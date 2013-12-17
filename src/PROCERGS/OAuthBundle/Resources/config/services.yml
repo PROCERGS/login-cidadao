@@ -1,0 +1,7 @@
+parameters:
+#    procergso_auth.example.class: PROCERGS\OAuthBundle\Example
+
+services:
+#    procergso_auth.example:
+#        class: %procergso_auth.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
