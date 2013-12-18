@@ -33,4 +33,24 @@ class Client extends BaseClient
         parent::__construct();
     }
 
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
 }

@@ -4,7 +4,7 @@ procergs_login_cidadao_core:
 
 procergso_auth:
     resource: "@PROCERGSOAuthBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /auth
 
 fos_oauth_server_token:
     resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"

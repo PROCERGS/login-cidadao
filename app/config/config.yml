@@ -71,6 +71,10 @@ fos_oauth_server:
   access_token_class:   PROCERGS\OAuthBundle\Entity\AccessToken
   refresh_token_class:  PROCERGS\OAuthBundle\Entity\RefreshToken
   auth_code_class:      PROCERGS\OAuthBundle\Entity\AuthCode
+  service:
+      user_provider: fos_user.user_manager
+      options:
+          supported_scopes: name cpf birthdate email city
 
 fos_user:
     db_driver: orm
