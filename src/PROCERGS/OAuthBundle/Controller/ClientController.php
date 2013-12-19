@@ -19,16 +19,17 @@ class ClientController extends Controller
         
         $client = $clientManager->findClientBy(array('name' => "VPR"));
         if ($client instanceof Client) {
-            $client->setAllowedGrantTypes(array('token', 'authorization_code', 'name', 'cpf'));
+            $client->setAllowedGrantTypes(array('authorization_code'));
         } else {
             $client = $clientManager->createClient();
             $client->setRedirectUris(array('http://vpr.des.dona.to'));
-            $client->setAllowedGrantTypes(array('token', 'authorization_code'));
+            $client->setAllowedGrantTypes(array('authorization_code'));
             $client->setName("VPR");
             $client->setDescription("Votação de Prioridades do RS");
         }
         $clientManager->updateClient($client);
         
+        die("ok");
     }
     
     /**
