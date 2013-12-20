@@ -16,24 +16,8 @@ security:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        login:
-            pattern:  ^/demo/secured/login$
-            security: false
-
-        secured_area:
-            pattern:    ^/demo/secured/
-            form_login:
-                check_path: _security_check
-                login_path: _demo_login
-            logout:
-                path:   _demo_logout
-                target: _demo
-            #anonymous: ~
-            #http_basic:
-            #    realm: "Secured Demo Area"
-
         main:
-          pattern: ^/
+          pattern: ^/(?!api)
           form_login:
               provider:       fos_userbundle
               csrf_provider:  form.csrf_provider
@@ -41,17 +25,17 @@ security:
           anonymous:  true
             
         oauth_token:
-          pattern:  ^/oauth/v2/token
-          security: false
+            pattern:  ^/oauth/v2/token
+            security: false
           
         oauth_authorize:
-          pattern:  ^/oauth/v2/auth
-          form_login:
-            provider: fos_userbundle
-            csrf_provider: form.csrf_provider
-            check_path: /oauth/v2/auth_login_check
-            login_path: /oauth/v2/auth_login
-          anonymous: true
+            pattern:  ^/oauth/v2/auth
+            form_login:
+                provider: fos_userbundle
+                csrf_provider: form.csrf_provider
+                check_path: /oauth/v2/auth_login_check
+                login_path: /oauth/v2/auth_login
+            anonymous: true
           
         api:
           pattern:    ^/api
