@@ -40,14 +40,25 @@ class OAuthEventListener
                 $user = $this->getUser($event);
                 $scope = $this->getScope();
                 
-                $authorization = new Authorization();
-                $authorization->setClient($client);
-                $authorization->setPerson($user);
-                $authorization->setScope($scope);
-                
-                $user->addAuthorization($authorization);
                 $em = $this->doctrine->getManager();
-                $em->persist($authorization);
+                $authRepo = $this->doctrine
+                        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization');
+                $currentAuth = $authRepo->findOneBy(array(
+                    'person' => $user,
+                    'client' => $client
+                ));
+                
+                // if the authorization is already there, update it.
+                if ($currentAuth instanceof Authorization) {
+                    $currentAuth->setScope($scope);
+                } else {
+                    $authorization = new Authorization();
+                    $authorization->setClient($client);
+                    $authorization->setPerson($user);
+                    $authorization->setScope($scope);
+                    $em->persist($authorization);
+                }
+                
                 $em->flush();
             }
         }
