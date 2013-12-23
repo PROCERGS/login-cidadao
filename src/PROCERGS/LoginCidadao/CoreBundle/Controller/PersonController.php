@@ -19,8 +19,12 @@ class PersonController extends Controller
      */
     public function selfAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $token = $this->get('security.context')->getToken();
+        $user = $token->getUser();
 
+        $accessToken = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:AccessToken')->findOneBy(array('token' => $token->getToken()));
+        $client = $accessToken->getClient();
+        
         $encoders = array(new XmlEncoder(), new JsonEncoder());
         $normalizers = array(new GetSetMethodNormalizer());
 

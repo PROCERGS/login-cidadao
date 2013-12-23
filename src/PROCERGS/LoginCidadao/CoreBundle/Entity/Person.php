@@ -5,6 +5,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use PROCERGS\OAuthBundle\Entity\Client;
 
 /**
  * @ORM\Entity
@@ -48,9 +49,15 @@ class Person extends BaseUser
      */
     protected $city;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Authorization", mappedBy="person")
+     */
+    protected $authorizations;
+
     public function __construct()
     {
         parent::__construct();
+        $this->authorizations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getName()
@@ -81,6 +88,28 @@ class Person extends BaseUser
     public function setCep($cep)
     {
         $this->cep = $cep;
+    }
+
+    public function addAuthorization(Authorization $authorization)
+    {
+        $this->authorizations[] = $authorization;
+    }
+
+    public function getAuthorizations()
+    {
+        return $this->authorizations;
+    }
+
+    public function isAuthorizedClient(Client $client, $scope)
+    {
+        $authorizations = $this->getAuthorizations();
+        foreach ($authorizations as $auth) {
+            $c = $auth->getClient();
+            if ($c->getId() == $client->getId()) {
+                return $auth->hasScopes($scope);
+            }
+        }
+        return false;
     }
 
 }

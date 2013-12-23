@@ -27,6 +27,11 @@ class Client extends BaseClient
      * @ORM\Column(type="string")
      */
     protected $description;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization", mappedBy="client")
+     */
+    protected $people;
 
     public function __construct()
     {
