@@ -45,6 +45,12 @@ class Person extends BaseUser
      * @Groups({"cpf"})
      */
     protected $username;
+    
+    /**
+     * @Expose
+     * @Groups({"email"})
+     */
+    protected $email;
 
     /**
      * @Expose
