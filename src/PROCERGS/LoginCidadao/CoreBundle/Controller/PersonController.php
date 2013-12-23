@@ -5,10 +5,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use JMS\Serializer\SerializationContext;
 
 class PersonController extends Controller
 {
@@ -25,12 +22,17 @@ class PersonController extends Controller
         $accessToken = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:AccessToken')->findOneBy(array('token' => $token->getToken()));
         $client = $accessToken->getClient();
         
-        $encoders = array(new XmlEncoder(), new JsonEncoder());
-        $normalizers = array(new GetSetMethodNormalizer());
+        $authorization = $this->getDoctrine()
+                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
+                ->findOneBy(array(
+                    'person' => $user,
+                    'client' => $client
+                ));
+        $scope = $authorization->getScope();
+        
+        $serializer = $this->container->get('jms_serializer');
 
-        $serializer = new Serializer($normalizers, $encoders);
-
-        $json = $serializer->serialize($user, 'json');
+        $json = $serializer->serialize($user, 'json', SerializationContext::create()->setGroups($scope));
         die($json);
     }
 

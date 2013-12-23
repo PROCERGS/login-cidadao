@@ -6,14 +6,19 @@ use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use PROCERGS\OAuthBundle\Entity\Client;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
 
 /**
  * @ORM\Entity
+ * @ExclusionPolicy("all")
  */
 class Person extends BaseUser
 {
 
     /**
+     * @Expose
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -21,6 +26,8 @@ class Person extends BaseUser
     protected $id;
 
     /**
+     * @Expose
+     * @Groups({"name"})
      * @ORM\Column(type="string")
      * @Assert\NotBlank(message="Please enter your name.", groups={"Registration", "Profile"})
      * @Assert\Length(
@@ -32,18 +39,30 @@ class Person extends BaseUser
      * )
      */
     protected $name;
+    
+    /**
+     * @Expose
+     * @Groups({"cpf"})
+     */
+    protected $username;
 
     /**
+     * @Expose
+     * @Groups({"birthdate"})
      * @ORM\Column(type="date")
      */
     protected $birthdate;
 
     /**
+     * @Expose
+     * @Groups({"cep"})
      * @ORM\Column(type="string", nullable=true)
      */
     protected $cep;
 
     /**
+     * @Expose
+     * @Groups({"city"})
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\City")
      * @ORM\JoinColumn(name="city_id", referencedColumnName="id")
      */
