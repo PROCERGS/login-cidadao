@@ -1,5 +1,4 @@
 procergs_login_cidadao_core:
-    #resource: "@PROCERGSLoginCidadaoCoreBundle/Resources/config/routing.yml"
     resource: "@PROCERGSLoginCidadaoCoreBundle/Controller"
     type:     annotation
     prefix:   /api/v1
