@@ -28,9 +28,9 @@ class PersonController extends Controller
         $translator = $this->get('translator');
 
         try {
-            /* if ($genToken !== $token) {
-              throw new AccessDeniedException("CSRF detected!");
-              } */
+            if ($genToken !== $token) {
+                throw new AccessDeniedException("CSRF detected!");
+            }
 
             if (false === $security->isGranted('ROLE_USER')) {
                 throw new AccessDeniedException();
@@ -41,8 +41,8 @@ class PersonController extends Controller
             $authorizations = $user->getAuthorizations();
             foreach ($authorizations as $auth) {
                 if ($auth->getPerson()->getId() == $user->getId() && $auth->getClient()->getId() == $clientId) {
-                    $em->remove($auth);
-                    $em->flush();
+                    //$em->remove($auth);
+                    //$em->flush();
                     $response->setData(array(
                         'message' => $translator->trans("Authorization successfully revoked."),
                         'success' => true
