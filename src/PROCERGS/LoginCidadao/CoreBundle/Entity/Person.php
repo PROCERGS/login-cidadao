@@ -39,13 +39,13 @@ class Person extends BaseUser
      * )
      */
     protected $name;
-    
+
     /**
      * @Expose
      * @Groups({"cpf"})
      */
     protected $username;
-    
+
     /**
      * @Expose
      * @Groups({"email"})
@@ -135,6 +135,13 @@ class Person extends BaseUser
             }
         }
         return false;
+    }
+
+    public function getFirstName()
+    {
+        $exploded = explode(' ', $this->getName());
+        $firstName = reset($exploded);
+        return $firstName;
     }
 
 }

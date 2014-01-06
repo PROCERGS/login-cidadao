@@ -21,7 +21,8 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "friendsofsymfony/oauth-server-bundle": "dev-master",
-        "jms/serializer-bundle": "*"
+        "jms/serializer-bundle": "*",
+        "simplethings/entity-audit-bundle": "*"
     },
     "scripts": {
         "post-install-cmd": [

@@ -8,11 +8,18 @@ procergs_login_cidadao_ui:
     type:     annotation
     prefix:   /
 
+# Audit
+simple_things_entity_audit:
+    resource: "@SimpleThingsEntityAuditBundle/Resources/config/routing.yml"
+    prefix: /audit
+
+# API
 procergs_login_cidadao_core:
     resource: "@PROCERGSLoginCidadaoCoreBundle/Controller"
     type:     annotation
     prefix:   /api/v1
 
+# OAuth Routes
 procergso_auth:
     resource: "@PROCERGSOAuthBundle/Resources/config/routing.yml"
     prefix:   /auth

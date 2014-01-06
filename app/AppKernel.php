@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new PROCERGS\LoginCidadao\UIBundle\PROCERGSLoginCidadaoUIBundle(),
             new PROCERGS\Generic\LocaleBundle\PROCERGSGenericLocaleBundle(),
+            new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

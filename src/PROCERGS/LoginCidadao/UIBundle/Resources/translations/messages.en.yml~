@@ -5,12 +5,10 @@ Welcome!: Welcome!
 'You might start by logging in or %link_start%registering%link_end%.': 'You might start by logging in or %link_start%registering%link_end%.'
 security.login.username: CPF
 security.login.password: Password
-security.login.remember_me: 'Remember me'
-security.login.submit: 'Log in'
+security.login.remember_me: Remember me
+security.login.submit: Log in
 'Welcome %user.name%': 'Welcome %user.name%'
 scope.name: Name
 scope.cpf: CPF
 scope.email: Email
 'Authorized Applications': 'Authorized Applications'
-'Description:': 'Description:'
-'Access scope:': 'Access scope:'

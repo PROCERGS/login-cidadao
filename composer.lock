@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "f4eeb745cc00499db83ae126a82e7ffb",
+    "hash": "f1c66033524ecac3ffc552e78ef60503",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -622,12 +622,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSOAuthServerBundle.git",
-                "reference": "0742ea3cf59944aa9f0e821b9f8b6a88f541a83c"
+                "reference": "f1334af288b3d81f312e58d5a888f488235cc740"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSOAuthServerBundle/zipball/0742ea3cf59944aa9f0e821b9f8b6a88f541a83c",
-                "reference": "0742ea3cf59944aa9f0e821b9f8b6a88f541a83c",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSOAuthServerBundle/zipball/f1334af288b3d81f312e58d5a888f488235cc740",
+                "reference": "f1334af288b3d81f312e58d5a888f488235cc740",
                 "shasum": ""
             },
             "require": {
@@ -651,6 +651,11 @@
                 "willdurand/propel-typehintable-behavior": "The Typehintable behavior is useful to add type hints on generated methods, to be compliant with interfaces"
             },
             "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "FOS\\OAuthServerBundle": ""
@@ -677,7 +682,7 @@
                 "oauth2",
                 "server"
             ],
-            "time": "2013-10-30 00:32:09"
+            "time": "2014-01-02 16:44:31"
         },
         {
             "name": "friendsofsymfony/oauth2-php",
@@ -737,12 +742,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "6596b9d754b6cb094e10470967ed7b51e2aa9e12"
+                "reference": "c66cb666ea98d101c3650279c545081a94e47d3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/6596b9d754b6cb094e10470967ed7b51e2aa9e12",
-                "reference": "6596b9d754b6cb094e10470967ed7b51e2aa9e12",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/c66cb666ea98d101c3650279c545081a94e47d3e",
+                "reference": "c66cb666ea98d101c3650279c545081a94e47d3e",
                 "shasum": ""
             },
             "require": {
@@ -797,7 +802,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2013-12-16 16:36:36"
+            "time": "2013-12-30 08:57:49"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -1543,6 +1548,49 @@
             ],
             "description": "This bundle generates code for you",
             "time": "2013-08-21 18:09:35"
+        },
+        {
+            "name": "simplethings/entity-audit-bundle",
+            "version": "v0.5.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/simplethings/EntityAudit.git",
+                "reference": "c35fffda82dbb6f60099efa0e20067ca856b3b47"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/simplethings/EntityAudit/zipball/c35fffda82dbb6f60099efa0e20067ca856b3b47",
+                "reference": "c35fffda82dbb6f60099efa0e20067ca856b3b47",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/orm": "~2.1"
+            },
+            "require-dev": {
+                "symfony/framework-bundle": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "SimpleThings\\EntityAudit": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "New BSD"
+            ],
+            "description": "Audit for Doctrine Entities",
+            "keywords": [
+                "Audit",
+                "database",
+                "persistence"
+            ],
+            "time": "2013-07-08 08:18:28"
         },
         {
             "name": "swiftmailer/swiftmailer",

@@ -25,12 +25,14 @@ framework:
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
+    globals:
+        fos_csrf_provider: "@form.csrf_provider"
 
 # Assetic Configuration
 assetic:
     debug:          %kernel.debug%
     use_controller: false
-    bundles:        [ ]
+    bundles:        [ "PROCERGSLoginCidadaoUIBundle" ]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -83,3 +85,14 @@ fos_user:
     registration:
         form:
             type: procergs_person_registration
+
+# Audit Trail
+simple_things_entity_audit:
+    audited_entities:
+        - PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization
+        - PROCERGS\LoginCidadao\CoreBundle\Entity\City
+        - PROCERGS\LoginCidadao\CoreBundle\Entity\Person
+        - PROCERGS\OAuthBundle\Entity\AccessToken
+        - PROCERGS\OAuthBundle\Entity\AuthCode
+        - PROCERGS\OAuthBundle\Entity\Client
+        - PROCERGS\OAuthBundle\Entity\RefreshToken

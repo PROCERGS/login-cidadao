@@ -14,7 +14,7 @@ class LocaleController extends Controller
      */
     public function setAction(Request $request, $_locale)
     {
-        return $this->redirect('/');
+        return $this->redirect($this->generateUrl('ui_home'));
     }
 
 }
