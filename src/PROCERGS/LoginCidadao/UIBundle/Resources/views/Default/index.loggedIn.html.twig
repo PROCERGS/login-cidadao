@@ -9,10 +9,10 @@
 
 <div class="row">
     <div class="col-xs-12">
-        <h2>{% trans %}Authorized Applications{% endtrans %}</h2>
+        <h2>{% trans %}Available Applications and Sites{% endtrans %}</h2>
         <ul class="list-group">
         {% for auth in user.getAuthorizations %}
-            <li class="list-group-item">
+            <li class="list-group-item authorized">
                 <a href="{{ path('ui_revoke', { 'clientId': auth.client.id }) }}" data-token="{{ csrf_token(path('ui_revoke', { 'clientId': auth.client.id })) }}" class="btn btn-float btn-danger revoke">{{ 'Revoke Access' | trans }}</a>
                 <h4 class="list-group-item-heading">{{ auth.client.name }}</h4>
                 <p class="list-group-item-text">
@@ -24,6 +24,16 @@
                 {% for scope in auth.scope %}
                     <span class="label label-default">{{ ('scope.' ~ scope) | trans }}</span>
                 {% endfor %}
+                </p>
+            </li>
+        {% endfor %}
+        {% for client in apps %}
+            <li class="list-group-item unauthorized">
+                <a href="{{ client.siteUrl }}" class="btn btn-float btn-success">{{ 'Visit Site' | trans }}</a>
+                <h4 class="list-group-item-heading">{{ client.name }}</h4>
+                <p class="list-group-item-text">
+                    <strong>{{ 'Description:' | trans }}</strong>
+                    {{ client.description }}
                 </p>
             </li>
         {% endfor %}

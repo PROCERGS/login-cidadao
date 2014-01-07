@@ -27,11 +27,16 @@ class Client extends BaseClient
      * @ORM\Column(type="string")
      */
     protected $description;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization", mappedBy="client")
      */
     protected $people;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $siteUrl;
 
     public function __construct()
     {
@@ -56,6 +61,16 @@ class Client extends BaseClient
     public function getDescription()
     {
         return $this->description;
+    }
+
+    public function setSiteUrl($url)
+    {
+        $this->siteUrl = $url;
+    }
+
+    public function getSiteUrl()
+    {
+        return $this->siteUrl;
     }
 
 }

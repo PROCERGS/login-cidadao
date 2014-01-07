@@ -125,6 +125,12 @@ class Person extends BaseUser
         return $this->authorizations;
     }
 
+    /**
+     * Checks if a given Client can access this Person's specified scope.
+     * @param \PROCERGS\OAuthBundle\Entity\Client $client
+     * @param mixed $scope can be a single scope or an array with several.
+     * @return boolean
+     */
     public function isAuthorizedClient(Client $client, $scope)
     {
         $authorizations = $this->getAuthorizations();
@@ -132,6 +138,23 @@ class Person extends BaseUser
             $c = $auth->getClient();
             if ($c->getId() == $client->getId()) {
                 return $auth->hasScopes($scope);
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Checks if this Person has any authorization for a given Client.
+     * WARNING: Note that it does NOT validate scope!
+     * @param \PROCERGS\OAuthBundle\Entity\Client $client
+     */
+    public function hasAuthorization(Client $client)
+    {
+        $authorizations = $this->getAuthorizations();
+        foreach ($authorizations as $auth) {
+            $c = $auth->getClient();
+            if ($c->getId() == $client->getId()) {
+                return true;
             }
         }
         return false;

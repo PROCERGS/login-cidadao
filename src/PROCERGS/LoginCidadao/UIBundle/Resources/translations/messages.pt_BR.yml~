@@ -15,3 +15,8 @@ scope.email: Email
 'Description:': 'Descrição:'
 'Access scope:': 'Escopo de acesso:'
 'Revoke Access': 'Revogar Acesso'
+'Available Applications': '__Available Applications'
+'Visit Site': '__Visit Site'
+'Click again to confirm': '__Click again to confirm'
+'Please, wait...': '__Please, wait...'
+Revoked: __Revoked
