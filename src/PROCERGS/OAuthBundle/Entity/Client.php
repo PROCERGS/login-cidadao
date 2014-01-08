@@ -2,6 +2,7 @@
 
 namespace PROCERGS\OAuthBundle\Entity;
 
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
 use FOS\OAuthServerBundle\Entity\Client as BaseClient;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,9 +30,9 @@ class Client extends BaseClient
     protected $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization", mappedBy="client")
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization", mappedBy="client", cascade={"remove"}, orphanRemoval=true)
      */
-    protected $people;
+    protected $authorizations;
 
     /**
      * @ORM\Column(type="string")
@@ -41,6 +42,7 @@ class Client extends BaseClient
     public function __construct()
     {
         parent::__construct();
+        $this->authorizations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function setName($name)
@@ -73,4 +75,15 @@ class Client extends BaseClient
         return $this->siteUrl;
     }
 
+    public function getAuthorizations()
+    {
+        return $this->authorizations;
+    }
+
+    public function removeAuthorization(Authorization $authorization)
+    {
+        if ($this->authorizations->contains($authorization)) {
+            $this->authorizations->removeElement($authorization);
+        }
+    }
 }
