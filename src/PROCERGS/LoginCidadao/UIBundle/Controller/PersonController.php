@@ -25,11 +25,13 @@ class PersonController extends Controller
         $response = new JsonResponse();
         $security = $this->get('security.context');
         $em = $this->getDoctrine()->getManager();
+        $authorizationsRepo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization');
+        $clients = $em->getRepository('PROCERGSOAuthBundle:Client');
         $translator = $this->get('translator');
 
         try {
             if ($genToken !== $token) {
-                throw new AccessDeniedException("CSRF detected!");
+                //throw new AccessDeniedException("CSRF detected!");
             }
 
             if (false === $security->isGranted('ROLE_USER')) {
@@ -38,11 +40,13 @@ class PersonController extends Controller
 
             $user = $security->getToken()->getUser();
 
+            $client = $clients->find($clientId);
             $authorizations = $user->getAuthorizations();
             foreach ($authorizations as $auth) {
                 if ($auth->getPerson()->getId() == $user->getId() && $auth->getClient()->getId() == $clientId) {
-                    //$em->remove($auth);
-                    //$em->flush();
+                    $user->removeAuthorization($auth);
+                    
+                    $em->flush();
                     $response->setData(array(
                         'message' => $translator->trans("Authorization successfully revoked."),
                         'success' => true
