@@ -7,17 +7,9 @@ use PROCERGS\OAuthBundle\Entity\Client;
 
 /**
  * @ORM\Entity
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="unique_person_client", columns={"person_id", "client_id"})})
  */
 class Authorization
 {
-
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
 
     /**
      * @ORM\Column(type="array")
@@ -26,12 +18,14 @@ class Authorization
     protected $scope;
 
     /**
+     * @ORM\Id()
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="authorizations")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", nullable=false)
      */
     protected $person;
 
     /**
+     * @ORM\Id()
      * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="people")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id", nullable=false)
      */
@@ -48,7 +42,7 @@ class Authorization
     /**
      * @param \PROCERGS\LoginCidadao\CoreBundle\Entity\Person $person
      */
-    public function setPerson(Person $person = null)
+    public function setPerson(Person $person)
     {
         $this->person = $person;
     }
@@ -64,7 +58,7 @@ class Authorization
     /**
      * @param \PROCERGS\OAuthBundle\Entity\Client $client
      */
-    public function setClient(Client $client = null)
+    public function setClient(Client $client)
     {
         $this->client = $client;
     }

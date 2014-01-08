@@ -75,7 +75,7 @@ class Person extends BaseUser
     protected $city;
 
     /**
-     * @ORM\OneToMany(targetEntity="Authorization", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Authorization", mappedBy="person")
      */
     protected $authorizations;
 
@@ -117,17 +117,7 @@ class Person extends BaseUser
 
     public function addAuthorization(Authorization $authorization)
     {
-        $this->authorizations->add($authorization);
-        $authorization->setPerson($this);
-        return $this;
-    }
-    
-    public function removeAuthorization(Authorization $authorization)
-    {
-        if ($this->authorizations->contains($authorization)) {
-            $this->authorizations->removeElement($authorization);
-        }
-        return $this;
+        $this->authorizations[] = $authorization;
     }
 
     public function getAuthorizations()
