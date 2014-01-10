@@ -54,7 +54,6 @@ class PersonController extends Controller
             $authorizations = $user->getAuthorizations();
             foreach ($authorizations as $auth) {
                 if ($auth->getPerson()->getId() == $user->getId() && $auth->getClient()->getId() == $clientId) {
-                    //$user->removeAuthorization($auth);
                     
                     foreach ($accessTokens as $accessToken) {
                         $em->remove($accessToken);
