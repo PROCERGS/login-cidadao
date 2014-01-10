@@ -20,3 +20,5 @@ scope.email: Email
 'Please, wait...': 'Por favor, aguarde...'
 Revoked: Revogado
 'Available Applications and Sites': 'Sites e Aplicativos Disponíveis'
+'Authorization successfully revoked.': 'Autorização revogada com sucesso.'
+'Authorization not found.': 'Autorização não encontrada.'
