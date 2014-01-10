@@ -29,4 +29,10 @@ class RefreshToken extends BaseRefreshToken
      */
     protected $user;
 
+    public function setExpired()
+    {
+        $now = new \DateTime();
+        $this->setExpiresAt($now->getTimestamp());
+    }
+
 }

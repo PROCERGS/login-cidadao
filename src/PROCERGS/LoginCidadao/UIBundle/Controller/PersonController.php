@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use PROCERGS\OAuthBundle\Entity\AccessToken;
 
 class PersonController extends Controller
 {
@@ -25,7 +26,7 @@ class PersonController extends Controller
         $response = new JsonResponse();
         $security = $this->get('security.context');
         $em = $this->getDoctrine()->getManager();
-        $authorizationsRepo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization');
+        $tokens = $em->getRepository('PROCERGSOAuthBundle:AccessToken');
         $clients = $em->getRepository('PROCERGSOAuthBundle:Client');
         $translator = $this->get('translator');
 
@@ -41,11 +42,29 @@ class PersonController extends Controller
             $user = $security->getToken()->getUser();
 
             $client = $clients->find($clientId);
+            $accessTokens = $tokens->findBy(array(
+                'client' => $client,
+                'user' => $user
+            ));
+            $refreshTokens = $em->getRepository('PROCERGSOAuthBundle:RefreshToken')
+                    ->findBy(array(
+                        'client' => $client,
+                        'user' => $user
+                    ));
             $authorizations = $user->getAuthorizations();
             foreach ($authorizations as $auth) {
                 if ($auth->getPerson()->getId() == $user->getId() && $auth->getClient()->getId() == $clientId) {
-                    $user->removeAuthorization($auth);
+                    //$user->removeAuthorization($auth);
                     
+                    foreach ($accessTokens as $accessToken) {
+                        $em->remove($accessToken);
+                    }
+                    
+                    foreach ($refreshTokens as $refreshToken) {
+                        $em->remove($refreshToken);
+                    }
+                    
+                    $em->remove($auth);
                     $em->flush();
                     $response->setData(array(
                         'message' => $translator->trans("Authorization successfully revoked."),
