@@ -32,7 +32,7 @@ class PersonController extends Controller
 
         try {
             if ($genToken !== $token) {
-                //throw new AccessDeniedException("CSRF detected!");
+                throw new AccessDeniedException("CSRF detected!");
             }
 
             if (false === $security->isGranted('ROLE_USER')) {
