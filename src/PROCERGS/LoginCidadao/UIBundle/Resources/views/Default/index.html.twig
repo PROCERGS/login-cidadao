@@ -1,32 +1,42 @@
 {% extends 'PROCERGSLoginCidadaoUIBundle::base.html.twig' %}
 
 {% block body %}
-<div class="row">
-    <div class="col-xs-6">
-        <h1>{% trans %}Welcome!{% endtrans %}</h1>
-        <p>{% trans %}Welcome to the Citizen's Login service.{% endtrans %}</p>
-        <p>{% trans %}Here you'll find all you need to know about the service.{% endtrans %}</p>
-        <p>{{ 'You might start by logging in or %link_start%registering%link_end%.' | trans({'%link_start%' : '<a href="'~path('fos_user_registration_register')~'">', '%link_end%' : '</a>' }) | raw }}</p>
+<div class="container col-xs-offset-0 col-sm-offset-2 col-xs-offset-0 col-sm-8">
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
+            <h2>{% trans %}One account. All the Government.{% endtrans %}</h2>
+        </div>
     </div>
-    <div class="col-xs-6">
-        <form role="form" action="{{ path("fos_user_security_check") }}" method="post">
-            <input type="hidden" name="_csrf_token" value="{{ fos_csrf_provider.generateCsrfToken('authenticate') }}" />
-            <div class="form-group">
-                <label for="username">{{ 'security.login.username'|trans }}</label>
-                <input type="text" class="form-control" id="username" name="_username" placeholder="{{ 'security.login.username'|trans }}" required>
-            </div>
-            <div class="form-group">
-                <label for="password">{{ 'security.login.password'|trans }}</label>
-                <input type="password" class="form-control" id="password" name="_password" placeholder="{{ 'security.login.password'|trans }}" required>
-            </div>
-            <div class="checkbox">
-                <label for="remember_me">
-                    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-                    {{ 'security.login.remember_me'|trans }}
-                </label>
-            </div>
-            <button type="submit" class="btn btn-default">{{ 'security.login.submit'|trans }}</button>
-        </form>
+
+    <div class="row">
+        <div class="col-xs-12 col-lg-8 col-lg-offset-2">
+            <h3 class="text-center">{%trans%}Sign in with your Citizen's Login{%endtrans%}</h3>
+            <form role="form" action="{{ path("fos_user_security_check") }}" method="post" class="well well-lg">
+                <input type="hidden" name="_csrf_token" value="{{ fos_csrf_provider.generateCsrfToken('authenticate') }}" />
+                <div class="form-group">
+                    <label for="username" class="sr-only">{{ 'security.login.username'|trans }}</label>
+                    <input type="text" class="form-control" id="username" name="_username" placeholder="{{ 'security.login.username'|trans }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="sr-only">{{ 'security.login.password'|trans }}</label>
+                    <input type="password" class="form-control" id="password" name="_password" placeholder="{{ 'security.login.password'|trans }}" required>
+                </div>
+                <button type="submit" class="btn btn-success btn-block">{{ 'security.login.submit'|trans }}</button>
+                <div class="checkbox">
+                    <label for="remember_me">
+                        <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                        {{ 'security.login.remember_me'|trans }}
+                    </label>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            <p>{{ '%link_start%Create your account%link_end%' | trans({'%link_start%' : '<a href="'~path('fos_user_registration_register')~'">', '%link_end%' : '</a>' }) | raw }}</p>
+        </div>
     </div>
 </div>
 {% endblock %}
