@@ -3,7 +3,7 @@ Welcome!: Welcome!
 'Welcome to the Citizen''s Login service.': 'Welcome to the Citizen''s Login service.'
 'Here you''ll find all you need to know about the service.': 'Here you''ll find all you need to know about the service.'
 'You might start by logging in or %link_start%registering%link_end%.': 'You might start by logging in or %link_start%registering%link_end%.'
-security.login.username: CPF
+security.login.username: CPF, username or email
 security.login.password: Password
 security.login.remember_me: 'Remember me'
 security.login.submit: 'Log in'
@@ -14,3 +14,19 @@ scope.email: Email
 'Authorized Applications': 'Authorized Applications'
 'Description:': 'Description:'
 'Access scope:': 'Access scope:'
+'Government of Rio Grande do Sul - Promoting equality makes the difference': '__Government of Rio Grande do Sul - Promoting equality makes the difference'
+'One account. All that the Government offers.': '__One account. All that the Government offers.'
+'Citizen''s Login': '__Citizen''s Login'
+'Need help?': '__Need help?'
+'%link_start%Create your account%link_end%': '__%link_start%Create your account%link_end%'
+'One account to all of the Government''s services': '__One account to all of the Government''s services'
+'Available services': '__Available services'
+'Government of Rio Grande do Sul': '__Government of Rio Grande do Sul'
+'Privacy and Terms of Service': '__Privacy and Terms of Service'
+Help: __Help
+'Available Applications and Sites': '__Available Applications and Sites'
+'Revoke Access': '__Revoke Access'
+'Visit Site': '__Visit Site'
+'Click again to confirm': '__Click again to confirm'
+'Please, wait...': '__Please, wait...'
+Revoked: __Revoked
