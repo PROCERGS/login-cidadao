@@ -112,30 +112,45 @@
         return true;
     }
 
+    function formatCPF(element, cpf)
+    {
+        if ($.isNumeric(cpf) && cpf.length === 11) {
+            var cpfRegex = new RegExp('([0-9]{3})([0-9]{3})([0-9]{3})([0-9]{2})', 'gi');
+            cpf = cpf.replace(cpfRegex, '$1.$2.$3-$4');
+            element.val(cpf).data('masked', true);
+        }
+    }
+
     $(document).ready(function(){
-        $("#username").on('keyup keydown', function(e) {
+        $("#username").on('keyup', function(e) {
+            var c= String.fromCharCode(e.which);
+            var isWordcharacter = c.match(/\w/);
+
             var val = $(this).val().trim();
             var masked = $(this).data('masked');
             var cpf = val;
             var cleanup = new RegExp('[. \\-]', 'gi');
             cpf = cpf.replace(cleanup, '');
 
+
+            if (!isWordcharacter && e.keyCode !== 0) {
+                formatCPF($(this), cpf);
+                return;
+            }
+
             if ($.isNumeric(cpf)) {
                 if (cpf.length > 11) {
                     cpf = cpf.substr(0,11);
                 }
-                if (cpf.length === 11) {
-                    var cpfRegex = new RegExp('([0-9]{3})([0-9]{3})([0-9]{3})([0-9]{2})', 'gi');
-                    cpf = cpf.replace(cpfRegex, '$1.$2.$3-$4');
-                    $(this).val(cpf).data('masked', true);
-                }
-                //$(this).mask('AAA.AAA.AAA-AA', {reverse: true});
+                formatCPF($(this), cpf);
             } else {
                 if (masked === true) {
                     val = val.replace(/([0-9]{3})[.]([0-9]{3})[.]([0-9]{3})-([0-9]{2})/, '$1$2$3$4');
                     $(this).val(val);
                 }
             }
+
+            return false;
         });
     });
 </script>
