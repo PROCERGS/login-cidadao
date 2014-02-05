@@ -11,6 +11,19 @@
     src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v7/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
 }
 
+/* Footer anchoring */
+html, body { height: 100%; }
+body>.container {
+    min-height: 100%;
+    padding-bottom: 36px;
+}
+footer {
+    position: relative;
+    margin-top: -36px;
+    height: 36px;
+    clear: both;
+}
+
 body {
     background-image: url(../../images/wp.jpg);
     background-size: cover;

@@ -115,6 +115,7 @@
     $(document).ready(function(){
         $("#username").on('keyup keydown', function(e) {
             var val = $(this).val().trim();
+            var masked = $(this).data('masked');
             var cpf = val;
             var cleanup = new RegExp('[. \\-]', 'gi');
             cpf = cpf.replace(cleanup, '');
@@ -126,11 +127,14 @@
                 if (cpf.length === 11) {
                     var cpfRegex = new RegExp('([0-9]{3})([0-9]{3})([0-9]{3})([0-9]{2})', 'gi');
                     cpf = cpf.replace(cpfRegex, '$1.$2.$3-$4');
-                    $(this).val(cpf);
+                    $(this).val(cpf).data('masked', true);
                 }
                 //$(this).mask('AAA.AAA.AAA-AA', {reverse: true});
             } else {
-                $(this).unmask();
+                if (masked === true) {
+                    val = val.replace(/([0-9]{3})[.]([0-9]{3})[.]([0-9]{3})-([0-9]{2})/, '$1$2$3$4');
+                    $(this).val(val);
+                }
             }
         });
     });
