@@ -1,4 +1,4 @@
-{% extends 'PROCERGSLoginCidadaoUIBundle::base.html.twig' %}
+{% extends 'PROCERGSLoginCidadaoUIBundle::base.loggedIn.html.twig' %}
 
 {% block body %}
 <div class="row">
@@ -58,7 +58,7 @@
             button.addClass('disabled')
                     .prop('disabled', true)
                     .html("{{ 'Please, wait...' | trans }}");
-            
+
             $.post(
                 button.attr('href'),
                 { token: button.data('token') },
@@ -76,7 +76,7 @@
                         .prop("disabled", false)
                         .html("{{ 'Revoke Access' | trans }}");
             });
-            
+
             event.stopPropagation();
             event.preventDefault();
         });
