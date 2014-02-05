@@ -1,3 +1,9 @@
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /connect
+facebook_login:
+    pattern: /login_facebook
+
 procergs_generic_locale:
     resource: "@PROCERGSGenericLocaleBundle/Controller/"
     type:     annotation

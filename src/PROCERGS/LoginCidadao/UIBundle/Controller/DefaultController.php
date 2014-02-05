@@ -17,14 +17,15 @@ class DefaultController extends Controller
     {
         $security = $this->get('security.context');
         if (false === $security->isGranted('ROLE_USER')) {
-            return array();
+            $facebookId = $this->container->getParameter('facebook_client_id');
+            return compact('facebookId');
         } else {
             $em = $this->getDoctrine()->getManager();
             $clients = $em->getRepository('PROCERGSOAuthBundle:Client');
-            
+
             $user = $security->getToken()->getUser();
             $allApps = $clients->findAll();
-            
+
             $apps = array();
             // Filtering off authorized apps
             foreach ($allApps as $app) {
@@ -33,9 +34,9 @@ class DefaultController extends Controller
                 }
                 $apps[] = $app;
             }
-            
+
             return $this->render(
-                'PROCERGSLoginCidadaoUIBundle:Default:index.loggedIn.html.twig', 
+                'PROCERGSLoginCidadaoUIBundle:Default:index.loggedIn.html.twig',
                 compact('user', 'apps')
             );
         }

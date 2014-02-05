@@ -23,11 +23,17 @@ security:
               csrf_provider:  form.csrf_provider
           logout:     true
           anonymous:  true
-            
+          oauth:
+              resource_owners:
+                  facebook:   /login_facebook
+              login_path:     /login
+              oauth_user_provider:
+                  service: hwi_oauth.user.provider.entity
+
         oauth_token:
             pattern:  ^/oauth/v2/token
             security: false
-          
+
         oauth_authorize:
             pattern:  ^/oauth/v2/auth
             form_login:
@@ -36,7 +42,7 @@ security:
                 check_path: /oauth/v2/auth_login_check
                 login_path: /oauth/v2/auth_login
             anonymous: true
-          
+
         api:
           pattern:    ^/api
           fos_oauth:  true

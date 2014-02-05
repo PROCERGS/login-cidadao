@@ -13,3 +13,8 @@ parameters:
 
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    facebook_client_id: facebook_app_id_here
+    facebook_client_secret: facebook_app_secret_here
+
+    http_proxy: ~

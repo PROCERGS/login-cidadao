@@ -96,3 +96,20 @@ simple_things_entity_audit:
         - PROCERGS\OAuthBundle\Entity\AuthCode
         - PROCERGS\OAuthBundle\Entity\Client
         - PROCERGS\OAuthBundle\Entity\RefreshToken
+
+hwi_oauth:
+    firewall_name: main
+
+    resource_owners:
+        facebook:
+            type:           facebook
+            client_id:      %facebook_client_id%
+            client_secret:  %facebook_client_secret%
+            scope:          "email user_about_me user_birthday user_location"
+
+services:
+    hwi_oauth.user.provider.entity:
+        class: HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider
+
+parameters:
+    buzz.client.class: PROCERGS\Generic\HWIOAuthProxyBundle\Buzz\Client\CurlProxy
