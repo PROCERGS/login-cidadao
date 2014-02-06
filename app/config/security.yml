@@ -8,8 +8,11 @@ security:
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
-        fos_userbundle:
-            id: fos_user.user_provider.username
+        chainprovider:
+            chain:
+                providers: [fos_userbundle, fos_facebook_provider]
+        fos_facebook_provider:
+            id: fos_facebook.user.login
 
     firewalls:
         dev:
@@ -18,17 +21,25 @@ security:
 
         main:
           pattern: ^/(?!api)
+
+          fos_facebook:
+              app_url: ""
+              server_url: "http://lc.des.dona.to"
+              login_path: /login
+              check_path: /facebook/login_check
+              provider: fos_facebook_provider
+              default_target_path: /
+
           form_login:
               provider:       fos_userbundle
               csrf_provider:  form.csrf_provider
-          logout:     true
-          anonymous:  true
-          oauth:
-              resource_owners:
-                  facebook:   /login_facebook
               login_path:     /login
-              oauth_user_provider:
-                  service: hwi_oauth.user.provider.entity
+              use_forward:    false
+              check_path:     /login_check
+              failure_path:   null
+          logout:
+              path: /logout
+          anonymous:  true
 
         oauth_token:
             pattern:  ^/oauth/v2/token

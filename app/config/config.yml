@@ -83,6 +83,8 @@ fos_user:
     firewall_name: main
     user_class: PROCERGS\LoginCidadao\CoreBundle\Entity\Person
     registration:
+        confirmation:
+            enabled: true
         form:
             type: procergs_person_registration
 
@@ -97,19 +99,9 @@ simple_things_entity_audit:
         - PROCERGS\OAuthBundle\Entity\Client
         - PROCERGS\OAuthBundle\Entity\RefreshToken
 
-hwi_oauth:
-    firewall_name: main
-
-    resource_owners:
-        facebook:
-            type:           facebook
-            client_id:      %facebook_client_id%
-            client_secret:  %facebook_client_secret%
-            scope:          "email user_about_me user_birthday user_location"
-
-services:
-    hwi_oauth.user.provider.entity:
-        class: HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider
-
-parameters:
-    buzz.client.class: PROCERGS\Generic\HWIOAuthProxyBundle\Buzz\Client\CurlProxy
+fos_facebook:
+    alias:  facebook
+    app_id: %facebook_app_id%
+    secret: %facebook_app_secret%
+    cookie: true
+    permissions: [email, user_about_me, user_birthday, user_location]

@@ -14,7 +14,9 @@ parameters:
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
 
-    facebook_client_id: facebook_app_id_here
-    facebook_client_secret: facebook_app_secret_here
+    facebook_app_id: facebook_app_id_here
+    facebook_app_secret: facebook_app_secret_here
+    facebook_app_url: facebook_app_url
+    facebook_app_this_url: "https://meu.rs.gov.br"
 
     http_proxy: ~

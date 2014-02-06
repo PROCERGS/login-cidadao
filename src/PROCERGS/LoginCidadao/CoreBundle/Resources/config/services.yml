@@ -2,6 +2,14 @@ parameters:
 #    procergs_login_cidadao_core.example.class: PROCERGS\LoginCidadao\CoreBundle\Example
 
 services:
+    fos_facebook.user.login:
+        class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\FacebookProvider
+        arguments:
+            facebook: "@fos_facebook.api"
+            userManager: "@fos_user.user_manager"
+            validator: "@validator"
+            container: "@service_container"
+
     procergs_person.registration.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\RegistrationFormType
         arguments: [%fos_user.model.user.class%]

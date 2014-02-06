@@ -75,6 +75,16 @@ class Person extends BaseUser
     protected $city;
 
     /**
+     * @ORM\Column(name="facebook_id", type="string", length=255, nullable=true)
+     */
+    protected $facebookId;
+
+    /**
+     * @ORM\Column(name="facebook_access_token", type="string", length=255, nullable=true)
+     */
+    protected $facebookAccessToken;
+
+    /**
      * @ORM\OneToMany(targetEntity="Authorization", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
      */
     protected $authorizations;
@@ -121,7 +131,7 @@ class Person extends BaseUser
         $authorization->setPerson($this);
         return $this;
     }
-    
+
     public function removeAuthorization(Authorization $authorization)
     {
         if ($this->authorizations->contains($authorization)) {
@@ -152,7 +162,7 @@ class Person extends BaseUser
         }
         return false;
     }
-    
+
     /**
      * Checks if this Person has any authorization for a given Client.
      * WARNING: Note that it does NOT validate scope!
@@ -177,4 +187,27 @@ class Person extends BaseUser
         return $firstName;
     }
 
+    public function setFacebookId($facebookId)
+    {
+        $this->facebookId = $facebookId;
+
+        return $this;
+    }
+
+    public function getFacebookId()
+    {
+        return $this->facebookId;
+    }
+
+    public function setFacebookAccessToken($facebookAccessToken)
+    {
+        $this->facebookAccessToken = $facebookAccessToken;
+
+        return $this;
+    }
+
+    public function getFacebookAccessToken()
+    {
+        return $this->facebookAccessToken;
+    }
 }
