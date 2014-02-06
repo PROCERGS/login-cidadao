@@ -23,7 +23,9 @@
         "friendsofsymfony/oauth-server-bundle": "dev-master",
         "jms/serializer-bundle": "*",
         "simplethings/entity-audit-bundle": "*",
-        "hwi/oauth-bundle": "0.3.*@dev"
+        "hwi/oauth-bundle": "0.3.*@dev",
+        "facebook/php-sdk": "3.2.0",
+        "friendsofsymfony/facebook-bundle": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [
