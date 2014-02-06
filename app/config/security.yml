@@ -11,6 +11,8 @@ security:
         chainprovider:
             chain:
                 providers: [fos_userbundle, fos_facebook_provider]
+        fos_userbundle:
+            id: fos_user.user_provider.username
         fos_facebook_provider:
             id: fos_facebook.user.login
 

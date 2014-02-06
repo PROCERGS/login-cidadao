@@ -17,8 +17,7 @@ class DefaultController extends Controller
     {
         $security = $this->get('security.context');
         if (false === $security->isGranted('ROLE_USER')) {
-            $facebookId = $this->container->getParameter('facebook_client_id');
-            return compact('facebookId');
+            return array();
         } else {
             $em = $this->getDoctrine()->getManager();
             $clients = $em->getRepository('PROCERGSOAuthBundle:Client');

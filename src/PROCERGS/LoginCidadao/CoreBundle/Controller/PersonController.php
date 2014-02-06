@@ -41,4 +41,16 @@ class PersonController extends Controller
         return $response;
     }
 
+    public function connectFacebookWithAccountAction()
+    {
+        $fbService = $this->get('fos_facebook.user.login');
+        //todo: check if service is successfully connected.
+        $fbService->connectExistingAccount();
+        return $this->redirect($this->generateUrl('fos_user_profile_edit'));
+    }
+
+    public function loginFbAction() {
+        return $this->redirect($this->generateUrl("_homepage"));
+    }
+
 }

@@ -75,14 +75,11 @@ class Person extends BaseUser
     protected $city;
 
     /**
-     * @ORM\Column(name="facebook_id", type="string", length=255, nullable=true)
+     * @var string
+     *
+     * @ORM\Column(name="facebookId", type="string", length=255, nullable=true)
      */
     protected $facebookId;
-
-    /**
-     * @ORM\Column(name="facebook_access_token", type="string", length=255, nullable=true)
-     */
-    protected $facebookAccessToken;
 
     /**
      * @ORM\OneToMany(targetEntity="Authorization", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
@@ -199,15 +196,44 @@ class Person extends BaseUser
         return $this->facebookId;
     }
 
-    public function setFacebookAccessToken($facebookAccessToken)
+    public function serialize()
     {
-        $this->facebookAccessToken = $facebookAccessToken;
-
-        return $this;
+        return serialize(array($this->facebookId, parent::serialize()));
     }
 
-    public function getFacebookAccessToken()
+    public function unserialize($data)
     {
-        return $this->facebookAccessToken;
+        list($this->facebookId, $parentData) = unserialize($data);
+        parent::unserialize($parentData);
     }
+
+    /**
+     * Get the full name of the user (first + last name)
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->getFirstname() . ' ' . $this->getLastname();
+    }
+
+    /**
+     * @param array
+     */
+    public function setFBData($fbdata)
+    {
+        if (isset($fbdata['id'])) {
+            $this->setFacebookId($fbdata['id']);
+            $this->addRole('ROLE_FACEBOOK');
+        }
+        if (isset($fbdata['first_name'])) {
+            $this->setFirstname($fbdata['first_name']);
+        }
+        if (isset($fbdata['last_name'])) {
+            $this->setSurname($fbdata['last_name']);
+        }
+        if (isset($fbdata['email'])) {
+            $this->setEmail($fbdata['email']);
+        }
+    }
+
 }

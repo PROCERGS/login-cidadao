@@ -1,9 +1,3 @@
-hwi_oauth_redirect:
-    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
-    prefix:   /connect
-facebook_login:
-    pattern: /login_facebook
-
 procergs_generic_locale:
     resource: "@PROCERGSGenericLocaleBundle/Controller/"
     type:     annotation
@@ -55,3 +49,18 @@ fos_user_resetting:
 fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
     prefix: /profile
+
+# FOSFacebook
+_security_check_facebook:
+    pattern:   /facebook/login_check
+    defaults:  { _controller: PROCERGSLoginCidadaoCoreBundle:Person:loginFb }
+
+_security_facebook_logout:
+  pattern:  /facebook/logout
+
+fos_facebook_channel:
+    resource: "@FOSFacebookBundle/Resources/config/routing.xml"
+
+user_couple_fb_with_account:
+    pattern: /user/couple/facebook
+    defaults: { _controller: PROCERGSLoginCidadaoCoreBundle:Person:connectFacebookWithAccount }
