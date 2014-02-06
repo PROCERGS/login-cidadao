@@ -61,6 +61,24 @@
     {{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
 
     {{ facebook_login_button() }}
+
+<script type="text/javascript">
+
+        var authurl = '{{ path('_security_check_facebook') }}';
+
+        function goLogIn(){
+            window.location = authurl;
+        }
+
+        function onFbInit() {
+            if (typeof(FB) != 'undefined' && FB != null ) {
+                FB.Event.subscribe('auth.statusChange', function(response) {
+                    setTimeout(goLogIn, 500);
+                });
+            }
+        }
+
+</script>
 {% endblock %}
 
 {% block footer %}

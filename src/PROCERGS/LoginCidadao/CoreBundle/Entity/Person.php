@@ -38,7 +38,22 @@ class Person extends BaseUser
      *     groups={"Registration", "Profile"}
      * )
      */
-    protected $name;
+    protected $firstName;
+
+    /**
+     * @Expose
+     * @Groups({"name"})
+     * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Please enter your surname.", groups={"Registration", "Profile"})
+     * @Assert\Length(
+     *     min=3,
+     *     max="255",
+     *     minMessage="The surname is too short.",
+     *     maxMessage="The surname is too long.",
+     *     groups={"Registration", "Profile"}
+     * )
+     */
+    protected $surname;
 
     /**
      * @Expose
@@ -92,14 +107,28 @@ class Person extends BaseUser
         $this->authorizations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    public function getName()
+    public function getFirstName()
     {
-        return $this->name;
+        return $this->firstName;
     }
 
-    public function setName($name)
+    public function setFirstName($firstName)
     {
-        $this->name = $name;
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getSurname()
+    {
+        return $this->firstName;
+    }
+
+    public function setSurname($suname)
+    {
+        $this->surname = $suname;
+
+        return $this;
     }
 
     public function getBirthdate()
@@ -177,13 +206,6 @@ class Person extends BaseUser
         return false;
     }
 
-    public function getFirstName()
-    {
-        $exploded = explode(' ', $this->getName());
-        $firstName = reset($exploded);
-        return $firstName;
-    }
-
     public function setFacebookId($facebookId)
     {
         $this->facebookId = $facebookId;
@@ -226,13 +248,17 @@ class Person extends BaseUser
             $this->addRole('ROLE_FACEBOOK');
         }
         if (isset($fbdata['first_name'])) {
-            $this->setFirstname($fbdata['first_name']);
+            $this->setFirstName($fbdata['first_name']);
         }
         if (isset($fbdata['last_name'])) {
             $this->setSurname($fbdata['last_name']);
         }
         if (isset($fbdata['email'])) {
             $this->setEmail($fbdata['email']);
+        }
+        if (isset($fbdata['birthday'])) {
+            $date = \DateTime::createFromFormat('m/d/Y', $fbdata['birthday']);
+            $this->setBirthdate($date);
         }
     }
 
