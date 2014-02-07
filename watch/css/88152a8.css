@@ -20,13 +20,13 @@ body>.container {
 }
 footer {
     position: relative;
-    margin-top: -36px;
+    margin-top: -56px;
     min-height: 36px;
     clear: both;
 }
 
 body {
-    background-image: url(../../images/wp.jpg);
+    background-image: url(../../bundles/procergslogincidadaoui/images/wp.jpg);
     background-size: cover;
     background-position: top center;
 }
