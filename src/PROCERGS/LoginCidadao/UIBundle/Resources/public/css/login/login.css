@@ -18,12 +18,7 @@ body>.container {
     margin-bottom: -36px;
     padding-bottom: 36px;
 }
-footer {
-    position: relative;
-    margin-top: -36px;
-    min-height: 36px;
-    clear: both;
-}
+
 
 body {
     background-image: url(../../images/wp.jpg);
@@ -112,28 +107,6 @@ a {
     height: 37px;
 }
 
-footer {
-    display: block;
-    width: 100%;
-}
-
-footer,
-footer>div{
-    overflow: hidden;
-}
-
 footer>div {
-    border-top: 1px solid #e5e5e5;
     background: rgba(0, 0, 0, .5);
-    padding: 10px 0 0;
-    font-size: .82em;
-}
-
-footer nav li {
-    display: inline-block;
-    margin-right: 10px;
-}
-
-footer nav a {
-    color: #737373;
 }

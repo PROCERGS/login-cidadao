@@ -1,0 +1,20 @@
+#register-aside {
+    background-color: #494949;
+    background-color: rgba(0, 0, 0, .7);
+    color: #DADADA;
+    height: 604px;
+    margin-bottom: 30px;
+    padding: 18px 8px;
+    text-align: center;
+}
+
+#register-aside p {
+    margin-bottom: 40px;
+}
+
+#sign-up {
+    background: #f1f1f1;
+    border: 1px solid #d8d8d8;
+    border-radius: 5px;
+    padding: 25px;
+}
