@@ -15,8 +15,8 @@ security:
             id: procergs_logincidadao.user_provider
         fos_facebook_provider:
             id: fos_facebook.user.login
-        fos_twitter:
-            id: fos_twitter.auth
+        fos_twitter_provider:
+            id: fos_twitter.user
 
     firewalls:
         dev:
@@ -34,7 +34,11 @@ security:
               provider: fos_facebook_provider
               default_target_path: /
 
-          fos_twitter: true
+          fos_twitter:
+              login_path: /twitter/login
+              check_path: /twitter/login_check
+              default_target_path: /
+              provider: fos_twitter_provider
 
           form_login:
               provider:       fos_userbundle

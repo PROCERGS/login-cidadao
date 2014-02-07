@@ -110,4 +110,4 @@ fos_twitter:
     file: %kernel.root_dir%/../vendor/kertz/twitteroauth/twitteroauth/twitteroauth.php
     consumer_key: IZzEIz3QiXr6jyrS24X4w
     consumer_secret: ylnAQtbkIdWIPBtMYGa789Ur86KjnSRqNaJoZainpJo
-    callback_url: http://%site_domain%/login_check
+    callback_url: http://%site_domain%/twitter/login_check

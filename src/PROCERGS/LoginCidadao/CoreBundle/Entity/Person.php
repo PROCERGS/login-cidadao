@@ -60,7 +60,7 @@ class Person extends BaseUser
      * @Groups({"username"})
      */
     protected $username;
-    
+
     /**
      * @Expose
      * @Groups({"cpf"})
@@ -71,8 +71,8 @@ class Person extends BaseUser
      *     minMessage="The CPF is too short.",
      *     maxMessage="The CPF is too long.",
      *     groups={"Registration", "Profile"}
-     * ) 
-     */    
+     * )
+     */
     protected $cpf;
 
     /**
@@ -314,14 +314,14 @@ class Person extends BaseUser
             $this->setBirthdate($date);
         }
     }
-    
+
     public function setCpf($var)
     {
         $this->cpf = $var;
-    
+
         return $this;
     }
-    
+
     public function getCpf()
     {
         return $this->cpf;
