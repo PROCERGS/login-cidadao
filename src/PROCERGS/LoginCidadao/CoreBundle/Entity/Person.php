@@ -57,9 +57,23 @@ class Person extends BaseUser
 
     /**
      * @Expose
-     * @Groups({"cpf"})
+     * @Groups({"username"})
      */
     protected $username;
+    
+    /**
+     * @Expose
+     * @Groups({"cpf"})
+     * @ORM\Column(type="string")
+     * @Assert\Length(
+     *     min=11,
+     *     max="11",
+     *     minMessage="The CPF is too short.",
+     *     maxMessage="The CPF is too long.",
+     *     groups={"Registration", "Profile"}
+     * ) 
+     */    
+    protected $cpf;
 
     /**
      * @Expose
@@ -70,7 +84,7 @@ class Person extends BaseUser
     /**
      * @Expose
      * @Groups({"birthdate"})
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", nullable=true)
      */
     protected $birthdate;
 
@@ -78,6 +92,7 @@ class Person extends BaseUser
      * @Expose
      * @Groups({"cep"})
      * @ORM\Column(type="string", nullable=true)
+
      */
     protected $cep;
 
@@ -298,6 +313,18 @@ class Person extends BaseUser
             $date = \DateTime::createFromFormat('m/d/Y', $fbdata['birthday']);
             $this->setBirthdate($date);
         }
+    }
+    
+    public function setCpf($var)
+    {
+        $this->cpf = $var;
+    
+        return $this;
+    }
+    
+    public function getCpf()
+    {
+        return $this->cpf;
     }
 
 }
