@@ -97,6 +97,20 @@ class Person extends BaseUser
     protected $facebookId;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="twitterId", type="string", length=255, nullable=true)
+     */
+    protected $twitterId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="twitterUsername", type="string", length=255, nullable=true)
+     */
+    protected $twitterUsername;
+
+    /**
      * @ORM\OneToMany(targetEntity="Authorization", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
      */
     protected $authorizations;
@@ -216,6 +230,30 @@ class Person extends BaseUser
     public function getFacebookId()
     {
         return $this->facebookId;
+    }
+
+    public function setTwitterId($twitterId)
+    {
+        $this->twitterId = $twitterId;
+
+        return $this;
+    }
+
+    public function getTwitterId()
+    {
+        return $this->twitterId;
+    }
+
+    public function setTwitterUsername($twitterUsername)
+    {
+        $this->twitterUsername = $twitterUsername;
+
+        return $this;
+    }
+
+    public function getTwitterUsername()
+    {
+        return $this->twitterUsername;
     }
 
     public function serialize()

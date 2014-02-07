@@ -17,6 +17,8 @@ parameters:
     facebook_app_id: facebook_app_id_here
     facebook_app_secret: facebook_app_secret_here
     facebook_app_url: facebook_app_url
-    facebook_app_this_url: "https://meu.rs.gov.br"
+    facebook_app_this_url: "https://%site_domain%"
 
     http_proxy: ~
+
+    site_domain: meu.rs.gov.br

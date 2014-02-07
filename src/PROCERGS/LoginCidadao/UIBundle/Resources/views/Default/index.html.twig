@@ -58,27 +58,33 @@
         </div>
     </div>
 
-    {{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
+    <div class="row">
+        <div class="col-xs-12">
+            {{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
 
-    <div class="fbpo">{{ facebook_login_button() }}</div>
+            <div class="fbpo">{{ facebook_login_button() }}</div>
 
-<script type="text/javascript">
+            {{ twitter_anywhere_setup() }}
 
-        var authurl = '{{ path('_security_check_facebook') }}';
+            <script type="text/javascript">
 
-        function goLogIn(){
-            window.location = authurl;
-        }
+                    var authurl = '{{ path('_security_check_facebook') }}';
 
-        function onFbInit() {
-            if (typeof(FB) != 'undefined' && FB != null ) {
-                FB.Event.subscribe('auth.statusChange', function(response) {
-                    setTimeout(goLogIn, 500);
-                });
-            }
-        }
+                    function goLogIn(){
+                        window.location = authurl;
+                    }
 
-</script>
+                    function onFbInit() {
+                        if (typeof(FB) != 'undefined' && FB != null ) {
+                            FB.Event.subscribe('auth.statusChange', function(response) {
+                                setTimeout(goLogIn, 500);
+                            });
+                        }
+                    }
+
+            </script>
+        </div>
+    </div>
 {% endblock %}
 
 {% block footer %}
