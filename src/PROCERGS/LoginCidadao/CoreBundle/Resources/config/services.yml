@@ -18,3 +18,6 @@ services:
 #    procergs_login_cidadao_core.example:
 #        class: %procergs_login_cidadao_core.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
+    procergs_logincidadao.user_provider:
+        class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\MeuProvider
+        arguments: [@fos_user.user_manager]

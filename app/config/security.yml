@@ -12,7 +12,7 @@ security:
             chain:
                 providers: [fos_userbundle, fos_facebook_provider]
         fos_userbundle:
-            id: fos_user.user_provider.username
+            id: procergs_logincidadao.user_provider
         fos_facebook_provider:
             id: fos_facebook.user.login
 
