@@ -16,6 +16,7 @@ class RegistrationFormType extends BaseType
         $builder->add('surname');
         $builder->add('birthdate', 'birthday');
         $builder->add('cep');
+        $builder->add('cpf');
     }
 
     public function getName()
