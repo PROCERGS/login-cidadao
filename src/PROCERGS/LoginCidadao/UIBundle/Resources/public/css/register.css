@@ -1,14 +1,17 @@
 #register-aside {
     background-color: #494949;
     background-color: rgba(0, 0, 0, .7);
+    border-radius: 5px;
     color: #DADADA;
     height: 604px;
     margin-bottom: 30px;
+    min-width: 360px;
     padding: 18px 8px;
     text-align: center;
 }
 
 #register-aside p {
+    font-size: 13px;
     margin-bottom: 40px;
 }
 
