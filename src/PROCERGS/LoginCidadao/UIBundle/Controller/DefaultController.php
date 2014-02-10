@@ -17,7 +17,7 @@ class DefaultController extends Controller
     {
         $security = $this->get('security.context');
         if (false === $security->isGranted('ROLE_USER')) {
-            return array();
+            return $this->redirect($this->generateUrl('fos_user_security_login'));
         } else {
             $em = $this->getDoctrine()->getManager();
             $clients = $em->getRepository('PROCERGSOAuthBundle:Client');

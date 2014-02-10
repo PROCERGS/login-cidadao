@@ -4,7 +4,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider;
 
 use FOS\UserBundle\Security\UserProvider;
 
-class MeuProvider extends UserProvider
+class LoginCidadaoProvider extends UserProvider
 {
     
     /**

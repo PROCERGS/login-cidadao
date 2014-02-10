@@ -15,6 +15,9 @@
     <div class="box-wrapper">
         <div class="row">
             <div class="col-xs-12 col-lg-6 col-lg-offset-3">
+            {% if error %}
+            <div>{{ error|trans }}</div>
+            {% endif %}
                 <form role="form" action="{{ path("fos_user_security_check") }}" method="post" class="well well-lg">
                     {% image '@PROCERGSLoginCidadaoUIBundle/Resources/public/images/logo_2x.png' %}
                         <img class="center-block" src="{{ asset_url }}" alt="{%trans%}Citizen's Login{%endtrans%}">
