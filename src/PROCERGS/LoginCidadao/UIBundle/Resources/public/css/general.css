@@ -1,5 +1,23 @@
-* {
-    font-family: 'Open Sans', arial !important;
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 300;
+    src: local('Open Sans Light'), local('OpenSans-Light'), url(https://themes.googleusercontent.com/static/fonts/opensans/v7/DXI1ORHCpsQm3Vp6mXoaTXhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v7/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+}
+
+*, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: 'Open Sans', arial;
+    font-weight: 300;
+}
+
+.font-a {
+    font-family: arial, helvetica, sans-serif;
 }
 
 html, body {
@@ -45,14 +63,12 @@ img.desaturate {
 }
 
 footer {
+    color: #737373;
+    display: block;
     position: relative;
     margin-top: -36px;
     min-height: 36px;
     clear: both;
-}
-
-footer {
-    display: block;
     width: 100%;
 }
 
@@ -72,13 +88,17 @@ footer nav li {
     margin-right: 10px;
 }
 
-footer nav a {
+footer nav li a {
+    color: #000;
+}
+
+.footer-login li, .footer-login li a {
     color: #737373;
 }
 
 /* buttons */
 .btn-green {
-    border: 1px solid #360
+    border: 1px solid #360;
     background: #299a0b; /* Old browsers */
     color: #fff;
     text-shadow: 0 1px rgba(0,0,0,0.1);
