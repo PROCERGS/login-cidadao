@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use PROCERGS\OAuthBundle\Entity\AccessToken;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class PersonController extends Controller
 {
@@ -54,15 +55,15 @@ class PersonController extends Controller
             $authorizations = $user->getAuthorizations();
             foreach ($authorizations as $auth) {
                 if ($auth->getPerson()->getId() == $user->getId() && $auth->getClient()->getId() == $clientId) {
-                    
+
                     foreach ($accessTokens as $accessToken) {
                         $em->remove($accessToken);
                     }
-                    
+
                     foreach ($refreshTokens as $refreshToken) {
                         $em->remove($refreshToken);
                     }
-                    
+
                     $em->remove($auth);
                     $em->flush();
                     $response->setData(array(
@@ -90,6 +91,22 @@ class PersonController extends Controller
             $response->setStatusCode(500);
             return $response;
         }
+    }
+
+    /**
+     * @Route("/connectTwitter", name="connect_twitter")
+     *
+     */
+    public function connectTwitterAction()
+    {
+        $request = $this->get('request');
+        $twitter = $this->get('fos_twitter.service');
+
+        $authURL = $twitter->getLoginUrl($request);
+
+        $response = new RedirectResponse($authURL);
+
+        return $response;
     }
 
 }

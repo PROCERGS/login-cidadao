@@ -105,3 +105,20 @@ fos_facebook:
     secret: %facebook_app_secret%
     cookie: true
     permissions: [email, user_about_me, user_birthday, user_location]
+
+hwi_oauth:
+    connect:
+        account_connector: procergs.hwi_twitter.user_provider
+    firewall_name: main
+    fosub:
+        username_iterations: 30
+        properties:
+            twitter: twitterId
+    resource_owners:
+        twitter:
+            type:           twitter
+            client_id:      %twitter_app_key%
+            client_secret:  %twitter_app_secret%
+            scope:          "email"
+parameters:
+    buzz.client.class: PROCERGS\Generic\HWIOAuthProxyBundle\Buzz\Client\CurlProxy

@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class PersonController extends Controller
 {
@@ -49,7 +49,8 @@ class PersonController extends Controller
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));
     }
 
-    public function loginFbAction() {
+    public function loginFbAction()
+    {
         return $this->redirect($this->generateUrl("_homepage"));
     }
 

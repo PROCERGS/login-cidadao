@@ -25,7 +25,9 @@
         "simplethings/entity-audit-bundle": "*",
         "hwi/oauth-bundle": "0.3.*@dev",
         "facebook/php-sdk": "3.2.0",
-        "friendsofsymfony/facebook-bundle": "dev-master"
+        "friendsofsymfony/facebook-bundle": "dev-master",
+        "kertz/twitteroauth": "dev-master",
+        "friendsofsymfony/twitter-bundle": "*@dev"
     },
     "scripts": {
         "post-install-cmd": [

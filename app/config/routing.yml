@@ -1,3 +1,20 @@
+#HWI OAuth
+hwi_oauth_security:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    prefix: /login
+
+hwi_oauth_connect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+    prefix: /login
+
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /login
+
+twitter_login:
+    pattern: /login/check-twitter
+
+# login-cidadao
 procergs_generic_locale:
     resource: "@PROCERGSGenericLocaleBundle/Controller/"
     type:     annotation

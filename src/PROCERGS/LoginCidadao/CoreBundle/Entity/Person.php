@@ -60,19 +60,19 @@ class Person extends BaseUser
      * @Groups({"username"})
      */
     protected $username;
-    
+
     /**
      * @Expose
      * @Groups({"cpf"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\Length(
      *     min=11,
      *     max="11",
      *     minMessage="The CPF is too short.",
      *     maxMessage="The CPF is too long.",
      *     groups={"Registration", "Profile"}
-     * ) 
-     */    
+     * )
+     */
     protected $cpf;
 
     /**
@@ -110,6 +110,27 @@ class Person extends BaseUser
      * @ORM\Column(name="facebookId", type="string", length=255, nullable=true)
      */
     protected $facebookId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="twitterId", type="string", length=255, nullable=true)
+     */
+    protected $twitterId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="twitterUsername", type="string", length=255, nullable=true)
+     */
+    protected $twitterUsername;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="twitterAccessToken", type="string", length=255, nullable=true)
+     */
+    protected $twitterAccessToken;
 
     /**
      * @ORM\OneToMany(targetEntity="Authorization", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
@@ -233,6 +254,42 @@ class Person extends BaseUser
         return $this->facebookId;
     }
 
+    public function setTwitterId($twitterId)
+    {
+        $this->twitterId = $twitterId;
+
+        return $this;
+    }
+
+    public function getTwitterId()
+    {
+        return $this->twitterId;
+    }
+
+    public function setTwitterUsername($twitterUsername)
+    {
+        $this->twitterUsername = $twitterUsername;
+
+        return $this;
+    }
+
+    public function getTwitterUsername()
+    {
+        return $this->twitterUsername;
+    }
+
+    public function setTwitterAccessToken($twitterAccessToken)
+    {
+        $this->twitterAccessToken = $twitterAccessToken;
+
+        return $this;
+    }
+
+    public function getTwitterAccessToken()
+    {
+        return $this->twitterAccessToken;
+    }
+
     public function serialize()
     {
         return serialize(array($this->facebookId, parent::serialize()));
@@ -276,14 +333,14 @@ class Person extends BaseUser
             $this->setBirthdate($date);
         }
     }
-    
+
     public function setCpf($var)
     {
         $this->cpf = $var;
-    
+
         return $this;
     }
-    
+
     public function getCpf()
     {
         return $this->cpf;

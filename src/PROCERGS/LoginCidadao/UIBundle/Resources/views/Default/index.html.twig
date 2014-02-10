@@ -61,27 +61,31 @@
         </div>
     </div>
 
-    {{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
+    <div class="row">
+        <div class="col-xs-12">
+            {{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
 
-    <div class="fbpo">{{ facebook_login_button() }}</div>
+            <div class="fbpo">{{ facebook_login_button() }}</div>
 
-<script type="text/javascript">
+            <script type="text/javascript">
 
-        var authurl = '{{ path('_security_check_facebook') }}';
+                    var authurl = '{{ path('_security_check_facebook') }}';
 
-        function goLogIn(){
-            window.location = authurl;
-        }
+                    function goLogIn(){
+                        window.location = authurl;
+                    }
 
-        function onFbInit() {
-            if (typeof(FB) != 'undefined' && FB != null ) {
-                FB.Event.subscribe('auth.statusChange', function(response) {
-                    setTimeout(goLogIn, 500);
-                });
-            }
-        }
+                    function onFbInit() {
+                        if (typeof(FB) != 'undefined' && FB != null ) {
+                            FB.Event.subscribe('auth.statusChange', function(response) {
+                                setTimeout(goLogIn, 500);
+                            });
+                        }
+                    }
 
-</script>
+            </script>
+        </div>
+    </div>
 {% endblock %}
 
 {% block footer %}

@@ -1,5 +1,5 @@
 parameters:
-#    procergs_login_cidadao_core.example.class: PROCERGS\LoginCidadao\CoreBundle\Example
+    procergs.hwi_twitter.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\FOSUBUserProvider
 
 services:
     fos_facebook.user.login:
@@ -10,14 +10,16 @@ services:
             validator: "@validator"
             container: "@service_container"
 
+    procergs.hwi_twitter.user_provider:
+        class: %procergs.hwi_twitter.user_provider.class%
+        arguments: [ "@fos_user.user_manager", { twitter: twitterId } ]
+
     procergs_person.registration.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\RegistrationFormType
         arguments: [%fos_user.model.user.class%]
         tags:
             - { name: form.type, alias: procergs_person_registration }
-#    procergs_login_cidadao_core.example:
-#        class: %procergs_login_cidadao_core.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+
     procergs_logincidadao.user_provider:
         class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
-        arguments: [@fos_user.user_manager]
+        arguments: ["@fos_user.user_manager"]

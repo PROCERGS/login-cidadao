@@ -1,0 +1,9 @@
+{% extends "PROCERGSLoginCidadaoUIBundle::base.loggedIn.html.twig" %}
+
+{% block body %}
+
+    {% trans_default_domain 'FOSUserBundle' %}
+
+    <p>{{ 'registration.check_email'|trans({'%email%': user.email}) }}</p>
+    
+{% endblock body %}
