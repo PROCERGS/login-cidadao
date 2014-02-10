@@ -27,8 +27,6 @@ class AppKernel extends Kernel
             new FOS\FacebookBundle\FOSFacebookBundle(),
             new PROCERGS\Generic\HWIOAuthProxyBundle\PROCERGSGenericHWIOAuthProxyBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
-//            new FOS\TwitterBundle\FOSTwitterBundle(),
-//            new PROCERGS\Generic\TwitterOAuthProxiedBundle\PROCERGSGenericTwitterOAuthProxiedBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

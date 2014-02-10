@@ -14,14 +14,6 @@ services:
         class: %procergs.hwi_twitter.user_provider.class%
         arguments: [ "@fos_user.user_manager", { twitter: twitterId } ]
 
-#    fos_twitter.user:
-#        class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\TwitterUserProvider
-#        arguments:
-#            twitter_oauth: "@fos_twitter.api"
-#            userManager: "@fos_user.user_manager"
-#            validator: "@validator"
-#            session: "@session"
-
     procergs_person.registration.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\RegistrationFormType
         arguments: [%fos_user.model.user.class%]
