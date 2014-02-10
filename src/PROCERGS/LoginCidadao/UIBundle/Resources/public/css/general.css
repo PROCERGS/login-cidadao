@@ -1,8 +1,13 @@
 * {
     font-family: 'Open Sans', arial !important;
 }
+
+html, body {
+    overflow-x: hidden;
+}
+
 body {
-    background: #ffffff;
+    background: #e5e5e5;
     background: -moz-linear-gradient(top, #ffffff 0%, #e5e5e5 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e5e5e5));
     background: -webkit-linear-gradient(top, #ffffff 0%,#e5e5e5 100%);
@@ -10,6 +15,10 @@ body {
     background: -ms-linear-gradient(top, #ffffff 0%,#e5e5e5 100%);
     background: linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%);
     background-attachment: fixed;
+}
+
+body>.container {
+    margin-bottom: 100px;
 }
 
 .header {
@@ -35,7 +44,40 @@ img.desaturate {
     padding: 0 44px!important;
 }
 
-.btn-login {
+footer {
+    position: relative;
+    margin-top: -36px;
+    min-height: 36px;
+    clear: both;
+}
+
+footer {
+    display: block;
+    width: 100%;
+}
+
+footer,
+footer>div{
+    overflow: hidden;
+}
+
+footer>div {
+    border-top: 1px solid #ebebeb;
+    padding: 10px 0 0;
+    font-size: .82em;
+}
+
+footer nav li {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+footer nav a {
+    color: #737373;
+}
+
+/* buttons */
+.btn-green {
     border: 1px solid #360
     background: #299a0b; /* Old browsers */
     color: #fff;
@@ -46,6 +88,7 @@ img.desaturate {
     background: -o-linear-gradient(top, #299a0b 0%,#197c09 100%,#299a0b 100%); /* Opera 11.10+ */
     background: -ms-linear-gradient(top, #299a0b 0%,#197c09 100%,#299a0b 100%); /* IE10+ */
     background: linear-gradient(to bottom, #299a0b 0%,#197c09 100%,#299a0b 100%); /* W3C */
+    border: none;
     height: 29px;
     float: right;
     font-size: 13px;
@@ -56,7 +99,7 @@ img.desaturate {
     width: 64px;
 }
 
-.btn-login:hover {
+.btn-green:hover {
     background: #0b891e; /* Old browsers */
     background: -moz-linear-gradient(top, #0b891e 0%, #0f7c09 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0b891e), color-stop(100%,#0f7c09)); /* Chrome,Safari4+ */

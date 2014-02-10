@@ -7,14 +7,23 @@
     <img src="{{ asset_url }}" alt="{%trans%}Government of Rio Grande do Sul - Promoting equality makes the difference{%endtrans%}" height="65">
     {% endimage %}
 
-    <a class="btn btn-default btn-login" href="#" role="button">Login</a>
+    <a class="btn btn-default btn-green" href="#" role="button">Login</a>
   </div><!-- /.container-fluid -->
 </nav>
+{% endblock %}
 
-
-
-
-
+{% block footer %}
+    <footer>
+        <div>
+            <nav>
+                <ul>
+                    <li><a href="#">{%trans%}Government of Rio Grande do Sul{%endtrans%}</a></li>
+                    <li><a href="#">{%trans%}Privacy and Terms of Service{%endtrans%}</a></li>
+                    <li><a href="#">{{ 'Help' | trans }}</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
 {% endblock %}
 
 {% block stylesheets %}

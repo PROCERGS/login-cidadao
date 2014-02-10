@@ -29,5 +29,5 @@ services:
             - { name: form.type, alias: procergs_person_registration }
 
     procergs_logincidadao.user_provider:
-        class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\MeuProvider
+        class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
         arguments: ["@fos_user.user_manager"]
