@@ -15,8 +15,8 @@ security:
             id: procergs_logincidadao.user_provider
         fos_facebook_provider:
             id: fos_facebook.user.login
-        fos_twitter_provider:
-            id: fos_twitter.user
+#        fos_twitter_provider:
+#            id: fos_twitter.user
 
     firewalls:
         dev:
@@ -24,32 +24,40 @@ security:
             security: false
 
         main:
-          pattern: ^/(?!api)
+            pattern: ^/(?!api)
 
-          fos_facebook:
-              app_url: ""
-              server_url: "http://lc.des.dona.to"
-              login_path: /login
-              check_path: /facebook/login_check
-              provider: fos_facebook_provider
-              default_target_path: /
+            fos_facebook:
+                app_url: ""
+                server_url: "http://lc.des.dona.to"
+                login_path: /login
+                check_path: /facebook/login_check
+                provider: fos_facebook_provider
+                default_target_path: /
 
-          fos_twitter:
-              login_path: /twitter/login
-              check_path: /twitter/login_check
-              default_target_path: /
-              provider: fos_twitter_provider
+            oauth:
+                resource_owners:
+                    twitter:    "/login/check-twitter"
+                login_path:   /login
+                use_forward:  false
+                failure_path: /login
+                oauth_user_provider:
+                    service:  procergs.hwi_twitter.user_provider
+#            fos_twitter:
+#                login_path: /app_dev.php/twitter/login
+#                check_path: /app_dev.php/twitter/login_check
+#                default_target_path: /
+#                provider: fos_twitter_provider
 
-          form_login:
-              provider:       fos_userbundle
-              csrf_provider:  form.csrf_provider
-              login_path:     /login
-              use_forward:    false
-              check_path:     /login_check
-              failure_path:   null
-          logout:
-              path: /logout
-          anonymous:  true
+            form_login:
+                provider:       fos_userbundle
+                csrf_provider:  form.csrf_provider
+                login_path:     /login
+                use_forward:    false
+                check_path:     /login_check
+                failure_path:   null
+            logout:
+                path: /logout
+            anonymous:  true
 
         oauth_token:
             pattern:  ^/oauth/v2/token

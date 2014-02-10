@@ -25,7 +25,9 @@ class AppKernel extends Kernel
             new PROCERGS\Generic\LocaleBundle\PROCERGSGenericLocaleBundle(),
             new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
             new FOS\FacebookBundle\FOSFacebookBundle(),
-            new FOS\TwitterBundle\FOSTwitterBundle(),
+            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+//            new FOS\TwitterBundle\FOSTwitterBundle(),
+//            new PROCERGS\Generic\TwitterOAuthProxiedBundle\PROCERGSGenericTwitterOAuthProxiedBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

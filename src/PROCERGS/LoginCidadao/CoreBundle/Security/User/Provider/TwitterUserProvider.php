@@ -3,7 +3,7 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider;
 
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use \TwitterOAuth;
+use PROCERGS\Generic\TwitterOAuthProxiedBundle\Service\TwitterOAuth;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;

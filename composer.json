@@ -27,7 +27,7 @@
         "facebook/php-sdk": "3.2.0",
         "friendsofsymfony/facebook-bundle": "dev-master",
         "kertz/twitteroauth": "dev-master",
-        "friendsofsymfony/twitter-bundle": "dev-master"
+        "friendsofsymfony/twitter-bundle": "*@dev"
     },
     "scripts": {
         "post-install-cmd": [

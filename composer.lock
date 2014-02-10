@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "ad83e3eb5bbdb77d6d519da2e9aefdf6",
+    "hash": "7be0b44ba62c963d654715ae4b0eaaa2",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -546,16 +546,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "2.3.4",
+            "version": "2.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "a41b02c080114c0de3da4ee9fba61f7d18fae7d0"
+                "reference": "2c31ec4809a28a549bf22d7cb7504add98156cd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/a41b02c080114c0de3da4ee9fba61f7d18fae7d0",
-                "reference": "a41b02c080114c0de3da4ee9fba61f7d18fae7d0",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/2c31ec4809a28a549bf22d7cb7504add98156cd6",
+                "reference": "2c31ec4809a28a549bf22d7cb7504add98156cd6",
                 "shasum": ""
             },
             "require": {
@@ -613,7 +613,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2013-05-11 07:51:12"
+            "time": "2014-02-08 16:28:24"
         },
         {
             "name": "facebook/php-sdk",
@@ -961,12 +961,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/hwi/HWIOAuthBundle.git",
-                "reference": "071bd0de9245cbbc0bce057e4d3a8c696d790894"
+                "reference": "8a42cccda1a60bbbbba724c5c3cd313aa24d66a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/071bd0de9245cbbc0bce057e4d3a8c696d790894",
-                "reference": "071bd0de9245cbbc0bce057e4d3a8c696d790894",
+                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/8a42cccda1a60bbbbba724c5c3cd313aa24d66a1",
+                "reference": "8a42cccda1a60bbbbba724c5c3cd313aa24d66a1",
                 "shasum": ""
             },
             "require": {
@@ -1065,7 +1065,7 @@
                 "yahoo",
                 "yandex"
             ],
-            "time": "2014-02-07 11:44:56"
+            "time": "2014-02-10 09:20:16"
         },
         {
             "name": "incenteev/composer-parameter-handler",
