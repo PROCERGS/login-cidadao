@@ -125,3 +125,6 @@ hwi_oauth:
             type:           twitter
             client_id:      %twitter_app_key%
             client_secret:  %twitter_app_secret%
+            scope:          "email"
+parameters:
+    buzz.client.class: PROCERGS\Generic\HWIOAuthProxyBundle\Buzz\Client\CurlProxy

@@ -25,6 +25,7 @@ class AppKernel extends Kernel
             new PROCERGS\Generic\LocaleBundle\PROCERGSGenericLocaleBundle(),
             new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
             new FOS\FacebookBundle\FOSFacebookBundle(),
+            new PROCERGS\Generic\HWIOAuthProxyBundle\PROCERGSGenericHWIOAuthProxyBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
 //            new FOS\TwitterBundle\FOSTwitterBundle(),
 //            new PROCERGS\Generic\TwitterOAuthProxiedBundle\PROCERGSGenericTwitterOAuthProxiedBundle(),

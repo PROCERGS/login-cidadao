@@ -64,7 +64,7 @@ class Person extends BaseUser
     /**
      * @Expose
      * @Groups({"cpf"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\Length(
      *     min=11,
      *     max="11",
@@ -124,6 +124,13 @@ class Person extends BaseUser
      * @ORM\Column(name="twitterUsername", type="string", length=255, nullable=true)
      */
     protected $twitterUsername;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="twitterAccessToken", type="string", length=255, nullable=true)
+     */
+    protected $twitterAccessToken;
 
     /**
      * @ORM\OneToMany(targetEntity="Authorization", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
@@ -269,6 +276,18 @@ class Person extends BaseUser
     public function getTwitterUsername()
     {
         return $this->twitterUsername;
+    }
+
+    public function setTwitterAccessToken($twitterAccessToken)
+    {
+        $this->twitterAccessToken = $twitterAccessToken;
+
+        return $this;
+    }
+
+    public function getTwitterAccessToken()
+    {
+        return $this->twitterAccessToken;
     }
 
     public function serialize()
