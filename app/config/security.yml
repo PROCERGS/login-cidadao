@@ -37,16 +37,11 @@ security:
             oauth:
                 resource_owners:
                     twitter:    "/login/check-twitter"
-                login_path:   /login
+                login_path:   /login/twitter
                 use_forward:  false
-                failure_path: /login
+                failure_path: /login/twitter
                 oauth_user_provider:
                     service:  procergs.hwi_twitter.user_provider
-#            fos_twitter:
-#                login_path: /app_dev.php/twitter/login
-#                check_path: /app_dev.php/twitter/login_check
-#                default_target_path: /
-#                provider: fos_twitter_provider
 
             form_login:
                 provider:       fos_userbundle
