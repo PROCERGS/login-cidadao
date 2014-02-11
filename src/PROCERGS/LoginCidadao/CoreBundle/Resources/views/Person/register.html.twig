@@ -32,7 +32,7 @@
 
             {{ form_start(form, {'attr': {'role':'form', 'class':'fos_user_registration_register'}}) }}
                 {{ form_errors(form) }}
-            
+
                 <div class="form-group">
                     {{ form_label(form.email) }}
                     {{ form_errors(form.email) }}
@@ -72,14 +72,14 @@
                     {{ form_errors(form.cpf) }}
                     {{ form_widget(form.cpf, {'attr': {'class': 'form-control'}}) }}
                 </div>
-
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-5">
-                        <input class='btn btn-default btn-green' type="submit" value="{{ 'registration.submit'|trans }}" />
-                    </div>
-                </div>
             {{ form_end(form) }}
-
         </div>
 
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+    {% stylesheets 'bundles/procergslogincidadaocore/css/register/*.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
 {% endblock %}
