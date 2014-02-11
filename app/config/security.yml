@@ -31,8 +31,9 @@ security:
                 server_url: "http://lc.des.dona.to"
                 login_path: /login
                 check_path: /facebook/login_check
-                provider: fos_facebook_provider
                 default_target_path: /
+                success_handler: security.authentication.success_handler
+                provider: fos_facebook_provider
 
             oauth:
                 resource_owners:
@@ -40,6 +41,7 @@ security:
                 login_path:   /login/twitter
                 use_forward:  false
                 failure_path: /login/twitter
+                success_handler: security.authentication.success_handler
                 oauth_user_provider:
                     service:  procergs.hwi_twitter.user_provider
 
