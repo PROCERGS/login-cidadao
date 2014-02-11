@@ -1,0 +1,10 @@
+registration.submit: __registration.submit
+profile.edit.submit: __profile.edit.submit
+registration.check_email: __registration.check_email
+profile.show.username: __profile.show.username
+profile.show.email: __profile.show.email
+registration.confirmed: __registration.confirmed
+registration.back: __registration.back
+layout.logged_in_as: __layout.logged_in_as
+layout.logout: __layout.logout
+layout.login: __layout.login

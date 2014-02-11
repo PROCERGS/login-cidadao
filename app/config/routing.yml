@@ -1,8 +1,3 @@
-#API
-procergs_login_cidadao_api:
-    resource: "@PROCERGSLoginCidadaoAPIBundle/Resources/config/routing.yml"
-    prefix:   /api/v1
-
 #HWI OAuth
 hwi_oauth_security:
     resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
@@ -18,6 +13,11 @@ hwi_oauth_redirect:
 
 twitter_login:
     pattern: /login/check-twitter
+
+#API
+procergs_login_cidadao_api:
+    resource: "@PROCERGSLoginCidadaoAPIBundle/Resources/config/routing.yml"
+    prefix:   /api/v1
 
 # login-cidadao
 procergs_generic_locale:

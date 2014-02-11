@@ -139,4 +139,12 @@ class PersonController extends Controller
         return $response;
     }
 
+    /**
+     * @Route("/person/username/update", name="lc_update_username")
+     * @Template()
+     */
+    public function updateUsernameAction()
+    {
+        return array();
+    }
 }

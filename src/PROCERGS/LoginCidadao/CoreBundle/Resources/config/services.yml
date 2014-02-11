@@ -1,7 +1,13 @@
 parameters:
     procergs.hwi_twitter.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\FOSUBUserProvider
+    security.authentication.success_handler.class: PROCERGS\LoginCidadao\CoreBundle\Handler\AuthenticationSuccessHandler
 
 services:
+    security.authentication.success_handler:
+        class: %security.authentication.success_handler.class%
+        public: false
+        arguments: ["@router", "@doctrine.orm.entity_manager", "@doctrine.orm.entity_manager", "@session"]
+
     fos_facebook.user.login:
         class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\FacebookProvider
         arguments:
