@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Email;
 
 class PersonController extends Controller
 {
@@ -149,11 +150,10 @@ class PersonController extends Controller
     public function updateUsernameAction()
     {
         $user = $this->getUser();
-        $doctrine = $this->getDoctrine();
-        $em = $doctrine->getEntityManager();
+        $userManager = $this->container->get('fos_user.user_manager');
 
         $defaultData = array('username' => $user->getUsername());
-        $form = $this->createFormBuilder($defaultData)
+        $formBuilder = $this->createFormBuilder($defaultData)
                 ->add('username', 'text', array(
                     'constraints' => array(
                         new NotBlank(),
@@ -165,18 +165,34 @@ class PersonController extends Controller
                     'required' => false,
                 ))
                 ->add('saveUsername', 'submit')
-                ->add('saveUsernamePassword', 'submit')
-                ->getForm();
+                ->add('saveUsernamePassword', 'submit');
+
+        $emailMissing = strstr($user->getEmail(), ' ') !== false;
+        if ($emailMissing) {
+            $formBuilder->add('email', 'email', array(
+                'required' => true,
+                'constraints' => new Email(),
+            ));
+        }
+
+        $form = $formBuilder->getForm();
 
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
             $data = $form->getData();
             $user->setUsername($data['username']);
-            $em->persist($user);
-            $em->flush();
+
+            if ($emailMissing) {
+                $user->setEmail($data['email']);
+            }
+            if (!is_null($data['password'])) {
+                $user->setPlainPassword($data['password']);
+            }
+
+            $userManager->updateUser($user);
             return $this->redirect($this->generateUrl('fos_user_profile_edit'));
         }
 
-        return array('form' => $form->createView());
+        return array('form' => $form->createView(), 'emailMissing' => $emailMissing);
     }
 }

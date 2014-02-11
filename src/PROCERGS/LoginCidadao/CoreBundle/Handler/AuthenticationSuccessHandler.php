@@ -48,7 +48,12 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             return new RedirectResponse($uri);
         } else {
             $referer = $request->headers->get('referer');
-            return new RedirectResponse($referer);
+            if (strlen($referer) > 0) {
+                $dest = $referer;
+            } else {
+                $dest = $this->router->generate('lc_home');
+            }
+            return new RedirectResponse($dest);
         }
     }
 

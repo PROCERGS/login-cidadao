@@ -41,6 +41,7 @@ security:
                 login_path:   /login/twitter
                 use_forward:  false
                 failure_path: /login/twitter
+                default_target_path: /
                 success_handler: security.authentication.success_handler
                 oauth_user_provider:
                     service:  procergs.hwi_twitter.user_provider
@@ -52,6 +53,7 @@ security:
                 use_forward:    false
                 check_path:     /login_check
                 failure_path:   null
+                default_target_path: /
             logout:
                 path: /logout
             anonymous:  true
