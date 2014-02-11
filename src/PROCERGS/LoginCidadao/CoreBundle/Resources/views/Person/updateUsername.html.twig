@@ -5,18 +5,46 @@
 <p>{% trans %}Your account is created, but we recommend you choose a better username.{% endtrans %}</p>
 <p>{% trans %}Your username will be used to quickly refer to yourself on Citizen's Login, just like Twitter's @ replies.{% endtrans %}</p>
 
-<label for="username">{{ 'Username:' | trans }}</label>
-<input type="text" id="username" name="username">
-<button type="submit" class="btn btn-success">{{'Save'|trans}}</button>
+{{ form_start(form) }}
+    {{ form_errors(form) }}
+
+    <div class="form-group">
+        {{ form_label(form.username, 'Username:' | trans) }}
+        {{ form_errors(form.username) }}
+        {{ form_widget(form.username) }}
+    </div>
+
+    {% if emailMissing == true %}
+    <p>{% trans %}We'll also need you to type your email address, since Twitter didn't tell it to us.{% endtrans %}</p>
+    <div class="form-group">
+        {{ form_label(form.email, 'Email:' | trans) }}
+        {{ form_errors(form.email) }}
+        {{ form_widget(form.email) }}
+    </div>
+    {% endif %}
+
+    <div class="form-group">
+        {{ form_widget(form.saveUsername, { 'label': 'Save' | trans, 'attr': { 'class': 'btn btn-success' } }) }}
+    </div>
 
 <h2>{% trans %}Since you're here...{% endtrans %}</h2>
 <p>{% trans %}Wouldn't you like to define a password so that you can login using your username and password as well?{% endtrans %}</p>
 
-<label for="password">{% trans %}If so, type in your password here:{% endtrans %}</label>
-<input type="text" id="password" name="password">
+    <div class="form-group">
+        {{ form_label(form.password.first, 'If so, type in your password here:' | trans) }}
+        {{ form_errors(form.password.first) }}
+        {{ form_widget(form.password.first) }}
+    </div>
 
-<label for="password_confirm">{% trans %}And then confirm it here:{% endtrans %}</label>
-<input type="text" id="password_confirm" name="password_confirm">
+    <div class="form-group">
+        {{ form_label(form.password.second, 'And then confirm it here:' | trans) }}
+        {{ form_errors(form.password.second) }}
+        {{ form_widget(form.password.second) }}
+    </div>
 
-<button type="submit" class="btn btn-success">{% trans %}Save username and password{% endtrans %}</button>
+    <div class="form-group">
+        {{ form_widget(form.saveUsernamePassword, { 'label': 'Save username and password' | trans, 'attr': { 'class': 'btn btn-success' } }) }}
+    </div>
+
+    {{ form_end(form) }}
 {% endblock %}
