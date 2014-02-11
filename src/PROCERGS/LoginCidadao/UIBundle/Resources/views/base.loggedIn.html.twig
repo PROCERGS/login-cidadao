@@ -9,11 +9,11 @@
 
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
         <!--{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} | -->
-        <a class="btn btn-default btn-green" role="button" href="{{ path('fos_user_security_logout') }}">
+        <a class="btn btn-success btn-sm pull-right" role="button" href="{{ path('fos_user_security_logout') }}">
             {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
         </a>
     {% else %}
-        <a role="button" class="btn btn-default btn-green" href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+        <a role="button" class="btn btn-success btn-sm pull-right" href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
     {% endif %}
 
   </div><!-- /.container-fluid -->

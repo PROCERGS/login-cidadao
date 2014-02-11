@@ -96,36 +96,6 @@ footer nav li a {
     color: #737373;
 }
 
-/* buttons */
-.btn-green {
-    border: 1px solid #360;
-    background: #299a0b; /* Old browsers */
-    color: #fff;
-    text-shadow: 0 1px rgba(0,0,0,0.1);
-    background: -moz-linear-gradient(top, #299a0b 0%, #197c09 100%, #299a0b 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#299a0b), color-stop(100%,#197c09), color-stop(100%,#299a0b)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #299a0b 0%,#197c09 100%,#299a0b 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #299a0b 0%,#197c09 100%,#299a0b 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #299a0b 0%,#197c09 100%,#299a0b 100%); /* IE10+ */
-    background: linear-gradient(to bottom, #299a0b 0%,#197c09 100%,#299a0b 100%); /* W3C */
-    border: none;
-    height: 29px;
-    float: right;
-    font-size: 13px;
-    line-height: 29px;
-    margin-top: 22px;
-    padding: 0;
-    vertical-align: middle;
-    width: 64px;
-}
-
-.btn-green:hover {
-    background: #0b891e; /* Old browsers */
-    background: -moz-linear-gradient(top, #0b891e 0%, #0f7c09 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0b891e), color-stop(100%,#0f7c09)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, #0b891e 0%,#0f7c09 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, #0b891e 0%,#0f7c09 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, #0b891e 0%,#0f7c09 100%); /* IE10+ */
-    background: linear-gradient(to bottom, #0b891e 0%,#0f7c09 100%); /* W3C */;
-    color: #fff;
+.navbar .btn-success {
+    margin-top: 15px;
 }
