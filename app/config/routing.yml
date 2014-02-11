@@ -25,7 +25,7 @@ procergs_generic_locale:
     type:     annotation
     prefix:   /locale
 
-procergs_login_cidadao_ui:
+procergs_login_cidadao_core:
     resource: "@PROCERGSLoginCidadaoCoreBundle/Controller/"
     type:     annotation
     prefix:   /

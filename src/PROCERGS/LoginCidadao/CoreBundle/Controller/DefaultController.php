@@ -3,10 +3,16 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class DefaultController extends Controller
 {
-    public function indexAction($name)
+    /**
+     * @Route("/", name="lc_home")
+     * @Template()
+     */
+    public function indexAction()
     {
         $security = $this->get('security.context');
         if (false === $security->isGranted('ROLE_USER')) {

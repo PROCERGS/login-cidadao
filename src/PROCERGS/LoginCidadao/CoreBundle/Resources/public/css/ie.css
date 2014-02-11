@@ -1,0 +1,39 @@
+/*ie7 ie8*/
+/*@media (min-width: 1200px) {
+    .ie-7 .col-lg-offset-1 {
+        margin-left: 0!important;
+    }
+}*/
+
+.ie-7 > .container {
+    padding-bottom: 0;
+}
+
+.ie-7 .services.well, .ie-8 .services.well {
+    background-color: #333;
+    filter:none;
+}
+
+.ie-7 .footer-login, .ie-8 .footer-login {
+    background-color: #000;
+}
+
+.ie-7 footer li {
+    list-style-type: none;
+    float: left;
+}
+
+.ie-7 #register-aside, .ie-7 #sign-up {
+    margin: 0 30px;
+    width: 460px;
+}
+
+/*ie9*/
+.ie-9 .services.well {
+    filter:none;
+}
+
+/*all ie*/
+body[class^='ie-'] footer {
+    height: 36px;
+}
