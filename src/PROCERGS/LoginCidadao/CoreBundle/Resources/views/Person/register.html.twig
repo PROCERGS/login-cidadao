@@ -38,10 +38,11 @@
             </form>
         </div>
 
+{% endblock %}
 
-
-
-
-
-
+{% block stylesheets %}
+{{ parent() }}
+    {% stylesheets 'bundles/procergslogincidadaocore/css/register/*.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
 {% endblock %}

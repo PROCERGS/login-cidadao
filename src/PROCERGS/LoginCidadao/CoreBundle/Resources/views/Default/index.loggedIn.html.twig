@@ -3,13 +3,45 @@
 {% block body %}
 <div class="row">
     <div class="col-xs-12">
-        <h1>{% trans with {'%user.name%': user.firstName} %}Welcome %user.name%{% endtrans %}</h1>
+        {# <h1>{% trans with {'%user.name%': user.firstName} %}Welcome %user.name%{% endtrans %}</h1> #}
     </div>
 </div>
 
 <div class="row">
     <div class="col-xs-12">
-        <h2>{% trans %}Available Applications and Sites{% endtrans %}</h2>
+        {# <h2>{% trans %}Available Applications and Sites{% endtrans %}</h2> #}
+
+        <div id="profile" class="col-md-7 col-lg-6">
+            <img class="pull-left" src="http://placehold.it/122x122">
+            <h4 class="pull-right">Pessoa da Silva</h4>
+            <a href="" class='pull-right'>Editar informações</a>
+
+            <div class="clearfix"></div>
+            <p>
+                <strong>CPF</strong><br>
+                <span>99999</span>
+            </p>
+
+            <p>
+                <strong>Data de nascimento</strong><br>
+                <span>99/99/9999</span>
+            </p>
+        </div>
+
+        <ul id="applications" class='col-md-4 col-md-offset-1 col-lg-5 col-lg-offset-1'>
+            <li>
+                <img src="" alt="" class="img-rounded">
+                <p>Nota fiscal gaúcha</p>
+                <div class="onoffswitch">
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" onchange="mudanfg();" checked="">
+                    <label class="onoffswitch-label" for="myonoffswitch">
+                        <div class="onoffswitch-inner"></div>
+                        <div class="onoffswitch-switch"></div>
+                    </label>
+                </div>
+            </li>
+        </ul>
+
         <ul class="list-group">
         {% for auth in user.getAuthorizations %}
             <li class="list-group-item authorized">
