@@ -87,6 +87,9 @@ fos_user:
             enabled: true
         form:
             type: procergs_person_registration
+    profile:
+        form:
+            type: procergs_person_profile
 
 # Audit Trail
 simple_things_entity_audit:

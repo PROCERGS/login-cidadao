@@ -108,5 +108,21 @@ class PersonController extends Controller
 
         return $response;
     }
+    
+    /**
+     * @Route("/person/check_username", name="ui_check_username")
+     */
+    public function checkUsernameAction(Request $request){
+        $username = $request->get('username');
+        $person = $this->getDoctrine()
+            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')
+            ->findByUsername($username);
 
+        $result = count($person) > 0;
+
+        $response = new JsonResponse();
+        $response->setData(json_encode(array('success'=>$result)));
+        return $response;        
+    }
+    
 }
