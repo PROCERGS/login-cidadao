@@ -9,6 +9,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class PersonController extends Controller
 {
@@ -145,6 +148,35 @@ class PersonController extends Controller
      */
     public function updateUsernameAction()
     {
-        return array();
+        $user = $this->getUser();
+        $doctrine = $this->getDoctrine();
+        $em = $doctrine->getEntityManager();
+
+        $defaultData = array('username' => $user->getUsername());
+        $form = $this->createFormBuilder($defaultData)
+                ->add('username', 'text', array(
+                    'constraints' => array(
+                        new NotBlank(),
+                        new Length(array('min' => 3)),
+                    ),
+                ))
+                ->add('password', 'repeated', array(
+                    'type' => 'password',
+                    'required' => false,
+                ))
+                ->add('saveUsername', 'submit')
+                ->add('saveUsernamePassword', 'submit')
+                ->getForm();
+
+        $form->handleRequest($this->getRequest());
+        if ($form->isValid()) {
+            $data = $form->getData();
+            $user->setUsername($data['username']);
+            $em->persist($user);
+            $em->flush();
+            return $this->redirect($this->generateUrl('fos_user_profile_edit'));
+        }
+
+        return array('form' => $form->createView());
     }
 }
