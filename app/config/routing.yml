@@ -1,3 +1,8 @@
+#API
+procergs_login_cidadao_api:
+    resource: "@PROCERGSLoginCidadaoAPIBundle/Resources/config/routing.yml"
+    prefix:   /api/v1
+
 #HWI OAuth
 hwi_oauth_security:
     resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
@@ -21,7 +26,7 @@ procergs_generic_locale:
     prefix:   /locale
 
 procergs_login_cidadao_ui:
-    resource: "@PROCERGSLoginCidadaoUIBundle/Controller/"
+    resource: "@PROCERGSLoginCidadaoCoreBundle/Controller/"
     type:     annotation
     prefix:   /
 
@@ -29,12 +34,6 @@ procergs_login_cidadao_ui:
 simple_things_entity_audit:
     resource: "@SimpleThingsEntityAuditBundle/Resources/config/routing.yml"
     prefix: /audit
-
-# API
-procergs_login_cidadao_core:
-    resource: "@PROCERGSLoginCidadaoCoreBundle/Controller"
-    type:     annotation
-    prefix:   /api/v1
 
 # OAuth Routes
 procergso_auth:

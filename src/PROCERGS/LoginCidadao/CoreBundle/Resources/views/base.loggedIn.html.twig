@@ -1,0 +1,49 @@
+{% extends 'PROCERGSLoginCidadaoCoreBundle::base.html.twig' %}
+
+{% block header %}
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_gov.png' %}
+        <img src="{{ asset_url }}" alt="{%trans%}Government of Rio Grande do Sul - Promoting equality makes the difference{%endtrans%}" height="65">
+    {% endimage %}
+
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        <!--{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} | -->
+        <a class="btn btn-success btn-sm pull-right" role="button" href="{{ path('fos_user_security_logout') }}">
+            {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+        </a>
+    {% else %}
+        <a role="button" class="btn btn-success btn-sm pull-right" href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+    {% endif %}
+
+  </div><!-- /.container-fluid -->
+</nav>
+{% endblock %}
+
+{% block footer %}
+    <footer class='font-a'>
+        <div>
+            <nav>
+                <ul>
+                    <li>{%trans%}Government of Rio Grande do Sul{%endtrans%}</li>
+                    <li><a href="#">{%trans%}Privacy and Terms of Service{%endtrans%}</a></li>
+                    <li><a href="#">{{ 'Help' | trans }}</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+{% endblock %}
+
+{% block stylesheets %}
+    {% stylesheets 'bundles/procergslogincidadaoui/css/*.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts
+            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.js'
+            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/*' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

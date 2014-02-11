@@ -1,0 +1,16 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+    {% stylesheets 'bundles/procergslogincidadaoui/css/*.css' filter='cssrewrite' %}
+<link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts
+            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.js'
+            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.placeholder.js'
+            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/*' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

@@ -57,6 +57,13 @@ class Person extends BaseUser
 
     /**
      * @Expose
+     * @Groups({"name"})
+     * @var string
+     */
+    protected $fullName;
+
+    /**
+     * @Expose
      * @Groups({"username"})
      */
     protected $username;
@@ -157,7 +164,7 @@ class Person extends BaseUser
 
     public function getSurname()
     {
-        return $this->firstName;
+        return $this->surname;
     }
 
     public function setSurname($suname)
@@ -292,6 +299,7 @@ class Person extends BaseUser
 
     public function serialize()
     {
+        $this->fullName = $this->getFullName();
         return serialize(array($this->facebookId, parent::serialize()));
     }
 
@@ -307,7 +315,7 @@ class Person extends BaseUser
      */
     public function getFullName()
     {
-        return $this->getFirstname() . ' ' . $this->getLastname();
+        return $this->getFirstname() . ' ' . $this->getSurname();
     }
 
     /**

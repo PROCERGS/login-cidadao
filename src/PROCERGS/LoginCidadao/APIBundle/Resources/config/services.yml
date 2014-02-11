@@ -1,0 +1,7 @@
+parameters:
+#    procergs_login_cidadao_api.example.class: PROCERGS\LoginCidadao\APIBundle\Example
+
+services:
+#    procergs_login_cidadao_api.example:
+#        class: %procergs_login_cidadao_api.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

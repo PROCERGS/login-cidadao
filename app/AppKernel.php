@@ -21,12 +21,14 @@ class AppKernel extends Kernel
             new PROCERGS\OAuthBundle\PROCERGSOAuthBundle(),
             new PROCERGS\LoginCidadao\CoreBundle\PROCERGSLoginCidadaoCoreBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
-            new PROCERGS\LoginCidadao\UIBundle\PROCERGSLoginCidadaoUIBundle(),
-            new PROCERGS\Generic\LocaleBundle\PROCERGSGenericLocaleBundle(),
+
             new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
             new FOS\FacebookBundle\FOSFacebookBundle(),
-            new PROCERGS\Generic\HWIOAuthProxyBundle\PROCERGSGenericHWIOAuthProxyBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+
+            new PROCERGS\Generic\LocaleBundle\PROCERGSGenericLocaleBundle(),
+            new PROCERGS\Generic\HWIOAuthProxyBundle\PROCERGSGenericHWIOAuthProxyBundle(),
+            new PROCERGS\LoginCidadao\APIBundle\PROCERGSLoginCidadaoAPIBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

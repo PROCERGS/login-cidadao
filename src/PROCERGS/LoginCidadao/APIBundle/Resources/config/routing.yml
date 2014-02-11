@@ -1,0 +1,6 @@
+# API
+procergs_login_cidadao_api_core:
+    resource: "@PROCERGSLoginCidadaoAPIBundle/Controller"
+    defaults: { _format: json }
+    type:     annotation
+    prefix:   /
