@@ -30,18 +30,56 @@
 
             {% trans_default_domain 'FOSUserBundle' %}
 
-            <form role="form" action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
-                {{ form_widget(form) }}
-                <div>
-                    <input class='btn btn-success btn-sm pull-right' type="submit" value="{{ 'registration.submit'|trans }}" />
+            {{ form_start(form, {'attr': {'role':'form', 'class':'fos_user_registration_register'}}) }}
+                {{ form_errors(form) }}
+            
+                <div class="form-group">
+                    {{ form_label(form.email) }}
+                    {{ form_errors(form.email) }}
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
                 </div>
-            </form>
+                <div class="form-group">
+                    {{ form_label(form.username) }}
+                    {{ form_errors(form.username) }}
+                    {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_errors(form.plainPassword) }}
+                    {{ form_widget(form.plainPassword) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.firstName) }}
+                    {{ form_errors(form.firstName) }}
+                    {{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.surname) }}
+                    {{ form_errors(form.surname) }}
+                    {{ form_widget(form.surname, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.birthdate) }}
+                    {{ form_errors(form.birthdate) }}
+                    {{ form_widget(form.birthdate) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.cep) }}
+                    {{ form_errors(form.cep) }}
+                    {{ form_widget(form.cep, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.cpf) }}
+                    {{ form_errors(form.cpf) }}
+                    {{ form_widget(form.cpf, {'attr': {'class': 'form-control'}}) }}
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-5">
+                        <input class='btn btn-default btn-green' type="submit" value="{{ 'registration.submit'|trans }}" />
+                    </div>
+                </div>
+            {{ form_end(form) }}
+
         </div>
-
-
-
-
-
-
 
 {% endblock %}
