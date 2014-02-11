@@ -1,4 +1,4 @@
-registration.submit: __registration.submit
+registration.submit: 'Próxima etapa'
 profile.edit.submit: __profile.edit.submit
 registration.check_email: __registration.check_email
 profile.show.username: __profile.show.username
@@ -7,4 +7,4 @@ registration.confirmed: __registration.confirmed
 registration.back: __registration.back
 layout.logged_in_as: __layout.logged_in_as
 layout.logout: __layout.logout
-layout.login: __layout.login
+layout.login: 'Login'

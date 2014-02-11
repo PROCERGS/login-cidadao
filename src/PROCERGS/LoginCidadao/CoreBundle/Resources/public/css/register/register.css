@@ -21,3 +21,16 @@
     border-radius: 5px;
     padding: 25px;
 }
+
+div[id$='plainPassword'] div {
+    margin-bottom: 15px;
+}
+
+.birthdate select{
+    display: inline-block;
+    width: 30%;
+}
+
+.birthdate select:nth-child(2) {
+    margin: 0 21px;
+}

@@ -1927,7 +1927,7 @@ output {
   vertical-align: middle;
 }
 
-.form-control, form input {
+.form-control {
   display: block;
   width: 100%;
   height: 34px;
