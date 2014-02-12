@@ -10,6 +10,7 @@ use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use PROCERGS\Generic\ValidationBundle\Validator\Constraints as PROCERGSAssert;
 
 /**
  * @ORM\Entity
@@ -74,6 +75,7 @@ class Person extends BaseUser
      * @Expose
      * @Groups({"cpf"})
      * @ORM\Column(type="string", nullable=true, unique=true)
+     * @PROCERGSAssert\CPF
      * @Assert\Length(
      *     min=11,
      *     max="11",
@@ -344,9 +346,10 @@ class Person extends BaseUser
         }
     }
 
-    public function setCpf($var)
+    public function setCpf($cpf)
     {
-        $this->cpf = $var;
+        $cpf = preg_replace('[^0-9]', '', $cpf);
+        $this->cpf = $cpf;
 
         return $this;
     }

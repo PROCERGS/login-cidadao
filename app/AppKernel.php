@@ -29,6 +29,7 @@ class AppKernel extends Kernel
             new PROCERGS\Generic\LocaleBundle\PROCERGSGenericLocaleBundle(),
             new PROCERGS\Generic\HWIOAuthProxyBundle\PROCERGSGenericHWIOAuthProxyBundle(),
             new PROCERGS\LoginCidadao\APIBundle\PROCERGSLoginCidadaoAPIBundle(),
+            new PROCERGS\Generic\ValidationBundle\PROCERGSGenericValidationBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
