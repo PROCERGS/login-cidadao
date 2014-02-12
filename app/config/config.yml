@@ -66,6 +66,7 @@ swiftmailer:
     username:  %mailer_user%
     password:  %mailer_password%
     spool:     { type: memory }
+    delivery_address: %mailer_sender_mail%
 
 fos_oauth_server:
   db_driver: orm
@@ -85,6 +86,9 @@ fos_user:
     registration:
         confirmation:
             enabled: true
+            from_email:
+              address: noreply@%site_domain%
+              sender_name: %site_domain%
         form:
             type: procergs_person_registration
     profile:

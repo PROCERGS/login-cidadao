@@ -22,6 +22,11 @@ parameters:
     twitter_app_key:    twitter_app_key_goes_here
     twitter_app_secret: twitter_app_secret_here
 
-    http_proxy: ~
+    http_proxy:
+        type: HTTP
+        host: proxy.procergs.reders
+        port: 3128
+        auth: 'login:senha'
 
     site_domain: meu.rs.gov.br
+    mailer_sender_mail: ~
