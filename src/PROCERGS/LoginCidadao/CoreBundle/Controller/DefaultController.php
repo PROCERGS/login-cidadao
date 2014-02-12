@@ -5,6 +5,10 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\Exception\DisabledException;
 
 class DefaultController extends Controller
 {
@@ -39,4 +43,33 @@ class DefaultController extends Controller
             );
         }
     }
+    
+    /**
+     * @Route("/failure_login", name="lc_home_failure_login")
+     * @Template()
+     */
+    public function failureLoginAction(Request $request)
+    {
+        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
+        $session = $request->getSession();
+        
+        // get the error if any (works with forward and redirect -- see below)
+        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
+            $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
+        } elseif (null !== $session && $session->has(SecurityContext::AUTHENTICATION_ERROR)) {
+            $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
+        } else {
+            $error = '';
+        }        
+        if ($error && $error instanceof DisabledException) {
+            $person = $error->getUser();
+            if ($person->getConfirmationToken() !== null) {
+                if (null !== $session) {
+                    $session->remove(SecurityContext::AUTHENTICATION_ERROR);
+                }
+                return $this->render('PROCERGSLoginCidadaoCoreBundle:Person:index.checkEmail.html.twig', compact('person'));
+            }
+        }
+        return $this->redirect($this->generateUrl('fos_user_security_login'));
+    }    
 }

@@ -48,7 +48,8 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             return new RedirectResponse($uri);
         } else {
             $referer = $request->headers->get('referer');
-            if (strlen($referer) > 0) {
+            $a = $this->router->generate('fos_user_security_login', array(), true);
+            if (strlen($referer) > 0 && $referer != $a) {
                 $dest = $referer;
             } else {
                 $dest = $this->router->generate('lc_home');

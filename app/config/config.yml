@@ -87,7 +87,7 @@ fos_user:
         confirmation:
             enabled: true
             from_email:
-              address: noreply@%site_domain%
+              address: %mailer_sender_mail%
               sender_name: %site_domain%
         form:
             type: procergs_person_registration
