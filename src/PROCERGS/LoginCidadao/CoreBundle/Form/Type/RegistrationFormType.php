@@ -12,11 +12,11 @@ class RegistrationFormType extends BaseType
     {
         parent::buildForm($builder, $options);
 
-        $builder->add('firstName');
-        $builder->add('surname');
-        $builder->add('birthdate', 'birthday');
-        $builder->add('cep');
-        $builder->add('cpf');
+        $builder->add('firstName', 'text', array('label' => 'form.firstName', 'translation_domain' => 'FOSUserBundle'));
+        $builder->add('surname', 'text', array('label' => 'form.surname', 'translation_domain' => 'FOSUserBundle'));
+        $builder->add('birthdate', 'birthday', array('label' => 'form.birthdate', 'translation_domain' => 'FOSUserBundle'));
+        $builder->add('cep', 'text', array('label' => 'form.cep', 'translation_domain' => 'FOSUserBundle'));
+        $builder->add('cpf', 'text', array('label' => 'form.cpf', 'translation_domain' => 'FOSUserBundle') );
     }
 
     public function getName()

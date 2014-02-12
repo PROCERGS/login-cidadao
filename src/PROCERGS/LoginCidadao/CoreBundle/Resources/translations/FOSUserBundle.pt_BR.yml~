@@ -1,0 +1,25 @@
+registration.submit: 'Próxima etapa'
+profile.edit.submit: __profile.edit.submit
+registration.check_email: __registration.check_email
+profile.show.username: __profile.show.username
+profile.show.email: __profile.show.email
+registration.confirmed: __registration.confirmed
+registration.back: __registration.back
+layout.logged_in_as: __layout.logged_in_as
+layout.logout: __layout.logout
+layout.login: 'Login'
+
+form:
+    group_name: "Nome do Grupo:"
+    username: "Escolha seu nome de usuário:"
+    email: "Email:"
+    current_password: "Senha atual:"
+    password: "Criar uma senha:"
+    password_confirmation: "Confirme sua senha:"
+    new_password: "Nova senha:"
+    new_password_confirmation: "Repita a senha:"
+    firstName: 'Nome'
+    surname: 'Sobrenome'
+    birthdate: 'Data de nascimento'
+    cep: 'Cep'
+    cpf: 'Cpf'

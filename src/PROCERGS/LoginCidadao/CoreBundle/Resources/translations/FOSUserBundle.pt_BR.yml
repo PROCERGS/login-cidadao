@@ -7,4 +7,17 @@ registration.confirmed: __registration.confirmed
 registration.back: __registration.back
 layout.logged_in_as: __layout.logged_in_as
 layout.logout: __layout.logout
-layout.login: 'Login'
+layout.login: Login
+form.group_name: 'Nome do Grupo:'
+form.username: 'Escolha seu nome de usuário:'
+form.email: 'Email:'
+form.current_password: 'Senha atual:'
+form.password: 'Criar uma senha:'
+form.password_confirmation: 'Confirme sua senha:'
+form.new_password: 'Nova senha:'
+form.new_password_confirmation: 'Repita a senha:'
+form.firstName: Nome
+form.surname: Sobrenome
+form.birthdate: 'Data de nascimento'
+form.cep: Cep
+form.cpf: Cpf
