@@ -9,9 +9,11 @@ use PROCERGS\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
+ * @UniqueEntity("cpf")
  * @ExclusionPolicy("all")
  */
 class Person extends BaseUser
@@ -71,7 +73,7 @@ class Person extends BaseUser
     /**
      * @Expose
      * @Groups({"cpf"})
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", nullable=true, unique=true)
      * @Assert\Length(
      *     min=11,
      *     max="11",
