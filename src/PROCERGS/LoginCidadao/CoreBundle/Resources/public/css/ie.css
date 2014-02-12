@@ -28,6 +28,10 @@
     width: 460px;
 }
 
+.ie-7 .form-control {
+    width: 90%;
+}
+
 /*ie9*/
 .ie-9 .services.well {
     filter:none;

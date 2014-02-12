@@ -96,6 +96,10 @@ a {
     height: 37px;
 }
 
+footer {
+    margin-top: 0;
+}
+
 footer>div {
     background: rgba(0, 0, 0, .5);
 }

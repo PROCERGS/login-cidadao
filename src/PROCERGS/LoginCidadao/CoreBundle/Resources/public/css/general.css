@@ -71,7 +71,7 @@ footer {
     color: #737373;
     display: block;
     position: relative;
-    margin-top: -36px;
+    margin-top: 50px;
     min-height: 36px;
     clear: both;
     width: 100%;
@@ -104,8 +104,6 @@ footer nav li a {
 .navbar .btn-success {
     margin-top: 15px;
 }
-
-
 
 #profile {
     background-color: #f1f1f1;
