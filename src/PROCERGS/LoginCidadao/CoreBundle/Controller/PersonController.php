@@ -2,6 +2,7 @@
 
 namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -127,19 +128,27 @@ class PersonController extends Controller
     }
 
     /**
-     * @Route("/person/check_username", name="ui_check_username")
+     * @Route("/person/username/validate", name="lc_validate_username")
      */
-    public function checkUsernameAction(Request $request)
+    public function validateUsernameAction(Request $request)
     {
+        $translator = $this->get('translator');
         $username = $request->get('username');
         $person = $this->getDoctrine()
                 ->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')
                 ->findByUsername($username);
 
-        $result = count($person) > 0;
+        $data = array('valid'=>true);
+        if(count($person) > 0){
+            $data = array(
+                'valid' => false,
+                'message' => $translator->trans('Someone already has that username. Try another?')
+            );
+        }
 
         $response = new JsonResponse();
-        $response->setData(json_encode(array('success' => $result)));
+        $response->setData($data);
+        
         return $response;
     }
 

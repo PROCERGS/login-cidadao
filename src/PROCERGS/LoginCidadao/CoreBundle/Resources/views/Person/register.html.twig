@@ -35,41 +35,41 @@
 
                 <div class="form-group">
                     {{ form_label(form.email) }}
-                    {{ form_errors(form.email) }}
+                    <div class="input-error">{{ form_errors(form.email) }}</div>
                     {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
                 </div>
                 <div class="form-group">
                     {{ form_label(form.username) }}
-                    {{ form_errors(form.username) }}
+                    <div class="input-error">{{ form_errors(form.username) }}</div>
                     {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
                 </div>
                 <div class="form-group">
-                    {{ form_errors(form.plainPassword) }}
+                    <div class="input-error">{{ form_errors(form.plainPassword) }}</div>
                     {{ form_widget(form.plainPassword) }}
                 </div>
                 <div class="form-group">
                     {{ form_label(form.firstName) }}
-                    {{ form_errors(form.firstName) }}
+                    <div class="input-error">{{ form_errors(form.firstName) }}</div>
                     {{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}
                 </div>
                 <div class="form-group">
                     {{ form_label(form.surname) }}
-                    {{ form_errors(form.surname) }}
+                    <div class="input-error">{{ form_errors(form.surname) }}</div>
                     {{ form_widget(form.surname, {'attr': {'class': 'form-control'}}) }}
                 </div>
                 <div class="form-group birthdate">
                     {{ form_label(form.birthdate) }}
-                    {{ form_errors(form.birthdate) }}
+                    <div class="input-error">{{ form_errors(form.birthdate) }}</div>
                     {{ form_widget(form.birthdate) }}
                 </div>
                 <div class="form-group">
                     {{ form_label(form.cep) }}
-                    {{ form_errors(form.cep) }}
+                    <div class="input-error">{{ form_errors(form.cep) }}</div>
                     {{ form_widget(form.cep, {'attr': {'class': 'form-control'}}) }}
                 </div>
                 <div class="form-group">
                     {{ form_label(form.cpf) }}
-                    {{ form_errors(form.cpf) }}
+                    <div class="input-error">{{ form_errors(form.cpf) }}</div>
                     {{ form_widget(form.cpf, {'attr': {'class': 'form-control'}}) }}
                 </div>
                 <input class='btn btn-success btn-sm pull-right' type="submit" value="{{ 'registration.submit'|trans }}" />
@@ -83,4 +83,32 @@
     {% stylesheets 'bundles/procergslogincidadaocore/css/register/*.css' filter='cssrewrite' %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
+{% endblock %}
+    
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        var validateUsernameUrl = '{{ path('lc_validate_username') }}';
+
+        $(document).ready(function(){
+            $('#fos_user_registration_form_username').blur(function(){
+                $elm = $(this);
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    url: validateUsernameUrl,
+                    data: { username: $(this).val() }
+                })
+                .done(function(result) {
+                    if(result.valid){
+                        $elm.parent().removeClass('has-error').find('.input-error').html("");
+                    }else{
+                        $elm.parent().addClass('has-error').find('.input-error').html('<ul><li>'+result.message+'</li></ul>');
+                    }
+                    return false;
+                });
+            });
+        });
+    </script>
 {% endblock %}
