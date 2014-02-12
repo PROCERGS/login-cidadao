@@ -6,7 +6,7 @@ profile.show.email: __profile.show.email
 registration.confirmed: __registration.confirmed
 registration.back: __registration.back
 layout.logged_in_as: __layout.logged_in_as
-layout.logout: __layout.logout
+layout.logout: Logout
 layout.login: Login
 form.group_name: 'Nome do Grupo:'
 form.username: 'Escolha seu nome de usuário:'

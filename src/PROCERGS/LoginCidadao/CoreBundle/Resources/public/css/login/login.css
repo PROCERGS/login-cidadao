@@ -3,7 +3,9 @@ html, body { height: 100%; }
 body>.container {
     min-height: 100%;
     margin-bottom: -36px;
+    margin-top: 0;
     padding-bottom: 36px;
+    padding-top: 0;
 }
 
 
