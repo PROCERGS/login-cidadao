@@ -25,16 +25,16 @@ class CPFValidator extends ConstraintValidator
         $digitoUm = 0;
         $digitoDois = 0;
 
-        if (strlen($cpf) !== 11 || preg_match('/([0-9])\\1{10}/', $cpf)) {
+        if (strlen($cpf) != 11 || preg_match('/([0-9])\\1{10}/', $cpf)) {
             return false;
         }
 
         for ($i = 0, $x = 10; $i <= 8; $i++, $x--) {
-            $digitoUm += $cpf[$i] * x;
+            $digitoUm += $cpf[$i] * $x;
         }
         for ($i = 0, $x = 11; $i <= 9; $i++, $x--) {
             $iStr = "$i";
-            if (str_repeat($iStr, 11) === $cpf) {
+            if (str_repeat($iStr, 11) == $cpf) {
                 return false;
             }
             $digitoDois += $cpf[$i] * $x;
@@ -42,7 +42,7 @@ class CPFValidator extends ConstraintValidator
 
         $calculoUm = (($digitoUm % 11) < 2) ? 0 : 11 - ($digitoUm % 11);
         $calculoDois = (($digitoDois % 11) < 2) ? 0 : 11 - ($digitoDois % 11);
-        if ($calculoUm !== $cpf[9] || $calculoDois !== $cpf[10]) {
+        if ($calculoUm != $cpf[9] || $calculoDois != $cpf[10]) {
             return false;
         }
         return true;
@@ -50,7 +50,7 @@ class CPFValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint)
     {
-        if (!self::isCPFValid($cpf)) {
+        if (!self::isCPFValid($value)) {
             $this->context->addViolation(
                     $constraint->message, array('%string%' => $value)
             );

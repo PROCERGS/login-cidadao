@@ -14,6 +14,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 
 class PersonController extends Controller
 {
@@ -148,7 +149,7 @@ class PersonController extends Controller
 
         $response = new JsonResponse();
         $response->setData($data);
-        
+
         return $response;
     }
 
@@ -161,20 +162,14 @@ class PersonController extends Controller
         $user = $this->getUser();
         $userManager = $this->container->get('fos_user.user_manager');
 
-        $defaultData = array('username' => $user->getUsername());
-        $formBuilder = $this->createFormBuilder($defaultData)
+        $formBuilder = $this->createFormBuilder($user)
                 ->add('username', 'text', array(
                     'constraints' => array(
                         new NotBlank(),
                         new Length(array('min' => 3)),
                     ),
                 ))
-                ->add('password', 'repeated', array(
-                    'type' => 'password',
-                    'required' => false,
-                ))
-                ->add('saveUsername', 'submit')
-                ->add('saveUsernamePassword', 'submit');
+                ->add('save', 'submit');
 
         $emailMissing = strstr($user->getEmail(), ' ') !== false;
         if ($emailMissing) {
@@ -183,25 +178,34 @@ class PersonController extends Controller
                 'constraints' => new Email(),
             ));
         }
+        $emptyPassword = strlen($user->getPassword()) == 0;
+        if ($emptyPassword) {
+            $formBuilder->add('plainPassword', 'repeated', array(
+                'type' => 'password'
+            ));
+        } else {
+            $formBuilder->add('current_password', 'password', array(
+                'required' => true,
+                'constraints' => new UserPassword(),
+                'mapped' => false
+            ));
+        }
 
         $form = $formBuilder->getForm();
 
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
             $data = $form->getData();
-            $user->setUsername($data['username']);
+            $user->setUsername($data->getUsername());
 
             if ($emailMissing) {
-                $user->setEmail($data['email']);
-            }
-            if (!is_null($data['password'])) {
-                $user->setPlainPassword($data['password']);
+                $user->setEmail($data->getEmail());
             }
 
             $userManager->updateUser($user);
             return $this->redirect($this->generateUrl('fos_user_profile_edit'));
         }
 
-        return array('form' => $form->createView(), 'emailMissing' => $emailMissing);
+        return array('form' => $form->createView(), 'emailMissing' => $emailMissing, 'emptyPassword' => $emptyPassword);
     }
 }

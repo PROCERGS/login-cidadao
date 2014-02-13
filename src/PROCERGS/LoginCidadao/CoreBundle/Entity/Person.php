@@ -195,6 +195,7 @@ class Person extends BaseUser
 
     public function setCep($cep)
     {
+        $cep = preg_replace('[^0-9]', '', $cep);
         $this->cep = $cep;
     }
 
