@@ -45,3 +45,6 @@ Save: Salvar
 'If so, type in your password here:': 'Se quiser, então digite sua senha aqui:'
 'And then confirm it here:': 'E confirme ela aqui:'
 'Save username and password': 'Salvar username e senha'
+'We''ll also need you to type your email address, since Twitter didn''t tell it to us.': '__We''ll also need you to type your email address, since Twitter didn''t tell it to us.'
+'Email:': '__Email:'
+'Someone already has that username. Try another?': 'Alguém já escolheu esse nome de usuário. Tente outro.'

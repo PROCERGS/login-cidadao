@@ -30,7 +30,7 @@
 
             {% trans_default_domain 'FOSUserBundle' %}
 
-            {{ form_start(form, {'attr': {'role':'form', 'class':'fos_user_registration_register'}}) }}
+            {{ form_start(form, {'action': path('fos_user_registration_register'), 'attr': {'role':'form', 'class':'fos_user_registration_register'}}) }}
                 {{ form_errors(form) }}
 
                 <div class="form-group">

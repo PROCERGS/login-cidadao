@@ -1,5 +1,5 @@
 registration.submit: 'Próxima etapa'
-profile.edit.submit: __profile.edit.submit
+profile.edit.submit: Salvar
 registration.check_email: __registration.check_email
 profile.show.username: __profile.show.username
 profile.show.email: __profile.show.email
