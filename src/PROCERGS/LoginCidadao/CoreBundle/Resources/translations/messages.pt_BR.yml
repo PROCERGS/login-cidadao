@@ -48,3 +48,8 @@ Save: Salvar
 'We''ll also need you to type your email address, since Twitter didn''t tell it to us.': '__We''ll also need you to type your email address, since Twitter didn''t tell it to us.'
 'Email:': '__Email:'
 'Someone already has that username. Try another?': 'Alguém já escolheu esse nome de usuário. Tente outro.'
+'Email': 'Email'
+'Birthday': 'Data de nascimento'
+'Username': 'Usuário'
+'CPF': 'CPF'
+'CEP': 'CEP'
