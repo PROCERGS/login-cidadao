@@ -13,18 +13,30 @@
 
         <div id="profile" class="col-md-7 col-lg-6">
             <img class="pull-left" src="http://placehold.it/122x122">
-            <h4 class="pull-right">Pessoa da Silva</h4>
-            <a href="" class='pull-right'>Editar informações</a>
+            <h4 class="pull-right">{{ user.fullname }}</h4>
+            <a href="{{ path('fos_user_profile_edit') }}" class='pull-right'>Editar informações</a>
 
             <div class="clearfix"></div>
-            <p>
-                <strong>CPF</strong><br>
-                <span>99999</span>
-            </p>
 
             <p>
-                <strong>Data de nascimento</strong><br>
-                <span>99/99/9999</span>
+                <strong>{{ 'Username' | trans }}</strong><br>
+                <span>{{ user.username }}</span>
+            </p>
+            <p>
+                <strong>{{ 'Email' | trans }}</strong><br>
+                <span>{{ user.email }}</span>
+            </p>
+            <p>
+                <strong>{{ 'Birthday' | trans }}</strong><br>
+                <span>{{ user.birthdate|date('d-m-Y') }}</span>
+            </p>
+            <p>
+                <strong>{{ 'CPF' | trans }}</strong><br>
+                <span>{{ user.cpf }}</span>
+            </p>
+            <p>
+                <strong>{{ 'CEP' | trans }}</strong><br>
+                <span>{{ user.cep }}</span>
             </p>
         </div>
 

@@ -1,11 +1,11 @@
 registration.submit: 'Próxima etapa'
-profile.edit.submit: __profile.edit.submit
-registration.check_email: __registration.check_email
-profile.show.username: __profile.show.username
-profile.show.email: __profile.show.email
-registration.confirmed: __registration.confirmed
-registration.back: __registration.back
-layout.logged_in_as: __layout.logged_in_as
+registration.check_email: 'Um email foi enviado para o endereço %email%. Para para ativar a sua conta, clique no link na mensagem.'
+registration.confirmed: 'Parabéns, %username%. A sua conta foi ativada.'
+registration.back: 'Retornar para a página de origem.'
+profile.edit.submit: 'Salvar'
+profile.show.username: 'Usuário'
+profile.show.email: 'Email'
+layout.logged_in_as: 'Conectado como %username%'
 layout.logout: Sair
 layout.login: Login
 form.group_name: 'Nome do Grupo:'

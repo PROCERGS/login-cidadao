@@ -12,11 +12,14 @@ class ProfileFormType extends BaseType
     {
         parent::buildForm($builder, $options);
 
-        $builder->add('firstName');
-        $builder->add('surname');
-        $builder->add('birthdate', 'birthday');
-        $builder->add('cep');
-        $builder->add('cpf');
+        $builder->add('username', null, array('read_only'=>true, 'label' => 'form.username', 'translation_domain' => 'FOSUserBundle'));
+        $builder->add('email', 'email', array('label' => 'form.email', 'translation_domain' => 'FOSUserBundle'));
+        $builder->add('firstName', 'text', array('label' => 'form.firstName', 'translation_domain' => 'FOSUserBundle'));
+        $builder->add('surname', 'text', array('label' => 'form.surname', 'translation_domain' => 'FOSUserBundle'));
+        $builder->add('birthdate', 'birthday', array('label' => 'form.birthdate', 'translation_domain' => 'FOSUserBundle'));
+        $builder->add('cep', null, array('label' => 'form.cep', 'translation_domain' => 'FOSUserBundle'));
+        $builder->add('cpf', null, array('label' => 'form.cpf', 'translation_domain' => 'FOSUserBundle') );
+
     }
 
     public function getName()
