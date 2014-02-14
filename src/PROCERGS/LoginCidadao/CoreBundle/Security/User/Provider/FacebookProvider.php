@@ -103,6 +103,8 @@ class FacebookProvider implements UserProviderInterface
 
     public function loadUserByUsername($username)
     {
+        $currentUserObj = $this->container->get('security.context')->getToken()->getUser();
+
         $user = $this->findUserByFbId($username);
 
         try {
@@ -113,9 +115,13 @@ class FacebookProvider implements UserProviderInterface
 
         if (!empty($fbdata)) {
             if (empty($user)) {
-                $user = $this->userManager->createUser();
-                $user->setEnabled(true);
-                $user->setPassword('');
+                if (!($currentUserObj instanceof UserInterface)) {
+                    $user = $this->userManager->createUser();
+                    $user->setEnabled(true);
+                    $user->setPassword('');
+                } else {
+                    $user = $currentUserObj;
+                }
             }
 
             if ($user->getUsername() == '' || $user->getUsername() == null) {
@@ -132,7 +138,6 @@ class FacebookProvider implements UserProviderInterface
         }
 
         if (empty($user)) {
-
             // TODO: the user was found obviously, but doesnt match our expectations, do something smart
             throw new UsernameNotFoundException('The facebook user could not be stored');
         }

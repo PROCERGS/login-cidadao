@@ -38,9 +38,9 @@ security:
             oauth:
                 resource_owners:
                     twitter:    "/login/check-twitter"
-                login_path:   /login/twitter
+                login_path:   /login
                 use_forward:  false
-                failure_path: /login/twitter
+                failure_path: /login
                 default_target_path: /
                 success_handler: security.authentication.success_handler
                 oauth_user_provider:
