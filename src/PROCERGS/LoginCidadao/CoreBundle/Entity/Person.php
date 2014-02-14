@@ -195,7 +195,7 @@ class Person extends BaseUser
 
     public function setCep($cep)
     {
-        $cep = preg_replace('[^0-9]', '', $cep);
+        $cep = preg_replace('/[^0-9]/', '', $cep);
         $this->cep = $cep;
     }
 
@@ -349,7 +349,7 @@ class Person extends BaseUser
 
     public function setCpf($cpf)
     {
-        $cpf = preg_replace('[^0-9]', '', $cpf);
+        $cpf = preg_replace('/[^0-9]/', '', $cpf);
         $this->cpf = $cpf;
 
         return $this;

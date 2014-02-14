@@ -17,7 +17,7 @@ class CPFValidator extends ConstraintValidator
      */
     public static function isCPFValid($cpf)
     {
-        $cpf = preg_replace('[^0-9]', '', $cpf);
+        $cpf = preg_replace('/[^0-9]/', '', $cpf);
         if (!is_numeric($cpf)) {
             return false;
         }
