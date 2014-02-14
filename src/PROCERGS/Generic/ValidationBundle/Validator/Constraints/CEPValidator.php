@@ -30,6 +30,9 @@ class CEPValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint)
     {
+        if (!isset($value)) {
+            return;
+        }
         if (!self::checkLength($value)) {
             $this->context->addViolation($constraint->lengthMessage);
         }

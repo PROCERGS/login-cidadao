@@ -56,10 +56,12 @@ class CPFValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint)
     {
+        if (!isset($value)) {
+            return;
+        }
         if (!self::checkLength($value)) {
             $this->context->addViolation($constraint->lengthMessage);
         }
-
         if (!self::isCPFValid($value)) {
             $this->context->addViolation(
                     $constraint->message, array('%string%' => $value)
