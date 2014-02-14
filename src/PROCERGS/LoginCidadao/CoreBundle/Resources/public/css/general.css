@@ -174,20 +174,23 @@ footer nav li a {
 }
 
 .onoffswitch {
-    position: relative;
-    width: 120px;
-    margin-top: 13px;
+    position: relative; width: 120px;
+    float: right;
+    margin-right: 10px;
+margin-top: 13px;
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 }
+
+.onoffswitch i {
+    display: none;
+}
+
 .onoffswitch-checkbox {
     display: none;
 }
 .onoffswitch-label {
-    display: block;
-    overflow: hidden;
-    cursor: pointer;
-    border: 2px solid #3D3D3D;
-    border-radius: 18px;
+    display: block; overflow: hidden; cursor: pointer;
+    border: 2px solid #3D3D3D; border-radius: 18px;
 }
 .onoffswitch-inner {
     width: 200%; margin-left: -100%;
@@ -218,7 +221,7 @@ footer nav li a {
     height: 22px;
     width: 22px; margin: 0px;
     background: #FFFFFF;
-    border: 2px solid #3D3D3D; border-radius: 18px;
+    border: 2px solid #3D3D3D; border-radius: 22px;
     position: absolute; top: 0; bottom: 0; right: 98px;
     -moz-transition: all 0.3s ease-in 0s; -webkit-transition: all 0.3s ease-in 0s;
     -o-transition: all 0.3s ease-in 0s; transition: all 0.3s ease-in 0s;
@@ -232,14 +235,6 @@ footer nav li a {
     margin-left: 0;
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
-    right: 0px;
-}
-
-.onoffswitch-checked .onoffswitch-inner {
-    margin-left: 0;
-}
-
-.onoffswitch-checked .onoffswitch-switch {
     right: 0px;
 }
 

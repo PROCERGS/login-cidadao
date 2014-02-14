@@ -1,0 +1,8 @@
+.services.well {
+    filter:none;
+}
+
+/*all ie*/
+body[class^='ie-'] footer {
+    height: 36px;
+}

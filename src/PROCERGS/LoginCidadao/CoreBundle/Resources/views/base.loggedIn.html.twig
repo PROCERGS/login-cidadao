@@ -4,7 +4,7 @@
 <nav class="navbar navbar-default" role="navigation">
   <div class="container-fluid">
     {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_gov.png' %}
-        <img src="{{ asset_url }}" alt="{%trans%}Government of Rio Grande do Sul - Promoting equality makes the difference{%endtrans%}" height="65">
+        <img src="{{ asset_url }}" alt="{%trans%}Government of Rio Grande do Sul - Promoting equality makes the difference{%endtrans%}" height="65" class="pull-left">
     {% endimage %}
 
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
@@ -38,6 +38,22 @@
     {% stylesheets 'bundles/procergslogincidadaocore/css/*.css' filter='cssrewrite' %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
+
+    {% stylesheets 'bundles/procergslogincidadaocore/css/ie/ie7.css' filter='cssrewrite' %}
+        <!--[if IE 7]>
+          <link rel="stylesheet" href="{{ asset_url }}" />
+        <![endif]-->
+    {% endstylesheets %}
+    {% stylesheets 'bundles/procergslogincidadaocore/css/ie/ie8.css' filter='cssrewrite' %}
+        <!--[if IE 8]>
+          <link rel="stylesheet" href="{{ asset_url }}" />
+        <![endif]-->
+    {% endstylesheets %}
+    {% stylesheets 'bundles/procergslogincidadaocore/css/ie/ie9.css' filter='cssrewrite' %}
+        <!--[if IE 9]>
+          <link rel="stylesheet" href="{{ asset_url }}" />
+        <![endif]-->
+    {% endstylesheets %}
 {% endblock %}
 
 {% block javascripts %}
@@ -45,5 +61,13 @@
             '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.js'
             '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/*' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    {% javascripts
+            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/ie/ie.js'
+    %}
+        <!--[if lt IE 9]>
+          <script type="text/javascript" src="{{ asset_url }}"></script>
+        <![endif]-->
     {% endjavascripts %}
 {% endblock %}

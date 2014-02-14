@@ -100,7 +100,7 @@
             </li>
         </ul>
 
-        <ul class="list-group">
+        <ul class="list-group" style="display:none;">
         {% for auth in user.getAuthorizations %}
             <li class="list-group-item authorized">
                 <a href="{{ path('ui_revoke', { 'clientId': auth.client.id }) }}" data-token="{{ csrf_token(path('ui_revoke', { 'clientId': auth.client.id })) }}" class="btn btn-float btn-danger revoke">{{ 'Revoke Access' | trans }}</a>

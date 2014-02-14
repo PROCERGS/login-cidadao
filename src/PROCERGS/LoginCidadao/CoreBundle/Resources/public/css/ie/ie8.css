@@ -1,43 +1,57 @@
-/*ie7 ie8*/
 /*@media (min-width: 1200px) {
     .ie-7 .col-lg-offset-1 {
         margin-left: 0!important;
     }
 }*/
 
-.ie-7 > .container {
+body > .container {
     padding-bottom: 0;
 }
 
-.ie-7 .services.well, .ie-8 .services.well {
+.navbar-default {
+    background-color: #ACA799;
+}
+
+.services.well {
     background-color: #333;
     filter:none;
 }
 
-.ie-7 .footer-login, .ie-8 .footer-login {
+.footer-login{
     background-color: #000;
 }
 
-.ie-7 footer li {
+footer > div {
+    padding-top: 0;
+}
+
+footer li {
     list-style-type: none;
     float: left;
 }
 
-.ie-7 #register-aside, .ie-7 #sign-up {
+#register-aside, #sign-up {
     margin: 0 30px;
     width: 460px;
 }
 
-.ie-7 .form-control {
+.form-control {
     width: 90%;
 }
 
-/*ie9*/
-.ie-9 .services.well {
-    filter:none;
+#applications {
+    width: 50%
 }
 
 /*all ie*/
 body[class^='ie-'] footer {
     height: 36px;
+}
+
+.onoffswitch-checked .onoffswitch-inner {
+    margin-left: 0;
+}
+
+.onoffswitch-checked .onoffswitch-switch {
+    right: 0px;
 }
