@@ -96,6 +96,7 @@ class Person extends BaseUser
      * @Expose
      * @Groups({"cep"})
      * @ORM\Column(type="string", nullable=true)
+     * @PROCERGSAssert\CEP
 
      */
     protected $cep;

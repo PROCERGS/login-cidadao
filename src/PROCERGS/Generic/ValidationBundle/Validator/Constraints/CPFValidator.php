@@ -48,8 +48,18 @@ class CPFValidator extends ConstraintValidator
         return true;
     }
 
+    public static function checkLength($cpf)
+    {
+        $cpf = preg_replace('/[^0-9]/', '', $cpf);
+        return strlen($cpf) == 11;
+    }
+
     public function validate($value, Constraint $constraint)
     {
+        if (!self::checkLength($value)) {
+            $this->context->addViolation($constraint->lengthMessage);
+        }
+
         if (!self::isCPFValid($value)) {
             $this->context->addViolation(
                     $constraint->message, array('%string%' => $value)

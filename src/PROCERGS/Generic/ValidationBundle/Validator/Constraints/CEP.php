@@ -7,11 +7,11 @@ use Symfony\Component\Validator\Constraint;
 /**
  * @Annotation
  */
-class CPF extends Constraint
+class CEP extends Constraint
 {
 
-    public $message = '%string% is not a CPF.';
-    public $lengthMessage = 'A CPF must contain 11 numbers.';
+    public $message = 'Invalid CEP.';
+    public $lengthMessage = 'CEP must be 8 characters long.';
 
     public function validatedBy()
     {
