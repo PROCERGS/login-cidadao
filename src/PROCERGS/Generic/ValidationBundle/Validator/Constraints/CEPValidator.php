@@ -8,7 +8,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 /**
  * @Annotation
  */
-class CPFValidator extends ConstraintValidator
+class CEPValidator extends ConstraintValidator
 {
 
     /**
