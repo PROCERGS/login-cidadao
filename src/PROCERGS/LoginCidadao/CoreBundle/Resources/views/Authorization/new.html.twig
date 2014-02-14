@@ -1,0 +1,11 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block body %}
+
+<div class="row well">
+    <div class="col-xs-12">
+        {% include "FOSOAuthServerBundle:Authorize:authorize_content.html.twig" %}
+    </div>
+</div>
+
+{% endblock body %}

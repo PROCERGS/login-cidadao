@@ -2,9 +2,9 @@ registration.submit: 'Próxima etapa'
 registration.check_email: 'Um email foi enviado para o endereço %email%. Para para ativar a sua conta, clique no link na mensagem.'
 registration.confirmed: 'Parabéns, %username%. A sua conta foi ativada.'
 registration.back: 'Retornar para a página de origem.'
-profile.edit.submit: 'Salvar'
-profile.show.username: 'Usuário'
-profile.show.email: 'Email'
+profile.edit.submit: Salvar
+profile.show.username: Usuário
+profile.show.email: Email
 layout.logged_in_as: 'Conectado como %username%'
 layout.logout: Sair
 layout.login: Login

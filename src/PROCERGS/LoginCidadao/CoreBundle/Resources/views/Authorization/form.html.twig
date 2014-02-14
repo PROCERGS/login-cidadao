@@ -1,0 +1,19 @@
+<form action="{{ path('fos_oauth_server_authorize') }}" method="POST" class="fos_oauth_server_authorize" {{ form_enctype(form) }}>
+    <p>{% trans with {'%client_name%': client.name} %}The <strong>%client_name%</strong> app wants to access the following information about you:{% endtrans %}</p>
+
+    <ul>
+    {% for scope in form.vars.value.scope|split(' ') %}
+        <li>{{ ('scope.' ~ scope) | trans }}</li>
+    {% endfor %}
+    </ul>
+
+    <input type="submit" name="accepted" value="{{ 'authorize.accept'|trans({}, 'FOSOAuthServerBundle') }}" class="btn btn-success" />
+    <input type="submit" name="rejected" value="{{ 'authorize.reject'|trans({}, 'FOSOAuthServerBundle') }}" class="btn btn-danger" />
+
+    {{ form_row(form.client_id) }}
+    {{ form_row(form.response_type) }}
+    {{ form_row(form.redirect_uri) }}
+    {{ form_row(form.state) }}
+    {{ form_row(form.scope) }}
+    {{ form_rest(form) }}
+</form>
