@@ -22,27 +22,27 @@ class CPFValidator extends ConstraintValidator
             return false;
         }
 
-        $digitoUm = 0;
-        $digitoDois = 0;
+        $check1 = 0;
+        $check2 = 0;
 
         if (strlen($cpf) != 11 || preg_match('/([0-9])\\1{10}/', $cpf)) {
             return false;
         }
 
         for ($i = 0, $x = 10; $i <= 8; $i++, $x--) {
-            $digitoUm += $cpf[$i] * $x;
+            $check1 += $cpf[$i] * $x;
         }
         for ($i = 0, $x = 11; $i <= 9; $i++, $x--) {
             $iStr = "$i";
             if (str_repeat($iStr, 11) == $cpf) {
                 return false;
             }
-            $digitoDois += $cpf[$i] * $x;
+            $check2 += $cpf[$i] * $x;
         }
 
-        $calculoUm = (($digitoUm % 11) < 2) ? 0 : 11 - ($digitoUm % 11);
-        $calculoDois = (($digitoDois % 11) < 2) ? 0 : 11 - ($digitoDois % 11);
-        if ($calculoUm != $cpf[9] || $calculoDois != $cpf[10]) {
+        $calc1 = (($check1 % 11) < 2) ? 0 : 11 - ($check1 % 11);
+        $calc2 = (($check2 % 11) < 2) ? 0 : 11 - ($check2 % 11);
+        if ($calc1 != $cpf[9] || $calc2 != $cpf[10]) {
             return false;
         }
         return true;

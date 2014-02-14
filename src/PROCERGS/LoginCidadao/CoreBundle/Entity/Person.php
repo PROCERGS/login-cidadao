@@ -76,13 +76,6 @@ class Person extends BaseUser
      * @Groups({"cpf"})
      * @ORM\Column(type="string", nullable=true, unique=true)
      * @PROCERGSAssert\CPF
-     * @Assert\Length(
-     *     min=11,
-     *     max="11",
-     *     minMessage="The CPF is too short.",
-     *     maxMessage="The CPF is too long.",
-     *     groups={"Registration", "Profile"}
-     * )
      */
     protected $cpf;
 
