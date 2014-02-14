@@ -14,9 +14,10 @@ class RegistrationFormType extends BaseType
 
         $builder->add('firstName', 'text', array('label' => 'form.firstName', 'translation_domain' => 'FOSUserBundle'));
         $builder->add('surname', 'text', array('label' => 'form.surname', 'translation_domain' => 'FOSUserBundle'));
-        $builder->add('cep', null, array('label' => 'form.cep', 'translation_domain' => 'FOSUserBundle'));
-        $builder->add('cpf', null, array('label' => 'form.cpf', 'translation_domain' => 'FOSUserBundle') );
+        $builder->add('cep', null, array('required' => false, 'label' => 'form.cep', 'translation_domain' => 'FOSUserBundle'));
+        $builder->add('cpf', null, array('required' => false, 'label' => 'form.cpf', 'translation_domain' => 'FOSUserBundle') );
         $builder->add('birthdate', 'birthday', array(
+            'required' => false,
             'format' => 'dd MMMM yyyy',
             'widget' => 'choice',
             'years' => range(date('Y'), date('Y')-70),

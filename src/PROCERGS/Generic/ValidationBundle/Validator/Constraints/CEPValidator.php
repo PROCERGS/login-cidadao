@@ -19,7 +19,7 @@ class CEPValidator extends ConstraintValidator
     public static function isCEPValid($cep)
     {
         $cep = preg_replace('/[^0-9]/', '', $cep);
-        if (!is_numeric($cpf)) {
+        if (!is_numeric($cep)) {
             return false;
         }
     }
