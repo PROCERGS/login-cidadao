@@ -326,16 +326,16 @@ class Person extends BaseUser
             $this->setFacebookId($fbdata['id']);
             $this->addRole('ROLE_FACEBOOK');
         }
-        if (isset($fbdata['first_name'])) {
+        if (isset($fbdata['first_name']) && is_null($this->getFirstName())) {
             $this->setFirstName($fbdata['first_name']);
         }
-        if (isset($fbdata['last_name'])) {
+        if (isset($fbdata['last_name']) && is_null($this->getSurname())) {
             $this->setSurname($fbdata['last_name']);
         }
-        if (isset($fbdata['email'])) {
+        if (isset($fbdata['email']) && is_null($this->getEmail())) {
             $this->setEmail($fbdata['email']);
         }
-        if (isset($fbdata['birthday'])) {
+        if (isset($fbdata['birthday']) && is_null($this->getBirthdate())) {
             $date = \DateTime::createFromFormat('m/d/Y', $fbdata['birthday']);
             $this->setBirthdate($date);
         }
