@@ -103,7 +103,12 @@ class FacebookProvider implements UserProviderInterface
 
     public function loadUserByUsername($username)
     {
-        $currentUserObj = $this->container->get('security.context')->getToken()->getUser();
+        $secToken = $this->container->get('security.context')->getToken();
+        if (!is_null($secToken) && !is_null($secToken->getUser())) {
+            $currentUserObj = $secToken->getUser();
+        } else {
+            $currentUserObj = null;
+        }
 
         $user = $this->findUserByFbId($username);
 
