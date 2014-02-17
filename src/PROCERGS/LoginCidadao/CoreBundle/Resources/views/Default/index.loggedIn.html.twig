@@ -4,8 +4,8 @@
 <div class="row">
     <div class="col-xs-12 text-right">
         {# <h1>{% trans with {'%user.name%': user.firstName} %}Welcome %user.name%{% endtrans %}</h1> #}
-        <button class="btn btn-app-display active" data-display='list'><i></i></button>
-        <button class="btn btn-app-display" data-display='icon'><i></i></button>
+        <button class="btn btn-app-display active" data-display="list"><i></i></button>
+        <button class="btn btn-app-display" data-display="icon"><i></i></button>
     </div>
 </div>
 
@@ -16,7 +16,7 @@
         <div id="profile" class="col-sd-3 col-md-3">
             <img class="pull-left" src="http://placehold.it/122x122">
             <h4 class="pull-right">{{ user.fullname }}</h4>
-            <a href="{{ path('fos_user_profile_edit') }}" class='pull-right'>Editar informações</a>
+            <a href="{{ path('fos_user_profile_edit') }}" class="pull-right">Editar informações</a>
 
             <div class="clearfix"></div>
 
@@ -42,10 +42,19 @@
             </p>
         </div>
 
-        <ul id="applications" class='col-sd-9 col-md-9 list'>
-            <li>
+        <ul id="applications" class="col-sd-9 col-md-9 list">
+        {% for auth in user.getAuthorizations %}
+		    <li>
                 <img src="http://placehold.it/120x120" alt="" class="img-rounded center-block">
-                <h4 class="center-block text-center">Nota Fiscal Gaúcha</h4>
+                <h4 class="center-block text-center">{{ auth.client.name }}</h4>
+                
+                {#<a href="{{ path('ui_revoke', { 'clientId': auth.client.id }) }}" data-token="{{ csrf_token(path('ui_revoke', { 'clientId': auth.client.id })) }}" class="btn btn-float btn-danger revoke">{{ 'Revoke Access' | trans }}</a>#}
+                <p>
+                {% for scope in auth.scope %}
+                    <span class="label label-default">{{ ('scope.' ~ scope) | trans }}</span>
+                {% endfor %}
+                </p>
+                
                 <div class="onoffswitch center-block onoffswitch-checked">
                     <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch1" checked>
                     <label class="onoffswitch-label" for="myonoffswitch1">
@@ -54,77 +63,20 @@
                     </label>
                 </div>
             </li>
-            <li>
-                <img src="http://placehold.it/120x120" alt="" class="img-rounded center-block">
-                <h4 class="center-block text-center">Nota Fiscal Gaúcha</h4>
-                <div class="onoffswitch center-block onoffswitch-checked">
-                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch2" checked>
-                    <label class="onoffswitch-label" for="myonoffswitch2">
-                        <div class="onoffswitch-inner"></div>
-                        <div class="onoffswitch-switch"></div>
-                    </label>
-                </div>
-            </li>
-            <li>
-                <img src="http://placehold.it/120x120" alt="" class="img-rounded center-block">
-                <h4 class="center-block text-center">Nota Fiscal Gaúcha</h4>
-                <div class="onoffswitch center-block onoffswitch-checked">
-                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch2" checked>
-                    <label class="onoffswitch-label" for="myonoffswitch2">
-                        <div class="onoffswitch-inner"></div>
-                        <div class="onoffswitch-switch"></div>
-                    </label>
-                </div>
-            </li>
-            <li>
-                <img src="http://placehold.it/120x120" alt="" class="img-rounded center-block">
-                <h4 class="center-block text-center">Nota Fiscal Gaúcha</h4>
-                <div class="onoffswitch center-block">
-                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch2" checked>
-                    <label class="onoffswitch-label" for="myonoffswitch2">
-                        <div class="onoffswitch-inner"></div>
-                        <div class="onoffswitch-switch"></div>
-                    </label>
-                </div>
-            </li>
-            <li>
-                <img src="http://placehold.it/120x120" alt="" class="img-rounded center-block">
-                <h4 class="center-block text-center">Nota Fiscal Gaúcha</h4>
-                <div class="onoffswitch center-block">
-                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch2" checked>
-                    <label class="onoffswitch-label" for="myonoffswitch2">
-                        <div class="onoffswitch-inner"></div>
-                        <div class="onoffswitch-switch"></div>
-                    </label>
-                </div>
-            </li>
-        </ul>
-
-        <ul class="list-group" style="display:none;">
-        {% for auth in user.getAuthorizations %}
-            <li class="list-group-item authorized">
-                <a href="{{ path('ui_revoke', { 'clientId': auth.client.id }) }}" data-token="{{ csrf_token(path('ui_revoke', { 'clientId': auth.client.id })) }}" class="btn btn-float btn-danger revoke">{{ 'Revoke Access' | trans }}</a>
-                <h4 class="list-group-item-heading">{{ auth.client.name }}</h4>
-                <p class="list-group-item-text">
-                    <strong>{{ 'Description:' | trans }}</strong>
-                    {{ auth.client.description }}
-                </p>
-                <p class="list-group-item-text">
-                    <strong>{{ 'Access scope:' | trans }}</strong>
-                {% for scope in auth.scope %}
-                    <span class="label label-default">{{ ('scope.' ~ scope) | trans }}</span>
-                {% endfor %}
-                </p>
-            </li>
         {% endfor %}
         {% for client in apps %}
-            <li class="list-group-item unauthorized">
-                <a href="{{ client.siteUrl }}" class="btn btn-float btn-success">{{ 'Visit Site' | trans }}</a>
-                <h4 class="list-group-item-heading">{{ client.name }}</h4>
-                <p class="list-group-item-text">
-                    <strong>{{ 'Description:' | trans }}</strong>
-                    {{ client.description }}
-                </p>
+        	<li>
+                <img src="http://placehold.it/120x120" alt="" class="img-rounded center-block">
+                <h4 class="center-block text-center">
+                    <a href="{{ client.siteUrl }}">{{ client.name }}</a>
+                </h4>
+                <div class="onoffswitch center-block onoffswitch-checked">
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="switch{{ client.id }}" checked>
+                    <label class="onoffswitch-label" for="switch{{ client.id }}">
+                        <div class="onoffswitch-inner"></div>
+                        <div class="onoffswitch-switch"></div>
+                    </label>
+                </div>
             </li>
         {% endfor %}
         </ul>
