@@ -86,16 +86,16 @@
             propHooks.value = hooks;
         }
 
-        $(function() {
-            // Look for forms
-            $(document).delegate('form', 'submit.placeholder', function() {
-                // Clear the placeholder values so they don't get submitted
-                var $inputs = $('.placeholder', this).each(clearPlaceholder);
-                setTimeout(function() {
-                    $inputs.each(setPlaceholder);
-                }, 10);
-            });
-        });
+        // $(function() {
+        //     // Look for forms
+        //     $(document).delegate('form', 'submit.placeholder', function() {
+        //         // Clear the placeholder values so they don't get submitted
+        //         var $inputs = $('.placeholder', this).each(clearPlaceholder);
+        //         setTimeout(function() {
+        //             $inputs.each(setPlaceholder);
+        //         }, 10);
+        //     });
+        // });
 
         // Clear placeholder values upon page reload
         $(window).bind('beforeunload.placeholder', function() {

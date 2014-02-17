@@ -10,9 +10,8 @@ $(function() {
         $(this).parent().toggleClass('onoffswitch-checked');
     });
 
-    // placeholder support
-    $('input, textarea').placeholder();
-
-
+    $('.btn-success').on('click', function(event) {
+        //event.preventDefault();
+    });
 
 });

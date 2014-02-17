@@ -32,8 +32,16 @@
     {% javascripts
             '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/ie/ie.js'
     %}
-        <!--[if lt IE 8]>
+        <!--[if lt IE 9]>
           <script type="text/javascript" src="{{ asset_url }}"></script>
         <![endif]-->
     {% endjavascripts %}
+
+
+    <!--[if lt IE 10]>
+        <script type="text/javascript">
+        $('input[placeholder], textarea[placeholder]').placeholder();
+        </script>
+    <![endif]-->
+
 {% endblock %}
