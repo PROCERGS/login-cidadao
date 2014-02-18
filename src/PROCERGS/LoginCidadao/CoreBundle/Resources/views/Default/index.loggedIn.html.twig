@@ -35,10 +35,10 @@
                         <dd>{{ user.birthdate|date('d/m/Y') }}
 
                         <dt>{{ 'CPF' | trans }}
-                        <dd>{{ user.cpf }}
+                        <dd>{{ "%s.%s.%s-%s" | format(user.cpf|slice(0, 3), user.cpf|slice(3, 3), user.cpf|slice(6, 3), user.cpf|slice(9, 2)) }}
 
                         <dt>{{ 'CEP' | trans }}
-                        <dd>{{ user.cep }}
+                        <dd>{{ "%s-%s" | format(user.cep|slice(0, 5), user.cep|slice(5, 3)) }}
                     </dl>
                 </div>
             </div>
