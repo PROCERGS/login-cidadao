@@ -72,7 +72,8 @@
                     <div class="input-error">{{ form_errors(form.cpf) }}</div>
                     {{ form_widget(form.cpf, {'attr': {'class': 'form-control'}}) }}
                 </div>
-                <input class='btn btn-success btn-sm pull-right' type="submit" value="{{ 'registration.submit'|trans }}" />
+                <button class='btn btn-success btn-sm pull-right' type="submit">{{ 'registration.submit'|trans }}</button>
+                <div class="clearfix"></div>
             {{ form_end(form) }}
         </div>
 

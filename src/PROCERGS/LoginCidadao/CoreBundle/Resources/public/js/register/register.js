@@ -1,3 +1,16 @@
+var pageWidth;
+
+function responsive(aside, signUp) {
+    pageWidth = $(window).width();
+    if( pageWidth < 992 ){
+        aside.remove();
+        signUp.after(aside);
+    } else {
+        aside.remove();
+        signUp.before(aside);
+    }
+}
+
 $(document).ready(function(){
     $('#fos_user_registration_form_username').blur(function(){
         $elm = $(this);
@@ -16,18 +29,10 @@ $(document).ready(function(){
             return false;
         });
     });
+
+    responsive( $('#register-aside'), $('#sign-up') );
 });
 
 $(window).resize(function() {
-    var pageWidth = $(window).width();
-
-    var register = $('#register-aside');
-    if( $(window).width()< 992){
-        register.remove();
-        $('#sign-up').after(register);
-    } else {
-        register.remove();
-        $('#sign-up').before(register);
-    }
-
+    responsive( $('#register-aside'), $('#sign-up') );
 });

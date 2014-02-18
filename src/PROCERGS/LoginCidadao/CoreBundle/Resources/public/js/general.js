@@ -32,5 +32,10 @@ $(function() {
         }
     });
 
+    // close for msg-popup - error, alert, warning
+    $('.msg-popup').on('click', '.btn', function() {
+        $('.msg-popup').fadeOut();
+    });
+
 
 });

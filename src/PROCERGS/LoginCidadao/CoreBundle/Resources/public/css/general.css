@@ -290,3 +290,62 @@ margin-top: 13px;
 .btn-app-display[data-display='icon'] i{
     background-image: url('../images/btn_icon.png');
 }
+
+.msg-popup {
+    background-color: #cccccc;
+    border-radius: 10px;
+    box-shadow: 0 0 15px 0px #000;
+    color:#4d4d4d;
+    height: 225px;
+    left: 50%;
+    margin-left: -300px;
+    margin-top: -110px;
+    padding: 14px;
+    position: absolute;
+    top:50%;
+    width: 600px;
+    z-index: 9999;
+}
+
+.msg-popup .content {
+    background-color: #f0f0f0;
+    border: solid 2px #b3b3b3;
+    border-radius: 10px;
+    height: 100%;
+    width: 100%;
+}
+
+.msg-popup .icon {
+    float: left;
+    height: 100%;
+    width: 200px;
+}
+
+.msg-popup .info {
+    float: right;
+    height: 100%;
+    width: 368px;
+}
+
+.msg-popup .info p {
+    margin: 20px 0 15px 0;
+}
+
+.msg-popup .btn {
+    box-shadow: 0 0 5px 0px #c6c8cf;
+    color: #FFF;
+    font-size: 20px;
+    height: 30px;
+    line-height: 16px;
+    text-transform: uppercase;
+    text-shadow: 0 0 1px #CCC;
+    width: 150px;
+}
+
+.msg-popup.warning .btn {
+    background-color: #fcd87c;
+}
+
+.msg-popup.error .btn {
+    background-color: #e61717;
+}
