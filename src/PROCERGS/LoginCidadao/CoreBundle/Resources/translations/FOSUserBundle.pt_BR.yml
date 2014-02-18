@@ -19,5 +19,5 @@ form.new_password_confirmation: 'Repita a senha:'
 form.firstName: Nome
 form.surname: Sobrenome
 form.birthdate: 'Data de nascimento'
-form.cep: Cep
-form.cpf: Cpf
+form.cep: CEP
+form.cpf: CPF

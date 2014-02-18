@@ -51,7 +51,7 @@ Save: Salvar
 'Someone already has that username. Try another?': 'Alguém já escolheu esse nome de usuário. Tente outro.'
 Username: Username
 Email: Email
-Birthday: 'Data de Nascimento'
+Birthdate: 'Data de Nascimento'
 CPF: CPF
 CEP: CEP
 'To confirm your change, type your current password below:': 'Para confirmar suas alterações, digite sua senha atual abaixo:'

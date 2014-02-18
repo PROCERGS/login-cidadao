@@ -16,7 +16,7 @@
         <div id="profile" class="col-sd-3 col-md-3">
             <img class="pull-left" src="http://placehold.it/122x122">
             <h4 class="pull-right">{{ user.fullname }}</h4>
-            <a href="{{ path('fos_user_profile_edit') }}" class="pull-right">Editar informações</a>
+            <a href="{{ path('fos_user_profile_edit') }}" class="pull-right">{% trans %}Edit profile{%  endtrans %}</a>
 
             <div class="clearfix"></div>
 
@@ -29,7 +29,7 @@
                 <span>{{ user.email }}</span>
             </p>
             <p>
-                <strong>{{ 'Birthday' | trans }}</strong><br>
+                <strong>{{ 'Birthdate' | trans }}</strong><br>
                 <span>{{ user.birthdate|date('d-m-Y') }}</span>
             </p>
             <p>
