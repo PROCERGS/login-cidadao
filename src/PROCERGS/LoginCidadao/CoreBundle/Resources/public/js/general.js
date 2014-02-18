@@ -18,7 +18,12 @@ $(function() {
 
             $('#applications').css({'margin-top': '-30px', 'opacity' : 0 });
             setTimeout(function () {
-                $('#applications').css({'margin-top' : 0, 'opacity' : 1}).toggleClass('list');
+            	if ($(this).data("display") === 'list') {
+            		$('#applications').removeClass('icon').addClass('list');
+            	} else {
+            		$('#applications').removeClass('list').addClass('icon');
+            	}
+                $('#applications').css({'margin-top' : 0, 'opacity' : 1});
             }, 800);
         }
     });
