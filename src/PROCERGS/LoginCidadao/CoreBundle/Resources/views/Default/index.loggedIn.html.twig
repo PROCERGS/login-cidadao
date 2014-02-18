@@ -16,7 +16,7 @@
         <div id="profile" class="col-sd-3 col-md-3">
             <img class="pull-left" src="http://placehold.it/122x122">
             <h4 class="pull-right">{{ user.fullname }}</h4>
-            <a href="{{ path('fos_user_profile_edit') }}" class="pull-right">Editar informações</a>
+            <a href="{{ path('fos_user_profile_edit') }}" class="pull-right">{% trans %}Edit profile{%  endtrans %}</a>
 
             <div class="clearfix"></div>
 
@@ -29,7 +29,7 @@
                 <span>{{ user.email }}</span>
             </p>
             <p>
-                <strong>{{ 'Birthday' | trans }}</strong><br>
+                <strong>{{ 'Birthdate' | trans }}</strong><br>
                 <span>{{ user.birthdate|date('d-m-Y') }}</span>
             </p>
             <p>
@@ -48,12 +48,14 @@
                 <img src="http://placehold.it/120x120" alt="" class="img-rounded center-block">
                 <h4 class="center-block text-center">{{ auth.client.name }}</h4>
                 
-                {#<a href="{{ path('ui_revoke', { 'clientId': auth.client.id }) }}" data-token="{{ csrf_token(path('ui_revoke', { 'clientId': auth.client.id })) }}" class="btn btn-float btn-danger revoke">{{ 'Revoke Access' | trans }}</a>#}
+                {#
+                <a href="{{ path('ui_revoke', { 'clientId': auth.client.id }) }}" data-token="{{ csrf_token(path('ui_revoke', { 'clientId': auth.client.id })) }}" class="btn btn-float btn-danger revoke">{{ 'Revoke Access' | trans }}</a>
                 <p>
                 {% for scope in auth.scope %}
                     <span class="label label-default">{{ ('scope.' ~ scope) | trans }}</span>
                 {% endfor %}
                 </p>
+                #}
                 
                 <div class="onoffswitch center-block onoffswitch-checked">
                     <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch1" checked>
@@ -71,7 +73,7 @@
                     <a href="{{ client.siteUrl }}">{{ client.name }}</a>
                 </h4>
                 <div class="onoffswitch center-block onoffswitch-checked">
-                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="switch{{ client.id }}" checked>
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="switch{{ client.id }}">
                     <label class="onoffswitch-label" for="switch{{ client.id }}">
                         <div class="onoffswitch-inner"></div>
                         <div class="onoffswitch-switch"></div>

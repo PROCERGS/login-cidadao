@@ -3,7 +3,7 @@ Welcome!: Welcome!
 'Welcome to the Citizen''s Login service.': 'Welcome to the Citizen''s Login service.'
 'Here you''ll find all you need to know about the service.': 'Here you''ll find all you need to know about the service.'
 'You might start by logging in or %link_start%registering%link_end%.': 'You might start by logging in or %link_start%registering%link_end%.'
-security.login.username: CPF, username or email
+security.login.username: 'CPF, username or email'
 security.login.password: Password
 security.login.remember_me: 'Remember me'
 security.login.submit: 'Log in'
@@ -30,3 +30,24 @@ Help: Help
 'Click again to confirm': 'Click again to confirm'
 'Please, wait...': 'Please, wait...'
 Revoked: Revoked
+'The <strong>%client_name%</strong> app wants to access the following information about you:': 'The <strong>%client_name%</strong> app wants to access the following information about you:'
+'Edit profile': 'Edit profile'
+Username: Username
+Email: Email
+Birthdate: Birthdate
+CPF: CPF
+CEP: CEP
+'We''re almost done!': 'We''re almost done!'
+'Your account is created, but we recommend you choose a better username.': 'Your account is created, but we recommend you choose a better username.'
+'Your username will be used to quickly refer to yourself on Citizen''s Login, just like Twitter''s @ replies.': 'Your username will be used to quickly refer to yourself on Citizen''s Login, just like Twitter''s @ replies.'
+'Username:': 'Username:'
+'We''ll also need you to type your email address, since Twitter didn''t tell it to us.': 'We''ll also need you to type your email address, since Twitter didn''t tell it to us.'
+'Email:': 'Email:'
+'You''ll need a password': 'You''ll need a password'
+'To make sure that you can access the Citizen''s Login even if you lose access to your Facebook or Twitter account, please define a password.': 'To make sure that you can access the Citizen''s Login even if you lose access to your Facebook or Twitter account, please define a password.'
+'Type in your password here:': 'Type in your password here:'
+'And then confirm it here:': 'And then confirm it here:'
+'To confirm your change, type your current password below:': 'To confirm your change, type your current password below:'
+'Current password:': 'Current password:'
+Save: Save
+'Logo Nota Fiscal Gaúcha': 'Logo Nota Fiscal Gaúcha'

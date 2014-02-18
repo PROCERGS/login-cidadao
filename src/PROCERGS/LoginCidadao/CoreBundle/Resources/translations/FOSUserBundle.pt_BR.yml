@@ -19,5 +19,15 @@ form.new_password_confirmation: 'Repita a senha:'
 form.firstName: Nome
 form.surname: Sobrenome
 form.birthdate: 'Data de nascimento'
-form.cep: Cep
-form.cpf: Cpf
+form.cep: CEP
+form.cpf: CPF
+resetting.request.invalid_username: __resetting.request.invalid_username
+resetting.request.username: __resetting.request.username
+resetting.request.submit: __resetting.request.submit
+resetting.check_email: __resetting.check_email
+resetting.email.subject: __resetting.email.subject
+resetting.email.message: __resetting.email.message
+registration.email.subject: __registration.email.subject
+registration.email.message: __registration.email.message
+resetting.reset.submit: __resetting.reset.submit
+resetting.password_already_requested: __resetting.password_already_requested

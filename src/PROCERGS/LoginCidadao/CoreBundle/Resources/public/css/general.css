@@ -146,6 +146,9 @@ footer nav li a {
     width: 170px;
 }
 
+#applications.icon li h4 {
+    height: 44px;
+}
 #applications li h4 {
     font-size: 20px;
 }
