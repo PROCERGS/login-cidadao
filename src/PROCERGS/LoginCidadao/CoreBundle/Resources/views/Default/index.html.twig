@@ -1,6 +1,22 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle::base.html.twig' %}
 
 {% block body %}
+
+{% if error %}
+<div class="msg-popup error">
+    <div class="content">
+        <div class="icon">icon</div>
+        <div class="info">
+            <h4>Nome ou número do Alerta!</h4>
+            <p>
+                {{ error|trans }}
+            </p>
+            <button type="button" class="btn">ok</button>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <div class="container col-sm-offset-1 col-xs-offset-0 col-sm-10">
     <div class="row">
         <div class="col-xs-12 text-center">
@@ -15,9 +31,6 @@
     <div class="box-wrapper">
         <div class="row">
             <div class="col-xs-12 col-lg-6 col-lg-offset-3">
-            {% if error %}
-            <div>{{ error|trans }}</div>
-            {% endif %}
                 <form role="form" action="{{ path("fos_user_security_check") }}" method="post" class="well well-lg">
                     {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_2x.png' %}
                         <img class="center-block" src="{{ asset_url }}" alt="{%trans%}Citizen's Login{%endtrans%}">

@@ -10,8 +10,4 @@ $(function() {
         $(this).parent().toggleClass('onoffswitch-checked');
     });
 
-    $('.btn-success').on('click', function(event) {
-        //event.preventDefault();
-    });
-
 });
