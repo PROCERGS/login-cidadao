@@ -32,6 +32,12 @@ services:
         tags:
             - { name: form.type, alias: procergs_person_profile }
 
+    procergs_person.resetting.form.type:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ResettingFormType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: procergs_person_resetting }
+
     procergs_logincidadao.user_provider:
         class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
         arguments: ["@fos_user.user_manager"]

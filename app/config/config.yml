@@ -66,7 +66,8 @@ swiftmailer:
     username:  %mailer_user%
     password:  %mailer_password%
     spool:     { type: memory }
-    delivery_address: %mailer_sender_mail%
+    sender_address: %mailer_sender_mail%
+    #delivery_address: %mailer_sender_mail%
 
 fos_oauth_server:
   db_driver: orm
@@ -94,6 +95,13 @@ fos_user:
     profile:
         form:
             type: procergs_person_profile
+    resetting:
+        email:
+            from_email: 
+                address:        %mailer_sender_mail%
+                sender_name:    %site_domain%
+        form:
+            type:               procergs_person_resetting
 
 # Audit Trail
 simple_things_entity_audit:

@@ -34,7 +34,7 @@
                         </div>
                         <button type="submit" class="btn btn-success btn-block">{{ 'security.login.submit'|trans }}</button>
 
-                        <p class="text-right"><a href="#lostPass">{%trans%}Need help?{%endtrans%}</a></p>
+                        <p class="text-right"><a href="{{ path("fos_user_resetting_request") }}">{%trans%}Need help?{%endtrans%}</a></p>
 
                         <div class="checkbox sr-only">
                             <label for="remember_me">

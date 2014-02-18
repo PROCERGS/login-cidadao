@@ -1,0 +1,7 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block body %}
+    {% trans_default_domain 'FOSUserBundle' %}
+
+    <p>{{ 'resetting.password_already_requested'|trans }}</p>
+{% endblock %}

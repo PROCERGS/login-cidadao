@@ -1,0 +1,17 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block body %}
+    <div class='col-md-4 col-md-offset-1 col-lg-5 col-lg-offset-1'>
+        {% trans_default_domain 'FOSUserBundle' %}
+
+        {{ form_start(form, {'action': path('fos_user_resetting_reset', {'token': token}), 'attr': {'role':'form', 'class':'user_resetting_reset'}}) }}
+            {{ form_errors(form) }}
+
+            <div class="form-group">
+                <div class="input-error">{{ form_errors(form.plainPassword) }}</div>
+                {{ form_widget(form.plainPassword) }}
+            </div>        
+            <input class='btn btn-success btn-sm pull-right' type="submit" value="{{ 'resetting.reset.submit'|trans }}" />
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
