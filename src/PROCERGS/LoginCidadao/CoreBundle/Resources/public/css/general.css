@@ -119,8 +119,8 @@ footer nav li a {
     /*width: 300px;*/
 }
 
-#profile p {
-    margin: 10px 0;
+#profile dl dt {
+    margin: 10px 0 0;
 }
 
 #applications {

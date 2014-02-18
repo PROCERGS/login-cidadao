@@ -19,14 +19,14 @@ $(function() {
             $('#applications').css({'margin-top': '-30px', 'opacity' : 0 });
             var button = $(this);
             setTimeout(function () {
-            	switch (button.data("display")) {
-	            	case 'list':
-	            		$('#applications').removeClass('icon').addClass('list');
-	            		break;
-	            	case 'icon':
-	            		$('#applications').removeClass('list').addClass('icon');
-	            		break;
-            	}
+                switch (button.data("display")) {
+                    case 'list':
+                        $('#applications').removeClass('icon').addClass('list');
+                        break;
+                    case 'icon':
+                        $('#applications').removeClass('list').addClass('icon');
+                        break;
+                }
                 $('#applications').css({'margin-top' : 0, 'opacity' : 1});
             }, 800);
         }
