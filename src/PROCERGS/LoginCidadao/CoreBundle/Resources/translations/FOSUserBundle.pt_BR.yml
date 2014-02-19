@@ -2,6 +2,8 @@ registration.submit: 'Próxima etapa'
 registration.check_email: 'Um email foi enviado para o endereço %email%. Para para ativar a sua conta, clique no link na mensagem.'
 registration.confirmed: 'Parabéns, %username%. A sua conta foi ativada.'
 registration.back: 'Retornar para a página de origem.'
+registration.email.subject: 'Bem-vindo(a), %username%!'
+registration.email.message: "Olá, %username%!\n\nPara completar a validação da sua conta, clique no link: %confirmationUrl%\n\nAtenciosamente,\na Equipe.\n"
 profile.edit.submit: Salvar
 profile.show.username: Usuário
 profile.show.email: Email
@@ -22,13 +24,11 @@ form.birthdate: 'Data de nascimento'
 form.cep: CEP
 form.cpf: CPF
 form.city: Cidade
-resetting.request.invalid_username: __resetting.request.invalid_username
-resetting.request.username: __resetting.request.username
-resetting.request.submit: __resetting.request.submit
-resetting.check_email: __resetting.check_email
-resetting.email.subject: __resetting.email.subject
-resetting.email.message: __resetting.email.message
-registration.email.subject: __registration.email.subject
-registration.email.message: __registration.email.message
-resetting.reset.submit: __resetting.reset.submit
-resetting.password_already_requested: __resetting.password_already_requested
+resetting.request.invalid_username: 'O usuário ou endereço de email "%username%" não está cadastrado.'
+resetting.request.username: 'Usuário ou email:'
+resetting.request.submit: 'Recuperar senha'
+resetting.check_email: 'Foi enviado um email para %email%. Para recuperar a sua senha, clique no link da mensagem.'
+resetting.email.subject: 'Redefinir senha'
+resetting.email.message: "Olá, %username%!\n\nPara redefinir sua senha, clique no link: %confirmationUrl%\n\nAtenciosamente,\na Equipe.\n"
+resetting.reset.submit: 'Alterar senha'
+resetting.password_already_requested: 'Este usuário já solicitou uma senha nas últimas 24 horas.'
