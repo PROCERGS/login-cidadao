@@ -1,7 +1,15 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig' %}
 
-{% set cpf = user.cpf|split('', 3) %}
-{% set cep = user.cep|split('', 5) %}
+{% set cpf = user.cpf %}
+{% set cep = user.cep %}
+
+{% if cpf != null %}
+    {% set cpf = user.cpf|split('', 3) %}
+{% endif %}
+
+{% if cep != null %}
+    {% set cep = user.cep|split('', 5) %}
+{% endif %}
 
 {% block body %}
 <div class="row">
@@ -34,14 +42,20 @@
                         <dt>{{ 'Email' | trans }}
                         <dd>{{ user.email }}
 
+                        {% if (user.birthdate != null) %}
                         <dt>{{ 'Birthdate' | trans }}
                         <dd>{{ user.birthdate|date('d/m/Y') }}
+                        {% endif %}
 
+                        {% if cpf != null %}
                         <dt>{{ 'CPF' | trans }}
                         <dd>{{ "%s.%s.%s-%s" | format(cpf[0], cpf[1], cpf[2], cpf[3]) }}
+                        {% endif %}
 
+                        {% if cep != null %}
                         <dt>{{ 'CEP' | trans }}
                         <dd>{{ "%s-%s" | format(cep[0], cep[1]) }}
+                        {% endif %}
                     </dl>
                 </div>
             </div>
