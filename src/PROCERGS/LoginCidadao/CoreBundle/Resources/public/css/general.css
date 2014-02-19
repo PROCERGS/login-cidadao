@@ -72,6 +72,26 @@ img.desaturate {
     padding: 0 44px!important;
 }
 
+.navbar-default .dropdown-menu {
+    background-color: #ededeb;
+}
+
+.navbar-default .btn-group {
+    margin-top: 20px;
+}
+
+.navbar-default .before {
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 8px solid #ededeb;
+    position: absolute;
+    left: 45px;
+    top:30px;
+}
+
 .navbar .btn-success {
     margin-top: 15px;
 }
@@ -115,12 +135,76 @@ footer nav li a {
     border: 1px solid #d8d8d8;
     border-radius: 5px;
     margin-bottom: 30px;
-    padding: 15px;
-    /*width: 300px;*/
+    padding: 0 20px;
+    width: 284px;
+}
+
+#profile .head {
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #999;
+    height: 192px;
+    left: -27px;
+    padding: 10px;
+    position: relative;
+    z-index: 999;
+    width: 305px
+}
+
+#profile .basic {
+    float: left;
+    height: 105px;
+    margin-bottom: 5px;
+    padding-left: 5px;
+}
+
+#profile .status-bar {
+    background-color: #018543;
+    color: #FFF;
+    font-size: 20px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#profile .info {
+    height: 0;
+    overflow: hidden;
+    transition: all 0.5s;
+}
+
+#profile .info.open {
+    display: block;
+    height: 300px;
+}
+
+#profile .toggle {
+    bottom: 3px;
+    left: 50%;
+    margin-left: -10px;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #018543;
+}
+
+#profile .toggle.open {
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #b80000;
+    border-top:none;
 }
 
 #profile dl dt {
     margin: 10px 0 0;
+}
+
+#profile input[readonly='readonly'] {
+    background: none;
+    border: none;
 }
 
 #applications {

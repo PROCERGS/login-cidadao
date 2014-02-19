@@ -12,11 +12,6 @@
     </div>
 </div>
 
-<!-- Button trigger modal -->
-<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#help-modal">
-  ajuda
-</button>
-
 <!-- Modal -->
 <div class="modal fade modal-lg" id="help-modal" tabindex="-1" role="dialog" aria-labelledby="help-modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -52,39 +47,43 @@
 <div class="row">
     <div class="col-xs-12">
         {# <h2>{% trans %}Available Applications and Sites{% endtrans %}</h2> #}
-
-        <div id="profile" class="col-sd-3 col-md-3">
-            <div class="row">
-                <div class="col-xs-12">
-                    <img src="http://placehold.it/122x122">
-                    <h4 class="profile-name text-right">{{ user.fullname }}</h4>
-                    <p class="text-right"><a href="{{ path('fos_user_profile_edit') }}">{% trans %}Edit profile{%  endtrans %}</a></p>
+        <div id="profile" class="pull-left">
+            <div class="head">
+                <img src="http://placehold.it/102x105" class="pull-left">
+                <div class="basic">
+                    <h4 class="profile-name text-left">{{ user.fullname }}</h4>
+                    <p class="text-left">CPF: 999.999.999</p>
+                    <p class="text-left"><a href="{{ path('fos_user_profile_edit') }}" class="edit">{% trans %}Edit profile{%  endtrans %}</a></p>
                 </div>
+                <p style="clear:both; font-size:12px; margin-bottom: 3px;">Situação do cadastro</p>
+                <div class="status-bar">100%</div>
+                <a href="#" class="toggle"></a>
             </div>
+            <div class="info">
+                <dl>
+                    <form style="margin-top: 20px;">
+                        <label>teste</label>
+                        <input type='text' value='nome' readonly="readonly" />
+                    </form>
+                    <dt>{{ 'Username' | trans }}
+                    <dd>{{ user.username }}
 
-            <div class="row">
-                <div class="col-xs-12">
-                    <dl>
-                        <dt>{{ 'Username' | trans }}
-                        <dd>{{ user.username }}
+                    <dt>{{ 'Email' | trans }}
+                    <dd>{{ user.email }}
 
-                        <dt>{{ 'Email' | trans }}
-                        <dd>{{ user.email }}
+                    <dt>{{ 'Birthdate' | trans }}
+                    <dd>{{ user.birthdate|date('d/m/Y') }}
 
-                        <dt>{{ 'Birthdate' | trans }}
-                        <dd>{{ user.birthdate|date('d/m/Y') }}
+                    {# <dt>{{ 'CPF' | trans }}
+                    <dd>{{ "%s.%s.%s-%s" | format(cpf[0], cpf[1], cpf[2], cpf[3]) }} #}
 
-                        <dt>{{ 'CPF' | trans }}
-                        <dd>{{ "%s.%s.%s-%s" | format(cpf[0], cpf[1], cpf[2], cpf[3]) }}
-
-                        <dt>{{ 'CEP' | trans }}
-                        <dd>{{ "%s-%s" | format(cep[0], cep[1]) }}
-                    </dl>
-                </div>
+                    <dt>{{ 'CEP' | trans }}
+                    <dd>{{ "%s-%s" | format(cep[0], cep[1]) }}
+                </dl>
             </div>
         </div>
 
-        <ul id="applications" class="col-sd-9 col-md-9 list">
+        <ul id="applications" class="pull-right list">
         {% for auth in user.getAuthorizations %}
             <li>
                 <img src="http://placehold.it/120x120" alt="" class="img-rounded center-block">
