@@ -5,14 +5,14 @@
 {% if error %}
 <div class="msg-popup error">
     <div class="content">
-        <div class="icon">icon</div>
+        <div class="icon"></div>
         <div class="info">
             <h4>Nome ou número do Alerta!</h4>
             <p>
                 {{ error|trans }}
             </p>
-            <button type="button" class="btn">ok</button>
         </div>
+        <button type="button" class="btn">ok</button>
     </div>
 </div>
 {% endif %}
