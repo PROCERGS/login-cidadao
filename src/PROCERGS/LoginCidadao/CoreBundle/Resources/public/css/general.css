@@ -307,23 +307,46 @@ margin-top: 13px;
     z-index: 9999;
 }
 
+.msg-popup h4 {
+    margin-top: 0;
+}
+
 .msg-popup .content {
     background-color: #f0f0f0;
     border: solid 2px #b3b3b3;
     border-radius: 10px;
     height: 100%;
+    padding-top: 15px;
     width: 100%;
 }
 
 .msg-popup .icon {
+    background-repeat: no-repeat;
+    background-position: center top;
     float: left;
-    height: 100%;
+    height: 75%;
     width: 200px;
+}
+
+.msg-popup.alert .icon {
+    background-image: url(../images/alert.png);
+}
+
+.msg-popup.error .icon {
+    background-image: url(../images/error.png);
+}
+
+.msg-popup.info .icon {
+    background-image: url(../images/info.png);
+}
+
+.msg-popup.success .icon {
+    background-image: url(../images/success.png);
 }
 
 .msg-popup .info {
     float: right;
-    height: 100%;
+    height: 70%;
     width: 368px;
 }
 
@@ -337,15 +360,36 @@ margin-top: 13px;
     font-size: 20px;
     height: 30px;
     line-height: 16px;
+    margin: 0 auto;
     text-transform: uppercase;
     text-shadow: 0 0 1px #CCC;
     width: 150px;
 }
 
-.msg-popup.warning .btn {
+.msg-popup.alert .btn {
     background-color: #fcd87c;
 }
 
 .msg-popup.error .btn {
     background-color: #e61717;
+}
+
+.msg-popup.info .btn {
+    background-color: blue;
+}
+
+.msg-popup.success .btn {
+    background-color: green;
+}
+
+#help-modal .left {
+    width: 25%;
+}
+
+#help-modal .right {
+    width: 75%;
+}
+
+#help-modal .big {
+    font-size: 50px;
 }
