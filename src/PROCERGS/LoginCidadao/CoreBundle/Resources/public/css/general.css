@@ -77,19 +77,42 @@ img.desaturate {
 }
 
 .navbar-default .btn-group {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
-.navbar-default .before {
+.navbar-default .btn-group img {
+    border-radius: 50%;
+}
+
+.navbar-default .dropdown-toggle {
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+.navbar-default .open .dropdown-toggle {
+    background: none;
+}
+
+.navbar-default .dropdown-toggle .name{
+    display: inline-block;
+    font-size: 20px;
+    margin-left: 10px;
+    text-shadow: none;
+}
+
+.navbar-default .dropdown-menu:before {
+    content:"";
     display: block;
-    width: 0;
-    height: 0;
+    width: 10px;
+    height: 20px;
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
     border-bottom: 8px solid #ededeb;
     position: absolute;
-    left: 45px;
-    top:30px;
+    left: 58px;
+    top:-20px;
+    z-index: 9999;
 }
 
 .navbar .btn-success {

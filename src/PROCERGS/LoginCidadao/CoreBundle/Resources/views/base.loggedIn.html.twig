@@ -11,9 +11,11 @@
     <!-- Single button -->
     <div class="btn-group pull-right">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        Pessoa da Silva <span class="caret"></span>
+        {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+        <img src="{{ asset_url }}" alt="" class="pull-left" width="33" height="33">
+        {% endimage %}
+        <span class="name">Pessoa da Silva</span>
       </button>
-      <i class="before"></i>
       <ul class="dropdown-menu" role="menu">
         <li><a href="#">Configurações</a></li>
         <li><a href="#">Temas</a></li>

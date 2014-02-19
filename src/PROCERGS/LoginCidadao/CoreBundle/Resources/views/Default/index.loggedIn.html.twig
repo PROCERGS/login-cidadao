@@ -57,7 +57,9 @@
         {# <h2>{% trans %}Available Applications and Sites{% endtrans %}</h2> #}
         <div id="profile" class="pull-left">
             <div class="head">
-                <img src="http://placehold.it/102x105" class="pull-left">
+                {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+                <img src="{{ asset_url }}" alt="" class="pull-left" width="102" height="105">
+                {% endimage %}
                 <div class="basic">
                     <h4 class="profile-name text-left">{{ user.fullname }}</h4>
                     <p class="text-left">CPF: 999.999.999</p>
