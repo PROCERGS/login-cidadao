@@ -1,0 +1,31 @@
+profile.edit.submit: Update
+profile.show.username: Username
+profile.show.email: Email
+registration.check_email: 'An email has been sent to %email%. It contains an activation link you must click to activate your account.'
+registration.confirmed: 'Congrats %username%, your account is now activated.'
+registration.back: 'Back to the originating page.'
+registration.email.subject: 'Welcome %username%!'
+registration.email.message: "Hello %username%!\n\nTo finish activating your account - please visit %confirmationUrl%\n\nRegards,\nthe Team.\n"
+registration.submit: Register
+resetting.password_already_requested: 'The password for this user has already been requested within the last 24 hours.'
+resetting.check_email: 'An email has been sent to %email%. It contains a link you must click to reset your password.'
+resetting.email.subject: 'Reset Password'
+resetting.email.message: "Hello %username%!\n\nTo reset your password - please visit %confirmationUrl%\n\nRegards,\nthe Team.\n"
+resetting.request.invalid_username: 'The username or email address "%username%" does not exist.'
+resetting.request.username: 'Username or email address:'
+resetting.request.submit: 'Reset password'
+resetting.reset.submit: 'Change password'
+form.group_name: 'Group name:'
+form.username: 'Username:'
+form.email: 'Email:'
+form.current_password: 'Current password:'
+form.password: 'Password:'
+form.password_confirmation: 'Verification:'
+form.new_password: 'New password:'
+form.new_password_confirmation: 'Verification:'
+form.firstName: Firstname
+form.surname: Surname
+form.birthdate: Birthday
+form.cep: Zipcode
+form.cpf: CPF
+form.city: City

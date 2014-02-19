@@ -83,7 +83,7 @@ fos_oauth_server:
 fos_user:
     db_driver: orm
     firewall_name: main
-    user_class: PROCERGS\LoginCidadao\CoreBundle\Entity\Person
+    user_class: %user.class%
     registration:
         confirmation:
             enabled: true
@@ -102,6 +102,8 @@ fos_user:
                 sender_name:    %site_domain%
         form:
             type:               procergs_person_resetting
+    service:
+        user_manager: procergs_logincidadao.user_manager
 
 # Audit Trail
 simple_things_entity_audit:
@@ -136,4 +138,5 @@ hwi_oauth:
             client_secret:  %twitter_app_secret%
             scope:          "email"
 parameters:
+    user.class: PROCERGS\LoginCidadao\CoreBundle\Entity\Person
     buzz.client.class: PROCERGS\Generic\HWIOAuthProxyBundle\Buzz\Client\CurlProxy

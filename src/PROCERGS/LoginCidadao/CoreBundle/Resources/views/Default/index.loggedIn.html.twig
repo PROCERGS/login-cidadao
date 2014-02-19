@@ -1,7 +1,15 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig' %}
 
-{% set cpf = user.cpf|split('', 3) %}
-{% set cep = user.cep|split('', 5) %}
+{% set cpf = user.cpf %}
+{% set cep = user.cep %}
+
+{% if cpf != null %}
+    {% set cpf = user.cpf|split('', 3) %}
+{% endif %}
+
+{% if cep != null %}
+    {% set cep = user.cep|split('', 5) %}
+{% endif %}
 
 {% block body %}
 <div class="row">
@@ -59,6 +67,7 @@
                 <div class="status-bar">100%</div>
                 <a href="#" class="toggle"></a>
             </div>
+
             <div class="info">
                 <dl>
                     <form style="margin-top: 20px;">
@@ -66,22 +75,30 @@
                         <input type='text' value='nome' readonly="readonly" />
                     </form>
                     <dt>{{ 'Username' | trans }}
-                    <dd>{{ user.username }}
+                        <dd>{{ user.username }}</dd>
 
-                    <dt>{{ 'Email' | trans }}
-                    <dd>{{ user.email }}
+                        <dt>{{ 'Email' | trans }}</dt>
+                        <dd>{{ user.email }}</dd>
 
-                    <dt>{{ 'Birthdate' | trans }}
-                    <dd>{{ user.birthdate|date('d/m/Y') }}
+                        {% if (user.birthdate != null) %}
+                        <dt>{{ 'Birthdate' | trans }}</dt>
+                        <dd>{{ user.birthdate|date('d/m/Y') }}</dd>
+                        {% endif %}
 
-                    {# <dt>{{ 'CPF' | trans }}
-                    <dd>{{ "%s.%s.%s-%s" | format(cpf[0], cpf[1], cpf[2], cpf[3]) }} #}
+                        {% if cpf != null %}
+                        <dt>{{ 'CPF' | trans }}</dt>
+                        <dd>{{ "%s.%s.%s-%s" | format(cpf[0], cpf[1], cpf[2], cpf[3]) }}</dd>
+                        {% endif %}
 
-                    <dt>{{ 'CEP' | trans }}
-                    <dd>{{ "%s-%s" | format(cep[0], cep[1]) }}
+                        {% if cep != null %}
+                        <dt>{{ 'CEP' | trans }}</dt>
+                        <dd>{{ "%s-%s" | format(cep[0], cep[1]) }}</dd>
+                        {% endif %}
+                    </dt>
                 </dl>
             </div>
         </div>
+
 
         <ul id="applications" class="pull-right list">
         {% for auth in user.getAuthorizations %}

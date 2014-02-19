@@ -30,3 +30,6 @@ parameters:
 
     site_domain: meu.rs.gov.br
     mailer_sender_mail: ~
+
+    # This must be compatible with strtotime()
+    registration.cpf.empty_time: '+1 month'

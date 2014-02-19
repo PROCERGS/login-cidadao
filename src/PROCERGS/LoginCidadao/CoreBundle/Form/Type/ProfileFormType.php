@@ -26,6 +26,15 @@ class ProfileFormType extends BaseType
             'label' => 'form.birthdate', 
             'translation_domain' => 'FOSUserBundle')
         );
+        $builder->add('city', 'entity', array(
+            'class' => 'PROCERGSLoginCidadaoCoreBundle:City',
+            'property' => 'name',
+            'required' => false,
+            'label' => 'form.city',
+            'translation_domain' => 'FOSUserBundle'
+        ));
+        
+        
     }
 
     public function getName()
