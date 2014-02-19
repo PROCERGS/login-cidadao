@@ -1,6 +1,13 @@
 parameters:
-    procergs.hwi_twitter.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\FOSUBUserProvider
     security.authentication.success_handler.class: PROCERGS\LoginCidadao\CoreBundle\Handler\AuthenticationSuccessHandler
+    fos_facebook.user.login.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\FacebookProvider
+    procergs.hwi_twitter.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\FOSUBUserProvider
+    procergs_person.registration.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\RegistrationFormType
+    procergs_person.profile.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ProfileFormType
+    procergs_person.resetting.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ResettingFormType
+    procergs_logincidadao.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
+    procergs_logincidadao.user_manager.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Manager\UserManager
+    
 
 services:
     security.authentication.success_handler:
@@ -9,7 +16,7 @@ services:
         arguments: ["@router", "@doctrine.orm.entity_manager", "@doctrine.orm.entity_manager", "@session"]
 
     fos_facebook.user.login:
-        class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\FacebookProvider
+        class: %fos_facebook.user.login.class%
         arguments:
             facebook: "@fos_facebook.api"
             userManager: "@fos_user.user_manager"
@@ -21,23 +28,27 @@ services:
         arguments: [ "@fos_user.user_manager", { twitter: twitterId } ]
 
     procergs_person.registration.form.type:
-        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\RegistrationFormType
+        class: %procergs_person.registration.form.type.class%
         arguments: [%fos_user.model.user.class%]
         tags:
             - { name: form.type, alias: procergs_person_registration }
 
     procergs_person.profile.form.type:
-        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ProfileFormType
+        class: %procergs_person.profile.form.type.class%
         arguments: [%fos_user.model.user.class%]
         tags:
             - { name: form.type, alias: procergs_person_profile }
 
     procergs_person.resetting.form.type:
-        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ResettingFormType
+        class: %procergs_person.resetting.form.type.class%
         arguments: [%fos_user.model.user.class%]
         tags:
             - { name: form.type, alias: procergs_person_resetting }
 
     procergs_logincidadao.user_provider:
-        class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
+        class: %procergs_logincidadao.user_provider.class%
         arguments: ["@fos_user.user_manager"]
+
+    procergs_logincidadao.user_manager:
+        class: %procergs_logincidadao.user_manager.class%
+        arguments: ["@security.encoder_factory", "@fos_user.util.username_canonicalizer", "@fos_user.util.email_canonicalizer", "@fos_user.entity_manager"]
