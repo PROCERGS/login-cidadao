@@ -51,4 +51,4 @@ services:
 
     procergs_logincidadao.user_manager:
         class: %procergs_logincidadao.user_manager.class%
-        arguments: ["@security.encoder_factory", "@fos_user.util.username_canonicalizer", "@fos_user.util.email_canonicalizer", "@fos_user.entity_manager"]
+        arguments: ["@security.encoder_factory", "@fos_user.util.username_canonicalizer", "@fos_user.util.email_canonicalizer", "@fos_user.entity_manager", %user.class%, "@service_container"]
