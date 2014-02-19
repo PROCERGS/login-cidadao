@@ -21,6 +21,7 @@ form.surname: Sobrenome
 form.birthdate: 'Data de nascimento'
 form.cep: CEP
 form.cpf: CPF
+form.city: Cidade
 resetting.request.invalid_username: __resetting.request.invalid_username
 resetting.request.username: __resetting.request.username
 resetting.request.submit: __resetting.request.submit

@@ -370,4 +370,23 @@ class Person extends BaseUser
     {
         return $this->cpfExpiration;
     }
+
+    /**
+     * @param \PROCERGS\LoginCidadao\CoreBundle\Entity\City $city
+     * @return City
+     */
+    public function setCity(\PROCERGS\LoginCidadao\CoreBundle\Entity\City $city = null)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\City
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }    
 }
