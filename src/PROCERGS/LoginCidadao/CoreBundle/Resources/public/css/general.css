@@ -153,6 +153,17 @@ footer nav li a {
     color: #737373;
 }
 
+.settings-nav, .settings-content {
+    background-color: #f1f1f1;
+    border: 1px solid #d8d8d8;
+    border-radius: 5px;
+    min-height: 300px;
+}
+
+.settings-content {
+    padding: 10px;
+}
+
 #profile {
     background-color: #f1f1f1;
     border: 1px solid #d8d8d8;
