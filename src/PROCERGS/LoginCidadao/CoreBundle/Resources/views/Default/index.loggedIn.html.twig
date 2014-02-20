@@ -54,8 +54,45 @@
 
 <div class="row">
     <div class="col-xs-12">
+
+        <div class="col-md-4">
+            <ul class="settings-nav nav nav-pills nav-stacked">
+                <li class="active"><a href="">Perfil</a></li>
+                <li><a href="">Aplicações</a></li>
+                <li><a href="">Notificações</a></li>
+                <li><a href="">Trocar senha</a></li>
+                <li><a href="">Trocar username</a></li>
+            </ul>
+        </div>
+
+        <div class="settings-content pull-right list col-md-7 col-md-offset-1">
+            <dl>
+                <dt>{{ 'Username' | trans }}
+                    <dd>{{ user.username }}</dd>
+
+                    <dt>{{ 'Email' | trans }}</dt>
+                    <dd>{{ user.email }}</dd>
+
+                    {% if (user.birthdate != null) %}
+                    <dt>{{ 'Birthdate' | trans }}</dt>
+                    <dd>{{ user.birthdate|date('d/m/Y') }}</dd>
+                    {% endif %}
+
+                    {% if cpf != null %}
+                    <dt>{{ 'CPF' | trans }}</dt>
+                    <dd>{{ "%s.%s.%s-%s" | format(cpf[0], cpf[1], cpf[2], cpf[3]) }}</dd>
+                    {% endif %}
+
+                    {% if cep != null %}
+                    <dt>{{ 'CEP' | trans }}</dt>
+                    <dd>{{ "%s-%s" | format(cep[0], cep[1]) }}</dd>
+                    {% endif %}
+                </dt>
+            </dl>
+        </div>
+
         {# <h2>{% trans %}Available Applications and Sites{% endtrans %}</h2> #}
-        <div id="profile" class="pull-left col-md-4">
+        <div id="profile" class="pull-left col-md-4" style="display:none;">
             <div class="head">
                 {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
                 <img src="{{ asset_url }}" alt="" class="pull-left" width="102" height="105">
@@ -75,10 +112,6 @@
 
             <div class="info">
                 <dl>
-                    <form style="margin-top: 20px;">
-                        <label>teste</label>
-                        <input type='text' value='nome' readonly="readonly" />
-                    </form>
                     <dt>{{ 'Username' | trans }}
                         <dd>{{ user.username }}</dd>
 
