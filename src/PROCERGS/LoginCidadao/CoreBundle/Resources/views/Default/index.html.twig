@@ -47,7 +47,14 @@
                         </div>
                         <button type="submit" class="btn btn-success btn-block">{{ 'security.login.submit'|trans }}</button>
 
-                        <div class="fbpo">{{ facebook_login_button() }}</div>
+                        <div class="row">
+                        	<div class="col-xs-6">
+                        	   <div class="fbpo">{{ facebook_login_button({ 'label': 'Connect using Facebook' | trans }) }}</div>
+                        	</div>
+                        	<div class="col-xs-6">
+                        	   <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}">{% trans %}Connect using Twitter{% endtrans %}</a>
+                        	</div>
+                        </div>
 
                         <p class="text-right"><a href="{{ path("fos_user_resetting_request") }}">{%trans%}Need help?{%endtrans%}</a></p>
 

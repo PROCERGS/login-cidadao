@@ -64,3 +64,4 @@ cpf_reminder.subject: 'Você não tem um CPF associado no Login Cidadão'
 'Please consider visiting Citizen''s Login until %date% to complete this information. After that date, your account might be suspended.': 'Por favor, visite o Login Cidadão até o dia %date% para completar essa informação. Após essa data, sua conta poderá ser suspensa.'
 Activate: Ativar
 Deactivate: Desativar
+'Connect using Facebook': 'Conectar usando Facebook'
