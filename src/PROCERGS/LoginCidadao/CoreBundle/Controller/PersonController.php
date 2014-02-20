@@ -113,22 +113,6 @@ class PersonController extends Controller
     }
 
     /**
-     * @Route("/connectTwitter", name="connect_twitter")
-     *
-     */
-    public function connectTwitterAction()
-    {
-        $request = $this->get('request');
-        $twitter = $this->get('fos_twitter.service');
-
-        $authURL = $twitter->getLoginUrl($request);
-
-        $response = new RedirectResponse($authURL);
-
-        return $response;
-    }
-
-    /**
      * @Route("/person/username/validate", name="lc_validate_username")
      */
     public function validateUsernameAction(Request $request)
