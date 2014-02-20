@@ -47,6 +47,8 @@
                         </div>
                         <button type="submit" class="btn btn-success btn-block">{{ 'security.login.submit'|trans }}</button>
 
+                        <div class="fbpo">{{ facebook_login_button() }}</div>
+
                         <p class="text-right"><a href="{{ path("fos_user_resetting_request") }}">{%trans%}Need help?{%endtrans%}</a></p>
 
                         <div class="checkbox sr-only">
@@ -78,7 +80,6 @@
         <div class="col-xs-12">
             {{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
 
-            <div class="fbpo">{{ facebook_login_button() }}</div>
 
             <script type="text/javascript">
 

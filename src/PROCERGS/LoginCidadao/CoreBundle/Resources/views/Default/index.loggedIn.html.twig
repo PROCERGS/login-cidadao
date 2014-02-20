@@ -55,7 +55,7 @@
 <div class="row">
     <div class="col-xs-12">
         {# <h2>{% trans %}Available Applications and Sites{% endtrans %}</h2> #}
-        <div id="profile" class="pull-left">
+        <div id="profile" class="pull-left col-md-4">
             <div class="head">
                 {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
                 <img src="{{ asset_url }}" alt="" class="pull-left" width="102" height="105">
@@ -63,10 +63,13 @@
                 <div class="basic">
                     <h4 class="profile-name text-left">{{ user.fullname }}</h4>
                     <p class="text-left">CPF: 999.999.999</p>
-                    <p class="text-left"><a href="{{ path('fos_user_profile_edit') }}" class="edit">{% trans %}Edit profile{%  endtrans %}</a></p>
                 </div>
                 <p style="clear:both; font-size:12px; margin-bottom: 3px;">Situação do cadastro</p>
-                <div class="status-bar">100%</div>
+                <div class="progress">
+                  <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                    <span class="txt">40%</span>
+                  </div>
+                </div>
                 <a href="#" class="toggle"></a>
             </div>
 
@@ -98,11 +101,12 @@
                         {% endif %}
                     </dt>
                 </dl>
+                <p class="text-left"><a href="{{ path('fos_user_profile_edit') }}" class="edit">{% trans %}Edit profile{%  endtrans %}</a></p>
             </div>
         </div>
 
 
-        <ul id="applications" class="pull-right list">
+        <ul id="applications" class="pull-right list col-md-8">
         {% for auth in user.getAuthorizations %}
             <li>
                 <img src="http://placehold.it/120x120" alt="" class="img-rounded center-block">
@@ -117,27 +121,20 @@
                 </p>
                 #}
 
-                <div class="onoffswitch center-block onoffswitch-checked">
-                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch1" checked>
-                    <label class="onoffswitch-label" for="myonoffswitch1">
-                        <div class="onoffswitch-inner"></div>
-                        <div class="onoffswitch-switch"></div>
-                    </label>
+                <div class="app-switch pull-right">
+                    <a class="btn activate" role="button">{% trans %}Activate{%  endtrans %}</a>
                 </div>
             </li>
         {% endfor %}
+
         {% for client in apps %}
             <li>
                 <img src="http://placehold.it/120x120" alt="" class="img-rounded center-block">
                 <h4 class="center-block text-center">
                     <a href="{{ client.siteUrl }}">{{ client.name }}</a>
                 </h4>
-                <div class="onoffswitch center-block onoffswitch-checked">
-                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="switch{{ client.id }}">
-                    <label class="onoffswitch-label" for="switch{{ client.id }}">
-                        <div class="onoffswitch-inner"></div>
-                        <div class="onoffswitch-switch"></div>
-                    </label>
+                <div class="app-switch pull-right">
+                    <a class="btn deactivate" role="button">{% trans %}Deactivate{%  endtrans %}</a>
                 </div>
             </li>
         {% endfor %}

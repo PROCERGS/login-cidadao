@@ -96,7 +96,7 @@ img.desaturate {
 
 .navbar-default .dropdown-toggle .name{
     display: inline-block;
-    font-size: 20px;
+    font-size: 23px;
     margin-left: 10px;
     text-shadow: none;
 }
@@ -167,11 +167,11 @@ footer nav li a {
     border-radius: 10px;
     box-shadow: 0 0 10px #999;
     height: 192px;
-    left: -27px;
+    left: -32px;
     padding: 10px;
     position: relative;
     z-index: 999;
-    width: 305px
+    width: 306px
 }
 
 #profile .basic {
@@ -181,15 +181,22 @@ footer nav li a {
     padding-left: 5px;
 }
 
-#profile .status-bar {
-    background-color: #018543;
+#profile .progress {
+    background-color: #a1a1a1;
     color: #FFF;
     font-size: 20px;
     height: 36px;
-    line-height: 36px;
     text-align: center;
+}
+
+#profile .txt {
+    display: block;
+    color: #FFF;
+    font-size: 20px;
+    line-height: 36px;
     vertical-align: middle;
 }
+
 
 #profile .info {
     height: 0;
@@ -276,6 +283,21 @@ footer nav li a {
 #applications.list li h4 {
     float: left;
     margin: 13px 10px;
+}
+
+#applications .app-switch .btn{
+    border-radius: 10px;
+    box-shadow: 0 0 10px #000000;
+    color: #FFF;
+    margin: 7px 15px 0 0;
+}
+
+#applications .app-switch .activate {
+    background-color: #138a35;
+}
+
+#applications .app-switch .deactivate {
+    background-color: #b80404;
 }
 
 #applications.list li .onoffswitch {
