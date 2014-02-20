@@ -12,11 +12,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class SentEmailRepository extends EntityRepository
 {
-    public function findAllSentInTheLast24h($indexedByReceiver = false)
+    public function findAllSentInTheLast24h($type, $indexedByReceiver = false)
     {
         $date = new \DateTime("-24 hours");
         $result = $this->getEntityManager()
-            ->createQuery('SELECT s FROM PROCERGSLoginCidadaoCoreBundle:SentEmail s WHERE s.date >= :date')
+            ->createQuery('SELECT s FROM PROCERGSLoginCidadaoCoreBundle:SentEmail s WHERE s.type = :type AND s.date >= :date')
+            ->setParameter('type', $type)
             ->setParameter('date', $date)
             ->getResult();
         if ($indexedByReceiver) {

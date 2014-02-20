@@ -20,6 +20,7 @@ class JobsController extends Controller
      */
     public function cpfCheckAction()
     {
+        $mailType = 'cpf-reminder';
         $translator = $this->get('translator');
 
         $subject = $translator->trans('cpf_reminder.subject');
@@ -32,7 +33,7 @@ class JobsController extends Controller
             ->getRepository('PROCERGSLoginCidadaoCoreBundle:SentEmail');
 
         $users = $personRepo->findAllPendingCPFUntilDate(new \DateTime());
-        $todayMail = $emailRepo->findAllSentInTheLast24h(true);
+        $todayMail = $emailRepo->findAllSentInTheLast24h($mailType, true);
 
         $mailCount = 0;
         foreach ($users as $user) {
@@ -42,7 +43,7 @@ class JobsController extends Controller
             }
 
             $email = new SentEmail();
-            $email->setType('cpf-reminder')
+            $email->setType($mailType)
                 ->setSubject($subject)
                 ->setSender($from)
                 ->setReceiver($to)
