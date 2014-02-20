@@ -58,3 +58,7 @@ CEP: CEP
 'Current password:': 'Senha atual:'
 'The <strong>%client_name%</strong> app wants to access the following information about you:': 'A aplicação <strong>%client_name%</strong> deseja acessar as seguintes informações sobre você:'
 'Edit profile': 'Editar informações'
+cpf_reminder.subject: 'Você não tem um CPF associado no Login Cidadão'
+'Hello, %name%': 'Olá, %name%'
+'We noticed that your account doesn''t have a CPF associated with it yet.': 'Nós notamos que sua conta não tem um CPF associado a ela ainda.'
+'Please consider visiting Citizen''s Login until %date% to complete this information. After that date, your account might be suspended.': 'Por favor, visite o Login Cidadão até o dia %date% para completar essa informação. Após essa data, sua conta poderá ser suspensa.'

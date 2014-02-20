@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use PROCERGS\Generic\ValidationBundle\Validator\Constraints as PROCERGSAssert;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
  * @UniqueEntity("cpf")
  * @ExclusionPolicy("all")
  */
@@ -388,5 +388,5 @@ class Person extends BaseUser
     public function getCity()
     {
         return $this->city;
-    }    
+    }
 }
