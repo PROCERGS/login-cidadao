@@ -8,19 +8,20 @@
     {% endimage %}
 
 
-
-    <div class="dropdown pull-right">
-          <button class="btn dropdown-toggle sr-only" type="button" id="dropdownMenu1" data-toggle="dropdown">
-            Dropdown
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
-            <li role="presentation" class="divider"></li>
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
-        </ul>
+    <!-- Single button -->
+    <div class="btn-group pull-right">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+        <img src="{{ asset_url }}" alt="" class="pull-left" width="33" height="33">
+        {% endimage %}
+        <span class="name">Pessoa da Silva</span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="#">Configurações</a></li>
+        <li><a href="#">Temas</a></li>
+        <li><a href="#" data-toggle="modal" data-target="#help-modal">Ajuda</a></li>
+        <li><a href="#">Sair</a></li>
+      </ul>
     </div>
 
   </div><!-- /.container-fluid -->
