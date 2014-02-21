@@ -11,12 +11,25 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\RouterInterface;
 use Doctrine\ORM\EntityManager;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\AcessSession;
 
 class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 {
 
     private $router;
     private $em;
+    
+    protected $container;
+    
+    public function setContainer($var)
+    {
+        $this->container = $var;
+    }
+    
+    public function getContainer()
+    {
+        return $this->container;
+    }
 
     /**
      * Constructor
@@ -39,7 +52,20 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
      */
     function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
-
+        $doctrine = $this->container->get('doctrine');
+        $vars = array(
+            'ip' => $request->getClientIp(),
+            'username' => $token->getUser()->getUsername()
+        );
+        $accessSession = $doctrine->getRepository('PROCERGSLoginCidadaoCoreBundle:AcessSession')->findOneBy($vars);
+        if (! $accessSession) {
+            $accessSession = new AcessSession();
+            $accessSession->fromArray($vars);
+        }
+        $accessSession->setVal(0);
+        $doctrine->getManager()->persist($accessSession);
+        $doctrine->getManager()->flush();
+        
         if (strstr($token->getUser()->getUsername(), '@') !== false) {
             $uri = $this->router->generate('lc_update_username');
 

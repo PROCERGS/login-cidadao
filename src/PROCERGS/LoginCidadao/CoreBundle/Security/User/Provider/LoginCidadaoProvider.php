@@ -19,9 +19,8 @@ class LoginCidadaoProvider extends UserProvider
     protected function findUser($username)
     {
         
-        if (preg_match('/^([0-9]{3})\.([0-9]{3})\.([0-9]{3})-([0-9]{2})$/', $username, $regs)) {
-            array_shift($regs);
-            $person = $this->userManager->findUserBy(array('cpf' => implode('', $regs)));
+        if (is_numeric($cpf = preg_replace('/[^0-9]/', '', $username)) && strlen($cpf) == 11) {
+            $person = $this->userManager->findUserBy(array('cpf' => $cpf));
             if ($person !== null) {
                 return $person;
             }
