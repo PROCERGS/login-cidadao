@@ -14,6 +14,8 @@ services:
         class: %security.authentication.success_handler.class%
         public: false
         arguments: ["@router", "@doctrine.orm.entity_manager", "@doctrine.orm.entity_manager", "@session"]
+        calls:
+            - [setContainer, ["@service_container"]]
 
     fos_facebook.user.login:
         class: %fos_facebook.user.login.class%
@@ -52,3 +54,24 @@ services:
     procergs_logincidadao.user_manager:
         class: %procergs_logincidadao.user_manager.class%
         arguments: ["@security.encoder_factory", "@fos_user.util.username_canonicalizer", "@fos_user.util.email_canonicalizer", "@fos_user.entity_manager", %user.class%, "@service_container"]
+
+    procergs_logincidadao.login.form.type:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\LoginFormType
+        tags:
+            - { name: form.type, alias: login_form_type }
+        calls:
+            - [setContainer, ["@service_container"]]                 
+            
+    procergs_logincidadao.login.twig.extension:
+        class: PROCERGS\LoginCidadao\CoreBundle\Twig\Extension\LoginCidadaoExtension
+        arguments: ["@service_container"]
+        tags:
+            - { name: twig.extension, alias: login_twig_extension }
+            
+    procergs_logincidadao.security.authentication.listener:
+        class: PROCERGS\LoginCidadao\CoreBundle\Security\Http\Firewall\LoginCidadaoListener
+        parent: security.authentication.listener.form
+        abstract: true
+        calls:
+            - [setContainer, ["@service_container"]]
+

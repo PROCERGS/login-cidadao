@@ -9,6 +9,9 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Security\Core\Exception\DisabledException;
+use PROCERGS\LoginCidadao\CoreBundle\Form\Type\LoginFormType;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Login;
 
 class DefaultController extends Controller
 {
@@ -71,5 +74,13 @@ class DefaultController extends Controller
             }
         }
         return $this->redirect($this->generateUrl('fos_user_security_login'));
-    }    
+    }
+    /**
+     * @Route("/teste1", name="teste_form1")
+     * @Template()
+     */
+    public function newAction(Request $request)
+    {
+        return $this->render('PROCERGSLoginCidadaoCoreBundle:Default:new.html.twig');
+    }
 }

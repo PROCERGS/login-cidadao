@@ -30,6 +30,9 @@ parameters:
 
     site_domain: meu.rs.gov.br
     mailer_sender_mail: ~
+    recaptcha_public_key: ~
+    recaptcha_public_key: ~
 
     # This must be compatible with strtotime()
     registration.cpf.empty_time: '+1 month'
+    brute_force_threshold: 4
