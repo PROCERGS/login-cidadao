@@ -12,7 +12,7 @@ body>.container {
 body {
     background-image: url(../../images/wp.jpg);
     background-size: cover;
-    background-position: top center;
+    background-position: center top;
 }
 
 h1>img {
@@ -117,24 +117,30 @@ footer>div {
 
 
 /* new layout */
+.slogan {
+    color: #000;
+    margin-bottom: 50px;
+    1px 1px 9px #FFF
+}
+
 #register-aside {
     background: rgba(241, 241, 241, 0.8);
     box-shadow: 1px 1px 1px #CCC;
     height: 460px;
+    margin-bottom: 30px;
     padding-top: 30px;
     position: relative;
-    width: 480px;
 }
 
 #register-aside .title {
-    font-weight: bold;
+    font-weight: 600;
     margin: 0;
     text-align: center;
 }
 
 #register-aside .text {
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 600;
     margin: 30px 0;
     text-align: center;
 }
@@ -142,8 +148,8 @@ footer>div {
 #register-box {
     background-color: #f1f1f1;
     height: 460px;
+    margin-bottom: 30px;
     padding: 0;
-    width: 325px;
 }
 
 #register-box header {
@@ -159,13 +165,55 @@ footer>div {
 }
 
 #register-box form {
-    padding-left: 20px;
+    padding: 0 20px;
+}
+
+#register-box .form-group {
+    clear: both;
 }
 
 #register-box input {
     background-color: #999999;
     border: none;
+    color: #FFF;
+    float: left;
     height: 35px;
     margin-bottom: 35px;
+    position: relative;
     width: 250px;
+}
+
+#register-box .req {
+    color: #999;
+    float: left;
+    font-size: 30px;
+    left: 5px;
+    position: relative;
+}
+
+#register-box .form-control:-moz-placeholder {
+  color: #FFF;
+}
+
+#register-box .form-control::-moz-placeholder {
+  color: #FFF;
+  opacity: 1;
+}
+
+#register-box .form-control:-ms-input-placeholder {
+  color: #FFF;
+}
+
+#register-box .form-control::-webkit-input-placeholder {
+  color: #FFF;
+}
+
+#register-box .terms {
+    clear: both;
+    font-size: 11px;
+}
+
+#register-box .terms a {
+    color: green;
+    font-weight: 400;
 }

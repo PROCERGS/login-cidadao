@@ -6,9 +6,23 @@
             {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/brasaoRS.png' %}
             <img src="{{ asset_url }}" alt="{%trans%}Available services{%endtrans%}" width="50" height="60" class="brasao">
             {% endimage %}
-            <a href="#" class="btn btn-login pull-right">Entrar</a>
+            <a href="#" class="btn btn-success btn-login pull-right">Entrar</a>
         </div>
     </div>
+{% endblock %}
+
+{% block footer %}
+    <footer class='footer-login font-a'>
+        <div>
+            <nav>
+                <ul>
+                    <li>{%trans%}Government of Rio Grande do Sul{%endtrans%}</li>
+                    <li><a href="#">{%trans%}Privacy and Terms of Service{%endtrans%}</a></li>
+                    <li><a href="#">{{ 'Help' | trans }}</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
 {% endblock %}
 
 {% block stylesheets %}

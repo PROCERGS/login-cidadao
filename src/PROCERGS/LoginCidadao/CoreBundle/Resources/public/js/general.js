@@ -1,4 +1,19 @@
+var pageWidth;
+
+function responsive(aside, signUp) {
+    pageWidth = $(window).width();
+    if( pageWidth < 992 ){
+        aside.remove();
+        signUp.after(aside);
+    } else {
+        aside.remove();
+        signUp.before(aside);
+    }
+}
+
 $(function() {
+
+    responsive( $('#register-aside'), $('#register-box') );
 
     $('.navbar .btn-login').on('click', function(e) {
         e.preventDefault();
@@ -56,4 +71,8 @@ $(function() {
     });
 
 
+});
+
+$(window).resize(function() {
+    responsive( $('#register-aside'), $('#register-box') );
 });

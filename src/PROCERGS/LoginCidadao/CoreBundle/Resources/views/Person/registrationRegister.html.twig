@@ -5,62 +5,63 @@
 <div class="container col-sm-offset-1 col-xs-offset-0 col-sm-10">
     <div class="row">
         <div class="col-xs-12 text-center">
-            <h1>{% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/gov_2x.png' %}
+            {# <h1>{% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/gov_2x.png' %}
                 <img src="{{ asset_url }}" alt="{%trans%}Government of Rio Grande do Sul - Promoting equality makes the difference{%endtrans%}">
                 {% endimage %}
-            </h1>
-            <h2>{% trans %}One account. All that the Government offers.{% endtrans %}</h2>
+            </h1> #}
+            <h1>Login Cidadão</h1>
+            <h2 class="slogan">{% trans %}One account. All that the Government offers.{% endtrans %}</h2>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-7">
-            <div id='register-aside'>
-                <h3 class="title">Com apenas um cadastro</h3>
-                <p class="text">Acesso a todos serviços oferecidos pelo Governo do Estado.</p>
-                {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_strip_2x.png' %}
-                <img src="{{ asset_url }}" alt="{%trans%}Available services{%endtrans%}" class="center-block">
-                {% endimage %}
-                <p class="text">Apenas com senha e CPF. Tornando muito mais simples o acesso aos serviços.</p>
-                {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_ng.png' %}
-                <img src="{{ asset_url }}" alt="{%trans%}Logo Nota Fiscal Gaúcha{%endtrans%}" class="center-block">
-                {% endimage %}
-            </div>
+
+        <div id='register-aside' class="col-md-6 col-lg-7">
+            <h3 class="title">Com apenas um cadastro</h3>
+            <p class="text">Acesso a todos serviços oferecidos pelo Governo do Estado.</p>
+            {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_strip_2x.png' %}
+            <img src="{{ asset_url }}" alt="{%trans%}Available services{%endtrans%}" class="center-block">
+            {% endimage %}
+            <p class="text">Apenas com senha e CPF. Tornando muito mais simples o acesso aos serviços.</p>
+            {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_ng.png' %}
+            <img src="{{ asset_url }}" alt="{%trans%}Logo Nota Fiscal Gaúcha{%endtrans%}" class="center-block">
+            {% endimage %}
         </div>
 
-        <div class="col-md-5">
-            <div id="register-box">
-                <header><h3 class="text-center">{% trans %}Open your account{% endtrans %}</h3></header>
+        <div id="register-box" class="col-md-5 col-md-offset-1 col-lg-4">
+            <header><h3 class="text-center">{% trans %}Open your account{% endtrans %}</h3></header>
 
-                {% for type, messages in app.session.flashbag.all() %}
-                    {% for message in messages %}
-                        <div class="flash-{{ type }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
+            {% for type, messages in app.session.flashbag.all() %}
+                {% for message in messages %}
+                    <div class="flash-{{ type }}">
+                        {{ message }}
+                    </div>
                 {% endfor %}
+            {% endfor %}
 
-                {% trans_default_domain 'FOSUserBundle' %}
+            {% trans_default_domain 'FOSUserBundle' %}
 
-                {{ form_start(form, {'action': path('fos_user_registration_register'), 'attr': {'role':'form', 'class':'fos_user_registration_register'}}) }}
-                    <div class="form-group">
-                        <div class="input-error">{{ form_errors(form.email) }}</div>
-                        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder' : 'form.email' }}) }}
-                    </div>
-                    <div class="form-group">
-                        <div class="input-error">{{ form_errors(form.plainPassword) }}</div>
-                        {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'placeholder' : 'form.plainPassword'}}) }}
-                    </div>
-                    <div class="form-group">
-                        <div class="input-error">{{ form_errors(form.mobile) }}</div>
-                        {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'placeholder' : 'form.mobile'}}) }}
-                    </div>
-                    <button class="btn btn-success btn-sm" type="submit">{{ 'registration.submit'|trans }}</button>
-                    <div class="clearfix"></div>
-                {{ form_end(form) }}                    
-
-            </div>
+            {{ form_start(form, {'action': path('fos_user_registration_register'), 'attr': {'role':'form', 'class':'fos_user_registration_register'}}) }}
+                <div class="form-group">
+                    <div class="input-error">{{ form_errors(form.email) }}</div>
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder' : 'form.email' }}) }}
+                    <i class="req">*</i>
+                </div>
+                <div class="form-group">
+                    <div class="input-error">{{ form_errors(form.plainPassword) }}</div>
+                    {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'placeholder' : 'form.plainPassword'}}) }}
+                    <i class="req">*</i>
+                </div>
+                <div class="form-group">
+                    <div class="input-error">{{ form_errors(form.mobile) }}</div>
+                    {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'placeholder' : 'form.phone'}}) }}
+                </div>
+                <p class='terms'>Ao clicar em abrir conta, você concorda com nosso <a href="">Termos</a> e que você leu nossa <a href="">Política de uso de dados</a>, incluindo nosso <a href="">Uso de cookies</a></p>
+                <button class="btn btn-success pull-right" type="submit">{{ 'registration.submit'|trans }}</button>
+                <div class="clearfix"></div>
+            {{ form_end(form) }}
         </div>
+
     </div>
 </div>
 
@@ -88,8 +89,6 @@
     </div>
 </div>
 {% endblock %}
-
-{% block footer %}{% endblock %}
 
 {% block stylesheets %}
 {{ parent() }}
