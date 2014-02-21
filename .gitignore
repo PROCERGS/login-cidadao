@@ -16,3 +16,5 @@
 /.project
 /.settings
 /.buildpath
+/composer.lock
+/app/check.php
