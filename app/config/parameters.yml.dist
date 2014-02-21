@@ -32,7 +32,6 @@ parameters:
     mailer_sender_mail: ~
     recaptcha_public_key: ~
     recaptcha_private_key: ~
-
     # This must be compatible with strtotime()
     registration.cpf.empty_time: '+1 month'
     brute_force_threshold: 4
