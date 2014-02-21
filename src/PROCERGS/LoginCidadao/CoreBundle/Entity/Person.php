@@ -31,8 +31,8 @@ class Person extends BaseUser
     /**
      * @Expose
      * @Groups({"name"})
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="Please enter your name.", groups={"Registration", "Profile"})
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank(message="Please enter your name.", groups={"Profile"})
      * @Assert\Length(
      *     min=3,
      *     max="255",
@@ -46,8 +46,8 @@ class Person extends BaseUser
     /**
      * @Expose
      * @Groups({"name"})
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="Please enter your surname.", groups={"Registration", "Profile"})
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank(message="Please enter your surname.", groups={"Profile"})
      * @Assert\Length(
      *     min=3,
      *     max="255",
@@ -60,17 +60,15 @@ class Person extends BaseUser
 
     /**
      * @Expose
-     * @Groups({"name"})
      * @var string
      */
     protected $fullName;
 
     /**
      * @Expose
-     * @Groups({"username"})
      */
     protected $username;
-
+    
     /**
      * @Expose
      * @Groups({"cpf"})
@@ -102,9 +100,15 @@ class Person extends BaseUser
      * @Groups({"cep"})
      * @ORM\Column(type="string", nullable=true)
      * @PROCERGSAssert\CEP
-
      */
     protected $cep;
+
+    /**
+     * @Expose
+     * @Groups({"mobile"})
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $mobile;
 
     /**
      * @Expose
@@ -153,6 +157,19 @@ class Person extends BaseUser
         $this->authorizations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    public function getEmail()
+    {
+        return $this->email;
+    }    
+    
+    public function setEmail($email)
+    {
+        $this->username = $email;
+        $this->email = $email;
+
+        return $this;
+    }    
+    
     public function getFirstName()
     {
         return $this->firstName;
@@ -196,6 +213,17 @@ class Person extends BaseUser
     {
         $cep = preg_replace('/[^0-9]/', '', $cep);
         $this->cep = $cep;
+    }
+    
+    public function getMobile()
+    {
+        return $this->mobile;
+    }
+
+    public function setMobile($mobile)
+    {
+        $mobile = preg_replace('/[^0-9]/', '', $mobile);
+        $this->mobile = $mobile;
     }
 
     public function addAuthorization(Authorization $authorization)

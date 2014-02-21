@@ -7,7 +7,8 @@ parameters:
     procergs_person.resetting.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ResettingFormType
     procergs_logincidadao.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
     procergs_logincidadao.user_manager.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Manager\UserManager
-    
+    procergs_logincidadao.user_register: PROCERGS\LoginCidadao\CoreBundle\EventListener\RegisterListner
+    procergs_logincidadao.profile_edit: PROCERGS\LoginCidadao\CoreBundle\EventListener\ProfileEditListner
 
 services:
     security.authentication.success_handler:
@@ -75,3 +76,14 @@ services:
         calls:
             - [setContainer, ["@service_container"]]
 
+    procergs_logincidadao.user_register:
+        class: %procergs_logincidadao.user_register%
+        arguments: ["@router", "@fos_user.mailer", "@fos_user.util.token_generator"]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    procergs_logincidadao.profile_edit:
+        class: %procergs_logincidadao.profile_edit%
+        arguments: ["@router"]
+        tags:
+            - { name: kernel.event_subscriber }

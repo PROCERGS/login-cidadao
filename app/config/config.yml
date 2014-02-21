@@ -86,7 +86,7 @@ fos_user:
     user_class: %user.class%
     registration:
         confirmation:
-            enabled: true
+            enabled: false
             from_email:
               address: %mailer_sender_mail%
               sender_name: %site_domain%

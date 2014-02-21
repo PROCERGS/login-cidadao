@@ -1,99 +1,99 @@
-{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+{% extends 'PROCERGSLoginCidadaoCoreBundle::base.html.twig' %}
 
 {% block body %}
 
+<div class="container col-sm-offset-1 col-xs-offset-0 col-sm-10">
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            <h1>{% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/gov_2x.png' %}
+                <img src="{{ asset_url }}" alt="{%trans%}Government of Rio Grande do Sul - Promoting equality makes the difference{%endtrans%}">
+                {% endimage %}
+            </h1>
+            <h2>{% trans %}One account. All that the Government offers.{% endtrans %}</h2>
+        </div>
+    </div>
 
-        <h1 class='text-center' style="margin-bottom:30px;">Crie seu Login Cidadão </h1>
-
-
-        <div id='register-aside' class="col-md-7 col-lg-6">
-            <h4>Com apenas um cadastro</h4>
-            <p>Acesso a todos serviços oferecidos pelo Governo do Estado.</p>
-            {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_strip_2x.png' %}
-            <img src="{{ asset_url }}" alt="{%trans%}Available services{%endtrans%}" style="margin-bottom: 80px;">
-            {% endimage %}
-            <h4>Facilidade de Acesso</h4>
-            <p>Apenas com senha e CPF. Tornando muito mais simples o acesso aos serviços.</p>
-            {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_ng.png' %}
-            <img src="{{ asset_url }}" alt="{%trans%}Logo Nota Fiscal Gaúcha{%endtrans%}">
-            {% endimage %}
+    <div class="row">
+        <div class="col-md-7">
+            <div id='register-aside'>
+                <h3 class="title">Com apenas um cadastro</h3>
+                <p class="text">Acesso a todos serviços oferecidos pelo Governo do Estado.</p>
+                {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_strip_2x.png' %}
+                <img src="{{ asset_url }}" alt="{%trans%}Available services{%endtrans%}" class="center-block">
+                {% endimage %}
+                <p class="text">Apenas com senha e CPF. Tornando muito mais simples o acesso aos serviços.</p>
+                {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_ng.png' %}
+                <img src="{{ asset_url }}" alt="{%trans%}Logo Nota Fiscal Gaúcha{%endtrans%}" class="center-block">
+                {% endimage %}
+            </div>
         </div>
 
-        <div id="sign-up" class='col-md-4 col-md-offset-1 col-lg-5 col-lg-offset-1'>
-            {% for type, messages in app.session.flashbag.all() %}
-                {% for message in messages %}
-                    <div class="flash-{{ type }}">
-                        {{ message }}
-                    </div>
+        <div class="col-md-5">
+            <div id="register-box">
+                <header><h3 class="text-center">{% trans %}Open your account{% endtrans %}</h3></header>
+
+                {% for type, messages in app.session.flashbag.all() %}
+                    {% for message in messages %}
+                        <div class="flash-{{ type }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
                 {% endfor %}
-            {% endfor %}
 
-            {% trans_default_domain 'FOSUserBundle' %}
+                {% trans_default_domain 'FOSUserBundle' %}
 
-            {{ form_start(form, {'action': path('fos_user_registration_register'), 'attr': {'role':'form', 'class':'fos_user_registration_register'}}) }}
-                {{ form_errors(form) }}
+                {{ form_start(form, {'action': path('fos_user_registration_register'), 'attr': {'role':'form', 'class':'fos_user_registration_register'}}) }}
+                    <div class="form-group">
+                        <div class="input-error">{{ form_errors(form.email) }}</div>
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder' : 'form.email' }}) }}
+                    </div>
+                    <div class="form-group">
+                        <div class="input-error">{{ form_errors(form.plainPassword) }}</div>
+                        {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'placeholder' : 'form.plainPassword'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <div class="input-error">{{ form_errors(form.mobile) }}</div>
+                        {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'placeholder' : 'form.mobile'}}) }}
+                    </div>
+                    <button class="btn btn-success btn-sm" type="submit">{{ 'registration.submit'|trans }}</button>
+                    <div class="clearfix"></div>
+                {{ form_end(form) }}                    
 
-                <div class="form-group">
-                    {{ form_label(form.email) }}
-                    <div class="input-error">{{ form_errors(form.email) }}</div>
-                    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.username) }}
-                    <div class="input-error">{{ form_errors(form.username) }}</div>
-                    {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <div class="form-group">
-                    <div class="input-error">{{ form_errors(form.plainPassword) }}</div>
-                    {{ form_widget(form.plainPassword) }}
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.firstName) }}
-                    <div class="input-error">{{ form_errors(form.firstName) }}</div>
-                    {{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.surname) }}
-                    <div class="input-error">{{ form_errors(form.surname) }}</div>
-                    {{ form_widget(form.surname, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <div class="form-group birthdate">
-                    {{ form_label(form.birthdate) }}
-                    <div class="input-error">{{ form_errors(form.birthdate) }}</div>
-                    {{ form_widget(form.birthdate) }}
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.cep) }}
-                    <div class="input-error">{{ form_errors(form.cep) }}</div>
-                    {{ form_widget(form.cep, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.cpf) }}
-                    <div class="input-error">{{ form_errors(form.cpf) }}</div>
-                    {{ form_widget(form.cpf, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <button class='btn btn-success btn-sm pull-right' type="submit">{{ 'registration.submit'|trans }}</button>
-                <div class="clearfix"></div>
-            {{ form_end(form) }}
+            </div>
         </div>
+    </div>
+</div>
 
+<div class="row">
+    <div class="col-xs-12">
+        {{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
+
+        <script type="text/javascript">
+
+                var authurl = '{{ path('_security_check_facebook') }}';
+
+                function goLogIn(){
+                    window.location = authurl;
+                }
+
+                function onFbInit() {
+                    if (typeof(FB) != 'undefined' && FB != null ) {
+                        FB.Event.subscribe('auth.statusChange', function(response) {
+                            setTimeout(goLogIn, 500);
+                        });
+                    }
+                }
+
+        </script>
+    </div>
+</div>
 {% endblock %}
+
+{% block footer %}{% endblock %}
 
 {% block stylesheets %}
 {{ parent() }}
-    {% stylesheets 'bundles/procergslogincidadaocore/css/register/*.css' filter='cssrewrite' %}
+    {% stylesheets 'bundles/procergslogincidadaocore/css/login/*.css' filter='cssrewrite' %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
-{% endblock %}
-
-{% block javascripts %}
-{{ parent() }}
-    <script type="text/javascript">
-        var validateUsernameUrl = '{{ path('lc_validate_username') }}';
-    </script>
-    {% javascripts
-        '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/register/register.js'
-    %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
 {% endblock %}
