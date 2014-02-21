@@ -1,0 +1,24 @@
+.navbar {
+    background-color: #333333;
+    border-radius:0;
+    height: 80px;
+    width: 100%;
+}
+
+.navbar .container {
+    max-width: 960px;
+}
+
+.navbar .brasao {
+    margin-top: 7px;
+}
+
+.navbar .btn-login {
+    background-color: #039935;
+    border-radius:0;
+    box-shadow: 1px 1px 0px 0px #969696;
+    color: #FFF;
+    height: 35px;
+    margin-top: 15px;
+    width: 135px;
+}

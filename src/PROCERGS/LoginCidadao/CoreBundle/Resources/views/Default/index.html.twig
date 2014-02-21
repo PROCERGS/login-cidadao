@@ -28,9 +28,21 @@
         </div>
     </div>
 
-    <div class="box-wrapper">
+
         <div class="row">
-            <div class="col-xs-12 col-lg-6 col-lg-offset-3">
+            <div id='register-aside' class="col-md-7">
+                <h3 class="title">Com apenas um cadastro</h3>
+                <p class="text">Acesso a todos serviços oferecidos pelo Governo do Estado.</p>
+                {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_strip_2x.png' %}
+                <img src="{{ asset_url }}" alt="{%trans%}Available services{%endtrans%}" class="center-block">
+                {% endimage %}
+                <p class="text">Apenas com senha e CPF. Tornando muito mais simples o acesso aos serviços.</p>
+                {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_ng.png' %}
+                <img src="{{ asset_url }}" alt="{%trans%}Logo Nota Fiscal Gaúcha{%endtrans%}" class="center-block">
+                {% endimage %}
+            </div>
+
+            <div class="col-md-5">
                 <form role="form" action="{{ path("fos_user_security_check") }}" method="post" class="well well-lg">
                     {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_2x.png' %}
                         <img class="center-block" src="{{ asset_url }}" alt="{%trans%}Citizen's Login{%endtrans%}">
@@ -80,7 +92,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+
     </div>
 
     <div class="row">

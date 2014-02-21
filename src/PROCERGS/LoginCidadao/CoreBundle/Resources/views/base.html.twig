@@ -1,5 +1,16 @@
 {% extends '::base.html.twig' %}
 
+{% block header %}
+    <div class="navbar">
+        <div class="container">
+            {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/brasaoRS.png' %}
+            <img src="{{ asset_url }}" alt="{%trans%}Available services{%endtrans%}" width="50" height="60" class="brasao">
+            {% endimage %}
+            <a href="#" class="btn btn-login pull-right">Entrar</a>
+        </div>
+    </div>
+{% endblock %}
+
 {% block stylesheets %}
     {% stylesheets 'bundles/procergslogincidadaocore/css/*.css' filter='cssrewrite' %}
 <link rel="stylesheet" href="{{ asset_url }}" />

@@ -43,7 +43,7 @@ class DefaultController extends Controller
             );
         }
     }
-    
+
     /**
      * @Route("/failure_login", name="lc_home_failure_login")
      * @Template()
@@ -52,7 +52,7 @@ class DefaultController extends Controller
     {
         /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
         $session = $request->getSession();
-        
+
         // get the error if any (works with forward and redirect -- see below)
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
@@ -60,7 +60,7 @@ class DefaultController extends Controller
             $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
         } else {
             $error = '';
-        }        
+        }
         if ($error && $error instanceof DisabledException) {
             $person = $error->getUser();
             if ($person->getConfirmationToken() !== null) {
@@ -71,5 +71,14 @@ class DefaultController extends Controller
             }
         }
         return $this->redirect($this->generateUrl('fos_user_security_login'));
-    }    
+    }
+
+    /**
+     * @Route("/login_teste", name="login_teste")
+     * @Template()
+     */
+    public function loginTesteAction()
+    {
+        return $this->render('PROCERGSLoginCidadaoCoreBundle:Default:teste.html.twig');
+    }
 }
