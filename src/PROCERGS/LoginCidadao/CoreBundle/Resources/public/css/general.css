@@ -66,18 +66,6 @@ img.desaturate {
     -webkit-filter: grayscale(1); /* Old WebKit */
 }
 
-/* override boostrap btn*/
-.btn-success{
-    background-color: #039935;
-    background-image: none;
-    border-radius:0;
-    box-shadow: 1px 1px 0 0 #969696;
-    color: #FFF;
-    font-size: 16px;
-    height: 35px;
-    width: 135px;
-}
-
 footer {
     color: #999999;
     display: block;
