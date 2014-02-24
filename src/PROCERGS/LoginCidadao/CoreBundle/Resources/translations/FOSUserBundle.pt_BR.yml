@@ -1,4 +1,4 @@
-registration.submit: 'Abrir conta'
+registration.submit: 'Criar conta'
 registration.check_email: 'Um email foi enviado para o endereço %email%. Para para ativar a sua conta, clique no link na mensagem.'
 registration.confirmed: 'Parabéns, %username%. A sua conta foi ativada.'
 registration.back: 'Retornar para a página de origem.'
@@ -12,9 +12,9 @@ layout.logout: Sair
 layout.login: Login
 form.group_name: 'Nome do Grupo:'
 form.username: 'Escolha seu nome de usuário:'
-form.email: 'Email'
+form.email: Email
 form.current_password: 'Senha atual:'
-form.plainPassword: 'Senha'
+form.plainPassword: Senha
 form.password: 'Criar uma senha:'
 form.password_confirmation: 'Confirme sua senha:'
 form.new_password: 'Nova senha:'
@@ -35,3 +35,4 @@ resetting.email.subject: 'Redefinir senha'
 resetting.email.message: "Olá, %username%!\n\nPara redefinir sua senha, clique no link: %confirmationUrl%\n\nAtenciosamente,\na Equipe.\n"
 resetting.reset.submit: 'Alterar senha'
 resetting.password_already_requested: 'Este usuário já solicitou uma senha nas últimas 24 horas.'
+(optional):  (opctional)
