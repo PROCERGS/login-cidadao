@@ -88,6 +88,18 @@
 </div>
 {% endblock %}
 
+{% block javascripts %}
+{{ parent() }}
+    {% javascripts
+            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/register/register.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script type="text/javascript">
+        var emailAvailableUrl = '{{ path('lc_email_available') }}';
+    </script>
+{% endblock %}
+
 {% block stylesheets %}
 {{ parent() }}
     {% stylesheets 'bundles/procergslogincidadaocore/css/login/*.css' filter='cssrewrite' %}
