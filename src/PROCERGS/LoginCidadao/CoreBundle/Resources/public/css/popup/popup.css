@@ -1,0 +1,79 @@
+body {
+    background-color: #f0f0f0;
+    background-image: none;
+    font-family: 'Open Sans', arial;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    padding: 0;
+}
+
+#login-box .title {
+    background-color: #039936;
+    color: #FFF;
+    display: block;
+    height: 50px;
+    margin: 0;
+    line-height: 50px;
+    padding-left: 15px;
+}
+
+#login-box form {
+    /*padding: 20px;*/
+}
+
+#login-box form .form-content {
+    padding: 20px;
+}
+
+#login-box form p {
+    margin-bottom: 50px;
+}
+
+#login-box form input {
+    background-color: #999999;
+    border: none;
+    border-radius: 0;
+    color: #FFF;
+    height: 35px;
+    width: 350px
+}
+
+#login-box .forgot-password {
+    color: #009141;
+    font-size: 12px;
+}
+
+#login-box .buttons {
+    background-color: #d9d9d9;
+    height: 70px;
+    padding: 8px 10px;
+}
+
+#login-box .connect {
+    color: #FFF;
+    cursor: pointer;
+    display: block;
+    height: 25px;
+    text-align: right;
+    width: 250px;
+}
+
+#login-box .connect:hover {
+    text-decoration: none;
+}
+
+#login-box .facebook {
+    background-color: #576d94;
+    margin-bottom: 5px;
+}
+
+#login-box .twitter {
+    background-color: #4baecd;
+}
+
+#login-box .btn-success {
+    width: 250px;
+}

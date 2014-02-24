@@ -146,23 +146,27 @@ footer>div {
 
 #register-box {
     background-color: #f1f1f1;
-    height: 460px;
+    /*height: 460px;*/
+    margin-bottom: 30px;
+    padding: 0;
 }
 
-#register-box header {
+#register-box .title {
     background-color: #039936;
     color: #FFF;
+    display: block;
     height: 50px;
     margin: 0 -15px 30px;
 }
 
 #register-box header h3 {
     line-height: 50px;
-    margin: 0;
+    margin-bottom: 45px;
+    margin-top: 0;
 }
 
 #register-box form {
-    padding: 0 20px;
+    padding: 0 20px 10px 20px;
 }
 
 #register-box .form-group {
@@ -188,26 +192,35 @@ footer>div {
     position: relative;
 }
 
-#register-box .form-control:-moz-placeholder {
-  color: #FFF;
-}
-
-#register-box .form-control::-moz-placeholder {
-  color: #FFF;
-  opacity: 1;
-}
-
-#register-box .form-control:-ms-input-placeholder {
-  color: #FFF;
-}
-
-#register-box .form-control::-webkit-input-placeholder {
-  color: #FFF;
-}
-
 #register-box .terms {
     clear: both;
     font-size: 11px;
+}
+
+#register-box .terms a {
+    color: green;
+    font-weight: 400;
+}
+
+#register-box .connect {
+    color: #FFF;
+    cursor: pointer;
+    display: block;
+    height: 40px;
+    text-align: right;
+    width: 100%;
+}
+
+#register-box .connect:hover {
+    text-decoration: none;
+}
+
+#register-box .facebook {
+    background-color: #576d94;
+}
+
+#register-box .twitter {
+    background-color: #4baecd;
 }
 
 #register-box .terms a {

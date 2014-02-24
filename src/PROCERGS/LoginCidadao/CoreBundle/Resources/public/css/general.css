@@ -70,6 +70,22 @@ img.desaturate {
     -webkit-filter: grayscale(1); /* Old WebKit */
 }
 
+/* override boostrap btn*/
+ .btn-success {
+     background-color: #039935;
+     background-image: none;
+     border-radius:0;
+     box-shadow: 1px 1px 0 0 #969696;
+     color: #FFF;
+     font-size: 16px;
+     height: 35px;
+     width: 135px;
+}
+
+.btn-success:hover {
+    background-color: #5cb85c;
+}
+
 footer {
     color: #999999;
     display: block;
@@ -103,6 +119,24 @@ footer nav li a {
 .footer-login li, .footer-login li a {
     color: #737373;
 }
+
+.phw input:-moz-placeholder {
+  color: #FFF;
+}
+
+.phw input::-moz-placeholder {
+  color: #FFF;
+  opacity: 1;
+}
+
+.phw input:-ms-input-placeholder {
+  color: #FFF;
+}
+
+.phw input::-webkit-input-placeholder {
+  color: #FFF;
+}
+
 
 .settings-nav, .settings-content {
     background-color: #f1f1f1;

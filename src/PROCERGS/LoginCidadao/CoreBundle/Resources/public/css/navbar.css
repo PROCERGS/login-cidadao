@@ -10,3 +10,7 @@
 .navbar .navbar-nav .btn {
     border-radius: 0;
 }
+
+.navbar .navbar-nav .btn:hover {
+    background-color: #5cb85c;
+}
