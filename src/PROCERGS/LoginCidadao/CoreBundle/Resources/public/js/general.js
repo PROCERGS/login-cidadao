@@ -15,12 +15,6 @@ $(function() {
 
     responsive( $('#register-aside'), $('#register-box') );
 
-    $('.navbar .btn-login').on('click', function(e) {
-        e.preventDefault();
-        window.open('login_teste', '', "width=400,height=400");
-        return false;
-    });
-
     // add bootstrap classes to forms
     $('.form-group input, .form-group select').not('.form-control').addClass('form-control');
     $('.form-group .input-error').not(':empty').parent('.form-group').addClass('has-error');
