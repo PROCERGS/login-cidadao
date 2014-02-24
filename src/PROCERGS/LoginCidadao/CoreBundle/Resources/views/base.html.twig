@@ -15,7 +15,7 @@
 
             <div class="collapse navbar-collapse" id="lc-navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{{ path("fos_user_security_login") }}" class="btn btn-success navbar-btn">{{ 'Log in' | trans }}</a></li>
+                    <li><a href="{{ path("fos_user_security_login") }}" class="btn btn-success navbar-btn login">{{ 'Log in' | trans }}</a></li>
                 </ul>
             </div>
         </div>
@@ -64,11 +64,13 @@
             '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/*' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
         <script type="text/javascript">
-        var meuAuth = {};
-        meuAuth.loginPopup = function (obj, evt) {
-            var url = '{{ path("fos_user_security_login") }}';
-            window.open(url, '', "width=400,height=400");
-        };
+            $(document).ready(function(){
+                $(".navbar .navbar-nav .btn.login").click(function(){
+                    var url = $(this).attr('href');
+                    window.open(url, '', "width=400,height=400");
+                    return false;
+                });
+            });
         </script>
     {% endjavascripts %}
 
