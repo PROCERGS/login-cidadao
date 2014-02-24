@@ -1,11 +1,14 @@
 $(document).ready(function(){
-    $('#fos_user_registration_form_username').blur(function(){
+    $('#fos_user_registration_form_email').blur(function(){
         $elm = $(this);
+        
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: validateUsernameUrl,
-            data: { username: $(this).val() }
+            url: emailAvailableUrl,
+            data: { 
+                email: $(this).val()
+            }
         })
         .done(function(result) {
             if(result.valid){

@@ -113,21 +113,22 @@ class PersonController extends Controller
     }
 
     /**
-     * @Route("/person/username/validate", name="lc_validate_username")
+     * @Route("/person/checkEmailAvailable", name="lc_email_available")
      */
-    public function validateUsernameAction(Request $request)
+    public function checkEmailAvailableAction(Request $request)
     {
         $translator = $this->get('translator');
-        $username = $request->get('username');
+        $email = $request->get('email');
+
         $person = $this->getDoctrine()
                 ->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')
-                ->findByUsername($username);
+                ->findByEmail($email);
 
         $data = array('valid'=>true);
         if(count($person) > 0){
             $data = array(
                 'valid' => false,
-                'message' => $translator->trans('Someone already has that username. Try another?')
+                'message' => $translator->trans('The email is already used')
             );
         }
 
