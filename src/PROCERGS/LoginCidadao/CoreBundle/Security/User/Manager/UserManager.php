@@ -45,19 +45,24 @@ class UserManager extends BaseManager
      * @param integer $username
      * @return string
      */
-    public function getNextAvailableUsername($username, $maxIterations = 10)
+    public function getNextAvailableUsername($username, $maxIterations = 10,
+                                             $default = null)
     {
         $i = 0;
         $testName = $username;
 
         do {
-            $user = $this->userManager->findUserByUsername($testName);
+            $user = $this->findUserByUsername($testName);
         } while ($user !== null && $i < $maxIterations && $testName = $username . $i++);
 
         if (is_null($user)) {
             return $testName;
         } else {
-            return "$username@" . time();
+            if (is_null($default)) {
+                return "$username@" . time();
+            } else {
+                return $default;
+            }
         }
     }
 
