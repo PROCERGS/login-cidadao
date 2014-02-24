@@ -58,7 +58,7 @@
             <div class="clearfix"></div>
         {{ form_end(form) }}
             <a class="connect facebook">Inscreva-se usando o facebook</a>
-            <a class="connect twitter">Inscreva-se usando o twitter</a>
+            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="connect twitter">Inscreva-se usando o twitter</a>
     </div>
 
 </div>
