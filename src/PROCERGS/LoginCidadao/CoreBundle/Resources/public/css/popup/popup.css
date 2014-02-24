@@ -29,7 +29,7 @@ body {
 }
 
 #login-box form p {
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 }
 
 #login-box form input {
@@ -53,11 +53,14 @@ body {
 }
 
 #login-box .connect {
+    box-shadow: 1px 1px #000;
     color: #FFF;
     cursor: pointer;
     display: block;
     height: 25px;
-    text-align: right;
+    line-height: 25px;
+    padding-left: 25px;
+    text-align: center;
     width: 250px;
 }
 
@@ -67,11 +70,15 @@ body {
 
 #login-box .facebook {
     background-color: #576d94;
+    background-image: url(../../images/facebook_login.png);
+    background-repeat: no-repeat;
     margin-bottom: 5px;
 }
 
 #login-box .twitter {
     background-color: #4baecd;
+    background-image: url(../../images/twitter_login.png);
+    background-repeat: no-repeat;
 }
 
 #login-box .btn-success {
