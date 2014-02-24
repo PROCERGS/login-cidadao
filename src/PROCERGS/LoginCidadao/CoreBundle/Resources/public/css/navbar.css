@@ -1,9 +1,6 @@
 .navbar {
     border-radius: 0;
 }
-.navbar .container {
-    max-width: 960px;
-}
 
 .navbar .navbar-nav li a {
     padding: 6px 12px;

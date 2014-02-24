@@ -120,7 +120,6 @@ footer>div {
 .slogan {
     color: #000;
     margin-bottom: 50px;
-    1px 1px 9px #FFF
 }
 
 #register-aside {
@@ -148,15 +147,13 @@ footer>div {
 #register-box {
     background-color: #f1f1f1;
     height: 460px;
-    margin-bottom: 30px;
-    padding: 0;
 }
 
 #register-box header {
     background-color: #039936;
     color: #FFF;
     height: 50px;
-    margin-bottom: 45px;
+    margin: 0 -15px 30px;
 }
 
 #register-box header h3 {
@@ -172,15 +169,15 @@ footer>div {
     clear: both;
 }
 
+#register-box .form-group {
+    margin-bottom: 30px;
+}
+
 #register-box input {
     background-color: #999999;
     border: none;
     color: #FFF;
-    float: left;
-    height: 35px;
-    margin-bottom: 35px;
     position: relative;
-    width: 250px;
 }
 
 #register-box .req {

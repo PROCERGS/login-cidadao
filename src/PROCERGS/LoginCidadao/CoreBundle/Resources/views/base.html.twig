@@ -1,25 +1,7 @@
 {% extends '::base.html.twig' %}
 
 {% block header %}
-    <div class="navbar navbar-inverse">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#lc-navbar-collapse">
-                    <span class="sr-only">{% trans %}Toggle Navigation{% endtrans %}</span>
-                    <span class="icon-bar"></span>
-                </button>
-                {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/brasaoRS.png' %}
-                <img src="{{ asset_url }}" alt="{% trans %}Available services{% endtrans %}" class="navbar-brand">
-                {% endimage %}
-            </div>
-
-            <div class="collapse navbar-collapse" id="lc-navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{{ path("fos_user_security_login") }}" class="btn btn-success navbar-btn login">{{ 'Log in' | trans }}</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+{% include "PROCERGSLoginCidadaoCoreBundle::navbar.html.twig" %}
 {% endblock %}
 
 {% block footer %}
@@ -61,17 +43,9 @@
     {% javascripts
             '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.js'
             '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.placeholder.js'
+            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/navbar.js'
             '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/*' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
-        <script type="text/javascript">
-            $(document).ready(function(){
-                $(".navbar .navbar-nav .btn.login").click(function(){
-                    var url = $(this).attr('href');
-                    window.open(url, '', "width=400,height=400");
-                    return false;
-                });
-            });
-        </script>
     {% endjavascripts %}
 
     {% javascripts

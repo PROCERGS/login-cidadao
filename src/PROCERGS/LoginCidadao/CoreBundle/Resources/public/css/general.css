@@ -39,6 +39,10 @@ body {
     background-attachment: fixed;*/
 }
 
+.container {
+    max-width: 960px;
+}
+
 body>.container {
     min-height: 100%;
     margin-bottom: -36px;
@@ -412,4 +416,8 @@ footer nav li a {
 
 #help-modal .big {
     font-size: 50px;
+}
+
+.header-shadows {
+    text-shadow: 1px 1px 1px #FFFFFF;
 }
