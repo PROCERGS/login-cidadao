@@ -48,7 +48,6 @@ body {
 
 #login-box .buttons {
     background-color: #d9d9d9;
-    height: 70px;
     padding: 8px 10px;
 }
 
@@ -57,11 +56,11 @@ body {
     color: #FFF;
     cursor: pointer;
     display: block;
-    height: 25px;
     line-height: 25px;
+    min-width: 100px;
     padding-left: 25px;
     text-align: center;
-    width: 250px;
+    width: 100%;
 }
 
 #login-box .connect:hover {
@@ -82,5 +81,5 @@ body {
 }
 
 #login-box .btn-success {
-    width: 250px;
+    width: 100%;
 }

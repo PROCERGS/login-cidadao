@@ -64,18 +64,22 @@ body {
 
 #register-box input {
     background-color: #999999;
-    border: none;
+    /*border: none;*/
     border-radius: 0;
     color: #FFF;
     margin: 0 auto;
     width: 90%;
 }
 
-#register-box .has-error input {
+/*#register-box .has-error input {
     background-color: #cc3300;
-}
+}*/
 
 #register-box .input-error {
+    margin: 10px 0;
+}
+
+/*#register-box .input-error {
     background-color: #fcccca;
     margin: 10px 0;
 }
@@ -86,7 +90,7 @@ body {
     list-style-type: none;
     margin: 0;
     padding: 5px 20px;
-}
+}*/
 
 #register-box .terms {
     clear: both;
