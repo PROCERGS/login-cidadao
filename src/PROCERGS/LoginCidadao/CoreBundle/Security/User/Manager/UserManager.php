@@ -14,9 +14,13 @@ class UserManager extends BaseManager
 
     private $container;
 
-    public function __construct(EncoderFactoryInterface $encoderFactory, CanonicalizerInterface $usernameCanonicalizer, CanonicalizerInterface $emailCanonicalizer, ObjectManager $om, $class, Container $container)
+    public function __construct(EncoderFactoryInterface $encoderFactory,
+                                CanonicalizerInterface $usernameCanonicalizer,
+                                CanonicalizerInterface $emailCanonicalizer,
+                                ObjectManager $om, $class, Container $container)
     {
-        parent::__construct($encoderFactory, $usernameCanonicalizer, $emailCanonicalizer, $om, $class);
+        parent::__construct($encoderFactory, $usernameCanonicalizer,
+                $emailCanonicalizer, $om, $class);
 
         $this->container = $container;
     }
@@ -30,6 +34,31 @@ class UserManager extends BaseManager
         $user->setCpfExpiration($cpfExpiryDate);
 
         return $user;
+    }
+
+    /**
+     * Tries to find an available username.
+     * TODO: Yeah, this is ugly, I'm sorry, but does the job.
+     * This is based on HWI's FOSUBRegistrationFormHandler
+     *
+     * @param string $username
+     * @param integer $username
+     * @return string
+     */
+    public function getNextAvailableUsername($username, $maxIterations = 10)
+    {
+        $i = 0;
+        $testName = $username;
+
+        do {
+            $user = $this->userManager->findUserByUsername($testName);
+        } while ($user !== null && $i < $maxIterations && $testName = $username . $i++);
+
+        if (is_null($user)) {
+            return $testName;
+        } else {
+            return "$username@" . time();
+        }
     }
 
 }

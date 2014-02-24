@@ -68,7 +68,7 @@ class Person extends BaseUser
      * @Expose
      */
     protected $username;
-    
+
     /**
      * @Expose
      * @Groups({"cpf"})
@@ -160,16 +160,15 @@ class Person extends BaseUser
     public function getEmail()
     {
         return $this->email;
-    }    
-    
+    }
+
     public function setEmail($email)
     {
-        $this->username = $email;
         $this->email = $email;
 
         return $this;
-    }    
-    
+    }
+
     public function getFirstName()
     {
         return $this->firstName;
@@ -214,7 +213,7 @@ class Person extends BaseUser
         $cep = preg_replace('/[^0-9]/', '', $cep);
         $this->cep = $cep;
     }
-    
+
     public function getMobile()
     {
         return $this->mobile;

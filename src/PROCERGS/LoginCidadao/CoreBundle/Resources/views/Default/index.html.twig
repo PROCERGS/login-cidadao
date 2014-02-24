@@ -19,7 +19,7 @@
     <div class="buttons">
         <div class="pull-left">
             <a class="connect facebook">Entrar usando o Facebook</a>
-            <a class="connect twitter">Entrar usando o Twitter</a>
+            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="connect twitter">Entrar usando o Twitter</a>
         </div>
         <div class="pull-right">
             <button type="submit" class="btn btn-success">Entrar</button>
