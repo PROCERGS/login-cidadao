@@ -38,6 +38,8 @@ class UserManager extends BaseManager
 
     /**
      * Tries to find an available username.
+     * TODO: Yeah, this is ugly, I'm sorry, but does the job.
+     * This is based on HWI's FOSUBRegistrationFormHandler
      *
      * @param string $username
      * @param integer $username
