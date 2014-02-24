@@ -39,6 +39,10 @@ body {
     background-attachment: fixed;*/
 }
 
+.container {
+    max-width: 960px;
+}
+
 body>.container {
     min-height: 100%;
     margin-bottom: -36px;
@@ -64,18 +68,6 @@ img.desaturate {
     filter: url(resources.svg#desaturate); /* Gecko */
     filter: gray; /* IE */
     -webkit-filter: grayscale(1); /* Old WebKit */
-}
-
-/* override boostrap btn*/
-.btn-success{
-    background-color: #039935;
-    background-image: none;
-    border-radius:0;
-    box-shadow: 1px 1px 0 0 #969696;
-    color: #FFF;
-    font-size: 16px;
-    height: 35px;
-    width: 135px;
 }
 
 footer {
@@ -442,4 +434,8 @@ footer nav li a {
 
 #help-modal .big {
     font-size: 50px;
+}
+
+.header-shadows {
+    text-shadow: 1px 1px 1px #FFFFFF;
 }

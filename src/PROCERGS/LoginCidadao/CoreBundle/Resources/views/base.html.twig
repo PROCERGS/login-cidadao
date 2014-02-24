@@ -1,14 +1,7 @@
 {% extends '::base.html.twig' %}
 
 {% block header %}
-    <div class="navbar">
-        <div class="container">
-            {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/brasaoRS.png' %}
-            <img src="{{ asset_url }}" alt="{%trans%}Available services{%endtrans%}" width="50" height="60" class="brasao">
-            {% endimage %}
-            <a href="javascript:meuAuth.loginPopup(this)" class="btn btn-success btn-login pull-right">Entrar</a>
-        </div>
-    </div>
+{% include "PROCERGSLoginCidadaoCoreBundle::navbar.html.twig" %}
 {% endblock %}
 
 {% block footer %}
@@ -50,15 +43,9 @@
     {% javascripts
             '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.js'
             '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.placeholder.js'
+            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/navbar.js'
             '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/*' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
-        <script type="text/javascript">
-        var meuAuth = {};
-        meuAuth.loginPopup = function (obj, evt) {
-            var url = '{{ path("fos_user_security_login") }}';
-            window.open(url, '', "width=600,height=450");
-        };
-        </script>
     {% endjavascripts %}
 
     {% javascripts
