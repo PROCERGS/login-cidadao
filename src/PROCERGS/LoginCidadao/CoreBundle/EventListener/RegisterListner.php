@@ -15,10 +15,10 @@ class RegisterListner implements EventSubscriberInterface
     private $router;
     private $mailer;
     private $tokenGenerator;
-    
+
     public function __construct(UrlGeneratorInterface $router, MailerInterface $mailer, TokenGeneratorInterface $tokenGenerator)
     {
-        $this->router = $router;        
+        $this->router = $router;
         $this->mailer = $mailer;
         $this->tokenGenerator = $tokenGenerator;
     }

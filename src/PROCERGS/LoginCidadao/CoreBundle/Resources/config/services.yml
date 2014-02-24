@@ -61,14 +61,14 @@ services:
         tags:
             - { name: form.type, alias: login_form_type }
         calls:
-            - [setContainer, ["@service_container"]]                 
-            
+            - [setContainer, ["@service_container"]]
+
     procergs_logincidadao.login.twig.extension:
         class: PROCERGS\LoginCidadao\CoreBundle\Twig\Extension\LoginCidadaoExtension
         arguments: ["@service_container"]
         tags:
             - { name: twig.extension, alias: login_twig_extension }
-            
+
     procergs_logincidadao.security.authentication.listener:
         class: PROCERGS\LoginCidadao\CoreBundle\Security\Http\Firewall\LoginCidadaoListener
         parent: security.authentication.listener.form

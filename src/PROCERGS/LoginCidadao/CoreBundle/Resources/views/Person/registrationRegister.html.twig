@@ -5,12 +5,12 @@
 <div class="row">
     <div class="col-xs-12 text-center header-shadows">
         <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
-        <h2 class="slogan">{% trans %}One account. All that the Government offers.{% endtrans %}</h2>
+        <h2 class="slogan hidden-xs">{% trans %}One account. All that the Government offers.{% endtrans %}</h2>
     </div>
 </div>
 
 <div class="row">
-    <div id="register-aside" class="col-xs-12 col-md-6 col-lg-7">
+    <div id="register-aside" class="col-xs-12 col-md-6 col-lg-7 hidden-xs">
         <h3 class="title">{% trans %}With only one account{% endtrans %}</h3>
 
         <p class="text">{% trans %}Access to all services offered by the Government{% endtrans %}</p>
@@ -25,7 +25,7 @@
     </div>
 
     <div id="register-box" class="col-md-5 col-md-offset-1 col-lg-4">
-        <header><h3 class="text-center">{% trans %}Create your account{% endtrans %}</h3></header>
+        <h3 class="title text-center">{% trans %}Create your account{% endtrans %}</h3>
 
         {% for type, messages in app.session.flashbag.all() %}
             {% for message in messages %}
@@ -37,25 +37,27 @@
 
         {% trans_default_domain 'FOSUserBundle' %}
 
-        {{ form_start(form, {'action': path('fos_user_registration_register'), 'attr': {'role':'form', 'class':'fos_user_registration_register'}}) }}
+        {{ form_start(form, {'action': path('fos_user_registration_register'), 'attr': {'role':'form', 'class':'fos_user_registration_register clearfix'}}) }}
             <div class="form-group phw">
                 {{ form_label(form.email, 'form.email' | trans, {'label_attr': {'class': 'sr-only'}}) }}
-                <div class="input-error">{{ form_errors(form.email) }}</div>
                 {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder' : 'form.email' }}) }}
+                <div class="input-error">{{ form_errors(form.email) }}</div>
             </div>
+
             <div class="form-group phw">
                 {{ form_label(form.plainPassword, 'form.plainPassword' | trans, {'label_attr': {'class': 'sr-only'}}) }}
-                <div class="input-error">{{ form_errors(form.plainPassword) }}</div>
                 {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'placeholder' : 'form.plainPassword' }}) }}
             </div>
+            <div class="input-error">{{ form_errors(form.plainPassword) }}</div>
+
             <div class="form-group phw">
                 {{ form_label(form.mobile, 'form.phone' | trans, {'label_attr': {'class': 'sr-only'}}) }}
-                <div class="input-error">{{ form_errors(form.mobile) }}</div>
                 {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'placeholder' : ('form.phone' | trans) ~ (' (optional)' | trans)}}) }}
             </div>
+            <div class="input-error">{{ form_errors(form.mobile) }}</div>
+
             <p class='terms'>Ao clicar em abrir conta, você concorda com nosso <a href="">Termos</a> e que você leu nossa <a href="">Política de uso de dados</a>, incluindo nosso <a href="">Uso de cookies</a></p>
             <button class="btn btn-success pull-right" type="submit">{{ 'registration.submit'|trans }}</button>
-            <div class="clearfix"></div>
         {{ form_end(form) }}
             <a class="connect facebook">Inscreva-se usando o facebook</a>
             <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="connect twitter">Inscreva-se usando o twitter</a>
@@ -102,7 +104,7 @@
 
 {% block stylesheets %}
 {{ parent() }}
-    {% stylesheets 'bundles/procergslogincidadaocore/css/login/*.css' filter='cssrewrite' %}
+    {% stylesheets 'bundles/procergslogincidadaocore/css/home/*.css' filter='cssrewrite' %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 {% endblock %}
