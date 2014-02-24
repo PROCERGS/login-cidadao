@@ -112,6 +112,24 @@ footer nav li a {
     color: #737373;
 }
 
+.phw input:-moz-placeholder {
+  color: #FFF;
+}
+
+.phw input::-moz-placeholder {
+  color: #FFF;
+  opacity: 1;
+}
+
+.phw input:-ms-input-placeholder {
+  color: #FFF;
+}
+
+.phw input::-webkit-input-placeholder {
+  color: #FFF;
+}
+
+
 .settings-nav, .settings-content {
     background-color: #f1f1f1;
     border: 1px solid #d8d8d8;
