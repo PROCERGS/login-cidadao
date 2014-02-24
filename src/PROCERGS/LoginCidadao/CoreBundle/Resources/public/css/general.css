@@ -78,8 +78,8 @@ img.desaturate {
      box-shadow: 1px 1px 0 0 #969696;
      color: #FFF;
      font-size: 16px;
-     height: 35px;
-     width: 135px;
+     padding-left: 25px;
+     padding-right: 25px;
 }
 
 .btn-success:hover {
