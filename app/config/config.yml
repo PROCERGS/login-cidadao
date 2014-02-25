@@ -92,6 +92,7 @@ fos_user:
               sender_name: %site_domain%
         form:
             type: procergs_person_registration
+            validation_groups:  [LoginCidadaoRegistration]
     profile:
         form:
             type: procergs_person_profile
