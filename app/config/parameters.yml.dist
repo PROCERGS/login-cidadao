@@ -34,4 +34,6 @@ parameters:
     recaptcha_private_key: ~
     # This must be compatible with strtotime()
     registration.cpf.empty_time: '+1 month'
+    # Compatible with strtotime() but without + and - sign
+    registration.email.unconfirmed_time: '1 day'
     brute_force_threshold: 4

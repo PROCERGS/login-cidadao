@@ -151,6 +151,18 @@ class Person extends BaseUser
      */
     protected $authorizations;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=false)
+     * @var \DateTime
+     */
+    protected $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false)
+     * @var \DateTime
+     */
+    protected $emailConfirmedAt;
+
     public function __construct()
     {
         parent::__construct();
@@ -415,6 +427,40 @@ class Person extends BaseUser
     public function getCity()
     {
         return $this->city;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue()
+    {
+        if (!($this->getCreatedAt() instanceof \DateTime)) {
+            $this->createdAt = new \DateTime();
+        }
+    }
+
+    public function setEmailConfirmedAt(\DateTime $emailConfirmedAt)
+    {
+        $this->emailConfirmedAt = $emailConfirmedAt;
+
+        return $this;
+    }
+
+    public function getEmailConfirmedAt()
+    {
+        return $this->emailConfirmedAt;
     }
 
 }

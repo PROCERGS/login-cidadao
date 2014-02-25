@@ -28,9 +28,9 @@ class JobsController extends Controller
         $from = $this->container->getParameter('mailer_sender_mail');
         $em = $this->getDoctrine()->getEntityManager();
         $personRepo = $this->getDoctrine()
-            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
         $emailRepo = $this->getDoctrine()
-            ->getRepository('PROCERGSLoginCidadaoCoreBundle:SentEmail');
+                ->getRepository('PROCERGSLoginCidadaoCoreBundle:SentEmail');
 
         $users = $personRepo->findAllPendingCPFUntilDate(new \DateTime());
         $todayMail = $emailRepo->findAllSentInTheLast24h($mailType, true);
@@ -44,10 +44,11 @@ class JobsController extends Controller
 
             $email = new SentEmail();
             $email->setType($mailType)
-                ->setSubject($subject)
-                ->setSender($from)
-                ->setReceiver($to)
-                ->setMessage($this->renderView('PROCERGSLoginCidadaoCoreBundle:Jobs:cpf_check.txt.twig', compact('user')));
+                    ->setSubject($subject)
+                    ->setSender($from)
+                    ->setReceiver($to)
+                    ->setMessage($this->renderView('PROCERGSLoginCidadaoCoreBundle:Jobs:cpf_check.txt.twig',
+                                    compact('user')));
 
             if ($this->get('mailer')->send($email->getSwiftMail())) {
                 $em->persist($email);
@@ -57,6 +58,31 @@ class JobsController extends Controller
         }
 
         return compact('mailCount');
+    }
+
+    /**
+     * @Route("/job/email-cleanup")
+     * @Template()
+     */
+    public function emailCleanupAction()
+    {
+        $unconfirmedEmailLimit = $this->container->getParameter('registration.email.unconfirmed_time');
+        $dateLimit = new \DateTime("-$unconfirmedEmailLimit");
+        $personRepo = $this->getDoctrine()
+                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+        $missingConfirmation = $personRepo->findUnconfirmedEmail($dateLimit);
+
+        $deleted = array();
+        if (!empty($missingConfirmation)) {
+            $em = $this->getDoctrine()->getManager();
+            foreach ($missingConfirmation as $person) {
+                $deleted[] = $person;
+                $em->remove($person);
+            }
+            $em->flush();
+        }
+
+        return compact('deleted');
     }
 
 }
