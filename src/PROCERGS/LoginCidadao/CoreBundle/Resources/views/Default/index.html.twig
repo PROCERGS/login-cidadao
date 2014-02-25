@@ -5,6 +5,11 @@
 <div id="login-box">
 
   <h3 class="title">Login Cidadão</h3>
+
+  {% if error %}
+    {{ error|trans }}
+  {% endif %}
+
   {{ form_start(form1, {'action' : path("fos_user_security_check"), 'attr' : {'role' : 'form'}}) }}
     <div class="form-content">
         <p>Entre no sistema xxx usando seu Login Cidadão</p>

@@ -2,14 +2,69 @@
     border-radius: 0;
 }
 
-.navbar .navbar-nav li a {
-    color: #fff;
+.navbar-nav>li>a {
+    padding: 0;
 }
 
-.navbar .navbar-nav .btn {
-    border-radius: 0;
+.navbar .navbar-brand {
+    padding: 2px 0;
 }
 
-.navbar .navbar-nav .btn:hover {
-    background-color: #5cb85c;
+.navbar .icon {
+    background-image: url('../images/navbar_icons.png');
+    margin-top: 15px;
+}
+
+.navbar .apps {
+    background-position: -3px 0;
+    height: 25px;
+    margin: 15px 30px;
+    width: 25px;
+}
+
+.navbar .apps:hover {
+    background-position: -43px 0;
+}
+
+.navbar .apps:active {
+    background-position: -83px 0;
+}
+
+.navbar .notifications {
+    background-position: 0 -61px;
+    height: 25px;
+    width: 33px;
+}
+
+.navbar .notifications:hover {
+    background-position: -40px -61px;
+}
+
+.navbar .notifications:active {
+    background-position: -80px -61px;
+}
+
+.navbar-inverse .navbar-nav>li>a.user {
+    background-image: none;
+    color: #FFF;
+    font-size: 23px;
+}
+
+.navbar-inverse .navbar-nav>li>a.user .img {
+    border-radius: 50%;
+}
+
+.navbar .logout {
+    background-position: -3px -30px;
+    height: 25px;
+    margin: 15px 30px;
+    width: 25px;
+}
+
+.navbar .logout:hover {
+    background-position: -43px -30px;
+}
+
+.navbar .logout:active {
+    background-position: -83px -30px;
 }

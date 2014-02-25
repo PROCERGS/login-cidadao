@@ -1,7 +1,8 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle::base.html.twig' %}
 
 {% block header %}
-<nav class="navbar navbar-default" role="navigation">
+{% include "PROCERGSLoginCidadaoCoreBundle::navbar.html.twig" %}
+{# <nav class="navbar navbar-default" role="navigation">
   <div class="container-fluid">
     {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_gov.png' %}
         <img src="{{ asset_url }}" alt="{%trans%}Government of Rio Grande do Sul - Promoting equality makes the difference{%endtrans%}" height="65" class="pull-left">
@@ -25,7 +26,7 @@
     </div>
 
   </div><!-- /.container-fluid -->
-</nav>
+</nav> #}
 {% endblock %}
 
 {% block footer %}
