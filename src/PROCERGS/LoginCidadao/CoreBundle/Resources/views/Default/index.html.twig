@@ -1,35 +1,42 @@
 {% extends '::base.html.twig' %}
 
 {% block body %}
-
+{% set form1 = logincidadao_initializeForm() %}
 <div id="login-box">
-    <h3 class="title">Login Cidadão</h3>
-    <form>
-        <div class="form-content">
-            <p>Entre no sistema xxx usando seu Login Cidadão</p>
-            <div class="form-group phw">
-                <input placeholder="E-mail ou CPF" class="form-control"/>
+
+  <h3 class="title">Login Cidadão</h3>
+  {{ form_start(form1, {'action' : path("fos_user_security_check"), 'attr' : {'role' : 'form'}}) }}
+    <div class="form-content">
+        <p>Entre no sistema xxx usando seu Login Cidadão</p>
+        <div class="form-group phw">
+            {{ form_label(form1.username, null, {'label_attr' : {'class': 'sr-only'}}) }}
+            {{ form_errors(form1.username) }}
+            {{ form_widget(form1.username, {'attr' : {'placeholder' : 'security.login.username', 'onKeyUp' : 'validador.onKeyUpMultiformat(this, event)', 'class':'form-control' }}) }}
+        </div>
+        <div class="form-group phw">
+            {{ form_label(form1.password, null , {'label_attr' : {'class': 'sr-only'}}) }}
+            {{ form_errors(form1.password) }}
+            {{ form_widget(form1.password, {'attr' : {'placeholder' : 'security.login.password', 'class':'form-control'}}) }}
+            <a href="" class="forgot-password">Esqueceu sua senha?</a>
+        </div>
+        <div class="form-group">
+            {{ form_row(form1.recaptcha, {'class':'form-control'}) }}
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row buttons">
+            <div class="col-xs-6">
+                <a class="connect facebook">Entrar usando o Facebook</a>
+                <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="connect twitter">Entrar usando o Twitter</a>
             </div>
-            <div class="form-group phw">
-                <input placeholder="Senha" class="form-control"/>
-                <a href="" class="forgot-password">Esqueceu sua senha?</a>
+            <div class="col-xs-6">
+                <button type="submit" class="btn btn-success">{{ 'security.login.submit'|trans }}</button>
+                <a href="" class="clearfix">Cadastre-se no sistema</a>
             </div>
         </div>
 
-        <div class="container">
-            <div class="row buttons">
-                <div class="col-xs-6">
-                    <a class="connect facebook">Entrar usando o Facebook</a>
-                    <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="connect twitter">Entrar usando o Twitter</a>
-                </div>
-                <div class="col-xs-6">
-                    <button type="submit" class="btn btn-success">Entrar</button>
-                    <a href="" class="clearfix">Cadastre-se no sistema</a>
-                </div>
-            </div>
-        </div>
-
-    </form>
+   {{ form_end(form1) }}
 </div>
 
 <!-- Facebook test -->

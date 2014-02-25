@@ -60,7 +60,7 @@
             <p class='terms'>Ao clicar em abrir conta, você concorda com nosso <a href="">Termos</a> e que você leu nossa <a href="">Política de uso de dados</a>, incluindo nosso <a href="">Uso de cookies</a></p>
             <button class="btn btn-success pull-right" type="submit">{{ 'registration.submit'|trans }}</button>
         {{ form_end(form) }}
-            <a class="connect facebook">Inscreva-se usando o facebook</a>
+            <a class="connect facebook" onclick="fb_login();">Inscreva-se usando o facebook</a>
             <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="connect twitter">Inscreva-se usando o twitter</a>
     </div>
 
@@ -84,6 +84,30 @@
                             setTimeout(goLogIn, 500);
                         });
                     }
+                }
+
+                function fb_login(){
+                    FB.login(function(response) {
+
+                        if (response.authResponse) {
+                            console.log('Welcome!  Fetching your information.... ');
+                            //console.log(response); // dump complete info
+                            access_token = response.authResponse.accessToken; //get access token
+                            user_id = response.authResponse.userID; //get FB UID
+
+                            FB.api('/me', function(response) {
+                                user_email = response.email; //get user email
+                          // you can store this data into your database
+                            });
+
+                        } else {
+                            //user hit cancel button
+                            console.log('User cancelled login or did not fully authorize.');
+
+                        }
+                    }, {
+                        scope: 'publish_stream,email'
+                    });
                 }
 
         </script>
