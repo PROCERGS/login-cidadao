@@ -141,7 +141,6 @@ footer nav li a {
 .settings-nav, .settings-content {
     background-color: #f1f1f1;
     border: 1px solid #d8d8d8;
-    border-radius: 5px;
     min-height: 300px;
 }
 

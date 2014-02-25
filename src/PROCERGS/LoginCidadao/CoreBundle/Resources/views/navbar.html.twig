@@ -9,3 +9,57 @@
         </div>
     </div>
 </div>
+
+
+
+<nav class="navbar navbar-default navbar-inverse" role="navigation" style="display:none">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+          {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/brasaoRS.png' %}
+            <img src="{{ asset_url }}" alt="{% trans %}Available services{% endtrans %}">
+          {% endimage %}
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li>
+            <a href="#" class="icon apps"></a>
+        </li>
+        <li class="dropdown">
+        <a href="#" class="icon notifications dropdown-toggle" data-toggle="dropdown"></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li class="divider"></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+            <a href="#" class="icon user">
+                {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+                <img src="{{ asset_url }}" alt="" class="img" width="33" height="33">
+                {% endimage %}
+                <span class="name">Pessoa da Silva</span>
+            </a>
+        </li>
+        <li><a href="#" class="icon logout"></a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
