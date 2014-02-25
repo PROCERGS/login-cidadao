@@ -38,6 +38,7 @@
         {% trans_default_domain 'FOSUserBundle' %}
 
         {{ form_start(form, {'action': path('fos_user_registration_register'), 'attr': {'role':'form', 'class':'fos_user_registration_register clearfix'}}) }}
+            {{ form_errors(form) }}
             <div class="form-group phw">
                 {{ form_label(form.email, 'form.email' | trans, {'label_attr': {'class': 'sr-only'}}) }}
                 {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder' : 'form.email' }}) }}
