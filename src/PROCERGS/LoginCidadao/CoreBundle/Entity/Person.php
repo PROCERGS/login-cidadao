@@ -416,4 +416,5 @@ class Person extends BaseUser
     {
         return $this->city;
     }
+
 }

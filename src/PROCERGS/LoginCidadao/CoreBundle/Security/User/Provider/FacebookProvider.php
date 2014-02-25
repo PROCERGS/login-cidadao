@@ -130,7 +130,9 @@ class FacebookProvider implements UserProviderInterface
             }
 
             if ($user->getUsername() == '' || $user->getUsername() == null) {
-                $user->setUsername($username . '@facebook.com');
+                $defaultUsername = $username . '@facebook.com';
+                $availUsername = $this->userManager->getNextAvailableUsername($fbdata['username'], 10, $defaultUsername);
+                $user->setUsername($availUsername);
             }
 
             $user->setFBData($fbdata);
