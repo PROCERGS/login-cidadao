@@ -37,6 +37,36 @@ class UserManager extends BaseManager
     }
 
     /**
+     * Updates a user.
+     *
+     * @param UserInterface $user
+     * @param Boolean       $andFlush Whether to flush the changes (default true)
+     */
+    public function updateUser(UserInterface $user, $andFlush = true)
+    {
+        $this->updateCanonicalFields($user);
+        $this->enforceUsername($user);
+
+        parent::updateUser($user, $andFlush);
+    }
+
+    /**
+     * Enforces that the given user will have an username
+     * @param \FOS\UserBundle\Model\UserInterface $user
+     */
+    public function enforceUsername(UserInterface $user)
+    {
+        $current = $user->getUsernameCanonical();
+        if (is_null($current) || strlen($current) == 0) {
+            $username = explode('@', $this->getEmailCanonical(), 1);
+            $newUsername = $this->getNextAvailableUsername($username);
+
+            $user->setUsername($newUsername);
+            $this->updateCanonicalFields($user);
+        }
+    }
+
+    /**
      * Tries to find an available username.
      * TODO: Yeah, this is ugly, I'm sorry, but does the job.
      * This is based on HWI's FOSUBRegistrationFormHandler

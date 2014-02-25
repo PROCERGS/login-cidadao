@@ -3,6 +3,7 @@
 {% block body %}
 {% set form1 = logincidadao_initializeForm() %}
 <div id="login-box">
+<<<<<<< HEAD
   <h3 class="title">Login Cidadão</h3>
   {{ form_start(form1, {'action' : path("fos_user_security_check"), 'attr' : {'role' : 'form'}}) }}
     <div class="form-content">
@@ -34,10 +35,29 @@
                 <a href="" class="clearfix">Cadastre-se no sistema</a>
             </div>
         </div>
-    </div>
 
    {{ form_end(form1) }}
 </div>
+
+<!-- Facebook test -->
+<div class="fbpo">{{ facebook_login_button({ 'label': 'Connect using Facebook' | trans }) }}</div>
+{{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
+
+<script type="text/javascript">
+    var authurl = '{{ path('_security_check_facebook') }}';
+
+    function goLogIn(){
+        window.location = authurl;
+    }
+
+    function onFbInit() {
+        if (typeof(FB) != 'undefined' && FB != null ) {
+            FB.Event.subscribe('auth.statusChange', function(response) {
+                setTimeout(goLogIn, 500);
+            });
+        }
+    }
+</script>
 {% endblock %}
 
 {% block stylesheets %}
