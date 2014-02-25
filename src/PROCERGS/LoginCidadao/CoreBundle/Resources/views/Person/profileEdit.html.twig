@@ -1,21 +1,26 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
 {% block content %}
+<div class="profile-edit">
 
-    <div id="sign-up" class='col-md-7 col-lg-6'>
-        {% for type, messages in app.session.flashbag.all() %}
-            {% for message in messages %}
-                <div class="flash-{{ type }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
+    <h3>Perfil</h3>
 
-        {% trans_default_domain 'FOSUserBundle' %}
+    {% for type, messages in app.session.flashbag.all() %}
+    {% for message in messages %}
+    <div class="flash-{{ type }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endfor %}
 
-        {{ form_start(form, {'action': path('fos_user_profile_edit'), 'attr': {'role':'form', 'class':'user_profile_edit'}}) }}
-            {{ form_errors(form) }}
+    {% trans_default_domain 'FOSUserBundle' %}
 
+    {{ form_start(form, {'action': path('fos_user_profile_edit'), 'attr': {'role':'form', 'class':'form-inline'}}) }}
+    {{ form_errors(form) }}
+
+
+    <div class="row clearfix">
+        <div class="col-md-7">
             <div class="form-group">
                 {{ form_label(form.email) }}
                 <div class="input-error">{{ form_errors(form.email) }}</div>
@@ -61,14 +66,24 @@
                 <div class="input-error">{{ form_errors(form.city) }}</div>
                 {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
             </div>
-            <input class='btn btn-success btn-sm pull-right' type="submit" value="{{ 'profile.edit.submit'|trans }}" />
-        {{ form_end(form) }}
+        </div>
+
+        <div class="col-md-5">
+            <img src="http://placehold.it/245x245">
+            <input type="file">
+        </div>
     </div>
+
+    <input class='btn btn-success btn-sm pull-right' type="submit" value="{{ 'profile.edit.submit'|trans }}" />
+    {{ form_end(form) }}
+
+</div>
+
 {% endblock %}
 
 {% block stylesheets %}
 {{ parent() }}
-    {% stylesheets 'bundles/procergslogincidadaocore/css/register/*.css' filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+{% stylesheets 'bundles/procergslogincidadaocore/css/register/*.css' filter='cssrewrite' %}
+<link rel="stylesheet" href="{{ asset_url }}" />
+{% endstylesheets %}
 {% endblock %}

@@ -120,20 +120,27 @@ footer nav li a {
     color: #737373;
 }
 
-.phw input:-moz-placeholder {
+.form-control {
+    background-color: #999999;
+    border: none;
+    border-radius: 0;
+    color: #FFF;
+}
+
+.form-control:-moz-placeholder {
   color: #FFF;
 }
 
-.phw input::-moz-placeholder {
+.form-control::-moz-placeholder {
   color: #FFF;
   opacity: 1;
 }
 
-.phw input:-ms-input-placeholder {
+.form-control:-ms-input-placeholder {
   color: #FFF;
 }
 
-.phw input::-webkit-input-placeholder {
+.form-control::-webkit-input-placeholder {
   color: #FFF;
 }
 
@@ -188,7 +195,7 @@ footer nav li a {
     width: 30px;
 }
 
-.settings-nav .profile a:hover .bg {
+.settings-nav .profile.active .bg, .settings-nav .profile a:hover .bg {
     background-position: -42px 0;
 }
 
@@ -198,7 +205,7 @@ footer nav li a {
     width: 30px;
 }
 
-.settings-nav .services a:hover .bg {
+.settings-nav .services.active .bg, .settings-nav .services a:hover .bg {
     background-position: -40px -72px;
 }
 
@@ -208,7 +215,7 @@ footer nav li a {
     width: 32px;
 }
 
-.settings-nav .notifications a:hover .bg {
+.settings-nav .notifications.active .bg, .settings-nav .notifications a:hover .bg {
     background-position: -39px -142px;
 }
 
@@ -219,7 +226,7 @@ footer nav li a {
     width: 28px;
 }
 
-.settings-nav .username a:hover .bg {
+.settings-nav .username.active .bg, .settings-nav .username a:hover .bg {
     background-position: -42px -207px;
 }
 
@@ -230,7 +237,7 @@ footer nav li a {
     width: 22px;
 }
 
-.settings-nav .password a:hover .bg {
+.settings-nav .password.active .bg, .settings-nav .password a:hover .bg {
     background-position: -45px -280px;
 }
 
@@ -241,7 +248,7 @@ footer nav li a {
     width: 30px;
 }
 
-.settings-nav .settings a:hover .bg {
+.settings-nav .settings.active .bg, .settings-nav .settings a:hover .bg {
     background-position: -42px -350px;
 }
 
@@ -249,7 +256,23 @@ footer nav li a {
     padding: 10px;
 }
 
-#profile {
+.settings-content h3 {
+    margin: 10px 15px;
+}
+
+.profile-edit form {
+    margin: 20px 60px;
+}
+
+.profile-edit .form-control {
+    margin-bottom: 10px;
+}
+
+.profile-edit .birthdate select {
+    margin-right: 3px;
+}
+
+/*#profile {
     background-color: #f1f1f1;
     border: 1px solid #d8d8d8;
     border-radius: 5px;
@@ -342,7 +365,7 @@ footer nav li a {
     padding-left: 60px;
 }
 
-/*horizontal*/
+
 #applications li {
     background-color: #4A3D2B;
     background-color: rgba(0,0,0,.7);
@@ -363,7 +386,7 @@ footer nav li a {
     font-size: 20px;
 }
 
-/*vertical*/
+
 #applications.list li {
     height: 50px;
     padding: 0;
@@ -555,3 +578,4 @@ footer nav li a {
 .header-shadows {
     text-shadow: 1px 1px 1px #FFFFFF;
 }
+*/
