@@ -58,7 +58,8 @@ class UserManager extends BaseManager
     {
         $current = $user->getUsernameCanonical();
         if (is_null($current) || strlen($current) == 0) {
-            $username = explode('@', $this->getEmailCanonical(), 1);
+            $username = explode('@', $user->getEmailCanonical(), 1);
+            $username = $username[0];
             $newUsername = $this->getNextAvailableUsername($username);
 
             $user->setUsername($newUsername);
