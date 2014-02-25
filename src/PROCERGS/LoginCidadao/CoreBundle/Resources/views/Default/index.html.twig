@@ -3,34 +3,54 @@
 {% block body %}
 
 <div id="login-box">
-  <h3 class="title">Login Cidadão</h3>
-  <form>
-    <div class="form-content">
-        <p>Entre no sistema xxx usando seu Login Cidadão</p>
-        <div class="form-group phw">
-            <input placeholder="E-mail ou CPF" class="form-control"/>
-        </div>
-        <div class="form-group phw">
-            <input placeholder="Senha" class="form-control"/>
-            <a href="" class="forgot-password">Esqueceu sua senha?</a>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="row buttons">
-            <div class="col-xs-6">
-                <a class="connect facebook">Entrar usando o Facebook</a>
-                <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="connect twitter">Entrar usando o Twitter</a>
+    <h3 class="title">Login Cidadão</h3>
+    <form>
+        <div class="form-content">
+            <p>Entre no sistema xxx usando seu Login Cidadão</p>
+            <div class="form-group phw">
+                <input placeholder="E-mail ou CPF" class="form-control"/>
             </div>
-            <div class="col-xs-6">
-                <button type="submit" class="btn btn-success">Entrar</button>
-                <a href="" class="clearfix">Cadastre-se no sistema</a>
+            <div class="form-group phw">
+                <input placeholder="Senha" class="form-control"/>
+                <a href="" class="forgot-password">Esqueceu sua senha?</a>
             </div>
         </div>
-    </div>
 
-   </form>
+        <div class="container">
+            <div class="row buttons">
+                <div class="col-xs-6">
+                    <a class="connect facebook">Entrar usando o Facebook</a>
+                    <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="connect twitter">Entrar usando o Twitter</a>
+                </div>
+                <div class="col-xs-6">
+                    <button type="submit" class="btn btn-success">Entrar</button>
+                    <a href="" class="clearfix">Cadastre-se no sistema</a>
+                </div>
+            </div>
+        </div>
+
+    </form>
 </div>
+
+<!-- Facebook test -->
+<div class="fbpo">{{ facebook_login_button({ 'label': 'Connect using Facebook' | trans }) }}</div>
+{{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
+
+<script type="text/javascript">
+    var authurl = '{{ path('_security_check_facebook') }}';
+
+    function goLogIn(){
+        window.location = authurl;
+    }
+
+    function onFbInit() {
+        if (typeof(FB) != 'undefined' && FB != null ) {
+            FB.Event.subscribe('auth.statusChange', function(response) {
+                setTimeout(goLogIn, 500);
+            });
+        }
+    }
+</script>
 {% endblock %}
 
 {% block stylesheets %}
