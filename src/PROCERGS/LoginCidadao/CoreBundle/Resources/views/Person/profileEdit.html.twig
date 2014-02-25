@@ -1,6 +1,6 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
-{% block body %}
+{% block content %}
 
     <div id="sign-up" class='col-md-7 col-lg-6'>
         {% for type, messages in app.session.flashbag.all() %}
@@ -65,7 +65,7 @@
         {{ form_end(form) }}
     </div>
 {% endblock %}
-        
+
 {% block stylesheets %}
 {{ parent() }}
     {% stylesheets 'bundles/procergslogincidadaocore/css/register/*.css' filter='cssrewrite' %}

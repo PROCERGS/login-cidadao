@@ -2,32 +2,27 @@
 
 {% block header %}
 {% include "PROCERGSLoginCidadaoCoreBundle::navbar.html.twig" %}
-{# <nav class="navbar navbar-default" role="navigation">
-  <div class="container-fluid">
-    {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_gov.png' %}
-        <img src="{{ asset_url }}" alt="{%trans%}Government of Rio Grande do Sul - Promoting equality makes the difference{%endtrans%}" height="65" class="pull-left">
-    {% endimage %}
+{% endblock %}
 
+{% block body %}
+    {% block sidebar %}
+        <div class="col-md-3 col-sm-3">
+            <ul class="settings-nav nav nav-pills nav-stacked">
+                <li class="profile active"><a href=""><span>Perfil</span><i class="bg"></i></a></li>
+                <li class="services"><a href=""><span>Serviços</span><i class="bg"></i></a></li>
+                <li class="notifications"><a href=""><span>Notificações</span><i class="bg"></i></a></li>
+                <li class="username"><a href=""><span>Definir nome de usuário</span><i class="bg"></i></a></li>
+                <li class="password"><a href=""><span>Alterar senha</span><i class="bg"></i></a></li>
+                <li class="settings"><a href=""><span>Configurações</span><i class="bg"></i></a></li>
+            </ul>
+        </div>
+    {% endblock sidebar %}
 
-    <!-- Single button -->
-    <div class="btn-group pull-right">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
-        <img src="{{ asset_url }}" alt="" class="pull-left" width="33" height="33">
-        {% endimage %}
-        <span class="name">Pessoa da Silva</span>
-      </button>
-      <ul class="dropdown-menu" role="menu">
-        <li><a href="#">Configurações</a></li>
-        <li><a href="#">Temas</a></li>
-        <li><a href="#" data-toggle="modal" data-target="#help-modal">Ajuda</a></li>
-        <li><a href="{{ path('fos_user_security_logout')}}">Sair</a></li>
-      </ul>
+    <div class="settings-content col-md-9 col-sm-9">
+    {% block content %}{% endblock content %}
     </div>
 
-  </div><!-- /.container-fluid -->
-</nav> #}
-{% endblock %}
+{% endblock body %}
 
 {% block footer %}
     <footer class='font-a'>

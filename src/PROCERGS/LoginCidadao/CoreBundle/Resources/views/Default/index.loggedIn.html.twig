@@ -11,170 +11,114 @@
     {% set cep = user.cep|split('', 5) %}
 {% endif %}
 
-{% block body %}
-<div class="row">
-    <div class="col-xs-12 text-right">
-        {# <h1>{% trans with {'%user.name%': user.firstName} %}Welcome %user.name%{% endtrans %}</h1> #}
-        <button class="btn btn-app-display active" data-display="list"><i></i></button>
-        <button class="btn btn-app-display" data-display="icon"><i></i></button>
+{% block content %}
+
+<dl>
+    <dt>{{ 'Username' | trans }}
+        <dd>{{ user.username }}</dd>
+
+        <dt>{{ 'Email' | trans }}</dt>
+        <dd>{{ user.email }}</dd>
+
+        {% if (user.birthdate != null) %}
+        <dt>{{ 'Birthdate' | trans }}</dt>
+        <dd>{{ user.birthdate|date('d/m/Y') }}</dd>
+        {% endif %}
+
+        {% if cpf != null %}
+        <dt>{{ 'CPF' | trans }}</dt>
+        <dd>{{ "%s.%s.%s-%s" | format(cpf[0], cpf[1], cpf[2], cpf[3]) }}</dd>
+        {% endif %}
+
+        {% if cep != null %}
+        <dt>{{ 'CEP' | trans }}</dt>
+        <dd>{{ "%s-%s" | format(cep[0], cep[1]) }}</dd>
+        {% endif %}
+    </dt>
+</dl>
+
+{# <h2>{% trans %}Available Applications and Sites{% endtrans %}</h2> #}
+<div id="profile" class="pull-left col-md-4" style="display:none;">
+    <div class="head">
+        {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+        <img src="{{ asset_url }}" alt="" class="pull-left" width="102" height="105">
+        {% endimage %}
+        <div class="basic">
+            <h4 class="profile-name text-left">{{ user.fullname }}</h4>
+            <p class="text-left">CPF: 999.999.999</p>
+        </div>
+        <p style="clear:both; font-size:12px; margin-bottom: 3px;">Situação do cadastro</p>
+        <div class="progress">
+          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+            <span class="txt">40%</span>
+          </div>
+        </div>
+        <a href="#" class="toggle"></a>
+    </div>
+
+    <div class="info">
+        <dl>
+            <dt>{{ 'Username' | trans }}
+                <dd>{{ user.username }}</dd>
+
+                <dt>{{ 'Email' | trans }}</dt>
+                <dd>{{ user.email }}</dd>
+
+                {% if (user.birthdate != null) %}
+                <dt>{{ 'Birthdate' | trans }}</dt>
+                <dd>{{ user.birthdate|date('d/m/Y') }}</dd>
+                {% endif %}
+
+                {% if cpf != null %}
+                <dt>{{ 'CPF' | trans }}</dt>
+                <dd>{{ "%s.%s.%s-%s" | format(cpf[0], cpf[1], cpf[2], cpf[3]) }}</dd>
+                {% endif %}
+
+                {% if cep != null %}
+                <dt>{{ 'CEP' | trans }}</dt>
+                <dd>{{ "%s-%s" | format(cep[0], cep[1]) }}</dd>
+                {% endif %}
+            </dt>
+        </dl>
+        <p class="text-left"><a href="{{ path('fos_user_profile_edit') }}" class="edit">{% trans %}Edit profile{%  endtrans %}</a></p>
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade modal-lg" id="help-modal" tabindex="-1" role="dialog" aria-labelledby="help-modalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-body">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <div class="left pull-left">
-                    <div class="big">?</div>
-                    <ul>
-                        <li><a href="">Como posso incluir meu RG no Login Cidadão</a></li>
-                        <li><a href="">Como posso participar do Nota Fiscal Gaúcha</a></li>
-                        <li><a href="">Como posso incluir meu RG no Login Cidadão</a></li>
-                        <li><a href="">Como posso participar do Nota Fiscal Gaúcha</a></li>
-                    </ul>
-                </div>
-                <div class="right pull-right">
-                    <h4>Como posso incluir meu RG no Login Cidadão</h4>
-                    <div class="text">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="row">
-    <div class="col-xs-12">
+<ul id="applications" class="pull-right list col-md-8">
+{% for auth in user.getAuthorizations %}
+    <li>
+        <img src="http://placehold.it/120x120" alt="" class="img-rounded center-block">
+        <h4 class="center-block text-center">{{ auth.client.name }}</h4>
 
-        <div class="col-md-3 col-sm-3">
-            <ul class="settings-nav nav nav-pills nav-stacked">
-                <li class="profile active"><a href=""><span>Perfil</span><i class="bg"></i></a></li>
-                <li class="services"><a href=""><span>Serviços</span><i class="bg"></i></a></li>
-                <li class="notifications"><a href=""><span>Notificações</span><i class="bg"></i></a></li>
-                <li class="username"><a href=""><span>Definir nome de usuário</span><i class="bg"></i></a></li>
-                <li class="password"><a href=""><span>Alterar senha</span><i class="bg"></i></a></li>
-                <li class="settings"><a href=""><span>Configurações</span><i class="bg"></i></a></li>
-            </ul>
-        </div>
-
-        <div class="settings-content col-md-9 col-sm-9">
-            <dl>
-                <dt>{{ 'Username' | trans }}
-                    <dd>{{ user.username }}</dd>
-
-                    <dt>{{ 'Email' | trans }}</dt>
-                    <dd>{{ user.email }}</dd>
-
-                    {% if (user.birthdate != null) %}
-                    <dt>{{ 'Birthdate' | trans }}</dt>
-                    <dd>{{ user.birthdate|date('d/m/Y') }}</dd>
-                    {% endif %}
-
-                    {% if cpf != null %}
-                    <dt>{{ 'CPF' | trans }}</dt>
-                    <dd>{{ "%s.%s.%s-%s" | format(cpf[0], cpf[1], cpf[2], cpf[3]) }}</dd>
-                    {% endif %}
-
-                    {% if cep != null %}
-                    <dt>{{ 'CEP' | trans }}</dt>
-                    <dd>{{ "%s-%s" | format(cep[0], cep[1]) }}</dd>
-                    {% endif %}
-                </dt>
-            </dl>
-        </div>
-
-        {# <h2>{% trans %}Available Applications and Sites{% endtrans %}</h2> #}
-        <div id="profile" class="pull-left col-md-4" style="display:none;">
-            <div class="head">
-                {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
-                <img src="{{ asset_url }}" alt="" class="pull-left" width="102" height="105">
-                {% endimage %}
-                <div class="basic">
-                    <h4 class="profile-name text-left">{{ user.fullname }}</h4>
-                    <p class="text-left">CPF: 999.999.999</p>
-                </div>
-                <p style="clear:both; font-size:12px; margin-bottom: 3px;">Situação do cadastro</p>
-                <div class="progress">
-                  <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                    <span class="txt">40%</span>
-                  </div>
-                </div>
-                <a href="#" class="toggle"></a>
-            </div>
-
-            <div class="info">
-                <dl>
-                    <dt>{{ 'Username' | trans }}
-                        <dd>{{ user.username }}</dd>
-
-                        <dt>{{ 'Email' | trans }}</dt>
-                        <dd>{{ user.email }}</dd>
-
-                        {% if (user.birthdate != null) %}
-                        <dt>{{ 'Birthdate' | trans }}</dt>
-                        <dd>{{ user.birthdate|date('d/m/Y') }}</dd>
-                        {% endif %}
-
-                        {% if cpf != null %}
-                        <dt>{{ 'CPF' | trans }}</dt>
-                        <dd>{{ "%s.%s.%s-%s" | format(cpf[0], cpf[1], cpf[2], cpf[3]) }}</dd>
-                        {% endif %}
-
-                        {% if cep != null %}
-                        <dt>{{ 'CEP' | trans }}</dt>
-                        <dd>{{ "%s-%s" | format(cep[0], cep[1]) }}</dd>
-                        {% endif %}
-                    </dt>
-                </dl>
-                <p class="text-left"><a href="{{ path('fos_user_profile_edit') }}" class="edit">{% trans %}Edit profile{%  endtrans %}</a></p>
-            </div>
-        </div>
-
-
-        <ul id="applications" class="pull-right list col-md-8">
-        {% for auth in user.getAuthorizations %}
-            <li>
-                <img src="http://placehold.it/120x120" alt="" class="img-rounded center-block">
-                <h4 class="center-block text-center">{{ auth.client.name }}</h4>
-
-                {#
-                <a href="{{ path('ui_revoke', { 'clientId': auth.client.id }) }}" data-token="{{ csrf_token(path('ui_revoke', { 'clientId': auth.client.id })) }}" class="btn btn-float btn-danger revoke">{{ 'Revoke Access' | trans }}</a>
-                <p>
-                {% for scope in auth.scope %}
-                    <span class="label label-default">{{ ('scope.' ~ scope) | trans }}</span>
-                {% endfor %}
-                </p>
-                #}
-
-                <div class="app-switch pull-right">
-                    <a class="btn activate" role="button">{% trans %}Activate{%  endtrans %}</a>
-                </div>
-            </li>
+        {#
+        <a href="{{ path('ui_revoke', { 'clientId': auth.client.id }) }}" data-token="{{ csrf_token(path('ui_revoke', { 'clientId': auth.client.id })) }}" class="btn btn-float btn-danger revoke">{{ 'Revoke Access' | trans }}</a>
+        <p>
+        {% for scope in auth.scope %}
+            <span class="label label-default">{{ ('scope.' ~ scope) | trans }}</span>
         {% endfor %}
+        </p>
+        #}
 
-        {% for client in apps %}
-            <li>
-                <img src="http://placehold.it/120x120" alt="" class="img-rounded center-block">
-                <h4 class="center-block text-center">
-                    <a href="{{ client.siteUrl }}">{{ client.name }}</a>
-                </h4>
-                <div class="app-switch pull-right">
-                    <a class="btn deactivate" role="button">{% trans %}Deactivate{%  endtrans %}</a>
-                </div>
-            </li>
-        {% endfor %}
-        </ul>
-    </div>
-</div>
+        <div class="app-switch pull-right">
+            <a class="btn activate" role="button">{% trans %}Activate{%  endtrans %}</a>
+        </div>
+    </li>
+{% endfor %}
+
+{% for client in apps %}
+    <li>
+        <img src="http://placehold.it/120x120" alt="" class="img-rounded center-block">
+        <h4 class="center-block text-center">
+            <a href="{{ client.siteUrl }}">{{ client.name }}</a>
+        </h4>
+        <div class="app-switch pull-right">
+            <a class="btn deactivate" role="button">{% trans %}Deactivate{%  endtrans %}</a>
+        </div>
+    </li>
+{% endfor %}
+</ul>
+
 {% endblock %}
 
 {% block javascripts %}
