@@ -87,3 +87,10 @@ services:
         arguments: ["@router"]
         tags:
             - { name: kernel.event_subscriber }
+            
+    procergs_logincidadao.cpf.form.type:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\CpfFormType
+        tags:
+            - { name: form.type, alias: cpf_form_type }
+        calls:
+            - [setContainer, ["@service_container"]]                

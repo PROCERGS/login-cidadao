@@ -15,6 +15,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\NfgHelper;
 
 class PersonController extends Controller
 {
@@ -192,5 +193,34 @@ class PersonController extends Controller
         }
 
         return array('form' => $form->createView(), 'emailMissing' => $emailMissing, 'emptyPassword' => $emptyPassword);
+    }
+    
+    /**
+     * @Route("/registration/cpf", name="lc_registration_cpf")
+     * @Template()
+     */
+    public function registrationCpfAction(Request $request)
+    {
+        $person = $this->getUser();
+        $form = $this->createForm('cpf_form_type', $person);
+        $form->handleRequest($this->getRequest());
+        if ($form->isValid()) {
+            $person->setCpfExpiration(null);
+            if ($form->get('nfgPassword')->getData()) {
+                $nfg = new NfgHelper();
+                $nfg->setUsername($person->getCpf());
+                $nfg->setPassword($form->get('nfgPassword')->getData());
+                if ($profile = $nfg->profile()) {
+                    $person->setCpfNfg(new \DateTime());
+                } else {
+                    $person->setCpfNfg(null);
+                }
+            }
+            $this->container->get('fos_user.user_manager')->updateUser($person);
+            return $this->redirect($this->generateUrl('lc_home'));
+        }
+        return array(
+            'form' => $form->createView()
+        );
     }
 }

@@ -66,6 +66,11 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
         $doctrine->getManager()->persist($accessSession);
         $doctrine->getManager()->flush();
         
+        $person = $doctrine->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->findOneBy(array('username' => $token->getUser()->getUsername()));
+        $opa = $person->getCpfExpiration();
+        if ($opa && $opa <= new \DateTime()) {
+            return new RedirectResponse($this->router->generate('lc_registration_cpf'));
+        }            
         if (strstr($token->getUser()->getUsername(), '@') !== false) {
             $uri = $this->router->generate('lc_update_username');
 

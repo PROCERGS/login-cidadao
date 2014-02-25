@@ -150,6 +150,11 @@ class Person extends BaseUser
      * @ORM\OneToMany(targetEntity="Authorization", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
      */
     protected $authorizations;
+    
+    /**
+     * @ORM\Column(name="cpf_nfg", type="datetime", nullable=true)
+     */
+    protected $cpfNfg;
 
     public function __construct()
     {
@@ -417,4 +422,14 @@ class Person extends BaseUser
         return $this->city;
     }
 
+    public function setCpfNfg($var)
+    {
+        $this->cpfNfg = $var;
+        return $this;
+    }
+    
+    public function getCpfNfg()
+    {
+        return $this->cpfNfg;
+    }    
 }
