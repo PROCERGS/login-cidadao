@@ -15,6 +15,7 @@ use PROCERGS\Generic\ValidationBundle\Validator\Constraints as PROCERGSAssert;
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
  * @UniqueEntity("cpf")
+ * @ORM\HasLifecycleCallbacks
  * @ExclusionPolicy("all")
  */
 class Person extends BaseUser
@@ -158,7 +159,7 @@ class Person extends BaseUser
     protected $createdAt;
 
     /**
-     * @ORM\Column(type="datetime", nullable=false)
+     * @ORM\Column(type="datetime", nullable=true)
      * @var \DateTime
      */
     protected $emailConfirmedAt;
@@ -439,7 +440,7 @@ class Person extends BaseUser
         $this->cpfNfg = $var;
         return $this;
     }
-    
+
     public function getCpfNfg()
     {
         return $this->cpfNfg;

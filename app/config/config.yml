@@ -98,7 +98,7 @@ fos_user:
             type: procergs_person_profile
     resetting:
         email:
-            from_email: 
+            from_email:
                 address:        %mailer_sender_mail%
                 sender_name:    %site_domain%
         form:
@@ -141,9 +141,9 @@ hwi_oauth:
 parameters:
     user.class: PROCERGS\LoginCidadao\CoreBundle\Entity\Person
     buzz.client.class: PROCERGS\Generic\HWIOAuthProxyBundle\Buzz\Client\CurlProxy
-    
+
 ewz_recaptcha:
     public_key:   %recaptcha_public_key%
     private_key:  %recaptcha_private_key%
     secure:       false
-    locale_key:   kernel.default_locale    
+    locale_key:   kernel.default_locale

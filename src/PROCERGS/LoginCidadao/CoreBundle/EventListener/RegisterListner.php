@@ -9,14 +9,19 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
 use FOS\UserBundle\Mailer\MailerInterface;
+use FOS\UserBundle\Event\GetResponseUserEvent;
+use FOS\UserBundle\Event\FilterUserResponseEvent;
 
 class RegisterListner implements EventSubscriberInterface
 {
+
     private $router;
     private $mailer;
     private $tokenGenerator;
 
-    public function __construct(UrlGeneratorInterface $router, MailerInterface $mailer, TokenGeneratorInterface $tokenGenerator)
+    public function __construct(UrlGeneratorInterface $router,
+                                MailerInterface $mailer,
+                                TokenGeneratorInterface $tokenGenerator)
     {
         $this->router = $router;
         $this->mailer = $mailer;
@@ -30,6 +35,8 @@ class RegisterListner implements EventSubscriberInterface
     {
         return array(
             FOSUserEvents::REGISTRATION_SUCCESS => 'onRegistrationSuccess',
+            FOSUserEvents::REGISTRATION_COMPLETED => 'onRegistrationCompleted',
+            FOSUserEvents::REGISTRATION_CONFIRM => 'onEmailConfirmed'
         );
     }
 
@@ -40,10 +47,20 @@ class RegisterListner implements EventSubscriberInterface
         if (null === $user->getConfirmationToken()) {
             $user->setConfirmationToken($this->tokenGenerator->generateToken());
         }
+    }
 
+    public function onRegistrationCompleted(FilterUserResponseEvent $event)
+    {
+        $user = $event->getUser();
         $this->mailer->sendConfirmationEmailMessage($user);
 
         $url = $this->router->generate('fos_user_profile_edit');
         $event->setResponse(new RedirectResponse($url));
     }
+
+    public function onEmailConfirmed(GetResponseUserEvent $event)
+    {
+        $event->getUser()->setEmailConfirmedAt(new \DateTime());
+    }
+
 }
