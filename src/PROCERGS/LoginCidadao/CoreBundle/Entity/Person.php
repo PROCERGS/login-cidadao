@@ -163,6 +163,11 @@ class Person extends BaseUser
      */
     protected $emailConfirmedAt;
 
+    /**
+     * @ORM\Column(name="cpf_nfg", type="datetime", nullable=true)
+     */
+    protected $cpfNfg;
+
     public function __construct()
     {
         parent::__construct();
@@ -427,6 +432,17 @@ class Person extends BaseUser
     public function getCity()
     {
         return $this->city;
+    }
+
+    public function setCpfNfg($var)
+    {
+        $this->cpfNfg = $var;
+        return $this;
+    }
+    
+    public function getCpfNfg()
+    {
+        return $this->cpfNfg;
     }
 
     public function setCreatedAt(\DateTime $createdAt)
