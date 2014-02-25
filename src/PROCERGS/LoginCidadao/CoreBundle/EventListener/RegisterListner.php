@@ -47,15 +47,15 @@ class RegisterListner implements EventSubscriberInterface
         if (null === $user->getConfirmationToken()) {
             $user->setConfirmationToken($this->tokenGenerator->generateToken());
         }
+
+        $url = $this->router->generate('fos_user_profile_edit');
+        $event->setResponse(new RedirectResponse($url));
     }
 
     public function onRegistrationCompleted(FilterUserResponseEvent $event)
     {
         $user = $event->getUser();
         $this->mailer->sendConfirmationEmailMessage($user);
-
-        $url = $this->router->generate('fos_user_profile_edit');
-        $event->setResponse(new RedirectResponse($url));
     }
 
     public function onEmailConfirmed(GetResponseUserEvent $event)
