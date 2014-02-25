@@ -137,11 +137,112 @@ footer nav li a {
   color: #FFF;
 }
 
-
 .settings-nav, .settings-content {
-    background-color: #f1f1f1;
-    border: 1px solid #d8d8d8;
+    background-color: #dddedc;
     min-height: 300px;
+}
+
+.settings-nav li {
+    margin: 12px 0;
+}
+
+.settings-nav li a {
+    border-radius: 0;
+    height: auto;
+    padding: 20px 15px;
+    position: relative;
+}
+
+.settings-nav li.active a {
+    background-color: #009933;
+}
+
+.settings-nav li a:hover, .settings-nav li.active a:hover {
+    background-color: #c7d6cb;
+    color: #696969;
+}
+
+.settings-nav li a span {
+    color: #696969;
+    display: inline-block;
+    font-weight: 500;
+    width: 85%;
+}
+
+.settings-nav li.active span {
+    color: #FFF;
+}
+
+.settings-nav li .bg {
+    background-image: url('../images/settings_nav_icons.png');
+    display: block;
+    margin-top: -15px;
+    position: absolute;
+    right: 8px;
+    top: 50%;
+}
+
+.settings-nav .profile .bg {
+    background-position: -3px 0;
+    height: 30px;
+    width: 30px;
+}
+
+.settings-nav .profile a:hover .bg {
+    background-position: -42px 0;
+}
+
+.settings-nav .services .bg {
+    background-position: 0 -72px;
+    height: 30px;
+    width: 30px;
+}
+
+.settings-nav .services a:hover .bg {
+    background-position: -40px -72px;
+}
+
+.settings-nav .notifications .bg {
+    background-position: 0 -142px;
+    height: 22px;
+    width: 32px;
+}
+
+.settings-nav .notifications a:hover .bg {
+    background-position: -39px -142px;
+}
+
+.settings-nav .username .bg {
+    background-position: -3px -207px;
+    height: 34px;
+    right: 11px;
+    width: 28px;
+}
+
+.settings-nav .username a:hover .bg {
+    background-position: -42px -207px;
+}
+
+.settings-nav .password .bg {
+    background-position: -6px -280px;
+    height: 30px;
+    right: 16px;
+    width: 22px;
+}
+
+.settings-nav .password a:hover .bg {
+    background-position: -45px -280px;
+}
+
+.settings-nav .settings .bg {
+    background-position: -2px -350px;
+    height: 30px;
+    right: 11px;
+    width: 30px;
+}
+
+.settings-nav .settings a:hover .bg {
+    background-position: -42px -350px;
 }
 
 .settings-content {
