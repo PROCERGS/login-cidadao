@@ -29,18 +29,24 @@ $(function() {
     $('.app-toggle .btn').on('click', function() {
 
         if ( !$(this).hasClass('active') ) {
-            console.log("here");
+
             $('.app-toggle .btn').removeClass('active');
             $(this).addClass('active');
+            $('#applications .list-group').css({'margin-top': '-30px', 'opacity' : 0 });
 
-            switch ($(this).data("display")) {
-                case 'list':
-                    $('#applications ul').removeClass('icon').addClass('list');
-                    break;
-                case 'icon':
-                    $('#applications ul').removeClass('list').addClass('icon');
-                    break;
-            }
+            var self = $(this);
+            setTimeout( function(){
+                switch (self.data("display")) {
+                    case 'list':
+                        $('#applications ul').removeClass('icon').addClass('list');
+                        break;
+                    case 'icon':
+                        $('#applications ul').removeClass('list').addClass('icon');
+                        break;
+                }
+                $('#applications .list-group').css({'margin-top' : 0, 'opacity' : 1});
+            }, 1000);
+
         }
     });
 

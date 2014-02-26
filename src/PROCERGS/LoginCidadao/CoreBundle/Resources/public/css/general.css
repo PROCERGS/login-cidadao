@@ -293,6 +293,14 @@ footer nav li a {
     padding-right: 40px;
 }
 
+#applications .list-group {
+    transition: all 0.8s ease;
+    -webkit-transition: all 0.8s ease;
+    -o-transition: all 0.8s ease;
+    -moz-transition: all 0.8s ease;
+    -ms-transition: all 0.8s ease;
+}
+
 #applications h4 {
     margin-bottom: 20px;
 }

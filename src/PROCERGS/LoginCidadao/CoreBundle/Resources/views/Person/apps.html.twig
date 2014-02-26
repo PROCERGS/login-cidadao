@@ -5,41 +5,43 @@
 
     <h3>Serviços</h3>
     <div class="app-toggle clearfix">
-        <button type="button" class="btn btn-default btn-lg active" data-display="list">
+        <button type="button" class="btn btn-default btn-lg active" data-display="icon">
           <span class="glyphicon glyphicon-th-large"></span>
         </button>
-        <button type="button" class="btn btn-default btn-lg" data-display="icon">
+        <button type="button" class="btn btn-default btn-lg" data-display="list">
           <span class="glyphicon glyphicon-th-list"></span>
         </button>
     </div>
 
-    <h4>Serviços ativos</h4>
-    <ul class="list clearfix">
-        <li>
-            <img src="http://placehold.it/65x65" alt="" class="img-rounded center-block">
-            <h5 class="center-block text-center">Central do Cidadão</h5>
-            <a class="btn activated" role="button">{% trans %}Activated{%  endtrans %}</a>
-        </li>
-        <li>
-            <img src="http://placehold.it/65x65" alt="" class="img-rounded center-block">
-            <h5 class="center-block text-center">teste</h5>
-            <a class="btn activated" role="button">{% trans %}Activated{%  endtrans %}</a>
-        </li>
-    </ul>
+    <div class="list-group">
+        <h4>Serviços ativos</h4>
+        <ul class="icon clearfix">
+            <li>
+                <img src="http://placehold.it/65x65" alt="" class="img-rounded center-block">
+                <h5 class="center-block text-center">Central do Cidadão</h5>
+                <a class="btn activated" role="button">{% trans %}Activated{%  endtrans %}</a>
+            </li>
+            <li>
+                <img src="http://placehold.it/65x65" alt="" class="img-rounded center-block">
+                <h5 class="center-block text-center">teste</h5>
+                <a class="btn activated" role="button">{% trans %}Activated{%  endtrans %}</a>
+            </li>
+        </ul>
 
-    <h4>Demais serviços</h4>
-    <ul class="icon clearfix">
-        <li>
-            <img src="http://placehold.it/65x65" alt="" class="img-rounded center-block">
-            <h5 class="center-block text-center">teste</h5>
-            <a class="btn deactivated" role="button">{% trans %}Deactivated{%  endtrans %}</a>
-        </li>
-        <li>
-            <img src="http://placehold.it/65x65" alt="" class="img-rounded center-block">
-            <h5 class="center-block text-center">teste</h5>
-            <a class="btn deactivated" role="button">{% trans %}Deactivated{%  endtrans %}</a>
-        </li>
-    </ul>
+        <h4>Demais serviços</h4>
+        <ul class="icon clearfix">
+            <li>
+                <img src="http://placehold.it/65x65" alt="" class="img-rounded center-block">
+                <h5 class="center-block text-center">teste</h5>
+                <a class="btn deactivated" role="button">{% trans %}Deactivated{%  endtrans %}</a>
+            </li>
+            <li>
+                <img src="http://placehold.it/65x65" alt="" class="img-rounded center-block">
+                <h5 class="center-block text-center">teste</h5>
+                <a class="btn deactivated" role="button">{% trans %}Deactivated{%  endtrans %}</a>
+            </li>
+        </ul>
+    </div>
 
     <ul>
     {% for auth in user.getAuthorizations %}
