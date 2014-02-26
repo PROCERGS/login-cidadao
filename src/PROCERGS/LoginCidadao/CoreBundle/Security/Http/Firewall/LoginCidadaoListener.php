@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\AcessSession;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 class LoginCidadaoListener extends UsernamePasswordFormAuthenticationListener
 {
@@ -52,6 +53,7 @@ class LoginCidadaoListener extends UsernamePasswordFormAuthenticationListener
         $form = $this->container->get('form.factory')->create($formType);        
         $form->handleRequest($request);
         if (! $form->isValid()) {
+            $request->getSession()->set(SecurityContextInterface::LAST_USERNAME, $vars['username']);
             throw new BadCredentialsException('Captcha is invalid');
         }
         $b = parent::attemptAuthentication($request);
