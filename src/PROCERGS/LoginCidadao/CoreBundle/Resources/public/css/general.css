@@ -258,6 +258,26 @@ footer nav li a {
     background-position: -42px -350px;
 }
 
+.progress-box {
+    background-color: #dddedc;
+    margin-top: 15px;
+}
+
+.progress-box .progress {
+    background-color: #999999;
+    background-image: none;
+    border-radius: 0 !important;
+    height: 30px;
+}
+
+.progress-box .progress-bar {
+    background-color: #ffd900;
+    background-image: none;
+    border-radius: 0 !important;
+    color: #000;
+    line-height: 30px;
+}
+
 .settings-content {
     /*padding: 10px;*/
     padding: 0;
