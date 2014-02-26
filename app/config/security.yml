@@ -25,7 +25,7 @@ security:
 
         main:
             pattern: ^/(?!api)
-            
+
             fos_facebook:
                 app_url: ""
                 server_url: "http://lc.des.dona.to"
@@ -52,12 +52,11 @@ security:
                 login_path:     /login
                 use_forward:    false
                 check_path:     /login_check
-                failure_path:   /failure_login
                 default_target_path: /
                 username_parameter: login_form_type[username]
                 password_parameter: login_form_type[password]
-                csrf_parameter: login_form_type[csrf_token]                
-                
+                csrf_parameter: login_form_type[csrf_token]
+
             logout:
                 path: /logout
             anonymous:  true

@@ -144,6 +144,8 @@ footer nav li a {
   color: #FFF;
 }
 
+
+/* settings nav and content */
 .settings-nav, .settings-content {
     background-color: #dddedc;
     min-height: 300px;
@@ -260,17 +262,122 @@ footer nav li a {
     margin: 10px 15px;
 }
 
-.profile-edit form {
+.settings-content h4 {
+    margin: 10px 35px;
+}
+
+
+/* profile page */
+#profile-edit form {
     margin: 20px 60px;
 }
 
-.profile-edit .form-control {
+#profile-edit .form-control {
     margin-bottom: 10px;
 }
 
-.profile-edit .birthdate select {
+#profile-edit .birthdate select {
     margin-right: 3px;
 }
+
+
+/* services/applications page */
+#applications .app-toggle .btn {
+    background: none;
+    border: none;
+    float: right;
+    margin: 0 5px;
+}
+
+#applications ul {
+    padding-right: 40px;
+}
+
+#applications h4 {
+    margin-bottom: 20px;
+}
+
+#applications li {
+    background-color: #999999;
+    color: #FFF;
+    float: left;
+    height: 175px;
+    list-style-type: none;
+    margin: 0 15px 30px 15px;
+    width: 140px;
+}
+
+#applications li .img-rounded {
+    margin-top: 14px;
+}
+
+#applications li h5 {
+    font-size: 17px;
+    height: 40px;
+    line-height: 20px;
+    padding: 0 10px
+}
+
+#applications li .btn {
+    background-color: #696969;
+    border-radius: 0;
+    color: #FFF;
+    display: block;
+    height: 35px;
+    width: 100%;
+}
+
+#applications li .activated {
+    background-color: #009933;
+}
+
+#applications .list li {
+    float: none;
+    height: 35px;
+    margin-left: 0;
+    width: 100%;
+}
+
+#applications .list li .img-rounded {
+    float: left;
+    height: 45px;
+    margin-top: -5px;
+    width: 45px;
+}
+
+#applications .list li h5 {
+    float: left;
+    height: 100%;
+    line-height: 35px;
+    margin: 0;
+    padding: 0 20px;
+}
+
+#applications .list li .btn {
+    float: right;
+    width: 110px;
+}
+
+
+/*#applications.list li {
+    height: 50px;
+    padding: 0;
+    width: 570px;
+}
+
+#applications.list li .img-rounded {
+    float: left;
+    height: 50px;
+    width: 50px;
+}
+
+#applications.list li h4 {
+    float: left;
+    margin: 13px 10px;
+}*/
+
+
+
 
 /*#profile {
     background-color: #f1f1f1;

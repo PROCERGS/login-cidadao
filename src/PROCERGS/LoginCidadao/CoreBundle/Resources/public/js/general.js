@@ -26,24 +26,21 @@ $(function() {
 
 
     // switch display application list
-    $('.btn-app-display').on('click', function() {
+    $('.app-toggle .btn').on('click', function() {
+
         if ( !$(this).hasClass('active') ) {
-            $('.btn-app-display').removeClass('active');
+            console.log("here");
+            $('.app-toggle .btn').removeClass('active');
             $(this).addClass('active');
 
-            $('#applications').css({'margin-top': '-30px', 'opacity' : 0 });
-            var button = $(this);
-            setTimeout(function () {
-                switch (button.data("display")) {
-                    case 'list':
-                        $('#applications').removeClass('icon').addClass('list');
-                        break;
-                    case 'icon':
-                        $('#applications').removeClass('list').addClass('icon');
-                        break;
-                }
-                $('#applications').css({'margin-top' : 0, 'opacity' : 1});
-            }, 800);
+            switch ($(this).data("display")) {
+                case 'list':
+                    $('#applications ul').removeClass('icon').addClass('list');
+                    break;
+                case 'icon':
+                    $('#applications ul').removeClass('list').addClass('icon');
+                    break;
+            }
         }
     });
 

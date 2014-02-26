@@ -3,7 +3,8 @@
 }
 
 .navbar .container .navbar-brand {
-    margin-left: 0;
+    margin-left: 15px;
+    margin-right: 15px;
     padding: 2px 0;
 }
 
