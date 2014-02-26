@@ -51,21 +51,13 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle profile-card" data-toggle="dropdown">
+                <li>
+                    <a href="{{ path('fos_user_profile_edit') }}" class="profile-card">
                         {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
                         <img src="{{ asset_url }}" alt="" class="profile-picture">
                         {% endimage %}
                         <span class="profile-username">{{ app.user.username }}</span>
-                        <b class="caret"></b>
                     </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li><a href="{{ path('fos_user_security_logout')}}">{% trans from "FOSUserBundle" %}layout.logout{% endtrans %}</a></li>
-                    </ul>
                 </li>
                 <li class="icons">
                     <a href="{{ path('fos_user_security_logout')}}">
