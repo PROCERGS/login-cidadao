@@ -172,7 +172,7 @@ footer nav li a {
 
 .settings-nav li a:hover, .settings-nav li.active a:hover {
     background-color: #c7d6cb;
-    color: #696969;
+    color: #696969 !important;
 }
 
 .settings-nav li a span {
@@ -212,7 +212,7 @@ footer nav li a {
 }
 
 .settings-nav .services.active .bg {
-    background-position: -40px -72px;
+    background-position: 32px -72px;
 }
 
 .settings-nav .notifications .bg {
@@ -221,6 +221,21 @@ footer nav li a {
     width: 32px;
 }
 
+.settings-nav .notifications>a {
+    padding-right: 8px;
+}
+.settings-nav .notifications>a span {
+    width: 100%;
+    vertical-align: middle;
+    line-height: 30px;
+}
+.settings-nav .notifications .glyphicon.glyphicon-bell {
+    color: #696969;
+    font-size: 30px;
+}
+.settings-nav .notifications.active .glyphicon.glyphicon-bell {
+    color: #fff;
+}
 .settings-nav .notifications.active .bg {
     background-position: -39px -142px;
 }
@@ -232,7 +247,7 @@ footer nav li a {
     width: 28px;
 }
 
-.settings-nav .username.active .bg, .settings-nav .username a:hover .bg {
+.settings-nav .username.active .bg {
     background-position: -42px -207px;
 }
 
@@ -243,7 +258,7 @@ footer nav li a {
     width: 22px;
 }
 
-.settings-nav .password.active .bg, .settings-nav .password a:hover .bg {
+.settings-nav .password.active .bg {
     background-position: -45px -280px;
 }
 
@@ -254,7 +269,7 @@ footer nav li a {
     width: 30px;
 }
 
-.settings-nav .settings.active .bg, .settings-nav .settings a:hover .bg {
+.settings-nav .settings.active .bg {
     background-position: -42px -350px;
 }
 
