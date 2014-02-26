@@ -16,9 +16,11 @@
 .navbar .navbar-nav>li>a>.glyphicon {
     font-size: 20px;
 }
-.navbar .icon {
-    display: inline-block;
-    background-image: url('../images/navbar_icons.png');
+
+.navbar .navbar-nav>li>a>.glyphicon>.badge {
+    margin: 0 0 0 -26px;
+    font-size: 10px;
+    padding: 2px 5px;
 }
 
 .navbar .icons .icon-label {
@@ -36,51 +38,9 @@
     }
 }
 
-.navbar .icon.apps {
-    background-position: -3px 0;
-    height: 25px;
-    width: 25px;
-}
-
-.navbar a:hover .icon.apps {
-    background-position: -43px 0;
-}
-
-.navbar a:active .icon.apps {
-    background-position: -83px 0;
-}
-
-.navbar .icon.notifications {
-    background-position: 0 -61px;
-    height: 25px;
-    width: 33px;
-}
-
-.navbar a:hover .icon.notifications {
-    background-position: -40px -61px;
-}
-
-.navbar a:active .icon.notifications {
-    background-position: -80px -61px;
-}
-
 .navbar-inverse .navbar-nav>li>a.user {
     background-image: none;
     color: #FFF;
-}
-
-.navbar .icon.logout {
-    background-position: -3px -30px;
-    height: 25px;
-    width: 25px;
-}
-
-.navbar a:hover .icon.logout {
-    background-position: -43px -30px;
-}
-
-.navbar a:active .icon.logout {
-    background-position: -83px -30px;
 }
 
 /* User Card */

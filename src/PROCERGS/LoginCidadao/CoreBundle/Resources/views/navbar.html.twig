@@ -38,6 +38,9 @@
                 <li class="dropdown icons">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="glyphicon glyphicon-bell">
+                            {% if notifications is defined and notifications is not empty %}
+                            <span class="badge">42</span>
+                            {% endif %}
                             <span class="icon-label">{% trans %}Notifications{% endtrans %}</span>
                         </i>
                     </a>
