@@ -70,6 +70,10 @@ img.desaturate {
     -webkit-filter: grayscale(1); /* Old WebKit */
 }
 
+.navbar-collapse {
+    max-height: none;
+}
+
 /* override boostrap btn*/
  .btn-success {
      background-color: #039935;
@@ -255,7 +259,8 @@ footer nav li a {
 }
 
 .settings-content {
-    padding: 10px;
+    /*padding: 10px;*/
+    padding: 0;
 }
 
 .settings-content h3 {
@@ -266,10 +271,18 @@ footer nav li a {
     margin: 10px 35px;
 }
 
+.settings-content .inner-content {
+    padding: 10px;
+}
+
 
 /* profile page */
 #profile-edit form {
-    margin: 20px 60px;
+    /*margin: 20px 60px;*/
+}
+
+#profile-edit form .inner-content {
+    padding: 20px 60px;
 }
 
 #profile-edit .form-control {
@@ -280,13 +293,29 @@ footer nav li a {
     margin-right: 3px;
 }
 
+#profile-edit .form-bar {
+    background-color: #d9d9d9;
+    height: 40px;
+}
+
 
 /* services/applications page */
+#applications .app-toggle {
+    margin-right: 50px;
+}
+
 #applications .app-toggle .btn {
     background: none;
     border: none;
+    box-shadow: none;
     float: right;
-    margin: 0 5px;
+    font-size: 1.8em;
+    padding: 8px;
+    text-shadow: none;
+}
+
+#applications .app-toggle .active {
+    opacity: 0.2
 }
 
 #applications ul {
@@ -294,6 +323,7 @@ footer nav li a {
 }
 
 #applications .list-group {
+    box-shadow: none;
     transition: all 0.8s ease;
     -webkit-transition: all 0.8s ease;
     -o-transition: all 0.8s ease;
@@ -315,7 +345,7 @@ footer nav li a {
     width: 140px;
 }
 
-#applications li .img-rounded {
+#applications li img {
     margin-top: 14px;
 }
 
@@ -346,7 +376,7 @@ footer nav li a {
     width: 100%;
 }
 
-#applications .list li .img-rounded {
+#applications .list li img {
     float: left;
     height: 45px;
     margin-top: -5px;
