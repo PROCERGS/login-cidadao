@@ -25,7 +25,7 @@
                 {# Apps list #}
                 <li class="dropdown icons">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="icon apps">
+                        <i class="glyphicon glyphicon-th">
                             <span class="icon-label">{% trans %}Applications{% endtrans %}</span>
                         </i>
                     </a>
@@ -37,7 +37,7 @@
                 {# Notifications #}
                 <li class="dropdown icons">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="icon notifications">
+                        <i class="glyphicon glyphicon-bell">
                             <span class="icon-label">{% trans %}Notifications{% endtrans %}</span>
                         </i>
                     </a>
@@ -51,7 +51,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle profile-card" data-toggle="dropdown">
                         {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
-                        <img src="{{ asset_url }}" alt="" class="profile-picture" width="34" height="34">
+                        <img src="{{ asset_url }}" alt="" class="profile-picture">
                         {% endimage %}
                         <span class="profile-username">{{ app.user.username }}</span>
                         <b class="caret"></b>
@@ -66,7 +66,7 @@
                 </li>
                 <li class="icons">
                     <a href="{{ path('fos_user_security_logout')}}">
-                        <i class="icon logout">
+                        <i class="glyphicon glyphicon-log-out">
                             <span class="icon-label">{% trans from "FOSUserBundle" %}layout.logout{% endtrans %}</span>
                         </i>
                     </a>

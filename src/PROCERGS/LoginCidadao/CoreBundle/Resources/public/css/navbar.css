@@ -4,7 +4,8 @@
 
 .navbar .container .navbar-brand {
     margin-left: 0;
-    padding: 2px 0;
+    margin-right: 5px;
+    padding: 8px 0;
 }
 
 .navbar-nav>li.icons>a {
@@ -12,26 +13,26 @@
     padding-bottom: 8px;
 }
 
+.navbar .navbar-nav>li>a>.glyphicon {
+    font-size: 20px;
+}
 .navbar .icon {
     display: inline-block;
     background-image: url('../images/navbar_icons.png');
 }
 
-.navbar .icons .icon .icon-label {
-    display: inline-block;
-    padding-left: 35px;
-    height: 25px;
-    vertical-align: middle;
-    line-height: 25px;
-    white-space: nowrap;
+.navbar .icons .icon-label {
+    font-size: 14px;
+    display: inline-table;
+    margin-top: -3px;
 }
 
 @media (min-width: 768px) {
-    .navbar .icons .icon .icon-label {
+    .navbar .icons .glyphicon .icon-label {
         display: none;
     }
     .navbar .profile-card .profile-username {
-        font-size: 23px;
+        font-size: 16px;
     }
 }
 
@@ -85,11 +86,12 @@
 /* User Card */
 .navbar .navbar-nav>li>a.profile-card {
     color: #fff;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .navbar .profile-card .profile-picture {
     border-radius: 50%;
-    margin-right: 5px
+    margin-right: 5px;
+    height: 30px;
 }
