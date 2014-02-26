@@ -13,55 +13,30 @@
     padding-bottom: 8px;
 }
 
-.navbar .icon {
-    display: inline-block;
-    background-image: url('../images/navbar_icons.png');
+.navbar .navbar-nav>li>a>.glyphicon {
+    font-size: 20px;
 }
 
-.navbar .icons .icon .icon-label {
-    display: inline-block;
-    padding-left: 35px;
-    height: 25px;
-    vertical-align: middle;
-    line-height: 25px;
-    white-space: nowrap;
+.navbar .navbar-nav>li>a>.glyphicon>.label {
+    margin: 3px 0 0 -26px;
+    font-size: 9px;
+    padding: 2px 3px;
+    display: inline-table;
+}
+
+.navbar .icons .icon-label {
+    font-size: 14px;
+    display: inline-table;
+    margin-top: -3px;
 }
 
 @media (min-width: 768px) {
-    .navbar .icons .icon .icon-label {
+    .navbar .icons .glyphicon .icon-label {
         display: none;
     }
     .navbar .profile-card .profile-username {
-        font-size: 23px;
+        font-size: 16px;
     }
-}
-
-.navbar .icon.apps {
-    background-position: -3px 0;
-    height: 25px;
-    width: 25px;
-}
-
-.navbar a:hover .icon.apps {
-    background-position: -43px 0;
-}
-
-.navbar a:active .icon.apps {
-    background-position: -83px 0;
-}
-
-.navbar .icon.notifications {
-    background-position: 0 -61px;
-    height: 25px;
-    width: 33px;
-}
-
-.navbar a:hover .icon.notifications {
-    background-position: -40px -61px;
-}
-
-.navbar a:active .icon.notifications {
-    background-position: -80px -61px;
 }
 
 .navbar-inverse .navbar-nav>li>a.user {
@@ -69,28 +44,15 @@
     color: #FFF;
 }
 
-.navbar .icon.logout {
-    background-position: -3px -30px;
-    height: 25px;
-    width: 25px;
-}
-
-.navbar a:hover .icon.logout {
-    background-position: -43px -30px;
-}
-
-.navbar a:active .icon.logout {
-    background-position: -83px -30px;
-}
-
 /* User Card */
 .navbar .navbar-nav>li>a.profile-card {
     color: #fff;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .navbar .profile-card .profile-picture {
     border-radius: 50%;
-    margin-right: 5px
+    margin-right: 5px;
+    height: 30px;
 }
