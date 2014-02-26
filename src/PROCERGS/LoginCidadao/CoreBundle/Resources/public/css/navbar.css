@@ -17,10 +17,11 @@
     font-size: 20px;
 }
 
-.navbar .navbar-nav>li>a>.glyphicon>.badge {
-    margin: 0 0 0 -26px;
-    font-size: 10px;
-    padding: 2px 5px;
+.navbar .navbar-nav>li>a>.glyphicon>.label {
+    margin: 3px 0 0 -26px;
+    font-size: 9px;
+    padding: 2px 3px;
+    display: inline-table;
 }
 
 .navbar .icons .icon-label {
