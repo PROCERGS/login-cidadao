@@ -18,72 +18,71 @@
     {{ form_start(form, {'action': path('fos_user_profile_edit'), 'attr': {'role':'form', 'class':'form-inline'}}) }}
     {{ form_errors(form) }}
 
+    <div class="inner-content">
+        <div class="row clearfix">
+            <div class="col-md-7">
+                <div class="form-group">
+                    {{ form_label(form.email) }}
+                    <div class="input-error">{{ form_errors(form.email) }}</div>
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.username) }}
+                    <div class="input-error">{{ form_errors(form.username) }}</div>
+                    {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.current_password) }}
+                    <div class="input-error">{{ form_errors(form.current_password) }}</div>
+                    {{ form_widget(form.current_password, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.firstName) }}
+                    <div class="input-error">{{ form_errors(form.firstName) }}</div>
+                    {{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.surname) }}
+                    <div class="input-error">{{ form_errors(form.surname) }}</div>
+                    {{ form_widget(form.surname, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group birthdate">
+                    {{ form_label(form.birthdate) }}
+                    <div class="input-error">{{ form_errors(form.birthdate) }}</div>
+                    {{ form_widget(form.birthdate) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.cep) }}
+                    <div class="input-error">{{ form_errors(form.cep) }}</div>
+                    {{ form_widget(form.cep, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.cpf) }}
+                    <div class="input-error">{{ form_errors(form.cpf) }}</div>
+                    {{ form_widget(form.cpf, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.city) }}
+                    <div class="input-error">{{ form_errors(form.city) }}</div>
+                    {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
 
-    <div class="row clearfix">
-        <div class="col-md-7">
-            <div class="form-group">
-                {{ form_label(form.email) }}
-                <div class="input-error">{{ form_errors(form.email) }}</div>
-                {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
-            </div>
-            <div class="form-group">
-                {{ form_label(form.username) }}
-                <div class="input-error">{{ form_errors(form.username) }}</div>
-                {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
-            </div>
-            <div class="form-group">
-                {{ form_label(form.current_password) }}
-                <div class="input-error">{{ form_errors(form.current_password) }}</div>
-                {{ form_widget(form.current_password, {'attr': {'class': 'form-control'}}) }}
-            </div>
-            <div class="form-group">
-                {{ form_label(form.firstName) }}
-                <div class="input-error">{{ form_errors(form.firstName) }}</div>
-                {{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}
-            </div>
-            <div class="form-group">
-                {{ form_label(form.surname) }}
-                <div class="input-error">{{ form_errors(form.surname) }}</div>
-                {{ form_widget(form.surname, {'attr': {'class': 'form-control'}}) }}
-            </div>
-            <div class="form-group birthdate">
-                {{ form_label(form.birthdate) }}
-                <div class="input-error">{{ form_errors(form.birthdate) }}</div>
-                {{ form_widget(form.birthdate) }}
-            </div>
-            <div class="form-group">
-                {{ form_label(form.cep) }}
-                <div class="input-error">{{ form_errors(form.cep) }}</div>
-                {{ form_widget(form.cep, {'attr': {'class': 'form-control'}}) }}
-            </div>
-            <div class="form-group">
-                {{ form_label(form.cpf) }}
-                <div class="input-error">{{ form_errors(form.cpf) }}</div>
-                {{ form_widget(form.cpf, {'attr': {'class': 'form-control'}}) }}
-            </div>
-            <div class="form-group">
-                {{ form_label(form.city) }}
-                <div class="input-error">{{ form_errors(form.city) }}</div>
-                {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
-            </div>
-        </div>
+            <div class="col-md-5">
+                <img src="http://placehold.it/245x245">
+                <input type="file">
 
-        <div class="col-md-5">
-            <img src="http://placehold.it/245x245">
-            <input type="file">
+                <a class="connect facebook">pessoa da silva</a>
+                <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="connect twitter disabled">@pessilva</a>
+            </div>
         </div>
     </div>
 
-    <input class='btn btn-success btn-sm pull-right' type="submit" value="{{ 'profile.edit.submit'|trans }}" />
+    <div class="form-bar">
+        <input class='btn btn-success btn-sm pull-right' type="submit" value="{{ 'profile.edit.submit'|trans }}" />
+    </div>
     {{ form_end(form) }}
 
 </div>
 
-{% endblock %}
-
-{% block stylesheets %}
-{{ parent() }}
-{% stylesheets 'bundles/procergslogincidadaocore/css/register/*.css' filter='cssrewrite' %}
-<link rel="stylesheet" href="{{ asset_url }}" />
-{% endstylesheets %}
 {% endblock %}

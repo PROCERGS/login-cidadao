@@ -1,7 +1,7 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
 {% block content %}
-<div id="applications">
+<div id="applications" class="inner-content">
 
     <h3>Serviços</h3>
     <div class="app-toggle clearfix">
@@ -17,12 +17,12 @@
         <h4>Serviços ativos</h4>
         <ul class="icon clearfix">
             <li>
-                <img src="http://placehold.it/65x65" alt="" class="img-rounded center-block">
+                <img src="http://placehold.it/65x65" alt="" class="center-block">
                 <h5 class="center-block text-center">Central do Cidadão</h5>
                 <a class="btn activated" role="button">{% trans %}Activated{%  endtrans %}</a>
             </li>
             <li>
-                <img src="http://placehold.it/65x65" alt="" class="img-rounded center-block">
+                <img src="http://placehold.it/65x65" alt="" class="center-block">
                 <h5 class="center-block text-center">teste</h5>
                 <a class="btn activated" role="button">{% trans %}Activated{%  endtrans %}</a>
             </li>
@@ -31,12 +31,12 @@
         <h4>Demais serviços</h4>
         <ul class="icon clearfix">
             <li>
-                <img src="http://placehold.it/65x65" alt="" class="img-rounded center-block">
+                <img src="http://placehold.it/65x65" alt="" class="center-block">
                 <h5 class="center-block text-center">teste</h5>
                 <a class="btn deactivated" role="button">{% trans %}Deactivated{%  endtrans %}</a>
             </li>
             <li>
-                <img src="http://placehold.it/65x65" alt="" class="img-rounded center-block">
+                <img src="http://placehold.it/65x65" alt="" class="center-block">
                 <h5 class="center-block text-center">teste</h5>
                 <a class="btn deactivated" role="button">{% trans %}Deactivated{%  endtrans %}</a>
             </li>
@@ -46,7 +46,7 @@
     <ul>
     {% for auth in user.getAuthorizations %}
         <li>
-            <img src="http://placehold.it/120x120" alt="" class="img-rounded center-block">
+            <img src="http://placehold.it/120x120" alt="" class="center-block">
             <h4 class="center-block text-center">{{ auth.client.name }}</h4>
 
             {#
@@ -68,7 +68,7 @@
     <ul>
     {% for client in apps %}
         <li>
-            <img src="http://placehold.it/120x120" alt="" class="img-rounded center-block">
+            <img src="http://placehold.it/120x120" alt="" class="center-block">
             <h4 class="center-block text-center">
                 <a href="{{ client.siteUrl }}">{{ client.name }}</a>
             </h4>
