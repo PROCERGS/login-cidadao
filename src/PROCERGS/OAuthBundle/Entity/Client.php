@@ -5,6 +5,7 @@ namespace PROCERGS\OAuthBundle\Entity;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
 use FOS\OAuthServerBundle\Entity\Client as BaseClient;
 use Doctrine\ORM\Mapping as ORM;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
 
 /**
  * @ORM\Entity
@@ -38,6 +39,11 @@ class Client extends BaseClient
      * @ORM\Column(type="string")
      */
     protected $siteUrl;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification", mappedBy="client")
+     */
+    protected $notifications;
 
     public function __construct()
     {

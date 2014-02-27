@@ -1,5 +1,6 @@
 parameters:
     security.authentication.success_handler.class: PROCERGS\LoginCidadao\CoreBundle\Handler\AuthenticationSuccessHandler
+    notifications.helper.class: PROCERGS\LoginCidadao\CoreBundle\Helper\NotificationsHelper
     fos_facebook.user.login.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\FacebookProvider
     procergs.hwi_twitter.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\FOSUBUserProvider
     procergs_person.registration.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\RegistrationFormType
@@ -18,6 +19,10 @@ services:
         arguments: ["@router", [], "@doctrine.orm.entity_manager", "@session", "@security.http_utils"]
         calls:
             - [setContainer, ["@service_container"]]
+
+    notifications.helper:
+        class: %notifications.helper.class%
+        arguments: ["@doctrine.orm.entity_manager", "@security.context"]
 
     fos_facebook.user.login:
         class: %fos_facebook.user.login.class%

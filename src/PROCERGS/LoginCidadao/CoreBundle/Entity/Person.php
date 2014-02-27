@@ -169,6 +169,11 @@ class Person extends BaseUser
      */
     protected $cpfNfg;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Notification", mappedBy="person")
+     */
+    protected $notifications;
+
     public function __construct()
     {
         parent::__construct();
