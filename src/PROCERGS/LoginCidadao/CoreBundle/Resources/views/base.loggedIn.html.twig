@@ -29,8 +29,8 @@
                         </span>
                     </a>
                 </li>
-                <li class="username">
-                    <a href="">
+                <li class="username {% if app.request.attributes.get('_route') == 'lc_update_username' %}active{% endif %}">
+                    <a href="{{ path('lc_update_username')}}">
                         <span>{% trans %}Change Username{% endtrans %}</span>
                         <i class="bg"></i>
                     </a>

@@ -140,7 +140,7 @@ class PersonController extends Controller
     }
 
     /**
-     * @Route("/person/username/update", name="lc_update_username")
+     * @Route("/profile/change-username", name="lc_update_username")
      * @Template()
      */
     public function updateUsernameAction()
@@ -149,21 +149,14 @@ class PersonController extends Controller
         $userManager = $this->container->get('fos_user.user_manager');
 
         $formBuilder = $this->createFormBuilder($user)
-                ->add('username', 'text', array(
-                    'constraints' => array(
-                        new NotBlank(),
-                        new Length(array('min' => 3)),
-                    ),
-                ))
-                ->add('save', 'submit');
+            ->add('username', 'text', array(
+                'constraints' => array(
+                    new NotBlank(),
+                    new Length(array('min' => 3)),
+                ),
+            ))
+            ->add('save', 'submit');
 
-        $emailMissing = strstr($user->getEmail(), ' ') !== false;
-        if ($emailMissing) {
-            $formBuilder->add('email', 'email', array(
-                'required' => true,
-                'constraints' => new Email(),
-            ));
-        }
         $emptyPassword = strlen($user->getPassword()) == 0;
         if ($emptyPassword) {
             $formBuilder->add('plainPassword', 'repeated', array(
@@ -184,15 +177,15 @@ class PersonController extends Controller
             $data = $form->getData();
             $user->setUsername($data->getUsername());
 
-            if ($emailMissing) {
-                $user->setEmail($data->getEmail());
-            }
-
             $userManager->updateUser($user);
-            return $this->redirect($this->generateUrl('fos_user_profile_edit'));
+            
+            $translator = $this->get('translator');
+            $this->get('session')->getFlashBag()->add('notice',$translator->trans('Updated username successfully!'));
+            
+            return $this->redirect($this->generateUrl('lc_update_username'));
         }
 
-        return array('form' => $form->createView(), 'emailMissing' => $emailMissing, 'emptyPassword' => $emptyPassword);
+        return array('form' => $form->createView(), 'emptyPassword' => $emptyPassword);
     }
     
     /**

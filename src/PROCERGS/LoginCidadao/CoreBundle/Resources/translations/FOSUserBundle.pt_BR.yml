@@ -37,4 +37,4 @@ resetting.reset.submit: 'Alterar senha'
 resetting.password_already_requested: 'Este usuário já solicitou uma senha nas últimas 24 horas.'
 (optional): (opctional)
 change_password.submit: 'Alterar senha'
-change_password.flash.success: 'A senha foi alterada.'
+change_password.flash.success: 'Senha alterada com sucesso!.'
