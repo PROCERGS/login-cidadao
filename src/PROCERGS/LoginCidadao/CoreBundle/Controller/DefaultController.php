@@ -47,6 +47,15 @@ class DefaultController extends Controller
         }
     }
 
+    /**
+     * @Route("/lc_home_gateway", name="lc_home_gateway")
+     * @Template()
+     */
+    public function gatewayAction(Request $request)
+    {
+        return array('home1' => $this->generateUrl('lc_home', array(), true));
+    }
+
         /**
      * @Route("/apps", name="lc_apps")
      * @Template()

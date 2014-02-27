@@ -15,6 +15,7 @@ use PROCERGS\Generic\ValidationBundle\Validator\Constraints as PROCERGSAssert;
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
  * @UniqueEntity("cpf")
+ * @UniqueEntity("username")
  * @ORM\HasLifecycleCallbacks
  * @ExclusionPolicy("all")
  */

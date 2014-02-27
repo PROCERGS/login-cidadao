@@ -50,7 +50,7 @@ Save: Salvar
 'Email:': 'Email:'
 'The email is already used': 'Este email já está sendo usado'
 'The username is already used': 'Este nome de usuário já está sendo usado'
-Username: Username
+Username: Nome de usuário
 Email: Email
 Birthdate: 'Data de Nascimento'
 CPF: CPF
@@ -85,7 +85,12 @@ Deactivate: __Deactivate
 Applications: __Applications
 'Your account is created, but you must have a CPF.': '__Your account is created, but you must have a CPF.'
 'Your CPF will give some realibility to your account.': '__Your CPF will give some realibility to your account.'
-'CPF:': '__CPF:'
+'CPF:': 'CPF:'
 'If you want to reinforce you CPF you can check with NFg': '__If you want to reinforce you CPF you can check with NFg'
 'You need to put you password of your account of NFg .': '__You need to put you password of your account of NFg .'
 'Type in your NFg password here:': '__Type in your NFg password here:'
+'Change Username': 'Alterar nome de usuário'
+'You don''t have any unread notification.': '__You don''t have any unread notification.'
+'You don''t have any notifications yet.': '__You don''t have any notifications yet.'
+'Change username': 'Alterar nome de usuário'
+'Updated username successfully!': 'Nome de usuário alterado com sucesso!'
