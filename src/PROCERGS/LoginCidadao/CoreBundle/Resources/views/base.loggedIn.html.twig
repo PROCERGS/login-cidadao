@@ -73,40 +73,6 @@
 
 {% endblock body %}
 
-{% block footer %}
-    <footer class="container">
-        <div class="row">
-            <div class="col-sm-4">
-                <h3>Informações Úteis</h3>
-                <ul>
-                    <li><a href="">Licença de Conteúdo</a></li>
-                    <li><a href="">Termos de Uso</a></li>
-                    <li><a href="">Política de Privacidade</a></li>
-                    <li><a href="">Repositório Github</a></li>
-                    <li><a href="">Humans.txt</a></li>
-                </ul>
-            </div>
-
-            <div class="col-sm-4">
-                <h3>Precisa de Ajuda?</h3>
-                <ul>
-                    <li><a href="">Contato</a></li>
-                    <li><a href="">Suporte e Informações</a></li>
-                </ul>
-
-                <h3>Fique por Dentro</h3>
-            </div>
-
-            <div class="col-sm-4">
-                <h3>Sobre o Governo</h3>
-            </div>
-        </div>
-        <div class="row copyright">
-            <span>Copyright</span>
-        </div>
-    </footer>
-{% endblock %}
-
 {% block stylesheets %}
     {% stylesheets 'bundles/procergslogincidadaocore/css/*.css' filter='cssrewrite' %}
     <link rel="stylesheet" href="{{ asset_url }}" />

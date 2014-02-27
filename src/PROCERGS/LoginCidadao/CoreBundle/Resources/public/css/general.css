@@ -99,7 +99,6 @@ footer {
     clear: both;
 }
 
-
 footer .row {
     background-color: #3b3a33;
 }
@@ -119,6 +118,53 @@ footer li {
 
 footer li a {
     color: #FFF;
+}
+
+footer .social {
+    margin-left: 40px;
+    padding: 0;
+    text-align: left;
+    width: 200px;
+}
+
+footer .social li {
+    display: inline-block;
+    margin: 0 3px;
+}
+
+footer .social a {
+    background-image: url(../images/social_icons.png);
+    display: block;
+    height: 30px;
+    width: 35px;
+}
+
+footer .social .flickr a {
+    background-position: 0 0;
+}
+
+footer .social .twitter a {
+    background-position: -44px 0;
+}
+
+footer .social .facebook a {
+    background-position: -85px 0;
+}
+
+footer .social .instagram a {
+    background-position: -112px 0;
+    left: -10px;
+    position: relative;
+}
+
+footer .social .youtube a {
+    background-position: -2px -40px;
+}
+
+footer .social .google a {
+    background-position: -87px -38px;
+    left: 5px;
+    position: relative;
 }
 
 footer .copyright {

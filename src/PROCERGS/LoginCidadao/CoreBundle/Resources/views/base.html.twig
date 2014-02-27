@@ -40,14 +40,25 @@
                 </ul>
 
                 <h3>Fique por Dentro</h3>
+                <ul class="social">
+                    <li class="flickr"><a href=""></a></li>
+                    <li class="twitter"><a href=""></a></li>
+                    <li class="facebook"><a href=""></a></li>
+                    <li class="instagram"><a href=""></a></li>
+                    <li class="youtube"><a href=""></a></li>
+                    <li class="google"><a href=""></a></li>
+                </ul>
             </div>
 
             <div class="col-sm-4">
                 <h3>Sobre o Governo</h3>
+                {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_gov2.png' %}
+                <img src="{{ asset_url }}" alt="{% trans %}Available services{% endtrans %}">
+                {% endimage %}
             </div>
         </div>
         <div class="row copyright">
-            <span>Copyright</span>
+            <span>Copyright @2014 Procergs</span>
         </div>
     </footer>
 {% endblock %}
