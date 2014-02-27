@@ -105,6 +105,9 @@ fos_user:
             type:               procergs_person_resetting
     service:
         user_manager: procergs_logincidadao.user_manager
+    change_password:
+        form:
+            type:               procergs_change_password
 
 # Audit Trail
 simple_things_entity_audit:

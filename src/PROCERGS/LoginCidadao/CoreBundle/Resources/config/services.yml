@@ -5,6 +5,7 @@ parameters:
     procergs_person.registration.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\RegistrationFormType
     procergs_person.profile.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ProfileFormType
     procergs_person.resetting.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ResettingFormType
+    procergs_logincidadao.change.password.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ChangePasswordFormType
     procergs_logincidadao.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
     procergs_logincidadao.user_manager.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Manager\UserManager
     procergs_logincidadao.user_register: PROCERGS\LoginCidadao\CoreBundle\EventListener\RegisterListner
@@ -93,4 +94,10 @@ services:
         tags:
             - { name: form.type, alias: cpf_form_type }
         calls:
-            - [setContainer, ["@service_container"]]                
+            - [setContainer, ["@service_container"]]             
+
+    procergs_logincidadao.change.password.form.type:
+        class: %procergs_logincidadao.change.password.form.type.class%
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: procergs_change_password }
