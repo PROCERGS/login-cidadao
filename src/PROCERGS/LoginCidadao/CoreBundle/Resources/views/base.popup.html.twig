@@ -1,0 +1,19 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    {% block content %}{% endblock content %}
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+
+{% stylesheets 'bundles/procergslogincidadaocore/css/bootstrap.css' filter='cssrewrite' %}
+<link rel="stylesheet" href="{{ asset_url }}" />
+{% endstylesheets %}
+{% stylesheets 'bundles/procergslogincidadaocore/css/general.css' filter='cssrewrite' %}
+<link rel="stylesheet" href="{{ asset_url }}" />
+{% endstylesheets %}
+{% stylesheets 'bundles/procergslogincidadaocore/css/popup/popup.css' filter='cssrewrite' %}
+<link rel="stylesheet" href="{{ asset_url }}" />
+{% endstylesheets %}
+{% endblock %}

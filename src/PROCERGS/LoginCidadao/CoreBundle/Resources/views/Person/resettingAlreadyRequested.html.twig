@@ -1,7 +1,17 @@
-{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+{% extends "PROCERGSLoginCidadaoCoreBundle::base.popup.html.twig" %}
 
-{% block body %}
-    {% trans_default_domain 'FOSUserBundle' %}
+{% block content %}
+    <div id="forgot-password-box">
+        <h3 class="title">Login Cidadão</h3>
 
-    <p>{{ 'resetting.password_already_requested'|trans }}</p>
+        {% trans_default_domain 'FOSUserBundle' %}
+
+        <div class="container">
+            <h3>Recuperar Senha</h3>
+            
+            <p>{{ 'resetting.password_already_requested'|trans }}</p>
+            
+            <a href="{{ path('fos_user_security_login') }}" class="btn btn-success btn-return">Voltar</a>
+        </div>
+    </div>
 {% endblock %}

@@ -12,7 +12,8 @@ parameters:
     procergs_logincidadao.user_register: PROCERGS\LoginCidadao\CoreBundle\EventListener\RegisterListner
     procergs_logincidadao.profile_edit: PROCERGS\LoginCidadao\CoreBundle\EventListener\ProfileEditListner
     procergs_logincidadao.change.password.listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\ChangePasswordListener
-
+    procergs_logincidadao.resetting.listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\ResettingListener
+    
 services:
     security.authentication.success_handler:
         class: %security.authentication.success_handler.class%
@@ -113,3 +114,9 @@ services:
         arguments: ["@router"]
         tags:
             - { name: kernel.event_subscriber }
+
+    procergs_logincidadao.resetting_listener:
+        class: %procergs_logincidadao.resetting.listener.class%
+        arguments: ["@router", %fos_user.resetting.token_ttl%]
+        tags:
+            - { name: kernel.event_subscriber }              
