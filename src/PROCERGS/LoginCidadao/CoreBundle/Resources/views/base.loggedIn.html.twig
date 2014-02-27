@@ -5,23 +5,26 @@
 {% endblock %}
 
 {% block body %}
+    <div class="row">
     {% block sidebar %}
         <div class="col-md-3 col-sm-3">
             <ul class="settings-nav nav nav-pills nav-stacked">
-                <li class="profile {% if app.request.attributes.get('_route') == 'fos_user_profile_edit' %}active{% endif %}">
+                <li class="profile glyph {% if app.request.attributes.get('_route') == 'fos_user_profile_edit' %}active{% endif %}">
                     <a href="{{ path('fos_user_profile_edit') }}">
-                        <span>{% trans %}Profile{% endtrans %}</span>
-                        <i class="bg"></i>
+                        <span>
+                            {% trans %}Profile{% endtrans %}
+                            <i class="glyphicon glyphicon-user pull-right"></i>
+                        </span>
                     </a>
                 </li>
-                <li class="services {% if app.request.attributes.get('_route') == 'lc_apps' %}active{% endif %}">
+                <li class="services glyph {% if app.request.attributes.get('_route') == 'lc_apps' %}active{% endif %}">
                     <a href="{{ path('lc_apps') }}">
                         <span>
                             {% trans %}Services{% endtrans %}
                             <i class="glyphicon glyphicon-th pull-right"></i>
                         </span></a>
                 </li>
-                <li class="notifications {% if app.request.attributes.get('_route') == 'lc_notifications_list' %}active{% endif %}">
+                <li class="notifications glyph {% if app.request.attributes.get('_route') == 'lc_notifications_list' %}active{% endif %}">
                     <a href="{{ path('lc_notifications_list') }}">
                         <span>
                             {% trans %}Notifications{% endtrans %}
@@ -41,10 +44,12 @@
                         <i class="bg"></i>
                     </a>
                 </li>
-                <li class="settings">
+                <li class="settings glyph">
                     <a href="">
-                        <span>{% trans %}Settings{% endtrans %}</span>
-                        <i class="bg"></i>
+                        <span>
+                            {% trans %}Settings{% endtrans %}
+                            <i class="glyphicon glyphicon-cog pull-right"></i>
+                        </span>
                     </a>
                 </li>
             </ul>
@@ -64,18 +69,40 @@
     {% block content %}{% endblock content %}
     </div>
 
+    </div>
+
 {% endblock body %}
 
 {% block footer %}
-    <footer class='font-a'>
-        <div>
-            <nav>
+    <footer class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <h3>Informações Úteis</h3>
                 <ul>
-                    <li>{%trans%}Government of Rio Grande do Sul{%endtrans%}</li>
-                    <li><a href="#">{%trans%}Privacy and Terms of Service{%endtrans%}</a></li>
-                    <li><a href="#">{{ 'Help' | trans }}</a></li>
+                    <li><a href="">Licença de Conteúdo</a></li>
+                    <li><a href="">Termos de Uso</a></li>
+                    <li><a href="">Política de Privacidade</a></li>
+                    <li><a href="">Repositório Github</a></li>
+                    <li><a href="">Humans.txt</a></li>
                 </ul>
-            </nav>
+            </div>
+
+            <div class="col-sm-4">
+                <h3>Precisa de Ajuda?</h3>
+                <ul>
+                    <li><a href="">Contato</a></li>
+                    <li><a href="">Suporte e Informações</a></li>
+                </ul>
+
+                <h3>Fique por Dentro</h3>
+            </div>
+
+            <div class="col-sm-4">
+                <h3>Sobre o Governo</h3>
+            </div>
+        </div>
+        <div class="row copyright">
+            <span>Copyright</span>
         </div>
     </footer>
 {% endblock %}

@@ -45,22 +45,11 @@
     top: 50%;
 }
 
-.settings-nav .profile .bg {
-    background-position: -3px 0;
-    height: 30px;
-    width: 30px;
-}
-
-.settings-nav .profile.active .bg {
-    background-position: -42px 0;
-}
-
-.settings-nav .notifications>a,
-.settings-nav .services>a{
+.settings-nav .glyph>a {
     padding-right: 8px;
 }
-.settings-nav .notifications>a span,
-.settings-nav .services>a span{
+
+.settings-nav .glyph>a span {
     width: 100%;
     vertical-align: middle;
     line-height: 30px;
@@ -94,17 +83,6 @@
 
 .settings-nav .password.active .bg {
     background-position: -45px -280px;
-}
-
-.settings-nav .settings .bg {
-    background-position: -2px -350px;
-    height: 30px;
-    right: 11px;
-    width: 30px;
-}
-
-.settings-nav .settings.active .bg {
-    background-position: -42px -350px;
 }
 
 .progress-box {
