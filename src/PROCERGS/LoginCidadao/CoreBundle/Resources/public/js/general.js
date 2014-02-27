@@ -17,7 +17,10 @@ $(function() {
 
     // add bootstrap classes to forms
     $('.form-group input, .form-group select').not('.form-control').addClass('form-control');
-    $('.form-group .input-error').not(':empty').parent('.form-group').addClass('has-error');
+    $('.form-group .input-error').not(':empty').parent('.form-group').addClass('has-error has-feedback');
+    $('form .has-error .form-control').on('focusin', function() {
+        $(this).parent('.form-group').removeClass('has-error has-feedback');
+    });
 
     // maks inputs
     $('#fos_user_registration_form_cep').mask('00000-000');

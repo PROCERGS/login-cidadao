@@ -39,19 +39,20 @@
 
         {{ form_start(form, {'action': path('fos_user_registration_register'), 'attr': {'role':'form', 'class':'fos_user_registration_register clearfix'}}) }}
             {{ form_errors(form) }}
-            <div class="form-group phw">
+            <div class="form-group">
                 {{ form_label(form.email, 'form.email' | trans, {'label_attr': {'class': 'sr-only'}}) }}
                 {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder' : 'form.email' }}) }}
+                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                 <div class="input-error alert-danger">{{ form_errors(form.email) }}</div>
             </div>
 
-            <div class="form-group phw">
+            <div class="form-group">
                 {{ form_label(form.plainPassword, 'form.plainPassword' | trans, {'label_attr': {'class': 'sr-only'}}) }}
                 {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'placeholder' : 'form.plainPassword' }}) }}
             </div>
             <div class="input-error">{{ form_errors(form.plainPassword) }}</div>
 
-            <div class="form-group phw">
+            <div class="form-group">
                 {{ form_label(form.mobile, 'form.phone' | trans, {'label_attr': {'class': 'sr-only'}}) }}
                 {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'placeholder' : ('form.phone' | trans) ~ (' (optional)' | trans)}}) }}
             </div>

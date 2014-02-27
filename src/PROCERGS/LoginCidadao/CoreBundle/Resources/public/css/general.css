@@ -126,7 +126,6 @@ footer nav li a {
 
 .form-control {
     background-color: #999999;
-    border: none;
     border-radius: 0;
     color: #FFF;
 }
@@ -148,320 +147,27 @@ footer nav li a {
   color: #FFF;
 }
 
-
-/* settings nav and content */
-.settings-nav, .settings-content {
-    background-color: #dddedc;
-    min-height: 300px;
+form .has-error input {
+    /*background-color: #cc3300;*/
 }
 
-.settings-nav li {
-    margin: 12px 0;
-}
-
-.settings-nav li a {
-    border-radius: 0;
-    height: auto;
-    padding: 20px 15px;
-    position: relative;
-}
-
-.settings-nav li.active a {
-    background-color: #009933;
-}
-
-.settings-nav li a:hover, .settings-nav li.active a:hover {
-    background-color: #c7d6cb;
-    color: #696969 !important;
-}
-
-.settings-nav li a span {
-    color: #696969;
-    display: inline-block;
-    font-weight: 500;
-    width: 85%;
-}
-
-.settings-nav li.active span {
-    color: #FFF;
-}
-
-.settings-nav li .bg {
-    background-image: url('../images/settings_nav_icons.png');
-    display: block;
-    margin-top: -15px;
-    position: absolute;
-    right: 8px;
-    top: 50%;
-}
-
-.settings-nav .profile .bg {
-    background-position: -3px 0;
-    height: 30px;
-    width: 30px;
-}
-
-.settings-nav .profile.active .bg {
-    background-position: -42px 0;
-}
-
-.settings-nav .services .bg {
-    background-position: 0 -72px;
-    height: 30px;
-    width: 30px;
-}
-
-.settings-nav .services.active .bg {
-    background-position: 32px -72px;
-}
-
-.settings-nav .notifications .bg {
-    background-position: 0 -142px;
-    height: 22px;
-    width: 32px;
-}
-
-.settings-nav .notifications>a {
-    padding-right: 8px;
-}
-.settings-nav .notifications>a span {
-    width: 100%;
-    vertical-align: middle;
-    line-height: 30px;
-}
-.settings-nav .notifications .glyphicon.glyphicon-bell {
-    color: #696969;
-    font-size: 30px;
-}
-.settings-nav .notifications.active .glyphicon.glyphicon-bell {
-    color: #fff;
-}
-.settings-nav .notifications.active .bg {
-    background-position: -39px -142px;
-}
-
-.settings-nav .username .bg {
-    background-position: -3px -207px;
-    height: 34px;
-    right: 11px;
-    width: 28px;
-}
-
-.settings-nav .username.active .bg {
-    background-position: -42px -207px;
-}
-
-.settings-nav .password .bg {
-    background-position: -6px -280px;
-    height: 30px;
-    right: 16px;
-    width: 22px;
-}
-
-.settings-nav .password.active .bg {
-    background-position: -45px -280px;
-}
-
-.settings-nav .settings .bg {
-    background-position: -2px -350px;
-    height: 30px;
-    right: 11px;
-    width: 30px;
-}
-
-.settings-nav .settings.active .bg {
-    background-position: -42px -350px;
-}
-
-.progress-box {
-    background-color: #dddedc;
-    margin-top: 15px;
-}
-
-.progress-box .progress {
-    background-color: #999999;
+form .input-error {
+    background-color: #fcccca;
     background-image: none;
-    border-radius: 0 !important;
-    height: 30px;
 }
 
-.progress-box .progress-bar {
-    background-color: #ffd900;
-    background-image: none;
-    border-radius: 0 !important;
+form .input-error ul {
     color: #000;
-    line-height: 30px;
-}
-
-.settings-content {
-    /*padding: 10px;*/
-    padding: 0;
-}
-
-.settings-content h3 {
-    margin: 10px 15px;
-}
-
-.settings-content h4 {
-    margin: 10px 35px;
-}
-
-.settings-content .inner-content {
-    padding: 10px;
-}
-
-
-/* profile page */
-#profile-edit form {
-    /*margin: 20px 60px;*/
-}
-
-#profile-edit form .inner-content {
-    padding: 20px 60px;
-}
-
-#profile-edit .form-control {
-    margin-bottom: 10px;
-}
-
-#profile-edit .birthdate select {
-    margin-right: 3px;
-}
-
-#profile-edit .connect {
-    background-size: 35px;
-    color: #FFF;
-    cursor: pointer;
-    display: block;
-    font-size: 16px;
-    height: 35px;
-    line-height: 35px;
-    margin-bottom: 5px;
-    padding-left: 50px;
-    width: 100%;
-}
-
-#profile-edit .connect:hover {
-    text-decoration: none;
-}
-
-#profile-edit .connect.disabled {
-    background-color: #999999;
-}
-
-#profile-edit .facebook {
-    background-color: #576d94;
-    background-image: url(../images/facebook_signin.png);
-    background-repeat: no-repeat;
-    margin-top: 10px;
-}
-
-#profile-edit .twitter {
-    background-color: #4baecd;
-    background-image: url(../images/twitter_signin.png);
-    background-repeat: no-repeat;
-}
-
-#profile-edit .form-bar {
-    background-color: #d9d9d9;
-    height: 40px;
-    padding: 2px 10px;
-}
-
-
-/* services/applications page */
-#applications .app-toggle {
-    margin-right: 50px;
-}
-
-#applications .app-toggle .btn {
-    background: none;
-    border: none;
-    box-shadow: none;
-    float: right;
-    font-size: 1.8em;
-    padding: 8px;
-    text-shadow: none;
-}
-
-#applications .app-toggle .active {
-    opacity: 0.2
-}
-
-#applications ul {
-    padding-right: 40px;
-}
-
-#applications .list-group {
-    box-shadow: none;
-    transition: all 0.8s ease;
-    -webkit-transition: all 0.8s ease;
-    -o-transition: all 0.8s ease;
-    -moz-transition: all 0.8s ease;
-    -ms-transition: all 0.8s ease;
-}
-
-#applications h4 {
-    margin-bottom: 20px;
-}
-
-#applications li {
-    background-color: #999999;
-    color: #FFF;
-    float: left;
-    height: 175px;
+    font-size: 13px;
     list-style-type: none;
-    margin: 0 15px 30px 15px;
-    width: 140px;
-}
-
-#applications li img {
-    margin-top: 14px;
-}
-
-#applications li h5 {
-    font-size: 17px;
-    height: 40px;
-    line-height: 20px;
-    padding: 0 10px
-}
-
-#applications li .btn {
-    background-color: #696969;
-    border-radius: 0;
-    color: #FFF;
-    display: block;
-    height: 35px;
-    width: 100%;
-}
-
-#applications li .activated {
-    background-color: #009933;
-}
-
-#applications .list li {
-    float: none;
-    height: 35px;
-    margin-left: 0;
-    width: 100%;
-}
-
-#applications .list li img {
-    float: left;
-    height: 45px;
-    margin-top: -5px;
-    width: 45px;
-}
-
-#applications .list li h5 {
-    float: left;
-    height: 100%;
-    line-height: 35px;
     margin: 0;
-    padding: 0 20px;
+    padding: 5px 20px;
 }
 
-#applications .list li .btn {
-    float: right;
-    width: 110px;
+form .form-control-feedback {
+    display: none;
+}
+
+form .has-feedback .form-control-feedback {
+    display: block;
 }

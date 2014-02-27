@@ -1,7 +1,7 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
 {% block content %}
-<div id="applications" class="inner-content">
+<div id="applications">
 
     <h3>Serviços</h3>
     <div class="app-toggle clearfix">
@@ -81,11 +81,4 @@
 
 </div>
 
-{% endblock %}
-
-{% block stylesheets %}
-{{ parent() }}
-{% stylesheets 'bundles/procergslogincidadaocore/css/register/*.css' filter='cssrewrite' %}
-<link rel="stylesheet" href="{{ asset_url }}" />
-{% endstylesheets %}
 {% endblock %}
