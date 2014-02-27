@@ -21,7 +21,7 @@
                             <i class="glyphicon glyphicon-th pull-right"></i>
                         </span></a>
                 </li>
-                <li class="notifications">
+                <li class="notifications {% if app.request.attributes.get('_route') == 'lc_notifications_list' %}active{% endif %}">
                     <a href="{{ path('lc_notifications_list') }}">
                         <span>
                             {% trans %}Notifications{% endtrans %}
