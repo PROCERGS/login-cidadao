@@ -31,7 +31,7 @@ security:
                 server_url: "http://lc.des.dona.to"
                 login_path: /login
                 check_path: /facebook/login_check
-                default_target_path: /
+                default_target_path: fos_user_profile_edit
                 success_handler: security.authentication.success_handler
                 provider: fos_facebook_provider
 

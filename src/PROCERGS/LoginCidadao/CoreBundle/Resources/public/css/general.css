@@ -147,12 +147,8 @@ footer nav li a {
   color: #FFF;
 }
 
-form .has-error input {
-    /*background-color: #cc3300;*/
-}
-
-form .input-error {
-    background-color: #fcccca;
+.progress-box .progress {
+    background-color: #999999;
     background-image: none;
 }
 
