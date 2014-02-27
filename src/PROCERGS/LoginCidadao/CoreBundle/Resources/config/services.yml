@@ -11,6 +11,7 @@ parameters:
     procergs_logincidadao.user_manager.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Manager\UserManager
     procergs_logincidadao.user_register: PROCERGS\LoginCidadao\CoreBundle\EventListener\RegisterListner
     procergs_logincidadao.profile_edit: PROCERGS\LoginCidadao\CoreBundle\EventListener\ProfileEditListner
+    procergs_logincidadao.change.password.listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\ChangePasswordListener
 
 services:
     security.authentication.success_handler:
@@ -106,3 +107,9 @@ services:
         arguments: [%fos_user.model.user.class%]
         tags:
             - { name: form.type, alias: procergs_change_password }
+
+    procergs_logincidadao.change_password_listener:
+        class: %procergs_logincidadao.change.password.listener.class%
+        arguments: ["@router"]
+        tags:
+            - { name: kernel.event_subscriber }     
