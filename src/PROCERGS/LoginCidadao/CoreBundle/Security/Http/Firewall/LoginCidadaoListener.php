@@ -48,12 +48,12 @@ class LoginCidadaoListener extends UsernamePasswordFormAuthenticationListener
         $accessSession->setVal($accessSession->getVal()+1);
         $doctrine->getManager()->persist($accessSession);
         $doctrine->getManager()->flush();
+        $request->getSession()->set(SecurityContextInterface::LAST_USERNAME, $vars['username']);
         $formType = $this->container->get('procergs_logincidadao.login.form.type');
         $formType->setVerifyCaptch($accessSession->getVal() >= $this->container->getParameter('brute_force_threshold'));
         $form = $this->container->get('form.factory')->create($formType);        
         $form->handleRequest($request);
-        if (! $form->isValid()) {
-            $request->getSession()->set(SecurityContextInterface::LAST_USERNAME, $vars['username']);
+        if (! $form->isValid()) {            
             throw new BadCredentialsException('Captcha is invalid');
         }
         $b = parent::attemptAuthentication($request);

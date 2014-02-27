@@ -9,27 +9,27 @@
         <div class="col-md-3 col-sm-3">
             <ul class="settings-nav nav nav-pills nav-stacked">
                 <li class="profile {% if app.request.attributes.get('_route') == 'fos_user_profile_edit' %}active{% endif %}">
-                    <a href="{{ path('fos_user_profile_edit') }}"><span>Perfil</span><i class="bg"></i></a>
+                    <a href="{{ path('fos_user_profile_edit') }}"><span>{%trans%}Profile{%endtrans%}</span><i class="bg"></i></a>
                 </li>
                 <li class="services {% if app.request.attributes.get('_route') == 'lc_apps' %}active{% endif %}">
-                    <a href="{{ path('lc_apps') }}"><span>Serviços  <i class="glyphicon glyphicon-th pull-right"></span></a>
+                    <a href="{{ path('lc_apps') }}"><span>{%trans%}Services{%endtrans%}</span><i class="bg"></i></a>
                 </li>
                 <li class="notifications">
-                    <a href=""><span>Notificações <i class="glyphicon glyphicon-bell pull-right"></i></span></a>
+                    <a href=""><span>{%trans%}Notifications{%endtrans%}<i class="glyphicon glyphicon-bell pull-right"></i></span></a>
                 </li>
                 <li class="username">
-                    <a href=""><span>Definir nome de usuário</span><i class="bg"></i></a>
+                    <a href=""><span>Change Username</span><i class="bg"></i></a>
                 </li>
-                <li class="password">
-                    <a href=""><span>Alterar senha</span><i class="bg"></i></a>
+                <li class="password {% if app.request.attributes.get('_route') == 'fos_user_change_password' %}active{% endif %}"   >
+                    <a href="{{ path('fos_user_change_password')}}"><span>{%trans%}Change password{%endtrans%}</span><i class="bg"></i></a>
                 </li>
                 <li class="settings">
-                    <a href=""><span>Configurações</span><i class="bg"></i></a>
+                    <a href=""><span>{%trans%}Settings{%endtrans%}</span><i class="bg"></i></a>
                 </li>
             </ul>
 
             <div class="progress-box">
-                <h5 style="padding: 10px 10px 0 10px;">Situação do Cadastro</h5>
+                <h5 style="padding: 10px 10px 0 10px;">{%trans%}Situation{%endtrans%}</h5>
                 <div class="progress">
                   <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
                     <span>50%</span>

@@ -68,9 +68,24 @@ Deactivated: Desativado
 'Connect using Facebook': 'Conectar usando Facebook'
 'Open your account': 'Abra sua conta'
 'Toggle Navigation': 'Abrir/fechar Menu'
-'Log in': 'Entrar'
+'Log in': Entrar
 'Connect using Twitter': 'Conectar usando Twitter'
 'With only one account': 'Com apenas uma conta'
 'Access to all services offered by the Government': 'Acesse todos os serviços oferecidos pelo governo do estado'
 'With only the password and CPF. Making accessing the services much simpler.': 'Com apenas sua senha e seu CPF. Tornando o acesso aos serviços muito mais simples.'
 'Create your account': 'Crie sua conta'
+Profile: Perfil
+Services: Serviços
+Notifications: Notificações
+'Change password': 'Alterar senha'
+Settings: Configurações
+Situation: 'Situação do cadastro'
+Activate: __Activate
+Deactivate: __Deactivate
+Applications: __Applications
+'Your account is created, but you must have a CPF.': '__Your account is created, but you must have a CPF.'
+'Your CPF will give some realibility to your account.': '__Your CPF will give some realibility to your account.'
+'CPF:': '__CPF:'
+'If you want to reinforce you CPF you can check with NFg': '__If you want to reinforce you CPF you can check with NFg'
+'You need to put you password of your account of NFg .': '__You need to put you password of your account of NFg .'
+'Type in your NFg password here:': '__Type in your NFg password here:'
