@@ -170,7 +170,7 @@ footer nav li a {
     background-color: #009933;
 }
 
-.settings-nav li a:hover, .settings-nav li.active a:hover {
+.settings-nav li:hover a, .settings-nav li.active:hover a {
     background-color: #c7d6cb;
     color: #696969 !important;
 }
@@ -184,6 +184,9 @@ footer nav li a {
 
 .settings-nav li.active span {
     color: #FFF;
+}
+.settings-nav li.active:hover span, .settings-nav li.active:hover i {
+    color: #696969;
 }
 
 .settings-nav li .bg {
