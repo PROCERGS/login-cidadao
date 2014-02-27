@@ -12,20 +12,22 @@ use Symfony\Component\Routing\RouterInterface;
 use Doctrine\ORM\EntityManager;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\AcessSession;
+use Symfony\Component\Security\Http\HttpUtils;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 {
 
     private $router;
     private $em;
-    
+
     protected $container;
-    
+
     public function setContainer($var)
     {
         $this->container = $var;
     }
-    
+
     public function getContainer()
     {
         return $this->container;
@@ -36,8 +38,9 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
      * @param RouterInterface   $router
      * @param EntityManager     $em
      */
-    public function __construct(RouterInterface $router, $options, EntityManager $em, Session $session)
+    public function __construct(RouterInterface $router, $options, EntityManager $em, Session $session, HttpUtils $httpUtils)
     {
+        parent::__construct($httpUtils, $options);
         $this->router = $router;
         $this->em = $em;
         $this->session = $session;
@@ -65,12 +68,12 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
         $accessSession->setVal(0);
         $doctrine->getManager()->persist($accessSession);
         $doctrine->getManager()->flush();
-        
+
         $person = $doctrine->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->findOneBy(array('username' => $token->getUser()->getUsername()));
         $opa = $person->getCpfExpiration();
         if ($opa && $opa <= new \DateTime()) {
             return new RedirectResponse($this->router->generate('lc_registration_cpf'));
-        }            
+        }
         if (strstr($token->getUser()->getUsername(), '@') !== false) {
             $uri = $this->router->generate('lc_update_username');
 
@@ -79,11 +82,12 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             return new RedirectResponse($uri);
         } else {
             $referer = $request->headers->get('referer');
-            $a = $this->router->generate('fos_user_security_login', array(), true);
-            if (strlen($referer) > 0 && $referer != $a) {
+            $login = $this->router->generate('fos_user_security_login', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+            $register = $this->router->generate('fos_user_registration_register', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+            if (strlen($referer) > 0 && $referer != $login && $referer != $register) {
                 $dest = $referer;
             } else {
-                $dest = $this->router->generate('lc_home');
+                $dest = $this->router->generate('fos_user_profile_edit');
             }
             return new RedirectResponse($dest);
         }

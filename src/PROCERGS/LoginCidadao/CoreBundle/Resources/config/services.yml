@@ -15,7 +15,7 @@ services:
     security.authentication.success_handler:
         class: %security.authentication.success_handler.class%
         public: false
-        arguments: ["@router", "@doctrine.orm.entity_manager", "@doctrine.orm.entity_manager", "@session"]
+        arguments: ["@router", [], "@doctrine.orm.entity_manager", "@session", "@security.http_utils"]
         calls:
             - [setContainer, ["@service_container"]]
 
@@ -88,13 +88,13 @@ services:
         arguments: ["@router"]
         tags:
             - { name: kernel.event_subscriber }
-            
+
     procergs_logincidadao.cpf.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\CpfFormType
         tags:
             - { name: form.type, alias: cpf_form_type }
         calls:
-            - [setContainer, ["@service_container"]]             
+            - [setContainer, ["@service_container"]]
 
     procergs_logincidadao.change.password.form.type:
         class: %procergs_logincidadao.change.password.form.type.class%
