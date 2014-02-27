@@ -74,6 +74,13 @@ class Notification implements NotificationInterface
     private $isRead;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="level", type="integer")
+     */
+    private $level;
+
+    /**
      * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="notifications")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      */
@@ -296,5 +303,53 @@ class Notification implements NotificationInterface
     public function getPerson()
     {
         return $this->person;
+    }
+
+    public function checkReceiver()
+    {
+        $auths = $this->getPerson()->getAuthorizations();
+        $client = $this->getClient();
+        foreach ($auths as $auth) {
+            if ($auth->getClient()->getId() === $client->getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function checkSender()
+    {
+        return $this->getClient()->getMaxNotificationLevel() >= $this->getLevel();
+    }
+
+    public function canBeSent()
+    {
+        return $this->checkReceiver() && $this->checkSender();
+    }
+
+    public function getLevel()
+    {
+        return $this->level;
+    }
+
+    public function setLevel($level)
+    {
+        switch ($level) {
+            case self::LEVEL_NORMAL:
+            case self::LEVEL_IMPORTANT:
+            case self::LEVEL_EXTREME:
+                $this->level = $level;
+                break;
+            default:
+                throw new \Symfony\Component\Validator\Exception\InvalidArgumentException();
+        }
+        return $this;
+    }
+
+    public function __construct()
+    {
+        $this->setLevel(self::LEVEL_NORMAL);
+        $this->setIsRead(false);
+        $this->setCreatedAt(new \DateTime());
     }
 }

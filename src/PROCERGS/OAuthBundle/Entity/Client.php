@@ -31,6 +31,11 @@ class Client extends BaseClient
     protected $description;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    protected $maxNotificationLevel;
+
+    /**
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization", mappedBy="client", cascade={"remove"}, orphanRemoval=true)
      */
     protected $authorizations;
@@ -49,6 +54,7 @@ class Client extends BaseClient
     {
         parent::__construct();
         $this->authorizations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->maxNotificationLevel = Notification::LEVEL_NORMAL;
     }
 
     public function setName($name)
@@ -91,5 +97,17 @@ class Client extends BaseClient
         if ($this->authorizations->contains($authorization)) {
             $this->authorizations->removeElement($authorization);
         }
+    }
+
+    public function getMaxNotificationLevel()
+    {
+        return $this->maxNotificationLevel;
+    }
+
+    public function setMaxNotificationLevel($maxNotificationLevel)
+    {
+        $this->maxNotificationLevel = $maxNotificationLevel;
+
+        return $this;
     }
 }

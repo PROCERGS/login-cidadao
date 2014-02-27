@@ -5,6 +5,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
 
 class NotificationController extends Controller
 {

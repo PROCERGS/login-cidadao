@@ -23,7 +23,7 @@ services:
 
     notifications.helper:
         class: %notifications.helper.class%
-        arguments: ["@doctrine.orm.entity_manager", "@security.context"]
+        arguments: ["@doctrine.orm.entity_manager", "@security.context", "@service_container"]
 
     fos_facebook.user.login:
         class: %fos_facebook.user.login.class%
@@ -112,4 +112,4 @@ services:
         class: %procergs_logincidadao.change.password.listener.class%
         arguments: ["@router"]
         tags:
-            - { name: kernel.event_subscriber }     
+            - { name: kernel.event_subscriber }
