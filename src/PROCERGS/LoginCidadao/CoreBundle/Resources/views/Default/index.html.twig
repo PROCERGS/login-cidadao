@@ -6,17 +6,20 @@
 
   <h3 class="title">Login Cidadão</h3>
 
-  {% if error %}
-    {{ error|trans }}
-  {% endif %}
-
   {{ form_start(form1, {'action' : path("fos_user_security_check"), 'attr' : {'role' : 'form'}}) }}
     <div class="form-content">
         <p>Entre no sistema xxx usando seu Login Cidadão</p>
         <div class="form-group">
+          {% if error %}
+            <div class="input-error alert-danger">
+                {{ error|trans }}
+            </div>
+          {% endif %}
+        </div>
+        <div class="form-group">
             {{ form_label(form1.username, null, {'label_attr' : {'class': 'sr-only'}}) }}
             {{ form_errors(form1.username) }}
-            {{ form_widget(form1.username, {'attr' : {'placeholder' : 'security.login.username', 'onKeyUp' : 'validador.onKeyUpMultiformat(this, event)', 'class':'form-control' }}) }}
+            {{ form_widget(form1.username, {'attr' : {'placeholder' : 'security.login.username', 'onKeyUp' : 'validador.onKeyUpMultiformat(this, event)', 'class':'form-control', 'value' : last_username }}) }}
         </div>
         <div class="form-group">
             {{ form_label(form1.password, null , {'label_attr' : {'class': 'sr-only'}}) }}
