@@ -90,3 +90,7 @@ body {
     font-weight: bold;
     margin: 5px 0;
 }
+
+#resetting_request {
+    cursor: pointer;
+}

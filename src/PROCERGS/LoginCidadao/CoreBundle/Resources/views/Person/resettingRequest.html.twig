@@ -28,7 +28,7 @@
                         <div class="input-error">{% if invalid_username is defined %}{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username})}}{% endif %}</div>
                     </div>
                     <input class='btn btn-success' type="submit" value="{{ 'resetting.request.submit'|trans }}" />
-                    <a href="{{ path('fos_user_registration_register') }}" class='btn btn-default' />{% trans %}Cancel{% endtrans %}<a/>
+                    <a href="{{ path('lc_home') }}" class='btn btn-default' />{% trans %}Cancel{% endtrans %}<a/>
                 </div>
             </div>
         </form>
