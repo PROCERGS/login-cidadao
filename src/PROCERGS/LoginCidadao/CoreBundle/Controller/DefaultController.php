@@ -89,7 +89,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/general", name="lc_apps")
+     * @Route("/general", name="lc_general")
      * @Template()
      */
     public function generalAction(Request $request)
