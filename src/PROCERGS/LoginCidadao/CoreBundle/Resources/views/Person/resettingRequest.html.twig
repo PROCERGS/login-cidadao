@@ -10,18 +10,19 @@
 </div>
 
 <div class="row">
-    <div id="forgot-password" class="col-lg-12">
+    <div class="general-content col-lg-12">
         {% trans_default_domain 'FOSUserBundle' %}
 
         <div class="col-md-12 title">
             <h3>Recuperar Senha</h3>
             <p>Informe seu nome de usuário ou email</p>
         </div>
-        
+
         <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="user_resetting_request">
             <div class="form-content">
                 <div class="col-md-8">
                     <div class="form-group">
+                        <label class="control-label invisible" for="username">{{ 'resetting.request.username'|trans }}</label>
                         <input class="form-control" placeholder="{{ 'resetting.request.username'|trans }}" type="text" id="username" name="username" required="required" />
                         <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                         <div class="input-error">{% if invalid_username is defined %}{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username})}}{% endif %}</div>
