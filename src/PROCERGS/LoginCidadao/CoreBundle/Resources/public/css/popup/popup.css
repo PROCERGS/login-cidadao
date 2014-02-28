@@ -79,3 +79,11 @@ body {
 #login-box .btn-success {
     width: 100%;
 }
+
+#login-box .register-link {
+    color: green;
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    margin: 5px 0;
+}

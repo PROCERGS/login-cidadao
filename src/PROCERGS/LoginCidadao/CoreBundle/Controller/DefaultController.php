@@ -56,7 +56,7 @@ class DefaultController extends Controller
         return array('home1' => $this->generateUrl('lc_home', array(), true));
     }
 
-        /**
+    /**
      * @Route("/apps", name="lc_apps")
      * @Template()
      */
@@ -86,5 +86,17 @@ class DefaultController extends Controller
                 compact('user', 'apps')
             );
         }
+    }
+
+    /**
+     * @Route("/general", name="lc_apps")
+     * @Template()
+     */
+    public function generalAction(Request $request)
+    {
+        return $this->render(
+            'PROCERGSLoginCidadaoCoreBundle:Info:terms.html.twig',
+            compact('user', 'apps')
+        );
     }
 }
