@@ -37,7 +37,7 @@
     <div class="container">
         <div class="row buttons">
             <div class="col-xs-6">
-                <a class="connect facebook">Entrar usando o Facebook</a>
+                <a class="connect facebook" href="https://www.facebook.com/dialog/oauth?client_id={{facebook_app_id}}&redirect_uri=''">Entrar usando o Facebook</a>
                 <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="connect twitter">Entrar usando o Twitter</a>
             </div>
             <div class="col-xs-6">
@@ -67,6 +67,31 @@
             });
         }
     }
+
+    function fb_login(){
+        FB.login(function(response) {
+
+            if (response.authResponse) {
+                console.log('Welcome!  Fetching your information.... ');
+                //console.log(response); // dump complete info
+                access_token = response.authResponse.accessToken; //get access token
+                user_id = response.authResponse.userID; //get FB UID
+
+                FB.api('/me', function(response) {
+                    user_email = response.email; //get user email
+              // you can store this data into your database
+                });
+
+            } else {
+                //user hit cancel button
+                console.log('User cancelled login or did not fully authorize.');
+
+            }
+        }, {
+            scope: 'publish_stream,email'
+        });
+    }
+
 </script>
 {% endblock %}
 

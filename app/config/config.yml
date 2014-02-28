@@ -28,6 +28,7 @@ twig:
     globals:
         fos_csrf_provider: "@form.csrf_provider"
         notifications_helper: "@notifications.helper"
+        facebook_app_id: "%facebook_app_id%"
 
 # Assetic Configuration
 assetic:
