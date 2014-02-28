@@ -10,7 +10,7 @@ body {
     padding: 0;
 }
 
-#login-box .title, #forgot-password-box .title{
+#login-box .title{
     background-color: #039936;
     color: #FFF;
     display: block;
@@ -24,11 +24,11 @@ body {
     /*padding: 20px;*/
 }
 
-#login-box form .form-content, #forgot-password-box  .form-content{
+#login-box form .form-content{
     padding: 20px;
 }
 
-#login-box form p, #forgot-password-box form p {
+#login-box form p{
     margin-bottom: 30px;
 }
 
@@ -42,7 +42,7 @@ body {
     font-size: 12px;
 }
 
-#login-box .buttons, #forgot-password-box .buttons {
+#login-box .buttons{
     background-color: #d9d9d9;
     padding: 8px 10px;
 }
@@ -79,8 +79,3 @@ body {
 #login-box .btn-success {
     width: 100%;
 }
-
-#forgot-password-box form input[type="submit"] {margin-top: 15px;}
-#forgot-password-box .container{padding: 20px;}
-#forgot-password-box form p.validate {padding: 10px 0;}
-#forgot-password-box .btn-return {margin-top: 20px;}

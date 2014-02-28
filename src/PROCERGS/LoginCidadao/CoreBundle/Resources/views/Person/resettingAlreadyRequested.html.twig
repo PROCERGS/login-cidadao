@@ -1,17 +1,33 @@
-{% extends "PROCERGSLoginCidadaoCoreBundle::base.popup.html.twig" %}
+{% extends 'PROCERGSLoginCidadaoCoreBundle::base.html.twig' %}
 
-{% block content %}
-    <div id="forgot-password-box">
-        <h3 class="title">Login Cidadão</h3>
+{% block body %}
 
+<div class="row">
+    <div class="col-xs-12 text-center header-shadows">
+        <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
+        <h2 class="slogan hidden-xs">{% trans %}One account. All that the Government offers.{% endtrans %}</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div id="forgot-password" class="col-lg-12">
         {% trans_default_domain 'FOSUserBundle' %}
 
-        <div class="container">
+        <div class="col-md-12 title">
             <h3>Recuperar Senha</h3>
-            
-            <p>{{ 'resetting.password_already_requested'|trans }}</p>
-            
-            <a href="{{ path('fos_user_security_login') }}" class="btn btn-success btn-return">Voltar</a>
+        </div>
+
+        <div class="col-md-12">
+            <p class="message">{{ 'resetting.password_already_requested'|trans }}</p>
+            <a href="{{ path('fos_user_registration_register') }}" class='btn btn-default' />Cancelar<a/>
         </div>
     </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+    {% stylesheets 'bundles/procergslogincidadaocore/css/home/*.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
 {% endblock %}

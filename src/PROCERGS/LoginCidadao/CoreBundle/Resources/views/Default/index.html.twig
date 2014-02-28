@@ -27,7 +27,7 @@
             {{ form_label(form1.password, null , {'label_attr' : {'class': 'sr-only'}}) }}
             {{ form_errors(form1.password) }}
             {{ form_widget(form1.password, {'attr' : {'placeholder' : 'security.login.password', 'class':'form-control'}}) }}
-            <a href="" class="forgot-password">Esqueceu sua senha?</a>
+            <a id="resetting_request" data-href="{{ path('fos_user_resetting_request') }}" class="forgot-password">Esqueceu sua senha?</a>
         </div>
         <div class="form-group">
             {# {{ form_row(form1.recaptcha, {'class':'form-control'}) }} #}
@@ -67,6 +67,27 @@
             });
         }
     }
+</script>
+{% endblock %}
+
+
+{% block footer %}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+    $(function(){
+        $('#resetting_request').click(function(){
+        var location1 = $(this).attr('data-href');
+        if (window.opener) {
+            window.opener.location = location1;
+            window.close();
+        } else {
+            window.location = location1;
+        }
+        });
+    });
 </script>
 {% endblock %}
 

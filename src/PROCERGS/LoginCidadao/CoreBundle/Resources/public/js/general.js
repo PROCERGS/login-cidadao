@@ -126,24 +126,6 @@ $(function() {
         }
     });
 
-    // close for msg-popup - error, alert, warning
-    $('.msg-popup').on('click', '.btn', function() {
-        $('.msg-popup').fadeOut();
-    });
-
-    $('#profile'). on('click', '.edit', function(e) {
-        e.preventDefault();
-        $('#profile input').attr('readonly', false);
-        $('#profile .info').addClass('open');
-    });
-
-    $('#profile'). on('click', '.toggle', function(e) {
-        e.preventDefault();
-        $(this).toggleClass('open');
-        $('#profile .info').toggleClass('open');
-    });
-
-
 });
 
 $(window).resize(function() {
