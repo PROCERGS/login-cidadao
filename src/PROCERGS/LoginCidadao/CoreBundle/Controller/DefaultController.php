@@ -57,6 +57,24 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/apps_detail", name="lc_apps_detail")
+     * @Template()
+     */
+    public function appsDetailAction(Request $request)
+    {
+        $security = $this->get('security.context');
+        if (false === $security->isGranted('ROLE_USER')) {
+            return $this->redirect($this->generateUrl('fos_user_registration_register'));
+        } else {
+
+            return $this->render(
+                'PROCERGSLoginCidadaoCoreBundle:Person:appsDetail.html.twig',
+                compact('user', 'apps')
+            );
+        }
+    }
+
+    /**
      * @Route("/apps", name="lc_apps")
      * @Template()
      */
