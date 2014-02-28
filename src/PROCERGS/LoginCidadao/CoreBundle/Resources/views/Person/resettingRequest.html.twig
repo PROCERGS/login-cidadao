@@ -1,27 +1,43 @@
-{% extends "PROCERGSLoginCidadaoCoreBundle::base.popup.html.twig" %}
+{% extends 'PROCERGSLoginCidadaoCoreBundle::base.html.twig' %}
 
-{% block content %}
-    <div id="forgot-password-box">
-        <h3 class="title">Login Cidadão</h3>
-        
+{% block body %}
+
+<div class="row">
+    <div class="col-xs-12 text-center header-shadows">
+        <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
+        <h2 class="slogan hidden-xs">{% trans %}One account. All that the Government offers.{% endtrans %}</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div id="forgot-password" class="col-lg-12">
         {% trans_default_domain 'FOSUserBundle' %}
-        <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="fos_user_resetting_request">
-            <div class="form-content">
-                <h3>Recuperar Senha</h3>
-                <p>Informe seu nome de usuário ou email</p>
-                
-                {% if invalid_username is defined %}
-                    <p class="bg-danger validate">{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}) }}</p>
-                {% endif %}
 
-                <div class="form-group">
-                    <input class="form-control" placeholder="{{ 'resetting.request.username'|trans }}" type="text" id="username" name="username" required="required" />
-                </div>
-                
-                <div class="form-group">
+        <div class="col-md-12 title">
+            <h3>Recuperar Senha</h3>
+            <p>Informe seu nome de usuário ou email</p>
+        </div>
+        
+        <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="user_resetting_request">
+            <div class="form-content">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <input class="form-control" placeholder="{{ 'resetting.request.username'|trans }}" type="text" id="username" name="username" required="required" />
+                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        <div class="input-error">{% if invalid_username is defined %}{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username})}}{% endif %}</div>
+                    </div>
                     <input class='btn btn-success' type="submit" value="{{ 'resetting.request.submit'|trans }}" />
+                    <a href="{{ path('fos_user_registration_register') }}" class='btn btn-default' />Cancelar<a/>
                 </div>
             </div>
         </form>
     </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+    {% stylesheets 'bundles/procergslogincidadaocore/css/home/*.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
 {% endblock %}

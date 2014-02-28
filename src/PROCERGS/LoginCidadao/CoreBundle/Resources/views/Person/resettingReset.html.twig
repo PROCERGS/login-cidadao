@@ -1,17 +1,50 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
 {% block body %}
-    <div class='col-md-4 col-md-offset-1 col-lg-5 col-lg-offset-1'>
+
+<div class="row">
+    <div class="col-xs-12 text-center header-shadows">
+        <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
+        <h2 class="slogan hidden-xs">{% trans %}One account. All that the Government offers.{% endtrans %}</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div id="forgot-password" class="col-lg-12">
         {% trans_default_domain 'FOSUserBundle' %}
+
+        <div class="col-md-12 title">
+            <h3>Recuperar Senha</h3>
+        </div>
 
         {{ form_start(form, {'action': path('fos_user_resetting_reset', {'token': token}), 'attr': {'role':'form', 'class':'user_resetting_reset'}}) }}
             {{ form_errors(form) }}
+            <div class="form-content">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        {{ form_widget(form.plainPassword.first, {'attr' : {'placeholder' : 'form.new_password' }})}}
+                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        <div class="input-error">{{ form_errors(form.plainPassword.first)}}</div>
+                    </div>
 
-            <div class="form-group">
-                <div class="input-error">{{ form_errors(form.plainPassword) }}</div>
-                {{ form_widget(form.plainPassword) }}
-            </div>        
-            <input class='btn btn-success btn-sm pull-right' type="submit" value="{{ 'resetting.reset.submit'|trans }}" />
+                    <div class="form-group">
+                        {{ form_widget(form.plainPassword.second, {'attr' : {'placeholder' : 'form.new_password_confirmation' }})}}
+                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        <div class="input-error">{{ form_errors(form.plainPassword.first)}}</div>
+                    </div>
+
+                    <input class='btn btn-success btn-sm' type="submit" value="{{ 'resetting.reset.submit'|trans }}" />
+                    <a href="{{ path('fos_user_registration_register') }}" class='btn btn-default' />Cancelar<a/>
+                </div>
+            </div>
         {{ form_end(form) }}
     </div>
+</div>
 {% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+    {% stylesheets 'bundles/procergslogincidadaocore/css/home/*.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}    
