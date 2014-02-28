@@ -50,7 +50,7 @@ Save: Salvar
 'Email:': 'Email:'
 'The email is already used': 'Este email já está sendo usado'
 'The username is already used': 'Este nome de usuário já está sendo usado'
-Username: Nome de usuário
+Username: 'Nome de usuário'
 Email: Email
 Birthdate: 'Data de Nascimento'
 CPF: CPF
@@ -94,3 +94,4 @@ Applications: __Applications
 'You don''t have any notifications yet.': '__You don''t have any notifications yet.'
 'Change username': 'Alterar nome de usuário'
 'Updated username successfully!': 'Nome de usuário alterado com sucesso!'
+'View all notifications': '__View all notifications'
