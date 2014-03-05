@@ -1,7 +1,7 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
 {% block content %}
-    <div id="profile-change-username">
+    <div id="profile-change-username" class="content clearfix">
         <h3>{%trans%}Change username{%endtrans%}</h3>
 
         {{ form_start(form, {'action': path('lc_update_username'), 'attr': {'role':'form', 'class':'lc_change_username'}}) }}
@@ -14,15 +14,15 @@
                             {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
                             <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                             <div class="input-error">{{ form_errors(form.username) }}</div>
-                        </div>        
-                    </div>        
-                        
+                        </div>
+                    </div>
+
                     {% if emptyPassword == true %}
                         <div class="col-md-12">
                             <h2>{% trans %}You'll need a password{% endtrans %}</h2>
                             <p>{% trans %}To make sure that you can access the Citizen's Login even if you lose access to your Facebook or Twitter account, please define a password.{% endtrans %}</p>
                         </div>
-                        
+
                         <div class="col-md-8">
                             <div class="form-group">
                                 {{ form_label(form.plainPassword.first, 'Type in your password here:' | trans, {'label_attr': {'class': 'control-label'}}) }}
@@ -50,9 +50,9 @@
                                 {{ form_widget(form.current_password, {'attr': {'class': 'form-control'}}) }}
                                 <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                                 <div class="input-error">{{ form_errors(form.current_password) }}</div>
-                            </div>        
+                            </div>
                         </div>
-                    {% endif %}                        
+                    {% endif %}
 
                     {% for type, messages in app.session.flashbag.all() %}
                         {% for message in messages %}
@@ -62,8 +62,8 @@
                                 </div>
                             </div>
                         {% endfor %}
-                    {% endfor %}                        
-                        
+                    {% endfor %}
+
                 </div>
             </div>
             <div class="form-bar">

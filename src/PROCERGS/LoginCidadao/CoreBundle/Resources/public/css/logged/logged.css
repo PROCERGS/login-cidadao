@@ -1,7 +1,17 @@
 /* settings nav and content */
-.settings-nav, .settings-content {
+.settings-nav .nav, .settings-content .content{
     background-color: #dddedc;
     min-height: 300px;
+}
+
+@media (min-width: 768px) {
+    .settings-nav {
+        padding-left: 0;
+    }
+
+    .settings-content {
+        padding-right: 0;
+    }
 }
 
 .settings-nav li {
@@ -113,13 +123,14 @@
     line-height: 30px;
 }
 
-.settings-content {
-    /*padding: 10px;*/
-    padding: 0;
+.settings-content .content {
+    padding-top: 20px;
 }
 
 .settings-content h3 {
-    margin: 20px;
+    margin-bottom: 30px;
+    margin-top: 0;
+    padding-left: 15px;
 }
 
 .settings-content h4 {
@@ -166,6 +177,21 @@
 
 #profile-edit .birthdate select {
     margin-right: 3px;
+}
+
+#profile-edit .file-upload {
+    margin: 20px 0;
+}
+
+#profile-edit .file-upload #fos_user_profile_form_pictureFile {
+    cursor: pointer;
+    position: relative;
+    top: -28px;
+    visibility: hidden;
+}
+
+#profile-edit .file-upload .file-name {
+    margin: 5px 0;
 }
 
 #profile-edit .connect {

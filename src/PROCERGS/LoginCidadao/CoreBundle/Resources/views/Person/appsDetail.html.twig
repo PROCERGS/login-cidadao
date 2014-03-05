@@ -1,7 +1,7 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
 {% block content %}
-<div id="app-detail">
+<div id="app-detail" class="content clearfix">
 
     <h3>Nota Físcal Gaúcha</h3>
 
@@ -26,6 +26,7 @@
         <div class="msg">
             <p class="text-center">Este serviço já está ativo na sua conta do Login Cidadão</p>
             <button class="btn btn-success center-block">Ativar serviço</button>
+            {# <button class="btn center-block">Desativar serviço</button> #}
         </div>
 
         <p style="margin-top:50px;">Este serviço utiliza os seguintes dados da sua conta do Login Cidadão</p>

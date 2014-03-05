@@ -1,11 +1,11 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
 {% block content %}
-<div id="applications">
+<div id="applications" class="content clearfix">
 
     <h3>Serviços</h3>
     <div class="app-toggle clearfix">
-        <button type="button" class="btn btn-default btn-lg active" data-display="icon">
+        <button type="button" class="btn btn-default btn-lg active" data-display="grid">
           <span class="glyphicon glyphicon-th-large"></span>
         </button>
         <button type="button" class="btn btn-default btn-lg" data-display="list">
@@ -15,7 +15,7 @@
 
     <div class="list-group">
         <h4>Serviços ativos</h4>
-        <ul class="icon clearfix">
+        <ul class="grid clearfix">
             <li>
                 <img src="http://placehold.it/65x65" alt="" class="center-block">
                 <h5 class="center-block text-center">Central do Cidadão</h5>
@@ -29,7 +29,7 @@
         </ul>
 
         <h4>Demais serviços</h4>
-        <ul class="icon clearfix">
+        <ul class="grid clearfix">
             <li>
                 <img src="http://placehold.it/65x65" alt="" class="center-block">
                 <h5 class="center-block text-center">teste</h5>

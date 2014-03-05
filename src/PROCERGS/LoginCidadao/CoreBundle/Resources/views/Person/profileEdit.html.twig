@@ -1,7 +1,7 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
 {% block content %}
-<div id="profile-edit">
+<div id="profile-edit" class="content clearfix">
 
     <h3>Perfil</h3>
 
@@ -80,12 +80,18 @@
                     {% if app.user.getSocialNetworksPicture is not null %}
                 <img src="{{ app.user.getSocialNetworksPicture }}">
                     {% else %}
-                <img src="http://placehold.it/245x245">
+                <img src="http://placehold.it/225x245">
                     {% endif %}
                 {% else %}
                 <img src="/{{ app.user.getPictureWebPath }}">
                 {% endif %}
-                {{ form_widget(form.pictureFile) }}
+
+                <div class="file-upload">
+                    <button type="button" class="btn btn-success btn-upload">Alterar foto</button>
+                    <div class="file-name"></div>
+                    {{ form_widget(form.pictureFile) }}
+                </div>
+
 
                 <a class="connect facebook">pessoa da silva</a>
                 <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="connect twitter disabled">@pessilva</a>
