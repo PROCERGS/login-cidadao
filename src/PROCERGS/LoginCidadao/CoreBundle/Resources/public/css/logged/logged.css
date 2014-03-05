@@ -1,5 +1,5 @@
 /* settings nav and content */
-.settings-nav, .settings-content {
+.settings-nav, .settings-content .content{
     background-color: #dddedc;
     min-height: 300px;
 }
@@ -113,13 +113,14 @@
     line-height: 30px;
 }
 
-.settings-content {
-    /*padding: 10px;*/
-    padding: 0;
+.settings-content .content {
+    padding-top: 20px;
 }
 
 .settings-content h3 {
-    margin: 20px;
+    margin-bottom: 30px;
+    margin-top: 0;
+    padding-left: 15px;
 }
 
 .settings-content h4 {
