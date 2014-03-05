@@ -9,7 +9,7 @@
     {% block sidebar %}
         <div class="col-md-3 col-sm-3">
             <ul class="settings-nav nav nav-pills nav-stacked">
-                <li class="profile glyph {% if app.request.attributes.get('_route') == 'fos_user_profile_edit' %}active{% endif %}">
+                <li class="profile glyph {{ app.request.attributes.get('_route') == 'fos_user_profile_edit' ? 'active' }}">
                     <a href="{{ path('fos_user_profile_edit') }}">
                         <span>
                             {% trans %}Profile{% endtrans %}
@@ -17,14 +17,14 @@
                         </span>
                     </a>
                 </li>
-                <li class="services glyph {% if app.request.attributes.get('_route') == 'lc_apps' %}active{% endif %}">
+                <li class="services glyph {{ app.request.attributes.get('_route') == 'lc_apps' ? 'active' }}">
                     <a href="{{ path('lc_apps') }}">
                         <span>
                             {% trans %}Services{% endtrans %}
                             <i class="glyphicon glyphicon-th pull-right"></i>
                         </span></a>
                 </li>
-                <li class="notifications glyph {% if app.request.attributes.get('_route') == 'lc_notifications_list' %}active{% endif %}">
+                <li class="notifications glyph {{ app.request.attributes.get('_route') == 'lc_notifications_list' ? 'active' }}">
                     <a href="{{ path('lc_notifications_list') }}">
                         <span>
                             {% trans %}Notifications{% endtrans %}
@@ -32,13 +32,13 @@
                         </span>
                     </a>
                 </li>
-                <li class="username {% if app.request.attributes.get('_route') == 'lc_update_username' %}active{% endif %}">
+                <li class="username {{ app.request.attributes.get('_route') == 'lc_update_username' ? 'active' }}">
                     <a href="{{ path('lc_update_username')}}">
                         <span>{% trans %}Change Username{% endtrans %}</span>
                         <i class="bg"></i>
                     </a>
                 </li>
-                <li class="password {% if app.request.attributes.get('_route') == 'fos_user_change_password' %}active{% endif %}"   >
+                <li class="password {{ app.request.attributes.get('_route') == 'fos_user_change_password' ? 'active' }}"   >
                     <a href="{{ path('fos_user_change_password')}}">
                         <span>{% trans %}Change password{% endtrans %}</span>
                         <i class="bg"></i>

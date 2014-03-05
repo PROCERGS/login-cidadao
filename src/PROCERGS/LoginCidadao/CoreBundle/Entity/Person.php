@@ -11,6 +11,7 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use PROCERGS\Generic\ValidationBundle\Validator\Constraints as PROCERGSAssert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
@@ -111,6 +112,17 @@ class Person extends BaseUser
      * @ORM\Column(type="string", nullable=true)
      */
     protected $mobile;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $picturePath;
+    protected $tempPicturePath;
+
+    /**
+     * @Assert\File(maxSize="6000000")
+     */
+    protected $pictureFile;
 
     /**
      * @Expose
@@ -486,4 +498,97 @@ class Person extends BaseUser
         return $this->emailConfirmedAt;
     }
 
+    public function getAbsolutePicturePath()
+    {
+        return null === $this->picturePath ? null : $this->getPictureUploadRootDir() . DIRECTORY_SEPARATOR . $this->picturePath;
+    }
+
+    public function getPictureWebPath()
+    {
+        return null === $this->picturePath ? null : $this->getPictureUploadDir() . DIRECTORY_SEPARATOR . $this->picturePath;
+    }
+
+    protected function getPictureUploadRootDir()
+    {
+        return __DIR__ . '/../../../../../web/' . $this->getPictureUploadDir();
+    }
+
+    protected function getPictureUploadDir()
+    {
+        return 'uploads/profile-pictures';
+    }
+
+    public function setPictureFile(UploadedFile $pictureFile = null)
+    {
+        $this->pictureFile = $pictureFile;
+        if (isset($this->picturePath)) {
+            $this->tempPicturePath = $this->picturePath;
+            $this->picturePath = null;
+        } else {
+            $this->picturePath = 'initial';
+        }
+    }
+
+    /**
+     *
+     * @return UploadedFile
+     */
+    public function getPictureFile()
+    {
+        return $this->pictureFile;
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function uploadPicture()
+    {
+        if (null === $this->getPictureFile()) {
+            return;
+        }
+
+        $this->getPictureFile()->move(
+                $this->getPictureUploadRootDir(), $this->picturePath
+        );
+
+        if (isset($this->tempPicturePath)) {
+            unlink($this->getPictureUploadRootDir() . DIRECTORY_SEPARATOR . $this->tempPicturePath);
+            $this->tempPicturePath = null;
+        }
+
+        $this->pictureFile = null;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload()
+    {
+        if (null !== $this->getPictureFile()) {
+            $filename = sha1($this->getId());
+            $this->picturePath = "$filename." . $this->getPictureFile()->guessExtension();
+        }
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removePicturePostRemoval()
+    {
+        if ($file = $this->getAbsolutePicturePath()) {
+            unlink($file);
+        }
+    }
+
+    public function getSocialNetworksPicture()
+    {
+        if (!is_null($this->getFacebookId())) {
+            return "https://graph.facebook.com/{$this->getFacebookId()}/picture?height=245&width=245";
+        }
+        if (!is_null($this->getTwitterId())) {
+            return 'twitter';
+        }
+    }
 }
