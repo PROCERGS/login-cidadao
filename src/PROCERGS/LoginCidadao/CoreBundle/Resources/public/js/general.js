@@ -126,6 +126,15 @@ $(function() {
         }
     });
 
+    $('.file-upload .btn-upload').on('click', function() {
+        $(this).siblings('input[type="file"]').trigger('click');
+    });
+
+    $('.file-upload input[type="file"]').change(function() {
+        var val = $(this).val();
+        $(this).siblings('.file-name').html(val.match(/[^\\/]+$/)[0]);
+    });
+
 });
 
 $(window).resize(function() {

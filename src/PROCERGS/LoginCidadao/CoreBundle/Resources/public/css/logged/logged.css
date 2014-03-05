@@ -179,6 +179,21 @@
     margin-right: 3px;
 }
 
+#profile-edit .file-upload {
+    margin: 20px 0;
+}
+
+#profile-edit .file-upload #fos_user_profile_form_pictureFile {
+    cursor: pointer;
+    position: relative;
+    top: -28px;
+    visibility: hidden;
+}
+
+#profile-edit .file-upload .file-name {
+    margin: 5px 0;
+}
+
 #profile-edit .connect {
     background-size: 35px;
     color: #FFF;
