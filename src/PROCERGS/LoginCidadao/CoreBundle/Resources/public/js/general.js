@@ -114,10 +114,10 @@ $(function() {
             setTimeout( function(){
                 switch (self.data("display")) {
                     case 'list':
-                        $('#applications ul').removeClass('icon').addClass('list');
+                        $('#applications ul').removeClass('grid').addClass('list');
                         break;
-                    case 'icon':
-                        $('#applications ul').removeClass('list').addClass('icon');
+                    case 'grid':
+                        $('#applications ul').removeClass('list').addClass('grid');
                         break;
                 }
                 $('#applications .list-group').css({'margin-top' : 0, 'opacity' : 1});
