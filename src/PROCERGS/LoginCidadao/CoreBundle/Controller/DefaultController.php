@@ -56,7 +56,25 @@ class DefaultController extends Controller
         return array('home1' => $this->generateUrl('lc_home', array(), true));
     }
 
-        /**
+    /**
+     * @Route("/apps_detail", name="lc_apps_detail")
+     * @Template()
+     */
+    public function appsDetailAction(Request $request)
+    {
+        $security = $this->get('security.context');
+        if (false === $security->isGranted('ROLE_USER')) {
+            return $this->redirect($this->generateUrl('fos_user_registration_register'));
+        } else {
+
+            return $this->render(
+                'PROCERGSLoginCidadaoCoreBundle:Person:appsDetail.html.twig',
+                compact('user', 'apps')
+            );
+        }
+    }
+
+    /**
      * @Route("/apps", name="lc_apps")
      * @Template()
      */
@@ -86,5 +104,17 @@ class DefaultController extends Controller
                 compact('user', 'apps')
             );
         }
+    }
+
+    /**
+     * @Route("/general", name="lc_general")
+     * @Template()
+     */
+    public function generalAction(Request $request)
+    {
+        return $this->render(
+            'PROCERGSLoginCidadaoCoreBundle:Info:terms.html.twig',
+            compact('user', 'apps')
+        );
     }
 }

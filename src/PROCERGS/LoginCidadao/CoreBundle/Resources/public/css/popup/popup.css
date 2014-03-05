@@ -37,9 +37,12 @@ body {
     width: 350px
 }
 
-#login-box .forgot-password {
+#login-box #resetting_request {
     color: #009141;
+    cursor: pointer;
+    display: inline-block;
     font-size: 12px;
+    margin: 5px 0;
 }
 
 #login-box .buttons{
@@ -78,4 +81,16 @@ body {
 
 #login-box .btn-success {
     width: 100%;
+}
+
+#login-box .register-link {
+    color: green;
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+#resetting_request {
+    cursor: pointer;
 }

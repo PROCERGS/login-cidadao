@@ -79,7 +79,7 @@ img.desaturate {
 }
 
 /* override boostrap btn*/
- .btn-success {
+ .btn-default, .btn-success {
      background-color: #039935;
      background-image: none;
      border-radius:0;
@@ -92,6 +92,11 @@ img.desaturate {
 
 .btn-success:hover {
     background-color: #5cb85c;
+}
+
+.btn-default {
+    background-color: #FFFFFF;
+    color: #333333;
 }
 
 footer {
@@ -207,12 +212,20 @@ footer .copyright {
     background-image: none;
 }
 
+form .input-error {
+    color: #a94442;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 10px 0;
+}
+
 form .input-error ul {
     color: #000;
-    font-size: 13px;
+    font-size: 14px;
+    font-weight: 500;
     list-style-type: none;
     margin: 0;
-    padding: 5px 20px;
+    padding: 0;
 }
 
 form .form-control-feedback {
@@ -223,24 +236,20 @@ form .has-feedback .form-control-feedback {
     display: block;
 }
 
-#forgot-password p.message, #forgot-password div.title{
-    margin-bottom: 20px;
-}
-#forgot-password {
+.general-content {
     background: none repeat scroll 0 0 rgba(241, 241, 241, 0.8);
     box-shadow: 1px 1px 1px #CCCCCC;
     margin-bottom: 30px;
     position: relative;
     padding: 12px 30px 30px;
 }
-.btn-default {
-    background-color: #FFFFFF;
-    background-image: none;
-    border-radius: 0;
-    box-shadow: 1px 1px 0 0 #969696;
-    color: #333333;
-    border-color: #CCCCCC;
-    font-size: 16px;
-    padding-left: 25px;
-    padding-right: 25px;
+
+.general-content h4 {
+    font-weight: bold;
+}
+
+.general-content .text {
+    font-weight: 500;
+    margin: 20px 0;
+    padding: 0 50px;
 }

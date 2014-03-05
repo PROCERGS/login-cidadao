@@ -63,7 +63,7 @@
     color: #fff;
 }
 
-.settings-nav .username .bg, .settings-nav .username a:hover .bg {
+.settings-nav .username .bg {
     background-position: -3px -207px;
     height: 34px;
     right: 11px;
@@ -83,6 +83,14 @@
 
 .settings-nav .password.active .bg {
     background-position: -45px -280px;
+}
+
+.settings-nav .notifications .glyphicon {
+    right: 3px;
+}
+
+.settings-nav .settings .glyphicon {
+    right: 5px;
 }
 
 .progress-box {
@@ -137,7 +145,7 @@
 
 .settings-content .input-error li {
     color: #a94442;
-    font-size: 13px;
+    font-weight: 500;
 }
 
 .settings-content .form-bar {
@@ -290,4 +298,17 @@
 #applications .list li .btn {
     float: right;
     width: 110px;
+}
+
+#app-detail .content {
+    padding: 0 40px 30px;
+}
+
+#app-detail .content .msg p {
+    font-size: 20px;
+    margin: 30px 0;
+}
+
+#app-detail .permissions {
+    color: green;
 }

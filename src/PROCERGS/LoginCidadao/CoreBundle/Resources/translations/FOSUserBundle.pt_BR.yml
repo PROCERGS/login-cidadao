@@ -38,3 +38,7 @@ resetting.password_already_requested: 'Este usuário já solicitou uma senha nas
 (optional): (opctional)
 change_password.submit: 'Alterar senha'
 change_password.flash.success: 'Senha alterada com sucesso!.'
+'As a safety measure we need you to type your password to confirm any changes.': '__As a safety measure we need you to type your password to confirm any changes.'
+'Reset Password': 'Recuperar senha'
+Cancel: Cancelar
+'Enter your username or email': 'Informe seu nome de usuário ou email'
