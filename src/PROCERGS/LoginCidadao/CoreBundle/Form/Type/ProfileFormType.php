@@ -42,7 +42,8 @@ class ProfileFormType extends BaseType
                     'translation_domain' => 'FOSUserBundle'
                 ))
                 ->add('mobile', null,
-                        array('required' => false, 'label' => 'form.mobile', 'translation_domain' => 'FOSUserBundle'));
+                        array('required' => false, 'label' => 'form.mobile', 'translation_domain' => 'FOSUserBundle'))
+                ->add('pictureFile');
     }
 
     public function getName()
