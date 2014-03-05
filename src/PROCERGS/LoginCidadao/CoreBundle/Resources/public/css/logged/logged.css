@@ -1,7 +1,17 @@
 /* settings nav and content */
-.settings-nav, .settings-content .content{
+.settings-nav .nav, .settings-content .content{
     background-color: #dddedc;
     min-height: 300px;
+}
+
+@media (min-width: 768px) {
+    .settings-nav {
+        padding-left: 0;
+    }
+
+    .settings-content {
+        padding-right: 0;
+    }
 }
 
 .settings-nav li {
