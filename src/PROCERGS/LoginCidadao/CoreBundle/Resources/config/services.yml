@@ -13,7 +13,7 @@ parameters:
     procergs_logincidadao.profile_edit: PROCERGS\LoginCidadao\CoreBundle\EventListener\ProfileEditListner
     procergs_logincidadao.change.password.listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\ChangePasswordListener
     procergs_logincidadao.resetting.listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\ResettingListener
-    
+
 services:
     security.authentication.success_handler:
         class: %security.authentication.success_handler.class%
@@ -36,7 +36,7 @@ services:
 
     procergs.hwi_twitter.user_provider:
         class: %procergs.hwi_twitter.user_provider.class%
-        arguments: [ "@fos_user.user_manager", { twitter: twitterId } ]
+        arguments: [ "@fos_user.user_manager", { twitter: twitterId }, %http_proxy% ]
 
     procergs_person.registration.form.type:
         class: %procergs_person.registration.form.type.class%
@@ -119,4 +119,4 @@ services:
         class: %procergs_logincidadao.resetting.listener.class%
         arguments: ["@router", %fos_user.resetting.token_ttl%]
         tags:
-            - { name: kernel.event_subscriber }              
+            - { name: kernel.event_subscriber }

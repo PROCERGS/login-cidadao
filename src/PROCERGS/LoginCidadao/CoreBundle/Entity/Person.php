@@ -125,6 +125,12 @@ class Person extends BaseUser
     protected $pictureFile;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     */
+    protected $twitterPicture;
+
+    /**
      * @Expose
      * @Groups({"city"})
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\City")
@@ -582,13 +588,62 @@ class Person extends BaseUser
         }
     }
 
+    public function setTwitterPicture($twitterPicture)
+    {
+        $this->twitterPicture = $twitterPicture;
+
+        return $this;
+    }
+
+    public function getTwitterPicture()
+    {
+        return $this->twitterPicture;
+    }
+
     public function getSocialNetworksPicture()
     {
         if (!is_null($this->getFacebookId())) {
             return "https://graph.facebook.com/{$this->getFacebookId()}/picture?height=245&width=245";
         }
         if (!is_null($this->getTwitterId())) {
-            return 'twitter';
+            if (!is_null($this->getTwitterPicture())) {
+                return $this->getTwitterPicture();
+            }
         }
+
+        return null;
+    }
+
+    public function updateTwitterPicture($rawResponse, $proxySettings = null)
+    {
+        $pictureAddress = $rawResponse['profile_image_url'];
+        $currentPicture = $this->getTwitterPicture();
+
+        $context = null;
+        if ($currentPicture !== $pictureAddress) {
+            if (!empty($proxySettings)) {
+                $auth = base64_encode($proxySettings['auth']);
+                $opts = array('http' => array(
+                        'proxy' => "tcp://{$proxySettings['host']}:{$proxySettings['port']}",
+                        'request_fulluri' => true,
+                        'header' => array(
+                            "Proxy-Authorization: Basic $auth"
+                        )
+                    ));
+                $context = stream_context_create($opts);
+            }
+            $this->setTwitterPicture($pictureAddress);
+
+            $picture = file_get_contents($pictureAddress, false, $context);
+            $ext = explode('.', $pictureAddress);
+            $filename = sha1($this->getId()) . '.' . array_pop($ext);
+            $this->picturePath = $filename;
+            file_put_contents($this->getAbsolutePicturePath(), $picture);
+        }
+    }
+
+    public function hasLocalPicture()
+    {
+        return file_exists($this->getAbsolutePicturePath());
     }
 }
