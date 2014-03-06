@@ -29,3 +29,12 @@ form.birthdate: Birthday
 form.cep: Zipcode
 form.cpf: CPF
 form.city: City
+form.adress: 'Logradouro'
+form.distrit: 'Bairro'
+form.uf: 'UF'
+form.cep: 'Cep'
+form.map: 'ver mapa'
+grid.search.noresult: 'Nenhum registro encontrado'
+grid.search.title: 'Resultados'
+grid.search.button: 'Pesquisar'
+cep.search.title: 'Consulta cep'

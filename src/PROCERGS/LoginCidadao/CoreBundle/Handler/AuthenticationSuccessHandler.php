@@ -85,14 +85,12 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             $login = $this->router->generate('fos_user_security_login', array(), UrlGeneratorInterface::ABSOLUTE_URL);
             $register = $this->router->generate('fos_user_registration_register', array(), UrlGeneratorInterface::ABSOLUTE_URL);
             if (strlen($referer) > 0) {
-                if ($referer == $login) {
+                if ($referer == $login || $referer == $register) {
                     $referer = $this->router->generate('lc_home_gateway');
-                } else if ($referer == $register) {
-                    $referer = $this->router->generate('fos_user_profile_edit');
                 }
                 $dest = $referer;
             } else {
-                $dest = $this->router->generate('fos_user_profile_edit');
+                $dest = $this->router->generate('lc_home_gateway');
             }
             return new RedirectResponse($dest);
         }

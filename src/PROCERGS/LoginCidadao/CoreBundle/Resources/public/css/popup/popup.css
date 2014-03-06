@@ -1,96 +1,128 @@
 body {
-    background-color: #f0f0f0;
-    background-image: none;
-    font-family: 'Open Sans', arial;
-    margin: 0;
-    padding: 0;
+	background-color: #f0f0f0;
+	background-image: none;
+	font-family: 'Open Sans', arial;
+	margin: 0;
+	padding: 0;
 }
 
 .container {
-    padding: 0;
+	padding: 0;
 }
 
-#login-box .title{
-    background-color: #039936;
-    color: #FFF;
-    display: block;
-    height: 50px;
-    margin: 0;
-    line-height: 50px;
-    padding-left: 15px;
+#login-box .title {
+	background-color: #039936;
+	color: #FFF;
+	display: block;
+	height: 50px;
+	margin: 0;
+	line-height: 50px;
+	padding-left: 15px;
 }
 
 #login-box form {
-    /*padding: 20px;*/
+	/*padding: 20px;*/
+	
 }
 
-#login-box form .form-content{
-    padding: 20px;
+#login-box form .form-content {
+	padding: 20px;
 }
 
-#login-box form p{
-    margin-bottom: 30px;
+#login-box form p {
+	margin-bottom: 30px;
 }
 
 #login-box form input {
-    height: 35px;
-    width: 350px
+	height: 35px;
+	width: 350px
 }
 
 #login-box #resetting_request {
-    color: #009141;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 12px;
-    margin: 5px 0;
+	color: #009141;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 12px;
+	margin: 5px 0;
 }
 
-#login-box .buttons{
-    background-color: #d9d9d9;
-    padding: 8px 10px;
+#login-box .buttons {
+	background-color: #d9d9d9;
+	padding: 8px 10px;
 }
 
 #login-box .connect {
-    box-shadow: 1px 1px #000;
-    color: #FFF;
-    cursor: pointer;
-    display: block;
-    line-height: 25px;
-    min-width: 100px;
-    padding-left: 25px;
-    text-align: center;
-    width: 100%;
+	box-shadow: 1px 1px #000;
+	color: #FFF;
+	cursor: pointer;
+	display: block;
+	line-height: 25px;
+	min-width: 100px;
+	padding-left: 25px;
+	text-align: center;
+	width: 100%;
 }
 
 #login-box .connect:hover {
-    text-decoration: none;
+	text-decoration: none;
 }
 
 #login-box .facebook {
-    background-color: #576d94;
-    background-image: url(../../images/facebook_login.png);
-    background-repeat: no-repeat;
-    margin-bottom: 5px;
+	background-color: #576d94;
+	background-image: url(../../images/facebook_login.png);
+	background-repeat: no-repeat;
+	margin-bottom: 5px;
 }
 
 #login-box .twitter {
-    background-color: #4baecd;
-    background-image: url(../../images/twitter_login.png);
-    background-repeat: no-repeat;
+	background-color: #4baecd;
+	background-image: url(../../images/twitter_login.png);
+	background-repeat: no-repeat;
 }
 
 #login-box .btn-success {
-    width: 100%;
+	width: 100%;
 }
 
 #login-box .register-link {
-    color: green;
-    display: block;
-    font-size: 13px;
-    font-weight: bold;
-    margin: 5px 0;
+	color: green;
+	display: block;
+	font-size: 13px;
+	font-weight: bold;
+	margin: 5px 0;
 }
 
 #resetting_request {
-    cursor: pointer;
+	cursor: pointer;
+}
+
+/* Postal Code Search */
+.cep-results dt:after {
+	content: ':';
+}
+.cep-results dt,.cep-results dd {
+	display: inline;
+}
+.cep-results .header {
+	display: none;
+}
+
+.cep-results .cep-result:nth-child(2n+1) {
+	background-color: #f9f9f9;
+}
+.cep-results .cep-result {
+	background-color: #f0f0f0;
+	margin-bottom: 20px;
+}
+
+@media (min-width: 992px) {
+	.cep-results dt {
+		display: none;
+	}
+	.cep-results .header {
+		display: block;
+	}
+	.cep-results .cep-result {
+		margin-bottom: 0 !important;
+	}
 }

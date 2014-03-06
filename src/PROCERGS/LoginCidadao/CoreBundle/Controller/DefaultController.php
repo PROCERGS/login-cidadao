@@ -11,7 +11,9 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Security\Core\Exception\DisabledException;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\LoginFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Login;
+use PROCERGS\Generic\ValidationBundle\Validator\Constraints\CEP;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\NfgHelper;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\DneHelper;
 
 class DefaultController extends Controller
 {
@@ -25,25 +27,7 @@ class DefaultController extends Controller
         if (false === $security->isGranted('ROLE_USER')) {
             return $this->redirect($this->generateUrl('fos_user_registration_register'));
         } else {
-            $em = $this->getDoctrine()->getManager();
-            $clients = $em->getRepository('PROCERGSOAuthBundle:Client');
-
-            $user = $security->getToken()->getUser();
-            $allApps = $clients->findAll();
-
-            $apps = array();
-            // Filtering off authorized apps
-            foreach ($allApps as $app) {
-                if ($user->hasAuthorization($app)) {
-                    continue;
-                }
-                $apps[] = $app;
-            }
-
-            return $this->render(
-                'PROCERGSLoginCidadaoCoreBundle:Default:index.loggedIn.html.twig',
-                compact('user', 'apps')
-            );
+            return $this->redirect($this->generateUrl('fos_user_profile_edit'));
         }
     }
 
@@ -116,5 +100,39 @@ class DefaultController extends Controller
             'PROCERGSLoginCidadaoCoreBundle:Info:terms.html.twig',
             compact('user', 'apps')
         );
+    }
+    
+    /**
+     * @Route("/lc_consultaCep", name="lc_consultaCep")
+     * @Template()
+     */
+    public function consultaCepAction(Request $request)
+    {
+        //$cep = new \PROCERGS\LoginCidadao\CoreBundle\Entity\Cep();
+        $form = $this->createFormBuilder()
+        ->add('adress', 'text', array('required' => true, 'label' => 'form.adress', 'translation_domain' => 'FOSUserBundle'))
+        ->add('adressnumber', 'text', array('required' => false, 'label' => 'form.adressnumber', 'translation_domain' => 'FOSUserBundle'))
+        ->add('city', 'text', array('required' => true, 'label' => 'form.city', 'translation_domain' => 'FOSUserBundle'))
+        ->add('uf', 'entity', array(
+            'class' => 'PROCERGSLoginCidadaoCoreBundle:Uf',
+            'property' => 'name',
+            'required' => true,
+            'label' => 'form.uf',
+            'translation_domain' => 'FOSUserBundle'
+        ))
+        ->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $busca = $this->get('procergs_logincidadao.dne');
+            $ceps = $busca->find(array(
+                'logradouro' => $form->get('adress')->getData(),
+                'numero' => $form->get('city')->getData(),
+                'localidade' => $form->get('adressnumber')->getData(),
+                'uf' => $form->get('uf')->getData()->getAcronym()
+            ));
+        } else {
+            $ceps = array();
+        }
+        return array('form' => $form->createView(), 'ceps' => $ceps);
     }
 }

@@ -120,3 +120,8 @@ services:
         arguments: ["@router", %fos_user.resetting.token_ttl%]
         tags:
             - { name: kernel.event_subscriber }
+            
+    procergs_logincidadao.dne:
+        class: PROCERGS\LoginCidadao\CoreBundle\Helper\DneHelper
+        calls:
+            - [setContainer, ["@service_container"]]

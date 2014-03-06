@@ -49,7 +49,7 @@ class NfgHelper
             'Host: nfg.sefaz.rs.gov.br'
         );
         $headApp = array_merge($headApp, $header);
-        curl_setopt($this->ch, CURLOPT_HEADER, $headApp);
+        curl_setopt($this->ch, CURLOPT_HTTPHEADER, $headApp);
         if (! $this->cookie) {
             $this->cookie = tempnam(sys_get_temp_dir(), "nfg");
         }
