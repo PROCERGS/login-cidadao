@@ -1,4 +1,4 @@
-{% if notifications_helper.getUnreadExtreme is not empty %}
+{% if app.user is not null and notifications_helper.getUnreadExtreme is not empty %}
     {% for notification in notifications_helper.getUnreadExtreme %}
 <div class="notification-extreme alert alert-danger">
     <div class="container">
