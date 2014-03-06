@@ -16,68 +16,26 @@
     <div class="list-group">
         <h4>Serviços ativos</h4>
         <ul class="grid clearfix">
+        {% for auth in user.getAuthorizations %}
             <li>
                 <img src="http://placehold.it/65x65" alt="" class="center-block">
-                <h5 class="center-block text-center">Central do Cidadão</h5>
+                <h5 class="center-block text-center">{{ auth.client.name }}</h5>
                 <a class="btn activated" role="button">{% trans %}Activated{%  endtrans %}</a>
             </li>
-            <li>
-                <img src="http://placehold.it/65x65" alt="" class="center-block">
-                <h5 class="center-block text-center">teste</h5>
-                <a class="btn activated" role="button">{% trans %}Activated{%  endtrans %}</a>
-            </li>
+        {% endfor %}
         </ul>
 
         <h4>Demais serviços</h4>
         <ul class="grid clearfix">
-            <li>
-                <img src="http://placehold.it/65x65" alt="" class="center-block">
-                <h5 class="center-block text-center">teste</h5>
-                <a class="btn deactivated" role="button">{% trans %}Deactivated{%  endtrans %}</a>
-            </li>
-            <li>
-                <img src="http://placehold.it/65x65" alt="" class="center-block">
-                <h5 class="center-block text-center">teste</h5>
-                <a class="btn deactivated" role="button">{% trans %}Deactivated{%  endtrans %}</a>
-            </li>
+            {% for client in apps %}
+                <li>
+                    <img src="http://placehold.it/65x65" alt="" class="center-block">
+                    <h5 class="center-block text-center">{{ client.name }}</h5>
+                    <a class="btn deactivated" role="button">{% trans %}Deactivated{%  endtrans %}</a>
+                </li>
+            {% endfor %}
         </ul>
     </div>
-
-    <ul>
-    {% for auth in user.getAuthorizations %}
-        <li>
-            <img src="http://placehold.it/120x120" alt="" class="center-block">
-            <h4 class="center-block text-center">{{ auth.client.name }}</h4>
-
-            {#
-            <a href="{{ path('ui_revoke', { 'clientId': auth.client.id }) }}" data-token="{{ csrf_token(path('ui_revoke', { 'clientId': auth.client.id })) }}" class="btn btn-float btn-danger revoke">{{ 'Revoke Access' | trans }}</a>
-            <p>
-            {% for scope in auth.scope %}
-                <span class="label label-default">{{ ('scope.' ~ scope) | trans }}</span>
-            {% endfor %}
-            </p>
-            #}
-
-            <div class="app-switch pull-right">
-                <a class="btn activate" role="button">{% trans %}Activate{%  endtrans %}</a>
-            </div>
-        </li>
-    {% endfor %}
-    </ul>
-
-    <ul>
-    {% for client in apps %}
-        <li>
-            <img src="http://placehold.it/120x120" alt="" class="center-block">
-            <h4 class="center-block text-center">
-                <a href="{{ client.siteUrl }}">{{ client.name }}</a>
-            </h4>
-            <div class="app-switch pull-right">
-                <a class="btn deactivate" role="button">{% trans %}Deactivate{%  endtrans %}</a>
-            </div>
-        </li>
-    {% endfor %}
-    </ul>
 
 </div>
 
