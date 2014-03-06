@@ -127,7 +127,7 @@ fos_facebook:
     app_id: %facebook_app_id%
     secret: %facebook_app_secret%
     cookie: true
-    permissions: [email, user_about_me, user_birthday, user_location]
+    permissions: %facebook_app_scope%
 
 hwi_oauth:
     connect:

@@ -18,6 +18,7 @@ parameters:
     facebook_app_secret: facebook_app_secret_here
     facebook_app_url: facebook_app_url
     facebook_app_this_url: "https://%site_domain%"
+    facebook_app_scope: [email, user_about_me, user_birthday, user_location]
 
     twitter_app_key:    twitter_app_key_goes_here
     twitter_app_secret: twitter_app_secret_here

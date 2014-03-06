@@ -14,9 +14,11 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\Generic\ValidationBundle\Validator\Constraints\CEP;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\NfgHelper;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\DneHelper;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class DefaultController extends Controller
 {
+
     /**
      * @Route("/", name="lc_home")
      * @Template()
@@ -29,6 +31,20 @@ class DefaultController extends Controller
         } else {
             return $this->redirect($this->generateUrl('fos_user_profile_edit'));
         }
+    }
+
+    /**
+     * @Route("/login/facebook", name="lc_link_facebook")
+     */
+    public function facebookLoginAction()
+    {
+        $api = $this->container->get('fos_facebook.api');
+        $scope = implode(',', $this->container->getParameter('facebook_app_scope'));
+        $callback = $this->container->get('router')->generate('_security_check_facebook',
+                array(), true);
+        $redirect_url = $api->getLoginUrl(array('scope' => $scope, 'redirect_uri' => $callback));
+
+        return new RedirectResponse($redirect_url);
     }
 
     /**
@@ -52,8 +68,8 @@ class DefaultController extends Controller
         } else {
 
             return $this->render(
-                'PROCERGSLoginCidadaoCoreBundle:Person:appsDetail.html.twig',
-                compact('user', 'apps')
+                            'PROCERGSLoginCidadaoCoreBundle:Person:appsDetail.html.twig',
+                            compact('user', 'apps')
             );
         }
     }
@@ -84,8 +100,8 @@ class DefaultController extends Controller
             }
 
             return $this->render(
-                'PROCERGSLoginCidadaoCoreBundle:Person:apps.html.twig',
-                compact('user', 'apps')
+                            'PROCERGSLoginCidadaoCoreBundle:Person:apps.html.twig',
+                            compact('user', 'apps')
             );
         }
     }
@@ -97,11 +113,11 @@ class DefaultController extends Controller
     public function generalAction(Request $request)
     {
         return $this->render(
-            'PROCERGSLoginCidadaoCoreBundle:Info:terms.html.twig',
-            compact('user', 'apps')
+                        'PROCERGSLoginCidadaoCoreBundle:Info:terms.html.twig',
+                        compact('user', 'apps')
         );
     }
-    
+
     /**
      * @Route("/lc_consultaCep", name="lc_consultaCep")
      * @Template()
@@ -110,17 +126,21 @@ class DefaultController extends Controller
     {
         //$cep = new \PROCERGS\LoginCidadao\CoreBundle\Entity\Cep();
         $form = $this->createFormBuilder()
-        ->add('adress', 'text', array('required' => true, 'label' => 'form.adress', 'translation_domain' => 'FOSUserBundle'))
-        ->add('adressnumber', 'text', array('required' => false, 'label' => 'form.adressnumber', 'translation_domain' => 'FOSUserBundle'))
-        ->add('city', 'text', array('required' => true, 'label' => 'form.city', 'translation_domain' => 'FOSUserBundle'))
-        ->add('uf', 'entity', array(
-            'class' => 'PROCERGSLoginCidadaoCoreBundle:Uf',
-            'property' => 'name',
-            'required' => true,
-            'label' => 'form.uf',
-            'translation_domain' => 'FOSUserBundle'
-        ))
-        ->getForm();
+                ->add('adress', 'text',
+                        array('required' => true, 'label' => 'form.adress', 'translation_domain' => 'FOSUserBundle'))
+                ->add('adressnumber', 'text',
+                        array('required' => false, 'label' => 'form.adressnumber', 'translation_domain' => 'FOSUserBundle'))
+                ->add('city', 'text',
+                        array('required' => true, 'label' => 'form.city', 'translation_domain' => 'FOSUserBundle'))
+                ->add('uf', 'entity',
+                        array(
+                    'class' => 'PROCERGSLoginCidadaoCoreBundle:Uf',
+                    'property' => 'name',
+                    'required' => true,
+                    'label' => 'form.uf',
+                    'translation_domain' => 'FOSUserBundle'
+                ))
+                ->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
             $busca = $this->get('procergs_logincidadao.dne');
@@ -135,4 +155,5 @@ class DefaultController extends Controller
         }
         return array('form' => $form->createView(), 'ceps' => $ceps);
     }
+
 }

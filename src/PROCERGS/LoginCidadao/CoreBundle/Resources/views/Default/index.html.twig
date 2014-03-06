@@ -37,7 +37,7 @@
     <div class="container">
         <div class="row buttons">
             <div class="col-xs-6">
-                <a class="connect facebook" href="https://www.facebook.com/dialog/oauth?client_id={{facebook_app_id}}&redirect_uri={{ url('_security_check_facebook') }}">Entrar usando o Facebook</a>
+                <a class="connect facebook" href="{{ path("lc_link_facebook") }}">Entrar usando o Facebook</a>
                 <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="connect twitter">Entrar usando o Twitter</a>
             </div>
             <div class="col-xs-6">
@@ -48,27 +48,6 @@
 
    {{ form_end(form1) }}
 </div>
-
-<!-- Facebook test -->
-<div class="fbpo">{{ facebook_login_button({ 'label': 'Connect using Facebook' | trans }) }}</div>
-{{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
-
-<script type="text/javascript">
-    var authurl = '{{ path('_security_check_facebook') }}';
-
-    function goLogIn(){
-        window.location = authurl;
-    }
-
-    function onFbInit() {
-        if (typeof(FB) != 'undefined' && FB != null ) {
-            FB.Event.subscribe('auth.statusChange', function(response) {
-                setTimeout(goLogIn, 500);
-            });
-        }
-    }
-
-</script>
 {% endblock %}
 
 
@@ -96,7 +75,7 @@
             } else {
                 window.location = location1;
             }
-            });        
+            });
     });
 </script>
 {% endblock %}
