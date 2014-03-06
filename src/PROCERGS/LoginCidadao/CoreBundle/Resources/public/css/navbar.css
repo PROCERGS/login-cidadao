@@ -56,3 +56,10 @@
     margin-right: 5px;
     height: 30px;
 }
+
+/* Notifications */
+.notification-extreme {
+    border-radius: 0;
+    margin-bottom: 0;
+    padding: 10px;
+}

@@ -21,10 +21,10 @@ class NotificationsHelper
      * @var SecurityContext
      */
     private $context;
-
     private $container;
 
-    public function __construct(EntityManager $em, SecurityContext $context, $container)
+    public function __construct(EntityManager $em, SecurityContext $context,
+                                $container)
     {
         $this->em = $em;
         $this->context = $context;
@@ -36,10 +36,15 @@ class NotificationsHelper
         return $this->context->getToken()->getUser();
     }
 
-    public function getUnread()
+    public function getUnreadExtreme()
+    {
+        return $this->getUnread(NotificationInterface::LEVEL_EXTREME);
+    }
+
+    public function getUnread($level = null)
     {
         return $this->em->getRepository("PROCERGSLoginCidadaoCoreBundle:Notification")
-                        ->findAllUnread($this->getUser());
+                        ->findAllUnread($this->getUser(), $level);
     }
 
     public function send(NotificationInterface $notification)
@@ -52,4 +57,5 @@ class NotificationsHelper
             throw new AccessDeniedException($translator->trans("This notification cannot be sent to this user. Check the notification level and whether the user has authorized the application."));
         }
     }
+
 }

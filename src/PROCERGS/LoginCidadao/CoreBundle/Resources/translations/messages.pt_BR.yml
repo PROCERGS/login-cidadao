@@ -80,18 +80,20 @@ Notifications: Notificações
 'Change password': 'Alterar senha'
 Settings: Configurações
 Situation: 'Situação do cadastro'
-Activate: __Activate
-Deactivate: __Deactivate
-Applications: __Applications
-'Your account is created, but you must have a CPF.': '__Your account is created, but you must have a CPF.'
-'Your CPF will give some realibility to your account.': '__Your CPF will give some realibility to your account.'
+Activate: Ativar
+Deactivate: Desativar
+Applications: Aplicativos
+'Your account is created, but you must have a CPF.': 'A sua conta foi criada, mas você precisa de um CPF.'
+'Your CPF will give some realibility to your account.': 'Seu CPF vai dar mais confiabilidade ao seu cadastro.'
 'CPF:': 'CPF:'
-'If you want to reinforce you CPF you can check with NFg': '__If you want to reinforce you CPF you can check with NFg'
-'You need to put you password of your account of NFg .': '__You need to put you password of your account of NFg .'
-'Type in your NFg password here:': '__Type in your NFg password here:'
+'If you want to reinforce you CPF you can check with NFg': 'Se você deseja reforçar seu cadastro ainda mais, você pode vinculá-lo à Nota Fiscal Gaúcha'
+'You need to put you password of your account of NFg .': 'Você precisa informar sua senha da Nota Fiscal Gaúcha.'
+'Type in your NFg password here:': 'Digite sua senha da NFG aqui:'
 'Change Username': 'Alterar nome de usuário'
-'You don''t have any unread notification.': '__You don''t have any unread notification.'
-'You don''t have any notifications yet.': '__You don''t have any notifications yet.'
+'You don''t have any unread notification.': 'Você não tem notificações não lidas.'
+'You don''t have any notifications yet.': 'Você ainda não possui notificações'
 'Change username': 'Alterar nome de usuário'
 'Updated username successfully!': 'Nome de usuário alterado com sucesso!'
-'View all notifications': '__View all notifications'
+'View all notifications': 'Ver todas notificações'
+notification.unconfirmed.email.title: Email não confirmado!
+notification.unconfirmed.email.shortText: Caso não confirme seu email em prazo hábil, sua conta será removida. Siga as instruções enviadas por email.
