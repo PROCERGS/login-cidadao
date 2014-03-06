@@ -1,13 +1,3 @@
-{% if app.user is not null and notifications_helper.getUnreadExtreme is not empty %}
-    {% for notification in notifications_helper.getUnreadExtreme %}
-<div class="notification-extreme alert alert-danger">
-    <div class="container">
-        <strong>{{ notification.title | trans }}</strong>
-        {{ notification.shortText | trans }}
-    </div>
-</div>
-    {% endfor %}
-{% endif %}
 <div class="navbar navbar-inverse">
     <div class="container">
         <div class="navbar-header {% if app.user == null %}pull-left{% endif %}">
@@ -102,3 +92,13 @@
         {% endif %}
     </div>
 </div>
+{% if app.user is not null and notifications_helper.getUnreadExtreme is not empty %}
+    {% for notification in notifications_helper.getUnreadExtreme %}
+<div class="notification-extreme alert alert-danger">
+    <div class="container">
+        <strong>{{ notification.title | trans }}</strong>
+        {{ notification.shortText | trans }}
+    </div>
+</div>
+    {% endfor %}
+{% endif %}
