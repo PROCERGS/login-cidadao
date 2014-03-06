@@ -61,59 +61,12 @@
             <p class='terms'>Ao clicar em abrir conta, você concorda com nosso <a href="">Termos</a> e que você leu nossa <a href="">Política de uso de dados</a>, incluindo nosso <a href="">Uso de cookies</a></p>
             <button class="btn btn-success pull-right" type="submit">{{ 'registration.submit'|trans }}</button>
         {{ form_end(form) }}
-            <a class="connect facebook" onclick="fb_login();">Inscreva-se usando o facebook</a>
+            <a class="connect facebook" href="{{ path("lc_link_facebook") }}">Inscreva-se usando o facebook</a>
             <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="connect twitter">Inscreva-se usando o twitter</a>
     </div>
 
 </div>
 
-<div class="row">
-    <div class="col-xs-12">
-        {{ facebook_initialize({'xfbml': true, 'fbAsyncInit': 'onFbInit();'}) }}
-
-        <script type="text/javascript">
-
-                var authurl = '{{ path('_security_check_facebook') }}';
-
-                function goLogIn(){
-                    window.location = authurl;
-                }
-
-                function onFbInit() {
-                    if (typeof(FB) != 'undefined' && FB != null ) {
-                        FB.Event.subscribe('auth.statusChange', function(response) {
-                            setTimeout(goLogIn, 500);
-                        });
-                    }
-                }
-
-                function fb_login(){
-                    FB.login(function(response) {
-
-                        if (response.authResponse) {
-                            console.log('Welcome!  Fetching your information.... ');
-                            //console.log(response); // dump complete info
-                            access_token = response.authResponse.accessToken; //get access token
-                            user_id = response.authResponse.userID; //get FB UID
-
-                            FB.api('/me', function(response) {
-                                user_email = response.email; //get user email
-                          // you can store this data into your database
-                            });
-
-                        } else {
-                            //user hit cancel button
-                            console.log('User cancelled login or did not fully authorize.');
-
-                        }
-                    }, {
-                        scope: 'publish_stream,email'
-                    });
-                }
-
-        </script>
-    </div>
-</div>
 {% endblock %}
 
 {% block javascripts %}
