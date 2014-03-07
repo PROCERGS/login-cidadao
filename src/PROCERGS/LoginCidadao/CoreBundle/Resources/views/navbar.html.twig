@@ -2,7 +2,7 @@
     <div class="container">
         <div class="navbar-header {% if app.user == null %}pull-left{% endif %}">
             {% if app.user != null %}
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#lc-navbar-collapse">
                 <span class="sr-only">{% trans %}Toggle Navigation{% endtrans %}</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -20,17 +20,25 @@
             <a data-href="{{ path("fos_user_security_login") }}" class="btn btn-login btn-success navbar-btn">{{ 'Log in' | trans }}</a>
         </div>
         {% else %}
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class="collapse navbar-collapse" id="lc-navbar-collapse">
             <ul class="nav navbar-nav">
                 {# Apps list #}
-                <li class="dropdown icons">
+                <li class="dropdown icons apps">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="glyphicon glyphicon-th">
                             <span class="icon-label">{% trans %}Applications{% endtrans %}</span>
                         </i>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="">App1</a></li>
+                    {% for auth in app.user.getAuthorizations %}
+                        <li>
+                            <a href="">
+                                <img src="http://placehold.it/50x50" alt="">
+                                <span>{{ auth.client.name }}</span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                        <li class="text-center all"><a href="{{ path('lc_apps') }}">{% trans %}View all services{% endtrans %}</a></li>
                     </ul>
                 </li>
 
@@ -53,7 +61,7 @@
                                 <a href=""><strong>{{ notification.title | trans }}</strong> - {{ notification.shortText | trans }} lorem</a>
                             </li>
                             {% endfor %}
-                            <li class="text-center"><a href="{{ path('lc_notifications_list') }}">{% trans %}View all notifications{% endtrans %}</a></li>
+                            <li class="text-center all"><a href="{{ path('lc_notifications_list') }}">{% trans %}View all notifications{% endtrans %}</a></li>
                         {% else %}
                         <li class="none">{% trans %}You don't have any unread notification.{% endtrans %}</li>
                         {% endif %}

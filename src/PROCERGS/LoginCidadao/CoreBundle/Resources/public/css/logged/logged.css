@@ -191,6 +191,10 @@
     margin-right: 3px;
 }
 
+#profile-edit img {
+    max-width: 100%;
+}
+
 #profile-edit .file-upload {
     margin: 20px 0;
 }
