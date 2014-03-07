@@ -15,6 +15,7 @@ parameters:
     procergs_logincidadao.resetting.listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\ResettingListener
     procergs_logincidadao.dne.class: PROCERGS\LoginCidadao\CoreBundle\Helper\DneHelper
     procergs_logincidadao.mailer.class: PROCERGS\LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer
+    kernel.listener.logged_in_user_listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\LoggedInUserListener
 
     procergs_logincidadao_core.emailChanged.template: PROCERGSLoginCidadaoCoreBundle:Person:emailChangedMessage.txt.twig
 
@@ -133,3 +134,9 @@ services:
     procergs_logincidadao.mailer:
         class: %procergs_logincidadao.mailer.class%
         arguments: [ "@mailer", "@router", "@twig", { "template": { "confirmation": %fos_user.registration.confirmation.template%, "resetting": %fos_user.resetting.email.template%, "email_changed": %procergs_logincidadao_core.emailChanged.template% }, "from_email": { "confirmation": %fos_user.registration.confirmation.from_email%, "resetting": %fos_user.resetting.email.from_email%, "email_changed": %mailer_sender_mail% } } ]
+
+    kernel.listener.logged_in_user_listener:
+        class: %kernel.listener.logged_in_user_listener.class%
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+        arguments: [ "@security.context", "@router" ]

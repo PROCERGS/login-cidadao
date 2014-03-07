@@ -178,16 +178,16 @@ class PersonController extends Controller
             $user->setUsername($data->getUsername());
 
             $userManager->updateUser($user);
-            
+
             $translator = $this->get('translator');
             $this->get('session')->getFlashBag()->add('notice',$translator->trans('Updated username successfully!'));
-            
+
             return $this->redirect($this->generateUrl('lc_update_username'));
         }
 
         return array('form' => $form->createView(), 'emptyPassword' => $emptyPassword);
     }
-    
+
     /**
      * @Route("/registration/cpf", name="lc_registration_cpf")
      * @Template()

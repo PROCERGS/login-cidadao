@@ -23,7 +23,7 @@ class DefaultController extends Controller
     /**
      * @Route("/", name="lc_home")
      * @Template()
-     */
+     * /
     public function indexAction()
     {
         $security = $this->get('security.context');
@@ -32,7 +32,7 @@ class DefaultController extends Controller
         } else {
             return $this->redirect($this->generateUrl('fos_user_profile_edit'));
         }
-    }
+    }*/
 
     /**
      * @Route("/login/facebook", name="lc_link_facebook")
@@ -156,12 +156,12 @@ class DefaultController extends Controller
         }
         return array('form' => $form->createView(), 'ceps' => $ceps);
     }
-    
+
     /**
-     * @Route("/lc_consultaCep2", name="lc_consultaCep2")     
+     * @Route("/lc_consultaCep2", name="lc_consultaCep2")
      */
     public function consultaCep2Action(Request $request)
-    {   
+    {
         $busca = $this->get('procergs_logincidadao.dne');
         $ceps = $busca->findByCep( $request->get('cep'));
         if ($ceps) {
@@ -169,7 +169,7 @@ class DefaultController extends Controller
         }else {
             $result = array('code' => 1, 'msg' => 'not found');
         }
-        return new Response(json_encode($result), 200, array('Content-Type' => 'application/json'));        
+        return new Response(json_encode($result), 200, array('Content-Type' => 'application/json'));
     }
 
 }

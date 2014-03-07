@@ -29,6 +29,9 @@ procergs_login_cidadao_core:
     resource: "@PROCERGSLoginCidadaoCoreBundle/Controller/"
     type:     annotation
     prefix:   /
+lc_home:
+    defaults: { _controller: FOSUserBundle:Registration:register }
+    pattern:   /
 
 # Audit
 simple_things_entity_audit:
