@@ -153,6 +153,13 @@ class Person extends BaseUser
     /**
      * @var string
      *
+     * @ORM\Column(name="facebookUsername", type="string", length=255, nullable=true)
+     */
+    protected $facebookUsername;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="twitterId", type="string", length=255, nullable=true)
      */
     protected $twitterId;
@@ -417,6 +424,9 @@ class Person extends BaseUser
         if (isset($fbdata['birthday']) && is_null($this->getBirthdate())) {
             $date = \DateTime::createFromFormat('m/d/Y', $fbdata['birthday']);
             $this->setBirthdate($date);
+        }
+        if (isset($fbdata['username']) && is_null($this->getFacebookUsername())) {
+            $this->setFacebookUsername($fbdata['username']);
         }
     }
 
@@ -687,6 +697,18 @@ class Person extends BaseUser
     {
         parent::setConfirmationToken($confirmationToken);
         $this->setEmailConfirmedAt(null);
+    }
+
+    public function setFacebookUsername($facebookUsername)
+    {
+        $this->facebookUsername = $facebookUsername;
+
+        return $this;
+    }
+
+    public function getFacebookUsername()
+    {
+        return $this->facebookUsername;
     }
 
 }

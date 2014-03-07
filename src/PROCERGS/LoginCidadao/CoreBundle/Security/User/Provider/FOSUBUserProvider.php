@@ -41,6 +41,7 @@ class FOSUBUserProvider extends BaseClass
         $setter = 'set' . ucfirst($service);
         $setter_id = $setter . 'Id';
         $setter_token = $setter . 'AccessToken';
+        $setter_username = $setter . 'Username';
 
         if (null !== $previousUser = $this->userManager->findUserBy(array($property => $username))) {
             $previousUser->$setter_id(null);
@@ -48,8 +49,10 @@ class FOSUBUserProvider extends BaseClass
             $this->userManager->updateUser($previousUser);
         }
 
+        $screenName = $response->getNickname();
         $user->$setter_id($username);
         $user->$setter_token($response->getAccessToken());
+        $user->$setter_username($screenName);
 
         $this->userManager->updateUser($user);
     }
@@ -70,12 +73,13 @@ class FOSUBUserProvider extends BaseClass
         $setter = 'set' . ucfirst($service);
         $setter_id = $setter . 'Id';
         $setter_token = $setter . 'AccessToken';
-        $setter_picture = $setter . 'Picture';
+        $setter_username = $setter . 'Username';
 
         if (null === $user) {
             $user = $this->userManager->createUser();
             $user->$setter_id($username);
             $user->$setter_token($response->getAccessToken());
+            $user->$setter_username($screenName);
 
             $fullName = explode(' ', $response->getRealName(), 2);
             $timestamp = microtime();
