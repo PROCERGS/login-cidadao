@@ -9,7 +9,7 @@
 }
 
 .navbar-nav>li.icons>a {
-    padding-top: 12px;
+    padding-top: 16px;
     padding-bottom: 8px;
 }
 
@@ -58,7 +58,24 @@
 }
 
 /* Notifications */
+.navbar .notification .none {
+    margin: 10px;
+}
+
+.navbar .notification ul {
+    width: 290px;
+}
+
+.navbar .notification ul li a {
+    white-space: normal;
+}
+
+.navbar .notification .level-3, .navbar .notification .level-3 a:hover {
+    background: #f2dede;
+}
+
 .notification-extreme {
+    background-image: none;
     border-radius: 0;
     margin-top: -20px;
     padding: 10px;
