@@ -259,3 +259,7 @@ form .has-feedback .form-control-feedback {
     margin: 20px 0;
     padding: 0 50px;
 }
+
+.header-shadows {
+    text-shadow: 1px 1px 1px #fff;
+}
