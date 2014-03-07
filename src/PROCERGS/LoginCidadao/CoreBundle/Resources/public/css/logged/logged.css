@@ -175,6 +175,18 @@
     margin-bottom: 10px;
 }
 
+#profile-edit .has-feedback .form-control {
+    padding-right: 0;
+}
+
+#profile-edit .input-error {
+    margin: 0;
+}
+
+#profile-edit .input-error ul {
+    margin-bottom: 10px;
+}
+
 #profile-edit .birthdate select {
     margin-right: 3px;
 }
@@ -344,9 +356,11 @@
 }
 
 #notifications li {
+    box-shadow: 0px 0px 1px #CCC;
+    border-radius:0;
     cursor: pointer;
+    margin-bottom: 5px;
     height: auto;
-    min-height: 130px;
     padding: 15px;
     position: relative;
     width: 100%;
@@ -364,8 +378,9 @@
     width: 100%;
 }
 
-#notifications li.alert {
-    background-color: #f0ccbd;
+#notifications li.level-3, #notifications li.level-3 a:hover, #notifications li.level-3:hover:before {
+    background: #f2dede;
+    content: none;
 }
 
 #notifications li.alert:before {
@@ -374,10 +389,11 @@
 
 #notifications img {
     float: left;
+    margin-right: 20px;
 }
 
 #notifications .box {
-    float: right;
+    float: left;
     width: 80%;
 }
 

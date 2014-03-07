@@ -6,11 +6,11 @@
     {% if notifications is not empty %}
     <ul>
         {% for notification in notifications %}
-        <li class="clearfix">
-            <img src="http://placehold.it/95x95" title="{{ notification.client.name }}">
-            <div class="box">
+        <li class="clearfix level-{{ notification.level }}">
+            {# <img src="http://placehold.it/95x95" title="{{ notification.client.name }}"> #}
+            <div class="box clearfix">
                 <h4>{{ notification.title }}</h4>
-                <p>{{ notification.shortText }}</p>
+                <p class="short">{{ notification.shortText }}</p>
                 <div class="desc">{{ notification.text | striptags('<a>') | raw | nl2br  }}</div>
                 <i class="glyphicon glyphicon-plus"></i>
             </div>
@@ -29,9 +29,8 @@
 <script type="text/javascript">
     $(function() {
         $('#notifications li').on('click', function() {
-            $(this).find('.desc').animate({
-                height: "toggle"
-            });
+            $(this).find('.short').toggle();
+            $(this).find('.desc').toggle();
             var icon = $(this).find('.glyphicon');
             icon.toggleClass('glyphicon-plus');
             icon.toggleClass('glyphicon-minus');

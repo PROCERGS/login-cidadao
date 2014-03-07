@@ -35,7 +35,7 @@
                 </li>
 
                 {# Notifications #}
-                <li class="dropdown icons">
+                <li class="dropdown icons notification">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="glyphicon glyphicon-bell">
                             {% if notifications_helper.getUnread is not empty %}
@@ -45,27 +45,17 @@
                         </i>
                     </a>
                     <ul class="dropdown-menu">
+
                         {% if notifications_helper.getUnread is not empty %}
                             {% for notification in notifications_helper.getUnread %}
 
-                            <li>
-                                <a href="">
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            {{ notification.title | trans }}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            {{ notification.shortText | trans }}
-                                        </div>
-                                    </div>
-                                </a>
+                            <li class="level-{{ notification.level }}">
+                                <a href=""><strong>{{ notification.title | trans }}</strong> - {{ notification.shortText | trans }} lorem</a>
                             </li>
                             {% endfor %}
                             <li class="text-center"><a href="{{ path('lc_notifications_list') }}">{% trans %}View all notifications{% endtrans %}</a></li>
                         {% else %}
-                        <li>{% trans %}You don't have any unread notification.{% endtrans %}</li>
+                        <li class="none">{% trans %}You don't have any unread notification.{% endtrans %}</li>
                         {% endif %}
                     </ul>
                 </li>
