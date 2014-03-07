@@ -10,6 +10,11 @@
             {{ form_widget(form.adress, {'attr': {'class': 'form-control'}}) }}
         </div>
         <div class="form-group">
+            {{ form_label(form.adressnumber) }}
+            <div class="input-error">{{ form_errors(form.adressnumber) }}</div>
+            {{ form_widget(form.adressnumber, {'attr': {'class': 'form-control'}}) }}
+        </div>        
+        <div class="form-group">
             {{ form_label(form.city) }}
             <div class="input-error">{{ form_errors(form.city) }}</div>
             {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
@@ -65,7 +70,7 @@
             {% endfor %}
         </div>
         {% else %}
-        <div>{{ 'grid.success.noresult'|trans }}</div>
+        <div>{{ 'grid.search.noresult'|trans }}</div>
         {% endif %}
     </div>
 </div>
