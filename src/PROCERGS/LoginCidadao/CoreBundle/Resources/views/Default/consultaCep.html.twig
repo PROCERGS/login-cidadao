@@ -4,6 +4,17 @@
     <div class="col-xs-12">
         <h3 class="title">{{ 'cep.search.title'|trans }}</h3>
         {{ form_start(form, {'attr': {'role':'form', 'class':'clearfix'}}) }} {{ form_errors(form) }}
+        
+        <div class="form-group">
+            {{ form_label(form.uf) }}
+            <div class="input-error">{{ form_errors(form.uf) }}</div>
+            {{ form_widget(form.uf, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.city) }}
+            <div class="input-error">{{ form_errors(form.city) }}</div>
+            {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
+        </div>                
         <div class="form-group">
             {{ form_label(form.adress) }}
             <div class="input-error">{{ form_errors(form.adress) }}</div>
@@ -13,16 +24,6 @@
             {{ form_label(form.adressnumber) }}
             <div class="input-error">{{ form_errors(form.adressnumber) }}</div>
             {{ form_widget(form.adressnumber, {'attr': {'class': 'form-control'}}) }}
-        </div>        
-        <div class="form-group">
-            {{ form_label(form.city) }}
-            <div class="input-error">{{ form_errors(form.city) }}</div>
-            {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(form.uf) }}
-            <div class="input-error">{{ form_errors(form.uf) }}</div>
-            {{ form_widget(form.uf, {'attr': {'class': 'form-control'}}) }}
         </div>
         <div class="form-bar">
             <input class='btn btn-success btn-sm pull-right' type="submit" value="{{ 'grid.search.button'|trans }}" />
@@ -43,6 +44,7 @@
             </div>
             {% for cep in ceps %}
             <div class="row cep-result">
+                <input type="hidden" class="littlesecret" value="{{ cep|json_encode }}"/>
                 <div class="col-md-3">
                     <dt>{{ 'form.adress'|trans }}</dt>
                     <dd data-cep-type="adress">{{ cep.tipoLogradouro | title }} {{ cep.logradouro | title }} {% if cep.idParidade is not null %} {{ cep.idParidade == "P" ? '(lado par)' : '(lado ímpar)' }} {% endif %}</dd>
@@ -83,12 +85,11 @@
 {% endstylesheets %} {% endblock %} {% block javascripts %} {{ parent() }}
 <script>
 function tryThisCep(obj, evt) {
-	if (window.opener) {
-		$(window.opener.document).find('#' + QueryString.cepField).val($(obj).text());		
-		$(window.opener.document).find('#' + QueryString.cityField).val($(obj).parent().parent().parent().find('[data-cep-type="city"]').text());		
-		$(window.opener.document).find('#' + QueryString.ufField).val($(obj).parent().parent().parent().find('[data-cep-type="uf"]').text());
+	if (window.opener) {		
+		var ugly = 'window.opener.'+QueryString.callback+'('+$(obj).parent().parent().parent().find('.littlesecret').val()+')';		
+		eval(ugly);	
 	}
-	window.close();
+	//window.close();
 }
 </script>
 {% endblock %} {% block footer %} {% endblock %}

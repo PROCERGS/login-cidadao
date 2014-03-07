@@ -126,7 +126,7 @@ validador.onKeyUpMultiformat = function (obj, e)
     return false;
 };
 validador.cep = { 'parent': validador };
-validador.cep.findByCep = function (obj, city_id, uf_id) {
+validador.cep.findByCep = function (obj, callback) {
 	//console.trace();	
     var cleanup = new RegExp('[. \\-]', 'gi');
     var val = obj.value.replace(cleanup, '');
@@ -140,20 +140,15 @@ validador.cep.findByCep = function (obj, city_id, uf_id) {
 				 validador.check.error(obj, $('label[for='+obj.id+']').text() +' invalido');
 				 return;
 			 }			 
-			 if (data1.itens && data1.itens.length) {
-				 if (city_id && $('#'+city_id).length) {
-					 $('#'+city_id).val(data1.itens[0].bairro.capitalize(true, true));
-				 }
-				 if (uf_id && $('#'+uf_id).length) {
-					 $('#'+uf_id).val(data1.itens[0].uf);
-				 }
+			 if (data1.itens && data1.itens.length && callback) {
+				 callback(data1.itens[0]);
 			 }
 			 validador.check.success(obj);
 		 }
 	 });
 };
-validador.cep.popupConsult = function (obj, evt, cepField, cityField, ufField) {
-	var url = $(obj).attr('data-href') + '?cepField='+cepField+'&cityField='+cityField+'&ufField='+ufField;
+validador.cep.popupConsult = function (obj, evt, cepField, callback) {
+	var url = $(obj).attr('data-href') + '?cepField='+cepField+'&callback='+callback;
 	window.open(url, '', "width=600,height=450");
 };
 
@@ -207,7 +202,7 @@ validador.mask.cep = function (obj, e) {
 };
 
 validador.mask.mobile = function (obj, e){	
-	if(this.int(e)==false){
+	if (this.int(e)==false) {
 		e.returnValue = false;
 		if (e.preventDefault){
 			e.preventDefault();
@@ -246,33 +241,37 @@ validador.mask.cpf = function (obj, e) {
 };
 validador.check = { 'parent': validador };
 validador.check.mobile = function (obj, e){
-	var cel = obj.value.toString().replace(/\-|\.|\/|\(|\)| /g, "");
-	if(cel.lengh < 8 || !$.isNumeric(cel)) {
-		this.error(obj, $('label[for='+obj.id+']').text() + ' invalido!');
-		return false;
-	} else {
-		this.success(obj);
-		return true;
+	if (obj.value.length) {
+		var cel = obj.value.toString().replace(/\-|\.|\/|\(|\)| /g, "");
+		if(cel.lengh < 8 || !$.isNumeric(cel)) {
+			this.error(obj, $('label[for='+obj.id+']').text() + ' invalido!');
+			return false;
+		}
 	}
+	this.success(obj);
+	return true;
 };
-validador.check.cep = function (obj, e){
-	var exp = /\d{2}\.\d{3}\-\d{3}/;
-	if(!exp.test(obj.value)) {
-		this.error(obj, $('label[for='+obj.id+']').text() + ' invalido!');
-		return false;
-	} else {
-		this.success(obj);
-		return true;
+validador.check.cep = function (obj, e){	
+	if (obj.value.length) {
+		var exp = /\d{2}\.\d{3}\-\d{3}/;
+		if(!exp.test(obj.value)) {
+			this.error(obj, $('label[for='+obj.id+']').text() + ' invalido!');
+			return false;
+		}
 	}
+	this.success(obj);
+	return true;
+	
 };
 validador.check.cpf = function (obj, e) {
-	if(!this.parent.isValidCpf(obj.value))	{
-		this.error(obj, $('label[for='+obj.id+']').text() + ' invalido!');
-		return false;
-	} else {
-		this.success(obj);
-		return true;
+	if (obj.value.length) {
+		if(!this.parent.isValidCpf(obj.value))	{
+			this.error(obj, $('label[for='+obj.id+']').text() + ' invalido!');
+			return false;
+		}
 	}
+	this.success(obj);
+	return true;
 };
 validador.check.error = function (obj, msg) {	
 	var parent = $(obj).parent();

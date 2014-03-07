@@ -44,27 +44,29 @@
                 <div class="form-group">
                     {{ form_label(form.cep) }}
                     <div class="input-error">{{ form_errors(form.cep) }}</div>
-                    {{ form_widget(form.cep, {'attr': {'class': 'form-control', 'onkeypress' : 'validador.mask.cep(this, event)', 'onblur' : 'validador.check.cep(this, event) && validador.cep.findByCep(this, \'city_id\', \'uf_id\')'}}) }}
+                    {{ form_widget(form.cep, {'attr': {'class': 'form-control', 'maxlength' : '10'}}) }}
                     <span>
                         Não sabe o CEP,
-                        <a onclick="validador.cep.popupConsult(this, event, '{{ form.cep.vars.id }}', 'city_id', 'uf_id');" href="javascript:void(0);" data-href="{{ path('lc_consultaCep') }}">consulte aqui</a>
+                        <a onclick="validador.cep.popupConsult(this, event, '{{ form.cep.vars.id }}', 'profileEdit.popLocation');" href="javascript:void(0);" data-href="{{ path('lc_consultaCep') }}">consulte aqui</a>
                     </span>
                 </div>
                 <div class="form-group">
-                    <label for="city_id">{{ 'form.city'|trans }}</label>
-                    <input type="text" class="form-control" name="city_id" id="city_id" readonly="readonly"/>
                     <label for="uf_id">{{ 'form.uf'|trans }}</label>
                     <input type="text" class="form-control" name="uf_id" id="uf_id" readonly="readonly"/>
+                    <label for="city_id">{{ 'form.city'|trans }}</label>
+                    <input type="text" class="form-control" name="city_id" id="city_id" readonly="readonly"/>
+                    <label for="adress_id">{{ 'form.adress'|trans }}</label>
+                    <input type="text" class="form-control" name="adress_id" id="adress_id" readonly="readonly"/>                    
                 </div>
                 <div class="form-group">
                     {{ form_label(form.cpf) }}
                     <div class="input-error">{{ form_errors(form.cpf) }}</div>
-                    {{ form_widget(form.cpf, {'attr': {'class': 'form-control', 'onkeypress' : 'validador.mask.cpf(this, event)', 'onblur' : 'validador.check.cpf(this, event)'}}) }}
+                    {{ form_widget(form.cpf, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }}
                 </div>
                 <div class="form-group">
                     {{ form_label(form.mobile) }}
                     <div class="input-error">{{ form_errors(form.mobile) }}</div>
-                    {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'onkeypress' : 'validador.mask.mobile(this, event)', 'onblur' : 'validador.check.mobile(this, event)'}}) }}
+                    {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }}
                 </div>
             </div>
 
@@ -105,14 +107,28 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
-$(document).ready(function() {	
-	$('#' + '{{ form.cep.vars.id }}').trigger('keypress');
-	$('#' + '{{ form.cep.vars.id }}').trigger('blur');
-	$('#' + '{{ form.mobile.vars.id }}').trigger('keypress');
-	$('#' + '{{ form.mobile.vars.id }}').trigger('blur');
-	$('#' + '{{ form.cpf.vars.id }}').trigger('keypress');
-	$('#' + '{{ form.cpf.vars.id }}').trigger('blur');
-	
+var profileEdit = {};
+profileEdit.popLocation = function (dneData) {	
+	$('#{{ form.cep.vars.id }}').val(dneData.cep);
+	validador.mask.cep($('#{{ form.cep.vars.id }}')[0], {});
+    $('#adress_id').val(dneData.tipoLogradouro.capitalize(true, true) + ' ' + dneData.logradouro.capitalize(true, true));
+    $('#city_id').val(dneData.localidade.capitalize(true, true));
+    $('#uf_id').val(dneData.uf);
+};
+$(document).ready(function() {
+	var teste1 = ['#{{ form.cep.vars.id }}','#{{ form.mobile.vars.id }}', '#{{ form.cpf.vars.id }}'];
+	console.log(teste1);
+	$(document).on('keypress', teste1[0], function (event) { console.log(teste1[0]);validador.mask.cep(this, event); });
+	$(document).on('blur', teste1[0], function (event) { console.log(teste1[0]);validador.mask.cep(this, event) && validador.check.cep(this, event) && validador.cep.findByCep(this, profileEdit.popLocation); });
+	$(teste1[0]).trigger('blur');
+
+	$(document).on('keypress', teste1[1], function (event) { console.log(teste1[1]);validador.mask.mobile(this, event); });
+	$(document).on('blur', teste1[1], function (event) { console.log(teste1[1]);validador.mask.mobile(this, event) && validador.check.mobile(this, event); });
+	$(teste1[1]).trigger('blur');
+
+	$(document).on('keypress', teste1[2], function (event) { console.log(teste1[2]);validador.mask.cpf(this, event); });
+	$(document).on('blur', teste1[2], function (event) { console.log(teste1[2]);validador.mask.cpf(this, event) && validador.check.cpf(this, event); });
+	$(teste1[2]).trigger('blur');
 });
 </script>
 {% endblock %}
