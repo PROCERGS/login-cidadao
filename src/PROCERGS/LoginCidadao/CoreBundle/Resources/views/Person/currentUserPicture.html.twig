@@ -1,0 +1,11 @@
+{%  if app.user.getPictureWebPath is null %}
+{%      if app.user.getSocialNetworksPicture is not null %}
+{{ app.user.getSocialNetworksPicture }}
+{%      else %}
+{% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+{{ asset_url }}
+{% endimage %}
+{%      endif %}
+{%  else %}
+/{{ app.user.getPictureWebPath }}
+{%  endif %}
