@@ -352,8 +352,24 @@
     width: 100%;
 }
 
-#notifications li:hover {
+#notifications li:hover:before {
+    background-color: #CCC;
+    content:"";
+    display: block;
+    height: 100%;
+    left: 0;
+    opacity: 0.3;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+#notifications li.alert {
     background-color: #f0ccbd;
+}
+
+#notifications li.alert:before {
+    background: none;
 }
 
 #notifications img {

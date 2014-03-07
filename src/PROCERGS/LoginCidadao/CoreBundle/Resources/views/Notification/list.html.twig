@@ -2,24 +2,24 @@
 
 {% block content %}
 <div id="notifications" class="content clearfix">
-<h3>Mensagem</h3>
-{% if notifications is not empty %}
-<ul>
-    {% for notification in notifications %}
-    <li class="clearfix">
-        <img src="http://placehold.it/95x95" title="{{ notification.client.name }}">
-        <div class="box">
-            <h4>{{ notification.title }}</h4>
-            <p>{{ notification.shortText }}</p>
-            <div class="desc">{{ notification.text | striptags('<a>') | raw | nl2br  }}</div>
-            <i class="glyphicon glyphicon-plus"></i>
-        </div>
-    </li>
-    {% endfor %}
-</ul>
-{% else %}
-    <p class="empty">{% trans %}You don't have any notifications yet.{% endtrans %}</p>
-{% endif %}
+    <h3>Mensagem</h3>
+    {% if notifications is not empty %}
+    <ul>
+        {% for notification in notifications %}
+        <li class="clearfix">
+            <img src="http://placehold.it/95x95" title="{{ notification.client.name }}">
+            <div class="box">
+                <h4>{{ notification.title }}</h4>
+                <p>{{ notification.shortText }}</p>
+                <div class="desc">{{ notification.text | striptags('<a>') | raw | nl2br  }}</div>
+                <i class="glyphicon glyphicon-plus"></i>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p class="empty">{% trans %}You don't have any notifications yet.{% endtrans %}</p>
+    {% endif %}
 </div>
 
 {% endblock %}
