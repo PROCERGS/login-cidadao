@@ -10,9 +10,13 @@ parameters:
     procergs_logincidadao.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
     procergs_logincidadao.user_manager.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Manager\UserManager
     procergs_logincidadao.user_register.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\RegisterListner
-    procergs_logincidadao.profile_edit: PROCERGS\LoginCidadao\CoreBundle\EventListener\ProfileEditListner
+    procergs_logincidadao.profile_edit.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\ProfileEditListner
     procergs_logincidadao.change.password.listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\ChangePasswordListener
     procergs_logincidadao.resetting.listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\ResettingListener
+    procergs_logincidadao.dne.class: PROCERGS\LoginCidadao\CoreBundle\Helper\DneHelper
+    procergs_logincidadao.mailer.class: PROCERGS\LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer
+
+    procergs_logincidadao_core.emailChanged.template: PROCERGSLoginCidadaoCoreBundle:Person:emailChangedMessage.txt.twig
 
 services:
     security.authentication.success_handler:
@@ -91,8 +95,8 @@ services:
             - { name: kernel.event_subscriber }
 
     procergs_logincidadao.profile_edit:
-        class: %procergs_logincidadao.profile_edit%
-        arguments: ["@router"]
+        class: %procergs_logincidadao.profile_edit.class%
+        arguments: ["@procergs_logincidadao.mailer", "@fos_user.mailer", "@fos_user.util.token_generator", "@router", "@session", "@security.context", "@notifications.helper"]
         tags:
             - { name: kernel.event_subscriber }
 
@@ -122,6 +126,10 @@ services:
             - { name: kernel.event_subscriber }
 
     procergs_logincidadao.dne:
-        class: PROCERGS\LoginCidadao\CoreBundle\Helper\DneHelper
+        class: %procergs_logincidadao.dne.class%
         calls:
             - [setContainer, ["@service_container"]]
+
+    procergs_logincidadao.mailer:
+        class: %procergs_logincidadao.mailer.class%
+        arguments: [ "@mailer", "@router", "@twig", { "template": { "confirmation": %fos_user.registration.confirmation.template%, "resetting": %fos_user.resetting.email.template%, "email_changed": %procergs_logincidadao_core.emailChanged.template% }, "from_email": { "confirmation": %fos_user.registration.confirmation.from_email%, "resetting": %fos_user.resetting.email.from_email%, "email_changed": %mailer_sender_mail% } } ]
