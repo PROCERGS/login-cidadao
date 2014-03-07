@@ -15,6 +15,7 @@ use PROCERGS\Generic\ValidationBundle\Validator\Constraints\CEP;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\NfgHelper;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\DneHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -146,14 +147,29 @@ class DefaultController extends Controller
             $busca = $this->get('procergs_logincidadao.dne');
             $ceps = $busca->find(array(
                 'logradouro' => $form->get('adress')->getData(),
-                'numero' => $form->get('city')->getData(),
-                'localidade' => $form->get('adressnumber')->getData(),
+                'localidade' => $form->get('city')->getData(),
+                'numero' => $form->get('adressnumber')->getData(),
                 'uf' => $form->get('uf')->getData()->getAcronym()
             ));
         } else {
             $ceps = array();
         }
         return array('form' => $form->createView(), 'ceps' => $ceps);
+    }
+    
+    /**
+     * @Route("/lc_consultaCep2", name="lc_consultaCep2")     
+     */
+    public function consultaCep2Action(Request $request)
+    {   
+        $busca = $this->get('procergs_logincidadao.dne');
+        $ceps = $busca->findByCep( $request->get('cep'));
+        if ($ceps) {
+            $result = array('code' => 0, 'msg' => null, 'itens' => array($ceps));
+        }else {
+            $result = array('code' => 1, 'msg' => 'not found');
+        }
+        return new Response(json_encode($result), 200, array('Content-Type' => 'application/json'));        
     }
 
 }

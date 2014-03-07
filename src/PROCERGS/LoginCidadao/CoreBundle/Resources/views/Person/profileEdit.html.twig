@@ -36,11 +36,6 @@
                     <div class="input-error">{{ form_errors(form.email) }}</div>
                     {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
                 </div>
-                <div class="form-group">
-                    {{ form_label(form.username) }}
-                    <div class="input-error">{{ form_errors(form.username) }}</div>
-                    {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
-                </div>
                 <div class="form-inline form-group birthdate">
                     {{ form_label(form.birthdate) }}
                     <div class="input-error">{{ form_errors(form.birthdate) }}</div>
@@ -49,7 +44,7 @@
                 <div class="form-group">
                     {{ form_label(form.cep) }}
                     <div class="input-error">{{ form_errors(form.cep) }}</div>
-                    {{ form_widget(form.cep, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_widget(form.cep, {'attr': {'class': 'form-control', 'onkeypress' : 'validador.mask.cep(this, event)', 'onblur' : 'validador.check.cep(this, event) && validador.cep.findByCep(this, \'city_id\', \'uf_id\')'}}) }}
                     <span>
                         Não sabe o CEP,
                         <a onclick="validador.cep.popupConsult(this, event, '{{ form.cep.vars.id }}', 'city_id', 'uf_id');" href="javascript:void(0);" data-href="{{ path('lc_consultaCep') }}">consulte aqui</a>
@@ -64,19 +59,12 @@
                 <div class="form-group">
                     {{ form_label(form.cpf) }}
                     <div class="input-error">{{ form_errors(form.cpf) }}</div>
-                    {{ form_widget(form.cpf, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_widget(form.cpf, {'attr': {'class': 'form-control', 'onkeypress' : 'validador.mask.cpf(this, event)', 'onblur' : 'validador.check.cpf(this, event)'}}) }}
                 </div>
                 <div class="form-group">
                     {{ form_label(form.mobile) }}
                     <div class="input-error">{{ form_errors(form.mobile) }}</div>
-                    {{ form_widget(form.mobile, {'attr': {'class': 'form-control'}}) }}
-                </div>
-
-                <div class="form-group">
-                    <p class="help-block">{% trans %}As a safety measure we need you to type your password to confirm any changes.{% endtrans %}</p>
-                    {{ form_label(form.current_password) }}
-                    <div class="input-error">{{ form_errors(form.current_password) }}</div>
-                    {{ form_widget(form.current_password, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'onkeypress' : 'validador.mask.mobile(this, event)', 'onblur' : 'validador.check.mobile(this, event)'}}) }}
                 </div>
             </div>
 
@@ -112,4 +100,19 @@
 
 </div>
 
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+$(document).ready(function() {	
+	$('#' + '{{ form.cep.vars.id }}').trigger('keypress');
+	$('#' + '{{ form.cep.vars.id }}').trigger('blur');
+	$('#' + '{{ form.mobile.vars.id }}').trigger('keypress');
+	$('#' + '{{ form.mobile.vars.id }}').trigger('blur');
+	$('#' + '{{ form.cpf.vars.id }}').trigger('keypress');
+	$('#' + '{{ form.cpf.vars.id }}').trigger('blur');
+	
+});
+</script>
 {% endblock %}
