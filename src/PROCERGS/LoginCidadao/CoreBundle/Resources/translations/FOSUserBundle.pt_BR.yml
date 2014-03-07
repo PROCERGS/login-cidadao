@@ -52,3 +52,5 @@ grid.search.noresult: 'Nenhum registro encontrado'
 grid.search.title: 'Resultados'
 grid.search.button: 'Pesquisar'
 cep.search.title: 'Consulta cep'
+email.changed.message.subject: "Seu email foi alterado!"
+email.changed.message.text: "Olá, %name%!\n\nEstamos lhe enviando esse email para informar-lhe que seu endereço de email foi alterado para %email%.\n\nSe não foi você quem fez essa mudança, por favor entre em contato com a equipe do Login Cidadão pois seu cadastro pode ter sido comprometido!"

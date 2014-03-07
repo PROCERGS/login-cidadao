@@ -81,15 +81,7 @@
             </div>
 
             <div class="col-md-5">
-                {% if app.user.getPictureWebPath is null %}
-                    {% if app.user.getSocialNetworksPicture is not null %}
-                <img src="{{ app.user.getSocialNetworksPicture }}">
-                    {% else %}
-                <img src="http://placehold.it/225x245">
-                    {% endif %}
-                {% else %}
-                <img src="/{{ app.user.getPictureWebPath }}">
-                {% endif %}
+                <img src="{% include 'PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig' %}">
 
                 <div class="file-upload">
                     <button type="button" class="btn btn-success btn-upload">Alterar foto</button>

@@ -38,3 +38,5 @@ grid.search.noresult: 'Nenhum registro encontrado'
 grid.search.title: 'Resultados'
 grid.search.button: 'Pesquisar'
 cep.search.title: 'Consulta cep'
+email.changed.message.subject: "Your email was changed!"
+email.changed.message.text: "Hello, %name%!\n\nWe are sending you this email to let you know that your email address was changed to %email%.\n\nIf you didn't change it, please contact us since this might be a security breach!"
