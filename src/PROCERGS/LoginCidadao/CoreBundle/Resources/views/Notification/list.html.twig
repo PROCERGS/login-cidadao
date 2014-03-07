@@ -2,29 +2,40 @@
 
 {% block content %}
 <div id="notifications" class="content clearfix">
-{% if notifications is not empty %}
+    <h3>Mensagem</h3>
+    {% if notifications is not empty %}
     <ul>
-    {% for notification in notifications %}
-        <li>
-            <dl>
-                <dt>From:</dt>
-                <dd>{{ notification.client.name }}</dd>
-
-                <dt>Title:
-                <dd>{{ notification.title }}</dd>
-
-                <dt>Short text:
-                <dd>{{ notification.shortText }}</dd>
-
-                <dt>Full text:
-                <dd>{{ notification.text | striptags('<a>') | raw | nl2br  }}</dd>
-            </dl>
+        {% for notification in notifications %}
+        <li class="clearfix">
+            <img src="http://placehold.it/95x95" title="{{ notification.client.name }}">
+            <div class="box">
+                <h4>{{ notification.title }}</h4>
+                <p>{{ notification.shortText }}</p>
+                <div class="desc">{{ notification.text | striptags('<a>') | raw | nl2br  }}</div>
+                <i class="glyphicon glyphicon-plus"></i>
+            </div>
         </li>
-    {% endfor %}
+        {% endfor %}
     </ul>
-{% else %}
-    <p>{% trans %}You don't have any notifications yet.{% endtrans %}</p>
-{% endif %}
+    {% else %}
+        <p class="empty">{% trans %}You don't have any notifications yet.{% endtrans %}</p>
+    {% endif %}
 </div>
 
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+    $(function() {
+        $('#notifications li').on('click', function() {
+            $(this).find('.desc').animate({
+                height: "toggle"
+            });
+            var icon = $(this).find('.glyphicon');
+            icon.toggleClass('glyphicon-plus');
+            icon.toggleClass('glyphicon-minus');
+        });
+    })
+</script>
 {% endblock %}
