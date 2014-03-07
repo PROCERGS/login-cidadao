@@ -338,3 +338,48 @@
 #app-detail .permissions {
     color: green;
 }
+
+#notifications ul {
+    padding: 0 40px;
+}
+
+#notifications li {
+    cursor: pointer;
+    height: auto;
+    min-height: 130px;
+    padding: 15px;
+    position: relative;
+    width: 100%;
+}
+
+#notifications li:hover {
+    background-color: #f0ccbd;
+}
+
+#notifications img {
+    float: left;
+}
+
+#notifications .box {
+    float: right;
+    width: 80%;
+}
+
+#notifications .box h4 {
+    margin: 0 0 10px;
+    padding: 0;
+}
+
+#notifications .glyphicon {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+#notifications .desc {
+    display: none;
+}
+
+#notifications .empty {
+    margin: 15px;
+}
