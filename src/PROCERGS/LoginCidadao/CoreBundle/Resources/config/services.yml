@@ -9,7 +9,7 @@ parameters:
     procergs_logincidadao.change.password.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ChangePasswordFormType
     procergs_logincidadao.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
     procergs_logincidadao.user_manager.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Manager\UserManager
-    procergs_logincidadao.user_register: PROCERGS\LoginCidadao\CoreBundle\EventListener\RegisterListner
+    procergs_logincidadao.user_register.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\RegisterListner
     procergs_logincidadao.profile_edit: PROCERGS\LoginCidadao\CoreBundle\EventListener\ProfileEditListner
     procergs_logincidadao.change.password.listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\ChangePasswordListener
     procergs_logincidadao.resetting.listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\ResettingListener
@@ -18,7 +18,7 @@ services:
     security.authentication.success_handler:
         class: %security.authentication.success_handler.class%
         public: false
-        arguments: ["@router", [], "@doctrine.orm.entity_manager", "@session", "@security.http_utils"]
+        arguments: ["@router", [], "@doctrine.orm.entity_manager", "@session", "@security.http_utils", "@notifications.helper"]
         calls:
             - [setContainer, ["@service_container"]]
 
@@ -85,8 +85,8 @@ services:
             - [setContainer, ["@service_container"]]
 
     procergs_logincidadao.user_register:
-        class: %procergs_logincidadao.user_register%
-        arguments: ["@router", "@fos_user.mailer", "@fos_user.util.token_generator"]
+        class: %procergs_logincidadao.user_register.class%
+        arguments: ["@router", "@fos_user.mailer", "@fos_user.util.token_generator", "@notifications.helper"]
         tags:
             - { name: kernel.event_subscriber }
 
@@ -120,7 +120,7 @@ services:
         arguments: ["@router", %fos_user.resetting.token_ttl%]
         tags:
             - { name: kernel.event_subscriber }
-            
+
     procergs_logincidadao.dne:
         class: PROCERGS\LoginCidadao\CoreBundle\Helper\DneHelper
         calls:

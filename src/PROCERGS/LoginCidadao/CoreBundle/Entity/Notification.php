@@ -352,4 +352,10 @@ class Notification implements NotificationInterface
         $this->setIsRead(false);
         $this->setCreatedAt(new \DateTime());
     }
+
+    public function isGlyphicon()
+    {
+        return (strstr($this->getIcon(), 'glyphicon') !== false);
+    }
+
 }

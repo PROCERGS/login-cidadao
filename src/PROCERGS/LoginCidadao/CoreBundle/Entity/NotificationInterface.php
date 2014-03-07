@@ -65,4 +65,6 @@ interface NotificationInterface
     public function getLevel();
 
     public function setLevel($level);
+
+    public function isGlyphicon();
 }

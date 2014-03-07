@@ -14,14 +14,15 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\AcessSession;
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\NotificationsHelper;
 
 class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 {
 
     private $router;
     private $em;
-
     protected $container;
+    private $notificationsHelper;
 
     public function setContainer($var)
     {
@@ -38,12 +39,16 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
      * @param RouterInterface   $router
      * @param EntityManager     $em
      */
-    public function __construct(RouterInterface $router, $options, EntityManager $em, Session $session, HttpUtils $httpUtils)
+    public function __construct(RouterInterface $router, $options,
+                                EntityManager $em, Session $session,
+                                HttpUtils $httpUtils,
+                                NotificationsHelper $notificationsHelper)
     {
         parent::__construct($httpUtils, $options);
         $this->router = $router;
         $this->em = $em;
         $this->session = $session;
+        $this->notificationsHelper = $notificationsHelper;
     }
 
     /**
@@ -61,7 +66,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             'username' => $token->getUser()->getUsername()
         );
         $accessSession = $doctrine->getRepository('PROCERGSLoginCidadaoCoreBundle:AcessSession')->findOneBy($vars);
-        if (! $accessSession) {
+        if (!$accessSession) {
             $accessSession = new AcessSession();
             $accessSession->fromArray($vars);
         }
@@ -69,21 +74,32 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
         $doctrine->getManager()->persist($accessSession);
         $doctrine->getManager()->flush();
 
-        $person = $doctrine->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->findOneBy(array('username' => $token->getUser()->getUsername()));
-        $opa = $person->getCpfExpiration();
-        if ($opa && $opa <= new \DateTime()) {
+        // CPF check
+        $cpfExpirationDate = $token->getUser()->getCpfExpiration();
+        if ($cpfExpirationDate instanceof \DateTime && $cpfExpirationDate <= new \DateTime()) {
             return new RedirectResponse($this->router->generate('lc_registration_cpf'));
         }
+
+        // Email check
+        if (is_null($token->getUser()->getEmailConfirmedAt())) {
+            $this->notificationsHelper->enforceUnconfirmedEmailNotification($token->getUser());
+        } else {
+            $this->notificationsHelper->clearUnconfirmedEmailNotification($token->getUser());
+        }
+
         if (strstr($token->getUser()->getUsername(), '@') !== false) {
             $uri = $this->router->generate('lc_update_username');
 
-            $this->session->set('referer_site_uri', $referer = $request->headers->get('referer'));
+            $this->session->set('referer_site_uri',
+                    $referer = $request->headers->get('referer'));
 
             return new RedirectResponse($uri);
         } else {
             $referer = $request->headers->get('referer');
-            $login = $this->router->generate('fos_user_security_login', array(), UrlGeneratorInterface::ABSOLUTE_URL);
-            $register = $this->router->generate('fos_user_registration_register', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+            $login = $this->router->generate('fos_user_security_login', array(),
+                    UrlGeneratorInterface::ABSOLUTE_URL);
+            $register = $this->router->generate('fos_user_registration_register',
+                    array(), UrlGeneratorInterface::ABSOLUTE_URL);
             if (strlen($referer) > 0) {
                 if ($referer == $login || $referer == $register) {
                     $referer = $this->router->generate('lc_home_gateway');

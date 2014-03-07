@@ -11,6 +11,7 @@ use FOS\UserBundle\Util\TokenGeneratorInterface;
 use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\NotificationsHelper;
 
 class RegisterListner implements EventSubscriberInterface
 {
@@ -18,14 +19,17 @@ class RegisterListner implements EventSubscriberInterface
     private $router;
     private $mailer;
     private $tokenGenerator;
+    private $notificationHelper;
 
     public function __construct(UrlGeneratorInterface $router,
                                 MailerInterface $mailer,
-                                TokenGeneratorInterface $tokenGenerator)
+                                TokenGeneratorInterface $tokenGenerator,
+                                NotificationsHelper $notificationHelper)
     {
         $this->router = $router;
         $this->mailer = $mailer;
         $this->tokenGenerator = $tokenGenerator;
+        $this->notificationHelper = $notificationHelper;
     }
 
     /**
@@ -55,12 +59,14 @@ class RegisterListner implements EventSubscriberInterface
     public function onRegistrationCompleted(FilterUserResponseEvent $event)
     {
         $user = $event->getUser();
+        $this->notificationHelper->enforceUnconfirmedEmailNotification($user);
         $this->mailer->sendConfirmationEmailMessage($user);
     }
 
     public function onEmailConfirmed(GetResponseUserEvent $event)
     {
         $event->getUser()->setEmailConfirmedAt(new \DateTime());
+        $this->notificationHelper->clearUnconfirmedEmailNotification($event->getUser());
     }
 
 }

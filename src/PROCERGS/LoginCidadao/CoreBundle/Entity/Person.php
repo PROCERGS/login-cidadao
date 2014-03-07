@@ -629,7 +629,7 @@ class Person extends BaseUser
                         'header' => array(
                             "Proxy-Authorization: Basic $auth"
                         )
-                    ));
+                ));
                 $context = stream_context_create($opts);
             }
             $this->setTwitterPicture($pictureAddress);
@@ -646,4 +646,24 @@ class Person extends BaseUser
     {
         return file_exists($this->getAbsolutePicturePath());
     }
+
+    public function getNotifications()
+    {
+        return $this->notifications;
+    }
+
+    public function checkEmailPending()
+    {
+        $confirmToken = $this->getConfirmationToken();
+        $notifications = $this->getNotifications();
+
+        if (is_null($confirmToken)) {
+            foreach ($notifications as $notification) {
+                if ($notification->getTitle() === 'notification.unconfirmed.email.title') {
+                    $notification->setRead(true);
+                }
+            }
+        }
+    }
+
 }
