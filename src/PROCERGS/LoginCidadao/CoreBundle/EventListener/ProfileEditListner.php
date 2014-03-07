@@ -29,6 +29,7 @@ class ProfileEditListner implements EventSubscriberInterface
      * @var NotificationsHelper
      */
     private $notificationsHelper;
+    private $emailUnconfirmedTime;
 
     public function __construct(TwigSwiftMailer $mailer,
                                 MailerInterface $fosMailer,
@@ -36,7 +37,8 @@ class ProfileEditListner implements EventSubscriberInterface
                                 UrlGeneratorInterface $router,
                                 SessionInterface $session,
                                 SecurityContextInterface $security,
-                                NotificationsHelper $notificationsHelper)
+                                NotificationsHelper $notificationsHelper,
+                                $emailUnconfirmedTime)
     {
         $this->mailer = $mailer;
         $this->fosMailer = $fosMailer;
@@ -45,6 +47,7 @@ class ProfileEditListner implements EventSubscriberInterface
         $this->session = $session;
         $this->security = $security;
         $this->notificationsHelper = $notificationsHelper;
+        $this->emailUnconfirmedTime = $emailUnconfirmedTime;
     }
 
     /**
@@ -70,6 +73,7 @@ class ProfileEditListner implements EventSubscriberInterface
         if ($user->getEmail() !== $this->email) {
             // send confirmation token to new email
             $user->setConfirmationToken($this->tokenGenerator->generateToken());
+            $user->setEmailExpiration(new \DateTime("+$this->emailUnconfirmedTime"));
             $this->fosMailer->sendConfirmationEmailMessage($user);
 
             $this->notificationsHelper->enforceUnconfirmedEmailNotification($user);

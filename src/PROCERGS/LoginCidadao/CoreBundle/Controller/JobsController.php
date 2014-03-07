@@ -66,11 +66,9 @@ class JobsController extends Controller
      */
     public function emailCleanupAction()
     {
-        $unconfirmedEmailLimit = $this->container->getParameter('registration.email.unconfirmed_time');
-        $dateLimit = new \DateTime("-$unconfirmedEmailLimit");
         $personRepo = $this->getDoctrine()
                 ->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
-        $missingConfirmation = $personRepo->findUnconfirmedEmail($dateLimit);
+        $missingConfirmation = $personRepo->findUnconfirmedEmailUntilDate(new \DateTime());
 
         $deleted = array();
         if (!empty($missingConfirmation)) {

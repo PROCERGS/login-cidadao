@@ -99,6 +99,11 @@ class Person extends BaseUser
     protected $cpfExpiration;
 
     /**
+     * @ORM\Column(name="email_expiration", type="datetime", nullable=true)
+     */
+    protected $emailExpiration;
+
+    /**
      * @Expose
      * @Groups({"cep"})
      * @ORM\Column(type="string", nullable=true)
@@ -492,7 +497,7 @@ class Person extends BaseUser
         }
     }
 
-    public function setEmailConfirmedAt(\DateTime $emailConfirmedAt)
+    public function setEmailConfirmedAt(\DateTime $emailConfirmedAt = null)
     {
         $this->emailConfirmedAt = $emailConfirmedAt;
 
@@ -664,6 +669,24 @@ class Person extends BaseUser
                 }
             }
         }
+    }
+
+    public function setEmailExpiration($emailExpiration)
+    {
+        $this->emailExpiration = $emailExpiration;
+
+        return $this;
+    }
+
+    public function getEmailExpiration()
+    {
+        return $this->emailExpiration;
+    }
+
+    public function setConfirmationToken($confirmationToken)
+    {
+        parent::setConfirmationToken($confirmationToken);
+        $this->setEmailConfirmedAt(null);
     }
 
 }

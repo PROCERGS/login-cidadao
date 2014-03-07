@@ -90,13 +90,13 @@ services:
 
     procergs_logincidadao.user_register:
         class: %procergs_logincidadao.user_register.class%
-        arguments: ["@router", "@fos_user.mailer", "@fos_user.util.token_generator", "@notifications.helper"]
+        arguments: ["@router", "@fos_user.mailer", "@fos_user.util.token_generator", "@notifications.helper", "%registration.email.unconfirmed_time%"]
         tags:
             - { name: kernel.event_subscriber }
 
     procergs_logincidadao.profile_edit:
         class: %procergs_logincidadao.profile_edit.class%
-        arguments: ["@procergs_logincidadao.mailer", "@fos_user.mailer", "@fos_user.util.token_generator", "@router", "@session", "@security.context", "@notifications.helper"]
+        arguments: ["@procergs_logincidadao.mailer", "@fos_user.mailer", "@fos_user.util.token_generator", "@router", "@session", "@security.context", "@notifications.helper", "%registration.email.unconfirmed_time%"]
         tags:
             - { name: kernel.event_subscriber }
 

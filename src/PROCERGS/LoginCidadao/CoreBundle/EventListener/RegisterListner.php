@@ -20,16 +20,19 @@ class RegisterListner implements EventSubscriberInterface
     private $mailer;
     private $tokenGenerator;
     private $notificationHelper;
+    private $emailUnconfirmedTime;
 
     public function __construct(UrlGeneratorInterface $router,
                                 MailerInterface $mailer,
                                 TokenGeneratorInterface $tokenGenerator,
-                                NotificationsHelper $notificationHelper)
+                                NotificationsHelper $notificationHelper,
+                                $emailUnconfirmedTime)
     {
         $this->router = $router;
         $this->mailer = $mailer;
         $this->tokenGenerator = $tokenGenerator;
         $this->notificationHelper = $notificationHelper;
+        $this->emailUnconfirmedTime = $emailUnconfirmedTime;
     }
 
     /**
@@ -50,6 +53,7 @@ class RegisterListner implements EventSubscriberInterface
 
         if (null === $user->getConfirmationToken()) {
             $user->setConfirmationToken($this->tokenGenerator->generateToken());
+            $user->setEmailExpiration(new \DateTime("+$this->emailUnconfirmedTime"));
         }
 
         $url = $this->router->generate('fos_user_profile_edit');
@@ -66,6 +70,7 @@ class RegisterListner implements EventSubscriberInterface
     public function onEmailConfirmed(GetResponseUserEvent $event)
     {
         $event->getUser()->setEmailConfirmedAt(new \DateTime());
+        $event->getUser()->setEmailExpiration(null);
         $this->notificationHelper->clearUnconfirmedEmailNotification($event->getUser());
     }
 
