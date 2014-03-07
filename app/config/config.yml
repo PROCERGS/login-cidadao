@@ -131,6 +131,7 @@ fos_facebook:
 
 hwi_oauth:
     connect:
+        confirmation: false
         account_connector: procergs.hwi_twitter.user_provider
     firewall_name: main
     fosub:
