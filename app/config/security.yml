@@ -41,7 +41,7 @@ security:
                 login_path:   /login
                 use_forward:  false
                 failure_path: /login
-                default_target_path: /
+                default_target_path: fos_user_profile_edit
                 success_handler: security.authentication.success_handler
                 oauth_user_provider:
                     service:  procergs.hwi_twitter.user_provider
