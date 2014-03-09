@@ -11,43 +11,33 @@
     <footer class="container">
         <div class="row">
             <div class="col-sm-4">
-                <h3>Informações Úteis</h3>
+                <h3>{% trans %}Useful Information{% endtrans %}</h3>
                 <ul>
-                    <li><a href="{{ path('lc_general') }}">Licença de Conteúdo</a></li>
-                    <li><a href="{{ path('lc_general') }}">{%trans%}Privacy and Terms of Service{%endtrans%}</a></li>
-                    <li><a href="{{ path('lc_general') }}">Política de Privacidade</a></li>
-                    <li><a href="https://github.com/PROCERGS/login-cidadao/">Repositório Github</a></li>
-                    <li><a href="/humans.txt">humans.txt</a></li>
+                    <li><a href="{{ path('lc_general') }}">{% trans %}Content License{% endtrans %}</a></li>
+                    <li><a href="{{ path('lc_general') }}">{% trans %}Privacy and Terms of Service{% endtrans %}</a></li>
+                    <li><a href="{{ path('lc_general') }}">{% trans %}Privacy Policy{% endtrans %}</a></li>
+                    <li><a href="https://github.com/PROCERGS/login-cidadao/">{% trans %}GitHub Repository{% endtrans %}</a></li>
+                    <li><a href="{{ asset('humans.txt') }}">humans.txt</a></li>
                 </ul>
             </div>
 
             <div class="col-sm-4">
-                <h3>Precisa de Ajuda?</h3>
+                <h3>{% trans %}Need help?{% endtrans %}</h3>
                 <ul>
-                    <li><a href="">Contato</a></li>
-                    <li><a href="">Suporte e Informações</a></li>
-                </ul>
-
-                <h3>Fique por Dentro</h3>
-                <ul class="social">
-                    <li class="flickr"><a href=""></a></li>
-                    <li class="twitter"><a href=""></a></li>
-                    <li class="facebook"><a href=""></a></li>
-                    <li class="instagram"><a href=""></a></li>
-                    <li class="youtube"><a href=""></a></li>
-                    <li class="google"><a href=""></a></li>
+                    <li><a href="">{{ 'Contact' | trans }}</a></li>
+                    <li><a href="">{{ 'Help' | trans }}</a></li>
                 </ul>
             </div>
 
             <div class="col-sm-4">
-                <h3>Sobre o Governo</h3>
+                <h3>{% trans %}About the Government{% endtrans %}</h3>
                 {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_gov2.png' %}
-                <img src="{{ asset_url }}" alt="{% trans %}Available services{% endtrans %}">
+                <img src="{{ asset_url }}" alt="{% trans %}Government{% endtrans %}">
                 {% endimage %}
             </div>
         </div>
         <div class="row copyright">
-            <span>Copyright @2014 Procergs</span>
+            <span>Copyright @2014 PROCERGS</span>
         </div>
     </footer>
 {% endblock %}
