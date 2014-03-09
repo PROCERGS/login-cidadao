@@ -95,5 +95,13 @@ Applications: Aplicativos
 'Change username': 'Alterar nome de usuário'
 'Updated username successfully!': 'Nome de usuário alterado com sucesso!'
 'View all notifications': 'Ver todas notificações'
-notification.unconfirmed.email.title: Email não confirmado!
-notification.unconfirmed.email.shortText: Caso não confirme seu email em prazo hábil, sua conta será removida. Siga as instruções enviadas por email.
+notification.unconfirmed.email.title: 'Email não confirmado!'
+notification.unconfirmed.email.shortText: 'Caso não confirme seu email em prazo hábil, sua conta será removida. Siga as instruções enviadas por email.'
+'Useful Information': 'Informações Úteis'
+'Content License': 'Licença do Conteúdo'
+'Privacy Policy': 'Política de Privacidade'
+'GitHub Repository': 'Repositório no GitHub'
+Contact: Contato
+'About the Government': 'Sobre o Governo'
+Government: Governo
+'View all services': 'Ver todos Serviços'
