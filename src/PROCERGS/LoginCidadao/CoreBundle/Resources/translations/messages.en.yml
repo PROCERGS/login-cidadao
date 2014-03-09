@@ -51,3 +51,40 @@ CEP: CEP
 'Current password:': 'Current password:'
 Save: Save
 'Logo Nota Fiscal Gaúcha': 'Logo Nota Fiscal Gaúcha'
+'Useful Information': 'Useful Information'
+'Content License': 'Content License'
+'Privacy Policy': 'Privacy Policy'
+'GitHub Repository': 'GitHub Repository'
+Contact: Contact
+'About the Government': 'About the Government'
+Government: Government
+Profile: Profile
+Services: Services
+Notifications: Notifications
+'Change Username': 'Change Username'
+'Change password': 'Change Password'
+Activate: Activate
+Deactivate: Deactivate
+'Hello, %name%': 'Hello, %name%'
+'We noticed that your account doesn''t have a CPF associated with it yet.': 'We noticed that your account doesn''t have a CPF associated with it yet.'
+'Please consider visiting Citizen''s Login until %date% to complete this information. After that date, your account might be suspended.': 'Please consider visiting Citizen''s Login until %date% to complete this information. After that date, your account might be suspended.'
+'Toggle Navigation': 'Toggle Navigation'
+'Log in': 'Log in'
+Applications: Applications
+'View all services': 'View all services'
+'View all notifications': 'View all notifications'
+'You don''t have any unread notification.': 'You don''t have any unread notification.'
+'You don''t have any notifications yet.': 'You don''t have any notifications yet.'
+Activated: Activated
+Deactivated: Deactivated
+'Your account is created, but you must have a CPF.': 'Your account is created, but you must have a CPF.'
+'Your CPF will give some realibility to your account.': 'Your CPF will give some realibility to your account.'
+'CPF:': 'CPF:'
+'If you want to reinforce you CPF you can check with NFg': 'If you want to reinforce you CPF you can check with NFg'
+'You need to put you password of your account of NFg .': 'You need to put you password of your account of NFg .'
+'Type in your NFg password here:': 'Type in your NFg password here:'
+'With only one account': 'With only one account'
+'Access to all services offered by the Government': 'Access to all services offered by the Government'
+'With only the password and CPF. Making accessing the services much simpler.': 'With only the password and CPF. Making accessing the services much simpler.'
+'Create your account': 'Create your account'
+'Change username': 'Change username'
