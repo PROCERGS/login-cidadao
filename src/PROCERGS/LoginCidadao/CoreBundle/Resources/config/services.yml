@@ -144,6 +144,6 @@ services:
 
     kernel.listener.exceptions_listener:
         class: %kernel.listener.exceptions_listener.class%
-        arguments: [ "@session", "@router" ]
+        arguments: [ "@session", "@router", "@translator" ]
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
