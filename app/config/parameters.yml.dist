@@ -38,3 +38,6 @@ parameters:
     # Compatible with strtotime() but without + and - sign
     registration.email.unconfirmed_time: '1 day'
     brute_force_threshold: 4
+
+    background_picture.author: 'Author Name'
+    background_picture.link: 'http://link.to/picture'
