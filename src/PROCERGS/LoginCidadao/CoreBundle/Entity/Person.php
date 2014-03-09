@@ -146,7 +146,7 @@ class Person extends BaseUser
     /**
      * @var string
      *
-     * @ORM\Column(name="facebookId", type="string", length=255, nullable=true)
+     * @ORM\Column(name="facebookId", type="string", length=255, nullable=true, unique=true)
      */
     protected $facebookId;
 
@@ -160,7 +160,7 @@ class Person extends BaseUser
     /**
      * @var string
      *
-     * @ORM\Column(name="twitterId", type="string", length=255, nullable=true)
+     * @ORM\Column(name="twitterId", type="string", length=255, nullable=true, unique=true)
      */
     protected $twitterId;
 

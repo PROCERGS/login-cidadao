@@ -88,3 +88,4 @@ Deactivated: Deactivated
 'With only the password and CPF. Making accessing the services much simpler.': 'With only the password and CPF. Making accessing the services much simpler.'
 'Create your account': 'Create your account'
 'Change username': 'Change username'
+exception.alreadyLinkedAccount: "This account is already linked with another user. You have to unlink from that user before linking to this current user."

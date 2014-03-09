@@ -105,3 +105,4 @@ Contact: Contato
 'About the Government': 'Sobre o Governo'
 Government: Governo
 'View all services': 'Ver todos Serviços'
+exception.alreadyLinkedAccount: "Essa conta já está conectada a um outro usuário. Você deve desfazer essa conexão antes de tentar linkar com o usuário atual."

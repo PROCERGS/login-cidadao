@@ -6,6 +6,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseClass;
 use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
+use PROCERGS\LoginCidadao\CoreBundle\Security\Exception\AlreadyLinkedAccount;
 
 class FOSUBUserProvider extends BaseClass
 {
@@ -43,7 +44,8 @@ class FOSUBUserProvider extends BaseClass
         $setter_token = $setter . 'AccessToken';
         $setter_username = $setter . 'Username';
 
-        if (null !== $previousUser = $this->userManager->findUserBy(array($property => $username))) {
+        if (null !== $previousUser = $this->userManager->findUserBy(array("{$service}Id" => $username))) {
+            throw new AlreadyLinkedAccount();
             $previousUser->$setter_id(null);
             $previousUser->$setter_token(null);
             $this->userManager->updateUser($previousUser);
@@ -66,7 +68,6 @@ class FOSUBUserProvider extends BaseClass
 
         $username = $response->getUsername();
         $screenName = $response->getNickname();
-        $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
 
 
         $service = $response->getResourceOwner()->getName();
@@ -74,6 +75,8 @@ class FOSUBUserProvider extends BaseClass
         $setter_id = $setter . 'Id';
         $setter_token = $setter . 'AccessToken';
         $setter_username = $setter . 'Username';
+
+        $user = $this->userManager->findUserBy(array("{$service}Id" => $username));
 
         if (null === $user) {
             $user = $this->userManager->createUser();

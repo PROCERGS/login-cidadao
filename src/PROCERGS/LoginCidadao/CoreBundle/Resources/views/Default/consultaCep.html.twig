@@ -85,11 +85,11 @@
 {% endstylesheets %} {% endblock %} {% block javascripts %} {{ parent() }}
 <script>
 function tryThisCep(obj, evt) {
-	if (window.opener) {		
-		var ugly = 'window.opener.'+QueryString.callback+'('+$(obj).parent().parent().parent().find('.littlesecret').val()+')';		
-		eval(ugly);	
-	}
-	//window.close();
+    if (window.opener) {        
+        var ugly = 'window.opener.'+QueryString.callback+'('+$(obj).parent().parent().parent().find('.littlesecret').val()+')';        
+        eval(ugly);    
+    }
+    //window.close();
 }
 </script>
 {% endblock %} {% block footer %} {% endblock %}

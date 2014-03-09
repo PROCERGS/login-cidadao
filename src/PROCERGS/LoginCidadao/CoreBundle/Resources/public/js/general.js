@@ -11,49 +11,49 @@ function responsive(aside, signUp) {
     }
 }
 if (typeof String.prototype.repeat !== 'function') {
-	String.prototype.repeat = function( num ) {
-	    return new Array( num + 1 ).join( this );
-	};
+    String.prototype.repeat = function( num ) {
+        return new Array( num + 1 ).join( this );
+    };
 }
 if (typeof String.prototype.capitalize !== 'function') {
-	String.prototype.capitalize = function(lc, all) {		
-		if (all) {
-			return this.split(" ").map(function(currentValue, index, array) {
-				return currentValue.capitalize(lc);
-			}, this).join(" ").split("-").map(
-					function(currentValue, index, array) {
-						return currentValue.capitalize(false);
-					}, this).join("-");
-		} else {
-			return lc ? this.charAt(0).toUpperCase()
-					+ this.slice(1).toLowerCase() : this.charAt(0)
-					.toUpperCase()
-					+ this.slice(1);
-		}
-	};
+    String.prototype.capitalize = function(lc, all) {        
+        if (all) {
+            return this.split(" ").map(function(currentValue, index, array) {
+                return currentValue.capitalize(lc);
+            }, this).join(" ").split("-").map(
+                    function(currentValue, index, array) {
+                        return currentValue.capitalize(false);
+                    }, this).join("-");
+        } else {
+            return lc ? this.charAt(0).toUpperCase()
+                    + this.slice(1).toLowerCase() : this.charAt(0)
+                    .toUpperCase()
+                    + this.slice(1);
+        }
+    };
 }
 var QueryString = function () {
-	  // This function is anonymous, is executed immediately and
-	  // the return value is assigned to QueryString!
-	  var query_string = {};
-	  var query = window.location.search.substring(1);
-	  var vars = query.split("&");
-	  for (var i=0;i<vars.length;i++) {
-	    var pair = vars[i].split("=");
-	    	// If first entry with this name
-	    if (typeof query_string[pair[0]] === "undefined") {
-	      query_string[pair[0]] = pair[1];
-	    	// If second entry with this name
-	    } else if (typeof query_string[pair[0]] === "string") {
-	      var arr = [ query_string[pair[0]], pair[1] ];
-	      query_string[pair[0]] = arr;
-	    	// If third or later entry with this name
-	    } else {
-	      query_string[pair[0]].push(pair[1]);
-	    }
-	  } 
-	    return query_string;
-	} ();
+      // This function is anonymous, is executed immediately and
+      // the return value is assigned to QueryString!
+      var query_string = {};
+      var query = window.location.search.substring(1);
+      var vars = query.split("&");
+      for (var i=0;i<vars.length;i++) {
+        var pair = vars[i].split("=");
+            // If first entry with this name
+        if (typeof query_string[pair[0]] === "undefined") {
+          query_string[pair[0]] = pair[1];
+            // If second entry with this name
+        } else if (typeof query_string[pair[0]] === "string") {
+          var arr = [ query_string[pair[0]], pair[1] ];
+          query_string[pair[0]] = arr;
+            // If third or later entry with this name
+        } else {
+          query_string[pair[0]].push(pair[1]);
+        }
+      } 
+        return query_string;
+    } ();
 var validador = {};
 validador.isValidCpf = function (cpf)
 {
@@ -107,7 +107,7 @@ validador.onKeyUpMultiformat = function (obj, e)
 
 
     if (!isWordcharacter && e.keyCode !== 0) {
-    	validador.formatCPF($(obj), cpf);
+        validador.formatCPF($(obj), cpf);
         return;
     }
 
@@ -127,161 +127,161 @@ validador.onKeyUpMultiformat = function (obj, e)
 };
 validador.cep = { 'parent': validador };
 validador.cep.findByCep = function (obj, callback) {
-	//console.trace();	
+    //console.trace();    
     var cleanup = new RegExp('[. \\-]', 'gi');
     var val = obj.value.replace(cleanup, '');
-	 $.ajax({
-		 type: "GET",
-		 dataType: "json",
-		 url: '/lc_consultaCep2',
-		 data: {'cep' : val },
-		 success : function (data1, textStatus, jqXHR) {			 
-			 if (data1.code > 0) {
-				 validador.check.error(obj, $('label[for='+obj.id+']').text() +' invalido');
-				 return;
-			 }			 
-			 if (data1.itens && data1.itens.length && callback) {
-				 callback(data1.itens[0]);
-			 }
-			 validador.check.success(obj);
-		 }
-	 });
+     $.ajax({
+         type: "GET",
+         dataType: "json",
+         url: '/lc_consultaCep2',
+         data: {'cep' : val },
+         success : function (data1, textStatus, jqXHR) {             
+             if (data1.code > 0) {
+                 validador.check.error(obj, $('label[for='+obj.id+']').text() +' invalido');
+                 return;
+             }             
+             if (data1.itens && data1.itens.length && callback) {
+                 callback(data1.itens[0]);
+             }
+             validador.check.success(obj);
+         }
+     });
 };
 validador.cep.popupConsult = function (obj, evt, cepField, callback) {
-	var url = $(obj).attr('data-href') + '?cepField='+cepField+'&callback='+callback;
-	window.open(url, '', "width=600,height=450");
+    var url = $(obj).attr('data-href') + '?cepField='+cepField+'&callback='+callback;
+    window.open(url, '', "width=600,height=450");
 };
 
 validador.mask = { 'parent': validador };
-validador.mask.int = function (e){	
-	var charCode = e.which || e.keyCode;
-	if ((charCode < 48 || charCode > 57) && (charCode != 8 && charCode != 46)) {
-		e.returnValue = false;
-		return false;
-	}
-	return true;
+validador.mask.int = function (e){    
+    var charCode = e.which || e.keyCode;
+    if ((charCode < 48 || charCode > 57) && (charCode != 8 && charCode != 46)) {
+        e.returnValue = false;
+        return false;
+    }
+    return true;
 };
 validador.mask.format = function(obj, mask, e) {
-	var masked;
-	var numerics = obj.value.toString().replace(/\-|\.|\/|\(|\)| /g, "");
-	var pos = 0;
-	var newVal = "";
-	var sizeMask = numerics.length;
-	
-	if (e && e.keyCode != 8) {
-		for (var i = 0; i <= sizeMask; i++) {
-			masked = ((mask.charAt(i) == "-") || (mask.charAt(i) == ".") || (mask
-					.charAt(i) == "/"));
-			masked = masked
-					|| ((mask.charAt(i) == "(") || (mask.charAt(i) == ")") || (mask
-							.charAt(i) == " "));
-			if (masked) {
-				newVal += mask.charAt(i);
-				sizeMask++;
-			} else {
-				newVal += numerics.charAt(pos);
-				pos++;
-			}
-		}
-		obj.value = newVal;
-		return true;
-	} else {
-		return true;
-	}
+    var masked;
+    var numerics = obj.value.toString().replace(/\-|\.|\/|\(|\)| /g, "");
+    var pos = 0;
+    var newVal = "";
+    var sizeMask = numerics.length;
+    
+    if (e && e.keyCode != 8) {
+        for (var i = 0; i <= sizeMask; i++) {
+            masked = ((mask.charAt(i) == "-") || (mask.charAt(i) == ".") || (mask
+                    .charAt(i) == "/"));
+            masked = masked
+                    || ((mask.charAt(i) == "(") || (mask.charAt(i) == ")") || (mask
+                            .charAt(i) == " "));
+            if (masked) {
+                newVal += mask.charAt(i);
+                sizeMask++;
+            } else {
+                newVal += numerics.charAt(pos);
+                pos++;
+            }
+        }
+        obj.value = newVal;
+        return true;
+    } else {
+        return true;
+    }
 };
 validador.mask.cep = function (obj, e) {
-	if(this.int(e)==false){
-		e.returnValue = false;
-		if (e.preventDefault){
-			e.preventDefault();
-		} else {
-			return false;
-		}		
-	}	
-	return this.format(obj, '00.000-000', e);	
+    if(this.int(e)==false){
+        e.returnValue = false;
+        if (e.preventDefault){
+            e.preventDefault();
+        } else {
+            return false;
+        }        
+    }    
+    return this.format(obj, '00.000-000', e);    
 };
 
-validador.mask.mobile = function (obj, e){	
-	if (this.int(e)==false) {
-		e.returnValue = false;
-		if (e.preventDefault){
-			e.preventDefault();
-		} else {
-			return false;
-		}		
-	}
-	var mask = '0000';
-	var test = obj.value.toString().replace(/\-|\.|\/|\(|\)| /g, "")+1;	
-	if (test.length > 8) {
-		var a = test.length - 8;
-		var b = a%2;
-		var c = Math.floor(a/2);
-		mask = '0000-0000';		
-		if (b) {
-			mask = '0'+ mask;
-		}
-		if (c) {			
-			mask = '(00) '.repeat(c) + mask;
-		}
-	} else if (test.length > 4) {
-		mask = '0000-0000';
-	}
-	return this.format(obj, mask, e);
+validador.mask.mobile = function (obj, e){    
+    if (this.int(e)==false) {
+        e.returnValue = false;
+        if (e.preventDefault){
+            e.preventDefault();
+        } else {
+            return false;
+        }        
+    }
+    var mask = '0000';
+    var test = obj.value.toString().replace(/\-|\.|\/|\(|\)| /g, "")+1;    
+    if (test.length > 8) {
+        var a = test.length - 8;
+        var b = a%2;
+        var c = Math.floor(a/2);
+        mask = '0000-0000';        
+        if (b) {
+            mask = '0'+ mask;
+        }
+        if (c) {            
+            mask = '(00) '.repeat(c) + mask;
+        }
+    } else if (test.length > 4) {
+        mask = '0000-0000';
+    }
+    return this.format(obj, mask, e);
 };
-validador.mask.cpf = function (obj, e) {	
-	if(this.int(e)==false){
-		e.returnValue = false;	
-		if (e.preventDefault){
-			e.preventDefault();
-		} else {
-			return false;
-		}
-	}	
-	return this.format(obj, '000.000.000-00', e);	
+validador.mask.cpf = function (obj, e) {    
+    if(this.int(e)==false){
+        e.returnValue = false;    
+        if (e.preventDefault){
+            e.preventDefault();
+        } else {
+            return false;
+        }
+    }    
+    return this.format(obj, '000.000.000-00', e);    
 };
 validador.check = { 'parent': validador };
 validador.check.mobile = function (obj, e){
-	if (obj.value.length) {
-		var cel = obj.value.toString().replace(/\-|\.|\/|\(|\)| /g, "");
-		if(cel.lengh < 8 || !$.isNumeric(cel)) {
-			this.error(obj, $('label[for='+obj.id+']').text() + ' invalido!');
-			return false;
-		}
-	}
-	this.success(obj);
-	return true;
+    if (obj.value.length) {
+        var cel = obj.value.toString().replace(/\-|\.|\/|\(|\)| /g, "");
+        if(cel.lengh < 8 || !$.isNumeric(cel)) {
+            this.error(obj, $('label[for='+obj.id+']').text() + ' invalido!');
+            return false;
+        }
+    }
+    this.success(obj);
+    return true;
 };
-validador.check.cep = function (obj, e){	
-	if (obj.value.length) {
-		var exp = /\d{2}\.\d{3}\-\d{3}/;
-		if(!exp.test(obj.value)) {
-			this.error(obj, $('label[for='+obj.id+']').text() + ' invalido!');
-			return false;
-		}
-	}
-	this.success(obj);
-	return true;
-	
+validador.check.cep = function (obj, e){    
+    if (obj.value.length) {
+        var exp = /\d{2}\.\d{3}\-\d{3}/;
+        if(!exp.test(obj.value)) {
+            this.error(obj, $('label[for='+obj.id+']').text() + ' invalido!');
+            return false;
+        }
+    }
+    this.success(obj);
+    return true;
+    
 };
 validador.check.cpf = function (obj, e) {
-	if (obj.value.length) {
-		if(!this.parent.isValidCpf(obj.value))	{
-			this.error(obj, $('label[for='+obj.id+']').text() + ' invalido!');
-			return false;
-		}
-	}
-	this.success(obj);
-	return true;
+    if (obj.value.length) {
+        if(!this.parent.isValidCpf(obj.value))    {
+            this.error(obj, $('label[for='+obj.id+']').text() + ' invalido!');
+            return false;
+        }
+    }
+    this.success(obj);
+    return true;
 };
-validador.check.error = function (obj, msg) {	
-	var parent = $(obj).parent();
-	parent.addClass('has-error has-feedback');
-	parent.find('.input-error').html('<ul><li>'+msg+'</li></ul>');
+validador.check.error = function (obj, msg) {    
+    var parent = $(obj).parent();
+    parent.addClass('has-error has-feedback');
+    parent.find('.input-error').html('<ul><li>'+msg+'</li></ul>');
 };
-validador.check.success = function (obj) {	
-	var parent = $(obj).parent();
-	parent.removeClass('has-error has-feedback');
-	parent.find('.input-error').html('');
+validador.check.success = function (obj) {    
+    var parent = $(obj).parent();
+    parent.removeClass('has-error has-feedback');
+    parent.find('.input-error').html('');
 };
 
 $(function() {

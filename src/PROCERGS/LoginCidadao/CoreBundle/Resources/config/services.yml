@@ -16,6 +16,7 @@ parameters:
     procergs_logincidadao.dne.class: PROCERGS\LoginCidadao\CoreBundle\Helper\DneHelper
     procergs_logincidadao.mailer.class: PROCERGS\LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer
     kernel.listener.logged_in_user_listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\LoggedInUserListener
+    kernel.listener.exceptions_listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\ExceptionListener
 
     procergs_logincidadao_core.emailChanged.template: PROCERGSLoginCidadaoCoreBundle:Person:emailChangedMessage.txt.twig
 
@@ -140,3 +141,9 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
         arguments: [ "@security.context", "@router" ]
+
+    kernel.listener.exceptions_listener:
+        class: %kernel.listener.exceptions_listener.class%
+        arguments: [ "@session", "@router" ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }

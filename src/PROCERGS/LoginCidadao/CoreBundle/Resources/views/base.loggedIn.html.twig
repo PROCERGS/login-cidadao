@@ -5,6 +5,12 @@
 {% endblock %}
 
 {% block body %}
+{% for flashMessage in app.session.flashbag.get('error') %}
+    <div class="alert alert-danger">
+        {{ flashMessage }}
+    </div>
+{% endfor %}
+
     <div class="row">
     {% block sidebar %}
         <div class="settings-nav col-sm-3">
