@@ -46,8 +46,8 @@
                     <div class="input-error">{{ form_errors(form.cep) }}</div>
                     {{ form_widget(form.cep, {'attr': {'class': 'form-control', 'maxlength' : '10'}}) }}
                     <span>
-                        Não sabe o CEP,
-                        <a onclick="validador.cep.popupConsult(this, event, '{{ form.cep.vars.id }}', 'profileEdit.popLocation');" href="javascript:void(0);" data-href="{{ path('lc_consultaCep') }}">consulte aqui</a>
+                        {% trans %}Don't know your CEP?{% endtrans %}
+                        <a onclick="validador.cep.popupConsult(this, event, '{{ form.cep.vars.id }}', 'profileEdit.popLocation');" href="javascript:void(0);" data-href="{{ path('lc_consultaCep') }}">{{ 'Search it!' | trans }}</a>
                     </span>
                 </div>
                 <div class="form-group">
