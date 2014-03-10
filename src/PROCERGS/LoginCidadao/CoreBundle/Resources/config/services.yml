@@ -111,7 +111,7 @@ services:
 
     procergs_logincidadao.change.password.form.type:
         class: %procergs_logincidadao.change.password.form.type.class%
-        arguments: [%fos_user.model.user.class%]
+        arguments: [%fos_user.model.user.class%, "@security.context"]
         tags:
             - { name: form.type, alias: procergs_change_password }
 
