@@ -138,7 +138,7 @@ validador.cep.findByCep = function (obj, callback) {
      });
 };
 validador.cep.popupConsult = function (obj, evt, cepField, callback) {
-    var url = $(obj).attr('data-href') + '?cepField='+cepField+'&callback='+callback;
+    var url = $(obj).attr('href') + '?cepField='+cepField+'&callback='+callback;
     window.open(url, '', "width=600,height=450");
 };
 
@@ -179,56 +179,7 @@ validador.mask.format = function(obj, mask, e) {
         return true;
     }
 };
-validador.mask.cep = function (obj, e) {
-    if(this.int(e)==false){
-        e.returnValue = false;
-        if (e.preventDefault){
-            e.preventDefault();
-        } else {
-            return false;
-        }        
-    }    
-    return this.format(obj, '00.000-000', e);    
-};
 
-validador.mask.mobile = function (obj, e){    
-    if (this.int(e)==false) {
-        e.returnValue = false;
-        if (e.preventDefault){
-            e.preventDefault();
-        } else {
-            return false;
-        }        
-    }
-    var mask = '0000';
-    var test = obj.value.toString().replace(/\-|\.|\/|\(|\)| /g, "")+1;    
-    if (test.length > 8) {
-        var a = test.length - 8;
-        var b = a%2;
-        var c = Math.floor(a/2);
-        mask = '0000-0000';        
-        if (b) {
-            mask = '0'+ mask;
-        }
-        if (c) {            
-            mask = '(00) '.repeat(c) + mask;
-        }
-    } else if (test.length > 4) {
-        mask = '0000-0000';
-    }
-    return this.format(obj, mask, e);
-};
-validador.mask.cpf = function (obj, e) {    
-    if(this.int(e)==false){
-        e.returnValue = false;    
-        if (e.preventDefault){
-            e.preventDefault();
-        } else {
-            return false;
-        }
-    }    
-    return this.format(obj, '000.000.000-00', e);    
-};
 validador.check = { 'parent': validador };
 validador.check.mobile = function (obj, e){
     if (obj.value.length) {
@@ -282,12 +233,6 @@ $(function() {
     $('form .has-error .form-control').on('focusin', function() {
         $(this).parent('.form-group').removeClass('has-error has-feedback');
     });
-
-    // maks inputs
-    $('#fos_user_registration_form_cep').mask('00000-000');
-
-    $('#fos_user_registration_form_cpf').mask('000.000.000-00');
-
 
     // switch display application list
     $('.app-toggle .btn').on('click', function() {
