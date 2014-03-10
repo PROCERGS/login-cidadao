@@ -71,6 +71,10 @@ class ProfileEditListner implements EventSubscriberInterface
     {
         $user = $event->getForm()->getData();
         if ($user->getEmail() !== $this->email) {
+            if (is_null($user->getConfirmationToken())) {
+                $user->setPreviousValidEmail($this->email);
+            }
+
             // send confirmation token to new email
             $user->setConfirmationToken($this->tokenGenerator->generateToken());
             $user->setEmailExpiration(new \DateTime("+$this->emailUnconfirmedTime"));

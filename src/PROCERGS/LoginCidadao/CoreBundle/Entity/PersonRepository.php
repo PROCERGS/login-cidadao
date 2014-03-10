@@ -25,7 +25,7 @@ class PersonRepository extends EntityRepository
     public function findUnconfirmedEmailUntilDate(\DateTime $dateLimit)
     {
         return $this->getEntityManager()
-                        ->createQuery('SELECT p FROM PROCERGSLoginCidadaoCoreBundle:Person p WHERE p.confirmationToken IS NOT NULL AND p.emailExpiration >= :date')
+                        ->createQuery('SELECT p FROM PROCERGSLoginCidadaoCoreBundle:Person p WHERE p.confirmationToken IS NOT NULL AND p.emailExpiration <= :date')
                         ->setParameter('date', $dateLimit)
                         ->getResult();
     }

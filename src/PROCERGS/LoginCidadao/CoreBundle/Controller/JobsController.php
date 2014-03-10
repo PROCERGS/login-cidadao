@@ -74,8 +74,19 @@ class JobsController extends Controller
         if (!empty($missingConfirmation)) {
             $em = $this->getDoctrine()->getManager();
             foreach ($missingConfirmation as $person) {
-                $deleted[] = $person;
-                $em->remove($person);
+                $previous = $person->getPreviousValidEmail();
+                if (is_null($previous)) {
+                    $deleted[] = $person;
+                    $em->remove($person);
+                } else {
+                    $person->setEmail($previous)
+                            ->setEmailConfirmedAt(new \DateTime())
+                            ->setEmailExpiration(null)
+                            ->setPreviousValidEmail(null)
+                            ->setConfirmationToken(null);
+                    $this->get('notifications.helper')->clearUnconfirmedEmailNotification($person);
+                    $this->get('fos_user.user_manager')->updateUser($person);
+                }
             }
             $em->flush();
         }

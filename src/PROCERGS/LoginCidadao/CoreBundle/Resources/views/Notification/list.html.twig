@@ -9,9 +9,9 @@
         <li class="clearfix level-{{ notification.level }}">
             {# <img src="http://placehold.it/95x95" title="{{ notification.client.name }}"> #}
             <div class="box clearfix">
-                <h4>{{ notification.title }}</h4>
-                <p class="short">{{ notification.shortText }}</p>
-                <div class="desc">{{ notification.text | striptags('<a>') | raw | nl2br  }}</div>
+                <h4>{{ notification.title | trans }}</h4>
+                <p class="short">{{ notification.shortText | trans }}</p>
+                <div class="desc">{{ notification.text | trans | striptags('<a>') | raw | nl2br  }}</div>
                 <i class="glyphicon glyphicon-plus"></i>
             </div>
         </li>

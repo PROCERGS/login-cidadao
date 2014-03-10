@@ -196,6 +196,12 @@ class Person extends BaseUser
     protected $emailConfirmedAt;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     */
+    protected $previousValidEmail;
+
+    /**
      * @ORM\Column(name="cpf_nfg", type="datetime", nullable=true)
      */
     protected $cpfNfg;
@@ -709,6 +715,18 @@ class Person extends BaseUser
     public function getFacebookUsername()
     {
         return $this->facebookUsername;
+    }
+
+    public function setPreviousValidEmail($previousValidEmail)
+    {
+        $this->previousValidEmail = $previousValidEmail;
+
+        return $this;
+    }
+
+    public function getPreviousValidEmail()
+    {
+        return $this->previousValidEmail;
     }
 
 }
