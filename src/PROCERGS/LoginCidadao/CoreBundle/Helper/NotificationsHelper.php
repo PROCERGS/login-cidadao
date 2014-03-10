@@ -8,6 +8,7 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Doctrine\ORM\EntityManager;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\InteractiveNotification;
 
 class NotificationsHelper
 {
@@ -62,7 +63,8 @@ class NotificationsHelper
 
     public function getUnreadExcludeExtreme()
     {
-        return $this->getRepository()->findUnreadUpToLevel($this->getUser(), NotificationInterface::LEVEL_IMPORTANT);
+        return $this->getRepository()->findUnreadUpToLevel($this->getUser(),
+                        NotificationInterface::LEVEL_IMPORTANT);
     }
 
     public function send(NotificationInterface $notification)
@@ -77,14 +79,17 @@ class NotificationsHelper
     }
 
     protected function getDefaultNotification(Person $person, $title,
-                                              $shortText, $text, $level, $icon)
+                                              $shortText, $text, $level, $icon,
+                                              $notification = null)
     {
         $persisted = $this->getRepository()->findOneBy(array('person' => $person, 'title' => $title));
         if ($persisted instanceof NotificationInterface) {
             return $persisted;
         }
 
-        $notification = new Notification();
+        if (is_null($notification)) {
+            $notification = new Notification();
+        }
         $notification->setPerson($person)
                 ->setIcon($icon)
                 ->setLevel($level)
@@ -116,7 +121,7 @@ class NotificationsHelper
         $icon = 'glyphicon glyphicon-exclamation-sign';
 
         return $this->getDefaultNotification($person, $title, $shortText, $text,
-                        $level, $icon);
+                        $level, $icon, new InteractiveNotification());
     }
 
     public function clearUnconfirmedEmailNotification(Person $person)
@@ -139,6 +144,7 @@ class NotificationsHelper
     {
         $notification = $this->getEmptyPasswordNotification($person);
         $notification->setRead(false);
+        $notification->setTarget('fos_user_change_password');
         $this->em->persist($notification);
         $this->em->flush();
     }

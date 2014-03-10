@@ -98,7 +98,10 @@
 }
 
 /* Notifications */
-.navbar .notification .level-3, .navbar .notification .level-3 a:hover {
+.navbar .notification .level-3,
+.navbar .notification .level-3 a:hover,
+.navbar .notification .level-2,
+.navbar .notification .level-2 a:hover{
     background: #f2dede;
 }
 
