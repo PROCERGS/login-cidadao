@@ -39,8 +39,8 @@
 }
 
 .navbar .dropdown-menu .all a:hover {
-    background-color: #009933;
-    background-image: none;
+    background-color: #009933!important;
+    background-image: none!important;
     color: #000!important;
 }
 

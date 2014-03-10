@@ -1,57 +1,7 @@
-/*@media (min-width: 1200px) {
-    .ie-7 .col-lg-offset-1 {
-        margin-left: 0!important;
-    }
-}*/
-
-body > .container {
-    padding-bottom: 0;
+#register-aside {
+    background-color: #f1f1f1;
 }
 
-.navbar-default {
-    background-color: #ACA799;
-}
+#profile-edit .facebook {
 
-.services.well {
-    background-color: #333;
-    filter:none;
-}
-
-.footer-login{
-    background-color: #000;
-}
-
-footer > div {
-    padding-top: 0;
-}
-
-footer li {
-    list-style-type: none;
-    float: left;
-}
-
-#register-aside, #sign-up {
-    margin: 0 30px;
-    width: 460px;
-}
-
-.form-control {
-    width: 96%;
-}
-
-#applications {
-    width: 50%
-}
-
-/*all ie*/
-body[class^='ie-'] footer {
-    height: 36px;
-}
-
-.onoffswitch-checked .onoffswitch-inner {
-    margin-left: 0;
-}
-
-.onoffswitch-checked .onoffswitch-switch {
-    right: 0px;
 }
