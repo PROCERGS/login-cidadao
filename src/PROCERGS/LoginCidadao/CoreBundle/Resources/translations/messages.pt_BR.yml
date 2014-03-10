@@ -98,8 +98,8 @@ Applications: Aplicativos
 notification.unconfirmed.email.title: 'Email não confirmado!'
 notification.unconfirmed.email.shortText: 'Caso não confirme seu email em prazo hábil, sua conta será removida. Siga as instruções enviadas por email.'
 notification.unconfirmed.email.text: >
-    Para utilizar o Login Cidadão, é necessário que você utilize um endereço de email válido.
-    Caso você não confirme seu endereço de email acessando o link que lhe foi enviado, sua conta será excluída.
+    <p>Para utilizar o Login Cidadão, é necessário que você utilize um endereço de email válido.</p>
+    <p>Caso você não confirme seu endereço de email acessando o link que lhe foi enviado, sua conta será excluída.</p>
 notification.empty.password.title: 'Você não tem uma senha!'
 notification.empty.password.shortText: 'Clique aqui para trocar sua senha.'
 notification.empty.password.text: ''

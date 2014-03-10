@@ -46,8 +46,8 @@
                 <li class="dropdown icons notification">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="glyphicon glyphicon-bell">
-                            {% if notifications_helper.getUnread is not empty %}
-                            <span class="label label-danger">{{ notifications_helper.getUnread | length }}</span>
+                            {% if notifications_helper.getUnreadExcludeExtreme is not empty %}
+                            <span class="label label-danger">{{ notifications_helper.getUnreadExcludeExtreme | length }}</span>
                             {% endif %}
                             <span class="icon-label">{% trans %}Notifications{% endtrans %}</span>
                         </i>
@@ -55,7 +55,7 @@
                     <ul class="dropdown-menu">
 
                         {% if notifications_helper.getUnread is not empty %}
-                            {% for notification in notifications_helper.getUnread %}
+                            {% for notification in notifications_helper.getUnread if not notification.isExtreme %}
                                 {% if notification.resolveTarget is defined %}
                                     {% set target = notification.resolveTarget(app_router) %}
                                 {% else %}

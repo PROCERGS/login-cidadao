@@ -63,6 +63,7 @@ interface NotificationInterface
      * Returns the severity of the notification
      */
     public function getLevel();
+    public function isExtreme();
 
     public function setLevel($level);
 

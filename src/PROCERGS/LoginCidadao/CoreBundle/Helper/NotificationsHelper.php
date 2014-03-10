@@ -60,6 +60,11 @@ class NotificationsHelper
         return $this->getRepository()->findAllUnread($this->getUser(), $level);
     }
 
+    public function getUnreadExcludeExtreme()
+    {
+        return $this->getRepository()->findUnreadUpToLevel($this->getUser(), NotificationInterface::LEVEL_IMPORTANT);
+    }
+
     public function send(NotificationInterface $notification)
     {
         if ($notification->canBeSent()) {

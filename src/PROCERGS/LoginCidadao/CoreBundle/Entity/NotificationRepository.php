@@ -23,4 +23,17 @@ class NotificationRepository extends EntityRepository
         }
     }
 
+    public function findUnreadUpToLevel(Person $person, $maxLevel = null)
+    {
+        if (is_null($maxLevel)) {
+            return $this->findAllUnread($person);
+        } else {
+            return $this->getEntityManager()
+                            ->createQuery('SELECT n FROM PROCERGSLoginCidadaoCoreBundle:Notification n WHERE n.person = :person AND n.isRead = false AND n.level <= :level')
+                            ->setParameter('person', $person)
+                            ->setParameter('level', $maxLevel)
+                            ->getResult();
+        }
+    }
+
 }

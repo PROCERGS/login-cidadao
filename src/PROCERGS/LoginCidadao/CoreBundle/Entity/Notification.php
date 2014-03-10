@@ -361,4 +361,9 @@ class Notification implements NotificationInterface
         return (strstr($this->getIcon(), 'glyphicon') !== false);
     }
 
+    public function isExtreme()
+    {
+        return $this->getLevel() === self::LEVEL_EXTREME;
+    }
+
 }
