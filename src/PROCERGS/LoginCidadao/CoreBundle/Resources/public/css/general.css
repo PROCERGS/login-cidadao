@@ -223,6 +223,7 @@ form .input-error {
     font-size: 14px;
     font-weight: 500;
     margin: 10px 0;
+    padding: 0 5px;
 }
 
 form .input-error ul {
@@ -261,5 +262,6 @@ form .has-feedback .form-control-feedback {
 }
 
 .header-shadows {
-    text-shadow: 1px 1px 1px #fff;
+    color: #FFF;
+    text-shadow: 1px 1px 1px #000;
 }

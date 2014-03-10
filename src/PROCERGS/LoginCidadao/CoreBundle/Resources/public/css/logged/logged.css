@@ -211,7 +211,6 @@
 }
 
 #profile-edit .connect {
-    background-size: 35px;
     color: #FFF;
     cursor: pointer;
     display: block;
@@ -231,14 +230,21 @@
     background-color: #999999;
 }
 
-#profile-edit .facebook {
+#profile-edit .connect .bg {
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 50px;
+    width: 50px;
+}
+
+#profile-edit .facebook .bg {
     background-color: #576d94;
     background-image: url(../../images/facebook_signin.png);
     background-repeat: no-repeat;
     margin-top: 10px;
 }
 
-#profile-edit .twitter {
+#profile-edit .twitter .bg {
     background-color: #4baecd;
     background-image: url(../../images/twitter_signin.png);
     background-repeat: no-repeat;

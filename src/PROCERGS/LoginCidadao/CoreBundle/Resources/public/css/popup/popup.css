@@ -6,7 +6,7 @@ body {
     padding: 0;
 }
 
-.container {
+body > .container {
     padding: 0;
 }
 
@@ -20,13 +20,10 @@ body {
     padding-left: 15px;
 }
 
-#login-box form {
-    /*padding: 20px;*/
-    
-}
-
 #login-box form .form-content {
-    padding: 20px;
+    height: auto;
+    min-height: 305px;
+    padding: 20px 10px 0;
 }
 
 #login-box form p {

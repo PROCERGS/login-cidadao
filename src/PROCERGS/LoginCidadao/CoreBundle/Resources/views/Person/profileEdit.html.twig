@@ -69,13 +69,13 @@
 
 
                 {% if app.user.facebookUsername is null %}
-                <a class="connect facebook disabled" href="{{ path('lc_link_facebook') }}">{{ 'Connect with Facebook' | trans }}</a>
+                <a class="connect facebook disabled" href="{{ path('lc_link_facebook') }}"><i class="bg"></i>{{ 'Connect with Facebook' | trans }}</a>
                 {% else %}
                 <span class="connect facebook">{{ app.user.facebookUsername }}</span>
                 {% endif %}
 
                 {% if app.user.twitterUsername is null %}
-                <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="connect twitter disabled">{{ 'Connect with Twitter' | trans }}</a>
+                <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="connect twitter disabled"><i class="bg"></i>{{ 'Connect with Twitter' | trans }}</a>
                 {% else %}
                 <span class="connect twitter">{{ app.user.twitterUsername }}</span>
                 {% endif %}
