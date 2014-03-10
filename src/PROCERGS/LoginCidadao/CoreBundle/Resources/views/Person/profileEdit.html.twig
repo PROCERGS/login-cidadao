@@ -104,17 +104,19 @@
 {{ parent() }}
 <script>
 var profileEdit = {};
+profileEdit.cepId = '#{{ form.cep.vars.id }}';
+
 profileEdit.popLocation = function (dneData) {    
-    $('#{{ form.cep.vars.id }}').val(dneData.cep);
-    validador.mask.cep($('#{{ form.cep.vars.id }}')[0], {});
-    var street = $('#adress_id').val(dneData.tipoLogradouro.capitalize(true, true) + ' ' + dneData.logradouro.capitalize(true, true));
-    var city = $('#city_id').val(dneData.localidade.capitalize(true, true));
-    var state = $('#uf_id').val(dneData.uf);
+    $(profileEdit.cepId).val(dneData.cep);
+    $(profileEdit.cepId).mask('00000-000');
+    var street = dneData.tipoLogradouro.capitalize(true, true) + ' ' + dneData.logradouro.capitalize(true, true);
+    var city = dneData.localidade.capitalize(true, true);
+    var state = dneData.uf;
 
     $('#user_address').html(city + ', ' + state);
 };
 $(document).ready(function() {
-    $("#{{ form.cep.vars.id }}").mask('00000-000');
+    $(profileEdit.cepId).mask('00000-000');
     $("#{{ form.cpf.vars.id }}").mask('000.000.000-00');
     $("#{{ form.mobile.vars.id }}").mask("(00) 0000-00009").focusout(function () {
         var phone, element;
@@ -127,10 +129,15 @@ $(document).ready(function() {
         }
     });
 
-    $('.search-cep').click(function() {
+    $('.search-cep').click(function(event) {
+    	event.preventDefault()
         validador.cep.popupConsult(this, event, '{{ form.cep.vars.id }}', 'profileEdit.popLocation');
         return false;
     });
+    $(profileEdit.cepId).blur(function(event) {
+    	validador.cep.findByCep(this, profileEdit.popLocation);
+    });
+    $(profileEdit.cepId).trigger('blur');
 });
 </script>
 {% endblock %}

@@ -25,8 +25,30 @@ class LoginCidadaoExtension extends \Twig_Extension
      */
     public function getFunctions()
     {
-        return array('logincidadao_initializeForm' => new \Twig_Function_Method($this, 'initializeForm', array('is_safe' => array('html'))));
+        return array(
+            'logincidadao_initializeForm' => new \Twig_Function_Method($this, 'initializeForm', array(
+                'is_safe' => array(
+                    'html'
+                )
+            ))
+        );
     }
+
+    public function getFilters()
+    {
+        return array(
+            new \Twig_SimpleFilter('formatCep', array(
+                $this,
+                'formatCep'
+            ))
+        );
+    }
+    
+    public function formatCep($var)
+    {
+        $var = substr($var, 0, 5) . '-' . substr($var, 5, 3);
+        return $var;
+    }    
 
     /**
      * Returns the name of the extension.
@@ -47,5 +69,4 @@ class LoginCidadaoExtension extends \Twig_Extension
         $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.login.form.type'));
         return $form->createView();
     }
-
 }

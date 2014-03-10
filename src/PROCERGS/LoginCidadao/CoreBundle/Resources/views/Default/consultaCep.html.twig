@@ -63,7 +63,7 @@
                 </div>
                 <div class="col-md-1">
                     <dt>{{ 'form.cep'|trans }}</dt>
-                    <dd><a onclick="tryThisCep(this, event);" href="javascript:void(0);">{{ cep.cep }}</a></dd>
+                    <dd><a onclick="tryThisCep(this, event);" href="javascript:void(0);">{{ cep.cep|formatCep }}</a></dd>
                 </div>
                 <div class="col-md-1">
                     <a target="_blank" href="http://maps.google.com.br/maps?q={{ cep.logradouro|url_encode(true) }},{{ cep.bairro|url_encode(true) }},{{ cep.localidade|url_encode(true) }},{{ cep.uf|url_encode(true) }}"><img src="http://placehold.it/15x15" alt="" class="center-block"></a>
@@ -89,7 +89,7 @@ function tryThisCep(obj, evt) {
         var ugly = 'window.opener.'+QueryString.callback+'('+$(obj).parent().parent().parent().find('.littlesecret').val()+')';        
         eval(ugly);    
     }
-    //window.close();
+    window.close();
 }
 </script>
 {% endblock %} {% block footer %} {% endblock %}
