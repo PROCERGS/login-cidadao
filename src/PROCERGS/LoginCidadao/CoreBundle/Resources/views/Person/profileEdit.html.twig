@@ -5,14 +5,6 @@
 
     <h3>Perfil</h3>
 
-    {% for type, messages in app.session.flashbag.all() %}
-    {% for message in messages %}
-    <div class="flash-{{ type }}">
-        {{ message }}
-    </div>
-    {% endfor %}
-    {% endfor %}
-
     {% trans_default_domain 'FOSUserBundle' %}
 
     {{ form_start(form, {'action': path('fos_user_profile_edit'), 'attr': {'role':'form' } }) }}
@@ -89,6 +81,20 @@
                 {% endif %}
             </div>
         </div>
+
+        <div class="row">
+            {% for type, messages in app.session.flashbag.all() %}
+                {% for message in messages %}
+                <div class="col-md-12">
+                    <div class="text-center bg-success flash-{{ type }}">
+                        {{ message }}
+                    </div>
+                </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+
     </div>
 
     <div class="form-bar">
@@ -106,7 +112,7 @@
 var profileEdit = {};
 profileEdit.cepId = '#{{ form.cep.vars.id }}';
 
-profileEdit.popLocation = function (dneData) {    
+profileEdit.popLocation = function (dneData) {
     $(profileEdit.cepId).val(dneData.cep);
     $(profileEdit.cepId).mask('00000-000');
     var street = dneData.tipoLogradouro.capitalize(true, true) + ' ' + dneData.logradouro.capitalize(true, true);
