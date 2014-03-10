@@ -67,3 +67,6 @@ form.phone: Phone
 'Reset Password': 'Reset Password'
 'Enter your username or email': 'Enter your username or email'
 Cancel: Cancel
+form.message: 'Mensagem'
+form.message.sucess: 'Sua mensagem foi enviado com sucesso, aguarde resposta!'
+form.submit: 'Enviar'

@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ContactFormType;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail;
 
 class DefaultController extends Controller
 {
@@ -101,5 +103,39 @@ class DefaultController extends Controller
         return new Response(json_encode($result), 200,
                 array('Content-Type' => 'application/json'));
     }
+    
+    /**
+     * @Route("/help", name="lc_help")
+     * @Template()
+     */
+    public function helpAction(Request $request)
+    {
+        return $this->render('PROCERGSLoginCidadaoCoreBundle:Info:help.html.twig');
+    }
+    
+    /**
+     * @Route("/contact", name="lc_contact")
+     * @Template()
+     */
+    public function contactAction(Request $request)
+    {
+        $form = $this->createForm(new ContactFormType());
+        $form->handleRequest($request);
+        $message = '';
+        if ($form->isValid()) {
+            $email = new SentEmail();
+            $email->setType('contact-mail')
+                    ->setSubject('Fale conosco - ' . $form->get('firstName')->getData() )
+                    ->setSender($form->get('email')->getData())
+                    ->setReceiver($this->container->getParameter('mailer_receiver_mail'))
+                    ->setMessage($form->get('message')->getData());
+            if ($this->get('mailer')->send($email->getSwiftMail())) {
+                $this->getDoctrine()->getEntityManager()->persist($email);
+                $this->getDoctrine()->getEntityManager()->flush();
+                $message = 'form.message.sucess';
+            }                 
+        }
+        return $this->render('PROCERGSLoginCidadaoCoreBundle:Info:contact.html.twig', array('form' => $form->createView(), 'messages' => $message));
+    }    
 
 }
