@@ -119,4 +119,7 @@
           <script type="text/javascript" src="{{ asset_url }}"></script>
         <![endif]-->
     {% endjavascripts %}
+    <script type="text/javascript">
+    validador.cep.urlQuery = '{{ path('lc_consultaCep2') }}';
+    </script>
 {% endblock %}

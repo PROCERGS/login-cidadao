@@ -114,3 +114,4 @@ Government: Governo
 exception.alreadyLinkedAccount: 'Essa conta já está conectada a um outro usuário. Você deve desfazer essa conexão antes de tentar linkar com o usuário atual.'
 'Governo do Rio Grande do Sul': 'Governo do Rio Grande do Sul'
 '<a href="%link%">Background picture</a> by %name%': '<a href="%link%">Imagem de fundo</a> por %name%'
+contact.title: 'Fale conosco'

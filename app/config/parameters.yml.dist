@@ -41,3 +41,4 @@ parameters:
 
     background_picture.author: 'Author Name'
     background_picture.link: 'http://link.to/picture'
+    mailer_receiver_mail: ~

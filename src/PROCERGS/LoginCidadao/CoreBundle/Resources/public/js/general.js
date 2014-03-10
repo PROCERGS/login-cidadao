@@ -116,6 +116,7 @@ validador.onKeyUpMultiformat = function (obj, e)
     return false;
 };
 validador.cep = { 'parent': validador };
+validador.cep.urlQuery = '/lc_consultaCep2';
 validador.cep.findByCep = function (obj, callback) {
     //console.trace();    
     var cleanup = new RegExp('[. \\-]', 'gi');
@@ -123,7 +124,7 @@ validador.cep.findByCep = function (obj, callback) {
      $.ajax({
          type: "GET",
          dataType: "json",
-         url: '/lc_consultaCep2',
+         url: validador.cep.urlQuery,
          data: {'cep' : val },
          success : function (data1, textStatus, jqXHR) {             
              if (data1.code > 0) {

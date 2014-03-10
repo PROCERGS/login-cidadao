@@ -80,3 +80,6 @@ email.changed.message.text: >
 'Don''t know your CEP?': 'Não sabe seu CEP?'
 'Search it!': 'Pesquise aqui!'
 'Your address': 'Seu endereço'
+form.message: 'Mensagem'
+form.message.sucess: 'Sua mensagem foi enviado com sucesso, aguarde resposta!'
+form.submit: 'Enviar'

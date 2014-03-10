@@ -85,6 +85,8 @@ security:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/connect/twitter$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login/facebook$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/contact$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/help$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/person/checkEmailAvailable, role: IS_AUTHENTICATED_ANONYMOUSLY }
