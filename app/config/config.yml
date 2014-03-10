@@ -31,6 +31,7 @@ twig:
         facebook_app_id: "%facebook_app_id%"
         background_picture_author: %background_picture.author%
         background_picture_link: %background_picture.link%
+        app_router: "@router"
 
 # Assetic Configuration
 assetic:

@@ -65,6 +65,10 @@ class RegisterListner implements EventSubscriberInterface
         $user = $event->getUser();
         $this->notificationHelper->enforceUnconfirmedEmailNotification($user);
         $this->mailer->sendConfirmationEmailMessage($user);
+
+        if (strlen($user->getPassword()) == 0) {
+            $this->notificationHelper->enforceEmptyPasswordNotification($user);
+        }
     }
 
     public function onEmailConfirmed(GetResponseUserEvent $event)

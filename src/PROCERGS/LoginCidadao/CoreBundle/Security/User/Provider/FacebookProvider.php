@@ -10,6 +10,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use \BaseFacebook;
 use \FacebookApiException;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use FOS\UserBundle\Form\Factory\FactoryInterface;
+use FOS\UserBundle\Event\FormEvent;
+use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Event\FilterUserResponseEvent;
 
 class FacebookProvider implements UserProviderInterface
 {
@@ -21,8 +26,13 @@ class FacebookProvider implements UserProviderInterface
     protected $userManager;
     protected $validator;
     protected $container;
+    protected $dispatcher;
+    protected $formFactory;
 
-    public function __construct(BaseFacebook $facebook, $userManager, $validator, $container)
+    public function __construct(BaseFacebook $facebook, $userManager,
+                                $validator, $container,
+                                EventDispatcherInterface $dispatcher,
+                                FactoryInterface $formFactory)
     {
         $this->facebook = $facebook;
 
@@ -44,6 +54,8 @@ class FacebookProvider implements UserProviderInterface
         $this->userManager = $userManager;
         $this->validator = $validator;
         $this->container = $container;
+        $this->dispatcher = $dispatcher;
+        $this->formFactory = $formFactory;
     }
 
     public function supportsClass($class)
@@ -133,7 +145,8 @@ class FacebookProvider implements UserProviderInterface
 
             if ($user->getUsername() == '' || $user->getUsername() == null) {
                 $defaultUsername = $username . '@facebook.com';
-                $availUsername = $this->userManager->getNextAvailableUsername($fbdata['username'], 10, $defaultUsername);
+                $availUsername = $this->userManager->getNextAvailableUsername($fbdata['username'],
+                        10, $defaultUsername);
                 $user->setUsername($availUsername);
             }
 
@@ -143,7 +156,20 @@ class FacebookProvider implements UserProviderInterface
                 // TODO: the user was found obviously, but doesnt match our expectations, do something smart
                 throw new UsernameNotFoundException('The facebook user could not be stored');
             }
+
+            $form = $this->formFactory->createForm();
+            $form->setData($user);
+
+            $request = $this->container->get('request');
+            $eventResponse = new \Symfony\Component\HttpFoundation\RedirectResponse('/');
+            $event = new FormEvent($form, $request);
+            $this->dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS,
+                    $event);
+
             $this->userManager->updateUser($user);
+
+            $this->dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED,
+                    new FilterUserResponseEvent($user, $request, $eventResponse));
         }
 
         if (empty($user)) {
@@ -157,7 +183,8 @@ class FacebookProvider implements UserProviderInterface
     public function refreshUser(UserInterface $user)
     {
         if (!$this->supportsClass(get_class($user)) || !$user->getFacebookId()) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.',
+                    get_class($user)));
         }
 
         return $this->loadUserByUsername($user->getFacebookId());

@@ -39,6 +39,8 @@ services:
             userManager: "@fos_user.user_manager"
             validator: "@validator"
             container: "@service_container"
+            dispatcher: "@event_dispatcher"
+            formFactory: "@fos_user.registration.form.factory"
 
     procergs.hwi_twitter.user_provider:
         class: %procergs.hwi_twitter.user_provider.class%
@@ -117,7 +119,7 @@ services:
 
     procergs_logincidadao.change_password_listener:
         class: %procergs_logincidadao.change.password.listener.class%
-        arguments: ["@router"]
+        arguments: ["@router", "@notifications.helper"]
         tags:
             - { name: kernel.event_subscriber }
 

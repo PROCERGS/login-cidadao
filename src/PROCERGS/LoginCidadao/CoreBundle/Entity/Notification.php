@@ -11,6 +11,9 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\NotificationRepository")
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="type", type="string")
+ * @ORM\DiscriminatorMap({"simple" = "Notification", "interactive" = "InteractiveNotification"})
  */
 class Notification implements NotificationInterface
 {

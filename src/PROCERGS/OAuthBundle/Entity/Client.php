@@ -21,19 +21,34 @@ class Client extends BaseClient
     protected $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=false)
      */
     protected $name;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=false)
      */
     protected $description;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=false)
      */
     protected $maxNotificationLevel;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $landingPageURL;
+
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     */
+    protected $termsOfUseURL;
+
+    /**
+     * @ORM\Column(type="array", nullable=false)
+     */
+    protected $allowedScopes;
 
     /**
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization", mappedBy="client", cascade={"remove"}, orphanRemoval=true)
@@ -110,4 +125,39 @@ class Client extends BaseClient
 
         return $this;
     }
+
+    public function getLandingPageURL()
+    {
+        return $this->landingPageURL;
+    }
+
+    public function setLandingPageURL($landingPageURL)
+    {
+        $this->landingPageURL = $landingPageURL;
+        return $this;
+    }
+
+    public function getTermsOfUseURL()
+    {
+        return $this->termsOfUseURL;
+    }
+
+    public function setTermsOfUseURL($termsOfUseURL)
+    {
+        $this->termsOfUseURL = $termsOfUseURL;
+        return $this;
+    }
+
+    public function getAllowedScopes()
+    {
+        return $this->allowedScopes;
+    }
+
+    public function setAllowedScopes(array $allowedScopes)
+    {
+        $this->allowedScopes = $allowedScopes;
+
+        return $this;
+    }
+
 }
