@@ -97,7 +97,9 @@ Applications: Aplicativos
 'View all notifications': 'Ver todas notificações'
 notification.unconfirmed.email.title: 'Email não confirmado!'
 notification.unconfirmed.email.shortText: 'Caso não confirme seu email em prazo hábil, sua conta será removida. Siga as instruções enviadas por email.'
-notification.unconfirmed.email.text: 'Para utilizar o Login Cidadão, é necessário que você utilize um endereço de email válido.\n\nCaso você não confirme seu endereço de email acessando o link que lhe foi enviado, sua conta será excluída.'
+notification.unconfirmed.email.text: >
+    Para utilizar o Login Cidadão, é necessário que você utilize um endereço de email válido.
+    Caso você não confirme seu endereço de email acessando o link que lhe foi enviado, sua conta será excluída.
 notification.empty.password.title: 'Você não tem uma senha!'
 notification.empty.password.shortText: 'Clique aqui para trocar sua senha.'
 notification.empty.password.text: ''
@@ -109,4 +111,6 @@ Contact: Contato
 'About the Government': 'Sobre o Governo'
 Government: Governo
 'View all services': 'Ver todos Serviços'
-exception.alreadyLinkedAccount: "Essa conta já está conectada a um outro usuário. Você deve desfazer essa conexão antes de tentar linkar com o usuário atual."
+exception.alreadyLinkedAccount: 'Essa conta já está conectada a um outro usuário. Você deve desfazer essa conexão antes de tentar linkar com o usuário atual.'
+'Governo do Rio Grande do Sul': 'Governo do Rio Grande do Sul'
+'<a href="%link%">Background picture</a> by %name%': '<a href="%link%">Imagem de fundo</a> por %name%'

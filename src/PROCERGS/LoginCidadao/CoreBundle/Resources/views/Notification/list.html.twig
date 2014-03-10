@@ -11,7 +11,7 @@
             <div class="box clearfix">
                 <h4>{{ notification.title | trans }}</h4>
                 <p class="short">{{ notification.shortText | trans }}</p>
-                <div class="desc">{{ notification.text | trans | striptags('<a>') | raw | nl2br  }}</div>
+                <div class="desc">{{ notification.text | trans | striptags('<a>') | nl2br | raw }}</div>
                 <i class="glyphicon glyphicon-plus"></i>
             </div>
         </li>

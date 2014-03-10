@@ -50,7 +50,7 @@
             <a class="connect facebook" href="{{ path("lc_link_facebook") }}">Inscreva-se usando o facebook</a>
             <a href="{{ path('lc_before_register_twitter') }}" class="connect twitter">Inscreva-se usando o twitter</a>
     </div>
-
+    {% trans_default_domain 'messages' %}
     <div id="register-aside" class="col-xs-12 col-md-6 col-lg-7 hidden-xs pull-left">
         <h3 class="title">{% trans %}With only one account{% endtrans %}</h3>
 

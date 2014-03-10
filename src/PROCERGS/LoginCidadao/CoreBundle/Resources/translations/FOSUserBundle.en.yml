@@ -5,12 +5,24 @@ registration.check_email: 'An email has been sent to %email%. It contains an act
 registration.confirmed: 'Congrats %username%, your account is now activated.'
 registration.back: 'Back to the originating page.'
 registration.email.subject: 'Welcome %username%!'
-registration.email.message: "Hello %username%!\n\nTo finish activating your account - please visit %confirmationUrl%\n\nRegards,\nthe Team.\n"
+registration.email.message: >
+    Hello %username%!
+
+    To finish activating your account - please visit %confirmationUrl%
+
+    Regards,
+    the Staff
 registration.submit: Register
 resetting.password_already_requested: 'The password for this user has already been requested within the last 24 hours.'
 resetting.check_email: 'An email has been sent to %email%. It contains a link you must click to reset your password.'
 resetting.email.subject: 'Reset Password'
-resetting.email.message: "Hello %username%!\n\nTo reset your password - please visit %confirmationUrl%\n\nRegards,\nthe Team.\n"
+resetting.email.message: >
+    Hello %username%!
+
+    To reset your password - please visit %confirmationUrl%
+
+    Regards,
+    the Staff
 resetting.request.invalid_username: 'The username or email address "%username%" does not exist.'
 resetting.request.username: 'Username or email address:'
 resetting.request.submit: 'Reset password'
@@ -38,7 +50,12 @@ grid.search.title: Results
 grid.search.button: Search
 cep.search.title: 'Search CEP'
 email.changed.message.subject: 'Your email was changed!'
-email.changed.message.text: "Hello, %name%!\n\nWe are sending you this email to let you know that your email address was changed to %email%.\n\nIf you didn't change it, please contact us since this might be a security breach!"
+email.changed.message.text: >
+    Hello, %name%!
+
+    We are sending you this email to let you know that your email address was changed to %email%.
+
+    If you didn't change it, please contact us since this might be a security breach!
 form.district: __form.district
 layout.logout: Logout
 change_password.submit: "Change Password"
