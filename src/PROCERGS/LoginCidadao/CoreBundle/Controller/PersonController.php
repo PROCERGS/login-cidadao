@@ -149,12 +149,7 @@ class PersonController extends Controller
         $userManager = $this->container->get('fos_user.user_manager');
 
         $formBuilder = $this->createFormBuilder($user)
-            ->add('username', 'text', array(
-                'constraints' => array(
-                    new NotBlank(),
-                    new Length(array('min' => 3)),
-                ),
-            ))
+            ->add('username', 'text')
             ->add('save', 'submit');
 
         $emptyPassword = strlen($user->getPassword()) == 0;
