@@ -5,15 +5,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\SecurityContext;
-use Symfony\Component\Security\Core\Exception\DisabledException;
-use PROCERGS\LoginCidadao\CoreBundle\Form\Type\LoginFormType;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
-use PROCERGS\Generic\ValidationBundle\Validator\Constraints\CEP;
-use PROCERGS\LoginCidadao\CoreBundle\Helper\NfgHelper;
-use PROCERGS\LoginCidadao\CoreBundle\Helper\DneHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,26 +13,13 @@ class DefaultController extends Controller
 {
 
     /**
-     * @Route("/", name="lc_home")
-     * @Template()
-     * /
-    public function indexAction()
-    {
-        $security = $this->get('security.context');
-        if (false === $security->isGranted('ROLE_USER')) {
-            return $this->redirect($this->generateUrl('fos_user_registration_register'));
-        } else {
-            return $this->redirect($this->generateUrl('fos_user_profile_edit'));
-        }
-    }*/
-
-    /**
      * @Route("/login/facebook", name="lc_link_facebook")
      */
     public function facebookLoginAction()
     {
         $api = $this->container->get('fos_facebook.api');
-        $scope = implode(',', $this->container->getParameter('facebook_app_scope'));
+        $scope = implode(',',
+                $this->container->getParameter('facebook_app_scope'));
         $callback = $this->container->get('router')->generate('_security_check_facebook',
                 array(), true);
         $redirect_url = $api->getLoginUrl(array('scope' => $scope, 'redirect_uri' => $callback));
@@ -52,66 +31,16 @@ class DefaultController extends Controller
      * @Route("/lc_home_gateway", name="lc_home_gateway")
      * @Template()
      */
-    public function gatewayAction(Request $request)
+    public function gatewayAction()
     {
         return array('home1' => $this->generateUrl('lc_home', array(), true));
-    }
-
-    /**
-     * @Route("/apps_detail", name="lc_apps_detail")
-     * @Template()
-     */
-    public function appsDetailAction(Request $request)
-    {
-        $security = $this->get('security.context');
-        if (false === $security->isGranted('ROLE_USER')) {
-            return $this->redirect($this->generateUrl('fos_user_registration_register'));
-        } else {
-
-            return $this->render(
-                            'PROCERGSLoginCidadaoCoreBundle:Person:appsDetail.html.twig',
-                            compact('user', 'apps')
-            );
-        }
-    }
-
-    /**
-     * @Route("/apps", name="lc_apps")
-     * @Template()
-     */
-    public function appsAction(Request $request)
-    {
-        $security = $this->get('security.context');
-        if (false === $security->isGranted('ROLE_USER')) {
-            return $this->redirect($this->generateUrl('fos_user_registration_register'));
-        } else {
-            $em = $this->getDoctrine()->getManager();
-            $clients = $em->getRepository('PROCERGSOAuthBundle:Client');
-
-            $user = $security->getToken()->getUser();
-            $allApps = $clients->findAll();
-
-            $apps = array();
-            // Filtering off authorized apps
-            foreach ($allApps as $app) {
-                if ($user->hasAuthorization($app)) {
-                    continue;
-                }
-                $apps[] = $app;
-            }
-
-            return $this->render(
-                            'PROCERGSLoginCidadaoCoreBundle:Person:apps.html.twig',
-                            compact('user', 'apps')
-            );
-        }
     }
 
     /**
      * @Route("/general", name="lc_general")
      * @Template()
      */
-    public function generalAction(Request $request)
+    public function generalAction()
     {
         return $this->render(
                         'PROCERGSLoginCidadaoCoreBundle:Info:terms.html.twig',
@@ -123,7 +52,7 @@ class DefaultController extends Controller
      * @Route("/lc_consultaCep", name="lc_consultaCep")
      * @Template()
      */
-    public function consultaCepAction(Request $request)
+    public function consultaCepAction()
     {
         //$cep = new \PROCERGS\LoginCidadao\CoreBundle\Entity\Cep();
         $form = $this->createFormBuilder()
@@ -163,13 +92,14 @@ class DefaultController extends Controller
     public function consultaCep2Action(Request $request)
     {
         $busca = $this->get('procergs_logincidadao.dne');
-        $ceps = $busca->findByCep( $request->get('cep'));
+        $ceps = $busca->findByCep($request->get('cep'));
         if ($ceps) {
             $result = array('code' => 0, 'msg' => null, 'itens' => array($ceps));
-        }else {
+        } else {
             $result = array('code' => 1, 'msg' => 'not found');
         }
-        return new Response(json_encode($result), 200, array('Content-Type' => 'application/json'));
+        return new Response(json_encode($result), 200,
+                array('Content-Type' => 'application/json'));
     }
 
 }
