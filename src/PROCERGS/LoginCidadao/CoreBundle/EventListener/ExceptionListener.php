@@ -3,6 +3,7 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\EventListener;
 
 use PROCERGS\LoginCidadao\CoreBundle\Security\Exception\AlreadyLinkedAccount;
+use PROCERGS\LoginCidadao\CoreBundle\Security\Exception\MissingEmailException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -33,6 +34,11 @@ class ExceptionListener
                 $this->translator->trans($exception->getMessage())
             );
             $url = $this->router->generate('fos_user_profile_edit');
+            $event->setResponse(new RedirectResponse($url));
+        }
+
+        if ($exception instanceof MissingEmailException) {
+            $url = $this->router->generate('lc_before_register_twitter');
             $event->setResponse(new RedirectResponse($url));
         }
     }

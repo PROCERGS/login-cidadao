@@ -42,7 +42,7 @@ services:
 
     procergs.hwi_twitter.user_provider:
         class: %procergs.hwi_twitter.user_provider.class%
-        arguments: [ "@fos_user.user_manager", { twitter: twitterId }, %http_proxy% ]
+        arguments: [ "@fos_user.user_manager", "@session", "@event_dispatcher", "@service_container", "@fos_user.registration.form.factory", { twitter: twitterId }, %http_proxy% ]
 
     procergs_person.registration.form.type:
         class: %procergs_person.registration.form.type.class%

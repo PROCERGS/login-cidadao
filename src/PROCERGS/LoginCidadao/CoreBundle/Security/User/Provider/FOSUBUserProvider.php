@@ -7,11 +7,23 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseClass;
 use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Security\Exception\AlreadyLinkedAccount;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use PROCERGS\LoginCidadao\CoreBundle\Security\Exception\MissingEmailException;
+use FOS\UserBundle\Event\FormEvent;
+use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Form\Factory\FactoryInterface;
+use FOS\UserBundle\Event\FilterUserResponseEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class FOSUBUserProvider extends BaseClass
 {
 
     protected $proxySettings;
+    protected $session;
+    protected $dispatcher;
+    protected $container;
+    protected $formFactory;
 
     /**
      * Constructor.
@@ -21,10 +33,17 @@ class FOSUBUserProvider extends BaseClass
      * @param array                $proxySettings
      */
     public function __construct(UserManagerInterface $userManager,
-                                array $properties,
-                                array $proxySettings = null)
+                                SessionInterface $session,
+                                EventDispatcherInterface $dispatcher,
+                                ContainerInterface $container,
+                                FactoryInterface $formFactory,
+                                array $properties, array $proxySettings = null)
     {
         $this->userManager = $userManager;
+        $this->session = $session;
+        $this->dispatcher = $dispatcher;
+        $this->container = $container;
+        $this->formFactory = $formFactory;
         $this->properties = $properties;
         $this->proxySettings = $proxySettings;
     }
@@ -79,13 +98,19 @@ class FOSUBUserProvider extends BaseClass
         $user = $this->userManager->findUserBy(array("{$service}Id" => $username));
 
         if (null === $user) {
+            $twitterEmail = $this->session->get('twitter.email');
+            if (!$twitterEmail) {
+                throw new MissingEmailException();
+            } else {
+                $this->session->remove('twitter.email');
+            }
+
             $user = $this->userManager->createUser();
             $user->$setter_id($username);
             $user->$setter_token($response->getAccessToken());
             $user->$setter_username($screenName);
 
             $fullName = explode(' ', $response->getRealName(), 2);
-            $timestamp = microtime();
 
             $user->setFirstName($fullName[0]);
             $user->setSurname($fullName[1]);
@@ -94,7 +119,7 @@ class FOSUBUserProvider extends BaseClass
             $availableUsername = $this->userManager->getNextAvailableUsername($screenName,
                     10, $defaultUsername);
             $user->setUsername($availableUsername);
-            $user->setEmail("$screenName@{$service}_$timestamp");
+            $user->setEmail($twitterEmail);
             $user->setPassword('');
             $user->setEnabled(true);
 
@@ -102,7 +127,19 @@ class FOSUBUserProvider extends BaseClass
                 $user->updateTwitterPicture($rawResponse, $this->proxySettings);
             }
 
+            $form = $this->formFactory->createForm();
+            $form->setData($user);
+
+            $request = $this->container->get('request');
+            $eventResponse = new \Symfony\Component\HttpFoundation\RedirectResponse('/');
+            $event = new FormEvent($form, $request);
+            $this->dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS,
+                    $event);
+
             $this->userManager->updateUser($user);
+
+            $this->dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED,
+                    new FilterUserResponseEvent($user, $request, $eventResponse));
 
             return $user;
         } else {

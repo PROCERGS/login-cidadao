@@ -48,7 +48,7 @@
             <button class="btn btn-success pull-right" type="submit">{{ 'registration.submit'|trans }}</button>
         {{ form_end(form) }}
             <a class="connect facebook" href="{{ path("lc_link_facebook") }}">Inscreva-se usando o facebook</a>
-            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="connect twitter">Inscreva-se usando o twitter</a>
+            <a href="{{ path('lc_before_register_twitter') }}" class="connect twitter">Inscreva-se usando o twitter</a>
     </div>
 
     <div id="register-aside" class="col-xs-12 col-md-6 col-lg-7 hidden-xs pull-left">
