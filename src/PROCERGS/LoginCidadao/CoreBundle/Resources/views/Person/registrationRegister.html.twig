@@ -10,21 +10,7 @@
 </div>
 
 <div class="row">
-    <div id="register-aside" class="col-xs-12 col-md-6 col-lg-7 hidden-xs">
-        <h3 class="title">{% trans %}With only one account{% endtrans %}</h3>
-
-        <p class="text">{% trans %}Access to all services offered by the Government{% endtrans %}</p>
-        {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_strip_2x.png' %}
-        <img src="{{ asset_url }}" alt="{%trans%}Available services{%endtrans%}" class="center-block">
-        {% endimage %}
-
-        <p class="text">{% trans %}With only the password and CPF. Making accessing the services much simpler.{% endtrans %}</p>
-        {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_ng.png' %}
-        <img src="{{ asset_url }}" alt="{%trans%}Logo Nota Fiscal Gaúcha{%endtrans%}" class="center-block">
-        {% endimage %}
-    </div>
-
-    <div id="register-box" class="col-md-5 col-md-offset-1 col-lg-4">
+    <div id="register-box" class="col-md-5 col-md-offset-1 col-lg-4 pull-right">
         <h3 class="title text-center">{% trans %}Create your account{% endtrans %}</h3>
 
         {% for type, messages in app.session.flashbag.all() %}
@@ -65,6 +51,19 @@
             <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="connect twitter">Inscreva-se usando o twitter</a>
     </div>
 
+    <div id="register-aside" class="col-xs-12 col-md-6 col-lg-7 hidden-xs pull-left">
+        <h3 class="title">{% trans %}With only one account{% endtrans %}</h3>
+
+        <p class="text">{% trans %}Access to all services offered by the Government{% endtrans %}</p>
+        {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_strip_2x.png' %}
+        <img src="{{ asset_url }}" alt="{%trans%}Available services{%endtrans%}" class="center-block">
+        {% endimage %}
+
+        <p class="text">{% trans %}With only the password and CPF. Making accessing the services much simpler.{% endtrans %}</p>
+        {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_ng.png' %}
+        <img src="{{ asset_url }}" alt="{%trans%}Logo Nota Fiscal Gaúcha{%endtrans%}" class="center-block">
+        {% endimage %}
+    </div>
 </div>
 
 {% endblock %}

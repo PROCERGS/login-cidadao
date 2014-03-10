@@ -1,15 +1,5 @@
 var pageWidth;
 
-function responsive(aside, signUp) {
-    pageWidth = $(window).width();
-    if( pageWidth < 992 ){
-        aside.remove();
-        signUp.after(aside);
-    } else {
-        aside.remove();
-        signUp.before(aside);
-    }
-}
 if (typeof String.prototype.repeat !== 'function') {
     String.prototype.repeat = function( num ) {
         return new Array( num + 1 ).join( this );
@@ -286,8 +276,6 @@ validador.check.success = function (obj) {
 
 $(function() {
 
-    responsive( $('#register-aside'), $('#register-box') );
-
     // add bootstrap classes to forms
     $('.form-group input, .form-group select').not('.form-control').addClass('form-control');
     $('.form-group .input-error').not(':empty').parent('.form-group').addClass('has-error has-feedback');
@@ -335,8 +323,4 @@ $(function() {
         $(this).siblings('.file-name').html(val.match(/[^\\/]+$/)[0]);
     });
 
-});
-
-$(window).resize(function() {
-    responsive( $('#register-aside'), $('#register-box') );
 });
