@@ -27,13 +27,13 @@ class Authorization
 
     /**
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="authorizations")
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="person_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     protected $person;
 
     /**
      * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="authorizations")
-     * @ORM\JoinColumn(name="client_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="client_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     protected $client;
 
