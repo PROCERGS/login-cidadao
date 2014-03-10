@@ -8,6 +8,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\NotificationsHelper;
+use FOS\UserBundle\Event\FilterUserResponseEvent;
 
 class ChangePasswordListener implements EventSubscriberInterface
 {
@@ -29,6 +30,7 @@ class ChangePasswordListener implements EventSubscriberInterface
     {
         return array(
             FOSUserEvents::CHANGE_PASSWORD_SUCCESS => 'onChangePasswordSuccess',
+            FOSUserEvents::CHANGE_PASSWORD_COMPLETED => 'onChangePasswordCompleted',
         );
     }
 
@@ -36,9 +38,15 @@ class ChangePasswordListener implements EventSubscriberInterface
     {
         $person = $event->getForm()->getData();
         $this->notificationHelper->clearEmptyPasswordNotification($person);
-        
+
         $url = $this->router->generate('fos_user_change_password');
         $event->setResponse(new RedirectResponse($url));
+    }
+
+    public function onChangePasswordCompleted(FilterUserResponseEvent $event)
+    {
+        $user = $event->getUser();
+        $this->notificationHelper->clearEmptyPasswordNotification($user);
     }
 
 }

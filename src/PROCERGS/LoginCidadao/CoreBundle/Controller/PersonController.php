@@ -8,14 +8,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\NfgHelper;
+use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Event\FilterUserResponseEvent;
 
 class PersonController extends Controller
 {
@@ -177,7 +174,13 @@ class PersonController extends Controller
             $translator = $this->get('translator');
             $this->get('session')->getFlashBag()->add('notice',$translator->trans('Updated username successfully!'));
 
-            return $this->redirect($this->generateUrl('lc_update_username'));
+            $response = $this->redirect($this->generateUrl('lc_update_username'));
+
+            $request = $this->getRequest();
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
+
+            return $response;
         }
 
         return array('form' => $form->createView(), 'emptyPassword' => $emptyPassword);
