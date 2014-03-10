@@ -34,12 +34,14 @@
 }
 
 .navbar .dropdown-menu .all a {
-    color: #FFF;
+    color: #FFF!important;
     font-size: 12px;
 }
 
 .navbar .dropdown-menu .all a:hover {
-    color: #000;
+    background-color: #009933;
+    background-image: none;
+    color: #000!important;
 }
 
 .navbar-nav>li.icons>a {
@@ -117,13 +119,13 @@
     width: 90px;
 }
 
-.navbar .apps li:hover {
+/*.navbar .apps li:hover {
     background-color: #f5f5f5;
 }
 
 .navbar .apps li a:hover {
     background: none;
-}
+}*/
 
 .navbar .apps li span {
     display: inline-block;
