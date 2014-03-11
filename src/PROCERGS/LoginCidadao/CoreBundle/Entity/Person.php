@@ -535,7 +535,7 @@ class Person extends BaseUser
 
     public function getPictureWebPath()
     {
-        return null === $this->picturePath ? null : $this->getPictureUploadDir() . DIRECTORY_SEPARATOR . $this->picturePath;
+        return null === $this->picturePath ? null : $this->getPictureUploadDir() . '/' . $this->picturePath;
     }
 
     protected function getPictureUploadRootDir()
@@ -582,8 +582,8 @@ class Person extends BaseUser
                 $this->getPictureUploadRootDir(), $this->picturePath
         );
 
-        if (isset($this->tempPicturePath)) {
-            unlink($this->getPictureUploadRootDir() . DIRECTORY_SEPARATOR . $this->tempPicturePath);
+        if (isset($this->tempPicturePath) && $this->tempPicturePath != $this->picturePath) {            
+            @unlink($this->getPictureUploadRootDir() . DIRECTORY_SEPARATOR . $this->tempPicturePath);
             $this->tempPicturePath = null;
         }
 
