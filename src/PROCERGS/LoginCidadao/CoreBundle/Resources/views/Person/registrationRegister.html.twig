@@ -10,7 +10,7 @@
 </div>
 
 <div class="row">
-    <div id="register-box" class="col-md-5 col-md-offset-1 col-lg-4 pull-right">
+    <div id="register-box" class="lc-box col-md-5 col-md-offset-1 col-lg-4 pull-right">
         <h3 class="title text-center">{% trans %}Create your account{% endtrans %}</h3>
 
         {% for type, messages in app.session.flashbag.all() %}
@@ -24,28 +24,30 @@
         {% trans_default_domain 'FOSUserBundle' %}
 
         {{ form_start(form, {'action': path('fos_user_registration_register'), 'attr': {'role':'form', 'class':'fos_user_registration_register clearfix'}}) }}
-            {{ form_errors(form) }}
-            <div class="form-group">
-                {{ form_label(form.email, 'form.email' | trans, {'label_attr': {'class': 'sr-only'}}) }}
-                {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder' : 'form.email' }}) }}
-                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                <div class="input-error alert-danger">{{ form_errors(form.email) }}</div>
-            </div>
+            <div class="form-content">
+                {{ form_errors(form) }}
+                <div class="form-group">
+                    {{ form_label(form.email, 'form.email' | trans, {'label_attr': {'class': 'sr-only'}}) }}
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder' : 'form.email' }}) }}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error alert-danger">{{ form_errors(form.email) }}</div>
+                </div>
 
-            <div class="form-group">
-                {{ form_label(form.plainPassword, 'form.plainPassword' | trans, {'label_attr': {'class': 'sr-only'}}) }}
-                {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'placeholder' : 'form.plainPassword' }}) }}
-            </div>
-            <div class="input-error">{{ form_errors(form.plainPassword) }}</div>
+                <div class="form-group">
+                    {{ form_label(form.plainPassword, 'form.plainPassword' | trans, {'label_attr': {'class': 'sr-only'}}) }}
+                    {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'placeholder' : 'form.plainPassword' }}) }}
+                    <div class="input-error alert-danger">{{ form_errors(form.plainPassword) }}</div>
+                </div>
 
-            <div class="form-group">
-                {{ form_label(form.mobile, 'form.phone' | trans, {'label_attr': {'class': 'sr-only'}}) }}
-                {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'placeholder' : ('form.phone' | trans) ~ (' (optional)' | trans)}}) }}
-            </div>
-            <div class="input-error">{{ form_errors(form.mobile) }}</div>
+                <div class="form-group">
+                    {{ form_label(form.mobile, 'form.phone' | trans, {'label_attr': {'class': 'sr-only'}}) }}
+                    {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'placeholder' : ('form.phone' | trans) ~ (' (optional)' | trans)}}) }}
+                    <div class="input-error alert-danger">{{ form_errors(form.mobile) }}</div>
+                </div>
 
-            <p class='terms'>Ao clicar em abrir conta, você concorda com nosso <a href="">Termos</a> e que você leu nossa <a href="">Política de uso de dados</a>, incluindo nosso <a href="">Uso de cookies</a></p>
-            <button class="btn btn-success pull-right" type="submit">{{ 'registration.submit'|trans }}</button>
+                <p class='terms'>Ao clicar em abrir conta, você concorda com nosso <a href="">Termos</a> e que você leu nossa <a href="">Política de uso de dados</a>, incluindo nosso <a href="">Uso de cookies</a></p>
+                <button class="btn btn-success pull-right" type="submit">{{ 'registration.submit'|trans }}</button>
+            </div>
         {{ form_end(form) }}
             <a class="connect facebook" href="{{ path("lc_link_facebook") }}">Inscreva-se usando o facebook</a>
             <a href="{{ path('lc_before_register_twitter') }}" class="connect twitter">Inscreva-se usando o twitter</a>
