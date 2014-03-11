@@ -39,6 +39,6 @@ parameters:
     registration.email.unconfirmed_time: '1 day'
     brute_force_threshold: 4
 
-    background_picture.author: 'Author Name'
-    background_picture.link: 'http://link.to/picture'
+    background_picture.author: 'Miriam Cardoso de Souza'
+    background_picture.link: 'http://www.flickr.com/photos/admiriam/10390118624/'
     mailer_receiver_mail: ~
