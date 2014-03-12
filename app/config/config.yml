@@ -147,6 +147,9 @@ hwi_oauth:
             client_id:      %twitter_app_key%
             client_secret:  %twitter_app_secret%
             scope:          "email"
+    http_client:
+        verify_peer: false
+        
 parameters:
     user.class: PROCERGS\LoginCidadao\CoreBundle\Entity\Person
     buzz.client.class: PROCERGS\Generic\HWIOAuthProxyBundle\Buzz\Client\CurlProxy

@@ -1,93 +1,116 @@
+html, body { height: 100%; }
+body>.container {
+    /*min-height: 100%;
+    margin-bottom: -36px;
+    margin-top: 0;
+    padding-bottom: 36px;
+    padding-top: 0;*/
+}
+
+
 body {
-    background-color: #f0f0f0;
-    background-image: none;
-    font-family: 'Open Sans', arial;
-    margin: 0;
+    background-image: url(../../images/wp.jpg);
+    background-size: cover;
+    background-position: center top;
+}
+
+.slogan {
+    color: #FFF;
+    margin-bottom: 50px;
+}
+
+#register-box {
+    background-color: #f1f1f1;
+    margin-bottom: 30px;
     padding: 0;
 }
 
-body > .container {
-    padding: 0;
-}
-
-#login-box .title {
+#register-box .title {
     background-color: #039936;
     color: #FFF;
     display: block;
     height: 50px;
     margin: 0;
     line-height: 50px;
-    padding-left: 15px;
 }
 
-#login-box form .form-content {
-    height: auto;
-    min-height: 305px;
-    padding: 20px 10px 0;
+
+#register-box .form-group {
+    margin: 30px 0;
 }
 
-#login-box form p {
-    margin-bottom: 30px;
+#register-box input {
+    margin: 0 auto;
+    width: 90%;
 }
 
-#login-box form input {
-    height: 35px;
-    width: 350px
+#register-box .has-feedback .form-control-feedback {
+    right: 12px;
+    top:0;
 }
 
-#login-box #resetting_request {
-    color: #009141;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 12px;
-    margin: 5px 0;
+#register-box .input-error {
+    margin-top: 5px;
 }
 
-#login-box .buttons {
-    background-color: #d9d9d9;
-    padding: 8px 10px;
+#register-box .terms {
+    clear: both;
+    font-size: 11px;
+    margin: 30px 0;
+    padding: 0 20px;
 }
 
-#login-box .connect {
+#register-box .terms a {
+    color: green;
+    font-weight: 400;
+}
+
+#register-box .connect {
     box-shadow: 1px 1px #000;
     color: #FFF;
     cursor: pointer;
     display: block;
-    line-height: 25px;
-    min-width: 100px;
-    padding-left: 25px;
+    font-size: 16px;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 50px;
     text-align: center;
     width: 100%;
 }
 
-#login-box .connect:hover {
+#register-box .btn-success {
+    margin-right: 20px;
+}
+
+#register-box .connect:hover {
     text-decoration: none;
 }
 
-#login-box .facebook {
+#register-box .facebook {
     background-color: #576d94;
-    background-image: url(../../images/facebook_login.png);
+    background-image: url(../../images/facebook_signin.png);
     background-repeat: no-repeat;
-    margin-bottom: 5px;
+    margin-top: 10px;
 }
 
-#login-box .twitter {
+#register-box .twitter {
     background-color: #4baecd;
-    background-image: url(../../images/twitter_login.png);
+    background-image: url(../../images/twitter_signin.png);
     background-repeat: no-repeat;
 }
 
-#login-box .btn-success {
-    width: 100%;
+#register-box .terms a {
+    color: green;
+    font-weight: 400;
 }
 
-#login-box .register-link {
-    color: green;
-    display: block;
-    font-size: 13px;
-    font-weight: bold;
-    margin: 5px 0;
-}
+
+
+
+
+
+
+
 
 #resetting_request {
     cursor: pointer;

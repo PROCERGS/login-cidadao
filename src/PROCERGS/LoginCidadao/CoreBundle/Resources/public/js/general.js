@@ -118,9 +118,17 @@ validador.onKeyUpMultiformat = function (obj, e)
 validador.cep = { 'parent': validador };
 validador.cep.urlQuery = '/lc_consultaCep2';
 validador.cep.findByCep = function (obj, callback) {
-    //console.trace();    
+    //console.trace();
+    if (obj.value == '') {
+    	validador.check.success(obj);
+    	return;
+    }	
     var cleanup = new RegExp('[. \\-]', 'gi');
     var val = obj.value.replace(cleanup, '');
+    if (val == '' || val.length != 8) {
+        validador.check.error(obj, $('label[for='+obj.id+']').text() +' invalido');
+        return;
+    }	    
      $.ajax({
          type: "GET",
          dataType: "json",
