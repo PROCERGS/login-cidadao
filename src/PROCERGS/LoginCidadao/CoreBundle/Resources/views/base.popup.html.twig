@@ -1,11 +1,8 @@
-{% extends '::base.html.twig' %}
+{% extends 'PROCERGSLoginCidadaoCoreBundle::base.html.twig' %} 
 
-{% block body %}
-    {% block content %}{% endblock content %}
+{% block header %} 
 {% endblock %}
 
-{% block footer %}
-{% endblock %}
 
 {% block stylesheets %}
 {{ parent() }}
@@ -19,4 +16,7 @@
 {% stylesheets 'bundles/procergslogincidadaocore/css/popup/popup.css' filter='cssrewrite' %}
 <link rel="stylesheet" href="{{ asset_url }}" />
 {% endstylesheets %}
+{% endblock %}
+
+{% block footer %}
 {% endblock %}

@@ -1,4 +1,6 @@
-{% extends 'PROCERGSLoginCidadaoCoreBundle::base.html.twig' %} {% block header %} {% endblock %} {% block body %}
+{% extends 'PROCERGSLoginCidadaoCoreBundle::base.popup.html.twig' %} 
+
+{% block body %}
 {% trans_default_domain 'FOSUserBundle' %}
 <div class="row">
     <div class="col-xs-12">
@@ -76,13 +78,10 @@
         {% endif %}
     </div>
 </div>
-{% endblock %} {% block stylesheets %} {{ parent() }} {% stylesheets 'bundles/procergslogincidadaocore/css/bootstrap.css' filter='cssrewrite' %}
-<link rel="stylesheet" href="{{ asset_url }}" />
-{% endstylesheets %} {% stylesheets 'bundles/procergslogincidadaocore/css/general.css' filter='cssrewrite' %}
-<link rel="stylesheet" href="{{ asset_url }}" />
-{% endstylesheets %} {% stylesheets 'bundles/procergslogincidadaocore/css/popup/popup.css' filter='cssrewrite' %}
-<link rel="stylesheet" href="{{ asset_url }}" />
-{% endstylesheets %} {% endblock %} {% block javascripts %} {{ parent() }}
+{% endblock %} 
+
+{% block javascripts %} 
+{{ parent() }}
 <script>
 function tryThisCep(obj, evt) {
     if (window.opener) {        
@@ -92,4 +91,4 @@ function tryThisCep(obj, evt) {
     window.close();
 }
 </script>
-{% endblock %} {% block footer %} {% endblock %}
+{% endblock %}

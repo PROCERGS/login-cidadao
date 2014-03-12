@@ -54,7 +54,7 @@ class DefaultController extends Controller
      * @Route("/lc_consultaCep", name="lc_consultaCep")
      * @Template()
      */
-    public function consultaCepAction()
+    public function consultaCepAction(Request $request)
     {
         //$cep = new \PROCERGS\LoginCidadao\CoreBundle\Entity\Cep();
         $form = $this->createFormBuilder()

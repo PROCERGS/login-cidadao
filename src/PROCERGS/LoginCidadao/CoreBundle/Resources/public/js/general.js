@@ -146,8 +146,8 @@ validador.cep.findByCep = function (obj, callback) {
          }
      });
 };
-validador.cep.popupConsult = function (obj, evt, cepField, callback) {
-    var url = $(obj).attr('href') + '?cepField='+cepField+'&callback='+callback;
+validador.cep.popupConsult = function (obj, evt, callback) {
+    var url = $(obj).attr('href') + '?callback='+callback;
     window.open(url, '', "width=600,height=450");
 };
 
