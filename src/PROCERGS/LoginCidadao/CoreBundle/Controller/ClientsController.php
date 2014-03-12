@@ -5,19 +5,24 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Request;
 
 class ClientsController extends Controller
 {
 
     /**
-     * @Route("/apps_detail", name="lc_apps_detail")
+     * @Route("/apps_detail/{clientId}", name="lc_apps_detail")
      * @Template()
      */
-    public function appsDetailAction()
+    public function appsDetailAction($clientId)
     {
+        $em = $this->getDoctrine()->getManager();
+        $clients = $em->getRepository('PROCERGSOAuthBundle:Client');
+        $client = $clients->find($clientId);
+
         return $this->render(
                         'PROCERGSLoginCidadaoCoreBundle:Person:appsDetail.html.twig',
-                        compact('user', 'apps')
+                        compact('client')
         );
     }
 

@@ -39,6 +39,10 @@ body {
     background-attachment: fixed;*/
 }
 
+a {
+    color: green;
+}
+
 ul {
     list-style: none;
 }
@@ -220,19 +224,19 @@ footer .copyright {
 
 form .input-error {
     color: #a94442;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
     margin: 10px 0;
-    padding: 0 5px;
+    padding: 0;
 }
 
 form .input-error ul {
     color: #000;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
     list-style-type: none;
     margin: 0;
-    padding: 0;
+    padding: 5px;
 }
 
 form .form-control-feedback {

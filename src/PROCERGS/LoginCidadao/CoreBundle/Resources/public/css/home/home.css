@@ -41,14 +41,18 @@ body {
     text-align: center;
 }
 
-#register-box {
+.lc-box {
     background-color: #f1f1f1;
     /*height: 460px;*/
     margin-bottom: 30px;
     padding: 0;
 }
 
-#register-box .title {
+.lc-box .form-content {
+    padding: 0 24px;
+}
+
+.lc-box .title {
     background-color: #039936;
     color: #FFF;
     display: block;
@@ -58,37 +62,31 @@ body {
 }
 
 
-#register-box .form-group {
+.lc-box .form-group {
     margin: 30px 0;
+    position: relative;
 }
 
-#register-box input {
-    margin: 0 auto;
-    width: 90%;
-}
-
-#register-box .has-feedback .form-control-feedback {
-    right: 12px;
+.lc-box .has-feedback .form-control-feedback {
     top:0;
 }
 
-#register-box .input-error {
+.lc-box .input-error {
     margin-top: 5px;
 }
 
-#register-box .terms {
+.lc-box .terms {
     clear: both;
     font-size: 11px;
     margin: 30px 0;
-    padding: 0 20px;
 }
 
-#register-box .terms a {
+.lc-box .terms a {
     color: green;
     font-weight: 400;
 }
 
-#register-box .connect {
+.lc-box .connect {
     box-shadow: 1px 1px #000;
     color: #FFF;
     cursor: pointer;
@@ -101,51 +99,24 @@ body {
     width: 100%;
 }
 
-#register-box .btn-success {
-    margin-right: 20px;
-}
-
-#register-box .connect:hover {
+.lc-box .connect:hover {
     text-decoration: none;
 }
 
-#register-box .facebook {
+.lc-box .facebook {
     background-color: #576d94;
     background-image: url(../../images/facebook_signin.png);
     background-repeat: no-repeat;
     margin-top: 10px;
 }
 
-#register-box .twitter {
+.lc-box .twitter {
     background-color: #4baecd;
     background-image: url(../../images/twitter_signin.png);
     background-repeat: no-repeat;
 }
 
-#register-box .terms a {
+.lc-box .terms a {
     color: green;
     font-weight: 400;
-}
-
-/*footer {
-    margin-top: 0;
-}
-
-footer>div {
-    background: rgba(0, 0, 0, .5);
-}*/
-
-
-
-@media (max-width: 767px) {
-    #register-box {
-        padding-bottom: 10px;
-    }
-
-    #register-box .btn-success, #register-box .connect {
-        display: block;
-        float: none!important;
-        margin: 0 auto 10px;
-        width: 98%;
-    }
 }
