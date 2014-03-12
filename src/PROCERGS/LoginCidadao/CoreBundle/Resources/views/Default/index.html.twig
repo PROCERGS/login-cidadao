@@ -27,12 +27,14 @@
 
             {{ form_start(form1, {'action' : path("fos_user_security_check"), 'attr' : {'role' : 'form'}}) }}
                 <div class="form-content">
-                    <p>Entre no sistema xxx usando seu Login Cidadão</p>
+                    <p style="margin-top:30px;">Entre no sistema xxx usando seu Login Cidadão</p>
 
                     <div class="form-group">
                       {% if error %}
                         <div class="input-error alert-danger">
-                            {{ error|trans }}
+                            <ul>
+                                <li>{{ error|trans }}</li>
+                            </ul>
                         </div>
                       {% endif %}
                     </div>
@@ -48,16 +50,14 @@
                         {{ form_errors(form1.password) }}
                         {{ form_widget(form1.password, {'attr' : {'placeholder' : 'security.login.password', 'class':'form-control'}}) }}
                     </div>
-                    <a id="resetting_request" href="{{ path('fos_user_resetting_request') }}">Esqueceu sua senha?</a>
 
                     <div class="form-group">
                         {# {{ form_row(form1.recaptcha, {'class':'form-control'}) }} #}
+                        <a id="resetting_request" href="{{ path('fos_user_resetting_request') }}">Esqueceu sua senha?</a>
+                        <a id="register_request" href="{{ path('fos_user_registration_register') }}" class="register-link pull-right">Cadastre-se no sistema</a>
                     </div>
 
-                    <div class="clearfix">
-                        <a id="register_request" href="{{ path('fos_user_registration_register') }}" class="register-link pull-left">Cadastre-se no sistema</a>
-                        <button type="submit" class="btn btn-success pull-right">{{ 'security.login.submit'|trans }}</button>
-                    </div>
+                    <button type="submit" class="btn btn-success center-block">{{ 'security.login.submit'|trans }}</button>
                 </div>
 
                {{ form_end(form1) }}

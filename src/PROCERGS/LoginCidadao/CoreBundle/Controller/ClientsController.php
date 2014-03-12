@@ -16,7 +16,7 @@ class ClientsController extends Controller
     public function appsDetailAction()
     {
         return $this->render(
-                        'PROCERGSLoginCidadaoCoreBundle:Authorization:appsDetail.html.twig',
+                        'PROCERGSLoginCidadaoCoreBundle:Person:appsDetail.html.twig',
                         compact('user', 'apps')
         );
     }

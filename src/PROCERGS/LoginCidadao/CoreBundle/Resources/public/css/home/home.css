@@ -132,14 +132,5 @@ footer>div {
 
 
 @media (max-width: 767px) {
-    .lc-box {
-        padding-bottom: 10px;
-    }
 
-    .lc-box .btn-success, .lc-box .connect {
-        display: block;
-        float: none!important;
-        margin: 0 auto 10px;
-        width: 98%;
-    }
 }
