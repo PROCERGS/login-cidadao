@@ -24,7 +24,7 @@ security:
             security: false
 
         main:
-            pattern: ^/
+            pattern: ^/(?!api)
 
             fos_facebook:
                 app_url: ""
