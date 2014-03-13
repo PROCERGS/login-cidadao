@@ -1,3 +1,0 @@
-procergs_generic_twitter_o_auth_proxied_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: PROCERGSGenericTwitterOAuthProxiedBundle:Default:index }
