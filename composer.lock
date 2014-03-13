@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "a79c6261eb91d90dc7334cd32cad10e2",
+    "hash": "10a846eac9b813ae2675c761db035444",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -958,12 +958,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guilhermednt/hwi-oauth-proxy-bundle.git",
-                "reference": "724269ca5ccc51ac199a4ce6305f5e53d3204ed1"
+                "reference": "a0b97b0b880cc1649c68070ae4c4bd51cc50ecb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guilhermednt/hwi-oauth-proxy-bundle/zipball/724269ca5ccc51ac199a4ce6305f5e53d3204ed1",
-                "reference": "724269ca5ccc51ac199a4ce6305f5e53d3204ed1",
+                "url": "https://api.github.com/repos/guilhermednt/hwi-oauth-proxy-bundle/zipball/a0b97b0b880cc1649c68070ae4c4bd51cc50ecb3",
+                "reference": "a0b97b0b880cc1649c68070ae4c4bd51cc50ecb3",
                 "shasum": ""
             },
             "require": {
@@ -993,7 +993,7 @@
                 "proxy",
                 "service"
             ],
-            "time": "2014-03-12 17:40:03"
+            "time": "2014-03-12 17:47:59"
         },
         {
             "name": "hwi/oauth-bundle",

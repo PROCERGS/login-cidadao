@@ -10,7 +10,7 @@
 	},
 	"repositories" : [{
 			"type" : "vcs",
-			"url" : "https://github.com/lordvacilaoerrocerto/EWZRecaptchaBundle"
+			"url" : "https://github.com/PROCERGS/EWZRecaptchaBundle"
 		}
 	],
 	"require" : {
