@@ -79,10 +79,6 @@ Activated: Activated
 Deactivated: Deactivated
 'Your account is created, but you must have a CPF.': 'Your account is created, but you must have a CPF.'
 'Your CPF will give some realibility to your account.': 'Your CPF will give some realibility to your account.'
-'CPF:': 'CPF:'
-'If you want to reinforce you CPF you can check with NFg': 'If you want to reinforce you CPF you can check with NFg'
-'You need to put you password of your account of NFg .': 'You need to put you password of your account of NFg .'
-'Type in your NFg password here:': 'Type in your NFg password here:'
 'With only one account': 'With only one account'
 'Access to all services offered by the Government': 'Access to all services offered by the Government'
 'With only the password and CPF. Making accessing the services much simpler.': 'With only the password and CPF. Making accessing the services much simpler.'
@@ -90,3 +86,10 @@ Deactivated: Deactivated
 'Change username': 'Change username'
 exception.alreadyLinkedAccount: "This account is already linked with another user. You have to unlink from that user before linking to this current user."
 contact.title: 'Fale conosco'
+nfg.noprofile.found: 'Não foi encontado sua conta na NFg!'
+cpf.registration.title: 'Registro de CPF'
+cpf.registration.nfg.check.invite: 'If you want to reinforce you CPF you can check with NFg, you need to put you password of your account of NFg.'
+cpf.registration.nfg.check.password: 'Type in your NFg password here:'
+cpf.registration.nfg.checked.at: 'Validado na NFg em %date1%'
+cpf.profile.nfg.check.invite: 'Você deseja reforçar seu cpf ainda mais?'
+cpf.profile.nfg.check.button: 'Verifique com a NFg!'

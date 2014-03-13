@@ -30,6 +30,10 @@ class ProfileEditListner implements EventSubscriberInterface
      */
     private $notificationsHelper;
     private $emailUnconfirmedTime;
+    
+    private $email;
+    private $cpf;
+    private $cpfEmptyTime;
 
     public function __construct(TwigSwiftMailer $mailer,
                                 MailerInterface $fosMailer,
@@ -65,6 +69,7 @@ class ProfileEditListner implements EventSubscriberInterface
     {
         // required, because when Success's event is called, session already contains new email
         $this->email = $this->security->getToken()->getUser()->getEmail();
+        $this->cpf = $this->security->getToken()->getUser()->getCpf();
     }
 
     public function onProfileEditSuccess(FormEvent $event)
@@ -83,11 +88,25 @@ class ProfileEditListner implements EventSubscriberInterface
             $this->notificationsHelper->enforceUnconfirmedEmailNotification($user);
             $this->mailer->sendEmailChangedMessage($user, $this->email);
         }
+        if ($user->getCpf() !== $this->cpf) {
+            $user->setCpfNfg(null);
+            if ($user->getCpf()) {
+                $user->setCpfExpiration(null);                
+            } else {                
+                $cpfExpiryDate = new \DateTime($this->cpfEmptyTime);
+                $user->setCpfExpiration($cpfExpiryDate);                
+            }
+        }
 
         // default:
         $url = $this->router->generate('fos_user_profile_edit');
 
         $event->setResponse(new RedirectResponse($url));
+    }
+    
+    public function setCpfEmptyTime($var)
+    {
+        $this->cpfEmptyTime = $var;
     }
 
 }

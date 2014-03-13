@@ -74,9 +74,8 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
         $doctrine->getManager()->persist($accessSession);
         $doctrine->getManager()->flush();
 
-        // CPF check
-        $cpfExpirationDate = $token->getUser()->getCpfExpiration();
-        if ($cpfExpirationDate instanceof \DateTime && $cpfExpirationDate <= new \DateTime()) {
+        // CPF check        
+        if ($token->getUser()->isCpfExpired()) {
             return new RedirectResponse($this->router->generate('lc_registration_cpf'));
         }
 

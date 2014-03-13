@@ -50,6 +50,19 @@
                     {{ form_label(form.cpf) }}
                     <div class="input-error">{{ form_errors(form.cpf) }}</div>
                     {{ form_widget(form.cpf, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }}
+                    {{ form_widget(form.cpfNfg, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}
+                    {% if form.cpf.vars.value is not null %}
+	                    {% if form.cpfNfg.vars.value is null or form.cpfNfg.vars.value == '' %}
+	                    <span>
+                            {{ 'cpf.profile.nfg.check.invite' | trans({}, 'messages')  }}
+	                        <a class="check-cpf" href="{{ path('lc_registration_cpf') }}">{{ 'cpf.profile.nfg.check.button' | trans({}, 'messages') }}</a>
+	                    </span>
+	                    {% else %}
+	                    <span>	                        
+	                        {{ 'cpf.registration.nfg.checked.at' | trans({'%date1%' : form.cpfNfg.vars.value}, 'messages')  }}
+	                    </span>	                    
+	                    {% endif %}                    
+                    {% endif %}
                 </div>
                 <div class="form-group">
                     {{ form_label(form.mobile) }}
@@ -111,6 +124,7 @@
 <script>
 var profileEdit = {};
 profileEdit.cepId = '#{{ form.cep.vars.id }}';
+profileEdit.cpfId = '#{{ form.cpf.vars.id }}';
 
 profileEdit.popLocation = function (dneData) {
     $(profileEdit.cepId).val(dneData.cep);
@@ -123,7 +137,7 @@ profileEdit.popLocation = function (dneData) {
 };
 $(document).ready(function() {
     $(profileEdit.cepId).mask('00000-000');
-    $("#{{ form.cpf.vars.id }}").mask('000.000.000-00');
+    $(profileEdit.cpfId).mask('000.000.000-00');
     $("#{{ form.mobile.vars.id }}").mask("(00) 0000-00009").focusout(function () {
         var phone, element;
         element = $(this); element.unmask();
@@ -136,10 +150,16 @@ $(document).ready(function() {
     });
 
     $('.search-cep').click(function(event) {
-    	event.preventDefault()
-        validador.cep.popupConsult(this, event, '{{ form.cep.vars.id }}', 'profileEdit.popLocation');
+    	event.preventDefault();
+        validador.cep.popupConsult(this, event, 'profileEdit.popLocation');
         return false;
     });
+    $('.check-cpf').click(function(event) {
+    	event.preventDefault()
+        var url = $(this).attr('href');
+        window.open(url, '', "width=600,height=450");
+        return false;
+    });    
     $(profileEdit.cepId).blur(function(event) {
     	validador.cep.findByCep(this, profileEdit.popLocation);
     });

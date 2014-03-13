@@ -43,13 +43,13 @@ class NfgHelper
             'Content-Type: application/x-www-form-urlencoded',
             'User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0',
             'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'Accept-Language: pt-BR,pt;q=0.8,en-US;q=0.5,en;q=0.3',
-            'Accept-Encoding: gzip, deflate',
+            'Accept-Language: pt-BR,pt;q=0.8,en-US;q=0.5,en;q=0.3',            
             'Connection: keep-alive',
             'Host: nfg.sefaz.rs.gov.br'
         );
         $headApp = array_merge($headApp, $header);
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $headApp);
+        curl_setopt($this->ch, CURLOPT_ENCODING, '');
         if (! $this->cookie) {
             $this->cookie = tempnam(sys_get_temp_dir(), "nfg");
         }
@@ -90,7 +90,7 @@ class NfgHelper
         curl_setopt($this->ch, CURLOPT_URL, $url);
         $result = curl_exec($this->ch);
         // $result = explode("\r\n\r\n", $result);
-        $this->isLoggedIn = strpos($result, 'HTTP/1.1 302 Found') === 0;
+        $this->isLoggedIn = strpos($result, 'HTTP/1.1 302 Found') !== 0;
         curl_close($this->ch);
         return $result;
     }
@@ -142,9 +142,9 @@ class NfgHelper
             'municipio' => array(
                 'id' => 'municipio_resposta',
                 'type' => 'label'
-            )
+            )            
         );
-        $var = array();
+        $var = array();        
         foreach ($maps as $idx => $map) {
             $node = $dom->getElementById($map['id']);
             if (! $node) {
@@ -158,6 +158,15 @@ class NfgHelper
                     $var[$idx] = $node->attributes->getNamedItem('value')->nodeValue;
                     break;
             }
+        }
+        $xpath = new \DOMXPath($dom);
+        $node = $xpath->query('//*[@class="nome"]');
+        if ($node->length) {
+            $val = $node->item(0)->nodeValue;
+            if (preg_match('/(.+)\((.+)\)/', $val, $matchs)) {
+                $var['nome'] = trim($matchs[1]);
+                $var['cpf'] = trim(preg_replace('/[^0-9]/', '', $matchs[2]));
+            }            
         }
         return $var;
     }

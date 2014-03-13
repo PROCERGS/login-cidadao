@@ -103,13 +103,8 @@ services:
         arguments: ["@procergs_logincidadao.mailer", "@fos_user.mailer", "@fos_user.util.token_generator", "@router", "@session", "@security.context", "@notifications.helper", "%registration.email.unconfirmed_time%"]
         tags:
             - { name: kernel.event_subscriber }
-
-    procergs_logincidadao.cpf.form.type:
-        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\CpfFormType
-        tags:
-            - { name: form.type, alias: cpf_form_type }
-        calls:
-            - [setContainer, ["@service_container"]]
+        calls:        
+            - [setCpfEmptyTime, ["%registration.cpf.empty_time%"]]
 
     procergs_logincidadao.change.password.form.type:
         class: %procergs_logincidadao.change.password.form.type.class%
