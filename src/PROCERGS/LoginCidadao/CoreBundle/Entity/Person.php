@@ -69,9 +69,9 @@ class Person extends BaseUser
 
     /**
      * @Expose
-     * @Assert\Regex(pattern="/^[A-Za-z0-9_]+$/i", message="change_username.invalid.username")
+     * @Assert\Regex(pattern="/^[A-Za-z0-9_.]+$/i", message="change_username.invalid.username")
      * @Assert\NotBlank
-     * @Assert\Length(min="1", max="15")
+     * @Assert\Length(min="1", max="20")
      */
     protected $username;
 
@@ -582,7 +582,7 @@ class Person extends BaseUser
                 $this->getPictureUploadRootDir(), $this->picturePath
         );
 
-        if (isset($this->tempPicturePath) && $this->tempPicturePath != $this->picturePath) {            
+        if (isset($this->tempPicturePath) && $this->tempPicturePath != $this->picturePath) {
             @unlink($this->getPictureUploadRootDir() . DIRECTORY_SEPARATOR . $this->tempPicturePath);
             $this->tempPicturePath = null;
         }
@@ -731,7 +731,7 @@ class Person extends BaseUser
     {
         return $this->previousValidEmail;
     }
-    
+
     public function isCpfExpired() {
         return ($this->getCpfExpiration() instanceof \DateTime && $this->getCpfExpiration() <= new \DateTime());
     }

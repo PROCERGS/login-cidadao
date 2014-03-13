@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
-class AcessSession
+class AccessSession
 {
 
     /**
@@ -53,7 +53,7 @@ class AcessSession
     public function setUsername($var)
     {
         $this->username = $var;
-        
+
         return $this;
     }
 
@@ -65,7 +65,7 @@ class AcessSession
     public function setIp($var)
     {
         $this->ip = $var;
-        
+
         return $this;
     }
 
@@ -77,7 +77,7 @@ class AcessSession
     public function setIDhacess($var)
     {
         $this->dhacess = $var;
-        
+
         return $this;
     }
 
@@ -89,7 +89,7 @@ class AcessSession
     public function setVal($var)
     {
         $this->val = $var;
-        
+
         return $this;
     }
 

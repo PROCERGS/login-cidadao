@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\RouterInterface;
 use Doctrine\ORM\EntityManager;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\AcessSession;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\AccessSession;
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\NotificationsHelper;
@@ -65,16 +65,16 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             'ip' => $request->getClientIp(),
             'username' => $token->getUser()->getUsername()
         );
-        $accessSession = $doctrine->getRepository('PROCERGSLoginCidadaoCoreBundle:AcessSession')->findOneBy($vars);
+        $accessSession = $doctrine->getRepository('PROCERGSLoginCidadaoCoreBundle:AccessSession')->findOneBy($vars);
         if (!$accessSession) {
-            $accessSession = new AcessSession();
+            $accessSession = new AccessSession();
             $accessSession->fromArray($vars);
         }
         $accessSession->setVal(0);
         $doctrine->getManager()->persist($accessSession);
         $doctrine->getManager()->flush();
 
-        // CPF check        
+        // CPF check
         if ($token->getUser()->isCpfExpired()) {
             return new RedirectResponse($this->router->generate('lc_registration_cpf'));
         }

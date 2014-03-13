@@ -37,7 +37,7 @@ class LoginFormType extends AbstractType
                     'ip' => $request->getClientIp(),
                     'username' => $lastUsername
                 );
-                $accessSession = $doctrine->getRepository('PROCERGSLoginCidadaoCoreBundle:AcessSession')->findOneBy($vars);
+                $accessSession = $doctrine->getRepository('PROCERGSLoginCidadaoCoreBundle:AccessSession')->findOneBy($vars);
                 $this->verifyCaptch = ($accessSession && $accessSession->getVal() >= $this->container->getParameter('brute_force_threshold'));
             }
         }
