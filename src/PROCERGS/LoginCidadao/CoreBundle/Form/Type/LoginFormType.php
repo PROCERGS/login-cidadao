@@ -23,11 +23,11 @@ class LoginFormType extends AbstractType
         return $this->container;
     }
 
-    private $verifyCaptch;
+    private $verifyCaptcha;
 
-    public function hasVerifyCaptch()
+    public function hasVerifyCaptcha()
     {
-        if ($this->verifyCaptch === null) {
+        if ($this->verifyCaptcha === null) {
             $request = $this->container->get('request');
             $session = $request->getSession();
             if (null !== $session) {
@@ -38,15 +38,15 @@ class LoginFormType extends AbstractType
                     'username' => $lastUsername
                 );
                 $accessSession = $doctrine->getRepository('PROCERGSLoginCidadaoCoreBundle:AccessSession')->findOneBy($vars);
-                $this->verifyCaptch = ($accessSession && $accessSession->getVal() >= $this->container->getParameter('brute_force_threshold'));
+                $this->verifyCaptcha = ($accessSession && $accessSession->getVal() >= $this->container->getParameter('brute_force_threshold'));
             }
         }
-        return $this->verifyCaptch;
+        return $this->verifyCaptcha;
     }
 
-    public function setVerifyCaptch($var)
+    public function setVerifyCaptcha($var)
     {
-        $this->verifyCaptch = $var;
+        $this->verifyCaptcha = $var;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -61,21 +61,6 @@ class LoginFormType extends AbstractType
             //'translation_domain' => 'PROCERGSLoginCidadaoCoreBundle',
             'mapped' => false
         ));
-        // if ($this->hasVerifyCaptch()) {
-        //     $builder->add('recaptcha', 'ewz_recaptcha', array(
-        //         'attr' => array(
-        //             'options' => array(
-        //                 'theme' => 'clean'
-        //             )
-        //         ),
-        //         'mapped' => false,
-        //         'constraints' => array(
-        //             new True()
-        //         )
-        //     ));
-        // } else {
-        //     $builder->add('recaptcha', 'hidden');
-        // }
     }
 
     public function getName()
