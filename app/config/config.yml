@@ -149,10 +149,10 @@ hwi_oauth:
             scope:          "email"
     http_client:
         verify_peer: false
-        
+
 parameters:
     user.class: PROCERGS\LoginCidadao\CoreBundle\Entity\Person
-    buzz.client.class: PROCERGS\Generic\HWIOAuthProxyBundle\Buzz\Client\CurlProxy
+    buzz.client.class: Donato\Generic\HWIOAuthProxyBundle\Buzz\Client\CurlProxy
 
 ewz_recaptcha:
     public_key:   %recaptcha_public_key%

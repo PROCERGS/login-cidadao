@@ -25,9 +25,9 @@ class AppKernel extends Kernel
             new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
             new FOS\FacebookBundle\FOSFacebookBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+            new Donato\Generic\HWIOAuthProxyBundle\DonatoGenericHWIOAuthProxyBundle(),
 
             new PROCERGS\Generic\LocaleBundle\PROCERGSGenericLocaleBundle(),
-            new PROCERGS\Generic\HWIOAuthProxyBundle\PROCERGSGenericHWIOAuthProxyBundle(),
             new PROCERGS\LoginCidadao\APIBundle\PROCERGSLoginCidadaoAPIBundle(),
             new PROCERGS\Generic\ValidationBundle\PROCERGSGenericValidationBundle(),
             new EWZ\Bundle\RecaptchaBundle\EWZRecaptchaBundle(),

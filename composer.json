@@ -33,7 +33,8 @@
 		"hwi/oauth-bundle" : "0.3.*@dev",
 		"facebook/php-sdk" : "3.2.0",
 		"friendsofsymfony/facebook-bundle" : "1.3.*",
-		"excelwebzone/recaptcha-bundle" : "dev-test-proxy"
+		"excelwebzone/recaptcha-bundle" : "dev-test-proxy",
+                "guilhermednt/hwi-oauth-proxy-bundle": "dev-master"
 	},
 	"scripts" : {
 		"post-install-cmd" : [
