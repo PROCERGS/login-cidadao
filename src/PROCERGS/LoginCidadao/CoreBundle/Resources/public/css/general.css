@@ -82,16 +82,25 @@ img.desaturate {
     max-height: none;
 }
 
-/* override boostrap btn*/
- .btn-default, .btn-success {
+/* override boostrap */
+.well {
+    background: none;
+    background-color: #dddedc;
+    border-radius: 0;
+}
+
+.btn {
+    background-image: none;
+    border-radius:0;
+    font-size: 16px;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.btn-default, .btn-success {
      background-color: #039935;
-     background-image: none;
-     border-radius:0;
      box-shadow: 1px 1px 0 0 #969696;
      color: #FFF;
-     font-size: 16px;
-     padding-left: 25px;
-     padding-right: 25px;
 }
 
 .btn-success:hover {
@@ -102,6 +111,7 @@ img.desaturate {
     background-color: #FFFFFF;
     color: #333333;
 }
+
 
 footer {
     margin-top: 20px;
@@ -247,8 +257,12 @@ form .has-feedback .form-control-feedback {
     display: block;
 }
 
+form .has-feedback .sr-only ~ .form-control-feedback {
+    top:0;
+}
+
 .general-content {
-    background: none repeat scroll 0 0 rgba(241, 241, 241, 0.8);
+    background: none repeat scroll 0 0 rgba(241, 241, 241, 0.9);
     box-shadow: 1px 1px 1px #CCCCCC;
     margin-bottom: 30px;
     position: relative;
