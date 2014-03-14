@@ -14,6 +14,8 @@ parameters:
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
 
+    web_profiler_toolbar: true
+
     facebook_app_id: facebook_app_id_here
     facebook_app_secret: facebook_app_secret_here
     facebook_app_url: facebook_app_url
