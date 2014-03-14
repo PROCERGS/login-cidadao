@@ -3,7 +3,7 @@
 {% block content %}
 <div id="profile-edit" class="content clearfix">
 
-    <h3>Perfil</h3>
+    <h3>{% trans %}Profile{% endtrans %}</h3>
 
     {% trans_default_domain 'FOSUserBundle' %}
 
@@ -58,10 +58,10 @@
 	                        <a class="check-cpf" href="{{ path('lc_registration_cpf') }}">{{ 'cpf.profile.nfg.check.button' | trans({}, 'messages') }}</a>
 	                    </span>
 	                    {% else %}
-	                    <span>	                        
+	                    <span>
 	                        {{ 'cpf.registration.nfg.checked.at' | trans({'%date1%' : form.cpfNfg.vars.value}, 'messages')  }}
-	                    </span>	                    
-	                    {% endif %}                    
+	                    </span>
+	                    {% endif %}
                     {% endif %}
                 </div>
                 <div class="form-group">
@@ -159,7 +159,7 @@ $(document).ready(function() {
         var url = $(this).attr('href');
         window.open(url, '', "width=600,height=450");
         return false;
-    });    
+    });
     $(profileEdit.cepId).blur(function(event) {
     	validador.cep.findByCep(this, profileEdit.popLocation);
     });

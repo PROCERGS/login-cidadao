@@ -4,35 +4,25 @@ profile.show.email: Email
 registration.check_email: 'An email has been sent to %email%. It contains an activation link you must click to activate your account.'
 registration.confirmed: 'Congrats %username%, your account is now activated.'
 registration.back: 'Back to the originating page.'
-registration.email.subject: 'Welcome %username%!'
-registration.email.message: >
-    Hello %username%!
-
-    To finish activating your account - please visit %confirmationUrl%
-
-    Regards,
-    the Staff
+registration.email.subject: '%username%''s email confirmation!'
+registration.email.message: "Hello %username%!\n\nTo finish activating your account - please visit %confirmationUrl%\n\nRegards, the Staff\n"
 registration.submit: Register
+registration.register: Register
+resseting.forgot_password: 'Forgot your password?'
 resetting.password_already_requested: 'The password for this user has already been requested within the last 24 hours.'
 resetting.check_email: 'An email has been sent to %email%. It contains a link you must click to reset your password.'
 resetting.email.subject: 'Reset Password'
-resetting.email.message: >
-    Hello %username%!
-
-    To reset your password - please visit %confirmationUrl%
-
-    Regards,
-    the Staff
+resetting.email.message: "Hello %username%!\n\nTo reset your password - please visit %confirmationUrl%\n\nRegards, the Staff\n"
 resetting.request.invalid_username: 'The username or email address "%username%" does not exist.'
 resetting.request.username: 'Username or email address:'
 resetting.request.submit: 'Reset password'
 resetting.reset.submit: 'Change password'
 form.group_name: 'Group name'
-form.username: 'Username'
-form.email: 'Email'
+form.username: Username
+form.email: Email
 form.current_password: 'Current password'
-form.password: 'Password'
-form.password_confirmation: 'Verification'
+form.password: Password
+form.password_confirmation: Verification
 form.new_password: 'New password'
 form.new_password_confirmation: 'Verification:'
 form.firstName: Firstname
@@ -50,15 +40,10 @@ grid.search.title: Results
 grid.search.button: Search
 cep.search.title: 'Search CEP'
 email.changed.message.subject: 'Your email was changed!'
-email.changed.message.text: >
-    Hello, %name%!
-
-    We are sending you this email to let you know that your email address was changed to %email%.
-
-    If you didn't change it, please contact us since this might be a security breach!
-form.district: __form.district
+email.changed.message.text: "Hello, %name%!\n\nWe are sending you this email to let you know that your email address was changed to %email%.\n\nIf you didn't change it, please contact us since this might be a security breach!\n"
+form.district: Neighborhood
 layout.logout: Logout
-change_password.submit: "Change Password"
+change_password.submit: 'Change Password'
 'Connect with Facebook': 'Connect with Facebook'
 'Connect with Twitter': 'Connect with Twitter'
 form.plainPassword: Password
@@ -67,6 +52,18 @@ form.phone: Phone
 'Reset Password': 'Reset Password'
 'Enter your username or email': 'Enter your username or email'
 Cancel: Cancel
-form.message: 'Mensagem'
+form.message: Mensagem
 form.message.sucess: 'Sua mensagem foi enviado com sucesso, aguarde resposta!'
-form.submit: 'Enviar'
+form.submit: Enviar
+'Log in using your Citizen''s Login': 'Log in using your Citizen''s Login'
+'Connect using Facebook': 'Connect using Facebook'
+'Connect using Twitter': 'Connect using Twitter'
+'Register with Twitter': 'Register with Twitter'
+'Since twitter won''t share your email, we need you to type your email manually.': 'Since twitter won''t share your email, we need you to type your email manually.'
+'This email will be used for future contact and can also be user to log in, so this must be a valid email.': 'This email will be used for future contact and can also be user to log in, so this must be a valid email.'
+'Email:': 'Email:'
+'Continue Registration': 'Continue Registration'
+'Don''t know your CEP?': 'Don''t know your CEP?'
+'Search it!': 'Search it!'
+'Your address': 'Your address'
+security.login.submit: 'Log in'

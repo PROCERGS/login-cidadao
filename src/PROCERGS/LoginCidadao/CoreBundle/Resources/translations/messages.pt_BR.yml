@@ -98,7 +98,7 @@ notification.unconfirmed.email.text: >
     <p>Para utilizar o Login Cidadão, é necessário que você utilize um endereço de email válido.</p>
     <p>Caso você não confirme seu endereço de email acessando o link que lhe foi enviado, sua conta será excluída.</p>
 notification.empty.password.title: 'Você não tem uma senha!'
-notification.empty.password.shortText: 'Clique aqui para trocar sua senha.'
+notification.empty.password.shortText: 'Clique aqui para definir sua senha.'
 notification.empty.password.text: ''
 'Useful Information': 'Informações Úteis'
 'Content License': 'Licença do Conteúdo'
@@ -119,3 +119,8 @@ cpf.registration.nfg.check.password: 'Digite sua senha da NFG aqui:'
 cpf.registration.nfg.checked.at: 'Validado na NFG em %date1%'
 cpf.profile.nfg.check.invite: 'Você deseja reforçar seu cpf ainda mais?'
 cpf.profile.nfg.check.button: 'Verifique com a NFG!'
+Profile: Perfil
+Services: Serviços
+'Active Services': 'Serviços Ativos'
+'Other Services': 'Demais serviços'
+'Log in using your Citizen''s Login': 'Entre usando seu Login Cidadão'

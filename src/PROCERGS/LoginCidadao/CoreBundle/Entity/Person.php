@@ -52,7 +52,7 @@ class Person extends BaseUser
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank(message="Please enter your surname.", groups={"Profile"})
      * @Assert\Length(
-     *     min=3,
+     *     min=1,
      *     max="255",
      *     minMessage="The surname is too short.",
      *     maxMessage="The surname is too long.",
