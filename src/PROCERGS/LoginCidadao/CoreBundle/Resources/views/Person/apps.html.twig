@@ -32,7 +32,7 @@
                 <li>
                     <img src="http://placehold.it/65x65" alt="" class="center-block">
                     <h5 class="center-block text-center">{{ client.name }}</h5>
-                    <a class="btn deactivated" role="button">{% trans %}Deactivated{%  endtrans %}</a>
+                    <a class="btn deactivated" role="button" href="{{ path('lc_apps_detail', {'clientId': client.id}) }}">{% trans %}Deactivated{%  endtrans %}</a>
                 </li>
             {% endfor %}
         </ul>

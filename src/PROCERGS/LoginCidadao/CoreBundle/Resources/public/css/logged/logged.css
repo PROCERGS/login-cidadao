@@ -355,8 +355,13 @@
     margin: 30px 0;
 }
 
-#app-detail .permissions {
+.permissions {
+    padding-left: 0;
+}
+
+.permissions li{
     color: green;
+    font-weight: bold;
 }
 
 #notifications ul {
@@ -428,4 +433,21 @@
 #fos_user_change_password_form_plainPassword ul {
     color: #a94442;
     padding-left: 0;
+}
+
+.fos_oauth_server_authorize {
+    padding-left: 50px;
+}
+
+.fos_oauth_server_authorize .img {
+    margin: 30px 0;
+}
+
+.fos_oauth_server_authorize .img .glyphicon {
+    font-size: 25px;
+    margin: 0 30px;
+}
+
+.fos_oauth_server_authorize .msg {
+    font-size: 17px;
 }
