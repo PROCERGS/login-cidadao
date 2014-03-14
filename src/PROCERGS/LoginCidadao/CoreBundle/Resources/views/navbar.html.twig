@@ -17,7 +17,7 @@
 
         {% if app.user == null %}
         <div class="pull-right">
-            <a data-href="{{ url("fos_user_security_login") }}" class="btn btn-login btn-success navbar-btn">{{ 'Log in' | trans }}</a>
+            <a href="{{ url("fos_user_security_login") }}" class="btn btn-login btn-success navbar-btn">{{ 'Log in' | trans }}</a>
         </div>
         {% else %}
         <div class="collapse navbar-collapse" id="lc-navbar-collapse">
