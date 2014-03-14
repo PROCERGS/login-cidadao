@@ -22,12 +22,14 @@
             <div class="form-content">
                 <div class="col-md-5">
                     <div class="form-group">
+                        {{ form_label(form.plainPassword.first, 'form.plainPassword' | trans, {'label_attr': {'class': 'sr-only'}}) }}
                         {{ form_widget(form.plainPassword.first, {'attr' : {'placeholder' : 'form.new_password' }})}}
                         <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                         <div class="input-error">{{ form_errors(form.plainPassword.first)}}</div>
                     </div>
 
                     <div class="form-group">
+                        {{ form_label(form.plainPassword.second, 'form.plainPassword' | trans, {'label_attr': {'class': 'sr-only'}}) }}
                         {{ form_widget(form.plainPassword.second, {'attr' : {'placeholder' : 'form.new_password_confirmation' }})}}
                         <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                         <div class="input-error">{{ form_errors(form.plainPassword.first)}}</div>
