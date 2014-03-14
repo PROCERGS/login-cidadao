@@ -13,6 +13,7 @@
 }
 
 .navbar .dropdown-menu {
+    background-color: #FFF!important;
     padding-bottom: 0;
     width: 290px;
 }

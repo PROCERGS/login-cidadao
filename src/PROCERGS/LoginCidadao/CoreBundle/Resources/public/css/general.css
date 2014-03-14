@@ -267,5 +267,6 @@ form .has-feedback .form-control-feedback {
 
 .header-shadows {
     color: #FFF;
+    cursor: default;
     text-shadow: 1px 1px 1px #000;
 }
