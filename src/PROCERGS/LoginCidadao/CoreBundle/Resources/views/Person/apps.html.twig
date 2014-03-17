@@ -24,7 +24,7 @@
                 <a href="{{ path('lc_apps_detail', {'clientId': auth.client.id}) }}">
                     <img src="http://placehold.it/65x65" alt="" class="center-block">
                     <span class="name center-block text-center">{{ auth.client.name }}</span>
-                    <span class="status">{% trans %}Activated{%  endtrans %}</span>
+                    <span class="activated status">{% trans %}Activated{%  endtrans %}</span>
                 </a>
             </li>
         {% endfor %}

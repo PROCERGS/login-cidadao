@@ -17,12 +17,31 @@ class ClientsController extends Controller
     public function appsDetailAction($clientId)
     {
         $em = $this->getDoctrine()->getManager();
+
         $clients = $em->getRepository('PROCERGSOAuthBundle:Client');
         $client = $clients->find($clientId);
+        $clientScopes = $client->getAllowedScopes();
+
+        $user = $this->getUser();
+
+        $clientScopes = $client->getAllowedScopes();
+
+        $authorization = $this->getDoctrine()
+                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
+                ->findOneBy(array(
+            'person' => $user,
+            'client' => $client
+        ));
+        $userScopes = empty($authorization) ? array() : $authorization->getScope();
+
+        $scopes = array();
+        foreach ($clientScopes as $s) {
+            $scopes[$s] = in_array($s, $userScopes) ? true : false;
+        }
 
         return $this->render(
                         'PROCERGSLoginCidadaoCoreBundle:Person:appsDetail.html.twig',
-                        compact('client')
+                        compact('user', 'client', 'scopes')
         );
     }
 
