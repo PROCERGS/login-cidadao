@@ -159,8 +159,7 @@
 
 .settings-content .form-bar {
     background-color: #d9d9d9;
-    height: 40px;
-    padding: 2px 10px;
+    padding: 10px;
 }
 
 
@@ -455,19 +454,19 @@
     padding-left: 0;
 }
 
-.fos_oauth_server_authorize {
-    padding-left: 50px;
-}
-
-.fos_oauth_server_authorize .img {
+.fos_oauth_server_authorize .connect-diagram {
     margin: 30px 0;
 }
 
-.fos_oauth_server_authorize .img .glyphicon {
+.fos_oauth_server_authorize .connect-diagram .glyphicon.glyphicon-chevron-right {
     font-size: 25px;
     margin: 0 30px;
 }
 
-.fos_oauth_server_authorize .msg {
+.fos_oauth_server_authorize .connect-diagram {
     font-size: 17px;
+}
+
+.fos_oauth_server_authorize .buttons.row {
+    margin-top: 20px;
 }

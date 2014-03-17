@@ -122,6 +122,7 @@ class FacebookProvider implements UserProviderInterface
             $currentUserObj = null;
         }
 
+        $newUser = false;
         $user = $this->findUserByFbId($username);
 
         try {
@@ -133,6 +134,7 @@ class FacebookProvider implements UserProviderInterface
         if (!empty($fbdata)) {
             if (empty($user)) {
                 if (!($currentUserObj instanceof UserInterface)) {
+                    $newUser = true;
                     $user = $this->userManager->createUser();
                     $user->setEnabled(true);
                     $user->setPassword('');
@@ -163,13 +165,18 @@ class FacebookProvider implements UserProviderInterface
             $request = $this->container->get('request');
             $eventResponse = new \Symfony\Component\HttpFoundation\RedirectResponse('/');
             $event = new FormEvent($form, $request);
-            $this->dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS,
-                    $event);
+            if ($newUser) {
+                $this->dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS,
+                        $event);
+            }
 
             $this->userManager->updateUser($user);
 
-            $this->dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED,
-                    new FilterUserResponseEvent($user, $request, $eventResponse));
+            if ($newUser) {
+                $this->dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED,
+                        new FilterUserResponseEvent($user, $request,
+                        $eventResponse));
+            }
         }
 
         if (empty($user)) {

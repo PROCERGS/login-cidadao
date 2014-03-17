@@ -99,7 +99,7 @@ img.desaturate {
 
 .btn-default, .btn-success {
      background-color: #039935;
-     box-shadow: 1px 1px 0 0 #969696;
+     border: solid 1px #039935;
      color: #FFF;
 }
 
