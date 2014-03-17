@@ -3,14 +3,16 @@
 {% block content %}
 <div id="applications" class="content clearfix">
 
-    <h3>{% trans %}Services{% endtrans %}</h3>
-    <div class="app-toggle clearfix">
-        <button type="button" class="btn btn-default btn-lg active" data-display="grid">
-          <span class="glyphicon glyphicon-th-large"></span>
-        </button>
-        <button type="button" class="btn btn-default btn-lg" data-display="list">
-          <span class="glyphicon glyphicon-th-list"></span>
-        </button>
+    <div class="clearfix">
+        <h3 class="pull-left">{% trans %}Services{% endtrans %}</h3>
+        <div class="app-toggle pull-right">
+            <button type="button" class="btn btn-default btn-lg active" data-display="grid">
+              <span class="glyphicon glyphicon-th-large"></span>
+            </button>
+            <button type="button" class="btn btn-default btn-lg" data-display="list">
+              <span class="glyphicon glyphicon-th-list"></span>
+            </button>
+        </div>
     </div>
 
     <div class="list-group">
@@ -19,9 +21,11 @@
         {% for auth in user.getAuthorizations %}
 
             <li>
-                <img src="http://placehold.it/65x65" alt="" class="center-block">
-                <h5 class="center-block text-center">{{ auth.client.name }}</h5>
-                <a class="btn activated" role="button" href="{{ path('lc_apps_detail', {'clientId': auth.client.id}) }}">{% trans %}Activated{%  endtrans %}</a>
+                <a href="{{ path('lc_apps_detail', {'clientId': auth.client.id}) }}">
+                    <img src="http://placehold.it/65x65" alt="" class="center-block">
+                    <span class="name center-block text-center">{{ auth.client.name }}</span>
+                    <span class="status">{% trans %}Activated{%  endtrans %}</span>
+                </a>
             </li>
         {% endfor %}
         </ul>
@@ -29,10 +33,13 @@
         <h4>{% trans %}Other Services{% endtrans %}</h4>
         <ul class="grid clearfix">
             {% for client in apps %}
+
                 <li>
-                    <img src="http://placehold.it/65x65" alt="" class="center-block">
-                    <h5 class="center-block text-center">{{ client.name }}</h5>
-                    <a class="btn deactivated" role="button" href="{{ path('lc_apps_detail', {'clientId': client.id}) }}">{% trans %}Deactivated{%  endtrans %}</a>
+                    <a href="{{ path('lc_apps_detail', {'clientId': client.id}) }}">
+                        <img src="http://placehold.it/65x65" alt="" class="center-block">
+                        <span class="name center-block text-center">{{ client.name }}</span>
+                        <span class="status">{% trans %}Deactivated{%  endtrans %}</span>
+                    </a>
                 </li>
             {% endfor %}
         </ul>
