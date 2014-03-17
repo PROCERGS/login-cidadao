@@ -3,7 +3,7 @@
 {% block content %}
 <div id="applications" class="content clearfix">
 
-    <h3>Serviços</h3>
+    <h3>{% trans %}Services{% endtrans %}</h3>
     <div class="app-toggle clearfix">
         <button type="button" class="btn btn-default btn-lg active" data-display="grid">
           <span class="glyphicon glyphicon-th-large"></span>
@@ -14,7 +14,7 @@
     </div>
 
     <div class="list-group">
-        <h4>Serviços ativos</h4>
+        <h4>{% trans %}Active Services{% endtrans %}</h4>
         <ul class="grid clearfix">
         {% for auth in user.getAuthorizations %}
 
@@ -26,13 +26,13 @@
         {% endfor %}
         </ul>
 
-        <h4>Demais serviços</h4>
+        <h4>{% trans %}Other Services{% endtrans %}</h4>
         <ul class="grid clearfix">
             {% for client in apps %}
                 <li>
                     <img src="http://placehold.it/65x65" alt="" class="center-block">
                     <h5 class="center-block text-center">{{ client.name }}</h5>
-                    <a class="btn deactivated" role="button">{% trans %}Deactivated{%  endtrans %}</a>
+                    <a class="btn deactivated" role="button" href="{{ path('lc_apps_detail', {'clientId': client.id}) }}">{% trans %}Deactivated{%  endtrans %}</a>
                 </li>
             {% endfor %}
         </ul>

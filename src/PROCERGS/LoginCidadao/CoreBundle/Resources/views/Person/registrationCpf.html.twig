@@ -1,54 +1,57 @@
-{% extends 'PROCERGSLoginCidadaoCoreBundle::base.popup.html.twig' %} 
+{% extends 'PROCERGSLoginCidadaoCoreBundle::base.popup.html.twig' %}
 
 {% block body %}
 
-<div class="row">
-    <div class="col-xs-12">
-        <h3 class="title">{{ 'cpf.registration.title'|trans }}</h3>
-        
-		{% if isExpired %}
-		<h1>{% trans %}We're almost done!{% endtrans %}</h1>
-		<p>{% trans %}Your account is created, but you must have a CPF.{% endtrans %}</p>
-		<p>{% trans %}Your CPF will give some realibility to your account.{% endtrans %}</p>
-		{% endif %}
+
+    <div class="popup-content">
 
         {{ form_start(form) }} {{ form_errors(form) }}
-        <div class="form-group">
-          {% if messages %}
-            <div class="input-error alert-danger">
-                {{ messages|trans }}
+        <div class="form-content">
+            <h3 class="title">{{ 'cpf.registration.title'|trans }}</h3>
+
+            {% if isExpired %}
+            <h1>{% trans %}We're almost done!{% endtrans %}</h1>
+            <p>{% trans %}Your account is created, but you must have a CPF.{% endtrans %}</p>
+            <p>{% trans %}Your CPF will give some realibility to your account.{% endtrans %}</p>
+            {% endif %}
+
+            <div class="form-group">
+              {% if messages %}
+                <div class="input-error alert-danger">
+                    {{ messages|trans }}
+                </div>
+              {% endif %}
             </div>
-          {% endif %}
-        </div>
-            {% if form.cpf is defined %}        
+            {% if form.cpf is defined %}
             <div class="form-group">
 		        {{ form_label(form.cpf, 'form.cpf'| trans({}, 'FOSUserBundle')) }}
 		        {{ form_errors(form.cpf) }}
 		        {{ form_widget(form.cpf) }}
 		    </div>
 		    {% endif %}
-	        <h4>{{ 'cpf.registration.nfg.check.invite'|trans }}</h4>	
-	                	
+	        <h4>{{ 'cpf.registration.nfg.check.invite'|trans }}</h4>
+
 	        <div class="form-group">
 	            {{ form_label(form.nfgPassword.first, 'cpf.registration.nfg.check.password' | trans) }}
 	            {{ form_errors(form.nfgPassword.first) }}
 	            {{ form_widget(form.nfgPassword.first) }}
 	        </div>
-	
+
 	        <div class="form-group">
 	            {{ form_label(form.nfgPassword.second, 'And then confirm it here:' | trans) }}
 	            {{ form_errors(form.nfgPassword.second) }}
 	            {{ form_widget(form.nfgPassword.second) }}
 	        </div>
-		    <div class="form-bar">
-		        <input class='btn btn-success btn-sm pull-right' type="submit" value="{{ 'profile.edit.submit'|trans({}, 'FOSUserBundle') }}" />
-		    </div>
-	    {{ form_end(form) }}    
+        </div>
+	    <div class="form-bar">
+	        <input class='btn btn-success btn-sm pull-right' type="submit" value="{{ 'profile.edit.submit'|trans({}, 'FOSUserBundle') }}" />
+	    </div>
+	    {{ form_end(form) }}
     </div>
-</div>    
-{% endblock %} 
 
-{% block javascripts %} 
+{% endblock %}
+
+{% block javascripts %}
 {{ parent() }}
 <script>
 $(document).ready(function() {
@@ -57,4 +60,4 @@ $(document).ready(function() {
     {% endif %}
 });
 </script>
-{% endblock %} 
+{% endblock %}

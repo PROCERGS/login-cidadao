@@ -18,7 +18,9 @@ class ExceptionListener
     private $router;
     private $translator;
 
-    public function __construct(SessionInterface $session, RouterInterface $router, TranslatorInterface $translator)
+    public function __construct(SessionInterface $session,
+                                RouterInterface $router,
+                                TranslatorInterface $translator)
     {
         $this->session = $session;
         $this->router = $router;
@@ -30,8 +32,7 @@ class ExceptionListener
         $exception = $event->getException();
         if ($exception instanceof AlreadyLinkedAccount) {
             $this->session->getFlashBag()->add(
-                'error',
-                $this->translator->trans($exception->getMessage())
+                    'error', $this->translator->trans($exception->getMessage())
             );
             $url = $this->router->generate('fos_user_profile_edit');
             $event->setResponse(new RedirectResponse($url));
@@ -42,4 +43,5 @@ class ExceptionListener
             $event->setResponse(new RedirectResponse($url));
         }
     }
+
 }

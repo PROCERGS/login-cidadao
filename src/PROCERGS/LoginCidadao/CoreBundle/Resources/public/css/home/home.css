@@ -20,7 +20,7 @@ body {
 }
 
 #register-aside {
-    background: rgba(241, 241, 241, 0.8);
+    background: rgba(241, 241, 241, 0.9);
     box-shadow: 1px 1px 1px #CCC;
     height: 460px;
     margin-bottom: 30px;
@@ -65,10 +65,6 @@ body {
 .lc-box .form-group {
     margin: 30px 0;
     position: relative;
-}
-
-.lc-box .has-feedback .form-control-feedback {
-    top:0;
 }
 
 .lc-box .input-error {

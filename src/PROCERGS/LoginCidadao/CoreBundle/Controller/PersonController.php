@@ -172,7 +172,7 @@ class PersonController extends Controller
             $userManager->updateUser($user);
 
             $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('notice',$translator->trans('Updated username successfully!'));
+            $this->get('session')->getFlashBag()->add('success', $translator->trans('Updated username successfully!'));
 
             $response = $this->redirect($this->generateUrl('lc_update_username'));
 
@@ -202,10 +202,10 @@ class PersonController extends Controller
             'type' => 'password',
             'mapped' => false
         ));
-        $form = $formBuilder->getForm();        
+        $form = $formBuilder->getForm();
         $form->handleRequest($this->getRequest());
         $messages = '';
-        if ($form->isValid()) {            
+        if ($form->isValid()) {
             if ($form->get('nfgPassword')->getData()) {
                 $nfg = new NfgHelper();
                 $nfg->setUsername($person->getCpf());
@@ -214,7 +214,7 @@ class PersonController extends Controller
                     $person->setCpfNfg(new \DateTime());
                     $person->setCpfExpiration(null);
                     $this->container->get('fos_user.user_manager')->updateUser($person);
-                    return $this->redirect($this->generateUrl('lc_home_gateway'));                    
+                    return $this->redirect($this->generateUrl('lc_home_gateway'));
                 } else {
                     $messages = 'nfg.noprofile.found';
                 }
