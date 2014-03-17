@@ -1,0 +1,48 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %} {% block content %}
+<div id="app-detail" class="content clearfix">
+
+    <h3>{{ client.name }}</h3>
+
+    <div class="content">
+        <div class="desc row">
+            <div class="col-sm-12 col-md-4">
+                <img src="http://placehold.it/220x220">
+            </div>
+
+            <div class="col-sm-12 col-md-7 col-md-offset-1">
+                <p>{{ client.description }}</p>
+            </div>
+
+        </div>
+        <p style="margin-top: 50px;">{{ 'form.redirecturis'| trans }}</p>
+        <ul class="permissions">
+            {% for item in client.redirecturis %}
+            <li>{{ item }}</li> {% endfor %}
+        </ul>
+        <p style="margin-top: 50px;">{{ 'form.allowedscopes'| trans }}</p>
+        <ul class="permissions">
+            {% for item in client.allowedscopes %}
+            <li>{{ item }}</li> {% endfor %}
+        </ul>
+        <p style="margin-top: 50px;">{{ 'form.allowedgranttypes'| trans }}</p>
+        <ul class="permissions">
+            {% for item in client.allowedgranttypes %}
+            <li>{{ item }}</li> {% endfor %}
+        </ul>
+        <p style="margin-top: 50px;">{{ 'form.landingpageurl'| trans }}</p>
+        <ul class="permissions">
+            <li>{{ client.landingpageurl }}</li>
+        </ul>
+        <p style="margin-top: 50px;">{{ 'form.termsofuseurl'| trans }}</p>
+        <ul class="permissions">
+            <li>{{ client.termsofuseurl }}</li>
+        </ul>
+        <p style="margin-top: 50px;">{{ 'form.secret'| trans }}</p>
+        <ul class="permissions">
+            <li>{{ client.secret }}</li>
+        </ul>        
+    </div>
+
+</div>
+
+{% endblock %}

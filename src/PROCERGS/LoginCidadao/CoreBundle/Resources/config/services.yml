@@ -144,3 +144,10 @@ services:
         arguments: [ "@session", "@router", "@translator" ]
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+            
+    procergs_logincidadao.client.form.type:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientFormType
+        tags:
+            - { name: form.type, alias: client_form_type }
+        calls:
+            - [setContainer, ["@service_container"]]            
