@@ -39,7 +39,7 @@ class OAuthEventListener
             if (null !== $client = $event->getClient()) {
                 $user = $this->getUser($event);
                 $scope = $this->getScope();
-                
+
                 $em = $this->doctrine->getManager();
                 $authRepo = $this->doctrine
                         ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization');
@@ -47,7 +47,7 @@ class OAuthEventListener
                     'person' => $user,
                     'client' => $client
                 ));
-                
+
                 // if the authorization is already there, update it.
                 if ($currentAuth instanceof Authorization) {
                     $currentAuth->setScope($scope);
@@ -58,7 +58,7 @@ class OAuthEventListener
                     $authorization->setScope($scope);
                     $em->persist($authorization);
                 }
-                
+
                 $em->flush();
             }
         }
@@ -71,12 +71,12 @@ class OAuthEventListener
                     'username' => $event->getUser()->getUsername()
                 ));
     }
-    
+
     protected function getScope()
     {
         $form = $this->form->getName();
         $scope = $this->request->query->get('scope', $this->request->request->get($form . '[scope]', '', true));
-        
+
         return explode(' ', $scope);
     }
 

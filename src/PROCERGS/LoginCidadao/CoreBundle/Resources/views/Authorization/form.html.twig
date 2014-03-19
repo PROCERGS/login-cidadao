@@ -11,7 +11,7 @@
 
     <div class="row">
         <div class="col-xs-12 col-sm-offset-2 col-sm-8">
-            <p class="msg">{% trans with {'%client_name%': client.name} %}The <strong>%client_name%</strong> app wants to access the following information about you:{% endtrans %}</p>
+            <p class="msg">{% trans with {'%client_name%': client.name} %}The application <strong>%client_name%</strong> wants to access the following information about you:{% endtrans %}</p>
 
             <ul class="permissions">
             {% for scope in form.vars.value.scope|split(' ') %}

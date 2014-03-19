@@ -8,7 +8,7 @@ security.login.password: Senha
 security.login.remember_me: 'Lembrar meus dados'
 security.login.submit: Entrar
 'Welcome %user.name%': 'Bem-vindo, %user.name%'
-scope.username: Username
+scope.username: 'Nome de Usuário'
 scope.name: Nome
 scope.cpf: CPF
 scope.email: Email
@@ -37,15 +37,15 @@ Revoked: Revogado
 Help: Ajuda
 'Logo Nota Fiscal Gaúcha': 'Logo Nota Fiscal Gaúcha'
 'We''re almost done!': 'Quase pronto!'
-'Your account is created, but we recommend you choose a better username.': 'Sua conta foi criada, mas recomendamos que escolha um username melhor.'
-'Your username will be used to quickly refer to yourself on Citizen''s Login, just like Twitter''s @ replies.': 'Seu username será usado para se referir a você rapidamente no Login Cidadão, da mesma forma que as citações com @ do Twitter.'
+'Your account is created, but we recommend you choose a better username.': 'Sua conta foi criada, mas recomendamos que escolha um nome de usuário melhor.'
+'Your username will be used to quickly refer to yourself on Citizen''s Login, just like Twitter''s @ replies.': 'Seu nome de usuário será usado para se referir a você rapidamente no Login Cidadão, da mesma forma que as citações com @ do Twitter.'
 'Username:': 'Username:'
 Save: Salvar
 'You''ll need a password': 'Você precisa de uma senha'
 'To make sure that you can access the Citizen''s Login even if you lose access to your Facebook or Twitter account, please define a password.': 'Para garantir que você consiga acessar seu Login Cidadão mesmo que você perca acesso às suas contas do Facebook ou do Twitter, por favor defina uma senha.'
 'Type in your password here:': 'Digite sua senha aqui:'
 'And then confirm it here:': 'E confirme ela aqui:'
-'Save username and password': 'Salvar username e senha'
+'Save username and password': 'Salvar nome de usuário e senha'
 'We''ll also need you to type your email address, since Twitter didn''t tell it to us.': 'Nós também precisaremos que você digite seu email, já que o Twitter não repassa essa informação.'
 'Email:': 'Email:'
 'The email is already used': 'Este email já está sendo usado'
@@ -57,7 +57,8 @@ CPF: CPF
 CEP: CEP
 'To confirm your change, type your current password below:': 'Para confirmar suas alterações, digite sua senha atual abaixo:'
 'Current password:': 'Senha atual:'
-'The <strong>%client_name%</strong> app wants to access the following information about you:': 'A aplicação <strong>%client_name%</strong> deseja acessar as seguintes informações sobre você:'
+'Authorize Application': 'Autorizar Aplicação'
+'The application <strong>%client_name%</strong> wants to access the following information about you:': 'A aplicação <strong>%client_name%</strong> deseja acessar as seguintes informações sobre você:'
 'Edit profile': 'Editar informações'
 cpf_reminder.subject: 'Você não tem um CPF associado no Login Cidadão'
 'Hello, %name%': 'Olá, %name%'

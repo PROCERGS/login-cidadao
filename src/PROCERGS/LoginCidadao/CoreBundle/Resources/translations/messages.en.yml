@@ -30,7 +30,8 @@ Help: Help
 'Click again to confirm': 'Click again to confirm'
 'Please, wait...': 'Please, wait...'
 Revoked: Revoked
-'The <strong>%client_name%</strong> app wants to access the following information about you:': 'The <strong>%client_name%</strong> app wants to access the following information about you:'
+'Authorize Application': 'Authorize Application'
+'The applicaton <strong>%client_name%</strong> wants to access the following information about you:': 'The application <strong>%client_name%</strong> wants to access the following information about you:'
 'Edit profile': 'Edit profile'
 Username: Username
 Email: Email
