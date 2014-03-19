@@ -6,7 +6,7 @@ if (typeof String.prototype.repeat !== 'function') {
     };
 }
 if (typeof String.prototype.capitalize !== 'function') {
-    String.prototype.capitalize = function(lc, all) {        
+    String.prototype.capitalize = function(lc, all) {
         if (all) {
             return this.split(" ").map(function(currentValue, index, array) {
                 return currentValue.capitalize(lc);
@@ -41,7 +41,7 @@ var QueryString = function () {
         } else {
           query_string[pair[0]].push(pair[1]);
         }
-      } 
+      }
         return query_string;
     } ();
 var validador = {};
@@ -122,23 +122,23 @@ validador.cep.findByCep = function (obj, callback) {
     if (obj.value == '') {
     	validador.check.success(obj);
     	return;
-    }	
+    }
     var cleanup = new RegExp('[. \\-]', 'gi');
     var val = obj.value.replace(cleanup, '');
     if (val == '' || val.length != 8) {
         validador.check.error(obj, $('label[for='+obj.id+']').text() +' invalido');
         return;
-    }	    
+    }
      $.ajax({
          type: "GET",
          dataType: "json",
          url: validador.cep.urlQuery,
          data: {'cep' : val },
-         success : function (data1, textStatus, jqXHR) {             
+         success : function (data1, textStatus, jqXHR) {
              if (data1.code > 0) {
                  validador.check.error(obj, $('label[for='+obj.id+']').text() +' invalido');
                  return;
-             }             
+             }
              if (data1.itens && data1.itens.length && callback) {
                  callback(data1.itens[0]);
              }
@@ -152,7 +152,7 @@ validador.cep.popupConsult = function (obj, evt, callback) {
 };
 
 validador.mask = { 'parent': validador };
-validador.mask.int = function (e){    
+validador.mask.int = function (e){
     var charCode = e.which || e.keyCode;
     if ((charCode < 48 || charCode > 57) && (charCode != 8 && charCode != 46)) {
         e.returnValue = false;
@@ -166,7 +166,7 @@ validador.mask.format = function(obj, mask, e) {
     var pos = 0;
     var newVal = "";
     var sizeMask = numerics.length;
-    
+
     if (e && e.keyCode != 8) {
         for (var i = 0; i <= sizeMask; i++) {
             masked = ((mask.charAt(i) == "-") || (mask.charAt(i) == ".") || (mask
@@ -201,7 +201,7 @@ validador.check.mobile = function (obj, e){
     this.success(obj);
     return true;
 };
-validador.check.cep = function (obj, e){    
+validador.check.cep = function (obj, e){
     if (obj.value.length) {
         var exp = /\d{2}\.\d{3}\-\d{3}/;
         if(!exp.test(obj.value)) {
@@ -211,7 +211,7 @@ validador.check.cep = function (obj, e){
     }
     this.success(obj);
     return true;
-    
+
 };
 validador.check.cpf = function (obj, e) {
     if (obj.value.length) {
@@ -223,12 +223,12 @@ validador.check.cpf = function (obj, e) {
     this.success(obj);
     return true;
 };
-validador.check.error = function (obj, msg) {    
+validador.check.error = function (obj, msg) {
     var parent = $(obj).parent();
     parent.addClass('has-error has-feedback');
     parent.find('.input-error').html('<ul><li>'+msg+'</li></ul>');
 };
-validador.check.success = function (obj) {    
+validador.check.success = function (obj) {
     var parent = $(obj).parent();
     parent.removeClass('has-error has-feedback');
     parent.find('.input-error').html('');
@@ -239,9 +239,9 @@ $(function() {
     // add bootstrap classes to forms
     $('.form-group input, .form-group select').not('.form-control').addClass('form-control');
     $('.form-group .input-error').not(':empty').parent('.form-group').addClass('has-error has-feedback');
-    $('form .has-error .form-control').on('focusin', function() {
-        $(this).parent('.form-group').removeClass('has-error has-feedback');
-    });
+    // $('form .has-error .form-control').on('focusin', function() {
+    //     $(this).parent('.form-group').removeClass('has-error has-feedback');
+    // });
 
     // switch display application list
     $('.app-toggle .btn').on('click', function() {
