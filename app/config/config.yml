@@ -83,7 +83,7 @@ fos_oauth_server:
   service:
       user_provider: fos_user.user_manager
       options:
-          supported_scopes: username name cpf birthdate email city
+          supported_scopes: id username full_name name cpf birthdate email city
 
 fos_user:
     db_driver: orm

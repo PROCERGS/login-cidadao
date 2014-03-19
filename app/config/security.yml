@@ -19,12 +19,16 @@ security:
 #            id: fos_twitter.user
 
     firewalls:
+        oauth_token:
+            pattern:  ^/oauth/v2/token
+            security: false
+
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
         main:
-            pattern: ^/(?!api)
+            pattern: ^/(?!api|!oauth)
 
             fos_facebook:
                 app_url: ""
@@ -61,10 +65,6 @@ security:
                 path: /logout
             anonymous:  true
 
-        oauth_token:
-            pattern:  ^/oauth/v2/token
-            security: false
-
         oauth_authorize:
             pattern:  ^/oauth/v2/auth
             form_login:
@@ -72,7 +72,8 @@ security:
                 csrf_provider: form.csrf_provider
                 check_path: /oauth/v2/auth_login_check
                 login_path: /oauth/v2/auth_login
-            anonymous: true
+            anonymous: false
+
 
         api:
           pattern:    ^/api

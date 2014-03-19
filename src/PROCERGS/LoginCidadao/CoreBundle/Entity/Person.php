@@ -25,6 +25,7 @@ class Person extends BaseUser
 
     /**
      * @Expose
+     * @Groups({"id"})
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -63,12 +64,14 @@ class Person extends BaseUser
 
     /**
      * @Expose
+     * @Groups({"full_name"})
      * @var string
      */
     protected $fullName;
 
     /**
      * @Expose
+     * @Groups({"username"})
      * @Assert\Regex(pattern="/^[A-Za-z0-9_.]+$/i", message="change_username.invalid.username")
      * @Assert\NotBlank
      * @Assert\Length(min="1", max="20")
