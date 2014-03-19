@@ -8,9 +8,13 @@ security.login.password: Password
 security.login.remember_me: 'Remember me'
 security.login.submit: 'Log in'
 'Welcome %user.name%': 'Welcome %user.name%'
+scope.id: 'Unique Identifier'
 scope.name: Name
+scope.surname: Surname
+scope.full_name: 'Full Name'
 scope.cpf: CPF
 scope.email: Email
+scope.birthdate: Birthdate
 'Authorized Applications': 'Authorized Applications'
 'Description:': 'Description:'
 'Access scope:': 'Access scope:'
