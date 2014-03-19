@@ -125,3 +125,7 @@ Services: Serviços
 'Active Services': 'Serviços Ativos'
 'Other Services': 'Demais serviços'
 'Log in using your Citizen''s Login': 'Entre usando seu Login Cidadão'
+'This service is already active in your Citizen''s Login account': 'Este serviço já está ativo na sua conta do Login Cidadão'
+'This service is not active in your Citizen''s Login account': 'Este serviço não está ativo na sua conta do Login Cidadão'
+'Activate this service': 'Ativar este serviço'
+'Deactivate this service': 'Desativar este serviço'

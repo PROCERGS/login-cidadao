@@ -289,12 +289,13 @@
     width: 140px;
 }
 
-#applications li a:hover {
-    text-decoration: none;
+#applications li>a {
+    display: block;
+    padding-top: 14px;
 }
 
-#applications li img {
-    margin-top: 14px;
+#applications li a:hover {
+    text-decoration: none;
 }
 
 #applications li .name {
@@ -351,17 +352,30 @@
     width: 110px;
 }
 
-#app-detail .content {
-    padding: 0 40px 30px;
+#app-detail {
+    padding: 20px 30px;
 }
 
-#app-detail .content img {
+#app-detail h3 {
+    margin-left: 0;
+}
+
+#app-detail img {
     margin-bottom: 20px;
 }
 
-#app-detail .content .msg p {
+#app-detail .msg p {
+    color: #F56F6F;
     font-size: 20px;
     margin: 30px 0;
+}
+
+#app-detail .msg .activated{
+    color: green;
+}
+
+#app-detail #deactivate-box {
+    display: none;
 }
 
 .permissions {
@@ -371,6 +385,10 @@
 .permissions li{
     color: green;
     font-weight: bold;
+}
+
+#app-detail .permissions .deny {
+    color: #F56F6F;
 }
 
 #notifications ul {
