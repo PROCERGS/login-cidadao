@@ -137,17 +137,17 @@ services:
         class: %kernel.listener.logged_in_user_listener.class%
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
-        arguments: [ "@security.context", "@router" ]
+        arguments: [ "@security.context", "@router", "@session" ]
 
     kernel.listener.exceptions_listener:
         class: %kernel.listener.exceptions_listener.class%
         arguments: [ "@session", "@router", "@translator" ]
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
-            
+
     procergs_logincidadao.client.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientFormType
         tags:
             - { name: form.type, alias: client_form_type }
         calls:
-            - [setContainer, ["@service_container"]]            
+            - [setContainer, ["@service_container"]]

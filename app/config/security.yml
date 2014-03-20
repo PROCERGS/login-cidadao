@@ -56,10 +56,13 @@ security:
                 login_path:     /login
                 use_forward:    false
                 check_path:     /login_check
-                default_target_path: /
                 username_parameter: login_form_type[username]
                 password_parameter: login_form_type[password]
                 csrf_parameter: login_form_type[csrf_token]
+                always_use_default_target_path: false
+                default_target_path:            fos_user_profile_edit
+                target_path_parameter:          _target_path
+                use_referer:                    true
 
             logout:
                 path: /logout
@@ -72,6 +75,10 @@ security:
                 csrf_provider: form.csrf_provider
                 check_path: /oauth/v2/auth_login_check
                 login_path: /oauth/v2/auth_login
+                always_use_default_target_path: false
+                default_target_path:            fos_user_profile_edit
+                target_path_parameter:          _target_path
+                use_referer:                    true
             anonymous: false
 
 
