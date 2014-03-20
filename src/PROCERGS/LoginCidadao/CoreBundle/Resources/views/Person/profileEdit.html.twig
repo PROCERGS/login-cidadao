@@ -48,16 +48,20 @@
                 </div>
                 <div class="form-group">
                     {{ form_label(form.cpf) }}
-                    <div class="input-error">{{ form_errors(form.cpf) }}</div>
-                    {{ form_widget(form.cpf, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }}
+                    <div class="input-error">{{ form_errors(form.cpf) }}</div>                    
                     {{ form_widget(form.cpfNfg, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}
                     {% if form.cpf.vars.value is not null %}
 	                    {% if form.cpfNfg.vars.value is null or form.cpfNfg.vars.value == '' %}
+	                    {{ form_widget(form.cpf, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }}
 	                    <span>
                             {{ 'cpf.profile.nfg.check.invite' | trans({}, 'messages')  }}
 	                        <a class="check-cpf" href="{{ path('lc_registration_cpf') }}">{{ 'cpf.profile.nfg.check.button' | trans({}, 'messages') }}</a>
 	                    </span>
 	                    {% else %}
+	                    {{ form_widget(form.cpf, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}
+	                    <span>
+	                       {{ form.cpf.vars.value|formatCpf }}
+	                    </span><br/>
 	                    <span>
 	                        {{ 'cpf.registration.nfg.checked.at' | trans({'%date1%' : form.cpfNfg.vars.value}, 'messages')  }}
 	                    </span>
@@ -156,7 +160,7 @@ $(document).ready(function() {
     });
     $('.check-cpf').click(function(event) {
     	event.preventDefault()
-        var url = $(this).attr('href');
+        var url = $(this).attr('href')+'?cpf='+$(profileEdit.cpfId).val();
         window.open(url, '', "width=600,height=450");
         return false;
     });
