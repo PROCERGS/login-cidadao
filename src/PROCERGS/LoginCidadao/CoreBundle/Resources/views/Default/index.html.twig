@@ -12,7 +12,7 @@
 
 <div class="container">
     <div class="row">
-        <div id="register-box" class="lc-box col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+        <div id="login-box" class="lc-box col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
             <h3 class="title text-center">{% trans %}Your login{% endtrans %}</h3>
 
             {% for type, messages in app.session.flashbag.all() %}
@@ -61,8 +61,13 @@
                 </div>
 
                {{ form_end(form1) }}
-               <a class="connect facebook" href="{{ path("lc_link_facebook") }}">{% trans %}Connect using Facebook{% endtrans %}</a>
-               <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="connect twitter">{% trans %}Connect using Twitter{% endtrans %}</a>
+
+                <div class="connect-box">
+                    <div><hr><span>{% trans %}or{% endtrans %}</span></div>
+                    <p>{% trans %}Use your social networks{% endtrans %}</p>
+                    <a class="connect facebook pull-left" href="{{ path("lc_link_facebook") }}">Facebook</a>
+                    <a class="connect twitter pull-right" href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}">Twitter</a>
+                </div>
         </div>
     </div>
 </div>

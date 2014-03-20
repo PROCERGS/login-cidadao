@@ -45,7 +45,7 @@ body {
     background-color: #f1f1f1;
     /*height: 460px;*/
     margin-bottom: 30px;
-    padding: 0;
+    padding: 0 0 20px;
 }
 
 .lc-box .form-content {
@@ -82,17 +82,52 @@ body {
     font-weight: 400;
 }
 
+.lc-box .btn-success {
+    display: block;
+    margin: 0 auto;
+    width: 250px;
+}
+
+.lc-box .connect-box > div {
+    margin: 25px 0;
+    position: relative;
+}
+
+.lc-box .connect-box hr {
+    border-color: #039935;
+    margin:0 20px;
+}
+
+.lc-box .connect-box > div span {
+    background-color: #f1f1f1;
+    display: inline-block;
+    left: 50%;
+    margin-left: -15px;
+    text-align: center;
+    top: -10px;
+    position: absolute;
+    width: 30px;
+}
+
+.lc-box .connect-box > p {
+    color: #039935;
+    font-size: 15px;
+    font-weight: bold;
+    margin: 20px;
+    text-align: center;
+}
+
 .lc-box .connect {
     box-shadow: 1px 1px #000;
     color: #FFF;
     cursor: pointer;
     display: block;
     font-size: 16px;
-    height: 50px;
-    line-height: 50px;
-    padding-left: 50px;
+    height: 25px;
+    line-height: 25px;
+    padding-left: 30px;
     text-align: center;
-    width: 100%;
+    width: 120px;
 }
 
 .lc-box .connect:hover {
@@ -101,15 +136,16 @@ body {
 
 .lc-box .facebook {
     background-color: #576d94;
-    background-image: url(../../images/facebook_signin.png);
+    background-image: url(../../images/facebook_login.png);
     background-repeat: no-repeat;
-    margin-top: 10px;
+    margin-left: 20px;
 }
 
 .lc-box .twitter {
     background-color: #4baecd;
-    background-image: url(../../images/twitter_signin.png);
+    background-image: url(../../images/twitter_login.png);
     background-repeat: no-repeat;
+    margin-right: 20px;
 }
 
 .lc-box .terms a {

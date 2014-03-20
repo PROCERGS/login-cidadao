@@ -46,11 +46,16 @@
                 </div>
 
                 <p class='terms'>Ao clicar em abrir conta, você concorda com nosso <a href="">Termos</a> e que você leu nossa <a href="">Política de uso de dados</a>, incluindo nosso <a href="">Uso de cookies</a></p>
-                <button class="btn btn-success center-block" type="submit">{{ 'registration.submit'|trans }}</button>
+                <button class="btn btn-success" type="submit">{{ 'registration.submit'|trans }}</button>
             </div>
         {{ form_end(form) }}
-            <a class="connect facebook" href="{{ path("lc_link_facebook") }}">Inscreva-se usando o facebook</a>
-            <a href="{{ path('lc_before_register_twitter') }}" class="connect twitter">Inscreva-se usando o twitter</a>
+            <div class="connect-box">
+                <div><hr><span>{% trans %}or{% endtrans %}</span></div>
+                <p>{% trans %}Use your social networks{% endtrans %}</p>
+                <a class="connect facebook pull-left" href="{{ path("lc_link_facebook") }}">Facebook</a>
+                <a class="connect twitter pull-right" href="{{ path('lc_before_register_twitter') }}">Twitter</a>
+            </div>
+
     </div>
     {% trans_default_domain 'messages' %}
     <div id="register-aside" class="col-xs-12 col-md-6 col-lg-7 hidden-xs pull-left">
