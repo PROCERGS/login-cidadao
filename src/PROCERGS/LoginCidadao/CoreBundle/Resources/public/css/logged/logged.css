@@ -383,6 +383,10 @@
     display: none;
 }
 
+#app-detail #deactivate-box form {
+    display: inline-block;
+}
+
 .permissions {
     padding-left: 0;
 }
