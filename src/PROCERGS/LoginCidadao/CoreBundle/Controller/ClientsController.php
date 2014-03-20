@@ -39,9 +39,11 @@ class ClientsController extends Controller
             $scopes[$s] = in_array($s, $userScopes) ? true : false;
         }
 
+        $csrf_token = $this->get('form.csrf_provider')->generateCsrfToken('authenticate');
+
         return $this->render(
                         'PROCERGSLoginCidadaoCoreBundle:Person:appsDetail.html.twig',
-                        compact('user', 'client', 'scopes')
+                        compact('user', 'client', 'scopes', 'csrf_token')
         );
     }
 

@@ -1,12 +1,12 @@
 $(document).ready(function(){
     $('#fos_user_registration_form_email').blur(function(){
         $elm = $(this);
-        
+
         $.ajax({
             type: "GET",
             dataType: "json",
             url: emailAvailableUrl,
-            data: { 
+            data: {
                 email: $(this).val()
             }
         })

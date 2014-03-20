@@ -24,7 +24,7 @@
                 <div class="alert alert-danger" id="deactivate-box">
                   <h4>Você quer mesmo desativar esse serviço?</h4>
                   <p>
-                    <a role="button" class="btn btn-danger" data-action="enable">Sim</a>
+                    <a role="button" class="btn btn-danger" data-action="enable" data-token="{{ csrf_token(path('ui_revoke', { 'clientId': client.id })) }}">Sim</a>
                     <a role="button" class="btn btn-default" data-action="disable">Não</a>
                   </p>
                 </div>
@@ -58,19 +58,21 @@ $(document).ready(function() {
     });
 
     $('#deactivate-box .btn').on('click', function() {
-        var action = $(this).data('action');
+        var self = $(this);
 
-        if (action == 'enable') {
+        if (self.data('action') == 'enable') {
             $.ajax({
                 url: "{{ path('ui_revoke', {'clientId': client.id}) }}",
-                type: 'GET',
-                success: function(data){
-                    console.log(data);
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown){
-                    console.log(XMLHttpRequest);
-                    console.log(textStatus);
+                type: 'POST',
+                data: {
+                    token: self.data('token')
                 }
+            })
+            .done(function() {
+                window.location.reload();
+            })
+            .fail(function() {
+                alert("Não foi possível desativar o serviço");
             });
         } else {
             $(this).closest('#deactivate-box').slideUp();

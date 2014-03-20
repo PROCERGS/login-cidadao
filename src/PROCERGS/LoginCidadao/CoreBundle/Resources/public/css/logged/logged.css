@@ -330,6 +330,10 @@
     width: 100%;
 }
 
+#applications .list li>a {
+    padding-top: 0;
+}
+
 #applications .list li img {
     float: left;
     height: 45px;
@@ -375,6 +379,7 @@
 }
 
 #app-detail #deactivate-box {
+    background-image: none;
     display: none;
 }
 
