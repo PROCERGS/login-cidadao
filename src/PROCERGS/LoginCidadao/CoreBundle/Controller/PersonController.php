@@ -188,6 +188,9 @@ class PersonController extends Controller
     public function registrationCpfAction(Request $request)
     {
         $person = $this->getUser();
+        if (is_numeric($cpf = preg_replace('/[^0-9]/', '', $request->get('cpf'))) && strlen($cpf) == 11) {
+            $person->setCpf($cpf);
+        }        
         $formBuilder = $this->createFormBuilder($person);
         if (!$person->getCpf()) {
             $formBuilder->add('cpf', 'text', array('required' => true));

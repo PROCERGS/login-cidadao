@@ -40,13 +40,23 @@ class LoginCidadaoExtension extends \Twig_Extension
             new \Twig_SimpleFilter('formatCep', array(
                 $this,
                 'formatCep'
-            ))
+            )),
+            new \Twig_SimpleFilter('formatCpf', array(
+                $this,
+                'formatCpf'
+            )),            
         );
     }
     
     public function formatCep($var)
     {
         $var = substr($var, 0, 5) . '-' . substr($var, 5, 3);
+        return $var;
+    } 
+
+    public function formatCpf($var)
+    {
+        $var = substr($var, 0, 3). '.'. substr($var, 3, 3). '.' . substr($var, 6, 3) . '-' . substr($var, 9);
         return $var;
     }    
 
