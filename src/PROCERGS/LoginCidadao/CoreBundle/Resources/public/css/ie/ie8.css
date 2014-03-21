@@ -2,6 +2,6 @@
     background-color: #f1f1f1;
 }
 
-#profile-edit .facebook {
-
+form .input-error {
+    padding: 0 12px;
 }

@@ -17,32 +17,40 @@
 
     <div class="list-group">
         <h4>{% trans %}Active Services{% endtrans %}</h4>
-        <ul class="grid clearfix">
-        {% for auth in user.getAuthorizations %}
-
-            <li>
-                <a href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}">
-                    <img src="http://placehold.it/65x65" alt="" class="center-block">
-                    <span class="name center-block text-center">{{ auth.client.name }}</span>
-                    <span class="activated status">{% trans %}Activated{%  endtrans %}</span>
-                </a>
-            </li>
-        {% endfor %}
-        </ul>
-
-        <h4>{% trans %}Other Services{% endtrans %}</h4>
-        <ul class="grid clearfix">
-            {% for client in apps %}
+        {% if user.getAuthorizations|length > 0 %}
+            <ul class="grid clearfix">
+            {% for auth in user.getAuthorizations %}
 
                 <li>
-                    <a href="{{ path('lc_app_details', {'clientId': client.id}) }}">
+                    <a href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}">
                         <img src="http://placehold.it/65x65" alt="" class="center-block">
-                        <span class="name center-block text-center">{{ client.name }}</span>
-                        <span class="status">{% trans %}Deactivated{%  endtrans %}</span>
+                        <span class="name center-block text-center">{{ auth.client.name }}</span>
+                        <span class="activated status">{% trans %}Activated{%  endtrans %}</span>
                     </a>
                 </li>
             {% endfor %}
-        </ul>
+            </ul>
+        {% else %}
+            <p class="empty">{% trans %}No service activated{%  endtrans %}</p>
+        {% endif %}
+
+        <h4>{% trans %}Other Services{% endtrans %}</h4>
+        {% if apps|length > 0 %}
+            <ul class="grid clearfix">
+                {% for client in apps %}
+
+                    <li>
+                        <a href="{{ path('lc_app_details', {'clientId': client.id}) }}">
+                            <img src="http://placehold.it/65x65" alt="" class="center-block">
+                            <span class="name center-block text-center">{{ client.name }}</span>
+                            <span class="status">{% trans %}Deactivated{%  endtrans %}</span>
+                        </a>
+                    </li>
+                {% endfor %
+}c            </ul>
+        {% else %}
+            <p class="empty">{% trans %}No service deactivated{%  endtrans %}</p>
+        {% endif %}
     </div>
 
 </div>

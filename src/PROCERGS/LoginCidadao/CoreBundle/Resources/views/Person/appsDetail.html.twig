@@ -39,10 +39,10 @@
         <p style="margin-top:50px;">Este serviço utiliza os seguintes dados da sua conta do Login Cidadão</p>
 
         <ul class="permissions pull-left">
-            {% for key, status in scopes %}
+            {% for auth, status in scopes %}
                 <li class="{{ status ? 'allow' : 'deny' }}">
                     {{ status ? '<i class="glyphicon glyphicon-ok"></i>' : '<i class="glyphicon glyphicon-remove"></i>' }}
-                    <span>{{ ('scope.' ~ key) | trans }}</span>
+                    <span>{{ ('scope.' ~ auth) | trans }}</span>
                 </li>
             {% endfor %}
         </ul>

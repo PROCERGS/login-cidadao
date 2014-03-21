@@ -67,10 +67,6 @@ body {
     position: relative;
 }
 
-.lc-box .input-error {
-    margin-top: 5px;
-}
-
 .lc-box .terms {
     clear: both;
     font-size: 11px;

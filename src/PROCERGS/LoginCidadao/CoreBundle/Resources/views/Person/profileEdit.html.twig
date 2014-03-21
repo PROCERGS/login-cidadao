@@ -15,28 +15,32 @@
             <div class="col-md-7">
                 <div class="form-group">
                     {{ form_label(form.firstName) }}
-                    <div class="input-error">{{ form_errors(form.firstName) }}</div>
                     {{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error">{{ form_errors(form.firstName) }}</div>
                 </div>
                 <div class="form-group">
                     {{ form_label(form.surname) }}
-                    <div class="input-error">{{ form_errors(form.surname) }}</div>
                     {{ form_widget(form.surname, {'attr': {'class': 'form-control'}}) }}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error">{{ form_errors(form.surname) }}</div>
                 </div>
                 <div class="form-group">
                     {{ form_label(form.email) }}
-                    <div class="input-error">{{ form_errors(form.email) }}</div>
                     {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error">{{ form_errors(form.email) }}</div>
                 </div>
                 <div class="form-inline form-group birthdate">
                     {{ form_label(form.birthdate) }}
-                    <div class="input-error">{{ form_errors(form.birthdate) }}</div>
                     {{ form_widget(form.birthdate) }}
+                    <div class="input-error">{{ form_errors(form.birthdate) }}</div>
                 </div>
                 <div class="form-group">
                     {{ form_label(form.cep) }}
-                    <div class="input-error">{{ form_errors(form.cep) }}</div>
                     {{ form_widget(form.cep, {'attr': {'class': 'form-control', 'maxlength' : '10'}}) }}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error">{{ form_errors(form.cep) }}</div>
                     <span>
                         {% trans %}Don't know your CEP?{% endtrans %}
                         <a class="search-cep" href="{{ path('lc_consultaCep') }}">{{ 'Search it!' | trans }}</a>
@@ -48,7 +52,6 @@
                 </div>
                 <div class="form-group">
                     {{ form_label(form.cpf) }}
-                    <div class="input-error">{{ form_errors(form.cpf) }}</div>                    
                     {{ form_widget(form.cpfNfg, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}
                     {% if form.cpf.vars.value is not null %}
 	                    {% if form.cpfNfg.vars.value is null or form.cpfNfg.vars.value == '' %}
@@ -67,11 +70,14 @@
 	                    </span>
 	                    {% endif %}
                     {% endif %}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error">{{ form_errors(form.cpf) }}</div>
                 </div>
                 <div class="form-group">
                     {{ form_label(form.mobile) }}
-                    <div class="input-error">{{ form_errors(form.mobile) }}</div>
                     {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error">{{ form_errors(form.mobile) }}</div>
                 </div>
             </div>
 
@@ -137,7 +143,7 @@ profileEdit.popLocation = function (dneData) {
     var city = dneData.localidade.capitalize(true, true);
     var state = dneData.uf;
 
-    $('#user_address').html(city + ', ' + state);
+    $('#user_address').html(street + ',' + city + ', ' + state);
 };
 $(document).ready(function() {
     $(profileEdit.cepId).mask('00000-000');

@@ -200,6 +200,7 @@ footer .copyright {
 
 .form-control {
     background-color: #999999;
+    border: none;
     border-radius: 0;
     color: #FFF;
 }
@@ -233,21 +234,30 @@ footer .copyright {
 }
 
 form .input-error {
+    background-color: #E64442;
     background-image: none;
-    color: #a94442;
+    color: #FFF;
     font-size: 12px;
     font-weight: 500;
-    margin: 10px 0;
+    margin: 0;
+    padding: 3px 12px;
+}
+
+form .input-error:empty {
     padding: 0;
 }
 
 form .input-error ul {
-    color: #000;
     font-size: 12px;
     font-weight: 500;
     list-style-type: none;
     margin: 0;
-    padding: 5px;
+    padding: 0;
+}
+
+form .input-error + div, form .input-error + span {
+    display: block;
+    margin-top: 5px;
 }
 
 form .form-control-feedback {

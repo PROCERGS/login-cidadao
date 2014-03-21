@@ -30,7 +30,7 @@ class CEPValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint)
     {
-        if (!isset($value)) {
+        if (!isset($value) || $value  === null || !strlen(trim($value))) {
             return;
         }
         if (!self::checkLength($value)) {
