@@ -28,6 +28,7 @@ twig:
     globals:
         fos_csrf_provider: "@form.csrf_provider"
         notifications_helper: "@notifications.helper"
+        background_helper: "@background.helper"
         facebook_app_id: "%facebook_app_id%"
         background_picture_author: %background_picture.author%
         background_picture_link: %background_picture.link%

@@ -75,7 +75,7 @@
 {% endblock %}
 
 {% block credits %}
-<div class="bg-credits">{% trans with { '%name%': background_picture_author, '%link%': background_picture_link } %}<a href="%link%">Background picture</a> by %name%{% endtrans %}</div>
+<div class="bg-credits">{% trans with { '%name%': background_helper.backgroundImage.author, '%link%': background_helper.backgroundImage.url } %}<a href="%link%">Background picture</a> by %name%{% endtrans %}</div>
 {% endblock %}
 
 {% block stylesheets %}
