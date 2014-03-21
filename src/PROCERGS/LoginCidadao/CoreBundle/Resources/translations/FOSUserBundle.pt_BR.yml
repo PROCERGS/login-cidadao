@@ -49,7 +49,7 @@ resetting.email.message: >
     A Equipe.
 resetting.reset.submit: 'Alterar senha'
 resetting.password_already_requested: 'Este usuário já solicitou uma senha nas últimas 24 horas.'
-(optional): (opctional)
+(optional): (opcional)
 change_password.submit: 'Alterar senha'
 change_password.flash.success: 'Senha alterada com sucesso!.'
 'As a safety measure we need you to type your password to confirm any changes.': 'Como medida de segurança, por favor informe sua senha para confirmar quaisquer mudanças.'
