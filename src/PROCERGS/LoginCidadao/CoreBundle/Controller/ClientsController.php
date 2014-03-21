@@ -34,12 +34,12 @@ class ClientsController extends Controller
         ));
         $userScopes = empty($authorization) ? array() : $authorization->getScope();
 
+        $mergeAuth = array_merge($clientScopes, $userScopes);
+
         $scopes = array();
-        foreach ($clientScopes as $s) {
+        foreach ($mergeAuth as $s) {
             $scopes[$s] = in_array($s, $userScopes) ? true : false;
         }
-
-        //$csrf_token = $this->get('form.csrf_provider')->generateCsrfToken('authenticate');
 
         $form = $this->createForm('procergs_revoke_authorization', array('client_id' => $clientId));
         $form = $form->createView();
