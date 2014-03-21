@@ -35,7 +35,7 @@ services:
 
     background.helper:
         class: %background.helper.class%
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", %background_picture.author%, %background_picture.link%, 'wp.jpg']
 
     fos_facebook.user.login:
         class: %fos_facebook.user.login.class%
