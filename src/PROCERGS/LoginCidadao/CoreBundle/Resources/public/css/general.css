@@ -233,6 +233,7 @@ footer .copyright {
 }
 
 form .input-error {
+    background-image: none;
     color: #a94442;
     font-size: 12px;
     font-weight: 500;

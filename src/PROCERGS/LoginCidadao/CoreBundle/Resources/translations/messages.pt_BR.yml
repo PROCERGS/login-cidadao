@@ -9,6 +9,7 @@ security.login.remember_me: 'Lembrar meus dados'
 security.login.submit: Entrar
 'Welcome %user.name%': 'Bem-vindo, %user.name%'
 scope.id: 'Identificador Único'
+scope.username: Username
 scope.name: Nome
 scope.surname: Sobrenome
 scope.full_name: 'Nome Completo'
@@ -26,6 +27,8 @@ Revoked: Revogado
 'Available Applications and Sites': 'Sites e Aplicativos Disponíveis'
 'Authorization successfully revoked.': 'Autorização revogada com sucesso.'
 'Authorization not found.': 'Autorização não encontrada.'
+'Wasn''t possible to disable this service.': 'Não foi possível desativar este serviço.'
+'Access Denied.': 'Acesso negado.'
 'Citizen''s Login': 'Login Cidadão'
 'One account. All the Government.': 'Um cadastro. Acesso por todo o Governo'
 '%link_start%Create your account%link_end%': '%link_start%Crie seu Login Cidadão%link_end%'

@@ -383,6 +383,10 @@
     display: none;
 }
 
+#app-detail #deactivate-box form {
+    display: inline-block;
+}
+
 .permissions {
     padding-left: 0;
 }
@@ -473,7 +477,7 @@
 
 .fos_oauth_server_authorize .connect-diagram .glyphicon.glyphicon-chevron-right {
     font-size: 25px;
-    margin: 0 30px;
+    margin: 30px 0;
 }
 
 .fos_oauth_server_authorize .connect-diagram {

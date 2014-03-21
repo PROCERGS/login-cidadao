@@ -6,6 +6,7 @@ parameters:
     procergs.hwi_twitter.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\FOSUBUserProvider
     procergs_person.registration.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\RegistrationFormType
     procergs_person.profile.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ProfileFormType
+    procergs_person.revoke_authorization.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\RevokeAuthorizationFormType
     procergs_person.resetting.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ResettingFormType
     procergs_logincidadao.change.password.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ChangePasswordFormType
     procergs_logincidadao.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
@@ -62,6 +63,12 @@ services:
         arguments: [%fos_user.model.user.class%]
         tags:
             - { name: form.type, alias: procergs_person_profile }
+
+    procergs_person.revoke_authorization.form.type:
+        class: %procergs_person.revoke_authorization.form.type.class%
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: procergs_revoke_authorization }
 
     procergs_person.resetting.form.type:
         class: %procergs_person.resetting.form.type.class%

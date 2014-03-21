@@ -24,8 +24,10 @@
                 <div class="alert alert-danger" id="deactivate-box">
                   <h4>Você quer mesmo desativar esse serviço?</h4>
                   <p>
-                    <a role="button" class="btn btn-danger" data-action="enable" data-token="{{ csrf_token(path('ui_revoke', { 'clientId': client.id })) }}">Sim</a>
-                    <a role="button" class="btn btn-default" data-action="disable">Não</a>
+                    {{ form_start(form, {'action': path('lc_revoke', { clientId: client.id }), 'attr': {'role':'form'}}) }}
+                    <button type="submit" class="btn btn-danger">Sim</button>
+                    {{ form_end(form) }}
+                    <a role="button" class="btn btn-default cancel">Não</a>
                   </p>
                 </div>
             {% else %}
@@ -57,26 +59,8 @@ $(document).ready(function() {
         $('#deactivate-box').slideDown();
     });
 
-    $('#deactivate-box .btn').on('click', function() {
-        var self = $(this);
-
-        if (self.data('action') == 'enable') {
-            $.ajax({
-                url: "{{ path('ui_revoke', {'clientId': client.id}) }}",
-                type: 'POST',
-                data: {
-                    token: self.data('token')
-                }
-            })
-            .done(function() {
-                window.location.reload();
-            })
-            .fail(function() {
-                alert("Não foi possível desativar o serviço");
-            });
-        } else {
-            $(this).closest('#deactivate-box').slideUp();
-        }
+    $('#deactivate-box .cancel').on('click', function() {
+        $(this).closest('#deactivate-box').slideUp();
     });
 });
 </script>

@@ -11,7 +11,7 @@ class ClientsController extends Controller
 {
 
     /**
-     * @Route("/apps_detail/{clientId}", name="lc_apps_detail")
+     * @Route("/app_details/{clientId}", name="lc_app_details")
      * @Template()
      */
     public function appsDetailAction($clientId)
@@ -34,16 +34,19 @@ class ClientsController extends Controller
         ));
         $userScopes = empty($authorization) ? array() : $authorization->getScope();
 
+        $mergeAuth = array_merge($clientScopes, $userScopes);
+
         $scopes = array();
-        foreach ($clientScopes as $s) {
+        foreach ($mergeAuth as $s) {
             $scopes[$s] = in_array($s, $userScopes) ? true : false;
         }
 
-        $csrf_token = $this->get('form.csrf_provider')->generateCsrfToken('authenticate');
+        $form = $this->createForm('procergs_revoke_authorization', array('client_id' => $clientId));
+        $form = $form->createView();
 
         return $this->render(
                         'PROCERGSLoginCidadaoCoreBundle:Person:appsDetail.html.twig',
-                        compact('user', 'client', 'scopes', 'csrf_token')
+                        compact('user', 'client', 'scopes', 'form')
         );
     }
 

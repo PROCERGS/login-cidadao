@@ -31,83 +31,78 @@ class PersonController extends Controller
     }
 
     /**
-     * @Route("/person/authorization/{clientId}/revoke", name="ui_revoke")
+     * @Route("/person/authorization/{clientId}/revoke", name="lc_revoke")
      * @Template()
      */
     public function revokeAuthorizationAction($clientId)
     {
-        $csrf = $this->get('form.csrf_provider');
-        $currentUrl = $this->getRequest()->getRequestUri();
-        $genToken = $csrf->generateCsrfToken($currentUrl);
-        $token = $this->getRequest()->get('token');
+        $form = $this->createForm('procergs_revoke_authorization');
+        $form->handleRequest($this->getRequest());
 
-        $response = new JsonResponse();
-        $security = $this->get('security.context');
-        $em = $this->getDoctrine()->getManager();
-        $tokens = $em->getRepository('PROCERGSOAuthBundle:AccessToken');
-        $clients = $em->getRepository('PROCERGSOAuthBundle:Client');
-        $translator = $this->get('translator');
+        if ($form->isValid()) {
+            $security = $this->get('security.context');
+            $em = $this->getDoctrine()->getManager();
+            $tokens = $em->getRepository('PROCERGSOAuthBundle:AccessToken');
+            $clients = $em->getRepository('PROCERGSOAuthBundle:Client');
+            $translator = $this->get('translator');
 
-        try {
-            if ($genToken !== $token) {
-                throw new AccessDeniedException("CSRF detected!");
-            }
+            try {
 
-            if (false === $security->isGranted('ROLE_USER')) {
-                throw new AccessDeniedException();
-            }
-
-            $user = $security->getToken()->getUser();
-
-            $client = $clients->find($clientId);
-            $accessTokens = $tokens->findBy(array(
-                'client' => $client,
-                'user' => $user
-            ));
-            $refreshTokens = $em->getRepository('PROCERGSOAuthBundle:RefreshToken')
-                    ->findBy(array(
-                'client' => $client,
-                'user' => $user
-            ));
-            $authorizations = $user->getAuthorizations();
-            foreach ($authorizations as $auth) {
-                if ($auth->getPerson()->getId() == $user->getId() && $auth->getClient()->getId() == $clientId) {
-
-                    foreach ($accessTokens as $accessToken) {
-                        $em->remove($accessToken);
-                    }
-
-                    foreach ($refreshTokens as $refreshToken) {
-                        $em->remove($refreshToken);
-                    }
-
-                    $em->remove($auth);
-                    $em->flush();
-                    $response->setData(array(
-                        'message' => $translator->trans("Authorization successfully revoked."),
-                        'success' => true
-                    ));
-
-                    return $response;
+                if (false === $security->isGranted('ROLE_USER')) {
+                    throw new AccessDeniedException();
                 }
+
+                $user = $security->getToken()->getUser();
+
+                $client = $clients->find($clientId);
+                $accessTokens = $tokens->findBy(array(
+                    'client' => $client,
+                    'user' => $user
+                ));
+                $refreshTokens = $em->getRepository('PROCERGSOAuthBundle:RefreshToken')
+                        ->findBy(array(
+                    'client' => $client,
+                    'user' => $user
+                ));
+                $authorizations = $user->getAuthorizations();
+                $success = false;
+
+                foreach ($authorizations as $auth) {
+                    if ($auth->getPerson()->getId() == $user->getId() && $auth->getClient()->getId() == $clientId) {
+
+                        foreach ($accessTokens as $accessToken) {
+                            $em->remove($accessToken);
+                        }
+
+                        foreach ($refreshTokens as $refreshToken) {
+                            $em->remove($refreshToken);
+                        }
+
+                        $em->remove($auth);
+                        $em->flush();
+
+                        $this->get('session')->getFlashBag()->add('success', $translator->trans('Authorization successfully revoked.'));
+                        $success = true;
+                    }
+                }
+
+                if (!$success) {
+                   throw new \InvalidArgumentException($translator->trans("Authorization not found."));
+                }
+            } catch (AccessDeniedException $e) {
+                $this->get('session')->getFlashBag()->add('error', $translator->trans("Access Denied."));
+            } catch (\Exception $e) {
+                $this->get('session')->getFlashBag()->add('error', $translator->trans("Wasn't possible to disable this service."));
+                $this->get('session')->getFlashBag()->add('error', $e->getMessage());
             }
 
-            throw new \InvalidArgumentException($translator->trans("Authorization not found."));
-        } catch (AccessDeniedException $e) {
-            $response->setData(array(
-                'message' => $e->getMessage(),
-                'success' => false
-            ));
-            $response->setStatusCode(403);
-            return $response;
-        } catch (\Exception $e) {
-            $response->setData(array(
-                'message' => $e->getMessage(),
-                'success' => false
-            ));
-            $response->setStatusCode(500);
-            return $response;
+        } else {
+            $this->get('session')->getFlashBag()->add('error', $translator->trans("Wasn't possible to disable this service."));
         }
+
+        return $this->redirect($this->generateUrl('lc_app_details', array('clientId' => $clientId)));
+
+
     }
 
     /**

@@ -9,6 +9,7 @@ security.login.remember_me: 'Remember me'
 security.login.submit: 'Log in'
 'Welcome %user.name%': 'Welcome %user.name%'
 scope.id: 'Unique Identifier'
+scope.username: Username
 scope.name: Name
 scope.surname: Surname
 scope.full_name: 'Full Name'
