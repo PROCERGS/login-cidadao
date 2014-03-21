@@ -41,7 +41,7 @@
                     {{ form_widget(form.cep, {'attr': {'class': 'form-control', 'maxlength' : '10'}}) }}
                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                     <div class="input-error">{{ form_errors(form.cep) }}</div>
-                    <span>
+                    <span class="extra">
                         {% trans %}Don't know your CEP?{% endtrans %}
                         <a class="search-cep" href="{{ path('lc_consultaCep') }}">{{ 'Search it!' | trans }}</a>
                     </span>
@@ -56,7 +56,7 @@
                     {% if form.cpf.vars.value is not null %}
 	                    {% if form.cpfNfg.vars.value is null or form.cpfNfg.vars.value == '' %}
 	                    {{ form_widget(form.cpf, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }}
-	                    <span>
+	                    <span class="extra">
                             {{ 'cpf.profile.nfg.check.invite' | trans({}, 'messages')  }}
 	                        <a class="check-cpf" href="{{ path('lc_registration_cpf') }}">{{ 'cpf.profile.nfg.check.button' | trans({}, 'messages') }}</a>
 	                    </span>

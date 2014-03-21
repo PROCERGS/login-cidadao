@@ -255,7 +255,7 @@ form .input-error ul {
     padding: 0;
 }
 
-form .input-error + div, form .input-error + span {
+form .form-group .extra {
     display: block;
     margin-top: 5px;
 }
@@ -270,6 +270,10 @@ form .has-feedback .form-control-feedback {
 
 form .has-feedback .sr-only ~ .form-control-feedback {
     top:0;
+}
+
+#fos_user_change_password_form_plainPassword > div {
+    margin-bottom: 10px;
 }
 
 .general-content {
