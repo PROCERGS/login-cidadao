@@ -69,6 +69,11 @@
           <link rel="stylesheet" href="{{ asset_url }}" />
         <![endif]-->
     {% endstylesheets %}
+        <style>
+            body {
+                background-image: url({{ asset('bundles/procergslogincidadaocore/images/'~background_helper.backgroundImage.file) }});
+            }
+        </style>
 {% endblock %}
 
 {% block javascripts %}

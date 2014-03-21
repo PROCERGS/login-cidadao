@@ -1,6 +1,7 @@
 parameters:
     security.authentication.success_handler.class: PROCERGS\LoginCidadao\CoreBundle\Handler\AuthenticationSuccessHandler
     notifications.helper.class: PROCERGS\LoginCidadao\CoreBundle\Helper\NotificationsHelper
+    background.helper.class: PROCERGS\LoginCidadao\CoreBundle\Helper\BackgroundImageHelper
     fos_facebook.user.login.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\FacebookProvider
     procergs.hwi_twitter.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\FOSUBUserProvider
     procergs_person.registration.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\RegistrationFormType
@@ -32,6 +33,10 @@ services:
     notifications.helper:
         class: %notifications.helper.class%
         arguments: ["@doctrine.orm.entity_manager", "@security.context", "@service_container"]
+
+    background.helper:
+        class: %background.helper.class%
+        arguments: ["@doctrine.orm.entity_manager", %background_picture.author%, %background_picture.link%, 'wp.jpg']
 
     fos_facebook.user.login:
         class: %fos_facebook.user.login.class%
