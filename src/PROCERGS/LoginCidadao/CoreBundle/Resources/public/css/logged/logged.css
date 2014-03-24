@@ -306,6 +306,8 @@
     float: none;
     height: 35px;
     margin-left: 0;
+    padding-left: 45px;
+    position: relative;
     width: 100%;
 }
 
@@ -314,9 +316,10 @@
 }
 
 #applications .list li img {
-    float: left;
     height: 45px;
-    margin-top: -5px;
+    left: 0;
+    position: absolute;
+    top: -5px;
     width: 45px;
 }
 
@@ -327,12 +330,12 @@
     margin: 0;
     padding: 0 20px;
     text-align: left;
-    width: 470px;
+    width: 80%;
 }
 
 #applications .list li .status {
     float: right;
-    width: 110px;
+    width: 20%;
 }
 
 #app-detail {

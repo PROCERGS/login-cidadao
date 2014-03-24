@@ -243,31 +243,6 @@ $(function() {
         //$(this).parent('.form-group').removeClass('has-error has-feedback');
     });
 
-    // switch display application list
-    $('.app-toggle .btn').on('click', function() {
-
-        if ( !$(this).hasClass('active') ) {
-
-            $('.app-toggle .btn').removeClass('active');
-            $(this).addClass('active');
-            $('#applications .list-group').css({'margin-top': '-30px', 'opacity' : 0 });
-
-            var self = $(this);
-            setTimeout( function(){
-                switch (self.data("display")) {
-                    case 'list':
-                        $('#applications ul').removeClass('grid').addClass('list');
-                        break;
-                    case 'grid':
-                        $('#applications ul').removeClass('list').addClass('grid');
-                        break;
-                }
-                $('#applications .list-group').css({'margin-top' : 0, 'opacity' : 1});
-            }, 1000);
-
-        }
-    });
-
     $('.file-upload .btn-upload').on('click', function() {
         $(this).siblings('input[type="file"]').trigger('click');
     });

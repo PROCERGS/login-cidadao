@@ -56,3 +56,49 @@
 </div>
 
 {% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+
+$(function() {
+    // switch display application list
+    $('.app-toggle .btn').on('click', function() {
+
+        if ( !$(this).hasClass('active') ) {
+
+            $('.app-toggle .btn').removeClass('active');
+            $(this).addClass('active');
+            $('#applications .list-group').css({'margin-top': '-30px', 'opacity' : 0 });
+
+            var self = $(this);
+            setTimeout( function(){
+                switch (self.data("display")) {
+                    case 'list':
+                        $('#applications ul').removeClass('grid').addClass('list');
+                        break;
+                    case 'grid':
+                        $('#applications ul').removeClass('list').addClass('grid');
+                        break;
+                }
+                $('#applications .list-group').css({'margin-top' : 0, 'opacity' : 1});
+            }, 1000);
+
+        }
+    });
+
+    $(window).resize(function() {
+
+        if ($(this).width() < 768) {
+            $('.app-toggle .btn[data-display="grid"]').trigger('click');
+            $('.app-toggle .btn[data-display="list"]').attr('disabled', 'disabled');
+        } else {
+            $('.app-toggle .btn[data-display="list"]').removeAttr('disabled');
+        }
+
+    });
+
+});
+
+</script>
+{% endblock %}
