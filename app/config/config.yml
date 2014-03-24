@@ -104,6 +104,7 @@ fos_user:
             type: procergs_person_profile
     resetting:
         email:
+            template: PROCERGSLoginCidadaoCoreBundle:Person:resettingEmail.html.twig
             from_email:
                 address:        %mailer_sender_mail%
                 sender_name:    %site_domain%
@@ -111,6 +112,7 @@ fos_user:
             type:               procergs_person_resetting
     service:
         user_manager: procergs_logincidadao.user_manager
+        mailer: fos_user.mailer.twig_swift
     change_password:
         form:
             type:               procergs_change_password

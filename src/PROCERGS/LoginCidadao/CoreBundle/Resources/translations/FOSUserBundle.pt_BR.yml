@@ -40,20 +40,14 @@ resetting.request.username: 'CPF, nome de usuário ou email:'
 resetting.request.submit: 'Recuperar senha'
 resetting.check_email: 'Foi enviado um email para %email%. Para recuperar a sua senha, clique no link da mensagem.'
 resetting.email.subject: 'Redefinir senha'
-resetting.email.message: >
-    Olá, %username%!
-
-    Para redefinir sua senha, clique no link: %confirmationUrl%
-
-    Atenciosamente,
-    A Equipe.
+resetting.email.message: 'Alguém solicitou recentemente para redefinir sua senha do Login Cidadão.'
 resetting.reset.submit: 'Alterar senha'
 resetting.password_already_requested: 'Este usuário já solicitou uma senha nas últimas 24 horas.'
 (optional): (opcional)
 change_password.submit: 'Alterar senha'
 change_password.flash.success: 'Senha alterada com sucesso!.'
 'As a safety measure we need you to type your password to confirm any changes.': 'Como medida de segurança, por favor informe sua senha para confirmar quaisquer mudanças.'
-'Reset Password': 'Recuperar senha'
+'Reset Password': 'Redefinir senha'
 Cancel: Cancelar
 'Enter your username or email': 'Informe seu CPF, nome de usuário ou email'
 form.adress: Logradouro
