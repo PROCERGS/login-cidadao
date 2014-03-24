@@ -237,6 +237,7 @@ form .input-error {
     background-color: #E64442;
     background-image: none;
     color: #FFF;
+    filter:none;
     font-size: 12px;
     font-weight: 500;
     margin: 0;
@@ -298,4 +299,27 @@ form .has-feedback .sr-only ~ .form-control-feedback {
     color: #FFF;
     cursor: default;
     text-shadow: 1px 1px 1px #000;
+}
+
+/* custom captcha */
+.captcha-container {
+    overflow: hidden;
+}
+
+.captcha-container > div {
+    margin-bottom: 20px;
+}
+
+#recaptcha_table {
+    border: none!important;
+}
+
+#recaptcha_table .recaptcha_image_cell, .recaptchatable .recaptcha_image_cell {
+    background-color: transparent!important;
+}
+
+.recaptchatable #recaptcha_response_field {
+    border: none!important;
+    color: #FFF;
+    padding: 6px 12px;
 }

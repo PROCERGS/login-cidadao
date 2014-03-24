@@ -61,6 +61,22 @@ class LoginFormType extends AbstractType
             //'translation_domain' => 'PROCERGSLoginCidadaoCoreBundle',
             'mapped' => false
         ));
+
+         if ($this->hasVerifyCaptcha()) {
+            $builder->add('recaptcha', 'ewz_recaptcha', array(
+                'attr' => array(
+                    'options' => array(
+                        'theme' => 'clean'
+                    )
+                ),
+                'mapped' => false,
+                'constraints' => array(
+                    new True()
+                )
+            ));
+        } else {
+            $builder->add('recaptcha', 'hidden');
+        }
     }
 
     public function getName()
