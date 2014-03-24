@@ -16,6 +16,7 @@ scope.full_name: 'Nome Completo'
 scope.cpf: CPF
 scope.email: Email
 scope.birthdate: 'Data de Nascimento'
+scope.city: Cidade
 'Authorized Applications': 'Aplicativos Autorizados'
 'Description:': 'Descrição:'
 'Access scope:': 'Escopo de acesso:'
