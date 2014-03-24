@@ -23,7 +23,7 @@
                 <div class="col-md-8">
                     <div class="form-group">
                         <label class="control-label invisible" for="username">{{ 'resetting.request.username'|trans }}</label>
-                        <input class="form-control" placeholder="{{ 'resetting.request.username'|trans }}" type="text" id="username" name="username" required="required" />
+                        <input class="form-control" onkeyup="validador.onKeyUpMultiformat(this, event);" placeholder="{{ 'resetting.request.username'|trans }}" type="text" id="username" name="username" required="required" />
                         <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                         <div class="input-error">{% if invalid_username is defined %}{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username})}}{% endif %}</div>
                     </div>
