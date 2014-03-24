@@ -10,8 +10,6 @@
             <constraint name="NotBlank">
                 <option name="message">fos_user.email.blank</option>
                 <option name="groups">
-                    <value>Registration</value>
-                    <value>Profile</value>
                     <value>LoginCidadaoRegistration</value>
                 </option>
             </constraint>
@@ -21,16 +19,12 @@
                 <option name="max">254</option>
                 <option name="maxMessage">fos_user.email.long</option>
                 <option name="groups">
-                    <value>Registration</value>
-                    <value>Profile</value>
                     <value>LoginCidadaoRegistration</value>
                 </option>
             </constraint>
             <constraint name="Email">
                 <option name="message">fos_user.email.invalid</option>
                 <option name="groups">
-                    <value>Registration</value>
-                    <value>Profile</value>
                     <value>LoginCidadaoRegistration</value>
                 </option>
             </constraint>
@@ -40,9 +34,6 @@
             <constraint name="NotBlank">
                 <option name="message">fos_user.password.blank</option>
                 <option name="groups">
-                    <value>Registration</value>
-                    <value>ResetPassword</value>
-                    <value>ChangePassword</value>
                     <value>LoginCidadaoRegistration</value>
                 </option>
             </constraint>
@@ -51,10 +42,6 @@
                 <option name="max">4096</option>
                 <option name="minMessage">fos_user.password.short</option>
                 <option name="groups">
-                    <value>Registration</value>
-                    <value>Profile</value>
-                    <value>ResetPassword</value>
-                    <value>ChangePassword</value>
                     <value>LoginCidadaoRegistration</value>
                 </option>
             </constraint>
