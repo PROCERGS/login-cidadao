@@ -97,4 +97,13 @@ class UserManager extends BaseManager
         }
     }
 
+    public function findUserByUsernameOrEmail($username) {
+       if (is_numeric($cpf = preg_replace('/[^0-9]/', '', $username)) && strlen($cpf) == 11) {
+            $person = parent::findUserBy(array('cpf' => $cpf));
+            if ($person !== null) {
+                return $person;
+            }
+        } 
+        return parent::findUserByUsernameOrEmail($username);        
+    }
 }
