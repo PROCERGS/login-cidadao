@@ -71,7 +71,7 @@
                     <dd><a onclick="tryThisCep(this, event);" href="javascript:void(0);">{{ cep.cep|formatCep }}</a></dd>
                 </div>
                 <div class="col-md-1">
-                    <a target="_blank" href="http://maps.google.com.br/maps?q={{ cep.logradouro|url_encode(true) }},{{ cep.bairro|url_encode(true) }},{{ cep.localidade|url_encode(true) }},{{ cep.uf|url_encode(true) }}, {{ form.adressnumber.vars.value|url_encode(true) }}"><img src="http://placehold.it/15x15" alt="" class="center-block"></a>
+                    <a target="_blank" class="center-block text-center" title="maps" href="http://maps.google.com.br/maps?q={{ cep.logradouro|url_encode(true) }},{{ cep.bairro|url_encode(true) }},{{ cep.localidade|url_encode(true) }},{{ cep.uf|url_encode(true) }}, {{ form.adressnumber.vars.value|url_encode(true) }}"><i class="glyphicon glyphicon-map-marker"></i></a>
                 </div>
             </div>
             {% endfor %}
