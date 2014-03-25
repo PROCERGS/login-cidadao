@@ -21,21 +21,26 @@
     background-color: #000;
 }
 
-footer li {
-    list-style-type: none;
-    float: left;
-}
-
 #register-aside, #sign-up {
+    background-color: #F1F1F1;
     margin: 0 30px;
     width: 460px;
 }
+
+.lc-box .connect {
+    width: 100px!important;
+}
+
 
 .form-control {
     line-height: 44px;
     padding: 0 6px;
     vertical-align: middle;
     width: 96%;
+}
+
+form .input-error {
+    padding: 0 12px;
 }
 
 #applications {

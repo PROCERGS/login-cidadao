@@ -35,7 +35,7 @@ header h3 {
 }
 
 .cep-results {
-    margin: 0 20px;
+    margin: 10px 20px;
 }
 
 .cep-results dt:after {
@@ -54,6 +54,7 @@ header h3 {
 .cep-results .cep-result {
     background-color: #f0f0f0;
     margin-bottom: 20px;
+    padding: 10px 0;
 }
 
 @media (min-width: 992px) {

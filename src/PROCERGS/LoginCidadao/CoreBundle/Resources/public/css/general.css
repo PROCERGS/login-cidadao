@@ -114,12 +114,9 @@ img.desaturate {
 
 
 footer {
+    background-color: #3b3a33;
     margin-top: 20px;
     clear: both;
-}
-
-footer .row {
-    background-color: #3b3a33;
 }
 
 footer h3 {
@@ -281,6 +278,7 @@ form .has-feedback .sr-only ~ .form-control-feedback {
     background: none repeat scroll 0 0 rgba(241, 241, 241, 0.9);
     box-shadow: 1px 1px 1px #CCCCCC;
     margin-bottom: 30px;
+    min-height: 250px;
     position: relative;
     padding: 12px 30px 30px;
 }
