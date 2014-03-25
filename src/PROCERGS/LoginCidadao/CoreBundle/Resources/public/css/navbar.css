@@ -46,12 +46,12 @@
 }
 
 .navbar-nav>li.icons>a {
-    padding-top: 16px;
+    padding-top: 17px;
     padding-bottom: 8px;
 }
 
-.navbar-nav>li.icons.apps>a{
-    padding-top: 17px;
+.navbar-nav>li.icons.logout>a{
+    padding-top: 13px;
 }
 
 .navbar .navbar-nav>li>a>.glyphicon {
@@ -114,6 +114,10 @@
 }
 
 /* Apps */
+.navbar .navbar-nav .apps .glyphicon {
+    top: -1px;
+}
+
 .navbar .apps li {
     float: left;
     height: 110px;
