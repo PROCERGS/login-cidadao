@@ -85,7 +85,7 @@
                 <img src="{% include 'PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig' %}">
 
                 <div class="file-upload">
-                    <button type="button" class="btn btn-success btn-upload">Alterar foto</button>
+                    <button type="button" class="btn btn-success btn-upload">{% trans %}Change photo{% endtrans %}</button>
                     <div class="file-name"></div>
                     {{ form_widget(form.pictureFile) }}
                 </div>

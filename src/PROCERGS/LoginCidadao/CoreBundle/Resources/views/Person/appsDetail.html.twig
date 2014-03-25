@@ -22,12 +22,12 @@
                 <a href="#" class="btn" id="app-deactivate" role="button">{% trans %}Deactivate this service{% endtrans %}</a>
 
                 <div class="alert alert-danger" id="deactivate-box">
-                  <h4>Você quer mesmo desativar esse serviço?</h4>
+                  <h4>{% trans %}Do you really want to disable this service?{%  endtrans %}</h4>
                   <p>
                     {{ form_start(form, {'action': path('lc_revoke', { clientId: client.id }), 'attr': {'role':'form'}}) }}
-                    <button type="submit" class="btn btn-danger">Sim</button>
+                    <button type="submit" class="btn btn-danger">{% trans %}Yes{%  endtrans %}</button>
                     {{ form_end(form) }}
-                    <a role="button" class="btn btn-default cancel">Não</a>
+                    <a role="button" class="btn btn-default cancel">{% trans %}No{%  endtrans %}</a>
                   </p>
                 </div>
             {% else %}
@@ -36,7 +36,7 @@
             {% endif %}
         </div>
 
-        <p style="margin-top:50px;">Este serviço utiliza os seguintes dados da sua conta do Login Cidadão</p>
+        <p style="margin-top:50px;">{% trans %}This service uses the following data from your Login Citizen account{%  endtrans %}</p>
 
         <ul class="permissions pull-left">
             {% for auth, status in scopes %}

@@ -137,3 +137,7 @@ Services: Serviços
 'This service is not active in your Citizen''s Login account': 'Este serviço não está ativo na sua conta do Login Cidadão'
 'Activate this service': 'Ativar este serviço'
 'Deactivate this service': 'Desativar este serviço'
+'Do you really want to disable this service?': 'Você quer mesmo desativar este serviço?'
+Yes: Sim
+No: Não
+'This service uses the following data from your Login Citizen account': 'Este serviço utiliza os seguintes dados da sua conta do Login Cidadão'
