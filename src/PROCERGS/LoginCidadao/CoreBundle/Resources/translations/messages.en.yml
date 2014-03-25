@@ -73,9 +73,14 @@ Notifications: Notifications
 'Change password': 'Change Password'
 Activate: Activate
 Deactivate: Deactivate
-'Hello, %name%': 'Hello, %name%'
-'We noticed that your account doesn''t have a CPF associated with it yet.': 'We noticed that your account doesn''t have a CPF associated with it yet.'
-'Please consider visiting Citizen''s Login until %date% to complete this information. After that date, your account might be suspended.': 'Please consider visiting Citizen''s Login until %date% to complete this information. After that date, your account might be suspended.'
+cpf_reminder.subject: 'We noticed that your account doesn''t have a CPF associated with it yet.'
+cpf_reminder.message: >
+  Hello, %name%
+  
+  We noticed that your account doesn''t have a CPF associated with it yet.
+  
+  Please consider visiting Citizen''s Login until %date% to complete this information. After that date, your account might be suspended.
+
 'Toggle Navigation': 'Toggle Navigation'
 'Log in': 'Log in'
 Applications: Applications

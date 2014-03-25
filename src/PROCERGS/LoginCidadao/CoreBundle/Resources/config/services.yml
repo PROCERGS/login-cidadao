@@ -20,7 +20,7 @@ parameters:
     kernel.listener.logged_in_user_listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\LoggedInUserListener
     kernel.listener.exceptions_listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\ExceptionListener
 
-    procergs_logincidadao_core.emailChanged.template: PROCERGSLoginCidadaoCoreBundle:Person:emailChangedMessage.txt.twig
+    procergs_logincidadao_core.emailChanged.template: PROCERGSLoginCidadaoCoreBundle:Person:emailChangedMessage.html.twig
 
 services:
     security.authentication.success_handler:

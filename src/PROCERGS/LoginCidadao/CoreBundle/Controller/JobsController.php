@@ -47,7 +47,7 @@ class JobsController extends Controller
                     ->setSubject($subject)
                     ->setSender($from)
                     ->setReceiver($to)
-                    ->setMessage($this->renderView('PROCERGSLoginCidadaoCoreBundle:Jobs:cpf_check.txt.twig',
+                    ->setMessage($this->renderView('PROCERGSLoginCidadaoCoreBundle:Jobs:cpf_check.html.twig',
                                     compact('user')));
 
             if ($this->get('mailer')->send($email->getSwiftMail())) {

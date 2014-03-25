@@ -1,5 +1,0 @@
-{% trans with {'%name%': user.firstName} %}Hello, %name%{% endtrans %}
-
-{% trans %}We noticed that your account doesn't have a CPF associated with it yet.{% endtrans %}
-
-{% trans with {'%date%': user.cpfExpiration | date('d/m/Y') } %}Please consider visiting Citizen's Login until %date% to complete this information. After that date, your account might be suspended.{% endtrans %}

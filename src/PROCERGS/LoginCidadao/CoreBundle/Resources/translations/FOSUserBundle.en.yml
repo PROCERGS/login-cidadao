@@ -69,3 +69,4 @@ form.submit: Enviar
 security.login.submit: 'Log in'
 or: or
 'Use your social networks': 'Use your social networks'
+registration.email.click: 'click here to confirm your email'
