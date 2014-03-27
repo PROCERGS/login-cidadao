@@ -735,8 +735,15 @@ class Person extends BaseUser
         return $this->previousValidEmail;
     }
 
-    public function isCpfExpired() {
+    public function isCpfExpired()
+    {
         return ($this->getCpfExpiration() instanceof \DateTime && $this->getCpfExpiration() <= new \DateTime());
+    }
+
+    public function hasPassword()
+    {
+        $password = $this->getPassword();
+        return !is_null($password) || strlen($password) > 0;
     }
 
 }
