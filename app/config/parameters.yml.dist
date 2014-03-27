@@ -44,3 +44,7 @@ parameters:
     background_picture.author: 'Miriam Cardoso de Souza'
     background_picture.link: 'http://www.flickr.com/photos/admiriam/10390118624/'
     mailer_receiver_mail: ~
+    nfg_ws_url: ~
+    soe_organization: ~
+    soe_username: ~
+    soe_password: ~
