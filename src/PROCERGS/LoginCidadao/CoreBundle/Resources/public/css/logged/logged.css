@@ -184,14 +184,25 @@
 #profile-edit .connect {
     background-size: 34px;
     color: #FFF;
-    cursor: pointer;
     display: block;
     font-size: 13px;
     height: 34px;
     line-height: 34px;
     margin-bottom: 5px;
-    padding-left: 50px;
-    width: 100%;
+}
+
+#profile-edit .connect .username {
+    padding-left: 20px;
+    padding-right: 0px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#profile-edit .connect .unlink {
+    color: #000;
+}
+#profile-edit .connect .unlink:hover {
+    color: #f55;
+    text-shadow: 0px 0px 2px #f00;
 }
 
 #profile-edit .connect:hover {
@@ -200,6 +211,9 @@
 
 #profile-edit .connect.disabled {
     background-color: #999999;
+}
+#profile-edit .connect.disabled a {
+    color: #fff;
 }
 
 #profile-edit .facebook {

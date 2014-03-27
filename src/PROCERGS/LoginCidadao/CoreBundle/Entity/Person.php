@@ -72,9 +72,9 @@ class Person extends BaseUser
     /**
      * @Expose
      * @Groups({"username"})
-     * @Assert\Regex(pattern="/^[A-Za-z0-9_.]+$/i", message="change_username.invalid.username")
+     * @PROCERGSAssert\Username
      * @Assert\NotBlank
-     * @Assert\Length(min="1", max="20")
+     * @Assert\Length(min="1", max="33")
      */
     protected $username;
 
@@ -735,8 +735,15 @@ class Person extends BaseUser
         return $this->previousValidEmail;
     }
 
-    public function isCpfExpired() {
+    public function isCpfExpired()
+    {
         return ($this->getCpfExpiration() instanceof \DateTime && $this->getCpfExpiration() <= new \DateTime());
+    }
+
+    public function hasPassword()
+    {
+        $password = $this->getPassword();
+        return !is_null($password) || strlen($password) > 0;
     }
 
 }

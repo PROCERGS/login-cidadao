@@ -81,28 +81,31 @@ class PersonController extends Controller
                         $em->remove($auth);
                         $em->flush();
 
-                        $this->get('session')->getFlashBag()->add('success', $translator->trans('Authorization successfully revoked.'));
+                        $this->get('session')->getFlashBag()->add('success',
+                                $translator->trans('Authorization successfully revoked.'));
                         $success = true;
                     }
                 }
 
                 if (!$success) {
-                   throw new \InvalidArgumentException($translator->trans("Authorization not found."));
+                    throw new \InvalidArgumentException($translator->trans("Authorization not found."));
                 }
             } catch (AccessDeniedException $e) {
-                $this->get('session')->getFlashBag()->add('error', $translator->trans("Access Denied."));
+                $this->get('session')->getFlashBag()->add('error',
+                        $translator->trans("Access Denied."));
             } catch (\Exception $e) {
-                $this->get('session')->getFlashBag()->add('error', $translator->trans("Wasn't possible to disable this service."));
-                $this->get('session')->getFlashBag()->add('error', $e->getMessage());
+                $this->get('session')->getFlashBag()->add('error',
+                        $translator->trans("Wasn't possible to disable this service."));
+                $this->get('session')->getFlashBag()->add('error',
+                        $e->getMessage());
             }
-
         } else {
-            $this->get('session')->getFlashBag()->add('error', $translator->trans("Wasn't possible to disable this service."));
+            $this->get('session')->getFlashBag()->add('error',
+                    $translator->trans("Wasn't possible to disable this service."));
         }
 
-        return $this->redirect($this->generateUrl('lc_app_details', array('clientId' => $clientId)));
-
-
+        return $this->redirect($this->generateUrl('lc_app_details',
+                                array('clientId' => $clientId)));
     }
 
     /**
@@ -117,8 +120,8 @@ class PersonController extends Controller
                 ->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')
                 ->findByEmail($email);
 
-        $data = array('valid'=>true);
-        if(count($person) > 0){
+        $data = array('valid' => true);
+        if (count($person) > 0) {
             $data = array(
                 'valid' => false,
                 'message' => $translator->trans('The email is already used')
@@ -141,16 +144,18 @@ class PersonController extends Controller
         $userManager = $this->container->get('fos_user.user_manager');
 
         $formBuilder = $this->createFormBuilder($user)
-            ->add('username', 'text')
-            ->add('save', 'submit');
+                ->add('username', 'text')
+                ->add('save', 'submit');
 
         $emptyPassword = strlen($user->getPassword()) == 0;
         if ($emptyPassword) {
-            $formBuilder->add('plainPassword', 'repeated', array(
+            $formBuilder->add('plainPassword', 'repeated',
+                    array(
                 'type' => 'password'
             ));
         } else {
-            $formBuilder->add('current_password', 'password', array(
+            $formBuilder->add('current_password', 'password',
+                    array(
                 'required' => true,
                 'constraints' => new UserPassword(),
                 'mapped' => false
@@ -167,13 +172,15 @@ class PersonController extends Controller
             $userManager->updateUser($user);
 
             $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('success', $translator->trans('Updated username successfully!'));
+            $this->get('session')->getFlashBag()->add('success',
+                    $translator->trans('Updated username successfully!'));
 
             $response = $this->redirect($this->generateUrl('lc_update_username'));
 
             $request = $this->getRequest();
             $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
+            $dispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_COMPLETED,
+                    new FilterUserResponseEvent($user, $request, $response));
 
             return $response;
         }
@@ -190,12 +197,13 @@ class PersonController extends Controller
         $person = $this->getUser();
         if (is_numeric($cpf = preg_replace('/[^0-9]/', '', $request->get('cpf'))) && strlen($cpf) == 11) {
             $person->setCpf($cpf);
-        }        
+        }
         $formBuilder = $this->createFormBuilder($person);
         if (!$person->getCpf()) {
             $formBuilder->add('cpf', 'text', array('required' => true));
         }
-        $formBuilder->add('nfgPassword', 'repeated', array(
+        $formBuilder->add('nfgPassword', 'repeated',
+                array(
             'required' => false,
             'type' => 'password',
             'mapped' => false
@@ -226,4 +234,34 @@ class PersonController extends Controller
             'form' => $form->createView(), 'messages' => $messages, 'isExpired' => $person->isCpfExpired()
         );
     }
+
+    /**
+     * @Route("/facebook/unlink", name="lc_unlink_facebook")
+     */
+    public function unlinkFacebookAction()
+    {
+        $person = $this->getUser();
+        $person->setFacebookId(null)
+                ->setFacebookUsername(null);
+        $userManager = $this->get('fos_user.user_manager');
+        $userManager->updateUser($person);
+
+        return $this->redirect($this->generateUrl('fos_user_profile_edit'));
+    }
+
+    /**
+     * @Route("/facebook/unlink", name="lc_unlink_twitter")
+     */
+    public function unlinkTwitterAction()
+    {
+        $person = $this->getUser();
+        $person->setTwitterId(null)
+                ->setTwitterUsername(null)
+                ->setTwitterAccessToken(null);
+        $userManager = $this->get('fos_user.user_manager');
+        $userManager->updateUser($person);
+
+        return $this->redirect($this->generateUrl('fos_user_profile_edit'));
+    }
+
 }
