@@ -8,6 +8,7 @@ use FOS\UserBundle\Util\CanonicalizerInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\DependencyInjection\Container;
 use FOS\UserBundle\Model\UserInterface;
+use PROCERGS\Generic\ValidationBundle\Validator\Constraints\UsernameValidator;
 
 class UserManager extends BaseManager
 {
@@ -60,6 +61,9 @@ class UserManager extends BaseManager
         if (is_null($current) || strlen($current) == 0) {
             $email = explode('@', $user->getEmailCanonical(), 2);
             $username = $email[0];
+            if (!UsernameValidator::isUsernameValid($username)) {
+                $username = UsernameValidator::getValidUsername();
+            }
             $newUsername = $this->getNextAvailableUsername($username);
 
             $user->setUsername($newUsername);

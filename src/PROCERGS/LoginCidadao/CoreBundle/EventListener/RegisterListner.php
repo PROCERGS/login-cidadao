@@ -14,6 +14,7 @@ use FOS\UserBundle\Event\FilterUserResponseEvent;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\NotificationsHelper;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use PROCERGS\Generic\ValidationBundle\Validator\Constraints\UsernameValidator;
 
 class RegisterListner implements EventSubscriberInterface
 {
@@ -63,8 +64,13 @@ class RegisterListner implements EventSubscriberInterface
             $user->setConfirmationToken($this->tokenGenerator->generateToken());
             $user->setEmailExpiration(new \DateTime("+$this->emailUnconfirmedTime"));
         }
-
-        $url = $this->router->generate('fos_user_profile_edit');
+        $email = explode('@', $user->getEmailCanonical(), 2);
+        $username = $email[0];
+        if (!UsernameValidator::isUsernameValid($username)) {
+            $url = $this->router->generate('lc_update_username');
+        } else {
+            $url = $this->router->generate('fos_user_profile_edit');
+        }
         $event->setResponse(new RedirectResponse($url));
     }
 
