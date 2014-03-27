@@ -390,6 +390,7 @@
     box-shadow: 0px 0px 1px #CCC;
     border-radius:0;
     cursor: pointer;
+    font-size: 13px;
     margin-bottom: 5px;
     height: auto;
     padding: 15px;
@@ -409,6 +410,22 @@
     width: 100%;
 }
 
+#notifications li.unread {
+    background-color: #CCC;
+}
+
+#notifications li.read {
+    background: none!important;
+}
+
+#notifications li .glyphicon-ok {
+    color:#093;
+}
+
+#notifications li.unread .glyphicon-ok {
+    color:#333;
+}
+
 #notifications li.level-3, #notifications li.level-3 a:hover, #notifications li.level-3:hover:before {
     background: #f2dede;
     content: none;
@@ -423,20 +440,30 @@
     margin-right: 20px;
 }
 
-#notifications .box {
+/*#notifications .box {
     float: left;
     width: 80%;
-}
+}*/
 
 #notifications .box h4 {
     margin: 0 0 10px;
     padding: 0;
 }
 
-#notifications .glyphicon {
+#notifications .gly-toggle, #notifications .gly-read, #notifications .loader {
     position: absolute;
     right: 10px;
     top: 10px;
+}
+
+#notifications .gly-read {
+    right: 42px;
+}
+
+#notifications .loader {
+    background-image: url(../../images/ajax-loader.gif);
+    height: 16px;
+    width: 16px;
 }
 
 #notifications .desc {
