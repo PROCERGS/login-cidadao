@@ -93,6 +93,7 @@ fos_user:
     registration:
         confirmation:
             enabled: false
+            template: PROCERGSLoginCidadaoCoreBundle:Person:registrationEmail.html.twig
             from_email:
               address: %mailer_sender_mail%
               sender_name: %site_domain%

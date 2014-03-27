@@ -28,6 +28,7 @@ Revoked: Revogado
 'Available Applications and Sites': 'Sites e Aplicativos Disponíveis'
 'Authorization successfully revoked.': 'Autorização revogada com sucesso.'
 'Authorization not found.': 'Autorização não encontrada.'
+'Captcha is invalid.': 'Captcha invalido.'
 'Wasn''t possible to disable this service.': 'Não foi possível desativar este serviço.'
 'Access Denied.': 'Acesso negado.'
 'Citizen''s Login': 'Login Cidadão'
@@ -68,9 +69,13 @@ CEP: CEP
 'The application <strong>%client_name%</strong> wants to access the following information about you:': 'A aplicação <strong>%client_name%</strong> deseja acessar as seguintes informações sobre você:'
 'Edit profile': 'Editar informações'
 cpf_reminder.subject: 'Você não tem um CPF associado no Login Cidadão'
-'Hello, %name%': 'Olá, %name%'
-'We noticed that your account doesn''t have a CPF associated with it yet.': 'Nós notamos que sua conta não tem um CPF associado a ela ainda.'
-'Please consider visiting Citizen''s Login until %date% to complete this information. After that date, your account might be suspended.': 'Por favor, visite o Login Cidadão até o dia %date% para completar essa informação. Após essa data, sua conta poderá ser suspensa.'
+cpf_reminder.message: >
+  Olá, %name%
+  
+  Nós notamos que sua conta não tem um CPF associado a ela ainda.
+  
+  Por favor, visite o Login Cidadão até o dia %date% para completar essa informação. Após essa data, sua conta poderá ser suspensa.
+
 Activated: Ativado
 Deactivated: Desativado
 'Connect using Facebook': 'Conectar usando Facebook'
@@ -136,3 +141,7 @@ Services: Serviços
 'This service is not active in your Citizen''s Login account': 'Este serviço não está ativo na sua conta do Login Cidadão'
 'Activate this service': 'Ativar este serviço'
 'Deactivate this service': 'Desativar este serviço'
+'Do you really want to disable this service?': 'Você quer mesmo desativar este serviço?'
+Yes: Sim
+No: Não
+'This service uses the following data from your Login Citizen account': 'Este serviço utiliza os seguintes dados da sua conta do Login Cidadão'

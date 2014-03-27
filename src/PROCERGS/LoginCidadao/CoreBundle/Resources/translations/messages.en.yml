@@ -23,6 +23,7 @@ scope.city: City
 'Government of Rio Grande do Sul - Promoting equality makes the difference': 'Government of Rio Grande do Sul - Promoting equality makes the difference'
 'One account. All that the Government offers.': 'One account. All that the Government offers.'
 'Citizen''s Login': 'Citizen''s Login'
+'Captcha is invalid.': 'Captcha is invalid.'
 'Need help?': 'Need help?'
 '%link_start%Create your account%link_end%': '%link_start%Create your account%link_end%'
 'One account to all of the Government''s services': 'One account to all of the Government''s services'
@@ -72,9 +73,14 @@ Notifications: Notifications
 'Change password': 'Change Password'
 Activate: Activate
 Deactivate: Deactivate
-'Hello, %name%': 'Hello, %name%'
-'We noticed that your account doesn''t have a CPF associated with it yet.': 'We noticed that your account doesn''t have a CPF associated with it yet.'
-'Please consider visiting Citizen''s Login until %date% to complete this information. After that date, your account might be suspended.': 'Please consider visiting Citizen''s Login until %date% to complete this information. After that date, your account might be suspended.'
+cpf_reminder.subject: 'We noticed that your account doesn''t have a CPF associated with it yet.'
+cpf_reminder.message: >
+  Hello, %name%
+  
+  We noticed that your account doesn''t have a CPF associated with it yet.
+  
+  Please consider visiting Citizen''s Login until %date% to complete this information. After that date, your account might be suspended.
+
 'Toggle Navigation': 'Toggle Navigation'
 'Log in': 'Log in'
 Applications: Applications

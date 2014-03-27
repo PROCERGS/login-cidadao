@@ -54,7 +54,8 @@ class LoginCidadaoListener extends UsernamePasswordFormAuthenticationListener
         $form = $this->container->get('form.factory')->create($formType);
         $form->handleRequest($request);
         if (! $form->isValid()) {
-            throw new BadCredentialsException('Captcha is invalid');
+            $translator = $this->container->get('translator');
+            throw new BadCredentialsException($translator->trans('Captcha is invalid.'));
         }
         $b = parent::attemptAuthentication($request);
         return $b;

@@ -221,6 +221,6 @@ class SentEmail
         return \Swift_Message::newInstance()->setSubject($this->getSubject())
                 ->setFrom($this->getSender())
                 ->setTo($this->getReceiver())
-                ->setBody($this->getMessage());
+                ->setBody($this->getMessage(), 'text/html');
     }
 }
