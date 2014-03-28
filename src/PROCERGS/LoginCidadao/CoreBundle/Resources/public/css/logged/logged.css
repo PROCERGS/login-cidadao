@@ -341,6 +341,7 @@
 }
 
 #applications .list li img {
+    background-color: #FFF;
     height: 45px;
     left: 0;
     position: absolute;
@@ -373,6 +374,8 @@
 
 #app-detail img {
     margin-bottom: 20px;
+    max-height: 220px;
+    max-width: 220px;
 }
 
 #app-detail .msg p {
@@ -520,4 +523,16 @@
 
 .fos_oauth_server_authorize .buttons.row {
     margin-top: 20px;
+}
+
+.app-admin .table-bordered, .app-admin .table-bordered td, .app-admin .table-bordered th {
+    border-color: #000;
+}
+
+.app-admin .table-bordered th {
+    border-bottom: none;
+}
+
+.app-admin .table-bordered .glyphicon {
+    margin: 0 3px 3px 0;
 }

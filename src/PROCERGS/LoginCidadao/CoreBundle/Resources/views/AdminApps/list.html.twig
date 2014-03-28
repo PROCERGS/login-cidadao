@@ -1,50 +1,55 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %} {% block content %}
-<div id="app-detail" class="content clearfix">
-    <div>{{ 'grid.admin.apps.title'|trans }}</div>
-    <div class="form-bar">
-        <a href="{{ path('lc_admin_app_new') }}">{{ 'grid.admin.apps.new'|trans }} </a>
-    </div>
+<div id="app-detail" class="content app-admin clearfix">
+    <h5>{{ 'grid.admin.apps.title'|trans }}</h5>
+    <p>
+        <a href="{{ path('lc_admin_app_new') }}" class="btn btn-primary btn-sm">{{ 'grid.admin.apps.new'|trans }} </a>
+    </p>
     {% if clients|length > 0 %}
     <div class="content">
-        <div class="row header">
-            <div class="col-md-1">{{ 'form.checkbox'|trans }}</div>
-            <div class="col-md-2">{{ 'form.show'|trans }}</div>
-            <div class="col-md-2">{{ 'form.edit'|trans }}</div>
-            <div class="col-md-3">{{ 'form.name'|trans }}</div>
-            <div class="col-md-4">{{ 'form.siteurl'|trans }}</div>
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                {# <th>{{ 'form.checkbox'|trans }}</th> #}
+                <th>{{ 'form.show'|trans }}</th>
+                <th>{{ 'form.edit'|trans }}</th>
+                <th>{{ 'form.name'|trans }}</th>
+                <th>{{ 'form.siteurl'|trans }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for client in clients %}
+              <tr>
+                {# <td>
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" /> {{ 'form.checkbox'|trans }}</td>
+                      </label>
+                    </div>
+                </td> #}
+                <td>
+                    <a href="{{ path('lc_admin_app_show', {'id': client.id}) }}">
+                        <span>
+                          <i class="glyphicon glyphicon-search"></i>{{ 'grid.admin.apps.show'|trans }}
+                        </span>
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('lc_admin_app_edit', {'id': client.id}) }}">
+                        <span>
+                          <i class="glyphicon glyphicon-pencil"></i>{{ 'grid.admin.apps.edit'|trans }}
+                        </span>
+                    </a>
+                </td>
+                <td>{{ client.name | trans }}</td>
+                <td>{{ client.siteurl }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
-        {% for client in clients %}
-        <div class="row cep-result">
-            <div class="col-md-1">
-                <dt>{{ 'form.checkbox'|trans }}</dt>
-                <dd>
-                    <input type="checkbox" />
-                </dd>
-            </div>
-            <div class="col-md-2">
-                <a href="{{ path('lc_admin_app_show', {'id': client.id}) }}"> 
-                <span> 
-                {{ 'grid.admin.apps.show'|trans }} <i class="glyphicon glyphicon-user pull-right"></i>
-                </span>
-                </a>
-            </div>
-            <div class="col-md-2">
-                <a href="{{ path('lc_admin_app_edit', {'id': client.id}) }}"> 
-                <span> 
-                {{ 'grid.admin.apps.edit'|trans }} <i class="glyphicon glyphicon-user pull-right"></i>
-                </span>
-                </a>
-            </div>            
-            <div class="col-md-3">
-                <dt>{{ 'form.name' | trans }}</dt>
-                <dd>{{ client.name | trans }}</dd>
-            </div>
-            <div class="col-md-4">
-                <dt>{{ 'form.siteurl' | trans }}</dt>
-                <dd>{{ client.siteurl }}</dd>
-            </div>
-        </div>
-        {% endfor %}
+
     </div>
     {% else %}
     <div>{{ 'grid.admin.apps.noresult'|trans }}</div>
