@@ -198,7 +198,7 @@
     text-overflow: ellipsis;
 }
 #profile-edit .connect .unlink {
-    color: #000;
+    color: #fff;
 }
 #profile-edit .connect .unlink:hover {
     color: #f55;
@@ -229,6 +229,17 @@
     background-repeat: no-repeat;
 }
 
+#profile-edit .social-networks .alert {
+    font-size: 11px;
+    background-image: none;
+}
+#profile-edit .social-networks .alert p.title {
+    margin-bottom: 10px;
+}
+
+#profile-edit .unlink-confirmation {
+    display: none;
+}
 
 /* services/applications page */
 #applications .app-toggle {

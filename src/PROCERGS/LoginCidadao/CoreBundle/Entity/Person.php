@@ -743,7 +743,7 @@ class Person extends BaseUser
     public function hasPassword()
     {
         $password = $this->getPassword();
-        return !is_null($password) || strlen($password) > 0;
+        return strlen($password) > 0;
     }
 
 }

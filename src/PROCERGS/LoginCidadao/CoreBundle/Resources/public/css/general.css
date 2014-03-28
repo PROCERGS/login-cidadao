@@ -92,7 +92,9 @@ img.desaturate {
 .btn {
     background-image: none;
     border-radius:0;
-    font-size: 16px;
+}
+
+.btn-wide {
     padding-left: 25px;
     padding-right: 25px;
 }

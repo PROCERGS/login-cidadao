@@ -76,9 +76,9 @@ Deactivate: Deactivate
 cpf_reminder.subject: 'We noticed that your account doesn''t have a CPF associated with it yet.'
 cpf_reminder.message: >
   Hello, %name%
-  
+
   We noticed that your account doesn''t have a CPF associated with it yet.
-  
+
   Please consider visiting Citizen''s Login until %date% to complete this information. After that date, your account might be suspended.
 
 'Toggle Navigation': 'Toggle Navigation'
@@ -140,3 +140,6 @@ form.secret: __form.secret
 'This service is not active in your Citizen''s Login account': '__This service is not active in your Citizen''s Login account'
 'Activate this service': '__Activate this service'
 admin.apps.list: __admin.apps.list
+social-networks.unlink.no-password: 'You must define a password before unlinking any social network.'
+social-networks.unlink.facebook.success: 'Facebook successfully unlinked.'
+social-networks.unlink.twitter.success: 'Twitter successfully unlinked.'

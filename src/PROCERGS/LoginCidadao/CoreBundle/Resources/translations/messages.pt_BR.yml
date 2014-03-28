@@ -71,9 +71,9 @@ CEP: CEP
 cpf_reminder.subject: 'Você não tem um CPF associado no Login Cidadão'
 cpf_reminder.message: >
   Olá, %name%
-  
+
   Nós notamos que sua conta não tem um CPF associado a ela ainda.
-  
+
   Por favor, visite o Login Cidadão até o dia %date% para completar essa informação. Após essa data, sua conta poderá ser suspensa.
 
 Activated: Ativado
@@ -145,3 +145,6 @@ Services: Serviços
 Yes: Sim
 No: Não
 'This service uses the following data from your Login Citizen account': 'Este serviço utiliza os seguintes dados da sua conta do Login Cidadão'
+social-networks.unlink.no-password: 'Você não pode desvincular uma rede social sem definir uma senha antes.'
+social-networks.unlink.facebook.success: 'Facebook desvinculado com sucesso.'
+social-networks.unlink.twitter.success: 'Twitter desvinculado com sucesso.'
