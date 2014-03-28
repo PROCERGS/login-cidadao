@@ -6,13 +6,18 @@
     {% if notifications is not empty %}
     <ul>
         {% for notification in notifications %}
-        <li class="clearfix level-{{ notification.level }}">
+        <li class="clearfix level-{{ notification.level }} {{ (notification.isRead) ? 'read' : 'unread' }}">
             {# <img src="http://placehold.it/95x95" title="{{ notification.client.name }}"> #}
             <div class="box clearfix">
-                <h4>{{ notification.title | trans }}</h4>
+                <h5>{{ notification.title | trans }}</h5>
                 <p class="short">{{ notification.shortText | trans }}</p>
-                <div class="desc">{{ notification.text | trans | striptags('<a><p>') | raw | nl2br  }}</div>
-                <i class="glyphicon glyphicon-plus"></i>
+                <div class="desc">
+                    {{ notification.text | trans | striptags('<a><p>') | raw | nl2br  }}
+                    {% if (notification.isRead == false) and (notification.level != 3) %}
+                        <i data-notification="{{ notification.id }}" class="gly-read glyphicon glyphicon-ok" title="{% trans %}Mark as read{% endtrans %}"></i>
+                    {% endif %}
+                </div>
+                <i class="gly-toggle glyphicon glyphicon-plus"></i>
             </div>
         </li>
         {% endfor %}
@@ -31,9 +36,46 @@
         $('#notifications li').on('click', function() {
             $(this).find('.short').toggle();
             $(this).find('.desc').toggle();
-            var icon = $(this).find('.glyphicon');
-            icon.toggleClass('glyphicon-plus');
-            icon.toggleClass('glyphicon-minus');
+            var icon = $(this).find('.gly-toggle');
+            icon.toggleClass('glyphicon-plus glyphicon-minus');
+        });
+
+
+        var readUrl = "{{ url('lc_notifications_read') }}";
+
+
+        $('#notifications li.unread .gly-read').on('click', function() {
+            event.stopPropagation();
+            var self = $(this);
+            var notification = self.data('notification');
+
+            self.off();
+
+            if (!self.closest('li').hasClass('unread')) {
+                return;
+            }
+
+            self.removeClass('glyphicon-ok').addClass('loader');
+
+            $.ajax({
+                url: readUrl,
+                type: 'POST',
+                dataType: 'json',
+                data: {notification: notification},
+            })
+            .done(function(data) {
+                console.log('done', data.message);
+                if (data.status)
+                    self.closest('li').removeClass('unread');
+
+                self.removeClass('loader').addClass('glyphicon-ok').attr('title', 'ok');
+            })
+            .fail(function(data) {
+                console.log('fail', data.message);
+                self.removeClass('loader').addClass('glyphicon-ok');
+            });
+
+
         });
     })
 </script>
