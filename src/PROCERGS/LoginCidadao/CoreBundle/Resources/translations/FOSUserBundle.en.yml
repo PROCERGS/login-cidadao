@@ -71,3 +71,5 @@ or: or
 'Use your social networks': 'Use your social networks'
 registration.email.click: 'click here to confirm your email'
 'Upload another picture': 'Upload another picture'
+'Do you really want to unlink <strong class="social-network-name"></strong>?': 'Do you really want to unlink <strong class="social-network-name"></strong>?'
+'Yes': Yes

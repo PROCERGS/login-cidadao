@@ -71,9 +71,9 @@ CEP: CEP
 cpf_reminder.subject: 'Você não tem um CPF associado no Login Cidadão'
 cpf_reminder.message: >
   Olá, %name%
-  
+
   Nós notamos que sua conta não tem um CPF associado a ela ainda.
-  
+
   Por favor, visite o Login Cidadão até o dia %date% para completar essa informação. Após essa data, sua conta poderá ser suspensa.
 
 Activated: Ativado
