@@ -241,10 +241,19 @@ class PersonController extends Controller
     public function unlinkFacebookAction()
     {
         $person = $this->getUser();
-        $person->setFacebookId(null)
-                ->setFacebookUsername(null);
-        $userManager = $this->get('fos_user.user_manager');
-        $userManager->updateUser($person);
+        $translator = $this->get('translator');
+        if ($person->hasPassword()) {
+            $person->setFacebookId(null)
+                    ->setFacebookUsername(null);
+            $userManager = $this->get('fos_user.user_manager');
+            $userManager->updateUser($person);
+
+            $this->get('session')->getFlashBag()->add('success',
+                    $translator->trans("social-networks.unlink.facebook.success"));
+        } else {
+            $this->get('session')->getFlashBag()->add('error',
+                    $translator->trans("social-networks.unlink.no-password"));
+        }
 
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));
     }
@@ -255,11 +264,20 @@ class PersonController extends Controller
     public function unlinkTwitterAction()
     {
         $person = $this->getUser();
-        $person->setTwitterId(null)
-                ->setTwitterUsername(null)
-                ->setTwitterAccessToken(null);
-        $userManager = $this->get('fos_user.user_manager');
-        $userManager->updateUser($person);
+        $translator = $this->get('translator');
+        if ($person->hasPassword()) {
+            $person->setTwitterId(null)
+                    ->setTwitterUsername(null)
+                    ->setTwitterAccessToken(null);
+            $userManager = $this->get('fos_user.user_manager');
+            $userManager->updateUser($person);
+            
+            $this->get('session')->getFlashBag()->add('success',
+                    $translator->trans("social-networks.unlink.twitter.success"));
+        } else {
+            $this->get('session')->getFlashBag()->add('error',
+                    $translator->trans("social-networks.unlink.no-password"));
+        }
 
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));
     }

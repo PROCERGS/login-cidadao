@@ -95,7 +95,7 @@
                 </div>
 
 
-                <div class="row">
+                <div class="row social-networks">
                     <div class="col-xs-12">
                 {% if app.user.facebookUsername is null %}
                         <div class="connect facebook disabled">
@@ -124,6 +124,21 @@
                             </a>
                         </div>
                 {% endif %}
+
+                        <div class="row unlink-confirmation">
+                            <div class="alert alert-danger col-xs-12">
+                                <p class="title">{% trans %}Do you really want to unlink <strong class="social-network-name"></strong>?{%  endtrans %}</p>
+
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <a href="#" class="btn btn-danger btn-sm btn-block confirm">{% trans %}Yes{% endtrans %}</a>
+                                    </div>
+                                    <div class="col-xs-6 text-right">
+                                        <a role="button" class="btn btn-default btn-sm btn-block cancel">{% trans %}Cancel{%  endtrans %}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -145,12 +160,11 @@
     </div>
 
     <div class="form-bar text-right">
-        <input class="btn btn-success btn-sm" type="submit" value="{{ 'profile.edit.submit'|trans }}" />
+        <input class="btn btn-success" type="submit" value="{{ 'profile.edit.submit'|trans }}" />
     </div>
     {{ form_end(form) }}
 
 </div>
-
 {% endblock %}
 
 {% block javascripts %}
@@ -198,6 +212,29 @@ $(document).ready(function() {
     	validador.cep.findByCep(this, profileEdit.popLocation);
     });
     $(profileEdit.cepId).trigger('blur');
+
+    $(".connect a.unlink").on('click', function() {
+        var confirmDialog = $('.unlink-confirmation');
+        var parent = $(this).parent();
+        var href = $(this).attr('href');
+        var serviceName = '';
+        if (parent.is('.facebook')) {
+            serviceName = 'facebook';
+        } else if (parent.is('.twitter')) {
+            serviceName = 'twitter';
+        }
+        confirmDialog.slideUp('fast', function() {
+            $('a.confirm', $('.unlink-confirmation')).attr('href', href);
+            $('.social-network-name', $('.unlink-confirmation')).html(serviceName);
+            confirmDialog.insertAfter(parent).slideDown();
+        });
+
+        return false;
+    });
+
+    $('.unlink-confirmation .cancel').on('click', function() {
+        $('.unlink-confirmation').slideUp();
+    });
 });
 </script>
 {% endblock %}

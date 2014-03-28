@@ -146,3 +146,6 @@ Yes: Sim
 No: Não
 'This service uses the following data from your Login Citizen account': 'Este serviço utiliza os seguintes dados da sua conta do Login Cidadão'
 'Mark as read': 'Marcar como lido'
+social-networks.unlink.no-password: 'Você não pode desvincular uma rede social sem definir uma senha antes.'
+social-networks.unlink.facebook.success: 'Facebook desvinculado com sucesso.'
+social-networks.unlink.twitter.success: 'Twitter desvinculado com sucesso.'
