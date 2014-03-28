@@ -21,7 +21,7 @@
                 {% else %}
 					{% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
 					{{ asset_url }}
-					{% endimage %}                
+					{% endimage %}
                 {% endif %}
 
                <div class="file-upload text-center">
@@ -45,40 +45,42 @@
             <div class="input-error alert-danger">{{ messages|trans }}</div>
             {% endif %}
         </div>
+
+        <div class="form-bar text-right">
+            <input class='btn btn-success btn-sm' type="submit" value="{{ 'profile.edit.submit'|trans }}" />
+        </div>
     </div>
-    <div class="form-bar">
-        <input class='btn btn-success btn-sm pull-right' type="submit" value="{{ 'profile.edit.submit'|trans }}" />
-    </div>
+
     {{ form_end(form) }}
 
 </div>
 {% endblock %} {% block javascripts %} {{ parent() }}
-<script type="text/javascript">    
-    function CollectionHolder(id) {        
+<script type="text/javascript">
+    function CollectionHolder(id) {
         var self = this;
         var holderId = id;
         var holder = $('#'+holderId);
-        
+
         var addTagLink = $('<a href="#" class="add_link_'+holderId+'">Add</a>');
-        var newLinkLi = $('<div></div>').append(addTagLink);        
+        var newLinkLi = $('<div></div>').append(addTagLink);
         holder.data('index', holder.find(':input').length);
 
-        addTagLink.on('click', function(e) {            
-            e.preventDefault(); 
+        addTagLink.on('click', function(e) {
+            e.preventDefault();
             self.addTagForm(holder, newLinkLi);
         });
 
         holder.append(newLinkLi);
 
         this.addTagForm = function (collectionHolder, newLinkLi) {
-            var prototype = collectionHolder.data('prototype'); 
+            var prototype = collectionHolder.data('prototype');
             var index = collectionHolder.data('index');
             var newForm = prototype.replace(/__name__label__/g, $('label[for='+collectionHolder.prop('id')+']').text()).replace(/__name__/g, index);
-            collectionHolder.data('index', index + 1);            
+            collectionHolder.data('index', index + 1);
             newLinkLi.before(newForm);
         }
     }
-    
+
     $(function() {
         $.each(['{{ form.redirecturis.vars.id }}', '{{ form.allowedscopes.vars.id }}', '{{ form.allowedgranttypes.vars.id }}'],function(idx,val){new CollectionHolder(val);});
     })
