@@ -75,6 +75,7 @@ class ClientFormType extends AbstractType
         $builder->add('termsofuseurl', 'textarea', array(
             'required' => true
         ));
+        $builder->add('pictureFile');
     }
 
     public function getName()

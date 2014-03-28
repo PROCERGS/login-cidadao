@@ -6,7 +6,11 @@
     <div class="content">
         <div class="desc row">
             <div class="col-sm-12 col-md-4">
-                <img src="http://placehold.it/220x220">
+                            {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
+                                <img src="/{{ client.getPictureWebPath }}" alt="" class="center-block" style="width: 90%;">
+                            {% else %}
+                                <img src="http://placehold.it/220x220" alt="" class="center-block">
+                            {% endif %}
             </div>
 
             <div class="col-sm-12 col-md-7 col-md-offset-1">
@@ -40,7 +44,11 @@
         <p style="margin-top: 50px;">{{ 'form.secret'| trans }}</p>
         <ul class="permissions">
             <li>{{ client.secret }}</li>
-        </ul>        
+        </ul>
+        <p style="margin-top: 50px;">{{ 'form.publicid'| trans }}</p>
+        <ul class="permissions">
+            <li>{{ client.publicid }}</li>
+        </ul>    
     </div>
 
 </div>

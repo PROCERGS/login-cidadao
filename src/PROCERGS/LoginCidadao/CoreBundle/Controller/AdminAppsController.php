@@ -35,10 +35,11 @@ class AdminAppsController extends Controller
             )));
         }
         return array(
-            'form' => $form->createView(), 'messages' => $messages
+            'form' => $form->createView(),
+            'messages' => $messages
         );
     }
-    
+
     /**
      * @Route("/show/{id}", name="lc_admin_app_show")
      * @Template()
@@ -46,8 +47,10 @@ class AdminAppsController extends Controller
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->find($id);        
-        return array('client' => $client);
+        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->find($id);
+        return array(
+            'client' => $client
+        );
     }
 
     /**
@@ -57,7 +60,32 @@ class AdminAppsController extends Controller
     public function listAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $clients = $em->getRepository('PROCERGSOAuthBundle:Client')->findAll();        
-        return array('clients' => $clients);
-    }    
+        $clients = $em->getRepository('PROCERGSOAuthBundle:Client')->findAll();
+        return array(
+            'clients' => $clients
+        );
+    }
+
+    /**
+     * @Route("/edit/{id}", name="lc_admin_app_edit")
+     * @Template()
+     */
+    public function editAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->find($id);
+        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.form.type'), $client);
+        $form->handleRequest($this->getRequest());
+        $messages = '';
+        if ($form->isValid()) {
+            $clientManager = $this->container->get('fos_oauth_server.client_manager.default');
+            $clientManager->updateClient($client);
+            $messages = 'aeee';
+        }
+        return $this->render('PROCERGSLoginCidadaoCoreBundle:AdminApps:new.html.twig', array(
+            'form' => $form->createView(),
+            'client' => $client,
+            'messages' => $messages
+        ));
+    }
 }

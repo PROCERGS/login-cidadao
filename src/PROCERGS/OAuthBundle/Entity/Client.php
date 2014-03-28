@@ -6,9 +6,12 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
 use FOS\OAuthServerBundle\Entity\Client as BaseClient;
 use Doctrine\ORM\Mapping as ORM;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class Client extends BaseClient
 {
@@ -65,6 +68,17 @@ class Client extends BaseClient
      */
     protected $notifications;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $picturePath;
+    protected $tempPicturePath;
+    
+    /**
+     * @Assert\File(maxSize="6000000")
+     */
+    protected $pictureFile;    
+    
     public function __construct()
     {
         parent::__construct();
@@ -159,5 +173,90 @@ class Client extends BaseClient
 
         return $this;
     }
+    
+    public function getAbsolutePicturePath()
+    {
+        return null === $this->picturePath ? null : $this->getPictureUploadRootDir() . DIRECTORY_SEPARATOR . $this->picturePath;
+    }
+    
+    public function getPictureWebPath()
+    {
+        return null === $this->picturePath ? null : $this->getPictureUploadDir() . '/' . $this->picturePath;
+    }
+    
+    protected function getPictureUploadRootDir()
+    {
+        return __DIR__ . '/../../../../web/' . $this->getPictureUploadDir();
+    }
+    
+    protected function getPictureUploadDir()
+    {
+        return 'uploads/client-pictures';
+    }
+    
+    public function setPictureFile(UploadedFile $pictureFile = null)
+    {
+        $this->pictureFile = $pictureFile;
+        if (isset($this->picturePath)) {
+            $this->tempPicturePath = $this->picturePath;
+            $this->picturePath = null;
+        } else {
+            $this->picturePath = null;
+        }
+    }
+    
+    /**
+     *
+     * @return UploadedFile
+     */
+    public function getPictureFile()
+    {
+        return $this->pictureFile;
+    }
+    
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function uploadPicture()
+    {
+        if (null === $this->getPictureFile()) {
+            return;
+        }
+    
+        $this->getPictureFile()->move(
+            $this->getPictureUploadRootDir(), $this->picturePath
+        );
+    
+        if (isset($this->tempPicturePath) && $this->tempPicturePath != $this->picturePath) {
+            @unlink($this->getPictureUploadRootDir() . DIRECTORY_SEPARATOR . $this->tempPicturePath);
+            $this->tempPicturePath = null;
+        }
+    
+        $this->pictureFile = null;
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload()
+    {
+        if (null !== $this->getPictureFile()) {
+            $filename = sha1($this->getId());
+            $this->picturePath = "$filename." . $this->getPictureFile()->guessExtension();
+        }
+    }
+    
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removePicturePostRemoval()
+    {
+        if ($file = $this->getAbsolutePicturePath()) {
+            unlink($file);
+        }
+    }
+    
 
 }

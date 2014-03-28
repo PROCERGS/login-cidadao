@@ -41,7 +41,11 @@
 
                     <li>
                         <a href="{{ path('lc_app_details', {'clientId': client.id}) }}">
-                            <img src="http://placehold.it/65x65" alt="" class="center-block">
+                            {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
+                                <img src="/{{ client.getPictureWebPath }}" alt="" class="center-block" style="width: 90%;">
+                            {% else %}
+                                <img src="http://placehold.it/65x65" alt="" class="center-block">
+                            {% endif %}                            
                             <span class="name center-block text-center">{{ client.name }}</span>
                             <span class="status">{% trans %}Deactivated{%  endtrans %}</span>
                         </a>

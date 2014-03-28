@@ -16,12 +16,20 @@
                 <div class="form-group">{{ form_label(form.termsofuseurl, 'form.termsofuseurl' | trans) }} {{ form_errors(form.termsofuseurl) }} {{ form_widget(form.termsofuseurl, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}</div>
             </div>
             <div class="col-md-5">
-                <img src="">
+                {% if client is defined %}
+                    <img src="/{{ client.getPictureWebPath }}">
+                {% else %}
+					{% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+					{{ asset_url }}
+					{% endimage %}                
+                {% endif %}
 
-                <div class="file-upload">
-                    <button type="button" class="btn btn-success btn-upload">Alterar foto</button>
+               <div class="file-upload text-center">
+                    <button type="button" class="btn btn-success btn-upload">{% trans %}Upload another picture{% endtrans %}</button>
                     <div class="file-name"></div>
-                    
+                    {{ form_widget(form.pictureFile) }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
