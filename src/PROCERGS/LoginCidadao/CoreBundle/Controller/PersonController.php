@@ -167,6 +167,7 @@ class PersonController extends Controller
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
             $data = $form->getData();
+            $hasChangedPassword = $data->getPassword() == '';
             $user->setUsername($data->getUsername());
 
             $userManager->updateUser($user);
@@ -176,12 +177,12 @@ class PersonController extends Controller
                     $translator->trans('Updated username successfully!'));
 
             $response = $this->redirect($this->generateUrl('lc_update_username'));
-
-            $request = $this->getRequest();
-            $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_COMPLETED,
-                    new FilterUserResponseEvent($user, $request, $response));
-
+            if ($hasChangedPassword) {
+                $request = $this->getRequest();
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_COMPLETED,
+                        new FilterUserResponseEvent($user, $request, $response));
+            }
             return $response;
         }
 

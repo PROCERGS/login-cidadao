@@ -9,10 +9,11 @@
                 <span class="icon-bar"></span>
             </button>
             {% endif %}
-
+            <a href="{{ url('lc_home') }}">
             {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/brasaoRS.png' %}
             <img src="{{ asset_url }}" alt="{% trans %}Available services{% endtrans %}" class="navbar-brand">
             {% endimage %}
+            </a>
         </div>
 
         {% if app.user == null %}
