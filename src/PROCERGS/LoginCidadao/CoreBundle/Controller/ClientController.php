@@ -7,14 +7,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 
-class ClientsController extends Controller
+class ClientController extends Controller
 {
 
     /**
-     * @Route("/app_details/{clientId}", name="lc_app_details")
+     * @Route("/client/view/{clientId}", name="lc_app_details")
      * @Template()
      */
-    public function appsDetailAction($clientId)
+    public function viewAction($clientId)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -41,40 +41,11 @@ class ClientsController extends Controller
             $scopes[$s] = in_array($s, $userScopes) ? true : false;
         }
 
-        $form = $this->createForm('procergs_revoke_authorization', array('client_id' => $clientId));
+        $form = $this->createForm('procergs_revoke_authorization',
+                array('client_id' => $clientId));
         $form = $form->createView();
 
-        return $this->render(
-                        'PROCERGSLoginCidadaoCoreBundle:Person:appsDetail.html.twig',
-                        compact('user', 'client', 'scopes', 'form')
-        );
-    }
-
-    /**
-     * @Route("/apps", name="lc_apps")
-     * @Template()
-     */
-    public function appsAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $clients = $em->getRepository('PROCERGSOAuthBundle:Client');
-
-        $user = $this->getUser();
-        $allApps = $clients->findAll();
-
-        $apps = array();
-        // Filtering off authorized apps
-        foreach ($allApps as $app) {
-            if ($user->hasAuthorization($app)) {
-                continue;
-            }
-            $apps[] = $app;
-        }
-
-        return $this->render(
-                        'PROCERGSLoginCidadaoCoreBundle:Person:apps.html.twig',
-                        compact('user', 'apps')
-        );
+        return compact('user', 'client', 'scopes', 'form');
     }
 
 }
