@@ -29,7 +29,7 @@ class Client extends BaseClient
     protected $name;
 
     /**
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="text", nullable=false)
      */
     protected $description;
 
@@ -44,7 +44,7 @@ class Client extends BaseClient
     protected $landingPageURL;
 
     /**
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="text", nullable=false)
      */
     protected $termsOfUseURL;
 
