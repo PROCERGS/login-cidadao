@@ -120,8 +120,8 @@ validador.cep.urlQuery = '/lc_consultaCep2';
 validador.cep.findByCep = function (obj, callback) {
     //console.trace();
     if (obj.value == '') {
-    	validador.check.success(obj);
-    	return;
+      validador.check.success(obj);
+      return;
     }
     var cleanup = new RegExp('[. \\-]', 'gi');
     var val = obj.value.replace(cleanup, '');
@@ -240,7 +240,7 @@ $(function() {
     $('.form-group input, .form-group select').not('.form-control').addClass('form-control');
     $('.form-group .input-error').not(':empty').parent('.form-group').addClass('has-error has-feedback');
     $('form .has-error .form-control').on('focusin', function() {
-        //$(this).parent('.form-group').removeClass('has-error has-feedback');
+        $(this).parent('.form-group').removeClass('has-error has-feedback');
     });
 
     $('.file-upload .btn-upload').on('click', function() {
