@@ -235,18 +235,18 @@ class PersonController extends Controller
             'form' => $form->createView(), 'messages' => $messages, 'isExpired' => $person->isCpfExpired()
         );
     }
-    
+
     /**
      * @Route("/cpf/unregister", name="lc_unregistration_cpf")
      * @Template()
      */
     public function unregistrationCpfAction(Request $request)
     {
-        $person = $this->getUser();    
+        $person = $this->getUser();
         $person->setCpfNfg(null);
         $this->container->get('fos_user.user_manager')->updateUser($person);
         return $this->redirect($this->generateUrl('lc_home_gateway'));
-    }    
+    }
 
     /**
      * @Route("/facebook/unlink", name="lc_unlink_facebook")
@@ -272,7 +272,7 @@ class PersonController extends Controller
     }
 
     /**
-     * @Route("/facebook/unlink", name="lc_unlink_twitter")
+     * @Route("/twitter/unlink", name="lc_unlink_twitter")
      */
     public function unlinkTwitterAction()
     {
@@ -284,7 +284,7 @@ class PersonController extends Controller
                     ->setTwitterAccessToken(null);
             $userManager = $this->get('fos_user.user_manager');
             $userManager->updateUser($person);
-            
+
             $this->get('session')->getFlashBag()->add('success',
                     $translator->trans("social-networks.unlink.twitter.success"));
         } else {
