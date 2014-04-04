@@ -190,7 +190,7 @@ class PersonController extends Controller
     }
 
     /**
-     * @Route("/registration/cpf", name="lc_registration_cpf")
+     * @Route("/cpf/register", name="lc_registration_cpf")
      * @Template()
      */
     public function registrationCpfAction(Request $request)
@@ -235,6 +235,18 @@ class PersonController extends Controller
             'form' => $form->createView(), 'messages' => $messages, 'isExpired' => $person->isCpfExpired()
         );
     }
+    
+    /**
+     * @Route("/cpf/unregister", name="lc_unregistration_cpf")
+     * @Template()
+     */
+    public function unregistrationCpfAction(Request $request)
+    {
+        $person = $this->getUser();    
+        $person->setCpfNfg(null);
+        $this->container->get('fos_user.user_manager')->updateUser($person);
+        return $this->redirect($this->generateUrl('lc_home_gateway'));
+    }    
 
     /**
      * @Route("/facebook/unlink", name="lc_unlink_facebook")

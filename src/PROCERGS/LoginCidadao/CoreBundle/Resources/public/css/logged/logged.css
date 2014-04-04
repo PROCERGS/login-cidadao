@@ -229,6 +229,12 @@
     background-repeat: no-repeat;
 }
 
+#profile-edit .nfg {
+    background-color: #EF9618;
+    background-image: url(../../images/nfg_34.png);
+    background-repeat: no-repeat;
+}
+
 #profile-edit .social-networks .alert {
     font-size: 11px;
     background-image: none;
