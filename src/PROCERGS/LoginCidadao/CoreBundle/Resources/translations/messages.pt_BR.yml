@@ -105,8 +105,9 @@ Applications: Aplicativos
 'Change username': 'Alterar nome de usuário'
 'Updated username successfully!': 'Nome de usuário alterado com sucesso!'
 'View all notifications': 'Ver todas notificações'
+email-confirmation.resent: 'As instruções para confirmação de email foram reenviadas.'
 notification.unconfirmed.email.title: 'Email não confirmado!'
-notification.unconfirmed.email.shortText: 'Caso não confirme seu email em prazo hábil, sua conta será removida. Siga as instruções enviadas por email.'
+notification.unconfirmed.email.shortText: 'Caso não confirme seu email em prazo hábil, sua conta será removida. Siga as instruções enviadas por email. <a href="%url%">Reenviar email</a>'
 notification.unconfirmed.email.text: >
     <p>Para utilizar o Login Cidadão, é necessário que você utilize um endereço de email válido.</p>
     <p>Caso você não confirme seu endereço de email acessando o link que lhe foi enviado, sua conta será excluída.</p>

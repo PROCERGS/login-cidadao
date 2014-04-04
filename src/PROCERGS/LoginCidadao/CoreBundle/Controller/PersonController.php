@@ -295,4 +295,22 @@ class PersonController extends Controller
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));
     }
 
+    /**
+     * @Route("/email/resend-confirmation", name="lc_resend_confirmation_email")
+     */
+    public function resendConfirmationEmail()
+    {
+        $mailer = $this->get('fos_user.mailer');
+        $translator = $this->get('translator');
+        $person = $this->getUser();
+
+        if (is_null($person->getEmailConfirmedAt())) {
+            $mailer->sendConfirmationEmailMessage($person);
+            $this->get('session')->getFlashBag()->add('success',
+                    $translator->trans("email-confirmation.resent"));
+        }
+
+        return $this->redirect($this->generateUrl('fos_user_profile_edit'));
+    }
+
 }

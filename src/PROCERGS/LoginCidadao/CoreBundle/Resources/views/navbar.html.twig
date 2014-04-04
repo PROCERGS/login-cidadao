@@ -99,7 +99,11 @@
 <div class="notification-extreme alert alert-danger">
     <div class="container">
         <strong>{{ notification.title | trans }}</strong>
-        {{ notification.shortText | trans }}
+        {% if notification.resolveTarget is defined %}
+            {{ notification.shortText | trans({ '%url%': notification.resolveTarget(app_router) }) | raw }}
+        {% else %}
+            {{ notification.shortText | trans }}
+        {% endif %}
     </div>
 </div>
     {% endfor %}
