@@ -10,10 +10,13 @@
             </button>
             {% endif %}
             <a href="{{ url('lc_home') }}">
-            {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/brasaoRS.png' %}
-            <img src="{{ asset_url }}" alt="{% trans %}Available services{% endtrans %}" class="navbar-brand">
-            {% endimage %}
+              {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/brasaoRS.png' %}
+              <img src="{{ asset_url }}" alt="{% trans %}Available services{% endtrans %}" class="navbar-brand">
+              {% endimage %}
             </a>
+            <button type="button" class="navbar-toggle pull-left" id="toggle-settings-nav">
+                <span>Menu</span>
+            </button>
         </div>
 
         {% if app.user == null %}

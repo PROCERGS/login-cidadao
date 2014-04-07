@@ -252,4 +252,8 @@ $(function() {
         $(this).siblings('.file-name').html(val.match(/[^\\/]+$/)[0]);
     });
 
+    $('#toggle-settings-nav').on('click', function() {
+      $('body').toggleClass('menu-open');
+    });
+
 });
