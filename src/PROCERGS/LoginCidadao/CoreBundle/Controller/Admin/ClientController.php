@@ -1,5 +1,6 @@
 <?php
-namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
+
+namespace PROCERGS\LoginCidadao\CoreBundle\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,9 +13,9 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail;
 use PROCERGS\OAuthBundle\Entity\Client;
 
 /**
- * @Route("/admin/apps")
+ * @Route("/admin/client")
  */
-class AdminAppsController extends Controller
+class ClientController extends Controller
 {
 
     /**
@@ -24,14 +25,16 @@ class AdminAppsController extends Controller
     public function newAction()
     {
         $client = new Client();
-        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.form.type'), $client);
+        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.form.type'),
+                $client);
         $form->handleRequest($this->getRequest());
         $messages = '';
         if ($form->isValid()) {
             $clientManager = $this->container->get('fos_oauth_server.client_manager.default');
             $clientManager->updateClient($client);
-            return $this->redirect($this->generateUrl('lc_admin_app_show', array(
-                'id' => $client->getId()
+            return $this->redirect($this->generateUrl('lc_admin_app_show',
+                                    array(
+                                'id' => $client->getId()
             )));
         }
         return array(
@@ -74,7 +77,8 @@ class AdminAppsController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $client = $em->getRepository('PROCERGSOAuthBundle:Client')->find($id);
-        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.form.type'), $client);
+        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.form.type'),
+                $client);
         $form->handleRequest($this->getRequest());
         $messages = '';
         if ($form->isValid()) {
@@ -82,10 +86,12 @@ class AdminAppsController extends Controller
             $clientManager->updateClient($client);
             $messages = 'aeee';
         }
-        return $this->render('PROCERGSLoginCidadaoCoreBundle:AdminApps:new.html.twig', array(
-            'form' => $form->createView(),
-            'client' => $client,
-            'messages' => $messages
+        return $this->render('PROCERGSLoginCidadaoCoreBundle:Admin\Client:new.html.twig',
+                        array(
+                    'form' => $form->createView(),
+                    'client' => $client,
+                    'messages' => $messages
         ));
     }
+
 }

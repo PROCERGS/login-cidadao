@@ -10,7 +10,7 @@
             {# <img src="http://placehold.it/95x95" title="{{ notification.client.name }}"> #}
             <div class="box clearfix">
                 <h5>{{ notification.title | trans }}</h5>
-                <p class="short">{{ notification.shortText | trans }}</p>
+                <p class="short">{{ notification.shortText | trans | striptags() | raw }}</p>
                 <div class="desc">
                     {{ notification.text | trans | striptags('<a><p>') | raw | nl2br  }}
                     {% if (notification.isRead == false) and (notification.level != 3) %}

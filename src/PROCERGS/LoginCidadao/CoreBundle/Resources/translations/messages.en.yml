@@ -117,29 +117,12 @@ notification.unconfirmed.email.text: "<p>To use this system you must use a valid
 notification.empty.password.title: 'You don''t have a password!'
 notification.empty.password.shortText: 'Click here to define your password.'
 notification.empty.password.text: ''
-app.new.title: __app.new.title
-form.name: __form.name
-form.description: __form.description
-form.siteurl: __form.siteurl
-form.allowedscopes: __form.allowedscopes
-form.allowedgranttypes: __form.allowedgranttypes
-form.landingpageurl: __form.landingpageurl
-form.termsofuseurl: __form.termsofuseurl
-profile.edit.submit: __profile.edit.submit
-grid.admin.apps.title: __grid.admin.apps.title
-grid.admin.apps.new: __grid.admin.apps.new
-form.checkbox: __form.checkbox
-form.edit: __form.edit
-grid.admin.apps.show: __grid.admin.apps.show
-grid.admin.apps.noresult: __grid.admin.apps.noresult
-form.redirecturis: __form.redirecturis
-form.secret: __form.secret
-'The application <strong>%client_name%</strong> wants to access the following information about you:': '__The application <strong>%client_name%</strong> wants to access the following information about you:'
-'This service is already active in your Citizen''s Login account': '__This service is already active in your Citizen''s Login account'
-'Deactivate this service': '__Deactivate this service'
-'This service is not active in your Citizen''s Login account': '__This service is not active in your Citizen''s Login account'
-'Activate this service': '__Activate this service'
-admin.apps.list: __admin.apps.list
+'The application <strong>%client_name%</strong> wants to access the following information about you:': 'The application <strong>%client_name%</strong> wants to access the following information about you:'
+'This service is already active in your Citizen''s Login account': 'This service is already active in your Citizen''s Login account'
+'Deactivate this service': 'Deactivate this service'
+'This service is not active in your Citizen''s Login account': 'This service is not active in your Citizen''s Login account'
+'Activate this service': 'Activate this service'
+admin.apps.list: 'Manage Apps'
 social-networks.unlink.no-password: 'You must define a password before unlinking any social network.'
 social-networks.unlink.facebook.success: 'Facebook successfully unlinked.'
 social-networks.unlink.twitter.success: 'Twitter successfully unlinked.'

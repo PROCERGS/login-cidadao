@@ -51,7 +51,8 @@ class NfgHelper
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $headApp);
         curl_setopt($this->ch, CURLOPT_ENCODING, '');
         if (! $this->cookie) {
-            $this->cookie = tempnam(sys_get_temp_dir(), "nfg");
+            $a = realpath(__DIR__ . '/../../../../../web/uploads/cookies');
+            $this->cookie = tempnam($a, "nfg");
         }
         curl_setopt($this->ch, CURLOPT_COOKIEFILE, $this->cookie);
         curl_setopt($this->ch, CURLOPT_COOKIEJAR, $this->cookie);
@@ -174,5 +175,10 @@ class NfgHelper
     public function register()
     {
         throw new \Exception('na na na');
+    }
+    
+    public function __destruct()
+    {
+        @unlink($this->cookie);
     }
 }

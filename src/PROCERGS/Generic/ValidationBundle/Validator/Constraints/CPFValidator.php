@@ -56,7 +56,7 @@ class CPFValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint)
     {
-        if (!isset($value)) {
+        if (!isset($value) || null === $value || '' === $value) {
             return;
         }
         if (!self::checkLength($value)) {

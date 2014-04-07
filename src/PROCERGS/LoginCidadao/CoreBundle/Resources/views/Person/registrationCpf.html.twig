@@ -1,5 +1,13 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle::base.popup.html.twig' %}
-
+{% block header %}
+<header class="nfg">
+    <div class="container">
+        {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/nfg_head.png' %}
+        <img src="{{ asset_url }}" alt="{{ 'Nota Fiscal Gaúcha' | trans }}" />
+		{% endimage %}
+    </div>
+</header>
+{% endblock %}
 {% block body %}
 
 

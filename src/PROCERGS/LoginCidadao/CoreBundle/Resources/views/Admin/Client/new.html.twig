@@ -1,19 +1,19 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig' %} {% block content %}
 <div id="profile-edit" class="content clearfix">
-    <h3>{{ 'app.new.title'|trans }}</h3>
+    <h3>{{ 'New Service'|trans }}</h3>
 
     {{ form_start(form, {'attr' : {'role' : 'form'}}) }} {{ form_errors(form) }}
     <div class="form-content">
         <div class="row clearfix">
             <div class="col-md-7">
-                <div class="form-group">{{ form_label(form.name, 'form.name'| trans) }} {{ form_errors(form.name) }} {{ form_widget(form.name) }}</div>
-                <div class="form-group">{{ form_label(form.description, 'form.description' | trans) }} {{ form_errors(form.description) }} {{ form_widget(form.description, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}</div>
-                <div class="form-group">{{ form_label(form.siteurl, 'form.siteurl' | trans) }} {{ form_errors(form.siteurl) }} {{ form_widget(form.siteurl) }}</div>
-                <div class="form-group">{{ form_row(form.redirecturis) }}</div>
-                <div class="form-group">{{ form_label(form.allowedscopes, 'form.allowedscopes'| trans) }} {{ form_errors(form.allowedscopes) }} {{ form_widget(form.allowedscopes) }}</div>
-                <div class="form-group">{{ form_label(form.allowedgranttypes, 'form.allowedgranttypes'| trans) }} {{ form_errors(form.allowedgranttypes) }} {{ form_widget(form.allowedgranttypes) }}</div>
-                <div class="form-group">{{ form_label(form.landingpageurl, 'form.landingpageurl'| trans) }} {{ form_errors(form.landingpageurl) }} {{ form_widget(form.landingpageurl) }}</div>
-                <div class="form-group">{{ form_label(form.termsofuseurl, 'form.termsofuseurl' | trans) }} {{ form_errors(form.termsofuseurl) }} {{ form_widget(form.termsofuseurl, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}</div>
+                <div class="form-group">{{ form_label(form.name, 'Name'| trans) }} {{ form_errors(form.name) }} {{ form_widget(form.name) }}</div>
+                <div class="form-group">{{ form_label(form.description, 'Description' | trans) }} {{ form_errors(form.description) }} {{ form_widget(form.description, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}</div>
+                <div class="form-group">{{ form_label(form.siteurl, 'URL' | trans) }} {{ form_errors(form.siteurl) }} {{ form_widget(form.siteurl) }}</div>
+                <div class="form-group">{{ form_row(form.redirecturis, { 'label': 'Redirect URIs' | trans }) }}</div>
+                <div class="form-group">{{ form_label(form.allowedscopes, 'Allowed Scopes'| trans) }} {{ form_errors(form.allowedscopes) }} {{ form_widget(form.allowedscopes) }}</div>
+                <div class="form-group">{{ form_label(form.allowedgranttypes, 'Allowed Grant Types'| trans) }} {{ form_errors(form.allowedgranttypes) }} {{ form_widget(form.allowedgranttypes) }}</div>
+                <div class="form-group">{{ form_label(form.landingpageurl, 'Landing Page'| trans) }} {{ form_errors(form.landingpageurl) }} {{ form_widget(form.landingpageurl) }}</div>
+                <div class="form-group">{{ form_label(form.termsofuseurl, 'Terms of Use' | trans) }} {{ form_errors(form.termsofuseurl) }} {{ form_widget(form.termsofuseurl, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}</div>
             </div>
             <div class="col-md-5">
                 {% if client is defined %}
@@ -47,7 +47,7 @@
         </div>
 
         <div class="form-bar text-right">
-            <input class='btn btn-success btn-sm' type="submit" value="{{ 'profile.edit.submit'|trans }}" />
+            <input class='btn btn-success' type="submit" value="{{ 'Create'|trans }}" />
         </div>
     </div>
 

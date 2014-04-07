@@ -3,13 +3,7 @@ registration.check_email: 'Um email foi enviado para o endereço %email%. Para p
 registration.confirmed: 'Parabéns, %username%. A sua conta foi ativada.'
 registration.back: 'Retornar para a página de origem.'
 registration.email.subject: 'Confirmação de email para %username%!'
-registration.email.message: >
-    Olá, %username%!
-
-    Para completar a validação da sua conta, clique no link: %confirmationUrl%
-
-    Atenciosamente,
-    A Equipe.
+registration.email.message: "Olá, %username%!\n\nPara completar a validação da sua conta, clique no link: %confirmationUrl%\n\nAtenciosamente, A Equipe.\n"
 registration.register: 'Registre-se aqui!'
 profile.edit.submit: Salvar
 profile.show.username: Usuário
@@ -60,31 +54,28 @@ grid.search.title: Resultados
 grid.search.button: Pesquisar
 cep.search.title: 'Consulta cep'
 email.changed.message.subject: 'Seu email foi alterado!'
-email.changed.message.text: >
-    Olá, %name%!
-
-    Estamos lhe enviando esse email para informar-lhe que seu endereço de email foi alterado para %email%.
-
-    Se não foi você quem fez essa mudança, por favor entre em contato com a equipe do Login Cidadão pois seu cadastro pode ter sido comprometido!
+email.changed.message.text: "Olá, %name%!\n\nEstamos lhe enviando esse email para informar-lhe que seu endereço de email foi alterado para %email%.\n\nSe não foi você quem fez essa mudança, por favor entre em contato com a equipe do Login Cidadão pois seu cadastro pode ter sido comprometido!\n"
 'Connect with Facebook': 'Conectar usando Facebook'
 'Connect with Twitter': 'Conectar usando Twitter'
 'Register with Twitter': 'Registrar usando Twitter'
 'Since twitter won''t share your email, we need you to type your email manually.': 'Infelizmente o twitter não compartilha seu endereço de email, portanto você terá que digitá-lo manualmente.'
 'This email will be used for future contact and can also be user to log in, so this must be a valid email.': 'Este email será usado para contatos futuros e também pode ser usado para acessar o sistema, por tanto certifique-se de digitar um endereço de email válido.'
 'Email:': 'Email:'
-'Continue': 'Continuar'
+Continue: Continuar
 'Don''t know your CEP?': 'Não sabe seu CEP?'
 'Search it!': 'Pesquise aqui!'
 'Your address': 'Seu endereço'
-form.message: 'Mensagem'
+form.message: Mensagem
 form.message.sucess: 'Sua mensagem foi enviado com sucesso, aguarde resposta!'
-form.submit: 'Enviar'
-security.login.submit: 'Entrar'
+form.submit: Enviar
+security.login.submit: Entrar
 'Use your social networks': 'Use sua conta de redes sociais'
-'or': 'ou'
+or: ou
 registration.email.click: 'clique aqui para confirmar seu email'
 'Log in using your Citizen''s Login': 'Acesse usando seu Login Cidadão'
 'Upload another picture': 'Enviar outra foto'
 'By clicking on open an account, you agree to our <a href="%linkTerms%">Terms</a> and that you have read our <a href="%linkPrivacy%">Privacy Data Usage</a>, including our <a href="%linkCookies%">Use of Cookies</a>': 'Ao clicar em abrir conta, você concorda com nossos <a href="%linkTerms%">Termos</a> e que você leu nossa <a href="%linkPrivacy%">Política de uso de dados</a>, incluindo nosso <a href="%linkCookies%">Uso de cookies</a>'
 'Do you really want to unlink <strong class="social-network-name"></strong>?': 'Tem certeza que deseja desvincular sua conta do <strong class="social-network-name"></strong>?'
-'Yes': Sim
+Yes: Sim
+nfg.connect: 'Conectar usando NFg'
+'Continue Registration': 'Continuar Cadastro'

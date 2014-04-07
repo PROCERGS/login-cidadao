@@ -190,7 +190,7 @@ class PersonController extends Controller
     }
 
     /**
-     * @Route("/registration/cpf", name="lc_registration_cpf")
+     * @Route("/cpf/register", name="lc_registration_cpf")
      * @Template()
      */
     public function registrationCpfAction(Request $request)
@@ -237,6 +237,18 @@ class PersonController extends Controller
     }
 
     /**
+     * @Route("/cpf/unregister", name="lc_unregistration_cpf")
+     * @Template()
+     */
+    public function unregistrationCpfAction(Request $request)
+    {
+        $person = $this->getUser();
+        $person->setCpfNfg(null);
+        $this->container->get('fos_user.user_manager')->updateUser($person);
+        return $this->redirect($this->generateUrl('lc_home_gateway'));
+    }
+
+    /**
      * @Route("/facebook/unlink", name="lc_unlink_facebook")
      */
     public function unlinkFacebookAction()
@@ -260,7 +272,7 @@ class PersonController extends Controller
     }
 
     /**
-     * @Route("/facebook/unlink", name="lc_unlink_twitter")
+     * @Route("/twitter/unlink", name="lc_unlink_twitter")
      */
     public function unlinkTwitterAction()
     {
@@ -272,12 +284,30 @@ class PersonController extends Controller
                     ->setTwitterAccessToken(null);
             $userManager = $this->get('fos_user.user_manager');
             $userManager->updateUser($person);
-            
+
             $this->get('session')->getFlashBag()->add('success',
                     $translator->trans("social-networks.unlink.twitter.success"));
         } else {
             $this->get('session')->getFlashBag()->add('error',
                     $translator->trans("social-networks.unlink.no-password"));
+        }
+
+        return $this->redirect($this->generateUrl('fos_user_profile_edit'));
+    }
+
+    /**
+     * @Route("/email/resend-confirmation", name="lc_resend_confirmation_email")
+     */
+    public function resendConfirmationEmail()
+    {
+        $mailer = $this->get('fos_user.mailer');
+        $translator = $this->get('translator');
+        $person = $this->getUser();
+
+        if (is_null($person->getEmailConfirmedAt())) {
+            $mailer->sendConfirmationEmailMessage($person);
+            $this->get('session')->getFlashBag()->add('success',
+                    $translator->trans("email-confirmation.resent"));
         }
 
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));

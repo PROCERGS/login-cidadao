@@ -109,7 +109,7 @@ class NotificationsHelper
         $icon = 'glyphicon glyphicon-envelope';
 
         return $this->getDefaultNotification($person, $title, $shortText, $text,
-                        $level, $icon);
+                        $level, $icon, new InteractiveNotification());
     }
 
     protected function getEmptyPasswordNotification(Person $person)
@@ -136,6 +136,7 @@ class NotificationsHelper
     {
         $notification = $this->getUnconfirmedEmailNotification($person);
         $notification->setRead(false);
+        $notification->setTarget('lc_resend_confirmation_email');
         $this->em->persist($notification);
         $this->em->flush();
     }
@@ -155,6 +156,11 @@ class NotificationsHelper
         $notification->setRead(true);
         $this->em->persist($notification);
         $this->em->flush();
+    }
+
+    public function isUnconfirmedEmailNotification(NotificationInterface $notification)
+    {
+        return ($notification->getTitle() === self::UNCONFIRMED_EMAIL_TITLE);
     }
 
 }
