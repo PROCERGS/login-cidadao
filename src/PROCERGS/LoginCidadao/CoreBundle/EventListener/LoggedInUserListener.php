@@ -36,7 +36,7 @@ class LoggedInUserListener
         }
 
         $_route = $event->getRequest()->attributes->get('_route');
-        if ($this->context->isGranted('IS_AUTHENTICATED_FULLY') && $_route == 'lc_home') {
+        if ($this->context->isGranted('IS_AUTHENTICATED_FULLY') && ($_route == 'lc_home' || $_route == 'fos_user_security_login')) {
             $key = '_security.main.target_path'; #where "main" is your firewall name
             //check if the referer session key has been set
             if ($this->session->has($key)) {
