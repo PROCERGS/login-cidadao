@@ -120,6 +120,7 @@
 {% endblock %}
 
 {% block javascripts %}
+{{ parent() }}
     {% javascripts
             '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.js'
             '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/*' %}
@@ -134,6 +135,6 @@
         <![endif]-->
     {% endjavascripts %}
     <script type="text/javascript">
-    validador.cep.urlQuery = '{{ path('lc_consultaCep2') }}';
+        validador.cep.urlQuery = '{{ path('lc_consultaCep2') }}';
     </script>
 {% endblock %}

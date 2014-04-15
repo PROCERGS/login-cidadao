@@ -19,6 +19,11 @@ class DefaultController extends Controller
      */
     public function facebookLoginAction()
     {
+        $shouldLogout = $this->getRequest()->get('logout');
+        if (!is_null($shouldLogout)) {
+            $this->get('session')->set('facebook.logout', true);
+        }
+
         $api = $this->container->get('fos_facebook.api');
         $scope = implode(',',
                 $this->container->getParameter('facebook_app_scope'));
@@ -103,7 +108,7 @@ class DefaultController extends Controller
         return new Response(json_encode($result), 200,
                 array('Content-Type' => 'application/json'));
     }
-    
+
     /**
      * @Route("/help", name="lc_help")
      * @Template()
@@ -112,7 +117,7 @@ class DefaultController extends Controller
     {
         return $this->render('PROCERGSLoginCidadaoCoreBundle:Info:help.html.twig');
     }
-    
+
     /**
      * @Route("/contact", name="lc_contact")
      * @Template()
@@ -133,9 +138,9 @@ class DefaultController extends Controller
                 $this->getDoctrine()->getEntityManager()->persist($email);
                 $this->getDoctrine()->getEntityManager()->flush();
                 $message = 'form.message.sucess';
-            }                 
+            }
         }
         return $this->render('PROCERGSLoginCidadaoCoreBundle:Info:contact.html.twig', array('form' => $form->createView(), 'messages' => $message));
-    }    
+    }
 
 }
