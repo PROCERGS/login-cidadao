@@ -12,7 +12,7 @@ class ExternalController extends Controller
 {
 
     /**
-     * @Route("/external/navbar", name="lc_navbar_external")
+     * @Route("/external/navbar.js", name="lc_navbar_external")
      * @Template()
      */
     public function navbarAction()
@@ -21,8 +21,9 @@ class ExternalController extends Controller
         $domain = preg_replace('/https?:\/\/([^\/]+)\/.*/i', '\1', $referer);
         $navbar = $this->renderView('PROCERGSLoginCidadaoCoreBundle:External:navbar.html.twig', compact('domain'));
         $html = json_encode(array('navbar' => $navbar));
-        $callbackName = $this->getRequest()->get('callback');
-        return $this->render('PROCERGSLoginCidadaoCoreBundle:External:navbar.js.twig', compact('html'));
+        $response = $this->render('PROCERGSLoginCidadaoCoreBundle:External:navbar.js.twig', compact('html'));
+        $response->headers->set('Content-Type', 'application/javascript');
+        return $response;
     }
 
 }
