@@ -1,0 +1,53 @@
+var citizenLogin = {
+    navbar: {
+        html: {{ html | raw }}
+    }
+};
+var div = '';
+
+citizenLogin.navbar.init = function(removeMargins) {
+    citizenLogin.body = document.getElementsByTagName('body')[0];
+    citizenLogin.head = document.getElementsByTagName('head')[0];
+
+    if (removeMargins !== false) {
+        citizenLogin.body.style.paddingTop = 0;
+        citizenLogin.body.style.paddingLeft = 0;
+        citizenLogin.body.style.paddingRight = 0;
+
+        citizenLogin.body.style.marginTop = 0;
+        citizenLogin.body.style.marginLeft = 0;
+        citizenLogin.body.style.marginRight = 0;
+    }
+
+    var css = null;
+    {% stylesheets 'bundles/procergslogincidadaocore/css/bootstrap.css'
+                    'bundles/procergslogincidadaocore/css/navbar.css' filter='cssrewrite' %}
+    css = document.createElement('link');
+    css.setAttribute('rel', 'stylesheet');
+    css.setAttribute('href', '//{{ app.request.host ~ asset_url }}');
+    citizenLogin.head.appendChild(css);
+    {% endstylesheets %}
+
+    var js = null;
+    {% javascripts
+            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.js' %}
+    if (typeof jQuery == 'undefined') {
+        console.log("Loading jQuery");
+        js = document.createElement('script');
+        js.setAttribute('type', 'text/javascript');
+        js.setAttribute('src', '//{{ app.request.host ~ asset_url }}');
+        citizenLogin.body.appendChild(js);
+    }
+    {% endjavascripts %}
+    {% javascripts
+            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/bootstrap.js' %}
+    js = document.createElement('script');
+    js.setAttribute('type', 'text/javascript');
+    js.setAttribute('src', '//{{ app.request.host ~ asset_url }}');
+    citizenLogin.body.appendChild(js);
+    {% endjavascripts %}
+
+    div = document.createElement('div');
+    div.innerHTML = citizenLogin.navbar.html.navbar;
+    citizenLogin.body.insertBefore(div.firstChild, citizenLogin.body.firstChild);
+};

@@ -11,7 +11,7 @@
             {% endif %}
             <a href="{{ url('lc_home') }}">
               {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/brasaoRS.png' %}
-              <img src="{{ asset_url }}" alt="{% trans %}Available services{% endtrans %}" class="navbar-brand">
+              <img src="//{{ app.request.host ~ asset_url }}" alt="{% trans %}Available services{% endtrans %}" class="navbar-brand">
               {% endimage %}
             </a>
             <button type="button" class="navbar-toggle pull-left" id="toggle-settings-nav">
@@ -37,7 +37,11 @@
                     {% for auth in app.user.getAuthorizations %}
                         <li>
                             <a href="">
+                            {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
+                                <img src="//{{ app.request.host ~ '/' ~ auth.client.getPictureWebPath }}" alt="">
+                            {% else %}
                                 <img src="http://placehold.it/50x50" alt="">
+                            {% endif %}
                                 <span>{{ auth.client.name }}</span>
                             </a>
                         </li>
