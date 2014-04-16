@@ -6,6 +6,8 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitterResourceOwner as Base;
 
 /**
  * TwitterResourceOwner
+ *
+ * This extends HIW's TwitterResourceOwner to use the force_login parameter.
  */
 class TwitterResourceOwner extends Base
 {
