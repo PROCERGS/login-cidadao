@@ -19,6 +19,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Helper\NfgHelper;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\DneHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\FormError;
 
 class TwitterController extends Controller
 {
@@ -44,6 +45,17 @@ class TwitterController extends Controller
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
             $data = $form->getData();
+
+            $person = $this->getDoctrine()
+                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')
+                ->findByEmail($data['email']);
+
+            if($person){
+                $formError = new FormError($this->get('translator')->trans('The email is already used'));
+                $form->get('email')->addError($formError);
+
+                return array('form' => $form->createView());
+            }
 
             $session = $this->getRequest()->getSession();
             $session->set('twitter.email', $data['email']);
