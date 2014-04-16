@@ -15,6 +15,7 @@ use FOS\UserBundle\Form\Factory\FactoryInterface;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
+use PROCERGS\LoginCidadao\CoreBundle\Security\Exception\AlreadyLinkedAccount;
 
 class FacebookProvider implements UserProviderInterface
 {
@@ -124,6 +125,12 @@ class FacebookProvider implements UserProviderInterface
 
         $newUser = false;
         $user = $this->findUserByFbId($username);
+
+        if(($user && $currentUserObj)){
+            if($user->getFacebookId() != $currentUserObj->getFacebookId()){
+                throw new AlreadyLinkedAccount();
+            }
+        }
 
         try {
             $fbdata = $this->facebook->api('/me');
