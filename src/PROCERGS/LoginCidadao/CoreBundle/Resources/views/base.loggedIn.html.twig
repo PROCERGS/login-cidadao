@@ -94,46 +94,16 @@
 {% endblock body %}
 
 {% block stylesheets %}
-    {% stylesheets 'bundles/procergslogincidadaocore/css/*.css' filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+{{ parent() }}
 
     {% stylesheets 'bundles/procergslogincidadaocore/css/logged/*.css' filter='cssrewrite' %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 
-    {% stylesheets 'bundles/procergslogincidadaocore/css/ie/ie7.css' filter='cssrewrite' %}
-        <!--[if IE 7]>
-          <link rel="stylesheet" href="{{ asset_url }}" />
-        <![endif]-->
-    {% endstylesheets %}
-    {% stylesheets 'bundles/procergslogincidadaocore/css/ie/ie8.css' filter='cssrewrite' %}
-        <!--[if IE 8]>
-          <link rel="stylesheet" href="{{ asset_url }}" />
-        <![endif]-->
-    {% endstylesheets %}
-    {% stylesheets 'bundles/procergslogincidadaocore/css/ie/ie9.css' filter='cssrewrite' %}
-        <!--[if IE 9]>
-          <link rel="stylesheet" href="{{ asset_url }}" />
-        <![endif]-->
-    {% endstylesheets %}
 {% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
-    {% javascripts
-            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.js'
-            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/*' %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-
-    {% javascripts
-            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/ie/ie.js'
-    %}
-        <!--[if lt IE 9]>
-          <script type="text/javascript" src="{{ asset_url }}"></script>
-        <![endif]-->
-    {% endjavascripts %}
     <script type="text/javascript">
         validador.cep.urlQuery = '{{ path('lc_consultaCep2') }}';
     </script>

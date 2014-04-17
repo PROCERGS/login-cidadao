@@ -103,62 +103,6 @@
     right: 5px;
 }
 
-@media (max-width: 768px) {
-
-  #toggle-settings-nav {
-    color: #FFF;
-    font-size: 22px;
-    margin: 0;
-  }
-
-  .menu-open {
-    position: relative;
-  }
-
-  .menu-open .settings-nav {
-    display: block;
-
-    -moz-transform: translateX(0px);
-    -webkit-transform: translateX(0px);
-    -o-transform: translateX(0px);
-    -ms-transform: translateX(0px);
-    transform: translateX(0px);
-  }
-
-  .settings-nav {
-    padding: 0;
-    position: absolute;
-    z-index: 100;
-
-    -webkit-transition: 0.5s ease-in-out;
-    -moz-transition: 0.5s ease-in-out;
-    -o-transition: 0.5s ease-in-out;
-    transition: 0.5s ease-in-out;
-
-    -moz-transform: translateX(-200px);
-    -webkit-transform: translateX(-200px);
-    -o-transform: translateX(-200px);
-    -ms-transform: translateX(-200px);
-    transform: translateX(-200px);
-  }
-
-  .settings-content {
-    -webkit-transition: 0.5s ease-in-out;
-    -moz-transition: 0.5s ease-in-out;
-    -o-transition: 0.5s ease-in-out;
-    transition: 0.5s ease-in-out;
-  }
-
-  .menu-open .settings-content {
-    -moz-transform: translateX(200px);
-    -webkit-transform: translateX(200px);
-    -o-transform: translateX(200px);
-    -ms-transform: translateX(200px);
-    transform: translateX(200px);
-  }
-
-}
-
 .progress-box {
     background-color: #dddedc;
     margin-top: 15px;
@@ -202,6 +146,70 @@
 .settings-content .form-bar {
     background-color: #d9d9d9;
     padding: 10px;
+}
+
+@media (max-width: 767px) {
+
+  #toggle-settings-nav {
+    color: #FFF;
+    font-size: 22px;
+    margin: 0;
+  }
+
+  .settings-nav {
+    padding: 0;
+    position: absolute;
+    z-index: 100;
+
+    -webkit-transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
+    transition: 0.5s ease-in-out;
+
+    -moz-transform: translateX(-200px);
+    -webkit-transform: translateX(-200px);
+    -o-transform: translateX(-200px);
+    -ms-transform: translateX(-200px);
+    transform: translateX(-200px);
+  }
+
+  .menu-open {
+    position: relative;
+  }
+
+  .menu-open .settings-nav {
+    display: block;
+
+    -moz-transform: translateX(0px);
+    -webkit-transform: translateX(0px);
+    -o-transform: translateX(0px);
+    -ms-transform: translateX(0px);
+    transform: translateX(0px);
+  }
+
+  .settings-content {
+    -webkit-transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
+    transition: 0.5s ease-in-out;
+  }
+
+  .menu-open .settings-content {
+    -moz-transform: translateX(200px);
+    -webkit-transform: translateX(200px);
+    -o-transform: translateX(200px);
+    -ms-transform: translateX(200px);
+    transform: translateX(200px);
+  }
+
+  .settings-content h3 {
+      margin: 15px 20px 10px;
+  }
+
+  .settings-content .form-content {
+      padding: 20px 20px;
+  }
+
 }
 
 

@@ -73,3 +73,10 @@ header h3 {
         margin-bottom: 0 !important;
     }
 }
+
+@media (min-width: 768px) {
+  #login-box {
+    margin-top: 20px;
+  }
+}
+
