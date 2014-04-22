@@ -26,7 +26,6 @@
   font-style: normal;
   font-weight: normal;
   line-height: 1;
-
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -75,13 +74,12 @@
 }
 
 #lc-navbar a {
-  color: #333;
   outline: none;
   text-decoration: none;
 }
 
 #lc-navbar-ul {
-  margin: 0;
+  margin: 0 -15px;
   padding: 0;
 }
 
@@ -93,6 +91,7 @@
 #lc-navbar-ul > li {
   float: left;
   height: 50px;
+  margin-right: 5px;
 }
 
 #lc-navbar .btn-default,
@@ -156,7 +155,7 @@
 }
 
 #lc-navbar .profile {
-  float: right;
+  margin-right: 0;
 }
 
 #lc-navbar .profile .dropdown-menu {
@@ -274,14 +273,13 @@
   font-size: 9px;
   position: absolute;
   display: inline;
-  padding: 3px;
   font-weight: 700;
   line-height: normal;
   color: #FFF;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
-  border-radius: .25em;
+  border-radius: 50%;
   top: 0;
   right: -15px;
 }
