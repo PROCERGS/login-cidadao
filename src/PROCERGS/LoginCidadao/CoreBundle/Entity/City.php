@@ -17,7 +17,6 @@ class City
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -39,6 +38,11 @@ class City
         return $this->id;
     }
 
+    public function setId($var)
+    {
+        $this->id = $var;
+        return $this;
+    }    
     /**
      * Set name
      *

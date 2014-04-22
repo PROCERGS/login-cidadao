@@ -117,8 +117,10 @@ services:
         tags:
             - { name: kernel.event_subscriber }
         calls:
-            - [setCpfEmptyTime, ["%registration.cpf.empty_time%"]]
-
+            - [setCpfEmptyTime, ["%registration.cpf.empty_time%"]]        
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+            - [setDneHelper, ["@procergs_logincidadao.dne"]]
+            
     procergs_logincidadao.change.password.form.type:
         class: %procergs_logincidadao.change.password.form.type.class%
         arguments: [%fos_user.model.user.class%, "@security.context"]
@@ -140,7 +142,7 @@ services:
     procergs_logincidadao.dne:
         class: %procergs_logincidadao.dne.class%
         calls:
-            - [setContainer, ["@service_container"]]
+            - [setProxy, ["%http_proxy%"]]
 
     procergs_logincidadao.mailer:
         class: %procergs_logincidadao.mailer.class%

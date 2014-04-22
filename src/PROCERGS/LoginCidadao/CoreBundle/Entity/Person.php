@@ -216,6 +216,22 @@ class Person extends BaseUser
      * @ORM\OneToMany(targetEntity="Notification", mappedBy="person")
      */
     protected $notifications;
+    /**
+     * @ORM\Column(name="adress", type="string", length=255, nullable=true)
+     * @var string
+     */
+    protected $adress;
+    /**
+     * @ORM\Column(name="adress_number",type="integer", nullable=true)
+     * @var string
+     */
+    protected $adressNumber;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Uf")
+     * @ORM\JoinColumn(name="uf_id", referencedColumnName="id")
+     */
+    protected $uf;
 
     public function __construct()
     {
@@ -745,5 +761,39 @@ class Person extends BaseUser
         $password = $this->getPassword();
         return strlen($password) > 0;
     }
+    
+    public function setAdress($var)
+    {
+        $this->adress = $var;
+        return $this;
+    }
+    
+    public function getAdress()
+    {
+        return $this->adress;
+    }
+
+    public function setAdressNumber($var)
+    {
+        $this->adressNumber = $var;
+        return $this;
+    }
+    
+    public function getAdressNumber()
+    {
+        return $this->adressNumber;
+    }
+    
+    public function setUf($var)
+    {
+        $this->uf = $var;
+        return $this;
+    }
+    
+    public function getUf()
+    {
+        return $this->uf;
+    }    
+    
 
 }

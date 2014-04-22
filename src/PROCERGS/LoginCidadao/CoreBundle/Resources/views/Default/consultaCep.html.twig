@@ -52,7 +52,7 @@
                 <input type="hidden" class="littlesecret" value="{{ cep|json_encode }}"/>
                 <div class="col-md-3">
                     <dt>{{ 'form.adress'|trans }}</dt>
-                    <dd data-cep-type="adress">{{ cep.tipoLogradouro | title }} {{ cep.logradouro | title }} {% if cep.idParidade is not null %} {{ cep.idParidade == "P" ? '(lado par)' : '(lado ímpar)' }} {% endif %}</dd>
+                    <dd data-cep-type="adress">{{ cep.tipoLogradouro | title }} {{ cep.tituloLogradouro | title }} {{ cep.logradouro | title }} {% if cep.idParidade is not null %} {{ cep.idParidade == "P" ? '(lado par)' : '(lado ímpar)' }} {% endif %}</dd>
                 </div>
                 <div class="col-md-3">
                     <dt>{{ 'form.district'|trans }}</dt>

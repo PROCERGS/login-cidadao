@@ -12,11 +12,11 @@ class DneHelper
 
     protected $cookie;
 
-    protected $container;
+    protected $proxy;
 
-    public function setContainer($var)
+    public function setProxy($var)
     {
-        $this->container = $var;
+        $this->proxy = $var;
     }
 
     private function _common($header = array())
@@ -26,7 +26,7 @@ class DneHelper
         curl_setopt($this->ch, CURLOPT_HEADER, 0);
         curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
-        $proxy = $this->container->getParameter('http_proxy');
+        $proxy = $this->proxy;
         if (isset($proxy['type'], $proxy['host'], $proxy['port'])) {
             curl_setopt($this->ch, CURLOPT_PROXYTYPE, $proxy['type']);
             curl_setopt($this->ch, CURLOPT_PROXY, $proxy['host']);

@@ -48,7 +48,11 @@
                 </div>
                 <div class="form-group">
                     <label for="user_address">{{ 'Your address'|trans }}</label>
-                    <span id="user_address"></span>
+                    <span id="user_address">
+                    {% if app.user.adress is not null %}
+                        {{ app.user.adress|title }},{{ app.user.city.name|title }},{{ app.user.uf.acronym }}
+                    {% endif %}
+                    </span>
                 </div>
                 <div class="form-group">
                     {{ form_label(form.cpf) }}
@@ -192,7 +196,11 @@ profileEdit.cpfId = '#{{ form.cpf.vars.id }}';
 profileEdit.popLocation = function (dneData) {
     $(profileEdit.cepId).val(dneData.cep);
     $(profileEdit.cepId).mask('00000-000');
-    var street = dneData.tipoLogradouro.capitalize(true, true) + ' ' + dneData.logradouro.capitalize(true, true);
+    var street = dneData.tipoLogradouro.capitalize(true, true);
+    if (dneData.tipoLogradouro != dneData.tituloLogradouro) {
+        street += ' ' + dneData.tituloLogradouro.capitalize(true, true);
+    }
+    street += ' ' + dneData.logradouro.capitalize(true, true);
     var city = dneData.localidade.capitalize(true, true);
     var state = dneData.uf;
 
@@ -226,7 +234,7 @@ $(document).ready(function() {
     $(profileEdit.cepId).blur(function(event) {
     	validador.cep.findByCep(this, profileEdit.popLocation);
     });
-    $(profileEdit.cepId).trigger('blur');
+    //$(profileEdit.cepId).trigger('blur');
 
     $(".connect a.unlink").on('click', function() {
         var confirmDialog = $('.unlink-confirmation');

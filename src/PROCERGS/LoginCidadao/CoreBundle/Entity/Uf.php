@@ -16,8 +16,7 @@ class Uf
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Id     
      */
     private $id;
 
@@ -45,6 +44,13 @@ class Uf
         return $this->id;
     }
 
+    public function setId($var)
+    {
+        $this->id = $var;
+    
+        return $this;
+    }
+    
     /**
      * Set name
      *
