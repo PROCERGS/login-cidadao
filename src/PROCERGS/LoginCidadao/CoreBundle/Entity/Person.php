@@ -664,24 +664,49 @@ class Person extends BaseUser
 
         $context = null;
         if ($currentPicture !== $pictureAddress) {
-            if (!empty($proxySettings)) {
-                $auth = base64_encode($proxySettings['auth']);
-                $opts = array('http' => array(
+            if (ini_get('allow_url_fopen')) {
+                if (!empty($proxySettings)) {
+                    $auth = base64_encode($proxySettings['auth']);
+                    $opts = array('http' => array(
                         'proxy' => "tcp://{$proxySettings['host']}:{$proxySettings['port']}",
                         'request_fulluri' => true,
                         'header' => array(
                             "Proxy-Authorization: Basic $auth"
                         )
-                ));
-                $context = stream_context_create($opts);
+                    ));
+                    $context = stream_context_create($opts);
+                }
+                $picture = file_get_contents($pictureAddress, false, $context);
+            } elseif (function_exists('curl_init')) {                
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_HEADER, 0);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                if (ini_get('open_basedir')) {
+                    //@TODO some gambi
+                } else {
+                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                }
+                curl_setopt($ch, CURLOPT_URL, $url);
+                if (isset($proxySettings['host'], $proxySettings['port'])) {
+                    curl_setopt($ch, CURLOPT_PROXYTYPE, $proxySettings['type']);
+                    curl_setopt($ch, CURLOPT_PROXY, $proxySettings['host']);
+                    curl_setopt($ch, CURLOPT_PROXYPORT, $proxySettings['port']);
+                    if (isset($proxySettings['auth'])) {
+                        curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxySettings['auth']);
+                    }
+                }
+                $picture = curl_exec($ch);
+                curl_close($ch);
+                $ch = null;
+            } else {
+                throw new \Exception('No way to open sockets');
             }
             $this->setTwitterPicture($pictureAddress);
-
-            $picture = file_get_contents($pictureAddress, false, $context);
             $ext = explode('.', $pictureAddress);
             $filename = sha1($this->getId()) . '.' . array_pop($ext);
             $this->picturePath = $filename;
-            file_put_contents($this->getAbsolutePicturePath(), $picture);
+            file_put_contents($this->getAbsolutePicturePath(), $picture);            
         }
     }
 
