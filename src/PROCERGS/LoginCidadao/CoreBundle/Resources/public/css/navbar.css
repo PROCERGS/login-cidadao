@@ -11,11 +11,28 @@
   src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v7/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
 }
 
-@font-face {
-  font-family: 'Glyphicons Halflings';
+#lc-navbar, #lc-navbar .btn {
+    border-radius: 0;
+}
 
-  src: url('http://lc.des.dona.to/bundles/procergslogincidadaocore/fonts/glyphicons-halflings-regular.eot');
-  src: url('http://lc.des.dona.to/bundles/procergslogincidadaocore/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('http://lc.des.dona.to/bundles/procergslogincidadaocore/fonts/glyphicons-halflings-regular.woff') format('woff'), url('http://lc.des.dona.to/bundles/procergslogincidadaocore/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('http://lc.des.dona.to/bundles/procergslogincidadaocore/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+#lc-navbar *, .notification-extreme * {
+    font-family: 'Open Sans', arial;
+    font-weight: 300;
+}
+
+#lc-navbar .btn-default, #lc-navbar .btn-success {
+    background-color: #039935;
+    border: solid 1px #039935;
+    color: #FFF;
+}
+
+#lc-navbar b, #lc-navbar strong,
+.notification-extreme b, .notification-extreme strong {
+    font-weight: 700;
+}
+
+#lc-navbar .container, .notification-extreme .container {
+    max-width: 960px;
 }
 
 #lc-navbar .glyphicon {
