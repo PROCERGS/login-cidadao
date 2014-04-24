@@ -39,6 +39,11 @@ class NfgHelper
         curl_setopt($this->ch, CURLOPT_HEADER, 1);
         curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
+        if (ini_get('open_basedir')) {
+            
+        } else {
+            curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
+        }
         $headApp = array(
             'Content-Type: application/x-www-form-urlencoded',
             'User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0',
