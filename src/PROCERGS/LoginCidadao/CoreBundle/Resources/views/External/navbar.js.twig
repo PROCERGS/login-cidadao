@@ -28,7 +28,7 @@ citizenLogin.navbar.init = function(removeMargins) {
 
     var cssFiles = [];
     cssFiles.push('//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css');
-    {% stylesheets 'bundles/procergslogincidadaocore/css/navbar.css' filter='cssrewrite' %}
+    {% stylesheets 'bundles/procergslogincidadaocore/css/navbar.css' filter='cssrewrite' filter='?uglifycss' %}
     cssFiles.push('//{{ app.request.host ~ asset_url }}');
     {% endstylesheets %}
     var css = null;

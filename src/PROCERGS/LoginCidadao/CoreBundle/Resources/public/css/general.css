@@ -22,20 +22,15 @@
 
 html, body {
     height: 100%;
+    background-color: transparent;
 }
 
-body {
-    background-image: url(../images/bg_inner.jpg);
+html {
+    background: url(../images/bg_inner.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     background-size: cover;
-    background-position: center top;
-    /*background: #e5e5e5;
-    background: -moz-linear-gradient(top, #ffffff 0%, #e5e5e5 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e5e5e5));
-    background: -webkit-linear-gradient(top, #ffffff 0%,#e5e5e5 100%);
-    background: -o-linear-gradient(top, #ffffff 0%,#e5e5e5 100%);
-    background: -ms-linear-gradient(top, #ffffff 0%,#e5e5e5 100%);
-    background: linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%);
-    background-attachment: fixed;*/
 }
 
 a {

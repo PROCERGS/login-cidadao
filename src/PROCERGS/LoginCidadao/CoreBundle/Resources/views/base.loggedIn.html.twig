@@ -96,7 +96,7 @@
 {% block stylesheets %}
 {{ parent() }}
 
-    {% stylesheets 'bundles/procergslogincidadaocore/css/logged/*.css' filter='cssrewrite' %}
+    {% stylesheets 'bundles/procergslogincidadaocore/css/logged/*.css' filter='cssrewrite' filter='?uglifycss' %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 
