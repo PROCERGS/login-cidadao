@@ -15,6 +15,10 @@
     border-radius: 0;
 }
 
+#lc-navbar .btn {
+    font-weight: 400;
+}
+
 #lc-navbar *, .notification-extreme * {
     font-family: 'Open Sans', arial;
     font-weight: 300;
