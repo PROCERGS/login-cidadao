@@ -623,13 +623,13 @@
             "target-dir": "EWZ/Bundle/RecaptchaBundle",
             "source": {
                 "type": "git",
-                "url": "https://github.com/lordvacilaoerrocerto/EWZRecaptchaBundle.git",
-                "reference": "9a40c9086dd3ffb915a274fab015742bd9e3fe70"
+                "url": "https://github.com/PROCERGS/EWZRecaptchaBundle.git",
+                "reference": "2d7754dadb18fc2ca87996d13bf91715a1b17cc2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lordvacilaoerrocerto/EWZRecaptchaBundle/zipball/9a40c9086dd3ffb915a274fab015742bd9e3fe70",
-                "reference": "9a40c9086dd3ffb915a274fab015742bd9e3fe70",
+                "url": "https://api.github.com/repos/PROCERGS/EWZRecaptchaBundle/zipball/2d7754dadb18fc2ca87996d13bf91715a1b17cc2",
+                "reference": "2d7754dadb18fc2ca87996d13bf91715a1b17cc2",
                 "shasum": ""
             },
             "require": {
@@ -657,9 +657,9 @@
                 "recaptcha"
             ],
             "support": {
-                "source": "https://github.com/lordvacilaoerrocerto/EWZRecaptchaBundle/tree/test-proxy"
+                "source": "https://github.com/PROCERGS/EWZRecaptchaBundle/tree/test-proxy"
             },
-            "time": "2014-02-26 14:42:17"
+            "time": "2014-04-24 12:49:40"
         },
         {
             "name": "facebook/php-sdk",
