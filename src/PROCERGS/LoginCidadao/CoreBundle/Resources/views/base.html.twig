@@ -53,20 +53,20 @@
 {% block stylesheets %}
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css" />
-    {% stylesheets 'bundles/procergslogincidadaocore/css/*.css' filter='cssrewrite' %}
+    {% stylesheets 'bundles/procergslogincidadaocore/css/*.css' filter='cssrewrite' filter='?uglifycss' %}
 <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
-    {% stylesheets 'bundles/procergslogincidadaocore/css/ie/ie7.css' filter='cssrewrite' %}
+    {% stylesheets 'bundles/procergslogincidadaocore/css/ie/ie7.css' filter='cssrewrite' filter='?uglifycss' %}
         <!--[if IE 7]>
           <link rel="stylesheet" href="{{ asset_url }}" />
         <![endif]-->
     {% endstylesheets %}
-    {% stylesheets 'bundles/procergslogincidadaocore/css/ie/ie8.css' filter='cssrewrite' %}
+    {% stylesheets 'bundles/procergslogincidadaocore/css/ie/ie8.css' filter='cssrewrite' filter='?uglifycss' %}
         <!--[if IE 8]>
           <link rel="stylesheet" href="{{ asset_url }}" />
         <![endif]-->
     {% endstylesheets %}
-    {% stylesheets 'bundles/procergslogincidadaocore/css/ie/ie9.css' filter='cssrewrite' %}
+    {% stylesheets 'bundles/procergslogincidadaocore/css/ie/ie9.css' filter='cssrewrite' filter='?uglifycss' %}
         <!--[if IE 9]>
           <link rel="stylesheet" href="{{ asset_url }}" />
         <![endif]-->
@@ -83,12 +83,12 @@
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     {% javascripts
             '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.placeholder.js'
-            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/*' filter='uglifyjs2' %}
+            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/*' filter='?uglifyjs2' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
     {% javascripts
-            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/ie/ie.js' filter='uglifyjs2'
+            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/ie/ie.js' filter='?uglifyjs2'
     %}
         <!--[if lt IE 9]>
           <script type="text/javascript" src="{{ asset_url }}"></script>

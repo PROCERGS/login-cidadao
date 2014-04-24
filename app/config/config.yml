@@ -44,6 +44,8 @@ assetic:
         cssrewrite: ~
         uglifyjs2:
             bin: %kernel.root_dir%/Resources/node_modules/.bin/uglifyjs
+        uglifycss:
+            bin: %kernel.root_dir%/Resources/node_modules/.bin/uglifycss
         #closure:
         #    jar: %kernel.root_dir%/Resources/java/compiler.jar
         #yui_css:
