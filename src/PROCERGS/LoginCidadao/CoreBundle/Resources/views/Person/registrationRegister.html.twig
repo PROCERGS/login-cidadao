@@ -82,7 +82,7 @@
 {% block javascripts %}
 {{ parent() }}
     {% javascripts
-            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/register/register.js' %}
+            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/register/register.js' filter='uglifyjs2' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
