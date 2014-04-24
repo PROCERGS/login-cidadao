@@ -25,7 +25,11 @@ class DneHelper
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($this->ch, CURLOPT_HEADER, 0);
         curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
+        if (ini_get('open_basedir')) {
+            
+        } else {
+            curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
+        }
         $proxy = $this->proxy;
         if (isset($proxy['type'], $proxy['host'], $proxy['port'])) {
             curl_setopt($this->ch, CURLOPT_PROXYTYPE, $proxy['type']);
