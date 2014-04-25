@@ -131,7 +131,7 @@ class Person extends BaseUser
     protected $tempPicturePath;
 
     /**
-     * @Assert\File(maxSize="6000000")
+     * @Assert\Image(maxSize="2M",mimeTypes={"image/jpeg", "image/png"}, maxSizeMessage="The maxmimum allowed file size is 2MB.",mimeTypesMessage="Only the jpeg and png filetypes are allowed.")
      */
     protected $pictureFile;
 
