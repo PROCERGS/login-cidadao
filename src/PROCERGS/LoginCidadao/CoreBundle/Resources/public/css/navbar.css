@@ -99,6 +99,10 @@
   text-decoration: none;
 }
 
+#lc-navbar-ul * {
+    box-shadow: none;
+}
+
 #lc-navbar-ul {
   margin: 0 -15px;
   padding: 0;
