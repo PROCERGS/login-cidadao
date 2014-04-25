@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<servicos>	
+	<servico>
+		<id>SGG_MEU</id>
+		<nome>Login Cidadão</nome>
+		<orgao-responsavel>Secretaria-Geral do Governo - Comitê de Governança e Cultura Digital </orgao-responsavel>
+		<tipo>S</tipo>
+		<descricao>
+		   O Login Cidadão facilita o cadastro e o relacionamento do cidadão gaúcho nas ferramentas e Serviços Digitais de Governo do Estado.
+		</descricao>
+		<finalistico>S</finalistico>
+		<atualizacao>M</atualizacao>
+		<ativo>S</ativo>
+		<palavras-chave>
+			<palavra>participação</palavra>
+			<palavra>cidadania</palavra>
+			<palavra>Cidadão</palavra>
+			<palavra>identidade</palavra>
+			<palavra>relacionamento</palavra>
+			<palavra>governança</palavra>
+			<palavra>Governo</palavra>
+		</palavras-chave>	
+		<link>http://meu.rs.gov.br/</link>
+	</servico>	
+	
+</servicos>
+
