@@ -1,5 +1,4 @@
 <?php
-
 namespace PROCERGS\LoginCidadao\CoreBundle\EventListener;
 
 use FOS\UserBundle\FOSUserEvents;
@@ -15,25 +14,29 @@ use PROCERGS\LoginCidadao\CoreBundle\Helper\NotificationsHelper;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use PROCERGS\Generic\ValidationBundle\Validator\Constraints\UsernameValidator;
+use Doctrine\ORM\EntityManager;
+use PROCERGS\LoginCidadao\CoreBundle\Exception\LcEmailException;
 
 class RegisterListner implements EventSubscriberInterface
 {
 
     private $router;
+
     private $session;
+
     private $translator;
+
     private $mailer;
+
     private $tokenGenerator;
+
     private $notificationHelper;
+
     private $emailUnconfirmedTime;
 
-    public function __construct(UrlGeneratorInterface $router,
-                                SessionInterface $session,
-                                TranslatorInterface $translator,
-                                MailerInterface $mailer,
-                                TokenGeneratorInterface $tokenGenerator,
-                                NotificationsHelper $notificationHelper,
-                                $emailUnconfirmedTime)
+    protected $em;
+
+    public function __construct(UrlGeneratorInterface $router, SessionInterface $session, TranslatorInterface $translator, MailerInterface $mailer, TokenGeneratorInterface $tokenGenerator, NotificationsHelper $notificationHelper, $emailUnconfirmedTime)
     {
         $this->router = $router;
         $this->session = $session;
@@ -59,14 +62,20 @@ class RegisterListner implements EventSubscriberInterface
     public function onRegistrationSuccess(FormEvent $event)
     {
         $user = $event->getForm()->getData();
-
+        
         if (null === $user->getConfirmationToken()) {
             $user->setConfirmationToken($this->tokenGenerator->generateToken());
             $user->setEmailExpiration(new \DateTime("+$this->emailUnconfirmedTime"));
         }
+        if ($this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->findOneBy(array(
+            'emailCanonical' =>
+            $user->getEmailCanonical()
+        ))) {
+        	throw new LcEmailException('registration.email.registered');
+        }
         $email = explode('@', $user->getEmailCanonical(), 2);
         $username = $email[0];
-        if (!UsernameValidator::isUsernameValid($username)) {
+        if (! UsernameValidator::isUsernameValid($username)) {
             $url = $this->router->generate('lc_update_username');
         } else {
             $url = $this->router->generate('fos_user_profile_edit');
@@ -79,7 +88,7 @@ class RegisterListner implements EventSubscriberInterface
         $user = $event->getUser();
         $this->notificationHelper->enforceUnconfirmedEmailNotification($user);
         $this->mailer->sendConfirmationEmailMessage($user);
-
+        
         if (strlen($user->getPassword()) == 0) {
             $this->notificationHelper->enforceEmptyPasswordNotification($user);
         }
@@ -90,16 +99,17 @@ class RegisterListner implements EventSubscriberInterface
         $event->getUser()->setEmailConfirmedAt(new \DateTime());
         $event->getUser()->setEmailExpiration(null);
         $this->notificationHelper->clearUnconfirmedEmailNotification($event->getUser());
-
-        $this->session->getFlashBag()->add(
-                'success',
-                $this->translator->trans('registration.confirmed',
-                        array('%username%' => $event->getUser()->getFirstName()),
-                        'FOSUserBundle')
-        );
-
+        
+        $this->session->getFlashBag()->add('success', $this->translator->trans('registration.confirmed', array(
+            '%username%' => $event->getUser()->getFirstName()
+        ), 'FOSUserBundle'));
+        
         $url = $this->router->generate('fos_user_profile_edit');
         $event->setResponse(new RedirectResponse($url));
     }
 
+    public function setEntityManager(EntityManager $var)
+    {
+        $this->em = $var;
+    }
 }

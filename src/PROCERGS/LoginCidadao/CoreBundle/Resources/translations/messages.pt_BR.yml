@@ -161,3 +161,4 @@ Description: Descrição
 Create: Criar
 'Secret/Private Key': 'Segredo/Chave Privada'
 'Public Id': 'Identificador Público'
+registration.email.registered: 'Esse e-mail já está sendo utilizado'

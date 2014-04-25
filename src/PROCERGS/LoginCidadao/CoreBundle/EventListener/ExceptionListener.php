@@ -1,5 +1,4 @@
 <?php
-
 namespace PROCERGS\LoginCidadao\CoreBundle\EventListener;
 
 use PROCERGS\LoginCidadao\CoreBundle\Security\Exception\AlreadyLinkedAccount;
@@ -10,17 +9,18 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Translation\TranslatorInterface;
+use PROCERGS\LoginCidadao\CoreBundle\Exception\LcEmailException;
 
 class ExceptionListener
 {
 
     private $session;
+
     private $router;
+
     private $translator;
 
-    public function __construct(SessionInterface $session,
-                                RouterInterface $router,
-                                TranslatorInterface $translator)
+    public function __construct(SessionInterface $session, RouterInterface $router, TranslatorInterface $translator)
     {
         $this->session = $session;
         $this->router = $router;
@@ -31,17 +31,19 @@ class ExceptionListener
     {
         $exception = $event->getException();
         if ($exception instanceof AlreadyLinkedAccount) {
-            $this->session->getFlashBag()->add(
-                    'error', $this->translator->trans($exception->getMessage())
-            );
+            $this->session->getFlashBag()->add('error', $this->translator->trans($exception->getMessage()));
             $url = $this->router->generate('fos_user_profile_edit');
             $event->setResponse(new RedirectResponse($url));
         }
-
+        
         if ($exception instanceof MissingEmailException) {
             $url = $this->router->generate('lc_before_register_twitter');
             $event->setResponse(new RedirectResponse($url));
         }
+        if ($exception instanceof LcEmailException) {
+            $this->session->getFlashBag()->add('error', $this->translator->trans($exception->getMessage()));
+            $url = $this->router->generate('lc_home');
+            $event->setResponse(new RedirectResponse($url));
+        }
     }
-
 }

@@ -61,9 +61,10 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
     function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
         $doctrine = $this->container->get('doctrine');
+        $form = $request->get('login_form_type');
         $vars = array(
             'ip' => $request->getClientIp(),
-            'username' => $token->getUser()->getUsername()
+            'username' =>$form['username'] 
         );
         $accessSession = $doctrine->getRepository('PROCERGSLoginCidadaoCoreBundle:AccessSession')->findOneBy($vars);
         if (!$accessSession) {
