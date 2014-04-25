@@ -191,7 +191,7 @@ footer .copyright {
     color: #737373;
 }
 
-.form-control {
+.form-control, #recaptcha_response_field {
     background-color: #999999;
     border: none;
     border-radius: 0;
