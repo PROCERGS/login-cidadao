@@ -624,12 +624,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/EWZRecaptchaBundle.git",
-                "reference": "2d7754dadb18fc2ca87996d13bf91715a1b17cc2"
+                "reference": "a5eb4d6fb86a66a073db382b7d83dfdfa9648dda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/EWZRecaptchaBundle/zipball/2d7754dadb18fc2ca87996d13bf91715a1b17cc2",
-                "reference": "2d7754dadb18fc2ca87996d13bf91715a1b17cc2",
+                "url": "https://api.github.com/repos/PROCERGS/EWZRecaptchaBundle/zipball/a5eb4d6fb86a66a073db382b7d83dfdfa9648dda",
+                "reference": "a5eb4d6fb86a66a073db382b7d83dfdfa9648dda",
                 "shasum": ""
             },
             "require": {
@@ -659,7 +659,7 @@
             "support": {
                 "source": "https://github.com/PROCERGS/EWZRecaptchaBundle/tree/test-proxy"
             },
-            "time": "2014-04-24 12:49:40"
+            "time": "2014-04-28 11:56:26"
         },
         {
             "name": "facebook/php-sdk",
