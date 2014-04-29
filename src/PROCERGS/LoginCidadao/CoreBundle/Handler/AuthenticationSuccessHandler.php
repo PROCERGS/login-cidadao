@@ -62,18 +62,20 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
     {
         $doctrine = $this->container->get('doctrine');
         $form = $request->get('login_form_type');
-        $vars = array(
-            'ip' => $request->getClientIp(),
-            'username' =>$form['username'] 
-        );
-        $accessSession = $doctrine->getRepository('PROCERGSLoginCidadaoCoreBundle:AccessSession')->findOneBy($vars);
-        if (!$accessSession) {
-            $accessSession = new AccessSession();
-            $accessSession->fromArray($vars);
+        if (isset($form['username'])) {
+            $vars = array(
+                'ip' => $request->getClientIp(),
+                'username' =>$form['username']
+            );
+            $accessSession = $doctrine->getRepository('PROCERGSLoginCidadaoCoreBundle:AccessSession')->findOneBy($vars);
+            if (!$accessSession) {
+                $accessSession = new AccessSession();
+                $accessSession->fromArray($vars);
+            }
+            $accessSession->setVal(0);
+            $doctrine->getManager()->persist($accessSession);
+            $doctrine->getManager()->flush();
         }
-        $accessSession->setVal(0);
-        $doctrine->getManager()->persist($accessSession);
-        $doctrine->getManager()->flush();
 
         // CPF check
         if ($token->getUser()->isCpfExpired()) {
