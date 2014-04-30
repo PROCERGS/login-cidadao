@@ -317,3 +317,39 @@ form .has-feedback .sr-only ~ .form-control-feedback {
     color: #FFF;
     padding: 6px 12px;
 }
+
+/* Beta Ribbon */
+/* Based on Daniel's code: http://unindented.org/articles/github-ribbon-using-css-transforms/ ' */
+.beta-ribbon {
+    background-color: #a00;
+    overflow: hidden;
+    white-space: nowrap;
+    /* top left corner */
+    position: absolute;
+    left: -41px;
+    top: 10px;
+    /* 45 deg ccw rotation */
+    -webkit-transform: rotate(-45deg);
+       -moz-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+         -o-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+    /* shadow */
+    -webkit-box-shadow: 0 0 10px #888;
+       -moz-box-shadow: 0 0 10px #888;
+            box-shadow: 0 0 10px #888;
+    z-index: 99999;
+}
+.beta-ribbon p {
+    border: 1px solid #faa;
+    color: #fff;
+    display: block;
+    /*font: bold 15px 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
+    font-size: 14px;
+    font-weight: bold;
+    margin: 1px 0;
+    padding: 5px 50px;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 0 0 5px #444;
+}
