@@ -1,9 +1,5 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle::base.html.twig' %}
 
-{% block header %}
-{% include "PROCERGSLoginCidadaoCoreBundle::navbar.html.twig" %}
-{% endblock %}
-
 {% block body %}
 {% for flashMessage in app.session.flashbag.get('success') %}
     <div class="alert alert-success">
