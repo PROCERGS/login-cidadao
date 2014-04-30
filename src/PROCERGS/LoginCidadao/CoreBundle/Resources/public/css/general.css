@@ -325,7 +325,7 @@ form .has-feedback .sr-only ~ .form-control-feedback {
     overflow: hidden;
     white-space: nowrap;
     /* top left corner */
-    position: absolute;
+    position: fixed;
     left: -41px;
     top: 10px;
     /* 45 deg ccw rotation */
