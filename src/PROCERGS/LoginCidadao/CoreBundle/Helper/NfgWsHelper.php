@@ -31,13 +31,9 @@ class NfgWsHelper
 
     protected $client;
 
-    protected $cpf;
+    protected $accessToken;
 
-    protected $tituloEleitor;
-
-    protected $nome;
-
-    protected $dataNascimento;
+    protected $tituloEleitoral;
 
     protected $organizacao;
 
@@ -53,27 +49,15 @@ class NfgWsHelper
         return $this;
     }
 
-    public function setCpf($var)
+    public function setAccessToken($var)
     {
-        $this->cpf = $var;
+        $this->accessToken = $var;
         return $this;
     }
 
-    public function setTituloEleitor($var)
+    public function setTituloEleitoral($var)
     {
-        $this->tituloEleitor = $var;
-        return $this;
-    }
-
-    public function setNome($var)
-    {
-        $this->nome = $var;
-        return $this;
-    }
-
-    public function setDataNascimento($var)
-    {
-        $this->dataNascimento = $var;
+        $this->tituloEleitoral = $var;
         return $this;
     }
 
@@ -109,15 +93,19 @@ class NfgWsHelper
                     'trace' => true
                 ));
             }
-            $result = $this->client->ConsultaCadastro(array(
-                'cpf' => $this->cpf ? $this->cpf : '',
-                'tituloEleitor' => $this->tituloEleitor ? $this->tituloEleitor : '',
-                'nome' => $this->nome ? $this->nome : '',
-                'dataNascimento' => $this->dataNascimento ? $this->dataNascimento : '',
+            $parm = array();
+            if ($this->accessToken) {
+                $parm['accessToken'] = $this->accessToken;
+            }
+            if ($this->tituloEleitoral) {
+                $parm['tituloEleitoral'] = $this->tituloEleitoral;
+            }
+            $parm += array(
                 'organizacao' => $this->organizacao ? $this->organizacao : '',
                 'usuario' => $this->usuario ? $this->usuario : '',
                 'senha' => $this->senha ? $this->senha : ''
-            ));
+            );
+            $result = $this->client->ConsultaCadastro($parm);
         } catch (Exception $e) {
             $this->error = $e;
             return false;
@@ -126,13 +114,69 @@ class NfgWsHelper
         if (! @$dom->loadXML($a = $result->ConsultaCadastroResult)) {
             return false;
         }
-        foreach (array('CodNivelAcesso', 'CodSitRetorno', 'NomeConsumidor', 'MsgRetorno') as $val) {
+        foreach (array('CodSitRetorno', 'MsgRetorno', 'CodNivelAcesso') as $val) {
             $node = $dom->getElementsByTagName($val);
             if (!$node->length) {
                 return false;
             }
             $retorno[$val] = $node->item(0)->nodeValue;
         }
+        if ($retorno['CodSitRetorno'] == 1 && $retorno['CodNivelAcesso'] > 1) {
+            foreach (array('NomeConsumidor', 'DtNasc', 'EmailPrinc', 'NroFoneContato', 'CodSitTitulo', 'CodCpf') as $val) {
+                $node = $dom->getElementsByTagName($val);
+                if (!$node->length || !strlen($node->item(0)->nodeValue)) {                    
+                    continue;
+                }
+                if ($val === 'CodCpf') {
+                    $retorno[$val] = str_pad($node->item(0)->nodeValue, 11, "0", STR_PAD_LEFT) ;
+                } else {
+                    $retorno[$val] = $node->item(0)->nodeValue;
+                }
+            }
+        }
         return $retorno;
+    }
+/*
+POST /LoginCidadaoWS/service.svc HTTP/1.1
+Host: m-nfg-des.procergs.reders
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.3
+Content-Type: text/xml; charset=utf-8
+SOAPAction: "https://m-nfg.sefaz.rs.gov.br/LoginCidadaoWs/LoginCidadaoService/ObterAccessID"
+Content-Length: 371
+ 
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://m-nfg.sefaz.rs.gov.br/LoginCidadaoWs/">
+<SOAP-ENV:Body>
+<ns1:ObterAccessID>
+<ns1:organizacao>PROCERGS</ns1:organizacao><
+ns1:usuario>4085</ns1:usuario>
+<ns1:senha>A93SUDES</ns1:senha>
+</ns1:ObterAccessID>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+*/    
+    public function obterAccessID()
+    {
+        try {
+            if (! $this->client) {
+                $this->client = new \SoapClient($this->url, array(
+                    'cache_wsdl' => WSDL_CACHE_NONE,
+                    'trace' => true
+                ));
+            }
+            $result = $this->client->ObterAccessID(array(
+                'organizacao' => $this->organizacao ? $this->organizacao : '',
+                'usuario' => $this->usuario ? $this->usuario : '',
+                'senha' => $this->senha ? $this->senha : ''
+            ));
+        } catch (Exception $e) {
+            $this->error = $e;
+            return false;
+        }
+        if (strpos($result->ObterAccessIDResult, ' ')) {
+            throw new \Exception($result->ObterAccessIDResult);
+        }        
+        return $result->ObterAccessIDResult;
     }
 }

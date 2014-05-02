@@ -44,7 +44,7 @@ class ProfileFormType extends BaseType
                 ->add('mobile', null,
                         array('required' => false, 'label' => 'form.mobile', 'translation_domain' => 'FOSUserBundle'))
                 ->add('pictureFile')
-                ->add('cpfNfg', 'date', array('required' => false, 'input' => 'datetime', 'widget' => 'single_text','format' => 'dd/MM/yyyy'));
+                ;
                 
     }
 

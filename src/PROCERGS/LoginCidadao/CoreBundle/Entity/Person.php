@@ -1,5 +1,4 @@
 <?php
-
 namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
@@ -38,11 +37,11 @@ class Person extends BaseUser
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank(message="Please enter your name.", groups={"Profile"})
      * @Assert\Length(
-     *     min=3,
-     *     max="255",
-     *     minMessage="The name is too short.",
-     *     maxMessage="The name is too long.",
-     *     groups={"Registration", "Profile"}
+     * min=3,
+     * max="255",
+     * minMessage="The name is too short.",
+     * maxMessage="The name is too long.",
+     * groups={"Registration", "Profile"}
      * )
      */
     protected $firstName;
@@ -53,11 +52,11 @@ class Person extends BaseUser
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank(message="Please enter your surname.", groups={"Profile"})
      * @Assert\Length(
-     *     min=1,
-     *     max="255",
-     *     minMessage="The surname is too short.",
-     *     maxMessage="The surname is too long.",
-     *     groups={"Registration", "Profile"}
+     * min=1,
+     * max="255",
+     * minMessage="The surname is too short.",
+     * maxMessage="The surname is too long.",
+     * groups={"Registration", "Profile"}
      * )
      */
     protected $surname;
@@ -65,6 +64,7 @@ class Person extends BaseUser
     /**
      * @Expose
      * @Groups({"full_name"})
+     *
      * @var string
      */
     protected $fullName;
@@ -128,6 +128,7 @@ class Person extends BaseUser
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $picturePath;
+
     protected $tempPicturePath;
 
     /**
@@ -137,6 +138,7 @@ class Person extends BaseUser
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
      * @var string
      */
     protected $twitterPicture;
@@ -150,37 +152,32 @@ class Person extends BaseUser
     protected $city;
 
     /**
-     * @var string
      *
-     * @ORM\Column(name="facebookId", type="string", length=255, nullable=true, unique=true)
+     * @var string @ORM\Column(name="facebookId", type="string", length=255, nullable=true, unique=true)
      */
     protected $facebookId;
 
     /**
-     * @var string
      *
-     * @ORM\Column(name="facebookUsername", type="string", length=255, nullable=true)
+     * @var string @ORM\Column(name="facebookUsername", type="string", length=255, nullable=true)
      */
     protected $facebookUsername;
 
     /**
-     * @var string
      *
-     * @ORM\Column(name="twitterId", type="string", length=255, nullable=true, unique=true)
+     * @var string @ORM\Column(name="twitterId", type="string", length=255, nullable=true, unique=true)
      */
     protected $twitterId;
 
     /**
-     * @var string
      *
-     * @ORM\Column(name="twitterUsername", type="string", length=255, nullable=true)
+     * @var string @ORM\Column(name="twitterUsername", type="string", length=255, nullable=true)
      */
     protected $twitterUsername;
 
     /**
-     * @var string
      *
-     * @ORM\Column(name="twitterAccessToken", type="string", length=255, nullable=true)
+     * @var string @ORM\Column(name="twitterAccessToken", type="string", length=255, nullable=true)
      */
     protected $twitterAccessToken;
 
@@ -191,47 +188,62 @@ class Person extends BaseUser
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
+     *
      * @var \DateTime
      */
     protected $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     *
      * @var \DateTime
      */
     protected $emailConfirmedAt;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
      * @var string
      */
     protected $previousValidEmail;
 
     /**
-     * @ORM\Column(name="cpf_nfg", type="datetime", nullable=true)
-     */
-    protected $cpfNfg;
-
-    /**
      * @ORM\OneToMany(targetEntity="Notification", mappedBy="person")
      */
     protected $notifications;
+
     /**
      * @ORM\Column(name="adress", type="string", length=255, nullable=true)
+     *
      * @var string
      */
     protected $adress;
+
     /**
      * @ORM\Column(name="adress_number",type="integer", nullable=true)
+     *
      * @var string
      */
     protected $adressNumber;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Uf")
      * @ORM\JoinColumn(name="uf_id", referencedColumnName="id")
      */
     protected $uf;
+
+    /**
+     * @ORM\Column(name="nfg_access_token", type="string", length=255, nullable=true, unique=true)
+     */
+    protected $nfgAccessToken;
+
+    /**
+     * @Expose
+     * @Groups({"nfgprofile"})
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile")
+     * @ORM\JoinColumn(name="nfg_profile_id", referencedColumnName="id")
+     */
+    protected $nfgProfile;
 
     public function __construct()
     {
@@ -247,7 +259,7 @@ class Person extends BaseUser
     public function setEmail($email)
     {
         $this->email = $email;
-
+        
         return $this;
     }
 
@@ -259,7 +271,7 @@ class Person extends BaseUser
     public function setFirstName($firstName)
     {
         $this->firstName = $firstName;
-
+        
         return $this;
     }
 
@@ -271,7 +283,7 @@ class Person extends BaseUser
     public function setSurname($suname)
     {
         $this->surname = $suname;
-
+        
         return $this;
     }
 
@@ -329,8 +341,10 @@ class Person extends BaseUser
 
     /**
      * Checks if a given Client can access this Person's specified scope.
-     * @param \PROCERGS\OAuthBundle\Entity\Client $client
-     * @param mixed $scope can be a single scope or an array with several.
+     *
+     * @param \PROCERGS\OAuthBundle\Entity\Client $client            
+     * @param mixed $scope
+     *            can be a single scope or an array with several.
      * @return boolean
      */
     public function isAuthorizedClient(Client $client, $scope)
@@ -348,7 +362,8 @@ class Person extends BaseUser
     /**
      * Checks if this Person has any authorization for a given Client.
      * WARNING: Note that it does NOT validate scope!
-     * @param \PROCERGS\OAuthBundle\Entity\Client $client
+     *
+     * @param \PROCERGS\OAuthBundle\Entity\Client $client            
      */
     public function hasAuthorization(Client $client)
     {
@@ -365,7 +380,7 @@ class Person extends BaseUser
     public function setFacebookId($facebookId)
     {
         $this->facebookId = $facebookId;
-
+        
         return $this;
     }
 
@@ -377,7 +392,7 @@ class Person extends BaseUser
     public function setTwitterId($twitterId)
     {
         $this->twitterId = $twitterId;
-
+        
         return $this;
     }
 
@@ -389,7 +404,7 @@ class Person extends BaseUser
     public function setTwitterUsername($twitterUsername)
     {
         $this->twitterUsername = $twitterUsername;
-
+        
         return $this;
     }
 
@@ -401,7 +416,7 @@ class Person extends BaseUser
     public function setTwitterAccessToken($twitterAccessToken)
     {
         $this->twitterAccessToken = $twitterAccessToken;
-
+        
         return $this;
     }
 
@@ -413,17 +428,21 @@ class Person extends BaseUser
     public function serialize()
     {
         $this->fullName = $this->getFullName();
-        return serialize(array($this->facebookId, parent::serialize()));
+        return serialize(array(
+            $this->facebookId,
+            parent::serialize()
+        ));
     }
 
     public function unserialize($data)
     {
-        list($this->facebookId, $parentData) = unserialize($data);
+        list ($this->facebookId, $parentData) = unserialize($data);
         parent::unserialize($parentData);
     }
 
     /**
      * Get the full name of the user (first + last name)
+     *
      * @return string
      */
     public function getFullName()
@@ -432,7 +451,9 @@ class Person extends BaseUser
     }
 
     /**
-     * @param array
+     *
+     * @param
+     *            array
      */
     public function setFBData($fbdata)
     {
@@ -462,7 +483,7 @@ class Person extends BaseUser
     {
         $cpf = preg_replace('/[^0-9]/', '', $cpf);
         $this->cpf = $cpf;
-
+        
         return $this;
     }
 
@@ -474,7 +495,7 @@ class Person extends BaseUser
     public function setCpfExpiration($cpfExpiration)
     {
         $this->cpfExpiration = $cpfExpiration;
-
+        
         return $this;
     }
 
@@ -484,17 +505,19 @@ class Person extends BaseUser
     }
 
     /**
-     * @param \PROCERGS\LoginCidadao\CoreBundle\Entity\City $city
+     *
+     * @param \PROCERGS\LoginCidadao\CoreBundle\Entity\City $city            
      * @return City
      */
     public function setCity(\PROCERGS\LoginCidadao\CoreBundle\Entity\City $city = null)
     {
         $this->city = $city;
-
+        
         return $this;
     }
 
     /**
+     *
      * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\City
      */
     public function getCity()
@@ -502,21 +525,10 @@ class Person extends BaseUser
         return $this->city;
     }
 
-    public function setCpfNfg($var)
-    {
-        $this->cpfNfg = $var;
-        return $this;
-    }
-
-    public function getCpfNfg()
-    {
-        return $this->cpfNfg;
-    }
-
     public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
-
+        
         return $this;
     }
 
@@ -530,7 +542,7 @@ class Person extends BaseUser
      */
     public function setCreatedAtValue()
     {
-        if (!($this->getCreatedAt() instanceof \DateTime)) {
+        if (! ($this->getCreatedAt() instanceof \DateTime)) {
             $this->createdAt = new \DateTime();
         }
     }
@@ -538,7 +550,7 @@ class Person extends BaseUser
     public function setEmailConfirmedAt(\DateTime $emailConfirmedAt = null)
     {
         $this->emailConfirmedAt = $emailConfirmedAt;
-
+        
         return $this;
     }
 
@@ -596,16 +608,14 @@ class Person extends BaseUser
         if (null === $this->getPictureFile()) {
             return;
         }
-
-        $this->getPictureFile()->move(
-                $this->getPictureUploadRootDir(), $this->picturePath
-        );
-
+        
+        $this->getPictureFile()->move($this->getPictureUploadRootDir(), $this->picturePath);
+        
         if (isset($this->tempPicturePath) && $this->tempPicturePath != $this->picturePath) {
             @unlink($this->getPictureUploadRootDir() . DIRECTORY_SEPARATOR . $this->tempPicturePath);
             $this->tempPicturePath = null;
         }
-
+        
         $this->pictureFile = null;
     }
 
@@ -634,7 +644,7 @@ class Person extends BaseUser
     public function setTwitterPicture($twitterPicture)
     {
         $this->twitterPicture = $twitterPicture;
-
+        
         return $this;
     }
 
@@ -645,15 +655,15 @@ class Person extends BaseUser
 
     public function getSocialNetworksPicture()
     {
-        if (!is_null($this->getFacebookId())) {
+        if (! is_null($this->getFacebookId())) {
             return "https://graph.facebook.com/{$this->getFacebookId()}/picture?height=245&width=245";
         }
-        if (!is_null($this->getTwitterId())) {
-            if (!is_null($this->getTwitterPicture())) {
+        if (! is_null($this->getTwitterId())) {
+            if (! is_null($this->getTwitterPicture())) {
                 return $this->getTwitterPicture();
             }
         }
-
+        
         return null;
     }
 
@@ -661,29 +671,31 @@ class Person extends BaseUser
     {
         $pictureAddress = $rawResponse['profile_image_url'];
         $currentPicture = $this->getTwitterPicture();
-
+        
         $context = null;
         if ($currentPicture !== $pictureAddress) {
             if (ini_get('allow_url_fopen')) {
-                if (!empty($proxySettings)) {
+                if (! empty($proxySettings)) {
                     $auth = base64_encode($proxySettings['auth']);
-                    $opts = array('http' => array(
-                        'proxy' => "tcp://{$proxySettings['host']}:{$proxySettings['port']}",
-                        'request_fulluri' => true,
-                        'header' => array(
-                            "Proxy-Authorization: Basic $auth"
+                    $opts = array(
+                        'http' => array(
+                            'proxy' => "tcp://{$proxySettings['host']}:{$proxySettings['port']}",
+                            'request_fulluri' => true,
+                            'header' => array(
+                                "Proxy-Authorization: Basic $auth"
+                            )
                         )
-                    ));
+                    );
                     $context = stream_context_create($opts);
                 }
                 $picture = file_get_contents($pictureAddress, false, $context);
-            } elseif (function_exists('curl_init')) {                
+            } elseif (function_exists('curl_init')) {
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_HEADER, 0);
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                 if (ini_get('open_basedir')) {
-                    //@TODO some gambi
+                    // @TODO some gambi
                 } else {
                     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
                 }
@@ -706,7 +718,7 @@ class Person extends BaseUser
             $ext = explode('.', $pictureAddress);
             $filename = sha1($this->getId()) . '.' . array_pop($ext);
             $this->picturePath = $filename;
-            file_put_contents($this->getAbsolutePicturePath(), $picture);            
+            file_put_contents($this->getAbsolutePicturePath(), $picture);
         }
     }
 
@@ -724,7 +736,7 @@ class Person extends BaseUser
     {
         $confirmToken = $this->getConfirmationToken();
         $notifications = $this->getNotifications();
-
+        
         if (is_null($confirmToken)) {
             foreach ($notifications as $notification) {
                 if ($notification->getTitle() === 'notification.unconfirmed.email.title') {
@@ -737,7 +749,7 @@ class Person extends BaseUser
     public function setEmailExpiration($emailExpiration)
     {
         $this->emailExpiration = $emailExpiration;
-
+        
         return $this;
     }
 
@@ -755,7 +767,7 @@ class Person extends BaseUser
     public function setFacebookUsername($facebookUsername)
     {
         $this->facebookUsername = $facebookUsername;
-
+        
         return $this;
     }
 
@@ -767,7 +779,7 @@ class Person extends BaseUser
     public function setPreviousValidEmail($previousValidEmail)
     {
         $this->previousValidEmail = $previousValidEmail;
-
+        
         return $this;
     }
 
@@ -786,13 +798,13 @@ class Person extends BaseUser
         $password = $this->getPassword();
         return strlen($password) > 0;
     }
-    
+
     public function setAdress($var)
     {
         $this->adress = $var;
         return $this;
     }
-    
+
     public function getAdress()
     {
         return $this->adress;
@@ -803,22 +815,52 @@ class Person extends BaseUser
         $this->adressNumber = $var;
         return $this;
     }
-    
+
     public function getAdressNumber()
     {
         return $this->adressNumber;
     }
-    
+
     public function setUf($var)
     {
         $this->uf = $var;
         return $this;
     }
-    
+
     public function getUf()
     {
         return $this->uf;
-    }    
-    
+    }
 
+    public function setNfgAccessToken($var)
+    {
+        $this->nfgAccessToken = $var;
+        return $this;
+    }
+
+    public function getNfgAccessToken()
+    {
+        return $this->nfgAccessToken;
+    }
+
+    /**
+     *
+     * @param \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var            
+     * @return City
+     */
+    public function setNfgProfile(\PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var = null)
+    {
+        $this->nfgProfile = $var;
+        
+        return $this;
+    }
+
+    /**
+     *
+     * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile
+     */
+    public function getNfgProfile()
+    {
+        return $this->nfgProfile;
+    }
 }

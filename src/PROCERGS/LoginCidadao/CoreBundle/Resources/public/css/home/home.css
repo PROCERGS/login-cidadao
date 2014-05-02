@@ -142,6 +142,12 @@ body {
     margin-right: 20px;
 }
 
+.lc-box .nfg {
+    background-color: #EF9618;
+    background-image: url(../../images/nfg_34.png);
+    background-repeat: no-repeat;
+}
+
 .lc-box .terms a {
     color: green;
     font-weight: 400;
