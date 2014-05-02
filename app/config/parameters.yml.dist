@@ -53,3 +53,6 @@ parameters:
     soe_organization: ~
     soe_username: ~
     soe_password: ~
+    nfg_url_auth: ~
+    nfg_url_login: ~
+    nfg_hmac_secret: ~        

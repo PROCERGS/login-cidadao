@@ -227,12 +227,25 @@ class Person extends BaseUser
      * @var string
      */
     protected $adressNumber;
-
+    
     /**
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Uf")
      * @ORM\JoinColumn(name="uf_id", referencedColumnName="id")
      */
     protected $uf;
+
+    /**
+     * @ORM\Column(name="nfg_access_token", type="string", length=255, nullable=true, unique=true)
+     */
+    protected $nfgAccessToken;
+
+    /**
+     * @Expose
+     * @Groups({"nfgprofile"})
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile")
+     * @ORM\JoinColumn(name="nfg_profile_id", referencedColumnName="id")
+     */
+    protected $nfgProfile;
 
     public function __construct()
     {
@@ -697,7 +710,7 @@ class Person extends BaseUser
                     $context = stream_context_create($opts);
                 }
                 $picture = file_get_contents($pictureAddress, false, $context);
-            } elseif (function_exists('curl_init')) {
+            } elseif (function_exists('curl_init')) {                
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -726,7 +739,7 @@ class Person extends BaseUser
             $ext = explode('.', $pictureAddress);
             $filename = sha1($this->getId()) . '.' . array_pop($ext);
             $this->picturePath = $filename;
-            file_put_contents($this->getAbsolutePicturePath(), $picture);
+            file_put_contents($this->getAbsolutePicturePath(), $picture);            
         }
     }
 
@@ -806,13 +819,13 @@ class Person extends BaseUser
         $password = $this->getPassword();
         return strlen($password) > 0;
     }
-
+    
     public function setAdress($var)
     {
         $this->adress = $var;
         return $this;
     }
-
+    
     public function getAdress()
     {
         return $this->adress;
@@ -823,22 +836,52 @@ class Person extends BaseUser
         $this->adressNumber = $var;
         return $this;
     }
-
+    
     public function getAdressNumber()
     {
         return $this->adressNumber;
     }
-
+    
     public function setUf($var)
     {
         $this->uf = $var;
         return $this;
     }
-
+    
     public function getUf()
     {
         return $this->uf;
+    }    
+    
+    public function setNfgAccessToken($var)
+    {
+        $this->nfgAccessToken = $var;
+        return $this;
     }
 
+    public function getNfgAccessToken()
+    {
+        return $this->nfgAccessToken;
+    }
 
+    /**
+     *
+     * @param \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var            
+     * @return City
+     */
+    public function setNfgProfile(\PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var = null)
+    {
+        $this->nfgProfile = $var;
+        
+        return $this;
+    }
+
+    /**
+     *
+     * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile
+     */
+    public function getNfgProfile()
+    {
+        return $this->nfgProfile;
+    }
 }

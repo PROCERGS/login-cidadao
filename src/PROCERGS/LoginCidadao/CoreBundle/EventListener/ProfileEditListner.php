@@ -97,8 +97,7 @@ class ProfileEditListner implements EventSubscriberInterface
             $this->notificationsHelper->enforceUnconfirmedEmailNotification($user);
             $this->mailer->sendEmailChangedMessage($user, $this->email);
         }
-        if ($user->getCpf() !== $this->cpf) {
-            $user->setCpfNfg(null);
+        if ($user->getCpf() !== $this->cpf) {            
             if ($user->getCpf()) {
                 $user->setCpfExpiration(null);
             } else {
