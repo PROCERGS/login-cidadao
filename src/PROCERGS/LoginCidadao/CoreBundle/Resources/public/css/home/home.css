@@ -143,12 +143,31 @@ body {
 }
 
 .lc-box .nfg {
+    background-position: 0;
     background-color: #EF9618;
     background-image: url(../../images/nfg_34.png);
     background-repeat: no-repeat;
+    margin-left: 20px;
+}
+
+#login-box .nfg {
+  margin-left: 40px;
+}
+
+#register-box .nfg {
+  margin-top: 5px;
 }
 
 .lc-box .terms a {
     color: green;
     font-weight: 400;
+}
+
+.lc-box .flash-error {
+  background-color: #E64442;
+  color: #FFF;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 10px 24px 0;
+  padding: 3px 12px;
 }
