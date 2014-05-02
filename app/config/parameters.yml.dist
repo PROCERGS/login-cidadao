@@ -6,6 +6,11 @@ parameters:
     database_user:     root
     database_password: ~
 
+    memcached_host: 127.0.0.1
+    memcached_port: 11211
+    session_prefix: lc_sess_
+    session_lifetime: 86400
+
     mailer_transport:  smtp
     mailer_host:       127.0.0.1
     mailer_user:       ~
@@ -48,3 +53,6 @@ parameters:
     soe_organization: ~
     soe_username: ~
     soe_password: ~
+    nfg_url_auth: ~
+    nfg_url_login: ~
+    nfg_hmac_secret: ~        
