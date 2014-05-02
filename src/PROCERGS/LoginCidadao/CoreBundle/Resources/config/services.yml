@@ -24,6 +24,15 @@ parameters:
     procergs_logincidadao.nfgws.class: PROCERGS\LoginCidadao\CoreBundle\Helper\NfgWsHelper
 
 services:
+    session.memcached:
+        class: Memcached
+        calls:
+            - [addServer, [%memcached_host%, %memcached_port%]]
+
+    session.handler.memcached:
+        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
+        arguments: ["@session.memcached", { prefix: %session_prefix%, expiretime: %session_lifetime% } ]
+
     security.authentication.success_handler:
         class: %security.authentication.success_handler.class%
         public: false
@@ -112,17 +121,17 @@ services:
             - { name: kernel.event_subscriber }
         calls:
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
-                    
+
     procergs_logincidadao.profile_edit:
         class: %procergs_logincidadao.profile_edit.class%
         arguments: ["@procergs_logincidadao.mailer", "@fos_user.mailer", "@fos_user.util.token_generator", "@router", "@session", "@security.context", "@notifications.helper", "%registration.email.unconfirmed_time%"]
         tags:
             - { name: kernel.event_subscriber }
         calls:
-            - [setCpfEmptyTime, ["%registration.cpf.empty_time%"]]        
+            - [setCpfEmptyTime, ["%registration.cpf.empty_time%"]]
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
             - [setDneHelper, ["@procergs_logincidadao.dne"]]
-            
+
     procergs_logincidadao.change.password.form.type:
         class: %procergs_logincidadao.change.password.form.type.class%
         arguments: [%fos_user.model.user.class%, "@security.context"]
@@ -172,7 +181,7 @@ services:
     procergs_logincidadao.nfgws:
         class: %procergs_logincidadao.nfgws.class%
         calls:
-            - [setUrl, [%nfg_ws_url%]]            
+            - [setUrl, [%nfg_ws_url%]]
             - [setOrganizacao, [%soe_organization%]]
             - [setUsuario, [%soe_username%]]
             - [setSenha, [%soe_password%]]
