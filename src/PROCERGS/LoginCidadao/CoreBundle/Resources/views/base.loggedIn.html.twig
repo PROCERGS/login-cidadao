@@ -24,8 +24,8 @@
                         </span>
                     </a>
                 </li>
-                <li class="services glyph {{ app.request.attributes.get('_route') == 'lc_apps' or app.request.attributes.get('_route') == 'lc_app_details' ? 'active' }}">
-                    <a href="{{ path('lc_apps') }}">
+                <li class="services glyph {{ app.request.attributes.get('_route') == 'lc_authorization_list' or app.request.attributes.get('_route') == 'lc_app_details' ? 'active' }}">
+                    <a href="{{ path('lc_authorization_list') }}">
                         <span>
                             {% trans %}Services{% endtrans %}
                             <i class="glyphicon glyphicon-th pull-right"></i>

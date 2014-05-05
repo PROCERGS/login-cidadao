@@ -12,10 +12,10 @@ class AuthorizationController extends Controller
 {
 
     /**
-     * @Route("/authorizations", name="lc_apps")
+     * @Route("/authorizations", name="lc_authorization_list")
      * @Template()
      */
-    public function userAuthorizationsAction(Request $request)
+    public function listAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $clients = $em->getRepository('PROCERGSOAuthBundle:Client');
@@ -31,42 +31,16 @@ class AuthorizationController extends Controller
             }
             $apps[] = $app;
         }
-        $sugg = new ClientSuggestion();        
-        $formBuilder = $this->createFormBuilder($sugg);
-        $formBuilder->add('text', 'textarea');
-        $form = $formBuilder->getForm();
-        
-        $em = $this->getDoctrine()->getEntityManager();        
-        $suggs = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:ClientSuggestion')->findBy(array(), array('createdAt' => 'desc'), 6);        
-        $form = $form->createView();
-        return compact('user', 'apps', 'form', 'suggs');
-    }
-    
-    /**
-     * @Route("/authorizations/suggestion", name="lc_apps_sugg")
-     * @Template()
-     */
-    public function suggestionAction(Request $request)
-    {
         $sugg = new ClientSuggestion();
         $formBuilder = $this->createFormBuilder($sugg);
         $formBuilder->add('text', 'textarea');
         $form = $formBuilder->getForm();
-                
+
         $em = $this->getDoctrine()->getEntityManager();
-        if ($request->getMethod() == 'POST') {
-            $form->handleRequest($request);
-            if ($form->isValid()) {
-                $sugg->setPerson($this->getUser());
-                $em->persist($sugg);
-                $em->flush();
-                $bag = $request->getSession()->getFlashBag();
-                $translator = $this->get('translator');
-                $bag->add('success', $translator->trans('client.suggestion.registered'));
-        
-            }
-        }
-        return $this->redirect($this->generateUrl('lc_apps'));
+        $suggs = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:ClientSuggestion')->findBy(array(),
+                array('createdAt' => 'desc'), 6);
+        $form = $form->createView();
+        return compact('user', 'apps', 'form', 'suggs');
     }
 
 }

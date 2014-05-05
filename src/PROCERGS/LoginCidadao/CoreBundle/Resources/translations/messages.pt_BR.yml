@@ -71,7 +71,9 @@ CEP: CEP
 cpf_reminder.subject: 'Você não tem um CPF associado no Login Cidadão'
 cpf_reminder.message: "Olá, %name%\n\nNós notamos que sua conta não tem um CPF associado a ela ainda.\n\nPor favor, visite o Login Cidadão até o dia %date% para completar essa informação. Após essa data, sua conta poderá ser suspensa.\n"
 Activated: Ativado
+Active: Ativado
 Deactivated: Desativado
+Inactive: Inativo
 'Connect using Facebook': 'Conectar usando Facebook'
 'Open your account': 'Abra sua conta'
 'Toggle Navigation': 'Abrir/fechar Menu'
@@ -149,8 +151,7 @@ Actions: Ações
 Details: Detalhes
 Edit: Editar
 'No services registered.': 'Nenhum Serviço registrado'
-'No service activated': 'Nenhum Serviço ativo'
-'No service deactivated': 'Nenhum Serviço a ser ativado'
+'There are no active services.': 'Nenhum serviço está ativo.'
 Name: Nome
 Description: Descrição
 'Redirect URIs': 'URIs para Redirectionamento'
@@ -177,9 +178,8 @@ nfg.email.already.used: 'Já existe um conta utlizando esse e-mail'
 nfg.corrupted.callback: 'Aparentemente os dados enviados pela NFG estão corrompidos, por favor entre em contato com o administrador do sistema'
 nfg.accessid.mismatch: 'Aparentemente a sessão enviada pela NFG está corrompida, por favor entre em contato com o administrador do sistema'
 nfg.user.notfound: 'Não foi encontrada uma conta do login cidadao vinculada com sua conta da NFG'
-common.submit: 'Enviar'
-client.suggestion.title: 'Sugira um serviço'
-client.suggestion.field: 'Sugestão'
+'Suggest a Service': 'Sugira um serviço'
+'Describe your suggestion': 'Sugestão'
 client.suggestion.registered: 'Sua sugestão foi registrada'
-client.suggestions.title: 'Seus ultimos 6 serviços sugeridos'
-client.suggestions.none: 'Nenhum serviço sugerido'
+'Your last suggested Services': 'Seus últimos serviços sugeridos'
+'Send': 'Enviar'

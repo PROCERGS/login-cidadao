@@ -125,14 +125,17 @@
 
 .settings-content .content {
     padding-top: 20px;
+    padding-bottom: 20px;
 }
 
-.settings-content h3 {
-    margin: 15px 30px 30px;
+.settings-content h1 {
+    margin: 15px 30px 10px;
+    font-size: 24px;
 }
 
-.settings-content h4 {
-    margin: 10px 35px;
+.settings-content h2 {
+    margin: 20px 35px 10px;
+    font-size: 18px;
 }
 
 .settings-content .form-content {
@@ -312,79 +315,32 @@
 }
 
 /* services/applications page */
-#applications .app-toggle {
-    margin-top: 5px;
-    margin-right: 50px;
+.content.applications .services-grid[data-columns]::before {
+    content: '3 .column.size-1of3';
 }
+.content.applications .services-grid .column { float: left; }
+.content.applications .services-grid .size-1of3 { width: 33.333%; }
 
-#applications .app-toggle .btn {
-    background: none;
-    border: none;
-    box-shadow: none;
-    float: right;
-    font-size: 1.8em;
-    padding: 8px;
-    text-shadow: none;
-}
-
-#applications .app-toggle .active {
-    opacity: 0.2
-}
-
-#applications ul {
-    padding-right: 40px;
-}
-
-#applications .list-group {
-    box-shadow: none;
-    transition: all 0.8s ease;
-    -webkit-transition: all 0.8s ease;
-    -o-transition: all 0.8s ease;
-    -moz-transition: all 0.8s ease;
-    -ms-transition: all 0.8s ease;
-}
-
-#applications h4 {
-    margin-bottom: 20px;
-}
-
-#applications p.empty {
-    margin-bottom: 30px;
-    margin-left: 35px;
-}
-
-#applications li {
-    background-color: #999999;
-    color: #FFF;
-    float: left;
-    height: 175px;
-    list-style-type: none;
-    margin: 0 15px 30px 15px;
+.content.applications .services-grid .service {
+    background-color: #999;
+    padding: 15px 0 0;
     width: 140px;
+    height: 175px;
 }
 
-#applications li>a {
-    display: block;
-    padding-top: 14px;
-}
-
-#applications li a:hover {
-    text-decoration: none;
-}
-
-#applications li .name {
-    color: #FFF;
+.content.applications .services-grid .service .name {
+    color: #fff;
     font-size: 17px;
     height: 40px;
     line-height: 20px;
     margin: 10px 0;
-    padding: 0 10px
+    padding: 0 10px;
 }
 
-#applications li .status {
+.content.applications .services-grid .service .status {
     background-color: #696969;
     border-radius: 0;
-    color: #FFF;
+    color: #fff;
     display: block;
     height: 35px;
     line-height: 35px;
@@ -393,11 +349,25 @@
     width: 100%;
 }
 
-#applications li .activated {
-    background-color: #009933;
+.content.applications .services-grid .service .status.active {
+    background-color: #093;
 }
 
-#applications .list li {
+.content.applications .services-grid .service a:hover {
+    text-decoration: none;
+}
+
+.content.applications h4 {
+    margin-bottom: 20px;
+}
+
+.content.applications p.empty {
+    margin-bottom: 30px;
+    margin-left: 35px;
+}
+
+
+.content.applications .list li {
     float: none;
     height: 35px;
     margin-left: 0;
@@ -406,11 +376,11 @@
     width: 100%;
 }
 
-#applications .list li>a {
+.content.applications .list li>a {
     padding-top: 0;
 }
 
-#applications .list li img {
+.content.applications .list li img {
     background-color: #FFF;
     height: 45px;
     left: 0;
@@ -419,7 +389,7 @@
     width: 45px;
 }
 
-#applications .list li .name {
+.content.applications .list li .name {
     float: left;
     height: 100%;
     line-height: 35px;
@@ -429,54 +399,55 @@
     width: 80%;
 }
 
-#applications .list li .status {
+.content.applications .list li .status {
     float: right;
     width: 20%;
 }
 
-#app-detail {
-    padding: 20px 30px;
-}
-
-#app-detail h3 {
+.client-details h3 {
     margin-left: 0;
 }
 
-#app-detail img {
+.client-details img {
     margin-bottom: 20px;
     max-height: 220px;
     max-width: 220px;
 }
 
-#app-detail .msg p {
+.client-details .msg p {
     color: #F56F6F;
     font-size: 20px;
     margin: 30px 0;
 }
 
-#app-detail .msg .activated{
+.client-details .msg .activated{
     color: green;
 }
 
-#app-detail #deactivate-box {
+.client-details #deactivate-box {
     background-image: none;
     display: none;
 }
 
-#app-detail #deactivate-box form {
+.client-details #deactivate-box form {
     display: inline-block;
 }
 
-.permissions {
+.client-details section.permissions {
+    margin: 0 30px;
+}
+
+.client-details ul.permissions {
+    margin-left: 20px;
     padding-left: 0;
 }
 
-.permissions li{
+.client-details ul.permissions li{
     color: green;
     font-weight: bold;
 }
 
-#app-detail .permissions .deny {
+.client-details ul.permissions .deny {
     color: #F56F6F;
 }
 
