@@ -58,10 +58,54 @@
             </ul>
         {% else %}
             <p class="empty">{% trans %}No service deactivated{%  endtrans %}</p>
-        {% endif %}
+        {% endif %}        
     </div>
-
-</div>
+	    <h4>{{ 'client.suggestion.title'|trans }}</h4>
+		<div class="form-content">
+		    {{ form_start(form, {'action': path('lc_apps_sugg'), 'attr': {'role':'form' } }) }}
+		    {{ form_errors(form) }}
+	        <div class="row clearfix">
+	            <div class="col-md-7">
+	                <div class="form-group">
+	                    {{ form_label(form.text, 'client.suggestion.field'|trans) }}
+	                    {{ form_widget(form.text, {'attr': {'class': 'form-control'}}) }}
+	                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+	                    <div class="input-error">{{ form_errors(form.text) }}</div>	                    
+	                </div>
+                        <div class="text-right">
+	                	    <input class="btn btn-success" type="submit" value="{{ 'common.submit'|trans }}" />
+	                   </div>
+	            </div>
+	        </div>
+	        {{ form_end(form) }}
+	        <div class="row">
+	            {% for type, messages in app.session.flashbag.all() %}
+	                {% for message in messages %}
+	                <div class="col-md-12">
+	                    <div class="text-center bg-success flash-{{ type }}">
+	                        {{ message }}
+	                    </div>
+	                </div>
+	                {% endfor %}
+	            {% endfor %}
+	        </div>
+	    </div>
+        <h4>{{ 'client.suggestions.title'|trans }}</h4>
+        {% if suggs|length > 0 %}
+            <ul class="">
+                {% for sugg in suggs %}
+                    <li>
+                        <span>{{ sugg.text }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="empty">{{ 'client.suggestions.none'|trans }}</p>
+        {% endif %}
+	    
+	</div>
+    
+    
 
 {% endblock %}
 
