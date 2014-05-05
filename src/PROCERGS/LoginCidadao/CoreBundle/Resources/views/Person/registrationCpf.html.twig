@@ -1,13 +1,4 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle::base.popup.html.twig' %}
-{% block header %}
-<header class="nfg">
-    <div class="container">
-        {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/nfg_head.png' %}
-        <img src="{{ asset_url }}" alt="{{ 'Nota Fiscal Gaúcha' | trans }}" />
-		{% endimage %}
-    </div>
-</header>
-{% endblock %}
 {% block body %}
 
 
@@ -37,19 +28,6 @@
 		        {{ form_widget(form.cpf) }}
 		    </div>
 		    {% endif %}
-	        <h4>{{ 'cpf.registration.nfg.check.invite'|trans }}</h4>
-
-	        <div class="form-group">
-	            {{ form_label(form.nfgPassword.first, 'cpf.registration.nfg.check.password' | trans) }}
-	            {{ form_errors(form.nfgPassword.first) }}
-	            {{ form_widget(form.nfgPassword.first) }}
-	        </div>
-
-	        <div class="form-group">
-	            {{ form_label(form.nfgPassword.second, 'And then confirm it here:' | trans) }}
-	            {{ form_errors(form.nfgPassword.second) }}
-	            {{ form_widget(form.nfgPassword.second) }}
-	        </div>
         </div>
 	    <div class="form-bar text-right">
 	        <input class='btn btn-success btn-sm' type="submit" value="{{ 'profile.edit.submit'|trans({}, 'FOSUserBundle') }}" />

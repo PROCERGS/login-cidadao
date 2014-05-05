@@ -202,51 +202,19 @@ class PersonController extends Controller
         $formBuilder = $this->createFormBuilder($person);
         if (!$person->getCpf()) {
             $formBuilder->add('cpf', 'text', array('required' => true));
-        }
-        $formBuilder->add('nfgPassword', 'repeated',
-                array(
-            'required' => false,
-            'type' => 'password',
-            'mapped' => false
-        ));
+        }        
         $form = $formBuilder->getForm();
         $form->handleRequest($this->getRequest());
         $messages = '';
         if ($form->isValid()) {
-            if ($form->get('nfgPassword')->getData()) {
-                $nfg = new NfgHelper();
-                $nfg->setUsername($person->getCpf());
-                $nfg->setPassword($form->get('nfgPassword')->getData());
-                if ($profile = $nfg->profile()) {
-                    $person->setCpfNfg(new \DateTime());
-                    $person->setCpfExpiration(null);
-                    $this->container->get('fos_user.user_manager')->updateUser($person);
-                    return $this->redirect($this->generateUrl('lc_home_gateway'));
-                } else {
-                    $messages = 'nfg.noprofile.found';
-                }
-            } else {
-                $person->setCpfExpiration(null);
-                $this->container->get('fos_user.user_manager')->updateUser($person);
-                return $this->redirect($this->generateUrl('lc_home_gateway'));
-            }
+            $person->setCpfExpiration(null);
+            $this->container->get('fos_user.user_manager')->updateUser($person);
+            return $this->redirect($this->generateUrl('lc_home'));
         }
         return array(
             'form' => $form->createView(), 'messages' => $messages, 'isExpired' => $person->isCpfExpired()
         );
-    }
-
-    /**
-     * @Route("/cpf/unregister", name="lc_unregistration_cpf")
-     * @Template()
-     */
-    public function unregistrationCpfAction(Request $request)
-    {
-        $person = $this->getUser();
-        $person->setCpfNfg(null);
-        $this->container->get('fos_user.user_manager')->updateUser($person);
-        return $this->redirect($this->generateUrl('lc_home_gateway'));
-    }
+    }    
 
     /**
      * @Route("/facebook/unlink", name="lc_unlink_facebook")

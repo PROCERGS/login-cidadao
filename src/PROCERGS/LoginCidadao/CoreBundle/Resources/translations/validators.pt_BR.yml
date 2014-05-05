@@ -1,2 +1,3 @@
 change_username.invalid.username: 'Nomes de usuário devem conter apenas letras não acentuadas, números e underline (_).'
 'Please enter your name.': 'Preencha seu nome.'
+voterreg.invalid: 'Título eleitoral inválido'
