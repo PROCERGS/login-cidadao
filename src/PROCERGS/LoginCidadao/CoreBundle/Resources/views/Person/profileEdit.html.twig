@@ -92,6 +92,7 @@
                     <button type="button" class="btn btn-success btn-upload">{% trans %}Upload another picture{% endtrans %}</button>
                     <div class="file-name"></div>
                     {{ form_widget(form.pictureFile) }}
+                    <div class="input-error">{{ form_errors(form.pictureFile) }}</div>
                         </div>
                     </div>
                 </div>

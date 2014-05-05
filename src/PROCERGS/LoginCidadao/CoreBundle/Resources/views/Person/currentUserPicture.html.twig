@@ -7,5 +7,5 @@
 {% endimage %}
 {%      endif %}
 {%  else %}
-//{{ app.request.host ~ '/' ~ app.user.getPictureWebPath }}
+//{{ app.request.host ~ ':' ~ app.request.port ~ '/' ~ app.user.getPictureWebPath }}
 {%  endif %}
