@@ -209,11 +209,6 @@ class Person extends BaseUser
     protected $previousValidEmail;
 
     /**
-     * @ORM\Column(name="cpf_nfg", type="datetime", nullable=true)
-     */
-    protected $cpfNfg;
-
-    /**
      * @ORM\OneToMany(targetEntity="Notification", mappedBy="person")
      */
     protected $notifications;
@@ -514,17 +509,6 @@ class Person extends BaseUser
     public function getCity()
     {
         return $this->city;
-    }
-
-    public function setCpfNfg($var)
-    {
-        $this->cpfNfg = $var;
-        return $this;
-    }
-
-    public function getCpfNfg()
-    {
-        return $this->cpfNfg;
     }
 
     public function setCreatedAt(\DateTime $createdAt)
