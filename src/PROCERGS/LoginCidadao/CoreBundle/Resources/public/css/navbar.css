@@ -168,6 +168,10 @@
   #lc-navbar .navbar-toggle {
     display: none;
   }
+
+  #lc-navbar-ul > li:first-child {
+    margin-right: 0;
+  }
 }
 
 #lc-navbar .notifications .glyphicon {
@@ -177,6 +181,10 @@
 #lc-navbar .brand img {
   position: relative;
   top: -4px;
+}
+
+#lc-navbar .brand a {
+  padding: 9px 0;
 }
 
 #lc-navbar .profile {
