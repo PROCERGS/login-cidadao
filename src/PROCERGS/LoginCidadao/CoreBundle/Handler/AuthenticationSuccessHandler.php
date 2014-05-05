@@ -104,11 +104,11 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
                     array(), UrlGeneratorInterface::ABSOLUTE_URL);
             if (strlen($referer) > 0) {
                 if ($referer == $login || $referer == $register) {
-                    $referer = $this->router->generate('lc_home_gateway');
+                    $referer = $this->router->generate('lc_home');
                 }
                 $dest = $referer;
             } else {
-                $dest = $this->router->generate('lc_home_gateway');
+                $dest = $this->router->generate('lc_home');
             }
             return new RedirectResponse($dest);
         }
