@@ -1,62 +1,62 @@
 <div class="navbar navbar-inverse" role="navigation" id="lc-navbar">
-  <div class="container">
-    <ul id="lc-navbar-ul">
+    <div class="container">
+        <ul id="lc-navbar-ul">
       {% if app.user != null %}
-      <li>
-        <button type="button" class="btn btn-default navbar-toggle" id="toggle-settings-nav">
-          <span class="sr-only">{% trans %}Toggle Navigation{% endtrans %}</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-      </li>
+            <li>
+                <button type="button" class="btn btn-default navbar-toggle" id="toggle-settings-nav">
+                    <span class="sr-only">{% trans %}Toggle Navigation{% endtrans %}</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </li>
       {% endif %}
 
-      <li class="brand">
-        <a href="{{ url('lc_home') }}" class="btn btn-default">
+            <li class="brand">
+                <a href="{{ url('lc_home') }}" class="btn btn-default">
           {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/brasaoRS.png' %}
-          <img src="//{{ app.request.host ~ ':' ~ app.request.port ~ asset_url }}" alt="{% trans %}Available services{% endtrans %}" width="33" height="40">
+                    <img src="//{{ app.request.host ~ ':' ~ app.request.port ~ asset_url }}" alt="{% trans %}Available services{% endtrans %}" width="33" height="40">
           {% endimage %}
-        </a>
-      </li>
+                </a>
+            </li>
 
       {% if app.user == null %}
-      <li class="pull-right">
-        <a href="{{ url("fos_user_security_login") }}" class="btn btn-login btn-success navbar-btn">{{ 'Log in' | trans }}</a>
-      </li>
+            <li class="pull-right">
+                <a href="{{ url("fos_user_security_login") }}" class="btn btn-login btn-success navbar-btn">{{ 'Log in' | trans }}</a>
+            </li>
       {% else %}
       {# Apps list #}
-      <li class="btn-group apps">
-        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans %}Applications{% endtrans %}">
-          <i class="glyphicon glyphicon-th"></i>
-        </button>
-        <ul class="dropdown-menu clearfix">
+            <li class="btn-group apps">
+                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans %}Applications{% endtrans %}">
+                    <i class="glyphicon glyphicon-th"></i>
+                </button>
+                <ul class="dropdown-menu clearfix">
           {% for auth in app.user.getAuthorizations %}
-          <li>
-            <a href="">
+                    <li>
+                        <a href="">
               {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
-              <img src="//{{ app.request.host ~ '/' ~ auth.client.getPictureWebPath }}" alt="">
+                            <img src="//{{ app.request.host ~ '/' ~ auth.client.getPictureWebPath }}" alt="">
               {% else %}
-              <img src="http://placehold.it/50x50" alt="">
+                            <img src="http://placehold.it/50x50" alt="">
               {% endif %}
-              <span>{{ auth.client.name }}</span>
-            </a>
-          </li>
+                            <span>{{ auth.client.name }}</span>
+                        </a>
+                    </li>
           {% endfor %}
-          <li class="text-center all"><a href="{{ url('lc_authorization_list') }}">{% trans %}View all services{% endtrans %}</a></li>
-        </ul>
-      </li>
+                    <li class="text-center all"><a href="{{ url('lc_authorization_list') }}">{% trans %}View all services{% endtrans %}</a></li>
+                </ul>
+            </li>
 
       {# Notifications #}
-      <li class="btn-group notifications">
-        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans %}Notifications{% endtrans %}">
-          <i class="glyphicon glyphicon-bell">
+            <li class="btn-group notifications">
+                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans %}Notifications{% endtrans %}">
+                    <i class="glyphicon glyphicon-bell">
             {% if notifications_helper.getUnreadExcludeExtreme is not empty %}
-            <span class="label label-danger">{{ notifications_helper.getUnreadExcludeExtreme | length }}</span>
+                        <span class="label label-danger">{{ notifications_helper.getUnreadExcludeExtreme | length }}</span>
             {% endif %}
-          </i>
-        </button>
-        <ul class="dropdown-menu clearfix">
+                    </i>
+                </button>
+                <ul class="dropdown-menu clearfix">
           {% if notifications_helper.getUnread is not empty %}
             {% for notification in notifications_helper.getUnread if not notification.isExtreme %}
               {% if notification.resolveTarget is defined %}
@@ -65,49 +65,51 @@
                 {% set target = url('lc_notifications_list') %}
               {% endif %}
 
-          <li class="level-{{ notification.level }}">
-            <a href="{{ target }}"><strong>{{ notification.title | trans }}</strong> - {{ notification.shortText | trans }}</a>
-          </li>
+                    <li class="level-{{ notification.level }}">
+                        <a href="{{ target }}"><strong>{{ notification.title | trans }}</strong> - {{ notification.shortText | trans }}</a>
+                    </li>
           {% endfor %}
-          <li class="text-center all"><a href="{{ url('lc_notifications_list') }}">{% trans %}View all notifications{% endtrans %}</a></li>
+                    <li class="text-center all"><a href="{{ url('lc_notifications_list') }}">{% trans %}View all notifications{% endtrans %}</a></li>
           {% else %}
-          <li class="none">{% trans %}You don't have any unread notification.{% endtrans %}</li>
+                    <li class="none">{% trans %}You don't have any unread notification.{% endtrans %}</li>
           {% endif %}
-        </ul>
-      </li>
+                </ul>
+            </li>
 
-      <li class="btn-group pull-right profile">
-        <button type="button" class="btn dropdown-toggle profile-card" data-toggle="dropdown">
-          <span class="profile-username">{{ app.user.username }}</span>
-          <img src="{% include 'PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig' %}" alt="" class="profile-picture">
-        </button>
-        <ul class="dropdown-menu clearfix">
-          <li>
-            <a href="{{ url('fos_user_profile_edit') }}">{% trans %}Profile{% endtrans %}</a>
-          </li>
-          <li>
-            <a href="{{ url('fos_user_security_logout') }}">{% trans from "FOSUserBundle" %}layout.logout{% endtrans %}</a>
-          </li>
-        </ul>
-      </li>
+            <li class="btn-group pull-right profile">
+                <button type="button" class="btn dropdown-toggle profile-card" data-toggle="dropdown">
+                    <span class="profile-username">{{ app.user.username }}</span>
+                    <span class="profile-picture-container">
+                        <img src="{% include 'PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig' %}" alt="" class="profile-picture">
+                    </span>
+                </button>
+                <ul class="dropdown-menu clearfix">
+                    <li>
+                        <a href="{{ url('fos_user_profile_edit') }}">{% trans %}Profile{% endtrans %}</a>
+                    </li>
+                    <li>
+                        <a href="{{ url('fos_user_security_logout') }}">{% trans from "FOSUserBundle" %}layout.logout{% endtrans %}</a>
+                    </li>
+                </ul>
+            </li>
       {% endif %}
 
-    </ul>
+        </ul>
 
-  </div>
+    </div>
 </div>
 
 {% if app.user is not null and notifications_helper.getUnreadExtreme is not empty %}
 {% for notification in notifications_helper.getUnreadExtreme %}
 <div class="notification-extreme alert alert-danger">
-  <div class="container">
-    <strong>{{ notification.title | trans }}</strong>
+    <div class="container">
+        <strong>{{ notification.title | trans }}</strong>
     {% if notification.resolveTarget is defined %}
     {{ notification.shortText | trans({ '%url%': notification.resolveTarget(app_router) }) | raw }}
     {% else %}
     {{ notification.shortText | trans }}
     {% endif %}
-  </div>
+    </div>
 </div>
 {% endfor %}
 {% endif %}

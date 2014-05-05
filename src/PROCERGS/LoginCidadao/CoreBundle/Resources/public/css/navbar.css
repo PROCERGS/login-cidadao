@@ -204,10 +204,17 @@
   }
 }
 
+#lc-navbar .profile-card .profile-picture-container {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: block;
+}
+
 #lc-navbar .profile-card .profile-picture {
-  border-radius: 50%;
-  float: right;
-  height: 30px;
+    min-height: 30px;
+    max-width: 30px;
 }
 
 #lc-navbar .dropdown-menu {
