@@ -239,6 +239,7 @@
     position: relative;
     top: -28px;
     visibility: hidden;
+    width: 100%;
 }
 
 #profile-edit .file-upload .file-name {
