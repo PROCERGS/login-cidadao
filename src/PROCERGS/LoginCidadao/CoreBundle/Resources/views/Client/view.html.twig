@@ -1,56 +1,53 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
 {% block content %}
-<div id="app-detail" class="content clearfix">
-     {# {{dump(client)}} #}
-    <h3>{{ client.name }}</h3>
-
-        <div class="desc row">
-            <div class="col-sm-12 col-md-4">
-                {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
-                    <img src="/{{ client.getPictureWebPath }}" alt="" class="center-block">
-                {% else %}
-                    <img src="http://placehold.it/220x220" alt="" class="center-block">
-                {% endif %}
-            </div>
-
-            <div class="col-sm-12 col-md-7 col-md-offset-1">
-                <p>{{ client.description }}</p>
-            </div>
-
-        </div>
-
-        <div class="msg text-center">
-            {% if (user.hasAuthorization(client)) %}
-                <p class="activated">{% trans %}This service is already active in your Citizen's Login account{%  endtrans %}</p>
-                <a href="#" class="btn" id="app-deactivate" role="button">{% trans %}Deactivate this service{% endtrans %}</a>
-
-                <div class="alert alert-danger" id="deactivate-box">
-                  <h4>{% trans %}Do you really want to disable this service?{%  endtrans %}</h4>
-                  <p>
-                    {{ form_start(form, {'action': path('lc_revoke', { clientId: client.id }), 'attr': {'role':'form'}}) }}
-                    <button type="submit" class="btn btn-danger">{% trans %}Yes{%  endtrans %}</button>
-                    {{ form_end(form) }}
-                    <a role="button" class="btn btn-default cancel">{% trans %}No{%  endtrans %}</a>
-                  </p>
-                </div>
+<div id="app-detail" class="client-details content">
+    <h1>{{ client.name }}</h1>
+    <div class="desc row">
+        <div class="col-sm-12 col-md-4 text-center">
+            {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
+                <img src="/{{ client.getPictureWebPath }}" alt="" class="center-block">
             {% else %}
-                <p>{% trans %}This service is not active in your Citizen's Login account{%  endtrans %}</p>
-                <a href="{{ client.landingPageURL }}" class="btn btn-success" role="button">{% trans %}Activate this service{% endtrans %}</a>
+                <img src="http://placehold.it/220x220" alt="" class="center-block">
             {% endif %}
         </div>
+        <div class="col-sm-12 col-md-7 col-md-offset-1">
+            <p>{{ client.description }}</p>
+        </div>
+    </div>
 
+    <div class="msg text-center">
+        {% if (user.hasAuthorization(client)) %}
+            <p class="activated">{% trans %}This service is already active in your Citizen's Login account{%  endtrans %}</p>
+            <a href="#" class="btn" id="app-deactivate" role="button">{% trans %}Deactivate this service{% endtrans %}</a>
+
+            <div class="alert alert-danger" id="deactivate-box">
+              <h4>{% trans %}Do you really want to disable this service?{%  endtrans %}</h4>
+              <p>
+                {{ form_start(form, {'action': path('lc_revoke', { clientId: client.id }), 'attr': {'role':'form'}}) }}
+                <button type="submit" class="btn btn-danger">{% trans %}Yes{%  endtrans %}</button>
+                {{ form_end(form) }}
+                <a role="button" class="btn btn-default cancel">{% trans %}No{%  endtrans %}</a>
+              </p>
+            </div>
+        {% else %}
+            <p>{% trans %}This service is not active in your Citizen's Login account{%  endtrans %}</p>
+            <a href="{{ client.landingPageURL }}" class="btn btn-success" role="button">{% trans %}Activate this service{% endtrans %}</a>
+        {% endif %}
+    </div>
+
+    <section class="permissions">
         <p style="margin-top:50px;">{% trans %}This service uses the following data from your Login Citizen account{%  endtrans %}</p>
 
-        <ul class="permissions pull-left">
-            {% for auth, status in scopes %}
-                <li class="{{ status ? 'allow' : 'deny' }}">
-                    {{ status ? '<i class="glyphicon glyphicon-ok"></i>' : '<i class="glyphicon glyphicon-remove"></i>' }}
-                    <span>{{ ('scope.' ~ auth) | trans }}</span>
-                </li>
-            {% endfor %}
+        <ul class="permissions">
+        {% for auth, status in scopes %}
+            <li class="{{ status ? 'allow' : 'deny' }}">
+                {{ status ? '<i class="glyphicon glyphicon-ok"></i>' : '<i class="glyphicon glyphicon-remove"></i>' }}
+                <span>{{ ('scope.' ~ auth) | trans }}</span>
+            </li>
+        {% endfor %}
         </ul>
-
+    </section>
 </div>
 
 {% endblock %}

@@ -1,9 +1,9 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
 {% block content %}
-<div id="profile-edit" class="content clearfix">
+<div id="profile-edit" class="content">
 
-    <h3>{% trans %}Profile{% endtrans %}</h3>
+    <h1>{% trans %}Profile{% endtrans %}</h1>
 
     {% trans_default_domain 'FOSUserBundle' %}
 
@@ -11,7 +11,7 @@
     {{ form_errors(form) }}
 
     <div class="form-content">
-        <div class="row clearfix">
+        <div class="row">
             <div class="col-md-7">
                 <div class="form-group">
                     {{ form_label(form.firstName) }}
@@ -55,7 +55,7 @@
                     </span>
                 </div>
                 <div class="form-group">
-                    {{ form_label(form.cpf) }}                    
+                    {{ form_label(form.cpf) }}
                     {% if form.cpf.vars.value is not null %}
 	                    {% if app.user.nfgAccessToken is null %}
 	                    {{ form_widget(form.cpf, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }}
@@ -92,6 +92,7 @@
                     <button type="button" class="btn btn-success btn-upload">{% trans %}Upload another picture{% endtrans %}</button>
                     <div class="file-name"></div>
                     {{ form_widget(form.pictureFile) }}
+                    <div class="input-error">{{ form_errors(form.pictureFile) }}</div>
                         </div>
                     </div>
                 </div>

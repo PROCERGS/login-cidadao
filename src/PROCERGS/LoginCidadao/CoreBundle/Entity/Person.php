@@ -621,9 +621,13 @@ class Person extends BaseUser
             return;
         }
 
-        $this->getPictureFile()->move(
-                $this->getPictureUploadRootDir(), $this->picturePath
-        );
+        if ($this->getPictureFile()->isValid()) {
+            if (!$this->_compress_image($this->getPictureFile()->getPathname(), $this->getPictureUploadRootDir() . '/'.$this->picturePath)) {
+                $this->getPictureFile()->move(
+                    $this->getPictureUploadRootDir(), $this->picturePath
+                );
+            }
+        }
 
         if (isset($this->tempPicturePath) && $this->tempPicturePath != $this->picturePath) {
             @unlink($this->getPictureUploadRootDir() . DIRECTORY_SEPARATOR . $this->tempPicturePath);
@@ -631,6 +635,22 @@ class Person extends BaseUser
         }
 
         $this->pictureFile = null;
+    }
+    
+    private function _compress_image($source_url, $destination_url, $quality = 50)
+    {
+    	$info = getimagesize($source_url);     
+    	if ($info['mime'] == 'image/jpeg') {
+    	    $image = imagecreatefromjpeg($source_url);
+    	} elseif ($info['mime'] == 'image/gif') {
+    	    $image = imagecreatefromgif($source_url);
+    	} elseif ($info['mime'] == 'image/png') {
+    	    $image = imagecreatefrompng($source_url);
+    	}
+    	if (!imagejpeg($image, $destination_url, $quality)) {
+    	    return false;    	        	      
+    	}
+    	return $destination_url;
     }
 
     /**
