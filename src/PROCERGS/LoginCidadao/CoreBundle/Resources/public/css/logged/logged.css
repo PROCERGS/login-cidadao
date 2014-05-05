@@ -316,17 +316,33 @@
 }
 
 /* services/applications page */
-.content.applications .services-grid[data-columns]::before {
-    content: '3 .column.size-1of3';
+@media (max-width: 420px){
+    .content.applications .services-grid[data-columns]::before {
+        content: '1 .column.size-1of1';
+    }
 }
+@media (min-width: 421px) and (max-width: 568px) {
+    .content.applications .services-grid[data-columns]::before {
+        content: '2 .column.size-1of2';
+    }
+}
+@media (min-width: 569px) {
+    .content.applications .services-grid[data-columns]::before {
+        content: '3 .column.size-1of3';
+    }
+}
+
 .content.applications .services-grid .column { float: left; }
-.content.applications .services-grid .size-1of3 { width: 33.333%; }
+.size-1of1 { width: 100%; }
+.size-1of2 { width: 50%; }
+.size-1of3 { width: 33.333%; }
 
 .content.applications .services-grid .service {
     background-color: #999;
     padding: 15px 0 0;
     width: 140px;
     height: 175px;
+    margin: 10px auto;
 }
 
 .content.applications .services-grid .service .name {
