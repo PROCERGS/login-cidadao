@@ -146,8 +146,25 @@ body {
     background-image: url(../../images/nfg_34.png);
 }
 
-#register-box .nfg {
-  margin-top: 5px;
+#register-box .connect.facebook {
+    font-size: 12px;
+}
+
+@media (min-width: 768px) {
+    #register-box .connect.facebook {
+        padding-left: 26px;
+    }
+}
+
+@media (min-width: 992px) {
+    #register-box .no-right-padding {
+      padding-right: 0;
+    }
+
+    #register-box .connect.facebook {
+        font-size: 13px;
+        padding-left: 30px;
+    }
 }
 
 .lc-box .terms a {

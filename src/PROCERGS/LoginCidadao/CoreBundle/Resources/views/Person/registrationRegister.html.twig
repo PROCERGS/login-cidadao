@@ -52,9 +52,11 @@
             <div class="connect-box">
                 <div><hr><span>{% trans %}or{% endtrans %}</span></div>
                 <p>{% trans %}Use your social networks{% endtrans %}</p>
-                <a class="connect facebook pull-left" data-href="{{ path("lc_link_facebook") }}">Facebook</a>
-                <a class="connect twitter pull-right" href="{{ path('lc_before_register_twitter') }}">Twitter</a>
-                <a class="connect nfg pull-left nfgpopup" data-href="{{ path('nfg_create') }}">NFG</a>
+                <div class="row">
+                    <div class="col-sm-12 col-md-4 no-right-padding text-center"><a class="connect facebook" data-href="{{ path("lc_link_facebook") }}">Facebook</a></div>
+                    <div class="col-sm-12 col-md-4 no-right-padding text-center"><a class="connect twitter" href="{{ path('lc_before_register_twitter') }}">Twitter</a></div>
+                    <div class="col-sm-12 col-md-4 text-center"><a class="connect nfg nfgpopup" data-href="{{ path('nfg_create') }}">NFG</a></div>
+                </div>
             </div>
 
     </div>
