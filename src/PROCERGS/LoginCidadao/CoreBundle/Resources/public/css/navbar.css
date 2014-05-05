@@ -168,10 +168,6 @@
   #lc-navbar .navbar-toggle {
     display: none;
   }
-
-  #lc-navbar-ul > li:first-child {
-    margin-right: 0;
-  }
 }
 
 #lc-navbar .notifications .glyphicon {
@@ -183,8 +179,26 @@
   top: -4px;
 }
 
+#lc-navbar .brand {
+  padding: 4px 0;
+}
+
 #lc-navbar .brand a {
-  padding: 9px 0;
+  background: url('../images/meu_logo.png') no-repeat;
+  height: 42px;
+  padding: 0;
+  width: 146px;
+}
+
+@media (max-width: 767px) {
+  #lc-navbar-ul > li:first-child {
+    margin-left: 5px;
+  }
+
+  #lc-navbar .brand a {
+    background-position: 0 -92px;
+    width: 42px;
+  }
 }
 
 #lc-navbar .profile {

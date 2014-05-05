@@ -13,15 +13,7 @@
       {% endif %}
 
       <li class="brand">
-        <a href="{{ url('lc_home') }}" class="btn btn-default">
-          {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/meurs_logo.png' %}
-          <img src="//{{ app.request.host ~ ':' ~ app.request.port ~ asset_url }}" alt="{% trans %}Meu RS{% endtrans %}" width="146" height="42" class="hidden-xs">
-          {% endimage %}
-
-          {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/meurs_logo_mob.png' %}
-          <img src="//{{ app.request.host ~ ':' ~ app.request.port ~ asset_url }}" alt="{% trans %}Meu RS{% endtrans %}" width="42" height="42" class="visible-xs">
-          {% endimage %}
-        </a>
+        <a href="{{ url('lc_home') }}" class="btn btn-default"></a>
       </li>
 
       {% if app.user == null %}
