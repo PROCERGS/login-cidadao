@@ -79,3 +79,6 @@ registration.email.click: 'clique aqui para confirmar seu email'
 Yes: Sim
 nfg.connect: 'Conectar usando NFg'
 'Continue Registration': 'Continuar Cadastro'
+form.voterReg: 'Título eleitoral'
+form.voterreg.invalid: 'Título eleitoral inválido'
+voterreg.invalid: 'Título eleitoral inválido'

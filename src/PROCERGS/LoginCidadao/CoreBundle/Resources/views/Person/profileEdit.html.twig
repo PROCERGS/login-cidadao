@@ -70,6 +70,12 @@
                     <div class="input-error">{{ form_errors(form.cpf) }}</div>
                 </div>
                 <div class="form-group">
+                    {{ form_label(form.voterReg) }}
+                    {{ form_widget(form.voterReg, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error">{{ form_errors(form.voterReg) }}</div>
+                </div>                
+                <div class="form-group">
                     {{ form_label(form.mobile) }}
                     {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }}
                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
@@ -220,7 +226,13 @@ $(document).ready(function() {
     $(profileEdit.cepId).blur(function(event) {
     	validador.cep.findByCep(this, profileEdit.popLocation);
     });
-    //$(profileEdit.cepId).trigger('blur');
+    var messages = {'0' : "{{ 'form.voterreg.invalid' | trans }}"};
+    var trevoterId = '#{{ form.voterReg.vars.id }}';
+      $(trevoterId).on('blur', function () {
+          if (!this.value.length) {return;}
+          this.value = completaZerosEsquerda(this.value, 12);
+          if (!validarTitulo(this.value)) {alert(messages[0]);}
+          }); 
 
     $(".connect a.unlink").on('click', function() {
         var confirmDialog = $('.unlink-confirmation');

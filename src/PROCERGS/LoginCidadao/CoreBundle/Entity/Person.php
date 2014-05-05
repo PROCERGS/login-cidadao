@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
  * @UniqueEntity("cpf")
+ * @UniqueEntity("voterReg") 
  * @UniqueEntity("username")
  * @ORM\HasLifecycleCallbacks
  * @ExclusionPolicy("all")
@@ -241,6 +242,12 @@ class Person extends BaseUser
      * @ORM\JoinColumn(name="nfg_profile_id", referencedColumnName="id")
      */
     protected $nfgProfile;
+    
+    /**
+     * @ORM\Column(name="voter_reg", type="string", length=12, nullable=true, unique=true)
+     * @PROCERGSAssert\VoterRegistration
+     */
+    protected $voterReg;    
 
     public function __construct()
     {
@@ -868,4 +875,15 @@ class Person extends BaseUser
     {
         return $this->nfgProfile;
     }
+    
+    public function setVoterReg($var)
+    {
+        $this->voterReg = preg_replace('/[^0-9]/', '', $var);
+        return $this;
+    }
+    
+    public function getVoterReg()
+    {
+        return $this->voterReg;
+    }    
 }
