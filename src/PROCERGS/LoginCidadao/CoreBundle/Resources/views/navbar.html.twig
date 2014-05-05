@@ -15,7 +15,7 @@
       <li class="brand">
         <a href="{{ url('lc_home') }}" class="btn btn-default">
           {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/brasaoRS.png' %}
-          <img src="//{{ app.request.host ~ asset_url }}" alt="{% trans %}Available services{% endtrans %}" width="33" height="40">
+          <img src="//{{ app.request.host ~ ':' ~ app.request.port ~ asset_url }}" alt="{% trans %}Available services{% endtrans %}" width="33" height="40">
           {% endimage %}
         </a>
       </li>
