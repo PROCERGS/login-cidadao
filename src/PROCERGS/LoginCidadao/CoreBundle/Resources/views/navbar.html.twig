@@ -14,8 +14,12 @@
 
       <li class="brand">
         <a href="{{ url('lc_home') }}" class="btn btn-default">
-          {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/brasaoRS.png' %}
-          <img src="//{{ app.request.host ~ ':' ~ app.request.port ~ asset_url }}" alt="{% trans %}Available services{% endtrans %}" width="33" height="40">
+          {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/meurs_logo.png' %}
+          <img src="//{{ app.request.host ~ ':' ~ app.request.port ~ asset_url }}" alt="{% trans %}Meu RS{% endtrans %}" width="146" height="42" class="hidden-xs">
+          {% endimage %}
+
+          {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/meurs_logo_mob.png' %}
+          <img src="//{{ app.request.host ~ ':' ~ app.request.port ~ asset_url }}" alt="{% trans %}Meu RS{% endtrans %}" width="42" height="42" class="visible-xs">
           {% endimage %}
         </a>
       </li>
@@ -25,8 +29,24 @@
         <a href="{{ url("fos_user_security_login") }}" class="btn btn-login btn-success navbar-btn">{{ 'Log in' | trans }}</a>
       </li>
       {% else %}
+
+      <li class="btn-group pull-right profile">
+        <button type="button" class="btn dropdown-toggle profile-card" data-toggle="dropdown">
+          <span class="profile-username">{{ app.user.username }}</span>
+          <img src="{% include 'PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig' %}" alt="" class="profile-picture">
+        </button>
+        <ul class="dropdown-menu clearfix">
+          <li>
+            <a href="{{ url('fos_user_profile_edit') }}">{% trans %}Profile{% endtrans %}</a>
+          </li>
+          <li>
+            <a href="{{ url('fos_user_security_logout') }}">{% trans from "FOSUserBundle" %}layout.logout{% endtrans %}</a>
+          </li>
+        </ul>
+      </li>
+
       {# Apps list #}
-      <li class="btn-group apps">
+      <li class="btn-group apps pull-right">
         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans %}Applications{% endtrans %}">
           <i class="glyphicon glyphicon-th"></i>
         </button>
@@ -48,7 +68,7 @@
       </li>
 
       {# Notifications #}
-      <li class="btn-group notifications">
+      <li class="btn-group notifications pull-right">
         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans %}Notifications{% endtrans %}">
           <i class="glyphicon glyphicon-bell">
             {% if notifications_helper.getUnreadExcludeExtreme is not empty %}
@@ -76,20 +96,6 @@
         </ul>
       </li>
 
-      <li class="btn-group pull-right profile">
-        <button type="button" class="btn dropdown-toggle profile-card" data-toggle="dropdown">
-          <span class="profile-username">{{ app.user.username }}</span>
-          <img src="{% include 'PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig' %}" alt="" class="profile-picture">
-        </button>
-        <ul class="dropdown-menu clearfix">
-          <li>
-            <a href="{{ url('fos_user_profile_edit') }}">{% trans %}Profile{% endtrans %}</a>
-          </li>
-          <li>
-            <a href="{{ url('fos_user_security_logout') }}">{% trans from "FOSUserBundle" %}layout.logout{% endtrans %}</a>
-          </li>
-        </ul>
-      </li>
       {% endif %}
 
     </ul>
