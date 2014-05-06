@@ -74,7 +74,9 @@ class Authorization
      */
     public function getScope()
     {
-        return $this->scope;
+        $scope = $this->enforcePublicProfileScope($this->scope);
+
+        return $scope;
     }
 
     /**
@@ -82,6 +84,7 @@ class Authorization
      */
     public function setScope(array $scope)
     {
+        $scope = $this->enforcePublicProfileScope($scope);
         $this->scope = $scope;
     }
 
@@ -103,4 +106,11 @@ class Authorization
         return true;
     }
 
+    protected function enforcePublicProfileScope($scope)
+    {
+        if (array_search('public_profile', $scope) === false) {
+            $scope[] = 'public_profile';
+        }
+        return $scope;
+    }
 }

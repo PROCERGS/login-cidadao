@@ -10,6 +10,8 @@ use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\VirtualProperty;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\Type;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use PROCERGS\Generic\ValidationBundle\Validator\Constraints as PROCERGSAssert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -18,7 +20,7 @@ use Symfony\Component\HttpFoundation\File\File;
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
  * @UniqueEntity("cpf")
- * @UniqueEntity("voterReg") 
+ * @UniqueEntity("voterReg")
  * @UniqueEntity("username")
  * @ORM\HasLifecycleCallbacks
  * @ExclusionPolicy("all")
@@ -29,7 +31,7 @@ class Person extends BaseUser
 
     /**
      * @Expose
-     * @Groups({"id"})
+     * @Groups({"id","public_profile"})
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -38,7 +40,7 @@ class Person extends BaseUser
 
     /**
      * @Expose
-     * @Groups({"name"})
+     * @Groups({"first_name","full_name","public_profile"})
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank(message="Please enter your name.", groups={"Profile"})
      * @Assert\Length(
@@ -53,7 +55,7 @@ class Person extends BaseUser
 
     /**
      * @Expose
-     * @Groups({"name"})
+     * @Groups({"last_name","full_name"})
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank(message="Please enter your surname.", groups={"Profile"})
      * @Assert\Length(
@@ -68,14 +70,7 @@ class Person extends BaseUser
 
     /**
      * @Expose
-     * @Groups({"full_name"})
-     * @var string
-     */
-    protected $fullName;
-
-    /**
-     * @Expose
-     * @Groups({"username"})
+     * @Groups({"username","public_profile"})
      * @PROCERGSAssert\Username
      * @Assert\NotBlank
      * @Assert\Length(
@@ -131,17 +126,6 @@ class Person extends BaseUser
      * @ORM\Column(type="string", nullable=true)
      */
     protected $mobile;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    protected $picturePath;
-    protected $tempPicturePath;
-
-    /**
-     * @Assert\Image(maxSize="2M",mimeTypes={"image/jpeg", "image/png"}, maxSizeMessage="The maxmimum allowed file size is 2MB.",mimeTypesMessage="Only the jpeg and png filetypes are allowed.")
-     */
-    protected $pictureFile;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -231,7 +215,7 @@ class Person extends BaseUser
      * @var string
      */
     protected $adressNumber;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Uf")
      * @ORM\JoinColumn(name="uf_id", referencedColumnName="id")
@@ -250,17 +234,19 @@ class Person extends BaseUser
      * @ORM\JoinColumn(name="nfg_profile_id", referencedColumnName="id")
      */
     protected $nfgProfile;
-    
+
     /**
      * @ORM\Column(name="voter_reg", type="string", length=12, nullable=true, unique=true)
      * @PROCERGSAssert\VoterRegistration
      */
-    protected $voterReg;    
+    protected $voterReg;
 
     /**
      * @Assert\File(
      *      maxSize="2M",
-     *      mimeTypes={"image/png", "image/jpeg", "image/pjpeg"}
+     *      maxSizeMessage="The maxmimum allowed file size is 2MB.",
+     *      mimeTypes={"image/png", "image/jpeg", "image/pjpeg"},
+     *      mimeTypesMessage="Only JPEG and PNG images are allowed."
      * )
      * @Vich\UploadableField(mapping="user_image", fileNameProperty="imageName")
      * @var File $image
@@ -273,6 +259,12 @@ class Person extends BaseUser
      * @var string $imageName
      */
     protected $imageName;
+
+    /**
+     * @Expose
+     * @Groups({"picture","public_profile"})
+     */
+    protected $profilePicutreUrl;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -460,7 +452,6 @@ class Person extends BaseUser
 
     public function serialize()
     {
-        $this->fullName = $this->getFullName();
         return serialize(array($this->facebookId, parent::serialize()));
     }
 
@@ -472,6 +463,9 @@ class Person extends BaseUser
 
     /**
      * Get the full name of the user (first + last name)
+     * @Groups({"full_name"})
+     * @VirtualProperty
+     * @SerializedName("full_name")
      * @return string
      */
     public function getFullName()
@@ -664,13 +658,13 @@ class Person extends BaseUser
         $password = $this->getPassword();
         return strlen($password) > 0;
     }
-    
+
     public function setAdress($var)
     {
         $this->adress = $var;
         return $this;
     }
-    
+
     public function getAdress()
     {
         return $this->adress;
@@ -681,23 +675,23 @@ class Person extends BaseUser
         $this->adressNumber = $var;
         return $this;
     }
-    
+
     public function getAdressNumber()
     {
         return $this->adressNumber;
     }
-    
+
     public function setUf($var)
     {
         $this->uf = $var;
         return $this;
     }
-    
+
     public function getUf()
     {
         return $this->uf;
-    }    
-    
+    }
+
     public function setNfgAccessToken($var)
     {
         $this->nfgAccessToken = $var;
@@ -711,13 +705,13 @@ class Person extends BaseUser
 
     /**
      *
-     * @param \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var            
+     * @param \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var
      * @return City
      */
     public function setNfgProfile(\PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var = null)
     {
         $this->nfgProfile = $var;
-        
+
         return $this;
     }
 
@@ -729,17 +723,17 @@ class Person extends BaseUser
     {
         return $this->nfgProfile;
     }
-    
+
     public function setVoterReg($var)
     {
         $this->voterReg = preg_replace('/[^0-9]/', '', $var);
         return $this;
     }
-    
+
     public function getVoterReg()
     {
         return $this->voterReg;
-    }    
+    }
 
     /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
@@ -783,4 +777,46 @@ class Person extends BaseUser
         return $this->imageName;
     }
 
+    public function setProfilePictureUrl($profilePicutreUrl)
+    {
+        $this->profilePicutreUrl = $profilePicutreUrl;
+
+        return $this;
+    }
+
+    public function getProfilePictureUrl()
+    {
+        return $this->profilePicutreUrl;
+    }
+
+    /**
+     * @Groups({"public_profile"})
+     * @VirtualProperty
+     * @SerializedName("age_range")
+     * @Type("array")
+     * @return array
+     */
+    public function getAgeRange()
+    {
+        $today = new \DateTime('today');
+        $age = $this->getBirthdate()->diff($today)->y;
+
+        $range = array();
+        if ($age < 13) {
+            $range['max'] = 13;
+        }
+        if ($age >= 13 && $age < 18) {
+            $range['min'] = 13;
+            $range['max'] = 17;
+        }
+        if ($age >= 18 && $age < 21) {
+            $range['min'] = 18;
+            $range['max'] = 20;
+        }
+        if ($age >= 21) {
+            $range['min'] = 21;
+        }
+
+        return $range;
+    }
 }
