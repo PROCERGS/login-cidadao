@@ -191,7 +191,7 @@ class PersonController extends Controller
 
     /**
      * @Route("/cpf/register", name="lc_registration_cpf")
-     * @Template("@PROCERGSLoginCidadaoCoreBundle:Person:registration/cpf.html.twig")
+     * @Template("PROCERGSLoginCidadaoCoreBundle:Person:registration/cpf.html.twig")
      */
     public function registrationCpfAction(Request $request)
     {
