@@ -119,12 +119,14 @@ body {
     cursor: pointer;
     display: block;
     height: 25px;
+    margin: 0 auto;
     line-height: 25px;
     padding-left: 30px;
     text-align: center;
     background-repeat: no-repeat;
     margin-top: 10px;
     margin-bottom: 10px;
+    max-width: 300px;
 }
 
 .lc-box .connect:hover {
