@@ -819,4 +819,9 @@ class Person extends BaseUser
 
         return $range;
     }
+
+    public function hasLocalProfilePicture()
+    {
+        return !is_null($this->getImageName());
+    }
 }

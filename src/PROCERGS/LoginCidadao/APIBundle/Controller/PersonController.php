@@ -17,6 +17,7 @@ class PersonController extends Controller
      */
     public function selfAction()
     {
+        $kernel = $this->get('kernel');
         $token = $this->get('security.context')->getToken();
         $user = $token->getUser();
 
@@ -34,12 +35,23 @@ class PersonController extends Controller
         $serializer = $this->container->get('jms_serializer');
 
         // User's profile picture
-        $helper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
-        $picturePath = $helper->asset($user, 'image');
-        $pictureUrl = $this->getRequest()->getUriForPath($picturePath);
-        $kernel = $this->get('kernel');
-        if ($kernel->getEnvironment() === 'dev') {
-            $pictureUrl = str_replace('/app_dev.php', '', $pictureUrl);
+        if ($user->hasLocalProfilePicture()) {
+            $helper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
+            $picturePath = $helper->asset($user, 'image');
+            $pictureUrl = $this->getRequest()->getUriForPath($picturePath);
+            if ($kernel->getEnvironment() === 'dev') {
+                $pictureUrl = str_replace('/app_dev.php', '', $pictureUrl);
+            }
+        } else {
+            $pictureUrl = $user->getSocialNetworksPicture();
+        }
+        if (is_null($pictureUrl)) {
+            // TODO: fix this and make it comply to DRY
+            $picturePath = $this->get('templating.helper.assets')->getUrl('bundles/procergslogincidadaocore/images/userav.png');
+            $pictureUrl = $this->getRequest()->getUriForPath($picturePath);
+            if ($kernel->getEnvironment() === 'dev') {
+                $pictureUrl = str_replace('/app_dev.php', '', $pictureUrl);
+            }
         }
         $user->setProfilePictureUrl($pictureUrl);
 
