@@ -230,7 +230,7 @@
     width: 30px;
     border-radius: 50%;
     overflow: hidden;
-    display: block;
+    display: inline-block;
 }
 
 #lc-navbar .profile-card .profile-picture {
