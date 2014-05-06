@@ -41,7 +41,7 @@
 
                 <div class="form-group">
                     {{ form_label(form.mobile, 'form.phone' | trans, {'label_attr': {'class': 'sr-only'}}) }}
-                    {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'placeholder' : ('form.phone' | trans) ~ (' (optional)' | trans)}}) }}
+                    {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'placeholder' : ('form.phone' | trans) }}) }}
                     <div class="input-error alert-danger">{{ form_errors(form.mobile) }}</div>
                 </div>
 
@@ -51,7 +51,7 @@
         {{ form_end(form) }}
             <div class="connect-box">
                 <div><hr><span>{% trans %}or{% endtrans %}</span></div>
-                <p>{% trans %}Use your social networks{% endtrans %}</p>
+                <p>{% trans %}Use accounts from other services{% endtrans %}</p>
                 <div class="row">
                     <div class="col-sm-12 col-md-4 no-right-padding text-center"><a class="connect facebook" data-href="{{ path("lc_link_facebook") }}">Facebook</a></div>
                     <div class="col-sm-12 col-md-4 no-right-padding text-center"><a class="connect twitter" href="{{ path('lc_before_register_twitter') }}">Twitter</a></div>

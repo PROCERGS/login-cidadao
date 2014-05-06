@@ -74,13 +74,7 @@ Notifications: Notifications
 Activate: Activate
 Deactivate: Deactivate
 cpf_reminder.subject: 'We noticed that your account doesn''t have a CPF associated with it yet.'
-cpf_reminder.message: >
-  Hello, %name%
-
-  We noticed that your account doesn''t have a CPF associated with it yet.
-
-  Please consider visiting Citizen''s Login until %date% to complete this information. After that date, your account might be suspended.
-
+cpf_reminder.message: "Hello, %name%\n\nWe noticed that your account doesn''t have a CPF associated with it yet.\n\nPlease consider visiting Citizen''s Login until %date% to complete this information. After that date, your account might be suspended.\n"
 'Toggle Navigation': 'Toggle Navigation'
 'Log in': 'Log in'
 Applications: Applications
@@ -126,3 +120,36 @@ admin.apps.list: 'Manage Apps'
 social-networks.unlink.no-password: 'You must define a password before unlinking any social network.'
 social-networks.unlink.facebook.success: 'Facebook successfully unlinked.'
 social-networks.unlink.twitter.success: 'Twitter successfully unlinked.'
+'Mark as read': 'Mark as read'
+'New Service': 'New Service'
+Name: Name
+Description: Description
+URL: URL
+'Redirect URIs': 'Redirect URIs'
+'Allowed Scopes': 'Allowed Scopes'
+'Allowed Grant Types': 'Allowed Grant Types'
+'Landing Page': 'Landing Page'
+'Terms of Use': 'Terms of Use'
+'Upload another picture': 'Upload another picture'
+Create: Create
+Service: Service
+Actions: Actions
+Details: Details
+Edit: Edit
+'No services registered.': 'No services registered.'
+'Secret/Private Key': 'Secret/Private Key'
+'Public Id': 'Public Id'
+Active: Active
+'There are no active services yet.': 'There are no active services yet.'
+Inactive: Inactive
+'Suggest a Service': 'Suggest a Service'
+'Describe your suggestion': 'Describe your suggestion'
+Send: Send
+'Your last suggested Services': 'Your last suggested Services'
+'Meu RS': 'Meu RS'
+'Login Cidadão': 'Login Cidadão'
+form.voterreg.invalid: 'Invalid Voter Registration'
+'Do you really want to disable this service?': 'Do you really want to disable this service?'
+Yes: Yes
+No: No
+'This service uses the following data from your Login Citizen account': 'This service uses the following data from your Login Citizen account'

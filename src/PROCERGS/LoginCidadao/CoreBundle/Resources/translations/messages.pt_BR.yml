@@ -151,8 +151,7 @@ Actions: Ações
 Details: Detalhes
 Edit: Editar
 'No services registered.': 'Nenhum Serviço registrado'
-'No service activated': 'Nenhum Serviço ativo'
-'No service deactivated': 'Nenhum Serviço a ser ativado'
+'There are no active services yet.': 'Você ainda não possui nenhum serviço ativo.'
 Name: Nome
 Description: Descrição
 'Redirect URIs': 'URIs para Redirectionamento'
