@@ -268,14 +268,14 @@ class Person extends BaseUser
     protected $image;
 
     /**
-     * @ORM\Column(type="string", length=255, name="image_name")
+     * @ORM\Column(type="string", length=255, name="image_name", nullable=true)
      *
      * @var string $imageName
      */
     protected $imageName;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      *
      * @var \DateTime $updatedAt
      */
