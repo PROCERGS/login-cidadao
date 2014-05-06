@@ -205,6 +205,11 @@ class Person extends BaseUser
     protected $notifications;
 
     /**
+     * @ORM\OneToMany(targetEntity="ClientSuggestion", mappedBy="person")
+     */
+    protected $suggestions;
+
+    /**
      * @ORM\Column(name="adress", type="string", length=255, nullable=true)
      * @var string
      */
@@ -824,4 +829,17 @@ class Person extends BaseUser
     {
         return !is_null($this->getImageName());
     }
+
+    public function getSuggestions()
+    {
+        return $this->suggestions;
+    }
+
+    public function setSuggestions($suggestions)
+    {
+        $this->suggestions = $suggestions;
+
+        return $this;
+    }
+
 }

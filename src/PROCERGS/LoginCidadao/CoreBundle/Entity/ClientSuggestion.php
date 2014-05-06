@@ -31,7 +31,7 @@ class ClientSuggestion
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="notifications")
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="suggestions")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $person;
@@ -49,13 +49,13 @@ class ClientSuggestion
     /**
      * Set text
      *
-     * @param string $text            
+     * @param string $text
      * @return Notification
      */
     public function setText($text)
     {
         $this->text = $text;
-        
+
         return $this;
     }
 
@@ -96,7 +96,7 @@ class ClientSuggestion
     public function setPerson(Person $person)
     {
         $this->person = $person;
-        
+
         return $this;
     }
 
