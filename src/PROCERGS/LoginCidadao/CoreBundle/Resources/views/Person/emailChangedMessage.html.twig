@@ -14,6 +14,9 @@
 
 {% block body_html %}
 {% autoescape false %}
-{% include "PROCERGSLoginCidadaoCoreBundle::common.email.html.twig" with {'subject' : 'email.changed.message.subject' | trans, 'msg' : 'email.changed.message.text' | trans({ '%name%': user.firstName, '%email%': user.email }) } %}
+{% include "PROCERGSLoginCidadaoCoreBundle::common.email.html.twig" with {
+    'subject' : 'email.changed.message.subject' | trans,
+    'msg' : 'email.changed.message.text.html' | trans({ '%name%': user.firstName, '%email%': user.email }) | raw
+} %}
 {% endautoescape %}
 {% endblock %}

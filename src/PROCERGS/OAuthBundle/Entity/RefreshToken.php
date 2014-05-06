@@ -25,7 +25,7 @@ class RefreshToken extends BaseRefreshToken
     protected $client;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person")
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", cascade={"remove"})
      */
     protected $user;
 
