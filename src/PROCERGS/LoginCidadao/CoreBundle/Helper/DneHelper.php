@@ -53,7 +53,13 @@ class DneHelper
         $headApp = array_merge($headApp, $header);
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $headApp);
         if (! $this->cookie) {
-            $this->cookie = tempnam(sys_get_temp_dir(), "dne");
+            $tmp = getenv('TMPDIR');
+            if ($tmp && @is_writable($tmp)) {
+                $tmpDir = $tmp;
+            } elseif (function_exists('sys_get_temp_dir') && @is_writable(sys_get_temp_dir())) {
+                $tmpDir = sys_get_temp_dir();
+            }
+            $this->cookie = tempnam($tmpDir, "dne");
         }
         curl_setopt($this->ch, CURLOPT_COOKIEFILE, $this->cookie);
         curl_setopt($this->ch, CURLOPT_COOKIEJAR, $this->cookie);

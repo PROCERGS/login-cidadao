@@ -166,7 +166,7 @@ class NfgController extends Controller
             $user->setBirthdate(new \DateTime(str_replace('T', ' ', $result1['DtNasc'])));
             $nfgProfile->setBirthdate($user->getBirthdate());
         }
-        if ($result1['NroFoneContato']) {
+        if (isset($result1['NroFoneContato'])) {
             $user->setMobile($result1['NroFoneContato']);
             $nfgProfile->setMobile($user->getMobile());
         }
