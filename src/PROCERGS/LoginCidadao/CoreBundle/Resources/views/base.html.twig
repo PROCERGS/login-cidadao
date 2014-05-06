@@ -13,8 +13,8 @@
             <div class="col-sm-4">
                 <h3>{% trans %}Useful Information{% endtrans %}</h3>
                 <ul>
-                    <li><a href="{{ path('lc_general') }}">{% trans %}Privacy and Terms of Service{% endtrans %}</a></li>
-                    <li><a href="{{ path('lc_general') }}">{% trans %}Privacy Policy{% endtrans %}</a></li>
+                    <li><a href="{{ path('lc_about') }}">{% trans %}About Citizen's Login{% endtrans %}</a></li>
+                    <li><a href="{{ path('lc_privacy') }}">{% trans %}Privacy and Terms of Service{% endtrans %}</a></li>
                     <li><a href="https://github.com/PROCERGS/login-cidadao/">{% trans %}GitHub Repository{% endtrans %}</a></li>
                     <li><a href="{{ asset('humans.txt') }}">humans.txt</a></li>
                 </ul>
@@ -29,7 +29,7 @@
             </div>
 
             <div class="col-sm-4">
-                <h3>{% trans %}About the Government{% endtrans %}</h3>
+                <h3 class="invisible">{% trans %}About the Government{% endtrans %}</h3>
                 {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_gov2.png' %}
                 <img src="{{ asset_url }}" alt="{% trans %}Government{% endtrans %}">
                 {% endimage %}

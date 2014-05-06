@@ -1,0 +1,33 @@
+{% extends 'PROCERGSLoginCidadaoCoreBundle::base.html.twig' %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-xs-12 text-center header-shadows">
+        <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
+        <h2 class="slogan hidden-xs">{% trans %}One account. All that the Government offers.{% endtrans %}</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="general-content col-sm-12">
+
+        <div class="title text-center">
+            <h4>{% trans %}About Citizen's Login{% endtrans %}</h3>
+        </div>
+
+        <div class="text">
+            <p>O Login Cidadão tem o objetivo de unificar o cadastro e autenticação do cidadão junto às ferramentas e Serviços Digitais de Governo, facilitando o cadastramento e o relacionamento da pessoa física com o Governo do Estado e abrindo caminho para a adoção de uma Identidade Digital unificada para os cidadãos gaúchos.</p>
+
+            <p>A iniciativa promove a desburocratização e a integração de sistemas, diminui a possibilidade de fraudes e padroniza o acesso as bases de dados do Estado, ao passo que permite o registro automatizado e o acompanhamento sistemático da interação dos cidadãos com os serviços digitais geridos pela Administração Estadual.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+    {% stylesheets 'bundles/procergslogincidadaocore/css/home/*.css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}

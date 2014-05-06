@@ -23,7 +23,7 @@ class DefaultController extends Controller
         if (! is_null($shouldLogout)) {
             $this->get('session')->set('facebook.logout', true);
         }
-        
+
         $api = $this->container->get('fos_facebook.api');
         $scope = implode(',', $this->container->getParameter('facebook_app_scope'));
         $callback = $this->container->get('router')->generate('_security_check_facebook', array(), true);
@@ -31,7 +31,7 @@ class DefaultController extends Controller
             'scope' => $scope,
             'redirect_uri' => $callback
         ));
-        
+
         return new RedirectResponse($redirect_url);
     }
 
@@ -64,7 +64,7 @@ class DefaultController extends Controller
         // $cep = new \PROCERGS\LoginCidadao\CoreBundle\Entity\Cep();
         $repoUf = $this->getDoctrine()->getEntityManager()->getRepository('PROCERGSLoginCidadaoCoreBundle:Uf');
         $q = $repoUf->createQueryBuilder('u')->orderBy('u.acronym');
-        $p = $repoUf->findBy(array('acronym' => 'RS'));     
+        $p = $repoUf->findBy(array('acronym' => 'RS'));
         $form = $this->createFormBuilder()->add('adress', 'text', array(
             'required' => true,
             'label' => 'form.adress',
@@ -83,7 +83,7 @@ class DefaultController extends Controller
             'required' => true,
             'label' => 'form.uf',
             'preferred_choices' => $p,
-            'query_builder' => $q,            
+            'query_builder' => $q,
             'translation_domain' => 'FOSUserBundle'
         )
         )->getForm();
