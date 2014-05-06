@@ -97,7 +97,7 @@ fos_user:
     registration:
         confirmation:
             enabled: false
-            template: PROCERGSLoginCidadaoCoreBundle:Person:registrationEmail.html.twig
+            template: PROCERGSLoginCidadaoCoreBundle:Person:registration/email.html.twig
             from_email:
               address: %mailer_sender_mail%
               sender_name: %site_domain%
@@ -109,7 +109,7 @@ fos_user:
             type: procergs_person_profile
     resetting:
         email:
-            template: PROCERGSLoginCidadaoCoreBundle:Person:resettingEmail.html.twig
+            template: PROCERGSLoginCidadaoCoreBundle:Person:resetting/email.html.twig
             from_email:
                 address:        %mailer_sender_mail%
                 sender_name:    %site_domain%
@@ -172,3 +172,27 @@ ewz_recaptcha:
     secure:       false
     locale_key:   kernel.default_locale
     http_proxy: %http_proxy%
+
+# Uploader
+knp_gaufrette:
+    stream_wrapper: ~
+
+    adapters:
+        user_adapter:
+            local:
+                directory: %kernel.root_dir%/../web/uploads/profile-pictures
+
+    filesystems:
+        user_image_fs:
+            adapter:    user_adapter
+
+vich_uploader:
+    db_driver:  orm
+    twig:       true
+    gaufrette:  true
+    storage:    vich_uploader.storage.gaufrette
+    mappings:
+        user_image:
+            uri_prefix:         /uploads/profile-pictures
+            upload_destination: user_image_fs
+            namer:              vich_uploader.namer_uniqid

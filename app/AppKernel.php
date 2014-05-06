@@ -31,6 +31,9 @@ class AppKernel extends Kernel
             new PROCERGS\LoginCidadao\APIBundle\PROCERGSLoginCidadaoAPIBundle(),
             new PROCERGS\Generic\ValidationBundle\PROCERGSGenericValidationBundle(),
             new EWZ\Bundle\RecaptchaBundle\EWZRecaptchaBundle(),
+
+            new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
+            new Vich\UploaderBundle\VichUploaderBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

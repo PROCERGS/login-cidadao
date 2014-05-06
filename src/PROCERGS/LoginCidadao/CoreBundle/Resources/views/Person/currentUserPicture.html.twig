@@ -1,4 +1,4 @@
-{%  if app.user.getPictureWebPath is null %}
+{%  if app.user.imageName is null %}
 {%      if app.user.getSocialNetworksPicture is not null %}
 {{ app.user.getSocialNetworksPicture }}
 {%      else %}
@@ -7,5 +7,5 @@
 {% endimage %}
 {%      endif %}
 {%  else %}
-//{{ app.request.host ~ '/' ~ app.user.getPictureWebPath }}
+{{ vich_uploader_asset(app.user, 'image') }}
 {%  endif %}

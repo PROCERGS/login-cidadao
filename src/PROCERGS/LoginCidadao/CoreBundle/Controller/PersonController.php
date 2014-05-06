@@ -191,7 +191,7 @@ class PersonController extends Controller
 
     /**
      * @Route("/cpf/register", name="lc_registration_cpf")
-     * @Template()
+     * @Template("@PROCERGSLoginCidadaoCoreBundle:Person:registration/cpf.html.twig")
      */
     public function registrationCpfAction(Request $request)
     {
@@ -202,7 +202,7 @@ class PersonController extends Controller
         $formBuilder = $this->createFormBuilder($person);
         if (!$person->getCpf()) {
             $formBuilder->add('cpf', 'text', array('required' => true));
-        }        
+        }
         $form = $formBuilder->getForm();
         $form->handleRequest($this->getRequest());
         $messages = '';
@@ -214,7 +214,7 @@ class PersonController extends Controller
         return array(
             'form' => $form->createView(), 'messages' => $messages, 'isExpired' => $person->isCpfExpired()
         );
-    }    
+    }
 
     /**
      * @Route("/facebook/unlink", name="lc_unlink_facebook")

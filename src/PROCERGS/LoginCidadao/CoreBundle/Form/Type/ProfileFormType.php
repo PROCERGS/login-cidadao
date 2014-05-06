@@ -43,10 +43,10 @@ class ProfileFormType extends BaseType
                 )) */
                 ->add('mobile', null,
                         array('required' => false, 'label' => 'form.mobile', 'translation_domain' => 'FOSUserBundle'))
-                ->add('pictureFile')
+                ->add('image')
                 ->add('voterReg', 'text', array('required' => false, 'label' => 'form.voterReg', 'translation_domain' => 'FOSUserBundle'))
                 ;
-                
+
     }
 
     public function getName()

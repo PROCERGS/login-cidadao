@@ -12,15 +12,17 @@ use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\VirtualProperty;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use PROCERGS\Generic\ValidationBundle\Validator\Constraints as PROCERGSAssert;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
  * @UniqueEntity("cpf")
- * @UniqueEntity("voterReg") 
+ * @UniqueEntity("voterReg")
  * @UniqueEntity("username")
  * @ORM\HasLifecycleCallbacks
  * @ExclusionPolicy("all")
+ * @Vich\Uploadable
  */
 class Person extends BaseUser
 {
@@ -76,7 +78,11 @@ class Person extends BaseUser
      * @Groups({"username"})
      * @PROCERGSAssert\Username
      * @Assert\NotBlank
-     * @Assert\Length(min="1", max="33")
+     * @Assert\Length(
+     *     min="1",
+     *     max="33",
+     *     groups={"Registration", "Profile"}
+     * )
      */
     protected $username;
 
@@ -125,23 +131,6 @@ class Person extends BaseUser
      * @ORM\Column(type="string", nullable=true)
      */
     protected $mobile;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    protected $picturePath;
-    protected $tempPicturePath;
-
-    /**
-     * @Assert\Image(maxSize="2M",mimeTypes={"image/jpeg", "image/png"}, maxSizeMessage="The maxmimum allowed file size is 2MB.",mimeTypesMessage="Only the jpeg and png filetypes are allowed.")
-     */
-    protected $pictureFile;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @var string
-     */
-    protected $twitterPicture;
 
     /**
      * @Expose
@@ -213,17 +202,19 @@ class Person extends BaseUser
      * @ORM\OneToMany(targetEntity="Notification", mappedBy="person")
      */
     protected $notifications;
+
     /**
      * @ORM\Column(name="adress", type="string", length=255, nullable=true)
      * @var string
      */
     protected $adress;
+
     /**
      * @ORM\Column(name="adress_number",type="integer", nullable=true)
      * @var string
      */
     protected $adressNumber;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Uf")
      * @ORM\JoinColumn(name="uf_id", referencedColumnName="id")
@@ -242,12 +233,36 @@ class Person extends BaseUser
      * @ORM\JoinColumn(name="nfg_profile_id", referencedColumnName="id")
      */
     protected $nfgProfile;
-    
+
     /**
      * @ORM\Column(name="voter_reg", type="string", length=12, nullable=true, unique=true)
      * @PROCERGSAssert\VoterRegistration
      */
-    protected $voterReg;    
+    protected $voterReg;
+
+    /**
+     * @Assert\File(
+     *      maxSize="2M",
+     *      mimeTypes={"image/png", "image/jpeg", "image/pjpeg"}
+     * )
+     * @Vich\UploadableField(mapping="user_image", fileNameProperty="imageName")
+     * @var File $image
+     */
+    protected $image;
+
+    /**
+     * @ORM\Column(type="string", length=255, name="image_name")
+     *
+     * @var string $imageName
+     */
+    protected $imageName;
+
+    /**
+     * @ORM\Column(type="datetime")
+     *
+     * @var \DateTime $updatedAt
+     */
+    protected $updatedAt;
 
     public function __construct()
     {
@@ -552,191 +567,13 @@ class Person extends BaseUser
         return $this->emailConfirmedAt;
     }
 
-    public function getAbsolutePicturePath()
-    {
-        return null === $this->picturePath ? null : $this->getPictureUploadRootDir() . DIRECTORY_SEPARATOR . $this->picturePath;
-    }
-
-    public function getPictureWebPath()
-    {
-        return null === $this->picturePath ? null : $this->getPictureUploadDir() . '/' . $this->picturePath;
-    }
-
-    protected function getPictureUploadRootDir()
-    {
-        return __DIR__ . '/../../../../../web/' . $this->getPictureUploadDir();
-    }
-
-    protected function getPictureUploadDir()
-    {
-        return 'uploads/profile-pictures';
-    }
-
-    public function setPictureFile(UploadedFile $pictureFile = null)
-    {
-        $this->pictureFile = $pictureFile;
-        if (isset($this->picturePath)) {
-            $this->tempPicturePath = $this->picturePath;
-            $this->picturePath = null;
-        } else {
-            $this->picturePath = 'initial';
-        }
-    }
-
-    /**
-     *
-     * @return UploadedFile
-     */
-    public function getPictureFile()
-    {
-        return $this->pictureFile;
-    }
-
-    /**
-     * @VirtualProperty
-     */
-    private function getPictureFullURL() {
-        /*
-        if (is_null($user->getPictureWebPath())) {
-            if (!is_null($user->getSocialNetworksPicture())) {
-                $pic = $user->getSocialNetworksPicture();
-            } else {
-                // no picture
-            }
-        } else {
-            $host = $this->getRequest()->headers->get('host');
-            $pic = "//$host/" . $user->getPictureWebPath();
-            die($pic);
-        }*/
-        // Not implemented yet
-    }
-
-    /**
-     * @ORM\PostPersist()
-     * @ORM\PostUpdate()
-     */
-    public function uploadPicture()
-    {
-        if (null === $this->getPictureFile()) {
-            return;
-        }
-
-        $this->getPictureFile()->move(
-                $this->getPictureUploadRootDir(), $this->picturePath
-        );
-
-        if (isset($this->tempPicturePath) && $this->tempPicturePath != $this->picturePath) {
-            @unlink($this->getPictureUploadRootDir() . DIRECTORY_SEPARATOR . $this->tempPicturePath);
-            $this->tempPicturePath = null;
-        }
-
-        $this->pictureFile = null;
-    }
-
-    /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
-     */
-    public function preUpload()
-    {
-        if (null !== $this->getPictureFile()) {
-            $filename = sha1($this->getId());
-            $this->picturePath = "$filename." . $this->getPictureFile()->guessExtension();
-        }
-    }
-
-    /**
-     * @ORM\PostRemove()
-     */
-    public function removePicturePostRemoval()
-    {
-        if ($file = $this->getAbsolutePicturePath()) {
-            unlink($file);
-        }
-    }
-
-    public function setTwitterPicture($twitterPicture)
-    {
-        $this->twitterPicture = $twitterPicture;
-
-        return $this;
-    }
-
-    public function getTwitterPicture()
-    {
-        return $this->twitterPicture;
-    }
-
     public function getSocialNetworksPicture()
     {
         if (!is_null($this->getFacebookId())) {
             return "https://graph.facebook.com/{$this->getFacebookId()}/picture?height=245&width=245";
         }
-        if (!is_null($this->getTwitterId())) {
-            if (!is_null($this->getTwitterPicture())) {
-                return $this->getTwitterPicture();
-            }
-        }
 
         return null;
-    }
-
-    public function updateTwitterPicture($rawResponse, $proxySettings = null)
-    {
-        $pictureAddress = $rawResponse['profile_image_url'];
-        $currentPicture = $this->getTwitterPicture();
-
-        $context = null;
-        if ($currentPicture !== $pictureAddress) {
-            if (ini_get('allow_url_fopen')) {
-                if (!empty($proxySettings)) {
-                    $auth = base64_encode($proxySettings['auth']);
-                    $opts = array('http' => array(
-                        'proxy' => "tcp://{$proxySettings['host']}:{$proxySettings['port']}",
-                        'request_fulluri' => true,
-                        'header' => array(
-                            "Proxy-Authorization: Basic $auth"
-                        )
-                    ));
-                    $context = stream_context_create($opts);
-                }
-                $picture = file_get_contents($pictureAddress, false, $context);
-            } elseif (function_exists('curl_init')) {                
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_HEADER, 0);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                if (ini_get('open_basedir')) {
-                    //@TODO some gambi
-                } else {
-                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-                }
-                curl_setopt($ch, CURLOPT_URL, $url);
-                if (isset($proxySettings['host'], $proxySettings['port'])) {
-                    curl_setopt($ch, CURLOPT_PROXYTYPE, $proxySettings['type']);
-                    curl_setopt($ch, CURLOPT_PROXY, $proxySettings['host']);
-                    curl_setopt($ch, CURLOPT_PROXYPORT, $proxySettings['port']);
-                    if (isset($proxySettings['auth'])) {
-                        curl_setopt($ch, CURLOPT_PROXYUSERPWD, $proxySettings['auth']);
-                    }
-                }
-                $picture = curl_exec($ch);
-                curl_close($ch);
-                $ch = null;
-            } else {
-                throw new \Exception('No way to open sockets');
-            }
-            $this->setTwitterPicture($pictureAddress);
-            $ext = explode('.', $pictureAddress);
-            $filename = sha1($this->getId()) . '.' . array_pop($ext);
-            $this->picturePath = $filename;
-            file_put_contents($this->getAbsolutePicturePath(), $picture);            
-        }
-    }
-
-    public function hasLocalPicture()
-    {
-        return file_exists($this->getAbsolutePicturePath());
     }
 
     public function getNotifications()
@@ -810,13 +647,13 @@ class Person extends BaseUser
         $password = $this->getPassword();
         return strlen($password) > 0;
     }
-    
+
     public function setAdress($var)
     {
         $this->adress = $var;
         return $this;
     }
-    
+
     public function getAdress()
     {
         return $this->adress;
@@ -827,23 +664,23 @@ class Person extends BaseUser
         $this->adressNumber = $var;
         return $this;
     }
-    
+
     public function getAdressNumber()
     {
         return $this->adressNumber;
     }
-    
+
     public function setUf($var)
     {
         $this->uf = $var;
         return $this;
     }
-    
+
     public function getUf()
     {
         return $this->uf;
-    }    
-    
+    }
+
     public function setNfgAccessToken($var)
     {
         $this->nfgAccessToken = $var;
@@ -857,13 +694,13 @@ class Person extends BaseUser
 
     /**
      *
-     * @param \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var            
+     * @param \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var
      * @return City
      */
     public function setNfgProfile(\PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var = null)
     {
         $this->nfgProfile = $var;
-        
+
         return $this;
     }
 
@@ -875,15 +712,58 @@ class Person extends BaseUser
     {
         return $this->nfgProfile;
     }
-    
+
     public function setVoterReg($var)
     {
         $this->voterReg = preg_replace('/[^0-9]/', '', $var);
         return $this;
     }
-    
+
     public function getVoterReg()
     {
         return $this->voterReg;
-    }    
+    }
+
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the  update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $image
+     */
+    public function setImage(File $image)
+    {
+        $this->image = $image;
+
+        if ($this->image) {
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    /**
+     * @return File
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param string $imageName
+     */
+    public function setImageName($imageName)
+    {
+        $this->imageName = $imageName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageName()
+    {
+        return $this->imageName;
+    }
+
 }
