@@ -179,9 +179,11 @@ nfg.corrupted.callback: 'Aparentemente os dados enviados pela NFG estão corromp
 nfg.accessid.mismatch: 'Aparentemente a sessão enviada pela NFG está corrompida, por favor entre em contato com o administrador do sistema'
 nfg.user.notfound: 'Não foi encontrada uma conta do login cidadao vinculada com sua conta da NFG'
 'Suggest a Service': 'Sugira um serviço'
-'Describe your suggestion': 'Sugestão'
+'Describe your suggestion': Sugestão
 client.suggestion.registered: 'Sua sugestão foi registrada'
 'Your last suggested Services': 'Seus últimos serviços sugeridos'
-'Send': 'Enviar'
+Send: Enviar
 form.voterreg.invalid: 'Título eleitoral inválido'
 voterreg.invalid: 'Título eleitoral inválido'
+'Meu RS': 'Meu RS'
+'Login Cidadão': 'Login Cidadão'
