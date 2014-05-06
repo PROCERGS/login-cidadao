@@ -1,26 +1,26 @@
 imports:
     - { resource: config.yml }
 
-framework:
-    session:
-        handler_id: session.handler.memcached
+#framework:
+#    session:
+#        handler_id: session.handler.memcached
 #    validation:
 #        cache: apc
 
-doctrine:
-    orm:
-        metadata_cache_driver:
-            type:   memcache
-            host:   %memcached_host%
-            port:   %memcached_port%
-        query_cache_driver:
-            type:   memcache
-            host:   %memcached_host%
-            port:   %memcached_port%
-        result_cache_driver:
-            type:   memcache
-            host:   %memcached_host%
-            port:   %memcached_port%
+#doctrine:
+#    orm:
+#        metadata_cache_driver:
+#            type:   memcache
+#            host:   %memcached_host%
+#            port:   %memcached_port%
+#        query_cache_driver:
+#            type:   memcache
+#            host:   %memcached_host%
+#            port:   %memcached_port%
+#        result_cache_driver:
+#            type:   memcache
+#            host:   %memcached_host%
+#            port:   %memcached_port%
 #        metadata_cache_driver: apc
 #        result_cache_driver: apc
 #        query_cache_driver: apc

@@ -24,14 +24,14 @@ parameters:
     procergs_logincidadao.nfgws.class: PROCERGS\LoginCidadao\CoreBundle\Helper\NfgWsHelper
 
 services:
-    session.memcached:
-        class: Memcached
-        calls:
-            - [addServer, [%memcached_host%, %memcached_port%]]
+#    session.memcached:
+#        class: Memcached
+#        calls:
+#            - [addServer, [%memcached_host%, %memcached_port%]]
 
-    session.handler.memcached:
-        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
-        arguments: ["@session.memcached", { prefix: %session_prefix%, expiretime: %session_lifetime% } ]
+#    session.handler.memcached:
+#        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
+#        arguments: ["@session.memcached", { prefix: %session_prefix%, expiretime: %session_lifetime% } ]
 
     security.authentication.success_handler:
         class: %security.authentication.success_handler.class%
