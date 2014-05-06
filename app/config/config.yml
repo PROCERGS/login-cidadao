@@ -100,7 +100,7 @@ fos_user:
             template: PROCERGSLoginCidadaoCoreBundle:Person:registration/email.html.twig
             from_email:
               address: %mailer_sender_mail%
-              sender_name: %site_domain%
+              sender_name: %mailer_sender_name%
         form:
             type: procergs_person_registration
             validation_groups:  [LoginCidadaoRegistration]
@@ -112,7 +112,7 @@ fos_user:
             template: PROCERGSLoginCidadaoCoreBundle:Person:resetting/email.html.twig
             from_email:
                 address:        %mailer_sender_mail%
-                sender_name:    %site_domain%
+                sender_name:    %mailer_sender_name%
         form:
             type:               procergs_person_resetting
     service:

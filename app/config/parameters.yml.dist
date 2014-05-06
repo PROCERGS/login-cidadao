@@ -38,6 +38,7 @@ parameters:
 
     site_domain: meu.rs.gov.br
     mailer_sender_mail: ~
+    mailer_sender_name: ~
     recaptcha_public_key: ~
     recaptcha_private_key: ~
     # This must be compatible with strtotime()
@@ -55,4 +56,4 @@ parameters:
     soe_password: ~
     nfg_url_auth: ~
     nfg_url_login: ~
-    nfg_hmac_secret: ~        
+    nfg_hmac_secret: ~
