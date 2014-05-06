@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\File\File;
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
  * @UniqueEntity("cpf")
- * @UniqueEntity("voterReg")
+ * @UniqueEntity("voterReg") 
  * @UniqueEntity("username")
  * @ORM\HasLifecycleCallbacks
  * @ExclusionPolicy("all")
@@ -133,6 +133,23 @@ class Person extends BaseUser
     protected $mobile;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $picturePath;
+    protected $tempPicturePath;
+
+    /**
+     * @Assert\Image(maxSize="2M",mimeTypes={"image/jpeg", "image/png"}, maxSizeMessage="The maxmimum allowed file size is 2MB.",mimeTypesMessage="Only the jpeg and png filetypes are allowed.")
+     */
+    protected $pictureFile;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     */
+    protected $twitterPicture;
+
+    /**
      * @Expose
      * @Groups({"city"})
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\City")
@@ -214,7 +231,7 @@ class Person extends BaseUser
      * @var string
      */
     protected $adressNumber;
-
+    
     /**
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Uf")
      * @ORM\JoinColumn(name="uf_id", referencedColumnName="id")
@@ -233,12 +250,12 @@ class Person extends BaseUser
      * @ORM\JoinColumn(name="nfg_profile_id", referencedColumnName="id")
      */
     protected $nfgProfile;
-
+    
     /**
      * @ORM\Column(name="voter_reg", type="string", length=12, nullable=true, unique=true)
      * @PROCERGSAssert\VoterRegistration
      */
-    protected $voterReg;
+    protected $voterReg;    
 
     /**
      * @Assert\File(
@@ -647,13 +664,13 @@ class Person extends BaseUser
         $password = $this->getPassword();
         return strlen($password) > 0;
     }
-
+    
     public function setAdress($var)
     {
         $this->adress = $var;
         return $this;
     }
-
+    
     public function getAdress()
     {
         return $this->adress;
@@ -664,23 +681,23 @@ class Person extends BaseUser
         $this->adressNumber = $var;
         return $this;
     }
-
+    
     public function getAdressNumber()
     {
         return $this->adressNumber;
     }
-
+    
     public function setUf($var)
     {
         $this->uf = $var;
         return $this;
     }
-
+    
     public function getUf()
     {
         return $this->uf;
-    }
-
+    }    
+    
     public function setNfgAccessToken($var)
     {
         $this->nfgAccessToken = $var;
@@ -694,13 +711,13 @@ class Person extends BaseUser
 
     /**
      *
-     * @param \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var
+     * @param \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var            
      * @return City
      */
     public function setNfgProfile(\PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var = null)
     {
         $this->nfgProfile = $var;
-
+        
         return $this;
     }
 
@@ -712,17 +729,17 @@ class Person extends BaseUser
     {
         return $this->nfgProfile;
     }
-
+    
     public function setVoterReg($var)
     {
         $this->voterReg = preg_replace('/[^0-9]/', '', $var);
         return $this;
     }
-
+    
     public function getVoterReg()
     {
         return $this->voterReg;
-    }
+    }    
 
     /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance

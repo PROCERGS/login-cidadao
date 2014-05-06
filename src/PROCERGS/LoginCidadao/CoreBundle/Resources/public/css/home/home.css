@@ -80,7 +80,8 @@ body {
 .lc-box .btn-success {
     display: block;
     margin: 0 auto;
-    width: 250px;
+    max-width: 250px;
+    width: 100%;
 }
 
 .lc-box .connect-box > div {
@@ -141,9 +142,9 @@ body {
 }
 
 .lc-box .nfg {
-    background-position: 0;
+    background-position: 2px 0;
     background-color: #EF9618;
-    background-image: url(../../images/nfg_34.png);
+    background-image: url(../../images/nfg.png);
 }
 
 #register-box .connect.facebook {
