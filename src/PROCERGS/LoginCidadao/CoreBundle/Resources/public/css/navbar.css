@@ -188,6 +188,7 @@
   height: 42px;
   padding: 0;
   width: 146px;
+  text-indent: -9999px;
 }
 
 @media (max-width: 767px) {

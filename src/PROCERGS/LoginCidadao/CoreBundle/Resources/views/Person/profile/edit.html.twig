@@ -74,7 +74,7 @@
                     {{ form_widget(form.voterReg, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                     <div class="input-error">{{ form_errors(form.voterReg) }}</div>
-                </div>                
+                </div>
                 <div class="form-group">
                     {{ form_label(form.mobile) }}
                     {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }}
@@ -92,7 +92,7 @@
                     <button type="button" class="btn btn-success btn-upload">{% trans %}Upload another picture{% endtrans %}</button>
                     <div class="file-name"></div>
                     {{ form_widget(form.image) }}
-                    <div class="input-error">{{ form_errors(form.pictureFile) }}</div>
+                    <div class="input-error">{{ form_errors(form.image) }}</div>
                         </div>
                     </div>
                 </div>
@@ -233,7 +233,7 @@ $(document).ready(function() {
           if (!this.value.length) {return;}
           this.value = completaZerosEsquerda(this.value, 12);
           if (!validarTitulo(this.value)) {alert(messages[0]);}
-          }); 
+          });
 
     $(".connect a.unlink").on('click', function() {
         var confirmDialog = $('.unlink-confirmation');
