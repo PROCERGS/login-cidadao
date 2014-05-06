@@ -204,20 +204,20 @@ footer .copyright {
     opacity: 1;
 }
 
-.form-control:-moz-placeholder {
+.form-control:-moz-placeholder, #recaptcha_response_field {
   color: #FFF;
 }
 
-.form-control::-moz-placeholder {
+.form-control::-moz-placeholder, #recaptcha_response_field {
   color: #FFF;
   opacity: 1;
 }
 
-.form-control:-ms-input-placeholder {
+.form-control:-ms-input-placeholder, #recaptcha_response_field {
   color: #FFF;
 }
 
-.form-control::-webkit-input-placeholder {
+.form-control::-webkit-input-placeholder, #recaptcha_response_field {
   color: #FFF;
 }
 
