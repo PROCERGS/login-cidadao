@@ -119,7 +119,7 @@ Government: Governo
 exception.alreadyLinkedAccount: 'Essa conta já está conectada a um outro usuário. Você deve desfazer essa conexão antes de tentar linkar com o usuário atual.'
 'Governo do Rio Grande do Sul': 'Governo do Rio Grande do Sul'
 '<a href="%link%">Background picture</a> by %name%': '<a href="%link%">Imagem de fundo</a> por %name%'
-contact.title: 'Fale conosco'
+contact.title: 'Contato'
 nfg.noprofile.found: 'Não foi encontado sua conta na NFG!'
 cpf.registration.title: 'Registro de CPF'
 cpf.registration.nfg.check.invite: 'Se você deseja reforçar seu cadastro ainda mais, você pode vinculá-lo à Nota Fiscal Gaúcha, basta informar sua senha da Nota Fiscal Gaúcha.'
