@@ -74,6 +74,11 @@
                     {{ form_widget(form.voterReg, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                     <div class="input-error">{{ form_errors(form.voterReg) }}</div>
+                    <span class="extra">
+                        {% trans %}voterreg.offer.search{% endtrans %}
+                        <a target='blank' href="{{ tre_search_link }}">{{ 'Search it!' | trans }}</a>
+                        
+                    </span>                    
                 </div>
                 <div class="form-group">
                     {{ form_label(form.mobile) }}

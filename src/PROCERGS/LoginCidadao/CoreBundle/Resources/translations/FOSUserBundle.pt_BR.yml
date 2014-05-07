@@ -83,3 +83,4 @@ Yes: Sim
 form.voterReg: 'Título de Eleitor'
 form.voterreg.invalid: 'Título de Eleitor inválido'
 voterreg.invalid: 'Título de Eleitor inválido'
+voterreg.offer.search: 'Nâo sabe seu Título de Eleitor?'
