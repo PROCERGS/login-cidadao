@@ -125,10 +125,6 @@ class FOSUBUserProvider extends BaseClass
             $user->setPassword('');
             $user->setEnabled(true);
 
-            if ($service === 'twitter') {
-                $user->updateTwitterPicture($rawResponse, $this->proxySettings);
-            }
-
             $form = $this->formFactory->createForm();
             $form->setData($user);
 
@@ -149,11 +145,6 @@ class FOSUBUserProvider extends BaseClass
             }
 
             return $user;
-        } else {
-            if ($service === 'twitter') {
-                $user->updateTwitterPicture($rawResponse, $this->proxySettings);
-                $this->userManager->updateUser($user);
-            }
         }
 
         $user = parent::loadUserByOAuthUserResponse($response);
