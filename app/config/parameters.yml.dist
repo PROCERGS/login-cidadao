@@ -57,3 +57,8 @@ parameters:
     nfg_url_auth: ~
     nfg_url_login: ~
     nfg_hmac_secret: ~
+
+    user_profile_ftp_host: ftp.host
+    user_profile_ftp_username: ftp_username
+    user_profile_ftp_password: ftp_password
+    user_profile_ftp_directory: /ftp/path/to/web/uploads/profile-pictures
