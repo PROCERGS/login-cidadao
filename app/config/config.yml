@@ -170,7 +170,7 @@ parameters:
 ewz_recaptcha:
     public_key:   %recaptcha_public_key%
     private_key:  %recaptcha_private_key%
-    secure:       false
+    secure:       true
     locale_key:   kernel.default_locale
     http_proxy: %http_proxy%
 
