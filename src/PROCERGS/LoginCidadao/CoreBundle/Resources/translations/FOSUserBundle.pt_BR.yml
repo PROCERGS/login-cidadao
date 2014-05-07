@@ -75,7 +75,7 @@ or: ou
 registration.email.click: 'Confirmar Email'
 'Log in using your Citizen''s Login': 'Acesse usando seu Login Cidadão'
 'Upload another picture': 'Enviar outra foto'
-'By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our <a href="%linkCookies%">Use of Cookies</a>.': 'Ao clicar em criar conta, você concorda com a <a href="%linkTerms%">Privacidade e Termos de uso</a> do serviço, incluindo nosso <a href="%linkCookies%">Uso de cookies</a>.'
+'By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.': 'Ao clicar em criar conta, você concorda com a <a href="%linkTerms%">Privacidade e Termos de uso</a> do serviço, incluindo nosso uso de cookies.'
 'Do you really want to unlink <strong class="social-network-name"></strong>?': 'Tem certeza que deseja desvincular sua conta do <strong class="social-network-name"></strong>?'
 Yes: Sim
 'Connect to the NFG': 'Conectar à NFG'
