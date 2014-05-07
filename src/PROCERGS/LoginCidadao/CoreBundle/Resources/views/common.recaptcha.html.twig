@@ -1,16 +1,16 @@
 <div class="custom-recaptcha">
   <div class="recaptcha-widget recaptcha_nothad_incorrect_sol recaptcha_isnot_showing_audio " id="recaptcha_widget">
-    <div id="recaptcha_image" style="width: 300px; height: 57px;"><img width="300" height="57" alt="Imagem de desafio reCAPTCHA" id="recaptcha_challenge_image"></div>
+    <div id="recaptcha_image" style="width: 300px; height: 57px;"><img width="300" height="57" alt="{{ 'recaptcha.instructions.img'|trans }}" id="recaptcha_challenge_image"></div>
     <div class="recaptcha-main">
       <div class="row">
         <div class="col-xs-12 col-sm-6">
           <label>
             <strong>
               <span class="recaptcha_only_if_image" id="recaptcha_instructions_image">
-                Digite o texto:
+                {{ 'recaptcha.instructions.image'|trans }}
               </span>
               <span class="recaptcha_only_if_audio" id="recaptcha_instructions_audio">
-                Digite o que você ouve:
+                {{ 'recaptcha.instructions.audio'|trans }}
               </span>
             </strong>
             <span id="recaptcha_challenge_field_holder" style="display: none;"></span><input type="text" name="recaptcha_response_field" id="recaptcha_response_field" autocomplete="off" class="">
@@ -19,23 +19,23 @@
 
         <div class="col-xs-12 col-sm-5">
           <div class="recaptcha-buttons">
-            <a title="Obter um novo desafio" href="javascript:Recaptcha.reload()" id="recaptcha_reload_btn">
+            <a title="{{ 'recaptcha.instructions.new.challenge'|trans }}" href="javascript:Recaptcha.reload()" id="recaptcha_reload_btn">
               <span>
-                Obter um novo desafio
+                {{ 'recaptcha.instructions.new.challenge'|trans }}
               </span>
             </a>
-            <a title="Obter um desafio de áudio" href="javascript:Recaptcha.switch_type('audio');" class="recaptcha_only_if_image" id="recaptcha_switch_audio_btn">
+            <a title="{{ 'recaptcha.instructions.new.audio'|trans }}" href="javascript:Recaptcha.switch_type('audio');" class="recaptcha_only_if_image" id="recaptcha_switch_audio_btn">
               <span>
-                Obter um desafio de áudio "
+                {{ 'recaptcha.instructions.new.audio'|trans }}
               </span>
             </a>
-            <a title="Obter um desafio visual" href="javascript:Recaptcha.switch_type('image');" class="recaptcha_only_if_audio" id="recaptcha_switch_img_btn">
+            <a title="{{ 'recaptcha.instructions.new.image'|trans }}" href="javascript:Recaptcha.switch_type('image');" class="recaptcha_only_if_audio" id="recaptcha_switch_img_btn">
               <span>
-                Obter um desafio visual
+                {{ 'recaptcha.instructions.new.image'|trans }}
               </span>
             </a>
-            <a title="Ajuda" href="javascript:Recaptcha.showhelp()" id="recaptcha_whatsthis_btn">
-              <span>Ajuda</span>
+            <a title="{{ 'recaptcha.instructions.help'|trans }}" href="javascript:Recaptcha.showhelp()" id="recaptcha_whatsthis_btn">
+              <span>{{ 'recaptcha.instructions.help'|trans }}</span>
             </a>
           </div>
         </div>

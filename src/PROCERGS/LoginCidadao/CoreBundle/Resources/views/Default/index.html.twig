@@ -52,7 +52,11 @@
                 </div>
 
                 <div class="form-group captcha-container">
-                    {{ form_row(form1.recaptcha, {'class':'form-control'}) }}
+                    {% if form1.recaptcha is defined %}
+					{% include "PROCERGSLoginCidadaoCoreBundle::common.recaptcha.html.twig" %}
+					{% form_theme form1 'EWZRecaptchaBundle:Form:ewz_recaptcha_widget.html.twig' %}
+					{{ form_widget(form1.recaptcha, { 'attr': {'options' : {'theme' : 'custom'}}}) }}
+                    {% endif %}
                     <a id="resetting_request" class="pull-left" href="{{ path('fos_user_resetting_request') }}">{{ 'resseting.forgot_password' | trans }}</a>
                     <a id="register_request" href="{{ path('fos_user_registration_register') }}" class="register-link pull-right">{{ 'registration.register' | trans }}</a>
                 </div>

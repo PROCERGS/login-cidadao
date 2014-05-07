@@ -74,8 +74,6 @@ class LoginFormType extends AbstractType
                     new True()
                 )
             ));
-        } else {
-            $builder->add('recaptcha', 'hidden');
         }
     }
 
