@@ -37,7 +37,7 @@ class NfgController extends Controller
         $parm['urlretorno'] = $this->generateUrl($callback, array(), UrlGeneratorInterface::ABSOLUTE_URL);
         // $url = $this->container->getParameter('nfg_url_auth') . '?' . http_build_query($parm);
         $url = $this->container->getParameter($url) . '?accessid=' . $parm['accessid'] . '&urlretorno=' . $parm['urlretorno'];
-        return $this->redirect($url);
+        return new RedirectResponse($url, 302, array('referer'=> $this->getRequest()->getUri()));
     }
 
     protected function checkAccessToken()
