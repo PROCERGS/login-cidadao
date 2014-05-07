@@ -17,7 +17,7 @@
                 {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
                     <img src="/{{ auth.client.getPictureWebPath }}" width="65" height="65" alt="" class="center-block">
                 {% else %}
-                    <img src="http://placehold.it/65x65" alt="" class="center-block">
+                    <img src="//placehold.it/65x65" alt="" class="center-block">
                 {% endif %}
                     <span class="name center-block text-center">{{ auth.client.name }}</span>
                     <span class="active status">{% trans %}Active{%  endtrans %}</span>
@@ -43,7 +43,7 @@
                 {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
                     <img src="/{{ client.getPictureWebPath }}" width="65" height="65" alt="" class="center-block">
                 {% else %}
-                    <img src="http://placehold.it/65x65" alt="" class="center-block">
+                    <img src="//placehold.it/65x65" alt="" class="center-block">
                 {% endif %}
                     <span class="name center-block text-center">{{ client.name }}</span>
                     <span class="status">{% trans %}Inactive{%  endtrans %}</span>

@@ -54,7 +54,7 @@
                         {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
                             <img src="//{{ app.request.host ~ '/' ~ auth.client.getPictureWebPath }}" alt="">
                         {% else %}
-                            <img src="http://placehold.it/50x50" alt="">
+                            <img src="//placehold.it/50x50" alt="">
                         {% endif %}
                             <span>{{ auth.client.name }}</span>
                         </a>

@@ -7,7 +7,7 @@
     <ul>
         {% for notification in notifications %}
         <li class="clearfix level-{{ notification.level }} {{ (notification.isRead) ? 'read' : 'unread' }}">
-            {# <img src="http://placehold.it/95x95" title="{{ notification.client.name }}"> #}
+            {# <img src="//placehold.it/95x95" title="{{ notification.client.name }}"> #}
             <div class="box clearfix">
                 <h5>{{ notification.title | trans }}</h5>
                 <p class="short">{{ notification.shortText | trans | striptags() | raw }}</p>
