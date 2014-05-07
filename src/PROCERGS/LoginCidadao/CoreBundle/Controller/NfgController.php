@@ -36,8 +36,9 @@ class NfgController extends Controller
         }
         $parm['urlretorno'] = $this->generateUrl($callback, array(), UrlGeneratorInterface::ABSOLUTE_URL);
         // $url = $this->container->getParameter('nfg_url_auth') . '?' . http_build_query($parm);
-        $url = $this->container->getParameter($url) . '?accessid=' . $parm['accessid'] . '&urlretorno=' . $parm['urlretorno'];
-        return new RedirectResponse($url, 302, array('referer'=> $this->getRequest()->getUri()));
+        $url = $this->container->getParameter($url) . '?accessid=' . $parm['accessid'] . '&urlretorno=' . $parm['urlretorno'];        
+        //IE referer stuff, dont kill me
+        return new Response('<html><body><script type="text/javascript">document.location= "'.$url.'";</script></body></html>');
     }
 
     protected function checkAccessToken()
