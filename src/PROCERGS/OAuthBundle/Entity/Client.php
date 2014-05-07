@@ -73,12 +73,22 @@ class Client extends BaseClient
      */
     protected $picturePath;
     protected $tempPicturePath;
-    
+
     /**
      * @Assert\File(maxSize="6000000")
      */
-    protected $pictureFile;    
-    
+    protected $pictureFile;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    protected $published;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    protected $visible;
+
     public function __construct()
     {
         parent::__construct();
@@ -173,27 +183,27 @@ class Client extends BaseClient
 
         return $this;
     }
-    
+
     public function getAbsolutePicturePath()
     {
         return null === $this->picturePath ? null : $this->getPictureUploadRootDir() . DIRECTORY_SEPARATOR . $this->picturePath;
     }
-    
+
     public function getPictureWebPath()
     {
         return null === $this->picturePath ? null : $this->getPictureUploadDir() . '/' . $this->picturePath;
     }
-    
+
     protected function getPictureUploadRootDir()
     {
         return __DIR__ . '/../../../../web/' . $this->getPictureUploadDir();
     }
-    
+
     protected function getPictureUploadDir()
     {
         return 'uploads/client-pictures';
     }
-    
+
     public function setPictureFile(UploadedFile $pictureFile = null)
     {
         $this->pictureFile = $pictureFile;
@@ -204,7 +214,7 @@ class Client extends BaseClient
             $this->picturePath = null;
         }
     }
-    
+
     /**
      *
      * @return UploadedFile
@@ -213,7 +223,7 @@ class Client extends BaseClient
     {
         return $this->pictureFile;
     }
-    
+
     /**
      * @ORM\PostPersist()
      * @ORM\PostUpdate()
@@ -223,19 +233,19 @@ class Client extends BaseClient
         if (null === $this->getPictureFile()) {
             return;
         }
-    
+
         $this->getPictureFile()->move(
-            $this->getPictureUploadRootDir(), $this->picturePath
+                $this->getPictureUploadRootDir(), $this->picturePath
         );
-    
+
         if (isset($this->tempPicturePath) && $this->tempPicturePath != $this->picturePath) {
             @unlink($this->getPictureUploadRootDir() . DIRECTORY_SEPARATOR . $this->tempPicturePath);
             $this->tempPicturePath = null;
         }
-    
+
         $this->pictureFile = null;
     }
-    
+
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
@@ -247,7 +257,7 @@ class Client extends BaseClient
             $this->picturePath = "$filename." . $this->getPictureFile()->guessExtension();
         }
     }
-    
+
     /**
      * @ORM\PostRemove()
      */
@@ -257,6 +267,29 @@ class Client extends BaseClient
             unlink($file);
         }
     }
-    
+
+    public function isVisible()
+    {
+        return $this->visible;
+    }
+
+    public function setVisible($visible)
+    {
+        $this->visible = $visible;
+
+        return $this;
+    }
+
+    public function isPublished()
+    {
+        return $this->published;
+    }
+
+    public function setPublished($published)
+    {
+        $this->published = $published;
+
+        return $this;
+    }
 
 }

@@ -432,13 +432,20 @@
 }
 
 .client-details .msg p {
-    color: #F56F6F;
     font-size: 20px;
     margin: 30px 0;
 }
 
-.client-details .msg .activated{
+.client-details .msg p.active {
     color: green;
+}
+
+.client-details .msg p.inactive {
+    color: #F56F6F;
+}
+
+.client-details .msg p.not-published {
+    color: #F7961E;
 }
 
 .client-details #deactivate-box {

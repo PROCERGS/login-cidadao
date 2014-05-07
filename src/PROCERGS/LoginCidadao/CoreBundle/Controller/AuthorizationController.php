@@ -29,7 +29,9 @@ class AuthorizationController extends Controller
             if ($user->hasAuthorization($app)) {
                 continue;
             }
-            $apps[] = $app;
+            if ($app->isVisible()) {
+                $apps[] = $app;
+            }
         }
         $sugg = new ClientSuggestion();
         $formBuilder = $this->createFormBuilder($sugg);

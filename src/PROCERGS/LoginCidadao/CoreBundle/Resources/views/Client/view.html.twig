@@ -5,11 +5,11 @@
     <h1>{{ client.name }}</h1>
     <div class="desc row">
         <div class="col-sm-12 col-md-4 text-center">
-            {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
-                <img src="/{{ client.getPictureWebPath }}" alt="" class="center-block">
-            {% else %}
-                <img src="//placehold.it/220x220" alt="" class="center-block">
-            {% endif %}
+        {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
+            <img src="/{{ client.getPictureWebPath }}" alt="" class="center-block">
+        {% else %}
+            <img src="//placehold.it/220x220" alt="" class="center-block">
+        {% endif %}
         </div>
         <div class="col-sm-12 col-md-7 col-md-offset-1">
             <p>{{ client.description }}</p>
@@ -17,25 +17,29 @@
     </div>
 
     <div class="msg text-center">
-        {% if (user.hasAuthorization(client)) %}
-            <p class="activated">{% trans %}This service is already active in your Citizen's Login account{%  endtrans %}</p>
-            <a href="#" class="btn" id="app-deactivate" role="button">{% trans %}Deactivate this service{% endtrans %}</a>
+    {% if client.published %}
+    {%   if (user.hasAuthorization(client)) %}
+        <p class="active">{% trans %}This service is already active in your Citizen's Login account{%  endtrans %}</p>
+        <a href="#" class="btn" id="app-deactivate" role="button">{% trans %}Deactivate this service{% endtrans %}</a>
 
-            <div class="alert alert-danger" id="deactivate-box">
-              <h4>{% trans %}Do you really want to disable this service?{%  endtrans %}</h4>
-              <p>
+        <div class="alert alert-danger" id="deactivate-box">
+            <h4>{% trans %}Do you really want to disable this service?{%  endtrans %}</h4>
+            <p>
                 {{ form_start(form, {'action': path('lc_revoke', { clientId: client.id }), 'attr': {'role':'form'}}) }}
                 <button type="submit" class="btn btn-danger">{% trans %}Yes{%  endtrans %}</button>
                 {{ form_end(form) }}
                 <a role="button" class="btn btn-default cancel">{% trans %}No{%  endtrans %}</a>
-              </p>
-            </div>
-        {% else %}
-            <p>{% trans %}This service is not active in your Citizen's Login account{%  endtrans %}</p>
-            <a href="{{ client.landingPageURL }}" class="btn btn-success" role="button">{% trans %}Activate this service{% endtrans %}</a>
-        {% endif %}
+            </p>
+        </div>
+    {%   else %}
+        <p class="inactive">{% trans %}This service is not active in your Citizen's Login account{%  endtrans %}</p>
+        <a href="{{ client.landingPageURL }}" class="btn btn-success" role="button">{% trans %}Activate this service{% endtrans %}</a>
+    {%   endif %}
+    {% else %}
+        <p class="not-published">{% trans %}This service is not available yet. Stay tuned for the launch date.{% endtrans %}</p>
+    {% endif %}
     </div>
-
+{% if client.published %}
     <section class="permissions">
         <p style="margin-top:50px;">{% trans %}This service uses the following data from your Login Citizen account{%  endtrans %}</p>
 
@@ -48,6 +52,7 @@
         {% endfor %}
         </ul>
     </section>
+{% endif %}
 </div>
 
 {% endblock %}
@@ -55,14 +60,14 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
-$(document).ready(function() {
-    $('#app-deactivate').on('click', function() {
-        $('#deactivate-box').slideDown();
-    });
+    $(document).ready(function() {
+        $('#app-deactivate').on('click', function() {
+            $('#deactivate-box').slideDown();
+        });
 
-    $('#deactivate-box .cancel').on('click', function() {
-        $(this).closest('#deactivate-box').slideUp();
+        $('#deactivate-box .cancel').on('click', function() {
+            $(this).closest('#deactivate-box').slideUp();
+        });
     });
-});
 </script>
 {% endblock %}
