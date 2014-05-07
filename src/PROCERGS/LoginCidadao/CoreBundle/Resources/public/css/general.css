@@ -289,6 +289,12 @@ form .has-feedback .sr-only ~ .form-control-feedback {
     padding: 0 50px;
 }
 
+@media (max-width: 767px) {
+  .general-content .text {
+    padding: 0;
+  }
+}
+
 .header-shadows {
     color: #FFF;
     cursor: default;
