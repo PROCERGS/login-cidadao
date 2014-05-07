@@ -149,8 +149,24 @@ body {
     background-image: url(../../images/nfg.png);
 }
 
-#register-box .connect.facebook {
-    font-size: 12px;
+@media (max-width: 767px) {
+  .lc-box .connect {
+    height: 34px;
+    line-height: 34px;
+  }
+
+  .lc-box .facebook {
+    background-image: url(../../images/facebook_link.png);
+  }
+
+  .lc-box .twitter {
+      background-image: url(../../images/twitter_link.png);
+  }
+
+  .lc-box .nfg {
+      background-position: 0;
+      background-image: url(../../images/nfg_34.png);
+  }
 }
 
 @media (min-width: 768px) {
