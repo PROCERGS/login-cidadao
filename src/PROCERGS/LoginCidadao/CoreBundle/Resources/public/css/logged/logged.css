@@ -176,11 +176,7 @@
     transform: translateX(-200px);
   }
 
-  .menu-open {
-    position: relative;
-  }
-
-  .menu-open .settings-nav {
+  .settings-nav.menu-open {
     display: block;
 
     -moz-transform: translateX(0px);
@@ -197,7 +193,7 @@
     transition: 0.5s ease-in-out;
   }
 
-  .menu-open .settings-content {
+  .settings-content.menu-open  {
     -moz-transform: translateX(200px);
     -webkit-transform: translateX(200px);
     -o-transform: translateX(200px);
