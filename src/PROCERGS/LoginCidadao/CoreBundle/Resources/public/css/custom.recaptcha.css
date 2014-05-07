@@ -1,15 +1,24 @@
 #recaptcha_widget.recaptcha-widget {
     background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid #E5E5E5;
-    width: 310px;
+    max-width: 400px;
 }
 .recaptcha-widget #recaptcha_image {
     border-bottom: 1px solid #E5E5E5;
-    height: 57px;
     overflow: hidden;
     padding: 5px;
     text-align: center;
+    max-width: 100%;
+    height: auto!important;
+    width: auto!important;
 }
+
+#recaptcha_challenge_image {
+  max-width: 100%;
+  height: auto!important;
+  width: auto!important;
+}
+
 .recaptcha-widget #recaptcha_image a {
     line-height: 17px;
 }
@@ -26,13 +35,14 @@
     margin: 0 0 0.4em;
 }
 .recaptcha-widget .recaptcha-main input[type="text"] {
-    width: 200px;
 }
-.recaptcha-widget .recaptcha-buttons {
-    bottom: 16px;
-    position: absolute;
-    right: 11px;
+
+@media (min-width: 768px) {
+  .recaptcha-widget .recaptcha-buttons {
+    margin-top: 30px;
+  }
 }
+
 .recaptcha-widget .recaptcha-buttons a {
     background: none no-repeat scroll center center #FFFFFF;
     display: inline-block;
