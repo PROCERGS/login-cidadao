@@ -3,6 +3,7 @@
 {% block metatags %}
 {{ parent() }}
 <meta property="og:site_name" content="{% trans %}Login Cidadão{% endtrans %}"/>
+<meta property="og:description" content="{% trans %}With only one account, the citizen will be able to use government's digital services.{% endtrans %}"/>
 {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/facebook-image.png' %}
 <meta property="og:image" content="{{ app.request.scheme ~'://' ~ app.request.host ~ asset_url }}" />
 {% endimage %}
