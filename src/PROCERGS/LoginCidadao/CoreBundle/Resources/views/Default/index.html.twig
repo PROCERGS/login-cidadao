@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-xs-12 text-center header-shadows">
         <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
-        <h2 class="slogan hidden-xs">{% trans %}One account. All that the Government offers.{% endtrans %}</h2>
+        <h2 class="slogan hidden-xs">{% trans %}One account. The entire Government.{% endtrans %}</h2>
     </div>
 </div>
 
@@ -53,9 +53,9 @@
 
                 <div class="form-group captcha-container">
                     {% if form1.recaptcha is defined %}
-					{% include "PROCERGSLoginCidadaoCoreBundle::common.recaptcha.html.twig" %}
-					{% form_theme form1 'EWZRecaptchaBundle:Form:ewz_recaptcha_widget.html.twig' %}
-					{{ form_widget(form1.recaptcha, { 'attr': {'options' : {'theme' : 'custom'}}}) }}
+          {% include "PROCERGSLoginCidadaoCoreBundle::common.recaptcha.html.twig" %}
+          {% form_theme form1 'EWZRecaptchaBundle:Form:ewz_recaptcha_widget.html.twig' %}
+          {{ form_widget(form1.recaptcha, { 'attr': {'options' : {'theme' : 'custom'}}}) }}
                     {% endif %}
                     <a id="resetting_request" class="pull-left" href="{{ path('fos_user_resetting_request') }}">{{ 'resseting.forgot_password' | trans }}</a>
                     <a id="register_request" href="{{ path('fos_user_registration_register') }}" class="register-link pull-right">{{ 'registration.register' | trans }}</a>
