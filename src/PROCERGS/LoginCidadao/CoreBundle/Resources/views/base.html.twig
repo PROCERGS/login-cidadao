@@ -4,7 +4,7 @@
 {{ parent() }}
 <meta property="og:site_name" content="{% trans %}Login Cidadão{% endtrans %}"/>
 {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/facebook-image.png' %}
-<meta property="og:image" content="//{{ app.request.host ~ ':' ~ app.request.port ~ asset_url }}" />
+<meta property="og:image" content="{{ app.request.scheme ~'://' ~ app.request.host ~ asset_url }}" />
 {% endimage %}
 <meta property="fb:app_id" content="{{ facebook_app_id }}"/>
 {% endblock %}
