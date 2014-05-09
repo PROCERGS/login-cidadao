@@ -198,3 +198,5 @@ recaptcha.instructions.help: 'Ajuda'
 recaptcha.instructions.img: 'Imagem de desafio reCAPTCHA'
 'With only one account, the citizen will be able to use government''s digital services.': 'Com apenas um cadastro, o cidadão poderá utilizar os serviços digitais do governo.'
 'One account. The entire Government.': 'Uma conta. O Governo Inteiro.'
+'Creative commons': Licença creative commons
+lc.html.title: 'Login Cidadão'

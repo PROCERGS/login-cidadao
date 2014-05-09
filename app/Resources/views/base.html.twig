@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ app.request.locale }}">
     <head>
-        <title>{% block title %}{% trans %}Login Cidadão{% endtrans %}{% endblock %}</title>
+        <title>{% block title %}{% trans %}lc.html.title{% endtrans %}{% endblock %}</title>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         {% block metatags %}{% endblock %}
         {% block stylesheets %}{% endblock %}    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
