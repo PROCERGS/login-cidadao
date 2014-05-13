@@ -34,11 +34,11 @@
     {{ form_end(form) }}
     <hr />
 
-    <div class="cep-msg">
+    <div class="common-grid-msg">
         <div>{{ 'grid.search.title'|trans }}</div>
         {% if ceps|length > 0 %}
 
-        <div class="cep-results">
+        <div class="common-grid-results">
             <div class="row header">
                 <div class="col-md-3">{{ 'form.adress'|trans }}</div>
                 <div class="col-md-3">{{ 'form.district'|trans }}</div>
@@ -48,23 +48,23 @@
                 <div class="col-md-1">{{ 'form.map'|trans }}</div>
             </div>
             {% for cep in ceps %}
-            <div class="row cep-result">
+            <div class="row common-grid-result">
                 <input type="hidden" class="littlesecret" value="{{ cep|json_encode }}"/>
                 <div class="col-md-3">
                     <dt>{{ 'form.adress'|trans }}</dt>
-                    <dd data-cep-type="adress">{{ cep.tipoLogradouro | title }} {{ cep.tituloLogradouro | title }} {{ cep.logradouro | title }} {% if cep.idParidade is not null %} {{ cep.idParidade == "P" ? '(lado par)' : '(lado ímpar)' }} {% endif %}</dd>
+                    <dd>{{ cep.tipoLogradouro | title }} {{ cep.tituloLogradouro | title }} {{ cep.logradouro | title }} {% if cep.idParidade is not null %} {{ cep.idParidade == "P" ? '(lado par)' : '(lado ímpar)' }} {% endif %}</dd>
                 </div>
                 <div class="col-md-3">
                     <dt>{{ 'form.district'|trans }}</dt>
-                    <dd data-cep-type="district">{{ cep.bairro | title }}</dd>
+                    <dd>{{ cep.bairro | title }}</dd>
                 </div>
                 <div class="col-md-3">
                     <dt>{{ 'form.city'|trans }}</dt>
-                    <dd data-cep-type="city">{{ cep.localidade | title }}</dd>
+                    <dd>{{ cep.localidade | title }}</dd>
                 </div>
                 <div class="col-md-1">
                     <dt>{{ 'form.uf'|trans }}</dt>
-                    <dd data-cep-type="uf">{{ cep.uf }}</dd>
+                    <dd>{{ cep.uf }}</dd>
                 </div>
                 <div class="col-md-1">
                     <dt>{{ 'form.cep'|trans }}</dt>

@@ -200,3 +200,17 @@ recaptcha.instructions.img: 'Imagem de desafio reCAPTCHA'
 'One account. The entire Government.': 'Uma conta. O Governo Inteiro.'
 'Creative commons': Licença creative commons
 lc.html.title: 'Login Cidadão'
+form.published: 'Publicado'
+form.visible: 'Visivel'
+grid.search.noresult: 'Nenhum registro encontrado'
+grid.search.title: Resultados
+grid.search.button: Pesquisar
+sugg.username: 'Nome do usuario'
+sugg.createdAt: 'Criado em '
+sugg.shorttext: 'Resumo'
+sugg.text: 'Sugestão'
+sugg.dateini: 'Data inicial'
+sugg.dateend: 'Data final'
+admin.sugg.list: 'Gerenciar sugestões'
+admin.sugg.list.title: 'Busca de sugestões'
+admin.sugg.show.title: 'Sugestão'

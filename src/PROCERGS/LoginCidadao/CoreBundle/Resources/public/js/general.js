@@ -342,4 +342,26 @@ $(function() {
         window.open($(this).attr('data-href'),'_blank', 'toolbar=0,location=0,scrollbars=no,resizable=no,top=0,left=500,width=400,height=750');
         return false;
     });
+    $(document).on('click', '.link-popup', function (event){
+        event.preventDefault();
+        var e = $(this);
+        var u = e.attr('data-href') ? e.attr('data-href') : e.attr('href');
+        if (u) {
+        	window.open(u,'_blank', e.attr('data-specs'));
+        }
+        return false;
+      });
+    $(document).on('submit', '.form-ajax', function(event){
+    	event.preventDefault();
+    	var e = $(this);
+    	$.ajax({
+    		type: e.attr('method'),
+    		url: e.attr('action'),
+    		data: e.serialize(),
+    		dataType : 'html',
+    		success : function(data, textStatus, jqXHR) {
+    			$(e.attr('ajax-target')).html(data);
+    		}
+        });
+    })
 });

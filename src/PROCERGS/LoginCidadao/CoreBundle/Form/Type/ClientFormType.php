@@ -39,16 +39,21 @@ class ClientFormType extends AbstractType
             'type' => 'text',
             'options' => array(
                 'required' => true
-            ),            
+            ),
             'allow_add' => true
         ));
+        $a = explode(' ', $this->container->getParameter('lc_supported_scopes'));
+        $a = array_combine($a, $a);
         $builder->add('allowedscopes', 'collection', array(
-            'type' => 'text',
+            'type' => 'choice',
             'options' => array(
-                'required' => true
-            ),            
+                'choices' => $a
+            ),
+            'required' => true,
             'allow_add' => true
         ));
+        
+        
         $builder->add('allowedgranttypes', 'collection', array(
             'type' => 'choice',
             'options' => array(
@@ -64,10 +69,9 @@ class ClientFormType extends AbstractType
                     OAuth2::GRANT_TYPE_AUTH_CODE
                 )
             ),
-            'required' => true,            
+            'required' => true,
             'allow_add' => true
-        )
-        );
+        ));
         
         $builder->add('landingpageurl', 'text', array(
             'required' => true
@@ -76,6 +80,12 @@ class ClientFormType extends AbstractType
             'required' => true
         ));
         $builder->add('pictureFile');
+        $builder->add('published', 'checkbox', array(
+            'required' => false
+        ));
+        $builder->add('visible', 'checkbox', array(
+            'required' => false
+        ));
     }
 
     public function getName()

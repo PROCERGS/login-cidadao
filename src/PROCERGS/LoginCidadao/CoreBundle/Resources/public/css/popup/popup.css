@@ -35,45 +35,6 @@ header h3 {
 
 
 /* Postal Code Search */
-.cep-msg {
-    margin: 20px;
-}
-
-.cep-results {
-    margin: 10px 20px;
-}
-
-.cep-results dt:after {
-    content: ':';
-}
-.cep-results dt,.cep-results dd {
-    display: inline;
-}
-.cep-results .header {
-    display: none;
-}
-
-.cep-results .cep-result:nth-child(2n+1) {
-    background-color: #f9f9f9;
-}
-.cep-results .cep-result {
-    background-color: #f0f0f0;
-    margin-bottom: 20px;
-    padding: 10px 0;
-}
-
-@media (min-width: 992px) {
-    .cep-results dt {
-        display: none;
-    }
-    .cep-results .header {
-        display: block;
-    }
-    .cep-results .cep-result {
-        margin-bottom: 0 !important;
-    }
-}
-
 @media (min-width: 768px) {
   #login-box {
     margin-top: 20px;

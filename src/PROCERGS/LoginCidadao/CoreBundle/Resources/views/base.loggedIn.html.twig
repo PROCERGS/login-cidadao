@@ -59,6 +59,14 @@
                             <i class="glyphicon glyphicon-th pull-right"></i>
                         </span></a>
                 </li>
+                <li class="services glyph {{ app.request.attributes.get('_route') == 'lc_admin_sugg_list' or app.request.attributes.get('_route') == 'lc_admin_sugg_show' ? 'active' }}">
+                    <a href="{{ path('lc_admin_sugg_list') }}">
+                        <span>
+                            {{ 'admin.sugg.list'|trans() }}
+                            <i class="glyphicon glyphicon-th pull-right"></i>
+                        </span></a>
+                </li>
+                
                 {% endif %}
                 {# <li class="settings glyph">
                     <a href="">

@@ -63,7 +63,8 @@ class ClientController extends Controller
     public function listAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $clients = $em->getRepository('PROCERGSOAuthBundle:Client')->findAll();
+        $clients = $em->getRepository('PROCERGSOAuthBundle:Client')->findBy(array(),
+                array('id' => 'desc'));
         return array(
             'clients' => $clients
         );

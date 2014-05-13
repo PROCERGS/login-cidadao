@@ -14,6 +14,8 @@
                 <div class="form-group">{{ form_label(form.allowedgranttypes, 'Allowed Grant Types'| trans) }} {{ form_errors(form.allowedgranttypes) }} {{ form_widget(form.allowedgranttypes) }}</div>
                 <div class="form-group">{{ form_label(form.landingpageurl, 'Landing Page'| trans) }} {{ form_errors(form.landingpageurl) }} {{ form_widget(form.landingpageurl) }}</div>
                 <div class="form-group">{{ form_label(form.termsofuseurl, 'Terms of Use' | trans) }} {{ form_errors(form.termsofuseurl) }} {{ form_widget(form.termsofuseurl, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}</div>
+                <div class="form-group">{{ form_label(form.published, 'form.published' | trans) }} {{ form_errors(form.published) }} {{ form_widget(form.published) }}</div>
+                <div class="form-group">{{ form_label(form.visible, 'form.visible' | trans) }} {{ form_errors(form.visible) }} {{ form_widget(form.visible) }}</div>
             </div>
             <div class="col-md-5">
                 {% if client is defined %}
