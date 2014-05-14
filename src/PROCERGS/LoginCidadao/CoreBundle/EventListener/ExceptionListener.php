@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Translation\TranslatorInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\LcEmailException;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\NfgException;
+use PROCERGS\LoginCidadao\CoreBundle\Exception\LcFcGbException;
 
 class ExceptionListener
 {
@@ -58,6 +59,13 @@ class ExceptionListener
                     $url = $this->router->generate('lc_home');
                     break;
             }
+            $event->setResponse(new RedirectResponse($url));
+        } elseif ($exception instanceof \FacebookApiException) {
+            $this->session->getFlashBag()->add('error', $this->translator->trans($exception->getMessage()));
+            $url = $this->router->generate('lc_home');            
+            $event->setResponse(new RedirectResponse($url));
+        } elseif ($exception instanceof  LcFcGbException) {
+            $url = $this->router->generate('lc_link_facebook');
             $event->setResponse(new RedirectResponse($url));
         }
     }

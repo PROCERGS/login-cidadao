@@ -126,7 +126,7 @@
         {% if app.session.get('facebook.logout') is not null %}
             var sessionClean = {{ app.session.remove('facebook.logout') }};
             FB.logout();
-        {% else %}
+        {% endif %}
             var button = $('a.connect.facebook');
             if (button.length > 0) {
                 var url = button.data('href');
@@ -135,7 +135,7 @@
                 }
                 button.attr('href', url);
             }
-        {% endif %}
+        
         });
     };
 

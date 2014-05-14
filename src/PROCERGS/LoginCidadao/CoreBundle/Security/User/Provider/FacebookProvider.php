@@ -16,6 +16,7 @@ use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use PROCERGS\LoginCidadao\CoreBundle\Security\Exception\AlreadyLinkedAccount;
+use PROCERGS\LoginCidadao\CoreBundle\Exception\LcFcGbException;
 
 class FacebookProvider implements UserProviderInterface
 {
@@ -135,9 +136,15 @@ class FacebookProvider implements UserProviderInterface
         try {
             $fbdata = $this->facebook->api('/me');
         } catch (FacebookApiException $e) {
+            switch ($e->getType()) {
+            	case 'OAuthException':
+            	case 'invalid_token':
+            	case 'Exception':
+            	    throw new LcFcGbException();
+            	    break;
+            }
             $fbdata = null;
         }
-
         if (!empty($fbdata)) {
             if (empty($user)) {
                 if (!($currentUserObj instanceof UserInterface)) {
@@ -154,7 +161,7 @@ class FacebookProvider implements UserProviderInterface
 
             if ($user->getUsername() == '' || $user->getUsername() == null) {
                 $defaultUsername = $username . '@facebook.com';
-                $availUsername = $this->userManager->getNextAvailableUsername($fbdata['username'],
+                $availUsername = $this->userManager->getNextAvailableUsername((isset($fbdata['username']) ? $fbdata['username'] : $username),
                         10, $defaultUsername);
                 $user->setUsername($availUsername);
             }
