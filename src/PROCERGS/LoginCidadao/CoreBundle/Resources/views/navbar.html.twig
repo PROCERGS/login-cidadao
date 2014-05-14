@@ -20,7 +20,9 @@
 
         {% if app.user == null %}
             <li class="pull-right">
-                <a href="{{ url("fos_user_security_login") }}" class="btn btn-login btn-success navbar-btn">{{ 'Log in' | trans }}</a>
+                {% if app.request.attributes.get('_route') != 'fos_user_security_login' %}
+                    <a href="{{ url("fos_user_security_login") }}" class="btn btn-login btn-success navbar-btn">{{ 'Log in' | trans }}</a>
+                {% endif %}
             </li>
         {% else %}
 
