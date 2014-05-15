@@ -303,13 +303,13 @@ class NfgController extends Controller
         }
         $nfgProfile->setName($result1['NomeConsumidor']);
         $nfgProfile->setEmail($result1['EmailPrinc']);
-        if ($result1['DtNasc']) {
+        if (isset($result1['DtNasc'])) {
             $nfgProfile->setBirthdate(new \DateTime(str_replace('T', ' ', $result1['DtNasc'])));
             if (! $person->getBirthdate()) {
                 $person->setBirthdate($nfgProfile->getBirthdate());
             }
         }
-        if ($result1['NroFoneContato']) {
+        if (isset($result1['NroFoneContato'])) {
             $nfgProfile->setMobile($result1['NroFoneContato']);
             if (! $person->getMobile()) {
                 $person->setMobile($nfgProfile->getMobile());
