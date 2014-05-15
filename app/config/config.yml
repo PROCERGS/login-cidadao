@@ -207,6 +207,6 @@ vich_uploader:
     storage:    vich_uploader.storage.gaufrette
     mappings:
         user_image:
-            uri_prefix:         %uri_root% ~ /uploads/profile-pictures
+            uri_prefix:         %uri_root%/uploads/profile-pictures
             upload_destination: user_image_fs
             namer:              vich_uploader.namer_uniqid
