@@ -187,7 +187,7 @@
   background: url('../images/meu_logo.png') no-repeat;
   height: 42px;
   padding: 0;
-  width: 146px;
+  width: 160px;
   text-indent: -9999px;
 }
 
@@ -198,7 +198,7 @@
 
   #lc-navbar .brand a {
     background-position: 0 -92px;
-    width: 42px;
+    width: 66px;
   }
 }
 
