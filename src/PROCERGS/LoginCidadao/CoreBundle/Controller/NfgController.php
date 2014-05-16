@@ -41,7 +41,7 @@ class NfgController extends Controller
         return new Response('<html><head><meta name="referrer" content="always"/></head><body><script type="text/javascript">document.location= "'.$url.'";</script></body></html>');
     }
 
-    protected function checkAccessToken()
+    protected function checkAccessToken($voterReg = NULL)
     {
         $request = $this->getRequest();
         $paccessid = $request->get('paccessid');
@@ -50,6 +50,9 @@ class NfgController extends Controller
         }
         $nfg = $this->get('procergs_logincidadao.nfgws');
         $nfg->setAccessToken($paccessid);
+        if ($voterReg) {
+            $nfg->setTituloEleitoral($voterReg);
+        }
         $result1 = $nfg->consultaCadastro();
         if ($result1['CodSitRetorno'] != 1) {
             throw new NfgException($result1['MsgRetorno']);
@@ -269,7 +272,7 @@ class NfgController extends Controller
         if (! $person) {
             return $this->redirect($this->generateUrl('lc_home'));
         }
-        $result1 = $this->checkAccessToken();
+        $result1 = $this->checkAccessToken($person['voterReg']);
         $em = $this->getDoctrine()->getEntityManager();
         $personRepo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
         
@@ -317,6 +320,12 @@ class NfgController extends Controller
         }
         if ($result1['CodNivelAcesso']) {
             $nfgProfile->setAccessLvl($result1['CodNivelAcesso']);
+        }
+        if (isset($result1['CodSitTitulo'])) {
+            $nfgProfile->setVoterRegSit($result1['CodSitTitulo']);
+            if (1 == $result1['CodSitTitulo']) {
+                $nfgProfile->setVoterReg($person->getVoterReg());
+            }
         }
         $em->persist($nfgProfile);
         

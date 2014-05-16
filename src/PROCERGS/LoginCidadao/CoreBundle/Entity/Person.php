@@ -241,6 +241,7 @@ class Person extends BaseUser
     protected $nfgProfile;
 
     /**
+     * @Groups({"voter_registration"}) 
      * @ORM\Column(name="voter_reg", type="string", length=12, nullable=true, unique=true)
      * @PROCERGSAssert\VoterRegistration
      */
@@ -477,6 +478,26 @@ class Person extends BaseUser
     {
         return $this->getFirstname() . ' ' . $this->getSurname();
     }
+    
+    /**
+     * @Groups({"data_valid"})
+     * @VirtualProperty
+     * @SerializedName("full_name")
+     * @return array
+     */
+    public function getDataValid()
+    {
+        $terms['cpf'] = (is_numeric($this->cpf) && strlen($this->nfgAccessToken)) ? 1 : 0;
+        $terms['email'] = (strlen($this->confirmationToken)) ? 1 : 0;
+        if ($this->getNfgProfile()) {
+            $terms['nfg_access_lvl'] = $this->getNfgProfile()->getAccessLvl();
+            $terms['voter_registration'] = $this->getNfgProfile()->getVoterRegSit();
+        } else {
+            $terms['nfg_access_lvl'] = 0;
+            $terms['voter_registration'] = 0;
+        }
+        return $terms;
+    }       
 
     /**
      * @param array

@@ -68,6 +68,12 @@ class NfgProfile
      * @Groups({"nfgprofile"})
      */
     protected $updatedAt;
+    
+    /**
+     * @ORM\Column(name="voter_reg_sit", type="integer", nullable=true)
+     * @Groups({"nfgprofile"})
+     */
+    protected $voterRegSit;
 
     public function getId()
     {
@@ -157,6 +163,17 @@ class NfgProfile
         return $this->voterReg;
     }
 
+    public function setVoterRegSit($var)
+    {
+        $this->voterRegSit = $var;
+        return $this;
+    }
+    
+    public function getVoterRegSit()
+    {
+        return $this->voterRegSit;
+    }
+    
     /**
      * @ORM\PrePersist
      * @ORM\PreUpdate
