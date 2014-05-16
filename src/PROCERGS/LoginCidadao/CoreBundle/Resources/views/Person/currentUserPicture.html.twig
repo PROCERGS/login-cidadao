@@ -1,11 +1,15 @@
+{%  set url = '//' ~ app.request.host %}
+{%  if app.request.port != 80 %}
+{%    set url =  url ~ ':' ~ app.request.port %}
+{%  endif %}
 {%  if app.user.imageName is null %}
 {%      if app.user.getSocialNetworksPicture is not null %}
 {{ app.user.getSocialNetworksPicture }}
 {%      else %}
 {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
-{{ asset_url }}
+{{ url ~ asset_url }}
 {% endimage %}
 {%      endif %}
 {%  else %}
-{{ vich_uploader_asset(app.user, 'image') }}
+{{ url ~ vich_uploader_asset(app.user, 'image') }}
 {%  endif %}
