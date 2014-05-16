@@ -17,9 +17,10 @@ class ExternalController extends Controller
      */
     public function navbarAction()
     {
+        $external = true;
         $referer = $this->getRequest()->headers->get('referer');
         $domain = preg_replace('/https?:\/\/([^\/]+)\/.*/i', '\1', $referer);
-        $navbar = $this->renderView('PROCERGSLoginCidadaoCoreBundle:External:navbar.html.twig', compact('domain'));
+        $navbar = $this->renderView('PROCERGSLoginCidadaoCoreBundle:External:navbar.html.twig', compact('domain', 'external'));
         $html = json_encode(array('navbar' => $navbar));
         $response = $this->render('PROCERGSLoginCidadaoCoreBundle:External:navbar.js.twig', compact('html'));
         $response->headers->set('Content-Type', 'application/javascript');

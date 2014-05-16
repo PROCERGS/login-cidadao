@@ -114,3 +114,13 @@
 </div>
 {% endfor %}
 {% endif %}
+{% if external %}
+<script>
+    $(function() {
+      $("#lc-navbar .dropdown-toggle").on("click", function() {
+        var menu = $(this).next(".dropdown-menu").toggle();
+        $("#lc-navbar .dropdown-menu").not(menu).hide();
+      });
+    });
+</script>
+{% endif %}
