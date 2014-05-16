@@ -825,6 +825,9 @@ class Person extends BaseUser
     public function getAgeRange()
     {
         $today = new \DateTime('today');
+        if (!$this->getBirthdate()) {
+            return array();
+        }
         $age = $this->getBirthdate()->diff($today)->y;
 
         $range = array();
