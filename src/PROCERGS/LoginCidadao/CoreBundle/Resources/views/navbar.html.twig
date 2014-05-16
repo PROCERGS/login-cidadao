@@ -114,7 +114,7 @@
 </div>
 {% endfor %}
 {% endif %}
-{% if external %}
+{% if external is defined and external == true %}
 <script>
     $(function() {
       $("#lc-navbar .dropdown-toggle").on("click", function() {
