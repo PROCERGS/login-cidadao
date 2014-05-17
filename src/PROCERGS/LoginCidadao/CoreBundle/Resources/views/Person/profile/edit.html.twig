@@ -225,6 +225,7 @@
 var profileEdit = {};
 profileEdit.cepId = '#{{ form.cep.vars.id }}';
 profileEdit.cpfId = '#{{ form.cpf.vars.id }}';
+profileEdit.voterRegId = '#{{ form.voterReg.vars.id }}';
 
 profileEdit.popLocation = function (dneData) {
     $(profileEdit.cepId).val(dneData.cep);
@@ -242,6 +243,7 @@ profileEdit.popLocation = function (dneData) {
 $(document).ready(function() {
     $(profileEdit.cepId).mask('00000-000');
     $(profileEdit.cpfId).mask('000.000.000-00');
+    $(profileEdit.voterRegId).mask('000000000000');
     $("#{{ form.mobile.vars.id }}").mask("(00) 0000-00009").focusout(function () {
         var phone, element;
         element = $(this); element.unmask();
