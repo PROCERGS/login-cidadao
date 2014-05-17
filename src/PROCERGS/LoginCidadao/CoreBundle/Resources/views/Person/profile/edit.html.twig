@@ -84,12 +84,12 @@
                                 {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
                                 <span class="extra">{% trans %}voterreg.nfg.offer.auth{% endtrans %}</span>
                             {% elseif app.user.nfgProfile.voterRegistrationSit == 1 %}
-                                {{ form_widget(form.voterRegistration, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}                                
+                                {{ form_widget(form.voterRegistration, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}
                                 <span>{{ form.voterRegistration.vars.value }}</span>
                             {% else %}
                                 {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
                                 <span class="extra">{% trans %}voterreg.nfg.fixit{% endtrans %}</span>
-                            {% endif %}    
+                            {% endif %}
                         {% endif %}
                     {% else %}
                         {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
@@ -225,7 +225,7 @@
 var profileEdit = {};
 profileEdit.cepId = '#{{ form.cep.vars.id }}';
 profileEdit.cpfId = '#{{ form.cpf.vars.id }}';
-profileEdit.voterRegId = '#{{ form.voterReg.vars.id }}';
+profileEdit.voterRegistrationId = '#{{ form.voterRegistration.vars.id }}';
 
 profileEdit.popLocation = function (dneData) {
     $(profileEdit.cepId).val(dneData.cep);
@@ -243,7 +243,7 @@ profileEdit.popLocation = function (dneData) {
 $(document).ready(function() {
     $(profileEdit.cepId).mask('00000-000');
     $(profileEdit.cpfId).mask('000.000.000-00');
-    $(profileEdit.voterRegId).mask('000000000000');
+    $(profileEdit.voterRegistrationId).mask('000000000000');
     $("#{{ form.mobile.vars.id }}").mask("(00) 0000-00009").focusout(function () {
         var phone, element;
         element = $(this); element.unmask();
