@@ -19,8 +19,7 @@ use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
- * @UniqueEntity("cpf")
- * @UniqueEntity("voterReg")
+ * @UniqueEntity("cpf") 
  * @UniqueEntity("username")
  * @ORM\HasLifecycleCallbacks
  * @ExclusionPolicy("all")
@@ -750,9 +749,13 @@ class Person extends BaseUser
         return $this->nfgProfile;
     }
 
-    public function setVoterReg($var)
+    public function setVoterReg($var = null)
     {
-        $this->voterReg = preg_replace('/[^0-9]/', '', $var);
+        if (null === $var) {
+            $this->voterReg = null;
+        } else  {
+            $this->voterReg = preg_replace('/[^0-9]/', '', $var);
+        }
         return $this;
     }
 

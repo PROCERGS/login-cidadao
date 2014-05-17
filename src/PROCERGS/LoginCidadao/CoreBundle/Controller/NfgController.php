@@ -64,7 +64,7 @@ class NfgController extends Controller
         return $result1;
     }
 
-    protected function checkOtherPerson(&$result1, &$em, &$personRepo, &$notificationsHelper)
+    protected function checkOtherPerson(&$result1, &$em, &$personRepo)
     {
         $otherPerson = $personRepo->findOneBy(array(
             'cpf' => $result1['CodCpf']
@@ -272,28 +272,28 @@ class NfgController extends Controller
         if (! $person) {
             return $this->redirect($this->generateUrl('lc_home'));
         }
-        $result1 = $this->checkAccessToken($person['voterReg']);
+        $result1 = $this->checkAccessToken($person->getVoterReg());
         $em = $this->getDoctrine()->getEntityManager();
         $personRepo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
         
-        $notificationsHelper = $this->get('notifications.helper');
         if ($person->getCpf()) {
             if ($person->getCpf() == $result1['CodCpf']) {
                 // ok
             } else {
-                $this->checkOtherPerson($result1, $em, $personRepo, $notificationsHelper);
+                $this->checkOtherPerson($result1, $em, $personRepo);
                 
                 $person->setCpf($result1['CodCpf']);
                 $notification = new Notification();
                 $notification->setPerson($otherPerson)
+                    ->setIcon('glyphicon glyphicon-exclamation-sign')
                     ->setLevel(Notification::LEVEL_NORMAL)
                     ->setTitle('notification.nfg.overwrite.cpf.title')
                     ->setShortText('notification.nfg.overwrite.cpf.message.short')
                     ->setText('notification.nfg.overwrite.cpf.message');
-                $notificationsHelper->send($notification);
+                $em->persist($notification);
             }
         } else {
-            $this->checkOtherPerson($result1, $em, $personRepo, $notificationsHelper);
+            $this->checkOtherPerson($result1, $em, $personRepo);
             $person->setCpf($result1['CodCpf']);
         }
         

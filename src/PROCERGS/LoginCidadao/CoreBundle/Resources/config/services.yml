@@ -131,6 +131,8 @@ services:
             - [setCpfEmptyTime, ["%registration.cpf.empty_time%"]]
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
             - [setDneHelper, ["@procergs_logincidadao.dne"]]
+            - [setNfgHelper, ["@procergs_logincidadao.nfgws"]]
+            - [setUserManager, ["@fos_user.user_manager"]]
 
     procergs_logincidadao.change.password.form.type:
         class: %procergs_logincidadao.change.password.form.type.class%

@@ -12,6 +12,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\LcEmailException;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\NfgException;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\LcFcGbException;
+use PROCERGS\LoginCidadao\CoreBundle\Exception\LcValidationException;
 
 class ExceptionListener
 {
@@ -66,6 +67,10 @@ class ExceptionListener
             $event->setResponse(new RedirectResponse($url));
         } elseif ($exception instanceof  LcFcGbException) {
             $url = $this->router->generate('lc_link_facebook');
+            $event->setResponse(new RedirectResponse($url));
+        } elseif ($exception instanceof LcValidationException) {
+            $this->session->getFlashBag()->add('error', $this->translator->trans($exception->getMessage()));
+            $url = $this->router->generate('fos_user_profile_edit');
             $event->setResponse(new RedirectResponse($url));
         }
     }
