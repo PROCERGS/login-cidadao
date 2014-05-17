@@ -44,7 +44,7 @@ class ProfileFormType extends BaseType
                 ->add('mobile', null,
                         array('required' => false, 'label' => 'form.mobile', 'translation_domain' => 'FOSUserBundle'))
                 ->add('image')
-                ->add('voterReg', 'text', array('required' => false, 'label' => 'form.voterReg', 'translation_domain' => 'FOSUserBundle'))
+                ->add('voterRegistration', 'text', array('required' => false, 'label' => 'form.voterRegistration', 'translation_domain' => 'FOSUserBundle'))
                 ;
 
     }

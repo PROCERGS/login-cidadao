@@ -160,3 +160,5 @@ No: No
 'Creative commons': Creative commons
 lc.html.title: 'Citizen''s Login'
 'About Citizen''s Login': 'About Citizen''s Login'
+voterregistration.conflict.ask.nfg: 'The informed voter registration is already being used by another person. If you are sure it''s yours then connect your account with Nota Fiscal Gaúcha to enable Voter Registration validation.'
+voterregistration.invalid: 'The informed voter registration is invalid or belongs to someone else. If you believe this is incorrect, try connection your account with Nota Fical Gaúcha to enable Voter Registration validation.'

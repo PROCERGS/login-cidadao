@@ -70,36 +70,36 @@
                     <div class="input-error">{{ form_errors(form.cpf) }}</div>
                 </div>
                 <div class="form-group">
-                    {{ form_label(form.voterReg) }}
+                    {{ form_label(form.voterRegistration) }}
                     {% if app.user.nfgAccessToken is not null %}
-                        {% if form.voterReg.vars.value is null or form.voterReg.vars.value == '' %}
-                            {{ form_widget(form.voterReg, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
+                        {% if form.voterRegistration.vars.value is null or form.voterRegistration.vars.value == '' %}
+                            {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
 		                    <span class="extra">
 		                        {% trans %}voterreg.offer.search{% endtrans %}
 		                        <a target='blank' href="{{ tre_search_link }}">{{ 'Search it!' | trans }}</a>
 		                    </span>
 		                    <span class="extra">{% trans %}voterreg.nfg.offer.complete{% endtrans %}</span>
                         {% else %}
-                            {% if app.user.nfgProfile.voterRegSit is null or app.user.nfgProfile.voterRegSit == 0 %}
-                                {{ form_widget(form.voterReg, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
+                            {% if app.user.nfgProfile.voterRegistrationSit is null or app.user.nfgProfile.voterRegistrationSit == 0 %}
+                                {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
                                 <span class="extra">{% trans %}voterreg.nfg.offer.auth{% endtrans %}</span>
-                            {% elseif app.user.nfgProfile.voterRegSit == 1 %}
-                                {{ form_widget(form.voterReg, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}                                
-                                <span>{{ form.voterReg.vars.value }}</span>
+                            {% elseif app.user.nfgProfile.voterRegistrationSit == 1 %}
+                                {{ form_widget(form.voterRegistration, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}                                
+                                <span>{{ form.voterRegistration.vars.value }}</span>
                             {% else %}
-                                {{ form_widget(form.voterReg, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
+                                {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
                                 <span class="extra">{% trans %}voterreg.nfg.fixit{% endtrans %}</span>
                             {% endif %}    
                         {% endif %}
                     {% else %}
-                        {{ form_widget(form.voterReg, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
+                        {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
 	                    <span class="extra">
 	                        {% trans %}voterreg.offer.search{% endtrans %}
 	                        <a target='blank' href="{{ tre_search_link }}">{{ 'Search it!' | trans }}</a>
 	                    </span>
                     {% endif %}
                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error">{{ form_errors(form.voterReg) }}</div>
+                    <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
                 </div>
                 <div class="form-group">
                     {{ form_label(form.mobile) }}
@@ -262,7 +262,7 @@ $(document).ready(function() {
     	validador.cep.findByCep(this, profileEdit.popLocation);
     });
     var messages = {'0' : "{{ 'form.voterreg.invalid' | trans }}"};
-    var trevoterId = '#{{ form.voterReg.vars.id }}';
+    var trevoterId = '#{{ form.voterRegistration.vars.id }}';
       $(trevoterId).on('blur', function () {
           if (!this.value.length) {return;}
           this.value = completaZerosEsquerda(this.value, 12);

@@ -80,7 +80,7 @@ registration.email.click: 'Confirmar Email'
 Yes: Sim
 'Connect to the NFG': 'Conectar à NFG'
 'Continue Registration': 'Continuar Cadastro'
-form.voterReg: 'Título de Eleitor'
+form.voterRegistration: 'Título de Eleitor'
 form.voterreg.invalid: 'Título de Eleitor inválido'
 voterreg.invalid: 'Título de Eleitor inválido'
 voterreg.offer.search: 'Nâo sabe seu Título de Eleitor?'

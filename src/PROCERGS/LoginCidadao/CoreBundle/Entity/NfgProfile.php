@@ -61,7 +61,7 @@ class NfgProfile
      * @ORM\Column(name="voter_reg", type="string", nullable=true)
      * @Groups({"nfgprofile"})
      */
-    protected $voterReg;
+    protected $voterRegistration;
 
     /**
      * @ORM\Column(name="updated_at", type="datetime")
@@ -73,7 +73,7 @@ class NfgProfile
      * @ORM\Column(name="voter_reg_sit", type="integer", nullable=true)
      * @Groups({"nfgprofile"})
      */
-    protected $voterRegSit;
+    protected $voterRegistrationSit;
 
     public function getId()
     {
@@ -152,26 +152,26 @@ class NfgProfile
         return $this->accessLvl;
     }
 
-    public function setVoterReg($var)
+    public function setVoterRegistration($var)
     {
-        $this->voterReg = $var;
+        $this->voterRegistration = $var;
         return $this;
     }
 
-    public function getVoterReg()
+    public function getVoterRegistration()
     {
-        return $this->voterReg;
+        return $this->voterRegistration;
     }
 
-    public function setVoterRegSit($var)
+    public function setVoterRegistrationSit($var)
     {
-        $this->voterRegSit = $var;
+        $this->voterRegistrationSit = $var;
         return $this;
     }
     
-    public function getVoterRegSit()
+    public function getVoterRegistrationSit()
     {
-        return $this->voterRegSit;
+        return $this->voterRegistrationSit;
     }
     
     /**

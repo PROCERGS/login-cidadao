@@ -244,7 +244,7 @@ class Person extends BaseUser
      * @ORM\Column(name="voter_reg", type="string", length=12, nullable=true, unique=true)
      * @PROCERGSAssert\VoterRegistration
      */
-    protected $voterReg;
+    protected $voterRegistration;
 
     /**
      * @Assert\File(
@@ -490,7 +490,7 @@ class Person extends BaseUser
         $terms['email'] = (strlen($this->confirmationToken)) ? 1 : 0;
         if ($this->getNfgProfile()) {
             $terms['nfg_access_lvl'] = $this->getNfgProfile()->getAccessLvl();
-            $terms['voter_registration'] = $this->getNfgProfile()->getVoterRegSit();
+            $terms['voter_registration'] = $this->getNfgProfile()->getVoterRegistrationSit();
         } else {
             $terms['nfg_access_lvl'] = 0;
             $terms['voter_registration'] = 0;
@@ -749,19 +749,19 @@ class Person extends BaseUser
         return $this->nfgProfile;
     }
 
-    public function setVoterReg($var = null)
+    public function setVoterRegistration($var = null)
     {
         if (null === $var) {
-            $this->voterReg = null;
+            $this->voterRegistration = null;
         } else  {
-            $this->voterReg = preg_replace('/[^0-9]/', '', $var);
+            $this->voterRegistration = preg_replace('/[^0-9]/', '', $var);
         }
         return $this;
     }
 
-    public function getVoterReg()
+    public function getVoterRegistration()
     {
-        return $this->voterReg;
+        return $this->voterRegistration;
     }
 
     /**

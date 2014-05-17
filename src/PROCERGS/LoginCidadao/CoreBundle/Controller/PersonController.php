@@ -281,4 +281,35 @@ class PersonController extends Controller
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));
     }
 
+    /**
+     * @Route("/doctrineBug")
+     */
+    public function doctrineBugAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $people = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+        $p1 = $people->find(100);
+        $p2 = $people->find(101);
+
+        $em->persist($p1);
+
+        $em->getConnection()->beginTransaction();
+        try {
+
+            $reg = $p2->getVoterRegistration();
+            $p2->setVoterRegistration(null);
+            $em->persist($p2);
+            $em->flush();
+throw new \Exception("oi");
+            $p1->setVoterRegistration($reg);
+            $em->persist($p1);
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $ex) {
+            $em->getConnection()->rollback();
+        }
+
+        die("ok");
+    }
+
 }
