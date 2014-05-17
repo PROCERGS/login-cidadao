@@ -54,7 +54,7 @@ class ProfileEditListner implements EventSubscriberInterface
     protected $voterReg;
 
     protected $nfg;
-    
+
     protected $userManager;
 
     public function __construct(TwigSwiftMailer $mailer, MailerInterface $fosMailer, TokenGeneratorInterface $tokenGenerator, UrlGeneratorInterface $router, SessionInterface $session, SecurityContextInterface $security, NotificationsHelper $notificationsHelper, $emailUnconfirmedTime)
@@ -98,7 +98,7 @@ class ProfileEditListner implements EventSubscriberInterface
     {
         $user = $event->getForm()->getData();
         $aUser = $this->security->getToken()->getUser();
-        if ($user->getVoterReg() != $this->voterReg) {            
+        if ($user->getVoterReg() != $this->voterReg) {
             if ($aUser->getNfgAccessToken()) {
                 $this->nfg->setAccessToken($aUser->getNfgAccessToken());
                 $this->nfg->setTituloEleitoral($user->getVoterReg());
@@ -118,14 +118,12 @@ class ProfileEditListner implements EventSubscriberInterface
                 if (isset($nfgReturn1)) {
                     if (isset($nfgReturn1['CodSitTitulo']) && $nfgReturn1['CodSitTitulo'] != 0) {
                         if ($nfgReturn1['CodSitTitulo'] == 1) {
+                            $this->em->flush();
+
                             $otherPerson->setVoterReg(null);
-                            //@TODO really weird and wrong sit
-                            $vrt = $user->getVoterReg();
-                            $user->setVoterReg(null);
-                            $this->em->flush($user);
-                            $this->em->flush($otherPerson);
-                            $user->setVoterReg($vrt);
-        
+                            $this->em->persist($otherPerson);
+                            $this->em->flush();
+
                             $notification = new Notification();
                             $notification->setPerson($otherPerson)
                             ->setIcon('glyphicon glyphicon-exclamation-sign')
@@ -134,7 +132,7 @@ class ProfileEditListner implements EventSubscriberInterface
                             ->setShortText('notification.nfg.revoked.voterreg.message.short')
                             ->setText('notification.nfg.revoked.voterreg.message');
                             $this->em->persist($notification);
-        
+
                             $aNfgProfile = $aUser->getNfgProfile();
                             $aNfgProfile->setVoterRegSit($nfgReturn1['CodSitTitulo']);
                             $aNfgProfile->setVoterReg($user->getVoterReg());
@@ -149,19 +147,19 @@ class ProfileEditListner implements EventSubscriberInterface
                     throw new LcValidationException('voterreg.already.used');
                 }
             } else {
-            	
+
             }
         }
         if ($user->getEmail() !== $this->email) {
             if (is_null($user->getConfirmationToken())) {
                 $user->setPreviousValidEmail($this->email);
             }
-            
+
             // send confirmation token to new email
             $user->setConfirmationToken($this->tokenGenerator->generateToken());
             $user->setEmailExpiration(new \DateTime("+$this->emailUnconfirmedTime"));
             $this->fosMailer->sendConfirmationEmailMessage($user);
-            
+
             $this->notificationsHelper->enforceUnconfirmedEmailNotification($user);
             $this->mailer->sendEmailChangedMessage($user, $this->email);
         }
@@ -200,7 +198,7 @@ class ProfileEditListner implements EventSubscriberInterface
         }
         // default:
         $url = $this->router->generate('fos_user_profile_edit');
-        
+
         $event->setResponse(new RedirectResponse($url));
     }
 
@@ -223,9 +221,9 @@ class ProfileEditListner implements EventSubscriberInterface
     {
         $this->nfg = $var;
     }
-    
+
     public function setUserManager($var)
     {
-        $this->userManager = $var;        
+        $this->userManager = $var;
     }
 }
