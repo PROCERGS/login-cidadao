@@ -129,7 +129,7 @@ class ProfileEditListner implements EventSubscriberInterface
         $this->userManager = $var;
     }
 
-    private function checkEmailChanged(Person $user)
+    private function checkEmailChanged(Person &$user)
     {
         if ($user->getEmail() !== $this->email) {
             if (is_null($user->getConfirmationToken())) {
@@ -146,7 +146,7 @@ class ProfileEditListner implements EventSubscriberInterface
         }
     }
 
-    private function checkCPFChanged(Person $user)
+    private function checkCPFChanged(Person &$user)
     {
         if ($user->getCpf() !== $this->cpf) {
             if ($user->getCpf()) {
@@ -205,40 +205,11 @@ class ProfileEditListner implements EventSubscriberInterface
         }
     }
 
-    private function checkVoterRegistrationChanged(Person $user)
+    private function checkVoterRegistrationChanged(Person &$user)
     {
-        if (is_null($user->getVoterRegistration()) || strlen($user->getVoterRegistration()) <= 0) {
+        if (null === $user->getVoterRegistration() || strlen($user->getVoterRegistration()) == 0) {
             return;
         }
-        if ($user->getVoterRegistration() != $this->voterRegistration) {
-            $currentUser = $this->security->getToken()->getUser();
-            try {
-                $isNfgValidated = $this->nfg->isVoterRegistrationValid($currentUser,
-                        $user->getVoterRegistration());
-            } catch (MissingNfgAccessTokenException $e) {
-                $isNfgValidated = null;
-            }
-
-            if ($isNfgValidated === false) {
-                throw new LcValidationException('voterregistration.conflict.ask.nfg');
-            }
-
-            $personRepo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
-            $otherPerson = $personRepo->findOneBy(array(
-                'voterRegistration' => $user->getVoterRegistration()
-            ));
-            if ($otherPerson instanceof Person && $otherPerson->getId() !== $user->getId()) {
-                $this->solveVoterRegistrationConflict($user, $otherPerson,
-                        $isNfgValidated);
-            } else {
-                // Nothing we can do...
-                return;
-            }
-        }
-
-        return;
-
-        // #############################################
         $aUser = $this->security->getToken()->getUser();
         if ($user->getVoterRegistration() != $this->voterRegistration) {
             if ($aUser->getNfgAccessToken()) {
@@ -261,13 +232,17 @@ class ProfileEditListner implements EventSubscriberInterface
                 if (isset($nfgReturn1)) {
                     if (isset($nfgReturn1['CodSitTitulo']) && $nfgReturn1['CodSitTitulo'] != 0) {
                         if ($nfgReturn1['CodSitTitulo'] == 1) {
-                            $this->em->flush();
-
+                            $className = $this->em->getClassMetadata(get_class($aUser))->getName();
+                            $uk = $this->em->getUnitOfWork();
+                            $a = $uk->getOriginalEntityData($user);
+                            $uk->detach($user);
+                            
                             $otherPerson->setVoterRegistration(null);
                             $this->em->persist($otherPerson);
-                            $this->em->flush();
-
-                            $notification = new Notification();
+                            
+                            $uk->registerManaged($user, array('id' => $user->getId()),$a);
+                            
+                            $notification = new Notification();                            
                             $notification->setPerson($otherPerson)
                                     ->setIcon('glyphicon glyphicon-exclamation-sign')
                                     ->setLevel(Notification::LEVEL_IMPORTANT)
@@ -289,13 +264,11 @@ class ProfileEditListner implements EventSubscriberInterface
                 } else {
                     throw new LcValidationException('voterreg.already.used');
                 }
-            } else {
-
             }
         }
     }
 
-    private function checkCEPChanged($user)
+    private function checkCEPChanged(&$user)
     {
         if ($user->getCep()) {
             $ceps = $this->dne->findByCep($user->getCep());
