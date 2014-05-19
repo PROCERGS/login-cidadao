@@ -54,3 +54,5 @@ php_value magic_quotes 0
 php_flag magic_quotes off
 php_value magic_quotes_gpc 0
 php_flag magic_quotes_gpc off
+AddType image/svg+xml svg svgz
+AddEncoding gzip svgz
