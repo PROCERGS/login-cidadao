@@ -479,9 +479,9 @@ class Person extends BaseUser
     }
     
     /**
-     * @Groups({"data_valid"})
+     * @Groups({"badges"})
      * @VirtualProperty
-     * @SerializedName("full_name")
+     * @SerializedName("badges")
      * @return array
      */
     public function getDataValid()
