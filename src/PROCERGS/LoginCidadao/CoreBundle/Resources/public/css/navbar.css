@@ -78,6 +78,7 @@
   font-family: 'Open Sans', arial;
   min-height: 50px;
   position: relative;
+  margin-bottom: 0;
 }
 
 #lc-navbar .pull-left {
