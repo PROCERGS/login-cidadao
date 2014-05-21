@@ -241,7 +241,7 @@ class Person extends BaseUser
 
     /**
      * @Groups({"voter_registration"}) 
-     * @ORM\Column(name="voter_reg", type="string", length=12, nullable=true, unique=true)
+     * @ORM\Column(name="voter_registration", type="string", length=12, nullable=true, unique=true)
      * @PROCERGSAssert\VoterRegistration
      */
     protected $voterRegistration;
@@ -486,14 +486,14 @@ class Person extends BaseUser
      */
     public function getDataValid()
     {
-        $terms['cpf'] = (is_numeric($this->cpf) && strlen($this->nfgAccessToken)) ? 1 : 0;
-        $terms['email'] = (strlen($this->confirmationToken)) ? 1 : 0;
+        $terms['cpf'] = (is_numeric($this->cpf) && strlen($this->nfgAccessToken));
+        $terms['email'] = is_null($this->getConfirmationToken());
         if ($this->getNfgProfile()) {
             $terms['nfg_access_lvl'] = $this->getNfgProfile()->getAccessLvl();
             $terms['voter_registration'] = $this->getNfgProfile()->getVoterRegistrationSit();
         } else {
-            $terms['nfg_access_lvl'] = 0;
-            $terms['voter_registration'] = 0;
+            $terms['nfg_access_lvl'] = false;
+            $terms['voter_registration'] = false;
         }
         return $terms;
     }       

@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class PersonController extends Controller
 {
@@ -31,7 +32,6 @@ class PersonController extends Controller
             'client' => $client
         ));
         $scope = $authorization->getScope();
-
         $serializer = $this->container->get('jms_serializer');
 
         // User's profile picture
@@ -63,4 +63,35 @@ class PersonController extends Controller
         return $response;
     }
 
+    /**
+     * @Route("/person/voter-registration", defaults={"_format" = "json"})
+     * @Template()
+     */
+    public function voterRegistrationAction()
+    {
+        $kernel = $this->get('kernel');
+        $token = $this->get('security.context')->getToken();
+        $user = $token->getUser();
+
+        $accessToken = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:AccessToken')->findOneBy(array('token' => $token->getToken()));
+        $client = $accessToken->getClient();
+
+        $authorization = $this->getDoctrine()
+                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
+                ->findOneBy(array(
+            'person' => $user,
+            'client' => $client
+        ));
+        $scope = $authorization->getScope();
+
+        if (array_search('voter_registration', $scope) !== false) {
+            $json = json_encode(array('voter_registration' => $user->getVoterRegistration()));
+        } else {
+            throw new AccessDeniedException();
+        }
+
+        $response = new JsonResponse();
+        $response->setData(json_decode($json));
+        return $response;
+    }
 }
