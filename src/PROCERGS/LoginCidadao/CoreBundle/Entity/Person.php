@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
- * @UniqueEntity("cpf") 
+ * @UniqueEntity("cpf")
  * @UniqueEntity("username")
  * @ORM\HasLifecycleCallbacks
  * @ExclusionPolicy("all")
@@ -240,7 +240,8 @@ class Person extends BaseUser
     protected $nfgProfile;
 
     /**
-     * @Groups({"voter_registration"}) 
+     * @Expose
+     * @Groups({"voter_registration"})
      * @ORM\Column(name="voter_registration", type="string", length=12, nullable=true, unique=true)
      * @PROCERGSAssert\VoterRegistration
      */
@@ -477,7 +478,7 @@ class Person extends BaseUser
     {
         return $this->getFirstname() . ' ' . $this->getSurname();
     }
-    
+
     /**
      * @Groups({"badges", "public_profile"})
      * @VirtualProperty
@@ -496,7 +497,7 @@ class Person extends BaseUser
             $terms['voter_registration'] = false;
         }
         return $terms;
-    }       
+    }
 
     /**
      * @param array
