@@ -754,7 +754,7 @@ class Person extends BaseUser
     {
         if (null === $var) {
             $this->voterRegistration = null;
-        } else  {
+        } else {
             $this->voterRegistration = preg_replace('/[^0-9]/', '', $var);
         }
         return $this;
@@ -868,6 +868,30 @@ class Person extends BaseUser
         $this->suggestions = $suggestions;
 
         return $this;
+    }
+
+    public function prepareAPISerialize($imageHelper, $isDev, $request)
+    {
+        // User's profile picture
+        if ($this->hasLocalProfilePicture()) {
+            $picturePath = $imageHelper->asset($this, 'image');
+            $pictureUrl = $request->getUriForPath($picturePath);
+            if ($isDev) {
+                $pictureUrl = str_replace('/app_dev.php', '', $pictureUrl);
+            }
+        } else {
+            $pictureUrl = $this->getSocialNetworksPicture();
+        }
+        if (is_null($pictureUrl)) {
+            // TODO: fix this and make it comply to DRY
+            $picturePath = $this->get('templating.helper.assets')->getUrl('bundles/procergslogincidadaocore/images/userav.png');
+            $pictureUrl = $this->getRequest()->getUriForPath($picturePath);
+            if ($isDev) {
+                $pictureUrl = str_replace('/app_dev.php', '', $pictureUrl);
+            }
+        }
+        $this->setProfilePictureUrl($pictureUrl);
+        $this->serialize();
     }
 
 }

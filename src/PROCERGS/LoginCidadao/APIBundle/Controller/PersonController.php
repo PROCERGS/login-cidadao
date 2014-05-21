@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use PROCERGS\LoginCidadao\APIBundle\Exception\RequestTimeoutException;
 
 class PersonController extends Controller
 {
@@ -18,45 +19,10 @@ class PersonController extends Controller
      */
     public function selfAction()
     {
-        $kernel = $this->get('kernel');
-        $token = $this->get('security.context')->getToken();
-        $user = $token->getUser();
+        $user = $this->getUser();
+        $scope = $this->getClientScope($user);
 
-        $accessToken = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:AccessToken')->findOneBy(array('token' => $token->getToken()));
-        $client = $accessToken->getClient();
-
-        $authorization = $this->getDoctrine()
-                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
-                ->findOneBy(array(
-            'person' => $user,
-            'client' => $client
-        ));
-        $scope = $authorization->getScope();
-        $serializer = $this->container->get('jms_serializer');
-
-        // User's profile picture
-        if ($user->hasLocalProfilePicture()) {
-            $helper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
-            $picturePath = $helper->asset($user, 'image');
-            $pictureUrl = $this->getRequest()->getUriForPath($picturePath);
-            if ($kernel->getEnvironment() === 'dev') {
-                $pictureUrl = str_replace('/app_dev.php', '', $pictureUrl);
-            }
-        } else {
-            $pictureUrl = $user->getSocialNetworksPicture();
-        }
-        if (is_null($pictureUrl)) {
-            // TODO: fix this and make it comply to DRY
-            $picturePath = $this->get('templating.helper.assets')->getUrl('bundles/procergslogincidadaocore/images/userav.png');
-            $pictureUrl = $this->getRequest()->getUriForPath($picturePath);
-            if ($kernel->getEnvironment() === 'dev') {
-                $pictureUrl = str_replace('/app_dev.php', '', $pictureUrl);
-            }
-        }
-        $user->setProfilePictureUrl($pictureUrl);
-
-        $user->serialize();
-        $json = $serializer->serialize($user, 'json', SerializationContext::create()->setGroups($scope));
+        $json = $this->serializePerson($user, $scope);
 
         $response = new JsonResponse();
         $response->setData(json_decode($json));
@@ -64,15 +30,66 @@ class PersonController extends Controller
     }
 
     /**
-     * @Route("/person/voter-registration", defaults={"_format" = "json"})
+     * @Route("/wait/person/voter-registration", defaults={"_format" = "json"})
      * @Template()
      */
-    public function voterRegistrationAction()
+    public function waitVoterRegistrationAction()
     {
-        $kernel = $this->get('kernel');
-        $token = $this->get('security.context')->getToken();
-        $user = $token->getUser();
+        $user = $this->getUser();
+        $scope = $this->getClientScope($user);
 
+        if (array_search('voter_registration', $scope) !== false) {
+            $people = $this->getDoctrine()->getManager()->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+            $id = $user->getId();
+
+            $callback = function() use ($id, $people) {
+                $person = $people->find($id);
+                $voterRegistration = $person->getVoterRegistration();
+                return (strlen($voterRegistration) > 0) ? $person : false;
+            };
+            $person = $this->runTimeLimited($callback);
+            $json = $this->serializePerson($person, $scope);
+        } else {
+            throw new AccessDeniedException();
+        }
+
+        $response = new JsonResponse();
+        return $response->setData(json_decode($json));
+    }
+
+    private function runTimeLimited($callback, $waitTime = 1)
+    {
+        $limit = ini_get('max_execution_time') - 2;
+        $startTime = time();
+        while ($limit > 0) {
+            $result = call_user_func($callback);
+            $delta = time() - $startTime;
+
+            if ($result !== false) {
+                return $result;
+            } else {
+                $limit -= $delta;
+                $startTime = time();
+                sleep($waitTime);
+            }
+        }
+        throw new RequestTimeoutException('lc.api.request.timeout');
+    }
+
+    private function serializePerson($person, $scope)
+    {
+        $helper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
+        $isDev = $this->get('kernel')->getEnvironment() === 'dev';
+        $person->prepareAPISerialize($helper, $isDev, $this->getRequest());
+
+        $serializer = $this->container->get('jms_serializer');
+        return $serializer->serialize($person, 'json',
+                        SerializationContext::create()->setGroups($scope));
+    }
+
+    private function getClientScope($user)
+    {
+        $token = $this->get('security.context')->getToken();
         $accessToken = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:AccessToken')->findOneBy(array('token' => $token->getToken()));
         $client = $accessToken->getClient();
 
@@ -82,16 +99,7 @@ class PersonController extends Controller
             'person' => $user,
             'client' => $client
         ));
-        $scope = $authorization->getScope();
-
-        if (array_search('voter_registration', $scope) !== false) {
-            $json = json_encode(array('voter_registration' => $user->getVoterRegistration()));
-        } else {
-            throw new AccessDeniedException();
-        }
-
-        $response = new JsonResponse();
-        $response->setData(json_decode($json));
-        return $response;
+        return $authorization->getScope();
     }
+
 }
