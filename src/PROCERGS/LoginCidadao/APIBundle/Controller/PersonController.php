@@ -73,7 +73,7 @@ class PersonController extends Controller
                 sleep($waitTime);
             }
         }
-        throw new RequestTimeoutException('lc.api.request.timeout');
+        throw new RequestTimeoutException();
     }
 
     private function serializePerson($person, $scope)
