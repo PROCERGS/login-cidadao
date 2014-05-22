@@ -5,6 +5,8 @@ var citizenLogin = {
 };
 var div = '';
 
+citizenLogin.loggedIn = {{ app.user != null ? 'true' : 'false' }};
+
 citizenLogin.navbar.init = function(removeMargins) {
     citizenLogin.body = document.getElementsByTagName('body')[0];
     citizenLogin.head = document.getElementsByTagName('head')[0];
