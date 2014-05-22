@@ -1,4 +1,5 @@
 <?php
+
 namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -10,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ContactFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Uf;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class DefaultController extends Controller
 {
@@ -20,13 +22,15 @@ class DefaultController extends Controller
     public function facebookLoginAction()
     {
         $shouldLogout = $this->getRequest()->get('logout');
-        if (! is_null($shouldLogout)) {
+        if (!is_null($shouldLogout)) {
             $this->get('session')->set('facebook.logout', true);
         }
 
         $api = $this->container->get('fos_facebook.api');
-        $scope = implode(',', $this->container->getParameter('facebook_app_scope'));
-        $callback = $this->container->get('router')->generate('_security_check_facebook', array(), true);
+        $scope = implode(',',
+                $this->container->getParameter('facebook_app_scope'));
+        $callback = $this->container->get('router')->generate('_security_check_facebook',
+                array(), true);
         $redirect_url = $api->getLoginUrl(array(
             'scope' => $scope,
             'redirect_uri' => $callback
@@ -52,7 +56,8 @@ class DefaultController extends Controller
      */
     public function generalAction()
     {
-        return $this->render('PROCERGSLoginCidadaoCoreBundle:Info:terms.html.twig', compact('user', 'apps'));
+        return $this->render('PROCERGSLoginCidadaoCoreBundle:Info:terms.html.twig',
+                        compact('user', 'apps'));
     }
 
     /**
@@ -65,28 +70,32 @@ class DefaultController extends Controller
         $repoUf = $this->getDoctrine()->getEntityManager()->getRepository('PROCERGSLoginCidadaoCoreBundle:Uf');
         $q = $repoUf->createQueryBuilder('u')->orderBy('u.acronym');
         $p = $repoUf->findBy(array('acronym' => 'RS'));
-        $form = $this->createFormBuilder()->add('adress', 'text', array(
-            'required' => true,
-            'label' => 'form.adress',
-            'translation_domain' => 'FOSUserBundle'
-        ))->add('adressnumber', 'text', array(
-            'required' => false,
-            'label' => 'form.adressnumber',
-            'translation_domain' => 'FOSUserBundle'
-        ))->add('city', 'text', array(
-            'required' => true,
-            'label' => 'form.city',
-            'translation_domain' => 'FOSUserBundle'
-        ))->add('uf', 'entity', array(
-            'class' => 'PROCERGSLoginCidadaoCoreBundle:Uf',
-            'property' => 'name',
-            'required' => true,
-            'label' => 'form.uf',
-            'preferred_choices' => $p,
-            'query_builder' => $q,
-            'translation_domain' => 'FOSUserBundle'
-        )
-        )->getForm();
+        $form = $this->createFormBuilder()->add('adress', 'text',
+                        array(
+                    'required' => true,
+                    'label' => 'form.adress',
+                    'translation_domain' => 'FOSUserBundle'
+                ))->add('adressnumber', 'text',
+                        array(
+                    'required' => false,
+                    'label' => 'form.adressnumber',
+                    'translation_domain' => 'FOSUserBundle'
+                ))->add('city', 'text',
+                        array(
+                    'required' => true,
+                    'label' => 'form.city',
+                    'translation_domain' => 'FOSUserBundle'
+                ))->add('uf', 'entity',
+                        array(
+                    'class' => 'PROCERGSLoginCidadaoCoreBundle:Uf',
+                    'property' => 'name',
+                    'required' => true,
+                    'label' => 'form.uf',
+                    'preferred_choices' => $p,
+                    'query_builder' => $q,
+                    'translation_domain' => 'FOSUserBundle'
+                        )
+                )->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
             $busca = $this->get('procergs_logincidadao.dne');
@@ -126,7 +135,8 @@ class DefaultController extends Controller
                 'msg' => 'not found'
             );
         }
-        return new Response(json_encode($result), 200, array(
+        return new Response(json_encode($result), 200,
+                array(
             'Content-Type' => 'application/json'
         ));
     }
@@ -158,9 +168,30 @@ class DefaultController extends Controller
                 $message = 'form.message.sucess';
             }
         }
-        return $this->render('PROCERGSLoginCidadaoCoreBundle:Info:contact.html.twig', array(
-            'form' => $form->createView(),
-            'messages' => $message
+        return $this->render('PROCERGSLoginCidadaoCoreBundle:Info:contact.html.twig',
+                        array(
+                    'form' => $form->createView(),
+                    'messages' => $message
         ));
     }
+
+    /**
+     * @Route("/logout/if-not-remembered", name="lc_contact")
+     * @Template()
+     */
+    public function logoutIfNotRememberedAction()
+    {
+        $result['logged_out'] = false;
+        if ($this->getRequest()->cookies->has('REMEMBERME')) {
+            $result = array('logged_out' => false);
+        } else {
+            $this->get("request")->getSession()->invalidate();
+            $this->get("security.context")->setToken(null);
+            $result['logged_out'] = true;
+        }
+
+        $response = new JsonResponse();
+        return $response->setData($result);
+    }
+
 }
