@@ -894,4 +894,14 @@ class Person extends BaseUser
         $this->serialize();
     }
 
+    public function isClientAuthorized($app_id)
+    {
+        foreach ($this->getAuthorizations() as $auth) {
+            if ($auth->getClient()->getPublicId() === $app_id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
