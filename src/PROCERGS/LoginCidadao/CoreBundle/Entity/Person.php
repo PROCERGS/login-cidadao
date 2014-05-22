@@ -870,7 +870,7 @@ class Person extends BaseUser
         return $this;
     }
 
-    public function prepareAPISerialize($imageHelper, $isDev, $request)
+    public function prepareAPISerialize($imageHelper, $templateHelper, $isDev, $request)
     {
         // User's profile picture
         if ($this->hasLocalProfilePicture()) {
@@ -884,7 +884,7 @@ class Person extends BaseUser
         }
         if (is_null($pictureUrl)) {
             // TODO: fix this and make it comply to DRY
-            $picturePath = $this->get('templating.helper.assets')->getUrl('bundles/procergslogincidadaocore/images/userav.png');
+            $picturePath = $templateHelper->getUrl('bundles/procergslogincidadaocore/images/userav.png');
             $pictureUrl = $this->getRequest()->getUriForPath($picturePath);
             if ($isDev) {
                 $pictureUrl = str_replace('/app_dev.php', '', $pictureUrl);

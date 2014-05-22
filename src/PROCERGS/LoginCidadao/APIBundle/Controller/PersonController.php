@@ -78,9 +78,10 @@ class PersonController extends Controller
 
     private function serializePerson($person, $scope)
     {
-        $helper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
+        $imgHelper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
+        $templateHelper = $this->get('templating.helper.assets');
         $isDev = $this->get('kernel')->getEnvironment() === 'dev';
-        $person->prepareAPISerialize($helper, $isDev, $this->getRequest());
+        $person->prepareAPISerialize($imgHelper, $templateHelper, $isDev, $this->getRequest());
 
         $serializer = $this->container->get('jms_serializer');
         return $serializer->serialize($person, 'json',
