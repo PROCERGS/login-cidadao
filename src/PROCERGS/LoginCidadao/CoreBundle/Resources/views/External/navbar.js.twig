@@ -5,7 +5,7 @@ var citizenLogin = {
 };
 var div = '';
 
-citizenLogin.loggedIn = {{ app.user != null ? 'true' : 'false' }};
+citizenLogin.loggedIn = {{ userAuthorized and app.user != null ? 'true' : 'false' }};
 
 citizenLogin.navbar.init = function(removeMargins) {
     citizenLogin.body = document.getElementsByTagName('body')[0];

@@ -5,8 +5,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 
 class ExternalController extends Controller
 {
@@ -17,12 +16,18 @@ class ExternalController extends Controller
      */
     public function navbarAction()
     {
+        $clientId = $this->getRequest()->get('app_id');
+        $hasAppId = strlen($clientId) > 0;
+
+        $user = $this->getUser();
+        $userAuthorized = $hasAppId && $user instanceof Person && $user->isClientAuthorized($clientId);
+
         $external = true;
-        $referer = $this->getRequest()->headers->get('referer');
-        $domain = preg_replace('/https?:\/\/([^\/]+)\/.*/i', '\1', $referer);
-        $navbar = $this->renderView('PROCERGSLoginCidadaoCoreBundle:External:navbar.html.twig', compact('external'));
+        $navbar = $this->renderView('PROCERGSLoginCidadaoCoreBundle:External:navbar.html.twig',
+                compact('external'));
         $html = json_encode(array('navbar' => $navbar));
-        $response = $this->render('PROCERGSLoginCidadaoCoreBundle:External:navbar.js.twig', compact('html'));
+        $response = $this->render('PROCERGSLoginCidadaoCoreBundle:External:navbar.js.twig',
+                compact('html', 'userAuthorized'));
         $response->headers->set('Content-Type', 'application/javascript');
         return $response;
     }
