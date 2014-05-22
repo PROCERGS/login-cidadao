@@ -17,6 +17,10 @@ scope.cpf: CPF
 scope.email: Email
 scope.birthdate: 'Data de Nascimento'
 scope.city: Cidade
+scope.voter_registration: Título de eleitor
+scope.badges: Medalhas
+scope.picture: Foto
+scope.public_profile: Perfil publico
 'Authorized Applications': 'Aplicativos Autorizados'
 'Description:': 'Descrição:'
 'Access scope:': 'Escopo de acesso:'

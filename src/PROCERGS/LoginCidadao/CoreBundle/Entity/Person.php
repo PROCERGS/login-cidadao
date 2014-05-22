@@ -480,7 +480,7 @@ class Person extends BaseUser
     }
 
     /**
-     * @Groups({"badges"})
+     * @Groups({"badges", "public_profile"})
      * @VirtualProperty
      * @SerializedName("badges")
      * @return array
