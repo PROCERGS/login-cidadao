@@ -885,7 +885,7 @@ class Person extends BaseUser
         if (is_null($pictureUrl)) {
             // TODO: fix this and make it comply to DRY
             $picturePath = $templateHelper->getUrl('bundles/procergslogincidadaocore/images/userav.png');
-            $pictureUrl = $this->getRequest()->getUriForPath($picturePath);
+            $pictureUrl = $request->getUriForPath($picturePath);
             if ($isDev) {
                 $pictureUrl = str_replace('/app_dev.php', '', $pictureUrl);
             }
