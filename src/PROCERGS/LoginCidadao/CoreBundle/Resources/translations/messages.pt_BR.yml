@@ -20,7 +20,7 @@ scope.city: Cidade
 scope.voter_registration: Título de eleitor
 scope.badges: Medalhas
 scope.picture: Foto
-scope.public_profile: Perfil publico
+scope.public_profile: 'Perfil Público'
 'Authorized Applications': 'Aplicativos Autorizados'
 'Description:': 'Descrição:'
 'Access scope:': 'Escopo de acesso:'
