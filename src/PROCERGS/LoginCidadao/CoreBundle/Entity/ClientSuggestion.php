@@ -71,7 +71,6 @@ class ClientSuggestion
 
     /**
      * @ORM\PrePersist
-     * @ORM\PreUpdate
      */
     public function setCreatedAt($var = null)
     {

@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use PROCERGS\LoginCidadao\APIBundle\Exception\RequestTimeoutException;
+use OAuth2\OAuth2ServerException;
 
 class PersonController extends Controller
 {
@@ -30,36 +31,51 @@ class PersonController extends Controller
     }
 
     /**
-     * @Route("/wait/person/voter-registration", defaults={"_format" = "json"})
+     * @Route("/person/wait/update")
      * @Template()
      */
     public function waitVoterRegistrationAction()
     {
         $user = $this->getUser();
         $scope = $this->getClientScope($user);
-
-        if (array_search('voter_registration', $scope) !== false) {
-            $people = $this->getDoctrine()->getManager()->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
-            $id = $user->getId();
-
-            $callback = function() use ($id, $people) {
-                $person = $people->find($id);
-                $voterRegistration = $person->getVoterRegistration();
-                return (strlen($voterRegistration) > 0) ? $person : false;
-            };
-            $person = $this->runTimeLimited($callback);
-            $json = $this->serializePerson($person, $scope);
-        } else {
-            throw new AccessDeniedException();
+        $updatedAt = date_create($this->getRequest()->get('updated_at'));
+        if (!$scope || !$updatedAt) {
+            $e = new OAuth2ServerException(403, 'Access Denied');
+            return $e->getHttpResponse();
         }
+        $people = $this->getDoctrine()->getManager()->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+        $id = $user->getId();
+        $lastUpdatedAt = null;
+        $callback = function() use ($id, $people, $updatedAt, &$lastUpdatedAt) {
+            $person = $people->find($id);
+            if (!$person->getUpdatedAt()) {
+                return false;
+            }
+            if ($person->getUpdatedAt() > $updatedAt) {
+                return $person;
+            } else {
+                if ($lastUpdatedAt === null) {
+                    $lastUpdatedAt = $person->getUpdatedAt();
+                } elseif ($person->getUpdatedAt() != $lastUpdatedAt) {
+                    return $person;
+                }
+            }
+            return false;
+        };
+        try {
+            $person = $this->runTimeLimited($callback);
+        } catch (RequestTimeoutException $e) {
+            $e = new OAuth2ServerException('408', 'Request Timeout');
+            return $e->getHttpResponse();
+        }
+        $json = $this->serializePerson($person, $scope);
 
-        $response = new JsonResponse();
-        return $response->setData(json_decode($json));
+        return new JsonResponse(json_decode($json));
     }
 
     private function runTimeLimited($callback, $waitTime = 1)
     {
-        $limit = ini_get('max_execution_time') - 2;
+        $limit = ini_get('max_execution_time') ? ini_get('max_execution_time') - 2 : 60;
         $startTime = time();
         while ($limit > 0) {
             $result = call_user_func($callback);
@@ -69,6 +85,9 @@ class PersonController extends Controller
                 return $result;
             } else {
                 $limit -= $delta;
+                if ($limit <= 0) {
+                    break;
+                }
                 $startTime = time();
                 sleep($waitTime);
             }

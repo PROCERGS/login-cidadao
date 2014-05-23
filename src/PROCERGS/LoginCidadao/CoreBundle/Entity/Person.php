@@ -903,5 +903,24 @@ class Person extends BaseUser
         }
         return false;
     }
-
+    
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function setUpdatedAt($var = NULL)
+    {
+        if ($var === null) {
+            $this->updatedAt = new \DateTime();
+        } else {
+            $this->updatedAt = $var;
+        }
+        return $this;
+    }
+    
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+    
 }
