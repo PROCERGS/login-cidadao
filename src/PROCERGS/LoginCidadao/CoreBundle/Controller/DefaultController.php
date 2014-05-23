@@ -12,6 +12,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ContactFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Uf;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class DefaultController extends Controller
 {
@@ -176,17 +177,21 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/logout/if-not-remembered", name="lc_contact")
+     * @Route("/logout/if-not-remembered", name="lc_logout_not_remembered")
      * @Template()
      */
     public function logoutIfNotRememberedAction()
     {
         $result['logged_out'] = false;
-        if ($this->getRequest()->cookies->has('REMEMBERME')) {
-            $result = array('logged_out' => false);
+        if ($this->getUser() instanceof UserInterface) {
+            if ($this->getRequest()->cookies->has('REMEMBERME')) {
+                $result = array('logged_out' => false);
+            } else {
+                $this->get("request")->getSession()->invalidate();
+                $this->get("security.context")->setToken(null);
+                $result['logged_out'] = true;
+            }
         } else {
-            $this->get("request")->getSession()->invalidate();
-            $this->get("security.context")->setToken(null);
             $result['logged_out'] = true;
         }
 

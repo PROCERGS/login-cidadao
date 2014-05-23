@@ -30,6 +30,12 @@ security:
         main:
             pattern: ^/(?!api|!oauth)
 
+            remember_me:
+                key:      "%secret%"
+                lifetime: 31536000 # 365 days in seconds
+                path:     /
+                domain:   ~
+
             fos_facebook:
                 app_url: ""
                 server_url: "http://lc.des.dona.to"
@@ -105,13 +111,14 @@ security:
         - { path: ^/person/checkEmailAvailable, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/job, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/external/navbar.js, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/logout/if-not-remembered, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/person, role: IS_AUTHENTICATED_FULLY }
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        
+
         #- { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ], requires_channel: https }
         #- { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         #- { path: ^/nfg, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
@@ -129,9 +136,9 @@ security:
         #- { path: ^/job, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         #- { path: ^/external/navbar.js, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         #- { path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
- 
+
         #- { path: ^/, roles: IS_AUTHENTICATED_FULLY, requires_channel: https }
         #- { path: ^/admin/, role: ROLE_ADMIN, requires_channel: https }
         #- { path: ^/person, role: IS_AUTHENTICATED_FULLY, requires_channel: https }
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        
+
