@@ -493,7 +493,7 @@ class Person extends BaseUser
             $terms['nfg_access_lvl'] = $this->getNfgProfile()->getAccessLvl();
             $terms['voter_registration'] = $this->getNfgProfile()->getVoterRegistrationSit();
         } else {
-            $terms['nfg_access_lvl'] = false;
+            $terms['nfg_access_lvl'] = 0;
             $terms['voter_registration'] = false;
         }
         return $terms;
