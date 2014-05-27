@@ -264,6 +264,19 @@ class ProfileEditListner implements EventSubscriberInterface
                 } else {
                     throw new LcValidationException('voterreg.already.used');
                 }
+            } else {
+                if (isset($nfgReturn1)) {
+                    if (isset($nfgReturn1['CodSitTitulo']) && $nfgReturn1['CodSitTitulo'] != 0) {
+                        if ($nfgReturn1['CodSitTitulo'] == 1) {
+                            $aNfgProfile = $aUser->getNfgProfile();
+                            $aNfgProfile->setVoterRegistrationSit($nfgReturn1['CodSitTitulo']);
+                            $aNfgProfile->setVoterRegistration($user->getVoterRegistration());
+                            $this->em->persist($aNfgProfile);
+                        } else {
+                            throw new LcValidationException('voterreg.nfg.fixit');
+                        }
+                    }
+                }
             }
         }
     }

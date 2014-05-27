@@ -25,6 +25,7 @@ framework:
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
+    exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
     globals:
         fos_csrf_provider: "@form.csrf_provider"
         notifications_helper: "@notifications.helper"
@@ -211,3 +212,13 @@ vich_uploader:
             uri_prefix:         %uri_root%/uploads/profile-pictures
             upload_destination: user_image_fs
             namer:              vich_uploader.namer_uniqid
+
+fos_rest:
+    view:
+        force_redirects:
+            html: true
+        formats:
+            json: true
+            xml: true
+        templating_formats:
+            html: true

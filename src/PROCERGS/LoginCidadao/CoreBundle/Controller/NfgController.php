@@ -71,7 +71,7 @@ class NfgController extends Controller
         ));
         if ($otherPerson) {
             if ($otherPerson->getNfgAccessToken()) {
-                $otherPersonNfg = $otherPerson->getNfeProfile();
+                $otherPersonNfg = $otherPerson->getNfgProfile();
                 if ($otherPersonNfg->getAccessLvl() == 1) {
                     if ($result1['CodNivelAcesso'] == 1) {
                         throw new NfgException('notification.nfg.already.bind.but.weak', NfgException::E_BIND);

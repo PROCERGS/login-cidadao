@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new PROCERGS\OAuthBundle\PROCERGSOAuthBundle(),
             new PROCERGS\LoginCidadao\CoreBundle\PROCERGSLoginCidadaoCoreBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
+            new FOS\RestBundle\FOSRestBundle(),
 
             new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
             new FOS\FacebookBundle\FOSFacebookBundle(),
