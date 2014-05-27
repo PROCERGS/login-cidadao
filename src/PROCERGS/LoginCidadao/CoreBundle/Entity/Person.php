@@ -274,7 +274,8 @@ class Person extends BaseUser
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     *
+     * @Expose
+     * @Groups({"updated_at","public_profile"})
      * @var \DateTime $updatedAt
      */
     protected $updatedAt;
@@ -589,6 +590,9 @@ class Person extends BaseUser
     {
         if (!($this->getCreatedAt() instanceof \DateTime)) {
             $this->createdAt = new \DateTime();
+        }
+        if (!$this->updatedAt) {
+            $this->updatedAt = new \DateTime();
         }
     }
 
@@ -905,7 +909,6 @@ class Person extends BaseUser
     }
     
     /**
-     * @ORM\PrePersist
      * @ORM\PreUpdate
      */
     public function setUpdatedAt($var = NULL)
