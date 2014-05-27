@@ -229,3 +229,5 @@ voterreg.already.used.but.nfg.mismatch: 'Esse Título de eleitor informado não 
 notification.nfg.revoked.voterreg.title: 'Revogação do seu Título de Eleitor'
 notification.nfg.revoked.voterreg.message.short: 'Foi retirado o Título de Eleitor da sua conta'
 notification.nfg.revoked.voterreg.message: 'Foi retirado o Título de Eleitor da sua conta, pois outro usuario apresentou dados, aparentemente, mais confiaveis, para utiliza-lo'
+'Page not found.': 'Página não encontrada.'
+'This e-mail is already confirmed.': 'Este e-mail já está confirmado.'
