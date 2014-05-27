@@ -118,9 +118,10 @@ class PersonController extends FOSRestController
 
     private function getCheckUpdateCallback($id, $updatedAt, $lastUpdatedAt)
     {
-        $people = $this->getDoctrine()->getManager()
-                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
-        return function() use ($id, $people, $updatedAt, $lastUpdatedAt) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $people = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+        return function() use ($id, $people, $em, $updatedAt, $lastUpdatedAt) {
+            $em->clear();
             $person = $people->find($id);
             if (!$person->getUpdatedAt()) {
                 return false;
