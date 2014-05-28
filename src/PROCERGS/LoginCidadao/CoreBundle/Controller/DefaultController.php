@@ -196,6 +196,10 @@ class DefaultController extends Controller
         }
 
         $response = new JsonResponse();
+        $userAgent = $this->getRequest()->headers->get('User-Agent');
+        if (preg_match('/(?i)msie [1-9]/', $userAgent)) {
+            $response->headers->set('Content-Type', 'text/json');
+        }
         return $response->setData($result);
     }
 
