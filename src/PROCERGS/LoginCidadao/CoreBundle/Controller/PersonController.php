@@ -13,6 +13,7 @@ use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\NfgHelper;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
+use FOS\UserBundle\Util\TokenGenerator;
 
 class PersonController extends Controller
 {
@@ -273,9 +274,14 @@ class PersonController extends Controller
         $person = $this->getUser();
 
         if (is_null($person->getEmailConfirmedAt())) {
+            if(is_null($person->getConfirmationToken())) {
+                $tokenGenerator = new TokenGenerator();
+                $person->setConfirmationToken($tokenGenerator->generateToken());
+                $userManager = $this->get('fos_user.user_manager');
+                $userManager->updateUser($person);
+            }
             $mailer->sendConfirmationEmailMessage($person);
-            $this->get('session')->getFlashBag()->add('success',
-                    $translator->trans("email-confirmation.resent"));
+            $this->get('session')->getFlashBag()->add('success', $translator->trans("email-confirmation.resent"));
         }
 
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));

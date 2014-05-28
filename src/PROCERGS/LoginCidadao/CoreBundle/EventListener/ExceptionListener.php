@@ -13,6 +13,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Exception\LcEmailException;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\NfgException;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\LcFcGbException;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\LcValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ExceptionListener
 {
@@ -63,7 +64,7 @@ class ExceptionListener
             $event->setResponse(new RedirectResponse($url));
         } elseif ($exception instanceof \FacebookApiException) {
             $this->session->getFlashBag()->add('error', $this->translator->trans($exception->getMessage()));
-            $url = $this->router->generate('lc_home');            
+            $url = $this->router->generate('lc_home');
             $event->setResponse(new RedirectResponse($url));
         } elseif ($exception instanceof  LcFcGbException) {
             $url = $this->router->generate('lc_link_facebook');
@@ -72,6 +73,15 @@ class ExceptionListener
             $this->session->getFlashBag()->add('error', $this->translator->trans($exception->getMessage()));
             $url = $this->router->generate('fos_user_profile_edit');
             $event->setResponse(new RedirectResponse($url));
+        }elseif ($exception instanceof NotFoundHttpException){
+            $request = $event->getRequest();
+            $route = $request->get('_route');
+
+            if($route == 'fos_user_registration_confirm') {
+                $this->session->getFlashBag()->add('error', $this->translator->trans('This e-mail is already confirmed.'));
+                $url = $this->router->generate('fos_user_profile_edit');
+                $event->setResponse(new RedirectResponse($url));
+            }
         }
     }
 }
