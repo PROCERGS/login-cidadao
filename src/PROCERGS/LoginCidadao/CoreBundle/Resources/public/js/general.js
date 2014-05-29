@@ -1,8 +1,6 @@
-var pageWidth;
-
 if (typeof String.prototype.repeat !== 'function') {
-    String.prototype.repeat = function(num) {
-        return new Array(num + 1).join(this);
+    String.prototype.repeat = function( num ) {
+        return new Array( num + 1 ).join( this );
     };
 }
 if (typeof String.prototype.capitalize !== 'function') {
@@ -22,30 +20,32 @@ if (typeof String.prototype.capitalize !== 'function') {
         }
     };
 }
-var QueryString = function() {
-    // This function is anonymous, is executed immediately and
-    // the return value is assigned to QueryString!
-    var query_string = {};
-    var query = window.location.search.substring(1);
-    var vars = query.split("&");
-    for (var i = 0; i < vars.length; i++) {
+var QueryString = function () {
+      // This function is anonymous, is executed immediately and
+      // the return value is assigned to QueryString!
+      var query_string = {};
+      var query = window.location.search.substring(1);
+      var vars = query.split("&");
+      for (var i=0;i<vars.length;i++) {
         var pair = vars[i].split("=");
-        // If first entry with this name
+            // If first entry with this name
         if (typeof query_string[pair[0]] === "undefined") {
-            query_string[pair[0]] = pair[1];
+          query_string[pair[0]] = pair[1];
             // If second entry with this name
         } else if (typeof query_string[pair[0]] === "string") {
-            var arr = [query_string[pair[0]], pair[1]];
-            query_string[pair[0]] = arr;
+          var arr = [ query_string[pair[0]], pair[1] ];
+          query_string[pair[0]] = arr;
             // If third or later entry with this name
         } else {
-            query_string[pair[0]].push(pair[1]);
+          query_string[pair[0]].push(pair[1]);
         }
-    }
-    return query_string;
-}();
-var validador = {};
-validador.isValidCpf = function(cpf)
+      }
+        return query_string;
+    } ();
+
+var validator = {};
+
+validator.isValidCpf = function(cpf)
 {
     var checkRepeat = new RegExp('([0-9])\\1{10}', 'g');
     var cleanup = new RegExp('[. \\-]', 'gi');
@@ -76,7 +76,8 @@ validador.isValidCpf = function(cpf)
     }
     return true;
 };
-validador.formatCPF = function(element, cpf)
+
+validator.formatCPF = function(element, cpf)
 {
     if ($.isNumeric(cpf) && cpf.length === 11) {
         var cpfRegex = new RegExp('([0-9]{3})([0-9]{3})([0-9]{3})([0-9]{2})', 'gi');
@@ -84,9 +85,10 @@ validador.formatCPF = function(element, cpf)
         element.val(cpf).data('masked', true);
     }
 };
-validador.onKeyUpMultiformat = function(obj, e)
+
+validator.onKeyUpMultiformat = function(obj, e)
 {
-    var c = String.fromCharCode(e.which);
+    var c= String.fromCharCode(e.which);
     var isWordcharacter = c.match(/\w/);
 
     var val = $(obj).val().trim();
@@ -97,15 +99,15 @@ validador.onKeyUpMultiformat = function(obj, e)
 
 
     if (!isWordcharacter && e.keyCode !== 0) {
-        validador.formatCPF($(obj), cpf);
+        validator.formatCPF($(obj), cpf);
         return;
     }
 
     if ($.isNumeric(cpf)) {
         if (cpf.length > 11) {
-            cpf = cpf.substr(0, 11);
+            cpf = cpf.substr(0,11);
         }
-        validador.formatCPF($(obj), cpf);
+        validator.formatCPF($(obj), cpf);
     } else {
         if (masked === true) {
             val = val.replace(/([0-9]{3})[.]([0-9]{3})[.]([0-9]{3})-([0-9]{2})/, '$1$2$3$4');
@@ -115,44 +117,46 @@ validador.onKeyUpMultiformat = function(obj, e)
 
     return false;
 };
-validador.cep = {'parent': validador};
-validador.cep.urlQuery = '/lc_consultaCep2';
-validador.cep.findByCep = function(obj, callback) {
-    //console.trace();
-    if (obj.value == '') {
-        validador.check.success(obj);
-        return;
+
+validator.cep = {'parent': validator};
+validator.cep.urlQuery = '/lc_consultaCep2';
+validator.cep.findByCep = function(obj, callback) {
+    if (obj.value === '') {
+        validator.check.success(obj);
+      return;
     }
     var cleanup = new RegExp('[. \\-]', 'gi');
     var val = obj.value.replace(cleanup, '');
-    if (val == '' || val.length != 8) {
-        validador.check.error(obj, $('label[for=' + obj.id + ']').text() + ' invalido');
+    if (val === '' || val.length !== 8) {
+        validator.check.error(obj, $('label[for=' + obj.id + ']').text() + ' invalido');
         return;
     }
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        url: validador.cep.urlQuery,
-        data: {'cep': val},
-        success: function(data1, textStatus, jqXHR) {
-            if (data1.code > 0) {
-                validador.check.error(obj, $('label[for=' + obj.id + ']').text() + ' invalido');
-                return;
-            }
-            if (data1.itens && data1.itens.length && callback) {
-                callback(data1.itens[0]);
-            }
-            validador.check.success(obj);
-        }
-    });
+     $.ajax({
+         type: "GET",
+         dataType: "json",
+        url: validator.cep.urlQuery + '/' + val
+    }).done(function(result) {
+        if (result.code !== 200) {
+            return this.fail(result);
+             }
+        if (result.items && result.items.length && callback) {
+            callback(result.items[0]);
+             }
+        validator.check.success(obj);
+    }).fail(function(result) {
+        if (result.code !== 200) {
+            validator.check.error(obj, $('label[for=' + obj.id + ']').text() + ' invalido');
+            return;
+         }
+     });
 };
-validador.cep.popupConsult = function(obj, evt, callback) {
-    var url = $(obj).attr('href') + '?callback=' + callback;
+validator.cep.popupConsult = function(obj, evt, callback) {
+    var url = $(obj).attr('href') + '?callback='+callback;
     window.open(url, '', "width=600,height=450");
 };
 
-validador.mask = {'parent': validador};
-validador.mask.int = function(e) {
+validator.mask = {'parent': validator};
+validator.mask.int = function(e) {
     var charCode = e.which || e.keyCode;
     if ((charCode < 48 || charCode > 57) && (charCode != 8 && charCode != 46)) {
         e.returnValue = false;
@@ -160,7 +164,7 @@ validador.mask.int = function(e) {
     }
     return true;
 };
-validador.mask.format = function(obj, mask, e) {
+validator.mask.format = function(obj, mask, e) {
     var masked;
     var numerics = obj.value.toString().replace(/\-|\.|\/|\(|\)| /g, "");
     var pos = 0;
@@ -189,23 +193,23 @@ validador.mask.format = function(obj, mask, e) {
     }
 };
 
-validador.check = {'parent': validador};
-validador.check.mobile = function(obj, e) {
+validator.check = {'parent': validator};
+validator.check.mobile = function(obj, e) {
     if (obj.value.length) {
         var cel = obj.value.toString().replace(/\-|\.|\/|\(|\)| /g, "");
-        if (cel.lengh < 8 || !$.isNumeric(cel)) {
-            this.error(obj, $('label[for=' + obj.id + ']').text() + ' invalido!');
+        if(cel.lengh < 8 || !$.isNumeric(cel)) {
+            this.error(obj, $('label[for='+obj.id+']').text() + ' invalido!');
             return false;
         }
     }
     this.success(obj);
     return true;
 };
-validador.check.cep = function(obj, e) {
+validator.check.cep = function(obj, e) {
     if (obj.value.length) {
         var exp = /\d{2}\.\d{3}\-\d{3}/;
-        if (!exp.test(obj.value)) {
-            this.error(obj, $('label[for=' + obj.id + ']').text() + ' invalido!');
+        if(!exp.test(obj.value)) {
+            this.error(obj, $('label[for='+obj.id+']').text() + ' invalido!');
             return false;
         }
     }
@@ -213,107 +217,80 @@ validador.check.cep = function(obj, e) {
     return true;
 
 };
-validador.check.cpf = function(obj, e) {
+validator.check.cpf = function(obj, e) {
     if (obj.value.length) {
-        if (!this.parent.isValidCpf(obj.value)) {
-            this.error(obj, $('label[for=' + obj.id + ']').text() + ' invalido!');
+        if(!this.parent.isValidCpf(obj.value))    {
+            this.error(obj, $('label[for='+obj.id+']').text() + ' invalido!');
             return false;
         }
     }
     this.success(obj);
     return true;
 };
-validador.check.error = function(obj, msg) {
+validator.check.error = function(obj, msg) {
     var parent = $(obj).parent();
     parent.addClass('has-error has-feedback');
-    parent.find('.input-error').html('<ul><li>' + msg + '</li></ul>');
+    parent.find('.input-error').html('<ul><li>'+msg+'</li></ul>');
 };
-validador.check.success = function(obj) {
+validator.check.success = function(obj) {
     var parent = $(obj).parent();
     parent.removeClass('has-error has-feedback');
     parent.find('.input-error').html('');
 };
 
-function completaZerosEsquerda(numero, tamanho) {
-    var ret = "";
-    if (numero.length > 0) {
-        var qtdCompleta = tamanho - numero.length;
-        var zeros = "";
-        for (var i = 0; i < qtdCompleta; i++) {
-            zeros += "0";
-        }
-        ret = zeros + numero;
+function zeroPadding(str, size) {
+    str = str.toString();
+    return str.length < size ? zeroPadding("0" + str, size) : str;
     }
-    return ret;
-}
-function somenteNumeros(e) {
-    if (window.event) {
-        // for IE, e.keyCode or window.event.keyCode can be used
-        key = e.keyCode;
+function checkVoterRegistration(inscricao) {
+  var paddedInsc = inscricao;
+  var dig1 = 0;
+  var dig2 = 0;
+  var tam = paddedInsc.length;
+  var digitos = paddedInsc.substr(tam - 2, 2);
+  var estado = paddedInsc.substr(tam - 4, 2);
+  var titulo = paddedInsc.substr(0, tam - 2);
+  var exce = (estado == '01') || (estado == '02');
+  dig1 = (titulo.charCodeAt(0) - 48) * 9 + (titulo.charCodeAt(1) - 48) * 8
+      + (titulo.charCodeAt(2) - 48) * 7 + (titulo.charCodeAt(3) - 48) * 6
+      + (titulo.charCodeAt(4) - 48) * 5 + (titulo.charCodeAt(5) - 48) * 4
+      + (titulo.charCodeAt(6) - 48) * 3 + (titulo.charCodeAt(7) - 48) * 2;
+  var resto = (dig1 % 11);
+  if (resto == 0) {
+    if (exce) {
+      dig1 = 1;
     } else {
-        if (e.which) {
-            // netscape
-            key = e.which;
-        } else {
-            key = 9;
-        }
+      dig1 = 0;
     }
-    if (!isNum(key)) {
-        return false;
+  } else {
+    if (resto == 1) {
+      dig1 = 0;
     } else {
-        return true;
+      dig1 = 11 - resto;
     }
-}
-function validarTitulo(inscricao) {
-    var paddedInsc = inscricao;
-    // alert("validando inscricao " + paddedInsc);
-    var dig1 = 0;
-    var dig2 = 0;
-    var tam = paddedInsc.length;
-    var digitos = paddedInsc.substr(tam - 2, 2);
-    var estado = paddedInsc.substr(tam - 4, 2);
-    var titulo = paddedInsc.substr(0, tam - 2);
-    var exce = (estado === '01') || (estado === '02');
-    dig1 = (titulo.charCodeAt(0) - 48) * 9 + (titulo.charCodeAt(1) - 48) * 8
-            + (titulo.charCodeAt(2) - 48) * 7 + (titulo.charCodeAt(3) - 48) * 6
-            + (titulo.charCodeAt(4) - 48) * 5 + (titulo.charCodeAt(5) - 48) * 4
-            + (titulo.charCodeAt(6) - 48) * 3 + (titulo.charCodeAt(7) - 48) * 2;
-    var resto = (dig1 % 11);
-    if (resto === 0) {
-        if (exce) {
-            dig1 = 1;
-        } else {
-            dig1 = 0;
-        }
+  }
+  dig2 = (titulo.charCodeAt(8) - 48) * 4 + (titulo.charCodeAt(9) - 48) * 3
+      + dig1 * 2;
+  resto = (dig2 % 11);
+  if (resto == 0) {
+    if (exce) {
+      dig2 = 1;
     } else {
-        if (resto === 1) {
-            dig1 = 0;
-        } else {
-            dig1 = 11 - resto;
-        }
+      dig2 = 0;
     }
-    dig2 = (titulo.charCodeAt(8) - 48) * 4 + (titulo.charCodeAt(9) - 48) * 3
-            + dig1 * 2;
-    resto = (dig2 % 11);
-    if (resto === 0) {
-        if (exce) {
-            dig2 = 1;
-        } else {
-            dig2 = 0;
-        }
+  } else {
+    if (resto == 1) {
+      dig2 = 0;
     } else {
-        if (resto === 1) {
-            dig2 = 0;
-        } else {
-            dig2 = 11 - resto;
-        }
+      dig2 = 11 - resto;
     }
-    if ((digitos.charCodeAt(0) - 48 === dig1)
-            && (digitos.charCodeAt(1) - 48 === dig2)) {
-        return true; // Titulo valido
-    } else {
-        return false;
-    }
+  }
+  if ((digitos.charCodeAt(0) - 48 == dig1)
+      && (digitos.charCodeAt(1) - 48 == dig2)) {
+    return true; // Titulo valido
+  } else {
+    return false;
+  }
 }
 
 $(function() {
@@ -335,33 +312,33 @@ $(function() {
     });
 
     $('#toggle-settings-nav').on('click', function() {
-        $('.settings-nav, .settings-content').toggleClass('menu-open');
+      $('.settings-nav, .settings-content').toggleClass('menu-open');
     });
-    $('.nfgpopup').on('click', function(event) {
-        event.preventDefault();
-        window.open($(this).attr('data-href'), '_blank', 'toolbar=0,location=0,scrollbars=no,resizable=no,top=0,left=500,width=400,height=750');
+    $('.nfgpopup').on('click', function (event){
+      event.preventDefault();
+        window.open($(this).attr('data-href'),'_blank', 'toolbar=0,location=0,scrollbars=no,resizable=no,top=0,left=500,width=400,height=750');
         return false;
     });
-    $(document).on('click', 'a.link-popup', function(event) {
+    $(document).on('click', 'a.link-popup', function (event){
         event.preventDefault();
         var e = $(this);
         var u = e.attr('data-href') ? e.attr('data-href') : e.attr('href');
         if (u) {
-            window.open(u, '_blank', e.attr('data-specs'));
+        	window.open(u,'_blank', e.attr('data-specs'));
         }
         return false;
-    });
-    $(document).on('submit', '.form-ajax', function(event) {
-        event.preventDefault();
-        var e = $(this);
-        $.ajax({
-            type: e.attr('method'),
-            url: e.attr('action'),
-            data: e.serialize(),
-            dataType: 'html',
-            success: function(data, textStatus, jqXHR) {
-                $(e.attr('ajax-target')).html(data);
-            }
+      });
+    $(document).on('submit', '.form-ajax', function(event){
+    	event.preventDefault();
+    	var e = $(this);
+    	$.ajax({
+    		type: e.attr('method'),
+    		url: e.attr('action'),
+    		data: e.serialize(),
+    		dataType : 'html',
+    		success : function(data, textStatus, jqXHR) {
+    			$(e.attr('ajax-target')).html(data);
+    		}
         });
     })
 });

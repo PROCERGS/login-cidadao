@@ -43,7 +43,7 @@
                     <div class="input-error">{{ form_errors(form.cep) }}</div>
                     <span class="extra">
                         {% trans %}Don't know your CEP?{% endtrans %}
-                        <a class="search-cep" href="{{ path('lc_consultaCep') }}">{{ 'Search it!' | trans }}</a>
+                        <a class="search-cep" href="{{ path('lc_search_postalcode') }}">{{ 'Search it!' | trans }}</a>
                     </span>
                 </div>
                 <div class="form-group">
@@ -61,9 +61,9 @@
 	                    {{ form_widget(form.cpf, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }}
 	                    {% else %}
 	                    {{ form_widget(form.cpf, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}
-	                    <span>
+                    <span>
 	                       {{ form.cpf.vars.value|formatCpf }}
-	                    </span>
+                    </span>
 	                    {% endif %}
                     {% endif %}
                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
@@ -71,35 +71,39 @@
                 </div>
                 <div class="form-group">
                     {{ form_label(form.voterRegistration) }}
-                    {% if app.user.nfgAccessToken is not null %}
-                        {% if form.voterRegistration.vars.value is null or form.voterRegistration.vars.value == '' %}
-                            {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
-		                    <span class="extra">
-		                        {% trans %}voterreg.offer.search{% endtrans %}
-		                        <a target='blank' href="{{ tre_search_link }}">{{ 'Search it!' | trans }}</a>
-		                    </span>
-		                    <span class="extra">{% trans %}voterreg.nfg.offer.complete{% endtrans %}</span>
-                        {% else %}
-                            {% if app.user.nfgProfile.voterRegistrationSit is null or app.user.nfgProfile.voterRegistrationSit == 0 %}
-                                {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
-                                <span class="extra">{% trans %}voterreg.nfg.offer.auth{% endtrans %}</span>
-                            {% elseif app.user.nfgProfile.voterRegistrationSit == 1 %}
-                                {{ form_widget(form.voterRegistration, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}
-                                <span>{{ form.voterRegistration.vars.value }}</span>
-                            {% else %}
-                                {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
-                                <span class="extra">{% trans %}voterreg.nfg.fixit{% endtrans %}</span>
-                            {% endif %}
-                        {% endif %}
-                    {% else %}
-                        {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
-	                    <span class="extra">
-	                        {% trans %}voterreg.offer.search{% endtrans %}
-	                        <a target='blank' href="{{ tre_search_link }}">{{ 'Search it!' | trans }}</a>
-	                    </span>
-                    {% endif %}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                {% if app.user.nfgAccessToken is not null %}
+                {%      if form.voterRegistration.vars.value is null or form.voterRegistration.vars.value == '' %}
+                    {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
                     <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
+                    <span class="extra">
+		                        {% trans %}Don't know your Voter Registration number?{% endtrans %}
+                        <a target='blank' href="{{ tre_search_link }}">{{ 'Search it!' | trans }}</a>
+                    </span>
+                    <span class="extra">{% trans %}Use your account on Nota Fiscal Gaúcha and validate your Voter Registration{% endtrans %}</span>
+                {%      else %}
+                {%          if app.user.nfgProfile.voterRegistrationSit is null or app.user.nfgProfile.voterRegistrationSit == 0 %}
+                    {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
+                    <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
+                    <span class="extra">{% trans %}Use your account on Nota Fiscal Gaúcha and authorize us to validate your Voter Registration{% endtrans %}</span>
+                {%          elseif app.user.nfgProfile.voterRegistrationSit == 1 %}
+                                {{ form_widget(form.voterRegistration, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}
+                    <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
+                    <span>{{ form.voterRegistration.vars.value }}</span>
+                {%          else %}
+                                {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
+                    <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
+                    <span class="extra">{% trans %}The Voter Registration used is not valid according to Nota Fiscal Gaúcha. Please type your Voter Registration correctly{% endtrans %}</span>
+                {%          endif %}
+                {%      endif %}
+                {% else %}
+                    {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
+                    <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
+                    <span class="extra">
+                        {% trans %}Don't know your Voter Registration number?{% endtrans %}
+                        <a target='blank' href="{{ tre_search_link }}">{{ 'Search it!' | trans }}</a>
+                    </span>
+                {% endif %}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                 </div>
                 <div class="form-group">
                     {{ form_label(form.mobile) }}
@@ -112,13 +116,13 @@
             <div class="col-md-5">
                 <div class="row">
                     <div class="col-xs-12">
-                <img src="{% include 'PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig' %}">
+                        <img src="{% include 'PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig' %}">
 
-                <div class="file-upload text-center">
-                    <button type="button" class="btn btn-success btn-upload">{% trans %}Upload another picture{% endtrans %}</button>
-                    <div class="file-name"></div>
+                        <div class="file-upload text-center">
+                            <button type="button" class="btn btn-success btn-upload">{% trans %}Upload another picture{% endtrans %}</button>
+                            <div class="file-name"></div>
                     {{ form_widget(form.image) }}
-                    <div class="input-error">{{ form_errors(form.image) }}</div>
+                            <div class="input-error">{{ form_errors(form.image) }}</div>
                         </div>
                     </div>
                 </div>
@@ -133,9 +137,9 @@
                 {% else %}
                         <div class="connect facebook">
                             {% if app.user.facebookUsername is not null %}
-                                <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.facebookUsername }}</span>
+                            <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.facebookUsername }}</span>
                             {% else %}
-                                <span class="col-xs-9 col-xs-offset-1 username">{{ 'facebook.nousername'|trans }}</span>
+                            <span class="col-xs-9 col-xs-offset-1 username">{{ 'facebook.nousername'|trans }}</span>
                             {% endif %}
                             {% if app.user.hasPassword %}
                             <a class="col-xs-2 unlink"  href="{{ path('lc_unlink_facebook') }}">
@@ -152,9 +156,9 @@
                 {% else %}
                         <div class="connect twitter">
                             {% if app.user.twitterUsername is not null %}
-                                <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.twitterUsername }}</span>
+                            <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.twitterUsername }}</span>
                             {% else %}
-                                <span class="col-xs-9 col-xs-offset-1 username">{{ 'twitter.nousername'|trans }}</span>
+                            <span class="col-xs-9 col-xs-offset-1 username">{{ 'twitter.nousername'|trans }}</span>
                             {% endif %}
                             {% if app.user.hasPassword %}
                             <a class="col-xs-2 unlink" href="{{ path('lc_unlink_twitter') }}">
@@ -165,7 +169,7 @@
                 {% endif %}
                 {% if app.user.nfgAccessToken is null %}
                         <div class="connect nfg disabled">
-                            <a data-href="{{ path('nfg_bind') }}" class="col-xs-11 col-xs-offset-1 username nfgpopup">{{ 'Connect to the NFG' | trans }}</a>
+                            <a data-href="{{ path('nfg_bind') }}" class="col-xs-11 col-xs-offset-1 username nfgpopup">{{ 'Connect to the Nota Fiscal Gaúcha' | trans }}</a>
                         </div>
                 {% else %}
                         <div class="connect nfg">
@@ -199,11 +203,11 @@
         <div class="row">
             {% for type, messages in app.session.flashbag.all() %}
                 {% for message in messages %}
-                <div class="col-md-12">
-                    <div class="text-center bg-success flash-{{ type }}">
+            <div class="col-md-12">
+                <div class="text-center bg-success flash-{{ type }}">
                         {{ message }}
-                    </div>
                 </div>
+            </div>
                 {% endfor %}
             {% endfor %}
         </div>
@@ -222,77 +226,88 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
-var profileEdit = {};
-profileEdit.cepId = '#{{ form.cep.vars.id }}';
-profileEdit.cpfId = '#{{ form.cpf.vars.id }}';
-profileEdit.voterRegistrationId = '#{{ form.voterRegistration.vars.id }}';
+    var profileEdit = {};
+    profileEdit.cepId = '#{{ form.cep.vars.id }}';
+    profileEdit.cpfId = '#{{ form.cpf.vars.id }}';
+    profileEdit.voterRegistrationId = '#{{ form.voterRegistration.vars.id }}';
 
-profileEdit.popLocation = function (dneData) {
-    $(profileEdit.cepId).val(dneData.cep);
-    $(profileEdit.cepId).mask('00000-000');
-    var street = dneData.tipoLogradouro.capitalize(true, true);
-    if (dneData.tipoLogradouro != dneData.tituloLogradouro) {
-        street += ' ' + dneData.tituloLogradouro.capitalize(true, true);
-    }
-    street += ' ' + dneData.logradouro.capitalize(true, true);
-    var city = dneData.localidade.capitalize(true, true);
-    var state = dneData.uf;
-
-    $('#user_address').html(street + ',' + city + ', ' + state);
-};
-$(document).ready(function() {
-    $(profileEdit.cepId).mask('00000-000');
-    $(profileEdit.cpfId).mask('000.000.000-00');
-    $(profileEdit.voterRegistrationId).mask('000000000000');
-    $("#{{ form.mobile.vars.id }}").mask("(00) 0000-00009").focusout(function () {
-        var phone, element;
-        element = $(this); element.unmask();
-        phone = element.val().replace(/\D/g, '');
-        if (phone.length > 10) {
-            element.mask("(00) 90000-0000");
-        } else {
-            element.mask("(00) 0000-00009");
+    profileEdit.popLocation = function(dneData) {
+        $(profileEdit.cepId).val(dneData.cep);
+        $(profileEdit.cepId).mask('00000-000');
+        var street = dneData.tipoLogradouro.capitalize(true, true);
+        if (dneData.tipoLogradouro != dneData.tituloLogradouro) {
+            street += ' ' + dneData.tituloLogradouro.capitalize(true, true);
         }
-    });
+        street += ' ' + dneData.logradouro.capitalize(true, true);
+        var city = dneData.localidade.capitalize(true, true);
+        var state = dneData.uf;
 
-    $('.search-cep').click(function(event) {
-    	event.preventDefault();
-        validador.cep.popupConsult(this, event, 'profileEdit.popLocation');
-        return false;
-    });
-    $(profileEdit.cepId).blur(function(event) {
-    	validador.cep.findByCep(this, profileEdit.popLocation);
-    });
-    var messages = {'0' : "{{ 'form.voterreg.invalid' | trans }}"};
-    var trevoterId = '#{{ form.voterRegistration.vars.id }}';
-      $(trevoterId).on('blur', function () {
-          if (!this.value.length) {return;}
-          this.value = completaZerosEsquerda(this.value, 12);
-          if (!validarTitulo(this.value)) {alert(messages[0]);}
-          });
-
-    $(".connect a.unlink").on('click', function() {
-        var confirmDialog = $('.unlink-confirmation');
-        var parent = $(this).parent();
-        var href = $(this).attr('href');
-        var serviceName = '';
-        if (parent.is('.facebook')) {
-            serviceName = 'facebook';
-        } else if (parent.is('.twitter')) {
-            serviceName = 'twitter';
-        }
-        confirmDialog.slideUp('fast', function() {
-            $('a.confirm', $('.unlink-confirmation')).attr('href', href);
-            $('.social-network-name', $('.unlink-confirmation')).html(serviceName);
-            confirmDialog.insertAfter(parent).slideDown();
+        $('#user_address').html(street + ',' + city + ', ' + state);
+    };
+    $(document).ready(function() {
+        $(profileEdit.cepId).mask('00000-000');
+        $(profileEdit.cpfId).mask('000.000.000-00');
+        $(profileEdit.voterRegistrationId).mask('000000000000');
+        $("#{{ form.mobile.vars.id }}").mask("(00) 0000-00009").focusout(function() {
+            var phone, element;
+            element = $(this);
+            element.unmask();
+            phone = element.val().replace(/\D/g, '');
+            if (phone.length > 10) {
+                element.mask("(00) 90000-0000");
+            } else {
+                element.mask("(00) 0000-00009");
+            }
         });
 
-        return false;
-    });
+        $('.search-cep').click(function(event) {
+            event.preventDefault();
+            validator.cep.popupConsult(this, event, 'profileEdit.popLocation');
+            return false;
+        });
+        $(profileEdit.cepId).blur(function(event) {
+            validator.cep.findByCep(this, profileEdit.popLocation);
+        });
+        var messages = {
+            form: {
+                voter_registration: {
+                    "invalid": "{{ 'form.voter_registration.invalid' | trans({}, "validators") }}"
+                }
+            }
+        };
+        var trevoterId = '#{{ form.voterRegistration.vars.id }}';
+        $(trevoterId).on('blur', function() {
+            if (!this.value.length) {
+                return;
+            }
+            this.value = zeroPadding(this.value, 12);
+            if (!checkVoterRegistration(this.value)) {
+                validator.check.error(this, messages.form.voter_registration.invalid);
+            }
+        });
 
-    $('.unlink-confirmation .cancel').on('click', function() {
-        $('.unlink-confirmation').slideUp();
+        $(".connect a.unlink").on('click', function() {
+            var confirmDialog = $('.unlink-confirmation');
+            var parent = $(this).parent();
+            var href = $(this).attr('href');
+            var serviceName = '';
+            if (parent.is('.facebook')) {
+                serviceName = 'facebook';
+            } else if (parent.is('.twitter')) {
+                serviceName = 'twitter';
+            }
+            confirmDialog.slideUp('fast', function() {
+                $('a.confirm', $('.unlink-confirmation')).attr('href', href);
+                $('.social-network-name', $('.unlink-confirmation')).html(serviceName);
+                confirmDialog.insertAfter(parent).slideDown();
+            });
+
+            return false;
+        });
+
+        $('.unlink-confirmation .cancel').on('click', function() {
+            $('.unlink-confirmation').slideUp();
+        });
     });
-});
 </script>
 {% endblock %}

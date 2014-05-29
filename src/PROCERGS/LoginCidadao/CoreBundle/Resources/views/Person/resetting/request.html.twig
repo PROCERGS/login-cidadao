@@ -23,7 +23,7 @@
                 <div class="col-md-8">
                     <div class="form-group">
                         <label class="control-label invisible" for="username">{{ 'resetting.request.username'|trans }}</label>
-                        <input class="form-control" onkeyup="validador.onKeyUpMultiformat(this, event);" placeholder="{{ 'resetting.request.username'|trans }}" type="text" id="username" name="username" required="required" />
+                        <input class="form-control username" placeholder="{{ 'resetting.request.username'|trans }}" type="text" name="username" required="required" />
                         <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                         <div class="input-error">{% if invalid_username is defined %}{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username})}}{% endif %}</div>
                     </div>
@@ -39,6 +39,17 @@
 {% block stylesheets %}
 {{ parent() }}
     {% stylesheets 'bundles/procergslogincidadaocore/css/home/*.css' filter='cssrewrite' filter='?uglifycss' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
+<link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    $(document).ready(function() {
+        $('input.username').on('keyup', function(e) {
+            validator.onKeyUpMultiformat(this, e);
+        });
+    });
+</script>
 {% endblock %}

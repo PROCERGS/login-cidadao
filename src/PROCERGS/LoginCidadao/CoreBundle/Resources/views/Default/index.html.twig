@@ -42,7 +42,7 @@
                 <div class="form-group">
                     {{ form_label(form1.username, null, {'label_attr' : {'class': 'sr-only'}}) }}
                     {{ form_errors(form1.username) }}
-                    {{ form_widget(form1.username, {'attr' : {'placeholder' : 'security.login.username', 'onKeyUp' : 'validador.onKeyUpMultiformat(this, event)', 'class':'form-control', 'value' : last_username }}) }}
+                    {{ form_widget(form1.username, {'attr' : {'placeholder' : 'security.login.username', 'onKeyUp' : 'validator.onKeyUpMultiformat(this, event)', 'class':'form-control', 'value' : last_username }}) }}
                 </div>
 
                 <div class="form-group">
@@ -72,7 +72,7 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-4 text-center"><a class="connect facebook" data-href="{{ path("lc_link_facebook") }}">Facebook</a></div>
                     <div class="col-sm-12 col-md-4 text-center"><a class="connect twitter" href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}">Twitter</a></div>
-                    <div class="col-sm-12 col-md-4 text-center"><a class="connect nfg nfgpopup" data-href="{{ path('nfg_login') }}">NFG</a></div>
+                    <div class="col-sm-12 col-md-4 text-center"><a class="connect nfg nfgpopup" data-href="{{ path('nfg_login') }}">Nota Fiscal Gaúcha</a></div>
                 </div>
             </div>
     </div>
