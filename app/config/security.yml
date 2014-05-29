@@ -89,13 +89,14 @@ security:
 
 
         api:
-          pattern:    ^/api
+          pattern:    ^/api/v1(?!/public)
           fos_oauth:  true
           stateless:  true
-          anonymous:  false
+          anonymous:  true
 
     access_control:
         - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }
+        - { path: ^/api/v1/public/lc_consultaCep2, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/nfg, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
