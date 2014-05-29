@@ -64,3 +64,5 @@ parameters:
     user_profile_ftp_directory: /ftp/path/to/web/uploads/profile-pictures
     tre_search_link: 'http://www.tse.jus.br/eleitor/servicos/titulo-e-local-de-votacao/consulta-por-nome'
     uri_root: ~
+
+    uri_vpr_link: 'http://des.vpr.rs.gov.br/app_dev.php'
