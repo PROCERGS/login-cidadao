@@ -268,15 +268,21 @@
         $(profileEdit.cepId).blur(function(event) {
             validator.cep.findByCep(this, profileEdit.popLocation);
         });
-        var messages = {'0': "{{ 'form.voter_registration.invalid' | trans({}, "validators") }}"};
+        var messages = {
+            form: {
+                voter_registration: {
+                    "invalid": "{{ 'form.voter_registration.invalid' | trans({}, "validators") }}"
+                }
+            }
+        };
         var trevoterId = '#{{ form.voterRegistration.vars.id }}';
         $(trevoterId).on('blur', function() {
             if (!this.value.length) {
                 return;
             }
             this.value = zeroPadding(this.value, 12);
-            if (!validarTitulo(this.value)) {
-                alert(messages[0]);
+            if (!checkVoterRegistration(this.value)) {
+                validator.check.error(this, messages.form.voter_registration.invalid);
             }
         });
 

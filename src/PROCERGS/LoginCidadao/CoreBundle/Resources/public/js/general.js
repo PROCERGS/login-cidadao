@@ -242,9 +242,8 @@ function zeroPadding(str, size) {
     str = str.toString();
     return str.length < size ? zeroPadding("0" + str, size) : str;
 }
-function validarTitulo(inscricao) {
+function checkVoterRegistration(inscricao) {
     var paddedInsc = inscricao;
-    // alert("validando inscricao " + paddedInsc);
     var dig1 = 0;
     var dig2 = 0;
     var tam = paddedInsc.length;
