@@ -8,26 +8,30 @@ use FOS\RestBundle\Controller\Annotations as REST;
 
 class AddressController extends FOSRestController
 {
+
     /**
-     * @REST\Get("/lc_consultaCep2", name="lc_consultaCep2")
+     * @REST\Get("/public/postalcode/{postalCode}", name="lc_consultaCep2", defaults={"postalCode" = ""})
      * @REST\View()
      */
-    public function consultaCep2Action(Request $request)
+    public function viewPostalCodeAction($postalCode)
     {
+        $request = $this->getRequest();
         $busca = $this->get('procergs_logincidadao.dne');
-        $ceps = $busca->findByCep($request->get('cep'));
-        if ($ceps) {
+        $postalCodes = $busca->findByCep($postalCode);
+        if ($postalCodes) {
             $result = array(
-                'code' => 0,
+                'code' => 200,
                 'msg' => null,
                 'items' => array(
-                    $ceps
+                    $postalCodes
                 )
             );
         } else {
             throw new NotFoundHttpException();
         }
-        return $result;
+
+        $view = $this->view($result);
+        return $this->handleView($view);
     }
 
 }

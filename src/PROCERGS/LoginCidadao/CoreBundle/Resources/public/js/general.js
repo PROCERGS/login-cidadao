@@ -134,17 +134,19 @@ validator.cep.findByCep = function(obj, callback) {
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: validator.cep.urlQuery,
-        data: {'cep': val},
-        success: function(data1, textStatus, jqXHR) {
-            if (data1.code > 0) {
-                validator.check.error(obj, $('label[for=' + obj.id + ']').text() + ' invalido');
-                return;
-            }
-            if (data1.items && data1.items.length && callback) {
-                callback(data1.items[0]);
-            }
-            validator.check.success(obj);
+        url: validator.cep.urlQuery + '/' + val
+    }).done(function(result) {
+        if (result.code !== 200) {
+            return this.fail(result);
+        }
+        if (result.items && result.items.length && callback) {
+            callback(result.items[0]);
+        }
+        validator.check.success(obj);
+    }).fail(function(result) {
+        if (result.code !== 200) {
+            validator.check.error(obj, $('label[for=' + obj.id + ']').text() + ' invalido');
+            return;
         }
     });
 };
