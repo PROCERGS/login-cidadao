@@ -23,6 +23,8 @@ parameters:
     procergs_logincidadao_core.emailChanged.template: PROCERGSLoginCidadaoCoreBundle:Person:emailChangedMessage.html.twig
     procergs_logincidadao.nfgws.class: PROCERGS\LoginCidadao\CoreBundle\Helper\NfgWsHelper
 
+    procergs_logincidadao.postalcode.search.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\SearchPostalCodeFormType
+
 services:
     security.authentication.success_handler:
         class: %security.authentication.success_handler.class%
@@ -76,6 +78,14 @@ services:
         arguments: [%fos_user.model.user.class%]
         tags:
             - { name: form.type, alias: procergs_person_resetting }
+
+    procergs_logincidadao.postalcode.search.form.type:
+        class: %procergs_logincidadao.postalcode.search.form.type.class%
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: search_postalcode_form_type }
+        calls:
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
 
     procergs_logincidadao.user_provider:
         class: %procergs_logincidadao.user_provider.class%
