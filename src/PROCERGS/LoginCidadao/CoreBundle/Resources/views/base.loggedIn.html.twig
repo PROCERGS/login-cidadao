@@ -1,6 +1,8 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle::base.html.twig' %}
 
 {% block body %}
+<a href="" class="alert alert-success center-block">A Votação de Prioridades já está disponível, vote aqui!</a>
+
 {% for flashMessage in app.session.flashbag.get('success') %}
     <div class="alert alert-success">
         {{ flashMessage }}
@@ -66,7 +68,7 @@
                             <i class="glyphicon glyphicon-th pull-right"></i>
                         </span></a>
                 </li>
-                
+
                 {% endif %}
                 {# <li class="settings glyph">
                     <a href="">
