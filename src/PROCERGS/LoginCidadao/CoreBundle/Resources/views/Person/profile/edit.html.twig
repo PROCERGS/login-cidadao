@@ -76,15 +76,15 @@
                     {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
                     <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
                     <span class="extra">
-		                        {% trans %}voterreg.offer.search{% endtrans %}
+		                        {% trans %}Don't know your Voter Registration number?{% endtrans %}
                         <a target='blank' href="{{ tre_search_link }}">{{ 'Search it!' | trans }}</a>
                     </span>
-                    <span class="extra">{% trans %}voterreg.nfg.offer.complete{% endtrans %}</span>
+                    <span class="extra">{% trans %}Use your account on Nota Fiscal Gaúcha and validate your Voter Registration{% endtrans %}</span>
                 {%      else %}
                 {%          if app.user.nfgProfile.voterRegistrationSit is null or app.user.nfgProfile.voterRegistrationSit == 0 %}
                     {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
                     <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
-                    <span class="extra">{% trans %}voterreg.nfg.offer.auth{% endtrans %}</span>
+                    <span class="extra">{% trans %}Use your account on Nota Fiscal Gaúcha and authorize us to validate your Voter Registration{% endtrans %}</span>
                 {%          elseif app.user.nfgProfile.voterRegistrationSit == 1 %}
                                 {{ form_widget(form.voterRegistration, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}
                     <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
@@ -92,14 +92,14 @@
                 {%          else %}
                                 {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
                     <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
-                    <span class="extra">{% trans %}voterreg.nfg.fixit{% endtrans %}</span>
+                    <span class="extra">{% trans %}The Voter Registration used is not valid according to Nota Fiscal Gaúcha. Please type your Voter Registration correctly{% endtrans %}</span>
                 {%          endif %}
                 {%      endif %}
                 {% else %}
                     {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
                     <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
                     <span class="extra">
-                        {% trans %}voterreg.offer.search{% endtrans %}
+                        {% trans %}Don't know your Voter Registration number?{% endtrans %}
                         <a target='blank' href="{{ tre_search_link }}">{{ 'Search it!' | trans }}</a>
                     </span>
                 {% endif %}
@@ -169,7 +169,7 @@
                 {% endif %}
                 {% if app.user.nfgAccessToken is null %}
                         <div class="connect nfg disabled">
-                            <a data-href="{{ path('nfg_bind') }}" class="col-xs-11 col-xs-offset-1 username nfgpopup">{{ 'Connect to the NFG' | trans }}</a>
+                            <a data-href="{{ path('nfg_bind') }}" class="col-xs-11 col-xs-offset-1 username nfgpopup">{{ 'Connect to the Nota Fiscal Gaúcha' | trans }}</a>
                         </div>
                 {% else %}
                         <div class="connect nfg">
@@ -268,13 +268,13 @@
         $(profileEdit.cepId).blur(function(event) {
             validator.cep.findByCep(this, profileEdit.popLocation);
         });
-        var messages = {'0': "{{ 'form.voterreg.invalid' | trans }}"};
+        var messages = {'0': "{{ 'form.voter_registration.invalid' | trans({}, "validators") }}"};
         var trevoterId = '#{{ form.voterRegistration.vars.id }}';
         $(trevoterId).on('blur', function() {
             if (!this.value.length) {
                 return;
             }
-            this.value = completaZerosEsquerda(this.value, 12);
+            this.value = zeroPadding(this.value, 12);
             if (!validarTitulo(this.value)) {
                 alert(messages[0]);
             }

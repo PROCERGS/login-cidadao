@@ -9,5 +9,5 @@ use Symfony\Component\Validator\Constraint;
 class VoterRegistration extends Constraint
 {
 
-    public $message = 'voterreg.invalid';
+    public $message = 'voter_registration.invalid';
 }

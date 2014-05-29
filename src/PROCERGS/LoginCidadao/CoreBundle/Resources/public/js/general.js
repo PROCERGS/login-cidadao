@@ -238,35 +238,9 @@ validator.check.success = function(obj) {
     parent.find('.input-error').html('');
 };
 
-function completaZerosEsquerda(numero, tamanho) {
-    var ret = "";
-    if (numero.length > 0) {
-        var qtdCompleta = tamanho - numero.length;
-        var zeros = "";
-        for (var i = 0; i < qtdCompleta; i++) {
-            zeros += "0";
-        }
-        ret = zeros + numero;
-    }
-    return ret;
-}
-function somenteNumeros(e) {
-    if (window.event) {
-        // for IE, e.keyCode or window.event.keyCode can be used
-        key = e.keyCode;
-    } else {
-        if (e.which) {
-            // netscape
-            key = e.which;
-        } else {
-            key = 9;
-        }
-    }
-    if (!isNum(key)) {
-        return false;
-    } else {
-        return true;
-    }
+function zeroPadding(str, size) {
+    str = str.toString();
+    return str.length < size ? zeroPadding("0" + str, size) : str;
 }
 function validarTitulo(inscricao) {
     var paddedInsc = inscricao;
