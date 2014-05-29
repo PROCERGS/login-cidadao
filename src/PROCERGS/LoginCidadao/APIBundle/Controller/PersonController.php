@@ -40,7 +40,7 @@ class PersonController extends FOSRestController
                         $this->getRequest()->get('updated_at'));
 
         if (!($updatedAt instanceof \DateTime)) {
-            throw new BadRequestHttpException("Missing or incorrect format for minimum update time. Please use Y-m-d H:i:s");
+            $updatedAt = new \DateTime();
         }
 
         $id = $user->getId();
