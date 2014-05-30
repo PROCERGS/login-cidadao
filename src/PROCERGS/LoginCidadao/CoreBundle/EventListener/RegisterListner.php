@@ -73,6 +73,13 @@ class RegisterListner implements EventSubscriberInterface
         ))) {
         	throw new LcEmailException('registration.email.registered');
         }
+        $key = '_security.main.target_path';
+        if ($this->session->has($key)) {
+            $url = $this->session->get($key);
+            $this->session->remove($key);
+            return $event->setResponse(new RedirectResponse($url));
+        } 
+        
         $email = explode('@', $user->getEmailCanonical(), 2);
         $username = $email[0];
         if (! UsernameValidator::isUsernameValid($username)) {

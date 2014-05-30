@@ -1,7 +1,8 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle::base.html.twig' %}
 
 {% block body %}
-{% set form1 = logincidadao_initializeForm() %}
+{% set form1 = lc_getForm() %}
+{% set form = lc_getFormFactory() %}
 
 <div class="row">
     <div class="col-xs-12 text-center header-shadows">
@@ -12,70 +13,11 @@
 
 
 <div class="row">
-    <div id="login-box" class="lc-box col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-        <h3 class="title text-center">{% trans %}Your login{% endtrans %}</h3>
-
-        {% for type, messages in app.session.flashbag.all() %}
-            {% for message in messages %}
-                <div class="flash-{{ type }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
-
-        {% trans_default_domain 'FOSUserBundle' %}
-
-        {{ form_start(form1, {'action' : path("fos_user_security_check"), 'attr' : {'role' : 'form'}}) }}
-            <div class="form-content">
-                <p style="margin-top:30px;">{% trans %}Log in using your Citizen's Login{% endtrans %}</p>
-
-                <div class="form-group">
-                  {% if error %}
-                    <div class="input-error alert-danger">
-                        <ul>
-                            <li>{{ error|trans }}</li>
-                        </ul>
-                    </div>
-                  {% endif %}
-                </div>
-
-                <div class="form-group">
-                    {{ form_label(form1.username, null, {'label_attr' : {'class': 'sr-only'}}) }}
-                    {{ form_errors(form1.username) }}
-                    {{ form_widget(form1.username, {'attr' : {'placeholder' : 'security.login.username', 'onKeyUp' : 'validator.onKeyUpMultiformat(this, event)', 'class':'form-control', 'value' : last_username }}) }}
-                </div>
-
-                <div class="form-group">
-                    {{ form_label(form1.password, null , {'label_attr' : {'class': 'sr-only'}}) }}
-                    {{ form_errors(form1.password) }}
-                    {{ form_widget(form1.password, {'attr' : {'placeholder' : 'security.login.password', 'class':'form-control'}}) }}
-                </div>
-
-                <div class="form-group captcha-container">
-                    {% if form1.recaptcha is defined %}
-          {% include "PROCERGSLoginCidadaoCoreBundle::common.recaptcha.html.twig" %}
-          {% form_theme form1 'EWZRecaptchaBundle:Form:ewz_recaptcha_widget.html.twig' %}
-          {{ form_widget(form1.recaptcha, { 'attr': {'options' : {'theme' : 'custom'}}}) }}
-                    {% endif %}
-                    <a id="resetting_request" class="pull-left" href="{{ path('fos_user_resetting_request') }}">{{ 'resseting.forgot_password' | trans }}</a>
-                    <a id="register_request" href="{{ path('fos_user_registration_register') }}" class="register-link pull-right">{{ 'registration.register' | trans }}</a>
-                </div>
-
-                <button type="submit" class="btn btn-success center-block">{{ 'security.login.submit'|trans }}</button>
-            </div>
-
-           {{ form_end(form1) }}
-
-            <div class="connect-box">
-                <div><hr><span>{% trans %}or{% endtrans %}</span></div>
-                <p>{% trans %}Use accounts from other services{% endtrans %}</p>
-                <div class="row">
-                    <div class="col-sm-12 col-md-4 text-center"><a class="connect facebook" data-href="{{ path("lc_link_facebook") }}">Facebook</a></div>
-                    <div class="col-sm-12 col-md-4 text-center"><a class="connect twitter" href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}">Twitter</a></div>
-                    <div class="col-sm-12 col-md-4 text-center"><a class="connect nfg nfgpopup" data-href="{{ path('nfg_login') }}">Nota Fiscal Gaúcha</a></div>
-                </div>
-            </div>
-    </div>
+    {% set common_row_class = 'lc-box col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3' %}
+    {% set common_row_style = 'display: none;' %}    
+    {% include "PROCERGSLoginCidadaoCoreBundle::common.register.html.twig" %}
+    {% set common_row_style = '' %}
+    {% include "PROCERGSLoginCidadaoCoreBundle::common.login.html.twig" %}
 </div>
 {% endblock %}
 
@@ -89,4 +31,16 @@
     {% stylesheets 'bundles/procergslogincidadaocore/css/home/*.css' filter='cssrewrite' filter='?uglifycss' %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+$(function(){
+	$("#register_request").click(function(event){
+		$('#login-box').hide();
+        $("#register-box").show();
+    });
+});
+</script>
 {% endblock %}
