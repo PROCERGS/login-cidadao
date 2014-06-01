@@ -1,4 +1,4 @@
-    <div id="login-box" class="{{ common_row_class }} style="{{ common_row_style is defined ? common_row_style : '' }}">
+    <div id="login-box" class="{{ common_row_class }}" style="{{ common_row_style is defined ? common_row_style : '' }}">
         <h3 class="title text-center">{% trans %}Your login{% endtrans %}</h3>
 
         {% for type, messages in app.session.flashbag.all() %}
