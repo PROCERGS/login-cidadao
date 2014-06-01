@@ -199,3 +199,20 @@ body {
   margin: 10px 24px 0;
   padding: 3px 12px;
 }
+
+#login-box .remember-group {
+  float: left;
+  font-size: 12px;
+  margin-top: 0;
+  padding-left: 0;
+}
+
+#login-box .remember-group #remember_me {
+  height: 18px;
+  margin: 0 10px 0 0;
+  width: 18px;
+}
+
+#login-box #resetting_request {
+  font-size: 12px;
+}
