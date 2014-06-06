@@ -20,13 +20,13 @@ class SuggestionFilterFormType extends AbstractType
             'required' => false,
             'format' => 'dd MMMM yyyy',
             'widget' => 'choice',
-            'years' => range(date('Y'), date('Y') - 70)
+            'years' => range(date('Y'), 1898)
         ));
         $builder->add('dateend', 'birthday', array(
             'required' => false,
             'format' => 'dd MMMM yyyy',
             'widget' => 'choice',
-            'years' => range(date('Y'), date('Y') - 70)
+            'years' => range(date('Y'), 1898)
         ));
         $builder->add('text', 'text', array(
             'required' => false

@@ -29,7 +29,7 @@ class ProfileFormType extends BaseType
                     'required' => false,
                     'format' => 'dd MMMM yyyy',
                     'widget' => 'choice',
-                    'years' => range(date('Y'), date('Y') - 100),
+                    'years' => range(date('Y'), 1898),
                     'label' => 'form.birthdate',
                     'translation_domain' => 'FOSUserBundle')
                 )

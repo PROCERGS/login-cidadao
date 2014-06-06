@@ -73,12 +73,12 @@ class RegisterListner implements EventSubscriberInterface
         ))) {
         	throw new LcEmailException('registration.email.registered');
         }
+        
         $key = '_security.main.target_path';
         if ($this->session->has($key)) {
-            $url = $this->session->get($key);
-            $this->session->remove($key);
-            return $event->setResponse(new RedirectResponse($url));
-        } 
+            //this is to be catch by loggedinUserListener.php
+            return $event->setResponse(new RedirectResponse($this->router->generate('lc_home')));
+        }
         
         $email = explode('@', $user->getEmailCanonical(), 2);
         $username = $email[0];
