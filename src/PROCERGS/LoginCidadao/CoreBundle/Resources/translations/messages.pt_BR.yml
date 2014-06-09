@@ -231,3 +231,5 @@ voterreg.nfg.fixit: 'O Título informado não é valido pela Nota Fiscal Gaúcha
 notification.nfg.already.bind: 'Essa conta da Nota Fiscal Gaúcha já está vinculada em uma conta do login cidadao.'
 'Page not found.': 'Página não encontrada.'
 'This e-mail is already confirmed.': 'Este e-mail já está confirmado.'
+social-networks.unlink.google.success: 'Google desvinculado com sucesso.'
+google.nousername: 'Conectado ao Google'

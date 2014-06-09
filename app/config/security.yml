@@ -61,6 +61,7 @@ security:
             oauth:
                 resource_owners:
                     twitter:    "/login/check-twitter"
+                    google:    "/login/check-google"
                 login_path:   /login
                 use_forward:  false
                 failure_path: /login
@@ -114,6 +115,7 @@ security:
         - { path: ^/nfg, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/connect/twitter$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/connect/google$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login/facebook$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/contact$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/general$, role: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -134,31 +136,3 @@ security:
         - { path: ^/profile/change-password, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/admin, role: [IS_AUTHENTICATED_FULLY, ROLE_ADMIN] }
         - { path: ^/person, role: IS_AUTHENTICATED_REMEMBERED }
-        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-
-        #- { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ], requires_channel: https }
-        #- { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/nfg, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/connect/twitter$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/login/facebook$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/contact$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/general$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/privacy$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/about$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/help$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/person/checkEmailAvailable, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/job, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/external/navbar.js, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-
-        #- { path: ^/, roles: IS_AUTHENTICATED_REMEMBERED, requires_channel: https }
-        #- { path: ^/profile/edit, roles: IS_AUTHENTICATED_FULLY, requires_channel: https }
-        #- { path: ^/profile/change-username, roles: IS_AUTHENTICATED_FULLY, requires_channel: https }
-        #- { path: ^/profile/change-password, roles: IS_AUTHENTICATED_FULLY, requires_channel: https }
-        #- { path: ^/admin/, role: [IS_AUTHENTICATED_FULLY, ROLE_ADMIN], requires_channel: https }
-        #- { path: ^/person, role: IS_AUTHENTICATED_REMEMBERED, requires_channel: https }
-        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-

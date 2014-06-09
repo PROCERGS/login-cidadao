@@ -293,6 +293,13 @@
     background-repeat: no-repeat;
 }
 
+#profile-edit .google {
+    background-color: #D44332;
+    background-image: url(https://s.ytimg.com/yts/imgbin/www-sharing-vflmcfmbm.png);
+    background-position: 0 -1519px;
+    background-repeat: no-repeat;
+}
+
 #profile-edit .nfg {
     background-color: #EF9618;
     background-image: url(../../images/nfg_34.png);

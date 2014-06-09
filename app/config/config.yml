@@ -156,12 +156,18 @@ hwi_oauth:
         username_iterations: 30
         properties:
             twitter: twitterId
+            google: googleId
     resource_owners:
         twitter:
             type:           twitter
             client_id:      %twitter_app_key%
             client_secret:  %twitter_app_secret%
             scope:          "email"
+        google:
+            type:           google
+            client_id:      %google_app_key%
+            client_secret:  %google_app_secret%
+            scope:          "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
     http_client:
         verify_peer: false
 

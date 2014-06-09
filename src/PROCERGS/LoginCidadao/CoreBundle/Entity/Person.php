@@ -279,6 +279,28 @@ class Person extends BaseUser
      * @var \DateTime $updatedAt
      */
     protected $updatedAt;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="googleId", type="string", length=255, nullable=true, unique=true)
+     */
+    protected $googleId;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="googleUsername", type="string", length=255, nullable=true)
+     */
+    protected $googleUsername;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="googleAccessToken", type="string", length=255, nullable=true)
+     */
+    protected $googleAccessToken;
+    
 
     public function __construct()
     {
@@ -925,5 +947,42 @@ class Person extends BaseUser
     {
         return $this->updatedAt;
     }
+    
+    public function setGoogleId($var)
+    {
+        $this->googleId = $var;
+    
+        return $this;
+    }
+    
+    public function getGoogleId()
+    {
+        return $this->googleId;
+    }
+    
+    public function setGoogleUsername($var)
+    {
+        $this->googleUsername = $var;
+    
+        return $this;
+    }
+    
+    public function getGoogleUsername()
+    {
+        return $this->googleUsername;
+    }
+    
+    public function setGoogleAccessToken($var)
+    {
+        $this->googleAccessToken = $var;
+    
+        return $this;
+    }
+    
+    public function getGoogleAccessToken()
+    {
+        return $this->googleAccessToken;
+    }
+    
     
 }

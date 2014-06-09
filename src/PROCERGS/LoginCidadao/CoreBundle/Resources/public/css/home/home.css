@@ -143,6 +143,13 @@ body {
     background-image: url(../../images/twitter_login.png);
 }
 
+.lc-box .google {
+    background-color: #D44332;
+    background-image: url(https://s.ytimg.com/yts/imgbin/www-sharing-vflmcfmbm.png);
+    background-position: 0 -1433px;
+    background-repeat: no-repeat;
+}
+
 .lc-box .nfg {
     background-position: 2px 0;
     background-color: #EF9618;

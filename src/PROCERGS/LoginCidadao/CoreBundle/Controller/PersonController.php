@@ -263,6 +263,30 @@ class PersonController extends Controller
 
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));
     }
+    
+    /**
+     * @Route("/google/unlink", name="lc_unlink_google")
+     */
+    public function unlinkGoogleAction()
+    {
+        $person = $this->getUser();
+        $translator = $this->get('translator');
+        if ($person->hasPassword()) {
+            $person->setGoogleId(null)
+            ->setGoogleUsername(null)
+            ->setGoogleAccessToken(null);
+            $userManager = $this->get('fos_user.user_manager');
+            $userManager->updateUser($person);
+    
+            $this->get('session')->getFlashBag()->add('success',
+                $translator->trans("social-networks.unlink.google.success"));
+        } else {
+            $this->get('session')->getFlashBag()->add('error',
+                $translator->trans("social-networks.unlink.no-password"));
+        }
+    
+        return $this->redirect($this->generateUrl('fos_user_profile_edit'));
+    }
 
     /**
      * @Route("/email/resend-confirmation", name="lc_resend_confirmation_email")

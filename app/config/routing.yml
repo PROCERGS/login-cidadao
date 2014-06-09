@@ -13,6 +13,9 @@ hwi_oauth_redirect:
 
 twitter_login:
     pattern: /login/check-twitter
+    
+google_login:
+    pattern: /login/check-google    
 
 #API
 procergs_login_cidadao_api:

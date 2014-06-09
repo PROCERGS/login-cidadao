@@ -66,3 +66,5 @@ parameters:
     uri_root: ~
 
     uri_vpr_link: 'http://des.vpr.rs.gov.br/app_dev.php'
+    google_app_key: 585800983080-o99vn39vmkgtav8rbpienbeplkam4a38.apps.googleusercontent.com
+    goole_app_secret: PFU7jZWYa_9OJLz96O1pASW3
