@@ -144,9 +144,8 @@ body {
 }
 
 .lc-box .google {
-    background-color: #D44332;
-    background-image: url(https://s.ytimg.com/yts/imgbin/www-sharing-vflmcfmbm.png);
-    background-position: 0 -1433px;
+    background-color: #dd4b39;
+    background-image: url(../../images/btn_red.png);    
     background-repeat: no-repeat;
 }
 

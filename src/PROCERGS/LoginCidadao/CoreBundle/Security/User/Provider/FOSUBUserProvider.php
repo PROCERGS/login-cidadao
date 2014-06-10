@@ -126,10 +126,12 @@ class FOSUBUserProvider extends BaseClass
             $user->$setter_username($screenName);
 
             $fullName = explode(' ', $response->getRealName(), 2);
-
-            $user->setFirstName($fullName[0]);
-            $user->setSurname($fullName[1]);
-
+            if (isset($fullName[0][1]) && $fullName[0][1] != '') {
+                $user->setFirstName($fullName[0]);
+            }
+            if (isset($fullName[1][1]) && $fullName[1][1] != '') {
+                $user->setSurname($fullName[1]);
+            }
             
             if (!UsernameValidator::isUsernameValid($screenName)) {
                 $screenName = UsernameValidator::getValidUsername();
