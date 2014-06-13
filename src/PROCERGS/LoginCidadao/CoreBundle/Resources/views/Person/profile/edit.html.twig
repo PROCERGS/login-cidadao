@@ -37,6 +37,12 @@
                     <div class="input-error">{{ form_errors(form.birthdate) }}</div>
                 </div>
                 <div class="form-group">
+                    {{ form_label(form.country) }}
+                    {{ form_widget(form.country, {'attr': {'class': 'form-control'}}) }}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error">{{ form_errors(form.country) }}</div>
+                </div>
+                <div class="form-group">
                     {{ form_label(form.cep) }}
                     {{ form_widget(form.cep, {'attr': {'class': 'form-control', 'maxlength' : '10'}}) }}
                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
@@ -46,6 +52,32 @@
                         <a class="search-cep" href="{{ path('lc_search_postalcode') }}">{{ 'Search it!' | trans }}</a>
                     </span>
                 </div>
+                <div class="form-group">
+                    {{ form_label(form.uf) }}
+                    {{ form_widget(form.uf, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_widget(form.ufsteppe, {'attr': {'class': 'form-control', 'style': 'display: none;'}}) }}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error">{{ form_errors(form.uf) }}</div>
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.city) }}
+                    {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_widget(form.citysteppe, {'attr': {'class': 'form-control', 'style': 'display: none;'}}) }}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error">{{ form_errors(form.city) }}</div>
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.adress) }}
+                    {{ form_widget(form.adress, {'attr': {'class': 'form-control', 'maxlength' : '255'}}) }}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error">{{ form_errors(form.adress) }}</div>
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.adressnumber) }}
+                    {{ form_widget(form.adressnumber, {'attr': {'class': 'form-control'}}) }}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error">{{ form_errors(form.adressnumber) }}</div>
+                </div>                
                 <div class="form-group">
                     <label for="user_address">{{ 'Your address'|trans }}</label>
                     <span id="user_address">
@@ -248,6 +280,12 @@
     profileEdit.cepId = '#{{ form.cep.vars.id }}';
     profileEdit.cpfId = '#{{ form.cpf.vars.id }}';
     profileEdit.voterRegistrationId = '#{{ form.voterRegistration.vars.id }}';
+    profileEdit.countryId = '#{{ form.country.vars.id }}';
+    profileEdit.ufId = '#{{ form.uf.vars.id }}';
+    profileEdit.cityId = '#{{ form.city.vars.id }}';
+    profileEdit.ufSteppeId = '#{{ form.ufsteppe.vars.id }}';
+    profileEdit.citySteppeId = '#{{ form.citysteppe.vars.id }}';
+    
 
     profileEdit.popLocation = function(dneData) {
         $(profileEdit.cepId).val(dneData.cep);
@@ -325,6 +363,46 @@
 
         $('.unlink-confirmation .cancel').on('click', function() {
             $('.unlink-confirmation').slideUp();
+        });
+
+        $(profileEdit.countryId).on('change', function (event) {
+        	$(profileEdit.ufId).find('option[value!=""]').remove();
+        	$(profileEdit.ufId).trigger('change');
+			$(profileEdit.ufId).hide();
+			$(profileEdit.ufSteppeId).show();
+        	if ($(this).val()) {
+            	$.ajax({
+            		type: 'GET',
+            		url: '{{ path('lc_search_uf_by_country') }}' + '/' + $(this).val(),
+            		dataType : 'json',
+            		success : function(data, textStatus, jqXHR) {
+                		if (data.length) {
+                			$(profileEdit.ufId).show();
+                			$(profileEdit.ufSteppeId).hide();
+                			$(profileEdit.ufId).append(data.map(function (val) {return $(document.createElement('option')).val(val.id).text(val.name)}));
+                		}
+            		}
+                });
+            }
+        });
+        $(profileEdit.ufId).on('change', function (event) {
+        	$(profileEdit.cityId).find('option[value!=""]').remove();
+        	$(profileEdit.cityId).hide();
+        	$(profileEdit.citySteppeId).show();
+        	if ($(this).val()) {
+            	$.ajax({
+            		type: 'GET',
+            		url: '{{ path('lc_search_city_by_uf') }}' + '/' + $(this).val(),
+            		dataType : 'json',
+            		success : function(data, textStatus, jqXHR) {
+            			if (data.length) {
+            				$(profileEdit.cityId).show();
+            				$(profileEdit.citySteppeId).hide();
+            				$(profileEdit.cityId).append(data.map(function (val) {return $(document.createElement('option')).val(val.id).text(val.name)}));
+            			}
+            		}
+                });
+            }
         });
     });
 </script>

@@ -24,6 +24,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Exception\LcValidationException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\MissingNfgAccessTokenException;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Uf;
 
 class ProfileEditListner implements EventSubscriberInterface
 {
@@ -92,7 +93,36 @@ class ProfileEditListner implements EventSubscriberInterface
     public function onProfileEditSuccess(FormEvent $event)
     {
         $user = $event->getForm()->getData();
-
+        if (!$user->getUf()) {
+            $steppe = ucwords(strtolower(trim($event->getForm()->get('ufsteppe')->getData())));
+            if ($steppe) {
+                $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Uf');
+                $ent = $repo->findOneBy(array(
+                    'name' => $steppe
+                ));
+                if (!$ent) {
+                    $ent = new Uf();
+                    $ent->setName($steppe);
+                    $this->em->persist($ent);
+                }
+                $user->setUf($ent);
+            }
+        }
+        if (!$user->getCity()) {
+            $steppe = ucwords(strtolower(trim($event->getForm()->get('citysteppe')->getData())));
+            if ($steppe) {
+                $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:City');
+                $ent = $repo->findOneBy(array(
+                    'name' => $steppe
+                ));
+                if (!$ent) {
+                    $ent = new City();
+                    $ent->setName($steppe);
+                    $this->em->persist($ent);
+                }
+                $user->setCity($ent);
+            }
+        }
         $this->checkVoterRegistrationChanged($user);
         $this->checkEmailChanged($user);
         $this->checkCPFChanged($user);
@@ -285,27 +315,8 @@ class ProfileEditListner implements EventSubscriberInterface
     {
         if ($user->getCep()) {
             $ceps = $this->dne->findByCep($user->getCep());
-            if (is_numeric($ceps['codigoMunIBGE'])) {
-                $cityRepo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:City');
-                $city = $cityRepo->findOneBy(array(
-                    'id' => $ceps['codigoMunIBGE']
-                ));
-                if (!$city) {
-                    $city = new City();
-                    $city->setId($ceps['codigoMunIBGE']);
-                    $city->setName($ceps['localidade']);
-                    $this->em->persist($city);
-                }
-                $user->setCity($city);
-                $ufRepo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Uf');
-                $uf = $ufRepo->findOneBy(array(
-                    'acronym' => $ceps['uf']
-                ));
-                if (!$uf) {
-                    throw Exception('uf not found');
-                }
-                $user->setUf($uf);
-                $user->setAdress($ceps['logradouroExtenso']);
+            if (!is_numeric($ceps['codigoMunIBGE'])) {
+                throw Exception('cep not found');
             }
         }
     }

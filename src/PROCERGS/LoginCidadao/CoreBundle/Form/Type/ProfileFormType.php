@@ -4,6 +4,12 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use FOS\UserBundle\Form\Type\ProfileFormType as BaseType;
+use Doctrine\ORM\EntityRepository;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Country;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Uf;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\City;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class ProfileFormType extends BaseType
 {
@@ -37,7 +43,69 @@ class ProfileFormType extends BaseType
                         array('required' => false, 'label' => 'form.mobile', 'translation_domain' => 'FOSUserBundle'))
                 ->add('image')
                 ->add('voterRegistration', 'text', array('required' => false, 'label' => 'form.voterRegistration', 'translation_domain' => 'FOSUserBundle'))
+                ->add('country', 'entity',array(
+                    'required' => false,
+                    'class' => 'PROCERGSLoginCidadaoCoreBundle:Country',
+                    'property' => 'name',
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('u')
+                            ->where('u.reviewed = ' . Country::REVIEWED_OK)
+                            ->orderBy('u.name', 'ASC');
+                    }
+                ))
+                ->add('adress', 'text', array('required' => false))
+                ->add('adressnumber', 'integer', array('required' => false))
                 ;
+                $builder->add('ufsteppe', 'text', array("required"=> false, "mapped"=>false));
+                $builder->add('citysteppe', 'text', array("required"=> false, "mapped"=>false));
+                $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+                    $person = $event->getData();
+                    $form = $event->getForm();
+                    $form->add('uf', 'entity',array(
+                        'required' => false,
+                        'class' => 'PROCERGSLoginCidadaoCoreBundle:Uf',
+                        'property' => 'name',
+                        'empty_value' => '',
+                        'query_builder' => function(EntityRepository $er) use ($person) {
+                            if ($person) {
+                                $pars['country'] = $person->getCountry();
+                                $pars['u'] = $person->getUf();
+                            } else {
+                                $pars['country'] = null;
+                                $pars['u'] = null;
+                            }
+                            return $er->createQueryBuilder('u')
+                            ->where('u.reviewed = ' . Uf::REVIEWED_OK)
+                            ->andWhere('u.country = :country')
+                            ->orWhere('u = :u')
+                            ->setParameters($pars)
+                            ->orderBy('u.name', 'ASC');
+                        }
+                    ));
+                    $form->add('city', 'entity',array(
+                        'required' => false,
+                        'class' => 'PROCERGSLoginCidadaoCoreBundle:City',
+                        'property' => 'name',
+                        'empty_value' => '',
+                        'query_builder' => function(EntityRepository $er) use ($person) {
+                            if ($person) {
+                                $pars['u'] = $person->getCity();
+                                $pars['uf'] = $person->getUf();
+                            } else {
+                                $pars['u'] = null;
+                                $pars['uf'] = null;
+                            }
+                            return $er->createQueryBuilder('u')
+                            ->where('u.reviewed = ' . City::REVIEWED_OK)
+                            ->andWhere('u.uf = :uf')
+                            ->orWhere('u = :u')
+                            ->setParameters($pars)
+                            ->orderBy('u.name', 'ASC');
+                        }
+                    ));
+                    
+                });
+                
 
     }
 

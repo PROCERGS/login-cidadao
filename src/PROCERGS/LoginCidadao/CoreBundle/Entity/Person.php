@@ -230,6 +230,12 @@ class Person extends BaseUser
      * @ORM\Column(name="nfg_access_token", type="string", length=255, nullable=true, unique=true)
      */
     protected $nfgAccessToken;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Country")
+     * @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     */
+    protected $country;
 
     /**
      * @Expose
@@ -982,6 +988,17 @@ class Person extends BaseUser
     public function getGoogleAccessToken()
     {
         return $this->googleAccessToken;
+    }
+    
+    public function setCountry($var)
+    {
+        $this->country = $var;
+        return $this;
+    }
+    
+    public function getCountry()
+    {
+        return $this->country;
     }
     
     
