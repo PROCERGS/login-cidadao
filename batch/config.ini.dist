@@ -1,0 +1,6 @@
+database_driver = pgsql
+database_host = sgg_meu.pgsql-teste.procergs.reders
+database_port = 5432
+database_name = sgg_meu
+database_user = d_sgg_meu_ad
+database_password = aD65e24dd5
