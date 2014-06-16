@@ -66,6 +66,8 @@ services:
         arguments: [%fos_user.model.user.class%]
         tags:
             - { name: form.type, alias: procergs_person_profile }
+        calls:
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]            
 
     procergs_person.revoke_authorization.form.type:
         class: %procergs_person.revoke_authorization.form.type.class%

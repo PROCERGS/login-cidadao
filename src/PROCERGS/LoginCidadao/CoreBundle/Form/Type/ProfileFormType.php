@@ -10,14 +10,16 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Uf;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\City;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Doctrine\ORM\EntityManager;
 
 class ProfileFormType extends BaseType
 {
+    private $em;
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         //parent::buildForm($builder, $options);
-
+        $country = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Country')->findOneBy(array('iso' => 'BR'));
         $builder/* ->add('username', null,
                         array('label' => 'form.username', 'translation_domain' => 'FOSUserBundle')) */
                 ->add('email', 'email',
@@ -47,6 +49,7 @@ class ProfileFormType extends BaseType
                     'required' => false,
                     'class' => 'PROCERGSLoginCidadaoCoreBundle:Country',
                     'property' => 'name',
+                    'preferred_choices' => array($country),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('u')
                             ->where('u.reviewed = ' . Country::REVIEWED_OK)
@@ -58,6 +61,8 @@ class ProfileFormType extends BaseType
                 ;
                 $builder->add('ufsteppe', 'text', array("required"=> false, "mapped"=>false));
                 $builder->add('citysteppe', 'text', array("required"=> false, "mapped"=>false));
+                $builder->add('ufpreferred', 'hidden', array("data" => $country->getId(),"required"=> false, "mapped"=>false));
+                
                 $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
                     $person = $event->getData();
                     $form = $event->getForm();
@@ -112,6 +117,12 @@ class ProfileFormType extends BaseType
     public function getName()
     {
         return 'procergs_person_profile';
+    }
+    
+    public function setEntityManager(EntityManager $em)
+    {
+        $this->em = $em;
+        return $this;
     }
 
 }
