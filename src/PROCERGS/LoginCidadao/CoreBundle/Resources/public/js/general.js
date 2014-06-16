@@ -304,7 +304,7 @@ var lcAutoLoader = {
 					    +'<div class="modal-body">'
 					    //+'<div class="ajax-loader"/>'
 					    +'<img src="../../bundles/procergslogincidadaocore/images/ajax-loader.gif"/>'
-					    +'<span id="ajax-loader-timer"></span>'
+					    +'<span id="ajax-loader-timer" style="margin-left: 15px;"></span>'
 					    +'</div>'
 				     +'</div>'
 				    +'</div>'
