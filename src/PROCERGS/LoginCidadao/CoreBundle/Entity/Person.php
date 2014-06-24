@@ -208,18 +208,24 @@ class Person extends BaseUser
     protected $suggestions;
 
     /**
+     * @Expose
+     * @Groups({"adress"})
      * @ORM\Column(name="adress", type="string", length=255, nullable=true)
      * @var string
      */
     protected $adress;
 
     /**
+     * @Expose
+     * @Groups({"adress_number"})
      * @ORM\Column(name="adress_number",type="integer", nullable=true)
      * @var string
      */
     protected $adressNumber;
 
     /**
+     * @Expose
+     * @Groups({"uf"}) 
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Uf")
      * @ORM\JoinColumn(name="uf_id", referencedColumnName="id")
      */
@@ -231,6 +237,8 @@ class Person extends BaseUser
     protected $nfgAccessToken;
     
     /**
+     * @Expose
+     * @Groups({"country"}) 
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Country")
      * @ORM\JoinColumn(name="country_id", referencedColumnName="id")
      */
