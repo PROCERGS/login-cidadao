@@ -44,7 +44,7 @@
                 </div>
                 <div class="form-group">
                     {{ form_label(form.cep) }}
-                    {{ form_widget(form.cep, {'attr': {'class': 'form-control', 'maxlength' : '10'}}) }}
+                    {{ form_widget(form.cep, {'attr': {'class': 'form-control', 'maxlength' : '11'}}) }}
                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                     <div class="input-error">{{ form_errors(form.cep) }}</div>
                     <span id="cepSearchBrazil" class="extra" style="display: none;">
@@ -77,57 +77,6 @@
                     {{ form_widget(form.adressnumber, {'attr': {'class': 'form-control'}}) }}
                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                     <div class="input-error">{{ form_errors(form.adressnumber) }}</div>
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.cpf) }}
-                    {% if form.cpf.vars.value is not null %}
-	                    {% if app.user.nfgAccessToken is null %}
-	                    {{ form_widget(form.cpf, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }}
-	                    {% else %}
-	                    {{ form_widget(form.cpf, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}
-                    <span>
-	                       {{ form.cpf.vars.value|formatCpf }}
-                    </span>
-	                    {% endif %}
-                    {% endif %}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error">{{ form_errors(form.cpf) }}</div>
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.voterRegistration) }}
-                {% if app.user.nfgAccessToken is not null %}
-                {%      if form.voterRegistration.vars.value is null or form.voterRegistration.vars.value == '' %}
-                    {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
-                    <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
-                    <span class="extra">
-		                        {% trans %}Don't know your Voter Registration number?{% endtrans %}
-                        <a target='blank' href="{{ tre_search_link }}">{{ 'Search it!' | trans }}</a>
-                    </span>
-                    <span class="extra">{% trans %}Use your account on Nota Fiscal Gaúcha and validate your Voter Registration{% endtrans %}</span>
-                {%      else %}
-                {%          if app.user.nfgProfile.voterRegistrationSit is null or app.user.nfgProfile.voterRegistrationSit == 0 %}
-                    {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
-                    <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
-                    <span class="extra">{% trans %}Use your account on Nota Fiscal Gaúcha and authorize us to validate your Voter Registration{% endtrans %}</span>
-                {%          elseif app.user.nfgProfile.voterRegistrationSit == 1 %}
-                                {{ form_widget(form.voterRegistration, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}
-                    <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
-                    <span>{{ form.voterRegistration.vars.value }}</span>
-                {%          else %}
-                                {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
-                    <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
-                    <span class="extra">{% trans %}The Voter Registration used is not valid according to Nota Fiscal Gaúcha. Please type your Voter Registration correctly{% endtrans %}</span>
-                {%          endif %}
-                {%      endif %}
-                {% else %}
-                    {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
-                    <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
-                    <span class="extra">
-                        {% trans %}Don't know your Voter Registration number?{% endtrans %}
-                        <a target='blank' href="{{ tre_search_link }}">{{ 'Search it!' | trans }}</a>
-                    </span>
-                {% endif %}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                 </div>
                 <div class="form-group">
                     {{ form_label(form.mobile) }}
@@ -215,7 +164,7 @@
                         </div>
                 {% else %}
                         <div class="connect nfg">
-                            <span class="col-xs-9 col-xs-offset-1 username">{{ form.cpf.vars.value | formatCpf }}</span>
+                            <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.cpf | formatCpf }}</span>
                             {% if app.user.hasPassword %}
                             <a class="col-xs-2 unlink"  href="{{ path('nfg_unbind') }}">
                                 <span class="glyphicon glyphicon-remove"></span>
@@ -268,8 +217,6 @@
 <script>
     var profileEdit = {};
     profileEdit.cepId = '#{{ form.cep.vars.id }}';
-    profileEdit.cpfId = '#{{ form.cpf.vars.id }}';
-    profileEdit.voterRegistrationId = '#{{ form.voterRegistration.vars.id }}';
     profileEdit.countryId = '#{{ form.country.vars.id }}';
     profileEdit.ufId = '#{{ form.uf.vars.id }}';
     profileEdit.cityId = '#{{ form.city.vars.id }}';
@@ -278,7 +225,6 @@
     profileEdit.urlSearchUf = '{{ path('lc_search_city_by_uf') }}';
     profileEdit.urlSearchCountry = '{{ path('lc_search_uf_by_country') }}';
     profileEdit.mobileId = "#{{ form.mobile.vars.id }}";
-    profileEdit.trevoterId = '#{{ form.voterRegistration.vars.id }}';
     profileEdit.ufpreferredId = '#{{ form.ufpreferred.vars.id }}';
     profileEdit.adressId = '#{{ form.adress.vars.id }}';
 
@@ -341,36 +287,22 @@
     };
 
     var messages = {
-            form: {
-                voter_registration: {
-                    "invalid": "{{ 'form.voter_registration.invalid' | trans({}, "validators") }}"
-                },
-                location : {
-                    "uf" : "{{ '- other uf -' | trans }}",
-                    "city" : "{{ '- other city -' | trans }}",
-                }
+        form: {
+            location : {
+                "uf" : "{{ '- other uf -' | trans }}",
+                "city" : "{{ '- other city -' | trans }}",
             }
-        };
+        }
+    };
     
     $(document).ready(function() {
         
-        $(profileEdit.cpfId).mask('000.000.000-00');
-        $(profileEdit.voterRegistrationId).mask('000000000000');
         profileEdit.brCheck();
 
         $('.search-cep').click(function(event) {
             event.preventDefault();
             validator.cep.popupConsult(this, event, 'profileEdit.popLocation');
             return false;
-        });
-        $(profileEdit.trevoterId ).on('blur', function() {
-            if (!this.value.length) {
-                return;
-            }
-            this.value = zeroPadding(this.value, 12);
-            if (!checkVoterRegistration(this.value)) {
-                validator.check.error(this, messages.form.voter_registration.invalid);
-            }
         });
 
         $(".connect a.unlink").on('click', function() {
@@ -414,6 +346,7 @@
                 			$(profileEdit.ufId).show();
                 			$(profileEdit.ufSteppeId).hide();
                 			$(profileEdit.ufId).append(data.map(function (val) {return $(document.createElement('option')).val(val.id).text(val.name)}));
+                			$(profileEdit.ufId).find('option:selected').removeAttr('selected');
                 			$(profileEdit.ufId).find('option[value=""]').first().attr('selected','selected');
                 			profileEdit.brCheck();
                 			if ($(profileEdit.countryId).val() == $(profileEdit.ufpreferredId).val()) {
@@ -440,6 +373,7 @@
             				$(profileEdit.cityId).show();
             				$(profileEdit.citySteppeId).hide();
             				$(profileEdit.cityId).append(data.map(function (val) {return $(document.createElement('option')).val(val.id).text(val.name)}));
+            				$(profileEdit.cityId).find('option:selected').removeAttr('selected');
             				$(profileEdit.cityId).find('option[value=""]').first().attr('selected','selected');
                 			if ($(profileEdit.countryId).val() == $(profileEdit.ufpreferredId).val()) {
                 				$(profileEdit.cityId).find('option[data-custom-option]').hide();

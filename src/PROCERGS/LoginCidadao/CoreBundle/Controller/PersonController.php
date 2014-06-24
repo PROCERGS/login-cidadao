@@ -14,6 +14,10 @@ use PROCERGS\LoginCidadao\CoreBundle\Helper\NfgHelper;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Util\TokenGenerator;
+use PROCERGS\LoginCidadao\CoreBundle\Form\Type\DocFormType;
+use FOS\UserBundle\Event\GetResponseUserEvent;
+use FOS\UserBundle\Event\FormEvent;
+use PROCERGS\LoginCidadao\CoreBundle\EventListener\ProfileEditListner;
 
 class PersonController extends Controller
 {
@@ -309,6 +313,34 @@ class PersonController extends Controller
         }
 
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));
+    }
+    
+    /**
+     * @Route("/profile/doc/edit", name="lc_profile_doc_edit")
+     * @Template()
+     */
+    public function docEditAction(Request $request)
+    {
+        $user = $this->getUser();
+        
+        $dispatcher = $this->container->get('event_dispatcher');
+        
+        $event = new GetResponseUserEvent($user, $request);        
+        $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $event);
+        
+        $form = $this->createForm(new DocFormType(), $user);
+        $form->handleRequest($this->getRequest());
+        if ($form->isValid()) {
+            
+            $event = new FormEvent($form, $request);
+            $dispatcher->dispatch(ProfileEditListner::PROFILE_DOC_EDIT_SUCCESS, $event);
+            
+            $userManager = $this->get('fos_user.user_manager');
+            $userManager->updateUser($user);
+            $translator = $this->get('translator');
+            $this->get('session')->getFlashBag()->add('success', $translator->trans("Documents were successfully changed"));
+        }
+        return array('form' => $form->createView());
     }
 
 }

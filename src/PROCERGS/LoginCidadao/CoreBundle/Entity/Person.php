@@ -115,7 +115,6 @@ class Person extends BaseUser
      * @Expose
      * @Groups({"cep"})
      * @ORM\Column(type="string", nullable=true)
-     * @PROCERGSAssert\CEP
      */
     protected $cep;
 
@@ -307,6 +306,19 @@ class Person extends BaseUser
      */
     protected $googleAccessToken;
     
+    /**
+     * @Expose
+     * @Groups({"rg"})
+     * @ORM\Column(name="rg", type="string", nullable=true,length=20)
+     */
+    protected $rg;
+    /**
+     * @Expose
+     * @Groups({"rg"})
+     * @ORM\Column(name="rg_issuer", type="string", nullable=true,length=80)
+     */
+    protected $rgIssuer;
+    
 
     public function __construct()
     {
@@ -367,7 +379,6 @@ class Person extends BaseUser
 
     public function setCep($cep)
     {
-        $cep = preg_replace('/[^0-9]/', '', $cep);
         $this->cep = $cep;
     }
 
@@ -520,7 +531,7 @@ class Person extends BaseUser
         $terms['email'] = is_null($this->getConfirmationToken());
         if ($this->getNfgProfile()) {
             $terms['nfg_access_lvl'] = $this->getNfgProfile()->getAccessLvl();
-            $terms['voter_registration'] = $this->getNfgProfile()->getVoterRegistrationSit();
+            $terms['voter_registration'] = $this->getNfgProfile()->getVoterRegistrationSit() > 0 ? true : false;
         } else {
             $terms['nfg_access_lvl'] = 0;
             $terms['voter_registration'] = false;
@@ -1001,5 +1012,26 @@ class Person extends BaseUser
         return $this->country;
     }
     
+    public function setRg($var)
+    {
+        $this->rg = $var;
+        return $this;
+    }
+    
+    public function getRg()
+    {
+        return $this->rg;
+    }
+
+    public function setRgIssuer($var)
+    {
+        $this->rgIssuer = $var;
+        return $this;
+    }
+    
+    public function getRgIssuer()
+    {
+        return $this->rgIssuer;
+    }    
     
 }
