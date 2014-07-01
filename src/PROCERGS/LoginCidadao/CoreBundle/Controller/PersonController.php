@@ -3,16 +3,21 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\NfgHelper;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Util\TokenGenerator;
+use PROCERGS\LoginCidadao\CoreBundle\Form\Type\DocFormType;
 use FOS\UserBundle\Event\GetResponseUserEvent;
+use FOS\UserBundle\Event\FormEvent;
+use PROCERGS\LoginCidadao\CoreBundle\EventListener\ProfileEditListner;
 
 class PersonController extends Controller
 {
@@ -262,7 +267,7 @@ class PersonController extends Controller
 
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));
     }
-
+    
     /**
      * @Route("/google/unlink", name="lc_unlink_google")
      */
@@ -272,18 +277,18 @@ class PersonController extends Controller
         $translator = $this->get('translator');
         if ($person->hasPassword()) {
             $person->setGoogleId(null)
-                    ->setGoogleUsername(null)
-                    ->setGoogleAccessToken(null);
+            ->setGoogleUsername(null)
+            ->setGoogleAccessToken(null);
             $userManager = $this->get('fos_user.user_manager');
             $userManager->updateUser($person);
-
+    
             $this->get('session')->getFlashBag()->add('success',
-                    $translator->trans("social-networks.unlink.google.success"));
+                $translator->trans("social-networks.unlink.google.success"));
         } else {
             $this->get('session')->getFlashBag()->add('error',
-                    $translator->trans("social-networks.unlink.no-password"));
+                $translator->trans("social-networks.unlink.no-password"));
         }
-
+    
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));
     }
 
@@ -297,18 +302,45 @@ class PersonController extends Controller
         $person = $this->getUser();
 
         if (is_null($person->getEmailConfirmedAt())) {
-            if (is_null($person->getConfirmationToken())) {
+            if(is_null($person->getConfirmationToken())) {
                 $tokenGenerator = new TokenGenerator();
                 $person->setConfirmationToken($tokenGenerator->generateToken());
                 $userManager = $this->get('fos_user.user_manager');
                 $userManager->updateUser($person);
             }
             $mailer->sendConfirmationEmailMessage($person);
-            $this->get('session')->getFlashBag()->add('success',
-                    $translator->trans("email-confirmation.resent"));
+            $this->get('session')->getFlashBag()->add('success', $translator->trans("email-confirmation.resent"));
         }
 
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));
+    }
+    
+    /**
+     * @Route("/profile/doc/edit", name="lc_profile_doc_edit")
+     * @Template()
+     */
+    public function docEditAction(Request $request)
+    {
+        $user = $this->getUser();
+        
+        $dispatcher = $this->container->get('event_dispatcher');
+        
+        $event = new GetResponseUserEvent($user, $request);        
+        $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $event);
+        
+        $form = $this->createForm(new DocFormType(), $user);
+        $form->handleRequest($this->getRequest());
+        if ($form->isValid()) {
+            
+            $event = new FormEvent($form, $request);
+            $dispatcher->dispatch(ProfileEditListner::PROFILE_DOC_EDIT_SUCCESS, $event);
+            
+            $userManager = $this->get('fos_user.user_manager');
+            $userManager->updateUser($user);
+            $translator = $this->get('translator');
+            $this->get('session')->getFlashBag()->add('success', $translator->trans("Documents were successfully changed"));
+        }
+        return array('form' => $form->createView());
     }
 
     /**

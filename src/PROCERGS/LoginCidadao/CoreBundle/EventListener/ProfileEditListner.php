@@ -25,9 +25,12 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\MissingNfgAccessTokenException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Uf;
+use PROCERGS\Generic\ValidationBundle\Validator\Constraints\CEPValidator;
 
 class ProfileEditListner implements EventSubscriberInterface
 {
+    
+    const PROFILE_DOC_EDIT_SUCCESS = 'lc.profile.doc.edit.success';
 
     private $mailer;
     private $fosMailer;
@@ -72,7 +75,8 @@ class ProfileEditListner implements EventSubscriberInterface
     {
         return array(
             FOSUserEvents::PROFILE_EDIT_INITIALIZE => 'onProfileEditInitialize',
-            FOSUserEvents::PROFILE_EDIT_SUCCESS => 'onProfileEditSuccess'
+            FOSUserEvents::PROFILE_EDIT_SUCCESS => 'onProfileEditSuccess',
+            ProfileEditListner::PROFILE_DOC_EDIT_SUCCESS => 'onProfileDocEditSuccess'
         );
     }
 
@@ -123,15 +127,20 @@ class ProfileEditListner implements EventSubscriberInterface
                 $user->setCity($ent);
             }
         }
-        $this->checkVoterRegistrationChanged($user);
         $this->checkEmailChanged($user);
-        $this->checkCPFChanged($user);
         $this->checkCEPChanged($user);
 
         // default:
         $url = $this->router->generate('fos_user_profile_edit');
 
         $event->setResponse(new RedirectResponse($url));
+    }
+    
+    public function onProfileDocEditSuccess(FormEvent $event)
+    {
+        $user = $event->getForm()->getData();
+        $this->checkVoterRegistrationChanged($user);
+        $this->checkCPFChanged($user);
     }
 
     public function setCpfEmptyTime($var)
@@ -314,9 +323,17 @@ class ProfileEditListner implements EventSubscriberInterface
     private function checkCEPChanged(&$user)
     {
         if ($user->getCep()) {
-            $ceps = $this->dne->findByCep($user->getCep());
-            if (!is_numeric($ceps['codigoMunIBGE'])) {
-                throw Exception('cep not found');
+            if ($user->getCountry())  {
+                if ($user->getCountry()->getIso() == 'BR') {
+                    $ceps = $this->dne->findByCep($user->getCep());
+                    if (!$ceps || !is_numeric($ceps['codigoMunIBGE'])) {
+                        throw new LcValidationException('cep not found');
+                    }
+                } else if ($user->getCountry()->getPostalFormat()) {
+                    if (!CEPValidator::validateMask($user->getCep(), $user->getCountry()->getPostalFormat()) ) {
+                        throw new LcValidationException('cep not match country mask.');
+                    }
+                }
             }
         }
     }

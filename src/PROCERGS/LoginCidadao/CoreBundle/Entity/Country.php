@@ -2,6 +2,7 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * City
@@ -15,7 +16,7 @@ class Country
     const REVIEWED_IGNORE = 1;
 
     /**
-     * @var integer
+     * @Groups({"country"}) 
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -24,25 +25,25 @@ class Country
     private $id;
 
     /**
-     *
+     * @Groups({"country"}) 
      * @var string @ORM\Column(name="name", type="string", length=50)
      */
     protected $name;
     
     /**
-     *
+     * @Groups({"country"}) 
      * @var string @ORM\Column(name="iso", type="string", length=2, nullable=true)
      */
     protected $iso;
 
     /**
-     *
+     * @Groups({"country"}) 
      * @var string @ORM\Column(name="postal_format", type="string", length=30, nullable=true)
      */
     protected $postalFormat;
 
     /**
-     *
+     * @Groups({"country"}) 
      * @var string @ORM\Column(name="postal_name", type="string", length=30, nullable=true)
      */
     protected $postalName;

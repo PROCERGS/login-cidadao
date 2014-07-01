@@ -28,10 +28,8 @@ class ProfileFormType extends BaseType
                         array('label' => 'form.firstName', 'translation_domain' => 'FOSUserBundle'))
                 ->add('surname', 'text',
                         array('label' => 'form.surname', 'translation_domain' => 'FOSUserBundle'))
-                ->add('cep', null,
+                ->add('cep', 'text',
                         array('required' => false, 'label' => 'form.cep', 'translation_domain' => 'FOSUserBundle'))
-                ->add('cpf', null,
-                        array('required' => false, 'label' => 'form.cpf', 'translation_domain' => 'FOSUserBundle'))
                 ->add('birthdate', 'birthday',
                         array(
                     'required' => false,
@@ -44,7 +42,6 @@ class ProfileFormType extends BaseType
                 ->add('mobile', null,
                         array('required' => false, 'label' => 'form.mobile', 'translation_domain' => 'FOSUserBundle'))
                 ->add('image')
-                ->add('voterRegistration', 'text', array('required' => false, 'label' => 'form.voterRegistration', 'translation_domain' => 'FOSUserBundle'))
                 ->add('country', 'entity',array(
                     'required' => false,
                     'class' => 'PROCERGSLoginCidadaoCoreBundle:Country',

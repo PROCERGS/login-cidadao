@@ -3,6 +3,7 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * City
@@ -16,7 +17,7 @@ class Uf
     const REVIEWED_IGNORE = 1;
     
     /**
-     * @var integer
+     * @Groups({"uf"}) 
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -26,7 +27,7 @@ class Uf
 
     /**
      * @var string
-     *
+     * @Groups({"uf"}) 
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
@@ -38,25 +39,25 @@ class Uf
     private $acronym;
     
     /**
-     *
+     * @Groups({"uf"}) 
      * @ORM\Column(name="iso", type="string", length=6, nullable=true)
      */
     private $iso;
     
     /**
-     *
+     * @Groups({"uf"}) 
      * @ORM\Column(name="fips", type="string", length=4, nullable=true)
      */
     private $fips;
     
     /**
-     *
+     * @Groups({"uf"}) 
      * @ORM\Column(name="stat", type="string", length=7, nullable=true)
      */
     private $stat;
     
     /**
-     *
+     * @Groups({"uf"}) 
      * @ORM\Column(name="class", type="string", length=255, nullable=true)
      */
     private $class;
