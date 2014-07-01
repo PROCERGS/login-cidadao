@@ -62,7 +62,7 @@ class RegisterListner implements EventSubscriberInterface
     public function onRegistrationSuccess(FormEvent $event)
     {
         $user = $event->getForm()->getData();
-        
+
         if (null === $user->getConfirmationToken()) {
             $user->setConfirmationToken($this->tokenGenerator->generateToken());
             $user->setEmailExpiration(new \DateTime("+$this->emailUnconfirmedTime"));
@@ -73,13 +73,13 @@ class RegisterListner implements EventSubscriberInterface
         ))) {
         	throw new LcEmailException('registration.email.registered');
         }
-        
+
         $key = '_security.main.target_path';
         if ($this->session->has($key)) {
             //this is to be catch by loggedinUserListener.php
             return $event->setResponse(new RedirectResponse($this->router->generate('lc_home')));
         }
-        
+
         $email = explode('@', $user->getEmailCanonical(), 2);
         $username = $email[0];
         if (! UsernameValidator::isUsernameValid($username)) {
@@ -95,7 +95,7 @@ class RegisterListner implements EventSubscriberInterface
         $user = $event->getUser();
         $this->notificationHelper->enforceUnconfirmedEmailNotification($user);
         $this->mailer->sendConfirmationEmailMessage($user);
-        
+
         if (strlen($user->getPassword()) == 0) {
             $this->notificationHelper->enforceEmptyPasswordNotification($user);
         }
@@ -106,11 +106,11 @@ class RegisterListner implements EventSubscriberInterface
         $event->getUser()->setEmailConfirmedAt(new \DateTime());
         $event->getUser()->setEmailExpiration(null);
         $this->notificationHelper->clearUnconfirmedEmailNotification($event->getUser());
-        
+
         $this->session->getFlashBag()->add('success', $this->translator->trans('registration.confirmed', array(
             '%username%' => $event->getUser()->getFirstName()
         ), 'FOSUserBundle'));
-        
+
         $url = $this->router->generate('fos_user_profile_edit');
         $event->setResponse(new RedirectResponse($url));
     }

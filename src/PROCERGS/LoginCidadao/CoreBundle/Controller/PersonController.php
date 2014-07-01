@@ -3,17 +3,16 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
-use PROCERGS\LoginCidadao\CoreBundle\Helper\NfgHelper;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Util\TokenGenerator;
+use FOS\UserBundle\Event\GetResponseUserEvent;
 
 class PersonController extends Controller
 {
@@ -263,7 +262,7 @@ class PersonController extends Controller
 
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));
     }
-    
+
     /**
      * @Route("/google/unlink", name="lc_unlink_google")
      */
@@ -273,18 +272,18 @@ class PersonController extends Controller
         $translator = $this->get('translator');
         if ($person->hasPassword()) {
             $person->setGoogleId(null)
-            ->setGoogleUsername(null)
-            ->setGoogleAccessToken(null);
+                    ->setGoogleUsername(null)
+                    ->setGoogleAccessToken(null);
             $userManager = $this->get('fos_user.user_manager');
             $userManager->updateUser($person);
-    
+
             $this->get('session')->getFlashBag()->add('success',
-                $translator->trans("social-networks.unlink.google.success"));
+                    $translator->trans("social-networks.unlink.google.success"));
         } else {
             $this->get('session')->getFlashBag()->add('error',
-                $translator->trans("social-networks.unlink.no-password"));
+                    $translator->trans("social-networks.unlink.no-password"));
         }
-    
+
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));
     }
 
@@ -298,17 +297,82 @@ class PersonController extends Controller
         $person = $this->getUser();
 
         if (is_null($person->getEmailConfirmedAt())) {
-            if(is_null($person->getConfirmationToken())) {
+            if (is_null($person->getConfirmationToken())) {
                 $tokenGenerator = new TokenGenerator();
                 $person->setConfirmationToken($tokenGenerator->generateToken());
                 $userManager = $this->get('fos_user.user_manager');
                 $userManager->updateUser($person);
             }
             $mailer->sendConfirmationEmailMessage($person);
-            $this->get('session')->getFlashBag()->add('success', $translator->trans("email-confirmation.resent"));
+            $this->get('session')->getFlashBag()->add('success',
+                    $translator->trans("email-confirmation.resent"));
         }
 
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));
+    }
+
+    /**
+     * @Route("/register/prefilled", name="lc_prefilled_registration")
+     */
+    public function preFilledRegistrationAction(Request $request)
+    {
+        /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
+        $formFactory = $this->container->get('fos_user.registration.form.factory');
+        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+        $userManager = $this->container->get('fos_user.user_manager');
+        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
+        $dispatcher = $this->container->get('event_dispatcher');
+
+        $user = $userManager->createUser();
+        $user->setEnabled(true);
+
+        $user->setFirstName($request->get('firstName'));
+        $user->setSurname($request->get('surname'));
+        $user->setEmail($request->get('email'));
+        $user->setMobile($request->get('mobile'));
+
+        $event = new GetResponseUserEvent($user, $request);
+        $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, $event);
+
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
+        }
+
+        $form = $formFactory->createForm();
+
+        $form->add('firstName', 'text',
+                        array('required' => false, 'label' => 'form.firstName', 'translation_domain' => 'FOSUserBundle'))
+                ->add('surname', 'text',
+                        array('required' => false, 'label' => 'form.surname', 'translation_domain' => 'FOSUserBundle'));
+
+        $form->setData($user);
+
+        if ('POST' === $request->getMethod()) {
+            $form->bind($request);
+
+            if ($form->isValid()) {
+                $event = new FormEvent($form, $request);
+                $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS,
+                        $event);
+
+                $userManager->updateUser($user);
+
+                if (null === $response = $event->getResponse()) {
+                    $url = $this->container->get('router')->generate('fos_user_registration_confirmed');
+                    $response = new RedirectResponse($url);
+                }
+
+                $dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED,
+                        new FilterUserResponseEvent($user, $request, $response));
+
+                return $response;
+            }
+        }
+
+        return $this->container->get('templating')->renderResponse('PROCERGSLoginCidadaoCoreBundle:Person:registration/preFilledRegistration.html.twig',
+                        array(
+                    'form' => $form->createView(),
+        ));
     }
 
 }

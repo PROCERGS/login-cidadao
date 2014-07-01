@@ -15,6 +15,24 @@
         {{ form_start(form, {'action': path('fos_user_registration_register'), 'attr': {'role':'form', 'class':'fos_user_registration_register clearfix'}}) }}
             <div class="form-content">
                 {{ form_errors(form) }}
+                {% if form.firstName is defined %}
+                <div class="form-group">
+                    {{ form_label(form.firstName, 'form.firstName' | trans, {'label_attr': {'class': 'sr-only'}}) }}
+                    {{ form_widget(form.firstName, {'attr': {'class': 'form-control', 'placeholder' : 'form.firstName' }}) }}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error alert-danger">{{ form_errors(form.firstName) }}</div>
+                </div>
+                {% endif %}
+
+                {% if form.surname is defined %}
+                <div class="form-group">
+                    {{ form_label(form.surname, 'form.surname' | trans, {'label_attr': {'class': 'sr-only'}}) }}
+                    {{ form_widget(form.surname, {'attr': {'class': 'form-control', 'placeholder' : 'form.surname' }}) }}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error alert-danger">{{ form_errors(form.surname) }}</div>
+                </div>
+                {% endif %}
+
                 <div class="form-group">
                     {{ form_label(form.email, 'form.email' | trans, {'label_attr': {'class': 'sr-only'}}) }}
                     {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder' : 'form.email' }}) }}
