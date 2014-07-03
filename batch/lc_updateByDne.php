@@ -8,7 +8,7 @@ if (! $config) {
 function updateAdressByDne($config) {
     $pdo = getPDOConnection($config);
     $pdo->beginTransaction();
-    $wrong = $pdo->query("select id, cep, city_id, adress from person where cep is not null and city_id = 0");
+    $wrong = $pdo->query("select id, cep, city_id, adress from person where cep is not null");
     if (!$wrong) {
         print_r($pdo->errorInfo());
         return false;
