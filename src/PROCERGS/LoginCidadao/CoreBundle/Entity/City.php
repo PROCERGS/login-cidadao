@@ -105,5 +105,16 @@ class City
         return $this->reviewed;
     }
     
+    public function setUf($var)
+    {
+        $this->uf = $var;
+        return $this;
+    }
+
+    public function getUf()
+    {
+        return $this->uf;
+    }
+    
     
 }

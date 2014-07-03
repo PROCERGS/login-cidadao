@@ -97,6 +97,9 @@ class ProfileEditListner implements EventSubscriberInterface
     public function onProfileEditSuccess(FormEvent $event)
     {
         $user = $event->getForm()->getData();
+        if (!$user->getCountry()) {
+            return;
+        }
         if (!$user->getUf()) {
             $steppe = ucwords(strtolower(trim($event->getForm()->get('ufsteppe')->getData())));
             if ($steppe) {
@@ -107,6 +110,7 @@ class ProfileEditListner implements EventSubscriberInterface
                 if (!$ent) {
                     $ent = new Uf();
                     $ent->setName($steppe);
+                    $ent->setCountry($user->getCountry());
                     $this->em->persist($ent);
                 }
                 $user->setUf($ent);
@@ -114,14 +118,23 @@ class ProfileEditListner implements EventSubscriberInterface
         }
         if (!$user->getCity()) {
             $steppe = ucwords(strtolower(trim($event->getForm()->get('citysteppe')->getData())));
-            if ($steppe) {
+            if ($user->getUf()) {
+                $uf = $user->getUf();
+            } elseif (isset($ent)) {
+                $uf = $ent;
+            } else {
+                $uf = null;
+            }
+            if ($uf && $steppe) {
                 $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:City');
                 $ent = $repo->findOneBy(array(
-                    'name' => $steppe
+                    'name' => $steppe,
+                    'uf' => $uf
                 ));
                 if (!$ent) {
                     $ent = new City();
                     $ent->setName($steppe);
+                    $ent->setUf($uf);
                     $this->em->persist($ent);
                 }
                 $user->setCity($ent);
@@ -324,9 +337,9 @@ class ProfileEditListner implements EventSubscriberInterface
     {
         if ($user->getCep()) {
             if ($user->getCountry())  {
-                if ($user->getCountry()->getIso() == 'BR') {
+                if ($user->getCountry()->getIso2() == 'BR') {
                     $ceps = $this->dne->findByCep($user->getCep());
-                    if (!$ceps || !is_numeric($ceps['codigoMunIBGE'])) {
+                    if (false === $ceps || !is_numeric($ceps['codigoMunIBGE'])) {
                         throw new LcValidationException('cep not found');
                     }
                 } else if ($user->getCountry()->getPostalFormat()) {

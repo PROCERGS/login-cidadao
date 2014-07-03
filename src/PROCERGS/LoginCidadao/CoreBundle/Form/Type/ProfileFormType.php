@@ -19,7 +19,7 @@ class ProfileFormType extends BaseType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         //parent::buildForm($builder, $options);
-        $country = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Country')->findOneBy(array('iso' => 'BR'));
+        $country = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Country')->findOneBy(array('iso2' => 'BR'));
         $builder/* ->add('username', null,
                         array('label' => 'form.username', 'translation_domain' => 'FOSUserBundle')) */
                 ->add('email', 'email',
@@ -107,7 +107,45 @@ class ProfileFormType extends BaseType
                     ));
                     
                 });
+                $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+                    $data = $event->getData();
+                    $form = $event->getForm();
+                    $form->add('uf', 'entity',array(
+                        'required' => false,
+                        'class' => 'PROCERGSLoginCidadaoCoreBundle:Uf',
+                        'property' => 'name',
+                        'empty_value' => '',
+                        'query_builder' => function(EntityRepository $er) use ($data) {
+                            $pars = array();
+                            $pars['country'] = isset($data['country'])? $data['country'] : null;
+                            $pars['u'] = isset($data['uf'])? $data['uf'] : null;
+                            return $er->createQueryBuilder('u')
+                            ->where('u.reviewed = ' . Uf::REVIEWED_OK)
+                            ->andWhere('u.country = :country')
+                            ->orWhere('u.id = :u')
+                            ->setParameters($pars)
+                            ->orderBy('u.name', 'ASC');
+                        }
+                    ));
+                    $form->add('city', 'entity',array(
+                        'required' => false,
+                        'class' => 'PROCERGSLoginCidadaoCoreBundle:City',
+                        'property' => 'name',
+                        'empty_value' => '',
+                        'query_builder' => function(EntityRepository $er) use ($data) {
+                            $pars = array();
+                            $pars['uf'] = isset($data['uf']) ? $data['uf'] : null;
+                            $pars['u'] = isset($data['city']) ? $data['city'] : null;
+                            return $er->createQueryBuilder('u')
+                            ->where('u.reviewed = ' . City::REVIEWED_OK)
+                            ->andWhere('u.uf = :uf')
+                            ->orWhere('u.id = :u')
+                            ->setParameters($pars)
+                            ->orderBy('u.name', 'ASC');
+                        }
+                    ));
                 
+                });
 
     }
 

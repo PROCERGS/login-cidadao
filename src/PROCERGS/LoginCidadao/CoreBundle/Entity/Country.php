@@ -32,10 +32,22 @@ class Country
     
     /**
      * @Groups({"country"}) 
-     * @var string @ORM\Column(name="iso", type="string", length=2, nullable=true)
+     * @var string @ORM\Column(name="iso2", type="string", length=2, nullable=true)
      */
-    protected $iso;
+    protected $iso2;
+    
+    /**
+     * @Groups({"country"})
+     * @var string @ORM\Column(name="iso3", type="string", length=3, nullable=true)
+     */
+    protected $iso3;
 
+    /**
+     * @Groups({"country"})
+     * @var string @ORM\Column(name="iso_num", type="integer", nullable=true)
+     */
+    protected $isoNum;
+    
     /**
      * @Groups({"country"}) 
      * @var string @ORM\Column(name="postal_format", type="string", length=30, nullable=true)
@@ -106,17 +118,41 @@ class Country
         return $this->postalName;
     }
     
-    public function setIso($var)
+    public function setIso2($var)
     {
-        $this->iso = $var;
+        $this->iso2 = $var;
     
         return $this;
     }
     
-    public function getIso()
+    public function getIso2()
     {
-        return $this->iso;
+        return $this->iso2;
     }
+    
+    public function setIso3($var)
+    {
+        $this->iso3 = $var;
+    
+        return $this;
+    }
+    
+    public function getIso3()
+    {
+        return $this->iso3;
+    }
+
+    public function setIsoNum($var)
+    {
+        $this->isoNum = $var;
+    
+        return $this;
+    }
+    
+    public function getIsoNum()
+    {
+        return $this->isoNum;
+    }    
     
     public function setReviewed($var)
     {

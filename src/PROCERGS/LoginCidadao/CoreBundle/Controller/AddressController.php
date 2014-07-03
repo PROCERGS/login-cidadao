@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Country;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Uf;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\City;
 
 class AddressController extends Controller
 {
@@ -47,11 +48,12 @@ class AddressController extends Controller
         $result = array();
         if (is_numeric($id)) {
             $result = $this->getDoctrine()
-            ->getEntityManager()
+            ->getManager ()
             ->getRepository('PROCERGSLoginCidadaoCoreBundle:Uf')
             ->createQueryBuilder('u')
             ->select('u.id, u.name')
             ->where('u.country = :country')
+            ->andWhere('u.reviewed = ' . Uf::REVIEWED_OK)
             ->setParameters(array('country' => new Country($id)))
             ->orderBy('u.name', 'ASC')
             ->getQuery()
@@ -69,11 +71,12 @@ class AddressController extends Controller
         $result = array();
         if (is_numeric($id)) {
             $result = $this->getDoctrine()
-            ->getEntityManager()
+            ->getManager ()
             ->getRepository('PROCERGSLoginCidadaoCoreBundle:City')
             ->createQueryBuilder('u')
             ->select('u.id, u.name')
             ->where('u.uf = :uf')
+            ->andWhere('u.reviewed = ' . City::REVIEWED_OK)
             ->setParameters(array('uf' => new Uf($id)))
             ->orderBy('u.name', 'ASC')
             ->getQuery()

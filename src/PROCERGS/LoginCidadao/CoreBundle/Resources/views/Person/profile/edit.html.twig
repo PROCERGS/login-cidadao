@@ -233,14 +233,17 @@
     	if ($(profileEdit.countryId).val() == $(profileEdit.ufpreferredId).val()) {
             $(profileEdit.cepId).val(dneData.cep);
             $(profileEdit.cepId).mask('00000-000');
-            var street = dneData.tipoLogradouro.capitalize(true, true);
-            if (dneData.tipoLogradouro != dneData.tituloLogradouro) {
+            //debugger;
+            var street = dneData.tipoLogradouro ? dneData.tipoLogradouro.capitalize(true, true) : '';
+            if (dneData.tituloLogradouro && dneData.tipoLogradouro != dneData.tituloLogradouro) {
                 street += ' ' + dneData.tituloLogradouro.capitalize(true, true);
             }
-            street += ' ' + dneData.logradouro.capitalize(true, true);
+            if (dneData.logradouro) {
+            	street += ' ' + dneData.logradouro.capitalize(true, true);
+            }
             var city = dneData.localidade.capitalize(true, true);
             var state = dneData.uf;
-            if (dneData.codigoMunIBGE) {
+            if (dneData.codigoMunIBGE && dneData.codigoMunIBGE > 0) {
                 var has1 = $(profileEdit.ufId).find('option[value="'+dneData.codigoMunIBGE.toString().substring(0,2)+'"]');
             	if (has1.length) {
             		has1.attr('selected','selected');
@@ -401,7 +404,10 @@
     			$(profileEdit.citySteppeId).show();
     			$(profileEdit.citySteppeId).focus();
             }
-        });    
+        });
+        if ($(profileEdit.countryId).val() == '') {
+        	$(profileEdit.countryId).trigger('change');
+        }
     });
 </script>
 {% endblock %}

@@ -24,12 +24,14 @@ class DocFormType extends AbstractType
         $builder->add('voterRegistration', 'text', array(
             'required' => false
         ));
+        /*
         $builder->add('rg', 'text', array(
             'required' => false
         ));
         $builder->add('rgIssuer', 'text', array(
             'required' => false
         ));
+        */
     }
 
     public function getName()

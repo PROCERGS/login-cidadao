@@ -40,9 +40,9 @@ class Uf
     
     /**
      * @Groups({"uf"}) 
-     * @ORM\Column(name="iso", type="string", length=6, nullable=true)
+     * @ORM\Column(name="iso6", type="string", length=6, nullable=true)
      */
-    private $iso;
+    private $iso6;
     
     /**
      * @Groups({"uf"}) 
@@ -165,16 +165,16 @@ class Uf
         return $this->fips;
     }
     
-    public function setIso($var)
+    public function setIso6($var)
     {
-        $this->iso = $var;
+        $this->iso6 = $var;
     
         return $this;
     }
     
-    public function getIso()
+    public function getIso6()
     {
-        return $this->iso;
+        return $this->iso6;
     }
     
     public function setReviewed($var)
@@ -187,6 +187,18 @@ class Uf
     public function getReviewed()
     {
         return $this->reviewed;
+    }
+    
+    public function setCountry($var)
+    {
+        $this->country = $var;
+    
+        return $this;
+    }
+    
+    public function getCountry()
+    {
+        return $this->country;
     }
     
 }
