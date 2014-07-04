@@ -98,46 +98,45 @@ class ProfileEditListner implements EventSubscriberInterface
     {
         $user = $event->getForm()->getData();
         if (!$user->getCountry()) {
-            return;
-        }
-        if (!$user->getUf()) {
-            $steppe = ucwords(strtolower(trim($event->getForm()->get('ufsteppe')->getData())));
-            if ($steppe) {
-                $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Uf');
-                $ent = $repo->findOneBy(array(
-                    'name' => $steppe
-                ));
-                if (!$ent) {
-                    $ent = new Uf();
-                    $ent->setName($steppe);
-                    $ent->setCountry($user->getCountry());
-                    $this->em->persist($ent);
+            if (!$user->getUf()) {
+                $steppe = ucwords(strtolower(trim($event->getForm()->get('ufsteppe')->getData())));
+                if ($steppe) {
+                    $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Uf');
+                    $ent = $repo->findOneBy(array(
+                        'name' => $steppe
+                    ));
+                    if (!$ent) {
+                        $ent = new Uf();
+                        $ent->setName($steppe);
+                        $ent->setCountry($user->getCountry());
+                        $this->em->persist($ent);
+                    }
+                    $user->setUf($ent);
                 }
-                $user->setUf($ent);
             }
-        }
-        if (!$user->getCity()) {
-            $steppe = ucwords(strtolower(trim($event->getForm()->get('citysteppe')->getData())));
-            if ($user->getUf()) {
-                $uf = $user->getUf();
-            } elseif (isset($ent)) {
-                $uf = $ent;
-            } else {
-                $uf = null;
-            }
-            if ($uf && $steppe) {
-                $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:City');
-                $ent = $repo->findOneBy(array(
-                    'name' => $steppe,
-                    'uf' => $uf
-                ));
-                if (!$ent) {
-                    $ent = new City();
-                    $ent->setName($steppe);
-                    $ent->setUf($uf);
-                    $this->em->persist($ent);
+            if (!$user->getCity()) {
+                $steppe = ucwords(strtolower(trim($event->getForm()->get('citysteppe')->getData())));
+                if ($user->getUf()) {
+                    $uf = $user->getUf();
+                } elseif (isset($ent)) {
+                    $uf = $ent;
+                } else {
+                    $uf = null;
                 }
-                $user->setCity($ent);
+                if ($uf && $steppe) {
+                    $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:City');
+                    $ent = $repo->findOneBy(array(
+                        'name' => $steppe,
+                        'uf' => $uf
+                    ));
+                    if (!$ent) {
+                        $ent = new City();
+                        $ent->setName($steppe);
+                        $ent->setUf($uf);
+                        $this->em->persist($ent);
+                    }
+                    $user->setCity($ent);
+                }
             }
         }
         $this->checkEmailChanged($user);

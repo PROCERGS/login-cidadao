@@ -327,6 +327,12 @@ class Person extends BaseUser
      */
     protected $rgIssuer;
     
+    /**
+     * @Expose
+     * @Groups({"complement"})
+     * @ORM\Column(name="complement", type="string", nullable=true,length=255)
+     */
+    protected $complement;
 
     public function __construct()
     {
@@ -1040,6 +1046,16 @@ class Person extends BaseUser
     public function getRgIssuer()
     {
         return $this->rgIssuer;
-    }    
+    }
+    public function setComplement($var)
+    {
+        $this->complement = $var;
+        return $this;
+    }
+    
+    public function getComplement()
+    {
+        return $this->complement;
+    }
     
 }

@@ -58,6 +58,7 @@ class ProfileFormType extends BaseType
                 ;
                 $builder->add('ufsteppe', 'text', array("required"=> false, "mapped"=>false));
                 $builder->add('citysteppe', 'text', array("required"=> false, "mapped"=>false));
+                $builder->add('complement', 'text', array("required"=> false));
                 $builder->add('ufpreferred', 'hidden', array("data" => $country->getId(),"required"=> false, "mapped"=>false));
                 
                 $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
