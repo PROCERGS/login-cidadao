@@ -403,7 +403,7 @@ class PersonController extends Controller
             ->getManager ()
             ->getRepository('PROCERGSLoginCidadaoCoreBundle:Rg')
             ->createQueryBuilder('u')
-            ->select('u.id, u.val, b.iso6')
+            ->select('u.id, u.val, right(b.iso6, 2) iso6')
             ->join('PROCERGSLoginCidadaoCoreBundle:Uf', 'b', 'with', 'u.uf = b')
             ->where('u.person = :person')
             ->setParameters(array('person' => $this->getUser()))
