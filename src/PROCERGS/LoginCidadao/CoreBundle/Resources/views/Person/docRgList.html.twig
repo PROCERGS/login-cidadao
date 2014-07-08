@@ -1,0 +1,29 @@
+<div id="rg-grid" class="common-grid-msg">    
+    {% if resultset|length > 0 %}
+    <div class="common-grid-results">
+        <div class="row header">
+            <div class="col-md-1">{{ 'Actions'|trans }}</div>
+            <div class="col-md-1">{{ 'UF'|trans }}</div>
+            <div class="col-md-10">{{ 'Val'|trans }}</div>
+        </div>
+        {% for row in resultset %}
+        <div class="row common-grid-result">
+            <input type="hidden" class="row-data" value="{{ row|json_encode }}"/>
+            <div class="col-md-1">
+                <a class="center-block text-center glyphicon glyphicon-pencil edit-grid" title="{{ 'Edit'|trans }}" href="javascript:void(0);"></a>
+            </div>
+            <div class="col-md-1">
+                <dt>{{ 'UF'|trans }}</dt>
+                <dd>{{ row.iso6 }}</dd>
+            </div>
+            <div class="col-md-10">
+                <dt>{{ 'Val'|trans }}</dt>
+                <dd>{{ row.val }}</dd>
+            </div>            
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <div>{{ 'grid.search.noresult'|trans }}</div>
+    {% endif %}
+</div>

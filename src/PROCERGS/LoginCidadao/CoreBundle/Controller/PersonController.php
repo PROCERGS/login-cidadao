@@ -18,6 +18,10 @@ use PROCERGS\LoginCidadao\CoreBundle\Form\Type\DocFormType;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Event\FormEvent;
 use PROCERGS\LoginCidadao\CoreBundle\EventListener\ProfileEditListner;
+use PROCERGS\LoginCidadao\CoreBundle\Form\Type\DocRgFormType;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Rg;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\FormError;
 
 class PersonController extends Controller
 {
@@ -344,6 +348,69 @@ class PersonController extends Controller
                     $translator->trans("Documents were successfully changed"));
         }
         return array('form' => $form->createView());
+    }
+    
+    /**
+     * @Route("/profile/doc/rg/edit", name="lc_profile_doc_rg_edit")
+     * @Template()
+     */
+    public function docRgEditAction(Request $request)
+    {
+        $form = $this->createForm(new DocRgFormType());
+        $rg = null;
+        if (($id = $request->get('id')) || (($data = $request->get($form->getName())) && ($id = $data['id']))) {
+            $rg = $this->getDoctrine()
+            ->getManager ()
+            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Rg')->findOneBy(array('person' => $this->getUser(), 'id' => $id));
+        }
+        if (!$rg) {
+            $rg = new Rg();
+            $rg->setPerson($this->getUser());
+        }
+        $form = $this->createForm(new DocRgFormType(), $rg);
+        $form->handleRequest($this->getRequest());
+        if ($form->isValid()) {
+            $manager = $this->getDoctrine()->getManager();
+            $dql = $manager->getRepository('PROCERGSLoginCidadaoCoreBundle:Rg')
+            ->createQueryBuilder('u')
+            ->where('u.person = :person and u.uf = :uf')
+            ->setParameter('person',$this->getUser())
+            ->setParameter('uf', $form->get('uf')->getData())
+            ->orderBy('u.id', 'ASC');            
+            if ($rg->getId()) {
+                $dql->andWhere('u != :rg')->setParameter('rg', $rg);
+            }
+            $has = $dql->getQuery()->getResult();
+            if ($has) {
+                $form->get('uf')->addError(new FormError($this->get('translator')->trans('there is a RG already registered for this UF')));
+                return array('form' => $form->createView());
+            }
+            $manager->persist($rg);
+            $manager->flush();
+            $resp = new Response('<script>rgGrid.getGrid();$(\'#edit-rg\').modal(\'hide\');</script>');
+            return $resp; 
+        }
+        return array('form' => $form->createView());
+    }
+    
+    /**
+     * @Route("/profile/doc/rg/list", name="lc_profile_doc_rg_list")
+     * @Template()
+     */
+    public function docRgListAction(Request $request)
+    {
+        $resultset = $this->getDoctrine()
+            ->getManager ()
+            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Rg')
+            ->createQueryBuilder('u')
+            ->select('u.id, u.val, b.iso6')
+            ->join('PROCERGSLoginCidadaoCoreBundle:Uf', 'b', 'with', 'u.uf = b')
+            ->where('u.person = :person')
+            ->setParameters(array('person' => $this->getUser()))
+            ->orderBy('u.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+        return array('resultset' => $resultset);
     }
 
     /**

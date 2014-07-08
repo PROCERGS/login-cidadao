@@ -317,15 +317,9 @@ class Person extends BaseUser
     /**
      * @Expose
      * @Groups({"rg"})
-     * @ORM\Column(name="rg", type="string", nullable=true,length=20)
+     * @ORM\OneToMany(targetEntity="Rg", mappedBy="person")
      */
-    protected $rg;
-    /**
-     * @Expose
-     * @Groups({"rg"})
-     * @ORM\Column(name="rg_issuer", type="string", nullable=true,length=80)
-     */
-    protected $rgIssuer;
+    protected $rgs;
     
     /**
      * @Expose
@@ -1026,27 +1020,6 @@ class Person extends BaseUser
         return $this->country;
     }
     
-    public function setRg($var)
-    {
-        $this->rg = $var;
-        return $this;
-    }
-    
-    public function getRg()
-    {
-        return $this->rg;
-    }
-
-    public function setRgIssuer($var)
-    {
-        $this->rgIssuer = $var;
-        return $this;
-    }
-    
-    public function getRgIssuer()
-    {
-        return $this->rgIssuer;
-    }
     public function setComplement($var)
     {
         $this->complement = $var;
@@ -1056,6 +1029,11 @@ class Person extends BaseUser
     public function getComplement()
     {
         return $this->complement;
+    }
+    
+    public function getRgs()
+    {
+        return $this->rgs;
     }
     
 }

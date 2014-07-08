@@ -4,64 +4,149 @@
     <h1>{% trans %}Documents{% endtrans %}</h1>
 
     {% trans_default_domain 'FOSUserBundle' %}
-    {{ form_start(form, {'action': path('lc_profile_doc_edit'), 'attr': {'role':'form' } }) }} {{ form_errors(form) }}
 
     <div class="form-content">
-        <div class="row">
-            <div class="col-md-7">
-                <div class="form-group">
-                    {{ form_label(form.cpf) }} 
-                    {% if form.cpf.vars.value is not null %} 
-                        {% if app.user.nfgAccessToken is null %} 
-                            {{ form_widget(form.cpf, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }} 
-                        {% else %} 
-                            {{ form_widget(form.cpf, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}
-                            <span> {{ form.cpf.vars.value|formatCpf }} </span> 
-                        {% endif %}
-                    {% endif %}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error">{{ form_errors(form.cpf) }}</div>
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.voterRegistration) }} 
-                    {% if app.user.nfgAccessToken is not null %} 
-                        {% if form.voterRegistration.vars.value is null or form.voterRegistration.vars.value == '' %} 
-                            {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
-                            <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
-                            <span class="extra">{% trans %}Don't know your Voter Registration number?{% endtrans %}<a target='blank' href="{{ tre_search_link }}">{{ 'Search it!' | trans }}</a></span> 
-                            <span class="extra">{% trans %}Use your account on Nota Fiscal Gaúcha and validate your Voter Registration{% endtrans %}</span> 
-                        {% else %} 
-                            {% if app.user.nfgProfile.voterRegistrationSit is null or app.user.nfgProfile.voterRegistrationSit == 0 %} 
-                                {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
-                                <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
-                                <span class="extra">{% trans %}Use your account on Nota Fiscal Gaúcha and authorize us to validate your Voter Registration{% endtrans %}</span> 
-                            {% elseif app.user.nfgProfile.voterRegistrationSit == 1 %} 
-                                {{ form_widget(form.voterRegistration, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}
-                                <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
-                                <span>{{ form.voterRegistration.vars.value }}</span> 
+    
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="active"><a href="#general" role="tab" data-toggle="tab">{{ 'General'|trans }}</a></li>
+            <li><a href="#rg" role="tab" data-toggle="tab">{{ 'RG'|trans }}</a></li>
+        </ul>
+        
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="general">
+                {{ form_start(form, {'action': path('lc_profile_doc_edit'), 'attr': {'role':'form' } }) }} 
+                {{ form_errors(form) }}
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="form-group">
+                            {{ form_label(form.cpf) }} 
+                            {% if form.cpf.vars.value is not null %} 
+                                {% if app.user.nfgAccessToken is null %} 
+                                    {{ form_widget(form.cpf, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }} 
+                                {% else %} 
+                                    {{ form_widget(form.cpf, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}
+                                    <span> {{ form.cpf.vars.value|formatCpf }} </span> 
+                                {% endif %}
+                            {% endif %}
+                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                            <div class="input-error">{{ form_errors(form.cpf) }}</div>
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.voterRegistration) }} 
+                            {% if app.user.nfgAccessToken is not null %} 
+                                {% if form.voterRegistration.vars.value is null or form.voterRegistration.vars.value == '' %} 
+                                    {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
+                                    <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
+                                    <span class="extra">{% trans %}Don't know your Voter Registration number?{% endtrans %}<a target='blank' href="{{ tre_search_link }}">{{ 'Search it!' | trans }}</a></span> 
+                                    <span class="extra">{% trans %}Use your account on Nota Fiscal Gaúcha and validate your Voter Registration{% endtrans %}</span> 
+                                {% else %} 
+                                    {% if app.user.nfgProfile.voterRegistrationSit is null or app.user.nfgProfile.voterRegistrationSit == 0 %} 
+                                        {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
+                                        <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
+                                        <span class="extra">{% trans %}Use your account on Nota Fiscal Gaúcha and authorize us to validate your Voter Registration{% endtrans %}</span> 
+                                    {% elseif app.user.nfgProfile.voterRegistrationSit == 1 %} 
+                                        {{ form_widget(form.voterRegistration, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}
+                                        <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
+                                        <span>{{ form.voterRegistration.vars.value }}</span> 
+                                    {% else %} 
+                                        {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
+                                        <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
+                                        <span class="extra">{% trans %}The Voter Registration used is not valid according to Nota Fiscal Gaúcha. Please type your Voter Registration correctly{% endtrans %}</span> 
+                                    {% endif %} 
+                                {% endif %} 
                             {% else %} 
                                 {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
                                 <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
-                                <span class="extra">{% trans %}The Voter Registration used is not valid according to Nota Fiscal Gaúcha. Please type your Voter Registration correctly{% endtrans %}</span> 
+                                <span class="extra">{% trans %}Don't know your Voter Registration number?{% endtrans %} <a target='blank' href="{{ tre_search_link }}">{{ 'Search it!' | trans }}</a></span> 
                             {% endif %} 
-                        {% endif %} 
-                    {% else %} 
-                        {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
-                        <div class="input-error">{{ form_errors(form.voterRegistration) }}</div>
-                        <span class="extra">{% trans %}Don't know your Voter Registration number?{% endtrans %} <a target='blank' href="{{ tre_search_link }}">{{ 'Search it!' | trans }}</a></span> 
-                    {% endif %} 
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        </div>
+                        
+                    </div>
                 </div>
-                
+                <div class="form-bar text-right">
+                    <input class="btn btn-success" type="submit" value="{{ 'profile.edit.submit'|trans }}" />
+                </div>
+                {{ form_end(form) }} 
+            </div>
+            <div class="tab-pane fade" id="rg">
+                <div id="add_rg" class="btn-sm btn-primary glyphicon glyphicon-plus" ></div>
+                <label for="add_rg">{{ 'add'|trans }} {{ 'RG'|trans }}</label>                
+                {% render(controller("PROCERGSLoginCidadaoCoreBundle:Person:docRgList")) %}
+                <div></div>
             </div>
         </div>
     </div>
 </div>
-<div class="form-bar text-right">
-    <input class="btn btn-success" type="submit" value="{{ 'profile.edit.submit'|trans }}" />
-</div>
-{{ form_end(form) }} {% endblock %} {% block javascripts %} {{ parent() }}
+<<style>
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    border-color: black black rgba(0, 0, 0, 0);
+}
+.nav-tabs {
+    border-bottom: 1px solid black;
+}
+.tab-pane {
+    margin-top: 10px;
+}
+</style>
+{% endblock %} 
+{% block javascripts %} 
+{{ parent() }}
 <script>
+function Pwindow(args) {
+	var id=null,label=null;
+	if (!args.id) {
+		id = '__default';
+	} else {
+		id = args.id;
+	}
+	if (!args.label) {
+		label = '';
+	} else {
+		label = args.label;
+	}
+	if (!$('#'+id).length) {
+		var html = '<div id="'+id+'" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="'+label+'" aria-hidden="true">'+
+	    '<div class="modal-dialog"><div class="modal-content"></div></div></div>';
+		$('.settings-content').append(html);
+	}
+	if (args.url) {
+		$('#'+id+' .modal-content').html('');
+		$.ajax({
+			type: 'get',
+			url: args.url,
+			data: args.data,
+			dataType : 'html',
+			success : function(data, textStatus, jqXHR) {
+				$('#'+id+' .modal-content').html(data);
+			}
+	    });
+	}
+	$('#'+id).modal('show');
+}
+var rgGrid = {};
+rgGrid.getGrid = function() {
+	$.ajax({
+		type: 'get',
+		url: "{{ path('lc_profile_doc_rg_list') }}",
+		dataType : 'html',
+		success : function(data, textStatus, jqXHR) {
+			$('#rg-grid').replaceWith(data);
+		}
+    });
+};
+$(document).on('click', '#add_rg',  function() {
+	Pwindow({'id' : 'edit-rg', 'url' : "{{ path('lc_profile_doc_rg_edit') }}"});
+});
+$(document).on('click', '#rg-grid a.edit-grid',  function() {	
+	var row = $.parseJSON($(this).parent().parent().find('.row-data').val());
+	var url = "{{ path('lc_profile_doc_rg_edit') }}";
+	if (row.id) {
+		url += '?id=' +row.id;
+	}
+	Pwindow({'id' : 'edit-rg','url' : url});
+});
 var profileDocEdit = {};
 profileDocEdit.cpfId = '#{{ form.cpf.vars.id }}';
 profileDocEdit.voterRegistrationId = '#{{ form.voterRegistration.vars.id }}';
@@ -73,6 +158,11 @@ var messages = {
         }
     }
 };
+$('#myModal').on('show.bs.modal', function (e) {
+	alert('oi');
+	
+	
+});
 $(function() {
 	$(profileDocEdit.cpfId).mask('000.000.000-00');
 	
