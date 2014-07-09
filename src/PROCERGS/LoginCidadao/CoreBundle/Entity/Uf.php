@@ -17,7 +17,7 @@ class Uf
     const REVIEWED_IGNORE = 1;
     
     /**
-     * @Groups({"uf"}) 
+     * @Groups({"uf", "rgs"}) 
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -27,7 +27,7 @@ class Uf
 
     /**
      * @var string
-     * @Groups({"uf"}) 
+     * @Groups({"uf", "rgs"}) 
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
@@ -39,25 +39,25 @@ class Uf
     private $acronym;
     
     /**
-     * @Groups({"uf"}) 
+     * @Groups({"uf", "rgs"}) 
      * @ORM\Column(name="iso6", type="string", length=6, nullable=true)
      */
     private $iso6;
     
     /**
-     * @Groups({"uf"}) 
+     * @Groups({"uf", "rgs"}) 
      * @ORM\Column(name="fips", type="string", length=4, nullable=true)
      */
     private $fips;
     
     /**
-     * @Groups({"uf"}) 
+     * @Groups({"uf", "rgs"}) 
      * @ORM\Column(name="stat", type="string", length=7, nullable=true)
      */
     private $stat;
     
     /**
-     * @Groups({"uf"}) 
+     * @Groups({"uf", "rgs"}) 
      * @ORM\Column(name="class", type="string", length=255, nullable=true)
      */
     private $class;

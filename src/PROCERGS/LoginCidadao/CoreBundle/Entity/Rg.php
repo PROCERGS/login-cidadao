@@ -31,20 +31,21 @@ class Rg
     /**
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Uf")
      * @ORM\JoinColumn(name="uf_id", referencedColumnName="id")
+     * @Groups({"rgs"})
      */
     protected $uf;
 
     /**
      * @Assert\Length(min=1,max="80")
      * @ORM\Column(name="issuer", type="string", length=80)
-     * @Groups({"rg"})
+     * @Groups({"rgs"})
      */
     protected $issuer;
 
     /**
      * @Assert\Length(min=1,max="20")
      * @ORM\Column(name="val",type="string", length=20)
-     * @Groups({"rg"})
+     * @Groups({"rgs"})
      */
     protected $val;
 

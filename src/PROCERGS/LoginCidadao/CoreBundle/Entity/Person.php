@@ -316,14 +316,14 @@ class Person extends BaseUser
     
     /**
      * @Expose
-     * @Groups({"rg"})
+     * @Groups({"rgs"})
      * @ORM\OneToMany(targetEntity="Rg", mappedBy="person")
      */
     protected $rgs;
     
     /**
      * @Expose
-     * @Groups({"complement"})
+     * @Groups({"adress_complement"})
      * @ORM\Column(name="complement", type="string", nullable=true,length=255)
      */
     protected $complement;
