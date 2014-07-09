@@ -298,7 +298,7 @@ var lcAutoLoader = {
 	"start": function (event, request, settings) {
 		if (!$("#ajax-loader").length) {
 			var modal =		
-				   '<div class="modal fade bs-example-modal-sm" id="ajax-loader" tabindex="-1" role="dialog" aria-labelledby="ajax-loader" data-backdrop="static" data-keyboard="false" aria-hidden="true">'
+				   '<div class="modal fade bs-example-modal-sm" id="ajax-loader" role="dialog" aria-labelledby="ajax-loader" data-backdrop="static" data-keyboard="false" aria-hidden="true">'
 				    +'<div class="modal-dialog modal-sm">'
 				     +'<div class="modal-content">'
 					    +'<div class="modal-body">'
