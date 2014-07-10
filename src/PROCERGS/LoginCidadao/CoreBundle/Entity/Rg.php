@@ -23,7 +23,7 @@ class Rg
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person")
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="rgs")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
     protected $person;
