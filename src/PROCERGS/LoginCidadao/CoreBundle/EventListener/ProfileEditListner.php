@@ -337,8 +337,9 @@ class ProfileEditListner implements EventSubscriberInterface
         if ($user->getCep()) {
             if ($user->getCountry())  {
                 if ($user->getCountry()->getIso2() == 'BR') {
+                    $user->setCep(CEPValidator::justNum($user->getCep()));
                     $ceps = $this->dne->findByCep($user->getCep());
-                    if (false === $ceps || !is_numeric($ceps['codigoMunIBGE'])) {
+                    if (!$ceps || !is_numeric($ceps['codigoMunIBGE'])) {
                         throw new LcValidationException('cep not found');
                     }
                 } else if ($user->getCountry()->getPostalFormat()) {

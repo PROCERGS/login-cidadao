@@ -27,6 +27,11 @@ class CEPValidator extends ConstraintValidator
         $cep = preg_replace('/[^0-9]/', '', $cep);
         return strlen($cep) == 8;
     }
+    
+    public static function justNum($cep)
+    {
+        return preg_replace('/[^0-9]/', '', $cep);
+    }
 
     public function validate($value, Constraint $constraint)
     {
