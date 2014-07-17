@@ -79,7 +79,7 @@
         </div>
     </div>
 </div>
-<<style>
+<style>
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
     border-color: black black rgba(0, 0, 0, 0);
 }
@@ -94,37 +94,6 @@
 {% block javascripts %} 
 {{ parent() }}
 <script>
-function Pwindow(args) {
-	var id=null,label=null;
-	if (!args.id) {
-		id = '__default';
-	} else {
-		id = args.id;
-	}
-	if (!args.label) {
-		label = '';
-	} else {
-		label = args.label;
-	}
-	if (!$('#'+id).length) {
-		var html = '<div id="'+id+'" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="'+label+'" aria-hidden="true">'+
-	    '<div class="modal-dialog"><div class="modal-content"></div></div></div>';
-		$('.settings-content').append(html);
-	}
-	if (args.url) {
-		$('#'+id+' .modal-content').html('');
-		$.ajax({
-			type: 'get',
-			url: args.url,
-			data: args.data,
-			dataType : 'html',
-			success : function(data, textStatus, jqXHR) {
-				$('#'+id+' .modal-content').html(data);
-			}
-	    });
-	}
-	$('#'+id).modal('show');
-}
 var rgGrid = {};
 rgGrid.getGrid = function() {
 	$.ajax({

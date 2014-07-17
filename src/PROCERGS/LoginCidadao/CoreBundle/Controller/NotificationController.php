@@ -56,5 +56,73 @@ class NotificationController extends Controller
 
         return $response;
     }
+    /**
+     * @Route("/inbox/sidebar", name="lc_not_inbox_sidebar")
+     * @Template()
+     */
+    public function sidebarAction()
+    {
+        $result = $this->getDoctrine()
+            ->getManager ()
+            ->getRepository('PROCERGSOAuthBundle:Client')
+            ->createQueryBuilder('u')
+            ->select('u.id, u.name, count(n.id) total')
+            ->join('PROCERGSLoginCidadaoCoreBundle:Notification', 'n', 'WITH', 'n.client = u')
+            ->where('u.visible = true')
+            ->orWhere('u.id = 1')
+            ->orderBy('u.id', 'ASC')
+            ->groupBy('u.id, u.name')
+            ->getQuery()
+            ->getResult();
+        return array('clients' => $result);
+    }
+    
+    /**
+     * @Route("/inbox/{id}/{title}", name="lc_not_inbox")
+     * @Template()
+     */
+    public function inboxAction($id = null, $title = null)
+    {
+        if (null === $id) {
+            return array();
+        }
+        $conn = $this->getDoctrine()->getManager()->getConnection();
+        $pars = array($id, $this->getUser()->getId());
+        if (null !== $title) {
+            $sql = 'select u.id, u.title, u.shorttext, u.isread, u.createdat from notification u where u.client_id = ? and u.person_id = ? ';
+            $sql .= "and title = ? ";
+            $pars[] = $title;
+        } else {
+            $sql = 'select u.title, count(u.title) as total, count(case when u.isread = true then true else null end) as readed from notification u where u.client_id = ? and u.person_id = ? ';
+            $sql .= 'group by u.title order by title';
+        }
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($pars);
+        $resultset = $stmt->fetchAll();
+        /*
+        $result = $this->getDoctrine()
+        ->getManager ()
+        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification')
+        ->createQueryBuilder('u')
+        ->select('u.title, count(u.title) as total, count(case when u.isread = true then true else null end) as readed')
+        ->where('u.id = :id')
+        ->setParameter('id' , $id)
+        ->groupBy('u.title')
+        ->orderBy('u.title', 'ASC')
+        ->getQuery()
+        ->getResult();
+        */
+        return compact('resultset', 'id', 'title');
+    }
+    
+    
+    /**
+     * @Route("/config/{id}", name="lc_not_config")
+     * @Template()
+     */
+    public function configAction($id = null)
+    {
+        return array();
+    }
 
 }

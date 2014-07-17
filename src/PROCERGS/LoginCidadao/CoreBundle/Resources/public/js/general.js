@@ -346,7 +346,37 @@ var lcAutoLoader = {
 };
 $(document).ajaxSend(lcAutoLoader.start);
 $(document).ajaxComplete(lcAutoLoader.stop);
-
+function Pwindow(args) {
+	var id=null,label=null;
+	if (!args.id) {
+		id = '__default';
+	} else {
+		id = args.id;
+	}
+	if (!args.label) {
+		label = '';
+	} else {
+		label = args.label;
+	}
+	if (!$('#'+id).length) {
+		var html = '<div id="'+id+'" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="'+label+'" aria-hidden="true">'+
+	    '<div class="modal-dialog"><div class="modal-content"></div></div></div>';
+		$('.settings-content').append(html);
+	}
+	if (args.url) {
+		$('#'+id+' .modal-content').html('');
+		$.ajax({
+			type: 'get',
+			url: args.url,
+			data: args.data,
+			dataType : 'html',
+			success : function(data, textStatus, jqXHR) {
+				$('#'+id+' .modal-content').html(data);
+			}
+	    });
+	}
+	$('#'+id).modal('show');
+}
 $(function() {
 
     // add bootstrap classes to forms

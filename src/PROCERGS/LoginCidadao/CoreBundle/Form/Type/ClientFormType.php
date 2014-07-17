@@ -9,39 +9,11 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\SecurityContext;
 use OAuth2\OAuth2;
 
-class ClientFormType extends AbstractType
+class ClientFormType extends ClientBaseFormType
 {
-
-    protected $container;
-
-    public function setContainer($var)
-    {
-        $this->container = $var;
-    }
-
-    public function getContainer()
-    {
-        return $this->container;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name', 'text', array(
-            'required' => true
-        ));
-        $builder->add('description', 'textarea', array(
-            'required' => true
-        ));
-        $builder->add('siteurl', 'text', array(
-            'required' => true
-        ));
-        $builder->add('redirecturis', 'collection', array(
-            'type' => 'text',
-            'options' => array(
-                'required' => true
-            ),
-            'allow_add' => true
-        ));
+        parent::buildForm($builder, $options);
         $a = explode(' ', $this->container->getParameter('lc_supported_scopes'));
         $a = array_combine($a, $a);
         $builder->add('allowedscopes', 'collection', array(
@@ -52,8 +24,6 @@ class ClientFormType extends AbstractType
             'required' => true,
             'allow_add' => true
         ));
-        
-        
         $builder->add('allowedgranttypes', 'collection', array(
             'type' => 'choice',
             'options' => array(
@@ -72,14 +42,6 @@ class ClientFormType extends AbstractType
             'required' => true,
             'allow_add' => true
         ));
-        
-        $builder->add('landingpageurl', 'text', array(
-            'required' => true
-        ));
-        $builder->add('termsofuseurl', 'textarea', array(
-            'required' => true
-        ));
-        $builder->add('pictureFile');
         $builder->add('published', 'checkbox', array(
             'required' => false
         ));

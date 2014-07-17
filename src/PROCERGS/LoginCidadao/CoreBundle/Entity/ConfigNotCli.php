@@ -1,0 +1,153 @@
+<?php
+namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use PROCERGS\OAuthBundle\Entity\Client;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="config_not_cli")
+ * @ORM\HasLifecycleCallbacks
+ */
+class ConfigNotCli
+{
+
+    /**
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(name="icon", type="string", length=255)
+     */
+    private $icon;
+
+    /**
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(name="mail_template", type="text")
+     */
+    private $mailTemplate;
+
+    /**
+     * @ORM\Column(name="mail_domain", type="string")
+     */
+    private $mailDomain;
+
+    /**
+     * @ORM\Column(name="mail_send", type="integer")
+     */
+    private $mailSend;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="configNotClis")
+     * @ORM\JoinColumn(name="client_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $client;
+
+    /**
+     * @ORM\Column(name="kind", type="string", length=18)
+     */
+    private $kind;
+
+    public function setId($var)
+    {
+        $this->id = $var;
+        return $this;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
+        
+        return $this;
+    }
+
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+
+    public function setName($var)
+    {
+        $this->name = $var;
+        
+        return $this;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setClient($client)
+    {
+        $this->client = $client;
+        
+        return $this;
+    }
+
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    public function setMailTemplate($var)
+    {
+        $this->mailTemplate = $var;
+        
+        return $this;
+    }
+
+    public function getMailTemplate()
+    {
+        return $this->mailTemplate;
+    }
+
+    public function setMailDomain($var)
+    {
+        $this->mailDomain = $var;
+        
+        return $this;
+    }
+
+    public function getMailDomain()
+    {
+        return $this->mailDomain;
+    }
+
+    public function setMailSend($var)
+    {
+        $this->mailSend = $var;
+        
+        return $this;
+    }
+
+    public function getMailSend()
+    {
+        return $this->mailSend;
+    }
+
+    public function setKind($var)
+    {
+        $this->kind = $var;
+        
+        return $this;
+    }
+
+    public function getKind()
+    {
+        return $this->kind;
+    }
+}

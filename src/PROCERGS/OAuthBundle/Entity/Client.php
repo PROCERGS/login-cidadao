@@ -8,10 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Tests\Fixtures\Publisher;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity("name")
  */
 class Client extends BaseClient
 {
@@ -24,7 +27,7 @@ class Client extends BaseClient
     protected $id;
 
     /**
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", nullable=false, unique=true)
      */
     protected $name;
 
@@ -67,6 +70,11 @@ class Client extends BaseClient
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification", mappedBy="client")
      */
     protected $notifications;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\ConfigNotCli", mappedBy="client")
+     */
+    protected $configNotClis;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -88,6 +96,12 @@ class Client extends BaseClient
      * @ORM\Column(type="boolean", nullable=false)
      */
     protected $visible;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="clients")
+     * @ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $person;
 
     public function __construct()
     {
@@ -291,5 +305,29 @@ class Client extends BaseClient
 
         return $this;
     }
+    
+    public function setId($var)
+    {
+        $this->id = $var;
+        return $this;
+    }
+    
+    public function setPerson($person)
+    {
+        $this->person = $person;
+    
+        return $this;
+    }
+    
+    public function getPerson()
+    {
+        return $this->person;
+    }
+    
+    public function getConfigNotClis()
+    {
+        return $this->configNotClis;
+    }
+    
 
 }

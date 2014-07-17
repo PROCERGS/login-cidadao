@@ -1,0 +1,29 @@
+<div id="dev-category-grid" class="common-grid-msg">    
+    {% if resultset|length > 0 %}
+    <div class="common-grid-results">
+        <div class="row header">
+            <div class="col-md-1">{{ 'Actions'|trans }}</div>
+            <div class="col-md-1">{{ 'Service'|trans }}</div>
+            <div class="col-md-10">{{ 'Category'|trans }}</div>
+        </div>
+        {% for row in resultset %}
+        <div class="row common-grid-result">
+            <input type="hidden" class="row-data" value="{{ row|json_encode }}"/>
+            <div class="col-md-1">
+                <a class="center-block text-center glyphicon glyphicon-pencil edit-grid" title="{{ 'Edit'|trans }}" href="{{ path('lc_dev_not_edit', {id: row.id}) }}"></a>
+            </div>
+            <div class="col-md-1">
+                <dt>{{ 'Service'|trans }}</dt>
+                <dd>{{ row.client.name }}</dd>
+            </div>
+            <div class="col-md-10">
+                <dt>{{ 'URL'|trans }}</dt>
+                <dd>{{ row.name }}</dd>
+            </div>            
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <div>{{ 'grid.search.noresult'|trans }}</div>
+    {% endif %}
+</div>

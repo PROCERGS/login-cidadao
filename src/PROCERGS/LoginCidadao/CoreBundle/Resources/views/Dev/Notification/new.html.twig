@@ -1,0 +1,73 @@
+{% extends 'PROCERGSLoginCidadaoCoreBundle:Dev:base.html.twig' %} {% block content %}
+<div id="profile-edit" class="content clearfix">
+    <h1>{{ 'Notification config'|trans }}</h1>
+    <div class="form-content">
+                {{ form_start(form, {'attr' : {'role' : 'form'}}) }} 
+                {{ form_errors(form) }}
+                <div class="row clearfix">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            {{ form_label(form.client, 'Service' | trans) }} 
+                            {{ form_errors(form.client) }} 
+                            {{ form_widget(form.client) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.kind, 'Kind'| trans) }} 
+                            {{ form_errors(form.kind) }} 
+                            {{ form_widget(form.kind) }}
+                        </div>                        
+                        <div class="form-group">
+                            {{ form_label(form.name, 'Name'| trans) }} 
+                            {{ form_errors(form.name) }} 
+                            {{ form_widget(form.name) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.icon, 'Icon' | trans) }}
+                            {{ form_errors(form.icon) }}
+                            {{ form_widget(form.icon) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.mailtemplate, 'Mail template' | trans) }} 
+                            {{ form_errors(form.mailtemplate) }} 
+                            {{ form_widget(form.mailtemplate, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.maildomain, 'Mail domain'| trans) }} 
+                            {{ form_errors(form.maildomain) }} 
+                            {{ form_widget(form.maildomain) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.mailsend, 'Mail send' | trans) }} 
+                            {{ form_errors(form.mailsend) }} 
+                            {{ form_widget(form.mailsend) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-bar text-right">
+                    <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
+                </div>
+                {{ form_end(form) }}
+            </div>
+    </div>
+</div>
+<style>
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    border-color: black black rgba(0, 0, 0, 0);
+}
+.nav-tabs {
+    border-bottom: 1px solid black;
+}
+.tab-pane {
+    margin-top: 10px;
+}
+</style>
+{% endblock %}
+
+{% block javascripts %} 
+{{ parent() }}
+<script type="text/javascript">
+$(document).on('click', '#add_notification_category',  function() {
+	Pwindow({'id' : 'edit-category', 'url' : "{{ path('lc_profile_doc_rg_edit') }}"});
+});
+</script>
+{% endblock %}

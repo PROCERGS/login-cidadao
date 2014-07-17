@@ -182,6 +182,20 @@ services:
             - { name: form.type, alias: client_form_type }
         calls:
             - [setContainer, ["@service_container"]]
+            
+    procergs_logincidadao.client.base.form.type:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientBaseFormType
+        tags:
+            - { name: form.type, alias: client_base_form_type }
+        calls:
+            - [setContainer, ["@service_container"]]
+            
+    procergs_logincidadao.client.not.cat.form.type:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientNotCatFormType
+        tags:
+            - { name: form.type, alias: client_not_cat_form_type }
+        calls:
+            - [setContainer, ["@service_container"]]            
 
     procergs_logincidadao.nfgws:
         class: %procergs_logincidadao.nfgws.class%

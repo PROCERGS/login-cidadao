@@ -201,6 +201,11 @@ class Person extends BaseUser
      * @ORM\OneToMany(targetEntity="Notification", mappedBy="person")
      */
     protected $notifications;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\OAuthBundle\Entity\Client", mappedBy="person")
+     */
+    protected $clients;
 
     /**
      * @ORM\OneToMany(targetEntity="ClientSuggestion", mappedBy="person")
@@ -667,6 +672,11 @@ class Person extends BaseUser
     public function getNotifications()
     {
         return $this->notifications;
+    }
+    
+    public function getClients()
+    {
+        return $this->clients;
     }
 
     public function checkEmailPending()
