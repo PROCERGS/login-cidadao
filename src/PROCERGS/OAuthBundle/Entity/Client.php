@@ -67,11 +67,6 @@ class Client extends BaseClient
     protected $siteUrl;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification", mappedBy="client")
-     */
-    protected $notifications;
-    
-    /**
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\ConfigNotCli", mappedBy="client")
      */
     protected $configNotClis;

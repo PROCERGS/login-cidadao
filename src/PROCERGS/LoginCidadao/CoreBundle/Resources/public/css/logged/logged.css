@@ -35,12 +35,12 @@
     color: #696969 !important;
 }
 
-.settings-nav li a span {
+/*.settings-nav li a span {
     color: #696969;
     display: inline-block;
     font-weight: 500;
     width: 85%;
-}
+}*/
 
 .settings-nav li.active span, .settings-nav li.active a:hover span {
     color: #FFF;
@@ -59,11 +59,11 @@
     padding-right: 8px;
 }
 
-.settings-nav .glyph>a span {
+/*.settings-nav .glyph>a span {
     width: 100%;
     vertical-align: middle;
     line-height: 30px;
-}
+}*/
 
 .settings-nav li .glyphicon {
     color: #696969;

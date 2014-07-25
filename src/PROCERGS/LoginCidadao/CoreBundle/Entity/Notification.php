@@ -84,10 +84,10 @@ class Notification implements NotificationInterface
     private $level;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="notifications")
-     * @ORM\JoinColumn(name="client_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="ConfigNotCli", inversedBy="notifications")
+     * @ORM\JoinColumn(name="config_not_cli_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $client;
+    private $configNotCli;
 
     /**
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="notifications")
@@ -284,16 +284,16 @@ class Notification implements NotificationInterface
         return $this->setIsRead($isRead);
     }
 
-    public function setClient($client)
+    public function setConfigNotCli($var)
     {
-        $this->client = $client;
+        $this->configNotCli = $var;
 
         return $this;
     }
 
-    public function getClient()
+    public function getConfigNotCli()
     {
-        return $this->client;
+        return $this->configNotCli;
     }
 
     public function setPerson($person)

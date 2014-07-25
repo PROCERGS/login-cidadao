@@ -64,55 +64,108 @@ class NotificationController extends Controller
     {
         $result = $this->getDoctrine()
             ->getManager ()
-            ->getRepository('PROCERGSOAuthBundle:Client')
-            ->createQueryBuilder('u')
-            ->select('u.id, u.name, count(n.id) total')
-            ->join('PROCERGSLoginCidadaoCoreBundle:Notification', 'n', 'WITH', 'n.client = u')
-            ->where('u.visible = true')
-            ->orWhere('u.id = 1')
-            ->orderBy('u.id', 'ASC')
-            ->groupBy('u.id, u.name')
+            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification')
+            ->createQueryBuilder('n')
+            ->select('c.id, c.name, CountIf(n.isRead != true) total')
+            ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH', 'n.configNotCli = cnc')
+            ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
+            ->where('n.person = :person')            
+            ->setParameter('person', $this->getUser())
+            ->groupBy('c.id', 'c.name')
+            ->orderBy('c.id', 'ASC')            
             ->getQuery()
             ->getResult();
         return array('clients' => $result);
     }
     
     /**
-     * @Route("/inbox/{id}/{title}", name="lc_not_inbox")
+     * @Route("/inbox/gridfull", name="lc_not_inbox_gridfull")
      * @Template()
-     */
-    public function inboxAction($id = null, $title = null)
-    {
-        if (null === $id) {
-            return array();
-        }
-        $conn = $this->getDoctrine()->getManager()->getConnection();
-        $pars = array($id, $this->getUser()->getId());
-        if (null !== $title) {
-            $sql = 'select u.id, u.title, u.shorttext, u.isread, u.createdat from notification u where u.client_id = ? and u.person_id = ? ';
-            $sql .= "and title = ? ";
-            $pars[] = $title;
-        } else {
-            $sql = 'select u.title, count(u.title) as total, count(case when u.isread = true then true else null end) as readed from notification u where u.client_id = ? and u.person_id = ? ';
-            $sql .= 'group by u.title order by title';
-        }
-        $stmt = $conn->prepare($sql);
-        $stmt->execute($pars);
-        $resultset = $stmt->fetchAll();
-        /*
-        $result = $this->getDoctrine()
+     */    
+    public function gridFullAction(Request $request = null) {
+        $resultset = $this->getDoctrine()
         ->getManager ()
         ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification')
-        ->createQueryBuilder('u')
-        ->select('u.title, count(u.title) as total, count(case when u.isread = true then true else null end) as readed')
-        ->where('u.id = :id')
-        ->setParameter('id' , $id)
-        ->groupBy('u.title')
-        ->orderBy('u.title', 'ASC')
-        ->getQuery()
-        ->getResult();
-        */
-        return compact('resultset', 'id', 'title');
+        ->createQueryBuilder('n')
+        ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH', 'n.configNotCli = cnc')
+        ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
+        ->where('n.person = :person')
+        ->setParameter('person', $this->getUser())
+        ->orderBy('n.createdAt', 'DESC')
+        ->getQuery()->getResult();
+        return array('resultset' => $resultset);
+    }
+    
+    /**
+     * @Route("/inbox/gridpri", name="lc_not_inbox_gridpri")
+     * @Template()
+     */
+    public function gridPriAction(Request $request = null) {
+        $id = $request->get('id');
+        if (!$id) {
+            return $this->gridFullAction();
+        }
+        $resultset = $this->getDoctrine()
+        ->getManager()
+        ->getRepository('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli')
+        ->createQueryBuilder('cnc')        
+        ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
+        ->where('c.id = :client')
+        ->setParameter('client', $id)
+        ->getQuery()->getResult();
+        return array('resultset' => $resultset);
+    }
+    
+    /**
+     * @Route("/inbox/gridsimple", name="lc_not_inbox_gridfull")
+     * @Template()
+     */
+    public function gridSimpleAction(Request $request = null) {
+        $id = $request->get('id');
+        if (!$id) {
+            return $this->gridFullAction();
+        }
+        $resultset = $this->getDoctrine()
+        ->getManager ()
+        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification')
+        ->createQueryBuilder('n')
+        ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH', 'n.configNotCli = cnc')
+        ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
+        ->where('n.person = :person and cnc.id = :configNotCli')
+        ->setParameter('person', $this->getUser())
+        ->setParameter('configNotCli', $id)
+        ->orderBy('n.createdAt', 'DESC')
+        ->getQuery()->getResult();
+        return array('resultset' => $resultset);
+    }
+    
+    /**
+     * @Route("/inbox", name="lc_not_inbox")
+     * @Template()
+     */
+    public function inboxAction(Request $request)
+    {
+        if ($request->get('id')) {
+            return $this->render('PROCERGSLoginCidadaoCoreBundle:Notification:inbox2.html.twig',
+                array('id' => $request->get('id'))
+            );
+        } else if ($request->get('notification')) {
+            $resultset = $this->getDoctrine()
+            ->getManager ()
+            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification')
+            ->createQueryBuilder('n')
+            ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH', 'n.configNotCli = cnc')
+            ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
+            ->where('n.person = :person and n.id = :id')
+            ->setParameter('person', $this->getUser())
+            ->setParameter('id', $request->get('notification'))
+            ->getQuery()->getOneOrNullResult();
+            return $this->render('PROCERGSLoginCidadaoCoreBundle:Notification:inbox3.html.twig',
+                array('resultset' => $resultset)
+            );
+        } else {
+            return array();
+        }
     }
     
     

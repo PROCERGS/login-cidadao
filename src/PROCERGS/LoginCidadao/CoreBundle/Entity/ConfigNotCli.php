@@ -18,43 +18,48 @@ class ConfigNotCli
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(name="icon", type="string", length=255)
      */
-    private $icon;
+    protected $icon;
 
     /**
      * @ORM\Column(name="name", type="string", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(name="mail_template", type="text")
      */
-    private $mailTemplate;
+    protected $mailTemplate;
 
     /**
      * @ORM\Column(name="mail_domain", type="string")
      */
-    private $mailDomain;
+    protected $mailDomain;
 
     /**
      * @ORM\Column(name="mail_send", type="integer")
      */
-    private $mailSend;
+    protected $mailSend;
 
     /**
      * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="configNotClis")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $client;
+    protected $client;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Notification", mappedBy="configNotCli")
+     */
+    protected $notifications;
 
     /**
      * @ORM\Column(name="kind", type="string", length=18)
      */
-    private $kind;
+    protected $kind;
 
     public function setId($var)
     {
@@ -150,4 +155,10 @@ class ConfigNotCli
     {
         return $this->kind;
     }
+    
+    public function getNotifications()
+    {
+        return $this->notifications;
+    }
+    
 }

@@ -1,0 +1,14 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle:Notification:base.html.twig" %} {% block content %}
+<div id="app-detail" class="content app-admin clearfix">
+    <div class="content">
+    {% if resultset is not null %}
+        <label for="title">{{ 'title'|trans }}</label>
+        <p id="title">{{ resultset.title }}</p>
+        <label for="shorttext">{{ 'shorttext'|trans }}</label>
+        <p id="shorttext">{{ resultset.shorttext }}</p>
+        <label for="text">{{ 'text'|trans }}</label>
+        <p id="text">{{ resultset.text }}</p>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

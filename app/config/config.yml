@@ -75,6 +75,7 @@ doctrine:
         dql: 
           string_functions: 
             right: PROCERGS\LoginCidadao\CoreBundle\DQL\Right
+            countif: PROCERGS\LoginCidadao\CoreBundle\DQL\CountIf
 
 # Swiftmailer Configuration
 swiftmailer:
