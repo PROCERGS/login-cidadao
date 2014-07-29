@@ -254,8 +254,9 @@ class Notification implements NotificationInterface
         $this->isRead = $isRead;
         if (!$isRead) {
             $this->setReadDate(null);
+        } else {
+            $this->setReadDate(new \DateTime());
         }
-
         return $this;
     }
 

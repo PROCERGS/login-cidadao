@@ -160,6 +160,11 @@ class NotificationController extends Controller
             ->setParameter('person', $this->getUser())
             ->setParameter('id', $request->get('notification'))
             ->getQuery()->getOneOrNullResult();
+            if ($resultset) {
+                $resultset->setIsRead(true);
+                $this->getDoctrine()->getManager()->persist($resultset);
+                $this->getDoctrine()->getManager()->flush();
+            }
             return $this->render('PROCERGSLoginCidadaoCoreBundle:Notification:inbox3.html.twig',
                 array('resultset' => $resultset)
             );
