@@ -24,6 +24,20 @@ class ConfigNotCli
      * @ORM\Column(name="icon", type="string", length=255)
      */
     protected $icon;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
+     */
+    protected $title;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="short_text", type="string", length=255, nullable=true)
+     */
+    protected $shortText;    
 
     /**
      * @ORM\Column(name="name", type="string", length=255)
@@ -159,6 +173,28 @@ class ConfigNotCli
     public function getNotifications()
     {
         return $this->notifications;
+    }
+    
+    public function setTitle($title)
+    {
+        $this->title = $title;
+        return $this;
+    }
+    
+    public function getTitle()
+    {
+        return $this->title;
+    }
+    
+    public function setShortText($shortText)
+    {
+        $this->shortText = $shortText;
+        return $this;
+    }
+    
+    public function getShortText()
+    {
+        return $this->shortText;
     }
     
 }

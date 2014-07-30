@@ -26,6 +26,7 @@ class NotificationController extends Controller
     public function newAction()
     {
         $client = new ConfigNotCli();
+        $client->setMailTemplate("%title%\r\n%shorttext%\r\n%text%");
         $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.not.cat.form.type'), $client);
         
         $form->handleRequest($this->getRequest());

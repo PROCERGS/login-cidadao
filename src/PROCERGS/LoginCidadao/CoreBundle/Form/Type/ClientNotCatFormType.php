@@ -53,8 +53,14 @@ class ClientNotCatFormType extends AbstractType
             'choices'   => array('glyphicon glyphicon-envelope' => 'envelope', 'glyphicon glyphicon-exclamation-sign' => 'exclamation-sign'),
             'required' => true
         ));
-        $builder->add('mailtemplate', 'textarea', array(
+        $builder->add('title', 'text', array(
             'required' => true
+        ));
+        $builder->add('shorttext', 'text', array(
+            'required' => true
+        ));
+        $builder->add('mailtemplate', 'textarea', array(
+            'required' => true,
         ));
         $builder->add('maildomain', 'text', array(
             'required' => true
@@ -63,8 +69,9 @@ class ClientNotCatFormType extends AbstractType
             'choices'   => array('0' => 'no', '1' => 'yes'),
             'required' => true
         ));
-        $builder->add('id', 'hidden', array(
-            'required' => false
+        $builder->add('id', 'integer', array(
+            'required' => false,
+            'read_only' => true
         ));
     }
 

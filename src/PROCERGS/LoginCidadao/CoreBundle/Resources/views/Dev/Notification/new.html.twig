@@ -6,6 +6,11 @@
                 {{ form_errors(form) }}
                 <div class="row clearfix">
                     <div class="col-md-12">
+						<div class="form-group">
+                            {{ form_label(form.id, 'Id' | trans) }} 
+                            {{ form_errors(form.id) }} 
+                            {{ form_widget(form.id) }}
+                        </div>
                         <div class="form-group">
                             {{ form_label(form.client, 'Service' | trans) }} 
                             {{ form_errors(form.client) }} 
@@ -22,9 +27,19 @@
                             {{ form_widget(form.name) }}
                         </div>
                         <div class="form-group">
-                            {{ form_label(form.icon, 'Icon' | trans) }}
+                            {{ form_label(form.icon, 'Default Icon' | trans) }}
                             {{ form_errors(form.icon) }}
                             {{ form_widget(form.icon) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.title, 'Default title' | trans) }}
+                            {{ form_errors(form.title) }}
+                            {{ form_widget(form.title) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.shorttext, 'Default shorttext' | trans) }}
+                            {{ form_errors(form.shorttext) }}
+                            {{ form_widget(form.shorttext) }}
                         </div>
                         <div class="form-group">
                             {{ form_label(form.mailtemplate, 'Mail template' | trans) }} 

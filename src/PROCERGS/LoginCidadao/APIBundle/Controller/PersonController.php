@@ -10,6 +10,9 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
 
 class PersonController extends FOSRestController
 {
@@ -144,6 +147,45 @@ class PersonController extends FOSRestController
     private function getSerializationContext($scope)
     {
         return SerializationContext::create()->setGroups($scope);
+    }
+    
+    /**
+     * @REST\Post("/person/sendnotification")
+     * @REST\View
+     */
+    public function sendNotificationAction(Request $request)
+    {
+        if (!$request->get('id_config') || !$request->get('text')) {
+            throw new  HttpException(400, "missing required fields");
+        }
+        $person = $this->getUser();
+        $token = $this->get('security.context')->getToken();
+        $accessToken = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:AccessToken')->findOneBy(array('token' => $token->getToken()));
+        $client = $accessToken->getClient();
+        
+        $authorization = $this->getDoctrine()
+        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
+        ->findOneBy(array(
+            'person' => $person,
+            'client' => $client
+        ));
+        if (!($authorization instanceof Authorization)) {
+            throw new AccessDeniedException();
+        }
+        $configNotCli = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli')->findOneBy(array('client' => $client, 'id' => $request->get('id_config')));
+        if (!$configNotCli) {
+            throw new  HttpException(400, "category not found");
+        }
+        $notification = new Notification();
+        $notification->setPerson($person);
+        $notification->setConfigNotCli($configNotCli)
+        ->setIcon($request->get('icon') ? $request->get('icon') : $configNotCli->getIcon())
+        ->setTitle($request->get('title') ? $request->get('title') : $configNotCli->getTitle())
+        ->setShortText($request->get('shorttext') ? $request->get('shorttext') : $configNotCli->getShortText())
+        ->setText($request->get('text'));
+        $this->getDoctrine()->getManager()->persist($notification);
+        $this->getDoctrine()->getManager()->flush();
+        return $this->handleView($this->view(array('id' => $notification->getId())));
     }
 
 }

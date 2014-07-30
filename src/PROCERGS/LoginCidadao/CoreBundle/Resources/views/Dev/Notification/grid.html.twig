@@ -3,8 +3,9 @@
     <div class="common-grid-results">
         <div class="row header">
             <div class="col-md-1">{{ 'Actions'|trans }}</div>
+            <div class="col-md-1">{{ 'Id'|trans }}</div>
             <div class="col-md-1">{{ 'Service'|trans }}</div>
-            <div class="col-md-10">{{ 'Category'|trans }}</div>
+            <div class="col-md-9">{{ 'Category'|trans }}</div>
         </div>
         {% for row in resultset %}
         <div class="row common-grid-result">
@@ -12,11 +13,15 @@
             <div class="col-md-1">
                 <a class="center-block text-center glyphicon glyphicon-pencil edit-grid" title="{{ 'Edit'|trans }}" href="{{ path('lc_dev_not_edit', {id: row.id}) }}"></a>
             </div>
+			<div class="col-md-1">
+                <dt>{{ 'Id'|trans }}</dt>
+                <dd>{{ row.id }}</dd>
+            </div>            
             <div class="col-md-1">
                 <dt>{{ 'Service'|trans }}</dt>
                 <dd>{{ row.client.name }}</dd>
             </div>
-            <div class="col-md-10">
+            <div class="col-md-9">
                 <dt>{{ 'URL'|trans }}</dt>
                 <dd>{{ row.name }}</dd>
             </div>            
