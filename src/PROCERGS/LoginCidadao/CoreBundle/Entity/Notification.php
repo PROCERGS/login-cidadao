@@ -5,6 +5,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use PROCERGS\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Notification
@@ -29,21 +30,24 @@ class Notification implements NotificationInterface
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")     
      * @ORM\Column(name="icon", type="string", length=255)
      */
     private $icon;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      * @ORM\Column(name="title", type="string", length=255)
      */
     private $title;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      * @ORM\Column(name="shortText", type="string", length=255)
      */
     private $shortText;
@@ -52,6 +56,7 @@ class Notification implements NotificationInterface
      * @var string
      *
      * @ORM\Column(name="text", type="text")
+     * @Assert\NotBlank()
      */
     private $text;
 
