@@ -1,7 +1,14 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle:Notification:base.html.twig" %}
 {% block content %}
 <div id="app-detail" class="content app-admin clearfix">
-    {{ render_hinclude(controller("PROCERGSLoginCidadaoCoreBundle:Notification:gridFull")) }}
+    {{ render(controller("PROCERGSLoginCidadaoCoreBundle:Notification:gridFull", 
+    { 
+    '_locale': app.request.locale, 
+    '_route': app.request.attributes.get('_route'), 
+    '_route_params' :app.request.attributes.get('_route_params'), 
+    'start' :app.request.query.get('start'), 
+    'lero': app.request 
+    } )) }}
 </div>
 <style>
 .notification-read {

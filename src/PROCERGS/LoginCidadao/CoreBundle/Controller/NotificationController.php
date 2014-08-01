@@ -83,7 +83,7 @@ class NotificationController extends Controller
      * @Template()
      */    
     public function gridFullAction(Request $request = null) {
-        $resultset = $this->getDoctrine()
+        $sql = $this->getDoctrine()
         ->getManager ()
         ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification')
         ->createQueryBuilder('n')
@@ -91,9 +91,18 @@ class NotificationController extends Controller
         ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
         ->where('n.person = :person')
         ->setParameter('person', $this->getUser())
-        ->orderBy('n.createdAt', 'DESC')
-        ->getQuery()->getResult();
-        return array('resultset' => $resultset);
+        ->orderBy('n.id', 'DESC');
+        $max = 100;
+        $perpage = 5;
+        if ($request->get('start')) {
+            $start = $request->get('start');          
+            $sql->setFirstResult($start * $max);
+        } else {
+            $start = 0;
+        }
+        $sql->setMaxResults($max + 1);
+        $resultset = $sql->getQuery()->getResult();
+        return array('resultset' => $resultset, 'maxresultset' => $max, 'perpage' => $perpage, 'start' => $start);
     }
     
     /**
