@@ -59,7 +59,7 @@ class ClientNotCatFormType extends AbstractType
         $builder->add('shorttext', 'text', array(
             'required' => true
         ));
-        $builder->add('mailtemplate', 'textarea', array(
+        $builder->add('mailtpl', 'textarea', array(
             'required' => true,
         ));
         $builder->add('maildomain', 'text', array(
@@ -72,6 +72,9 @@ class ClientNotCatFormType extends AbstractType
         $builder->add('id', 'integer', array(
             'required' => false,
             'read_only' => true
+        ));
+        $builder->add('mdtpl', 'textarea', array(
+            'required' => true,
         ));
     }
 

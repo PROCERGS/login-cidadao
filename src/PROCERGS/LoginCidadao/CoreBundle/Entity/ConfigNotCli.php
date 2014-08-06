@@ -45,9 +45,9 @@ class ConfigNotCli
     protected $name;
 
     /**
-     * @ORM\Column(name="mail_template", type="text")
+     * @ORM\Column(name="mail_tpl", type="text")
      */
-    protected $mailTemplate;
+    protected $mailTpl;
 
     /**
      * @ORM\Column(name="mail_domain", type="string")
@@ -74,6 +74,20 @@ class ConfigNotCli
      * @ORM\Column(name="kind", type="string", length=18)
      */
     protected $kind;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="html_tpl", type="text", nullable=true)
+     */
+    private $htmlTpl;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="md_tpl", type="text", nullable=true)
+     */
+    private $mdTpl;
 
     public function setId($var)
     {
@@ -122,16 +136,16 @@ class ConfigNotCli
         return $this->client;
     }
 
-    public function setMailTemplate($var)
+    public function setMailTpl($var)
     {
-        $this->mailTemplate = $var;
+        $this->mailTpl = $var;
         
         return $this;
     }
 
-    public function getMailTemplate()
+    public function getMailTpl()
     {
-        return $this->mailTemplate;
+        return $this->mailTpl;
     }
 
     public function setMailDomain($var)
@@ -196,5 +210,27 @@ class ConfigNotCli
     {
         return $this->shortText;
     }
+    
+    public function setMdTpl($var)
+    {
+        $this->mdTpl = $var;
+        return $this;
+    }
+    
+    public function getMdTpl()
+    {
+        return $this->mdTpl;
+    }
+    
+    public function setHtmlTpl($var)
+    {
+        $this->htmlTpl = $var;
+        return $this;
+    }
+    
+    public function getHtmlTpl()
+    {
+        return $this->htmlTpl;
+    }    
     
 }

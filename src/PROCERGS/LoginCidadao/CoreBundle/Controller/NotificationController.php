@@ -92,17 +92,23 @@ class NotificationController extends Controller
         ->where('n.person = :person')
         ->setParameter('person', $this->getUser())
         ->orderBy('n.id', 'DESC');
-        $max = 100;
-        $perpage = 5;
-        if ($request->get('start')) {
-            $start = $request->get('start');          
-            $sql->setFirstResult($start * $max);
+        
+        if ($request->get('client')) {
+            $sql->andWhere('c.id = :client')->setParameter('client', $request->get('client'));
+        }
+        
+        $max = 50;
+        $perpage = 50;
+        if ($request->get('page')) {
+            $page = $request->get('page');          
+            $sql->setFirstResult($page * $max);
         } else {
-            $start = 0;
+            $page = 0;
         }
         $sql->setMaxResults($max + 1);
+        
         $resultset = $sql->getQuery()->getResult();
-        return array('resultset' => $resultset, 'maxresultset' => $max, 'perpage' => $perpage, 'start' => $start);
+        return array('resultset' => $resultset, 'maxresultset' => $max, 'perpage' => $perpage, 'page' => $page);
     }
     
     /**
@@ -110,7 +116,7 @@ class NotificationController extends Controller
      * @Template()
      */
     public function gridPriAction(Request $request = null) {
-        $id = $request->get('id');
+        $id = $request->get('client');
         if (!$id) {
             return $this->gridFullAction();
         }
@@ -130,7 +136,7 @@ class NotificationController extends Controller
      * @Template()
      */
     public function gridSimpleAction(Request $request = null) {
-        $id = $request->get('id');
+        $id = $request->get('confignotcli');
         if (!$id) {
             return $this->gridFullAction();
         }
@@ -154,34 +160,34 @@ class NotificationController extends Controller
      */
     public function inboxAction(Request $request)
     {
-        if ($request->get('id')) {
-            return $this->render('PROCERGSLoginCidadaoCoreBundle:Notification:inbox2.html.twig',
-                array('id' => $request->get('id'))
-            );
-        } else if ($request->get('notification')) {
-            $resultset = $this->getDoctrine()
-            ->getManager ()
-            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification')
-            ->createQueryBuilder('n')
-            ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH', 'n.configNotCli = cnc')
-            ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
-            ->where('n.person = :person and n.id = :id')
-            ->setParameter('person', $this->getUser())
-            ->setParameter('id', $request->get('notification'))
-            ->getQuery()->getOneOrNullResult();
-            if ($resultset) {
-                $resultset->setIsRead(true);
-                $this->getDoctrine()->getManager()->persist($resultset);
-                $this->getDoctrine()->getManager()->flush();
-            }
-            return $this->render('PROCERGSLoginCidadaoCoreBundle:Notification:inbox3.html.twig',
-                array('resultset' => $resultset)
-            );
-        } else {
-            return array();
-        }
+        return array();
     }
-    
+
+    /**
+     * @Route("/inbox/show2", name="lc_not_inbox_show2")
+     * @Template()
+     */
+    public function show2Action(Request $request)
+    {
+        $resultset = $this->getDoctrine()
+        ->getManager ()
+        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification')
+        ->createQueryBuilder('n')
+        ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH', 'n.configNotCli = cnc')
+        ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
+        ->where('n.person = :person and n.id = :id')
+        ->setParameter('person', $this->getUser())
+        ->setParameter('id', $request->get('notification'))
+        ->getQuery()->getOneOrNullResult();
+        if ($resultset) {
+            $resultset->setIsRead(true);
+            $this->getDoctrine()->getManager()->persist($resultset);
+            $this->getDoctrine()->getManager()->flush();
+        }
+        return $this->render('PROCERGSLoginCidadaoCoreBundle:Notification:show2.html.twig',
+            array('resultset' => $resultset)
+        );
+    }
     
     /**
      * @Route("/config/{id}", name="lc_not_config")
@@ -191,5 +197,5 @@ class NotificationController extends Controller
     {
         return array();
     }
-
+    
 }

@@ -99,7 +99,14 @@ class Notification implements NotificationInterface
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $person;
-
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="html_tpl", type="text", nullable=true)
+     */
+    private $htmlTpl;
+    
     /**
      * Get id
      *
@@ -371,5 +378,25 @@ class Notification implements NotificationInterface
     {
         return $this->getLevel() === self::LEVEL_EXTREME;
     }
-
+    
+    public function setHtmlTpl($var)
+    {
+        $this->htmlTpl = $var;
+        return $this;
+    }
+    
+    public function getHtmlTpl()
+    {
+        return $this->htmlTpl;
+    }
+    
+    public function parseHtmlTpl($var)
+    {
+        $cplaces = array('%title%' => $this->title, '%shorttext%' => $this->shortText, '%text%' => $this->text);
+        foreach ($cplaces as $search => $replace) {
+            $var = str_replace($search, $replace, $var);
+        }
+        return $this->setHtmlTpl($var);
+    }
+    
 }

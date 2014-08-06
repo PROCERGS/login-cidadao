@@ -346,36 +346,28 @@ var lcAutoLoader = {
 };
 $(document).ajaxSend(lcAutoLoader.start);
 $(document).ajaxComplete(lcAutoLoader.stop);
-function Pwindow(args) {
-	var id=null,label=null;
-	if (!args.id) {
-		id = '__default';
-	} else {
-		id = args.id;
-	}
-	if (!args.label) {
-		label = '';
-	} else {
-		label = args.label;
-	}
-	if (!$('#'+id).length) {
-		var html = '<div id="'+id+'" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="'+label+'" aria-hidden="true">'+
+function Pwindow(options) {
+	var opts = {
+		id : '__default',
+		label : '',
+		type: 'get',
+		dataType : 'html',
+		success : function(data, textStatus, jqXHR) {
+			$('#'+opts.id+' .modal-content').html(data);
+		}
+	};
+	var opts = $.extend(true, {}, opts, options);
+	if (!$('#'+opts.id).length) {
+		var html = '<div id="'+opts.id+'" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="'+opts.label+'" aria-hidden="true">'+
 	    '<div class="modal-dialog"><div class="modal-content"></div></div></div>';
 		$('.settings-content').append(html);
 	}
-	if (args.url) {
-		$('#'+id+' .modal-content').html('');
-		$.ajax({
-			type: 'get',
-			url: args.url,
-			data: args.data,
-			dataType : 'html',
-			success : function(data, textStatus, jqXHR) {
-				$('#'+id+' .modal-content').html(data);
-			}
-	    });
+	if (!opts.url) {
+		return alert('dunno');
 	}
-	$('#'+id).modal('show');
+	$('#'+opts.id+' .modal-content').html('');
+	$.ajax(opts);
+	$('#'+opts.id).modal('show');
 }
 $(function() {
 

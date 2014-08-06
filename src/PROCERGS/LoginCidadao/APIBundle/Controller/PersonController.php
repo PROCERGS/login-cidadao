@@ -187,8 +187,9 @@ class PersonController extends FOSRestController
                     $not->setConfigNotCli($res[1])
                     ->setIcon(isset($row['icon']) && $row['icon'] ? $row['icon'] : $not->getConfigNotCli()->getIcon())
                     ->setTitle(isset($row['title']) && $row['title'] ? $row['title'] : $not->getConfigNotCli()->getTitle())
-                    ->setShortText(isset($row['shorttext']) && $row['shorttext'] ? $row['shorttext'] : $not->getConfigNotCli()->getShortText())
-                    ->setText($row['text']);
+                    ->setShortText(isset($row['shorttext']) && $row['shorttext'] ? $row['shorttext'] : $not->getConfigNotCli()->getShortText())                    
+                    ->setText($row['text'])
+                    ->parseHtmlTpl($not->getConfigNotCli()->getHtmlTpl());
                     $errors = $validator->validate($not);
                     if (!count($errors)) {
                         $em->persist($not);

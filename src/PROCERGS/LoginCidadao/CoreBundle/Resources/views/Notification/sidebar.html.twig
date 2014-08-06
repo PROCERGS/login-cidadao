@@ -1,14 +1,27 @@
 <div class="settings-nav col-sm-3">
     <ul class="nav nav-pills nav-stacked">
+        <li class="profile glyph dropdown">
+        	<a href="{{ path('lc_not_inbox') }}" role="button">{{ 'inbox'|trans }}</a>
+        </li>
      {% for cli in clients %}
-        <li class="profile glyph dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" id="drop4">{{ cli['name'] }}
-        <span>{{ cli['total'] }}</span>
-        <span class="caret"></span>
-        </a>
-            <ul aria-labelledby="drop4" role="menu" class="dropdown-menu" id="menu1">
-                <li role="presentation"><a href="{{ path('lc_not_inbox',{'id' : cli['id']}) }}" tabindex="-1" role="menuitem">{{ 'inbox'|trans }}</a></li>
-                <li role="presentation"><a href="{{ path('lc_not_config',{'id' : cli['id']}) }}" tabindex="-1" role="menuitem">{{ 'configure'|trans }}</a></li>
-            </ul>
+        <li class="profile glyph dropdown">
+	        <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" id="drop{{ cli['id'] }}">{{ cli['name'] }}
+		        <div class="pull-right">
+			        <span id="inbox-count-unread-{{ cli['id'] }}" class="badge">{{ cli['total'] }}</span>
+			        <span class="caret"></span>
+		        </div>
+	        </a>
+	        <ul aria-labelledby="drop{{ cli['id'] }}" role="menu" class="dropdown-menu" id="drop-menu{{ cli['id'] }}">
+	        	<li >
+	        		<a href="{{ path('lc_not_inbox',{'client' : cli['id']}) }}" tabindex="-1" role="menuitem">{{ 'inbox'|trans }}</a>
+	        	</li>
+	            <li >
+	            	<a href="{{ path('lc_not_inbox',{'client' : cli['id'], 'mode' : 1}) }}" tabindex="-1" role="menuitem">{{ 'priority'|trans }}</a>
+	            </li>
+	            <li >
+	            	<a href="{{ path('lc_not_config',{'client' : cli['id']}) }}" tabindex="-1" role="menuitem">{{ 'configure'|trans }}</a>
+	            </li>
+	        </ul>
         </li>
     {% endfor %}
     </ul>

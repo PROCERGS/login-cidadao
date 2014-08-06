@@ -127,6 +127,10 @@ class NotificationsHelper
     public function clearUnconfirmedEmailNotification(Person $person)
     {
         $notification = $this->getUnconfirmedEmailNotification($person);
+        if (!$notification->getConfigNotCli()) {
+            $config = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli')->find(3);
+            $notification->setConfigNotCli($config);
+        }
         $notification->setRead(true);
         $this->em->persist($notification);
         $this->em->flush();
@@ -135,6 +139,10 @@ class NotificationsHelper
     public function enforceUnconfirmedEmailNotification(Person $person)
     {
         $notification = $this->getUnconfirmedEmailNotification($person);
+        if (!$notification->getConfigNotCli()) {
+            $config = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli')->find(3);
+            $notification->setConfigNotCli($config);
+        }
         $notification->setRead(false);
         $notification->setTarget('lc_resend_confirmation_email');
         $this->em->persist($notification);

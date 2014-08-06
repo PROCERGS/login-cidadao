@@ -1,17 +1,25 @@
-<div class="common-grid-results">
-	<ul class="pagination" role="tablist">
-		{% if start > 0 %}
-			<li><a href="{{ path( (_route is defined ? _route : app.request.attributes.get('_route')), (_route_params is defined ? _route_params|merge({start:start-1}) : app.request.attributes.get('_route_params')|merge({start:start-1}) )) }}">&laquo;</a></li>
+<div class="common-grid-results grid-full">
+	{% set rstart = ((page*maxresultset)/perpage) %}
+	{% set rlength = (resultset|length) %}
+	{% if (rlength - maxresultset) > 0 %}
+		{% set resultset = resultset|slice(0, rlength-1) %}
+	{% endif %}
+	{% set rpage = ((rlength/perpage)-((rlength - maxresultset) > 0 ? 1 :0))|number_format(0, '', '') %}
+	{% set rpage = rpage > 0 ? rpage : 0 %}
+	{% set rlast = (rlength - maxresultset) > 0 %}
+
+	<ul class="pagination" role="tablist" style="display: none;">
+		{% if page > 0 %}
+			<li><a href="{{ path( (_route is defined ? _route : app.request.attributes.get('_route')), (_route_params is defined ? _route_params|merge({page:page-1}) : app.request.attributes.get('_route_params')|merge({page:page-1}) )) }}">&laquo;</a></li>
 		{% endif %}
-		{% set rstart = ((start*maxresultset)/perpage) %}
-		{% set rlength = (resultset|length) %}
-		{% for i in 0..((rlength/perpage)-((rlength - maxresultset) > 0 ? 1 :0)) %}
+		{% for i in 0..rpage  %}
 			<li><a href="#page{{ (i+1)+rstart }}" role="tab" data-toggle="tab">{{ (i+1)+rstart }}</a></li>
 		{% endfor %}
-		{% if (rlength - maxresultset) > 0 %}		
-			<li><a href="{{ path( (_route is defined ? _route : app.request.attributes.get('_route')), (_route_params is defined ? _route_params|merge({start:start+1}) : app.request.attributes.get('_route_params')|merge({start:start+1}) )) }}">&raquo;</a></li>
+		{% if rlast %}		
+			<li><a href="{{ path( (_route is defined ? _route : app.request.attributes.get('_route')), (_route_params is defined ? _route_params|merge({page:page+1}) : app.request.attributes.get('_route_params')|merge({page:page+1}) )) }}">&raquo;</a></li>
 		{% endif %}
 	</ul>
+	
 	<div class="tab-content">
 		<div class="tab-pane active" id="page{{ rstart+1 }}">
 			<div class="row header">
@@ -21,10 +29,9 @@
 			    <div class="col-md-2">{{ 'createdat'|trans }}</div>        
 			</div>
 	    {% for row in resultset %}
-			    <div class="row common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }}">
-			        <input type="hidden" class="row-data" value="{{ row|json_encode }}" />
+			    <div class="row common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }} {{ rlast != true ? 'row-last' }}">
 			        <div class="col-md-1">
-			            <a class="center-block text-center glyphicon glyphicon-search edit-grid" title="{{ 'Show'|trans }}" href="{{ path('lc_not_inbox',{'notification':row.id}) }}"></a>
+			            <a class="center-block text-center glyphicon glyphicon-search edit-grid" title="{{ 'Show'|trans }}" href="javascript:void(0)" data-href="{{ path('lc_not_inbox_show2',{'notification':row.id}) }}"></a>
 			        </div>
 			        <div class="col-md-3">
 			            <dt>{{ 'service'|trans }}</dt>
@@ -52,4 +59,9 @@
 	    {% endfor %}
 	    </div>
 	</div>
+	{% if rlast %}
+		<button type="button" class="btn btn-lg btn-primary infinityscroll-next-button ">
+		<span class="glyphicon glyphicon-star"></span> {{ 'more'|trans }}
+		</button>
+	{% endif %}
 </div>

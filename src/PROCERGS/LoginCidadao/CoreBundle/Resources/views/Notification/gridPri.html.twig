@@ -9,7 +9,7 @@
         </div>
         <div id="{{ 'collapse' ~ row.id  }}" class="panel-collapse collapse">
             <div class="panel-body">
-                {{ render(controller("PROCERGSLoginCidadaoCoreBundle:Notification:gridSimple", {id:row.id})) }}
+                {{ render(controller("PROCERGSLoginCidadaoCoreBundle:Notification:gridSimple", {confignotcli:row.id})) }}
             </div>
         </div>
     </div>

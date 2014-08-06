@@ -121,5 +121,14 @@ class DefaultController extends Controller
         }
         return $response->setData($result);
     }
+    
+    
+    /**
+     * @Route("/login/cert", name="lc_login_cert")
+     * @Template()
+     */
+    public function loginCertAction(Request $request) {
+        die(print_r($_REQUEST));
+    }
 
 }

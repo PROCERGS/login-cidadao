@@ -42,9 +42,14 @@
                             {{ form_widget(form.shorttext) }}
                         </div>
                         <div class="form-group">
-                            {{ form_label(form.mailtemplate, 'Mail template' | trans) }} 
-                            {{ form_errors(form.mailtemplate) }} 
-                            {{ form_widget(form.mailtemplate, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}
+                            {{ form_label(form.mdtpl, 'Markdown template' | trans) }} 
+                            {{ form_errors(form.mdtpl) }} 
+                            {{ form_widget(form.mdtpl, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.mailtpl, 'Mail template' | trans) }} 
+                            {{ form_errors(form.mailtpl) }} 
+                            {{ form_widget(form.mailtpl, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}
                         </div>
                         <div class="form-group">
                             {{ form_label(form.maildomain, 'Mail domain'| trans) }} 
@@ -65,24 +70,4 @@
             </div>
     </div>
 </div>
-<style>
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-    border-color: black black rgba(0, 0, 0, 0);
-}
-.nav-tabs {
-    border-bottom: 1px solid black;
-}
-.tab-pane {
-    margin-top: 10px;
-}
-</style>
-{% endblock %}
-
-{% block javascripts %} 
-{{ parent() }}
-<script type="text/javascript">
-$(document).on('click', '#add_notification_category',  function() {
-	Pwindow({'id' : 'edit-category', 'url' : "{{ path('lc_profile_doc_rg_edit') }}"});
-});
-</script>
 {% endblock %}
