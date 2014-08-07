@@ -4,23 +4,19 @@
 	{% if (app.request.query.get('mode') is not defined) or (app.request.query.get('mode') == 0) %}
 	    {{ render(controller("PROCERGSLoginCidadaoCoreBundle:Notification:gridFull", 
 		    { 
-		    '_locale': app.request.locale, 
-		    '_route': app.request.attributes.get('_route'), 
-		    '_route_params' :app.request.attributes.get('_route_params'), 
 		    'page' :app.request.query.get('page'),
 		    'client' :app.request.query.get('client'),
-		    'mode' :app.request.query.get('mode') 
+		    'mode' :app.request.query.get('mode'),
+		    'confignotcli' : app.request.query.get('confignotcli')
 		    } 
 	    )) }}
     {% else %}
     	{{ render(controller("PROCERGSLoginCidadaoCoreBundle:Notification:gridPri", 
 		    { 
-		    '_locale': app.request.locale, 
-		    '_route': app.request.attributes.get('_route'), 
-		    '_route_params' :app.request.attributes.get('_route_params'), 
 		    'page' :app.request.query.get('page'),
 		    'client' :app.request.query.get('client'),
-		    'mode' :app.request.query.get('mode') 
+		    'mode' :app.request.query.get('mode'),
+		    'confignotcli' : app.request.query.get('confignotcli')
 		    }
     	)) }}
 	{% endif %}
@@ -67,7 +63,7 @@
 			});
 		});    	
     	
-		$('#inbox-detail .grid-full').infinitescroll({
+		$('#grid-full .infinity-grid').infinitescroll({
 	    	debug: true,
 	        navSelector  : '.pagination',
 	        nextSelector : '.pagination a:last',
@@ -90,15 +86,15 @@
 	    		}
 	    	}
 	    	if (!isLast) {
-	    		$('#inbox-detail .grid-full .infinityscroll-next-button').show();
+	    		$('#grid-full .infinity-grid .infinityscroll-next-button').show();
 	    	}
 	        window.console && console.log('context: ',this);
 			window.console && console.log('returned: ', newElements);
 	    });
 	    $(window).unbind('.infscr');
-	    $(document).on('click', '#inbox-detail .grid-full .infinityscroll-next-button' ,function(){
+	    $(document).on('click', '#grid-full .infinity-grid .infinityscroll-next-button' ,function(){
 	    	$(this).hide();
-	    	$('#inbox-detail .grid-full').infinitescroll('retrieve');
+	    	$('#grid-full').infinitescroll('retrieve');
 	    	return false;
 	    });
     });

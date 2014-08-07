@@ -1,28 +1,26 @@
-<div class="common-grid-results grid-simple">
-    <div class="row header">
-        <div class="col-md-1">{{ 'actions'|trans }}</div>
-        <div class="col-md-3">{{ 'title'|trans }}</div>
-        <div class="col-md-6">{{ 'shorttext'|trans }}</div>
-        <div class="col-md-2">{{ 'createdat'|trans }}</div>        
+{% extends "PROCERGSLoginCidadaoCoreBundle:Notification:gridFull.html.twig" %}
+
+{% block grid_header_rows %}
+    <div class="col-md-1">{{ 'actions'|trans }}</div>
+    <div class="col-md-3">{{ 'title'|trans }}</div>
+    <div class="col-md-6">{{ 'shorttext'|trans }}</div>
+    <div class="col-md-2">{{ 'createdat'|trans }}</div>        
+{% endblock grid_header_rows %}
+
+{% block grid_rows %}
+    <div class="col-md-1">
+    	<a class="center-block text-center glyphicon glyphicon-search edit-grid" title="{{ 'Show'|trans }}" href="javascript:void(0)" data-href="{{ path('lc_not_inbox_show2',{'notification':row.id}) }}"></a>
     </div>
-    {% for row in resultset %}
-    <div class="row common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }}">
-        <input type="hidden" class="row-data" value="{{ row|json_encode }}" />
-        <div class="col-md-1">
-            <a class="center-block text-center glyphicon glyphicon-search edit-grid" title="{{ 'Show'|trans }}" href="{{ path('lc_not_inbox',{'notification':row.id}) }}"></a>
-        </div>
-        <div class="col-md-3">
-            <dt>{{ 'title'|trans }}</dt>
-            <dd>{{ row.title }}</dd>
-        </div>
-        <div class="col-md-6">
-            <dt>{{ 'shorttext'|trans }}</dt>
-            <dd>{{ row.shorttext }}</dd>
-        </div>
-        <div class="col-md-2">
-            <dt>{{ 'shorttext'|trans }}</dt>
-            <dd>{{ row.createdat|date('d/m/Y h:i:s') }}</dd>
-        </div>
+    <div class="col-md-3">
+        <dt>{{ 'title'|trans }}</dt>
+        <dd>{{ row.title }}</dd>
     </div>
-    {% endfor %}
-</div>
+    <div class="col-md-6">
+        <dt>{{ 'shorttext'|trans }}</dt>
+        <dd>{{ row.shorttext }}</dd>
+    </div>
+    <div class="col-md-2">
+        <dt>{{ 'createdat'|trans }}</dt>
+        <dd>{{ row.createdat|date('d/m/Y h:i:s') }}</dd>
+    </div>
+{% endblock grid_rows %}

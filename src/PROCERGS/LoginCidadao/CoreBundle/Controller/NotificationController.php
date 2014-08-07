@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 
 class NotificationController extends Controller
 {
@@ -87,6 +88,7 @@ class NotificationController extends Controller
         ->getManager ()
         ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification')
         ->createQueryBuilder('n')
+        ->select('n.id, n.isRead isread, n.title, n.shortText shorttext, n.createdAt createdat, c.name client_name')
         ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH', 'n.configNotCli = cnc')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
         ->where('n.person = :person')
@@ -96,19 +98,18 @@ class NotificationController extends Controller
         if ($request->get('client')) {
             $sql->andWhere('c.id = :client')->setParameter('client', $request->get('client'));
         }
-        
-        $max = 50;
-        $perpage = 50;
-        if ($request->get('page')) {
-            $page = $request->get('page');          
-            $sql->setFirstResult($page * $max);
-        } else {
-            $page = 0;
-        }
-        $sql->setMaxResults($max + 1);
-        
-        $resultset = $sql->getQuery()->getResult();
-        return array('resultset' => $resultset, 'maxresultset' => $max, 'perpage' => $perpage, 'page' => $page);
+        if ($request->get('confignotcli')) {
+            $sql->andWhere('cnc.id = :confignotcli')->setParameter('confignotcli', $request->get('confignotcli'));
+        }        
+        $grid = new GridHelper();
+        $grid->setId('grid-full');
+        $grid->setPerPage(10);
+        $grid->setMaxResult(50);
+        $grid->setQueryBuilder($sql);
+        $grid->setInfinityGrid(true);
+        $grid->setRoute('lc_not_inbox');
+        $grid->setRouteParams(array('client', 'mode', 'notification', 'confignotcli'));
+        return array('grid' => $grid->createView($request));
     }
     
     /**
@@ -132,7 +133,7 @@ class NotificationController extends Controller
     }
     
     /**
-     * @Route("/inbox/gridsimple", name="lc_not_inbox_gridfull")
+     * @Route("/inbox/gridsimple", name="lc_not_inbox_gridsimple")
      * @Template()
      */
     public function gridSimpleAction(Request $request = null) {
@@ -140,18 +141,31 @@ class NotificationController extends Controller
         if (!$id) {
             return $this->gridFullAction();
         }
-        $resultset = $this->getDoctrine()
+        $sql = $this->getDoctrine()
         ->getManager ()
         ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification')
         ->createQueryBuilder('n')
+        ->select('n.id, n.isRead isread, n.title, n.shortText shorttext, n.createdAt createdat, c.name client_name')
         ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH', 'n.configNotCli = cnc')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
         ->where('n.person = :person and cnc.id = :configNotCli')
         ->setParameter('person', $this->getUser())
         ->setParameter('configNotCli', $id)
-        ->orderBy('n.createdAt', 'DESC')
-        ->getQuery()->getResult();
-        return array('resultset' => $resultset);
+        ->orderBy('n.id', 'DESC');
+
+        if ($request->get('client')) {
+            $sql->andWhere('c.id = :client')->setParameter('client', $request->get('client'));
+        }
+        
+        $grid = new GridHelper();
+        $grid->setId('grid-simple');
+        $grid->setPerPage(5);
+        $grid->setMaxResult(25);
+        $grid->setQueryBuilder($sql);
+        $grid->setInfinityGrid(false);
+        $grid->setRoute('lc_not_inbox');
+        $grid->setRouteParams(array('client', 'mode', 'notification', 'confignotcli'));
+        return array('grid' => $grid->createView($request));
     }
     
     /**
