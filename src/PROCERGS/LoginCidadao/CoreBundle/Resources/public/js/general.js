@@ -352,10 +352,22 @@ function Pwindow(options) {
 		label : '',
 		type: 'get',
 		dataType : 'html',
+		selector: null,
+		_selector : function () {
+			return opts.selector || $('#'+opts.id+' .modal-content');
+		},	
+		beforeSend: function() {
+			$('#'+opts.id).modal('hide');
+			opts._selector().html('');
+		},
 		success : function(data, textStatus, jqXHR) {
-			$('#'+opts.id+' .modal-content').html(data);
+			opts._selector().html(data);
+		},
+		complete: function() {
+			$('#'+opts.id).modal('show');
 		}
 	};
+	
 	var opts = $.extend(true, {}, opts, options);
 	if (!$('#'+opts.id).length) {
 		var html = '<div id="'+opts.id+'" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="'+opts.label+'" aria-hidden="true">'+
@@ -365,9 +377,7 @@ function Pwindow(options) {
 	if (!opts.url) {
 		return alert('dunno');
 	}
-	$('#'+opts.id+' .modal-content').html('');
 	$.ajax(opts);
-	$('#'+opts.id).modal('show');
 }
 $(function() {
 

@@ -24,6 +24,18 @@
 <div id="notificationreader" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="{{ 'notification'|trans }}" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">{{ 'notification'|trans }}</h4>
+			</div>
+			<div class="modal-body">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
 		</div>
 	</div>
 </div>
@@ -50,53 +62,36 @@
     $(document).ready(function() {
 		$(document).on('click', '#inbox-detail .common-grid-results a.edit-grid',  function() {
 			var self = $(this);
-			var url = self.attr('data-href');
+			var url = '{{ path('lc_not_inbox_show2') }}';
+			url += '?'+$.param($.parseJSON(self.attr('data-row')));
 			Pwindow({
 				id : 'notificationreader',
 				url : url,
+				dataType :'json',
+				selector: $('#notificationreader .modal-body'),
 				success : function(data, textStatus, jqXHR) {
-					if (data) {
-						self.parent().parent().removeClass('notification-unread').addClass('notification-read');						
-					} 
-					$('#notificationreader .modal-content').html(data);
+					if (!data) {
+						return;
+					}
+					var cRow = self.parent().parent();
+					if (data.wasread) {
+						cRow.removeClass('notification-unread').addClass('notification-read');						
+					}
+					if (!data.htmltpl) {
+						data.htmltpl = '';
+					}
+					if (cRow.prev().find('a.edit-grid').length) {
+						var t = "$('#"+cRow.prev().find('a.edit-grid').attr('id')+"').click()";
+						data.htmltpl += '<a class="left carousel-control" href="javascript:void(0);" onclick="'+t+'" role="button"><span class="glyphicon glyphicon-chevron-left"></span></a>';	
+					}
+					if (cRow.next().find('a.edit-grid').length) {
+						var t = "$('#"+cRow.next().find('a.edit-grid').attr('id')+"').click()";
+						data.htmltpl += '<a class="right carousel-control" href="javascript:void(0);" onclick="'+t+'" role="button"><span class="glyphicon glyphicon-chevron-right"></span></a>';	
+					}
+					this.selector.html(data.htmltpl);
 				}
 			});
 		});    	
-    	
-		$('#grid-full .infinity-grid').infinitescroll({
-	    	debug: true,
-	        navSelector  : '.pagination',
-	        nextSelector : '.pagination a:last',
-	        itemSelector : '.row.common-grid-result',
-	        contentSelector: '#page1',
-	        bufferPx     : 200,
-	        state : {
-	        	currPage:0
-	        },
-	        loading: {	            
-	            msg: $('<div>'),
-	            img: null
-	        }
-	    },
-	    function( newElements, data, url ) {
-	    	var isLast = false;
-	    	for (x in newElements) {
-	    		if (isLast = newElements[x].classList.contains("row-last")) {
-	    			break;
-	    		}
-	    	}
-	    	if (!isLast) {
-	    		$('#grid-full .infinity-grid .infinityscroll-next-button').show();
-	    	}
-	        window.console && console.log('context: ',this);
-			window.console && console.log('returned: ', newElements);
-	    });
-	    $(window).unbind('.infscr');
-	    $(document).on('click', '#grid-full .infinity-grid .infinityscroll-next-button' ,function(){
-	    	$(this).hide();
-	    	$('#grid-full').infinitescroll('retrieve');
-	    	return false;
-	    });
     });
 </script>
 {% endblock %}

@@ -1,16 +1,12 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle:Notification:gridFull.html.twig" %}
 
-{% block grid_header_rows %}
-    <div class="col-md-1">{{ 'actions'|trans }}</div>
+{% block grid_header_rows %}    
     <div class="col-md-3">{{ 'title'|trans }}</div>
     <div class="col-md-6">{{ 'shorttext'|trans }}</div>
     <div class="col-md-2">{{ 'createdat'|trans }}</div>        
 {% endblock grid_header_rows %}
 
 {% block grid_rows %}
-    <div class="col-md-1">
-    	<a class="center-block text-center glyphicon glyphicon-search edit-grid" title="{{ 'Show'|trans }}" href="javascript:void(0)" data-href="{{ path('lc_not_inbox_show2',{'notification':row.id}) }}"></a>
-    </div>
     <div class="col-md-3">
         <dt>{{ 'title'|trans }}</dt>
         <dd>{{ row.title }}</dd>

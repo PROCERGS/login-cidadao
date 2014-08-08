@@ -102,9 +102,9 @@ class NotificationController extends Controller
             $sql->andWhere('cnc.id = :confignotcli')->setParameter('confignotcli', $request->get('confignotcli'));
         }        
         $grid = new GridHelper();
-        $grid->setId('grid-full');
+        $grid->setId('fullOne');
         $grid->setPerPage(10);
-        $grid->setMaxResult(50);
+        $grid->setMaxResult(10);
         $grid->setQueryBuilder($sql);
         $grid->setInfinityGrid(true);
         $grid->setRoute('lc_not_inbox');
@@ -158,7 +158,7 @@ class NotificationController extends Controller
         }
         
         $grid = new GridHelper();
-        $grid->setId('grid-simple');
+        $grid->setId('simpleOne');
         $grid->setPerPage(5);
         $grid->setMaxResult(25);
         $grid->setQueryBuilder($sql);
@@ -179,7 +179,6 @@ class NotificationController extends Controller
 
     /**
      * @Route("/inbox/show2", name="lc_not_inbox_show2")
-     * @Template()
      */
     public function show2Action(Request $request)
     {
@@ -193,14 +192,17 @@ class NotificationController extends Controller
         ->setParameter('person', $this->getUser())
         ->setParameter('id', $request->get('notification'))
         ->getQuery()->getOneOrNullResult();
+        $a = array('wasread' => false, 'htmltpl' => null);
         if ($resultset) {
-            $resultset->setIsRead(true);
-            $this->getDoctrine()->getManager()->persist($resultset);
-            $this->getDoctrine()->getManager()->flush();
+            if (!$resultset->getIsRead()) {
+                $resultset->setIsRead(true);
+                $this->getDoctrine()->getManager()->persist($resultset);
+                $this->getDoctrine()->getManager()->flush();
+                $a['wasread'] = true;
+            }            
+            $a['htmltpl'] = $resultset->getHtmlTpl();
         }
-        return $this->render('PROCERGSLoginCidadaoCoreBundle:Notification:show2.html.twig',
-            array('resultset' => $resultset)
-        );
+        return new JsonResponse($a);
     }
     
     /**
