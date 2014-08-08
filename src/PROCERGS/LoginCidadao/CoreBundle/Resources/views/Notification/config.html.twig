@@ -1,0 +1,22 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle:Notification:base.html.twig" %}
+{% block content %}
+<div id="inbox-detail" class="content app-admin clearfix">
+	<div class="panel-group" id="accordion">
+	    {% for row in resultset %} 
+	    <div class="panel panel-default">
+	        <input type="hidden" class="row-data" value="{{ row|json_encode }}" />
+	        <div class="panel-heading">
+	            <h4 class="panel-title">
+	                <a data-toggle="collapse" data-parent="#accordion" href="{{ '#collapse' ~ row.id  }}"><span class="caret"></span> {{ row.name }}</a>
+	            </h4>
+	        </div>
+	        <div id="{{ 'collapse' ~ row.id  }}" class="panel-collapse collapse">
+	            <div class="panel-body">
+	            	{{ form(forms[loop.index-1]) }}
+	            </div> 
+	        </div>
+	    </div>
+	    {% endfor %}
+	</div>
+</div>
+{% endblock %}

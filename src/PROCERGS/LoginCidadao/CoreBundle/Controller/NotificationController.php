@@ -9,6 +9,8 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\ConfigNotPer;
+use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientNotPerFormType;
 
 class NotificationController extends Controller
 {
@@ -206,12 +208,41 @@ class NotificationController extends Controller
     }
     
     /**
-     * @Route("/config/{id}", name="lc_not_config")
+     * @Route("/config", name="lc_not_config")
      * @Template()
      */
-    public function configAction($id = null)
+    public function configAction(Request $request)
     {
-        return array();
+        $id = $request->get('client');
+        if (!$id) {
+            return $this->gridFullAction();
+        }
+        $em = $this->getDoctrine()->getManager();
+        $resultset = $em
+        ->getRepository('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli')
+        ->createQueryBuilder('cnc')
+        ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
+        ->leftJoin('PROCERGSLoginCidadaoCoreBundle:ConfigNotPer', 'cnp', 'with', 'cnp.configNotCli = cnc and cnp.person = :person')
+        ->where('c.id = :client ')
+        ->setParameter('client', $id)
+        ->setParameter('person', $this->getUser())
+        ->getQuery()->getResult();
+        foreach ($resultset as &$res) {
+            $c = $res->getConfigNotPer();
+            if (!$c) {
+                $a = new ConfigNotPer();
+                $a->setPerson($this->getUser());
+                $a->setConfigNotCli($res);
+                $a->setMailSend($res->getMailSend());
+                $em->persist($a);
+                $res->setConfigNotPer($a);
+            }
+            $forms[] = $this->createForm(new ClientNotPerFormType(), $c)->createView();
+        }
+        if (isset($a)) {
+            $em->flush();
+        }
+        return array('resultset' => $resultset, 'forms' => $forms);
     }
     
 }

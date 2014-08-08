@@ -333,6 +333,11 @@ class Person extends BaseUser
      */
     protected $complement;
 
+    /**
+     * @ORM\OneToMany(targetEntity="ConfigNotPer", mappedBy="person")
+     */
+    protected $configNotPers;
+    
     public function __construct()
     {
         parent::__construct();

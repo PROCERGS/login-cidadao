@@ -88,6 +88,11 @@ class ConfigNotCli
      * @ORM\Column(name="md_tpl", type="text", nullable=true)
      */
     private $mdTpl;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="ConfigNotPer", mappedBy="configNotCli")
+     */
+    protected $configNotPer;    
 
     public function setId($var)
     {
@@ -231,6 +236,17 @@ class ConfigNotCli
     public function getHtmlTpl()
     {
         return $this->htmlTpl;
-    }    
+    }
+    
+    public function setConfigNotPer($var)
+    {
+        $this->configNotPer = $var;
+        return $this;
+    }
+    
+    public function getConfigNotPer()
+    {
+        return $this->configNotPer;
+    }
     
 }
