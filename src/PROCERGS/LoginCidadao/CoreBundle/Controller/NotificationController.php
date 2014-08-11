@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\ConfigNotPer;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientNotPerFormType;
+use Symfony\Component\HttpFoundation\Response;
 
 class NotificationController extends Controller
 {
@@ -244,5 +245,38 @@ class NotificationController extends Controller
         }
         return array('resultset' => $resultset, 'forms' => $forms);
     }
+    
+    /**
+     * @Route("/config/change", name="lc_not_config_change")
+     * @Template()
+     */
+    public function configChangeAction(Request $request)
+    {
+        $form = $this->createForm(new ClientNotPerFormType());
+        $config = null;
+        $manager = $this->getDoctrine()->getManager();
+        if ((($data = $request->get($form->getName())) && ($id = $data['id']))) {
+            $config = $manager->getRepository('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli')
+            ->createQueryBuilder('cnc')
+            ->select('cnp')
+            ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
+            ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotPer', 'cnp', 'with', 'cnp.configNotCli = cnc and cnp.person = :person')
+            ->where('cnp.id = :client ')
+            ->setParameter('client', $id)
+            ->setParameter('person', $this->getUser())
+            ->getQuery()->getOneOrNullResult();
+        }
+        if (!$config) {
+            return $this->gridFullAction();
+        }
+        $form = $this->createForm(new ClientNotPerFormType(), $config);
+        $form->handleRequest($this->getRequest());
+        if ($form->isValid()) {
+            $manager->persist($config);
+            $manager->flush();
+        }
+        return array('form' => $form->createView(), 'cnc_id' => $config->getConfigNotCli()->getId());
+    }    
+    
     
 }

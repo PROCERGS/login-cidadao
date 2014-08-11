@@ -1,0 +1,16 @@
+<div class="panel-body">
+	{{ form_start(form, {'action': path('lc_not_config_change'), 'attr': {'role':'form' , 'class' : 'form-ajax', 'ajax-target' : '#collapse' ~ cnc_id }}) }}
+	{{ form_errors(form) }}
+    <div class="form-content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+	                {{ form_label(form.mailsend) }} 
+	                {{ form_errors(form.mailsend) }} 
+	                {{ form_widget(form.mailsend) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div> 
