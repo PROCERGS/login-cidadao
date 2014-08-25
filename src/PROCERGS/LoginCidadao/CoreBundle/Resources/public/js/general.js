@@ -426,5 +426,42 @@ $(function() {
     			$(e.attr('ajax-target')).html(data);
     		}
         });
-    })
+    });
+    $('[data-infinity-grid="true"]').each(function () {
+    	var _id = '#'+ $(this).prop('id'); 
+		$(_id).infinitescroll({
+	    	debug: true,
+	        navSelector  : '.pagination',
+	        nextSelector : '.pagination a:last',
+	        itemSelector : '.row.common-grid-result',
+	        contentSelector: '#page1',
+	        bufferPx     : 200,
+	        state : {
+	        	currPage:0
+	        },
+	        loading: {	            
+	            msg: $('<div>'),
+	            img: null
+	        }
+	    },
+	    function( newElements, data, url ) {
+	    	var isLast = false;
+	    	for (x in newElements) {
+	    		if (isLast = newElements[x].classList.contains("row-last")) {
+	    			break;
+	    		}
+	    	}
+	    	if (!isLast) {
+	    		$(_id+' .infinityscroll-next-button').show();
+	    	}
+	        window.console && console.log('context: ',this);
+			window.console && console.log('returned: ', newElements);
+	    });
+	    $(window).unbind('.infscr');
+	    $(document).on('click', _id+' .infinityscroll-next-button' ,function(){
+	    	$(this).hide();
+	    	$(_id).infinitescroll('retrieve');
+	    	return false;
+	    });
+      });
 });
