@@ -1,0 +1,142 @@
+{% block grid_pagination %}
+<ul class="pagination" role="tablist" style="{{ grid.isInfinityGrid ? 'display: none;' }}">
+	{% if grid.getPage > 0 %}
+		<li><a href="{{ path(grid.getRoute, grid.getRouteParams|merge({page:grid.getPage-1})) }}">&laquo;</a></li>
+	{% endif %}
+	{% for i in 0..grid.getRpage  %}
+		<li><a href="#page{{ (i+1)+grid.getRstart }}" role="tab" data-toggle="tab">{{ (i+1)+grid.getRstart }}</a></li>
+	{% endfor %}
+	{% if grid.getRlast %}		
+		<li><a href="{{ path(grid.getRoute, grid.getRouteParams|merge({page:grid.getPage+1})) }}">&raquo;</a></li>
+	{% endif %}
+</ul>
+{% endblock grid_pagination %}
+
+{% block grid_header %}
+<div class="row header">
+	{{ block('grid_header_action') }}
+	{{ block('grid_header_data') }}
+</div>
+{% endblock grid_header %}
+
+{% block grid_header_action %}
+<div class="col-md-1">{{ 'actions'|trans }}</div>
+{% endblock grid_header_action %}
+
+{% block grid_header_data %}
+<div class="col-md-3">{{ 'service'|trans }}</div>
+<div class="col-md-6">{{ 'shorttext'|trans }}</div>
+<div class="col-md-2">{{ 'createdat'|trans }}</div>
+{% endblock grid_header_data %}
+
+{% block grid_row_action %}
+<div class="col-md-1">
+    <a id="{{ grid.getId }}-row-{{ row.id }}" class="center-block text-center glyphicon glyphicon-search edit-grid" title="{{ 'Show'|trans }}" href="javascript:void(0)" data-row="{{ grid.getRouteParams|merge({'notification':row.id})|json_encode }}"></a>
+</div>
+{% endblock grid_row_action %}
+		        
+{% block grid_row_data %}
+<div class="col-md-3">
+    <dt>{{ 'service'|trans }}</dt>
+    <dd>{{ row.client_name }}</dd>
+</div>
+<div class="col-md-6">
+    <dt>{{ 'shorttext'|trans }}</dt>
+    <dd>{{ row.shorttext }}</dd>
+</div>
+<div class="col-md-2">
+    <dt>{{ 'createdat'|trans }}</dt>
+    <dd>{{ row.createdat|date('d/m/Y h:i:s') }}</dd>
+</div>
+{% endblock grid_row_data %}
+
+{% block grid_infinity_pagination %}
+	{% if grid.getRlast and grid.isInfinityGrid %}
+		<button type="button" class="btn btn-lg btn-primary infinityscroll-next-button ">
+			<span class="glyphicon glyphicon-star"></span> {{ 'more'|trans }}
+		</button>
+	{% endif %}
+{% endblock grid_infinity_pagination %}				
+
+{% block grid_row %}
+<div class="row common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }} {{ grid.getRlast != true ? 'row-last' }}">
+	{{ block('grid_row_action') }}
+	{{ block('grid_row_data') }}
+</div>
+{% endblock grid_row %}
+
+{% block grid_body %}
+<div class="tab-content">
+	<div class="tab-pane active" id="page{{ grid.getRstart+1 }}">
+		{{ block('grid_header') }}
+	    {% for row in grid.getResultset %}
+	    	{{ block('grid_row') }}
+			{% if loop.index%grid.getPerpage==0 %}
+				</div>			
+				<div class="tab-pane" id="page{{ (loop.index/grid.getPerpage)+grid.getRstart+1 }}">
+					{{ block('grid_header') }}
+			{% endif%}
+	    {% endfor %}
+    </div>
+</div>
+{% endblock grid_body %}
+
+{% block grid %}
+<div id="{{ grid.getId }}" class="common-grid-results" {{ grid.isInfinityGrid ? 'data-infinity-grid="true"' }}>
+	{{ block('grid_pagination') }}
+	{{ block('grid_body') }}
+	{{ block('grid_infinity_pagination') }}
+</div>
+{% endblock grid %}
+
+{% if grid.isInfinityGrid %}
+<script>
+if (typeof grid{{ grid.getId }} == "undefined") {
+	function gridInfinityGrid (val) {
+		var _id = '#'+val;
+		this.getId = getId;
+		function getId () {
+			return _id;
+		}
+		this.doMutley = function () {
+			$(_id).infinitescroll({
+		    	debug: true,
+		        navSelector  : '.pagination',
+		        nextSelector : '.pagination a:last',
+		        itemSelector : '.row.common-grid-result',
+		        contentSelector: '#page1',
+		        bufferPx     : 200,
+		        state : {
+		        	currPage:0
+		        },
+		        loading: {	            
+		            msg: $('<div>'),
+		            img: null
+		        }
+		    },
+		    function( newElements, data, url ) {
+		    	var isLast = false;
+		    	for (x in newElements) {
+		    		if (isLast = newElements[x].classList.contains("row-last")) {
+		    			break;
+		    		}
+		    	}
+		    	if (!isLast) {
+		    		$(_id+' .infinityscroll-next-button').show();
+		    	}
+		        window.console && console.log('context: ',this);
+				window.console && console.log('returned: ', newElements);
+		    });
+		    $(window).unbind('.infscr');
+		    $(document).on('click', _id+' .infinityscroll-next-button' ,function(){
+		    	$(this).hide();
+		    	$(_id).infinitescroll('retrieve');
+		    	return false;
+		    });
+		}
+	}
+	var grid{{ grid.getId }} = new gridInfinityGrid('{{ grid.getId }}');
+	window.onready = grid{{ grid.getId }}.doMutley;
+}
+</script>
+{% endif %}
