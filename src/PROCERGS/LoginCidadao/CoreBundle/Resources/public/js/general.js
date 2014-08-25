@@ -427,17 +427,17 @@ $(function() {
     		}
         });
     });
-    $('[data-infinity-grid="true"]').each(function () {
+    var dynInfGrid = function () {
     	var _id = '#'+ $(this).prop('id'); 
 		$(_id).infinitescroll({
 	    	debug: true,
-	        navSelector  : '.pagination',
-	        nextSelector : '.pagination a:last',
-	        itemSelector : '.row.common-grid-result',
-	        contentSelector: '#page1',
+	        navSelector  : _id + ' .pagination',
+	        nextSelector : _id + ' .pagination a:last',
+	        itemSelector : _id + ' .row.common-grid-result',
+	        contentSelector: _id + ' .tab-pane.active',
 	        bufferPx     : 200,
 	        state : {
-	        	currPage:0
+	        	currPage: $(_id).attr('data-grid-currpage')
 	        },
 	        loading: {	            
 	            msg: $('<div>'),
@@ -463,5 +463,6 @@ $(function() {
 	    	$(_id).infinitescroll('retrieve');
 	    	return false;
 	    });
-      });
+      };
+      $('[data-infinity-grid="true"]').each(dynInfGrid);
 });
