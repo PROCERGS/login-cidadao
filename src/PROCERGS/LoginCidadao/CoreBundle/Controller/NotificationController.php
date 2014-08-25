@@ -139,7 +139,8 @@ class NotificationController extends Controller
      * @Route("/inbox/gridsimple", name="lc_not_inbox_gridsimple")
      * @Template()
      */
-    public function gridSimpleAction(Request $request = null) {
+    public function gridSimpleAction() {
+        $request = $this->getRequest();
         $id = $request->get('confignotcli');
         if (!$id) {
             return $this->gridFullAction();
@@ -162,11 +163,11 @@ class NotificationController extends Controller
         
         $grid = new GridHelper();
         $grid->setId('simpleOne');
-        $grid->setPerPage(5);
-        $grid->setMaxResult(25);
+        $grid->setPerPage(10);
+        $grid->setMaxResult(10);
         $grid->setQueryBuilder($sql);
-        $grid->setInfinityGrid(false);
-        $grid->setRoute('lc_not_inbox');
+        $grid->setInfinityGrid(true);
+        $grid->setRoute('lc_not_inbox_gridsimple');
         $grid->setRouteParams(array('client', 'mode', 'notification', 'confignotcli'));
         return array('grid' => $grid->createView($request));
     }
