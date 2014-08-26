@@ -68,3 +68,6 @@ parameters:
     uri_vpr_link: 'http://des.vpr.rs.gov.br/app_dev.php'
     google_app_key: ~
     google_app_secret: ~
+    igp_ws_url: ~
+    igp_username: ~
+    igp_password: ~

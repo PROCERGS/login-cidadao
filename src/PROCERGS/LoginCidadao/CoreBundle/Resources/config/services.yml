@@ -22,6 +22,7 @@ parameters:
 
     procergs_logincidadao_core.emailChanged.template: PROCERGSLoginCidadaoCoreBundle:Person:emailChangedMessage.html.twig
     procergs_logincidadao.nfgws.class: PROCERGS\LoginCidadao\CoreBundle\Helper\NfgWsHelper
+    procergs_logincidadao.igpws.class: PROCERGS\LoginCidadao\CoreBundle\Helper\IgpWsHelper
 
     procergs_logincidadao.postalcode.search.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\SearchPostalCodeFormType
 
@@ -204,3 +205,10 @@ services:
             - [setOrganizacao, [%soe_organization%]]
             - [setUsuario, [%soe_username%]]
             - [setSenha, [%soe_password%]]
+    procergs_logincidadao.igpws:
+        class: %procergs_logincidadao.igpws.class%
+        calls:
+            - [setUrl, [%igp_ws_url%]]            
+            - [setUsername, [%igp_username%]]
+            - [setPassword, [%igp_password%]]
+            
