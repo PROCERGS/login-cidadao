@@ -14,6 +14,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Uf;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\IgpWsHelper;
+use Doctrine\ORM\Query;
 
 class DefaultController extends Controller
 {
@@ -138,10 +139,15 @@ class DefaultController extends Controller
      */
     public function igpConsultAction(Request $request) {
         $igp = $this->get('procergs_logincidadao.igpws');
-        $igp->setCpf('83495304053');
-        print_r($igp->consultar());
+        //$rcs = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->createQueryBuilder('p')->select('p.cpf')->where('p.cpf is not null')->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        echo "<pre>";
+        $rcs[] = array('cpf' => '1000450741');
+        foreach ($rcs as $rc) {
+            $igp->setCpf($rc['cpf']);
+            $rc['igp'] = $igp->consultar();
+            print_r($rc);
+        }
         die();
-        
     }
 
 }

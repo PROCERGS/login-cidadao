@@ -105,32 +105,36 @@ class IgpWsHelper
 
     public function consultar()
     {
-        $header = array(
-            'organizacao: PROCERGS',
-            'matricula: ' . $this->username,
-            'senha: ' . $this->password,
-            'sistema: IRS',
-            'objeto: SIIINDIVIDUOBASICO',
-            'acao: CONSULTAR'
-        );
-        $this->_common($header);
+        if (!$this->ch) {
+            $header = array(
+                'organizacao: PROCERGS',
+                'matricula: ' . $this->username,
+                'senha: ' . $this->password,
+                'sistema: IRS',
+                'objeto: SIIINDIVIDUOBASICO',
+                'acao: CONSULTAR'
+            );
+            $this->_common($header);
+            curl_setopt($this->ch, CURLOPT_POST, 1);
+            curl_setopt($this->ch, CURLOPT_URL, $this->url);
+        }
+        $data = array();
         if ($this->rg) {
             $data['rg'] = $this->rg;
         }
         if ($this->cpf) {
             $data['cpf'] = $this->cpf;
         }
-        curl_setopt($this->ch, CURLOPT_POST, 1);
         curl_setopt($this->ch, CURLOPT_POSTFIELDS, json_encode($data));
-        $url = $this->url;
-        curl_setopt($this->ch, CURLOPT_URL, $url);
         $result = curl_exec($this->ch);
-        curl_close($this->ch);
         return $result;
     }
 
     public function __destruct()
     {
+        curl_close($this->ch);
+        $this->ch = null;
         @unlink($this->cookie);
+        $this->cookie = null;
     }
 }
