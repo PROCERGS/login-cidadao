@@ -109,10 +109,9 @@ class IgpWsHelper
             'organizacao: PROCERGS',
             'matricula: ' . $this->username,
             'senha: ' . $this->password,
-            'sistema: MEU',
+            'sistema: IRS',
             'objeto: SIIINDIVIDUOBASICO',
-            'acao: CONSULTAR',
-            'usuarioPessoa: ' . $this->username
+            'acao: CONSULTAR'
         );
         $this->_common($header);
         if ($this->rg) {
