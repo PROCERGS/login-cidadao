@@ -12,6 +12,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail;
 use PROCERGS\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientNotCatFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\ConfigNotCli;
+use Michelf\MarkdownExtra;
 
 /**
  * @Route("/dev/not")
@@ -95,7 +96,7 @@ class NotificationController extends Controller
         $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.not.cat.form.type'), $client);
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
-            $client->setHtmlTpl($this->container->get('markdown.parser')->transformMarkdown($form->get('mdtpl')->getData()));
+            $client->setHtmlTpl(MarkdownExtra::defaultTransform($form->get('mdtpl')->getData()));
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($client);
             $manager->flush();
