@@ -5,7 +5,7 @@ namespace PROCERGS\OAuthBundle\Entity;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
 use FOS\OAuthServerBundle\Entity\Client as BaseClient;
 use Doctrine\ORM\Mapping as ORM;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Tests\Fixtures\Publisher;
@@ -67,7 +67,18 @@ class Client extends BaseClient
     protected $siteUrl;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\ConfigNotCli", mappedBy="client")
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification", mappedBy="sender")
+     */
+    protected $notifications;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category", mappedBy="client")
+     */
+    protected $categories;
+
+    /**
+     * @deprecated since version number
+     * @ ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\ConfigNotCli", mappedBy="client")
      */
     protected $configNotClis;
 
@@ -91,7 +102,7 @@ class Client extends BaseClient
      * @ORM\Column(type="boolean", nullable=false)
      */
     protected $visible;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="clients")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")
@@ -300,29 +311,29 @@ class Client extends BaseClient
 
         return $this;
     }
-    
+
     public function setId($var)
     {
         $this->id = $var;
         return $this;
     }
-    
+
     public function setPerson($person)
     {
         $this->person = $person;
-    
+
         return $this;
     }
-    
+
     public function getPerson()
     {
         return $this->person;
     }
-    
+
     public function getConfigNotClis()
     {
         return $this->configNotClis;
     }
-    
+
 
 }

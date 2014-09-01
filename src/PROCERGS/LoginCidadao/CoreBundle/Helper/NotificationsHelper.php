@@ -3,12 +3,13 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Helper;
 
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\NotificationInterface;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationInterface;
 use Symfony\Component\Security\Core\SecurityContext;
 use Doctrine\ORM\EntityManager;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\InteractiveNotification;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category;
 
 class NotificationsHelper
 {
@@ -32,18 +33,24 @@ class NotificationsHelper
      */
     private $context;
     private $container;
+    private $unconfirmedEmailCategoryId;
+    private $emptyPasswordCategoryId;
 
     public function __construct(EntityManager $em, SecurityContext $context,
-                                $container)
+                                $container, $unconfirmedEmailCategoryId,
+                                $emptyPasswordCategoryId)
     {
         $this->em = $em;
         $this->context = $context;
         $this->container = $container;
+
+        $this->unconfirmedEmailCategoryId = $unconfirmedEmailCategoryId;
+        $this->emptyPasswordCategoryId = $emptyPasswordCategoryId;
     }
 
     private function getRepository()
     {
-        return $this->em->getRepository("PROCERGSLoginCidadaoCoreBundle:Notification");
+        return $this->em->getRepository("PROCERGSLoginCidadaoCoreBundle:Notification\Notification");
     }
 
     public function getUser()
@@ -80,7 +87,8 @@ class NotificationsHelper
 
     protected function getDefaultNotification(Person $person, $title,
                                               $shortText, $text, $level, $icon,
-                                              $notification = null)
+                                              $notification = null,
+                                              Category $category)
     {
         $persisted = $this->getRepository()->findOneBy(array('person' => $person, 'title' => $title));
         if ($persisted instanceof NotificationInterface) {
@@ -95,7 +103,8 @@ class NotificationsHelper
                 ->setLevel($level)
                 ->setTitle($title)
                 ->setShortText($shortText)
-                ->setText($text);
+                ->setText($text)
+                ->setCategory($category);
 
         return $notification;
     }
@@ -109,7 +118,8 @@ class NotificationsHelper
         $icon = 'glyphicon glyphicon-envelope';
 
         return $this->getDefaultNotification($person, $title, $shortText, $text,
-                        $level, $icon, new InteractiveNotification());
+                        $level, $icon, new Notification(),
+                        $this->getUnconfirmedEmailCategory());
     }
 
     protected function getEmptyPasswordNotification(Person $person)
@@ -121,15 +131,16 @@ class NotificationsHelper
         $icon = 'glyphicon glyphicon-exclamation-sign';
 
         return $this->getDefaultNotification($person, $title, $shortText, $text,
-                        $level, $icon, new InteractiveNotification());
+                        $level, $icon, new Notification(),
+                        $this->getEmptyPasswordCategory());
     }
 
     public function clearUnconfirmedEmailNotification(Person $person)
     {
         $notification = $this->getUnconfirmedEmailNotification($person);
-        if (!$notification->getConfigNotCli()) {
-            $config = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli')->find(3);
-            $notification->setConfigNotCli($config);
+        if (!$notification->getCategory()) {
+            $category = $this->getUnconfirmedEmailCategory();
+            $notification->setCategory($category);
         }
         $notification->setRead(true);
         $this->em->persist($notification);
@@ -139,12 +150,12 @@ class NotificationsHelper
     public function enforceUnconfirmedEmailNotification(Person $person)
     {
         $notification = $this->getUnconfirmedEmailNotification($person);
-        if (!$notification->getConfigNotCli()) {
-            $config = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli')->find(3);
-            $notification->setConfigNotCli($config);
+        if (!$notification->getCategory()) {
+            $category = $this->getUnconfirmedEmailCategory();
+            $notification->setCategory($category);
         }
         $notification->setRead(false);
-        $notification->setTarget('lc_resend_confirmation_email');
+        //$notification->setTarget('lc_resend_confirmation_email');
         $this->em->persist($notification);
         $this->em->flush();
     }
@@ -153,7 +164,7 @@ class NotificationsHelper
     {
         $notification = $this->getEmptyPasswordNotification($person);
         $notification->setRead(false);
-        $notification->setTarget('fos_user_change_password');
+        //$notification->setTarget('fos_user_change_password');
         $this->em->persist($notification);
         $this->em->flush();
     }
@@ -169,6 +180,16 @@ class NotificationsHelper
     public function isUnconfirmedEmailNotification(NotificationInterface $notification)
     {
         return ($notification->getTitle() === self::UNCONFIRMED_EMAIL_TITLE);
+    }
+
+    private function getUnconfirmedEmailCategory()
+    {
+        return $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')->find($this->unconfirmedEmailCategoryId);
+    }
+
+    private function getEmptyPasswordCategory()
+    {
+        return $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')->find($this->emptyPasswordCategoryId);
     }
 
 }

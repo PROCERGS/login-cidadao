@@ -36,7 +36,7 @@ services:
 
     notifications.helper:
         class: %notifications.helper.class%
-        arguments: ["@doctrine.orm.entity_manager", "@security.context", "@service_container"]
+        arguments: ["@doctrine.orm.entity_manager", "@security.context", "@service_container", %notifications_categories_unconfirmed_email%, %notifications_categories_empty_password%]
 
     background.helper:
         class: %background.helper.class%
@@ -68,7 +68,7 @@ services:
         tags:
             - { name: form.type, alias: procergs_person_profile }
         calls:
-            - [setEntityManager, ["@doctrine.orm.entity_manager"]]            
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
 
     procergs_person.revoke_authorization.form.type:
         class: %procergs_person.revoke_authorization.form.type.class%
@@ -183,20 +183,20 @@ services:
             - { name: form.type, alias: client_form_type }
         calls:
             - [setContainer, ["@service_container"]]
-            
+
     procergs_logincidadao.client.base.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientBaseFormType
         tags:
             - { name: form.type, alias: client_base_form_type }
         calls:
             - [setContainer, ["@service_container"]]
-            
+
     procergs_logincidadao.client.not.cat.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientNotCatFormType
         tags:
             - { name: form.type, alias: client_not_cat_form_type }
         calls:
-            - [setContainer, ["@service_container"]]            
+            - [setContainer, ["@service_container"]]
 
     procergs_logincidadao.nfgws:
         class: %procergs_logincidadao.nfgws.class%
@@ -208,7 +208,7 @@ services:
     procergs_logincidadao.igpws:
         class: %procergs_logincidadao.igpws.class%
         calls:
-            - [setUrl, [%igp_ws_url%]]            
+            - [setUrl, [%igp_ws_url%]]
             - [setUsername, [%igp_username%]]
             - [setPassword, [%igp_password%]]
-            
+

@@ -16,6 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use PROCERGS\Generic\ValidationBundle\Validator\Constraints as PROCERGSAssert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationToken;
 
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
@@ -198,10 +199,10 @@ class Person extends BaseUser
     protected $previousValidEmail;
 
     /**
-     * @ORM\OneToMany(targetEntity="Notification", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification", mappedBy="person")
      */
     protected $notifications;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="PROCERGS\OAuthBundle\Entity\Client", mappedBy="person")
      */
@@ -230,7 +231,7 @@ class Person extends BaseUser
 
     /**
      * @Expose
-     * @Groups({"uf"}) 
+     * @Groups({"uf"})
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Uf")
      * @ORM\JoinColumn(name="uf_id", referencedColumnName="id")
      */
@@ -240,10 +241,10 @@ class Person extends BaseUser
      * @ORM\Column(name="nfg_access_token", type="string", length=255, nullable=true, unique=true)
      */
     protected $nfgAccessToken;
-    
+
     /**
      * @Expose
-     * @Groups({"country"}) 
+     * @Groups({"country"})
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Country")
      * @ORM\JoinColumn(name="country_id", referencedColumnName="id")
      */
@@ -297,35 +298,35 @@ class Person extends BaseUser
      * @var \DateTime $updatedAt
      */
     protected $updatedAt;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="googleId", type="string", length=255, nullable=true, unique=true)
      */
     protected $googleId;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="googleUsername", type="string", length=255, nullable=true)
      */
     protected $googleUsername;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="googleAccessToken", type="string", length=255, nullable=true)
      */
     protected $googleAccessToken;
-    
+
     /**
      * @Expose
      * @Groups({"rgs"})
      * @ORM\OneToMany(targetEntity="Rg", mappedBy="person")
      */
     protected $rgs;
-    
+
     /**
      * @Expose
      * @Groups({"adress_complement"})
@@ -334,14 +335,28 @@ class Person extends BaseUser
     protected $complement;
 
     /**
-     * @ORM\OneToMany(targetEntity="ConfigNotPer", mappedBy="person")
+     * @deprecated since version 1.0.2
+     * @ ORM\OneToMany(targetEntity="ConfigNotPer", mappedBy="person")
      */
     protected $configNotPers;
-    
+
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationToken", mappedBy="person")
+     */
+    protected $notificationTokens;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\PersonOption", mappedBy="person")
+     */
+    protected $notificationOptions;
+
     public function __construct()
     {
         parent::__construct();
         $this->authorizations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->notificationTokens = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->notificationOptions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->notifications = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getEmail()
@@ -678,7 +693,7 @@ class Person extends BaseUser
     {
         return $this->notifications;
     }
-    
+
     public function getClients()
     {
         return $this->clients;
@@ -969,7 +984,7 @@ class Person extends BaseUser
         }
         return false;
     }
-    
+
     /**
      * @ORM\PreUpdate
      */
@@ -982,73 +997,73 @@ class Person extends BaseUser
         }
         return $this;
     }
-    
+
     public function getUpdatedAt()
     {
         return $this->updatedAt;
     }
-    
+
     public function setGoogleId($var)
     {
         $this->googleId = $var;
-    
+
         return $this;
     }
-    
+
     public function getGoogleId()
     {
         return $this->googleId;
     }
-    
+
     public function setGoogleUsername($var)
     {
         $this->googleUsername = $var;
-    
+
         return $this;
     }
-    
+
     public function getGoogleUsername()
     {
         return $this->googleUsername;
     }
-    
+
     public function setGoogleAccessToken($var)
     {
         $this->googleAccessToken = $var;
-    
+
         return $this;
     }
-    
+
     public function getGoogleAccessToken()
     {
         return $this->googleAccessToken;
     }
-    
+
     public function setCountry($var)
     {
         $this->country = $var;
         return $this;
     }
-    
+
     public function getCountry()
     {
         return $this->country;
     }
-    
+
     public function setComplement($var)
     {
         $this->complement = $var;
         return $this;
     }
-    
+
     public function getComplement()
     {
         return $this->complement;
     }
-    
+
     public function getRgs()
     {
         return $this->rgs;
     }
-    
+
 }

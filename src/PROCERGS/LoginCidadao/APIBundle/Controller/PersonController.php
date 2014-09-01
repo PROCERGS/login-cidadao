@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
 
 class PersonController extends FOSRestController
 {
@@ -148,7 +148,7 @@ class PersonController extends FOSRestController
     {
         return SerializationContext::create()->setGroups($scope);
     }
-    
+
     /**
      * @REST\Post("/person/sendnotification")
      * @REST\View
@@ -158,9 +158,9 @@ class PersonController extends FOSRestController
             $token = $this->get('security.context')->getToken();
             $accessToken = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:AccessToken')->findOneBy(array('token' => $token->getToken()));
             $client = $accessToken->getClient();
-            
+
             $body = json_decode($request->getContent(), 1);
-            
+
             $chkAuth = $this->getDoctrine()
             ->getManager ()
             ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
@@ -174,10 +174,10 @@ class PersonController extends FOSRestController
             $rowR = array();
             $em = $this->getDoctrine()->getManager();
             $validator = $this->get('validator');
-            
+
             foreach ($body as $idx => $row) {
                 if (isset($row['person_id'])) {
-                    $res = $chkAuth->setParameters(array('person_id' => $row['person_id'], 'config_id' => $row['config_id']))->getResult();                    
+                    $res = $chkAuth->setParameters(array('person_id' => $row['person_id'], 'config_id' => $row['config_id']))->getResult();
                     if (!$res) {
                         $rowR[$idx] = array('person_id' => $row['person_id'], 'error' => 'missing authorization or configuration');
                         continue;
@@ -187,7 +187,7 @@ class PersonController extends FOSRestController
                     $not->setConfigNotCli($res[1])
                     ->setIcon(isset($row['icon']) && $row['icon'] ? $row['icon'] : $not->getConfigNotCli()->getIcon())
                     ->setTitle(isset($row['title']) && $row['title'] ? $row['title'] : $not->getConfigNotCli()->getTitle())
-                    ->setShortText(isset($row['shorttext']) && $row['shorttext'] ? $row['shorttext'] : $not->getConfigNotCli()->getShortText())                    
+                    ->setShortText(isset($row['shorttext']) && $row['shorttext'] ? $row['shorttext'] : $not->getConfigNotCli()->getShortText())
                     ->setText($row['text'])
                     ->parseHtmlTpl($not->getConfigNotCli()->getHtmlTpl());
                     $errors = $validator->validate($not);
@@ -201,7 +201,7 @@ class PersonController extends FOSRestController
             }
             $em->flush();
             return $this->handleView($this->view($rowR));
-        
+
     }
 
 }

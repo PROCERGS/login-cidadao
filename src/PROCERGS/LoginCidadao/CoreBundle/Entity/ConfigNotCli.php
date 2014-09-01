@@ -6,9 +6,10 @@ use PROCERGS\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="config_not_cli")
- * @ORM\HasLifecycleCallbacks
+ * @deprecated since version 1.0.2
+ * @ ORM\Entity
+ * @ ORM\Table(name="config_not_cli")
+ * @ ORM\HasLifecycleCallbacks
  */
 class ConfigNotCli
 {
@@ -24,20 +25,20 @@ class ConfigNotCli
      * @ORM\Column(name="icon", type="string", length=255)
      */
     protected $icon;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
     protected $title;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="short_text", type="string", length=255, nullable=true)
      */
-    protected $shortText;    
+    protected $shortText;
 
     /**
      * @ORM\Column(name="name", type="string", length=255)
@@ -64,9 +65,9 @@ class ConfigNotCli
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $client;
-    
+
     /**
-     * @ORM\OneToMany(targetEntity="Notification", mappedBy="configNotCli")
+     * @ ORM\OneToMany(targetEntity="Notification", mappedBy="configNotCli")
      */
     protected $notifications;
 
@@ -74,7 +75,7 @@ class ConfigNotCli
      * @ORM\Column(name="kind", type="string", length=18)
      */
     protected $kind;
-    
+
     /**
      * @var string
      *
@@ -88,11 +89,12 @@ class ConfigNotCli
      * @ORM\Column(name="md_tpl", type="text", nullable=true)
      */
     private $mdTpl;
-    
+
     /**
-     * @ORM\OneToOne(targetEntity="ConfigNotPer", mappedBy="configNotCli")
+     * @deprecated since version 1.0.2
+     * @ ORM\OneToOne(targetEntity="ConfigNotPer", mappedBy="configNotCli")
      */
-    protected $configNotPer;    
+    protected $configNotPer;
 
     public function setId($var)
     {
@@ -108,7 +110,7 @@ class ConfigNotCli
     public function setIcon($icon)
     {
         $this->icon = $icon;
-        
+
         return $this;
     }
 
@@ -120,7 +122,7 @@ class ConfigNotCli
     public function setName($var)
     {
         $this->name = $var;
-        
+
         return $this;
     }
 
@@ -132,7 +134,7 @@ class ConfigNotCli
     public function setClient($client)
     {
         $this->client = $client;
-        
+
         return $this;
     }
 
@@ -144,7 +146,7 @@ class ConfigNotCli
     public function setMailTpl($var)
     {
         $this->mailTpl = $var;
-        
+
         return $this;
     }
 
@@ -156,7 +158,7 @@ class ConfigNotCli
     public function setMailDomain($var)
     {
         $this->mailDomain = $var;
-        
+
         return $this;
     }
 
@@ -168,7 +170,7 @@ class ConfigNotCli
     public function setMailSend($var)
     {
         $this->mailSend = $var;
-        
+
         return $this;
     }
 
@@ -180,7 +182,7 @@ class ConfigNotCli
     public function setKind($var)
     {
         $this->kind = $var;
-        
+
         return $this;
     }
 
@@ -188,65 +190,65 @@ class ConfigNotCli
     {
         return $this->kind;
     }
-    
+
     public function getNotifications()
     {
         return $this->notifications;
     }
-    
+
     public function setTitle($title)
     {
         $this->title = $title;
         return $this;
     }
-    
+
     public function getTitle()
     {
         return $this->title;
     }
-    
+
     public function setShortText($shortText)
     {
         $this->shortText = $shortText;
         return $this;
     }
-    
+
     public function getShortText()
     {
         return $this->shortText;
     }
-    
+
     public function setMdTpl($var)
     {
         $this->mdTpl = $var;
         return $this;
     }
-    
+
     public function getMdTpl()
     {
         return $this->mdTpl;
     }
-    
+
     public function setHtmlTpl($var)
     {
         $this->htmlTpl = $var;
         return $this;
     }
-    
+
     public function getHtmlTpl()
     {
         return $this->htmlTpl;
     }
-    
+
     public function setConfigNotPer($var)
     {
         $this->configNotPer = $var;
         return $this;
     }
-    
+
     public function getConfigNotPer()
     {
         return $this->configNotPer;
     }
-    
+
 }

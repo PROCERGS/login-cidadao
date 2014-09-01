@@ -79,7 +79,7 @@
                 {% if notifications_helper.getUnread is not empty %}
                     {% for notification in notifications_helper.getUnread if not notification.isExtreme %}
                         {% if notification.resolveTarget is defined %}
-                            {% set target = notification.resolveTarget(app_router) %}
+                            {#% set target = notification.resolveTarget(app_router) %#}
                         {% else %}
                             {% set target = url('lc_notifications_list') %}
                         {% endif %}

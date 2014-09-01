@@ -5,7 +5,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
@@ -73,19 +73,19 @@ class NotificationController extends Controller
             ->select('c.id, c.name, CountIf(n.isRead != true) total')
             ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH', 'n.configNotCli = cnc')
             ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
-            ->where('n.person = :person')            
+            ->where('n.person = :person')
             ->setParameter('person', $this->getUser())
             ->groupBy('c.id', 'c.name')
-            ->orderBy('c.id', 'ASC')            
+            ->orderBy('c.id', 'ASC')
             ->getQuery()
             ->getResult();
         return array('clients' => $result);
     }
-    
+
     /**
      * @Route("/inbox/gridfull", name="lc_not_inbox_gridfull")
      * @Template()
-     */    
+     */
     public function gridFullAction(Request $request = null) {
         $sql = $this->getDoctrine()
         ->getManager ()
@@ -97,13 +97,13 @@ class NotificationController extends Controller
         ->where('n.person = :person')
         ->setParameter('person', $this->getUser())
         ->orderBy('n.id', 'DESC');
-        
+
         if ($request->get('client')) {
             $sql->andWhere('c.id = :client')->setParameter('client', $request->get('client'));
         }
         if ($request->get('confignotcli')) {
             $sql->andWhere('cnc.id = :confignotcli')->setParameter('confignotcli', $request->get('confignotcli'));
-        }        
+        }
         $grid = new GridHelper();
         $grid->setId('fullOne');
         $grid->setPerPage(10);
@@ -114,7 +114,7 @@ class NotificationController extends Controller
         $grid->setRouteParams(array('client', 'mode', 'notification', 'confignotcli'));
         return array('grid' => $grid->createView($request));
     }
-    
+
     /**
      * @Route("/inbox/gridpri", name="lc_not_inbox_gridpri")
      * @Template()
@@ -127,14 +127,14 @@ class NotificationController extends Controller
         $resultset = $this->getDoctrine()
         ->getManager()
         ->getRepository('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli')
-        ->createQueryBuilder('cnc')        
+        ->createQueryBuilder('cnc')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
         ->where('c.id = :client')
         ->setParameter('client', $id)
         ->getQuery()->getResult();
         return array('resultset' => $resultset);
     }
-    
+
     /**
      * @Route("/inbox/gridsimple", name="lc_not_inbox_gridsimple")
      * @Template()
@@ -160,7 +160,7 @@ class NotificationController extends Controller
         if ($request->get('client')) {
             $sql->andWhere('c.id = :client')->setParameter('client', $request->get('client'));
         }
-        
+
         $grid = new GridHelper();
         $grid->setId('simpleOne');
         $grid->setPerPage(10);
@@ -171,7 +171,7 @@ class NotificationController extends Controller
         $grid->setRouteParams(array('client', 'mode', 'notification', 'confignotcli'));
         return array('grid' => $grid->createView($request));
     }
-    
+
     /**
      * @Route("/inbox", name="lc_not_inbox")
      * @Template()
@@ -203,12 +203,12 @@ class NotificationController extends Controller
                 $this->getDoctrine()->getManager()->persist($resultset);
                 $this->getDoctrine()->getManager()->flush();
                 $a['wasread'] = true;
-            }            
+            }
             $a['htmltpl'] = $resultset->getHtmlTpl();
         }
         return new JsonResponse($a);
     }
-    
+
     /**
      * @Route("/config", name="lc_not_config")
      * @Template()
@@ -246,7 +246,7 @@ class NotificationController extends Controller
         }
         return array('resultset' => $resultset, 'forms' => $forms);
     }
-    
+
     /**
      * @Route("/config/change", name="lc_not_config_change")
      * @Template()
@@ -277,7 +277,7 @@ class NotificationController extends Controller
             $manager->flush();
         }
         return array('form' => $form->createView(), 'cnc_id' => $config->getConfigNotCli()->getId());
-    }    
-    
-    
+    }
+
+
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
+namespace PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
 
 interface NotificationInterface
 {

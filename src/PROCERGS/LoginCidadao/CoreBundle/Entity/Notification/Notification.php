@@ -1,6 +1,6 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
+namespace PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
 
 use Doctrine\ORM\Mapping as ORM;
 use PROCERGS\OAuthBundle\Entity\Client;
@@ -11,10 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Notification
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\NotificationRepository")
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="kind", type="string")
- * @ORM\DiscriminatorMap({"simple" = "Notification", "interactive" = "InteractiveNotification"})
+ * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationRepository")
  */
 class Notification implements NotificationInterface
 {
@@ -31,7 +28,7 @@ class Notification implements NotificationInterface
     /**
      * @var string
      * @Assert\NotBlank()
-     * @Assert\Length(max="255")     
+     * @Assert\Length(max="255")
      * @ORM\Column(name="icon", type="string", length=255)
      */
     private $icon;
@@ -84,29 +81,66 @@ class Notification implements NotificationInterface
     /**
      * @var int
      *
+     * @deprecated since version 1.0.2
      * @ORM\Column(name="level", type="integer")
      */
     private $level;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ConfigNotCli", inversedBy="notifications")
-     * @ORM\JoinColumn(name="config_not_cli_id", referencedColumnName="id", onDelete="CASCADE")
+     * @deprecated since version 1.0.2
+     * @ ORM\ManyToOne(targetEntity="ConfigNotCli", inversedBy="notifications")
+     * @ ORM\JoinColumn(name="config_not_cli_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $configNotCli;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="notifications")
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="notifications")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $person;
-    
+
+    /**
+     * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="notifications")
+     * @ORM\JoinColumn(name="client_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $sender;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="expire_date", type="datetime", nullable=true)
+     */
+    private $expireDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="consider_read_date", type="datetime", nullable=true)
+     */
+    private $considerReadDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="received_date", type="datetime", nullable=true)
+     */
+    private $receivedDate;
+
+    /**
+     * @var Category
+     *
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="notifications")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     */
+    private $category;
+
     /**
      * @var string
      *
      * @ORM\Column(name="html_tpl", type="text", nullable=true)
      */
     private $htmlTpl;
-    
+
     /**
      * Get id
      *
@@ -378,18 +412,18 @@ class Notification implements NotificationInterface
     {
         return $this->getLevel() === self::LEVEL_EXTREME;
     }
-    
+
     public function setHtmlTpl($var)
     {
         $this->htmlTpl = $var;
         return $this;
     }
-    
+
     public function getHtmlTpl()
     {
         return $this->htmlTpl;
     }
-    
+
     public function parseHtmlTpl($var)
     {
         $cplaces = array('%title%' => $this->title, '%shorttext%' => $this->shortText, '%text%' => $this->text);
@@ -398,5 +432,60 @@ class Notification implements NotificationInterface
         }
         return $this->setHtmlTpl($var);
     }
-    
+
+    public function getSender()
+    {
+        return $this->sender;
+    }
+
+    public function getExpireDate()
+    {
+        return $this->expireDate;
+    }
+
+    public function getConsiderReadDate()
+    {
+        return $this->considerReadDate;
+    }
+
+    public function getReceivedDate()
+    {
+        return $this->receivedDate;
+    }
+
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    public function setSender($sender)
+    {
+        $this->sender = $sender;
+        return $this;
+    }
+
+    public function setExpireDate(\DateTime $expireDate)
+    {
+        $this->expireDate = $expireDate;
+        return $this;
+    }
+
+    public function setConsiderReadDate(\DateTime $considerReadDate)
+    {
+        $this->considerReadDate = $considerReadDate;
+        return $this;
+    }
+
+    public function setReceivedDate(\DateTime $receivedDate)
+    {
+        $this->receivedDate = $receivedDate;
+        return $this;
+    }
+
+    public function setCategory(Category $category)
+    {
+        $this->category = $category;
+        return $this;
+    }
+
 }

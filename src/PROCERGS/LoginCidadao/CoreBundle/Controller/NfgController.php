@@ -17,7 +17,7 @@ use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
 
 /**
  * @Route("/nfg")

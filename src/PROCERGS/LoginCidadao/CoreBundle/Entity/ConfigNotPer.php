@@ -6,9 +6,10 @@ use PROCERGS\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="config_not_per")
- * @ORM\HasLifecycleCallbacks
+ * @deprecated since version 1.0.2
+ * @ ORM\Entity
+ * @ ORM\Table(name="config_not_per")
+ * @ ORM\HasLifecycleCallbacks
  */
 class ConfigNotPer
 {
@@ -36,7 +37,7 @@ class ConfigNotPer
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $person;
-    
+
 
     public function setId($var)
     {
@@ -76,7 +77,7 @@ class ConfigNotPer
     public function setMailSend($var)
     {
         $this->mailSend = $var;
-        
+
         return $this;
     }
 
@@ -84,7 +85,7 @@ class ConfigNotPer
     {
         return $this->mailSend;
     }
-    
-    
+
+
 
 }
