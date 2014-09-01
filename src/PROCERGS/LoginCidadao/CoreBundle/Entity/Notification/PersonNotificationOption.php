@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table()
  * @ORM\Entity
  */
-class PersonOption
+class PersonNotificationOption
 {
 
     /**
@@ -31,6 +31,23 @@ class PersonOption
     private $createdAt;
 
     /**
+     * Determines if this category of notification should be sent by email
+     *
+     * @var boolean
+     * @ORM\Column(name="send_email", type="boolean")
+     */
+    private $sendEmail;
+
+    /**
+     * Determines if this category of notification should be sent via push
+     * notification
+     *
+     * @var boolean
+     * @ORM\Column(name="send_push", type="boolean")
+     */
+    private $sendPush;
+
+    /**
      * @var Person
      *
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="notificationOptions")
@@ -47,17 +64,6 @@ class PersonOption
     private $category;
 
     /**
-     * @ORM\Column(type="json_array")
-     * @Assert\Choice(
-     *   choices = {"email", "push", "simple"},
-     *   multipleMessage = "Choose a valid delivery method.",
-     *   maxMessage = "You can only select up to {{ limit }} delivery methods.",
-     *   multiple = true, min = 0, max = 3
-     * )
-     */
-    protected $delivery;
-
-    /**
      * Get id
      *
      * @return integer
@@ -71,7 +77,7 @@ class PersonOption
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return PersonOption
+     * @return PersonNotificationOption
      */
     public function setCreatedAt($createdAt)
     {

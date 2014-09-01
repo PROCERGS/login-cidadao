@@ -87,13 +87,6 @@ class Notification implements NotificationInterface
     private $level;
 
     /**
-     * @deprecated since version 1.0.2
-     * @ ORM\ManyToOne(targetEntity="ConfigNotCli", inversedBy="notifications")
-     * @ ORM\JoinColumn(name="config_not_cli_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $configNotCli;
-
-    /**
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="notifications")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")
      */

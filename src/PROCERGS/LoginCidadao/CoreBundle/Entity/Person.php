@@ -335,18 +335,12 @@ class Person extends BaseUser
     protected $complement;
 
     /**
-     * @deprecated since version 1.0.2
-     * @ ORM\OneToMany(targetEntity="ConfigNotPer", mappedBy="person")
-     */
-    protected $configNotPers;
-
-    /**
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationToken", mappedBy="person")
      */
     protected $notificationTokens;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\PersonOption", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\PersonNotificationOption", mappedBy="person")
      */
     protected $notificationOptions;
 

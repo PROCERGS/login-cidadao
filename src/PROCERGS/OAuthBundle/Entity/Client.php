@@ -77,12 +77,6 @@ class Client extends BaseClient
     protected $categories;
 
     /**
-     * @deprecated since version number
-     * @ ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\ConfigNotCli", mappedBy="client")
-     */
-    protected $configNotClis;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $picturePath;
