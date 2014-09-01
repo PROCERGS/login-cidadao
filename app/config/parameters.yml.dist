@@ -71,3 +71,7 @@ parameters:
     igp_ws_url: ~
     igp_username: ~
     igp_password: ~
+
+    # Notification's categories IDs
+    notifications_categories_unconfirmed_email: 1
+    notifications_categories_empty_password: 2
