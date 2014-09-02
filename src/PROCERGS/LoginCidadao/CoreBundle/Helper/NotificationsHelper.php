@@ -32,6 +32,17 @@ class NotificationsHelper
      * @var SecurityContext
      */
     private $context;
+
+    /**
+     * @var \Symfony\Component\Routing\Router
+     */
+    private $router;
+
+    /**
+     *
+     * @var \Symfony\Component\Translation\TranslatorInterface
+     */
+    private $translator;
     private $container;
     private $unconfirmedEmailCategoryId;
     private $emptyPasswordCategoryId;
@@ -43,6 +54,8 @@ class NotificationsHelper
         $this->em = $em;
         $this->context = $context;
         $this->container = $container;
+        $this->router = $this->container->get('router');
+        $this->translator = $this->container->get('translator');
 
         $this->unconfirmedEmailCategoryId = $unconfirmedEmailCategoryId;
         $this->emptyPasswordCategoryId = $emptyPasswordCategoryId;
@@ -77,14 +90,17 @@ class NotificationsHelper
     public function send(NotificationInterface $notification)
     {
         if ($notification->canBeSent()) {
-            $this->em->persist($notification);
-            $this->em->flush();
+            $handler = $this->getNotificationHandler();
+            $handler->post($notification);
         } else {
             $translator = $this->container->get('translator');
             throw new AccessDeniedException($translator->trans("This notification cannot be sent to this user. Check the notification level and whether the user has authorized the application."));
         }
     }
 
+    /**
+     * @deprecated since version 1.0.2
+     */
     protected function oldgetDefaultNotification(Person $person, $title,
                                                  $shortText, $text, $level,
                                                  $icon, $notification = null,
@@ -112,7 +128,8 @@ class NotificationsHelper
     protected function getDefaultNotification(Person $person, $title,
                                               $shortText, $text, $level, $icon,
                                               $notification = null,
-                                              Category $category)
+                                              Category $category,
+                                              $parameters = null)
     {
         $persisted = $this->getRepository()->findOneBy(array('person' => $person, 'category' => $category));
         if ($persisted instanceof NotificationInterface) {
@@ -122,6 +139,11 @@ class NotificationsHelper
         if (is_null($notification)) {
             $notification = new Notification();
         }
+
+        $text = strtr($text, $category->getPlaceholdersArray($parameters));
+        $shortText = strtr($shortText,
+                $category->getPlaceholdersArray($parameters));
+
         $notification->setPerson($person)
                 ->setIcon($icon)
                 ->setLevel($level)
@@ -136,14 +158,17 @@ class NotificationsHelper
     protected function getUnconfirmedEmailNotification(Person $person)
     {
         $title = self::UNCONFIRMED_EMAIL_TITLE;
-        $shortText = self::UNCONFIRMED_EMAIL_SHORT_TEXT;
-        $text = self::UNCONFIRMED_EMAIL_FULL_TEXT;
+        $shortText = $this->translator->trans(self::UNCONFIRMED_EMAIL_SHORT_TEXT);
+        $text = $this->translator->trans(self::UNCONFIRMED_EMAIL_FULL_TEXT);
         $level = NotificationInterface::LEVEL_EXTREME;
         $icon = 'glyphicon glyphicon-envelope';
+        $url = $this->container->get('router')
+                ->generate('lc_resend_confirmation_email');
 
         return $this->getDefaultNotification($person, $title, $shortText, $text,
                         $level, $icon, new Notification(),
-                        $this->getUnconfirmedEmailCategory());
+                        $this->getUnconfirmedEmailCategory(),
+                        array('%url%' => $url));
     }
 
     protected function getEmptyPasswordNotification(Person $person)
@@ -156,7 +181,7 @@ class NotificationsHelper
 
         return $this->getDefaultNotification($person, $title, $shortText, $text,
                         $level, $icon, new Notification(),
-                        $this->getEmptyPasswordCategory());
+                        $this->getEmptyPasswordCategory(), array());
     }
 
     public function clearUnconfirmedEmailNotification(Person $person)

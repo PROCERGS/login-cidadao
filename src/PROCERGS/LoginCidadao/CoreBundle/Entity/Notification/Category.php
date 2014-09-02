@@ -104,9 +104,17 @@ class Category implements CategoryInterface
      */
     protected $notifications;
 
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Placeholder", mappedBy="category")
+     */
+    protected $placeholders;
+
     public function __construct()
     {
         $this->notifications = new ArrayCollection();
+        $this->placeholders = new ArrayCollection();
     }
 
     /**
@@ -357,6 +365,34 @@ class Category implements CategoryInterface
     public function setNotifications(ArrayCollection $notifications)
     {
         $this->notifications = $notifications;
+        return $this;
+    }
+
+    /**
+     *
+     * @return ArrayCollection
+     */
+    public function getPlaceholders()
+    {
+        return $this->placeholders;
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getPlaceholdersArray(array $parameters)
+    {
+        $result = array();
+        foreach ($this->getPlaceholders() as $placeholder) {
+            $result[$placeholder->getName()] = $placeholder->getDefault();
+        }
+        return array_merge($result, $parameters);
+    }
+
+    public function setPlaceholders(ArrayCollection $placeholders)
+    {
+        $this->placeholders = $placeholders;
         return $this;
     }
 
