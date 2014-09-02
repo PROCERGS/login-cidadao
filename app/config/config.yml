@@ -245,3 +245,6 @@ fos_rest:
             xml: true
         templating_formats:
             html: true
+
+nelmio_api_doc:
+    name: MeuRS API

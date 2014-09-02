@@ -98,37 +98,10 @@ class NotificationsHelper
         }
     }
 
-    /**
-     * @deprecated since version 1.0.2
-     */
-    protected function oldgetDefaultNotification(Person $person, $title,
-                                                 $shortText, $text, $level,
-                                                 $icon, $notification = null,
-                                                 Category $category)
-    {
-        $persisted = $this->getRepository()->findOneBy(array('person' => $person, 'title' => $title));
-        if ($persisted instanceof NotificationInterface) {
-            return $persisted;
-        }
-
-        if (is_null($notification)) {
-            $notification = new Notification();
-        }
-        $notification->setPerson($person)
-                ->setIcon($icon)
-                ->setLevel($level)
-                ->setTitle($title)
-                ->setShortText($shortText)
-                ->setText($text)
-                ->setCategory($category);
-
-        return $notification;
-    }
-
     protected function getDefaultNotification(Person $person, $title,
                                               $shortText, $text, $level, $icon,
-                                              $notification = null,
                                               Category $category,
+                                              $notification = null,
                                               $parameters = null)
     {
         $persisted = $this->getRepository()->findOneBy(array('person' => $person, 'category' => $category));
@@ -166,9 +139,8 @@ class NotificationsHelper
                 ->generate('lc_resend_confirmation_email');
 
         return $this->getDefaultNotification($person, $title, $shortText, $text,
-                        $level, $icon, new Notification(),
-                        $this->getUnconfirmedEmailCategory(),
-                        array('%url%' => $url));
+                        $level, $icon, $this->getUnconfirmedEmailCategory(),
+                        new Notification(), array('%url%' => $url));
     }
 
     protected function getEmptyPasswordNotification(Person $person)
@@ -180,8 +152,8 @@ class NotificationsHelper
         $icon = 'glyphicon glyphicon-exclamation-sign';
 
         return $this->getDefaultNotification($person, $title, $shortText, $text,
-                        $level, $icon, new Notification(),
-                        $this->getEmptyPasswordCategory(), array());
+                        $level, $icon, $this->getEmptyPasswordCategory(),
+                        new Notification(), array());
     }
 
     public function clearUnconfirmedEmailNotification(Person $person)

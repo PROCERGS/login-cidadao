@@ -4,3 +4,8 @@ procergs_login_cidadao_api_core:
     defaults: { _format: json }
     type:     annotation
     prefix:   /
+
+procergs_login_cidadao_Notification:
+    type: rest
+    prefix: /
+    resource: "@PROCERGSLoginCidadaoAPIBundle/Controller/NotificationController.php"

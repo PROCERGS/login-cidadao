@@ -4,14 +4,16 @@ namespace PROCERGS\LoginCidadao\APIBundle\Controller;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Util\Codes;
-use FOS\RestBundle\Controller\Annotations;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Request\ParamFetcherInterface;
+use FOS\RestBundle\Controller\Annotations as REST;
 
 class NotificationController extends FOSRestController
 {
 
     /**
-     * List all notifications.
+     * List all notifications for a given Person.
      *
      * @ApiDoc(
      *   resource = true,
@@ -20,9 +22,10 @@ class NotificationController extends FOSRestController
      *   }
      * )
      *
-     * @Annotations\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing Notifications")
-     * @Annotations\QueryParam(name="limit", requirements="\d+", default="5", description="How many notifications to return.")
-     * @Annotations\View(
+     * @REST\QueryParam(name="personId", requirements="\d+", nullable=false, description="The person's id")
+     * @REST\QueryParam(name="offset", requirements="\d+", nullable=true, description="Offset from which to start listing Notifications")
+     * @REST\QueryParam(name="limit", requirements="\d+", default="5", description="How many notifications to return.")
+     * @REST\View(
      *   templateVar="notifications"
      * )
      *
@@ -30,6 +33,7 @@ class NotificationController extends FOSRestController
      * @param ParamFetcherInterface  $paramFetcher  param fetcher service
      *
      * @return array
+     * @REST\Get("/people/{personId}/notifications")
      */
     public function getNotificationsAction(Request $request,
                                            ParamFetcherInterface $paramFetcher)
