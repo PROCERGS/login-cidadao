@@ -849,7 +849,7 @@ class Person extends BaseUser
      *
      * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $image
      */
-    public function setImage(File $image)
+    public function setImage($image)
     {
         $this->image = $image;
 
