@@ -26,6 +26,9 @@ parameters:
 
     procergs_logincidadao.postalcode.search.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\SearchPostalCodeFormType
 
+    procergs.notification.handler.class: PROCERGS\LoginCidadao\CoreBundle\Handler\NotificationHandler
+    procergs.notification.class: PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification
+
 services:
     security.authentication.success_handler:
         class: %security.authentication.success_handler.class%
@@ -212,3 +215,8 @@ services:
             - [setUsername, [%igp_username%]]
             - [setPassword, [%igp_password%]]
 
+    procergs.notification.handler:
+        class: %procergs.notification.handler.class%
+        arguments: [ "@doctrine.orm.entity_manager", %procergs.notification.class%, "@form.factory" ]
+        tags:
+            - { name: "security.secure_service" }

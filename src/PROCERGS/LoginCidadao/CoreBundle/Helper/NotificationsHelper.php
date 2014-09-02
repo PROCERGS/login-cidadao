@@ -85,12 +85,36 @@ class NotificationsHelper
         }
     }
 
+    protected function oldgetDefaultNotification(Person $person, $title,
+                                                 $shortText, $text, $level,
+                                                 $icon, $notification = null,
+                                                 Category $category)
+    {
+        $persisted = $this->getRepository()->findOneBy(array('person' => $person, 'title' => $title));
+        if ($persisted instanceof NotificationInterface) {
+            return $persisted;
+        }
+
+        if (is_null($notification)) {
+            $notification = new Notification();
+        }
+        $notification->setPerson($person)
+                ->setIcon($icon)
+                ->setLevel($level)
+                ->setTitle($title)
+                ->setShortText($shortText)
+                ->setText($text)
+                ->setCategory($category);
+
+        return $notification;
+    }
+
     protected function getDefaultNotification(Person $person, $title,
                                               $shortText, $text, $level, $icon,
                                               $notification = null,
                                               Category $category)
     {
-        $persisted = $this->getRepository()->findOneBy(array('person' => $person, 'title' => $title));
+        $persisted = $this->getRepository()->findOneBy(array('person' => $person, 'category' => $category));
         if ($persisted instanceof NotificationInterface) {
             return $persisted;
         }
@@ -137,44 +161,48 @@ class NotificationsHelper
 
     public function clearUnconfirmedEmailNotification(Person $person)
     {
+        $handler = $this->getNotificationHandler();
         $notification = $this->getUnconfirmedEmailNotification($person);
         if (!$notification->getCategory()) {
             $category = $this->getUnconfirmedEmailCategory();
             $notification->setCategory($category);
         }
         $notification->setRead(true);
-        $this->em->persist($notification);
-        $this->em->flush();
+        $handler->patch($notification, array());
     }
 
     public function enforceUnconfirmedEmailNotification(Person $person)
     {
+        $category = $this->getUnconfirmedEmailCategory();
+        $handler = $this->getNotificationHandler();
+
         $notification = $this->getUnconfirmedEmailNotification($person);
         if (!$notification->getCategory()) {
-            $category = $this->getUnconfirmedEmailCategory();
             $notification->setCategory($category);
         }
         $notification->setRead(false);
-        //$notification->setTarget('lc_resend_confirmation_email');
-        $this->em->persist($notification);
-        $this->em->flush();
+        $handler->patch($notification, array());
     }
 
     public function enforceEmptyPasswordNotification(Person $person)
     {
+        $category = $this->getEmptyPasswordCategory();
+        $handler = $this->getNotificationHandler();
+
         $notification = $this->getEmptyPasswordNotification($person);
+        if (!$notification->getCategory()) {
+            $notification->setCategory($category);
+        }
         $notification->setRead(false);
-        //$notification->setTarget('fos_user_change_password');
-        $this->em->persist($notification);
-        $this->em->flush();
+        $handler->patch($notification, array());
     }
 
     public function clearEmptyPasswordNotification(Person $person)
     {
+        $handler = $this->getNotificationHandler();
         $notification = $this->getEmptyPasswordNotification($person);
         $notification->setRead(true);
-        $this->em->persist($notification);
-        $this->em->flush();
+        $handler->patch($notification, array());
     }
 
     public function isUnconfirmedEmailNotification(NotificationInterface $notification)
@@ -190,6 +218,15 @@ class NotificationsHelper
     private function getEmptyPasswordCategory()
     {
         return $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')->find($this->emptyPasswordCategoryId);
+    }
+
+    /**
+     *
+     * @return \PROCERGS\LoginCidadao\CoreBundle\Handler\NotificationHandlerInterface
+     */
+    private function getNotificationHandler()
+    {
+        return $this->container->get('procergs.notification.handler');
     }
 
 }

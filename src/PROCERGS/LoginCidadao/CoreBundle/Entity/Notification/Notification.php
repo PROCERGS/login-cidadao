@@ -58,6 +58,13 @@ class Notification implements NotificationInterface
     private $text;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="callback_url", type="string", length=255, nullable=true)
+     */
+    private $callbackUrl;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="createdAt", type="datetime")
@@ -82,7 +89,7 @@ class Notification implements NotificationInterface
      * @var int
      *
      * @deprecated since version 1.0.2
-     * @ORM\Column(name="level", type="integer")
+     * @ORM\Column(name="level", type="integer", nullable=true)
      */
     private $level;
 
@@ -265,7 +272,7 @@ class Notification implements NotificationInterface
      * @param \DateTime $readDate
      * @return Notification
      */
-    private function setReadDate($readDate)
+    public function setReadDate($readDate)
     {
         $this->readDate = $readDate;
 
@@ -457,19 +464,19 @@ class Notification implements NotificationInterface
         return $this;
     }
 
-    public function setExpireDate(\DateTime $expireDate)
+    public function setExpireDate(\DateTime $expireDate = null)
     {
         $this->expireDate = $expireDate;
         return $this;
     }
 
-    public function setConsiderReadDate(\DateTime $considerReadDate)
+    public function setConsiderReadDate(\DateTime $considerReadDate = null)
     {
         $this->considerReadDate = $considerReadDate;
         return $this;
     }
 
-    public function setReceivedDate(\DateTime $receivedDate)
+    public function setReceivedDate(\DateTime $receivedDate = null)
     {
         $this->receivedDate = $receivedDate;
         return $this;
@@ -478,6 +485,17 @@ class Notification implements NotificationInterface
     public function setCategory(Category $category)
     {
         $this->category = $category;
+        return $this;
+    }
+
+    public function getCallbackUrl()
+    {
+        return $this->callbackUrl;
+    }
+
+    public function setCallbackUrl($callbackUrl)
+    {
+        $this->callbackUrl = $callbackUrl;
         return $this;
     }
 
