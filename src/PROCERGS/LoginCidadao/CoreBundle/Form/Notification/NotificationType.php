@@ -5,6 +5,9 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Form\Notification;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Doctrine\ORM\EntityRepository;
 
 class NotificationType extends AbstractType
 {
@@ -29,7 +32,12 @@ class NotificationType extends AbstractType
                 ->add('person', 'entity',
                         array(
                     'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
-                    'property' => 'id'
+                    'property' => 'id',
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('p')
+                                    ->where('p.id = :id')
+                                    ->setParameter('id', 0);
+                    }
                 ))
                 ->add('sender', 'entity',
                         array(
@@ -46,7 +54,20 @@ class NotificationType extends AbstractType
                         array(
                     'class' => 'PROCERGSLoginCidadaoCoreBundle:Notification\Category',
                     'property' => 'id'
-                ))
+                ))->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+                    $data = $event->getData();
+                    $id = array_key_exists('person', $data) ? $data['person'] : 0;
+                    $form = $event->getForm();
+                    $form->add('person', 'entity',array(
+                        'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
+                        'property' => 'id',
+                        'query_builder' => function(EntityRepository $er) use ($id) {
+                            return $er->createQueryBuilder('p')
+                                    ->where('p.id = :id')
+                                    ->setParameter('id', $id);
+                        }
+                    ));
+                })
         ;
     }
 

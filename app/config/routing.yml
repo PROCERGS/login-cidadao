@@ -19,6 +19,7 @@ google_login:
 
 #API
 procergs_login_cidadao_api:
+    type: rest
     resource: "@PROCERGSLoginCidadaoAPIBundle/Resources/config/routing.yml"
     prefix:   /api/v1
 

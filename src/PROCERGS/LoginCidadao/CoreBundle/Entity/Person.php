@@ -6,12 +6,7 @@ use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use PROCERGS\OAuthBundle\Entity\Client;
-use JMS\Serializer\Annotation\Groups;
-use JMS\Serializer\Annotation\ExclusionPolicy;
-use JMS\Serializer\Annotation\Expose;
-use JMS\Serializer\Annotation\VirtualProperty;
-use JMS\Serializer\Annotation\SerializedName;
-use JMS\Serializer\Annotation\Type;
+use JMS\Serializer\Annotation as JMS;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use PROCERGS\Generic\ValidationBundle\Validator\Constraints as PROCERGSAssert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -23,24 +18,25 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationToken;
  * @UniqueEntity("cpf")
  * @UniqueEntity("username")
  * @ORM\HasLifecycleCallbacks
- * @ExclusionPolicy("all")
+ * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
  */
 class Person extends BaseUser
 {
 
     /**
-     * @Expose
-     * @Groups({"id","public_profile"})
+     * @JMS\Expose
+     * @JMS\Groups({"id","public_profile"})
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @JMS\Since("1.0")
      */
     protected $id;
 
     /**
-     * @Expose
-     * @Groups({"first_name","full_name","public_profile"})
+     * @JMS\Expose
+     * @JMS\Groups({"first_name","full_name","public_profile"})
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank(message="Please enter your name.", groups={"Profile"})
      * @Assert\Length(
@@ -50,12 +46,13 @@ class Person extends BaseUser
      *     maxMessage="The name is too long.",
      *     groups={"Registration", "Profile"}
      * )
+     * @JMS\Since("1.0")
      */
     protected $firstName;
 
     /**
-     * @Expose
-     * @Groups({"last_name","full_name"})
+     * @JMS\Expose
+     * @JMS\Groups({"last_name","full_name"})
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank(message="Please enter your surname.", groups={"Profile"})
      * @Assert\Length(
@@ -65,12 +62,13 @@ class Person extends BaseUser
      *     maxMessage="The surname is too long.",
      *     groups={"Registration", "Profile"}
      * )
+     * @JMS\Since("1.0")
      */
     protected $surname;
 
     /**
-     * @Expose
-     * @Groups({"username","public_profile"})
+     * @JMS\Expose
+     * @JMS\Groups({"username","public_profile"})
      * @PROCERGSAssert\Username
      * @Assert\NotBlank
      * @Assert\Length(
@@ -78,65 +76,75 @@ class Person extends BaseUser
      *     max="33",
      *     groups={"Registration", "Profile"}
      * )
+     * @JMS\Since("1.0")
      */
     protected $username;
 
     /**
-     * @Expose
-     * @Groups({"cpf"})
+     * @JMS\Expose
+     * @JMS\Groups({"cpf"})
      * @ORM\Column(type="string", nullable=true, unique=true)
      * @PROCERGSAssert\CPF
+     * @JMS\Since("1.0")
      */
     protected $cpf;
 
     /**
-     * @Expose
-     * @Groups({"email"})
+     * @JMS\Expose
+     * @JMS\Groups({"email"})
+     * @JMS\Since("1.0")
      */
     protected $email;
 
     /**
-     * @Expose
-     * @Groups({"birthdate"})
+     * @JMS\Expose
+     * @JMS\Groups({"birthdate"})
      * @ORM\Column(type="date", nullable=true)
+     * @JMS\Since("1.0")
      */
     protected $birthdate;
 
     /**
      * @ORM\Column(name="cpf_expiration", type="date", nullable=true)
+     * @JMS\Since("1.0")
      */
     protected $cpfExpiration;
 
     /**
      * @ORM\Column(name="email_expiration", type="datetime", nullable=true)
+     * @JMS\Since("1.0")
      */
     protected $emailExpiration;
 
     /**
-     * @Expose
-     * @Groups({"cep"})
+     * @JMS\Expose
+     * @JMS\Groups({"cep"})
      * @ORM\Column(type="string", nullable=true)
+     * @JMS\Since("1.0")
      */
     protected $cep;
 
     /**
-     * @Expose
-     * @Groups({"mobile"})
+     * @JMS\Expose
+     * @JMS\Groups({"mobile"})
      * @ORM\Column(type="string", nullable=true)
+     * @JMS\Since("1.0")
      */
     protected $mobile;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @var string
+     * @JMS\Since("1.0")
      */
     protected $twitterPicture;
 
     /**
-     * @Expose
-     * @Groups({"city"})
+     * @JMS\Expose
+     * @JMS\Groups({"city"})
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\City")
      * @ORM\JoinColumn(name="city_id", referencedColumnName="id")
+     * @JMS\Since("1.0")
      */
     protected $city;
 
@@ -144,6 +152,7 @@ class Person extends BaseUser
      * @var string
      *
      * @ORM\Column(name="facebookId", type="string", length=255, nullable=true, unique=true)
+     * @JMS\Since("1.0")
      */
     protected $facebookId;
 
@@ -151,6 +160,7 @@ class Person extends BaseUser
      * @var string
      *
      * @ORM\Column(name="facebookUsername", type="string", length=255, nullable=true)
+     * @JMS\Since("1.0")
      */
     protected $facebookUsername;
 
@@ -158,6 +168,7 @@ class Person extends BaseUser
      * @var string
      *
      * @ORM\Column(name="twitterId", type="string", length=255, nullable=true, unique=true)
+     * @JMS\Since("1.0")
      */
     protected $twitterId;
 
@@ -165,6 +176,7 @@ class Person extends BaseUser
      * @var string
      *
      * @ORM\Column(name="twitterUsername", type="string", length=255, nullable=true)
+     * @JMS\Since("1.0")
      */
     protected $twitterUsername;
 
@@ -172,6 +184,7 @@ class Person extends BaseUser
      * @var string
      *
      * @ORM\Column(name="twitterAccessToken", type="string", length=255, nullable=true)
+     * @JMS\Since("1.0")
      */
     protected $twitterAccessToken;
 
@@ -183,18 +196,21 @@ class Person extends BaseUser
     /**
      * @ORM\Column(type="datetime", nullable=false)
      * @var \DateTime
+     * @JMS\Since("1.0")
      */
     protected $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @var \DateTime
+     * @JMS\Since("1.0")
      */
     protected $emailConfirmedAt;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @var string
+     * @JMS\Since("1.0")
      */
     protected $previousValidEmail;
 
@@ -214,55 +230,62 @@ class Person extends BaseUser
     protected $suggestions;
 
     /**
-     * @Expose
-     * @Groups({"adress"})
+     * @JMS\Expose
+     * @JMS\Groups({"adress"})
      * @ORM\Column(name="adress", type="string", length=255, nullable=true)
      * @var string
+     * @JMS\Since("1.0.2")
      */
     protected $adress;
 
     /**
-     * @Expose
-     * @Groups({"adress_number"})
+     * @JMS\Expose
+     * @JMS\Groups({"adress_number"})
      * @ORM\Column(name="adress_number",type="integer", nullable=true)
      * @var string
+     * @JMS\Since("1.0.2")
      */
     protected $adressNumber;
 
     /**
-     * @Expose
-     * @Groups({"uf"})
+     * @JMS\Expose
+     * @JMS\Groups({"uf"})
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Uf")
      * @ORM\JoinColumn(name="uf_id", referencedColumnName="id")
+     * @JMS\Since("1.0.2")
      */
     protected $uf;
 
     /**
      * @ORM\Column(name="nfg_access_token", type="string", length=255, nullable=true, unique=true)
+     * @JMS\Since("1.0.2")
      */
     protected $nfgAccessToken;
 
     /**
-     * @Expose
-     * @Groups({"country"})
+     * @JMS\Expose
+     * @JMS\Groups({"country"})
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Country")
      * @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     * @JMS\Since("1.0.2")
      */
     protected $country;
 
     /**
-     * @Expose
-     * @Groups({"nfgprofile"})
+     * @JMS\Expose
+     * @JMS\Groups({"nfgprofile"})
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile")
      * @ORM\JoinColumn(name="nfg_profile_id", referencedColumnName="id")
+     * @JMS\Since("1.0.2")
      */
     protected $nfgProfile;
 
     /**
-     * @Expose
-     * @Groups({"voter_registration"})
+     * @JMS\Expose
+     * @JMS\Groups({"voter_registration"})
      * @ORM\Column(name="voter_registration", type="string", length=12, nullable=true, unique=true)
      * @PROCERGSAssert\VoterRegistration
+     * @JMS\Since("1.0.2")
      */
     protected $voterRegistration;
 
@@ -275,6 +298,7 @@ class Person extends BaseUser
      * )
      * @Vich\UploadableField(mapping="user_image", fileNameProperty="imageName")
      * @var File $image
+     * @JMS\Since("1.0.2")
      */
     protected $image;
 
@@ -282,20 +306,23 @@ class Person extends BaseUser
      * @ORM\Column(type="string", length=255, name="image_name", nullable=true)
      *
      * @var string $imageName
+     * @JMS\Since("1.0.2")
      */
     protected $imageName;
 
     /**
-     * @Expose
-     * @Groups({"picture","public_profile"})
+     * @JMS\Expose
+     * @JMS\Groups({"picture","public_profile"})
+     * @JMS\Since("1.0.2")
      */
     protected $profilePicutreUrl;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Expose
-     * @Groups({"updated_at","public_profile"})
+     * @JMS\Expose
+     * @JMS\Groups({"updated_at","public_profile"})
      * @var \DateTime $updatedAt
+     * @JMS\Since("1.0.2")
      */
     protected $updatedAt;
 
@@ -303,6 +330,7 @@ class Person extends BaseUser
      * @var string
      *
      * @ORM\Column(name="googleId", type="string", length=255, nullable=true, unique=true)
+     * @JMS\Since("1.0.3")
      */
     protected $googleId;
 
@@ -310,6 +338,7 @@ class Person extends BaseUser
      * @var string
      *
      * @ORM\Column(name="googleUsername", type="string", length=255, nullable=true)
+     * @JMS\Since("1.0.3")
      */
     protected $googleUsername;
 
@@ -317,20 +346,23 @@ class Person extends BaseUser
      * @var string
      *
      * @ORM\Column(name="googleAccessToken", type="string", length=255, nullable=true)
+     * @JMS\Since("1.0.3")
      */
     protected $googleAccessToken;
 
     /**
-     * @Expose
-     * @Groups({"rgs"})
+     * @JMS\Expose
+     * @JMS\Groups({"rgs"})
      * @ORM\OneToMany(targetEntity="Rg", mappedBy="person")
+     * @JMS\Since("1.0.3")
      */
     protected $rgs;
 
     /**
-     * @Expose
-     * @Groups({"adress_complement"})
+     * @JMS\Expose
+     * @JMS\Groups({"adress_complement"})
      * @ORM\Column(name="complement", type="string", nullable=true,length=255)
+     * @JMS\Since("1.0.3")
      */
     protected $complement;
 
@@ -536,9 +568,9 @@ class Person extends BaseUser
 
     /**
      * Get the full name of the user (first + last name)
-     * @Groups({"full_name"})
-     * @VirtualProperty
-     * @SerializedName("full_name")
+     * @JMS\Groups({"full_name"})
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("full_name")
      * @return string
      */
     public function getFullName()
@@ -547,9 +579,9 @@ class Person extends BaseUser
     }
 
     /**
-     * @Groups({"badges", "public_profile"})
-     * @VirtualProperty
-     * @SerializedName("badges")
+     * @JMS\Groups({"badges", "public_profile"})
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("badges")
      * @return array
      */
     public function getDataValid()
@@ -895,10 +927,10 @@ class Person extends BaseUser
     }
 
     /**
-     * @Groups({"public_profile"})
-     * @VirtualProperty
-     * @SerializedName("age_range")
-     * @Type("array")
+     * @JMS\Groups({"public_profile"})
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("age_range")
+     * @JMS\Type("array")
      * @return array
      */
     public function getAgeRange()

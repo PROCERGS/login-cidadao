@@ -236,8 +236,16 @@ vich_uploader:
             upload_destination: user_image_fs
             namer:              vich_uploader.namer_uniqid
 
+# Disabling annotations is needed by FOS Rest Bundle
+sensio_framework_extra:
+    view: { annotations: false }
+    router: { annotations: true }
+    request: { converters: true }
+
 fos_rest:
+    param_fetcher_listener: true
     view:
+        view_response_listener: 'force'
         force_redirects:
             html: true
         formats:
@@ -245,6 +253,28 @@ fos_rest:
             xml: true
         templating_formats:
             html: true
+    format_listener:
+        rules:
+            - { path: ^/, priorities: [ html, json, xml ], fallback_format: html, prefer_extension: true }
+            - { path: ^/api/v1, priorities: [ html, json, xml ], fallback_format: json, prefer_extension: true }
+    exception:
+        codes:
+            'Symfony\Component\Routing\Exception\ResourceNotFoundException': 404
+            'Doctrine\ORM\OptimisticLockException': HTTP_CONFLICT
+        messages:
+            'Symfony\Component\Routing\Exception\ResourceNotFoundException': true
+    allowed_methods_listener: true
+    access_denied_listener:
+        json: true
+    body_listener: true
+    disable_csrf_role: ROLE_API
 
 nelmio_api_doc:
     name: MeuRS API
+
+jms_serializer:
+    metadata:
+        directories:
+            FOSUB:
+                namespace_prefix: "FOS\\UserBundle"
+                path: "%kernel.root_dir%/serializer/FOSUB"

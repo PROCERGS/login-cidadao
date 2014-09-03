@@ -78,6 +78,19 @@ class NotificationHandler implements NotificationHandlerInterface
 
             return $notification;
         }
+        // Debuging stuff
+        /*
+        foreach ($form->all() as $f) {
+            $errors = $f->getErrors();
+            if (count($errors) > 0) {
+                foreach ($errors as $error) {
+                    $form->addError($error);
+                }
+                echo $f->getName();
+                print_r($errors);
+            }
+        }
+        // */
 
         throw new InvalidFormException('Invalid submitted data', $form);
     }

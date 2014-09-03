@@ -13,13 +13,31 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class PersonController extends FOSRestController
 {
 
     /**
+     * Gets the currently authenticated user.
+     *
+     * The returned object contents will depend on the scope the user authorized.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Gets the currently authenticated user.",
+     *   output = {
+     *     "class"="PROCERGS\LoginCidadao\CoreBundle\Entity\Person",
+     *     "groups" = {"public_profile"}
+     *   },
+     *   statusCodes = {
+     *     200 = "Returned when successful"
+     *   }
+     * )
      * @REST\Get("/person")
-     * @REST\View
+     * @REST\View(templateVar="person")
+     * @throws NotFoundHttpException
      */
     public function selfAction()
     {
@@ -32,6 +50,20 @@ class PersonController extends FOSRestController
     }
 
     /**
+     * Waits for a change in the current user's profile.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Waits for a change in the current user's profile.",
+     *   output = {
+     *     "class"="PROCERGS\LoginCidadao\CoreBundle\Entity\Person",
+     *     "groups" = {"public_profile"}
+     *   },
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     408 = "Returned when the request times out"
+     *   }
+     * )
      * @REST\Get("/wait/person/update")
      * @REST\View
      */
@@ -152,6 +184,7 @@ class PersonController extends FOSRestController
     /**
      * @REST\Post("/person/sendnotification")
      * @REST\View
+     * @deprecated since version 1.0.2
      */
     public function sendNotificationAction(Request $request)
     {
