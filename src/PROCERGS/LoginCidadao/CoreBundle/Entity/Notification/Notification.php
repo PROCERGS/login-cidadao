@@ -6,12 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 use PROCERGS\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Notification
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationRepository")
+ * @JMS\ExclusionPolicy("all")
  */
 class Notification implements NotificationInterface
 {
@@ -22,6 +24,8 @@ class Notification implements NotificationInterface
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $id;
 
@@ -30,6 +34,8 @@ class Notification implements NotificationInterface
      * @Assert\NotBlank()
      * @Assert\Length(max="255")
      * @ORM\Column(name="icon", type="string", length=255)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $icon;
 
@@ -38,6 +44,8 @@ class Notification implements NotificationInterface
      * @Assert\NotBlank()
      * @Assert\Length(max="255")
      * @ORM\Column(name="title", type="string", length=255)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $title;
 
@@ -46,6 +54,8 @@ class Notification implements NotificationInterface
      * @Assert\NotBlank()
      * @Assert\Length(max="255")
      * @ORM\Column(name="shortText", type="string", length=255)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $shortText;
 
@@ -54,6 +64,8 @@ class Notification implements NotificationInterface
      *
      * @ORM\Column(name="text", type="text")
      * @Assert\NotBlank()
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $text;
 
@@ -68,6 +80,8 @@ class Notification implements NotificationInterface
      * @var \DateTime
      *
      * @ORM\Column(name="createdAt", type="datetime")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $createdAt;
 
@@ -75,6 +89,8 @@ class Notification implements NotificationInterface
      * @var \DateTime
      *
      * @ORM\Column(name="readDate", type="datetime", nullable=true)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $readDate;
 
@@ -82,6 +98,8 @@ class Notification implements NotificationInterface
      * @var boolean
      *
      * @ORM\Column(name="isRead", type="boolean")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $isRead;
 
@@ -96,12 +114,18 @@ class Notification implements NotificationInterface
     /**
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="notifications")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
+     * @JMS\MaxDepth(1)
      */
     private $person;
 
     /**
      * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="notifications")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id", onDelete="CASCADE")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
+     * @JMS\MaxDepth(1)
      */
     private $sender;
 
@@ -123,6 +147,8 @@ class Notification implements NotificationInterface
      * @var \DateTime
      *
      * @ORM\Column(name="received_date", type="datetime", nullable=true)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $receivedDate;
 
@@ -131,6 +157,8 @@ class Notification implements NotificationInterface
      *
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="notifications")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $category;
 

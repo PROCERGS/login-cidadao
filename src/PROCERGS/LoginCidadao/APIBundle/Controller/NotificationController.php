@@ -2,7 +2,6 @@
 
 namespace PROCERGS\LoginCidadao\APIBundle\Controller;
 
-use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +13,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 /**
  * @REST\Prefix("")
  */
-class NotificationController extends FOSRestController
+class NotificationController extends BaseController
 {
 
     /**
@@ -78,7 +77,7 @@ class NotificationController extends FOSRestController
             throw new AccessDeniedHttpException();
         }
 
-        return $notification;
+        return $this->renderWithContext($notification);
     }
 
     /**

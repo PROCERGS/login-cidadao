@@ -10,11 +10,13 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Tests\Fixtures\Publisher;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity("name")
+ * @JMS\ExclusionPolicy("all")
  */
 class Client extends BaseClient
 {
@@ -23,16 +25,22 @@ class Client extends BaseClient
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", nullable=false, unique=true)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $name;
 
     /**
      * @ORM\Column(type="text", nullable=false)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $description;
 
@@ -43,13 +51,17 @@ class Client extends BaseClient
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $landingPageURL;
 
     /**
      * @ORM\Column(type="text", nullable=false)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
-    protected $termsOfUseURL;
+    protected $termsOfUseUrl;
 
     /**
      * @ORM\Column(type="array", nullable=false)
@@ -63,6 +75,8 @@ class Client extends BaseClient
 
     /**
      * @ORM\Column(type="string")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $siteUrl;
 
@@ -89,11 +103,15 @@ class Client extends BaseClient
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $published;
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $visible;
 
@@ -175,14 +193,14 @@ class Client extends BaseClient
         return $this;
     }
 
-    public function getTermsOfUseURL()
+    public function getTermsOfUseUrl()
     {
-        return $this->termsOfUseURL;
+        return $this->termsOfUseUrl;
     }
 
-    public function setTermsOfUseURL($termsOfUseURL)
+    public function setTermsOfUseUrl($termsOfUseUrl)
     {
-        $this->termsOfUseURL = $termsOfUseURL;
+        $this->termsOfUseUrl = $termsOfUseUrl;
         return $this;
     }
 
