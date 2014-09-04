@@ -8,6 +8,8 @@ use PROCERGS\LoginCidadao\CoreBundle\Handler\NotificationHandlerInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Notification\NotificationType;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\Notification\InvalidFormException;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
+use FOS\OAuthServerBundle\Model\ClientInterface;
 
 class NotificationHandler implements NotificationHandlerInterface
 {
@@ -29,6 +31,22 @@ class NotificationHandler implements NotificationHandlerInterface
     public function all($limit = 5, $offset = 0, $orderby = null)
     {
         return $this->repository->findBy(array(), $orderby, $limit, $offset);
+    }
+
+    public function getAllFromPerson(Person $person, $limit = 5, $offset = 0,
+                                     $orderby = null)
+    {
+        return $this->repository->findBy(array('person' => $person), $orderby,
+                        $limit, $offset);
+    }
+
+    public function getAllFromPersonByClient(Person $person,
+                                             ClientInterface $client,
+                                             $limit = 5, $offset = 0,
+                                             $orderby = null)
+    {
+        return $this->repository->findBy(array('person' => $person, 'sender' => $client),
+                        $orderby, $limit, $offset);
     }
 
     public function get($id)
@@ -80,17 +98,17 @@ class NotificationHandler implements NotificationHandlerInterface
         }
         // Debuging stuff
         /*
-        foreach ($form->all() as $f) {
-            $errors = $f->getErrors();
-            if (count($errors) > 0) {
-                foreach ($errors as $error) {
-                    $form->addError($error);
-                }
-                echo $f->getName();
-                print_r($errors);
-            }
-        }
-        // */
+          foreach ($form->all() as $f) {
+          $errors = $f->getErrors();
+          if (count($errors) > 0) {
+          foreach ($errors as $error) {
+          $form->addError($error);
+          }
+          echo $f->getName();
+          print_r($errors);
+          }
+          }
+          // */
 
         throw new InvalidFormException('Invalid submitted data', $form);
     }

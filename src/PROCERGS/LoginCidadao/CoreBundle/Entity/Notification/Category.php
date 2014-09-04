@@ -7,12 +7,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use PROCERGS\LoginCidadao\CoreBundle\Model\CategoryInterface;
 use PROCERGS\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Category
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @JMS\ExclusionPolicy("all")
  */
 class Category implements CategoryInterface
 {
@@ -23,6 +25,8 @@ class Category implements CategoryInterface
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $id;
 
@@ -30,6 +34,8 @@ class Category implements CategoryInterface
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $name;
 

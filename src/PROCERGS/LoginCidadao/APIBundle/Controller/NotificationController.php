@@ -37,7 +37,7 @@ class NotificationController extends BaseController
      * @param ParamFetcherInterface  $paramFetcher  param fetcher service
      *
      * @return array
-     * @REST\Get("/people/{personId}/notifications")
+     * @REST\Get("/notifications")
      */
     public function getNotificationsAction(Request $request,
                                            ParamFetcherInterface $paramFetcher)
@@ -46,7 +46,19 @@ class NotificationController extends BaseController
         $offset = null == $offset ? 0 : $offset;
         $limit = $paramFetcher->get('limit');
 
-        return $this->getNotificationHandler()->all($limit, $offset);
+        $person = $this->getUser();
+        $client = $this->getClient();
+        $scopes = $this->getClientScope($person);
+
+        if (array_search('get_all_notifications', $scopes) === false) {
+            $notifications = $this->getNotificationHandler()->getAllFromPersonByClient($person,
+                    $client, $limit, $offset);
+        } else {
+            $notifications = $this->getNotificationHandler()->getAllFromPerson($person,
+                    $limit, $offset);
+        }
+
+        return $this->renderWithContext($notifications);
     }
 
     /**

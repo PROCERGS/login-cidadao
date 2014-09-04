@@ -7,6 +7,7 @@ use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
+use FOS\OAuthServerBundle\Model\ClientInterface;
 
 class BaseController extends FOSRestController
 {
@@ -20,7 +21,6 @@ class BaseController extends FOSRestController
                 ->setSerializationContext($this->getSerializationContext($scope));
         return $this->handleView($view);
     }
-
 
     protected function preparePerson(Person $person)
     {
@@ -44,9 +44,7 @@ class BaseController extends FOSRestController
 
     protected function getClientScope($user)
     {
-        $token = $this->get('security.context')->getToken();
-        $accessToken = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:AccessToken')->findOneBy(array('token' => $token->getToken()));
-        $client = $accessToken->getClient();
+        $client = $this->getClient();
 
         $authorization = $this->getDoctrine()
                 ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
@@ -68,6 +66,19 @@ class BaseController extends FOSRestController
     protected function getSerializationContext($scope)
     {
         return SerializationContext::create()->setGroups($scope);
+    }
+
+    /**
+     * Gets the authenticated Client.
+     *
+     * @return ClientInterface
+     */
+    protected function getClient()
+    {
+        $token = $this->get('security.context')->getToken();
+        $accessToken = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:AccessToken')->findOneBy(array('token' => $token->getToken()));
+        $client = $accessToken->getClient();
+        return $client;
     }
 
 }
