@@ -19,8 +19,16 @@ class NotificationController extends BaseController
     /**
      * List all notifications for a given Person.
      *
+     * This call will check for the <code>get_all_notifications</code> scope.
+     * If present, then all notifications will be returned, otherwise only the
+     * ones sent by the requesting Client will be listed.
+     *
      * @ApiDoc(
      *   resource = true,
+     *   output = {
+     *     "class"="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification",
+     *     "groups" = {"public"}
+     *   },
      *   statusCodes = {
      *     200 = "Returned when successful"
      *   }
@@ -67,7 +75,10 @@ class NotificationController extends BaseController
      * @ApiDoc(
      *   resource = true,
      *   description = "Gets a Notification for a given id",
-     *   output = "PROCERGS\NotificationServiceBundle\Entity\Notification",
+     *   output = {
+     *     "class"="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification",
+     *     "groups" = {"public"}
+     *   },
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     403 = "Returned when trying to access another user's Notification",
@@ -77,7 +88,7 @@ class NotificationController extends BaseController
      * @REST\View(templateVar="notification")
      * @param Request $request the request object
      * @param int     $id
-     * @return array
+     * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification
      * @throws NotFoundHttpException when notification not exist
      * @throws AccessDeniedHttpException when trying to access another user's Notification
      * @REST\Get("/notifications/{id}", name="api_1_get_notification")

@@ -54,7 +54,7 @@ class Client extends BaseClient
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */
-    protected $landingPageURL;
+    protected $landingPageUrl;
 
     /**
      * @ORM\Column(type="text", nullable=false)
@@ -182,14 +182,14 @@ class Client extends BaseClient
         return $this;
     }
 
-    public function getLandingPageURL()
+    public function getLandingPageUrl()
     {
-        return $this->landingPageURL;
+        return $this->landingPageUrl;
     }
 
-    public function setLandingPageURL($landingPageURL)
+    public function setLandingPageUrl($landingPageUrl)
     {
-        $this->landingPageURL = $landingPageURL;
+        $this->landingPageUrl = $landingPageUrl;
         return $this;
     }
 
