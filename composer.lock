@@ -120,7 +120,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan H. Wage",
+                    "name": "Jonathan Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"
@@ -141,7 +141,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -208,7 +208,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -412,7 +412,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Symfony Community",
@@ -483,7 +485,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -537,7 +539,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -1660,7 +1662,7 @@
             ],
             "authors": [
                 {
-                    "name": "Johannes M. Schmitt",
+                    "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -1730,9 +1732,9 @@
             ],
             "authors": [
                 {
-                    "name": "Johannes M. Schmitt",
+                    "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -1753,12 +1755,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/Gaufrette.git",
-                "reference": "b243f8f3ea535b7f080d51be5cc98a3f72c0b627"
+                "reference": "12376684828a013acfdc20bc29a64155d07e0ddf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/Gaufrette/zipball/b243f8f3ea535b7f080d51be5cc98a3f72c0b627",
-                "reference": "b243f8f3ea535b7f080d51be5cc98a3f72c0b627",
+                "url": "https://api.github.com/repos/KnpLabs/Gaufrette/zipball/12376684828a013acfdc20bc29a64155d07e0ddf",
+                "reference": "12376684828a013acfdc20bc29a64155d07e0ddf",
                 "shasum": ""
             },
             "require": {
@@ -1827,7 +1829,7 @@
                 "filesystem",
                 "media"
             ],
-            "time": "2014-06-24 08:35:18"
+            "time": "2014-08-19 13:42:49"
         },
         {
             "name": "knplabs/knp-gaufrette-bundle",
@@ -2134,12 +2136,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "ca0dd69752428fc2b35161471db7bc48e2e624c1"
+                "reference": "8fe99a9c451f4ee491a41671108fedcf1d583937"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/ca0dd69752428fc2b35161471db7bc48e2e624c1",
-                "reference": "ca0dd69752428fc2b35161471db7bc48e2e624c1",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/8fe99a9c451f4ee491a41671108fedcf1d583937",
+                "reference": "8fe99a9c451f4ee491a41671108fedcf1d583937",
                 "shasum": ""
             },
             "require": {
@@ -2200,7 +2202,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2014-09-02 06:55:54"
+            "time": "2014-09-04 08:12:53"
         },
         {
             "name": "phpcollection/phpcollection",
@@ -2236,9 +2238,9 @@
             ],
             "authors": [
                 {
-                    "name": "Johannes M. Schmitt",
+                    "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -2288,7 +2290,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -2341,17 +2343,17 @@
         },
         {
             "name": "sensio/distribution-bundle",
-            "version": "v2.3.4",
+            "version": "v2.3.5",
             "target-dir": "Sensio/Bundle/DistributionBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioDistributionBundle.git",
-                "reference": "66df91b4bd637a83299d8072aed3658bfd3b3021"
+                "reference": "715fcb65f9a4841ffaf40c0bf050329d74c84cad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/66df91b4bd637a83299d8072aed3658bfd3b3021",
-                "reference": "66df91b4bd637a83299d8072aed3658bfd3b3021",
+                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/715fcb65f9a4841ffaf40c0bf050329d74c84cad",
+                "reference": "715fcb65f9a4841ffaf40c0bf050329d74c84cad",
                 "shasum": ""
             },
             "require": {
@@ -2383,7 +2385,7 @@
                 "configuration",
                 "distribution"
             ],
-            "time": "2013-08-22 05:04:53"
+            "time": "2014-09-03 12:25:05"
         },
         {
             "name": "sensio/framework-extra-bundle",
@@ -2422,7 +2424,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 }
             ],
             "description": "This bundle provides a way to configure your controllers with annotations",
@@ -2644,22 +2648,22 @@
         },
         {
             "name": "symfony/icu",
-            "version": "v1.2.2",
+            "version": "v1.1.2",
             "target-dir": "Symfony/Component/Icu",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Icu.git",
-                "reference": "d4d85d6055b87f394d941b45ddd3a9173e1e3d2a"
+                "reference": "229730a14ccac63bb3c5d9f0494fcd27140c0dd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Icu/zipball/d4d85d6055b87f394d941b45ddd3a9173e1e3d2a",
-                "reference": "d4d85d6055b87f394d941b45ddd3a9173e1e3d2a",
+                "url": "https://api.github.com/repos/symfony/Icu/zipball/229730a14ccac63bb3c5d9f0494fcd27140c0dd3",
+                "reference": "229730a14ccac63bb3c5d9f0494fcd27140c0dd3",
                 "shasum": ""
             },
             "require": {
                 "ext-intl": "*",
-                "lib-icu": ">=4.4",
+                "lib-icu": ">=3.8",
                 "php": ">=5.3.3",
                 "symfony/intl": "~2.3"
             },
@@ -2689,7 +2693,7 @@
                 "icu",
                 "intl"
             ],
-            "time": "2014-07-25 09:58:17"
+            "time": "2014-07-25 10:00:11"
         },
         {
             "name": "symfony/monolog-bundle",
@@ -2734,7 +2738,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Symfony Community",
@@ -2808,16 +2814,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.3.18",
+            "version": "v2.3.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "75e07e6bde6391a6f49c8546a43740c80ac1b06b"
+                "reference": "1fc05758044fa1cf54460d7d4aff5f55b0f1b0db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/75e07e6bde6391a6f49c8546a43740c80ac1b06b",
-                "reference": "75e07e6bde6391a6f49c8546a43740c80ac1b06b",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/1fc05758044fa1cf54460d7d4aff5f55b0f1b0db",
+                "reference": "1fc05758044fa1cf54460d7d4aff5f55b0f1b0db",
                 "shasum": ""
             },
             "require": {
@@ -2899,14 +2905,12 @@
             ],
             "authors": [
                 {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com",
-                    "homepage": "http://fabien.potencier.org",
-                    "role": "Lead Developer"
-                },
-                {
                     "name": "Symfony Community",
                     "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
                 }
             ],
             "description": "The Symfony PHP framework",
@@ -2914,7 +2918,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2014-07-15 14:20:44"
+            "time": "2014-09-03 09:45:27"
         },
         {
             "name": "twig/extensions",
@@ -2951,7 +2955,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 }
             ],
             "description": "Common additional features for Twig that do not directly belong in core",
@@ -3110,7 +3116,7 @@
             ],
             "authors": [
                 {
-                    "name": "William DURAND",
+                    "name": "William Durand",
                     "email": "william.durand1@gmail.com",
                     "homepage": "http://www.willdurand.fr"
                 }
