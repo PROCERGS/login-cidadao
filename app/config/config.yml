@@ -253,10 +253,10 @@ fos_rest:
             xml: true
         templating_formats:
             html: true
-    format_listener:
-        rules:
-            - { path: ^/, priorities: [ html, json, xml ], fallback_format: html, prefer_extension: true }
-            - { path: ^/api/v1, priorities: [ html, json, xml ], fallback_format: json, prefer_extension: true }
+#    format_listener:
+#        rules:
+#            - { path: ^/api/v1, priorities: [ html, json, xml ], fallback_format: json, prefer_extension: true }
+#            - { path: '^/', stop: true }
     exception:
         codes:
             'Symfony\Component\Routing\Exception\ResourceNotFoundException': 404
