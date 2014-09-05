@@ -129,6 +129,8 @@ class NotificationController extends BaseController
     public function postNotificationAction(Request $request)
     {
         try {
+            $this->validateNotification($request);
+
             $newNotification = $this->getNotificationHandler()->post(
                     $request->request->all()
             );
@@ -169,6 +171,30 @@ class NotificationController extends BaseController
         }
 
         return $notification;
+    }
+
+    protected function validateNotification(Request $request)
+    {
+        $notificationPerson = $request->get('person');
+        $notificationClient = $request->get('sender');
+        $requestPerson = $this->getUser();
+        $requestClient = $this->getClient();
+
+        if ($requestClient->getId() != $notificationClient || $requestPerson->getId() != $notificationPerson) {
+            throw new AccessDeniedHttpException("You don't have permission to send notifications to this person.");
+        }
+        $scopes = $this->getClientScope($this->getUser());
+        if (!is_array($scopes) || array_search('notifications', $scopes) === false) {
+            throw new AccessDeniedHttpException("This person didn't allow you to send notifications.");
+        }
+
+        $categories = $this->getDoctrine()
+                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category');
+        $notificationCategory = $categories->find($request->get('category'));
+        if ($notificationCategory->getClient()->getId() != $requestClient->getId()) {
+            throw new AccessDeniedHttpException("Invalid category.");
+        }
+        return true;
     }
 
 }

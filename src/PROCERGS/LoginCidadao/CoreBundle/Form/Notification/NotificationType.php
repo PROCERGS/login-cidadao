@@ -18,6 +18,37 @@ class NotificationType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $emptyEntityQuery = function(EntityRepository $er) {
+            return $er->createQueryBuilder('p')
+                            ->where('p.id = :id')
+                            ->setParameter('id', 0);
+        };
+
+        $preSubmit = function (FormEvent $event) {
+            $data = $event->getData();
+            $form = $event->getForm();
+            $form
+                    ->add('person', 'entity',
+                            $this->getPreSubmitParams(
+                                    'PROCERGSLoginCidadaoCoreBundle:Person',
+                                    'id', $this->getPersonQuery($data)
+                            )
+                    )
+                    ->add('sender', 'entity',
+                            $this->getPreSubmitParams(
+                                    'PROCERGSOAuthBundle:Client', 'randomId',
+                                    $this->getSenderQuery($data)
+                            )
+                    )
+                    ->add('category', 'entity',
+                            $this->getPreSubmitParams(
+                                    'PROCERGSLoginCidadaoCoreBundle:Notification\Category',
+                                    'id', $this->getCategoryQuery($data)
+                            )
+                    )
+            ;
+        };
+
         $builder
                 ->add('icon')
                 ->add('title')
@@ -33,16 +64,13 @@ class NotificationType extends AbstractType
                         array(
                     'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
                     'property' => 'id',
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('p')
-                                    ->where('p.id = :id')
-                                    ->setParameter('id', 0);
-                    }
+                    'query_builder' => $emptyEntityQuery
                 ))
                 ->add('sender', 'entity',
                         array(
                     'class' => 'PROCERGSOAuthBundle:Client',
-                    'property' => 'randomId'
+                    'property' => 'randomId',
+                    'query_builder' => $emptyEntityQuery
                 ))
                 ->add('expireDate', 'datetime',
                         array('required' => false, 'widget' => 'single_text'))
@@ -53,21 +81,10 @@ class NotificationType extends AbstractType
                 ->add('category', 'entity',
                         array(
                     'class' => 'PROCERGSLoginCidadaoCoreBundle:Notification\Category',
-                    'property' => 'id'
-                ))->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-                    $data = $event->getData();
-                    $id = array_key_exists('person', $data) ? $data['person'] : 0;
-                    $form = $event->getForm();
-                    $form->add('person', 'entity',array(
-                        'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
-                        'property' => 'id',
-                        'query_builder' => function(EntityRepository $er) use ($id) {
-                            return $er->createQueryBuilder('p')
-                                    ->where('p.id = :id')
-                                    ->setParameter('id', $id);
-                        }
-                    ));
-                })
+                    'property' => 'id',
+                    'query_builder' => $emptyEntityQuery
+                ))
+                ->addEventListener(FormEvents::PRE_SUBMIT, $preSubmit)
         ;
     }
 
@@ -88,6 +105,58 @@ class NotificationType extends AbstractType
     public function getName()
     {
         return '';
+    }
+
+    private function getPreSubmitParams($class, $property, $queryBuilder)
+    {
+        return array(
+            'class' => $class,
+            'property' => $property,
+            'query_builder' => $queryBuilder
+        );
+    }
+
+    private function getPersonQuery($data)
+    {
+        $id = array_key_exists('person', $data) ? $data['person'] : 0;
+        $clientId = array_key_exists('sender', $data) ? $data['sender'] : 0;
+        $query = function(EntityRepository $er) use ($id, $clientId) {
+            return $er->createQueryBuilder('p')
+                            ->innerJoin('PROCERGSLoginCidadaoCoreBundle:Authorization',
+                                    'a', 'WITH',
+                                    'a.person = p AND a.client = :clientId')
+                            ->where('p.id = :id')
+                            ->setParameters(compact('id', 'clientId'));
+        };
+        return $query;
+    }
+
+    private function getSenderQuery($data)
+    {
+        $id = array_key_exists('sender', $data) ? $data['sender'] : 0;
+        $personId = array_key_exists('person', $data) ? $data['person'] : 0;
+        $query = function(EntityRepository $er) use ($id, $personId) {
+            return $er->createQueryBuilder('c')
+                            ->innerJoin('PROCERGSLoginCidadaoCoreBundle:Authorization',
+                                    'a', 'WITH',
+                                    'a.client = c AND a.person = :personId')
+                            ->where('c.id = :id')
+                            ->setParameters(compact('id', 'personId'));
+        };
+        return $query;
+    }
+
+    private function getCategoryQuery($data)
+    {
+        $id = array_key_exists('category', $data) ? $data['category'] : 0;
+        $clientId = array_key_exists('sender', $data) ? $data['sender'] : 0;
+        $query = function(EntityRepository $er) use ($id, $clientId) {
+            return $er->createQueryBuilder('c')
+                            ->where('c.id = :id')
+                            ->andWhere('c.client = :clientId')
+                            ->setParameters(compact('id', 'clientId'));
+        };
+        return $query;
     }
 
 }

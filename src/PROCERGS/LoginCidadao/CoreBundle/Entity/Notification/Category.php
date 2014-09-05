@@ -402,4 +402,15 @@ class Category implements CategoryInterface
         return $this;
     }
 
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    public function setClient($client)
+    {
+        $this->client = $client;
+        return $this;
+    }
+
 }

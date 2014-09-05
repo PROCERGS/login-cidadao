@@ -14,6 +14,7 @@ use JMS\Serializer\Annotation as JMS;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationRepository")
  * @JMS\ExclusionPolicy("all")
+ * @ORM\HasLifecycleCallbacks
  */
 class Notification implements NotificationInterface
 {
@@ -525,6 +526,16 @@ class Notification implements NotificationInterface
     {
         $this->callbackUrl = $callbackUrl;
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue()
+    {
+        if (!($this->getCreatedAt() instanceof \DateTime)) {
+            $this->createdAt = new \DateTime();
+        }
     }
 
 }
