@@ -24,7 +24,7 @@ class NotificationController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $notifications = $em->getRepository("PROCERGSLoginCidadaoCoreBundle:Notification")
+        $notifications = $em->getRepository("PROCERGSLoginCidadaoCoreBundle:Notification\Notification")
                 ->findBy(array('person' => $this->getUser()));
 
         return compact('notifications');
@@ -39,7 +39,7 @@ class NotificationController extends Controller
         $notificationId = $request->get('notification');
 
         $em = $this->getDoctrine()->getManager();
-        $notifications = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification');
+        $notifications = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification');
 
         $data = array('status' => 0, 'message' => 'Error');
 
@@ -68,10 +68,10 @@ class NotificationController extends Controller
     {
         $result = $this->getDoctrine()
             ->getManager ()
-            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification')
+            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
             ->createQueryBuilder('n')
             ->select('c.id, c.name, CountIf(n.isRead != true) total')
-            ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH', 'n.configNotCli = cnc')
+            ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
             ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
             ->where('n.person = :person')
             ->setParameter('person', $this->getUser())
@@ -89,10 +89,10 @@ class NotificationController extends Controller
     public function gridFullAction(Request $request = null) {
         $sql = $this->getDoctrine()
         ->getManager ()
-        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification')
+        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
         ->createQueryBuilder('n')
         ->select('n.id, n.isRead isread, n.title, n.shortText shorttext, n.createdAt createdat, c.name client_name')
-        ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH', 'n.configNotCli = cnc')
+        ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
         ->where('n.person = :person')
         ->setParameter('person', $this->getUser())
@@ -126,7 +126,7 @@ class NotificationController extends Controller
         }
         $resultset = $this->getDoctrine()
         ->getManager()
-        ->getRepository('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli')
+        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
         ->createQueryBuilder('cnc')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
         ->where('c.id = :client')
@@ -147,10 +147,10 @@ class NotificationController extends Controller
         }
         $sql = $this->getDoctrine()
         ->getManager ()
-        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification')
+        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
         ->createQueryBuilder('n')
         ->select('n.id, n.isRead isread, n.title, n.shortText shorttext, n.createdAt createdat, c.name client_name')
-        ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH', 'n.configNotCli = cnc')
+        ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
         ->where('n.person = :person and cnc.id = :configNotCli')
         ->setParameter('person', $this->getUser())
@@ -188,9 +188,9 @@ class NotificationController extends Controller
     {
         $resultset = $this->getDoctrine()
         ->getManager ()
-        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification')
+        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
         ->createQueryBuilder('n')
-        ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH', 'n.configNotCli = cnc')
+        ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
         ->where('n.person = :person and n.id = :id')
         ->setParameter('person', $this->getUser())
@@ -221,10 +221,10 @@ class NotificationController extends Controller
         }
         $em = $this->getDoctrine()->getManager();
         $resultset = $em
-        ->getRepository('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli')
+        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
         ->createQueryBuilder('cnc')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
-        ->leftJoin('PROCERGSLoginCidadaoCoreBundle:ConfigNotPer', 'cnp', 'with', 'cnp.configNotCli = cnc and cnp.person = :person')
+        ->leftJoin('PROCERGSLoginCidadaoCoreBundle:Notification\PersonNotificationOption', 'cnp', 'with', 'cnp.category = cnc and cnp.person = :person')
         ->where('c.id = :client ')
         ->setParameter('client', $id)
         ->setParameter('person', $this->getUser())
@@ -257,11 +257,11 @@ class NotificationController extends Controller
         $config = null;
         $manager = $this->getDoctrine()->getManager();
         if ((($data = $request->get($form->getName())) && ($id = $data['id']))) {
-            $config = $manager->getRepository('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli')
+            $config = $manager->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
             ->createQueryBuilder('cnc')
             ->select('cnp')
             ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
-            ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotPer', 'cnp', 'with', 'cnp.configNotCli = cnc and cnp.person = :person')
+            ->join('PROCERGSLoginCidadaoCoreBundle:Notification\PersonNotificationOption', 'cnp', 'with', 'cnp.category = cnc and cnp.person = :person')
             ->where('cnp.id = :client ')
             ->setParameter('client', $id)
             ->setParameter('person', $this->getUser())

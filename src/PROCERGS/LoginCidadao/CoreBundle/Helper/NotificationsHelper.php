@@ -131,7 +131,7 @@ class NotificationsHelper
 
     protected function getUnconfirmedEmailNotification(Person $person)
     {
-        $title = self::UNCONFIRMED_EMAIL_TITLE;
+        $title = $this->translator->trans(self::UNCONFIRMED_EMAIL_TITLE);
         $shortText = $this->translator->trans(self::UNCONFIRMED_EMAIL_SHORT_TEXT);
         $text = $this->translator->trans(self::UNCONFIRMED_EMAIL_FULL_TEXT);
         $level = NotificationInterface::LEVEL_EXTREME;
@@ -146,9 +146,9 @@ class NotificationsHelper
 
     protected function getEmptyPasswordNotification(Person $person)
     {
-        $title = self::EMPTY_PASSWORD_TITLE;
-        $shortText = self::EMPTY_PASSWORD_SHORT_TEXT;
-        $text = self::EMPTY_PASSWORD_FULL_TEXT;
+        $title = $this->translator->trans(self::EMPTY_PASSWORD_TITLE);
+        $shortText = $this->translator->trans(self::EMPTY_PASSWORD_SHORT_TEXT);
+        $text = $this->translator->trans(self::EMPTY_PASSWORD_FULL_TEXT);
         $level = NotificationInterface::LEVEL_IMPORTANT;
         $icon = 'glyphicon glyphicon-exclamation-sign';
 
