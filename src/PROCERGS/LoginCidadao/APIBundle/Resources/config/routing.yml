@@ -1,9 +1,8 @@
 # API
-#procergs_login_cidadao_api_core:
-#    resource: "@PROCERGSLoginCidadaoAPIBundle/Controller"
-#    defaults: { _format: json }
-#    type:     rest
-#    prefix:   /
+procergs_login_cidadao_api_core:
+    resource: "@PROCERGSLoginCidadaoAPIBundle/Controller"
+    defaults: { _format: json }
+    prefix:   /
 
 procergs_login_cidadao_Notification:
     type: rest

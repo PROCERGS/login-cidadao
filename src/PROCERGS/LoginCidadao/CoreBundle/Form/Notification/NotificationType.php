@@ -29,21 +29,21 @@ class NotificationType extends AbstractType
             $form = $event->getForm();
             $form
                     ->add('person', 'entity',
-                            $this->getPreSubmitParams(
+                            NotificationType::getPreSubmitParams(
                                     'PROCERGSLoginCidadaoCoreBundle:Person',
-                                    'id', $this->getPersonQuery($data)
+                                    'id', NotificationType::getPersonQuery($data)
                             )
                     )
                     ->add('sender', 'entity',
-                            $this->getPreSubmitParams(
+                            NotificationType::getPreSubmitParams(
                                     'PROCERGSOAuthBundle:Client', 'randomId',
-                                    $this->getSenderQuery($data)
+                                    NotificationType::getSenderQuery($data)
                             )
                     )
                     ->add('category', 'entity',
-                            $this->getPreSubmitParams(
+                            NotificationType::getPreSubmitParams(
                                     'PROCERGSLoginCidadaoCoreBundle:Notification\Category',
-                                    'id', $this->getCategoryQuery($data)
+                                    'id', NotificationType::getCategoryQuery($data)
                             )
                     )
             ;
@@ -107,7 +107,7 @@ class NotificationType extends AbstractType
         return '';
     }
 
-    private function getPreSubmitParams($class, $property, $queryBuilder)
+    public static function getPreSubmitParams($class, $property, $queryBuilder)
     {
         return array(
             'class' => $class,
@@ -116,7 +116,7 @@ class NotificationType extends AbstractType
         );
     }
 
-    private function getPersonQuery($data)
+    public static function getPersonQuery($data)
     {
         $id = array_key_exists('person', $data) ? $data['person'] : 0;
         $clientId = array_key_exists('sender', $data) ? $data['sender'] : 0;
@@ -131,7 +131,7 @@ class NotificationType extends AbstractType
         return $query;
     }
 
-    private function getSenderQuery($data)
+    public static function getSenderQuery($data)
     {
         $id = array_key_exists('sender', $data) ? $data['sender'] : 0;
         $personId = array_key_exists('person', $data) ? $data['person'] : 0;
@@ -146,7 +146,7 @@ class NotificationType extends AbstractType
         return $query;
     }
 
-    private function getCategoryQuery($data)
+    public static function getCategoryQuery($data)
     {
         $id = array_key_exists('category', $data) ? $data['category'] : 0;
         $clientId = array_key_exists('sender', $data) ? $data['sender'] : 0;

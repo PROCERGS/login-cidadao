@@ -10,6 +10,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\InteractiveNotification;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category;
+use PROCERGS\LoginCidadao\CoreBundle\Exception\Notification\MissingCategory;
 
 class NotificationsHelper
 {
@@ -209,12 +210,20 @@ class NotificationsHelper
 
     private function getUnconfirmedEmailCategory()
     {
-        return $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')->find($this->unconfirmedEmailCategoryId);
+        $category = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')->find($this->unconfirmedEmailCategoryId);
+        if (null === $category) {
+            throw new MissingCategory("missing category for unconfirmed email, please configure your db");
+        }
+        return $category;
     }
 
     private function getEmptyPasswordCategory()
     {
-        return $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')->find($this->emptyPasswordCategoryId);
+        $category = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')->find($this->emptyPasswordCategoryId);
+        if (null === $category) {
+            throw new MissingCategory("missing category for empty password, please configure your db");
+        }
+        return $category;
     }
 
     /**
