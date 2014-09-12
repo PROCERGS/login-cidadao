@@ -1,0 +1,21 @@
+{
+	"version": "$Id: oauth_configuration.json,v 1.13 2014/08/26 06:26:49 mlemos Exp $",
+	"comments": [
+		"The servers entry should be an object with a list of object",
+		"entries, one for each server type. The server object entry name is",
+		"the name of the server type. Each server entry is an object with",
+		"some mandatory properties: oauth_version, dialog_url,",
+		"access_token_url and request_token_url (just for Oauth 1.0 and",
+		"1.0a). Check the OAuth client class for the complete list of server",
+		"properties."
+	],
+	"servers":
+	{
+		"Meu":
+		{
+			"oauth_version": "2.0",
+			"dialog_url": "https://meu.rs.gov.br/oauth/v2/auth?response_type=code&client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&state={STATE}&scope={SCOPE}",
+			"access_token_url": "https://meu.rs.gov.br/oauth/v2/token"
+		}
+	}
+}

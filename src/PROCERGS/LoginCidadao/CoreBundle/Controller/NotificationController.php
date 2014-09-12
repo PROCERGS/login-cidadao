@@ -12,6 +12,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\ConfigNotPer;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientNotPerFormType;
 use Symfony\Component\HttpFoundation\Response;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\PersonNotificationOption;
 
 class NotificationController extends Controller
 {
@@ -230,14 +231,14 @@ class NotificationController extends Controller
         ->setParameter('person', $this->getUser())
         ->getQuery()->getResult();
         foreach ($resultset as &$res) {
-            $c = $res->getConfigNotPer();
+            $c = $res->getPersonNotificationOption();
             if (!$c) {
-                $a = new ConfigNotPer();
+                $a = new PersonNotificationOption();
                 $a->setPerson($this->getUser());
-                $a->setConfigNotCli($res);
-                $a->setMailSend($res->getMailSend());
+                $a->setCategory($res);
+                $a->setMailSend($res->getEmailable());
                 $em->persist($a);
-                $res->setConfigNotPer($a);
+                $res->setPersonNotificationOption($a);
             }
             $forms[] = $this->createForm(new ClientNotPerFormType(), $c)->createView();
         }

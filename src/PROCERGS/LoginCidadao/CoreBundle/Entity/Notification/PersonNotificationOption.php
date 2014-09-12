@@ -95,5 +95,29 @@ class PersonNotificationOption
     {
         return $this->createdAt;
     }
+    
+    public function setCategory($var)
+    {
+        $this->category = $var;
+        return $this;
+    }
+    
+    public function setPerson($var) 
+    {
+        $this->person = $var;
+        return $this;
+    }
+    
+    public function setSendEmail($var)
+    {
+        $this->sendEmail = $var;
+        return $this;
+    }
+    
+    public function setSendPush($var)
+    {
+        $this->sendPush = $var;
+        return $this;
+    }
 
 }

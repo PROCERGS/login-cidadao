@@ -109,6 +109,12 @@ class Category implements CategoryInterface
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification", mappedBy="category")
      */
     protected $notifications;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\PersonNotificationOption", inversedBy="category")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     */
+    protected $personNotificationOption;
 
     /**
      * @var ArrayCollection
@@ -412,5 +418,16 @@ class Category implements CategoryInterface
         $this->client = $client;
         return $this;
     }
-
+    
+    public function getPersonNotificationOption()
+    {
+        return $this->personNotificationOption;
+    }
+    
+    public function setPersonNotificationOption($var)
+    {
+        $this->personNotificationOption = $var;
+        return $this;
+    }
+    
 }
