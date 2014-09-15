@@ -9,12 +9,7 @@
         </div>
         <div id="{{ 'collapse' ~ row.id  }}" class="panel-collapse collapse">
             <div class="panel-body">
-                {{ render(controller("PROCERGSLoginCidadaoCoreBundle:Notification:gridSimple", {
-				    'page' : app.request.query.get('page'),
-				    'client': app.request.query.get('client'),
-				    'mode' : app.request.query.get('mode'), 
-		            'confignotcli' : row.id
-                })) }}
+                {% include "PROCERGSLoginCidadaoCoreBundle:Notification:gridSimple.html.twig" with {"grid": grids[row.id]} %}
             </div>
         </div>
     </div>

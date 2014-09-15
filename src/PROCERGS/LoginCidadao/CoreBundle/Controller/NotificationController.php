@@ -13,6 +13,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\ConfigNotPer;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientNotPerFormType;
 use Symfony\Component\HttpFoundation\Response;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\PersonNotificationOption;
+use PROCERGS\LoginCidadao\CoreBundle\Form\Type\PersonNotificationOptionFormType;
 
 class NotificationController extends Controller
 {
@@ -133,7 +134,13 @@ class NotificationController extends Controller
         ->where('c.id = :client')
         ->setParameter('client', $id)
         ->getQuery()->getResult();
-        return array('resultset' => $resultset);
+        $grids = array();
+        foreach ($resultset as $rows) {
+            $request->query->set('confignotcli', $rows->getId());
+            $temp = $this->gridSimpleAction();
+            $grids[$rows->getId()] = $temp['grid'];
+        }
+        return array('resultset' => $resultset, 'grids' => $grids);
     }
 
     /**
@@ -179,7 +186,12 @@ class NotificationController extends Controller
      */
     public function inboxAction(Request $request)
     {
-        return array();
+        $mode = $request->get('mode', 0); 
+        if ($mode === 0) {
+            return $this->gridFullAction($request);
+        } else {
+            return $this->gridPriAction($request);
+        }
     }
 
     /**
@@ -236,11 +248,13 @@ class NotificationController extends Controller
                 $a = new PersonNotificationOption();
                 $a->setPerson($this->getUser());
                 $a->setCategory($res);
-                $a->setMailSend($res->getEmailable());
+                $a->setSendEmail($res->getEmailable());
+                $a->setSendPush(false);
+                $a->setCreatedAt(new \DateTime());
                 $em->persist($a);
                 $res->setPersonNotificationOption($a);
             }
-            $forms[] = $this->createForm(new ClientNotPerFormType(), $c)->createView();
+            $forms[] = $this->createForm(new PersonNotificationOptionFormType(), $c)->createView();
         }
         if (isset($a)) {
             $em->flush();
@@ -254,7 +268,7 @@ class NotificationController extends Controller
      */
     public function configChangeAction(Request $request)
     {
-        $form = $this->createForm(new ClientNotPerFormType());
+        $form = $this->createForm(new PersonNotificationOptionFormType());
         $config = null;
         $manager = $this->getDoctrine()->getManager();
         if ((($data = $request->get($form->getName())) && ($id = $data['id']))) {
@@ -271,13 +285,13 @@ class NotificationController extends Controller
         if (!$config) {
             return $this->gridFullAction();
         }
-        $form = $this->createForm(new ClientNotPerFormType(), $config);
+        $form = $this->createForm(new PersonNotificationOptionFormType(), $config);
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
             $manager->persist($config);
             $manager->flush();
         }
-        return array('form' => $form->createView(), 'cnc_id' => $config->getConfigNotCli()->getId());
+        return array('form' => $form->createView(), 'cnc_id' => $config->getCategory()->getId());
     }
 
 

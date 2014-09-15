@@ -194,10 +194,10 @@ services:
         calls:
             - [setContainer, ["@service_container"]]
 
-    procergs_logincidadao.client.not.cat.form.type:
-        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientNotCatFormType
+    procergs_logincidadao.category.form.type:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\CategoryFormType
         tags:
-            - { name: form.type, alias: client_not_cat_form_type }
+            - { name: form.type, alias: category_form_type }
         calls:
             - [setContainer, ["@service_container"]]
 

@@ -12,7 +12,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Form\DataTransformer\FromArray;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class ClientNotCatFormType extends AbstractType
+class CategoryFormType extends AbstractType
 {
 
     protected $container;
@@ -42,30 +42,26 @@ class ClientNotCatFormType extends AbstractType
                     ->orderBy('u.name', 'ASC');
             }
         ));
-        $builder->add('kind', 'choice', array(
-            'choices'   => array('interactive' => 'interactive', 'simple' => 'simple'),
-            'required' => true
-        ));
         $builder->add('name', 'text', array(
             'required' => true
         ));
-        $builder->add('icon', 'choice', array(
+        $builder->add('defaulticon', 'choice', array(
             'choices'   => array('glyphicon glyphicon-envelope' => 'envelope', 'glyphicon glyphicon-exclamation-sign' => 'exclamation-sign'),
             'required' => true
         ));
-        $builder->add('title', 'text', array(
+        $builder->add('defaulttitle', 'text', array(
             'required' => true
         ));
-        $builder->add('shorttext', 'text', array(
+        $builder->add('defaultshorttext', 'text', array(
             'required' => true
         ));
-        $builder->add('mailtpl', 'textarea', array(
+        $builder->add('mailtemplate', 'textarea', array(
             'required' => true,
         ));
-        $builder->add('maildomain', 'text', array(
+        $builder->add('mailsenderaddress', 'text', array(
             'required' => true
         ));
-        $builder->add('mailsend', 'choice', array(
+        $builder->add('emailable', 'choice', array(
             'choices'   => array('0' => 'no', '1' => 'yes'),
             'required' => true
         ));
@@ -73,14 +69,14 @@ class ClientNotCatFormType extends AbstractType
             'required' => false,
             'read_only' => true
         ));
-        $builder->add('mdtpl', 'textarea', array(
+        $builder->add('markdowntemplate', 'textarea', array(
             'required' => true,
         ));
     }
 
     public function getName()
     {
-        return 'client_not_cat_form_type';
+        return 'category_form_type';
     }
 
     public function getUser()

@@ -58,7 +58,7 @@ class PersonNotificationOption
     /**
      * @var Category
      *
-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="personNotificationOption")
+     * @ORM\OneToOne(targetEntity="Category", inversedBy="personNotificationOption")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     private $category;
@@ -72,6 +72,12 @@ class PersonNotificationOption
     {
         return $this->id;
     }
+    
+    public function setId($var)
+    {
+        $this->id = $var;
+        return $this;
+    }    
 
     /**
      * Set createdAt
@@ -102,11 +108,21 @@ class PersonNotificationOption
         return $this;
     }
     
+    public function getCategory()
+    {
+        return $this->category;
+    }    
+    
     public function setPerson($var) 
     {
         $this->person = $var;
         return $this;
     }
+    
+    public function getPerson()
+    {
+        return $this->person;
+    }    
     
     public function setSendEmail($var)
     {
@@ -114,10 +130,20 @@ class PersonNotificationOption
         return $this;
     }
     
+    public function getSendEmail()
+    {
+        return $this->sendEmail;
+    }    
+    
     public function setSendPush($var)
     {
         $this->sendPush = $var;
         return $this;
     }
+    
+    public function getSendPush()
+    {
+        return $this->sendPush;
+    }    
 
 }

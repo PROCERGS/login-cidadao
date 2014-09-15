@@ -3,7 +3,7 @@
     <h5>{{ 'Notification config'|trans }}</h5>
     <a id="add_category" class="btn-sm btn-primary glyphicon glyphicon-plus" href="{{ path('lc_dev_not_new') }}"></a>
     <label for="add_service">{{ 'add'|trans }} {{ 'Config'|trans }}</label>           
-    {% render(controller("PROCERGSLoginCidadaoCoreBundle:Dev/Notification:grid")) %}
+    {% include "PROCERGSLoginCidadaoCoreBundle:Dev/Notification:grid.html.twig" %}
 </div>
 
 {% endblock %} 

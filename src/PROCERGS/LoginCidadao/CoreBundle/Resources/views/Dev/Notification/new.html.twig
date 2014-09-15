@@ -17,49 +17,44 @@
                             {{ form_widget(form.client) }}
                         </div>
                         <div class="form-group">
-                            {{ form_label(form.kind, 'Kind'| trans) }} 
-                            {{ form_errors(form.kind) }} 
-                            {{ form_widget(form.kind) }}
-                        </div>                        
-                        <div class="form-group">
                             {{ form_label(form.name, 'Name'| trans) }} 
                             {{ form_errors(form.name) }} 
                             {{ form_widget(form.name) }}
                         </div>
                         <div class="form-group">
-                            {{ form_label(form.icon, 'Default Icon' | trans) }}
-                            {{ form_errors(form.icon) }}
-                            {{ form_widget(form.icon) }}
+                            {{ form_label(form.defaulticon, 'Default Icon' | trans) }}
+                            {{ form_errors(form.defaulticon) }}
+                            {{ form_widget(form.defaulticon) }}
                         </div>
                         <div class="form-group">
-                            {{ form_label(form.title, 'Default title' | trans) }}
-                            {{ form_errors(form.title) }}
-                            {{ form_widget(form.title) }}
+                            {{ form_label(form.defaulttitle, 'Default title' | trans) }}
+                            {{ form_errors(form.defaulttitle) }}
+                            {{ form_widget(form.defaulttitle) }}
                         </div>
                         <div class="form-group">
-                            {{ form_label(form.shorttext, 'Default shorttext' | trans) }}
-                            {{ form_errors(form.shorttext) }}
-                            {{ form_widget(form.shorttext) }}
+                            {{ form_label(form.defaultshorttext, 'Default shorttext' | trans) }}
+                            {{ form_errors(form.defaultshorttext) }}
+                            {{ form_widget(form.defaultshorttext) }}
                         </div>
                         <div class="form-group">
-                            {{ form_label(form.mdtpl, 'Markdown template' | trans) }} 
-                            {{ form_errors(form.mdtpl) }} 
-                            {{ form_widget(form.mdtpl, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}
+                            {{ form_label(form.markdowntemplate, 'Markdown template' | trans) }} 
+                            {{ form_errors(form.markdowntemplate) }} 
+                            {{ form_widget(form.markdowntemplate, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}
                         </div>
                         <div class="form-group">
-                            {{ form_label(form.mailtpl, 'Mail template' | trans) }} 
-                            {{ form_errors(form.mailtpl) }} 
-                            {{ form_widget(form.mailtpl, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}
+                            {{ form_label(form.mailtemplate, 'Mail template' | trans) }} 
+                            {{ form_errors(form.mailtemplate) }} 
+                            {{ form_widget(form.mailtemplate, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}
                         </div>
                         <div class="form-group">
-                            {{ form_label(form.maildomain, 'Mail domain'| trans) }} 
-                            {{ form_errors(form.maildomain) }} 
-                            {{ form_widget(form.maildomain) }}
+                            {{ form_label(form.mailsenderaddress, 'Mail domain'| trans) }} 
+                            {{ form_errors(form.mailsenderaddress) }} 
+                            {{ form_widget(form.mailsenderaddress) }}
                         </div>
                         <div class="form-group">
-                            {{ form_label(form.mailsend, 'Mail send' | trans) }} 
-                            {{ form_errors(form.mailsend) }} 
-                            {{ form_widget(form.mailsend) }}
+                            {{ form_label(form.emailable, 'Mail send' | trans) }} 
+                            {{ form_errors(form.emailable) }} 
+                            {{ form_widget(form.emailable) }}
                         </div>
                     </div>
                 </div>

@@ -12,14 +12,14 @@ use PROCERGS\LoginCidadao\CoreBundle\Form\DataTransformer\FromArray;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class ClientNotPerFormType extends AbstractType
+class PersonNotificationOptionFormType extends AbstractType
 {
 
     protected $container;
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('mailsend', 'choice', array(
+        $builder->add('sendemail', 'choice', array(
             'choices'   => array('0' => 'no', '1' => 'yes'),
             'required' => true
         ));
@@ -31,7 +31,7 @@ class ClientNotPerFormType extends AbstractType
 
     public function getName()
     {
-        return 'client_not_per_form_type';
+        return 'person_notification_option_form_type';
     }
 
 }

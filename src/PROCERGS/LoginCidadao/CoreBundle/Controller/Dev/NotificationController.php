@@ -11,8 +11,8 @@ use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ContactFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail;
 use PROCERGS\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientNotCatFormType;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\ConfigNotCli;
 use Michelf\MarkdownExtra;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category;
 
 /**
  * @Route("/dev/not")
@@ -26,9 +26,9 @@ class NotificationController extends Controller
      */
     public function newAction()
     {
-        $client = new ConfigNotCli();
-        $client->setMailTpl("%title%\r\n%shorttext%\r\n%text%");
-        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.not.cat.form.type'), $client);
+        $client = new Category();
+        $client->setMailTemplate("%title%\r\n%shorttext%\r\n%text%");
+        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.category.form.type'), $client);
         
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
@@ -50,7 +50,7 @@ class NotificationController extends Controller
      */
     public function listAction()
     {
-        return array();
+        return $this->gridAction();
     }
 
     /**
@@ -61,7 +61,7 @@ class NotificationController extends Controller
     {
         $clients = $this->getDoctrine()
             ->getManager()
-            ->getRepository('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli')
+            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
             ->createQueryBuilder('u')
             ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'u.client = c')
             ->where('c.person = :person')
@@ -69,9 +69,7 @@ class NotificationController extends Controller
             ->orderBy('u.id', 'desc')
             ->getQuery()
             ->getResult();
-        return array(
-            'resultset' => $clients
-        );
+        return array('resultset' => $clients);
     }
 
     /**
@@ -81,7 +79,7 @@ class NotificationController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $client = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli')
+        $client = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
         ->createQueryBuilder('u')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'u.client = c')
         ->where('c.person = :person and u.id = :id')
@@ -93,10 +91,10 @@ class NotificationController extends Controller
         if (!$client) {
             return $this->redirect($this->generateUrl('lc_dev_not_edit'));
         }
-        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.not.cat.form.type'), $client);
+        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.category.form.type'), $client);
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
-            $client->setHtmlTpl(MarkdownExtra::defaultTransform($form->get('mdtpl')->getData()));
+            $client->setHtmlTemplate(MarkdownExtra::defaultTransform($form->get('markdowntemplate')->getData()));
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($client);
             $manager->flush();
