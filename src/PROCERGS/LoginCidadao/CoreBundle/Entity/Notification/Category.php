@@ -111,8 +111,7 @@ class Category implements CategoryInterface
     protected $notifications;
     
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\PersonNotificationOption", inversedBy="category")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\PersonNotificationOption", mappedBy="category") 
      */
     protected $personNotificationOption;
 
