@@ -58,7 +58,7 @@ class PersonNotificationOption
     /**
      * @var Category
      *
-     * @ORM\ManyToOne(targetEntity="Category")
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="personNotificationOption")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     private $category;
