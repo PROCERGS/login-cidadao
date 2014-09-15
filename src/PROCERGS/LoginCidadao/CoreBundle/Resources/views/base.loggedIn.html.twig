@@ -51,6 +51,13 @@
                         </span>
                     </a>
                 </li>
+                <li class="services glyph">
+                    <a href="{{ path('lc_not_inbox') }}">
+                        <span>
+                            {{ 'Notification 2'|trans() }}
+                            <i class="glyphicon glyphicon-th pull-right"></i>
+                        </span></a>
+                </li>
                 <li class="username {{ app.request.attributes.get('_route') == 'lc_update_username' ? 'active' }}">
                     <a href="{{ path('lc_update_username')}}">
                         <span>{% trans %}Change Username{% endtrans %}</span>
@@ -75,13 +82,6 @@
                     <a href="{{ path('lc_admin_sugg_list') }}">
                         <span>
                             {{ 'admin.sugg.list'|trans() }}
-                            <i class="glyphicon glyphicon-th pull-right"></i>
-                        </span></a>
-                </li>
-                <li class="services glyph">
-                    <a href="{{ path('lc_not_inbox') }}">
-                        <span>
-                            {{ 'Notification 2'|trans() }}
                             <i class="glyphicon glyphicon-th pull-right"></i>
                         </span></a>
                 </li>
