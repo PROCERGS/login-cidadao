@@ -28,6 +28,9 @@ class NotificationController extends Controller
     {
         $client = new Category();
         $client->setMailTemplate("%title%\r\n%shorttext%\r\n%text%");
+        $client->setMailSenderAddress($this->getUser()->getEmail());
+        $client->setEmailable(true);
+        $client->setMarkdownTemplate("%title%\r\n--\r\n\r\n> %shorttext%\r\n\r\n```\r\n%text%\r\n```");
         $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.category.form.type'), $client);
         
         $form->handleRequest($this->getRequest());

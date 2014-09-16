@@ -48,7 +48,7 @@ class ClientController extends Controller
      */
     public function listAction()
     {
-        return array();
+        return $this->gridAction();
     }
     
     /**

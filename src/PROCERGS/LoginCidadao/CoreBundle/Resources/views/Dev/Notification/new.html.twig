@@ -2,8 +2,18 @@
 <div id="profile-edit" class="content clearfix">
     <h1>{{ 'Notification config'|trans }}</h1>
     <div class="form-content">
-                {{ form_start(form, {'attr' : {'role' : 'form'}}) }} 
-                {{ form_errors(form) }}
+    
+		<ul class="nav nav-tabs" role="tablist">
+            <li class="active"><a href="#general" role="tab" data-toggle="tab">{{ 'General'|trans }}</a></li>
+            <li><a href="#template" role="tab" data-toggle="tab">{{ 'Template'|trans }}</a></li>
+            <li><a href="#placeholder" role="tab" data-toggle="tab">{{ 'Placeholder'|trans }}</a></li>
+        </ul>
+        
+        <!-- Tab panes -->
+        			{{ form_start(form, {'attr' : {'role' : 'form'}}) }}
+			{{ form_errors(form) }}
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="general">
                 <div class="row clearfix">
                     <div class="col-md-12">
 						<div class="form-group">
@@ -37,32 +47,62 @@
                             {{ form_widget(form.defaultshorttext) }}
                         </div>
                         <div class="form-group">
-                            {{ form_label(form.markdowntemplate, 'Markdown template' | trans) }} 
-                            {{ form_errors(form.markdowntemplate) }} 
-                            {{ form_widget(form.markdowntemplate, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_label(form.mailtemplate, 'Mail template' | trans) }} 
-                            {{ form_errors(form.mailtemplate) }} 
-                            {{ form_widget(form.mailtemplate, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_label(form.mailsenderaddress, 'Mail domain'| trans) }} 
-                            {{ form_errors(form.mailsenderaddress) }} 
-                            {{ form_widget(form.mailsenderaddress) }}
-                        </div>
-                        <div class="form-group">
                             {{ form_label(form.emailable, 'Mail send' | trans) }} 
                             {{ form_errors(form.emailable) }} 
                             {{ form_widget(form.emailable) }}
                         </div>
+						<div class="form-group">
+		                    {{ form_label(form.mailsenderaddress, 'Mail sender' | trans) }} 
+		                    {{ form_errors(form.mailsenderaddress) }} 
+		                    {{ form_widget(form.mailsenderaddress, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}
+		                </div>
                     </div>
                 </div>
                 <div class="form-bar text-right">
                     <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
                 </div>
-                {{ form_end(form) }}
+			</div>
+			<div class="tab-pane fade" id="template">
+				<div class="row clearfix">
+                    <div class="col-md-12">
+						<div class="form-group">
+		                    {{ form_label(form.markdowntemplate, 'Markdown template' | trans) }} 
+		                    {{ form_errors(form.markdowntemplate) }} 
+		                    {{ form_widget(form.markdowntemplate, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}
+		                </div>
+		                <div class="form-group">
+		                    {{ form_label(form.mailtemplate, 'Mail template' | trans) }} 
+		                    {{ form_errors(form.mailtemplate) }} 
+		                    {{ form_widget(form.mailtemplate, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}
+		                </div>
+                    </div>
+                </div>                
+                <div class="form-bar text-right">
+                    <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
+                </div>
+			</div>
+            <div class="tab-pane fade" id="placeholder">
+				<div class="row clearfix">
+                    <div class="col-md-12">
+		                <a id="add_placeholder" class="btn-sm btn-primary glyphicon glyphicon-plus" href="javascript:void(0);"></a>
+		                <label for="add_placeholder">{{ 'add'|trans }} {{ 'Placeholder'|trans }}</label>                
+		                <div></div>
+                    </div>
+                </div>                
             </div>
+		</div>
+		{{ form_end(form) }}
     </div>
 </div>
+<style>
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    border-color: black black rgba(0, 0, 0, 0);
+}
+.nav-tabs {
+    border-bottom: 1px solid black;
+}
+.tab-pane {
+    margin-top: 10px;
+}
+</style>
 {% endblock %}

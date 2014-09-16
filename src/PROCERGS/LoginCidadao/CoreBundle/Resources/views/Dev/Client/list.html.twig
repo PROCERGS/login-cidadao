@@ -3,7 +3,7 @@
     <h5>{{ 'Services'|trans }}</h5>
     <a id="add_service" class="btn-sm btn-primary glyphicon glyphicon-plus" href="{{ path('lc_dev_client_new') }}"></a>
     <label for="add_service">{{ 'add'|trans }} {{ 'Service'|trans }}</label>           
-    {% render(controller("PROCERGSLoginCidadaoCoreBundle:Dev/Client:grid")) %}
+    {% include "PROCERGSLoginCidadaoCoreBundle:Dev/Client:grid.html.twig" %}
 </div>
 
 {% endblock %} 
