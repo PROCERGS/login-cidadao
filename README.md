@@ -29,3 +29,18 @@ Generate assets
 ---------------
 
 php app/console assets:install --symlink
+
+Vagrant
+=======
+
+```
+vagrant box add centos65-x86_64-20140116 https://github.com/2creatives/vagrant-centos/releases/download/v6.5.3/centos65-x86_64-20140116.box
+
+vagrant init
+```
+
+Add entry to /etc/hosts
+
+```
+192.168.33.10 lc.local
+```
