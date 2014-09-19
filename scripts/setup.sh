@@ -7,9 +7,15 @@ yum -y groupinstall "Development Tools"
 
 yum install nodejs npm -y
 
-yum -y install mysql mysql-server
-chkconfig --levels 235 mysqld on
-/etc/init.d/mysqld start
+yum -y install postgres-server
+service postgresql initdb
+chkconfig postgresql on
+
+su - postgres
+psql postgres postgres
+alter user postgres with password 'postgres'
+exit
+exit
 
 mysql -uroot -e 'create database login';
 
@@ -20,7 +26,7 @@ rm /etc/httpd/conf.d/welcome.conf
 
 yum install -y memcached
 
-yum -y install php php-gd php-imap php-ldap php-pear php-xml php-xmlrpc php-mbstring php-mcrypt  php-snmp php-soap php-tidy curl curl-devel php-mysql php-suhosin php-xcache php-pecl-memcache
+yum -y install php-pgsql php-gd php-imap php-ldap php-pear php-xml php-xmlrpc php-mbstring php-mcrypt  php-snmp php-soap php-tidy curl curl-devel php-suhosin php-xcache php-pecl-memcache
 cp /login-cidadao/scripts/login.conf /etc/httpd/conf.d/
 cp /login-cidadao/scripts/php.ini /etc/php.ini
 /etc/init.d/httpd restart

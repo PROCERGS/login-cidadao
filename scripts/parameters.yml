@@ -1,0 +1,59 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_driver: pdo_pgsql
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: login
+    database_user: postgres
+    database_password: 123
+    memcached_host: 127.0.0.1
+    memcached_port: 11211
+    session_prefix: lc_sess_
+    session_lifetime: 86400
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    locale: pt_BR
+    secret: ThisTokenIsNotSoSecretChangeIt
+    web_profiler_toolbar: true
+    facebook_app_id: facebook_app_id_here
+    facebook_app_secret: facebook_app_secret_here
+    facebook_app_url: facebook_app_url
+    facebook_app_this_url: 'https://%site_domain%'
+    facebook_app_scope:
+        - email
+        - user_about_me
+        - user_birthday
+        - user_location
+    twitter_app_key: twitter_app_key_goes_here
+    twitter_app_secret: twitter_app_secret_here
+    http_proxy:
+        type: HTTP
+        host: proxy.procergs.reders
+        port: 3128
+        auth: 'login:senha'
+    site_domain: meu.rs.gov.br
+    mailer_sender_mail: teste@teste.com.br
+    mailer_sender_name: Teste
+    recaptcha_public_key: null
+    recaptcha_private_key: null
+    registration.cpf.empty_time: '+1 month'
+    registration.email.unconfirmed_time: '1 day'
+    brute_force_threshold: 4
+    background_picture.author: 'Miriam Cardoso de Souza'
+    background_picture.link: 'http://www.flickr.com/photos/admiriam/10390118624/'
+    mailer_receiver_mail: null
+    nfg_ws_url: null
+    soe_organization: null
+    soe_username: null
+    soe_password: null
+    nfg_url_auth: null
+    nfg_url_login: null
+    nfg_hmac_secret: null
+    user_profile_ftp_host: ftp.host
+    user_profile_ftp_username: ftp_username
+    user_profile_ftp_password: ftp_password
+    user_profile_ftp_directory: /ftp/path/to/web/uploads/profile-pictures
+    tre_search_link: 'http://www.tse.jus.br/eleitor/servicos/titulo-e-local-de-votacao/consulta-por-nome'
+    uri_root: /
