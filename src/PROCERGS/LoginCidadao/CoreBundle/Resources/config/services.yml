@@ -201,6 +201,13 @@ services:
         calls:
             - [setContainer, ["@service_container"]]
 
+    procergs_logincidadao.placeholder.form.type:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\PlaceholderFormType
+        tags:
+            - { name: form.type, alias: placeholder_form_type }
+        calls:
+            - [setSecurity, ["@security.context"]]            
+
     procergs_logincidadao.nfgws:
         class: %procergs_logincidadao.nfgws.class%
         calls:

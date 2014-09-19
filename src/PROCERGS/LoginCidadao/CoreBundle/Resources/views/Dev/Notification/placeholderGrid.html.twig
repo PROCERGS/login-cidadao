@@ -1,0 +1,34 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle::grid_layout.html.twig" %}
+
+{% block grid_header_action %}
+<div class="col-md-1">{{ 'actions'|trans }}</div>
+{% endblock grid_header_action %}
+
+{% block grid_header_data %}
+<div class="col-md-4">{{ 'name'|trans }}</div>
+<div class="col-md-7">{{ 'default'|trans }}</div>
+{% endblock grid_header_data %}
+
+{% block grid_row_action %}
+<div class="col-md-1">
+    <a id="{{ grid.getId }}-row-{{ row.id }}" class="center-block text-center glyphicon glyphicon-search edit-grid" title="{{ 'Show'|trans }}" href="javascript:void(0)" data-row="{{ grid.getRouteParams|merge({'category_id':row.id})|json_encode }}"></a>
+</div>
+{% endblock grid_row_action %}
+
+{% block grid_row_data %}
+<div class="col-md-4">
+    <dt>{{ 'name'|trans }}</dt>
+    <dd>{{ row.name }}</dd>
+</div>
+<div class="col-md-7">
+    <dt>{{ 'defautl'|trans }}</dt>
+    <dd>{{ row.default }}</dd>
+</div>
+{% endblock grid_row_data %}
+
+{% block grid_row %}
+<div class="row common-grid-result {{ grid.getRlast != true ? 'row-last' }}">
+	{{ block('grid_row_action') }}
+	{{ block('grid_row_data') }}
+</div>
+{% endblock grid_row %}

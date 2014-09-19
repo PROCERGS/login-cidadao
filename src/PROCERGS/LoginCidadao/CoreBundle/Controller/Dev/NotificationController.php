@@ -13,6 +13,9 @@ use PROCERGS\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientNotCatFormType;
 use Michelf\MarkdownExtra;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Placeholder;
+use PROCERGS\LoginCidadao\CoreBundle\Form\Type\PlaceholderFormType;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 
 /**
  * @Route("/dev/not")
@@ -102,9 +105,90 @@ class NotificationController extends Controller
             $manager->persist($client);
             $manager->flush();
         }
+        $request = $this->getRequest();
+        $request->query->set('category_id', $id);
+        $placeholders = $this->placeholderGridAction($request);
         return $this->render('PROCERGSLoginCidadaoCoreBundle:Dev\Notification:new.html.twig', array(
             'form' => $form->createView(),
-            'client' => $client
+            'client' => $client,
+            'placeholderGrid' => $placeholders['grid']
         ));
     }
+    
+    /**
+     * @Route("/placeholder/edit", name="lc_dev_not_placeholder_edit")
+     * @Template()
+     */
+    public function placeholderEditAction(Request $request)
+    {
+       $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.placeholder.form.type'));
+       $placeholder = null;
+       $em = $this->getDoctrine()->getManager();
+       if (($id = $request->get('id')) || (($data = $request->get($form->getName())) && ($id = $data['id']))) {
+           $placeholder = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Placeholder')
+           ->createQueryBuilder('u')
+           ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cat', 'with', 'u.category = cat')
+           ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'cat.client = c')
+           ->where('c.person = :person and u.id = :id')
+           ->setParameter('person', $this->getUser())
+           ->setParameter('id', $id)
+           ->orderBy('u.id', 'desc')
+           ->getQuery()
+           ->getSingleResult();
+       } elseif (($categoryId = $request->get('category_id')) || (($data = $request->get($form->getName())) && ($categoryId = $data['category']))) {
+           $category = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
+           ->createQueryBuilder('u')
+           ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'u.client = c')
+           ->where('c.person = :person and u.id = :id')
+           ->setParameter('person', $this->getUser())
+           ->setParameter('id', $categoryId)
+           ->orderBy('u.id', 'desc')
+           ->getQuery()
+           ->getSingleResult();
+           $placeholder = new Placeholder();
+           $placeholder->setCategory($category);
+       }
+       if (!$placeholder) {
+           die('dunno');
+       }
+       $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.placeholder.form.type'), $placeholder);
+       $form->handleRequest($this->getRequest());       
+       if ($form->isValid()) {
+           $em->persist($placeholder);
+           $em->flush();
+           $resp = new Response('<script>placeholderGrid.getGrid();</script>');
+           return $resp;
+       }
+       return array('form' => $form->createView());
+    }
+    
+    /**
+     * @Route("/placeholder/grid", name="lc_dev_not_placeholder_grid")
+     * @Template()
+     */
+    public function placeholderGridAction(Request $request)
+    {
+        $categoryId = $request->get('category_id');
+        $em = $this->getDoctrine()->getManager();
+        $sql = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Placeholder')
+        ->createQueryBuilder('u')
+        ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cat', 'with', 'u.category = cat')
+        ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'cat.client = c')
+        ->where('c.person = :person and cat.id = :id')
+        ->setParameter('person', $this->getUser())
+        ->setParameter('id', $categoryId)
+        ->orderBy('u.id', 'desc');
+        
+        $grid = new GridHelper();
+        $grid->setId('placeholder-grid');
+        $grid->setPerPage(2);
+        $grid->setMaxResult(2);
+        $grid->setQueryBuilder($sql);
+        $grid->setInfinityGrid(true);
+        $grid->setRoute('lc_dev_not_placeholder_grid');
+        $grid->setRouteParams(array('category_id'));
+        return array('grid' => $grid->createView($request));
+                
+    }
+    
 }

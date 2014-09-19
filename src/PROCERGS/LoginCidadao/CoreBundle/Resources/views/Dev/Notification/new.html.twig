@@ -1,108 +1,119 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle:Dev:base.html.twig' %} {% block content %}
-<div id="profile-edit" class="content clearfix">
-    <h1>{{ 'Notification config'|trans }}</h1>
-    <div class="form-content">
-    
-		<ul class="nav nav-tabs" role="tablist">
-            <li class="active"><a href="#general" role="tab" data-toggle="tab">{{ 'General'|trans }}</a></li>
-            <li><a href="#template" role="tab" data-toggle="tab">{{ 'Template'|trans }}</a></li>
-            <li><a href="#placeholder" role="tab" data-toggle="tab">{{ 'Placeholder'|trans }}</a></li>
-        </ul>
-        
-        <!-- Tab panes -->
-        			{{ form_start(form, {'attr' : {'role' : 'form'}}) }}
-			{{ form_errors(form) }}
-        <div class="tab-content">
-            <div class="tab-pane fade in active" id="general">
-                <div class="row clearfix">
-                    <div class="col-md-12">
-						<div class="form-group">
-                            {{ form_label(form.id, 'Id' | trans) }} 
-                            {{ form_errors(form.id) }} 
-                            {{ form_widget(form.id) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_label(form.client, 'Service' | trans) }} 
-                            {{ form_errors(form.client) }} 
-                            {{ form_widget(form.client) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_label(form.name, 'Name'| trans) }} 
-                            {{ form_errors(form.name) }} 
-                            {{ form_widget(form.name) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_label(form.defaulticon, 'Default Icon' | trans) }}
-                            {{ form_errors(form.defaulticon) }}
-                            {{ form_widget(form.defaulticon) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_label(form.defaulttitle, 'Default title' | trans) }}
-                            {{ form_errors(form.defaulttitle) }}
-                            {{ form_widget(form.defaulttitle) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_label(form.defaultshorttext, 'Default shorttext' | trans) }}
-                            {{ form_errors(form.defaultshorttext) }}
-                            {{ form_widget(form.defaultshorttext) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_label(form.emailable, 'Mail send' | trans) }} 
-                            {{ form_errors(form.emailable) }} 
-                            {{ form_widget(form.emailable) }}
-                        </div>
-						<div class="form-group">
-		                    {{ form_label(form.mailsenderaddress, 'Mail sender' | trans) }} 
-		                    {{ form_errors(form.mailsenderaddress) }} 
-		                    {{ form_widget(form.mailsenderaddress, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}
-		                </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ 'Notification config'|trans }}</h3>
+        </div>
+    </div>
+<div id="notification_id">
+    {{ form_start(form, {'attr' : {'role' : 'form'}}) }} {{ form_errors(form) }}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ 'General'|trans }}</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row clearfix">
+                <div class="col-md-12">
+                    <div class="form-group">{{ form_label(form.id, 'Id' | trans) }} {{ form_errors(form.id) }} {{ form_widget(form.id) }}</div>
+                    <div class="form-group">{{ form_label(form.client, 'Service' | trans) }} {{ form_errors(form.client) }} {{ form_widget(form.client) }}</div>
+                    <div class="form-group">{{ form_label(form.name, 'Name'| trans) }} {{ form_errors(form.name) }} {{ form_widget(form.name) }}</div>
+                    <div class="form-group">{{ form_label(form.defaulticon, 'Default Icon' | trans) }} {{ form_errors(form.defaulticon) }} {{ form_widget(form.defaulticon) }}</div>
+                    <div class="form-group">{{ form_label(form.defaulttitle, 'Default title' | trans) }} {{ form_errors(form.defaulttitle) }} {{ form_widget(form.defaulttitle) }}</div>
+                    <div class="form-group">{{ form_label(form.defaultshorttext, 'Default shorttext' | trans) }} {{ form_errors(form.defaultshorttext) }} {{ form_widget(form.defaultshorttext) }}</div>
+                    <div class="form-group">{{ form_label(form.emailable, 'Mail send' | trans) }} {{ form_errors(form.emailable) }} {{ form_widget(form.emailable) }}</div>
+                    <div class="form-group">{{ form_label(form.mailsenderaddress, 'Mail sender' | trans) }} {{ form_errors(form.mailsenderaddress) }} {{ form_widget(form.mailsenderaddress) }}</div>
+
+                    <div class="form-bar text-right">
+                        <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
                     </div>
+
                 </div>
-                <div class="form-bar text-right">
-                    <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
-                </div>
-			</div>
-			<div class="tab-pane fade" id="template">
-				<div class="row clearfix">
-                    <div class="col-md-12">
-						<div class="form-group">
-		                    {{ form_label(form.markdowntemplate, 'Markdown template' | trans) }} 
-		                    {{ form_errors(form.markdowntemplate) }} 
-		                    {{ form_widget(form.markdowntemplate, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}
-		                </div>
-		                <div class="form-group">
-		                    {{ form_label(form.mailtemplate, 'Mail template' | trans) }} 
-		                    {{ form_errors(form.mailtemplate) }} 
-		                    {{ form_widget(form.mailtemplate, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}
-		                </div>
-                    </div>
-                </div>                
-                <div class="form-bar text-right">
-                    <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
-                </div>
-			</div>
-            <div class="tab-pane fade" id="placeholder">
-				<div class="row clearfix">
-                    <div class="col-md-12">
-		                <a id="add_placeholder" class="btn-sm btn-primary glyphicon glyphicon-plus" href="javascript:void(0);"></a>
-		                <label for="add_placeholder">{{ 'add'|trans }} {{ 'Placeholder'|trans }}</label>                
-		                <div></div>
-                    </div>
-                </div>                
             </div>
-		</div>
-		{{ form_end(form) }}
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ 'Templates'|trans }}</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row clearfix">
+                <div class="col-md-12">
+                    <div class="form-group">{{ form_label(form.markdowntemplate, 'Markdown template' | trans) }} {{ form_errors(form.markdowntemplate) }} {{ form_widget(form.markdowntemplate, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}</div>
+                    <div class="form-group">{{ form_label(form.mailtemplate, 'Mail template' | trans) }} {{ form_errors(form.mailtemplate) }} {{ form_widget(form.mailtemplate, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}</div>
+
+                    <div class="form-bar text-right">
+                        <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">{{ 'Placeholders'|trans }}</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row clearfix">
+            <div class="col-md-12">
+                <a id="new_placeholder" class="btn-sm btn-primary glyphicon glyphicon-plus" href="javascript:void(0);"></a> <label for="new_placeholder">{{ 'add'|trans }} {{ 'Placeholder'|trans }}</label>
+                <div id="placeholder-grid">
+                {% include "PROCERGSLoginCidadaoCoreBundle:Dev/Notification:placeholderGrid.html.twig" with {'grid': placeholderGrid} %}
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+<div id="placeholder-edit"></div>
 <style>
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-    border-color: black black rgba(0, 0, 0, 0);
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus
+	{
+	border-color: black black rgba(0, 0, 0, 0);
 }
+
 .nav-tabs {
-    border-bottom: 1px solid black;
+	border-bottom: 1px solid black;
 }
+
 .tab-pane {
-    margin-top: 10px;
+	margin-top: 10px;
 }
 </style>
+{% endblock %}
+
+{% block javascripts %} 
+{{ parent() }}
+<script>
+var categoryId = '#{{ form.id.vars.id }}';
+var routePlaceholderEdit = '{{ path('lc_dev_not_placeholder_edit') }}';
+var routePlaceholderGrid = '{{ path('lc_dev_not_placeholder_grid') }}';
+var placeholderGrid = {};
+placeholderGrid.getGrid = function() {
+	if ($(categoryId).length) {
+	$.ajax({
+		type: 'get',
+		url: routePlaceholderGrid + '?category_id='+ $(categoryId).val(),
+		dataType : 'html',
+		success : function(data, textStatus, jqXHR) {
+			$('#placeholder-grid').html(data);
+		}
+    });
+	}
+};
+$(document).on('click', '#new_placeholder',  function() {	
+	if ($(categoryId).length) {
+		$.ajax({
+			type: 'get',
+			url: routePlaceholderEdit + '?category_id='+ $(categoryId).val(),
+			dataType : 'html',
+			success : function(data, textStatus, jqXHR) {
+				$('#placeholder-edit').html(data);
+			}
+	    });
+	}
+});
+
+</script>
 {% endblock %}
