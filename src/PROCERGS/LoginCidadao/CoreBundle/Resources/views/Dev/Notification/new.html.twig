@@ -58,8 +58,7 @@
     <div class="panel-body">
         <div class="row clearfix">
             <div class="col-md-12">
-                <a id="new_placeholder" class="btn-sm btn-primary glyphicon glyphicon-plus" href="javascript:void(0);"></a> <label for="new_placeholder">{{ 'add'|trans }} {{ 'Placeholder'|trans }}</label>
-                <div id="placeholder-grid">
+                <div id="placeholder-grid-place">
                 {% include "PROCERGSLoginCidadaoCoreBundle:Dev/Notification:placeholderGrid.html.twig" with {'grid': placeholderGrid} %}
                 </div>
             </div>
@@ -88,32 +87,65 @@
 <script>
 var categoryId = '#{{ form.id.vars.id }}';
 var routePlaceholderEdit = '{{ path('lc_dev_not_placeholder_edit') }}';
+var routePlaceholderRemove = '{{ path('lc_dev_not_placeholder_remove') }}';
 var routePlaceholderGrid = '{{ path('lc_dev_not_placeholder_grid') }}';
 var placeholderGrid = {};
 placeholderGrid.getGrid = function() {
-	if ($(categoryId).length) {
+	if (!$(categoryId).length) {
+	}
 	$.ajax({
 		type: 'get',
 		url: routePlaceholderGrid + '?category_id='+ $(categoryId).val(),
 		dataType : 'html',
 		success : function(data, textStatus, jqXHR) {
-			$('#placeholder-grid').html(data);
+			$('#placeholder-grid-place').html(data);
+			$(data).each(lcInitInfinityGrid);
+			$('html, body').animate({scrollTop: $('#placeholder-grid-place').offset().top});
 		}
     });
-	}
 };
 $(document).on('click', '#new_placeholder',  function() {	
-	if ($(categoryId).length) {
-		$.ajax({
-			type: 'get',
-			url: routePlaceholderEdit + '?category_id='+ $(categoryId).val(),
-			dataType : 'html',
-			success : function(data, textStatus, jqXHR) {
-				$('#placeholder-edit').html(data);
-			}
-	    });
+	if (!$(categoryId).length) {
+		return;
 	}
+	$.ajax({
+		type: 'get',
+		url: routePlaceholderEdit + '?category_id='+ $(categoryId).val(),
+		dataType : 'html',
+		success : function(data, textStatus, jqXHR) {
+			$('#placeholder-edit').html(data);
+			$('html, body').animate({scrollTop: $('#placeholder-edit').offset().top});
+		}
+    });
 });
-
+$(document).on('click', '#placeholder-grid .edit-row-grid',  function() {
+	if (!$(categoryId).length) {
+		return;
+	}
+	var $id = $.parseJSON($(this).attr('data-row')).id;
+	$.ajax({
+		type: 'get',
+		url: routePlaceholderEdit + '?id='+ $id,
+		dataType : 'html',
+		success : function(data, textStatus, jqXHR) {
+			$('#placeholder-edit').html(data);
+			$('html, body').animate({scrollTop: $('#placeholder-edit').offset().top});
+		}
+    });
+});
+$(document).on('click', '#placeholder-grid .remove-row-grid',  function() {	
+	if (!$(categoryId).length) {
+		return;
+	}
+	var $id = $.parseJSON($(this).attr('data-row')).id;
+	$.ajax({
+		type: 'get',
+		url: routePlaceholderRemove + '?id='+ $id,
+		dataType : 'html',
+		success : function(data, textStatus, jqXHR) {
+			$('#placeholder-edit').html(data);			
+		}
+    });
+});
 </script>
 {% endblock %}

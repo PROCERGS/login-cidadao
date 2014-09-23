@@ -379,6 +379,48 @@ function Pwindow(options) {
 	}
 	$.ajax(opts);
 }
+var lcInfinityscrollNextButton = function() {
+	$(this).hide();
+	$($(this).attr('data-retrive')).infinitescroll('retrieve');
+};
+var lcInitInfinityGrid = function () {
+	var _id = '#'+ $(this).prop('id'); 
+	$(_id).infinitescroll({
+    	debug: true,
+        navSelector  : _id + ' .pagination',
+        nextSelector : _id + ' .pagination a:last',
+        itemSelector : _id + ' .row.common-grid-result',
+        contentSelector: _id + ' .tab-pane.active',
+        bufferPx     : 200,
+        state : {
+        	currPage: Number($(_id).attr('data-grid-currpage'))
+        },
+        loading: {	            
+            msg: $('<div></div>'),
+            img: null
+        },
+        pathParse: function (path, currPage) {
+        	var matches = path.match(/^(.*[?|&]page=)\d+(.*|$)/);
+        	if (matches) {
+        		return matches.slice(1);
+        	}
+        }
+    },
+    function( newElements, data, url ) {
+    	var isLast = false;
+    	for (x in newElements) {
+    		if (isLast = newElements[x].classList.contains("row-last")) {
+    			break;
+    		}
+    	}
+    	if (!isLast) {
+    		$(_id+' .infinityscroll-next-button').show();
+    	}
+        window.console && console.log('context: ',this);
+		window.console && console.log('returned: ', newElements);
+    });
+    $(window).unbind('.infscr');    
+};
 $(function() {
 
     // add bootstrap classes to forms
@@ -427,42 +469,6 @@ $(function() {
     		}
         });
     });
-    var dynInfGrid = function () {
-    	var _id = '#'+ $(this).prop('id'); 
-		$(_id).infinitescroll({
-	    	debug: true,
-	        navSelector  : _id + ' .pagination',
-	        nextSelector : _id + ' .pagination a:last',
-	        itemSelector : _id + ' .row.common-grid-result',
-	        contentSelector: _id + ' .tab-pane.active',
-	        bufferPx     : 200,
-	        state : {
-	        	currPage: $(_id).attr('data-grid-currpage')
-	        },
-	        loading: {	            
-	            msg: $('<div>'),
-	            img: null
-	        }
-	    },
-	    function( newElements, data, url ) {
-	    	var isLast = false;
-	    	for (x in newElements) {
-	    		if (isLast = newElements[x].classList.contains("row-last")) {
-	    			break;
-	    		}
-	    	}
-	    	if (!isLast) {
-	    		$(_id+' .infinityscroll-next-button').show();
-	    	}
-	        window.console && console.log('context: ',this);
-			window.console && console.log('returned: ', newElements);
-	    });
-	    $(window).unbind('.infscr');
-	    $(document).on('click', _id+' .infinityscroll-next-button' ,function(){
-	    	$(this).hide();
-	    	$(_id).infinitescroll('retrieve');
-	    	return false;
-	    });
-      };
-      $('[data-infinity-grid="true"]').each(dynInfGrid);
+    $('[data-infinity-grid="true"]').each(lcInitInfinityGrid);
+    $(document).on('click', '.infinityscroll-next-button' , lcInfinityscrollNextButton);
 });

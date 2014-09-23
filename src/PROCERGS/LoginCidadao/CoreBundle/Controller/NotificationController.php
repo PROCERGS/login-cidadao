@@ -170,7 +170,7 @@ class NotificationController extends Controller
         }
 
         $grid = new GridHelper();
-        $grid->setId('simpleOne');
+        $grid->setId('simpleOne'.$id);
         $grid->setPerPage(10);
         $grid->setMaxResult(10);
         $grid->setQueryBuilder($sql);

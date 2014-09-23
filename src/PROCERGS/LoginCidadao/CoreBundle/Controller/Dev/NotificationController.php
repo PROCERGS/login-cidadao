@@ -191,4 +191,31 @@ class NotificationController extends Controller
                 
     }
     
+    /**
+     * @Route("/placeholder/remove", name="lc_dev_not_placeholder_remove")
+     * @Template()
+     */
+    public function placeholderRemoveAction(Request $request)
+    {
+        if ($id = $request->get('id')) {
+            $em = $this->getDoctrine()->getManager();
+            $placeholder = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Placeholder')
+            ->createQueryBuilder('u')
+            ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cat', 'with', 'u.category = cat')
+            ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'cat.client = c')
+            ->where('c.person = :person and u.id = :id')
+            ->setParameter('person', $this->getUser())
+            ->setParameter('id', $id)
+            ->orderBy('u.id', 'desc')
+            ->getQuery()
+            ->getOneOrNullResult();
+            if ($placeholder) {
+                $em->remove($placeholder);
+                $em->flush();
+            }
+        }
+        $resp = new Response('<script>placeholderGrid.getGrid();</script>');
+        return $resp;
+    }
+    
 }

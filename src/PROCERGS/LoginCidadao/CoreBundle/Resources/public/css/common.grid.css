@@ -38,4 +38,7 @@
     .common-grid-results .common-grid-result {
         margin-bottom: 0 !important;
     }
+	.label-action-column-grid {
+        display: none;
+    }
 }
