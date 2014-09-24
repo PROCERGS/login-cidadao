@@ -1,11 +1,14 @@
-{% extends 'PROCERGSLoginCidadaoCoreBundle:Dev:base.html.twig' %} {% block content %}
+{% extends 'PROCERGSLoginCidadaoCoreBundle:Dev:base.html.twig' %} 
+{% block content %}
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">{{ 'Notification config'|trans }}</h3>
         </div>
     </div>
 <div id="notification_id">
-    {{ form_start(form, {'attr' : {'role' : 'form'}}) }} {{ form_errors(form) }}
+    {% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
+    {{ form_start(form, {'attr' : {'role' : 'form'}}) }} 
+    {{ form_errors(form) }}
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">{{ 'General'|trans }}</h3>
@@ -13,14 +16,16 @@
         <div class="panel-body">
             <div class="row clearfix">
                 <div class="col-md-12">
-                    <div class="form-group">{{ form_label(form.id, 'Id' | trans) }} {{ form_errors(form.id) }} {{ form_widget(form.id) }}</div>
-                    <div class="form-group">{{ form_label(form.client, 'Service' | trans) }} {{ form_errors(form.client) }} {{ form_widget(form.client) }}</div>
-                    <div class="form-group">{{ form_label(form.name, 'Name'| trans) }} {{ form_errors(form.name) }} {{ form_widget(form.name) }}</div>
-                    <div class="form-group">{{ form_label(form.defaulticon, 'Default Icon' | trans) }} {{ form_errors(form.defaulticon) }} {{ form_widget(form.defaulticon) }}</div>
-                    <div class="form-group">{{ form_label(form.defaulttitle, 'Default title' | trans) }} {{ form_errors(form.defaulttitle) }} {{ form_widget(form.defaulttitle) }}</div>
-                    <div class="form-group">{{ form_label(form.defaultshorttext, 'Default shorttext' | trans) }} {{ form_errors(form.defaultshorttext) }} {{ form_widget(form.defaultshorttext) }}</div>
-                    <div class="form-group">{{ form_label(form.emailable, 'Mail send' | trans) }} {{ form_errors(form.emailable) }} {{ form_widget(form.emailable) }}</div>
-                    <div class="form-group">{{ form_label(form.mailsenderaddress, 'Mail sender' | trans) }} {{ form_errors(form.mailsenderaddress) }} {{ form_widget(form.mailsenderaddress) }}</div>
+                    {{ form_row(form.id)}}
+                    {{ form_row(form.client)}}
+                    {{ form_row(form.name)}}
+                    {{ form_row(form.defaultIcon)}}
+                    {% if form.defaultTitle is defined %}
+                        {{ form_row(form.defaultTitle)}}
+                        {{ form_row(form.defaultShortText)}}
+                    {% endif %}
+                    {{ form_row(form.emailable)}}
+                    {{ form_row(form.mailSenderAddress)}}
 
                     <div class="form-bar text-right">
                         <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
@@ -30,7 +35,7 @@
             </div>
         </div>
     </div>
-
+    {% if form.markdownTemplate is defined %}    
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">{{ 'Templates'|trans }}</h3>
@@ -38,9 +43,8 @@
         <div class="panel-body">
             <div class="row clearfix">
                 <div class="col-md-12">
-                    <div class="form-group">{{ form_label(form.markdowntemplate, 'Markdown template' | trans) }} {{ form_errors(form.markdowntemplate) }} {{ form_widget(form.markdowntemplate, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}</div>
-                    <div class="form-group">{{ form_label(form.mailtemplate, 'Mail template' | trans) }} {{ form_errors(form.mailtemplate) }} {{ form_widget(form.mailtemplate, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}</div>
-
+                    {{ form_row(form.markdownTemplate) }}
+                    {{ form_row(form.mailTemplate) }}
                     <div class="form-bar text-right">
                         <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
                     </div>
@@ -49,8 +53,10 @@
             </div>
         </div>
     </div>
+    {% endif %}
     {{ form_end(form) }}
 </div>
+{% if placeholderGrid is defined %}
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">{{ 'Placeholders'|trans }}</h3>
@@ -58,28 +64,15 @@
     <div class="panel-body">
         <div class="row clearfix">
             <div class="col-md-12">
-                <div id="placeholder-grid-place">
-                {% include "PROCERGSLoginCidadaoCoreBundle:Dev/Notification:placeholderGrid.html.twig" with {'grid': placeholderGrid} %}
+                <div id="placeholder-grid-place">                
+                    {% include "PROCERGSLoginCidadaoCoreBundle:Dev/Notification:placeholderGrid.html.twig" with {'grid': placeholderGrid} %}
                 </div>
             </div>
         </div>
     </div>
 </div>
+{% endif %}
 <div id="placeholder-edit"></div>
-<style>
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus
-	{
-	border-color: black black rgba(0, 0, 0, 0);
-}
-
-.nav-tabs {
-	border-bottom: 1px solid black;
-}
-
-.tab-pane {
-	margin-top: 10px;
-}
-</style>
 {% endblock %}
 
 {% block javascripts %} 

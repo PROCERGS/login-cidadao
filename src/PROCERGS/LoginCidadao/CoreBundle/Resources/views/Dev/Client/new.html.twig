@@ -2,85 +2,42 @@
 <div id="profile-edit" class="content clearfix">
     <h1>{{ 'Service'|trans }}</h1>
     <div class="form-content">
-                {{ form_start(form, {'attr' : {'role' : 'form'}}) }} 
-                {{ form_errors(form) }}
-                <div class="row clearfix">
-                    <div class="col-md-7">
-                        <div class="form-group">
-                            {{ form_label(form.name, 'Name'| trans) }} 
-                            {{ form_errors(form.name) }} 
-                            {{ form_widget(form.name) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_label(form.description, 'Description' | trans) }} 
-                            {{ form_errors(form.description) }} 
-                            {{ form_widget(form.description, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_label(form.siteurl, 'URL' | trans) }}
-                            {{ form_errors(form.siteurl) }}
-                            {{ form_widget(form.siteurl) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_label(form.redirecturis, 'Redirect URIs' | trans) }} 
-                            {{ form_errors(form.redirecturis) }} 
-                            {{ form_widget(form.redirecturis, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_label(form.landingpageurl, 'Landing Page'| trans) }} 
-                            {{ form_errors(form.landingpageurl) }} 
-                            {{ form_widget(form.landingpageurl) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_label(form.termsofuseurl, 'Terms of Use' | trans) }} 
-                            {{ form_errors(form.termsofuseurl) }} 
-                            {{ form_widget(form.termsofuseurl) }}
-                        </div>
-                        {% if client is defined %}
-                            <div class="form-group">
-                                <label for="publicid">{{ 'Public Id'| trans }}</label>
-                                <textarea rows="3" class="form-control" id="publicid" readonly="readonly">{{ client.publicid }}</textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="secret">{{ 'Secret/Private Key'| trans }}</label>
-                                <textarea rows="3" class="form-control" id="secret" readonly="readonly">{{ client.secret }}</textarea>
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="col-md-5">
-                        {% if client is defined and client.getPictureWebPath != '' %}
-                            <img src="/{{ client.getPictureWebPath }}"/>
-                        {% else %}
-        					{% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
-        					<img src="{{ asset_url }}"/>
-        					{% endimage %}
-                        {% endif %}
-        
-                       <div class="file-upload text-center">
-                            <button type="button" class="btn btn-success btn-upload">{% trans %}Upload another picture{% endtrans %}</button>
-                            <div class="file-name"></div>
-                            {{ form_widget(form.pictureFile) }}
-                        </div>
-                    </div>
-                </div>
-                <div class="form-bar text-right">
-                    <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
-                </div>
-                {{ form_end(form) }}
+        {% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
+        {{ form_start(form, {'attr' : {'role' : 'form'}}) }} 
+        {{ form_errors(form) }}
+        <div class="row clearfix">
+            <div class="col-md-7">
+                {{ form_row(form.name) }}
+                {{ form_row(form.description) }}
+                {{ form_row(form.siteUrl) }}
+                {{ form_row(form.redirectUris) }}
+                {{ form_row(form.landingPageUrl) }}
+                {{ form_row(form.termsOfUseUrl) }}
+                {{ form_row(form.publicId) }}
+                {{ form_row(form.secret) }}
             </div>
+            <div class="col-md-5">
+                {% if client is defined and client.getPictureWebPath != '' %}
+                    <img src="/{{ client.getPictureWebPath }}"/>
+                {% else %}
+					{% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+					<img src="{{ asset_url }}"/>
+					{% endimage %}
+                {% endif %}
+
+               <div class="file-upload text-center">
+                    <button type="button" class="btn btn-success btn-upload">{% trans %}Upload another picture{% endtrans %}</button>
+                    <div class="file-name"></div>
+                    {{ form_widget(form.pictureFile) }}
+                </div>
+            </div>
+        </div>
+        <div class="form-bar text-right">
+            <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
+        </div>
+        {{ form_end(form) }}
     </div>
 </div>
-<style>
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-    border-color: black black rgba(0, 0, 0, 0);
-}
-.nav-tabs {
-    border-bottom: 1px solid black;
-}
-.tab-pane {
-    margin-top: 10px;
-}
-</style>
 {% endblock %}
 
 {% block javascripts %} 

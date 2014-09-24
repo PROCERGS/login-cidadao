@@ -23,13 +23,13 @@ class PlaceholderFormType extends AbstractType
             'required' => true
         ));
         $builder->add('default', 'text', array(
-            'required' => true
+            'required' => false
         ));
         $builder->add('id', 'hidden', array(
             'required' => false
         ));
         $user = $this->getUser();
-        $builder->add('category', 'entity', array(
+        $builder->add('category', 'hidden_entity', array(
             'required' => true,
             'class' => 'PROCERGSLoginCidadaoCoreBundle:Notification\Category',
             'property' => 'name',

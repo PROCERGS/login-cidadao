@@ -29,20 +29,33 @@ class NotificationController extends Controller
      */
     public function newAction()
     {
-        $client = new Category();
-        $client->setMailTemplate("%title%\r\n%shorttext%\r\n%text%");
-        $client->setMailSenderAddress($this->getUser()->getEmail());
-        $client->setEmailable(true);
-        $client->setMarkdownTemplate("%title%\r\n--\r\n\r\n> %shorttext%\r\n\r\n```\r\n%text%\r\n```");
-        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.category.form.type'), $client);
+        $category = new Category();
+        $category->setMailTemplate("%title%\r\n%shorttext%\r\n");
+        $category->setMailSenderAddress($this->getUser()->getEmail());
+        $category->setEmailable(true);
+        $category->setMarkdownTemplate("%title%\r\n--\r\n\r\n> %shorttext%\r\n\r\n");
+        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.category.form.type'), $category);
         
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
             $manager = $this->getDoctrine()->getManager();
-            $manager->persist($client);
+            $manager->persist($category);
+            
+            $title = new Placeholder();
+            $title->setCategory($category);
+            $title->setName('title');
+            $title->setDefault($form->get('defaultTitle')->getData());
+            $manager->persist($title);
+            
+            $sText = new Placeholder();
+            $sText->setCategory($category);
+            $sText->setName('shorttext');
+            $sText->setDefault($form->get('defaultShortText')->getData());
+            $manager->persist($sText);
+            
             $manager->flush();
             return $this->redirect($this->generateUrl('lc_dev_not_edit', array(
-                'id' => $client->getId()
+                'id' => $category->getId()
             )));
         }
         return array(
@@ -100,7 +113,7 @@ class NotificationController extends Controller
         $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.category.form.type'), $client);
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
-            $client->setHtmlTemplate(MarkdownExtra::defaultTransform($form->get('markdowntemplate')->getData()));
+            $client->setHtmlTemplate(MarkdownExtra::defaultTransform($form->get('markdownTemplate')->getData()));
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($client);
             $manager->flush();

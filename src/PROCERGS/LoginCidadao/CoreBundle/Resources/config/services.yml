@@ -185,28 +185,32 @@ services:
         tags:
             - { name: form.type, alias: client_form_type }
         calls:
-            - [setContainer, ["@service_container"]]
+            - [setLcScope, ["%lc_supported_scopes%"]]
 
     procergs_logincidadao.client.base.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientBaseFormType
         tags:
             - { name: form.type, alias: client_base_form_type }
-        calls:
-            - [setContainer, ["@service_container"]]
 
     procergs_logincidadao.category.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\CategoryFormType
         tags:
             - { name: form.type, alias: category_form_type }
         calls:
-            - [setContainer, ["@service_container"]]
+            - [setSecurity, ["@security.context"]]
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]            
 
     procergs_logincidadao.placeholder.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\PlaceholderFormType
         tags:
             - { name: form.type, alias: placeholder_form_type }
         calls:
-            - [setSecurity, ["@security.context"]]            
+            - [setSecurity, ["@security.context"]]
+            
+    procergs_logincidadao.form.type.hidden_entity:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\HiddenEntityType
+        tags:
+            - { name: form.type, alias: hidden_entity }
 
     procergs_logincidadao.nfgws:
         class: %procergs_logincidadao.nfgws.class%

@@ -11,12 +11,18 @@ use OAuth2\OAuth2;
 
 class ClientFormType extends ClientBaseFormType
 {
+    protected $lcScope;
+    
+    public function setLcScope($var){
+        $this->lcScope = $var;
+    }
+   
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        $a = explode(' ', $this->container->getParameter('lc_supported_scopes'));
+        $a = explode(' ', $this->lcScope);
         $a = array_combine($a, $a);
-        $builder->add('allowedscopes', 'collection', array(
+        $builder->add('allowedScopes', 'collection', array(
             'type' => 'choice',
             'options' => array(
                 'choices' => $a
@@ -24,7 +30,7 @@ class ClientFormType extends ClientBaseFormType
             'required' => true,
             'allow_add' => true
         ));
-        $builder->add('allowedgranttypes', 'collection', array(
+        $builder->add('allowedGrantTypes', 'collection', array(
             'type' => 'choice',
             'options' => array(
                 'choices' => array(

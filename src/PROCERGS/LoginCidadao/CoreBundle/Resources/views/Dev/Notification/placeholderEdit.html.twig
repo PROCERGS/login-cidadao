@@ -1,3 +1,5 @@
+{% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
+
 {{ form_start(form, {'action': path('lc_dev_not_placeholder_edit'), 'attr': {'role':'form', 'id': 'form_placeholder', 'class' : 'form-ajax', 'ajax-target' : 'div:has(#form_placeholder):last'} }) }}
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -7,9 +9,8 @@
         <div class="row clearfix">
             {{ form_errors(form) }}
             <div class="col-md-12">
-                <div class="form-group">{{ form_label(form.name, 'Name'| trans) }} {{ form_errors(form.name) }} {{ form_widget(form.name) }}</div>
-                <div class="form-group">{{ form_label(form.default, 'Default' | trans) }} {{ form_errors(form.default) }} {{ form_widget(form.default) }}</div>
-                <div class="form-group" style="display: none;">{{ form_row(form.category) }}</div>
+                {{ form_row(form.name) }}
+                {{ form_row(form.default) }}
                 <div class="form-bar text-right">
                     <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
                 </div>

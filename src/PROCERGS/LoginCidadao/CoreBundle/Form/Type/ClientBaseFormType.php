@@ -2,28 +2,13 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\True;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Security\Core\SecurityContext;
-use OAuth2\OAuth2;
 use PROCERGS\LoginCidadao\CoreBundle\Form\DataTransformer\FromArray;
-
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 class ClientBaseFormType extends AbstractType
 {
-
-    protected $container;
-
-    public function setContainer($var)
-    {
-        $this->container = $var;
-    }
-
-    public function getContainer()
-    {
-        return $this->container;
-    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -31,24 +16,51 @@ class ClientBaseFormType extends AbstractType
             'required' => true
         ));
         $builder->add('description', 'textarea', array(
-            'required' => true
-        ));
-        $builder->add('siteurl', 'text', array(
-            'required' => true
-        ));
-        $builder->add($builder->create('redirecturis', 'textarea', array(
             'required' => true,
+            'attr' => array('rows' => 4)
+        ));
+        $builder->add('siteUrl', 'text', array(
+            'required' => true
+        ));
+        $builder->add($builder->create('redirectUris', 'textarea', array(
+            'required' => true,
+            'attr' => array('rows' => 4)
         ))->addModelTransformer(new FromArray()) );
-        $builder->add('landingpageurl', 'text', array(
+        $builder->add('landingPageUrl', 'text', array(
             'required' => true
         ));
-        $builder->add('termsofuseurl', 'text', array(
+        $builder->add('termsOfUseUrl', 'text', array(
             'required' => true
         ));
+                
+        
         $builder->add('pictureFile');
         $builder->add('id', 'hidden', array(
             'required' => false
         ));
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $entity = $event->getData();
+            $form = $event->getForm();
+            if ($entity->getId()) {
+                $form->add('publicId', 'textarea', array(
+                    'required' => false,
+                    'read_only' => true,
+                    'attr' => array('rows' => 4)
+                ));
+                $form->add('secret', 'textarea', array(
+                    'required' => false,
+                    'read_only' => true,
+                    'attr' => array('rows' => 4)
+                ));
+            } else {
+                $form->add('publicId', 'hidden', array(
+                    'required' => false,
+                ));
+                $form->add('secret', 'hidden', array(
+                    'required' => false,
+                ));
+            }
+        });
     }
 
     public function getName()

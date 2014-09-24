@@ -8,6 +8,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Model\CategoryInterface;
 use PROCERGS\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
 use JMS\Serializer\Annotation as JMS;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Category
@@ -36,6 +37,8 @@ class Category implements CategoryInterface
      * @ORM\Column(name="name", type="string", length=255)
      * @JMS\Expose
      * @JMS\Groups({"public"})
+     * @Assert\NotBlank()
+     * @Assert\Length(max = "255")
      */
     private $name;
 
@@ -48,15 +51,12 @@ class Category implements CategoryInterface
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="default_title", type="string", length=255)
      */
     private $defaultTitle;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="default_short_text", type="string", length=255)
+
      */
     private $defaultShortText;
 
@@ -163,9 +163,6 @@ class Category implements CategoryInterface
 
     /**
      * Set defaultTitle
-     *
-     * @param string $defaultTitle
-     * @return Category
      */
     public function setDefaultTitle($defaultTitle)
     {
@@ -176,11 +173,15 @@ class Category implements CategoryInterface
 
     /**
      * Get defaultTitle
-     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max = "255")
      * @return string
      */
     public function getDefaultTitle()
     {
+        if (!$this->defaultTitle && $this->id) {
+            return '(idontcare)';
+        }
         return $this->defaultTitle;
     }
 
@@ -199,11 +200,15 @@ class Category implements CategoryInterface
 
     /**
      * Get defaultShortText
-     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max = "255")
      * @return string
      */
     public function getDefaultShortText()
     {
+        if (!$this->defaultShortText && $this->id) {
+            return '(idontcare)';
+        }
         return $this->defaultShortText;
     }
 

@@ -1,0 +1,63 @@
+{% block form_row %}
+    {% spaceless %}
+    <div class="form-group {%- if errors[0] is defined %} has-error has-feedback {% endif -%}">
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+        {{ form_errors(form) }}
+    </div>
+    {% endspaceless %}
+{% endblock form_row %}
+
+{% block widget_attributes -%}
+    id="{{ id }}" name="{{ full_name }}" 
+    {%- if read_only %} readonly="readonly"{% endif -%}
+    {%- if disabled %} disabled="disabled"{% endif -%}
+    {%- if required %} required="required"{% endif -%}    
+    {%- if attr.class is not defined %}
+        class='form-control'     
+    {% endif -%}
+    {%- for attrname, attrvalue in attr -%}
+        {{- " " -}}
+        {%- if attrname in ['placeholder', 'title'] -%}
+            {{- attrname }}="{{ attrvalue|trans({}, translation_domain) }}"
+        {%- elseif attrvalue is sameas(true) -%}
+            {{- attrname }}="{{ attrname }}"
+        {%- elseif attrvalue is not sameas(false) -%}
+            {{- attrname }}="{{ attrvalue }}"
+        {%- endif -%}
+    {%- endfor -%}
+{%- endblock widget_attributes %}
+
+{% block form_errors %}
+    {% spaceless %}
+    {% if errors[0] is defined %}
+        {% if compound %}
+            <div class="alert alert-danger">
+                <ul>
+                {% for error in errors %}
+                    <li>{{ error.message }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            <div class="input-error">
+                <ul>
+                {%- for error in errors -%}
+                    <li>{{ error.message }}</li>
+                {%- endfor -%}
+                </ul>
+            </div>
+        {% endif %}
+    {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
+
+{% block hidden_entity_row -%}
+{% spaceless %}
+<div style="display:none;">{{ form_widget(form) }}</div>
+{% endspaceless %}
+{%- endblock hidden_entity_row %}
+
+
+

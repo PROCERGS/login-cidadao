@@ -4,12 +4,14 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
 
 use Doctrine\ORM\Mapping as ORM;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category;
-
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Placeholder
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @UniqueEntity(fields={"category", "name"},errorPath="name")
  */
 class Placeholder
 {
@@ -27,12 +29,14 @@ class Placeholder
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max = "255")
      */
     private $name;
 
     /**
      * @var string
-     *
+     * @Assert\Length(max = "255")
      * @ORM\Column(name="defaultValue", type="string", length=255, nullable=true)
      */
     private $default;
