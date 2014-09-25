@@ -28,6 +28,20 @@
     {%- endfor -%}
 {%- endblock widget_attributes %}
 
+{% block birthday_widget -%}
+{% if widget == 'single_text' %}
+{{- block('form_widget_simple') -}}
+{% else -%}
+<div {%- if attr.class is not defined %} class='form-inline birthdate' {% endif -%} {{ block('widget_container_attributes') }}>
+{{- date_pattern|replace({
+'{{ year }}': form_widget(form.year),
+'{{ month }}': form_widget(form.month),
+'{{ day }}': form_widget(form.day),
+})|raw -}}
+</div>
+{%- endif %}
+{%- endblock birthday_widget %}
+
 {% block form_errors %}
     {% spaceless %}
     {% if errors[0] is defined %}

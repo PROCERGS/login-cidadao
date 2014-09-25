@@ -30,7 +30,7 @@
 			{% endblock grid_header %}			
 		    {% for row in grid.getResultset %}
 				{% block grid_row %}
-				<div class="row common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }} {{ grid.getRlast != true ? 'row-last' }}">
+				<div class="row common-grid-result {{ grid.getRlast != true ? 'row-last' }}">
 					{% block grid_row_action %}
 					<div class="col-md-1">
 					    <a id="{{ 'row' }}" class="center-block text-center glyphicon glyphicon-search edit-grid" title="{{ 'action'|trans }}" href="javascript:void(0)" data-row="{{ 'row' }}"></a>

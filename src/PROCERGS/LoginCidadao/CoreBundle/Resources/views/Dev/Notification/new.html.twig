@@ -92,7 +92,6 @@ placeholderGrid.getGrid = function() {
 		dataType : 'html',
 		success : function(data, textStatus, jqXHR) {
 			$('#placeholder-grid-place').html(data);
-			$(data).each(lcInitInfinityGrid);
 			$('html, body').animate({scrollTop: $('#placeholder-grid-place').offset().top});
 		}
     });

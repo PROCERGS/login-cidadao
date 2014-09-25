@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ContactFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\SuggestionFilterFormType;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 
 /**
  * @Route("/admin/suggestion")
@@ -48,11 +49,12 @@ class SuggestionController extends Controller
     {
         $form = $this->createForm(new SuggestionFilterFormType());
         $form->handleRequest($request);
-        $result['suggs'] = null;
+        $result['grid'] = null;
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getEntityManager();
             $q = $em->createQueryBuilder();
-            $q->select('cs.id, cs.createdAt, SUBSTRING(cs.text,0, 40) shorttext, u.username');
+            //$q->select('cs.id, cs.createdAt, SUBSTRING(cs.text,0, 40) shorttext, u.username');
+            $q->select('cs.id, cs.createdAt, cs.text shorttext, u.username');
             $q->from('PROCERGSLoginCidadaoCoreBundle:ClientSuggestion', 'cs');
             $q->join('PROCERGSLoginCidadaoCoreBundle:Person', 'u', 'WITH', 'cs.person = u');
             $q->where('1=1');
@@ -74,7 +76,16 @@ class SuggestionController extends Controller
                 $q->setParameter('4', '%'.addcslashes($parms['text'], '\\%_').'%');
             }
             $q->addOrderBy('cs.createdAt');
-            $result['suggs'] = $q->getQuery()->getResult();
+            
+            $grid = new GridHelper();
+            $grid->setId('suggs-grid');
+            $grid->setPerPage(2);
+            $grid->setMaxResult(2);
+            $grid->setQueryBuilder($q);
+            $grid->setInfinityGrid(true);
+            $grid->setRoute('lc_admin_sugg_list_query');
+            $grid->setRouteParams(array($form->getName()));
+            return array('grid' => $grid->createView($request));
         }
         return $result;
     }

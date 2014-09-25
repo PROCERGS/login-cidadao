@@ -5,8 +5,9 @@ security:
 
     role_hierarchy:
         ROLE_DEV:       ROLE_USER
-        ROLE_ADMIN:       ROLE_USER ROLE_DEV
-        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_SUPER:       ROLE_DEV
+        ROLE_ADMIN:       ROLE_SUPER
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
         chainprovider:
@@ -135,5 +136,6 @@ security:
         - { path: ^/profile/edit, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/profile/change-username, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/profile/change-password, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/admin, role: [IS_AUTHENTICATED_FULLY, ROLE_ADMIN] }
+        - { path: ^/admin, role: [IS_AUTHENTICATED_FULLY, ROLE_SUPER] }
+        - { path: ^/dev, role: [IS_AUTHENTICATED_FULLY, ROLE_DEV] }
         - { path: ^/person, role: IS_AUTHENTICATED_REMEMBERED }

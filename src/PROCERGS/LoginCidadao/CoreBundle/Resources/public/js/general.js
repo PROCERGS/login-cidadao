@@ -381,45 +381,45 @@ function Pwindow(options) {
 }
 var lcInfinityscrollNextButton = function() {
 	$(this).hide();
+	var _id = $(this).attr('data-retrive');
+	if (!$(_id).data('infinitescroll')) {
+		$(_id).infinitescroll({
+	    	debug: true,
+	        navSelector  : _id + ' .pagination',
+	        nextSelector : _id + ' .pagination a:last',
+	        itemSelector : _id + ' .row.common-grid-result',
+	        contentSelector: _id + ' .tab-pane.active',
+	        bufferPx     : 200,
+	        state : {
+	        	currPage: Number($(_id).attr('data-grid-currpage'))
+	        },
+	        loading: {	            
+	            msg: $('<div></div>'),
+	            img: null
+	        },
+	        pathParse: function (path, currPage) {
+	        	var matches = path.match(/^(.*[?|&]page=)\d+(.*|$)/);
+	        	if (matches) {
+	        		return matches.slice(1);
+	        	}
+	        }
+	    },
+	    function( newElements, data, url ) {
+	    	var isLast = false;
+	    	for (x in newElements) {
+	    		if (isLast = newElements[x].classList.contains("row-last")) {
+	    			break;
+	    		}
+	    	}
+	    	if (!isLast) {
+	    		$(_id+' .infinityscroll-next-button').show();
+	    	}
+	        window.console && console.log('context: ',this);
+			window.console && console.log('returned: ', newElements);
+	    });
+	    $(window).unbind('.infscr');
+    }
 	$($(this).attr('data-retrive')).infinitescroll('retrieve');
-};
-var lcInitInfinityGrid = function () {
-	var _id = '#'+ $(this).prop('id'); 
-	$(_id).infinitescroll({
-    	debug: true,
-        navSelector  : _id + ' .pagination',
-        nextSelector : _id + ' .pagination a:last',
-        itemSelector : _id + ' .row.common-grid-result',
-        contentSelector: _id + ' .tab-pane.active',
-        bufferPx     : 200,
-        state : {
-        	currPage: Number($(_id).attr('data-grid-currpage'))
-        },
-        loading: {	            
-            msg: $('<div></div>'),
-            img: null
-        },
-        pathParse: function (path, currPage) {
-        	var matches = path.match(/^(.*[?|&]page=)\d+(.*|$)/);
-        	if (matches) {
-        		return matches.slice(1);
-        	}
-        }
-    },
-    function( newElements, data, url ) {
-    	var isLast = false;
-    	for (x in newElements) {
-    		if (isLast = newElements[x].classList.contains("row-last")) {
-    			break;
-    		}
-    	}
-    	if (!isLast) {
-    		$(_id+' .infinityscroll-next-button').show();
-    	}
-        window.console && console.log('context: ',this);
-		window.console && console.log('returned: ', newElements);
-    });
-    $(window).unbind('.infscr');    
 };
 $(function() {
 
@@ -469,6 +469,5 @@ $(function() {
     		}
         });
     });
-    $('[data-infinity-grid="true"]').each(lcInitInfinityGrid);
     $(document).on('click', '.infinityscroll-next-button' , lcInfinityscrollNextButton);
 });

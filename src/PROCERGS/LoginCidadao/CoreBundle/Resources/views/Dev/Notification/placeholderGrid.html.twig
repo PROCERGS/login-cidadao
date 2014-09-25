@@ -42,13 +42,6 @@
 </div>
 {% endblock grid_row_data %}
 
-{% block grid_row %}
-<div class="row common-grid-result {{ grid.getRlast != true ? 'row-last' }}">
-	{{ block('grid_row_action') }}
-	{{ block('grid_row_data') }}
-</div>
-{% endblock grid_row %}
-
 {% block grid_infinity_pagination %}
 <div class="btn-group btn-group-justified">
     {% if grid.getRlast and grid.isInfinityGrid %}
