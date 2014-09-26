@@ -27,6 +27,7 @@
                     <li><a href="{{ path('lc_privacy') }}">{% trans %}Privacy and Terms of Service{% endtrans %}</a></li>
                     <li><a href="https://github.com/PROCERGS/login-cidadao/" target="_blank">{% trans %}GitHub Repository{% endtrans %}</a></li>
                     <li><a href="{{ asset('humans.txt') }}" target="_blank">humans.txt</a></li>
+                    <li><a href="{{ path('lc_dev') }}">{{ 'developers'|trans }}</a></li>
                 </ul>
             </div>
 
@@ -91,7 +92,10 @@
 {% block javascripts %}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/hinclude/0.9.5/hinclude.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-infinitescroll/2.0b2.120519/jquery.infinitescroll.min.js"></script>
     {% javascripts
+    		
             '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.placeholder.js'
             '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/*' filter='?uglifyjs2' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -111,7 +115,17 @@
         $('input[placeholder], textarea[placeholder]').placeholder();
         </script>
     <![endif]-->
-<script type="text/javascript" src="//updateyourbrowser.net/asn.js"></script>
+<script type="text/javascript"> 
+var $buoop = {}; 
+$buoop.ol = window.onload; 
+window.onload=function(){ 
+ try {if ($buoop.ol) $buoop.ol();}catch (e) {} 
+ var e = document.createElement("script"); 
+ e.setAttribute("type", "text/javascript"); 
+ e.setAttribute("src", "//browser-update.org/update.js"); 
+ document.body.appendChild(e); 
+} 
+</script>
 
 <script>
     window.fbAsyncInit = function() {

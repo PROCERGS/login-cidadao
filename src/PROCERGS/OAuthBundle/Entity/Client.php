@@ -5,13 +5,18 @@ namespace PROCERGS\OAuthBundle\Entity;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
 use FOS\OAuthServerBundle\Entity\Client as BaseClient;
 use Doctrine\ORM\Mapping as ORM;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Tests\Fixtures\Publisher;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity("name")
+ * @JMS\ExclusionPolicy("all")
  */
 class Client extends BaseClient
 {
@@ -20,16 +25,22 @@ class Client extends BaseClient
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $id;
 
     /**
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", nullable=false, unique=true)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $name;
 
     /**
      * @ORM\Column(type="text", nullable=false)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $description;
 
@@ -40,13 +51,17 @@ class Client extends BaseClient
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
-    protected $landingPageURL;
+    protected $landingPageUrl;
 
     /**
      * @ORM\Column(type="text", nullable=false)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
-    protected $termsOfUseURL;
+    protected $termsOfUseUrl;
 
     /**
      * @ORM\Column(type="array", nullable=false)
@@ -60,13 +75,20 @@ class Client extends BaseClient
 
     /**
      * @ORM\Column(type="string")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $siteUrl;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification", mappedBy="client")
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification", mappedBy="sender")
      */
     protected $notifications;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category", mappedBy="client")
+     */
+    protected $categories;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -81,13 +103,23 @@ class Client extends BaseClient
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $published;
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $visible;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="clients")
+     * @ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $person;
 
     public function __construct()
     {
@@ -150,25 +182,25 @@ class Client extends BaseClient
         return $this;
     }
 
-    public function getLandingPageURL()
+    public function getLandingPageUrl()
     {
-        return $this->landingPageURL;
+        return $this->landingPageUrl;
     }
 
-    public function setLandingPageURL($landingPageURL)
+    public function setLandingPageUrl($landingPageUrl)
     {
-        $this->landingPageURL = $landingPageURL;
+        $this->landingPageUrl = $landingPageUrl;
         return $this;
     }
 
-    public function getTermsOfUseURL()
+    public function getTermsOfUseUrl()
     {
-        return $this->termsOfUseURL;
+        return $this->termsOfUseUrl;
     }
 
-    public function setTermsOfUseURL($termsOfUseURL)
+    public function setTermsOfUseUrl($termsOfUseUrl)
     {
-        $this->termsOfUseURL = $termsOfUseURL;
+        $this->termsOfUseUrl = $termsOfUseUrl;
         return $this;
     }
 
@@ -291,5 +323,29 @@ class Client extends BaseClient
 
         return $this;
     }
+
+    public function setId($var)
+    {
+        $this->id = $var;
+        return $this;
+    }
+
+    public function setPerson($person)
+    {
+        $this->person = $person;
+
+        return $this;
+    }
+
+    public function getPerson()
+    {
+        return $this->person;
+    }
+
+    public function getConfigNotClis()
+    {
+        return $this->configNotClis;
+    }
+
 
 }

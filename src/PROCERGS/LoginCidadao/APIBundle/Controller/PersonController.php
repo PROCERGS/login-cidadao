@@ -3,32 +3,66 @@
 namespace PROCERGS\LoginCidadao\APIBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations as REST;
-use FOS\RestBundle\Controller\FOSRestController;
 use JMS\Serializer\SerializationContext;
 use PROCERGS\LoginCidadao\APIBundle\Exception\RequestTimeoutException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
-class PersonController extends FOSRestController
+class PersonController extends BaseController
 {
 
     /**
+     * Gets the currently authenticated user.
+     *
+     * The returned object contents will depend on the scope the user authorized.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Gets the currently authenticated user.",
+     *   output = {
+     *     "class"="PROCERGS\LoginCidadao\CoreBundle\Entity\Person",
+     *     "groups" = {"public_profile"}
+     *   },
+     *   statusCodes = {
+     *     200 = "Returned when successful"
+     *   }
+     * )
      * @REST\Get("/person")
-     * @REST\View
+     * @REST\View(templateVar="person")
+     * @throws NotFoundHttpException
      */
     public function selfAction()
     {
-        $person = $this->getUser();
+        $person = $this->preparePerson($this->getUser());
         $scope = $this->getClientScope($person);
 
-        $view = $this->view($this->preparePerson($person))
+        $view = $this->view($person)
                 ->setSerializationContext($this->getSerializationContext($scope));
         return $this->handleView($view);
     }
 
     /**
+     * Waits for a change in the current user's profile.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Waits for a change in the current user's profile.",
+     *   output = {
+     *     "class"="PROCERGS\LoginCidadao\CoreBundle\Entity\Person",
+     *     "groups" = {"public_profile"}
+     *   },
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     408 = "Returned when the request times out"
+     *   }
+     * )
      * @REST\Get("/wait/person/update")
      * @REST\View
      */
@@ -77,45 +111,6 @@ class PersonController extends FOSRestController
         throw new RequestTimeoutException("Request Timeout");
     }
 
-    private function preparePerson(Person $person)
-    {
-        $imgHelper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
-        $templateHelper = $this->get('templating.helper.assets');
-        $isDev = $this->get('kernel')->getEnvironment() === 'dev';
-        $person->prepareAPISerialize($imgHelper, $templateHelper, $isDev,
-                $this->getRequest());
-
-        return $person;
-    }
-
-    private function serializePerson($person, $scope)
-    {
-        $person = $this->preparePerson($person, $scope);
-
-        $serializer = $this->container->get('jms_serializer');
-        return $serializer->serialize($person, 'json',
-                        SerializationContext::create()->setGroups($scope));
-    }
-
-    private function getClientScope($user)
-    {
-        $token = $this->get('security.context')->getToken();
-        $accessToken = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:AccessToken')->findOneBy(array('token' => $token->getToken()));
-        $client = $accessToken->getClient();
-
-        $authorization = $this->getDoctrine()
-                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
-                ->findOneBy(array(
-            'person' => $user,
-            'client' => $client
-        ));
-        if (!($authorization instanceof Authorization)) {
-            throw new AccessDeniedException();
-        }
-
-        return $authorization->getScope();
-    }
-
     private function getCheckUpdateCallback($id, $updatedAt, $lastUpdatedAt)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -141,9 +136,61 @@ class PersonController extends FOSRestController
         };
     }
 
-    private function getSerializationContext($scope)
+    /**
+     * @REST\Post("/person/sendnotification")
+     * @REST\View
+     * @deprecated since version 1.0.2
+     */
+    public function sendNotificationAction(Request $request)
     {
-        return SerializationContext::create()->setGroups($scope);
+        $token = $this->get('security.context')->getToken();
+        $accessToken = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:AccessToken')->findOneBy(array('token' => $token->getToken()));
+        $client = $accessToken->getClient();
+
+        $body = json_decode($request->getContent(), 1);
+
+        $chkAuth = $this->getDoctrine()
+                ->getManager()
+                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
+                ->createQueryBuilder('a')
+                ->select('cnc, p')
+                ->join('PROCERGSLoginCidadaoCoreBundle:Person', 'p', 'WITH',
+                        'a.person = p')
+                ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'a.client = c')
+                ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc',
+                        'WITH', 'cnc.client = c')
+                ->where('c.id = ' . $client->getId() . ' and p.id = :person_id and cnc.id = :config_id')
+                ->getQuery();
+        $rowR = array();
+        $em = $this->getDoctrine()->getManager();
+        $validator = $this->get('validator');
+
+        foreach ($body as $idx => $row) {
+            if (isset($row['person_id'])) {
+                $res = $chkAuth->setParameters(array('person_id' => $row['person_id'], 'config_id' => $row['config_id']))->getResult();
+                if (!$res) {
+                    $rowR[$idx] = array('person_id' => $row['person_id'], 'error' => 'missing authorization or configuration');
+                    continue;
+                }
+                $not = new Notification();
+                $not->setPerson($res[0]);
+                $not->setConfigNotCli($res[1])
+                        ->setIcon(isset($row['icon']) && $row['icon'] ? $row['icon'] : $not->getConfigNotCli()->getIcon())
+                        ->setTitle(isset($row['title']) && $row['title'] ? $row['title'] : $not->getConfigNotCli()->getTitle())
+                        ->setShortText(isset($row['shorttext']) && $row['shorttext'] ? $row['shorttext'] : $not->getConfigNotCli()->getShortText())
+                        ->setText($row['text'])
+                        ->parseHtmlTpl($not->getConfigNotCli()->getHtmlTpl());
+                $errors = $validator->validate($not);
+                if (!count($errors)) {
+                    $em->persist($not);
+                    $rowR[$idx] = array('person_id' => $row['person_id'], 'notification_id' => $not->getId());
+                } else {
+                    $rowR[$idx] = array('person_id' => $row['person_id'], 'error' => (string) $errors);
+                }
+            }
+        }
+        $em->flush();
+        return $this->handleView($this->view($rowR));
     }
 
 }

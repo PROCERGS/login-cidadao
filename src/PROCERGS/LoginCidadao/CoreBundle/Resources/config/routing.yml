@@ -1,3 +1,0 @@
-procergs_login_cidadao_core_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: PROCERGSLoginCidadaoCoreBundle:Default:index }

@@ -6,6 +6,10 @@ use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Symfony\Component\HttpFoundation\Request;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Country;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Uf;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\City;
+use Doctrine\ORM\Query;
 
 class AddressController extends FOSRestController
 {
@@ -46,7 +50,7 @@ class AddressController extends FOSRestController
         ->createQueryBuilder('cty')
         ->where('cty.reviewed = ' . Country::REVIEWED_OK)
         ->orderBy('cty.id', 'ASC');
-        return $this->handleView($this->view($query->getQuery()->getResult(Doctrine\ORM\Query::HYDRATE_ARRAY)));
+        return $this->handleView($this->view($query->getQuery()->getResult(Query::HYDRATE_ARRAY)));
     }
     
     /**
@@ -66,7 +70,7 @@ class AddressController extends FOSRestController
             $query->setParameter('country', $country);
         }
         $query->orderBy('uf.id', 'ASC');
-        return $this->handleView($this->view($query->getQuery()->getResult(Doctrine\ORM\Query::HYDRATE_ARRAY)));
+        return $this->handleView($this->view($query->getQuery()->getResult(Query::HYDRATE_ARRAY)));
     }
     
     /**
@@ -76,7 +80,7 @@ class AddressController extends FOSRestController
     public function searchCityAction(Request $request = null)
     {
         $request = $this->getRequest();
-        $result = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:City')
+        $query = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:City')
         ->createQueryBuilder('c')
         ->where('c.reviewed = ' . Country::REVIEWED_OK);
         $country = $request->get('country_id');
@@ -94,7 +98,7 @@ class AddressController extends FOSRestController
             $query->setParameter('uf', $uf);
         }
         $query->orderBy('c.id', 'ASC');
-        return $this->handleView($this->view($query->getQuery()->getResult(Doctrine\ORM\Query::HYDRATE_ARRAY)));
+        return $this->handleView($this->view($query->getQuery()->getResult(Query::HYDRATE_ARRAY)));
     }
 
 }

@@ -51,6 +51,13 @@
                         </span>
                     </a>
                 </li>
+                <li class="services glyph">
+                    <a href="{{ path('lc_not_inbox') }}">
+                        <span>
+                            {{ 'Notification 2'|trans() }}
+                            <i class="glyphicon glyphicon-th pull-right"></i>
+                        </span></a>
+                </li>
                 <li class="username {{ app.request.attributes.get('_route') == 'lc_update_username' ? 'active' }}">
                     <a href="{{ path('lc_update_username')}}">
                         <span>{% trans %}Change Username{% endtrans %}</span>
@@ -63,22 +70,15 @@
                         <i class="bg"></i>
                     </a>
                 </li>
-                {% if app.user is not null and is_granted('ROLE_ADMIN') %}
-                <li class="services glyph {{ app.request.attributes.get('_route') == 'lc_admin_app_list' or app.request.attributes.get('_route') == 'lc_admin_app_new' or app.request.attributes.get('_route') == 'lc_admin_app_show' ? 'active' }}">
-                    <a href="{{ path('lc_admin_app_list') }}">
+                {% if app.user is not null and is_granted('ROLE_SUPER') %}
+                <li class="services glyph">
+                    <a href="{{ path('lc_admin') }}">
                         <span>
-                            {{ 'admin.apps.list'|trans() }}
+                            {{ 'admin.area'|trans() }}
                             <i class="glyphicon glyphicon-th pull-right"></i>
-                        </span></a>
+                        </span>
+                    </a>
                 </li>
-                <li class="services glyph {{ app.request.attributes.get('_route') == 'lc_admin_sugg_list' or app.request.attributes.get('_route') == 'lc_admin_sugg_show' ? 'active' }}">
-                    <a href="{{ path('lc_admin_sugg_list') }}">
-                        <span>
-                            {{ 'admin.sugg.list'|trans() }}
-                            <i class="glyphicon glyphicon-th pull-right"></i>
-                        </span></a>
-                </li>
-
                 {% endif %}
                 {# <li class="settings glyph">
                     <a href="">

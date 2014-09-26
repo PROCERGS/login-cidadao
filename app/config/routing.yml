@@ -13,14 +13,20 @@ hwi_oauth_redirect:
 
 twitter_login:
     pattern: /login/check-twitter
-    
+
 google_login:
-    pattern: /login/check-google    
+    pattern: /login/check-google
 
 #API
 procergs_login_cidadao_api:
+    type: rest
     resource: "@PROCERGSLoginCidadaoAPIBundle/Resources/config/routing.yml"
     prefix:   /api/v1
+
+# API Doc
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc
 
 # login-cidadao
 procergs_generic_locale:

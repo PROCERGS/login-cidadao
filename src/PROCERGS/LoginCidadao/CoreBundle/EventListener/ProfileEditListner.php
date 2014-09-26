@@ -21,7 +21,7 @@ use Assetic\Exception\Exception;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\NfgWsHelper;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\NfgException;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\LcValidationException;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\MissingNfgAccessTokenException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Uf;
@@ -29,7 +29,7 @@ use PROCERGS\Generic\ValidationBundle\Validator\Constraints\CEPValidator;
 
 class ProfileEditListner implements EventSubscriberInterface
 {
-    
+
     const PROFILE_DOC_EDIT_SUCCESS = 'lc.profile.doc.edit.success';
 
     private $mailer;
@@ -147,7 +147,7 @@ class ProfileEditListner implements EventSubscriberInterface
 
         $event->setResponse(new RedirectResponse($url));
     }
-    
+
     public function onProfileDocEditSuccess(FormEvent $event)
     {
         $user = $event->getForm()->getData();
@@ -287,13 +287,13 @@ class ProfileEditListner implements EventSubscriberInterface
                             $uk = $this->em->getUnitOfWork();
                             $a = $uk->getOriginalEntityData($user);
                             $uk->detach($user);
-                            
+
                             $otherPerson->setVoterRegistration(null);
                             $this->em->persist($otherPerson);
-                            
+
                             $uk->registerManaged($user, array('id' => $user->getId()),$a);
-                            
-                            $notification = new Notification();                            
+
+                            $notification = new Notification();
                             $notification->setPerson($otherPerson)
                                     ->setIcon('glyphicon glyphicon-exclamation-sign')
                                     ->setLevel(Notification::LEVEL_IMPORTANT)

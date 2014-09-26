@@ -1,6 +1,6 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
+namespace PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
 
 interface NotificationInterface
 {
@@ -25,12 +25,9 @@ interface NotificationInterface
 
     public function setText($text);
 
-    /**
-     * @return \PROCERGS\OAuthBundle\Entity\Client
-     */
-    public function getClient();
+    public function getConfigNotCli();
 
-    public function setClient($client);
+    public function setConfigNotCli($var);
 
     /**
      * @return Person

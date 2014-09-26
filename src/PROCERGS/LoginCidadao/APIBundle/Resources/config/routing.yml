@@ -2,5 +2,17 @@
 procergs_login_cidadao_api_core:
     resource: "@PROCERGSLoginCidadaoAPIBundle/Controller"
     defaults: { _format: json }
-    type:     annotation
     prefix:   /
+
+procergs_login_cidadao_Notification:
+    type: rest
+    prefix: /
+    resource: "@PROCERGSLoginCidadaoAPIBundle/Controller/NotificationController.php"
+    name_prefix: api_1_
+    defaults: { _format: json }
+
+procergs_login_cidadao_Person:
+    type: rest
+    prefix: /
+    resource: "@PROCERGSLoginCidadaoAPIBundle/Controller/PersonController.php"
+    defaults: { _format: json }

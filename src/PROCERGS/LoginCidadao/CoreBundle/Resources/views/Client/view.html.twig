@@ -33,7 +33,7 @@
         </div>
     {%   else %}
         <p class="inactive">{% trans %}This service is not active in your Citizen's Login account{%  endtrans %}</p>
-        <a href="{{ client.landingPageURL }}" class="btn btn-success" role="button">{% trans %}Activate this service{% endtrans %}</a>
+        <a href="{{ client.landingPageUrl }}" class="btn btn-success" role="button">{% trans %}Activate this service{% endtrans %}</a>
     {%   endif %}
     {% else %}
         <p class="not-published">{% trans %}This service is not available yet. Stay tuned for the launch date.{% endtrans %}</p>

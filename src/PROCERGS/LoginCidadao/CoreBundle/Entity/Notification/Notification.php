@@ -1,19 +1,20 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
+namespace PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
 
 use Doctrine\ORM\Mapping as ORM;
 use PROCERGS\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
+use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Notification
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\NotificationRepository")
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="kind", type="string")
- * @ORM\DiscriminatorMap({"simple" = "Notification", "interactive" = "InteractiveNotification"})
+ * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationRepository")
+ * @JMS\ExclusionPolicy("all")
+ * @ORM\HasLifecycleCallbacks
  */
 class Notification implements NotificationInterface
 {
@@ -24,27 +25,38 @@ class Notification implements NotificationInterface
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $id;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      * @ORM\Column(name="icon", type="string", length=255)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $icon;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      * @ORM\Column(name="title", type="string", length=255)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $title;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      * @ORM\Column(name="shortText", type="string", length=255)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $shortText;
 
@@ -52,13 +64,25 @@ class Notification implements NotificationInterface
      * @var string
      *
      * @ORM\Column(name="text", type="text")
+     * @Assert\NotBlank()
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $text;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="callback_url", type="string", length=255, nullable=true)
+     */
+    private $callbackUrl;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="createdAt", type="datetime")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $createdAt;
 
@@ -66,6 +90,8 @@ class Notification implements NotificationInterface
      * @var \DateTime
      *
      * @ORM\Column(name="readDate", type="datetime", nullable=true)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $readDate;
 
@@ -73,27 +99,76 @@ class Notification implements NotificationInterface
      * @var boolean
      *
      * @ORM\Column(name="isRead", type="boolean")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $isRead;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="level", type="integer")
+     * @deprecated since version 1.0.2
+     * @ORM\Column(name="level", type="integer", nullable=true)
      */
     private $level;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="notifications")
-     * @ORM\JoinColumn(name="client_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $client;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="notifications")
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="notifications")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
+     * @JMS\MaxDepth(1)
      */
     private $person;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="notifications")
+     * @ORM\JoinColumn(name="client_id", referencedColumnName="id", onDelete="CASCADE")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
+     * @JMS\MaxDepth(1)
+     */
+    private $sender;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="expire_date", type="datetime", nullable=true)
+     */
+    private $expireDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="consider_read_date", type="datetime", nullable=true)
+     */
+    private $considerReadDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="received_date", type="datetime", nullable=true)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
+     */
+    private $receivedDate;
+
+    /**
+     * @var Category
+     *
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="notifications")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
+     */
+    private $category;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="html_tpl", type="text", nullable=true)
+     */
+    private $htmlTpl;
 
     /**
      * Get id
@@ -226,7 +301,7 @@ class Notification implements NotificationInterface
      * @param \DateTime $readDate
      * @return Notification
      */
-    private function setReadDate($readDate)
+    public function setReadDate($readDate)
     {
         $this->readDate = $readDate;
 
@@ -254,8 +329,9 @@ class Notification implements NotificationInterface
         $this->isRead = $isRead;
         if (!$isRead) {
             $this->setReadDate(null);
+        } else {
+            $this->setReadDate(new \DateTime());
         }
-
         return $this;
     }
 
@@ -284,16 +360,16 @@ class Notification implements NotificationInterface
         return $this->setIsRead($isRead);
     }
 
-    public function setClient($client)
+    public function setConfigNotCli($var)
     {
-        $this->client = $client;
+        $this->configNotCli = $var;
 
         return $this;
     }
 
-    public function getClient()
+    public function getConfigNotCli()
     {
-        return $this->client;
+        return $this->configNotCli;
     }
 
     public function setPerson($person)
@@ -364,6 +440,102 @@ class Notification implements NotificationInterface
     public function isExtreme()
     {
         return $this->getLevel() === self::LEVEL_EXTREME;
+    }
+
+    public function setHtmlTpl($var)
+    {
+        $this->htmlTpl = $var;
+        return $this;
+    }
+
+    public function getHtmlTpl()
+    {
+        return $this->htmlTpl;
+    }
+
+    public function parseHtmlTpl($var)
+    {
+        $cplaces = array('%title%' => $this->title, '%shorttext%' => $this->shortText, '%text%' => $this->text);
+        foreach ($cplaces as $search => $replace) {
+            $var = str_replace($search, $replace, $var);
+        }
+        return $this->setHtmlTpl($var);
+    }
+
+    public function getSender()
+    {
+        return $this->sender;
+    }
+
+    public function getExpireDate()
+    {
+        return $this->expireDate;
+    }
+
+    public function getConsiderReadDate()
+    {
+        return $this->considerReadDate;
+    }
+
+    public function getReceivedDate()
+    {
+        return $this->receivedDate;
+    }
+
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    public function setSender($sender)
+    {
+        $this->sender = $sender;
+        return $this;
+    }
+
+    public function setExpireDate(\DateTime $expireDate = null)
+    {
+        $this->expireDate = $expireDate;
+        return $this;
+    }
+
+    public function setConsiderReadDate(\DateTime $considerReadDate = null)
+    {
+        $this->considerReadDate = $considerReadDate;
+        return $this;
+    }
+
+    public function setReceivedDate(\DateTime $receivedDate = null)
+    {
+        $this->receivedDate = $receivedDate;
+        return $this;
+    }
+
+    public function setCategory(Category $category)
+    {
+        $this->category = $category;
+        return $this;
+    }
+
+    public function getCallbackUrl()
+    {
+        return $this->callbackUrl;
+    }
+
+    public function setCallbackUrl($callbackUrl)
+    {
+        $this->callbackUrl = $callbackUrl;
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue()
+    {
+        if (!($this->getCreatedAt() instanceof \DateTime)) {
+            $this->createdAt = new \DateTime();
+        }
     }
 
 }

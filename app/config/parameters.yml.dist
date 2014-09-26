@@ -37,8 +37,8 @@ parameters:
         auth: 'login:senha'
 
     site_domain: meu.rs.gov.br
-    mailer_sender_mail: ~
-    mailer_sender_name: ~
+    mailer_sender_mail: webmaster@example.com
+    mailer_sender_name: webmaster
     recaptcha_public_key: ~
     recaptcha_private_key: ~
     # This must be compatible with strtotime()
@@ -65,6 +65,13 @@ parameters:
     tre_search_link: 'http://www.tse.jus.br/eleitor/servicos/titulo-e-local-de-votacao/consulta-por-nome'
     uri_root: ~
 
-    uri_vpr_link: 'http://des.vpr.rs.gov.br/app_dev.php'
+    uri_vpr_link: ~
     google_app_key: ~
     google_app_secret: ~
+    igp_ws_url: ~
+    igp_username: ~
+    igp_password: ~
+
+    # Notification's categories IDs
+    notifications_categories_unconfirmed_email: 1
+    notifications_categories_empty_password: 2

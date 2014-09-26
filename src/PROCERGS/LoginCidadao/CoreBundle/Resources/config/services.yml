@@ -22,8 +22,12 @@ parameters:
 
     procergs_logincidadao_core.emailChanged.template: PROCERGSLoginCidadaoCoreBundle:Person:emailChangedMessage.html.twig
     procergs_logincidadao.nfgws.class: PROCERGS\LoginCidadao\CoreBundle\Helper\NfgWsHelper
+    procergs_logincidadao.igpws.class: PROCERGS\LoginCidadao\CoreBundle\Helper\IgpWsHelper
 
     procergs_logincidadao.postalcode.search.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\SearchPostalCodeFormType
+
+    procergs.notification.handler.class: PROCERGS\LoginCidadao\CoreBundle\Handler\NotificationHandler
+    procergs.notification.class: PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification
 
 services:
     security.authentication.success_handler:
@@ -35,7 +39,7 @@ services:
 
     notifications.helper:
         class: %notifications.helper.class%
-        arguments: ["@doctrine.orm.entity_manager", "@security.context", "@service_container"]
+        arguments: ["@doctrine.orm.entity_manager", "@security.context", "@service_container", %notifications_categories_unconfirmed_email%, %notifications_categories_empty_password%]
 
     background.helper:
         class: %background.helper.class%
@@ -67,7 +71,7 @@ services:
         tags:
             - { name: form.type, alias: procergs_person_profile }
         calls:
-            - [setEntityManager, ["@doctrine.orm.entity_manager"]]            
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
 
     procergs_person.revoke_authorization.form.type:
         class: %procergs_person.revoke_authorization.form.type.class%
@@ -181,7 +185,32 @@ services:
         tags:
             - { name: form.type, alias: client_form_type }
         calls:
-            - [setContainer, ["@service_container"]]
+            - [setLcScope, ["%lc_supported_scopes%"]]
+
+    procergs_logincidadao.client.base.form.type:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientBaseFormType
+        tags:
+            - { name: form.type, alias: client_base_form_type }
+
+    procergs_logincidadao.category.form.type:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\CategoryFormType
+        tags:
+            - { name: form.type, alias: category_form_type }
+        calls:
+            - [setSecurity, ["@security.context"]]
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]            
+
+    procergs_logincidadao.placeholder.form.type:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\PlaceholderFormType
+        tags:
+            - { name: form.type, alias: placeholder_form_type }
+        calls:
+            - [setSecurity, ["@security.context"]]
+            
+    procergs_logincidadao.form.type.hidden_entity:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\HiddenEntityType
+        tags:
+            - { name: form.type, alias: hidden_entity }
 
     procergs_logincidadao.nfgws:
         class: %procergs_logincidadao.nfgws.class%
@@ -190,3 +219,15 @@ services:
             - [setOrganizacao, [%soe_organization%]]
             - [setUsuario, [%soe_username%]]
             - [setSenha, [%soe_password%]]
+    procergs_logincidadao.igpws:
+        class: %procergs_logincidadao.igpws.class%
+        calls:
+            - [setUrl, [%igp_ws_url%]]
+            - [setUsername, [%igp_username%]]
+            - [setPassword, [%igp_password%]]
+
+    procergs.notification.handler:
+        class: %procergs.notification.handler.class%
+        arguments: [ "@doctrine.orm.entity_manager", %procergs.notification.class%, "@form.factory" ]
+        tags:
+            - { name: "security.secure_service" }

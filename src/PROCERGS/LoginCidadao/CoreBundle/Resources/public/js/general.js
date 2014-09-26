@@ -346,7 +346,81 @@ var lcAutoLoader = {
 };
 $(document).ajaxSend(lcAutoLoader.start);
 $(document).ajaxComplete(lcAutoLoader.stop);
-
+function Pwindow(options) {
+	var opts = {
+		id : '__default',
+		label : '',
+		type: 'get',
+		dataType : 'html',
+		selector: null,
+		_selector : function () {
+			return opts.selector || $('#'+opts.id+' .modal-content');
+		},	
+		beforeSend: function() {
+			$('#'+opts.id).modal('hide');
+			opts._selector().html('');
+		},
+		success : function(data, textStatus, jqXHR) {
+			opts._selector().html(data);
+		},
+		complete: function() {
+			$('#'+opts.id).modal('show');
+		}
+	};
+	
+	var opts = $.extend(true, {}, opts, options);
+	if (!$('#'+opts.id).length) {
+		var html = '<div id="'+opts.id+'" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="'+opts.label+'" aria-hidden="true">'+
+	    '<div class="modal-dialog"><div class="modal-content"></div></div></div>';
+		$('.settings-content').append(html);
+	}
+	if (!opts.url) {
+		return alert('dunno');
+	}
+	$.ajax(opts);
+}
+var lcInfinityscrollNextButton = function() {
+	$(this).hide();
+	var _id = $(this).attr('data-retrive');
+	if (!$(_id).data('infinitescroll')) {
+		$(_id).infinitescroll({
+	    	debug: true,
+	        navSelector  : _id + ' .pagination',
+	        nextSelector : _id + ' .pagination a:last',
+	        itemSelector : _id + ' .row.common-grid-result',
+	        contentSelector: _id + ' .tab-pane.active',
+	        bufferPx     : 200,
+	        state : {
+	        	currPage: Number($(_id).attr('data-grid-currpage'))
+	        },
+	        loading: {	            
+	            msg: $('<div></div>'),
+	            img: null
+	        },
+	        pathParse: function (path, currPage) {
+	        	var matches = path.match(/^(.*[?|&]page=)\d+(.*|$)/);
+	        	if (matches) {
+	        		return matches.slice(1);
+	        	}
+	        }
+	    },
+	    function( newElements, data, url ) {
+	    	var isLast = false;
+	    	for (x in newElements) {
+	    		if (isLast = newElements[x].classList.contains("row-last")) {
+	    			break;
+	    		}
+	    	}
+	    	if (!isLast) {
+	    		$(_id+' .infinityscroll-next-button').show();
+	    	}
+	        window.console && console.log('context: ',this);
+			window.console && console.log('returned: ', newElements);
+	    });
+	    $(window).unbind('.infscr');
+    }
+	$($(this).attr('data-retrive')).infinitescroll('retrieve');
+};
 $(function() {
 
     // add bootstrap classes to forms
@@ -394,5 +468,6 @@ $(function() {
     			$(e.attr('ajax-target')).html(data);
     		}
         });
-    })
+    });
+    $(document).on('click', '.infinityscroll-next-button' , lcInfinityscrollNextButton);
 });

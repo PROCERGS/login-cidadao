@@ -21,6 +21,8 @@ scope.voter_registration: Título de eleitor
 scope.badges: Medalhas
 scope.picture: Foto
 scope.public_profile: 'Perfil Público'
+scope.get_all_notifications: 'Ler suas Notificações'
+scope.notifications: 'Enviar Notificações'
 'Authorized Applications': 'Aplicativos Autorizados'
 'Description:': 'Descrição:'
 'Access scope:': 'Escopo de acesso:'
@@ -537,3 +539,5 @@ scope.adress: 'Logradouro'
 scope.adress_number: 'Número do logradouro'
 scope.adress_complement: 'Complemento do logradouro'
 scope.rgs: 'RGs'
+scope.cep: 'CEP'
+scope.mobile: 'Celular'

@@ -1,0 +1,17 @@
+<div class="panel-group" id="accordion">
+    {% for row in resultset %} 
+    <div class="panel panel-default">
+        <input type="hidden" class="row-data" value="{{ row|json_encode }}" />
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="{{ '#collapse' ~ row.id  }}"><span class="caret"></span> {{ row.name }}</a>
+            </h4>
+        </div>
+        <div id="{{ 'collapse' ~ row.id  }}" class="panel-collapse collapse">
+            <div class="panel-body">
+                {% include "PROCERGSLoginCidadaoCoreBundle:Notification:gridSimple.html.twig" with {"grid": grids[row.id]} %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
