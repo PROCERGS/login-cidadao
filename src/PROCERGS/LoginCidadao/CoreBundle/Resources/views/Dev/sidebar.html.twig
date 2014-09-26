@@ -1,12 +1,12 @@
 <div class="settings-nav col-sm-3">
     <ul class="nav nav-pills nav-stacked">
-        <li class="profile glyph {{ app.request.attributes.get('_route') == 'lc_dev_client_list' ? 'active' }}">
-            <a href="{{ path('lc_dev_client_list') }}"> 
+        <li class="profile glyph {{ app.request.attributes.get('_route') == 'lc_dev_client' ? 'active' }}">
+            <a href="{{ path('lc_dev_client') }}"> 
                 <span>{{ 'Services'|trans }}<i class="glyphicon glyphicon-user pull-right"></i></span>
             </a>
         </li>
-        <li class="profile glyph {{ app.request.attributes.get('_route') == 'lc_dev_not_list' ? 'active' }}">
-            <a href="{{ path('lc_dev_not_list') }}"> 
+        <li class="profile glyph {{ app.request.attributes.get('_route') == 'lc_dev_not' ? 'active' }}">
+            <a href="{{ path('lc_dev_not') }}"> 
                 <span>{{ 'Notification config'|trans }}<i class="glyphicon glyphicon-user pull-right"></i></span>
             </a>
         </li>

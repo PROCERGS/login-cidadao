@@ -1,5 +1,4 @@
 <?php
-
 namespace PROCERGS\LoginCidadao\CoreBundle\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -11,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ContactFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail;
 use PROCERGS\OAuthBundle\Entity\Client;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 
 /**
  * @Route("/admin/client")
@@ -25,16 +25,16 @@ class ClientController extends Controller
     public function newAction()
     {
         $client = new Client();
-        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.form.type'),
-                $client);
+        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.form.type'), $client);
+        
         $form->handleRequest($this->getRequest());
         $messages = '';
         if ($form->isValid()) {
             $clientManager = $this->container->get('fos_oauth_server.client_manager.default');
+            $client->setPerson($this->getUser());
             $clientManager->updateClient($client);
-            return $this->redirect($this->generateUrl('lc_admin_app_show',
-                                    array(
-                                'id' => $client->getId()
+            return $this->redirect($this->generateUrl('lc_admin_app_edit', array(
+                'id' => $client->getId()
             )));
         }
         return array(
@@ -44,29 +44,34 @@ class ClientController extends Controller
     }
 
     /**
-     * @Route("/show/{id}", name="lc_admin_app_show")
+     * @Route("/", name="lc_admin_app")
      * @Template()
      */
-    public function showAction($id)
+    public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->find($id);
-        return array(
-            'client' => $client
-        );
+        return $this->gridAction($request);
     }
 
     /**
-     * @Route("/list", name="lc_admin_app_list")
+     * @Route("/grid", name="lc_admin_app_grid")
      * @Template()
      */
-    public function listAction()
+    public function gridAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $clients = $em->getRepository('PROCERGSOAuthBundle:Client')->findBy(array(),
-                array('id' => 'desc'));
+        $sql = $em->getRepository('PROCERGSOAuthBundle:Client')
+            ->createQueryBuilder('c')
+            ->addOrderBy('c.id', 'desc');
+        ;
+        $grid = new GridHelper();
+        $grid->setId('client-grid');
+        $grid->setPerPage(5);
+        $grid->setMaxResult(5);
+        $grid->setQueryBuilder($sql);
+        $grid->setInfinityGrid(true);
+        $grid->setRoute('lc_admin_app_grid');
         return array(
-            'clients' => $clients
+            'grid' => $grid->createView($request)
         );
     }
 
@@ -78,8 +83,10 @@ class ClientController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $client = $em->getRepository('PROCERGSOAuthBundle:Client')->find($id);
-        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.form.type'),
-                $client);
+        if (! $client) {
+            return $this->redirect($this->generateUrl('lc_admin_app_new'));
+        }
+        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.form.type'), $client);
         $form->handleRequest($this->getRequest());
         $messages = '';
         if ($form->isValid()) {
@@ -87,12 +94,10 @@ class ClientController extends Controller
             $clientManager->updateClient($client);
             $messages = 'aeee';
         }
-        return $this->render('PROCERGSLoginCidadaoCoreBundle:Admin\Client:new.html.twig',
-                        array(
-                    'form' => $form->createView(),
-                    'client' => $client,
-                    'messages' => $messages
+        return $this->render('PROCERGSLoginCidadaoCoreBundle:Admin\Client:new.html.twig', array(
+            'form' => $form->createView(),
+            'client' => $client,
+            'messages' => $messages
         ));
     }
-
 }

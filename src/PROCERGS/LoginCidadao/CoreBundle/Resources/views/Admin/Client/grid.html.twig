@@ -5,16 +5,15 @@
 {% endblock grid_header_action %}
 
 {% block grid_header_data %}
-<div class="col-md-1">{{ 'Id'|trans }}</div>
-<div class="col-md-2">{{ 'Service'|trans }}</div>
-<div class="col-md-8">{{ 'Category'|trans }}</div>
+<div class="col-md-4">{{ 'Service'|trans }}</div>
+<div class="col-md-7">{{ 'URL'|trans }}</div>
 {% endblock grid_header_data %}
 
 {% block grid_row_action %}
 <div class="col-md-1 action-column-grid">
     <div class="btn-group btn-group-justified">
         <div class="btn-group">
-            <a title="{{ 'Edit'|trans }}" href="{{ path('lc_dev_not_edit', {id: row.id}) }}">
+            <a href="{{ path('lc_admin_app_edit', {'id': row.id}) }}">
                 <button type="button" class="btn btn-warning edit-row-grid" id="{{ grid.getId }}-row-{{ row.id }}"  data-row="{{ grid.getRouteParams|merge({'id':row.id})|json_encode }}">
                     <span class="glyphicon glyphicon-pencil"></span>
                     <span class="label-action-column-grid">{{ 'edit'|trans }} </span>            
@@ -26,18 +25,14 @@
 {% endblock grid_row_action %}
 
 {% block grid_row_data %}
-<div class="col-md-1">
-    <dt>{{ 'Id'|trans }}</dt>
-    <dd>{{ row.id }}</dd>
-</div>            
-<div class="col-md-2">
+<div class="col-md-3">
     <dt>{{ 'Service'|trans }}</dt>
-    <dd><div style="word-wrap: break-word;">{{ row.client.name }}</div></dd>
+    <dd>{{ row.name }}</dd>
 </div>
-<div class="col-md-8">
+<div class="col-md-7">
     <dt>{{ 'URL'|trans }}</dt>
-    <dd><div style="word-wrap: break-word;">{{ row.name }}</div></dd>
-</div>  
+    <dd>{{ row.siteurl }}</dd>
+</div>
 {% endblock grid_row_data %}
 
 {% block grid_infinity_pagination %}
@@ -50,7 +45,7 @@
 	</div>
 	{% endif %}
 	<div class="btn-group">
-	    <a href="{{ path('lc_dev_not_new') }}">
+        <a href="{{ path('lc_admin_app_new') }}">
             <button type="button" class="btn btn-primary" id="new_service">
         		<span class="glyphicon glyphicon glyphicon-plus"></span> {{ 'add'|trans }}
         	</button>

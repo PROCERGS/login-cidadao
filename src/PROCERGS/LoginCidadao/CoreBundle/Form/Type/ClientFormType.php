@@ -20,6 +20,7 @@ class ClientFormType extends ClientBaseFormType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
+        /*
         $a = explode(' ', $this->lcScope);
         $a = array_combine($a, $a);
         $builder->add('allowedScopes', 'collection', array(
@@ -48,12 +49,14 @@ class ClientFormType extends ClientBaseFormType
             'required' => true,
             'allow_add' => true
         ));
+        */
         $builder->add('published', 'checkbox', array(
             'required' => false
         ));
         $builder->add('visible', 'checkbox', array(
             'required' => false
         ));
+        
     }
 
     public function getName()

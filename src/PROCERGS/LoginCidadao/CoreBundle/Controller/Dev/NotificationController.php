@@ -64,31 +64,37 @@ class NotificationController extends Controller
     }
 
     /**
-     * @Route("/list", name="lc_dev_not_list")
+     * @Route("/", name="lc_dev_not")
      * @Template()
      */
-    public function listAction()
+    public function indexAction(Request $request)
     {
-        return $this->gridAction();
+        return $this->gridAction($request);
     }
 
     /**
      * @Route("/grid", name="lc_dev_not_grid")
      * @Template()
      */
-    public function gridAction()
+    public function gridAction(Request $request)
     {
-        $clients = $this->getDoctrine()
+        $em = $this->getDoctrine()->getManager();
+        $sql = $this->getDoctrine()
             ->getManager()
             ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
             ->createQueryBuilder('u')
             ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'u.client = c')
             ->where('c.person = :person')
             ->setParameter('person', $this->getUser())
-            ->orderBy('u.id', 'desc')
-            ->getQuery()
-            ->getResult();
-        return array('resultset' => $clients);
+            ->orderBy('u.id', 'desc');
+        $grid = new GridHelper();
+        $grid->setId('category-grid');
+        $grid->setPerPage(5);
+        $grid->setMaxResult(5);
+        $grid->setQueryBuilder($sql);
+        $grid->setInfinityGrid(true);
+        $grid->setRoute('lc_dev_not_grid');
+        return array('grid' => $grid->createView($request));
     }
 
     /**

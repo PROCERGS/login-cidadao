@@ -79,10 +79,14 @@ class GridHelper
         $this->rpage = (integer) (($this->rlength / $this->perPage) - (($this->rlength - $this->maxResult) > 0 ? 1 : 0));
         $this->rpage = $this->rpage > 0 ? $this->rpage : 0;
         
-        foreach ($this->routeParams as $val) {
-            $a[$val] = $request->get($val);
+        if ($this->routeParams) {
+            foreach ($this->routeParams as $val) {
+                $a[$val] = $request->get($val);
+            }
+            $this->routeParams = $a;
+        } else {
+            $this->routeParams = array();
         }
-        $this->routeParams = $a;
         return $this;
     }
 

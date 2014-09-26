@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ContactFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail;
 use PROCERGS\OAuthBundle\Entity\Client;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 
 /**
  * @Route("/dev/client")
@@ -43,27 +44,34 @@ class ClientController extends Controller
     }
 
     /**
-     * @Route("/list", name="lc_dev_client_list")
+     * @Route("/", name="lc_dev_client")
      * @Template()
      */
-    public function listAction()
+    public function indexAction(Request $request)
     {
-        return $this->gridAction();
+        return $this->gridAction($request);
     }
     
     /**
      * @Route("/grid", name="lc_dev_client_grid")
      * @Template()
      */
-    public function gridAction()
+    public function gridAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $clients = $em->getRepository('PROCERGSOAuthBundle:Client')->findBy(array('person' => $this->getUser()), array(
-            'id' => 'desc'
-        ));
-        return array(
-            'resultset' => $clients
-        );
+        $sql = $em->getRepository('PROCERGSOAuthBundle:Client')->createQueryBuilder('c')
+        ->where('c.person = :person')
+        ->setParameter('person', $this->getUser())
+        ->addOrderBy('c.id', 'desc');
+        $grid = new GridHelper();
+        $grid->setId('client-grid');
+        $grid->setPerPage(5);
+        $grid->setMaxResult(5);
+        $grid->setQueryBuilder($sql);
+        $grid->setInfinityGrid(true);
+        $grid->setRoute('lc_dev_client_grid');
+        return array('grid' => $grid->createView($request));
+        
     }
     
 
