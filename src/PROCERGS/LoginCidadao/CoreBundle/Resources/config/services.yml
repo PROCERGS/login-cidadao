@@ -211,7 +211,14 @@ services:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\HiddenEntityType
         tags:
             - { name: form.type, alias: hidden_entity }
-
+    
+    procergs_logincidadao.form.type.switch:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\SwitchType
+        tags:
+            - { name: form.type, alias: switch }
+        calls:
+            - [setTranslator, ["@translator"]]
+            
     procergs_logincidadao.nfgws:
         class: %procergs_logincidadao.nfgws.class%
         calls:

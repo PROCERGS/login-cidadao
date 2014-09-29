@@ -32,6 +32,7 @@ class ClientController extends Controller
         if ($form->isValid()) {
             $clientManager = $this->container->get('fos_oauth_server.client_manager.default');
             $client->setPerson($this->getUser());
+            $client->setAllowedGrantTypes(Client::getAllGrants());
             $clientManager->updateClient($client);
             return $this->redirect($this->generateUrl('lc_dev_client_edit', array(
                 'id' => $client->getId()
@@ -90,6 +91,7 @@ class ClientController extends Controller
         $form->handleRequest($this->getRequest());
         $messages = '';
         if ($form->isValid()) {
+            $client->setAllowedGrantTypes(Client::getAllGrants());
             $clientManager = $this->container->get('fos_oauth_server.client_manager.default');
             $clientManager->updateClient($client);
             $messages = 'aeee';

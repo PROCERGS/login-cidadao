@@ -50,13 +50,6 @@ class ClientFormType extends ClientBaseFormType
             'allow_add' => true
         ));
         */
-        $builder->add('published', 'checkbox', array(
-            'required' => false
-        ));
-        $builder->add('visible', 'checkbox', array(
-            'required' => false
-        ));
-        
     }
 
     public function getName()

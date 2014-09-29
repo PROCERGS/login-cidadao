@@ -61,6 +61,12 @@ class ClientBaseFormType extends AbstractType
                 ));
             }
         });
+        $builder->add('published', 'switch', array(
+            'required' => false
+        ));
+        $builder->add('visible', 'switch', array(
+            'required' => false
+        ));
     }
 
     public function getName()

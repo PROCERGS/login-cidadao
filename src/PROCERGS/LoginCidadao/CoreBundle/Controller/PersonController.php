@@ -349,7 +349,7 @@ class PersonController extends Controller
         }
         return array('form' => $form->createView());
     }
-    
+
     /**
      * @Route("/profile/doc/rg/edit", name="lc_profile_doc_rg_edit")
      * @Template()
@@ -369,14 +369,20 @@ class PersonController extends Controller
         }
         $form = $this->createForm(new DocRgFormType(), $rg);
         $form->handleRequest($this->getRequest());
-        if ($form->isValid()) {
+        if ($form->isValid()) {            
+            $rgNum = str_split($form->get('val')->getData());            
+            if ( ($form->get('uf')->getData()->getId() == 43) && ($this->checkRGDce($rgNum) != $rgNum[0]) || ($this->checkRGDcd($rgNum) != $rgNum[9]) ) {
+                $form->get('val')->addError(new FormError($this->get('translator')->trans('This RG is invalid')));
+                return array('form' => $form->createView());
+            }
+
             $manager = $this->getDoctrine()->getManager();
             $dql = $manager->getRepository('PROCERGSLoginCidadaoCoreBundle:Rg')
             ->createQueryBuilder('u')
             ->where('u.person = :person and u.uf = :uf')
             ->setParameter('person',$this->getUser())
             ->setParameter('uf', $form->get('uf')->getData())
-            ->orderBy('u.id', 'ASC');            
+            ->orderBy('u.id', 'ASC');
             if ($rg->getId()) {
                 $dql->andWhere('u != :rg')->setParameter('rg', $rg);
             }
@@ -384,15 +390,54 @@ class PersonController extends Controller
             if ($has) {
                 $form->get('uf')->addError(new FormError($this->get('translator')->trans('there is a RG already registered for this UF')));
                 return array('form' => $form->createView());
-            }
+            }            
             $manager->persist($rg);
             $manager->flush();
             $resp = new Response('<script>rgGrid.getGrid();$(\'#edit-rg\').modal(\'hide\');</script>');
-            return $resp; 
+            return $resp;
         }
         return array('form' => $form->createView());
     }
-    
+
+    private function checkRGDce($rg) {
+      $total = ($rg[1] * 2) + ($rg[2] * 3) + ($rg[3] * 4) + ($rg[4] * 5) + ($rg[5] * 6) + ($rg[6] * 7) + ($rg[7] * 8) + ($rg[8] * 9);
+      $resto = $total % 11;
+      
+      if ($resto == 0 || $resto == 1) {
+          return 1;
+      } else {
+          return 11 - $resto;
+      }
+    }
+
+    private function checkRGDcd($rg) {
+        $n1 = ($rg[8] * 2) % 9;
+        $n2 = ($rg[6] * 2) % 9;
+        $n3 = ($rg[4] * 2) % 9;
+        $n4 = ($rg[2] * 2) % 9;
+        $n5 = ($rg[0] * 2) % 9;
+        $total = $n1 + $n2 + $n3 + $n4 + $n5 + $rg[7] + $rg[5] + $rg[3] + $rg[1];
+
+        if ($rg[8] == 9)
+          $total = $total + 9;
+        if ($rg[6] == 9)
+          $total = $total + 9;
+        if ($rg[4] == 9)
+          $total = $total + 9;
+        if ($rg[2] == 9)
+          $total = $total + 9;
+        if ($rg[0] == 9)
+          $total = $total + 9;
+
+        $resto = $total % 10;
+
+        if ($resto == 0) {
+          return 1;
+        } else {
+          return 10 - $resto;
+        }
+    }
+
     /**
      * @Route("/profile/doc/rg/list", name="lc_profile_doc_rg_list")
      * @Template()

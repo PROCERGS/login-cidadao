@@ -73,5 +73,6 @@
 {% endspaceless %}
 {%- endblock hidden_entity_row %}
 
-
-
+{% block switch_widget -%}
+<p>{{ block('checkbox_widget') }}</p>
+{%- endblock switch_widget %}

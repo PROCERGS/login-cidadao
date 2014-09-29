@@ -1,4 +1,5 @@
-{% extends 'PROCERGSLoginCidadaoCoreBundle:Dev:base.html.twig' %} {% block content %}
+{% extends 'PROCERGSLoginCidadaoCoreBundle:Dev:base.html.twig' %}
+{% block content %}
 <div id="profile-edit" class="content clearfix">
     <h1>{{ 'Service'|trans }}</h1>
     <div class="form-content">
@@ -13,6 +14,8 @@
                 {{ form_row(form.redirectUris) }}
                 {{ form_row(form.landingPageUrl) }}
                 {{ form_row(form.termsOfUseUrl) }}
+                {{ form_row(form.published) }}
+                {{ form_row(form.visible) }}
                 {{ form_row(form.publicId) }}
                 {{ form_row(form.secret) }}
             </div>
@@ -38,10 +41,4 @@
         {{ form_end(form) }}
     </div>
 </div>
-{% endblock %}
-
-{% block javascripts %} 
-{{ parent() }}
-<script type="text/javascript">
-</script>
 {% endblock %}
