@@ -69,9 +69,22 @@ $COMPOSER install
 ###############################
 # Database Setup
 ###############################
-echo "Installing the database..."
-php app/console doctrine:schema:create
+echo -ne "Installing the database...\\t\\t"
+# Let's check if the schema is ok first...
+php app/console doctrine:schema:validate -q
+
 if [ "$?" -ne 0 ]; then
-  die "\\nThere was a problem installing the database."
+  # Ok... We'll have to do something...
+  if [ "$?" -ne 0 ]; then
+    php app/console doctrine:database:create -q
+    SCHEMA_CREATE=`php app/console doctrine:schema:create -q`
+
+    if [ "$?" -ne 0 ]; then
+      echo $FAIL
+      die "\\nThere was a problem installing the database. Here is the error returned:\\n$SCHEMA_CREATE"
+    fi
+  fi
 fi
+echo $OK
+
 echo -e "\\nInstall is done."
