@@ -11,5 +11,10 @@
                 <span>{{ 'admin.sugg.list'|trans() }}<i class="glyphicon glyphicon-th pull-right"></i></span>
             </a>
         </li>
+        <li class="services glyph {{ myController == 'Admin\\Person' ? 'active' }}">
+            <a href="{{ path('lc_admin_person') }}"> 
+                <span>{{ 'admin.person.list'|trans() }}<i class="glyphicon glyphicon-th pull-right"></i></span>
+            </a>
+        </li>        
     </ul>
 </div>

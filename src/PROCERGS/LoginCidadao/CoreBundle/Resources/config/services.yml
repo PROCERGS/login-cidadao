@@ -219,6 +219,12 @@ services:
         calls:
             - [setTranslator, ["@translator"]]
             
+    procergs_logincidadao.person.resume.form.type:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\PersonResumeFormType
+        parent: procergs_person.profile.form.type
+        tags:
+            - { name: form.type, alias: person_resume_form_type }
+            
     procergs_logincidadao.nfgws:
         class: %procergs_logincidadao.nfgws.class%
         calls:

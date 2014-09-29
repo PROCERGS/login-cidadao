@@ -1,0 +1,47 @@
+{% extends 'PROCERGSLoginCidadaoCoreBundle:Admin:base.html.twig' %}
+{% block content %}
+<div id="profile-edit" class="content clearfix">
+    <h1>{{ 'Service'|trans }}</h1>
+    <div class="form-content">
+        {% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
+        {{ form_start(form, {'attr' : {'role' : 'form'}}) }} 
+        {{ form_errors(form) }}
+        <div class="row clearfix">
+            <div class="col-md-7">
+                {{ form_row(form.firstName) }}
+                {{ form_row(form.surname) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.birthdate) }}
+                {{ form_row(form.country) }}
+                {{ form_row(form.cep) }}
+                {{ form_row(form.uf) }}
+                {{ form_row(form.city) }}
+                {{ form_row(form.adress) }}
+                {{ form_row(form.adressnumber) }}
+                {{ form_row(form.complement) }}
+                {{ form_row(form.mobile) }}
+            </div>
+            <div class="col-md-5">
+                
+                <div class="row">
+                    <div class="col-xs-12">
+                        <img src="{% include 'PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig' %}">
+
+                        <div class="file-upload text-center">
+                            <button type="button" class="btn btn-success btn-upload">{% trans %}Upload another picture{% endtrans %}</button>
+                            <div class="file-name"></div>
+                                {{ form_widget(form.image) }}
+                            <div class="input-error">{{ form_errors(form.image) }}</div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <div class="form-bar text-right">
+            <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
