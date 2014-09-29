@@ -30,9 +30,10 @@ class CategoryFormType extends AbstractType
                     ->getName();
                 $form->add('client', 'text', array(
                     'required' => true,
+                    'label' => 'Service',
                     'mapped' => false,
                     'read_only' => true,
-                    'data' => $name
+                    'data' => $name,
                 ));
                 $form->add('mailTemplate', 'textarea', array(
                     'required' => true,
@@ -53,6 +54,7 @@ class CategoryFormType extends AbstractType
                 ));                
                 $form->add('client', 'entity', array(
                     'required' => true,
+                    'label' => 'Service',
                     'class' => 'PROCERGSOAuthBundle:Client',
                     'property' => 'name',
                     'query_builder' => function (EntityRepository $er) use($person)

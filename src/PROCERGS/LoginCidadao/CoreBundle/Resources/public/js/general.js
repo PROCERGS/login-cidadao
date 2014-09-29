@@ -470,4 +470,5 @@ $(function() {
         });
     });
     $(document).on('click', '.infinityscroll-next-button' , lcInfinityscrollNextButton);
+    $("[data-enable-switch='1']").bootstrapSwitch();    
 });

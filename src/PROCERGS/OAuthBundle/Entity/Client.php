@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Tests\Fixtures\Publisher;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation as JMS;
-
+use OAuth2\OAuth2;
 /**
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
@@ -126,6 +126,18 @@ class Client extends BaseClient
         parent::__construct();
         $this->authorizations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->maxNotificationLevel = Notification::LEVEL_NORMAL;
+    }
+    
+    public static  function getAllGrants()
+    {
+        return array(
+            OAuth2::GRANT_TYPE_AUTH_CODE,
+            OAuth2::GRANT_TYPE_IMPLICIT,
+            OAuth2::GRANT_TYPE_USER_CREDENTIALS,
+            OAuth2::GRANT_TYPE_CLIENT_CREDENTIALS,
+            OAuth2::GRANT_TYPE_REFRESH_TOKEN,
+            OAuth2::GRANT_TYPE_EXTENSIONS,
+        );
     }
 
     public function setName($name)

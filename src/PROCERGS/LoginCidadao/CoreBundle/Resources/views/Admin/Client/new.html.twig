@@ -42,37 +42,3 @@
     </div>
 </div>
 {% endblock %}
-
-{% block javascripts %} 
-{{ parent() }}
-<script type="text/javascript">
-    function CollectionHolder(id) {
-        var self = this;
-        var holderId = id;
-        var holder = $('#'+holderId);
-
-        var addTagLink = $('<a href="#" class="add_link_'+holderId+'">Add</a>');
-        var newLinkLi = $('<div></div>').append(addTagLink);
-        holder.data('index', holder.find(':input').length);
-
-        addTagLink.on('click', function(e) {
-            e.preventDefault();
-            self.addTagForm(holder, newLinkLi);
-        });
-
-        holder.append(newLinkLi);
-
-        this.addTagForm = function (collectionHolder, newLinkLi) {
-            var prototype = collectionHolder.data('prototype');
-            var index = collectionHolder.data('index');
-            var newForm = prototype.replace(/__name__label__/g, $('label[for='+collectionHolder.prop('id')+']').text()).replace(/__name__/g, index);
-            collectionHolder.data('index', index + 1);
-            newLinkLi.before(newForm);
-        }
-    }
-
-    $(function() {
-        $.each(['{{ form.allowedScopes.vars.id }}', '{{ form.allowedGrantTypes.vars.id }}'],function(idx,val){new CollectionHolder(val);});
-    })
-</script>
-{% endblock %}

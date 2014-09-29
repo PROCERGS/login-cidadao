@@ -1,12 +1,12 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::grid_layout.html.twig" %}
 
 {% block grid_header_action %}
-<div class="col-md-2">{{ 'actions'|trans }}</div>
+<div class="col-md-2">{{ 'Actions'|trans }}</div>
 {% endblock grid_header_action %}
 
 {% block grid_header_data %}
-<div class="col-md-3">{{ 'name'|trans }}</div>
-<div class="col-md-7">{{ 'default'|trans }}</div>
+<div class="col-md-3">{{ 'Name'|trans }}</div>
+<div class="col-md-7">{{ 'Default'|trans }}</div>
 {% endblock grid_header_data %}
 
 {% block grid_body_empty %}
@@ -33,11 +33,11 @@
 
 {% block grid_row_data %}
 <div class="col-md-3">
-    <dt>{{ 'name'|trans }}</dt>
+    <dt>{{ 'Name'|trans }}</dt>
     <dd>{{ row.name }}</dd>
 </div>
 <div class="col-md-7">
-    <dt>{{ 'defautl'|trans }}</dt>
+    <dt>{{ 'Default'|trans }}</dt>
     <dd>{{ row.default }}</dd>
 </div>
 {% endblock grid_row_data %}
