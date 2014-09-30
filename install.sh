@@ -97,14 +97,12 @@ php app/console doctrine:schema:validate -q
 
 if [ "$?" -ne 0 ]; then
   # Ok... We'll have to do something...
-  if [ "$?" -ne 0 ]; then
-    php app/console doctrine:database:create -q
-    SCHEMA_CREATE=`php app/console doctrine:schema:create -q`
+  php app/console doctrine:database:create -q
+  SCHEMA_CREATE=`php app/console doctrine:schema:create -q`
 
-    if [ "$?" -ne 0 ]; then
-      echo $FAIL
-      die "\\nThere was a problem installing the database. Here is the error returned:\\n$SCHEMA_CREATE"
-    fi
+  if [ "$?" -ne 0 ]; then
+    echo $FAIL
+    die "\\nThere was a problem installing the database. Here is the error returned:\\n$SCHEMA_CREATE"
   fi
 fi
 echo $OK
