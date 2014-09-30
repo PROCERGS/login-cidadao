@@ -37,7 +37,7 @@ echo $OK
 ###############################
 # Symfony Check
 ###############################
-SF_CHECK="php app/check.php"
+SF_CHECK="php app/check.php 2>&1"
 function sf_env_check {
   PHP_INFO=$($SF_CHECK)
   if [[ $PHP_INFO == *ERROR* ]]
@@ -80,7 +80,7 @@ else
   echo $OK
 fi
 echo -ne "Installing dependencies...\\t\\t"
-COMPOSER_RESULT=`$COMPOSER install -n`
+COMPOSER_RESULT=`$COMPOSER install -n 2>&1`
 if [ "$?" -ne 0 ]; then
   echo $FAIL
   die "\\nThere was a problem running composer install procedure. Here is the output returned:\\n$COMPOSER_RESULT"
@@ -98,11 +98,11 @@ php app/console doctrine:schema:validate -q
 if [ "$?" -ne 0 ]; then
   # Ok... We'll have to do something...
   php app/console doctrine:database:create -q
-  SCHEMA_CREATE=`php app/console doctrine:schema:create -q`
+  SCHEMA_CREATE=$(php app/console doctrine:schema:create 2>&1)
 
   if [ "$?" -ne 0 ]; then
     echo $FAIL
-    die "\\nThere was a problem installing the database. Here is the error returned:\\n$SCHEMA_CREATE"
+    die "\\nThere was a problem installing the database. Here is the error returned:\\n\\n$SCHEMA_CREATE"
   fi
 fi
 echo $OK
