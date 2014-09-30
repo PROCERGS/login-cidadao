@@ -111,6 +111,13 @@ class Category implements CategoryInterface
     protected $notifications;
     
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Shout", mappedBy="category")
+     */
+    protected $shouts;    
+    
+    /**
      * @ORM\OneToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\PersonNotificationOption", mappedBy="category") 
      */
     protected $personNotificationOption;

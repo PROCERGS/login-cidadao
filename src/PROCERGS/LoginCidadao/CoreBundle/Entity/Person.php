@@ -219,6 +219,12 @@ class Person extends BaseUser
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification", mappedBy="person")
      */
     protected $notifications;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Shout", mappedBy="person")
+     */
+    protected $shouts;
+    
 
     /**
      * @ORM\OneToMany(targetEntity="PROCERGS\OAuthBundle\Entity\Client", mappedBy="person")
