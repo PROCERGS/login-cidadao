@@ -1,9 +1,6 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle::base.html.twig' %}
 
 {% block body %}
-{% if uri_vpr_link is defined and uri_vpr_link is not empty %}
-<a href="{{ uri_vpr_link }}" target="_blank" class="alert alert-success center-block">A Votação de Prioridades já está disponível, vote aqui!</a>
-{% endif %}
 
 {% for flashMessage in app.session.flashbag.get('success') %}
     <div class="alert alert-success">
