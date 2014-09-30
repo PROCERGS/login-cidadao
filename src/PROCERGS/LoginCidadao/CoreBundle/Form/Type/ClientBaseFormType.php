@@ -55,9 +55,11 @@ class ClientBaseFormType extends AbstractType
             } else {
                 $form->add('publicId', 'hidden', array(
                     'required' => false,
+                    'mapped' =>false
                 ));
                 $form->add('secret', 'hidden', array(
                     'required' => false,
+                    'mapped' =>false
                 ));
             }
         });
