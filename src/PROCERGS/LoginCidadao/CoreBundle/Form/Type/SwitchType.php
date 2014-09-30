@@ -3,12 +3,10 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use PROCERGS\LoginCidadao\CoreBundle\Form\Type\CommonFormType;
 
-class SwitchType extends AbstractType
+class SwitchType extends CommonFormType
 {
-    private $translator;
-
     public function getParent()
     {
         return 'checkbox';
@@ -30,7 +28,4 @@ class SwitchType extends AbstractType
         ));
     }
     
-    public function setTranslator(TranslatorInterface $var) {
-        $this->translator = $var;
-    }
 }

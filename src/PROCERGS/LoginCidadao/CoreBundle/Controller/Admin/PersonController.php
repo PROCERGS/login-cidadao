@@ -80,6 +80,8 @@ class PersonController extends Controller
         $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.person.resume.form.type'), $person);
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
+            $userManager = $this->container->get('fos_user.user_manager');
+            $userManager->updateUser($person);
         }
         return array(
             'form' => $form->createView(),

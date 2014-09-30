@@ -1,47 +1,90 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle:Admin:base.html.twig' %}
 {% block content %}
-<div id="profile-edit" class="content clearfix">
-    <h1>{{ 'Service'|trans }}</h1>
-    <div class="form-content">
-        {% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
-        {{ form_start(form, {'attr' : {'role' : 'form'}}) }} 
-        {{ form_errors(form) }}
-        <div class="row clearfix">
-            <div class="col-md-7">
-                {{ form_row(form.firstName) }}
-                {{ form_row(form.surname) }}
-                {{ form_row(form.email) }}
-                {{ form_row(form.birthdate) }}
-                {{ form_row(form.country) }}
-                {{ form_row(form.cep) }}
-                {{ form_row(form.uf) }}
-                {{ form_row(form.city) }}
-                {{ form_row(form.adress) }}
-                {{ form_row(form.adressnumber) }}
-                {{ form_row(form.complement) }}
-                {{ form_row(form.mobile) }}
-            </div>
-            <div class="col-md-5">
-                
-                <div class="row">
-                    <div class="col-xs-12">
-                        <img src="{% include 'PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig' %}">
-
-                        <div class="file-upload text-center">
-                            <button type="button" class="btn btn-success btn-upload">{% trans %}Upload another picture{% endtrans %}</button>
-                            <div class="file-name"></div>
-                                {{ form_widget(form.image) }}
-                            <div class="input-error">{{ form_errors(form.image) }}</div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ 'Profile'|trans }}</h3>
+        </div>
+    </div>
+    
+<div id="notification_id">
+    {% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
+    {{ form_start(form, {'attr' : {'role' : 'form'}}) }} 
+    {{ form_errors(form) }}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ 'General'|trans }}</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row clearfix">
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <img src="{% include 'PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig' %}">
+    
+                            <div class="file-upload text-center">
+                                <button type="button" class="btn btn-success btn-upload">{% trans %}Upload another picture{% endtrans %}</button>
+                                <div class="file-name"></div>
+                                    {{ form_widget(form.image) }}
+                                <div class="input-error">{{ form_errors(form.image) }}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
+                <div class="col-md-7">
+                    {{ form_row(form.username) }}
+                    {{ form_row(form.firstName) }}
+                    {{ form_row(form.surname) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.email) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.birthdate) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.country) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.cep) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.uf) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.city) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.adress) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.adressnumber) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.complement) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.mobile) }}
+                </div>                
             </div>
         </div>
-        <div class="form-bar text-right">
-            <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
-        </div>
-        {{ form_end(form) }}
     </div>
+    {% if form.roles is defined %}    
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ 'Actions'|trans }}</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row clearfix">
+                <div class="col-md-12">
+                    {{ form_row(form.roles) }}
+                    <div class="form-bar text-right">
+                        <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {{ form_end(form) }}
 </div>
 {% endblock %}
