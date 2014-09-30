@@ -30,6 +30,11 @@ parameters:
     procergs.notification.class: PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification
 
 services:
+    procergs_lc.command.populate_database:
+        class: PROCERGS\LoginCidadao\CoreBundle\Command\PopulateDatabaseCommand
+        tags:
+            - { name: console.command }
+    
     security.authentication.success_handler:
         class: %security.authentication.success_handler.class%
         public: false
