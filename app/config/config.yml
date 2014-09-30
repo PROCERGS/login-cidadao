@@ -36,7 +36,6 @@ twig:
         background_picture_link: %background_picture.link%
         app_router: "@router"
         tre_search_link: "%tre_search_link%"
-        uri_vpr_link: "%uri_vpr_link%"
 
 # Assetic Configuration
 assetic:
