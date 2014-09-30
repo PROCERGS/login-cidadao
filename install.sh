@@ -25,8 +25,12 @@ if hash setfacl 2>/dev/null; then
   sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs web/uploads
   sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs web/uploads
 else
-  sudo chmod +a "$HTTPDUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
-  sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+  sudo chmod +a "$HTTPDUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs web/uploads
+  sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs web/uploads
+  if [ "$?" -ne 0 ]; then
+    echo $FAIL
+    die "\\nThere was a problem setting the directories permissions.\\nFor more info check: http://symfony.com/doc/current/book/installation.html"
+  fi
 fi
 echo $OK
 
