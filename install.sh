@@ -4,6 +4,9 @@ sudo echo "Installing login-cidadao..."
 
 OK="[$(tput setaf 2)$(tput bold) OK $(tput sgr0)$(tput sgr0)]"
 FAIL="[$(tput setaf 1)$(tput bold)FAIL$(tput sgr0)$(tput sgr0)]"
+WARN="[$(tput setaf 3)$(tput bold)WARN$(tput sgr0)$(tput sgr0)]"
+YELLOW_WARNING="$(tput setaf 3)$(tput bold)WARNING$(tput sgr0)$(tput sgr0)"
+PARAMETERS_FILE="app/config/parameters.yml"
 
 function die {
   echo -e $1
@@ -63,8 +66,23 @@ fi
 ###############################
 # composer install
 ###############################
-echo -e "\\nInstalling dependencies and initializing parameters.yml..."
-$COMPOSER install
+echo -ne "Checking parameters.yml...\\t\\t"
+if [ ! -f $PARAMETERS_FILE ]; then
+  echo $WARN
+  echo "$YELLOW_WARNING: parameters.yml initialized with default values!"
+  echo " This is likely to be a major problem when installing the database!"
+  echo -e " This is likely to be a major problem running the application!\\n"
+else
+  echo $OK
+fi
+echo -ne "Installing dependencies...\\t\\t"
+COMPOSER_RESULT=`$COMPOSER install -n`
+if [ "$?" -ne 0 ]; then
+  echo $FAIL
+  die "\\nThere was a problem running composer install procedure. Here is the output returned:\\n$COMPOSER_RESULT"
+else
+  echo $OK
+fi
 
 ###############################
 # Database Setup
