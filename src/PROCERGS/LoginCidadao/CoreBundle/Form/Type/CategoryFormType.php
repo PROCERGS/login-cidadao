@@ -2,20 +2,14 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Security\Core\SecurityContext;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use PROCERGS\LoginCidadao\CoreBundle\Form\Type\CommonFormType;
 
-class CategoryFormType extends AbstractType
+class CategoryFormType extends CommonFormType
 {
-
-    protected $security;
-
-    protected $em;
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -100,31 +94,4 @@ class CategoryFormType extends AbstractType
         return 'category_form_type';
     }
 
-    public function setSecurity(SecurityContext $security)
-    {
-        $this->security = $security;
-        return $this;
-    }
-
-    public function setEntityManager(EntityManager $em)
-    {
-        $this->em = $em;
-        return $this;
-    }
-
-    public function getUser()
-    {
-        if (! $this->security) {
-            throw new \LogicException('The SecurityBundle is not registered in your application.');
-        }
-        if (null === $token = $this->security->getToken()) {
-            return;
-        }
-        
-        if (! is_object($user = $token->getUser())) {
-            return;
-        }
-        
-        return $user;
-    }
 }

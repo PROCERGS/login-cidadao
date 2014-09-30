@@ -14,7 +14,7 @@ use Doctrine\ORM\EntityManager;
 
 class ProfileFormType extends BaseType
 {
-    private $em;
+    protected $em;
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

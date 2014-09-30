@@ -219,6 +219,15 @@ services:
         calls:
             - [setTranslator, ["@translator"]]
             
+    procergs_logincidadao.person.resume.form.type:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\PersonResumeFormType
+        tags:
+            - { name: form.type, alias: person_resume_form_type }
+        calls:
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+            - [setTranslator, ["@translator"]]
+            - [setSecurity, ["@security.context"]]
+            
     procergs_logincidadao.nfgws:
         class: %procergs_logincidadao.nfgws.class%
         calls:
