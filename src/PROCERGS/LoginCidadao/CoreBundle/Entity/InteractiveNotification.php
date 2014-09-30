@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 /**
  * Notification
  * @deprecated since version 1.0.2
- * @ ORM\Table()
+ * @ ORM\Table(name="interactive_notification")
  * @ ORM\Entity()
  */
 class InteractiveNotification extends Notification\Notification

@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * City
  *
- * @ORM\Table()
+ * @ORM\Table(name="access_session")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */

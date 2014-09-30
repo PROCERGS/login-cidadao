@@ -14,6 +14,7 @@ use JMS\Serializer\Annotation as JMS;
 use OAuth2\OAuth2;
 /**
  * @ORM\Entity
+ * @ORM\Table(name="client")
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity("name")
  * @JMS\ExclusionPolicy("all")

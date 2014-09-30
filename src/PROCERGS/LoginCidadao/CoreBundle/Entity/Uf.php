@@ -8,7 +8,7 @@ use JMS\Serializer\Annotation\Groups;
 /**
  * City
  *
- * @ORM\Table()
+ * @ORM\Table(name="uf")
  * @ORM\Entity
  */
 class Uf

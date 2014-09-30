@@ -9,7 +9,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 /**
  * NotificationToken
  *
- * @ORM\Table()
+ * @ORM\Table(name="notification_token")
  * @ORM\Entity
  */
 class NotificationToken

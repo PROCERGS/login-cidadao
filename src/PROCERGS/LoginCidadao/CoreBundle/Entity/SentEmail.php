@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SentEmail
  *
- * @ORM\Table()
+ * @ORM\Table(name="sent_email")
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmailRepository")
  */
 class SentEmail

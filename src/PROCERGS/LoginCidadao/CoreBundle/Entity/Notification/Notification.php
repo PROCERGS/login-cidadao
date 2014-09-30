@@ -11,7 +11,7 @@ use JMS\Serializer\Annotation as JMS;
 /**
  * Notification
  *
- * @ORM\Table()
+ * @ORM\Table(name="notification")
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationRepository")
  * @JMS\ExclusionPolicy("all")
  * @ORM\HasLifecycleCallbacks

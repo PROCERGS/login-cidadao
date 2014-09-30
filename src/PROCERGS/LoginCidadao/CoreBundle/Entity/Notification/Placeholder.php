@@ -9,7 +9,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Placeholder
  *
- * @ORM\Table()
+ * @ORM\Table(name="placeholder")
  * @ORM\Entity
  * @UniqueEntity(fields={"category", "name"},errorPath="name")
  */

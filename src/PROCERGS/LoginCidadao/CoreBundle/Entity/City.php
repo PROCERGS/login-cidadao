@@ -8,7 +8,7 @@ use JMS\Serializer\Annotation\Groups;
 /**
  * City
  *
- * @ORM\Table()
+ * @ORM\Table(name="city")
  * @ORM\Entity
  */
 class City

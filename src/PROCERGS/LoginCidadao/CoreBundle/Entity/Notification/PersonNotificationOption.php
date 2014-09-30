@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * PersonOption
  *
- * @ORM\Table()
+ * @ORM\Table(name="person_notification_option")
  * @ORM\Entity
  */
 class PersonNotificationOption

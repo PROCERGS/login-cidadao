@@ -15,6 +15,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationToken;
 
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
+ * @ORM\Table(name="person")
  * @UniqueEntity("cpf")
  * @UniqueEntity("username")
  * @ORM\HasLifecycleCallbacks
