@@ -21,12 +21,12 @@ rm -rf app/cache/*
 rm -rf app/logs/*
 
 HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
-if hash setfacl 2>/dev/null; then
+if type "setfacl" &>/dev/null; then
   sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs web/uploads
   sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs web/uploads
 else
-  sudo chmod +a "$HTTPDUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs web/uploads
-  sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs web/uploads
+  sudo chmod +a "$HTTPDUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs web/uploads &>/dev/null
+  sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs web/uploads &>/dev/null
   if [ "$?" -ne 0 ]; then
     echo $FAIL
     die "\\nThere was a problem setting the directories permissions.\\nFor more info check: http://symfony.com/doc/current/book/installation.html"
@@ -35,36 +35,16 @@ fi
 echo $OK
 
 ###############################
-# Symfony Check
-###############################
-SF_CHECK="php app/check.php 2>&1"
-function sf_env_check {
-  PHP_INFO=$($SF_CHECK)
-  if [[ $PHP_INFO == *ERROR* ]]
-  then
-    SF_OK=0
-  fi
-}
-
-echo -ne "Checking Symfony2 requirements...\\t"
-SF_OK=1
-sf_env_check
-if [ "$SF_OK" -ne 1 ]; then
-  echo $FAIL
-  die "Your environment didn't pass the test. Check the problems found by running:\\n$ $SF_CHECK"
-else
-  echo $OK
-fi
-
-###############################
 # Composer Check
 ###############################
 if hash composer 2>/dev/null; then
-  COMPOSER=composer
+  COMPOSER="composer"
 else
-  echo -e "Composer not found... Installing it as composer.phar"
-  php -r "readfile('https://getcomposer.org/installer');" | php
-  COMPOSER=composer.phar
+  COMPOSER="php composer.phar"
+  if [ ! -f "composer.phar" ]; then
+    echo -e "Composer not found... Installing it as composer.phar"
+    php -r "readfile('https://getcomposer.org/installer');" | php
+  fi
 fi
 
 ###############################
@@ -73,6 +53,7 @@ fi
 echo -ne "Checking parameters.yml...\\t\\t"
 if [ ! -f $PARAMETERS_FILE ]; then
   echo $WARN
+  cp "$PARAMETERS_FILE.dist" $PARAMETERS_FILE
   echo "$YELLOW_WARNING: parameters.yml initialized with default values!"
   echo " This is likely to be a major problem when installing the database!"
   echo -e " This is likely to be a major problem running the application!\\n"
@@ -84,6 +65,35 @@ COMPOSER_RESULT=`$COMPOSER install -n 2>&1`
 if [ "$?" -ne 0 ]; then
   echo $FAIL
   die "\\nThere was a problem running composer install procedure. Here is the output returned:\\n$COMPOSER_RESULT"
+else
+  echo $OK
+fi
+
+###############################
+# Symfony Check
+###############################
+SF_CHECK="php app/check.php"
+function sf_env_check {
+  if type "php" &>/dev/null; then
+    PHP_INFO=$($SF_CHECK 2>&1)
+    if [ "$?" -ne 0 ]; then
+      SF_OK=0
+    else
+      if [[ $PHP_INFO == *ERROR* ]]; then
+        SF_OK=0
+      fi
+    fi
+  else
+    SF_OK=0
+  fi
+}
+
+echo -ne "Checking Symfony2 requirements...\\t"
+SF_OK=1
+sf_env_check
+if [ "$SF_OK" -ne 1 ]; then
+  echo $FAIL
+  die "Your environment didn't pass the test. Check the problems found by running:\\n$ $SF_CHECK"
 else
   echo $OK
 fi
