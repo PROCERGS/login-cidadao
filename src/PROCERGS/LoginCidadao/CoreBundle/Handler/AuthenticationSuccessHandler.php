@@ -82,13 +82,6 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             return new RedirectResponse($this->router->generate('lc_registration_cpf'));
         }
 
-        // Email check
-        if (is_null($token->getUser()->getEmailConfirmedAt())) {
-            $this->notificationsHelper->enforceUnconfirmedEmailNotification($token->getUser());
-        } else {
-            $this->notificationsHelper->clearUnconfirmedEmailNotification($token->getUser());
-        }
-
         if (strstr($token->getUser()->getUsername(), '@') !== false) {
             $uri = $this->router->generate('lc_update_username');
 

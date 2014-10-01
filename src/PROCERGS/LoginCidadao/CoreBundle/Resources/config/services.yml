@@ -177,7 +177,7 @@ services:
         class: %kernel.listener.logged_in_user_listener.class%
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
-        arguments: [ "@security.context", "@router", "@session" ]
+        arguments: [ "@security.context", "@router", "@session", "@translator" ]
 
     kernel.listener.exceptions_listener:
         class: %kernel.listener.exceptions_listener.class%

@@ -192,7 +192,6 @@ class ProfileEditListner implements EventSubscriberInterface
             $user->setEmailExpiration(new \DateTime("+$this->emailUnconfirmedTime"));
             $this->fosMailer->sendConfirmationEmailMessage($user);
 
-            $this->notificationsHelper->enforceUnconfirmedEmailNotification($user);
             $this->mailer->sendEmailChangedMessage($user, $this->email);
         }
     }
