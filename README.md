@@ -54,7 +54,7 @@ General Steps for Installation
   * app/cache
   * app/logs
   * web/uploads
-2. Make sure you have all dependencies installed.
+2. Make sure you have all dependencies and needed PHP extensions installed.
 3. Check if your environment meets Symfony's prerequesites:
 
     `$ php app/check.php`
