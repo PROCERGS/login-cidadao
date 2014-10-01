@@ -54,17 +54,18 @@ General Steps for Installation
   * app/cache
   * app/logs
   * web/uploads
-2. Check if your environment meets Symfony's prerequesites:
+2. Make sure you have all dependencies installed.
+3. Check if your environment meets Symfony's prerequesites:
 
     `$ php app/check.php`
 
-3. Run `$ composer install`
-4. Create the database if you didn't do it yet:
+4. Run `$ composer install`
+5. Create the database if you didn't do it yet:
 
     `$ php app/console doctrine:database:create`
 
-5. Create the schema:
+6. Create the schema:
 
     `$ php app/console doctrine:schema:create`
 
-6. Point your server's Document Root to the /web folder and make sure app.php is your index. Symfony already comes with .htaccess to do it for you on Apache.
+7. Point your server's Document Root to the /web folder and make sure app.php is your index. Symfony already comes with .htaccess to do it for you on Apache.
