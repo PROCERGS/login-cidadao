@@ -32,7 +32,7 @@ class Shout
     /**
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\ShoutPerson", mappedBy="shout") 
      */
-    private $receivers;
+    private $persons;
 
     /**
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="shouts")
@@ -54,6 +54,45 @@ class Shout
     public function getId()
     {
         return $this->id;
+    }
+    
+    public function setId($var)
+    {
+        $this->id = $var;
+        return $this;
+    }
+    
+    public function getCategory()
+    {
+        return $this->category;
+    }
+    
+    public function setCategory($var)
+    {
+        $this->category = $var;
+        return $this;
+    }
+    
+    public function getPerson()
+    {
+        return $this->person;
+    }
+    
+    public function setPerson($var)
+    {
+        $this->person = $var;
+        return $this;
+    }
+    
+    public function getPersons()
+    {
+        return $this->persons;
+    }
+    
+    public function setPersons($var)
+    {
+        $this->persons = $var;
+        return $this;
     }
 
     /**

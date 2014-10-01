@@ -30,7 +30,7 @@ class ShoutPerson
     protected $person;
     
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Shout", inversedBy="receivers")
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Shout", inversedBy="persons")
      * @ORM\JoinColumn(name="shout_id", referencedColumnName="id")
      */    
     protected $shout;
