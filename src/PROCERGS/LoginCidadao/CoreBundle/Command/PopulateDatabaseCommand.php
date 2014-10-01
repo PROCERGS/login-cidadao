@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\ORM\EntityManager;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category;
 
 class PopulateDatabaseCommand extends ContainerAwareCommand
 {
@@ -15,23 +16,29 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-                ->setName('login-cidadao:database:populate')
-                ->setDescription('Populates the database.')
-                ->addArgument('dump_folder', InputArgument::REQUIRED, 'Where are the dumps?');
+            ->setName('login-cidadao:database:populate')
+            ->setDescription('Populates the database.')
+            ->addArgument('dump_folder', InputArgument::REQUIRED, 'Where are the dumps?');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dir = realpath($input->getArgument('dump_folder'));
+        //$this->loadDumpFiles($dir, $output);
+        $this->createCategories($output);
+    }
+
+    private function loadDumpFiles($dir, OutputInterface $output)
+    {
         $em = $this->getManager();
         $db = $em->getConnection();
-        $db->beginTransaction();
 
+        $db->beginTransaction();
         try {
             $db->exec('DELETE FROM city;');
             $db->exec('DELETE FROM uf;');
             $db->exec('DELETE FROM country;');
-            
+
             $countryInsert = 'INSERT INTO country (id, name, iso2, postal_format, postal_name, reviewed, iso3, iso_num) VALUES (:id, :name, :iso2, :postal_format, :postal_name, :reviewed, :iso3, :iso_num)';
             $countryQuery = $db->prepare($countryInsert);
             $countries = $this->loopInsert($dir, 'country_dump.csv', $countryQuery, array($this, 'prepareCountryData'));
@@ -39,7 +46,7 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
             $statesInsert = 'INSERT INTO uf (id, name, acronym, country_id, iso6, fips, stat, class, reviewed) VALUES (:id, :name, :acronym, :country_id, :iso6, :fips, :stat, :class, :reviewed)';
             $statesQuery = $db->prepare($statesInsert);
             $states = $this->loopInsert($dir, 'uf_dump.csv', $statesQuery, array($this, 'prepareStateData'));
-            
+
             $citiesInsert = 'INSERT INTO city (id, name, uf_id, stat, reviewed) VALUES (:id, :name, :uf_id, :stat, :reviewed)';
             $citiesQuery = $db->prepare($citiesInsert);
             $cities = $this->loopInsert($dir, 'city_dump.csv', $citiesQuery, array($this, 'prepareCityData'));
@@ -48,7 +55,6 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
         } catch (Exception $e) {
             $db->rollBack();
         }
-
         $output->writeln("Added $countries countries, $states states and $cities cities.");
     }
 
@@ -61,19 +67,19 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
         return $this->getContainer()->get('doctrine')->getManager();
     }
 
-    private function prepareCountryData($row)
+    protected function prepareCountryData($row)
     {
         list($id, $name, $iso2, $postal_format, $postal_name, $reviewed, $iso3, $iso_num) = $row;
         return compact('id', 'name', 'iso2', 'postal_format', 'postal_name', 'reviewed', 'iso3', 'iso_num');
     }
 
-    private function prepareStateData($row)
+    protected function prepareStateData($row)
     {
         list($id, $name, $acronym, $country_id, $iso6, $fips, $stat, $class, $reviewed) = $row;
         return compact('id', 'name', 'acronym', 'country_id', 'iso6', 'fips', 'stat', 'class', 'reviewed');
     }
 
-    private function prepareCityData($row)
+    protected function prepareCityData($row)
     {
         list($id, $name, $uf_id, $stat, $reviewed) = $row;
         return compact('id', 'name', 'uf_id', 'stat', 'reviewed');
@@ -95,6 +101,22 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
             fclose($handle);
         }
         return $entries;
+    }
+
+    protected function createCategories(OutputInterface $output)
+    {
+        $em = $this->getManager();
+        $categories = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category');
+        
+        $count = $em->createQuery("SELECT c FROM PROCERGSLoginCidadaoCoreBundle:Notification\Category c");
+        $count->setMaxResults(1)->execute();
+        $result = $count->getResult();
+        
+        if (count($result) === 0) {
+            // Create categories
+        }
+        
+        $output->writeln(count($result) > 0 ? 'Has categories' : 'Nothing here');
     }
 
 }
