@@ -5,10 +5,10 @@
             <h3 class="panel-title">{{ 'Profile'|trans }}</h3>
         </div>
     </div>
-    
+
 <div id="notification_id">
     {% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
-    {{ form_start(form, {'attr' : {'role' : 'form'}}) }} 
+    {{ form_start(form, {'attr' : {'role' : 'form'}}) }}
     {{ form_errors(form) }}
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -20,7 +20,7 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <img src="{% include 'PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig' %}">
-    
+
                             <div class="file-upload text-center">
                                 <button type="button" class="btn btn-success btn-upload">{% trans %}Upload another picture{% endtrans %}</button>
                                 <div class="file-name"></div>
@@ -64,11 +64,11 @@
                 </div>
                 <div class="col-md-6">
                     {{ form_row(form.mobile) }}
-                </div>                
+                </div>
             </div>
         </div>
     </div>
-    {% if form.roles is defined %}    
+    {% if form.roles is defined %}
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">{{ 'Actions'|trans }}</h3>
@@ -85,6 +85,85 @@
         </div>
     </div>
     {% endif %}
+
+<style type="text/css">
+  html {
+    background-image: none!important;
+    background-color: dimgrey;
+  }
+
+  .list-checked li {
+    background-color: aliceblue;
+  }
+</style>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ 'Perfis'|trans }}</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row clearfix">
+                <div class="col-md-12">
+                    <div>
+                      <label>Perfis atuais: </label>
+                      <span class="label label-primary">Facebook</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Perfil">
+                    <button type="button" class="btn btn-primary" id="search">Buscar</button>
+                    <div id="search-result">
+                      <ul class="list-group list-checked"></ul>
+                      <ul class="list-group list-new"></ul>
+                    </div>
+
+                    {# <div class="text-right">
+                        <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
+                    </div> #}
+                    <button type="button" class="btn btn-primary">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     {{ form_end(form) }}
 </div>
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+
+{% javascripts
+        '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/handlebars-v2.0.0.js' filter='uglifyjs2' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+
+<script type="text/javascript">
+  $(function(){
+    var itens = [{'name': 'Facebook', 'checked': true},
+                 {'name': 'Desenvolvedor', 'checked': false},
+                 {'name': 'Super usuário', 'checked': false},
+                 {'name':'Administrador', 'checked': false}];
+
+    $("#search").on("click", function() {
+      $.each(itens, function(index, value) {
+        if (value.checked) {
+          var item = "<li class='list-group-item item-checked'>" + value.name + "<button type='button' class='btn btn-default btn-xs pull-right'><span class='glyphicon glyphicon-remove'></span></button></li>";
+          $(".list-checked").append(item);
+        } else {
+          var item = "<li class='list-group-item'>" + value.name + "<button type='button' class='btn btn-default btn-xs pull-right'><span class='glyphicon glyphicon-plus'></span></button></li>";
+          $(".list-new").append(item);
+        }
+      });
+    });
+
+    $("#search-result").on("click", ".list-group-item", function() {
+      if ($(this).hasClass("item-checked")) {
+        $(".list-new").append($(this));
+      } else {
+        $(".list-checked").append($(this));
+      }
+      $(this).toggleClass("item-checked");
+    });
+
+  });
+</script>
 {% endblock %}
