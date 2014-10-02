@@ -12,6 +12,7 @@ use PROCERGS\Generic\ValidationBundle\Validator\Constraints as PROCERGSAssert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationToken;
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
@@ -22,7 +23,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationToken;
  * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
  */
-class Person extends BaseUser
+class Person extends BaseUser implements PersonInterface
 {
 
     /**
@@ -219,12 +220,11 @@ class Person extends BaseUser
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification", mappedBy="person")
      */
     protected $notifications;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Shout", mappedBy="person")
      */
     protected $shouts;
-    
 
     /**
      * @ORM\OneToMany(targetEntity="PROCERGS\OAuthBundle\Entity\Client", mappedBy="person")
@@ -382,6 +382,9 @@ class Person extends BaseUser
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\PersonNotificationOption", mappedBy="person")
      */
     protected $notificationOptions;
+
+    /** @var array * */
+    protected $badges = array();
 
     public function __construct()
     {
@@ -984,7 +987,8 @@ class Person extends BaseUser
         return $this;
     }
 
-    public function prepareAPISerialize($imageHelper, $templateHelper, $isDev, $request)
+    public function prepareAPISerialize($imageHelper, $templateHelper, $isDev,
+                                        $request)
     {
         // User's profile picture
         if ($this->hasLocalProfilePicture()) {
@@ -1097,6 +1101,17 @@ class Person extends BaseUser
     public function getRgs()
     {
         return $this->rgs;
+    }
+
+    public function getBadges()
+    {
+        return $this->badges;
+    }
+
+    public function mergeBadges(array $badges)
+    {
+        $this->badges = array_merge($this->badges, $badges);
+        return $this;
     }
 
 }

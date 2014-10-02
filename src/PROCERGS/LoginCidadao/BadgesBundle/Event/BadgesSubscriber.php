@@ -1,0 +1,41 @@
+<?php
+
+namespace PROCERGS\LoginCidadao\BadgesBundle\Event;
+
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use PROCERGS\LoginCidadao\BadgesBundle\BadgesEvents;
+use PROCERGS\LoginCidadao\BadgesBundle\Handler\BadgesHandler;
+
+class BadgesSubscriber implements EventSubscriberInterface
+{
+    
+    /** @var BadgesHandler */
+    protected $handler;
+
+    public function __construct(BadgesHandler $handler)
+    {
+        $this->handler = $handler;
+    }
+    
+    public static function getSubscribedEvents()
+    {
+        return array(
+            BadgesEvents::BADGES_REGISTER_EVALUATOR => array('onRegisterEvaluator', 0),
+            BadgesEvents::BADGES_EVALUATE => array('onBadgeEvaluate', 0)
+        );
+    }
+
+    public function onBadgeEvaluate(EvaluateBadgesEvent $event)
+    {
+        error_log("Evaluating on LC");
+    }
+
+    public function onRegisterEvaluator(RegisterEvaluatorEvent $event)
+    {
+        $evaluator = $event->getEvaluator();
+        $id = $evaluator->getName();
+        $this->handler->register($evaluator);
+        error_log("Evaluator $id registered");
+    }
+
+}

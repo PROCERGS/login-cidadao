@@ -22,6 +22,9 @@ use PROCERGS\LoginCidadao\CoreBundle\Form\Type\DocRgFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Rg;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\FormError;
+use PROCERGS\LoginCidadao\BadgesBundle\BadgesEvents;
+use PROCERGS\LoginCidadao\BadgesBundle\Event\EvaluateBadgesEvent;
+use PROCERGS\LoginCidadao\BadgesBundle\Event\ListBadgesEvent;
 
 class PersonController extends Controller
 {
@@ -150,7 +153,7 @@ class PersonController extends Controller
     public function updateUsernameAction()
     {
         $user = $this->getUser();
-        $userManager = $this->container->get('fos_user.user_manager');
+        $userManager = $this->get('fos_user.user_manager');
 
         $formBuilder = $this->createFormBuilder($user)
                 ->add('username', 'text')
@@ -188,7 +191,7 @@ class PersonController extends Controller
             $response = $this->redirect($this->generateUrl('lc_update_username'));
             if ($hasChangedPassword) {
                 $request = $this->getRequest();
-                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher = $this->get('event_dispatcher');
                 $dispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_COMPLETED,
                         new FilterUserResponseEvent($user, $request, $response));
             }
@@ -217,7 +220,7 @@ class PersonController extends Controller
         $messages = '';
         if ($form->isValid()) {
             $person->setCpfExpiration(null);
-            $this->container->get('fos_user.user_manager')->updateUser($person);
+            $this->get('fos_user.user_manager')->updateUser($person);
             return $this->redirect($this->generateUrl('lc_home'));
         }
         return array(
@@ -327,8 +330,15 @@ class PersonController extends Controller
     public function docEditAction(Request $request)
     {
         $user = $this->getUser();
-
-        $dispatcher = $this->container->get('event_dispatcher');
+        $dispatcher = $this->get('event_dispatcher');
+        
+        /** @var \PROCERGS\LoginCidadao\BadgesBundle\Handler\BadgesHandler **/
+        $badgesHandler = $this->get('badges.handler');
+        $badgesHandler->evaluate($user);
+        $badges = $badgesHandler->getAvailableBadges();
+        var_dump($badges);
+        var_dump($user->getBadges());
+        die();
 
         $event = new GetResponseUserEvent($user, $request);
         $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $event);
@@ -464,11 +474,11 @@ class PersonController extends Controller
     public function preFilledRegistrationAction(Request $request)
     {
         /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
-        $formFactory = $this->container->get('fos_user.registration.form.factory');
+        $formFactory = $this->get('fos_user.registration.form.factory');
         /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
-        $userManager = $this->container->get('fos_user.user_manager');
+        $userManager = $this->get('fos_user.user_manager');
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
-        $dispatcher = $this->container->get('event_dispatcher');
+        $dispatcher = $this->get('event_dispatcher');
 
         $user = $userManager->createUser();
         $user->setEnabled(true);
@@ -510,7 +520,7 @@ class PersonController extends Controller
                 $userManager->updateUser($user);
 
                 if (null === $response = $event->getResponse()) {
-                    $url = $this->container->get('router')->generate('fos_user_registration_confirmed');
+                    $url = $this->get('router')->generate('fos_user_registration_confirmed');
                     $response = new RedirectResponse($url);
                 }
 
@@ -521,7 +531,7 @@ class PersonController extends Controller
             }
         }
 
-        return $this->container->get('templating')->renderResponse('PROCERGSLoginCidadaoCoreBundle:Person:registration/preFilledRegistration.html.twig',
+        return $this->get('templating')->renderResponse('PROCERGSLoginCidadaoCoreBundle:Person:registration/preFilledRegistration.html.twig',
                         array(
                     'form' => $form->createView(),
         ));
