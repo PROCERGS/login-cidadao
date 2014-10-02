@@ -1,9 +1,9 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::grid_layout.html.twig" %}
 
 {% block grid_header_data %}
-<div class="col-md-3">{{ 'service'|trans }}</div>
-<div class="col-md-6">{{ 'shorttext'|trans }}</div>
-<div class="col-md-2">{{ 'createdat'|trans }}</div>
+<div class="col-md-3">{{ 'Service'|trans }}</div>
+<div class="col-md-6">{{ 'sugg.shorttext'|trans }}</div>
+<div class="col-md-2">{{ 'sugg.createdAt'|trans }}</div>
 {% endblock grid_header_data %}
 
 {% block grid_row_action %}
@@ -29,7 +29,7 @@
 
 {% block grid_row %}
 <div class="row common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }} {{ grid.getRlast != true ? 'row-last' }}">
-	{{ block('grid_row_action') }}
-	{{ block('grid_row_data') }}
+  {{ block('grid_row_action') }}
+  {{ block('grid_row_data') }}
 </div>
 {% endblock grid_row %}
