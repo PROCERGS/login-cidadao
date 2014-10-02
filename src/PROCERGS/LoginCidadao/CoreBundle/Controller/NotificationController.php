@@ -71,17 +71,42 @@ class NotificationController extends Controller
         $result = $this->getDoctrine()
             ->getManager ()
             ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
-            ->createQueryBuilder('n')
-            ->select('c.id, c.name, CountIf(n.isRead != true) total')
-            ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
-            ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
-            ->where('n.person = :person')
-            ->setParameter('person', $this->getUser())
-            ->groupBy('c.id', 'c.name')
-            ->orderBy('c.id', 'ASC')
-            ->getQuery()
-            ->getResult();
+            ->getTotalUnreadGroupByClient($this->getUser());
         return array('clients' => $result);
+    }
+    
+    /**
+     * @Route("/inbox/gridnavbarunread", name="lc_not_inbox_gridnavbarunread")
+     * @Template()
+     */
+    public function gridNavbarUnreadAction(Request $request = null)
+    {
+        $sql = $this->getDoctrine()
+        ->getManager ()
+        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
+        ->createQueryBuilder('n')
+        ->select('n.id, n.isRead isread, n.title, n.shortText shorttext, n.createdAt createdat, c.name client_name')
+        ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
+        ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
+        ->where('n.person = :person and n.isRead = false')
+        ->setParameter('person', $this->getUser())
+        ->orderBy('n.id', 'DESC');
+        
+        if ($request->get('client')) {
+            $sql->andWhere('c.id = :client')->setParameter('client', $request->get('client'));
+        }
+        if ($request->get('confignotcli')) {
+            $sql->andWhere('cnc.id = :confignotcli')->setParameter('confignotcli', $request->get('confignotcli'));
+        }
+        $grid = new GridHelper();
+        $grid->setId('navbarUnread');
+        $grid->setPerPage(2);
+        $grid->setMaxResult(2);
+        $grid->setQueryBuilder($sql);
+        $grid->setInfinityGrid(true);
+        $grid->setRoute('lc_not_inbox_gridnavbarunread');
+        $grid->setRouteParams(array('client', 'mode', 'notification', 'confignotcli'));
+        return array('grid' => $grid->createView($request));
     }
 
     /**
