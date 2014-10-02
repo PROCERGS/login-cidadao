@@ -331,14 +331,6 @@ class PersonController extends Controller
     {
         $user = $this->getUser();
         $dispatcher = $this->get('event_dispatcher');
-        
-        /** @var \PROCERGS\LoginCidadao\BadgesBundle\Handler\BadgesHandler **/
-        $badgesHandler = $this->get('badges.handler');
-        $badgesHandler->evaluate($user);
-        $badges = $badgesHandler->getAvailableBadges();
-        var_dump($badges);
-        var_dump($user->getBadges());
-        die();
 
         $event = new GetResponseUserEvent($user, $request);
         $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $event);
