@@ -177,7 +177,7 @@ services:
         class: %kernel.listener.logged_in_user_listener.class%
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
-        arguments: [ "@security.context", "@router", "@session" ]
+        arguments: [ "@security.context", "@router", "@session", "@translator" ]
 
     kernel.listener.exceptions_listener:
         class: %kernel.listener.exceptions_listener.class%
@@ -223,6 +223,13 @@ services:
             - { name: form.type, alias: switch }
         calls:
             - [setTranslator, ["@translator"]]
+            
+    procergs_logincidadao.form.type.ajax_choice:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\AjaxChoiceType
+        tags:
+            - { name: form.type, alias: ajax_choice }
+        calls:
+            - [setTranslator, ["@translator"]]            
             
     procergs_logincidadao.person.resume.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\PersonResumeFormType
