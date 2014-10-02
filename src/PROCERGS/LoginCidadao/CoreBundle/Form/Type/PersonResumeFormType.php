@@ -64,7 +64,7 @@ class PersonResumeFormType extends CommonFormType
             'read_only' => 'true',
             "required" => false
         ));
-        
+
         $em = $this->em;
         $user = $this->getUser();
         $allRoles = array(
@@ -73,7 +73,7 @@ class PersonResumeFormType extends CommonFormType
             'ROLE_SUPER'=> $this->translator->trans('ROLE_SUPER')
         );
         $allRoles['ROLE_ADMIN'] = $this->translator->trans('ROLE_ADMIN');
-        
+
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use (&$em, &$user, &$allRoles)
         {
             $person = $event->getData();

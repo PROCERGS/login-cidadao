@@ -48,7 +48,7 @@ class PersonController extends Controller
                 $sql->setParameter('1', '%' . addcslashes($parms['username'], '\\%_') . '%');
             }
             $sql->addOrderBy('u.id', 'desc');
-            
+
             $grid = new GridHelper();
             $grid->setId('person-grid');
             $grid->setPerPage(5);
