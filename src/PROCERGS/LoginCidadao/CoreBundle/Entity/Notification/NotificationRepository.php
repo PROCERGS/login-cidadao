@@ -35,7 +35,7 @@ class NotificationRepository extends EntityRepository
             ->setParameter('person', $person)
             ->groupBy('c.id', 'c.name')
             ->orderBy('c.id', 'ASC')
-            ->getQuery()->getQuery()
+            ->getQuery()
             ->getResult();
     }
     
