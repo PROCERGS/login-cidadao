@@ -224,6 +224,13 @@ services:
         calls:
             - [setTranslator, ["@translator"]]
             
+    procergs_logincidadao.form.type.ajax_choice:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\AjaxChoiceType
+        tags:
+            - { name: form.type, alias: ajax_choice }
+        calls:
+            - [setTranslator, ["@translator"]]            
+            
     procergs_logincidadao.person.resume.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\PersonResumeFormType
         tags:

@@ -70,19 +70,14 @@ class NotificationsHelper
         return $this->context->getToken()->getUser();
     }
 
-    public function getUnreadExtreme()
-    {
-        return $this->getUnread(NotificationInterface::LEVEL_EXTREME);
-    }
-
     public function getUnread($level = null)
     {
         return $this->getRepository()->findAllUnread($this->getUser(), $level);
     }
-
-    public function getUnreadExcludeExtreme()
+    
+    public function getTotalUnread()
     {
-        return $this->getRepository()->findUnreadUpToLevel($this->getUser(), NotificationInterface::LEVEL_IMPORTANT);
+        return $this->getRepository()->getTotalUnread($this->getUser());
     }
 
     public function send(NotificationInterface $notification)

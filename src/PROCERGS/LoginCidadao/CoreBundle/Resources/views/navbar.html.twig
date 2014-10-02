@@ -70,28 +70,11 @@
             <li class="btn-group notifications pull-right">
                 <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans %}Notifications{% endtrans %}">
                     <i class="glyphicon glyphicon-bell">
-                    {% if notifications_helper.getUnreadExcludeExtreme is not empty %}
-                        <span class="label label-danger">{{ notifications_helper.getUnreadExcludeExtreme | length }}</span>
-                    {% endif %}
+                        <span class="label label-danger notification-total-unread-badge">{{ notifications_helper.getTotalUnread }}</span>
                     </i>
                 </button>
                 <ul class="dropdown-menu clearfix">
-                {% if notifications_helper.getUnread is not empty %}
-                    {% for notification in notifications_helper.getUnread if not notification.isExtreme %}
-                        {% if notification.resolveTarget is defined %}
-                            {#% set target = notification.resolveTarget(app_router) %#}
-                        {% else %}
-                            {% set target = url('lc_notifications_list') %}
-                        {% endif %}
-
-                    <li class="level-{{ notification.level }}">
-                        <a href="{{ target }}"><strong>{{ notification.title | trans }}</strong> - {{ notification.shortText | trans }}</a>
-                    </li>
-                    {% endfor %}
-                    <li class="text-center all"><a href="{{ url('lc_notifications_list') }}">{% trans %}View all notifications{% endtrans %}</a></li>
-                {% else %}
-                    <li class="none">{% trans %}You don't have any unread notification.{% endtrans %}</li>
-                {% endif %}
+                    {% render(controller("PROCERGSLoginCidadaoCoreBundle:Notification:gridNavbarUnread")) %}
                 </ul>
             </li>
         {% endif %}
