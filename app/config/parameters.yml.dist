@@ -47,8 +47,8 @@ parameters:
     registration.email.unconfirmed_time: '1 day'
     brute_force_threshold: 4
 
-    background_picture.author: 'Miriam Cardoso de Souza'
-    background_picture.link: 'http://www.flickr.com/photos/admiriam/10390118624/'
+    background_picture.author: 'Guilherme da Silva Donato'
+    background_picture.link: 'http://www.flickr.com/photos/lordjedi/2295119043/'
     mailer_receiver_mail: ~
     nfg_ws_url: ~
     soe_organization: ~

@@ -10,7 +10,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\InteractiveNotification;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category;
-use PROCERGS\LoginCidadao\CoreBundle\Exception\Notification\MissingCategory;
+use PROCERGS\LoginCidadao\CoreBundle\Exception\Notification\MissingCategoryException;
 
 class NotificationsHelper
 {
@@ -48,9 +48,7 @@ class NotificationsHelper
     private $unconfirmedEmailCategoryId;
     private $emptyPasswordCategoryId;
 
-    public function __construct(EntityManager $em, SecurityContext $context,
-                                $container, $unconfirmedEmailCategoryId,
-                                $emptyPasswordCategoryId)
+    public function __construct(EntityManager $em, SecurityContext $context, $container, $unconfirmedEmailCategoryId, $emptyPasswordCategoryId)
     {
         $this->em = $em;
         $this->context = $context;
@@ -84,8 +82,7 @@ class NotificationsHelper
 
     public function getUnreadExcludeExtreme()
     {
-        return $this->getRepository()->findUnreadUpToLevel($this->getUser(),
-                        NotificationInterface::LEVEL_IMPORTANT);
+        return $this->getRepository()->findUnreadUpToLevel($this->getUser(), NotificationInterface::LEVEL_IMPORTANT);
     }
 
     public function send(NotificationInterface $notification)
@@ -99,11 +96,7 @@ class NotificationsHelper
         }
     }
 
-    protected function getDefaultNotification(Person $person, $title,
-                                              $shortText, $text, $level, $icon,
-                                              Category $category,
-                                              $notification = null,
-                                              $parameters = null)
+    protected function getDefaultNotification(Person $person, $title, $shortText, $text, $level, $icon, Category $category, $notification = null, $parameters = null)
     {
         $persisted = $this->getRepository()->findOneBy(array('person' => $person, 'category' => $category));
         if ($persisted instanceof NotificationInterface) {
@@ -115,16 +108,15 @@ class NotificationsHelper
         }
 
         $text = strtr($text, $category->getPlaceholdersArray($parameters));
-        $shortText = strtr($shortText,
-                $category->getPlaceholdersArray($parameters));
+        $shortText = strtr($shortText, $category->getPlaceholdersArray($parameters));
 
         $notification->setPerson($person)
-                ->setIcon($icon)
-                ->setLevel($level)
-                ->setTitle($title)
-                ->setShortText($shortText)
-                ->setText($text)
-                ->setCategory($category);
+            ->setIcon($icon)
+            ->setLevel($level)
+            ->setTitle($title)
+            ->setShortText($shortText)
+            ->setText($text)
+            ->setCategory($category);
 
         return $notification;
     }
@@ -137,11 +129,9 @@ class NotificationsHelper
         $level = NotificationInterface::LEVEL_EXTREME;
         $icon = 'glyphicon glyphicon-envelope';
         $url = $this->container->get('router')
-                ->generate('lc_resend_confirmation_email');
+            ->generate('lc_resend_confirmation_email');
 
-        return $this->getDefaultNotification($person, $title, $shortText, $text,
-                        $level, $icon, $this->getUnconfirmedEmailCategory(),
-                        new Notification(), array('%url%' => $url));
+        return $this->getDefaultNotification($person, $title, $shortText, $text, $level, $icon, $this->getUnconfirmedEmailCategory(), new Notification(), array('%url%' => $url));
     }
 
     protected function getEmptyPasswordNotification(Person $person)
@@ -152,9 +142,7 @@ class NotificationsHelper
         $level = NotificationInterface::LEVEL_IMPORTANT;
         $icon = 'glyphicon glyphicon-exclamation-sign';
 
-        return $this->getDefaultNotification($person, $title, $shortText, $text,
-                        $level, $icon, $this->getEmptyPasswordCategory(),
-                        new Notification(), array());
+        return $this->getDefaultNotification($person, $title, $shortText, $text, $level, $icon, $this->getEmptyPasswordCategory(), new Notification(), array());
     }
 
     public function clearUnconfirmedEmailNotification(Person $person)
@@ -169,6 +157,10 @@ class NotificationsHelper
         $handler->patch($notification, array());
     }
 
+    /**
+     * @deprecated since version 1.1.0
+     * @param Person $person
+     */
     public function enforceUnconfirmedEmailNotification(Person $person)
     {
         $category = $this->getUnconfirmedEmailCategory();
@@ -182,6 +174,10 @@ class NotificationsHelper
         $handler->patch($notification, array());
     }
 
+    /**
+     * @deprecated since version 1.1.0
+     * @param Person $person
+     */
     public function enforceEmptyPasswordNotification(Person $person)
     {
         $category = $this->getEmptyPasswordCategory();
@@ -195,6 +191,10 @@ class NotificationsHelper
         $handler->patch($notification, array());
     }
 
+    /**
+     * @deprecated since version 1.1.0
+     * @param Person $person
+     */
     public function clearEmptyPasswordNotification(Person $person)
     {
         $handler = $this->getNotificationHandler();
@@ -212,7 +212,7 @@ class NotificationsHelper
     {
         $category = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')->find($this->unconfirmedEmailCategoryId);
         if (null === $category) {
-            throw new MissingCategory("missing category for unconfirmed email, please configure your db");
+            throw new MissingCategoryException("missing category for unconfirmed email, please configure your db");
         }
         return $category;
     }
@@ -221,7 +221,7 @@ class NotificationsHelper
     {
         $category = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')->find($this->emptyPasswordCategoryId);
         if (null === $category) {
-            throw new MissingCategory("missing category for empty password, please configure your db");
+            throw new MissingCategoryException("missing category for empty password, please configure your db");
         }
         return $category;
     }

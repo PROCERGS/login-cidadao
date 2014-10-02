@@ -100,19 +100,13 @@
     </div>
 </div>
 
-{% if app.user is not null and notifications_helper.getUnreadExtreme is not empty %}
-    {% for notification in notifications_helper.getUnreadExtreme %}
+{% if app.session.flashbag.peek('alert.unconfirmed.email') %}
+    {% set flashMessage = app.session.flashbag.get('alert.unconfirmed.email') | first %}
 <div class="notification-extreme alert alert-danger">
     <div class="container">
-        <strong>{{ notification.title | trans }}</strong>
-    {% if notification.resolveTarget is defined %}
-        {{ notification.shortText | trans({ '%url%': notification.resolveTarget(app_router) }) | raw }}
-    {% else %}
-        {{ notification.shortText | trans | raw }}
-    {% endif %}
+        {{ flashMessage | raw }}
     </div>
 </div>
-{% endfor %}
 {% endif %}
 {% if external is defined and external == true %}
 <script>
