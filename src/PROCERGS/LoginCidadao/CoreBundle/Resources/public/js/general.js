@@ -303,8 +303,8 @@ var lcAutoLoader = {
 				     +'<div class="modal-content">'
 					    +'<div class="modal-body">'
 					    //+'<div class="ajax-loader"/>'
-					    +'<img src="../../bundles/procergslogincidadaocore/images/ajax-loader.gif"/>'
-					    +'<span id="ajax-loader-timer" style="margin-left: 15px;"></span>'
+              +'<div class="ajax-loader"></div>'
+              +'<span id="ajax-loader-timer" style="margin-left: 15px; display:none"></span>'
 					    +'</div>'
 				     +'</div>'
 				    +'</div>'
@@ -366,9 +366,8 @@ function Pwindow(options) {
 		complete: function() {
 			$('#'+opts.id).modal('show');
 		}
-	};
-	
-	var opts = $.extend(true, {}, opts, options);
+	};	
+	opts = $.extend(true, {}, opts, options);
 	if (!$('#'+opts.id).length) {
 		var html = '<div id="'+opts.id+'" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="'+opts.label+'" aria-hidden="true">'+
 	    '<div class="modal-dialog"><div class="modal-content"></div></div></div>';
@@ -379,48 +378,68 @@ function Pwindow(options) {
 	}
 	$.ajax(opts);
 }
-var lcInfinityscrollNextButton = function() {
-	$(this).hide();
-	var _id = $(this).attr('data-retrive');
-	if (!$(_id).data('infinitescroll')) {
-		$(_id).infinitescroll({
-	    	debug: true,
-	        navSelector  : _id + ' .pagination',
-	        nextSelector : _id + ' .pagination a:last',
-	        itemSelector : _id + ' .row.common-grid-result',
-	        contentSelector: _id + ' .tab-pane.active',
-	        bufferPx     : 200,
-	        state : {
-	        	currPage: Number($(_id).attr('data-grid-currpage'))
-	        },
-	        loading: {	            
-	            msg: $('<div></div>'),
-	            img: null
-	        },
-	        pathParse: function (path, currPage) {
-	        	var matches = path.match(/^(.*[?|&]page=)\d+(.*|$)/);
-	        	if (matches) {
-	        		return matches.slice(1);
-	        	}
-	        }
-	    },
-	    function( newElements, data, url ) {
-	    	var isLast = false;
-	    	for (x in newElements) {
-	    		if (isLast = newElements[x].classList.contains("row-last")) {
-	    			break;
-	    		}
-	    	}
-	    	if (!isLast) {
-	    		$(_id+' .infinityscroll-next-button').show();
-	    	}
-	        window.console && console.log('context: ',this);
-			window.console && console.log('returned: ', newElements);
-	    });
-	    $(window).unbind('.infscr');
-    }
-	$($(this).attr('data-retrive')).infinitescroll('retrieve');
-};
+var lcInfinityGrid = {
+	"scrollNextButton" : function() {
+		$(this).hide();
+		lcInfinityGrid.common($(this).attr('data-retrive'));
+		$($(this).attr('data-retrive')).infinitescroll('retrieve');
+	},
+	"common" : function(_id) {
+		if (!$(_id).data('infinitescroll')) {
+			var opts = {
+			    	debug: true,
+			        navSelector  : _id + ' .pagination',
+			        nextSelector : _id + ' .pagination a:last',
+			        itemSelector : _id + ' .row.common-grid-result',
+			        contentSelector: _id + ' .tab-pane.active',
+			        bufferPx     : 0,
+			        state : {
+			        	currPage: Number($(_id).attr('data-grid-currpage'))
+			        },
+			        loading: {	            
+			            msg: $('<div></div>'),
+			            img: null
+			        },
+			        pathParse: function (path, currPage) {
+			        	var matches = path.match(/^(.*[?|&]page=)\d+(.*|$)/);
+			        	if (matches) {
+			        		return matches.slice(1);
+			        	}
+			        }
+			    };
+			var extraOpts = $(_id).data('grid-extra-opts');
+			if (extraOpts) {
+				if (extraOpts.binder) {
+					extraOpts.binder = $(extraOpts.binder);
+				}
+			}
+			opts = $.extend(true, {}, opts, extraOpts);
+			$(_id).infinitescroll(opts,
+		    function( newElements, data, url ) {
+		    	var isLast = false;
+		    	for (x in newElements) {
+		    		if (isLast = newElements[x].classList.contains("row-last")) {
+		    			break;
+		    		}
+		    	}
+		    	if (!isLast) {
+		    		$(_id+' .infinityscroll-next-button').show();
+		    	}
+				/*
+				 * window.console && console.log('context: ',this);
+				 * window.console && console.log('returned: ', newElements);
+				 */		    });
+			if (extraOpts && extraOpts.behavior && extraOpts.behavior == 'local') {
+/*				console.log('here');*/
+			} else {
+				$(window).unbind('.infscr');
+			}
+	    }
+	},
+	"startUp" : function() {
+		lcInfinityGrid.common('#'+$(this).attr('id'));
+	}
+}
 $(function() {
 
     // add bootstrap classes to forms
@@ -469,6 +488,8 @@ $(function() {
     		}
         });
     });
-    $(document).on('click', '.infinityscroll-next-button' , lcInfinityscrollNextButton);
+    $(document).on('click', '.infinityscroll-next-button' , lcInfinityGrid.scrollNextButton);
+    $('[data-infinity-grid="true"]').each(lcInfinityGrid.startUp);
     $("[data-enable-switch='1']").bootstrapSwitch();    
 });
+
