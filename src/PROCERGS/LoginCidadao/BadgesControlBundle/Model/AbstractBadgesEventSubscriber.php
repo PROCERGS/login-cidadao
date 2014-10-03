@@ -11,10 +11,21 @@ abstract class AbstractBadgesEventSubscriber implements EventSubscriberInterface
 {
 
     protected $badges = array();
+    protected $name;
 
     abstract public function onBadgeEvaluate(EvaluateBadgesEvent $event);
 
-    abstract public function getName();
+    public function setName($name)
+    {
+        $this->name = $name;
+        
+        return $this;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
 
     public function getAvailableBadges()
     {
