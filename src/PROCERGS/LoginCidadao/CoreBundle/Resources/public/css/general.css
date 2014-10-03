@@ -196,10 +196,11 @@ footer .copyright {
 }
 
 .form-control, #recaptcha_response_field {
-    background-color: #999999;
+    /*background-color: #999999;
     border: none;
     border-radius: 0;
-    color: #FFF;
+    color: #FFF;*/
+    border-radius: 0;
 }
 
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
