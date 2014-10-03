@@ -1,14 +1,14 @@
 parameters:
     badges.handler.class: PROCERGS\LoginCidadao\BadgesControlBundle\Handler\BadgesHandler
-    procergs_login_cidadao_badges.subscriber.class: PROCERGS\LoginCidadao\BadgesControlBundle\Event\BadgesSubscriber
+    procergs_login_cidadao_badges_control.subscriber.class: PROCERGS\LoginCidadao\BadgesControlBundle\Event\BadgesSubscriber
 
 services:
     badges.handler:
         class: %badges.handler.class%
         arguments: [ @event_dispatcher ]
     
-    procergs_login_cidadao_badges.subscriber:
-        class: %procergs_login_cidadao_badges.subscriber.class%
+    procergs_login_cidadao_badges_control.subscriber:
+        class: %procergs_login_cidadao_badges_control.subscriber.class%
         arguments: [ @badges.handler ]
         tags:
             - { name: kernel.event_subscriber }
