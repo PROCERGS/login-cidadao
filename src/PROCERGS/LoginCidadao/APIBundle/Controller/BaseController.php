@@ -14,7 +14,7 @@ class BaseController extends FOSRestController
 
     protected function renderWithContext($content)
     {
-        $person = $this->preparePerson($this->getUser());
+        $person = $this->getUser();
         $scope = $this->getClientScope($person);
 
         $view = $this->view($content)
@@ -22,22 +22,10 @@ class BaseController extends FOSRestController
         return $this->handleView($view);
     }
 
-    protected function preparePerson(Person $person)
-    {
-        $imgHelper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
-        $templateHelper = $this->get('templating.helper.assets');
-        $isDev = $this->get('kernel')->getEnvironment() === 'dev';
-        $person->prepareAPISerialize($imgHelper, $templateHelper, $isDev,
-                $this->getRequest());
-
-        return $person;
-    }
-
     protected function serializePerson($person, $scope)
     {
-        $person = $this->preparePerson($person, $scope);
-        die(print_r($scope));
-        $serializer = $this->container->get('jms_serializer');
+        $person = $this->getUser();
+        $serializer = $this->get('jms_serializer');
         return $serializer->serialize($person, 'json',
                         SerializationContext::create()->setGroups($scope));
     }

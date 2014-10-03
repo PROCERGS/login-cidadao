@@ -8,7 +8,7 @@ use PROCERGS\LoginCidadao\BadgesControlBundle\Handler\BadgesHandler;
 
 class BadgesSubscriber implements EventSubscriberInterface
 {
-    
+
     /** @var BadgesHandler */
     protected $handler;
 
@@ -16,7 +16,7 @@ class BadgesSubscriber implements EventSubscriberInterface
     {
         $this->handler = $handler;
     }
-    
+
     public static function getSubscribedEvents()
     {
         return array(

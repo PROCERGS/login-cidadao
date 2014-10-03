@@ -40,7 +40,7 @@ class PersonController extends BaseController
      */
     public function selfAction()
     {
-        $person = $this->preparePerson($this->getUser());
+        $person = $this->getUser();
         $scope = $this->getClientScope($person);
 
         $view = $this->view($person)
@@ -83,7 +83,7 @@ class PersonController extends BaseController
                 $lastUpdatedAt);
         $person = $this->runTimeLimited($callback);
         $context = SerializationContext::create()->setGroups($scope);
-        $view = $this->view($this->preparePerson($person))
+        $view = $this->view($person)
                 ->setSerializationContext($context);
         return $this->handleView($view);
     }

@@ -383,7 +383,11 @@ class Person extends BaseUser implements PersonInterface
      */
     protected $notificationOptions;
 
-    /** @var array * */
+    /**
+     * @JMS\Expose
+     * @JMS\Groups({"badges", "public_profile"})
+     * @var array
+     */
     protected $badges = array();
 
     public function __construct()
@@ -591,7 +595,7 @@ class Person extends BaseUser implements PersonInterface
     /**
      * @JMS\Groups({"badges", "public_profile"})
      * @JMS\VirtualProperty
-     * @JMS\SerializedName("badges")
+     * @JMS\SerializedName("badges_old")
      * @return array
      */
     public function getDataValid()

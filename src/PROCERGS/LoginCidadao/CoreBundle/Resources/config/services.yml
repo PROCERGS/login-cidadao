@@ -28,6 +28,8 @@ parameters:
 
     procergs.notification.handler.class: PROCERGS\LoginCidadao\CoreBundle\Handler\NotificationHandler
     procergs.notification.class: PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification
+    
+    procergs.person.serialize.listenner.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\PersonSerializeEventListenner
 
 services:
     procergs_lc.command.populate_database:
@@ -259,3 +261,10 @@ services:
         arguments: [ "@doctrine.orm.entity_manager", %procergs.notification.class%, "@form.factory" ]
         tags:
             - { name: "security.secure_service" }
+
+    procergs.person.serialize.listenner:
+        class: %procergs.person.serialize.listenner.class%
+        scope: request
+        arguments: [ @vich_uploader.templating.helper.uploader_helper, @templating.helper.assets, @kernel, @request ]
+        tags:
+            - { name: jms_serializer.event_listener, event: serializer.pre_serialize, method: onPreSerialize }
