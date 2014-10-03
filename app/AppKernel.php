@@ -41,7 +41,7 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             
-            new PROCERGS\LoginCidadao\BadgesBundle\PROCERGSLoginCidadaoBadgesBundle(),
+            new PROCERGS\LoginCidadao\BadgesControlBundle\PROCERGSLoginCidadaoBadgesControlBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
