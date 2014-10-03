@@ -42,6 +42,7 @@ class AppKernel extends Kernel
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             
             new PROCERGS\LoginCidadao\BadgesControlBundle\PROCERGSLoginCidadaoBadgesControlBundle(),
+            new PROCERGS\LoginCidadao\BadgesBundle\PROCERGSLoginCidadaoBadgesBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

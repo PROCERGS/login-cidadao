@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "146c4b368293fef48626a446afc94186",
+    "hash": "8151c4b1286c5ff40cb7273e6656ec47",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -776,12 +776,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSOAuthServerBundle.git",
-                "reference": "414f0e1a4beabf811e63e096f5b37305ceac7b41"
+                "reference": "18eac304b53a2fa16bca5e2f2bdcc6cf6a88aa03"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSOAuthServerBundle/zipball/414f0e1a4beabf811e63e096f5b37305ceac7b41",
-                "reference": "414f0e1a4beabf811e63e096f5b37305ceac7b41",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSOAuthServerBundle/zipball/18eac304b53a2fa16bca5e2f2bdcc6cf6a88aa03",
+                "reference": "18eac304b53a2fa16bca5e2f2bdcc6cf6a88aa03",
                 "shasum": ""
             },
             "require": {
@@ -836,7 +836,7 @@
                 "oauth2",
                 "server"
             ],
-            "time": "2014-05-21 08:33:09"
+            "time": "2014-09-16 00:41:15"
         },
         {
             "name": "friendsofsymfony/oauth2-php",
@@ -970,30 +970,29 @@
         {
             "name": "friendsofsymfony/user-bundle",
             "version": "dev-master",
-            "target-dir": "FOS/UserBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "094bea6f318fbb067db3ddf6d26a62af0bf13442"
+                "reference": "96e4542c751e074ac018ff9e8915a444f16bd92f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/094bea6f318fbb067db3ddf6d26a62af0bf13442",
-                "reference": "094bea6f318fbb067db3ddf6d26a62af0bf13442",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/96e4542c751e074ac018ff9e8915a444f16bd92f",
+                "reference": "96e4542c751e074ac018ff9e8915a444f16bd92f",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
-                "symfony/form": "~2.1",
-                "symfony/framework-bundle": "~2.1",
-                "symfony/security-bundle": "~2.1"
+                "symfony/form": "~2.3",
+                "symfony/framework-bundle": "~2.3",
+                "symfony/security-bundle": "~2.3",
+                "symfony/twig-bundle": "~2.3"
             },
             "require-dev": {
                 "doctrine/doctrine-bundle": "*",
                 "swiftmailer/swiftmailer": ">=4.3, <6.0",
-                "symfony/validator": "~2.1",
-                "symfony/yaml": "~2.1",
-                "twig/twig": "~1.5",
+                "symfony/validator": "~2.3",
+                "symfony/yaml": "~2.3",
                 "willdurand/propel-typehintable-behavior": "dev-master"
             },
             "suggest": {
@@ -1006,8 +1005,8 @@
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "FOS\\UserBundle": ""
+                "psr-4": {
+                    "FOS\\UserBundle\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1033,7 +1032,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2014-08-23 11:32:38"
+            "time": "2014-09-29 09:47:47"
         },
         {
             "name": "guilhermednt/hwi-oauth-proxy-bundle",
@@ -2136,12 +2135,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "8fe99a9c451f4ee491a41671108fedcf1d583937"
+                "reference": "3889e7ff245dde6ad802e3c61d73fdf1bf4d3329"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/8fe99a9c451f4ee491a41671108fedcf1d583937",
-                "reference": "8fe99a9c451f4ee491a41671108fedcf1d583937",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/3889e7ff245dde6ad802e3c61d73fdf1bf4d3329",
+                "reference": "3889e7ff245dde6ad802e3c61d73fdf1bf4d3329",
                 "shasum": ""
             },
             "require": {
@@ -2202,7 +2201,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2014-09-04 08:12:53"
+            "time": "2014-09-29 15:12:56"
         },
         {
             "name": "phpcollection/phpcollection",
@@ -2302,6 +2301,48 @@
                 "type"
             ],
             "time": "2014-01-09 22:37:17"
+        },
+        {
+            "name": "procergs/login-cidadao-badges-bundle",
+            "version": "dev-master",
+            "target-dir": "PROCERGS/LoginCidadao/BadgesBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PROCERGS/login-cidadao-badges-bundle.git",
+                "reference": "06f7ccd767611e38ea83c43f1d3ea3c59c350a2f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/06f7ccd767611e38ea83c43f1d3ea3c59c350a2f",
+                "reference": "06f7ccd767611e38ea83c43f1d3ea3c59c350a2f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "PROCERGS\\LoginCidadao\\BadgesBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guilherme Donato",
+                    "email": "packagist@cadastro.dona.to"
+                }
+            ],
+            "description": "Login Cidadão's Badge Bundle",
+            "homepage": "https://github.com/PROCERGS/login-cidadao-badges-bundle",
+            "keywords": [
+                "badges",
+                "login-cidadao"
+            ],
+            "time": "2014-10-03 14:49:26"
         },
         {
             "name": "psr/log",
@@ -3192,7 +3233,8 @@
         "knplabs/knp-gaufrette-bundle": 20,
         "knplabs/gaufrette": 20,
         "nelmio/api-doc-bundle": 20,
-        "jms/security-extra-bundle": 20
+        "jms/security-extra-bundle": 20,
+        "procergs/login-cidadao-badges-bundle": 20
     },
     "prefer-stable": false,
     "platform": {
