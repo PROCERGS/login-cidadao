@@ -595,7 +595,7 @@ class Person extends BaseUser implements PersonInterface
     /**
      * @JMS\Groups({"badges", "public_profile"})
      * @JMS\VirtualProperty
-     * @JMS\SerializedName("badges_old")
+     * @JMS\SerializedName("deprecated_badges")
      * @return array
      */
     public function getDataValid()
