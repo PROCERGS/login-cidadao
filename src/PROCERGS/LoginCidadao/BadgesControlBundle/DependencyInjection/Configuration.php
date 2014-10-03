@@ -1,6 +1,6 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\BadgesBundle\DependencyInjection;
+namespace PROCERGS\LoginCidadao\BadgesControlBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

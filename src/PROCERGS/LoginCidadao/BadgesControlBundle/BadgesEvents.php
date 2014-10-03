@@ -1,6 +1,6 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\BadgesBundle;
+namespace PROCERGS\LoginCidadao\BadgesControlBundle;
 
 final class BadgesEvents
 {
@@ -10,7 +10,7 @@ final class BadgesEvents
      * to evaluate the badges for a Person object.
      * 
      * The event listener receives an
-     * PROCERGS\LoginCidadao\BadgesBundle\Event\EvaluateBadgesEvent instance
+     * PROCERGS\LoginCidadao\BadgesControlBundle\Event\EvaluateBadgesEvent instance
      * 
      * @var string
      */
@@ -21,7 +21,7 @@ final class BadgesEvents
      * to list the available badges of the application.
      * 
      * The event listener receives an
-     * PROCERGS\LoginCidadao\BadgesBundle\Event\ListBadgesEvent instance
+     * PROCERGS\LoginCidadao\BadgesControlBundle\Event\ListBadgesEvent instance
      * 
      * @var string
      */
@@ -32,7 +32,7 @@ final class BadgesEvents
      * an evaluator is registered.
      * 
      * The event listener receives an
-     * PROCERGS\LoginCidadao\BadgesBundle\Model\BadgeEvaluatorInterface instance
+     * PROCERGS\LoginCidadao\BadgesControlBundle\Model\BadgeEvaluatorInterface instance
      * 
      * @var string
      */

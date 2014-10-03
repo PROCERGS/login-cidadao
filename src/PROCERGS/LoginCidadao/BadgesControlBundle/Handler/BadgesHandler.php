@@ -1,13 +1,13 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\BadgesBundle\Handler;
+namespace PROCERGS\LoginCidadao\BadgesControlBundle\Handler;
 
-use PROCERGS\LoginCidadao\BadgesBundle\Model\BadgeEvaluatorInterface;
+use PROCERGS\LoginCidadao\BadgesControlBundle\Model\BadgeEvaluatorInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
-use PROCERGS\LoginCidadao\BadgesBundle\BadgesEvents;
-use PROCERGS\LoginCidadao\BadgesBundle\Event\ListBadgesEvent;
-use PROCERGS\LoginCidadao\BadgesBundle\Event\EvaluateBadgesEvent;
+use PROCERGS\LoginCidadao\BadgesControlBundle\BadgesEvents;
+use PROCERGS\LoginCidadao\BadgesControlBundle\Event\ListBadgesEvent;
+use PROCERGS\LoginCidadao\BadgesControlBundle\Event\EvaluateBadgesEvent;
 
 class BadgesHandler
 {

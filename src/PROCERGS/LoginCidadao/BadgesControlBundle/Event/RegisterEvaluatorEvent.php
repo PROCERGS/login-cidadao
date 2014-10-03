@@ -1,9 +1,9 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\BadgesBundle\Event;
+namespace PROCERGS\LoginCidadao\BadgesControlBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
-use PROCERGS\LoginCidadao\BadgesBundle\Model\BadgeEvaluatorInterface;
+use PROCERGS\LoginCidadao\BadgesControlBundle\Model\BadgeEvaluatorInterface;
 
 class RegisterEvaluatorEvent extends Event
 {

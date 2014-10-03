@@ -1,10 +1,10 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\BadgesBundle\Event;
+namespace PROCERGS\LoginCidadao\BadgesControlBundle\Event;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use PROCERGS\LoginCidadao\BadgesBundle\BadgesEvents;
-use PROCERGS\LoginCidadao\BadgesBundle\Handler\BadgesHandler;
+use PROCERGS\LoginCidadao\BadgesControlBundle\BadgesEvents;
+use PROCERGS\LoginCidadao\BadgesControlBundle\Handler\BadgesHandler;
 
 class BadgesSubscriber implements EventSubscriberInterface
 {

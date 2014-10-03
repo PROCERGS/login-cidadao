@@ -1,11 +1,11 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\BadgesBundle\Model;
+namespace PROCERGS\LoginCidadao\BadgesControlBundle\Model;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use PROCERGS\LoginCidadao\BadgesBundle\BadgesEvents;
-use PROCERGS\LoginCidadao\BadgesBundle\Event\ListBadgesEvent;
-use PROCERGS\LoginCidadao\BadgesBundle\Event\EvaluateBadgesEvent;
+use PROCERGS\LoginCidadao\BadgesControlBundle\BadgesEvents;
+use PROCERGS\LoginCidadao\BadgesControlBundle\Event\ListBadgesEvent;
+use PROCERGS\LoginCidadao\BadgesControlBundle\Event\EvaluateBadgesEvent;
 
 abstract class AbstractBadgesEventSubscriber implements EventSubscriberInterface, BadgeEvaluatorInterface
 {

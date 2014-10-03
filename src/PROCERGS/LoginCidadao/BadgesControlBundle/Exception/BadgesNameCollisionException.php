@@ -1,6 +1,6 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\BadgesBundle\Exception;
+namespace PROCERGS\LoginCidadao\BadgesControlBundle\Exception;
 
 class BadgesNameCollisionException extends \Exception
 {
