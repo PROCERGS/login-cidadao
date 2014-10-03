@@ -59,7 +59,6 @@ class NotificationType extends AbstractType
                         array('required' => false, 'widget' => 'single_text'))
                 ->add('readDate', 'datetime',
                         array('required' => false, 'widget' => 'single_text'))
-                ->add('isRead')
                 ->add('person', 'entity',
                         array(
                     'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',

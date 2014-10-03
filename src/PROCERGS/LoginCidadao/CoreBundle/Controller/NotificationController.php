@@ -19,50 +19,6 @@ class NotificationController extends Controller
 {
 
     /**
-     * @Route("/list", name="lc_notifications_list")
-     * @Template()
-     */
-    public function listAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $notifications = $em->getRepository("PROCERGSLoginCidadaoCoreBundle:Notification\Notification")
-                ->findBy(array('person' => $this->getUser()));
-
-        return compact('notifications');
-    }
-
-    /**
-     * @Route("/read", name="lc_notifications_read")
-     * @Template()
-     */
-    public function readAction(Request $request)
-    {
-        $notificationId = $request->get('notification');
-
-        $em = $this->getDoctrine()->getManager();
-        $notifications = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification');
-
-        $data = array('status' => 0, 'message' => 'Error');
-
-        try {
-            $notification = $notifications->find($notificationId);
-            if ($notification && !$notification->isExtreme()) {
-                $notification->setIsRead(true);
-                $em->flush();
-                $data = array('status' => 1, 'message' => 'Done');
-            }
-
-        } catch (\Exception $e) {
-            $data = array('status' => 0, 'message' => 'Error');
-        }
-
-        $response = new JsonResponse();
-        $response->setData($data);
-
-        return $response;
-    }
-    /**
      * @Route("/inbox/sidebar", name="lc_not_inbox_sidebar")
      * @Template()
      */
@@ -85,10 +41,10 @@ class NotificationController extends Controller
         ->getManager ()
         ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
         ->createQueryBuilder('n')
-        ->select('n.id, n.isRead isread, n.title, n.shortText shorttext, n.createdAt createdat, c.name client_name')
+        ->select('n.id, case when n.readDate is null then false else true end isread, n.title, n.shortText shorttext, n.createdAt createdat, c.name client_name')
         ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
-        ->where('n.person = :person and n.isRead = false')
+        ->where('n.person = :person and n.readDate is null')
         ->setParameter('person', $this->getUser())
         ->orderBy('n.id', 'DESC');
         
@@ -118,7 +74,7 @@ class NotificationController extends Controller
         ->getManager ()
         ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
         ->createQueryBuilder('n')
-        ->select('n.id, n.isRead isread, n.title, n.shortText shorttext, n.createdAt createdat, c.name client_name')
+        ->select('n.id, case when n.readDate is null then false else true end isread, n.title, n.shortText shorttext, n.createdAt createdat, c.name client_name')
         ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
         ->where('n.person = :person')
@@ -182,7 +138,7 @@ class NotificationController extends Controller
         ->getManager ()
         ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
         ->createQueryBuilder('n')
-        ->select('n.id, n.isRead isread, n.title, n.shortText shorttext, n.createdAt createdat, c.name client_name')
+        ->select('n.id, case when n.readDate is null then false else true end isread, n.title, n.shortText shorttext, n.createdAt createdat, c.name client_name')
         ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
         ->where('n.person = :person and cnc.id = :configNotCli')
@@ -224,8 +180,8 @@ class NotificationController extends Controller
      */
     public function show2Action(Request $request)
     {
-        $resultset = $this->getDoctrine()
-        ->getManager ()
+        $em = $this->getDoctrine()->getManager ();
+        $resultset = $em
         ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
         ->createQueryBuilder('n')
         ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
@@ -236,10 +192,10 @@ class NotificationController extends Controller
         ->getQuery()->getOneOrNullResult();
         $a = array('wasread' => false, 'htmltpl' => null);
         if ($resultset) {
-            if (!$resultset->getIsRead()) {
-                $resultset->setIsRead(true);
-                $this->getDoctrine()->getManager()->persist($resultset);
-                $this->getDoctrine()->getManager()->flush();
+            if (!$resultset->isRead()) {
+                $resultset->setReadDate(new \DateTime());
+                $em->persist($resultset);
+                $em->flush();
                 $a['wasread'] = true;
             }
             $a['htmltpl'] = $resultset->getHtmlTpl();

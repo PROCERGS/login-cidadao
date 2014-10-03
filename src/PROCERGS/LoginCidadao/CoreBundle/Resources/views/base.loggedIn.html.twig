@@ -40,19 +40,11 @@
                             <i class="glyphicon glyphicon-th pull-right"></i>
                         </span></a>
                 </li>
-                <li class="notifications glyph {{ app.request.attributes.get('_route') == 'lc_notifications_list' ? 'active' }}">
-                    <a href="{{ path('lc_notifications_list') }}">
-                        <span>
-                            {% trans %}Notifications{% endtrans %}
-                            <i class="glyphicon glyphicon-bell pull-right"></i>
-                        </span>
-                    </a>
-                </li>
                 <li class="services glyph">
                     <a href="{{ path('lc_not_inbox') }}">
                         <span>
-                            {{ 'Notification 2'|trans() }}
-                            <i class="glyphicon glyphicon-th pull-right"></i>
+                            {% trans %}Notifications{% endtrans %}
+                            <i class="glyphicon glyphicon-bell pull-right"></i>
                         </span></a>
                 </li>
                 <li class="username {{ app.request.attributes.get('_route') == 'lc_update_username' ? 'active' }}">
@@ -72,19 +64,21 @@
                     <a href="{{ path('lc_admin') }}">
                         <span>
                             {{ 'admin.area'|trans() }}
-                            <i class="glyphicon glyphicon-th pull-right"></i>
+                            <i class="glyphicon glyphicon-tasks pull-right"></i>
                         </span>
                     </a>
                 </li>
                 {% endif %}
-                {# <li class="settings glyph">
-                    <a href="">
+                {% if app.user is not null and is_granted('ROLE_DEV') %}
+                <li class="services glyph">
+                    <a href="{{ path('lc_dev') }}">
                         <span>
-                            {% trans %}Settings{% endtrans %}
-                            <i class="glyphicon glyphicon-cog pull-right"></i>
+                            {{ 'developer.area'|trans() }}
+                            <i class="glyphicon glyphicon-wrench pull-right"></i>
                         </span>
                     </a>
-                </li> #}
+                </li>
+                {% endif %}                
             </ul>
 
             {# <div class="progress-box">

@@ -13,12 +13,12 @@ class NotificationRepository extends EntityRepository
     {
         if (is_null($level)) {
             return $this->getEntityManager()
-                            ->createQuery('SELECT n FROM PROCERGSLoginCidadaoCoreBundle:Notification\Notification n WHERE n.person = :person AND n.isRead = false')
+                            ->createQuery('SELECT n FROM PROCERGSLoginCidadaoCoreBundle:Notification\Notification n WHERE n.person = :person AND n.dateRead is null')
                             ->setParameter('person', $person)
                             ->getResult();
         } else {
             return $this->getEntityManager()
-                            ->createQuery('SELECT n FROM PROCERGSLoginCidadaoCoreBundle:Notification\Notification n WHERE n.person = :person AND n.isRead = false AND n.level = :level')
+                            ->createQuery('SELECT n FROM PROCERGSLoginCidadaoCoreBundle:Notification\Notification n WHERE n.person = :person AND n.dateRead is null AND n.level = :level')
                             ->setParameter('person', $person)
                             ->setParameter('level', $level)
                             ->getResult();
@@ -27,7 +27,7 @@ class NotificationRepository extends EntityRepository
     
     public function getTotalUnreadGroupByClient($person) {
         return $this->getEntityManager()->createQueryBuilder('n')
-            ->select('c.id, c.name, CountIf(n.isRead != true) total')
+            ->select('c.id, c.name, CountIf(n.readDate is null) total')
             ->from('PROCERGSLoginCidadaoCoreBundle:Notification\Notification', 'n')
             ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
             ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
@@ -41,7 +41,7 @@ class NotificationRepository extends EntityRepository
     
     public function getTotalUnread($person) {
         return $this->getEntityManager()->createQueryBuilder('n')
-        ->select('CountIf(n.isRead != true) total')
+        ->select('CountIf(n.readDate is null) total')
         ->from('PROCERGSLoginCidadaoCoreBundle:Notification\Notification', 'n')
         ->where('n.person = :person')
         ->setParameter('person', $person)
@@ -55,7 +55,7 @@ class NotificationRepository extends EntityRepository
             return $this->findAllUnread($person);
         } else {
             return $this->getEntityManager()
-                            ->createQuery('SELECT n FROM PROCERGSLoginCidadaoCoreBundle:Notification\Notification n WHERE n.person = :person AND n.isRead = false AND n.level <= :level')
+                            ->createQuery('SELECT n FROM PROCERGSLoginCidadaoCoreBundle:Notification\Notification n WHERE n.person = :person AND n.readDate is null AND n.level <= :level')
                             ->setParameter('person', $person)
                             ->setParameter('level', $maxLevel)
                             ->getResult();

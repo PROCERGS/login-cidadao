@@ -80,7 +80,7 @@ class Notification implements NotificationInterface
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="createdAt", type="datetime")
+     * @ORM\Column(name="created_at", type="datetime")
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */
@@ -89,20 +89,11 @@ class Notification implements NotificationInterface
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="readDate", type="datetime", nullable=true)
+     * @ORM\Column(name="read_date", type="datetime", nullable=true)
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */
     private $readDate;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="isRead", type="boolean")
-     * @JMS\Expose
-     * @JMS\Groups({"public"})
-     */
-    private $isRead;
 
     /**
      * @var int
@@ -319,30 +310,13 @@ class Notification implements NotificationInterface
     }
 
     /**
-     * Set isRead
-     *
-     * @param boolean $isRead
-     * @return Notification
+     * @JMS\Groups({"public"})
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("isRead")
      */
-    public function setIsRead($isRead)
+    public function isRead()
     {
-        $this->isRead = $isRead;
-        if (!$isRead) {
-            $this->setReadDate(null);
-        } else {
-            $this->setReadDate(new \DateTime());
-        }
-        return $this;
-    }
-
-    /**
-     * Get isRead
-     *
-     * @return boolean
-     */
-    public function getIsRead()
-    {
-        return $this->isRead;
+        return (null !== $this->readDate);
     }
 
     public function wasRead()
