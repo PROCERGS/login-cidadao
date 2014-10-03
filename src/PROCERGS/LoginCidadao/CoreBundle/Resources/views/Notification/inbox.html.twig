@@ -27,19 +27,22 @@
 </div>
 <style>
 .notification-read {
-    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9) !important;
+    background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;
     color: #222222;
-    border: 1px groove #98bf21;
-    border-bottom: none;
+    border: thin groove #98bf21;
     padding:3px;
 }
 .notification-unread {
     /*background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;*/
-    background: none repeat scroll 0 0 rgba(161, 178, 210, 0.62) !important;
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9) !important;
     border-bottom: none;
     color: #222222;
-    border: 1px groove #98bf21;
+    border: thin groove #98bf21;
     padding:3px;
+}
+
+.common-grid-result + .common-grid-result {
+  border-top: none;
 }
 </style>
 {% endblock %}

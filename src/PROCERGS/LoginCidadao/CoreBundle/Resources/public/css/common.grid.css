@@ -24,7 +24,7 @@
 
 .common-grid-results .common-grid-result {
     background-color: #f0f0f0;
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
     padding: 10px 0;
 }
 
@@ -34,11 +34,12 @@
     }
     .common-grid-results .header {
         display: block;
+        padding: 10px 0;
     }
     .common-grid-results .common-grid-result {
         margin-bottom: 0 !important;
     }
-	.label-action-column-grid {
+  .label-action-column-grid {
         display: none;
     }
 }
