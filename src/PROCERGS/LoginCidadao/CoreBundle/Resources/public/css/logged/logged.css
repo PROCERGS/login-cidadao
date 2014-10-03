@@ -30,8 +30,9 @@
     cursor: default;
 }
 
-.settings-nav li a:hover {
-    background-color: #c7d6cb;
+.settings-nav li a:hover, .settings-nav .open > a {
+    background-image: none;
+    background-color: #c7d6cb!important;
     color: #696969 !important;
 }
 
@@ -103,6 +104,18 @@
     right: 5px;
 }
 
+.settings-nav .glyph>a .caret {
+  width: 0;
+}
+
+.settings-nav .glyph>a .notification-count {
+  width: auto;
+}
+
+.settings-nav .dropdown-menu {
+  width: 100%;
+}
+
 .progress-box {
     background-color: #dddedc;
     margin-top: 15px;
@@ -160,6 +173,7 @@
   }
 
   .settings-nav {
+    min-width: 200px;
     padding: 0;
     position: absolute;
     z-index: 100;
@@ -269,7 +283,7 @@
     text-shadow: 0px 0px 2px #f00;
 }
 
-#profile-edit .connect:hover {
+#profile-edit .connect a:hover {
     text-decoration: none;
 }
 
