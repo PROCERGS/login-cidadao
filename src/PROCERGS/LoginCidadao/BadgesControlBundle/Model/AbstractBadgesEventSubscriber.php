@@ -10,11 +10,16 @@ use PROCERGS\LoginCidadao\BadgesControlBundle\Event\EvaluateBadgesEvent;
 abstract class AbstractBadgesEventSubscriber implements EventSubscriberInterface, BadgeEvaluatorInterface
 {
 
+    protected $badges = array();
+
     abstract public function onBadgeEvaluate(EvaluateBadgesEvent $event);
 
     abstract public function getName();
 
-    abstract public function getAvailableBadges();
+    public function getAvailableBadges()
+    {
+        return $this->badges;
+    }
 
     public static function getSubscribedEvents()
     {
@@ -27,6 +32,14 @@ abstract class AbstractBadgesEventSubscriber implements EventSubscriberInterface
     public function onBadgeListAvailable(ListBadgesEvent $event)
     {
         $event->registerBadges($this);
+    }
+
+    protected function registerBadge($name, $description, $extras = null)
+    {
+        if (is_null($extras)) {
+            $extras = array();
+        }
+        $this->badges[$name] = array_merge(compact('description'), $extras);
     }
 
 }
