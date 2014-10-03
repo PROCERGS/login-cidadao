@@ -209,20 +209,20 @@ footer .copyright {
 }
 
 .form-control:-moz-placeholder, #recaptcha_response_field:-moz-placeholder {
-  color: #FFF;
+  color: #555;
 }
 
 .form-control::-moz-placeholder, #recaptcha_response_field::-moz-placeholder {
-  color: #FFF;
+  color: #555;
   opacity: 1;
 }
 
 .form-control:-ms-input-placeholder, #recaptcha_response_field:-ms-input-placeholder {
-  color: #FFF;
+  color: #555;
 }
 
 .form-control::-webkit-input-placeholder, #recaptcha_response_field::-webkit-input-placeholder {
-  color: #FFF;
+  color: #555;
 }
 
 .progress-box .progress {
