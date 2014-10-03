@@ -1,6 +1,6 @@
 /* settings nav and content */
 .settings-nav .nav, .settings-content .content{
-    background-color: #dddedc;
+    background-color: #F1F1F1;
     min-height: 422px;
 }
 
@@ -59,11 +59,11 @@
     padding-right: 8px;
 }
 
-/*.settings-nav .glyph>a span {
+.settings-nav .glyph>a span {
     width: 100%;
     vertical-align: middle;
     line-height: 30px;
-}*/
+}
 
 .settings-nav li .glyphicon {
     color: #696969;
@@ -274,7 +274,8 @@
 }
 
 #profile-edit .connect.disabled {
-    background-color: #999999;
+    /*background-color: #999999;*/
+    background-color: #696969;
 }
 #profile-edit .connect.disabled a {
     color: #fff;
@@ -287,7 +288,7 @@
     margin-top: 10px;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;    
+    text-overflow: ellipsis;
 }
 
 #profile-edit .twitter {
@@ -296,7 +297,7 @@
     background-repeat: no-repeat;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;            
+    text-overflow: ellipsis;
 }
 
 #profile-edit .google {
