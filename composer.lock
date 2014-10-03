@@ -2309,12 +2309,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/login-cidadao-badges-bundle.git",
-                "reference": "06f7ccd767611e38ea83c43f1d3ea3c59c350a2f"
+                "reference": "cff55554cb610d2d191f660be6ef77c2116b5250"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/06f7ccd767611e38ea83c43f1d3ea3c59c350a2f",
-                "reference": "06f7ccd767611e38ea83c43f1d3ea3c59c350a2f",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/cff55554cb610d2d191f660be6ef77c2116b5250",
+                "reference": "cff55554cb610d2d191f660be6ef77c2116b5250",
                 "shasum": ""
             },
             "require": {
@@ -2342,7 +2342,7 @@
                 "badges",
                 "login-cidadao"
             ],
-            "time": "2014-10-03 14:49:26"
+            "time": "2014-10-03 18:37:15"
         },
         {
             "name": "psr/log",
