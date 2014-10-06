@@ -13,9 +13,7 @@ class BadgeController extends BaseController
      * @ApiDoc(
      *   resource = true,
      *   description = "Gets the available badges.",
-     *   output = {
-     *     "class"="PROCERGS\LoginCidadao\BadgesControlBundle\Model\BadgeInterface"
-     *   },
+     *   output = "ArrayCollection",
      *   statusCodes = {
      *     200 = "Returned when successful"
      *   }
