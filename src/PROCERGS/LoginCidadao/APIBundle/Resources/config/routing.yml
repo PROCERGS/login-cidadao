@@ -16,3 +16,9 @@ procergs_login_cidadao_Person:
     prefix: /
     resource: "@PROCERGSLoginCidadaoAPIBundle/Controller/PersonController.php"
     defaults: { _format: json }
+
+procergs_login_cidadao_Badge:
+    type: rest
+    prefix: /
+    resource: "@PROCERGSLoginCidadaoAPIBundle/Controller/BadgeController.php"
+    defaults: { _format: json }

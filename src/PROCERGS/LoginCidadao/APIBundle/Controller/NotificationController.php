@@ -45,7 +45,6 @@ class NotificationController extends BaseController
      * @param ParamFetcherInterface  $paramFetcher  param fetcher service
      *
      * @return array
-     * @REST\Get("/notifications")
      */
     public function getNotificationsAction(Request $request,
                                            ParamFetcherInterface $paramFetcher)

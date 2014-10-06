@@ -34,11 +34,10 @@ class PersonController extends BaseController
      *     200 = "Returned when successful"
      *   }
      * )
-     * @REST\Get("/person")
      * @REST\View(templateVar="person")
      * @throws NotFoundHttpException
      */
-    public function selfAction()
+    public function getPersonAction()
     {
         $person = $this->getUser();
         $scope = $this->getClientScope($person);
