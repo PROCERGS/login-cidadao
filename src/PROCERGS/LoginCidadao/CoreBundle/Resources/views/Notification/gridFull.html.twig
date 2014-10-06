@@ -2,8 +2,8 @@
 
 {% block grid_header_data %}
 <div class="col-md-3">{{ 'Service'|trans }}</div>
-<div class="col-md-6">{{ 'sugg.shorttext'|trans }}</div>
-<div class="col-md-2">{{ 'sugg.createdAt'|trans }}</div>
+<div class="col-md-6">{{ 'not.shorttext'|trans }}</div>
+<div class="col-md-2">{{ 'not.createdat'|trans }}</div>
 {% endblock grid_header_data %}
 
 {% block grid_row_action %}
@@ -14,15 +14,15 @@
 
 {% block grid_row_data %}
 <div class="col-md-3">
-    <dt>{{ 'service'|trans }}</dt>
+    <dt>{{ 'Service'|trans }}</dt>
     <dd>{{ row.client_name }}</dd>
 </div>
 <div class="col-md-6">
-    <dt>{{ 'shorttext'|trans }}</dt>
+    <dt>{{ 'not.shorttext'|trans }}</dt>
     <dd>{{ row.shorttext }}</dd>
 </div>
 <div class="col-md-2">
-    <dt>{{ 'createdat'|trans }}</dt>
+    <dt>{{ 'not.createdat'|trans }}</dt>
     <dd>{{ row.createdat|date('d/m/Y h:i:s') }}</dd>
 </div>
 {% endblock grid_row_data %}

@@ -56,8 +56,8 @@ class NotificationController extends Controller
         }
         $grid = new GridHelper();
         $grid->setId('navbarUnread');
-        $grid->setPerPage(4);
-        $grid->setMaxResult(4);
+        $grid->setPerPage(8);
+        $grid->setMaxResult(8);
         $grid->setQueryBuilder($sql);
         $grid->setInfinityGrid(true);
         $grid->setRoute('lc_not_inbox_gridnavbarunread');
