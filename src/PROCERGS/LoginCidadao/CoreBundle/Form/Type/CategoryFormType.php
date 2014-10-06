@@ -82,8 +82,8 @@ class CategoryFormType extends CommonFormType
         ));
         $builder->add('emailable', 'choice', array(
             'choices' => array(
-                '0' => 'no',
-                '1' => 'yes'
+                '0' => 'No',
+                '1' => 'Yes'
             ),
             'required' => true
         ));
