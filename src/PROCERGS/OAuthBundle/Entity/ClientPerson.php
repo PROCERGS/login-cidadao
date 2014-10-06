@@ -1,5 +1,5 @@
 <?php
-namespace PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
+namespace PROCERGS\OAuthBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -7,10 +7,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Notification
  *
- * @ORM\Table(name="shout_person")
+ * @ORM\Table(name="client_person")
  * @ORM\Entity
  */
-class ShoutPerson
+class ClientPerson
 {
 
     /**
@@ -27,10 +27,10 @@ class ShoutPerson
     protected $person;
     
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Shout", inversedBy="persons")
-     * @ORM\JoinColumn(name="shout_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="persons")
+     * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      */    
-    protected $shout;
+    protected $client;
 
     public function getId()
     {
@@ -54,14 +54,14 @@ class ShoutPerson
         return $this;
     }
 
-    public function getShout()
+    public function getClient()
     {
-        return $this->shout;
+        return $this->client;
     }
 
-    public function setShout($var)
+    public function setClient($var)
     {
-        $this->shout = $var;
+        $this->client = $var;
         return $this;
     }
 }
