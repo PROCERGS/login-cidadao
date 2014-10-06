@@ -50,13 +50,16 @@ class Category implements CategoryInterface
     private $defaultIcon;
 
     /**
-     * @var string
+     * @ORM\Column(name="default_title", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max = "255")
      */
     private $defaultTitle;
 
     /**
-     * @var string
-
+     * @Assert\NotBlank()
+     * @Assert\Length(max = "255")
+     * @ORM\Column(name="default_short_text", type="string", length=255)
      */
     private $defaultShortText;
 
@@ -180,15 +183,10 @@ class Category implements CategoryInterface
 
     /**
      * Get defaultTitle
-     * @Assert\NotBlank()
-     * @Assert\Length(max = "255")
      * @return string
      */
     public function getDefaultTitle()
     {
-        if (!$this->defaultTitle && $this->id) {
-            return '(idontcare)';
-        }
         return $this->defaultTitle;
     }
 
@@ -207,15 +205,9 @@ class Category implements CategoryInterface
 
     /**
      * Get defaultShortText
-     * @Assert\NotBlank()
-     * @Assert\Length(max = "255")
-     * @return string
      */
     public function getDefaultShortText()
     {
-        if (!$this->defaultShortText && $this->id) {
-            return '(idontcare)';
-        }
         return $this->defaultShortText;
     }
 

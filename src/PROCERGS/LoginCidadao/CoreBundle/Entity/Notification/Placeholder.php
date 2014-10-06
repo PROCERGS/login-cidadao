@@ -31,6 +31,9 @@ class Placeholder
      * @ORM\Column(name="name", type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(max = "255")
+     * @Assert\NotEqualTo(value="title")
+     * @Assert\NotEqualTo(value="shortext")
+     * @Assert\NotEqualTo(value="icon")
      */
     private $name;
 

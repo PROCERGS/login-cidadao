@@ -40,19 +40,6 @@ class NotificationController extends Controller
         if ($form->isValid()) {
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($category);
-            
-            $title = new Placeholder();
-            $title->setCategory($category);
-            $title->setName('title');
-            $title->setDefault($form->get('defaultTitle')->getData());
-            $manager->persist($title);
-            
-            $sText = new Placeholder();
-            $sText->setCategory($category);
-            $sText->setName('shorttext');
-            $sText->setDefault($form->get('defaultShortText')->getData());
-            $manager->persist($sText);
-            
             $manager->flush();
             return $this->redirect($this->generateUrl('lc_dev_not_edit', array(
                 'id' => $category->getId()
@@ -112,9 +99,9 @@ class NotificationController extends Controller
         ->setParameter('id', $id)
         ->orderBy('u.id', 'desc')
         ->getQuery()
-        ->getSingleResult();
+        ->getOneOrNullResult();
         if (!$client) {
-            return $this->redirect($this->generateUrl('lc_dev_not_edit'));
+            return $this->redirect($this->generateUrl('lc_dev_not'));
         }
         $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.category.form.type'), $client);
         $form->handleRequest($this->getRequest());

@@ -59,12 +59,6 @@ class CategoryFormType extends CommonFormType
                         ->orderBy('u.name', 'ASC');
                     }
                 ));
-                $form->add('defaultTitle', 'text', array(
-                    'required' => true
-                ));
-                $form->add('defaultShortText', 'text', array(
-                    'required' => true
-                ));
             }
         });
         $builder->add('name', 'text', array(
@@ -75,6 +69,12 @@ class CategoryFormType extends CommonFormType
                 'glyphicon glyphicon-envelope' => 'envelope',
                 'glyphicon glyphicon-exclamation-sign' => 'exclamation-sign'
             ),
+            'required' => true
+        ));
+        $builder->add('defaultTitle', 'text', array(
+            'required' => true
+        ));
+        $builder->add('defaultShortText', 'text', array(
             'required' => true
         ));
         $builder->add('mailSenderAddress', 'text', array(
