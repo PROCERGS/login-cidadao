@@ -39,7 +39,7 @@ class Client extends BaseClient
     protected $name;
 
     /**
-     * @ORM\Column(type="text", nullable=false)
+     * @ORM\Column(type="string", length=4000, nullable=false)
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */
@@ -51,14 +51,14 @@ class Client extends BaseClient
     protected $maxNotificationLevel;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", length=2000, nullable=true)
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */
     protected $landingPageUrl;
 
     /**
-     * @ORM\Column(type="text", nullable=false)
+     * @ORM\Column(type="string", length=2000, nullable=false)
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */
@@ -75,7 +75,7 @@ class Client extends BaseClient
     protected $authorizations;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=2000)
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */
