@@ -35,6 +35,11 @@ class LoginCidadaoExtension extends \Twig_Extension
                 'is_safe' => array(
                     'html'
                 )
+            )),
+            'lc_render' => new \Twig_Function_Method($this, 'lcRender', array(
+                'is_safe' => array(
+                    'html'
+                )
             ))
         );
     }
@@ -83,5 +88,10 @@ class LoginCidadaoExtension extends \Twig_Extension
     public function getFormFactory($name = 'fos_user.registration.form.factory')
     {
         return $this->container->get($name)->createForm()->createView();
+    }
+    
+    public function lcRender($name)
+    {
+        return '';
     }
 }

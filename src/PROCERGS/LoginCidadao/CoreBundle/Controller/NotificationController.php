@@ -35,7 +35,7 @@ class NotificationController extends Controller
      * @Route("/inbox/gridnavbarunread", name="lc_not_inbox_gridnavbarunread")
      * @Template()
      */
-    public function gridNavbarUnreadAction(Request $request = null)
+    public function gridNavbarUnreadAction(Request $request)
     {
         $sql = $this->getDoctrine()
         ->getManager ()
@@ -56,12 +56,14 @@ class NotificationController extends Controller
         }
         $grid = new GridHelper();
         $grid->setId('navbarUnread');
-        $grid->setPerPage(2);
-        $grid->setMaxResult(2);
+        $grid->setPerPage(4);
+        $grid->setMaxResult(4);
         $grid->setQueryBuilder($sql);
         $grid->setInfinityGrid(true);
         $grid->setRoute('lc_not_inbox_gridnavbarunread');
         $grid->setRouteParams(array('client', 'mode', 'notification', 'confignotcli'));
+        $grid->setExtraOpts(array('behavior'=> 'local', 'binder' => 'div:has(#navbarUnread):last'));
+        //$grid->setExtraOpts(array('behavior'=> 'local', 'binder' => '#navbarUnread .common-grid-result:last'));
         return array('grid' => $grid->createView($request));
     }
 

@@ -359,6 +359,10 @@ class Client extends BaseClient
     {
         return $this->configNotClis;
     }
+    
+    public function getCategories(){
+        return $this->categories;
+    }
 
 
 }

@@ -31,6 +31,7 @@ class GridHelper
     protected $id;
     protected $route;
     protected $routeParams;
+    protected $extraOpts;
 
     public function setInfinityGrid($var)
     {
@@ -166,6 +167,17 @@ class GridHelper
     public function getRouteParams()
     {
         return $this->routeParams;
+    }
+    
+    public function setExtraOpts($var)
+    {
+        $this->extraOpts = $var;
+        return $this;
+    }
+    
+    public function getExtraOpts()
+    {
+        return $this->extraOpts;
     }
     
 }

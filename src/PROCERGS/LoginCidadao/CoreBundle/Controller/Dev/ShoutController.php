@@ -80,10 +80,22 @@ class ShoutController extends Controller
                 'data' => $placeholder->getDefault()
             ));
         }
+        $form->add('id', 'hidden', array(
+            'data' => $categoryId
+        ));
+        $form->add('persons', 'ajax_choice', array(
+            'attr' => array(
+                'data-ac-route' => $this->generateUrl('lc_dev_shout_step_category'),
+                'data-ac-search-prop' => 'name',
+                'data-ac-extra-prop' => json_encode(array($form->get('id')->getName())),
+            ),
+            'multiple' => true
+        ));
         $form = $form->getForm();
         return array('form' => $form->createView());
-        
-    }    
+    }
+    
+    
 
     /**
      * @Route("/", name="lc_dev_shout")

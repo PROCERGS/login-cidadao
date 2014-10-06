@@ -67,14 +67,16 @@
             </li>
 
             {# Notifications #}
-            <li class="btn-group notifications pull-right">
+            <li class="btn-group notifications pull-right dropdown-keep-open">
                 <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans %}Notifications{% endtrans %}">
                     <i class="glyphicon glyphicon-bell">
                         <span class="label label-danger notification-total-unread-badge">{{ notifications_helper.getTotalUnread }}</span>
                     </i>
                 </button>
                 <ul class="dropdown-menu clearfix">
-                    {% render(controller("PROCERGSLoginCidadaoCoreBundle:Notification:gridNavbarUnread")) %}
+                    <div class="scrollspy-example" data-offset="0" data-spy="scroll">
+                        {% render(controller("PROCERGSLoginCidadaoCoreBundle:Notification:gridNavbarUnread")) %}
+                    </div>
                 </ul>
             </li>
         {% endif %}
@@ -82,7 +84,14 @@
 
     </div>
 </div>
-
+<style>
+.scrollspy-example {
+    height: 300px;
+    margin-top: 10px;
+    overflow: auto;
+    position: relative;
+}
+</style>
 {% if app.session.flashbag.peek('alert.unconfirmed.email') %}
     {% set flashMessage = app.session.flashbag.get('alert.unconfirmed.email') | first %}
 <div class="notification-extreme alert alert-danger">
@@ -95,6 +104,8 @@
 <script>
     $(function() {
       $("#lc-navbar .dropdown-toggle").on("click", function() {
+          console.log('passei aqui');
+          debugger;
         var menu = $(this).next(".dropdown-menu").toggle();
         $("#lc-navbar .dropdown-menu").not(menu).hide();
       });

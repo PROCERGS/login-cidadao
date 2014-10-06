@@ -11,6 +11,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ContactFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail;
 use PROCERGS\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
 
 /**
  * @Route("/admin/client")
@@ -101,5 +102,42 @@ class ClientController extends Controller
             'client' => $client,
             'messages' => $messages
         ));
+    }
+    /**
+     * @Route("/replicate", name="lc_admin_app_replicate")
+     * @Template()
+     */
+    public function replicateMeAction()
+    {
+        $id = 1;
+        $em = $this->getDoctrine()->getManager();
+        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->find($id);
+        foreach (range(1, 50) as $var) {
+            $newClient = clone $client;
+            $newClient->setId(null);
+            $rid = uniqid();
+            $newClient->setName('clone_'. $rid);
+            $newClient->setRandomId($rid);        
+            $em->persist($newClient);
+            $cats = $client->getCategories();
+            foreach ($cats as $cat) {
+                $newCat = clone $cat;
+                $newCat->setClient($newClient);
+                $em->persist($newCat);
+                $places = $cat->getPlaceholders();
+                foreach ($places as $place) {
+                    $newPlace = clone $place;
+                    $newPlace->setId(null);
+                    $newPlace->setCategory($newCat);
+                    $em->persist($newPlace);
+                }
+                foreach (range(1,100) as $var2) {
+                    $newNot = new Notification();
+                    $newNot->setCategory($newCat);
+                }
+            }
+        }
+        $em->flush();
+        return new Response("ok");
     }
 }

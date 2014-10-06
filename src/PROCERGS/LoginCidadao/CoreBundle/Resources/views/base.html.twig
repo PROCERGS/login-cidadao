@@ -94,11 +94,14 @@
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.0.2/js/bootstrap-switch.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/hinclude/0.9.5/hinclude.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-infinitescroll/2.0b2.120519/jquery.infinitescroll.min.js"></script>
     {% javascripts
-    		
-            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.placeholder.js'
-            '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/*' filter='?uglifyjs2' %}
+        '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
+        '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.placeholder.js'
+        '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.js'
+        '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.local.js'
+        '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/general.js' 
+        filter='?uglifyjs2'
+    %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 

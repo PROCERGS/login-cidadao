@@ -1,5 +1,5 @@
 {% block grid %}
-<div id="{{ grid.getId }}" data-grid-currpage="{{ grid.getPage }}" class="common-grid-results" {{ grid.isInfinityGrid ? 'data-infinity-grid="true"' }}>
+<div id="{{ grid.getId }}" data-grid-extra-opts="{{ grid.getExtraOpts|json_encode }}" data-grid-currpage="{{ grid.getPage }}" class="common-grid-results" {{ grid.isInfinityGrid ? 'data-infinity-grid="true"' }}>
 	{% block grid_pagination %}
 	<ul class="pagination" role="tablist" style="{{ grid.isInfinityGrid ? 'display: none;' }}">
 		{% if grid.getPage > 0 %}

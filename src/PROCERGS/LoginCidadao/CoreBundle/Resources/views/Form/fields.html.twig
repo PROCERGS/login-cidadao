@@ -76,3 +76,62 @@
 {% block switch_widget -%}
 <p>{{ block('checkbox_widget') }}</p>
 {%- endblock switch_widget %}
+
+{% block ajax_choice_label -%}
+{{ block('form_label') }}<a class="glyphicon glyphicon-pencil ajax-choice-label" type="button" ></a>
+{%- endblock ajax_choice_label %}
+
+{% block ajax_choice_widget -%}
+    {% if required and empty_value is none and not empty_value_in_choices and not multiple -%}
+        {% set required = false %}
+    {%- endif -%}
+    <div class="ajax-choise-sandbox">
+        {% set options = choices -%}
+        {%- if options|length > 0 -%}
+        <div class="btn-toolbar" role="toolbar">
+        {% for group_label, choice in options %}
+            {%- if choice is not iterable -%}
+                {% if choice is selectedchoice(value) %}
+                <div class="btn-group">
+                    <span class="label label-info" type="button">{{ choice.label|trans({}, translation_domain) }}</span>
+                </div>
+                {% endif %}
+            {%- endif -%}
+        {% endfor %}
+        </div>
+        {%- endif -%}
+        <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+            {% if empty_value is not none -%}
+                <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
+            {%- endif %}
+            {%- if preferred_choices|length > 0 -%}
+                {% set options = preferred_choices %}
+                {{- block('choice_widget_options') -}}
+                {% if choices|length > 0 and separator is not none -%}
+                    <option disabled="disabled">{{ separator }}</option>
+                {%- endif %}
+            {%- endif -%}
+            {% set options = choices -%}
+            {{- block('choice_widget_options') -}}
+        </select>
+        <div class="input-group">
+          <input type="text" class="form-control">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default">Buscar!</button>
+          </span>
+        </div>
+    </div>
+{%- endblock ajax_choice_widget %}
+
+{% block ajax_choice_options -%}
+    {% for group_label, choice in options %}
+        {%- if choice is iterable -%}
+            <optgroup label="{{ group_label|trans({}, translation_domain) }}">
+                {% set options = choice %}
+                {{- block('choice_widget_options') -}}
+            </optgroup>
+        {%- else -%}
+            <option value="{{ choice.value }}"{% if choice is selectedchoice(value) %} selected="selected"{% endif %}>{{ choice.label|trans({}, translation_domain) }}</option>
+        {%- endif -%}
+    {% endfor %}
+{%- endblock ajax_choice_options %}

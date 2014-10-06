@@ -344,3 +344,10 @@ form .has-feedback .sr-only ~ .form-control-feedback {
 #page-not-found .text {
     font-size: 20px;
 }
+
+.ajax-loader {
+  background-image: url(../images/ajax-loader.gif);
+  height: 16px;
+  margin: 0 auto;
+  width: 16px;
+}
