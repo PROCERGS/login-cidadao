@@ -1,5 +1,11 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::grid_layout.html.twig" %}
 {% block grid %}
+<style type="text/css">
+.action-column-grid .glyphicon-pencil {
+  margin-left: -6px;
+}
+
+</style>
 <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">{{ 'grid.search.title'|trans }}</h3>
@@ -7,7 +13,7 @@
         <div class="panel-body">
             <div class="row clearfix">
                 <div class="col-md-12">
-                    {{ parent() }}    
+                    {{ parent() }}
                 </div>
             </div>
         </div>
@@ -28,7 +34,7 @@
             <a title="{{ 'Edit'|trans }}" href="{{ path('lc_admin_person_edit', {id: row.id}) }}">
             <button type="button" class="btn btn-warning edit-row-grid" id="{{ grid.getId }}-row-{{ row.id }}"  data-row="{{ grid.getRouteParams|merge({'id':row.id})|json_encode }}">
                 <span class="glyphicon glyphicon-pencil"></span>
-                <span class="label-action-column-grid">{{ 'edit'|trans }} </span>            
+                <span class="label-action-column-grid">{{ 'edit'|trans }} </span>
             </button>
             </a>
         </div>
