@@ -293,134 +293,153 @@ function checkVoterRegistration(inscricao) {
   }
 }
 var lcAutoLoader = {
-    "startTime" :null,
-    "timer": null,
-  "start": function (event, request, settings) {
-    if (!$("#ajax-loader").length) {
-      var modal =
-           '<div class="modal fade bs-example-modal-sm" id="ajax-loader" role="dialog" aria-labelledby="ajax-loader" data-backdrop="static" data-keyboard="false" aria-hidden="true">'
-            +'<div class="modal-dialog modal-sm">'
-             +'<div class="modal-content">'
-              +'<div class="modal-body">'
-              //+'<div class="ajax-loader"/>'
+		"startTime" :null,
+		"timer": null,
+	"start": function (event, request, settings) {
+		if (!$("#ajax-loader").length) {
+			var modal =		
+				   '<div class="modal fade bs-example-modal-sm" id="ajax-loader" role="dialog" aria-labelledby="ajax-loader" data-backdrop="static" data-keyboard="false" aria-hidden="true">'
+				    +'<div class="modal-dialog modal-sm">'
+				     +'<div class="modal-content">'
+					    +'<div class="modal-body">'
+					    //+'<div class="ajax-loader"/>'
               +'<div class="ajax-loader"></div>'
               +'<span id="ajax-loader-timer" style="margin-left: 15px; display:none"></span>'
-              +'</div>'
-             +'</div>'
-            +'</div>'
-           +'</div>';
-      $(modal).appendTo(document.body);
-        $("#ajax-loader").on('shown.bs.modal', lcAutoLoader.startTimer);
-        $("#ajax-loader").on('hidden.bs.modal', lcAutoLoader.stopTimer);
-    }
-      $("#ajax-loader").modal('show');
-  },
-  "stop" : function (event, request, settings) {
-    $("#ajax-loader").modal('hide');
-  },
-  "stopTimer" : function(event) {
-    clearTimeout(lcAutoLoader.timer);
-    lcAutoLoader.startTime = null;
-    lcAutoLoader.timer = null;
-    $("#ajax-loader-timer").html("");
-  },
-  "startTimer" : function(event) {
-    if (lcAutoLoader.startTime == null) {
-      lcAutoLoader.startTime = new Date();
-    }
-      var now = new Date();
-      now.setTime(now - lcAutoLoader.startTime);
-      var m = now.getMinutes();
-      var s = now.getSeconds();
-      m = lcAutoLoader.checkTime(m);
-      s = lcAutoLoader.checkTime(s);
-      $("#ajax-loader-timer").html(m + ":" + s);
-      lcAutoLoader.timer = setTimeout(lcAutoLoader.startTimer, 500);
-  },
-  "checkTime" : function(i) {
-    if (i < 10) {
-      i= "0" + i;
-    }
-    return i;
-  }
+					    +'</div>'
+				     +'</div>'
+				    +'</div>'
+				   +'</div>';
+			$(modal).appendTo(document.body);
+		    $("#ajax-loader").on('shown.bs.modal', lcAutoLoader.startTimer);
+		    $("#ajax-loader").on('hidden.bs.modal', lcAutoLoader.stopTimer);
+		}
+	    $("#ajax-loader").modal('show');
+	},
+	"stop" : function (event, request, settings) {
+		$("#ajax-loader").modal('hide');
+	},
+	"stopTimer" : function(event) {
+		clearTimeout(lcAutoLoader.timer);
+		lcAutoLoader.startTime = null;
+		lcAutoLoader.timer = null;
+		$("#ajax-loader-timer").html("");
+	},
+	"startTimer" : function(event) {
+		if (lcAutoLoader.startTime == null) {
+			lcAutoLoader.startTime = new Date(); 
+		}
+	    var now = new Date();
+	    now.setTime(now - lcAutoLoader.startTime);
+	    var m = now.getMinutes();
+	    var s = now.getSeconds();
+	    m = lcAutoLoader.checkTime(m);
+	    s = lcAutoLoader.checkTime(s);
+	    $("#ajax-loader-timer").html(m + ":" + s);
+	    lcAutoLoader.timer = setTimeout(lcAutoLoader.startTimer, 500);
+	},
+	"checkTime" : function(i) {
+		if (i < 10) {
+			i= "0" + i;
+		}
+		return i;
+	}
 };
 $(document).ajaxSend(lcAutoLoader.start);
 $(document).ajaxComplete(lcAutoLoader.stop);
 function Pwindow(options) {
-  var opts = {
-    id : '__default',
-    label : '',
-    type: 'get',
-    dataType : 'html',
-    selector: null,
-    _selector : function () {
-      return opts.selector || $('#'+opts.id+' .modal-content');
-    },
-    beforeSend: function() {
-      $('#'+opts.id).modal('hide');
-      opts._selector().html('');
-    },
-    success : function(data, textStatus, jqXHR) {
-      opts._selector().html(data);
-    },
-    complete: function() {
-      $('#'+opts.id).modal('show');
-    }
-  };
-
-  var opts = $.extend(true, {}, opts, options);
-  if (!$('#'+opts.id).length) {
-    var html = '<div id="'+opts.id+'" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="'+opts.label+'" aria-hidden="true">'+
-      '<div class="modal-dialog"><div class="modal-content"></div></div></div>';
-    $('.settings-content').append(html);
-  }
-  if (!opts.url) {
-    return alert('dunno');
-  }
-  $.ajax(opts);
+	var opts = {
+		id : '__default',
+		label : '',
+		type: 'get',
+		dataType : 'html',
+		selector: null,
+		_selector : function () {
+			return opts.selector || $('#'+opts.id+' .modal-content');
+		},	
+		beforeSend: function() {
+			$('#'+opts.id).modal('hide');
+			opts._selector().html('');
+		},
+		success : function(data, textStatus, jqXHR) {
+			opts._selector().html(data);
+		},
+		complete: function() {
+			$('#'+opts.id).modal('show');
+		}
+	};	
+	opts = $.extend(true, {}, opts, options);
+	if (!$('#'+opts.id).length) {
+		var html = '<div id="'+opts.id+'" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="'+opts.label+'" aria-hidden="true">'+
+	    '<div class="modal-dialog"><div class="modal-content"></div></div></div>';
+		$('.settings-content').append(html);
+	}
+	if (!opts.url) {
+		return alert('dunno');
+	}
+	$.ajax(opts);
 }
-var lcInfinityscrollNextButton = function() {
-  $(this).hide();
-  var _id = $(this).attr('data-retrive');
-  if (!$(_id).data('infinitescroll')) {
-    $(_id).infinitescroll({
-        debug: true,
-          navSelector  : _id + ' .pagination',
-          nextSelector : _id + ' .pagination a:last',
-          itemSelector : _id + ' .row.common-grid-result',
-          contentSelector: _id + ' .tab-pane.active',
-          bufferPx     : 200,
-          state : {
-            currPage: Number($(_id).attr('data-grid-currpage'))
-          },
-          loading: {
-              msg: $('<div></div>'),
-              img: null
-          },
-          pathParse: function (path, currPage) {
-            var matches = path.match(/^(.*[?|&]page=)\d+(.*|$)/);
-            if (matches) {
-              return matches.slice(1);
-            }
-          }
-      },
-      function( newElements, data, url ) {
-        var isLast = false;
-        for (x in newElements) {
-          if (isLast = newElements[x].classList.contains("row-last")) {
-            break;
-          }
-        }
-        if (!isLast) {
-          $(_id+' .infinityscroll-next-button').show();
-        }
-          window.console && console.log('context: ',this);
-      window.console && console.log('returned: ', newElements);
-      });
-      $(window).unbind('.infscr');
-    }
-  $($(this).attr('data-retrive')).infinitescroll('retrieve');
-};
+var lcInfinityGrid = {
+	"scrollNextButton" : function() {
+		$(this).hide();
+		lcInfinityGrid.common($(this).attr('data-retrive'));
+		$($(this).attr('data-retrive')).infinitescroll('retrieve');
+	},
+	"common" : function(_id) {
+		if (!$(_id).data('infinitescroll')) {
+			var opts = {
+			    	debug: true,
+			        navSelector  : _id + ' .pagination',
+			        nextSelector : _id + ' .pagination a:last',
+			        itemSelector : _id + ' .row.common-grid-result',
+			        contentSelector: _id + ' .tab-pane.active',
+			        bufferPx     : 0,
+			        state : {
+			        	currPage: Number($(_id).attr('data-grid-currpage'))
+			        },
+			        loading: {	            
+			            msg: $('<div></div>'),
+			            img: null
+			        },
+			        pathParse: function (path, currPage) {
+			        	var matches = path.match(/^(.*[?|&]page=)\d+(.*|$)/);
+			        	if (matches) {
+			        		return matches.slice(1);
+			        	}
+			        }
+			    };
+			var extraOpts = $(_id).data('grid-extra-opts');
+			if (extraOpts) {
+				if (extraOpts.binder) {
+					extraOpts.binder = $(extraOpts.binder);
+				}
+			}
+			opts = $.extend(true, {}, opts, extraOpts);
+			$(_id).infinitescroll(opts,
+		    function( newElements, data, url ) {
+		    	var isLast = false;
+		    	for (x in newElements) {
+		    		if (isLast = newElements[x].classList.contains("row-last")) {
+		    			break;
+		    		}
+		    	}
+		    	if (!isLast) {
+		    		$(_id+' .infinityscroll-next-button').show();
+		    	}
+				/*
+				 * window.console && console.log('context: ',this);
+				 * window.console && console.log('returned: ', newElements);
+				 */		    });
+			if (extraOpts && extraOpts.behavior && extraOpts.behavior == 'local') {
+/*				console.log('here');*/
+			} else {
+				$(window).unbind('.infscr');
+			}
+	    }
+	},
+	"startUp" : function() {
+		lcInfinityGrid.common('#'+$(this).attr('id'));
+	}
+}
 $(function() {
 
     // add bootstrap classes to forms
@@ -452,23 +471,25 @@ $(function() {
         var e = $(this);
         var u = e.attr('data-href') ? e.attr('data-href') : e.attr('href');
         if (u) {
-          window.open(u,'_blank',e.attr('data-specs'));
+        	window.open(u,'_blank',e.attr('data-specs'));
         }
         return false;
       });
     $(document).on('submit', '.form-ajax', function(event){
-      event.preventDefault();
-      var e = $(this);
-      $.ajax({
-        type: e.attr('method'),
-        url: e.attr('action'),
-        data: e.serialize(),
-        dataType : 'html',
-        success : function(data, textStatus, jqXHR) {
-          $(e.attr('ajax-target')).html(data);
-        }
+    	event.preventDefault();
+    	var e = $(this);
+    	$.ajax({
+    		type: e.attr('method'),
+    		url: e.attr('action'),
+    		data: e.serialize(),
+    		dataType : 'html',
+    		success : function(data, textStatus, jqXHR) {
+    			$(e.attr('ajax-target')).html(data);
+    		}
         });
     });
-    $(document).on('click', '.infinityscroll-next-button' , lcInfinityscrollNextButton);
-    $("[data-enable-switch='1']").bootstrapSwitch();
+    $(document).on('click', '.infinityscroll-next-button' , lcInfinityGrid.scrollNextButton);
+    $('[data-infinity-grid="true"]').each(lcInfinityGrid.startUp);
+    $("[data-enable-switch='1']").bootstrapSwitch();    
 });
+
