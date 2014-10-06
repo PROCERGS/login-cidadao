@@ -12,6 +12,8 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail;
 use PROCERGS\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category;
+use Michelf\MarkdownExtra;
 
 /**
  * @Route("/admin/client")
@@ -103,41 +105,74 @@ class ClientController extends Controller
             'messages' => $messages
         ));
     }
+    
     /**
-     * @Route("/replicate", name="lc_admin_app_replicate")
+     * @Route("/populate/{id}", name="lc_admin_app_populate")
      * @Template()
      */
-    public function replicateMeAction()
+    public function populateAction($id)
     {
-        $id = 1;
         $em = $this->getDoctrine()->getManager();
-        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->find($id);
-        foreach (range(1, 50) as $var) {
-            $newClient = clone $client;
-            $newClient->setId(null);
-            $rid = uniqid();
-            $newClient->setName('clone_'. $rid);
-            $newClient->setRandomId($rid);        
-            $em->persist($newClient);
-            $cats = $client->getCategories();
-            foreach ($cats as $cat) {
-                $newCat = clone $cat;
-                $newCat->setClient($newClient);
-                $em->persist($newCat);
-                $places = $cat->getPlaceholders();
-                foreach ($places as $place) {
-                    $newPlace = clone $place;
-                    $newPlace->setId(null);
-                    $newPlace->setCategory($newCat);
-                    $em->persist($newPlace);
+        
+        $clientManager = $this->container->get('fos_oauth_server.client_manager.default');
+        $em->beginTransaction();
+        $input = 'Lorem Ipsum ';
+        $person = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->find($id);
+        foreach (range(1, 1) as $val1) {
+            $client = new Client();
+            $client->setPerson($person);
+            $client->setName("Sample client $val1 ". uniqid());
+            $client->setDescription('Sample client');
+            $client->setSiteUrl("http://localhost");
+            $client->setRedirectUris(array('http://localhost'));
+            $client->setLandingPageUrl('http://localhost');
+            $client->setTermsOfUseUrl('http://localhost');
+            $client->setAllowedGrantTypes(Client::getAllGrants());
+            $client->setPublished(0);
+            $client->setVisible(0);
+            $clientManager->updateClient($client);
+            
+            $list = array();
+            foreach (range(1, 20) as $val2) {
+                $cm = "Sample category $val2 ";
+                $category = new Category();
+                $category->setClient($client);
+                $category->setName($cm. uniqid());
+                $category->setDefaultIcon('glyphicon glyphicon-envelope');
+                $category->setDefaultTitle($cm ." title");
+                $category->setDefaultShortText($cm ." shorttext");
+                $category->setMailTemplate("%title%\r\n%shorttext%\r\n");
+                $category->setMailSenderAddress($person->getEmail());
+                $category->setEmailable(true);
+                $category->setMarkdownTemplate("%title%\r\n--\r\n\r\n> %shorttext%\r\n\r\n");
+                $category->setHtmlTemplate(MarkdownExtra::defaultTransform($category->getMarkdownTemplate()));
+                $em->persist($category);
+                foreach (range(1, 20) as $val3) {
+                    $r = rand(1, 19);
+                    $msg = array();
+                    if ($r%2) {
+                        $msg['title'] = str_repeat($input, $r);
+                        $msg['shorttext'] = str_repeat($input, $r);
+                    }                         
+                    $not = new Notification();
+                    $not->setPerson($person);
+                    $not->setCategory($category);
+                    $not->setIcon($category->getDefaultIcon());
+                    $not->setTitle(isset($msg['title']) ? $msg['title'] : $category->getDefaultTitle());
+                    $not->setShortText(isset($msg['shorttext']) ? $msg['shorttext'] : $category->getDefaultShortText());
+                    $not->parseHtmlTpl($category->getHtmlTemplate());
+                    $em->persist($not);
+                    $list[] =& $not;
                 }
-                foreach (range(1,100) as $var2) {
-                    $newNot = new Notification();
-                    $newNot->setCategory($newCat);
-                }
+                $list[] =& $category;
+            }
+            $em->flush();
+            $em->clear($client);
+            foreach ($list as &$entityes) {
+                $em->clear($entityes);
             }
         }
-        $em->flush();
+        $em->commit();
         return new Response("ok");
     }
 }

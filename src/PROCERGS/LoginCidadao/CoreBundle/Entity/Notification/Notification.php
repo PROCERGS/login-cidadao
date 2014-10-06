@@ -63,7 +63,7 @@ class Notification implements NotificationInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="text", type="text")
+     * @ORM\Column(name="text", type="text", nullable=true)
      * @Assert\NotBlank()
      * @JMS\Expose
      * @JMS\Groups({"public"})
@@ -402,7 +402,6 @@ class Notification implements NotificationInterface
     public function __construct()
     {
         $this->setLevel(self::LEVEL_NORMAL);
-        $this->setIsRead(false);
         $this->setCreatedAt(new \DateTime());
     }
 
@@ -429,7 +428,7 @@ class Notification implements NotificationInterface
 
     public function parseHtmlTpl($var)
     {
-        $cplaces = array('%title%' => $this->title, '%shorttext%' => $this->shortText, '%text%' => $this->text);
+        $cplaces = array('%title%' => $this->title, '%shorttext%' => $this->shortText);
         foreach ($cplaces as $search => $replace) {
             $var = str_replace($search, $replace, $var);
         }
