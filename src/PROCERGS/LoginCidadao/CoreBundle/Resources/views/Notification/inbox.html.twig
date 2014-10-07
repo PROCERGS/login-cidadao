@@ -26,23 +26,23 @@
   </div>
 </div>
 <style>
-.notification-read {
+#inbox-detail .notification-read {
     background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;
     color: #222222;
     border: thin groove #98bf21;
-    padding:3px;
+    padding:20px 0;
 }
-.notification-unread {
+#inbox-detail .notification-unread {
     /*background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;*/
     background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9) !important;
     border-bottom: none;
     color: #222222;
     border: thin groove #98bf21;
-    padding:3px;
+    padding:20px 0;
 }
 
 .common-grid-result + .common-grid-result {
-  border-top: none;
+  border-top: none!important;
 }
 </style>
 {% endblock %}
@@ -51,6 +51,8 @@
 {{ parent() }}
 <script >
     $(document).ready(function() {
+      var navbarCount = $("#lc-navbar-ul .notification-total-unread-badge");
+
     $(document).on('click', '#inbox-detail .common-grid-results a.edit-grid',  function() {
       var self = $(this);
       var url = '{{ path('lc_not_inbox_show2') }}';
@@ -67,6 +69,8 @@
           var cRow = self.parent().parent();
           if (data.wasread) {
             cRow.removeClass('notification-unread').addClass('notification-read');
+            var count  = parseInt(navbarCount.text()) - 1;
+            navbarCount.text(count);
           }
           if (!data.htmltpl) {
             data.htmltpl = '';

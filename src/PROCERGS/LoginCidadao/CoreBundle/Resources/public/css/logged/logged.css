@@ -21,7 +21,7 @@
 .settings-nav li a {
   border-radius: 0;
   line-height: 30px;
-  padding: 10px;
+  padding: 12px;
 }
 
 .settings-nav li.active a, .settings-nav li.active a:hover {
