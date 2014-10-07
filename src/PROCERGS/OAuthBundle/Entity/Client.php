@@ -121,11 +121,6 @@ class Client extends BaseClient
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $person;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\OAuthBundle\Entity\ClientPerson", mappedBy="Client")
-     */
-    private $persons;
 
     public function __construct()
     {
@@ -362,10 +357,6 @@ class Client extends BaseClient
 
     public function getCategories(){
         return $this->categories;
-    }
-    
-    public function getPersons(){
-        return $this->persons;
     }
 
 

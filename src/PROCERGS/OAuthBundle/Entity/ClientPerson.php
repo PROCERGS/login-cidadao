@@ -25,12 +25,6 @@ class ClientPerson
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */    
     protected $person;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="persons")
-     * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
-     */    
-    protected $client;
 
     public function getId()
     {
