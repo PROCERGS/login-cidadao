@@ -12,6 +12,7 @@ use JMS\Serializer\Tests\Fixtures\Publisher;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation as JMS;
 use OAuth2\OAuth2;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="client")
@@ -122,14 +123,19 @@ class Client extends BaseClient
      */
     private $person;
 
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey", mappedBy="client")
+     */
+    protected $logoutKeys;
+
     public function __construct()
     {
         parent::__construct();
         $this->authorizations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->maxNotificationLevel = Notification::LEVEL_NORMAL;
     }
-    
-    public static  function getAllGrants()
+
+    public static function getAllGrants()
     {
         return array(
             OAuth2::GRANT_TYPE_AUTH_CODE,
@@ -280,7 +286,7 @@ class Client extends BaseClient
         }
 
         $this->getPictureFile()->move(
-                $this->getPictureUploadRootDir(), $this->picturePath
+            $this->getPictureUploadRootDir(), $this->picturePath
         );
 
         if (isset($this->tempPicturePath) && $this->tempPicturePath != $this->picturePath) {
@@ -355,9 +361,9 @@ class Client extends BaseClient
         return $this->person;
     }
 
-    public function getCategories(){
+    public function getCategories()
+    {
         return $this->categories;
     }
-
 
 }

@@ -390,6 +390,11 @@ class Person extends BaseUser implements PersonInterface
      */
     protected $badges = array();
 
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
+     */
+    protected $logoutKeys;
+
     public function __construct()
     {
         parent::__construct();
