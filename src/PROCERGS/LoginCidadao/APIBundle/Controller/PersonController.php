@@ -15,6 +15,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PersonController extends BaseController
 {
@@ -227,9 +228,12 @@ class PersonController extends BaseController
         $em = $this->getDoctrine()->getManager();
         $em->persist($logoutKey);
         $em->flush();
-
-        return $this->renderWithContext($logoutKey,
-                                        $this->getSerializationContext('public'));
+        
+        $result = array(
+            'key' => $logoutKey->getKey(),
+            'url' => $this->generateUrl('lc_logout_not_remembered_safe', array('key' => $logoutKey->getKey()), UrlGeneratorInterface::ABSOLUTE_URL)
+        );
+        return $result;
     }
 
 }
