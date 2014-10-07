@@ -15,7 +15,7 @@
 }
 
 .settings-nav li {
-  margin: 12px 0;
+  margin: 0 0 12px;
 }
 
 .settings-nav li a {
@@ -25,7 +25,8 @@
 }
 
 .settings-nav li.active a, .settings-nav li.active a:hover {
-  background-color: #009933;
+  /*background-color: #009933;*/
+  background-color: #5CB85C;
   cursor: default;
 }
 
@@ -373,7 +374,7 @@
 }
 
 .content.applications .services-grid .service .status.active {
-  background-color: #093;
+  background-color: #5CB85C;
 }
 
 .content.applications .services-grid .service a:hover {
@@ -425,6 +426,15 @@
 .content.applications .list li .status {
   float: right;
   width: 20%;
+}
+
+.content .last-suggestions ul {
+  margin: 20px 35px 10px;
+  padding: 0;
+}
+
+.content .last-suggestions span {
+  word-break: break-all;
 }
 
 .client-details h3 {
