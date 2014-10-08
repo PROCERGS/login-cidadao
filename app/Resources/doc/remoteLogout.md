@@ -6,21 +6,21 @@ Remote Logout is the name of the feature that allows for an OAuth Client, proper
 Steps
 -----
 
-0. The OAuth Client (a.k.a. Service ou 3rd Party Application) requests an Access Token if one isn't available thru the Client Credentials grant type. ([Learn more](http://aaronparecki.com/articles/2012/07/29/1/oauth2-simplified))
-1. OAuth Client uses it's Access Token to request a Logout Key for a person that has already authorized such client with the `logout` scope.
-2. OAuth Client receives the Logout Key then redirects the user to the logout URL passing the just-obtained key.
-3. User is logged out of Citizen Login.
+1. The OAuth Client (a.k.a. Service ou 3rd Party Application) requests an Access Token if one isn't available thru the Client Credentials grant type. ([Learn more](http://aaronparecki.com/articles/2012/07/29/1/oauth2-simplified))
+2. OAuth Client uses it's Access Token to request a Logout Key for a person that has already authorized such client with the `logout` scope.
+3. OAuth Client receives the Logout Key then redirects the user to the logout URL passing the just-obtained key.
+4. User is logged out of Citizen Login.
 
 **Note:** Each Logout Key has a 5 minutes lifespan and can be used only once.
 
 Steps Detailed
 --------------
 
-### 0. Obtaining the Access Token
+### Obtaining the Access Token
 
 This step is specific to your programming language and OAuth library and you have to learn how to use it yourself.
 
-### 1. Requesting the Logout Key
+### Requesting the Logout Key
 
 The Logout Key is obtained by calling the Citizen Login API through `GET /api/v1/person/{personId}/logout-key.json` and authenticating using your application's Access Token.
 
@@ -42,7 +42,7 @@ Response:
 
 Note that for convinience we already return the full URL that you'll have to redirect the user to or open in a hidden iframe.
 
-### 2. Redirect the user
+### Redirect the user
 
 Having the Logout Key and URL you can either redirect the user to that URL or open it in a hidden iframe.
 
