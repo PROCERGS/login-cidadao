@@ -43,16 +43,6 @@
                     <div class="input-error">{{ form_errors(form.country) }}</div>
                 </div>
                 <div class="form-group">
-                    {{ form_label(form.cep) }}
-                    {{ form_widget(form.cep, {'attr': {'class': 'form-control', 'maxlength' : '11'}}) }}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error">{{ form_errors(form.cep) }}</div>
-                    <span id="cepSearchBrazil" class="extra" style="display: none;">
-                        {% trans %}Don't know your CEP?{% endtrans %}
-                        <a class="search-cep" href="{{ path('lc_search_postalcode') }}">{{ 'Search it!' | trans }}</a>
-                    </span>
-                </div>
-                <div class="form-group">
                     {{ form_label(form.uf) }}
                     {{ form_widget(form.uf, {'attr': {'class': 'form-control'}}) }}
                     {{ form_widget(form.ufsteppe, {'attr': {'class': 'form-control', 'style': 'display: none;'}}) }}
@@ -66,24 +56,6 @@
                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                     <div class="input-error">{{ form_errors(form.city) }}</div>
                 </div>
-                <div class="form-group">
-                    {{ form_label(form.adress) }}
-                    {{ form_widget(form.adress, {'attr': {'class': 'form-control', 'maxlength' : '255'}}) }}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error">{{ form_errors(form.adress) }}</div>
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.adressnumber) }}
-                    {{ form_widget(form.adressnumber, {'attr': {'class': 'form-control'}}) }}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error">{{ form_errors(form.adressnumber) }}</div>
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.complement) }}
-                    {{ form_widget(form.complement, {'attr': {'class': 'form-control'}}) }}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error">{{ form_errors(form.complement) }}</div>
-                </div>                
                 <div class="form-group">
                     {{ form_label(form.mobile) }}
                     {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }}
@@ -222,7 +194,6 @@
 {{ parent() }}
 <script>
     var profileEdit = {};
-    profileEdit.cepId = '#{{ form.cep.vars.id }}';
     profileEdit.countryId = '#{{ form.country.vars.id }}';
     profileEdit.ufId = '#{{ form.uf.vars.id }}';
     profileEdit.cityId = '#{{ form.city.vars.id }}';
@@ -232,7 +203,6 @@
     profileEdit.urlSearchCountry = '{{ path('lc_search_uf_by_country') }}';
     profileEdit.mobileId = "#{{ form.mobile.vars.id }}";
     profileEdit.ufpreferredId = '#{{ form.ufpreferred.vars.id }}';
-    profileEdit.adressId = '#{{ form.adress.vars.id }}';
 
     profileEdit.callbackOnceSearchUf = null;
     profileEdit.popLocation = function(dneData) {
@@ -262,7 +232,6 @@
             		$(profileEdit.ufId).trigger('change');
                 }
             }
-            $(profileEdit.adressId).val(street);
     	}
     };
 
@@ -303,9 +272,9 @@
             }
         }
     };
-    
+
     $(document).ready(function() {
-        
+
         profileEdit.brCheck();
 
         $('.search-cep').click(function(event) {
@@ -339,7 +308,7 @@
 
         $(document.createElement('option')).val('').attr('data-custom-option', 1).text(messages.form.location.uf).insertAfter($(profileEdit.ufId).find('option[value=""]').first());
         $(document.createElement('option')).val('').attr('data-custom-option', 1).text(messages.form.location.city).insertAfter($(profileEdit.cityId).find('option[value=""]').first());
-        
+
         $(profileEdit.countryId).on('change', function (event) {
         	$(profileEdit.ufId).find('option[value!=""]').remove();
         	$(profileEdit.ufId).trigger('change');

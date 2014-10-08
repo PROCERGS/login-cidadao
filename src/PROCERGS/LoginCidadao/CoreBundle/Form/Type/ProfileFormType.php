@@ -28,8 +28,6 @@ class ProfileFormType extends BaseType
                         array('label' => 'form.firstName', 'translation_domain' => 'FOSUserBundle'))
                 ->add('surname', 'text',
                         array('label' => 'form.surname', 'translation_domain' => 'FOSUserBundle'))
-                ->add('cep', 'text',
-                        array('required' => false, 'label' => 'form.cep', 'translation_domain' => 'FOSUserBundle'))
                 ->add('birthdate', 'birthday',
                         array(
                     'required' => false,
@@ -53,12 +51,9 @@ class ProfileFormType extends BaseType
                             ->orderBy('u.name', 'ASC');
                     }
                 ))
-                ->add('adress', 'text', array('required' => false))
-                ->add('adressnumber', 'integer', array('required' => false))
                 ;
                 $builder->add('ufsteppe', 'text', array("required"=> false, "mapped"=>false));
                 $builder->add('citysteppe', 'text', array("required"=> false, "mapped"=>false));
-                $builder->add('complement', 'text', array("required"=> false));
                 $builder->add('ufpreferred', 'hidden', array("data" => $country->getId(),"required"=> false, "mapped"=>false));
                 
                 $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {

@@ -16,7 +16,7 @@ class PersonAddress
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"public_profile"})
+     * @JMS\Groups({"addresses"})
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -25,6 +25,8 @@ class PersonAddress
     protected $id;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="addresses")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", nullable=false)
@@ -32,13 +34,26 @@ class PersonAddress
     protected $person;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
      * @ORM\Column(type="string", nullable=true)
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @JMS\Expose
+     * @JMS\Groups({"addresses"})
+     * @JMS\Since("1.1.0")
+     * @ORM\Column(type="string", nullable=false)
      * @var string
      */
     protected $line1;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
      * @ORM\Column(type="string", nullable=true)
      * @var string
@@ -46,6 +61,8 @@ class PersonAddress
     protected $line2;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\City")
      * @ORM\JoinColumn(name="city_id", referencedColumnName="id")
@@ -54,6 +71,8 @@ class PersonAddress
     protected $city;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
      * @ORM\Column(name="postal_code", type="string", nullable=true)
      * @var string
@@ -71,7 +90,7 @@ class PersonAddress
     }
 
     /**
-     * 
+     *
      * @return City
      */
     public function getCity()
@@ -105,6 +124,39 @@ class PersonAddress
     public function setPostalCode($postalCode)
     {
         $this->postalCode = $postalCode;
+        return $this;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getPerson()
+    {
+        return $this->person;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    public function setPerson($person)
+    {
+        $this->person = $person;
+        return $this;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
         return $this;
     }
 
