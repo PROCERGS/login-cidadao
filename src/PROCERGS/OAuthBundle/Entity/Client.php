@@ -129,11 +129,6 @@ class Client extends BaseClient
      */
     protected $logoutKeys;
     
-    /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey", mappedBy="client")
-     */
-    protected $logoutKeys;
-
     public function __construct()
     {
         parent::__construct();
