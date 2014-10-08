@@ -6,7 +6,7 @@ Remote Logout is the name of the feature that allows for an OAuth Client, proper
 Steps
 -----
 
-1. The OAuth Client (a.k.a. Service ou 3rd Party Application) requests an Access Token if one isn't available thru the Client Credentials grant type. ([Learn more](http://aaronparecki.com/articles/2012/07/29/1/oauth2-simplified))
+1. The OAuth Client (a.k.a. Service ou 3rd Party Application) requests an Access Token if one isn't available through the Client Credentials grant type. ([Learn more](http://aaronparecki.com/articles/2012/07/29/1/oauth2-simplified))
 2. OAuth Client uses it's Access Token to request a Logout Key for a person that has already authorized such client with the `logout` scope.
 3. OAuth Client receives the Logout Key then redirects the user to the logout URL passing the just-obtained key.
 4. User is logged out of Citizen Login.
