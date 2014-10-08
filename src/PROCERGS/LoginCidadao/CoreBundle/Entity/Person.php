@@ -28,7 +28,7 @@ class Person extends BaseUser implements PersonInterface
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"id","public_profile"})
+     * @JMS\Groups({"public_profile"})
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -70,7 +70,7 @@ class Person extends BaseUser implements PersonInterface
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"username","public_profile"})
+     * @JMS\Groups({"public_profile"})
      * @PROCERGSAssert\Username
      * @Assert\NotBlank
      * @Assert\Length(
@@ -319,7 +319,7 @@ class Person extends BaseUser implements PersonInterface
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"picture","public_profile"})
+     * @JMS\Groups({"public_profile"})
      * @JMS\Since("1.0.2")
      */
     protected $profilePicutreUrl;
@@ -327,7 +327,7 @@ class Person extends BaseUser implements PersonInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @JMS\Expose
-     * @JMS\Groups({"updated_at","public_profile"})
+     * @JMS\Groups({"public_profile"})
      * @var \DateTime $updatedAt
      * @JMS\Since("1.0.2")
      */
@@ -385,7 +385,7 @@ class Person extends BaseUser implements PersonInterface
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"badges", "public_profile"})
+     * @JMS\Groups({"public_profile"})
      * @var array
      */
     protected $badges = array();
