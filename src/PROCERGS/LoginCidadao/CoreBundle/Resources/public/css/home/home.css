@@ -52,7 +52,7 @@ body {
 }
 
 .lc-box .title {
-    background-color: #5CB85C;
+    background-color: #039936;
     color: #FFF;
     display: block;
     height: 50px;
@@ -145,7 +145,7 @@ body {
 
 .lc-box .google {
     background-color: #dd4b39;
-    background-image: url(../../images/btn_red.png);
+    background-image: url(../../images/btn_red.png);    
     background-repeat: no-repeat;
 }
 

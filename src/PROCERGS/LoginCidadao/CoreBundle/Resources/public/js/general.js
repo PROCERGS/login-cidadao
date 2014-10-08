@@ -379,7 +379,7 @@ function Pwindow(options) {
 	$.ajax(opts);
 }
 var lcInfinityGrid = {
-	"scrollNextButton" : function() {
+	"scrollNextButton" : function(event) {
 		$(this).hide();
 		lcInfinityGrid.common($(this).attr('data-retrive'));
 		$($(this).attr('data-retrive')).infinitescroll('retrieve');
@@ -428,7 +428,8 @@ var lcInfinityGrid = {
 				/*
 				 * window.console && console.log('context: ',this);
 				 * window.console && console.log('returned: ', newElements);
-				 */		    });
+				 */		    
+			});
 			if (extraOpts && extraOpts.behavior && extraOpts.behavior == 'local') {
 /*				console.log('here');*/
 			} else {
@@ -440,6 +441,99 @@ var lcInfinityGrid = {
 		lcInfinityGrid.common('#'+$(this).attr('id'));
 	}
 }
+var lcAcWidget = {
+	onSearch : function(event){
+    	var self = $(this);
+    	var opts = self.data('ac-attr');
+    	opts = opts.filter;
+    	var data = {};        	
+    	for (var x in opts.extra_form_prop) {
+    		data[x] = $('#'+opts.extra_form_prop[x]).val();
+    	}
+    	data[opts.search_prop] = $(this).parent().prev().val();
+    	$.ajax({
+    		type: 'get',
+    		url: opts.route,
+    		data: {"ac_data":data},
+    		dataType : 'html',
+    		success : function(data, textStatus, jqXHR) {
+    			self.parents().find('.ac-magicbox .ac-scrollspy-opts').html(data);
+    		}
+        });
+    },
+	onClickFilteredItem : function(event){
+    	var src = '.ac-scrollspy-opts';
+    	var target = '.ac-scrollspy-opts-selected .common-grid-results .tab-pane.active';
+    	var id = '#'+ $(this).attr('id');
+    	if (!$(target).length || $(target+" .row:has("+id+"):last").length) {
+    		$(src+" .row:has("+id+"):last").remove();
+    	} else {
+    		$(src+" .row:has("+id+"):last").appendTo(target);
+    	}
+    },
+    onClickSelectedItem : function(event){
+    	var target = '.ac-scrollspy-opts .common-grid-results .tab-pane.active';
+    	var src = '.ac-scrollspy-opts-selected';
+    	var id = '#'+ $(this).attr('id');
+    	if (!$(target).length || $(target+" .row:has("+id+"):last").length) {
+    		$(src+" .row:has("+id+"):last").remove();
+    	} else {
+    		$(src+" .row:has("+id+"):last").appendTo(target);
+    	}
+    },
+    onClickSearchEnable : function(event) {
+    	var _id = '#'+$(this).attr('data-ac-reference');
+    	var mb = $(_id + ' + .ac-magicbox');
+    	$(_id).parent().find('.ac-tags-toolbar').toggleClass('in');
+    	if (mb.hasClass('in')) {
+    		mb.toggleClass('in');
+    		mb.find('.ac-scrollspy-opts-selected').html();
+    		mb.find('.ac-scrollspy-opts').html();
+    		return;
+    	}
+    	var opts = mb.find('[data-ac-attr]').data('ac-attr');
+		opts = opts.selected;
+		var data = {};
+		if (opts.extra_form_prop) {
+	    	for (var x in opts.extra_form_prop) {
+	    		data[x] = $('#'+opts.extra_form_prop[x]).val();
+	    	}
+		}
+    	$.ajax({
+    		type: 'get',
+    		url: opts.route,
+    		data: {"ac_data":data},
+    		dataType : 'html',
+    		success : function(data, textStatus, jqXHR) {
+    			mb.find('.ac-scrollspy-opts-selected').html(data);
+    			mb.toggleClass('in');
+    		}
+        });
+    },
+    onClickSearchCancel : function(event) {
+    	var _id = '#'+$(this).attr('data-ac-reference');
+    	var mb = $(_id + ' + .ac-magicbox');
+    	mb.toggleClass('in');
+    	$(_id).parent().find('.ac-tags-toolbar').toggleClass('in');
+    },
+    onClickSearchCommit : function(event) {
+    	var _id = '#'+$(this).attr('data-ac-reference');
+    	$(_id+' option').remove();
+    	var mb = $(_id + ' + .ac-magicbox');
+    	var tag = mb.parent().find('.ac-tags-toolbar');
+    	tag.children().remove();
+    	var opts = mb.find('[data-ac-attr]').data('ac-attr');
+    	mb.find('.ac-scrollspy-opts-selected .ac-search-select').each(function(a,b){    		
+    		var data = $(b).data('row');
+    		$(document.createElement('option')).attr('selected', 'selected').attr('value',data[opts.property_value]).text(data[opts.property_text]).appendTo(_id);
+    		$(document.createElement('div')).addClass('btn-group').append(
+				$(document.createElement('span')).addClass('label label-info').attr('type', 'button').text(data[opts.property_text])
+    		).appendTo(tag);
+    	});
+    	mb.toggleClass('in');
+    	$(_id).parent().find('.ac-tags-toolbar').toggleClass('in');
+    },
+};
 $(function() {
 
     // add bootstrap classes to forms
@@ -490,6 +584,12 @@ $(function() {
     });
     $(document).on('click', '.infinityscroll-next-button' , lcInfinityGrid.scrollNextButton);
     $('[data-infinity-grid="true"]').each(lcInfinityGrid.startUp);
-    $("[data-enable-switch='1']").bootstrapSwitch();    
+    $("[data-enable-switch='1']").bootstrapSwitch();
+    $(document).on('click', "[data-ac-attr]", lcAcWidget.onSearch);
+    $(document).on('click', ".ac-scrollspy-opts .ac-search-select", lcAcWidget.onClickFilteredItem);
+    $(document).on('click', ".ac-scrollspy-opts-selected .ac-search-select", lcAcWidget.onClickSelectedItem);
+    $(document).on('click', ".ac-search-enable", lcAcWidget.onClickSearchEnable);
+    $(document).on('click', ".ac-search-cancel", lcAcWidget.onClickSearchCancel);
+    $(document).on('click', ".ac-search-commit", lcAcWidget.onClickSearchCommit);
 });
 

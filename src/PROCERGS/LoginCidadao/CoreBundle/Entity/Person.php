@@ -219,7 +219,7 @@ class Person extends BaseUser implements PersonInterface
     protected $shouts;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\OAuthBundle\Entity\Client", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="PROCERGS\OAuthBundle\Entity\ClientPerson", mappedBy="person")
      */
     protected $clients;
 
@@ -704,6 +704,11 @@ class Person extends BaseUser implements PersonInterface
     {
         return $this->clients;
     }
+    
+    public function setClients($var)
+    {
+        return $this->clients = $var;
+    }    
 
     public function checkEmailPending()
     {
@@ -1060,6 +1065,13 @@ class Person extends BaseUser implements PersonInterface
     {
         $this->badges = array_merge($this->badges, $badges);
         return $this;
+    }
+    
+    public function getFullNameOrUsername() {
+        if (null === $this->firstName) {
+            return $this->username;
+        }
+        return $this->getFullName();
     }
 
     public function getLogoutKeys()

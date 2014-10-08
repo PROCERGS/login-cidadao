@@ -7,6 +7,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Form\DataTransformer\FromArray;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Doctrine\ORM\EntityRepository;
 class ClientBaseFormType extends AbstractType
 {
 
@@ -52,6 +53,31 @@ class ClientBaseFormType extends AbstractType
                     'read_only' => true,
                     'attr' => array('rows' => 4)
                 ));
+                $form->add('persons', 'ajax_choice', array(
+                    'ajax_choice_attr' => array(
+                        'filter' => array(
+                            'route' => 'lc_dev_client_grid_developer_filter',
+                            'search_prop' => 'username',
+                            'extra_form_prop' => array('service_id' => 'id')
+                        ),
+                        'selected' => array(
+                            'route' => 'lc_dev_client_grid_developer',
+                            'extra_form_prop' => array('person_id' => 'persons')
+                        ),
+                        'property_value' => 'id',
+                        'property_text' => 'fullNameOrUsername',
+                    ),
+                    'required' => true,
+                    'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
+                    'property' => 'fullName',
+                    'query_builder' => function(EntityRepository $er) use (&$entity) {
+                        //$country = $er->createQueryBuilder('h')->getEntityManager()->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->findOneBy(array('iso2' => 'BR'));
+                        return $er->createQueryBuilder('u')
+                        ->join('PROCERGSOAuthBundle:ClientPerson', 'cp', 'with', 'cp.person = u')
+                        ->where('cp.client = :client')->setParameter('client', $entity)
+                        ->orderBy('u.username', 'ASC');
+                    }
+                ));      
             } else {
                 $form->add('publicId', 'hidden', array(
                     'required' => false,

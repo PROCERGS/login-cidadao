@@ -231,7 +231,8 @@ services:
         tags:
             - { name: form.type, alias: ajax_choice }
         calls:
-            - [setTranslator, ["@translator"]]            
+            - [setTranslator, ["@translator"]]
+            - [setRouter, ["@router"]]            
             
     procergs_logincidadao.person.resume.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\PersonResumeFormType

@@ -75,6 +75,58 @@ class ClientController extends Controller
         
     }
     
+    /**
+     * @Route("/grid/developer/filter", name="lc_dev_client_grid_developer_filter")
+     * @Template()
+     */
+    public function gridDeveloperFilterAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $sql = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->createQueryBuilder('u');
+        $sql->select('u');
+        $sql->where('1=1');
+        $parms = $request->get('ac_data');
+        if (isset($parms['username'])) {
+            $sql->andWhere('u.cpf like ?1 or u.username like ?1 or u.email like ?1 or u.firstName like ?1 or u.surname like ?1');
+            $sql->setParameter('1', '%' . addcslashes($parms['username'], '\\%_') . '%');
+        }
+        $sql->addOrderBy('u.id', 'desc');
+        $grid = new GridHelper();
+        $grid->setId('developer-filter-grid');
+        $grid->setPerPage(5);
+        $grid->setMaxResult(5);
+        $grid->setQueryBuilder($sql);
+        $grid->setInfinityGrid(true);
+        $grid->setRouteParams(array('ac_data'));
+        $grid->setRoute('lc_dev_client_grid_developer_filter');
+        return array('grid' => $grid->createView($request));
+    }
+
+    /**
+     * @Route("/grid/developer", name="lc_dev_client_grid_developer")
+     * @Template()
+     */
+    public function gridDeveloperAction(Request $request)
+    {
+        $parms = $request->get('ac_data');
+        if (!isset($parms['person_id'])) {
+            die('dunno');
+        }
+        $em = $this->getDoctrine()->getManager();
+        $sql = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->createQueryBuilder('p');
+        $sql->where('p.id in(:id)')->setParameter('id', $parms['person_id']);
+        $sql->addOrderBy('p.id', 'desc');
+        $grid = new GridHelper();
+        $grid->setId('developer-grid');
+        $grid->setPerPage(5);
+        $grid->setMaxResult(5);
+        $grid->setQueryBuilder($sql);
+        $grid->setInfinityGrid(true);
+        $grid->setRouteParams(array('ac_data'));
+        $grid->setRoute('lc_dev_client_grid_developer');
+        return array('grid' => $grid->createView($request));
+    }
+    
 
     /**
      * @Route("/edit/{id}", name="lc_dev_client_edit")

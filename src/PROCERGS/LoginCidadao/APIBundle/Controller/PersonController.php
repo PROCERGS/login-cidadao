@@ -14,9 +14,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class PersonController extends BaseController
 {
@@ -46,7 +43,7 @@ class PersonController extends BaseController
         $scope = $this->getClientScope($person);
 
         $view = $this->view($person)
-            ->setSerializationContext($this->getSerializationContext($scope));
+                ->setSerializationContext($this->getSerializationContext($scope));
         return $this->handleView($view);
     }
 
@@ -73,7 +70,7 @@ class PersonController extends BaseController
         $user = $this->getUser();
         $scope = $this->getClientScope($user);
         $updatedAt = \DateTime::createFromFormat('Y-m-d H:i:s',
-                                                 $this->getRequest()->get('updated_at'));
+                        $this->getRequest()->get('updated_at'));
 
         if (!($updatedAt instanceof \DateTime)) {
             $updatedAt = new \DateTime();
@@ -82,11 +79,11 @@ class PersonController extends BaseController
         $id = $user->getId();
         $lastUpdatedAt = null;
         $callback = $this->getCheckUpdateCallback($id, $updatedAt,
-                                                  $lastUpdatedAt);
+                $lastUpdatedAt);
         $person = $this->runTimeLimited($callback);
         $context = SerializationContext::create()->setGroups($scope);
         $view = $this->view($person)
-            ->setSerializationContext($context);
+                ->setSerializationContext($context);
         return $this->handleView($view);
     }
 
@@ -152,17 +149,17 @@ class PersonController extends BaseController
         $body = json_decode($request->getContent(), 1);
 
         $chkAuth = $this->getDoctrine()
-            ->getManager()
-            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
-            ->createQueryBuilder('a')
-            ->select('cnc, p')
-            ->join('PROCERGSLoginCidadaoCoreBundle:Person', 'p', 'WITH',
-                   'a.person = p')
-            ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'a.client = c')
-            ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH',
-                   'cnc.client = c')
-            ->where('c.id = ' . $client->getId() . ' and p.id = :person_id and cnc.id = :config_id')
-            ->getQuery();
+                ->getManager()
+                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
+                ->createQueryBuilder('a')
+                ->select('cnc, p')
+                ->join('PROCERGSLoginCidadaoCoreBundle:Person', 'p', 'WITH',
+                        'a.person = p')
+                ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'a.client = c')
+                ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc',
+                        'WITH', 'cnc.client = c')
+                ->where('c.id = ' . $client->getId() . ' and p.id = :person_id and cnc.id = :config_id')
+                ->getQuery();
         $rowR = array();
         $em = $this->getDoctrine()->getManager();
         $validator = $this->get('validator');
@@ -177,11 +174,11 @@ class PersonController extends BaseController
                 $not = new Notification();
                 $not->setPerson($res[0]);
                 $not->setConfigNotCli($res[1])
-                    ->setIcon(isset($row['icon']) && $row['icon'] ? $row['icon'] : $not->getConfigNotCli()->getIcon())
-                    ->setTitle(isset($row['title']) && $row['title'] ? $row['title'] : $not->getConfigNotCli()->getTitle())
-                    ->setShortText(isset($row['shorttext']) && $row['shorttext'] ? $row['shorttext'] : $not->getConfigNotCli()->getShortText())
-                    ->setText($row['text'])
-                    ->parseHtmlTpl($not->getConfigNotCli()->getHtmlTpl());
+                        ->setIcon(isset($row['icon']) && $row['icon'] ? $row['icon'] : $not->getConfigNotCli()->getIcon())
+                        ->setTitle(isset($row['title']) && $row['title'] ? $row['title'] : $not->getConfigNotCli()->getTitle())
+                        ->setShortText(isset($row['shorttext']) && $row['shorttext'] ? $row['shorttext'] : $not->getConfigNotCli()->getShortText())
+                        ->setText($row['text'])
+                        ->parseHtmlTpl($not->getConfigNotCli()->getHtmlTpl());
                 $errors = $validator->validate($not);
                 if (!count($errors)) {
                     $em->persist($not);
@@ -193,53 +190,6 @@ class PersonController extends BaseController
         }
         $em->flush();
         return $this->handleView($this->view($rowR));
-    }
-
-    /**
-     * Generates and returns a logout key for the user.
-     *
-     * @ApiDoc(
-     *   resource = true,
-     *   description = "Generates and returns a logout key for the user.",
-     *   output = {
-     *     "class"="PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey",
-     *     "groups" = {"key"}
-     *   },
-     *   statusCodes = {
-     *     200 = "Returned when successful"
-     *   }
-     * )
-     * @REST\Get("/person/{id}/logout-key")
-     * @REST\View(templateVar="logoutKey")
-     * @throws NotFoundHttpException
-     */
-    public function getLogoutKeyAction($id)
-    {
-        $token = $this->get('security.context')->getToken();
-        $accessToken = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:AccessToken')->findOneBy(array('token' => $token->getToken()));
-        $client = $accessToken->getClient();
-
-        $people = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
-        $person = $people->find($id);
-        
-        if (!$person->isAuthorizedClient($client, 'logout')) {
-            throw new AccessDeniedHttpException("Not authorized");
-        }
-        
-        $logoutKey = new LogoutKey();
-        $logoutKey->setPerson($person);
-        $logoutKey->setClient($client);
-        $logoutKey->setKey($logoutKey->generateKey());
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($logoutKey);
-        $em->flush();
-        
-        $result = array(
-            'key' => $logoutKey->getKey(),
-            'url' => $this->generateUrl('lc_logout_not_remembered_safe', array('key' => $logoutKey->getKey()), UrlGeneratorInterface::ABSOLUTE_URL)
-        );
-        return $result;
     }
 
 }

@@ -9,7 +9,6 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Translation\TranslatorInterface;
-use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class LoggedInUserListener
 {
@@ -70,17 +69,14 @@ class LoggedInUserListener
     protected function checkUnconfirmedEmail()
     {
         $user = $this->context->getToken()->getUser();
-        if ($user instanceof PersonInterface) {
-            if (is_null($user->getEmailConfirmedAt())) {
-                $params = array('%url%' => $this->router->generate('lc_resend_confirmation_email'));
-                $title = $this->translator->trans('notification.unconfirmed.email.title');
-                $text = $this->translator->trans('notification.unconfirmed.email.shortText',
-                                                 $params);
-                $alert = sprintf("<strong>%s</strong> %s", $title, $text);
-
-                $this->session->getFlashBag()->add('alert.unconfirmed.email',
-                                                   $alert);
-            }
+        if (is_null($user->getEmailConfirmedAt())) {
+            $params = array('%url%' => $this->router->generate('lc_resend_confirmation_email'));
+            $title = $this->translator->trans('notification.unconfirmed.email.title');
+            $text = $this->translator->trans('notification.unconfirmed.email.shortText',
+                                             $params);
+            $alert = sprintf("<strong>%s</strong> %s", $title, $text);
+            
+            $this->session->getFlashBag()->add('alert.unconfirmed.email', $alert);
         }
     }
 

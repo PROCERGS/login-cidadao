@@ -74,7 +74,7 @@
                     </i>
                 </button>
                 <ul class="dropdown-menu clearfix">
-                    <div class="scrollspy-example" data-offset="0" data-spy="scroll">
+                    <div class="navbar-scrollspy-notification" data-offset="0" data-spy="scroll">
                         {% render(controller("PROCERGSLoginCidadaoCoreBundle:Notification:gridNavbarUnread")) %}
                     </div>
                 </ul>
@@ -84,14 +84,6 @@
 
     </div>
 </div>
-<style>
-.scrollspy-example {
-    height: 300px;
-    margin-top: 10px;
-    overflow: auto;
-    position: relative;
-}
-</style>
 {% if app.session.flashbag.peek('alert.unconfirmed.email') %}
     {% set flashMessage = app.session.flashbag.get('alert.unconfirmed.email') | first %}
 <div class="notification-extreme alert alert-danger">

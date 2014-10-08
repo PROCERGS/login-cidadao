@@ -12,15 +12,13 @@ use FOS\OAuthServerBundle\Model\ClientInterface;
 class BaseController extends FOSRestController
 {
 
-    protected function renderWithContext($content, $context = null)
+    protected function renderWithContext($content)
     {
         $person = $this->getUser();
-        if (is_null($context)) {
-            $scope = $this->getClientScope($person);
-            $context = $this->getSerializationContext($scope);
-        }
+        $scope = $this->getClientScope($person);
 
-        $view = $this->view($content)->setSerializationContext($context);
+        $view = $this->view($content)
+                ->setSerializationContext($this->getSerializationContext($scope));
         return $this->handleView($view);
     }
 
@@ -29,7 +27,7 @@ class BaseController extends FOSRestController
         $person = $this->getUser();
         $serializer = $this->get('jms_serializer');
         return $serializer->serialize($person, 'json',
-                                      SerializationContext::create()->setGroups($scope));
+                        SerializationContext::create()->setGroups($scope));
     }
 
     protected function getClientScope($user)
@@ -37,8 +35,8 @@ class BaseController extends FOSRestController
         $client = $this->getClient();
 
         $authorization = $this->getDoctrine()
-            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
-            ->findOneBy(array(
+                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
+                ->findOneBy(array(
             'person' => $user,
             'client' => $client
         ));
