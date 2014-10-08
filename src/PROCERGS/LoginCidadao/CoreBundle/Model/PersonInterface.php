@@ -24,10 +24,6 @@ interface PersonInterface
 
     public function setBirthdate($birthdate);
 
-    public function getCep();
-
-    public function setCep($cep);
-
     public function getMobile();
 
     public function setMobile($mobile);
@@ -129,14 +125,6 @@ interface PersonInterface
 
     public function hasPassword();
 
-    public function setAdress($var);
-
-    public function getAdress();
-
-    public function setAdressNumber($var);
-
-    public function getAdressNumber();
-
     public function setUf($var);
 
     public function getUf();
@@ -230,9 +218,9 @@ interface PersonInterface
     public function getComplement();
 
     public function getRgs();
-    
+
     public function getBadges();
-    
+
     /**
      * Merges badges <code>$badges</code> into a person's badges.
      * 

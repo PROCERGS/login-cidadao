@@ -120,14 +120,6 @@ class Person extends BaseUser implements PersonInterface
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"cep"})
-     * @ORM\Column(type="string", nullable=true)
-     * @JMS\Since("1.0")
-     */
-    protected $cep;
-
-    /**
-     * @JMS\Expose
      * @JMS\Groups({"mobile"})
      * @ORM\Column(type="string", nullable=true)
      * @JMS\Since("1.0")
@@ -235,24 +227,6 @@ class Person extends BaseUser implements PersonInterface
      * @ORM\OneToMany(targetEntity="ClientSuggestion", mappedBy="person")
      */
     protected $suggestions;
-
-    /**
-     * @JMS\Expose
-     * @JMS\Groups({"adress"})
-     * @ORM\Column(name="adress", type="string", length=255, nullable=true)
-     * @var string
-     * @JMS\Since("1.0.2")
-     */
-    protected $adress;
-
-    /**
-     * @JMS\Expose
-     * @JMS\Groups({"adress_number"})
-     * @ORM\Column(name="adress_number",type="integer", nullable=true)
-     * @var string
-     * @JMS\Since("1.0.2")
-     */
-    protected $adressNumber;
 
     /**
      * @JMS\Expose
@@ -366,14 +340,6 @@ class Person extends BaseUser implements PersonInterface
     protected $rgs;
 
     /**
-     * @JMS\Expose
-     * @JMS\Groups({"adress_complement"})
-     * @ORM\Column(name="complement", type="string", nullable=true,length=255)
-     * @JMS\Since("1.0.3")
-     */
-    protected $complement;
-
-    /**
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationToken", mappedBy="person")
      */
     protected $notificationTokens;
@@ -394,6 +360,11 @@ class Person extends BaseUser implements PersonInterface
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
      */
     protected $logoutKeys;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonAddress", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
+     */
+    protected $addresses;
 
     public function __construct()
     {
@@ -448,16 +419,6 @@ class Person extends BaseUser implements PersonInterface
     public function setBirthdate($birthdate)
     {
         $this->birthdate = $birthdate;
-    }
-
-    public function getCep()
-    {
-        return $this->cep;
-    }
-
-    public function setCep($cep)
-    {
-        $this->cep = $cep;
     }
 
     public function getMobile()
@@ -811,28 +772,6 @@ class Person extends BaseUser implements PersonInterface
         return strlen($password) > 0;
     }
 
-    public function setAdress($var)
-    {
-        $this->adress = $var;
-        return $this;
-    }
-
-    public function getAdress()
-    {
-        return $this->adress;
-    }
-
-    public function setAdressNumber($var)
-    {
-        $this->adressNumber = $var;
-        return $this;
-    }
-
-    public function getAdressNumber()
-    {
-        return $this->adressNumber;
-    }
-
     public function setUf($var)
     {
         $this->uf = $var;
@@ -1120,6 +1059,28 @@ class Person extends BaseUser implements PersonInterface
     public function mergeBadges(array $badges)
     {
         $this->badges = array_merge($this->badges, $badges);
+        return $this;
+    }
+
+    public function getLogoutKeys()
+    {
+        return $this->logoutKeys;
+    }
+
+    public function getAddresses()
+    {
+        return $this->addresses;
+    }
+
+    public function setLogoutKeys($logoutKeys)
+    {
+        $this->logoutKeys = $logoutKeys;
+        return $this;
+    }
+
+    public function setAddresses($addresses)
+    {
+        $this->addresses = $addresses;
         return $this;
     }
 
