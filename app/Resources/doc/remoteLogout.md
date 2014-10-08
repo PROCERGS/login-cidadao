@@ -18,7 +18,7 @@ Steps Detailed
 
 ### Obtaining the Access Token
 
-This step is specific to your programming language and OAuth library and you have to learn how to use it yourself.
+This step is specific to your programming language and OAuth library so you'll have to learn how to use it yourself.
 
 ### Requesting the Logout Key
 
