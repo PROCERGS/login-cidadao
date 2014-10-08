@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class PersonController extends BaseController
 {
@@ -220,6 +221,11 @@ class PersonController extends BaseController
 
         $people = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
         $person = $people->find($id);
+        
+        if (!$person->isAuthorizedClient($client, 'logout')) {
+            throw new AccessDeniedHttpException("Not authorized");
+        }
+        
         $logoutKey = new LogoutKey();
         $logoutKey->setPerson($person);
         $logoutKey->setClient($client);
