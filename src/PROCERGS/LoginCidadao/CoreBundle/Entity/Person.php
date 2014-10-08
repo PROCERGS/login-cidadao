@@ -28,7 +28,7 @@ class Person extends BaseUser implements PersonInterface
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"id","public_profile"})
+     * @JMS\Groups({"public_profile"})
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -70,7 +70,7 @@ class Person extends BaseUser implements PersonInterface
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"username","public_profile"})
+     * @JMS\Groups({"public_profile"})
      * @PROCERGSAssert\Username
      * @Assert\NotBlank
      * @Assert\Length(
@@ -227,7 +227,7 @@ class Person extends BaseUser implements PersonInterface
     protected $shouts;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\OAuthBundle\Entity\Client", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="PROCERGS\OAuthBundle\Entity\ClientPerson", mappedBy="person")
      */
     protected $clients;
 
@@ -319,7 +319,7 @@ class Person extends BaseUser implements PersonInterface
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"picture","public_profile"})
+     * @JMS\Groups({"public_profile"})
      * @JMS\Since("1.0.2")
      */
     protected $profilePicutreUrl;
@@ -327,7 +327,7 @@ class Person extends BaseUser implements PersonInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @JMS\Expose
-     * @JMS\Groups({"updated_at","public_profile"})
+     * @JMS\Groups({"public_profile"})
      * @var \DateTime $updatedAt
      * @JMS\Since("1.0.2")
      */
@@ -385,10 +385,15 @@ class Person extends BaseUser implements PersonInterface
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"badges", "public_profile"})
+     * @JMS\Groups({"public_profile"})
      * @var array
      */
     protected $badges = array();
+
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
+     */
+    protected $logoutKeys;
 
     public function __construct()
     {
@@ -738,6 +743,11 @@ class Person extends BaseUser implements PersonInterface
     {
         return $this->clients;
     }
+    
+    public function setClients($var)
+    {
+        return $this->clients = $var;
+    }    
 
     public function checkEmailPending()
     {
@@ -1116,6 +1126,13 @@ class Person extends BaseUser implements PersonInterface
     {
         $this->badges = array_merge($this->badges, $badges);
         return $this;
+    }
+    
+    public function getFullNameOrUsername() {
+        if (null === $this->firstName) {
+            return $this->username;
+        }
+        return $this->getFullName();
     }
 
 }

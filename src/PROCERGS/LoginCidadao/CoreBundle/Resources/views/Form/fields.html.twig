@@ -78,47 +78,61 @@
 {%- endblock switch_widget %}
 
 {% block ajax_choice_label -%}
-{{ block('form_label') }}<a class="glyphicon glyphicon-pencil ajax-choice-label" type="button" ></a>
+{{ block('form_label') }}<a class="glyphicon glyphicon-pencil ac-search-enable" data-ac-reference="{{ id }}" type="button" ></a>
 {%- endblock ajax_choice_label %}
 
 {% block ajax_choice_widget -%}
     {% if required and empty_value is none and not empty_value_in_choices and not multiple -%}
         {% set required = false %}
     {%- endif -%}
-    <div class="ajax-choise-sandbox">
+    <div class="ac-sandbox">
         {% set options = choices -%}
-        {%- if options|length > 0 -%}
-        <div class="btn-toolbar" role="toolbar">
-        {% for group_label, choice in options %}
-            {%- if choice is not iterable -%}
-                {% if choice is selectedchoice(value) %}
-                <div class="btn-group">
-                    <span class="label label-info" type="button">{{ choice.label|trans({}, translation_domain) }}</span>
-                </div>
-                {% endif %}
+        <div class="ac-tags-toolbar btn-toolbar collapse in" role="toolbar">
+            {%- if options|length > 0 -%}        
+            {% for group_label, choice in options %}
+                {%- if choice is not iterable -%}
+                    <div class="btn-group">
+                        <span class="label label-info" type="button">{{ choice.label|trans({}, translation_domain) }}</span>
+                    </div>
+                {%- endif -%}
+            {% endfor %}        
             {%- endif -%}
-        {% endfor %}
         </div>
-        {%- endif -%}
         <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
             {% if empty_value is not none -%}
                 <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
             {%- endif %}
             {%- if preferred_choices|length > 0 -%}
                 {% set options = preferred_choices %}
-                {{- block('choice_widget_options') -}}
+                {{- block('ajax_choice_options') -}}
                 {% if choices|length > 0 and separator is not none -%}
                     <option disabled="disabled">{{ separator }}</option>
                 {%- endif %}
             {%- endif -%}
             {% set options = choices -%}
-            {{- block('choice_widget_options') -}}
+            {{- block('ajax_choice_options') -}}
         </select>
-        <div class="input-group">
-          <input type="text" class="form-control">
-          <span class="input-group-btn">
-            <button type="button" class="btn btn-default">Buscar!</button>
-          </span>
+        <div class="ac-magicbox collapse">
+            <div class="input-group">
+              <input type="text" class="form-control"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" {%- if ajax_choice_attr is defined %} data-ac-attr="{{ ajax_choice_attr|json_encode }}"{% endif -%}>Buscar!</button>
+              </span>
+            </div>
+            <div class="ac-scrollspy-opts"></div>
+            <div class="ac-scrollspy-opts-selected"></div>
+            <div class="btn-group btn-group-justified">
+                <div class="btn-group">
+                	<button type="button" class="btn btn-default ac-search-cancel" data-ac-reference="{{ id }}">
+                		<span class="glyphicon glyphicon-remove-sign"></span> {{ 'cancel'|trans }}
+                	</button>
+            	</div>
+            	<div class="btn-group">
+                    <button type="button" class="btn btn-primary ac-search-commit" data-ac-reference="{{ id }}">
+                		<span class="glyphicon glyphicon-ok-sign"></span> {{ 'add'|trans }}
+                	</button>
+            	</div>
+            </div>
         </div>
     </div>
 {%- endblock ajax_choice_widget %}
@@ -131,7 +145,7 @@
                 {{- block('choice_widget_options') -}}
             </optgroup>
         {%- else -%}
-            <option value="{{ choice.value }}"{% if choice is selectedchoice(value) %} selected="selected"{% endif %}>{{ choice.label|trans({}, translation_domain) }}</option>
+            <option value="{{ choice.value }}" selected="selected">{{ choice.label|trans({}, translation_domain) }}</option>
         {%- endif -%}
     {% endfor %}
 {%- endblock ajax_choice_options %}

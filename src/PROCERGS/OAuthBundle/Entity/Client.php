@@ -122,8 +122,14 @@ class Client extends BaseClient
      */
     private $person;
     
+
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\OAuthBundle\Entity\ClientPerson", mappedBy="Client")
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey", mappedBy="client")
+     */
+    protected $logoutKeys;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\OAuthBundle\Entity\ClientPerson", mappedBy="client")
      */
     private $persons;
 
@@ -360,7 +366,8 @@ class Client extends BaseClient
         return $this->person;
     }
 
-    public function getCategories(){
+    public function getCategories()
+    {
         return $this->categories;
     }
     

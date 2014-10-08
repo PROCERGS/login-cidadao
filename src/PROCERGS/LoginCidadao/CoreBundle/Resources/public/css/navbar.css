@@ -387,3 +387,9 @@
 #external .notification-extreme.alert {
     margin-bottom: 0;
 }
+.navbar-scrollspy-notification {
+    height: 300px;
+    margin-top: 10px;
+    overflow: auto;
+    position: relative;
+}
