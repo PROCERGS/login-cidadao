@@ -9,13 +9,13 @@ This page will describe what scope does what. Bellow there's a list of the avail
  * [ birthdate ](#birthdate)
  * [ email ](#email)
  * [ city ](#city)
- * [ voter_registration ](#voter_registration) (**deprecated**)
+ * ~~[ voter_registration ](#voter_registration)~~ (**deprecated**)
  * [ country ](#country)
  * [ uf ](#uf)
  * [ adress ](#adress)
- * [ adress_number ](#adress_number) (**deprecated**)
- * [ adress_complement ](#adress_complement) (**deprecated**)
- * [ rgs ](#rgs) (**deprecated**)
+ * ~~[ adress_number ](#adress_number)~~ (**deprecated**)
+ * ~~[ adress_complement ](#adress_complement)~~ (**deprecated**)
+ * ~~[ rgs ](#rgs)~~ (**deprecated**)
  * [ get_all_notifications ](#get_all_notifications)
  * [ notifications ](#notifications)
  * [ cep ](#cep)
@@ -54,11 +54,11 @@ Allows read access to a person's email address.
 
 Allows read access to a person's city.
 
-## <a name="voter_registration"></a> voter_registration (deprecated)
+## <a name="voter_registration"></a> ~~voter_registration~~ (deprecated)
 
 **DO NOT USE**
 
-Allowed read access to a person's voter registration.
+Used to allow read access to a person's voter registration.
 
 ## <a name="country"></a> country
 
@@ -72,15 +72,15 @@ Allows read access to a person's state.
 
 Allows read access to a person's addresses.
 
-## <a name="adress_number"></a> adress_number (deprecated)
+## <a name="adress_number"></a> ~~adress_number~~ (deprecated)
 
 **DO NOT USE**
 
-## <a name="adress_complement"></a> adress_complement (deprecated)
+## <a name="adress_complement"></a> ~~adress_complement~~ (deprecated)
 
 **DO NOT USE**
 
-## <a name="rgs"></a> rgs (deprecated)
+## <a name="rgs"></a> ~~rgs~~ (deprecated)
 
 **DO NOT USE**
 
