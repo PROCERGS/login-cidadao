@@ -98,9 +98,11 @@ img.desaturate {
 }
 
 .btn-default, .btn-success {
-     background-color: #039935;
-     border: solid 1px #039935;
-     color: #FFF;
+     /*background-color: #039935;
+     border: solid 1px #039935;*/
+     /*background-color: #5CB85C;
+     border: solid 1px #5CB85C;
+     color: #FFF;*/
 }
 
 .btn-success:hover {
