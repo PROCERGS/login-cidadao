@@ -277,43 +277,5 @@ class NotificationController extends Controller
         return array('form' => $form->createView(), 'cnc_id' => $config->getCategory()->getId());
     }
 
-    /**
-     * @Route("/inbox2/{nId}", name="lc_not_inbox2")
-     * @Template()
-     */
-    public function inbox2Action($nId)
-    {
-        return $this->gridSingleNotificationAction($nId);
-    }
-
-    /**
-     * @Route("/inbox2/grid", name="lc_not_inbox2_grid")
-     * @Template()
-     */
-    public function gridSingleNotificationAction($nId) {
-        $em = $this->getDoctrine()->getManager ();
-        $resultset = $em
-        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
-        ->createQueryBuilder('n')
-        ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
-        ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
-        ->where('n.person = :person and n.id = :id')
-        ->setParameter('person', $this->getUser())
-        ->setParameter('id', $nId)
-        ->getQuery()->getOneOrNullResult();
-        $a = array('wasread' => false, 'htmltpl' => null);
-        if ($resultset) {
-            if (!$resultset->isRead()) {
-                $resultset->setReadDate(new \DateTime());
-                $em->persist($resultset);
-                $em->flush();
-                $a['wasread'] = true;
-            }
-            $a['htmltpl'] = $resultset->getHtmlTpl();
-        }
-        return array('htmltpl' => $a['htmltpl']);
-    }
-
-
 
 }
