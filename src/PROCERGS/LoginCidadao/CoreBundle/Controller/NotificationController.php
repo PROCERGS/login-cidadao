@@ -30,7 +30,7 @@ class NotificationController extends Controller
             ->getTotalUnreadGroupByClient($this->getUser());
         return array('clients' => $result);
     }
-    
+
     /**
      * @Route("/inbox/gridnavbarunread", name="lc_not_inbox_gridnavbarunread")
      * @Template()
@@ -47,7 +47,7 @@ class NotificationController extends Controller
         ->where('n.person = :person and n.readDate is null')
         ->setParameter('person', $this->getUser())
         ->orderBy('n.id', 'DESC');
-        
+
         if ($request->get('client')) {
             $sql->andWhere('c.id = :client')->setParameter('client', $request->get('client'));
         }
@@ -169,7 +169,7 @@ class NotificationController extends Controller
      */
     public function inboxAction(Request $request)
     {
-        $mode = $request->get('mode', 0); 
+        $mode = $request->get('mode', 0);
         if ($mode === 0) {
             return $this->gridFullAction($request);
         } else {
@@ -276,6 +276,44 @@ class NotificationController extends Controller
         }
         return array('form' => $form->createView(), 'cnc_id' => $config->getCategory()->getId());
     }
+
+    /**
+     * @Route("/inbox2/{nId}", name="lc_not_inbox2")
+     * @Template()
+     */
+    public function inbox2Action($nId)
+    {
+        return $this->gridSingleNotificationAction($nId);
+    }
+
+    /**
+     * @Route("/inbox2/grid", name="lc_not_inbox2_grid")
+     * @Template()
+     */
+    public function gridSingleNotificationAction($nId) {
+        $em = $this->getDoctrine()->getManager ();
+        $resultset = $em
+        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
+        ->createQueryBuilder('n')
+        ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
+        ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
+        ->where('n.person = :person and n.id = :id')
+        ->setParameter('person', $this->getUser())
+        ->setParameter('id', $nId)
+        ->getQuery()->getOneOrNullResult();
+        $a = array('wasread' => false, 'htmltpl' => null);
+        if ($resultset) {
+            if (!$resultset->isRead()) {
+                $resultset->setReadDate(new \DateTime());
+                $em->persist($resultset);
+                $em->flush();
+                $a['wasread'] = true;
+            }
+            $a['htmltpl'] = $resultset->getHtmlTpl();
+        }
+        return array('htmltpl' => $a['htmltpl']);
+    }
+
 
 
 }
