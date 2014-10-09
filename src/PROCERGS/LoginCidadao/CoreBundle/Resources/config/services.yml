@@ -10,6 +10,7 @@ parameters:
     procergs_person.resetting.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ResettingFormType
     procergs_logincidadao.change.password.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ChangePasswordFormType
     procergs_logincidadao.person.address.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType
+    procergs_logincidadao.city.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\CityType
     procergs_logincidadao.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
     procergs_logincidadao.user_manager.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Manager\UserManager
     procergs_logincidadao.user_register.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\RegisterListner
@@ -275,3 +276,8 @@ services:
         class: %procergs_logincidadao.person.address.form.type.class%
         tags:
             - { name: form.type, alias: lc_person_address }
+
+    procergs_logincidadao.city.form.type:
+        class: %procergs_logincidadao.city.form.type.class%
+        tags:
+            - { name: form.type, alias: city }
