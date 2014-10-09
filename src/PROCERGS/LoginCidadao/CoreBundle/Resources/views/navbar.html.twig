@@ -70,7 +70,9 @@
             <li class="btn-group notifications pull-right dropdown-keep-open">
                 <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans %}Notifications{% endtrans %}">
                     <i class="glyphicon glyphicon-bell">
-                        <span class="label label-danger notification-total-unread-badge">{{ notifications_helper.getTotalUnread }}</span>
+                        {% if notifications_helper.getTotalUnread > 0 %}
+                            <span class="label label-danger notification-total-unread-badge">{{ notifications_helper.getTotalUnread }}</span>
+                        {% endif %}
                     </i>
                 </button>
                 <ul class="dropdown-menu clearfix">
