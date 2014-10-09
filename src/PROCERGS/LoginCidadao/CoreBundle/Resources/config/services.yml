@@ -9,6 +9,7 @@ parameters:
     procergs_person.revoke_authorization.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\RevokeAuthorizationFormType
     procergs_person.resetting.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ResettingFormType
     procergs_logincidadao.change.password.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ChangePasswordFormType
+    procergs_logincidadao.person.address.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType
     procergs_logincidadao.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
     procergs_logincidadao.user_manager.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Manager\UserManager
     procergs_logincidadao.user_register.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\RegisterListner
@@ -28,7 +29,7 @@ parameters:
 
     procergs.notification.handler.class: PROCERGS\LoginCidadao\CoreBundle\Handler\NotificationHandler
     procergs.notification.class: PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification
-    
+
     procergs.person.serialize.listenner.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\PersonSerializeEventListenner
 
 services:
@@ -36,7 +37,7 @@ services:
         class: PROCERGS\LoginCidadao\CoreBundle\Command\PopulateDatabaseCommand
         tags:
             - { name: console.command }
-    
+
     security.authentication.success_handler:
         class: %security.authentication.success_handler.class%
         public: false
@@ -205,7 +206,7 @@ services:
             - { name: form.type, alias: category_form_type }
         calls:
             - [setSecurity, ["@security.context"]]
-            - [setEntityManager, ["@doctrine.orm.entity_manager"]]            
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
 
     procergs_logincidadao.placeholder.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\PlaceholderFormType
@@ -213,27 +214,27 @@ services:
             - { name: form.type, alias: placeholder_form_type }
         calls:
             - [setSecurity, ["@security.context"]]
-            
+
     procergs_logincidadao.form.type.hidden_entity:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\HiddenEntityType
         tags:
             - { name: form.type, alias: hidden_entity }
-    
+
     procergs_logincidadao.form.type.switch:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\SwitchType
         tags:
             - { name: form.type, alias: switch }
         calls:
             - [setTranslator, ["@translator"]]
-            
+
     procergs_logincidadao.form.type.ajax_choice:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\AjaxChoiceType
         tags:
             - { name: form.type, alias: ajax_choice }
         calls:
             - [setTranslator, ["@translator"]]
-            - [setRouter, ["@router"]]            
-            
+            - [setRouter, ["@router"]]
+
     procergs_logincidadao.person.resume.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\PersonResumeFormType
         tags:
@@ -242,7 +243,7 @@ services:
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
             - [setTranslator, ["@translator"]]
             - [setSecurity, ["@security.context"]]
-            
+
     procergs_logincidadao.nfgws:
         class: %procergs_logincidadao.nfgws.class%
         calls:
@@ -269,3 +270,8 @@ services:
         arguments: [ @vich_uploader.templating.helper.uploader_helper, @templating.helper.assets, @kernel, @request ]
         tags:
             - { name: jms_serializer.event_listener, event: serializer.pre_serialize, method: onPreSerialize }
+
+    procergs_logincidadao.person.address.form.type:
+        class: %procergs_logincidadao.person.address.form.type.class%
+        tags:
+            - { name: form.type, alias: lc_person_address }

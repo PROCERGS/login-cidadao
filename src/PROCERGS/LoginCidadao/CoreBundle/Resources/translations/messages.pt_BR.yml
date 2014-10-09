@@ -576,4 +576,10 @@ notification.grid.title: 'Título'
 'developer.area': 'Área do desenvolvedor'
 not.createdat: 'Criado em '
 not.shorttext: 'Resumo'
-'Addresses': Endereços
+Addresses: Endereços
+'ex: Home Address': 'ex: Casa'
+'ex: 221B Baker Street': 'ex: Rua Baker, 221B'
+'ex: apartment 2': 'ex: ap. 2'
+'ex: DE24 8SG': 'ex: 90807-123'
+'ex: London': 'ex: Porto Alegre'
+New Address: Adicionar Endereço

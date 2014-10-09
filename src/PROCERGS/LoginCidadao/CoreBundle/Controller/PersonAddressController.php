@@ -20,4 +20,15 @@ class PersonAddressController extends Controller
         return compact('person');
     }
 
+    /**
+     * @Route("/person/addresses/new", name="lc_person_addresses_new")
+     * @Template()
+     */
+    public function newAddressAction()
+    {
+        $form = $this->createForm('lc_person_address');
+
+        return compact('form');
+    }
+
 }
