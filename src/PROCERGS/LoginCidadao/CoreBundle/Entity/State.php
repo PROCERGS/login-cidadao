@@ -8,80 +8,80 @@ use JMS\Serializer\Annotation\Groups;
 /**
  * City
  *
- * @ORM\Table(name="uf")
+ * @ORM\Table(name="state")
  * @ORM\Entity
  */
-class Uf
+class State
 {
     const REVIEWED_OK = 0;
     const REVIEWED_IGNORE = 1;
-    
+
     /**
-     * @Groups({"uf", "rgs"}) 
+     * @Groups({"state", "rgs"})
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")       
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
      * @var string
-     * @Groups({"uf", "rgs"}) 
+     * @Groups({"state", "rgs"})
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
-    
+
     /**
-     * 
+     *
      * @ORM\Column(name="acronym", type="string", length=2, nullable=true)
      */
     private $acronym;
-    
+
     /**
-     * @Groups({"uf", "rgs"}) 
+     * @Groups({"state", "rgs"})
      * @ORM\Column(name="iso6", type="string", length=6, nullable=true)
      */
     private $iso6;
-    
+
     /**
-     * @Groups({"uf", "rgs"}) 
+     * @Groups({"state", "rgs"})
      * @ORM\Column(name="fips", type="string", length=4, nullable=true)
      */
     private $fips;
-    
+
     /**
-     * @Groups({"uf", "rgs"}) 
+     * @Groups({"state", "rgs"})
      * @ORM\Column(name="stat", type="string", length=7, nullable=true)
      */
     private $stat;
-    
+
     /**
-     * @Groups({"uf", "rgs"}) 
+     * @Groups({"state", "rgs"})
      * @ORM\Column(name="class", type="string", length=255, nullable=true)
      */
     private $class;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Country")
      * @ORM\JoinColumn(name="country_id", referencedColumnName="id")
      */
     protected $country;
-    
+
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $reviewed;
-    
+
     public function __construct($id = null)
     {
         $this->setId($id);
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -91,10 +91,10 @@ class Uf
     public function setId($var)
     {
         $this->id = $var;
-    
+
         return $this;
     }
-    
+
     /**
      * Set name
      *
@@ -104,20 +104,20 @@ class Uf
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
         return $this->name;
     }
-    
+
     /**
      * Set Acronym
      *
@@ -127,10 +127,10 @@ class Uf
     public function setAcronym($var)
     {
         $this->acronym = $var;
-    
+
         return $this;
     }
-    
+
     /**
      * Get Acronym
      *
@@ -140,65 +140,65 @@ class Uf
     {
         return $this->acronym;
     }
-    
+
     public function setStat($var)
     {
         $this->stat = $var;
-    
+
         return $this;
     }
-    
+
     public function getStat()
     {
         return $this->stat;
     }
-    
+
     public function setFips($var)
     {
         $this->fips = $var;
-    
+
         return $this;
     }
-    
+
     public function getFips()
     {
         return $this->fips;
     }
-    
+
     public function setIso6($var)
     {
         $this->iso6 = $var;
-    
+
         return $this;
     }
-    
+
     public function getIso6()
     {
         return $this->iso6;
     }
-    
+
     public function setReviewed($var)
     {
         $this->reviewed = $var;
-    
+
         return $this;
     }
-    
+
     public function getReviewed()
     {
         return $this->reviewed;
     }
-    
+
     public function setCountry($var)
     {
         $this->country = $var;
-    
+
         return $this;
     }
-    
+
     public function getCountry()
     {
         return $this->country;
     }
-    
+
 }

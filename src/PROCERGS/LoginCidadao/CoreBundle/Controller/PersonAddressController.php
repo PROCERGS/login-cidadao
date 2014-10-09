@@ -2,9 +2,11 @@
 
 namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonAddress;
 
 class PersonAddressController extends Controller
 {
@@ -24,9 +26,19 @@ class PersonAddressController extends Controller
      * @Route("/person/addresses/new", name="lc_person_addresses_new")
      * @Template()
      */
-    public function newAddressAction()
+    public function newAddressAction(Request $request)
     {
-        $form = $this->createForm('lc_person_address');
+        $address = new PersonAddress();
+        $form = $this->createForm('lc_person_address', $address);
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            //$address = $form->getData();
+            var_dump($address);die();
+
+            return $this->redirect($this->generateUrl('lc_person_addresses'));
+        }
 
         return compact('form');
     }

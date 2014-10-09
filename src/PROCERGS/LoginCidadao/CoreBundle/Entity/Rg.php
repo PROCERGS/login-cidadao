@@ -6,10 +6,8 @@ use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * City
- *
- * @ORM\Table(name="rg")
- * @ORM\Entity
+ * @ ORM\Table(name="rg")
+ * @ ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
 class Rg
@@ -29,11 +27,11 @@ class Rg
     protected $person;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Uf")
-     * @ORM\JoinColumn(name="uf_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\State")
+     * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      * @Groups({"rgs"})
      */
-    protected $uf;
+    protected $state;
 
     /**
      * @Assert\Length(min=1,max="80")
@@ -60,9 +58,9 @@ class Rg
         return $this;
     }
 
-    public function setUf($var)
+    public function setState($var)
     {
-        $this->uf = $var;
+        $this->state = $var;
         return $this;
     }
 
@@ -77,9 +75,9 @@ class Rg
         return $this->person;
     }
 
-    public function getUf()
+    public function getState()
     {
-        return $this->uf;
+        return $this->state;
     }
 
     public function setVal($var)
@@ -92,13 +90,13 @@ class Rg
     {
         return $this->val;
     }
-    
+
     public function setIssuer($var)
     {
         $this->issuer = $var;
         return $this;
     }
-    
+
     public function getIssuer()
     {
         return $this->issuer;

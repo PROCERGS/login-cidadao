@@ -371,9 +371,9 @@ class PersonController extends Controller
         }
         $form = $this->createForm(new DocRgFormType(), $rg);
         $form->handleRequest($this->getRequest());
-        if ($form->isValid()) {            
-            $rgNum = str_split($form->get('val')->getData());            
-            if ( ($form->get('uf')->getData()->getId() == 43) && ($this->checkRGDce($rgNum) != $rgNum[0]) || ($this->checkRGDcd($rgNum) != $rgNum[9]) ) {
+        if ($form->isValid()) {
+            $rgNum = str_split($form->get('val')->getData());
+            if ( ($form->get('state')->getData()->getId() == 43) && ($this->checkRGDce($rgNum) != $rgNum[0]) || ($this->checkRGDcd($rgNum) != $rgNum[9]) ) {
                 $form->get('val')->addError(new FormError($this->get('translator')->trans('This RG is invalid')));
                 return array('form' => $form->createView());
             }
@@ -381,18 +381,18 @@ class PersonController extends Controller
             $manager = $this->getDoctrine()->getManager();
             $dql = $manager->getRepository('PROCERGSLoginCidadaoCoreBundle:Rg')
             ->createQueryBuilder('u')
-            ->where('u.person = :person and u.uf = :uf')
+            ->where('u.person = :person and u.state = :state')
             ->setParameter('person',$this->getUser())
-            ->setParameter('uf', $form->get('uf')->getData())
+            ->setParameter('state', $form->get('state')->getData())
             ->orderBy('u.id', 'ASC');
             if ($rg->getId()) {
                 $dql->andWhere('u != :rg')->setParameter('rg', $rg);
             }
             $has = $dql->getQuery()->getResult();
             if ($has) {
-                $form->get('uf')->addError(new FormError($this->get('translator')->trans('there is a RG already registered for this UF')));
+                $form->get('state')->addError(new FormError($this->get('translator')->trans('You already have an ID registered for this State')));
                 return array('form' => $form->createView());
-            }            
+            }
             $manager->persist($rg);
             $manager->flush();
             $resp = new Response('<script>rgGrid.getGrid();$(\'#edit-rg\').modal(\'hide\');</script>');
@@ -404,7 +404,7 @@ class PersonController extends Controller
     private function checkRGDce($rg) {
       $total = ($rg[1] * 2) + ($rg[2] * 3) + ($rg[3] * 4) + ($rg[4] * 5) + ($rg[5] * 6) + ($rg[6] * 7) + ($rg[7] * 8) + ($rg[8] * 9);
       $resto = $total % 11;
-      
+
       if ($resto == 0 || $resto == 1) {
           return 1;
       } else {
@@ -451,7 +451,7 @@ class PersonController extends Controller
             ->getRepository('PROCERGSLoginCidadaoCoreBundle:Rg')
             ->createQueryBuilder('u')
             ->select('u.id, u.val, right(b.iso6, 2) iso6')
-            ->join('PROCERGSLoginCidadaoCoreBundle:Uf', 'b', 'with', 'u.uf = b')
+            ->join('PROCERGSLoginCidadaoCoreBundle:State', 'b', 'with', 'u.state = b')
             ->where('u.person = :person')
             ->setParameters(array('person' => $this->getUser()))
             ->orderBy('u.id', 'ASC')

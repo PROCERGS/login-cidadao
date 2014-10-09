@@ -172,10 +172,8 @@ voterregistration.invalid: 'The informed voter registration is invalid or belong
 'To enjoy all the benefits of Citizen Login, please check your information and submit the following form.': 'To enjoy all the benefits of Citizen Login, please check your information and submit the following form.'
 'After registering you''ll receive a confirmation email to proceed the activation of your account.': 'After registering you''ll receive a confirmation email to proceed the activation of your account.'
 scope.country: 'Country'
-scope.uf: 'UF'
-scope.adress: 'Adress'
-scope.adress_number: 'Adress number'
-scope.adress_complement: 'Adress complement'
+scope.state: State
+scope.address: Address
 scope.rgs: 'RGs'
 scope.cep: 'CEP'
 scope.mobile: 'Mobile'

@@ -21,10 +21,10 @@ unlink($filename);
 $pdo = getPDOConnection($config);
 $pdo->beginTransaction();
 $st1 = $pdo->prepare('select id from city a1 where a1.id = ?');
-$st2 = $pdo->prepare('insert into city (id, uf_id, name, stat) values (?,'.
-    '(select a1.id from uf a1 inner join country a2 on a1.country_id = a2.id where a2.iso2 = \'BR\' and a1.stat = left(cast(? as varchar), 2))'.
+$st2 = $pdo->prepare('insert into city (id, state_id, name, stat) values (?,'.
+    '(select a1.id from state a1 inner join country a2 on a1.country_id = a2.id where a2.iso2 = \'BR\' and a1.stat = left(cast(? as varchar), 2))'.
     ', ?, ?)');
-$st3 = $pdo->prepare('update city set uf_id = COALESCE((select a1.id from uf a1 inner join country a2 on a1.country_id = a2.id where a2.iso2 = \'BR\' and a1.stat = left(cast(? as varchar), 2)), uf_id)'.
+$st3 = $pdo->prepare('update city set state_id = COALESCE((select a1.id from state a1 inner join country a2 on a1.country_id = a2.id where a2.iso2 = \'BR\' and a1.stat = left(cast(? as varchar), 2)), state_id)'.
 ', name = ?, stat = ? where id = ?');
 PHPExcel_Settings::setCacheStorageMethod(PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp, array( 'memoryCacheSize' => '2GB'));
 $xls = PHPExcel_IOFactory::load($filename1);

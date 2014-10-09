@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ContactFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Uf;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\IgpWsHelper;
@@ -123,8 +123,8 @@ class DefaultController extends Controller
         }
         return $response->setData($result);
     }
-    
-    
+
+
     /**
      * @Route("/login/cert", name="lc_login_cert")
      * @Template()
@@ -132,7 +132,7 @@ class DefaultController extends Controller
     public function loginCertAction(Request $request) {
         die(print_r($_REQUEST));
     }
-    
+
     /**
      * @Route("/igp/consult", name="lc_ipg_consutl")
      * @Template()

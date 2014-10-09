@@ -23,13 +23,13 @@ class ClientPerson
     /**
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="clients")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
-     */    
+     */
     protected $person;
-    
+
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="persons")
+     * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
-     */    
+     */
     protected $client;
 
     public function getId()

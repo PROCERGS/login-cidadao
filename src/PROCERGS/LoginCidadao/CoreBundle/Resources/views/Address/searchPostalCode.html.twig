@@ -8,9 +8,9 @@
     <div class="form-content">
         <h3 class="title">{{ 'cep.search.title'|trans }}</h3>
         <div class="form-group">
-            {{ form_label(form.uf) }}
-            <div class="input-error">{{ form_errors(form.uf) }}</div>
-            {{ form_widget(form.uf, {'attr': {'class': 'form-control'}}) }}
+            {{ form_label(form.state) }}
+            <div class="input-error">{{ form_errors(form.state) }}</div>
+            {{ form_widget(form.state, {'attr': {'class': 'form-control'}}) }}
         </div>
         <div class="form-group">
             {{ form_label(form.city) }}
@@ -43,7 +43,7 @@
                 <div class="col-md-3">{{ 'form.adress'|trans }}</div>
                 <div class="col-md-3">{{ 'form.district'|trans }}</div>
                 <div class="col-md-3">{{ 'form.city'|trans }}</div>
-                <div class="col-md-1">{{ 'form.uf'|trans }}</div>
+                <div class="col-md-1">{{ 'form.state'|trans }}</div>
                 <div class="col-md-1">{{ 'form.cep'|trans }}</div>
                 <div class="col-md-1">{{ 'form.map'|trans }}</div>
             </div>
@@ -63,15 +63,15 @@
                     <dd>{{ cep.localidade | title }}</dd>
                 </div>
                 <div class="col-md-1">
-                    <dt>{{ 'form.uf'|trans }}</dt>
-                    <dd>{{ cep.uf }}</dd>
+                    <dt>{{ 'form.state'|trans }}</dt>
+                    <dd>{{ cep.state }}</dd>
                 </div>
                 <div class="col-md-1">
                     <dt>{{ 'form.cep'|trans }}</dt>
                     <dd><a onclick="tryThisCep(this, event);" href="javascript:void(0);">{{ cep.cep|formatCep }}</a></dd>
                 </div>
                 <div class="col-md-1">
-                    <a target="_blank" class="center-block text-center" title="maps" href="http://maps.google.com.br/maps?q={{ cep.logradouro|url_encode(true) }},{{ cep.bairro|url_encode(true) }},{{ cep.localidade|url_encode(true) }},{{ cep.uf|url_encode(true) }}, {{ form.adressnumber.vars.value|url_encode(true) }}"><i class="glyphicon glyphicon-map-marker"></i></a>
+                    <a target="_blank" class="center-block text-center" title="maps" href="http://maps.google.com.br/maps?q={{ cep.logradouro|url_encode(true) }},{{ cep.bairro|url_encode(true) }},{{ cep.localidade|url_encode(true) }},{{ cep.state|url_encode(true) }}, {{ form.adressnumber.vars.value|url_encode(true) }}"><i class="glyphicon glyphicon-map-marker"></i></a>
                 </div>
             </div>
             {% endfor %}

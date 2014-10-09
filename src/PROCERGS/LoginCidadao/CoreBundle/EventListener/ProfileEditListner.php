@@ -24,7 +24,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Exception\LcValidationException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\MissingNfgAccessTokenException;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Uf;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
 use PROCERGS\Generic\ValidationBundle\Validator\Constraints\CEPValidator;
 
 class ProfileEditListner implements EventSubscriberInterface
@@ -98,41 +98,41 @@ class ProfileEditListner implements EventSubscriberInterface
     {
         $user = $event->getForm()->getData();
         if (!$user->getCountry()) {
-            if (!$user->getUf()) {
+            if (!$user->getState()) {
                 $steppe = ucwords(strtolower(trim($event->getForm()->get('ufsteppe')->getData())));
                 if ($steppe) {
-                    $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Uf');
+                    $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:State');
                     $ent = $repo->findOneBy(array(
                         'name' => $steppe
                     ));
                     if (!$ent) {
-                        $ent = new Uf();
+                        $ent = new State();
                         $ent->setName($steppe);
                         $ent->setCountry($user->getCountry());
                         $this->em->persist($ent);
                     }
-                    $user->setUf($ent);
+                    $user->setState($ent);
                 }
             }
             if (!$user->getCity()) {
                 $steppe = ucwords(strtolower(trim($event->getForm()->get('citysteppe')->getData())));
-                if ($user->getUf()) {
-                    $uf = $user->getUf();
+                if ($user->getState()) {
+                    $state = $user->getState();
                 } elseif (isset($ent)) {
-                    $uf = $ent;
+                    $state = $ent;
                 } else {
-                    $uf = null;
+                    $state = null;
                 }
-                if ($uf && $steppe) {
+                if ($state && $steppe) {
                     $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:City');
                     $ent = $repo->findOneBy(array(
                         'name' => $steppe,
-                        'uf' => $uf
+                        'state' => $state
                     ));
                     if (!$ent) {
                         $ent = new City();
                         $ent->setName($steppe);
-                        $ent->setUf($uf);
+                        $ent->setState($state);
                         $this->em->persist($ent);
                     }
                     $user->setCity($ent);

@@ -215,7 +215,7 @@ class DneHelper
         $data = http_build_query(array(
             'logradouro' => isset($var['logradouro']) ? $var['logradouro'] : '',
             'localidade' => isset($var['localidade']) ? $var['localidade'] : '',
-            'uf' => isset($var['uf']) ? $var['uf'] : '',
+            'state' => isset($var['state']) ? $var['state'] : '',
             'numero' => isset($var['numero']) ? $var['numero'] : ''
         ));
         $dataGet = http_build_query(array(

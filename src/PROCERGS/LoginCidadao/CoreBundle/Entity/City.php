@@ -15,7 +15,7 @@ class City
 {
     const REVIEWED_OK = 0;
     const REVIEWED_IGNORE = 1;
-    
+
     /**
      * @var integer
      *
@@ -33,7 +33,7 @@ class City
      * @ORM\Column(name="name", type="string", length=255)
      */
     protected $name;
-    
+
     /**
      * @var string
      *
@@ -41,13 +41,13 @@ class City
      * @ORM\Column(name="stat", type="string", length=7, nullable=true)
      */
     protected $stat;
-    
+
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Uf")
-     * @ORM\JoinColumn(name="uf_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\State")
+     * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      */
-    protected $uf;
-    
+    protected $state;
+
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
@@ -56,7 +56,7 @@ class City
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -67,12 +67,12 @@ class City
     {
         $this->id = $var;
         return $this;
-    }    
+    }
 
     public function setName($var)
     {
         $this->name = $var;
-    
+
         return $this;
     }
 
@@ -80,41 +80,41 @@ class City
     {
         return $this->name;
     }
-    
+
     public function setStat($var)
     {
         $this->stat = $var;
-    
+
         return $this;
     }
-    
+
     public function getStat()
     {
         return $this->stat;
     }
-    
+
     public function setReviewed($var)
     {
         $this->reviewed = $var;
-    
+
         return $this;
     }
-    
+
     public function getReviewed()
     {
         return $this->reviewed;
     }
-    
-    public function setUf($var)
+
+    public function setState($var)
     {
-        $this->uf = $var;
+        $this->state = $var;
         return $this;
     }
 
-    public function getUf()
+    public function getState()
     {
-        return $this->uf;
+        return $this->state;
     }
-    
-    
+
+
 }

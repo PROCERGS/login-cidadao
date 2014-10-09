@@ -13,22 +13,22 @@ function updateAdressByDne($config) {
         print_r($pdo->errorInfo());
         return false;
     }
-    $stm1 = $pdo->prepare("update person set country_id = ?, uf_id = ?, city_id = ?, adress = ? where id = ?");
-    $stm2 = $pdo->prepare("select a1.id, a1.uf_id, a2.country_id from city a1 inner join uf a2 on a1.uf_id = a2.id where a1.stat = ?");
-    $stm3 = $pdo->prepare('select a1.id, a1.uf_id, a2.country_id from city a1 inner join uf a2 on a1.uf_id = a2.id where a2.iso6 = ? and translate(lower(a1.name),\'áàâãäāéèêëíìïóòôõöúùûüūÁÀÂÃÄĀÉÈÊËÍÌÏÓÒÔÕÖÚÙÛÜŪçÇ‘\',\'aaaaaaeeeeiiiooooouuuuuAAAAAAEEEEIIIOOOOOUUUUUcC\') = translate(lower(?),\'áàâãäāéèêëíìïóòôõöúùûüūÁÀÂÃÄĀÉÈÊËÍÌÏÓÒÔÕÖÚÙÛÜŪçÇ‘\',\'aaaaaaeeeeiiiooooouuuuuAAAAAAEEEEIIIOOOOOUUUUUcC\')');
-    
+    $stm1 = $pdo->prepare("update person set country_id = ?, state_id = ?, city_id = ?, adress = ? where id = ?");
+    $stm2 = $pdo->prepare("select a1.id, a1.state_id, a2.country_id from city a1 inner join state a2 on a1.state_id = a2.id where a1.stat = ?");
+    $stm3 = $pdo->prepare('select a1.id, a1.state_id, a2.country_id from city a1 inner join state a2 on a1.state_id = a2.id where a2.iso6 = ? and translate(lower(a1.name),\'áàâãäāéèêëíìïóòôõöúùûüūÁÀÂÃÄĀÉÈÊËÍÌÏÓÒÔÕÖÚÙÛÜŪçÇ‘\',\'aaaaaaeeeeiiiooooouuuuuAAAAAAEEEEIIIOOOOOUUUUUcC\') = translate(lower(?),\'áàâãäāéèêëíìïóòôõöúùûüūÁÀÂÃÄĀÉÈÊËÍÌÏÓÒÔÕÖÚÙÛÜŪçÇ‘\',\'aaaaaaeeeeiiiooooouuuuuAAAAAAEEEEIIIOOOOOUUUUUcC\')');
+
     $dne = new DneHelper();
     foreach ($wrong as $person) {
         $ceps = $dne->findByCep($person['cep']);
         if ($ceps) {
             if (is_numeric($ceps['codigoMunIBGE'])) {
                 if ($ceps['codigoMunIBGE'] === 0) {
-                    if (!$stm3->execute(array('BR-'.$ceps['uf'],$ceps['infoAdicional']))) {
+                    if (!$stm3->execute(array('BR-'.$ceps['state'],$ceps['infoAdicional']))) {
                         print_r($pdo->errorInfo());
                         return false;
                     }
                     if ($res = $stm3->fetchAll()) {
-                        if (!$stm1->execute(array($res[0]['country_id'], $res[0]['uf_id'], $res[0]['id'], $ceps['localidade'], $person['id']))) {
+                        if (!$stm1->execute(array($res[0]['country_id'], $res[0]['state_id'], $res[0]['id'], $ceps['localidade'], $person['id']))) {
                             print_r($pdo->errorInfo());
                             return false;
                         }
@@ -39,7 +39,7 @@ function updateAdressByDne($config) {
                         return false;
                     }
                     if ($res = $stm2->fetchAll()) {
-                        if (!$stm1->execute(array($res[0]['country_id'], $res[0]['uf_id'], $res[0]['id'], $ceps['logradouroExtenso'], $person['id']))) {
+                        if (!$stm1->execute(array($res[0]['country_id'], $res[0]['state_id'], $res[0]['id'], $ceps['logradouroExtenso'], $person['id']))) {
                             print_r($pdo->errorInfo());
                             return false;
                         }

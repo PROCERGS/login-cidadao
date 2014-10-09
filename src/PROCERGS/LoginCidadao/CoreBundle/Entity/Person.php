@@ -230,12 +230,12 @@ class Person extends BaseUser implements PersonInterface
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"uf"})
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Uf")
-     * @ORM\JoinColumn(name="uf_id", referencedColumnName="id")
+     * @JMS\Groups({"state"})
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\State")
+     * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      * @JMS\Since("1.0.2")
      */
-    protected $uf;
+    protected $state;
 
     /**
      * @ORM\Column(name="nfg_access_token", type="string", length=255, nullable=true, unique=true)
@@ -334,7 +334,7 @@ class Person extends BaseUser implements PersonInterface
     /**
      * @JMS\Expose
      * @JMS\Groups({"rgs"})
-     * @ORM\OneToMany(targetEntity="Rg", mappedBy="person")
+     * @ ORM\OneToMany(targetEntity="Rg", mappedBy="person")
      * @JMS\Since("1.0.3")
      */
     protected $rgs;
@@ -704,11 +704,11 @@ class Person extends BaseUser implements PersonInterface
     {
         return $this->clients;
     }
-    
+
     public function setClients($var)
     {
         return $this->clients = $var;
-    }    
+    }
 
     public function checkEmailPending()
     {
@@ -777,15 +777,15 @@ class Person extends BaseUser implements PersonInterface
         return strlen($password) > 0;
     }
 
-    public function setUf($var)
+    public function setState($var)
     {
-        $this->uf = $var;
+        $this->state = $var;
         return $this;
     }
 
-    public function getUf()
+    public function getState()
     {
-        return $this->uf;
+        return $this->state;
     }
 
     public function setNfgAccessToken($var)
@@ -1066,7 +1066,7 @@ class Person extends BaseUser implements PersonInterface
         $this->badges = array_merge($this->badges, $badges);
         return $this;
     }
-    
+
     public function getFullNameOrUsername() {
         if (null === $this->firstName) {
             return $this->username;

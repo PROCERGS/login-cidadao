@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ContactFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Uf;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\NfgException;
 use FOS\UserBundle\Event\FormEvent;

@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Country;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Uf;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\City;
 
 class AddressController extends Controller
@@ -28,7 +28,7 @@ class AddressController extends Controller
                 'logradouro' => $form->get('adress')->getData(),
                 'localidade' => $form->get('city')->getData(),
                 'numero' => $form->get('adressnumber')->getData(),
-                'uf' => $form->get('uf')->getData()->getAcronym()
+                'state' => $form->get('state')->getData()->getAcronym()
             ));
         } else {
             $ceps = array();
@@ -38,22 +38,22 @@ class AddressController extends Controller
             'ceps' => $ceps
         );
     }
-    
+
     /**
-     * @Route("/uf/country/{id}", name="lc_search_uf_by_country", defaults={"id" = ""})
+     * @Route("/state/country/{id}", name="lc_search_state_by_country", defaults={"id" = ""})
      * @Template()
      */
-    public function viewUfAction($id)
+    public function viewStateAction($id)
     {
         $result = array();
         if (is_numeric($id)) {
             $result = $this->getDoctrine()
             ->getManager ()
-            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Uf')
+            ->getRepository('PROCERGSLoginCidadaoCoreBundle:State')
             ->createQueryBuilder('u')
             ->select('u.id, u.name')
             ->where('u.country = :country')
-            ->andWhere('u.reviewed = ' . Uf::REVIEWED_OK)
+            ->andWhere('u.reviewed = ' . State::REVIEWED_OK)
             ->setParameters(array('country' => new Country($id)))
             ->orderBy('u.name', 'ASC')
             ->getQuery()
@@ -61,9 +61,9 @@ class AddressController extends Controller
         }
         return new JsonResponse($result);
     }
-    
+
     /**
-     * @Route("/city/uf/{id}", name="lc_search_city_by_uf", defaults={"id" = ""})
+     * @Route("/city/state/{id}", name="lc_search_city_by_state", defaults={"id" = ""})
      * @Template()
      */
     public function viewCityAction($id)
@@ -75,15 +75,15 @@ class AddressController extends Controller
             ->getRepository('PROCERGSLoginCidadaoCoreBundle:City')
             ->createQueryBuilder('u')
             ->select('u.id, u.name')
-            ->where('u.uf = :uf')
+            ->where('u.state = :state')
             ->andWhere('u.reviewed = ' . City::REVIEWED_OK)
-            ->setParameters(array('uf' => new Uf($id)))
+            ->setParameters(array('state' => new State($id)))
             ->orderBy('u.name', 'ASC')
             ->getQuery()
             ->getResult();
         }
         return new JsonResponse($result);
     }
-    
+
 
 }

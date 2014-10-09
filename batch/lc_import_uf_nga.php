@@ -33,10 +33,10 @@ if ($row != array(
 }
 $pdo = getPDOConnection($config);
 $pdo->beginTransaction();
-$st1 = $pdo->prepare('select id id from uf a1 where a1.fips = ?');
-$st2 = $pdo->prepare('select a1.id id from uf a1 inner join country a2 on a1.country_id = a2.id where a2.iso = ? and a1.name = ?');
-$st3 = $pdo->prepare('update uf set fips = ?, name = ?, class = ?, country_id = (select id from country where iso = ?) where id = ?');
-$st4 = $pdo->prepare('insert into uf (id, country_id, fips, name, class) values (nextval(\'uf_id_seq\'), (select id from country where iso = ?), ?, ?, ?)');
+$st1 = $pdo->prepare('select id id from state a1 where a1.fips = ?');
+$st2 = $pdo->prepare('select a1.id id from state a1 inner join country a2 on a1.country_id = a2.id where a2.iso = ? and a1.name = ?');
+$st3 = $pdo->prepare('update state set fips = ?, name = ?, class = ?, country_id = (select id from country where iso = ?) where id = ?');
+$st4 = $pdo->prepare('insert into state (id, country_id, fips, name, class) values (nextval(\'state_id_seq\'), (select id from country where iso = ?), ?, ?, ?)');
 while ($row = fgetcsv($f, null, ';')) {
     if (! $st1->execute(array(
         $row[3]

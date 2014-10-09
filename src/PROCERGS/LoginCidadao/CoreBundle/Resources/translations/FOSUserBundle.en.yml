@@ -28,12 +28,12 @@ form.new_password_confirmation: 'Verification:'
 form.firstName: Firstname
 form.surname: Surname
 form.birthdate: Birthday
-form.cep: CEP
+form.cep: Postal Code
 form.cpf: CPF
 form.city: City
-form.adress: Logradouro
-form.distrit: Bairro
-form.uf: UF
+form.adress: Address
+form.district: District
+form.state: State
 form.map: 'open on map'
 grid.search.noresult: 'No results found'
 grid.search.title: Results

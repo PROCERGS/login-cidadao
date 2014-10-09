@@ -89,10 +89,10 @@ class PersonResumeFormType extends CommonFormType
                 'data' => $name,
             ));
             $name = '';
-            if ($var = $person->getUf()) {
+            if ($var = $person->getState()) {
                 $name = $var->getName();
             }
-            $form->add('uf', 'text', array(
+            $form->add('state', 'text', array(
                 'required' => true,
                 'read_only' => 'true',
                 'mapped' => false,

@@ -46,7 +46,7 @@ Cancel: Cancelar
 'Enter your username or email': 'Informe seu CPF, nome de usuário ou email'
 form.adress: Logradouro
 form.district: Bairro
-form.uf: UF
+form.state: Estado
 form.map: 'ver mapa'
 form.adressnumber: Número
 grid.search.noresult: 'Nenhum registro encontrado'

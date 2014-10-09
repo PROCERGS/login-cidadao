@@ -7,7 +7,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Symfony\Component\HttpFoundation\Request;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Country;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Uf;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\City;
 use Doctrine\ORM\Query;
 
@@ -38,7 +38,7 @@ class AddressController extends FOSRestController
         $view = $this->view($result);
         return $this->handleView($view);
     }
-    
+
     /**
      * @REST\Get("/public/country", name="lc_search_country" )
      * @REST\View()
@@ -52,27 +52,27 @@ class AddressController extends FOSRestController
         ->orderBy('cty.id', 'ASC');
         return $this->handleView($this->view($query->getQuery()->getResult(Query::HYDRATE_ARRAY)));
     }
-    
+
     /**
-     * @REST\Get("/public/uf", name="lc_search_uf" )
+     * @REST\Get("/public/state", name="lc_search_state" )
      * @REST\View()
      */
-    public function searchUfAction(Request $request = null)
+    public function searchStateAction(Request $request = null)
     {
         $request = $this->getRequest();
-        $query = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:Uf')
-        ->createQueryBuilder('uf')
-        ->where('uf.reviewed = ' . Country::REVIEWED_OK);
+        $query = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:State')
+        ->createQueryBuilder('state')
+        ->where('state.reviewed = ' . Country::REVIEWED_OK);
         $country = $request->get('country_id');
         if ($country) {
-            $query->join('PROCERGSLoginCidadaoCoreBundle:Country', 'cty', 'WITH', 'uf.country = cty');
+            $query->join('PROCERGSLoginCidadaoCoreBundle:Country', 'cty', 'WITH', 'state.country = cty');
             $query->andWhere('cty.id = :country');
             $query->setParameter('country', $country);
         }
-        $query->orderBy('uf.id', 'ASC');
+        $query->orderBy('state.id', 'ASC');
         return $this->handleView($this->view($query->getQuery()->getResult(Query::HYDRATE_ARRAY)));
     }
-    
+
     /**
      * @REST\Get("/public/city", name="lc_search_city" )
      * @REST\View()
@@ -84,18 +84,18 @@ class AddressController extends FOSRestController
         ->createQueryBuilder('c')
         ->where('c.reviewed = ' . Country::REVIEWED_OK);
         $country = $request->get('country_id');
-        $uf = $request->get('uf_id');
-        if ($country || $uf) {
-            $query->join('PROCERGSLoginCidadaoCoreBundle:Uf', 'uf', 'WITH', 'c.uf = uf');
+        $state = $request->get('state_id');
+        if ($country || $state) {
+            $query->join('PROCERGSLoginCidadaoCoreBundle:State', 'state', 'WITH', 'c.state = state');
         }
         if ($country) {
-            $query->join('PROCERGSLoginCidadaoCoreBundle:Country', 'cty', 'WITH', 'uf.country = cty');
+            $query->join('PROCERGSLoginCidadaoCoreBundle:Country', 'cty', 'WITH', 'state.country = cty');
             $query->andWhere('cty.id = :country');
             $query->setParameter('country', $country);
         }
-        if ($uf) {
-            $query->andWhere('uf.id = :uf');
-            $query->setParameter('uf', $uf);
+        if ($state) {
+            $query->andWhere('state.id = :state');
+            $query->setParameter('state', $state);
         }
         $query->orderBy('c.id', 'ASC');
         return $this->handleView($this->view($query->getQuery()->getResult(Query::HYDRATE_ARRAY)));

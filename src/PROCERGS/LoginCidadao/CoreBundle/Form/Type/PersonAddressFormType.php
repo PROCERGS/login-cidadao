@@ -16,12 +16,13 @@ class PersonAddressFormType extends AbstractType
             ->add('line1', null,
                   array('attr' => array('class' => 'form-control'), 'label' => 'Address'))
             ->add('line2', null,
-                  array('attr' => array('class' => 'form-control'), 'label' => 'Address Second Line'))
+                  array('attr' => array('class' => 'form-control'), 'label' => 'Address Second Line', 'required' => false))
             ->add('city', null,
                   array('attr' => array('class' => 'form-control')))
             ->add('postalCode', null,
                   array('attr' => array('class' => 'form-control')))
-            ->add('save', 'submit', array('attr' => array('class' => 'btn btn-success')));
+            ->add('save', 'submit',
+                  array('attr' => array('class' => 'btn btn-success')));
     }
 
     public function getName()

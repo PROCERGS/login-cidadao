@@ -12,7 +12,7 @@ function getCountryPostal($config)
     if (! file_get_contents_curl("http://www.geopostcodes.com/inc/download.php?f=Countries&t=9", $filename)) {
         return false;
     }
-    
+
     $zip = new Zip_Manager();
     $zip->open($filename);
     $zip->filteredExtractTo('./');
@@ -77,7 +77,7 @@ function updateByNsg($config)
     if (! file_get_contents_curl('https://nsgreg.nga.mil/NSGDOC/files/doc/Document/GENC%20Standard%20Index%20XML%20Ed2.0.zip', $filename, 'https://nsgreg.nga.mil/doc/view?i=2382')) {
         return false;
     }
-    
+
     $zip = new Zip_Manager();
     $zip->open($filename);
     $zip->filteredExtractTo('./', array(
@@ -98,11 +98,11 @@ function updateByNsg($config)
         return false;
     }
     $pdo = getPDOConnection($config);
-    
+
     $st1 = $pdo->prepare('select id from country where iso3 = ?');
     $st2 = $pdo->prepare('update country set name = ? where id = ?');
     $st3 = $pdo->prepare('insert into country (id, name, iso2, iso3, iso_num, reviewed) values (nextval(\'country_id_seq\'), ?,?,?,?, 0)');
-    
+
     $pdo->beginTransaction();
     foreach ($nodes as $node) {
         $char3Code = $node->getElementsByTagName('char3Code')->item(0)->nodeValue;
@@ -142,15 +142,15 @@ function updateByNsg($config)
          * echo $node->getElementsByTagName('char3Code')->item(0)->nodeValue; echo $node->getElementsByTagName('char2Code')->item(0)->nodeValue; echo $node->getElementsByTagName('numericCode')->item(0)->nodeValue; echo $node->getElementsByTagName('name')->item(0)->nodeValue;
          */
     }
-    
+
     $st1->closeCursor();
     $st2->closeCursor();
     $st3->closeCursor();
-    
-    $st1 = $pdo->prepare('select id id from uf a1 where a1.iso6 = ?');
-    $st2 = $pdo->prepare('select a1.id id from uf a1 inner join country a2 on a1.country_id = a2.id where a2.iso3 = ? and a1.name = ?');
-    $st3 = $pdo->prepare('update uf set iso6 = ?, name = ?, country_id = (select id from country where iso3 = ?) where id = ?');
-    $st4 = $pdo->prepare('insert into uf (id, country_id, iso6, name, reviewed) values (nextval(\'uf_id_seq\'), (select id from country where iso3 = ?), ?, ?, 0)');
+
+    $st1 = $pdo->prepare('select id id from state a1 where a1.iso6 = ?');
+    $st2 = $pdo->prepare('select a1.id id from state a1 inner join country a2 on a1.country_id = a2.id where a2.iso3 = ? and a1.name = ?');
+    $st3 = $pdo->prepare('update state set iso6 = ?, name = ?, country_id = (select id from country where iso3 = ?) where id = ?');
+    $st4 = $pdo->prepare('insert into state (id, country_id, iso6, name, reviewed) values (nextval(\'state_id_seq\'), (select id from country where iso3 = ?), ?, ?, 0)');
     $xpath = new DOMXPath($dom);
     // $nodes = $xpath->query('//GENCStandardBaselineIndex/AdministrativeSubdivision[country][encoding/char6Code][name]');
     $nodes = $xpath->query('//GENCStandardBaselineIndex/AdministrativeSubdivision');

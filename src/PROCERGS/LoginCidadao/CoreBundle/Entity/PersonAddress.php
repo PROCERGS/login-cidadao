@@ -30,6 +30,7 @@ class PersonAddress
      * @JMS\Since("1.1.0")
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="addresses")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", nullable=false)
+     * @var \PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface
      */
     protected $person;
 

@@ -6,7 +6,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use FOS\UserBundle\Form\Type\ProfileFormType as BaseType;
 use Doctrine\ORM\EntityRepository;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Country;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Uf;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\City;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -55,25 +55,25 @@ class ProfileFormType extends BaseType
                 $builder->add('ufsteppe', 'text', array("required"=> false, "mapped"=>false));
                 $builder->add('citysteppe', 'text', array("required"=> false, "mapped"=>false));
                 $builder->add('ufpreferred', 'hidden', array("data" => $country->getId(),"required"=> false, "mapped"=>false));
-                
+
                 $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
                     $person = $event->getData();
                     $form = $event->getForm();
-                    $form->add('uf', 'entity',array(
+                    $form->add('state', 'entity',array(
                         'required' => false,
-                        'class' => 'PROCERGSLoginCidadaoCoreBundle:Uf',
+                        'class' => 'PROCERGSLoginCidadaoCoreBundle:State',
                         'property' => 'name',
                         'empty_value' => '',
                         'query_builder' => function(EntityRepository $er) use ($person) {
                             if ($person) {
                                 $pars['country'] = $person->getCountry();
-                                $pars['u'] = $person->getUf();
+                                $pars['u'] = $person->getState();
                             } else {
                                 $pars['country'] = null;
                                 $pars['u'] = null;
                             }
                             return $er->createQueryBuilder('u')
-                            ->where('u.reviewed = ' . Uf::REVIEWED_OK)
+                            ->where('u.reviewed = ' . State::REVIEWED_OK)
                             ->andWhere('u.country = :country')
                             ->orWhere('u = :u')
                             ->setParameters($pars)
@@ -88,35 +88,35 @@ class ProfileFormType extends BaseType
                         'query_builder' => function(EntityRepository $er) use ($person) {
                             if ($person) {
                                 $pars['u'] = $person->getCity();
-                                $pars['uf'] = $person->getUf();
+                                $pars['state'] = $person->getState();
                             } else {
                                 $pars['u'] = null;
-                                $pars['uf'] = null;
+                                $pars['state'] = null;
                             }
                             return $er->createQueryBuilder('u')
                             ->where('u.reviewed = ' . City::REVIEWED_OK)
-                            ->andWhere('u.uf = :uf')
+                            ->andWhere('u.state = :state')
                             ->orWhere('u = :u')
                             ->setParameters($pars)
                             ->orderBy('u.name', 'ASC');
                         }
                     ));
-                    
+
                 });
                 $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
                     $data = $event->getData();
                     $form = $event->getForm();
-                    $form->add('uf', 'entity',array(
+                    $form->add('state', 'entity',array(
                         'required' => false,
-                        'class' => 'PROCERGSLoginCidadaoCoreBundle:Uf',
+                        'class' => 'PROCERGSLoginCidadaoCoreBundle:State',
                         'property' => 'name',
                         'empty_value' => '',
                         'query_builder' => function(EntityRepository $er) use ($data) {
                             $pars = array();
                             $pars['country'] = isset($data['country'])? $data['country'] : null;
-                            $pars['u'] = isset($data['uf'])? $data['uf'] : null;
+                            $pars['u'] = isset($data['state'])? $data['state'] : null;
                             return $er->createQueryBuilder('u')
-                            ->where('u.reviewed = ' . Uf::REVIEWED_OK)
+                            ->where('u.reviewed = ' . State::REVIEWED_OK)
                             ->andWhere('u.country = :country')
                             ->orWhere('u.id = :u')
                             ->setParameters($pars)
@@ -130,17 +130,17 @@ class ProfileFormType extends BaseType
                         'empty_value' => '',
                         'query_builder' => function(EntityRepository $er) use ($data) {
                             $pars = array();
-                            $pars['uf'] = isset($data['uf']) ? $data['uf'] : null;
+                            $pars['state'] = isset($data['state']) ? $data['state'] : null;
                             $pars['u'] = isset($data['city']) ? $data['city'] : null;
                             return $er->createQueryBuilder('u')
                             ->where('u.reviewed = ' . City::REVIEWED_OK)
-                            ->andWhere('u.uf = :uf')
+                            ->andWhere('u.state = :state')
                             ->orWhere('u.id = :u')
                             ->setParameters($pars)
                             ->orderBy('u.name', 'ASC');
                         }
                     ));
-                
+
                 });
 
     }
@@ -149,7 +149,7 @@ class ProfileFormType extends BaseType
     {
         return 'procergs_person_profile';
     }
-    
+
     public function setEntityManager(EntityManager $em)
     {
         $this->em = $em;

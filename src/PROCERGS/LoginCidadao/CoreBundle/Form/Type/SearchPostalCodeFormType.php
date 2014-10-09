@@ -17,8 +17,8 @@ class SearchPostalCodeFormType extends AbstractType
         $queryBuilder = function (EntityRepository $er) {
             return $er->createQueryBuilder('u')->orderBy('u.acronym');
         };
-        $ufRepo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Uf');
-        $preferredChoices = $ufRepo->findBy(array('acronym' => 'RS'));
+        $stateRepo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:State');
+        $preferredChoices = $stateRepo->findBy(array('acronym' => 'RS'));
         $builder->add('adress', 'text',
                 array(
             'required' => true,
@@ -34,12 +34,12 @@ class SearchPostalCodeFormType extends AbstractType
             'required' => true,
             'label' => 'form.city',
             'translation_domain' => 'FOSUserBundle'
-        ))->add('uf', 'entity',
+        ))->add('state', 'entity',
                 array(
-            'class' => 'PROCERGSLoginCidadaoCoreBundle:Uf',
+            'class' => 'PROCERGSLoginCidadaoCoreBundle:State',
             'property' => 'name',
             'required' => true,
-            'label' => 'form.uf',
+            'label' => 'form.state',
             'preferred_choices' => $preferredChoices,
             'query_builder' => $queryBuilder,
             'translation_domain' => 'FOSUserBundle'

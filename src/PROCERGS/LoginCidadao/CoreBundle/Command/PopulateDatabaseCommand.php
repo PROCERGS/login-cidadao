@@ -24,8 +24,8 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dir = realpath($input->getArgument('dump_folder'));
-        //$this->loadDumpFiles($dir, $output);
-        $this->createCategories($output);
+        $this->loadDumpFiles($dir, $output);
+        //$this->createCategories($output);
     }
 
     private function loadDumpFiles($dir, OutputInterface $output)
@@ -36,18 +36,18 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
         $db->beginTransaction();
         try {
             $db->exec('DELETE FROM city;');
-            $db->exec('DELETE FROM uf;');
+            $db->exec('DELETE FROM state;');
             $db->exec('DELETE FROM country;');
 
             $countryInsert = 'INSERT INTO country (id, name, iso2, postal_format, postal_name, reviewed, iso3, iso_num) VALUES (:id, :name, :iso2, :postal_format, :postal_name, :reviewed, :iso3, :iso_num)';
             $countryQuery = $db->prepare($countryInsert);
             $countries = $this->loopInsert($dir, 'country_dump.csv', $countryQuery, array($this, 'prepareCountryData'));
 
-            $statesInsert = 'INSERT INTO uf (id, name, acronym, country_id, iso6, fips, stat, class, reviewed) VALUES (:id, :name, :acronym, :country_id, :iso6, :fips, :stat, :class, :reviewed)';
+            $statesInsert = 'INSERT INTO state (id, name, acronym, country_id, iso6, fips, stat, class, reviewed) VALUES (:id, :name, :acronym, :country_id, :iso6, :fips, :stat, :class, :reviewed)';
             $statesQuery = $db->prepare($statesInsert);
-            $states = $this->loopInsert($dir, 'uf_dump.csv', $statesQuery, array($this, 'prepareStateData'));
+            $states = $this->loopInsert($dir, 'state_dump.csv', $statesQuery, array($this, 'prepareStateData'));
 
-            $citiesInsert = 'INSERT INTO city (id, name, uf_id, stat, reviewed) VALUES (:id, :name, :uf_id, :stat, :reviewed)';
+            $citiesInsert = 'INSERT INTO city (id, name, state_id, stat, reviewed) VALUES (:id, :name, :state_id, :stat, :reviewed)';
             $citiesQuery = $db->prepare($citiesInsert);
             $cities = $this->loopInsert($dir, 'city_dump.csv', $citiesQuery, array($this, 'prepareCityData'));
 
@@ -59,7 +59,7 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
     }
 
     /**
-     * 
+     *
      * @return EntityManager
      */
     private function getManager()
@@ -81,8 +81,8 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
 
     protected function prepareCityData($row)
     {
-        list($id, $name, $uf_id, $stat, $reviewed) = $row;
-        return compact('id', 'name', 'uf_id', 'stat', 'reviewed');
+        list($id, $name, $state_id, $stat, $reviewed) = $row;
+        return compact('id', 'name', 'state_id', 'stat', 'reviewed');
     }
 
     private function loopInsert($dir, $fileName, $query, $prepareFunction, $debug = false)
@@ -107,15 +107,15 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
     {
         $em = $this->getManager();
         $categories = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category');
-        
+
         $count = $em->createQuery("SELECT c FROM PROCERGSLoginCidadaoCoreBundle:Notification\Category c");
         $count->setMaxResults(1)->execute();
         $result = $count->getResult();
-        
+
         if (count($result) === 0) {
             // Create categories
         }
-        
+
         $output->writeln(count($result) > 0 ? 'Has categories' : 'Nothing here');
     }
 

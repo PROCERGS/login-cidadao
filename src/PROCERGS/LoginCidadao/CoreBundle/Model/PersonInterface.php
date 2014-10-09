@@ -125,9 +125,9 @@ interface PersonInterface
 
     public function hasPassword();
 
-    public function setUf($var);
+    public function setState($var);
 
-    public function getUf();
+    public function getState();
 
     public function setNfgAccessToken($var);
 
@@ -223,7 +223,7 @@ interface PersonInterface
 
     /**
      * Merges badges <code>$badges</code> into a person's badges.
-     * 
+     *
      * @param array $badges
      */
     public function mergeBadges(array $badges);
