@@ -613,5 +613,10 @@ $(function() {
     $(document).on('click', ".ac-search-enable", lcAcWidget.onClickSearchEnable);
     $(document).on('click', ".ac-search-cancel", lcAcWidget.onClickSearchCancel);
     $(document).on('click', ".ac-search-commit", lcAcWidget.onClickSearchCommit);
+
+    $("#navbarUnread .notification-link").on("click", function(event) {
+      event.preventDefault();
+      console.log("ae");
+    });
 });
 

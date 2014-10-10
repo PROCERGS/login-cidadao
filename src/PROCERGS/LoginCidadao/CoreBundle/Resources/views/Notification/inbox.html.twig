@@ -75,14 +75,14 @@
           if (!data.htmltpl) {
             data.htmltpl = '';
           }
-          if (cRow.prev().find('a.edit-grid').length) {
-            var t = "$('#"+cRow.prev().find('a.edit-grid').attr('id')+"').click()";
-            data.htmltpl += '<a class="left carousel-control" href="javascript:void(0);" onclick="'+t+'" role="button"><span class="glyphicon glyphicon-chevron-left"></span></a>';
-          }
-          if (cRow.next().find('a.edit-grid').length) {
-            var t = "$('#"+cRow.next().find('a.edit-grid').attr('id')+"').click()";
-            data.htmltpl += '<a class="right carousel-control" href="javascript:void(0);" onclick="'+t+'" role="button"><span class="glyphicon glyphicon-chevron-right"></span></a>';
-          }
+          // if (cRow.prev().find('a.edit-grid').length) {
+          //   var t = "$('#"+cRow.prev().find('a.edit-grid').attr('id')+"').click()";
+          //   data.htmltpl += '<a class="left carousel-control" href="javascript:void(0);" onclick="'+t+'" role="button"><span class="glyphicon glyphicon-chevron-left"></span></a>';
+          // }
+          // if (cRow.next().find('a.edit-grid').length) {
+          //   var t = "$('#"+cRow.next().find('a.edit-grid').attr('id')+"').click()";
+          //   data.htmltpl += '<a class="right carousel-control" href="javascript:void(0);" onclick="'+t+'" role="button"><span class="glyphicon glyphicon-chevron-right"></span></a>';
+          // }
           this.selector.html(data.htmltpl);
         }
       });

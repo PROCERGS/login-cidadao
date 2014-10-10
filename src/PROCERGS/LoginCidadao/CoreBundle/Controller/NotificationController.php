@@ -30,7 +30,7 @@ class NotificationController extends Controller
             ->getTotalUnreadGroupByClient($this->getUser());
         return array('clients' => $result);
     }
-    
+
     /**
      * @Route("/inbox/gridnavbarunread", name="lc_not_inbox_gridnavbarunread")
      * @Template()
@@ -47,7 +47,7 @@ class NotificationController extends Controller
         ->where('n.person = :person and n.readDate is null')
         ->setParameter('person', $this->getUser())
         ->orderBy('n.id', 'DESC');
-        
+
         if ($request->get('client')) {
             $sql->andWhere('c.id = :client')->setParameter('client', $request->get('client'));
         }
@@ -169,7 +169,7 @@ class NotificationController extends Controller
      */
     public function inboxAction(Request $request)
     {
-        $mode = $request->get('mode', 0); 
+        $mode = $request->get('mode', 0);
         if ($mode === 0) {
             return $this->gridFullAction($request);
         } else {

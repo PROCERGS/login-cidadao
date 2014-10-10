@@ -351,3 +351,7 @@ form .has-feedback .sr-only ~ .form-control-feedback {
   margin: 0 auto;
   width: 16px;
 }
+
+.modal-body h2 {
+  margin: 20px 0;
+}
