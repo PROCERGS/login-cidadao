@@ -492,23 +492,45 @@ var lcAcWidget = {
     		return;
     	}
     	var opts = mb.find('[data-ac-attr]').data('ac-attr');
-		opts = opts.selected;
-		var data = {};
-		if (opts.extra_form_prop) {
-	    	for (var x in opts.extra_form_prop) {
-	    		data[x] = $('#'+opts.extra_form_prop[x]).val();
-	    	}
-		}
-    	$.ajax({
-    		type: 'get',
-    		url: opts.route,
-    		data: {"ac_data":data},
-    		dataType : 'html',
-    		success : function(data, textStatus, jqXHR) {
-    			mb.find('.ac-scrollspy-opts-selected').html(data);
-    			mb.toggleClass('in');
+    	var callback = function () {
+    		var data = {};
+    		if (opts.selected.extra_form_prop) {
+    	    	for (var x in opts.selected.extra_form_prop) {
+    	    		data[x] = $('#'+opts.selected.extra_form_prop[x]).val();
+    	    	}
     		}
-        });
+        	$.ajax({
+        		type: 'get',
+        		url: opts.selected.route,
+        		data: {"ac_data":data},
+        		dataType : 'html',
+        		success : function(data, textStatus, jqXHR) {
+        			mb.find('.ac-scrollspy-opts-selected').html(data);
+        			mb.toggleClass('in');
+        			$('html, body').animate({scrollTop: mb.offset().top});
+        		}
+            });
+    	}
+    	var warmup = mb.find('.ac-scrollspy-opts:empty');
+    	if (warmup.length) {
+        	var data = {};
+        	for (var x in opts.filter.extra_form_prop) {
+        		data[x] = $('#'+opts.filter.extra_form_prop[x]).val();
+        	}
+        	$.ajax({
+        		type: 'get',
+        		url: opts.filter.route,
+        		data: {"ac_data":data},
+        		dataType : 'html',
+        		success : function(data, textStatus, jqXHR) {
+        			warmup.html(data);
+        			callback();
+        		}
+            });
+    	} else {
+    		callback();
+    	}
+    	
     },
     onClickSearchCancel : function(event) {
     	var _id = '#'+$(this).attr('data-ac-reference');

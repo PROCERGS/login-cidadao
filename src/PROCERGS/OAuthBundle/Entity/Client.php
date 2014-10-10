@@ -118,12 +118,9 @@ class Client extends BaseClient
     protected $visible;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="clients")
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\OneToMany(targetEntity="PROCERGS\OAuthBundle\Entity\ClientPerson", mappedBy="client",)
      */
-    private $person;
-
-
+    private $persons;
     /**
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey", mappedBy="client")
      */
@@ -350,21 +347,21 @@ class Client extends BaseClient
         return $this;
     }
 
-    public function setPerson($person)
-    {
-        $this->person = $person;
-
-        return $this;
-    }
-
-    public function getPerson()
-    {
-        return $this->person;
-    }
-
     public function getCategories()
     {
         return $this->categories;
     }
+
+    public function getPersons()
+    {
+        return $this->persons;
+    }
+    
+    public function setPersons($var)
+    {
+        $this->persons = $var;
+        return $this;
+    }
+
 
 }

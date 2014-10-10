@@ -16,8 +16,11 @@
                 {{ form_row(form.termsOfUseUrl) }}
                 {{ form_row(form.published) }}
                 {{ form_row(form.visible) }}
-                {{ form_row(form.publicId) }}
-                {{ form_row(form.secret) }}
+                {% if form.publicId is defined %}
+                    {{ form_row(form.publicId) }}
+                    {{ form_row(form.secret) }}
+                    {{ form_row(form.persons) }}
+                {% endif %}
             </div>
             <div class="col-md-5">
                 {% if client is defined and client.getPictureWebPath != '' %}

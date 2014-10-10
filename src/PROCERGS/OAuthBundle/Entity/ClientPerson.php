@@ -3,12 +3,14 @@ namespace PROCERGS\OAuthBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Notification
  *
  * @ORM\Table(name="client_person")
  * @ORM\Entity
+ * @UniqueEntity(fields={"person", "client"},errorPath="person")
  */
 class ClientPerson
 {

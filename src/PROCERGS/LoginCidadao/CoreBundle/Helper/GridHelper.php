@@ -61,16 +61,21 @@ class GridHelper
     {
         if ($request->get('page')) {
             $this->page = $request->get('page');
-            $this->queryBuilder->setFirstResult($this->page * $this->maxResult);
+            if (null !== $this->queryBuilder) {
+                $this->queryBuilder->setFirstResult($this->page * $this->maxResult);
+            }
         } else {
             $this->page = 0;
         }
         if ($this->infinityGrid) {
             $this->perPage = $this->maxResult;
         }
-        $this->queryBuilder->setMaxResults($this->maxResult + 1);
-        $this->resultset = $this->queryBuilder->getQuery()->getResult();
-        
+        if (null !== $this->queryBuilder) {
+            $this->queryBuilder->setMaxResults($this->maxResult + 1);
+            $this->resultset = $this->queryBuilder->getQuery()->getResult();
+        } else {
+            $this->resultset = array();
+        }
         $this->rlength = count($this->resultset);
         $this->rstart = ($this->page * $this->maxResult) / $this->perPage;
         $this->rlast = ($this->rlength - $this->maxResult) > 0;

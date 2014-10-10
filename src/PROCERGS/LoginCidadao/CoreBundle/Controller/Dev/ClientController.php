@@ -11,6 +11,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ContactFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail;
 use PROCERGS\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
+use PROCERGS\OAuthBundle\Entity\ClientPerson;
 
 /**
  * @Route("/dev/client")
@@ -30,8 +31,10 @@ class ClientController extends Controller
         $form->handleRequest($this->getRequest());
         $messages = '';
         if ($form->isValid()) {
-            $clientManager = $this->container->get('fos_oauth_server.client_manager.default');
-            $client->setPerson($this->getUser());
+            $clientManager = $this->container->get('fos_oauth_server.client_manager');
+            $new = new ClientPerson();
+            $new->setPerson($this->getUser());
+            $client->setPersons(array($new));
             $client->setAllowedGrantTypes(Client::getAllGrants());
             $clientManager->updateClient($client);
             return $this->redirect($this->generateUrl('lc_dev_client_edit', array(
@@ -61,7 +64,9 @@ class ClientController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $sql = $em->getRepository('PROCERGSOAuthBundle:Client')->createQueryBuilder('c')
-        ->where('c.person = :person')
+        ->join('PROCERGSOAuthBundle:ClientPerson', 'cp', 'with', 'cp.client = c')
+        
+        ->where('cp.person = :person')
         ->setParameter('person', $this->getUser())
         ->addOrderBy('c.id', 'desc');
         $grid = new GridHelper();
@@ -81,21 +86,21 @@ class ClientController extends Controller
      */
     public function gridDeveloperFilterAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $sql = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->createQueryBuilder('u');
-        $sql->select('u');
-        $sql->where('1=1');
-        $parms = $request->get('ac_data');
-        if (isset($parms['username'])) {
-            $sql->andWhere('u.cpf like ?1 or u.username like ?1 or u.email like ?1 or u.firstName like ?1 or u.surname like ?1');
-            $sql->setParameter('1', '%' . addcslashes($parms['username'], '\\%_') . '%');
-        }
-        $sql->addOrderBy('u.id', 'desc');
         $grid = new GridHelper();
         $grid->setId('developer-filter-grid');
         $grid->setPerPage(5);
         $grid->setMaxResult(5);
-        $grid->setQueryBuilder($sql);
+        $parms = $request->get('ac_data');
+        if (isset($parms['username'])) {
+            $em = $this->getDoctrine()->getManager();
+            $sql = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->createQueryBuilder('u');
+            $sql->select('u');
+            $sql->where('1=1');
+            $sql->andWhere('u.cpf like ?1 or u.username like ?1 or u.email like ?1 or u.firstName like ?1 or u.surname like ?1');
+            $sql->setParameter('1', '%' . addcslashes($parms['username'], '\\%_') . '%');
+            $sql->addOrderBy('u.id', 'desc');
+            $grid->setQueryBuilder($sql);
+        }
         $grid->setInfinityGrid(true);
         $grid->setRouteParams(array('ac_data'));
         $grid->setRoute('lc_dev_client_grid_developer_filter');
@@ -108,19 +113,18 @@ class ClientController extends Controller
      */
     public function gridDeveloperAction(Request $request)
     {
-        $parms = $request->get('ac_data');
-        if (!isset($parms['person_id'])) {
-            die('dunno');
-        }
-        $em = $this->getDoctrine()->getManager();
-        $sql = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->createQueryBuilder('p');
-        $sql->where('p.id in(:id)')->setParameter('id', $parms['person_id']);
-        $sql->addOrderBy('p.id', 'desc');
         $grid = new GridHelper();
         $grid->setId('developer-grid');
         $grid->setPerPage(5);
         $grid->setMaxResult(5);
-        $grid->setQueryBuilder($sql);
+        $parms = $request->get('ac_data');
+        if (isset($parms['person_id']) && !empty($parms['person_id'])) {
+            $em = $this->getDoctrine()->getManager();
+            $sql = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->createQueryBuilder('p');
+            $sql->where('p.id in(:id)')->setParameter('id', $parms['person_id']);
+            $sql->addOrderBy('p.id', 'desc');
+            $grid->setQueryBuilder($sql);
+        }
         $grid->setInfinityGrid(true);
         $grid->setRouteParams(array('ac_data'));
         $grid->setRoute('lc_dev_client_grid_developer');
@@ -135,7 +139,10 @@ class ClientController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->findOneBy(array('id' => $id, 'person' => $this->getUser()));
+        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->createQueryBuilder('c')
+        ->join('PROCERGSOAuthBundle:ClientPerson', 'cp', 'WITH', 'cp.client = c')
+        ->where('cp.person = :person and c.id = :id ')->setParameters(array('id' => $id, 'person' => $this->getUser()))
+        ->getQuery()->getOneOrNullResult();
         if (!$client) {
             return $this->redirect($this->generateUrl('lc_dev_client_new'));
         }
@@ -144,9 +151,8 @@ class ClientController extends Controller
         $messages = '';
         if ($form->isValid()) {
             $client->setAllowedGrantTypes(Client::getAllGrants());
-            $clientManager = $this->container->get('fos_oauth_server.client_manager.default');
+            $clientManager = $this->container->get('fos_oauth_server.client_manager');
             $clientManager->updateClient($client);
-            $messages = 'aeee';
         }
         return $this->render('PROCERGSLoginCidadaoCoreBundle:Dev\Client:new.html.twig',
                         array(

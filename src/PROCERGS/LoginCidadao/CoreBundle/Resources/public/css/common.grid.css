@@ -27,6 +27,12 @@
     /*margin-bottom: 20px;*/
     padding: 10px 0;
 }
+.common-grid-results .common-grid-result-no-result {
+	display: none;
+}
+.common-grid-results .common-grid-result-no-result:only-child {
+	display: block;
+}
 
 @media ( min-width : 992px) {
     .common-grid-results dt {

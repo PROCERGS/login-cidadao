@@ -7,6 +7,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Form\Type\CommonFormType;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class AjaxChoiceType extends CommonFormType
 {
@@ -21,19 +22,32 @@ class AjaxChoiceType extends CommonFormType
         return 'ajax_choice';
     }
 
+    /*
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        if (isset($options['transformer']) && null !== $options['transformer']) {
+            $builder->addModelTransformer(new $options['transformer']());
+        }
+    }
+    */
+
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
+            //'transformer' => null,
             'ajax_choice_attr' => array(),
-            'attr' => array('style'=> 'display:none;'),
-            'multiple' => true,
+            'attr' => array(
+                'style' => 'display:none;'
+            ),
+            'multiple' => true
         ));
     }
-    
+
     /**
-     * @param FormView $view
-     * @param FormInterface $form
-     * @param array $options
+     *
+     * @param FormView $view            
+     * @param FormInterface $form            
+     * @param array $options            
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
@@ -46,11 +60,16 @@ class AjaxChoiceType extends CommonFormType
             if (isset($options['ajax_choice_attr']['selected'])) {
                 $this->transformation1($options['ajax_choice_attr']['selected'], $nForm);
             }
-            $view->vars['ajax_choice_attr'] = $options['ajax_choice_attr'];
+            if (isset($options['ajax_choice_attr']['search_prop_label'])) {
+                $view->vars['ajax_choice_search_prop_label'] = $this->translator->trans($options['ajax_choice_attr']['search_prop_label']);
+                unset($options['ajax_choice_attr']['search_prop_label']);
+            }
+            $view->vars['ajax_choice_attr'] = & $options['ajax_choice_attr'];
         }
     }
-    
-    private function transformation1(&$grid, &$nForm) {
+
+    private function transformation1(&$grid, &$nForm)
+    {
         if (isset($grid['route'])) {
             $grid['route'] = $this->generateUrl($grid['route']);
         }
@@ -60,6 +79,4 @@ class AjaxChoiceType extends CommonFormType
             }
         }
     }
-    
-    
 }
