@@ -34,13 +34,25 @@ class PersonAddressController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            //$address = $form->getData();
-            var_dump($address);die();
+            $address->setPerson($this->getUser());
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($address);
+            $em->flush();
 
             return $this->redirect($this->generateUrl('lc_person_addresses'));
         }
 
         return compact('form');
+    }
+
+    /**
+     * @ Route("/person/addresses/new", name="lc_person_addresses_new")
+     * @Template()
+     */
+    public function deleteAction()
+    {
+
     }
 
 }

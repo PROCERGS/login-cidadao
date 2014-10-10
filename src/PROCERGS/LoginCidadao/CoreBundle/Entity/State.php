@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation\Groups;
  * City
  *
  * @ORM\Table(name="state")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\StateRepository")
  */
 class State
 {
@@ -196,6 +196,9 @@ class State
         return $this;
     }
 
+    /**
+     * @return Country
+     */
     public function getCountry()
     {
         return $this->country;

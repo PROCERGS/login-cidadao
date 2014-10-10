@@ -4,3 +4,15 @@
     {% include "PROCERGSLoginCidadaoCoreBundle:PersonAddress:list.component.html.twig" %}
     {% include "PROCERGSLoginCidadaoCoreBundle:PersonAddress:form.component.html.twig" %}
 {% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+    <script src="{{ asset('js/components/typeahead.bundle.js') }}"></script>
+    <script>
+        var cities = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            // remote: ''
+        });
+    </script>
+{% endblock %}

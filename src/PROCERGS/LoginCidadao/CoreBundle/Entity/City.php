@@ -111,6 +111,9 @@ class City
         return $this;
     }
 
+    /**
+     * @return State
+     */
     public function getState()
     {
         return $this->state;
