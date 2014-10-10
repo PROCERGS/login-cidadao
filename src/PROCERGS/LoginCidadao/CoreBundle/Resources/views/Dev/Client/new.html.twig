@@ -7,10 +7,26 @@
         {{ form_start(form, {'attr' : {'role' : 'form'}}) }} 
         {{ form_errors(form) }}
         <div class="row clearfix">
+            <div class="col-md-5">
+                {% if client is defined and client.getPictureWebPath != '' %}
+                    <img src="/{{ client.getPictureWebPath }}"/>
+                {% else %}
+					{% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+					<img src="{{ asset_url }}"/>
+					{% endimage %}
+                {% endif %}
+               <div class="file-upload text-center">
+                    <button type="button" class="btn btn-success btn-upload">{% trans %}Upload another picture{% endtrans %}</button>
+                    <div class="file-name"></div>
+                    {{ form_widget(form.pictureFile) }}
+                </div>
+            </div>
             <div class="col-md-7">
                 {{ form_row(form.name) }}
                 {{ form_row(form.description) }}
                 {{ form_row(form.siteUrl) }}
+            </div>
+            <div class="col-md-12">
                 {{ form_row(form.redirectUris) }}
                 {{ form_row(form.landingPageUrl) }}
                 {{ form_row(form.termsOfUseUrl) }}
@@ -21,21 +37,6 @@
                     {{ form_row(form.secret) }}
                     {{ form_row(form.persons) }}
                 {% endif %}
-            </div>
-            <div class="col-md-5">
-                {% if client is defined and client.getPictureWebPath != '' %}
-                    <img src="/{{ client.getPictureWebPath }}"/>
-                {% else %}
-					{% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
-					<img src="{{ asset_url }}"/>
-					{% endimage %}
-                {% endif %}
-
-               <div class="file-upload text-center">
-                    <button type="button" class="btn btn-success btn-upload">{% trans %}Upload another picture{% endtrans %}</button>
-                    <div class="file-name"></div>
-                    {{ form_widget(form.pictureFile) }}
-                </div>
             </div>
         </div>
         <div class="form-bar text-right">

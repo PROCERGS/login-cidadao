@@ -43,6 +43,7 @@ class ClientBaseFormType extends AbstractType
             $entity = $event->getData();
             $form = $event->getForm();
             $form->add('persons', 'ajax_choice', array(
+                'label' => 'dev.ac.owners',
                 'ajax_choice_attr' => array(
                     'filter' => array(
                         'route' => 'lc_dev_client_grid_developer_filter',
@@ -89,6 +90,7 @@ class ClientBaseFormType extends AbstractType
                     'attr' => array('rows' => 4)
                 ));
                 $form->add('persons', 'ajax_choice', array(
+                    'label' => 'dev.ac.owners',
                     'ajax_choice_attr' => array(
                         'filter' => array(
                             'route' => 'lc_dev_client_grid_developer_filter',

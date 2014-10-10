@@ -458,6 +458,7 @@ var lcAcWidget = {
     		dataType : 'html',
     		success : function(data, textStatus, jqXHR) {
     			self.parents().find('.ac-magicbox .ac-scrollspy-opts').html(data);
+    			lcInfinityGrid.common('#' + $(data).attr('id'));
     		}
         });
     },
@@ -524,6 +525,7 @@ var lcAcWidget = {
         		dataType : 'html',
         		success : function(data, textStatus, jqXHR) {
         			warmup.html(data);
+        			lcInfinityGrid.common('#' + $(data).attr('id'));
         			callback();
         		}
             });
