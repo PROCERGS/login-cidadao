@@ -38,7 +38,7 @@
 .settings-nav li a > span {
   display: inline-block;
   line-height: normal;
-  width: 80%;
+  padding-left: 50px;
   word-break: break-word;
 }
 
@@ -49,7 +49,7 @@
   font-size: 30px;
   margin-top: -18px;
   position: absolute;
-  right: 5px;
+  left: 10px;
   text-align: center;
   top: 50%;
   width: 20%;

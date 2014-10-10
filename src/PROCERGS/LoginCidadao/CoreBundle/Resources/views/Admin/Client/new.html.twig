@@ -4,16 +4,16 @@
     <h1>{{ 'Service'|trans }}</h1>
     <div class="form-content">
         {% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
-        {{ form_start(form, {'attr' : {'role' : 'form'}}) }} 
+        {{ form_start(form, {'attr' : {'role' : 'form'}}) }}
         {{ form_errors(form) }}
         <div class="row clearfix">
             <div class="col-md-5">
                 {% if client is defined and client.getPictureWebPath != '' %}
                     <img src="/{{ client.getPictureWebPath }}"/>
                 {% else %}
-					{% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
-					<img src="{{ asset_url }}"/>
-					{% endimage %}
+          {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+          <img src="{{ asset_url }}"/>
+          {% endimage %}
                 {% endif %}
                <div class="file-upload text-center">
                     <button type="button" class="btn btn-success btn-upload">{% trans %}Upload another picture{% endtrans %}</button>
@@ -45,4 +45,14 @@
         {{ form_end(form) }}
     </div>
 </div>
+<style type="text/css">
+  .ac-search-enable {
+    cursor: pointer;
+    margin: 0 10px;
+  }
+
+  .ac-scrollspy-opts, .ac-scrollspy-opts-selected {
+    height: 350px;
+  }
+</style>
 {% endblock %}
