@@ -28,10 +28,6 @@ class ClientPerson
      */
     protected $person;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client")
-     * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
-     */
     protected $client;
 
     public function getId()
