@@ -33,7 +33,7 @@ EOT
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $clientManager = $this->getContainer()->get('fos_oauth_server.client_manager.default');
+        $clientManager = $this->getContainer()->get('fos_oauth_server.client_manager');
         $client = $clientManager->createClient();
         $client->setName($input->getArgument('name'));
         $client->setDescription($input->getArgument('description'));

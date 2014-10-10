@@ -22,32 +22,6 @@ class ClientController extends Controller
 {
 
     /**
-     * @Route("/new", name="lc_admin_app_new")
-     * @Template()
-     */
-    public function newAction()
-    {
-        $client = new Client();
-        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.form.type'), $client);
-        
-        $form->handleRequest($this->getRequest());
-        $messages = '';
-        if ($form->isValid()) {
-            $clientManager = $this->container->get('fos_oauth_server.client_manager.default');
-            $client->setPerson($this->getUser());
-            $client->setAllowedGrantTypes(Client::getAllGrants());
-            $clientManager->updateClient($client);
-            return $this->redirect($this->generateUrl('lc_admin_app_edit', array(
-                'id' => $client->getId()
-            )));
-        }
-        return array(
-            'form' => $form->createView(),
-            'messages' => $messages
-        );
-    }
-
-    /**
      * @Route("/", name="lc_admin_app")
      * @Template()
      */
@@ -95,7 +69,7 @@ class ClientController extends Controller
         $messages = '';
         if ($form->isValid()) {
             $client->setAllowedGrantTypes(Client::getAllGrants());
-            $clientManager = $this->container->get('fos_oauth_server.client_manager.default');
+            $clientManager = $this->container->get('fos_oauth_server.client_manager');
             $clientManager->updateClient($client);
             $messages = 'aeee';
         }
@@ -114,7 +88,7 @@ class ClientController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
-        $clientManager = $this->container->get('fos_oauth_server.client_manager.default');
+        $clientManager = $this->container->get('fos_oauth_server.client_manager');
         $em->beginTransaction();
         $input = 'Lorem Ipsum ';
         $person = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->find($id);

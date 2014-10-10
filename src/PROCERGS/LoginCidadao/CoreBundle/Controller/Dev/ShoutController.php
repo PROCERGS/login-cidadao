@@ -38,7 +38,8 @@ class ShoutController extends Controller
             ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
             ->createQueryBuilder('u')
             ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'u.client = c')
-            ->where('c.person = :person')
+            ->join('PROCERGSOAuthBundle:ClientPerson', 'cp', 'with', 'cp.client = c')
+            ->where('cp.person = :person')
             ->setParameter('person', $this->getUser())
             ->orderBy('u.id', 'desc');
         $grid = new GridHelper();
@@ -68,7 +69,8 @@ class ShoutController extends Controller
         ->createQueryBuilder('u')
         ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cat', 'with', 'u.category = cat')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'cat.client = c')
-        ->where('c.person = :person and cat.id = :id')
+        ->join('PROCERGSOAuthBundle:ClientPerson', 'cp', 'with', 'cp.client = c')
+        ->where('cp.person = :person and cat.id = :id')
         ->setParameter('person', $this->getUser())
         ->setParameter('id', $categoryId)
         ->orderBy('u.id', 'desc')->getQuery()->getResult();
@@ -137,10 +139,10 @@ class ShoutController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->findOneBy(array(
-            'id' => $id,
-            'person' => $this->getUser()
-        ));
+        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->createQueryBuilder('c')
+        ->join('PROCERGSOAuthBundle:ClientPerson', 'cp', 'WITH', 'cp.client = c')
+        ->where('cp.person = :person and c.id = :id ')->setParameters(array('id' => $id, 'person' => $this->getUser()))
+        ->getQuery()->getOneOrNullResult();
         if (! $client) {
             return $this->redirect($this->generateUrl('lc_dev_shout_new'));
         }
@@ -149,7 +151,7 @@ class ShoutController extends Controller
         $messages = '';
         if ($form->isValid()) {
             $client->setAllowedGrantTypes(Client::getAllGrants());
-            $clientManager = $this->container->get('fos_oauth_server.client_manager.default');
+            $clientManager = $this->container->get('fos_oauth_server.client_manager');
             $clientManager->updateClient($client);
             $messages = 'aeee';
         }

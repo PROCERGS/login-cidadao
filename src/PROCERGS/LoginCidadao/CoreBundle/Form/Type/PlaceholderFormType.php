@@ -37,7 +37,8 @@ class PlaceholderFormType extends AbstractType
             {
                 return $er->createQueryBuilder('u')
                     ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'u.client = c')
-                    ->where('c.person = :person')
+                    ->join('PROCERGSOAuthBundle:ClientPerson', 'cp', 'with', 'cp.client = c')
+                    ->where('cp.person = :person')
                     ->setParameter('person', $user)
                     ->orderBy('u.id', 'desc');
             }

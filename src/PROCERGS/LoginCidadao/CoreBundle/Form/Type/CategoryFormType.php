@@ -53,10 +53,11 @@ class CategoryFormType extends CommonFormType
                     'property' => 'name',
                     'query_builder' => function (EntityRepository $er) use($person)
                     {
-                        return $er->createQueryBuilder('u')
-                        ->where('u.person = :person')
+                        return $er->createQueryBuilder('c')
+                        ->join('PROCERGSOAuthBundle:ClientPerson', 'cp', 'with', 'cp.client = c')
+                        ->where('cp.person = :person')
                         ->setParameter('person', $person)
-                        ->orderBy('u.name', 'ASC');
+                        ->orderBy('c.name', 'ASC');
                     }
                 ));
             }

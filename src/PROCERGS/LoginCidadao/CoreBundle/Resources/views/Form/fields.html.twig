@@ -113,23 +113,30 @@
             {{- block('ajax_choice_options') -}}
         </select>
         <div class="ac-magicbox collapse">
+            <label>{{ ajax_choice_search_prop_label|trans() }}</label>
             <div class="input-group">
-              <input type="text" class="form-control"/>
-              <span class="input-group-btn">
-                <button type="button" class="btn btn-default" {%- if ajax_choice_attr is defined %} data-ac-attr="{{ ajax_choice_attr|json_encode }}"{% endif -%}>Buscar!</button>
-              </span>
+                <input type="text" class="form-control"/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" {%- if ajax_choice_attr is defined %} data-ac-attr="{{ ajax_choice_attr|json_encode }}"{% endif -%}>{{ 'Search'|trans }}</button>
+                </span>
             </div>
-            <div class="ac-scrollspy-opts"></div>
-            <div class="ac-scrollspy-opts-selected"></div>
+            <div class="ac-scrollspy-opts-group">
+                <label>{{ 'ac.search.result'|trans }}</label>
+                <div class="ac-scrollspy-opts"></div>
+            </div>
+            <div class="ac-scrollspy-opts-selected-group">
+                <label>{{ 'ac.selected.itens'|trans }}</label>
+                <div class="ac-scrollspy-opts-selected"></div>
+            </div>
             <div class="btn-group btn-group-justified">
                 <div class="btn-group">
                 	<button type="button" class="btn btn-default ac-search-cancel" data-ac-reference="{{ id }}">
-                		<span class="glyphicon glyphicon-remove-sign"></span> {{ 'cancel'|trans }}
+                		<span class="glyphicon glyphicon-remove-sign"></span> {{ 'Cancel'|trans }}
                 	</button>
             	</div>
             	<div class="btn-group">
                     <button type="button" class="btn btn-primary ac-search-commit" data-ac-reference="{{ id }}">
-                		<span class="glyphicon glyphicon-ok-sign"></span> {{ 'add'|trans }}
+                		<span class="glyphicon glyphicon-ok-sign"></span> {{ 'Edit'|trans }}
                 	</button>
             	</div>
             </div>

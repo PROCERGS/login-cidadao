@@ -94,6 +94,7 @@ fos_oauth_server:
   auth_code_class:      PROCERGS\OAuthBundle\Entity\AuthCode
   service:
       user_provider: fos_user.user_manager
+      client_manager: procergs_logincidadao.oauth.client_manager
       options:
           supported_scopes: %lc_supported_scopes%
 

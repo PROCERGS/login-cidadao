@@ -39,6 +39,42 @@ class ClientBaseFormType extends AbstractType
         $builder->add('id', 'hidden', array(
             'required' => false
         ));
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+            $entity = $event->getData();
+            $form = $event->getForm();
+            $form->add('persons', 'ajax_choice', array(
+                'label' => 'dev.ac.owners',
+                'ajax_choice_attr' => array(
+                    'filter' => array(
+                        'route' => 'lc_dev_client_grid_developer_filter',
+                        'search_prop' => 'username',
+                        'extra_form_prop' => array('service_id' => 'id')
+                    ),
+                    'selected' => array(
+                        'route' => 'lc_dev_client_grid_developer',
+                        'extra_form_prop' => array('person_id' => 'persons')
+                    ),
+                    'property_value' => 'id',
+                    'property_text' => 'fullNameOrUsername',
+                    'search_prop_label' => 'dev.client.persons.filter'
+                ),
+                'required' => true,
+                'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
+                'property' => 'fullNameOrUsername',
+                'query_builder' => function(EntityRepository $er) use (&$entity) {
+                    //$country = $er->createQueryBuilder('h')->getEntityManager()->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->findOneBy(array('iso2' => 'BR'));
+                    $sql = $er->createQueryBuilder('u');
+                    if (!empty( $entity['persons']) ) {
+                        $sql->where('u.id in (:persons)');
+                        $sql->setParameter('persons', $entity['persons']);
+                        $sql->orderBy('u.username', 'ASC');
+                    } else {
+                        $sql->where('1 != 1');
+                    }
+                    return $sql;
+                }
+            ));
+        });
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $entity = $event->getData();
             $form = $event->getForm();
@@ -54,6 +90,7 @@ class ClientBaseFormType extends AbstractType
                     'attr' => array('rows' => 4)
                 ));
                 $form->add('persons', 'ajax_choice', array(
+                    'label' => 'dev.ac.owners',
                     'ajax_choice_attr' => array(
                         'filter' => array(
                             'route' => 'lc_dev_client_grid_developer_filter',
@@ -66,27 +103,18 @@ class ClientBaseFormType extends AbstractType
                         ),
                         'property_value' => 'id',
                         'property_text' => 'fullNameOrUsername',
+                        'search_prop_label' => 'dev.client.persons.filter'
                     ),
                     'required' => true,
                     'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
-                    'property' => 'fullName',
+                    'property' => 'fullNameOrUsername',
                     'query_builder' => function(EntityRepository $er) use (&$entity) {
-                        //$country = $er->createQueryBuilder('h')->getEntityManager()->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->findOneBy(array('iso2' => 'BR'));
                         return $er->createQueryBuilder('u')
                         ->join('PROCERGSOAuthBundle:ClientPerson', 'cp', 'with', 'cp.person = u')
                         ->where('cp.client = :client')->setParameter('client', $entity)
                         ->orderBy('u.username', 'ASC');
                     }
                 ));      
-            } else {
-                $form->add('publicId', 'hidden', array(
-                    'required' => false,
-                    'mapped' =>false
-                ));
-                $form->add('secret', 'hidden', array(
-                    'required' => false,
-                    'mapped' =>false
-                ));
             }
         });
         $builder->add('published', 'switch', array(

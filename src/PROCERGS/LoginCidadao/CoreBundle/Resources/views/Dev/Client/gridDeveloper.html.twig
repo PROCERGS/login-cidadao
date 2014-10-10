@@ -1,10 +1,9 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::grid_layout.html.twig" %}
 
 {% block grid_header_data %}
-<div class="col-md-3">{{ 'cpf'|trans }}</div>
-<div class="col-md-2">{{ 'username'|trans }}</div>
-<div class="col-md-2">{{ 'email'|trans }}</div>
-<div class="col-md-4">{{ 'name'|trans }}</div>
+<div class="col-md-3">{{ 'CPF'|trans }}</div>
+<div class="col-md-2">{{ 'Email'|trans }}</div>
+<div class="col-md-6">{{ 'dev.grid.fullNameOrUsername'|trans }}</div>
 {% endblock grid_header_data %}
 
 {% block grid_row_action %}
@@ -13,7 +12,7 @@
         <div class="btn-group">
             <button type="button" class="btn btn-info ac-search-select" id="{{ grid.getId }}-row-{{ row.id }}"  data-row="{{ {'id':row.id, 'fullNameOrUsername': row.fullNameOrUsername}|json_encode }}">
                 <span class="glyphicon glyphicon-arrow-down"></span>
-                <span class="label-action-column-grid">{{ 'select'|trans }} </span>
+                <span class="label-action-column-grid">{{ 'Move'|trans }} </span>
             </button>
         </div>
     </div>
@@ -22,19 +21,15 @@
 
 {% block grid_row_data %}
 <div class="col-md-3">
-    <dt>{{ 'cpf'|trans }}</dt>
+    <dt>{{ 'CPF'|trans }}</dt>
     <dd ><div style="word-wrap: break-word;">{{ row.cpf }}</div></dd>
 </div>
 <div class="col-md-2">
-    <dt>{{ 'username'|trans }}</dt>
-    <dd ><div style="word-wrap: break-word;">{{ row.username }}</div></dd>
-</div>
-<div class="col-md-2">
-    <dt>{{ 'name'|trans }}</dt>
+    <dt>{{ 'Email'|trans }}</dt>
     <dd ><div style="word-wrap: break-word;">{{ row.email }}</div></dd>
 </div>
-<div class="col-md-4">
-    <dt>{{ 'name'|trans }}</dt>
-    <dd ><div style="word-wrap: break-word;">{{ row.getFullName }}</div></dd>
+<div class="col-md-6">
+    <dt>{{ 'dev.grid.fullNameOrUsername'|trans }}</dt>
+    <dd ><div style="word-wrap: break-word;">{{ row.fullNameOrUsername }}</div></dd>
 </div>
 {% endblock grid_row_data %}
