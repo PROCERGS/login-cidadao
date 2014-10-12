@@ -14,8 +14,11 @@ class CityRepository extends EntityRepository
         return $qb
                 ->select('c')
                 ->from('PROCERGSLoginCidadaoCoreBundle:City', 'c')
+                ->join('PROCERGSLoginCidadaoCoreBundle:State', 's', 'WITH', 'c.state = s')
                 ->where('c.name LIKE :string')
-                ->setParameter('string', "%$string%")
+                ->addOrderBy('s.preference', 'DESC')
+                ->addOrderBy('c.name', 'ASC')
+                ->setParameter('string', "$string%")
                 ->getQuery()->getResult();
     }
 

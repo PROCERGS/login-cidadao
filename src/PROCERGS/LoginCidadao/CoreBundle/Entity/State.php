@@ -73,6 +73,12 @@ class State
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $reviewed;
+    
+    /**
+     * @ORM\Column(type="integer", nullable=true, options={"default" = 0})
+     * @var int
+     */
+    protected $preference;
 
     public function __construct($id = null)
     {

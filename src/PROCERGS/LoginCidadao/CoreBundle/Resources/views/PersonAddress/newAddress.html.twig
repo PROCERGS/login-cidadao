@@ -5,22 +5,41 @@
     {% include "PROCERGSLoginCidadaoCoreBundle:PersonAddress:form.component.html.twig" %}
 {% endblock %}
 
+{% block stylesheets %}
+{{ parent() }}
+    {% stylesheets '@PROCERGSLoginCidadaoCoreBundle/Resources/public/css/components/typeaheadjs.css' filter='cssrewrite' filter='?uglifycss' %}
+<link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock stylesheets %}
+
 {% block javascripts %}
 {{ parent() }}
-{% javascripts '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/typeahead.bundle.js' %}
-    <script src="{{ asset_url }}"></script>
+{% javascripts
+                '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/typeahead.bundle.js'
+                '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/handlebars-v2.0.0.js' %}
+<script src="{{ asset_url }}"></script>
 {% endjavascripts %}
-    <script>
-        var cities = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: '/api/v1/address/cities/search/%QUERY.json',
-        });
-        cities.initialize();
-        $('#{{ form.city.vars.id }}').typeahead(null, {
-            name: 'city',
-            displayKey: 'name',
-            source: cities.ttAdapter()
-        });
-    </script>
+<script>
+    var cities = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        remote: '/api/v1/address/cities/search/%QUERY.json',
+    });
+    cities.initialize();
+    $('#{{ form.city.vars.id }}').typeahead(null, {
+        name: 'city',
+        displayKey: function(city){
+            return city.name + ', ' + city.state.acronym;
+        },
+        source: cities.ttAdapter(),
+        templates: {
+        empty: [
+          '<div class="empty-message">',
+          'No city found.',
+          '</div>'
+        ].join('\n'),
+        suggestion: Handlebars.compile('<p><strong>{\{name}}</strong>, {\{state.acronym}}</p>')
+        }
+    });
+</script>
 {% endblock %}
