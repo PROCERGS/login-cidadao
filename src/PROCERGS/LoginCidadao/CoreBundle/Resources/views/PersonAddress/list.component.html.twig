@@ -14,10 +14,14 @@
             </div>
 
             <div class="panel-body">
-                <p>{{ address.line1 }}</p>
-                <p>{{ address.line2 }}</p>
-                <p>{{ address.postalCode }}</p>
-                <p>{{ address.city.name }} / {{ address.city.state.name }}</p>
+                <address>
+                    {{ address.line1 }}<br>
+                    {{ address.line2 }}<br>
+                    {{ address.postalCode }}<br>
+                {% if address.city %}
+                    {{ address.city.name }}, <abbr title="{{ address.city.state.name }}">{{ address.city.state.acronym }}</abbr>
+                {% endif %}
+                </address>
             </div>
         </div>
     {% endfor %}

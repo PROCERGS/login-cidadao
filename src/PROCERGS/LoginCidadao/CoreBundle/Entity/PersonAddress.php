@@ -66,7 +66,7 @@ class PersonAddress
      * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\City")
-     * @ORM\JoinColumn(name="city_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=true)
      * @var City
      */
     protected $city;
