@@ -446,8 +446,7 @@ class PersonController extends Controller
      */
     public function docRgListAction(Request $request)
     {
-        $resultset = $this->getDoctrine()
-            ->getManager ()
+        $resultset = $this->getDoctrine()->getManager()
             ->getRepository('PROCERGSLoginCidadaoCoreBundle:Rg')
             ->createQueryBuilder('u')
             ->select('u.id, u.val, right(b.iso6, 2) iso6')
@@ -457,7 +456,7 @@ class PersonController extends Controller
             ->orderBy('u.id', 'ASC')
             ->getQuery()
             ->getResult();
-        return array('resultset' => $resultset);
+        return compact('resultset');
     }
 
     /**

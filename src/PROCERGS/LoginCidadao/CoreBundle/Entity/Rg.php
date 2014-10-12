@@ -6,8 +6,8 @@ use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ ORM\Table(name="rg")
- * @ ORM\Entity
+ * @ORM\Table(name="rg")
+ * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
 class Rg
