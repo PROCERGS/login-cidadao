@@ -292,60 +292,9 @@ function checkVoterRegistration(inscricao) {
     return false;
   }
 }
-var lcAutoLoader = {
-		"startTime" :null,
-		"timer": null,
-	"start": function (event, request, settings) {
-		if (!$("#ajax-loader").length) {
-			var modal =		
-				   '<div class="modal fade bs-example-modal-sm" id="ajax-loader" role="dialog" aria-labelledby="ajax-loader" data-backdrop="static" data-keyboard="false" aria-hidden="true">'
-				    +'<div class="modal-dialog modal-sm">'
-				     +'<div class="modal-content">'
-					    +'<div class="modal-body">'
-					    //+'<div class="ajax-loader"/>'
-              +'<div class="ajax-loader"></div>'
-              +'<span id="ajax-loader-timer" style="margin-left: 15px; display:none"></span>'
-					    +'</div>'
-				     +'</div>'
-				    +'</div>'
-				   +'</div>';
-			$(modal).appendTo(document.body);
-		    $("#ajax-loader").on('shown.bs.modal', lcAutoLoader.startTimer);
-		    $("#ajax-loader").on('hidden.bs.modal', lcAutoLoader.stopTimer);
-		}
-	    $("#ajax-loader").modal('show');
-	},
-	"stop" : function (event, request, settings) {
-		$("#ajax-loader").modal('hide');
-	},
-	"stopTimer" : function(event) {
-		clearTimeout(lcAutoLoader.timer);
-		lcAutoLoader.startTime = null;
-		lcAutoLoader.timer = null;
-		$("#ajax-loader-timer").html("");
-	},
-	"startTimer" : function(event) {
-		if (lcAutoLoader.startTime == null) {
-			lcAutoLoader.startTime = new Date(); 
-		}
-	    var now = new Date();
-	    now.setTime(now - lcAutoLoader.startTime);
-	    var m = now.getMinutes();
-	    var s = now.getSeconds();
-	    m = lcAutoLoader.checkTime(m);
-	    s = lcAutoLoader.checkTime(s);
-	    $("#ajax-loader-timer").html(m + ":" + s);
-	    lcAutoLoader.timer = setTimeout(lcAutoLoader.startTimer, 500);
-	},
-	"checkTime" : function(i) {
-		if (i < 10) {
-			i= "0" + i;
-		}
-		return i;
-	}
-};
-$(document).ajaxSend(lcAutoLoader.start);
-$(document).ajaxComplete(lcAutoLoader.stop);
+
+//$(document).ajaxSend(lcAutoLoader.start);
+//$(document).ajaxComplete(lcAutoLoader.stop);
 function Pwindow(options) {
 	var opts = {
 		id : '__default',
