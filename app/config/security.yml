@@ -111,6 +111,7 @@ security:
           anonymous:  true
 
     access_control:
+        - { path: ^/api/v1/address/cities/search, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }
         - { path: ^/api/v1/public/lc_consultaCep2, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY }

@@ -12,13 +12,17 @@ use FOS\OAuthServerBundle\Model\ClientInterface;
 class BaseController extends FOSRestController
 {
 
-    protected function renderWithContext($content)
+    protected function renderWithContext($content, $context = null)
     {
         $person = $this->getUser();
-        $scope = $this->getClientScope($person);
+
+        if (null === $context) {
+            $scope = $this->getClientScope($person);
+            $context = $this->getSerializationContext($scope);
+        }
 
         $view = $this->view($content)
-                ->setSerializationContext($this->getSerializationContext($scope));
+            ->setSerializationContext($context);
         return $this->handleView($view);
     }
 
@@ -26,8 +30,7 @@ class BaseController extends FOSRestController
     {
         $person = $this->getUser();
         $serializer = $this->get('jms_serializer');
-        return $serializer->serialize($person, 'json',
-                        SerializationContext::create()->setGroups($scope));
+        return $serializer->serialize($person, 'json', SerializationContext::create()->setGroups($scope));
     }
 
     protected function getClientScope($user)
@@ -35,11 +38,11 @@ class BaseController extends FOSRestController
         $client = $this->getClient();
 
         $authorization = $this->getDoctrine()
-                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
-                ->findOneBy(array(
+            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
+            ->findOneBy(array(
             'person' => $user,
             'client' => $client
-        ));
+            ));
         if (!($authorization instanceof Authorization)) {
             throw new AccessDeniedHttpException("Access denied");
         }
@@ -64,7 +67,9 @@ class BaseController extends FOSRestController
     protected function getClient()
     {
         $token = $this->get('security.context')->getToken();
-        $accessToken = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:AccessToken')->findOneBy(array('token' => $token->getToken()));
+        $accessToken = $this->getDoctrine()->
+            getRepository('PROCERGSOAuthBundle:AccessToken')->
+            findOneBy(array('token' => $token->getToken()));
         $client = $accessToken->getClient();
         return $client;
     }

@@ -17,7 +17,7 @@ class State
     const REVIEWED_IGNORE = 1;
 
     /**
-     * @Groups({"state", "rgs"})
+     * @Groups({"state", "rgs", "typeahead"})
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -27,13 +27,13 @@ class State
 
     /**
      * @var string
-     * @Groups({"state", "rgs"})
+     * @Groups({"state", "rgs", "typeahead"})
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
-     *
+     * @Groups({"typeahead"})
      * @ORM\Column(name="acronym", type="string", length=2, nullable=true)
      */
     private $acronym;
@@ -63,6 +63,7 @@ class State
     private $class;
 
     /**
+     * @Groups({"typeahead"})
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Country")
      * @ORM\JoinColumn(name="country_id", referencedColumnName="id")
      */

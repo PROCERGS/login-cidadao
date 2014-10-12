@@ -7,12 +7,20 @@
 
 {% block javascripts %}
 {{ parent() }}
-    <script src="{{ asset('js/components/typeahead.bundle.js') }}"></script>
+{% javascripts '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/typeahead.bundle.js' %}
+    <script src="{{ asset_url }}"></script>
+{% endjavascripts %}
     <script>
         var cities = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            // remote: ''
+            remote: '/api/v1/address/cities/search/%QUERY.json',
+        });
+        cities.initialize();
+        $('#{{ form.city.vars.id }}').typeahead(null, {
+            name: 'city',
+            displayKey: 'name',
+            source: cities.ttAdapter()
         });
     </script>
 {% endblock %}

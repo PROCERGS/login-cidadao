@@ -8,8 +8,8 @@ use JMS\Serializer\Annotation\Groups;
 /**
  * City
  *
- * @ORM\Table(name="city")
- * @ORM\Entity
+ * @ORM\Table(name="city",indexes={@ORM\Index(name="city_name_index", columns={"name"})})
+ * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\CityRepository")
  */
 class City
 {
@@ -21,7 +21,7 @@ class City
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @Groups({"city"})
+     * @Groups({"city","typeahead"})
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
@@ -29,7 +29,7 @@ class City
     /**
      * @var string
      *
-     * @Groups({"city"})
+     * @Groups({"city","typeahead"})
      * @ORM\Column(name="name", type="string", length=255)
      */
     protected $name;
@@ -43,6 +43,7 @@ class City
     protected $stat;
 
     /**
+     * @Groups({"city","typeahead"})
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\State")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      */
