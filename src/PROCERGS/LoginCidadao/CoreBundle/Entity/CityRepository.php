@@ -22,4 +22,17 @@ class CityRepository extends EntityRepository
                 ->getQuery()->getResult();
     }
 
+    public function findByPreferedState()
+    {
+        $em = $this->getEntityManager();
+        $states = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:State')
+            ->createQueryBuilder('s')
+            ->orderBy('s.preference', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()->getResult();
+        $state = reset($states);
+        $cities = $state->getCities();
+        return $cities;
+    }
+
 }

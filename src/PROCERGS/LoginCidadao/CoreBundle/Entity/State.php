@@ -6,13 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
 
 /**
- * City
+ * State
  *
- * @ORM\Table(name="state")
+ * @ORM\Table(name="state",indexes={@ORM\Index(name="state_preference_index", columns={"preference"})})
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\StateRepository")
  */
 class State
 {
+
     const REVIEWED_OK = 0;
     const REVIEWED_IGNORE = 1;
 
@@ -73,12 +74,18 @@ class State
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $reviewed;
-    
+
     /**
      * @ORM\Column(type="integer", nullable=true, options={"default" = 0})
      * @var int
      */
     protected $preference;
+
+    /**
+     * @ORM\OneToMany(targetEntity="City", mappedBy="state", cascade={"remove"}, orphanRemoval=true)
+     * @var
+     */
+    protected $cities;
 
     public function __construct($id = null)
     {
@@ -106,7 +113,7 @@ class State
      * Set name
      *
      * @param string $name
-     * @return City
+     * @return State
      */
     public function setName($name)
     {
@@ -129,7 +136,7 @@ class State
      * Set Acronym
      *
      * @param string $name
-     * @return City
+     * @return State
      */
     public function setAcronym($var)
     {
@@ -209,6 +216,28 @@ class State
     public function getCountry()
     {
         return $this->country;
+    }
+
+    public function getPreference()
+    {
+        return $this->preference;
+    }
+
+    public function getCities()
+    {
+        return $this->cities;
+    }
+
+    public function setPreference($preference)
+    {
+        $this->preference = $preference;
+        return $this;
+    }
+
+    public function setCities($cities)
+    {
+        $this->cities = $cities;
+        return $this;
     }
 
 }
