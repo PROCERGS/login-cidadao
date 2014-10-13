@@ -9,3 +9,10 @@
     </div>
 </div>
 {% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+    {% javascripts  '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/person.address.js' %}
+<script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
