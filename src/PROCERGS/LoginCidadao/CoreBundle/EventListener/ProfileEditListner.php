@@ -140,7 +140,6 @@ class ProfileEditListner implements EventSubscriberInterface
             }
         }
         $this->checkEmailChanged($user);
-        $this->checkCEPChanged($user);
 
         // default:
         $url = $this->router->generate('fos_user_profile_edit');
@@ -325,25 +324,6 @@ class ProfileEditListner implements EventSubscriberInterface
                         } else {
                             throw new LcValidationException('voterreg.nfg.fixit');
                         }
-                    }
-                }
-            }
-        }
-    }
-
-    private function checkCEPChanged(&$user)
-    {
-        if ($user->getCep()) {
-            if ($user->getCountry())  {
-                if ($user->getCountry()->getIso2() == 'BR') {
-                    $user->setCep(CEPValidator::justNum($user->getCep()));
-                    $ceps = $this->dne->findByCep($user->getCep());
-                    if (!$ceps || !is_numeric($ceps['codigoMunIBGE'])) {
-                        throw new LcValidationException('cep not found');
-                    }
-                } else if ($user->getCountry()->getPostalFormat()) {
-                    if (!CEPValidator::validateMask($user->getCep(), $user->getCountry()->getPostalFormat()) ) {
-                        throw new LcValidationException('cep not match country mask.');
                     }
                 }
             }
