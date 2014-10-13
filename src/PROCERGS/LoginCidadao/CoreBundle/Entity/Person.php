@@ -334,7 +334,7 @@ class Person extends BaseUser implements PersonInterface
     /**
      * @JMS\Expose
      * @JMS\Groups({"rgs"})
-     * @ORM\OneToMany(targetEntity="Rg", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Rg", mappedBy="person")
      * @JMS\Since("1.0.3")
      */
     protected $rgs;
