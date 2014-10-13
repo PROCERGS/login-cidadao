@@ -7,6 +7,8 @@
         {{ form_start(form, {'action': path('lc_update_username'), 'attr': {'role':'form', 'class':'lc_change_username'}}) }}
             {{ form_errors(form) }}
             <div class="form-content">
+    <div class="panel panel-default">
+      <div class="panel-body">
                 <div class="row clearfix">
                     <div class="col-md-8">
                         <div class="form-group">
@@ -66,9 +68,12 @@
 
                 </div>
             </div>
-            <div class="form-bar text-right">
+      <div class="panel-footer text-right">
                 {{ form_widget(form.save, { 'label': 'Save' | trans, 'attr': { 'class': 'btn btn-success btn-sm' } }) }}
             </div>
+    </div>
+
+  </div>
         {{ form_end(form) }}
     </div>
 {% endblock %}

@@ -119,13 +119,13 @@ img.desaturate {
 }
 
 .btn-default, .btn-success {
-     background-color: #039935;
-     border: solid 1px #039935;
+     /*background-color: #039935;
+     border: solid 1px #039935;*/
      color: #FFF;
 }
 
 .btn-success:hover {
-    background-color: #5cb85c;
+    /*background-color: #5cb85c;*/
 }
 
 .btn-default {
