@@ -370,6 +370,10 @@ form .has-feedback .sr-only ~ .form-control-feedback {
   width: 16px;
 }
 
+.modal-dialog {
+  margin: 130px auto;
+}
+
 .modal-body h2 {
   margin: 20px 0;
 }
