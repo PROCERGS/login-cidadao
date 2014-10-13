@@ -33,8 +33,8 @@ class ClientBaseFormType extends AbstractType
         $builder->add('termsOfUseUrl', 'text', array(
             'required' => true
         ));
-                
-        
+
+
         $builder->add('pictureFile');
         $builder->add('id', 'hidden', array(
             'required' => false
@@ -42,7 +42,7 @@ class ClientBaseFormType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $entity = $event->getData();
             $form = $event->getForm();
-            $form->add('persons', 'ajax_choice', array(
+            $form->add('owners', 'ajax_choice', array(
                 'label' => 'dev.ac.owners',
                 'ajax_choice_attr' => array(
                     'filter' => array(
@@ -52,7 +52,7 @@ class ClientBaseFormType extends AbstractType
                     ),
                     'selected' => array(
                         'route' => 'lc_dev_client_grid_developer',
-                        'extra_form_prop' => array('person_id' => 'persons')
+                        'extra_form_prop' => array('person_id' => 'owners')
                     ),
                     'property_value' => 'id',
                     'property_text' => 'fullNameOrUsername',
@@ -64,9 +64,9 @@ class ClientBaseFormType extends AbstractType
                 'query_builder' => function(EntityRepository $er) use (&$entity) {
                     //$country = $er->createQueryBuilder('h')->getEntityManager()->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->findOneBy(array('iso2' => 'BR'));
                     $sql = $er->createQueryBuilder('u');
-                    if (!empty( $entity['persons']) ) {
-                        $sql->where('u.id in (:persons)');
-                        $sql->setParameter('persons', $entity['persons']);
+                    if (!empty( $entity['owners']) ) {
+                        $sql->where('u.id in (:owners)');
+                        $sql->setParameter('owners', $entity['owners']);
                         $sql->orderBy('u.username', 'ASC');
                     } else {
                         $sql->where('1 != 1');
@@ -89,7 +89,7 @@ class ClientBaseFormType extends AbstractType
                     'read_only' => true,
                     'attr' => array('rows' => 4)
                 ));
-                $form->add('persons', 'ajax_choice', array(
+                $form->add('owners', 'ajax_choice', array(
                     'label' => 'dev.ac.owners',
                     'ajax_choice_attr' => array(
                         'filter' => array(
@@ -99,7 +99,7 @@ class ClientBaseFormType extends AbstractType
                         ),
                         'selected' => array(
                             'route' => 'lc_dev_client_grid_developer',
-                            'extra_form_prop' => array('person_id' => 'persons')
+                            'extra_form_prop' => array('person_id' => 'owners')
                         ),
                         'property_value' => 'id',
                         'property_text' => 'fullNameOrUsername',
@@ -110,11 +110,10 @@ class ClientBaseFormType extends AbstractType
                     'property' => 'fullNameOrUsername',
                     'query_builder' => function(EntityRepository $er) use (&$entity) {
                         return $er->createQueryBuilder('u')
-                        ->join('PROCERGSOAuthBundle:ClientPerson', 'cp', 'with', 'cp.person = u')
-                        ->where('cp.client = :client')->setParameter('client', $entity)
+                        ->where(':client MEMBER OF u.clients')->setParameter('client', $entity)
                         ->orderBy('u.username', 'ASC');
                     }
-                ));      
+                ));
             }
         });
         $builder->add('published', 'switch', array(

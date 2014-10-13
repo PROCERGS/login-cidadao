@@ -1,4 +1,5 @@
 <?php
+
 namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,28 +20,31 @@ class PlaceholderFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name', 'text', array(
+        $builder->add('name', 'text',
+                      array(
             'required' => true
         ));
-        $builder->add('default', 'text', array(
+        $builder->add('default', 'text',
+                      array(
             'required' => false
         ));
-        $builder->add('id', 'hidden', array(
+        $builder->add('id', 'hidden',
+                      array(
             'required' => false
         ));
         $user = $this->getUser();
-        $builder->add('category', 'hidden_entity', array(
+        $builder->add('category', 'hidden_entity',
+                      array(
             'required' => true,
             'class' => 'PROCERGSLoginCidadaoCoreBundle:Notification\Category',
             'property' => 'name',
-            'query_builder' => function (EntityRepository $er) use(&$user)
-            {
+            'query_builder' => function (EntityRepository $er) use(&$user) {
                 return $er->createQueryBuilder('u')
-                    ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'u.client = c')
-                    ->join('PROCERGSOAuthBundle:ClientPerson', 'cp', 'with', 'cp.client = c')
-                    ->where('cp.person = :person')
-                    ->setParameter('person', $user)
-                    ->orderBy('u.id', 'desc');
+                        ->join('PROCERGSOAuthBundle:Client', 'c', 'with',
+                               'u.client = c')
+                        ->where(':person MEMBER OF c.owners')
+                        ->setParameter('person', $user)
+                        ->orderBy('u.id', 'desc');
             }
         ));
     }
@@ -58,17 +62,18 @@ class PlaceholderFormType extends AbstractType
 
     public function getUser()
     {
-        if (! $this->security) {
+        if (!$this->security) {
             throw new \LogicException('The SecurityBundle is not registered in your application.');
         }
         if (null === $token = $this->security->getToken()) {
             return;
         }
 
-        if (! is_object($user = $token->getUser())) {
+        if (!is_object($user = $token->getUser())) {
             return;
         }
 
         return $user;
     }
+
 }

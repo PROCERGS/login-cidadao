@@ -1,4 +1,5 @@
 <?php
+
 namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,74 +15,84 @@ class CategoryFormType extends CommonFormType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $person = $this->getUser();
-        
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use($person)
-        {
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA,
+                                   function (FormEvent $event) use($person) {
             $cat = $event->getData();
             $form = $event->getForm();
             if ($cat->getId()) {
                 $name = $cat->getClient()
                     ->getName();
-                $form->add('client', 'text', array(
+                $form->add('client', 'text',
+                           array(
                     'required' => true,
                     'label' => 'Service',
                     'mapped' => false,
                     'read_only' => true,
                     'data' => $name,
                 ));
-                $form->add('mailTemplate', 'textarea', array(
+                $form->add('mailTemplate', 'textarea',
+                           array(
                     'required' => true,
                     'attr' => array('rows' => 4)
                 ));
-                $form->add('markdownTemplate', 'textarea', array(
+                $form->add('markdownTemplate', 'textarea',
+                           array(
                     'required' => true,
                     'attr' => array('rows' => 4)
                 ));
-                $form->add('id', 'integer', array(
+                $form->add('id', 'integer',
+                           array(
                     'required' => false,
                     'read_only' => true
                 ));
             } else {
-                $form->add('id', 'hidden', array(
+                $form->add('id', 'hidden',
+                           array(
                     'required' => false,
                     'read_only' => true
-                ));                
-                $form->add('client', 'entity', array(
+                ));
+                $form->add('client', 'entity',
+                           array(
                     'required' => true,
                     'label' => 'Service',
                     'class' => 'PROCERGSOAuthBundle:Client',
                     'property' => 'name',
-                    'query_builder' => function (EntityRepository $er) use($person)
-                    {
+                    'query_builder' => function (EntityRepository $er) use($person) {
                         return $er->createQueryBuilder('c')
-                        ->join('PROCERGSOAuthBundle:ClientPerson', 'cp', 'with', 'cp.client = c')
-                        ->where('cp.person = :person')
-                        ->setParameter('person', $person)
-                        ->orderBy('c.name', 'ASC');
+                                ->where(':person MEMBER OF c.owners')
+                                ->setParameter('person', $person)
+                                ->orderBy('c.name', 'ASC');
                     }
                 ));
             }
         });
-        $builder->add('name', 'text', array(
+        $builder->add('name', 'text',
+                      array(
             'required' => true
         ));
-        $builder->add('defaultIcon', 'choice', array(
+        $builder->add('defaultIcon', 'choice',
+                      array(
             'choices' => array(
                 'glyphicon glyphicon-envelope' => 'envelope',
                 'glyphicon glyphicon-exclamation-sign' => 'exclamation-sign'
             ),
             'required' => true
         ));
-        $builder->add('defaultTitle', 'text', array(
+        $builder->add('defaultTitle', 'text',
+                      array(
             'required' => true
         ));
-        $builder->add('defaultShortText', 'text', array(
+        $builder->add('defaultShortText', 'text',
+                      array(
             'required' => true
         ));
-        $builder->add('mailSenderAddress', 'text', array(
+        $builder->add('mailSenderAddress', 'text',
+                      array(
             'required' => true
         ));
-        $builder->add('emailable', 'choice', array(
+        $builder->add('emailable', 'choice',
+                      array(
             'choices' => array(
                 '0' => 'No',
                 '1' => 'Yes'
