@@ -7,15 +7,12 @@
 
     <div class="form-content">
 
-        <ul class="nav nav-tabs" role="tablist">
-            <li class="active"><a href="#general" role="tab" data-toggle="tab">{{ 'General'|trans }}</a></li>
-            <li><a href="#rg" role="tab" data-toggle="tab">{{ 'RG'|trans }}</a></li>
-        </ul>
-
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <div class="tab-pane fade in active" id="general">
-                {{ form_start(form, {'action': path('lc_profile_doc_edit'), 'attr': {'role':'form' } }) }}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">{{ 'General'|trans }}</h3>
+          </div>
+          <div class="panel-body">
+            {{ form_start(form, {'action': path('lc_profile_doc_edit'), 'attr': {'role':'form' } }) }}
                 {{ form_errors(form) }}
                 <div class="row">
                     <div class="col-md-7">
@@ -65,18 +62,23 @@
 
                     </div>
                 </div>
-                <div class="form-bar text-right">
-                    <input class="btn btn-success" type="submit" value="{{ 'profile.edit.submit'|trans }}" />
-                </div>
                 {{ form_end(form) }}
-            </div>
-            <div class="tab-pane fade" id="rg">
-                <a id="add_rg" class="btn-sm btn-primary glyphicon glyphicon-plus" href="javascript:void(0);"></a>
-                <label for="add_rg">{{ 'add'|trans }} {{ 'RG'|trans }}</label>
-                {% render(controller("PROCERGSLoginCidadaoCoreBundle:Person:docRgList")) %}
-                <div></div>
-            </div>
+          </div>
+          <div class="panel-footer text-right">
+              <input class="btn btn-success" type="submit" value="{{ 'profile.edit.submit'|trans }}" />
+          </div>
         </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">{{ 'RG'|trans }}</h3>
+          </div>
+          <div class="panel-body">
+            <button type="button" class="btn btn-primary" id="add-rg">{{ 'add'|trans }} {{ 'RG'|trans }}</button>
+            {% render(controller("PROCERGSLoginCidadaoCoreBundle:Person:docRgList")) %}
+          </div>
+        </div>
+
     </div>
 </div>
 <style>
@@ -105,10 +107,12 @@ rgGrid.getGrid = function() {
     }
     });
 };
-$(document).on('click', '#add_rg',  function() {
+$('#add-rg').on("click", function() {
   Pwindow({'id' : 'edit-rg', 'url' : "{{ path('lc_profile_doc_rg_edit') }}"});
 });
-$(document).on('click', '#rg-grid a.edit-grid',  function() {
+
+
+$("#rg-grid a.edit-grid").on('click', function() {
   var row = $.parseJSON($(this).parent().parent().find('.row-data').val());
   var url = "{{ path('lc_profile_doc_rg_edit') }}";
   if (row.id) {
@@ -127,11 +131,7 @@ var messages = {
         }
     }
 };
-$('#myModal').on('show.bs.modal', function (e) {
-  alert('oi');
 
-
-});
 $(function() {
   $(profileDocEdit.cpfId).mask('000.000.000-00');
 
