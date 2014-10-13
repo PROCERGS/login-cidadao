@@ -25,7 +25,8 @@
 }
 
 .settings-nav li.active a, .settings-nav li.active a:hover {
-  background-color: #009933;
+  /*background-color: #009933;*/
+  background-color: #5CB85C;
   cursor: default;
 }
 
@@ -373,7 +374,7 @@
 }
 
 .content.applications .services-grid .service .status.active {
-  background-color: #093;
+  background-color: #5CB85C;
 }
 
 .content.applications .services-grid .service a:hover {
