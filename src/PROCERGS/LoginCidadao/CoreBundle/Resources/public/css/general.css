@@ -51,6 +51,14 @@ a {
     color: green;
 }
 
+/* Adjusts navbar's offset. */
+a.anchor {
+    display: block;
+    position: relative;
+    top: -60px;
+    visibility: hidden;
+}
+
 ul {
     list-style: none;
 }
