@@ -1,8 +1,14 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle:PersonAddress:base.html.twig" %}
 
+{% if form is not defined and edit_form is defined %}
+    {% set form = edit_form %}
+{% endif %}
+
 {% block addresses %}
     {% include "PROCERGSLoginCidadaoCoreBundle:PersonAddress:list.component.html.twig" %}
+{% if edit_form is not defined %}
     {% include "PROCERGSLoginCidadaoCoreBundle:PersonAddress:form.component.html.twig" %}
+{% endif %}
 {% endblock %}
 
 {% block stylesheets %}
@@ -14,8 +20,7 @@
 
 {% block javascripts %}
 {{ parent() }}
-{% javascripts
-                '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/typeahead.bundle.js'
+{% javascripts  '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/typeahead.bundle.js'
                 '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/handlebars-v2.0.0.js' %}
 <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
@@ -26,7 +31,7 @@
         remote: '/api/v1/address/cities/search/%QUERY.json',
     });
     cities.initialize();
-    $('#{{ form.city.vars.id }}').typeahead(null, {
+    $('.city-selector').typeahead(null, {
         name: 'city',
         displayKey: function(city){
             return city.name + ', ' + city.state.acronym;

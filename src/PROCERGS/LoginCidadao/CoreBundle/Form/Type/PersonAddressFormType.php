@@ -19,7 +19,7 @@ class PersonAddressFormType extends AbstractType
             ->add('line2', null,
                   array('attr' => array('class' => 'form-control'), 'label' => 'Address Second Line', 'required' => false))
             ->add('city', 'city_selector',
-                  array('attr' => array('class' => 'form-control'), 'required' => false))
+                  array('attr' => array('class' => 'form-control city-selector'), 'required' => false))
             ->add('postalCode', null,
                   array('attr' => array('class' => 'form-control')))
             ->add('save', 'submit',

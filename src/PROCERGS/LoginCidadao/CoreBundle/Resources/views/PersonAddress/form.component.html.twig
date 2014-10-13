@@ -1,3 +1,6 @@
+{% if form is not defined and edit_form is defined %}
+    {% set form = edit_form %}
+{% endif %}
 {{ form_start(form) }}
 <a name="form"></a>
 <div class="panel panel-default">

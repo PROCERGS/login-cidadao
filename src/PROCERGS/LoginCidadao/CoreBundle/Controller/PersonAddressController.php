@@ -50,6 +50,33 @@ class PersonAddressController extends Controller
     }
 
     /**
+     * @Route("/person/addresses/{id}/edit", name="lc_person_addresses_edit")
+     * @Template("PROCERGSLoginCidadaoCoreBundle:PersonAddress:newAddress.html.twig")
+     */
+    public function editAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $addresses = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:PersonAddress');
+        $address = $addresses->find($id);
+        if ($address->getPerson()->getId() !== $this->getUser()->getId()) {
+            throw new AccessDeniedException();
+        }
+
+        $form = $this->createForm('lc_person_address', $address);
+        $form->handleRequest($this->getRequest());
+
+        if ($form->isValid()) {
+            $address->setPerson($this->getUser());
+            $em->flush();
+            return $this->redirect($this->generateUrl('lc_person_addresses'));
+        }
+        $deleteForms = $this->getDeleteForms();
+        $edit_form = $form->createView();
+
+        return compact('edit_form', 'deleteForms');
+    }
+
+    /**
      * @Route("/person/addresses/{id}/remove", name="lc_person_addresses_delete")
      * @Template()
      */
