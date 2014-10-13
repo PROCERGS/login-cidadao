@@ -12,6 +12,8 @@ use JMS\Serializer\Tests\Fixtures\Publisher;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation as JMS;
 use OAuth2\OAuth2;
+use Doctrine\Common\Collections\ArrayCollection;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 
 /**
  * @ORM\Entity
@@ -117,7 +119,16 @@ class Client extends BaseClient
      */
     protected $visible;
 
-    private $persons;
+    /**
+     * @ORM\ManyToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="clients"  )
+     * @ORM\JoinTable(name="client_owners",
+     *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id")}
+     *      )
+     * @var ArrayCollection
+     */
+    protected $owners;
+
     /**
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey", mappedBy="client")
      */
@@ -126,7 +137,8 @@ class Client extends BaseClient
     public function __construct()
     {
         parent::__construct();
-        $this->authorizations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->authorizations = new ArrayCollection();
+        $this->owners = new ArrayCollection();
         $this->maxNotificationLevel = Notification::LEVEL_NORMAL;
     }
 
@@ -349,16 +361,15 @@ class Client extends BaseClient
         return $this->categories;
     }
 
-    public function getPersons()
+    public function getOwners()
     {
-        return $this->persons;
+        return $this->owners;
     }
 
-    public function setPersons($var)
+    public function setOwners(ArrayCollection $owners)
     {
-        $this->persons = $var;
+        $this->owners = $owners;
         return $this;
     }
-
 
 }

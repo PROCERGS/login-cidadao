@@ -11,7 +11,12 @@ class ClientManager extends FOSClientManager
 
     public function updateClient(ClientInterface $client)
     {
-        $this->em->getConnection()->beginTransaction();        
+        // let's see what happens
+        $this->em->persist($client);
+        $this->em->flush();
+        return;
+
+        $this->em->getConnection()->beginTransaction();
         if ($client->getId()) {
             $this->em->createQuery('DELETE from PROCERGSOAuthBundle:ClientPerson where client_id = :id')->setParameter('id', $client->getId());
         }
@@ -40,7 +45,7 @@ class ClientManager extends FOSClientManager
                     $this->em->persist($iten);
                 }
             }
-        }        
+        }
         $this->em->flush();
         $this->em->getConnection()->commit();
     }

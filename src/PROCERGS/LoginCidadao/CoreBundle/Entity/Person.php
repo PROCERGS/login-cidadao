@@ -4,6 +4,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use PROCERGS\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation as JMS;
@@ -219,7 +220,7 @@ class Person extends BaseUser implements PersonInterface
     protected $shouts;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\OAuthBundle\Entity\ClientPerson", mappedBy="person")
+     * @ORM\ManyToMany(targetEntity="PROCERGS\OAuthBundle\Entity\Client", mappedBy="owners")
      */
     protected $clients;
 
@@ -334,7 +335,7 @@ class Person extends BaseUser implements PersonInterface
     /**
      * @JMS\Expose
      * @JMS\Groups({"rgs"})
-     * @ORM\OneToMany(targetEntity="Rg", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Rg", mappedBy="person")
      * @JMS\Since("1.0.3")
      */
     protected $rgs;
@@ -369,10 +370,11 @@ class Person extends BaseUser implements PersonInterface
     public function __construct()
     {
         parent::__construct();
-        $this->authorizations = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->notificationTokens = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->notificationOptions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->notifications = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->authorizations = new ArrayCollection();
+        $this->notificationTokens = new ArrayCollection();
+        $this->notificationOptions = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
+        $this->clients = new ArrayCollection();
     }
 
     public function getEmail()

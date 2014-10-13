@@ -8,9 +8,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Notification
  *
- * @ORM\Table(name="client_person")
- * @ORM\Entity
- * @UniqueEntity(fields={"person", "client"},errorPath="person")
+ * @ ORM\Table(name="client_person")
+ * @ ORM\Entity
+ * @ UniqueEntity(fields={"person", "client"},errorPath="person")
  */
 class ClientPerson
 {

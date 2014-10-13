@@ -44,7 +44,7 @@ class City
 
     /**
      * @Groups({"city","typeahead"})
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\State")
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\State", inversedBy="cities")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      */
     protected $state;

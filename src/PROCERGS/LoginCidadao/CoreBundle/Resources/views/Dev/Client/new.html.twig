@@ -4,7 +4,7 @@
     <h1>{{ 'Service'|trans }}</h1>
     <div class="form-content">
         {% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
-        {{ form_start(form, {'attr' : {'role' : 'form'}}) }} 
+        {{ form_start(form, {'attr' : {'role' : 'form'}}) }}
         {{ form_errors(form) }}
         <div class="row clearfix">
             <div class="col-md-5">
@@ -35,7 +35,7 @@
                 {% if form.publicId is defined %}
                     {{ form_row(form.publicId) }}
                     {{ form_row(form.secret) }}
-                    {{ form_row(form.persons) }}
+                    {{ form_row(form.owners) }}
                 {% endif %}
             </div>
         </div>

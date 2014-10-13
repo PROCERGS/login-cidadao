@@ -1,4 +1,5 @@
 <?php
+
 namespace PROCERGS\LoginCidadao\CoreBundle\Controller\Dev;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -38,8 +39,7 @@ class ShoutController extends Controller
             ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
             ->createQueryBuilder('u')
             ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'u.client = c')
-            ->join('PROCERGSOAuthBundle:ClientPerson', 'cp', 'with', 'cp.client = c')
-            ->where('cp.person = :person')
+            ->where(':person MEMBER OF c.owners')
             ->setParameter('person', $this->getUser())
             ->orderBy('u.id', 'desc');
         $grid = new GridHelper();
@@ -53,7 +53,7 @@ class ShoutController extends Controller
             'grid' => $grid->createView($request)
         );
     }
-    
+
     /**
      * @Route("/step/placeholder", name="lc_dev_shout_step_placeholder")
      * @Template()
@@ -66,26 +66,31 @@ class ShoutController extends Controller
         }
         $em = $this->getDoctrine()->getManager();
         $placeholders = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Placeholder')
-        ->createQueryBuilder('u')
-        ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cat', 'with', 'u.category = cat')
-        ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'cat.client = c')
-        ->join('PROCERGSOAuthBundle:ClientPerson', 'cp', 'with', 'cp.client = c')
-        ->where('cp.person = :person and cat.id = :id')
-        ->setParameter('person', $this->getUser())
-        ->setParameter('id', $categoryId)
-        ->orderBy('u.id', 'desc')->getQuery()->getResult();
-        
+                ->createQueryBuilder('u')
+                ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category',
+                       'cat', 'with', 'u.category = cat')
+                ->join('PROCERGSOAuthBundle:Client', 'c', 'with',
+                       'cat.client = c')
+                ->where(':person MEMBER OF c.owners')
+                ->andWhere('cat.id = :id')
+                ->setParameter('person', $this->getUser())
+                ->setParameter('id', $categoryId)
+                ->orderBy('u.id', 'desc')->getQuery()->getResult();
+
         $form = $this->createFormBuilder();
         foreach ($placeholders as $placeholder) {
-            $form->add('place_'. $placeholder->getId(), 'text', array(
+            $form->add('place_' . $placeholder->getId(), 'text',
+                       array(
                 'label' => $placeholder->getName(),
                 'data' => $placeholder->getDefault()
             ));
         }
-        $form->add('id', 'hidden', array(
+        $form->add('id', 'hidden',
+                   array(
             'data' => $categoryId
         ));
-        $form->add('persons', 'ajax_choice', array(
+        $form->add('owners', 'ajax_choice',
+                   array(
             'attr' => array(
                 'data-ac-route' => $this->generateUrl('lc_dev_shout_step_category'),
                 'data-ac-search-prop' => 'name',
@@ -96,8 +101,6 @@ class ShoutController extends Controller
         $form = $form->getForm();
         return array('form' => $form->createView());
     }
-    
-    
 
     /**
      * @Route("/", name="lc_dev_shout")
@@ -140,13 +143,14 @@ class ShoutController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $client = $em->getRepository('PROCERGSOAuthBundle:Client')->createQueryBuilder('c')
-        ->join('PROCERGSOAuthBundle:ClientPerson', 'cp', 'WITH', 'cp.client = c')
-        ->where('cp.person = :person and c.id = :id ')->setParameters(array('id' => $id, 'person' => $this->getUser()))
-        ->getQuery()->getOneOrNullResult();
-        if (! $client) {
+                ->where(':person MEMBER OF c.owners')
+                ->andWhere('c.id = :id ')->setParameters(array('id' => $id, 'person' => $this->getUser()))
+                ->getQuery()->getOneOrNullResult();
+        if (!$client) {
             return $this->redirect($this->generateUrl('lc_dev_shout_new'));
         }
-        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.base.form.type'), $client);
+        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.base.form.type'),
+                                                                                    $client);
         $form->handleRequest($this->getRequest());
         $messages = '';
         if ($form->isValid()) {
@@ -155,10 +159,12 @@ class ShoutController extends Controller
             $clientManager->updateClient($client);
             $messages = 'aeee';
         }
-        return $this->render('PROCERGSLoginCidadaoCoreBundle:Dev\Client:new.html.twig', array(
-            'form' => $form->createView(),
-            'client' => $client,
-            'messages' => $messages
+        return $this->render('PROCERGSLoginCidadaoCoreBundle:Dev\Client:new.html.twig',
+                             array(
+                'form' => $form->createView(),
+                'client' => $client,
+                'messages' => $messages
         ));
     }
+
 }
