@@ -19,14 +19,9 @@ class PersonAddressController extends Controller
      */
     public function listAction()
     {
-        $person = $this->getUser();
+        $deleteForms = $this->getDeleteForms();
 
-        foreach ($person->getAddresses() as $address) {
-            $data = array('address_id' => $address->getId());
-            $deleteForms[$address->getId()] = $this->createForm(new RemovePersonAddressFormType(), $data)->createView();
-        }
-
-        return compact('person', 'deleteForms');
+        return compact('deleteForms');
     }
 
     /**
@@ -49,8 +44,9 @@ class PersonAddressController extends Controller
 
             return $this->redirect($this->generateUrl('lc_person_addresses'));
         }
+        $deleteForms = $this->getDeleteForms();
 
-        return compact('form');
+        return compact('form', 'deleteForms');
     }
 
     /**
@@ -86,6 +82,18 @@ class PersonAddressController extends Controller
         }
 
         return $this->redirect($this->generateUrl('lc_person_addresses'));
+    }
+
+    protected function getDeleteForms()
+    {
+        $person = $this->getUser();
+        $deleteForms = array();
+
+        foreach ($person->getAddresses() as $address) {
+            $data = array('address_id' => $address->getId());
+            $deleteForms[$address->getId()] = $this->createForm(new RemovePersonAddressFormType(), $data)->createView();
+        }
+        return $deleteForms;
     }
 
 }
