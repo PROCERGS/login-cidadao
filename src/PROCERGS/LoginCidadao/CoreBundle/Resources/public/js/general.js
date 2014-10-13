@@ -296,215 +296,215 @@ function checkVoterRegistration(inscricao) {
 //$(document).ajaxSend(lcAutoLoader.start);
 //$(document).ajaxComplete(lcAutoLoader.stop);
 function Pwindow(options) {
-	var opts = {
-		id : '__default',
-		label : '',
-		type: 'get',
-		dataType : 'html',
-		selector: null,
-		_selector : function () {
-			return opts.selector || $('#'+opts.id+' .modal-content');
-		},	
-		beforeSend: function() {
-			$('#'+opts.id).modal('hide');
-			opts._selector().html('');
-		},
-		success : function(data, textStatus, jqXHR) {
-			opts._selector().html(data);
-		},
-		complete: function() {
-			$('#'+opts.id).modal('show');
-		}
-	};	
-	opts = $.extend(true, {}, opts, options);
-	if (!$('#'+opts.id).length) {
-		var html = '<div id="'+opts.id+'" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="'+opts.label+'" aria-hidden="true">'+
-	    '<div class="modal-dialog"><div class="modal-content"></div></div></div>';
-		$('.settings-content').append(html);
-	}
-	if (!opts.url) {
-		return alert('dunno');
-	}
-	$.ajax(opts);
+  var opts = {
+    id : '__default',
+    label : '',
+    type: 'get',
+    dataType : 'html',
+    selector: null,
+    _selector : function () {
+      return opts.selector || $('#'+opts.id+' .modal-content');
+    },
+    beforeSend: function() {
+      $('#'+opts.id).modal('hide');
+      opts._selector().html('');
+    },
+    success : function(data, textStatus, jqXHR) {
+      opts._selector().html(data);
+    },
+    complete: function() {
+      $('#'+opts.id).modal('show');
+    }
+  };
+  opts = $.extend(true, {}, opts, options);
+  if (!$('#'+opts.id).length) {
+    var html = '<div id="'+opts.id+'" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="'+opts.label+'" aria-hidden="true">'+
+      '<div class="modal-dialog"><div class="modal-content"></div></div></div>';
+    $('.settings-content').append(html);
+  }
+  if (!opts.url) {
+    return alert('dunno');
+  }
+  $.ajax(opts);
 }
 var lcInfinityGrid = {
-	"scrollNextButton" : function(event) {
-		$(this).hide();
-		lcInfinityGrid.common($(this).attr('data-retrive'));
-		$($(this).attr('data-retrive')).infinitescroll('retrieve');
-	},
-	"common" : function(_id) {
-		if (!$(_id).data('infinitescroll')) {
-			var opts = {
-			    	debug: true,
-			        navSelector  : _id + ' .pagination',
-			        nextSelector : _id + ' .pagination a:last',
-			        itemSelector : _id + ' .row.common-grid-result',
-			        contentSelector: _id + ' .tab-pane.active',
-			        bufferPx     : 0,
-			        state : {
-			        	currPage: Number($(_id).attr('data-grid-currpage'))
-			        },
-			        loading: {	            
-			            msg: $('<div></div>'),
-			            img: null
-			        },
-			        pathParse: function (path, currPage) {
-			        	var matches = path.match(/^(.*[?|&]page=)\d+(.*|$)/);
-			        	if (matches) {
-			        		return matches.slice(1);
-			        	}
-			        }
-			    };
-			var extraOpts = $(_id).data('grid-extra-opts');
-			if (extraOpts) {
-				if (extraOpts.binder) {
-					extraOpts.binder = $(extraOpts.binder);
-				}
-			}
-			opts = $.extend(true, {}, opts, extraOpts);
-			$(_id).infinitescroll(opts,
-		    function( newElements, data, url ) {
-		    	var isLast = false;
-		    	for (x in newElements) {
-		    		if (isLast = newElements[x].classList.contains("row-last")) {
-		    			break;
-		    		}
-		    	}
-		    	if (!isLast) {
-		    		$(_id+' .infinityscroll-next-button').show();
-		    	}
-				/*
-				 * window.console && console.log('context: ',this);
-				 * window.console && console.log('returned: ', newElements);
-				 */		    
-			});
-			if (extraOpts && extraOpts.behavior && extraOpts.behavior == 'local') {
-/*				console.log('here');*/
-			} else {
-				$(window).unbind('.infscr');
-			}
-	    }
-	},
-	"startUp" : function() {
-		lcInfinityGrid.common('#'+$(this).attr('id'));
-	}
+  "scrollNextButton" : function(event) {
+    $(this).hide();
+    lcInfinityGrid.common($(this).attr('data-retrive'));
+    $($(this).attr('data-retrive')).infinitescroll('retrieve');
+  },
+  "common" : function(_id) {
+    if (!$(_id).data('infinitescroll')) {
+      var opts = {
+            debug: true,
+              navSelector  : _id + ' .pagination',
+              nextSelector : _id + ' .pagination a:last',
+              itemSelector : _id + ' .row.common-grid-result',
+              contentSelector: _id + ' .tab-pane.active',
+              bufferPx     : 0,
+              state : {
+                currPage: Number($(_id).attr('data-grid-currpage'))
+              },
+              loading: {
+                  msg: $('<div></div>'),
+                  img: null
+              },
+              pathParse: function (path, currPage) {
+                var matches = path.match(/^(.*[?|&]page=)\d+(.*|$)/);
+                if (matches) {
+                  return matches.slice(1);
+                }
+              }
+          };
+      var extraOpts = $(_id).data('grid-extra-opts');
+      if (extraOpts) {
+        if (extraOpts.binder) {
+          extraOpts.binder = $(extraOpts.binder);
+        }
+      }
+      opts = $.extend(true, {}, opts, extraOpts);
+      $(_id).infinitescroll(opts,
+        function( newElements, data, url ) {
+          var isLast = false;
+          for (x in newElements) {
+            if (isLast = newElements[x].classList.contains("row-last")) {
+              break;
+            }
+          }
+          if (!isLast) {
+            $(_id+' .infinityscroll-next-button').show();
+          }
+        /*
+         * window.console && console.log('context: ',this);
+         * window.console && console.log('returned: ', newElements);
+         */
+      });
+      if (extraOpts && extraOpts.behavior && extraOpts.behavior == 'local') {
+/*        console.log('here');*/
+      } else {
+        $(window).unbind('.infscr');
+      }
+      }
+  },
+  "startUp" : function() {
+    lcInfinityGrid.common('#'+$(this).attr('id'));
+  }
 }
 var lcAcWidget = {
-	onSearch : function(event){
-    	var self = $(this);
-    	var opts = self.data('ac-attr');
-    	opts = opts.filter;
-    	var data = {};        	
-    	for (var x in opts.extra_form_prop) {
-    		data[x] = $('#'+opts.extra_form_prop[x]).val();
-    	}
-    	data[opts.search_prop] = $(this).parent().prev().val();
-    	$.ajax({
-    		type: 'get',
-    		url: opts.route,
-    		data: {"ac_data":data},
-    		dataType : 'html',
-    		success : function(data, textStatus, jqXHR) {
-    			self.parents().find('.ac-magicbox .ac-scrollspy-opts').html(data);
-    			lcInfinityGrid.common('#' + $(data).attr('id'));
-    		}
+  onSearch : function(event){
+      var self = $(this);
+      var opts = self.data('ac-attr');
+      opts = opts.filter;
+      var data = {};
+      for (var x in opts.extra_form_prop) {
+        data[x] = $('#'+opts.extra_form_prop[x]).val();
+      }
+      data[opts.search_prop] = $(this).parent().prev().val();
+      $.ajax({
+        type: 'get',
+        url: opts.route,
+        data: {"ac_data":data},
+        dataType : 'html',
+        success : function(data, textStatus, jqXHR) {
+          self.parents().find('.ac-magicbox .ac-scrollspy-opts').html(data);
+          lcInfinityGrid.common('#' + $(data).attr('id'));
+        }
         });
     },
-	onClickFilteredItem : function(event){
-    	var src = '.ac-scrollspy-opts';
-    	var target = '.ac-scrollspy-opts-selected .common-grid-results .tab-pane.active';
-    	var id = '#'+ $(this).attr('id');
-    	if (!$(target).length || $(target+" .row:has("+id+"):last").length) {
-    		$(src+" .row:has("+id+"):last").remove();
-    	} else {
-    		$(src+" .row:has("+id+"):last").appendTo(target);
-    	}
+  onClickFilteredItem : function(event){
+      var src = '.ac-scrollspy-opts';
+      var target = '.ac-scrollspy-opts-selected .common-grid-results .tab-pane.active';
+      var id = '#'+ $(this).attr('id');
+      if (!$(target).length || $(target+" .row:has("+id+"):last").length) {
+        $(src+" .row:has("+id+"):last").remove();
+      } else {
+        $(src+" .row:has("+id+"):last").appendTo(target);
+      }
     },
     onClickSelectedItem : function(event){
-    	var target = '.ac-scrollspy-opts .common-grid-results .tab-pane.active';
-    	var src = '.ac-scrollspy-opts-selected';
-    	var id = '#'+ $(this).attr('id');
-    	if (!$(target).length || $(target+" .row:has("+id+"):last").length) {
-    		$(src+" .row:has("+id+"):last").remove();
-    	} else {
-    		$(src+" .row:has("+id+"):last").appendTo(target);
-    	}
+      var target = '.ac-scrollspy-opts .common-grid-results .tab-pane.active';
+      var src = '.ac-scrollspy-opts-selected';
+      var id = '#'+ $(this).attr('id');
+      if (!$(target).length || $(target+" .row:has("+id+"):last").length) {
+        $(src+" .row:has("+id+"):last").remove();
+      } else {
+        $(src+" .row:has("+id+"):last").appendTo(target);
+      }
     },
     onClickSearchEnable : function(event) {
-    	var _id = '#'+$(this).attr('data-ac-reference');
-    	var mb = $(_id + ' + .ac-magicbox');
-    	$(_id).parent().find('.ac-tags-toolbar').toggleClass('in');
-    	if (mb.hasClass('in')) {
-    		mb.toggleClass('in');
-    		mb.find('.ac-scrollspy-opts-selected').html();
-    		mb.find('.ac-scrollspy-opts').html();
-    		return;
-    	}
-    	var opts = mb.find('[data-ac-attr]').data('ac-attr');
-    	var callback = function () {
-    		var data = {};
-    		if (opts.selected.extra_form_prop) {
-    	    	for (var x in opts.selected.extra_form_prop) {
-    	    		data[x] = $('#'+opts.selected.extra_form_prop[x]).val();
-    	    	}
-    		}
-        	$.ajax({
-        		type: 'get',
-        		url: opts.selected.route,
-        		data: {"ac_data":data},
-        		dataType : 'html',
-        		success : function(data, textStatus, jqXHR) {
-        			mb.find('.ac-scrollspy-opts-selected').html(data);
-        			mb.toggleClass('in');
-        			$('html, body').animate({scrollTop: mb.offset().top});
-        		}
+      var _id = '#'+$(this).attr('data-ac-reference');
+      var mb = $(_id + ' + .ac-magicbox');
+      $(_id).parent().find('.ac-tags-toolbar').toggleClass('in');
+      if (mb.hasClass('in')) {
+        mb.toggleClass('in');
+        mb.find('.ac-scrollspy-opts-selected').html();
+        mb.find('.ac-scrollspy-opts').html();
+        return;
+      }
+      var opts = mb.find('[data-ac-attr]').data('ac-attr');
+      var callback = function () {
+        var data = {};
+        if (opts.selected.extra_form_prop) {
+            for (var x in opts.selected.extra_form_prop) {
+              data[x] = $('#'+opts.selected.extra_form_prop[x]).val();
+            }
+        }
+          $.ajax({
+            type: 'get',
+            url: opts.selected.route,
+            data: {"ac_data":data},
+            dataType : 'html',
+            success : function(data, textStatus, jqXHR) {
+              mb.find('.ac-scrollspy-opts-selected').html(data);
+              mb.toggleClass('in');
+              $('html, body').animate({scrollTop: mb.offset().top});
+            }
             });
-    	}
-    	var warmup = mb.find('.ac-scrollspy-opts:empty');
-    	if (warmup.length) {
-        	var data = {};
-        	for (var x in opts.filter.extra_form_prop) {
-        		data[x] = $('#'+opts.filter.extra_form_prop[x]).val();
-        	}
-        	$.ajax({
-        		type: 'get',
-        		url: opts.filter.route,
-        		data: {"ac_data":data},
-        		dataType : 'html',
-        		success : function(data, textStatus, jqXHR) {
-        			warmup.html(data);
-        			lcInfinityGrid.common('#' + $(data).attr('id'));
-        			callback();
-        		}
+      }
+      var warmup = mb.find('.ac-scrollspy-opts:empty');
+      if (warmup.length) {
+          var data = {};
+          for (var x in opts.filter.extra_form_prop) {
+            data[x] = $('#'+opts.filter.extra_form_prop[x]).val();
+          }
+          $.ajax({
+            type: 'get',
+            url: opts.filter.route,
+            data: {"ac_data":data},
+            dataType : 'html',
+            success : function(data, textStatus, jqXHR) {
+              warmup.html(data);
+              lcInfinityGrid.common('#' + $(data).attr('id'));
+              callback();
+            }
             });
-    	} else {
-    		callback();
-    	}
-    	
+      } else {
+        callback();
+      }
+
     },
     onClickSearchCancel : function(event) {
-    	var _id = '#'+$(this).attr('data-ac-reference');
-    	var mb = $(_id + ' + .ac-magicbox');
-    	mb.toggleClass('in');
-    	$(_id).parent().find('.ac-tags-toolbar').toggleClass('in');
+      var _id = '#'+$(this).attr('data-ac-reference');
+      var mb = $(_id + ' + .ac-magicbox');
+      mb.toggleClass('in');
+      $(_id).parent().find('.ac-tags-toolbar').toggleClass('in');
     },
     onClickSearchCommit : function(event) {
-    	var _id = '#'+$(this).attr('data-ac-reference');
-    	$(_id+' option').remove();
-    	var mb = $(_id + ' + .ac-magicbox');
-    	var tag = mb.parent().find('.ac-tags-toolbar');
-    	tag.children().remove();
-    	var opts = mb.find('[data-ac-attr]').data('ac-attr');
-    	mb.find('.ac-scrollspy-opts-selected .ac-search-select').each(function(a,b){    		
-    		var data = $(b).data('row');
-    		$(document.createElement('option')).attr('selected', 'selected').attr('value',data[opts.property_value]).text(data[opts.property_text]).appendTo(_id);
-    		$(document.createElement('div')).addClass('btn-group').append(
-				$(document.createElement('span')).addClass('label label-info').attr('type', 'button').text(data[opts.property_text])
-    		).appendTo(tag);
-    	});
-    	mb.toggleClass('in');
-    	$(_id).parent().find('.ac-tags-toolbar').toggleClass('in');
+      var _id = '#'+$(this).attr('data-ac-reference');
+      $(_id+' option').remove();
+      var mb = $(_id + ' + .ac-magicbox');
+      var tag = mb.parent().find('.ac-tags-toolbar');
+      tag.children().remove();
+      var opts = mb.find('[data-ac-attr]').data('ac-attr');
+      mb.find('.ac-scrollspy-opts-selected .ac-search-select').each(function(a,b){
+        var data = $(b).data('row');
+        $(document.createElement('option')).attr('selected', 'selected').attr('value',data[opts.property_value]).text(data[opts.property_text]).appendTo(_id);
+        $(document.createElement('div')).addClass('btn-group').append(
+        $(document.createElement('span')).addClass('label label-info').attr('type', 'button').text(data[opts.property_text])
+        ).appendTo(tag);
+      });
+      mb.toggleClass('in');
+      $(_id).parent().find('.ac-tags-toolbar').toggleClass('in');
     },
 };
 $(function() {
@@ -538,21 +538,21 @@ $(function() {
         var e = $(this);
         var u = e.attr('data-href') ? e.attr('data-href') : e.attr('href');
         if (u) {
-        	window.open(u,'_blank',e.attr('data-specs'));
+          window.open(u,'_blank',e.attr('data-specs'));
         }
         return false;
       });
     $(document).on('submit', '.form-ajax', function(event){
-    	event.preventDefault();
-    	var e = $(this);
-    	$.ajax({
-    		type: e.attr('method'),
-    		url: e.attr('action'),
-    		data: e.serialize(),
-    		dataType : 'html',
-    		success : function(data, textStatus, jqXHR) {
-    			$(e.attr('ajax-target')).html(data);
-    		}
+      event.preventDefault();
+      var e = $(this);
+      $.ajax({
+        type: e.attr('method'),
+        url: e.attr('action'),
+        data: e.serialize(),
+        dataType : 'html',
+        success : function(data, textStatus, jqXHR) {
+          $(e.attr('ajax-target')).html(data);
+        }
         });
     });
     $(document).on('click', '.infinityscroll-next-button' , lcInfinityGrid.scrollNextButton);
@@ -564,10 +564,28 @@ $(function() {
     $(document).on('click', ".ac-search-enable", lcAcWidget.onClickSearchEnable);
     $(document).on('click', ".ac-search-cancel", lcAcWidget.onClickSearchCancel);
     $(document).on('click', ".ac-search-commit", lcAcWidget.onClickSearchCommit);
-
-    $("#navbarUnread .notification-link").on("click", function(event) {
-      event.preventDefault();
-      console.log("ae");
-    });
 });
 
+// navbar - notifications
+$(function(){
+  $("#navbarUnread .notification-link").on("click", function(event) {
+    event.preventDefault();
+    var self = $(this);
+    var url = notificationUrl;
+    url += '?'+$.param($.parseJSON(self.attr('data-row')));
+
+    Pwindow({
+      id : 'notification-modal',
+      url : url,
+      dataType :'json',
+      selector: $('#notification-modal .modal-body'),
+      success : function(data, textStatus, jqXHR) {
+        if (!data) {
+          return;
+        }
+        this.selector.html(data.htmltpl);
+      }
+    });
+
+  });
+});

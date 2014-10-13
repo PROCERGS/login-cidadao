@@ -7,24 +7,6 @@
       {% include "PROCERGSLoginCidadaoCoreBundle:Notification:gridPri.html.twig" %}
   {% endif %}
 </div>
-<div id="notificationreader" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="{{ 'notification'|trans }}" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span>
-          <span class="sr-only">Close</span>
-        </button>
-        <h4 class="modal-title" id="myModalLabel">{{ 'Notifications'|trans }}</h4>
-      </div>
-      <div class="modal-body">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
 <style>
 #inbox-detail .notification-read {
     background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;
@@ -58,10 +40,10 @@
       var url = '{{ path('lc_not_inbox_show2') }}';
       url += '?'+$.param($.parseJSON(self.attr('data-row')));
       Pwindow({
-        id : 'notificationreader',
+        id : 'notification-modal',
         url : url,
         dataType :'json',
-        selector: $('#notificationreader .modal-body'),
+        selector: $('#notification-modal .modal-body'),
         success : function(data, textStatus, jqXHR) {
           if (!data) {
             return;

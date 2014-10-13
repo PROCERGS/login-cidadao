@@ -19,7 +19,7 @@
 }
 
 .common-grid-results .common-grid-result:nth-child(2n+1) {
-    background-color: #f9f9f9;
+    /*background-color: #f9f9f9;*/
 }
 
 .common-grid-results .common-grid-result {
@@ -28,10 +28,10 @@
     padding: 10px 0;
 }
 .common-grid-results .common-grid-result-no-result {
-	display: none;
+  display: none;
 }
 .common-grid-results .common-grid-result-no-result:only-child {
-	display: block;
+  display: block;
 }
 
 @media ( min-width : 992px) {
