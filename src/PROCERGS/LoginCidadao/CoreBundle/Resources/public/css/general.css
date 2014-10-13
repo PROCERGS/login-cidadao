@@ -41,6 +41,9 @@ body {
     width: 100%;
     z-index: 9999;
     top: 0px;
+
+    -webkit-box-shadow: 0 2px 33px 0px #000;
+    box-shadow: 0 2px 33px 0px #000;
 }
 
 body>.container {
