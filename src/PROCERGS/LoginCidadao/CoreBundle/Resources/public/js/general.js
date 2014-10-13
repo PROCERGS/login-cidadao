@@ -568,7 +568,9 @@ $(function() {
 
 // navbar - notifications
 $(function(){
-  $("#navbarUnread .notification-link").on("click", function(event) {
+  var navbarCount = $("#lc-navbar-ul .notification-total-unread-badge");
+
+  $("#navbarUnread .notification-unread").on("click", function(event) {
     event.preventDefault();
     var self = $(this);
     var url = notificationUrl;
@@ -582,6 +584,13 @@ $(function(){
       success : function(data, textStatus, jqXHR) {
         if (!data) {
           return;
+        }
+        if (data.wasread) {
+          var count  = parseInt(navbarCount.text()) - 1;
+          navbarCount.text(count);
+        }
+        if (!data.htmltpl) {
+          data.htmltpl = '';
         }
         this.selector.html(data.htmltpl);
       }
