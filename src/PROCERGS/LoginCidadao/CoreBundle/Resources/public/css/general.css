@@ -33,6 +33,16 @@ html {
     background-size: cover;
 }
 
+body {
+    padding-top: 50px;
+}
+#lc-navbar {
+    position: fixed !important;
+    width: 100%;
+    z-index: 9999;
+    top: 0px;
+}
+
 body>.container {
     margin-top: 30px;
 }
