@@ -116,7 +116,8 @@
   font-size: 24px;
 }
 
-.settings-content h2 {
+.settings-content .content.applications h2,
+.settings-content .content.change-username h2 {
   margin: 20px 35px 10px;
   font-size: 18px;
 }
@@ -221,7 +222,8 @@
 }
 
 #profile-edit .file-upload {
-  margin: 20px 0;
+  max-height: 20px;
+  color: #000;
 }
 
 #profile-edit .file-upload input[type="file"] {
@@ -239,11 +241,14 @@
 #profile-edit .connect {
   background-size: 34px;
   color: #FFF;
-  display: block;
+  display: inline-block;
   font-size: 13px;
   height: 34px;
   line-height: 34px;
+
+  min-width: 250px;
   margin-bottom: 5px;
+  max-width: 275px;
 }
 
 #profile-edit .connect .username {
@@ -609,5 +614,22 @@
 }
 
 .addresses.content .panel.remove-box {
+    display: none;
+}
+
+.content.profile-edit h2.personal-info {
+    font-size: 22px;
+}
+
+.content.profile-edit .media .profile-picture {
+    max-height: 55px;
+    max-width: 55px;
+}
+
+.content.profile-edit input[type=date] {
+    display: block;
+}
+
+.content.profile-edit .picture-upload-box {
     display: none;
 }
