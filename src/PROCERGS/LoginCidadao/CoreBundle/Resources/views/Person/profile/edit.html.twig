@@ -51,8 +51,7 @@
                 </div>
                 <div class="form-inline form-group birthdate">
                     {{ form_label(form.birthdate) }}
-                    <input type="date" class="form-control birthdate" data-date-format="dd/mm/yyyy" max="2000-01-01" min="1900-01-01">
-                    {#{ form_widget(form.birthdate) }#}
+                    {{ form_widget(form.birthdate) }}
                     <div class="input-error">{{ form_errors(form.birthdate) }}</div>
                 </div>
             </div>
@@ -223,10 +222,6 @@
 
 {% block javascripts %}
 {{ parent() }}
-{% javascripts  '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/bootstrap-datepicker.js' %}
-<script src="{{ asset_url }}"></script>
-{% endjavascripts %}
-
 <script>
     var profileEdit = {};
     profileEdit.countryId = '#{{ form.country.vars.id }}';
@@ -424,10 +419,3 @@
     });
 </script>
 {% endblock %}
-
-{% block stylesheets %}
-    {{ parent() }}
-    {% stylesheets '@PROCERGSLoginCidadaoCoreBundle/Resources/public/css/components/datepicker3.css' filter='cssrewrite' filter='?uglifycss' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
-{% endblock stylesheets %}
