@@ -18,10 +18,10 @@
                 </p>
 
                 <div class="form-group">
-                  {% if error %}
+                  {% if error is defined and error is not null %}
                     <div class="input-error alert-danger">
                         <ul>
-                            <li>{{ error|trans }}</li>
+                            <li>{{ error.messageKey|trans({}, 'security') }}</li>
                         </ul>
                     </div>
                   {% endif %}
