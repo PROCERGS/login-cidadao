@@ -4,3 +4,19 @@
     {% include "PROCERGSLoginCidadaoCoreBundle:PersonAddress:list.component.html.twig" %}
     <a href="{{ path('lc_person_addresses_new') }}#form" class="btn btn-success btn-block">{{ 'New Address' | trans }}</a>
 {% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    $(document).ready(function() {
+        $('.btn.address-remove').on('click', function() {
+            var id = $(this).data('address-id');
+            $('.remove-box[data-address-id='+id+']').slideDown();
+        });
+
+        $('.remove-box .cancel').on('click', function() {
+            $(this).closest('.remove-box').slideUp();
+        });
+    });
+</script>
+{% endblock %}

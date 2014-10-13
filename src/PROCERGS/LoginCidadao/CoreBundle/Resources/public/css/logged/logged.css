@@ -545,70 +545,69 @@
   margin-right: 20px;
 }
 
-/*#notifications .box {
-    float: left;
-    width: 80%;
-    }*/
+#notifications .box h4 {
+  margin: 0 0 10px;
+  padding: 0;
+}
 
-    #notifications .box h4 {
-      margin: 0 0 10px;
-      padding: 0;
-    }
+#notifications .gly-toggle, #notifications .gly-read, #notifications .loader {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
 
-    #notifications .gly-toggle, #notifications .gly-read, #notifications .loader {
-      position: absolute;
-      right: 10px;
-      top: 10px;
-    }
+#notifications .gly-read {
+  right: 42px;
+}
 
-    #notifications .gly-read {
-      right: 42px;
-    }
+#notifications .loader {
+  background-image: url(../../images/ajax-loader.gif);
+  height: 16px;
+  width: 16px;
+}
 
-    #notifications .loader {
-      background-image: url(../../images/ajax-loader.gif);
-      height: 16px;
-      width: 16px;
-    }
+#notifications .desc {
+  display: none;
+}
 
-    #notifications .desc {
-      display: none;
-    }
+#notifications .empty {
+  margin: 30px;
+}
 
-    #notifications .empty {
-      margin: 30px;
-    }
+#fos_user_change_password_form_plainPassword ul {
+  color: #a94442;
+  padding-left: 0;
+}
 
-    #fos_user_change_password_form_plainPassword ul {
-      color: #a94442;
-      padding-left: 0;
-    }
+.fos_oauth_server_authorize .connect-diagram {
+  margin: 30px 0;
+}
 
-    .fos_oauth_server_authorize .connect-diagram {
-      margin: 30px 0;
-    }
+.fos_oauth_server_authorize .connect-diagram .glyphicon.glyphicon-chevron-right {
+  font-size: 25px;
+  margin: 30px 0;
+}
 
-    .fos_oauth_server_authorize .connect-diagram .glyphicon.glyphicon-chevron-right {
-      font-size: 25px;
-      margin: 30px 0;
-    }
+.fos_oauth_server_authorize .connect-diagram {
+  font-size: 17px;
+}
 
-    .fos_oauth_server_authorize .connect-diagram {
-      font-size: 17px;
-    }
+.fos_oauth_server_authorize .buttons.row {
+  margin-top: 20px;
+}
 
-    .fos_oauth_server_authorize .buttons.row {
-      margin-top: 20px;
-    }
+.app-admin .table-bordered, .app-admin .table-bordered td, .app-admin .table-bordered th {
+  border-color: #000;
+}
 
-    .app-admin .table-bordered, .app-admin .table-bordered td, .app-admin .table-bordered th {
-      border-color: #000;
-    }
+.app-admin .table-bordered th {
+  border-bottom: none;
+}
 
-    .app-admin .table-bordered th {
-      border-bottom: none;
-    }
+.app-admin .table-bordered .glyphicon {
+  margin: 0 3px 3px 0;
+}
 
-    .app-admin .table-bordered .glyphicon {
-      margin: 0 3px 3px 0;
-    }
+.addresses.content .panel.remove-box {
+    display: none;
+}

@@ -7,11 +7,23 @@
                     <a href="#" class="btn btn-default btn-sm" title="{{ 'Edit' | trans }}">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </a>
-                    <a href="#" class="btn btn-danger btn-sm" title="{{ 'Remove' | trans }}">
+                    <button type="button" class="btn btn-danger btn-sm address-remove" data-address-id="{{ address.id }}" title="{{ 'Remove' | trans }}">
                         <span class="glyphicon glyphicon-trash"></span>
-                    </a>
+                    </button>
                 </div>
             </div>
+            {% set form = deleteForms[address.id] %}
+            {{ form_start(form, {'action': path('lc_person_addresses_delete', { id: address.id }), 'attr': {'role': 'form'}}) }}
+            <div class="panel panel-danger remove-box" data-address-id="{{ address.id }}" style="margin-bottom: 0">
+                <div class="panel-heading clearfix">
+                    <span class="pull-left">{{ 'Are you sure you want to remove this address?' | trans }}</span>
+                    <span class="pull-right">
+                        {{ form_widget(form.delete) }}
+                        <button type="button" class="btn btn-default btn-xs cancel">{{ 'No' | trans }}</button>
+                    </span>
+                </div>
+            </div>
+            {{ form_end(form) }}
 
             <div class="panel-body">
                 <address>

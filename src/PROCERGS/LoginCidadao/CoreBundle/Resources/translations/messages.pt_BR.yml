@@ -590,3 +590,6 @@ Commit: 'Consignar'
 Search: 'Pesquisar'
 dev.grid.fullNameOrUsername: 'Nome ou nome de usuário'
 dev.ac.owners: 'Proprietarios'
+Are you sure you want to remove this address?: Tem certeza que deseja remover esse endereço?
+Yes, remove: Sim, remover
+Remove: Remover
