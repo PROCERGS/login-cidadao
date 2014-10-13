@@ -11,7 +11,7 @@
 
 <div class="row">
     {% set common_row_class = 'lc-box col-xs-12 col-md-5 col-md-offset-1 pull-right' %}
-    {% include "PROCERGSLoginCidadaoCoreBundle::common.register.html.twig" %}
+    {{ include("PROCERGSLoginCidadaoCoreBundle::common.register.html.twig") }}
     {% trans_default_domain 'messages' %}
     <div id="register-aside" class="col-xs-12 col-md-6 hidden-xs pull-left">
         <h3 class="title">{% trans %}With only one account{% endtrans %}</h3>

@@ -29,7 +29,7 @@
               {{ form_widget(form.message, {'attr' : {'placeholder' : 'form.message'|trans, 'class' :'form-control', 'rows': '3' }}) }}
           </div>
           <div class="form-group">
-			{% include "PROCERGSLoginCidadaoCoreBundle::common.recaptcha.html.twig" %}
+			{{ include("PROCERGSLoginCidadaoCoreBundle::common.recaptcha.html.twig") }}
 			{% form_theme form 'EWZRecaptchaBundle:Form:ewz_recaptcha_widget.html.twig' %}
 			{{ form_widget(form.recaptcha, { 'attr': {'options' : {'theme' : 'custom'}}}) }}
             <div class="input-error alert-danger">{{ form_errors(form.recaptcha) }}</div>

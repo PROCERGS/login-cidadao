@@ -1,4 +1,4 @@
-{% extends 'PROCERGSLoginCidadaoCoreBundle:Dev:base.html.twig' %} 
+{% extends 'PROCERGSLoginCidadaoCoreBundle:Dev:base.html.twig' %}
 {% block content %}
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -7,7 +7,7 @@
     </div>
 <div id="notification_id">
     {% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
-    {{ form_start(form, {'attr' : {'role' : 'form'}}) }} 
+    {{ form_start(form, {'attr' : {'role' : 'form'}}) }}
     {{ form_errors(form) }}
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -35,7 +35,7 @@
             </div>
         </div>
     </div>
-    {% if form.markdownTemplate is defined %}    
+    {% if form.markdownTemplate is defined %}
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">{{ 'Templates'|trans }}</h3>
@@ -64,8 +64,8 @@
     <div class="panel-body">
         <div class="row clearfix">
             <div class="col-md-12">
-                <div id="placeholder-grid-place">                
-                    {% include "PROCERGSLoginCidadaoCoreBundle:Dev/Notification:placeholderGrid.html.twig" with {'grid': placeholderGrid} %}
+                <div id="placeholder-grid-place">
+                    {{ include("PROCERGSLoginCidadaoCoreBundle:Dev/Notification:placeholderGrid.html.twig", {'grid': placeholderGrid} ) }}
                 </div>
             </div>
         </div>
@@ -75,7 +75,7 @@
 <div id="placeholder-edit"></div>
 {% endblock %}
 
-{% block javascripts %} 
+{% block javascripts %}
 {{ parent() }}
 <script>
 var categoryId = '#{{ form.id.vars.id }}';
@@ -96,7 +96,7 @@ placeholderGrid.getGrid = function() {
 		}
     });
 };
-$(document).on('click', '#new_placeholder',  function() {	
+$(document).on('click', '#new_placeholder',  function() {
 	if (!$(categoryId).length) {
 		return;
 	}
@@ -125,7 +125,7 @@ $(document).on('click', '#placeholder-grid .edit-row-grid',  function() {
 		}
     });
 });
-$(document).on('click', '#placeholder-grid .remove-row-grid',  function() {	
+$(document).on('click', '#placeholder-grid .remove-row-grid',  function() {
 	if (!$(categoryId).length) {
 		return;
 	}
@@ -135,7 +135,7 @@ $(document).on('click', '#placeholder-grid .remove-row-grid',  function() {
 		url: routePlaceholderRemove + '?id='+ $id,
 		dataType : 'html',
 		success : function(data, textStatus, jqXHR) {
-			$('#placeholder-edit').html(data);			
+			$('#placeholder-edit').html(data);
 		}
     });
 });

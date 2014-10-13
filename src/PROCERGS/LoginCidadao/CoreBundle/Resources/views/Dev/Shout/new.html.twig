@@ -5,7 +5,7 @@
             <h3 class="panel-title">{{ 'Shout'|trans }}</h3>
         </div>
     </div>
-    
+
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">{{ 'Pickup a category'|trans }}</h3>
@@ -13,7 +13,7 @@
         <div class="panel-body">
             <div class="row clearfix">
                 <div class="col-md-12">
-                    {% include "PROCERGSLoginCidadaoCoreBundle:Dev/Shout:stepCategory.html.twig" %}
+                    {{ include("PROCERGSLoginCidadaoCoreBundle:Dev/Shout:stepCategory.html.twig") }}
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
     <div id="ajax-result"></div>
 {% endblock %}
 
-{% block javascripts %} 
+{% block javascripts %}
 {{ parent() }}
 <script type="text/javascript">
 var routeChoise = '{{ path('lc_dev_shout_step_placeholder') }}';

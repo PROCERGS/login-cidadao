@@ -15,7 +15,7 @@
 
 {% block body_html %}
 {% autoescape false %}
-{% include "PROCERGSLoginCidadaoCoreBundle::common.email.html.twig" with {'subject' : 'registration.email.subject'|trans({'%username%': user.username}), 'msg' : 'resetting.email.message'|trans, 'url' : confirmationUrl } %}
+{{ include("PROCERGSLoginCidadaoCoreBundle::common.email.html.twig", {'subject' : 'registration.email.subject'|trans({'%username%': user.username}), 'msg' : 'resetting.email.message'|trans, 'url' : confirmationUrl } ) }}
 {% endautoescape %}
 {% endblock %}
 

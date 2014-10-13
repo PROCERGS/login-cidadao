@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block header %}
-{% include "PROCERGSLoginCidadaoCoreBundle::navbar.html.twig" %}
+{{ include("PROCERGSLoginCidadaoCoreBundle::navbar.html.twig") }}
 {% endblock %}
 
 {% block sidebar %}{% endblock %}
@@ -99,7 +99,7 @@
         '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.placeholder.js'
         '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.js'
         '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.local.js'
-        '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/general.js' 
+        '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/general.js'
         filter='?uglifyjs2'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -119,16 +119,16 @@
         $('input[placeholder], textarea[placeholder]').placeholder();
         </script>
     <![endif]-->
-<script type="text/javascript"> 
-var $buoop = {}; 
-$buoop.ol = window.onload; 
-window.onload=function(){ 
- try {if ($buoop.ol) $buoop.ol();}catch (e) {} 
- var e = document.createElement("script"); 
- e.setAttribute("type", "text/javascript"); 
- e.setAttribute("src", "//browser-update.org/update.js"); 
- document.body.appendChild(e); 
-} 
+<script type="text/javascript">
+var $buoop = {};
+$buoop.ol = window.onload;
+window.onload=function(){
+ try {if ($buoop.ol) $buoop.ol();}catch (e) {}
+ var e = document.createElement("script");
+ e.setAttribute("type", "text/javascript");
+ e.setAttribute("src", "//browser-update.org/update.js");
+ document.body.appendChild(e);
+}
 </script>
 
 <script>

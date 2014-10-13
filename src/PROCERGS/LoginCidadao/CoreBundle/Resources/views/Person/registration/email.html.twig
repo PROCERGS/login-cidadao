@@ -15,11 +15,11 @@
 
 {% block body_html %}
 {% autoescape false %}
-{% include "PROCERGSLoginCidadaoCoreBundle::common.email.html.twig" with {
+{{ include("PROCERGSLoginCidadaoCoreBundle::common.email.html.twig", {
     'subject' : 'registration.email.subject' | trans({'%username%': user.username}),
     'msg' : 'registration.email.message.html' | trans({'%username%': user.username}) | raw,
     'url' : confirmationUrl,
     'urlsubject' : 'registration.email.click' | trans
-} %}
+} ) }}
 {% endautoescape %}
 {% endblock %}

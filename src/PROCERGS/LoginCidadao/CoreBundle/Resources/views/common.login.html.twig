@@ -41,7 +41,7 @@
 
                 {% if form1.recaptcha is defined %}
                 <div class="form-group captcha-container">
-                  {% include "PROCERGSLoginCidadaoCoreBundle::common.recaptcha.html.twig" %}
+                  {{ include("PROCERGSLoginCidadaoCoreBundle::common.recaptcha.html.twig") }}
                   {% form_theme form1 'EWZRecaptchaBundle:Form:ewz_recaptcha_widget.html.twig' %}
                   {{ form_widget(form1.recaptcha, { 'attr': {'options' : {'theme' : 'custom'}}}) }}
                 </div>

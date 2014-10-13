@@ -5,48 +5,12 @@
 {% endif %}
 
 {% block addresses %}
-    {% include "PROCERGSLoginCidadaoCoreBundle:PersonAddress:list.component.html.twig" %}
-{% if edit_form is not defined %}
-    {% include "PROCERGSLoginCidadaoCoreBundle:PersonAddress:form.component.html.twig" %}
-{% endif %}
-{% endblock %}
-
-{% block stylesheets %}
-{{ parent() }}
-    {% stylesheets '@PROCERGSLoginCidadaoCoreBundle/Resources/public/css/components/typeaheadjs.css' filter='cssrewrite' filter='?uglifycss' %}
-<link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
-{% endblock stylesheets %}
-
-{% block javascripts %}
-{{ parent() }}
-{% javascripts  '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/typeahead.bundle.js'
-                '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/handlebars-v2.0.0.js' %}
-<script src="{{ asset_url }}"></script>
-{% endjavascripts %}
-<script>
-    var cityTypeaheadUrl = '{{ path('api_1_get_cities', {'city': 'QUERY', '_format': 'json'}) }}'.replace('QUERY', '%QUERY');
-    var cities = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        remote: cityTypeaheadUrl,
-        prefetch: '{{ path('api_1_get_cities_prefetch', {'_format': 'json'} ) }}',
-    });
-    cities.initialize();
-    $('.city-selector').typeahead(null, {
-        name: 'city',
-        displayKey: function(city){
-            return city.name + ', ' + city.state.acronym;
-        },
-        source: cities.ttAdapter(),
-        templates: {
-        empty: [
-          '<div class="empty-message">',
-          'No city found.',
-          '</div>'
-        ].join('\n'),
-        suggestion: Handlebars.compile('<p><strong>{\{name}}</strong>, {\{state.acronym}}</p>')
-        }
-    });
-</script>
+    {{ include("PROCERGSLoginCidadaoCoreBundle:PersonAddress:list.component.html.twig") }}
+    {% if edit_form is not defined %}
+        {{ include("PROCERGSLoginCidadaoCoreBundle:PersonAddress:form.component.html.twig") }}
+    {% endif %}
+    <script>
+        var cityTypeaheadSearchUrl = '{{ path('api_1_get_cities', {'city': 'QUERY', '_format': 'json'}) }}'.replace('QUERY', '%QUERY');
+        var cityTypeaheadPrefetchUrl = '{{ path('api_1_get_cities_prefetch', {'_format': 'json'} ) }}';
+    </script>
 {% endblock %}

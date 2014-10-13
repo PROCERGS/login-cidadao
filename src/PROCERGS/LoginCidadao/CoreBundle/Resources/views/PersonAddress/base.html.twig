@@ -11,8 +11,17 @@
 {% endblock %}
 
 {% block javascripts %}
-{{ parent() }}
-    {% javascripts  '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/person.address.js' %}
-<script src="{{ asset_url }}"></script>
+    {{ parent() }}
+    {% javascripts  '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/typeahead.bundle.js'
+                    '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/handlebars-v2.0.0.js'
+                    '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/person.address.js' %}
+    <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets '@PROCERGSLoginCidadaoCoreBundle/Resources/public/css/components/typeaheadjs.css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock stylesheets %}

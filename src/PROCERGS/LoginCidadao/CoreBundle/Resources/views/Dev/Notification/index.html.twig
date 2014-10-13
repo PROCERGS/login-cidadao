@@ -1,5 +1,5 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle:Dev:base.html.twig" %}
- 
+
 {% block content %}
 <div id="notification_id">
     <div class="panel panel-default">
@@ -9,7 +9,7 @@
         <div class="panel-body">
             <div class="row clearfix">
                 <div class="col-md-12">
-                    {% include "PROCERGSLoginCidadaoCoreBundle:Dev/Notification:grid.html.twig" %}
+                    {{ include("PROCERGSLoginCidadaoCoreBundle:Dev/Notification:grid.html.twig") }}
                 </div>
             </div>
         </div>
@@ -17,7 +17,7 @@
 </div>
 {% endblock content %}
 
-{% block javascripts %} 
+{% block javascripts %}
 {{ parent() }}
 <script type="text/javascript">
 </script>

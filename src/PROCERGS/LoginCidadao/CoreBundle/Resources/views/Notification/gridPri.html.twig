@@ -1,5 +1,5 @@
 <div class="panel-group" id="accordion">
-    {% for row in resultset %} 
+    {% for row in resultset %}
     <div class="panel panel-default">
         <input type="hidden" class="row-data" value="{{ row|json_encode }}" />
         <div class="panel-heading">
@@ -9,7 +9,7 @@
         </div>
         <div id="{{ 'collapse' ~ row.id  }}" class="panel-collapse collapse">
             <div class="panel-body">
-                {% include "PROCERGSLoginCidadaoCoreBundle:Notification:gridSimple.html.twig" with {"grid": grids[row.id]} %}
+                {{ include("PROCERGSLoginCidadaoCoreBundle:Notification:gridSimple.html.twig", {"grid": grids[row.id]} ) }}
             </div>
         </div>
     </div>
