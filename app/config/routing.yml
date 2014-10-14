@@ -1,3 +1,8 @@
+procergs_login_cidadao_notification:
+    resource: "@PROCERGSLoginCidadaoNotificationBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 #HWI OAuth
 hwi_oauth_security:
     resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"

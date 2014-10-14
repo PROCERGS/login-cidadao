@@ -1,0 +1,15 @@
+parameters:
+    notifications.helper.class: PROCERGS\LoginCidadao\NotificationBundle\Helper\NotificationsHelper
+    procergs.notification.handler.class: PROCERGS\LoginCidadao\NotificationBundle\Handler\NotificationHandler
+    procergs.notification.class: PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification
+
+services:
+    notifications.helper:
+        class: %notifications.helper.class%
+        arguments: ["@doctrine.orm.entity_manager", "@security.context", "@service_container", %notifications_categories_unconfirmed_email%, %notifications_categories_empty_password%]
+
+    procergs.notification.handler:
+        class: %procergs.notification.handler.class%
+        arguments: [ "@doctrine.orm.entity_manager", %procergs.notification.class%, "@form.factory" ]
+        tags:
+            - { name: "security.secure_service" }

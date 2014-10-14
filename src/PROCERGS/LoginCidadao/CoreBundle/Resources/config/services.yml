@@ -1,6 +1,5 @@
 parameters:
     security.authentication.success_handler.class: PROCERGS\LoginCidadao\CoreBundle\Handler\AuthenticationSuccessHandler
-    notifications.helper.class: PROCERGS\LoginCidadao\CoreBundle\Helper\NotificationsHelper
     background.helper.class: PROCERGS\LoginCidadao\CoreBundle\Helper\BackgroundImageHelper
     fos_facebook.user.login.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\FacebookProvider
     procergs.hwi_twitter.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\FOSUBUserProvider
@@ -45,10 +44,6 @@ services:
         arguments: ["@router", [], "@doctrine.orm.entity_manager", "@session", "@security.http_utils", "@notifications.helper"]
         calls:
             - [setContainer, ["@service_container"]]
-
-    notifications.helper:
-        class: %notifications.helper.class%
-        arguments: ["@doctrine.orm.entity_manager", "@security.context", "@service_container", %notifications_categories_unconfirmed_email%, %notifications_categories_empty_password%]
 
     background.helper:
         class: %background.helper.class%
@@ -258,12 +253,6 @@ services:
             - [setUrl, [%igp_ws_url%]]
             - [setUsername, [%igp_username%]]
             - [setPassword, [%igp_password%]]
-
-    procergs.notification.handler:
-        class: %procergs.notification.handler.class%
-        arguments: [ "@doctrine.orm.entity_manager", %procergs.notification.class%, "@form.factory" ]
-        tags:
-            - { name: "security.secure_service" }
 
     procergs.person.serialize.listenner:
         class: %procergs.person.serialize.listenner.class%

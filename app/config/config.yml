@@ -41,7 +41,7 @@ twig:
 assetic:
     debug:          %kernel.debug%
     use_controller: false
-    bundles:        [ "PROCERGSLoginCidadaoCoreBundle" ]
+    bundles:        [ "PROCERGSLoginCidadaoCoreBundle", "PROCERGSLoginCidadaoNotificationBundle" ]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~

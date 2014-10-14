@@ -1,0 +1,27 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block sidebar %}
+<div class="settings-nav col-sm-3">
+    <ul class="nav nav-pills nav-stacked">
+        <li class="profile glyph {{ app.request.attributes.get('_route') == 'fos_user_profile_edit' ? 'active' }}">
+            <a href="{{ path('lc_notifications') }}" class="clearfix">
+                <i class="glyphicon glyphicon-user icon"></i>
+                <span>{% trans %}Notifications{% endtrans %}</span>
+            </a>
+        </li>
+        <li class="profile glyph {{ app.request.attributes.get('_route') == 'lc_profile_doc_edit' ? 'active' }}">
+            <a href="{{ path('lc_notifications_settings') }}" class="clearfix">
+                <span>{% trans %}Notification Settings{% endtrans %}</span>
+                <i class="glyphicon glyphicon-file icon"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets '@PROCERGSLoginCidadaoNotificationBundle/Resources/public/css/notifications.css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock stylesheets %}

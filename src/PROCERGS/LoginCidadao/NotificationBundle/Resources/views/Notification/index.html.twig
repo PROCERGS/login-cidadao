@@ -1,0 +1,29 @@
+{% extends "PROCERGSLoginCidadaoNotificationBundle::base.html.twig" %}
+
+{% block content %}
+<div class="content notifications">
+    <h1>{{ 'Notifications' | trans }}</h1>
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {% for notification in app.user.notifications %}
+                        <a class="media" href="#">
+                            <div class="pull-left">
+                                <img class="media-object" src="/{{ notification.sender.getPictureWebPath }}" alt="{{ notification.sender.name }}" title="{{ notification.sender.name }}">
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">{{ notification.title }}</h4>
+                                {{ notification.shortText }}
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+                <div class="panel-footer">
+                    {{ 'Load more' | trans }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
