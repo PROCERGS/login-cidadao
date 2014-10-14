@@ -1,46 +1,22 @@
-<div id="profile-edit" class="content rgcontent">
-    <h1>{% trans %}RG{% endtrans %}</h1>
-    {{ form_start(form, {'action': path('lc_profile_doc_rg_edit'), 'attr': {'role':'form', 'class' : 'form-ajax', 'ajax-target' : '#edit-rg .modal-content', 'id': 'form-rg'} }) }}
-    {{ form_errors(form) }}
-    <div class="form-content">
-        <div class="row">
+{% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
+
+{{ form_start(form, {'action': path('lc_profile_doc_rg_edit'), 'attr': {'role':'form', 'id': 'form-rg', 'class' : 'form-ajax', 'ajax-target' : 'div:has(#form-rg):last'} }) }}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">{{ 'RG'|trans }}</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row clearfix">
+            {{ form_errors(form) }}
             <div class="col-md-12">
-                <div class="form-group">
-                    {{ form_label(form.state) }}
-                    {{ form_widget(form.state, {'attr': {'class': 'form-control'}}) }}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error">{{ form_errors(form.state) }}</div>
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.issuer) }}
-                    {{ form_widget(form.issuer, {'attr': {'class': 'form-control'}}) }}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error">{{ form_errors(form.issuer) }}</div>
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.val) }}
-                    {{ form_widget(form.val, {'attr': {'class': 'form-control rg-input', 'maxlength': '10'}}) }}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error">{{ form_errors(form.val) }}</div>
-                </div>
+                {{ form_row(form.state) }}
+                {{ form_row(form.issuer) }}
+                {{ form_row(form.val) }}
             </div>
         </div>
     </div>
-    <div class="form-bar text-right">
-        <input class="btn btn-success" type="submit" value="{{ 'Send'|trans }}" />
+    <div class="panel-footer text-right">
+        <input type="submit" value="{{ 'Send'|trans }}" class="btn btn-success">
     </div>
-    {{ form_end(form) }}
 </div>
-
-<script type="text/javascript">
-  $(function() {
-
-    $(".rg-input").on("keydown", function(event) {
-        if (event.which != 8 && (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57)) && (event.keyCode < 96 || event.keyCode > 105)) {
-          return false;
-        }
-    });
-
-  });
-</script>
-
+{{ form_end(form) }}

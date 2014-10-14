@@ -71,54 +71,69 @@
 
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">{{ 'RG'|trans }}</h3>
+            <h3 class="panel-title">{{ 'RGs'|trans }}</h3>
           </div>
           <div class="panel-body">
-            <button type="button" class="btn btn-primary" id="add-rg">{{ 'add'|trans }} {{ 'RG'|trans }}</button>
-            {% render(controller("PROCERGSLoginCidadaoCoreBundle:Person:docRgList")) %}
+            <div id="rg-grid-place">
+                {{ include("PROCERGSLoginCidadaoCoreBundle:Person:docRgList.html.twig", {'grid': grid} ) }}
+            </div>
           </div>
         </div>
-
+        <div id="rg-edit"></div>
     </div>
 </div>
-<style>
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-    border-color: black black rgba(0, 0, 0, 0);
-}
-.nav-tabs {
-    border-bottom: 1px solid black;
-}
-.tab-pane {
-    margin-top: 10px;
-}
-</style>
 {% endblock %}
 {% block javascripts %}
 {{ parent() }}
 <script>
+var routeRgEdit = '{{ path('lc_profile_doc_rg_edit') }}';
+var routeRgRemove = '{{ path('lc_profile_doc_rg_remove') }}';
+var routeRgGrid = '{{ path('lc_profile_doc_rg_list') }}';
 var rgGrid = {};
 rgGrid.getGrid = function() {
-  $.ajax({
-    type: 'get',
-    url: "{{ path('lc_profile_doc_rg_list') }}",
-    dataType : 'html',
-    success : function(data, textStatus, jqXHR) {
-      $('#rg-grid').replaceWith(data);
-    }
+    $.ajax({
+        type: 'get',
+        url: routeRgGrid,
+        dataType : 'html',
+        success : function(data, textStatus, jqXHR) {
+        	$('#rg-grid-place').html(data);
+        	$('html, body').animate({scrollTop: $('#rg-grid-place').offset().top});
+        }
     });
 };
-$('#add-rg').on("click", function() {
-  Pwindow({'id' : 'edit-rg', 'url' : "{{ path('lc_profile_doc_rg_edit') }}"});
+$(document).on('click', '#new_rg',  function() {
+	$.ajax({
+		type: 'get',
+		url: routeRgEdit,
+		dataType : 'html',
+		success : function(data, textStatus, jqXHR) {
+			$('#rg-edit').html(data);
+			$('html, body').animate({scrollTop: $('#rg-edit').offset().top});
+		}
+    });
 });
-
-
-$("#rg-grid a.edit-grid").on('click', function() {
-  var row = $.parseJSON($(this).parent().parent().find('.row-data').val());
-  var url = "{{ path('lc_profile_doc_rg_edit') }}";
-  if (row.id) {
-    url += '?id=' +row.id;
-  }
-  Pwindow({'id' : 'edit-rg','url' : url});
+$(document).on('click', '#rg-grid .edit-row-grid',  function() {
+	var $id = $(this).data('row').id;
+	$.ajax({
+		type: 'get',
+		url: routeRgEdit + '?id='+ $id,
+		dataType : 'html',
+		success : function(data, textStatus, jqXHR) {
+			$('#rg-edit').html(data);
+			$('html, body').animate({scrollTop: $('#rg-edit').offset().top});
+		}
+    });
+});
+$(document).on('click', '#rg-grid .remove-row-grid',  function() {
+	var $id = $(this).data('row').id;
+	$.ajax({
+		type: 'get',
+		url: routeRgRemove + '?id='+ $id,
+		dataType : 'html',
+		success : function(data, textStatus, jqXHR) {
+			$('#rg-edit').html(data);
+		}
+    });
 });
 var profileDocEdit = {};
 profileDocEdit.cpfId = '#{{ form.cpf.vars.id }}';

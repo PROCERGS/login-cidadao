@@ -25,6 +25,7 @@ use Symfony\Component\Form\FormError;
 use PROCERGS\LoginCidadao\BadgesBundle\BadgesEvents;
 use PROCERGS\LoginCidadao\BadgesBundle\Event\EvaluateBadgesEvent;
 use PROCERGS\LoginCidadao\BadgesBundle\Event\ListBadgesEvent;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 
 class PersonController extends Controller
 {
@@ -349,9 +350,35 @@ class PersonController extends Controller
             $this->get('session')->getFlashBag()->add('success',
                     $translator->trans("Documents were successfully changed"));
         }
-        return array('form' => $form->createView());
+        $return = $this->docRgListAction($request);
+        $return['form'] = $form->createView();
+        return $return;
     }
 
+    /**
+     * @Route("/profile/doc/rg/remove", name="lc_profile_doc_rg_remove")
+     * @Template()
+     */
+    public function docRgRemoveAction(Request $request)
+    {
+        if ($id = $request->get('id')) {
+            $em = $this->getDoctrine()->getManager();
+            $rg = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Rg')
+            ->createQueryBuilder('u')
+            ->where('u.person = :person and u.id = :id')
+            ->setParameter('person',$this->getUser())
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+            if ($rg) {
+                $em->remove($rg);
+                $em->flush();
+            }
+        }
+        $resp = new Response('<script>rgGrid.getGrid();</script>');
+        return $resp;
+    }
+    
     /**
      * @Route("/profile/doc/rg/edit", name="lc_profile_doc_rg_edit")
      * @Template()
@@ -373,7 +400,7 @@ class PersonController extends Controller
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
             $rgNum = str_split($form->get('val')->getData());
-            if ( ($form->get('state')->getData()->getId() == 43) && ($this->checkRGDce($rgNum) != $rgNum[0]) || ($this->checkRGDcd($rgNum) != $rgNum[9]) ) {
+            if ( ($form->get('state')->getData()->getId() == 43) && ($this->checkRGDce($rgNum) != $rgNum[0] || $this->checkRGDcd($rgNum) != $rgNum[9]) ) {
                 $form->get('val')->addError(new FormError($this->get('translator')->trans('This RG is invalid')));
                 return array('form' => $form->createView());
             }
@@ -395,7 +422,7 @@ class PersonController extends Controller
             }
             $manager->persist($rg);
             $manager->flush();
-            $resp = new Response('<script>rgGrid.getGrid();$(\'#edit-rg\').modal(\'hide\');</script>');
+            $resp = new Response('<script>rgGrid.getGrid();</script>');
             return $resp;
         }
         return array('form' => $form->createView());
@@ -446,17 +473,23 @@ class PersonController extends Controller
      */
     public function docRgListAction(Request $request)
     {
-        $resultset = $this->getDoctrine()->getManager()
+        $sql = $this->getDoctrine()->getManager()
             ->getRepository('PROCERGSLoginCidadaoCoreBundle:Rg')
             ->createQueryBuilder('u')
             ->select('u.id, u.val, right(b.iso6, 2) iso6')
             ->join('PROCERGSLoginCidadaoCoreBundle:State', 'b', 'with', 'u.state = b')
             ->where('u.person = :person')
             ->setParameters(array('person' => $this->getUser()))
-            ->orderBy('u.id', 'ASC')
-            ->getQuery()
-            ->getResult();
-        return compact('resultset');
+            ->orderBy('u.id', 'desc');
+        
+        $grid = new GridHelper();
+        $grid->setId('rg-grid');
+        $grid->setPerPage(4);
+        $grid->setMaxResult(4);
+        $grid->setQueryBuilder($sql);
+        $grid->setInfinityGrid(true);
+        $grid->setRoute('lc_profile_doc_rg_list');
+        return array('grid' => $grid->createView($request));
     }
 
     /**
