@@ -87,6 +87,20 @@
   width: 100%;
 }
 
+.settings-nav .submenu {
+  background-color: #FFF;
+  padding: 0;
+}
+
+.settings-nav .submenu a {
+  display: block;
+  padding: 0 18px;
+}
+
+.settings-nav .submenu a:hover {
+  text-decoration: none;
+}
+
 .progress-box {
   background-color: #dddedc;
   margin-top: 15px;
@@ -633,4 +647,54 @@
 
 .content.profile-edit .picture-upload-box {
     display: none;
+}
+
+#inbox-detail .notification-read {
+    background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;
+    color: #222222;
+    border: thin groove #98bf21;
+    padding:20px 0;
+}
+
+#inbox-detail .notification-unread {
+    /*background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;*/
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9) !important;
+    border-bottom: none;
+    color: #222222;
+    border: thin groove #98bf21;
+    padding:20px 0;
+}
+
+#inbox-detail .notification {
+  cursor: pointer;
+  border-bottom: solid 1px #CCC;
+  font-size: 12px;
+  padding: 15px 10px;
+}
+
+#inbox-detail .notification:hover {
+  background-color: #C7D6CB!important;
+}
+
+#inbox-detail .notification .client-img {
+  background-color: #FFF;
+  border: solid 1px #CCC;
+  float: left;
+  height: 50px;
+  margin: 0 15px 0 0;
+  width: 50px ;
+}
+
+#inbox-detail .notification .client-name {
+  margin: 5px 0 0;
+}
+
+#inbox-detail .notification .title {
+  font-size: 13px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.common-grid-result + .common-grid-result {
+  border-top: none!important;
 }

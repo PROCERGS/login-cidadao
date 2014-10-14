@@ -1,35 +1,17 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::grid_layout.html.twig" %}
 
+{% block grid_header_action %}
+{% endblock grid_header_action %}
+
 {% block grid_header_data %}
-<div class="col-md-3">{{ 'Service'|trans }}</div>
-<div class="col-md-6">{{ 'not.shorttext'|trans }}</div>
-<div class="col-md-2">{{ 'not.createdat'|trans }}</div>
+<div class="col-md-12">{{ 'Notifications'|trans }}</div>
 {% endblock grid_header_data %}
 
-{% block grid_row_action %}
-<div class="col-md-1">
-    <a id="{{ grid.getId }}-row-{{ row.id }}" class="center-block text-center glyphicon glyphicon-search edit-grid" title="{{ 'Show'|trans }}" href="javascript:void(0)" data-row="{{ grid.getRouteParams|merge({'notification':row.id, 'client_id': row.client_id})|json_encode }}"></a>
-</div>
-{% endblock grid_row_action %}
-
-{% block grid_row_data %}
-<div class="col-md-3">
-    <dt>{{ 'Service'|trans }}</dt>
-    <dd>{{ row.client_name }}</dd>
-</div>
-<div class="col-md-6">
-    <dt>{{ 'not.shorttext'|trans }}</dt>
-    <dd>{{ row.shorttext }}</dd>
-</div>
-<div class="col-md-2">
-    <dt>{{ 'not.createdat'|trans }}</dt>
-    <dd>{{ row.createdat|date('d/m/Y h:i:s') }}</dd>
-</div>
-{% endblock grid_row_data %}
-
 {% block grid_row %}
-<div class="row common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }} {{ grid.getRlast != true ? 'row-last' }}">
-  {{ block('grid_row_action') }}
-  {{ block('grid_row_data') }}
+<div class="row notification common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }} {{ grid.getRlast != true ? 'row-last' }}" data-row="{{ grid.getRouteParams|merge({'notification':row.id, 'client_id': row.client_id})|json_encode }}" title="{{ 'Click to read'|trans }}">
+  <div class="client-img"></div>
+  <h6 class="title">{{ row.title }}</h6>
+  <div class="client-name">{{ row.client_name }}</div>
+  <div class="date">{{ row.createdat|date('d/m/Y h:i:s') }}</div>
 </div>
 {% endblock grid_row %}

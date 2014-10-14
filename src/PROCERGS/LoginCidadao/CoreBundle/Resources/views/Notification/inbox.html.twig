@@ -7,26 +7,6 @@
       {{ include("PROCERGSLoginCidadaoCoreBundle:Notification:gridPri.html.twig") }}
   {% endif %}
 </div>
-<style>
-#inbox-detail .notification-read {
-    background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;
-    color: #222222;
-    border: thin groove #98bf21;
-    padding:20px 0;
-}
-#inbox-detail .notification-unread {
-    /*background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;*/
-    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9) !important;
-    border-bottom: none;
-    color: #222222;
-    border: thin groove #98bf21;
-    padding:20px 0;
-}
-
-.common-grid-result + .common-grid-result {
-  border-top: none!important;
-}
-</style>
 {% endblock %}
 
 {% block javascripts %}
@@ -35,7 +15,7 @@
     $(document).ready(function() {
       var navbarCount = $("#lc-navbar-ul .notification-total-unread-badge");
 
-    $(document).on('click', '#inbox-detail .common-grid-results a.edit-grid',  function() {
+    $(document).on('click', '#inbox-detail .notification',  function() {
       var self = $(this);
       var url = '{{ path('lc_not_inbox_show2') }}';
       url += '?'+$.param($.parseJSON(self.attr('data-row')));
@@ -45,6 +25,7 @@
         dataType :'json',
         selector: $('#notification-modal .modal-body'),
         success : function(data, textStatus, jqXHR) {
+          console.log(data);
           if (!data) {
             return;
           }
@@ -56,21 +37,13 @@
             if (self.data('row').client_id) {
                 var sideSelector = $('#inbox-count-unread-'+self.data('row').client_id);
                 if (sideSelector.length) {
-                    sideSelector.contents().first().replaceWith(document.createTextNode(parseInt(sideSelector.text()) - 1)); 
+                    sideSelector.contents().first().replaceWith(document.createTextNode(parseInt(sideSelector.text()) - 1));
                 }
             }
           }
           if (!data.htmltpl) {
             data.htmltpl = '';
           }
-          // if (cRow.prev().find('a.edit-grid').length) {
-          //   var t = "$('#"+cRow.prev().find('a.edit-grid').attr('id')+"').click()";
-          //   data.htmltpl += '<a class="left carousel-control" href="javascript:void(0);" onclick="'+t+'" role="button"><span class="glyphicon glyphicon-chevron-left"></span></a>';
-          // }
-          // if (cRow.next().find('a.edit-grid').length) {
-          //   var t = "$('#"+cRow.next().find('a.edit-grid').attr('id')+"').click()";
-          //   data.htmltpl += '<a class="right carousel-control" href="javascript:void(0);" onclick="'+t+'" role="button"><span class="glyphicon glyphicon-chevron-right"></span></a>';
-          // }
           this.selector.html(data.htmltpl);
         }
       });
