@@ -30,7 +30,7 @@ class Shout
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\ShoutPerson", mappedBy="shout") 
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\ShoutPerson", mappedBy="shout")
      */
     private $persons;
 
@@ -41,7 +41,7 @@ class Shout
     private $person;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\Category", inversedBy="shouts")
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     private $category;
@@ -55,40 +55,40 @@ class Shout
     {
         return $this->id;
     }
-    
+
     public function setId($var)
     {
         $this->id = $var;
         return $this;
     }
-    
+
     public function getCategory()
     {
         return $this->category;
     }
-    
+
     public function setCategory($var)
     {
         $this->category = $var;
         return $this;
     }
-    
+
     public function getPerson()
     {
         return $this->person;
     }
-    
+
     public function setPerson($var)
     {
         $this->person = $var;
         return $this;
     }
-    
+
     public function getPersons()
     {
         return $this->persons;
     }
-    
+
     public function setPersons($var)
     {
         $this->persons = $var;
