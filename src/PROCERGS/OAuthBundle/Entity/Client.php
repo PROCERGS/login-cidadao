@@ -14,6 +14,8 @@ use JMS\Serializer\Annotation as JMS;
 use OAuth2\OAuth2;
 use Doctrine\Common\Collections\ArrayCollection;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
+use PROCERGS\LoginCidadao\CoreBundle\Model\AbstractUniqueEntity;
+use PROCERGS\LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
 
 /**
  * @ORM\Entity
@@ -22,7 +24,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
  * @UniqueEntity("name")
  * @JMS\ExclusionPolicy("all")
  */
-class Client extends BaseClient
+class Client extends BaseClient implements UniqueEntityInterface
 {
 
     /**
@@ -369,6 +371,35 @@ class Client extends BaseClient
     public function setOwners(ArrayCollection $owners)
     {
         $this->owners = $owners;
+        return $this;
+    }
+
+    /* Unique Interface Stuff */
+
+    /**
+     * @ORM\Column(type="string", nullable=true, unique=true)
+     * @var string
+     */
+    private $uid;
+
+    /**
+     * Gets the Unique Id of the Entity.
+     * @return string the entity UID
+     */
+    public function getUid()
+    {
+        return $this->uid;
+    }
+
+    /**
+     * Sets the Unique Id of the Entity.
+     * @param string $id the entity UID
+     * @return AbstractUniqueEntity
+     */
+    public function setUid($uid = null)
+    {
+        $this->uid = $uid;
+
         return $this;
     }
 

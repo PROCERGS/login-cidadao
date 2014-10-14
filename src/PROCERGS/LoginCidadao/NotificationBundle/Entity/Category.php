@@ -9,6 +9,7 @@ use PROCERGS\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
+use PROCERGS\LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
 
 /**
  * Category
@@ -17,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @JMS\ExclusionPolicy("all")
  */
-class Category implements CategoryInterface
+class Category implements CategoryInterface, UniqueEntityInterface
 {
 
     /**
@@ -114,7 +115,7 @@ class Category implements CategoryInterface
     protected $notifications;
 
     /**
-     * @ORM\OneToOne(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\PersonNotificationOption", mappedBy="category") 
+     * @ORM\OneToOne(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\PersonNotificationOption", mappedBy="category")
      */
     protected $personNotificationOption;
 
@@ -297,29 +298,6 @@ class Category implements CategoryInterface
     }
 
     /**
-     * Set application
-     *
-     * @param string $application
-     * @return Category
-     */
-    public function setApplication($application)
-    {
-        $this->application = $application;
-
-        return $this;
-    }
-
-    /**
-     * Get application
-     *
-     * @return string
-     */
-    public function getApplication()
-    {
-        return $this->application;
-    }
-
-    /**
      * Set htmlTemplate
      *
      * @param string $htmlTemplate
@@ -414,16 +392,45 @@ class Category implements CategoryInterface
         $this->client = $client;
         return $this;
     }
-    
+
     public function getPersonNotificationOption()
     {
         return $this->personNotificationOption;
     }
-    
+
     public function setPersonNotificationOption($var)
     {
         $this->personNotificationOption = $var;
         return $this;
     }
-    
+
+    /* Unique Interface Stuff */
+
+    /**
+     * @ORM\Column(type="string", nullable=true, unique=true)
+     * @var string
+     */
+    private $uid;
+
+    /**
+     * Gets the Unique Id of the Entity.
+     * @return string the entity UID
+     */
+    public function getUid()
+    {
+        return $this->uid;
+    }
+
+    /**
+     * Sets the Unique Id of the Entity.
+     * @param string $id the entity UID
+     * @return AbstractUniqueEntity
+     */
+    public function setUid($uid = null)
+    {
+        $this->uid = $uid;
+
+        return $this;
+    }
+
 }

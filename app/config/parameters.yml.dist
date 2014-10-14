@@ -71,6 +71,7 @@ parameters:
     igp_username: ~
     igp_password: ~
 
+    # Default Client
+    oauth_default_client.uid: login-cidadao
     # Notification's categories IDs
-    notifications_categories_unconfirmed_email: 1
-    notifications_categories_empty_password: 2
+    notifications_categories_alert: login-cidadao-alert

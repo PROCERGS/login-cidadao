@@ -8,7 +8,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\ORM\EntityManager;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\Category;
+use PROCERGS\OAuthBundle\Entity\Client;
 
 class PopulateDatabaseCommand extends ContainerAwareCommand
 {
@@ -24,8 +25,9 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dir = realpath($input->getArgument('dump_folder'));
-        $this->loadDumpFiles($dir, $output);
-        //$this->createCategories($output);
+        //$this->loadDumpFiles($dir, $output);
+        $this->createDefaultOAuthClient($output);
+        $this->createCategories($output);
     }
 
     private function loadDumpFiles($dir, OutputInterface $output)
@@ -103,20 +105,67 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
         return $entries;
     }
 
+    protected function createDefaultOAuthClient(OutputInterface $output)
+    {
+        if (!($this->getDefaultOAuthClient() instanceof Client)) {
+            $domain = $this->getContainer()->getParameter('site_domain');
+            $url = "//$domain";
+            $grantTypes = array(
+                "authorization_code",
+                "token",
+                "password",
+                "client_credentials",
+                "refresh_token",
+                "extensions"
+            );
+
+            $clientManager = $this->getContainer()->get('fos_oauth_server.client_manager');
+            $client = $clientManager->createClient();
+            $client->setName('Login Cidadão');
+            $client->setDescription('Login Cidadão');
+            $client->setSiteUrl($url);
+            $client->setRedirectUris(array($url));
+            $client->setAllowedGrantTypes($grantTypes);
+            $client->setTermsOfUseUrl($url);
+            $client->setPublished(true);
+            $client->setVisible(false);
+            $clientManager->updateClient($client);
+            $output->writeln('Default Client created.');
+        }
+    }
+
     protected function createCategories(OutputInterface $output)
     {
         $em = $this->getManager();
-        $categories = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category');
+        $categories = $em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category');
 
-        $count = $em->createQuery("SELECT c FROM PROCERGSLoginCidadaoCoreBundle:Notification\Category c");
-        $count->setMaxResults(1)->execute();
-        $result = $count->getResult();
+        $alertCategoryUid = $this->getContainer()->getParameter('notifications_categories_alert.uid');
+        $alertCategory = $categories->findByUid($alertCategoryUid);
 
-        if (count($result) === 0) {
-            // Create categories
+        if (!($alertCategory instanceof Category)) {
+            $alertCategory = new Category();
+            $alertCategory->setClient($this->getDefaultOAuthClient())
+                ->setDefaultShortText('Alert')
+                ->setDefaultTitle('Alert')
+                ->setDefaultIcon('alert')
+                ->setEmailable(false)
+                ->setName('Alerts')
+                ->setUid($alertCategoryUid);
+            $em->persist($alertCategory);
+            $em->flush();
+            $output->writeln('Alert category created.');
         }
-
-        $output->writeln(count($result) > 0 ? 'Has categories' : 'Nothing here');
     }
 
+    /**
+     * @return Client
+     */
+    private function getDefaultOAuthClient()
+    {
+        $em = $this->getManager();
+        $uid = $this->getContainer()->getParameter('oauth_default_client.uid');
+        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->findByUid($uid);
+
+        return $client;
+    }
 }
