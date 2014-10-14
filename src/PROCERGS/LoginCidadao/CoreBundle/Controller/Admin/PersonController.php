@@ -44,7 +44,7 @@ class PersonController extends Controller
             $sql->where('1=1');
             $parms = $form->getData();
             if (isset($parms['username'][0])) {
-                $sql->andWhere('u.cpf like ?1 or u.username like ?1 or u.email like ?1 or u.firstName like ?1 or u.surname like ?1');
+                $sql->andWhere('u.cpf like ?1 or LowerUnaccent(u.username) like LowerUnaccent(?1) or LowerUnaccent(u.email) like LowerUnaccent(?1) or LowerUnaccent(u.firstName) like LowerUnaccent(?1) or LowerUnaccent(u.surname) like LowerUnaccent(?1)');
                 $sql->setParameter('1', '%' . addcslashes($parms['username'], '\\%_') . '%');
             }
             $sql->addOrderBy('u.id', 'desc');

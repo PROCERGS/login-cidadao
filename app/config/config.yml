@@ -75,6 +75,7 @@ doctrine:
           string_functions:
             right: PROCERGS\LoginCidadao\CoreBundle\DQL\Right
             countif: PROCERGS\LoginCidadao\CoreBundle\DQL\CountIf
+            lowerunaccent: PROCERGS\LoginCidadao\CoreBundle\DQL\LowerUnaccent
 
 # Swiftmailer Configuration
 swiftmailer:
