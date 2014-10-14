@@ -91,7 +91,7 @@ class NotificationsHelper
         }
     }
 
-    protected function getDefaultNotification(Person $person, $title, $shortText, $text, $level, $icon, Category $category, $notification = null, $parameters = null)
+    protected function getDefaultNotification(Person $person, $title, $shortText, $text, $icon, Category $category, $notification = null, $parameters = null)
     {
         $persisted = $this->getRepository()->findOneBy(array('person' => $person, 'category' => $category));
         if ($persisted instanceof NotificationInterface) {
@@ -107,7 +107,6 @@ class NotificationsHelper
 
         $notification->setPerson($person)
             ->setIcon($icon)
-            ->setLevel($level)
             ->setTitle($title)
             ->setShortText($shortText)
             ->setText($text)
@@ -121,12 +120,11 @@ class NotificationsHelper
         $title = $this->translator->trans(self::UNCONFIRMED_EMAIL_TITLE);
         $shortText = $this->translator->trans(self::UNCONFIRMED_EMAIL_SHORT_TEXT);
         $text = $this->translator->trans(self::UNCONFIRMED_EMAIL_FULL_TEXT);
-        $level = NotificationInterface::LEVEL_EXTREME;
         $icon = 'glyphicon glyphicon-envelope';
         $url = $this->container->get('router')
             ->generate('lc_resend_confirmation_email');
 
-        return $this->getDefaultNotification($person, $title, $shortText, $text, $level, $icon, $this->getUnconfirmedEmailCategory(), new Notification(), array('%url%' => $url));
+        return $this->getDefaultNotification($person, $title, $shortText, $text, $icon, $this->getUnconfirmedEmailCategory(), new Notification(), array('%url%' => $url));
     }
 
     protected function getEmptyPasswordNotification(Person $person)
@@ -134,10 +132,9 @@ class NotificationsHelper
         $title = $this->translator->trans(self::EMPTY_PASSWORD_TITLE);
         $shortText = $this->translator->trans(self::EMPTY_PASSWORD_SHORT_TEXT);
         $text = $this->translator->trans(self::EMPTY_PASSWORD_FULL_TEXT);
-        $level = NotificationInterface::LEVEL_IMPORTANT;
         $icon = 'glyphicon glyphicon-exclamation-sign';
 
-        return $this->getDefaultNotification($person, $title, $shortText, $text, $level, $icon, $this->getEmptyPasswordCategory(), new Notification(), array());
+        return $this->getDefaultNotification($person, $title, $shortText, $text, $icon, $this->getEmptyPasswordCategory(), new Notification(), array());
     }
 
     public function clearUnconfirmedEmailNotification(Person $person)
@@ -216,7 +213,7 @@ class NotificationsHelper
     {
         $category = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')->find($this->emptyPasswordCategoryId);
         if (null === $category) {
-            throw new MissingCategoryException("missing category for empty password, please configure your db");
+            throw new MissingCategoryException("Missing category id for empty password, please edit your parameters.yml");
         }
         return $category;
     }

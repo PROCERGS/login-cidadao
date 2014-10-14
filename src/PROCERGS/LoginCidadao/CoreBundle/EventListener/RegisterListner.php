@@ -12,6 +12,7 @@ use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\NotificationsHelper;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use PROCERGS\Generic\ValidationBundle\Validator\Constraints\UsernameValidator;
@@ -28,7 +29,8 @@ class RegisterListner implements EventSubscriberInterface
     private $translator;
     private $mailer;
     private $tokenGenerator;
-    private $notificationHelper;
+    /** @var NotificationsHelper */
+    private $notificationsHelper;
     private $emailUnconfirmedTime;
     protected $em;
 
@@ -37,7 +39,7 @@ class RegisterListner implements EventSubscriberInterface
                                 TranslatorInterface $translator,
                                 MailerInterface $mailer,
                                 TokenGeneratorInterface $tokenGenerator,
-                                NotificationsHelper $notificationHelper,
+                                NotificationsHelper $notificationsHelper,
                                 $emailUnconfirmedTime)
     {
         $this->router = $router;
@@ -45,7 +47,7 @@ class RegisterListner implements EventSubscriberInterface
         $this->translator = $translator;
         $this->mailer = $mailer;
         $this->tokenGenerator = $tokenGenerator;
-        $this->notificationHelper = $notificationHelper;
+        $this->notificationsHelper = $notificationsHelper;
         $this->emailUnconfirmedTime = $emailUnconfirmedTime;
     }
 
@@ -98,7 +100,7 @@ class RegisterListner implements EventSubscriberInterface
         $this->mailer->sendConfirmationEmailMessage($user);
 
         if (strlen($user->getPassword()) == 0) {
-            $this->notificationHelper->enforceEmptyPasswordNotification($user);
+            $this->notificationsHelper->enforceEmptyPasswordNotification($user);
         }
     }
 
