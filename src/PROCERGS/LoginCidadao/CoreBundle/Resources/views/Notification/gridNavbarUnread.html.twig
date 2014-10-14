@@ -18,7 +18,7 @@
 {% endblock grid_row_data %}
 
 {% block grid_row %}
-<div class="row common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }} {{ grid.getRlast != true ? 'row-last' }}" data-row="{{ grid.getRouteParams|merge({'notification':row.id})|json_encode }}">
+<div class="row common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }} {{ grid.getRlast != true ? 'row-last' }}" data-row="{{ grid.getRouteParams|merge({'notification':row.id, 'client_id': row.client_id})|json_encode }}">
   {{ block('grid_row_action') }}
   {{ block('grid_row_data') }}
 </div>
