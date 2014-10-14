@@ -4,7 +4,8 @@ namespace PROCERGS\LoginCidadao\NotificationBundle\Handler;
 
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
-use FOS\OAuthServerBundle\Model\ClientInterface;
+use PROCERGS\OAuthBundle\Model\ClientInterface;
+use PROCERGS\LoginCidadao\NotificationBundle\Model\CategoryInterface;
 
 interface NotificationHandlerInterface
 {
@@ -92,4 +93,28 @@ interface NotificationHandlerInterface
      * @return NotificationInterface
      */
     public function patch(NotificationInterface $notification, array $parameters);
+
+    /**
+     * Retrieves a person's settings.
+     *
+     * @param Person $person
+     * @param CategoryInterface $client optionally filters by category.
+     */
+    public function getSettings(Person $person, CategoryInterface $category = null);
+
+    /**
+     * Retrieves a person's settings for a specific Client.
+     *
+     * @param Person $person
+     * @param ClientInterface $client optionally filters by category.
+     */
+    public function getSettingsByClient(Person $person, ClientInterface $client);
+
+    /**
+     * Ensures that the given Person has all it's notifications setup for a Client.
+     *
+     * @param Person $person
+     * @param ClientInterface $client
+     */
+    public function initializeSettings(Person $person, ClientInterface $client);
 }

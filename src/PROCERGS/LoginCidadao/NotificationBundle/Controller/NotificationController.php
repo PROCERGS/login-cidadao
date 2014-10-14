@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use PROCERGS\LoginCidadao\NotificationBundle\Handler\NotificationHandlerInterface;
 
 class NotificationController extends Controller
 {
@@ -26,10 +27,14 @@ class NotificationController extends Controller
     public function editSettingsAction()
     {
         $person = $this->getUser();
-        $authorizations = $person->getAuthorizations();
-        foreach ($authorizations as $authorization) {
+        $handler = $this->getNotificationHandler();
+        //$client = $this->getDoctrine()->getManager()->getRepository('PROCERGSOAuthBundle:Client')->find(1);
 
-        }
+        //$handler->initializeSettings($person, $client);
+
+        $settings = $handler->getSettings($person);
+
+        return compact('settings');
     }
 
     /**
@@ -45,4 +50,11 @@ class NotificationController extends Controller
         return compact('notifications');
     }
 
+    /**
+     * @return NotificationHandlerInterface
+     */
+    private function getNotificationHandler()
+    {
+        return $this->get('procergs.notification.handler');
+    }
 }

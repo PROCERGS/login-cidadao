@@ -3,13 +3,15 @@
 namespace PROCERGS\LoginCidadao\NotificationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * PersonOption
  *
  * @ORM\Table(name="person_notification_option")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\NotificationBundle\Entity\PersonNotificationOptionRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class PersonNotificationOption
 {
@@ -48,7 +50,7 @@ class PersonNotificationOption
     private $sendPush;
 
     /**
-     * @var Person
+     * @var PersonInterface
      *
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="notificationOptions")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
@@ -72,12 +74,12 @@ class PersonNotificationOption
     {
         return $this->id;
     }
-    
+
     public function setId($var)
     {
         $this->id = $var;
         return $this;
-    }    
+    }
 
     /**
      * Set createdAt
@@ -101,49 +103,59 @@ class PersonNotificationOption
     {
         return $this->createdAt;
     }
-    
+
     public function setCategory($var)
     {
         $this->category = $var;
         return $this;
     }
-    
+
     public function getCategory()
     {
         return $this->category;
-    }    
-    
-    public function setPerson($var) 
+    }
+
+    public function setPerson($var)
     {
         $this->person = $var;
         return $this;
     }
-    
+
     public function getPerson()
     {
         return $this->person;
-    }    
-    
+    }
+
     public function setSendEmail($var)
     {
         $this->sendEmail = $var;
         return $this;
     }
-    
+
     public function getSendEmail()
     {
         return $this->sendEmail;
-    }    
-    
+    }
+
     public function setSendPush($var)
     {
         $this->sendPush = $var;
         return $this;
     }
-    
+
     public function getSendPush()
     {
         return $this->sendPush;
-    }    
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue()
+    {
+        if (!($this->getCreatedAt() instanceof \DateTime)) {
+            $this->createdAt = new \DateTime();
+        }
+    }
 
 }

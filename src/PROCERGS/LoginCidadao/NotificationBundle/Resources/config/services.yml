@@ -2,6 +2,7 @@ parameters:
     notifications.helper.class: PROCERGS\LoginCidadao\NotificationBundle\Helper\NotificationsHelper
     procergs.notification.handler.class: PROCERGS\LoginCidadao\NotificationBundle\Handler\NotificationHandler
     procergs.notification.class: PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification
+    notification_oauth_event_listener.class: PROCERGS\LoginCidadao\NotificationBundle\EventListener\OAuthAuthorizationListener
 
 services:
     notifications.helper:
@@ -13,3 +14,9 @@ services:
         arguments: [ "@doctrine.orm.entity_manager", %procergs.notification.class%, "@form.factory" ]
         tags:
             - { name: "security.secure_service" }
+
+    notification_oauth_event_listener:
+        class:  %notification_oauth_event_listener.class%
+        arguments: [ "@doctrine.orm.entity_manager", "@procergs.notification.handler" ]
+        tags:
+            - { name: kernel.event_listener, event: fos_oauth_server.post_authorization_process, method: onPostAuthorizationProcess }

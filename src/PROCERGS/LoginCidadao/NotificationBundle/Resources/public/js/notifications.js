@@ -1,3 +1,4 @@
+// This is just a test
 $('.load-more').click(function (event) {
     var lastId = $('.component.notifications.small .media').last().data('notification-id');
     $.get('http://lc.des.dona.to/app_dev.php/notifications/navbar/fragment/' + lastId, function (data) {

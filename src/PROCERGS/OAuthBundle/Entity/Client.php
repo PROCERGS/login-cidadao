@@ -16,6 +16,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Model\AbstractUniqueEntity;
 use PROCERGS\LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
+use PROCERGS\OAuthBundle\Model\ClientInterface;
 
 /**
  * @ORM\Entity
@@ -24,7 +25,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
  * @UniqueEntity("name")
  * @JMS\ExclusionPolicy("all")
  */
-class Client extends BaseClient implements UniqueEntityInterface
+class Client extends BaseClient implements UniqueEntityInterface, ClientInterface
 {
 
     /**

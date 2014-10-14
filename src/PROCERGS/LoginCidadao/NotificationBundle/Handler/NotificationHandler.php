@@ -9,7 +9,9 @@ use PROCERGS\LoginCidadao\NotificationBundle\Form\NotificationType;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Exception\InvalidFormException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
-use FOS\OAuthServerBundle\Model\ClientInterface;
+use PROCERGS\OAuthBundle\Model\ClientInterface;
+use PROCERGS\LoginCidadao\NotificationBundle\Model\CategoryInterface;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\PersonNotificationOption;
 
 class NotificationHandler implements NotificationHandlerInterface
 {
@@ -37,7 +39,7 @@ class NotificationHandler implements NotificationHandlerInterface
                                      $orderby = null)
     {
         return $this->repository->findBy(array('person' => $person), $orderby,
-                        $limit, $offset);
+                                         $limit, $offset);
     }
 
     public function getAllFromPersonByClient(Person $person,
@@ -46,7 +48,7 @@ class NotificationHandler implements NotificationHandlerInterface
                                              $orderby = null)
     {
         return $this->repository->findBy(array('person' => $person, 'sender' => $client),
-                        $orderby, $limit, $offset);
+                                         $orderby, $limit, $offset);
     }
 
     public function get($id)
@@ -86,7 +88,7 @@ class NotificationHandler implements NotificationHandlerInterface
                                  array $parameters, $method = "PUT")
     {
         $form = $this->formFactory->create(new NotificationType(),
-                $notification, compact('method'));
+                                           $notification, compact('method'));
         $form->submit($parameters, 'PATCH' !== $method);
         if ($form->isValid()) {
 
@@ -116,6 +118,43 @@ class NotificationHandler implements NotificationHandlerInterface
     private function createNotification()
     {
         return new $this->entityClass();
+    }
+
+    public function getSettings(Person $person,
+                                CategoryInterface $category = null)
+    {
+        $repo = $this->om->getRepository('PROCERGSLoginCidadaoNotificationBundle:PersonNotificationOption');
+        $filter = compact('person');
+        if (null !== $category) {
+            $filter['category'] = $category;
+        }
+
+        return $repo->findBy($filter);
+    }
+
+    public function getSettingsByClient(Person $person, ClientInterface $client)
+    {
+        $repo = $this->om->getRepository('PROCERGSLoginCidadaoNotificationBundle:PersonNotificationOption');
+        $repo->findByClient($person, $client);
+    }
+
+    public function initializeSettings(Person $person, ClientInterface $client)
+    {
+        $om = $this->om;
+        $categoriesRepo = $om->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category');
+        $orphanCategories = $categoriesRepo->findUnconfigured($person, $client);
+
+        if (count($orphanCategories) > 0) {
+            foreach ($orphanCategories as $category) {
+                $config = new PersonNotificationOption();
+                $config->setCategory($category)
+                    ->setPerson($person)
+                    ->setSendEmail($category->getEmailable())
+                    ->setSendPush(true);
+                $om->persist($config);
+            }
+            $om->flush();
+        }
     }
 
 }

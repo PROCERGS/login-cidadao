@@ -17,7 +17,7 @@
     </div>
 
     <div class="msg text-center">
-    {% if client.published %}
+    {% if client.published or user.hasAuthorization(client) %}
     {%   if (user.hasAuthorization(client)) %}
         <p class="active">{% trans %}This service is already active in your Citizen's Login account{%  endtrans %}</p>
         <a href="#" class="btn" id="app-deactivate" role="button">{% trans %}Deactivate this service{% endtrans %}</a>

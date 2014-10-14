@@ -15,7 +15,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
  * Category
  *
  * @ORM\Table(name="category")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\NotificationBundle\Entity\CategoryRepository")
  * @JMS\ExclusionPolicy("all")
  */
 class Category implements CategoryInterface, UniqueEntityInterface
