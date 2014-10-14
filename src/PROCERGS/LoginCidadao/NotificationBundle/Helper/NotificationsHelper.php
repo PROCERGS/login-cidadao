@@ -1,16 +1,16 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\CoreBundle\Helper;
+namespace PROCERGS\LoginCidadao\NotificationBundle\Helper;
 
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationInterface;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationInterface;
 use Symfony\Component\Security\Core\SecurityContext;
 use Doctrine\ORM\EntityManager;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\InteractiveNotification;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category;
-use PROCERGS\LoginCidadao\CoreBundle\Exception\Notification\MissingCategoryException;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\Category;
+use PROCERGS\LoginCidadao\NotificationBundle\Exception\MissingCategoryException;
 
 class NotificationsHelper
 {
@@ -62,7 +62,7 @@ class NotificationsHelper
 
     private function getRepository()
     {
-        return $this->em->getRepository("PROCERGSLoginCidadaoCoreBundle:Notification\Notification");
+        return $this->em->getRepository("PROCERGSLoginCidadaoNotificationBundle:Notification");
     }
 
     public function getUser()
@@ -202,7 +202,7 @@ class NotificationsHelper
 
     private function getUnconfirmedEmailCategory()
     {
-        $category = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')->find($this->unconfirmedEmailCategoryId);
+        $category = $this->em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')->find($this->unconfirmedEmailCategoryId);
         if (null === $category) {
             throw new MissingCategoryException("missing category for unconfirmed email, please configure your db");
         }
@@ -211,7 +211,7 @@ class NotificationsHelper
 
     private function getEmptyPasswordCategory()
     {
-        $category = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')->find($this->emptyPasswordCategoryId);
+        $category = $this->em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')->find($this->emptyPasswordCategoryId);
         if (null === $category) {
             throw new MissingCategoryException("Missing category id for empty password, please edit your parameters.yml");
         }
@@ -220,7 +220,7 @@ class NotificationsHelper
 
     /**
      *
-     * @return \PROCERGS\LoginCidadao\CoreBundle\Handler\NotificationHandlerInterface
+     * @return \PROCERGS\LoginCidadao\NotificationBundle\Handler\NotificationHandlerInterface
      */
     private function getNotificationHandler()
     {

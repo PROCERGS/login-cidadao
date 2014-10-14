@@ -1,6 +1,6 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\CoreBundle\Form\Notification;
+namespace PROCERGS\LoginCidadao\NotificationBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -26,7 +26,7 @@ class ClientType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'PROCERGS\LoginCidadao\CoreBundle\Entity\Notification',
+            'data_class' => 'PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification',
             'csrf_protection' => false
         ));
     }

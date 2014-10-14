@@ -1,6 +1,6 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\CoreBundle\Form\Notification;
+namespace PROCERGS\LoginCidadao\NotificationBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -42,7 +42,7 @@ class NotificationType extends AbstractType
                     )
                     ->add('category', 'entity',
                             NotificationType::getPreSubmitParams(
-                                    'PROCERGSLoginCidadaoCoreBundle:Notification\Category',
+                                    'PROCERGSLoginCidadaoNotificationBundle:Category',
                                     'id', NotificationType::getCategoryQuery($data)
                             )
                     )
@@ -79,7 +79,7 @@ class NotificationType extends AbstractType
                         array('required' => false, 'widget' => 'single_text'))
                 ->add('category', 'entity',
                         array(
-                    'class' => 'PROCERGSLoginCidadaoCoreBundle:Notification\Category',
+                    'class' => 'PROCERGSLoginCidadaoNotificationBundle:Category',
                     'property' => 'id',
                     'query_builder' => $emptyEntityQuery
                 ))
@@ -93,7 +93,7 @@ class NotificationType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification',
+            'data_class' => 'PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification',
             'csrf_protection' => false
         ));
     }

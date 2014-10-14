@@ -1,6 +1,6 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\CoreBundle\Model;
+namespace PROCERGS\LoginCidadao\NotificationBundle\Model;
 
 interface CategoryInterface
 {

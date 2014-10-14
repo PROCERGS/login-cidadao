@@ -1,13 +1,13 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\CoreBundle\Handler;
+namespace PROCERGS\LoginCidadao\NotificationBundle\Handler;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\FormFactoryInterface;
-use PROCERGS\LoginCidadao\CoreBundle\Handler\NotificationHandlerInterface;
-use PROCERGS\LoginCidadao\CoreBundle\Form\Notification\NotificationType;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationInterface;
-use PROCERGS\LoginCidadao\CoreBundle\Exception\Notification\InvalidFormException;
+use PROCERGS\LoginCidadao\NotificationBundle\Handler\NotificationHandlerInterface;
+use PROCERGS\LoginCidadao\NotificationBundle\Form\NotificationType;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationInterface;
+use PROCERGS\LoginCidadao\NotificationBundle\Exception\InvalidFormException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use FOS\OAuthServerBundle\Model\ClientInterface;
 

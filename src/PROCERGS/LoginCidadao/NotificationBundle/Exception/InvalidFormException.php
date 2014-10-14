@@ -1,6 +1,6 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\CoreBundle\Exception\Notification;
+namespace PROCERGS\LoginCidadao\NotificationBundle\Exception;
 
 class InvalidFormException extends \RuntimeException
 {
