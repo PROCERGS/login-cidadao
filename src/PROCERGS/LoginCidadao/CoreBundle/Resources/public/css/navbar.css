@@ -396,7 +396,11 @@
 }
 
 .notifications .menu-title {
-  margin: 5px 5px -5px;
+  margin: 5px;
+}
+
+#navbarUnread {
+  margin-top: 0;
 }
 
 #navbarUnread .notification {

@@ -5,7 +5,7 @@
 {% endblock grid_header %}
 
 {% block grid_row %}
-<div class="row notification common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }} {{ grid.getRlast != true ? 'row-last' }}" data-row="{{ grid.getRouteParams|merge({'notification':row.id})|json_encode }}">
+<div class="row notification common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }} {{ grid.getRlast != true ? 'row-last' }}" data-row="{{ grid.getRouteParams|merge({'notification':row.id, 'client_id': row.client_id})|json_encode }}">
   <div class="client-img"></div>
   <h6 class="title">{{ row.title }}</h6>
   <div class="client-name pull-left clearfix">{{ row.client_name }}</div>
