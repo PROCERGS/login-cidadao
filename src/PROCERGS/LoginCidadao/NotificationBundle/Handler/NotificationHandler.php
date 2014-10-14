@@ -135,7 +135,7 @@ class NotificationHandler implements NotificationHandlerInterface
     public function getSettingsByClient(Person $person, ClientInterface $client)
     {
         $repo = $this->om->getRepository('PROCERGSLoginCidadaoNotificationBundle:PersonNotificationOption');
-        $repo->findByClient($person, $client);
+        return $repo->findByClient($person, $client);
     }
 
     public function initializeSettings(Person $person, ClientInterface $client = null)
