@@ -331,19 +331,7 @@ class Notification implements NotificationInterface
 
     public function setRead($isRead)
     {
-        return $this->setIsRead($isRead);
-    }
-
-    public function setConfigNotCli($var)
-    {
-        $this->configNotCli = $var;
-
-        return $this;
-    }
-
-    public function getConfigNotCli()
-    {
-        return $this->configNotCli;
+        return $this->setReadDate(null);
     }
 
     public function setPerson($person)
