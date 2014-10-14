@@ -9,19 +9,25 @@ use Doctrine\ORM\Query;
 class NotificationRepository extends EntityRepository
 {
 
-    public function findNextNotifications(Person $person, $items = 8, $lastId = 0)
+    public function findNextNotifications(Person $person, $items = 8,
+                                          $lastId = 0)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('n')
             ->from('PROCERGSLoginCidadaoNotificationBundle:Notification', 'n')
-            ->where('n.id > :lastId')
-            ->andWhere('n.person = :person')
+            ->where('n.person = :person')
+            ->orderBy('n.id', 'DESC')
             ->setMaxResults($items)
-            ->setParameters(compact('lastId', 'person'));
-        
+            ->setParameter('person', $person);
+
+        if ($lastId > 0) {
+            $qb->andWhere('n.id < :lastId')
+                ->setParameter('lastId', $lastId);
+        }
+
         return $qb->getQuery()->getResult();
     }
-    
+
     public function findAllUnread(Person $person, $level = null)
     {
         if (is_null($level)) {
@@ -42,9 +48,12 @@ class NotificationRepository extends EntityRepository
     {
         return $this->getEntityManager()->createQueryBuilder('n')
                 ->select('c.id, c.name, CountIf(n.readDate is null) total')
-                ->from('PROCERGSLoginCidadaoNotificationBundle:Notification', 'n')
-                ->join('PROCERGSLoginCidadaoNotificationBundle:Category', 'cnc', 'WITH', 'n.category = cnc')
-                ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
+                ->from('PROCERGSLoginCidadaoNotificationBundle:Notification',
+                       'n')
+                ->join('PROCERGSLoginCidadaoNotificationBundle:Category', 'cnc',
+                       'WITH', 'n.category = cnc')
+                ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH',
+                       'cnc.client = c')
                 ->where('n.person = :person')
                 ->setParameter('person', $person)
                 ->groupBy('c.id', 'c.name')
@@ -57,7 +66,8 @@ class NotificationRepository extends EntityRepository
     {
         return $this->getEntityManager()->createQueryBuilder('n')
                 ->select('CountIf(n.readDate is null) total')
-                ->from('PROCERGSLoginCidadaoNotificationBundle:Notification', 'n')
+                ->from('PROCERGSLoginCidadaoNotificationBundle:Notification',
+                       'n')
                 ->where('n.person = :person')
                 ->setParameter('person', $person)
                 ->getQuery()

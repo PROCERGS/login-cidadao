@@ -129,6 +129,9 @@
 
 {% block javascripts %}
 {{ parent() }}
+    {% javascripts '@PROCERGSLoginCidadaoNotificationBundle/Resources/public/js/notifications.js' filter='uglifyjs2' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
     <script type="text/javascript">
         validator.cep.urlQuery = '{{ path('lc_consultaCep2') }}';
         var notificationUrl = '{{ path('lc_not_inbox_show2') }}';

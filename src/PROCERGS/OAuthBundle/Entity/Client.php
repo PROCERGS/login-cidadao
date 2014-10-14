@@ -6,7 +6,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
 use FOS\OAuthServerBundle\Entity\Client as BaseClient;
 use Doctrine\ORM\Mapping as ORM;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Tests\Fixtures\Publisher;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -264,7 +264,7 @@ class Client extends BaseClient implements UniqueEntityInterface
         return 'uploads/client-pictures';
     }
 
-    public function setPictureFile(UploadedFile $pictureFile = null)
+    public function setPictureFile(File $pictureFile = null)
     {
         $this->pictureFile = $pictureFile;
         if (isset($this->picturePath)) {
@@ -277,7 +277,7 @@ class Client extends BaseClient implements UniqueEntityInterface
 
     /**
      *
-     * @return UploadedFile
+     * @return File
      */
     public function getPictureFile()
     {

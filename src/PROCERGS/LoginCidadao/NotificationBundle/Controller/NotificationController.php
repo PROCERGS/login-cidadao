@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 
 class NotificationController extends Controller
 {
@@ -17,7 +16,7 @@ class NotificationController extends Controller
      */
     public function indexAction()
     {
-        
+
     }
 
     /**
@@ -29,19 +28,19 @@ class NotificationController extends Controller
         $person = $this->getUser();
         $authorizations = $person->getAuthorizations();
         foreach ($authorizations as $authorization) {
-            
+
         }
     }
 
     /**
-     * @Route("/notifications/navbar/fragment", name="lc_notifications_navbar_fragment")
+     * @Route("/notifications/navbar/fragment/{offset}", requirements={"offset" = "\d+"}, defaults={"offset" = 0}, name="lc_notifications_navbar_fragment")
      * @Template()
      */
-    public function getNavbarFragmentAction(Request $request)
+    public function getNavbarFragmentAction(Request $request, $offset = 0)
     {
         $notifications = $this->getDoctrine()->getManager()
             ->getRepository('PROCERGSLoginCidadaoNotificationBundle:Notification')
-            ->findNextNotifications($this->getUser());
+            ->findNextNotifications($this->getUser(), 8, $offset);
 
         return compact('notifications');
     }

@@ -10,6 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\ORM\EntityManager;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Category;
 use PROCERGS\OAuthBundle\Entity\Client;
+use Symfony\Component\HttpFoundation\File\File;
 
 class PopulateDatabaseCommand extends ContainerAwareCommand
 {
@@ -26,7 +27,7 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
     {
         $dir = realpath($input->getArgument('dump_folder'));
         //$this->loadDumpFiles($dir, $output);
-        $this->createDefaultOAuthClient($output);
+        $this->createDefaultOAuthClient($dir, $output);
         $this->createCategories($output);
     }
 
@@ -105,9 +106,12 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
         return $entries;
     }
 
-    protected function createDefaultOAuthClient(OutputInterface $output)
+    protected function createDefaultOAuthClient($dir, OutputInterface $output)
     {
         if (!($this->getDefaultOAuthClient() instanceof Client)) {
+            $uid = $this->getContainer()->getParameter('oauth_default_client.uid');
+            $pictureName = 'meurs_logo.png';
+            $picture = new File($dir . DIRECTORY_SEPARATOR . $pictureName);
             $domain = $this->getContainer()->getParameter('site_domain');
             $url = "//$domain";
             $grantTypes = array(
@@ -129,6 +133,8 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
             $client->setTermsOfUseUrl($url);
             $client->setPublished(true);
             $client->setVisible(false);
+            $client->setUid($uid);
+            $client->setPictureFile($picture);
             $clientManager->updateClient($client);
             $output->writeln('Default Client created.');
         }
@@ -140,7 +146,7 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
         $categories = $em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category');
 
         $alertCategoryUid = $this->getContainer()->getParameter('notifications_categories_alert.uid');
-        $alertCategory = $categories->findByUid($alertCategoryUid);
+        $alertCategory = $categories->findOneByUid($alertCategoryUid);
 
         if (!($alertCategory instanceof Category)) {
             $alertCategory = new Category();
@@ -148,6 +154,7 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
                 ->setDefaultShortText('Alert')
                 ->setDefaultTitle('Alert')
                 ->setDefaultIcon('alert')
+                ->setMarkdownTemplate('%shorttext%')
                 ->setEmailable(false)
                 ->setName('Alerts')
                 ->setUid($alertCategoryUid);
@@ -164,7 +171,7 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
     {
         $em = $this->getManager();
         $uid = $this->getContainer()->getParameter('oauth_default_client.uid');
-        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->findByUid($uid);
+        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->findOneByUid($uid);
 
         return $client;
     }

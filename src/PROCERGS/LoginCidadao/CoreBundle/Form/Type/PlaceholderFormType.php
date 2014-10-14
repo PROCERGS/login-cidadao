@@ -36,7 +36,7 @@ class PlaceholderFormType extends AbstractType
         $builder->add('category', 'hidden_entity',
                       array(
             'required' => true,
-            'class' => 'PROCERGSLoginCidadaoCoreBundle:Notification\Category',
+            'class' => 'PROCERGSLoginCidadaoNotificationBundle:Category',
             'property' => 'name',
             'query_builder' => function (EntityRepository $er) use(&$user) {
                 return $er->createQueryBuilder('u')

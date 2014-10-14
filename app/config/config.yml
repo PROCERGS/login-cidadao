@@ -144,11 +144,11 @@ simple_things_entity_audit:
         - PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail
         - PROCERGS\LoginCidadao\CoreBundle\Entity\State
 
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationToken
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\PersonOption
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Placeholder
+        - PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification
+        - PROCERGS\LoginCidadao\NotificationBundle\Entity\Category
+        - PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationToken
+        - PROCERGS\LoginCidadao\NotificationBundle\Entity\PersonOption
+        - PROCERGS\LoginCidadao\NotificationBundle\Entity\Placeholder
 
         - PROCERGS\OAuthBundle\Entity\AccessToken
         - PROCERGS\OAuthBundle\Entity\AuthCode

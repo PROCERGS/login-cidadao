@@ -26,7 +26,7 @@ class NotificationController extends BaseController
      * @ApiDoc(
      *   resource = true,
      *   output = {
-     *     "class"="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification",
+     *     "class"="PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification",
      *     "groups" = {"public"}
      *   },
      *   statusCodes = {
@@ -75,7 +75,7 @@ class NotificationController extends BaseController
      *   resource = true,
      *   description = "Gets a Notification for a given id",
      *   output = {
-     *     "class"="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification",
+     *     "class"="PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification",
      *     "groups" = {"public"}
      *   },
      *   statusCodes = {
@@ -87,7 +87,7 @@ class NotificationController extends BaseController
      * @REST\View(templateVar="notification")
      * @param Request $request the request object
      * @param int     $id
-     * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification
+     * @return \PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification
      * @throws NotFoundHttpException when notification not exist
      * @throws AccessDeniedHttpException when trying to access another user's Notification
      * @REST\Get("/notifications/{id}", name="api_1_get_notification")
@@ -188,7 +188,7 @@ class NotificationController extends BaseController
         }
 
         $categories = $this->getDoctrine()
-                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category');
+                ->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category');
         $notificationCategory = $categories->find($request->get('category'));
         if ($notificationCategory->getClient()->getId() != $requestClient->getId()) {
             throw new AccessDeniedHttpException("Invalid category.");

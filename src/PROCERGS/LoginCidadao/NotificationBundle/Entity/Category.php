@@ -67,14 +67,14 @@ class Category implements CategoryInterface, UniqueEntityInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="mail_template", type="text")
+     * @ORM\Column(name="mail_template", type="text", nullable=true)
      */
     private $mailTemplate;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="mail_sender_address", type="string", length=255)
+     * @ORM\Column(name="mail_sender_address", type="string", length=255, nullable=true)
      */
     private $mailSenderAddress;
 
@@ -105,7 +105,7 @@ class Category implements CategoryInterface, UniqueEntityInterface
      *
      * @ORM\Column(name="markdown_template", type="text")
      */
-    private $markdownTemplate;
+    private $markdownTemplate = '%shortText%';
 
     /**
      * @var ArrayCollection

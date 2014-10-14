@@ -11,8 +11,8 @@ use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ContactFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail;
 use PROCERGS\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\Category;
 use Michelf\MarkdownExtra;
 
 /**
@@ -79,7 +79,7 @@ class ClientController extends Controller
             'messages' => $messages
         ));
     }
-    
+
     /**
      * @Route("/populate/{id}", name="lc_admin_app_populate")
      * @Template()
@@ -87,7 +87,7 @@ class ClientController extends Controller
     public function populateAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        
+
         $clientManager = $this->container->get('fos_oauth_server.client_manager');
         $em->beginTransaction();
         $input = 'Lorem Ipsum ';
@@ -105,7 +105,7 @@ class ClientController extends Controller
             $client->setPublished(0);
             $client->setVisible(0);
             $clientManager->updateClient($client);
-            
+
             $list = array();
             foreach (range(1, 20) as $val2) {
                 $cm = "Sample category $val2 ";
@@ -127,7 +127,7 @@ class ClientController extends Controller
                     if ($r%2) {
                         $msg['title'] = str_repeat($input, $r);
                         $msg['shorttext'] = str_repeat($input, $r);
-                    }                         
+                    }
                     $not = new Notification();
                     $not->setPerson($person);
                     $not->setCategory($category);

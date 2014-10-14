@@ -17,7 +17,7 @@
     overflow: hidden;
 }
 .component.notifications.small .media-heading {
-    font-size: 130%;
+    font-size: 14px;
     font-weight: bold !important;
     color: #000;
 }

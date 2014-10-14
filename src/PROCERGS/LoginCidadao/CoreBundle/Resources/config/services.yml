@@ -27,9 +27,6 @@ parameters:
 
     procergs_logincidadao.postalcode.search.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\SearchPostalCodeFormType
 
-    procergs.notification.handler.class: PROCERGS\LoginCidadao\CoreBundle\Handler\NotificationHandler
-    procergs.notification.class: PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification
-
     procergs.person.serialize.listenner.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\PersonSerializeEventListenner
 
 services:

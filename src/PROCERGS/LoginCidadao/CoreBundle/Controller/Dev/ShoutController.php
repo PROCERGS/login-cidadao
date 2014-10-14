@@ -36,7 +36,7 @@ class ShoutController extends Controller
         $em = $this->getDoctrine()->getManager();
         $sql = $this->getDoctrine()
             ->getManager()
-            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
+            ->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')
             ->createQueryBuilder('u')
             ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'u.client = c')
             ->where(':person MEMBER OF c.owners')
@@ -65,9 +65,9 @@ class ShoutController extends Controller
             die('dunno');
         }
         $em = $this->getDoctrine()->getManager();
-        $placeholders = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Placeholder')
+        $placeholders = $em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Placeholder')
                 ->createQueryBuilder('u')
-                ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category',
+                ->join('PROCERGSLoginCidadaoNotificationBundle:Category',
                        'cat', 'with', 'u.category = cat')
                 ->join('PROCERGSOAuthBundle:Client', 'c', 'with',
                        'cat.client = c')

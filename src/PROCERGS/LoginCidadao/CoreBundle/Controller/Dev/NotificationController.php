@@ -13,8 +13,8 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail;
 use PROCERGS\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientNotCatFormType;
 use Michelf\MarkdownExtra;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Placeholder;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\Category;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\Placeholder;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\PlaceholderFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 
@@ -70,7 +70,7 @@ class NotificationController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $sql = $this->getDoctrine()->getManager()
-            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
+            ->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')
             ->createQueryBuilder('u')
             ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'u.client = c')
             ->where(':person MEMBER OF c.owners')
@@ -93,7 +93,7 @@ class NotificationController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $client = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
+        $client = $em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')
             ->createQueryBuilder('u')
             ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'u.client = c')
             ->where(':person MEMBER OF c.owners')
@@ -136,9 +136,9 @@ class NotificationController extends Controller
         $placeholder = null;
         $em = $this->getDoctrine()->getManager();
         if (($id = $request->get('id')) || (($data = $request->get($form->getName())) && ($id = $data['id']))) {
-            $placeholder = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Placeholder')
+            $placeholder = $em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Placeholder')
                 ->createQueryBuilder('u')
-                ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category',
+                ->join('PROCERGSLoginCidadaoNotificationBundle:Category',
                        'cat', 'with', 'u.category = cat')
                 ->join('PROCERGSOAuthBundle:Client', 'c', 'with',
                        'cat.client = c')
@@ -150,7 +150,7 @@ class NotificationController extends Controller
                 ->getQuery()
                 ->getSingleResult();
         } elseif (($categoryId = $request->get('category_id')) || (($data = $request->get($form->getName())) && ($categoryId = $data['category']))) {
-            $category = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
+            $category = $em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')
                 ->createQueryBuilder('u')
                 ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'u.client = c')
                 ->where(':person MEMBER OF c.owners')
@@ -186,9 +186,9 @@ class NotificationController extends Controller
     {
         $categoryId = $request->get('category_id');
         $em = $this->getDoctrine()->getManager();
-        $sql = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Placeholder')
+        $sql = $em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Placeholder')
             ->createQueryBuilder('u')
-            ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category',
+            ->join('PROCERGSLoginCidadaoNotificationBundle:Category',
                    'cat', 'with', 'u.category = cat')
             ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'cat.client = c')
             ->where(':person MEMBER OF c.owners')
@@ -216,9 +216,9 @@ class NotificationController extends Controller
     {
         if ($id = $request->get('id')) {
             $em = $this->getDoctrine()->getManager();
-            $placeholder = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Placeholder')
+            $placeholder = $em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Placeholder')
                 ->createQueryBuilder('u')
-                ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category',
+                ->join('PROCERGSLoginCidadaoNotificationBundle:Category',
                        'cat', 'with', 'u.category = cat')
                 ->join('PROCERGSOAuthBundle:Client', 'c', 'with',
                        'cat.client = c')
