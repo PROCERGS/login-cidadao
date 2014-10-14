@@ -111,7 +111,7 @@ interface NotificationHandlerInterface
     public function getSettingsByClient(Person $person, ClientInterface $client);
 
     /**
-     * Ensures that the given Person has all it's notifications setup for a Client.
+     * Ensures that the given Person has all it's notifications setup.
      *
      * @param Person $person
      * @param ClientInterface $client

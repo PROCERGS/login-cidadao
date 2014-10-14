@@ -28,9 +28,7 @@ class NotificationController extends Controller
     {
         $person = $this->getUser();
         $handler = $this->getNotificationHandler();
-        //$client = $this->getDoctrine()->getManager()->getRepository('PROCERGSOAuthBundle:Client')->find(1);
-
-        //$handler->initializeSettings($person, $client);
+        $handler->initializeSettings($person);
 
         $settings = $handler->getSettings($person);
 

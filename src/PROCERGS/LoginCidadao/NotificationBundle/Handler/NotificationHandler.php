@@ -138,7 +138,7 @@ class NotificationHandler implements NotificationHandlerInterface
         $repo->findByClient($person, $client);
     }
 
-    public function initializeSettings(Person $person, ClientInterface $client)
+    public function initializeSettings(Person $person, ClientInterface $client = null)
     {
         $om = $this->om;
         $categoriesRepo = $om->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category');

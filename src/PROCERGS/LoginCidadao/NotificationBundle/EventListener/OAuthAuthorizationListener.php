@@ -42,6 +42,11 @@ class OAuthAuthorizationListener
         return $this->personRepo->findOneBy(compact('username'));
     }
 
+    /**
+     * We setup the notification settings regardless of the client asking the
+     * scope or not.
+     * @param OAuthEvent $event
+     */
     public function setupNotificationSettings(OAuthEvent $event)
     {
         $person = $this->getUser($event);
