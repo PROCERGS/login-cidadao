@@ -8,7 +8,6 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Doctrine\ORM\EntityManager;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\InteractiveNotification;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\Notification\MissingCategoryException;
 
@@ -74,7 +73,7 @@ class NotificationsHelper
     {
         return $this->getRepository()->findAllUnread($this->getUser(), $level);
     }
-    
+
     public function getTotalUnread()
     {
         return $this->getRepository()->getTotalUnread($this->getUser());
