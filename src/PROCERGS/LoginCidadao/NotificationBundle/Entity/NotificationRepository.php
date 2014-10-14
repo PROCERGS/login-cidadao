@@ -9,6 +9,19 @@ use Doctrine\ORM\Query;
 class NotificationRepository extends EntityRepository
 {
 
+    public function findNextNotifications(Person $person, $items = 8, $lastId = 0)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select('n')
+            ->from('PROCERGSLoginCidadaoNotificationBundle:Notification', 'n')
+            ->where('n.id > :lastId')
+            ->andWhere('n.person = :person')
+            ->setMaxResults($items)
+            ->setParameters(compact('lastId', 'person'));
+        
+        return $qb->getQuery()->getResult();
+    }
+    
     public function findAllUnread(Person $person, $level = null)
     {
         if (is_null($level)) {

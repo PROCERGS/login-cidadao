@@ -41,7 +41,7 @@ class Shout
     private $person;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category", inversedBy="shouts")
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\Category", inversedBy="shouts")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     private $category;

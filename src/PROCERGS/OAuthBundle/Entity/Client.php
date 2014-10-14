@@ -5,7 +5,7 @@ namespace PROCERGS\OAuthBundle\Entity;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
 use FOS\OAuthServerBundle\Entity\Client as BaseClient;
 use Doctrine\ORM\Mapping as ORM;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Tests\Fixtures\Publisher;
@@ -85,12 +85,12 @@ class Client extends BaseClient
     protected $siteUrl;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification", mappedBy="sender")
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification", mappedBy="sender")
      */
     protected $notifications;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category", mappedBy="client")
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\Category", mappedBy="client")
      */
     protected $categories;
 

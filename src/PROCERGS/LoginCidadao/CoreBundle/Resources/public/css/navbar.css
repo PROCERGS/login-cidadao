@@ -262,14 +262,13 @@
 
 #lc-navbar .dropdown-menu {
     background-color: #FFF!important;
-    width: 300px;
+    width: 430px;
     position: absolute;
     top: 100%;
     right: 0;
     z-index: 1000;
     display: none;
     float: left;
-    /*padding: 5px 0 0;*/
     padding: 0;
     list-style: none;
     font-size: 14px;

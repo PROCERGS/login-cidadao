@@ -7,7 +7,7 @@ use FOS\UserBundle\Event\FormEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use PROCERGS\LoginCidadao\CoreBundle\Helper\NotificationsHelper;
+use PROCERGS\LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 
 class ChangePasswordListener implements EventSubscriberInterface

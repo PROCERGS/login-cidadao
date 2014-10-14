@@ -1,4 +1,28 @@
-.content.notifications img.media-object {
+.component.notifications .notification-image img {
     max-height: 64px;
     max-width: 64px;
+}
+
+.component.notifications a.media {
+    display: block;
+    padding: 5px;
+}
+.component.notifications a.media:hover {
+    background: #f1f1f1;
+}
+
+.component.notifications .media-heading {
+    white-space: nowrap !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.component.notifications.small .media-heading {
+    font-size: 130%;
+    font-weight: bold !important;
+    color: #000;
+}
+
+.component.notifications.small .notification-image img {
+    max-height: 35px;
+    max-width: 35px;
 }

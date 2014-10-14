@@ -14,7 +14,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\AccessSession;
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use PROCERGS\LoginCidadao\CoreBundle\Helper\NotificationsHelper;
+use PROCERGS\LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
 
 class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 {

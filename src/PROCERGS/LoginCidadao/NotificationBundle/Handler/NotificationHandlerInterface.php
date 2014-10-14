@@ -1,8 +1,8 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\CoreBundle\Handler;
+namespace PROCERGS\LoginCidadao\NotificationBundle\Handler;
 
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationInterface;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use FOS\OAuthServerBundle\Model\ClientInterface;
 

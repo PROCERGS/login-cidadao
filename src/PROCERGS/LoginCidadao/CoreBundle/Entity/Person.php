@@ -12,7 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use PROCERGS\Generic\ValidationBundle\Validator\Constraints as PROCERGSAssert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationToken;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationToken;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 
 /**
@@ -210,7 +210,7 @@ class Person extends BaseUser implements PersonInterface
     protected $previousValidEmail;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Notification", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification", mappedBy="person")
      */
     protected $notifications;
 
@@ -341,12 +341,12 @@ class Person extends BaseUser implements PersonInterface
     protected $rgs;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\NotificationToken", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationToken", mappedBy="person")
      */
     protected $notificationTokens;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\PersonNotificationOption", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\PersonNotificationOption", mappedBy="person")
      */
     protected $notificationOptions;
 
@@ -1098,4 +1098,18 @@ class Person extends BaseUser implements PersonInterface
         return $this;
     }
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getNotificationOptions()
+    {
+        return $this->notificationOptions;
+    }
+    
+    public function setNotificationOptions(ArrayCollection $notificationOptions)
+    {
+        $this->notificationOptions = $notificationOptions;
+        return $this;
+    }
+    
 }

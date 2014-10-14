@@ -120,7 +120,8 @@
 {% block stylesheets %}
 {{ parent() }}
 
-    {% stylesheets 'bundles/procergslogincidadaocore/css/logged/*.css' filter='cssrewrite' filter='?uglifycss' %}
+    {% stylesheets 'bundles/procergslogincidadaocore/css/logged/*.css'
+                    '@PROCERGSLoginCidadaoNotificationBundle/Resources/public/css/notifications.css' filter='cssrewrite' filter='?uglifycss' %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 
