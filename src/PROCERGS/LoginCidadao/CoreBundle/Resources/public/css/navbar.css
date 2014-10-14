@@ -395,7 +395,38 @@
     position: relative;
 }
 
-#navbarUnread .common-grid-result {
+.notifications .menu-title {
+  margin: 5px;
+}
+
+#navbarUnread {
+  margin-top: 0;
+}
+
+#navbarUnread .notification {
   cursor: pointer;
-  margin-bottom: 5px!important;
+  border-bottom: solid 1px #CCC;
+  font-size: 12px;
+  padding: 15px 10px;
+}
+
+#navbarUnread .notification:hover {
+  background-color: #C7D6CB;
+}
+
+#navbarUnread .client-img {
+  background-color: #FFF;
+  float: left;
+  height: 50px;
+  margin: 0 10px 0 0;
+  width: 50px ;
+}
+
+#navbarUnread .client-name {
+  margin: 5px 0 0;
+}
+
+#navbarUnread .title {
+  font-weight: bold;
+  margin: 0;
 }
