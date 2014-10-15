@@ -72,16 +72,17 @@ class NotificationController extends Controller
      * @Template()
      */
     public function gridFullAction(Request $request = null) {
-        $sql = $this->getDoctrine()
-        ->getManager ()
-        ->getRepository('PROCERGSLoginCidadaoNotificationBundle:Notification')
-        ->createQueryBuilder('n')
-        ->select('n.id, case when n.readDate is null then false else true end isread, n.title, n.shortText shorttext, n.createdAt createdat, c.id client_id, c.name client_name')
-        ->join('PROCERGSLoginCidadaoNotificationBundle:Category', 'cnc', 'WITH', 'n.category = cnc')
-        ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
-        ->where('n.person = :person')
-        ->setParameter('person', $this->getUser())
-        ->orderBy('n.id', 'DESC');
+     $sql = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('PROCERGSLoginCidadaoNotificationBundle:Notification')
+            ->createQueryBuilder('n')
+            ->select('n.id, case when n.readDate is null then false else true end isread, n.title, n.shortText shorttext, n.createdAt createdat, c.id client_id, c.name client_name')
+            ->join('PROCERGSLoginCidadaoNotificationBundle:Category', 'cnc',
+                   'WITH', 'n.category = cnc')
+            ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
+            ->where('n.person = :person')
+            ->setParameter('person', $this->getUser())
+            ->orderBy('n.id', 'DESC');
 
         if ($request->get('client')) {
             $sql->andWhere('c.id = :client')->setParameter('client', $request->get('client'));
@@ -111,7 +112,7 @@ class NotificationController extends Controller
         }
         $resultset = $this->getDoctrine()
         ->getManager()
-        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
+        ->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')
         ->createQueryBuilder('cnc')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
         ->where('c.id = :client')
