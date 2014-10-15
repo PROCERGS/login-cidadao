@@ -33,10 +33,11 @@ class PersonNotificationOptionRepository extends EntityRepository
             ->select('s')
             ->from('PROCERGSLoginCidadaoNotificationBundle:PersonNotificationOption',
                    's')
-            ->join('PROCERGSLoginCidadaoNotificationBundle:Category', 'c')
+            ->join('PROCERGSLoginCidadaoNotificationBundle:Category', 'c', 'WITH', 's.category = c')
             ->where('s.person = :person')
             ->setParameter('person', $person)
-            ->orderBy('c.client');
+            ->addOrderBy('c.client')
+            ->addOrderBy('c.name');
 
         if (null !== $category) {
             $qb->andWhere('s.category = :category')->setParameter('category',
