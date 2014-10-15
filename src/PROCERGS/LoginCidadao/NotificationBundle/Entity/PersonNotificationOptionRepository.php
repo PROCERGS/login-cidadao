@@ -17,7 +17,8 @@ class PersonNotificationOptionRepository extends EntityRepository
             ->select('s')
             ->from('PROCERGSLoginCidadaoNotificationBundle:PersonNotificationOption',
                    's')
-            ->join('PROCERGSLoginCidadaoNotificationBundle:Category', 'c')
+            ->join('PROCERGSLoginCidadaoNotificationBundle:Category', 'c',
+                   'WITH', 's.category = c')
             ->where('s.person = :person')
             ->andWhere('c.client = :client')
             ->setParameters(compact('person', 'client'));
@@ -33,7 +34,8 @@ class PersonNotificationOptionRepository extends EntityRepository
             ->select('s')
             ->from('PROCERGSLoginCidadaoNotificationBundle:PersonNotificationOption',
                    's')
-            ->join('PROCERGSLoginCidadaoNotificationBundle:Category', 'c', 'WITH', 's.category = c')
+            ->join('PROCERGSLoginCidadaoNotificationBundle:Category', 'c',
+                   'WITH', 's.category = c')
             ->where('s.person = :person')
             ->setParameter('person', $person)
             ->addOrderBy('c.client')
