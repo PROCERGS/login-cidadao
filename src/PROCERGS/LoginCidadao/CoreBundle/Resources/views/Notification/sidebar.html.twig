@@ -1,11 +1,14 @@
 <div class="settings-nav col-sm-3">
     <ul class="nav nav-pills nav-stacked">
-        <li class="profile glyph dropdown">
-          <a href="{{ path('lc_not_inbox') }}" role="button">{{ 'notification.menu.inbox'|trans }}</a>
+        <li class="profile glyph">
+          <a href="{{ url('lc_home') }}" role="button">
+            <i class="glyphicon glyphicon-arrow-left icon"></i>
+            <span>{{ 'notification.menu.inbox'|trans }}</span>
+          </a>
         </li>
      {% for cli in clients %}
-        <li class="profile glyph dropdown">
-          <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" id="drop{{ cli['id'] }}">
+        <li>
+          <a href="#" class="collapse-toggle" data-toggle="collapse" data-target="#collapse{{ cli['id'] }}">
             <i class="glyphicon glyphicon-envelope icon"></i>
             <span>{{ cli['name'] }}</span>
             <div class="icon-count">
@@ -15,7 +18,7 @@
               </span>
             </div>
           </a>
-          <ul aria-labelledby="drop{{ cli['id'] }}" role="menu" class="dropdown-menu" id="drop-menu{{ cli['id'] }}">
+          <ul aria-labelledby="drop{{ cli['id'] }}" role="menu" class="collapse submenu" id="collapse{{ cli['id'] }}">
             <li >
               <a href="{{ path('lc_not_inbox',{'client' : cli['id']}) }}" tabindex="-1" role="menuitem">{{ 'notification.sub.inbox'|trans }}</a>
             </li>
@@ -27,6 +30,8 @@
               </li>
           </ul>
         </li>
+
+
     {% endfor %}
     </ul>
 </div>

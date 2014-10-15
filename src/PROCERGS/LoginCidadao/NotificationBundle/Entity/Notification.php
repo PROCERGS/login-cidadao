@@ -12,7 +12,7 @@ use JMS\Serializer\Annotation as JMS;
 /**
  * Notification
  *
- * @ORM\Table(name="notification")
+ * @ORM\Table(name="notification", indexes={@ORM\Index(name="total_idx1", columns={"person_id", "read_date"})})
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationRepository")
  * @JMS\ExclusionPolicy("all")
  * @ORM\HasLifecycleCallbacks

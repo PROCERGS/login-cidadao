@@ -232,7 +232,6 @@
     	if ($(profileEdit.countryId).val() == $(profileEdit.ufpreferredId).val()) {
             $(profileEdit.cepId).val(dneData.cep);
             $(profileEdit.cepId).mask('00000-000');
-            //debugger;
             var street = dneData.tipoLogradouro ? dneData.tipoLogradouro.capitalize(true, true) : '';
             if (dneData.tituloLogradouro && dneData.tipoLogradouro != dneData.tituloLogradouro) {
                 street += ' ' + dneData.tituloLogradouro.capitalize(true, true);
@@ -339,7 +338,7 @@
         	$(profileEdit.stateId).find('option[value!=""]').remove();
         	$(profileEdit.stateId).trigger('change');
 			$(profileEdit.stateId).hide();
-			$(profileEdit.ufSteppeId).show();
+			$(profileEdit.stateSteppeId).show();
         	if ($(this).val()) {
             	$.ajax({
             		type: 'GET',
@@ -348,7 +347,7 @@
             		success : function(data, textStatus, jqXHR) {
                 		if (data.length) {
                 			$(profileEdit.stateId).show();
-                			$(profileEdit.ufSteppeId).hide();
+                			$(profileEdit.stateSteppeId).hide();
                 			$(profileEdit.stateId).append(data.map(function (val) {return $(document.createElement('option')).val(val.id).text(val.name)}));
                 			$(profileEdit.stateId).find('option:selected').removeAttr('selected');
                 			$(profileEdit.stateId).find('option[value=""]').first().attr('selected','selected');
@@ -392,15 +391,15 @@
             		}
                 });
             } else {
-            	if ($(event.target.selectedOptions[0]).attr('data-custom-option') == 1) {
+            	if ($(event.target).find('[data-custom-option="1"]:selected').length) {
         			$(profileEdit.stateId).hide();
-        			$(profileEdit.ufSteppeId).show();
-        			$(profileEdit.ufSteppeId).focus();
+        			$(profileEdit.stateSteppeId).show();
+        			$(profileEdit.stateSteppeId).focus();
                 }
             }
         });
         $(profileEdit.cityId).on('change', function (event) {
-        	if ($(event.target.selectedOptions[0]).attr('data-custom-option') == 1) {
+        	if ($(event.target).find('[data-custom-option="1"]:selected').length) {
     			$(profileEdit.cityId).hide();
     			$(profileEdit.citySteppeId).show();
     			$(profileEdit.citySteppeId).focus();

@@ -18,13 +18,13 @@
         <div class="btn-group">
             <button type="button" class="btn btn-warning edit-row-grid" id="{{ grid.getId }}-row-{{ row.id }}"  data-row="{{ grid.getRouteParams|merge({'id':row.id})|json_encode }}">
                 <span class="glyphicon glyphicon-pencil"></span>
-                <span class="label-action-column-grid">{{ 'edit'|trans }} </span>            
+                <span class="label-action-column-grid">{{ 'Edit'|trans }} </span>            
             </button>
         </div>
         <div class="btn-group">
             <button type="button" class="btn btn-danger remove-row-grid" id="{{ grid.getId }}-row-{{ row.id }}" data-row="{{ grid.getRouteParams|merge({'id':row.id})|json_encode }}">
                 <span class="glyphicon glyphicon-remove"></span>
-                <span class="label-action-column-grid"> {{ 'remove'|trans }} </span>
+                <span class="label-action-column-grid"> {{ 'Remove'|trans }} </span>
             </button>
         </div>
     </div>

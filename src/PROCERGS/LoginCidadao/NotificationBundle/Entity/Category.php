@@ -88,7 +88,7 @@ class Category implements CategoryInterface, UniqueEntityInterface
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="categories")
      * @ORM\JoinColumn(name="sender_id", referencedColumnName="id")
      */
