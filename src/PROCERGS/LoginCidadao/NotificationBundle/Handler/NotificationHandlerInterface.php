@@ -6,6 +6,7 @@ use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\CategoryInterface;
+use PROCERGS\LoginCidadao\NotificationBundle\Model\NotificationSettings;
 
 interface NotificationHandlerInterface
 {
@@ -98,10 +99,12 @@ interface NotificationHandlerInterface
      * Retrieves a person's settings.
      *
      * @param PersonInterface   $person
-     * @param CategoryInterface $client optionally filters by category.
+     * @param CategoryInterface $client optionally filter by category
+     * @param ClientInterface $client optionally filter by client
      */
     public function getSettings(PersonInterface $person,
-                                CategoryInterface $category = null);
+                                CategoryInterface $category = null,
+                                ClientInterface $client = null);
 
     /**
      * Retrieves a person's settings for a specific Client.
@@ -129,4 +132,15 @@ interface NotificationHandlerInterface
      * @param int $end
      */
     public function markRangeAsRead(PersonInterface $person, $start, $end);
+
+    /**
+     *
+     * @param PersonInterface $person
+     * @param ClientInterface $client filter by client
+     * @param CategoryInterface $category filter by category
+     * @return NotificationSettings PersonNotificationOptions grouped by Client
+     */
+    public function getGroupedSettings(PersonInterface $person,
+                                       ClientInterface $client = null,
+                                       CategoryInterface $category = null);
 }

@@ -13,6 +13,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\CategoryInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\PersonNotificationOption;
+use PROCERGS\LoginCidadao\NotificationBundle\Model\NotificationSettings;
 
 class NotificationHandler implements NotificationHandlerInterface
 {
@@ -109,7 +110,8 @@ class NotificationHandler implements NotificationHandlerInterface
     }
 
     public function getSettings(PersonInterface $person,
-                                CategoryInterface $category = null)
+                                CategoryInterface $category = null,
+                                ClientInterface $client = null)
     {
         $repo = $this->om->getRepository('PROCERGSLoginCidadaoNotificationBundle:PersonNotificationOption');
         return $repo->findByPerson($person, $category);
@@ -166,6 +168,20 @@ class NotificationHandler implements NotificationHandlerInterface
         $om->flush();
 
         return $result;
+    }
+
+    public function getGroupedSettings(PersonInterface $person,
+                                       ClientInterface $client = null,
+                                       CategoryInterface $category = null)
+    {
+        $settings = new NotificationSettings();
+
+        $options = $this->getSettings($person, $category, $client);
+        foreach ($options as $option) {
+            $settings->addOption($option);
+        }
+
+        return $settings;
     }
 
 }

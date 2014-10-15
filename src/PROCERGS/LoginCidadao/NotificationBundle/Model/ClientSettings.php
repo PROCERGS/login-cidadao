@@ -18,23 +18,29 @@ class ClientSettings
         $this->options = new ArrayCollection();
     }
 
+    /**
+     * @return ArrayCollection
+     */
     public function getOptions()
     {
         return $this->options;
     }
 
-    public function setOptions($options)
+    public function setOptions(ArrayCollection $options)
     {
         $this->options = $options;
         return $this;
     }
 
+    /**
+     * @return ClientInterface
+     */
     public function getClient()
     {
         return $this->client;
     }
 
-    public function setClient($client)
+    public function setClient(ClientInterface $client)
     {
         $this->client = $client;
         return $this;

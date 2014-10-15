@@ -26,7 +26,8 @@ class PersonNotificationOptionRepository extends EntityRepository
     }
 
     public function findByPerson(PersonInterface $person,
-                                 CategoryInterface $category = null)
+                                 CategoryInterface $category = null,
+                                 ClientInterface $client = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('s')
@@ -40,6 +41,9 @@ class PersonNotificationOptionRepository extends EntityRepository
         if (null !== $category) {
             $qb->andWhere('s.category = :category')->setParameter('category',
                                                                   $category);
+        }
+        if (null !== $client) {
+            $qb->andWhere('c.client = :client')->setParameter('client', $client);
         }
 
         return $qb->getQuery()->getResult();

@@ -34,26 +34,18 @@ class NotificationController extends Controller
         $handler = $this->getNotificationHandler();
         $handler->initializeSettings($person);
 
-        $clients = array();
-        foreach ($handler->getSettings($person) as $option) {
-            $clients = $this->addClientOption($clients, $option);
-        }
-
-        $settings = new NotificationSettings();
-        $settings->setClients($clients);
-
-        $form = $this->createForm(new SettingsType(), $settings);
+        $form = $this->createForm(new SettingsType(),
+                                  $handler->getGroupedSettings($person));
 
         $form->handleRequest($request);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $form->getData()->persist($em);
             $em->flush();
+            return $this->redirect($this->generateUrl('lc_notifications_settings'));
         }
 
-        $form = $form->createView();
-
-        return compact('settings', 'form');
+        return array('form' => $form->createView());
     }
 
     /**
@@ -75,19 +67,6 @@ class NotificationController extends Controller
     private function getNotificationHandler()
     {
         return $this->get('procergs.notification.handler');
-    }
-
-    private function addClientOption($clients, PersonNotificationOption $option)
-    {
-        $clientObj = $option->getCategory()->getClient();
-        $id = $clientObj->getId();
-        if (!array_key_exists($id, $clients)) {
-            $clients[$id] = new ClientSettings($clientObj);
-        }
-        $client = $clients[$id];
-        $client->getOptions()->add($option);
-
-        return $clients;
     }
 
 }

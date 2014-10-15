@@ -5,6 +5,7 @@ namespace PROCERGS\LoginCidadao\NotificationBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use PROCERGS\LoginCidadao\NotificationBundle\Model\CategoryInterface;
 
 /**
  * PersonOption
@@ -110,6 +111,10 @@ class PersonNotificationOption
         return $this;
     }
 
+    /**
+     *
+     * @return CategoryInterface
+     */
     public function getCategory()
     {
         return $this->category;

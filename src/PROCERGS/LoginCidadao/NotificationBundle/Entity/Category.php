@@ -10,6 +10,7 @@ use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 use PROCERGS\LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
+use PROCERGS\OAuthBundle\Model\ClientInterface;
 
 /**
  * Category
@@ -382,6 +383,9 @@ class Category implements CategoryInterface, UniqueEntityInterface
         return $this;
     }
 
+    /**
+     * @return ClientInterface
+     */
     public function getClient()
     {
         return $this->client;
