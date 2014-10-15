@@ -232,7 +232,6 @@
     	if ($(profileEdit.countryId).val() == $(profileEdit.ufpreferredId).val()) {
             $(profileEdit.cepId).val(dneData.cep);
             $(profileEdit.cepId).mask('00000-000');
-            //debugger;
             var street = dneData.tipoLogradouro ? dneData.tipoLogradouro.capitalize(true, true) : '';
             if (dneData.tituloLogradouro && dneData.tipoLogradouro != dneData.tituloLogradouro) {
                 street += ' ' + dneData.tituloLogradouro.capitalize(true, true);
@@ -347,7 +346,6 @@
             		dataType : 'json',
             		success : function(data, textStatus, jqXHR) {
                 		if (data.length) {
-                    		debugger
                 			$(profileEdit.stateId).show();
                 			$(profileEdit.stateSteppeId).hide();
                 			$(profileEdit.stateId).append(data.map(function (val) {return $(document.createElement('option')).val(val.id).text(val.name)}));
