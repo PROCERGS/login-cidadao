@@ -6,12 +6,15 @@ use Doctrine\ORM\EntityRepository;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\CategoryInterface;
+use Doctrine\ORM\QueryBuilder;
 
 class PersonNotificationOptionRepository extends EntityRepository
 {
 
-    public function findByClient(PersonInterface $person,
-                                 ClientInterface $client)
+    /**
+     * @return QueryBuilder
+     */
+    private function getBaseQuery()
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('s')
@@ -19,23 +22,25 @@ class PersonNotificationOptionRepository extends EntityRepository
                    's')
             ->join('PROCERGSLoginCidadaoNotificationBundle:Category', 'c',
                    'WITH', 's.category = c')
-            ->where('s.person = :person')
-            ->andWhere('c.client = :client')
-            ->setParameters(compact('person', 'client'));
+            ->innerJoin('PROCERGSOAuthBundle:Client', 'cli', 'WITH',
+                        'c.client = cli')
+            ->innerJoin('PROCERGSLoginCidadaoCoreBundle:Authorization', 'a',
+                        'WITH', 'a.client = cli AND a.person = s.person');
 
-        return $qb->getQuery()->getResult();
+        return $qb;
+    }
+
+    public function findByClient(PersonInterface $person,
+                                 ClientInterface $client)
+    {
+        return $this->findByPerson($person, null, $client);
     }
 
     public function findByPerson(PersonInterface $person,
                                  CategoryInterface $category = null,
                                  ClientInterface $client = null)
     {
-        $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select('s')
-            ->from('PROCERGSLoginCidadaoNotificationBundle:PersonNotificationOption',
-                   's')
-            ->join('PROCERGSLoginCidadaoNotificationBundle:Category', 'c',
-                   'WITH', 's.category = c')
+        $qb = $this->getBaseQuery()
             ->where('s.person = :person')
             ->setParameter('person', $person)
             ->addOrderBy('c.client')
