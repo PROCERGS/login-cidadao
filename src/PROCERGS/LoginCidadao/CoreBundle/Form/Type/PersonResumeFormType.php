@@ -30,12 +30,6 @@ class PersonResumeFormType extends CommonFormType
             'read_only' => 'true',
             'translation_domain' => 'FOSUserBundle'
         ));
-        $builder->add('cep', 'text', array(
-            'required' => false,
-            'read_only' => 'true',
-            'label' => 'form.cep',
-            'translation_domain' => 'FOSUserBundle'
-        ));
         $builder->add('birthdate', 'birthday', array(
             'required' => false,
             'read_only' => 'true',
@@ -52,19 +46,6 @@ class PersonResumeFormType extends CommonFormType
             'translation_domain' => 'FOSUserBundle'
         ));
         $builder->add('image');
-        $builder->add('adress', 'text', array(
-            'read_only' => 'true',
-            'required' => false
-        ));
-        $builder->add('adressnumber', 'integer', array(
-            'read_only' => 'true',
-            'required' => false
-        ));
-        $builder->add('complement', 'text', array(
-            'read_only' => 'true',
-            "required" => false
-        ));
-
         $em = $this->em;
         $user = $this->getUser();
         $allRoles = array(
