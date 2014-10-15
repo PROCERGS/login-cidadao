@@ -1,6 +1,7 @@
+# Notifications
 procergs_login_cidadao_notification:
-    resource: "@PROCERGSLoginCidadaoNotificationBundle/Controller/"
-    type:     annotation
+    type: rest
+    resource: "@PROCERGSLoginCidadaoNotificationBundle/Resources/config/routing.yml"
     prefix:   /
 
 #HWI OAuth

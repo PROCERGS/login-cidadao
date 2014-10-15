@@ -59,10 +59,13 @@ class NotificationController extends BaseController
 
         if (array_search('get_all_notifications', $scopes) === false) {
             $notifications = $this->getNotificationHandler()->getAllFromPersonByClient($person,
-                    $client, $limit, $offset);
+                                                                                       $client,
+                                                                                       $limit,
+                                                                                       $offset);
         } else {
             $notifications = $this->getNotificationHandler()->getAllFromPerson($person,
-                    $limit, $offset);
+                                                                               $limit,
+                                                                               $offset);
         }
 
         return $this->renderWithContext($notifications);
@@ -131,7 +134,7 @@ class NotificationController extends BaseController
             $this->validateNotification($request);
 
             $newNotification = $this->getNotificationHandler()->post(
-                    $request->request->all()
+                $request->request->all()
             );
 
             $routeOptions = array(
@@ -140,7 +143,7 @@ class NotificationController extends BaseController
             );
 
             return $this->routeRedirectView('api_1_get_notification',
-                            $routeOptions, Codes::HTTP_CREATED);
+                                            $routeOptions, Codes::HTTP_CREATED);
         } catch (InvalidFormException $exception) {
             return $exception->getForm();
         }
@@ -166,7 +169,7 @@ class NotificationController extends BaseController
     {
         if (!($notification = $this->getNotificationHandler()->get($id))) {
             throw new NotFoundHttpException(sprintf('The resource \'%s\' was not found.',
-                    $id));
+                                                    $id));
         }
 
         return $notification;
@@ -188,7 +191,7 @@ class NotificationController extends BaseController
         }
 
         $categories = $this->getDoctrine()
-                ->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category');
+            ->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category');
         $notificationCategory = $categories->find($request->get('category'));
         if ($notificationCategory->getClient()->getId() != $requestClient->getId()) {
             throw new AccessDeniedHttpException("Invalid category.");

@@ -4,10 +4,10 @@ security:
         FOS\UserBundle\Model\UserInterface: sha512
 
     role_hierarchy:
-        ROLE_DEV:       ROLE_USER
+        ROLE_DEV:         ROLE_USER
         ROLE_SUPER:       ROLE_DEV
         ROLE_ADMIN:       ROLE_SUPER
-        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_SUPER_ADMIN: [ ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH ]
 
     providers:
         chainprovider:
@@ -17,8 +17,6 @@ security:
             id: procergs_logincidadao.user_provider
         fos_facebook_provider:
             id: fos_facebook.user.login
-#        fos_twitter_provider:
-#            id: fos_twitter.user
 
     firewalls:
         oauth_token:
@@ -44,6 +42,7 @@ security:
         main:
             context: context_key
             pattern: ^/(?!api|!oauth)
+            switch_user: true
 
             remember_me:
                 key:      "%secret%"

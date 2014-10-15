@@ -332,7 +332,12 @@ class Notification implements NotificationInterface
 
     public function setRead($isRead)
     {
-        return $this->setReadDate(null);
+        if ($isRead) {
+            $this->setReadDate(new \DateTime());
+        } else {
+            $this->setReadDate(null);
+        }
+        return $this;
     }
 
     public function setPerson($person)

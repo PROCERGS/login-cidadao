@@ -1,21 +1,44 @@
 {% extends "PROCERGSLoginCidadaoNotificationBundle::base.html.twig" %}
 
 {% block content %}
-<div class="content notifications-settings">
-    <h1>{{ 'Notifications Settings' | trans }}</h1>
-    <div class="row">
-        <div class="col-sm-10 col-sm-offset-1">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                {% for config in settings %}
-                    {{ config.sendPush }}
-                {% endfor %}
+    <div class="content notifications-settings">
+        <h1>{{ 'Notifications Settings' | trans }}</h1>
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                {{ form_start(form) }}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        {% set lastClient = 0 %}
+                        {% for client in form.clients %}
+                            {% set clientObj = client.vars.data.client %}
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h2 class="panel-title">{{ clientObj.name }}</h2>
+                                    </div>
+                                    <table class="table">
+                                        <tr>
+                                            <th></th>
+                                            <th class="text-center">{{ 'Send email' | trans }}</th>
+                                            <th class="text-center">{{ 'Send push' | trans }}</th>
+                                        </tr>
+                            {% for option in client.options %}
+                                {% set category = option.vars.data.category %}
+                                <tr>
+                                    <td>{{ category.name }}</td>
+                                    <td class="text-center">{{ form_widget(option.sendEmail) }}</td>
+                                    <td class="text-center">{{ form_widget(option.sendPush) }}</td>
+                                </tr>
+                            {% endfor %}
+                                    </table>
+                                </div>
+                        {% endfor %}
+                    </div>
+                    <div class="panel-footer text-right">
+                        {{ form_widget(form.save) }}
+                    </div>
                 </div>
-                <div class="panel-footer text-right">
-                    <button type="button" class="btn btn-success">{{ 'Save' | trans }}</button>
-                </div>
+                {{ form_end(form) }}
             </div>
         </div>
     </div>
-</div>
 {% endblock content %}

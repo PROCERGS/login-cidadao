@@ -5,6 +5,7 @@ namespace PROCERGS\LoginCidadao\NotificationBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use Doctrine\ORM\Query;
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class NotificationRepository extends EntityRepository
 {
@@ -85,6 +86,15 @@ class NotificationRepository extends EntityRepository
                     ->setParameter('level', $maxLevel)
                     ->getResult();
         }
+    }
+
+    public function findUntil(PersonInterface $person, $start, $end)
+    {
+        $qb = $this->createQueryBuilder('n');
+        $qb->where($qb->expr()->between('n.id', ':start', ':end'))
+            ->setParameters(compact('start', 'end'));
+
+        return $qb->getQuery()->getResult();
     }
 
 }

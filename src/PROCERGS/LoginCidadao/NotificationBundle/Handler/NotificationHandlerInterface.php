@@ -3,7 +3,7 @@
 namespace PROCERGS\LoginCidadao\NotificationBundle\Handler;
 
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationInterface;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\CategoryInterface;
 
@@ -33,20 +33,20 @@ interface NotificationHandlerInterface
     /**
      * Get a list of an user's Notifications.
      *
-     * @param Person           $person  the user to get notifications from
+     * @param PersonInterface  $person  the user to get notifications from
      * @param int              $limit   the limit of the result
      * @param int              $offset  starting from the offset
      * @param int              $orderby the ordering criteria
      *
      * @return array
      */
-    public function getAllFromPerson(Person $person, $limit = 5, $offset = 0,
-                                     $orderby = null);
+    public function getAllFromPerson(PersonInterface $person, $limit = 5,
+                                     $offset = 0, $orderby = null);
 
     /**
      * Get a list of an user's Notifications restricted by Client.
      *
-     * @param Person           $person  the user to get notifications from
+     * @param PersonInterface  $person  the user to get notifications from
      * @param ClientInterface  $client  the requesting Client
      * @param int              $limit   the limit of the result
      * @param int              $offset  starting from the offset
@@ -54,7 +54,7 @@ interface NotificationHandlerInterface
      *
      * @return array
      */
-    public function getAllFromPersonByClient(Person $person,
+    public function getAllFromPersonByClient(PersonInterface $person,
                                              ClientInterface $client,
                                              $limit = 5, $offset = 0,
                                              $orderby = null);
@@ -97,24 +97,36 @@ interface NotificationHandlerInterface
     /**
      * Retrieves a person's settings.
      *
-     * @param Person $person
+     * @param PersonInterface   $person
      * @param CategoryInterface $client optionally filters by category.
      */
-    public function getSettings(Person $person, CategoryInterface $category = null);
+    public function getSettings(PersonInterface $person,
+                                CategoryInterface $category = null);
 
     /**
      * Retrieves a person's settings for a specific Client.
      *
-     * @param Person $person
+     * @param PersonInterface $person
      * @param ClientInterface $client optionally filters by category.
      */
-    public function getSettingsByClient(Person $person, ClientInterface $client);
+    public function getSettingsByClient(PersonInterface $person,
+                                        ClientInterface $client);
 
     /**
      * Ensures that the given Person has all it's notifications setup.
      *
-     * @param Person $person
+     * @param PersonInterface $person
      * @param ClientInterface $client
      */
-    public function initializeSettings(Person $person, ClientInterface $client);
+    public function initializeSettings(PersonInterface $person,
+                                       ClientInterface $client);
+
+    /**
+     * Mark the specified range of IDs as read.
+     *
+     * @param PersonInterface $person
+     * @param int $start
+     * @param int $end
+     */
+    public function markRangeAsRead(PersonInterface $person, $start, $end);
 }

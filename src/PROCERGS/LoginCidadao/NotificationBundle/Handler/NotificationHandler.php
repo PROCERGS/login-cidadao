@@ -9,6 +9,7 @@ use PROCERGS\LoginCidadao\NotificationBundle\Form\NotificationType;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Exception\InvalidFormException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\CategoryInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\PersonNotificationOption;
@@ -35,14 +36,14 @@ class NotificationHandler implements NotificationHandlerInterface
         return $this->repository->findBy(array(), $orderby, $limit, $offset);
     }
 
-    public function getAllFromPerson(Person $person, $limit = 5, $offset = 0,
-                                     $orderby = null)
+    public function getAllFromPerson(PersonInterface $person, $limit = 5,
+                                     $offset = 0, $orderby = null)
     {
         return $this->repository->findBy(array('person' => $person), $orderby,
                                          $limit, $offset);
     }
 
-    public function getAllFromPersonByClient(Person $person,
+    public function getAllFromPersonByClient(PersonInterface $person,
                                              ClientInterface $client,
                                              $limit = 5, $offset = 0,
                                              $orderby = null)
@@ -98,19 +99,6 @@ class NotificationHandler implements NotificationHandlerInterface
 
             return $notification;
         }
-        // Debuging stuff
-        //*
-        foreach ($form->all() as $f) {
-            $errors = $f->getErrors();
-            if (count($errors) > 0) {
-                foreach ($errors as $error) {
-                    $form->addError($error);
-                }
-                echo $f->getName();
-                print_r($errors);
-            }
-        }
-        // */
 
         throw new InvalidFormException('Invalid submitted data', $form);
     }
@@ -120,25 +108,22 @@ class NotificationHandler implements NotificationHandlerInterface
         return new $this->entityClass();
     }
 
-    public function getSettings(Person $person,
+    public function getSettings(PersonInterface $person,
                                 CategoryInterface $category = null)
     {
         $repo = $this->om->getRepository('PROCERGSLoginCidadaoNotificationBundle:PersonNotificationOption');
-        $filter = compact('person');
-        if (null !== $category) {
-            $filter['category'] = $category;
-        }
-
-        return $repo->findBy($filter);
+        return $repo->findByPerson($person, $category);
     }
 
-    public function getSettingsByClient(Person $person, ClientInterface $client)
+    public function getSettingsByClient(PersonInterface $person,
+                                        ClientInterface $client)
     {
         $repo = $this->om->getRepository('PROCERGSLoginCidadaoNotificationBundle:PersonNotificationOption');
         return $repo->findByClient($person, $client);
     }
 
-    public function initializeSettings(Person $person, ClientInterface $client = null)
+    public function initializeSettings(PersonInterface $person,
+                                       ClientInterface $client = null)
     {
         $om = $this->om;
         $categoriesRepo = $om->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category');
@@ -155,6 +140,32 @@ class NotificationHandler implements NotificationHandlerInterface
             }
             $om->flush();
         }
+    }
+
+    public function markRangeAsRead(PersonInterface $person, $start, $end)
+    {
+        $om = $this->om;
+        $notifications = $om
+            ->getRepository('PROCERGSLoginCidadaoNotificationBundle:Notification')
+            ->findUntil($person, $start, $end);
+
+        $result = array(
+            'read' => array(),
+            'failed' => array()
+        );
+        foreach ($notifications as $notification) {
+            try {
+                if (!$notification->isRead()) {
+                    $notification->setRead(true);
+                }
+                $result['read'][] = $notification->getId();
+            } catch (Exception $e) {
+                $result['failed'][] = $notification->getId();
+            }
+        }
+        $om->flush();
+
+        return $result;
     }
 
 }
