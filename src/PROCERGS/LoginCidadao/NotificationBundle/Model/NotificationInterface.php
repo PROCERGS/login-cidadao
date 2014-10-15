@@ -25,10 +25,6 @@ interface NotificationInterface
 
     public function setText($text);
 
-    public function getConfigNotCli();
-
-    public function setConfigNotCli($var);
-
     /**
      * @return Person
      */
