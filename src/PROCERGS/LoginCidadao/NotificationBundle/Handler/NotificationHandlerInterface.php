@@ -2,7 +2,7 @@
 
 namespace PROCERGS\LoginCidadao\NotificationBundle\Handler;
 
-use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationInterface;
+use PROCERGS\LoginCidadao\NotificationBundle\Model\NotificationInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\CategoryInterface;
@@ -143,4 +143,11 @@ interface NotificationHandlerInterface
     public function getGroupedSettings(PersonInterface $person,
                                        ClientInterface $client = null,
                                        CategoryInterface $category = null);
+
+    /**
+     *
+     * @param PersonInterface $person
+     * @return type Returns an AuthenticatedNotificationHandler
+     */
+    public function getAuthenticatedHandler(PersonInterface $person);
 }

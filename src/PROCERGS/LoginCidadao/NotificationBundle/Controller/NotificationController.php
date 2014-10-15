@@ -31,11 +31,12 @@ class NotificationController extends Controller
     public function editSettingsAction(Request $request)
     {
         $person = $this->getUser();
-        $handler = $this->getNotificationHandler();
-        $handler->initializeSettings($person);
+        $handler = $this->getNotificationHandler()
+            ->getAuthenticatedHandler($person);
+        $handler->initializeSettings();
 
         $form = $this->createForm(new SettingsType(),
-                                  $handler->getGroupedSettings($person));
+                                  $handler->getGroupedSettings());
 
         $form->handleRequest($request);
         if ($form->isValid()) {

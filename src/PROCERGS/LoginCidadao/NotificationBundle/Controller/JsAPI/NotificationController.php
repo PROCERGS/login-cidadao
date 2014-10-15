@@ -35,10 +35,11 @@ class NotificationController extends FOSRestController
      */
     public function putReadAction($start, $end)
     {
-        $handler = $this->getNotificationHandler();
         $person = $this->getUser();
+        $handler = $this->getNotificationHandler()
+            ->getAuthenticatedHandler($person);
 
-        return $handler->markRangeAsRead($person, $start, $end);
+        return $handler->markRangeAsRead($start, $end);
     }
 
     /**

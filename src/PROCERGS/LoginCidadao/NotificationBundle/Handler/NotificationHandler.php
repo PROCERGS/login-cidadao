@@ -14,6 +14,7 @@ use PROCERGS\OAuthBundle\Model\ClientInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\CategoryInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\PersonNotificationOption;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\NotificationSettings;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class NotificationHandler implements NotificationHandlerInterface
 {
@@ -22,6 +23,7 @@ class NotificationHandler implements NotificationHandlerInterface
     private $entityClass;
     private $repository;
     private $formFactory;
+    private $authenticatedHandlers = array();
 
     public function __construct(ObjectManager $om, $entityClass,
                                 FormFactoryInterface $formFactory)
@@ -87,7 +89,8 @@ class NotificationHandler implements NotificationHandlerInterface
      * @throws \PROCERGS\LoginCidadao\CoreBundle\Exception\Notification\InvalidFormException
      */
     private function processForm(NotificationInterface $notification,
-                                 array $parameters, $method = "PUT")
+                                 array $parameters, $method = "PUT",
+                                 PersonInterface $person = null)
     {
         $form = $this->formFactory->create(new NotificationType(),
                                            $notification, compact('method'));
@@ -95,6 +98,11 @@ class NotificationHandler implements NotificationHandlerInterface
         if ($form->isValid()) {
 
             $notification = $form->getData();
+
+            if (null !== $person && $notification->getPerson()->getId() !== $person->getId()) {
+                throw new AccessDeniedHttpException();
+            }
+
             $this->om->persist($notification);
             $this->om->flush($notification);
 
@@ -182,6 +190,16 @@ class NotificationHandler implements NotificationHandlerInterface
         }
 
         return $settings;
+    }
+
+    public function getAuthenticatedHandler(PersonInterface $person)
+    {
+        $id = $person->getId();
+        if (!array_key_exists($id, $this->authenticatedHandlers)) {
+            $this->authenticatedHandlers[$id] = new AuthenticatedNotificationHandler($person,
+                                                                                     $this);
+        }
+        return $this->authenticatedHandlers[$id];
     }
 
 }
