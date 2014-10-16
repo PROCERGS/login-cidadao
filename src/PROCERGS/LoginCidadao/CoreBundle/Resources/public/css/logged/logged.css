@@ -3,6 +3,12 @@
   background-color: #F1F1F1;
 }
 
+@media (max-width: 768px) {
+  .settings-content {
+    margin: 20px;
+  }
+}
+
 .settings-content .content{
   min-height: 422px;
 }

@@ -21,8 +21,6 @@
   </div>
 </div>
 
-
-
 {% for flashMessage in app.session.flashbag.get('success') %}
     <div class="alert alert-success">
         {{ flashMessage }}
@@ -36,7 +34,7 @@
 
     <div class="row">
     {% block sidebar %}
-        <div class="settings-nav col-sm-3 col-md-2">
+        <div class="settings-nav col-md-3 col-lg-2">
             <ul class="nav nav-pills nav-stacked">
                 <li class="profile glyph {{ app.request.attributes.get('_route') == 'fos_user_profile_edit' ? 'active' }}">
                     <a href="{{ path('fos_user_profile_edit') }}" class="clearfix">
@@ -100,7 +98,7 @@
         </div>
     {% endblock sidebar %}
 
-    <div class="settings-content col-sm-9 col-sm-offset-3 col-md-6 col-md-offset-4">
+    <div class="settings-content col-sm-7 col-sm-offset-4 col-md-7 col-md-offset-4 col-lg-6 col-lg-offset-4">
     {% block content %}{% endblock content %}
     </div>
 
