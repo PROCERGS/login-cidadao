@@ -591,7 +591,7 @@ $(function(){
           if (self.data('row').client_id) {
               var sideSelector = $('#inbox-count-unread-'+self.data('row').client_id);
               if (sideSelector.length) {
-                  sideSelector.contents().first().replaceWith(document.createTextNode(parseInt(sideSelector.text()) - 1)); 
+                  sideSelector.contents().first().replaceWith(document.createTextNode(parseInt(sideSelector.text()) - 1));
               }
           }
         }
