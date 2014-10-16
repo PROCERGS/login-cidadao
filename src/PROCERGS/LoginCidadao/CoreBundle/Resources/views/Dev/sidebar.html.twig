@@ -1,6 +1,12 @@
 {% set myController = app.request.get('_template').get('controller')|trim %}
 <div class="settings-nav col-sm-3">
     <ul class="nav nav-pills nav-stacked">
+        <li class="profile glyph">
+          <a href="{{ url('lc_home') }}" role="button">
+            <i class="glyphicon glyphicon-arrow-left icon"></i>
+            <span>{{ 'Developers'|trans }}</span>
+          </a>
+        </li>
         <li class="profile glyph {{ myController == 'Dev\\Client' ? 'active' }}">
             <a href="{{ path('lc_dev_client') }}">
                 <span>{{ 'Services'|trans }}</span>
