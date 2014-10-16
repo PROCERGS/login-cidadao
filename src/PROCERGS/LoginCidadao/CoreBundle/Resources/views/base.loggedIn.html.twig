@@ -34,7 +34,7 @@
 
     <div class="row">
     {% block sidebar %}
-        <div class="settings-nav col-md-3 col-lg-2">
+        <div class="settings-nav col-sm-3 col-lg-2">
             <ul class="nav nav-pills nav-stacked">
                 <li class="profile glyph {{ app.request.attributes.get('_route') == 'fos_user_profile_edit' ? 'active' }}">
                     <a href="{{ path('fos_user_profile_edit') }}" class="clearfix">
