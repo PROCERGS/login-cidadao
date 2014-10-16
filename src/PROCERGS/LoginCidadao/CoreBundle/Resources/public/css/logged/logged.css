@@ -1,21 +1,39 @@
 /* settings nav and content */
-.settings-nav .nav, .settings-content .content{
+.settings-content {
   background-color: #F1F1F1;
+}
+
+@media (max-width: 768px) {
+  .settings-content {
+    margin: 0 15px;
+  }
+}
+
+.settings-content .content{
   min-height: 422px;
+}
+
+.settings-nav {
+  background-color: #F1F1F1;
+  position: fixed;
+  top: 51px;
+  bottom: 0;
+  left: -200px;
+  z-index: 1000;
+  display: block;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
 }
 
 @media (min-width: 768px) {
   .settings-nav {
-    padding-left: 0;
-  }
-
-  .settings-content {
-    padding-right: 0;
+    left: 0;
   }
 }
 
 .settings-nav li {
-  margin: 0;
+  margin: 0!important;
 }
 
 .settings-nav li a {
@@ -166,31 +184,31 @@
   }
 
   .settings-nav {
-    min-width: 200px;
+    /*min-width: 200px;
     padding: 0;
     position: absolute;
     z-index: 100;
+    */
 
     -webkit-transition: 0.5s ease-in-out;
     -moz-transition: 0.5s ease-in-out;
     -o-transition: 0.5s ease-in-out;
     transition: 0.5s ease-in-out;
 
-    -moz-transform: translateX(-200px);
+    /*-moz-transform: translateX(-200px);
     -webkit-transform: translateX(-200px);
     -o-transform: translateX(-200px);
     -ms-transform: translateX(-200px);
-    transform: translateX(-200px);
+    transform: translateX(-200px);*/
   }
 
   .settings-nav.menu-open {
-    display: block;
-
-    -moz-transform: translateX(0px);
+    left: 0;
+    /*-moz-transform: translateX(0px);
     -webkit-transform: translateX(0px);
     -o-transform: translateX(0px);
     -ms-transform: translateX(0px);
-    transform: translateX(0px);
+    transform: translateX(0px);*/
   }
 
   .settings-content {
@@ -214,6 +232,15 @@
 
   .settings-content .form-content {
     padding: 20px 20px;
+  }
+
+  footer .content {
+    background: none;
+  }
+
+  footer .inner-row {
+    background-color: #222;
+    margin: 0;
   }
 
 }
@@ -267,7 +294,7 @@
 }
 
 #profile-edit .connect .username {
-  padding-left: 20px;
+  padding-left: 30px;
   padding-right: 0px;
   overflow: hidden;
   text-overflow: ellipsis;

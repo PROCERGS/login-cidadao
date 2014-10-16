@@ -211,6 +211,7 @@
         <input class="btn btn-success" type="submit" value="{{ 'profile.edit.submit'|trans }}" />
     </div>
     {{ form_end(form) }}
+</div>
 {% endblock %}
 
 {% block javascripts %}
@@ -229,7 +230,7 @@
 
     profileEdit.callbackOnceSearchState = null;
     profileEdit.popLocation = function(dneData) {
-    	if ($(profileEdit.countryId).val() == $(profileEdit.ufpreferredId).val()) {
+      if ($(profileEdit.countryId).val() == $(profileEdit.ufpreferredId).val()) {
             $(profileEdit.cepId).val(dneData.cep);
             $(profileEdit.cepId).mask('00000-000');
             var street = dneData.tipoLogradouro ? dneData.tipoLogradouro.capitalize(true, true) : '';
@@ -237,24 +238,24 @@
                 street += ' ' + dneData.tituloLogradouro.capitalize(true, true);
             }
             if (dneData.logradouro) {
-            	street += ' ' + dneData.logradouro.capitalize(true, true);
+              street += ' ' + dneData.logradouro.capitalize(true, true);
             }
             var city = dneData.localidade.capitalize(true, true);
             var state = dneData.state;
             if (dneData.codigoMunIBGE && dneData.codigoMunIBGE > 0) {
                 var has1 = $(profileEdit.stateId).find('option[value="'+dneData.codigoMunIBGE.toString().substring(0,2)+'"]');
-            	if (has1.length) {
-            		has1.attr('selected','selected');
-            		profileEdit.callbackOnceSearchState = function(data, textStatus, jqXHR) {
-            			var has2 = $(profileEdit.cityId).find('option[value="'+dneData.codigoMunIBGE.toString()+'"]');
-            			if (has2.length) {
-            				has2.attr('selected','selected');
-            			}
-                	};
-            		$(profileEdit.stateId).trigger('change');
+              if (has1.length) {
+                has1.attr('selected','selected');
+                profileEdit.callbackOnceSearchState = function(data, textStatus, jqXHR) {
+                  var has2 = $(profileEdit.cityId).find('option[value="'+dneData.codigoMunIBGE.toString()+'"]');
+                  if (has2.length) {
+                    has2.attr('selected','selected');
+                  }
+                  };
+                $(profileEdit.stateId).trigger('change');
                 }
             }
-    	}
+      }
     };
 
     profileEdit.brCheckCep = function (event) {
@@ -263,7 +264,7 @@
     profileEdit.brCheck = function() {
         if ($(profileEdit.countryId).val() == $(profileEdit.statepreferredId).val()) {
             $(profileEdit.mobileId).mask("(00) 0000-00009").focusout(function() {
-            	if ($(profileEdit.countryId).val() == $(profileEdit.statepreferredId).val()) {
+              if ($(profileEdit.countryId).val() == $(profileEdit.statepreferredId).val()) {
                     var phone, element;
                     element = $(this);
                     element.unmask();
@@ -279,10 +280,10 @@
             $(profileEdit.cepId).bind('blur', profileEdit.brCheckCep);
             $("#cepSearchBrazil").show();
         } else {
-        	$(profileEdit.mobileId).unmask();
-        	$(profileEdit.cepId).unmask();
-        	$(profileEdit.cepId).unbind('blur', profileEdit.brCheckCep);
-        	$("#cepSearchBrazil").hide();
+          $(profileEdit.mobileId).unmask();
+          $(profileEdit.cepId).unmask();
+          $(profileEdit.cepId).unbind('blur', profileEdit.brCheckCep);
+          $("#cepSearchBrazil").hide();
         }
     };
 
@@ -335,78 +336,78 @@
         $(document.createElement('option')).val('').attr('data-custom-option', 1).text(messages.form.location.city).insertAfter($(profileEdit.cityId).find('option[value=""]').first());
 
         $(profileEdit.countryId).on('change', function (event) {
-        	$(profileEdit.stateId).find('option[value!=""]').remove();
-        	$(profileEdit.stateId).trigger('change');
-			$(profileEdit.stateId).hide();
-			$(profileEdit.stateSteppeId).show();
-        	if ($(this).val()) {
-            	$.ajax({
-            		type: 'GET',
-            		url: profileEdit.urlSearchCountry + '/' + $(this).val(),
-            		dataType : 'json',
-            		success : function(data, textStatus, jqXHR) {
-                		if (data.length) {
-                			$(profileEdit.stateId).show();
-                			$(profileEdit.stateSteppeId).hide();
-                			$(profileEdit.stateId).append(data.map(function (val) {return $(document.createElement('option')).val(val.id).text(val.name)}));
-                			$(profileEdit.stateId).find('option:selected').removeAttr('selected');
-                			$(profileEdit.stateId).find('option[value=""]').first().attr('selected','selected');
-                			profileEdit.brCheck();
-                			if ($(profileEdit.countryId).val() == $(profileEdit.ufpreferredId).val()) {
-                				$(profileEdit.stateId).find('option[data-custom-option]').hide();
-                    		} else {
-                    			$(profileEdit.stateId).find('option[data-custom-option]').show();
-                    		}
-                		}
-            		}
+          $(profileEdit.stateId).find('option[value!=""]').remove();
+          $(profileEdit.stateId).trigger('change');
+      $(profileEdit.stateId).hide();
+      $(profileEdit.stateSteppeId).show();
+          if ($(this).val()) {
+              $.ajax({
+                type: 'GET',
+                url: profileEdit.urlSearchCountry + '/' + $(this).val(),
+                dataType : 'json',
+                success : function(data, textStatus, jqXHR) {
+                    if (data.length) {
+                      $(profileEdit.stateId).show();
+                      $(profileEdit.stateSteppeId).hide();
+                      $(profileEdit.stateId).append(data.map(function (val) {return $(document.createElement('option')).val(val.id).text(val.name)}));
+                      $(profileEdit.stateId).find('option:selected').removeAttr('selected');
+                      $(profileEdit.stateId).find('option[value=""]').first().attr('selected','selected');
+                      profileEdit.brCheck();
+                      if ($(profileEdit.countryId).val() == $(profileEdit.ufpreferredId).val()) {
+                        $(profileEdit.stateId).find('option[data-custom-option]').hide();
+                        } else {
+                          $(profileEdit.stateId).find('option[data-custom-option]').show();
+                        }
+                    }
+                }
                 });
             }
         });
         $(profileEdit.stateId).on('change', function (event) {
-        	$(profileEdit.cityId).find('option[value!=""]').remove();
-        	$(profileEdit.cityId).hide();
-        	$(profileEdit.citySteppeId).show();
-        	if ($(this).val()) {
-            	$.ajax({
-            		type: 'GET',
-            		url: profileEdit.urlSearchState + '/' + $(this).val(),
-            		dataType : 'json',
-            		success : function(data, textStatus, jqXHR) {
-            			if (data.length) {
-            				$(profileEdit.cityId).show();
-            				$(profileEdit.citySteppeId).hide();
-            				$(profileEdit.cityId).append(data.map(function (val) {return $(document.createElement('option')).val(val.id).text(val.name)}));
-            				$(profileEdit.cityId).find('option:selected').removeAttr('selected');
-            				$(profileEdit.cityId).find('option[value=""]').first().attr('selected','selected');
-                			if ($(profileEdit.countryId).val() == $(profileEdit.ufpreferredId).val()) {
-                				$(profileEdit.cityId).find('option[data-custom-option]').hide();
-                    		} else {
-                    			$(profileEdit.cityId).find('option[data-custom-option]').show();
-                    		}
-                			if (profileEdit.callbackOnceSearchState) {
-                				profileEdit.callbackOnceSearchState(data, textStatus, jqXHR);
-                				profileEdit.callbackOnceSearchState = null;
-                    		}
-            			}
-            		}
+          $(profileEdit.cityId).find('option[value!=""]').remove();
+          $(profileEdit.cityId).hide();
+          $(profileEdit.citySteppeId).show();
+          if ($(this).val()) {
+              $.ajax({
+                type: 'GET',
+                url: profileEdit.urlSearchState + '/' + $(this).val(),
+                dataType : 'json',
+                success : function(data, textStatus, jqXHR) {
+                  if (data.length) {
+                    $(profileEdit.cityId).show();
+                    $(profileEdit.citySteppeId).hide();
+                    $(profileEdit.cityId).append(data.map(function (val) {return $(document.createElement('option')).val(val.id).text(val.name)}));
+                    $(profileEdit.cityId).find('option:selected').removeAttr('selected');
+                    $(profileEdit.cityId).find('option[value=""]').first().attr('selected','selected');
+                      if ($(profileEdit.countryId).val() == $(profileEdit.ufpreferredId).val()) {
+                        $(profileEdit.cityId).find('option[data-custom-option]').hide();
+                        } else {
+                          $(profileEdit.cityId).find('option[data-custom-option]').show();
+                        }
+                      if (profileEdit.callbackOnceSearchState) {
+                        profileEdit.callbackOnceSearchState(data, textStatus, jqXHR);
+                        profileEdit.callbackOnceSearchState = null;
+                        }
+                  }
+                }
                 });
             } else {
-            	if ($(event.target).find('[data-custom-option="1"]:selected').length) {
-        			$(profileEdit.stateId).hide();
-        			$(profileEdit.stateSteppeId).show();
-        			$(profileEdit.stateSteppeId).focus();
+              if ($(event.target).find('[data-custom-option="1"]:selected').length) {
+              $(profileEdit.stateId).hide();
+              $(profileEdit.stateSteppeId).show();
+              $(profileEdit.stateSteppeId).focus();
                 }
             }
         });
         $(profileEdit.cityId).on('change', function (event) {
-        	if ($(event.target).find('[data-custom-option="1"]:selected').length) {
-    			$(profileEdit.cityId).hide();
-    			$(profileEdit.citySteppeId).show();
-    			$(profileEdit.citySteppeId).focus();
+          if ($(event.target).find('[data-custom-option="1"]:selected').length) {
+          $(profileEdit.cityId).hide();
+          $(profileEdit.citySteppeId).show();
+          $(profileEdit.citySteppeId).focus();
             }
         });
         if ($(profileEdit.countryId).val() == '') {
-        	$(profileEdit.countryId).trigger('change');
+          $(profileEdit.countryId).trigger('change');
         }
     });
 </script>

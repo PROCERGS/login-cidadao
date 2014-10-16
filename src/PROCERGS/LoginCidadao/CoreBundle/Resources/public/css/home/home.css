@@ -23,7 +23,7 @@ body {
     box-shadow: 1px 1px 1px #CCC;
     height: 460px;
     margin-bottom: 30px;
-    padding-top: 30px;
+    padding: 30px 15px;
     position: relative;
 }
 
@@ -221,4 +221,13 @@ body {
 
 #login-box #resetting_request {
   font-size: 12px;
+}
+
+footer .content {
+  background: none;
+}
+
+footer .inner-row {
+  background-color: #222;
+  margin: 0;
 }

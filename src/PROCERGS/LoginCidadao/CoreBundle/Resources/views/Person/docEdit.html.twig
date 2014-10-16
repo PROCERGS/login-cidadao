@@ -96,43 +96,43 @@ rgGrid.getGrid = function() {
         url: routeRgGrid,
         dataType : 'html',
         success : function(data, textStatus, jqXHR) {
-        	$('#rg-grid-place').html(data);
-        	$('html, body').animate({scrollTop: $('#rg-grid-place').offset().top});
+          $('#rg-grid-place').html(data);
+          $('html, body').animate({scrollTop: $('#rg-grid-place').offset().top});
         }
     });
 };
 $(document).on('click', '#new_rg',  function() {
-	$.ajax({
-		type: 'get',
-		url: routeRgEdit,
-		dataType : 'html',
-		success : function(data, textStatus, jqXHR) {
-			$('#rg-edit').html(data);
-			$('html, body').animate({scrollTop: $('#rg-edit').offset().top});
-		}
+  $.ajax({
+    type: 'get',
+    url: routeRgEdit,
+    dataType : 'html',
+    success : function(data, textStatus, jqXHR) {
+      $('#rg-edit').html(data);
+      $('html, body').animate({scrollTop: $('#rg-edit').offset().top});
+    }
     });
 });
 $(document).on('click', '#rg-grid .edit-row-grid',  function() {
-	var $id = $(this).data('row').id;
-	$.ajax({
-		type: 'get',
-		url: routeRgEdit + '?id='+ $id,
-		dataType : 'html',
-		success : function(data, textStatus, jqXHR) {
-			$('#rg-edit').html(data);
-			$('html, body').animate({scrollTop: $('#rg-edit').offset().top});
-		}
+  var $id = $(this).data('row').id;
+  $.ajax({
+    type: 'get',
+    url: routeRgEdit + '?id='+ $id,
+    dataType : 'html',
+    success : function(data, textStatus, jqXHR) {
+      $('#rg-edit').html(data);
+      $('html, body').animate({scrollTop: $('#rg-edit').offset().top});
+    }
     });
 });
 $(document).on('click', '#rg-grid .remove-row-grid',  function() {
-	var $id = $(this).data('row').id;
-	$.ajax({
-		type: 'get',
-		url: routeRgRemove + '?id='+ $id,
-		dataType : 'html',
-		success : function(data, textStatus, jqXHR) {
-			$('#rg-edit').html(data);
-		}
+  var $id = $(this).data('row').id;
+  $.ajax({
+    type: 'get',
+    url: routeRgRemove + '?id='+ $id,
+    dataType : 'html',
+    success : function(data, textStatus, jqXHR) {
+      $('#rg-edit').html(data);
+    }
     });
 });
 var profileDocEdit = {};
