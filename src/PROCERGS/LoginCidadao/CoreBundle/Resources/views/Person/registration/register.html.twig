@@ -10,21 +10,23 @@
 </div>
 
 <div class="row">
-    {% set common_row_class = 'lc-box col-xs-12 col-md-5 col-md-offset-1 pull-right' %}
+    {% set common_row_class = 'col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-0 col-md-push-6 col-lg-4 col-lg-offset-1' %}
     {{ include("PROCERGSLoginCidadaoCoreBundle::common.register.html.twig") }}
     {% trans_default_domain 'messages' %}
-    <div id="register-aside" class="col-xs-12 col-md-6 hidden-xs pull-left">
-        <h3 class="title">{% trans %}With only one account{% endtrans %}</h3>
+    <div class="col-xs-12 hidden-xs col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-0 col-md-pull-6 col-lg-5 col-lg-offset-2">
+      <div id="register-aside">
+          <h3 class="title">{% trans %}With only one account{% endtrans %}</h3>
 
-        <p class="text">{% trans %}Access to all services offered by the Government{% endtrans %}</p>
-        {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_strip_2x.png' %}
-        <img src="{{ asset_url }}" alt="{%trans%}Available services{%endtrans%}" class="center-block">
-        {% endimage %}
+          <p class="text">{% trans %}Access to all services offered by the Government{% endtrans %}</p>
+          {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_strip_2x.png' %}
+          <img src="{{ asset_url }}" alt="{%trans%}Available services{%endtrans%}" class="center-block">
+          {% endimage %}
 
-        <p class="text">{% trans %}With only the password and CPF. Making accessing the services much simpler.{% endtrans %}</p>
-        {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_ng.png' %}
-        <img src="{{ asset_url }}" alt="{%trans%}Logo Nota Fiscal Gaúcha{%endtrans%}" class="center-block">
-        {% endimage %}
+          <p class="text">{% trans %}With only the password and CPF. Making accessing the services much simpler.{% endtrans %}</p>
+          {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_ng.png' %}
+          <img src="{{ asset_url }}" alt="{%trans%}Logo Nota Fiscal Gaúcha{%endtrans%}" class="center-block">
+          {% endimage %}
+      </div>
     </div>
 </div>
 
