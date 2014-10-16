@@ -2,7 +2,7 @@
 
 namespace PROCERGS\LoginCidadao\NotificationBundle\Handler;
 
-use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationInterface;
+use PROCERGS\LoginCidadao\NotificationBundle\Model\NotificationInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\CategoryInterface;

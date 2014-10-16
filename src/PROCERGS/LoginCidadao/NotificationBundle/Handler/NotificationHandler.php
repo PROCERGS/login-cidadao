@@ -6,7 +6,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\FormFactoryInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Handler\NotificationHandlerInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Form\NotificationType;
-use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationInterface;
+use PROCERGS\LoginCidadao\NotificationBundle\Model\NotificationInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Exception\InvalidFormException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;

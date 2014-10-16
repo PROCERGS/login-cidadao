@@ -3,7 +3,7 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Helper;
 
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationInterface;
+use PROCERGS\LoginCidadao\NotificationBundle\Model\NotificationInterface;
 use Symfony\Component\Security\Core\SecurityContext;
 use Doctrine\ORM\EntityManager;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
