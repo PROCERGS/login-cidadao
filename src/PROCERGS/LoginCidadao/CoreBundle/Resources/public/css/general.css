@@ -134,9 +134,12 @@ img.desaturate {
 }
 
 footer {
-    background-color: #3b3a33;
     margin-top: 20px;
     clear: both;
+}
+
+footer .content {
+  background-color: #3b3a33;
 }
 
 footer h3 {
