@@ -18,7 +18,7 @@
   position: fixed;
   top: 51px;
   bottom: 0;
-  left: -200px;
+  /*left: -200px;*/
   z-index: 1000;
   display: block;
   padding: 0;
@@ -189,6 +189,12 @@
     position: absolute;
     z-index: 100;
     */
+    bottom: auto;
+    height: auto;
+    max-width: 200px;
+    left: -200px;
+    position: absolute;
+    overflow: hidden;
 
     -webkit-transition: 0.5s ease-in-out;
     -moz-transition: 0.5s ease-in-out;
@@ -224,6 +230,8 @@
     -o-transform: translateX(200px);
     -ms-transform: translateX(200px);
     transform: translateX(200px);
+    /*left: 200px;
+    position: relative;*/
   }
 
   .settings-content h3 {
@@ -231,7 +239,7 @@
   }
 
   .settings-content .form-content {
-    padding: 20px 20px;
+    padding: 20px 0;
   }
 
   footer .content {
