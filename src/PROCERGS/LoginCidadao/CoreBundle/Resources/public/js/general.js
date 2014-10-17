@@ -527,8 +527,7 @@ $(function() {
 
     // sidebar behavior on mobile
     $('#toggle-settings-nav').on('click', function() {
-      $('.settings-nav, .settings-content, footer .content').toggleClass('menu-open');
-      $("body").toggleClass("no-scroll")
+      $('body').toggleClass('menu-open', 'no-scroll');
     });
 
     $('.nfgpopup').on('click', function (event){

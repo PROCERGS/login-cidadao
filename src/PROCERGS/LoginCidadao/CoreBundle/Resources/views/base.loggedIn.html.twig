@@ -22,108 +22,117 @@
 </div>
 
 {% for flashMessage in app.session.flashbag.get('success') %}
-    <div class="alert alert-success">
-        {{ flashMessage }}
+<div class="row">
+  <div class="col-sm-7 col-sm-offset-4 col-md-7 col-md-offset-4 col-lg-6 col-lg-offset-4">
+    <div class="alert alert-success alert-bar">
+      {{ flashMessage }}
     </div>
+  </div>
+</div>
 {% endfor %}
+
 {% for flashMessage in app.session.flashbag.get('error') %}
-    <div class="alert alert-danger">
-        {{ flashMessage }}
+<div class="row">
+  <div class="col-sm-7 col-sm-offset-4 col-md-7 col-md-offset-4 col-lg-6 col-lg-offset-4">
+    <div class="alert alert-danger alert-bar">
+      {{ flashMessage }}
     </div>
+  </div>
+</div>
 {% endfor %}
 
-    <div class="row">
-    {% block sidebar %}
-        <div class="settings-nav col-sm-3 col-lg-2">
-            <ul class="nav nav-pills nav-stacked">
-                <li class="profile glyph {{ app.request.attributes.get('_route') == 'fos_user_profile_edit' ? 'active' }}">
-                    <a href="{{ path('fos_user_profile_edit') }}" class="clearfix">
-                        <i class="glyphicon glyphicon-user icon"></i>
-                        <span>{% trans %}Profile{% endtrans %}</span>
-                    </a>
-                </li>
-                <li class="profile glyph {{ app.request.attributes.get('_route') == 'lc_profile_doc_edit' ? 'active' }}">
-                    <a href="{{ path('lc_profile_doc_edit') }}" class="clearfix">
-                        <span>{% trans %}Documents{% endtrans %}</span>
-                        <i class="glyphicon glyphicon-file icon"></i>
-                    </a>
-                </li>
-                <li class="profile glyph {{ app.request.attributes.get('_route') == 'lc_person_addresses' ? 'active' }}">
-                    <a href="{{ path('lc_person_addresses') }}" class="clearfix">
-                        <span>{% trans %}Addresses{% endtrans %}</span>
-                        <i class="glyphicon glyphicon-map-marker icon"></i>
-                    </a>
-                </li>
-                <li class="services glyph {{ app.request.attributes.get('_route') == 'lc_authorization_list' or app.request.attributes.get('_route') == 'lc_app_details' ? 'active' }}">
-                    <a href="{{ path('lc_authorization_list') }}" class="clearfix">
-                        <span>{% trans %}Services{% endtrans %}</span>
-                        <i class="glyphicon glyphicon-th icon"></i>
-                    </a>
-                </li>
-                <li class="services glyph">
-                    <a href="{{ path('lc_not_inbox') }}" class="clearfix">
-                        <span>{% trans %}Notifications{% endtrans %}</span>
-                        <i class="glyphicon glyphicon-bell icon"></i>
-                    </a>
-                </li>
-                <li class="username {{ app.request.attributes.get('_route') == 'lc_update_username' ? 'active' }}">
-                    <a href="{{ path('lc_update_username')}}" class="clearfix">
-                        <span>{% trans %}Change Username{% endtrans %}</span>
-                        <i class="glyphicon glyphicon-pencil icon"></i>
-                    </a>
-                </li>
-                <li class="password {{ app.request.attributes.get('_route') == 'fos_user_change_password' ? 'active' }}"   >
-                    <a href="{{ path('fos_user_change_password')}}" class="clearfix">
-                        <span>{% trans %}Change password{% endtrans %}</span>
-                        <i class="glyphicon glyphicon-lock icon"></i>
-                    </a>
-                </li>
-                {% if app.user is not null and is_granted('ROLE_SUPER') %}
-                <li class="services glyph">
-                    <a href="{{ path('lc_admin') }}" class="clearfix">
-                        <span>{{ 'admin.area'|trans() }}</span>
-                        <i class="glyphicon glyphicon-tasks icon"></i>
-                    </a>
-                </li>
-                {% endif %}
-                {% if app.user is not null and is_granted('ROLE_DEV') %}
-                <li class="services glyph">
-                    <a href="{{ path('lc_dev') }}" class="clearfix">
-                        <span>{{ 'developer.area'|trans() }}</span>
-                        <i class="glyphicon glyphicon-wrench icon"></i>
-                    </a>
-                </li>
-                {% endif %}
-            </ul>
-        </div>
-    {% endblock sidebar %}
+<div class="row">
+  {% block sidebar %}
+  <div class="settings-nav col-sm-3 col-lg-2">
+    <ul class="nav nav-pills nav-stacked">
+      <li class="profile glyph {{ app.request.attributes.get('_route') == 'fos_user_profile_edit' ? 'active' }}">
+        <a href="{{ path('fos_user_profile_edit') }}" class="clearfix">
+          <i class="glyphicon glyphicon-user icon"></i>
+          <span>{% trans %}Profile{% endtrans %}</span>
+        </a>
+      </li>
+      <li class="profile glyph {{ app.request.attributes.get('_route') == 'lc_profile_doc_edit' ? 'active' }}">
+        <a href="{{ path('lc_profile_doc_edit') }}" class="clearfix">
+          <span>{% trans %}Documents{% endtrans %}</span>
+          <i class="glyphicon glyphicon-file icon"></i>
+        </a>
+      </li>
+      <li class="profile glyph {{ app.request.attributes.get('_route') == 'lc_person_addresses' ? 'active' }}">
+        <a href="{{ path('lc_person_addresses') }}" class="clearfix">
+          <span>{% trans %}Addresses{% endtrans %}</span>
+          <i class="glyphicon glyphicon-map-marker icon"></i>
+        </a>
+      </li>
+      <li class="services glyph {{ app.request.attributes.get('_route') == 'lc_authorization_list' or app.request.attributes.get('_route') == 'lc_app_details' ? 'active' }}">
+        <a href="{{ path('lc_authorization_list') }}" class="clearfix">
+          <span>{% trans %}Services{% endtrans %}</span>
+          <i class="glyphicon glyphicon-th icon"></i>
+        </a>
+      </li>
+      <li class="services glyph">
+        <a href="{{ path('lc_not_inbox') }}" class="clearfix">
+          <span>{% trans %}Notifications{% endtrans %}</span>
+          <i class="glyphicon glyphicon-bell icon"></i>
+        </a>
+      </li>
+      <li class="username {{ app.request.attributes.get('_route') == 'lc_update_username' ? 'active' }}">
+        <a href="{{ path('lc_update_username')}}" class="clearfix">
+          <span>{% trans %}Change Username{% endtrans %}</span>
+          <i class="glyphicon glyphicon-pencil icon"></i>
+        </a>
+      </li>
+      <li class="password {{ app.request.attributes.get('_route') == 'fos_user_change_password' ? 'active' }}"   >
+        <a href="{{ path('fos_user_change_password')}}" class="clearfix">
+          <span>{% trans %}Change password{% endtrans %}</span>
+          <i class="glyphicon glyphicon-lock icon"></i>
+        </a>
+      </li>
+      {% if app.user is not null and is_granted('ROLE_SUPER') %}
+      <li class="services glyph">
+        <a href="{{ path('lc_admin') }}" class="clearfix">
+          <span>{{ 'admin.area'|trans() }}</span>
+          <i class="glyphicon glyphicon-tasks icon"></i>
+        </a>
+      </li>
+      {% endif %}
+      {% if app.user is not null and is_granted('ROLE_DEV') %}
+      <li class="services glyph">
+        <a href="{{ path('lc_dev') }}" class="clearfix">
+          <span>{{ 'developer.area'|trans() }}</span>
+          <i class="glyphicon glyphicon-wrench icon"></i>
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+  {% endblock sidebar %}
 
-    <div class="settings-content col-sm-7 col-sm-offset-4 col-md-7 col-md-offset-4 col-lg-6 col-lg-offset-4">
+  <div class="settings-content col-sm-7 col-sm-offset-4 col-md-7 col-md-offset-4 col-lg-6 col-lg-offset-4">
     {% block content %}{% endblock content %}
-    </div>
+  </div>
 
-    </div>
+</div>
 
 {% endblock body %}
 
 {% block footer %}
 {% set columns = 'col-sm-7 col-sm-offset-4 col-md-7 col-md-offset-4 col-lg-6 col-lg-offset-4' %}
-    {{ include("PROCERGSLoginCidadaoCoreBundle::footer.html.twig") }}
+{{ include("PROCERGSLoginCidadaoCoreBundle::footer.html.twig") }}
 {% endblock %}
 
 {% block stylesheets %}
 {{ parent() }}
 
-    {% stylesheets 'bundles/procergslogincidadaocore/css/logged/*.css' filter='cssrewrite' filter='?uglifycss' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+{% stylesheets 'bundles/procergslogincidadaocore/css/logged/*.css' filter='cssrewrite' filter='?uglifycss' %}
+<link rel="stylesheet" href="{{ asset_url }}" />
+{% endstylesheets %}
 
 {% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
-    <script type="text/javascript">
-        validator.cep.urlQuery = '{{ path('lc_consultaCep2') }}';
-        var notificationUrl = '{{ path('lc_not_inbox_show2') }}';
-    </script>
+<script type="text/javascript">
+  validator.cep.urlQuery = '{{ path('lc_consultaCep2') }}';
+  var notificationUrl = '{{ path('lc_not_inbox_show2') }}';
+</script>
 {% endblock %}
