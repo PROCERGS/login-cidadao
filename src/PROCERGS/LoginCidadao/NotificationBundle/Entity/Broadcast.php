@@ -56,7 +56,7 @@ class Broadcast
     /**
      * @ORM\Column(name="html_tpl", type="text", nullable=true)
      */
-    private $htmlTpl;
+    private $htmlTemplate;
 
     public function getId()
     {
@@ -109,6 +109,28 @@ class Broadcast
     public function setReceivers($receivers)
     {
         $this->receivers = $receivers;
+        return $this;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    public function getHtmlTemplate()
+    {
+        return $this->htmlTemplate;
+    }
+
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    public function setHtmlTemplate($htmlTemplate)
+    {
+        $this->htmlTemplate = $htmlTemplate;
         return $this;
     }
 
