@@ -16,6 +16,15 @@
 
 .common-grid-results .header {
     display: none;
+    padding: 10px 15px;
+    border: 1px solid rgba(0, 0, 0, 0);
+    color: #333;
+    background-color: #F5F5F5;
+    border-color: #DDD;
+    background-image: -webkit-linear-gradient(top,#F5F5F5 0,#E8E8E8 100%);
+    background-image: linear-gradient(to bottom,#F5F5F5 0,#E8E8E8 100%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#ffe8e8e8', GradientType=0);
 }
 
 .common-grid-results .common-grid-result:nth-child(2n+1) {

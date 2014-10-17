@@ -1,17 +1,15 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle:Dev:base.html.twig' %}
 {% block content %}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">{{ 'Category'|trans }}</h3>
-        </div>
-    </div>
+<div class="content">
+<h1 class="visible-xs">{{ 'Category'|trans }}</h1>
+
 <div id="notification_id">
     {% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
     {{ form_start(form, {'attr' : {'role' : 'form'}}) }}
     {{ form_errors(form) }}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">{{ 'General'|trans }}</h3>
+            <h2 class="panel-title">{{ 'General'|trans }}</h2>
         </div>
         <div class="panel-body">
             <div class="row clearfix">
@@ -38,7 +36,7 @@
     {% if form.markdownTemplate is defined %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">{{ 'Templates'|trans }}</h3>
+            <h2 class="panel-title">{{ 'Templates'|trans }}</h2>
         </div>
         <div class="panel-body">
             <div class="row clearfix">
@@ -59,7 +57,7 @@
 {% if placeholderGrid is defined %}
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">{{ 'Placeholders'|trans }}</h3>
+        <h2 class="panel-title">{{ 'Placeholders'|trans }}</h2>
     </div>
     <div class="panel-body">
         <div class="row clearfix">
@@ -73,6 +71,8 @@
 </div>
 {% endif %}
 <div id="placeholder-edit"></div>
+
+</div>
 {% endblock %}
 
 {% block javascripts %}
@@ -84,59 +84,59 @@ var routePlaceholderRemove = '{{ path('lc_dev_not_placeholder_remove') }}';
 var routePlaceholderGrid = '{{ path('lc_dev_not_placeholder_grid') }}';
 var placeholderGrid = {};
 placeholderGrid.getGrid = function() {
-	if (!$(categoryId).length) {
-	}
-	$.ajax({
-		type: 'get',
-		url: routePlaceholderGrid + '?category_id='+ $(categoryId).val(),
-		dataType : 'html',
-		success : function(data, textStatus, jqXHR) {
-			$('#placeholder-grid-place').html(data);
-			$('html, body').animate({scrollTop: $('#placeholder-grid-place').offset().top});
-		}
+  if (!$(categoryId).length) {
+  }
+  $.ajax({
+    type: 'get',
+    url: routePlaceholderGrid + '?category_id='+ $(categoryId).val(),
+    dataType : 'html',
+    success : function(data, textStatus, jqXHR) {
+      $('#placeholder-grid-place').html(data);
+      $('html, body').animate({scrollTop: $('#placeholder-grid-place').offset().top});
+    }
     });
 };
 $(document).on('click', '#new_placeholder',  function() {
-	if (!$(categoryId).length) {
-		return;
-	}
-	$.ajax({
-		type: 'get',
-		url: routePlaceholderEdit + '?category_id='+ $(categoryId).val(),
-		dataType : 'html',
-		success : function(data, textStatus, jqXHR) {
-			$('#placeholder-edit').html(data);
-			$('html, body').animate({scrollTop: $('#placeholder-edit').offset().top});
-		}
+  if (!$(categoryId).length) {
+    return;
+  }
+  $.ajax({
+    type: 'get',
+    url: routePlaceholderEdit + '?category_id='+ $(categoryId).val(),
+    dataType : 'html',
+    success : function(data, textStatus, jqXHR) {
+      $('#placeholder-edit').html(data);
+      $('html, body').animate({scrollTop: $('#placeholder-edit').offset().top});
+    }
     });
 });
 $(document).on('click', '#placeholder-grid .edit-row-grid',  function() {
-	if (!$(categoryId).length) {
-		return;
-	}
-	var $id = $.parseJSON($(this).attr('data-row')).id;
-	$.ajax({
-		type: 'get',
-		url: routePlaceholderEdit + '?id='+ $id,
-		dataType : 'html',
-		success : function(data, textStatus, jqXHR) {
-			$('#placeholder-edit').html(data);
-			$('html, body').animate({scrollTop: $('#placeholder-edit').offset().top});
-		}
+  if (!$(categoryId).length) {
+    return;
+  }
+  var $id = $.parseJSON($(this).attr('data-row')).id;
+  $.ajax({
+    type: 'get',
+    url: routePlaceholderEdit + '?id='+ $id,
+    dataType : 'html',
+    success : function(data, textStatus, jqXHR) {
+      $('#placeholder-edit').html(data);
+      $('html, body').animate({scrollTop: $('#placeholder-edit').offset().top});
+    }
     });
 });
 $(document).on('click', '#placeholder-grid .remove-row-grid',  function() {
-	if (!$(categoryId).length) {
-		return;
-	}
-	var $id = $.parseJSON($(this).attr('data-row')).id;
-	$.ajax({
-		type: 'get',
-		url: routePlaceholderRemove + '?id='+ $id,
-		dataType : 'html',
-		success : function(data, textStatus, jqXHR) {
-			$('#placeholder-edit').html(data);
-		}
+  if (!$(categoryId).length) {
+    return;
+  }
+  var $id = $.parseJSON($(this).attr('data-row')).id;
+  $.ajax({
+    type: 'get',
+    url: routePlaceholderRemove + '?id='+ $id,
+    dataType : 'html',
+    success : function(data, textStatus, jqXHR) {
+      $('#placeholder-edit').html(data);
+    }
     });
 });
 </script>
