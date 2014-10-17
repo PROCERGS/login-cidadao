@@ -526,7 +526,8 @@ $(function() {
     });
 
     $('#toggle-settings-nav').on('click', function() {
-      $('.settings-nav, .settings-content').toggleClass('menu-open');
+      $('.settings-nav, .settings-content, footer .content').toggleClass('menu-open');
+      $("body").toggleClass("no-scroll")
     });
     $('.nfgpopup').on('click', function (event){
       event.preventDefault();
@@ -591,7 +592,7 @@ $(function(){
           if (self.data('row').client_id) {
               var sideSelector = $('#inbox-count-unread-'+self.data('row').client_id);
               if (sideSelector.length) {
-                  sideSelector.contents().first().replaceWith(document.createTextNode(parseInt(sideSelector.text()) - 1)); 
+                  sideSelector.contents().first().replaceWith(document.createTextNode(parseInt(sideSelector.text()) - 1));
               }
           }
         }
