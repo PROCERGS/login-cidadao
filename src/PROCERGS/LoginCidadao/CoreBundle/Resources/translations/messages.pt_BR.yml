@@ -596,3 +596,6 @@ If the address is in another country leave the city blank and fill in this infor
 Change: Alterar
 'This RG is invalid' : 'Esse RG é inválido'
 'You already have an ID registered for this State' : 'Você ja tem um RG cadastrado para esse Estado'
+notification.config.user.offer.send.email: 'Enviar notificação também por e-mail?'
+notification.config.category.change.success: 'Configuração alterada com sucesso'
+notification.config.category.title: 'Notificações - Configurações'

@@ -121,7 +121,7 @@ class Category implements CategoryInterface
     protected $shouts;    
     
     /**
-     * @ORM\OneToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\PersonNotificationOption", mappedBy="category") 
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\PersonNotificationOption", mappedBy="category") 
      */
     protected $personNotificationOption;
 

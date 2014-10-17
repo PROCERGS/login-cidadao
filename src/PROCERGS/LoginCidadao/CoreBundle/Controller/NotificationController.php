@@ -14,6 +14,8 @@ use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientNotPerFormType;
 use Symfony\Component\HttpFoundation\Response;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\PersonNotificationOption;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\PersonNotificationOptionFormType;
+use Symfony\Component\Form\FormError;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 class NotificationController extends Controller
 {
@@ -219,25 +221,40 @@ class NotificationController extends Controller
         $resultset = $em
         ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
         ->createQueryBuilder('cnc')
+        ->select('cnc, cnp')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
         ->leftJoin('PROCERGSLoginCidadaoCoreBundle:Notification\PersonNotificationOption', 'cnp', 'with', 'cnp.category = cnc and cnp.person = :person')
         ->where('c.id = :client ')
         ->setParameter('client', $id)
         ->setParameter('person', $this->getUser())
-        ->getQuery()->getResult();
-        foreach ($resultset as &$res) {
-            $c = $res->getPersonNotificationOption();
-            if (!$c) {
-                $a = new PersonNotificationOption();
-                $a->setPerson($this->getUser());
-                $a->setCategory($res);
-                $a->setSendEmail($res->getEmailable());
-                $a->setSendPush(false);
-                $a->setCreatedAt(new \DateTime());
-                $em->persist($a);
-                $res->setPersonNotificationOption($a);
-            }
-            $forms[] = $this->createForm(new PersonNotificationOptionFormType(), $c)->createView();
+        ->getQuery()->setFetchMode('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'client', ClassMetadata::FETCH_EAGER) ->getResult();
+        for ($i = 0, $tot = count($resultset); $i < $tot; $i++) {
+            if ($i%2) {
+                $c =& $resultset[$i];
+                if (!$c) {
+                    $res =& $resultset[$i-1];                   
+                    $a = new PersonNotificationOption();
+                    $a->setPerson($this->getUser());
+                    $a->setCategory($res);
+                    $a->setSendEmail($res->getEmailable());
+                    $a->setSendPush(false);
+                    $a->setCreatedAt(new \DateTime());
+                    $em->persist($a);
+                    $c =& $a;
+                }
+                $formId = 'person-notifcation-category-'.$resultset[$i-1]->getId();
+                $form = $this->createForm(new PersonNotificationOptionFormType(), $c, array(
+                    'action'=> $this->generateUrl('lc_not_config_change'),
+                    'attr' => array(
+                        'class' => 'form-ajax', 
+                        'id' => $formId,
+                        'role' => 'form',
+                        'ajax-target' => 'div:has(#'. $formId .'):last'
+                    )
+                ));
+                $forms[$i-1] = $form->createView();
+                unset($resultset[$i]);
+            }         
         }
         if (isset($a)) {
             $em->flush();
@@ -263,18 +280,30 @@ class NotificationController extends Controller
             ->where('cnp.id = :client ')
             ->setParameter('client', $id)
             ->setParameter('person', $this->getUser())
-            ->getQuery()->getOneOrNullResult();
+            ->getQuery()->setFetchMode('PROCERGSLoginCidadaoCoreBundle:Notification\PersonNotificationOption', 'category', ClassMetadata::FETCH_EAGER)->getOneOrNullResult();
         }
         if (!$config) {
-            return $this->gridFullAction();
+            die('dunno');
         }
-        $form = $this->createForm(new PersonNotificationOptionFormType(), $config);
+        $formId = 'person-notifcation-category-'.$config->getCategory()->getId();
+        $form = $this->createForm(new PersonNotificationOptionFormType(), $config, array(
+            'action'=> $this->generateUrl('lc_not_config_change'),
+            'attr' => array(
+                'class' => 'form-ajax',
+                'id' => $formId,
+                'role' => 'form',
+                'ajax-target' => 'div:has(#'. $formId .'):last'
+            )
+        ));
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
             $manager->persist($config);
             $manager->flush();
         }
-        return array('form' => $form->createView(), 'cnc_id' => $config->getCategory()->getId());
+        $message = "notification.config.category.change.success";
+        //$translator = $this->get('translator');        
+        //$form->addError(new FormError($translator->trans("notification.missing.personnotificationoption")));
+        return array('form' => $form->createView(), 'form_message' => $message);
     }
 
 
