@@ -19,7 +19,7 @@ body.no-scroll {
 .settings-nav {
   background-color: #F1F1F1;
   position: fixed;
-  top: 51px;
+  top: 50px;
   bottom: 0;
   /*left: -200px;*/
   z-index: 1000;
