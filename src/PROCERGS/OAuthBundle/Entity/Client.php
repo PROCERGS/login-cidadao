@@ -19,7 +19,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 
 /**
- * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\NotificationBundle\Entity\ClientRepository")
+ * @ORM\Entity(repositoryClass="PROCERGS\OAuthBundle\Entity\ClientRepository")
  * @ORM\Table(name="client")
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity("name")
