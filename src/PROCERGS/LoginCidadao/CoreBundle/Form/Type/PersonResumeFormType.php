@@ -1,4 +1,5 @@
 <?php
+
 namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
@@ -12,34 +13,39 @@ class PersonResumeFormType extends CommonFormType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('username', null, array(
+        $builder->add('username', null,
+                      array(
             'read_only' => 'true',
         ));
-        $builder->add('email', 'email', array(
+        $builder->add('email', 'email',
+                      array(
             'label' => 'form.email',
             'read_only' => 'true',
             'translation_domain' => 'FOSUserBundle'
         ));
-        $builder->add('firstName', 'text', array(
+        $builder->add('firstName', 'text',
+                      array(
             'label' => 'form.firstName',
             'read_only' => 'true',
             'translation_domain' => 'FOSUserBundle'
         ));
-        $builder->add('surname', 'text', array(
+        $builder->add('surname', 'text',
+                      array(
             'label' => 'form.surname',
             'read_only' => 'true',
             'translation_domain' => 'FOSUserBundle'
         ));
-        $builder->add('birthdate', 'birthday', array(
+        $builder->add('birthdate', 'birthday',
+                      array(
             'required' => false,
             'read_only' => 'true',
-            'format' => 'dd MMMM yyyy',
-            'widget' => 'choice',
-            'years' => range(date('Y'), 1898),
+            'format' => 'yyyy-MM-dd',
+            'widget' => 'single_text',
             'label' => 'form.birthdate',
             'translation_domain' => 'FOSUserBundle'
         ));
-        $builder->add('mobile', null, array(
+        $builder->add('mobile', null,
+                      array(
             'required' => false,
             'read_only' => 'true',
             'label' => 'form.mobile',
@@ -51,19 +57,20 @@ class PersonResumeFormType extends CommonFormType
         $allRoles = array(
             'ROLE_FACEBOOK' => $this->translator->trans('ROLE_FACEBOOK'),
             'ROLE_DEV' => $this->translator->trans('ROLE_DEV'),
-            'ROLE_SUPER'=> $this->translator->trans('ROLE_SUPER')
+            'ROLE_SUPER' => $this->translator->trans('ROLE_SUPER')
         );
         $allRoles['ROLE_ADMIN'] = $this->translator->trans('ROLE_ADMIN');
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use (&$em, &$user, &$allRoles)
-        {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA,
+                                   function (FormEvent $event) use (&$em, &$user, &$allRoles) {
             $person = $event->getData();
             $form = $event->getForm();
             $name = '';
             if ($var = $person->getCountry()) {
                 $name = $var->getName();
             }
-            $form->add('country', 'text', array(
+            $form->add('country', 'text',
+                       array(
                 'required' => true,
                 'mapped' => false,
                 'read_only' => true,
@@ -73,7 +80,8 @@ class PersonResumeFormType extends CommonFormType
             if ($var = $person->getState()) {
                 $name = $var->getName();
             }
-            $form->add('state', 'text', array(
+            $form->add('state', 'text',
+                       array(
                 'required' => true,
                 'read_only' => 'true',
                 'mapped' => false,
@@ -84,7 +92,8 @@ class PersonResumeFormType extends CommonFormType
             if ($var = $person->getCity()) {
                 $name = $var->getName();
             }
-            $form->add('city', 'text', array(
+            $form->add('city', 'text',
+                       array(
                 'required' => true,
                 'read_only' => 'true',
                 'mapped' => false,
@@ -95,18 +104,20 @@ class PersonResumeFormType extends CommonFormType
             $isPersonAdmin = in_array('ROLE_ADMIN', $person->getRoles());
             if ($isPersonAdmin) {
                 if ($isUserAdmin) {
-                    $form->add('roles', 'choice', array(
-                        'choices'   => $allRoles,
-                        'multiple'  => true,
+                    $form->add('roles', 'choice',
+                               array(
+                        'choices' => $allRoles,
+                        'multiple' => true,
                     ));
                 }
             } else {
                 if (!$isUserAdmin) {
                     unset($allRoles['ROLE_ADMIN']);
                 }
-                $form->add('roles', 'choice', array(
-                    'choices'   => $allRoles,
-                    'multiple'  => true,
+                $form->add('roles', 'choice',
+                           array(
+                    'choices' => $allRoles,
+                    'multiple' => true,
                 ));
             }
         });
@@ -116,4 +127,5 @@ class PersonResumeFormType extends CommonFormType
     {
         return 'person_resume_form_type';
     }
+
 }
