@@ -2,157 +2,158 @@
 
 {% block content %}
 <div class="content applications">
-    <h1>{% trans %}Services{% endtrans %}</h1>
 
     {# ################# #
      #  ACTIVE SERVICES  #
      # ################# #}
-    <section class="active-services">
-        <h2>{% trans %}Active Services{% endtrans %}</h2>
-    {% if user.getAuthorizations|length > 0 %}
-        <ul class="services-grid clearfix" data-columns>
+     <div class="panel panel-default">
+      <div class="panel-heading big-heading">{% trans %}Active Services{% endtrans %}</div>
+      <div class="panel-body">
+        {% if user.getAuthorizations|length > 0 %}
         {% for auth in user.getAuthorizations %}
-            <li class="service">
-                <a href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}">
-                {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
-                    <img src="/{{ auth.client.getPictureWebPath }}" width="65" height="65" alt="" class="center-block">
-                {% else %}
-                    <img src="//placehold.it/65x65" alt="" class="center-block">
-                {% endif %}
-                    <span class="name center-block text-center">{{ auth.client.name }}</span>
-                    <span class="active status">{% trans %}Active{%  endtrans %}</span>
-                </a>
-            </li>
+        <div class="services list-group">
+          <a href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}" class="list-group-item clearfix">
+            {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
+            <img src="/{{ auth.client.getPictureWebPath }}" width="65" height="65" alt="" class="client-img">
+            {% else %}
+            <img src="//placehold.it/65x65" alt="" class="center-block">
+            {% endif %}
+            <h6 class="title">{{ auth.client.name }}{{ auth.client.name }}{{ auth.client.name }}</h6>
+            <div class="status"><span class="label label-success pull-right">{% trans %}Active{%  endtrans %}</span></div>
+          </a>
+        </div>
         {% endfor %}
-        </ul>
-    {% else %}
+
+        {% else %}
         <p class="empty">{% trans %}There are no active services yet.{%  endtrans %}</p>
-    {% endif %}
-    </section>
+        {% endif %}
+      </div>
+    </div>
 
     {# ################ #
      #  OTHER SERVICES  #
      # ################ #}
-{% if apps|length > 0 %}
-    <section class="active-services">
-        <h2>{% trans %}Other Services{% endtrans %}</h2>
-        <ul class="services-grid clearfix" data-columns>
-        {% for client in apps %}
-            <li class="service">
-                <a href="{{ path('lc_app_details', {'clientId': client.id}) }}">
-                {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
-                    <img src="/{{ client.getPictureWebPath }}" width="65" height="65" alt="" class="center-block">
-                {% else %}
-                    <img src="//placehold.it/65x65" alt="" class="center-block">
-                {% endif %}
-                    <span class="name center-block text-center">{{ client.name }}</span>
-                    <span class="status">{% trans %}Inactive{%  endtrans %}</span>
-                </a>
-            </li>
-        {% endfor %}
-        </ul>
-    </section>
-{% endif %}
+     {% if apps|length > 0 %}
+     <div class="panel panel-default">
+      <div class="panel-heading big-heading">{% trans %}Active Services{% endtrans %}</div>
+      <div class="panel-body">
+          {% for client in apps %}
+          <div class="services list-group">
+            <a href="{{ path('lc_app_details', {'clientId': client.id}) }}" class="list-group-item clearfix">
+              {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
+              <img src="/{{ client.getPictureWebPath }}" width="65" height="65" alt="" class="client-img">
+              {% else %}
+              <img src="//placehold.it/65x65" alt="" class="client-img">
+              {% endif %}
+              <h6 class="title">{{ client.name }}</h6>
+              <div class="status"><span class="label label-default pull-right">{% trans %}Inactive{%  endtrans %}</span></div>
+            </a>
+          </div>
+          {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
 
     {# ################# #
      #  SUGGESTION FORM  #
      # ################# #}
-    <section class="new-suggestion">
-        <h2>{{ 'Suggest a Service' | trans }}</h2>
-        <div class="form-content">
-            {{ form_start(form, {'action': path('lc_suggestions_new_service'), 'attr': {'role':'form' } }) }}
-                {{ form_errors(form) }}
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            {{ form_label(form.text, 'Describe your suggestion'|trans) }}
-                            {{ form_widget(form.text, {'attr': {'class': 'form-control'}}) }}
-                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                            <div class="input-error">{{ form_errors(form.text) }}</div>
-                        </div>
-                        <div class="text-right">
-                            <input class="btn btn-success" type="submit" value="{{ 'Send' |trans }}" />
-                        </div>
-                    </div>
-                </div>
-            {{ form_end(form) }}
-            <div class="row">
-            {% for type, messages in app.session.flashbag.all() %}
-                {% for message in messages %}
-                <div class="col-sm-12">
-                    <div class="text-center bg-success flash-{{ type }}">
-                        {{ message }}
-                    </div>
-                </div>
-                {% endfor %}
-            {% endfor %}
+     <section class="new-suggestion">
+      <h2>{{ 'Suggest a Service' | trans }}</h2>
+      <div class="form-content">
+        {{ form_start(form, {'action': path('lc_suggestions_new_service'), 'attr': {'role':'form' } }) }}
+        {{ form_errors(form) }}
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="form-group">
+              {{ form_label(form.text, 'Describe your suggestion'|trans) }}
+              {{ form_widget(form.text, {'attr': {'class': 'form-control'}}) }}
+              <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+              <div class="input-error">{{ form_errors(form.text) }}</div>
             </div>
+            <div class="text-right">
+              <input class="btn btn-success" type="submit" value="{{ 'Send' |trans }}" />
+            </div>
+          </div>
         </div>
+        {{ form_end(form) }}
+        <div class="row">
+          {% for type, messages in app.session.flashbag.all() %}
+          {% for message in messages %}
+          <div class="col-sm-12">
+            <div class="text-center bg-success flash-{{ type }}">
+              {{ message }}
+            </div>
+          </div>
+          {% endfor %}
+          {% endfor %}
+        </div>
+      </div>
     </section>
 
-{% if suggs|length > 0 %}
+    {% if suggs|length > 0 %}
     <section class="last-suggestions">
-        <h2>{{ 'Your last suggested Services'|trans }}</h2>
-        <ul>
+      <h2>{{ 'Your last suggested Services'|trans }}</h2>
+      <ul>
         {% for sugg in suggs %}
-            <li>
-                <span>{{ sugg.text }}</span>
-            </li>
+        <li>
+          <span>{{ sugg.text }}</span>
+        </li>
         {% endfor %}
-        </ul>
+      </ul>
     </section>
-{% endif %}
-</div>
+    {% endif %}
+  </div>
 
 
-{% endblock %}
+  {% endblock %}
 
-{% block javascripts %}
-{{ parent() }}
-{% javascripts '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/salvatore.min.js' %}
-<script type="text/javascript" src="{{ asset_url }}"></script>
-{% endjavascripts %}
+  {% block javascripts %}
+  {{ parent() }}
+  {% javascripts '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/salvatore.min.js' %}
+  <script type="text/javascript" src="{{ asset_url }}"></script>
+  {% endjavascripts %}
 
-<script>
+  <script>
 
-$(function() {
+    $(function() {
     // switch display application list
     $('.app-toggle .btn').on('click', function() {
 
-        if ( !$(this).hasClass('active') ) {
+      if ( !$(this).hasClass('active') ) {
 
-            $('.app-toggle .btn').removeClass('active');
-            $(this).addClass('active');
-            $('#applications .list-group').css({'margin-top': '-30px', 'opacity' : 0 });
+        $('.app-toggle .btn').removeClass('active');
+        $(this).addClass('active');
+        $('#applications .list-group').css({'margin-top': '-30px', 'opacity' : 0 });
 
-            var self = $(this);
-            setTimeout( function(){
-                switch (self.data("display")) {
-                    case 'list':
-                        $('#applications ul').removeClass('grid').addClass('list');
-                        break;
-                    case 'grid':
-                        $('#applications ul').removeClass('list').addClass('grid');
-                        break;
-                }
-                $('#applications .list-group').css({'margin-top' : 0, 'opacity' : 1});
-            }, 1000);
+        var self = $(this);
+        setTimeout( function(){
+          switch (self.data("display")) {
+            case 'list':
+            $('#applications ul').removeClass('grid').addClass('list');
+            break;
+            case 'grid':
+            $('#applications ul').removeClass('list').addClass('grid');
+            break;
+          }
+          $('#applications .list-group').css({'margin-top' : 0, 'opacity' : 1});
+        }, 1000);
 
-        }
+      }
     });
 
     $(window).resize(function() {
 
-        if ($(this).width() < 768) {
-            $('.app-toggle .btn[data-display="grid"]').trigger('click');
-            $('.app-toggle .btn[data-display="list"]').attr('disabled', 'disabled');
-        } else {
-            $('.app-toggle .btn[data-display="list"]').removeAttr('disabled');
-        }
+      if ($(this).width() < 768) {
+        $('.app-toggle .btn[data-display="grid"]').trigger('click');
+        $('.app-toggle .btn[data-display="list"]').attr('disabled', 'disabled');
+      } else {
+        $('.app-toggle .btn[data-display="list"]').removeAttr('disabled');
+      }
 
     });
 
-});
+  });
 
 </script>
 {% endblock %}
