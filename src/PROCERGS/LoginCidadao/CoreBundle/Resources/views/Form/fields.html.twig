@@ -9,12 +9,12 @@
 {% endblock form_row %}
 
 {% block widget_attributes -%}
-    id="{{ id }}" name="{{ full_name }}" 
+    id="{{ id }}" name="{{ full_name }}"
     {%- if read_only %} readonly="readonly"{% endif -%}
     {%- if disabled %} disabled="disabled"{% endif -%}
-    {%- if required %} required="required"{% endif -%}    
+    {%- if required %} required="required"{% endif -%}
     {%- if attr.class is not defined %}
-        class='form-control'     
+        class="form-control"
     {% endif -%}
     {%- for attrname, attrvalue in attr -%}
         {{- " " -}}
@@ -32,7 +32,7 @@
 {% if widget == 'single_text' %}
 {{- block('form_widget_simple') -}}
 {% else -%}
-<div {%- if attr.class is not defined %} class='form-inline birthdate' {% endif -%} {{ block('widget_container_attributes') }}>
+<div {%- if attr.class is not defined %} class="form-inline birthdate" {% endif -%} {{ block('widget_container_attributes') }}>
 {{- date_pattern|replace({
 '{{ year }}': form_widget(form.year),
 '{{ month }}': form_widget(form.month),
@@ -88,14 +88,14 @@
     <div class="ac-sandbox">
         {% set options = choices -%}
         <div class="ac-tags-toolbar btn-toolbar collapse in" role="toolbar">
-            {%- if options|length > 0 -%}        
+            {%- if options|length > 0 -%}
             {% for group_label, choice in options %}
                 {%- if choice is not iterable -%}
                     <div class="btn-group">
                         <span class="label label-info" type="button">{{ choice.label|trans({}, translation_domain) }}</span>
                     </div>
                 {%- endif -%}
-            {% endfor %}        
+            {% endfor %}
             {%- endif -%}
         </div>
         <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>

@@ -21,21 +21,11 @@
             {{ form_errors(form) }}
             <div class="form-content">
                 <div class="col-md-5">
-                    <div class="form-group">
-                        {{ form_label(form.plainPassword.first, 'form.plainPassword' | trans, {'label_attr': {'class': 'sr-only'}}) }}
-                        {{ form_widget(form.plainPassword.first, {'attr' : {'placeholder' : 'form.new_password' }})}}
-                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                        <div class="input-error">{{ form_errors(form.plainPassword.first)}}</div>
-                    </div>
+                    {{ form_row(form.plainPassword.first) }}
+                    {{ form_row(form.plainPassword.second) }}
 
-                    <div class="form-group">
-                        {{ form_label(form.plainPassword.second, 'form.plainPassword' | trans, {'label_attr': {'class': 'sr-only'}}) }}
-                        {{ form_widget(form.plainPassword.second, {'attr' : {'placeholder' : 'form.new_password_confirmation' }})}}
-                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                        <div class="input-error">{{ form_errors(form.plainPassword.first)}}</div>
-                    </div>
 
-                    <input class='btn btn-success btn-sm' type="submit" value="{{ 'resetting.reset.submit'|trans }}" />
+                    {{ form_widget(form.save, { 'label': 'resetting.reset.submit' | trans,  'attr': { 'class': 'btn btn-success' } }) }}
                     <a href="{{ path('lc_home') }}" class='btn btn-default' />{% trans %}Cancel{% endtrans %}<a/>
                 </div>
             </div>

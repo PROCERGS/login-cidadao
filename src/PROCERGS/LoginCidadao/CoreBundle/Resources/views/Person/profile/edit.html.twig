@@ -32,28 +32,14 @@
                         <button type="button" class="btn btn-xs btn-success btn-upload">{{ 'Upload another picture' | trans }}</button>
                         <span class="file-name"></span>
                         {{ form_widget(form.image) }}
-                        <div class="input-error">{{ form_errors(form.image) }}</div>
+                        {{ form_errors(form.image) }}
                     </div>
                 </div>
             </div>
             <div class="panel-body">
-                <div class="form-group">
-                    {{ form_label(form.firstName) }}
-                    {{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error">{{ form_errors(form.firstName) }}</div>
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.surname) }}
-                    {{ form_widget(form.surname, {'attr': {'class': 'form-control'}}) }}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error">{{ form_errors(form.surname) }}</div>
-                </div>
-                <div class="form-inline form-group birthdate">
-                    {{ form_label(form.birthdate) }}
-                    {{ form_widget(form.birthdate) }}
-                    <div class="input-error">{{ form_errors(form.birthdate) }}</div>
-                </div>
+                {{ form_row(form.firstName) }}
+                {{ form_row(form.surname) }}
+                {{ form_row(form.birthdate) }}
             </div>
         </div>
 
@@ -62,38 +48,23 @@
                 <h2 class="panel-title">{{ 'Contact Information' | trans }}</h2>
             </div>
             <div class="panel-body">
-                <div class="form-group">
-                    {{ form_label(form.email) }}
-                    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error">{{ form_errors(form.email) }}</div>
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.country) }}
-                    {{ form_widget(form.country, {'attr': {'class': 'form-control'}}) }}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error">{{ form_errors(form.country) }}</div>
-                </div>
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.country) }}
                 <div class="form-group">
                     {{ form_label(form.state) }}
                     {{ form_widget(form.state, {'attr': {'class': 'form-control'}}) }}
                     {{ form_widget(form.ufsteppe, {'attr': {'class': 'form-control', 'style': 'display: none;'}}) }}
                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error">{{ form_errors(form.state) }}</div>
+                    {{ form_errors(form.state) }}
                 </div>
                 <div class="form-group">
                     {{ form_label(form.city) }}
                     {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
                     {{ form_widget(form.citysteppe, {'attr': {'class': 'form-control', 'style': 'display: none;'}}) }}
                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error">{{ form_errors(form.city) }}</div>
+                    {{ form_errors(form.city) }}
                 </div>
-                <div class="form-group">
-                    {{ form_label(form.mobile) }}
-                    {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error">{{ form_errors(form.mobile) }}</div>
-                </div>
+                {{ form_row(form.mobile) }}
             </div>
         </div>
 

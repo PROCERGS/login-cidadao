@@ -8,6 +8,7 @@
         <h4 class="panel-title" style="padding-top: 7.5px;">
             {{ form_label(form.name, null, {'label_attr': {'class': 'sr-only2' | trans} }) }}
             {{ form_widget(form.name, {'attr': {'placeholder': 'ex: Home Address' | trans} }) }}
+            {{ form_errors(form.name) }}
         </h4>
     </div>
 
@@ -15,18 +16,22 @@
         <div class="form-group">
             {{ form_label(form.line1) }}
             {{ form_widget(form.line1, {'attr': {'placeholder': 'ex: 221B Baker Street' | trans} }) }}
+            {{ form_errors(form.line1) }}
         </div>
         <div class="form-group">
             {{ form_label(form.line2, null, {'label_attr': {'class': 'sr-only' | trans} }) }}
             {{ form_widget(form.line2, {'attr': {'placeholder': 'ex: apartment 2' | trans} }) }}
+            {{ form_errors(form.line2) }}
         </div>
         <div class="form-group">
             {{ form_label(form.postalCode) }}
             {{ form_widget(form.postalCode, {'attr': {'placeholder': 'ex: DE24 8SG' | trans} }) }}
+            {{ form_errors(form.postalCode) }}
         </div>
         <div class="form-group">
             {{ form_label(form.city) }}
             {{ form_widget(form.city, {'attr': {'placeholder': 'ex: London' | trans} }) }}
+            {{ form_errors(form.city) }}
             <small>{% trans %}If the address is in another country leave the city blank and fill in this information in the second line of your address.{% endtrans %}</small>
         </div>
     </div>

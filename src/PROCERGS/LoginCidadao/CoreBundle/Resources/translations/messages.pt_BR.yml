@@ -189,7 +189,7 @@ nfg.corrupted.callback: 'Aparentemente os dados enviados pela Nota Fiscal Gaúch
 nfg.accessid.mismatch: 'Aparentemente a sessão enviada pela Nota Fiscal Gaúcha está corrompida, por favor entre em contato com o administrador do sistema'
 nfg.user.notfound: 'Não foi encontrada uma conta do login cidadao vinculada com sua conta da Nota Fiscal Gaúcha'
 'Suggest a Service': 'Sugira um serviço'
-'Describe your suggestion': Sugestão
+Suggestion: Sugestão
 client.suggestion.registered: 'Sua sugestão foi registrada'
 'Your last suggested Services': 'Seus últimos serviços sugeridos'
 Send: Enviar

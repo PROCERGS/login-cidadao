@@ -11,12 +11,7 @@
       <div class="panel-body">
                 <div class="row clearfix">
                     <div class="col-md-8">
-                        <div class="form-group">
-                            {{ form_label(form.username, 'Username:' | trans, {'label_attr': {'class': 'control-label'}}) }}
-                            {{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
-                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                            <div class="input-error">{{ form_errors(form.username) }}</div>
-                        </div>
+                        {{ form_row(form.username) }}
                     </div>
 
                     {% if emptyPassword == true %}
@@ -26,33 +21,18 @@
                         </div>
 
                         <div class="col-md-8">
-                            <div class="form-group">
-                                {{ form_label(form.plainPassword.first, 'Type in your password here:' | trans, {'label_attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(form.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
-                                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                                <div class="input-error">{{ form_errors(form.plainPassword.first) }}</div>
-                            </div>
+                            {{ form_row(form.plainPassword.first, { 'label': 'Type in your password here:' | trans }) }}
                         </div>
 
                         <div class="col-md-8">
-                            <div class="form-group">
-                                {{ form_label(form.plainPassword.second, 'And then confirm it here:' | trans, {'label_attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(form.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
-                                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                                <div class="input-error">{{ form_errors(form.plainPassword.second) }}</div>
-                            </div>
+                            {{ form_row(form.plainPassword.second, { 'label': 'And then confirm it here:' | trans }) }}
                         </div>
                     {% else %}
                         <div class="col-md-12">
                             <p>{% trans %}To confirm your change, type your current password below:{% endtrans %}</p>
                         </div>
                         <div class="col-md-8">
-                            <div class="form-group">
-                                {{ form_label(form.current_password, 'Current password:' | trans, {'label_attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(form.current_password, {'attr': {'class': 'form-control'}}) }}
-                                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                                <div class="input-error">{{ form_errors(form.current_password) }}</div>
-                            </div>
+                            {{ form_row(form.current_password, { 'label': 'Current password:' | trans }) }}
                         </div>
                     {% endif %}
 
