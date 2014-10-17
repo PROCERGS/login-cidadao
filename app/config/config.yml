@@ -146,6 +146,7 @@ simple_things_entity_audit:
         - PROCERGS\LoginCidadao\CoreBundle\Entity\State
 
         - PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification
+        - PROCERGS\LoginCidadao\NotificationBundle\Entity\Broadcast
         - PROCERGS\LoginCidadao\NotificationBundle\Entity\Category
         - PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationToken
         - PROCERGS\LoginCidadao\NotificationBundle\Entity\PersonOption

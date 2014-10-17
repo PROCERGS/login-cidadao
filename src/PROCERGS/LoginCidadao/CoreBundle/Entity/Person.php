@@ -215,9 +215,9 @@ class Person extends BaseUser implements PersonInterface
     protected $notifications;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Shout", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\Broadcast", mappedBy="person")
      */
-    protected $shouts;
+    protected $broadcasts;
 
     /**
      * @ORM\ManyToMany(targetEntity="PROCERGS\OAuthBundle\Entity\Client", mappedBy="owners")
@@ -1105,11 +1105,11 @@ class Person extends BaseUser implements PersonInterface
     {
         return $this->notificationOptions;
     }
-    
+
     public function setNotificationOptions(ArrayCollection $notificationOptions)
     {
         $this->notificationOptions = $notificationOptions;
         return $this;
     }
-    
+
 }

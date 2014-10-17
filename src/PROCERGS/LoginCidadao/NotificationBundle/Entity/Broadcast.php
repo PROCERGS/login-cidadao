@@ -1,5 +1,6 @@
 <?php
-namespace PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
+
+namespace PROCERGS\LoginCidadao\NotificationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use PROCERGS\OAuthBundle\Entity\Client;
@@ -8,13 +9,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as JMS;
 
 /**
- * Notification
+ * Notification Broadcast entity
  *
- * @ORM\Table(name="shout")
+ * @ORM\Table(name="boradcast")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
-class Shout
+class Broadcast
 {
 
     /**
@@ -30,12 +31,18 @@ class Shout
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\ShoutPerson", mappedBy="shout")
+     * @ORM\ManyToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person")
+     * @ORM\JoinTable(
+     *     name="broadcast_person",
+     *     joinColumns={@ORM\JoinColumn(name="broadcast_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="personid", referencedColumnName="id")}
+     * )
+     * @var \Doctrine\Common\Collections\Collection
      */
-    private $persons;
+    private $receivers;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="shouts")
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="broadcasts")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $person;
@@ -84,24 +91,25 @@ class Shout
         return $this;
     }
 
-    public function getPersons()
-    {
-        return $this->persons;
-    }
-
-    public function setPersons($var)
-    {
-        $this->persons = $var;
-        return $this;
-    }
-
     /**
      * @ORM\PrePersist
      */
     public function setCreatedAtValue()
     {
-        if (! ($this->getCreatedAt() instanceof \DateTime)) {
+        if (!($this->getCreatedAt() instanceof \DateTime)) {
             $this->createdAt = new \DateTime();
         }
     }
+
+    public function getReceivers()
+    {
+        return $this->receivers;
+    }
+
+    public function setReceivers($receivers)
+    {
+        $this->receivers = $receivers;
+        return $this;
+    }
+
 }
