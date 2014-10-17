@@ -19,7 +19,7 @@ body.no-scroll {
 .settings-nav {
   background-color: #F1F1F1;
   position: fixed;
-  top: 51px;
+  top: 50px;
   bottom: 0;
   /*left: -200px;*/
   z-index: 1000;
@@ -32,6 +32,7 @@ body.no-scroll {
   .settings-nav {
     left: 0;
   }
+
 }
 
 .settings-nav li {
@@ -220,7 +221,7 @@ body.no-scroll {
     transform: translateX(-200px);*/
   }
 
-  .settings-nav.menu-open {
+  .menu-open .settings-nav {
     left: 0;
     /*-moz-transform: translateX(0px);
     -webkit-transform: translateX(0px);
@@ -229,14 +230,14 @@ body.no-scroll {
     transform: translateX(0px);*/
   }
 
-  .settings-content, footer .content {
+  .settings-content, footer .content, .alert-bar {
     -webkit-transition: 0.5s ease-in-out;
     -moz-transition: 0.5s ease-in-out;
     -o-transition: 0.5s ease-in-out;
     transition: 0.5s ease-in-out;
   }
 
-  .settings-content.menu-open, footer .content.menu-open {
+  .menu-open .settings-content, .menu-open footer .content, .menu-open .alert-bar {
     -moz-transform: translateX(200px);
     -webkit-transform: translateX(200px);
     -o-transform: translateX(200px);
@@ -404,7 +405,21 @@ body.no-scroll {
 
 
 .last-suggestions {
+  padding: 0 15px 15px;
+}
+
+.last-suggestions .title {
+  font-weight: bold;
+}
+
+.last-suggestions .label {
+  font-size: 12px;
+  margin: 2px;
   word-wrap: break-word;
+  word-break: break-all;
+  display: inline-block;
+  white-space: normal;
+  text-align: left;
 }
 
 .client-details h3 {
@@ -589,40 +604,40 @@ body.no-scroll {
 }
 
 .addresses.content .panel.remove-box {
-    display: none;
+  display: none;
 }
 
 .content.profile-edit h2.personal-info {
-    font-size: 22px;
+  font-size: 22px;
 }
 
 .content.profile-edit .media .profile-picture {
-    max-height: 55px;
-    max-width: 55px;
+  max-height: 55px;
+  max-width: 55px;
 }
 
 .content.profile-edit input[type=date] {
-    display: block;
+  display: block;
 }
 
 .content.profile-edit .picture-upload-box {
-    display: none;
+  display: none;
 }
 
 #inbox-detail .notification-read {
-    background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;
-    color: #222222;
-    border: thin groove #98bf21;
-    padding:20px 0;
+  background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;
+  color: #222222;
+  border: thin groove #98bf21;
+  padding:20px 0;
 }
 
 #inbox-detail .notification-unread {
-    /*background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;*/
-    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9) !important;
-    border-bottom: none;
-    color: #222222;
-    border: thin groove #98bf21;
-    padding:20px 0;
+  /*background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;*/
+  background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9) !important;
+  border-bottom: none;
+  color: #222222;
+  border: thin groove #98bf21;
+  padding:20px 0;
 }
 
 #inbox-detail .notification {

@@ -49,3 +49,7 @@
         display: none;
     }
 }
+
+.common-grid-results .panel-body {
+  padding: 0 15px;
+}
