@@ -16,12 +16,13 @@ class SettingsType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('clients', 'collection',array(
-            'type' => new ClientSettingsType(),
-            'allow_add' => false,
-            'allow_delete' => false
-        ))
-        ->add('save', 'submit', array('attr' => array('class' => 'btn btn-success')));
+        $builder->add('clients', 'collection',
+                      array(
+                'type' => new ClientSettingsType(),
+                'allow_add' => false,
+                'allow_delete' => false
+            ))
+            ->add('save', 'submit');
     }
 
     /**

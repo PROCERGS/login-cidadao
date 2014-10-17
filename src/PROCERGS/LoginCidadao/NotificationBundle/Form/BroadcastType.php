@@ -50,8 +50,7 @@ class BroadcastType extends AbstractType
                         ->setParameter('clientId', $clientId);
                 }
             ))
-            ->add('save', 'submit',
-                  array('attr' => array('class' => 'btn btn-success')))
+            ->add('save', 'submit')
         ;
     }
 
