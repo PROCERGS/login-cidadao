@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * Placeholder
  *
  * @ORM\Table(name="placeholder")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\NotificationBundle\Entity\PlaceholderRepository")
  * @UniqueEntity(fields={"category", "name"},errorPath="name")
  */
 class Placeholder

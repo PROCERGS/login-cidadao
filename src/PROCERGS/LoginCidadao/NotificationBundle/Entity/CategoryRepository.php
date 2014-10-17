@@ -5,6 +5,7 @@ namespace PROCERGS\LoginCidadao\NotificationBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
+use Doctrine\ORM\QueryBuilder;
 
 class CategoryRepository extends EntityRepository
 {
@@ -28,6 +29,27 @@ class CategoryRepository extends EntityRepository
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param PersonInterface $person
+     * @return QueryBuilder
+     */
+    public function getOwnedCategoriesQuery(PersonInterface $person)
+    {
+        $qb = $this->getEntityManager()
+            ->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')
+            ->createQueryBuilder('cat')
+            ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cat.client = c')
+            ->where(':person MEMBER OF c.owners')
+            ->setParameter('person', $person)
+            ->orderBy('cat.id', 'DESC');
+        return $qb;
+    }
+
+    public function findOwnedCategories(PersonInterface $person)
+    {
+        return $this->getOwnedCategoriesQuery($person)->getQuery()->getResult();
     }
 
 }

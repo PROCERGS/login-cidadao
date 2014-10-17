@@ -34,14 +34,9 @@ class ShoutController extends Controller
     public function stepCategoryAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $sql = $this->getDoctrine()
-            ->getManager()
-            ->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')
-            ->createQueryBuilder('u')
-            ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'u.client = c')
-            ->where(':person MEMBER OF c.owners')
-            ->setParameter('person', $this->getUser())
-            ->orderBy('u.id', 'desc');
+        $sql = $em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')
+            ->getOwnedCategoriesQuery($this->getUser());
+
         $grid = new GridHelper();
         $grid->setId('shout-category-grid');
         $grid->setPerPage(5);
@@ -66,16 +61,7 @@ class ShoutController extends Controller
         }
         $em = $this->getDoctrine()->getManager();
         $placeholders = $em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Placeholder')
-                ->createQueryBuilder('u')
-                ->join('PROCERGSLoginCidadaoNotificationBundle:Category',
-                       'cat', 'with', 'u.category = cat')
-                ->join('PROCERGSOAuthBundle:Client', 'c', 'with',
-                       'cat.client = c')
-                ->where(':person MEMBER OF c.owners')
-                ->andWhere('cat.id = :id')
-                ->setParameter('person', $this->getUser())
-                ->setParameter('id', $categoryId)
-                ->orderBy('u.id', 'desc')->getQuery()->getResult();
+            ->findOwnedPlaceholdersByCategoryId($this->getUser(), $categoryId);
 
         $form = $this->createFormBuilder();
         foreach ($placeholders as $placeholder) {
@@ -142,15 +128,13 @@ class ShoutController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->createQueryBuilder('c')
-                ->where(':person MEMBER OF c.owners')
-                ->andWhere('c.id = :id ')->setParameters(array('id' => $id, 'person' => $this->getUser()))
-                ->getQuery()->getOneOrNullResult();
+        $client = $em->getRepository('PROCERGSOAuthBundle:Client')
+            ->findOneOwned($this->getUser(), $id);
         if (!$client) {
             return $this->redirect($this->generateUrl('lc_dev_shout_new'));
         }
-        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.base.form.type'),
-                                                                                    $client);
+        $form = $this->createForm('procergs_logincidadao.client.base.form.type',
+                                  $client);
         $form->handleRequest($this->getRequest());
         $messages = '';
         if ($form->isValid()) {
