@@ -21,6 +21,7 @@ class PersonNotificationOptionFormType extends AbstractType
     {
         $builder->add('sendEmail', 'choice', array(
             'choices'   => array('0' => 'No', '1' => 'Yes'),
+            'expanded' => true,
             'required' => true
         ));
         $builder->add('id', 'hidden', array(

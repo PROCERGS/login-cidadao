@@ -526,7 +526,8 @@ $(function() {
     });
 
     $('#toggle-settings-nav').on('click', function() {
-      $('.settings-nav, .settings-content').toggleClass('menu-open');
+      $('.settings-nav, .settings-content, footer .content').toggleClass('menu-open');
+      $("body").toggleClass("no-scroll")
     });
     $('.nfgpopup').on('click', function (event){
       event.preventDefault();

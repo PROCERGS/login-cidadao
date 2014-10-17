@@ -1,3 +1,6 @@
+body.no-scroll {
+  overflow: hidden;
+}
 /* settings nav and content */
 .settings-content {
   background-color: #F1F1F1;
@@ -22,8 +25,7 @@
   z-index: 1000;
   display: block;
   padding: 0;
-  overflow-x: hidden;
-  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+  overflow-y: auto;
 }
 
 @media (min-width: 768px) {
@@ -156,7 +158,13 @@
 }
 
 .settings-content .form-content {
-  padding: 20px 60px;
+  padding: 20px 0;
+}
+
+@media (min-width: 768px) {
+  .settings-content .form-content {
+    padding: 20px;
+  }
 }
 
 .settings-content .input-error ul {
@@ -189,12 +197,10 @@
     position: absolute;
     z-index: 100;
     */
-    bottom: auto;
+    /*bottom: auto;
     height: auto;
-    max-width: 200px;
+    max-width: 200px;*/
     left: -200px;
-    position: absolute;
-    overflow: hidden;
 
     -webkit-transition: 0.5s ease-in-out;
     -moz-transition: 0.5s ease-in-out;
@@ -217,14 +223,14 @@
     transform: translateX(0px);*/
   }
 
-  .settings-content {
+  .settings-content, footer .content {
     -webkit-transition: 0.5s ease-in-out;
     -moz-transition: 0.5s ease-in-out;
     -o-transition: 0.5s ease-in-out;
     transition: 0.5s ease-in-out;
   }
 
-  .settings-content.menu-open  {
+  .settings-content.menu-open, footer .content.menu-open {
     -moz-transform: translateX(200px);
     -webkit-transform: translateX(200px);
     -o-transform: translateX(200px);

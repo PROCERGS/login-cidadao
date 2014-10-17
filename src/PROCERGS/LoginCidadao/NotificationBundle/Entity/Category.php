@@ -114,7 +114,7 @@ class Category implements CategoryInterface, UniqueEntityInterface
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification", mappedBy="category")
      */
     protected $notifications;
-
+    
     /**
      * @ORM\OneToOne(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\PersonNotificationOption", mappedBy="category")
      */
@@ -396,12 +396,12 @@ class Category implements CategoryInterface, UniqueEntityInterface
         $this->client = $client;
         return $this;
     }
-
+    
     public function getPersonNotificationOption()
     {
         return $this->personNotificationOption;
     }
-
+    
     public function setPersonNotificationOption($var)
     {
         $this->personNotificationOption = $var;
@@ -433,8 +433,7 @@ class Category implements CategoryInterface, UniqueEntityInterface
     public function setUid($uid = null)
     {
         $this->uid = $uid;
-
         return $this;
     }
-
+    
 }

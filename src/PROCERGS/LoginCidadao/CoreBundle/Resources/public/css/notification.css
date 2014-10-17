@@ -1,0 +1,16 @@
+.notification-panel-main-img {
+	background-color: #FFF;	
+	height: 64px;
+	width: 64px;
+}
+
+.notification-panel-sub-img {
+	background-color: #FFF;
+	height: 25px;
+	width: 25px;
+}
+.notification-panel-sub-icon {
+	font-size: 25px;
+	height: 25px;
+	width: 25px;
+}
