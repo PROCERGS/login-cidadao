@@ -604,7 +604,3 @@ body.no-scroll {
 .content.profile-edit .picture-upload-box {
   display: none;
 }
-
-.common-grid-result + .common-grid-result {
-  border-top: none!important;
-}
