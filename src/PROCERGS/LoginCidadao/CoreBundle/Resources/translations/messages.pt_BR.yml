@@ -599,3 +599,4 @@ Change: Alterar
 notification.config.user.offer.send.email: 'Enviar notificação também por e-mail?'
 notification.config.category.change.success: 'Configuração alterada com sucesso'
 notification.config.category.title: 'Notificações - Configurações'
+notification.inbox.category.title: 'Notificações - Categorias'
