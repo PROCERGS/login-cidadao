@@ -48,7 +48,7 @@ class NotificationRepository extends EntityRepository
     public function getTotalUnreadGroupByClient($person)
     {
         return $this->getEntityManager()->createQueryBuilder('n')
-                ->select('c.id, c.name, CountIf(n.readDate is null) total')
+                ->select('c.id, c.name, CountIf(n.readDate is null) total, c.picturePath picture_path')
                 ->from('PROCERGSLoginCidadaoNotificationBundle:Notification',
                        'n')
                 ->join('PROCERGSLoginCidadaoNotificationBundle:Category', 'cnc',
