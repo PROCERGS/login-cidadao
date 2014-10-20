@@ -21,6 +21,8 @@ class NotificationHandler implements NotificationHandlerInterface
 
     private $om;
     private $entityClass;
+
+    /** @var \PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationRepository */
     private $repository;
     private $formFactory;
     private $authenticatedHandlers = array();
@@ -200,6 +202,12 @@ class NotificationHandler implements NotificationHandlerInterface
                                                                                      $this);
         }
         return $this->authenticatedHandlers[$id];
+    }
+
+    public function getAllFromPersonIdOffset(PersonInterface $person,
+                                             $limit = 5, $offset = 0)
+    {
+        return $this->repository->findNextNotifications($person, $limit, $offset);
     }
 
 }

@@ -45,6 +45,16 @@ interface NotificationHandlerInterface
                                      $offset = 0, $orderby = null);
 
     /**
+     * Same as getAllFromPerson but uses the notification's id as the offset.
+     *
+     * @param PersonInterface $person
+     * @param type $limit
+     * @param type $offset the id of the last notification received
+     */
+    public function getAllFromPersonIdOffset(PersonInterface $person,
+                                             $limit = 5, $offset = 0);
+
+    /**
      * Get a list of an user's Notifications restricted by Client.
      *
      * @param PersonInterface  $person  the user to get notifications from

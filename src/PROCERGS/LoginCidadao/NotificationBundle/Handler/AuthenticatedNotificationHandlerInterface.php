@@ -32,6 +32,16 @@ interface AuthenticatedNotificationHandlerInterface
     public function all($limit = 5, $offset = 0, $orderby = null);
 
     /**
+     * Get a list of Notifications offseting by Id.
+     *
+     * @param int $limit   the limit of the result
+     * @param int $offset  starting from the id
+     *
+     * @return array
+     */
+    public function allIdOffset($limit = 5, $offset = 0);
+
+    /**
      * Get a list of an user's Notifications restricted by Client.
      *
      * @param ClientInterface  $client  the requesting Client
