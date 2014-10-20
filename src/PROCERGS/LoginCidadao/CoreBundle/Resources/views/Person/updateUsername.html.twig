@@ -2,7 +2,7 @@
 
 {% block content %}
     <div id="profile-change-username" class="content change-username clearfix">
-        <h1>{%trans%}Change username{%endtrans%}</h1>
+        <h1 class="visible-xs">{%trans%}Change username{%endtrans%}</h1>
 
         {{ form_start(form, {'action': path('lc_update_username'), 'attr': {'role':'form', 'class':'lc_change_username'}}) }}
             {{ form_errors(form) }}
