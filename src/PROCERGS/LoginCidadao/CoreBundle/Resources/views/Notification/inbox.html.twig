@@ -33,9 +33,8 @@
           if (!data) {
             return;
           }
-          var cRow = self.parent().parent();
           if (data.wasread) {
-            cRow.removeClass('notification-unread').addClass('notification-read');
+            self.removeClass('notification-unread').addClass('notification-read');
             var count  = parseInt(navbarCount.text()) - 1;
             $('.notification-total-unread-badge').text(count);
             if (self.data('row').client_id) {
