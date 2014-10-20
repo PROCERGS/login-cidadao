@@ -3,7 +3,7 @@
 }
 
 .common-grid-results {
-    margin: 10px 20px;
+    /*margin: 10px 20px;*/
 }
 
 .common-grid-results dt:after {
@@ -64,4 +64,12 @@
 
 .common-grid-results .panel-body {
   padding: 0 15px;
+}
+
+.infinityscroll-loading .text {
+  display: none;
+}
+
+.infinityscroll-loading .ajax-loader {
+  display: block;
 }

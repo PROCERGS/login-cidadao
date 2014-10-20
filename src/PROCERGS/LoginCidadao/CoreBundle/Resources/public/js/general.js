@@ -329,7 +329,7 @@ function Pwindow(options) {
 }
 var lcInfinityGrid = {
   "scrollNextButton" : function(event) {
-    $(this).hide();
+    $(this).addClass('infinityscroll-loading');
     lcInfinityGrid.common($(this).attr('data-retrive'));
     $($(this).attr('data-retrive')).infinitescroll('retrieve');
   },
@@ -372,7 +372,7 @@ var lcInfinityGrid = {
             }
           }
           if (!isLast) {
-            $(_id+' .infinityscroll-next-button').show();
+            $(_id+' .infinityscroll-next-button').removeClass('infinityscroll-loading');
           }
         /*
          * window.console && console.log('context: ',this);
