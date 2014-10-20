@@ -1,5 +1,5 @@
 .notification-panel-main-img {
-	background-color: #FFF;	
+	background-color: #FFF;
 	height: 64px;
 	width: 64px;
 }
@@ -9,8 +9,23 @@
 	height: 25px;
 	width: 25px;
 }
+
 .notification-panel-sub-icon {
 	font-size: 25px;
 	height: 25px;
 	width: 25px;
+}
+
+.notification-sidebar-main-img {
+	color: #696969;
+	display: inline-block;
+	line-height: normal;
+	font-size: 30px;
+	margin-top: -18px;
+	position: absolute;
+	left: 5px;
+	text-align: center;
+	top: 50%;
+	height: 32px;
+	width: 32px;
 }
