@@ -36,6 +36,7 @@ html {
 body {
     padding-top: 50px;
 }
+
 #lc-navbar {
     position: fixed !important;
     width: 100%;
@@ -382,4 +383,14 @@ form .has-feedback .sr-only ~ .form-control-feedback {
 
 .modal-body h2 {
   margin: 20px 0;
+}
+
+.alert-bar {
+  border-radius: 0;
+}
+
+@media (min-width: 768px) {
+  .alert-bar {
+    margin: 0 -15px 20px;
+  }
 }

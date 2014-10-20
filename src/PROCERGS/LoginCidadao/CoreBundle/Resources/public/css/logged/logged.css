@@ -19,7 +19,7 @@ body.no-scroll {
 .settings-nav {
   background-color: #F1F1F1;
   position: fixed;
-  top: 51px;
+  top: 50px;
   bottom: 0;
   /*left: -200px;*/
   z-index: 1000;
@@ -32,6 +32,7 @@ body.no-scroll {
   .settings-nav {
     left: 0;
   }
+
 }
 
 .settings-nav li {
@@ -70,7 +71,7 @@ body.no-scroll {
   font-size: 30px;
   margin-top: -18px;
   position: absolute;
-  left: 10px;
+  left: 5px;
   text-align: center;
   top: 50%;
   width: 20%;
@@ -147,24 +148,15 @@ body.no-scroll {
 }
 
 .settings-content h1 {
-  margin: 15px 30px 10px;
+  margin: 15px 0px 15px;
   font-size: 24px;
 }
 
-.settings-content .content.applications h2,
-.settings-content .content.change-username h2 {
-  margin: 20px 35px 10px;
-  font-size: 18px;
-}
-
-.settings-content .form-content {
-  padding: 20px 0;
-}
-
 @media (min-width: 768px) {
-  .settings-content .form-content {
-    padding: 20px;
+  .settings-content h1 {
+    margin: 15px 20px 10px;
   }
+
 }
 
 .settings-content .input-error ul {
@@ -172,7 +164,7 @@ body.no-scroll {
 }
 
 .settings-content .form-bar {
-  background-color: #d9d9d9;
+  background-color: #F5F5F5;
   padding: 10px;
 }
 
@@ -214,7 +206,7 @@ body.no-scroll {
     transform: translateX(-200px);*/
   }
 
-  .settings-nav.menu-open {
+  .menu-open .settings-nav {
     left: 0;
     /*-moz-transform: translateX(0px);
     -webkit-transform: translateX(0px);
@@ -223,14 +215,14 @@ body.no-scroll {
     transform: translateX(0px);*/
   }
 
-  .settings-content, footer .content {
+  .settings-content, footer .content, .alert-bar {
     -webkit-transition: 0.5s ease-in-out;
     -moz-transition: 0.5s ease-in-out;
     -o-transition: 0.5s ease-in-out;
     transition: 0.5s ease-in-out;
   }
 
-  .settings-content.menu-open, footer .content.menu-open {
+  .menu-open .settings-content, .menu-open footer .content, .menu-open .alert-bar {
     -moz-transform: translateX(200px);
     -webkit-transform: translateX(200px);
     -o-transform: translateX(200px);
@@ -242,10 +234,6 @@ body.no-scroll {
 
   .settings-content h3 {
     margin: 15px 20px 10px;
-  }
-
-  .settings-content .form-content {
-    padding: 20px 0;
   }
 
   footer .content {
@@ -382,110 +370,37 @@ body.no-scroll {
   display: none;
 }
 
-/* services/applications page */
-@media (max-width: 420px){
-  .content.applications .services-grid[data-columns]::before {
-    content: '1 .column.size-1of1';
-  }
-}
-@media (min-width: 421px) and (max-width: 568px) {
-  .content.applications .services-grid[data-columns]::before {
-    content: '2 .column.size-1of2';
-  }
-}
-@media (min-width: 569px) {
-  .content.applications .services-grid[data-columns]::before {
-    content: '3 .column.size-1of3';
-  }
-}
-
-.content.applications .services-grid .column { float: left; }
-.size-1of1 { width: 100%; }
-.size-1of2 { width: 50%; }
-.size-1of3 { width: 33.333%; }
-
-.content.applications .services-grid .service {
-  background-color: #999;
-  padding: 15px 0 0;
-  width: 140px;
-  height: 175px;
-  margin: 10px auto;
-}
-
-.content.applications .services-grid .service .name {
-  color: #fff;
-  font-size: 17px;
-  height: 40px;
-  line-height: 20px;
-  margin: 10px 0;
-  padding: 0 10px;
-}
-
-.content.applications .services-grid .service .status {
-  background-color: #696969;
-  border-radius: 0;
-  color: #fff;
-  display: block;
-  height: 35px;
-  line-height: 35px;
-  text-align: center;
-  vertical-align: middle;
-  width: 100%;
-}
-
-.content.applications .services-grid .service .status.active {
-  background-color: #5CB85C;
-}
-
-.content.applications .services-grid .service a:hover {
-  text-decoration: none;
-}
-
-.content.applications h4 {
-  margin-bottom: 20px;
-}
-
-.content.applications p.empty {
-  margin-bottom: 30px;
-  margin-left: 35px;
-}
-
-
-.content.applications .list li {
-  float: none;
-  height: 35px;
-  margin-left: 0;
-  padding-left: 45px;
-  position: relative;
-  width: 100%;
-}
-
-.content.applications .list li>a {
-  padding-top: 0;
-}
-
-.content.applications .list li img {
-  background-color: #FFF;
-  height: 45px;
-  left: 0;
-  position: absolute;
-  top: -5px;
-  width: 45px;
-}
-
-.content.applications .list li .name {
+.applications .services .client-img {
   float: left;
-  height: 100%;
-  line-height: 35px;
-  margin: 0;
-  padding: 0 20px;
-  text-align: left;
-  width: 80%;
+  margin: 0px 10px 10px 0px;
 }
 
-.content.applications .list li .status {
-  float: right;
-  width: 20%;
+.applications .services .title {
+  margin: 0;
+}
+
+.applications .services .status {
+  clear: both;
+  margin: 10px 0;
+}
+
+
+.last-suggestions {
+  padding: 0 15px 15px;
+}
+
+.last-suggestions .title {
+  font-weight: bold;
+}
+
+.last-suggestions .label {
+  font-size: 12px;
+  margin: 2px;
+  word-wrap: break-word;
+  word-break: break-all;
+  display: inline-block;
+  white-space: normal;
+  text-align: left;
 }
 
 .client-details h3 {
@@ -670,40 +585,40 @@ body.no-scroll {
 }
 
 .addresses.content .panel.remove-box {
-    display: none;
+  display: none;
 }
 
 .content.profile-edit h2.personal-info {
-    font-size: 22px;
+  font-size: 22px;
 }
 
 .content.profile-edit .media .profile-picture {
-    max-height: 55px;
-    max-width: 55px;
+  max-height: 55px;
+  max-width: 55px;
 }
 
 .content.profile-edit input[type=date] {
-    display: block;
+  display: block;
 }
 
 .content.profile-edit .picture-upload-box {
-    display: none;
+  display: none;
 }
 
 #inbox-detail .notification-read {
-    background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;
-    color: #222222;
-    border: thin groove #98bf21;
-    padding:20px 0;
+  background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;
+  color: #222222;
+  border: solid 1px #DDD;
+  padding:20px 0;
 }
 
 #inbox-detail .notification-unread {
-    /*background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;*/
-    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9) !important;
-    border-bottom: none;
-    color: #222222;
-    border: thin groove #98bf21;
-    padding:20px 0;
+  /*background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;*/
+  background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9) !important;
+  border-bottom: none;
+  color: #222222;
+  border: solid 1px #DDD;
+  padding:20px 0;
 }
 
 #inbox-detail .notification {
