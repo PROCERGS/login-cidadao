@@ -44,7 +44,7 @@ class NotificationController extends Controller
         ->getManager ()
         ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
         ->createQueryBuilder('n')
-        ->select('n.id, case when n.readDate is null then false else true end isread, n.title, n.shortText shorttext, n.createdAt createdat,  c.id client_id, c.name client_name')
+        ->select('n.id, case when n.readDate is null then false else true end isread, n.title, n.shortText shorttext, n.createdAt createdat,  c.id client_id, c.name client_name, c.picturePath client_picture')
         ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
         ->where('n.person = :person and n.readDate is null')

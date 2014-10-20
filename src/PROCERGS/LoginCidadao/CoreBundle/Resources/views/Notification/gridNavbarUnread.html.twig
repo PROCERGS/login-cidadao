@@ -8,7 +8,12 @@
 <div class="row notification common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }} {{ grid.getRlast != true ? 'row-last' }}" data-row="{{ grid.getRouteParams|merge({'notification':row.id, 'client_id': row.client_id})|json_encode }}">
   <div class="media">
     <div class="pull-left">
-      <img alt="{{ row.client_name }}" class="media-object" src="" width="50" height="50" />
+      {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+        {% if row.client_picture != '' %}
+           {% set asset_url = '/' ~ lc_client_picture_web_path(row.client_picture)  %}
+        {% endif %}
+        <img alt="{{ row.client_name }}" class="media-object" src="{{ asset_url }}" width="50" height="50" />
+      {% endimage %}
     </div>
     <div class="media-body">
       <h4 class="media-heading">{{ row.title }}</h4>
