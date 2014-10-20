@@ -2,6 +2,11 @@
 {% block content %}
 <div id="inbox-detail" class="content app-admin clearfix">
   {% if (app.request.query.get('mode') is not defined) or (app.request.query.get('mode') == 0) %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">{{ 'Notifications'|trans ~ ' - ' ~ extra_title }}</h4>
+            </div>
+        </div>
       {{ include("PROCERGSLoginCidadaoCoreBundle:Notification:gridFull.html.twig") }}
     {% else %}
       {{ include("PROCERGSLoginCidadaoCoreBundle:Notification:gridPri.html.twig") }}
