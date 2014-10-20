@@ -79,7 +79,7 @@ class NotificationController extends Controller
         ->getManager ()
         ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
         ->createQueryBuilder('n')
-        ->select('n.id, case when n.readDate is null then false else true end isread, n.title, n.shortText shorttext, n.createdAt createdat, c.id client_id, c.name client_name')
+        ->select('n.id, case when n.readDate is null then false else true end isread, n.title, n.shortText shorttext, n.createdAt createdat, c.id client_id, c.name client_name, c.picturePath client_picture, cnc.defaultIcon category_default_icon')
         ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
         ->where('n.person = :person')
@@ -175,7 +175,14 @@ class NotificationController extends Controller
     {
         $mode = $request->get('mode', 0);
         if ($mode === 0) {
-            return $this->gridFullAction($request);
+            $return = $this->gridFullAction($request);
+            if ($request->get('client')) {
+                $client = $this->getDoctrine()->getEntityManager()->getRepository('PROCERGSOAuthBundle:Client')->find($request->get('client'));
+                $return['extra_title'] = $client->getName();
+            } else {
+                $return['extra_title'] = $this->get('translator')->trans('notification.menu.inbox.all');
+            }
+            return $return;
         } else {
             return $this->gridPriAction($request);
         }

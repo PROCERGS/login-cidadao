@@ -1,20 +1,36 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::grid_layout.html.twig" %}
 
-{% block grid_header_action %}
-{% endblock grid_header_action %}
-
-{% block grid_header_data %}
-<div class="col-md-12">{{ 'Notifications'|trans }}</div>
-{% endblock grid_header_data %}
+{% block grid_header %}
+{% endblock grid_header %}
 
 {% block grid_row_action %}
 {% endblock grid_row_action %}
 
 {% block grid_row_data %}
-  <div class="client-img"></div>
-  <h6 class="title">{{ row.title }}</h6>
-  <div class="client-name">{{ row.client_name }}</div>
-  <div class="date">{{ row.createdat|date('d/m/Y h:i:s') }}</div>
+
+    <div class="media">
+        <a  href="javascript:void(0)" class="pull-left">
+          {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+            {% if row.client_picture != '' %}
+               {% set asset_url = '/' ~ lc_client_picture_web_path(row.client_picture)  %}
+            {% endif %}
+            <img alt="{{ row.client_name }}" class="media-object notification-panel-main-img" src="{{ asset_url }}"/>  
+          {% endimage %}
+        </a>
+        <div class="media-body">
+            <h4 class="media-heading">{{ row.client_name }}</h4>
+            <div class="media">
+                <a href="javascript:void(0)" class="pull-left">
+                    <span class="media-object notification-panel-sub-icon {{ row.category_default_icon }}"/>
+                </a>
+                <div class="media-body">
+                        <div class="media-heading">{{ row.client_name }}</div>
+                        <div class="date">{{ row.createdat|date('d/m/Y h:i:s') }}</div>
+                </div>
+            </div>
+        </div>
+    </div>	
+    <h6 class="title">{{ row.title }}</h6>
 {% endblock grid_row_data %}
 
 {% block grid_row %}
