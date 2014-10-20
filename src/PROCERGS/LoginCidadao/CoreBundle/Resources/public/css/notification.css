@@ -1,31 +1,50 @@
-.notification-panel-main-img {
-	background-color: #FFF;
-	height: 64px;
-	width: 64px;
+#inbox-detail .notification-read {
+  background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;
+  color: #222222;
+  border: solid 1px #DDD;
+  padding:20px 0;
 }
 
-.notification-panel-sub-img {
-	background-color: #FFF;
-	height: 25px;
-	width: 25px;
+#inbox-detail .notification-unread {
+  /*background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;*/
+  background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9) !important;
+  border-bottom: none;
+  color: #222222;
+  border: solid 1px #DDD;
+  padding:20px 0;
 }
 
-.notification-panel-sub-icon {
-	font-size: 25px;
-	height: 25px;
-	width: 25px;
+#inbox-detail .notification {
+  cursor: pointer;
+  border-bottom: solid 1px #CCC;
+  font-size: 13px;
+  padding: 15px 10px;
+}
+
+#inbox-detail .notification:hover {
+  background-color: #C7D6CB!important;
+}
+
+#inbox-detail .notification .client-name {
+  margin: 5px 0 0;
+}
+
+#inbox-detail .notification .media-heading {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
 }
 
 .notification-sidebar-main-img {
-	color: #696969;
-	display: inline-block;
-	line-height: normal;
-	font-size: 30px;
-	margin-top: -18px;
-	position: absolute;
-	left: 5px;
-	text-align: center;
-	top: 50%;
-	height: 32px;
-	width: 32px;
+  color: #696969;
+  display: inline-block;
+  line-height: normal;
+  font-size: 30px;
+  margin-top: -18px;
+  position: absolute;
+  left: 5px;
+  text-align: center;
+  top: 50%;
+  height: 32px;
+  width: 32px;
 }
