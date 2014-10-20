@@ -10,7 +10,7 @@
   background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9) !important;
   border-bottom: none;
   color: #222222;
-  border: solid 1px #DDD;
+  border: solid 1px #B6B6B6!important;
   padding:20px 0;
 }
 
@@ -22,7 +22,7 @@
 }
 
 #inbox-detail .notification:hover {
-  background-color: #C7D6CB!important;
+  background-color: #E2EFDE!important;
 }
 
 #inbox-detail .notification .client-name {
@@ -30,7 +30,7 @@
 }
 
 #inbox-detail .notification .media-heading {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: bold;
   margin: 0;
 }
