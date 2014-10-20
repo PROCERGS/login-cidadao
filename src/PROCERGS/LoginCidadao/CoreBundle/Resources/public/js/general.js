@@ -589,7 +589,7 @@ $(function(){
         }
         if (data.wasread) {
           var count  = parseInt(navbarCount.text()) - 1;
-          navbarCount.text(count);
+          $('.notification-total-unread-badge').text(count);
           if (self.data('row').client_id) {
               var sideSelector = $('#inbox-count-unread-'+self.data('row').client_id);
               if (sideSelector.length) {

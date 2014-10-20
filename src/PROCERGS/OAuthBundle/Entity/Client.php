@@ -252,17 +252,22 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
 
     public function getPictureWebPath()
     {
-        return null === $this->picturePath ? null : $this->getPictureUploadDir() . '/' . $this->picturePath;
+        return self::resolvePictureWebPath($this->picturePath);
     }
 
     protected function getPictureUploadRootDir()
     {
-        return __DIR__ . '/../../../../web/' . $this->getPictureUploadDir();
+        return __DIR__ . '/../../../../web/' . self::getPictureUploadDir();
     }
 
-    protected function getPictureUploadDir()
+    protected static function getPictureUploadDir()
     {
         return 'uploads/client-pictures';
+    }
+    
+    public static function resolvePictureWebPath($var)
+    {
+        return null === $var ? null : self::getPictureUploadDir() . '/' . $var;
     }
 
     public function setPictureFile(File $pictureFile = null)

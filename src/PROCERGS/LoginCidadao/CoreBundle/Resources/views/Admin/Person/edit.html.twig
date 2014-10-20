@@ -1,10 +1,8 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle:Admin:base.html.twig' %}
 {% block content %}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">{{ 'Profile'|trans }}</h3>
-        </div>
-    </div>
+<div class="content">
+
+    <h1 class="visible-xs">{{ 'Profile'|trans }}</h1>
 
 <div id="notification_id">
     {% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
@@ -12,7 +10,7 @@
     {{ form_errors(form) }}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">{{ 'General'|trans }}</h3>
+                <h2 class="panel-title">{{ 'General'|trans }}</h2>
         </div>
         <div class="panel-body">
             <div class="row clearfix">
@@ -60,7 +58,7 @@
     {% if form.roles is defined %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">{{ 'Actions'|trans }}</h3>
+                <h2 class="panel-title">{{ 'Actions'|trans }}</h2>
         </div>
         <div class="panel-body">
             <div class="row clearfix">
@@ -99,7 +97,7 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">{{ 'Perfis'|trans }}</h3>
+            <h2 class="panel-title">{{ 'Perfis'|trans }}</h2>
     </div>
     <div class="panel-body">
         <div class="row clearfix">
@@ -131,6 +129,7 @@
 </div>
 
     {{ form_end(form) }}
+    </div>
 </div>
 {% endblock %}
 

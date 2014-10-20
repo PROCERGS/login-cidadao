@@ -598,3 +598,5 @@ If the address is in another country leave the city blank and fill in this infor
 notification.config.user.offer.send.email: 'Enviar notificação também por e-mail?'
 notification.config.category.change.success: 'Configuração alterada com sucesso'
 notification.config.category.title: 'Notificações - Configurações'
+notification.inbox.category.title: 'Notificações - Categorias'
+notification.menu.inbox.all: 'Todas'

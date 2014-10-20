@@ -25,15 +25,13 @@
         dataType :'json',
         selector: $('#notification-modal .modal-body'),
         success : function(data, textStatus, jqXHR) {
-          console.log(data);
           if (!data) {
             return;
           }
-          var cRow = self.parent().parent();
           if (data.wasread) {
-            cRow.removeClass('notification-unread').addClass('notification-read');
+            self.removeClass('notification-unread').addClass('notification-read');
             var count  = parseInt(navbarCount.text()) - 1;
-            navbarCount.text(count);
+            $('.notification-total-unread-badge').text(count);
             if (self.data('row').client_id) {
                 var sideSelector = $('#inbox-count-unread-'+self.data('row').client_id);
                 if (sideSelector.length) {

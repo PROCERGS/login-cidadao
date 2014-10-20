@@ -2,6 +2,7 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Twig\Extension;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use PROCERGS\OAuthBundle\Entity\Client;
 
 class LoginCidadaoExtension extends \Twig_Extension
 {
@@ -40,7 +41,12 @@ class LoginCidadaoExtension extends \Twig_Extension
                 'is_safe' => array(
                     'html'
                 )
-            ))
+            )),
+            'lc_client_picture_web_path' => new \Twig_Function_Method($this, 'lcClientPictureWebPath', array(
+                'is_safe' => array(
+                    'html'
+                )
+            )),
         );
     }
 
@@ -93,5 +99,10 @@ class LoginCidadaoExtension extends \Twig_Extension
     public function lcRender($name)
     {
         return '';
+    }
+    
+    public function lcClientPictureWebPath($var)
+    {
+        return Client::resolvePictureWebPath($var);
     }
 }

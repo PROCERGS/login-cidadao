@@ -13,7 +13,7 @@
 
 
 <div class="row">
-    {% set common_row_class = 'col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3' %}
+    {% set common_row_class = 'col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4' %}
     {% set common_row_style = 'display: none;' %}
     {{ include("PROCERGSLoginCidadaoCoreBundle::common.register.html.twig") }}
     {% set common_row_style = '' %}
@@ -39,8 +39,8 @@
 $(function(){
   $("#register_request").click(function(event){
     $('#login-box').hide();
-        $("#register-box").show();
-    });
+    $("#register-box").parent().show();
+  });
 });
 </script>
 {% endblock %}

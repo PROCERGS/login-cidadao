@@ -1,22 +1,9 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle:Notification:gridFull.html.twig" %}
 
-{% block grid_header_data %}
-    <div class="col-md-3">{{ 'notification.grid.title'|trans }}</div>
-    <div class="col-md-6">{{ 'not.shorttext'|trans }}</div>
-    <div class="col-md-2">{{ 'not.createdat'|trans }}</div>
-{% endblock grid_header_data %}
+{% block grid_header %}
+{% endblock grid_header %}
 
-{% block grid_row_data %}
-    <div class="col-md-3">
-        <dt>{{ 'notification.grid.title'|trans }}</dt>
-        <dd>{{ row.title }}</dd>
-    </div>
-    <div class="col-md-6">
-        <dt>{{ 'not.shorttext'|trans }}</dt>
-        <dd>{{ row.shorttext }}</dd>
-    </div>
-    <div class="col-md-2">
-        <dt>{{ 'not.createdat'|trans }}</dt>
-        <dd>{{ row.createdat|date('d/m/Y h:i:s') }}</dd>
-    </div>
+{% block grid_row_data %}  
+  <div class="date">{{ row.createdat|date('d/m/Y h:i:s') }}</div>
+  <h6 class="title">{{ row.title }}</h6>
 {% endblock grid_row_data %}

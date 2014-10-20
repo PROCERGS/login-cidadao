@@ -16,6 +16,7 @@ use PROCERGS\LoginCidadao\NotificationBundle\Entity\PersonNotificationOption;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\PersonNotificationOptionFormType;
 use Symfony\Component\Form\FormError;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category;
 
 class NotificationController extends Controller
 {
@@ -116,10 +117,11 @@ class NotificationController extends Controller
         ->getManager()
         ->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')
         ->createQueryBuilder('cnc')
+        ->select('cnc')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
         ->where('c.id = :client')
         ->setParameter('client', $id)
-        ->getQuery()->getResult();
+        ->getQuery()->setFetchMode('PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category', 'client', ClassMetadata::FETCH_EAGER)->getResult();
         $grids = array();
         foreach ($resultset as $rows) {
             $request->query->set('confignotcli', $rows->getId());

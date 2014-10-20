@@ -148,14 +148,8 @@ body.no-scroll {
 }
 
 .settings-content h1 {
-  margin: 15px 0px 15px;
+  margin: 0 0 15px;
   font-size: 24px;
-}
-
-.settings-content .content.applications h2,
-.settings-content .content.change-username h2 {
-  margin: 20px 35px 10px;
-  font-size: 18px;
 }
 
 @media (min-width: 768px) {
@@ -163,9 +157,6 @@ body.no-scroll {
     margin: 15px 20px 10px;
   }
 
-  .settings-content .form-content {
-    padding: 0 20px;
-  }
 }
 
 .settings-content .input-error ul {
@@ -175,12 +166,6 @@ body.no-scroll {
 .settings-content .form-bar {
   background-color: #F5F5F5;
   padding: 10px;
-}
-
-@media (min-width: 768px) {
-  .settings-content .form-bar {
-    margin: 0 20px;
-  }
 }
 
 .settings-content .panel {
@@ -249,10 +234,6 @@ body.no-scroll {
 
   .settings-content h3 {
     margin: 15px 20px 10px;
-  }
-
-  .settings-content .form-content {
-    padding: 20px 0;
   }
 
   footer .content {
@@ -627,7 +608,7 @@ body.no-scroll {
 #inbox-detail .notification-read {
   background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;
   color: #222222;
-  border: thin groove #98bf21;
+  border: solid 1px #DDD;
   padding:20px 0;
 }
 
@@ -636,7 +617,7 @@ body.no-scroll {
   background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9) !important;
   border-bottom: none;
   color: #222222;
-  border: thin groove #98bf21;
+  border: solid 1px #DDD;
   padding:20px 0;
 }
 
@@ -656,7 +637,7 @@ body.no-scroll {
   border: solid 1px #CCC;
   float: left;
   height: 50px;
-  margin: 0 15px 0 0;
+  margin: 0 15px 5px 0;
   width: 50px ;
 }
 

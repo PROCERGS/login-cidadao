@@ -33,6 +33,7 @@ class ClientController extends Controller
             'client' => $client
         ));
         $userScopes = empty($authorization) ? array() : $authorization->getScope();
+        $clientScopes = empty($clientScopes) ? array() : $clientScopes;
 
         $mergeAuth = array_merge($clientScopes, $userScopes);
 

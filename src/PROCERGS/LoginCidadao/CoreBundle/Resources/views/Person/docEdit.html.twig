@@ -1,7 +1,7 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %} {% block content %}
 <div id="profile-edit" class="content">
 
-    <h1>{% trans %}Documents{% endtrans %}</h1>
+    <h1 class="visible-xs">{% trans %}Documents{% endtrans %}</h1>
 
     {% trans_default_domain 'FOSUserBundle' %}
 
@@ -9,7 +9,7 @@
 
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">{{ 'General'|trans }}</h3>
+            <h2 class="panel-title">{{ 'General'|trans }}</h2>
           </div>
           <div class="panel-body">
             {{ form_start(form, {'action': path('lc_profile_doc_edit'), 'attr': {'role':'form' } }) }}
@@ -71,7 +71,7 @@
 
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">{{ 'RGs'|trans }}</h3>
+            <h2 class="panel-title">{{ 'RGs'|trans }}</h2>
           </div>
           <div class="panel-body">
             <div id="rg-grid-place">
