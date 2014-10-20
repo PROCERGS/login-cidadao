@@ -74,7 +74,7 @@ class ClientController extends Controller
         $grid->setPerPage(5);
         $grid->setMaxResult(5);
         $grid->setQueryBuilder($sql);
-        $grid->setInfinityGrid(true);
+        $grid->setInfiniteGrid(true);
         $grid->setRoute('lc_dev_client_grid');
         return array('grid' => $grid->createView($request));
     }
@@ -101,7 +101,7 @@ class ClientController extends Controller
             $sql->addOrderBy('u.id', 'desc');
             $grid->setQueryBuilder($sql);
         }
-        $grid->setInfinityGrid(true);
+        $grid->setInfiniteGrid(true);
         $grid->setRouteParams(array('ac_data'));
         $grid->setRoute('lc_dev_client_grid_developer_filter');
         return array('grid' => $grid->createView($request));
@@ -125,7 +125,7 @@ class ClientController extends Controller
             $sql->addOrderBy('p.id', 'desc');
             $grid->setQueryBuilder($sql);
         }
-        $grid->setInfinityGrid(true);
+        $grid->setInfiniteGrid(true);
         $grid->setRouteParams(array('ac_data'));
         $grid->setRoute('lc_dev_client_grid_developer');
         return array('grid' => $grid->createView($request));

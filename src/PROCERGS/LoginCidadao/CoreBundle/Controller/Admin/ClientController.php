@@ -46,7 +46,7 @@ class ClientController extends Controller
         $grid->setPerPage(5);
         $grid->setMaxResult(5);
         $grid->setQueryBuilder($sql);
-        $grid->setInfinityGrid(true);
+        $grid->setInfiniteGrid(true);
         $grid->setRoute('lc_admin_app_grid');
         return array(
             'grid' => $grid->createView($request)

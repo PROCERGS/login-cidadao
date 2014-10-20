@@ -1,41 +1,50 @@
 <?php
+
 namespace PROCERGS\LoginCidadao\CoreBundle\Helper;
 
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\QueryBuilder;
-use JMS\Serializer\Tests\Fixtures\Publisher;
 
 class GridHelper
 {
 
+    /** @var integer */
     protected $perPage;
 
+    /** @var integer */
     protected $maxResult = 25;
 
+    /** @var integer */
     protected $page;
 
-    protected $infinityGrid = false;
-
+    /** @var boolean */
+    protected $infiniteGrid = false;
     protected $resultset;
 
+    /** @var QueryBuilder */
     protected $queryBuilder;
-
     protected $rlength;
-
     protected $rstart;
-
     protected $rlast;
-
     protected $rpage;
-
     protected $id;
+
+    /** @var string */
     protected $route;
+
+    /** @var array */
     protected $routeParams;
+
+    /** @var array */
     protected $extraOpts;
 
-    public function setInfinityGrid($var)
+    /**
+     * @param boolean $infinite
+     * @return GridHelper
+     */
+    public function setInfiniteGrid($infinite)
     {
-        $this->infinityGrid = $var;
+        $this->infiniteGrid = $infinite;
         return $this;
     }
 
@@ -67,7 +76,7 @@ class GridHelper
         } else {
             $this->page = 0;
         }
-        if ($this->infinityGrid) {
+        if ($this->infiniteGrid) {
             $this->perPage = $this->maxResult;
         }
         if (null !== $this->queryBuilder) {
@@ -84,7 +93,7 @@ class GridHelper
         }
         $this->rpage = (integer) (($this->rlength / $this->perPage) - (($this->rlength - $this->maxResult) > 0 ? 1 : 0));
         $this->rpage = $this->rpage > 0 ? $this->rpage : 0;
-        
+
         if ($this->routeParams) {
             foreach ($this->routeParams as $val) {
                 $a[$val] = $request->get($val);
@@ -136,9 +145,9 @@ class GridHelper
         return $this->rpage;
     }
 
-    public function isInfinityGrid()
+    public function isInfiniteGrid()
     {
-        return $this->infinityGrid;
+        return $this->infiniteGrid;
     }
 
     public function setId($var)
@@ -151,38 +160,38 @@ class GridHelper
     {
         return $this->id;
     }
-    
+
     public function setRoute($var)
     {
         $this->route = $var;
         return $this;
     }
-    
+
     public function setRouteParams($var)
     {
         $this->routeParams = $var;
         return $this;
     }
-    
+
     public function getRoute()
     {
         return $this->route;
     }
-    
+
     public function getRouteParams()
     {
         return $this->routeParams;
     }
-    
+
     public function setExtraOpts($var)
     {
         $this->extraOpts = $var;
         return $this;
     }
-    
+
     public function getExtraOpts()
     {
         return $this->extraOpts;
     }
-    
+
 }

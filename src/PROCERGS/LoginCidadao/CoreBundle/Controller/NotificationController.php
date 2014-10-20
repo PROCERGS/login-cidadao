@@ -62,7 +62,7 @@ class NotificationController extends Controller
         $grid->setPerPage(8);
         $grid->setMaxResult(8);
         $grid->setQueryBuilder($sql);
-        $grid->setInfinityGrid(true);
+        $grid->setInfiniteGrid(true);
         $grid->setRoute('lc_not_inbox_gridnavbarunread');
         $grid->setRouteParams(array('client', 'mode', 'notification', 'confignotcli'));
         $grid->setExtraOpts(array('behavior'=> 'local', 'binder' => 'div:has(#navbarUnread):last'));
@@ -98,7 +98,7 @@ class NotificationController extends Controller
         $grid->setPerPage(10);
         $grid->setMaxResult(10);
         $grid->setQueryBuilder($sql);
-        $grid->setInfinityGrid(true);
+        $grid->setInfiniteGrid(true);
         $grid->setRoute('lc_not_inbox');
         $grid->setRouteParams(array('client', 'mode', 'notification', 'confignotcli'));
         return array('grid' => $grid->createView($request));
@@ -162,7 +162,7 @@ class NotificationController extends Controller
         $grid->setPerPage(10);
         $grid->setMaxResult(10);
         $grid->setQueryBuilder($sql);
-        $grid->setInfinityGrid(true);
+        $grid->setInfiniteGrid(true);
         $grid->setRoute('lc_not_inbox_gridsimple');
         $grid->setRouteParams(array('client', 'mode', 'notification', 'confignotcli'));
         return array('grid' => $grid->createView($request));
@@ -235,7 +235,7 @@ class NotificationController extends Controller
             if ($i%2) {
                 $c =& $resultset[$i];
                 if (!$c) {
-                    $res =& $resultset[$i-1];                   
+                    $res =& $resultset[$i-1];
                     $a = new PersonNotificationOption();
                     $a->setPerson($this->getUser());
                     $a->setCategory($res);
@@ -249,7 +249,7 @@ class NotificationController extends Controller
                 $form = $this->createForm(new PersonNotificationOptionFormType(), $c, array(
                     'action'=> $this->generateUrl('lc_not_config_change'),
                     'attr' => array(
-                        'class' => 'form-ajax', 
+                        'class' => 'form-ajax',
                         'id' => $formId,
                         'role' => 'form',
                         'ajax-target' => 'div:has(#'. $formId .'):last'
@@ -257,7 +257,7 @@ class NotificationController extends Controller
                 ));
                 $forms[$i-1] = $form->createView();
                 unset($resultset[$i]);
-            }         
+            }
         }
         if (isset($a)) {
             $em->flush();
@@ -304,7 +304,7 @@ class NotificationController extends Controller
             $manager->flush();
         }
         $message = "notification.config.category.change.success";
-        //$translator = $this->get('translator');        
+        //$translator = $this->get('translator');
         //$form->addError(new FormError($translator->trans("notification.missing.personnotificationoption")));
         return array('form' => $form->createView(), 'form_message' => $message);
     }

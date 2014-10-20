@@ -11,7 +11,7 @@
             <a title="{{ 'Edit'|trans }}" href="{{ path('lc_dev_shout_edit', {id: row.id}) }}">
             <button type="button" class="btn btn-warning edit-row-grid" id="{{ grid.getId }}-row-{{ row.id }}"  data-row="{{ grid.getRouteParams|merge({'id':row.id})|json_encode }}">
                 <span class="glyphicon glyphicon-pencil"></span>
-                <span class="label-action-column-grid">{{ 'edit'|trans }} </span>            
+                <span class="label-action-column-grid">{{ 'edit'|trans }} </span>
             </button>
             </a>
         </div>
@@ -26,11 +26,11 @@
 </div>
 {% endblock grid_row_data %}
 
-{% block grid_infinity_pagination %}
+{% block grid_infinite_pagination %}
 <div class="btn-group btn-group-justified">
-    {% if grid.getRlast and grid.isInfinityGrid %}
+    {% if grid.getRlast and grid.isInfiniteGrid %}
     <div class="btn-group">
-    	<button type="button" class="btn btn-default infinityscroll-next-button " data-retrive="#{{ grid.getId }}">
+    	<button type="button" class="btn btn-default infinitescroll-next-button " data-retrive="#{{ grid.getId }}">
     		<span class="glyphicon glyphicon glyphicon-list"></span> {{ 'more'|trans }}
     	</button>
 	</div>
@@ -43,4 +43,4 @@
         </a>
 	</div>
 </div>
-{% endblock grid_infinity_pagination %}
+{% endblock grid_infinite_pagination %}

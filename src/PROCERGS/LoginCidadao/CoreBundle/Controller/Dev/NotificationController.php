@@ -81,7 +81,7 @@ class NotificationController extends Controller
         $grid->setPerPage(5);
         $grid->setMaxResult(5);
         $grid->setQueryBuilder($sql);
-        $grid->setInfinityGrid(true);
+        $grid->setInfiniteGrid(true);
         $grid->setRoute('lc_dev_not_grid');
         return array('grid' => $grid->createView($request));
     }
@@ -202,7 +202,7 @@ class NotificationController extends Controller
         $grid->setPerPage(2);
         $grid->setMaxResult(2);
         $grid->setQueryBuilder($sql);
-        $grid->setInfinityGrid(true);
+        $grid->setInfiniteGrid(true);
         $grid->setRoute('lc_dev_not_placeholder_grid');
         $grid->setRouteParams(array('category_id'));
         return array('grid' => $grid->createView($request));

@@ -31,14 +31,14 @@
 </div>
 {% endblock grid_row_data %}
 
-{% block grid_infinity_pagination %}
+{% block grid_infinite_pagination %}
 <div class="btn-group btn-group-justified">
-    {% if grid.getRlast and grid.isInfinityGrid %}
+    {% if grid.getRlast and grid.isInfiniteGrid %}
     <div class="btn-group">
-      <button type="button" class="btn btn-default infinityscroll-next-button " data-retrive="#{{ grid.getId }}">
+      <button type="button" class="btn btn-default infinitescroll-next-button " data-retrive="#{{ grid.getId }}">
         <span class="glyphicon glyphicon glyphicon-list"></span> {{ 'more'|trans }}
       </button>
   </div>
   {% endif %}
 </div>
-{% endblock grid_infinity_pagination %}
+{% endblock grid_infinite_pagination %}

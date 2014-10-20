@@ -62,13 +62,13 @@ class SuggestionController extends Controller
                 $sql->setParameter('4', '%'.addcslashes($parms['text'], '\\%_').'%');
             }
             $sql->addOrderBy('cs.createdAt');
-            
+
             $grid = new GridHelper();
             $grid->setId('suggs-grid');
             $grid->setPerPage(5);
             $grid->setMaxResult(5);
             $grid->setQueryBuilder($sql);
-            $grid->setInfinityGrid(true);
+            $grid->setInfiniteGrid(true);
             $grid->setRoute('lc_admin_sugg_list_query');
             $grid->setRouteParams(array($form->getName()));
             return array('grid' => $grid->createView($request));

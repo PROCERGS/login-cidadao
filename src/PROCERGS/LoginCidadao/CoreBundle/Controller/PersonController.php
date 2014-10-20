@@ -378,7 +378,7 @@ class PersonController extends Controller
         $resp = new Response('<script>rgGrid.getGrid();</script>');
         return $resp;
     }
-    
+
     /**
      * @Route("/profile/doc/rg/edit", name="lc_profile_doc_rg_edit")
      * @Template()
@@ -481,13 +481,13 @@ class PersonController extends Controller
             ->where('u.person = :person')
             ->setParameters(array('person' => $this->getUser()))
             ->orderBy('u.id', 'desc');
-        
+
         $grid = new GridHelper();
         $grid->setId('rg-grid');
         $grid->setPerPage(4);
         $grid->setMaxResult(4);
         $grid->setQueryBuilder($sql);
-        $grid->setInfinityGrid(true);
+        $grid->setInfiniteGrid(true);
         $grid->setRoute('lc_profile_doc_rg_list');
         return array('grid' => $grid->createView($request));
     }

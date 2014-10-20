@@ -42,7 +42,7 @@ class ShoutController extends Controller
         $grid->setPerPage(5);
         $grid->setMaxResult(5);
         $grid->setQueryBuilder($sql);
-        $grid->setInfinityGrid(true);
+        $grid->setInfiniteGrid(true);
         $grid->setRoute('lc_dev_shout_step_category');
         return array(
             'grid' => $grid->createView($request)
@@ -114,7 +114,7 @@ class ShoutController extends Controller
         $grid->setPerPage(5);
         $grid->setMaxResult(5);
         $grid->setQueryBuilder($sql);
-        $grid->setInfinityGrid(true);
+        $grid->setInfiniteGrid(true);
         $grid->setRoute('lc_dev_shout_grid');
         return array(
             'grid' => $grid->createView($request)

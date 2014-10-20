@@ -54,7 +54,7 @@ class PersonController extends Controller
             $grid->setPerPage(5);
             $grid->setMaxResult(5);
             $grid->setQueryBuilder($sql);
-            $grid->setInfinityGrid(true);
+            $grid->setInfiniteGrid(true);
             $grid->setRoute('lc_admin_person_grid');
             $grid->setRouteParams(array(
                 $form->getName()

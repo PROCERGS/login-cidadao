@@ -327,10 +327,10 @@ function Pwindow(options) {
   }
   $.ajax(opts);
 }
-var lcInfinityGrid = {
+var lcInfiniteGrid = {
   "scrollNextButton" : function(event) {
     $(this).hide();
-    lcInfinityGrid.common($(this).attr('data-retrive'));
+    lcInfiniteGrid.common($(this).attr('data-retrive'));
     $($(this).attr('data-retrive')).infinitescroll('retrieve');
   },
   "common" : function(_id) {
@@ -372,7 +372,7 @@ var lcInfinityGrid = {
             }
           }
           if (!isLast) {
-            $(_id+' .infinityscroll-next-button').show();
+            $(_id+' .infinitescroll-next-button').show();
           }
         /*
          * window.console && console.log('context: ',this);
@@ -387,7 +387,7 @@ var lcInfinityGrid = {
       }
   },
   "startUp" : function() {
-    lcInfinityGrid.common('#'+$(this).attr('id'));
+    lcInfiniteGrid.common('#'+$(this).attr('id'));
   }
 }
 var lcAcWidget = {
@@ -407,7 +407,7 @@ var lcAcWidget = {
         dataType : 'html',
         success : function(data, textStatus, jqXHR) {
           self.parents().find('.ac-magicbox .ac-scrollspy-opts').html(data);
-          lcInfinityGrid.common('#' + $(data).attr('id'));
+          lcInfiniteGrid.common('#' + $(data).attr('id'));
         }
         });
     },
@@ -474,7 +474,7 @@ var lcAcWidget = {
             dataType : 'html',
             success : function(data, textStatus, jqXHR) {
               warmup.html(data);
-              lcInfinityGrid.common('#' + $(data).attr('id'));
+              lcInfiniteGrid.common('#' + $(data).attr('id'));
               callback();
             }
             });
@@ -557,8 +557,8 @@ $(function() {
         }
         });
     });
-    $(document).on('click', '.infinityscroll-next-button' , lcInfinityGrid.scrollNextButton);
-    $('[data-infinity-grid="true"]').each(lcInfinityGrid.startUp);
+    $(document).on('click', '.infinitescroll-next-button' , lcInfiniteGrid.scrollNextButton);
+    $('[data-infinite-grid="true"]').each(lcInfiniteGrid.startUp);
     $("[data-enable-switch='1']").bootstrapSwitch();
     $(document).on('click', "[data-ac-attr]", lcAcWidget.onSearch);
     $(document).on('click', ".ac-scrollspy-opts .ac-search-select", lcAcWidget.onClickFilteredItem);
