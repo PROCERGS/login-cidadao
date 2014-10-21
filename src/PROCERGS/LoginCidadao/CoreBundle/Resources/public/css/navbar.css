@@ -404,6 +404,7 @@
 }
 
 #navbarUnread .notification {
+  background-color: #FFF;
   cursor: pointer;
   border-bottom: solid 1px #CCC;
   font-size: 12px;
@@ -411,22 +412,15 @@
 }
 
 #navbarUnread .notification:hover {
-  background-color: #C7D6CB;
-}
-
-#navbarUnread .client-img {
-  background-color: #FFF;
-  float: left;
-  height: 50px;
-  margin: 0 10px 0 0;
-  width: 50px ;
+  background-color: #E2EFDE;
 }
 
 #navbarUnread .client-name {
   margin: 5px 0 0;
 }
 
-#navbarUnread .title {
+#navbarUnread .media-heading {
+  font-size: 12px;
   font-weight: bold;
   margin: 0;
 }

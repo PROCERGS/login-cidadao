@@ -44,7 +44,7 @@ class NotificationController extends Controller
         ->getManager ()
         ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
         ->createQueryBuilder('n')
-        ->select('n.id, case when n.readDate is null then false else true end isread, n.title, n.shortText shorttext, n.createdAt createdat,  c.id client_id, c.name client_name')
+        ->select('n.id, case when n.readDate is null then false else true end isread, n.title, n.shortText shorttext, n.createdAt createdat,  c.id client_id, c.name client_name, c.picturePath client_picture')
         ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
         ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
         ->where('n.person = :person and n.readDate is null')
@@ -241,7 +241,7 @@ class NotificationController extends Controller
             if ($i%2) {
                 $c =& $resultset[$i];
                 if (!$c) {
-                    $res =& $resultset[$i-1];                   
+                    $res =& $resultset[$i-1];
                     $a = new PersonNotificationOption();
                     $a->setPerson($this->getUser());
                     $a->setCategory($res);
@@ -255,7 +255,7 @@ class NotificationController extends Controller
                 $form = $this->createForm(new PersonNotificationOptionFormType(), $c, array(
                     'action'=> $this->generateUrl('lc_not_config_change'),
                     'attr' => array(
-                        'class' => 'form-ajax', 
+                        'class' => 'form-ajax',
                         'id' => $formId,
                         'role' => 'form',
                         'ajax-target' => 'div:has(#'. $formId .'):last'
@@ -263,7 +263,7 @@ class NotificationController extends Controller
                 ));
                 $forms[$i-1] = $form->createView();
                 unset($resultset[$i]);
-            }         
+            }
         }
         if (isset($a)) {
             $em->flush();
@@ -310,7 +310,7 @@ class NotificationController extends Controller
             $manager->flush();
         }
         $message = "notification.config.category.change.success";
-        //$translator = $this->get('translator');        
+        //$translator = $this->get('translator');
         //$form->addError(new FormError($translator->trans("notification.missing.personnotificationoption")));
         return array('form' => $form->createView(), 'form_message' => $message);
     }

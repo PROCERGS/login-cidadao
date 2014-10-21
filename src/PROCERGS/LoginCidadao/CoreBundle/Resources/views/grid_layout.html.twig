@@ -63,7 +63,10 @@
   {% if grid.getRlast and grid.isInfinityGrid %}
   <div class="btn-group">
     <button type="button" class="btn btn-default infinityscroll-next-button " data-retrive="#{{ grid.getId }}">
-      <span class="glyphicon glyphicon glyphicon-list"></span> {{ 'more'|trans }}
+      <span class="text">
+        <span class="glyphicon glyphicon glyphicon-list"></span> {{ 'more'|trans }}
+      </span>
+      <span class="ajax-loader"></span>
     </button>
   </div>
   {% endif %}
