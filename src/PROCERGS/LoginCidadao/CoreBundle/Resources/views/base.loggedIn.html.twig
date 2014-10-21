@@ -70,7 +70,7 @@
         </a>
       </li>
       <li class="services glyph">
-        <a href="{{ path('lc_not_inbox') }}" class="clearfix">
+        <a href="{{ path('lc_notifications') }}" class="clearfix">
           <span>{% trans %}Notifications{% endtrans %}</span>
           <i class="glyphicon glyphicon-bell icon"></i>
         </a>
@@ -143,7 +143,6 @@
     {% endjavascripts %}
 <script type="text/javascript">
   validator.cep.urlQuery = '{{ path('lc_consultaCep2') }}';
-  var notificationUrl = '{{ path('lc_not_inbox_show2') }}';
         var notification = {
             'config': {
                 'navbar_fragment_url': '{{ path('lc_notifications_navbar_fragment') }}',
