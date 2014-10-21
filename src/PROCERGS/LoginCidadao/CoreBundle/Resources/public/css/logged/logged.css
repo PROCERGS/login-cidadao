@@ -85,15 +85,10 @@ body.no-scroll {
 
 .settings-nav li a > .icon-count {
   color: #696969;
-  display: inline-block;
   line-height: normal;
   font-size: 30px;
-  margin-top: -10px;
-  position: absolute;
-  right: 5px;
+  padding-left: 50px;
   text-align: center;
-  top: 50%;
-  width: 20%;
 }
 
 .settings-nav li a > .icon-count .badge {

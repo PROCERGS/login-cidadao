@@ -3,7 +3,7 @@
 }
 
 #inbox-detail .notification-read {
-  background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;
+  background-color: #F5F5F5 !important;
   color: #222222;
   border: solid 1px #DDD;
   border-bottom: none;
@@ -47,11 +47,9 @@
   display: inline-block;
   line-height: normal;
   font-size: 30px;
-  margin-top: -18px;
   position: absolute;
   left: 10px;
   text-align: center;
-  top: 50%;
   height: 32px;
   width: 32px;
 }
