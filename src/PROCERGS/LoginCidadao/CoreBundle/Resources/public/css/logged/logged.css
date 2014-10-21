@@ -12,6 +12,11 @@ body.no-scroll {
   }
 }
 
+@media (min-width: 992px) {
+  .settings-content {
+    padding: 0 50px;
+  }
+}
 .settings-content .content{
   min-height: 422px;
 }
@@ -53,7 +58,7 @@ body.no-scroll {
 
 .settings-nav li a:hover, .settings-nav .open > a {
   background-image: none;
-  background-color: #c7d6cb!important;
+  background-color: #E2EFDE!important;
   color: #696969 !important;
 }
 
@@ -79,15 +84,11 @@ body.no-scroll {
 
 .settings-nav li a > .icon-count {
   color: #696969;
-  display: inline-block;
   line-height: normal;
   font-size: 30px;
-  margin-top: -10px;
-  position: absolute;
-  right: 5px;
+  margin-top: 5px;
+  padding-left: 50px;
   text-align: center;
-  top: 50%;
-  width: 20%;
 }
 
 .settings-nav li a > .icon-count .badge {
@@ -603,8 +604,4 @@ body.no-scroll {
 
 .content.profile-edit .picture-upload-box {
   display: none;
-}
-
-.common-grid-result + .common-grid-result {
-  border-top: none!important;
 }
