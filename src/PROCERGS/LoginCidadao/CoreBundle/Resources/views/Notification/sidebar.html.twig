@@ -1,4 +1,4 @@
-<div class="settings-nav col-sm-3 col-lg-2">
+<div class="settings-nav col-sm-3 col-lg-2" id="notification-sidebar">
     <ul class="nav nav-pills nav-stacked">
         <li class="profile glyph">
           <a href="{{ url('lc_home') }}" role="button">
@@ -10,7 +10,7 @@
         <li class="profile glyph">
           <a href="{{ url('lc_not_inbox') }}" role="button" class="clearfix">
             <span style="padding-left:0px;">{{ 'notification.menu.inbox.all'|trans }}</span>
-            <div class="icon-count">
+            <div class="icon-count" style="margin-top: -18px;">
                 <span class="badge notification-count notification-total-unread-badge">{{ notifications_helper.getTotalUnread }}</span>
             </div>
           </a>

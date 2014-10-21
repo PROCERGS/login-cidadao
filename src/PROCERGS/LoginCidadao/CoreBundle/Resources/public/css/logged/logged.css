@@ -87,6 +87,7 @@ body.no-scroll {
   color: #696969;
   line-height: normal;
   font-size: 30px;
+  margin-top: 5px;
   padding-left: 50px;
   text-align: center;
 }

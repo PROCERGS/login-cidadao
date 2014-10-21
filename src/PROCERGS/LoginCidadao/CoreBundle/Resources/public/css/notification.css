@@ -53,3 +53,7 @@
   height: 32px;
   width: 32px;
 }
+
+#notification-sidebar > ul > li > a {
+  line-height: normal;
+}
