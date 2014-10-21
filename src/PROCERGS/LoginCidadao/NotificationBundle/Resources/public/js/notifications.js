@@ -4,7 +4,7 @@ $('.infinitegrid').on('click', '.load-more', function (event) {
     $.get(url, function (data) {
         var button = $('.infinitegrid .load-more');
         var perPage = button.data('per-page');
-        var result = $(data).find('.infinitegrid-content .notification');
+        var result = $(data).find('.infinitegrid-content .notification-line');
         var newButton = $(data).find('.load-more');
         button.replaceWith(newButton);
 
@@ -18,7 +18,7 @@ $('.infinitegrid').on('click', '.load-more', function (event) {
 });
 
 $('.infinitegrid').on('click', 'a.notification', function (event) {
-    $(this).parent().stop().toggleClass('notification-open').promise().done(function() {
+    $(this).parent('.notification-line').stop().toggleClass('notification-open').promise().done(function() {
         var isOpen = $(this).is('.notification-open');
         if (isOpen) {
             console.log("down");
