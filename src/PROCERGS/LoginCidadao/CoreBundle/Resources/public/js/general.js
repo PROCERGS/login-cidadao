@@ -328,34 +328,44 @@ function Pwindow(options) {
   $.ajax(opts);
 }
 var lcInfinityGrid = {
+  /* aqui eh funcao que cria a instancia do infintyscroll quando clica num botao*/
   "scrollNextButton" : function(event) {
+	/* escondendo o botao */
     $(this).hide();
+    /*o data-retrive eh onde esta armazedo o id do elemento que vamos criar a instancia do scroll, eh onde esta a grid */
     lcInfinityGrid.common($(this).attr('data-retrive'));
     $($(this).attr('data-retrive')).infinitescroll('retrieve');
   },
+  /* aqui colocamos metodo para criar instancias do infinitescroll*/
   "common" : function(_id) {
+	  /*testamos se ja tem o bind do plugin infinitescroll 'https://github.com/paulirish/infinite-scroll', pois as vezes o elemento eh trocado e perde  a instancia */
     if (!$(_id).data('infinitescroll')) {
+    	/*opcoes padroes para um grid padrao usado o html criado pelo grid_layout.html.twig*/
       var opts = {
-            debug: true,
+            debug: false,
               navSelector  : _id + ' .pagination',
               nextSelector : _id + ' .pagination a:last',
               itemSelector : _id + ' .row.common-grid-result',
               contentSelector: _id + ' .tab-pane.active',
               bufferPx     : 0,
               state : {
+            	  /* tem que dizer qual o numero da pagina atual*/
                 currPage: Number($(_id).attr('data-grid-currpage'))
               },
               loading: {
+            	  /*aqui é para colocar um loader se quiser*/
                   msg: $('<div></div>'),
                   img: null
               },
               pathParse: function (path, currPage) {
+            	  /* aqui colocamos uma expressao para filtrar da url qual o numero da pagina, pois isso importa para o plugin*/
                 var matches = path.match(/^(.*[?|&]page=)\d+(.*|$)/);
                 if (matches) {
                   return matches.slice(1);
                 }
               }
           };
+      /* fazemos um merge dos parametros extras que podem vir da grid*/
       var extraOpts = $(_id).data('grid-extra-opts');
       if (extraOpts) {
         if (extraOpts.binder) {
@@ -365,6 +375,7 @@ var lcInfinityGrid = {
       opts = $.extend(true, {}, opts, extraOpts);
       $(_id).infinitescroll(opts,
         function( newElements, data, url ) {
+    	  /*somente uma funcao de callback para ver se ja atingimos a ultima pagina para tirar o botao paginador*/
           var isLast = false;
           for (x in newElements) {
             if (isLast = newElements[x].classList.contains("row-last")) {
@@ -374,28 +385,31 @@ var lcInfinityGrid = {
           if (!isLast) {
             $(_id+' .infinityscroll-next-button').show();
           }
-        /*
-         * window.console && console.log('context: ',this);
-         * window.console && console.log('returned: ', newElements);
-         */
       });
+      /* aqui testmos se para usar o autoscroll ou nao */
       if (extraOpts && extraOpts.behavior && extraOpts.behavior == 'local') {
-/*        console.log('here');*/
+    	  /*console.log('here');*/
       } else {
+    	  /*isso aqui eh para tirar o autoscroll*/
         $(window).unbind('.infscr');
       }
       }
   },
   "startUp" : function() {
+	  /*funcao para criar instancia ao iniciar a pagina, important quando temo autoscroll sem o botao paginador*/
     lcInfinityGrid.common('#'+$(this).attr('id'));
   }
 }
+/* conjunto de funcao para fazer um multiplo select, sem a listagem de todas as opcoes ao mesmo tempo */
 var lcAcWidget = {
+  /* funcao que dispara quando se clica no botao filtra do multiplo select */
   onSearch : function(event){
       var self = $(this);
+      /*aqui pegamos os parametro de filtragem via ajax*/
       var opts = self.data('ac-attr');
       opts = opts.filter;
       var data = {};
+      /* montamos os dados que vao ser enviado via ajax*/
       for (var x in opts.extra_form_prop) {
         data[x] = $('#'+opts.extra_form_prop[x]).val();
       }
@@ -406,11 +420,13 @@ var lcAcWidget = {
         data: {"ac_data":data},
         dataType : 'html',
         success : function(data, textStatus, jqXHR) {
+        	/*aqui recebemos uma grid e disparamos os infinityscroll */
           self.parents().find('.ac-magicbox .ac-scrollspy-opts').html(data);
           lcInfinityGrid.common('#' + $(data).attr('id'));
         }
         });
     },
+    /*aqui eh acao do botao do multiple select, q quando diparado retira o item da grid de pesquisa e coloca na grid dos selecionados*/
   onClickFilteredItem : function(event){
       var src = '.ac-scrollspy-opts';
       var target = '.ac-scrollspy-opts-selected .common-grid-results .tab-pane.active';
@@ -421,6 +437,7 @@ var lcAcWidget = {
         $(src+" .row:has("+id+"):last").appendTo(target);
       }
     },
+    /* aqui eh acao do botao do multiple select, q quando diparado retira o item da grid dos selecionado e coloca na grid de pesquisa*/
     onClickSelectedItem : function(event){
       var target = '.ac-scrollspy-opts .common-grid-results .tab-pane.active';
       var src = '.ac-scrollspy-opts-selected';
@@ -431,10 +448,13 @@ var lcAcWidget = {
         $(src+" .row:has("+id+"):last").appendTo(target);
       }
     },
+    /* aqui é quando clico para poder abrir o multiplo select*/
     onClickSearchEnable : function(event) {
+    	/* pegamos a referencia de qual elemento vamos criar nossa instancia do multiplesect*/
       var _id = '#'+$(this).attr('data-ac-reference');
       var mb = $(_id + ' + .ac-magicbox');
       $(_id).parent().find('.ac-tags-toolbar').toggleClass('in');
+      /* checamos se o ja esta aberto ou nao o multipleselect*/
       if (mb.hasClass('in')) {
         mb.toggleClass('in');
         mb.find('.ac-scrollspy-opts-selected').html();
@@ -442,8 +462,10 @@ var lcAcWidget = {
         return;
       }
       var opts = mb.find('[data-ac-attr]').data('ac-attr');
+      /* criar uma funcao de callback apenas para disparar na instanciacao do nosso componente, para nao termos grid de selectionado vazia*/
       var callback = function () {
         var data = {};
+        /*montamos os dados que serao enviados via ajax */
         if (opts.selected.extra_form_prop) {
             for (var x in opts.selected.extra_form_prop) {
               data[x] = $('#'+opts.selected.extra_form_prop[x]).val();
@@ -452,27 +474,33 @@ var lcAcWidget = {
           $.ajax({
             type: 'get',
             url: opts.selected.route,
+            /*encapsulamos numa unica variavel os dados do ajax para faciliar a vida quando a grid infinita tiver que ficar repopulando os dados*/
             data: {"ac_data":data},
             dataType : 'html',
             success : function(data, textStatus, jqXHR) {
+            	/*pegamos a grid de retorno e colocamos dentro da div de exibicao*/
               mb.find('.ac-scrollspy-opts-selected').html(data);
               mb.toggleClass('in');
               $('html, body').animate({scrollTop: mb.offset().top});
             }
             });
       }
+      /* aqui temos um aquecimento caso nao tenhamos os itens ja selecionados*/
       var warmup = mb.find('.ac-scrollspy-opts:empty');
       if (warmup.length) {
           var data = {};
+          /*montamos os dados que serao enviados via ajax*/
           for (var x in opts.filter.extra_form_prop) {
             data[x] = $('#'+opts.filter.extra_form_prop[x]).val();
           }
           $.ajax({
             type: 'get',
             url: opts.filter.route,
+            /*encapsulamos numa unica variavel os dados do ajax para faciliar a vida quando a grid infinita tiver que ficar repopulando os dados*/
             data: {"ac_data":data},
             dataType : 'html',
             success : function(data, textStatus, jqXHR) {
+            	/*colocamos os dos dos na grid e disparmos o inifinity scroll*/
               warmup.html(data);
               lcInfinityGrid.common('#' + $(data).attr('id'));
               callback();
@@ -483,26 +511,35 @@ var lcAcWidget = {
       }
 
     },
+    /* funcao apenas para fechar o componente*/
     onClickSearchCancel : function(event) {
       var _id = '#'+$(this).attr('data-ac-reference');
       var mb = $(_id + ' + .ac-magicbox');
       mb.toggleClass('in');
       $(_id).parent().find('.ac-tags-toolbar').toggleClass('in');
     },
+    /*funcao para pegar os itens selecionados e converte-los para um select:multiple para poder ser enviado via formulario*/
     onClickSearchCommit : function(event) {
+    	/*limpamos os dados que estao presente no select:multiple*/
       var _id = '#'+$(this).attr('data-ac-reference');
       $(_id+' option').remove();
-      var mb = $(_id + ' + .ac-magicbox');
+      /*limpamos as representações visuais de labels das opções do select:multiple*/
+      var mb = $(_id + ' + .ac-magicbox');      
       var tag = mb.parent().find('.ac-tags-toolbar');
       tag.children().remove();
       var opts = mb.find('[data-ac-attr]').data('ac-attr');
+      /*pegamos os dados que estao na grid dos selecionados e colocamos eles select:multiple e criamos suas representacoes visuais*/
       mb.find('.ac-scrollspy-opts-selected .ac-search-select').each(function(a,b){
+    	  /*pegamos os dados ocultos da grid*/
         var data = $(b).data('row');
+        /*criamso as opcoes para colocar no select:multiple*/
         $(document.createElement('option')).attr('selected', 'selected').attr('value',data[opts.property_value]).text(data[opts.property_text]).appendTo(_id);
+        /*criamso as "tags" que sao representacoes visuais das opcoes do select:multiple*/
         $(document.createElement('div')).addClass('btn-group').append(
         $(document.createElement('span')).addClass('label label-info').attr('type', 'button').text(data[opts.property_text])
         ).appendTo(tag);
       });
+      /*exibimos a barra com as novas "tags" representando os itens do select:multiple*/
       mb.toggleClass('in');
       $(_id).parent().find('.ac-tags-toolbar').toggleClass('in');
     },
