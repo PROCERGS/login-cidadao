@@ -12,6 +12,12 @@ body.no-scroll {
   }
 }
 
+@media (min-width: 992px) {
+  .settings-content {
+    padding: 0 50px;
+  }
+}
+
 .settings-content .content{
   min-height: 422px;
 }

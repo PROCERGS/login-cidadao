@@ -1,3 +1,7 @@
+#inbox-detail .tab-content {
+  border-bottom: solid 1px #DDD;
+}
+
 #inbox-detail .notification-read {
   background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85) !important;
   color: #222222;
