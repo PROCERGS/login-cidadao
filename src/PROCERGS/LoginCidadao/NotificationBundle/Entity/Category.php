@@ -11,6 +11,7 @@ use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 use PROCERGS\LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
+use Michelf\MarkdownExtra;
 
 /**
  * Category
@@ -318,6 +319,9 @@ class Category implements CategoryInterface, UniqueEntityInterface
      */
     public function getHtmlTemplate()
     {
+        if ($this->htmlTemplate === null) {
+            $this->setHtmlTemplate(MarkdownExtra::defaultTransform($this->getMarkdownTemplate()));
+        }
         return $this->htmlTemplate;
     }
 

@@ -1,0 +1,27 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle::grid_layout.html.twig" %}
+
+{% block grid_header_action %}
+{% endblock grid_header_action %}
+
+{% block grid_header_data %}
+<div class="col-md-12">{{ 'Notifications'|trans }}</div>
+{% endblock grid_header_data %}
+
+{% block grid_row_action %}
+{% endblock grid_row_action %}
+
+{% block grid_row_data %}
+  <div class="client-img"></div>
+  <h6 class="title">{{ row.title }}</h6>
+  <div class="client-name">{{ row.client_name }}</div>
+  <div class="date">{{ row.createdat|date('d/m/Y h:i:s') }}</div>
+{% endblock grid_row_data %}
+
+{% block grid_row %}
+<div class="row notification common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }} {{ grid.rlast != true ? 'row-last' }}"
+     data-row="{{ grid.routeParams|merge({'notification':row.id, 'client_id': row.client_id})|json_encode }}"
+     title="{{ 'Click to read'|trans }}">
+  {{ block('grid_row_action') }}
+  {{ block('grid_row_data') }}
+</div>
+{% endblock grid_row %}

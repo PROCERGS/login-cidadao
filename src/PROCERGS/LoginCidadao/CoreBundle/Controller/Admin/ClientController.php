@@ -134,7 +134,7 @@ class ClientController extends Controller
                     $not->setIcon($category->getDefaultIcon());
                     $not->setTitle(isset($msg['title']) ? $msg['title'] : $category->getDefaultTitle());
                     $not->setShortText(isset($msg['shorttext']) ? $msg['shorttext'] : $category->getDefaultShortText());
-                    $not->parseHtmlTpl($category->getHtmlTemplate());
+                    $not->parseHtmlTemplate($category->getHtmlTemplate());
                     $em->persist($not);
                     $list[] =& $not;
                 }

@@ -178,7 +178,7 @@ class PersonController extends BaseController
                         ->setTitle(isset($row['title']) && $row['title'] ? $row['title'] : $not->getConfigNotCli()->getTitle())
                         ->setShortText(isset($row['shorttext']) && $row['shorttext'] ? $row['shorttext'] : $not->getConfigNotCli()->getShortText())
                         ->setText($row['text'])
-                        ->parseHtmlTpl($not->getConfigNotCli()->getHtmlTpl());
+                        ->parseHtmlTemplate($not->getConfigNotCli()->getHtmlTemplate());
                 $errors = $validator->validate($not);
                 if (!count($errors)) {
                     $em->persist($not);

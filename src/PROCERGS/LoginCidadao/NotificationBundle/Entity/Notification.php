@@ -158,9 +158,9 @@ class Notification implements NotificationInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="html_tpl", type="text", nullable=true)
+     * @ORM\Column(name="html_template", type="text", nullable=true)
      */
-    private $htmlTpl;
+    private $htmlTemplate;
 
     /**
      * Get id
@@ -409,24 +409,24 @@ class Notification implements NotificationInterface
         return $this->getLevel() === self::LEVEL_EXTREME;
     }
 
-    public function setHtmlTpl($var)
+    public function setHtmlTemplate($var)
     {
-        $this->htmlTpl = $var;
+        $this->htmlTemplate = $var;
         return $this;
     }
 
-    public function getHtmlTpl()
+    public function getHtmlTemplate()
     {
-        return $this->htmlTpl;
+        return $this->htmlTemplate;
     }
 
-    public function parseHtmlTpl($var)
+    public function parseHtmlTemplate($var)
     {
         $cplaces = array('%title%' => $this->title, '%shorttext%' => $this->shortText);
         foreach ($cplaces as $search => $replace) {
             $var = str_replace($search, $replace, $var);
         }
-        return $this->setHtmlTpl($var);
+        return $this->setHtmlTemplate($var);
     }
 
     public function getSender()
@@ -503,6 +503,67 @@ class Notification implements NotificationInterface
         if (!($this->getCreatedAt() instanceof \DateTime)) {
             $this->createdAt = new \DateTime();
         }
+    }
+
+    public function renderHtml($values = null)
+    {
+        if (null === $values) {
+            $values = array();
+        }
+
+        $template = $this->getHtmlTemplate();
+        if (null === $template) {
+            $this->setHtmlTemplate($this->getCategory()->getHtmlTemplate());
+            $template = $this->getHtmlTemplate();
+        }
+        $placeholders = $this->getPlaceholdersArray();
+        foreach ($placeholders as $placeholder) {
+            $name = $placeholder->getName();
+
+            if (array_key_exists($name, $values)) {
+                $value = $values[$name];
+            } else {
+                $value = $placeholder->getDefault();
+            }
+            $template = str_replace($name, $value, $template);
+        }
+        $this->setHtmlTemplate($template);
+        return $template;
+    }
+
+    public function getDefaultPlaceholders()
+    {
+        $placeholders = array();
+
+        $title = new Placeholder();
+        $placeholders[] = $title->setName('%title%')
+            ->setDefault($this->getTitle())
+            ->setCategory($this->getCategory());
+        $placeholders[$title->getName()] = $title;
+
+        $shortText = new Placeholder();
+        $placeholders[] = $shortText->setName('%shorttext%')
+            ->setDefault($this->getShortText())
+            ->setCategory($this->getCategory());
+        $placeholders[$shortText->getName()] = $shortText;
+
+        $text = new Placeholder();
+        $text->setName('%text%')
+            ->setDefault($this->getText())
+            ->setCategory($this->getCategory());
+        $placeholders[$text->getName()] = $text;
+
+        return $placeholders;
+    }
+
+    public function getPlaceholdersArray()
+    {
+        $placeholders = array();
+        foreach ($this->getCategory()->getPlaceholders() as $placeholder) {
+            $placeholders[$placeholder->getName()] = $placeholder;
+        }
+
+        return array_merge($placeholders, $this->getDefaultPlaceholders());
     }
 
 }
