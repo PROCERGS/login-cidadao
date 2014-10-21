@@ -597,10 +597,10 @@ $(function(){
               }
           }
         }
-        if (!data.htmltpl) {
-          data.htmltpl = '';
+        if (!data.htmlTemplate) {
+          data.htmlTemplate = '';
         }
-        this.selector.html(data.htmltpl);
+        this.selector.html(data.htmlTemplate);
       }
     });
 
