@@ -4,6 +4,8 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Helper;
 
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\QueryBuilder;
+use PROCERGS\Generic\InfiniteScrollBundle\Model\AbstractInfiniteIterable;
+use PROCERGS\Generic\InfiniteScrollBundle\Model\QueryBuilderIterator;
 
 class GridHelper
 {
@@ -38,6 +40,18 @@ class GridHelper
     /** @var array */
     protected $extraOpts;
 
+    /** @var AbstractInfiniteIterable */
+    protected $iterable;
+
+    public function __construct(AbstractInfiniteIterable $iterable = null)
+    {
+        if (null !== $iterable) {
+            $this->setIterable($iterable);
+            $this->setMaxResult($this->getIterable()->getPerIteration());
+            $this->setPerPage($this->getIterable()->getPerIteration());
+        }
+    }
+
     /**
      * @param boolean $infinite
      * @return GridHelper
@@ -60,37 +74,47 @@ class GridHelper
         return $this;
     }
 
-    public function setQueryBuilder(QueryBuilder &$var)
+    /**
+     * @deprecated since version 1.1.0
+     * @param QueryBuilder $var
+     * @return GridHelper
+     */
+    public function setQueryBuilder(QueryBuilder &$queryBuilder)
     {
-        $this->queryBuilder = $var;
+        $this->queryBuilder = $queryBuilder;
+        // create QueryBuilderIterator for legacy code
+        $iterable = new QueryBuilderIterator($queryBuilder, $this->getPerPage());
+        $this->setIterable($iterable);
         return $this;
     }
 
-    public function createView(Request &$request)
+    public function createView(Request $request)
     {
         if ($request->get('page')) {
             $this->page = $request->get('page');
             if (null !== $this->queryBuilder) {
                 $this->queryBuilder->setFirstResult($this->page * $this->maxResult);
             }
+            if (null !== $this->getIterable()) {
+                $this->getIterable()->setInitialOffset($this->page * $this->maxResult);
+            }
         } else {
-            $this->page = 0;
+            $this->page = 1;
         }
         if ($this->infiniteGrid) {
             $this->perPage = $this->maxResult;
         }
-        if (null !== $this->queryBuilder) {
-            $this->queryBuilder->setMaxResults($this->maxResult + 1);
-            $this->resultset = $this->queryBuilder->getQuery()->getResult();
+        if (null !== $this->getIterable()) {
+            //$this->queryBuilder->setMaxResults($this->maxResult + 1);
+            $this->resultset = $this->getIterable()->current();
+            //$this->resultset = $this->queryBuilder->getQuery()->getResult();
         } else {
             $this->resultset = array();
         }
         $this->rlength = count($this->resultset);
         $this->rstart = ($this->page * $this->maxResult) / $this->perPage;
-        $this->rlast = ($this->rlength - $this->maxResult) > 0;
-        if ($this->rlast) {
-            array_pop($this->resultset);
-        }
+        $this->rlast = ($this->rlength < $this->maxResult);
+
         $this->rpage = (integer) (($this->rlength / $this->perPage) - (($this->rlength - $this->maxResult) > 0 ? 1 : 0));
         $this->rpage = $this->rpage > 0 ? $this->rpage : 0;
 
@@ -192,6 +216,24 @@ class GridHelper
     public function getExtraOpts()
     {
         return $this->extraOpts;
+    }
+
+    /**
+     * @return AbstractInfiniteIterable
+     */
+    public function getIterable()
+    {
+        return $this->iterable;
+    }
+
+    /**
+     * @param AbstractInfiniteIterable $iterable
+     * @return GridHelper
+     */
+    public function setIterable(AbstractInfiniteIterable $iterable)
+    {
+        $this->iterable = $iterable;
+        return $this;
     }
 
 }

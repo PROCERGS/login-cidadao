@@ -1,19 +1,6 @@
 {% extends "PROCERGSLoginCidadaoNotificationBundle::base.html.twig" %}
-
 {% block content %}
-<div class="content notifications">
-    <h1>{{ 'Notifications' | trans }}</h1>
-    <div class="row">
-        <div class="col-sm-10 col-sm-offset-1">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    {{ include('PROCERGSLoginCidadaoNotificationBundle:Notification:list.component.html.twig', { 'notifications': app.user.notifications } ) }}
-                </div>
-                <div class="panel-footer">
-                    {{ 'Load more' | trans }}
-                </div>
-            </div>
-        </div>
+    <div id="inbox-detail" class="content notifications clearfix">
+        {{ include("PROCERGSLoginCidadaoNotificationBundle:Notification:grid.html.twig") }}
     </div>
-</div>
-{% endblock content %}
+{% endblock %}

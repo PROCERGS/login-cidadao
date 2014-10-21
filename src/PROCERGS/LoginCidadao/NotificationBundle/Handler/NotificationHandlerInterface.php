@@ -157,7 +157,7 @@ interface NotificationHandlerInterface
     /**
      *
      * @param PersonInterface $person
-     * @return type Returns an AuthenticatedNotificationHandler
+     * @return AuthenticatedNotificationHandlerInterface Returns an AuthenticatedNotificationHandler
      */
     public function getAuthenticatedHandler(PersonInterface $person);
 }

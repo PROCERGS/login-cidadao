@@ -26,3 +26,82 @@
     max-height: 35px;
     max-width: 35px;
 }
+
+.infinitegrid .notification {
+    display: block;
+    text-decoration: none;
+    border: solid 1px #DDD;
+    border-top: none;
+    border-bottom: solid 1px #CCC;
+    padding: 15px 10px;
+    color: #222;
+    font-size: 12px;
+}
+
+.infinitegrid .notification-unread {
+    background: none repeat scroll 0 0 rgba(220, 240, 255, 0.9) !important;
+}
+
+.infinitegrid .notification-read {
+    background-color: #f5f5f5 !important;
+}
+
+.infinitegrid .notification:hover {
+    background-color: #C7D6CB!important;
+}
+
+.infinitegrid .notification .client-img {
+    background-color: #FFF;
+    border: solid 1px #CCC;
+    float: left;
+    height: 50px;
+    margin: 0 15px 5px 0;
+    width: 50px ;
+}
+
+.infinitegrid .notification .client-name {
+    margin: 5px 0 0;
+}
+
+.infinitegrid .notification .title {
+    font-size: 13px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.infinitegrid .notification-line {
+    margin: 0;
+    -webkit-transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
+    transition: 0.5s ease-in-out;
+}
+
+.infinitegrid .notification-open {
+    margin: 20px 0 !important;
+}
+
+.infinitegrid .notification-open .notification {
+    border-top: solid 1px #DDD !important;
+}
+
+.infinitegrid .notification-open + .notification-line>.notification {
+    border-top: solid 1px #DDD !important;
+}
+
+.infinitegrid .notification-content {
+    display: none;
+    padding: 15px 10px;
+    background-color: #fff;
+    border: solid 1px #DDD;
+    border-left: 3px solid #666;
+    margin: 0 6px;
+}
+
+.infinitegrid .notification-open .notification-content {
+    display: block;
+}
+
+.infinitegrid .notification-open {
+    display: block;
+}

@@ -4,24 +4,40 @@
 {% endblock grid_header_action %}
 
 {% block grid_header_data %}
-<div class="col-md-12">{{ 'Notifications'|trans }}</div>
+    <div class="col-md-12">{{ 'Notifications'|trans }}</div>
 {% endblock grid_header_data %}
 
 {% block grid_row_action %}
 {% endblock grid_row_action %}
 
 {% block grid_row_data %}
-  <div class="client-img"></div>
-  <h6 class="title">{{ row.title }}</h6>
-  <div class="client-name">{{ row.client_name }}</div>
-  <div class="date">{{ row.createdat|date('d/m/Y h:i:s') }}</div>
+    <div class="client-img"></div>
+    <h6 class="title">{{ row.title }}</h6>
+    <div class="client-name">{{ row.sender.name }}</div>
+    <div class="date">{{ row.createdat|date('d/m/Y h:i:s') }}</div>
 {% endblock grid_row_data %}
 
 {% block grid_row %}
-<div class="row notification common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }} {{ grid.rlast != true ? 'row-last' }}"
-     data-row="{{ grid.routeParams|merge({'notification':row.id, 'client_id': row.client_id})|json_encode }}"
-     title="{{ 'Click to read'|trans }}">
-  {{ block('grid_row_action') }}
-  {{ block('grid_row_data') }}
-</div>
+    <div class="notification-line {{ openId is defined and row.id == openId ? 'notification-open' : '' }}">
+        <a class="row notification common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }} {{ grid.rlast ? 'row-last' }}"
+             data-row="{{ grid.routeParams|merge({'notification':row.id, 'client_id': row.sender.id})|json_encode }}"
+             title="{{ 'Click to read'|trans }}"
+             data-notification-id="{{ row.id }}"
+             href="{{ path('lc_notifications', { id: row.id }) }}">
+            {{ block('grid_row_action') }}
+            {{ block('grid_row_data') }}
+        </a>
+        <div class="row notification-content common-grid-result">
+            {{ row.renderHtml() | raw }}
+        </div>
+    </div>
 {% endblock grid_row %}
+
+{% block grid_infinite_pagination %}
+    {% if not grid.rlast and grid.isInfiniteGrid %}
+        <a href="{{ path(grid.route, { 'offset': grid.iterable.nextOffset }) }}" class="btn btn-block btn-info load-more" data-next-offset="{{ grid.iterable.nextOffset }}"
+           data-per-page="{{ grid.perPage }}">
+            {{ 'load more...'|trans }}
+        </a>
+    {% endif %}
+{% endblock grid_infinite_pagination %}
