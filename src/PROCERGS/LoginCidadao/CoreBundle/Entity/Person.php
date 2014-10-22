@@ -14,6 +14,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationToken;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+use PROCERGS\OAuthBundle\Model\ClientInterface;
 
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
@@ -475,14 +476,19 @@ class Person extends BaseUser implements PersonInterface
     /**
      * Checks if this Person has any authorization for a given Client.
      * WARNING: Note that it does NOT validate scope!
-     * @param \PROCERGS\OAuthBundle\Entity\Client $client
+     * @param \PROCERGS\OAuthBundle\Entity\Client | integer $client
      */
-    public function hasAuthorization(Client $client)
+    public function hasAuthorization($client)
     {
+        if ($client instanceof ClientInterface) {
+            $id = $client->getId();
+        } else {
+            $id = $client;
+        }
         $authorizations = $this->getAuthorizations();
         foreach ($authorizations as $auth) {
             $c = $auth->getClient();
-            if ($c->getId() == $client->getId()) {
+            if ($c->getId() == $id) {
                 return true;
             }
         }

@@ -41,9 +41,9 @@ interface PersonInterface
     /**
      * Checks if this Person has any authorization for a given Client.
      * WARNING: Note that it does NOT validate scope!
-     * @param \PROCERGS\OAuthBundle\Entity\Client $client
+     * @param \PROCERGS\OAuthBundle\Entity\Client | integer $client
      */
-    public function hasAuthorization(Client $client);
+    public function hasAuthorization($client);
 
     public function setFacebookId($facebookId);
 
