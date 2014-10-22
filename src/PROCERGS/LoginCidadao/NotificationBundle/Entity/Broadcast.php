@@ -11,7 +11,7 @@ use JMS\Serializer\Annotation as JMS;
 /**
  * Notification Broadcast entity
  *
- * @ORM\Table(name="boradcast")
+ * @ORM\Table(name="broadcast")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
