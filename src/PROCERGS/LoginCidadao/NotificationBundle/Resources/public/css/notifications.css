@@ -60,7 +60,11 @@
 }
 
 .infinitegrid .notification .client-name {
-    margin: 5px 0 0;
+    margin: 5px 0;
+}
+
+.infinitegrid .notification .date {
+    font-size: 11px;
 }
 
 .infinitegrid .notification .title {
