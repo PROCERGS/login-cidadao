@@ -160,4 +160,17 @@ interface NotificationHandlerInterface
      * @return AuthenticatedNotificationHandlerInterface Returns an AuthenticatedNotificationHandler
      */
     public function getAuthenticatedHandler(PersonInterface $person);
+
+    /**
+     * Return a person's number of unread notifications.
+     * @param PersonInterface $person
+     */
+    public function countUnread(PersonInterface $person);
+
+    /**
+     * Return a person's number of unread notifications grouping by Client
+     * @param PersonInterface $person
+     * @param ClientInterface $client
+     */
+    public function countUnreadByClient(PersonInterface $person);
 }

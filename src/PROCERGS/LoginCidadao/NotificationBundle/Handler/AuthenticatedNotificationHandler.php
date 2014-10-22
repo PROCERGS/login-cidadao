@@ -40,7 +40,8 @@ class AuthenticatedNotificationHandler implements AuthenticatedNotificationHandl
 
     public function allIdOffset($limit = 5, $offset = 0)
     {
-        return $this->handler->getAllFromPersonIdOffset($this->person, $limit, $offset);
+        return $this->handler->getAllFromPersonIdOffset($this->person, $limit,
+                                                        $offset);
     }
 
     public function getAllFromClient(ClientInterface $client, $limit = 5,
@@ -81,6 +82,16 @@ class AuthenticatedNotificationHandler implements AuthenticatedNotificationHandl
     {
         return $this->handler->getGroupedSettings($this->person, $client,
                                                   $category);
+    }
+
+    public function countUnread()
+    {
+        return $this->handler->countUnread($this->person);
+    }
+
+    public function countUnreadByClient()
+    {
+        return $this->handler->countUnreadByClient($this->person);
     }
 
 }

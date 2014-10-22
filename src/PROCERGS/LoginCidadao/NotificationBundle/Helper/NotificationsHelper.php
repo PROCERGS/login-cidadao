@@ -76,7 +76,7 @@ class NotificationsHelper
 
     public function getTotalUnread()
     {
-        return $this->getRepository()->getTotalUnread($this->getUser());
+        return $this->getNotificationHandler()->countUnread($this->getUser());
     }
 
     public function send(NotificationInterface $notification)

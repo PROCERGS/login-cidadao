@@ -66,13 +66,13 @@ class NotificationRepository extends EntityRepository
     public function getTotalUnread($person)
     {
         return $this->getEntityManager()->createQueryBuilder('n')
-                ->select('CountIf(n.readDate is null) total')
+                ->select('COUNT(n.id) total')
                 ->from('PROCERGSLoginCidadaoNotificationBundle:Notification',
                        'n')
                 ->where('n.person = :person')
+                ->andWhere('n.readDate IS NULL')
                 ->setParameter('person', $person)
-                ->getQuery()
-                ->getResult(Query::HYDRATE_SINGLE_SCALAR);
+                ->getQuery()->getSingleScalarResult();
     }
 
     public function findUnreadUpToLevel(Person $person, $maxLevel = null)

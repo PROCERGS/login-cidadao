@@ -210,4 +210,13 @@ class NotificationHandler implements NotificationHandlerInterface
         return $this->repository->findNextNotifications($person, $limit, $offset);
     }
 
+    public function countUnread(PersonInterface $person)
+    {
+        return $this->repository->getTotalUnread($person);
+    }
+
+    public function countUnreadByClient(PersonInterface $person)
+    {
+        return $this->repository->getTotalUnreadGroupByClient($person);
+    }
 }

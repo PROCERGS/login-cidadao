@@ -124,12 +124,11 @@ class NotificationController extends Controller
      */
     public function sidebarAction()
     {
-        // TODO: use NotificationHandler
-        $result = $this->getDoctrine()
-            ->getManager()
-            ->getRepository('PROCERGSLoginCidadaoNotificationBundle:Notification')
-            ->getTotalUnreadGroupByClient($this->getUser());
-        return array('clients' => $result);
+        $handler = $this->getNotificationHandler()
+            ->getAuthenticatedHandler($this->getUser());
+
+        $clients = $handler->countUnreadByClient();
+        return compact('clients');
     }
 
 }

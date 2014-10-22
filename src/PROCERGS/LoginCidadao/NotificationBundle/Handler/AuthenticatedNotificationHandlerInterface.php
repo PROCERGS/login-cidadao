@@ -86,4 +86,14 @@ interface AuthenticatedNotificationHandlerInterface
      */
     public function getGroupedSettings(ClientInterface $client = null,
                                        CategoryInterface $category = null);
+
+    /**
+     * Return a person's number of unread notifications.
+     */
+    public function countUnread();
+
+    /**
+     * Return a person's number of unread notifications grouping by Client.
+     */
+    public function countUnreadByClient();
 }
