@@ -634,10 +634,10 @@ $(function(){
               }
           }
         }
-        if (!data.htmlTemplate) {
-          data.htmlTemplate = '';
+        if (!data.htmltpl) {
+          data.htmltpl = '';
         }
-        this.selector.html(data.htmlTemplate);
+        this.selector.html(data.htmltpl);
       }
     });
 
