@@ -11,7 +11,14 @@
 {% endblock grid_row_action %}
 
 {% block grid_row_data %}
-    <div class="client-img"></div>
+    <div class="client-img">
+        {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+        {% if row.sender.pictureWebPath != '' %}
+            {% set asset_url = '/' ~ row.sender.pictureWebPath  %}
+        {% endif %}
+        <img alt="{{ row.sender.name }}" class="media-object" src="{{ asset_url }}" width="50" height="50" />
+        {% endimage %}
+    </div>
     <h6 class="title">{{ row.title }}</h6>
     <div class="client-name">{{ row.sender.name }}</div>
     <div class="date">{{ row.createdat|date('d/m/Y h:i:s') }}</div>
