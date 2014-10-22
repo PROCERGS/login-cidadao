@@ -82,7 +82,7 @@
 }
 
 .infinitegrid .notification-open .notification {
-    border-top: solid 1px #DDD !important;
+    border: 1px solid #050 !important;
 }
 
 .infinitegrid .notification-open + .notification-line>.notification {
@@ -94,7 +94,9 @@
     padding: 15px 10px;
     background-color: #fff;
     border: solid 1px #DDD;
-    border-left: 3px solid #666;
+    border-left: 2px solid #666;
+    border-right: 2px solid #666;
+    border-bottom: 2px solid #ccc;
     margin: 0 6px;
 }
 
