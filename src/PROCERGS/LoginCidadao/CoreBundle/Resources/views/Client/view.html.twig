@@ -2,25 +2,41 @@
 
 {% block content %}
 <div id="app-detail" class="client-details content">
-    <h1>{{ client.name }}</h1>
-    <div class="desc row">
-        <div class="col-sm-12 col-md-4 text-center">
-        {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
-            <img src="/{{ client.getPictureWebPath }}" alt="" class="center-block">
-        {% else %}
-            <img src="//placehold.it/220x220" alt="" class="center-block">
-        {% endif %}
+
+<h1 class="visible-xs">{% trans %}Services{% endtrans %}</h1>
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="media">
+          <a class="pull-left" href="#">
+            {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
+            <img src="/{{ client.getPictureWebPath }}" alt="" class="media-object" width="100" height="100">
+            {% else %}
+            <img src="//placehold.it/220x220" alt="" class="media-object" width="100">
+            {% endif %}
+          </a>
+          <div class="media-body">
+            <h3 class="media-heading">{{ client.name }}</h3>
+            {{ client.description }}
+          </div>
+          {% if client.published %}
+          <div class="permissions">
+                <p>{% trans %}This service uses the following data from your Login Citizen account{%  endtrans %}:</p>
+                {% for auth, status in scopes %}
+                <span class="label {{ status ? 'label-success' : 'label-danger' }}">{{ ('scope.' ~ auth) | trans }}</span>
+                {% endfor %}
+          </div>
+          {% endif %}
         </div>
-        <div class="col-sm-12 col-md-7 col-md-offset-1">
-            <p class="client-desc">{{ client.description }}</p>
-        </div>
+      </div>
     </div>
 
-    <div class="msg text-center">
+
+    <div class="msg text-center clearfix">
     {% if client.published %}
     {%   if (user.hasAuthorization(client)) %}
-        <p class="active">{% trans %}This service is already active in your Citizen's Login account{%  endtrans %}</p>
-        <a href="#" class="btn" id="app-deactivate" role="button">{% trans %}Deactivate this service{% endtrans %}</a>
+        <div class="alert alert-success app-status" role="alert">{% trans %}This service is already active in your Citizen's Login account{%  endtrans %}</div>
+        <button type="button" class="btn btn-link btn-sm pull-right" id="app-deactivate">{% trans %}Deactivate this service{% endtrans %}</button>
 
         <div class="alert alert-danger" id="deactivate-box">
             <h4>{% trans %}Do you really want to disable this service?{%  endtrans %}</h4>
@@ -32,27 +48,14 @@
             </p>
         </div>
     {%   else %}
-        <p class="inactive">{% trans %}This service is not active in your Citizen's Login account{%  endtrans %}</p>
-        <a href="{{ client.landingPageUrl }}" class="btn btn-success" role="button">{% trans %}Activate this service{% endtrans %}</a>
+        <p class="alert alert-danger app-status">{% trans %}This service is not active in your Citizen's Login account{%  endtrans %}</p>
+        <a href="{{ client.landingPageUrl }}" class="btn btn-success" role="button" id="app-activate">{% trans %}Activate this service{% endtrans %}</a>
     {%   endif %}
     {% else %}
-        <p class="not-published">{% trans %}This service is not available yet. Stay tuned for the launch date.{% endtrans %}</p>
+        <p class="alert alert-info app-status">{% trans %}This service is not available yet. Stay tuned for the launch date.{% endtrans %}</p>
     {% endif %}
     </div>
-{% if client.published %}
-    <section class="permissions">
-        <p style="margin-top:50px;">{% trans %}This service uses the following data from your Login Citizen account{%  endtrans %}</p>
 
-        <ul class="permissions">
-        {% for auth, status in scopes %}
-            <li class="{{ status ? 'allow' : 'deny' }}">
-                {{ status ? '<i class="glyphicon glyphicon-ok"></i>' : '<i class="glyphicon glyphicon-remove"></i>' }}
-                <span>{{ ('scope.' ~ auth) | trans }}</span>
-            </li>
-        {% endfor %}
-        </ul>
-    </section>
-{% endif %}
 </div>
 
 {% endblock %}
