@@ -1,8 +1,9 @@
 // Notifications Infinite Grid Refresh
 $('.infinitegrid').on('click', '.load-more', function (event) {
+    var parent = $(this).closest('.infinitegrid');
     var url = $(this).attr('href');//.replace('OFFSET', lastId);
     $.get(url, function (data) {
-        var button = $('.infinitegrid .load-more');
+        var button = parent.find('.load-more');
         var perPage = button.data('per-page');
         var result = $(data).find('.infinitegrid-content .notification-line');
         var newButton = $(data).find('.load-more');
@@ -11,13 +12,13 @@ $('.infinitegrid').on('click', '.load-more', function (event) {
         if (result.size() < perPage) {
             button.hide();
         }
-        $('.infinitegrid .infinitegrid-content').append(result);
+        parent.find('.infinitegrid-content').append(result);
     });
     event.stopPropagation();
     return false;
 });
 
-$('.infinitegrid').on('click', 'a.notification', function (event) {
+$('.content.notifications .infinitegrid').on('click', 'a.notification', function (event) {
     event.stopPropagation();
     $(this).parent('.notification-line').stop().toggleClass('notification-open').promise().done(function() {
         var isOpen = $(this).is('.notification-open');
