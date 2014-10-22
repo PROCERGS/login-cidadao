@@ -95,6 +95,7 @@ body.no-scroll {
   float: right;
   padding-right: 18px;
   position: relative;
+  margin-top: -29px;
 }
 
 .settings-nav li a > .icon-count .caret {
