@@ -81,9 +81,11 @@
                     </i>
                 </button>
                 <ul class="dropdown-menu clearfix">
-                    <li class="menu-title">{{ 'Notifications'|trans }}</li>
+                    <li class="menu-title">
+                        {{ 'Notifications'|trans }}
+                    </li>
                     <div class="navbar-scrollspy-notification" data-offset="0" data-spy="scroll">
-                        {% render(controller("PROCERGSLoginCidadaoCoreBundle:Notification:gridNavbarUnread")) %}
+                        {% render(controller("PROCERGSLoginCidadaoNotificationBundle:Notification:navbar")) %}
                     </div>
                 </ul>
             </li>

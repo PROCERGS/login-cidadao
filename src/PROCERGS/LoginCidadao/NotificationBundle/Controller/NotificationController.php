@@ -131,4 +131,19 @@ class NotificationController extends Controller
         return compact('clients');
     }
 
+    /**
+     * @Route("/notifications/navbar/{offset}", requirements={"offset" = "\d+"}, defaults={"offset" = 0}, name="lc_notifications_navbar")
+     * @Template()
+     */
+    public function navbarAction(Request $request, $offset = 0)
+    {
+        $grid = $this->getNotificationGrid($offset)
+            ->setPerPage(5)
+            ->setMaxResult(5)
+            ->setRoute('lc_notifications_navbar')
+            ->createView($request);
+
+        return compact('grid');
+    }
+
 }
