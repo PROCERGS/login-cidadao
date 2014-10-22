@@ -33,7 +33,11 @@
 }
 
 #inbox-detail .notification .client-name {
-  margin: 5px 0 0;
+  margin: 5px 0;
+}
+
+#inbox-detail .notification .date {
+  font-size: 11px;
 }
 
 #inbox-detail .notification .media-heading {
