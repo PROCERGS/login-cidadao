@@ -43,13 +43,13 @@
       <div class="form-group">
         {{ form_label(form.plainPassword, 'form.plainPassword' | trans, {'label_attr': {'class': 'sr-only'}}) }}
         {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'placeholder' : 'form.plainPassword' }}) }}
-        <div class="input-error alert-danger">{{ form_errors(form.plainPassword) }}</div>
+        {{ form_errors(form.plainPassword) }}
       </div>
 
       <div class="form-group">
         {{ form_label(form.mobile, 'form.phone' | trans, {'label_attr': {'class': 'sr-only'}}) }}
         {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'placeholder' : ('form.phone' | trans) }}) }}
-        <div class="input-error alert-danger">{{ form_errors(form.mobile) }}</div>
+        {{ form_errors(form.mobile) }}
       </div>
 
       <p class='terms'>{% trans with { '%linkTerms%': path("lc_privacy")} %}By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.{% endtrans %}</p>
