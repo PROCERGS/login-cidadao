@@ -31,15 +31,40 @@ class NotificationController extends FOSRestController
      * @param int     $start
      * @param int     $end
      * @return array
-     * @REST\Put("/notifications/{start}/{end}/read", requirements={"start" = "\d+","end" = "\d+"}, name="js_api_1_put_notification_read")
+     * @REST\Put("/notifications/{start}/{end}/read", requirements={"start" = "\d+","end" = "\d+"}, name="js_api_1_put_notification_read_range")
      */
-    public function putReadAction($start, $end)
+    public function putReadRangeAction($start, $end)
     {
         $person = $this->getUser();
         $handler = $this->getNotificationHandler()
             ->getAuthenticatedHandler($person);
 
         return $handler->markRangeAsRead($start, $end);
+    }
+
+    /**
+     * Mark a notification as read.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Mark a notification as read.",
+     *   output = "array",
+     *   statusCodes = {
+     *     200 = "Returned when successful"
+     *   }
+     * )
+     * @REST\View(templateVar="result")
+     * @param int     $notificationId
+     * @return array
+     * @REST\Put("/notifications/{notificationId}/read", requirements={"notificationId" = "\d+"}, name="js_api_1_put_notification_read")
+     */
+    public function putReadAction($notificationId)
+    {
+        $person = $this->getUser();
+        $handler = $this->getNotificationHandler()
+            ->getAuthenticatedHandler($person);
+
+        return $handler->markRangeAsRead($notificationId, $notificationId);
     }
 
     /**
