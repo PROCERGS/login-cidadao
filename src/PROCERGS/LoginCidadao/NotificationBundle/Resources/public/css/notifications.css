@@ -120,6 +120,10 @@
     display: block;
 }
 
+.infinitegrid .notification-open .media-body {
+  color: #FFF;
+}
+
 .load-more {
   background-color: #5CB85C;
 }

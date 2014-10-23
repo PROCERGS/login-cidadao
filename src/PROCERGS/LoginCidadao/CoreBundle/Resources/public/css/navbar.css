@@ -361,8 +361,9 @@
 }
 
 #lc-navbar .app .media:hover {
-    background-color: #E8E8E8;
-    cursor: pointer;
+  background: none;
+  background-color: #E2EFDE;
+  cursor: pointer;
 }
 
 #lc-navbar .app .media a {
