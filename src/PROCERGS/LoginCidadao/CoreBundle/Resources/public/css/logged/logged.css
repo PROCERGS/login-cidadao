@@ -51,9 +51,13 @@ body.no-scroll {
   padding: 12px;
 }
 
-.settings-nav li.active a, .settings-nav li.active a:hover {
+.settings-nav li.active a,
+.settings-nav li.active a:hover,
+.settings-nav li a.active,
+.settings-nav li a.active:hover {
   /*background-color: #009933;*/
-  background-color: #5CB85C;
+  background-color: #5CB85C !important;
+  color: #fff !important;
   cursor: default;
 }
 

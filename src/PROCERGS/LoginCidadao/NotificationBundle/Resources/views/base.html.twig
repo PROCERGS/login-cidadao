@@ -1,7 +1,10 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
 {% block sidebar %}
-    {% render(controller("PROCERGSLoginCidadaoNotificationBundle:Notification:sidebar")) %}
+    {% if clientId is not defined %}
+        {% set clientId = null %}
+    {% endif %}
+    {% render(controller("PROCERGSLoginCidadaoNotificationBundle:Notification:sidebar", { 'route': app.request.attributes.get('_route'), 'clientId': clientId })) %}
 {% endblock %}
 
 {% block stylesheets %}
