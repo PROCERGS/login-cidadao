@@ -61,8 +61,4 @@ interface ClientInterface extends BaseInterface
     public function getOwners();
 
     public function setOwners(ArrayCollection $owners);
-
-    public function getUid();
-
-    public function setUid($uid = null);
 }

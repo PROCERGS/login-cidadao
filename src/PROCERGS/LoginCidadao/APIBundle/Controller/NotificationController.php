@@ -111,7 +111,7 @@ class NotificationController extends BaseController
      * @ApiDoc(
      *   resource = true,
      *   description = "Creates a new notification from the submitted data.",
-     *   input = "PROCERGS\LoginCidadao\CoreBundle\Form\Notification\NotificationType",
+     *   input = "PROCERGS\LoginCidadao\NotificationBundle\Form\NotificationType",
      *   statusCodes = {
      *     200 = "Returned when successful",
      *     400 = "Returned when the form has errors"

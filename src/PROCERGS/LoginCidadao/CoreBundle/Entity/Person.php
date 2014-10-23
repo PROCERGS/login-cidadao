@@ -486,10 +486,12 @@ class Person extends BaseUser implements PersonInterface
             $id = $client;
         }
         $authorizations = $this->getAuthorizations();
-        foreach ($authorizations as $auth) {
-            $c = $auth->getClient();
-            if ($c->getId() == $id) {
-                return true;
+        if (is_array($authorizations)) {
+            foreach ($authorizations as $auth) {
+                $c = $auth->getClient();
+                if ($c->getId() == $id) {
+                    return true;
+                }
             }
         }
         return false;
