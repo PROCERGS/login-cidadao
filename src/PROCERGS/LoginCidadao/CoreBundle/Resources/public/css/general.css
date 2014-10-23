@@ -105,7 +105,7 @@ img.desaturate {
 /* override boostrap */
 .well {
     background: none;
-    background-color: #dddedc;
+    background-color: #F1F1F1;
     border-radius: 0;
 }
 
