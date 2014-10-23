@@ -63,6 +63,10 @@ a.anchor {
     visibility: hidden;
 }
 
+a:hover {
+  text-decoration: none;
+}
+
 ul {
     list-style: none;
 }
