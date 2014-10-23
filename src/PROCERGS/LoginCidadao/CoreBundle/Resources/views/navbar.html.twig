@@ -74,7 +74,7 @@
             <li class="btn-group notifications pull-right dropdown-keep-open">
                 <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans %}Notifications{% endtrans %}">
                     <i class="glyphicon glyphicon-bell">
-                        {% set unreadTotal = notifications_helper.getTotalUnread +100 %}
+                        {% set unreadTotal = notifications_helper.getTotalUnread %}
                         {% if unreadTotal > 0 %}
                             {% if unreadTotal > 99 %}
                                 {% set unreadTotal = '99+' %}
