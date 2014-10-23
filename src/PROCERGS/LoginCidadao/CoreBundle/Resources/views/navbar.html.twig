@@ -96,7 +96,7 @@
 </div>
 {% if app.session.flashbag.peek('alert.unconfirmed.email') %}
     {% set flashMessage = app.session.flashbag.get('alert.unconfirmed.email') | first %}
-<div class="notification-extreme alert alert-danger">
+<div class="col-lg-offset-2 col-sm-offset-3 notification-extreme alert alert-danger">
     <div class="container">
         {{ flashMessage | raw }}
     </div>
