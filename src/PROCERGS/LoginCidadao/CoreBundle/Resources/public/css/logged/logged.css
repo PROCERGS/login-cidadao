@@ -360,6 +360,10 @@ body.no-scroll {
   display: none;
 }
 
+.applications .service:hover {
+  background-color: #E2EFDE!important;
+}
+
 .applications .service .status {
   clear: both;
 }
