@@ -25,12 +25,17 @@
 {% endblock grid_row_data %}
 
 {% block grid_row %}
+    {% if grid.routeParams.clientId is defined %}
+        {% set url = path('lc_notifications_from_client', { id: row.id, clientId: grid.routeParams.clientId }) %}
+    {% else %}
+        {% set url = path('lc_notifications', { id: row.id }) %}
+    {% endif %}
     <div class="notification-line {{ openId is defined and row.id == openId ? 'notification-open' : '' }}">
         <a class="row notification common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }} {{ grid.rlast ? 'row-last' }}"
              data-row="{{ grid.routeParams|merge({'notification':row.id, 'client_id': row.sender.id})|json_encode }}"
              title="{{ 'Click to read'|trans }}"
              data-notification-id="{{ row.id }}"
-             href="{{ path('lc_notifications', { id: row.id }) }}">
+             href="{{ url }}">
             {{ block('grid_row_action') }}
             {{ block('grid_row_data') }}
         </a>
@@ -42,7 +47,11 @@
 
 {% block grid_infinite_pagination %}
     {% if not grid.rlast and grid.isInfiniteGrid %}
-        <a href="{{ path(grid.route, { 'offset': grid.iterable.nextOffset }) }}" class="btn btn-block btn-info load-more" data-next-offset="{{ grid.iterable.nextOffset }}"
+        {% set routeParams = { 'offset': grid.iterable.nextOffset } %}
+        {% if grid.routeParams.clientId is defined %}
+        {% set routeParams = { 'offset': grid.iterable.nextOffset, 'clientId': grid.routeParams.clientId } %}
+        {% endif %}
+        <a href="{{ path(grid.route, routeParams) }}" class="btn btn-block btn-info load-more" data-next-offset="{{ grid.iterable.nextOffset }}"
            data-per-page="{{ grid.perPage }}">
             {{ 'load more...'|trans }}
         </a>

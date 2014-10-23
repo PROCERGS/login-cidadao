@@ -50,9 +50,11 @@ interface NotificationHandlerInterface
      * @param PersonInterface $person
      * @param type $limit
      * @param type $offset the id of the last notification received
+     * @param ClientInterface $client optionally filters by OAuth Client
      */
     public function getAllFromPersonIdOffset(PersonInterface $person,
-                                             $limit = 5, $offset = 0);
+                                             $limit = 5, $offset = 0,
+                                             ClientInterface $client = null);
 
     /**
      * Get a list of an user's Notifications restricted by Client.

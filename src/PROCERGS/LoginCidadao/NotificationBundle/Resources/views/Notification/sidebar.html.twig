@@ -20,7 +20,7 @@
 
             <ul aria-labelledby="notifications_submenu_general" role="menu" class="submenu">
                 <li>
-                    <a href="{{ path('lc_notifications_settings') }}" tabindex="-1" role="menuitem">{{ 'notification.sub.configure'|trans }}</a>
+                    <a href="{{ path('lc_notifications_settings') }}" tabindex="-1" role="menuitem">{{ 'Settings'|trans }}</a>
                 </li>
             </ul>
         </li>
@@ -44,11 +44,11 @@
                 </a>
                 <ul aria-labelledby="drop{{ cli.id }}" role="menu" class="collapse submenu" id="collapse{{ cli.id }}">
                     <li>
-                        <a href="{{ path('lc_notifications_settings',{'clientId' : cli.id}) }}" tabindex="-1" role="menuitem">{{ 'Notifications'|trans }}</a>
+                        <a href="{{ path('lc_notifications_from_client',{'clientId' : cli.id}) }}" tabindex="-1" role="menuitem">{{ 'Notifications'|trans }}</a>
                     </li>
                     {% if app.user.hasAuthorization(cli.id) %}
                     <li>
-                        <a href="{{ path('lc_notifications_settings',{'clientId' : cli.id}) }}" tabindex="-1" role="menuitem">{{ 'notification.sub.configure'|trans }}</a>
+                        <a href="{{ path('lc_notifications_settings',{'clientId' : cli.id}) }}" tabindex="-1" role="menuitem">{{ 'Settings'|trans }}</a>
                     </li>
                     {% endif %}
                 </ul>

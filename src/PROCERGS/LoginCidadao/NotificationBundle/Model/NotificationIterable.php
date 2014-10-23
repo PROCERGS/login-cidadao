@@ -33,8 +33,7 @@ class NotificationIterable extends AbstractInfiniteIterable
             return $this->cache[$this->offset];
         }
 
-        $current = $this->handler->allIdOffset($this->getPerIteration(),
-                                               $this->getOffset());
+        $current = $this->getCurrentData();
         if (is_array($current)) {
             $last = end($current);
             if ($last instanceof NotificationInterface) {
@@ -92,6 +91,12 @@ class NotificationIterable extends AbstractInfiniteIterable
     public function getNextOffset()
     {
         return $this->nextOffset;
+    }
+
+    protected function getCurrentData()
+    {
+        return $this->handler->allIdOffset($this->getPerIteration(),
+                                           $this->getOffset());
     }
 
 }

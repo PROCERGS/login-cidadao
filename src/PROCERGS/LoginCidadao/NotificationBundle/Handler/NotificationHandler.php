@@ -205,9 +205,11 @@ class NotificationHandler implements NotificationHandlerInterface
     }
 
     public function getAllFromPersonIdOffset(PersonInterface $person,
-                                             $limit = 5, $offset = 0)
+                                             $limit = 5, $offset = 0,
+                                             ClientInterface $client = null)
     {
-        return $this->repository->findNextNotifications($person, $limit, $offset);
+        return $this->repository->findNextNotifications($person, $limit,
+                                                        $offset, $client);
     }
 
     public function countUnread(PersonInterface $person)
@@ -219,4 +221,5 @@ class NotificationHandler implements NotificationHandlerInterface
     {
         return $this->repository->getTotalUnreadGroupByClient($person);
     }
+
 }

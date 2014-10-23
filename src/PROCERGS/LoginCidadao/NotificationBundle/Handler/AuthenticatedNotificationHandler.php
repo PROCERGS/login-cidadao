@@ -38,10 +38,11 @@ class AuthenticatedNotificationHandler implements AuthenticatedNotificationHandl
                                                 $orderby);
     }
 
-    public function allIdOffset($limit = 5, $offset = 0)
+    public function allIdOffset($limit = 5, $offset = 0,
+                                ClientInterface $client = null)
     {
         return $this->handler->getAllFromPersonIdOffset($this->person, $limit,
-                                                        $offset);
+                                                        $offset, $client);
     }
 
     public function getAllFromClient(ClientInterface $client, $limit = 5,
