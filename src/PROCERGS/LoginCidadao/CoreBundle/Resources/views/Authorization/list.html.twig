@@ -12,19 +12,25 @@
       <div class="panel-heading"><h2 class="panel-title">{% trans %}Active Services{% endtrans %}</h2></div>
       <div class="panel-body">
         {% if user.getAuthorizations|length > 0 %}
-        {% for auth in user.getAuthorizations %}
-        <div class="services list-group">
-          <a href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}" class="list-group-item clearfix">
-            {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
-            <img src="/{{ auth.client.getPictureWebPath }}" width="65" height="65" alt="" class="client-img">
-            {% else %}
-            <img src="//placehold.it/65x65" alt="" class="center-block">
-            {% endif %}
-            <h6 class="title">{{ auth.client.name }}{{ auth.client.name }}{{ auth.client.name }}</h6>
-            <div class="status"><span class="label label-success pull-right">{% trans %}Active{%  endtrans %}</span></div>
-          </a>
-        </div>
-        {% endfor %}
+        <ul class="list-group">
+          {% for auth in user.getAuthorizations %}
+          <li class="list-group-item service clearfix">
+            <a class="media" href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}">
+              <div class="pull-left">
+                {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
+                <img src="/{{ auth.client.getPictureWebPath }}" width="65" height="65" alt="" class="media-object">
+                {% else %}
+                <img src="//placehold.it/65x65" alt="">
+                {% endif %}
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading">{{ auth.client.name }}</h4>
+              </div>
+              <div class="status"><span class="label label-success pull-right">{% trans %}Active{%  endtrans %}</span></div>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
 
         {% else %}
         <p class="empty">{% trans %}There are no active services yet.{%  endtrans %}</p>
@@ -39,19 +45,25 @@
      <div class="panel panel-default">
       <div class="panel-heading"><h2 class="panel-title">{% trans %}Other Services{% endtrans %}</h2></div>
       <div class="panel-body">
-          {% for client in apps %}
-          <div class="services list-group">
-            <a href="{{ path('lc_app_details', {'clientId': client.id}) }}" class="list-group-item clearfix">
-              {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
-              <img src="/{{ client.getPictureWebPath }}" width="65" height="65" alt="" class="client-img">
-              {% else %}
-              <img src="//placehold.it/65x65" alt="" class="client-img">
-              {% endif %}
-              <h6 class="title">{{ client.name }}</h6>
-              <div class="status"><span class="label label-default pull-right">{% trans %}Inactive{%  endtrans %}</span></div>
-            </a>
-          </div>
-          {% endfor %}
+          <ul class="list-group">
+            {% for client in apps %}
+            <li class="list-group-item service clearfix">
+              <a class="media" href="{{ path('lc_app_details', {'clientId': client.id}) }}">
+                <div class="pull-left">
+                  {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
+                  <img src="/{{ client.getPictureWebPath }}" width="65" height="65" alt="" class="media-object">
+                  {% else %}
+                  <img src="//placehold.it/65x65" alt="">
+                  {% endif %}
+                </div>
+                <div class="media-body">
+                  <h4 class="media-heading">{{ client.name }}</h4>
+                </div>
+                <div class="status"><span class="label label-success pull-right">{% trans %}Inactive{%  endtrans %}</span></div>
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
       </div>
     </div>
     {% endif %}

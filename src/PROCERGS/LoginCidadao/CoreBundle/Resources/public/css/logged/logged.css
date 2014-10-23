@@ -356,18 +356,8 @@ body.no-scroll {
   display: none;
 }
 
-.applications .services .client-img {
-  float: left;
-  margin: 0px 10px 10px 0px;
-}
-
-.applications .services .title {
-  margin: 0;
-}
-
-.applications .services .status {
+.applications .service .status {
   clear: both;
-  margin: 10px 0;
 }
 
 
