@@ -52,7 +52,7 @@
 }
 
 .infinitegrid .notification:hover {
-    background-color: #C7D6CB;
+    background-color: #E2EFDE;
 }
 
 .infinitegrid .notification .client-img {
@@ -118,4 +118,8 @@
 
 .infinitegrid .notification-open {
     display: block;
+}
+
+.load-more {
+  background-color: #5CB85C;
 }

@@ -20,6 +20,10 @@ $('.infinitegrid').on('click', '.load-more', function (event) {
 
 $('.content.notifications .infinitegrid').on('click', 'a.notification', function (event) {
     event.stopPropagation();
+
+    $('.notification').not(this).parent('.notification-line').removeClass('notification-open');
+    $('.notification-content').slideUp();
+
     $(this).parent('.notification-line').stop().toggleClass('notification-open').promise().done(function() {
         var isOpen = $(this).is('.notification-open');
         if (isOpen) {
