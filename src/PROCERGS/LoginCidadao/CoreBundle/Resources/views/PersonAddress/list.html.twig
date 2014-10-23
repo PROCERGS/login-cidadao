@@ -2,5 +2,7 @@
 
 {% block addresses %}
     {{ include("PROCERGSLoginCidadaoCoreBundle:PersonAddress:list.component.html.twig") }}
-    <a href="{{ path('lc_person_addresses_new') }}#form" class="btn btn-success btn-block">{{ 'New Address' | trans }}</a>
+    <div class="form-bar text-center clearfix">
+      <a href="{{ path('lc_person_addresses_new') }}#form" class="btn btn-success">{{ 'New Address' | trans }}</a>
+    </div>
 {% endblock %}

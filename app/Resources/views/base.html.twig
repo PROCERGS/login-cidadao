@@ -19,6 +19,10 @@
     <body id="body">
         {% block header %}{% endblock %}
         <div class="container-fluid">
+            {% block notificationExtreme %}
+                {{ include("PROCERGSLoginCidadaoCoreBundle::notification_extreme.html.twig", { columns: 'col-sm-7 col-sm-offset-4 col-md-7 col-md-offset-4 col-lg-6 col-lg-offset-4' } ) }}
+            {% endblock %}
+
             {% block body %}
             {% endblock %}
             {% block footer %}{% endblock %}

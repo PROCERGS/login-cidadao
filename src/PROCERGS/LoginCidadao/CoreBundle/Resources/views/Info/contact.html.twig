@@ -1,6 +1,11 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle::base.html.twig' %}
 {% trans_default_domain 'FOSUserBundle' %}
 {% block body %}
+
+{% block notificationExtreme %}
+{{ include("PROCERGSLoginCidadaoCoreBundle::notification_extreme.html.twig", { columns: 'col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3' } ) }}
+{% endblock %}
+
 <div class="row">
   <div class="general-content col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3 clearfix">
     {{ form_start(form, {'attr' : {'role' : 'form'}}) }}

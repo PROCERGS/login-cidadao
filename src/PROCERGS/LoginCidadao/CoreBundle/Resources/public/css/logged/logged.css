@@ -10,6 +10,7 @@ body.no-scroll {
   .settings-content {
     margin: 0 15px;
   }
+
 }
 
 @media (min-width: 992px) {
@@ -190,35 +191,16 @@ body.no-scroll {
   }
 
   .settings-nav {
-    /*min-width: 200px;
-    padding: 0;
-    position: absolute;
-    z-index: 100;
-    */
-    /*bottom: auto;
-    height: auto;
-    max-width: 200px;*/
     left: -200px;
 
     -webkit-transition: 0.5s ease-in-out;
     -moz-transition: 0.5s ease-in-out;
     -o-transition: 0.5s ease-in-out;
     transition: 0.5s ease-in-out;
-
-    /*-moz-transform: translateX(-200px);
-    -webkit-transform: translateX(-200px);
-    -o-transform: translateX(-200px);
-    -ms-transform: translateX(-200px);
-    transform: translateX(-200px);*/
   }
 
   .menu-open .settings-nav {
     left: 0;
-    /*-moz-transform: translateX(0px);
-    -webkit-transform: translateX(0px);
-    -o-transform: translateX(0px);
-    -ms-transform: translateX(0px);
-    transform: translateX(0px);*/
   }
 
   .settings-content, footer .content, .alert-bar {
@@ -234,8 +216,6 @@ body.no-scroll {
     -o-transform: translateX(200px);
     -ms-transform: translateX(200px);
     transform: translateX(200px);
-    /*left: 200px;
-    position: relative;*/
   }
 
   .settings-content h3 {

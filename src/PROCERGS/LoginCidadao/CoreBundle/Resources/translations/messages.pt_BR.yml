@@ -244,7 +244,7 @@ Cpf: 'CPF'
 Country: 'Pais'
 State: Estado
 City: 'Cidade'
-Address: Endreço
+Address: Endereço
 'Documents': 'Documentos'
 'Documents were successfully changed': 'Documentos foram alterados com sucesso'
 'cep not match country mask.': 'CEP não é válido para o pais selecionado.'
