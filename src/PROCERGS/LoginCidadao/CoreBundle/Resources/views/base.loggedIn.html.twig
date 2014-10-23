@@ -75,12 +75,6 @@
           <i class="glyphicon glyphicon-bell icon"></i>
         </a>
       </li>
-                <li class="profile glyph {{ app.request.attributes.get('_route') == 'lc_notifications_settings' ? 'active' }}">
-                    <a href="{{ path('lc_notifications_settings') }}" class="clearfix">
-                        <span>{% trans %}Notification Settings{% endtrans %}</span>
-                        <i class="glyphicon glyphicon-send icon"></i>
-                    </a>
-                </li>
       <li class="username {{ app.request.attributes.get('_route') == 'lc_update_username' ? 'active' }}">
         <a href="{{ path('lc_update_username')}}" class="clearfix">
           <span>{% trans %}Change Username{% endtrans %}</span>

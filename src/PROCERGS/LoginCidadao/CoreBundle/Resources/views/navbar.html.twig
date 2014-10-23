@@ -76,6 +76,9 @@
                     <i class="glyphicon glyphicon-bell">
                         {% set unreadTotal = notifications_helper.getTotalUnread %}
                         {% if unreadTotal > 0 %}
+                            {% if unreadTotal > 99 %}
+                                {% set unreadTotal = '99+' %}
+                            {% endif %}
                             <span class="label label-danger notification-total-unread-badge">{{ unreadTotal }}</span>
                         {% endif %}
                     </i>

@@ -6,12 +6,14 @@ use Doctrine\ORM\EntityRepository;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use Doctrine\ORM\Query;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+use PROCERGS\OAuthBundle\Model\ClientInterface;
 
 class NotificationRepository extends EntityRepository
 {
 
     public function findNextNotifications(Person $person, $items = 8,
-                                          $lastId = 0)
+                                          $lastId = 0,
+                                          ClientInterface $client = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('n')
@@ -24,6 +26,12 @@ class NotificationRepository extends EntityRepository
         if ($lastId > 0) {
             $qb->andWhere('n.id < :lastId')
                 ->setParameter('lastId', $lastId);
+        }
+
+        if ($client instanceof ClientInterface) {
+            $qb
+                ->andWhere('n.sender = :client')
+                ->setParameter('client', $client);
         }
 
         return $qb->getQuery()->getResult();
@@ -47,18 +55,16 @@ class NotificationRepository extends EntityRepository
 
     public function getTotalUnreadGroupByClient($person)
     {
-        return $this->getEntityManager()->createQueryBuilder('n')
-                ->select('c.id, c.name, CountIf(n.readDate is null) total, c.picturePath picture_path')
-                ->from('PROCERGSLoginCidadaoNotificationBundle:Notification',
-                       'n')
-                ->join('PROCERGSLoginCidadaoNotificationBundle:Category', 'cnc',
-                       'WITH', 'n.category = cnc')
-                ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH',
-                       'cnc.client = c')
-                ->where('n.person = :person')
-                ->setParameter('person', $person)
-                ->groupBy('c.id', 'c.name')
-                ->orderBy('c.id', 'ASC')
+        $qb = $this->getEntityManager()->createQueryBuilder('n')
+            ->select('c.id, c.name, CountIf(n.readDate is null) total, c.picturePath picture_path')
+            ->from('PROCERGSLoginCidadaoNotificationBundle:Notification', 'n')
+            ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'n.sender = c')
+            ->where('n.person = :person')
+            ->setParameter('person', $person)
+            ->groupBy('c.id', 'c.name')
+            ->orderBy('c.id', 'ASC');
+
+        return $qb
                 ->getQuery()
                 ->getResult();
     }

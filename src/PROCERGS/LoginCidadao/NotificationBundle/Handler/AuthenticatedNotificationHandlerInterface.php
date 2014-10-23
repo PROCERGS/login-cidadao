@@ -36,10 +36,12 @@ interface AuthenticatedNotificationHandlerInterface
      *
      * @param int $limit   the limit of the result
      * @param int $offset  starting from the id
+     * @param ClientInterface $client optionally filters by OAuth Client
      *
      * @return array
      */
-    public function allIdOffset($limit = 5, $offset = 0);
+    public function allIdOffset($limit = 5, $offset = 0,
+                                ClientInterface $client = null);
 
     /**
      * Get a list of an user's Notifications restricted by Client.
