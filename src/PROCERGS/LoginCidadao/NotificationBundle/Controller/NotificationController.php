@@ -171,13 +171,13 @@ class NotificationController extends Controller
      * @Route("/notifications/sidebar", name="lc_notifications_sidebar")
      * @Template()
      */
-    public function sidebarAction()
+    public function sidebarAction($route, $clientId)
     {
         $handler = $this->getNotificationHandler()
             ->getAuthenticatedHandler($this->getUser());
 
         $clients = $handler->countUnreadByClient();
-        return compact('clients');
+        return compact('clients', 'route', 'clientId');
     }
 
     /**
