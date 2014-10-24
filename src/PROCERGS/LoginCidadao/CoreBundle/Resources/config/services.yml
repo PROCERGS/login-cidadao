@@ -260,6 +260,7 @@ services:
 
     procergs_logincidadao.person.address.form.type:
         class: %procergs_logincidadao.person.address.form.type.class%
+        arguments: [ "@translator" ]
         tags:
             - { name: form.type, alias: lc_person_address }
 

@@ -25,7 +25,7 @@ if ($('.city-selector').length) {
         templates: {
             empty: [
                 '<div class="empty-message">',
-                'No city found.',
+                $('.city-selector').data('empty-message'),
                 '</div>'
             ].join('\n'),
             suggestion: Handlebars.compile('<p><strong>{\{name}}</strong>, {\{state.acronym}}</p>')

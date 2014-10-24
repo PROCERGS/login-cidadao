@@ -5,12 +5,21 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class PersonAddressFormType extends AbstractType
 {
+    protected $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator =  $translator;
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $cityEmptyMessage = $this->translator->trans('No city found.');
+
         $builder
             ->add('name', null,
                   array('attr' => array('class' => 'form-control')))
@@ -19,7 +28,7 @@ class PersonAddressFormType extends AbstractType
             ->add('line2', null,
                   array('attr' => array('class' => 'form-control'), 'label' => 'Address Second Line', 'required' => false))
             ->add('city', 'city_selector',
-                  array('attr' => array('class' => 'form-control city-selector'), 'required' => false))
+                  array('attr' => array('class' => 'form-control city-selector', 'data-empty-message' => $cityEmptyMessage), 'required' => false))
             ->add('postalCode', null,
                   array('attr' => array('class' => 'form-control')))
             ->add('save', 'submit',
