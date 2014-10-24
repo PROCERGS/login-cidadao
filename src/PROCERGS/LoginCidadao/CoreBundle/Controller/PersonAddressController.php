@@ -9,7 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonAddress;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\RemovePersonAddressFormType;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class PersonAddressController extends Controller
 {
@@ -122,7 +122,7 @@ class PersonAddressController extends Controller
         $deleteForms = array();
         $addresses = $person->getAddresses();
 
-        if (is_array($addresses) || $addresses instanceof ArrayCollection) {
+        if (is_array($addresses) || $addresses instanceof Collection) {
             foreach ($addresses as $address) {
                 $data = array('address_id' => $address->getId());
                 $deleteForms[$address->getId()] = $this->createForm(new RemovePersonAddressFormType(),
