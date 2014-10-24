@@ -127,3 +127,9 @@
 .load-more {
   background-color: #5CB85C;
 }
+
+.load-more:hover {
+  background-color: #E2EFDE!important;
+  border-color: #DDD;
+  color: #000;
+}

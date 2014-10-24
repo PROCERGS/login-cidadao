@@ -8,7 +8,7 @@
         {% for i in 0..grid.rpage  %}
             <li><a href="#page{{ (i+1)+grid.rstart }}" role="tab" data-toggle="tab">{{ (i+1)+grid.rstart }}</a></li>
         {% endfor %}
-        {% if grid.rlast %}
+        {% if not grid.rlast %}
             <li><a href="{{ path(grid.route, grid.routeParams|merge({page:grid.page+1})) }}">&raquo;</a></li>
         {% endif %}
         </ul>
@@ -60,7 +60,7 @@
         {% endblock grid_body %}
 
         {% block grid_infinite_pagination %}
-        {% if grid.rlast and grid.isInfiniteGrid %}
+        {% if not grid.rlast and grid.isInfiniteGrid %}
         <div class="btn-group">
             <button type="button" class="btn btn-default infinitescroll-next-button " data-retrive="#{{ grid.id }}">
                 <span class="glyphicon glyphicon glyphicon-list"></span> {{ 'more'|trans }}
