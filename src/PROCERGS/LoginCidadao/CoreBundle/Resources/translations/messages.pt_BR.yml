@@ -591,3 +591,4 @@ If the address is in another country leave the city blank and fill in this infor
 'This RG is invalid' : 'Esse RG é inválido'
 'You already have an ID registered for this State' : 'Você ja tem um RG cadastrado para esse Estado'
 No city found.: Nenhuma cidade encontrada com esse nome.
+'You don''t have an address registered yet. Use the button below to add one.': Você não tem um endereço cadastrado ainda. Use o botão a seguir para adicionar um.
