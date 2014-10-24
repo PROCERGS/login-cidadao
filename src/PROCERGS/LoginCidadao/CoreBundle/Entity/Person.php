@@ -376,6 +376,8 @@ class Person extends BaseUser implements PersonInterface
         $this->notificationOptions = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->clients = new ArrayCollection();
+        $this->logoutKeys = new ArrayCollection();
+        $this->addresses = new ArrayCollection();
     }
 
     public function getEmail()

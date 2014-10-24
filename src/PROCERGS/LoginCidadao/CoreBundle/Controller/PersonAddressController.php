@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonAddress;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\RemovePersonAddressFormType;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class PersonAddressController extends Controller
 {
@@ -99,13 +100,17 @@ class PersonAddressController extends Controller
                 $em->remove($address);
                 $em->flush();
             } catch (AccessDeniedException $e) {
-                $this->get('session')->getFlashBag()->add('error', $translator->trans("Access Denied."));
+                $this->get('session')->getFlashBag()->add('error',
+                                                          $translator->trans("Access Denied."));
             } catch (\Exception $e) {
-                $this->get('session')->getFlashBag()->add('error', $translator->trans("Wasn't possible to remove this address."));
-                $this->get('session')->getFlashBag()->add('error', $e->getMessage());
+                $this->get('session')->getFlashBag()->add('error',
+                                                          $translator->trans("Wasn't possible to remove this address."));
+                $this->get('session')->getFlashBag()->add('error',
+                                                          $e->getMessage());
             }
         } else {
-            $this->get('session')->getFlashBag()->add('error', $translator->trans("Wasn't possible to remove this address."));
+            $this->get('session')->getFlashBag()->add('error',
+                                                      $translator->trans("Wasn't possible to remove this address."));
         }
 
         return $this->redirect($this->generateUrl('lc_person_addresses'));
@@ -115,10 +120,14 @@ class PersonAddressController extends Controller
     {
         $person = $this->getUser();
         $deleteForms = array();
+        $addresses = $person->getAddresses();
 
-        foreach ($person->getAddresses() as $address) {
-            $data = array('address_id' => $address->getId());
-            $deleteForms[$address->getId()] = $this->createForm(new RemovePersonAddressFormType(), $data)->createView();
+        if (is_array($addresses) || $addresses instanceof ArrayCollection) {
+            foreach ($addresses as $address) {
+                $data = array('address_id' => $address->getId());
+                $deleteForms[$address->getId()] = $this->createForm(new RemovePersonAddressFormType(),
+                                                                    $data)->createView();
+            }
         }
         return $deleteForms;
     }
