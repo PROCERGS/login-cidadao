@@ -93,10 +93,13 @@ class GridHelper
         if ($request->get('page')) {
             $this->page = $request->get('page');
             if (null !== $this->queryBuilder) {
-                $this->queryBuilder->setFirstResult($this->page * $this->maxResult);
+                $this->queryBuilder->setFirstResult(($this->page - 1) * $this->maxResult);
             }
             if (null !== $this->getIterable()) {
-                $this->getIterable()->setInitialOffset($this->page * $this->maxResult);
+                $this->getIterable()->setInitialOffset(($this->page - 1) * $this->maxResult);
+                if (null !== $this->queryBuilder) {
+                    $this->getIterable()->setOffset($this->getIterable()->getInitialOffset());
+                }
             }
         } else {
             $this->page = 1;

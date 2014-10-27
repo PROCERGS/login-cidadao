@@ -6,7 +6,7 @@
             <li><a href="{{ path(grid.route, grid.routeParams|merge({page:grid.page-1})) }}">&laquo;</a></li>
         {% endif %}
         {% for i in 0..grid.rpage  %}
-            <li><a href="#page{{ (i+1)+grid.rstart }}" role="tab" data-toggle="tab">{{ (i+1)+grid.rstart }}</a></li>
+            <li><a href="#page{{ (i)+grid.rstart }}" role="tab" data-toggle="tab">{{ (i)+grid.rstart }}</a></li>
         {% endfor %}
         {% if not grid.rlast %}
             <li><a href="{{ path(grid.route, grid.routeParams|merge({page:grid.page+1})) }}">&raquo;</a></li>
@@ -16,7 +16,7 @@
 
         {% block grid_body %}
         <div class="tab-content">
-            <div class="tab-pane active infinitegrid-content" id="page{{ grid.rstart+1 }}">
+            <div class="tab-pane active infinitegrid-content" id="page{{ grid.rstart }}">
             {% if grid.resultset|length >0 %}
             {% block grid_header %}
                 <div class="row header">

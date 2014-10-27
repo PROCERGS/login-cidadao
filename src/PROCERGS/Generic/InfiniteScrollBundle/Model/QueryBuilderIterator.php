@@ -26,13 +26,15 @@ class QueryBuilderIterator extends AbstractInfiniteIterable
     {
         $query = $this->getQueryBuilder()
             ->setFirstResult($this->getOffset())
-            ->setMaxResults($this->getPerIteration())
+            ->setMaxResults($this->getPerIteration() + 1)
         ;
 
         $results = $query->getQuery()->getResult();
 
-        if (count($results) < $this->getPerIteration()) {
+        if (count($results) <= $this->getPerIteration()) {
             $this->last = true;
+        } else {
+            array_pop($results);
         }
 
         return $results;
