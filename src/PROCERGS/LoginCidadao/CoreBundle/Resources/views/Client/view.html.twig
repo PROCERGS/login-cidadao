@@ -31,8 +31,8 @@
     </div>
 
     <div class="msg text-center clearfix">
-    {% if client.published %}
-    {%   if (user.hasAuthorization(client)) %}
+    {% if client.published or user.hasAuthorization(client) %}
+    {%   if user.hasAuthorization(client) %}
         <div class="alert alert-success app-status" role="alert">{% trans %}This service is already active in your Citizen's Login account{%  endtrans %}</div>
         <button type="button" class="btn btn-link btn-sm pull-right" id="app-deactivate">{% trans %}Deactivate this service{% endtrans %}</button>
 

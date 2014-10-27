@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationToken;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
@@ -488,7 +489,7 @@ class Person extends BaseUser implements PersonInterface
             $id = $client;
         }
         $authorizations = $this->getAuthorizations();
-        if (is_array($authorizations)) {
+        if (is_array($authorizations) || $authorizations instanceof Collection) {
             foreach ($authorizations as $auth) {
                 $c = $auth->getClient();
                 if ($c->getId() == $id) {
