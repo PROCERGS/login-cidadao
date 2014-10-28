@@ -29,7 +29,7 @@ class NotificationController extends Controller
         } else {
             $offset = null;
         }
-        $grid = $this->getNotificationGrid($offset)->createView($this->getRequest());
+        $grid = $this->getNotificationGrid($offset, 10)->createView($this->getRequest());
 
         return compact('grid', 'openId');
     }
@@ -50,7 +50,7 @@ class NotificationController extends Controller
         $client = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:Client')
             ->find($clientId);
 
-        $grid = $this->getNotificationGrid($offset, $client)->createView($this->getRequest());
+        $grid = $this->getNotificationGrid($offset, 10, $client)->createView($this->getRequest());
 
         return compact('grid', 'openId');
     }
@@ -92,25 +92,12 @@ class NotificationController extends Controller
     }
 
     /**
-     * @Route("/notifications/navbar/fragment/{offset}", requirements={"offset" = "\d+"}, defaults={"offset" = 0}, name="lc_notifications_navbar_fragment")
-     * @Template()
-     */
-    public function getNavbarFragmentAction(Request $request, $offset = 0)
-    {
-        $notifications = $this->getDoctrine()->getManager()
-            ->getRepository('PROCERGSLoginCidadaoNotificationBundle:Notification')
-            ->findNextNotifications($this->getUser(), 8, $offset);
-
-        return compact('notifications');
-    }
-
-    /**
      * @Route("/notifications/grid/fragment/{offset}", requirements={"offset" = "\d+"}, defaults={"offset" = 0}, name="lc_notifications_grid_fragment")
      * @Template("PROCERGSLoginCidadaoNotificationBundle:Notification:grid.html.twig")
      */
     public function getGridFragmentAction(Request $request, $offset = 0)
     {
-        $grid = $this->getNotificationGrid($offset)->createView($request);
+        $grid = $this->getNotificationGrid($offset, 10)->createView($request);
 
         return compact('grid');
     }
@@ -124,7 +111,7 @@ class NotificationController extends Controller
     {
         $client = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:Client')
             ->find($clientId);
-        $grid = $this->getNotificationGrid($offset, $client)->createView($request);
+        $grid = $this->getNotificationGrid($offset, 10, $client)->createView($request);
 
         return compact('grid');
     }
@@ -137,16 +124,17 @@ class NotificationController extends Controller
         return $this->get('procergs.notification.handler');
     }
 
-    private function getNotificationGrid($offset = 0,
+    private function getNotificationGrid($offset = 0, $perIteration = 10,
                                          ClientInterface $client = null)
     {
         $handler = $this->getNotificationHandler()
             ->getAuthenticatedHandler($this->getUser());
         if ($client instanceof ClientInterface) {
-            $iterator = new ClientNotificationIterable($handler, $client, 10,
-                                                       $offset);
+            $iterator = new ClientNotificationIterable($handler, $client,
+                                                       $perIteration, $offset);
         } else {
-            $iterator = new NotificationIterable($handler, 10, $offset);
+            $iterator = new NotificationIterable($handler, $perIteration,
+                                                 $offset);
         }
 
         $grid = new GridHelper($iterator);
@@ -186,7 +174,7 @@ class NotificationController extends Controller
      */
     public function navbarAction(Request $request, $offset = 0)
     {
-        $grid = $this->getNotificationGrid($offset)
+        $grid = $this->getNotificationGrid($offset, 5)
             ->setPerPage(5)
             ->setMaxResult(5)
             ->setRoute('lc_notifications_navbar')
