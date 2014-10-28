@@ -139,7 +139,6 @@
     validator.cep.urlQuery = '{{ path('lc_consultaCep2') }}';
     var notification = {
         'config': {
-            'navbar_fragment_url': '{{ path('lc_notifications_navbar_fragment') }}',
             'mark_as_read_range': '{{ path('js_api_1_put_notification_read_range', { 'start': '0', 'end': '9', '_format': 'json' }) }}',
             'mark_as_read': '{{ path('js_api_1_put_notification_read', { 'notificationId': '0', '_format': 'json' }) }}'
         }
