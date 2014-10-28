@@ -85,6 +85,9 @@
 {% endblock %}
 {% block javascripts %}
 {{ parent() }}
+{% javascripts '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/idCard.js' filter='uglifyjs2' %}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}
 <script>
 var routeRgEdit = '{{ path('lc_profile_doc_rg_edit') }}';
 var routeRgRemove = '{{ path('lc_profile_doc_rg_remove') }}';
@@ -143,6 +146,9 @@ var messages = {
     form: {
         voter_registration: {
             "invalid": "{{ 'form.voter_registration.invalid' | trans({}, "validators") }}"
+        },
+        id_card: {
+            "allIdsLoaded": "{{ 'No more documents' | trans }}"
         }
     }
 };
