@@ -1,13 +1,13 @@
 // Notifications Infinite Grid Refresh
-$('.infinitegrid').on('click', '.load-more', function (event) {
+$('.infinitegrid').on('click', '.notification-load-more', function (event) {
     $(this).button('loading');
     var parent = $(this).closest('.infinitegrid');
-    var url = $(this).attr('href');//.replace('OFFSET', lastId);
+    var url = $(this).attr('href');
     $.get(url, function (data) {
-        var button = parent.find('.load-more');
+        var button = parent.find('.notification-load-more');
         var perPage = button.data('per-page');
         var result = $(data).find('.infinitegrid-content .notification-line');
-        var newButton = $(data).find('.load-more');
+        var newButton = $(data).find('.notification-load-more');
         button.replaceWith(newButton);
         if (result.size() < perPage) {
             button.hide();

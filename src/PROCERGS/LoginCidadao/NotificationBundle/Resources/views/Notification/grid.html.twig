@@ -69,7 +69,7 @@
         {% if grid.routeParams.clientId is defined %}
         {% set routeParams = { 'offset': grid.iterable.nextOffset, 'clientId': grid.routeParams.clientId } %}
         {% endif %}
-        <a href="{{ path(grid.route, routeParams) }}" class="btn btn-block btn-info load-more" data-next-offset="{{ grid.iterable.nextOffset }}"
+        <a href="{{ path(grid.route, routeParams) }}" class="btn btn-block btn-info notification-load-more" data-next-offset="{{ grid.iterable.nextOffset }}"
            data-per-page="{{ grid.perPage }}" data-loading-text="{{ 'loading...'|trans }}">
             {{ 'load more'|trans }}
         </a>
