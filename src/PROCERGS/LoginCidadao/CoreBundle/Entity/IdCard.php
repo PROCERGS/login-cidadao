@@ -1,4 +1,5 @@
 <?php
+
 namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -6,11 +7,11 @@ use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Table(name="rg")
+ * @ORM\Table(name="id_card")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
-class Rg
+class IdCard
 {
 
     /**
@@ -29,23 +30,20 @@ class Rg
     /**
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\State")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
-     * @Groups({"rgs"})
      */
     protected $state;
 
     /**
      * @Assert\Length(min=1,max="80")
      * @ORM\Column(name="issuer", type="string", length=80)
-     * @Groups({"rgs"})
      */
     protected $issuer;
 
     /**
      * @Assert\Length(min=1,max="20")
-     * @ORM\Column(name="val",type="string", length=20)
-     * @Groups({"rgs"})
+     * @ORM\Column(name="value",type="string", length=20)
      */
-    protected $val;
+    protected $value;
 
     public function getId()
     {
@@ -80,15 +78,15 @@ class Rg
         return $this->state;
     }
 
-    public function setVal($var)
+    public function setValue($var)
     {
-        $this->val = $var;
+        $this->value = $var;
         return $this;
     }
 
-    public function getVal()
+    public function getValue()
     {
-        return $this->val;
+        return $this->value;
     }
 
     public function setIssuer($var)
@@ -101,4 +99,5 @@ class Rg
     {
         return $this->issuer;
     }
+
 }
