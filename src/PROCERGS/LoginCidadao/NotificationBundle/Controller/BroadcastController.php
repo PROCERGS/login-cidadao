@@ -17,11 +17,20 @@ class BroadcastController extends Controller
      */
     public function listAction()
     {
-        return array();
+        $em = $this->getDoctrine()->getManager();
+        $apps = $em->getRepository('PROCERGSOAuthBundle:Client')->createQueryBuilder('c')
+            ->where(':person MEMBER OF c.owners')
+            ->setParameter('person', $this->getUser())
+            ->addOrderBy('c.id', 'desc')
+            ->getQuery()
+            ->getResult();
+
+        return array('apps' => $apps);
     }
 
+
     /**
-     * @Route("/clients/{clientId}/broadcasts/new", name="lc_notification_broadcast_new")
+     * @Route("/notifications/broadcasts/new/{clientId}", name="lc_notification_broadcast_new")
      * @Template()
      */
     public function newAction(Request $request, $clientId)
@@ -31,12 +40,32 @@ class BroadcastController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($form->getData());
+            $broadcast = $form->getData();
+            $em->persist($broadcast);
             $em->flush();
-            return $this->redirect($this->generateUrl('lc_notification_broadcast_list'));
+            $url = $this->generateUrl('lc_notification_broadcast_new_placeholder',
+              array('broadcastId' => $broadcast->getId()));
+            return $this->redirect($url);
         }
 
-        return array('form' => $form->createView());
+        return array('form' => $form->createView(), 'clientId' => $clientId);
+    }
+
+    /**
+     * @Route("/notifications/broadcasts/{broadcastId}/placeholders", name="lc_notification_broadcast_view_placeholder")
+     * @Template()
+     */
+    public function viewPlaceholderAction(Request $request, $broadcastId)
+    {
+        $broadcast = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoNotificationBundle:Broadcast')
+            ->find($broadcastId);
+
+        $category = $broadcast->getCategory();
+        $template = $category->getHtmlTemplate();
+
+        $placeholders = $category->getPlaceholders();
+
+        return compact('template', 'placeholders');
     }
 
 }

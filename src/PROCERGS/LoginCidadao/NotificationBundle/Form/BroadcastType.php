@@ -31,7 +31,6 @@ class BroadcastType extends AbstractType
         $clientId = $this->clientId;
 
         $builder
-            ->add('htmlTemplate')
             ->add('receivers', null,
                   array(
                 'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
@@ -50,7 +49,6 @@ class BroadcastType extends AbstractType
                         ->setParameter('clientId', $clientId);
                 }
             ))
-            ->add('save', 'submit')
         ;
     }
 
