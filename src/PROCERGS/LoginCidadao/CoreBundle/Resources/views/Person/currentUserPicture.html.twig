@@ -2,14 +2,14 @@
 {%  if app.request.port != 80 %}
 {%    set url =  url ~ ':' ~ app.request.port %}
 {%  endif %}
-{%  if app.user.imageName is null %}
-{%      if app.user.getSocialNetworksPicture is not null %}
-{{ app.user.getSocialNetworksPicture }}
+{%  if targetPerson.imageName is null %}
+{%      if targetPerson.getSocialNetworksPicture is not null %}
+{{ targetPerson.getSocialNetworksPicture }}
 {%      else %}
 {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
 {{ url ~ asset_url }}
 {% endimage %}
 {%      endif %}
 {%  else %}
-{{ url ~ vich_uploader_asset(app.user, 'image') }}
+{{ url ~ vich_uploader_asset(targetPerson, 'image') }}
 {%  endif %}

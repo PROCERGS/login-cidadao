@@ -51,7 +51,6 @@ class PersonResumeFormType extends CommonFormType
             'label' => 'form.mobile',
             'translation_domain' => 'FOSUserBundle'
         ));
-        $builder->add('image');
         $em = $this->em;
         $user = $this->getUser();
         $allRoles = array(
