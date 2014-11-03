@@ -34,7 +34,7 @@ class BroadcastType extends AbstractType
             ->add('receivers', null,
                   array(
                 'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
-                'property' => 'fullName',
+                'property' => 'email',
                 'query_builder' => function (PersonRepository $repository) use ($clientId) {
                     return $repository->getFindAuthorizedByClientIdQuery($clientId);
                 }
@@ -67,7 +67,7 @@ class BroadcastType extends AbstractType
      */
     public function getName()
     {
-        return 'notification_broadcast';
+        return 'broadcast_settings';
     }
 
 }

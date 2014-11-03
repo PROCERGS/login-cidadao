@@ -1,0 +1,13 @@
+.placeholder .label {
+  color: #555;
+  font-size: 13px;
+  font-weight: normal;
+}
+
+#btn-preview {
+  margin-bottom: 50px;
+}
+
+a.list-group-item:hover {
+  background-color: #E2EFDE;
+}
