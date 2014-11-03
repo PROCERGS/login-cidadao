@@ -1,5 +1,6 @@
 // ID Card Infinite Grid Refresh
 $('.infinitegrid').on('click', '.id-card-load-more', function (event) {
+    event.stopPropagation();
     $(this).button('loading');
     var parent = $(this).closest('.infinitegrid');
     var url = $(this).attr('href');
@@ -12,10 +13,34 @@ $('.infinitegrid').on('click', '.id-card-load-more', function (event) {
             button.replaceWith(newButton);
         }
         if (result.size() < perPage || newButton.length === 0) {
-            button.addClass('disabled').attr('href', '#').html(messages.form.id_card.allIdsLoaded);
+            button.parent().hide();
         }
         parent.find('.infinitegrid-content').append(result);
     });
-    event.stopPropagation();
     return false;
+});
+
+$('.infinitegrid').on('click', '.edit-row-grid', function (event) {
+    event.stopPropagation();
+    var button = $(this);
+    button.attr('disabled', 'disabled');
+
+    var url = button.attr('href');
+    history.pushState({}, '', url);
+
+    url += ' .id-card-forms-placeholder';
+    $('.id-card-forms-placeholder').slideUp().load(url, function () {
+        $('.id-card-forms-placeholder').slideDown();
+        button.removeAttr('disabled');
+    });
+    return false;
+});
+
+$('.infinitegrid').on('click', 'button.remove-row-grid', function (event) {
+    var infiniteGrid = $(this).closest('.infinitegrid');
+    $('.confirm-removal[data-id=' + $(this).data('id') + ']', infiniteGrid).slideDown();
+});
+
+$('.infinitegrid .confirm-removal').on('click', '.cancel', function (event) {
+    $(this).closest('.confirm-removal').slideUp();
 });

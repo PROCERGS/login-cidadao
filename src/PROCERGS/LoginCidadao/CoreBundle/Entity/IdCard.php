@@ -5,11 +5,17 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Table(name="id_card")
- * @ORM\Entity
+ * @ORM\Table(name="id_card",
+ *   uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="unique_document", columns={"state_id", "value"})
+ *   }
+ * )
+ * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\IdCardRepository")
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity(fields={"state","value"}, message="This document is already in use.")
  */
 class IdCard
 {
@@ -22,7 +28,7 @@ class IdCard
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="rgs")
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="idCards")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
     protected $person;

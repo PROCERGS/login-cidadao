@@ -336,11 +336,10 @@ class Person extends BaseUser implements PersonInterface
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"rgs"})
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Rg", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\IdCard", mappedBy="person")
      * @JMS\Since("1.0.3")
      */
-    protected $rgs;
+    protected $idCards;
 
     /**
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationToken", mappedBy="person")
@@ -1064,9 +1063,9 @@ class Person extends BaseUser implements PersonInterface
         return $this->complement;
     }
 
-    public function getRgs()
+    public function getIdCards()
     {
-        return $this->rgs;
+        return $this->idCards;
     }
 
     public function getBadges()

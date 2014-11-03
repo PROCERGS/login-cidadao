@@ -29,6 +29,8 @@ parameters:
 
     procergs.person.serialize.listenner.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\PersonSerializeEventListenner
 
+    procergs_logincidadao.idcard.form.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\IdCardType
+
 services:
     procergs_lc.command.populate_database:
         class: PROCERGS\LoginCidadao\CoreBundle\Command\PopulateDatabaseCommand
@@ -269,3 +271,9 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         tags:
             - { name: form.type, alias: city_selector }
+
+    procergs_logincidadao.idcard.form:
+        class: %procergs_logincidadao.idcard.form.class%
+        arguments: [ %lc_idcard_country_acronym% ]
+        tags:
+            - { name: form.type, alias: lc_idcard_form }

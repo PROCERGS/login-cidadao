@@ -19,7 +19,7 @@ use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Event\FormEvent;
 use PROCERGS\LoginCidadao\CoreBundle\EventListener\ProfileEditListner;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\DocRgFormType;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Rg;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\IdCard;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\FormError;
 use PROCERGS\LoginCidadao\BadgesBundle\BadgesEvents;
@@ -363,7 +363,7 @@ class PersonController extends Controller
     {
         if ($id = $request->get('id')) {
             $em = $this->getDoctrine()->getManager();
-            $rg = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Rg')
+            $rg = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:IdCard')
             ->createQueryBuilder('u')
             ->where('u.person = :person and u.id = :id')
             ->setParameter('person',$this->getUser())
@@ -390,23 +390,23 @@ class PersonController extends Controller
         if (($id = $request->get('id')) || (($data = $request->get($form->getName())) && ($id = $data['id']))) {
             $rg = $this->getDoctrine()
             ->getManager ()
-            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Rg')->findOneBy(array('person' => $this->getUser(), 'id' => $id));
+            ->getRepository('PROCERGSLoginCidadaoCoreBundle:IdCard')->findOneBy(array('person' => $this->getUser(), 'id' => $id));
         }
         if (!$rg) {
-            $rg = new Rg();
+            $rg = new IdCard();
             $rg->setPerson($this->getUser());
         }
         $form = $this->createForm(new DocRgFormType(), $rg);
         $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
-            $rgNum = str_split($form->get('val')->getData());
+            $rgNum = str_split($form->get('value')->getData());
             if ( ($form->get('state')->getData()->getId() == 43) && ($this->checkRGDce($rgNum) != $rgNum[0] || $this->checkRGDcd($rgNum) != $rgNum[9]) ) {
-                $form->get('val')->addError(new FormError($this->get('translator')->trans('This RG is invalid')));
+                $form->get('value')->addError(new FormError($this->get('translator')->trans('This RG is invalid')));
                 return array('form' => $form->createView());
             }
 
             $manager = $this->getDoctrine()->getManager();
-            $dql = $manager->getRepository('PROCERGSLoginCidadaoCoreBundle:Rg')
+            $dql = $manager->getRepository('PROCERGSLoginCidadaoCoreBundle:IdCard')
             ->createQueryBuilder('u')
             ->where('u.person = :person and u.state = :state')
             ->setParameter('person',$this->getUser())
@@ -474,13 +474,8 @@ class PersonController extends Controller
     public function docRgListAction(Request $request)
     {
         $sql = $this->getDoctrine()->getManager()
-            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Rg')
-            ->createQueryBuilder('u')
-            ->select('u.id, u.val, right(b.iso6, 2) iso6')
-            ->join('PROCERGSLoginCidadaoCoreBundle:State', 'b', 'with', 'u.state = b')
-            ->where('u.person = :person')
-            ->setParameters(array('person' => $this->getUser()))
-            ->orderBy('u.id', 'desc');
+            ->getRepository('PROCERGSLoginCidadaoCoreBundle:IdCard')
+            ->getGridQuery($this->getUser());
 
         $grid = new GridHelper();
         $grid->setId('rg-grid');

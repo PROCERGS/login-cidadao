@@ -217,7 +217,7 @@ interface PersonInterface
 
     public function getComplement();
 
-    public function getRgs();
+    public function getIdCards();
 
     public function getBadges();
 

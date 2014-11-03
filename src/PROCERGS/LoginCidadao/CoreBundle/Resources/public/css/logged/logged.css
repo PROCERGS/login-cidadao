@@ -573,3 +573,7 @@ body.no-scroll {
 .content.profile-edit .picture-upload-box {
   display: none;
 }
+
+.infinitegrid .confirm-removal {
+    display: none;
+}
