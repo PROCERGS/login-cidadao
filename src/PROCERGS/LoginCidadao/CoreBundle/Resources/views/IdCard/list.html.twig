@@ -3,8 +3,68 @@
         <h2 class="panel-title">{{ 'RGs'|trans }}</h2>
     </div>
     <div class="panel-body">
-        <div id="rg-grid-place">
-            {{ include("PROCERGSLoginCidadaoCoreBundle:IdCard:grid.html.twig", {'grid': grid} ) }}
+        <div class="row id-cards">
+            {% for idCard in idCards %}
+                <div class="col-md-6 id-card-container">
+                    <div class="row id-card">
+                        <div class="confirm-removal" data-id="{{ idCard.id }}">
+                            {% set form = deleteForms[idCard.id] %}
+                            {{ form_start(form, {'action': path('lc_person_id_cards_delete', { id: idCard.id }), 'attr': {'role': 'form'}}) }}
+                            <div class="panel panel-danger remove-box" data-id-card-id="{{ idCard.id }}" style="margin-bottom: 0">
+                                <div class="panel-heading clearfix">
+                                    <span class="pull-left">{{ 'Are you sure you want to remove this ID Card?' | trans }}</span>
+                                    <span class="pull-right">
+                                        {{ form_widget(form.delete) }}
+                                        <button type="button" class="btn btn-default btn-xs cancel">{{ 'No' | trans }}</button>
+                                    </span>
+                                </div>
+                            </div>
+                            {{ form_end(form) }}
+                        </div>
+                        <div class="btn-group pull-right">
+                            <a href="{{ path('lc_person_id_cards_edit', { id: idCard.id }) }}"
+                               class="btn btn-xs btn-warning id-card-edit"
+                               title="{{ 'Edit' | trans }}">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="sr-only">{{ 'Edit' | trans }}</span>
+                            </a>
+                            <button type="button" class="btn btn-xs btn-danger remove"
+                                    title="{{ 'Remove' | trans }}">
+                                <span class="glyphicon glyphicon-remove"></span>
+                                <span class="sr-only">{{ 'Remove' | trans }}</span>
+                            </button>
+                        </div>
+                        <div class="media">
+                            <div class="media-left">
+                                <span class="id-card-state">{{ idCard.state.acronym }}</span>
+                            </div>
+                            <div class="media-body id-card-details">
+                                <dl>
+                                    <dt>{{ 'ID Card' | trans }}
+                                    <dd class="media-heading">{{ idCard.value }}
+                                    <dt>{{ 'Issuer' | trans }}
+                                    <dd>{{ idCard.issuer }}
+                                </dl>
+                            </div>
+                        </div>
+                        {#                            <div class="col-xs-2 col-lg-3 col-md-4 id-card-state">
+                                                        {{ idCard.state.acronym }}
+                                                    </div>
+                                                    <dl class="col-xs-10 col-lg-9 col-md-8 id-card-details">
+                                                        <dt class="sr-only">{{ 'Document' | trans }}
+                                                        <dd><strong>{{ idCard.value }}</strong>
+                                                        <dt class="sr-only">{{ 'Document Issuer' | trans }}
+                                                        <dd>{{ idCard.issuer }}
+                                                    </dl>
+                        #}
+                        <div class="row">
+                            <div class="col-xs-12 text-right">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
 </div>

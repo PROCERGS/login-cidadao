@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\RemoveIdCardFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+use Doctrine\Common\Collections\Collection;
 
 class IdCardController extends Controller
 {
@@ -20,24 +21,9 @@ class IdCardController extends Controller
      */
     public function listAction(Request $request)
     {
-        //$idCards = $this->getPerson()->getIdCards();
-        $query = $this->getDoctrine()->getManager()
-            ->getRepository('PROCERGSLoginCidadaoCoreBundle:IdCard')
-            ->getGridQuery($this->getUser());
-
-        $grid = new GridHelper();
-        $grid->setId('rg-grid');
-        $grid->setPerPage(4);
-        $grid->setMaxResult(4);
-        $grid->setQueryBuilder($query);
-        $grid->setInfiniteGrid(true);
-        $grid->setRoute('lc_person_id_cards_list');
-
-        $grid = $grid->createView($request);
-        return array(
-            'grid' => $grid,
-            'deleteForms' => $this->getDeleteForms($grid)
-        );
+        $idCards = $this->getPerson()->getIdCards();
+        $deleteForms = $this->getDeleteForms($idCards);
+        return compact('idCards', 'deleteForms');
     }
 
     /**
@@ -109,17 +95,18 @@ class IdCardController extends Controller
         return $this->redirect($this->generateUrl('lc_documents'));
     }
 
-    protected function getDeleteForms(GridHelper $grid)
+    protected function getDeleteForms($idCards = null)
     {
-        $person = $this->getUser();
         $deleteForms = array();
-        $idCards = $grid->getIterable()->current();
+        if ($idCards === null) {
+            $idCards = $this->getPerson()->getIdCards();
+        }
 
         if (is_array($idCards) || $idCards instanceof Collection) {
             foreach ($idCards as $idCard) {
-                $data = array('id_card_id' => $idCard['id']);
-                $deleteForms[$idCard['id']] = $this->createForm(new RemoveIdCardFormType(),
-                                                                $data)->createView();
+                $data = array('id_card_id' => $idCard->getId());
+                $deleteForms[$idCard->getId()] = $this->createForm(new RemoveIdCardFormType(),
+                                                                   $data)->createView();
             }
         }
         return $deleteForms;
@@ -132,4 +119,5 @@ class IdCardController extends Controller
     {
         return $this->getUser();
     }
+
 }

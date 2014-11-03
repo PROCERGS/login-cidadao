@@ -20,7 +20,7 @@ $('.infinitegrid').on('click', '.id-card-load-more', function (event) {
     return false;
 });
 
-$('.infinitegrid').on('click', '.edit-row-grid', function (event) {
+$('.id-cards').on('click', '.id-card-edit', function (event) {
     event.stopPropagation();
     var button = $(this);
     button.attr('disabled', 'disabled');
@@ -36,11 +36,13 @@ $('.infinitegrid').on('click', '.edit-row-grid', function (event) {
     return false;
 });
 
-$('.infinitegrid').on('click', 'button.remove-row-grid', function (event) {
-    var infiniteGrid = $(this).closest('.infinitegrid');
-    $('.confirm-removal[data-id=' + $(this).data('id') + ']', infiniteGrid).slideDown();
+$('.id-card').on('click', '.remove', function (event) {
+    var idCard = $(this).closest('.id-card');
+    $('.confirm-removal', idCard).slideDown();
+    idCard.addClass('blockHover');
 });
 
-$('.infinitegrid .confirm-removal').on('click', '.cancel', function (event) {
+$('.id-card .confirm-removal').on('click', '.cancel', function (event) {
     $(this).closest('.confirm-removal').slideUp();
+    $(this).closest('.id-card').removeClass('blockHover');
 });
