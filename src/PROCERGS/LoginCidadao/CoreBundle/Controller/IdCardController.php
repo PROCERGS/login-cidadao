@@ -11,6 +11,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\RemoveIdCardFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use Doctrine\Common\Collections\Collection;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\IdCard;
 
 class IdCardController extends Controller
 {
@@ -24,6 +25,33 @@ class IdCardController extends Controller
         $idCards = $this->getPerson()->getIdCards();
         $deleteForms = $this->getDeleteForms($idCards);
         return compact('idCards', 'deleteForms');
+    }
+
+    /**
+     * @Route("/person/idcards/new", name="lc_person_id_cards_new")
+     * @Template
+     */
+    public function newAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $idCard = new IdCard();
+        $form = $this->createForm('lc_idcard_form', $idCard);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $idCard->setPerson($this->getPerson());
+
+            $em->persist($idCard);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('lc_documents'));
+        }
+
+        return array(
+            'form' => $form->createView(),
+            'deleteForms' => $this->getDeleteForms()
+        );
     }
 
     /**

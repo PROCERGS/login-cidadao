@@ -2,7 +2,7 @@
 
 {% block id_card_forms_placeholder %}
     <div class="id-card-forms-placeholder">
-        {{ form_start(form, {'action': path('lc_person_id_cards_edit', { id: id }), 'attr': {'role':'form', 'id': 'form-rg' } }) }}
+        {{ form_start(form, {'action': path('lc_person_id_cards_new'), 'attr': {'role':'form', 'id': 'form-rg' } }) }}
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h2 class="panel-title">{{ 'ID Card'|trans }}</h2>
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="panel-footer text-right">
-                <input type="submit" value="{{ 'Send'|trans }}" class="btn btn-success">
+                <input type="submit" value="{{ 'Add'|trans }}" class="btn btn-success">
             </div>
         </div>
         {{ form_end(form) }}

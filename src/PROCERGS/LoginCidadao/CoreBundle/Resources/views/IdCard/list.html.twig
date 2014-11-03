@@ -2,8 +2,8 @@
     <div class="panel-heading">
         <h2 class="panel-title">{{ 'RGs'|trans }}</h2>
     </div>
-    <div class="panel-body">
-        <div class="row id-cards">
+    <div class="panel-body id-cards">
+        <div class="row">
             {% for idCard in idCards %}
                 <div class="col-md-6 id-card-container">
                     <div class="row id-card">
@@ -47,24 +47,12 @@
                                 </dl>
                             </div>
                         </div>
-                        {#                            <div class="col-xs-2 col-lg-3 col-md-4 id-card-state">
-                                                        {{ idCard.state.acronym }}
-                                                    </div>
-                                                    <dl class="col-xs-10 col-lg-9 col-md-8 id-card-details">
-                                                        <dt class="sr-only">{{ 'Document' | trans }}
-                                                        <dd><strong>{{ idCard.value }}</strong>
-                                                        <dt class="sr-only">{{ 'Document Issuer' | trans }}
-                                                        <dd>{{ idCard.issuer }}
-                                                    </dl>
-                        #}
-                        <div class="row">
-                            <div class="col-xs-12 text-right">
-
-                            </div>
-                        </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
+        <a href="{{ path('lc_person_id_cards_new') }}" class="btn btn-primary id-card-add">
+            <span class="glyphicon glyphicon glyphicon-plus"></span> {{ 'Add'|trans }}
+        </a>
     </div>
 </div>

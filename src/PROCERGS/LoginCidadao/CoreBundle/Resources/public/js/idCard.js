@@ -20,7 +20,7 @@ $('.infinitegrid').on('click', '.id-card-load-more', function (event) {
     return false;
 });
 
-$('.id-cards').on('click', '.id-card-edit', function (event) {
+$('.id-cards').on('click', '.id-card-edit, .id-card-add', function (event) {
     event.stopPropagation();
     var button = $(this);
     button.attr('disabled', 'disabled');
