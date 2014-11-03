@@ -17,14 +17,7 @@
                 <div class="col-md-5">
                     <div class="row">
                         <div class="col-xs-12">
-                            <img src="{{ include("PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig") }}">
-
-                            <div class="file-upload text-center">
-                                <button type="button" class="btn btn-success btn-upload">{% trans %}Upload another picture{% endtrans %}</button>
-                                <div class="file-name"></div>
-                                    {{ form_widget(form.image) }}
-                                {{ form_errors(form.image) }}
-                            </div>
+                            <img src="{{ include("PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': person}) }}" alt="" class="col-xs-12 img-responsive"/>
                         </div>
                     </div>
                 </div>

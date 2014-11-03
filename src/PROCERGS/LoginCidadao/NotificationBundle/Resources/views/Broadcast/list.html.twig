@@ -1,7 +1,19 @@
-{% extends "::base.html.twig" %}
+{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
-{% block title %}PROCERGSLoginCidadaoNotificationBundle:Broadcast:list{% endblock %}
+{% block content %}
+<div class="content notifications-broadcast-new">
 
-{% block body %}
-<h1>Welcome to the Broadcast:list page</h1>
-{% endblock %}
+    <div class="panel panel-default">
+      <div class="panel-heading"><h2 class="panel-title">{{ 'Notification Broadcast' | trans }}</h2></div>
+      <div class="panel-body">
+        <ul class="list-group">
+          {% for app in apps %}
+            <li class="list-group-item">
+                <a href="{{ path('lc_notification_broadcast_new', {'clientId': app.id}) }}">{{ app.name }}</a>
+            </li>
+        {% endfor %}
+        </ul>
+      </div>
+    </div>
+</div>
+{% endblock content %}

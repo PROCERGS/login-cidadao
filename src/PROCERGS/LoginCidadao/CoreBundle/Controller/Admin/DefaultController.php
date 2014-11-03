@@ -24,7 +24,7 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return array();
+        return $this->redirect($this->generateUrl('lc_admin_app'));
     }
 
 }
