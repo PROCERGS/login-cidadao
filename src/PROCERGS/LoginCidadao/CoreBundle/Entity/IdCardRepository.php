@@ -29,4 +29,16 @@ class IdCardRepository extends EntityRepository
         ));
     }
 
+    public function findByPersonOrderByStateAcronym(PersonInterface $person)
+    {
+        $qb = $this->createQueryBuilder('i')
+            ->join('PROCERGSLoginCidadaoCoreBundle:State', 's', 'with',
+                   'i.state = s')
+            ->where('i.person = :person')
+            ->setParameters(array('person' => $person))
+            ->orderBy('s.acronym', 'asc');
+
+        return $qb->getQuery()->getResult();
+    }
+
 }
