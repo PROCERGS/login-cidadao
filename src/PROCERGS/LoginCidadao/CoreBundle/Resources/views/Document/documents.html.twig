@@ -10,28 +10,17 @@
 
         {{ render(controller('PROCERGSLoginCidadaoCoreBundle:IdCard:list')) }}
 
+        <a name="id-card-forms-placeholder" class="anchor"></a>
         <div class="id-card-forms-placeholder">
             {% block id_card_forms_placeholder %}{% endblock %}
         </div>
-        {#
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h2 class="panel-title">{{ 'RGs'|trans }}</h2>
-                        </div>
-                        <div class="panel-body">
-                            <div id="rg-grid-place">
-                                {{ include("PROCERGSLoginCidadaoCoreBundle:Person:docRgList.html.twig", {'grid': grid} ) }}
-                            </div>
-                        </div>
-                    </div>
-                    <div id="rg-edit"></div>
-        #}
     </div>
 {% endblock documents_content %}
 
 {% block javascripts %}
 {{ parent() }}
-{% javascripts '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/idCard.js' filter='uglifyjs2' %}
+{% javascripts '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/idCard.js'
+               '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/jquery-scrollto.js' filter='uglifyjs2' %}
 <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
 {% endblock javascripts %}
