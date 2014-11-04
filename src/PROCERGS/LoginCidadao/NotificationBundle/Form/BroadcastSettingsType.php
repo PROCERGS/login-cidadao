@@ -36,8 +36,7 @@ class BroadcastSettingsType extends AbstractType
             ->add('placeholders', 'collection',
                    array(
                     'type' => new BroadcastPlaceholderType()
-            ))                    
-            //->add('template', 'textarea', array('attr' => array('rows' => 10, 'disabled' => 'disabled')))
+            ))
             ->add('save', 'submit')
             ;
     }

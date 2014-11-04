@@ -3,6 +3,7 @@
 namespace PROCERGS\LoginCidadao\NotificationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use PROCERGS\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -128,10 +129,28 @@ class Broadcast
         return $this;
     }
 
-    public function setHtmlTemplate($htmlTemplate)
-    {
-        $this->htmlTemplate = $htmlTemplate;
-        return $this;
+    // public function setHtmlTemplate($htmlTemplate)
+    // {
+    //     $this->htmlTemplate = $htmlTemplate;
+    //     return $this;
+    // }
+
+    public function setHtmlTemplate(ArrayCollection $placeholders) {
+      $html = $this->getCategory()->getHtmlTemplate();
+
+      $values = array();
+      foreach ($placeholders as $placeholder) {
+          $name = $placeholder->getName();
+
+          if (array_key_exists($name, $values)) {
+              $value = $values[$name];
+          } else {
+              $value = $placeholder->getValue();
+          }
+          $html = str_replace($name, $value, $html);
+      }
+      $this->htmlTemplate = $html;
+      return $this;
     }
 
 }
