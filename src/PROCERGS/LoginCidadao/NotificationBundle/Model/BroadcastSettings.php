@@ -45,6 +45,12 @@ class BroadcastSettings
         return $this->template;
     }
     
+    public function setTemplate($template)
+    {
+        $this->template = $template;
+        return $this;
+    }
+    
     public function getReceivers()
     {
         return $this->receivers;

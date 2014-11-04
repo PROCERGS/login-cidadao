@@ -72,9 +72,12 @@ class BroadcastController extends Controller
         $form = $this->createForm(new BroadcastSettingsType($broadcastId, $category->getId()), $broadcastSettings);
 
         $form->handleRequest($request);
-        if ($form->isValid()) {          
-          print_r($form->get('template')->getData());
-          die("ae");
+        if ($form->isValid()) {
+          $em = $this->getDoctrine()->getManager();
+          $placeholders = $form->get('placeholders')->getData();
+          $broadcast->setHtmlTemplate($placeholders);
+          $em->persist($broadcast);
+          $em->flush();
         }
 
         return array('form' => $form->createView());

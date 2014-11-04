@@ -15,6 +15,8 @@ $(function() {
       $("#notification-preview *").replaceText(label, val);
     });
 
+    var templateNew = $("#notification-preview").html();
+    $("#broadcast_template").val(templateNew);
     preview = true;
   });
 

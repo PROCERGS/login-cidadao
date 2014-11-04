@@ -4,10 +4,10 @@
 <div class="content notifications-broadcast-preview">
   <h2>{{ 'Notification Broadcast Preview' | trans }}</h2>
   <div class="panel panel-default">
-    <div class="panel-body">                
-    {{ form_start(form) }}            
-      <ul class="list-group">          
-      {% for placeholder in form.placeholders %}  
+    <div class="panel-body">
+    {{ form_start(form) }}
+      <ul class="list-group">
+      {% for placeholder in form.placeholders %}
         {% set placeholderObj = placeholder.vars.data.placeholder %}
         <li class="list-group-item placeholder">
             <span class="label" data-placeholder="{{ placeholderObj.name }}">{{ placeholderObj.name }}</span>
@@ -16,23 +16,23 @@
       {% endfor %}
       </ul>
       <button type="button" class="btn btn-primary" id="btn-preview">Preview</button>
-      
+
       <h4>{{ 'Template' | trans }}</h4>
       <div class="well" id="notification-preview">{{ form.vars.data.template | raw}}</div>
       <div class="hidden" id="hidden-template">{{ form.vars.data.template | raw}}</div>
-      
+
       <h4>{{ 'Sending for...' | trans }} <span class="badge">{{ form.vars.data.receivers|length }}</span></h4>
       <ul class="list-group">
         {% for receiver in form.vars.data.receivers|slice(0,5) %}
           <li class="list-group-item">{{ receiver.firstName ? receiver.firstName : receiver.userName }}</li>
         {% endfor %}
       </ul>
-      
+
       <div class="form-bar text-right clearfix">
         <button type="button" class="btn btn-danger pull-left">{{ 'Edit' | trans }}</button>
         {{ form_widget(form.save, {'attr': {'class': 'btn btn-success'}}) }}
       </div>
-      
+
     {{ form_end(form) }}
 
     </div>
