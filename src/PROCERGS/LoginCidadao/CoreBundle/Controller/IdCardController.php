@@ -22,7 +22,7 @@ class IdCardController extends Controller
      */
     public function listAction(Request $request)
     {
-        $idCards = $this->getPerson()->getIdCards();
+        $idCards = $this->getIdCards();
         $deleteForms = $this->getDeleteForms($idCards);
         return compact('idCards', 'deleteForms');
     }
@@ -127,7 +127,7 @@ class IdCardController extends Controller
     {
         $deleteForms = array();
         if ($idCards === null) {
-            $idCards = $this->getPerson()->getIdCards();
+            $idCards = $this->getIdCards();
         }
 
         if (is_array($idCards) || $idCards instanceof Collection) {
@@ -146,6 +146,13 @@ class IdCardController extends Controller
     protected function getPerson()
     {
         return $this->getUser();
+    }
+
+    protected function getIdCards()
+    {
+        $person = $this->getPerson();
+        $repo = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:IdCard');
+        return $repo->findByPersonOrderByStateAcronym($person);
     }
 
 }

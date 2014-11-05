@@ -587,9 +587,21 @@ body.no-scroll {
     border-radius: 10px;
     margin-bottom: 15px;
     max-width: 99%;
+    min-height: 124px;
     background: #f5f5f5;
     -webkit-box-shadow: 3px 3px 9px 0 #ddd;
     box-shadow: 3px 3px 9px 0 #ddd;
+}
+
+.id-card.add-new {
+    border-color: #428bca;
+}
+.id-card.add-new p {
+    padding: 22px 0;
+    color: #428bca;
+}
+.id-card.add-new .id-card-state {
+    color: #428bca;
 }
 
 .id-card-state {
@@ -626,6 +638,8 @@ dl.id-card-details {
 
 .id-card .btn-group {
     display: none;
+    position: absolute;
+    right: 0;
 }
 
 .id-card.blockHover .btn-group{
@@ -642,4 +656,20 @@ dl.id-card-details {
 
 .id-card .confirm-removal {
     font-size: 12px;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.id-card .confirm-removal .remove-box {
+    position: absolute;
+    height: 100%;
+}
+
+.id-card .confirm-removal .remove-box .panel-heading {
+    height: 100%;
+}
+
+.id-card {
+    position: relative;
 }

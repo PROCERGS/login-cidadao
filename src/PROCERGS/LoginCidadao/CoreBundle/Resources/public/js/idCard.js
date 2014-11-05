@@ -30,7 +30,9 @@ $('.id-cards').on('click', '.id-card-edit, .id-card-add', function (event) {
 
     url += ' .id-card-forms-placeholder';
     $('.id-card-forms-placeholder').slideUp().load(url, function () {
-        $('.id-card-forms-placeholder').slideDown();
+        $('.id-card-forms-placeholder').slideDown()
+                .siblings('.anchor[name=id-card-forms-placeholder]')
+                .ScrollTo();
         button.removeAttr('disabled');
     });
     return false;
