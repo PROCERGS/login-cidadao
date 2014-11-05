@@ -39,9 +39,9 @@ class BroadcastController extends Controller
     public function aboutAction(Request $request, $broadcastId)
     {
         $em = $this->getDoctrine()->getManager();        
-        $broadcasts = $em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Broadcast')->findOneById($broadcastId);
+        $broadcast = $em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Broadcast')->findOneById($broadcastId);
 
-        return array('broadcasts' => $broadcasts);
+        return array('broadcast' => $broadcast);
     }
 
     /**

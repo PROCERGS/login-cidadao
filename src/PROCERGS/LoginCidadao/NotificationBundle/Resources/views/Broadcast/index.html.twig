@@ -10,9 +10,9 @@
         <div class="list-group broadcasts-list">
           {% for broadcast in broadcasts %}              
             <a href="{{ path('lc_dev_broadcast_about', {'broadcastId': broadcast.id}) }}" class="list-group-item">
-                <h4 class="list-group-item-heading">{{ broadcast.category.name }}</h4>                
-                <p class="list-group-item-text">{{ broadcast.title }}</p>
+                <h4 class="list-group-item-heading">{{ broadcast.title }}</h4>   
                 <p class="list-group-item-text">{{ broadcast.shortText }}</p>
+                <p class="list-group-item-text">{{ broadcast.category.name }}</p>                
                 <p class="list-group-item-text">{{ broadcast.createdat|date('d/m/Y h:i:s') }}</p>
             </a>
         {% endfor %}
