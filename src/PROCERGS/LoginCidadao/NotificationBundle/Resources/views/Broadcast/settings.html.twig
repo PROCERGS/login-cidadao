@@ -6,6 +6,10 @@
   <div class="panel panel-default">
     <div class="panel-body">
     {{ form_start(form) }}
+      {{ form_row(form.title) }}
+      {{ form_row(form.shortText) }}
+
+      <label>{{ 'Placeholders' | trans }}</label>
       <ul class="list-group">
       {% for placeholder in form.placeholders %}
         {% set placeholderObj = placeholder.vars.data.placeholder %}

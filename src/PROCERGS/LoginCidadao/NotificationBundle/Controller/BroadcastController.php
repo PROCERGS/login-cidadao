@@ -49,7 +49,7 @@ class BroadcastController extends Controller
             $broadcast = $form->getData();
             $em->persist($broadcast);
             $em->flush();
-            $url = $this->generateUrl('lc_notification_broadcast_view_placeholder',
+            $url = $this->generateUrl('lc_notification_broadcast_settings',
               array('broadcastId' => $broadcast->getId()));
             return $this->redirect($url);
         }
@@ -58,10 +58,10 @@ class BroadcastController extends Controller
     }
 
     /**
-     * @Route("/notifications/broadcasts/{broadcastId}/placeholders", name="lc_notification_broadcast_view_placeholder")
+     * @Route("/notifications/broadcasts/{broadcastId}/settings", name="lc_notification_broadcast_settings")
      * @Template()
      */
-    public function viewPlaceholderAction(Request $request, $broadcastId)
+    public function settingsAction(Request $request, $broadcastId)
     {
         $broadcast = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoNotificationBundle:Broadcast')->find($broadcastId);
         $category = $broadcast->getCategory();
@@ -83,16 +83,18 @@ class BroadcastController extends Controller
           $em->flush();
 
           
-          $helper = $this->get('notifications.helper');
-          $html = $broadcast->getHtmlTemplate();          
+          $helper = $this->get('notifications.helper');          
+          $shortText = $form->get('shortText')->getData();
+          $title = $form->get('title')->getData();
+          $html = $broadcast->getHtmlTemplate(); 
+          
           foreach ($broadcast->getReceivers() as $person) {
-            $notification = new Notification();
-            
-            $notification->setIcon("ae");
-            $notification->setCallbackUrl("ae");
-            $notification->setShortText("shortext teste");
-            $notification->setTitle("title teste");
-            $notification->setText($html);
+            $notification = new Notification();            
+            $notification->setIcon("icon");
+            $notification->setCallbackUrl("url");
+            $notification->setShortText($shortText);
+            $notification->setTitle($title);
+            $notification->setHtmlTemplate($html);
             $notification->setPerson($person);
             $notification->setSender($broadcast->getCategory()->getClient());            
             $notification->setCategory($broadcast->getCategory());
@@ -103,17 +105,6 @@ class BroadcastController extends Controller
         }
 
         return array('form' => $form->createView());
-    }
-
-    private function sendBroadcast($broadcast)
-    {
-      $notification = new Notification();
-      $notification->setText($broadcast->getHtmlTemplate());
-      foreach ($broadcast->getReceivers() as $person) {
-        print_r($person->getEmail());
-      }
-
-
     }
 
 }

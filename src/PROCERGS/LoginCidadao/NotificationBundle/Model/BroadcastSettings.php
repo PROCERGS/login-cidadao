@@ -14,13 +14,17 @@ class BroadcastSettings
     protected $template;
     protected $receivers;
     protected $category;
+    protected $title;
+    protected $shortText;
 
     public function __construct(Broadcast $broadcast)
     {        
         $this->broadcast = $broadcast;
         $this->template = $broadcast->getCategory()->getHtmlTemplate();
         $this->placeholders = new ArrayCollection();        
-        $this->receivers = $broadcast->getReceivers();
+        $this->receivers = $broadcast->getReceivers();        
+        $this->title = $broadcast->getCategory()->getDefaultTitle();
+        $this->shortText = $broadcast->getCategory()->getDefaultShortText();
     }
 
     /**
@@ -64,12 +68,39 @@ class BroadcastSettings
         return $this->category;
     }
     
-     public function setCategory(String $category)
+     public function setCategory($category)
     {
         $this->$category = $category;
         return $this;
     }
-
+    
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+    
+     public function setTitle($title)
+    {
+        $this->title = $title;
+        return $this;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getShortText()
+    {
+        return $this->shortText;
+    }
+    
+     public function setShortText($shortText)
+    {
+        $this->shortText = $shortText;
+        return $this;
+    }
 
     /**
      * @return Broadcast
