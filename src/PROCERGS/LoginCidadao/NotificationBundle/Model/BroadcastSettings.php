@@ -79,12 +79,12 @@ class BroadcastSettings
      */
     public function getTitle()
     {
-        return $this->title;
+        return $this->broadcast->getTitle();
     }
     
      public function setTitle($title)
     {
-        $this->title = $title;
+        $this->broadcast->setTitle($title);
         return $this;
     }
     
@@ -93,12 +93,12 @@ class BroadcastSettings
      */
     public function getShortText()
     {
-        return $this->shortText;
+        return $this->broadcast->getShortText();
     }
     
      public function setShortText($shortText)
     {
-        $this->shortText = $shortText;
+        $this->broadcast->setShortText($shortText);
         return $this;
     }
 

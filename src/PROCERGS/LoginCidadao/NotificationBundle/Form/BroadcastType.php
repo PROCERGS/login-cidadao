@@ -31,16 +31,8 @@ class BroadcastType extends AbstractType
         $clientId = $this->clientId;
 
         $builder
-            ->add('receivers', null,
-                  array(
-                'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
-                'property' => 'email',
-                'query_builder' => function (PersonRepository $repository) use ($clientId) {
-                    return $repository->getFindAuthorizedByClientIdQuery($clientId);
-                }
-            ))
             ->add('category', 'entity',
-                  array(
+              array(
                 'class' => 'PROCERGS\LoginCidadao\NotificationBundle\Entity\Category',
                 'property' => 'name',
                 'query_builder' => function (CategoryRepository $repository) use ($person, $clientId) {
@@ -49,6 +41,14 @@ class BroadcastType extends AbstractType
                         ->setParameter('clientId', $clientId);
                 }
             ))
+            ->add('receivers', null,
+                  array(
+                'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
+                'property' => 'email',
+                'query_builder' => function (PersonRepository $repository) use ($clientId) {
+                    return $repository->getFindAuthorizedByClientIdQuery($clientId);
+                }
+            ))            
         ;
     }
 

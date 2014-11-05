@@ -1,15 +1,15 @@
-{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+{% extends "PROCERGSLoginCidadaoCoreBundle:Dev:base.html.twig" %}
 
 {% block content %}
 <div class="content broadcast">
 
     <div class="panel panel-default">
-      <div class="panel-heading"><h2 class="panel-title">{{ 'Services' | trans }}</h2></div>
+      <div class="panel-heading"><h2 class="panel-title">{{ 'Select one client' | trans }}</h2></div>
       <div class="panel-body">
         <div class="list-group">
-          {% for app in apps %}
-            <a href="{{ path('lc_notification_broadcast_new', {'clientId': app.id}) }}" class="list-group-item">
-                {{ app.name }}
+          {% for client in clients %}
+            <a href="{{ path('lc_dev_broadcast_new', {'clientId': client.id}) }}" class="list-group-item">
+                {{ client.name }}
             </a>
         {% endfor %}
         </div>

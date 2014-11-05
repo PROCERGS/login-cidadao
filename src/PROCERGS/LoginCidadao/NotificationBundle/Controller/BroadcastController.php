@@ -14,29 +14,56 @@ use PROCERGS\LoginCidadao\NotificationBundle\Entity\Broadcast;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
 use PROCERGS\LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
 
+/**
+ * @Route("/dev/broadcasts")
+ */
 class BroadcastController extends Controller
 {
+    
+    /**
+     * @Route("/", name="lc_dev_broadcasts")
+     * @Template()
+     */
+    public function indexAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();        
+        $broadcasts = $em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Broadcast')->findByPerson($this->getUser());
+
+        return array('broadcasts' => $broadcasts);
+    }
+    
+    /**
+     * @Route("/about/{broadcastId}/", name="lc_dev_broadcast_about")
+     * @Template()
+     */
+    public function aboutAction(Request $request, $broadcastId)
+    {
+        $em = $this->getDoctrine()->getManager();        
+        $broadcasts = $em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Broadcast')->findOneById($broadcastId);
+
+        return array('broadcasts' => $broadcasts);
+    }
 
     /**
-     * @Route("/notifications/broadcasts", name="lc_notification_broadcast_list")
+     * @Route("/clients", name="lc_dev_broadcasts_clients")
      * @Template()
      */
     public function listAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $apps = $em->getRepository('PROCERGSOAuthBundle:Client')->createQueryBuilder('c')
+        $clients = $em->getRepository('PROCERGSOAuthBundle:Client')->createQueryBuilder('c')
             ->where(':person MEMBER OF c.owners')
             ->setParameter('person', $this->getUser())
             ->addOrderBy('c.id', 'desc')
             ->getQuery()
             ->getResult();
 
-        return array('apps' => $apps);
+        return array('clients' => $clients);
     }
 
 
     /**
-     * @Route("/notifications/broadcasts/new/{clientId}", name="lc_notification_broadcast_new")
+     * @Route("/new/{clientId}", name="lc_dev_broadcast_new")
      * @Template()
      */
     public function newAction(Request $request, $clientId)
@@ -47,9 +74,10 @@ class BroadcastController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $broadcast = $form->getData();
+            $broadcast->setPerson($this->getUser());
             $em->persist($broadcast);
             $em->flush();
-            $url = $this->generateUrl('lc_notification_broadcast_settings',
+            $url = $this->generateUrl('lc_dev_broadcast_settings',
               array('broadcastId' => $broadcast->getId()));
             return $this->redirect($url);
         }
@@ -58,7 +86,7 @@ class BroadcastController extends Controller
     }
 
     /**
-     * @Route("/notifications/broadcasts/{broadcastId}/settings", name="lc_notification_broadcast_settings")
+     * @Route("/settings/{broadcastId}", name="lc_dev_broadcast_settings")
      * @Template()
      */
     public function settingsAction(Request $request, $broadcastId)
@@ -81,7 +109,6 @@ class BroadcastController extends Controller
           $broadcast->setHtmlTemplate($placeholders);
           $em->persist($broadcast);
           $em->flush();
-
           
           $helper = $this->get('notifications.helper');          
           $shortText = $form->get('shortText')->getData();
@@ -101,7 +128,11 @@ class BroadcastController extends Controller
             
             $helper->send($notification);
           }
-          die('feito');
+          
+          $translator = $this->get('translator');
+          $this->get('session')->getFlashBag()->add('success',
+                                                      $translator->trans("Broadcast sent"));
+            return $this->redirect($this->generateUrl('lc_dev_broadcasts'));
         }
 
         return array('form' => $form->createView());
