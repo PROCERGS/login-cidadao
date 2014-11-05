@@ -69,8 +69,7 @@ class NotificationHandler implements NotificationHandlerInterface
 
     public function post(array $parameters)
     {
-        $notification = $this->createNotification();
-
+        $notification = $this->createNotification();        
         return $this->processForm($notification, $parameters, 'POST');
     }
 
@@ -96,7 +95,8 @@ class NotificationHandler implements NotificationHandlerInterface
     {
         $form = $this->formFactory->create(new NotificationType(),
                                            $notification, compact('method'));
-        $form->submit($parameters, 'PATCH' !== $method);
+        $form->submit($parameters, 'PATCH' !== $method); 
+        $data = $form->getData();
         if ($form->isValid()) {
 
             $notification = $form->getData();

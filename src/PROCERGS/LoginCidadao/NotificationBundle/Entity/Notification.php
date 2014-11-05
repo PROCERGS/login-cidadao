@@ -37,7 +37,7 @@ class Notification implements NotificationInterface
      * @Assert\Length(max="255")
      * @ORM\Column(name="icon", type="string", length=255)
      * @JMS\Expose
-     * @JMS\Groups({"public"})
+     * @JMS\Groups({"public", "form"})
      */
     private $icon;
 
@@ -47,7 +47,7 @@ class Notification implements NotificationInterface
      * @Assert\Length(max="255")
      * @ORM\Column(name="title", type="string", length=255)
      * @JMS\Expose
-     * @JMS\Groups({"public"})
+     * @JMS\Groups({"public", "form"})
      */
     private $title;
 
@@ -55,9 +55,10 @@ class Notification implements NotificationInterface
      * @var string
      * @Assert\NotBlank()
      * @Assert\Length(max="255")
-     * @ORM\Column(name="shortText", type="string", length=255)
+     * @ORM\Column(name="short_text", type="string", length=255)
      * @JMS\Expose
-     * @JMS\Groups({"public"})
+     * @JMS\Groups({"public", "form"})
+     * @JMS\SerializedName("shortText")
      */
     private $shortText;
 
@@ -67,7 +68,7 @@ class Notification implements NotificationInterface
      * @ORM\Column(name="text", type="text", nullable=true)
      * @Assert\NotBlank()
      * @JMS\Expose
-     * @JMS\Groups({"public"})
+     * @JMS\Groups({"public", "form"})
      */
     private $text;
 
@@ -75,6 +76,7 @@ class Notification implements NotificationInterface
      * @var string
      *
      * @ORM\Column(name="callback_url", type="string", length=255, nullable=true)
+     * @JMS\Groups({"form"})
      */
     private $callbackUrl;
 
@@ -84,6 +86,7 @@ class Notification implements NotificationInterface
      * @ORM\Column(name="created_at", type="datetime")
      * @JMS\Expose
      * @JMS\Groups({"public"})
+     * @JMS\SerializedName("createdAt")
      */
     private $createdAt;
 
@@ -108,7 +111,7 @@ class Notification implements NotificationInterface
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="notifications")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="CASCADE")
      * @JMS\Expose
-     * @JMS\Groups({"public"})
+     * @JMS\Groups({"public", "form"})
      * @JMS\MaxDepth(1)
      */
     private $person;
@@ -117,7 +120,7 @@ class Notification implements NotificationInterface
      * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="notifications")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id", onDelete="CASCADE")
      * @JMS\Expose
-     * @JMS\Groups({"public"})
+     * @JMS\Groups({"public", "form"})
      * @JMS\MaxDepth(1)
      */
     private $sender;
@@ -126,6 +129,7 @@ class Notification implements NotificationInterface
      * @var \DateTime
      *
      * @ORM\Column(name="expire_date", type="datetime", nullable=true)
+     * @JMS\Groups({"form"})
      */
     private $expireDate;
 
@@ -133,6 +137,7 @@ class Notification implements NotificationInterface
      * @var \DateTime
      *
      * @ORM\Column(name="consider_read_date", type="datetime", nullable=true)
+     * @JMS\Groups({"form"})
      */
     private $considerReadDate;
 
@@ -151,7 +156,7 @@ class Notification implements NotificationInterface
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="notifications")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      * @JMS\Expose
-     * @JMS\Groups({"public"})
+     * @JMS\Groups({"public", "form"})
      */
     private $category;
 
@@ -327,7 +332,7 @@ class Notification implements NotificationInterface
 
     public function getRead()
     {
-        return $this->getIsRead();
+        return $this->isRead();
     }
 
     public function setRead($isRead)
@@ -354,10 +359,9 @@ class Notification implements NotificationInterface
 
     public function checkReceiver()
     {
-        $auths = $this->getPerson()->getAuthorizations();
-        $client = $this->getClient();
-        foreach ($auths as $auth) {
-            if ($auth->getClient()->getId() === $client->getId()) {
+        $auths = $this->getPerson()->getAuthorizations();        
+        foreach ($auths as $auth) {            
+            if ($auth->getClient()->getId() === $this->getSender()->getId()) {
                 return true;
             }
         }
@@ -366,7 +370,7 @@ class Notification implements NotificationInterface
 
     public function checkSender()
     {
-        return $this->getClient()->getMaxNotificationLevel() >= $this->getLevel();
+        return $this->getSender()->getMaxNotificationLevel() >= $this->getLevel();
     }
 
     public function canBeSent()

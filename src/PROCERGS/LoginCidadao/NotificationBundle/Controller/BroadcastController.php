@@ -10,6 +10,9 @@ use PROCERGS\LoginCidadao\NotificationBundle\Form\BroadcastSettingsType;
 use Symfony\Component\HttpFoundation\Request;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\BroadcastSettings;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\BroadcastPlaceholder;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\Broadcast;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
+use PROCERGS\LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
 
 class BroadcastController extends Controller
 {
@@ -78,9 +81,39 @@ class BroadcastController extends Controller
           $broadcast->setHtmlTemplate($placeholders);
           $em->persist($broadcast);
           $em->flush();
+
+          
+          $helper = $this->get('notifications.helper');
+          $html = $broadcast->getHtmlTemplate();          
+          foreach ($broadcast->getReceivers() as $person) {
+            $notification = new Notification();
+            
+            $notification->setIcon("ae");
+            $notification->setCallbackUrl("ae");
+            $notification->setShortText("shortext teste");
+            $notification->setTitle("title teste");
+            $notification->setText($html);
+            $notification->setPerson($person);
+            $notification->setSender($broadcast->getCategory()->getClient());            
+            $notification->setCategory($broadcast->getCategory());
+            
+            $helper->send($notification);
+          }
+          die('feito');
         }
 
         return array('form' => $form->createView());
+    }
+
+    private function sendBroadcast($broadcast)
+    {
+      $notification = new Notification();
+      $notification->setText($broadcast->getHtmlTemplate());
+      foreach ($broadcast->getReceivers() as $person) {
+        print_r($person->getEmail());
+      }
+
+
     }
 
 }

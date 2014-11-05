@@ -18,7 +18,7 @@ class State
     const REVIEWED_IGNORE = 1;
 
     /**
-     * @Groups({"state", "rgs", "typeahead"})
+     * @Groups({"state", "typeahead"})
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -28,7 +28,7 @@ class State
 
     /**
      * @var string
-     * @Groups({"state", "rgs", "typeahead"})
+     * @Groups({"state", "typeahead"})
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
@@ -40,25 +40,25 @@ class State
     private $acronym;
 
     /**
-     * @Groups({"state", "rgs"})
+     * @Groups({"state"})
      * @ORM\Column(name="iso6", type="string", length=6, nullable=true)
      */
     private $iso6;
 
     /**
-     * @Groups({"state", "rgs"})
+     * @Groups({"state"})
      * @ORM\Column(name="fips", type="string", length=4, nullable=true)
      */
     private $fips;
 
     /**
-     * @Groups({"state", "rgs"})
+     * @Groups({"state"})
      * @ORM\Column(name="stat", type="string", length=7, nullable=true)
      */
     private $stat;
 
     /**
-     * @Groups({"state", "rgs"})
+     * @Groups({"state"})
      * @ORM\Column(name="class", type="string", length=255, nullable=true)
      */
     private $class;

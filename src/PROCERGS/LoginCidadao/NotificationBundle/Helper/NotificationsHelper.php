@@ -10,6 +10,11 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Category;
 use PROCERGS\LoginCidadao\NotificationBundle\Exception\MissingCategoryException;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Serializer;
+use PROCERGS\LoginCidadao\NotificationBundle\Form\NotificationType;
+use JMS\Serializer\SerializationContext;
 
 class NotificationsHelper
 {
@@ -83,7 +88,12 @@ class NotificationsHelper
     {
         if ($notification->canBeSent()) {
             $handler = $this->getNotificationHandler();
-            $handler->post($notification);
+            
+            $serializer = $this->container->get('jms_serializer');
+            $context = SerializationContext::create()->setGroups('form');
+            $array = json_decode($serializer->serialize($notification, 'json', $context), true);
+            
+            $handler->patch($notification, array());
         } else {
             $translator = $this->container->get('translator');
             throw new AccessDeniedException($translator->trans("This notification cannot be sent to this user. Check the notification level and whether the user has authorized the application."));

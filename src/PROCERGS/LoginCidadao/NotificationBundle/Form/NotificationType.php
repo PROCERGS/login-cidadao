@@ -55,10 +55,12 @@ class NotificationType extends AbstractType
                 ->add('shortText')
                 ->add('text')
                 ->add('callbackUrl')
-                ->add('createdAt', 'datetime',
+/*                ->add('createdAt', 'datetime',
                         array('required' => false, 'widget' => 'single_text'))
                 ->add('readDate', 'datetime',
                         array('required' => false, 'widget' => 'single_text'))
+                ->add('receivedDate', 'datetime',
+                        array('required' => false, 'widget' => 'single_text'))*/
                 ->add('person', 'entity',
                         array(
                     'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
@@ -74,8 +76,6 @@ class NotificationType extends AbstractType
                 ->add('expireDate', 'datetime',
                         array('required' => false, 'widget' => 'single_text'))
                 ->add('considerReadDate', 'datetime',
-                        array('required' => false, 'widget' => 'single_text'))
-                ->add('receivedDate', 'datetime',
                         array('required' => false, 'widget' => 'single_text'))
                 ->add('category', 'entity',
                         array(
