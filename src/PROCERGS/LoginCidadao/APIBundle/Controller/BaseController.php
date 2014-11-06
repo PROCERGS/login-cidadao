@@ -7,7 +7,9 @@ use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
-use FOS\OAuthServerBundle\Model\ClientInterface;
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+use PROCERGS\OAuthBundle\Model\ClientInterface;
+use PROCERGS\OAuthBundle\Model\ClientUser;
 
 class BaseController extends FOSRestController
 {
@@ -30,19 +32,23 @@ class BaseController extends FOSRestController
     {
         $person = $this->getUser();
         $serializer = $this->get('jms_serializer');
-        return $serializer->serialize($person, 'json', SerializationContext::create()->setGroups($scope));
+        return $serializer->serialize($person, 'json',
+                                      SerializationContext::create()->setGroups($scope));
     }
 
-    protected function getClientScope($user)
+    protected function getClientScope(PersonInterface $user,
+                                      ClientInterface $client = null)
     {
-        $client = $this->getClient();
+        if ($client === null) {
+            $client = $this->getClient();
+        }
 
         $authorization = $this->getDoctrine()
             ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
             ->findOneBy(array(
             'person' => $user,
             'client' => $client
-            ));
+        ));
         if (!($authorization instanceof Authorization)) {
             throw new AccessDeniedHttpException("Access denied");
         }
