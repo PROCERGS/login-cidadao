@@ -24,6 +24,8 @@ class IdCardType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $countryAcronym = $this->countryAcronym;
+
         $builder->add('value', 'text',
                       array(
                 'required' => true
@@ -41,13 +43,13 @@ class IdCardType extends AbstractType
                 'required' => true,
                 'class' => 'PROCERGSLoginCidadaoCoreBundle:State',
                 'property' => 'name',
-                'query_builder' => function (EntityRepository $er) {
+                'query_builder' => function (EntityRepository $er) use ($countryAcronym) {
                     return $er->createQueryBuilder('s')
                         ->join('PROCERGSLoginCidadaoCoreBundle:Country', 'c',
                                'WITH', 's.country = c')
                         ->where('s.reviewed = ' . Country::REVIEWED_OK)
                         ->andWhere('c.iso2 = :country')
-                        ->setParameter('country', $this->countryAcronym)
+                        ->setParameter('country', $countryAcronym)
                         ->orderBy('s.name', 'ASC');
                 }
         ));
