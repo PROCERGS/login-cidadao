@@ -10,9 +10,9 @@ use PROCERGS\LoginCidadao\NotificationBundle\Form\BroadcastSettingsType;
 use Symfony\Component\HttpFoundation\Request;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\BroadcastSettings;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\BroadcastPlaceholder;
-use PROCERGS\LoginCidadao\NotificationBundle\Entity\Broadcast;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
-use PROCERGS\LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
+use PROCERGS\LoginCidadao\NotificationBundle\Model\BroadcastNotificationIterable;
 
 /**
  * @Route("/dev/broadcasts")
@@ -21,15 +21,44 @@ class BroadcastController extends Controller
 {
     
     /**
-     * @Route("/", name="lc_dev_broadcasts")
+     * @Route("/list/{id}", requirements={"id" = "\d+"}, defaults={"id" = null}, name="lc_dev_broadcasts")
      * @Template()
      */
-    public function indexAction(Request $request)
-    {
+    public function indexAction(Request $request, $id = null)
+    {       
+        if (null !== $id) {
+            $openId = $id;
+            $offset = $id + 1;
+        } else {
+            $offset = null;
+        }
+        
+        $grid = $this->getBroadcastGrid();        
+        
+        return array('grid' => $grid->createView($request));
+    }
+    
+    private function getBroadcastGrid(){
         $em = $this->getDoctrine()->getManager();        
-        $broadcasts = $em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Broadcast')->findByPerson($this->getUser());
-
-        return array('broadcasts' => $broadcasts);
+        $sql = $em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Broadcast')->createQueryBuilder('c')
+            ->where('c.person = :person')
+            ->setParameter('person', $this->getUser())
+            ->addOrderBy('c.id', 'desc');
+        
+        $grid = new GridHelper();
+        $grid->setId('broadcasts');
+        $grid->setPerPage(10);
+        $grid->setMaxResult(10);
+        $grid->setQueryBuilder($sql);
+        $grid->setInfiniteGrid(true);
+        $grid->setRoute('lc_dev_broadcasts');
+        
+        return $grid;
+    }
+    
+    private function getNotificationHandler()
+    {
+        return $this->get('procergs.notification.handler');
     }
     
     /**
@@ -48,7 +77,7 @@ class BroadcastController extends Controller
      * @Route("/clients", name="lc_dev_broadcasts_clients")
      * @Template()
      */
-    public function listAction()
+    public function clientsAction()
     {
         $em = $this->getDoctrine()->getManager();
         $clients = $em->getRepository('PROCERGSOAuthBundle:Client')->createQueryBuilder('c')
