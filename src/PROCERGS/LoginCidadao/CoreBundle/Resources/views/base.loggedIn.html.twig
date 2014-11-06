@@ -23,7 +23,7 @@
 
 {% for flashMessage in app.session.flashbag.get('success') %}
 <div class="row">
-  <div class="col-sm-7 col-sm-offset-4 col-md-7 col-md-offset-4 col-lg-6 col-lg-offset-4">
+  <div class="col-sm-7 col-sm-offset-4">
     <div class="alert alert-success alert-bar">
       {{ flashMessage }}
     </div>
@@ -33,7 +33,7 @@
 
 {% for flashMessage in app.session.flashbag.get('error') %}
 <div class="row">
-  <div class="col-sm-7 col-sm-offset-4 col-md-7 col-md-offset-4 col-lg-6 col-lg-offset-4">
+  <div class="col-sm-7 col-sm-offset-4">
     <div class="alert alert-danger alert-bar">
       {{ flashMessage }}
     </div>
@@ -115,7 +115,7 @@
 {% endblock body %}
 
 {% block footer %}
-{% set columns = 'col-sm-7 col-sm-offset-4 col-md-7 col-md-offset-4 col-lg-6 col-lg-offset-4' %}
+{% set columns = 'col-sm-7 col-sm-offset-4' %}
 {{ include("PROCERGSLoginCidadaoCoreBundle::footer.html.twig") }}
 {% endblock %}
 
