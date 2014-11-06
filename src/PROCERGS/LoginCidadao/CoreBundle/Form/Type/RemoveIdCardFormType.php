@@ -13,7 +13,7 @@ class RemoveIdCardFormType extends AbstractType
         $builder
             ->add('id_card_id', 'hidden')
             ->add('delete', 'submit', array(
-                'attr' => array('class' => 'btn btn-danger btn-xs'),
+                'attr' => array('class' => 'btn btn-danger btn-sm pull-right'),
                 'label' => 'Yes, remove')
         );
     }

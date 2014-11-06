@@ -13,31 +13,31 @@
                             <div class="panel panel-danger remove-box" data-id-card-id="{{ idCard.id }}" style="margin-bottom: 0">
                                 <div class="panel-heading clearfix">
                                     <p>{{ 'Are you sure you want to remove this ID Card?' | trans }}</p>
-                                    <p><strong>{{ idCard.state.acronym }}</strong>: {{ idCard.value }}</p>
-                                    <p class="text-right">
+                                    <p class="id-card-confirm-value"><strong>{{ idCard.state.acronym }}</strong>: {{ idCard.value }}</p>
+                                    <p>
                                         {{ form_widget(form.delete) }}
-                                        <button type="button" class="btn btn-default btn-xs cancel">{{ 'No' | trans }}</button>
+                                        <button type="button" class="btn btn-default btn-sm cancel pull-left">{{ 'No' | trans }}</button>
                                     </p>
                                 </div>
                             </div>
                             {{ form_end(form) }}
                         </div>
-                        <div class="btn-group pull-right">
-                            <a href="{{ path('lc_person_id_cards_edit', { id: idCard.id }) }}"
-                               class="btn btn-xs btn-warning id-card-edit"
-                               title="{{ 'Edit' | trans }}">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                                <span class="sr-only">{{ 'Edit' | trans }}</span>
-                            </a>
-                            <button type="button" class="btn btn-xs btn-danger remove"
-                                    title="{{ 'Remove' | trans }}">
-                                <span class="glyphicon glyphicon-remove"></span>
-                                <span class="sr-only">{{ 'Remove' | trans }}</span>
-                            </button>
-                        </div>
                         <div class="media">
                             <div class="media-left">
                                 <span class="id-card-state">{{ idCard.state.acronym }}</span>
+                                <div class="btn-group">
+                                    <a href="{{ path('lc_person_id_cards_edit', { id: idCard.id }) }}"
+                                       class="btn btn-xs btn-warning id-card-edit"
+                                       title="{{ 'Edit' | trans }}">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                        <span class="sr-only">{{ 'Edit' | trans }}</span>
+                                    </a>
+                                    <button type="button" class="btn btn-xs btn-danger remove"
+                                            title="{{ 'Remove' | trans }}">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                        <span class="sr-only">{{ 'Remove' | trans }}</span>
+                                    </button>
+                                </div>
                             </div>
                             <div class="media-body id-card-details">
                                 <dl>
