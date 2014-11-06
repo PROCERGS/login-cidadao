@@ -8,7 +8,6 @@ use PROCERGS\LoginCidadao\NotificationBundle\Handler\NotificationHandlerInterfac
 use PROCERGS\LoginCidadao\NotificationBundle\Form\NotificationType;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\NotificationInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Exception\InvalidFormException;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\CategoryInterface;

@@ -8,7 +8,6 @@ use PROCERGS\LoginCidadao\NotificationBundle\Handler\NotificationHandlerInterfac
 use PROCERGS\LoginCidadao\NotificationBundle\Form\NotificationType;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\NotificationInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Exception\InvalidFormException;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\CategoryInterface;
@@ -69,7 +68,7 @@ class NotificationHandler implements NotificationHandlerInterface
 
     public function post(array $parameters)
     {
-        $notification = $this->createNotification();        
+        $notification = $this->createNotification();
         return $this->processForm($notification, $parameters, 'POST');
     }
 
@@ -95,7 +94,7 @@ class NotificationHandler implements NotificationHandlerInterface
     {
         $form = $this->formFactory->create(new NotificationType(),
                                            $notification, compact('method'));
-        $form->submit($parameters, 'PATCH' !== $method); 
+        $form->submit($parameters, 'PATCH' !== $method);
         $data = $form->getData();
         if ($form->isValid()) {
 
