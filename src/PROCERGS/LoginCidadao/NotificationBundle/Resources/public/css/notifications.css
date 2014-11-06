@@ -120,7 +120,7 @@
     display: block;
 }
 
-.infinitegrid .notification-open .media-body {
+.infinitegrid .notification-open .notification-read .media-body {
   color: #FFF;
 }
 

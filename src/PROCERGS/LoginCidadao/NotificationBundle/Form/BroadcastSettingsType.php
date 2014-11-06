@@ -37,6 +37,8 @@ class BroadcastSettingsType extends AbstractType
                    array(
                     'type' => new BroadcastPlaceholderType()
             ))
+            ->add('title', 'text', array("required"=> true))
+            ->add('shortText', 'text', array("required"=> true))            
             ->add('save', 'submit')
             ;
     }

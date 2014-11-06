@@ -94,8 +94,7 @@ class NotificationHandler implements NotificationHandlerInterface
     {
         $form = $this->formFactory->create(new NotificationType(),
                                            $notification, compact('method'));
-        $form->submit($parameters, 'PATCH' !== $method);
-        $data = $form->getData();
+        $form->submit($parameters, 'PATCH' !== $method);         
         if ($form->isValid()) {
 
             $notification = $form->getData();

@@ -1,11 +1,16 @@
-{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+{% extends "PROCERGSLoginCidadaoCoreBundle:Dev:base.html.twig" %}
 
 {% block content %}
 <div class="content notifications-broadcast-preview">
-  <h2>{{ 'Notification Broadcast Preview' | trans }}</h2>
+  
   <div class="panel panel-default">
+    <div class="panel-heading"><h2 class="panel-title">{{ 'Broadcast Preview' | trans }}</h2></div>
     <div class="panel-body">
     {{ form_start(form) }}
+      {{ form_row(form.title) }}
+      {{ form_row(form.shortText) }}
+
+      <label>{{ 'Placeholders' | trans }}</label>
       <ul class="list-group">
       {% for placeholder in form.placeholders %}
         {% set placeholderObj = placeholder.vars.data.placeholder %}
@@ -28,8 +33,7 @@
         {% endfor %}
       </ul>
 
-      <div class="form-bar text-right clearfix">
-        <button type="button" class="btn btn-danger pull-left">{{ 'Edit' | trans }}</button>
+      <div class="form-bar text-right clearfix">        
         {{ form_widget(form.save, {'attr': {'class': 'btn btn-success'}}) }}
       </div>
 

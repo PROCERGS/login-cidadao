@@ -58,6 +58,16 @@ class Broadcast
      * @ORM\Column(name="html_tpl", type="text", nullable=true)
      */
     private $htmlTemplate;
+    
+    /**
+     * @ORM\Column(name="title", type="string", nullable=true)
+     */
+    private $title;
+
+    /**
+     * @ORM\Column(name="short_text", type="string", nullable=true)
+     */
+    private $shortText;
 
     public function getId()
     {
@@ -151,6 +161,28 @@ class Broadcast
       }
       $this->htmlTemplate = $html;
       return $this;
+    }
+    
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function setTitle($title)
+    {
+        $this->title = $title;
+        return $this;
+    }
+    
+    public function getShortText()
+    {
+        return $this->shortText;
+    }
+
+    public function setShortText($shortText)
+    {
+        $this->shortText = $shortText;
+        return $this;
     }
 
 }
