@@ -137,22 +137,25 @@ fos_user:
 # Audit Trail
 simple_things_entity_audit:
     audited_entities:
+        - PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey
+
         - PROCERGS\LoginCidadao\CoreBundle\Entity\AccessSession
         - PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization
         - PROCERGS\LoginCidadao\CoreBundle\Entity\City
         - PROCERGS\LoginCidadao\CoreBundle\Entity\ClientSuggestion
         - PROCERGS\LoginCidadao\CoreBundle\Entity\Country
+        - PROCERGS\LoginCidadao\CoreBundle\Entity\IdCard
         - PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile
         - PROCERGS\LoginCidadao\CoreBundle\Entity\Person
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\Rg
+        - PROCERGS\LoginCidadao\CoreBundle\Entity\PersonAddress
         - PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail
         - PROCERGS\LoginCidadao\CoreBundle\Entity\State
 
-        - PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification
         - PROCERGS\LoginCidadao\NotificationBundle\Entity\Broadcast
         - PROCERGS\LoginCidadao\NotificationBundle\Entity\Category
+        - PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification
         - PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationToken
-        - PROCERGS\LoginCidadao\NotificationBundle\Entity\PersonOption
+        - PROCERGS\LoginCidadao\NotificationBundle\Entity\PersonNotificationOption
         - PROCERGS\LoginCidadao\NotificationBundle\Entity\Placeholder
 
         - PROCERGS\OAuthBundle\Entity\AccessToken

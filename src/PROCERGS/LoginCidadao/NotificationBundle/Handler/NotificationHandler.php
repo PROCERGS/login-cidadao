@@ -8,7 +8,6 @@ use PROCERGS\LoginCidadao\NotificationBundle\Handler\NotificationHandlerInterfac
 use PROCERGS\LoginCidadao\NotificationBundle\Form\NotificationType;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\NotificationInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Exception\InvalidFormException;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\CategoryInterface;
@@ -19,6 +18,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 class NotificationHandler implements NotificationHandlerInterface
 {
 
+    /** @var ObjectManager */
     private $om;
     private $entityClass;
 
@@ -59,7 +59,12 @@ class NotificationHandler implements NotificationHandlerInterface
 
     public function get($id)
     {
-        return $this->repository->find($id);
+        $notification = $this->repository->find($id);
+        if (!$notification->isRead()) {
+            $notification->setReadDate(new DateTime());
+            $this->om->persist($notification);
+        }
+        return $notification;
     }
 
     public function patch(NotificationInterface $notification, array $parameters)
@@ -69,7 +74,7 @@ class NotificationHandler implements NotificationHandlerInterface
 
     public function post(array $parameters)
     {
-        $notification = $this->createNotification();        
+        $notification = $this->createNotification();
         return $this->processForm($notification, $parameters, 'POST');
     }
 
@@ -95,7 +100,7 @@ class NotificationHandler implements NotificationHandlerInterface
     {
         $form = $this->formFactory->create(new NotificationType(),
                                            $notification, compact('method'));
-        $form->submit($parameters, 'PATCH' !== $method);         
+        $form->submit($parameters, 'PATCH' !== $method);
         if ($form->isValid()) {
 
             $notification = $form->getData();

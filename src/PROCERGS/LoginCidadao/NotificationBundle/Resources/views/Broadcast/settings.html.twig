@@ -34,7 +34,8 @@
       </ul>
 
       <div class="form-bar text-right clearfix">        
-        {{ form_widget(form.save, {'attr': {'class': 'btn btn-success'}}) }}
+        {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+        {{ form_widget(form.saveAndAdd, {'attr': {'class': 'btn btn-success'}}) }}
       </div>
 
     {{ form_end(form) }}

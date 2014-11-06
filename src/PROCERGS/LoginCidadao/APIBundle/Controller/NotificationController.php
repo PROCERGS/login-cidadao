@@ -9,6 +9,9 @@ use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use PROCERGS\OAuthBundle\Model\ClientUser;
+use PROCERGS\OAuthBundle\Model\ClientInterface;
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 
 /**
  * @REST\Prefix("")
@@ -177,15 +180,63 @@ class NotificationController extends BaseController
 
     protected function validateNotification(Request $request)
     {
-        $notificationPerson = $request->get('person');
-        $notificationClient = $request->get('sender');
-        $requestPerson = $this->getUser();
-        $requestClient = $this->getClient();
+        $token = $this->get('security.context')->getToken();
+        $user = $token->getUser();
+        if ($user instanceof ClientUser) {
+            return $this->validateNotificationAsClient($user->getClient(),
+                                                       $request);
+        } elseif ($user instanceof PersonInterface) {
+            return $this->validateNotificationAsPerson($user, $request);
+        } else {
+            throw new AccessDeniedHttpException("Invalid grant type.");
+        }
+    }
 
-        if ($requestClient->getId() != $notificationClient || $requestPerson->getId() != $notificationPerson) {
+    protected function validateNotificationAsClient(ClientInterface $sender,
+                                                    Request $request)
+    {
+        $notificationPerson = (int) $request->get('person');
+        $notificationClient = (int) $request->get('sender');
+
+        if ($notificationClient !== $sender->getId()) {
+            throw new AccessDeniedHttpException("This application cannot impersonate other applications when sending notifications.");
+        }
+
+        $person = $this->getDoctrine()
+            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')
+            ->find($notificationPerson);
+
+        return $this->validateNotificationCore($sender, $person, $request);
+    }
+
+    protected function validateNotificationAsPerson(PersonInterface $person,
+                                                    Request $request)
+    {
+        $notificationPerson = (int) $request->get('person');
+        $sender = $this->getClient();
+
+        if ($person->getId() !== $notificationPerson) {
+            throw new AccessDeniedHttpException("You can't send notifications to this person.");
+        }
+
+        return $this->validateNotificationCore($sender, $person, $request);
+    }
+
+    protected function validateNotificationCore(ClientInterface $sender,
+                                                PersonInterface $person,
+                                                Request $request)
+    {
+        $notificationPerson = (int) $request->get('person');
+        $notificationClient = (int) $request->get('sender');
+
+        if ($notificationClient !== $sender->getId()) {
+            throw new AccessDeniedHttpException("This application cannot impersonate other applications when sending notifications.");
+        }
+
+        if ($person->getId() !== $notificationPerson) {
             throw new AccessDeniedHttpException("You don't have permission to send notifications to this person.");
         }
-        $scopes = $this->getClientScope($this->getUser());
+        $scopes = $this->getClientScope($person, $sender);
         if (!is_array($scopes) || array_search('notifications', $scopes) === false) {
             throw new AccessDeniedHttpException("This person didn't allow you to send notifications.");
         }
@@ -193,7 +244,7 @@ class NotificationController extends BaseController
         $categories = $this->getDoctrine()
             ->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category');
         $notificationCategory = $categories->find($request->get('category'));
-        if ($notificationCategory->getClient()->getId() != $requestClient->getId()) {
+        if ($notificationCategory->getClient()->getId() !== $sender->getId()) {
             throw new AccessDeniedHttpException("Invalid category.");
         }
         return true;

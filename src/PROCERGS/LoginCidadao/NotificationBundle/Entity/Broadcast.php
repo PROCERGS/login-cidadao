@@ -68,6 +68,11 @@ class Broadcast
      * @ORM\Column(name="short_text", type="string", nullable=true)
      */
     private $shortText;
+    
+    /**
+     * @ORM\Column(name="sent", type="boolean", nullable=true)
+     */
+    private $sent;
 
     public function getId()
     {
@@ -182,6 +187,17 @@ class Broadcast
     public function setShortText($shortText)
     {
         $this->shortText = $shortText;
+        return $this;
+    }
+    
+    public function getSent()
+    {
+        return $this->sent;
+    }
+
+    public function setSent($sent)
+    {
+        $this->sent = $sent;
         return $this;
     }
 

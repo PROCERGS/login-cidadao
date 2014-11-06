@@ -9,6 +9,9 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Translation\TranslatorInterface;
+use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
+use PROCERGS\OAuthBundle\Model\ClientUser;
+use Doctrine\ORM\EntityManager;
 
 class LoggedInUserListener
 {
@@ -25,14 +28,19 @@ class LoggedInUserListener
     /** @var TranslatorInterface */
     private $translator;
 
+    /** @var EntityManager */
+    private $em;
+
     public function __construct(SecurityContextInterface $context,
                                 RouterInterface $router, Session $session,
-                                TranslatorInterface $translator)
+                                TranslatorInterface $translator,
+                                EntityManager $em)
     {
         $this->context = $context;
         $this->router = $router;
         $this->session = $session;
         $this->translator = $translator;
+        $this->em = $em;
     }
 
     public function onKernelRequest(GetResponseEvent $event)
@@ -47,6 +55,11 @@ class LoggedInUserListener
 
         $_route = $event->getRequest()->attributes->get('_route');
         if ($this->context->isGranted('IS_AUTHENTICATED_FULLY')) {
+            if (!($this->context->getToken()->getUser() instanceof PersonInterface)) {
+                // We don't have a PersonInterface... Nothing to do here.
+                return;
+            }
+
             if ($_route == 'lc_home' || $_route == 'fos_user_security_login') {
                 $key = '_security.main.target_path'; #where "main" is your firewall name
                 //check if the referer session key has been set
@@ -68,14 +81,15 @@ class LoggedInUserListener
 
     protected function checkUnconfirmedEmail()
     {
-        $user = $this->context->getToken()->getUser();
+        $token = $this->context->getToken();
+        $user = $token->getUser();
         if (is_null($user->getEmailConfirmedAt())) {
             $params = array('%url%' => $this->router->generate('lc_resend_confirmation_email'));
             $title = $this->translator->trans('notification.unconfirmed.email.title');
             $text = $this->translator->trans('notification.unconfirmed.email.shortText',
                                              $params);
             $alert = sprintf("<strong>%s</strong> %s", $title, $text);
-            
+
             $this->session->getFlashBag()->add('alert.unconfirmed.email', $alert);
         }
     }

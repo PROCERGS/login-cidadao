@@ -39,7 +39,8 @@ class BroadcastSettingsType extends AbstractType
             ))
             ->add('title', 'text', array("required"=> true))
             ->add('shortText', 'text', array("required"=> true))            
-            ->add('save', 'submit')
+            ->add('save', 'submit', array('label' => 'Save'))
+            ->add('saveAndAdd', 'submit', array('label' => 'Save and Send'))
             ;
     }
 

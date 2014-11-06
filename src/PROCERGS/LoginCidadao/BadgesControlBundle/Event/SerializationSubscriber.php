@@ -25,7 +25,6 @@ class SerializationSubscriber implements EventSubscriberInterface
                 'event' => 'serializer.pre_serialize',
                 'method' => 'onPreSerialize',
                 'class' => 'PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface'
-//                'class' => 'PROCERGS\LoginCidadao\CoreBundle\Entity\Person'
             )
         );
     }

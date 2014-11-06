@@ -4,6 +4,7 @@ body.no-scroll {
 /* settings nav and content */
 .settings-content {
     background-color: #F1F1F1;
+    max-width: 960px;
 }
 
 @media (max-width: 768px) {
@@ -636,22 +637,23 @@ dl.id-card-details {
     margin-top: 0;
 }
 
+.id-card .media-left {
+    min-width: 65px;
+}
+
 .id-card .btn-group {
-    display: none;
-    position: absolute;
-    right: 0;
-}
-
-.id-card.blockHover .btn-group{
-    display: none !important;
-}
-
-.id-card:hover .btn-group {
     display: block;
+    margin-left: 7px;
+}
+
+.id-card .btn-group :first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
 .id-card .btn-group button:last-child {
     border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 .id-card .confirm-removal {
@@ -659,11 +661,19 @@ dl.id-card-details {
     position: absolute;
     height: 100%;
     width: 100%;
+    z-index: 999;
 }
 
 .id-card .confirm-removal .remove-box {
     position: absolute;
     height: 100%;
+    width: 100%;
+}
+
+.id-card .confirm-removal .id-card-confirm-value
+{
+    margin-top: -5px;
+    margin-bottom: 5px;
 }
 
 .id-card .confirm-removal .remove-box .panel-heading {

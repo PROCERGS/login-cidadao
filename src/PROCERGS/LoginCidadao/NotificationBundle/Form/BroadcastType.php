@@ -33,6 +33,7 @@ class BroadcastType extends AbstractType
         $builder
             ->add('category', 'entity',
               array(
+                  'required' => true,
                 'class' => 'PROCERGS\LoginCidadao\NotificationBundle\Entity\Category',
                 'property' => 'name',
                 'query_builder' => function (CategoryRepository $repository) use ($person, $clientId) {
@@ -43,6 +44,7 @@ class BroadcastType extends AbstractType
             ))
             ->add('receivers', null,
                   array(
+                 'required' => true,
                 'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
                 'property' => 'email',
                 'query_builder' => function (PersonRepository $repository) use ($clientId) {
