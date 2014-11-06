@@ -11,7 +11,7 @@ use FOS\OAuthServerBundle\Model\Client;
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKeyRepository")
  * @ORM\Table(name="logout_key")
- * @UniqueEntity("key")
+ * @UniqueEntity("logoutKey")
  * @ORM\HasLifecycleCallbacks
  * @JMS\ExclusionPolicy("all")
  */
@@ -35,7 +35,7 @@ class LogoutKey
      * @ORM\Column(name="logout_key", type="string", nullable=false)
      * @var string
      */
-    protected $key;
+    protected $logoutKey;
 
     /**
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="logoutKeys")
@@ -64,7 +64,7 @@ class LogoutKey
 
     public function getKey()
     {
-        return $this->key;
+        return $this->logoutKey;
     }
 
     public function getPerson()
@@ -79,9 +79,9 @@ class LogoutKey
         return $this;
     }
 
-    public function setKey($key)
+    public function setKey($logoutKey)
     {
-        $this->key = $key;
+        $this->logoutKey = $logoutKey;
 
         return $this;
     }

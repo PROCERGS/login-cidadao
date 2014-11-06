@@ -42,7 +42,7 @@ class Placeholder
      * @Assert\Length(max = "255")
      * @ORM\Column(name="defaultValue", type="string", length=255, nullable=true)
      */
-    private $default;
+    private $defaultValue;
 
     /**
      * @var Category
@@ -64,7 +64,7 @@ class Placeholder
 
     public function getDefault()
     {
-        return $this->default;
+        return $this->defaultValue;
     }
 
     public function getCategory()
@@ -84,9 +84,9 @@ class Placeholder
         return $this;
     }
 
-    public function setDefault($default)
+    public function setDefault($defaultValue)
     {
-        $this->default = $default;
+        $this->defaultValue = $defaultValue;
         return $this;
     }
 
