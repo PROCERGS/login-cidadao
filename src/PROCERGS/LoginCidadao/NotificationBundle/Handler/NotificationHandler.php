@@ -18,6 +18,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 class NotificationHandler implements NotificationHandlerInterface
 {
 
+    /** @var ObjectManager */
     private $om;
     private $entityClass;
 
@@ -58,7 +59,12 @@ class NotificationHandler implements NotificationHandlerInterface
 
     public function get($id)
     {
-        return $this->repository->find($id);
+        $notification = $this->repository->find($id);
+        if (!$notification->isRead()) {
+            $notification->setReadDate(new DateTime());
+            $this->om->persist($notification);
+        }
+        return $notification;
     }
 
     public function patch(NotificationInterface $notification, array $parameters)
@@ -94,7 +100,7 @@ class NotificationHandler implements NotificationHandlerInterface
     {
         $form = $this->formFactory->create(new NotificationType(),
                                            $notification, compact('method'));
-        $form->submit($parameters, 'PATCH' !== $method);         
+        $form->submit($parameters, 'PATCH' !== $method);
         if ($form->isValid()) {
 
             $notification = $form->getData();

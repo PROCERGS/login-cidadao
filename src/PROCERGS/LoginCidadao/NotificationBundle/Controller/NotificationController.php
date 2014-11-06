@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use PROCERGS\LoginCidadao\NotificationBundle\Handler\AuthenticatedNotificationHandlerInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Handler\NotificationHandlerInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Form\SettingsType;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\NotificationIterable;
@@ -26,9 +27,11 @@ class NotificationController extends Controller
         if (null !== $id) {
             $openId = $id;
             $offset = $id + 1;
+            $this->getAuthenticatedNotificationHandler()->markRangeAsRead($openId, $openId);
         } else {
             $offset = null;
         }
+
         $grid = $this->getNotificationGrid($offset, 10)->createView($this->getRequest());
 
         return compact('grid', 'openId');
@@ -43,6 +46,7 @@ class NotificationController extends Controller
         if (null !== $id) {
             $openId = $id;
             $offset = $id + 1;
+            $this->getAuthenticatedNotificationHandler()->markRangeAsRead($openId, $openId);
         } else {
             $offset = null;
         }
@@ -117,6 +121,15 @@ class NotificationController extends Controller
     }
 
     /**
+     * @return AuthenticatedNotificationHandlerInterface
+     */
+    private function getAuthenticatedNotificationHandler()
+    {
+        return $this->getNotificationHandler()
+                ->getAuthenticatedHandler($this->getUser());
+    }
+
+    /**
      * @return NotificationHandlerInterface
      */
     private function getNotificationHandler()
@@ -126,9 +139,8 @@ class NotificationController extends Controller
 
     private function getNotificationGrid($offset = 0, $perIteration = 10,
                                          ClientInterface $client = null)
-    {        
-        $handler = $this->getNotificationHandler()
-            ->getAuthenticatedHandler($this->getUser());
+    {
+        $handler = $this->getAuthenticatedNotificationHandler();
         if ($client instanceof ClientInterface) {
             $iterator = new ClientNotificationIterable($handler, $client,
                                                        $perIteration, $offset);
