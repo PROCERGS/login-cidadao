@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Translation\TranslatorInterface;
 use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientUser;
 use Doctrine\ORM\EntityManager;
 
@@ -49,13 +50,14 @@ class LoggedInUserListener
             // don't do anything if it's not the master request
             return;
         }
-        if (is_null($this->context->getToken())) {
+        $token = $this->context->getToken();
+        if (is_null($token)) {
             return;
         }
 
         $_route = $event->getRequest()->attributes->get('_route');
         if ($this->context->isGranted('IS_AUTHENTICATED_FULLY')) {
-            if (!($this->context->getToken()->getUser() instanceof PersonInterface)) {
+            if (!($token->getUser() instanceof PersonInterface)) {
                 // We don't have a PersonInterface... Nothing to do here.
                 return;
             }
