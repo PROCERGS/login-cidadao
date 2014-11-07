@@ -1,5 +1,7 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
+{% block title %}{{ 'Change username' | trans }} | {{ parent() }}{% endblock title %}
+
 {% block content %}
     <div id="profile-change-username" class="content change-username clearfix">
         <h1 class="visible-xs">{%trans%}Change username{%endtrans%}</h1>

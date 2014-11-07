@@ -1,5 +1,7 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
+{% block title %}{{ 'Notifications' | trans }} | {{ parent() }}{% endblock title %}
+
 {% block sidebar %}
     {% if clientId is not defined %}
         {% set clientId = null %}

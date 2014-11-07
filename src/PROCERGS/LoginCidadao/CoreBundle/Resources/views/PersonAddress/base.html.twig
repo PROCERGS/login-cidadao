@@ -1,5 +1,7 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
+{% block title %}{{ 'Addresses' | trans }} | {{ parent() }}{% endblock title %}
+
 {% block content %}
     <div class="content addresses">
         <h1 class="visible-xs">{{ 'Addresses' | trans }}</h1>
