@@ -12,8 +12,8 @@
                class="{{ route == 'lc_notifications' and not clientId ? 'active' }}">
                 <span style="padding-left:0px;">{{ 'Notifications' | trans }}</span>
                 <div class="icon-count">
-                    <span class="badge notification-count notification-total-unread-badge">
-                        {{ notifications_helper.getTotalUnread }}
+                    <span class="badge notification-count">
+                        <span class="notification-total-unread-badge">{{ notifications_helper.getTotalUnread }}</span>
                         <span class="caret"></span>
                     </span>
                 </div>
@@ -40,7 +40,7 @@
                     <span>{{ cli.name }}</span>
                     <div class="icon-count">
                         <span id="inbox-count-unread-{{ cli.id }}" class="badge notification-count">
-                            {{ cli.total }}
+                            <span class="notification-count-client" data-client-id="{{ cli.id }}">{{ cli.total }}</span>
                             <span class="caret"></span>
                         </span>
                     </div>

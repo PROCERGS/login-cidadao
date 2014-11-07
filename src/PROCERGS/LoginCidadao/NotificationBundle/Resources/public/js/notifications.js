@@ -24,7 +24,7 @@ $('.content.notifications .infinitegrid').on('click', 'a.notification', function
     $('.content .notification').not(this).parent('.notification-line').removeClass('notification-open');
     $('.content .notification-content').slideUp();
 
-    $(this).parent('.notification-line').stop().toggleClass('notification-open').promise().done(function() {
+    $(this).parent('.notification-line').stop().toggleClass('notification-open').promise().done(function () {
         var isOpen = $(this).is('.notification-open');
         if (isOpen) {
             $(this).children('.notification-content').hide().slideDown();
@@ -44,6 +44,24 @@ $('.content.notifications .infinitegrid').on('click', 'a.notification', function
                     $('.infinitegrid .notification[data-notification-id=' + value + ']')
                             .removeClass('notification-unread')
                             .addClass('notification-read');
+                });
+
+                // Update notifications counts
+                var url = notification.config.count_unread;
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (result) {
+                        $.each(result, function (index, value) {
+                            if (index === 'total') {
+                                $('.notification-total-unread-badge').html(value);
+                            } else {
+                                var client = value.id;
+                                var count = value.total;
+                                $('.notification-count-client[data-client-id=' + client + ']').html(count);
+                            }
+                        });
+                    }
                 });
             }
         });

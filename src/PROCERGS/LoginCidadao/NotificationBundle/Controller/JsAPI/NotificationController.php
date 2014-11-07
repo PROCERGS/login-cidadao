@@ -64,6 +64,35 @@ class NotificationController extends FOSRestController
     }
 
     /**
+     * Get the unread notifications count.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Get the unread notifications count.",
+     *   output = "array",
+     *   statusCodes = {
+     *     200 = "Returned when successful"
+     *   }
+     * )
+     * @REST\View(templateVar="result")
+     * @return array
+     * @REST\Get("/notifications/count/unread", name="js_api_1_get_notification_count_unread")
+     */
+    public function getUnreadCountAction()
+    {
+        $person = $this->getUser();
+        $result = $this->getNotificationHandler()->countUnreadByClient($person);
+        $result['total'] = 0;
+        if (!empty($result)) {
+            foreach ($result as $client) {
+                $result['total'] += $client['total'];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * @return NotificationHandlerInterface
      */
     private function getNotificationHandler()
