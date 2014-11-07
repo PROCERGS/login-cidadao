@@ -6,6 +6,7 @@ use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use SimpleThings\EntityAudit\AuditConfiguration;
+use Symfony\Component\HttpKernel\HttpKernel;
 use PROCERGS\OAuthBundle\Model\ClientUser;
 use Doctrine\ORM\EntityManager;
 
@@ -32,7 +33,15 @@ class LoggedInUserListener
 
     public function onKernelRequest(GetResponseEvent $event)
     {
+        if (HttpKernel::MASTER_REQUEST != $event->getRequestType()) {
+            // don't do anything if it's not the master request
+            return;
+        }
         $token = $this->context->getToken();
+        if (is_null($token)) {
+            return;
+        }
+
         if ($token instanceof OAuthToken && $token->getUser() === null) {
             $accessToken = $this->em->
                 getRepository('PROCERGSOAuthBundle:AccessToken')->
