@@ -1,0 +1,385 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block content %}
+<div id="profile-edit" class="content profile-edit">
+
+    <h1 class="visible-xs">{% trans %}Profile{% endtrans %}</h1>
+
+    {% trans_default_domain 'FOSUserBundle' %}
+
+    {{ form_start(form, {'action': path('fos_user_profile_edit'), 'attr': {'role':'form' } }) }}
+    {{ form_errors(form) }}
+
+    <div class="form-content">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <div class="media clearfix">
+                        <div class="pull-left">
+                            <img src="{{ include("PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" class="profile-picture">
+                            <button type="button" class="btn btn-xs btn-link btn-block change-picture" title="{% trans %}Upload another picture{% endtrans %}">{{ 'Change' | trans }}</button>
+                        </div>
+                        <div class="media-body">
+                            <h2 class="media-heading personal-info">{{ 'Personal Information' | trans }}</h2>
+                            {{ app.user.username }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-info picture-upload-box" style="margin-bottom: 0">
+                <div class="panel-heading clearfix">
+                    <div class="file-upload">
+                        <button type="button" class="btn btn-xs btn-success btn-upload">{{ 'Upload another picture' | trans }}</button>
+                        <span class="file-name"></span>
+                        {{ form_widget(form.image) }}
+                        {{ form_errors(form.image) }}
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                {{ form_row(form.firstName) }}
+                {{ form_row(form.surname) }}
+                {{ form_row(form.birthdate) }}
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">{{ 'Contact Information' | trans }}</h2>
+            </div>
+            <div class="panel-body">
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.country) }}
+                <div class="form-group">
+                    {{ form_label(form.state) }}
+                    {{ form_widget(form.state, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_widget(form.ufsteppe, {'attr': {'class': 'form-control', 'style': 'display: none;'}}) }}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    {{ form_errors(form.state) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.city) }}
+                    {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_widget(form.citysteppe, {'attr': {'class': 'form-control', 'style': 'display: none;'}}) }}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    {{ form_errors(form.city) }}
+                </div>
+                {{ form_row(form.mobile) }}
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">{{ 'Social Networks and other connections' | trans }}</h2>
+            </div>
+            <div class="panel-body">
+                {% if app.user.facebookId is null %}
+                        <div class="connect facebook disabled">
+                            <a class="col-xs-11 col-xs-offset-1 username" href="{{ path('lc_link_facebook') }}">{{ 'Connect with Facebook' | trans }}</a>
+                        </div>
+                {% else %}
+                        <div class="connect facebook">
+                            {% if app.user.facebookUsername is not null %}
+                            <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.facebookUsername }}</span>
+                            {% else %}
+                            <span class="col-xs-9 col-xs-offset-1 username">{{ 'facebook.nousername'|trans }}</span>
+                            {% endif %}
+                            {% if app.user.hasPassword %}
+                            <a class="col-xs-2 unlink text-right"  href="{{ path('lc_unlink_facebook') }}">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </a>
+                            {% endif %}
+                        </div>
+                {% endif %}
+
+                {% if app.user.twitterId is null %}
+                        <div class="connect twitter disabled">
+                            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="col-xs-11 col-xs-offset-1 username">{{ 'Connect with Twitter' | trans }}</a>
+                        </div>
+                {% else %}
+                        <div class="connect twitter">
+                            {% if app.user.twitterUsername is not null %}
+                            <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.twitterUsername }}</span>
+                            {% else %}
+                            <span class="col-xs-9 col-xs-offset-1 username">{{ 'twitter.nousername'|trans }}</span>
+                            {% endif %}
+                            {% if app.user.hasPassword %}
+                            <a class="col-xs-2 unlink text-right" href="{{ path('lc_unlink_twitter') }}">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </a>
+                            {% endif %}
+                        </div>
+                {% endif %}
+                {% if app.user.googleId is null %}
+                        <div class="connect google disabled">
+                            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google'}) }}" class="col-xs-11 col-xs-offset-1 username">{{ 'Connect with Google' | trans }}</a>
+                        </div>
+                {% else %}
+                        <div class="connect google">
+                            {% if app.user.googleUsername is not null %}
+                            <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.googleUsername }}</span>
+                            {% else %}
+                            <span class="col-xs-9 col-xs-offset-1 username">{{ 'google.nousername'|trans }}</span>
+                            {% endif %}
+                            {% if app.user.hasPassword %}
+                            <a class="col-xs-2 unlink text-right" href="{{ path('lc_unlink_google') }}">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </a>
+                            {% endif %}
+                        </div>
+                {% endif %}
+                {% if app.user.nfgAccessToken is null %}
+                        <div class="connect nfg disabled">
+                            <a data-href="{{ path('nfg_bind') }}" href="javascript:void(0);" class="col-xs-11 col-xs-offset-1 username nfgpopup">{{ 'Connect to the Nota Fiscal Gaúcha' | trans }}</a>
+                        </div>
+                {% else %}
+                        <div class="connect nfg">
+                            <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.cpf | formatCpf }}</span>
+                            {% if app.user.hasPassword %}
+                            <a class="col-xs-2 unlink text-right"  href="{{ path('nfg_unbind') }}">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </a>
+                            {% endif %}
+                        </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row social-networks">
+            <div class="col-xs-12">
+
+                <div class="row unlink-confirmation">
+                    <div class="alert alert-danger col-xs-10 col-xs-offset-1">
+                        <p class="title">{% trans %}Do you really want to unlink <strong class="social-network-name"></strong>?{%  endtrans %}</p>
+
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <a href="#" class="btn btn-danger btn-sm btn-block confirm">{% trans %}Yes{% endtrans %}</a>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <a role="button" class="btn btn-default btn-sm btn-block cancel">{% trans %}Cancel{%  endtrans %}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for type, messages in app.session.flashbag.all() %}
+                {% for message in messages %}
+            <div class="col-md-12">
+                <div class="text-center bg-success flash-{{ type }}">
+                        {{ message }}
+                </div>
+            </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="form-bar text-right">
+        <input class="btn btn-success" type="submit" value="{{ 'profile.edit.submit'|trans }}" />
+    </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    var profileEdit = {};
+    profileEdit.countryId = '#{{ form.country.vars.id }}';
+    profileEdit.stateId = '#{{ form.state.vars.id }}';
+    profileEdit.cityId = '#{{ form.city.vars.id }}';
+    profileEdit.stateSteppeId = '#{{ form.ufsteppe.vars.id }}';
+    profileEdit.citySteppeId = '#{{ form.citysteppe.vars.id }}';
+    profileEdit.urlSearchState = '{{ path('lc_search_city_by_state') }}';
+    profileEdit.urlSearchCountry = '{{ path('lc_search_state_by_country') }}';
+    profileEdit.mobileId = "#{{ form.mobile.vars.id }}";
+    profileEdit.ufpreferredId = '#{{ form.ufpreferred.vars.id }}';
+
+    profileEdit.callbackOnceSearchState = null;
+    profileEdit.popLocation = function(dneData) {
+      if ($(profileEdit.countryId).val() == $(profileEdit.ufpreferredId).val()) {
+            $(profileEdit.cepId).val(dneData.cep);
+            $(profileEdit.cepId).mask('00000-000');
+            var street = dneData.tipoLogradouro ? dneData.tipoLogradouro.capitalize(true, true) : '';
+            if (dneData.tituloLogradouro && dneData.tipoLogradouro != dneData.tituloLogradouro) {
+                street += ' ' + dneData.tituloLogradouro.capitalize(true, true);
+            }
+            if (dneData.logradouro) {
+              street += ' ' + dneData.logradouro.capitalize(true, true);
+            }
+            var city = dneData.localidade.capitalize(true, true);
+            var state = dneData.state;
+            if (dneData.codigoMunIBGE && dneData.codigoMunIBGE > 0) {
+                var has1 = $(profileEdit.stateId).find('option[value="'+dneData.codigoMunIBGE.toString().substring(0,2)+'"]');
+              if (has1.length) {
+                has1.attr('selected','selected');
+                profileEdit.callbackOnceSearchState = function(data, textStatus, jqXHR) {
+                  var has2 = $(profileEdit.cityId).find('option[value="'+dneData.codigoMunIBGE.toString()+'"]');
+                  if (has2.length) {
+                    has2.attr('selected','selected');
+                  }
+                  };
+                $(profileEdit.stateId).trigger('change');
+                }
+            }
+      }
+    };
+
+    profileEdit.brCheckCep = function (event) {
+        validator.cep.findByCep(this, profileEdit.popLocation);
+    };
+    profileEdit.brCheck = function() {
+        if ($(profileEdit.countryId).val() == $(profileEdit.statepreferredId).val()) {
+            $(profileEdit.mobileId).mask("(00) 0000-00009").focusout(function() {
+              if ($(profileEdit.countryId).val() == $(profileEdit.statepreferredId).val()) {
+                    var phone, element;
+                    element = $(this);
+                    element.unmask();
+                    phone = element.val().replace(/\D/g, '');
+                    if (phone.length > 10) {
+                        element.mask("(00) 90000-0000");
+                    } else {
+                        element.mask("(00) 0000-00009");
+                    }
+                }
+            });
+            $(profileEdit.cepId).mask('00000-000');
+            $(profileEdit.cepId).bind('blur', profileEdit.brCheckCep);
+            $("#cepSearchBrazil").show();
+        } else {
+          $(profileEdit.mobileId).unmask();
+          $(profileEdit.cepId).unmask();
+          $(profileEdit.cepId).unbind('blur', profileEdit.brCheckCep);
+          $("#cepSearchBrazil").hide();
+        }
+    };
+
+    var messages = {
+        form: {
+            location : {
+                "state" : "{{ '- other state -' | trans }}",
+                "city" : "{{ '- other city -' | trans }}",
+            }
+        }
+    };
+
+    $(document).ready(function() {
+        $('.change-picture').click(function(){
+            $('.picture-upload-box').slideDown();
+        });
+
+        profileEdit.brCheck();
+
+        $('.search-cep').click(function(event) {
+            event.preventDefault();
+            validator.cep.popupConsult(this, event, 'profileEdit.popLocation');
+            return false;
+        });
+
+        $(".connect a.unlink").on('click', function() {
+            var confirmDialog = $('.unlink-confirmation');
+            var parent = $(this).parent();
+            var href = $(this).attr('href');
+            var serviceName = '';
+            if (parent.is('.facebook')) {
+                serviceName = 'facebook';
+            } else if (parent.is('.twitter')) {
+                serviceName = 'twitter';
+            }
+            confirmDialog.slideUp('fast', function() {
+                $('a.confirm', $('.unlink-confirmation')).attr('href', href);
+                $('.social-network-name', $('.unlink-confirmation')).html(serviceName);
+                confirmDialog.insertAfter(parent).slideDown();
+            });
+
+            return false;
+        });
+
+        $('.unlink-confirmation .cancel').on('click', function() {
+            $('.unlink-confirmation').slideUp();
+        });
+
+        $(document.createElement('option')).val('').attr('data-custom-option', 1).text(messages.form.location.state).insertAfter($(profileEdit.stateId).find('option[value=""]').first());
+        $(document.createElement('option')).val('').attr('data-custom-option', 1).text(messages.form.location.city).insertAfter($(profileEdit.cityId).find('option[value=""]').first());
+
+        $(profileEdit.countryId).on('change', function (event) {
+          $(profileEdit.stateId).find('option[value!=""]').remove();
+          $(profileEdit.stateId).trigger('change');
+      $(profileEdit.stateId).hide();
+      $(profileEdit.stateSteppeId).show();
+          if ($(this).val()) {
+              $.ajax({
+                type: 'GET',
+                url: profileEdit.urlSearchCountry + '/' + $(this).val(),
+                dataType : 'json',
+                success : function(data, textStatus, jqXHR) {
+                    if (data.length) {
+                      $(profileEdit.stateId).show();
+                      $(profileEdit.stateSteppeId).hide();
+                      $(profileEdit.stateId).append(data.map(function (val) {return $(document.createElement('option')).val(val.id).text(val.name)}));
+                      $(profileEdit.stateId).find('option:selected').removeAttr('selected');
+                      $(profileEdit.stateId).find('option[value=""]').first().attr('selected','selected');
+                      profileEdit.brCheck();
+                      if ($(profileEdit.countryId).val() == $(profileEdit.ufpreferredId).val()) {
+                        $(profileEdit.stateId).find('option[data-custom-option]').hide();
+                        } else {
+                          $(profileEdit.stateId).find('option[data-custom-option]').show();
+                        }
+                    }
+                }
+                });
+            }
+        });
+        $(profileEdit.stateId).on('change', function (event) {
+          $(profileEdit.cityId).find('option[value!=""]').remove();
+          $(profileEdit.cityId).hide();
+          $(profileEdit.citySteppeId).show();
+          if ($(this).val()) {
+              $.ajax({
+                type: 'GET',
+                url: profileEdit.urlSearchState + '/' + $(this).val(),
+                dataType : 'json',
+                success : function(data, textStatus, jqXHR) {
+                  if (data.length) {
+                    $(profileEdit.cityId).show();
+                    $(profileEdit.citySteppeId).hide();
+                    $(profileEdit.cityId).append(data.map(function (val) {return $(document.createElement('option')).val(val.id).text(val.name)}));
+                    $(profileEdit.cityId).find('option:selected').removeAttr('selected');
+                    $(profileEdit.cityId).find('option[value=""]').first().attr('selected','selected');
+                      if ($(profileEdit.countryId).val() == $(profileEdit.ufpreferredId).val()) {
+                        $(profileEdit.cityId).find('option[data-custom-option]').hide();
+                        } else {
+                          $(profileEdit.cityId).find('option[data-custom-option]').show();
+                        }
+                      if (profileEdit.callbackOnceSearchState) {
+                        profileEdit.callbackOnceSearchState(data, textStatus, jqXHR);
+                        profileEdit.callbackOnceSearchState = null;
+                        }
+                  }
+                }
+                });
+            } else {
+              if ($(event.target).find('[data-custom-option="1"]:selected').length) {
+              $(profileEdit.stateId).hide();
+              $(profileEdit.stateSteppeId).show();
+              $(profileEdit.stateSteppeId).focus();
+                }
+            }
+        });
+        $(profileEdit.cityId).on('change', function (event) {
+          if ($(event.target).find('[data-custom-option="1"]:selected').length) {
+          $(profileEdit.cityId).hide();
+          $(profileEdit.citySteppeId).show();
+          $(profileEdit.citySteppeId).focus();
+            }
+        });
+        if ($(profileEdit.countryId).val() == '') {
+          $(profileEdit.countryId).trigger('change');
+        }
+    });
+</script>
+{% endblock %}
