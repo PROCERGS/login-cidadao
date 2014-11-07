@@ -42,7 +42,8 @@
         "michelf/php-markdown": "1.4.1",
         "nelmio/api-doc-bundle": "@dev",
         "jms/security-extra-bundle": "dev-master",
-        "procergs/login-cidadao-badges-bundle": "dev-master"
+        "procergs/login-cidadao-badges-bundle": "dev-master",
+        "scheb/two-factor-bundle": "~1.2"
     },
     "scripts" : {
         "post-install-cmd" : [

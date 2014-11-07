@@ -16,6 +16,7 @@ use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationToken;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 use Doctrine\Common\Collections\Collection;
+use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
@@ -26,7 +27,7 @@ use Doctrine\Common\Collections\Collection;
  * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
  */
-class Person extends BaseUser implements PersonInterface
+class Person extends BaseUser implements PersonInterface, TwoFactorInterface
 {
 
     /**
@@ -367,6 +368,11 @@ class Person extends BaseUser implements PersonInterface
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonAddress", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
      */
     protected $addresses;
+
+    /**
+     * @ORM\Column(name="google_authenticator_secret", type="string", nullable=true)
+     */
+    private $googleAuthenticatorSecret;
 
     public function __construct()
     {
@@ -1079,7 +1085,8 @@ class Person extends BaseUser implements PersonInterface
         return $this;
     }
 
-    public function getFullNameOrUsername() {
+    public function getFullNameOrUsername()
+    {
         if (null === $this->firstName) {
             return $this->username;
         }
@@ -1119,6 +1126,17 @@ class Person extends BaseUser implements PersonInterface
     public function setNotificationOptions(ArrayCollection $notificationOptions)
     {
         $this->notificationOptions = $notificationOptions;
+        return $this;
+    }
+
+    public function getGoogleAuthenticatorSecret()
+    {
+        return $this->googleAuthenticatorSecret;
+    }
+
+    public function setGoogleAuthenticatorSecret($googleAuthenticatorSecret)
+    {
+        $this->googleAuthenticatorSecret = $googleAuthenticatorSecret;
         return $this;
     }
 

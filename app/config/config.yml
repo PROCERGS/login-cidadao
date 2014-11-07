@@ -287,3 +287,34 @@ jms_serializer:
             FOSUB:
                 namespace_prefix: "FOS\\UserBundle"
                 path: "%kernel.root_dir%/serializer/FOSUB"
+
+scheb_two_factor:
+    trusted_computer:
+        enabled: false
+        cookie_name: lc_trusted_computer
+        cookie_lifetime: 2592000
+        
+    exclude_pattern: ^/(css|js|images|api)
+    
+    parameter_names:
+        auth_code: _auth_code
+        trusted: _trusted
+    
+    email:
+        enabled: false
+        mailer: swiftmailer
+        sender_email: %mailer_sender_mail%
+        digits: 6
+        template: PROCERGSLoginCidadaoCoreBundle:TwoFactorAuthentication:form.html.twig
+    
+    google:
+        enabled: true
+        server_name: %site_domain%
+        template: PROCERGSLoginCidadaoCoreBundle:TwoFactorAuthentication:form.html.twig
+    
+    persister: ~
+    model_manager_name: ~
+    
+    security_tokens:
+        - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
+        - FOS\FacebookBundle\Security\Authentication\Token\FacebookUserToken
