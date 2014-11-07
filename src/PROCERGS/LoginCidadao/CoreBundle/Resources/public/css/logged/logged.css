@@ -37,6 +37,7 @@ body.no-scroll {
     display: block;
     padding: 0;
     overflow-y: auto;
+    max-width: 255px !important;
 }
 
 @media (min-width: 768px) {
