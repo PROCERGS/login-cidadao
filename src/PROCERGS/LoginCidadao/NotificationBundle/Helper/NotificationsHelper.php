@@ -49,10 +49,9 @@ class NotificationsHelper
      */
     private $translator;
     private $container;
-    private $unconfirmedEmailCategoryId;
-    private $emptyPasswordCategoryId;
+    private $categoryUid;
 
-    public function __construct(EntityManager $em, SecurityContext $context, $container, $unconfirmedEmailCategoryId, $emptyPasswordCategoryId)
+    public function __construct(EntityManager $em, SecurityContext $context, $container, $categoryUid)
     {
         $this->em = $em;
         $this->context = $context;
@@ -60,8 +59,7 @@ class NotificationsHelper
         $this->router = $this->container->get('router');
         $this->translator = $this->container->get('translator');
 
-        $this->unconfirmedEmailCategoryId = $unconfirmedEmailCategoryId;
-        $this->emptyPasswordCategoryId = $emptyPasswordCategoryId;
+        $this->categoryUid = $categoryUid;
     }
 
     private function getRepository()
@@ -211,7 +209,7 @@ class NotificationsHelper
 
     private function getUnconfirmedEmailCategory()
     {
-        $category = $this->em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')->find($this->unconfirmedEmailCategoryId);
+        $category = $this->em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')->findOneByUid($this->categoryUid);
         if (null === $category) {
             throw new MissingCategoryException("missing category for unconfirmed email, please configure your db");
         }
@@ -220,7 +218,7 @@ class NotificationsHelper
 
     private function getEmptyPasswordCategory()
     {
-        $category = $this->em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')->find($this->emptyPasswordCategoryId);
+        $category = $this->em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')->findOneByUid($this->categoryUid);
         if (null === $category) {
             throw new MissingCategoryException("Missing category id for empty password, please edit your parameters.yml");
         }
