@@ -7,7 +7,7 @@ parameters:
 services:
     notifications.helper:
         class: %notifications.helper.class%
-        arguments: ["@doctrine.orm.entity_manager", "@security.context", "@service_container", %notifications_categories_alert.uid%, %notifications_categories_alert.uid%]
+        arguments: ["@doctrine.orm.entity_manager", "@security.context", "@service_container", %notifications_categories_alert.uid%]
 
     procergs.notification.handler:
         class: %procergs.notification.handler.class%
