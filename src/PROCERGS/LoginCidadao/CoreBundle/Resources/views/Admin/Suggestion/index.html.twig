@@ -33,3 +33,10 @@
     <div id="ajax-result"></div>
 </div>
 {% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+  $('.date').mask('00/00/0000', {'translation': {0: {pattern: /[0-9*]/}}});
+</script>
+{% endblock %}
