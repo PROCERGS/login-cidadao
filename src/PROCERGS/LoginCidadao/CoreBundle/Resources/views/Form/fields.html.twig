@@ -156,3 +156,9 @@
         {%- endif -%}
     {% endfor %}
 {%- endblock ajax_choice_options %}
+
+{% block submit_widget -%}
+    {% set attr = attr|merge({'class': 'btn btn-success' ~ (attr.class is defined ? ' ' ~ attr.class : '')} ) %}
+    {% set type = type|default('submit') -%}
+    {{ block('button_widget') }}
+{%- endblock submit_widget %}
