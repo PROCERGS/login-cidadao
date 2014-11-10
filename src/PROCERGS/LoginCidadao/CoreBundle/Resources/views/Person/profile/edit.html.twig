@@ -189,7 +189,15 @@
 
 {% block javascripts %}
 {{ parent() }}
+
+{% javascripts '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js' filter='uglifyjs2' %}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}
+
 <script>
+
+    $('.birthdate').mask('00/00/0000', {'translation': {0: {pattern: /[0-9*]/}}});
+
     var profileEdit = {};
     profileEdit.countryId = '#{{ form.country.vars.id }}';
     profileEdit.stateId = '#{{ form.state.vars.id }}';

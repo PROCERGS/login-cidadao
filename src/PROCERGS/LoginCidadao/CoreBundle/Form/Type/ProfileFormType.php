@@ -30,10 +30,12 @@ class ProfileFormType extends BaseType
                         array('label' => 'form.surname', 'translation_domain' => 'FOSUserBundle'))
                 ->add('birthdate', 'birthday', array(
                     'required' => false,
-                    'format' => 'yyyy-MM-dd',
+                    'format' => 'dd/MM/yyyy',
                     'widget' => 'single_text',
                     'label' => 'form.birthdate',
-                    'translation_domain' => 'FOSUserBundle')
+                    'translation_domain' => 'FOSUserBundle',
+                    'attr' => array('pattern' => '[0-9/]*', 'class' => 'birthdate')
+                    )
                 )
                 ->add('mobile', null,
                         array('required' => false, 'label' => 'form.mobile', 'translation_domain' => 'FOSUserBundle'))
