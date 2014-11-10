@@ -11,6 +11,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\City;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Doctrine\ORM\EntityManager;
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class ProfileFormType extends BaseType
 {
@@ -47,7 +48,8 @@ class ProfileFormType extends BaseType
                     'preferred_choices' => array($country),
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('u')
-                            ->where('u.reviewed = ' . Country::REVIEWED_OK)
+                            ->where('u.reviewed = :reviewed')
+                            ->setParameter('reviewed', Country::REVIEWED_OK)
                             ->orderBy('u.name', 'ASC');
                     }
                 ))
@@ -65,19 +67,26 @@ class ProfileFormType extends BaseType
                         'property' => 'name',
                         'empty_value' => '',
                         'query_builder' => function(EntityRepository $er) use ($person) {
-                            if ($person) {
-                                $pars['country'] = $person->getCountry();
-                                $pars['u'] = $person->getState();
+                            if ($person instanceof PersonInterface) {
+                                $country = $person->getCountry();
+                                $state = $person->getState();
                             } else {
-                                $pars['country'] = null;
-                                $pars['u'] = null;
+                                $country = null;
+                                $state = null;
                             }
-                            return $er->createQueryBuilder('u')
-                            ->where('u.reviewed = ' . State::REVIEWED_OK)
-                            ->andWhere('u.country = :country')
-                            ->orWhere('u = :u')
-                            ->setParameters($pars)
-                            ->orderBy('u.name', 'ASC');
+
+                            $params = array(
+                                'reviewed' => State::REVIEWED_OK,
+                                'country' => $country instanceof Country ? $country : null,
+                                'state' => $state instanceof State ? $state : null
+                            );
+
+                            return $er->createQueryBuilder('s')
+                                ->where('s.reviewed = :reviewed')
+                                ->andWhere('s.country = :country')
+                                ->orWhere('s = :state')
+                                ->setParameters($params)
+                                ->orderBy('s.name', 'ASC');
                         }
                     ));
                     $form->add('city', 'entity',array(
@@ -86,19 +95,26 @@ class ProfileFormType extends BaseType
                         'property' => 'name',
                         'empty_value' => '',
                         'query_builder' => function(EntityRepository $er) use ($person) {
-                            if ($person) {
-                                $pars['u'] = $person->getCity();
-                                $pars['state'] = $person->getState();
+                            if ($person instanceof PersonInterface) {
+                                $country = $person->getCountry();
+                                $state = $person->getState();
+                                $city = $person->getCity();
                             } else {
-                                $pars['u'] = null;
-                                $pars['state'] = null;
+                                $country = null;
+                                $state = null;
+                                $city = null;
                             }
-                            return $er->createQueryBuilder('u')
-                            ->where('u.reviewed = ' . City::REVIEWED_OK)
-                            ->andWhere('u.state = :state')
-                            ->orWhere('u = :u')
-                            ->setParameters($pars)
-                            ->orderBy('u.name', 'ASC');
+                            $params = array(
+                                'reviewed' => State::REVIEWED_OK,
+                                'state' => ($country instanceof Country && $state instanceof State) ? $state : null,
+                                'city' => ($country instanceof Country && $state instanceof State && $city instanceof City) ? $city : null
+                            );
+                            return $er->createQueryBuilder('c')
+                                ->where('c.reviewed = :reviewed')
+                                ->andWhere('c.state = :state')
+                                ->orWhere('c = :city')
+                                ->setParameters($params)
+                                ->orderBy('c.name', 'ASC');
                         }
                     ));
 
@@ -112,15 +128,17 @@ class ProfileFormType extends BaseType
                         'property' => 'name',
                         'empty_value' => '',
                         'query_builder' => function(EntityRepository $er) use ($data) {
-                            $pars = array();
-                            $pars['country'] = isset($data['country'])? $data['country'] : null;
-                            $pars['u'] = isset($data['state'])? $data['state'] : null;
-                            return $er->createQueryBuilder('u')
-                            ->where('u.reviewed = ' . State::REVIEWED_OK)
-                            ->andWhere('u.country = :country')
-                            ->orWhere('u.id = :u')
-                            ->setParameters($pars)
-                            ->orderBy('u.name', 'ASC');
+                            $params = array(
+                                'reviewed' => State::REVIEWED_OK,
+                                'country' => isset($data['country']) ? $data['country'] : null,
+                                'stateId' => isset($data['state']) ? $data['state'] : null
+                            );
+                            return $er->createQueryBuilder('s')
+                                    ->where('s.reviewed = :reviewed')
+                                    ->andWhere('s.country = :country')
+                                    ->orWhere('s.id = :stateId')
+                                    ->setParameters($params)
+                                    ->orderBy('s.name', 'ASC');
                         }
                     ));
                     $form->add('city', 'entity',array(
@@ -129,15 +147,17 @@ class ProfileFormType extends BaseType
                         'property' => 'name',
                         'empty_value' => '',
                         'query_builder' => function(EntityRepository $er) use ($data) {
-                            $pars = array();
-                            $pars['state'] = isset($data['state']) ? $data['state'] : null;
-                            $pars['u'] = isset($data['city']) ? $data['city'] : null;
-                            return $er->createQueryBuilder('u')
-                            ->where('u.reviewed = ' . City::REVIEWED_OK)
-                            ->andWhere('u.state = :state')
-                            ->orWhere('u.id = :u')
-                            ->setParameters($pars)
-                            ->orderBy('u.name', 'ASC');
+                            $params = array(
+                                'reviewed' => State::REVIEWED_OK,
+                                'state' => isset($data['state']) ? $data['state'] : null,
+                                'cityId' => isset($data['city']) ? $data['city'] : null
+                            );
+                            return $er->createQueryBuilder('c')
+                                        ->where('c.reviewed = :reviewed')
+                                        ->andWhere('c.state = :state')
+                                        ->orWhere('c.id = :cityId')
+                                        ->setParameters($params)
+                                        ->orderBy('c.name', 'ASC');
                         }
                     ));
 
