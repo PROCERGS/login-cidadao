@@ -52,7 +52,7 @@
                 <ul class="dropdown-menu clearfix">
                 {% for auth in app.user.getAuthorizations %}
                     <li class="app">
-                        <a href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}" class="media">
+                        <a href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}" class="media clearfix">
                           <div class="pull-left">
                             {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
                                 <img src="//{{ app.request.host ~ '/' ~ auth.client.getPictureWebPath }}" alt="" class="media-object" width="50" height="50">
