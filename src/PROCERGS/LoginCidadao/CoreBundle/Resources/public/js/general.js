@@ -591,9 +591,17 @@ $(function() {
         dataType : 'html',
         success : function(data, textStatus, jqXHR) {
           $(e.attr('ajax-target')).html(data);
+          history.pushState({ infiniteGrid: data }, '', '');
         }
         });
     });
+    // Ajax history fix
+    var currentState = history.state;
+    if (currentState && currentState.infiniteGrid) {
+      $("#ajax-result").html(currentState.infiniteGrid);
+    }
+
+
     $(document).on('click', '.infinitescroll-next-button' , lcInfiniteGrid.scrollNextButton);
     $('[data-infinite-grid="true"]').each(lcInfiniteGrid.startUp);
     $("[data-enable-switch='1']").bootstrapSwitch();
