@@ -19,7 +19,7 @@ class SuggestionFilterFormType extends AbstractType
         ));
         $builder->add('dateini', 'date', array(
             'required' => false,
-            'format' => 'dd MMMM yyyy',
+            'format' => 'dd/MM/yyyy',
             'widget' => 'single_text',
             'years' => range(date('Y'), 1898),
             'label' => 'sugg.dateini',
@@ -27,7 +27,7 @@ class SuggestionFilterFormType extends AbstractType
         ));
         $builder->add('dateend', 'date', array(
             'required' => false,
-            'format' => 'dd MMMM yyyy',
+            'format' => 'dd/MM/yyyy',
             'widget' => 'single_text',
             'years' => range(date('Y'), 1898),
             'label' => 'sugg.dateend',
