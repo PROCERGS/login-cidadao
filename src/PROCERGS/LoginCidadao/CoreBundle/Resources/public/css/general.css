@@ -406,3 +406,24 @@ form .has-feedback .sr-only ~ .form-control-feedback {
     margin: 0 -15px 20px;
   }
 }
+
+#oauth-box {
+  min-height: 400px;
+}
+
+#oauth-box .connect-diagram {
+    margin: 30px 0;
+}
+
+#oauth-box .connect-diagram .glyphicon.glyphicon-chevron-right {
+    font-size: 25px;
+    margin: 30px 0;
+}
+
+#oauth-box .connect-diagram {
+    font-size: 17px;
+}
+
+#oauth-box .buttons.row {
+    margin-top: 20px;
+}
