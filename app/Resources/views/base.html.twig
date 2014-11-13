@@ -18,11 +18,15 @@
     </head>
     <body id="body">
         {% block header %}{% endblock %}
-        <div class="container">
+        <div class="container-fluid">
+            {% block notificationExtreme %}
+                {{ include("PROCERGSLoginCidadaoCoreBundle::notification_extreme.html.twig", { columns: 'col-sm-7 col-sm-offset-4' } ) }}
+            {% endblock %}
+
             {% block body %}
             {% endblock %}
+            {% block footer %}{% endblock %}
         </div>
-        {% block footer %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
 </html>

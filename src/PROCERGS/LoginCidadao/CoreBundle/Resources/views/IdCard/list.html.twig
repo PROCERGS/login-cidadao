@@ -1,0 +1,68 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title">{{ 'ID Cards'|trans }}</h2>
+    </div>
+    <div class="panel-body id-cards">
+        <div class="row">
+            {% for idCard in idCards %}
+                <div class="col-md-6 id-card-container">
+                    <div class="row id-card">
+                        <div class="confirm-removal" data-id="{{ idCard.id }}">
+                            {% set form = deleteForms[idCard.id] %}
+                            {{ form_start(form, {'action': path('lc_person_id_cards_delete', { id: idCard.id }), 'attr': {'role': 'form'}}) }}
+                            <div class="panel panel-danger remove-box" data-id-card-id="{{ idCard.id }}" style="margin-bottom: 0">
+                                <div class="panel-heading clearfix">
+                                    <p>{{ 'Are you sure you want to remove this ID Card?' | trans }}</p>
+                                    <p class="id-card-confirm-value"><strong>{{ idCard.state.acronym }}</strong>: {{ idCard.value }}</p>
+                                    <p>
+                                        {{ form_widget(form.delete) }}
+                                        <button type="button" class="btn btn-default btn-sm cancel pull-left">{{ 'No' | trans }}</button>
+                                    </p>
+                                </div>
+                            </div>
+                            {{ form_end(form) }}
+                        </div>
+                        <div class="media">
+                            <div class="media-left">
+                                <span class="id-card-state">{{ idCard.state.acronym }}</span>
+                                <div class="btn-group">
+                                    <a href="{{ path('lc_person_id_cards_edit', { id: idCard.id }) }}"
+                                       class="btn btn-xs btn-warning id-card-edit"
+                                       title="{{ 'Edit' | trans }}">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                        <span class="sr-only">{{ 'Edit' | trans }}</span>
+                                    </a>
+                                    <button type="button" class="btn btn-xs btn-danger remove"
+                                            title="{{ 'Remove' | trans }}">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                        <span class="sr-only">{{ 'Remove' | trans }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="media-body id-card-details">
+                                <dl>
+                                    <dt>{{ 'ID Card' | trans }}
+                                    <dd class="media-heading">{{ idCard.value }}
+                                    <dt>{{ 'Issuer' | trans }}
+                                    <dd>{{ idCard.issuer }}
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            {# ADD NEW #}
+            <div class="col-md-6 id-card-container">
+                <div class="row id-card add-new">
+                    <a href="{{ path('lc_person_id_cards_new') }}"
+                       class="media id-card-add">
+                        <div class="media-body id-card-details text-center">
+                            <p>{{ 'Click here to <strong>add an ID Card</strong>' | trans | raw }}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

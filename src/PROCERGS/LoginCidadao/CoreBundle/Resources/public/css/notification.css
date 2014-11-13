@@ -1,0 +1,15 @@
+.notification-sidebar-main-img {
+  color: #696969;
+  display: inline-block;
+  line-height: normal;
+  font-size: 30px;
+  position: absolute;
+  left: 10px;
+  text-align: center;
+  height: 32px;
+  width: 32px;
+}
+
+#notification-sidebar > ul > li > a {
+  line-height: normal;
+}

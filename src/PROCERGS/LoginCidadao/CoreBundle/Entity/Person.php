@@ -4,42 +4,44 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use PROCERGS\OAuthBundle\Entity\Client;
-use JMS\Serializer\Annotation\Groups;
-use JMS\Serializer\Annotation\ExclusionPolicy;
-use JMS\Serializer\Annotation\Expose;
-use JMS\Serializer\Annotation\VirtualProperty;
-use JMS\Serializer\Annotation\SerializedName;
-use JMS\Serializer\Annotation\Type;
+use JMS\Serializer\Annotation as JMS;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use PROCERGS\Generic\ValidationBundle\Validator\Constraints as PROCERGSAssert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationToken;
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+use PROCERGS\OAuthBundle\Model\ClientInterface;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
+ * @ORM\Table(name="person")
  * @UniqueEntity("cpf")
  * @UniqueEntity("username")
  * @ORM\HasLifecycleCallbacks
- * @ExclusionPolicy("all")
+ * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
  */
-class Person extends BaseUser
+class Person extends BaseUser implements PersonInterface
 {
 
     /**
-     * @Expose
-     * @Groups({"id","public_profile"})
+     * @JMS\Expose
+     * @JMS\Groups({"public_profile"})
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @JMS\Since("1.0")
      */
     protected $id;
 
     /**
-     * @Expose
-     * @Groups({"first_name","full_name","public_profile"})
+     * @JMS\Expose
+     * @JMS\Groups({"first_name","full_name","public_profile"})
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank(message="Please enter your name.", groups={"Profile"})
      * @Assert\Length(
@@ -49,12 +51,13 @@ class Person extends BaseUser
      *     maxMessage="The name is too long.",
      *     groups={"Registration", "Profile"}
      * )
+     * @JMS\Since("1.0")
      */
     protected $firstName;
 
     /**
-     * @Expose
-     * @Groups({"last_name","full_name"})
+     * @JMS\Expose
+     * @JMS\Groups({"last_name","full_name"})
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank(message="Please enter your surname.", groups={"Profile"})
      * @Assert\Length(
@@ -64,12 +67,13 @@ class Person extends BaseUser
      *     maxMessage="The surname is too long.",
      *     groups={"Registration", "Profile"}
      * )
+     * @JMS\Since("1.0")
      */
     protected $surname;
 
     /**
-     * @Expose
-     * @Groups({"username","public_profile"})
+     * @JMS\Expose
+     * @JMS\Groups({"public_profile"})
      * @PROCERGSAssert\Username
      * @Assert\NotBlank
      * @Assert\Length(
@@ -77,66 +81,67 @@ class Person extends BaseUser
      *     max="33",
      *     groups={"Registration", "Profile"}
      * )
+     * @JMS\Since("1.0")
      */
     protected $username;
 
     /**
-     * @Expose
-     * @Groups({"cpf"})
+     * @JMS\Expose
+     * @JMS\Groups({"cpf"})
      * @ORM\Column(type="string", nullable=true, unique=true)
      * @PROCERGSAssert\CPF
+     * @JMS\Since("1.0")
      */
     protected $cpf;
 
     /**
-     * @Expose
-     * @Groups({"email"})
+     * @JMS\Expose
+     * @JMS\Groups({"email"})
+     * @JMS\Since("1.0")
      */
     protected $email;
 
     /**
-     * @Expose
-     * @Groups({"birthdate"})
+     * @JMS\Expose
+     * @JMS\Groups({"birthdate"})
      * @ORM\Column(type="date", nullable=true)
+     * @JMS\Since("1.0")
      */
     protected $birthdate;
 
     /**
      * @ORM\Column(name="cpf_expiration", type="date", nullable=true)
+     * @JMS\Since("1.0")
      */
     protected $cpfExpiration;
 
     /**
      * @ORM\Column(name="email_expiration", type="datetime", nullable=true)
+     * @JMS\Since("1.0")
      */
     protected $emailExpiration;
 
     /**
-     * @Expose
-     * @Groups({"cep"})
+     * @JMS\Expose
+     * @JMS\Groups({"mobile"})
      * @ORM\Column(type="string", nullable=true)
-     * @PROCERGSAssert\CEP
-     */
-    protected $cep;
-
-    /**
-     * @Expose
-     * @Groups({"mobile"})
-     * @ORM\Column(type="string", nullable=true)
+     * @JMS\Since("1.0")
      */
     protected $mobile;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @var string
+     * @JMS\Since("1.0")
      */
     protected $twitterPicture;
 
     /**
-     * @Expose
-     * @Groups({"city"})
+     * @JMS\Expose
+     * @JMS\Groups({"city"})
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\City")
      * @ORM\JoinColumn(name="city_id", referencedColumnName="id")
+     * @JMS\Since("1.0")
      */
     protected $city;
 
@@ -144,6 +149,7 @@ class Person extends BaseUser
      * @var string
      *
      * @ORM\Column(name="facebookId", type="string", length=255, nullable=true, unique=true)
+     * @JMS\Since("1.0")
      */
     protected $facebookId;
 
@@ -151,6 +157,7 @@ class Person extends BaseUser
      * @var string
      *
      * @ORM\Column(name="facebookUsername", type="string", length=255, nullable=true)
+     * @JMS\Since("1.0")
      */
     protected $facebookUsername;
 
@@ -158,6 +165,7 @@ class Person extends BaseUser
      * @var string
      *
      * @ORM\Column(name="twitterId", type="string", length=255, nullable=true, unique=true)
+     * @JMS\Since("1.0")
      */
     protected $twitterId;
 
@@ -165,6 +173,7 @@ class Person extends BaseUser
      * @var string
      *
      * @ORM\Column(name="twitterUsername", type="string", length=255, nullable=true)
+     * @JMS\Since("1.0")
      */
     protected $twitterUsername;
 
@@ -172,6 +181,7 @@ class Person extends BaseUser
      * @var string
      *
      * @ORM\Column(name="twitterAccessToken", type="string", length=255, nullable=true)
+     * @JMS\Since("1.0")
      */
     protected $twitterAccessToken;
 
@@ -183,25 +193,38 @@ class Person extends BaseUser
     /**
      * @ORM\Column(type="datetime", nullable=false)
      * @var \DateTime
+     * @JMS\Since("1.0")
      */
     protected $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @var \DateTime
+     * @JMS\Since("1.0")
      */
     protected $emailConfirmedAt;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @var string
+     * @JMS\Since("1.0")
      */
     protected $previousValidEmail;
 
     /**
-     * @ORM\OneToMany(targetEntity="Notification", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification", mappedBy="person")
      */
     protected $notifications;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\Broadcast", mappedBy="person")
+     */
+    protected $broadcasts;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="PROCERGS\OAuthBundle\Entity\Client", mappedBy="owners")
+     */
+    protected $clients;
 
     /**
      * @ORM\OneToMany(targetEntity="ClientSuggestion", mappedBy="person")
@@ -209,41 +232,44 @@ class Person extends BaseUser
     protected $suggestions;
 
     /**
-     * @ORM\Column(name="adress", type="string", length=255, nullable=true)
-     * @var string
+     * @JMS\Expose
+     * @JMS\Groups({"state"})
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\State")
+     * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
+     * @JMS\Since("1.0.2")
      */
-    protected $adress;
-
-    /**
-     * @ORM\Column(name="adress_number",type="integer", nullable=true)
-     * @var string
-     */
-    protected $adressNumber;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Uf")
-     * @ORM\JoinColumn(name="uf_id", referencedColumnName="id")
-     */
-    protected $uf;
+    protected $state;
 
     /**
      * @ORM\Column(name="nfg_access_token", type="string", length=255, nullable=true, unique=true)
+     * @JMS\Since("1.0.2")
      */
     protected $nfgAccessToken;
 
     /**
-     * @Expose
-     * @Groups({"nfgprofile"})
+     * @JMS\Expose
+     * @JMS\Groups({"country"})
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Country")
+     * @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     * @JMS\Since("1.0.2")
+     */
+    protected $country;
+
+    /**
+     * @JMS\Expose
+     * @JMS\Groups({"nfgprofile"})
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile")
      * @ORM\JoinColumn(name="nfg_profile_id", referencedColumnName="id")
+     * @JMS\Since("1.0.2")
      */
     protected $nfgProfile;
 
     /**
-     * @Expose
-     * @Groups({"voter_registration"})
+     * @JMS\Expose
+     * @JMS\Groups({"voter_registration"})
      * @ORM\Column(name="voter_registration", type="string", length=12, nullable=true, unique=true)
      * @PROCERGSAssert\VoterRegistration
+     * @JMS\Since("1.0.2")
      */
     protected $voterRegistration;
 
@@ -256,6 +282,7 @@ class Person extends BaseUser
      * )
      * @Vich\UploadableField(mapping="user_image", fileNameProperty="imageName")
      * @var File $image
+     * @JMS\Since("1.0.2")
      */
     protected $image;
 
@@ -263,27 +290,94 @@ class Person extends BaseUser
      * @ORM\Column(type="string", length=255, name="image_name", nullable=true)
      *
      * @var string $imageName
+     * @JMS\Since("1.0.2")
      */
     protected $imageName;
 
     /**
-     * @Expose
-     * @Groups({"picture","public_profile"})
+     * @JMS\Expose
+     * @JMS\Groups({"public_profile"})
+     * @JMS\Since("1.0.2")
      */
     protected $profilePicutreUrl;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Expose
-     * @Groups({"updated_at","public_profile"})
+     * @JMS\Expose
+     * @JMS\Groups({"public_profile"})
      * @var \DateTime $updatedAt
+     * @JMS\Since("1.0.2")
      */
     protected $updatedAt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="googleId", type="string", length=255, nullable=true, unique=true)
+     * @JMS\Since("1.0.3")
+     */
+    protected $googleId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="googleUsername", type="string", length=255, nullable=true)
+     * @JMS\Since("1.0.3")
+     */
+    protected $googleUsername;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="googleAccessToken", type="string", length=255, nullable=true)
+     * @JMS\Since("1.0.3")
+     */
+    protected $googleAccessToken;
+
+    /**
+     * @JMS\Expose
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\IdCard", mappedBy="person")
+     * @JMS\Since("1.0.3")
+     */
+    protected $idCards;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationToken", mappedBy="person")
+     */
+    protected $notificationTokens;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\PersonNotificationOption", mappedBy="person")
+     */
+    protected $notificationOptions;
+
+    /**
+     * @JMS\Expose
+     * @JMS\Groups({"public_profile"})
+     * @var array
+     */
+    protected $badges = array();
+
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
+     */
+    protected $logoutKeys;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonAddress", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
+     */
+    protected $addresses;
 
     public function __construct()
     {
         parent::__construct();
-        $this->authorizations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->authorizations = new ArrayCollection();
+        $this->notificationTokens = new ArrayCollection();
+        $this->notificationOptions = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
+        $this->clients = new ArrayCollection();
+        $this->logoutKeys = new ArrayCollection();
+        $this->addresses = new ArrayCollection();
     }
 
     public function getEmail()
@@ -330,17 +424,6 @@ class Person extends BaseUser
     public function setBirthdate($birthdate)
     {
         $this->birthdate = $birthdate;
-    }
-
-    public function getCep()
-    {
-        return $this->cep;
-    }
-
-    public function setCep($cep)
-    {
-        $cep = preg_replace('/[^0-9]/', '', $cep);
-        $this->cep = $cep;
     }
 
     public function getMobile()
@@ -395,15 +478,22 @@ class Person extends BaseUser
     /**
      * Checks if this Person has any authorization for a given Client.
      * WARNING: Note that it does NOT validate scope!
-     * @param \PROCERGS\OAuthBundle\Entity\Client $client
+     * @param \PROCERGS\OAuthBundle\Entity\Client | integer $client
      */
-    public function hasAuthorization(Client $client)
+    public function hasAuthorization($client)
     {
+        if ($client instanceof ClientInterface) {
+            $id = $client->getId();
+        } else {
+            $id = $client;
+        }
         $authorizations = $this->getAuthorizations();
-        foreach ($authorizations as $auth) {
-            $c = $auth->getClient();
-            if ($c->getId() == $client->getId()) {
-                return true;
+        if (is_array($authorizations) || $authorizations instanceof Collection) {
+            foreach ($authorizations as $auth) {
+                $c = $auth->getClient();
+                if ($c->getId() == $id) {
+                    return true;
+                }
             }
         }
         return false;
@@ -470,9 +560,9 @@ class Person extends BaseUser
 
     /**
      * Get the full name of the user (first + last name)
-     * @Groups({"full_name"})
-     * @VirtualProperty
-     * @SerializedName("full_name")
+     * @JMS\Groups({"full_name"})
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("full_name")
      * @return string
      */
     public function getFullName()
@@ -481,9 +571,9 @@ class Person extends BaseUser
     }
 
     /**
-     * @Groups({"badges", "public_profile"})
-     * @VirtualProperty
-     * @SerializedName("badges")
+     * @JMS\Groups({"badges", "public_profile"})
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("deprecated_badges")
      * @return array
      */
     public function getDataValid()
@@ -492,7 +582,7 @@ class Person extends BaseUser
         $terms['email'] = is_null($this->getConfirmationToken());
         if ($this->getNfgProfile()) {
             $terms['nfg_access_lvl'] = $this->getNfgProfile()->getAccessLvl();
-            $terms['voter_registration'] = $this->getNfgProfile()->getVoterRegistrationSit();
+            $terms['voter_registration'] = $this->getNfgProfile()->getVoterRegistrationSit() > 0 ? true : false;
         } else {
             $terms['nfg_access_lvl'] = 0;
             $terms['voter_registration'] = false;
@@ -622,6 +712,16 @@ class Person extends BaseUser
         return $this->notifications;
     }
 
+    public function getClients()
+    {
+        return $this->clients;
+    }
+
+    public function setClients($var)
+    {
+        return $this->clients = $var;
+    }
+
     public function checkEmailPending()
     {
         $confirmToken = $this->getConfirmationToken();
@@ -689,37 +789,15 @@ class Person extends BaseUser
         return strlen($password) > 0;
     }
 
-    public function setAdress($var)
+    public function setState($var)
     {
-        $this->adress = $var;
+        $this->state = $var;
         return $this;
     }
 
-    public function getAdress()
+    public function getState()
     {
-        return $this->adress;
-    }
-
-    public function setAdressNumber($var)
-    {
-        $this->adressNumber = $var;
-        return $this;
-    }
-
-    public function getAdressNumber()
-    {
-        return $this->adressNumber;
-    }
-
-    public function setUf($var)
-    {
-        $this->uf = $var;
-        return $this;
-    }
-
-    public function getUf()
-    {
-        return $this->uf;
+        return $this->state;
     }
 
     public function setNfgAccessToken($var)
@@ -778,7 +856,7 @@ class Person extends BaseUser
      *
      * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $image
      */
-    public function setImage(File $image)
+    public function setImage($image)
     {
         $this->image = $image;
 
@@ -824,10 +902,10 @@ class Person extends BaseUser
     }
 
     /**
-     * @Groups({"public_profile"})
-     * @VirtualProperty
-     * @SerializedName("age_range")
-     * @Type("array")
+     * @JMS\Groups({"public_profile"})
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("age_range")
+     * @JMS\Type("array")
      * @return array
      */
     public function getAgeRange()
@@ -874,7 +952,8 @@ class Person extends BaseUser
         return $this;
     }
 
-    public function prepareAPISerialize($imageHelper, $templateHelper, $isDev, $request)
+    public function prepareAPISerialize($imageHelper, $templateHelper, $isDev,
+                                        $request)
     {
         // User's profile picture
         if ($this->hasLocalProfilePicture()) {
@@ -907,7 +986,7 @@ class Person extends BaseUser
         }
         return false;
     }
-    
+
     /**
      * @ORM\PreUpdate
      */
@@ -920,10 +999,127 @@ class Person extends BaseUser
         }
         return $this;
     }
-    
+
     public function getUpdatedAt()
     {
         return $this->updatedAt;
     }
-    
+
+    public function setGoogleId($var)
+    {
+        $this->googleId = $var;
+
+        return $this;
+    }
+
+    public function getGoogleId()
+    {
+        return $this->googleId;
+    }
+
+    public function setGoogleUsername($var)
+    {
+        $this->googleUsername = $var;
+
+        return $this;
+    }
+
+    public function getGoogleUsername()
+    {
+        return $this->googleUsername;
+    }
+
+    public function setGoogleAccessToken($var)
+    {
+        $this->googleAccessToken = $var;
+
+        return $this;
+    }
+
+    public function getGoogleAccessToken()
+    {
+        return $this->googleAccessToken;
+    }
+
+    public function setCountry($var)
+    {
+        $this->country = $var;
+        return $this;
+    }
+
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    public function setComplement($var)
+    {
+        $this->complement = $var;
+        return $this;
+    }
+
+    public function getComplement()
+    {
+        return $this->complement;
+    }
+
+    public function getIdCards()
+    {
+        return $this->idCards;
+    }
+
+    public function getBadges()
+    {
+        return $this->badges;
+    }
+
+    public function mergeBadges(array $badges)
+    {
+        $this->badges = array_merge($this->badges, $badges);
+        return $this;
+    }
+
+    public function getFullNameOrUsername() {
+        if (null === $this->firstName) {
+            return $this->username;
+        }
+        return $this->getFullName();
+    }
+
+    public function getLogoutKeys()
+    {
+        return $this->logoutKeys;
+    }
+
+    public function getAddresses()
+    {
+        return $this->addresses;
+    }
+
+    public function setLogoutKeys($logoutKeys)
+    {
+        $this->logoutKeys = $logoutKeys;
+        return $this;
+    }
+
+    public function setAddresses($addresses)
+    {
+        $this->addresses = $addresses;
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getNotificationOptions()
+    {
+        return $this->notificationOptions;
+    }
+
+    public function setNotificationOptions(ArrayCollection $notificationOptions)
+    {
+        $this->notificationOptions = $notificationOptions;
+        return $this;
+    }
+
 }

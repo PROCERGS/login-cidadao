@@ -14,27 +14,40 @@ class SuggestionFilterFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('username', 'text', array(
-            'required' => false
-        ));
-        $builder->add('dateini', 'birthday', array(
             'required' => false,
-            'format' => 'dd MMMM yyyy',
-            'widget' => 'choice',
-            'years' => range(date('Y'), date('Y') - 70)
+            'label' => 'sugg.username'
         ));
-        $builder->add('dateend', 'birthday', array(
+        $builder->add('dateini', 'date', array(
             'required' => false,
-            'format' => 'dd MMMM yyyy',
-            'widget' => 'choice',
-            'years' => range(date('Y'), date('Y') - 70)
+            'format' => 'dd/MM/yyyy',
+            'widget' => 'single_text',
+            'years' => range(date('Y'), 1898),
+            'label' => 'sugg.dateini',
+            'attr' => array('pattern' => '[0-9/]*', 'class' => 'date')
+        ));
+        $builder->add('dateend', 'date', array(
+            'required' => false,
+            'format' => 'dd/MM/yyyy',
+            'widget' => 'single_text',
+            'years' => range(date('Y'), 1898),
+            'label' => 'sugg.dateend',
+            'attr' => array('pattern' => '[0-9/]*', 'class' => 'date')
         ));
         $builder->add('text', 'text', array(
-            'required' => false
+            'required' => false,
+            'label' => 'sugg.text'
+        ));
+        $builder->setMethod('GET');
+    }
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'csrf_protection' => false,
         ));
     }
 
     public function getName()
     {
-        return 'suggestion_filter_form_type';
+        return 'sugg_filt_form_type';
     }
 }

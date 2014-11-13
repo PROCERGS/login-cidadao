@@ -1,90 +1,58 @@
-{% extends 'PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig' %} {% block content %}
+{% extends 'PROCERGSLoginCidadaoCoreBundle:Admin:base.html.twig' %}
+{% block content %}
 <div id="profile-edit" class="content clearfix">
-    <h3>{{ 'New Service'|trans }}</h3>
-
-    {{ form_start(form, {'attr' : {'role' : 'form'}}) }} {{ form_errors(form) }}
+    <h1>{{ 'Service'|trans }}</h1>
     <div class="form-content">
+        {% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
+        {{ form_start(form, {'attr' : {'role' : 'form'}}) }}
+        {{ form_errors(form) }}
         <div class="row clearfix">
-            <div class="col-md-7">
-                <div class="form-group">{{ form_label(form.name, 'Name'| trans) }} {{ form_errors(form.name) }} {{ form_widget(form.name) }}</div>
-                <div class="form-group">{{ form_label(form.description, 'Description' | trans) }} {{ form_errors(form.description) }} {{ form_widget(form.description, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}</div>
-                <div class="form-group">{{ form_label(form.siteurl, 'URL' | trans) }} {{ form_errors(form.siteurl) }} {{ form_widget(form.siteurl) }}</div>
-                <div class="form-group">{{ form_row(form.redirecturis, { 'label': 'Redirect URIs' | trans }) }}</div>
-                <div class="form-group">{{ form_label(form.allowedscopes, 'Allowed Scopes'| trans) }} {{ form_errors(form.allowedscopes) }} {{ form_widget(form.allowedscopes) }}</div>
-                <div class="form-group">{{ form_label(form.allowedgranttypes, 'Allowed Grant Types'| trans) }} {{ form_errors(form.allowedgranttypes) }} {{ form_widget(form.allowedgranttypes) }}</div>
-                <div class="form-group">{{ form_label(form.landingpageurl, 'Landing Page'| trans) }} {{ form_errors(form.landingpageurl) }} {{ form_widget(form.landingpageurl) }}</div>
-                <div class="form-group">{{ form_label(form.termsofuseurl, 'Terms of Use' | trans) }} {{ form_errors(form.termsofuseurl) }} {{ form_widget(form.termsofuseurl, {'attr' : {'class' :'form-control', 'rows': '3' }}) }}</div>
-                <div class="form-group">{{ form_label(form.published, 'form.published' | trans) }} {{ form_errors(form.published) }} {{ form_widget(form.published) }}</div>
-                <div class="form-group">{{ form_label(form.visible, 'form.visible' | trans) }} {{ form_errors(form.visible) }} {{ form_widget(form.visible) }}</div>
-            </div>
             <div class="col-md-5">
-                {% if client is defined %}
-                    <img src="/{{ client.getPictureWebPath }}">
+                {% if client is defined and client.getPictureWebPath != '' %}
+                    <img src="/{{ client.getPictureWebPath }}"/>
                 {% else %}
-					{% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
-					{{ asset_url }}
-					{% endimage %}
+          {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+          <img src="{{ asset_url }}"/>
+          {% endimage %}
                 {% endif %}
-
                <div class="file-upload text-center">
                     <button type="button" class="btn btn-success btn-upload">{% trans %}Upload another picture{% endtrans %}</button>
                     <div class="file-name"></div>
                     {{ form_widget(form.pictureFile) }}
-                        </div>
-                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            {% for type, messages in app.session.flashbag.all() %} {% for message in messages %}
-            <div class="col-md-12">
-                <div class="text-center bg-success flash-{{ type }}">{{ message }}</div>
+            <div class="col-md-7">
+                {{ form_row(form.name) }}
+                {{ form_row(form.description) }}
+                {{ form_row(form.siteUrl) }}
             </div>
-            {% endfor %} {% endfor %}
+            <div class="col-md-12">
+                {{ form_row(form.redirectUris) }}
+                {{ form_row(form.landingPageUrl) }}
+                {{ form_row(form.termsOfUseUrl) }}
+                {{ form_row(form.published) }}
+                {{ form_row(form.visible) }}
+                {% if form.publicId is defined %}
+                    {{ form_row(form.publicId) }}
+                    {{ form_row(form.secret) }}
+                    {{ form_row(form.owners) }}
+                {% endif %}
+            </div>
         </div>
-        <div class="row">
-            {% if messages %}
-            <div class="input-error alert-danger">{{ messages|trans }}</div>
-            {% endif %}
-        </div>
-
         <div class="form-bar text-right">
-            <input class='btn btn-success' type="submit" value="{{ 'Create'|trans }}" />
+            <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
         </div>
+        {{ form_end(form) }}
     </div>
-
-    {{ form_end(form) }}
-
 </div>
-{% endblock %} {% block javascripts %} {{ parent() }}
-<script type="text/javascript">
-    function CollectionHolder(id) {
-        var self = this;
-        var holderId = id;
-        var holder = $('#'+holderId);
+<style type="text/css">
+  .ac-search-enable {
+    cursor: pointer;
+    margin: 0 10px;
+  }
 
-        var addTagLink = $('<a href="#" class="add_link_'+holderId+'">Add</a>');
-        var newLinkLi = $('<div></div>').append(addTagLink);
-        holder.data('index', holder.find(':input').length);
-
-        addTagLink.on('click', function(e) {
-            e.preventDefault();
-            self.addTagForm(holder, newLinkLi);
-        });
-
-        holder.append(newLinkLi);
-
-        this.addTagForm = function (collectionHolder, newLinkLi) {
-            var prototype = collectionHolder.data('prototype');
-            var index = collectionHolder.data('index');
-            var newForm = prototype.replace(/__name__label__/g, $('label[for='+collectionHolder.prop('id')+']').text()).replace(/__name__/g, index);
-            collectionHolder.data('index', index + 1);
-            newLinkLi.before(newForm);
-        }
-    }
-
-    $(function() {
-        $.each(['{{ form.redirecturis.vars.id }}', '{{ form.allowedscopes.vars.id }}', '{{ form.allowedgranttypes.vars.id }}'],function(idx,val){new CollectionHolder(val);});
-    })
-</script>
+  .ac-scrollspy-opts, .ac-scrollspy-opts-selected {
+    height: 350px;
+  }
+</style>
 {% endblock %}

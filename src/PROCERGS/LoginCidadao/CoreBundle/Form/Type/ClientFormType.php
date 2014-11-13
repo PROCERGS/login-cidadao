@@ -9,42 +9,21 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\SecurityContext;
 use OAuth2\OAuth2;
 
-class ClientFormType extends AbstractType
+class ClientFormType extends ClientBaseFormType
 {
-
-    protected $container;
-
-    public function setContainer($var)
-    {
-        $this->container = $var;
+    protected $lcScope;
+    
+    public function setLcScope($var){
+        $this->lcScope = $var;
     }
-
-    public function getContainer()
-    {
-        return $this->container;
-    }
-
+   
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name', 'text', array(
-            'required' => true
-        ));
-        $builder->add('description', 'textarea', array(
-            'required' => true
-        ));
-        $builder->add('siteurl', 'text', array(
-            'required' => true
-        ));
-        $builder->add('redirecturis', 'collection', array(
-            'type' => 'text',
-            'options' => array(
-                'required' => true
-            ),
-            'allow_add' => true
-        ));
-        $a = explode(' ', $this->container->getParameter('lc_supported_scopes'));
+        parent::buildForm($builder, $options);
+        /*
+        $a = explode(' ', $this->lcScope);
         $a = array_combine($a, $a);
-        $builder->add('allowedscopes', 'collection', array(
+        $builder->add('allowedScopes', 'collection', array(
             'type' => 'choice',
             'options' => array(
                 'choices' => $a
@@ -52,9 +31,7 @@ class ClientFormType extends AbstractType
             'required' => true,
             'allow_add' => true
         ));
-        
-        
-        $builder->add('allowedgranttypes', 'collection', array(
+        $builder->add('allowedGrantTypes', 'collection', array(
             'type' => 'choice',
             'options' => array(
                 'choices' => array(
@@ -72,20 +49,7 @@ class ClientFormType extends AbstractType
             'required' => true,
             'allow_add' => true
         ));
-        
-        $builder->add('landingpageurl', 'text', array(
-            'required' => true
-        ));
-        $builder->add('termsofuseurl', 'textarea', array(
-            'required' => true
-        ));
-        $builder->add('pictureFile');
-        $builder->add('published', 'checkbox', array(
-            'required' => false
-        ));
-        $builder->add('visible', 'checkbox', array(
-            'required' => false
-        ));
+        */
     }
 
     public function getName()

@@ -31,7 +31,7 @@
                 <button type="button" class="btn dropdown-toggle profile-card" data-toggle="dropdown">
                     <span class="profile-username">{{ app.user.username }}</span>
                     <span class="profile-picture-container">
-                        <img src="{% include 'PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig' %}" alt="" class="profile-picture" width="30" height="30">
+                        <img src="{{ include("PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" alt="" class="profile-picture" width="30" height="30">
                     </span>
                 </button>
                 <ul class="dropdown-menu clearfix">
@@ -51,14 +51,18 @@
                 </button>
                 <ul class="dropdown-menu clearfix">
                 {% for auth in app.user.getAuthorizations %}
-                    <li>
-                        <a href="">
-                        {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
-                            <img src="//{{ app.request.host ~ '/' ~ auth.client.getPictureWebPath }}" alt="">
-                        {% else %}
-                            <img src="//placehold.it/50x50" alt="">
-                        {% endif %}
-                            <span>{{ auth.client.name }}</span>
+                    <li class="app">
+                        <a href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}" class="media clearfix">
+                          <div class="pull-left">
+                            {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
+                                <img src="//{{ app.request.host ~ '/' ~ auth.client.getPictureWebPath }}" alt="" class="media-object" width="50" height="50">
+                            {% else %}
+                                <img src="//placehold.it/50x50" alt="" class="media-object">
+                            {% endif %}
+                          </div>
+                          <div class="media-body">
+                            <h5 class="media-heading">{{ auth.client.name }}</h5>
+                          </div>
                         </a>
                     </li>
                 {% endfor %}
@@ -67,31 +71,25 @@
             </li>
 
             {# Notifications #}
-            <li class="btn-group notifications pull-right">
+            <li class="btn-group notifications pull-right dropdown-keep-open">
                 <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans %}Notifications{% endtrans %}">
                     <i class="glyphicon glyphicon-bell">
-                    {% if notifications_helper.getUnreadExcludeExtreme is not empty %}
-                        <span class="label label-danger">{{ notifications_helper.getUnreadExcludeExtreme | length }}</span>
-                    {% endif %}
+                        {% set unreadTotal = notifications_helper.getTotalUnread %}
+                        {% if unreadTotal > 0 %}
+                            {% if unreadTotal > 99 %}
+                                {% set unreadTotal = '99+' %}
+                            {% endif %}
+                            <span class="label label-danger notification-total-unread-badge">{{ unreadTotal }}</span>
+                        {% endif %}
                     </i>
                 </button>
                 <ul class="dropdown-menu clearfix">
-                {% if notifications_helper.getUnread is not empty %}
-                    {% for notification in notifications_helper.getUnread if not notification.isExtreme %}
-                        {% if notification.resolveTarget is defined %}
-                            {% set target = notification.resolveTarget(app_router) %}
-                        {% else %}
-                            {% set target = url('lc_notifications_list') %}
-                        {% endif %}
-
-                    <li class="level-{{ notification.level }}">
-                        <a href="{{ target }}"><strong>{{ notification.title | trans }}</strong> - {{ notification.shortText | trans }}</a>
+                    <li class="menu-title">
+                        {{ 'Notifications'|trans }}
                     </li>
-                    {% endfor %}
-                    <li class="text-center all"><a href="{{ url('lc_notifications_list') }}">{% trans %}View all notifications{% endtrans %}</a></li>
-                {% else %}
-                    <li class="none">{% trans %}You don't have any unread notification.{% endtrans %}</li>
-                {% endif %}
+                    <div class="navbar-scrollspy-notification" data-offset="0" data-spy="scroll">
+                        {% render(controller("PROCERGSLoginCidadaoNotificationBundle:Notification:navbar")) %}
+                    </div>
                 </ul>
             </li>
         {% endif %}
@@ -100,24 +98,12 @@
     </div>
 </div>
 
-{% if app.user is not null and notifications_helper.getUnreadExtreme is not empty %}
-    {% for notification in notifications_helper.getUnreadExtreme %}
-<div class="notification-extreme alert alert-danger">
-    <div class="container">
-        <strong>{{ notification.title | trans }}</strong>
-    {% if notification.resolveTarget is defined %}
-        {{ notification.shortText | trans({ '%url%': notification.resolveTarget(app_router) }) | raw }}
-    {% else %}
-        {{ notification.shortText | trans }}
-    {% endif %}
-    </div>
-</div>
-{% endfor %}
-{% endif %}
 {% if external is defined and external == true %}
 <script>
     $(function() {
       $("#lc-navbar .dropdown-toggle").on("click", function() {
+          console.log('passei aqui');
+          debugger;
         var menu = $(this).next(".dropdown-menu").toggle();
         $("#lc-navbar .dropdown-menu").not(menu).hide();
       });

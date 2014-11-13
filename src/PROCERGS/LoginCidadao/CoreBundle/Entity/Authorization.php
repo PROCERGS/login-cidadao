@@ -7,7 +7,7 @@ use PROCERGS\OAuthBundle\Entity\Client;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="`authorization`",uniqueConstraints={@ORM\UniqueConstraint(name="unique_person_client", columns={"person_id", "client_id"})})
+ * @ORM\Table(name="auth",uniqueConstraints={@ORM\UniqueConstraint(name="unique_person_client", columns={"person_id", "client_id"})})
  */
 class Authorization
 {

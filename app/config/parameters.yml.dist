@@ -37,8 +37,8 @@ parameters:
         auth: 'login:senha'
 
     site_domain: meu.rs.gov.br
-    mailer_sender_mail: ~
-    mailer_sender_name: ~
+    mailer_sender_mail: webmaster@example.com
+    mailer_sender_name: webmaster
     recaptcha_public_key: ~
     recaptcha_private_key: ~
     # This must be compatible with strtotime()
@@ -47,8 +47,8 @@ parameters:
     registration.email.unconfirmed_time: '1 day'
     brute_force_threshold: 4
 
-    background_picture.author: 'Miriam Cardoso de Souza'
-    background_picture.link: 'http://www.flickr.com/photos/admiriam/10390118624/'
+    background_picture.author: 'Guilherme da Silva Donato'
+    background_picture.link: 'http://www.flickr.com/photos/lordjedi/2295119043/'
     mailer_receiver_mail: ~
     nfg_ws_url: ~
     soe_organization: ~
@@ -63,4 +63,15 @@ parameters:
     user_profile_ftp_password: ftp_password
     user_profile_ftp_directory: /ftp/path/to/web/uploads/profile-pictures
     tre_search_link: 'http://www.tse.jus.br/eleitor/servicos/titulo-e-local-de-votacao/consulta-por-nome'
-    uri_root: ~
+    uri_root: /
+
+    google_app_key: YOUR_API_KEY
+    google_app_secret: YOUR_API_SECRET
+    igp_ws_url: ~
+    igp_username: ~
+    igp_password: ~
+
+    # Default Client
+    oauth_default_client.uid: login-cidadao
+    # Notification's categories IDs
+    notifications_categories_alert.uid: login-cidadao-alert

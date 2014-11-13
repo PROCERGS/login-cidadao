@@ -1,0 +1,73 @@
+{% block grid %}
+    <div id="{{ grid.id }}" data-grid-extra-opts="{{ grid.extraOpts|json_encode }}" data-grid-currpage="{{ grid.page }}" class="common-grid-results infinitegrid" {{ grid.isInfiniteGrid ? 'data-infinite-grid="true"' }}>
+        {% block grid_pagination %}
+        <ul class="pagination" role="tablist" style="{{ grid.isInfiniteGrid ? 'display: none;' }}">
+        {% if grid.page > 0 %}
+            <li><a href="{{ path(grid.route, grid.routeParams|merge({page:grid.page-1})) }}">&laquo;</a></li>
+        {% endif %}
+        {% for i in 0..grid.rpage  %}
+            <li><a href="#page{{ (i)+grid.rstart }}" role="tab" data-toggle="tab">{{ (i)+grid.rstart }}</a></li>
+        {% endfor %}
+        {% if not grid.rlast %}
+            <li><a href="{{ path(grid.route, grid.routeParams|merge({page:grid.page+1})) }}">&raquo;</a></li>
+        {% endif %}
+        </ul>
+        {% endblock grid_pagination %}
+
+        {% block grid_body %}
+        <div class="tab-content">
+            <div class="tab-pane active infinitegrid-content" id="page{{ grid.rstart }}">
+            {% if grid.resultset|length >0 %}
+            {% block grid_header %}
+                <div class="row header">
+                {% block grid_header_action %}
+                    <div class="col-md-1">{{ 'Actions'|trans }}</div>
+                {% endblock grid_header_action %}
+                {% block grid_header_data %}
+                    <div class="col-md-11">{{ 'data'|trans }}</div>
+                {% endblock grid_header_data %}
+                </div>
+            {% endblock grid_header %}
+            {% for row in grid.resultset %}
+            {% block grid_row %}
+                <div class="row common-grid-result {{ grid.rlast != true ? 'row-last' }}">
+                {% block grid_row_action %}
+                    <div class="col-md-1">
+                        <a id="{{ 'row' }}" class="center-block text-center glyphicon glyphicon-search edit-grid" title="{{ 'action'|trans }}" href="javascript:void(0)" data-row="{{ 'row' }}"></a>
+                    </div>
+                {% endblock grid_row_action %}
+                {% block grid_row_data %}
+                    <div class="col-md-11">
+                        <dt>{{ 'data'|trans }}</dt>
+                        <dd>{{ 'row' }}</dd>
+                    </div>
+                {% endblock grid_row_data %}
+                </div>
+            {% endblock grid_row %}
+            {% if loop.index%grid.perpage==0 %}
+            </div>
+            <div class="tab-pane" id="page{{ (loop.index/grid.perpage)+grid.rstart+1 }}">
+            {{ block('grid_header') }}
+            {% endif%}
+            {% endfor %}
+            {% else %}
+            {% block grid_body_empty %}
+            <div class="common-grid-result-no-result text-center">{{ 'grid.search.noresult'|trans }}</div>
+            {% endblock grid_body_empty %}
+            {% endif %}
+            </div>
+        </div>
+        {% endblock grid_body %}
+
+        {% block grid_infinite_pagination %}
+        {% if not grid.rlast and grid.isInfiniteGrid %}
+        <div class="btn-group">
+            <button type="button" class="btn btn-default infinitescroll-next-button " data-retrive="#{{ grid.id }}">
+                <span class="glyphicon glyphicon glyphicon-list"></span> {{ 'more'|trans }}
+                <span class="ajax-loader"></span>
+            </button>
+        </div>
+        {% endif %}
+        {% endblock grid_infinite_pagination %}
+    </div>
+{% endblock grid %}

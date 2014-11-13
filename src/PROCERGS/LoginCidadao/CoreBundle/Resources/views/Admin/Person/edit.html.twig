@@ -1,0 +1,183 @@
+{% extends 'PROCERGSLoginCidadaoCoreBundle:Admin:base.html.twig' %}
+{% block content %}
+<div class="content">
+
+    <h1 class="visible-xs">{{ 'Profile'|trans }}</h1>
+
+<div id="notification_id">
+    {% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
+    {{ form_start(form, {'attr' : {'role' : 'form'}}) }}
+    {{ form_errors(form) }}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+                <h2 class="panel-title">{{ 'General'|trans }}</h2>
+        </div>
+        <div class="panel-body">
+            <div class="row clearfix">
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <img src="{{ include("PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': person}) }}" alt="" class="col-xs-12 img-responsive"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    {{ form_row(form.username) }}
+                    {{ form_row(form.firstName) }}
+                    {{ form_row(form.surname) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.email) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.birthdate) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.country) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.state) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.city) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.mobile) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if form.roles is defined %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+                <h2 class="panel-title">{{ 'Actions'|trans }}</h2>
+        </div>
+        <div class="panel-body">
+            <div class="row clearfix">
+                <div class="col-md-12">
+                    {{ form_row(form.roles) }}
+                    <div class="form-bar text-right">
+                        <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {{ form_end(form) }}
+
+
+
+<style type="text/css">
+.list-checked li {
+  background-color: aliceblue;
+}
+
+#roles-test {
+  margin-bottom: 20px;
+  opacity: 0.2;
+}
+#btn-search {
+  margin: 20px 0;
+}
+
+#search-result {
+  clear: both;
+  display: none;
+}
+</style>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+            <h2 class="panel-title">{{ 'Perfis'|trans }}</h2>
+    </div>
+    <div class="panel-body">
+        <div class="row clearfix">
+            <div class="col-md-12">
+                <select id="roles-test" name="person_resume_form_type[roles][]" required="required" class="form-control selected-options" multiple="multiple">
+                  <option value="ROLE_ADMIN" selected="selected">Perfil Administrador</option>
+                </select>
+
+                <div>
+                  <label>Perfis atuais: </label>
+                  <span class="label label-primary">Administrador</span>
+                </div>
+                <input type="text" class="form-control" placeholder="Perfil">
+                <button type="button" class="btn btn-primary pull-right" id="btn-search">Buscar</button>
+                <div id="search-result">
+                  <h5>Perfis Vinculados</h5>
+                  <ul class="list-group list-checked"></ul>
+                  <h5>Resultados da busca</h5>
+                  <ul class="list-group list-new"></ul>
+                </div>
+
+                {# <div class="text-right">
+                    <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
+                </div> #}
+                <button type="button" class="btn btn-primary">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
+
+
+{% block javascripts %}
+{{ parent() }}
+
+<script type="text/javascript">
+  $(function() {
+    var itens = [{'name': 'Perfil Facebook', 'role': 'ROLE_FACEBOOK'},
+                 {'name': 'Perfil Desenvolvedor', 'role': 'ROLE_DEV'},
+                 {'name': 'Perfil Super Usuário', 'role': 'ROLE_SUPER'}];
+
+    var btnSearch = $("#btn-search"),
+        searchResult = $("#search-result"),
+        selectedOptions = $(".selected-options option[selected='selected']"),
+        selectedList = $(".list-checked"),
+        searchList = $(".list-new");
+
+
+    btnSearch.on("click", function() {
+      // coloca as opções ja vinculadas na lista
+      selectedOptions.each(function(){
+        var li = "<li class='list-group-item item-checked' data-name='"+$(this).text()+"' data-role='"+$(this).val()+"'>" + $(this).text() + "<button type='button' class='btn btn-default btn-xs pull-right'><span class='glyphicon glyphicon-remove'></span></button></li>";
+
+        selectedList.append(li);
+      });
+
+      // TEMP - resultados da busca
+      $.each(itens, function(index, value) {
+        var item = "<li class='list-group-item' data-name='"+value.name+"' data-role='"+value.role+"'>" + value.name + "<button type='button' class='btn btn-default btn-xs pull-right'><span class='glyphicon glyphicon-plus'></span></button></li>";
+        searchList.append(item);
+      });
+
+      searchResult.show();
+    });
+
+
+    // add/remove os itens da lista
+    searchResult.on("click", ".list-group-item", function() {
+      var role = $(this).data("role");
+      var name = $(this).data("name");
+
+      if ($(this).hasClass("item-checked")) {
+        $(".selected-options option[value='"+role+"']").remove();
+        searchList.append($(this));
+      } else {
+        var option = '<option value="' + role + '" selected="selected">' + name + '</option>';
+        $(".selected-options").append(option);
+        selectedList.append($(this));
+      }
+      $(this).find(".glyphicon").toggleClass("glyphicon-remove").toggleClass("glyphicon-plus");
+      $(this).toggleClass("item-checked");
+    });
+
+  });
+</script>
+{% endblock %}

@@ -14,13 +14,12 @@ class BackgroundImageHelper
      */
     private $em;
     private $default;
-    public $backgroundImage;
+    private $backgroundImage;
 
     public function __construct(EntityManager $em, $author, $url, $file)
     {
         $this->em = $em;
         $this->default = array('author' => $author, 'url' => $url, 'file' => $file);
-        $this->setRandomImage();
     }
 
     private function getRepository()
@@ -42,6 +41,14 @@ class BackgroundImageHelper
 
             $this->backgroundImage = $image;
         }
+    }
+    
+    public function getBackgroundImage()
+    {
+        if (null === $this->backgroundImage) {
+            $this->setRandomImage();
+        }
+        return $this->backgroundImage;
     }
 
 }

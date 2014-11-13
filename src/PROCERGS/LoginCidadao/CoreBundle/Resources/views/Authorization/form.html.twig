@@ -3,7 +3,7 @@
 
     <div class="connect-diagram row">
         <div class="col-xs-5 text-right">
-            <img src="{% include 'PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig' %}" width="90">
+            <img src="{{ include("PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" width="90">
         </div>
         <div class="col-xs-2 text-center">
             <i class="glyphicon glyphicon-chevron-right"></i>

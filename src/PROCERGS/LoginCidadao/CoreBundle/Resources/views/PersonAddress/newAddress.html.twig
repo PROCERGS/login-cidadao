@@ -1,0 +1,16 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle:PersonAddress:base.html.twig" %}
+
+{% if form is not defined and edit_form is defined %}
+    {% set form = edit_form %}
+{% endif %}
+
+{% block addresses %}
+    {{ include("PROCERGSLoginCidadaoCoreBundle:PersonAddress:list.component.html.twig") }}
+    {% if edit_form is not defined %}
+        {{ include("PROCERGSLoginCidadaoCoreBundle:PersonAddress:form.component.html.twig") }}
+    {% endif %}
+    <script>
+        var cityTypeaheadSearchUrl = '{{ path('api_1_get_cities', {'city': 'QUERY', '_format': 'json'}) }}'.replace('QUERY', '%QUERY');
+        var cityTypeaheadPrefetchUrl = '{{ path('api_1_get_cities_prefetch', {'_format': 'json'} ) }}';
+    </script>
+{% endblock %}

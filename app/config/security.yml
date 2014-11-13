@@ -4,8 +4,10 @@ security:
         FOS\UserBundle\Model\UserInterface: sha512
 
     role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
-        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_DEV:         ROLE_USER
+        ROLE_SUPER:       ROLE_DEV
+        ROLE_ADMIN:       ROLE_SUPER
+        ROLE_SUPER_ADMIN: [ ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH ]
 
     providers:
         chainprovider:
@@ -15,8 +17,6 @@ security:
             id: procergs_logincidadao.user_provider
         fos_facebook_provider:
             id: fos_facebook.user.login
-#        fos_twitter_provider:
-#            id: fos_twitter.user
 
     firewalls:
         oauth_token:
@@ -27,8 +27,22 @@ security:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        main2:
+            pattern: ^/facebook
+            context: context_key
+            fos_facebook:
+                app_url: ""
+                server_url: "http://lc.des.dona.to"
+                login_path: /login
+                check_path: /facebook/login_check
+                default_target_path: fos_user_profile_edit
+                success_handler: security.authentication.success_handler
+                provider: fos_facebook_provider
+
         main:
+            context: context_key
             pattern: ^/(?!api|!oauth)
+            switch_user: true
 
             remember_me:
                 key:      "%secret%"
@@ -48,6 +62,7 @@ security:
             oauth:
                 resource_owners:
                     twitter:    "/login/check-twitter"
+                    google:    "/login/check-google"
                 login_path:   /login
                 use_forward:  false
                 failure_path: /login
@@ -89,17 +104,21 @@ security:
 
 
         api:
-          pattern:    ^/api
+          pattern:    ^/api/v1(?!/public)
           fos_oauth:  true
           stateless:  true
-          anonymous:  false
+          anonymous:  true
 
     access_control:
+        - { path: ^/api/v1/address/cities/search, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/v1/address/cities/prefetch, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }
+        - { path: ^/api/v1/public/lc_consultaCep2, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/nfg, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/connect/twitter$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/connect/google$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login/facebook$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/contact$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/general$, role: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -118,33 +137,6 @@ security:
         - { path: ^/profile/edit, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/profile/change-username, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/profile/change-password, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/admin, role: [IS_AUTHENTICATED_FULLY, ROLE_ADMIN] }
+        - { path: ^/admin, role: [IS_AUTHENTICATED_FULLY, ROLE_SUPER] }
+        - { path: ^/dev, role: [IS_AUTHENTICATED_FULLY, ROLE_DEV] }
         - { path: ^/person, role: IS_AUTHENTICATED_REMEMBERED }
-        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-
-        #- { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ], requires_channel: https }
-        #- { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/nfg, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/connect/twitter$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/login/facebook$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/contact$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/general$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/privacy$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/about$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/help$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/person/checkEmailAvailable, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/job, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/external/navbar.js, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        #- { path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-
-        #- { path: ^/, roles: IS_AUTHENTICATED_REMEMBERED, requires_channel: https }
-        #- { path: ^/profile/edit, roles: IS_AUTHENTICATED_FULLY, requires_channel: https }
-        #- { path: ^/profile/change-username, roles: IS_AUTHENTICATED_FULLY, requires_channel: https }
-        #- { path: ^/profile/change-password, roles: IS_AUTHENTICATED_FULLY, requires_channel: https }
-        #- { path: ^/admin/, role: [IS_AUTHENTICATED_FULLY, ROLE_ADMIN], requires_channel: https }
-        #- { path: ^/person, role: IS_AUTHENTICATED_REMEMBERED, requires_channel: https }
-        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-

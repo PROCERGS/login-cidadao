@@ -38,7 +38,6 @@ class AuthorizationController extends Controller
         $formBuilder->add('text', 'textarea');
         $form = $formBuilder->getForm();
 
-        $em = $this->getDoctrine()->getEntityManager();
         $suggs = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:ClientSuggestion')->findBy(array('person' => $user),
                 array('createdAt' => 'desc'), 6);
         $form = $form->createView();

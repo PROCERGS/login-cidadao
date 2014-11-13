@@ -15,6 +15,7 @@ use FOS\UserBundle\Form\Factory\FactoryInterface;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use PROCERGS\Generic\ValidationBundle\Validator\Constraints\UsernameValidator;
 
 class FOSUBUserProvider extends BaseClass
 {
@@ -99,13 +100,25 @@ class FOSUBUserProvider extends BaseClass
         $user = $this->userManager->findUserBy(array("{$service}Id" => $username));
 
         if (null === $user) {
-            $twitterEmail = $this->session->get('twitter.email');
-            if (!$twitterEmail) {
-                throw new MissingEmailException();
-            } else {
-                $this->session->remove('twitter.email');
+            switch ($service) {
+                case 'twitter':
+                    $email = $this->session->get('twitter.email');
+                    if (!$email) {
+                        throw new MissingEmailException();
+                    } else {
+                        $this->session->remove('twitter.email');
+                    }
+                    $defaultUsername = "$screenName@$service";
+                break;
+                case 'google':
+                    $email = $rawResponse['email'];
+                    $defaultUsername = $email;
+                    break;
+                default:
+                    $email = $rawResponse['email'];
+                    $defaultUsername = $email;
+                break;
             }
-
             $newUser = true;
             $user = $this->userManager->createUser();
             $user->$setter_id($username);
@@ -113,17 +126,23 @@ class FOSUBUserProvider extends BaseClass
             $user->$setter_username($screenName);
 
             $fullName = explode(' ', $response->getRealName(), 2);
-
-            $user->setFirstName($fullName[0]);
-            $user->setSurname($fullName[1]);
-
-            $defaultUsername = "$screenName@$service";
+            if (isset($fullName[0][1]) && $fullName[0][1] != '') {
+                $user->setFirstName($fullName[0]);
+            }
+            if (isset($fullName[1][1]) && $fullName[1][1] != '') {
+                $user->setSurname($fullName[1]);
+            }
+            
+            if (!UsernameValidator::isUsernameValid($screenName)) {
+                $screenName = UsernameValidator::getValidUsername();
+            }
             $availableUsername = $this->userManager->getNextAvailableUsername($screenName,
                     10, $defaultUsername);
             $user->setUsername($availableUsername);
-            $user->setEmail($twitterEmail);
+            $user->setEmail($email);
             $user->setPassword('');
             $user->setEnabled(true);
+            $this->userManager->updateCanonicalFields($user);
 
             $form = $this->formFactory->createForm();
             $form->setData($user);

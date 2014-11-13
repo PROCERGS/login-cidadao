@@ -15,7 +15,7 @@ class ClientController extends Controller
      */
     public function initClientAction()
     {
-        $clientManager = $this->get('fos_oauth_server.client_manager.default');
+        $clientManager = $this->get('fos_oauth_server.client_manager');
         
         $client = $clientManager->findClientBy(array('name' => "VPR"));
         if ($client instanceof Client) {
@@ -37,7 +37,7 @@ class ClientController extends Controller
      */
     public function getPublicIdAction($id)
     {
-        $clientManager = $this->get('fos_oauth_server.client_manager.default');
+        $clientManager = $this->get('fos_oauth_server.client_manager');
         $client = $clientManager->findClientBy(array('id' => $id));
         die($client->getPublicId());
         

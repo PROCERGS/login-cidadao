@@ -1,3 +1,9 @@
+# Notifications
+procergs_login_cidadao_notification:
+    type: rest
+    resource: "@PROCERGSLoginCidadaoNotificationBundle/Resources/config/routing.yml"
+    prefix:   /
+
 #HWI OAuth
 hwi_oauth_security:
     resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
@@ -14,10 +20,19 @@ hwi_oauth_redirect:
 twitter_login:
     pattern: /login/check-twitter
 
+google_login:
+    pattern: /login/check-google
+
 #API
 procergs_login_cidadao_api:
+    type: rest
     resource: "@PROCERGSLoginCidadaoAPIBundle/Resources/config/routing.yml"
     prefix:   /api/v1
+
+# API Doc
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc
 
 # login-cidadao
 procergs_generic_locale:

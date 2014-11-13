@@ -1,0 +1,17 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block title %}{{ 'Notifications' | trans }} | {{ parent() }}{% endblock title %}
+
+{% block sidebar %}
+    {% if clientId is not defined %}
+        {% set clientId = null %}
+    {% endif %}
+    {% render(controller("PROCERGSLoginCidadaoNotificationBundle:Notification:sidebar", { 'route': app.request.attributes.get('_route'), 'clientId': clientId })) %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets '@PROCERGSLoginCidadaoNotificationBundle/Resources/public/css/notifications.css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock stylesheets %}

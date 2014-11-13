@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ContactFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\SuggestionFilterFormType;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 
 /**
  * @Route("/admin/suggestion")
@@ -17,23 +18,10 @@ class SuggestionController extends Controller
 {
 
     /**
-     * @Route("/show/{id}", name="lc_admin_sugg_show")
+     * @Route("/", name="lc_admin_sugg")
      * @Template()
      */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $sugg = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:ClientSuggestion')->find($id);
-        return array(
-            'sugg' => $sugg
-        );
-    }
-
-    /**
-     * @Route("/list", name="lc_admin_sugg_list")
-     * @Template()
-     */
-    public function listAction(Request $request)
+    public function indexAction(Request $request)
     {
         $form = $this->createForm(new SuggestionFilterFormType());
         $form = $form->createView();
@@ -48,33 +36,42 @@ class SuggestionController extends Controller
     {
         $form = $this->createForm(new SuggestionFilterFormType());
         $form->handleRequest($request);
-        $result['suggs'] = null;
+        $result['grid'] = null;
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $q = $em->createQueryBuilder();
-            $q->select('cs.id, cs.createdAt, SUBSTRING(cs.text,0, 40) shorttext, u.username');
-            $q->from('PROCERGSLoginCidadaoCoreBundle:ClientSuggestion', 'cs');
-            $q->join('PROCERGSLoginCidadaoCoreBundle:Person', 'u', 'WITH', 'cs.person = u');
-            $q->where('1=1');
+            $em = $this->getDoctrine()->getManager();
+            $sql = $em->createQueryBuilder();
+            $sql->select('cs.id, cs.createdAt, cs.text shorttext, u.username');
+            $sql->from('PROCERGSLoginCidadaoCoreBundle:ClientSuggestion', 'cs');
+            $sql->join('PROCERGSLoginCidadaoCoreBundle:Person', 'u', 'WITH', 'cs.person = u');
+            $sql->where('1=1');
             $parms = $form->getData();
             if (isset($parms['username'][0])) {
-                $q->andWhere('u.username = ?1');
-                $q->setParameter('1', $parms['username']);
+                $sql->andWhere('u.username = ?1');
+                $sql->setParameter('1', $parms['username']);
             }
             if (isset($parms['dateini'])) {
-                $q->andWhere('cs.createdAt >= ?2');
-                $q->setParameter('2', $parms['dateini']);
+                $sql->andWhere('cs.createdAt >= ?2');
+                $sql->setParameter('2', $parms['dateini']);
             }
             if (isset($parms['dateend'])) {
-                $q->andWhere('cs.createdAt <= ?3');
-                $q->setParameter('3', $parms['dateend']);
+                $sql->andWhere('cs.createdAt <= ?3');
+                $sql->setParameter('3', $parms['dateend']);
             }
             if (isset($parms['text'][0])) {
-                $q->andWhere("cs.text like ?4");
-                $q->setParameter('4', '%'.addcslashes($parms['text'], '\\%_').'%');
+                $sql->andWhere("cs.text like ?4");
+                $sql->setParameter('4', '%'.addcslashes($parms['text'], '\\%_').'%');
             }
-            $q->addOrderBy('cs.createdAt');
-            $result['suggs'] = $q->getQuery()->getResult();
+            $sql->addOrderBy('cs.createdAt');
+
+            $grid = new GridHelper();
+            $grid->setId('suggs-grid');
+            $grid->setPerPage(5);
+            $grid->setMaxResult(5);
+            $grid->setQueryBuilder($sql);
+            $grid->setInfiniteGrid(true);
+            $grid->setRoute('lc_admin_sugg_list_query');
+            $grid->setRouteParams(array($form->getName()));
+            return array('grid' => $grid->createView($request));
         }
         return $result;
     }

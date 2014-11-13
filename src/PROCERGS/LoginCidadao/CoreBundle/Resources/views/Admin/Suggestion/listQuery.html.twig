@@ -1,38 +1,42 @@
-<div class="common-grid-msg">
-    <div>{{ 'grid.search.title'|trans }}</div>
-    {% if suggs|length > 0 %}
-    <div class="common-grid-results">
-        <div class="row header">
-            <div class="col-md-1"></div>
-            <div class="col-md-3">{{ 'sugg.username'|trans }}</div>
-            <div class="col-md-2">{{ 'sugg.createdAt'|trans }}</div>
-            <div class="col-md-6">{{ 'sugg.shorttext'|trans }}</div>
+{% extends "PROCERGSLoginCidadaoCoreBundle::grid_layout.html.twig" %}
+{% block grid %}
+<div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">{{ 'grid.search.title'|trans }}</h2>
         </div>
-        {% for sugg in suggs %}
-        <div class="row common-grid-result">
-            <div class="col-md-1">
-                <a class="center-block text-center link-popup" title="{{ 'show'|trans }}" href="javascript:void(0)" data-specs="width=400,height=400" data-href="{{ path('lc_admin_sugg_show', {'id': sugg.id}) }}"><i class="glyphicon glyphicon-map-marker"></i></a>
-            </div>        
-            <div class="col-md-3">
-                <dt>{{ 'sugg.username'|trans }}</dt>
-                <dd >{{ sugg.username }}</dd>
-            </div>
-            <div class="col-md-2">
-                <dt>{{ 'sugg.createdAt'|trans }}</dt>
-                <dd >{{ sugg.createdAt|date('d/m/Y h:i:s') }}</dd>
-            </div>
-            <div class="col-md-6">
-                <dt>{{ 'sugg.shorttext'|trans }}</dt>
-                <dd >{{ sugg.shorttext }}</dd>
+        <div class="panel-body">
+            <div class="row clearfix">
+                <div class="col-md-12">
+                    {{ parent() }}
+                </div>
             </div>
         </div>
-        {% endfor %}
     </div>
-    {% else %}
-    <div>{{ 'grid.search.noresult'|trans }}</div>
-    {% endif %}
-</div>
-<script type="text/javascript">
-//    alert('rola');
-</script>
+{% endblock grid %}
 
+{% block grid_header_action %}
+{% endblock grid_header_action %}
+
+{% block grid_header_data %}
+<div class="col-md-3">{{ 'sugg.username'|trans }}</div>
+<div class="col-md-2">{{ 'sugg.createdAt'|trans }}</div>
+<div class="col-md-6">{{ 'sugg.shorttext'|trans }}</div>
+{% endblock grid_header_data %}
+
+{% block grid_row_action %}
+{% endblock grid_row_action %}
+
+{% block grid_row_data %}
+<div class="col-md-3">
+    <dt>{{ 'sugg.username'|trans }}</dt>
+    <dd ><div style="word-wrap: break-word;">{{ row.username }}</div></dd>
+</div>
+<div class="col-md-2">
+    <dt>{{ 'sugg.createdAt'|trans }}</dt>
+    <dd ><div style="word-wrap: break-word;">{{ row.createdAt|date('d/m/Y h:i:s') }}</div></dd>
+</div>
+<div class="col-md-6">
+    <dt>{{ 'sugg.shorttext'|trans }}</dt>
+    <dd ><div style="word-wrap: break-word;">{{ row.shorttext }}</div></dd>
+</div>
+{% endblock grid_row_data %}

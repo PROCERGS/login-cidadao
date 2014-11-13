@@ -262,14 +262,14 @@
 
 #lc-navbar .dropdown-menu {
     background-color: #FFF!important;
-    width: 300px;
+    width: 430px;
     position: absolute;
     top: 100%;
     right: 0;
     z-index: 1000;
     display: none;
     float: left;
-    padding: 5px 0 0;
+    padding: 0;
     list-style: none;
     font-size: 14px;
     border: 1px solid #CCC;
@@ -281,6 +281,10 @@
 
 #lc-navbar .open > .dropdown-menu {
     display: block;
+}
+
+#lc-navbar .menu-title {
+  padding: 0 5px;
 }
 
 #lc-navbar .dropdown-menu li a {
@@ -298,7 +302,8 @@
 }
 
 #lc-navbar .dropdown-menu .all {
-    background-color: #009933;
+    background-color: #5CB85C;
+    clear: both;
     height: auto;
     margin: 0;
     padding:0;
@@ -316,7 +321,7 @@
 #lc-navbar .dropdown-menu .all a:hover {
     background-color: #009933!important;
     background-image: none!important;
-    color: #000!important;
+    color: #FFF!important;
 }
 
 @media (max-width: 767px) {
@@ -345,34 +350,30 @@
     text-align: center;
     white-space: nowrap;
     vertical-align: baseline;
-    border-radius: 50%;
+    border-radius: 43%;
     top: 0;
-    right: -15px;
+    right: 20px;
 }
 
 /* Apps */
-#lc-navbar .apps li {
-    float: left;
-    height: 110px;
-    margin: 3px;
-    padding-top: 5px;
-    text-align: center;
-    width: 90px;
+#lc-navbar .app .media {
+  padding: 10px;
 }
 
-#lc-navbar .apps li a {
-    padding: 10px 20px;
+#lc-navbar .app .media:hover {
+  background: none;
+  background-color: #E2EFDE;
+  cursor: pointer;
 }
 
-#lc-navbar .apps li span {
-    display: inline-block;
-    margin-top: 5px;
+#lc-navbar .app .media a {
+  padding: 0;
 }
 
-#lc-navbar .apps .dropdown-menu img {
-    max-width: 50px;
-    max-height: 50px;
+#lc-navbar .app a:hover {
+  background-image: none;
 }
+
 
 #lc-navbar .notifications li a {
     border-bottom: solid 1px #CCC;
@@ -386,4 +387,40 @@
 
 #external .notification-extreme.alert {
     margin-bottom: 0;
+}
+.navbar-scrollspy-notification {
+    height: 300px;
+    margin-top: 0;
+    overflow: auto;
+    position: relative;
+}
+
+.notifications .menu-title {
+  margin: 5px;
+}
+
+#navbarUnread {
+  margin-top: 0;
+}
+
+#navbarUnread .notification {
+  background-color: #FFF;
+  cursor: pointer;
+  border-bottom: solid 1px #CCC;
+  font-size: 12px;
+  padding: 15px 10px;
+}
+
+#navbarUnread .notification:hover {
+  background-color: #E2EFDE;
+}
+
+#navbarUnread .client-name {
+  margin: 5px 0 0;
+}
+
+#navbarUnread .media-heading {
+  font-size: 12px;
+  font-weight: bold;
+  margin: 0;
 }

@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use PROCERGS\LoginCidadao\CoreBundle\Helper\NotificationsHelper;
+use PROCERGS\LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
 use PROCERGS\LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer;
 use FOS\UserBundle\Mailer\MailerInterface;
 use Doctrine\ORM\EntityManager;
@@ -21,12 +21,16 @@ use Assetic\Exception\Exception;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\NfgWsHelper;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\NfgException;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\LcValidationException;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\MissingNfgAccessTokenException;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
+use PROCERGS\Generic\ValidationBundle\Validator\Constraints\CEPValidator;
 
 class ProfileEditListner implements EventSubscriberInterface
 {
+
+    const PROFILE_DOC_EDIT_SUCCESS = 'lc.profile.doc.edit.success';
 
     private $mailer;
     private $fosMailer;
@@ -71,7 +75,8 @@ class ProfileEditListner implements EventSubscriberInterface
     {
         return array(
             FOSUserEvents::PROFILE_EDIT_INITIALIZE => 'onProfileEditInitialize',
-            FOSUserEvents::PROFILE_EDIT_SUCCESS => 'onProfileEditSuccess'
+            FOSUserEvents::PROFILE_EDIT_SUCCESS => 'onProfileEditSuccess',
+            ProfileEditListner::PROFILE_DOC_EDIT_SUCCESS => 'onProfileDocEditSuccess'
         );
     }
 
@@ -92,16 +97,61 @@ class ProfileEditListner implements EventSubscriberInterface
     public function onProfileEditSuccess(FormEvent $event)
     {
         $user = $event->getForm()->getData();
-
-        $this->checkVoterRegistrationChanged($user);
+        if (!$user->getCountry()) {
+            if (!$user->getState()) {
+                $steppe = ucwords(strtolower(trim($event->getForm()->get('ufsteppe')->getData())));
+                if ($steppe) {
+                    $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:State');
+                    $ent = $repo->findOneBy(array(
+                        'name' => $steppe
+                    ));
+                    if (!$ent) {
+                        $ent = new State();
+                        $ent->setName($steppe);
+                        $ent->setCountry($user->getCountry());
+                        $this->em->persist($ent);
+                    }
+                    $user->setState($ent);
+                }
+            }
+            if (!$user->getCity()) {
+                $steppe = ucwords(strtolower(trim($event->getForm()->get('citysteppe')->getData())));
+                if ($user->getState()) {
+                    $state = $user->getState();
+                } elseif (isset($ent)) {
+                    $state = $ent;
+                } else {
+                    $state = null;
+                }
+                if ($state && $steppe) {
+                    $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:City');
+                    $ent = $repo->findOneBy(array(
+                        'name' => $steppe,
+                        'state' => $state
+                    ));
+                    if (!$ent) {
+                        $ent = new City();
+                        $ent->setName($steppe);
+                        $ent->setState($state);
+                        $this->em->persist($ent);
+                    }
+                    $user->setCity($ent);
+                }
+            }
+        }
         $this->checkEmailChanged($user);
-        $this->checkCPFChanged($user);
-        $this->checkCEPChanged($user);
 
         // default:
         $url = $this->router->generate('fos_user_profile_edit');
 
         $event->setResponse(new RedirectResponse($url));
+    }
+
+    public function onProfileDocEditSuccess(FormEvent $event)
+    {
+        $user = $event->getForm()->getData();
+        $this->checkVoterRegistrationChanged($user);
+        $this->checkCPFChanged($user);
     }
 
     public function setCpfEmptyTime($var)
@@ -141,7 +191,6 @@ class ProfileEditListner implements EventSubscriberInterface
             $user->setEmailExpiration(new \DateTime("+$this->emailUnconfirmedTime"));
             $this->fosMailer->sendConfirmationEmailMessage($user);
 
-            $this->notificationsHelper->enforceUnconfirmedEmailNotification($user);
             $this->mailer->sendEmailChangedMessage($user, $this->email);
         }
     }
@@ -236,13 +285,13 @@ class ProfileEditListner implements EventSubscriberInterface
                             $uk = $this->em->getUnitOfWork();
                             $a = $uk->getOriginalEntityData($user);
                             $uk->detach($user);
-                            
+
                             $otherPerson->setVoterRegistration(null);
                             $this->em->persist($otherPerson);
-                            
+
                             $uk->registerManaged($user, array('id' => $user->getId()),$a);
-                            
-                            $notification = new Notification();                            
+
+                            $notification = new Notification();
                             $notification->setPerson($otherPerson)
                                     ->setIcon('glyphicon glyphicon-exclamation-sign')
                                     ->setLevel(Notification::LEVEL_IMPORTANT)
@@ -277,35 +326,6 @@ class ProfileEditListner implements EventSubscriberInterface
                         }
                     }
                 }
-            }
-        }
-    }
-
-    private function checkCEPChanged(&$user)
-    {
-        if ($user->getCep()) {
-            $ceps = $this->dne->findByCep($user->getCep());
-            if (is_numeric($ceps['codigoMunIBGE'])) {
-                $cityRepo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:City');
-                $city = $cityRepo->findOneBy(array(
-                    'id' => $ceps['codigoMunIBGE']
-                ));
-                if (!$city) {
-                    $city = new City();
-                    $city->setId($ceps['codigoMunIBGE']);
-                    $city->setName($ceps['localidade']);
-                    $this->em->persist($city);
-                }
-                $user->setCity($city);
-                $ufRepo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Uf');
-                $uf = $ufRepo->findOneBy(array(
-                    'acronym' => $ceps['uf']
-                ));
-                if (!$uf) {
-                    throw Exception('uf not found');
-                }
-                $user->setUf($uf);
-                $user->setAdress($ceps['logradouroExtenso']);
             }
         }
     }

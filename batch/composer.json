@@ -1,0 +1,9 @@
+{
+	"license" : "MIT",
+	"type" : "project",
+	"require" : {
+		"php" : ">=5.3.3",
+		"codeplex/phpexcel": "dev-master"
+	},
+	"minimum-stability" : "stable"
+}

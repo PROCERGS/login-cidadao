@@ -5,31 +5,49 @@ namespace PROCERGS\OAuthBundle\Entity;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
 use FOS\OAuthServerBundle\Entity\Client as BaseClient;
 use Doctrine\ORM\Mapping as ORM;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Notification;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Tests\Fixtures\Publisher;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use JMS\Serializer\Annotation as JMS;
+use OAuth2\OAuth2;
+use Doctrine\Common\Collections\ArrayCollection;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
+use PROCERGS\LoginCidadao\CoreBundle\Model\AbstractUniqueEntity;
+use PROCERGS\LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
+use PROCERGS\OAuthBundle\Model\ClientInterface;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\OAuthBundle\Entity\ClientRepository")
+ * @ORM\Table(name="client")
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity("name")
+ * @JMS\ExclusionPolicy("all")
  */
-class Client extends BaseClient
+class Client extends BaseClient implements UniqueEntityInterface, ClientInterface
 {
 
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $id;
 
     /**
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", nullable=false, unique=true)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $name;
 
     /**
-     * @ORM\Column(type="text", nullable=false)
+     * @ORM\Column(type="string", length=4000, nullable=false)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $description;
 
@@ -39,14 +57,18 @@ class Client extends BaseClient
     protected $maxNotificationLevel;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", length=2000, nullable=true)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
-    protected $landingPageURL;
+    protected $landingPageUrl;
 
     /**
-     * @ORM\Column(type="text", nullable=false)
+     * @ORM\Column(type="string", length=2000, nullable=false)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
-    protected $termsOfUseURL;
+    protected $termsOfUseUrl;
 
     /**
      * @ORM\Column(type="array", nullable=false)
@@ -59,14 +81,21 @@ class Client extends BaseClient
     protected $authorizations;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=2000)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $siteUrl;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Notification", mappedBy="client")
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification", mappedBy="sender")
      */
     protected $notifications;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\Category", mappedBy="client")
+     */
+    protected $categories;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -81,19 +110,51 @@ class Client extends BaseClient
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $published;
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     protected $visible;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="clients"  )
+     * @ORM\JoinTable(name="client_owners",
+     *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id")}
+     *      )
+     * @var ArrayCollection
+     */
+    protected $owners;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey", mappedBy="client")
+     */
+    protected $logoutKeys;
 
     public function __construct()
     {
         parent::__construct();
-        $this->authorizations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->authorizations = new ArrayCollection();
+        $this->owners = new ArrayCollection();
         $this->maxNotificationLevel = Notification::LEVEL_NORMAL;
+    }
+
+    public static function getAllGrants()
+    {
+        return array(
+            OAuth2::GRANT_TYPE_AUTH_CODE,
+            OAuth2::GRANT_TYPE_IMPLICIT,
+            OAuth2::GRANT_TYPE_USER_CREDENTIALS,
+            OAuth2::GRANT_TYPE_CLIENT_CREDENTIALS,
+            OAuth2::GRANT_TYPE_REFRESH_TOKEN,
+            OAuth2::GRANT_TYPE_EXTENSIONS,
+        );
     }
 
     public function setName($name)
@@ -150,25 +211,25 @@ class Client extends BaseClient
         return $this;
     }
 
-    public function getLandingPageURL()
+    public function getLandingPageUrl()
     {
-        return $this->landingPageURL;
+        return $this->landingPageUrl;
     }
 
-    public function setLandingPageURL($landingPageURL)
+    public function setLandingPageUrl($landingPageUrl)
     {
-        $this->landingPageURL = $landingPageURL;
+        $this->landingPageUrl = $landingPageUrl;
         return $this;
     }
 
-    public function getTermsOfUseURL()
+    public function getTermsOfUseUrl()
     {
-        return $this->termsOfUseURL;
+        return $this->termsOfUseUrl;
     }
 
-    public function setTermsOfUseURL($termsOfUseURL)
+    public function setTermsOfUseUrl($termsOfUseUrl)
     {
-        $this->termsOfUseURL = $termsOfUseURL;
+        $this->termsOfUseUrl = $termsOfUseUrl;
         return $this;
     }
 
@@ -191,20 +252,25 @@ class Client extends BaseClient
 
     public function getPictureWebPath()
     {
-        return null === $this->picturePath ? null : $this->getPictureUploadDir() . '/' . $this->picturePath;
+        return self::resolvePictureWebPath($this->picturePath);
     }
 
     protected function getPictureUploadRootDir()
     {
-        return __DIR__ . '/../../../../web/' . $this->getPictureUploadDir();
+        return __DIR__ . '/../../../../web/' . self::getPictureUploadDir();
     }
 
-    protected function getPictureUploadDir()
+    protected static function getPictureUploadDir()
     {
         return 'uploads/client-pictures';
     }
+    
+    public static function resolvePictureWebPath($var)
+    {
+        return null === $var ? null : self::getPictureUploadDir() . '/' . $var;
+    }
 
-    public function setPictureFile(UploadedFile $pictureFile = null)
+    public function setPictureFile(File $pictureFile = null)
     {
         $this->pictureFile = $pictureFile;
         if (isset($this->picturePath)) {
@@ -217,7 +283,7 @@ class Client extends BaseClient
 
     /**
      *
-     * @return UploadedFile
+     * @return File
      */
     public function getPictureFile()
     {
@@ -235,7 +301,7 @@ class Client extends BaseClient
         }
 
         $this->getPictureFile()->move(
-                $this->getPictureUploadRootDir(), $this->picturePath
+            $this->getPictureUploadRootDir(), $this->picturePath
         );
 
         if (isset($this->tempPicturePath) && $this->tempPicturePath != $this->picturePath) {
@@ -288,6 +354,57 @@ class Client extends BaseClient
     public function setPublished($published)
     {
         $this->published = $published;
+
+        return $this;
+    }
+
+    public function setId($var)
+    {
+        $this->id = $var;
+        return $this;
+    }
+
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    public function getOwners()
+    {
+        return $this->owners;
+    }
+
+    public function setOwners(ArrayCollection $owners)
+    {
+        $this->owners = $owners;
+        return $this;
+    }
+
+    /* Unique Interface Stuff */
+
+    /**
+     * @ORM\Column(type="string", nullable=true, unique=true)
+     * @var string
+     */
+    private $uid;
+
+    /**
+     * Gets the Unique Id of the Entity.
+     * @return string the entity UID
+     */
+    public function getUid()
+    {
+        return $this->uid;
+    }
+
+    /**
+     * Sets the Unique Id of the Entity.
+     * @param string $id the entity UID
+     * @return AbstractUniqueEntity
+     */
+    public function setUid($uid = null)
+    {
+        $this->uid = $uid;
 
         return $this;
     }

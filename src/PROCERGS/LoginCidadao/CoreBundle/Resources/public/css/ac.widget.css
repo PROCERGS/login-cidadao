@@ -1,0 +1,16 @@
+.ac-sandbox, .ac-magicbox, .ac-search-enable, .ac-search-cancel,
+	.ac-search-commit, .ac-tags-toolbar, .ac-scrollspy-opts-selected-group,
+	.ac-scrollspy-opts-group {
+	
+}
+
+.ac-scrollspy-opts, .ac-scrollspy-opts-selected {
+	height: 150px;
+	overflow: auto;
+	position: relative;
+	background-color: white;
+}
+
+.ac-scrollspy-opts-selected .glyphicon-arrow-down:before {
+	content: "";
+}

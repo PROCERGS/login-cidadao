@@ -14,7 +14,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\AccessSession;
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use PROCERGS\LoginCidadao\CoreBundle\Helper\NotificationsHelper;
+use PROCERGS\LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
 
 class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 {
@@ -80,13 +80,6 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
         // CPF check
         if ($token->getUser()->isCpfExpired()) {
             return new RedirectResponse($this->router->generate('lc_registration_cpf'));
-        }
-
-        // Email check
-        if (is_null($token->getUser()->getEmailConfirmedAt())) {
-            $this->notificationsHelper->enforceUnconfirmedEmailNotification($token->getUser());
-        } else {
-            $this->notificationsHelper->clearUnconfirmedEmailNotification($token->getUser());
         }
 
         if (strstr($token->getUser()->getUsername(), '@') !== false) {

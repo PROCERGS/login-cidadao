@@ -1,0 +1,26 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block title %}{{ 'Addresses' | trans }} | {{ parent() }}{% endblock title %}
+
+{% block content %}
+    <div class="content addresses">
+        <h1 class="visible-xs">{{ 'Addresses' | trans }}</h1>
+        {% block addresses %}{% endblock %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts  '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/typeahead.bundle.js'
+                    '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/handlebars-v2.0.0.js'
+                    '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/person.address.js' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets '@PROCERGSLoginCidadaoCoreBundle/Resources/public/css/components/typeaheadjs.css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock stylesheets %}

@@ -2,6 +2,7 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Twig\Extension;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use PROCERGS\OAuthBundle\Entity\Client;
 
 class LoginCidadaoExtension extends \Twig_Extension
 {
@@ -26,11 +27,26 @@ class LoginCidadaoExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'logincidadao_initializeForm' => new \Twig_Function_Method($this, 'initializeForm', array(
+            'lc_getForm' => new \Twig_Function_Method($this, 'getForm', array(
                 'is_safe' => array(
                     'html'
                 )
-            ))
+            )),
+            'lc_getFormFactory' => new \Twig_Function_Method($this, 'getFormFactory', array(
+                'is_safe' => array(
+                    'html'
+                )
+            )),
+            'lc_render' => new \Twig_Function_Method($this, 'lcRender', array(
+                'is_safe' => array(
+                    'html'
+                )
+            )),
+            'lc_client_picture_web_path' => new \Twig_Function_Method($this, 'lcClientPictureWebPath', array(
+                'is_safe' => array(
+                    'html'
+                )
+            )),
         );
     }
 
@@ -70,13 +86,23 @@ class LoginCidadaoExtension extends \Twig_Extension
         return 'login_twig_extension';
     }
 
-    /**
-     *
-     * @see FacebookHelper::initialize()
-     */
-    public function initializeForm($parameters = array(), $name = null)
+    public function getForm($name = 'procergs_logincidadao.login.form.type')
     {
-        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.login.form.type'));
-        return $form->createView();
+        return $this->container->get('form.factory')->create($this->container->get($name))->createView();
+    }
+    
+    public function getFormFactory($name = 'fos_user.registration.form.factory')
+    {
+        return $this->container->get($name)->createForm()->createView();
+    }
+    
+    public function lcRender($name)
+    {
+        return '';
+    }
+    
+    public function lcClientPictureWebPath($var)
+    {
+        return Client::resolvePictureWebPath($var);
     }
 }

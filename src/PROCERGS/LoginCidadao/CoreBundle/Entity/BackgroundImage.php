@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * BackgroundImage
  *
- * @ORM\Table()
+ * @ORM\Table(name="background_image")
  * @ORM\Entity
  */
 class BackgroundImage

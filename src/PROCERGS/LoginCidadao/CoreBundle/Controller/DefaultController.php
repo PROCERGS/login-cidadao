@@ -10,9 +10,11 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ContactFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Uf;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\IgpWsHelper;
+use Doctrine\ORM\Query;
 
 class DefaultController extends Controller
 {
@@ -59,87 +61,6 @@ class DefaultController extends Controller
     {
         return $this->render('PROCERGSLoginCidadaoCoreBundle:Info:terms.html.twig',
                         compact('user', 'apps'));
-    }
-
-    /**
-     * @Route("/lc_consultaCep", name="lc_consultaCep")
-     * @Template()
-     */
-    public function consultaCepAction(Request $request)
-    {
-        // $cep = new \PROCERGS\LoginCidadao\CoreBundle\Entity\Cep();
-        $repoUf = $this->getDoctrine()->getEntityManager()->getRepository('PROCERGSLoginCidadaoCoreBundle:Uf');
-        $q = $repoUf->createQueryBuilder('u')->orderBy('u.acronym');
-        $p = $repoUf->findBy(array('acronym' => 'RS'));
-        $form = $this->createFormBuilder()->add('adress', 'text',
-                        array(
-                    'required' => true,
-                    'label' => 'form.adress',
-                    'translation_domain' => 'FOSUserBundle'
-                ))->add('adressnumber', 'text',
-                        array(
-                    'required' => false,
-                    'label' => 'form.adressnumber',
-                    'translation_domain' => 'FOSUserBundle'
-                ))->add('city', 'text',
-                        array(
-                    'required' => true,
-                    'label' => 'form.city',
-                    'translation_domain' => 'FOSUserBundle'
-                ))->add('uf', 'entity',
-                        array(
-                    'class' => 'PROCERGSLoginCidadaoCoreBundle:Uf',
-                    'property' => 'name',
-                    'required' => true,
-                    'label' => 'form.uf',
-                    'preferred_choices' => $p,
-                    'query_builder' => $q,
-                    'translation_domain' => 'FOSUserBundle'
-                        )
-                )->getForm();
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $busca = $this->get('procergs_logincidadao.dne');
-            $ceps = $busca->find(array(
-                'logradouro' => $form->get('adress')->getData(),
-                'localidade' => $form->get('city')->getData(),
-                'numero' => $form->get('adressnumber')->getData(),
-                'uf' => $form->get('uf')->getData()->getAcronym()
-            ));
-        } else {
-            $ceps = array();
-        }
-        return array(
-            'form' => $form->createView(),
-            'ceps' => $ceps
-        );
-    }
-
-    /**
-     * @Route("/lc_consultaCep2", name="lc_consultaCep2")
-     */
-    public function consultaCep2Action(Request $request)
-    {
-        $busca = $this->get('procergs_logincidadao.dne');
-        $ceps = $busca->findByCep($request->get('cep'));
-        if ($ceps) {
-            $result = array(
-                'code' => 0,
-                'msg' => null,
-                'itens' => array(
-                    $ceps
-                )
-            );
-        } else {
-            $result = array(
-                'code' => 1,
-                'msg' => 'not found'
-            );
-        }
-        return new Response(json_encode($result), 200,
-                array(
-            'Content-Type' => 'application/json'
-        ));
     }
 
     /**
@@ -201,6 +122,32 @@ class DefaultController extends Controller
             $response->headers->set('Content-Type', 'text/json');
         }
         return $response->setData($result);
+    }
+
+
+    /**
+     * @Route("/login/cert", name="lc_login_cert")
+     * @Template()
+     */
+    public function loginCertAction(Request $request) {
+        die(print_r($_REQUEST));
+    }
+
+    /**
+     * @Route("/igp/consult", name="lc_ipg_consutl")
+     * @Template()
+     */
+    public function igpConsultAction(Request $request) {
+        $igp = $this->get('procergs_logincidadao.igpws');
+        //$rcs = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->createQueryBuilder('p')->select('p.cpf')->where('p.cpf is not null')->getQuery()->getResult(Query::HYDRATE_ARRAY);
+        echo "<pre>";
+        $rcs[] = array('cpf' => '1000450741');
+        foreach ($rcs as $rc) {
+            $igp->setCpf($rc['cpf']);
+            $rc['igp'] = $igp->consultar();
+            print_r($rc);
+        }
+        die();
     }
 
 }

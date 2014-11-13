@@ -1,106 +1,138 @@
+body.no-scroll {
+    overflow: hidden;
+}
 /* settings nav and content */
-.settings-nav .nav, .settings-content .content{
-    background-color: #dddedc;
+.settings-content {
+    background-color: #F1F1F1;
+    max-width: 960px;
+}
+
+.limit-960>div {
+    max-width: 960px;
+}
+
+@media (max-width: 768px) {
+    .settings-content {
+        margin: 0 15px;
+    }
+
+}
+
+@media (min-width: 992px) {
+    .settings-content {
+        padding: 0 50px;
+    }
+}
+.settings-content .content{
     min-height: 422px;
+}
+
+.settings-nav {
+    background-color: #F1F1F1;
+    position: fixed;
+    top: 50px;
+    bottom: 0;
+    /*left: -200px;*/
+    z-index: 1000;
+    display: block;
+    padding: 0;
+    overflow-y: auto;
+    max-width: 255px !important;
 }
 
 @media (min-width: 768px) {
     .settings-nav {
-        padding-left: 0;
+        left: 0;
     }
 
-    .settings-content {
-        padding-right: 0;
-    }
 }
 
 .settings-nav li {
-    margin: 12px 0;
+    margin: 0!important;
 }
 
 .settings-nav li a {
     border-radius: 0;
-    height: auto;
-    padding: 20px 15px;
-    position: relative;
+    line-height: 30px;
+    padding: 12px;
 }
 
-.settings-nav li.active a, .settings-nav li.active a:hover {
-    background-color: #009933;
+.settings-nav li.active a,
+.settings-nav li.active a:hover,
+.settings-nav li a.active,
+.settings-nav li a.active:hover {
+    /*background-color: #009933;*/
+    background-color: #5CB85C !important;
+    color: #fff !important;
     cursor: default;
 }
 
-.settings-nav li a:hover {
-    background-color: #c7d6cb;
+.settings-nav li a:hover, .settings-nav .open > a {
+    background-image: none;
+    background-color: #E2EFDE!important;
     color: #696969 !important;
 }
 
-.settings-nav li a span {
+.settings-nav li a > span {
+    display: inline-block;
+    line-height: normal;
+    padding-left: 50px;
+    word-break: break-word;
+}
+
+.settings-nav li a > .icon {
     color: #696969;
     display: inline-block;
-    font-weight: 500;
-    width: 85%;
-}
-
-.settings-nav li.active span, .settings-nav li.active a:hover span {
-    color: #FFF;
-}
-
-.settings-nav li .bg {
-    background-image: url('../../images/settings_nav_icons.png');
-    display: block;
-    margin-top: -15px;
-    position: absolute;
-    right: 8px;
-    top: 50%;
-}
-
-.settings-nav .glyph>a {
-    padding-right: 8px;
-}
-
-.settings-nav .glyph>a span {
-    width: 100%;
-    vertical-align: middle;
-    line-height: 30px;
-}
-
-.settings-nav li .glyphicon {
-    color: #696969;
+    line-height: normal;
     font-size: 30px;
-}
-.settings-nav li.active .glyphicon {
-    color: #fff;
-}
-
-.settings-nav .username .bg {
-    background-position: -3px -207px;
-    height: 34px;
-    right: 11px;
-    width: 28px;
+    margin-top: -18px;
+    position: absolute;
+    left: 5px;
+    text-align: center;
+    top: 50%;
+    width: 20%;
 }
 
-.settings-nav .username.active .bg {
-    background-position: -42px -207px;
+.settings-nav li a > .icon-count {
+    color: #696969;
+    line-height: normal;
+    font-size: 30px;
+    margin-top: 5px;
+    padding-left: 50px;
+    text-align: center;
 }
 
-.settings-nav .password .bg {
-    background-position: -6px -280px;
-    height: 30px;
-    right: 16px;
-    width: 22px;
+.settings-nav li a > .icon-count .badge {
+    float: right;
+    padding-right: 18px;
+    position: relative;
+    margin-top: -29px;
 }
 
-.settings-nav .password.active .bg {
-    background-position: -45px -280px;
-}
-
-.settings-nav .notifications .glyphicon {
+.settings-nav li a > .icon-count .caret {
+    float: left;
+    margin-top: -2px;
+    position: absolute;
     right: 3px;
+    top: 50%
 }
 
-.settings-nav .settings .glyphicon {
-    right: 5px;
+.settings-nav .dropdown-menu {
+    width: 100%;
+}
+
+.settings-nav .submenu {
+    background-color: #FFF;
+    padding: 0;
+}
+
+.settings-nav .submenu a {
+    display: block;
+    padding: 0 18px;
+}
+
+.settings-nav .submenu a:hover {
+    text-decoration: none;
 }
 
 .progress-box {
@@ -129,17 +161,19 @@
 }
 
 .settings-content h1 {
-    margin: 15px 30px 10px;
+    margin: 0 0 15px;
     font-size: 24px;
 }
 
-.settings-content h2 {
-    margin: 20px 35px 10px;
-    font-size: 18px;
-}
+@media (min-width: 768px) {
+    .settings-content .content {
+        padding-top: 50px;
+    }
 
-.settings-content .form-content {
-    padding: 20px 60px;
+    .settings-content h1 {
+        margin: 15px 20px 10px;
+    }
+
 }
 
 .settings-content .input-error ul {
@@ -147,67 +181,65 @@
 }
 
 .settings-content .form-bar {
-    background-color: #d9d9d9;
+    background-color: #F5F5F5;
     padding: 10px;
 }
 
+.settings-content .panel {
+    border-radius: 0;
+}
+
 @media (max-width: 767px) {
+    .settings-nav > .nav {
+        max-width: 200px;
+    }
 
-  #toggle-settings-nav {
-    color: #FFF;
-    font-size: 22px;
-    margin: 0;
-  }
+    #toggle-settings-nav {
+        color: #FFF;
+        font-size: 22px;
+        margin: 0;
+    }
 
-  .settings-nav {
-    padding: 0;
-    position: absolute;
-    z-index: 100;
+    .settings-nav {
+        left: -200px;
 
-    -webkit-transition: 0.5s ease-in-out;
-    -moz-transition: 0.5s ease-in-out;
-    -o-transition: 0.5s ease-in-out;
-    transition: 0.5s ease-in-out;
+        -webkit-transition: 0.5s ease-in-out;
+        -moz-transition: 0.5s ease-in-out;
+        -o-transition: 0.5s ease-in-out;
+        transition: 0.5s ease-in-out;
+    }
 
-    -moz-transform: translateX(-200px);
-    -webkit-transform: translateX(-200px);
-    -o-transform: translateX(-200px);
-    -ms-transform: translateX(-200px);
-    transform: translateX(-200px);
-  }
+    .menu-open .settings-nav {
+        left: 0;
+    }
 
-  .settings-nav.menu-open {
-    display: block;
+    .settings-content, footer .content, .alert-bar {
+        -webkit-transition: 0.5s ease-in-out;
+        -moz-transition: 0.5s ease-in-out;
+        -o-transition: 0.5s ease-in-out;
+        transition: 0.5s ease-in-out;
+    }
 
-    -moz-transform: translateX(0px);
-    -webkit-transform: translateX(0px);
-    -o-transform: translateX(0px);
-    -ms-transform: translateX(0px);
-    transform: translateX(0px);
-  }
+    .menu-open .settings-content, .menu-open footer .content, .menu-open .alert-bar {
+        -moz-transform: translateX(200px);
+        -webkit-transform: translateX(200px);
+        -o-transform: translateX(200px);
+        -ms-transform: translateX(200px);
+        transform: translateX(200px);
+    }
 
-  .settings-content {
-    -webkit-transition: 0.5s ease-in-out;
-    -moz-transition: 0.5s ease-in-out;
-    -o-transition: 0.5s ease-in-out;
-    transition: 0.5s ease-in-out;
-  }
+    .settings-content h3 {
+        margin: 15px 20px 10px;
+    }
 
-  .settings-content.menu-open  {
-    -moz-transform: translateX(200px);
-    -webkit-transform: translateX(200px);
-    -o-transform: translateX(200px);
-    -ms-transform: translateX(200px);
-    transform: translateX(200px);
-  }
+    footer .content {
+        background: none;
+    }
 
-  .settings-content h3 {
-      margin: 15px 20px 10px;
-  }
-
-  .settings-content .form-content {
-      padding: 20px 20px;
-  }
+    footer .inner-row {
+        background-color: #222;
+        margin: 0;
+    }
 
 }
 
@@ -221,7 +253,7 @@
     padding-right: 0;
 }
 
-#profile-edit .birthdate select {
+.birthdate select {
     margin-right: 3px;
 }
 
@@ -230,7 +262,8 @@
 }
 
 #profile-edit .file-upload {
-    margin: 20px 0;
+    max-height: 20px;
+    color: #000;
 }
 
 #profile-edit .file-upload input[type="file"] {
@@ -248,15 +281,18 @@
 #profile-edit .connect {
     background-size: 34px;
     color: #FFF;
-    display: block;
+    display: inline-block;
     font-size: 13px;
     height: 34px;
     line-height: 34px;
+
+    min-width: 250px;
     margin-bottom: 5px;
+    max-width: 275px;
 }
 
 #profile-edit .connect .username {
-    padding-left: 20px;
+    padding-left: 30px;
     padding-right: 0px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -269,12 +305,13 @@
     text-shadow: 0px 0px 2px #f00;
 }
 
-#profile-edit .connect:hover {
+#profile-edit .connect a:hover {
     text-decoration: none;
 }
 
 #profile-edit .connect.disabled {
-    background-color: #999999;
+    /*background-color: #999999;*/
+    background-color: #696969;
 }
 #profile-edit .connect.disabled a {
     color: #fff;
@@ -285,18 +322,36 @@
     background-image: url(../../images/facebook_link.png);
     background-repeat: no-repeat;
     margin-top: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #profile-edit .twitter {
     background-color: #4baecd;
     background-image: url(../../images/twitter_link.png);
     background-repeat: no-repeat;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#profile-edit .google {
+    background-color: #dd4b39;
+    background-image: url(../../images/btn_red.png);
+    background-repeat: no-repeat;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #profile-edit .nfg {
     background-color: #EF9618;
     background-image: url(../../images/nfg_34.png);
     background-repeat: no-repeat;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #profile-edit .social-networks .alert {
@@ -311,110 +366,31 @@
     display: none;
 }
 
-/* services/applications page */
-@media (max-width: 420px){
-    .content.applications .services-grid[data-columns]::before {
-        content: '1 .column.size-1of1';
-    }
-}
-@media (min-width: 421px) and (max-width: 568px) {
-    .content.applications .services-grid[data-columns]::before {
-        content: '2 .column.size-1of2';
-    }
-}
-@media (min-width: 569px) {
-    .content.applications .services-grid[data-columns]::before {
-        content: '3 .column.size-1of3';
-    }
+.applications .service:hover {
+    background-color: #E2EFDE!important;
 }
 
-.content.applications .services-grid .column { float: left; }
-.size-1of1 { width: 100%; }
-.size-1of2 { width: 50%; }
-.size-1of3 { width: 33.333%; }
-
-.content.applications .services-grid .service {
-    background-color: #999;
-    padding: 15px 0 0;
-    width: 140px;
-    height: 175px;
-    margin: 10px auto;
-}
-
-.content.applications .services-grid .service .name {
-    color: #fff;
-    font-size: 17px;
-    height: 40px;
-    line-height: 20px;
-    margin: 10px 0;
-    padding: 0 10px;
-}
-
-.content.applications .services-grid .service .status {
-    background-color: #696969;
-    border-radius: 0;
-    color: #fff;
-    display: block;
-    height: 35px;
-    line-height: 35px;
-    text-align: center;
-    vertical-align: middle;
-    width: 100%;
-}
-
-.content.applications .services-grid .service .status.active {
-    background-color: #093;
-}
-
-.content.applications .services-grid .service a:hover {
-    text-decoration: none;
-}
-
-.content.applications h4 {
-    margin-bottom: 20px;
-}
-
-.content.applications p.empty {
-    margin-bottom: 30px;
-    margin-left: 35px;
+.applications .service .status {
+    clear: both;
 }
 
 
-.content.applications .list li {
-    float: none;
-    height: 35px;
-    margin-left: 0;
-    padding-left: 45px;
-    position: relative;
-    width: 100%;
+.last-suggestions {
+    padding: 0 15px 15px;
 }
 
-.content.applications .list li>a {
-    padding-top: 0;
+.last-suggestions .title {
+    font-weight: bold;
 }
 
-.content.applications .list li img {
-    background-color: #FFF;
-    height: 45px;
-    left: 0;
-    position: absolute;
-    top: -5px;
-    width: 45px;
-}
-
-.content.applications .list li .name {
-    float: left;
-    height: 100%;
-    line-height: 35px;
-    margin: 0;
-    padding: 0 20px;
+.last-suggestions .label {
+    font-size: 12px;
+    margin: 2px;
+    word-wrap: break-word;
+    word-break: break-all;
+    display: inline-block;
+    white-space: normal;
     text-align: left;
-    width: 80%;
-}
-
-.content.applications .list li .status {
-    float: right;
-    width: 20%;
 }
 
 .client-details h3 {
@@ -428,53 +404,38 @@
 }
 
 @media (max-width: 767px) {
-  .client-details .client-desc {
-    margin: 0 30px;
-  }
+    .client-details .client-desc {
+        margin: 0 30px;
+    }
 }
 
-.client-details .msg p {
-    font-size: 20px;
-    margin: 30px 0;
+.client-details .msg .app-status {
+    margin-bottom: 0;
 }
 
-.client-details .msg p.active {
-    color: green;
-}
-
-.client-details .msg p.inactive {
-    color: #F56F6F;
-}
-
-.client-details .msg p.not-published {
-    color: #F7961E;
+.client-details #app-activate {
+    margin-top: 30px;
 }
 
 .client-details #deactivate-box {
     background-image: none;
     display: none;
+    clear: both;
 }
 
 .client-details #deactivate-box form {
     display: inline-block;
 }
 
-.client-details section.permissions {
-    margin: 0 30px;
+.client-details .permissions {
+    margin: 100px 0 0;
 }
 
-.client-details ul.permissions {
-    margin-left: 20px;
-    padding-left: 0;
-}
-
-.client-details ul.permissions li{
-    color: green;
-    font-weight: bold;
-}
-
-.client-details ul.permissions .deny {
-    color: #F56F6F;
+.client-details .permissions .label {
+    font-size: 12px;
+    margin-bottom: 3px;
+    display: inline-block;
+    padding: 5px;
 }
 
 #notifications ul {
@@ -535,11 +496,6 @@
     margin-right: 20px;
 }
 
-/*#notifications .box {
-    float: left;
-    width: 80%;
-}*/
-
 #notifications .box h4 {
     margin: 0 0 10px;
     padding: 0;
@@ -574,23 +530,6 @@
     padding-left: 0;
 }
 
-.fos_oauth_server_authorize .connect-diagram {
-    margin: 30px 0;
-}
-
-.fos_oauth_server_authorize .connect-diagram .glyphicon.glyphicon-chevron-right {
-    font-size: 25px;
-    margin: 30px 0;
-}
-
-.fos_oauth_server_authorize .connect-diagram {
-    font-size: 17px;
-}
-
-.fos_oauth_server_authorize .buttons.row {
-    margin-top: 20px;
-}
-
 .app-admin .table-bordered, .app-admin .table-bordered td, .app-admin .table-bordered th {
     border-color: #000;
 }
@@ -601,4 +540,135 @@
 
 .app-admin .table-bordered .glyphicon {
     margin: 0 3px 3px 0;
+}
+
+.addresses.content .panel.remove-box {
+    display: none;
+}
+
+.content.profile-edit h2.personal-info {
+    font-size: 22px;
+}
+
+.content.profile-edit .media .profile-picture {
+    max-height: 55px;
+    max-width: 55px;
+}
+
+.content.profile-edit input[type=date] {
+    display: block;
+}
+
+.content.profile-edit .picture-upload-box {
+    display: none;
+}
+
+.id-card .confirm-removal {
+    display: none;
+}
+
+.id-cards {
+    padding-left: 25px;
+}
+
+.id-card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    max-width: 99%;
+    min-height: 124px;
+    background: #f5f5f5;
+    -webkit-box-shadow: 3px 3px 9px 0 #ddd;
+    box-shadow: 3px 3px 9px 0 #ddd;
+}
+
+.id-card.add-new {
+    border-color: #428bca;
+}
+.id-card.add-new p {
+    padding: 22px 0;
+    color: #428bca;
+}
+.id-card.add-new .id-card-state {
+    color: #428bca;
+}
+
+.id-card-state {
+    padding-top: 4px;
+    padding-left: 10px;
+    display: inline-block;
+    width: 45px;
+    height: 45px;
+    font-family: monospace;
+    font-size: 32px;
+    font-weight: bold;
+    color: #696969;
+}
+
+.id-card-details {
+    padding: 15px;
+}
+
+dl.id-card-details {
+    margin-bottom: 0;
+}
+
+.id-card-details dl {
+    margin-bottom: 0;
+}
+
+.id-card-details dd {
+    margin-bottom: 7px;
+}
+
+.id-card .media {
+    margin-top: 0;
+}
+
+.id-card .media-left {
+    min-width: 65px;
+}
+
+.id-card .btn-group {
+    display: block;
+    margin-left: 7px;
+}
+
+.id-card .btn-group :first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.id-card .btn-group button:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.id-card .confirm-removal {
+    font-size: 12px;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 999;
+}
+
+.id-card .confirm-removal .remove-box {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.id-card .confirm-removal .id-card-confirm-value
+{
+    margin-top: -5px;
+    margin-bottom: 5px;
+}
+
+.id-card .confirm-removal .remove-box .panel-heading {
+    height: 100%;
+}
+
+.id-card {
+    position: relative;
 }
