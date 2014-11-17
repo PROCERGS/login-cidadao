@@ -1,4 +1,4 @@
-{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+{% extends "PROCERGSLoginCidadaoCoreBundle::base.html.twig" %}
 
 {% block body %}
 
@@ -13,21 +13,18 @@
     <div class="general-content col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
         {% trans_default_domain 'FOSUserBundle' %}
 
-        <div class="col-md-12 title">
+        <div class="title">
             <h3>{% trans %}Reset Password{% endtrans %}</h3>
         </div>
 
         {{ form_start(form, {'action': path('fos_user_resetting_reset', {'token': token}), 'attr': {'role':'form', 'class':'user_resetting_reset'}}) }}
             {{ form_errors(form) }}
             <div class="form-content">
-                <div class="col-md-5">
-                    {{ form_row(form.plainPassword.first) }}
-                    {{ form_row(form.plainPassword.second) }}
+                {{ form_row(form.plainPassword.first) }}
+                {{ form_row(form.plainPassword.second) }}
 
-
-                    {{ form_widget(form.save, { 'label': 'resetting.reset.submit' | trans,  'attr': { 'class': 'btn btn-success' } }) }}
-                    <a href="{{ path('lc_home') }}" class='btn btn-default' />{% trans %}Cancel{% endtrans %}<a/>
-                </div>
+                {{ form_widget(form.save, { 'label': 'resetting.reset.submit' | trans,  'attr': { 'class': 'btn btn-success' } }) }}
+                <a href="{{ path('lc_home') }}" class='btn btn-default' />{% trans %}Cancel{% endtrans %}<a/>
             </div>
         {{ form_end(form) }}
     </div>

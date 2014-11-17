@@ -88,11 +88,11 @@ class NotificationsHelper
     {
         if ($notification->canBeSent()) {
             $handler = $this->getNotificationHandler();
-            
+
             $serializer = $this->container->get('jms_serializer');
             $context = SerializationContext::create()->setGroups('form');
             $array = json_decode($serializer->serialize($notification, 'json', $context), true);
-            
+
             $handler->patch($notification, array());
         } else {
             $translator = $this->container->get('translator');
@@ -211,7 +211,7 @@ class NotificationsHelper
 
     private function getUnconfirmedEmailCategory()
     {
-        $category = $this->em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')->find($this->unconfirmedEmailCategoryId);
+        $category = $this->em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')->findOneByUid($this->unconfirmedEmailCategoryId);
         if (null === $category) {
             throw new MissingCategoryException("missing category for unconfirmed email, please configure your db");
         }
@@ -220,7 +220,7 @@ class NotificationsHelper
 
     private function getEmptyPasswordCategory()
     {
-        $category = $this->em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')->find($this->emptyPasswordCategoryId);
+        $category = $this->em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')->findOneByUid($this->emptyPasswordCategoryId);
         if (null === $category) {
             throw new MissingCategoryException("Missing category id for empty password, please edit your parameters.yml");
         }
