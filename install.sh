@@ -1,5 +1,20 @@
 #!/bin/bash
 
+SKIP_ACL=0
+while test $# -gt 0
+do
+    case "$1" in
+        --skip-acl)
+            SKIP_ACL=1
+            ;;
+        --*) echo "bad option $1"
+            ;;
+        *) echo "argument $1"
+            ;;
+    esac
+    shift
+done
+
 sudo echo "Installing login-cidadao..."
 
 OK="[$(tput setaf 2)$(tput bold) OK $(tput sgr0)$(tput sgr0)]"
@@ -16,23 +31,26 @@ function die {
 ###############################
 # Setting up Permissions
 ###############################
-echo -ne "Setting up Permissions...\\t\\t"
-rm -rf app/cache/*
-rm -rf app/logs/*
 
-HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
-if type "setfacl" &>/dev/null; then
-  sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs web/uploads
-  sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs web/uploads
-else
-  sudo chmod +a "$HTTPDUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs web/uploads &>/dev/null
-  sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs web/uploads &>/dev/null
-  if [ "$?" -ne 0 ]; then
-    echo $FAIL
-    die "\\nThere was a problem setting the directories permissions.\\nFor more info check: http://symfony.com/doc/current/book/installation.html"
+if [ $SKIP_ACL -ne 1 ]; then
+  echo -ne "Setting up Permissions...\\t\\t"
+  rm -rf app/cache/*
+  rm -rf app/logs/*
+
+  HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
+  if type "setfacl" &>/dev/null; then
+    sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs web/uploads
+    sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs web/uploads
+  else
+    sudo chmod +a "$HTTPDUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs web/uploads &>/dev/null
+    sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs web/uploads &>/dev/null
+    if [ "$?" -ne 0 ]; then
+      echo $FAIL
+      die "\\nThere was a problem setting the directories permissions.\\nFor more info check: http://symfony.com/doc/current/book/installation.html"
+    fi
   fi
+  echo $OK
 fi
-echo $OK
 
 ###############################
 # Composer Check
@@ -113,6 +131,8 @@ if [ "$?" -ne 0 ]; then
   if [ "$?" -ne 0 ]; then
     echo $FAIL
     die "\\nThere was a problem installing the database. Here is the error returned:\\n\\n$SCHEMA_CREATE"
+  else
+    POPULATE=$(php app/console login-cidadao:database:populate batch/ 2>&1)
   fi
 fi
 echo $OK

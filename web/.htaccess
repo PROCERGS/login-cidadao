@@ -50,10 +50,5 @@ DirectoryIndex app.php
         # RedirectTemp cannot be used instead
     </IfModule>
 </IfModule>
-php_value magic_quotes 0
-php_flag magic_quotes off
-php_value magic_quotes_gpc 0
-php_flag magic_quotes_gpc off
-php_value memory_limit 128M
 AddType image/svg+xml svg svgz
 AddEncoding gzip svgz
