@@ -136,7 +136,7 @@ class BroadcastController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {          
           $placeholders = $form->get('placeholders')->getData();
-          $broadcast->setHtmlTemplate($placeholders);                   
+          $broadcast->setHtmlTemplate($placeholders, $form->get('title')->getData(), $form->get('shortText')->getData());                   
           
           $translator = $this->get('translator');
           if ($form->get('saveAndAdd')->isClicked()) {            
@@ -163,8 +163,8 @@ class BroadcastController extends Controller
 
         foreach ($broadcast->getReceivers() as $person) {
           $notification = new Notification();            
-          $notification->setIcon("icon");
-          $notification->setCallbackUrl("url");
+          $notification->setIcon($broadcast->getCategory()->getDefaultIcon());
+          //$notification->setCallbackUrl("url");
           $notification->setShortText($shortText);
           $notification->setTitle($title);
           $notification->setHtmlTemplate($html);

@@ -14,6 +14,8 @@ use PROCERGS\LoginCidadao\NotificationBundle\Model\CategoryInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\PersonNotificationOption;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\NotificationSettings;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\Category;
+use PROCERGS\LoginCidadao\NotificationBundle\Model\BroadcastPlaceholder;
 
 class NotificationHandler implements NotificationHandlerInterface
 {
@@ -224,6 +226,34 @@ class NotificationHandler implements NotificationHandlerInterface
     public function countUnreadByClient(PersonInterface $person)
     {
         return $this->repository->getTotalUnreadGroupByClient($person);
+    }
+    
+    public static function renderHtmlByNotification($notification)
+    {
+        
+    }
+    
+    public static function renderHtmlByCategory($category, $replacePlaceholders=null, $replaceTitle=null, $replaceShortText=null)
+    {
+        $html = $category->getHtmlTemplate();
+        if (null !== $replaceTitle) {
+            $html = str_replace('%title%', $replaceTitle, $html);
+        }
+        if (null !== $replaceShortText) {
+            $html = str_replace('%shorttext%', $replaceShortText, $html);
+        }
+        if (null !== $replacePlaceholders) {
+            if ($replacePlaceholders[0] instanceof BroadcastPlaceholder) {
+                foreach ($replacePlaceholders as $placeholder) {
+                    $html = str_replace('%'.$placeholder->getName().'%', $placeholder->getValue(), $html);
+                }
+            } else {
+                foreach ($replacePlaceholders as $placeholder) {
+                    $html = str_replace('%'.$placeholder->getName().'%', $placeholder->getDefault(), $html);
+                }
+            }
+        }
+        return $html;
     }
 
 }

@@ -11,10 +11,10 @@
       </div>
       <div class="panel-body">
           <p><strong>{{ 'Title' | trans }}</strong> : {{ broadcast.title }}</p>
-          <p><strong>{{ 'ShortText' | trans }}</strong> : {{ broadcast.shortText }}</p>
+          <p><strong>{{ 'Short text' | trans }}</strong> : {{ broadcast.shortText }}</p>
           <p><strong>{{ 'Category' | trans }}</strong> : {{ broadcast.category.name }}</p>
 
-          <p><strong>{{ 'Html' | trans }}</strong> </p>
+          <p><strong>{{ 'Message' | trans }}</strong> </p>
           <div class="well" id="notification-preview">{{  broadcast.htmlTemplate | raw }}</div>
 
           <p><strong>{{ 'Receivers' | trans }}</strong></p>

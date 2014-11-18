@@ -516,10 +516,11 @@ class Notification implements NotificationInterface
         }
 
         $template = $this->getHtmlTemplate();
-        if (null === $template) {
-            $this->setHtmlTemplate($this->getCategory()->getHtmlTemplate());
-            $template = $this->getHtmlTemplate();
-        }
+        if (null !== $template) {
+            return $template;
+        }        
+        $this->setHtmlTemplate($this->getCategory()->getHtmlTemplate());
+        $template = $this->getHtmlTemplate();
         $placeholders = $this->getPlaceholdersArray();
         foreach ($placeholders as $placeholder) {
             $name = $placeholder->getName();
