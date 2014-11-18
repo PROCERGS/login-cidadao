@@ -266,6 +266,7 @@ fos_rest:
     format_listener:
         rules:
             - { path: ^/api/v1, priorities: [ json, xml, html ], fallback_format: json, prefer_extension: true }
+            - { path: '^/', stop: true}
     exception:
         codes:
             'Symfony\Component\Routing\Exception\ResourceNotFoundException': 404
