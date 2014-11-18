@@ -5,6 +5,7 @@ Send push: Enviar via Push
 Back to main menu: Voltar ao menu principal
 load more: ver mais
 loading...: aguarde
+<<<<<<< HEAD
 'Select one client': 'Selecione um serviço'
 'Broadcast Settings': 'Configurações do envio de notificações'
 'Receivers': 'Destinatários'
@@ -24,3 +25,16 @@ loading...: aguarde
 'Broadcast': 'Envio de notificação'
 'Back to broadcasts list': 'Voltar para a lista de envio de notificações'
 Message: 'Mensagem'
+=======
+New Broadcast: Novo Broadcast
+Not sent: Não enviado
+Back to broadcasts list: Voltar para a lista de broadcasts
+Send notifications: Enviar notificações
+Select one client: Selecione um cliente
+Broadcast Settings: Configurações do Broadcast
+Receivers: Destinatários
+Next: Próximo
+Title: Título
+Short Text: Resumo
+Sending for...: Enviando para
+>>>>>>> branch 'dev' of https://github.com/PROCERGS/login-cidadao.git

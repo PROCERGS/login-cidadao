@@ -88,11 +88,11 @@ class NotificationsHelper
     {
         if ($notification->canBeSent()) {
             $handler = $this->getNotificationHandler();
-            
+
             $serializer = $this->container->get('jms_serializer');
             $context = SerializationContext::create()->setGroups('form');
             $array = json_decode($serializer->serialize($notification, 'json', $context), true);
-            
+
             $handler->patch($notification, array());
         } else {
             $translator = $this->container->get('translator');
