@@ -15,16 +15,16 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Serializer;
 use PROCERGS\LoginCidadao\NotificationBundle\Form\NotificationType;
 use JMS\Serializer\SerializationContext;
+use PROCERGS\LoginCidadao\NotificationBundle\Handler\NotificationHandler;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\Placeholder;
 
 class NotificationsHelper
 {
 
-    const UNCONFIRMED_EMAIL_TITLE = 'notification.unconfirmed.email.title';
-    const UNCONFIRMED_EMAIL_SHORT_TEXT = 'notification.unconfirmed.email.shortText';
-    const UNCONFIRMED_EMAIL_FULL_TEXT = 'notification.unconfirmed.email.text';
     const EMPTY_PASSWORD_TITLE = 'notification.empty.password.title';
     const EMPTY_PASSWORD_SHORT_TEXT = 'notification.empty.password.shortText';
     const EMPTY_PASSWORD_FULL_TEXT = 'notification.empty.password.text';
+    const EMPTY_PASSWORD_CLICK = 'notification.empty.password.click.here';
 
     /**
      *
@@ -111,29 +111,17 @@ class NotificationsHelper
             $notification = new Notification();
         }
 
-        $text = strtr($text, $category->getPlaceholdersArray($parameters));
-        $shortText = strtr($shortText, $category->getPlaceholdersArray($parameters));
+        $html = NotificationHandler::renderHtmlByCategory($category, $parameters, $title, $shortText);
 
         $notification->setPerson($person)
             ->setIcon($icon)
             ->setTitle($title)
             ->setShortText($shortText)
-            ->setText($text)
-            ->setCategory($category);
+            ->setHtmlTemplate($html)
+            ->setCategory($category)
+            ->setSender($category->getClient());
 
         return $notification;
-    }
-
-    protected function getUnconfirmedEmailNotification(Person $person)
-    {
-        $title = $this->translator->trans(self::UNCONFIRMED_EMAIL_TITLE);
-        $shortText = $this->translator->trans(self::UNCONFIRMED_EMAIL_SHORT_TEXT);
-        $text = $this->translator->trans(self::UNCONFIRMED_EMAIL_FULL_TEXT);
-        $icon = 'glyphicon glyphicon-envelope';
-        $url = $this->container->get('router')
-            ->generate('lc_resend_confirmation_email');
-
-        return $this->getDefaultNotification($person, $title, $shortText, $text, $icon, $this->getUnconfirmedEmailCategory(), new Notification(), array('%url%' => $url));
     }
 
     protected function getEmptyPasswordNotification(Person $person)
@@ -142,37 +130,9 @@ class NotificationsHelper
         $shortText = $this->translator->trans(self::EMPTY_PASSWORD_SHORT_TEXT);
         $text = $this->translator->trans(self::EMPTY_PASSWORD_FULL_TEXT);
         $icon = 'glyphicon glyphicon-exclamation-sign';
-
-        return $this->getDefaultNotification($person, $title, $shortText, $text, $icon, $this->getEmptyPasswordCategory(), new Notification(), array());
-    }
-
-    public function clearUnconfirmedEmailNotification(Person $person)
-    {
-        $handler = $this->getNotificationHandler();
-        $notification = $this->getUnconfirmedEmailNotification($person);
-        if (!$notification->getCategory()) {
-            $category = $this->getUnconfirmedEmailCategory();
-            $notification->setCategory($category);
-        }
-        $notification->setRead(true);
-        $handler->patch($notification, array());
-    }
-
-    /**
-     * @deprecated since version 1.1.0
-     * @param Person $person
-     */
-    public function enforceUnconfirmedEmailNotification(Person $person)
-    {
-        $category = $this->getUnconfirmedEmailCategory();
-        $handler = $this->getNotificationHandler();
-
-        $notification = $this->getUnconfirmedEmailNotification($person);
-        if (!$notification->getCategory()) {
-            $notification->setCategory($category);
-        }
-        $notification->setRead(false);
-        $handler->patch($notification, array());
+        $url = $this->container->get('router')
+        ->generate('fos_user_change_password', array(), true);
+        return $this->getDefaultNotification($person, $title, $shortText, $text, $icon, $this->getEmptyPasswordCategory(), new Notification(), array(new Placeholder('link', $url), new Placeholder('linktitle', $title), new Placeholder('linkclick', $this->translator->trans(self::EMPTY_PASSWORD_CLICK))));
     }
 
     /**
@@ -202,11 +162,6 @@ class NotificationsHelper
         $notification = $this->getEmptyPasswordNotification($person);
         $notification->setRead(true);
         $handler->patch($notification, array());
-    }
-
-    public function isUnconfirmedEmailNotification(NotificationInterface $notification)
-    {
-        return ($notification->getTitle() === self::UNCONFIRMED_EMAIL_TITLE);
     }
 
     private function getUnconfirmedEmailCategory()

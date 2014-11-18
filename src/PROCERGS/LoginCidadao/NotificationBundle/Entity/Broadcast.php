@@ -8,6 +8,7 @@ use PROCERGS\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as JMS;
+use PROCERGS\LoginCidadao\NotificationBundle\Handler\NotificationHandler;
 
 /**
  * Notification Broadcast entity
@@ -150,21 +151,8 @@ class Broadcast
     //     return $this;
     // }
 
-    public function setHtmlTemplate(ArrayCollection $placeholders) {
-      $html = $this->getCategory()->getHtmlTemplate();
-
-      $values = array();
-      foreach ($placeholders as $placeholder) {
-          $name = $placeholder->getName();
-
-          if (array_key_exists($name, $values)) {
-              $value = $values[$name];
-          } else {
-              $value = $placeholder->getValue();
-          }
-          $html = str_replace($name, $value, $html);
-      }
-      $this->htmlTemplate = $html;
+    public function setHtmlTemplate(ArrayCollection $placeholders, $title, $shortText) {
+      $this->htmlTemplate = NotificationHandler::renderHtmlByCategory($this->getCategory(), $placeholders, $title, $shortText);
       return $this;
     }
     

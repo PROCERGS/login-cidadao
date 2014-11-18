@@ -20,7 +20,7 @@
         </li>
       {% endfor %}
       </ul>
-      <button type="button" class="btn btn-primary" id="btn-preview">Preview</button>
+      <button type="button" class="btn btn-primary" id="btn-preview">{{ 'Preview' | trans }}</button>
 
       <h4>{{ 'Template' | trans }}</h4>
       <div class="well" id="notification-preview">{{ form.vars.data.template | raw}}</div>

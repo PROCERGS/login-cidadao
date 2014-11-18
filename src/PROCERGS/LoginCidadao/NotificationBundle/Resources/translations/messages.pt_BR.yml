@@ -5,14 +5,22 @@ Send push: Enviar via Push
 Back to main menu: Voltar ao menu principal
 load more: ver mais
 loading...: aguarde
-New Broadcast: Novo Broadcast
-Not sent: Não enviado
-Back to broadcasts list: Voltar para a lista de broadcasts
-Send notifications: Enviar notificações
-Select one client: Selecione um cliente
-Broadcast Settings: Configurações do Broadcast
-Receivers: Destinatários
-Next: Próximo
-Title: Título
-Short Text: Resumo
-Sending for...: Enviando para
+'Select one client': 'Selecione um serviço'
+'Broadcast Settings': 'Configurações do envio de notificações'
+'Receivers': 'Destinatários'
+'Next': 'Próximo'
+'Broadcast Preview': 'Previsualição do envio da notificação'
+'Title': 'Título'
+'Short text': 'Resumo'
+'Preview': 'Previsualizar'
+'Template': 'Modelo'
+'Sending for...': 'Enviando para...'
+'Save and Send': 'Salvar e enviar'
+'Broadcast sent': 'Notificações enviadas'
+'Broadcast saved': 'Rascunho do envio de notificações salvo'
+'New Broadcast': 'Novo envio de notificações'
+'Broadcasts': 'Envio de notificações'
+'Not sent': 'Não enviado'
+'Broadcast': 'Envio de notificação'
+'Back to broadcasts list': 'Voltar para a lista de envio de notificações'
+Message: 'Mensagem'
