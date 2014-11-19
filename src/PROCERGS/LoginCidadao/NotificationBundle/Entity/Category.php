@@ -299,6 +299,11 @@ class Category implements CategoryInterface, UniqueEntityInterface
         return $this->emailable;
     }
 
+    public function isEmailable()
+    {
+        return $this->getEmailable();
+    }
+
     /**
      * Set htmlTemplate
      *
