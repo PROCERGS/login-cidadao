@@ -8,6 +8,7 @@ use PROCERGS\LoginCidadao\NotificationBundle\Event\NotificationEvent;
 use PROCERGS\LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer;
 use PROCERGS\LoginCidadao\NotificationBundle\Handler\NotificationHandlerInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\PersonNotificationOption;
+use PROCERGS\LoginCidadao\NotificationBundle\Model\NotificationInterface;
 
 class NotificationsSubscriber implements EventSubscriberInterface
 {
@@ -43,9 +44,11 @@ class NotificationsSubscriber implements EventSubscriberInterface
     {
         // TODO: send email
         $notification = $event->getNotification();
-        $settings = $this->getSettings($notification);
-        if ($settings->getSendEmail()) {
-            $this->mailer; // ...
+        if ($notification->getCategory()->isEmailable()) {
+            $settings = $this->getSettings($notification);
+            if ($settings->getSendEmail()) {
+                $this->sendNotificationEmail($notification);
+            }
         }
     }
 
@@ -67,6 +70,15 @@ class NotificationsSubscriber implements EventSubscriberInterface
                                                             $client);
 
         return reset($settings);
+    }
+
+    private function sendNotificationEmail(NotificationInterface $notification)
+    {
+        $html = $this->notificationHandler->getEmailHtml($notification);
+        $this->mailer->sendEmailBasedOnNotification($notification->getCategory()->getMailSenderAddress(),
+                                                    $notification->getPerson()->getEmail(),
+                                                    $notification->getTitle(),
+                                                    $html);
     }
 
 }

@@ -11,6 +11,9 @@ class NotificationEvent extends Event
     /** @var NotificationInterface */
     protected $notification;
 
+    /** @var array */
+    protected $placeholders = null;
+
     public function __construct(NotificationInterface $notification)
     {
         $this->notification = $notification;
@@ -23,6 +26,24 @@ class NotificationEvent extends Event
     public function getNotification()
     {
         return $this->notification;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPlaceholders()
+    {
+        return $this->placeholders;
+    }
+
+    /**
+     * @param array $placeholders
+     * @return NotificationEvent
+     */
+    public function setPlaceholders(array $placeholders)
+    {
+        $this->placeholders = $placeholders;
+        return $this;
     }
 
 }
