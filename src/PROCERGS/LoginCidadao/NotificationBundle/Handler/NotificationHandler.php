@@ -33,10 +33,8 @@ class NotificationHandler implements NotificationHandlerInterface
     private $formFactory;
     private $authenticatedHandlers = array();
     private $mailer;
-
     /** @var NotificationType */
     private $notificationType;
-
     /** @var ContainerAwareEventDispatcher */
     private $dispatcher;
 
@@ -50,7 +48,6 @@ class NotificationHandler implements NotificationHandlerInterface
         $this->repository = $this->om->getRepository($this->entityClass);
         $this->formFactory = $formFactory;
         $this->notificationType = $notificationType;
-        $this->dispatcher = $dispatcher;
     }
 
     public function all($limit = 5, $offset = 0, $orderby = null)
@@ -136,12 +133,14 @@ class NotificationHandler implements NotificationHandlerInterface
             $this->om->persist($notification);
             $this->om->flush($notification);
             $this->dispatcher->dispatch(NotificationEvents::NOTIFICATION_SUCCESS, $notificationEvent);
-
+            
             $userSetting = $this->getSettings($notification->getPerson(),
                                               $notification->getCategory(),
                                               $notification->getCategory()->getClient());
             if ($userSetting && $userSetting[0]->getSendEmail()) {
-
+                
+                $html = self::_renderHtml($notification->getCategory()->getMailTemplate(), $form->get('placeholders')->getData(), $notification->getTitle(), $notification->getShortText());
+                $this->mailer->sendEmailBasedOnNotification($notification->getCategory()->getMailSenderAddress(), $notification->getPerson()->getEmail(), $notification->getTitle(), $html);
             }
 
             $this->dispatcher->dispatch(NotificationEvents::NOTIFICATION_COMPLETED, $notificationEvent);
@@ -152,18 +151,18 @@ class NotificationHandler implements NotificationHandlerInterface
                                                                                                    1),
                                                                                                    $form);
     }
-
+    
     private function getErrorMessages(\Symfony\Component\Form\Form $form)
     {
-        $errors = array();
+       $errors = array();
         foreach ($form->getErrors() as $key => $error) {
             $template = $error->getMessageTemplate();
             $parameters = $error->getMessageParameters();
-
+    
             foreach ($parameters as $var => $value) {
                 $template = str_replace($var, $value, $template);
             }
-
+    
             $errors[$key] = $template;
         }
         if ($form->count()) {
@@ -283,13 +282,18 @@ class NotificationHandler implements NotificationHandlerInterface
     {
         return $this->repository->getTotalUnreadGroupByClient($person);
     }
-
+    
     public static function renderHtmlByCategory($category,
                                                 $replacePlaceholders = null,
                                                 $replaceTitle = null,
                                                 $replaceShortText = null)
     {
         $html = $category->getHtmlTemplate();
+        return self::_renderHtml($html, $replacePlaceholders, $replaceTitle, $replaceShortText);
+    }
+    
+    private static function _renderHtml($html, $replacePlaceholders=null, $replaceTitle=null, $replaceShortText=null)
+    {
         if (null !== $replaceTitle) {
             $html = str_replace('%title%', $replaceTitle, $html);
         }
