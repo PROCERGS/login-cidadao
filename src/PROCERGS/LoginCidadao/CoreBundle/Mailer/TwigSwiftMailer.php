@@ -7,13 +7,13 @@ use FOS\UserBundle\Model\UserInterface;
 
 class TwigSwiftMailer extends BaseMailer
 {
-    protected $mailerSenderMail;    
-    
+    protected $mailerSenderMail;
+
     public function setMailerSenderMail($var)
     {
         $this->mailerSenderMail = $var;
     }
-    
+
     public function sendEmailChangedMessage(UserInterface $user, $oldEmail)
     {
         $template = $this->parameters['template']['email_changed'];
@@ -28,15 +28,15 @@ class TwigSwiftMailer extends BaseMailer
 
         $this->sendMessage($template, $context, $from, $oldEmail);
     }
-    
-    public function sendEmailBasedOnNotification($fromEmailNome, $toEmail, $subject, $htmlBody)
+
+    public function sendEmailBasedOnNotification($fromEmailName, $toEmail, $subject, $htmlBody)
     {
         $message = \Swift_Message::newInstance()
         ->setSubject($subject)
-        ->setFrom(array($this->parameters['from_email']['email_changed'] => $fromEmailNome))
+        ->setFrom(array($this->parameters['from_email']['email_changed'] => $fromEmailName))
         ->setTo($toEmail);
             $message->setBody($htmlBody, 'text/html')
             ->addPart($htmlBody, 'text/plain');
-        $this->mailer->send($message);        
+        $this->mailer->send($message);
     }
 }
