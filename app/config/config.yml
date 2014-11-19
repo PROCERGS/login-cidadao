@@ -262,7 +262,7 @@ fos_rest:
             xml: true
             html: false
         templating_formats:
-            html: false
+            html: true
     format_listener:
         rules:
             - { path: ^/api/v1, priorities: [ json, xml, html ], fallback_format: json, prefer_extension: true }
