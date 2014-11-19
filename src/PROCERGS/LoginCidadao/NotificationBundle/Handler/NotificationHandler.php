@@ -16,6 +16,7 @@ use PROCERGS\LoginCidadao\NotificationBundle\Model\NotificationSettings;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Category;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\BroadcastPlaceholder;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\Placeholder;
 
 class NotificationHandler implements NotificationHandlerInterface
 {
@@ -28,14 +29,17 @@ class NotificationHandler implements NotificationHandlerInterface
     private $repository;
     private $formFactory;
     private $authenticatedHandlers = array();
+    private $mailer;
+    private $notificationType;
 
     public function __construct(ObjectManager $om, $entityClass,
-                                FormFactoryInterface $formFactory)
+                                FormFactoryInterface $formFactory, $mailer, $notificationType)
     {
         $this->om = $om;
         $this->entityClass = $entityClass;
         $this->repository = $this->om->getRepository($this->entityClass);
         $this->formFactory = $formFactory;
+        $this->notificationType = $notificationType;
     }
 
     public function all($limit = 5, $offset = 0, $orderby = null)
@@ -100,7 +104,7 @@ class NotificationHandler implements NotificationHandlerInterface
                                  array $parameters, $method = "PUT",
                                  PersonInterface $person = null)
     {
-        $form = $this->formFactory->create(new NotificationType(),
+        $form = $this->formFactory->create($this->notificationType,
                                            $notification, compact('method'));
         $form->submit($parameters, 'PATCH' !== $method);
         if ($form->isValid()) {
@@ -110,14 +114,43 @@ class NotificationHandler implements NotificationHandlerInterface
             if (null !== $person && $notification->getPerson()->getId() !== $person->getId()) {
                 throw new AccessDeniedHttpException();
             }
-
+            if (null === $notification->getHtmlTemplate()) {
+                $notification->setHtmlTemplate(self::renderHtmlByCategory($notification->getCategory(), $form->get('placeholders')->getData(), $notification->getTitle(), $notification->getShortText()));
+            }
             $this->om->persist($notification);
             $this->om->flush($notification);
+            
+            $userSetting = $this->getSettings($notification->getPerson(),$notification->getCategory(), $notification->getCategory()->getClient());
+            if ($userSetting && $userSetting[0]->getSendEmail()) {
+                
+            }
 
             return $notification;
         }
 
-        throw new InvalidFormException('Invalid submitted data', $form);
+        throw new InvalidFormException('Invalid submitted data ' . print_r($this->getErrorMessages($form), 1) , $form);
+    }
+    
+    private function getErrorMessages(\Symfony\Component\Form\Form $form) {
+       $errors = array();
+        foreach ($form->getErrors() as $key => $error) {
+            $template = $error->getMessageTemplate();
+            $parameters = $error->getMessageParameters();
+    
+            foreach ($parameters as $var => $value) {
+                $template = str_replace($var, $value, $template);
+            }
+    
+            $errors[$key] = $template;
+        }
+        if ($form->count()) {
+            foreach ($form as $child) {
+                if (!$child->isValid()) {
+                    $errors[$child->getName()] = $this->getErrorMessages($child);
+                }
+            }
+        }
+        return $errors;
     }
 
     private function createNotification()
@@ -228,11 +261,6 @@ class NotificationHandler implements NotificationHandlerInterface
         return $this->repository->getTotalUnreadGroupByClient($person);
     }
     
-    public static function renderHtmlByNotification($notification)
-    {
-        
-    }
-    
     public static function renderHtmlByCategory($category, $replacePlaceholders=null, $replaceTitle=null, $replaceShortText=null)
     {
         $html = $category->getHtmlTemplate();
@@ -243,13 +271,17 @@ class NotificationHandler implements NotificationHandlerInterface
             $html = str_replace('%shorttext%', $replaceShortText, $html);
         }
         if (null !== $replacePlaceholders) {
-            if ($replacePlaceholders[0] instanceof BroadcastPlaceholder) {
+            if (isset($replacePlaceholders[0]) && $replacePlaceholders[0] instanceof BroadcastPlaceholder) {
                 foreach ($replacePlaceholders as $placeholder) {
                     $html = str_replace('%'.$placeholder->getName().'%', $placeholder->getValue(), $html);
                 }
-            } else {
+            } else if (isset($replacePlaceholders[0]) && $replacePlaceholders[0] instanceof Placeholder) {
                 foreach ($replacePlaceholders as $placeholder) {
                     $html = str_replace('%'.$placeholder->getName().'%', $placeholder->getDefault(), $html);
+                }
+            } else {
+                foreach ($replacePlaceholders as $name => $default) {
+                    $html = str_replace('%'.$name.'%', $default, $html);
                 }
             }
         }

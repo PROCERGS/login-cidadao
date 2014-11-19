@@ -66,7 +66,6 @@ class Notification implements NotificationInterface
      * @var string
      *
      * @ORM\Column(name="text", type="text", nullable=true)
-     * @Assert\NotBlank()
      * @JMS\Expose
      * @JMS\Groups({"public", "form"})
      */
@@ -509,66 +508,9 @@ class Notification implements NotificationInterface
         }
     }
 
-    public function renderHtml($values = null)
+    public function renderHtml()
     {
-        if (null === $values) {
-            $values = array();
-        }
-
-        $template = $this->getHtmlTemplate();
-        if (null !== $template) {
-            return $template;
-        }        
-        $this->setHtmlTemplate($this->getCategory()->getHtmlTemplate());
-        $template = $this->getHtmlTemplate();
-        $placeholders = $this->getPlaceholdersArray();
-        foreach ($placeholders as $placeholder) {
-            $name = $placeholder->getName();
-
-            if (array_key_exists($name, $values)) {
-                $value = $values[$name];
-            } else {
-                $value = $placeholder->getDefault();
-            }
-            $template = str_replace($name, $value, $template);
-        }
-        $this->setHtmlTemplate($template);
-        return $template;
-    }
-
-    public function getDefaultPlaceholders()
-    {
-        $placeholders = array();
-
-        $title = new Placeholder();
-        $placeholders[] = $title->setName('%title%')
-            ->setDefault($this->getTitle())
-            ->setCategory($this->getCategory());
-        $placeholders[$title->getName()] = $title;
-
-        $shortText = new Placeholder();
-        $placeholders[] = $shortText->setName('%shorttext%')
-            ->setDefault($this->getShortText())
-            ->setCategory($this->getCategory());
-        $placeholders[$shortText->getName()] = $shortText;
-
-        $text = new Placeholder();
-        $text->setName('%text%')
-            ->setDefault($this->getText())
-            ->setCategory($this->getCategory());
-        $placeholders[$text->getName()] = $text;
-
-        return $placeholders;
-    }
-
-    public function getPlaceholdersArray()
-    {
-        $placeholders = array();
-        foreach ($this->getCategory()->getPlaceholders() as $placeholder) {
-            $placeholders[$placeholder->getName()] = $placeholder;
-        }
-
-        return array_merge($placeholders, $this->getDefaultPlaceholders());
+        return $this->htmlTemplate;
     }
 
 }
