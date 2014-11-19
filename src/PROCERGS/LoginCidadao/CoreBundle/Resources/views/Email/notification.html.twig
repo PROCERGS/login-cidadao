@@ -1,0 +1,22 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block subject %}
+    {% autoescape false %}
+        {{ subject }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+{{ body | raw }}
+{% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+{% autoescape false %}
+{{ include("PROCERGSLoginCidadaoCoreBundle::common.email.html.twig", {
+    'subject' : subject,
+    'msg' : body | raw
+} ) }}
+{% endautoescape %}
+{% endblock %}
