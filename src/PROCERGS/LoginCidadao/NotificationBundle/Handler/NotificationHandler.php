@@ -39,6 +39,7 @@ class NotificationHandler implements NotificationHandlerInterface
         $this->entityClass = $entityClass;
         $this->repository = $this->om->getRepository($this->entityClass);
         $this->formFactory = $formFactory;
+        $this->mailer = $mailer;
         $this->notificationType = $notificationType;
     }
 
@@ -122,7 +123,8 @@ class NotificationHandler implements NotificationHandlerInterface
             
             $userSetting = $this->getSettings($notification->getPerson(),$notification->getCategory(), $notification->getCategory()->getClient());
             if ($userSetting && $userSetting[0]->getSendEmail()) {
-                
+                $html = self::_renderHtml($notification->getCategory()->getMailTemplate(), $form->get('placeholders')->getData(), $notification->getTitle(), $notification->getShortText());
+                $this->mailer->sendEmailBasedOnNotification($notification->getCategory()->getMailSenderAddress(), $notification->getPerson()->getEmail(), $notification->getTitle(), $html);
             }
 
             return $notification;
@@ -264,6 +266,11 @@ class NotificationHandler implements NotificationHandlerInterface
     public static function renderHtmlByCategory($category, $replacePlaceholders=null, $replaceTitle=null, $replaceShortText=null)
     {
         $html = $category->getHtmlTemplate();
+        return self::_renderHtml($html, $replacePlaceholders, $replaceTitle, $replaceShortText);
+    }
+    
+    private static function _renderHtml($html, $replacePlaceholders=null, $replaceTitle=null, $replaceShortText=null)
+    {
         if (null !== $replaceTitle) {
             $html = str_replace('%title%', $replaceTitle, $html);
         }
@@ -287,5 +294,5 @@ class NotificationHandler implements NotificationHandlerInterface
         }
         return $html;
     }
-
+    
 }
