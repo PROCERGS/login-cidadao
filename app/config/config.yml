@@ -256,16 +256,17 @@ fos_rest:
     view:
         view_response_listener: 'force'
         force_redirects:
-            html: true
+            html: false
         formats:
             json: true
             xml: true
+            html: false
         templating_formats:
-            html: true
-#    format_listener:
-#        rules:
-#            - { path: ^/api/v1, priorities: [ html, json, xml ], fallback_format: json, prefer_extension: true }
-#            - { path: '^/', stop: true }
+            html: false
+    format_listener:
+        rules:
+            - { path: ^/api/v1, priorities: [ json, xml, html ], fallback_format: json, prefer_extension: true }
+            - { path: '^/', stop: true}
     exception:
         codes:
             'Symfony\Component\Routing\Exception\ResourceNotFoundException': 404

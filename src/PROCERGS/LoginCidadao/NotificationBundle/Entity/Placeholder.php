@@ -32,8 +32,13 @@ class Placeholder
      * @Assert\NotBlank()
      * @Assert\Length(max = "255")
      * @Assert\NotEqualTo(value="title")
-     * @Assert\NotEqualTo(value="shortext")
+     * @Assert\NotEqualTo(value="shorttext")
      * @Assert\NotEqualTo(value="icon")
+     * @Assert\Regex(
+     *     pattern     = "/^[a-z]+$/i",
+     *     htmlPattern = "^[a-zA-Z]+$",
+     *     message="The value must containt only caracteres from A to Z"
+     * )
      */
     private $name;
 
@@ -51,6 +56,12 @@ class Placeholder
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     private $category;
+    
+    public function __construct($name = null, $defaultValue = null)
+    {
+        $this->setName($name);
+        $this->setDefault($defaultValue);
+    }
 
     public function getId()
     {

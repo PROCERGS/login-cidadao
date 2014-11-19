@@ -26,7 +26,7 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dir = realpath($input->getArgument('dump_folder'));
-        //$this->loadDumpFiles($dir, $output);
+        $this->loadDumpFiles($dir, $output);
         $this->createDefaultOAuthClient($dir, $output);
         $this->createCategories($output);
     }
@@ -73,7 +73,13 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
     protected function prepareCountryData($row)
     {
         list($id, $name, $iso2, $postal_format, $postal_name, $reviewed, $iso3, $iso_num) = $row;
-        return compact('id', 'name', 'iso2', 'postal_format', 'postal_name', 'reviewed', 'iso3', 'iso_num');
+        $vars = compact('id', 'name', 'iso2', 'postal_format', 'postal_name', 'reviewed', 'iso3', 'iso_num');
+        foreach ($vars as $k => $v) {
+            if ($v === "") {
+                $vars[$k] = null;
+            }
+        }
+        return $vars;
     }
 
     protected function prepareStateData($row)
