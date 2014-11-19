@@ -20,6 +20,7 @@ parameters:
     procergs_logincidadao.mailer.class: PROCERGS\LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer
     kernel.listener.logged_in_user_listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\LoggedInUserListener
     kernel.listener.exceptions_listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\ExceptionListener
+    procergs_login_cidadao_notification.subscriber.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\NotificationsSubscriber
 
     procergs_logincidadao_core.emailChanged.template: PROCERGSLoginCidadaoCoreBundle:Person:emailChangedMessage.html.twig
     procergs_logincidadao.nfgws.class: PROCERGS\LoginCidadao\CoreBundle\Helper\NfgWsHelper
@@ -277,3 +278,9 @@ services:
         arguments: [ %lc_idcard_country_acronym% ]
         tags:
             - { name: form.type, alias: lc_idcard_form }
+
+    procergs_login_cidadao_notification.subscriber:
+        class: %procergs_login_cidadao_notification.subscriber.class%
+        arguments: [ @procergs.notification.handler, @procergs_logincidadao.mailer ]
+        tags:
+            - { name: kernel.event_subscriber }
