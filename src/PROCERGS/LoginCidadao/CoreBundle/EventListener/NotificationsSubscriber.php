@@ -75,7 +75,8 @@ class NotificationsSubscriber implements EventSubscriberInterface
     private function sendNotificationEmail(NotificationInterface $notification)
     {
         $html = $this->notificationHandler->getEmailHtml($notification);
-        $this->mailer->sendEmailBasedOnNotification($notification->getCategory()->getMailSenderAddress(),
+        $this->mailer->sendEmailBasedOnNotification($notification->getId(),
+                                                    $notification->getCategory()->getMailSenderAddress(),
                                                     $notification->getPerson()->getEmail(),
                                                     $notification->getTitle(),
                                                     $html);

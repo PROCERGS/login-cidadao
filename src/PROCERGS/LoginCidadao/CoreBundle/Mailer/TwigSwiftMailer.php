@@ -29,12 +29,13 @@ class TwigSwiftMailer extends BaseMailer
         $this->sendMessage($template, $context, $from, $oldEmail);
     }
 
-    public function sendEmailBasedOnNotification($fromEmailName, $toEmail, $subject, $htmlBody)
+    public function sendEmailBasedOnNotification($notificationId, $fromEmailName, $toEmail, $subject, $htmlBody)
     {
         $templateName = $this->parameters['template']['notification_email'];
         $context = array(
             'subject' => $subject,
-            'body' => $htmlBody
+            'body' => $htmlBody,
+            'id' => $notificationId
         );
         $fromEmail = $this->parameters['from_email']['email_changed'];
         $from = array($fromEmail => $fromEmailName);

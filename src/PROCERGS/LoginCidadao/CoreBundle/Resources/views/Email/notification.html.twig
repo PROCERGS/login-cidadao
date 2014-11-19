@@ -1,4 +1,4 @@
-{% trans_default_domain 'FOSUserBundle' %}
+{% trans_default_domain 'messages' %}
 
 {% block subject %}
     {% autoescape false %}
@@ -8,15 +8,19 @@
 
 {% block body_text %}
 {% autoescape false %}
-{{ body | raw }}
+{{ body | striptags | raw }}
+
+{{ 'View this notification on Citizen Login' | trans }}: {{ url('lc_notifications', { id: id }) }}
 {% endautoescape %}
 {% endblock %}
 
 {% block body_html %}
+    {% set notificationUrl = url('lc_notifications', { id: id }) %}
+    {% set bodyWithLink = body ~ '<p><a href="' ~ notificationUrl ~ '">' ~ 'View this notification on Citizen Login' | trans ~ '</a></p>' %}
 {% autoescape false %}
 {{ include("PROCERGSLoginCidadaoCoreBundle::common.email.html.twig", {
     'subject' : subject,
-    'msg' : body | raw
+    'msg' : bodyWithLink | raw
 } ) }}
 {% endautoescape %}
 {% endblock %}
