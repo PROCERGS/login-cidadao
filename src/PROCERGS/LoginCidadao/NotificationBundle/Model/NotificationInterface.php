@@ -2,6 +2,9 @@
 
 namespace PROCERGS\LoginCidadao\NotificationBundle\Model;
 
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+use PROCERGS\LoginCidadao\NotificationBundle\Model\CategoryInterface;
+
 interface NotificationInterface
 {
 
@@ -26,7 +29,7 @@ interface NotificationInterface
     public function setText($text);
 
     /**
-     * @return Person
+     * @return PersonInterface
      */
     public function getPerson();
 
@@ -56,9 +59,13 @@ interface NotificationInterface
      * Returns the severity of the notification
      */
     public function getLevel();
+
     public function isExtreme();
 
     public function setLevel($level);
 
     public function isGlyphicon();
+
+    /** @var CategoryInterface */
+    public function getCategory();
 }
