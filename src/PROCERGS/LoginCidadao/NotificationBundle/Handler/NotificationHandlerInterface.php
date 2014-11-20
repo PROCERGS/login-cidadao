@@ -175,4 +175,10 @@ interface NotificationHandlerInterface
      * @param ClientInterface $client
      */
     public function countUnreadByClient(PersonInterface $person);
+
+    /**
+     * Renders the
+     * @param NotificationInterface $notification
+     */
+    public function getEmailHtml(NotificationInterface $notification);
 }

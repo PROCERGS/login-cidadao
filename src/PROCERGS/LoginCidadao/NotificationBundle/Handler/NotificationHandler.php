@@ -17,6 +17,9 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Category;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\BroadcastPlaceholder;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Placeholder;
+use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use PROCERGS\LoginCidadao\NotificationBundle\NotificationEvents;
+use PROCERGS\LoginCidadao\NotificationBundle\Event\NotificationEvent;
 
 class NotificationHandler implements NotificationHandlerInterface
 {
@@ -30,16 +33,24 @@ class NotificationHandler implements NotificationHandlerInterface
     private $formFactory;
     private $authenticatedHandlers = array();
     private $mailer;
+
+    /** @var NotificationType */
     private $notificationType;
 
+    /** @var ContainerAwareEventDispatcher */
+    private $dispatcher;
+
     public function __construct(ObjectManager $om, $entityClass,
-                                FormFactoryInterface $formFactory, $mailer, $notificationType)
+                                FormFactoryInterface $formFactory, $mailer,
+                                NotificationType $notificationType,
+                                ContainerAwareEventDispatcher $dispatcher)
     {
         $this->om = $om;
         $this->entityClass = $entityClass;
         $this->repository = $this->om->getRepository($this->entityClass);
         $this->formFactory = $formFactory;
         $this->notificationType = $notificationType;
+        $this->dispatcher = $dispatcher;
     }
 
     public function all($limit = 5, $offset = 0, $orderby = null)
@@ -110,37 +121,47 @@ class NotificationHandler implements NotificationHandlerInterface
         if ($form->isValid()) {
 
             $notification = $form->getData();
+            $notificationEvent = new NotificationEvent($notification);
+            $notificationEvent->setPlaceholders($form->get('placeholders')->getData());
+
+            $this->dispatcher->dispatch(NotificationEvents::NOTIFICATION_INITIALIZE,
+                                        $notificationEvent);
 
             if (null !== $person && $notification->getPerson()->getId() !== $person->getId()) {
                 throw new AccessDeniedHttpException();
             }
             if (null === $notification->getHtmlTemplate()) {
-                $notification->setHtmlTemplate(self::renderHtmlByCategory($notification->getCategory(), $form->get('placeholders')->getData(), $notification->getTitle(), $notification->getShortText()));
+                $notification->setHtmlTemplate(self::renderHtmlByCategory($notification->getCategory(),
+                                                                          $form->get('placeholders')->getData(),
+                                                                                     $notification->getTitle(),
+                                                                                     $notification->getShortText()));
             }
             $this->om->persist($notification);
             $this->om->flush($notification);
-            
-            $userSetting = $this->getSettings($notification->getPerson(),$notification->getCategory(), $notification->getCategory()->getClient());
-            if ($userSetting && $userSetting[0]->getSendEmail()) {
-                
-            }
+            $this->dispatcher->dispatch(NotificationEvents::NOTIFICATION_SUCCESS,
+                                        $notificationEvent);
 
+            $this->dispatcher->dispatch(NotificationEvents::NOTIFICATION_COMPLETED,
+                                        $notificationEvent);
             return $notification;
         }
 
-        throw new InvalidFormException('Invalid submitted data ' . print_r($this->getErrorMessages($form), 1) , $form);
+        throw new InvalidFormException('Invalid submitted data ' . print_r($this->getErrorMessages($form),
+                                                                                                   1),
+                                                                                                   $form);
     }
-    
-    private function getErrorMessages(\Symfony\Component\Form\Form $form) {
-       $errors = array();
+
+    private function getErrorMessages(\Symfony\Component\Form\Form $form)
+    {
+        $errors = array();
         foreach ($form->getErrors() as $key => $error) {
             $template = $error->getMessageTemplate();
             $parameters = $error->getMessageParameters();
-    
+
             foreach ($parameters as $var => $value) {
                 $template = str_replace($var, $value, $template);
             }
-    
+
             $errors[$key] = $template;
         }
         if ($form->count()) {
@@ -260,10 +281,21 @@ class NotificationHandler implements NotificationHandlerInterface
     {
         return $this->repository->getTotalUnreadGroupByClient($person);
     }
-    
-    public static function renderHtmlByCategory($category, $replacePlaceholders=null, $replaceTitle=null, $replaceShortText=null)
+
+    public static function renderHtmlByCategory($category,
+                                                $replacePlaceholders = null,
+                                                $replaceTitle = null,
+                                                $replaceShortText = null)
     {
         $html = $category->getHtmlTemplate();
+        return self::_renderHtml($html, $replacePlaceholders, $replaceTitle,
+                                 $replaceShortText);
+    }
+
+    private static function _renderHtml($html, $replacePlaceholders = null,
+                                        $replaceTitle = null,
+                                        $replaceShortText = null)
+    {
         if (null !== $replaceTitle) {
             $html = str_replace('%title%', $replaceTitle, $html);
         }
@@ -273,19 +305,29 @@ class NotificationHandler implements NotificationHandlerInterface
         if (null !== $replacePlaceholders) {
             if (isset($replacePlaceholders[0]) && $replacePlaceholders[0] instanceof BroadcastPlaceholder) {
                 foreach ($replacePlaceholders as $placeholder) {
-                    $html = str_replace('%'.$placeholder->getName().'%', $placeholder->getValue(), $html);
+                    $html = str_replace('%' . $placeholder->getName() . '%',
+                                        $placeholder->getValue(), $html);
                 }
             } else if (isset($replacePlaceholders[0]) && $replacePlaceholders[0] instanceof Placeholder) {
                 foreach ($replacePlaceholders as $placeholder) {
-                    $html = str_replace('%'.$placeholder->getName().'%', $placeholder->getDefault(), $html);
+                    $html = str_replace('%' . $placeholder->getName() . '%',
+                                        $placeholder->getDefault(), $html);
                 }
             } else {
                 foreach ($replacePlaceholders as $name => $default) {
-                    $html = str_replace('%'.$name.'%', $default, $html);
+                    $html = str_replace('%' . $name . '%', $default, $html);
                 }
             }
         }
         return $html;
+    }
+
+    public function getEmailHtml(NotificationInterface $notification,
+                                 $placeholders = null)
+    {
+        return self::_renderHtml($notification->getCategory()->getMailTemplate(),
+                                 $placeholders, $notification->getTitle(),
+                                 $notification->getShortText());
     }
 
 }
