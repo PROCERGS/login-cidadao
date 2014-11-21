@@ -8,17 +8,21 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\CategoryRepository;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class BroadcastType extends AbstractType
 {
 
     private $person;
     private $clientId;
+    private $loginCidadaoClientId;
 
-    public function __construct(PersonInterface $person, $clientId)
+    public function __construct(PersonInterface $person, $clientId, $loginCidadaoClientId)
     {
         $this->person = $person;
         $this->clientId = $clientId;
+        $this->loginCidadaoClientId = $loginCidadaoClientId;
     }
 
     /**
@@ -29,9 +33,28 @@ class BroadcastType extends AbstractType
     {
         $person = $this->person;
         $clientId = $this->clientId;
-
-        $builder
-            ->add('category', 'entity',
+        $loginCidadaoClientId = $this->loginCidadaoClientId;
+        $receiversConfig = array(
+            'label' => 'Receivers',
+            'ajax_choice_attr' => array(
+                'filter' => array(
+                    'route' => 'lc_dev_broadcasts_grid_receivers_filter',
+                    'search_prop' => 'username',
+                    'extra_form_prop' => array('client_id' => 'client_id')
+                ),
+                'selected' => array(
+                    'route' => 'lc_dev_broadcasts_grid_receivers',
+                    'extra_form_prop' => array('person_id' => 'receivers', 'client_id' => 'client_id')
+                ),
+                'property_value' => 'id',
+                'property_text' => 'fullNameOrUsername',
+                'search_prop_label' => 'dev.broadcasts.receivers.filter'
+            ),
+            'required' => true,
+            'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
+            'property' => 'fullNameOrUsername'
+        );
+        $builder->add('category', 'entity',
               array(
                   'required' => true,
                 'class' => 'PROCERGS\LoginCidadao\NotificationBundle\Entity\Category',
@@ -41,17 +64,35 @@ class BroadcastType extends AbstractType
                         ->andWhere('c.id = :clientId')
                         ->setParameter('clientId', $clientId);
                 }
-            ))
-            ->add('receivers', null,
-                  array(
-                 'required' => true,
-                'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
-                'property' => 'email',
-                'query_builder' => function (PersonRepository $repository) use ($clientId) {
-                    return $repository->getFindAuthorizedByClientIdQuery($clientId);
+            ));
+        $builder->add('client_id', 'hidden', array('required' => false, 'mapped' => false, 'data' => $clientId));
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use (&$receiversConfig, &$person, &$clientId, &$loginCidadaoClientId) {
+            $entity = $event->getData();
+            $form = $event->getForm();
+            $receiversConfig['query_builder'] = function (PersonRepository $repository) use (&$clientId, &$loginCidadaoClientId, &$entity) {
+                if ($clientId != $loginCidadaoClientId) {
+                    $sql = $repository->getFindAuthorizedByClientIdQuery($clientId);
+                } else {
+                    $sql = $repository->createQueryBuilder('p');
                 }
-            ))            
-        ;
+                if (!empty( $entity['receivers']) ) {
+                    $sql->where('p.id in (:receivers)');
+                    $sql->setParameter('receivers', $entity['receivers']);
+                }
+                return $sql;
+            };
+            $form->add('receivers', 'ajax_choice', $receiversConfig);        
+        });
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use (&$receiversConfig, &$person, &$clientId, &$loginCidadaoClientId) {
+            $entity = $event->getData();
+            $form = $event->getForm();
+            $receiversConfig['query_builder'] = function (PersonRepository $repository) {
+                $sql = $repository->createQueryBuilder('u');
+                $sql->where('1 != 1');
+                return $sql;
+            };
+            $form->add('receivers', 'ajax_choice', $receiversConfig);
+        });
     }
 
     /**

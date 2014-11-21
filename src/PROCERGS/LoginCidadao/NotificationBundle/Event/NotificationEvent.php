@@ -40,7 +40,7 @@ class NotificationEvent extends Event
      * @param array $placeholders
      * @return NotificationEvent
      */
-    public function setPlaceholders(array $placeholders)
+    public function setPlaceholders(array $placeholders = null)
     {
         $this->placeholders = $placeholders;
         return $this;

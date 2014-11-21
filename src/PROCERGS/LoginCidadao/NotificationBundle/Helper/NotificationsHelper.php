@@ -86,7 +86,7 @@ class NotificationsHelper
 
     public function send(NotificationInterface $notification)
     {
-        if ($notification->canBeSent()) {
+        if ((null !== $notification->getSender() && $this->getNotificationHandler()->getLoginCidadaoClientId() == $notification->getSender()->getId()) || $notification->canBeSent()) {
             $handler = $this->getNotificationHandler();
 
             $serializer = $this->container->get('jms_serializer');
