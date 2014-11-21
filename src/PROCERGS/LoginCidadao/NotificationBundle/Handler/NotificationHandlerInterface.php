@@ -181,4 +181,6 @@ interface NotificationHandlerInterface
      * @param NotificationInterface $notification
      */
     public function getEmailHtml(NotificationInterface $notification);
+    
+    public function getLoginCidadaoClientId();
 }

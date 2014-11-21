@@ -54,6 +54,8 @@ interface NotificationInterface
     public function checkSender();
 
     public function canBeSent();
+    
+    public function getSender();
 
     /**
      * Returns the severity of the notification

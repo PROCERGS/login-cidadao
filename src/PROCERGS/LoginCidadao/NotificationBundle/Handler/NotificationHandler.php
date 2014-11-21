@@ -39,11 +39,13 @@ class NotificationHandler implements NotificationHandlerInterface
 
     /** @var ContainerAwareEventDispatcher */
     private $dispatcher;
+    private $oauthDefaultClientUid;
+    private $oauthDefaultClientId;
 
     public function __construct(ObjectManager $om, $entityClass,
                                 FormFactoryInterface $formFactory, $mailer,
                                 NotificationType $notificationType,
-                                ContainerAwareEventDispatcher $dispatcher)
+                                ContainerAwareEventDispatcher $dispatcher, $oauthDefaultClientUid)
     {
         $this->om = $om;
         $this->entityClass = $entityClass;
@@ -51,6 +53,7 @@ class NotificationHandler implements NotificationHandlerInterface
         $this->formFactory = $formFactory;
         $this->notificationType = $notificationType;
         $this->dispatcher = $dispatcher;
+        $this->oauthDefaultClientUid = $oauthDefaultClientUid;
     }
 
     public function all($limit = 5, $offset = 0, $orderby = null)
@@ -328,6 +331,17 @@ class NotificationHandler implements NotificationHandlerInterface
         return self::_renderHtml($notification->getCategory()->getMailTemplate(),
                                  $placeholders, $notification->getTitle(),
                                  $notification->getShortText());
+    }
+    
+    public function getLoginCidadaoClientId()
+    {
+        if ($this->oauthDefaultClientId === null) {
+            $loginCidadaoClientId = $this->om->getRepository('PROCERGSOAuthBundle:Client')->findOneBy(array('uid' => $this->oauthDefaultClientUid));
+            if ($loginCidadaoClientId) {
+                $this->oauthDefaultClientId = $loginCidadaoClientId->getId();
+            }            
+        }
+        return $this->oauthDefaultClientId;
     }
 
 }
