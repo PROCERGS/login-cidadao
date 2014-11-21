@@ -15,7 +15,7 @@ class CityRepository extends EntityRepository
                 ->select('c')
                 ->from('PROCERGSLoginCidadaoCoreBundle:City', 'c')
                 ->join('PROCERGSLoginCidadaoCoreBundle:State', 's', 'WITH', 'c.state = s')
-                ->where('c.name LIKE :string')
+                ->where('c.name LIKE :string OR LOWER(c.name) LIKE :string')
                 ->addOrderBy('s.preference', 'DESC')
                 ->addOrderBy('c.name', 'ASC')
                 ->setParameter('string', "$string%")
