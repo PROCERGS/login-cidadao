@@ -38,10 +38,7 @@ class EvaluateBadgesEvent extends Event
         $namespace = $badge->getNamespace();
         $name = $badge->getName();
         $badgeArray = array(
-            array(
-                'name' => "$namespace.$name",
-                'data' => $badge->getData()
-            )
+            "$namespace.$name" => $badge->getData()
         );
 
         $this->getPerson()->mergeBadges($badgeArray);
