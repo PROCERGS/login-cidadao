@@ -336,6 +336,7 @@ class Person extends BaseUser implements PersonInterface
 
     /**
      * @JMS\Expose
+     * @JMS\Groups({"id_cards"})
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\IdCard", mappedBy="person")
      * @JMS\Since("1.0.3")
      */
@@ -364,6 +365,8 @@ class Person extends BaseUser implements PersonInterface
     protected $logoutKeys;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"addresses"})
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonAddress", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
      */
     protected $addresses;
@@ -1076,6 +1079,13 @@ class Person extends BaseUser implements PersonInterface
     public function mergeBadges(array $badges)
     {
         $this->badges = array_merge($this->badges, $badges);
+        foreach ($this->badges as $badge) {
+            foreach ($badges as $newBadge) {
+                if ($badge['name'] === $newBadge['name']) {
+                    $badge['data'] = $newBadge['data'];
+                }
+            }
+        }
         return $this;
     }
 

@@ -84,6 +84,10 @@ Allows read access to a person's addresses.
 
 **DO NOT USE**
 
+## <a name="id_cards"></a> id_cards
+
+Allows read access to all ID Cards.
+
 ## <a name="get_all_notifications"></a> get_all_notifications
 
 Allows read access to all notifications of a given person instead of being able to see only the OAuth Client's own notifications.

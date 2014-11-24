@@ -16,7 +16,7 @@ class Country
     const REVIEWED_IGNORE = 1;
 
     /**
-     * @Groups({"country", "typeahead"})
+     * @Groups({"country", "typeahead", "public_profile"})
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -25,19 +25,19 @@ class Country
     private $id;
 
     /**
-     * @Groups({"country", "typeahead"})
+     * @Groups({"country", "typeahead", "public_profile"})
      * @var string @ORM\Column(name="name", type="string", length=50)
      */
     protected $name;
 
     /**
-     * @Groups({"country", "typeahead"})
+     * @Groups({"country", "typeahead", "public_profile"})
      * @var string @ORM\Column(name="iso2", type="string", length=2, nullable=true)
      */
     protected $iso2;
 
     /**
-     * @Groups({"country"})
+     * @Groups({"country", "public_profile"})
      * @var string @ORM\Column(name="iso3", type="string", length=3, nullable=true)
      */
     protected $iso3;
