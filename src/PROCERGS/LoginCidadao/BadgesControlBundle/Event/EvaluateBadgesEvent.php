@@ -17,7 +17,7 @@ class EvaluateBadgesEvent extends Event
     }
 
     /**
-     * 
+     *
      * @return PersonInterface
      */
     public function getPerson()
@@ -38,9 +38,12 @@ class EvaluateBadgesEvent extends Event
         $namespace = $badge->getNamespace();
         $name = $badge->getName();
         $badgeArray = array(
-            "$namespace.$name" => $badge->getData()
+            array(
+                'name' => "$namespace.$name",
+                'data' => $badge->getData()
+            )
         );
-        
+
         $this->getPerson()->mergeBadges($badgeArray);
     }
 
