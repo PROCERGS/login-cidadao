@@ -26,7 +26,7 @@ class NotificationType extends CommonFormType
                             ->setParameter('id', 0);
         };
         $em = $this->em;
-        $placesHoldersForm = $builder->create('placeholders', 'form', array('mapped'=>false));
+        $placesHoldersForm = $builder->create('placeholders', 'form');
         $builder->add($placesHoldersForm);
         $preSubmit = function (FormEvent $event) use (&$em) {
             $data = $event->getData();            

@@ -182,5 +182,5 @@ interface NotificationHandlerInterface
      */
     public function getEmailHtml(NotificationInterface $notification);
     
-    public function getLoginCidadaoClientId();
+    public function getLoginCidadaoClient();
 }

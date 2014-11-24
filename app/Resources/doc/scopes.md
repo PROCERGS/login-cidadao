@@ -12,7 +12,7 @@ This page will describe what scope does what. Bellow there's a list of the avail
  * ~~[ voter_registration ](#voter_registration)~~ (**deprecated**)
  * [ country ](#country)
  * [ uf ](#uf)
- * [ adress ](#adress)
+ * [ address ](#address)
  * ~~[ adress_number ](#adress_number)~~ (**deprecated**)
  * ~~[ adress_complement ](#adress_complement)~~ (**deprecated**)
  * ~~[ rgs ](#rgs)~~ (**deprecated**)
@@ -68,7 +68,7 @@ Allows read access to a person's country.
 
 Allows read access to a person's state.
 
-## <a name="adress"></a> adress
+## <a name="address"></a> address
 
 Allows read access to a person's addresses.
 

@@ -165,6 +165,9 @@ class Notification implements NotificationInterface
      * @ORM\Column(name="html_template", type="text", nullable=true)
      */
     private $htmlTemplate;
+    
+    private $placeholders;
+    private $mailTemplate;
 
     /**
      * Get id
@@ -512,5 +515,26 @@ class Notification implements NotificationInterface
     {
         return $this->htmlTemplate;
     }
-
+    
+    public function setPlaceholders($var)
+    {
+        $this->placeholders = $var;
+    }
+    
+    public function getPlaceholders()
+    {
+        return $this->placeholders;
+    }
+    
+    public function setMailTemplate($var)
+    {
+        $this->mailTemplate = $var;
+    }
+    
+    public function getMailTemplate()
+    {
+        return $this->mailTemplate;
+    }
+    
+    
 }

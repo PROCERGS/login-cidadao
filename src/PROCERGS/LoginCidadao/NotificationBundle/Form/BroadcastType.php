@@ -16,13 +16,11 @@ class BroadcastType extends AbstractType
 
     private $person;
     private $clientId;
-    private $loginCidadaoClientId;
 
-    public function __construct(PersonInterface $person, $clientId, $loginCidadaoClientId)
+    public function __construct(PersonInterface $person, $clientId)
     {
         $this->person = $person;
         $this->clientId = $clientId;
-        $this->loginCidadaoClientId = $loginCidadaoClientId;
     }
 
     /**
@@ -33,7 +31,6 @@ class BroadcastType extends AbstractType
     {
         $person = $this->person;
         $clientId = $this->clientId;
-        $loginCidadaoClientId = $this->loginCidadaoClientId;
         $receiversConfig = array(
             'label' => 'Receivers',
             'ajax_choice_attr' => array(
@@ -66,24 +63,20 @@ class BroadcastType extends AbstractType
                 }
             ));
         $builder->add('client_id', 'hidden', array('required' => false, 'mapped' => false, 'data' => $clientId));
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use (&$receiversConfig, &$person, &$clientId, &$loginCidadaoClientId) {
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use (&$receiversConfig, &$person, $clientId) {
             $entity = $event->getData();
             $form = $event->getForm();
-            $receiversConfig['query_builder'] = function (PersonRepository $repository) use (&$clientId, &$loginCidadaoClientId, &$entity) {
-                if ($clientId != $loginCidadaoClientId) {
-                    $sql = $repository->getFindAuthorizedByClientIdQuery($clientId);
-                } else {
-                    $sql = $repository->createQueryBuilder('p');
-                }
+            $receiversConfig['query_builder'] = function (PersonRepository $repository) use ($clientId, &$entity) {
+                $sql = $repository->getFindAuthorizedByClientIdQuery($clientId);
                 if (!empty( $entity['receivers']) ) {
-                    $sql->where('p.id in (:receivers)');
+                    $sql->andWhere('p.id in (:receivers)');
                     $sql->setParameter('receivers', $entity['receivers']);
                 }
                 return $sql;
             };
             $form->add('receivers', 'ajax_choice', $receiversConfig);        
         });
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use (&$receiversConfig, &$person, &$clientId, &$loginCidadaoClientId) {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use (&$receiversConfig, &$person, &$clientId) {
             $entity = $event->getData();
             $form = $event->getForm();
             $receiversConfig['query_builder'] = function (PersonRepository $repository) {

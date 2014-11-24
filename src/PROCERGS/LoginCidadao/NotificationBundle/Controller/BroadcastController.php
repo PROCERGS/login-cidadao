@@ -14,6 +14,7 @@ use PROCERGS\LoginCidadao\NotificationBundle\Model\BroadcastPlaceholder;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Broadcast;
+use PROCERGS\LoginCidadao\NotificationBundle\Handler\NotificationHandler;
 
 /**
  * @Route("/dev/broadcasts")
@@ -99,8 +100,7 @@ class BroadcastController extends Controller
      */
     public function newAction(Request $request, $clientId)
     {
-        $loginCidadaoClientId = $this->get('procergs.notification.handler')->getLoginCidadaoClientId();
-        $form = $this->createForm(new BroadcastType($this->getUser(), $clientId, $loginCidadaoClientId));
+        $form = $this->createForm(new BroadcastType($this->getUser(), $clientId));
 
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -172,6 +172,7 @@ class BroadcastController extends Controller
           $notification->setPerson($person);
           $notification->setSender($broadcast->getCategory()->getClient());            
           $notification->setCategory($broadcast->getCategory());
+          $notification->setMailTemplate($broadcast->getMailTemplate());
 
           $helper->send($notification);
         }
@@ -193,12 +194,7 @@ class BroadcastController extends Controller
         }
         if (isset($parms['username'])) {
             $em = $this->getDoctrine()->getManager();
-            $loginCidadaoClientId = $this->get('procergs.notification.handler')->getLoginCidadaoClientId();
-            if ($loginCidadaoClientId != $parms['client_id']) {
-                $sql = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->getFindAuthorizedByClientIdQuery($parms['client_id']);
-            } else {
-                $sql = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->createQueryBuilder('p');
-            }
+            $sql = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->getFindAuthorizedByClientIdQuery($parms['client_id']);
             $sql->andWhere('p.cpf like ?1 or p.username like ?1 or p.email like ?1 or p.firstName like ?1 or p.surname like ?1');
             $sql->setParameter('1',
                 '%' . addcslashes($parms['username'], '\\%_') . '%');
@@ -224,12 +220,7 @@ class BroadcastController extends Controller
         $parms = $request->get('ac_data');
         if (isset($parms['person_id']) && !empty($parms['person_id'])) {
             $em = $this->getDoctrine()->getManager();
-            $loginCidadaoClientId = $this->get('procergs.notification.handler')->getLoginCidadaoClientId();
-            if ($loginCidadaoClientId != $parms['client_id']) {
-                $sql = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->getFindAuthorizedByClientIdQuery($parms['client_id']);
-            } else {
-                $sql = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->createQueryBuilder('p');
-            }
+            $sql = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->getFindAuthorizedByClientIdQuery($parms['client_id']);
             $sql->where('p.id in(:id)')->setParameter('id', $parms['person_id']);
             $sql->addOrderBy('p.id', 'desc');
             $grid->setQueryBuilder($sql);
