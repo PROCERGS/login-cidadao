@@ -18,6 +18,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 use PROCERGS\Generic\ValidationBundle\Validator\Constraints\UsernameValidator;
 use Doctrine\ORM\EntityManager;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\LcEmailException;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
 
 class RegisterListner implements EventSubscriberInterface
 {
@@ -33,6 +34,8 @@ class RegisterListner implements EventSubscriberInterface
     private $notificationsHelper;
     private $emailUnconfirmedTime;
     protected $em;
+    private $lcSupportedScopes;
+    private $notificationHandler;
 
     public function __construct(UrlGeneratorInterface $router,
                                 SessionInterface $session,
@@ -40,7 +43,7 @@ class RegisterListner implements EventSubscriberInterface
                                 MailerInterface $mailer,
                                 TokenGeneratorInterface $tokenGenerator,
                                 NotificationsHelper $notificationsHelper,
-                                $emailUnconfirmedTime)
+                                $emailUnconfirmedTime, $lcSupportedScopes, $notificationHandler)
     {
         $this->router = $router;
         $this->session = $session;
@@ -49,6 +52,8 @@ class RegisterListner implements EventSubscriberInterface
         $this->tokenGenerator = $tokenGenerator;
         $this->notificationsHelper = $notificationsHelper;
         $this->emailUnconfirmedTime = $emailUnconfirmedTime;
+        $this->lcSupportedScopes = $lcSupportedScopes;
+        $this->notificationHandler = $notificationHandler;
     }
 
     /**
@@ -97,8 +102,15 @@ class RegisterListner implements EventSubscriberInterface
     public function onRegistrationCompleted(FilterUserResponseEvent $event)
     {
         $user = $event->getUser();
+        $auth = new Authorization();
+        $auth->setPerson($user);
+        $auth->setClient($this->notificationHandler->getLoginCidadaoClient());
+        $auth->setScope(explode(' ', $this->lcSupportedScopes));
+        $this->em->persist($auth);
+        $this->em->flush();
+        
         $this->mailer->sendConfirmationEmailMessage($user);
-
+        
         if (strlen($user->getPassword()) == 0) {
             $this->notificationsHelper->enforceEmptyPasswordNotification($user);
         }

@@ -68,18 +68,25 @@ class NotificationsSubscriber implements EventSubscriberInterface
         ;
         $settings = $this->notificationHandler->getSettings($person, $category,
                                                             $client);
+        if (!$settings) {
+            if ($this->notificationHandler->initializeSettings($person, $client)) {
+                $settings = $this->notificationHandler->getSettings($person, $category, $client);
+            }
+        }
 
         return reset($settings);
     }
 
     private function sendNotificationEmail(NotificationInterface $notification)
     {
-        $html = $this->notificationHandler->getEmailHtml($notification);
+        if (null === $notification->getMailTemplate()) {
+            $notification->setMailTemplate($this->notificationHandler->getEmailHtml($notification));
+        }
         $this->mailer->sendEmailBasedOnNotification($notification->getId(),
                                                     $notification->getCategory()->getMailSenderAddress(),
                                                     $notification->getPerson()->getEmail(),
                                                     $notification->getTitle(),
-                                                    $html);
+                                                    $notification->getMailTemplate());
     }
 
 }

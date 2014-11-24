@@ -19,7 +19,7 @@ class CategoryRepository extends EntityRepository
             ->innerJoin('PROCERGSLoginCidadaoCoreBundle:Authorization', 'a',
                         'WITH', 'a.client = c.client AND a.person = :person')
             ->leftJoin('PROCERGSLoginCidadaoNotificationBundle:PersonNotificationOption',
-                       'o', 'WITH', 'o.category = c')
+                       'o', 'WITH', 'o.category = c AND a.person = o.person')
             ->where('o is null')
             ->setParameter('person', $person);
 

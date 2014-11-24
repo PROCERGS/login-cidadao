@@ -40,7 +40,7 @@ class NotificationHandler implements NotificationHandlerInterface
     /** @var ContainerAwareEventDispatcher */
     private $dispatcher;
     private $oauthDefaultClientUid;
-    private $oauthDefaultClientId;
+    private $oauthDefaultClient;
 
     public function __construct(ObjectManager $om, $entityClass,
                                 FormFactoryInterface $formFactory, $mailer,
@@ -125,7 +125,6 @@ class NotificationHandler implements NotificationHandlerInterface
 
             $notification = $form->getData();
             $notificationEvent = new NotificationEvent($notification);
-            $notificationEvent->setPlaceholders($form->get('placeholders')->getData());
 
             $this->dispatcher->dispatch(NotificationEvents::NOTIFICATION_INITIALIZE,
                                         $notificationEvent);
@@ -135,7 +134,7 @@ class NotificationHandler implements NotificationHandlerInterface
             }
             if (null === $notification->getHtmlTemplate()) {
                 $notification->setHtmlTemplate(self::renderHtmlByCategory($notification->getCategory(),
-                                                                          $form->get('placeholders')->getData(),
+                                                                          $notification->getPlaceholders(),
                                                                                      $notification->getTitle(),
                                                                                      $notification->getShortText()));
             }
@@ -214,7 +213,9 @@ class NotificationHandler implements NotificationHandlerInterface
                 $om->persist($config);
             }
             $om->flush();
+            return true;
         }
+        return false;
     }
 
     public function markRangeAsRead(PersonInterface $person, $start, $end)
@@ -324,24 +325,30 @@ class NotificationHandler implements NotificationHandlerInterface
         }
         return $html;
     }
+    
+    public static function renderEmailByCategory($category,
+        $replacePlaceholders = null,
+        $replaceTitle = null,
+        $replaceShortText = null)
+    {
+        return self::_renderHtml($category->getMailTemplate(), $replacePlaceholders, $replaceTitle,
+            $replaceShortText);
+    }
 
-    public function getEmailHtml(NotificationInterface $notification,
-                                 $placeholders = null)
+    public function getEmailHtml(NotificationInterface $notification)
     {
         return self::_renderHtml($notification->getCategory()->getMailTemplate(),
-                                 $placeholders, $notification->getTitle(),
+                                 $notification->getPlaceholders(), $notification->getTitle(),
                                  $notification->getShortText());
     }
     
-    public function getLoginCidadaoClientId()
+    public function getLoginCidadaoClient()
     {
-        if ($this->oauthDefaultClientId === null) {
-            $loginCidadaoClientId = $this->om->getRepository('PROCERGSOAuthBundle:Client')->findOneBy(array('uid' => $this->oauthDefaultClientUid));
-            if ($loginCidadaoClientId) {
-                $this->oauthDefaultClientId = $loginCidadaoClientId->getId();
-            }            
+        if ($this->oauthDefaultClient === null) {
+            $this->oauthDefaultClient = $this->om->getRepository('PROCERGSOAuthBundle:Client')->findOneBy(array('uid' => $this->oauthDefaultClientUid));
         }
-        return $this->oauthDefaultClientId;
+        return $this->oauthDefaultClient;
     }
+    
 
 }

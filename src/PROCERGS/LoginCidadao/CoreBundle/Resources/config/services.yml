@@ -128,7 +128,7 @@ services:
 
     procergs_logincidadao.user_register:
         class: %procergs_logincidadao.user_register.class%
-        arguments: ["@router", "@session", "@translator", "@fos_user.mailer", "@fos_user.util.token_generator", "@notifications.helper", "%registration.email.unconfirmed_time%"]
+        arguments: ["@router", "@session", "@translator", "@fos_user.mailer", "@fos_user.util.token_generator", "@notifications.helper", "%registration.email.unconfirmed_time%", "%lc_supported_scopes%", "@procergs.notification.handler" ]
         tags:
             - { name: kernel.event_subscriber }
         calls:

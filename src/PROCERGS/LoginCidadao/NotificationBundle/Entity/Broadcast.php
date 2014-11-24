@@ -61,6 +61,11 @@ class Broadcast
     private $htmlTemplate;
     
     /**
+     * @ORM\Column(name="mail_template", type="text", nullable=true)
+     */
+    private $mailTemplate;    
+    
+    /**
      * @ORM\Column(name="title", type="string", nullable=true)
      */
     private $title;
@@ -153,7 +158,17 @@ class Broadcast
 
     public function setHtmlTemplate(ArrayCollection $placeholders, $title, $shortText) {
       $this->htmlTemplate = NotificationHandler::renderHtmlByCategory($this->getCategory(), $placeholders, $title, $shortText);
+      $this->mailTemplate = NotificationHandler::renderHtmlByCategory($this->getCategory(), $placeholders, $title, $shortText);
       return $this;
+    }
+    
+    public function setMailTemplate($var) {
+        $this->mailTemplate = $var;
+        return $this;
+    }    
+    
+    public function getMailTemplate() {
+        return $this->mailTemplate;
     }
     
     public function getTitle()

@@ -86,7 +86,7 @@ class NotificationsHelper
 
     public function send(NotificationInterface $notification)
     {
-        if ((null !== $notification->getSender() && $this->getNotificationHandler()->getLoginCidadaoClientId() == $notification->getSender()->getId()) || $notification->canBeSent()) {
+        if ($notification->canBeSent()) {
             $handler = $this->getNotificationHandler();
 
             $serializer = $this->container->get('jms_serializer');
@@ -111,15 +111,13 @@ class NotificationsHelper
             $notification = new Notification();
         }
 
-        $html = NotificationHandler::renderHtmlByCategory($category, $parameters, $title, $shortText);
-
         $notification->setPerson($person)
             ->setIcon($icon)
             ->setTitle($title)
             ->setShortText($shortText)
-            ->setHtmlTemplate($html)
             ->setCategory($category)
-            ->setSender($category->getClient());
+            ->setSender($category->getClient())
+            ->setPlaceholders($parameters);
 
         return $notification;
     }
