@@ -55,7 +55,7 @@ class NotificationController extends FOSRestController
      * )
      * @REST\View(templateVar="html")
      * @return string
-     * @REST\Get("/notifications/{id}", name="js_api_1_get_notification_html")
+     * @REST\Get("/notifications/{id}/html", name="js_api_1_get_notification_html")
      */
     public function getNotificationHtmlAction($id)
     {
