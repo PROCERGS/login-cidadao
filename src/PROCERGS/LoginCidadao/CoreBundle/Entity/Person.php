@@ -1079,6 +1079,7 @@ class Person extends BaseUser implements PersonInterface
     public function mergeBadges(array $badges)
     {
         $this->badges = array_merge($this->badges, $badges);
+        /*
         foreach ($this->badges as $badge) {
             foreach ($badges as $newBadge) {
                 if ($badge['name'] === $newBadge['name']) {
@@ -1086,6 +1087,7 @@ class Person extends BaseUser implements PersonInterface
                 }
             }
         }
+        */
         return $this;
     }
 

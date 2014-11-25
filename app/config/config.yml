@@ -198,7 +198,7 @@ parameters:
     user.class: PROCERGS\LoginCidadao\CoreBundle\Entity\Person
     buzz.client.class: Donato\Generic\HWIOAuthProxyBundle\Buzz\Client\CurlProxy
     hwi_oauth.resource_owner.twitter.class: PROCERGS\LoginCidadao\CoreBundle\OAuth\ResourceOwner\TwitterResourceOwner
-    lc_supported_scopes: 'id username full_name name cpf birthdate email city picture public_profile voter_registration badges country state city adress adress_number adress_complement rgs get_all_notifications notifications cep mobile'
+    lc_supported_scopes: 'id username full_name name cpf birthdate email city picture public_profile voter_registration badges country state city addresses id_cards get_all_notifications notifications cep mobile'
     lc_idcard_country_acronym: BR
 
 ewz_recaptcha:
