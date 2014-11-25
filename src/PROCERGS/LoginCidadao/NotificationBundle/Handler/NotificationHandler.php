@@ -79,12 +79,7 @@ class NotificationHandler implements NotificationHandlerInterface
 
     public function get($id)
     {
-        $notification = $this->repository->find($id);
-        if (!$notification->isRead()) {
-            $notification->setReadDate(new DateTime());
-            $this->om->persist($notification);
-        }
-        return $notification;
+        return $this->repository->find($id);
     }
 
     public function patch(NotificationInterface $notification, array $parameters)
@@ -325,7 +320,7 @@ class NotificationHandler implements NotificationHandlerInterface
         }
         return $html;
     }
-    
+
     public static function renderEmailByCategory($category,
         $replacePlaceholders = null,
         $replaceTitle = null,
@@ -341,7 +336,7 @@ class NotificationHandler implements NotificationHandlerInterface
                                  $notification->getPlaceholders(), $notification->getTitle(),
                                  $notification->getShortText());
     }
-    
+
     public function getLoginCidadaoClient()
     {
         if ($this->oauthDefaultClient === null) {
@@ -349,6 +344,6 @@ class NotificationHandler implements NotificationHandlerInterface
         }
         return $this->oauthDefaultClient;
     }
-    
+
 
 }
