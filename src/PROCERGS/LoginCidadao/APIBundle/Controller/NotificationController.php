@@ -145,8 +145,12 @@ class NotificationController extends BaseController
                 '_format' => $request->get('_format')
             );
 
-            return $this->routeRedirectView('api_1_get_notification',
+            $redirect = $this->routeRedirectView('api_1_get_notification',
                                             $routeOptions, Codes::HTTP_CREATED);
+            $view = $this->view(array('id' => $newNotification->getId()));
+            $response = $this->handleView($view);
+            $redirect->getResponse()->setContent($response->getContent());
+            return $redirect;
         } catch (InvalidFormException $exception) {
             return $exception->getForm();
         }
