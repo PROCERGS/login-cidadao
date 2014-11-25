@@ -43,11 +43,11 @@ class ClientController extends Controller
         ;
         $grid = new GridHelper();
         $grid->setId('client-grid');
-        $grid->setPerPage(5);
-        $grid->setMaxResult(5);
+        $grid->setPerPage(15);
+        $grid->setMaxResult(15);
         $grid->setQueryBuilder($sql);
         $grid->setInfiniteGrid(true);
-        $grid->setRoute('lc_admin_app_grid');
+        $grid->setRoute('lc_admin_app');
         return array(
             'grid' => $grid->createView($request)
         );
