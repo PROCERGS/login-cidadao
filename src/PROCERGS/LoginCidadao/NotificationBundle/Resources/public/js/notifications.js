@@ -24,6 +24,7 @@ $(function () {
         $('.content .notification').not(clicked).parent('.notification-line').removeClass('notification-open');
         $('.content .notification-content').slideUp();
 
+        // Animate
         $(clicked).parent('.notification-line').stop().toggleClass('notification-open').promise().done(function () {
             var isOpen = $(this).is('.notification-open');
             if (isOpen) {
@@ -33,38 +34,13 @@ $(function () {
             }
         });
 
+        // Mark as read
         if ($(clicked).is('.notification-unread')) {
             var notificationId = $(clicked).data('notification-id');
-            var url = notification.config.mark_as_read.replace('0', notificationId);
-            $.ajax({
-                url: url,
-                type: 'PUT',
-                success: function (result) {
-                    $.each(result.read, function (index, value) {
-                        $('.infinitegrid .notification[data-notification-id=' + value + ']')
-                                .removeClass('notification-unread')
-                                .addClass('notification-read');
-                    });
-
-                    // Update notifications counts
-                    var url = notification.config.count_unread;
-                    $.ajax({
-                        url: url,
-                        type: 'GET',
-                        success: function (result) {
-                            $.each(result, function (index, value) {
-                                if (index === 'total') {
-                                    $('.notification-total-unread-badge').html(value);
-                                } else {
-                                    var client = value.id;
-                                    var count = value.total;
-                                    $('.notification-count-client[data-client-id=' + client + ']').html(count);
-                                }
-                            });
-                        }
-                    });
-                }
-            });
+            $('.infinitegrid .notification[data-notification-id=' + notificationId + ']')
+                    .removeClass('notification-unread')
+                    .addClass('notification-read');
+            notification.updateNotificationCounters();
         }
     };
 

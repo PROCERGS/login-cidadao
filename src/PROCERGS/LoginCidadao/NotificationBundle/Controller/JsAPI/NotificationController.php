@@ -65,6 +65,10 @@ class NotificationController extends FOSRestController
 
         $notification = $handler->get($id);
 
+        if ($notification->isRead() === false) {
+            $this->putReadAction($notification->getId());
+        }
+
         return $notification->getHtmlTemplate();
     }
 
