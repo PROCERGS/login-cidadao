@@ -54,7 +54,7 @@ interface NotificationInterface
     public function checkSender();
 
     public function canBeSent();
-    
+
     public function getSender();
 
     /**
@@ -70,8 +70,14 @@ interface NotificationInterface
 
     /** @var CategoryInterface */
     public function getCategory();
+
     public function setPlaceholders($var);
+
     public function getPlaceholders();
+
     public function setMailTemplate($var);
+
     public function getMailTemplate();
+
+    public function getHtmlTemplate();
 }

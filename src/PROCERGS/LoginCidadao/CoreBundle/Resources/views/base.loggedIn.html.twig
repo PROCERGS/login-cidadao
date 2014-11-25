@@ -141,6 +141,7 @@
             'mark_as_read_range': '{{ path('js_api_1_put_notification_read_range', { 'start': '0', 'end': '9', '_format': 'json' }) }}',
             'mark_as_read': '{{ path('js_api_1_put_notification_read', { 'notificationId': '0', '_format': 'json' }) }}',
             'count_unread': '{{ path('js_api_1_get_notification_count_unread', { '_format': 'json' }) }}',
+            'read_notification': '{{ path('js_api_1_get_notification_html', { 'id': '0', '_format': 'html' }) }}'
         }
     };
     </script>
