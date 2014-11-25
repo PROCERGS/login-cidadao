@@ -42,8 +42,10 @@
             {{ block('grid_row_action') }}
             {{ block('grid_row_data') }}
         </a>
-        <div class="row notification-content common-grid-result" data-loaded="false">
-            {#{ row.renderHtml() | raw }#}
+        <div class="row notification-content common-grid-result" data-loaded="{{ row.isRead ? 'true' : 'false' }}">
+            {% if row.isRead %}
+            {{ row.renderHtml() | raw }}
+            {% endif %}
         </div>
     </div>
 {% endblock grid_row %}
