@@ -43,6 +43,32 @@ class NotificationController extends FOSRestController
     }
 
     /**
+     * Get and read a notification
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Get and read a notification",
+     *   output = "html",
+     *   statusCodes = {
+     *     200 = "Returned when successful"
+     *   }
+     * )
+     * @REST\View(templateVar="html")
+     * @return string
+     * @REST\Get("/notifications/{id}", name="js_api_1_get_notification_html")
+     */
+    public function getNotificationHtmlAction($id)
+    {
+        $person = $this->getUser();
+        $handler = $this->getNotificationHandler()
+            ->getAuthenticatedHandler($person);
+
+        $notification = $handler->get($id);
+
+        return $notification->getHtmlTemplate();
+    }
+
+    /**
      * Mark a notification as read.
      *
      * @ApiDoc(
