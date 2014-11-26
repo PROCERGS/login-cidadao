@@ -8,27 +8,59 @@ $(document).ready(function () {
     });
 });
 
-if ($('.city-selector').length) {
-    var cities = new Bloodhound({
+selectors.prepareQuery = function (selectorName) {
+    return function (url, query) {
+        var country_id = $('.countries option:selected').val();
+        var state_id = $('.states option:selected').val();
+        if (country_id > 0 || state_id > 0) {
+            filter = '?country_id=' + country_id + '&state_id=' + state_id;
+        } else {
+            filter = '';
+        }
+        url = selectors[selectorName].url;
+        console.log(url.replace('%QUERY', query) + filter);
+        return url.replace('%QUERY', query) + filter;
+    }
+};
+
+selectors.clearOnChange = function (data, name) {
+    var next = $('[data-selector=' + name + ']').data('selector-next');
+    if (undefined !== next) {
+        var nextField = $('[data-selector=' + next + ']');
+        nextField.typeahead('val', null);
+        if (data !== null) {
+            nextField.data('selector-filter', data.id);
+        }
+        selectors.clearOnChange(null, next);
+    }
+};
+
+$.each($('[data-selector]'), function () {
+    var selectorName = $(this).data('selector');
+    selectors[selectorName].bloodhound = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
-        remote: cityTypeaheadSearchUrl,
-        prefetch: cityTypeaheadPrefetchUrl,
-    });
-    cities.initialize();
-    $('.city-selector').typeahead(null, {
-        name: 'city',
-        displayKey: function (city) {
-            return city.name + ', ' + city.state.acronym;
+        remote: {
+            'url': selectors[selectorName].url,
+            'replace': selectors.prepareQuery(selectorName)
         },
-        source: cities.ttAdapter(),
+    });
+    selectors[selectorName].bloodhound.initialize();
+    $(this).typeahead(null, {
+        name: selectorName,
+        displayKey: selectors[selectorName].displayKey,
+        source: selectors[selectorName].bloodhound.ttAdapter(),
         templates: {
             empty: [
                 '<div class="empty-message">',
-                $('.city-selector').data('empty-message'),
+                $(this).data('empty-message'),
                 '</div>'
             ].join('\n'),
-            suggestion: Handlebars.compile('<p><strong>{\{name}}</strong>, {\{state.acronym}}</p>')
+            suggestion: Handlebars.compile(selectors[selectorName].template)
         }
+    }).on('typeahead:selected', function (obj, data, name) {
+        selectors.clearOnChange(data, name);
+        console.log($('[data-selector=' + name + ']').typeahead('val'));
+        console.log(data);
     });
-}
+});

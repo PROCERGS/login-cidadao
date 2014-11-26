@@ -38,10 +38,76 @@ class PersonAddressController extends BaseController
      */
     public function getCitiesAction($city)
     {
+        $request = $this->getRequest();
+        $countryId = $request->get('country_id', null);
+        $stateId = $request->get('state_id', null);
+
         $em = $this->getDoctrine()->getManager();
         $cities = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:City');
         $context = $this->getSerializationContext('typeahead');
-        $result = $cities->findByString($city);
+        $result = $cities->findByString($city, $countryId, $stateId);
+
+        return $this->renderWithContext($result, $context);
+    }
+
+    /**
+     * Searches states by name and, optionally, country.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Searches states by name and, optionally, country.",
+     *   output = {
+     *     "class"="PROCERGS\LoginCidadao\CoreBundle\Entity\State",
+     *     "groups" = {"public"}
+     *   },
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when no city is found"
+     *   }
+     * )
+     * @REST\View(templateVar="states")
+     * @param string  $state
+     * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\State
+     * @throws NotFoundHttpException when no state is found
+     * @REST\Get("/address/states/search/{state}", name="api_1_get_states")
+     */
+    public function getStatesAction($state)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $states = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:State');
+        $context = $this->getSerializationContext('typeahead');
+        $result = $states->findByString($state);
+
+        return $this->renderWithContext($result, $context);
+    }
+
+    /**
+     * Searches countries by name.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   description = "Searches countries by name.",
+     *   output = {
+     *     "class"="PROCERGS\LoginCidadao\CoreBundle\Entity\Country",
+     *     "groups" = {"public"}
+     *   },
+     *   statusCodes = {
+     *     200 = "Returned when successful",
+     *     404 = "Returned when no city is found"
+     *   }
+     * )
+     * @REST\View(templateVar="countries")
+     * @param string  $country
+     * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\Country
+     * @throws NotFoundHttpException when no country is found
+     * @REST\Get("/address/countries/search/{country}", name="api_1_get_countries")
+     */
+    public function getCountriesAction($country)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $countries = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Country');
+        $context = $this->getSerializationContext('typeahead');
+        $result = $countries->findByString($country);
 
         return $this->renderWithContext($result, $context);
     }

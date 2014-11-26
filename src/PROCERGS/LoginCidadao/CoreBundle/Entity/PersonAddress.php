@@ -72,6 +72,16 @@ class PersonAddress
     protected $city;
 
     /**
+     * @var State
+     */
+    protected $state;
+
+    /**
+     * @var Country
+     */
+    protected $country;
+
+    /**
      * @JMS\Expose
      * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
@@ -158,6 +168,28 @@ class PersonAddress
     public function setName($name)
     {
         $this->name = $name;
+        return $this;
+    }
+
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    public function setState(State $state)
+    {
+        $this->state = $state;
+        return $this;
+    }
+
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    public function setCountry(Country $country)
+    {
+        $this->country = $country;
         return $this;
     }
 

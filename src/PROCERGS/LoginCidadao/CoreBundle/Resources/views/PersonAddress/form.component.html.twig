@@ -29,10 +29,19 @@
             {{ form_errors(form.postalCode) }}
         </div>
         <div class="form-group">
+            {{ form_label(form.country) }}
+            {{ form_widget(form.country, {'attr': {'placeholder': 'ex: Brazil' | trans} }) }}
+            {{ form_errors(form.country) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.state) }}
+            {{ form_widget(form.state, {'attr': {'placeholder': 'ex: Rio Grande do Sul' | trans} }) }}
+            {{ form_errors(form.state) }}
+        </div>
+        <div class="form-group">
             {{ form_label(form.city) }}
-            {{ form_widget(form.city, {'attr': {'placeholder': 'ex: London' | trans} }) }}
+            {{ form_widget(form.city, {'attr': {'placeholder': 'ex: Porto Alegre' | trans} }) }}
             {{ form_errors(form.city) }}
-            <small>{% trans %}If the address is in another country leave the city blank and fill in this information in the second line of your address.{% endtrans %}</small>
         </div>
     </div>
     <div class="panel-footer">

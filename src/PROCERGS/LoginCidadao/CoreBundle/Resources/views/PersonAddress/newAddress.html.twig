@@ -10,7 +10,28 @@
         {{ include("PROCERGSLoginCidadaoCoreBundle:PersonAddress:form.component.html.twig") }}
     {% endif %}
     <script>
-        var cityTypeaheadSearchUrl = '{{ path('api_1_get_cities', {'city': 'QUERY', '_format': 'json'}) }}'.replace('QUERY', '%QUERY');
-        var cityTypeaheadPrefetchUrl = '{{ path('api_1_get_cities_prefetch', {'_format': 'json'} ) }}';
+        var selectors = {
+            'city': {
+                'url': '{{ path('api_1_get_cities', {'city': 'QUERY', '_format': 'json'}) }}'.replace('QUERY', '%QUERY'),
+                'template': '<p><strong>{\{name}}</strong>, {\{state.acronym}}</p>',
+                'displayKey': function (city) {
+                    return city.name + ', ' + city.state.acronym;
+                },
+            },
+            'state': {
+                'url': '{{ path('api_1_get_states', {'state': 'QUERY', '_format': 'json'}) }}'.replace('QUERY', '%QUERY'),
+                'template': '<p><strong>{\{name}}</strong>, {\{country.iso2}}</p>',
+                displayKey: function (state) {
+                    return state.name + ', ' + state.country.iso2;
+                }
+            },
+            'country': {
+                'url': '{{ path('api_1_get_countries', {'country': 'QUERY', '_format': 'json'}) }}'.replace('QUERY', '%QUERY'),
+                'template': '<p><strong>{\{name}}</strong></p>',
+                displayKey: function (country) {
+                    return country.name;
+                }
+            }
+        };
     </script>
 {% endblock %}

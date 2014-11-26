@@ -10,6 +10,8 @@ parameters:
     procergs_logincidadao.change.password.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ChangePasswordFormType
     procergs_logincidadao.person.address.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType
     procergs_logincidadao.city.selector.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\CitySelectorType
+    procergs_logincidadao.state.selector.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\StateSelectorType
+    procergs_logincidadao.country.selector.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\CountrySelectorType
     procergs_logincidadao.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
     procergs_logincidadao.user_manager.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Manager\UserManager
     procergs_logincidadao.user_register.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\RegisterListner
@@ -264,7 +266,7 @@ services:
 
     procergs_logincidadao.person.address.form.type:
         class: %procergs_logincidadao.person.address.form.type.class%
-        arguments: [ "@translator" ]
+        arguments: [ "@translator", "@doctrine.orm.entity_manager" ]
         tags:
             - { name: form.type, alias: lc_person_address }
 
@@ -273,6 +275,18 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         tags:
             - { name: form.type, alias: city_selector }
+
+    procergs_logincidadao.state.selector.form.type:
+        class: %procergs_logincidadao.state.selector.form.type.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: form.type, alias: state_selector }
+
+    procergs_logincidadao.country.selector.form.type:
+        class: %procergs_logincidadao.country.selector.form.type.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: form.type, alias: country_selector }
 
     procergs_logincidadao.idcard.form:
         class: %procergs_logincidadao.idcard.form.class%
