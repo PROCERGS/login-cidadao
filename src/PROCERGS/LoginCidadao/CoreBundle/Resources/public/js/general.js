@@ -331,7 +331,7 @@ var lcInfiniteGrid = {
   /* aqui eh funcao que cria a instancia do infintyscroll quando clica num botao*/
   "scrollNextButton" : function(event) {
     /* escondendo o botao */
-    $(this).addClass('infinityscroll-loading');
+    $(this).addClass('infinitescroll-loading');
     /*o data-retrive eh onde esta armazedo o id do elemento que vamos criar a instancia do scroll, eh onde esta a grid */
     lcInfiniteGrid.common($(this).attr('data-retrive'));
     $($(this).attr('data-retrive')).infinitescroll('retrieve');
@@ -382,11 +382,11 @@ var lcInfiniteGrid = {
               break;
             }
           }
-          if (!isLast) {
+          if (isLast) {
             $(_id+' .infinitescroll-next-button').removeClass('infinitescroll-loading');
           }
       });
-      /* aqui testmos se para usar o autoscroll ou nao */
+      /* aqui testamos se é para usar o autoscroll ou nao */
       if (extraOpts && extraOpts.behavior && extraOpts.behavior == 'local') {
         /*console.log('here');*/
       } else {
