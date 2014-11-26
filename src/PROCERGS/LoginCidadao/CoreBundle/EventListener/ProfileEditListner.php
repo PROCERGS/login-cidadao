@@ -229,16 +229,7 @@ class ProfileEditListner implements EventSubscriberInterface
                 $other->setVoterRegistration(null);
                 $this->em->persist($other);
 
-                $notification = new Notification();
-                $notification->setPerson($other)
-                        ->setIcon('glyphicon glyphicon-exclamation-sign')
-                        ->setLevel(Notification::LEVEL_IMPORTANT)
-                        ->setTitle('notification.nfg.revoked.voterreg.title')
-                        ->setShortText('notification.nfg.revoked.voterreg.message.short')
-                        ->setText('notification.nfg.revoked.voterreg.message');
-                $this->em->persist($notification);
-
-                $this->em->flush();
+                $this->notificationsHelper->revokedVoterRegistrationNotification($other);
 
                 $user->setVoterRegistration($voterRegistration);
                 $this->em->persist($user);
@@ -291,14 +282,7 @@ class ProfileEditListner implements EventSubscriberInterface
 
                             $uk->registerManaged($user, array('id' => $user->getId()),$a);
 
-                            $notification = new Notification();
-                            $notification->setPerson($otherPerson)
-                                    ->setIcon('glyphicon glyphicon-exclamation-sign')
-                                    ->setLevel(Notification::LEVEL_IMPORTANT)
-                                    ->setTitle('notification.nfg.revoked.voterreg.title')
-                                    ->setShortText('notification.nfg.revoked.voterreg.message.short')
-                                    ->setText('notification.nfg.revoked.voterreg.message');
-                            $this->em->persist($notification);
+                            $this->notificationsHelper->revokedVoterRegistrationNotification($otherPerson);
 
                             $aNfgProfile = $aUser->getNfgProfile();
                             $aNfgProfile->setVoterRegistrationSit($nfgReturn1['CodSitTitulo']);
