@@ -41,11 +41,13 @@ class NotificationHandler implements NotificationHandlerInterface
     private $dispatcher;
     private $oauthDefaultClientUid;
     private $oauthDefaultClient;
+    private $ch;
+    private $proxy;
 
     public function __construct(ObjectManager $om, $entityClass,
                                 FormFactoryInterface $formFactory, $mailer,
                                 NotificationType $notificationType,
-                                ContainerAwareEventDispatcher $dispatcher, $oauthDefaultClientUid)
+                                ContainerAwareEventDispatcher $dispatcher, $oauthDefaultClientUid, $proxy)
     {
         $this->om = $om;
         $this->entityClass = $entityClass;
@@ -54,6 +56,7 @@ class NotificationHandler implements NotificationHandlerInterface
         $this->notificationType = $notificationType;
         $this->dispatcher = $dispatcher;
         $this->oauthDefaultClientUid = $oauthDefaultClientUid;
+        $this->proxy = $proxy;
     }
 
     public function all($limit = 5, $offset = 0, $orderby = null)
@@ -229,19 +232,63 @@ class NotificationHandler implements NotificationHandlerInterface
             'read' => array(),
             'failed' => array()
         );
+        
+        $this->_initCallback();
         foreach ($notifications as $notification) {
             try {
-                if (!$notification->isRead()) {
-                    $notification->setRead(true);
+                if (!$notification->isRead()) {                    
+                    if ($notification->getCallbackUrl()) {
+                        $notification->setRead(true);
+                        $secret = $notification->getCategory()->getClient()->getSecret();
+                        $base['data'] = json_encode(array(
+                            'id' => $notification->getId(),
+                            'person_id' => $notification->getPerson()->getId(),
+                            'read_date' => $notification->getReadDate()->getTimestamp()
+                        ));
+                        $base['signature'] = hash_hmac('sha256', $base['data'], $secret);
+                        $dataPost = http_build_query($base);
+                        curl_setopt($this->ch, CURLOPT_URL, $notification->getCallbackUrl());
+                        curl_setopt($this->ch, CURLOPT_POST, 1);
+                        curl_setopt($this->ch, CURLOPT_POSTFIELDS, $dataPost);
+                        $httpResponse = curl_exec($this->ch);
+                        $code = curl_getinfo ($this->ch, CURLINFO_HTTP_CODE);
+                        if ($code != '200') {
+                            $notification->setRead(false);
+                            throw new \Exception();
+                        }                        
+                    } else {
+                        $notification->setRead(true);
+                    }
                 }
                 $result['read'][] = $notification->getId();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $result['failed'][] = $notification->getId();
             }
         }
+        curl_close($this->ch);
         $om->flush();
 
         return $result;
+    }
+    
+    private function _initCallback()
+    {
+        $this->ch = curl_init();
+        curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($this->ch, CURLOPT_HEADER, 0);
+        curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
+        if (!ini_get('open_basedir')) {
+            curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
+        }
+        $proxy = $this->proxy;
+        if (isset($proxy['type'], $proxy['host'], $proxy['port'])) {
+            curl_setopt($this->ch, CURLOPT_PROXYTYPE, $proxy['type']);
+            curl_setopt($this->ch, CURLOPT_PROXY, $proxy['host']);
+            curl_setopt($this->ch, CURLOPT_PROXYPORT, $proxy['port']);
+            if (isset($proxy['auth'])) {
+                curl_setopt($this->ch, CURLOPT_PROXYUSERPWD, $proxy['auth']);
+            }
+        }
     }
 
     public function getGroupedSettings(PersonInterface $person,
