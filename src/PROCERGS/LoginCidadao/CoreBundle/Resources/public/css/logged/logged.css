@@ -672,3 +672,9 @@ dl.id-card-details {
 .id-card {
     position: relative;
 }
+
+label + .glyphicon-pencil {
+  cursor: pointer;
+  margin-left: 5px;
+  margin-top: -3px;
+}
