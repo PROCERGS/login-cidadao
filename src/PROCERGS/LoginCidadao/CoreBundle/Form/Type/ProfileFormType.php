@@ -51,7 +51,8 @@ class ProfileFormType extends BaseType
                             ->where('u.reviewed = :reviewed')
                             ->setParameter('reviewed', Country::REVIEWED_OK)
                             ->orderBy('u.name', 'ASC');
-                    }
+                    },
+                    'label' => 'Nationality'
                 ))
                 ;
                 $builder->add('ufsteppe', 'text', array("required"=> false, "mapped"=>false));
@@ -87,7 +88,8 @@ class ProfileFormType extends BaseType
                                 ->orWhere('s = :state')
                                 ->setParameters($params)
                                 ->orderBy('s.name', 'ASC');
-                        }
+                        },
+                        'label' => 'Place of birth - State'
                     ));
                     $form->add('city', 'entity',array(
                         'required' => false,
@@ -115,7 +117,8 @@ class ProfileFormType extends BaseType
                                 ->orWhere('c = :city')
                                 ->setParameters($params)
                                 ->orderBy('c.name', 'ASC');
-                        }
+                        },
+                        'label' => 'Place of birth - City'
                     ));
 
                 });

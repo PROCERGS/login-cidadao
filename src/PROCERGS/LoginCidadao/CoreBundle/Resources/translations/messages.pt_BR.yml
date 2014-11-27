@@ -605,3 +605,6 @@ View this notification on Citizen Login: Abra essa notificação no Login Cidad�
 scope.id_cards : 'Documentos de Identidade'
 scope.state: 'Estado'
 scope.addresses: 'Endereços'
+Nationality: 'Nacionalidade'
+Place of birth - State: 'Naturalidade - Estado'
+Place of birth - City: 'Naturalidade - Cidade'

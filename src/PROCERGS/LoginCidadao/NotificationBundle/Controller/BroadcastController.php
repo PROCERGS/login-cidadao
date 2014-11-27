@@ -186,8 +186,8 @@ class BroadcastController extends Controller
     {
         $grid = new GridHelper();
         $grid->setId('receivers-filter-grid');
-        $grid->setPerPage(2);
-        $grid->setMaxResult(2);
+        $grid->setPerPage(5);
+        $grid->setMaxResult(5);
         $parms = $request->get('ac_data');
         if (!isset($parms['client_id']) || !is_numeric($parms['client_id'])) {
             die('dunno');
