@@ -28,11 +28,27 @@
 
             <div class="panel-body">
                 <address>
-                    {{ address.line1 }}<br>
-                    {{ address.line2 }}<br>
-                    {{ address.postalCode }}<br>
+                {% if address.address %}
+                	{{ address.address }}
+	                {% if address.addressNumber %}
+	                	, {{ address.addressNumber }}
+	                {% endif %}
+                	<br/>
+                {% endif %}
+                {% if address.complement %}
+                	{{ address.complement }}<br/>
+                {% endif %}
+                {% if address.postalCode %}
+                	{{ address.postalCode }}<br/>
+                {% endif %}
                 {% if address.city %}
-                    {{ address.city.name }}, <abbr title="{{ address.city.state.name }}">{{ address.city.state.acronym }}</abbr>
+                    {{ address.city.name }}
+                    {% if address.city.state.acronym %}
+                    	, <abbr title="{{ address.city.state.name }}">{{ address.city.state.acronym }}</abbr>
+					{% else %}
+						, {{ address.city.state.name }}
+                    {% endif %}
+                    	, {{ address.city.state.country.name | trans }}
                 {% endif %}
                 </address>
             </div>

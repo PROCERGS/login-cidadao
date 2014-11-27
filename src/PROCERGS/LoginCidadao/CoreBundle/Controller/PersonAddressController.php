@@ -10,6 +10,9 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonAddress;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\RemovePersonAddressFormType;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Form\FormError;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\City;
 
 class PersonAddressController extends Controller
 {
@@ -36,10 +39,9 @@ class PersonAddressController extends Controller
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        $em = $this->getDoctrine()->getManager();
+        if ($form->isValid() && $this->checkAddressLocation($address, $form, $em)) {
             $address->setPerson($this->getUser());
-
-            $em = $this->getDoctrine()->getManager();
             $em->persist($address);
             $em->flush();
 
@@ -48,6 +50,62 @@ class PersonAddressController extends Controller
         $deleteForms = $this->getDeleteForms();
 
         return compact('form', 'deleteForms');
+    }
+    
+    private function checkAddressLocation(&$address, &$form, &$em) {
+        if (!$address->getCountry()) {
+            $form->get('country')->addError(new FormError($this->get('translator')->trans('required.field')));
+            return false;
+        }
+        if (!$address->getState()) {
+            $steppe = ucwords(strtolower(trim($form->get('statesteppe')->getData())));
+            if ($steppe) {
+                $repo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:State');
+                $ent = $repo->findOneBy(array(
+                    'name' => $steppe
+                ));
+                if (!$ent) {
+                    $ent = new State();
+                    $ent->setName($steppe);
+                    $ent->setCountry($address->getCountry());
+                    $em->persist($ent);
+                }
+                $address->setState($ent);
+            }
+        }
+        if (!$address->getState()) {
+            $form->get('state')->addError(new FormError($this->get('translator')->trans('required.field')));
+            return false;
+        }
+        if (!$address->getCity()) {
+            $steppe = ucwords(strtolower(trim($form->get('citysteppe')->getData())));
+            if ($address->getState()) {
+                $state = $address->getState();
+            } elseif (isset($ent)) {
+                $state = $ent;
+            } else {
+                $state = null;
+            }
+            if ($state && $steppe) {
+                $repo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:City');
+                $ent = $repo->findOneBy(array(
+                    'name' => $steppe,
+                    'state' => $state
+                ));
+                if (!$ent) {
+                    $ent = new City();
+                    $ent->setName($steppe);
+                    $ent->setState($state);
+                    $em->persist($ent);
+                }
+                $address->setCity($ent);
+            }
+        }
+        if (!$address->getCity()) {
+            $form->get('city')->addError(new FormError($this->get('translator')->trans('required.field')));
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -66,7 +124,7 @@ class PersonAddressController extends Controller
         $form = $this->createForm('lc_person_address', $address);
         $form->handleRequest($this->getRequest());
 
-        if ($form->isValid()) {
+        if ($form->isValid() && $this->checkAddressLocation($address, $form, $em)) {
             $address->setPerson($this->getUser());
             $em->flush();
             return $this->redirect($this->generateUrl('lc_person_addresses'));
