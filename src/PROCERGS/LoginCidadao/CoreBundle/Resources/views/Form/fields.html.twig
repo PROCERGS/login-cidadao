@@ -78,7 +78,7 @@
 {%- endblock switch_widget %}
 
 {% block ajax_choice_label -%}
-{{ block('form_label') }}<a class="glyphicon glyphicon-pencil ac-search-enable btn btn-primary btn-xs" data-ac-reference="{{ id }}" type="button" ></a>
+{{ block('form_label') }}<a class="glyphicon glyphicon-pencil ac-search-enable btn btn-primary btn-xs" data-ac-reference="{{ id }}" type="button" ></a><div class="ac-search-loader"></div>
 {%- endblock ajax_choice_label %}
 
 {% block ajax_choice_widget -%}
