@@ -78,7 +78,7 @@
 {%- endblock switch_widget %}
 
 {% block ajax_choice_label -%}
-{{ block('form_label') }}<a class="glyphicon glyphicon-pencil ac-search-enable btn btn-primary btn-xs" data-ac-reference="{{ id }}" type="button" ></a>
+{{ block('form_label') }}<a class="glyphicon glyphicon-pencil ac-search-enable btn btn-primary btn-xs" data-ac-reference="{{ id }}" type="button" ></a><div class="ac-search-loader"></div>
 {%- endblock ajax_choice_label %}
 
 {% block ajax_choice_widget -%}
@@ -136,7 +136,7 @@
               </div>
               <div class="btn-group">
                     <button type="button" class="btn btn-primary ac-search-commit" data-ac-reference="{{ id }}">
-                    <span class="glyphicon glyphicon-ok-sign"></span> {{ 'Edit'|trans }}
+                    <span class="glyphicon glyphicon-ok-sign"></span> {{ 'add'|trans }}
                   </button>
               </div>
             </div>

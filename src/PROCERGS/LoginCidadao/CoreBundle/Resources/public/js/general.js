@@ -420,6 +420,7 @@ var lcAcWidget = {
         data: {"ac_data":data},
         dataType : 'html',
         success : function(data, textStatus, jqXHR) {
+          console.log(data);
           /*aqui recebemos uma grid e disparamos os infinityscroll */
           self.parents().find('.ac-magicbox .ac-scrollspy-opts').html(data);
           lcInfiniteGrid.common('#' + $(data).attr('id'));
@@ -450,6 +451,7 @@ var lcAcWidget = {
     },
     /* aqui é quando clico para poder abrir o multiplo select*/
     onClickSearchEnable : function(event) {
+      $('.ac-search-loader').addClass('show');
       /* pegamos a referencia de qual elemento vamos criar nossa instancia do multiplesect*/
       var _id = '#'+$(this).attr('data-ac-reference');
       var mb = $(_id + ' + .ac-magicbox');
@@ -471,6 +473,7 @@ var lcAcWidget = {
               data[x] = $('#'+opts.selected.extra_form_prop[x]).val();
             }
         }
+        console.log("loading");
           $.ajax({
             type: 'get',
             url: opts.selected.route,
@@ -478,6 +481,7 @@ var lcAcWidget = {
             data: {"ac_data":data},
             dataType : 'html',
             success : function(data, textStatus, jqXHR) {
+              $('.ac-search-loader').removeClass('show');
               /*pegamos a grid de retorno e colocamos dentro da div de exibicao*/
               mb.find('.ac-scrollspy-opts-selected').html(data);
               mb.toggleClass('in');

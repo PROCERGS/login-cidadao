@@ -26,3 +26,15 @@
 .ac-sandbox .infinitegrid-content .header {
   padding: 2px 0;
 }
+
+.ac-search-loader {
+  background-image: url(../images/ajax-loader.gif);
+  display: none;
+  height: 16px;
+  margin: -3px 8px;
+  width: 16px;
+}
+
+.ac-search-loader.show {
+  display: inline-block!important;
+}
