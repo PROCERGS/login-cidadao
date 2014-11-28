@@ -3,6 +3,7 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\AbstractQuery;
 
 class CountryRepository extends EntityRepository
 {
@@ -41,6 +42,15 @@ class CountryRepository extends EntityRepository
                 ->where('c.preference > 0')
                 ->addOrderBy('c.preference', 'DESC')
                 ->getQuery()->getResult();
+    }
+    
+    public function isPreferred($var)
+    {
+        return $this->createQueryBuilder('c')
+                ->select('count(c) total')
+                ->where('c.preference > 0 and c = :country')->setParameter('country', $var)          
+                ->getQuery()->getResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
+        
     }
 
 }

@@ -37,7 +37,6 @@ abstract class AbstractTextSelectorType extends AbstractType
         ));
     }
 
-    public abstract function getName();
 
     /**
      * @return DataTransformerInterface
