@@ -57,12 +57,14 @@ class PersonAddressController extends Controller
             $form->get('country')->addError(new FormError($this->get('translator')->trans('required.field')));
             return false;
         }
-        if (!$address->getState()) {
+        $isPreferred = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Country')->isPreferred($address->getCountry());
+        if (!$address->getState() && !$isPreferred) {
             $steppe = ucwords(strtolower(trim($form->get('statesteppe')->getData())));
             if ($steppe) {
                 $repo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:State');
                 $ent = $repo->findOneBy(array(
-                    'name' => $steppe
+                    'name' => $steppe,
+                    'country' => $address->getCountry()
                 ));
                 if (!$ent) {
                     $ent = new State();
@@ -77,7 +79,7 @@ class PersonAddressController extends Controller
             $form->get('state')->addError(new FormError($this->get('translator')->trans('required.field')));
             return false;
         }
-        if (!$address->getCity()) {
+        if (!$address->getCity() && !$isPreferred) {
             $steppe = ucwords(strtolower(trim($form->get('citysteppe')->getData())));
             if ($address->getState()) {
                 $state = $address->getState();
