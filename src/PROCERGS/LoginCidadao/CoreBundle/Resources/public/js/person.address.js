@@ -15,7 +15,7 @@ $(document).ready(function() {
             $(addressEdit.stateId).find('option[value!=""]').remove();
             $(addressEdit.stateId).trigger('change');
             $(addressEdit.stateId).hide();
-            $(addressEdit.stateSteppeId).show();
+            $(addressEdit.stateSteppeId).val(addressEdit.loadMessage).show().attr('disabled', 'disabled');
             if ($(this).val()) {
                 $.ajax({
                     type : 'GET',
@@ -25,7 +25,7 @@ $(document).ready(function() {
                         if (data.length) {
                             $(addressEdit.stateId).show();
                             $(addressEdit.stateSteppeId).hide();
-                            $(addressEdit.stateSteppeId).val('');
+                            $(addressEdit.stateSteppeId).val('').removeAttr('disabled');
                             $(addressEdit.stateId).append(data.map(function(val) {
                                 return $(document.createElement('option')).val(val.id).text(val.name)
                             }));
@@ -36,6 +36,8 @@ $(document).ready(function() {
                             } else {
                                 $(addressEdit.stateId).find('option[data-custom-option]').show();
                             }
+                        } else {
+                            $(addressEdit.stateSteppeId).val('').removeAttr('disabled');
                         }
                     }
                 });
@@ -44,7 +46,7 @@ $(document).ready(function() {
         $(addressEdit.stateId).on('change', function(event) {
             $(addressEdit.cityId).find('option[value!=""]').remove();
             $(addressEdit.cityId).hide();
-            $(addressEdit.citySteppeId).show();
+            $(addressEdit.citySteppeId).val(addressEdit.loadMessage).show().attr('disabled', 'disabled');
             if ($(this).val()) {
                 $.ajax({
                     type : 'GET',
@@ -54,7 +56,7 @@ $(document).ready(function() {
                         if (data.length) {
                             $(addressEdit.cityId).show();
                             $(addressEdit.citySteppeId).hide();
-                            $(addressEdit.citySteppeId).val('');
+                            $(addressEdit.citySteppeId).val('').removeAttr('disabled');
                             $(addressEdit.cityId).append(data.map(function(val) {
                                 return $(document.createElement('option')).val(val.id).text(val.name)
                             }));
@@ -65,14 +67,13 @@ $(document).ready(function() {
                             } else {
                                 $(addressEdit.cityId).find('option[data-custom-option]').show();
                             }
-                            if (addressEdit.callbackOnceSearchState) {
-                                addressEdit.callbackOnceSearchState(data, textStatus, jqXHR);
-                                addressEdit.callbackOnceSearchState = null;
-                            }
+                        } else {
+                            $(addressEdit.citySteppeId).val('').removeAttr('disabled');
                         }
                     }
                 });
             } else {
+                $(addressEdit.citySteppeId).val('').removeAttr('disabled');
                 if ($(event.target).find('[data-custom-option="1"]:selected').length) {
                     $(addressEdit.stateId).hide();
                     $(addressEdit.stateSteppeId).show();

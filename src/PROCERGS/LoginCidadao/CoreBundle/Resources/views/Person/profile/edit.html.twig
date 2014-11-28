@@ -208,6 +208,9 @@
     profileEdit.urlSearchCountry = '{{ path('lc_search_state_by_country') }}';
     profileEdit.mobileId = "#{{ form.mobile.vars.id }}";
     profileEdit.ufpreferredId = '#{{ form.ufpreferred.vars.id }}';
+    profileEdit.addStateMessage = "{{ 'add.other.state'| trans }}";
+    profileEdit.addCityMessage = "{{ 'add.other.city'| trans }}";
+    profileEdit.loadMessage = "{{ 'field.loader'| trans }}";
 
     profileEdit.callbackOnceSearchState = null;
     profileEdit.popLocation = function(dneData) {
@@ -268,15 +271,6 @@
         }
     };
 
-    var messages = {
-        form: {
-            location : {
-                "state" : "{{ 'add.other.state' | trans }}",
-                "city" : "{{ 'add.other.city' | trans }}",
-            }
-        }
-    };
-
     $(document).ready(function() {
         $('.change-picture').click(function(){
             $('.picture-upload-box').slideDown();
@@ -313,14 +307,14 @@
             $('.unlink-confirmation').slideUp();
         });
 
-        $(document.createElement('option')).val('').attr('data-custom-option', 1).text(messages.form.location.state).hide().insertAfter($(profileEdit.stateId).find('option[value=""]').first());
-        $(document.createElement('option')).val('').attr('data-custom-option', 1).text(messages.form.location.city).hide().insertAfter($(profileEdit.cityId).find('option[value=""]').first());
+        $(document.createElement('option')).val('').attr('data-custom-option', 1).text(profileEdit.addStateMessage).hide().insertAfter($(profileEdit.stateId).find('option[value=""]').first());
+        $(document.createElement('option')).val('').attr('data-custom-option', 1).text(profileEdit.addCityMessage).hide().insertAfter($(profileEdit.cityId).find('option[value=""]').first());
 
         $(profileEdit.countryId).on('change', function (event) {
           $(profileEdit.stateId).find('option[value!=""]').remove();
           $(profileEdit.stateId).trigger('change');
       $(profileEdit.stateId).hide();
-      $(profileEdit.stateSteppeId).show();
+      $(profileEdit.stateSteppeId).val(profileEdit.loadMessage).show().attr('disabled', 'disabled');
           if ($(this).val()) {
               $.ajax({
                 type: 'GET',
@@ -330,7 +324,7 @@
                     if (data.length) {
                       $(profileEdit.stateId).show();
                       $(profileEdit.stateSteppeId).hide();
-                      $(profileEdit.stateSteppeId).val('');
+                      $(profileEdit.stateSteppeId).val('').removeAttr('disabled');
                       $(profileEdit.stateId).append(data.map(function (val) {return $(document.createElement('option')).val(val.id).text(val.name)}));
                       $(profileEdit.stateId).find('option:selected').removeAttr('selected');
                       $(profileEdit.stateId).find('option[value=""]').first().attr('selected','selected');
@@ -340,6 +334,8 @@
                         } else {
                           $(profileEdit.stateId).find('option[data-custom-option]').show();
                         }
+                    } else {
+                    	$(profileEdit.stateSteppeId).val('').removeAttr('disabled');
                     }
                 }
                 });
@@ -348,7 +344,7 @@
         $(profileEdit.stateId).on('change', function (event) {
           $(profileEdit.cityId).find('option[value!=""]').remove();
           $(profileEdit.cityId).hide();
-          $(profileEdit.citySteppeId).show();
+          $(profileEdit.citySteppeId).val(profileEdit.loadMessage).show().attr('disabled', 'disabled');
           if ($(this).val()) {
               $.ajax({
                 type: 'GET',
@@ -358,7 +354,7 @@
                   if (data.length) {
                     $(profileEdit.cityId).show();
                     $(profileEdit.citySteppeId).hide();
-                    $(profileEdit.citySteppeId).val('');
+                    $(profileEdit.citySteppeId).val('').removeAttr('disabled');
                     $(profileEdit.cityId).append(data.map(function (val) {return $(document.createElement('option')).val(val.id).text(val.name)}));
                     $(profileEdit.cityId).find('option:selected').removeAttr('selected');
                     $(profileEdit.cityId).find('option[value=""]').first().attr('selected','selected');
@@ -371,10 +367,13 @@
                         profileEdit.callbackOnceSearchState(data, textStatus, jqXHR);
                         profileEdit.callbackOnceSearchState = null;
                         }
+                  } else {
+					$(profileEdit.citySteppeId).val('').removeAttr('disabled');
                   }
                 }
                 });
             } else {
+				$(profileEdit.citySteppeId).val('').removeAttr('disabled');
               if ($(event.target).find('[data-custom-option="1"]:selected').length) {
               $(profileEdit.stateId).hide();
               $(profileEdit.stateSteppeId).show();
