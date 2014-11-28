@@ -8,8 +8,8 @@ $(document).ready(function() {
     });
 
     if (typeof addressEdit != 'undefined') {
-        $(document.createElement('option')).val('').attr('data-custom-option', 1).text(addressEdit.addStateMessage).insertAfter($(addressEdit.stateId).find('option[value=""]').first());
-        $(document.createElement('option')).val('').attr('data-custom-option', 1).text(addressEdit.addCityMessage).insertAfter($(addressEdit.cityId).find('option[value=""]').first());
+        $(document.createElement('option')).val('').attr('data-custom-option', 1).text(addressEdit.addStateMessage).hide().insertAfter($(addressEdit.stateId).find('option[value=""]').first());
+        $(document.createElement('option')).val('').attr('data-custom-option', 1).text(addressEdit.addCityMessage).hide().insertAfter($(addressEdit.cityId).find('option[value=""]').first());
 
         $(addressEdit.countryId).on('change', function(event) {
             $(addressEdit.stateId).find('option[value!=""]').remove();

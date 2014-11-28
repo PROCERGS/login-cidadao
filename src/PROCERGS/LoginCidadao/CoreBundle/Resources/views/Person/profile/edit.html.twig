@@ -271,8 +271,8 @@
     var messages = {
         form: {
             location : {
-                "state" : "{{ '- other state -' | trans }}",
-                "city" : "{{ '- other city -' | trans }}",
+                "state" : "{{ 'add.other.state' | trans }}",
+                "city" : "{{ 'add.other.city' | trans }}",
             }
         }
     };
@@ -313,8 +313,8 @@
             $('.unlink-confirmation').slideUp();
         });
 
-        $(document.createElement('option')).val('').attr('data-custom-option', 1).text(messages.form.location.state).insertAfter($(profileEdit.stateId).find('option[value=""]').first());
-        $(document.createElement('option')).val('').attr('data-custom-option', 1).text(messages.form.location.city).insertAfter($(profileEdit.cityId).find('option[value=""]').first());
+        $(document.createElement('option')).val('').attr('data-custom-option', 1).text(messages.form.location.state).hide().insertAfter($(profileEdit.stateId).find('option[value=""]').first());
+        $(document.createElement('option')).val('').attr('data-custom-option', 1).text(messages.form.location.city).hide().insertAfter($(profileEdit.cityId).find('option[value=""]').first());
 
         $(profileEdit.countryId).on('change', function (event) {
           $(profileEdit.stateId).find('option[value!=""]').remove();
@@ -330,6 +330,7 @@
                     if (data.length) {
                       $(profileEdit.stateId).show();
                       $(profileEdit.stateSteppeId).hide();
+                      $(profileEdit.stateSteppeId).val('');
                       $(profileEdit.stateId).append(data.map(function (val) {return $(document.createElement('option')).val(val.id).text(val.name)}));
                       $(profileEdit.stateId).find('option:selected').removeAttr('selected');
                       $(profileEdit.stateId).find('option[value=""]').first().attr('selected','selected');
@@ -357,6 +358,7 @@
                   if (data.length) {
                     $(profileEdit.cityId).show();
                     $(profileEdit.citySteppeId).hide();
+                    $(profileEdit.citySteppeId).val('');
                     $(profileEdit.cityId).append(data.map(function (val) {return $(document.createElement('option')).val(val.id).text(val.name)}));
                     $(profileEdit.cityId).find('option:selected').removeAttr('selected');
                     $(profileEdit.cityId).find('option[value=""]').first().attr('selected','selected');
