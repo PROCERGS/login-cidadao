@@ -420,7 +420,6 @@ var lcAcWidget = {
         data: {"ac_data":data},
         dataType : 'html',
         success : function(data, textStatus, jqXHR) {
-          console.log(data);
           /*aqui recebemos uma grid e disparamos os infinityscroll */
           self.parents().find('.ac-magicbox .ac-scrollspy-opts').html(data);
           lcInfiniteGrid.common('#' + $(data).attr('id'));
@@ -473,7 +472,6 @@ var lcAcWidget = {
               data[x] = $('#'+opts.selected.extra_form_prop[x]).val();
             }
         }
-        console.log("loading");
           $.ajax({
             type: 'get',
             url: opts.selected.route,
