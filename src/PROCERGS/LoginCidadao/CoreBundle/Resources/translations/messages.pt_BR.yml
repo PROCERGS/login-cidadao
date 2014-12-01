@@ -122,7 +122,7 @@ notification.empty.password.click.here: 'clicando aqui'
 Contact: Contato
 'About the Government': 'Sobre o Governo'
 Government: Governo
-'View all services': 'Ver todos Serviços'
+'view all services': 'ver todos serviços'
 exception.alreadyLinkedAccount: 'Essa conta já está conectada a um outro usuário. Você deve desfazer essa conexão antes de tentar linkar com o usuário atual.'
 'Governo do Rio Grande do Sul': 'Governo do Rio Grande do Sul'
 '<a href="%link%">Background picture</a> by %name%': '<a href="%link%">Imagem de fundo</a> por %name%'
