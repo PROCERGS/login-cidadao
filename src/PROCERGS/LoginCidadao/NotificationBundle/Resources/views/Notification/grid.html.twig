@@ -34,7 +34,7 @@
     {% else %}
         {% set url = path('lc_notifications', { id: row.id }) %}
     {% endif %}
-    <div class="notification-line {{ openId is defined and row.id == openId ? 'notification-open' : '' }}">
+    <div class="notification-line {{ openId is defined and row.id == openId ? 'notification-open' : '' }} menu-item">
         <a class="row media notification common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }} {{ grid.rlast ? 'row-last' }}"
              title="{{ 'Click to read'|trans }}"
              data-notification-id="{{ row.id }}"
