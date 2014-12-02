@@ -113,6 +113,10 @@
     position: relative;
 }
 
+#lc-navbar .dropdown-header {
+  padding: 3px 10px;
+}
+
 #lc-navbar-ul > li {
     float: left;
     height: 50px;
@@ -256,6 +260,10 @@
     margin: 0;
 }
 
+#lc-navbar .media>.pull-left {
+  padding-right: 10px;
+}
+
 #lc-navbar .dropdown-menu .none {
     margin: 10px;
 }
@@ -281,10 +289,6 @@
 
 #lc-navbar .open > .dropdown-menu {
     display: block;
-}
-
-#lc-navbar .menu-title {
-  padding: 0 5px;
 }
 
 #lc-navbar .dropdown-menu li a {
@@ -382,10 +386,6 @@
     padding: 0;
     overflow: auto;
     position: relative;
-}
-
-.dropdown-menu .menu-title {
-  margin: 5px;
 }
 
 #navbarUnread {
