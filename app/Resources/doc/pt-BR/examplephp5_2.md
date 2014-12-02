@@ -7,7 +7,7 @@ Essa implementacao tem como dependetencia a classe http-client também diponivel
 
 Primeiro instanciamos a classe oauth_client_class:
 
-```
+``` php
 $client = new oauth_client_class();
 //aqui especificacamos o nome do servidor que vamos utilizar. Isso server para carregar as configurações extras do cliente oauth.
 $client->server = 'Meu';
@@ -24,7 +24,7 @@ $client->scope = '';
 Temos que criar um arquivo de configuração ("oauth_configuration.json
 ") do servidor Oauth que desejamos utilizar. Nesse arquivo, especificamos a versão do protocolo Oauth, o endereço para fazer a autenticação (com marcadores para fazer substiuições das variaveis) e o endereço para obter a token de acesso aos dados:
 
-```
+``` js
 {
     "servers":
     {
@@ -41,13 +41,13 @@ Temos que criar um arquivo de configuração ("oauth_configuration.json
 
 Por padrão, esse arquivo deve ser colocado no mesmo diretorio que o nosso "script" esta rodando, todavia é possivel mudar esse diretorio:
 
-```
+``` php
 $client->configuration_file='';
 ```
 
 Com os dados preenchidos, temos que inicializar a instancia:
 
-```
+``` php
 // aqui a classe vai carregar as informações extras do servidor
 if (($success = $client->Initialize())) {
     //aqui ele vai processar os dados do $_REQUEST para descobrir se precisa realizar a autorização no gerenciador de identidades e/ou solicitar uma token de acesso
@@ -70,5 +70,6 @@ if ($client->exit) {
     exit();
 }
 ```
+
 Uma vez obtido a token de acesso podemos pegar os dados do usuario. Na variavel "$user" vai ser preenchida com os dados solicitados, declarados na propriedade "scope". A lista de escopos suportados pode ser encontrado [ aqui ](scopes.md).
 
