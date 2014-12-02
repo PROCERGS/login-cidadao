@@ -40,4 +40,6 @@ Para continuar escolha um dos seguintes exemplos para explicarmos como utilizar 
 
 * [ Exemplo utilizando PHP 5.2 ](examplephp5_2.md)
 * [ Exemplo utilizando PHP 5.3 ](examplephp5_3.md)
-* [ Exemplo utilizando Java ](examplejava.md) 
+* [ Exemplo utilizando Java ](examplejava.md)
+
+[ Voltar ao Índice ](index.md)
