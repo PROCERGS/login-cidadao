@@ -1,21 +1,43 @@
 # Integração
-Esta página descreve como fazer um integração básica com o login cidadao.
-O login cidadaão é um gerenciador de identidades que utiliza o protocolo Oauth.
-Para entender um pouco mais de Oauth por favor leia http://oauth.net/2/ e tambem http://aaronparecki.com/articles/2012/07/29/1/oauth2-simplified.
 
-O protocolo Oauth é complexo, por isso, recomendamos utilizar alguma implementação pronta para uso de um desenvolvedor confiavel.
-No nosso branch de exemplos há exemplos utilizando as tecnologias java e php para realizar a conexão.
-Em todos os exemplos é necessario ter as seguintes informações em mão:
+## Introdução
 
-* O endereço para fazer autorização, no caso, seria https://meu.rs.gov.br/oauth/v2/auth
-* O endereço para requisitar um token de acesso, no caso, seria https://meu.rs.gov.br/oauth/v2/token
-* O endereço para requisitar os dados do usuario, no caso seria https://meu.rs.gov.br/api/v1/person.json
-* O conjunto de escopos que vamos requisitar do usuario, no caso, poderia ser usar qualquer numero de escopos suportados separados por espaço. A lista dos escopo suportados pode ser encontrado [ aqui ](scopes.md).
-* Precisamos ter um chave publica e um chave privada para utilizar o Oauth. Para conseguir essa chaves basta solicitar o cadastro da sua aplicação pelo seguinte endereço: https://meu.rs.gov.br/contact. Caso seu pedido seja aprovado será lhe enviado essas duas chaves.
-* Precisamos espeficiar os endereços de retorno que o gerenciador de identidades esta autorizado a retornar dados.
-   
-Para continuar escolha uma dos seguintes exemplos para explicarmos como utilizar a autenticacao:
+Esta página descreve como fazer um integração básica com o Login Cidadao, um gerenciador de identidades que utiliza o protocolo OAuth 2.
+
+Caso queira mais informações sobre OAuth 2, por favor, leia [ a página do OAuth 2 ](http://oauth.net/2/) e também [ este post de Aaron Parecki ](http://aaronparecki.com/articles/2012/07/29/1/oauth2-simplified).
+
+O protocolo OAuth 2 é complexo, por isso, a menos que você conheça profundamente tanto a [ RFC-6749 ](http://tools.ietf.org/html/rfc6749) quanto as melhores práticas em segurança, utilize alguma biblioteca implementada e mantida por alguém que conheça.
+
+## Antes de Começar
+
+### <a name="basic_info"></a>Informações Básicas
+
+São informações básicas e fundamentais para o funcionamento dos exemplos e do processo de autenticação:
+
+ * URLs do Login Cidadão
+   * URL de Autorização. Exemplo: `https://meu.rs.gov.br/oauth/v2/auth`
+   * URL para solicitação de Access Token. Exemplo: `https://meu.rs.gov.br/oauth/v2/token`
+   * URL com os dados do usuário autenticado. Exemplo: `https://meu.rs.gov.br/api/v1/person.json`
+ * O conjunto de escopos que serão acessados
+ * Chave pública do Client OAuth
+ * Chave privada (ou Secret) do Client OAuth
+ * Precisamos especificar as URLs de Retorno que o gerenciador de identidades esta autorizado a retornar dados.
+
+Tanto as URLs do Login Cidadão quanto as chaves de acesso devem ser obtidas na instalação do Login Cidadão na qual você deseja autenticar-se enquanto as URLs de Retorno dependem do seu Client OAuth.
+
+### Escopos
+
+Você pode solicitar quantos e quais escopos desejar, entretanto esteja ciente de que quanto mais informações você solicitar ao usuário menor será a probabilidade do mesmo lhe autorizar a recebê-las, portanto solicite apenas o **absolutamente necessário**.
+
+A lista dos escopos suportados pode ser encontrada [ aqui ](scopes.md).
+
+## Exemplos
+
+No nosso branch `exemplos` demonstramos a integração utilizando `Java`, `PHP 5.2` e `PHP 5.3`.
+Em todos os exemplos é necessário ter as [ Informações Básicas ](#basic_info).
+
+Para continuar escolha um dos seguintes exemplos para explicarmos como utilizar a autenticação:
 
 * [ Exemplo utilizando PHP 5.2 ](examplephp5_2.md)
 * [ Exemplo utilizando PHP 5.3 ](examplephp5_3.md)
-* [ Exemplo utilizando Java ](examplejava5_3.md) 
+* [ Exemplo utilizando Java ](examplejava.md) 
