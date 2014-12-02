@@ -347,6 +347,13 @@
     right: 20px;
 }
 
+#lc-navbar .menu-item {
+    -webkit-transition: 0.3s ease-in-out;
+    -moz-transition: 0.3s ease-in-out;
+    -o-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
+}
+
 #lc-navbar .menu-item:hover {
   background: none;
   background-color: #E2EFDE;

@@ -145,7 +145,7 @@ body {
 
 .lc-box .google {
     background-color: #dd4b39;
-    background-image: url(../../images/btn_red.png);
+    background-image: url(../../images/google_login.png);
     background-repeat: no-repeat;
 }
 
@@ -167,6 +167,10 @@ body {
 
   .lc-box .twitter {
       background-image: url(../../images/twitter_link.png);
+  }
+
+  .lc-box .google {
+    background-image: url(../../images/google_link.png);
   }
 
   .lc-box .nfg {
