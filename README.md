@@ -22,6 +22,11 @@ Dependencies
   * php5-mysql or php5-pgsql or your preferred driver
   * php5-memcache (you can use php5-memcached instead, just remember to change the `Memcache` classes to `Memcached`)
 
+Docs
+====
+
+[ Read the docs ](app/Resources/doc/index.md)
+
 Setup - Development
 ===================
 
