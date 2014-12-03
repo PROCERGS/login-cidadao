@@ -1,8 +1,14 @@
 Citizen Login Documentation
 ===========================
 
-Contents
+General Contents
+----------------
+
+ * [ Integration ](integration.md)
+ * [ Scopes ](scopes.md)
+ * [ "Remote" Logout ](remoteLogout.md)
+
+REST API
 --------
 
- * [Scopes](scopes.md)
- * [ "Remote" Logout ](remoteLogout.md)
+ * [ Introduction ](restApiIntro.md)
