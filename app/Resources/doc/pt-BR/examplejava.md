@@ -58,107 +58,104 @@ Primeiramente criamos um arquivo de configuração `oauth_configuration.properti
 ```
 //tipo de aplicação que o Apache Oltu utilizará
 application=generic
+
 //endereço para fazer a autenticação
 authz_endpoint=https://meu.rs.gov.br/oauth/v2/auth
+
 //endereço para obter a Access Token
 token_endpoint=https://meu.rs.gov.br/oauth/v2/token
+
 //endereço para obter os dados do usuário
 resource_url=https://meu.rs.gov.br/api/v1/person
+
 //escopos desejados
 scope=
+
 //chave pública
 client_id=
+
 //chave privada
 client_secret=
+
 //endereço para onde o gerenciador de identidades irá retornar dados
 redirect_uri=
 ```
 
 ### Criando um filtro de autenticação
 
-É necessário criar um filtro utilizando `javax.servlet.Filter`:
- 
+É necessário criar um filtro utilizando `javax.servlet.Filter`. Para isso utilizamos o arquivo `src/main/java/br/gov/rs/meu/helper/AuthFilter.java` da seguinte forma:
+
 ``` java
-package br.gov.rs.meu.helper;
+// src/main/java/br/gov/rs/meu/helper/AuthFilter.java
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
-import org.apache.oltu.oauth2.client.response.OAuthAuthzResponse;
-import org.apache.oltu.oauth2.common.message.types.ResponseType;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
-
-//colocamos como um dos endereços filtrados, o proprio endereço de redireciomento
-//assim o proprio filtro vai receber o retorno do gerenciador de identidades
 @WebFilter(urlPatterns = { Utils.REDIRECT_URI })
 public class AuthFilter implements Filter {
-	
-	protected List<String> whiteList = new ArrayList<String>();; 
-	
+	// ...
+}
+```
+
+Utilizamos a anotação `@WebFilter` para fazer do endereço de redirecionamento um dos endereços filtrados para que possamos receber o retorno do gerenciador de identidade.
+
+``` java
+// src/main/java/br/gov/rs/meu/helper/AuthFilter.java
+
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-		try {			 
+		try {
 			HttpServletRequest req = (HttpServletRequest) request;
 			HttpServletResponse res = (HttpServletResponse) response;
-			//primeiro verificamos ser temos alguma sessão ativa, sem criar uma nova sessão
 			HttpSession ses = req.getSession(false);
-			//pegamos o endereço que o usuario esta tentando acessar
+            
+			// Guardamos o endereço que o usuário está tentando acessar
 			String reqURI = req.getRequestURI();
-			//verificamos se existe na sessão nossa variavel que indica que o usuario esta autenticado			
+            
+			// Verificamos se o usuário já está autenticado nessa aplicação
 			if ((ses != null && ses.getAttribute("username") != null) || reqURI.contains("javax.faces.resource") || Utils.inArray(reqURI, whiteList)) {
 				chain.doFilter(request, response);
 			} else {
-			//caso não exista a variável que indique ele esta autenticado
-			//verificamos se existe a variável na sessão que indique ele está no processo de autenticação
+				// Ele não está autenticado, mas pode estar em processo de autenticação
 				if (ses != null && ses.getAttribute("lc.oauthParams") != null) {
-					//caso exista o parametro indicando o processo de autenticação
-					//recuperamos o parametro
+					// Obtemos os parâmetros de autenticação
 					OAuthParams oauthParams = (OAuthParams) ses.getAttribute("lc.oauthParams");
-					//analisamos os parametros do request para ver tem o código de autenticação enviado pelo gerenciador de identidades
-					OAuthAuthzResponse oar = OAuthAuthzResponse.oauthCodeAuthzResponse(req);					
+					OAuthAuthzResponse oar = OAuthAuthzResponse.oauthCodeAuthzResponse(req);
+                    
+                    // e verificamos se recebemos um Authorization Code
 					oauthParams.setAuthzCode(oar.getCode());
-					//com o código temos obter a Access Token do servidor					
+                    
+					// Solicitamos um Access Token
 					Utils.getAuthorizationToken(oauthParams);
-					// com a Access Token tentamos pegar os dados do usuário
+                    
+					// e, em seguida, solicitamos os dados do usuário
 					Utils.getResource(oauthParams);
-					//como o retorno do dados do usuário é no formato JSON
-					//necesitamos converter esse dado para um objeto, no caso, vamos converter para um objeto do tipo Map
-					//utilizamos o jackson para converter JSON para o MAP
+                    
+					// Para simplificar armazenaremos os dados em um Map
+                    // Naturalmente você deveria desserializar o JSON recebido
+                    // para um objeto apropriado
 					ObjectMapper mapper = new ObjectMapper();					
 					Map<String, Object> person = mapper.readValue(
 							oauthParams.getResource(),
 							new TypeReference<Map<String, Object>>() {
 							});
-					//apos a convesão preenchemos uma variável da sessão indicando que o usuário esta autenticado
-					//nessa variável colocamos a informações do usuário convertidas
+					
+                    // Nesse momento já possuimos os dados do usuário
+                    // É nesse ponto que você deve persistir o usuário juntamente com
+                    // Seus Access e Refresh Tokens
+                    // Como isto é apenas um exemplo vamos apenas salvar na sessão
 					ses.setAttribute("username", person);
-					//recuperarmos a variável da sessão que continha o endereço original
-					//que o usuário tentava acessar antes do processo de autenticação
-					//agora encaminhamos o usuário para esse endereço
+                    
+					// Encaminhamos o usuário para onde ele tentou ir originalmente
 					res.sendRedirect((String) ses.getAttribute("lc.origTarget"));
-					//removemos o endereço da sessão
 					ses.removeAttribute("lc.origTarget");
 				} else {
-					//pegamos o endereço que o usuario tentou acessar 
+                	// O usuário não está autenticado nem está se autenticando
+                    // Então devemos encaminhá-lo para o gerenciador de identidade
+                    
+					// É uma boa prática salvar a URL que o usuário tentou acessar
+                    // para encaminhá-lo depois da autorização e autenticação.
 					String origTarget = Utils.getFullRequestURL(req);
-					//carregamos as configurações para conectar no gerenciador de identidades
+                    
+					// Preparamos as configurações do gerenciador de identidade
 					OAuthParams oauthParams = Utils.prepareOAuthParams(req);
-					//criamos uma cliente para fazer a requisição da autenticação
 					OAuthClientRequest oauthRequest = OAuthClientRequest
 							.authorizationLocation(
 									oauthParams.getAuthzEndpoint())
@@ -168,11 +165,12 @@ public class AuthFilter implements Filter {
 							.setScope(oauthParams.getScope())
 							.setState(oauthParams.getState())
 							.buildQueryMessage();
-					//salvamos na sessão as configurações para conectar no gerenciador de identidades
+                            
+					// Salvamos na sessão as configurações do gerenciador de identidade
 					ses.setAttribute("lc.oauthParams", oauthParams);
-					//salvamos na sessao o endereço que o usuário tentou acessar
 					ses.setAttribute("lc.origTarget", origTarget);
-					//redirecionamos o usuario para o gerenciador de identidades
+                    
+					// Redirecionamos o usuário para o gerenciador de identidades
 					res.sendRedirect(oauthRequest.getLocationUri());
 				}
 			}
@@ -182,22 +180,7 @@ public class AuthFilter implements Filter {
 		}
 
 	}
-
-	@Override
-	public void destroy() {
-
-	}
-
-	@Override
-	public void init(FilterConfig arg0) throws ServletException {
-		String whiteList = arg0.getInitParameter("whitelist");
-		if (whiteList != null) {
-			for (String string : whiteList.split(",")) {
-				this.whiteList.add(string);
-			}
-		}
-	}
-
-}
 ```
+
+
 [ Voltar ao Índice ](index.md)
