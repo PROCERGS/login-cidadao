@@ -1,4 +1,4 @@
-# Exemplo utilizando PHP 5.2
+# Exemplo utilizando PHP 5.3
 
 ## Antes de Começar
 
