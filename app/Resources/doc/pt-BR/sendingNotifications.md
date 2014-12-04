@@ -55,3 +55,7 @@ Como resposta, você receberá um status code HTTP 201, como qualquer API RESTfu
 	"id": 654
 }
 ```
+
+[Voltar à Introdução à API REST](restApiIntro.md)
+
+[Voltar ao índice](index.md)
