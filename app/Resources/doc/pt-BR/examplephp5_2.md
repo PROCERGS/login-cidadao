@@ -37,7 +37,7 @@ Primeiro instanciamos a classe `oauth_client_class`:
 
 ``` php
 $client = new oauth_client_class();
-//aqui especificacamos o nome do servidor que vamos utilizar. Isso serve para carregar as configurações extras do cliente OAuth.
+//aqui especificamos o nome do servidor que vamos utilizar. Isso carregar as configurações extras do cliente OAuth
 $client->server = 'Meu';
 //colocamos um dos nossos endereços que autorizamos o Login Cidadão a retornar dados
 $client->redirect_uri = '';
@@ -57,7 +57,7 @@ $client->configuration_file='';
 
 ### Fazendo a mágica acontecer
 
-Com os dados preenchidos, podemos inicializar a instancia:
+Com os dados preenchidos, podemos inicializar a instância:
 
 ``` php
 // aqui a classe vai carregar as informações extras do servidor
@@ -68,16 +68,16 @@ if (($success = $client->Initialize())) {
             $client->error = $client->authorization_error;
             $success = false;
         } elseif (strlen($client->access_token)) {
-            // quando conseguirmos o Access Token podemos pegar os dados 
+            // quando conseguimos o Access Token podemos pegar os dados 
             $success = $client->CallAPI('https://meu.rs.gov.br/api/v1/person', 'GET', array(), array(
                 'FailOnAccessError' => true
             ), $user);
         }
     }
-    // aqui ele retorna o status das operações realizadas pela instancia
+    // aqui ele retorna o status das operações realizadas pela instância
     $success = $client->Finalize($success);
 }
-// caso a classe precise encerrar a execução dessa pagina como, por exemplo, quando o gerenciador de identidades retorna dados para essa pagina, apos solicitar a autorização
+// caso a classe precise encerrar a execução desta pagina como, por exemplo, quando o gerenciador de identidades retorna dados para essa pagina, apos solicitar a autorização
 if ($client->exit) {
     exit();
 }
