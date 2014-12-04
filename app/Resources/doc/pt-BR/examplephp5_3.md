@@ -19,7 +19,7 @@ No arquivo `composer.json` basta adicionar a seguinte configuração:
 }
 ```
 
-Ulitizando a linha de comando, no mesmo diretorio que esta o arquivo `composer.json` é possivel executar o seguinte comando: `composer install --prefer-dist`. Assim o `composer` instalará o componente desejado e suas dependencias. 
+Utilizando a linha de comando, no mesmo diretorio que esta o arquivo `composer.json` é possivel executar o seguinte comando: `composer install --prefer-dist`. Assim o `composer` instalará o componente desejado e suas dependencias.
 
 ## Começando
 
@@ -31,7 +31,7 @@ Primeiramente criamos um arquivo de configuração `config.ini` referente ao ser
 [fkooman_client_config]
 //endereço para fazer a autenticação
 authorize_endpoint = "https://meu.rs.gov.br/oauth/v2/auth";
-//endereço para requerer o Acess Token
+//endereço para requerer o Access Token
 token_endpoint = "https://meu.rs.gov.br/oauth/v2/token";
 //endereço para retornar os dados
 redirect_uri = "http://localhost/callback.php";
@@ -51,7 +51,7 @@ api_url = "https://meu.rs.gov.br/api/v1/person.json";
 
 ### Criando um script de autenticação
 
-É necessário criar um script que ofereça a possibilidade do usuario autenticar. Esse script tem que testar se o usuário ja esta autenticado. No moemento que o script detectar que o usuário esta autenticado, ele que pegar as informação sobre esse usuário.
+É necessário criar um script que oferece a possibilidade do usuario autenticar. Esse script tem que testar se o usuário ja esta autenticado. No momento que o script detectar que o usuário esta autenticado, ele que pegar as informação sobre esse usuário.
  
 ``` php
 //primeiro carregamos as configurações
@@ -59,33 +59,33 @@ $config = parse_ini_file('config.ini');
 if (false === $config) {
     die('please you need to have a config.ini file. Make one based on config.ini.dist');
 }
-//com as configurações é criado um instancia das configurações do cliente
+//com as configurações é criado um instância das configurações do cliente
 $clientConfig = new \fkooman\OAuth\Client\ClientConfig($config);
 
-//criamos uma instancia para armazenar os dados utilizados pelo Oauth
+//criamos uma instância para armazenar os dados utilizados pelo Oauth
 $tokenStorage = new \fkooman\OAuth\Client\SessionStorage();
-//criamos uma instancia para fazer a comunicação http
+//criamos uma instância para fazer a comunicação http
 $httpClient = new \Guzzle\Http\Client();
-//criamos uma instancia para utilizar a API do nosso gerenciador de identidades 
+//criamos uma instância para utilizar a API do nosso gerenciador de identidades 
 $api = new fkooman\OAuth\Client\Api($config['api_context'], $clientConfig, $tokenStorage, $httpClient);
 //configuramos o contexto da nossa API
 $context = new \fkooman\OAuth\Client\Context($config['api_context'], explode(" ", $config['api_scopes']));
-//verficamos se ja temos uma Access Token
+//verificamos se já temos uma Access Token
 $accessToken = $api->getAccessToken($context);
 if (false === $accessToken) {
-	//caso nao tenhamos uma Access Token
-	//se temos uma variavel indicando que desejamos autenticar 
+	//caso não tenhamos uma Access Token
+	//se temos uma variável indicando que desejamos autenticar
     if ($_GET['authorize'] == 1) {        
     	//enviamos o usuario para a tela de autorização do gerenciador de identidades    
         header("HTTP/1.1 302 Found");
         header("Location: " . $api->getAuthorizeUri($context));
     } else {
-    	//oferecamos a autenticação para o usuário
+    	//oferecemos a autenticação para o usuário
         echo "<a href='index.php?authorize=1'>Logar com o Login do Cidadao</a>";
     }
     exit;
 } else {
-	//caso tenhamos a Acces token podemos consultar a API e obter os dados dele
+	//caso tenhamos a Access token podemos consultar a API e obter os dados dele
     try {
         $client = new \Guzzle\Http\Client();
         $bearerAuth = new \fkooman\Guzzle\Plugin\BearerAuth\BearerAuth($accessToken->getAccessToken());
@@ -100,7 +100,7 @@ if (false === $accessToken) {
             print_r($response->getBody());
         }
     } catch (\fkooman\Guzzle\Plugin\BearerAuth\Exception\BearerErrorResponseException $e) {
-    	//caso tenhamos um erro de token invalida, jogamos essa token fora, tentamos autenticar novamente
+    	//caso tenhamos um erro de token inválida, jogamos essa token fora, tentamos autenticar novamente
         if ("invalid_token" === $e->getBearerReason()) {            
             $api->deleteAccessToken($context);
             $api->deleteRefreshToken($context);            
@@ -127,17 +127,17 @@ $config = parse_ini_file('config.ini');
 if (false === $config) {
     die('please you need to have a config.ini file. Make one based on config.ini.dist');
 }
-//com as configurações é criado um instancia das configurações do cliente
+//com as configurações é criado um instância das configurações do cliente
 $clientConfig = new \fkooman\OAuth\Client\ClientConfig($config);
 try {
-	//criamos uma instancia para armazenar os dados utilizados pelo Oauth
+	//criamos uma instância para armazenar os dados utilizados pelo Oauth
     $tokenStorage = new \fkooman\OAuth\Client\SessionStorage();
-    //criamos uma instancia para fazer a comunicação http
+    //criamos uma instância para fazer a comunicação http
     $httpClient = new \Guzzle\Http\Client();
-    //criamos uma instancia para lidar com o retorno do gerenciador de identidades
+    //criamos uma instância para lidar com o retorno do gerenciador de identidades
     $cb = new \fkooman\OAuth\Client\Callback($config['api_context'], $clientConfig, $tokenStorage, $httpClient);    
     $cb->handleCallback($_GET);
-    //redirecionamos para o script de autenticação
+    //direcionamos para o script de autenticação
     header("HTTP/1.1 302 Found");
     header("Location: index.php");
     exit;
