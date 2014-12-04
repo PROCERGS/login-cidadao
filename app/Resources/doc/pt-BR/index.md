@@ -12,3 +12,4 @@ REST API
 --------
 
  * [ Introdução ](restApiIntro.md)
+ * [ Enviando Notificações ](sendingNotifications.md)

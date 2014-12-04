@@ -85,3 +85,10 @@ Authorization: Bearer YTY4ZDA0M2...YTU3ZjI3Ng
 GET /api/v1/person.json?access_token=YTY4ZDA0M2...YTU3ZjI3Ng HTTP/1.1
 Host: meu.rs.gov.br
 ```
+
+Veja também
+-----------
+
+[Enviando Notificações](sendingNotifications.md)
+
+[ Voltar ao Índice ](index.md)
