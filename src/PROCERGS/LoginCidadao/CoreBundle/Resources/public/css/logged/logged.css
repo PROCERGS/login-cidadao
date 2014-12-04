@@ -680,3 +680,13 @@ label + .glyphicon-pencil {
   margin-left: 5px;
   margin-top: -3px;
 }
+
+#person_resume_form_type_roles label {
+  float: left;
+  width: 50%;
+}
+
+#person_resume_form_type_roles input[type='checkbox'] {
+  float: right;
+  width: 50%;
+}

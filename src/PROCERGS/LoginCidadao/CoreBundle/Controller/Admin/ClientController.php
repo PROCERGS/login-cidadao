@@ -71,6 +71,9 @@ class ClientController extends Controller
             $client->setAllowedGrantTypes(Client::getAllGrants());
             $clientManager = $this->container->get('fos_oauth_server.client_manager');
             $clientManager->updateClient($client);
+            $translator = $this->get('translator');
+            $this->get('session')->getFlashBag()->add('success',
+                    $translator->trans('Updated successfully!'));
             $messages = 'aeee';
         }
         return $this->render('PROCERGSLoginCidadaoCoreBundle:Admin\Client:new.html.twig', array(

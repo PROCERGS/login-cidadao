@@ -82,6 +82,8 @@ class PersonController extends Controller
         if ($form->isValid()) {
             $userManager = $this->container->get('fos_user.user_manager');
             $userManager->updateUser($person);
+            $translator = $this->get('translator');
+            $translator->trans('Updated successfully.');
         }
         return array(
             'form' => $form->createView(),
