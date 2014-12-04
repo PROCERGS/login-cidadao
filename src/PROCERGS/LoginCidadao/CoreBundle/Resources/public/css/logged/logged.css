@@ -261,7 +261,6 @@ body.no-scroll {
 }
 
 #profile-edit .file-upload {
-    max-height: 20px;
     color: #000;
 }
 
@@ -271,6 +270,10 @@ body.no-scroll {
     top: -28px;
     visibility: hidden;
     width: 100%;
+}
+
+#profile-edit .btn-upload {
+  margin-top: 5px;
 }
 
 #profile-edit .file-upload .file-name {
@@ -676,4 +679,14 @@ label + .glyphicon-pencil {
   cursor: pointer;
   margin-left: 5px;
   margin-top: -3px;
+}
+
+#person_resume_form_type_roles label {
+  float: left;
+  width: 50%;
+}
+
+#person_resume_form_type_roles input[type='checkbox'] {
+  float: right;
+  width: 50%;
 }

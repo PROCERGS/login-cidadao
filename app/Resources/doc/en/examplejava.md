@@ -1,12 +1,12 @@
-# Exemplo utilizando Java
+# Example using Java
 
-## Antes de Começar
+## Before you begin
 
-Certifique-se de que você tem todos os dados descritos [ aqui ](integration.md#basic_info) antes de seguir o tutorial.
+Make sure you have all the data described [here](integration.md#basic_info) before following the tutorial.
 
-### Dependências
+### Dependencies
 
-Para conectar no Login Cidadão usando `Java` é utilizado o cliente OAuth [Apache Oltu](https://oltu.apache.org/). Nesse exemplo, será utilizado o gerenciador de dependencias Maven. Assim, no `pom.xml` do projeto é necessario adicionar as seguintes dependencias:
+To connect the Citizen Login using `Java` is used OAuth client [Apache Oltu] (https://oltu.apache.org/). In this example, the Maven dependencies manager is used. Thus, in the 'project pom.xml` is necessary to add the following dependencies:
 
 ```xml
 	<properties>
@@ -49,41 +49,41 @@ Para conectar no Login Cidadão usando `Java` é utilizado o cliente OAuth [Apac
 ```
 
 
-## Começando
+## Getting started
 
-### Arquivo de configuração
+### Configuration file
 
-Primeiramente criamos um arquivo de configuração `oauth_configuration.properties` referente ao servidor OAuth que desejamos utilizar. Nesse arquivo, especificamos o tipo de aplicação que o Apache Oltu utilizará, especificamos o endereço para fazer a autenticação, o endereço para obter o Access Token, endereço para obter os dados do usuário, os escopos desejados, a chave pública, a chave privada e o endereço para onde o gerenciador de identidades irá retornar os dados :
+First we create a configuration file `oauth_configuration.properties` regarding the OAuth server we want to use. In this file, specify the type of application that Apache Oltu use, specify the address to authenticate, the address for the Access Token, address for user data, the desired scopes, the public key, the private key and the address to where the manager identities will return the data:
 
 ```
-//tipo de aplicação que o Apache Oltu utilizará
+//type of application that uses Apache Oltu
 application=generic
 
-//endereço para fazer a autenticação
+//address to authenticate
 authz_endpoint=https://meu.rs.gov.br/oauth/v2/auth
 
-//endereço para obter a Access Token
+//address for the Access Token
 token_endpoint=https://meu.rs.gov.br/oauth/v2/token
 
-//endereço para obter os dados do usuário
+//address for user data
 resource_url=https://meu.rs.gov.br/api/v1/person
 
-//escopos desejados
+//desired scopes
 scope=
 
-//chave pública
+//public key
 client_id=
 
-//chave privada
+//private key
 client_secret=
 
-//endereço para onde o gerenciador de identidades irá retornar dados
+//address where the manager identities will return data
 redirect_uri=
 ```
 
-### Criando um filtro de autenticação
+### Creating an authentication filter
 
-É necessário criar um filtro utilizando `javax.servlet.Filter`. Para isso utilizamos o arquivo `src/main/java/br/gov/rs/meu/helper/AuthFilter.java` da seguinte forma:
+You must create a filter using `javax.servlet.Filter`. For that use the `src / main / java / br / gov / rs / my / helper / AuthFilter.java` as follows:
 
 ``` java
 // src/main/java/br/gov/rs/meu/helper/AuthFilter.java
@@ -94,7 +94,7 @@ public class AuthFilter implements Filter {
 }
 ```
 
-Na a anotação `@WebFilter` nos adicionamos como um dos endereços filtrados o endereço para aonde o gerenciador de identidades retornará dados.
+In the annotation `@ WebFilter` add us as one of the addresses filtered the address to where the identities manager returns data
 
 ``` java
 // src/main/java/br/gov/rs/meu/helper/AuthFilter.java
@@ -106,55 +106,53 @@ Na a anotação `@WebFilter` nos adicionamos como um dos endereços filtrados o 
 			HttpServletResponse res = (HttpServletResponse) response;
 			HttpSession ses = req.getSession(false);
             
-			// Guardamos o endereço que o usuário está tentando acessar
+			// Keep the address that the user is trying to access
 			String reqURI = req.getRequestURI();
             
-			// Verificamos se o usuário já está autenticado nesta aplicação
+			// Check if the user is already authenticated in this application
 			if ((ses != null && ses.getAttribute("username") != null) || reqURI.contains("javax.faces.resource") || Utils.inArray(reqURI, whiteList)) {
 				chain.doFilter(request, response);
 			} else {
-				// Ele não está autenticado, mas pode estar em processo de autenticação
+				// It is not authenticated, but can be authenticating
 				if (ses != null && ses.getAttribute("lc.oauthParams") != null) {
-					// Obtemos os parâmetros de autenticação
+					// We obtain the authentication parameters
 					OAuthParams oauthParams = (OAuthParams) ses.getAttribute("lc.oauthParams");
 					OAuthAuthzResponse oar = OAuthAuthzResponse.oauthCodeAuthzResponse(req);
                     
-                    // e verificamos se recebemos um Authorization Code
+                    // and check if we received an Authorization Code
 					oauthParams.setAuthzCode(oar.getCode());
                     
-					// Solicitamos um Access Token
+					// We request an Access Token
 					Utils.getAuthorizationToken(oauthParams);
                     
-					// e, em seguida, solicitamos os dados do usuário
+					// and then ask the user data
 					Utils.getResource(oauthParams);
                     
-					// Para simplificar, armazenamos os dados em um Map
-                    // Naturalmente você deveria desserializar o JSON recebido
-                    // para um objeto apropriado
+					// For simplicity, we store data on a Map
+                    // Of course you should deserialize the JSON received 
+                    // for a suitable object
 					ObjectMapper mapper = new ObjectMapper();					
 					Map<String, Object> person = mapper.readValue(
 							oauthParams.getResource(),
 							new TypeReference<Map<String, Object>>() {
 							});
 					
-                    // Nesse momento já possuimos os dados do usuário
-                    // É nesse ponto que você deve persistir o usuário juntamente com
-                    // Seus Access e Refresh Tokens
-                    // Como isto é apenas um exemplo vamos apenas salvar na sessão
+                    // At this point, we have already user data
+                    // This is where you must persist the user along with their Access and Refresh Tokens.                    
+                    // As this is just an example let's just save the session
 					ses.setAttribute("username", person);
                     
-					// Encaminhamos o usuário para onde ele tentou ir originalmente
+					// We refer the user to where he originally tried to go
 					res.sendRedirect((String) ses.getAttribute("lc.origTarget"));
 					ses.removeAttribute("lc.origTarget");
 				} else {
-                	// O usuário não está autenticado nem está se autenticando
-                    // Então devemos encaminhá-lo para o gerenciador de identidade
+                	// The user is not authenticated and also not are authenticating
+                    // Then we must refer the User to the identity manager
                     
-					// É uma boa prática salvar a URL que o usuário tentou acessar
-                    // para encaminhá-lo depois da autorização e autenticação.
+					// It is a good practice to save the URL that the user tried to submit it after authorization and authentication.
 					String origTarget = Utils.getFullRequestURL(req);
                     
-					// Preparamos as configurações do gerenciador de identidade
+					// Prepare the identity manager settings
 					OAuthParams oauthParams = Utils.prepareOAuthParams(req);
 					OAuthClientRequest oauthRequest = OAuthClientRequest
 							.authorizationLocation(
@@ -166,11 +164,11 @@ Na a anotação `@WebFilter` nos adicionamos como um dos endereços filtrados o 
 							.setState(oauthParams.getState())
 							.buildQueryMessage();
                             
-					// Salvemos na sessão as configurações do gerenciador de identidade
+					// Save the session identity manager settings
 					ses.setAttribute("lc.oauthParams", oauthParams);
 					ses.setAttribute("lc.origTarget", origTarget);
                     
-					// Redirecionamos o usuário para o gerenciador de identidades
+					//Redirect the user to the identity management
 					res.sendRedirect(oauthRequest.getLocationUri());
 				}
 			}
@@ -182,12 +180,12 @@ Na a anotação `@WebFilter` nos adicionamos como um dos endereços filtrados o 
 	}
 ```
 
-No arquivo `src/main/java/br/gov/rs/meu/helper/Utils.java` merece explicação dois metodos: `getAuthorizationToken` e o `getResource`.
-O metodo `getAuthorizationToken` é responsável por obter a Access Token:
+In `src / main / java / br / gov / rs / my / helper / Utils.java` deserves explanation two methods:` `getAuthorizationToken` and getResource`.
+The method `getAuthorizationToken` is responsible for getting the Access Token:
 
 ```
 public static void getAuthorizationToken(OAuthParams oauthParams) throws OAuthSystemException, OAuthProblemException {
-	//Preparamos as configurações do gerenciador de identidade
+	//Prepare the identity manager settings
 	OAuthClientRequest oRequest = OAuthClientRequest
 			.tokenLocation(oauthParams.getTokenEndpoint())
 			.setClientId(oauthParams.getClientId())
@@ -199,23 +197,23 @@ public static void getAuthorizationToken(OAuthParams oauthParams) throws OAuthSy
 	OAuthClient client = new OAuthClient(new URLConnectionClient());
 
 	OAuthAccessTokenResponse oauthResponse = null;
-	//definimos uma classe genérica para receber a Access Token
+	//define a generic class to receive the Access Token
 	Class<? extends OAuthAccessTokenResponse> cl = OAuthJSONAccessTokenResponse.class;
-	//requisitamos ao gerenciador de identidade uma Access Token para
+	//we request the identity manager an Access Token
 	oauthResponse = client.accessToken(oRequest, cl);
-	//salve a Access Token, a Refresh Token e a data de expiração
+	//save the Access Token, the Refresh Token and the expiry date
 	oauthParams.setAccessToken(oauthResponse.getAccessToken());
 	oauthParams.setExpiresIn(oauthResponse.getExpiresIn());
 	oauthParams.setRefreshToken(oauthResponse.getRefreshToken());
 }
 ```
 
-O metodo `getResource` é responsável por obter os dados do usuário:
+The method `getResource` is responsible for obtaining the user data:
 
 ```
 public static void getResource(OAuthParams oauthParams) throws OAuthSystemException, OAuthProblemException {
 	OAuthClientRequest request = null;
-	//escolhemos a forma que enviamos a nossa Access Token para o gerenciador de identidades
+	//choose the way we send our Access Token for identity management
 	if (Utils.REQUEST_TYPE_QUERY.equals(oauthParams.getRequestType())) {
 		request = new OAuthBearerClientRequest(oauthParams.getResourceUrl())
 				.setAccessToken(oauthParams.getAccessToken())
@@ -232,11 +230,11 @@ public static void getResource(OAuthParams oauthParams) throws OAuthSystemExcept
 	}
 
 	OAuthClient client = new OAuthClient(new URLConnectionClient());
-	//requisitamos ao gerenciador de identidade os dados do usuário
+	//we request the identity manager user data
 	OAuthResourceResponse resourceResponse = client.resource(request,
 			oauthParams.getRequestMethod(), OAuthResourceResponse.class);
 
-	//caso tenha uma resposta positiva do gerenciador de identidade salve a resposta
+	//if you have a positive response from identity manager save the answer
 	if (resourceResponse.getResponseCode() == 200) {
 		oauthParams.setResource(resourceResponse.getBody());
 	} else {
@@ -248,4 +246,4 @@ public static void getResource(OAuthParams oauthParams) throws OAuthSystemExcept
 
 ```
 
-[ Voltar ao Índice ](index.md)
+[Back to index](index.md)
