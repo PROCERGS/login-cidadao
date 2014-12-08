@@ -56,6 +56,36 @@ As a response, you'll get a 201 HTTP status code as any RESTful API should, but 
 }
 ```
 
+### Receiving notification of readback
+
+To receive a warning that the recipient of the notification read the message in the notification you must add the parameter `callbackUrl`:
+
+```js
+{
+	...
+	"callbackUrl" : "https://mysite/"
+	...
+}
+```
+
+
+If you were informed in a URL parameter `callbackUrl` in the notification, at the time user to read the notification will be sending a request to that address.
+The request is POST type and return two parameters, the parameter `data` and the parameter `signature`.
+The parameter 'data` is a serialized data structure in JSON format. In this structure we have the following data:
+
+```js
+{
+	//the unique notification identifier
+	'id': 1,
+	//the unique user identifier
+	'person_id': 1,
+	//the date and time of the reading formatted in Unix timestamp
+    'read_date': 1272509157
+}
+```
+
+The parameter `signature` is a signature `HMAC` using the `sha256` on the information contained in the parameter `data`. The password used to make this signature is the private key (or secret) of Client OAuth. Thus, it is possible to ensure the authenticity of the message sent.
+
 [Back to REST API Introduction](restApiIntro.md)
 
 [Back to index](index.md)
