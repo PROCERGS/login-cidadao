@@ -11,6 +11,13 @@ procergs_login_cidadao_Notification:
     name_prefix: api_1_
     defaults: { _format: json }
 
+procergs_login_cidadao_NotificationCallback:
+    type: rest
+    prefix: /
+    resource: "@PROCERGSLoginCidadaoAPIBundle/Controller/NotificationCallbackController.php"
+    name_prefix: api_1_
+    defaults: { _format: json }
+
 procergs_login_cidadao_Person:
     type: rest
     prefix: /
