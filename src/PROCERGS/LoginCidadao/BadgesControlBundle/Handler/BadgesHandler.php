@@ -4,9 +4,11 @@ namespace PROCERGS\LoginCidadao\BadgesControlBundle\Handler;
 
 use PROCERGS\LoginCidadao\BadgesControlBundle\Model\BadgeEvaluatorInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+use PROCERGS\LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
 use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use PROCERGS\LoginCidadao\BadgesControlBundle\BadgesEvents;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Event\ListBadgesEvent;
+use PROCERGS\LoginCidadao\BadgesControlBundle\Event\ListBearersEvent;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Event\EvaluateBadgesEvent;
 
 class BadgesHandler
@@ -19,7 +21,7 @@ class BadgesHandler
     {
         $this->evaluators = array();
         $this->dispatcher = $dispatcher;
-        
+
         $this->setup();
     }
 
@@ -34,7 +36,7 @@ class BadgesHandler
 
     /**
      * Evaluates the badges for a given person.
-     * 
+     *
      * @param PersonInterface $person
      * @return PersonInterface instance with badges
      */
@@ -47,7 +49,7 @@ class BadgesHandler
 
     protected function setup()
     {
-        
+
     }
 
     public function getAvailableBadges()
@@ -56,5 +58,12 @@ class BadgesHandler
         $this->dispatcher->dispatch(BadgesEvents::BADGES_LIST_AVAILABLE, $event);
         return $event->getBadges();
     }
-    
+
+    public function countBearers(BadgeInterface $badge = null, $value = null)
+    {
+        $event = new ListBearersEvent($badge, $value);
+        $this->dispatcher->dispatch(BadgesEvents::BADGES_LIST_BEARERS, $event);
+        return $event->getCount();
+    }
+
 }
