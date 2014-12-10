@@ -17,7 +17,7 @@
                     <ul class="list-group">
                         {% for auth in user.getAuthorizations %}
                             {% if auth.client.uid != defaultClientUid %}
-                                <li class="list-group-item service">
+                                <li class="list-group-item service clearfix">
                                     <a class="media clearfix" href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}">
                                         <div class="pull-left">
                                             {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
