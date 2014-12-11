@@ -43,4 +43,18 @@ class PersonRepository extends EntityRepository
         ;
     }
 
+    public function getCountByCountry()
+    {
+      $qb = $this->getEntityManager()->createQueryBuilder();
+
+      return $qb
+              ->select('count(p.country) AS qty, c.name')
+              ->from('PROCERGSLoginCidadaoCoreBundle:Person', 'p')
+              ->innerJoin('PROCERGSLoginCidadaoCoreBundle:Country', 'c', 'WITH', 'p.country = c')
+              ->where('p.country IS NOT NULL')
+              ->groupBy('p.country, c.name')
+              ->orderBy('qty', 'DESC')
+              ->getQuery()->getResult();
+    }
+
 }

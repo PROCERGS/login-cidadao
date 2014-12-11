@@ -724,3 +724,7 @@ label + .glyphicon-pencil {
 .statistics-badges .badges-count {
   font-size: 20px;
 }
+
+.statistics-badges .badge-img {
+  margin-bottom: 5px;
+}
