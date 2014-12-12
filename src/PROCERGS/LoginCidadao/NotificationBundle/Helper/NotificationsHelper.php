@@ -59,7 +59,6 @@ class NotificationsHelper
         $this->container = $container;
         $this->router = $this->container->get('router');
         $this->translator = $this->container->get('translator');
-
         $this->unconfirmedEmailCategoryId = $unconfirmedEmailCategoryId;
         $this->emptyPasswordCategoryId = $emptyPasswordCategoryId;
     }
@@ -88,11 +87,11 @@ class NotificationsHelper
     {
         if ($notification->canBeSent()) {
             $handler = $this->getNotificationHandler();
-            
+
             $serializer = $this->container->get('jms_serializer');
             $context = SerializationContext::create()->setGroups('form');
             $array = json_decode($serializer->serialize($notification, 'json', $context), true);
-            
+
             $handler->patch($notification, array());
         } else {
             $translator = $this->container->get('translator');
@@ -169,7 +168,7 @@ class NotificationsHelper
         $notification = $this->getDefaultNotification($person, $title, $shortText, $text, $icon, $category, new Notification(), array(new Placeholder('link', ''), new Placeholder('linktitle', ''), new Placeholder('linkclick', '')));
         return $handler->patch($notification, array());
     }
-    
+
     public function overwriteCpfNotification(Person $person)
     {
         $category = $this->getEmptyPasswordCategory();
@@ -181,7 +180,7 @@ class NotificationsHelper
         $notification = $this->getDefaultNotification($person, $title, $shortText, $text, $icon, $category, new Notification(), array(new Placeholder('link', ''), new Placeholder('linktitle', ''), new Placeholder('linkclick', '')));
         return $handler->patch($notification, array());
     }
-    
+
     public function revokedVoterRegistrationNotification(Person $person)
     {
         $category = $this->getEmptyPasswordCategory();
@@ -192,6 +191,6 @@ class NotificationsHelper
         $icon = 'glyphicon glyphicon-exclamation-sign';
         $notification = $this->getDefaultNotification($person, $title, $shortText, $text, $icon, $category, new Notification(), array(new Placeholder('link', ''), new Placeholder('linktitle', ''), new Placeholder('linkclick', '')));
         return $handler->patch($notification, array());
-    }    
+    }
 
 }
