@@ -337,6 +337,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface
 
     /**
      * @JMS\Expose
+     * @JMS\Groups({"id_cards"})
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\IdCard", mappedBy="person")
      * @JMS\Since("1.0.3")
      */
@@ -365,6 +366,8 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface
     protected $logoutKeys;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"addresses"})
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonAddress", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
      */
     protected $addresses;

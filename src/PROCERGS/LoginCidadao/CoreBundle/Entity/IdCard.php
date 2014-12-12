@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Table(name="id_card",
@@ -34,18 +35,24 @@ class IdCard
     protected $person;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"id_cards"})
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\State")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      */
     protected $state;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"id_cards"})
      * @Assert\Length(min=1,max="80")
      * @ORM\Column(name="issuer", type="string", length=80)
      */
     protected $issuer;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"id_cards"})
      * @Assert\Length(min=1,max="20")
      * @ORM\Column(name="value",type="string", length=20)
      */

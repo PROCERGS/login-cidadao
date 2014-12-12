@@ -2,6 +2,7 @@
     {% set form = edit_form %}
 {% endif %}
 {{ form_start(form) }}
+{% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
 <a name="form" class="anchor"></a>
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -14,14 +15,9 @@
 
     <div class="panel-body">
         <div class="form-group">
-            {{ form_label(form.line1) }}
-            {{ form_widget(form.line1, {'attr': {'placeholder': 'ex: 221B Baker Street' | trans} }) }}
-            {{ form_errors(form.line1) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(form.line2, null, {'label_attr': {'class': 'sr-only' | trans} }) }}
-            {{ form_widget(form.line2, {'attr': {'placeholder': 'ex: apartment 2' | trans} }) }}
-            {{ form_errors(form.line2) }}
+            {{ form_label(form.country) }}
+            {{ form_widget(form.country, {'attr': {'placeholder': 'ex: Brazil' | trans} }) }}
+            {{ form_errors(form.country) }}
         </div>
         <div class="form-group">
             {{ form_label(form.postalCode) }}
@@ -29,10 +25,31 @@
             {{ form_errors(form.postalCode) }}
         </div>
         <div class="form-group">
+            {{ form_label(form.state) }}
+            {{ form_widget(form.state, {'attr': {'placeholder': 'ex: Rio Grande do Sul' | trans} }) }}
+            {{ form_widget(form.statesteppe, {'attr': {'style': 'display: none;'}}) }}
+            {{ form_errors(form.state) }}
+        </div>
+        <div class="form-group">
             {{ form_label(form.city) }}
-            {{ form_widget(form.city, {'attr': {'placeholder': 'ex: London' | trans} }) }}
+            {{ form_widget(form.city, {'attr': {'placeholder': 'ex: Porto Alegre' | trans} }) }}
+            {{ form_widget(form.citysteppe, {'attr': {'style': 'display: none;'}}) }}
             {{ form_errors(form.city) }}
-            <small>{% trans %}If the address is in another country leave the city blank and fill in this information in the second line of your address.{% endtrans %}</small>
+        </div>
+        <div class="form-group">
+            {{ form_label(form.address) }}
+            {{ form_widget(form.address, {'attr': {'placeholder': 'ex: 221B Baker Street' | trans} }) }}
+            {{ form_errors(form.address) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.addressNumber) }}
+            {{ form_widget(form.addressNumber) }}
+            {{ form_errors(form.addressNumber) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.complement) }}
+            {{ form_widget(form.complement, {'attr': {'placeholder': 'ex: apartment 2' | trans} }) }}
+            {{ form_errors(form.complement) }}
         </div>
     </div>
     <div class="panel-footer">

@@ -30,11 +30,11 @@
                             <span class="extra">{% trans %}Don't know your Voter Registration number?{% endtrans %}<a target='blank' href="{{ tre_search_link }}">{{ 'Search it!' | trans }}</a></span>
                             <span class="extra">{% trans %}Use your account on Nota Fiscal Gaúcha and validate your Voter Registration{% endtrans %}</span>
                         {% else %}
-                            {% if app.user.nfgProfile.voterRegistrationSit is null or app.user.nfgProfile.voterRegistrationSit == 0 %}
+                            {% if app.user.nfgProfile != null and (app.user.nfgProfile.voterRegistrationSit is null or app.user.nfgProfile.voterRegistrationSit == 0) %}
                                 {{ form_widget(form.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
                                 {{ form_errors(form.voterRegistration) }}
                                 <span class="extra">{% trans %}Use your account on Nota Fiscal Gaúcha and authorize us to validate your Voter Registration{% endtrans %}</span>
-                            {% elseif app.user.nfgProfile.voterRegistrationSit == 1 %}
+                            {% elseif app.user.nfgProfile != null and app.user.nfgProfile.voterRegistrationSit == 1 %}
                                 {{ form_widget(form.voterRegistration, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}
                                 {{ form_errors(form.voterRegistration) }}
                                 <span>{{ form.voterRegistration.vars.value }}</span>

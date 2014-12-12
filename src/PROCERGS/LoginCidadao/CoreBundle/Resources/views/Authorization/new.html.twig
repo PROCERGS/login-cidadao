@@ -1,10 +1,12 @@
-{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+{% extends "PROCERGSLoginCidadaoCoreBundle::base.html.twig" %}
 
 {% block body %}
 
 <div class="row">
-    <div class="col-sm-7 col-sm-offset-4 well">
+    <div class="col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+      <div class="well" id="oauth-box">
         {{ include("FOSOAuthServerBundle:Authorize:authorize_content.html.twig") }}
+      </div>
     </div>
 </div>
 

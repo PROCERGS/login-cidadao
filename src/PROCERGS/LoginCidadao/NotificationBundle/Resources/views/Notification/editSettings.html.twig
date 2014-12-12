@@ -29,8 +29,16 @@
                                 {% set category = option.vars.data.category %}
                                 <tr>
                                     <td>{{ category.name }}</td>
-                                    <td class="text-center">{{ form_widget(option.sendEmail) }}</td>
-                                    <td class="text-center">{{ form_widget(option.sendPush) }}</td>
+                                    <td class="text-center">
+                                        <label>
+                                            {{ form_widget(option.sendEmail, { attr: { class: '' } } ) }}
+                                        </label>
+                                    </td>
+                                    <td class="text-center">
+                                        <label>
+                                            {{ form_widget(option.sendPush, { attr: { class: '' } } ) }}
+                                        </label>
+                                    </td>
                                 </tr>
                             {% endfor %}
                                     </table>

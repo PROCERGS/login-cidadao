@@ -133,3 +133,7 @@
   border-color: #DDD;
   color: #000;
 }
+
+.notifications-settings td>label {
+    padding: 0 15px;
+}

@@ -81,15 +81,7 @@ class NfgController extends Controller
                         $otherPerson->setNfgProfile(null);
                         //@TODO do no use updateUser
                         $this->container->get('fos_user.user_manager')->updateUser($otherPerson);
-
-                        $notification = new Notification();
-                        $notification->setPerson($otherPerson)
-                            ->setIcon('glyphicon glyphicon-exclamation-sign')
-                            ->setLevel(Notification::LEVEL_IMPORTANT)
-                            ->setTitle('notification.nfg.revoked.cpf.title')
-                            ->setShortText('notification.nfg.revoked.cpf.message.short')
-                            ->setText('notification.nfg.revoked.cpf.message');
-                        $em->persist($notification);
+                        $this->container->get('notifications.helper')->revokedCpfNotification($otherPerson);
                     }
                 } else {
                     throw new NfgException('notification.nfg.already.bind', NfgException::E_BIND);
@@ -101,15 +93,7 @@ class NfgController extends Controller
                     $otherPerson->setCpf(null);
                     //@TODO do no use updateUser
                     $this->container->get('fos_user.user_manager')->updateUser($otherPerson);
-
-                    $notification = new Notification();
-                    $notification->setPerson($otherPerson)
-                        ->setIcon('glyphicon glyphicon-exclamation-sign')
-                        ->setLevel(Notification::LEVEL_IMPORTANT)
-                        ->setTitle('notification.nfg.revoked.cpf.title')
-                        ->setShortText('notification.nfg.revoked.cpf.message.short')
-                        ->setText('notification.nfg.revoked.cpf.message');
-                    $em->persist($notification);
+                    $this->container->get('notifications.helper')->revokedCpfNotification($otherPerson);
                 }
             }
         } else {
@@ -283,14 +267,7 @@ class NfgController extends Controller
                 $this->checkOtherPerson($result1, $em, $personRepo);
 
                 $person->setCpf($result1['CodCpf']);
-                $notification = new Notification();
-                $notification->setPerson($otherPerson)
-                    ->setIcon('glyphicon glyphicon-exclamation-sign')
-                    ->setLevel(Notification::LEVEL_NORMAL)
-                    ->setTitle('notification.nfg.overwrite.cpf.title')
-                    ->setShortText('notification.nfg.overwrite.cpf.message.short')
-                    ->setText('notification.nfg.overwrite.cpf.message');
-                $em->persist($notification);
+                $this->container->get('notifications.helper')->overwriteCpfNotification($otherPerson);
             }
         } else {
             $this->checkOtherPerson($result1, $em, $personRepo);

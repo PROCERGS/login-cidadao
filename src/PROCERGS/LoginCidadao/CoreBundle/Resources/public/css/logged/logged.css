@@ -64,7 +64,6 @@ body.no-scroll {
     /*background-color: #009933;*/
     background-color: #5CB85C !important;
     color: #fff !important;
-    cursor: default;
 }
 
 .settings-nav li a:hover, .settings-nav .open > a {
@@ -171,9 +170,8 @@ body.no-scroll {
     }
 
     .settings-content h1 {
-        margin: 15px 20px 10px;
+      margin-top: -20px;
     }
-
 }
 
 .settings-content .input-error ul {
@@ -262,7 +260,6 @@ body.no-scroll {
 }
 
 #profile-edit .file-upload {
-    max-height: 20px;
     color: #000;
 }
 
@@ -272,6 +269,10 @@ body.no-scroll {
     top: -28px;
     visibility: hidden;
     width: 100%;
+}
+
+#profile-edit .btn-upload {
+  margin-top: 5px;
 }
 
 #profile-edit .file-upload .file-name {
@@ -338,7 +339,7 @@ body.no-scroll {
 
 #profile-edit .google {
     background-color: #dd4b39;
-    background-image: url(../../images/btn_red.png);
+    background-image: url(../../images/google_link.png);
     background-repeat: no-repeat;
     white-space: nowrap;
     overflow: hidden;
@@ -394,7 +395,7 @@ body.no-scroll {
 }
 
 .client-details h3 {
-    margin-left: 0;
+    margin: 0;
 }
 
 .client-details img {
@@ -530,23 +531,6 @@ body.no-scroll {
     padding-left: 0;
 }
 
-.fos_oauth_server_authorize .connect-diagram {
-    margin: 30px 0;
-}
-
-.fos_oauth_server_authorize .connect-diagram .glyphicon.glyphicon-chevron-right {
-    font-size: 25px;
-    margin: 30px 0;
-}
-
-.fos_oauth_server_authorize .connect-diagram {
-    font-size: 17px;
-}
-
-.fos_oauth_server_authorize .buttons.row {
-    margin-top: 20px;
-}
-
 .app-admin .table-bordered, .app-admin .table-bordered td, .app-admin .table-bordered th {
     border-color: #000;
 }
@@ -589,7 +573,7 @@ body.no-scroll {
 }
 
 .id-card {
-    border: 5px solid #ccc;
+    border: 1px solid #ccc;
     border-radius: 10px;
     margin-bottom: 15px;
     max-width: 99%;
@@ -623,7 +607,7 @@ body.no-scroll {
 }
 
 .id-card-details {
-    padding: 10px 0 10px 5px;
+    padding: 15px;
 }
 
 dl.id-card-details {
@@ -673,6 +657,7 @@ dl.id-card-details {
     position: absolute;
     height: 100%;
     width: 100%;
+    border-radius: 5px;
 }
 
 .id-card .confirm-removal .id-card-confirm-value
@@ -687,4 +672,58 @@ dl.id-card-details {
 
 .id-card {
     position: relative;
+}
+
+label + .glyphicon-pencil {
+  cursor: pointer;
+  margin-left: 5px;
+  margin-top: -3px;
+}
+
+#person_resume_form_type_roles label {
+  float: left;
+  width: 50%;
+}
+
+#person_resume_form_type_roles input[type='checkbox'] {
+  float: right;
+  width: 50%;
+}
+
+#statistics .item {
+  background-color: #F9F9F9;
+  color: #000;
+  display: block;
+  margin-bottom: 10px;
+  padding: 15px 0;
+  text-align: center;
+}
+
+#statistics .item:hover {
+  background-color: #E2EFDE;
+}
+
+#statistics .glyphicon, #statistics .service-img {
+  display: block;
+  font-size: 35px;
+  margin-bottom: 8px;
+}
+
+.statistics-badges .media {
+  background-color: #F9F9F9;
+  margin-bottom: 10px;
+  margin-top: 0;
+  padding: 15px;
+}
+
+.statistics-badges .badge-img {
+
+}
+
+.statistics-badges .badges-count {
+  font-size: 20px;
+}
+
+.statistics-badges .badge-img {
+  margin-bottom: 5px;
 }

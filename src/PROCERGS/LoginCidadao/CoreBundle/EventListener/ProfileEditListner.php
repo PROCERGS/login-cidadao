@@ -97,46 +97,55 @@ class ProfileEditListner implements EventSubscriberInterface
     public function onProfileEditSuccess(FormEvent $event)
     {
         $user = $event->getForm()->getData();
-        if (!$user->getCountry()) {
-            if (!$user->getState()) {
-                $steppe = ucwords(strtolower(trim($event->getForm()->get('ufsteppe')->getData())));
-                if ($steppe) {
-                    $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:State');
-                    $ent = $repo->findOneBy(array(
-                        'name' => $steppe
-                    ));
-                    if (!$ent) {
-                        $ent = new State();
-                        $ent->setName($steppe);
-                        $ent->setCountry($user->getCountry());
-                        $this->em->persist($ent);
+        
+        if (!$user->getState()) {
+            $steppe = ucwords(strtolower(trim($event->getForm()->get('ufsteppe')->getData())));
+            if ($steppe) {
+                if ($user->getCountry()) {
+                    $isPreferred = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Country')->isPreferred($user->getCountry());
+                    if ($isPreferred) {
+                        throw new LcValidationException('restrict.location.creation');
                     }
-                    $user->setState($ent);
-                }
-            }
-            if (!$user->getCity()) {
-                $steppe = ucwords(strtolower(trim($event->getForm()->get('citysteppe')->getData())));
-                if ($user->getState()) {
-                    $state = $user->getState();
-                } elseif (isset($ent)) {
-                    $state = $ent;
                 } else {
-                    $state = null;
+                    throw new LcValidationException('required.field.country');
                 }
-                if ($state && $steppe) {
-                    $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:City');
-                    $ent = $repo->findOneBy(array(
-                        'name' => $steppe,
-                        'state' => $state
-                    ));
-                    if (!$ent) {
-                        $ent = new City();
-                        $ent->setName($steppe);
-                        $ent->setState($state);
-                        $this->em->persist($ent);
+                $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:State');
+                $ent = $repo->findOneBy(array(
+                    'name' => $steppe,
+                    'country' => $user->getCountry()
+                ));
+                if (!$ent) {
+                    $ent = new State();
+                    $ent->setName($steppe);
+                    $ent->setCountry($user->getCountry());
+                    $this->em->persist($ent);
+                }
+                $user->setState($ent);
+            }
+        }
+        if (!$user->getCity()) {
+            $steppe = ucwords(strtolower(trim($event->getForm()->get('citysteppe')->getData())));
+            if ($steppe) {
+                if ($user->getState()) {
+                    $isPreferred = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Country')->isPreferred($user->getState()->getCountry());
+                    if ($isPreferred) {
+                        throw new LcValidationException('restrict.location.creation');
                     }
-                    $user->setCity($ent);
+                } else {
+                    throw new LcValidationException('required.field.state');
                 }
+                $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:City');
+                $ent = $repo->findOneBy(array(
+                    'name' => $steppe,
+                    'state' => $user->getState()
+                ));
+                if (!$ent) {
+                    $ent = new City();
+                    $ent->setName($steppe);
+                    $ent->setState($user->getState());
+                    $this->em->persist($ent);
+                }
+                $user->setCity($ent);
             }
         }
         $this->checkEmailChanged($user);
@@ -229,16 +238,7 @@ class ProfileEditListner implements EventSubscriberInterface
                 $other->setVoterRegistration(null);
                 $this->em->persist($other);
 
-                $notification = new Notification();
-                $notification->setPerson($other)
-                        ->setIcon('glyphicon glyphicon-exclamation-sign')
-                        ->setLevel(Notification::LEVEL_IMPORTANT)
-                        ->setTitle('notification.nfg.revoked.voterreg.title')
-                        ->setShortText('notification.nfg.revoked.voterreg.message.short')
-                        ->setText('notification.nfg.revoked.voterreg.message');
-                $this->em->persist($notification);
-
-                $this->em->flush();
+                $this->notificationsHelper->revokedVoterRegistrationNotification($other);
 
                 $user->setVoterRegistration($voterRegistration);
                 $this->em->persist($user);
@@ -291,14 +291,7 @@ class ProfileEditListner implements EventSubscriberInterface
 
                             $uk->registerManaged($user, array('id' => $user->getId()),$a);
 
-                            $notification = new Notification();
-                            $notification->setPerson($otherPerson)
-                                    ->setIcon('glyphicon glyphicon-exclamation-sign')
-                                    ->setLevel(Notification::LEVEL_IMPORTANT)
-                                    ->setTitle('notification.nfg.revoked.voterreg.title')
-                                    ->setShortText('notification.nfg.revoked.voterreg.message.short')
-                                    ->setText('notification.nfg.revoked.voterreg.message');
-                            $this->em->persist($notification);
+                            $this->notificationsHelper->revokedVoterRegistrationNotification($otherPerson);
 
                             $aNfgProfile = $aUser->getNfgProfile();
                             $aNfgProfile->setVoterRegistrationSit($nfgReturn1['CodSitTitulo']);

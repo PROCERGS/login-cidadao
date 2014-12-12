@@ -18,4 +18,16 @@ class ClientRepository extends EntityRepository
                 ->getOneOrNullResult();
     }
 
+    public function getCountPerson() {
+      $qb = $this->getEntityManager()->createQueryBuilder();
+
+      return $qb
+              ->select('count(a.id) AS qty, c AS client')
+              ->from('PROCERGSLoginCidadaoCoreBundle:Authorization', 'a')
+              ->innerJoin('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'a.client = c')
+              ->groupBy('a.client, c')
+              ->orderBy('qty', 'DESC')
+              ->getQuery()->getResult();
+    }
+
 }

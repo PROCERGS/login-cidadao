@@ -43,11 +43,11 @@ class ClientController extends Controller
         ;
         $grid = new GridHelper();
         $grid->setId('client-grid');
-        $grid->setPerPage(5);
-        $grid->setMaxResult(5);
+        $grid->setPerPage(15);
+        $grid->setMaxResult(15);
         $grid->setQueryBuilder($sql);
         $grid->setInfiniteGrid(true);
-        $grid->setRoute('lc_admin_app_grid');
+        $grid->setRoute('lc_admin_app');
         return array(
             'grid' => $grid->createView($request)
         );
@@ -71,6 +71,9 @@ class ClientController extends Controller
             $client->setAllowedGrantTypes(Client::getAllGrants());
             $clientManager = $this->container->get('fos_oauth_server.client_manager');
             $clientManager->updateClient($client);
+            $translator = $this->get('translator');
+            $this->get('session')->getFlashBag()->add('success',
+                    $translator->trans('Updated successfully!'));
             $messages = 'aeee';
         }
         return $this->render('PROCERGSLoginCidadaoCoreBundle:Admin\Client:new.html.twig', array(

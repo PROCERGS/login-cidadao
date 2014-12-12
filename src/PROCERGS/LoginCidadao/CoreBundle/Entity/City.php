@@ -21,7 +21,7 @@ class City
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @Groups({"city","typeahead"})
+     * @Groups({"city","typeahead","public_profile"})
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
@@ -29,7 +29,7 @@ class City
     /**
      * @var string
      *
-     * @Groups({"city","typeahead"})
+     * @Groups({"city","typeahead","public_profile"})
      * @ORM\Column(name="name", type="string", length=255)
      */
     protected $name;
@@ -43,7 +43,7 @@ class City
     protected $stat;
 
     /**
-     * @Groups({"city","typeahead"})
+     * @Groups({"city","typeahead","public_profile"})
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\State", inversedBy="cities")
      * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      */

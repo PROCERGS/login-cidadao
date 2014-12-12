@@ -1,8 +1,3 @@
-Citizen Login Documentation
-===========================
+[ English Version ](en/index.md)
 
-Contents
---------
-
- * [Scopes](scopes.md)
- * [ "Remote" Logout ](remoteLogout.md)
+[ Versão em Português do Brasil ](pt-BR/index.md)

@@ -4,6 +4,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
@@ -38,7 +39,8 @@ class PersonAddress
      * @JMS\Expose
      * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
-     * @ORM\Column(type="string", nullable=true)
+     * @Assert\Length(max="30")
+     * @ORM\Column(type="string", nullable=true, length=30)
      * @var string
      */
     protected $name;
@@ -47,19 +49,31 @@ class PersonAddress
      * @JMS\Expose
      * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
-     * @ORM\Column(type="string", nullable=false)
+     * @Assert\Length(max="255")
+     * @ORM\Column(type="string", nullable=false, length=255)
      * @var string
      */
-    protected $line1;
+    protected $address;
 
     /**
      * @JMS\Expose
      * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", nullable=true, length=255)
+     * @Assert\Length(max="255")
      * @var string
      */
-    protected $line2;
+    protected $complement;
+    
+    /**
+     * @JMS\Expose
+     * @JMS\Groups({"addresses"})
+     * @JMS\Since("1.1.0")
+     * @Assert\Length(max="10")
+     * @ORM\Column(name="address_number",type="string", nullable=true, length=10)
+     * @var string
+     */
+    protected $addressNumber;    
 
     /**
      * @JMS\Expose
@@ -72,22 +86,38 @@ class PersonAddress
     protected $city;
 
     /**
+     * @var State
+     */
+    protected $state;
+
+    /**
+     * @var Country
+     */
+    protected $country;
+
+    /**
      * @JMS\Expose
      * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
-     * @ORM\Column(name="postal_code", type="string", nullable=true)
+     * @Assert\Length(max="20")
+     * @ORM\Column(name="postal_code", type="string", nullable=true, length=20)
      * @var string
      */
     protected $postalCode;
 
-    public function getLine1()
+    public function getAddress()
     {
-        return $this->line1;
+        return $this->address;
     }
 
-    public function getLine2()
+    public function getComplement()
     {
-        return $this->line2;
+        return $this->complement;
+    }
+    
+    public function getAddressNumber()
+    {
+        return $this->addressNumber;
     }
 
     /**
@@ -99,19 +129,25 @@ class PersonAddress
         return $this->city;
     }
 
-    public function setLine1($line1)
+    public function setAddress($var)
     {
-        $this->line1 = $line1;
+        $this->address = $var;
         return $this;
     }
 
-    public function setLine2($line2)
+    public function setComplement($var)
     {
-        $this->line2 = $line2;
+        $this->complement = $var;
         return $this;
     }
+    
+    public function setAddressNumber($var)
+    {
+        $this->addressNumber = $var;
+        return $this;
+    }    
 
-    public function setCity(City $city)
+    public function setCity(City $city = NULL)
     {
         $this->city = $city;
         return $this;
@@ -158,6 +194,28 @@ class PersonAddress
     public function setName($name)
     {
         $this->name = $name;
+        return $this;
+    }
+
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    public function setState(State $state = NULL)
+    {
+        $this->state = $state;
+        return $this;
+    }
+
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    public function setCountry(Country $country = NULL)
+    {
+        $this->country = $country;
         return $this;
     }
 

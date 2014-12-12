@@ -8,8 +8,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Doctrine\ORM\EntityRepository;
+use PROCERGS\LoginCidadao\CoreBundle\Form\Type\CommonFormType;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
-class NotificationType extends AbstractType
+class NotificationType extends CommonFormType
 {
 
     /**
@@ -23,10 +25,12 @@ class NotificationType extends AbstractType
                             ->where('p.id = :id')
                             ->setParameter('id', 0);
         };
-
-        $preSubmit = function (FormEvent $event) {
-            $data = $event->getData();
-            $form = $event->getForm();
+        $em = $this->em;
+        $placesHoldersForm = $builder->create('placeholders', 'form');
+        $builder->add($placesHoldersForm);
+        $preSubmit = function (FormEvent $event) use (&$em) {
+            $data = $event->getData();            
+            $form = $event->getForm();            
             $form
                     ->add('person', 'entity',
                             NotificationType::getPreSubmitParams(
@@ -47,14 +51,33 @@ class NotificationType extends AbstractType
                             )
                     )
             ;
+            if (isset($data['category']) && isset($data['sender']) ) {
+                $category = $em
+                ->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')
+                ->createQueryBuilder('c')
+                ->where('c.id = :id')
+                ->andWhere('c.client = :clientId')
+                ->setParameters(array('id' => $data['category'], 'clientId' => $data['sender']))
+                ->getQuery()
+                ->setFetchMode('PROCERGSLoginCidadaoNotificationBundle:Placeholder', 'placeholders', ClassMetadata::FETCH_EAGER)
+                ->getOneOrNullResult();
+                
+                $placesHoldersForm = $form->get('placeholders');
+                foreach ($category->getPlaceholders() as $placeholder) {
+                    $placesHoldersForm->add($placeholder->getName(), 'text', array('required' => false, 'empty_data' => $placeholder->getDefault()));
+                }
+                $form->add('icon', 'text', array('required' => false,'empty_data' => $category->getDefaultIcon()));
+                $form->add('title', 'text', array('required' => false, 'empty_data' =>$category->getDefaultTitle()));
+                $form->add('shortText', 'text', array('required' => false, 'empty_data' =>$category->getDefaultShortText()));
+            }
         };
 
         $builder
-                ->add('icon')
-                ->add('title')
-                ->add('shortText')
-                ->add('text')
-                ->add('callbackUrl')
+                ->add('icon', 'text', array('required' => false))
+                ->add('title', 'text', array('required' => false))
+                ->add('shortText', 'text', array('required' => false))
+                ->add('text', 'text', array('required' => false))
+                ->add('callbackUrl', 'text', array('required' => false))
 /*                ->add('createdAt', 'datetime',
                         array('required' => false, 'widget' => 'single_text'))
                 ->add('readDate', 'datetime',
@@ -103,7 +126,7 @@ class NotificationType extends AbstractType
      */
     public function getName()
     {
-        return '';
+        return 'form_notification_type';
     }
 
     public static function getPreSubmitParams($class, $property, $queryBuilder)

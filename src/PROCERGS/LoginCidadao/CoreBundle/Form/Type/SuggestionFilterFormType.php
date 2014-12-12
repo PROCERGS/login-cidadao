@@ -17,19 +17,21 @@ class SuggestionFilterFormType extends AbstractType
             'required' => false,
             'label' => 'sugg.username'
         ));
-        $builder->add('dateini', 'birthday', array(
+        $builder->add('dateini', 'date', array(
             'required' => false,
-            'format' => 'dd MMMM yyyy',
-            'widget' => 'choice',
+            'format' => 'dd/MM/yyyy',
+            'widget' => 'single_text',
             'years' => range(date('Y'), 1898),
-            'label' => 'sugg.dateini'
+            'label' => 'sugg.dateini',
+            'attr' => array('pattern' => '[0-9/]*', 'class' => 'date')
         ));
-        $builder->add('dateend', 'birthday', array(
+        $builder->add('dateend', 'date', array(
             'required' => false,
-            'format' => 'dd MMMM yyyy',
-            'widget' => 'choice',
+            'format' => 'dd/MM/yyyy',
+            'widget' => 'single_text',
             'years' => range(date('Y'), 1898),
-            'label' => 'sugg.dateend'
+            'label' => 'sugg.dateend',
+            'attr' => array('pattern' => '[0-9/]*', 'class' => 'date')
         ));
         $builder->add('text', 'text', array(
             'required' => false,

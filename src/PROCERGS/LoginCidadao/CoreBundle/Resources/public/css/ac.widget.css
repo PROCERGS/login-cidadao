@@ -1,16 +1,40 @@
+.ac-sandbox {
+  margin-top: 15px;
+}
+
 .ac-sandbox, .ac-magicbox, .ac-search-enable, .ac-search-cancel,
-	.ac-search-commit, .ac-tags-toolbar, .ac-scrollspy-opts-selected-group,
-	.ac-scrollspy-opts-group {
-	
+  .ac-search-commit, .ac-tags-toolbar, .ac-scrollspy-opts-selected-group,
+  .ac-scrollspy-opts-group {
+
 }
 
 .ac-scrollspy-opts, .ac-scrollspy-opts-selected {
-	height: 150px;
-	overflow: auto;
-	position: relative;
-	background-color: white;
+  height: 150px;
+  overflow: auto;
+  position: relative;
+  background-color: white;
 }
 
 .ac-scrollspy-opts-selected .glyphicon-arrow-down:before {
-	content: "";
+  content: "";
+}
+
+.ac-scrollspy-opts-group {
+  margin: 15px 0;
+}
+
+.ac-sandbox .infinitegrid-content .header {
+  padding: 2px 0;
+}
+
+.ac-search-loader {
+  background-image: url(../images/ajax-loader.gif);
+  display: none;
+  height: 16px;
+  margin: -3px 8px;
+  width: 16px;
+}
+
+.ac-search-loader.show {
+  display: inline-block!important;
 }

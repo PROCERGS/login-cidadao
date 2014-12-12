@@ -66,10 +66,10 @@
   padding: 0 15px;
 }
 
-.infinityscroll-loading .text {
+.infinitescroll-loading .text {
   display: none;
 }
 
-.infinityscroll-loading .ajax-loader {
-  display: block;
+.infinitescroll-loading .ajax-loader {
+  display: inline-block;
 }

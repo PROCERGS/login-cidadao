@@ -14,6 +14,10 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+use PROCERGS\OAuthBundle\Model\ClientInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use PROCERGS\OAuthBundle\Model\ClientUser;
 
 class PersonController extends BaseController
 {
@@ -40,10 +44,18 @@ class PersonController extends BaseController
     public function getPersonAction()
     {
         $person = $this->getUser();
-        $scope = $this->getClientScope($person);
+        if ($person instanceof PersonInterface) {
+            $scope = $this->getClientScope($person);
+        } else {
+            if ($person instanceof ClientUser) {
+                throw new AccessDeniedHttpException("This is only available to a person's Access Token, not a client's.");
+            } else {
+                throw new AccessDeniedHttpException();
+            }
+        }
 
         $view = $this->view($person)
-                ->setSerializationContext($this->getSerializationContext($scope));
+            ->setSerializationContext($this->getSerializationContext($scope));
         return $this->handleView($view);
     }
 
@@ -70,7 +82,7 @@ class PersonController extends BaseController
         $user = $this->getUser();
         $scope = $this->getClientScope($user);
         $updatedAt = \DateTime::createFromFormat('Y-m-d H:i:s',
-                        $this->getRequest()->get('updated_at'));
+                                                 $this->getRequest()->get('updated_at'));
 
         if (!($updatedAt instanceof \DateTime)) {
             $updatedAt = new \DateTime();
@@ -79,11 +91,11 @@ class PersonController extends BaseController
         $id = $user->getId();
         $lastUpdatedAt = null;
         $callback = $this->getCheckUpdateCallback($id, $updatedAt,
-                $lastUpdatedAt);
+                                                  $lastUpdatedAt);
         $person = $this->runTimeLimited($callback);
         $context = SerializationContext::create()->setGroups($scope);
         $view = $this->view($person)
-                ->setSerializationContext($context);
+            ->setSerializationContext($context);
         return $this->handleView($view);
     }
 
@@ -149,17 +161,17 @@ class PersonController extends BaseController
         $body = json_decode($request->getContent(), 1);
 
         $chkAuth = $this->getDoctrine()
-                ->getManager()
-                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
-                ->createQueryBuilder('a')
-                ->select('cnc, p')
-                ->join('PROCERGSLoginCidadaoCoreBundle:Person', 'p', 'WITH',
-                        'a.person = p')
-                ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'a.client = c')
-                ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc',
-                        'WITH', 'cnc.client = c')
-                ->where('c.id = ' . $client->getId() . ' and p.id = :person_id and cnc.id = :config_id')
-                ->getQuery();
+            ->getManager()
+            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
+            ->createQueryBuilder('a')
+            ->select('cnc, p')
+            ->join('PROCERGSLoginCidadaoCoreBundle:Person', 'p', 'WITH',
+                   'a.person = p')
+            ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'a.client = c')
+            ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH',
+                   'cnc.client = c')
+            ->where('c.id = ' . $client->getId() . ' and p.id = :person_id and cnc.id = :config_id')
+            ->getQuery();
         $rowR = array();
         $em = $this->getDoctrine()->getManager();
         $validator = $this->get('validator');
@@ -174,11 +186,11 @@ class PersonController extends BaseController
                 $not = new Notification();
                 $not->setPerson($res[0]);
                 $not->setConfigNotCli($res[1])
-                        ->setIcon(isset($row['icon']) && $row['icon'] ? $row['icon'] : $not->getConfigNotCli()->getIcon())
-                        ->setTitle(isset($row['title']) && $row['title'] ? $row['title'] : $not->getConfigNotCli()->getTitle())
-                        ->setShortText(isset($row['shorttext']) && $row['shorttext'] ? $row['shorttext'] : $not->getConfigNotCli()->getShortText())
-                        ->setText($row['text'])
-                        ->parseHtmlTemplate($not->getConfigNotCli()->getHtmlTemplate());
+                    ->setIcon(isset($row['icon']) && $row['icon'] ? $row['icon'] : $not->getConfigNotCli()->getIcon())
+                    ->setTitle(isset($row['title']) && $row['title'] ? $row['title'] : $not->getConfigNotCli()->getTitle())
+                    ->setShortText(isset($row['shorttext']) && $row['shorttext'] ? $row['shorttext'] : $not->getConfigNotCli()->getShortText())
+                    ->setText($row['text'])
+                    ->parseHtmlTemplate($not->getConfigNotCli()->getHtmlTemplate());
                 $errors = $validator->validate($not);
                 if (!count($errors)) {
                     $em->persist($not);

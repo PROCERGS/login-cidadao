@@ -299,6 +299,11 @@ class Category implements CategoryInterface, UniqueEntityInterface
         return $this->emailable;
     }
 
+    public function isEmailable()
+    {
+        return $this->getEmailable();
+    }
+
     /**
      * Set htmlTemplate
      *
@@ -438,24 +443,6 @@ class Category implements CategoryInterface, UniqueEntityInterface
     {
         $this->uid = $uid;
         return $this;
-    }
-
-    public function renderMarkdownPreview() {
-      $preview = $this->getMarkdownTemplate();
-
-      $values = array();
-      $placeholders = $this->getPlaceholders();
-      foreach ($placeholders as $placeholder) {
-          $name = $placeholder->getName();
-
-          if (array_key_exists($name, $values)) {
-              $value = $values[$name];
-          } else {
-              $value = $placeholder->getDefault();
-          }
-          $preview = str_replace($name, $value, $preview);
-      }
-      return $preview;
     }
 
 }

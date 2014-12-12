@@ -331,7 +331,7 @@ var lcInfiniteGrid = {
   /* aqui eh funcao que cria a instancia do infintyscroll quando clica num botao*/
   "scrollNextButton" : function(event) {
     /* escondendo o botao */
-    $(this).addClass('infinityscroll-loading');
+    $(this).addClass('infinitescroll-loading');
     /*o data-retrive eh onde esta armazedo o id do elemento que vamos criar a instancia do scroll, eh onde esta a grid */
     lcInfiniteGrid.common($(this).attr('data-retrive'));
     $($(this).attr('data-retrive')).infinitescroll('retrieve');
@@ -382,11 +382,11 @@ var lcInfiniteGrid = {
               break;
             }
           }
-          if (!isLast) {
+          if (isLast) {
             $(_id+' .infinitescroll-next-button').removeClass('infinitescroll-loading');
           }
       });
-      /* aqui testmos se para usar o autoscroll ou nao */
+      /* aqui testamos se é para usar o autoscroll ou nao */
       if (extraOpts && extraOpts.behavior && extraOpts.behavior == 'local') {
         /*console.log('here');*/
       } else {
@@ -450,6 +450,7 @@ var lcAcWidget = {
     },
     /* aqui é quando clico para poder abrir o multiplo select*/
     onClickSearchEnable : function(event) {
+      $('.ac-search-loader').addClass('show');
       /* pegamos a referencia de qual elemento vamos criar nossa instancia do multiplesect*/
       var _id = '#'+$(this).attr('data-ac-reference');
       var mb = $(_id + ' + .ac-magicbox');
@@ -478,6 +479,7 @@ var lcAcWidget = {
             data: {"ac_data":data},
             dataType : 'html',
             success : function(data, textStatus, jqXHR) {
+              $('.ac-search-loader').removeClass('show');
               /*pegamos a grid de retorno e colocamos dentro da div de exibicao*/
               mb.find('.ac-scrollspy-opts-selected').html(data);
               mb.toggleClass('in');
@@ -591,9 +593,17 @@ $(function() {
         dataType : 'html',
         success : function(data, textStatus, jqXHR) {
           $(e.attr('ajax-target')).html(data);
+          history.pushState({ infiniteGrid: data }, '', '');
         }
         });
     });
+    // Ajax history fix
+    var currentState = history.state;
+    if (currentState && currentState.infiniteGrid) {
+      $("#ajax-result").html(currentState.infiniteGrid);
+    }
+
+
     $(document).on('click', '.infinitescroll-next-button' , lcInfiniteGrid.scrollNextButton);
     $('[data-infinite-grid="true"]').each(lcInfiniteGrid.startUp);
     $("[data-enable-switch='1']").bootstrapSwitch();

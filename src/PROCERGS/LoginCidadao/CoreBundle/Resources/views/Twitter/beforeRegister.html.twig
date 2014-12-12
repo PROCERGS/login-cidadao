@@ -18,16 +18,11 @@
             <p>{% trans %}Since twitter won't share your email, we need you to type your email manually.{% endtrans %}</p>
             <p>{% trans %}This email will be used for future contact and can also be user to log in, so this must be a valid email.{% endtrans %}</p>
         </div>
-
+		{% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
         {{ form_start(form, {'action': path('lc_before_register_twitter'), 'attr': {'role':'form', 'class':'lc_before_register_twitter'}}) }}
             <div class="form-content">
                 <div class="col-md-8">
-                    <div class="form-group">
-                        {{ form_label(form.email, 'Email:' | trans, {'label_attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
-                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                        <div class="input-error">{{ form_errors(form.email) }}</div>
-                    </div>
+                	{{ form_row(form.email) }}
                     {{ form_widget(form.save, { 'label': 'Continue Registration' | trans, 'attr': { 'class': 'btn btn-success btn-sm pull-right' } }) }}
                     <a href="{{ path('lc_home') }}" class='btn btn-default' />{% trans %}Cancel{% endtrans %}<a/>
                 </div>

@@ -34,7 +34,7 @@
     {% else %}
         {% set url = path('lc_notifications', { id: row.id }) %}
     {% endif %}
-    <div class="notification-line {{ openId is defined and row.id == openId ? 'notification-open' : '' }}">
+    <div class="notification-line {{ openId is defined and row.id == openId ? 'notification-open' : '' }} menu-item">
         <a class="row media notification common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }} {{ grid.rlast ? 'row-last' }}"
              title="{{ 'Click to read'|trans }}"
              data-notification-id="{{ row.id }}"
@@ -42,8 +42,10 @@
             {{ block('grid_row_action') }}
             {{ block('grid_row_data') }}
         </a>
-        <div class="row notification-content common-grid-result">
+        <div class="row notification-content common-grid-result" data-loaded="{{ row.isRead ? 'true' : 'false' }}">
+            {% if row.isRead %}
             {{ row.renderHtml() | raw }}
+            {% endif %}
         </div>
     </div>
 {% endblock grid_row %}
@@ -54,7 +56,7 @@
         {% if grid.routeParams.clientId is defined %}
         {% set routeParams = { 'offset': grid.iterable.nextOffset, 'clientId': grid.routeParams.clientId } %}
         {% endif %}
-        <a href="{{ path(grid.route, routeParams) }}" class="btn btn-block btn-info notification-load-more" data-next-offset="{{ grid.iterable.nextOffset }}"
+        <a href="{{ path(grid.route, routeParams) }}" class="btn btn-block btn-info btn-more notification-load-more" data-next-offset="{{ grid.iterable.nextOffset }}"
            data-per-page="{{ grid.perPage }}" data-loading-text="{{ 'loading...'|trans }}">
             {{ 'load more'|trans }}
         </a>

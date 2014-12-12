@@ -1,4 +1,5 @@
 <?php
+
 namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -12,11 +13,12 @@ use JMS\Serializer\Annotation\Groups;
  */
 class Country
 {
+
     const REVIEWED_OK = 0;
     const REVIEWED_IGNORE = 1;
 
     /**
-     * @Groups({"country", "typeahead"})
+     * @Groups({"country", "typeahead", "public_profile"})
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -25,19 +27,19 @@ class Country
     private $id;
 
     /**
-     * @Groups({"country", "typeahead"})
+     * @Groups({"country", "typeahead", "public_profile"})
      * @var string @ORM\Column(name="name", type="string", length=50)
      */
     protected $name;
 
     /**
-     * @Groups({"country", "typeahead"})
+     * @Groups({"country", "typeahead", "public_profile"})
      * @var string @ORM\Column(name="iso2", type="string", length=2, nullable=true)
      */
     protected $iso2;
 
     /**
-     * @Groups({"country"})
+     * @Groups({"country", "public_profile"})
      * @var string @ORM\Column(name="iso3", type="string", length=3, nullable=true)
      */
     protected $iso3;
@@ -64,6 +66,12 @@ class Country
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $reviewed;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true, options={"default" = 0})
+     * @var int
+     */
+    protected $preference;
 
     public function __construct($id = null)
     {
@@ -165,4 +173,5 @@ class Country
     {
         return $this->reviewed;
     }
+
 }

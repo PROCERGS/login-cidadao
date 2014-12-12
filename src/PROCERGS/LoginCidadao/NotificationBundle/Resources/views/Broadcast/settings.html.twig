@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="content notifications-broadcast-preview">
-  
+
   <div class="panel panel-default">
     <div class="panel-heading"><h2 class="panel-title">{{ 'Broadcast Preview' | trans }}</h2></div>
     <div class="panel-body">
@@ -14,13 +14,13 @@
       <ul class="list-group">
       {% for placeholder in form.placeholders %}
         {% set placeholderObj = placeholder.vars.data.placeholder %}
-        <li class="list-group-item placeholder">
+        <li class="list-group-item placeholder clearfix">
             <span class="label" data-placeholder="{{ placeholderObj.name }}">{{ placeholderObj.name }}</span>
             {{ form_widget(placeholder.value, {'attr': {'class': 'pull-right value'}} ) }}
         </li>
       {% endfor %}
       </ul>
-      <button type="button" class="btn btn-primary" id="btn-preview">Preview</button>
+      <button type="button" class="btn btn-primary" id="btn-preview">{{ 'Preview' | trans }}</button>
 
       <h4>{{ 'Template' | trans }}</h4>
       <div class="well" id="notification-preview">{{ form.vars.data.template | raw}}</div>
@@ -33,7 +33,7 @@
         {% endfor %}
       </ul>
 
-      <div class="form-bar text-right clearfix">        
+      <div class="form-bar text-right clearfix">
         {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
         {{ form_widget(form.saveAndAdd, {'attr': {'class': 'btn btn-success'}}) }}
       </div>

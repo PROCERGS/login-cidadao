@@ -2,12 +2,17 @@
 
 namespace PROCERGS\LoginCidadao\NotificationBundle\Model;
 
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+use PROCERGS\LoginCidadao\NotificationBundle\Model\CategoryInterface;
+
 interface NotificationInterface
 {
 
     const LEVEL_NORMAL = 1;
     const LEVEL_IMPORTANT = 2;
     const LEVEL_EXTREME = 3;
+
+    public function getId();
 
     public function getIcon();
 
@@ -26,7 +31,7 @@ interface NotificationInterface
     public function setText($text);
 
     /**
-     * @return Person
+     * @return PersonInterface
      */
     public function getPerson();
 
@@ -52,13 +57,31 @@ interface NotificationInterface
 
     public function canBeSent();
 
+    public function getSender();
+
     /**
      * Returns the severity of the notification
      */
     public function getLevel();
+
     public function isExtreme();
 
     public function setLevel($level);
 
     public function isGlyphicon();
+
+    /** @var CategoryInterface */
+    public function getCategory();
+
+    public function setPlaceholders($var);
+
+    public function getPlaceholders();
+
+    public function setMailTemplate($var);
+
+    public function getMailTemplate();
+
+    public function getHtmlTemplate();
+
+    public function isRead();
 }

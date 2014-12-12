@@ -113,6 +113,10 @@
     position: relative;
 }
 
+#lc-navbar .dropdown-header {
+  padding: 3px 10px;
+}
+
 #lc-navbar-ul > li {
     float: left;
     height: 50px;
@@ -256,6 +260,10 @@
     margin: 0;
 }
 
+#lc-navbar .media>.pull-left {
+  padding-right: 10px;
+}
+
 #lc-navbar .dropdown-menu .none {
     margin: 10px;
 }
@@ -283,45 +291,29 @@
     display: block;
 }
 
-#lc-navbar .menu-title {
-  padding: 0 5px;
-}
-
 #lc-navbar .dropdown-menu li a {
     display: block;
-    padding: 5px 20px;
+    /*padding: 5px 20px;*/
 }
 
-#lc-navbar .dropdown-menu li a:hover {
+/*#lc-navbar .dropdown-menu li a:hover {
     background-color: #F5F5F5;
     background-image: -webkit-linear-gradient(top,#F5F5F5 0,#E8E8E8 100%);
     background-image: linear-gradient(to bottom,#F5F5F5 0,#E8E8E8 100%);
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#ffe8e8e8', GradientType=0);
     background-color: #E8E8E8;
+}*/
+
+#lc-navbar .dropdown-menu .btn-more {
+    color: #FFF;
+    padding: 6px 12px;
 }
 
-#lc-navbar .dropdown-menu .all {
-    background-color: #5CB85C;
-    clear: both;
-    height: auto;
-    margin: 0;
-    padding:0;
-    width: 100%;
-}
-
-#lc-navbar .dropdown-menu .all a {
-    border: none;
-    color: #FFF!important;
-    font-size: 12px;
-    padding: 3px 20px;
-    text-align: center;
-}
-
-#lc-navbar .dropdown-menu .all a:hover {
-    background-color: #009933!important;
-    background-image: none!important;
-    color: #FFF!important;
+#lc-navbar .dropdown-menu .btn-more:hover {
+    background-color: #31B0D5;
+    border-color: #269ABC;
+    background-image: none;
 }
 
 @media (max-width: 767px) {
@@ -355,15 +347,22 @@
     right: 20px;
 }
 
-/* Apps */
-#lc-navbar .app .media {
-  padding: 10px;
+#lc-navbar .menu-item {
+    -webkit-transition: 0.3s ease-in-out;
+    -moz-transition: 0.3s ease-in-out;
+    -o-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
 }
 
-#lc-navbar .app .media:hover {
+#lc-navbar .menu-item:hover {
   background: none;
   background-color: #E2EFDE;
   cursor: pointer;
+}
+
+/* Apps */
+#lc-navbar .app .media {
+  padding: 10px;
 }
 
 #lc-navbar .app .media a {
@@ -388,15 +387,12 @@
 #external .notification-extreme.alert {
     margin-bottom: 0;
 }
-.navbar-scrollspy-notification {
+.navbar-scrollspy-notification .tab-content, .navbar-scrollspy-app {
     height: 300px;
-    margin-top: 0;
+    margin: 0;
+    padding: 0;
     overflow: auto;
     position: relative;
-}
-
-.notifications .menu-title {
-  margin: 5px;
 }
 
 #navbarUnread {
