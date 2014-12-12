@@ -1,0 +1,36 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle:Admin:base.html.twig" %}
+{% block content %}
+  <div id="statistics" class="content statistics-badges">
+
+    <h1 class="visible-xs">{{ 'admin.statistics.userByBadge'|trans }}</h1>
+
+    <div class="row">
+      {% for item in data %}
+        {% for key, value in item %}
+          <div class="col-md-6">
+            <div class="media">
+              <a class="media-left badge-img" href="#">
+                <img src="" alt="badge" width="70" height="70">
+              </a>
+              <div class="media-body">
+                <h5 class="media-heading">{{ key }}</h5>
+                {% for bkey, bvalue in value %}
+                  {{ bkey }}
+                  {% if bvalue is iterable %}
+                    <ul class="list-group">
+                    {% for key, data in bvalue %}
+                      <li class="list-group-item">  {{ key }} - {{ data }}</li>
+                    {% endfor %}
+                    </ul>
+                    {% else %}
+                    - {{ bvalue }}
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endblock %}
