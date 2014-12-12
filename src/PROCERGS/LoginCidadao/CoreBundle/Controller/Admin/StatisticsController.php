@@ -37,7 +37,8 @@ class StatisticsController extends Controller
         foreach ($badge as $name => $desc) {
           $filterBadge = new \PROCERGS\LoginCidadao\BadgesBundle\Model\Badge($client, $name, 2);
           $count = $badgesHandler->countBearers($filterBadge);
-          $data[] = $count;
+          $b = array_shift($count);
+          $data[$client][] = $b;
         }
       }
       return array("data" => $data);
