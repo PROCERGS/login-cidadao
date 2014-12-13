@@ -1151,6 +1151,16 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface
         return $this;
     }
 
+    /**
+     * Checks whether 2FA is enabled.
+     *
+     * @return boolean
+     */
+    public function isTwoFactorAuthenticationEnabled()
+    {
+        return $this->googleAuthenticatorSecret !== null;
+    }
+
     public function getGoogleAuthenticatorSecret()
     {
         return $this->googleAuthenticatorSecret;

@@ -16,7 +16,7 @@ class TwoFactorAuthenticationController extends Controller
 {
 
     /**
-     * @Route("/enable")
+     * @Route("/enable", name="2fa_enable")
      * @Template()
      */
     public function enableAction(Request $request)
@@ -30,10 +30,17 @@ class TwoFactorAuthenticationController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $person = $form->getData();
-            $em->persist($person);
-            $em->flush();
+            $verificationCode = $form->get('verification')->getData();
+            $isValid = $twoFactor->checkCode($person, $verificationCode);
+
+            if ($isValid) {
+                $em = $this->getDoctrine()->getManager();
+                $person = $form->getData();
+                $em->persist($person);
+                $em->flush();
+            } else {
+                throw new Exception("Invalid code. TODO: Handle this error.");
+            }
         }
 
         return array(

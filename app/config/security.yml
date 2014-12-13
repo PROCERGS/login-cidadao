@@ -8,11 +8,11 @@ security:
         ROLE_DEV:           ROLE_USER
         ROLE_SUPER:         ROLE_DEV
         ROLE_ADMIN:         ROLE_SUPER
-        ROLE_SUPER_ADMIN:   [ ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH, FEATURE_ALPHA ]
+        ROLE_SUPER_ADMIN:   ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH, FEATURE_ALPHA
 
         FEATURE_ALPHA:      FEATURE_BETA, FEATURE_2FACTOR_AUTH
         FEATURE_BETA:       FEATURE_PROD
-        FEATURE_PROD:       
+        FEATURE_PROD:
 
     providers:
         chainprovider:

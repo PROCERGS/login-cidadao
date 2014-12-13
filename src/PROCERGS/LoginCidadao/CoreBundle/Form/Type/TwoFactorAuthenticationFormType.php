@@ -14,8 +14,17 @@ class TwoFactorAuthenticationFormType extends AbstractType
     {
         $builder
             //->add('googleAuthenticatorSecret', 'hidden')
-            ->add('googleAuthenticatorSecret', 'text')
-            ->add('enable', 'submit', array(
+            ->add('googleAuthenticatorSecret', 'text',
+                  array(
+                'read_only' => true,
+                'label' => "Authenticator Secret"
+            ))
+            ->add('verification', 'text', array(
+                'label' => 'Generated Code',
+                'mapped' => false
+            ))
+            ->add('enable', 'submit',
+                  array(
                 'attr' => array('class' => 'btn btn-success'),
                 'label' => 'Activate Two-Factor Authentication')
         );
@@ -27,7 +36,6 @@ class TwoFactorAuthenticationFormType extends AbstractType
             'data_class' => 'PROCERGS\LoginCidadao\CoreBundle\Entity\Person'
         ));
     }
-
 
     public function getName()
     {
