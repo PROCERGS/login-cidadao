@@ -39,7 +39,7 @@ class TwoFactorAuthenticationController extends Controller
                 $em->persist($person);
                 $em->flush();
             } else {
-                throw new Exception("Invalid code. TODO: Handle this error.");
+                throw new \Exception("Invalid verification code. TODO: Handle this error.");
             }
         }
 
