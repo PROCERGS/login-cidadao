@@ -165,10 +165,10 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="facebookRefreshToken", type="string", length=255, nullable=true)
+     * @ORM\Column(name="facebookAccessToken", type="string", length=255, nullable=true)
      * @JMS\Since("1.1")
      */
-    protected $facebookRefreshToken;
+    protected $facebookAccessToken;
 
     /**
      * @var string
@@ -783,14 +783,14 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface
         return $this->facebookUsername;
     }
 
-    public function getFacebookRefreshToken()
+    public function getFacebookAccessToken()
     {
-        return $this->facebookRefreshToken;
+        return $this->facebookAccessToken;
     }
 
-    public function setFacebookRefreshToken($facebookRefreshToken)
+    public function setFacebookAccessToken($facebookAccessToken)
     {
-        $this->facebookRefreshToken = $facebookRefreshToken;
+        $this->facebookAccessToken = $facebookAccessToken;
         return $this;
     }
 
