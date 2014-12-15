@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "778baf99bc744e9c5fefbbdbd71f7f33",
+    "hash": "9bead98d2b3260500211fda2ee89a6e8",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2384,16 +2384,16 @@
         },
         {
             "name": "scheb/two-factor-bundle",
-            "version": "v1.2.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/scheb/two-factor-bundle.git",
-                "reference": "a77b086bc2776fda7b083f618ec8e0f5b47b15fb"
+                "url": "https://github.com/guilhermednt/two-factor-bundle.git",
+                "reference": "9fcb1ce1985f808c2bca20bdb6b808da30192b7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scheb/two-factor-bundle/zipball/a77b086bc2776fda7b083f618ec8e0f5b47b15fb",
-                "reference": "a77b086bc2776fda7b083f618ec8e0f5b47b15fb",
+                "url": "https://api.github.com/repos/guilhermednt/two-factor-bundle/zipball/9fcb1ce1985f808c2bca20bdb6b808da30192b7d",
+                "reference": "9fcb1ce1985f808c2bca20bdb6b808da30192b7d",
                 "shasum": ""
             },
             "require": {
@@ -2410,7 +2410,6 @@
                     "Scheb\\TwoFactorBundle\\": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2423,12 +2422,15 @@
             "description": "Provides two-factor authenticaton for Symfony2",
             "homepage": "https://github.com/scheb/two-factor-bundle",
             "keywords": [
-                "Authentication",
-                "Symfony2",
+                "authentication",
+                "symfony2",
                 "two-factor",
                 "two-step"
             ],
-            "time": "2014-08-18 20:11:47"
+            "support": {
+                "source": "https://github.com/guilhermednt/two-factor-bundle/tree/master"
+            },
+            "time": "2014-12-15 20:31:01"
         },
         {
             "name": "sensio/distribution-bundle",
@@ -3328,7 +3330,8 @@
         "knplabs/gaufrette": 20,
         "nelmio/api-doc-bundle": 20,
         "jms/security-extra-bundle": 20,
-        "procergs/login-cidadao-badges-bundle": 20
+        "procergs/login-cidadao-badges-bundle": 20,
+        "scheb/two-factor-bundle": 20
     },
     "prefer-stable": false,
     "platform": {

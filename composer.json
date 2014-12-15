@@ -8,9 +8,14 @@
             "" : "src/"
         }
     },
-    "repositories" : [{
+    "repositories" : [
+        {
             "type" : "vcs",
             "url" : "https://github.com/PROCERGS/EWZRecaptchaBundle"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/guilhermednt/two-factor-bundle"
         }
     ],
     "require" : {
@@ -43,7 +48,7 @@
         "nelmio/api-doc-bundle": "@dev",
         "jms/security-extra-bundle": "dev-master",
         "procergs/login-cidadao-badges-bundle": "dev-master",
-        "scheb/two-factor-bundle": "~1.2"
+        "scheb/two-factor-bundle": "dev-master"
     },
     "scripts" : {
         "post-install-cmd" : [
