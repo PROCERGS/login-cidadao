@@ -200,7 +200,6 @@ parameters:
     hwi_oauth.resource_owner.twitter.class: PROCERGS\LoginCidadao\CoreBundle\OAuth\ResourceOwner\TwitterResourceOwner
     lc_supported_scopes: 'id username first_name last_name full_name name cpf birthdate email city picture public_profile voter_registration badges country state city addresses id_cards get_all_notifications notifications cep mobile'
     lc_idcard_country_acronym: BR
-    scheb_two_factor.security.google.provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\TwoFactor\GoogleAndBackupCodeProvider
 
 ewz_recaptcha:
     public_key:   %recaptcha_public_key%
@@ -310,7 +309,8 @@ scheb_two_factor:
         template: PROCERGSLoginCidadaoCoreBundle:TwoFactorAuthentication:form.html.twig
 
     google:
-        enabled: false
+        enabled: true
+        use_backup_codes: true
         server_name: %site_domain%
         template: PROCERGSLoginCidadaoCoreBundle:TwoFactorAuthentication:form.html.twig
 
