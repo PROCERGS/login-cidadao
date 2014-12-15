@@ -58,7 +58,7 @@ class ClientBaseFormType extends AbstractType
                     'property_text' => 'fullNameOrUsername',
                     'search_prop_label' => 'dev.client.persons.filter'
                 ),
-                'required' => true,
+                'required' => false,
                 'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
                 'property' => 'fullNameOrUsername',
                 'query_builder' => function(EntityRepository $er) use (&$entity) {
@@ -105,7 +105,7 @@ class ClientBaseFormType extends AbstractType
                         'property_text' => 'fullNameOrUsername',
                         'search_prop_label' => 'dev.client.persons.filter'
                     ),
-                    'required' => true,
+                    'required' => false,
                     'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
                     'property' => 'fullNameOrUsername',
                     'query_builder' => function(EntityRepository $er) use (&$entity) {
