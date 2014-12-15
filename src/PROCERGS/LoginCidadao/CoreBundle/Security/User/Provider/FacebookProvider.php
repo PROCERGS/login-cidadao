@@ -102,6 +102,7 @@ class FacebookProvider implements UserProviderInterface
             }
 
             $user->setFBData($fbdata);
+            $user->setFacebookAccessToken($this->facebook->getAccessToken());
 
             if (count($this->validator->validate($user, 'Facebook'))) {
                 // TODO: the user was found obviously, but doesnt match our expectations, do something smart
@@ -167,6 +168,7 @@ class FacebookProvider implements UserProviderInterface
             }
 
             $user->setFBData($fbdata);
+            $user->setFacebookAccessToken($this->facebook->getAccessToken());
 
             if (count($this->validator->validate($user, 'Facebook'))) {
                 // TODO: the user was found obviously, but doesnt match our expectations, do something smart
