@@ -9,6 +9,7 @@ use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Security\Core\Util\StringUtils;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Doctrine\ORM\EntityManager;
 
 class GoogleAndBackupCodeProvider extends GoogleProvider implements TwoFactorProviderInterface
 {
@@ -34,6 +35,11 @@ class GoogleAndBackupCodeProvider extends GoogleProvider implements TwoFactorPro
     protected $authCodeParameter;
 
     /**
+     * @var EntityManager
+     */
+    protected $em;
+
+    /**
      * Construct provider for Google authentication
      *
      * @param \Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator $helper
@@ -49,6 +55,12 @@ class GoogleAndBackupCodeProvider extends GoogleProvider implements TwoFactorPro
         $this->templating = $templating;
         $this->formTemplate = $formTemplate;
         $this->authCodeParameter = $authCodeParameter;
+    }
+
+    public function setEntityManager(EntityManager $em)
+    {
+        $this->em = $em;
+        return $this;
     }
 
     /**
@@ -90,10 +102,12 @@ class GoogleAndBackupCodeProvider extends GoogleProvider implements TwoFactorPro
         $backupCodes = $person->getBackupCodes();
 
         foreach ($backupCodes as $backupCode) {
+            if ($backupCode->getUsed()) {
+                continue;
+            }
             if (StringUtils::equals($backupCode->getCode(), $authCode)) {
                 $backupCode->setUsed(true);
-                // TODO: persist used backup code
-
+                $this->em->flush($backupCode);
                 return true;
             }
         }

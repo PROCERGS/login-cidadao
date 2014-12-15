@@ -310,7 +310,7 @@ scheb_two_factor:
         template: PROCERGSLoginCidadaoCoreBundle:TwoFactorAuthentication:form.html.twig
 
     google:
-        enabled: true
+        enabled: false
         server_name: %site_domain%
         template: PROCERGSLoginCidadaoCoreBundle:TwoFactorAuthentication:form.html.twig
 

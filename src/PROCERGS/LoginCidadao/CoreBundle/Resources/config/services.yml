@@ -35,6 +35,9 @@ parameters:
 
     procergs_logincidadao.idcard.form.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\IdCardType
 
+    scheb_two_factor.security.google.class: Google\Authenticator\GoogleAuthenticator
+    scheb_two_factor.security.google_authenticator.class: Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator
+
 services:
     procergs_lc.command.populate_database:
         class: PROCERGS\LoginCidadao\CoreBundle\Command\PopulateDatabaseCommand
@@ -305,3 +308,19 @@ services:
         arguments: [ @security.role_hierarchy, 'FEATURE_' ]
         tags:
             - { name: security.voter }
+
+
+    scheb_two_factor.security.google:
+        class: %scheb_two_factor.security.google.class%
+
+    scheb_two_factor.security.google_authenticator:
+        class: %scheb_two_factor.security.google_authenticator.class%
+        arguments: [ @scheb_two_factor.security.google, %scheb_two_factor.google.server_name% ]
+
+    procergs.two_factor.provider:
+        class: %scheb_two_factor.security.google.provider.class%
+        arguments: [ "@scheb_two_factor.security.google_authenticator", @templating, %scheb_two_factor.google.template%, %scheb_two_factor.parameter_names.auth_code% ]
+        calls:
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+        tags:
+            - { name: scheb_two_factor.provider, alias: procergs_two_factor }

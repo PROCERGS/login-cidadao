@@ -5,7 +5,15 @@
         </div>
         <div class="panel-body">
             {% if app.user.isTwoFactorAuthenticationEnabled %}
-                On
+                <ul class="backup-codes">
+                    {% for backupCode in app.user.backupCodes %}
+                        <li class="backup-code">
+                            {{ backupCode.used ? '<s>' : '' }}
+                            {{ backupCode.code }}
+                            {{ backupCode.used ? '</s>' : '' }}
+                        </li>
+                    {% endfor %}
+                </ul>
             {% else %}
                 <p>{% trans %}Two-Factor Authentication is <strong>disabled</strong>. To enhance the security level of your account, click Enable. {% endtrans %}</p>
                 <p><a href="{{ path("2fa_enable") }}" class="btn btn-success">{{ 'Enable' | trans }}</a></p>
