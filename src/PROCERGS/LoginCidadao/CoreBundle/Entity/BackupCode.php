@@ -3,6 +3,7 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Scheb\TwoFactorBundle\Model\Google\BackupCodeInterface;
 
 /**
  * BackupCode
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="backup_code")
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\BackupCodeRepository")
  */
-class BackupCode
+class BackupCode implements BackupCodeInterface
 {
 
     /**
