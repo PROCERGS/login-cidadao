@@ -200,6 +200,7 @@ parameters:
     hwi_oauth.resource_owner.twitter.class: PROCERGS\LoginCidadao\CoreBundle\OAuth\ResourceOwner\TwitterResourceOwner
     lc_supported_scopes: 'id username first_name last_name full_name name cpf birthdate email city picture public_profile voter_registration badges country state city addresses id_cards get_all_notifications notifications cep mobile'
     lc_idcard_country_acronym: BR
+    scheb_two_factor.security.google.provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\TwoFactor\GoogleAndBackupCodeProvider
 
 ewz_recaptcha:
     public_key:   %recaptcha_public_key%
@@ -244,7 +245,7 @@ vich_uploader:
             uri_prefix:         %uri_root%/uploads/profile-pictures
             upload_destination: user_image_fs
             namer:              vich_uploader.namer_uniqid
-            inject_on_load:     false 
+            inject_on_load:     false
 
 # Disabling annotations is needed by FOS Rest Bundle
 sensio_framework_extra:
@@ -294,28 +295,28 @@ scheb_two_factor:
         enabled: false
         cookie_name: lc_trusted_computer
         cookie_lifetime: 2592000
-        
+
     exclude_pattern: ^/(css|js|images|api)
-    
+
     parameter_names:
         auth_code: _auth_code
         trusted: _trusted
-    
+
     email:
         enabled: false
         mailer: swiftmailer
         sender_email: %mailer_sender_mail%
         digits: 6
         template: PROCERGSLoginCidadaoCoreBundle:TwoFactorAuthentication:form.html.twig
-    
+
     google:
         enabled: true
         server_name: %site_domain%
         template: PROCERGSLoginCidadaoCoreBundle:TwoFactorAuthentication:form.html.twig
-    
+
     persister: ~
     model_manager_name: ~
-    
+
     security_tokens:
         - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
         - FOS\FacebookBundle\Security\Authentication\Token\FacebookUserToken

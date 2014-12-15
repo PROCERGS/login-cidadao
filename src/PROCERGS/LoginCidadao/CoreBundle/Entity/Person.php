@@ -385,6 +385,12 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface
      */
     private $googleAuthenticatorSecret;
 
+    /**
+     * @JMS\Exclude
+     * @ORM\OneToMany(targetEntity="BackupCode", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
+     */
+    private $backupCodes;
+
     public function __construct()
     {
         parent::__construct();
@@ -395,6 +401,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface
         $this->clients = new ArrayCollection();
         $this->logoutKeys = new ArrayCollection();
         $this->addresses = new ArrayCollection();
+        $this->backupCodes = new ArrayCollection();
     }
 
     public function getEmail()
@@ -1169,6 +1176,17 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface
     public function setGoogleAuthenticatorSecret($googleAuthenticatorSecret)
     {
         $this->googleAuthenticatorSecret = $googleAuthenticatorSecret;
+        return $this;
+    }
+
+    public function getBackupCodes()
+    {
+        return $this->backupCodes;
+    }
+
+    public function setBackupCodes($backupCodes)
+    {
+        $this->backupCodes = $backupCodes;
         return $this;
     }
 
