@@ -1184,7 +1184,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorWithBackupInt
         return $this->backupCodes;
     }
 
-    public function setBackupCodes($backupCodes)
+    public function setBackupCodes(ArrayCollection $backupCodes)
     {
         $this->backupCodes = $backupCodes;
         return $this;
