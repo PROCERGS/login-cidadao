@@ -4,23 +4,21 @@
 
     <h1 class="visible-xs">{{ 'admin.statistics.userByBadge'|trans }}</h1>
 
-    <div class="row">
-      {% for item in data %}
-        <div class="col-md-4">
-          <div class="item">
-            <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-            <div>
-              {{ item.name | trans }}
-              {% if item.country is defined %}
-                /
-                {{ item.country | trans }}
-              {% endif %}
-            </div>
-            <div>{{ item.qty }}</div>
+    {% for item in data %}
+      <div class="col-md-4">
+        <div class="item">
+          <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+          <div>
+            {{ item.name | trans }}
+            {% if item.country is defined %}
+              /
+              {{ item.country | trans }}
+            {% endif %}
           </div>
+          <div>{{ item.qty }}</div>
         </div>
-      {% endfor %}
-    </div>
+      </div>
+    {% endfor %}
 
   </div>
 {% endblock %}

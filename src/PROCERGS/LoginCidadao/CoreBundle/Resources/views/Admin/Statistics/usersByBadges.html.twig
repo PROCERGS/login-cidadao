@@ -4,7 +4,6 @@
 
     <h1 class="visible-xs">{{ 'admin.statistics.userByBadge'|trans }}</h1>
 
-    <div class="row">
       {% for client, badges in data %}
         <div class="panel panel-default">
           <div class="panel-heading">{{ client }}</div>
@@ -28,6 +27,5 @@
           </div>
         </div>
       {% endfor %}
-    </div>
   </div>
 {% endblock %}
