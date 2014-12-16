@@ -2388,12 +2388,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guilhermednt/two-factor-bundle.git",
-                "reference": "9fcb1ce1985f808c2bca20bdb6b808da30192b7d"
+                "reference": "8bd3ec4f251c166de119f1fe95c1d0bf923fddd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guilhermednt/two-factor-bundle/zipball/9fcb1ce1985f808c2bca20bdb6b808da30192b7d",
-                "reference": "9fcb1ce1985f808c2bca20bdb6b808da30192b7d",
+                "url": "https://api.github.com/repos/guilhermednt/two-factor-bundle/zipball/8bd3ec4f251c166de119f1fe95c1d0bf923fddd8",
+                "reference": "8bd3ec4f251c166de119f1fe95c1d0bf923fddd8",
                 "shasum": ""
             },
             "require": {
@@ -2430,7 +2430,7 @@
             "support": {
                 "source": "https://github.com/guilhermednt/two-factor-bundle/tree/master"
             },
-            "time": "2014-12-15 20:31:01"
+            "time": "2014-12-15 20:54:38"
         },
         {
             "name": "sensio/distribution-bundle",
@@ -3334,6 +3334,7 @@
         "scheb/two-factor-bundle": 20
     },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
         "php": ">=5.3.3"
     },
