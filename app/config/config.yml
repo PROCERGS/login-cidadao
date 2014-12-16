@@ -141,6 +141,7 @@ simple_things_entity_audit:
 
         - PROCERGS\LoginCidadao\CoreBundle\Entity\AccessSession
         - PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization
+        - PROCERGS\LoginCidadao\CoreBundle\Entity\BackupCode
         - PROCERGS\LoginCidadao\CoreBundle\Entity\City
         - PROCERGS\LoginCidadao\CoreBundle\Entity\ClientSuggestion
         - PROCERGS\LoginCidadao\CoreBundle\Entity\Country
