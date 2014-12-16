@@ -1,4 +1,4 @@
-{% if app.security.isGranted('FEATURE_2FACTOR_AUTH') %}
+{% if app.security.isGranted('FEATURE_2FACTOR_AUTH') and app.user.password != null %}
     <div class="panel panel-default">
         <div class="panel-heading">
             <h2 class="panel-title">{{ 'Two-Factor Authentication' | trans }}</h2>
@@ -8,7 +8,7 @@
                 <p>{{ 'Your account is protected by Two-Factor Authentication. If you wish to disable it you can do so further below.' | trans }}</p>
 
                 <h3>{{ 'Backup Codes' | trans }}</h3>
-                <p>{{ 'Backup Codes are special codes that can be used to access your account. They can be used only once each and replace a regular generated code. Backup Codes are extremelly important to prevent you from losing access to your account if you lose your smartphone.' }}</p>
+                <p>{{ 'Backup Codes are special codes that can be used to access your account. They can be used only once each and replace a regular generated code. Backup Codes are extremelly important to prevent you from losing access to your account if you lose your smartphone.' | trans }}</p>
                 <p>{% trans %}Your Backup Codes can be found in the following box. Please <strong>save them</strong> in a safe location because if you lose them you can <strong>permanently</strong> lose access to your account.{% endtrans %}</p>
 
                 <div class="row">
@@ -38,23 +38,5 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modal2FADisable" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title">{{ 'Confirm Two-Factor Authentication Deactivation' | trans }}</h4>
-                </div>
-                <div class="modal-body">
-                    <p>{% trans %}By disabling Two-Factor Authentication you are reducing your account's security. If you want to proceed, type your account's password to confirm:{% endtrans %}</p>
-                    
-                    form here
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'Keep it activated' | trans }}</button>
-                    <button type="button" class="btn btn-danger">{{ 'I understand the risks. Disable Two-Factor Authentication' | trans }}</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    {% render(controller("PROCERGSLoginCidadaoCoreBundle:TwoFactorAuthentication:disable")) %}
 {% endif %}
