@@ -20,7 +20,7 @@
             <h3 class="media-heading">{{ client.name }}</h3>
             {{ client.description }}
         </div>
-          {% if client.published %}
+          {% if user.hasAuthorization(client) %}
           <div class="permissions">
                 <p>{% trans %}This service uses the following data from your Login Citizen account{%  endtrans %}:</p>
                 {% for auth, status in scopes %}
