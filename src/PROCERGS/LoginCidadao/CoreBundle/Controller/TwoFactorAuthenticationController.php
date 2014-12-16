@@ -16,15 +16,13 @@ use Doctrine\ORM\EntityManager;
 /**
  * @Route("/two-factor")
  */
-class TwoFactorAuthenticationController extends Controller
-{
+class TwoFactorAuthenticationController extends Controller {
 
     /**
      * @Route("/enable", name="2fa_enable")
      * @Template()
      */
-    public function enableAction(Request $request)
-    {
+    public function enableAction(Request $request) {
         $twoFactor = $this->get("scheb_two_factor.security.google_authenticator");
         $translator = $this->get('translator');
         $person = $this->getPerson();
@@ -39,11 +37,10 @@ class TwoFactorAuthenticationController extends Controller
             $isValid = $twoFactor->checkCode($person, $verificationCode);
 
             if ($isValid) {
-                $em = $this->getDoctrine()->getManager();
-                $this->generateBackupCodes($em, $person);
-                $person = $form->getData();
-                $em->persist($person);
-                $em->flush();
+                $this->enable2FA($person, $form);
+                $message = $translator->trans('Two-Factor Authentication Enabled.');
+                $this->get('session')->getFlashBag()->add('success', $message);
+                return $this->redirect($this->generateUrl("fos_user_change_password"));
             } else {
                 $message = $translator->trans('Invalid code! Make sure you configured your app correctly and your smartphone\'s time is adjusted.');
                 $form->get('verification')->addError(new FormError($message));
@@ -60,8 +57,7 @@ class TwoFactorAuthenticationController extends Controller
      * @Route("/disable")
      * @Template()
      */
-    public function disableAction()
-    {
+    public function disableAction() {
         return array();
     }
 
@@ -69,22 +65,25 @@ class TwoFactorAuthenticationController extends Controller
      * @Route("/teste")
      * @Template()
      */
-    public function formAction()
-    {
+    public function formAction() {
         return array();
     }
 
     /**
      * @return PersonInterface
      */
-    protected function getPerson()
-    {
+    protected function getPerson() {
         return $this->getUser();
     }
 
-    protected function generateBackupCodes(EntityManager $em,
-                                           PersonInterface $person)
-    {
+    protected function enable2FA(PersonInterface $person, $form) {
+        $em = $this->getDoctrine()->getManager();
+        $this->generateBackupCodes($em, $person);
+        $em->persist($form->getData());
+        $em->flush();
+    }
+
+    protected function generateBackupCodes(EntityManager $em, PersonInterface $person) {
         $generator = new SecureRandom();
         $backupCodes = array();
         while (count($backupCodes) < 10) {
