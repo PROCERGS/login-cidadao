@@ -53,7 +53,7 @@ form.phone: Phone
 'Enter your username or email': 'Enter your username or email'
 Cancel: Cancel
 form.message: Mensagem
-form.message.sucess: 'Sua mensagem foi enviado com sucesso, aguarde resposta!'
+form.message.sucess: 'Your message was sent.'
 form.submit: Enviar
 'Log in using your Citizen''s Login': 'Log in using your Citizen''s Login'
 'Connect using Facebook': 'Connect using Facebook'
