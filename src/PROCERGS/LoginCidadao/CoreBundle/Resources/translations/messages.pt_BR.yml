@@ -645,3 +645,4 @@ After you finish configuring your code generator app, type the generated code be
 Generated Code: Código Gerado
 Invalid code! Make sure you configured your app correctly and your smartphone's time is adjusted.: Código inválido! Certifique-se de que o aplicativo está configurado corretamente e que o relógio do seu smartphone está ajustado.
 scheb_two_factor.code_invalid: Código inválido! Certifique-se de que o relógio do seu smartphone está ajustado.
+Two-Factor Authentication Enabled.: Autenticação em Dois Fatores ativada.
