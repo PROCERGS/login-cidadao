@@ -26,7 +26,7 @@ class JobsController extends Controller
         $subject = $translator->trans('cpf_reminder.subject');
 
         $from = $this->container->getParameter('mailer_sender_mail');
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $personRepo = $this->getDoctrine()
                 ->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
         $emailRepo = $this->getDoctrine()

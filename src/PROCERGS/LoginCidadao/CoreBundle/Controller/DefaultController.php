@@ -31,9 +31,9 @@ class DefaultController extends Controller
 
         $api = $this->container->get('fos_facebook.api');
         $scope = implode(',',
-                $this->container->getParameter('facebook_app_scope'));
+                         $this->container->getParameter('facebook_app_scope'));
         $callback = $this->container->get('router')->generate('_security_check_facebook',
-                array(), true);
+                                                              array(), true);
         $redirect_url = $api->getLoginUrl(array(
             'scope' => $scope,
             'redirect_uri' => $callback
@@ -60,7 +60,7 @@ class DefaultController extends Controller
     public function generalAction()
     {
         return $this->render('PROCERGSLoginCidadaoCoreBundle:Info:terms.html.twig',
-                        compact('user', 'apps'));
+                             compact('user', 'apps'));
     }
 
     /**
@@ -80,20 +80,31 @@ class DefaultController extends Controller
     {
         $form = $this->createForm(new ContactFormType());
         $form->handleRequest($request);
-        $message = '';
+        $translator = $this->get('translator');
+        $message = $translator->trans('contact.form.sent');
         if ($form->isValid()) {
             $email = new SentEmail();
-            $email->setType('contact-mail')->setSubject('Fale conosco - ' . $form->get('firstName')->getData())->setSender($form->get('email')->getData())->setReceiver($this->container->getParameter('mailer_receiver_mail'))->setMessage($form->get('message')->getData());
-            if ($this->get('mailer')->send($email->getSwiftMail())) {
-                $this->getDoctrine()->getEntityManager()->persist($email);
-                $this->getDoctrine()->getEntityManager()->flush();
-                $message = 'form.message.sucess';
+            $email
+                ->setType('contact-mail')
+                ->setSubject('Fale conosco - ' . $form->get('firstName')->getData())
+                ->setSender($form->get('email')->getData())
+                ->setReceiver($this->container->getParameter('mailer_receiver_mail'))
+                ->setMessage($form->get('message')->getData());
+            $mailer = $this->get('mailer');
+            $swiftMail = $email->getSwiftMail();
+            if ($mailer->send($swiftMail)) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($email);
+                $em->flush();
+                $this->get('session')->getFlashBag()->add('success', $message);
             }
+
+            $url = $this->generateUrl("lc_contact");
+            return $this->redirect($url);
         }
         return $this->render('PROCERGSLoginCidadaoCoreBundle:Info:contact.html.twig',
-                        array(
-                    'form' => $form->createView(),
-                    'messages' => $message
+                             array(
+                'form' => $form->createView()
         ));
     }
 
@@ -124,12 +135,12 @@ class DefaultController extends Controller
         return $response->setData($result);
     }
 
-
     /**
      * @Route("/login/cert", name="lc_login_cert")
      * @Template()
      */
-    public function loginCertAction(Request $request) {
+    public function loginCertAction(Request $request)
+    {
         die(print_r($_REQUEST));
     }
 
@@ -137,7 +148,8 @@ class DefaultController extends Controller
      * @Route("/igp/consult", name="lc_ipg_consutl")
      * @Template()
      */
-    public function igpConsultAction(Request $request) {
+    public function igpConsultAction(Request $request)
+    {
         $igp = $this->get('procergs_logincidadao.igpws');
         //$rcs = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->createQueryBuilder('p')->select('p.cpf')->where('p.cpf is not null')->getQuery()->getResult(Query::HYDRATE_ARRAY);
         echo "<pre>";

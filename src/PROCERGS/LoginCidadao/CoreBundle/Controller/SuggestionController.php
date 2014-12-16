@@ -26,7 +26,7 @@ class SuggestionController extends Controller
         $formBuilder->add('text', 'textarea');
         $form = $formBuilder->getForm();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
             if ($form->isValid()) {
