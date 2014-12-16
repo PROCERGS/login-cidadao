@@ -414,6 +414,8 @@ form .has-feedback .sr-only ~ .form-control-feedback {
 }
 
 #oauth-box {
+  border: none;
+  box-shadow: none;
   min-height: 400px;
 }
 
