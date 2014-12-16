@@ -85,8 +85,8 @@ class DefaultController extends Controller
             $email = new SentEmail();
             $email->setType('contact-mail')->setSubject('Fale conosco - ' . $form->get('firstName')->getData())->setSender($form->get('email')->getData())->setReceiver($this->container->getParameter('mailer_receiver_mail'))->setMessage($form->get('message')->getData());
             if ($this->get('mailer')->send($email->getSwiftMail())) {
-                $this->getDoctrine()->getEntityManager()->persist($email);
-                $this->getDoctrine()->getEntityManager()->flush();
+                $this->getDoctrine()->getManager()->persist($email);
+                $this->getDoctrine()->getManager()->flush();
                 $message = 'form.message.sucess';
             }
         }
