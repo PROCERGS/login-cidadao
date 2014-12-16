@@ -143,6 +143,8 @@ Actions: Actions
 Details: Details
 Edit: Edit
 'No services registered.': 'No services registered.'
+Public id : Public Key (Public Id)
+Secret : Private Key (Secret)
 'Secret/Private Key': 'Secret/Private Key'
 'Public Id': 'Public Id'
 Active: Active
@@ -218,3 +220,16 @@ Generated Code: Generated Code
 Invalid code! Make sure you configured your app correctly and your smartphone's time is adjusted.: Invalid code! Make sure you configured your app correctly and your smartphone's time is adjusted.
 scheb_two_factor.code_invalid: Invalid code! Make sure your smartphone's clock is correct.
 Two-Factor Authentication Enabled.: Two-Factor Authentication Enabled.
+Security: Security
+Your account is protected by Two-Factor Authentication. If you wish to disable it you can do so further below.: Your account is protected by Two-Factor Authentication. If you wish to disable it you can do so further below.
+Backup Codes: Backup Codes
+Backup Codes are special codes that can be used to access your account. They can be used only once each and replace a regular generated code. Backup Codes are extremelly important to prevent you from losing access to your account if you lose your smartphone.: Backup Codes are special codes that can be used to access your account. They can be used only once each and replace a regular generated code. Backup Codes are extremelly important to prevent you from losing access to your account if you lose your smartphone.
+Your Backup Codes can be found in the following box. Please <strong>save them</strong> in a safe location because if you lose them you can <strong>permanently</strong> lose access to your account.: Your Backup Codes can be found in the following box. Please <strong>save them</strong> in a safe location because if you lose them you can <strong>permanently</strong> lose access to your account.
+Disable Two-Factor Authentication: Disable Two-Factor Authentication
+Currently your account safety is pretty good. If for some reason you need to disable Two-Factor Authentication you can do so in the button below.: Currently your account safety is pretty good. If for some reason you need to disable Two-Factor Authentication you can do so in the button below.
+If you change your mind, remember that you can always enable it back again.: If you change your mind, remember that you can always enable it back again.
+Confirm Two-Factor Authentication Deactivation: Confirm Two-Factor Authentication Deactivation
+'By disabling Two-Factor Authentication you are reducing your account''s security.': 'If you want to proceed, type your account''s password to confirm:'
+'If you want to proceed, type your account''s password to confirm': 'If you want to proceed, type your account''s password to confirm:'
+I understand the risks. Disable Two-Factor Authentication: I understand the risks. Disable Two-Factor Authentication
+Keep it activated: Keep it activated

@@ -168,8 +168,8 @@ Description: Descrição
 more: 'Mais'
 'Published' : 'Publicado'
 'Visible' : 'Visível'
-'Public id' : 'Identificado público'
-'Secret' : 'Senha'
+Public id : Chave Pública (Identificado Público)
+Secret : Chave Privada (Secret)
 Create: Criar
 'Secret/Private Key': 'Segredo/Chave Privada'
 'Public Id': 'Identificador Público'
@@ -645,4 +645,18 @@ After you finish configuring your code generator app, type the generated code be
 Generated Code: Código Gerado
 Invalid code! Make sure you configured your app correctly and your smartphone's time is adjusted.: Código inválido! Certifique-se de que o aplicativo está configurado corretamente e que o relógio do seu smartphone está ajustado.
 scheb_two_factor.code_invalid: Código inválido! Certifique-se de que o relógio do seu smartphone está ajustado.
-Two-Factor Authentication Enabled.: Autenticação em Dois Fatores ativada.
+Two-Factor Authentication enabled.: Autenticação em Dois Fatores ativada.
+Security: Segurança
+Your account is protected by Two-Factor Authentication. If you wish to disable it you can do so further below.: Sua conta está protegida por Autenticação em Dois Fatores. Se você deseja desativar isso, você pode fazê-lo abaixo.
+Backup Codes: Códigos Alternativos
+Backup Codes are special codes that can be used to access your account. They can be used only once each and replace a regular generated code. Backup Codes are extremelly important to prevent you from losing access to your account if you lose your smartphone.: Códigos Alternativos são códigos especiais que podem ser usados para acessar sua conta. Cada um pode ser usado apenas uma vez e eles substituem a digitação de códigos gerados normalmente por seu smartphone. Códigos Alternativos são extremamente importantes para prevenir que você perca acesso à sua conta no caso de perda de seu smartphone.
+Your Backup Codes can be found in the following box. Please <strong>save them</strong> in a safe location because if you lose them you can <strong>permanently</strong> lose access to your account.: Seus Códigos Alternativos podem ser encontrados no quadro a seguir. Por favor, <strong>guarde-os</strong> em um local seguro pois caso você os extravie é possível que você perca acesso à sua conta <strong>permanentemente</strong>.
+Disable Two-Factor Authentication: Desativar Autenticação em Dois Fatores
+Currently your account safety is pretty good. If for some reason you need to disable Two-Factor Authentication you can do so in the button below.: Atualmente a segurança da sua conta está bastante forte mas se, por algum motivo, você deseja desativar a Autenticação em Dois Fatores você pode pressionar o botão a seguir.
+If you change your mind, remember that you can always enable it back again.: Se você mudar de ideia, lembre-se que você pode reativar a Autenticação em Dois Fatores a qualquer momento.
+Confirm Two-Factor Authentication Deactivation: Confirmar Desativação da Autenticação em Dois Fatores
+'By disabling Two-Factor Authentication you are reducing your account''s security.': 'Ao desativar a Autenticação em Dois Fatores você está reduzindo o nível de segurança da sua conta.'
+'If you want to proceed, type your account''s password to confirm:': 'Se você deseja prosseguir, digite a senha da sua conta para confirmar a alteração:'
+I understand the risks. Disable Two-Factor Authentication: Entendo os riscos, desative a Autenticação em Dois Fatores
+Keep it activated: Manter Ativada
+Two-Factor Authentication disabled.: Autenticação em Dois Fatores desativada.
