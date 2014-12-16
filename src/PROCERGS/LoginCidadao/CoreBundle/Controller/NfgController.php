@@ -115,7 +115,7 @@ class NfgController extends Controller
     public function createBackAction(Request $request)
     {
         $result1 = $this->checkAccessToken();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $personRepo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
         if ($personRepo->findOneBy(array(
             'cpf' => $result1['CodCpf']
@@ -219,7 +219,7 @@ class NfgController extends Controller
             throw new NfgException('nfg.accessid.mismatch');
         }
         $cpf = str_pad($cpf, 11, "0", STR_PAD_LEFT);
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $personRepo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
         $user = $personRepo->findOneBy(array(
             'cpf' => $cpf
@@ -257,7 +257,7 @@ class NfgController extends Controller
             return $this->redirect($this->generateUrl('lc_home'));
         }
         $result1 = $this->checkAccessToken($person->getVoterRegistration());
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $personRepo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
 
         if ($person->getCpf()) {

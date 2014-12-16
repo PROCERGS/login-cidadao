@@ -1,10 +1,9 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle:Admin:base.html.twig" %}
 {% block content %}
-<div id="statistics" class="content">
+  <div id="statistics" class="content">
 
-  <h1 class="visible-xs">{{ 'admin.statistics.list'|trans }}</h1>
+    <h1 class="visible-xs">{{ 'admin.statistics.list'|trans }}</h1>
 
-  <div class="row">
     <div class="col-md-6">
       <a href="{{ path('lc_admin_statistics_user_badge') }}" class="item">
         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
@@ -26,7 +25,6 @@
         <span>{{ 'Users by Services'|trans }}</span>
       </a>
     </div>
-  </div>
 
-</div>
+  </div>
 {% endblock %}
