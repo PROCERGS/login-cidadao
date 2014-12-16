@@ -5,15 +5,31 @@
         </div>
         <div class="panel-body">
             {% if app.user.isTwoFactorAuthenticationEnabled %}
-                <ul class="backup-codes">
-                    {% for backupCode in app.user.backupCodes %}
-                        <li class="backup-code">
-                            {{ backupCode.used ? '<s>' : '' }}
-                            {{ backupCode.code }}
-                            {{ backupCode.used ? '</s>' : '' }}
-                        </li>
-                    {% endfor %}
-                </ul>
+                <p>{{ 'Your account is protected by Two-Factor Authentication. If you wish to disable it you can do so further below.' | trans }}</p>
+
+                <h3>{{ 'Backup Codes' | trans }}</h3>
+                <p>{{ 'Backup Codes are special codes that can be used to access your account. They can be used only once each and replace a regular generated code. Backup Codes are extremelly important to prevent you from losing access to your account if you lose your smartphone.' }}</p>
+                <p>{% trans %}Your Backup Codes can be found in the following box. Please <strong>save them</strong> in a safe location because if you lose them you can <strong>permanently</strong> lose access to your account.{% endtrans %}</p>
+
+                <div class="row">
+                    <ul class="backup-codes well well-sm col-sm-offset-3 col-sm-6">
+                        {% for backupCode in app.user.backupCodes %}
+                            <li class="backup-code text-center">
+                                {{ backupCode.used ? '<s>' : '' }}
+                                {{ backupCode.code }}
+                                {{ backupCode.used ? '</s>' : '' }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <h3>{{ 'Disable Two-Factor Authentication' | trans }}</h3>
+                <p>{{ 'Currently your account safety is pretty good. If for some reason you need to disable Two-Factor Authentication you can do so in the button below.' | trans }}</p>
+                <p>{{ 'If you change your mind, remember that you can always enable it back again.' | trans }}</p>
+
+                <p class="text-center">
+                    <button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal2FADisable">{{ 'Disable Two-Factor Authentication' | trans }}</button>
+                </p>
             {% else %}
                 <p>{% trans %}Two-Factor Authentication is <strong>disabled</strong>. To enhance the security level of your account, click Enable. {% endtrans %}</p>
                 <p><a href="{{ path("2fa_enable") }}" class="btn btn-success">{{ 'Enable' | trans }}</a></p>
@@ -21,4 +37,24 @@
             {% endif %}
         </div>
     </div>
+
+    <div class="modal fade" id="modal2FADisable" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">{{ 'Confirm Two-Factor Authentication Deactivation' | trans }}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{% trans %}By disabling Two-Factor Authentication you are reducing your account's security. If you want to proceed, type your account's password to confirm:{% endtrans %}</p>
+                    
+                    form here
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'Keep it activated' | trans }}</button>
+                    <button type="button" class="btn btn-danger">{{ 'I understand the risks. Disable Two-Factor Authentication' | trans }}</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 {% endif %}
