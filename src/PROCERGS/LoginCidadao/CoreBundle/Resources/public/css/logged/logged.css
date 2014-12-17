@@ -211,6 +211,10 @@ body.no-scroll {
         left: 0;
     }
 
+    .menu-open .settings-nav.top {
+        top: 0;
+    }
+
     .settings-content, footer .content, .alert-bar {
         -webkit-transition: 0.5s ease-in-out;
         -moz-transition: 0.5s ease-in-out;

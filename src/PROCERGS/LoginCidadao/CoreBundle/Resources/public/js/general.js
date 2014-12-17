@@ -1,3 +1,16 @@
+// Fix navbar/settings nav position on small devices
+$(document).ready(function(){
+    var navbar = $('#lc-navbar');
+    var settingsNav = $(".settings-nav");
+    $(window).scroll(function(){
+        if (navbar.visible(true)) {
+          settingsNav.removeClass("top");
+        } else {
+          settingsNav.addClass("top");
+        }
+    })
+})
+
 if (typeof String.prototype.repeat !== 'function') {
     String.prototype.repeat = function( num ) {
         return new Array( num + 1 ).join( this );
@@ -479,6 +492,7 @@ var lcAcWidget = {
             data: {"ac_data":data},
             dataType : 'html',
             success : function(data, textStatus, jqXHR) {
+              console.log(data);
               $('.ac-search-loader').removeClass('show');
               /*pegamos a grid de retorno e colocamos dentro da div de exibicao*/
               mb.find('.ac-scrollspy-opts-selected').html(data);
