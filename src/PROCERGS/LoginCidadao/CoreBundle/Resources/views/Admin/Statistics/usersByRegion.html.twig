@@ -1,12 +1,12 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle:Admin:base.html.twig" %}
 {% block content %}
-  <div id="statistics" class="content statistics-region">
+  <div id="statistics" class="content statistics-region clearfix">
 
     <h1>{{ 'admin.statistics.userByRegion'|trans }}</h1>
 
     {% for item in data %}
       <div class="col-md-4">
-        <div class="item">
+        <a class="item" href="{{ path('lc_admin_statistics_user_city', {'stateId': item.id } ) }}" title="{{ 'admin.statistics.checkCities'|trans }}">
           <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
           <div>
             {{ item.name | trans }}
@@ -15,7 +15,7 @@
           <div>{{ item.country | trans }}</div>
           {% endif %}
           <div class="qty">{{ item.qty }}</div>
-        </div>
+        </a>
       </div>
     {% endfor %}
 
