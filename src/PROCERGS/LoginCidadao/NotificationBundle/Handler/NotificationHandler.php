@@ -20,6 +20,7 @@ use PROCERGS\LoginCidadao\NotificationBundle\Entity\Placeholder;
 use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use PROCERGS\LoginCidadao\NotificationBundle\NotificationEvents;
 use PROCERGS\LoginCidadao\NotificationBundle\Event\NotificationEvent;
+use PROCERGS\LoginCidadao\NotificationBundle\Entity\FailedCallback;
 
 class NotificationHandler implements NotificationHandlerInterface
 {
@@ -47,7 +48,8 @@ class NotificationHandler implements NotificationHandlerInterface
     public function __construct(ObjectManager $om, $entityClass,
                                 FormFactoryInterface $formFactory, $mailer,
                                 NotificationType $notificationType,
-                                ContainerAwareEventDispatcher $dispatcher, $oauthDefaultClientUid, $proxy)
+                                ContainerAwareEventDispatcher $dispatcher,
+                                $oauthDefaultClientUid, $proxy)
     {
         $this->om = $om;
         $this->entityClass = $entityClass;
@@ -133,8 +135,8 @@ class NotificationHandler implements NotificationHandlerInterface
             if (null === $notification->getHtmlTemplate()) {
                 $notification->setHtmlTemplate(self::renderHtmlByCategory($notification->getCategory(),
                                                                           $notification->getPlaceholders(),
-                                                                                     $notification->getTitle(),
-                                                                                     $notification->getShortText()));
+                                                                          $notification->getTitle(),
+                                                                          $notification->getShortText()));
             }
             $this->om->persist($notification);
             $this->om->flush($notification);
@@ -227,33 +229,13 @@ class NotificationHandler implements NotificationHandlerInterface
             'read' => array(),
             'failed' => array()
         );
-        
-        $this->_initCallback();
+
+        $this->initCallback();
         foreach ($notifications as $notification) {
             try {
-                if (!$notification->isRead()) {                    
-                    if ($notification->getCallbackUrl()) {
-                        $notification->setRead(true);
-                        $secret = $notification->getCategory()->getClient()->getSecret();
-                        $base['data'] = json_encode(array(
-                            'id' => $notification->getId(),
-                            'person_id' => $notification->getPerson()->getId(),
-                            'read_date' => $notification->getReadDate()->getTimestamp()
-                        ));
-                        $base['signature'] = hash_hmac('sha256', $base['data'], $secret);
-                        $dataPost = http_build_query($base);
-                        curl_setopt($this->ch, CURLOPT_URL, $notification->getCallbackUrl());
-                        curl_setopt($this->ch, CURLOPT_POST, 1);
-                        curl_setopt($this->ch, CURLOPT_POSTFIELDS, $dataPost);
-                        $httpResponse = curl_exec($this->ch);
-                        $code = curl_getinfo ($this->ch, CURLINFO_HTTP_CODE);
-                        if ($code != '200') {
-                            $notification->setRead(false);
-                            throw new \Exception();
-                        }                        
-                    } else {
-                        $notification->setRead(true);
-                    }
+                if (!$notification->isRead()) {
+                    $notification->setRead(true);
+                    $this->sendCallback($notification, $om);
                 }
                 $result['read'][] = $notification->getId();
             } catch (\Exception $e) {
@@ -265,8 +247,8 @@ class NotificationHandler implements NotificationHandlerInterface
 
         return $result;
     }
-    
-    private function _initCallback()
+
+    private function initCallback()
     {
         $this->ch = curl_init();
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
@@ -369,18 +351,20 @@ class NotificationHandler implements NotificationHandlerInterface
     }
 
     public static function renderEmailByCategory($category,
-        $replacePlaceholders = null,
-        $replaceTitle = null,
-        $replaceShortText = null)
+                                                 $replacePlaceholders = null,
+                                                 $replaceTitle = null,
+                                                 $replaceShortText = null)
     {
-        return self::_renderHtml($category->getMailTemplate(), $replacePlaceholders, $replaceTitle,
-            $replaceShortText);
+        return self::_renderHtml($category->getMailTemplate(),
+                                 $replacePlaceholders, $replaceTitle,
+                                 $replaceShortText);
     }
 
     public function getEmailHtml(NotificationInterface $notification)
     {
         return self::_renderHtml($notification->getCategory()->getMailTemplate(),
-                                 $notification->getPlaceholders(), $notification->getTitle(),
+                                 $notification->getPlaceholders(),
+                                 $notification->getTitle(),
                                  $notification->getShortText());
     }
 
@@ -392,5 +376,49 @@ class NotificationHandler implements NotificationHandlerInterface
         return $this->oauthDefaultClient;
     }
 
+    protected function registerFailedCallback(NotificationInterface $notification,
+                                              ObjectManager $om, $ch,
+                                              $curlResponse)
+    {
+        $info = curl_getinfo($ch);
+
+        $body = null;
+        if ($curlResponse !== false) {
+            $body = $curlResponse;
+        }
+
+        $failedCallback = new FailedCallback();
+        $failedCallback->setDate(new \DateTime());
+        $failedCallback->setNotification($notification);
+        $failedCallback->setRequestUrl($info['url']);
+        $failedCallback->setResponseBody($body);
+        $failedCallback->setResponseCode($info['http_code']);
+        $om->persist($failedCallback);
+    }
+
+    private function sendCallback(NotificationInterface $notification,
+                                  ObjectManager $om)
+    {
+        if ($notification->getCallbackUrl()) {
+            $secret = $notification->getCategory()->getClient()->getSecret();
+            $base['data'] = json_encode(array(
+                'id' => $notification->getId(),
+                'person_id' => $notification->getPerson()->getId(),
+                'read_date' => $notification->getReadDate()->getTimestamp()
+            ));
+            $base['signature'] = hash_hmac('sha256', $base['data'], $secret);
+            $dataPost = http_build_query($base);
+            curl_setopt($this->ch, CURLOPT_URL, $notification->getCallbackUrl());
+            curl_setopt($this->ch, CURLOPT_POST, 1);
+            curl_setopt($this->ch, CURLOPT_POSTFIELDS, $dataPost);
+            $curlResponse = curl_exec($this->ch);
+            $code = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
+
+            if ($code != '200') {
+                $this->registerFailedCallback($notification, $om, $this->ch,
+                                              $curlResponse);
+            }
+        }
+    }
 
 }
