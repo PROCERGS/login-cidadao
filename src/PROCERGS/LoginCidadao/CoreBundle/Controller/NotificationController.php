@@ -163,7 +163,7 @@ class NotificationController extends Controller
         if ($mode === 0) {
             $return = $this->gridFullAction($request);
             if ($request->get('client')) {
-                $client = $this->getDoctrine()->getEntityManager()->getRepository('PROCERGSOAuthBundle:Client')->find($request->get('client'));
+                $client = $this->getDoctrine()->getManager()->getRepository('PROCERGSOAuthBundle:Client')->find($request->get('client'));
                 $return['extra_title'] = $client->getName();
             } else {
                 $return['extra_title'] = $this->get('translator')->trans('notification.menu.inbox.all');
@@ -299,7 +299,7 @@ class NotificationController extends Controller
             $manager->flush();
         }
         $message = "notification.config.category.change.success";
-        //$translator = $this->get('translator');        
+        //$translator = $this->get('translator');
         //$form->addError(new FormError($translator->trans("notification.missing.personnotificationoption")));
         return array('form' => $form->createView(), 'form_message' => $message);
     }
