@@ -560,4 +560,16 @@ class PersonController extends Controller
         ));
     }
 
+    /**
+     * @Route("/profile/badges", name="lc_profile_badges")
+     * @Template()
+     */
+    public function badgesListAction(Request $request)
+    {
+      $badgesHandler = $this->get('badges.handler');
+
+      $badges = $badgesHandler->getAvailableBadges();
+      return array('data' => $badges);
+    }
+
 }
