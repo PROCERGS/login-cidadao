@@ -11,8 +11,10 @@
     {% endfor %}
 
     {% trans_default_domain 'FOSUserBundle' %}
-
-    {{ form_start(form, {'action': path('fos_user_registration_register'), 'attr': {'role':'form', 'class':'fos_user_registration_register clearfix'}}) }}
+    {% if actionUrl is not defined %}
+		{% set actionUrl = 'fos_user_registration_register' %}
+    {% endif%}
+    {{ form_start(form, {'action': path(actionUrl), 'attr': {'role':'form', 'class':'fos_user_registration_register clearfix'}}) }}
     <div class="form-content">
       {{ form_errors(form) }}
       {% if form.firstName is defined %}
