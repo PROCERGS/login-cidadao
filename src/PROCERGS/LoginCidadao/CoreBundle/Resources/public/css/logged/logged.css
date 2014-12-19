@@ -732,3 +732,12 @@ label + .glyphicon-pencil {
 .statistics-badges .badge-img {
   margin-bottom: 5px;
 }
+
+.badges-list .badge-img {
+  border: solid 1px #CCC;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  vertical-align: middle;
+  width: 60px;
+}

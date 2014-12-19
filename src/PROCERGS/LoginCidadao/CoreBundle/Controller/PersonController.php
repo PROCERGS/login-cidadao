@@ -493,7 +493,7 @@ class PersonController extends Controller
     public function preFilledRegistrationAction(Request $request)
     {
         if (null !== $this->getUser()) {
-            return $this->get('templating')->renderResponse('PROCERGSLoginCidadaoCoreBundle:Person:registration/errorAlreadyLoggedin.html.twig');            
+            return $this->get('templating')->renderResponse('PROCERGSLoginCidadaoCoreBundle:Person:registration/errorAlreadyLoggedin.html.twig');
         }
         /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
         $formFactory = $this->get('fos_user.registration.form.factory');
@@ -569,7 +569,9 @@ class PersonController extends Controller
       $badgesHandler = $this->get('badges.handler');
 
       $badges = $badgesHandler->getAvailableBadges();
-      return array('data' => $badges);
+      $user = $badgesHandler->evaluate($this->getUser());
+
+      return array('allBadges' => $badges, 'userBadges' => $user->getBadges());
     }
 
 }
