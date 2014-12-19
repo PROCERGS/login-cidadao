@@ -734,10 +734,68 @@ label + .glyphicon-pencil {
 }
 
 .badges-list .badge-img {
-  border: solid 1px #CCC;
   height: 60px;
   line-height: 60px;
   text-align: center;
   vertical-align: middle;
   width: 60px;
+}
+
+.badges-list .badge-icon {
+  border-radius: 50%;
+  box-shadow: inset 1px 1px 0px #B5B5B5;
+  color: #FFF;
+  height: 60px;
+  line-height: 50px;
+  margin: 0 auto;
+  text-align: center;
+  vertical-align: middle;
+  width: 60px;
+}
+
+.badges-list .badge-icon:before {
+  font-size: 22px;
+  text-shadow: 1px 1px #CCC;
+}
+
+.badges-list .badge-icon.locked {
+  background-color: #CCC;
+  opacity: 0.1;
+}
+
+.badges-list .badge-has_cpf {
+  background-color: #8DDAFC;
+  border: solid 1px #5AB9DB;
+}
+
+.badges-list .badge-has_cpf:before {
+  content: "CPF";
+}
+
+.badges-list .badge-valid_email {
+  background-color: #FF7171;
+  border: solid 1px #D58D8D;
+}
+
+.badges-list .badge-valid_email:before {
+  content: "@";
+  font-size: 30px;
+}
+
+.badges-list .badge-nfg_access_lvl {
+  background-color: #FAB60F;
+  border: solid 1px #D58D8D;
+}
+
+.badges-list .badge-nfg_access_lvl:before {
+  content: "NFG";
+}
+
+.badges-list .badge-voter_registration {
+  background-color: #C3EC87;
+  border: solid 1px #A0BBA6;
+}
+
+.badges-list .badge-voter_registration:before {
+  content: "TSE";
 }
