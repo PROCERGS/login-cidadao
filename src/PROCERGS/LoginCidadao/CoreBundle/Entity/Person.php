@@ -16,7 +16,8 @@ use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationToken;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 use Doctrine\Common\Collections\Collection;
-use Scheb\TwoFactorBundle\Model\Google\TwoFactorWithBackupInterface;
+use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
+use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
@@ -27,7 +28,7 @@ use Scheb\TwoFactorBundle\Model\Google\TwoFactorWithBackupInterface;
  * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
  */
-class Person extends BaseUser implements PersonInterface, TwoFactorWithBackupInterface
+class Person extends BaseUser implements PersonInterface, TwoFactorInterface, BackupCodeInterface
 {
 
     /**
@@ -1188,6 +1189,35 @@ class Person extends BaseUser implements PersonInterface, TwoFactorWithBackupInt
     {
         $this->backupCodes = $backupCodes;
         return $this;
+    }
+
+    public function invalidateBackupCode($code)
+    {
+        $backupCode = $this->findBackupCode($code);
+        $backupCode->setUsed(true);
+
+        return $this;
+    }
+
+    public function isBackupCode($code)
+    {
+        $backupCode = $this->findBackupCode($code);
+        return $backupCode !== false && $backupCode->getUsed() === false;
+    }
+
+    /**
+     * @param string $code
+     * @return BackupCode
+     */
+    private function findBackupCode($code)
+    {
+        $backupCodes = $this->getBackupCodes();
+        foreach ($backupCodes as $backupCode) {
+            if ($backupCode->getCode() === $code) {
+                return $backupCode;
+            }
+        }
+        return false;
     }
 
 }
