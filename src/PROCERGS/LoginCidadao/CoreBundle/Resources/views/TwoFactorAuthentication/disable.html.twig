@@ -1,21 +1,30 @@
-{{ form_start(form, {'action': path('2fa_disable'), 'attr': {'role':'form', 'class':'lc_2fa_disable'}}) }}
-<div class="modal fade" id="modal2FADisable" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title">{{ 'Confirm Two-Factor Authentication Deactivation' | trans }}</h4>
-            </div>
-            <div class="modal-body">
-                <p>{% trans %}By disabling Two-Factor Authentication you are reducing your account's security.{% endtrans %}</p>
+{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
-                {{ form_row(form.current_password) }}
+
+{% block title %}{{ 'Security' | trans }} | {{ parent() }}{% endblock title %}
+
+{% block content %}
+    <div class="form-content">
+        <div class="content security clearfix">
+            <h1 class="visible-xs">{{ 'Two-Factor Authentication' | trans }}</h1>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{ 'Confirm Two-Factor Authentication Deactivation' | trans }}</h2>
+                </div>
+                <div class="panel-body">
+                    {{ form_start(form, {'action': path('2fa_disable'), 'attr': {'role':'form', 'class':'lc_2fa_disable'} }) }}
+
+                    <p>{% trans %}By disabling Two-Factor Authentication you are reducing your account's security.{% endtrans %}</p>
+
+                    {{ form_row(form.current_password) }}
+
+                    <a class="btn btn-default pull-left" href="{{ path('fos_user_change_password')}}">{{ 'Keep it activated' | trans }}</a>
+                    {{ form_widget(form.disable, { 'attr': { 'class': 'pull-right btn-danger' } }) }}
+
+                    {{ form_end(form) }}
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'Keep it activated' | trans }}</button>
-                {{ form_widget(form.disable) }}
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-{{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

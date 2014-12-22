@@ -9,11 +9,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\TwoFactorAuthenticationFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\TwoFactorAuthenticationDisableFormType;
+use PROCERGS\LoginCidadao\CoreBundle\Form\Type\TwoFactorAuthenticationBackupCodeGenerationFormType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Security\Core\Util\SecureRandom;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\BackupCode;
 use Doctrine\ORM\EntityManager;
-use Scheb\TwoFactorBundle\Model\Google\TwoFactorWithBackupInterface;
+use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 
 /**
  * @Route("/two-factor")
@@ -64,13 +65,41 @@ class TwoFactorAuthenticationController extends Controller
     public function disableAction(Request $request)
     {
         $person = $this->getPerson();
-        $form = $this->createForm(new TwoFactorAuthenticationDisableFormType(), $person);
+        $form = $this->createForm(new TwoFactorAuthenticationDisableFormType(),
+                                  $person);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $translator = $this->get('translator');
             $this->disable2FA($person, $form);
             $message = $translator->trans('Two-Factor Authentication disabled.');
+            $this->get('session')->getFlashBag()->add('success', $message);
+            return $this->redirect($this->generateUrl("fos_user_change_password"));
+        }
+
+        return array(
+            'form' => $form->createView()
+        );
+    }
+
+    /**
+     * @Route("/backup-codes/generate", name="2fa_backup_codes_generate")
+     * @Template()
+     */
+    public function generateBackupCodesAction(Request $request)
+    {
+        $person = $this->getPerson();
+        $form = $this->createForm(new TwoFactorAuthenticationBackupCodeGenerationFormType(),
+                                  $person);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $translator = $this->get('translator');
+            $this->removeBackupCodes($em, $person);
+            $this->generateBackupCodes($em, $person);
+            $em->flush();
+            $message = $translator->trans('New Backup Codes generated. Don\'t forget to copy and store them safely.');
             $this->get('session')->getFlashBag()->add('success', $message);
             return $this->redirect($this->generateUrl("fos_user_change_password"));
         }
@@ -105,7 +134,7 @@ class TwoFactorAuthenticationController extends Controller
         $em->flush();
     }
 
-    protected function disable2FA(TwoFactorWithBackupInterface $person, $form)
+    protected function disable2FA(BackupCodeInterface $person, $form)
     {
         $em = $this->getDoctrine()->getManager();
         $backupCodes = $person->getBackupCodes();
@@ -115,6 +144,15 @@ class TwoFactorAuthenticationController extends Controller
         $person->setGoogleAuthenticatorSecret(null);
         $em->persist($person);
         $em->flush();
+    }
+
+    protected function removeBackupCodes(EntityManager $em,
+                                         PersonInterface $person)
+    {
+        $backupCodes = $person->getBackupCodes();
+        foreach ($backupCodes as $backupCode) {
+            $em->remove($backupCode);
+        }
     }
 
     protected function generateBackupCodes(EntityManager $em,

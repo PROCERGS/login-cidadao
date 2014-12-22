@@ -23,12 +23,19 @@
                     </ul>
                 </div>
 
+                <h4>{{ 'Generate new Backup Codes' | trans }}</h4>
+                <p>{% trans %}If your backup codes have been compromised or if you have already used too many of them, you can click the button bellow to generate new ones, but keep in mind that the current Backup Codes you see above will be <strong>deleted</strong> and will stop working.{% endtrans %}</p>
+
+                <p class="text-center">
+                    <a href="{{ path('2fa_backup_codes_generate') }}" class="btn btn-success">{{ 'Generate new Backup Codes' | trans }}</a>
+                </p>
+
                 <h3>{{ 'Disable Two-Factor Authentication' | trans }}</h3>
                 <p>{{ 'Currently your account safety is pretty good. If for some reason you need to disable Two-Factor Authentication you can do so in the button below.' | trans }}</p>
                 <p>{{ 'If you change your mind, remember that you can always enable it back again.' | trans }}</p>
 
                 <p class="text-center">
-                    <button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal2FADisable">{{ 'Disable Two-Factor Authentication' | trans }}</button>
+                    <a href="{{ path('2fa_disable') }}" class="btn btn-xs btn-danger">{{ 'Disable Two-Factor Authentication' | trans }}</a>
                 </p>
             {% else %}
                 <p>{% trans %}Two-Factor Authentication is <strong>disabled</strong>. To enhance the security level of your account, click Enable. {% endtrans %}</p>
@@ -38,5 +45,4 @@
         </div>
     </div>
 
-    {% render(controller("PROCERGSLoginCidadaoCoreBundle:TwoFactorAuthentication:disable")) %}
 {% endif %}

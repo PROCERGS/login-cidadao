@@ -234,3 +234,7 @@ Confirm Two-Factor Authentication Deactivation: Confirm Two-Factor Authenticatio
 'If you want to proceed, type your account''s password to confirm': 'If you want to proceed, type your account''s password to confirm:'
 I understand the risks. Disable Two-Factor Authentication: I understand the risks. Disable Two-Factor Authentication
 Keep it activated: Keep it activated
+Generate new Backup Codes: Generate new Backup Codes
+If your backup codes have been compromised or if you have already used too many of them, you can click the button bellow to generate new ones, but keep in mind that the current Backup Codes you see above will be <strong>deleted</strong> and will stop working.: If your backup codes have been compromised or if you have already used too many of them, you can click the button bellow to generate new ones, but keep in mind that the current Backup Codes you see above will be <strong>deleted</strong> and will stop working.
+'To prevent unauthorized Backup Code generation type your password to confirm:': 'To prevent unauthorized Backup Code generation type your password to confirm:'
+Confirm Backup Codes Generation: Confirm Backup Codes Generation
