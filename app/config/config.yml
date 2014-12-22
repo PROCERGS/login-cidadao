@@ -311,7 +311,6 @@ scheb_two_factor:
 
     google:
         enabled: true
-        use_backup_codes: true
         server_name: %site_domain%
         template: PROCERGSLoginCidadaoCoreBundle:TwoFactorAuthentication:form.html.twig
 
