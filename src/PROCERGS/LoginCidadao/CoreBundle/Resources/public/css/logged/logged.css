@@ -743,7 +743,7 @@ label + .glyphicon-pencil {
 
 .badges-list .badge-icon {
   border-radius: 50%;
-  box-shadow: inset 1px 1px 0px #B5B5B5;
+  box-shadow: inset 1px 2px 7px #FFF, 1px 1px 4px #CCC;
   color: #FFF;
   height: 60px;
   line-height: 50px;
@@ -755,12 +755,20 @@ label + .glyphicon-pencil {
 
 .badges-list .badge-icon:before {
   font-size: 22px;
-  text-shadow: 1px 1px #CCC;
+  text-shadow: 1px 1px 2px #CCC;
 }
 
-.badges-list .badge-icon.locked {
+.badges-list .locked .badge-icon {
   background-color: #CCC;
+  border-color: #000;
+  color: #CCC;
+  opacity: 0.05;
+}
+
+.badges-list .locked .media-body {
+  color: #CCC;
   opacity: 0.1;
+  text-shadow: 1px 1px 7px #000;
 }
 
 .badges-list .badge-has_cpf {
