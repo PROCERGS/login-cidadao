@@ -61,6 +61,18 @@ class StatisticsController extends Controller
     }
 
     /**
+     * @Route("/users/city/{stateId}", name="lc_admin_statistics_user_city")
+     * @Template()
+     */
+    public function usersByCityAction($stateId) {
+      $em = $this->getDoctrine()->getManager();
+      $repo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+      $data = $repo->getCountByCity($stateId);
+
+      return $this->render('PROCERGSLoginCidadaoCoreBundle:Admin\Statistics:usersByCity.html.twig', array('data' => $data ));
+    }
+
+    /**
      * @Route("/users/services", name="lc_admin_statistics_user_services")
      * @Template()
      */

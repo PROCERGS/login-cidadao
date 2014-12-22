@@ -6,16 +6,13 @@
 
     {% for item in data %}
       <div class="col-md-4">
-        <a class="item" href="{{ path('lc_admin_statistics_user_city', {'stateId': item.id } ) }}" title="{{ 'admin.statistics.checkCities'|trans }}">
+        <div class="item">
           <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
           <div>
             {{ item.name | trans }}
           </div>
-          {% if item.country is defined %}
-          <div>{{ item.country | trans }}</div>
-          {% endif %}
           <div class="qty">{{ item.qty }}</div>
-        </a>
+        </div>
       </div>
     {% endfor %}
 

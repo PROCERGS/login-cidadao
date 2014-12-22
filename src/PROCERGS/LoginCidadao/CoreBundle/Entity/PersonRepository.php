@@ -62,13 +62,30 @@ class PersonRepository extends EntityRepository
       $qb = $this->getEntityManager()->createQueryBuilder();
 
       return $qb
-              ->select('count(p.state) AS qty, s.name, c.name AS country')
+              ->select('count(p.state) AS qty, s.id, s.name, c.name AS country')
               ->from('PROCERGSLoginCidadaoCoreBundle:Person', 'p')
               ->innerJoin('PROCERGSLoginCidadaoCoreBundle:State', 's', 'WITH', 'p.state = s')
               ->innerJoin('PROCERGSLoginCidadaoCoreBundle:Country', 'c', 'WITH', 's.country = c')
               ->where('p.state IS NOT NULL')
-              ->groupBy('p.state, s.name, country')
+              ->groupBy('p.state, s.name, country, s.id')
               ->orderBy('qty', 'DESC')
+              ->getQuery()->getResult();
+    }
+
+    public function getCountByCity($stateId)
+    {
+      $qb = $this->getEntityManager()->createQueryBuilder();
+
+      return $qb
+              ->select('count(p.city) AS qty, c.name')
+              ->from('PROCERGSLoginCidadaoCoreBundle:Person', 'p')
+              ->innerJoin('PROCERGSLoginCidadaoCoreBundle:City', 'c', 'WITH', 'p.city = c')
+              ->innerJoin('PROCERGSLoginCidadaoCoreBundle:State', 's', 'WITH', 'c.state = s')
+              ->where('p.city IS NOT NULL')
+              ->andWhere('s.id = :stateId')
+              ->groupBy('p.city, c.name')
+              ->orderBy('qty', 'DESC')
+              ->setParameter('stateId', $stateId)
               ->getQuery()->getResult();
     }
 

@@ -339,6 +339,8 @@
                     }
                 }
                 });
+            } else {
+            	$(profileEdit.stateSteppeId).val('').removeAttr('disabled');
             }
         });
         $(profileEdit.stateId).on('change', function (event) {

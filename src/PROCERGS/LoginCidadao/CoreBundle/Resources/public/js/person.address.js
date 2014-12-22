@@ -41,6 +41,8 @@ $(document).ready(function() {
                         }
                     }
                 });
+            } else {
+                $(addressEdit.stateSteppeId).val('').removeAttr('disabled');
             }
         });
         $(addressEdit.stateId).on('change', function(event) {

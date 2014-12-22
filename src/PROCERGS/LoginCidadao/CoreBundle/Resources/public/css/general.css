@@ -48,6 +48,7 @@ body {
 }
 
 @media (max-width: 767px) {
+
   #lc-navbar {
     position: absolute!important;
   }
@@ -262,6 +263,10 @@ footer .copyright {
 
 .form-control::-webkit-input-placeholder, #recaptcha_response_field::-webkit-input-placeholder {
   color: #555;
+}
+
+.panel-default>.panel-heading {
+  border-radius: 0;
 }
 
 .progress-box .progress {
