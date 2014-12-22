@@ -16,15 +16,15 @@
           <div class="panel-body">
             {% for badge, content in badges %}
               {% set key = client ~ '.' ~ badge  %}
-              <div class="media {{ key in userBadges|keys ? '' : 'locked' }}">
-                <div class="media-left">
-                  <div class="badge-icon badge-{{ badge }}"></div>
-                </div>
-                <div class="media-body">
-                  <h4 class="media-heading">
-                    {{ badge }}
-                  </h4>
-                  {{ content.description }}
+                <div class="media {{ key in userBadges|keys ? '' : 'locked' }}">
+                  <div class="media-left">
+                    <div class="badge-icon badge-{{ badge }}"></div>
+                  </div>
+                  <div class="media-body">
+                    <h4 class="media-heading">
+                      {{ badge }}
+                    </h4>
+                    {{ content.description }}
                   </div>
                 </div>
               {% endfor %}

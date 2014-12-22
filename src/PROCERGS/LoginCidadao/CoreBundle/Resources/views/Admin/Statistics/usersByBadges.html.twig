@@ -1,31 +1,34 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle:Admin:base.html.twig" %}
 {% block content %}
-  <div id="statistics" class="content statistics-badges">
+  <div id="statistics" class="content statistics-badges badges-list">
 
     <h1>{{ 'admin.statistics.userByBadge'|trans }}</h1>
 
-      {% for client, badges in data %}
-        <div class="panel panel-default">
-          <div class="panel-heading">{{ client }}</div>
-          <div class="panel-body">
-            <ul class="list-group">
-              {% for badge, value in badges %}
-                {% for key, item in value %}
-                <li class="list-group-item">
-                  {% if item is iterable %}
-                    {% for k, num in item %}
-                      <div>{{ key }} {{ k }} - {{ num }}</div>
-                    {% endfor %}
+    <div class="row">
+    {% for client, badges in data %}
+      {% for badge, value in badges %}
+        {% for key, item in value %}
+          <div class="col-sm-6">
+            <div class="media">
+              <div class="media-left">
+                <div class="badge-icon badge-{{ key }}"></div>
+              </div>
+              <div class="media-body">
+                <h5 class="media-heading">{{ client }}</h5>
+                {% if item is iterable %}
+                  {% for k, num in item %}
+                    <div>{{ key }} {{ k }} - <strong>{{ num }}</strong></div>
+                  {% endfor %}
                   {% else %}
-                  {{ key }} - {{ item }}
-                  {% endif %}
-                </li>
-                {% endfor %}
-
-              {% endfor %}
-            </ul>
+                  {{ key }} - <strong>{{ item }}</strong>
+                {% endif %}
+              </div>
+            </div>
           </div>
-        </div>
+        {% endfor %}
       {% endfor %}
+    {% endfor %}
+    </div>
+
   </div>
 {% endblock %}
