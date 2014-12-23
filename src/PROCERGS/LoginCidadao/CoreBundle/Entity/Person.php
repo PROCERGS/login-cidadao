@@ -16,6 +16,8 @@ use PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationToken;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 use Doctrine\Common\Collections\Collection;
+use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
+use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
@@ -26,7 +28,7 @@ use Doctrine\Common\Collections\Collection;
  * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
  */
-class Person extends BaseUser implements PersonInterface
+class Person extends BaseUser implements PersonInterface, TwoFactorInterface, BackupCodeInterface
 {
 
     /**
@@ -379,6 +381,17 @@ class Person extends BaseUser implements PersonInterface
      */
     protected $addresses;
 
+    /**
+     * @ORM\Column(name="google_authenticator_secret", type="string", nullable=true)
+     */
+    private $googleAuthenticatorSecret;
+
+    /**
+     * @JMS\Exclude
+     * @ORM\OneToMany(targetEntity="BackupCode", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
+     */
+    private $backupCodes;
+
     public function __construct()
     {
         parent::__construct();
@@ -389,6 +402,7 @@ class Person extends BaseUser implements PersonInterface
         $this->clients = new ArrayCollection();
         $this->logoutKeys = new ArrayCollection();
         $this->addresses = new ArrayCollection();
+        $this->backupCodes = new ArrayCollection();
     }
 
     public function getEmail()
@@ -1101,7 +1115,8 @@ class Person extends BaseUser implements PersonInterface
         return $this;
     }
 
-    public function getFullNameOrUsername() {
+    public function getFullNameOrUsername()
+    {
         if (null === $this->firstName) {
             return $this->username;
         }
@@ -1142,6 +1157,67 @@ class Person extends BaseUser implements PersonInterface
     {
         $this->notificationOptions = $notificationOptions;
         return $this;
+    }
+
+    /**
+     * Checks whether 2FA is enabled.
+     *
+     * @return boolean
+     */
+    public function isTwoFactorAuthenticationEnabled()
+    {
+        return $this->googleAuthenticatorSecret !== null;
+    }
+
+    public function getGoogleAuthenticatorSecret()
+    {
+        return $this->googleAuthenticatorSecret;
+    }
+
+    public function setGoogleAuthenticatorSecret($googleAuthenticatorSecret)
+    {
+        $this->googleAuthenticatorSecret = $googleAuthenticatorSecret;
+        return $this;
+    }
+
+    public function getBackupCodes()
+    {
+        return $this->backupCodes;
+    }
+
+    public function setBackupCodes(ArrayCollection $backupCodes)
+    {
+        $this->backupCodes = $backupCodes;
+        return $this;
+    }
+
+    public function invalidateBackupCode($code)
+    {
+        $backupCode = $this->findBackupCode($code);
+        $backupCode->setUsed(true);
+
+        return $this;
+    }
+
+    public function isBackupCode($code)
+    {
+        $backupCode = $this->findBackupCode($code);
+        return $backupCode !== false && $backupCode->getUsed() === false;
+    }
+
+    /**
+     * @param string $code
+     * @return BackupCode
+     */
+    private function findBackupCode($code)
+    {
+        $backupCodes = $this->getBackupCodes();
+        foreach ($backupCodes as $backupCode) {
+            if ($backupCode->getCode() === $code) {
+                return $backupCode;
+            }
+        }
+        return false;
     }
 
 }

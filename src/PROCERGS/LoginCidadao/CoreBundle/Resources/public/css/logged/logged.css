@@ -727,10 +727,23 @@ label + .glyphicon-pencil {
   margin-bottom: 5px!important;
 }
 
+.backup-codes {
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2;
+}
+.backup-codes .backup-code,
+.backup-codes .backup-code s {
+    font-family: monospace;
+}
+
+.backup-codes .backup-code s {
+    color: #ccc;
+}
+
 .badges-list .media {
   margin-bottom: 30px;
 }
-
 .badges-list .badge-img {
   height: 60px;
   line-height: 60px;

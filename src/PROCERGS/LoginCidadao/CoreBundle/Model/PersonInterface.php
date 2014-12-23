@@ -227,4 +227,8 @@ interface PersonInterface
      * @param array $badges
      */
     public function mergeBadges(array $badges);
+    
+    public function getGoogleAuthenticatorSecret();
+
+    public function setGoogleAuthenticatorSecret($googleAuthenticatorSecret);
 }
