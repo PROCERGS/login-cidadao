@@ -718,18 +718,13 @@ label + .glyphicon-pencil {
   font-weight: bold;
 }
 
-.statistics-badges .media {
-  margin-bottom: 10px;
-  margin-top: 0;
-  padding: 15px;
+.statistics-badges .badge-box {
+  margin-bottom: 30px;
+  text-align: center;
 }
 
-.statistics-badges .badges-count {
-  font-size: 20px;
-}
-
-.statistics-badges .badge-img {
-  margin-bottom: 5px;
+.statistics-badges .badge-icon {
+  margin-bottom: 5px!important;
 }
 
 .badges-list .media {

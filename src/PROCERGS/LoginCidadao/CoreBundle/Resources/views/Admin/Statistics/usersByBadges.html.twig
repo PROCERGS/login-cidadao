@@ -4,32 +4,6 @@
 
     <h1>{{ 'admin.statistics.userByBadge'|trans }}</h1>
 
-    <div class="row">
-      {% for client, badges in data %}
-        {% for badge, value in badges %}
-          {% for key, item in value %}
-            <div class="col-sm-6">
-              <div class="media">
-                <div class="media-left">
-                  <div class="badge-icon badge-{{ key }}"></div>
-                </div>
-                <div class="media-body">
-                  <h4 class="media-heading">{{ client }}</h4>
-                  {% if item is iterable %}
-                    {% for k, num in item %}
-                      <div>{{ key }} {{ k }} - <strong>{{ num }}</strong></div>
-                    {% endfor %}
-                    {% else %}
-                    {{ key }} - <strong>{{ item }}</strong>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
-          {% endfor %}
-        {% endfor %}
-      {% endfor %}
-    </div>
-
     {% for client, badges in data %}
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -38,13 +12,18 @@
         <div class="panel-body">
           {% for badge, value in badges %}
             {% for key, item in value %}
-              {% if item is iterable %}
-                {% for k, num in item %}
-                  <div>{{ key }} {{ k }} - <strong>{{ num }}</strong></div>
-                {% endfor %}
-                {% else %}
-                {{ key }} - <strong>{{ item }}</strong>
-              {% endif %}
+              <div class="col-xs-6 col-md-3 badge-box">
+                <div class="badge-icon badge-{{ key }}"></div>
+                {% if item is iterable %}
+                  {% for k, num in item %}
+                    <div>{{ key }} {{ k }}</div><div><strong>{{ num }}</strong></div>
+                  {% endfor %}
+                  {% else %}
+                  <div>{{ key }}</div>
+                  <div><strong>{{ item }}</strong></div>
+                {% endif %}
+              </div>
+
             {% endfor %}
           {% endfor %}
         </div>
