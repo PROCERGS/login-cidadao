@@ -732,6 +732,10 @@ label + .glyphicon-pencil {
   margin-bottom: 5px;
 }
 
+.badges-list .media {
+  margin-bottom: 30px;
+}
+
 .badges-list .badge-img {
   height: 60px;
   line-height: 60px;
