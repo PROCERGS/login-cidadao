@@ -46,6 +46,31 @@ assetic:
     use_controller: false
     bundles:        [ "PROCERGSLoginCidadaoCoreBundle", "PROCERGSLoginCidadaoNotificationBundle" ]
     #java: /usr/bin/java
+    assets:
+      lc_base_js:
+        inputs:
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery/1.11.0/jquery.min.js'
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/bootstrap/3.3.0/js/bootstrap.min.js'
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/bootstrap-switch/3.0.2/js/bootstrap-switch.min.js'
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/hinclude/0.9.5/hinclude.min.js'
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.placeholder.js'
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.js'
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.local.js'
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/general.js'
+      lc_base_css:
+        inputs:
+          - 'bundles/procergslogincidadaocore/css/bootstrap/3.3.0/css/bootstrap.min.css' 
+          - 'bundles/procergslogincidadaocore/css/bootstrap/3.3.0/css/bootstrap-theme.min.css'
+          - 'bundles/procergslogincidadaocore/css/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
+          - 'bundles/procergslogincidadaocore/css/general.css'
+          - 'bundles/procergslogincidadaocore/css/navbar.css'
+          - 'bundles/procergslogincidadaocore/css/ac.widget.css'
+          - 'bundles/procergslogincidadaocore/css/common.grid.css'
+          - 'bundles/procergslogincidadaocore/css/custom.recaptcha.css'
+          - 'bundles/procergslogincidadaocore/css/list.buttons.css' 
+          - 'bundles/procergslogincidadaocore/css/notification.css'
+          
     filters:
         cssrewrite: ~
         uglifyjs2:
