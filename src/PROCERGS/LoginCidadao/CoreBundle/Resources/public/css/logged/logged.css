@@ -214,6 +214,7 @@ body.no-scroll {
     .menu-open .settings-nav.top {
         top: 0;
     }
+
     .settings-content, footer .content, .alert-bar {
         -webkit-transition: 0.5s ease-in-out;
         -moz-transition: 0.5s ease-in-out;
@@ -745,6 +746,9 @@ label + .glyphicon-pencil {
     color: #ccc;
 }
 
+.badges-list .media {
+  margin-bottom: 30px;
+}
 .badges-list .badge-img {
   height: 60px;
   line-height: 60px;
