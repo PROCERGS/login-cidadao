@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9bead98d2b3260500211fda2ee89a6e8",
+    "hash": "b3b5b51af2c660dcfbab17dc0d96a957",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2387,13 +2387,13 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/guilhermednt/two-factor-bundle.git",
-                "reference": "8bd3ec4f251c166de119f1fe95c1d0bf923fddd8"
+                "url": "https://github.com/scheb/two-factor-bundle.git",
+                "reference": "b93f8021cfc4d90e766e630e8886980fdc843572"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guilhermednt/two-factor-bundle/zipball/8bd3ec4f251c166de119f1fe95c1d0bf923fddd8",
-                "reference": "8bd3ec4f251c166de119f1fe95c1d0bf923fddd8",
+                "url": "https://api.github.com/repos/scheb/two-factor-bundle/zipball/b93f8021cfc4d90e766e630e8886980fdc843572",
+                "reference": "b93f8021cfc4d90e766e630e8886980fdc843572",
                 "shasum": ""
             },
             "require": {
@@ -2410,6 +2410,7 @@
                     "Scheb\\TwoFactorBundle\\": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2422,15 +2423,12 @@
             "description": "Provides two-factor authenticaton for Symfony2",
             "homepage": "https://github.com/scheb/two-factor-bundle",
             "keywords": [
-                "authentication",
-                "symfony2",
+                "Authentication",
+                "Symfony2",
                 "two-factor",
                 "two-step"
             ],
-            "support": {
-                "source": "https://github.com/guilhermednt/two-factor-bundle/tree/master"
-            },
-            "time": "2014-12-15 20:54:38"
+            "time": "2014-12-23 10:30:50"
         },
         {
             "name": "sensio/distribution-bundle",

@@ -44,7 +44,7 @@
         "nelmio/api-doc-bundle": "@dev",
         "jms/security-extra-bundle": "dev-master",
         "procergs/login-cidadao-badges-bundle": "dev-master",
-        "scheb/two-factor-bundle": "dev-backup-codes"
+        "scheb/two-factor-bundle": "dev-master"
     },
     "scripts" : {
         "post-install-cmd" : [
