@@ -720,11 +720,38 @@ label + .glyphicon-pencil {
 
 .statistics-badges .badge-box {
   margin-bottom: 30px;
+  padding: 10px;
   text-align: center;
+  word-wrap: break-word;
+}
+
+.statistics-badges .badge-box .about {
+  width: 30%;
+}
+
+.statistics-badges .badge-box .count {
+  width: 70%;
+}
+
+.statistics-badges .badge-box .col {
+  float: left;
+  width: 50%;
+}
+
+.statistics-badges .badge-box .count {
+  font-size: 35px;
+  line-height: 54px;
+  padding-left: 10px;
+  text-align: left;
+}
+
+.statistics-badges .badge-box .count .list {
+  font-size: 16px;
+  line-height: normal;
 }
 
 .statistics-badges .badge-icon {
-  margin-bottom: 5px!important;
+  margin-bottom: 10px!important;
 }
 
 .backup-codes {

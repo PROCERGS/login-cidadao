@@ -12,16 +12,20 @@
         <div class="panel-body">
           {% for badge, value in badges %}
             {% for key, item in value %}
-              <div class="col-xs-6 col-md-3 badge-box">
-                <div class="badge-icon badge-{{ key }}"></div>
-                {% if item is iterable %}
-                  {% for k, num in item %}
-                    <div>{{ key }} {{ k }}</div><div><strong>{{ num }}</strong></div>
-                  {% endfor %}
-                  {% else %}
+              <div class="col-xs-12 col-sm-6 col-md-4 badge-box clearfix">
+                <div class="about col">
+                  <div class="badge-icon badge-{{ key }}"></div>
                   <div>{{ key }}</div>
-                  <div><strong>{{ item }}</strong></div>
-                {% endif %}
+                </div>
+                <div class="count col">
+                  {% if item is iterable %}
+                    {% for k, num in item %}
+                      <div class="list">{{ k }}: <strong>{{ num }}</strong></div>
+                    {% endfor %}
+                  {% else %}
+                      {{ item }}
+                  {% endif %}
+                </div>
               </div>
 
             {% endfor %}
