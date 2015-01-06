@@ -559,10 +559,16 @@ Placeholders: 'Marcadores de posição'
 Placeholder: 'Marcador de posição'
 admin.person.list: 'Gerenciar pessoas'
 admin.person.list.title:  'Busca de pessoas'
-'ROLE_FACEBOOK': 'Perfil facebook'
-'ROLE_DEV': 'Perfil desenvolvedor'
-'ROLE_SUPER': 'Perfil super usuario'
-'ROLE_ADMIN': 'Perfil administrador'
+ROLE_USER: Usuário
+ROLE_FACEBOOK: Associado com Facebook
+ROLE_DEV: Desenvolvedor
+ROLE_SUPER: Super Usuário
+ROLE_ADMIN: Administrador
+ROLE_SUPER_ADMIN: Super Administrador
+FEATURE_PROD: Funcionalidades de Produção
+FEATURE_ALPHA: Funcionalidades Alpha
+FEATURE_BETA: Funcionalidades Beta
+FEATURE_2FACTOR_AUTH: Funcionalidade de Autenticação por 2 Fatores
 'Roles': 'Perfis'
 admin.area: 'Área do administrator'
 developer.area: 'Área do desenvolvedor'

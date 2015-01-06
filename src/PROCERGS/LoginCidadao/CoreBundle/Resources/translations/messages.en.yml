@@ -238,3 +238,13 @@ Generate new Backup Codes: Generate new Backup Codes
 If your backup codes have been compromised or if you have already used too many of them, you can click the button bellow to generate new ones, but keep in mind that the current Backup Codes you see above will be <strong>deleted</strong> and will stop working.: If your backup codes have been compromised or if you have already used too many of them, you can click the button bellow to generate new ones, but keep in mind that the current Backup Codes you see above will be <strong>deleted</strong> and will stop working.
 'To prevent unauthorized Backup Code generation type your password to confirm:': 'To prevent unauthorized Backup Code generation type your password to confirm:'
 Confirm Backup Codes Generation: Confirm Backup Codes Generation
+ROLE_USER: User
+ROLE_FACEBOOK: Linked with Facebook
+ROLE_DEV: Developer
+ROLE_SUPER: Super User
+ROLE_ADMIN: Administrator
+ROLE_SUPER_ADMIN: Super Administrator
+FEATURE_PROD: Production Features
+FEATURE_ALPHA: Alpha Features
+FEATURE_BETA: Beta Features
+FEATURE_2FACTOR_AUTH: Two Factor Authentication Feature
