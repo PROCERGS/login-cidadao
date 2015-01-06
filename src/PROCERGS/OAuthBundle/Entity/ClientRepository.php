@@ -25,6 +25,7 @@ class ClientRepository extends EntityRepository
               ->select('count(a.id) AS qty, c AS client')
               ->from('PROCERGSLoginCidadaoCoreBundle:Authorization', 'a')
               ->innerJoin('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'a.client = c')
+              ->where('c.published = true')
               ->groupBy('a.client, c')
               ->orderBy('qty', 'DESC')
               ->getQuery()->getResult();
