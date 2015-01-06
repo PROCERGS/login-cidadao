@@ -75,6 +75,7 @@ assetic:
         inputs:
           - '@lc_base_css'
           - 'bundles/procergslogincidadaocore/css/logged/logged.css'
+          - 'bundles/procergslogincidadaonotification/css/notifications.css'
 
     filters:
         cssrewrite: ~
