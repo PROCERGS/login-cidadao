@@ -159,7 +159,7 @@ footer .content {
 }
 
 footer h3 {
-    color: #3dc90a;
+    color: #5DB35D;
     margin: 20px 15px;
 }
 
@@ -172,7 +172,11 @@ footer li {
 }
 
 footer li a {
-    color: #FFF;
+    color: #F1F1F1;
+}
+
+footer a:hover {
+  color: #5DB35D;
 }
 
 footer .social {

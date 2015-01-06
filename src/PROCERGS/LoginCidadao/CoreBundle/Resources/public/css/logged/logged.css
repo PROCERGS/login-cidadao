@@ -28,7 +28,7 @@ body.no-scroll {
 }
 
 .settings-nav {
-    background-color: #F1F1F1;
+    background-color: #222;
     position: fixed;
     top: 50px;
     bottom: 0;
@@ -53,24 +53,27 @@ body.no-scroll {
 
 .settings-nav li a {
     border-radius: 0;
+    color: #F1F1F1;
     line-height: 30px;
     padding: 12px;
 }
 
+.settings-nav li a:hover,
+.settings-nav li a:focus,
 .settings-nav li.active a,
 .settings-nav li.active a:hover,
 .settings-nav li a.active,
 .settings-nav li a.active:hover {
     /*background-color: #009933;*/
-    background-color: #5CB85C !important;
-    color: #fff !important;
+    background-color: #5DB35D !important;
+    color: #F1F1F1 !important;
 }
 
-.settings-nav li a:hover, .settings-nav .open > a {
+/*.settings-nav li a:hover, .settings-nav .open > a {
     background-image: none;
     background-color: #E2EFDE!important;
     color: #696969 !important;
-}
+}*/
 
 .settings-nav li a > span {
     display: inline-block;
@@ -80,7 +83,7 @@ body.no-scroll {
 }
 
 .settings-nav li a > .icon {
-    color: #696969;
+    color: #FFF;
     display: inline-block;
     line-height: normal;
     font-size: 30px;
@@ -121,7 +124,6 @@ body.no-scroll {
 }
 
 .settings-nav .submenu {
-    background-color: #FFF;
     padding: 0;
 }
 
