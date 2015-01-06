@@ -1,4 +1,5 @@
 <?php
+
 namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -13,8 +14,8 @@ abstract class CommonFormType extends AbstractType
 
     protected $em;
 
+    /** @var SecurityContext */
     protected $security;
-
     protected $translator;
     protected $router;
 
@@ -32,17 +33,17 @@ abstract class CommonFormType extends AbstractType
 
     public function getUser()
     {
-        if (! $this->security) {
+        if (!$this->security) {
             throw new \LogicException('The SecurityBundle is not registered in your application.');
         }
         if (null === $token = $this->security->getToken()) {
             return;
         }
-        
-        if (! is_object($user = $token->getUser())) {
+
+        if (!is_object($user = $token->getUser())) {
             return;
         }
-        
+
         return $user;
     }
 
@@ -50,14 +51,16 @@ abstract class CommonFormType extends AbstractType
     {
         $this->translator = $var;
     }
-    
+
     public function setRouter(RouterInterface $var)
     {
         $this->router = $var;
     }
-    
-    public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+
+    public function generateUrl($route, $parameters = array(),
+                                $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         return $this->router->generate($route, $parameters, $referenceType);
     }
+
 }
