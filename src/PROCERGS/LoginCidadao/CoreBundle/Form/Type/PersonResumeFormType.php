@@ -7,9 +7,28 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\CommonFormType;
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\SecurityHelper;
 
 class PersonResumeFormType extends CommonFormType
 {
+
+    /** @var SecurityHelper */
+    private $securityHelper;
+
+    public function __construct(SecurityHelper $securityHelper)
+    {
+        $this->securityHelper = $securityHelper;
+    }
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'available_roles' => array()
+        ));
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -51,80 +70,117 @@ class PersonResumeFormType extends CommonFormType
             'label' => 'form.mobile',
             'translation_domain' => 'FOSUserBundle'
         ));
-        $em = $this->em;
+
         $user = $this->getUser();
-        $allRoles = array(
-            'ROLE_FACEBOOK' => $this->translator->trans('ROLE_FACEBOOK'),
-            'ROLE_DEV' => $this->translator->trans('ROLE_DEV'),
-            'ROLE_SUPER' => $this->translator->trans('ROLE_SUPER')
-        );
-        $allRoles['ROLE_ADMIN'] = $this->translator->trans('ROLE_ADMIN');
+
+        $allRoles = $this->translateRoles($builder->getOption('available_roles'));
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
-                                   function (FormEvent $event) use (&$em, &$user, &$allRoles) {
+                                   function (FormEvent $event) use ($user, &$allRoles) {
             $person = $event->getData();
-            $form = $event->getForm();
-            $name = '';
-            if ($var = $person->getCountry()) {
-                $name = $var->getName();
-            }
-            $form->add('country', 'text',
-                       array(
-                'required' => true,
-                'mapped' => false,
-                'read_only' => true,
-                'data' => $name,
-            ));
-            $name = '';
-            if ($var = $person->getState()) {
-                $name = $var->getName();
-            }
-            $form->add('state', 'text',
-                       array(
-                'required' => true,
-                'read_only' => 'true',
-                'mapped' => false,
-                'read_only' => true,
-                'data' => $name,
-            ));
-            $name = '';
-            if ($var = $person->getCity()) {
-                $name = $var->getName();
-            }
-            $form->add('city', 'text',
-                       array(
-                'required' => true,
-                'read_only' => 'true',
-                'mapped' => false,
-                'read_only' => true,
-                'data' => $name,
-            ));
-            $isUserAdmin = in_array('ROLE_ADMIN', $user->getRoles());
-            $isPersonAdmin = in_array('ROLE_ADMIN', $person->getRoles());
-            if ($isPersonAdmin) {
-                if ($isUserAdmin) {
-                    $form->add('roles', 'choice',
-                               array(
-                        'choices' => $allRoles,
-                        'multiple' => true,
-                    ));
-                }
-            } else {
-                if (!$isUserAdmin) {
-                    unset($allRoles['ROLE_ADMIN']);
-                }
-                $form->add('roles', 'choice',
-                           array(
-                    'choices' => $allRoles,
-                    'multiple' => true,
-                ));
-            }
+            $form = PersonResumeFormType::populateCountryStateCity($person,
+                                                                   $event->getForm());
+
+            $roles = PersonResumeFormType::filterRoles($person, $user, $form,
+                                                       $allRoles);
         });
     }
 
     public function getName()
     {
         return 'person_resume_form_type';
+    }
+
+    private static function populateCountryStateCity(PersonInterface $person,
+                                                     FormInterface $form)
+    {
+        $country = $person->getCountry();
+        $state = $person->getState();
+        $city = $person->getCity();
+
+        $countryName = '';
+        if ($country) {
+            $countryName = $country->getName();
+        }
+        $form->add('country', 'text',
+                   array(
+            'required' => true,
+            'mapped' => false,
+            'read_only' => true,
+            'data' => $countryName,
+        ));
+
+        $stateName = '';
+        if ($state) {
+            $stateName = $state->getName();
+        }
+        $form->add('state', 'text',
+                   array(
+            'required' => true,
+            'read_only' => 'true',
+            'mapped' => false,
+            'read_only' => true,
+            'data' => $stateName,
+        ));
+
+        $cityName = '';
+        if ($city) {
+            $cityName = $city->getName();
+        }
+        $form->add('city', 'text',
+                   array(
+            'required' => true,
+            'read_only' => 'true',
+            'mapped' => false,
+            'read_only' => true,
+            'data' => $cityName,
+        ));
+
+        return $form;
+    }
+
+    private function translateRoles($roles)
+    {
+        $translated = array();
+        foreach ($roles as $role) {
+            if ($role == 'ROLE_ALLOWED_TO_SWITCH') {
+                continue;
+            }
+            $translated[$role] = $this->translator->trans($role);
+        }
+        return $translated;
+    }
+
+    private function filterRoles(PersonInterface $person,
+                                 PersonInterface $loggedUser,
+                                 FormInterface $form, array $roles)
+    {
+        $loggedUserLevel = $this->securityHelper->getLoggedInUserLevel();
+        $targetPersonLevel = $this->securityHelper->getTargetPersonLevel($person);
+        $isLoggedUserSuperAdmin = $this->security->isGranted('ROLE_SUPER_ADMIN');
+
+        $filteredRoles = array();
+        foreach ($roles as $role => $name) {
+            $isFeature = preg_match('/^FEATURE_/', $role) === 1;
+            if (!$isLoggedUserSuperAdmin && $isFeature) {
+                continue;
+            }
+
+            if ($loggedUserLevel < $this->securityHelper->getRoleLevel($role)) {
+                continue;
+            }
+
+            $filteredRoles[$role] = $name;
+        }
+
+        $form->add('roles', 'choice',
+                   array(
+            'choices' => $filteredRoles,
+            'multiple' => true,
+            'read_only' => ($targetPersonLevel > $loggedUserLevel),
+            'disabled' => ($targetPersonLevel > $loggedUserLevel)
+        ));
+        return $filteredRoles;
     }
 
 }
