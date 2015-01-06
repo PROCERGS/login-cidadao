@@ -59,7 +59,6 @@ class NotificationsHelper
         $this->container = $container;
         $this->router = $this->container->get('router');
         $this->translator = $this->container->get('translator');
-
         $this->unconfirmedEmailCategoryId = $unconfirmedEmailCategoryId;
         $this->emptyPasswordCategoryId = $emptyPasswordCategoryId;
     }
@@ -120,7 +119,7 @@ class NotificationsHelper
     public function enforceEmptyPasswordNotification(Person $person)
     {
         $handler = $this->getNotificationHandler();
-        
+
         $title = $this->translator->trans(self::EMPTY_PASSWORD_TITLE);
         $shortText = $this->translator->trans(self::EMPTY_PASSWORD_SHORT_TEXT);
         $text = $this->translator->trans(self::EMPTY_PASSWORD_FULL_TEXT);
@@ -137,6 +136,7 @@ class NotificationsHelper
      */
     public function clearEmptyPasswordNotification(Person $person)
     {
+
     }
 
     private function getEmptyPasswordCategory()
@@ -156,7 +156,7 @@ class NotificationsHelper
     {
         return $this->container->get('procergs.notification.handler');
     }
-    
+
     public function revokedCpfNotification(Person $person)
     {
         $category = $this->getEmptyPasswordCategory();
@@ -168,7 +168,7 @@ class NotificationsHelper
         $notification = $this->getDefaultNotification($person, $title, $shortText, $text, $icon, $category, new Notification(), array(new Placeholder('link', ''), new Placeholder('linktitle', ''), new Placeholder('linkclick', '')));
         return $handler->patch($notification, array());
     }
-    
+
     public function overwriteCpfNotification(Person $person)
     {
         $category = $this->getEmptyPasswordCategory();
@@ -180,7 +180,7 @@ class NotificationsHelper
         $notification = $this->getDefaultNotification($person, $title, $shortText, $text, $icon, $category, new Notification(), array(new Placeholder('link', ''), new Placeholder('linktitle', ''), new Placeholder('linkclick', '')));
         return $handler->patch($notification, array());
     }
-    
+
     public function revokedVoterRegistrationNotification(Person $person)
     {
         $category = $this->getEmptyPasswordCategory();
@@ -191,7 +191,6 @@ class NotificationsHelper
         $icon = 'glyphicon glyphicon-exclamation-sign';
         $notification = $this->getDefaultNotification($person, $title, $shortText, $text, $icon, $category, new Notification(), array(new Placeholder('link', ''), new Placeholder('linktitle', ''), new Placeholder('linkclick', '')));
         return $handler->patch($notification, array());
-    }    
-    
+    }
 
 }

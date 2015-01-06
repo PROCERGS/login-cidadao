@@ -83,7 +83,7 @@
                     </li>
                     <li class="password {{ app.request.attributes.get('_route') == 'fos_user_change_password' ? 'active' }}"   >
                         <a href="{{ path('fos_user_change_password')}}" class="clearfix">
-                            <span>{% trans %}Change password{% endtrans %}</span>
+                            <span>{% trans %}Security{% endtrans %}</span>
                             <i class="glyphicon glyphicon-lock icon"></i>
                         </a>
                     </li>
@@ -103,6 +103,12 @@
                             </a>
                         </li>
                     {% endif %}
+                    <li class="profile glyph {{ app.request.attributes.get('_route') == 'lc_profile_badges' ? 'active' }}">
+                        <a href="{{ path('lc_profile_badges') }}" class="clearfix">
+                            <span>{{ 'scope.badges'|trans() }}</span>
+                            <i class="glyphicon glyphicon-certificate icon"></i>
+                        </a>
+                    </li>
                 </ul>
             </div>
         {% endblock sidebar %}
@@ -119,11 +125,8 @@
     {{ include("PROCERGSLoginCidadaoCoreBundle::footer.html.twig") }}
 {% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-
-    {% stylesheets 'bundles/procergslogincidadaocore/css/logged/*.css'
-                    '@PROCERGSLoginCidadaoNotificationBundle/Resources/public/css/notifications.css' filter='cssrewrite' filter='?uglifycss' %}
+{% block stylesheets_custom %}
+    {% stylesheets '@lc_logged_css' filter='cssrewrite' filter='?uglifycss' %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 

@@ -5,11 +5,8 @@
 {% endblock %}
 
 
-{% block stylesheets %}
-{{ parent() }}
-
-{% stylesheets 'bundles/procergslogincidadaocore/css/general.css'
-                'bundles/procergslogincidadaocore/css/popup/popup.css' filter='cssrewrite' filter='?uglifycss' %}
+{% block stylesheets_custom %}
+{% stylesheets '@lc_base_css' 'bundles/procergslogincidadaocore/css/popup/popup.css' filter='cssrewrite' filter='?uglifycss' %}
 <link rel="stylesheet" href="{{ asset_url }}" />
 {% endstylesheets %}
 {% endblock %}

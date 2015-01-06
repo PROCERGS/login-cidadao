@@ -8,7 +8,8 @@
             "" : "src/"
         }
     },
-    "repositories" : [{
+    "repositories" : [
+        {
             "type" : "vcs",
             "url" : "https://github.com/PROCERGS/EWZRecaptchaBundle"
         }
@@ -42,7 +43,8 @@
         "michelf/php-markdown": "1.4.1",
         "nelmio/api-doc-bundle": "@dev",
         "jms/security-extra-bundle": "dev-master",
-        "procergs/login-cidadao-badges-bundle": "dev-master"
+        "procergs/login-cidadao-badges-bundle": "dev-master",
+        "scheb/two-factor-bundle": "dev-master"
     },
     "scripts" : {
         "post-install-cmd" : [

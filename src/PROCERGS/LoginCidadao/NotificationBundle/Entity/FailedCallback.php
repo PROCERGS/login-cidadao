@@ -11,7 +11,7 @@ use PROCERGS\LoginCidadao\NotificationBundle\Model\NotificationInterface;
  * FailedCallback
  *
  * @ORM\Table(name="failed_callback")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\NotificationBundle\Entity\FailedCallbackRepository")
  */
 class FailedCallback
 {
@@ -22,6 +22,8 @@ class FailedCallback
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $id;
 
@@ -29,6 +31,8 @@ class FailedCallback
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime")
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $date;
 
@@ -36,6 +40,8 @@ class FailedCallback
      * @var string
      *
      * @ORM\Column(name="request_url", type="string", length=255)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $requestUrl;
 
@@ -43,6 +49,8 @@ class FailedCallback
      * @var integer
      *
      * @ORM\Column(name="response_code", type="integer", length=255)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $responseCode;
 
@@ -50,6 +58,8 @@ class FailedCallback
      * @var string
      *
      * @ORM\Column(name="response_body", type="text", nullable=true)
+     * @JMS\Expose
+     * @JMS\Groups({"public"})
      */
     private $responseBody;
 

@@ -33,12 +33,9 @@
         {% if not grid.getRlast and grid.isInfiniteGrid %}
             {% set routeParams = { 'page': grid.page + 1 } %}
             <div class="btn-group">
-                {# <button type="button" class="btn btn-default infinitescroll-next-button " data-retrive="#{{ grid.getId }}"> #}
-                <a href="{{ path(grid.route, routeParams) }}" class="btn btn-block btn-info"
-                   data-next-offset="{{ grid.page + 1 }}">
-                    {{ 'load more'|trans }}
-                </a>
-                {# </button> #}
+                <button type="button" class="btn btn-info infinitescroll-next-button " data-retrive="#{{ grid.getId }}">
+                  {{ 'load more'|trans }}
+                </button>
             </div>
         {% endif %}
     </div>

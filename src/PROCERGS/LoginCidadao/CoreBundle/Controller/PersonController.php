@@ -492,6 +492,9 @@ class PersonController extends Controller
      */
     public function preFilledRegistrationAction(Request $request)
     {
+        if (null !== $this->getUser()) {
+            return $this->get('templating')->renderResponse('PROCERGSLoginCidadaoCoreBundle:Person:registration/errorAlreadyLoggedin.html.twig');
+        }
         /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
         $formFactory = $this->get('fos_user.registration.form.factory');
         /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
@@ -553,7 +556,22 @@ class PersonController extends Controller
         return $this->get('templating')->renderResponse('PROCERGSLoginCidadaoCoreBundle:Person:registration/preFilledRegistration.html.twig',
                         array(
                     'form' => $form->createView(),
+                    'actionUrl' => 'lc_prefilled_registration'
         ));
+    }
+
+    /**
+     * @Route("/profile/badges", name="lc_profile_badges")
+     * @Template()
+     */
+    public function badgesListAction(Request $request)
+    {
+      $badgesHandler = $this->get('badges.handler');
+
+      $badges = $badgesHandler->getAvailableBadges();
+      $user = $badgesHandler->evaluate($this->getUser());
+
+      return array('allBadges' => $badges, 'userBadges' => $user->getBadges());
     }
 
 }

@@ -46,6 +46,36 @@ assetic:
     use_controller: false
     bundles:        [ "PROCERGSLoginCidadaoCoreBundle", "PROCERGSLoginCidadaoNotificationBundle" ]
     #java: /usr/bin/java
+    assets:
+      lc_base_js:
+        inputs:
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery/1.11.0/jquery.min.js'
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/bootstrap/3.3.1/js/bootstrap.min.js'
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/js/bootstrap-switch.min.js'
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/hinclude/0.9.5/hinclude.min.js'
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.placeholder.js'
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.js'
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.local.js'
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.visible.min.js'
+          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/general.js'
+      lc_base_css:
+        inputs:
+          - 'bundles/procergslogincidadaocore/bootstrap/3.3.1/css/bootstrap.min.css'
+          - 'bundles/procergslogincidadaocore/bootstrap/3.3.1/css/bootstrap-theme.min.css'
+          - 'bundles/procergslogincidadaocore/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
+          - 'bundles/procergslogincidadaocore/css/general.css'
+          - 'bundles/procergslogincidadaocore/css/navbar.css'
+          - 'bundles/procergslogincidadaocore/css/ac.widget.css'
+          - 'bundles/procergslogincidadaocore/css/common.grid.css'
+          - 'bundles/procergslogincidadaocore/css/custom.recaptcha.css'
+          - 'bundles/procergslogincidadaocore/css/list.buttons.css'
+          - 'bundles/procergslogincidadaocore/css/notification.css'
+      lc_logged_css:
+        inputs:    
+          - '@lc_base_css'
+          - 'bundles/procergslogincidadaocore/css/logged/logged.css'          
+
     filters:
         cssrewrite: ~
         uglifyjs2:
@@ -141,6 +171,7 @@ simple_things_entity_audit:
 
         - PROCERGS\LoginCidadao\CoreBundle\Entity\AccessSession
         - PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization
+        - PROCERGS\LoginCidadao\CoreBundle\Entity\BackupCode
         - PROCERGS\LoginCidadao\CoreBundle\Entity\City
         - PROCERGS\LoginCidadao\CoreBundle\Entity\ClientSuggestion
         - PROCERGS\LoginCidadao\CoreBundle\Entity\Country
@@ -244,7 +275,7 @@ vich_uploader:
             uri_prefix:         %uri_root%/uploads/profile-pictures
             upload_destination: user_image_fs
             namer:              vich_uploader.namer_uniqid
-            inject_on_load:     false 
+            inject_on_load:     false
 
 # Disabling annotations is needed by FOS Rest Bundle
 sensio_framework_extra:
@@ -288,3 +319,34 @@ jms_serializer:
             FOSUB:
                 namespace_prefix: "FOS\\UserBundle"
                 path: "%kernel.root_dir%/serializer/FOSUB"
+
+scheb_two_factor:
+    trusted_computer:
+        enabled: false
+        cookie_name: lc_trusted_computer
+        cookie_lifetime: 2592000
+
+    exclude_pattern: ^/(css|js|images|api)
+
+    parameter_names:
+        auth_code: _auth_code
+        trusted: _trusted
+
+    email:
+        enabled: false
+        mailer: swiftmailer
+        sender_email: %mailer_sender_mail%
+        digits: 6
+        template: PROCERGSLoginCidadaoCoreBundle:TwoFactorAuthentication:form.html.twig
+
+    google:
+        enabled: true
+        server_name: %site_domain%
+        template: PROCERGSLoginCidadaoCoreBundle:TwoFactorAuthentication:form.html.twig
+
+    persister: ~
+    model_manager_name: ~
+
+    security_tokens:
+        - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
+        - FOS\FacebookBundle\Security\Authentication\Token\FacebookUserToken

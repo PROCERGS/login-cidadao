@@ -18,3 +18,7 @@ a.list-group-item:hover {
 .broadcast-item .list-group-item-text {
     margin: 5px 0;
 }
+
+#notification-preview h1 {
+  margin-top: 0;
+}

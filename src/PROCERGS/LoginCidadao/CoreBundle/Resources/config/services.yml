@@ -299,3 +299,9 @@ services:
         arguments: [ @procergs.notification.handler, @procergs_logincidadao.mailer ]
         tags:
             - { name: kernel.event_subscriber }
+
+    procergs.feature_hierarchy.voter:
+        class: %security.access.role_hierarchy_voter.class%
+        arguments: [ @security.role_hierarchy, 'FEATURE_' ]
+        tags:
+            - { name: security.voter }
