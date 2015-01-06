@@ -34,6 +34,7 @@ parameters:
     procergs.person.serialize.listenner.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\PersonSerializeEventListenner
 
     procergs_logincidadao.idcard.form.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\IdCardType
+    procergs_logincidadao.security.helper.class: PROCERGS\LoginCidadao\CoreBundle\Helper\SecurityHelper
 
 services:
     procergs_lc.command.populate_database:
@@ -236,6 +237,7 @@ services:
 
     procergs_logincidadao.person.resume.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\PersonResumeFormType
+        arguments: [ @lc.security.helper ]
         tags:
             - { name: form.type, alias: person_resume_form_type }
         calls:
@@ -305,3 +307,7 @@ services:
         arguments: [ @security.role_hierarchy, 'FEATURE_' ]
         tags:
             - { name: security.voter }
+
+    lc.security.helper:
+        class: %procergs_logincidadao.security.helper.class%
+        arguments: [ @security.context ]
