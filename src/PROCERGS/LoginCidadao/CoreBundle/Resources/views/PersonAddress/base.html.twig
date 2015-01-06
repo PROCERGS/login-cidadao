@@ -19,7 +19,8 @@
 {% endblock %}
 
 {% block stylesheets_custom %}
-    {% stylesheets '@lc_logged_css' '@PROCERGSLoginCidadaoCoreBundle/Resources/public/css/components/typeaheadjs.css' filter='cssrewrite' filter='?uglifycss' %}
+    {{ parent() }}
+    {% stylesheets '@PROCERGSLoginCidadaoCoreBundle/Resources/public/css/components/typeaheadjs.css' filter='cssrewrite' filter='?uglifycss' %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 {% endblock %}
