@@ -45,7 +45,7 @@ procergs_login_cidadao_core:
     type:     annotation
     prefix:   /
 lc_home:
-    defaults: { _controller: FOSUserBundle:Registration:register }
+    defaults: { _controller: FOSUserBundle:Security:login }
     pattern:   /
 
 # Audit

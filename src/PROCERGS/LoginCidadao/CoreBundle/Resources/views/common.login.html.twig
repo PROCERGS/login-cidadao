@@ -15,7 +15,7 @@
         {{ form_start(form1, {'action' : path("fos_user_security_check"), 'attr' : {'role' : 'form'}}) }}
         <div class="form-content">
           <p style="margin-top:30px;">
-            {% trans with { '%link_start%': '<a id="register_request" href="javascript:void(0);" class="register-link">', '%link_end%': '</a>' } %}Log in now %link_start%or create your account here!%link_end%{% endtrans %}
+            {% trans with { '%link_start%': '<a id="register_request" href="javascript:void(0);" class="register-link"><strong>', '%link_end%': '</strong></a>' } %}Log in now %link_start%or create your account here!%link_end%{% endtrans %}
           </p>
 
           <div class="form-group">
