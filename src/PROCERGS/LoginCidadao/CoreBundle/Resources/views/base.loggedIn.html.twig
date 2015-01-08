@@ -109,6 +109,12 @@
                             <i class="glyphicon glyphicon-certificate icon"></i>
                         </a>
                     </li>
+                    <li class="services glyph {{ app.request.attributes.get('_route') == 'lc_statistics' or app.request.attributes.get('_route') == 'lc_statistics_user_badge' or app.request.attributes.get('_route') == 'lc_statistics_user_region' or app.request.attributes.get('_route') == 'lc_statistics_user_city' or app.request.attributes.get('_route') == 'lc_statistics_user_services' ? 'active' }}">
+                        <a href="{{ path('lc_statistics') }}">
+                            <span>{{ 'statistics.list'|trans() }}</span>
+                            <i class="glyphicon glyphicon-stats icon"></i>
+                        </a>
+                    </li>
                 </ul>
             </div>
         {% endblock sidebar %}
