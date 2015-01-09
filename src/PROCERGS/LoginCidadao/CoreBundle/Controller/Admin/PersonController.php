@@ -112,9 +112,15 @@ class PersonController extends Controller
                 $translator->trans('Updated successfully.');
             }
         }
+
+        $user = $this->getUser();
+        $defaultClientUid = $this->container->getParameter('oauth_default_client.uid');
+
         return array(
             'form' => $form->createView(),
-            'person' => $person
+            'person' => $person,
+            'user' => $user,
+            'defaultClientUid' => $defaultClientUid
         );
     }
 

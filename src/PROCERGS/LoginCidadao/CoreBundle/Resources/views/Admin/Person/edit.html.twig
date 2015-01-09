@@ -67,6 +67,41 @@
         {% endif %}
         {{ form_end(form) }}
 
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h2 class="panel-title">{{ 'Actions'|trans }}</h2>
+          </div>
+          <div class="panel-body">
+            {% if user.getAuthorizations|length > 0 %}
+              <ul class="list-group">
+                {% for auth in user.getAuthorizations %}
+                  {% if auth.client.uid != defaultClientUid %}
+                    <li class="list-group-item service clearfix">
+                      <div class="media clearfix">
+                        <div class="pull-left">
+                          {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
+                            <img src="/{{ auth.client.getPictureWebPath }}" width="65" height="65" alt="" class="media-object">
+                            {% else %}
+                            <img src="//placehold.it/65x65" alt="">
+                          {% endif %}
+                        </div>
+                        <div class="media-body">
+                          <h5 class="media-heading">{{ auth.client.name }}</h5>
+                          <a href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}" class="btn btn-link btn-sm pull-left link-detail"><span class="glyphicon glyphicon-info-sign"></span> {% trans %}Service's details{%  endtrans %}</a>
+                        </div>
+                      </div>
+                      <a href="{{ auth.client.siteUrl }}" class="btn btn-link btn-sm pull-right"><span class="glyphicon glyphicon-link"></span> {% trans %}Go to service's page{%  endtrans %}</a>
+                    </li>
+
+                  {% endif %}
+                {% endfor %}
+              </ul>
+
+              {% else %}
+              <p class="empty">{% trans %}There are no active services yet.{%  endtrans %}</p>
+            {% endif %}
+          </div>
+        </div>
 
       </div>
     </div>

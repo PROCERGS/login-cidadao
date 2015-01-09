@@ -381,6 +381,10 @@ body.no-scroll {
     clear: both;
 }
 
+.service .link-detail {
+  padding-left: 0;
+}
+
 
 .last-suggestions {
     padding: 0 15px 15px;

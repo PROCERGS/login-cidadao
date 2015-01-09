@@ -18,7 +18,7 @@
                         {% for auth in user.getAuthorizations %}
                             {% if auth.client.uid != defaultClientUid %}
                                 <li class="list-group-item service clearfix">
-                                    <a class="media clearfix" href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}">
+                                    <div class="media clearfix">
                                         <div class="pull-left">
                                             {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
                                                 <img src="/{{ auth.client.getPictureWebPath }}" width="65" height="65" alt="" class="media-object">
@@ -28,8 +28,9 @@
                                         </div>
                                         <div class="media-body">
                                             <h5 class="media-heading">{{ auth.client.name }}</h5>
+                                            <a href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}" class="btn btn-link btn-sm pull-left link-detail"><span class="glyphicon glyphicon-info-sign"></span> {% trans %}Service's details{%  endtrans %}</a>
                                         </div>
-                                        <div class="status label label-success pull-right">{% trans %}Active{%  endtrans %}</div>
+                                        <a href="{{ auth.client.siteUrl }}" class="btn btn-link btn-sm pull-right"><span class="glyphicon glyphicon-link"></span> {% trans %}Go to service's page{%  endtrans %}</a>
                                     </a>
                                 </li>
 
@@ -53,7 +54,7 @@
                     <ul class="list-group">
                         {% for client in apps %}
                             <li class="list-group-item service">
-                                <a class="media clearfix" href="{{ path('lc_app_details', {'clientId': client.id}) }}">
+                                <div class="media clearfix">
                                     <div class="pull-left">
                                         {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
                                             <img src="/{{ client.getPictureWebPath }}" width="65" height="65" alt="" class="media-object">
@@ -63,9 +64,10 @@
                                     </div>
                                     <div class="media-body">
                                         <h5 class="media-heading">{{ client.name }}</h5>
+                                        <a href="{{ path('lc_app_details', {'clientId': client.id}) }}" class="btn btn-link btn-sm pull-left link-detail"><span class="glyphicon glyphicon-info-sign"></span> Detalhes do serviço</a>
                                     </div>
-                                    <div class="status"><span class="label label-default pull-right">{% trans %}Inactive{%  endtrans %}</span></div>
-                                </a>
+                                    <a href="{{ client.siteUrl }}" class="btn btn-link btn-sm pull-right"><span class="glyphicon glyphicon-link"></span> Acessar o site do serviço</a>
+                                </div>
                             </li>
                         {% endfor %}
                     </ul>
