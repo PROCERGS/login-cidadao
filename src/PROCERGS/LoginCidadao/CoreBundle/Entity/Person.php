@@ -644,7 +644,12 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     public function setCpf($cpf)
     {
-        $cpf = preg_replace('/[^0-9]/', '', $cpf);
+        $cpf = trim(preg_replace('/[^0-9]/', '', $cpf));
+
+        if ($cpf === '') {
+            $cpf = null;
+        }
+
         $this->cpf = $cpf;
 
         return $this;

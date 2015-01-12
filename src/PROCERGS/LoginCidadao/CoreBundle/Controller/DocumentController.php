@@ -21,7 +21,7 @@ class DocumentController extends Controller
      */
     public function documentsAction(Request $request)
     {
-        $this->generalAction($request);
+        return $this->generalAction($request);
     }
 
     /**
@@ -52,7 +52,7 @@ class DocumentController extends Controller
         }
 
         return array(
-            'form' => $form->createView()
+            'generalDocsForm' => $form->createView()
         );
     }
 
