@@ -1,0 +1,30 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+{% block content %}
+  <div id="statistics" class="content">
+
+    <h1 class="visible-xs">{{ 'statistics.list'|trans }}</h1>
+
+    <div class="col-md-6">
+      <a href="{{ path('lc_statistics_user_badge') }}" class="item">
+        <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+        <span>{{ 'Users by Badges'|trans }}</span>
+      </a>
+    </div>
+    <div class="col-md-6">
+      <div class="item">
+        <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+        <div class="clearfix">
+          <a href="{{ path('lc_statistics_user_region', {'type': 'country'} ) }}" style="margin-right:10px;">{{ 'Users by Country'|trans }}</a>
+          <a href="{{ path('lc_statistics_user_region', {'type': 'state'}) }}" style="margin-left:10px;">{{ 'Users by State'|trans }}</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <a href="{{ path('lc_statistics_user_services') }}" class="item">
+        <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+        <span>{{ 'Users by Services'|trans }}</span>
+      </a>
+    </div>
+
+  </div>
+{% endblock %}
