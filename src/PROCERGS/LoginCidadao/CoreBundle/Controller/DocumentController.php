@@ -52,7 +52,7 @@ class DocumentController extends Controller
         }
 
         return array(
-            'form' => $form->createView()
+            'generalDocsForm' => $form->createView()
         );
     }
 
