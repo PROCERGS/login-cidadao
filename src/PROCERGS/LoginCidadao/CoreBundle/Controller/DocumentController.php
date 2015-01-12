@@ -21,7 +21,7 @@ class DocumentController extends Controller
      */
     public function documentsAction(Request $request)
     {
-        $this->generalAction($request);
+        return $this->generalAction($request);
     }
 
     /**

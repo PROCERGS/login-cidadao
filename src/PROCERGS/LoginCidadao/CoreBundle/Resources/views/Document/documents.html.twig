@@ -6,7 +6,7 @@
     {% trans_default_domain 'FOSUserBundle' %}
     <div class="form-content">
 
-        {{ render(controller('PROCERGSLoginCidadaoCoreBundle:Document:general')) }}
+        {{ include("PROCERGSLoginCidadaoCoreBundle:Document:general.html.twig", { 'form': form }) }}
 
         {{ render(controller('PROCERGSLoginCidadaoCoreBundle:IdCard:list')) }}
 
