@@ -89,4 +89,14 @@ class PersonRepository extends EntityRepository
               ->getQuery()->getResult();
     }
 
+    public function getCountAll()
+    {
+      $qb = $this->getEntityManager()->createQueryBuilder();
+
+      return $qb
+              ->select('count(p.id) AS qty')
+              ->from('PROCERGSLoginCidadaoCoreBundle:Person', 'p')
+              ->orderBy('qty', 'DESC')
+              ->getQuery()->getSingleResult();
+    }
 }

@@ -731,33 +731,20 @@ label + .glyphicon-pencil {
   word-wrap: break-word;
 }
 
-.statistics-badges .badge-box .about {
-  width: 30%;
-}
-
-.statistics-badges .badge-box .count {
-  width: 70%;
-}
-
-.statistics-badges .badge-box .col {
-  float: left;
-  width: 50%;
-}
-
-.statistics-badges .badge-box .count {
-  font-size: 35px;
-  line-height: 54px;
-  padding-left: 10px;
-  text-align: left;
-}
-
-.statistics-badges .badge-box .count .list {
-  font-size: 16px;
-  line-height: normal;
-}
-
 .statistics-badges .badge-icon {
   margin-bottom: 10px!important;
+  margin-top: 10px!important;
+}
+
+.statistics-badges .progress {
+  margin-bottom: 5px;
+  margin-top: 28px;
+}
+
+@media (max-width: 767px) {
+  .statistics-badges .progress {
+    margin-top: 10px;
+  }
 }
 
 .backup-codes {

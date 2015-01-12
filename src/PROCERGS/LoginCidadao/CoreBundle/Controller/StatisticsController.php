@@ -41,7 +41,12 @@ class StatisticsController extends Controller
           $data[$client][] = $b;
         }
       }
-      return array("data" => $data);
+
+      $em = $this->getDoctrine()->getManager();
+      $repo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+      $totalUsers = $repo->getCountAll();
+
+      return array("data" => $data, "totalUsers" => $totalUsers['qty']);
     }
 
     /**
@@ -57,7 +62,12 @@ class StatisticsController extends Controller
         $data = $repo->getCountByState();
       }
 
-      return $this->render('PROCERGSLoginCidadaoCoreBundle:Statistics:usersByRegion.html.twig', array('data' => $data ));
+      $em = $this->getDoctrine()->getManager();
+      $repo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+      $totalUsers = $repo->getCountAll();
+
+
+      return $this->render('PROCERGSLoginCidadaoCoreBundle:Statistics:usersByRegion.html.twig', array('data' => $data, 'totalUsers' => $totalUsers ));
     }
 
     /**

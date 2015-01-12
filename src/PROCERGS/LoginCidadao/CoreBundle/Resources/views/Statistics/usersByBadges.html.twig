@@ -12,18 +12,29 @@
         <div class="panel-body">
           {% for badge, value in badges %}
             {% for key, item in value %}
-              <div class="col-xs-12 col-sm-6 col-md-4 badge-box clearfix">
-                <div class="about col">
+              <div class="row">
+                <div class="col-sm-2">
                   <div class="badge-icon badge-{{ key }}"></div>
-                  <div>{{ key }}</div>
                 </div>
-                <div class="count col">
+                <div class="col-sm-10">
                   {% if item is iterable %}
                     {% for k, num in item %}
-                      <div class="list">{{ k }}: <strong>{{ num }}</strong></div>
+                      {% set w = (num * 100) / totalUsers %}
+                      <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="{{ w|round }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ w|round }}%;">
+                          {{ num }}
+                        </div>
+                      </div>
+                      <div>{{ key }} - {{ k }}</div>
                     {% endfor %}
                   {% else %}
-                      {{ item }}
+                      <div class="progress">
+                        {% set w = (item * 100) / totalUsers %}
+                        <div class="progress-bar" role="progressbar" aria-valuenow="{{ w|round }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ w|round }}%;">
+                          {{ item }}
+                        </div>
+                      </div>
+                      <div>{{ key }}</div>
                   {% endif %}
                 </div>
               </div>
