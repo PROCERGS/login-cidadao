@@ -47,6 +47,22 @@ assetic:
     bundles:        [ "PROCERGSLoginCidadaoCoreBundle", "PROCERGSLoginCidadaoNotificationBundle" ]
     #java: /usr/bin/java
     assets:
+      bootstrap_fonts_woff:
+          inputs:
+              - 'bundles/procergslogincidadaocore/bootstrap/3.3.1/fonts/glyphicons-halflings-regular.woff'
+          output: fonts/glyphicons-halflings-regular.woff
+      bootstrap_fonts_ttf:            
+          inputs:
+              - 'bundles/procergslogincidadaocore/bootstrap/3.3.1/fonts/glyphicons-halflings-regular.ttf'
+          output: fonts/glyphicons-halflings-regular.ttf
+      bootstrap_fonts_svg:
+          inputs:
+              - 'bundles/procergslogincidadaocore/bootstrap/3.3.1/fonts/glyphicons-halflings-regular.svg'
+          output: fonts/glyphicons-halflings-regular.svg
+      bootstrap_fonts_eot:
+          inputs:
+              - 'bundles/procergslogincidadaocore/bootstrap/3.3.1/fonts/glyphicons-halflings-regular.eot'
+          output: fonts/glyphicons-halflings-regular.eot
       lc_base_js:
         inputs:
           - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery/1.11.0/jquery.min.js'
