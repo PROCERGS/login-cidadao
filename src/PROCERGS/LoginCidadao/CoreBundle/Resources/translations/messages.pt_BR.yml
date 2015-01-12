@@ -679,3 +679,5 @@ If your backup codes have been compromised or if you have already used too many 
 Confirm Backup Codes Generation: Confirmação da Geração de Códigos Alternativos
 Service's details: "Detalhes do serviço"
 Go to service's page: "Acessar o site do serviço"
+notification.receivedAt: "Recebida em:"
+notification.readAt: "Lida em:"

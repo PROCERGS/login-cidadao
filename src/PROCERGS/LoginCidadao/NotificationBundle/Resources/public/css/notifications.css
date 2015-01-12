@@ -111,6 +111,10 @@
     border-top: none;
 }
 
+.infinitegrid .notification-content h1 {
+  margin-top: 0;
+}
+
 .infinitegrid .notification-open .notification-content {
     display: block;
     border-color: #050;
