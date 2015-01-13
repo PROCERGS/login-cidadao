@@ -168,8 +168,12 @@ class DefaultController extends Controller
      */
     public function dashboardAction()
     {
-      $user = $this->getUser();
-      return compact('user');
+      $badgesHandler = $this->get('badges.handler');
+
+      $badges = $badgesHandler->getAvailableBadges();
+      $user = $badgesHandler->evaluate($this->getUser());
+
+      return array('allBadges' => $badges, 'userBadges' => $user->getBadges());
     }
 
 }

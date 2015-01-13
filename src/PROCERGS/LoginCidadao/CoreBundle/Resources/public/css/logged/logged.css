@@ -855,7 +855,7 @@ label + .glyphicon-pencil {
   width: 200px;
 }
 
-#dashboard .service-img {
+#dashboard .service-img, #dashboard .badge-icon {
   display: block;
   float: left;
   margin: 5px;
