@@ -385,6 +385,15 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @ORM\Column(name="google_authenticator_secret", type="string", nullable=true)
      */
     private $googleAuthenticatorSecret;
+    
+    /**
+     * @JMS\Expose
+     * @JMS\Groups({"nationality"})
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Country")
+     * @ORM\JoinColumn(name="nationality_id", referencedColumnName="id")
+     * @JMS\Since("1.0.2")
+     */
+    protected $nationality;
 
     /**
      * @JMS\Exclude
@@ -1224,5 +1233,17 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         }
         return false;
     }
+    
+    public function setNationality($var)
+    {
+        $this->nationality = $var;
+        return $this;
+    }
+    
+    public function getNationality()
+    {
+        return $this->nationality;
+    }
+    
 
 }
