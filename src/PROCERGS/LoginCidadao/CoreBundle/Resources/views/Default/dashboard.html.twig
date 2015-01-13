@@ -30,7 +30,7 @@
           </div>
         </div>
 
-        <div class="col-xs-6 services">
+        <div class="col-xs-12 col-md-6 services">
           <div class="panel panel-default">
             <div class="panel-heading">
               {% trans %}Services{% endtrans %}
@@ -38,18 +38,20 @@
               <div class="panel-body">
                 {% if user.getAuthorizations|length > 0 %}
                   {% for auth in user.getAuthorizations %}
+                    <a href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}">
                     {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
                       <img src="/{{ auth.client.getPictureWebPath }}" width="65" height="65" alt="" class="media-object service-img">
                       {% else %}
                       <img src="//placehold.it/65x65" alt="" class="service-img">
                     {% endif %}
+                    </a>
                   {% endfor %}
                 {% endif %}
               </div>
             </div>
           </div>
 
-          <div class="col-xs-6">
+          <div class="col-xs-12 col-md-6">
             <div class="panel panel-default">
               <div class="panel-heading">
                 {% trans %}Log de acesso{% endtrans %}
