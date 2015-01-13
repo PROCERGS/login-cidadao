@@ -162,4 +162,18 @@ class DefaultController extends Controller
         die();
     }
 
+    /**
+     * @Route("/dashboard", name="lc_dashboard")
+     * @Template()
+     */
+    public function dashboardAction()
+    {
+      $badgesHandler = $this->get('badges.handler');
+
+      $badges = $badgesHandler->getAvailableBadges();
+      $user = $badgesHandler->evaluate($this->getUser());
+
+      return array('allBadges' => $badges, 'userBadges' => $user->getBadges());
+    }
+
 }

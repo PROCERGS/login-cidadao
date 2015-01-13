@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b3b5b51af2c660dcfbab17dc0d96a957",
+    "hash": "e5b832f34ad843f028f1214299ceeb94",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2577,16 +2577,16 @@
         },
         {
             "name": "simplethings/entity-audit-bundle",
-            "version": "v0.6",
+            "version": "v0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplethings/EntityAudit.git",
-                "reference": "c8f3fc50a7384c0c44798de4675f870890097e26"
+                "reference": "37f8aeaea4cb7e4b7fba07db4109843080a22d0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplethings/EntityAudit/zipball/c8f3fc50a7384c0c44798de4675f870890097e26",
-                "reference": "c8f3fc50a7384c0c44798de4675f870890097e26",
+                "url": "https://api.github.com/repos/simplethings/EntityAudit/zipball/37f8aeaea4cb7e4b7fba07db4109843080a22d0a",
+                "reference": "37f8aeaea4cb7e4b7fba07db4109843080a22d0a",
                 "shasum": ""
             },
             "require": {
@@ -2616,7 +2616,7 @@
                 "database",
                 "persistence"
             ],
-            "time": "2014-05-09 09:58:26"
+            "time": "2014-11-10 16:07:56"
         },
         {
             "name": "sonata-project/google-authenticator",
@@ -3314,8 +3314,12 @@
             "time": "2014-05-16 12:34:51"
         }
     ],
-    "packages-dev": [],
-    "aliases": [],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
         "friendsofsymfony/user-bundle": 20,
@@ -3332,9 +3336,10 @@
         "scheb/two-factor-bundle": 20
     },
     "prefer-stable": false,
-    "prefer-lowest": false,
     "platform": {
         "php": ">=5.3.3"
     },
-    "platform-dev": []
+    "platform-dev": [
+
+    ]
 }

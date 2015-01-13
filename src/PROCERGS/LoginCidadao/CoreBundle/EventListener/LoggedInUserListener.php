@@ -72,7 +72,7 @@ class LoggedInUserListener
                     //remove the session key
                     $this->session->remove($key);
                 } else {
-                    $url = $this->router->generate('fos_user_profile_edit');
+                    $url = $this->router->generate('lc_dashboard');
                 }
                 $event->setResponse(new RedirectResponse($url));
             } else {

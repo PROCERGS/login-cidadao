@@ -30,7 +30,7 @@
         "friendsofsymfony/user-bundle" : "~2.0@dev",
         "friendsofsymfony/oauth-server-bundle" : "dev-master",
         "jms/serializer-bundle" : "*",
-        "simplethings/entity-audit-bundle" : "*",
+        "simplethings/entity-audit-bundle" : "0.7",
         "hwi/oauth-bundle" : "0.3.*@dev",
         "facebook/php-sdk" : "3.2.0",
         "friendsofsymfony/facebook-bundle" : "1.3.*",

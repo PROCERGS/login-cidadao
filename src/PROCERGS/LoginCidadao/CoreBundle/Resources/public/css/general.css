@@ -149,6 +149,10 @@ img.desaturate {
   border-radius: 0 !important;
 }
 
+.panel .media-body {
+  width: 100%;
+}
+
 footer {
     margin-top: 20px;
     clear: both;

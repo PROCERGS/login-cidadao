@@ -12,7 +12,7 @@
         <div class="panel-body">
           {% for badge, value in badges %}
             {% for key, item in value %}
-              <div class="row">
+              <div class="row badge-box">
                 <div class="col-sm-2">
                   <div class="badge-icon badge-{{ key }}"></div>
                 </div>
@@ -20,21 +20,33 @@
                   {% if item is iterable %}
                     {% for k, num in item %}
                       {% set w = (num * 100) / totalUsers %}
-                      <div class="progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="{{ w|round }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ w|round }}%;">
-                          {{ num }}
+                      <div class="wrap clearfix">
+                        <div>{{ key }} - {{ k }}</div>
+                        <div class="col-sm-1 badge-count">
+                          <span class="label label-info">{{ num }}</span>
+                        </div>
+                        <div class="col-sm-11">
+                          <div class="progress">
+                            <div class="progress-bar" role="progressbar" data-total="{{ totalUsers }}" aria-valuenow="{{ w|round }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ w|round(1, 'floor') }}%;">
+                              {{ w|round(1, 'floor') }}%
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div>{{ key }} - {{ k }}</div>
                     {% endfor %}
                   {% else %}
-                      <div class="progress">
-                        {% set w = (item * 100) / totalUsers %}
-                        <div class="progress-bar" role="progressbar" aria-valuenow="{{ w|round }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ w|round }}%;">
-                          {{ item }}
+                      <div>{{ key }}</div>
+                      <div class="col-sm-1 badge-count">
+                        <span class="label label-info">{{ item }}</span>
+                      </div>
+                      <div class="col-sm-11 badge-progress">
+                        <div class="progress">
+                          {% set w = (item * 100) / totalUsers %}
+                          <div class="progress-bar" role="progressbar" aria-valuenow="{{ w|round }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ w|round }}%;">
+                            {{ w|round(1, 'floor') }}%
+                          </div>
                         </div>
                       </div>
-                      <div>{{ key }}</div>
                   {% endif %}
                 </div>
               </div>
