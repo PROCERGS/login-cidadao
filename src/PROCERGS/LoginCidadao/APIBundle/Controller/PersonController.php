@@ -18,6 +18,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use PROCERGS\OAuthBundle\Model\ClientUser;
+use PROCERGS\LoginCidadao\APIBundle\Security\Audit\Annotation as Audit;
 
 class PersonController extends BaseController
 {
@@ -39,6 +40,7 @@ class PersonController extends BaseController
      *   }
      * )
      * @REST\View(templateVar="person")
+     * @Audit\Loggable(type="SELECT")
      * @throws NotFoundHttpException
      */
     public function getPersonAction()
