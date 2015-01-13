@@ -183,10 +183,12 @@ fos_user:
 
 # Audit Trail
 simple_things_entity_audit:
+    global_ignore_columns:
+        - updatedAt
+        - lastLogin
     audited_entities:
         - PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey
 
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\AccessSession
         - PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization
         - PROCERGS\LoginCidadao\CoreBundle\Entity\BackupCode
         - PROCERGS\LoginCidadao\CoreBundle\Entity\City
