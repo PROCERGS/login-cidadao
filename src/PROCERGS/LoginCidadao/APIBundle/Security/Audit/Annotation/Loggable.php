@@ -29,6 +29,13 @@ class Loggable extends ConfigurationAnnotation
         return "loggable";
     }
 
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this->type;
+    }
+
     public function getType()
     {
         switch ($this->type) {
