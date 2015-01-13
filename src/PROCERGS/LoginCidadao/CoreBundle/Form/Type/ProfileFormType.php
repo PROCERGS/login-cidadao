@@ -52,9 +52,22 @@ class ProfileFormType extends BaseType
                             ->setParameter('reviewed', Country::REVIEWED_OK)
                             ->orderBy('u.name', 'ASC');
                     },
-                    'label' => 'Nationality'
+                    'label' => 'Place of birth - Country'
                 ))
                 ;
+                $builder->add('nationality', 'entity',array(
+                    'required' => false,
+                    'class' => 'PROCERGSLoginCidadaoCoreBundle:Country',
+                    'property' => 'name',
+                    'preferred_choices' => array($country),
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('u')
+                        ->where('u.reviewed = :reviewed')
+                        ->setParameter('reviewed', Country::REVIEWED_OK)
+                        ->orderBy('u.name', 'ASC');
+                    },
+                    'label' => 'Nationality'
+                        ));                
                 $builder->add('ufsteppe', 'text', array("required"=> false, "mapped"=>false));
                 $builder->add('citysteppe', 'text', array("required"=> false, "mapped"=>false));
                 $builder->add('ufpreferred', 'hidden', array("data" => $country->getId(),"required"=> false, "mapped"=>false));
