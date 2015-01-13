@@ -162,4 +162,14 @@ class DefaultController extends Controller
         die();
     }
 
+    /**
+     * @Route("/dashboard", name="lc_dashboard")
+     * @Template()
+     */
+    public function dashboardAction()
+    {
+      $user = $this->getUser();
+      return compact('user');
+    }
+
 }
