@@ -18,11 +18,17 @@
               <img src="{{ include("PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" class="profile-picture pull-left">
 
               <div class="about pull-left">
-                <h4 class="media-heading">{{ app.user.firstName }}</h4>
-                <div>{{ app.user.email }}</div>
+                <h4 class="media-heading">
+                  <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                  {{ app.user.firstName }}
+                </h4>
                 {% if app.user.birthdate is not null %}
-                  <div>{{ app.user.birthdate | date('birthdate.format' | trans) }}</div>
+                  <div class="birthdate">{{ app.user.birthdate | date('birthdate.format' | trans) }}</div>
                 {% endif %}
+                <div>
+                  <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                  {{ app.user.email }}
+                </div>
                 {% if app.user.state is not null %}
                   <div>
                     <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
@@ -44,7 +50,7 @@
               <div class="panel-body">
                 {% if app.user.getAuthorizations|length > 0 %}
                   {% for auth in app.user.getAuthorizations %}
-                    <a href="{{ auth.client.siteUrl }}">
+                    <a href="{{ auth.client.siteUrl }}" title="{{ auth.client.name }}">
                       {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
                         <img src="/{{ auth.client.getPictureWebPath }}" width="65" height="65" alt="" class="media-object service-img">
                         {% else %}

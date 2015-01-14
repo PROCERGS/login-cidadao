@@ -860,3 +860,15 @@ label + .glyphicon-pencil {
   float: left;
   margin: 5px;
 }
+
+#dashboard .about .glyphicon {
+  font-size: 14px;
+  margin-right: 3px;
+}
+
+#dashboard .birthdate {
+  margin-left: 19px;
+  font-size: 11px;
+  margin-top: -2px;
+  margin-bottom: 5px;
+}
