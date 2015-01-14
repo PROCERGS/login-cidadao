@@ -4,10 +4,11 @@
 
     <h1>{{ 'statistics.userByBadge'|trans }}</h1>
 
+        {% trans_default_domain "badges" %}
     {% for client, badges in data %}
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">{{ client }}</h3>
+                    <h3 class="panel-title">{{ (client ~ '.title') | trans }}</h3>
         </div>
         <div class="panel-body">
           {% for badge, value in badges %}
@@ -22,7 +23,7 @@
                     {% for k, num in item %}
                       {% set w = (num * 100) / totalUsers %}
                       <div class="wrap clearfix">
-                        <div>{{ key }} - {{ k }}</div>
+                                                <div>{{ (client ~ '.' ~ key ~ '.title') | trans }} - {{ k }}</div>
                         <div class="col-sm-1 badge-count">
                           <span class="label label-info">{{ num }}</span>
                         </div>
@@ -36,6 +37,7 @@
                       </div>
                     {% endfor %}
                   {% else %}
+                                        <div>{{ (client ~ '.' ~ key ~ '.title') | trans }}</div>
                       <div class="col-sm-1 badge-count">
                         <span class="label label-info">{{ item }}</span>
                       </div>

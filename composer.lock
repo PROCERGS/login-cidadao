@@ -2309,12 +2309,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/login-cidadao-badges-bundle.git",
-                "reference": "4621b116dadca0f33266753de59701d6b4f86492"
+                "reference": "34b64807ec526c37edd014a7d612deda08689570"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/4621b116dadca0f33266753de59701d6b4f86492",
-                "reference": "4621b116dadca0f33266753de59701d6b4f86492",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/34b64807ec526c37edd014a7d612deda08689570",
+                "reference": "34b64807ec526c37edd014a7d612deda08689570",
                 "shasum": ""
             },
             "require": {
@@ -2342,7 +2342,7 @@
                 "badges",
                 "login-cidadao"
             ],
-            "time": "2014-12-10 13:22:38"
+            "time": "2015-01-14 17:48:06"
         },
         {
             "name": "psr/log",
@@ -3314,12 +3314,8 @@
             "time": "2014-05-16 12:34:51"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "friendsofsymfony/user-bundle": 20,
@@ -3336,10 +3332,9 @@
         "scheb/two-factor-bundle": 20
     },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
         "php": ">=5.3.3"
     },
-    "platform-dev": [
-
-    ]
+    "platform-dev": []
 }
