@@ -40,7 +40,7 @@
             <div class="panel-body">
               {% if app.user.getAuthorizations|length > 0 %}
                 {% for auth in app.user.getAuthorizations %}
-                  <a href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}">
+                  <a href="{{ auth.client.siteUrl }}">
                     {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
                       <img src="/{{ auth.client.getPictureWebPath }}" width="65" height="65" alt="" class="media-object service-img">
                       {% else %}

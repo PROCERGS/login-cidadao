@@ -35,9 +35,9 @@
 {{ parent() }}
 <script>
 $(function(){
-  $("#register_request").click(function(event){
-    $('#login-box').hide();
-    $("#register-box").parent().show();
+  $(".toggle-lc-box").click(function(event){
+    $('#login-box').parent().toggle();
+    $("#register-box").parent().toggle();
   });
 });
 </script>

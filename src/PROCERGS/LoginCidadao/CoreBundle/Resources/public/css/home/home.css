@@ -196,6 +196,12 @@ body {
     }
 }
 
+#btn-login-back {
+  margin-bottom: -20px;
+  margin-top: 10px;
+  margin-left: 18px;
+}
+
 .lc-box .terms a {
     color: green;
     font-weight: 400;
