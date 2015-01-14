@@ -75,6 +75,7 @@ class ActionLogger
     {
         $repo = $this->em->getRepository('PROCERGSLoginCidadaoAPIBundle:ActionLog');
         $log = $repo->find($id);
+
         if ($log instanceof ActionLog) {
             return $log;
         } else {

@@ -4,6 +4,7 @@ namespace PROCERGS\LoginCidadao\APIBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+use PROCERGS\OAuthBundle\Model\ClientInterface;
 
 /**
  * ActionLog
@@ -45,6 +46,11 @@ class ActionLog
      * @ORM\Column(name="client_id", type="integer")
      */
     private $clientId;
+
+    /**
+     * @var ClientInterface
+     */
+    private $client;
 
     /**
      * @var integer
@@ -410,6 +416,24 @@ class ActionLog
         if (!($this->getCreatedAt() instanceof \DateTime)) {
             $this->createdAt = new \DateTime();
         }
+    }
+
+    /**
+     * @return Client
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
+     * @param ClientInterface $client
+     * @return ActionLog
+     */
+    public function setClient(ClientInterface $client)
+    {
+        $this->client = $client;
+        return $this;
     }
 
 }
