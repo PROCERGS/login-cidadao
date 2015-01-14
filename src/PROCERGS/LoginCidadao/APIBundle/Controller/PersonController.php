@@ -77,6 +77,7 @@ class PersonController extends BaseController
      *   }
      * )
      * @REST\Get("/wait/person/update")
+     * @Audit\Loggable(type="SELECT")
      * @REST\View
      */
     public function waitPersonChangeAction()
@@ -152,6 +153,7 @@ class PersonController extends BaseController
     /**
      * @REST\Post("/person/sendnotification")
      * @REST\View
+     * @Audit\Loggable(type="CREATE")
      * @deprecated since version 1.0.2
      */
     public function sendNotificationAction(Request $request)
