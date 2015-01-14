@@ -733,13 +733,18 @@ label + .glyphicon-pencil {
   margin-top: 10px!important;
 }
 
+.statistics-badges .badge-title {
+  text-align: center;
+  word-wrap: break-word;
+}
+
 .statistics-badges .progress {
   margin-bottom: 5px;
   margin-top: 5px;
 }
 
-.statistics-badges .badge-progress {
-  padding-left: 0;
+.statistics-badges .badge-single {
+  padding-top: 25px;
 }
 
 .statistics-badges .badge-count {
@@ -752,6 +757,14 @@ label + .glyphicon-pencil {
 }
 
 @media (max-width: 767px) {
+  .statistics-badges .badge-progress {
+    padding-left: 0;
+  }
+
+  .statistics-badges .badge-single {
+    padding-top: 0;
+  }
+
   .statistics-badges .progress {
     margin-top: 10px;
   }
