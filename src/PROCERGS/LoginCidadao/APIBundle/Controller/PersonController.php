@@ -18,6 +18,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use PROCERGS\OAuthBundle\Model\ClientUser;
+use PROCERGS\LoginCidadao\APIBundle\Security\Audit\Annotation as Audit;
 
 class PersonController extends BaseController
 {
@@ -39,6 +40,7 @@ class PersonController extends BaseController
      *   }
      * )
      * @REST\View(templateVar="person")
+     * @Audit\Loggable(type="SELECT")
      * @throws NotFoundHttpException
      */
     public function getPersonAction()
@@ -75,6 +77,7 @@ class PersonController extends BaseController
      *   }
      * )
      * @REST\Get("/wait/person/update")
+     * @Audit\Loggable(type="SELECT")
      * @REST\View
      */
     public function waitPersonChangeAction()
@@ -150,6 +153,7 @@ class PersonController extends BaseController
     /**
      * @REST\Post("/person/sendnotification")
      * @REST\View
+     * @Audit\Loggable(type="CREATE")
      * @deprecated since version 1.0.2
      */
     public function sendNotificationAction(Request $request)

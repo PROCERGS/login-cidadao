@@ -4,6 +4,7 @@ namespace PROCERGS\LoginCidadao\APIBundle\Controller;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations as REST;
+use PROCERGS\LoginCidadao\APIBundle\Security\Audit\Annotation as Audit;
 
 class NotificationCallbackController extends BaseController
 {
@@ -29,6 +30,7 @@ class NotificationCallbackController extends BaseController
      * @param ParamFetcherInterface  $paramFetcher  param fetcher service
      *
      * @REST\Get("/notifications/callbacks/failed", name="api_1_get_failed_notification_callbacks")
+     * @Audit\Loggable(type="SELECT")
      *
      * @return array
      */

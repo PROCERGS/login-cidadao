@@ -42,14 +42,20 @@ class LoggedInUserListener
             return;
         }
 
-        if ($token instanceof OAuthToken && $token->getUser() === null) {
+        if (!($token instanceof OAuthToken)) {
+            return;
+        }
+
+        $this->auditConfig->setCurrentUsername("OAuthToken:{$token->getToken()}");
+
+        // Handling Client Credentials
+        if ($token->getUser() === null) {
             $accessToken = $this->em->
                 getRepository('PROCERGSOAuthBundle:AccessToken')->
                 findOneBy(array('token' => $token->getToken()));
             $client = $accessToken->getClient();
 
             $token->setUser(new ClientUser($client));
-            $this->auditConfig->setCurrentUsername("OAuthToken:{$token->getToken()}");
         }
     }
 

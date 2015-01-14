@@ -12,6 +12,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use PROCERGS\OAuthBundle\Model\ClientUser;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+use PROCERGS\LoginCidadao\APIBundle\Security\Audit\Annotation as Audit;
 
 /**
  * @REST\Prefix("")
@@ -46,6 +47,7 @@ class NotificationController extends BaseController
      *
      * @param Request                $request       the request object
      * @param ParamFetcherInterface  $paramFetcher  param fetcher service
+     * @Audit\Loggable(type="SELECT")
      *
      * @return array
      */
@@ -97,6 +99,7 @@ class NotificationController extends BaseController
      * @throws NotFoundHttpException when notification not exist
      * @throws AccessDeniedHttpException when trying to access another user's Notification
      * @REST\Get("/notifications/{id}", name="api_1_get_notification")
+     * @Audit\Loggable(type="SELECT")
      */
     public function getNotificationAction($id)
     {
@@ -130,6 +133,7 @@ class NotificationController extends BaseController
      * @return FormTypeInterface|View
      *
      * @REST\Post("/person/notification")
+     * @Audit\Loggable(type="CREATE")
      */
     public function postNotificationAction(Request $request)
     {

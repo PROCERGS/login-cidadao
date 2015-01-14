@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Country;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\City;
+use PROCERGS\LoginCidadao\APIBundle\Security\Audit\Annotation as Audit;
 use Doctrine\ORM\Query;
 
 class AddressController extends FOSRestController
@@ -17,6 +18,7 @@ class AddressController extends FOSRestController
     /**
      * @REST\Get("/public/postalcode/{postalCode}", name="lc_consultaCep2", defaults={"postalCode" = ""})
      * @REST\View()
+     * @Audit\Loggable(type="SELECT")
      */
     public function viewPostalCodeAction($postalCode)
     {
@@ -42,6 +44,7 @@ class AddressController extends FOSRestController
     /**
      * @REST\Get("/public/country", name="lc_search_country" )
      * @REST\View()
+     * @Audit\Loggable(type="SELECT")
      */
     public function searchCountryAction()
     {
@@ -56,6 +59,7 @@ class AddressController extends FOSRestController
     /**
      * @REST\Get("/public/state", name="lc_search_state" )
      * @REST\View()
+     * @Audit\Loggable(type="SELECT")
      */
     public function searchStateAction(Request $request = null)
     {
@@ -76,6 +80,7 @@ class AddressController extends FOSRestController
     /**
      * @REST\Get("/public/city", name="lc_search_city" )
      * @REST\View()
+     * @Audit\Loggable(type="SELECT")
      */
     public function searchCityAction(Request $request = null)
     {
