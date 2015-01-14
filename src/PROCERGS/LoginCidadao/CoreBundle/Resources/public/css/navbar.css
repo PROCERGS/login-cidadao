@@ -420,3 +420,17 @@
   font-weight: bold;
   margin: 0;
 }
+
+#lc-navbar .impersonation {
+    padding: 14px 0;
+    margin-left: 10px;
+}
+
+#lc-navbar .impersonation .impersonation-username {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #f5f5f5;
+    color: #f5f5f5;
+    padding: 0 0 0 3px;
+    width: 95px;
+}
