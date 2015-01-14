@@ -10,6 +10,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
           {% trans %}Profile{% endtrans %}
+            <a href="{{ path('fos_user_profile_edit') }}" class="btn btn-primary btn-xs btn-section pull-right" role="button">Editar</a>
           </div>
           <div class="panel-body">
 
@@ -24,9 +25,6 @@
                 {{ app.user.state.name }} - {{ app.user.city.name }}
               </div>
             </div>
-          </div>
-          <div class="panel-footer clearfix">
-            <a href="{{ path('fos_user_profile_edit') }}" class="btn btn-primary btn-section pull-right" role="button">Editar</a>
           </div>
         </div>
       </div>
@@ -74,7 +72,7 @@
             <div class="col-xs-12 col-md-6 badges-list">
               <div class="panel panel-default">
                 <div class="panel-heading">
-                {% trans %}Badges{% endtrans %}
+                {{ 'scope.badges'|trans }}
                 </div>
                 <div class="panel-body">
                   {% if userBadges|length == 0 %}
