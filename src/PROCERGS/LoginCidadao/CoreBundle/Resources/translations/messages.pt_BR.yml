@@ -683,3 +683,8 @@ notification.receivedAt: "Recebida em:"
 notification.readAt: "Lida em:"
 Place of birth - Country: 'Naturalidade - Pais'
 Back to login: 'Voltar parar o login'
+birthdate.format: 'd/m/Y'
+Activity Log: Registro de Atividade
+Badges: Medalhas
+You don't have any active service.: Você não tem nenhum serviço ativo.
+Check the services available: Conheça os serviços disponíveis
