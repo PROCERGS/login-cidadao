@@ -683,3 +683,4 @@ notification.receivedAt: "Recebida em:"
 notification.readAt: "Lida em:"
 Place of birth - Country: 'Naturalidade - Pais'
 Back to login: 'Voltar parar o login'
+birthdate.format: 'd/m/Y'

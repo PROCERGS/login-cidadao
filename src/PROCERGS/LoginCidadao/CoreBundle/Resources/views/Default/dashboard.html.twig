@@ -18,7 +18,7 @@
             <div class="about pull-left">
               <h4 class="media-heading">{{ app.user.firstName }}</h4>
               <div>{{ app.user.email }}</div>
-              <div>{{ app.user.birthdate }}</div>
+              <div>{{ app.user.birthdate | date('birthdate.format' | trans) }}</div>
               <div>
                 <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
                 {{ app.user.state.name }} - {{ app.user.city.name }}
