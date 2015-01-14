@@ -16,14 +16,14 @@
               <div class="row badge-box">
                 <div class="col-md-2">
                   <div class="badge-icon badge-{{ key }}"></div>
-                  <div class="badge-title">{{ key }}</div>
+                  <div class="badge-title">{{ (client ~ '.' ~ key ~ '.title') | trans }}</div>
                 </div>
                 <div class="col-md-10 {{ item is iterable ? '' : 'badge-single'}}">
                   {% if item is iterable %}
                     {% for k, num in item %}
                       {% set w = (num * 100) / totalUsers %}
                       <div class="wrap clearfix">
-                                                <div>{{ (client ~ '.' ~ key ~ '.title') | trans }} - {{ k }}</div>
+                        <div>{{ (client ~ '.' ~ key ~ '.title') | trans }} - {{ k }}</div>
                         <div class="col-sm-1 badge-count">
                           <span class="label label-info">{{ num }}</span>
                         </div>
@@ -37,7 +37,6 @@
                       </div>
                     {% endfor %}
                   {% else %}
-                                        <div>{{ (client ~ '.' ~ key ~ '.title') | trans }}</div>
                       <div class="col-sm-1 badge-count">
                         <span class="label label-info">{{ item }}</span>
                       </div>
