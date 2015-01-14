@@ -249,3 +249,5 @@ FEATURE_ALPHA: Alpha Features
 FEATURE_BETA: Beta Features
 FEATURE_2FACTOR_AUTH: Two Factor Authentication Feature
 birthdate.format: 'm/d/Y'
+Activity Log: Activity Log
+Badges: Badges
