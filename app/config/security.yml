@@ -115,16 +115,22 @@ security:
           anonymous:  true
 
     access_control:
+        - { path: ^/admin, role: [ROLE_SUPER] }
+        - { path: ^/dev, role: [ROLE_DEV] }
+
         - { path: ^/api/v1/address/(cities|states|countries)/search, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/v1/address/cities/prefetch, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }
         - { path: ^/api/v1/public/lc_consultaCep2, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }
+
         - { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/nfg, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
         - { path: ^/connect/twitter$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/connect/google$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login/facebook$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
         - { path: ^/contact$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/general$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/privacy$, role: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -133,8 +139,10 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/person/checkEmailAvailable, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
         - { path: ^/job, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/external/navbar.js, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
         - { path: ^/logout/if-not-remembered, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
@@ -142,6 +150,4 @@ security:
         - { path: ^/profile/edit, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/profile/change-username, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/profile/change-password, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/admin, role: [IS_AUTHENTICATED_FULLY, ROLE_SUPER] }
-        - { path: ^/dev, role: [IS_AUTHENTICATED_FULLY, ROLE_DEV] }
         - { path: ^/person, role: IS_AUTHENTICATED_REMEMBERED }
