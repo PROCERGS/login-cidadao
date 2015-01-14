@@ -40,6 +40,20 @@ class ActionLog
     private $accessToken;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="client_id", type="integer")
+     */
+    private $clientId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="user_id", type="integer")
+     */
+    private $userId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="controller", type="string", length=255)
@@ -103,14 +117,6 @@ class ActionLog
     private $responseCode;
 
     /**
-     * @var PersonInterface
-     *
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person")
-     * @ORM\JoinColumn(name="personu_id", referencedColumnName="id")
-     */
-    private $person;
-
-    /**
      * Get id
      *
      * @return integer
@@ -141,6 +147,52 @@ class ActionLog
     public function getAccessToken()
     {
         return $this->accessToken;
+    }
+
+    /**
+     * Set client id
+     *
+     * @param integer $clientId
+     * @return ActionLog
+     */
+    public function setClientId($clientId)
+    {
+        $this->clientId = $clientId;
+
+        return $this;
+    }
+
+    /**
+     * Get client id
+     *
+     * @return integer
+     */
+    public function getClientId()
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * Set user id
+     *
+     * @param integer $userId
+     * @return ActionLog
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
+     * Get user id
+     *
+     * @return integer
+     */
+    public function getUserId()
+    {
+        return $this->userId;
     }
 
     /**
@@ -328,19 +380,6 @@ class ActionLog
     }
 
     /**
-     * Get person
-     *
-     * @param PersonInterface $person
-     * @return ActionLog
-     */
-    public function setPerson(PersonInterface $person)
-    {
-        $this->person = $person;
-
-        return $this;
-    }
-
-    /**
      * Set response code
      *
      * @param integer $responseCode
@@ -361,16 +400,6 @@ class ActionLog
     public function getResponseCode()
     {
         return $this->responseCode;
-    }
-
-    /**
-     * Get person
-     *
-     * @return PersonInterface
-     */
-    public function getPerson()
-    {
-        return $this->person;
     }
 
     /**
