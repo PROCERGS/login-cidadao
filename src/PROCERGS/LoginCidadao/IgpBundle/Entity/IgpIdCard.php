@@ -6,11 +6,12 @@ use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation as JMS;
+use PROCERGS\LoginCidadao\IgpBundle\Validator\Constraints\RG;
 
 /**
  * @ORM\Table(name="igp_id_card")
  * @ORM\Entity
- * @ORM\HasLifecycleCallbacks 
+ * @ORM\HasLifecycleCallbacks
  */
 class IgpIdCard
 {
@@ -32,7 +33,7 @@ class IgpIdCard
      * @JMS\Groups({"id_cards"})
      * @Assert\Length(min=1,max="66")
      * @ORM\Column(name="nome_mae", type="string", length=66, nullable=true)
-     * @RG     
+     * @RG
      */
     protected $nomeMae;
 
@@ -162,5 +163,5 @@ class IgpIdCard
     {
         return $this->situacaoRg;
     }
-    
+
 }
