@@ -11,12 +11,14 @@ use JMS\Serializer\Annotation as JMS;
 /**
  * @ORM\Table(name="id_card",
  *   uniqueConstraints={
- *     @ORM\UniqueConstraint(name="unique_document", columns={"state_id", "value"})
+ *     @ORM\UniqueConstraint(name="unique_document", columns={"state_id", "value"}),
+ *     @ORM\UniqueConstraint(name="unique_document", columns={"state_id", "person_id"})
  *   }
  * )
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\IdCardRepository")
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity(fields={"state","value"}, message="This document is already in use.")
+ * @UniqueEntity(fields={"state","person"}, message="You already have an ID Card in this state.")
  */
 class IdCard
 {
