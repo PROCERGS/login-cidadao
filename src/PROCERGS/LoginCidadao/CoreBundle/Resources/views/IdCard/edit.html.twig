@@ -10,10 +10,10 @@
             <div class="panel-body">
                 <div class="row clearfix">
                     {{ form_errors(form) }}
-                    <div class="col-md-12">
-                        {{ form_row(form.state) }}
-                        {{ form_row(form.issuer) }}
-                        {{ form_row(form.value) }}
+					<div class="col-md-12">
+						{% for child in form -%}
+        					{{ form_row(child) }}
+						{%- endfor %}
                     </div>
                 </div>
             </div>

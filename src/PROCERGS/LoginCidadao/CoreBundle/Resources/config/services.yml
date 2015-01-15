@@ -27,7 +27,6 @@ parameters:
     procergs_logincidadao_core.emailChanged.template: PROCERGSLoginCidadaoCoreBundle:Person:emailChangedMessage.html.twig
     procergs_logincidadao_core.notification.email.template: PROCERGSLoginCidadaoCoreBundle:Email:notification.html.twig
     procergs_logincidadao.nfgws.class: PROCERGS\LoginCidadao\CoreBundle\Helper\NfgWsHelper
-    procergs_logincidadao.igpws.class: PROCERGS\LoginCidadao\CoreBundle\Helper\IgpWsHelper
 
     procergs_logincidadao.postalcode.search.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\SearchPostalCodeFormType
 
@@ -35,6 +34,7 @@ parameters:
 
     procergs_logincidadao.idcard.form.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\IdCardType
     procergs_logincidadao.security.helper.class: PROCERGS\LoginCidadao\CoreBundle\Helper\SecurityHelper
+    account.security_listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\SecurityListener
 
 services:
     procergs_lc.command.populate_database:
@@ -178,9 +178,9 @@ services:
 
     kernel.listener.logged_in_user_listener:
         class: %kernel.listener.logged_in_user_listener.class%
+        arguments: [ "@security.context", "@router", "@session", "@translator", "@doctrine.orm.entity_manager" ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
-        arguments: [ "@security.context", "@router", "@session", "@translator", "@doctrine.orm.entity_manager" ]
 
     kernel.listener.exceptions_listener:
         class: %kernel.listener.exceptions_listener.class%
@@ -252,12 +252,6 @@ services:
             - [setOrganizacao, [%soe_organization%]]
             - [setUsuario, [%soe_username%]]
             - [setSenha, [%soe_password%]]
-    procergs_logincidadao.igpws:
-        class: %procergs_logincidadao.igpws.class%
-        calls:
-            - [setUrl, [%igp_ws_url%]]
-            - [setUsername, [%igp_username%]]
-            - [setPassword, [%igp_password%]]
 
     procergs.person.serialize.listenner:
         class: %procergs.person.serialize.listenner.class%
@@ -292,7 +286,7 @@ services:
 
     procergs_logincidadao.idcard.form:
         class: %procergs_logincidadao.idcard.form.class%
-        arguments: [ %lc_idcard_country_acronym% ]
+        arguments: [ %lc_idcard_country_acronym%, @event_dispatcher ]
         tags:
             - { name: form.type, alias: lc_idcard_form }
 
@@ -311,3 +305,9 @@ services:
     lc.security.helper:
         class: %procergs_logincidadao.security.helper.class%
         arguments: [ @security.context ]
+
+    account.security_listener:
+        class: %account.security_listener.class%
+        arguments: [ @security.context, @session, @lc.action_logger ]
+        tags:
+            - { name: kernel.event_listener, event: security.interactive_login, method: onSecurityInteractiveLogin }

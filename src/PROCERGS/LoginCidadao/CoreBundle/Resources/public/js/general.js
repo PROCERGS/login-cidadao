@@ -627,6 +627,11 @@ $(function() {
     $(document).on('click', ".ac-search-enable", lcAcWidget.onClickSearchEnable);
     $(document).on('click', ".ac-search-cancel", lcAcWidget.onClickSearchCancel);
     $(document).on('click', ".ac-search-commit", lcAcWidget.onClickSearchCommit);
+    $(document).on('change mousedown', 'select[readonly="readonly"]', function(event){
+        event.stopPropagation();
+        event.preventDefault();
+        $(this).val($(this).parents().find('[selected="selected"]').val());
+    });
 });
 
 // navbar - notifications

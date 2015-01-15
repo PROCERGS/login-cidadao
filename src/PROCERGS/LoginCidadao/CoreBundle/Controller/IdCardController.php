@@ -12,6 +12,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Form\Type\RemoveIdCardFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use Doctrine\Common\Collections\Collection;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\IdCard;
+use PROCERGS\LoginCidadao\CoreBundle\PROCERGSLoginCidadaoCoreEvents;
 
 class IdCardController extends Controller
 {
@@ -24,7 +25,8 @@ class IdCardController extends Controller
     {
         $idCards = $this->getIdCards();
         $deleteForms = $this->getDeleteForms($idCards);
-        return compact('idCards', 'deleteForms');
+        $states = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:State')->findStateByPreferredCountry($this->container->getParameter('lc_idcard_country_acronym'));
+        return compact('idCards', 'deleteForms', 'states');
     }
 
     /**
@@ -35,14 +37,16 @@ class IdCardController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $idCard = new IdCard();
+        $idCard = new IdCard();        
+        $ufId = $request->get('state');
+        if ($ufId) {
+            $idCard->setState($em->getRepository('PROCERGSLoginCidadaoCoreBundle:State')->find($ufId));
+        }
+        $idCard->setPerson($this->getPerson());        
         $form = $this->createForm('lc_idcard_form', $idCard);
         $form->handleRequest($request);
-
         if ($form->isValid()) {
-            $idCard->setPerson($this->getPerson());
-
-            $em->persist($idCard);
+            $em->persist($form->getData());
             $em->flush();
 
             return $this->redirect($this->generateUrl('lc_documents'));

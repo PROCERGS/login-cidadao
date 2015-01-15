@@ -22,10 +22,10 @@ $('.infinitegrid').on('click', '.id-card-load-more', function (event) {
 
 $('.id-cards').on('click', '.id-card-edit, .id-card-add', function (event) {
     event.stopPropagation();
-    var button = $(this);
+    var button = $(this);    
     button.attr('disabled', 'disabled');
 
-    var url = button.attr('href');
+    var url = button.attr('href') + '?state='+ $('#lc_idcard_select_state').val();
     history.pushState({}, '', url);
 
     url += ' .id-card-forms-placeholder';

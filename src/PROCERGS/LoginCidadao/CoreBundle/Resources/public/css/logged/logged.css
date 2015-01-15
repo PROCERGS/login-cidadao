@@ -596,8 +596,7 @@ body.no-scroll {
 .id-card.add-new {
     border-color: #428bca;
 }
-.id-card.add-new p {
-    padding: 22px 0;
+.id-card.add-new p {    
     color: #428bca;
 }
 .id-card.add-new .id-card-state {
@@ -733,13 +732,18 @@ label + .glyphicon-pencil {
   margin-top: 10px!important;
 }
 
+.statistics-badges .badge-title {
+  text-align: center;
+  word-wrap: break-word;
+}
+
 .statistics-badges .progress {
   margin-bottom: 5px;
   margin-top: 5px;
 }
 
-.statistics-badges .badge-progress {
-  padding-left: 0;
+.statistics-badges .badge-single {
+  padding-top: 25px;
 }
 
 .statistics-badges .badge-count {
@@ -752,6 +756,14 @@ label + .glyphicon-pencil {
 }
 
 @media (max-width: 767px) {
+  .statistics-badges .badge-progress {
+    padding-left: 0;
+  }
+
+  .statistics-badges .badge-single {
+    padding-top: 0;
+  }
+
   .statistics-badges .progress {
     margin-top: 10px;
   }
@@ -859,4 +871,16 @@ label + .glyphicon-pencil {
   display: block;
   float: left;
   margin: 5px;
+}
+
+#dashboard .about .glyphicon {
+  font-size: 14px;
+  margin-right: 3px;
+}
+
+#dashboard .birthdate {
+  margin-left: 19px;
+  font-size: 11px;
+  margin-top: -2px;
+  margin-bottom: 5px;
 }

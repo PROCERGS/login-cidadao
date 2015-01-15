@@ -1,7 +1,7 @@
 <?php
-namespace PROCERGS\LoginCidadao\CoreBundle\Helper;
+namespace PROCERGS\LoginCidadao\IgpBundle\Entity;
 
-class IgpWsHelper
+class IgpWs
 {
 
     protected $url;
@@ -127,14 +127,18 @@ class IgpWsHelper
         }
         curl_setopt($this->ch, CURLOPT_POSTFIELDS, json_encode($data));
         $result = curl_exec($this->ch);
-        return $result;
+        return json_decode($result, true);
     }
 
     public function __destruct()
     {
-        curl_close($this->ch);
-        $this->ch = null;
-        @unlink($this->cookie);
-        $this->cookie = null;
+        if (null !== $this->ch) {
+            curl_close($this->ch);
+            $this->ch = null;
+        }
+        if (null !== $this->cookie) {
+            @unlink($this->cookie);
+            $this->cookie = null;
+        }
     }
 }
