@@ -168,12 +168,25 @@ class DefaultController extends Controller
      */
     public function dashboardAction()
     {
+      // badges
       $badgesHandler = $this->get('badges.handler');
-
       $badges = $badgesHandler->getAvailableBadges();
-      $user = $badgesHandler->evaluate($this->getUser());
+      $userBadges = $badgesHandler->evaluate($this->getUser())->getBadges();
 
-      return array('allBadges' => $badges, 'userBadges' => $user->getBadges());
+      // logs
+      $em = $this->getDoctrine()->getManager();
+      $logRepo = $em->getRepository('PROCERGSLoginCidadaoAPIBundle:ActionLog');
+      $logs['logins'] = $logRepo->findLoginsByPerson($this->getUser(), 3);
+      $logs['clients'] = $logRepo->getWithClientByPerson($this->getUser(), 3);
+
+      // notifications
+      $notificationHandler = $this->get('procergs.notification.handler');
+      $notifications = $notificationHandler->getUnread($this->getUser());
+
+      return array('allBadges' => $badges,
+                   'userBadges' => $userBadges,
+                   'logs' => $logs,
+                   'notifications' => $notifications,);
     }
 
 }

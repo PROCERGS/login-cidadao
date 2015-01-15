@@ -181,6 +181,16 @@ interface NotificationHandlerInterface
      * @param NotificationInterface $notification
      */
     public function getEmailHtml(NotificationInterface $notification);
-    
+
+    /**
+     * Get default OAUTH client
+     */
     public function getLoginCidadaoClient();
+
+    /**
+     * Retrieves a person's unread notifications
+     * @param PersonInterface $person
+     * @param int $limit
+     */
+    public function getUnread(PersonInterface $person, $limit);
 }

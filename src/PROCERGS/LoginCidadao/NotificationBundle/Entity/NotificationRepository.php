@@ -103,4 +103,14 @@ class NotificationRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function getUnread(Person $person, $limit = 5)
+    {
+        return $this->getEntityManager()
+                ->createQuery('SELECT n FROM PROCERGSLoginCidadaoNotificationBundle:Notification n WHERE n.person = :person AND n.readDate is null')
+                ->setParameter('person', $person)
+                ->setMaxResults($limit)
+                ->getResult();
+
+    }
+
 }
