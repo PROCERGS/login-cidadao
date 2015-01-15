@@ -2,6 +2,8 @@
   <div id="register-box" class="lc-box">
     <h3 class="title text-center">{% trans %}Create your account{% endtrans %}</h3>
 
+    <button type="button" class="btn btn-link btn-xs toggle-lc-box" id="btn-login-back">{% trans %}Back to login{% endtrans %}</button>
+
     {% for type, messages in app.session.flashbag.all() %}
     {% for message in messages %}
     <div class="flash-{{ type }}">
@@ -12,7 +14,7 @@
 
     {% trans_default_domain 'FOSUserBundle' %}
     {% if actionUrl is not defined %}
-		{% set actionUrl = 'fos_user_registration_register' %}
+    {% set actionUrl = 'fos_user_registration_register' %}
     {% endif%}
     {{ form_start(form, {'action': path(actionUrl), 'attr': {'role':'form', 'class':'fos_user_registration_register clearfix'}}) }}
     <div class="form-content">
@@ -55,6 +57,7 @@
       </div>
 
       <p class='terms'>{% trans with { '%linkTerms%': path("lc_privacy")} %}By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.{% endtrans %}</p>
+
       <button class="btn btn-success" type="submit">{{ 'registration.submit'|trans }}</button>
     </div>
     {{ form_end(form) }}

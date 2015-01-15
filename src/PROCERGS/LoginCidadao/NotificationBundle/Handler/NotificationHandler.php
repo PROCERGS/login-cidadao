@@ -421,4 +421,9 @@ class NotificationHandler implements NotificationHandlerInterface
         }
     }
 
+    public function getUnread(PersonInterface $person, $limit = 5)
+    {
+        return $this->repository->getUnread($person, $limit);
+    }
+
 }

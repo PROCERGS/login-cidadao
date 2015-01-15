@@ -4,6 +4,7 @@ namespace PROCERGS\LoginCidadao\APIBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations as REST;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use PROCERGS\LoginCidadao\APIBundle\Security\Audit\Annotation as Audit;
 
 class BadgeController extends BaseController
 {
@@ -19,12 +20,13 @@ class BadgeController extends BaseController
      *   }
      * )
      * @REST\View(templateVar="badges")
+     * @Audit\Loggable(type="SELECT")
      * @throws NotFoundHttpException
      */
     public function getBadgesAction()
     {
         $badges = $this->get('badges.handler')->getAvailableBadges();
-        
+
         return $badges;
     }
 }

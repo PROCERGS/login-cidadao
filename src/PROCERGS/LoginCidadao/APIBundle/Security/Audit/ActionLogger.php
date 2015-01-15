@@ -2,6 +2,7 @@
 
 namespace PROCERGS\LoginCidadao\APIBundle\Security\Audit;
 
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\HttpFoundation\Request;
 use SimpleThings\EntityAudit\AuditConfiguration;
@@ -41,27 +42,15 @@ class ActionLogger
         $token = $this->security->getToken();
         $user = $token->getUser();
         $auditUsername = $this->auditConfig->getCurrentUsername();
-        $controller = get_class($controllerAction[0]);
-        $action = $controllerAction[1];
 
-        $log = new ActionLog();
-        $log->setController($controller);
-        $log->setAction($action);
-        $log->setActionType($annotation->getType());
-        $log->setMethod($request->getMethod());
-        $log->setUri($request->getUri());
-        $log->setAuditUsername($auditUsername);
-        $log->setIp($request->getClientIp());
+        $log = $this->initLog($request, $annotation->getType(),
+                              $controllerAction, $auditUsername);
 
         if ($user instanceof PersonInterface) {
-            $log->setPerson($user);
+            $log->setUserId($user->getId());
         }
 
-        if ($token instanceof OAuthToken) {
-            $log->setAccessToken($token->getToken());
-        }
-
-        //var_dump($request->attributes); die();
+        $this->logAccessToken($log, $token);
 
         $this->em->persist($log);
         $this->em->flush($log);
@@ -86,11 +75,66 @@ class ActionLogger
     {
         $repo = $this->em->getRepository('PROCERGSLoginCidadaoAPIBundle:ActionLog');
         $log = $repo->find($id);
+
         if ($log instanceof ActionLog) {
             return $log;
         } else {
             return null;
         }
+    }
+
+    /**
+     * @param Loggable $annotation
+     * @param Request $request
+     * @param array $controllerAction
+     * @param string $auditUsername
+     * @return ActionLog
+     */
+    private function initLog(Request $request, $actionType, $controllerAction,
+                             $auditUsername)
+    {
+        $controller = get_class($controllerAction[0]);
+        $action = $controllerAction[1];
+
+        $log = new ActionLog();
+        $log->setController($controller);
+        $log->setAction($action);
+        $log->setActionType($actionType);
+        $log->setMethod($request->getMethod());
+        $log->setUri($request->getUri());
+        $log->setAuditUsername($auditUsername);
+        $log->setIp($request->getClientIp());
+
+        return $log;
+    }
+
+    private function logAccessToken(ActionLog $log, TokenInterface $token)
+    {
+        if (!($token instanceof OAuthToken)) {
+            return;
+        }
+
+        $accessTokenRepo = $this->em->getRepository('PROCERGSOAuthBundle:AccessToken');
+        $accessToken = $accessTokenRepo->findOneBy(array(
+            'token' => $token->getToken()
+        ));
+
+        $log->setAccessToken($token->getToken());
+        $log->setClientId($accessToken->getClient()->getId());
+        $log->setUserId($accessToken->getUser()->getId());
+    }
+
+    public function registerLogin(Request $request, PersonInterface $person, array $controllerAction)
+    {
+        $auditUsername = $this->auditConfig->getCurrentUsername();
+        $actionType = ActionLog::TYPE_LOGIN;
+
+        $log = $this->initLog($request, $actionType, $controllerAction,
+                              $auditUsername);
+        $log->setUserId($person->getId());
+
+        $this->em->persist($log);
+        $this->em->flush($log);
     }
 
 }

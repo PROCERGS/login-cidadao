@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use PROCERGS\LoginCidadao\APIBundle\Security\Audit\Annotation as Audit;
 
 /**
  * @REST\Prefix("")
@@ -35,6 +36,7 @@ class PersonAddressController extends BaseController
      * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\City
      * @throws NotFoundHttpException when no city is found
      * @REST\Get("/address/cities/search/{city}", name="api_1_get_cities")
+     * @Audit\Loggable(type="SELECT")
      */
     public function getCitiesAction($city)
     {
@@ -70,6 +72,7 @@ class PersonAddressController extends BaseController
      * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\State
      * @throws NotFoundHttpException when no state is found
      * @REST\Get("/address/states/search/{state}", name="api_1_get_states")
+     * @Audit\Loggable(type="SELECT")
      */
     public function getStatesAction($state)
     {
@@ -101,6 +104,7 @@ class PersonAddressController extends BaseController
      * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\Country
      * @throws NotFoundHttpException when no country is found
      * @REST\Get("/address/countries/search/{country}", name="api_1_get_countries")
+     * @Audit\Loggable(type="SELECT")
      */
     public function getCountriesAction($country)
     {
@@ -131,6 +135,7 @@ class PersonAddressController extends BaseController
      * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\City
      * @throws NotFoundHttpException when no city is found
      * @REST\Get("/address/cities/prefetch", name="api_1_get_cities_prefetch")
+     * @Audit\Loggable(type="SELECT")
      */
     public function getCitiesPrefetchAction()
     {

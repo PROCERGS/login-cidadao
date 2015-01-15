@@ -23,7 +23,9 @@
   <h5 class="media-heading">{{ row.title }}</h5>
   <div class="client-name">{{ row.sender.name }}</div>
   <div class="date">{{ 'notification.receivedAt'|trans }} {{ row.createdat|date('d/m/Y h:i:s') }}</div>
+  {% if row.readDate is not null  %}
   <div class="date">{{ 'notification.readAt'|trans }} {{ row.readDate|date('d/m/Y h:i:s') }}</div>
+  {% endif %}
 </div>
 {% endblock grid_row_data %}
 

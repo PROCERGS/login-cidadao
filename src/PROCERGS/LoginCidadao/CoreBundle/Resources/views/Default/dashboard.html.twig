@@ -1,99 +1,124 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 {% block content %}
-
-  <div id="dashboard" class="content">
-
-    <div class="row">
-
+<div id="dashboard" class="content">
+   <div class="row">
       {# Profile description #}
       <div class="col-xs-12">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-          {% trans %}Profile{% endtrans %}
-          </div>
-          <div class="panel-body">
-
-            <img src="{{ include("PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" class="profile-picture pull-left">
-
-            <div class="about pull-left">
-              <h4 class="media-heading">{{ app.user.firstName }}</h4>
-              <div>{{ app.user.email }}</div>
-              <div>{{ app.user.birthdate }}</div>
-              <div>
-                <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                {{ app.user.state.name }} - {{ app.user.city.name }}
-              </div>
-            </div>
-          </div>
-          <div class="panel-footer clearfix">
-            <a href="{{ path('fos_user_profile_edit') }}" class="btn btn-primary btn-section pull-right" role="button">Editar</a>
-          </div>
-        </div>
-      </div>
-
-        {# Active services #}
-        <div class="col-xs-12 col-md-6 services">
-          <div class="panel panel-default">
+         <div class="panel panel-default">
             <div class="panel-heading">
-            {% trans %}Services{% endtrans %}
+               {% trans %}Profile{% endtrans %}
+               <a href="{{ path('fos_user_profile_edit') }}" class="btn btn-primary btn-xs btn-section pull-right" role="button">Editar</a>
             </div>
             <div class="panel-body">
-              {% if app.user.getAuthorizations|length > 0 %}
-                {% for auth in app.user.getAuthorizations %}
-                  <a href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}">
-                    {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
-                      <img src="/{{ auth.client.getPictureWebPath }}" width="65" height="65" alt="" class="media-object service-img">
-                      {% else %}
-                      <img src="//placehold.it/65x65" alt="" class="service-img">
-                    {% endif %}
-                  </a>
-                {% endfor %}
-              {% endif %}
-            </div>
-          </div>
-        </div>
-
-          {# Logs #}
-          <div class="col-xs-12 col-md-6">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                {% trans %}Log de acesso{% endtrans %}
-              </div>
-              <div class="panel-body">
-                <ul class="list-group">
-                  <li class="list-group-item">Cras justo odio</li>
-                  <li class="list-group-item">Dapibus ac facilisis in</li>
-                  <li class="list-group-item">Morbi leo risus</li>
-                  <li class="list-group-item">Porta ac consectetur ac</li>
-                  <li class="list-group-item">Vestibulum at eros</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-            <div class="col-xs-12 col-md-6 badges-list">
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                {% trans %}Badges{% endtrans %}
-                </div>
-                <div class="panel-body">
-                  {% if userBadges|length == 0 %}
-                    <div class="alert alert-warning" role="alert">{% trans %}You don't have any badges yet!{% endtrans %}</div>
+               <img src="{{ include("PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" class="profile-picture pull-left">
+               <div class="about pull-left">
+                  <h4 class="media-heading">
+                     <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                     {{ app.user.firstName }}
+                  </h4>
+                  {% if app.user.birthdate is not null %}
+                  <div class="birthdate">{{ app.user.birthdate | date('birthdate.format' | trans) }}</div>
                   {% endif %}
+                  <div>
+                     <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                     {{ app.user.email }}
+                  </div>
+                  {% if app.user.state is not null %}
+                  <div>
+                     <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+                     {{ app.user.state.name ~ (app.user.city ? ' - ' ~ app.user.city.name) }}
+                  </div>
+                  {% endif %}
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
 
-                  {% for client, badges in allBadges %}
-                    {% for badge, content in badges %}
-                      {% set key = client ~ '.' ~ badge  %}
-                        {% if key in userBadges|keys %}
-                        <div class="badge-icon badge-{{ badge }}"></div>
-                      {% endif %}
-                    {% endfor %}
+   <div class="row">
+      {# Active services #}
+      <div class="col-xs-12 col-md-6 services">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               {% trans %}Services{% endtrans %}
+            </div>
+            <div class="panel-body">
+               {% if app.user.getAuthorizations|length > 0 %}
+               {% for auth in app.user.getAuthorizations %}
+               <a href="{{ auth.client.siteUrl }}" title="{{ auth.client.name }}">
+               {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
+               <img src="/{{ auth.client.getPictureWebPath }}" width="65" height="65" alt="" class="media-object service-img">
+               {% else %}
+               <img src="//placehold.it/65x65" alt="" class="service-img">
+               {% endif %}
+               </a>
+               {% endfor %}
+               {% else %}
+               <p class="text-center">{% trans %}You don't have any active service.{% endtrans %}</p>
+               <p class="text-center"><a href="">{{ 'Check the services available' | trans }}</a></p>
+               {% endif %}
+            </div>
+         </div>
+      </div>
+      {# Logs #}
+      <div class="col-xs-12 col-md-6">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               {% trans %}Activity Log{% endtrans %}
+            </div>
+            <div class="panel-body">
+               <ul class="list-group">
+                  {% for log in logs.logins %}
+                  <li class="list-group-item">{{ log.actionType }} - {{ log.createdAt|date("d/m/Y h:i:s") }}</li>
                   {% endfor %}
-                </div>
-              </div>
+                  {% for log in logs.clients %}
+                  <li class="list-group-item">{{ log.actionType }} - {{ log.createdAt|date("d/m/Y h:i:s") }}</li>
+                  {% endfor %}
+               </ul>
             </div>
+         </div>
+      </div>
+   </div>
 
+   <div class="row">
+      {# Badges #}
+      <div class="col-xs-12 col-md-6 badges-list">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               {{ 'Badges' | trans }}
             </div>
-          </div>
+            <div class="panel-body">
+               {% if userBadges|length == 0 %}
+               <div class="alert alert-warning" role="alert">{% trans %}You don't have any badges yet!{% endtrans %}</div>
+               {% endif %}
+               {% for client, badges in allBadges %}
+               {% for badge, content in badges %}
+               {% set key = client ~ '.' ~ badge  %}
+               {% if key in userBadges|keys %}
+               <div class="badge-icon badge-{{ badge }}"></div>
+               {% endif %}
+               {% endfor %}
+               {% endfor %}
+            </div>
+         </div>
+      </div>
+      <div class="col-xs-12 col-md-6">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               {% trans %}Notifications{% endtrans %}
+            </div>
+            <div class="panel-body">
+               <div class="list-group">
+                  {% for notification in notifications %}
+                    <a href="{{ path('lc_notifications', { id: notification.id }) }}" class="list-group-item">
+                    {{ notification.sender.name }} - {{ notification.title }} - {{ notification.createdAt|date("d/m/Y h:i:s") }}
+                    </a>
+                  {% endfor %}
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
 
-        {% endblock %}
+</div>
+{% endblock %}

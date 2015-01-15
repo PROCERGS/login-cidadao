@@ -3,18 +3,13 @@
 namespace PROCERGS\LoginCidadao\APIBundle\Security\Audit\Annotation;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationAnnotation;
-use Doctrine\Common\Annotations\Annotation;
+use PROCERGS\LoginCidadao\APIBundle\Entity\ActionLog;
 
 /**
  * @Annotation
  */
 class Loggable extends ConfigurationAnnotation
 {
-
-    const TYPE_SELECT = 'SELECT';
-    const TYPE_UPDATE = 'UPDATE';
-    const TYPE_CREATE = 'CREATE';
-    const TYPE_DELETE = 'DELETE';
 
     protected $type;
     private $actionLogId;
@@ -39,10 +34,11 @@ class Loggable extends ConfigurationAnnotation
     public function getType()
     {
         switch ($this->type) {
-            case self::TYPE_CREATE:
-            case self::TYPE_DELETE:
-            case self::TYPE_SELECT:
-            case self::TYPE_UPDATE:
+            case ActionLog::TYPE_CREATE:
+            case ActionLog::TYPE_DELETE:
+            case ActionLog::TYPE_SELECT:
+            case ActionLog::TYPE_UPDATE:
+            case ActionLog::TYPE_LOGIN:
                 return $this->type;
             default:
                 return "UNKNOWN";

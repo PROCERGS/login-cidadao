@@ -682,7 +682,10 @@ Go to service's page: "Acessar o site do serviço"
 notification.receivedAt: "Recebida em:"
 notification.readAt: "Lida em:"
 Place of birth - Country: 'Naturalidade - Pais'
+<<<<<<< HEAD
 'Idcard value': 'Número'
+=======
+>>>>>>> branch 'dev' of https://github.com/PROCERGS/login-cidadao.git
 Back to login: 'Voltar parar o login'
 birthdate.format: 'd/m/Y'
 Activity Log: Registro de Atividade

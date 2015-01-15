@@ -4,6 +4,7 @@ namespace PROCERGS\LoginCidadao\APIBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+use PROCERGS\OAuthBundle\Model\ClientInterface;
 
 /**
  * ActionLog
@@ -23,6 +24,12 @@ use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 class ActionLog
 {
 
+    const TYPE_SELECT = 'SELECT';
+    const TYPE_UPDATE = 'UPDATE';
+    const TYPE_CREATE = 'CREATE';
+    const TYPE_DELETE = 'DELETE';
+    const TYPE_LOGIN = 'LOGIN';
+
     /**
      * @var integer
      *
@@ -35,9 +42,28 @@ class ActionLog
     /**
      * @var string
      *
-     * @ORM\Column(name="access_token", type="string", length=255)
+     * @ORM\Column(name="access_token", type="string", length=255, nullable=true)
      */
     private $accessToken;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="client_id", type="integer", nullable=true)
+     */
+    private $clientId;
+
+    /**
+     * @var ClientInterface
+     */
+    private $client;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="user_id", type="integer")
+     */
+    private $userId;
 
     /**
      * @var string
@@ -103,14 +129,6 @@ class ActionLog
     private $responseCode;
 
     /**
-     * @var PersonInterface
-     *
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person")
-     * @ORM\JoinColumn(name="personu_id", referencedColumnName="id")
-     */
-    private $person;
-
-    /**
      * Get id
      *
      * @return integer
@@ -141,6 +159,52 @@ class ActionLog
     public function getAccessToken()
     {
         return $this->accessToken;
+    }
+
+    /**
+     * Set client id
+     *
+     * @param integer $clientId
+     * @return ActionLog
+     */
+    public function setClientId($clientId)
+    {
+        $this->clientId = $clientId;
+
+        return $this;
+    }
+
+    /**
+     * Get client id
+     *
+     * @return integer
+     */
+    public function getClientId()
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * Set user id
+     *
+     * @param integer $userId
+     * @return ActionLog
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
+     * Get user id
+     *
+     * @return integer
+     */
+    public function getUserId()
+    {
+        return $this->userId;
     }
 
     /**
@@ -328,19 +392,6 @@ class ActionLog
     }
 
     /**
-     * Get person
-     *
-     * @param PersonInterface $person
-     * @return ActionLog
-     */
-    public function setPerson(PersonInterface $person)
-    {
-        $this->person = $person;
-
-        return $this;
-    }
-
-    /**
      * Set response code
      *
      * @param integer $responseCode
@@ -364,16 +415,6 @@ class ActionLog
     }
 
     /**
-     * Get person
-     *
-     * @return PersonInterface
-     */
-    public function getPerson()
-    {
-        return $this->person;
-    }
-
-    /**
      * @ORM\PrePersist
      */
     public function setCreatedAtValue()
@@ -381,6 +422,24 @@ class ActionLog
         if (!($this->getCreatedAt() instanceof \DateTime)) {
             $this->createdAt = new \DateTime();
         }
+    }
+
+    /**
+     * @return Client
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
+     * @param ClientInterface $client
+     * @return ActionLog
+     */
+    public function setClient(ClientInterface $client)
+    {
+        $this->client = $client;
+        return $this;
     }
 
 }

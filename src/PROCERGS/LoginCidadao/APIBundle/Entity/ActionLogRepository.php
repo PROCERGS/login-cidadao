@@ -3,6 +3,8 @@
 namespace PROCERGS\LoginCidadao\APIBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+use PROCERGS\OAuthBundle\Model\ClientInterface;
 
 /**
  * ActionLogRepository
@@ -12,5 +14,52 @@ use Doctrine\ORM\EntityRepository;
  */
 class ActionLogRepository extends EntityRepository
 {
+
+    public function getWithClientByPerson(PersonInterface $person, $limit = null)
+    {
+        $query = $this->createQueryBuilder('l')
+            ->select('l, c')
+            ->innerJoin('PROCERGSOAuthBundle:Client', 'c', 'WITH',
+                        'c.id = l.clientId')
+            ->where('l.userId = :person_id')
+            ->setParameter('person_id', $person->getId());
+
+        if ($limit > 0) {
+            $query->setMaxResults($limit);
+        }
+
+        $result = array(
+            'actionLogs' => array(),
+            'clients' => array()
+        );
+        foreach ($query->getQuery()->getResult() as $item) {
+            $object = '';
+            if ($item instanceof ActionLog) {
+                $object = 'actionLogs';
+            } elseif ($item instanceof ClientInterface) {
+                $object = 'clients';
+            }
+            $result[$object][$item->getId()] = $item;
+        }
+
+        foreach ($result['actionLogs'] as $log) {
+            $log->setClient($result['clients'][$log->getClientId()]);
+        }
+
+        return $result['actionLogs'];
+    }
+
+    public function findLoginsByPerson(PersonInterface $person, $limit = null)
+    {
+        $query = $this->createQueryBuilder('l')
+            ->where('l.userId = :person_id')
+            ->setParameter('person_id', $person->getId());
+
+        if ($limit > 0) {
+            $query->setMaxResults($limit);
+        }
+
+        return $query->getQuery()->getResult();
+    }
 
 }

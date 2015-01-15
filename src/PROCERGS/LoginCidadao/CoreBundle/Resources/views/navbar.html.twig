@@ -26,6 +26,18 @@
             </li>
         {% else %}
 
+            {% if is_granted('ROLE_ALLOWED_TO_SWITCH') or is_granted('ROLE_PREVIOUS_ADMIN') %}
+            <li class="impersonation pull-right">
+                {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                    <a class="impersonation-exit btn btn-danger btn-xs" href="?_switch_user=_exit">Back to Normal</a>
+                {% else %}
+                    <form method="get">
+                        <input class="impersonation-username" type="text" name="_switch_user" placeholder="Impersonate" />
+                    </form>
+                {% endif %}
+            </li>
+            {% endif %}
+
             {# Profile Card #}
             <li class="btn-group pull-right profile">
                 <button type="button" class="btn dropdown-toggle profile-card" data-toggle="dropdown">
