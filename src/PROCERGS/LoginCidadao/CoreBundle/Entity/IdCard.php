@@ -7,6 +7,10 @@ use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation as JMS;
+use PROCERGS\LoginCidadao\CoreBundle\Model\IdCardInterface;
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+
+use PROCERGS\LoginCidadao\ValidationControlBundle\Validator\Constraints as Validators;
 
 /**
  * @ORM\Table(name="id_card",
@@ -19,8 +23,9 @@ use JMS\Serializer\Annotation as JMS;
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity(fields={"state","value"}, message="This document is already in use.")
  * @UniqueEntity(fields={"state","person"}, message="You already have an ID Card in this state.")
+ * @Validators\IdCard
  */
-class IdCard
+class IdCard implements IdCardInterface
 {
 
     /**
@@ -65,21 +70,21 @@ class IdCard
         return $this->id;
     }
 
-    public function setId($var)
+    public function setId($id)
     {
-        $this->id = $var;
+        $this->id = $id;
         return $this;
     }
 
-    public function setState($var)
+    public function setState(State $state)
     {
-        $this->state = $var;
+        $this->state = $state;
         return $this;
     }
 
-    public function setPerson($var)
+    public function setPerson(PersonInterface $person)
     {
-        $this->person = $var;
+        $this->person = $person;
         return $this;
     }
 
@@ -93,9 +98,9 @@ class IdCard
         return $this->state;
     }
 
-    public function setValue($var)
+    public function setValue($value)
     {
-        $this->value = $var;
+        $this->value = $value;
         return $this;
     }
 
@@ -104,9 +109,9 @@ class IdCard
         return $this->value;
     }
 
-    public function setIssuer($var)
+    public function setIssuer($issuer)
     {
-        $this->issuer = $var;
+        $this->issuer = $issuer;
         return $this;
     }
 

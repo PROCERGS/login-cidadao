@@ -17,13 +17,14 @@ class RGValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint)
     {
+        var_dump($value);die();
         if ($value === null || ! (strlen(trim($value)))) {
             return;
         }
         $rgNum = $this->context->getRoot()
             ->get('value')
             ->getData();
-        
+
         if (strlen($rgNum) != 10) {
             $this->context->addViolationAt('value', $constraint->lengthMessage);
         }
@@ -41,7 +42,7 @@ class RGValidator extends ConstraintValidator
     {
         $total = ($rg[1] * 2) + ($rg[2] * 3) + ($rg[3] * 4) + ($rg[4] * 5) + ($rg[5] * 6) + ($rg[6] * 7) + ($rg[7] * 8) + ($rg[8] * 9);
         $resto = $total % 11;
-        
+
         if ($resto == 0 || $resto == 1) {
             return 1;
         } else {

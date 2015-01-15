@@ -46,7 +46,8 @@ class AppKernel extends Kernel
             new PROCERGS\LoginCidadao\NotificationBundle\PROCERGSLoginCidadaoNotificationBundle(),
             
             new Scheb\TwoFactorBundle\SchebTwoFactorBundle(),
-            new PROCERGS\LoginCidadao\IgpBundle\PROCERGSLoginCidadaoIgpBundle()
+            new PROCERGS\LoginCidadao\IgpBundle\PROCERGSLoginCidadaoIgpBundle(),
+            new PROCERGS\LoginCidadao\ValidationControlBundle\PROCERGSLoginCidadaoValidationControlBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

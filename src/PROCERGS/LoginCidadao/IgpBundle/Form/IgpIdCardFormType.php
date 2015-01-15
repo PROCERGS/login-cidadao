@@ -1,4 +1,5 @@
 <?php
+
 namespace PROCERGS\LoginCidadao\IgpBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -6,7 +7,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormEvents;
-use PROCERGS\LoginCidadao\CoreBundle\PROCERGSLoginCidadaoCoreEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use PROCERGS\LoginCidadao\IgpBundle\Validator\Constraints\RG;
@@ -16,8 +16,8 @@ class IgpIdCardFormType extends AbstractType
 
     /**
      *
-     * @param FormBuilderInterface $builder            
-     * @param array $options            
+     * @param FormBuilderInterface $builder
+     * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -25,9 +25,6 @@ class IgpIdCardFormType extends AbstractType
             'required' => true,
             'label' => 'nomeMae',
             'translation_domain' => 'IgpBundle',
-            /* 'constraints' => array(
-                new RG()
-            ), */
         ));
         $builder->add('dataEmissaoCI', 'birthday', array(
             'required' => true,
@@ -48,7 +45,7 @@ class IgpIdCardFormType extends AbstractType
 
     /**
      *
-     * @param OptionsResolverInterface $resolver            
+     * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {

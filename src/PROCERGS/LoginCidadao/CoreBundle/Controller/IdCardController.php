@@ -12,7 +12,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Form\Type\RemoveIdCardFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use Doctrine\Common\Collections\Collection;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\IdCard;
-use PROCERGS\LoginCidadao\CoreBundle\PROCERGSLoginCidadaoCoreEvents;
+use PROCERGS\LoginCidadao\ValidationControlBundle\Handler\ValidationHandler;
 
 class IdCardController extends Controller
 {
@@ -37,12 +37,17 @@ class IdCardController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $idCard = new IdCard();        
-        $ufId = $request->get('state');
-        if ($ufId) {
-            $idCard->setState($em->getRepository('PROCERGSLoginCidadaoCoreBundle:State')->find($ufId));
+        $stateId = $request->get('state');
+        $state = null;
+        if ($stateId > 0) {
+            $state = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:State')
+                ->find($stateId);
         }
-        $idCard->setPerson($this->getPerson());        
+
+        $validationHandler = $this->getValidationHandler();
+        $idCard = $validationHandler->instantiateIdCard($state);
+
+        $idCard->setPerson($this->getPerson());
         $form = $this->createForm('lc_idcard_form', $idCard);
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -157,6 +162,14 @@ class IdCardController extends Controller
         $person = $this->getPerson();
         $repo = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:IdCard');
         return $repo->findByPersonOrderByStateAcronym($person);
+    }
+
+    /**
+     * @return ValidationHandler
+     */
+    private function getValidationHandler()
+    {
+        return $this->get('validation.handler');
     }
 
 }

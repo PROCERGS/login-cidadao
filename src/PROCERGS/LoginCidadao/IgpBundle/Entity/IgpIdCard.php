@@ -1,4 +1,5 @@
 <?php
+
 namespace PROCERGS\LoginCidadao\IgpBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -12,6 +13,7 @@ use PROCERGS\LoginCidadao\IgpBundle\Validator\Constraints\RG;
  * @ORM\Table(name="igp_id_card")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
+ * @RG
  */
 class IgpIdCard
 {
@@ -33,7 +35,6 @@ class IgpIdCard
      * @JMS\Groups({"id_cards"})
      * @Assert\Length(min=1,max="66")
      * @ORM\Column(name="nome_mae", type="string", length=66, nullable=true)
-     * @RG
      */
     protected $nomeMae;
 

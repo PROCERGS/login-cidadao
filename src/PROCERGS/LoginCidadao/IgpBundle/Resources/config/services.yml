@@ -1,29 +1,35 @@
+parameters:
+    igp.badges.subscriber.class: PROCERGS\LoginCidadao\IgpBundle\Event\BadgesSubscriber
+    igp.validations.subscriber.class: PROCERGS\LoginCidadao\IgpBundle\Event\ValidationSubscriber
+
+    igp.validations.rg.validator.class: PROCERGS\LoginCidadao\IgpBundle\Validator\Constraints\RGValidator
+
 services:
-    procergs_login_cidadao_igp.badgessubscriber:
-        class: PROCERGS\LoginCidadao\IgpBundle\Event\BadgesSubscriber
+    igp.badges.subscriber:
+        class: %igp.badges.subscriber.class%
         arguments: [ @translator, @doctrine.orm.entity_manager ]
         tags:
             - { name: kernel.event_subscriber }
-            
-    procergs_login_cidadao_igp.validationsubscriber:
-        class: PROCERGS\LoginCidadao\IgpBundle\Event\ValidationSubscriber
-        arguments: [ @translator, @doctrine.orm.entity_manager ]
+
+    igp.validations.subscriber:
+        class: %igp.validations.subscriber.class%
+        arguments: [ @translator, @doctrine.orm.entity_manager, @igp.validations.webservice ]
         tags:
             - { name: kernel.event_subscriber }
-            
-    procergs_login_cidadao_igp.igpws:
+
+    igp.validations.webservice:
         class: PROCERGS\LoginCidadao\IgpBundle\Entity\IgpWs
         calls:
             - [setUrl, [%igp_ws_url%]]
             - [setUsername, [%igp_username%]]
             - [setPassword, [%igp_password%]]
-            
-    procergs_login_cidadao_igp.procergs_logincidadao.igp.rg.validation:
-        class: PROCERGS\LoginCidadao\IgpBundle\Validator\Constraints\RGValidator
-        arguments: [ @procergs_login_cidadao_igp.igpws ]
+
+    igp.validations.rg.validator:
+        class: %igp.validations.rg.validator.class%
+        arguments: [ @igp.validations.webservice ]
         tags:
             - { name: validator.constraint_validator, alias: igp_rg_validator }
-            
+
     procergs_login_cidadao_igp.form.type.igpidcard:
         class: PROCERGS\LoginCidadao\IgpBundle\Form\IgpIdCardFormType
         tags:
