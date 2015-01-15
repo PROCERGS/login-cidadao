@@ -186,7 +186,7 @@ class DefaultController extends Controller
       return array('allBadges' => $badges,
                    'userBadges' => $userBadges,
                    'logs' => $logs,
-                   'notifications' => $notifications,);
+                   'notifications' => $notifications);
     }
 
 }
