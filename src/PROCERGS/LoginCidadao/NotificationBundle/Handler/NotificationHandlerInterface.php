@@ -27,7 +27,7 @@ interface NotificationHandlerInterface
      * @param int $offset  starting from the offset
      * @param int $orderby the ordering criteria
      *
-     * @return array
+     * @return NotificationInterface[]
      */
     public function all($limit = 5, $offset = 0, $orderby = null);
 
@@ -39,7 +39,7 @@ interface NotificationHandlerInterface
      * @param int              $offset  starting from the offset
      * @param int              $orderby the ordering criteria
      *
-     * @return array
+     * @return NotificationInterface[]
      */
     public function getAllFromPerson(PersonInterface $person, $limit = 5,
                                      $offset = 0, $orderby = null);
@@ -51,6 +51,8 @@ interface NotificationHandlerInterface
      * @param type $limit
      * @param type $offset the id of the last notification received
      * @param ClientInterface $client optionally filters by OAuth Client
+     *
+     * @return NotificationInterface[]
      */
     public function getAllFromPersonIdOffset(PersonInterface $person,
                                              $limit = 5, $offset = 0,
@@ -65,7 +67,7 @@ interface NotificationHandlerInterface
      * @param int              $offset  starting from the offset
      * @param int              $orderby the ordering criteria
      *
-     * @return array
+     * @return NotificationInterface[]
      */
     public function getAllFromPersonByClient(PersonInterface $person,
                                              ClientInterface $client,
@@ -113,6 +115,8 @@ interface NotificationHandlerInterface
      * @param PersonInterface   $person
      * @param CategoryInterface $client optionally filter by category
      * @param ClientInterface $client optionally filter by client
+     *
+     * @return PersonNotificationOption[]
      */
     public function getSettings(PersonInterface $person,
                                 CategoryInterface $category = null,
@@ -123,6 +127,8 @@ interface NotificationHandlerInterface
      *
      * @param PersonInterface $person
      * @param ClientInterface $client optionally filters by category.
+     *
+     * @return PersonNotificationOption[]
      */
     public function getSettingsByClient(PersonInterface $person,
                                         ClientInterface $client);
@@ -132,6 +138,8 @@ interface NotificationHandlerInterface
      *
      * @param PersonInterface $person
      * @param ClientInterface $client
+     *
+     * @return boolean
      */
     public function initializeSettings(PersonInterface $person,
                                        ClientInterface $client);
@@ -142,6 +150,8 @@ interface NotificationHandlerInterface
      * @param PersonInterface $person
      * @param int $start
      * @param int $end
+     *
+     * @return array
      */
     public function markRangeAsRead(PersonInterface $person, $start, $end);
 
@@ -166,6 +176,8 @@ interface NotificationHandlerInterface
     /**
      * Return a person's number of unread notifications.
      * @param PersonInterface $person
+     *
+     * @return integer
      */
     public function countUnread(PersonInterface $person);
 
@@ -173,20 +185,23 @@ interface NotificationHandlerInterface
      * Return a person's number of unread notifications grouping by Client
      * @param PersonInterface $person
      * @param ClientInterface $client
+     *
+     * @return array
      */
     public function countUnreadByClient(PersonInterface $person);
 
     /**
      * Renders the
      * @param NotificationInterface $notification
+     *
+     * @return string
      */
     public function getEmailHtml(NotificationInterface $notification);
-
+    
     /**
      * Get default OAUTH client
      */
     public function getLoginCidadaoClient();
-
     /**
      * Retrieves a person's unread notifications
      * @param PersonInterface $person
