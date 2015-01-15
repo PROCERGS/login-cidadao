@@ -44,5 +44,13 @@ class StateRepository extends EntityRepository
                 ->addOrderBy('s.preference', 'DESC')
                 ->getQuery()->getResult();
     }
+    
+    public function findStateByPreferredCountry($countryAcronym)
+    {
+        return $this->createQueryBuilder('s')->join('PROCERGSLoginCidadaoCoreBundle:Country', 'c', 'WITH', 's.country = c')->where('s.reviewed = ' . Country::REVIEWED_OK)
+                        ->andWhere('c.iso2 = :country')
+                        ->setParameter('country', $countryAcronym)
+                        ->orderBy('s.name', 'ASC')->getQuery()->getResult();;
+    }
 
 }

@@ -1,0 +1,30 @@
+services:
+    procergs_login_cidadao_igp.badgessubscriber:
+        class: PROCERGS\LoginCidadao\IgpBundle\Event\BadgesSubscriber
+        arguments: [ @translator, @doctrine.orm.entity_manager ]
+        tags:
+            - { name: kernel.event_subscriber }
+            
+    procergs_login_cidadao_igp.validationsubscriber:
+        class: PROCERGS\LoginCidadao\IgpBundle\Event\ValidationSubscriber
+        arguments: [ @translator, @doctrine.orm.entity_manager ]
+        tags:
+            - { name: kernel.event_subscriber }
+            
+    procergs_login_cidadao_igp.igpws:
+        class: PROCERGS\LoginCidadao\IgpBundle\Entity\IgpWs
+        calls:
+            - [setUrl, [%igp_ws_url%]]
+            - [setUsername, [%igp_username%]]
+            - [setPassword, [%igp_password%]]
+            
+    procergs_login_cidadao_igp.procergs_logincidadao.igp.rg.validation:
+        class: PROCERGS\LoginCidadao\IgpBundle\Validator\Constraints\RGValidator
+        arguments: [ @procergs_login_cidadao_igp.igpws ]
+        tags:
+            - { name: validator.constraint_validator, alias: igp_rg_validator }
+            
+    procergs_login_cidadao_igp.form.type.igpidcard:
+        class: PROCERGS\LoginCidadao\IgpBundle\Form\IgpIdCardFormType
+        tags:
+            - { name: form.type, alias: lc_igpidcardformtype }

@@ -682,6 +682,7 @@ Go to service's page: "Acessar o site do serviço"
 notification.receivedAt: "Recebida em:"
 notification.readAt: "Lida em:"
 Place of birth - Country: 'Naturalidade - Pais'
+'Idcard value': 'Número'
 Back to login: 'Voltar parar o login'
 birthdate.format: 'd/m/Y'
 Activity Log: Registro de Atividade

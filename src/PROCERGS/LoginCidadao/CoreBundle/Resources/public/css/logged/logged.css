@@ -596,8 +596,7 @@ body.no-scroll {
 .id-card.add-new {
     border-color: #428bca;
 }
-.id-card.add-new p {
-    padding: 22px 0;
+.id-card.add-new p {    
     color: #428bca;
 }
 .id-card.add-new .id-card-state {
