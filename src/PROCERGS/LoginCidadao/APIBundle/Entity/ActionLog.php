@@ -24,6 +24,12 @@ use PROCERGS\OAuthBundle\Model\ClientInterface;
 class ActionLog
 {
 
+    const TYPE_SELECT = 'SELECT';
+    const TYPE_UPDATE = 'UPDATE';
+    const TYPE_CREATE = 'CREATE';
+    const TYPE_DELETE = 'DELETE';
+    const TYPE_LOGIN = 'LOGIN';
+
     /**
      * @var integer
      *
@@ -36,14 +42,14 @@ class ActionLog
     /**
      * @var string
      *
-     * @ORM\Column(name="access_token", type="string", length=255)
+     * @ORM\Column(name="access_token", type="string", length=255, nullable=true)
      */
     private $accessToken;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="client_id", type="integer")
+     * @ORM\Column(name="client_id", type="integer", nullable=true)
      */
     private $clientId;
 

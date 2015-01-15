@@ -49,4 +49,17 @@ class ActionLogRepository extends EntityRepository
         return $result['actionLogs'];
     }
 
+    public function findLoginsByPerson(PersonInterface $person, $limit = null)
+    {
+        $query = $this->createQueryBuilder('l')
+            ->where('l.userId = :person_id')
+            ->setParameter('person_id', $person->getId());
+
+        if ($limit > 0) {
+            $query->setMaxResults($limit);
+        }
+
+        return $query->getQuery()->getResult();
+    }
+
 }

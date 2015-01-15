@@ -43,8 +43,8 @@ class ActionLogger
         $user = $token->getUser();
         $auditUsername = $this->auditConfig->getCurrentUsername();
 
-        $log = $this->initLog($annotation, $request, $controllerAction,
-                              $auditUsername);
+        $log = $this->initLog($request, $annotation->getType(),
+                              $controllerAction, $auditUsername);
 
         if ($user instanceof PersonInterface) {
             $log->setUserId($user->getId());
@@ -90,8 +90,8 @@ class ActionLogger
      * @param string $auditUsername
      * @return ActionLog
      */
-    private function initLog(Loggable $annotation, Request $request,
-                             $controllerAction, $auditUsername)
+    private function initLog(Request $request, $actionType, $controllerAction,
+                             $auditUsername)
     {
         $controller = get_class($controllerAction[0]);
         $action = $controllerAction[1];
@@ -99,7 +99,7 @@ class ActionLogger
         $log = new ActionLog();
         $log->setController($controller);
         $log->setAction($action);
-        $log->setActionType($annotation->getType());
+        $log->setActionType($actionType);
         $log->setMethod($request->getMethod());
         $log->setUri($request->getUri());
         $log->setAuditUsername($auditUsername);
@@ -122,6 +122,19 @@ class ActionLogger
         $log->setAccessToken($token->getToken());
         $log->setClientId($accessToken->getClient()->getId());
         $log->setUserId($accessToken->getUser()->getId());
+    }
+
+    public function registerLogin(Request $request, PersonInterface $person, array $controllerAction)
+    {
+        $auditUsername = $this->auditConfig->getCurrentUsername();
+        $actionType = ActionLog::TYPE_LOGIN;
+
+        $log = $this->initLog($request, $actionType, $controllerAction,
+                              $auditUsername);
+        $log->setUserId($person->getId());
+
+        $this->em->persist($log);
+        $this->em->flush($log);
     }
 
 }

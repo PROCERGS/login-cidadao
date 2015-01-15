@@ -35,6 +35,7 @@ parameters:
 
     procergs_logincidadao.idcard.form.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\IdCardType
     procergs_logincidadao.security.helper.class: PROCERGS\LoginCidadao\CoreBundle\Helper\SecurityHelper
+    account.security_listener.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\SecurityListener
 
 services:
     procergs_lc.command.populate_database:
@@ -178,9 +179,9 @@ services:
 
     kernel.listener.logged_in_user_listener:
         class: %kernel.listener.logged_in_user_listener.class%
+        arguments: [ "@security.context", "@router", "@session", "@translator", "@doctrine.orm.entity_manager" ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
-        arguments: [ "@security.context", "@router", "@session", "@translator", "@doctrine.orm.entity_manager" ]
 
     kernel.listener.exceptions_listener:
         class: %kernel.listener.exceptions_listener.class%
@@ -311,3 +312,9 @@ services:
     lc.security.helper:
         class: %procergs_logincidadao.security.helper.class%
         arguments: [ @security.context ]
+
+    account.security_listener:
+        class: %account.security_listener.class%
+        arguments: [ @security.context, @session, @lc.action_logger ]
+        tags:
+            - { name: kernel.event_listener, event: security.interactive_login, method: onSecurityInteractiveLogin }
