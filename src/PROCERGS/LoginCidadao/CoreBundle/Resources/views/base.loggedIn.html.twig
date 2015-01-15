@@ -38,6 +38,12 @@
                             <span>{% trans %}Profile{% endtrans %}</span>
                         </a>
                     </li>
+                    <li class="profile glyph {{ app.request.attributes.get('_route') == 'lc_profile_badges' ? 'active' }}">
+                        <a href="{{ path('lc_profile_badges') }}" class="clearfix">
+                            <span>{{ 'Badges'|trans() }}</span>
+                            <i class="glyphicon glyphicon-certificate icon"></i>
+                        </a>
+                    </li>
                     <li class="profile glyph {{ (app.request.attributes.get('_route') == 'lc_documents' or app.request.attributes.get('_route') starts with 'lc_person_id_cards') ? 'active' }}">
                         <a href="{{ path('lc_documents') }}" class="clearfix">
                             <span>{% trans %}Documents{% endtrans %}</span>
@@ -74,6 +80,12 @@
                             <i class="glyphicon glyphicon-lock icon"></i>
                         </a>
                     </li>
+                    <li class="services glyph {{ app.request.attributes.get('_route') == 'lc_statistics' or app.request.attributes.get('_route') == 'lc_statistics_user_badge' or app.request.attributes.get('_route') == 'lc_statistics_user_region' or app.request.attributes.get('_route') == 'lc_statistics_user_city' or app.request.attributes.get('_route') == 'lc_statistics_user_services' ? 'active' }}">
+                        <a href="{{ path('lc_statistics') }}">
+                            <span>{{ 'statistics.list'|trans() }}</span>
+                            <i class="glyphicon glyphicon-stats icon"></i>
+                        </a>
+                    </li>
                     {% if app.user is not null and is_granted('ROLE_SUPER') %}
                         <li class="services glyph">
                             <a href="{{ path('lc_admin') }}" class="clearfix">
@@ -90,18 +102,6 @@
                             </a>
                         </li>
                     {% endif %}
-                    <li class="profile glyph {{ app.request.attributes.get('_route') == 'lc_profile_badges' ? 'active' }}">
-                        <a href="{{ path('lc_profile_badges') }}" class="clearfix">
-                            <span>{{ 'Badges'|trans() }}</span>
-                            <i class="glyphicon glyphicon-certificate icon"></i>
-                        </a>
-                    </li>
-                    <li class="services glyph {{ app.request.attributes.get('_route') == 'lc_statistics' or app.request.attributes.get('_route') == 'lc_statistics_user_badge' or app.request.attributes.get('_route') == 'lc_statistics_user_region' or app.request.attributes.get('_route') == 'lc_statistics_user_city' or app.request.attributes.get('_route') == 'lc_statistics_user_services' ? 'active' }}">
-                        <a href="{{ path('lc_statistics') }}">
-                            <span>{{ 'statistics.list'|trans() }}</span>
-                            <i class="glyphicon glyphicon-stats icon"></i>
-                        </a>
-                    </li>
                 </ul>
             </div>
         {% endblock sidebar %}
