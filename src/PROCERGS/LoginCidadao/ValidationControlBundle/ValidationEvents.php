@@ -40,4 +40,6 @@ final class ValidationEvents
      * PROCERGS\LoginCidadao\ValidationControlBundle\Event\IdCardValidateEvent
      */
     const ID_CARD_VALIDATE = 'validation.id_card.validate';
+    
+    const VALIDATION_ID_CARD_PERSIST = 'validation.idcard.persist';
 }

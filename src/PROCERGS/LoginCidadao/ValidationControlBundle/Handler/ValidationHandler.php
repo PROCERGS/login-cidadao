@@ -12,6 +12,8 @@ use PROCERGS\LoginCidadao\ValidationControlBundle\Validator\Constraints\IdCardVa
 use Symfony\Component\Validator\Constraint;
 use PROCERGS\LoginCidadao\ValidationControlBundle\Event\IdCardValidateEvent;
 use Symfony\Component\Validator\ExecutionContextInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormInterface;
 
 class ValidationHandler
 {
@@ -49,6 +51,12 @@ class ValidationHandler
     {
         $event = new IdCardValidateEvent($validator, $constraint, $idCard);
         $this->dispatcher->dispatch(ValidationEvents::ID_CARD_VALIDATE, $event);
+    }
+    
+    public function persistIdCard(FormInterface $form, $data)
+    {
+        $event = new FormEvent($form, $data);
+        $this->dispatcher->dispatch(ValidationEvents::VALIDATION_ID_CARD_PERSIST, $event);
     }
 
 }

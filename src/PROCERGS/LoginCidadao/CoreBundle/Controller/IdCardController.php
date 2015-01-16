@@ -52,8 +52,9 @@ class IdCardController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $em->persist($form->getData());
+            $validationHandler->persistIdCard($form, $request);
             $em->flush();
-
+            
             return $this->redirect($this->generateUrl('lc_documents'));
         }
 
