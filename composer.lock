@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e5b832f34ad843f028f1214299ceeb94",
+    "hash": "f08da472e1f6e4c65a082386c0b213e9",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2345,6 +2345,53 @@
             "time": "2015-01-14 17:48:06"
         },
         {
+            "name": "procergs/login-cidadao-igp-bundle",
+            "version": "dev-master",
+            "target-dir": "PROCERGS/LoginCidadao/IgpBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PROCERGS/login-cidadao-igp-bundle.git",
+                "reference": "3456e0b622694e52681cbc7bcdb0b925586c2bcc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-igp-bundle/zipball/3456e0b622694e52681cbc7bcdb0b925586c2bcc",
+                "reference": "3456e0b622694e52681cbc7bcdb0b925586c2bcc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "PROCERGS\\LoginCidadao\\IgpBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guilherme Donato",
+                    "email": "packagist@cadastro.dona.to"
+                },
+                {
+                    "name": "lordvacilaoerrocerto",
+                    "email": "lordvacilaoerrocerto@users.noreply.github.com"
+                }
+            ],
+            "description": "Login Cidadão's Badge and Validation Bundle",
+            "homepage": "https://github.com/PROCERGS/login-cidadao-igp-bundle",
+            "keywords": [
+                "badges",
+                "login-cidadao",
+                "validation"
+            ],
+            "time": "2015-01-16 16:03:56"
+        },
+        {
             "name": "psr/log",
             "version": "1.0.0",
             "source": {
@@ -3314,8 +3361,12 @@
             "time": "2014-05-16 12:34:51"
         }
     ],
-    "packages-dev": [],
-    "aliases": [],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
         "friendsofsymfony/user-bundle": 20,
@@ -3329,12 +3380,14 @@
         "nelmio/api-doc-bundle": 20,
         "jms/security-extra-bundle": 20,
         "procergs/login-cidadao-badges-bundle": 20,
+        "procergs/login-cidadao-igp-bundle": 20,
         "scheb/two-factor-bundle": 20
     },
     "prefer-stable": false,
-    "prefer-lowest": false,
     "platform": {
         "php": ">=5.3.3"
     },
-    "platform-dev": []
+    "platform-dev": [
+
+    ]
 }
