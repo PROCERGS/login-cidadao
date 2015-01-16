@@ -24,9 +24,6 @@
                       {% set w = (num * 100) / totalUsers %}
                       <div class="wrap clearfix">
                         <div>{{ (client ~ '.' ~ key ~ '.title') | trans }} - {{ k }}</div>
-                        <div class="col-sm-1 badge-count">
-                          <span class="label label-info">{{ num }}</span>
-                        </div>
                         <div class="col-sm-11 badge-progress">
                           <div class="progress">
                             <div class="progress-bar" role="progressbar" data-total="{{ totalUsers }}" aria-valuenow="{{ w|round }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ w|round(1, 'floor') }}%;">
@@ -34,12 +31,12 @@
                             </div>
                           </div>
                         </div>
+                        <div class="col-sm-1 badge-count">
+                          <span class="label label-info">{{ num }}</span>
+                        </div>
                       </div>
                     {% endfor %}
                   {% else %}
-                      <div class="col-sm-1 badge-count">
-                        <span class="label label-info">{{ item }}</span>
-                      </div>
                       <div class="col-sm-11 badge-progress">
                         <div class="progress">
                           {% set w = (item * 100) / totalUsers %}
@@ -47,6 +44,9 @@
                             {{ w|round(1, 'floor') }}%
                           </div>
                         </div>
+                      </div>
+                      <div class="col-sm-1 badge-count">
+                        <span class="label label-info">{{ item }}</span>
                       </div>
                   {% endif %}
                 </div>
