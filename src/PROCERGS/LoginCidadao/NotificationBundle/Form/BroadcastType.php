@@ -48,12 +48,14 @@ class BroadcastType extends AbstractType
                 'search_prop_label' => 'dev.broadcasts.receivers.filter'
             ),
             'required' => true,
+            'empty_data'  => null,
             'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
             'property' => 'fullNameOrUsername'
         );
         $builder->add('category', 'entity',
               array(
                   'required' => true,
+                  'empty_data'  => null,
                 'class' => 'PROCERGS\LoginCidadao\NotificationBundle\Entity\Category',
                 'property' => 'name',
                 'query_builder' => function (CategoryRepository $repository) use ($person, $clientId) {
@@ -74,7 +76,7 @@ class BroadcastType extends AbstractType
                 }
                 return $sql;
             };
-            $form->add('receivers', 'ajax_choice', $receiversConfig);        
+            $form->add('receivers', 'ajax_choice', $receiversConfig);
         });
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use (&$receiversConfig, &$person, &$clientId) {
             $entity = $event->getData();
