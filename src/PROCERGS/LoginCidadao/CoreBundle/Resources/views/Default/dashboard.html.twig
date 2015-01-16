@@ -46,7 +46,7 @@
             <div class="panel-body">
                {% if app.user.getAuthorizations|length > 0 %}
                {% for auth in app.user.getAuthorizations %}
-               <a href="{{ auth.client.siteUrl }}" title="{{ auth.client.name }}">
+               <a href="{{ auth.client.siteUrl }}" target="_blank" title="{{ auth.client.name }}">
                {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
                <img src="/{{ auth.client.getPictureWebPath }}" width="65" height="65" alt="" class="media-object service-img">
                {% else %}
