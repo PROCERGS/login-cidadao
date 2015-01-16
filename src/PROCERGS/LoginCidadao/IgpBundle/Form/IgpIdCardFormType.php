@@ -21,10 +21,9 @@ class IgpIdCardFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nomeMae', 'text', array(
+        $builder->add('nomeCI', 'text', array(
             'required' => true,
-            'label' => 'nomeMae',
-            'translation_domain' => 'IgpBundle',
+            'label' => 'nomeCI',
         ));
         $builder->add('dataEmissaoCI', 'birthday', array(
             'required' => true,
@@ -34,12 +33,10 @@ class IgpIdCardFormType extends AbstractType
                 'pattern' => '[0-9/]*'
             ),
             'label' => 'dataEmissaoCI',
-            'translation_domain' => 'IgpBundle'
         ));
-        $builder->add('nomeCI', 'text', array(
+        $builder->add('nomeMae', 'text', array(
             'required' => true,
-            'label' => 'nomeCI',
-            'translation_domain' => 'IgpBundle'
+            'label' => 'nomeMae',
         ));
     }
 

@@ -8,6 +8,8 @@ class IgpValidations
     const MESSAGE_LENGTH = 'The Id Card number must be 10 characters long.';
     const MESSAGE_INVALID = 'Invalid Id Card number.';
     const MESSAGE_WEBSERVICE_UNAVAILABLE = "It wasn't possible to validate your Id Card at this time. Please try again in a little while.";
+    const MESSAGE_VALUE_MISMATCH = 'The value does not match the value of the IGP';
+    const MESSAGE_IDCARD_PROBLEM = 'Id Card irregular situation';
 
     public static function checkIdCardNumber($number)
     {

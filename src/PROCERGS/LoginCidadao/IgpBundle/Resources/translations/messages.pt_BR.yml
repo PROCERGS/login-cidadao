@@ -1,6 +1,4 @@
-has_cpf.description: Medalha concedida a quem informou seu CPF.
-valid_email.description: Medalha concedida a quem confirmou seu endereço de email através do link enviado ao email de cadastro.
-nfg_access_lvl.description: Medalha concedida a quem tem sua conta da NFG vinculada ao Login Cidadão.
-voter_registration.description: Medalha concedida a quem informou seu Título de Eleitor.
-mother: 'mamae'
-value: 'fa'
+'nomeMae': 'Nome da mãe'
+'dataEmissaoCI': 'Data emissao'
+'nomeCI': 'Nome'
+'Oficial Id Card information': 'Preencha o formulário com os dados conforme consta na sua carteira de identidade'

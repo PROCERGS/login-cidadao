@@ -12,6 +12,8 @@ use PROCERGS\LoginCidadao\ValidationControlBundle\ValidationEvents;
 use PROCERGS\LoginCidadao\ValidationControlBundle\Event\IdCardValidateEvent;
 use PROCERGS\LoginCidadao\IgpBundle\Validator\IgpValidations;
 use PROCERGS\LoginCidadao\IgpBundle\Entity\IgpWs;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
 
 class ValidationSubscriber implements EventSubscriberInterface
 {
@@ -32,7 +34,9 @@ class ValidationSubscriber implements EventSubscriberInterface
      * @var IgpWs
      */
     protected $igpWs;
-
+    
+    protected $lastIgpWsResult;
+    
     public function __construct(TranslatorInterface $translator,
                                 EntityManager $em, IgpWs $igpWs)
     {
@@ -47,6 +51,7 @@ class ValidationSubscriber implements EventSubscriberInterface
             ValidationEvents::ID_CARD_FORM_PRE_SET_DATA => array('onInitializeForm'),
             ValidationEvents::ID_CARD_FORM_PRE_SUBMIT => array('onInitializeForm'),
             ValidationEvents::ID_CARD_VALIDATE => array('onValidate'),
+            ValidationEvents::VALIDATION_ID_CARD_PERSIST => array('onPersist'),
         );
     }
 
@@ -69,7 +74,7 @@ class ValidationSubscriber implements EventSubscriberInterface
         if ($iso6 == self::REQUIRED_ISO6) {
             $igpForm = $form->getForm();
             $igpForm->add('igp', 'lc_igpidcardformtype',
-                          array('mapped' => false));
+                          array('mapped' => false, 'label' => 'Oficial Id Card information'));
         }
     }
 
@@ -107,8 +112,48 @@ class ValidationSubscriber implements EventSubscriberInterface
             if ($res['cod_retorno'] != 1) {
                 $validatorContext->addViolationAt('value',
                                                   $res['mensagem_retorno']);
+            } else {
+                $this->lastIgpWsResult = $res;
+                $igpIdCards = $event->getValidatorContext()->getRoot()->get('igp')->getData();
+                if (mb_strtoupper($igpIdCards->getNomeMae()) !==  mb_strtoupper($res['nomeMae'])) {
+                    $validatorContext->addViolationAt('igp.nomeMae', IgpValidations::MESSAGE_VALUE_MISMATCH);
+                }
+                if ($igpIdCards->getDataEmissaoCI() != (\DateTime::createFromFormat('!d/m/Y', $res['dataEmissaoCI']))) {
+                    $validatorContext->addViolationAt('igp.dataEmissaoCI', IgpValidations::MESSAGE_VALUE_MISMATCH);
+                }
+                if (mb_strtoupper($igpIdCards->getNomeCI()) !== mb_strtoupper($res['nome'])) {
+                    $validatorContext->addViolationAt('igp.nomeCI', IgpValidations::MESSAGE_VALUE_MISMATCH);
+                }
+                if ($res['situacao_rg'] != 1) {
+                    $validatorContext->addViolationAt('igp', IgpValidations::MESSAGE_IDCARD_PROBLEM);
+                }
             }
         }
+    }
+    
+    public function onPersist(FormEvent $event)
+    {
+        if (null === $this->lastIgpWsResult) {
+            $this->igpWs->setRg($event->getData()->getValue());
+            $this->lastIgpWsResult = $this->igpWs->consultar();
+            if ($this->lastIgpWsResult === null) {
+                throw new \Exception($this->translator->trans(IgpValidations::MESSAGE_WEBSERVICE_UNAVAILABLE));
+            }
+        }
+        $igpIdCargs = $event->getForm()->get('igp')->getData();
+        $igpIdCargs->setIdCard($event->getForm()->getData());
+        $igpIdCargs->setId($this->lastIgpWsResult['ig']);
+        if (isset($this->lastIgpWsResult['nomeMae'])) {
+            $igpIdCargs->setNomeMae($this->lastIgpWsResult['nomeMae']);
+        }
+        $igpIdCargs->setNomeCi($this->lastIgpWsResult['nome']);
+        $igpIdCargs->setDataEmissaoCI(date_create_from_format('!d/m/Y', $this->lastIgpWsResult['dataEmissaoCI']));
+        $igpIdCargs->setRg($this->lastIgpWsResult['rg']);
+        if (isset($this->lastIgpWsResult['cpf'])) {
+            $igpIdCargs->setCpf($this->lastIgpWsResult['cpf']);
+        }
+        $igpIdCargs->setSituacaoRg($this->lastIgpWsResult['situacao_rg']);
+        $this->em->persist($igpIdCargs);        
     }
 
 }
