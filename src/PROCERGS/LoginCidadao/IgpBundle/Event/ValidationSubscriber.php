@@ -14,6 +14,7 @@ use PROCERGS\LoginCidadao\IgpBundle\Validator\IgpValidations;
 use PROCERGS\LoginCidadao\IgpBundle\Entity\IgpWs;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\Exception\OutOfBoundsException;
 
 class ValidationSubscriber implements EventSubscriberInterface
 {
@@ -61,20 +62,28 @@ class ValidationSubscriber implements EventSubscriberInterface
         if (!$data) {
             return;
         }
-        $iso6 = null;
+        $iso6 = $id = null;
         if ($data instanceof IdCardInterface) {
             if ($data->getState()) {
                 $iso6 = $data->getState()->getIso6();
             }
+            if ($data->getId()) {
+                $id = $data->getId();
+            }
         } else {
             $state = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:State')->find($data['state']);
             $iso6 = $state->getIso6();
+            if ($data['id']) {
+                $id = $data['id']; 
+            }
         }
 
         if ($iso6 == self::REQUIRED_ISO6) {
-            $igpForm = $form->getForm();
-            $igpForm->add('igp', 'lc_igpidcardformtype',
-                          array('mapped' => false, 'label' => 'Oficial Id Card information'));
+            if (null === $id) {
+                $igpForm = $form->getForm();
+                $igpForm->add('igp', 'lc_igpidcardformtype',
+                    array('mapped' => false, 'label' => 'Oficial Id Card information'));
+            }
         }
     }
 
@@ -102,7 +111,12 @@ class ValidationSubscriber implements EventSubscriberInterface
             $validatorContext->addViolationAt('value',
                                               IgpValidations::MESSAGE_INVALID);
         }
-
+        try {
+            $igpIdCards = $event->getValidatorContext()->getRoot()->get('igp')->getData();
+        } catch (OutOfBoundsException $e) {
+            $validatorContext->addViolation(IgpValidations::MESSAGE_IMUTABLE_VALID_IDCARD);
+            return;
+        }        
         $this->igpWs->setRg($rgNum);
         $res = $this->igpWs->consultar();
         if ($res === null) {
@@ -113,8 +127,7 @@ class ValidationSubscriber implements EventSubscriberInterface
                 $validatorContext->addViolationAt('value',
                                                   $res['mensagem_retorno']);
             } else {
-                $this->lastIgpWsResult = $res;
-                $igpIdCards = $event->getValidatorContext()->getRoot()->get('igp')->getData();
+                $this->lastIgpWsResult = $res;                
                 if (mb_strtoupper($igpIdCards->getNomeMae()) !==  mb_strtoupper($res['nomeMae'])) {
                     $validatorContext->addViolationAt('igp.nomeMae', IgpValidations::MESSAGE_VALUE_MISMATCH);
                 }

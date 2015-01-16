@@ -10,6 +10,7 @@ class IgpValidations
     const MESSAGE_WEBSERVICE_UNAVAILABLE = "It wasn't possible to validate your Id Card at this time. Please try again in a little while.";
     const MESSAGE_VALUE_MISMATCH = 'The value does not match the value of the IGP';
     const MESSAGE_IDCARD_PROBLEM = 'Id Card irregular situation';
+    const MESSAGE_IMUTABLE_VALID_IDCARD = "It is not possible to change a Id Card after validated";
 
     public static function checkIdCardNumber($number)
     {

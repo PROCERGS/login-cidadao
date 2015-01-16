@@ -3,3 +3,4 @@
 'It wasn''t possible to validate your Id Card at this time. Please try again in a little while.': 'Não foi possivel validar seu RG. Por favor tente novamente mais tarde'
 'The value does not match the value of the IGP': 'O valor informado não corresponde ao valor cadastro no orgão IGP'
 'Id Card irregular situation': 'Situação irregular do RG'
+'It is not possible to change a Id Card after validated': 'Não é possivel alterar um cartão de identidade depois de validado, todavia ainda é possivel exclui-lo'
