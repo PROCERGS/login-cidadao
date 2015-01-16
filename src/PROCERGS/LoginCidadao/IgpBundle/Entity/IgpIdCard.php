@@ -7,13 +7,11 @@ use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation as JMS;
-use PROCERGS\LoginCidadao\IgpBundle\Validator\Constraints\RG;
 
 /**
  * @ORM\Table(name="igp_id_card")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\IgpBundle\Entity\IgpIdCardRepository")
  * @ORM\HasLifecycleCallbacks
- * @RG
  */
 class IgpIdCard
 {

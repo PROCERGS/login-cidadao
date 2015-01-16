@@ -5,7 +5,7 @@ namespace PROCERGS\LoginCidadao\IgpBundle\Event;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Model\AbstractBadgesEventSubscriber;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Event\EvaluateBadgesEvent;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Event\ListBearersEvent;
-use PROCERGS\LoginCidadao\IgpBundle\Model\Badge;
+use PROCERGS\LoginCidadao\IgpBundle\Entity\Badge;
 use Symfony\Component\Translation\TranslatorInterface;
 use Doctrine\ORM\EntityManager;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
@@ -33,15 +33,15 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
 
     public function onBadgeEvaluate(EvaluateBadgesEvent $event)
     {
-        //die('as');
-        //$this->checkRg($event);
+        $this->checkRg($event);
     }
     
     protected function checkRg(EvaluateBadgesEvent $event)
     {
         $person = $event->getPerson();
-        if (is_numeric($person->getCpf()) && strlen($person->getNfgAccessToken()) > 0) {
-            $event->registerBadge($this->getBadge('has_cpf', true));
+        $count = $this->em->getRepository('PROCERGSLoginCidadaoIgpBundle:IgpIdCard')->getCountByPerson($person);
+        if ($count) {
+            $event->registerBadge($this->getBadge('valid_id_card_rs', true));
         }
     }
 
@@ -75,12 +75,7 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
 
     protected function count()
     {
-        return $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')
-                ->createQueryBuilder('p')
-                ->select('COUNT(p)')
-                ->andWhere('p.cpf IS NOT NULL')
-                ->andWhere('p.nfgAccessToken IS NOT NULL')
-                ->getQuery()->getSingleScalarResult();
+        return $this->em->getRepository('PROCERGSLoginCidadaoIgpBundle:IgpIdCard')->getCount();
     }
 
 }
