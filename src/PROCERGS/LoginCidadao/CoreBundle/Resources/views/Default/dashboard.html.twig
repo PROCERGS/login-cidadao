@@ -7,7 +7,7 @@
          <div class="panel panel-default">
             <div class="panel-heading">
                {% trans %}Profile{% endtrans %}
-               <a href="{{ path('fos_user_profile_edit') }}" class="btn btn-primary btn-xs btn-section pull-right" role="button">Editar</a>
+               <a href="{{ path('fos_user_profile_edit') }}" class="btn btn-primary btn-xs btn-section pull-right" role="button" title="{% trans %}more{% endtrans %}"><span class="glyphicon glyphicon-pencil"></span></a>
             </div>
             <div class="panel-body">
                <img src="{{ include("PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" class="profile-picture pull-left">
@@ -41,6 +41,7 @@
          <div class="panel panel-default">
             <div class="panel-heading">
                {% trans %}Services{% endtrans %}
+                <a href="{{ path('lc_authorization_list') }}" class="btn btn-primary btn-xs btn-section pull-right" role="button" title="{% trans %}more{% endtrans %}"><span class="glyphicon glyphicon-plus"></span></a>
             </div>
             <div class="panel-body">
                {% if app.user.getAuthorizations|length > 0 %}
@@ -86,6 +87,7 @@
          <div class="panel panel-default">
             <div class="panel-heading">
                {{ 'Badges' | trans }}
+               <a href="{{ path('lc_profile_badges') }}" class="btn btn-primary btn-xs btn-section pull-right" role="button" title="{% trans %}more{% endtrans %}"><span class="glyphicon glyphicon-plus"></span></a>
             </div>
             <div class="panel-body">
                {% if userBadges|length == 0 %}
