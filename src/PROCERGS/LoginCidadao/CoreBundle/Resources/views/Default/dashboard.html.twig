@@ -142,7 +142,7 @@
                   <li class="media">
                     <div class="media-left">
                       {% if log.client.getPictureWebPath is not null and log.client.getPictureWebPath != '' %}
-                      <img src="http://meu.rs.gov.br/uploads/client-pictures/77de68daecd823babbb58edb1c8e14d7106e83bb.png" width="35" alt="">
+                      <img src="/{{ log.client.getPictureWebPath }}" width="35" alt="">
                       {% else %}
                       <img src="//placehold.it/14x14" alt="">
                       {% endif %}
