@@ -405,7 +405,7 @@ body.no-scroll {
 }
 
 .client-details h3 {
-    margin: 0;
+    margin: 0 0 10px;
 }
 
 .client-details img {

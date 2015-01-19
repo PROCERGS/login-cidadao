@@ -54,6 +54,7 @@
     {% else %}
         <p class="alert alert-info app-status">{% trans %}This service is not available yet. Stay tuned for the launch date.{% endtrans %}</p>
     {% endif %}
+    <a href="{{ path('lc_authorization_list') }}" class="btn btn-default" role="button">{% trans %}Back{% endtrans %}</a>
     </div>
 
 </div>
