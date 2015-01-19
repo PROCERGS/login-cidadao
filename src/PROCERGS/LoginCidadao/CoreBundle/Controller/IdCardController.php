@@ -73,6 +73,7 @@ class IdCardController extends Controller
         $fragment = $request->query->has('fragment');
         $em = $this->getDoctrine()->getManager();
         $person = $this->getUser();
+        $validationHandler = $this->getValidationHandler();
 
         $idCards = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:IdCard');
         $idCard = $idCards->findPersonIdCard($person, $id);
@@ -81,8 +82,8 @@ class IdCardController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $newIdCard = $form->getData();
-            $em->persist($newIdCard);
+            $em->persist($form->getData());
+            $validationHandler->persistIdCard($form, $request);
             $em->flush();
             return $this->redirect($this->generateUrl('lc_documents'));
         }
