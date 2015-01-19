@@ -898,3 +898,11 @@ label + .glyphicon-pencil {
 #dashboard .notification {
   background: none repeat scroll 0 0 rgba(220, 240, 255, 0.9);
 }
+
+#dashboard .log-type {
+  margin-right: 5px;
+}
+
+#dashboard .log-about {
+  font-size: 11px;
+}

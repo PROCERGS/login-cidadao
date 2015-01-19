@@ -177,7 +177,7 @@ class DefaultController extends Controller
       $em = $this->getDoctrine()->getManager();
       $logRepo = $em->getRepository('PROCERGSLoginCidadaoAPIBundle:ActionLog');
       $logs['logins'] = $logRepo->findLoginsByPerson($this->getUser(), 3);
-      $logs['clients'] = $logRepo->getWithClientByPerson($this->getUser(), 3);
+      $logs['activity'] = $logRepo->getWithClientByPerson($this->getUser(), 3);
 
       // notifications
       $notificationHandler = $this->get('procergs.notification.handler');

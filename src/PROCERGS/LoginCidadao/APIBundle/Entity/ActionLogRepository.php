@@ -22,7 +22,8 @@ class ActionLogRepository extends EntityRepository
             ->innerJoin('PROCERGSOAuthBundle:Client', 'c', 'WITH',
                         'c.id = l.clientId')
             ->where('l.userId = :person_id')
-            ->setParameter('person_id', $person->getId());
+            ->setParameter('person_id', $person->getId())
+            ->orderBy('l.createdAt', 'DESC');
 
         if ($limit > 0) {
             $query->setMaxResults($limit);
@@ -53,7 +54,8 @@ class ActionLogRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('l')
             ->where('l.userId = :person_id')
-            ->setParameter('person_id', $person->getId());
+            ->setParameter('person_id', $person->getId())
+            ->orderBy('l.createdAt', 'DESC');
 
         if ($limit > 0) {
             $query->setMaxResults($limit);

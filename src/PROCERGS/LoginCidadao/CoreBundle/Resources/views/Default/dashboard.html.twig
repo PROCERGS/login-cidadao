@@ -37,7 +37,7 @@
 
    <div class="row">
       {# Active services #}
-      <div class="col-xs-12 col-md-6 services">
+      <div class="col-xs-12 services">
          <div class="panel panel-default">
             <div class="panel-heading">
                {% trans %}Services{% endtrans %}
@@ -58,24 +58,6 @@
                <p class="text-center">{% trans %}You don't have any active service.{% endtrans %}</p>
                <p class="text-center"><a href="">{{ 'Check the services available' | trans }}</a></p>
                {% endif %}
-            </div>
-         </div>
-      </div>
-      {# Logs #}
-      <div class="col-xs-12 col-md-6">
-         <div class="panel panel-default">
-            <div class="panel-heading">
-               {% trans %}Activity Log{% endtrans %}
-            </div>
-            <div class="panel-body">
-               <ul class="list-group">
-                  {% for log in logs.logins %}
-                  <li class="list-group-item">{{ log.actionType }} - {{ log.createdAt|date("d/m/Y H:i:s") }}</li>
-                  {% endfor %}
-                  {% for log in logs.clients %}
-                  <li class="list-group-item">{{ log.actionType }} - {{ log.createdAt|date("d/m/Y H:i:s") }}</li>
-                  {% endfor %}
-               </ul>
             </div>
          </div>
       </div>
@@ -120,6 +102,64 @@
                     </a>
                   {% endfor %}
                </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="row">
+     {# Logs #}
+      <div class="col-xs-12 col-md-6">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               {% trans %}Login Log{% endtrans %}
+            </div>
+            <div class="panel-body">
+               <ul class="list-group">
+                  {% if logs.logins|length == 0 %}
+                  <div class="alert alert-warning" role="alert">{% trans %}You don't have any login log.{% endtrans %}</div>
+                  {% endif %}
+                  {% for log in logs.logins %}
+                  <li class="list-group-item">
+                    {% trans with {'%ip%': log.ip ,'%date%': log.createdAt|date("d/m/y H:i")} %}Login by <span class="label label-info">%ip%</span> at <span class="label label-info">%date%</span>{% endtrans %}
+                  {% endfor %}
+               </ul>
+            </div>
+         </div>
+      </div>
+      {# Logs #}
+      <div class="col-xs-12 col-md-6">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               {% trans %}Activity Log{% endtrans %}
+            </div>
+            <div class="panel-body">
+               <ul class="media-list">
+                  {% if logs.activity|length == 0 %}
+                  <div class="alert alert-warning" role="alert">{% trans %}You don't have any activity log.{% endtrans %}</div>
+                  {% endif %}
+                  {% for log in logs.activity %}
+                  <li class="media">
+                    <div class="media-left">
+                      {% if log.client.getPictureWebPath is not null and log.client.getPictureWebPath != '' %}
+                      <img src="http://meu.rs.gov.br/uploads/client-pictures/77de68daecd823babbb58edb1c8e14d7106e83bb.png" width="35" alt="">
+                      {% else %}
+                      <img src="//placehold.it/14x14" alt="">
+                      {% endif %}
+                    </div>
+
+                    <div class="media-body">
+                      <h5 class="media-heading">{{ log.client.name }}</h5>
+
+                      {% if log.actionType == 'SELECT' %}
+                        <span class="log-about">{% trans with {'%date%': log.createdAt | date('log.date.format' | trans) } %}Information viewed at %date%{% endtrans %}</span>
+                      {% else %}
+                      <span class="log-about">{% trans with {'%date%': log.createdAt | date('log.date.format' | trans) } %}Information changed at %date%{% endtrans %}</span>
+                      {% endif %}
+                    </div>
+                  </li>
+                  {% endfor %}
+               </ul>
             </div>
          </div>
       </div>
