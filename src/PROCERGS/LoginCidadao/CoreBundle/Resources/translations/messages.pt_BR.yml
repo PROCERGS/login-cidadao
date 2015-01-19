@@ -691,10 +691,10 @@ You don't have any active service.: Você não tem nenhum serviço ativo.
 Check the services available: Conheça os serviços disponíveis
 Dashboard: 'Início'
 badges.list.title: 'O que são as medalhas?'
-badges.list.description: 'Medalhas são os indicadores de
+badges.list.description: 'Medalhas são os indicadores de validações que sua identidade virtual possui. Elas permitem que os demais sistemas integrados ao Login Cidadão possam melhorar a sua experiência ao utilizar os serviços ofertados.'
 Login Log: Registro de acesso
-'Login by <span class="label label-info">%ip%</span> at <span class="label label-info">%date%</span>': 'Acessador por <span class="label label-info">%ip%</span> em <span class="label label-info">%date%</span>'
+'Login by <span class="label label-info">%ip%</span> at <span class="label label-info">%date%</span>': 'Acessado por <span class="label label-info">%ip%</span> em <span class="label label-info">%date%</span>'
 log.date.format: 'd/m/Y'
-'Login by <span class="label label-info">%ip%</span> at <span class="label label-info">%date%</span>': 'Acessador por <span class="label label-info">%ip%</span> em <span class="label label-info">%date%</span>'
+'Login by <span class="label label-info">%ip%</span> at <span class="label label-info">%date%</span>': 'Acessado por <span class="label label-info">%ip%</span> em <span class="label label-info">%date%</span>'
 'Information viewed at %date%': 'Visualizou informações em %date%'
 'Information changed at %date%': 'Alterou informações em %date%'
