@@ -816,13 +816,11 @@ label + .glyphicon-pencil {
   background-color: #CCC;
   border-color: #000;
   color: #CCC;
-  opacity: 0.05;
+  opacity: 0.2;
 }
 
 .badges-list .locked .media-body {
   color: #CCC;
-  opacity: 0.1;
-  text-shadow: 1px 1px 7px #000;
 }
 
 .badges-list .badge-has_cpf {
