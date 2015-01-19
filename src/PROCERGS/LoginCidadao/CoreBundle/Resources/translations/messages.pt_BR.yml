@@ -690,3 +690,5 @@ Badges: Medalhas
 You don't have any active service.: Você não tem nenhum serviço ativo.
 Check the services available: Conheça os serviços disponíveis
 Dashboard: 'Início'
+badges.list.title: 'O que são as medalhas?'
+badges.list.description: 'Medalhas são os indicadores de validações que sua identidade virtual possui. Elas permitem que os demais sistemas integrados ao login cidadao possam melhorar a sua experiencia ao utilizar os serviços ofertados.'
