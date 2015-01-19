@@ -2351,12 +2351,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/login-cidadao-igp-bundle.git",
-                "reference": "e91aa499b723d02a59b589c1b1443310243f6bfb"
+                "reference": "9f318324eff1f6022e8290ce12aa622ed61bcd1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-igp-bundle/zipball/e91aa499b723d02a59b589c1b1443310243f6bfb",
-                "reference": "e91aa499b723d02a59b589c1b1443310243f6bfb",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-igp-bundle/zipball/9f318324eff1f6022e8290ce12aa622ed61bcd1f",
+                "reference": "9f318324eff1f6022e8290ce12aa622ed61bcd1f",
                 "shasum": ""
             },
             "require": {
@@ -2389,7 +2389,7 @@
                 "login-cidadao",
                 "validation"
             ],
-            "time": "2015-01-19 09:44:53"
+            "time": "2015-01-19 20:16:59"
         },
         {
             "name": "psr/log",
@@ -3361,12 +3361,8 @@
             "time": "2014-05-16 12:34:51"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "friendsofsymfony/user-bundle": 20,
@@ -3384,10 +3380,9 @@
         "scheb/two-factor-bundle": 20
     },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
         "php": ">=5.3.3"
     },
-    "platform-dev": [
-
-    ]
+    "platform-dev": []
 }
