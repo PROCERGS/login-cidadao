@@ -699,3 +699,4 @@ log.date.format: 'd/m/Y H:i:s'
 'Information viewed at %date%': 'Visualizou informações em %date%'
 'Information changed at %date%': 'Alterou informações em %date%'
 'Back to services': 'Voltar para os serviços'
+You don't have any activity log.: Você ainda não possui nenhum registro de atividade.
