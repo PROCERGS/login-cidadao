@@ -38,7 +38,7 @@ security:
             context: context_key
             fos_facebook:
                 app_url: ""
-                server_url: "http://lc.des.dona.to"
+                server_url: %facebook_app_this_url%
                 login_path: /login
                 check_path: /facebook/login_check
                 default_target_path: fos_user_profile_edit
@@ -58,7 +58,7 @@ security:
 
             fos_facebook:
                 app_url: ""
-                server_url: "http://lc.des.dona.to"
+                server_url: %facebook_app_this_url%
                 login_path: /login
                 check_path: /facebook/login_check
                 default_target_path: fos_user_profile_edit
