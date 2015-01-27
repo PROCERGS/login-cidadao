@@ -2351,12 +2351,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/login-cidadao-igp-bundle.git",
-                "reference": "9f318324eff1f6022e8290ce12aa622ed61bcd1f"
+                "reference": "d46a9b718cfdac1845d3e8e540c32ed79ed6e281"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-igp-bundle/zipball/9f318324eff1f6022e8290ce12aa622ed61bcd1f",
-                "reference": "9f318324eff1f6022e8290ce12aa622ed61bcd1f",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-igp-bundle/zipball/d46a9b718cfdac1845d3e8e540c32ed79ed6e281",
+                "reference": "d46a9b718cfdac1845d3e8e540c32ed79ed6e281",
                 "shasum": ""
             },
             "require": {
@@ -2389,7 +2389,7 @@
                 "login-cidadao",
                 "validation"
             ],
-            "time": "2015-01-19 20:16:59"
+            "time": "2015-01-27 20:29:29"
         },
         {
             "name": "psr/log",

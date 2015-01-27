@@ -870,9 +870,10 @@ label + .glyphicon-pencil {
 }
 
 #dashboard .profile-picture {
-  margin-bottom: 15px;
-  margin-right: 15px;
-  width: 200px;
+    margin-bottom: 15px;
+    margin-right: 15px;
+    max-width: 125px;
+    max-height: 125px;
 }
 
 #dashboard .service-img, #dashboard .badge-icon {
