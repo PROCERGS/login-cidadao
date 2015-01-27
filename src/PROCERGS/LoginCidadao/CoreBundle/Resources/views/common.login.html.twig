@@ -2,7 +2,7 @@
     <div id="login-box" class="lc-box">
         <h3 class="title text-center">{% trans %}Your login{% endtrans %}</h3>
 
-        {% for type, messages in app.session.flashbag.all() %}
+        {% for type, messages in app.session.flashbag.peekAll() %}
         {% for message in messages %}
         <div class="flash-{{ type }}">
           {{ message }}
@@ -11,12 +11,11 @@
         {% endfor %}
 
         {% trans_default_domain 'FOSUserBundle' %}
-
-        {{ form_start(form1, {'action' : path("fos_user_security_check"), 'attr' : {'role' : 'form'}}) }}
-        <div class="form-content">
-          <p style="margin-top:30px;">
+          <p style="margin-bottom: 0px; margin-left: 25px; margin-top: 30px;">
             {% trans with { '%link_start%': '<a id="register-request" href="javascript:void(0);" class="register-link toggle-lc-box"><strong>', '%link_end%': '</strong></a>' } %}Log in now %link_start%or create your account here!%link_end%{% endtrans %}
           </p>
+        {{ form_start(form1, {'action' : path("fos_user_security_check"), 'attr' : {'role' : 'form'}}) }}
+        <div class="form-content">
 
           <div class="form-group">
             {% if error is defined and error is not null %}

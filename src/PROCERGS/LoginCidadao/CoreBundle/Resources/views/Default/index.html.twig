@@ -18,6 +18,7 @@
     {{ include("PROCERGSLoginCidadaoCoreBundle::common.register.html.twig") }}
     {% set common_row_style = '' %}
     {{ include("PROCERGSLoginCidadaoCoreBundle::common.login.html.twig") }}
+    {% set oi = app.session.flashbag.clear() %}
 </div>
 {% endblock %}
 

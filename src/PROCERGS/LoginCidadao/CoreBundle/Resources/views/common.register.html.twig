@@ -2,15 +2,17 @@
   <div id="register-box" class="lc-box">
     <h3 class="title text-center">{% trans %}Create your account{% endtrans %}</h3>
 
-    <button type="button" class="btn btn-link btn-xs toggle-lc-box" id="btn-login-back">{% trans %}Back to login{% endtrans %}</button>
-
-    {% for type, messages in app.session.flashbag.all() %}
+	{% for type, messages in app.session.flashbag.peekAll() %}
     {% for message in messages %}
     <div class="flash-{{ type }}">
       {{ message }}
     </div>
     {% endfor %}
     {% endfor %}
+      <p style="margin-bottom: -3px; margin-left: 25px; margin-top: 30px;">
+		<button type="button" class="btn btn-link btn-xs toggle-lc-box"> {% trans %}Back to login{% endtrans %}</button>
+      </p>
+    
 
     {% trans_default_domain 'FOSUserBundle' %}
     {% if actionUrl is not defined %}
