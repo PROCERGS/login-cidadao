@@ -45,18 +45,20 @@
             </div>
             <div class="panel-body">
                {% if app.user.getAuthorizations|length > 0 %}
-               {% for auth in app.user.getAuthorizations %}
-               <a href="{{ auth.client.siteUrl }}" target="_blank" title="{{ auth.client.name }}">
-               {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
-               <img src="/{{ auth.client.getPictureWebPath }}" width="65" height="65" alt="" class="media-object service-img">
+                 {% for auth in app.user.getAuthorizations %}
+                    {% if auth.client.uid != defaultClientUid %}
+                      <a href="{{ auth.client.siteUrl }}" target="_blank" title="{{ auth.client.name }}">
+                      {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
+                        <img src="/{{ auth.client.getPictureWebPath }}" width="65" height="65" alt="" class="media-object service-img">
+                      {% else %}
+                        <img src="//placehold.it/65x65" alt="" class="service-img">
+                      {% endif %}
+                      </a>
+                    {% endif %}
+                 {% endfor %}
                {% else %}
-               <img src="//placehold.it/65x65" alt="" class="service-img">
-               {% endif %}
-               </a>
-               {% endfor %}
-               {% else %}
-               <p class="text-center">{% trans %}You don't have any active service.{% endtrans %}</p>
-               <p class="text-center"><a href="">{{ 'Check the services available' | trans }}</a></p>
+                 <p class="text-center">{% trans %}You don't have any active service.{% endtrans %}</p>
+                 <p class="text-center"><a href="">{{ 'Check the services available' | trans }}</a></p>
                {% endif %}
             </div>
          </div>

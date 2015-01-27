@@ -183,10 +183,13 @@ class DefaultController extends Controller
       $notificationHandler = $this->get('procergs.notification.handler');
       $notifications = $notificationHandler->getUnread($this->getUser());
 
+      $defaultClientUid = $this->container->getParameter('oauth_default_client.uid');
+
       return array('allBadges' => $badges,
                    'userBadges' => $userBadges,
                    'logs' => $logs,
-                   'notifications' => $notifications);
+                   'notifications' => $notifications,
+                   'defaultClientUid' => $defaultClientUid);
     }
 
 }

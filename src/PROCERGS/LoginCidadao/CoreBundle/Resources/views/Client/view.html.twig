@@ -10,16 +10,17 @@
       <div class="panel-body">
         <div class="media">
           <a class="pull-left" href="#">
-        {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
-            <img src="/{{ client.getPictureWebPath }}" alt="" class="media-object" width="100" height="100">
-        {% else %}
-            <img src="//placehold.it/220x220" alt="" class="media-object" width="100">
-        {% endif %}
+          {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
+              <img src="/{{ client.getPictureWebPath }}" alt="" class="media-object" width="100" height="100">
+          {% else %}
+              <img src="//placehold.it/220x220" alt="" class="media-object" width="100">
+          {% endif %}
           </a>
           <div class="media-body">
             <h3 class="media-heading">{{ client.name }}</h3>
             {{ client.description }}
-        </div>
+          </div>
+          <a href="{{ client.siteUrl }}" target="_blank" class="btn btn-link btn-sm pull-right"><span class="glyphicon glyphicon-link"></span> {% trans %}Go to service's page{%  endtrans %}</a>
           {% if user.hasAuthorization(client) %}
           <div class="permissions">
                 <p>{% trans %}This service uses the following data from your Login Citizen account{%  endtrans %}:</p>
@@ -54,7 +55,9 @@
     {% else %}
         <p class="alert alert-info app-status">{% trans %}This service is not available yet. Stay tuned for the launch date.{% endtrans %}</p>
     {% endif %}
-    <a href="{{ path('lc_authorization_list') }}" class="btn btn-default" role="button">{% trans %}Back{% endtrans %}</a>
+
+    <a href="{{ path('lc_authorization_list') }}" class="btn btn-link btn-sm pull-left" role="button">{% trans %}Back to services{% endtrans %}</a>
+
     </div>
 
 </div>
