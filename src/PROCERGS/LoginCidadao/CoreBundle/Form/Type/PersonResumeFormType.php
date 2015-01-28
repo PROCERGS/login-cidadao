@@ -74,15 +74,16 @@ class PersonResumeFormType extends CommonFormType
         $user = $this->getUser();
 
         $allRoles = $this->translateRoles($builder->getOption('available_roles'));
-
+        $securityHelper = $this->securityHelper;
+        $security = $this->security;
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
-                                   function (FormEvent $event) use ($user, &$allRoles) {
+                                   function (FormEvent $event) use ($user, &$allRoles, &$securityHelper, &$security) {
             $person = $event->getData();
             $form = PersonResumeFormType::populateCountryStateCity($person,
                                                                    $event->getForm());
 
             $roles = PersonResumeFormType::filterRoles($person, $user, $form,
-                                                       $allRoles);
+                                                       $allRoles, $securityHelper, $security);
         });
     }
 
@@ -91,7 +92,7 @@ class PersonResumeFormType extends CommonFormType
         return 'person_resume_form_type';
     }
 
-    private static function populateCountryStateCity(PersonInterface $person,
+    public static function populateCountryStateCity(PersonInterface $person,
                                                      FormInterface $form)
     {
         $country = $person->getCountry();
@@ -151,13 +152,13 @@ class PersonResumeFormType extends CommonFormType
         return $translated;
     }
 
-    private function filterRoles(PersonInterface $person,
+    public static function filterRoles(PersonInterface $person,
                                  PersonInterface $loggedUser,
-                                 FormInterface $form, array $roles)
+                                 FormInterface $form, array $roles, $securityHelper, $security)
     {
-        $loggedUserLevel = $this->securityHelper->getLoggedInUserLevel();
-        $targetPersonLevel = $this->securityHelper->getTargetPersonLevel($person);
-        $isLoggedUserSuperAdmin = $this->security->isGranted('ROLE_SUPER_ADMIN');
+        $loggedUserLevel = $securityHelper->getLoggedInUserLevel();
+        $targetPersonLevel = $securityHelper->getTargetPersonLevel($person);
+        $isLoggedUserSuperAdmin = $security->isGranted('ROLE_SUPER_ADMIN');
 
         $filteredRoles = array();
         foreach ($roles as $role => $name) {
@@ -166,7 +167,7 @@ class PersonResumeFormType extends CommonFormType
                 continue;
             }
 
-            if ($loggedUserLevel < $this->securityHelper->getRoleLevel($role)) {
+            if ($loggedUserLevel < $securityHelper->getRoleLevel($role)) {
                 continue;
             }
 
