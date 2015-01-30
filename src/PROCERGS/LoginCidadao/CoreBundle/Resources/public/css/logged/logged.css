@@ -373,6 +373,35 @@ body.no-scroll {
     display: none;
 }
 
+#profile-edit .file-upload input[type=file] {
+    display: none;
+}
+
+#profile-edit .file-upload .btn-upload,
+#profile-edit .file-upload .form-group,
+#profile-edit .file-upload .form-group .checkbox {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#profile-edit .file-upload .btn-facebook-profile-pic-preview {
+    padding: 4px;
+}
+
+#profile-edit .file-upload .facebook-profile-pic-preview {
+    max-height: 35.9px;
+}
+
+#profile-edit .file-upload .activity-desc {
+    margin-top: 5px;
+    font-size: 90%;
+}
+
+#profile-edit .file-upload .activity-desc .upload,
+#profile-edit .file-upload .activity-desc .facebook-pic {
+    display: none;
+}
+
 .applications .service:hover {
     background-color: #E2EFDE!important;
 }

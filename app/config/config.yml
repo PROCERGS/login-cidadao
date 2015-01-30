@@ -51,7 +51,7 @@ assetic:
           inputs:
               - 'bundles/procergslogincidadaocore/bootstrap/3.3.1/fonts/glyphicons-halflings-regular.woff'
           output: fonts/glyphicons-halflings-regular.woff
-      bootstrap_fonts_ttf:            
+      bootstrap_fonts_ttf:
           inputs:
               - 'bundles/procergslogincidadaocore/bootstrap/3.3.1/fonts/glyphicons-halflings-regular.ttf'
           output: fonts/glyphicons-halflings-regular.ttf
@@ -287,8 +287,7 @@ knp_gaufrette:
 vich_uploader:
     db_driver:  orm
     twig:       true
-    gaufrette:  true
-    storage:    vich_uploader.storage.gaufrette
+    storage:    gaufrette
     mappings:
         user_image:
             uri_prefix:         %uri_root%/uploads/profile-pictures

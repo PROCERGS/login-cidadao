@@ -31,9 +31,34 @@
             <div class="panel panel-info picture-upload-box" style="margin-bottom: 0">
                 <div class="panel-heading clearfix">
                     <div class="file-upload">
-                        <button type="button" class="btn btn-xs btn-success btn-upload">{{ 'Upload another picture' | trans }}</button>
-                        <span class="file-name"></span>
-                        {{ form_widget(form.image) }}
+                        <div class="buttons-toggle" data-toggle="buttons" role="group">
+                            {% set imageDeleteName = (form.image.delete is defined) ? form.image.delete.vars.full_name : 'img-button' %}
+                            {% if form.image.delete is defined %}
+                                {% do form.image.delete.setRendered %}
+                                {% if app.user.socialNetworksPicture is not null %}
+                                    <label class="btn btn-lg btn-info btn-facebook-profile-pic-preview" data-toggle="tooltip" data-placement="bottom" title="{{ 'Use your Facebook picture' | trans }}">
+                                        <input class="use-facebook" type="radio" name="{{ form.image.delete.vars.full_name }}" autocomplete="off"> <img class="facebook-profile-pic-preview" src="{{ app.user.socialNetworksPicture }}" >
+                                    </label>
+                                {% else %}
+                                    <label class="btn btn-lg btn-danger">
+                                        <input type="radio" name="{{ form.image.delete.vars.full_name }}" autocomplete="off">
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                    </label>
+                                {% endif %}
+                            {% endif %}
+
+                            <label class="btn btn-lg btn-success btn-upload" data-toggle="tooltip" data-placement="bottom" title="{{ 'Upload another picture' | trans }}">
+                                <input class="upload-picture" type="radio" name="{{ imageDeleteName }}" value="0">
+                                <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+                            </label>
+                        </div>
+
+                        <div class="activity-desc">
+                            <span class="upload">{{ 'Your profile picure will be changed to <strong></strong>' | trans | raw }}</span>
+                            <span class="facebook-pic">{{ 'Your Facebook profile picure will be used.' | trans }}</span>
+                        </div>
+
+                        {{ form_widget(form.image.file) }}
                         {{ form_errors(form.image) }}
                     </div>
                 </div>
@@ -198,6 +223,10 @@
 <script>
 
     $('.birthdate').mask('00/00/0000', {'translation': {0: {pattern: /[0-9*]/}}});
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
 
     var profileEdit = {};
     profileEdit.countryId = '#{{ form.country.vars.id }}';

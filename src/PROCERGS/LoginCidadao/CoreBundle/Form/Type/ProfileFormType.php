@@ -35,12 +35,16 @@ class ProfileFormType extends BaseType
                     'widget' => 'single_text',
                     'label' => 'form.birthdate',
                     'translation_domain' => 'FOSUserBundle',
-                    'attr' => array('pattern' => '[0-9/]*', 'class' => 'birthdate')
+                    'attr' => array('pattern' => '[0-9/]*', 'class' => 'form-control birthdate')
                     )
                 )
                 ->add('mobile', null,
                         array('required' => false, 'label' => 'form.mobile', 'translation_domain' => 'FOSUserBundle'))
-                ->add('image')
+                ->add('image', 'vich_file', array(
+                    'required'      => false,
+                    'allow_delete'  => true, // not mandatory, default is true
+                    'download_link' => true, // not mandatory, default is true
+                ))
                 ->add('country', 'entity',array(
                     'required' => false,
                     'class' => 'PROCERGSLoginCidadaoCoreBundle:Country',
