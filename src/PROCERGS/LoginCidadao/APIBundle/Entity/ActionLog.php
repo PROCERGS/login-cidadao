@@ -96,7 +96,7 @@ class ActionLog
     /**
      * @var string
      *
-     * @ORM\Column(name="uri", type="string", length=255)
+     * @ORM\Column(name="uri", type="text")
      */
     private $uri;
 
