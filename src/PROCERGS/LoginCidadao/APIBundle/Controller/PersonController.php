@@ -19,6 +19,8 @@ use PROCERGS\OAuthBundle\Model\ClientInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use PROCERGS\OAuthBundle\Model\ClientUser;
 use PROCERGS\LoginCidadao\APIBundle\Security\Audit\Annotation as Audit;
+use PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PersonController extends BaseController
 {
@@ -206,6 +208,60 @@ class PersonController extends BaseController
         }
         $em->flush();
         return $this->handleView($this->view($rowR));
+    }
+
+    /**
+     * Generates and returns a logout key for the user.
+     *
+     * @ApiDoc(
+     * resource = true,
+     * description = "Generates and returns a logout key for the user.",
+     * output = {
+     * "class"="PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey",
+     * "groups" = {"key"}
+     * },
+     * statusCodes = {
+     * 200 = "Returned when successful"
+     * }
+     * )
+     * @REST\Get("/person/{id}/logout-key")
+     * @REST\View(templateVar="logoutKey")
+     *
+     * @throws NotFoundHttpException
+     */
+    public function getLogoutKeyAction($id)
+    {
+        $token = $this->get('security.context')->getToken();
+        $accessToken = $this->getDoctrine()
+            ->getRepository('PROCERGSOAuthBundle:AccessToken')
+            ->findOneBy(array(
+            'token' => $token->getToken()
+        ));
+        $client = $accessToken->getClient();
+
+        $people = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+        $person = $people->find($id);
+
+        if (! $person->isAuthorizedClient($client, 'logout')) {
+            throw new AccessDeniedHttpException("Not authorized");
+        }
+
+        $logoutKey = new LogoutKey();
+        $logoutKey->setPerson($person);
+        $logoutKey->setClient($client);
+        $logoutKey->setKey($logoutKey->generateKey());
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($logoutKey);
+        $em->flush();
+
+        $result = array(
+            'key' => $logoutKey->getKey(),
+            'url' => $this->generateUrl('lc_logout_not_remembered_safe', array(
+                'key' => $logoutKey->getKey()
+            ), UrlGeneratorInterface::ABSOLUTE_URL)
+        );
+        return $result;
     }
 
 }

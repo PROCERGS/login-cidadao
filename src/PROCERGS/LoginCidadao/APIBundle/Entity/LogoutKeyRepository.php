@@ -12,7 +12,7 @@ class LogoutKeyRepository extends EntityRepository
         $date = new \DateTime("-5 minutes");
         $dateLimit = $date->format('Y-m-d H:i:s');
         return $this->getEntityManager()
-                ->createQuery('SELECT k FROM PROCERGSLoginCidadaoAPIBundle:LogoutKey k WHERE k.key = :key AND k.createdAt >= :dateLimit')
+                ->createQuery('SELECT k FROM PROCERGSLoginCidadaoAPIBundle:LogoutKey k WHERE k.logoutKey = :key AND k.createdAt >= :dateLimit')
                 ->setParameters(compact('dateLimit', 'key'))
                 ->getOneOrNullResult();
     }
