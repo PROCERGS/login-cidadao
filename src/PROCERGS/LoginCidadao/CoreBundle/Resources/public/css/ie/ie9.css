@@ -1,0 +1,7 @@
+/* Display labels */
+label.sr-only {
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    position: relative !important;
+}

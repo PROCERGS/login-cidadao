@@ -46,3 +46,11 @@ form .input-error {
 #applications {
     width: 50%
 }
+
+/* Display labels */
+label.sr-only {
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    position: relative !important;
+}
