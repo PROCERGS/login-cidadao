@@ -75,3 +75,4 @@ parameters:
     oauth_default_client.uid: login-cidadao
     # Notification's categories IDs
     notifications_categories_alert.uid: login-cidadao-alert
+    postalcode_search_link: 'http://m.correios.com.br/movel/buscaCep.do'
