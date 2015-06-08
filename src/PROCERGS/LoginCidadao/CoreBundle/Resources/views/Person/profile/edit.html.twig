@@ -71,15 +71,25 @@
                 {{ form_row(form.country) }}
                 <div class="form-group">
                     {{ form_label(form.state) }}
-                    {{ form_widget(form.state, {'attr': {'class': 'form-control'}}) }}
-                    {{ form_widget(form.ufsteppe, {'attr': {'class': 'form-control', 'style': 'display: none;'}}) }}
+                    {% if form.state.vars.choices|length >= 1 %}
+	                    {{ form_widget(form.state, {'attr': {'class': 'form-control'}}) }}
+	                    {{ form_widget(form.ufsteppe, {'attr': {'class': 'form-control', 'style': 'display: none;'}}) }}
+                    {% else %}
+	                    {{ form_widget(form.state, {'attr': {'class': 'form-control', 'style': 'display: none;'}}) }}
+	                    {{ form_widget(form.ufsteppe, {'attr': {'class': 'form-control'}}) }}
+                    {% endif %}
                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                     {{ form_errors(form.state) }}
                 </div>
                 <div class="form-group">
                     {{ form_label(form.city) }}
-                    {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
-                    {{ form_widget(form.citysteppe, {'attr': {'class': 'form-control', 'style': 'display: none;'}}) }}
+                    {% if form.city.vars.choices|length >= 1 %}
+	                    {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
+	                    {{ form_widget(form.citysteppe, {'attr': {'class': 'form-control', 'style': 'display: none;'}}) }}
+                    {% else %}
+	                    {{ form_widget(form.city, {'attr': {'class': 'form-control', 'style': 'display: none;'}}) }}
+	                    {{ form_widget(form.citysteppe, {'attr': {'class': 'form-control'}}) }}
+                    {% endif %}
                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                     {{ form_errors(form.city) }}
                 </div>
