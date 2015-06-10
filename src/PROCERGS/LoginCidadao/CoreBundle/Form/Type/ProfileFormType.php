@@ -71,7 +71,7 @@ class ProfileFormType extends BaseType
                         ->orderBy('u.name', 'ASC');
                     },
                     'label' => 'Nationality'
-                        ));                
+                        ));
                 $builder->add('ufsteppe', 'text', array("required"=> false, "mapped"=>false));
                 $builder->add('citysteppe', 'text', array("required"=> false, "mapped"=>false));
                 $builder->add('ufpreferred', 'hidden', array("data" => $country->getId(),"required"=> false, "mapped"=>false));
@@ -129,9 +129,8 @@ class ProfileFormType extends BaseType
                                 'city' => ($country instanceof Country && $state instanceof State && $city instanceof City) ? $city : null
                             );
                             return $er->createQueryBuilder('c')
-                                ->where('c.reviewed = :reviewed')
-                                ->andWhere('c.state = :state')
-                                ->orWhere('c = :city')
+                                ->where('c.reviewed = :reviewed and c.state = :state')
+                                ->orWhere('c = :city and c.state = :state')
                                 ->setParameters($params)
                                 ->orderBy('c.name', 'ASC');
                         },
@@ -173,9 +172,8 @@ class ProfileFormType extends BaseType
                                 'cityId' => isset($data['city']) ? $data['city'] : null
                             );
                             return $er->createQueryBuilder('c')
-                                        ->where('c.reviewed = :reviewed')
-                                        ->andWhere('c.state = :state')
-                                        ->orWhere('c.id = :cityId')
+                                        ->where('c.reviewed = :reviewed and c.state = :state')
+                                        ->orWhere('c.id = :cityId and c.state = :state')
                                         ->setParameters($params)
                                         ->orderBy('c.name', 'ASC');
                         }

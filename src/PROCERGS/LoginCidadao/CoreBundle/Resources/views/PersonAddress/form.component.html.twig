@@ -22,6 +22,7 @@
         <div class="form-group">
             {{ form_label(form.postalCode) }}
             {{ form_widget(form.postalCode, {'attr': {'placeholder': 'ex: DE24 8SG' | trans} }) }}
+            <span class="extra">{% trans %}Don't know your postal code?{% endtrans %}<a target='blank' href="{{ postalcode_search_link }}">{{ 'Search it!' | trans }}</a></span>            
             {{ form_errors(form.postalCode) }}
         </div>
         <div class="form-group">

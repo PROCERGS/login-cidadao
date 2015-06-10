@@ -59,7 +59,7 @@ class IdCardType extends AbstractType
         $builder->add('value', 'text',
                       array(
             'required' => true,
-            'label' => 'Idcard value'
+            'label' => 'Idcard value',
         ));
 
         $dispatcher = $this->dispatcher;

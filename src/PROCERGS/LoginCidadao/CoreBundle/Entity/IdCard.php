@@ -62,6 +62,10 @@ class IdCard implements IdCardInterface
      * @JMS\Groups({"id_cards"})
      * @Assert\Length(min=1,max="20")
      * @ORM\Column(name="value",type="string", length=20)
+     * @Assert\Regex(
+     *     pattern="/^[A-Za-z0-9]+$/",
+     *     message="This field accepts only letters and numbers"
+     * )
      */
     protected $value;
 
