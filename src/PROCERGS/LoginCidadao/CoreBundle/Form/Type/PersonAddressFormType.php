@@ -186,9 +186,7 @@ class PersonAddressFormType extends AbstractType
         });
         
             $builder
-            ->add('postalCode')
-            ->add('save', 'submit',
-                  array('attr' => array('class' => 'btn btn-success')));
+            ->add('postalCode');
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

@@ -30,7 +30,6 @@ use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
  */
 class Person extends BaseUser implements PersonInterface, TwoFactorInterface, BackupCodeInterface
 {
-
     /**
      * @JMS\Expose
      * @JMS\Groups({"public_profile"})
@@ -385,7 +384,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @ORM\Column(name="google_authenticator_secret", type="string", nullable=true)
      */
     private $googleAuthenticatorSecret;
-    
+
     /**
      * @JMS\Expose
      * @JMS\Groups({"nationality"})
@@ -404,14 +403,14 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function __construct()
     {
         parent::__construct();
-        $this->authorizations = new ArrayCollection();
-        $this->notificationTokens = new ArrayCollection();
+        $this->authorizations      = new ArrayCollection();
+        $this->notificationTokens  = new ArrayCollection();
         $this->notificationOptions = new ArrayCollection();
-        $this->notifications = new ArrayCollection();
-        $this->clients = new ArrayCollection();
-        $this->logoutKeys = new ArrayCollection();
-        $this->addresses = new ArrayCollection();
-        $this->backupCodes = new ArrayCollection();
+        $this->notifications       = new ArrayCollection();
+        $this->clients             = new ArrayCollection();
+        $this->logoutKeys          = new ArrayCollection();
+        $this->addresses           = new ArrayCollection();
+        $this->backupCodes         = new ArrayCollection();
     }
 
     public function getEmail()
@@ -467,7 +466,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     public function setMobile($mobile)
     {
-        $mobile = preg_replace('/[^0-9]/', '', $mobile);
+        $mobile       = preg_replace('/[^0-9]/', '', $mobile);
         $this->mobile = $mobile;
     }
 
@@ -486,6 +485,9 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         return $this;
     }
 
+    /**
+     * @return Authorization[]
+     */
     public function getAuthorizations()
     {
         return $this->authorizations;
@@ -507,6 +509,22 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
             }
         }
         return false;
+    }
+
+    /**
+     * @param Client $client
+     * @return array
+     */
+    public function getClientScope(Client $client)
+    {
+        $authorizations = $this->getAuthorizations();
+        foreach ($authorizations as $auth) {
+            $c = $auth->getClient();
+            if ($c->getId() == $client->getId()) {
+                return $auth->getScope();
+            }
+        }
+        return null;
     }
 
     /**
@@ -601,7 +619,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      */
     public function getFullName()
     {
-        return $this->getFirstname() . ' ' . $this->getSurname();
+        return $this->getFirstname().' '.$this->getSurname();
     }
 
     /**
@@ -612,13 +630,14 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      */
     public function getDataValid()
     {
-        $terms['cpf'] = (is_numeric($this->cpf) && strlen($this->nfgAccessToken));
+        $terms['cpf']   = (is_numeric($this->cpf) && strlen($this->nfgAccessToken));
         $terms['email'] = is_null($this->getConfirmationToken());
         if ($this->getNfgProfile()) {
-            $terms['nfg_access_lvl'] = $this->getNfgProfile()->getAccessLvl();
-            $terms['voter_registration'] = $this->getNfgProfile()->getVoterRegistrationSit() > 0 ? true : false;
+            $terms['nfg_access_lvl']     = $this->getNfgProfile()->getAccessLvl();
+            $terms['voter_registration'] = $this->getNfgProfile()->getVoterRegistrationSit()
+                > 0 ? true : false;
         } else {
-            $terms['nfg_access_lvl'] = 0;
+            $terms['nfg_access_lvl']     = 0;
             $terms['voter_registration'] = false;
         }
         return $terms;
@@ -763,7 +782,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     public function checkEmailPending()
     {
-        $confirmToken = $this->getConfirmationToken();
+        $confirmToken  = $this->getConfirmationToken();
         $notifications = $this->getNotifications();
 
         if (is_null($confirmToken)) {
@@ -830,7 +849,8 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     public function isCpfExpired()
     {
-        return ($this->getCpfExpiration() instanceof \DateTime && $this->getCpfExpiration() <= new \DateTime());
+        return ($this->getCpfExpiration() instanceof \DateTime && $this->getCpfExpiration()
+            <= new \DateTime());
     }
 
     public function hasPassword()
@@ -866,7 +886,8 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @param \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var
      * @return City
      */
-    public function setNfgProfile(\PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var = null)
+    public function setNfgProfile(\PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var
+    = null)
     {
         $this->nfgProfile = $var;
 
@@ -1008,7 +1029,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         // User's profile picture
         if ($this->hasLocalProfilePicture()) {
             $picturePath = $imageHelper->asset($this, 'image');
-            $pictureUrl = $request->getUriForPath($picturePath);
+            $pictureUrl  = $request->getUriForPath($picturePath);
             if ($isDev) {
                 $pictureUrl = str_replace('/app_dev.php', '', $pictureUrl);
             }
@@ -1018,7 +1039,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         if (is_null($pictureUrl)) {
             // TODO: fix this and make it comply to DRY
             $picturePath = $templateHelper->getUrl('bundles/procergslogincidadaocore/images/userav.png');
-            $pictureUrl = $request->getUriForPath($picturePath);
+            $pictureUrl  = $request->getUriForPath($picturePath);
             if ($isDev) {
                 $pictureUrl = str_replace('/app_dev.php', '', $pictureUrl);
             }
@@ -1233,17 +1254,15 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         }
         return false;
     }
-    
+
     public function setNationality($var)
     {
         $this->nationality = $var;
         return $this;
     }
-    
+
     public function getNationality()
     {
         return $this->nationality;
     }
-    
-
 }

@@ -1,0 +1,40 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block title %}PROCERGSLoginCidadaoCoreBundle:DynamicForm:edit{% endblock %}
+
+{% block content %}
+    <div id="profile-edit" class="content profile-edit">
+        <h1 class="visible-xs">{{ 'Complete Missing Fields' | trans }}</h1>
+
+        {{ form_start(form) }}
+
+        {% if form.person is defined %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{ 'Personal Details' | trans }}</h2>
+                </div>
+                <div class="panel-body">
+                    {{ form_row(form.person) }}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if form.idcard is defined %}
+            {{ include("PROCERGSLoginCidadaoCoreBundle:IdCard:form.component.html.twig", {'form': form.idcard, 'hide_footer': true }) }}
+        {% endif %}
+
+        {% if form.address is defined %}
+            {{ include("PROCERGSLoginCidadaoCoreBundle:PersonAddress:form.component.html.twig", {'form': form.address, 'embeded': true, 'hide_footer': true, 'name_as_normal_field': true }) }}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-sm-10" style="margin-top: 5px;">
+                {{ 'After completing your information, click the following button to continue:' | trans }}
+            </div>
+            <div class="col-sm-2 text-right">
+                <input type="submit" value="{{ 'Send'|trans }}" class="btn btn-success">
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
