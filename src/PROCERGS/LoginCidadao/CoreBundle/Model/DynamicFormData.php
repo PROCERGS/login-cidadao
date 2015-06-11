@@ -20,6 +20,12 @@ class DynamicFormData
     /** @var string */
     protected $redirectUrl;
 
+    /** @var string */
+    protected $scope;
+
+    /** @var string */
+    protected $state;
+
     /**
      * @return Person
      */
@@ -82,6 +88,28 @@ class DynamicFormData
     public function setRedirectUrl($redirectUrl)
     {
         $this->redirectUrl = $redirectUrl;
+        return $this;
+    }
+
+    public function getScope()
+    {
+        return $this->scope;
+    }
+
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    public function setScope($scope)
+    {
+        $this->scope = $scope;
+        return $this;
+    }
+
+    public function setState($state)
+    {
+        $this->state = $state;
         return $this;
     }
 }

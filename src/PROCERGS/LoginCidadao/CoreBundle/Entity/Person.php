@@ -1163,6 +1163,9 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         return $this->logoutKeys;
     }
 
+    /**
+     * @return ArrayCollection
+     */
     public function getAddresses()
     {
         return $this->addresses;

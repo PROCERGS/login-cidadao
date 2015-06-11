@@ -23,9 +23,9 @@ class IdCardController extends Controller
      */
     public function listAction(Request $request)
     {
-        $idCards = $this->getIdCards();
+        $idCards     = $this->getIdCards();
         $deleteForms = $this->getDeleteForms($idCards);
-        $states = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:State')->findStateByPreferredCountry($this->container->getParameter('lc_idcard_country_acronym'));
+        $states      = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:State')->findStateByPreferredCountry($this->container->getParameter('lc_idcard_country_acronym'));
         return compact('idCards', 'deleteForms', 'states');
     }
 
@@ -38,14 +38,14 @@ class IdCardController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $stateId = $request->get('state');
-        $state = null;
+        $state   = null;
         if ($stateId > 0) {
             $state = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:State')
                 ->find($stateId);
         }
 
         $validationHandler = $this->getValidationHandler();
-        $idCard = $validationHandler->instantiateIdCard($state);
+        $idCard            = $validationHandler->instantiateIdCard($state);
 
         $idCard->setPerson($this->getPerson());
         $form = $this->createForm('lc_idcard_form', $idCard);
@@ -54,7 +54,7 @@ class IdCardController extends Controller
             $em->persist($form->getData());
             $validationHandler->persistIdCard($form, $request);
             $em->flush();
-            
+
             return $this->redirect($this->generateUrl('lc_documents'));
         }
 
@@ -70,13 +70,13 @@ class IdCardController extends Controller
      */
     public function editAction(Request $request, $id)
     {
-        $fragment = $request->query->has('fragment');
-        $em = $this->getDoctrine()->getManager();
-        $person = $this->getUser();
+        $fragment          = $request->query->has('fragment');
+        $em                = $this->getDoctrine()->getManager();
+        $person            = $this->getUser();
         $validationHandler = $this->getValidationHandler();
 
         $idCards = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:IdCard');
-        $idCard = $idCards->findPersonIdCard($person, $id);
+        $idCard  = $idCards->findPersonIdCard($person, $id);
 
         $form = $this->createForm('lc_idcard_form', $idCard);
         $form->handleRequest($request);
@@ -103,14 +103,14 @@ class IdCardController extends Controller
     public function deleteAction(Request $request, $id)
     {
         $translator = $this->get('translator');
-        $form = $this->createForm(new RemoveIdCardFormType());
+        $form       = $this->createForm(new RemoveIdCardFormType());
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $person = $this->getUser();
-            $em = $this->getDoctrine()->getManager();
+            $person  = $this->getUser();
+            $em      = $this->getDoctrine()->getManager();
             $idCards = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:IdCard');
-            $idCard = $idCards->find($id);
+            $idCard  = $idCards->find($id);
 
             try {
                 if ($idCard->getPerson()->getId() !== $person->getId()) {
@@ -120,18 +120,33 @@ class IdCardController extends Controller
                 $em->flush();
             } catch (AccessDeniedException $e) {
                 $this->get('session')->getFlashBag()->add('error',
-                                                          $translator->trans("Access Denied."));
+                    $translator->trans("Access Denied."));
             } catch (\Exception $e) {
                 $this->get('session')->getFlashBag()->add('error',
-                                                          $translator->trans("Couldn't remove this ID Card."));
+                    $translator->trans("Couldn't remove this ID Card."));
                 $this->get('session')->getFlashBag()->add('error',
-                                                          $e->getMessage());
+                    $e->getMessage());
             }
         } else {
             $this->get('session')->getFlashBag()->add('error',
-                                                      $translator->trans("Couldn't remove this ID Card."));
+                $translator->trans("Couldn't remove this ID Card."));
         }
         return $this->redirect($this->generateUrl('lc_documents'));
+    }
+
+    /**
+     * @Route("/person/idcards/{id}/add-new-button", name="lc_person_id_cards_add_new_button")
+     * @Template
+     */
+    public function addNewButtonAction()
+    {
+        $preferredCountry = $this->container->getParameter('lc_idcard_country_acronym');
+
+        $states = $this->getDoctrine()
+            ->getRepository('PROCERGSLoginCidadaoCoreBundle:State')
+            ->findStateByPreferredCountry($preferredCountry);
+
+        return compact('states');
     }
 
     protected function getDeleteForms($idCards = null)
@@ -143,9 +158,9 @@ class IdCardController extends Controller
 
         if (is_array($idCards) || $idCards instanceof Collection) {
             foreach ($idCards as $idCard) {
-                $data = array('id_card_id' => $idCard->getId());
+                $data                          = array('id_card_id' => $idCard->getId());
                 $deleteForms[$idCard->getId()] = $this->createForm(new RemoveIdCardFormType(),
-                                                                   $data)->createView();
+                        $data)->createView();
             }
         }
         return $deleteForms;
@@ -162,7 +177,7 @@ class IdCardController extends Controller
     protected function getIdCards()
     {
         $person = $this->getPerson();
-        $repo = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:IdCard');
+        $repo   = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:IdCard');
         return $repo->findByPersonOrderByStateAcronym($person);
     }
 
@@ -173,5 +188,4 @@ class IdCardController extends Controller
     {
         return $this->get('validation.handler');
     }
-
 }

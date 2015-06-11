@@ -6,8 +6,9 @@
     <div id="profile-edit" class="content profile-edit">
         <h1 class="visible-xs">{{ 'Complete Missing Fields' | trans }}</h1>
 
-        {{ form_start(form) }}
+        <p>{% trans with { '%client%': client.name } %}<strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.{% endtrans %}</p>
 
+        {{ form_start(form) }}
         {% if form.person is defined %}
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -20,7 +21,9 @@
         {% endif %}
 
         {% if form.idcard is defined %}
-            {{ include("PROCERGSLoginCidadaoCoreBundle:IdCard:form.component.html.twig", {'form': form.idcard, 'hide_footer': true }) }}
+            <div class="id-card-forms-placeholder">
+                {{ include("PROCERGSLoginCidadaoCoreBundle:IdCard:form.component.html.twig", {'form': form.idcard, 'hide_footer': true }) }}
+            </div>
         {% endif %}
 
         {% if form.address is defined %}
@@ -38,3 +41,23 @@
         {{ form_end(form) }}
     </div>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/dynamic-form/idCard.js'
+               '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/jquery-scrollto.js' filter='uglifyjs2' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script>
+        var dynamicForm = {
+            'idCard': {
+                'loadedFormStateId': '{{ state.id }}',
+                'formUrl': '{{ path('client_dynamic_form', { 'scope': 'id_cards', 'clientId': client.id }) }}',
+                'unlockState': function () {
+                    $('#form_idcard_state').removeAttr('disabled').removeAttr('readonly');
+                }
+            }
+        };
+    </script>
+{% endblock javascripts %}
