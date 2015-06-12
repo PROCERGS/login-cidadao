@@ -76,9 +76,7 @@ class DynamicFormController extends Controller
 
         $form = $formBuilder->createView();
 
-        $state = $this->getStateFromRequest($request);
-
-        return compact('client', 'scope', 'authorizedScope', 'form', 'state');
+        return compact('client', 'scope', 'authorizedScope', 'form');
     }
 
     /**
