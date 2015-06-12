@@ -10,7 +10,7 @@ Esta página descreverá o que cada escopo faz. A seguir está a lista de todos 
  * [ email ](#email)
  * [ city ](#city)
  * [ country ](#country)
- * [ uf ](#uf)
+ * [ state ](#state)
  * [ addresses ](#addresses)
  * ~~[ adress_number ](#adress_number)~~ (**deprecated**)
  * ~~[ adress_complement ](#adress_complement)~~ (**deprecated**)
@@ -18,7 +18,7 @@ Esta página descreverá o que cada escopo faz. A seguir está a lista de todos 
  * [ id_cards ](#id_cards)
  * [ get_all_notifications ](#get_all_notifications)
  * [ notifications ](#notifications)
- * [ cep ](#cep)
+ * ~~[ cep ](#cep)~~ (**deprecated**)
  * [ mobile ](#mobile)
  * [ logout ](#logout)
 
@@ -149,7 +149,7 @@ Permite acesso de leitura do país de uma pessoa. Assim como em `city`, o objeto
 }
 ```
 
-## <a name="uf"></a> uf
+## <a name="state"></a> state
 
 Permite acesso de leitura do estado de uma pessoa. Assim como em `city` e `country`, o objeto completo será retornado como no exemplo:
 
@@ -274,7 +274,7 @@ Permite acesso de leitura e **escrite** às notificações do Client OAuth.
 
 Esse escopo não altera o conteúdo do objeto Person.
 
-## <a name="cep"></a> cep (deprecated)
+## <a name="cep"></a> ~~cep~~ (deprecated)
 
 **NÃO USE**
 
