@@ -52,7 +52,7 @@
     <script>
         var dynamicForm = {
             'idCard': {
-                'loadedFormStateId': '{{ state.id }}',
+                'loadedFormStateId': '{{ form.vars.data.state ? form.vars.data.state.id : 0 }}',
                 'formUrl': '{{ path('client_dynamic_form', { 'scope': 'id_cards', 'clientId': client.id }) }}',
                 'unlockState': function () {
                     $('#form_idcard_state').removeAttr('disabled').removeAttr('readonly');
@@ -61,3 +61,13 @@
         };
     </script>
 {% endblock javascripts %}
+
+{% block content_columns %}col-sm-10 col-sm-offset-2{% endblock %}
+{% block sidebar %}{% endblock %}
+{% block notificationExtreme %}
+    {{ include("PROCERGSLoginCidadaoCoreBundle::notification_extreme.html.twig", { columns: block('content_columns') } ) }}
+{% endblock %}
+{% block footer %}
+    {% set columns = block('content_columns') %}
+    {{ include("PROCERGSLoginCidadaoCoreBundle::footer.html.twig") }}
+{% endblock %}
