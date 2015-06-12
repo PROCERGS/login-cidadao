@@ -10,7 +10,7 @@ This page will describe what scope does what. Bellow there's a list of the avail
  * [ email ](#email)
  * [ city ](#city)
  * [ country ](#country)
- * [ uf ](#uf)
+ * [ state ](#state)
  * [ addresses ](#addresses)
  * ~~[ adress_number ](#adress_number)~~ (**deprecated**)
  * ~~[ adress_complement ](#adress_complement)~~ (**deprecated**)
@@ -18,7 +18,7 @@ This page will describe what scope does what. Bellow there's a list of the avail
  * [ id_cards ](#id_cards)
  * [ get_all_notifications ](#get_all_notifications)
  * [ notifications ](#notifications)
- * [ cep ](#cep)
+ * ~~[ cep ](#cep)~~ (**deprecated**)
  * [ mobile ](#mobile)
  * [ logout ](#logout)
 
@@ -149,7 +149,7 @@ Allows read access to a person's country. The full object will be returned as sh
 }
 ```
 
-## <a name="uf"></a> uf
+## <a name="state"></a> state
 
 Allows read access to a person's state. The full object will be returned as shown in the example:
 
@@ -274,7 +274,7 @@ Allows read and **write** access to the OAuth Client's own notifications.
 
 This won't change the contents of the Person object.
 
-## <a name="cep"></a> cep (deprecated)
+## <a name="cep"></a> ~~cep~~ (deprecated)
 
 **DO NOT USE**
 
