@@ -455,3 +455,28 @@ form .has-feedback .sr-only ~ .form-control-feedback {
 #oauth-box .buttons.row {
     margin-top: 20px;
 }
+
+.login-box {
+    background-color: #F1F1F1;
+    padding: 25px 20px;
+    box-shadow: 4px 4px 8px #D0D0D0;
+    border: 1px solid #D0D0D0;
+}
+
+.login-box h1 {
+    margin: 0 0 15px;
+}
+.login-box h2 {
+    font-size: 24px;
+}
+
+@media (max-width: 992px) {
+    .login-box .login {
+        margin-top: 20px;
+    }
+}
+@media (min-width: 992px) {
+    .login-box .registration {
+        /*border-right: 1px solid #c0c0c0;*/
+    }
+}
