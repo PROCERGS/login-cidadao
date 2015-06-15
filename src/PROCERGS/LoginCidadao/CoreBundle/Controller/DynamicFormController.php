@@ -108,7 +108,16 @@ class DynamicFormController extends Controller
                 $this->addPersonField($formBuilder, $person, 'mobile');
                 break;
             case 'birthdate':
-                $this->addPersonField($formBuilder, $person, 'birthdate', 'text');
+                $this->addPersonField($formBuilder, $person, 'birthdate',
+                    'birthday',
+                    array(
+                    'required' => false,
+                    'format' => 'dd/MM/yyyy',
+                    'widget' => 'single_text',
+                    'label' => 'form.birthdate',
+                    'translation_domain' => 'FOSUserBundle',
+                    'attr' => array('pattern' => '[0-9/]*', 'class' => 'form-control birthdate')
+                ));
                 break;
             case 'city':
                 $this->addPersonField($formBuilder, $person, 'city',
@@ -176,10 +185,10 @@ class DynamicFormController extends Controller
     }
 
     private function addPersonField(FormInterface $formBuilder, Person $person,
-                                    $field, $type = null)
+                                    $field, $type = null, $options = array())
     {
         $personForm = $this->getPersonForm($formBuilder, $person);
-        $personForm->add($field, $type);
+        $personForm->add($field, $type, $options);
     }
 
     /**

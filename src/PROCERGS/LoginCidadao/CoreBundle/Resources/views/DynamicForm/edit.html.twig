@@ -44,12 +44,17 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {% javascripts '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/dynamic-form/idCard.js'
-               '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/jquery-scrollto.js' filter='uglifyjs2' %}
+    {% javascripts  '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/dynamic-form/idCard.js'
+                    '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/jquery-scrollto.js'
+                    '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js' filter='uglifyjs2' %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
     <script>
+        $(document).ready(function () {
+            $('.birthdate').mask('00/00/0000', {'translation': {0: {pattern: /[0-9*]/}}});
+        });
+
         var dynamicForm = {
             'idCard': {
                 'loadedFormStateId': '{{ form.vars.data.state ? form.vars.data.state.id : 0 }}',
