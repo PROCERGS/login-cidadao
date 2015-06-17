@@ -1268,4 +1268,13 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     {
         return $this->nationality;
     }
+
+    public function getPlaceOfBirth()
+    {
+        return array(
+            'country' => $this->getCountry(),
+            'state' => $this->getState(),
+            'city' => $this->getCity()
+        );
+    }
 }
