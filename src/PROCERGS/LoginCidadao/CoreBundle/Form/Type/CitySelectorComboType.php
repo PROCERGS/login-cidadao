@@ -27,10 +27,14 @@ class CitySelectorComboType extends AbstractType
     /** @var CountryManager */
     private $countryManager;
 
+    /** @var string */
+    private $level;
+
     public function __construct(CountryManager $countryManager,
                                 StateManager $stateManager,
-                                CityManager $cityManager)
+                                CityManager $cityManager, $level = 'city')
     {
+        $this->level          = $level;
         $this->cityManager    = $cityManager;
         $this->stateManager   = $stateManager;
         $this->countryManager = $countryManager;
@@ -52,8 +56,12 @@ class CitySelectorComboType extends AbstractType
 
         $stateManager = $this->stateManager;
         $cityManager  = $this->cityManager;
+        $level        = $this->level;
 
-        $refreshState = function (FormInterface $form, $countryId = null) use ($options, $stateManager) {
+        $refreshState = function (FormInterface $form, $countryId = null) use ($options, $stateManager, $level) {
+            if ($level === 'country') {
+                return;
+            }
             $form->add('state', 'entity',
                 array(
                 'class' => $stateManager->getClass(),
@@ -67,7 +75,10 @@ class CitySelectorComboType extends AbstractType
             ));
         };
 
-        $refreshCity = function (FormInterface $form, $stateId = null) use ($options, $cityManager) {
+        $refreshCity = function (FormInterface $form, $stateId = null) use ($options, $cityManager, $level) {
+            if ($level === 'country' || $level === 'state') {
+                return;
+            }
             $form->add('city', 'entity',
                 array(
                 'class' => $cityManager->getClass(),
@@ -82,7 +93,7 @@ class CitySelectorComboType extends AbstractType
         };
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) use ($refreshState, $refreshCity) {
+            function (FormEvent $event) use ($refreshState, $refreshCity, $level) {
             $form = $event->getForm();
             $data = $event->getData();
 
@@ -94,24 +105,25 @@ class CitySelectorComboType extends AbstractType
                     !== null) {
                     $countryId = $data->getCountry()->getId();
                 }
-                if ($data->getState() !== null && $data->getState()->getId() !== null) {
+                if ($level !== 'country' && $data->getState() !== null && $data->getState()->getId()
+                    !== null) {
                     $stateId = $data->getState()->getId();
                 }
             }
 
-            $refreshState($form, $countryId);
-            $refreshCity($form, $stateId);
+            $refreshState($form, $countryId, $level);
+            $refreshCity($form, $stateId, $level);
         });
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) use ($refreshState, $refreshCity) {
+            function (FormEvent $event) use ($refreshState, $refreshCity, $level) {
             $form = $event->getForm();
             $data = $event->getData();
 
             if (isset($data['country']) && !empty($data['country'])) {
                 $refreshState($form, $data['country']);
             }
-            if (isset($data['state']) && !empty($data['state'])) {
+            if ($level !== 'country' && isset($data['state']) && !empty($data['state'])) {
                 $refreshCity($form, $data['state']);
             }
         });
