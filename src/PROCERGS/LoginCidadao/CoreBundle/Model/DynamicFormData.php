@@ -27,6 +27,11 @@ class DynamicFormData
     protected $state;
 
     /**
+     * @var SelectData
+     */
+    protected $placeOfBirth;
+
+    /**
      * @return Person
      */
     public function getPerson()
@@ -110,6 +115,18 @@ class DynamicFormData
     public function setState($state)
     {
         $this->state = $state;
+        return $this;
+    }
+
+    /** @return SelectData */
+    public function getPlaceOfBirth()
+    {
+        return $this->placeOfBirth;
+    }
+
+    public function setPlaceOfBirth(SelectData $placeOfBirth)
+    {
+        $this->placeOfBirth = $placeOfBirth;
         return $this;
     }
 }

@@ -311,3 +311,21 @@ services:
         arguments: [ @security.context, @session, @lc.action_logger ]
         tags:
             - { name: kernel.event_listener, event: security.interactive_login, method: onSecurityInteractiveLogin }
+
+    lc.country_manager:
+        class: PROCERGS\LoginCidadao\CoreBundle\Model\Manager\CountryManager
+        arguments:
+            - @doctrine.orm.entity_manager
+            - PROCERGS\LoginCidadao\CoreBundle\Entity\Country
+
+    lc.state_manager:
+        class: PROCERGS\LoginCidadao\CoreBundle\Model\Manager\StateManager
+        arguments:
+            - @doctrine.orm.entity_manager
+            - PROCERGS\LoginCidadao\CoreBundle\Entity\State
+
+    lc.city_manager:
+        class: PROCERGS\LoginCidadao\CoreBundle\Model\Manager\CityManager
+        arguments:
+            - @doctrine.orm.entity_manager
+            - PROCERGS\LoginCidadao\CoreBundle\Entity\City

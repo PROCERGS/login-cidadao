@@ -9,13 +9,20 @@
         <p>{% trans with { '%client%': client.name } %}<strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.{% endtrans %}</p>
 
         {{ form_start(form) }}
-        {% if form.person is defined %}
+        {{ form_errors(form) }}
+        {% if form.person is defined or form.placeOfBirth is defined %}
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h2 class="panel-title">{{ 'Personal Details' | trans }}</h2>
                 </div>
                 <div class="panel-body">
-                    {{ form_row(form.person) }}
+                    {% if form.person is defined %}
+                        {{ form_row(form.person) }}
+                    {% endif %}
+
+                    {% if form.placeOfBirth is defined %}
+                        {{ form_row(form.placeOfBirth) }}
+                    {% endif %}
                 </div>
             </div>
         {% endif %}

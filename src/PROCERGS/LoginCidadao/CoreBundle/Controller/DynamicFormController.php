@@ -24,6 +24,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Form\Type\StateSelectorComboType;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\CountrySelectorComboType;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\PlaceOfBirthType;
 use PROCERGS\LoginCidadao\ValidationControlBundle\Handler\ValidationHandler;
+use PROCERGS\LoginCidadao\CoreBundle\Model\SelectData;
 
 class DynamicFormController extends Controller
 {
@@ -46,10 +47,14 @@ class DynamicFormController extends Controller
 
         $scope = explode(' ', $request->get('scope', null));
 
+        $placeOfBirth = new SelectData();
+        $placeOfBirth->getFromPerson($person);
+
         $data = new DynamicFormData();
         $data->setPerson($person)
             ->setRedirectUrl($request->get('redirect_url', null))
-            ->setScope($request->get('scope', null));
+            ->setScope($request->get('scope', null))
+            ->setPlaceOfBirth($placeOfBirth);
 
         $formBuilder = $this->createFormBuilder($data,
             array('cascade_validation' => true));
@@ -59,12 +64,18 @@ class DynamicFormController extends Controller
         $formBuilder->add('redirect_url', 'hidden')
             ->add('scope', 'hidden');
 
-        $formBuilder->getForm()->handleRequest($request);
-        if ($formBuilder->getForm()->isValid()) {
-            $em      = $this->getDoctrine()->getManager();
-            $person  = $formBuilder->getData()->getPerson();
-            $address = $formBuilder->getData()->getAddress();
-            $idCard  = $formBuilder->getData()->getIdCard();
+        $form = $formBuilder->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $em           = $this->getDoctrine()->getManager();
+            $person       = $formBuilder->getData()->getPerson();
+            $address      = $formBuilder->getData()->getAddress();
+            $idCard       = $formBuilder->getData()->getIdCard();
+            $placeOfBirth = $formBuilder->getData()->getPlaceOfBirth();
+
+            if ($placeOfBirth instanceof SelectData) {
+                $placeOfBirth->toPerson($person);
+            }
 
             $userManager = $this->get('fos_user.user_manager');
             $userManager->updateUser($person);
@@ -85,7 +96,7 @@ class DynamicFormController extends Controller
             //return $this->redirect($formBuilder->getData()->getRedirectUrl());
         }
 
-        $form = $formBuilder->getForm()->createView();
+        $form = $form->createView();
 
         return compact('client', 'scope', 'authorizedScope', 'form');
     }
@@ -100,36 +111,41 @@ class DynamicFormController extends Controller
         $state   = $this->getState($request);
         $city    = $this->getCity($request);
 
-        $person = $this->getUser();
+        $locationData = new \PROCERGS\LoginCidadao\CoreBundle\Model\SelectData();
+        $person       = $this->getUser();
+
         if ($city instanceof City) {
-            $person->setCity($city)
+            $locationData->setCity($city)
                 ->setState($city->getState())
                 ->setCountry($city->getState()->getCountry());
         } elseif ($state instanceof State) {
-            $person->setCity(null)
+            $locationData->setCity(null)
                 ->setState($state)
                 ->setCountry($state->getCountry());
         } elseif ($country instanceof Country) {
-            $person->setCity(null)
+            $locationData->setCity(null)
                 ->setState(null)
                 ->setCountry($country);
         }
 
         $level = $request->get('level');
         $data  = new DynamicFormData();
-        $data->setPerson($person);
+        $data->setPlaceOfBirth($locationData);
 
         $formBuilder = $this->createFormBuilder($data,
             array('cascade_validation' => true));
-        switch ($level) {
-            case self::LOCATION_FORM_LEVEL_CITY:
-                $this->addCityField($formBuilder, $person);
-            case self::LOCATION_FORM_LEVEL_STATE:
-                $this->addStateField($formBuilder, $person);
-            case self::LOCATION_FORM_LEVEL_COUNTRY:
-                $this->addCountryField($formBuilder, $person);
-                break;
-        };
+        $this->addCityField($formBuilder, $person);
+        /*
+          switch ($level) {
+          case self::LOCATION_FORM_LEVEL_CITY:
+          $this->addCityField($formBuilder, $person);
+          case self::LOCATION_FORM_LEVEL_STATE:
+          $this->addStateField($formBuilder, $person);
+          case self::LOCATION_FORM_LEVEL_COUNTRY:
+          $this->addCountryField($formBuilder, $person);
+          break;
+          };
+         */
 
         return array('form' => $formBuilder->getForm()->createView());
     }
@@ -177,18 +193,18 @@ class DynamicFormController extends Controller
                 ));
                 break;
             case 'city':
-                //$this->addCityField($formBuilder, $person);
+                $this->addCityField($formBuilder, $person);
                 $placeOfBirthLevel = 'city';
-                $this->addPlaceOfBirth($formBuilder, $person, $placeOfBirthLevel);
+                //$this->addPlaceOfBirth($formBuilder, $person, $placeOfBirthLevel);
                 break;
             case 'state':
                 //$this->addStateField($formBuilder, $person);
                 $placeOfBirthLevel = 'state';
-                $this->addPlaceOfBirth($formBuilder, $person, $placeOfBirthLevel);
+                //$this->addPlaceOfBirth($formBuilder, $person, $placeOfBirthLevel);
                 break;
             case 'country':
                 $placeOfBirthLevel = 'country';
-                $this->addPlaceOfBirth($formBuilder, $person, $placeOfBirthLevel);
+                //$this->addPlaceOfBirth($formBuilder, $person, $placeOfBirthLevel);
                 break;
             case 'addresses.new':
                 $this->addAddresses($formBuilder, $person, true);
@@ -286,7 +302,15 @@ class DynamicFormController extends Controller
     private function addCityField(FormBuilderInterface $formBuilder,
                                   Person $person)
     {
-        $field = new CitySelectorComboType($person->getState());
+        $countryManager = $this->get('lc.country_manager');
+        $stateManager   = $this->get('lc.state_manager');
+        $cityManager    = $this->get('lc.city_manager');
+
+        $field = new CitySelectorComboType($countryManager, $stateManager,
+            $cityManager);
+
+        $formBuilder->add('placeOfBirth', $field);
+        return;
 
         $this->addPersonField($formBuilder, $person, 'city', $field);
     }
@@ -313,7 +337,10 @@ class DynamicFormController extends Controller
         $this->addPersonField($formBuilder, $person, 'country', 'entity',
             array(
             'class' => 'PROCERGSLoginCidadaoCoreBundle:Country',
-            'property' => 'name'
+            'property' => 'name',
+            'attr' => array(
+                'class' => 'form-control location-select country-select'
+            )
         ));
         $controller = $this;
         $formBuilder->addEventListener(FormEvents::PRE_SET_DATA,
@@ -322,13 +349,27 @@ class DynamicFormController extends Controller
             //$form   = $event->getForm()->get('person');
             $person = $event->getData()->getPerson();
             $states = $person->getCountry()->getStates();
+            $cities = $person->getState() ? $person->getState()->getCities() : array();
 
             $form->add('state', 'entity',
                 array(
                 'class' => 'PROCERGSLoginCidadaoCoreBundle:State',
                 'empty_value' => '',
                 'property' => 'name',
-                'choices' => $states
+                'choices' => $states,
+                'attr' => array(
+                    'class' => 'form-control location-select state-select'
+                )
+            ));
+            $form->add('city', 'entity',
+                array(
+                'class' => 'PROCERGSLoginCidadaoCoreBundle:City',
+                'empty_value' => '',
+                'property' => 'name',
+                'choices' => $cities,
+                'attr' => array(
+                    'class' => 'form-control location-select city-select'
+                )
             ));
             return;
 
@@ -344,6 +385,32 @@ class DynamicFormController extends Controller
             //$form = $event->getForm();
             $form    = $this->getPersonForm($formBuilder, $person);
 
+            $country = $pobData['country'];
+            $state   = $pobData['state'];
+            $states  = $country->getStates();
+            $cities  = $state ? $state->getCities() : array();
+
+            $form->add('state', 'entity',
+                array(
+                'class' => 'PROCERGSLoginCidadaoCoreBundle:State',
+                'empty_value' => '',
+                'property' => 'name',
+                'choices' => $states,
+                'attr' => array(
+                    'class' => 'form-control location-select state-select'
+                )
+            ));
+            $form->add('city', 'entity',
+                array(
+                'class' => 'PROCERGSLoginCidadaoCoreBundle:City',
+                'empty_value' => '',
+                'property' => 'name',
+                'choices' => $cities,
+                'attr' => array(
+                    'class' => 'form-control location-select city-select'
+                )
+            ));
+            return;
             $form->add('country', new CountrySelectorComboType());
             $form->add('state', new StateSelectorComboType($pobData['country']));
             $form->add('city', new CitySelectorComboType($pobData['state']));

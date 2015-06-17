@@ -54,6 +54,7 @@ class PlaceOfBirthType extends AbstractType
 
         $resolver->setDefaults(array(
             //'data_class' => 'PROCERGS\LoginCidadao\CoreBundle\Entity\Person'
+            'property_path' => false
         ));
     }
 
