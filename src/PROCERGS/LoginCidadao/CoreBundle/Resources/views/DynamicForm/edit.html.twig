@@ -77,7 +77,7 @@
     </script>
 {% endblock javascripts %}
 
-{% block content_columns %}col-sm-10 col-sm-offset-2{% endblock %}
+{% block content_columns %}container{% endblock %}
 {% block sidebar %}{% endblock %}
 {% block notificationExtreme %}
     {{ include("PROCERGSLoginCidadaoCoreBundle::notification_extreme.html.twig", { columns: block('content_columns') } ) }}
