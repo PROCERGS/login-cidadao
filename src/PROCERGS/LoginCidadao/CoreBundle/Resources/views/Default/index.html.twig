@@ -4,127 +4,149 @@
     {% set form1 = lc_getForm() %}
     {% set form = lc_getFormFactory() %}
 
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2 login-box">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
-                    <h2 class="hidden-xs">{% trans %}One account. The entire Government.{% endtrans %}</h2>
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col-md-6 registration hidden-xs">
-                    {% trans_default_domain 'FOSUserBundle' %}
-                    <h1>{{ 'form.register.call_to_action' | trans }}</h1>
-                    {% if actionUrl is not defined %}
-                        {% set actionUrl = 'fos_user_registration_register' %}
-                    {% endif%}
-                    {{ form_start(form, {'action': path(actionUrl), 'attr': {'role':'form', 'class':'fos_user_registration_register clearfix'}}) }}
-                    <div class="form-content">
-                        {{ form_errors(form) }}
-                        {% if form.firstName is defined %}
-                            <div class="form-group">
-                                {{ form_label(form.firstName, 'form.firstName' | trans) }}
-                                {{ form_widget(form.firstName, {'attr': {'class': 'form-control', 'placeholder' : 'form.firstName.example' }}) }}
-                                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                                {{ form_errors(form.firstName) }}
-                            </div>
-                        {% endif %}
+    <div class="row lc-main-title">
+        <div class="col-12 text-center">
+            <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
+            <h2 class="hidden-xs">{% trans %}One account. The entire Government.{% endtrans %}</h2>
+        </div>
+    </div>
 
-                        {% if form.surname is defined %}
-                            <div class="form-group">
-                                {{ form_label(form.surname, 'form.surname' | trans) }}
-                                {{ form_widget(form.surname, {'attr': {'class': 'form-control', 'placeholder' : 'form.surname.example' }}) }}
-                                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                                {{ form_errors(form.surname) }}
-                            </div>
-                        {% endif %}
 
+    <div class="container lc-box-group">
+
+        <div class="row">
+            <div class="col-md-5">
+                <div class="box box-register">
+
+                {% trans_default_domain 'FOSUserBundle' %}
+                    <h1 class="title">{{ 'form.register.call_to_action' | trans }}</h1>
+
+                {% if actionUrl is not defined %}
+                    {% set actionUrl = 'fos_user_registration_register' %}
+                {% endif%}
+
+                {{ form_start(form, {'action': path(actionUrl), 'attr': {'role':'form', 'class':'fos_user_registration_register clearfix'}}) }}
+
+                {% for type, messages in app.session.flashbag.peekAll() %}
+                    {% for message in messages %}
+                        <div class="flash-{{ type }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
+                <div class="form-content">
+                    {{ form_errors(form) }}
+                    {% if form.firstName is defined %}
                         <div class="form-group">
-                            {{ form_label(form.email, 'form.email' | trans) }}
-                            {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder' : 'form.email.example' }}) }}
+                            {{ form_label(form.firstName, 'form.firstName' | trans) }}
+                            {{ form_widget(form.firstName, {'attr': {'class': 'form-control', 'placeholder' : 'form.firstName.example' }}) }}
                             <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                            {{ form_errors(form.email) }}
+                            {{ form_errors(form.firstName) }}
                         </div>
+                    {% endif %}
 
+                    {% if form.surname is defined %}
                         <div class="form-group">
-                            {{ form_label(form.plainPassword, 'form.plainPassword' | trans) }}
-                            {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'placeholder' : 'form.plainPassword.example' }}) }}
-                            {{ form_errors(form.plainPassword) }}
+                            {{ form_label(form.surname, 'form.surname' | trans) }}
+                            {{ form_widget(form.surname, {'attr': {'class': 'form-control', 'placeholder' : 'form.surname.example' }}) }}
+                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                            {{ form_errors(form.surname) }}
                         </div>
+                    {% endif %}
 
-                        <div class="form-group">
-                            {{ form_label(form.mobile, 'form.phone' | trans) }}
-                            {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'placeholder' : ('form.phone.example' | trans) }}) }}
-                            {{ form_errors(form.mobile) }}
-                        </div>
-
-                        <p class='terms'>{% trans with { '%linkTerms%': path("lc_privacy")} %}By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.{% endtrans %}</p>
-
-                        <button class="btn btn-block btn-success" type="submit">{{ 'registration.submit'|trans }}</button>
+                    <div class="form-group">
+                        {{ form_label(form.email, 'form.email' | trans) }}
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder' : 'form.email.example' }}) }}
+                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        {{ form_errors(form.email) }}
                     </div>
-                    {{ form_end(form) }}
+
+                    <div class="form-group">
+                        {{ form_label(form.plainPassword, 'form.plainPassword' | trans) }}
+                        {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'placeholder' : 'form.plainPassword.example' }}) }}
+                        {{ form_errors(form.plainPassword) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(form.mobile, 'form.phone' | trans) }}
+                        {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'placeholder' : ('form.phone.example' | trans) }}) }}
+                        {{ form_errors(form.mobile) }}
+                    </div>
+
+                    <p class='terms'>{% trans with { '%linkTerms%': path("lc_privacy")} %}By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.{% endtrans %}</p>
+
+                    <button class="btn btn-block btn-success" type="submit">{{ 'registration.submit'|trans }}</button>
                 </div>
-                <div class="col-md-6 login">
-                    {% trans_default_domain 'FOSUserBundle' %}
-                    <h1>{{ 'form.login.call_to_action' | trans }}</h1>
-                    {{ form_start(form1, {'action' : path("fos_user_security_check"), 'attr' : {'role' : 'form'}}) }}
-                    <div class="form-content">
-
-                        {% if error is defined and error is not null %}
-                            <div class="form-group">
-                                <div class="input-error alert-danger">
-                                    <ul>
-                                        <li>{{ error.messageKey|trans({}, 'security') }}</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        {% endif %}
-
-                        <div class="form-group">
-                            {{ form_label(form1.username) }}
-                            {{ form_errors(form1.username) }}
-                            {{ form_widget(form1.username, {'attr' : {'placeholder' : 'security.login.username', 'onKeyUp' : 'validator.onKeyUpMultiformat(this, event)', 'class':'form-control', 'value' : last_username }}) }}
-                        </div>
-
-                        <div class="form-group">
-                            <label for="{{ form1.password.vars.id }}" class="required" style="display: block">
-                                {{ 'form.plainPassword' | trans }}
-                                <a id="resetting_request" target="_blank" class="pull-right" href="{{ path('fos_user_resetting_request') }}">{{ 'resseting.forgot_password' | trans }}</a>
-                            </label>
-                            {{ form_errors(form1.password) }}
-                            {{ form_widget(form1.password, {'attr' : {'placeholder' : 'security.login.password', 'class':'form-control'}}) }}
-                        </div>
-
-                        {% if form1.recaptcha is defined %}
-                            <div class="form-group captcha-container">
-                                {{ include("PROCERGSLoginCidadaoCoreBundle::common.recaptcha.html.twig") }}
-                                {% form_theme form1 'EWZRecaptchaBundle:Form:ewz_recaptcha_widget.html.twig' %}
-                                {{ form_widget(form1.recaptcha, { 'attr': {'options' : {'theme' : 'custom'}}}) }}
-                            </div>
-                        {% endif %}
-
-                        <div class="form-group">
-                            <div class="checkbox remember-group">
-                                <label>
-                                    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />{{ 'security.login.remember_me'|trans }}
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="text-right">
-                            <button type="submit" class="btn btn-block btn-success">{{ 'security.login.submit'|trans }}</button>
-                        </div>
-                    </div>
-
-                    {{ form_end(form1) }}
+                {{ form_end(form) }}
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-12 connect-box">
-                    <h2>{% trans %}Use accounts from other services{% endtrans %}</h2>
+            <div class="col-md-2"></div>
+
+            <div class="col-md-5">
+                <div class="box">
+                {% trans_default_domain 'FOSUserBundle' %}
+                <h1 class="title">{{ 'form.login.call_to_action' | trans }}</h1>
+                {{ form_start(form1, {'action' : path("fos_user_security_check"), 'attr' : {'role' : 'form'}}) }}
+                <div class="form-content">
+
+                    {% if error is defined and error is not null %}
+                        <div class="form-group">
+                            <div class="input-error alert-danger">
+                                <ul>
+                                    <li>{{ error.messageKey|trans({}, 'security') }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="form-group">
+                        {{ form_label(form1.username) }}
+                        {{ form_errors(form1.username) }}
+                        {{ form_widget(form1.username, {'attr' : {'placeholder' : 'security.login.username', 'onKeyUp' : 'validator.onKeyUpMultiformat(this, event)', 'class':'form-control', 'value' : last_username }}) }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form1.password.vars.id }}" class="required" style="display: block">
+                            {{ 'form.plainPassword' | trans }}
+                            <a id="resetting_request" target="_blank" class="pull-right" href="{{ path('fos_user_resetting_request') }}">{{ 'resseting.forgot_password' | trans }}</a>
+                        </label>
+                        {{ form_errors(form1.password) }}
+                        {{ form_widget(form1.password, {'attr' : {'placeholder' : 'security.login.password', 'class':'form-control'}}) }}
+                    </div>
+
+                    {% if form1.recaptcha is defined %}
+                        <div class="form-group captcha-container">
+                            {{ include("PROCERGSLoginCidadaoCoreBundle::common.recaptcha.html.twig") }}
+                            {% form_theme form1 'EWZRecaptchaBundle:Form:ewz_recaptcha_widget.html.twig' %}
+                            {{ form_widget(form1.recaptcha, { 'attr': {'options' : {'theme' : 'custom'}}}) }}
+                        </div>
+                    {% endif %}
+
+                    <div class="form-group">
+                        <div class="checkbox remember-group">
+                            <label>
+                                <input type="checkbox" id="remember_me" name="_remember_me" value="on" />{{ 'security.login.remember_me'|trans }}
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-block btn-success">{{ 'security.login.submit'|trans }}</button>
+                    </div>
+                </div>
+
+                {{ form_end(form1) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="box connect-box lc-box clearfix">
+                    <h3>{% trans %}Use accounts from other services{% endtrans %}</h3>
                     <p>{% trans %}If you prefer, it's possible to use other services to login or create your account.{% endtrans %}</p>
                     <div class="row">
                         <div class="col-md-3 text-center"><a class="connect facebook" data-href="{{ path("lc_link_facebook") }}">Facebook</a></div>
@@ -132,38 +154,15 @@
                         <div class="col-md-3 text-center"><a class="connect google" href="{{ path('hwi_oauth_service_redirect', {'service': 'google'}) }}">Google</a></div>
                         <div class="col-md-3 text-center"><a class="connect nfg nfgpopup" data-href="{{ path('nfg_login') }}">NFG</a></div>
                     </div>
-                </div>
+                </div></div>
             </div>
         </div>
-        {#
-        {% set common_row_class = 'col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4' %}
-        {% set common_row_style = 'display: none;' %}
-        {{ include("PROCERGSLoginCidadaoCoreBundle::common.register.html.twig") }}
-        {% set common_row_style = '' %}
-        {{ include("PROCERGSLoginCidadaoCoreBundle::common.login.html.twig") }}
-        {% set oi = app.session.flashbag.clear() %}
-        #}
-    </div>
-{% endblock %}
 
-{% block credits %}
-    <div class="bg-credits">{% trans with { '%name%': background_helper.backgroundImage.author, '%link%': background_helper.backgroundImage.url } %}<a href="%link%">Background picture</a> by %name%{% endtrans %}</div>
+
 {% endblock %}
 
 {% block stylesheets_custom %}
     {% stylesheets '@lc_base_css' 'bundles/procergslogincidadaocore/css/home/*.css' filter='cssrewrite' filter='?uglifycss' %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        $(function () {
-            $(".toggle-lc-box").click(function (event) {
-                $('#login-box').parent().toggle();
-                $("#register-box").parent().toggle();
-            });
-        });
-    </script>
 {% endblock %}
