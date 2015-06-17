@@ -32,9 +32,8 @@ class CitySelectorComboType extends AbstractType
 
     public function __construct(CountryManager $countryManager,
                                 StateManager $stateManager,
-                                CityManager $cityManager, $level = 'city')
+                                CityManager $cityManager)
     {
-        $this->level          = $level;
         $this->cityManager    = $cityManager;
         $this->stateManager   = $stateManager;
         $this->countryManager = $countryManager;
@@ -51,12 +50,12 @@ class CitySelectorComboType extends AbstractType
             'attr' => array(
                 'class' => 'form-control location-select country-select'
             ),
-            'label' => 'Place of birth - Country'
+            'label' => $options['country_label']
         ));
 
         $stateManager = $this->stateManager;
         $cityManager  = $this->cityManager;
-        $level        = $this->level;
+        $level        = $options['level'];
 
         $refreshState = function (FormInterface $form, $countryId = null) use ($options, $stateManager, $level) {
             if ($level === 'country') {
@@ -71,7 +70,7 @@ class CitySelectorComboType extends AbstractType
                 'attr' => array(
                     'class' => 'form-control location-select state-select'
                 ),
-                'label' => 'Place of birth - State'
+                'label' => $options['state_label']
             ));
         };
 
@@ -88,7 +87,7 @@ class CitySelectorComboType extends AbstractType
                 'attr' => array(
                     'class' => 'form-control location-select city-select'
                 ),
-                'label' => 'Place of birth - City'
+                'label' => $options['city_label']
             ));
         };
 
@@ -133,12 +132,16 @@ class CitySelectorComboType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'PROCERGS\LoginCidadao\CoreBundle\Model\SelectData',
-            'label' => false
+            'label' => false,
+            'level' => 'city',
+            'country_label' => 'Country',
+            'state_label' => 'State',
+            'city_label' => 'City'
         ));
     }
 
     public function getName()
     {
-        return 'city_selector_combo';
+        return 'lc_location';
     }
 }

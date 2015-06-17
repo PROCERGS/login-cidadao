@@ -48,7 +48,7 @@ class DynamicFormController extends Controller
         $scope = explode(' ', $request->get('scope', null));
 
         $placeOfBirth = new SelectData();
-        $placeOfBirth->getFromPerson($person);
+        $placeOfBirth->getFromObject($person);
 
         $data = new DynamicFormData();
         $data->setPerson($person)
@@ -74,7 +74,7 @@ class DynamicFormController extends Controller
             $placeOfBirth = $formBuilder->getData()->getPlaceOfBirth();
 
             if ($placeOfBirth instanceof SelectData) {
-                $placeOfBirth->toPerson($person);
+                $placeOfBirth->toObject($person);
             }
 
             $userManager = $this->get('fos_user.user_manager');
@@ -82,6 +82,7 @@ class DynamicFormController extends Controller
 
             if ($address instanceof PersonAddress) {
                 $address->setPerson($person);
+                $address->getLocation()->toObject($address);
                 $em->persist($address);
             }
 
@@ -135,17 +136,6 @@ class DynamicFormController extends Controller
         $formBuilder = $this->createFormBuilder($data,
             array('cascade_validation' => true));
         $this->addPlaceOfBirth($formBuilder, $level);
-        /*
-          switch ($level) {
-          case self::LOCATION_FORM_LEVEL_CITY:
-          $this->addCityField($formBuilder, $person);
-          case self::LOCATION_FORM_LEVEL_STATE:
-          $this->addStateField($formBuilder, $person);
-          case self::LOCATION_FORM_LEVEL_COUNTRY:
-          $this->addCountryField($formBuilder, $person);
-          break;
-          };
-         */
 
         return array('form' => $formBuilder->getForm()->createView());
     }
@@ -226,8 +216,8 @@ class DynamicFormController extends Controller
         return $formBuilder->get('person');
     }
 
-    private function addAddresses(FormInterface $formBuilder, Person $person,
-                                  $new = true)
+    private function addAddresses(FormBuilderInterface $formBuilder,
+                                  Person $person, $new = true)
     {
         $addresses = $person->getAddresses();
         if ($new === false && $addresses->count() > 0) {
@@ -239,7 +229,7 @@ class DynamicFormController extends Controller
             array('label' => false));
     }
 
-    private function addIdCard(FormInterface $formBuilder, Person $person)
+    private function addIdCard(FormBuilderInterface $formBuilder, Person $person)
     {
         $state    = $this->getStateFromRequest($this->getRequest());
         $formData = $formBuilder->getData();
@@ -299,14 +289,14 @@ class DynamicFormController extends Controller
 
     private function addPlaceOfBirth(FormBuilderInterface $formBuilder, $level)
     {
-        $countryManager = $this->get('lc.country_manager');
-        $stateManager   = $this->get('lc.state_manager');
-        $cityManager    = $this->get('lc.city_manager');
 
-        $field = new CitySelectorComboType($countryManager, $stateManager,
-            $cityManager, $level);
-
-        $formBuilder->add('placeOfBirth', $field);
+        $formBuilder->add('placeOfBirth', 'lc_location',
+            array(
+            'level' => $level,
+            'city_label' => 'Place of birth - City',
+            'state_label' => 'Place of birth - State',
+            'country_label' => 'Place of birth - Country',
+        ));
         return;
     }
 

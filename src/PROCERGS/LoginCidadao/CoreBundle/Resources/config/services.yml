@@ -329,3 +329,12 @@ services:
         arguments:
             - @doctrine.orm.entity_manager
             - PROCERGS\LoginCidadao\CoreBundle\Entity\City
+
+    lc.location.type:
+        class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\CitySelectorComboType
+        arguments:
+            - @lc.country_manager
+            - @lc.state_manager
+            - @lc.city_manager
+        tags:
+            - { name: form.type, alias: lc_location }

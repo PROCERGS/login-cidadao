@@ -2,7 +2,6 @@
 
 namespace PROCERGS\LoginCidadao\CoreBundle\Model;
 
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Country;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\City;
@@ -93,21 +92,21 @@ class SelectData
         return $this->city;
     }
 
-    public function getFromPerson(Person $person)
+    public function getFromObject(LocationAwareInterface $object)
     {
-        $this->setCity($person->getCity())
-            ->setState($person->getState())
-            ->setCountry($person->getCountry());
+        $this->setCity($object->getCity())
+            ->setState($object->getState())
+            ->setCountry($object->getCountry());
 
         return $this;
     }
 
-    public function toPerson(Person $person)
+    public function toObject(LocationAwareInterface $object)
     {
-        $person->setCity($this->getCity())
+        $object->setCity($this->getCity())
             ->setState($this->getState())
             ->setCountry($this->getCountry());
 
-        return $person;
+        return $object;
     }
 }

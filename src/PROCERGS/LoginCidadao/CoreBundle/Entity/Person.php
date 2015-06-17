@@ -18,6 +18,7 @@ use PROCERGS\OAuthBundle\Model\ClientInterface;
 use Doctrine\Common\Collections\Collection;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
+use PROCERGS\LoginCidadao\CoreBundle\Model\LocationAwareInterface;
 
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
@@ -28,7 +29,8 @@ use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
  * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
  */
-class Person extends BaseUser implements PersonInterface, TwoFactorInterface, BackupCodeInterface
+class Person extends BaseUser implements PersonInterface, TwoFactorInterface, BackupCodeInterface,
+    LocationAwareInterface
 {
     /**
      * @JMS\Expose
@@ -859,9 +861,9 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         return strlen($password) > 0;
     }
 
-    public function setState($var)
+    public function setState(State $state = null)
     {
-        $this->state = $var;
+        $this->state = $state;
         return $this;
     }
 
@@ -1112,9 +1114,9 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         return $this->googleAccessToken;
     }
 
-    public function setCountry($var)
+    public function setCountry(Country $country = null)
     {
-        $this->country = $var;
+        $this->country = $country;
         return $this;
     }
 

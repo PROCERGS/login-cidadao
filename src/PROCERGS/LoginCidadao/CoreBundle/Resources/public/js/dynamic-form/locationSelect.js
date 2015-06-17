@@ -36,15 +36,15 @@ $(document).ready(function () {
         $('.location-select').attr('disabled', 'disabled');
         var url = locationSelection.formUrl;
         var data = locationSelection.getData(this);
+        var parent = $(this).parent('.form-group').parent('div');
         locationSelection.request = $.get(url, data, function (data) {
-            locationSelection.last = data;
             switch (locationSelection.getLevel()) {
                 case 'city':
-                    $('.city-select').replaceWith($(data).find('.city-select').get(0));
+                    $('.city-select', parent).empty().append($(data).find('.city-select option'));
                 case 'state':
-                    $('.state-select').replaceWith($(data).find('.state-select').get(0));
+                    $('.state-select', parent).empty().append($(data).find('.state-select option'));
                 case 'country':
-                    $('.country-select').replaceWith($(data).find('.country-select').get(0));
+                    $('.country-select', parent).empty().append($(data).find('.country-select option'));
                     break;
             }
         }, 'html').always(function () {
