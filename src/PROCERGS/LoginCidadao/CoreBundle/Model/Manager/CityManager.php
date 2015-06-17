@@ -34,6 +34,7 @@ class CityManager implements LocationManagerInterface
         return $this->repository->createQueryBuilder('c')
                 ->join('c.state', 's')
                 ->where('s.id = :id')
+                ->orderBy('c.name')
                 ->setParameters(compact('id'))
                 ->getQuery()->getResult();
     }

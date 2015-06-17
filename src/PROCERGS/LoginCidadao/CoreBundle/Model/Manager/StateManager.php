@@ -34,6 +34,7 @@ class StateManager implements LocationManagerInterface
         return $this->repository->createQueryBuilder('s')
                 ->join('s.country', 'c')
                 ->where('c.id = :id')
+                ->orderBy('s.name')
                 ->setParameters(compact('id'))
                 ->getQuery()->getResult();
     }

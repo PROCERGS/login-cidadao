@@ -3,6 +3,7 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Model\Manager;
 
 use Doctrine\ORM\EntityManager;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\Country;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\CountryRepository;
 
 class CountryManager implements LocationManagerInterface
@@ -31,6 +32,7 @@ class CountryManager implements LocationManagerInterface
 
     public function findAll()
     {
-        $this->repository->findAll();
+        $this->repository->findBy(array('reviewed' => Country::REVIEWED_OK),
+            array('name' => 'ASC'));
     }
 }
