@@ -23,22 +23,20 @@
 html, body {
     height: 100%;
     background-color: transparent;
+    overflow: auto;
 }
 
 html {
-    background: #ffffff; /* Old browsers */
-    background: -moz-radial-gradient(center, ellipse cover,  #ffffff 30%, #d1d1d1 100%); /* FF3.6+ */
-    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(30%,#ffffff), color-stop(100%,#d1d1d1)); /* Chrome,Safari4+ */
-    background: -webkit-radial-gradient(center, ellipse cover,  #ffffff 30%,#d1d1d1 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-radial-gradient(center, ellipse cover,  #ffffff 30%,#d1d1d1 100%); /* Opera 12+ */
-    background: -ms-radial-gradient(center, ellipse cover,  #ffffff 30%,#d1d1d1 100%); /* IE10+ */
-    background: radial-gradient(ellipse at center,  #ffffff 30%,#d1d1d1 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#d1d1d1',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+    background: #7d7e7d; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover,  #7d7e7d 0%, #0e0e0e 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#7d7e7d), color-stop(100%,#0e0e0e)); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover,  #7d7e7d 0%,#0e0e0e 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover,  #7d7e7d 0%,#0e0e0e 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover,  #7d7e7d 0%,#0e0e0e 100%); /* IE10+ */
+    background: radial-gradient(ellipse at center,  #7d7e7d 0%,#0e0e0e 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
+
 
 body {
     padding-top: 50px;
@@ -57,7 +55,7 @@ body {
 @media (max-width: 767px) {
 
     #lc-navbar {
-        position: absolute!important;
+        /*position: absolute!important;*/
     }
 }
 
@@ -161,21 +159,34 @@ img.desaturate {
 }
 
 footer {
-    margin-top: 20px;
+    margin-top: 10px!important;
     clear: both;
 }
 
-footer .content {
-    background-color: #222;
+@media (max-width: 767px) {
+    footer .content {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    footer .invisible {
+        display: none;
+    }
+}
+
+footer .logged {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 footer h3 {
-    color: #5DB35D;
-    margin: 20px 15px;
+    color: #FFF;
+    margin: 20px 0;
+    text-shadow: 1px 1px 1px #353535;
 }
 
 footer ul {
-    padding: 10px 15px;
+    padding: 10px 0;
 }
 
 footer li {
@@ -183,7 +194,7 @@ footer li {
 }
 
 footer li a {
-    color: #F1F1F1;
+    color: #FFF;
 }
 
 footer a:hover {
@@ -238,11 +249,12 @@ footer .social .google a {
 }
 
 footer .copyright {
-    border-top: solid 1px #666461;
+    /*border-top: solid 1px #666461;*/
     color: #FFF;
     padding: 10px 0;
     text-align: center;
 }
+
 
 
 .footer-login li, .footer-login li a {
@@ -457,10 +469,10 @@ form .has-feedback .sr-only ~ .form-control-feedback {
 }
 
 .login-box {
-    background-color: #F1F1F1;
-    padding: 25px 20px;
-    box-shadow: 4px 4px 8px #D0D0D0;
-    border: 1px solid #D0D0D0;
+    /*background-color: #F1F1F1;*/
+    /*padding: 25px 20px;*/
+    /*box-shadow: 4px 4px 8px #D0D0D0;
+    border: 1px solid #D0D0D0;*/
 }
 
 .login-box h1 {
@@ -476,7 +488,31 @@ form .has-feedback .sr-only ~ .form-control-feedback {
     }
 }
 @media (min-width: 992px) {
-    .login-box .registration {
+    .login-box .registration, .login-box .login {
         /*border-right: 1px solid #c0c0c0;*/
+        background-color: #FAFAFA;
+        padding: 25px;
     }
+}
+
+.login-box .registration, .login-box .login {
+    /*border-right: 1px solid #c0c0c0;*/
+    background-color: #FAFAFA;
+    padding: 25px;
+}
+
+.login-box .title {
+    margin: 50px 0;
+}
+
+.connect-box {
+    background-color: #FAFAFA;
+    border: solid 1px #CCC;
+    margin-top: 20px;
+    padding: 0 20px 20px!important;
+}
+
+.connect-box h3 {
+    color: #474747;
+    text-shadow: 1px 1px 1px #D8D8D8;
 }
