@@ -87,8 +87,7 @@ class DynamicFormController extends Controller
             }
 
             if ($idCard instanceof IdCardInterface) {
-                $this->getValidationHandler()->persistIdCard($formBuilder,
-                    $request);
+                $this->getValidationHandler()->persistIdCard($form, $request);
                 $em->persist($idCard);
             }
 
@@ -155,26 +154,36 @@ class DynamicFormController extends Controller
         switch ($scope) {
             case 'surname':
             case 'full_name':
-                $this->addPersonField($formBuilder, $person, 'firstname');
-                $this->addPersonField($formBuilder, $person, 'surname');
+                $this->addPersonField($formBuilder, $person, 'firstname', null,
+                    array('required' => true));
+                $this->addPersonField($formBuilder, $person, 'surname', null,
+                    array('required' => true));
                 break;
             case 'cpf':
-                $this->addPersonField($formBuilder, $person, 'cpf');
+                $this->addPersonField($formBuilder, $person, 'cpf', null,
+                    array(
+                    'required' => true,
+                    'attr' => array(
+                        'class' => 'form-control cpf'
+                    )
+                ));
                 break;
             case 'id_cards':
                 $this->addIdCard($formBuilder, $person);
                 break;
             case 'email':
-                $this->addPersonField($formBuilder, $person, 'email');
+                $this->addPersonField($formBuilder, $person, 'email', null,
+                    array('required' => true));
                 break;
             case 'mobile':
-                $this->addPersonField($formBuilder, $person, 'mobile');
+                $this->addPersonField($formBuilder, $person, 'mobile', null,
+                    array('required' => true));
                 break;
             case 'birthdate':
                 $this->addPersonField($formBuilder, $person, 'birthdate',
                     'birthday',
                     array(
-                    'required' => false,
+                    'required' => true,
                     'format' => 'dd/MM/yyyy',
                     'widget' => 'single_text',
                     'label' => 'form.birthdate',
@@ -222,6 +231,13 @@ class DynamicFormController extends Controller
         $addresses = $person->getAddresses();
         if ($new === false && $addresses->count() > 0) {
             $address = $addresses->last();
+            $city    = $address->getCity();
+            if ($city instanceof City) {
+                $state   = $city->getState();
+                $country = $state->getCountry();
+                $address->getLocation()->setCity($city)
+                    ->setState($state)->setCountry($country);
+            }
             $formBuilder->getData()->setAddress($address);
         }
 

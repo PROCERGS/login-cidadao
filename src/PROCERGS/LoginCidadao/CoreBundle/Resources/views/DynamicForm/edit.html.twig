@@ -61,6 +61,7 @@
     <script>
         $(document).ready(function () {
             $('.birthdate').mask('00/00/0000', {'translation': {0: {pattern: /[0-9*]/}}});
+            $('.cpf').mask('000.000.000-00', {'translation': {0: {pattern: /[0-9*]/}}});
 
             locationSelection.formUrl = '{{ path('dynamic_form_location') }}';
         });
