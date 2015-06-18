@@ -55,14 +55,14 @@
             {# ADD NEW #}
             <div class="col-md-6 id-card-container">
                 <div class="row id-card add-new">
-					<p style="text-align:left;margin-left:10%;padding-top:22px;">Selecione um estado abaixo:</p>
-  					<div style="margin-right: 10%;margin-left:10%">                
-	                	<select class="form-control" name="lc_idcard_select_state" id="lc_idcard_select_state">
-						{% for state in states %}
-							<option value="{{ state.id }}">{{ state.name }}</option>
-	                    {% endfor %}
-	                	</select>
-                	</div>
+                    <p style="text-align:left;margin-left:10%;padding-top:22px;">{{ 'Select a state below:' | trans }}</p>
+                    <div style="margin-right: 10%;margin-left:10%">
+                        <select class="form-control" name="lc_idcard_select_state" id="lc_idcard_select_state">
+                            {% for state in states %}
+                                <option value="{{ state.id }}">{{ state.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                     <a href="{{ path('lc_person_id_cards_new') }}"
                        class="media id-card-add">
                         <div class="media-body id-card-details text-center">

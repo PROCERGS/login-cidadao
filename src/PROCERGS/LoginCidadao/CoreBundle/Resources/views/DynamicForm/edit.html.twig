@@ -1,0 +1,89 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block title %}PROCERGSLoginCidadaoCoreBundle:DynamicForm:edit{% endblock %}
+
+{% block content %}
+    <div id="profile-edit" class="content profile-edit">
+        <h1 class="visible-xs">{{ 'Complete Missing Fields' | trans }}</h1>
+
+        <p>{% trans with { '%client%': client.name } %}<strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.{% endtrans %}</p>
+
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+        {% if form.person is defined or form.placeOfBirth is defined %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{ 'Personal Details' | trans }}</h2>
+                </div>
+                <div class="panel-body">
+                    {% if form.person is defined %}
+                        {{ form_row(form.person) }}
+                    {% endif %}
+
+                    {% if form.placeOfBirth is defined %}
+                        {{ form_row(form.placeOfBirth) }}
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if form.idcard is defined %}
+            <div class="id-card-forms-placeholder">
+                {{ include("PROCERGSLoginCidadaoCoreBundle:IdCard:form.component.html.twig", {'form': form.idcard, 'hide_footer': true }) }}
+            </div>
+        {% endif %}
+
+        {% if form.address is defined %}
+            {{ include("PROCERGSLoginCidadaoCoreBundle:PersonAddress:form.component.html.twig", {'form': form.address, 'embeded': true, 'hide_footer': true, 'name_as_normal_field': true }) }}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-sm-10" style="margin-top: 5px;">
+                {{ 'After completing your information, click the following button to continue:' | trans }}
+            </div>
+            <div class="col-sm-2 text-right">
+                <input type="submit" value="{{ 'Send'|trans }}" class="btn btn-success">
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts  '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/dynamic-form/idCard.js'
+                    '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/dynamic-form/locationSelect.js'
+                    '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/jquery-scrollto.js'
+                    '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js' filter='uglifyjs2' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script>
+        $(document).ready(function () {
+            $('.birthdate').mask('00/00/0000', {'translation': {0: {pattern: /[0-9*]/}}});
+            $('.cpf').mask('000.000.000-00', {'translation': {0: {pattern: /[0-9*]/}}});
+
+            locationSelection.formUrl = '{{ path('dynamic_form_location') }}';
+        });
+
+        var dynamicForm = {
+            'idCard': {
+                'loadedFormStateId': '{{ form.vars.data.state ? form.vars.data.state.id : 0 }}',
+                'formUrl': '{{ path('client_dynamic_form', { 'scope': 'id_cards', 'clientId': client.id }) }}',
+                'unlockState': function () {
+                    $('#form_idcard_state').removeAttr('disabled').removeAttr('readonly');
+                }
+            }
+        };
+    </script>
+{% endblock javascripts %}
+
+{% block content_columns %}container{% endblock %}
+{% block sidebar %}{% endblock %}
+{% block notificationExtreme %}
+    {{ include("PROCERGSLoginCidadaoCoreBundle::notification_extreme.html.twig", { columns: block('content_columns') } ) }}
+{% endblock %}
+{% block footer %}
+    {% set columns = block('content_columns') %}
+    {{ include("PROCERGSLoginCidadaoCoreBundle::footer.html.twig") }}
+{% endblock %}

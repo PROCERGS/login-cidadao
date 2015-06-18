@@ -15,23 +15,29 @@ layout.login: Login
 form.group_name: 'Nome do Grupo:'
 form.username: 'Escolha seu nome de usuário:'
 form.email: Email
+form.email.example: seu@email.com
 form.current_password: 'Senha atual:'
 form.plainPassword: Senha
+form.plainPassword.example: Crie uma senha
 form.password: 'Criar uma senha:'
 form.password_confirmation: 'Confirme sua senha:'
 form.new_password: 'Nova senha:'
 form.new_password_confirmation: 'Repita a senha:'
 form.firstName: Nome
+form.firstName.example: Fulano
 form.surname: Sobrenome
+form.surname.example: de Tal
 form.birthdate: 'Data de nascimento'
 form.cep: CEP
 form.cpf: CPF
 form.city: Cidade
 form.phone: Telefone
+form.phone.example: (51) 99999-9999
 form.mobile: Celular
+form.mobile.example: (51) 99999-9999
 resseting.forgot_password: 'Esqueceu sua senha?'
 resetting.request.invalid_username: 'O CPF, nome de usuário ou email "%username%" não está cadastrado.'
-resetting.request.username: 'CPF, nome de usuário ou email:'
+resetting.request.username: 'Email ou CPF:'
 resetting.request.submit: 'Recuperar senha'
 resetting.check_email: 'Foi enviado um email para %email%. Para recuperar a sua senha, clique no link da mensagem.'
 resetting.email.subject: 'Redefinir senha'
@@ -102,3 +108,5 @@ Use your Facebook picture: Usar sua foto do Facebook
 Remove your picture: Remover foto do perfil
 Your profile picure will be changed to <strong></strong>: Sua foto de perfil será trocada para <strong></strong>
 Your Facebook profile picure will be used.: Sua foto de perfil do Facebook será usada.
+form.register.call_to_action: Quero me cadastrar
+form.login.call_to_action: Já tenho cadastro

@@ -3,8 +3,8 @@ Welcome!: Bem-vindo!
 'Welcome to the Citizen''s Login service.': 'Seja bem-vindo ao Login Cidadão.'
 'Here you''ll find all you need to know about the service.': 'Aqui você encontrará tudo que você precisa saber sobre esse serviço.'
 'You might start by logging in or %link_start%registering%link_end%.': 'Você pode começar acessando o sistema ou %link_start%cadastrando-se%link_end%.'
-security.login.username: 'CPF, nome de usuário ou email'
-security.login.password: Senha
+security.login.username: 'Email ou CPF'
+security.login.password: Digite sua senha
 security.login.remember_me: 'Lembrar meus dados'
 security.login.submit: Entrar
 'Welcome %user.name%': 'Bem-vindo, %user.name%'
@@ -703,3 +703,4 @@ You don't have any activity log.: Você ainda não possui nenhum registro de ati
 scope.logout: 'Permitir deslogar'
 'Search it!': 'Pesquise aqui!'
 'Don''t know your postal code?': 'Não sabe seu código postal?'
+'Select a state below:': 'Selecione um estado abaixo:'

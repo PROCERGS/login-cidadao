@@ -78,17 +78,6 @@ interface PersonInterface
 
     public function getCpfExpiration();
 
-    /**
-     * @param \PROCERGS\LoginCidadao\CoreBundle\Entity\City $city
-     * @return City
-     */
-    public function setCity(\PROCERGS\LoginCidadao\CoreBundle\Entity\City $city = null);
-
-    /**
-     * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\City
-     */
-    public function getCity();
-
     public function setCreatedAt(\DateTime $createdAt);
 
     public function getCreatedAt();
@@ -124,10 +113,6 @@ interface PersonInterface
     public function isCpfExpired();
 
     public function hasPassword();
-
-    public function setState($var);
-
-    public function getState();
 
     public function setNfgAccessToken($var);
 
@@ -209,10 +194,6 @@ interface PersonInterface
 
     public function getGoogleAccessToken();
 
-    public function setCountry($var);
-
-    public function getCountry();
-
     public function setComplement($var);
 
     public function getComplement();
@@ -227,7 +208,7 @@ interface PersonInterface
      * @param array $badges
      */
     public function mergeBadges(array $badges);
-    
+
     public function getGoogleAuthenticatorSecret();
 
     public function setGoogleAuthenticatorSecret($googleAuthenticatorSecret);

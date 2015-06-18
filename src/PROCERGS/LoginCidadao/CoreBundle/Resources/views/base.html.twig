@@ -17,7 +17,7 @@
 {% block sidebar %}{% endblock %}
 
 {% block footer %}
-{% set columns = 'col-xs-12 col-lg-10 col-lg-offset-2 col-lg-pull-1' %}
+{% set columns = 'container' %}
     {{ include("PROCERGSLoginCidadaoCoreBundle::footer.html.twig") }}
 {% endblock %}
 
@@ -42,11 +42,6 @@
           <link rel="stylesheet" href="{{ asset_url }}" />
         <![endif]-->
     {% endstylesheets %}
-        <style>
-            html {
-                background-image: url({{ asset('bundles/procergslogincidadaocore/images/'~background_helper.backgroundImage.file) }});
-            }
-        </style>
 {% endblock %}
 
 {% block javascripts %}

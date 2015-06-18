@@ -238,6 +238,78 @@ footer .content {
 }
 
 footer .inner-row {
-  background-color: #222;
+  /*background-color: #222;*/
+}
+
+
+
+
+
+
+
+
+
+
+/* novo css */
+.lc-main-title {
+  margin-bottom: 50px;
+  margin-top: 25px;
+}
+
+.lc-main-title h1,
+.lc-main-title h2 {
+  text-shadow: 1px 1px 1px #353535;
+  color: #FFF;
+}
+
+.box {
+  background-color: #F9F8F8;
+}
+
+.box-register {
+  margin-bottom: 20px;
+}
+
+.box .flash-error {
+  background-color: #E64442;
+  color: #FFF;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  padding: 3px 12px;
+}
+
+.box .title {
+  background-image: -webkit-linear-gradient(top,#f5f5f5 0,#e8e8e8 100%);
+  background-image: -o-linear-gradient(top,#f5f5f5 0,#e8e8e8 100%);
+  background-image: -webkit-gradient(linear,left top,left bottom,from(#f5f5f5),to(#e8e8e8));
+  background-image: linear-gradient(to bottom,#f5f5f5 0,#e8e8e8 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#ffe8e8e8', GradientType=0);
+  background-repeat: repeat-x;
+  background-color: #f5f5f5;
+
+  color: #474747;
+  display: block;
+  font-size: 20px;
+  height: 50px;
   margin: 0;
+  line-height: 50px;
+  text-align: center;
+  text-shadow: 1px 1px 1px #D8D8D8;
+}
+
+.box form {
+  border: solid 1px #CCC;
+  padding: 35px;
+}
+
+.box .terms {
+  font-size: 11px;
+}
+
+@media (max-width: 767px) {
+  footer {
+    padding-left: 30px!important;
+    padding-right: 30px!important;
+  }
 }

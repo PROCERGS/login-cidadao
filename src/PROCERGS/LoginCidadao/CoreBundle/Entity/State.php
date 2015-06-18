@@ -83,7 +83,7 @@ class State
 
     /**
      * @ORM\OneToMany(targetEntity="City", mappedBy="state", cascade={"remove"}, orphanRemoval=true)
-     * @var
+     * @var City
      */
     protected $cities;
 
