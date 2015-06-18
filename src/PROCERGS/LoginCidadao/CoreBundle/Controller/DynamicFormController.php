@@ -18,6 +18,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\IdCard;
 use PROCERGS\LoginCidadao\CoreBundle\Model\IdCardInterface;
 use PROCERGS\LoginCidadao\ValidationControlBundle\Handler\ValidationHandler;
 use PROCERGS\LoginCidadao\CoreBundle\Model\SelectData;
+use PROCERGS\OAuthBundle\Entity\Client;
 
 class DynamicFormController extends Controller
 {
@@ -32,6 +33,9 @@ class DynamicFormController extends Controller
     public function editAction(Request $request, $clientId)
     {
         $client = $this->parseClient($clientId);
+        if (!($client instanceof Client)) {
+            throw $this->createNotFoundException("Client not found.");
+        }
 
         $person          = $this->getUser();
         $authorizedScope = $person->getClientScope($client);
