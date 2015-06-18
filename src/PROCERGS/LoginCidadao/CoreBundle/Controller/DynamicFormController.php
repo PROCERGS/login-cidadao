@@ -85,7 +85,7 @@ class DynamicFormController extends Controller
 
             $em->flush();
 
-            //return $this->redirect($formBuilder->getData()->getRedirectUrl());
+            return $this->redirect($formBuilder->getData()->getRedirectUrl());
         }
 
         $viewData = compact('client', 'scope', 'authorizedScope');
