@@ -704,3 +704,9 @@ scope.logout: 'Permitir deslogar'
 'Search it!': 'Pesquise aqui!'
 'Don''t know your postal code?': 'Não sabe seu código postal?'
 'Select a state below:': 'Selecione um estado abaixo:'
+Firstname: Nome
+Surname: Sobrenome
+'After completing your information, click the following button to continue:': 'Depois de completar suas informações, clique no botão a seguir para continuar:'
+<strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.: <strong>%client%</strong> precisa de detalhes adicionais sobre você. Por favor, complete as informações em branco a seguir para continuar.
+Personal Details: Informações Pessoais
+Complete Missing Fields: Complete as Informações em Branco
