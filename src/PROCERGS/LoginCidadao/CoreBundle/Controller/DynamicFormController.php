@@ -5,10 +5,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormBuilderInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonAddress;
@@ -19,10 +16,6 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Country;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\IdCard;
 use PROCERGS\LoginCidadao\CoreBundle\Model\IdCardInterface;
-use PROCERGS\LoginCidadao\CoreBundle\Form\Type\CitySelectorComboType;
-use PROCERGS\LoginCidadao\CoreBundle\Form\Type\StateSelectorComboType;
-use PROCERGS\LoginCidadao\CoreBundle\Form\Type\CountrySelectorComboType;
-use PROCERGS\LoginCidadao\CoreBundle\Form\Type\PlaceOfBirthType;
 use PROCERGS\LoginCidadao\ValidationControlBundle\Handler\ValidationHandler;
 use PROCERGS\LoginCidadao\CoreBundle\Model\SelectData;
 
@@ -38,14 +31,13 @@ class DynamicFormController extends Controller
      */
     public function editAction(Request $request, $clientId)
     {
-        $client = $this->getDoctrine()
-            ->getRepository('PROCERGSOAuthBundle:Client')
-            ->find($clientId);
+        $client = $this->parseClient($clientId);
 
         $person          = $this->getUser();
         $authorizedScope = $person->getClientScope($client);
+        $requestedScope  = explode(' ', $request->get('scope', null));
 
-        $scope = explode(' ', $request->get('scope', null));
+        $scope = array_intersect($authorizedScope, $requestedScope);
 
         $placeOfBirth = new SelectData();
         $placeOfBirth->getFromObject($person);
@@ -151,6 +143,7 @@ class DynamicFormController extends Controller
                               Person $person)
     {
         $placeOfBirthLevel = '';
+        $request           = $this->getRequest();
         switch ($scope) {
             case 'surname':
             case 'full_name':
@@ -203,11 +196,11 @@ class DynamicFormController extends Controller
                 $placeOfBirthLevel = 'country';
                 $this->addPlaceOfBirth($formBuilder, $placeOfBirthLevel);
                 break;
-            case 'addresses.new':
-                $this->addAddresses($formBuilder, $person, true);
-                break;
-            case 'addresses.edit':
-                $this->addAddresses($formBuilder, $person, false);
+            case 'addresses':
+
+                $addressAction = $request->get('address_action', 'edit');
+                $new           = $addressAction === 'new' ? true : false;
+                $this->addAddresses($formBuilder, $person, $new);
                 break;
             default:
                 break;
@@ -291,11 +284,11 @@ class DynamicFormController extends Controller
         $repo = $this->getDoctrine()
             ->getRepository('PROCERGSLoginCidadaoCoreBundle:State');
 
-        $stateId = $request->get('idCardStateId', null);
+        $stateId = $request->get('id_card_state_id', null);
         if ($stateId !== null) {
             $state = $repo->find($stateId);
         }
-        $stateAcronym = $request->get('idCardState', null);
+        $stateAcronym = $request->get('id_card_state', null);
         if ($stateAcronym !== null) {
             $state = $repo->findOneByAcronym($stateAcronym);
         }
@@ -365,5 +358,22 @@ class DynamicFormController extends Controller
         }
 
         return $result;
+    }
+
+    private function parseClient($clientId)
+    {
+        $parsing = explode('_', $clientId, 2);
+        if (count($parsing) > 1) {
+            $params = array(
+                'id' => $parsing[0],
+                'randomId' => $parsing[1]
+            );
+        } else {
+            $params = array('id' => $clientId);
+        }
+
+        return $this->getDoctrine()
+                ->getRepository('PROCERGSOAuthBundle:Client')
+                ->findOneBy($params);
     }
 }

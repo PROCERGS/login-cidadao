@@ -9,7 +9,7 @@ $('.id-card-forms-placeholder').on('change', '#form_idcard_state', function () {
 
     if (brokeForm) {
         fields.attr('disabled', 'disabled');
-        var url = dynamicForm.idCard.formUrl + '&idCardStateId=' + selectedState + ' .id-card-forms-placeholder';
+        var url = dynamicForm.idCard.formUrl + '&id_card_state_id=' + selectedState + ' .id-card-forms-placeholder';
         console.log(url);
 
         $('.id-card-forms-placeholder').load(url, function () {
