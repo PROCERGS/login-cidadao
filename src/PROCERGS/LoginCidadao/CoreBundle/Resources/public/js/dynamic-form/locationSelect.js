@@ -26,10 +26,22 @@ var locationSelection = {
         if ($('.country-select').is('.location-select')) {
             return 'country';
         }
+    },
+    prepareField: function (filter, parent, data) {
+        var element = $(filter, parent);
+        var oldId = element.attr('id');
+        var oldName = element.attr('name');
+        element.closest('div')
+                .data('field-id', oldId)
+                .data('field-name', oldName);
+
+        element.replaceWith($(data).find(filter)).attr('id', oldId)
+                .attr('name', oldName);
+        return;
     }
 };
 $(document).ready(function () {
-    $('form').on('change', '.location-select', function () {
+    $('form').on('change', '.location-select:not(.location-text)', function () {
         if (locationSelection.request) {
             locationSelection.request.abort();
         }
@@ -40,11 +52,11 @@ $(document).ready(function () {
         locationSelection.request = $.get(url, data, function (data) {
             switch (locationSelection.getLevel()) {
                 case 'city':
-                    $('.city-select', parent).empty().append($(data).find('.city-select option'));
+                    locationSelection.prepareField('.city-select', parent, data);
                 case 'state':
-                    $('.state-select', parent).empty().append($(data).find('.state-select option'));
+                    locationSelection.prepareField('.state-select', parent, data);
                 case 'country':
-                    $('.country-select', parent).empty().append($(data).find('.country-select option'));
+                    locationSelection.prepareField('.country-select', parent, data);
                     break;
             }
         }, 'html').always(function () {

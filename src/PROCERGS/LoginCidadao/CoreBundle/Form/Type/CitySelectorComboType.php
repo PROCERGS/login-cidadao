@@ -61,12 +61,27 @@ class CitySelectorComboType extends AbstractType
             if ($level === 'country') {
                 return;
             }
+            if ($countryId === null) {
+                $choices = array();
+            } else {
+                $choices = $stateManager->findByCountryId($countryId);
+            }
+            if (count($choices) <= 0) {
+                $form->add('state', 'text',
+                    array(
+                    'label' => $options['state_label'],
+                    'attr' => array(
+                        'class' => 'form-control location-select state-select location-text'
+                    ))
+                );
+                return;
+            }
             $form->add('state', 'entity',
                 array(
                 'class' => $stateManager->getClass(),
                 'property' => 'name',
                 'empty_value' => '',
-                'choices' => $countryId === null ? array() : $stateManager->findByCountryId($countryId),
+                'choices' => $choices,
                 'attr' => array(
                     'class' => 'form-control location-select state-select'
                 ),
@@ -76,6 +91,21 @@ class CitySelectorComboType extends AbstractType
 
         $refreshCity = function (FormInterface $form, $stateId = null) use ($options, $cityManager, $level) {
             if ($level === 'country' || $level === 'state') {
+                return;
+            }
+            if ($stateId === null) {
+                $choices = array();
+            } else {
+                $choices = $cityManager->findByStateId($stateId);
+            }
+            if (count($choices) <= 0) {
+                $form->add('city', 'text',
+                    array(
+                    'label' => $options['city_label'],
+                    'attr' => array(
+                        'class' => 'form-control location-select city-select location-text'
+                    ))
+                );
                 return;
             }
             $form->add('city', 'entity',
