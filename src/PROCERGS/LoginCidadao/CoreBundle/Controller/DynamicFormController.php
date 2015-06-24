@@ -84,7 +84,6 @@ class DynamicFormController extends Controller
 
             if ($address instanceof PersonAddress) {
                 $address->setPerson($person);
-                $address->getLocation()->toObject($address);
                 $em->persist($address);
             }
 

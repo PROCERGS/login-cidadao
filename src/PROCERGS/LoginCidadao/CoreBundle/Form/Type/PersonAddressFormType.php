@@ -75,6 +75,13 @@ class PersonAddressFormType extends AbstractType
                 }
             }
         });
+        $builder->addEventListener(FormEvents::POST_SUBMIT,
+            function (FormEvent $event) {
+            $address = $event->getData();
+            if ($address instanceof PersonAddress) {
+                $address->getLocation()->toObject($address);
+            }
+        });
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
