@@ -35,8 +35,9 @@ var locationSelection = {
                 .data('field-id', oldId)
                 .data('field-name', oldName);
 
-        element.replaceWith($(data).find(filter)).attr('id', oldId)
-                .attr('name', oldName);
+        element.replaceWith($(data).find(filter));
+        //.attr('id', oldId)
+        //.attr('name', oldName);
         return;
     }
 };

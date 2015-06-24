@@ -66,15 +66,23 @@ class CitySelectorComboType extends AbstractType
             } else {
                 $choices = $stateManager->findByCountryId($countryId);
             }
-            if (count($choices) <= 0) {
-                $form->add('state', 'text',
+            if (empty($choices)) {
+                if ($form->has('state')) {
+                    $form->remove('state');
+                }
+                $form->add('state_text', (empty($choices) ? 'text' : 'hidden'),
                     array(
                     'label' => $options['state_label'],
+                    //'mapped' => false,
                     'attr' => array(
                         'class' => 'form-control location-select state-select location-text'
-                    ))
-                );
+                    )
+                ));
                 return;
+            } else {
+                if ($form->has('state_text')) {
+                    $form->remove('state_text');
+                }
             }
             $form->add('state', 'entity',
                 array(
@@ -98,15 +106,23 @@ class CitySelectorComboType extends AbstractType
             } else {
                 $choices = $cityManager->findByStateId($stateId);
             }
-            if (count($choices) <= 0) {
-                $form->add('city', 'text',
+            if (empty($choices)) {
+                if ($form->has('city')) {
+                    $form->remove('city');
+                }
+                $form->add('city_text', 'text',
                     array(
                     'label' => $options['city_label'],
+                    //'mapped' => false,
                     'attr' => array(
                         'class' => 'form-control location-select city-select location-text'
                     ))
                 );
                 return;
+            } else {
+                if ($form->has('city_text')) {
+                    $form->remove('city_text');
+                }
             }
             $form->add('city', 'entity',
                 array(
@@ -152,8 +168,13 @@ class CitySelectorComboType extends AbstractType
             if (isset($data['country']) && !empty($data['country'])) {
                 $refreshState($form, $data['country']);
             }
-            if ($level !== 'country' && isset($data['state']) && !empty($data['state'])) {
+            $hasState     = isset($data['state']) && !empty($data['state']);
+            $hasStateText = isset($data['state_text']) && !empty($data['state_text']);
+            if ($level !== 'country' && $hasState) {
                 $refreshCity($form, $data['state']);
+            }
+            if ($level !== 'country' && $hasStateText) {
+                $refreshCity($form, $data['state_text']);
             }
         });
     }

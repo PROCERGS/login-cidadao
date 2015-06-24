@@ -19,6 +19,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Model\IdCardInterface;
 use PROCERGS\LoginCidadao\ValidationControlBundle\Handler\ValidationHandler;
 use PROCERGS\LoginCidadao\CoreBundle\Model\SelectData;
 use PROCERGS\OAuthBundle\Entity\Client;
+use PROCERGS\LoginCidadao\CoreBundle\DynamicFormEvents;
 
 class DynamicFormController extends Controller
 {
@@ -63,6 +64,11 @@ class DynamicFormController extends Controller
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $dispatcher = $this->getDispatcher();
+            $event      = new \FOS\UserBundle\Event\FormEvent($form, $request);
+            $dispatcher->dispatch(DynamicFormEvents::POST_FORM_VALIDATION,
+                $event);
+
             $em           = $this->getDoctrine()->getManager();
             $person       = $formBuilder->getData()->getPerson();
             $address      = $formBuilder->getData()->getAddress();
@@ -89,7 +95,10 @@ class DynamicFormController extends Controller
 
             $em->flush();
 
-            return $this->redirect($formBuilder->getData()->getRedirectUrl());
+            $dispatcher->dispatch(DynamicFormEvents::POST_FORM_EDIT, $event);
+
+            $dispatcher->dispatch(DynamicFormEvents::PRE_REDIRECT, $event);
+            //return $this->redirect($formBuilder->getData()->getRedirectUrl());
         }
 
         $viewData = compact('client', 'scope', 'authorizedScope');
@@ -379,5 +388,13 @@ class DynamicFormController extends Controller
         return $this->getDoctrine()
                 ->getRepository('PROCERGSOAuthBundle:Client')
                 ->findOneBy($params);
+    }
+
+    /**
+     * @return \Symfony\Component\EventDispatcher\EventDispatcher
+     */
+    private function getDispatcher()
+    {
+        return $this->get('event_dispatcher');
     }
 }

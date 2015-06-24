@@ -24,6 +24,16 @@ class SelectData
     protected $city;
 
     /**
+     * @var string
+     */
+    protected $cityText;
+
+    /**
+     * @var string
+     */
+    protected $stateText;
+
+    /**
      * Set country
      *
      * @param Country $country
@@ -90,6 +100,36 @@ class SelectData
     public function getCity()
     {
         return $this->city;
+    }
+
+    public function getCityText()
+    {
+        if ($this->getCity() instanceof City) {
+            return $this->getCity()->getName();
+        } else {
+            return $this->cityText;
+        }
+    }
+
+    public function getStateText()
+    {
+        if ($this->getState() instanceof State) {
+            return $this->getState()->getName();
+        } else {
+            return $this->stateText;
+        }
+    }
+
+    public function setCityText($cityText)
+    {
+        $this->cityText = $cityText;
+        return $this;
+    }
+
+    public function setStateText($stateText)
+    {
+        $this->stateText = $stateText;
+        return $this;
     }
 
     public function getFromObject(LocationAwareInterface $object)
