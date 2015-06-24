@@ -235,6 +235,8 @@ class DynamicFormController extends Controller
                                   Person $person, $new = true)
     {
         $addresses = $person->getAddresses();
+        $address   = new PersonAddress();
+        $address->setLocation(new SelectData());
         if ($new === false && $addresses->count() > 0) {
             $address = $addresses->last();
             $city    = $address->getCity();
@@ -244,8 +246,8 @@ class DynamicFormController extends Controller
                 $address->getLocation()->setCity($city)
                     ->setState($state)->setCountry($country);
             }
-            $formBuilder->getData()->setAddress($address);
         }
+        $formBuilder->getData()->setAddress($address);
 
         $formBuilder->add('address', 'lc_person_address',
             array('label' => false));

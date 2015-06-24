@@ -15,6 +15,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Model\SelectData;
 use PROCERGS\LoginCidadao\CoreBundle\Model\Manager\CityManager;
 use PROCERGS\LoginCidadao\CoreBundle\Model\Manager\StateManager;
 use PROCERGS\LoginCidadao\CoreBundle\Model\Manager\CountryManager;
+use PROCERGS\LoginCidadao\CoreBundle\EventListener\ProfileEditListner;
 
 class CitySelectorComboType extends AbstractType
 {
@@ -27,16 +28,21 @@ class CitySelectorComboType extends AbstractType
     /** @var CountryManager */
     private $countryManager;
 
+    /** @var ProfileEditListner */
+    private $profileEditSubscriber;
+
     /** @var string */
     private $level;
 
     public function __construct(CountryManager $countryManager,
                                 StateManager $stateManager,
-                                CityManager $cityManager)
+                                CityManager $cityManager,
+                                ProfileEditListner $profileEditSubscriber)
     {
-        $this->cityManager    = $cityManager;
-        $this->stateManager   = $stateManager;
-        $this->countryManager = $countryManager;
+        $this->cityManager           = $cityManager;
+        $this->stateManager          = $stateManager;
+        $this->countryManager        = $countryManager;
+        $this->profileEditSubscriber = $profileEditSubscriber;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -177,6 +183,8 @@ class CitySelectorComboType extends AbstractType
                 $refreshCity($form, $data['state_text']);
             }
         });
+
+        $builder->addEventSubscriber($this->profileEditSubscriber);
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

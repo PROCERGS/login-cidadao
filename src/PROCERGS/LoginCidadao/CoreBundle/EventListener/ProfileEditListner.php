@@ -6,6 +6,7 @@ use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -27,6 +28,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Exception\MissingNfgAccessTokenException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
 use PROCERGS\LoginCidadao\CoreBundle\DynamicFormEvents;
 use PROCERGS\LoginCidadao\CoreBundle\Model\DynamicFormData;
+use PROCERGS\LoginCidadao\CoreBundle\Model\SelectData;
 
 class ProfileEditListner implements EventSubscriberInterface
 {
@@ -77,7 +79,7 @@ class ProfileEditListner implements EventSubscriberInterface
             FOSUserEvents::PROFILE_EDIT_INITIALIZE => 'onProfileEditInitialize',
             FOSUserEvents::PROFILE_EDIT_SUCCESS => 'onProfileEditSuccess',
             ProfileEditListner::PROFILE_DOC_EDIT_SUCCESS => 'onProfileDocEditSuccess',
-            DynamicFormEvents::POST_FORM_VALIDATION => 'registerTextualLocation'
+            FormEvents::POST_SUBMIT => 'registerTextualLocation'
         );
     }
 
@@ -328,30 +330,29 @@ class ProfileEditListner implements EventSubscriberInterface
         }
     }
 
-    public function registerTextualLocation(FormEvent $event)
+    public function registerTextualLocation(\Symfony\Component\Form\FormEvent $event)
     {
         $this->registerTextualState($event);
         $this->registerTextualCity($event);
     }
 
-    private function registerTextualState(FormEvent $event)
+    private function registerTextualState(\Symfony\Component\Form\FormEvent $event)
     {
         $data = $event->getForm()->getData();
-        if (!($data instanceof DynamicFormData)) {
+        if (!($data instanceof SelectData)) {
             return;
         }
-        $placeOfBirth = $data->getPlaceOfBirth();
-        $form         = $event->getForm()->get('placeOfBirth');
+        $form = $event->getForm();
         if ($form->has('state_text')) {
             $stateTextInput = $form->get('state_text')->getData();
             $stateText      = ucwords(strtolower(trim($stateTextInput)));
             if (!$stateText) {
                 return;
             }
-            if (!$placeOfBirth->getCountry()) {
+            if (!$data->getCountry()) {
                 throw new LcValidationException('required.field.country');
             }
-            $isPreferred = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Country')->isPreferred($placeOfBirth->getCountry());
+            $isPreferred = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Country')->isPreferred($data->getCountry());
             if ($isPreferred) {
                 throw new LcValidationException('restrict.location.creation');
             }
@@ -359,37 +360,36 @@ class ProfileEditListner implements EventSubscriberInterface
             $repo  = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:State');
             $state = $repo->findOneBy(array(
                 'name' => $stateText,
-                'country' => $placeOfBirth->getCountry()
+                'country' => $data->getCountry()
             ));
             if (!$state) {
                 $state = new State();
                 $state->setName($stateText);
-                $state->setCountry($placeOfBirth->getCountry());
+                $state->setCountry($data->getCountry());
                 $this->em->persist($state);
             }
-            $placeOfBirth->setState($state)
+            $data->setState($state)
                 ->setCity(null);
         }
     }
 
-    private function registerTextualCity(FormEvent $event)
+    private function registerTextualCity(\Symfony\Component\Form\FormEvent $event)
     {
         $data = $event->getForm()->getData();
-        if (!($data instanceof DynamicFormData)) {
+        if (!($data instanceof SelectData)) {
             return;
         }
-        $placeOfBirth = $data->getPlaceOfBirth();
-        $form         = $event->getForm()->get('placeOfBirth');
+        $form = $event->getForm();
         if ($form->has('city_text')) {
             $cityTextInput = $form->get('city_text')->getData();
             $cityText      = ucwords(strtolower(trim($cityTextInput)));
             if (!$cityText) {
                 return;
             }
-            if (!$placeOfBirth->getState()) {
+            if (!$data->getState()) {
                 throw new LcValidationException('required.field.state');
             }
-            $isPreferred = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Country')->isPreferred($placeOfBirth->getCountry());
+            $isPreferred = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Country')->isPreferred($data->getCountry());
             if ($isPreferred) {
                 throw new LcValidationException('restrict.location.creation');
             }
@@ -397,15 +397,15 @@ class ProfileEditListner implements EventSubscriberInterface
             $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:City');
             $city = $repo->findOneBy(array(
                 'name' => $cityText,
-                'state' => $placeOfBirth->getState()
+                'state' => $data->getState()
             ));
             if (!$city) {
                 $city = new City();
                 $city->setName($cityText);
-                $city->setState($placeOfBirth->getState());
+                $city->setState($data->getState());
                 $this->em->persist($city);
             }
-            $placeOfBirth->setCity($city);
+            $data->setCity($city);
         }
     }
 }

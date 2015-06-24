@@ -31,13 +31,15 @@ var locationSelection = {
         var element = $(filter, parent);
         var oldId = element.attr('id');
         var oldName = element.attr('name');
-        element.closest('div')
-                .data('field-id', oldId)
-                .data('field-name', oldName);
 
-        element.replaceWith($(data).find(filter));
-        //.attr('id', oldId)
-        //.attr('name', oldName);
+        var regex = /(.*)(\[\w+\])$/;
+        var m = regex.exec(oldName);
+        var newElement = $(data).find(filter);
+        var newName = regex.exec(newElement.attr('name'));
+        if (newName !== null) {
+            newElement.attr('name', m[1] + newName[2]);
+        }
+        element.replaceWith(newElement.attr('id', oldId));
         return;
     }
 };
