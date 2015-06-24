@@ -28,13 +28,6 @@
                 {{ form_errors(form.name) }}
             </div>
         {% endif %}
-{#
-        <div class="form-group">
-            {{ form_label(form.country) }}
-            {{ form_widget(form.country, {'attr': {'placeholder': 'ex: Brazil' | trans} }) }}
-            {{ form_errors(form.country) }}
-        </div>
-#}
         <div class="form-group">
             {{ form_label(form.postalCode) }}
             {{ form_widget(form.postalCode, {'attr': {'placeholder': 'ex: DE24 8SG' | trans} }) }}
@@ -42,20 +35,6 @@
                 {{ form_errors(form.postalCode) }}
         </div>
         {{ form_row(form.location) }}
-        {#
-        <div class="form-group">
-            {{ form_label(form.state) }}
-            {{ form_widget(form.state, {'attr': {'placeholder': 'ex: Rio Grande do Sul' | trans} }) }}
-            {{ form_widget(form.statesteppe, {'attr': {'style': 'display: none;'}}) }}
-            {{ form_errors(form.state) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(form.city) }}
-            {{ form_widget(form.city, {'attr': {'placeholder': 'ex: Porto Alegre' | trans} }) }}
-            {{ form_widget(form.citysteppe, {'attr': {'style': 'display: none;'}}) }}
-            {{ form_errors(form.city) }}
-        </div>
-        #}
         <div class="form-group">
             {{ form_label(form.address) }}
             {{ form_widget(form.address, {'attr': {'placeholder': 'ex: 221B Baker Street' | trans} }) }}
