@@ -80,6 +80,7 @@ services:
             - { name: form.type, alias: procergs_person_profile }
         calls:
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+            - [ setDefaultCountryIso2, [%default_country_iso2%] ]
 
     procergs_person.revoke_authorization.form.type:
         class: %procergs_person.revoke_authorization.form.type.class%

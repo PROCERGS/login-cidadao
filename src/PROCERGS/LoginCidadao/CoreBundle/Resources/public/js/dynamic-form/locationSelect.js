@@ -40,6 +40,7 @@ var locationSelection = {
             newElement.attr('name', m[1] + newName[2]);
         }
         element.replaceWith(newElement.attr('id', oldId));
+        newElement.trigger('location:changed');
         return;
     }
 };
