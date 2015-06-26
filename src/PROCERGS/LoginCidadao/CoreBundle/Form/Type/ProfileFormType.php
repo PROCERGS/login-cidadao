@@ -16,171 +16,63 @@ use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 class ProfileFormType extends BaseType
 {
     protected $em;
+    private $defaultCountryIso2;
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         //parent::buildForm($builder, $options);
-        $country = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Country')->findOneBy(array('iso2' => 'BR'));
+        $country = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Country')->findOneBy(array(
+            'iso2' => $this->defaultCountryIso2));
         $builder/* ->add('username', null,
-                        array('label' => 'form.username', 'translation_domain' => 'FOSUserBundle')) */
-                ->add('email', 'email',
-                        array('label' => 'form.email', 'translation_domain' => 'FOSUserBundle'))
-                ->add('firstName', 'text',
-                        array('label' => 'form.firstName', 'translation_domain' => 'FOSUserBundle'))
-                ->add('surname', 'text',
-                        array('label' => 'form.surname', 'translation_domain' => 'FOSUserBundle'))
-                ->add('birthdate', 'birthday', array(
-                    'required' => false,
-                    'format' => 'dd/MM/yyyy',
-                    'widget' => 'single_text',
-                    'label' => 'form.birthdate',
-                    'translation_domain' => 'FOSUserBundle',
-                    'attr' => array('pattern' => '[0-9/]*', 'class' => 'form-control birthdate')
-                    )
+              array('label' => 'form.username', 'translation_domain' => 'FOSUserBundle')) */
+            ->add('email', 'email',
+                array('label' => 'form.email', 'translation_domain' => 'FOSUserBundle'))
+            ->add('firstName', 'text',
+                array('label' => 'form.firstName', 'translation_domain' => 'FOSUserBundle'))
+            ->add('surname', 'text',
+                array('label' => 'form.surname', 'translation_domain' => 'FOSUserBundle'))
+            ->add('birthdate', 'birthday',
+                array(
+                'required' => false,
+                'format' => 'dd/MM/yyyy',
+                'widget' => 'single_text',
+                'label' => 'form.birthdate',
+                'translation_domain' => 'FOSUserBundle',
+                'attr' => array('pattern' => '[0-9/]*', 'class' => 'form-control birthdate')
                 )
-                ->add('mobile', null,
-                        array('required' => false, 'label' => 'form.mobile', 'translation_domain' => 'FOSUserBundle'))
-                ->add('image', 'vich_file', array(
-                    'required'      => false,
-                    'allow_delete'  => true, // not mandatory, default is true
-                    'download_link' => true, // not mandatory, default is true
-                ))
-                ->add('country', 'entity',array(
-                    'required' => false,
-                    'class' => 'PROCERGSLoginCidadaoCoreBundle:Country',
-                    'property' => 'name',
-                    'preferred_choices' => array($country),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('u')
-                            ->where('u.reviewed = :reviewed')
-                            ->setParameter('reviewed', Country::REVIEWED_OK)
-                            ->orderBy('u.name', 'ASC');
-                    },
-                    'label' => 'Place of birth - Country'
-                ))
-                ;
-                $builder->add('nationality', 'entity',array(
-                    'required' => false,
-                    'class' => 'PROCERGSLoginCidadaoCoreBundle:Country',
-                    'property' => 'name',
-                    'preferred_choices' => array($country),
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('u')
-                        ->where('u.reviewed = :reviewed')
-                        ->setParameter('reviewed', Country::REVIEWED_OK)
-                        ->orderBy('u.name', 'ASC');
-                    },
-                    'label' => 'Nationality'
-                        ));
-                $builder->add('ufsteppe', 'text', array("required"=> false, "mapped"=>false));
-                $builder->add('citysteppe', 'text', array("required"=> false, "mapped"=>false));
-                $builder->add('ufpreferred', 'hidden', array("data" => $country->getId(),"required"=> false, "mapped"=>false));
-
-                $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-                    $person = $event->getData();
-                    $form = $event->getForm();
-                    $form->add('state', 'entity',array(
-                        'required' => false,
-                        'class' => 'PROCERGSLoginCidadaoCoreBundle:State',
-                        'property' => 'name',
-                        'empty_value' => '',
-                        'query_builder' => function(EntityRepository $er) use ($person) {
-                            if ($person instanceof PersonInterface) {
-                                $country = $person->getCountry();
-                                $state = $person->getState();
-                            } else {
-                                $country = null;
-                                $state = null;
-                            }
-
-                            $params = array(
-                                'reviewed' => State::REVIEWED_OK,
-                                'country' => $country instanceof Country ? $country : null,
-                                'state' => $state instanceof State ? $state : null
-                            );
-
-                            return $er->createQueryBuilder('s')
-                                ->where('s.reviewed = :reviewed')
-                                ->andWhere('s.country = :country')
-                                ->orWhere('s = :state')
-                                ->setParameters($params)
-                                ->orderBy('s.name', 'ASC');
-                        },
-                        'label' => 'Place of birth - State'
-                    ));
-                    $form->add('city', 'entity',array(
-                        'required' => false,
-                        'class' => 'PROCERGSLoginCidadaoCoreBundle:City',
-                        'property' => 'name',
-                        'empty_value' => '',
-                        'query_builder' => function(EntityRepository $er) use ($person) {
-                            if ($person instanceof PersonInterface) {
-                                $country = $person->getCountry();
-                                $state = $person->getState();
-                                $city = $person->getCity();
-                            } else {
-                                $country = null;
-                                $state = null;
-                                $city = null;
-                            }
-                            $params = array(
-                                'reviewed' => State::REVIEWED_OK,
-                                'state' => ($country instanceof Country && $state instanceof State) ? $state : null,
-                                'city' => ($country instanceof Country && $state instanceof State && $city instanceof City) ? $city : null
-                            );
-                            return $er->createQueryBuilder('c')
-                                ->where('c.reviewed = :reviewed and c.state = :state')
-                                ->orWhere('c = :city and c.state = :state')
-                                ->setParameters($params)
-                                ->orderBy('c.name', 'ASC');
-                        },
-                        'label' => 'Place of birth - City'
-                    ));
-
-                });
-                $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-                    $data = $event->getData();
-                    $form = $event->getForm();
-                    $form->add('state', 'entity',array(
-                        'required' => false,
-                        'class' => 'PROCERGSLoginCidadaoCoreBundle:State',
-                        'property' => 'name',
-                        'empty_value' => '',
-                        'query_builder' => function(EntityRepository $er) use ($data) {
-                            $params = array(
-                                'reviewed' => State::REVIEWED_OK,
-                                'country' => isset($data['country']) ? $data['country'] : null,
-                                'stateId' => isset($data['state']) ? $data['state'] : null
-                            );
-                            return $er->createQueryBuilder('s')
-                                    ->where('s.reviewed = :reviewed')
-                                    ->andWhere('s.country = :country')
-                                    ->orWhere('s.id = :stateId')
-                                    ->setParameters($params)
-                                    ->orderBy('s.name', 'ASC');
-                        }
-                    ));
-                    $form->add('city', 'entity',array(
-                        'required' => false,
-                        'class' => 'PROCERGSLoginCidadaoCoreBundle:City',
-                        'property' => 'name',
-                        'empty_value' => '',
-                        'query_builder' => function(EntityRepository $er) use ($data) {
-                            $params = array(
-                                'reviewed' => State::REVIEWED_OK,
-                                'state' => isset($data['state']) ? $data['state'] : null,
-                                'cityId' => isset($data['city']) ? $data['city'] : null
-                            );
-                            return $er->createQueryBuilder('c')
-                                        ->where('c.reviewed = :reviewed and c.state = :state')
-                                        ->orWhere('c.id = :cityId and c.state = :state')
-                                        ->setParameters($params)
-                                        ->orderBy('c.name', 'ASC');
-                        }
-                    ));
-
-                });
-
+            )
+            ->add('mobile', null,
+                array('required' => false, 'label' => 'form.mobile', 'translation_domain' => 'FOSUserBundle'))
+            ->add('image', 'vich_file',
+                array(
+                'required' => false,
+                'allow_delete' => true, // not mandatory, default is true
+                'download_link' => true, // not mandatory, default is true
+            ))
+            ->add('placeOfBirth', 'lc_location',
+                array(
+                'level' => 'city',
+                'city_label' => 'Place of birth - City',
+                'state_label' => 'Place of birth - State',
+                'country_label' => 'Place of birth - Country',
+            ))
+        ;
+        $builder->add('nationality', 'entity',
+            array(
+            'required' => false,
+            'class' => 'PROCERGSLoginCidadaoCoreBundle:Country',
+            'property' => 'name',
+            'preferred_choices' => array($country),
+            'query_builder' => function(EntityRepository $er) {
+            return $er->createQueryBuilder('u')
+                    ->where('u.reviewed = :reviewed')
+                    ->setParameter('reviewed', Country::REVIEWED_OK)
+                    ->orderBy('u.name', 'ASC');
+        },
+            'label' => 'Nationality'
+        ));
+        $builder->add('defaultCountry', 'hidden',
+            array("data" => $country->getId(), "required" => false, "mapped" => false));
     }
 
     public function getName()
@@ -194,4 +86,9 @@ class ProfileFormType extends BaseType
         return $this;
     }
 
+    public function setDefaultCountryIso2($iso2)
+    {
+        $this->defaultCountryIso2 = $iso2;
+        return $this;
+    }
 }

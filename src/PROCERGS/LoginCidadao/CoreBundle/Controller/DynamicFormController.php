@@ -19,6 +19,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Model\IdCardInterface;
 use PROCERGS\LoginCidadao\ValidationControlBundle\Handler\ValidationHandler;
 use PROCERGS\LoginCidadao\CoreBundle\Model\SelectData;
 use PROCERGS\OAuthBundle\Entity\Client;
+use PROCERGS\LoginCidadao\CoreBundle\DynamicFormEvents;
 
 class DynamicFormController extends Controller
 {
@@ -41,7 +42,7 @@ class DynamicFormController extends Controller
         $authorizedScope = $person->getClientScope($client);
         $requestedScope  = explode(' ', $request->get('scope', null));
 
-        $scope = array_intersect($authorizedScope, $requestedScope);
+        $scope = $this->intersectScopes($authorizedScope, $requestedScope);
 
         $placeOfBirth = new SelectData();
         $placeOfBirth->getFromObject($person);
@@ -63,6 +64,11 @@ class DynamicFormController extends Controller
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $dispatcher = $this->getDispatcher();
+            $event      = new \FOS\UserBundle\Event\FormEvent($form, $request);
+            $dispatcher->dispatch(DynamicFormEvents::POST_FORM_VALIDATION,
+                $event);
+
             $em           = $this->getDoctrine()->getManager();
             $person       = $formBuilder->getData()->getPerson();
             $address      = $formBuilder->getData()->getAddress();
@@ -78,7 +84,6 @@ class DynamicFormController extends Controller
 
             if ($address instanceof PersonAddress) {
                 $address->setPerson($person);
-                $address->getLocation()->toObject($address);
                 $em->persist($address);
             }
 
@@ -88,6 +93,10 @@ class DynamicFormController extends Controller
             }
 
             $em->flush();
+
+            $dispatcher->dispatch(DynamicFormEvents::POST_FORM_EDIT, $event);
+
+            $dispatcher->dispatch(DynamicFormEvents::PRE_REDIRECT, $event);
 
             return $this->redirect($formBuilder->getData()->getRedirectUrl());
         }
@@ -226,6 +235,8 @@ class DynamicFormController extends Controller
                                   Person $person, $new = true)
     {
         $addresses = $person->getAddresses();
+        $address   = new PersonAddress();
+        $address->setLocation(new SelectData());
         if ($new === false && $addresses->count() > 0) {
             $address = $addresses->last();
             $city    = $address->getCity();
@@ -235,8 +246,8 @@ class DynamicFormController extends Controller
                 $address->getLocation()->setCity($city)
                     ->setState($state)->setCountry($country);
             }
-            $formBuilder->getData()->setAddress($address);
         }
+        $formBuilder->getData()->setAddress($address);
 
         $formBuilder->add('address', 'lc_person_address',
             array('label' => false));
@@ -379,5 +390,37 @@ class DynamicFormController extends Controller
         return $this->getDoctrine()
                 ->getRepository('PROCERGSOAuthBundle:Client')
                 ->findOneBy($params);
+    }
+
+    /**
+     * @return \Symfony\Component\EventDispatcher\EventDispatcher
+     */
+    private function getDispatcher()
+    {
+        return $this->get('event_dispatcher');
+    }
+
+    private function getScopeAsArray($scope)
+    {
+        if ($scope === null) {
+            $scope = array();
+        }
+        if (!is_array($scope)) {
+            if (preg_match("/[^ ]+ [^ ]+/", $scope) === 1) {
+                $scope = explode(' ', $scope);
+            } else {
+                $scope = array($scope);
+            }
+        }
+
+        return $scope;
+    }
+
+    private function intersectScopes($authorizedScope, $requestedScope)
+    {
+        $authorizedScope = $this->getScopeAsArray($authorizedScope);
+        $requestedScope  = $this->getScopeAsArray($requestedScope);
+
+        return array_intersect($authorizedScope, $requestedScope);
     }
 }

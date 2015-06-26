@@ -15,6 +15,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Model\SelectData;
 use PROCERGS\LoginCidadao\CoreBundle\Model\Manager\CityManager;
 use PROCERGS\LoginCidadao\CoreBundle\Model\Manager\StateManager;
 use PROCERGS\LoginCidadao\CoreBundle\Model\Manager\CountryManager;
+use PROCERGS\LoginCidadao\CoreBundle\EventListener\ProfileEditListner;
 
 class CitySelectorComboType extends AbstractType
 {
@@ -27,16 +28,21 @@ class CitySelectorComboType extends AbstractType
     /** @var CountryManager */
     private $countryManager;
 
+    /** @var ProfileEditListner */
+    private $profileEditSubscriber;
+
     /** @var string */
     private $level;
 
     public function __construct(CountryManager $countryManager,
                                 StateManager $stateManager,
-                                CityManager $cityManager)
+                                CityManager $cityManager,
+                                ProfileEditListner $profileEditSubscriber)
     {
-        $this->cityManager    = $cityManager;
-        $this->stateManager   = $stateManager;
-        $this->countryManager = $countryManager;
+        $this->cityManager           = $cityManager;
+        $this->stateManager          = $stateManager;
+        $this->countryManager        = $countryManager;
+        $this->profileEditSubscriber = $profileEditSubscriber;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -61,12 +67,35 @@ class CitySelectorComboType extends AbstractType
             if ($level === 'country') {
                 return;
             }
+            if ($countryId === null) {
+                $choices = array();
+            } else {
+                $choices = $stateManager->findByCountryId($countryId);
+            }
+            if (empty($choices)) {
+                if ($form->has('state')) {
+                    $form->remove('state');
+                }
+                $form->add('state_text', (empty($choices) ? 'text' : 'hidden'),
+                    array(
+                    'label' => $options['state_label'],
+                    //'mapped' => false,
+                    'attr' => array(
+                        'class' => 'form-control location-select state-select location-text'
+                    )
+                ));
+                return;
+            } else {
+                if ($form->has('state_text')) {
+                    $form->remove('state_text');
+                }
+            }
             $form->add('state', 'entity',
                 array(
                 'class' => $stateManager->getClass(),
                 'property' => 'name',
                 'empty_value' => '',
-                'choices' => $countryId === null ? array() : $stateManager->findByCountryId($countryId),
+                'choices' => $choices,
                 'attr' => array(
                     'class' => 'form-control location-select state-select'
                 ),
@@ -77,6 +106,29 @@ class CitySelectorComboType extends AbstractType
         $refreshCity = function (FormInterface $form, $stateId = null) use ($options, $cityManager, $level) {
             if ($level === 'country' || $level === 'state') {
                 return;
+            }
+            if ($stateId === null) {
+                $choices = array();
+            } else {
+                $choices = $cityManager->findByStateId($stateId);
+            }
+            if (empty($choices)) {
+                if ($form->has('city')) {
+                    $form->remove('city');
+                }
+                $form->add('city_text', 'text',
+                    array(
+                    'label' => $options['city_label'],
+                    //'mapped' => false,
+                    'attr' => array(
+                        'class' => 'form-control location-select city-select location-text'
+                    ))
+                );
+                return;
+            } else {
+                if ($form->has('city_text')) {
+                    $form->remove('city_text');
+                }
             }
             $form->add('city', 'entity',
                 array(
@@ -122,10 +174,17 @@ class CitySelectorComboType extends AbstractType
             if (isset($data['country']) && !empty($data['country'])) {
                 $refreshState($form, $data['country']);
             }
-            if ($level !== 'country' && isset($data['state']) && !empty($data['state'])) {
+            $hasState     = isset($data['state']) && !empty($data['state']);
+            $hasStateText = isset($data['state_text']) && !empty($data['state_text']);
+            if ($level !== 'country' && $hasState) {
                 $refreshCity($form, $data['state']);
             }
+            if ($level !== 'country' && $hasStateText) {
+                $refreshCity($form, $data['state_text']);
+            }
         });
+
+        $builder->addEventSubscriber($this->profileEditSubscriber);
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

@@ -19,6 +19,7 @@ use Doctrine\Common\Collections\Collection;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Model\LocationAwareInterface;
+use PROCERGS\LoginCidadao\CoreBundle\Model\SelectData;
 
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
@@ -1273,10 +1274,13 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     public function getPlaceOfBirth()
     {
-        return array(
-            'country' => $this->getCountry(),
-            'state' => $this->getState(),
-            'city' => $this->getCity()
-        );
+        $location = new SelectData();
+        $location->getFromObject($this);
+        return $location;
+    }
+
+    public function setPlaceOfBirth(SelectData $location)
+    {
+        $location->toObject($this);
     }
 }

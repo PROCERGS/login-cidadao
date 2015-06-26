@@ -81,7 +81,7 @@ class Country
     public function __construct($id = null)
     {
         $this->setId($id);
-        $this->states = new Doctrine\Common\Collections\ArrayCollection();
+        $this->states = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId()
