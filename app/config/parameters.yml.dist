@@ -50,13 +50,6 @@ parameters:
     background_picture.author: 'Guilherme da Silva Donato'
     background_picture.link: 'http://www.flickr.com/photos/lordjedi/2295119043/'
     mailer_receiver_mail: ~
-    nfg_ws_url: ~
-    soe_organization: ~
-    soe_username: ~
-    soe_password: ~
-    nfg_url_auth: ~
-    nfg_url_login: ~
-    nfg_hmac_secret: ~
 
     user_profile_ftp_host: ftp.host
     user_profile_ftp_username: ftp_username

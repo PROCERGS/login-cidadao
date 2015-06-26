@@ -9,7 +9,6 @@ This page will describe what scope does what. Bellow there's a list of the avail
  * [ birthdate ](#birthdate)
  * [ email ](#email)
  * [ city ](#city)
- * ~~[ voter_registration ](#voter_registration)~~ (**deprecated**)
  * [ country ](#country)
  * [ uf ](#uf)
  * [ addresses ](#addresses)
@@ -129,12 +128,6 @@ Allows read access to a person's city. The full City object will be returned, in
 	// ...
 }
 ```
-
-## <a name="voter_registration"></a> ~~voter_registration~~ (deprecated)
-
-**DO NOT USE**
-
-Used to allow read access to a person's voter registration.
 
 ## <a name="country"></a> country
 

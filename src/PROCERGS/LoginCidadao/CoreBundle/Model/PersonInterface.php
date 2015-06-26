@@ -114,20 +114,6 @@ interface PersonInterface
 
     public function hasPassword();
 
-    public function setNfgAccessToken($var);
-
-    public function getNfgAccessToken();
-
-    /**
-     *
-     * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile
-     */
-    public function getNfgProfile();
-
-    public function setVoterRegistration($var = null);
-
-    public function getVoterRegistration();
-
     /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
      * of 'UploadedFile' is injected into this setter to trigger the  update. If this

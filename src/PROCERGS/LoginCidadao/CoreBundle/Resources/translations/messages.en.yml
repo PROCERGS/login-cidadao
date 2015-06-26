@@ -17,7 +17,6 @@ scope.cpf: CPF
 scope.email: Email
 scope.birthdate: Birthdate
 scope.city: City
-scope.voter_registration: Voter Registration
 scope.badges: Badges
 scope.picture: Picture
 scope.public_profile: Public Profile
@@ -99,13 +98,7 @@ Deactivated: Deactivated
 'Change username': 'Change username'
 exception.alreadyLinkedAccount: 'This account is already linked with another user. You have to unlink from that user before linking to this current user.'
 contact.title: 'Fale conosco'
-nfg.noprofile.found: 'Não foi encontado sua conta na Nota Fiscal Gaúcha!'
 cpf.registration.title: 'Registro de CPF'
-cpf.registration.nfg.check.invite: 'If you want to reinforce you CPF you can check with Nota Fiscal Gaúcha, you need to put you password of your account of Nota Fiscal Gaúcha.'
-cpf.registration.nfg.check.password: 'Type in your Nota Fiscal Gaúcha password here:'
-cpf.registration.nfg.checked.at: 'Validado na Nota Fiscal Gaúcha em %date1%'
-cpf.profile.nfg.check.invite: 'Você deseja reforçar seu CPF ainda mais?'
-cpf.profile.nfg.check.button: 'Verifique com a Nota Fiscal Gaúcha!'
 'Your login': 'Your login'
 'Governo do Rio Grande do Sul': 'Governo do Rio Grande do Sul'
 '<a href="%link%">Background picture</a> by %name%': '<a href="%link%">Background picture</a> by %name%'
@@ -156,7 +149,6 @@ Send: Send
 'Your last suggested Services': 'Your last suggested Services'
 'Meu RS': 'Meu RS'
 'Login Cidadão': 'Login Cidadão'
-form.voter_registration.invalid: 'Invalid Voter Registration'
 'Do you really want to disable this service?': 'Do you really want to disable this service?'
 Yes: Yes
 No: No
@@ -168,8 +160,6 @@ No: No
 'Creative commons': Creative commons
 lc.html.title: 'Citizen''s Login'
 'About Citizen''s Login': 'About Citizen''s Login'
-voterregistration.conflict.ask.nfg: 'The informed voter registration is already being used by another person. If you are sure it''s yours then connect your account with Nota Fiscal Gaúcha to enable Voter Registration validation.'
-voterregistration.invalid: 'The informed voter registration is invalid or belongs to someone else. If you believe this is incorrect, try connection your account with Nota Fical Gaúcha to enable Voter Registration validation.'
 'This is the Citizen Login': 'This is the Citizen Login'
 'To enjoy all the benefits of Citizen Login, please check your information and submit the following form.': 'To enjoy all the benefits of Citizen Login, please check your information and submit the following form.'
 'After registering you''ll receive a confirmation email to proceed the activation of your account.': 'After registering you''ll receive a confirmation email to proceed the activation of your account.'

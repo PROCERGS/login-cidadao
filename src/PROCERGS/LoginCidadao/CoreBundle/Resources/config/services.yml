@@ -26,7 +26,6 @@ parameters:
 
     procergs_logincidadao_core.emailChanged.template: PROCERGSLoginCidadaoCoreBundle:Person:emailChangedMessage.html.twig
     procergs_logincidadao_core.notification.email.template: PROCERGSLoginCidadaoCoreBundle:Email:notification.html.twig
-    procergs_logincidadao.nfgws.class: PROCERGS\LoginCidadao\CoreBundle\Helper\NfgWsHelper
 
     procergs_logincidadao.postalcode.search.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\SearchPostalCodeFormType
 
@@ -147,7 +146,6 @@ services:
             - [setCpfEmptyTime, ["%registration.cpf.empty_time%"]]
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
             - [setDneHelper, ["@procergs_logincidadao.dne"]]
-            - [setNfgHelper, ["@procergs_logincidadao.nfgws"]]
             - [setUserManager, ["@fos_user.user_manager"]]
 
     procergs_logincidadao.change.password.form.type:
@@ -245,14 +243,6 @@ services:
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
             - [setTranslator, ["@translator"]]
             - [setSecurity, ["@security.context"]]
-
-    procergs_logincidadao.nfgws:
-        class: %procergs_logincidadao.nfgws.class%
-        calls:
-            - [setUrl, [%nfg_ws_url%]]
-            - [setOrganizacao, [%soe_organization%]]
-            - [setUsuario, [%soe_username%]]
-            - [setSenha, [%soe_password%]]
 
     procergs.person.serialize.listenner:
         class: %procergs.person.serialize.listenner.class%

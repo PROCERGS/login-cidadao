@@ -253,12 +253,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     protected $state;
 
     /**
-     * @ORM\Column(name="nfg_access_token", type="string", length=255, nullable=true, unique=true)
-     * @JMS\Since("1.0.2")
-     */
-    protected $nfgAccessToken;
-
-    /**
      * @JMS\Expose
      * @JMS\Groups({"country"})
      * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Country")
@@ -266,24 +260,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Since("1.0.2")
      */
     protected $country;
-
-    /**
-     * @JMS\Expose
-     * @JMS\Groups({"nfgprofile"})
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile")
-     * @ORM\JoinColumn(name="nfg_profile_id", referencedColumnName="id")
-     * @JMS\Since("1.0.2")
-     */
-    protected $nfgProfile;
-
-    /**
-     * @JMS\Expose
-     * @JMS\Groups({"voter_registration"})
-     * @ORM\Column(name="voter_registration", type="string", length=12, nullable=true, unique=true)
-     * @PROCERGSAssert\VoterRegistration
-     * @JMS\Since("1.0.2")
-     */
-    protected $voterRegistration;
 
     /**
      * @Assert\File(
@@ -633,16 +609,8 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      */
     public function getDataValid()
     {
-        $terms['cpf']   = (is_numeric($this->cpf) && strlen($this->nfgAccessToken));
+        $terms['cpf']   = is_numeric($this->cpf);
         $terms['email'] = is_null($this->getConfirmationToken());
-        if ($this->getNfgProfile()) {
-            $terms['nfg_access_lvl']     = $this->getNfgProfile()->getAccessLvl();
-            $terms['voter_registration'] = $this->getNfgProfile()->getVoterRegistrationSit()
-                > 0 ? true : false;
-        } else {
-            $terms['nfg_access_lvl']     = 0;
-            $terms['voter_registration'] = false;
-        }
         return $terms;
     }
 
@@ -871,54 +839,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function getState()
     {
         return $this->state;
-    }
-
-    public function setNfgAccessToken($var)
-    {
-        $this->nfgAccessToken = $var;
-        return $this;
-    }
-
-    public function getNfgAccessToken()
-    {
-        return $this->nfgAccessToken;
-    }
-
-    /**
-     *
-     * @param \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var
-     * @return City
-     */
-    public function setNfgProfile(\PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var
-    = null)
-    {
-        $this->nfgProfile = $var;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile
-     */
-    public function getNfgProfile()
-    {
-        return $this->nfgProfile;
-    }
-
-    public function setVoterRegistration($var = null)
-    {
-        if (null === $var) {
-            $this->voterRegistration = null;
-        } else {
-            $this->voterRegistration = preg_replace('/[^0-9]/', '', $var);
-        }
-        return $this;
-    }
-
-    public function getVoterRegistration()
-    {
-        return $this->voterRegistration;
     }
 
     /**

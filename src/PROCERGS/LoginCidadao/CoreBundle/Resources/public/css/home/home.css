@@ -149,12 +149,6 @@ body {
     background-repeat: no-repeat;
 }
 
-.lc-box .nfg {
-    background-position: 2px 0;
-    background-color: #EF9618;
-    background-image: url(../../images/nfg.png);
-}
-
 @media (max-width: 767px) {
   .lc-box .connect {
     height: 34px;
@@ -173,10 +167,6 @@ body {
     background-image: url(../../images/google_link.png);
   }
 
-  .lc-box .nfg {
-      background-position: 0;
-      background-image: url(../../images/nfg_34.png);
-  }
 }
 
 @media (min-width: 768px) {
