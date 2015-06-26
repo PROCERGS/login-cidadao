@@ -40,12 +40,10 @@ Revoked: Revogado
 'One account. All the Government.': 'Um cadastro. Acesso por todo o Governo'
 '%link_start%Create your account%link_end%': '%link_start%Crie seu Login Cidadão%link_end%'
 'Sign in with your Citizen''s Login': 'Acesse com seu Login Cidadão'
-'Government of Rio Grande do Sul - Promoting equality makes the difference': 'Governo do Rio Grande do Sul - Promover a igualdade faz a diferença'
 'One account. All that the Government offers.': 'Uma conta. Tudo o que o Governo oferece.'
 'Need help?': 'Não consegue conectar?'
 'One account to all of the Government''s services': 'Uma conta única para todos os serviços do Governo'
 'Available services': 'Serviços disponíveis'
-'Government of Rio Grande do Sul': 'Governo do Estado do Rio Grande do Sul'
 'Privacy and Terms of Service': 'Privacidade e Termos de Uso'
 Help: Ajuda
 'Logo Nota Fiscal Gaúcha': 'Logo Nota Fiscal Gaúcha'
@@ -123,7 +121,6 @@ Contact: Contato
 Government: Governo
 'view all services': 'ver todos serviços'
 exception.alreadyLinkedAccount: 'Essa conta já está conectada a um outro usuário. Você deve desfazer essa conexão antes de tentar linkar com o usuário atual.'
-'Governo do Rio Grande do Sul': 'Governo do Rio Grande do Sul'
 '<a href="%link%">Background picture</a> by %name%': '<a href="%link%">Imagem de fundo</a> por %name%'
 contact.title: 'Contato'
 cpf.registration.title: 'Registro de CPF'

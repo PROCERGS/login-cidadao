@@ -25,7 +25,6 @@ scope.notifications: Send Notifications
 'Authorized Applications': 'Authorized Applications'
 'Description:': 'Description:'
 'Access scope:': 'Access scope:'
-'Government of Rio Grande do Sul - Promoting equality makes the difference': 'Government of Rio Grande do Sul - Promoting equality makes the difference'
 'One account. All that the Government offers.': 'One account. All that the Government offers.'
 'Citizen''s Login': 'Citizen''s Login'
 'Captcha is invalid.': 'Captcha is invalid.'
@@ -33,7 +32,6 @@ scope.notifications: Send Notifications
 '%link_start%Create your account%link_end%': '%link_start%Create your account%link_end%'
 'One account to all of the Government''s services': 'One account to all of the Government''s services'
 'Available services': 'Available services'
-'Government of Rio Grande do Sul': 'Government of Rio Grande do Sul'
 'Privacy and Terms of Service': 'Privacy and Terms of Service'
 Help: Help
 'Available Applications and Sites': 'Available Applications and Sites'
@@ -100,7 +98,6 @@ exception.alreadyLinkedAccount: 'This account is already linked with another use
 contact.title: 'Fale conosco'
 cpf.registration.title: 'Registro de CPF'
 'Your login': 'Your login'
-'Governo do Rio Grande do Sul': 'Governo do Rio Grande do Sul'
 '<a href="%link%">Background picture</a> by %name%': '<a href="%link%">Background picture</a> by %name%'
 'Active Services': 'Active Services'
 'Other Services': 'Other Services'
