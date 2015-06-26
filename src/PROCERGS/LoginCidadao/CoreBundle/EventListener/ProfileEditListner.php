@@ -16,7 +16,6 @@ use PROCERGS\LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
 use PROCERGS\LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer;
 use FOS\UserBundle\Mailer\MailerInterface;
 use Doctrine\ORM\EntityManager;
-use PROCERGS\LoginCidadao\CoreBundle\Helper\DneHelper;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\City;
 use Assetic\Exception\Exception;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\LcValidationException;
@@ -165,11 +164,6 @@ class ProfileEditListner implements EventSubscriberInterface
     public function setEntityManager(EntityManager $var)
     {
         $this->em = $var;
-    }
-
-    public function setDneHelper(DneHelper $var)
-    {
-        $this->dne = $var;
     }
 
     public function setUserManager($var)

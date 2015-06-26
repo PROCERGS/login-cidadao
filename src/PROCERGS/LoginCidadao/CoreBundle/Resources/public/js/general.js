@@ -131,43 +131,6 @@ validator.onKeyUpMultiformat = function (obj, e)
     return false;
 };
 
-validator.cep = {'parent': validator};
-validator.cep.urlQuery = '/lc_consultaCep2';
-validator.cep.findByCep = function (obj, callback) {
-    if (obj.value === '') {
-        validator.check.success(obj);
-        return;
-    }
-    var cleanup = new RegExp('[. \\-]', 'gi');
-    var val = obj.value.replace(cleanup, '');
-    if (val === '' || val.length !== 8) {
-        validator.check.error(obj, $('label[for=' + obj.id + ']').text() + ' invalido');
-        return;
-    }
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        url: validator.cep.urlQuery + '/' + val
-    }).done(function (result) {
-        if (result.code !== 200) {
-            return this.fail(result);
-        }
-        if (result.items && result.items.length && callback) {
-            callback(result.items[0]);
-        }
-        validator.check.success(obj);
-    }).fail(function (result) {
-        if (result.code !== 200) {
-            validator.check.error(obj, $('label[for=' + obj.id + ']').text() + ' invalido');
-            return;
-        }
-    });
-};
-validator.cep.popupConsult = function (obj, evt, callback) {
-    var url = $(obj).attr('href') + '?callback=' + callback;
-    window.open(url, '', "width=600,height=450");
-};
-
 validator.mask = {'parent': validator};
 validator.mask.int = function (e) {
     var charCode = e.which || e.keyCode;

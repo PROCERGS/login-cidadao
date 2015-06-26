@@ -16,32 +16,6 @@ class AddressController extends FOSRestController
 {
 
     /**
-     * @REST\Get("/public/postalcode/{postalCode}", name="lc_consultaCep2", defaults={"postalCode" = ""})
-     * @REST\View()
-     * @Audit\Loggable(type="SELECT")
-     */
-    public function viewPostalCodeAction($postalCode)
-    {
-        $request = $this->getRequest();
-        $busca = $this->get('procergs_logincidadao.dne');
-        $postalCodes = $busca->findByCep($postalCode);
-        if ($postalCodes) {
-            $result = array(
-                'code' => 200,
-                'msg' => null,
-                'items' => array(
-                    $postalCodes
-                )
-            );
-        } else {
-            throw new NotFoundHttpException();
-        }
-
-        $view = $this->view($result);
-        return $this->handleView($view);
-    }
-
-    /**
      * @REST\Get("/public/country", name="lc_search_country" )
      * @REST\View()
      * @Audit\Loggable(type="SELECT")
