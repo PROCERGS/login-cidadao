@@ -42,7 +42,7 @@ class DynamicFormController extends Controller
         $authorizedScope = $person->getClientScope($client);
         $requestedScope  = explode(' ', $request->get('scope', null));
 
-        $scope = array_intersect($authorizedScope, $requestedScope);
+        $scope = $this->intersectScopes($authorizedScope, $requestedScope);
 
         $placeOfBirth = new SelectData();
         $placeOfBirth->getFromObject($person);
@@ -97,7 +97,8 @@ class DynamicFormController extends Controller
             $dispatcher->dispatch(DynamicFormEvents::POST_FORM_EDIT, $event);
 
             $dispatcher->dispatch(DynamicFormEvents::PRE_REDIRECT, $event);
-            //return $this->redirect($formBuilder->getData()->getRedirectUrl());
+
+            return $this->redirect($formBuilder->getData()->getRedirectUrl());
         }
 
         $viewData = compact('client', 'scope', 'authorizedScope');
@@ -397,5 +398,29 @@ class DynamicFormController extends Controller
     private function getDispatcher()
     {
         return $this->get('event_dispatcher');
+    }
+
+    private function getScopeAsArray($scope)
+    {
+        if ($scope === null) {
+            $scope = array();
+        }
+        if (!is_array($scope)) {
+            if (preg_match("/[^ ]+ [^ ]+/", $scope) === 1) {
+                $scope = explode(' ', $scope);
+            } else {
+                $scope = array($scope);
+            }
+        }
+
+        return $scope;
+    }
+
+    private function intersectScopes($authorizedScope, $requestedScope)
+    {
+        $authorizedScope = $this->getScopeAsArray($authorizedScope);
+        $requestedScope  = $this->getScopeAsArray($requestedScope);
+
+        return array_intersect($authorizedScope, $requestedScope);
     }
 }
