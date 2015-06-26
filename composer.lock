@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "020067c987f3fd938165a75546de2f11",
+    "hash": "498a3cb85d6ad97c5fa79953e9279a34",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -141,7 +141,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -208,7 +208,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -485,7 +485,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -539,7 +539,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -977,7 +977,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/92d5624f2a29e74d8fd9d2a94d7ed7998a8c2809",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/3efbc08a97f218d0a4524dee926fc4381e3d0947",
                 "reference": "96e4542c751e074ac018ff9e8915a444f16bd92f",
                 "shasum": ""
             },
@@ -1089,7 +1089,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/faea7fa22628e310a882f7cfba8f3c8dea060c89",
+                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/7a1e41685642d8866509cdca8af9077a3c5f0b10",
                 "reference": "25b60de3ec06ea6f12cfa561466f37ff8a938bb9",
                 "shasum": ""
             },
@@ -1550,7 +1550,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/JMSSecurityExtraBundle/zipball/59b777ebaa37803a75803982ddab18c08a47e48f",
+                "url": "https://api.github.com/repos/schmittjoh/JMSSecurityExtraBundle/zipball/75bd0f773b1c645d70eb6174fff67ba5779a291e",
                 "reference": "59b777ebaa37803a75803982ddab18c08a47e48f",
                 "shasum": ""
             },
@@ -1661,7 +1661,7 @@
             ],
             "authors": [
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -1731,7 +1731,7 @@
             ],
             "authors": [
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -2144,7 +2144,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/5de5d530dd9c11cb22455f422f41fc9431fcab67",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/7c8b01021522cb429e5127a4c9175efa44a9cb69",
                 "reference": "3889e7ff245dde6ad802e3c61d73fdf1bf4d3329",
                 "shasum": ""
             },
@@ -2242,9 +2242,9 @@
             ],
             "authors": [
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -2292,9 +2292,9 @@
             ],
             "authors": [
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -2309,17 +2309,17 @@
         },
         {
             "name": "procergs/login-cidadao-badges-bundle",
-            "version": "dev-master",
+            "version": "dev-cleanup",
             "target-dir": "PROCERGS/LoginCidadao/BadgesBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/login-cidadao-badges-bundle.git",
-                "reference": "34b64807ec526c37edd014a7d612deda08689570"
+                "reference": "fcaccb4df3c42e28f7529af91d959f7b3ad6be56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/3a154019dc346b745afc68b15fa5d190b0ed4a8d",
-                "reference": "34b64807ec526c37edd014a7d612deda08689570",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/fcaccb4df3c42e28f7529af91d959f7b3ad6be56",
+                "reference": "fcaccb4df3c42e28f7529af91d959f7b3ad6be56",
                 "shasum": ""
             },
             "require": {
@@ -2331,7 +2331,6 @@
                     "PROCERGS\\LoginCidadao\\BadgesBundle": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2347,7 +2346,11 @@
                 "badges",
                 "login-cidadao"
             ],
-            "time": "2015-01-14 17:48:06"
+            "support": {
+                "source": "https://github.com/PROCERGS/login-cidadao-badges-bundle/tree/cleanup",
+                "issues": "https://github.com/PROCERGS/login-cidadao-badges-bundle/issues"
+            },
+            "time": "2015-06-26 18:33:47"
         },
         {
             "name": "procergs/login-cidadao-igp-bundle",
@@ -2444,7 +2447,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scheb/two-factor-bundle/zipball/9f43a5833e0954fccc303d987d3d7a937d8cbc99",
+                "url": "https://api.github.com/repos/scheb/two-factor-bundle/zipball/45851693b074981942c8edd3c584b7d70e37257a",
                 "reference": "b93f8021cfc4d90e766e630e8886980fdc843572",
                 "shasum": ""
             },
