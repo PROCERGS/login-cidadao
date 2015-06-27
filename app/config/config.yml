@@ -31,7 +31,7 @@ twig:
         resources:
             - 'PROCERGSLoginCidadaoCoreBundle:Form:fields.html.twig'
     globals:
-        fos_csrf_provider: "@form.csrf_provider"
+        fos_csrf_provider: "@security.csrf.token_manager"
         notifications_helper: "@notifications.helper"
         facebook_app_id: "%facebook_app_id%"
         background_picture_author: %background_picture.author%

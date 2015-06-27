@@ -22,17 +22,18 @@ class NotificationController extends Controller
      * @Route("/notifications/{id}", requirements={"id" = "\d+"}, defaults={"id" = null}, name="lc_notifications")
      * @Template()
      */
-    public function indexAction($id = null)
+    public function indexAction(Request $request, $id = null)
     {
         if (null !== $id) {
             $openId = $id;
             $offset = $id + 1;
-            $this->getAuthenticatedNotificationHandler()->markRangeAsRead($openId, $openId);
+            $this->getAuthenticatedNotificationHandler()->markRangeAsRead($openId,
+                $openId);
         } else {
             $offset = null;
         }
 
-        $grid = $this->getNotificationGrid($offset, 10)->createView($this->getRequest());
+        $grid = $this->getNotificationGrid($offset, 10)->createView($request);
 
         return compact('grid', 'openId');
     }
@@ -41,12 +42,13 @@ class NotificationController extends Controller
      * @Route("/client/{clientId}/notifications/{id}", requirements={"id" = "\d+", "clientId" = "\d+"}, defaults={"id" = null}, name="lc_notifications_from_client")
      * @Template("PROCERGSLoginCidadaoNotificationBundle:Notification:index.html.twig")
      */
-    public function getFromClientAction($clientId, $id = null)
+    public function getFromClientAction(Request $request, $clientId, $id = null)
     {
         if (null !== $id) {
             $openId = $id;
             $offset = $id + 1;
-            $this->getAuthenticatedNotificationHandler()->markRangeAsRead($openId, $openId);
+            $this->getAuthenticatedNotificationHandler()->markRangeAsRead($openId,
+                $openId);
         } else {
             $offset = null;
         }
@@ -54,7 +56,7 @@ class NotificationController extends Controller
         $client = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:Client')
             ->find($clientId);
 
-        $grid = $this->getNotificationGrid($offset, 10, $client)->createView($this->getRequest());
+        $grid = $this->getNotificationGrid($offset, 10, $client)->createView($request);
 
         return compact('grid', 'openId');
     }
@@ -82,7 +84,7 @@ class NotificationController extends Controller
         $handler->initializeSettings();
 
         $form = $this->createForm(new SettingsType(),
-                                  $handler->getGroupedSettings($client));
+            $handler->getGroupedSettings($client));
 
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -115,7 +117,7 @@ class NotificationController extends Controller
     {
         $client = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:Client')
             ->find($clientId);
-        $grid = $this->getNotificationGrid($offset, 10, $client)->createView($request);
+        $grid   = $this->getNotificationGrid($offset, 10, $client)->createView($request);
 
         return compact('grid');
     }
@@ -143,10 +145,10 @@ class NotificationController extends Controller
         $handler = $this->getAuthenticatedNotificationHandler();
         if ($client instanceof ClientInterface) {
             $iterator = new ClientNotificationIterable($handler, $client,
-                                                       $perIteration, $offset);
+                $perIteration, $offset);
         } else {
             $iterator = new NotificationIterable($handler, $perIteration,
-                                                 $offset);
+                $offset);
         }
 
         $grid = new GridHelper($iterator);
@@ -194,5 +196,4 @@ class NotificationController extends Controller
 
         return compact('grid');
     }
-
 }

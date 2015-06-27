@@ -4,8 +4,7 @@ namespace PROCERGS\LoginCidadao\NotificationBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\ORM\EntityRepository;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ClientSettingsType extends AbstractType
 {
@@ -16,7 +15,8 @@ class ClientSettingsType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('options', 'collection',array(
+        $builder->add('options', 'collection',
+            array(
             'type' => new PersonNotificationOptionType(),
             'allow_add' => false,
             'allow_delete' => false
@@ -24,9 +24,9 @@ class ClientSettingsType extends AbstractType
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'PROCERGS\LoginCidadao\NotificationBundle\Model\ClientSettings',
@@ -38,5 +38,4 @@ class ClientSettingsType extends AbstractType
     {
         return 'settings';
     }
-
 }

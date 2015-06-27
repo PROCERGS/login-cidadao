@@ -5,7 +5,7 @@ namespace PROCERGS\LoginCidadao\BadgesControlBundle\Handler;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Model\BadgeEvaluatorInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
-use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PROCERGS\LoginCidadao\BadgesControlBundle\BadgesEvents;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Event\ListBadgesEvent;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Event\ListBearersEvent;
@@ -17,7 +17,7 @@ class BadgesHandler
     protected $evaluators;
     protected $dispatcher;
 
-    public function __construct(ContainerAwareEventDispatcher $dispatcher)
+    public function __construct(EventDispatcherInterface $dispatcher)
     {
         $this->evaluators = array();
         $this->dispatcher = $dispatcher;

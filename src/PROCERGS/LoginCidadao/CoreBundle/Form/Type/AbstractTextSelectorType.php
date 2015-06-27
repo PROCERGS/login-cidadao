@@ -4,7 +4,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\DataTransformerInterface;
 
@@ -30,7 +30,7 @@ abstract class AbstractTextSelectorType extends AbstractType
         $builder->addModelTransformer($transformer);
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'invalid_message' => 'The selected value was not found'

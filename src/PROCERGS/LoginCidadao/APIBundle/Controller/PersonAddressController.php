@@ -38,9 +38,8 @@ class PersonAddressController extends BaseController
      * @REST\Get("/address/cities/search/{city}", name="api_1_get_cities")
      * @Audit\Loggable(type="SELECT")
      */
-    public function getCitiesAction($city)
+    public function getCitiesAction(Request $request, $city)
     {
-        $request = $this->getRequest();
         $countryId = $request->get('country_id', null);
         $stateId = $request->get('state_id', null);
 

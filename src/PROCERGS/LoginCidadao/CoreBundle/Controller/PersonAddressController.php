@@ -116,7 +116,7 @@ class PersonAddressController extends Controller
      * @Route("/person/addresses/{id}/edit", name="lc_person_addresses_edit")
      * @Template("PROCERGSLoginCidadaoCoreBundle:PersonAddress:newAddress.html.twig")
      */
-    public function editAction($id)
+    public function editAction(Request $request, $id)
     {
         $em        = $this->getDoctrine()->getManager();
         $addresses = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:PersonAddress');
@@ -135,11 +135,11 @@ class PersonAddressController extends Controller
         }
 
         $form = $this->createForm('lc_person_address', $address);
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $address->setPerson($this->getUser());
-            
+
             $em->flush();
             return $this->redirect($this->generateUrl('lc_person_addresses'));
         }
@@ -153,11 +153,11 @@ class PersonAddressController extends Controller
      * @Route("/person/addresses/{id}/remove", name="lc_person_addresses_delete")
      * @Template()
      */
-    public function deleteAction($id)
+    public function deleteAction(Request $request, $id)
     {
         $translator = $this->get('translator');
         $form       = $this->createForm(new RemovePersonAddressFormType());
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $person    = $this->getUser();
