@@ -922,7 +922,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     {
         return $this->voterRegistration;
     }
-
     /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
      * of 'UploadedFile' is injected into this setter to trigger the  update. If this
@@ -1066,12 +1065,12 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     /**
      * @ORM\PreUpdate
      */
-    public function setUpdatedAt($var = NULL)
+    public function setUpdatedAt($updatedAt = null)
     {
-        if ($var === null) {
-            $this->updatedAt = new \DateTime();
+        if ($updatedAt instanceof \DateTime) {
+            $this->updatedAt = $updatedAt;
         } else {
-            $this->updatedAt = $var;
+            $this->updatedAt = new \DateTime('now');
         }
         return $this;
     }

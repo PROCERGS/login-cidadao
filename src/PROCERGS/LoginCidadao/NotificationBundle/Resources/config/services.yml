@@ -11,7 +11,15 @@ services:
 
     procergs.notification.handler:
         class: %procergs.notification.handler.class%
-        arguments: [ "@doctrine.orm.entity_manager", %procergs.notification.class%, "@form.factory", "@procergs_logincidadao.mailer", "@procergs_logincidadao.notification.type", @event_dispatcher, "%oauth_default_client.uid%", "%http_proxy%" ]
+        arguments:
+            - @doctrine.orm.entity_manager
+            - %procergs.notification.class%
+            - @form.factory
+            - @procergs_logincidadao.mailer
+            - @procergs_logincidadao.notification.type
+            - @event_dispatcher
+            - %oauth_default_client.uid%
+            - %http_proxy%
         tags:
             - { name: "security.secure_service" }
 

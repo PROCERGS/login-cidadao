@@ -6,5 +6,5 @@
     {% if clientId is not defined %}
         {% set clientId = null %}
     {% endif %}
-    {% render(controller("PROCERGSLoginCidadaoNotificationBundle:Notification:sidebar", { 'route': app.request.attributes.get('_route'), 'clientId': clientId })) %}
+    {{ render(controller("PROCERGSLoginCidadaoNotificationBundle:Notification:sidebar", { 'route': app.request.attributes.get('_route'), 'clientId': clientId })) }}
 {% endblock %}

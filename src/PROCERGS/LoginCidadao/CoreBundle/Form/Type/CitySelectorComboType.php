@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
@@ -32,7 +32,6 @@ class CitySelectorComboType extends AbstractType
 
     /** @var ProfileEditListner */
     private $profileEditSubscriber;
-
     /** @var TranslatorInterface */
     private $translator;
 
@@ -58,6 +57,7 @@ class CitySelectorComboType extends AbstractType
             array(
             'empty_value' => '',
             'class' => $this->countryManager->getClass(),
+            'choice_label' => 'name',
             'property' => 'name',
             'choices' => $this->countryManager->findAll(),
             'attr' => array(
@@ -100,6 +100,7 @@ class CitySelectorComboType extends AbstractType
             $form->add('state', 'entity',
                 array(
                 'class' => $stateManager->getClass(),
+                'choice_label' => 'name',
                 'property' => 'name',
                 'empty_value' => '',
                 'choices' => $choices,
@@ -141,6 +142,7 @@ class CitySelectorComboType extends AbstractType
                 array(
                 'class' => $cityManager->getClass(),
                 'empty_value' => '',
+                'choice_label' => 'name',
                 'property' => 'name',
                 'choices' => $stateId === null ? array() : $cityManager->findByStateId($stateId),
                 'attr' => array(
@@ -194,7 +196,7 @@ class CitySelectorComboType extends AbstractType
         $builder->addEventSubscriber($this->profileEditSubscriber);
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'PROCERGS\LoginCidadao\CoreBundle\Model\SelectData',

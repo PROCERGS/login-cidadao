@@ -37,7 +37,7 @@ class SearchPostalCodeFormType extends AbstractType
         ))->add('state', 'entity',
                 array(
             'class' => 'PROCERGSLoginCidadaoCoreBundle:State',
-            'property' => 'name',
+            'choice_label' => 'name',
             'required' => true,
             'label' => 'form.state',
             'preferred_choices' => $preferredChoices,

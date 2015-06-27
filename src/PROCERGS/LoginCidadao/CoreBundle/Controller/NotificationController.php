@@ -41,7 +41,7 @@ class NotificationController extends Controller
      */
     public function gridNavbarUnreadAction(Request $request)
     {
-        $handler = $this->getNotificationHandler()
+        $handler  = $this->getNotificationHandler()
             ->getAuthenticatedHandler($this->getUser());
         $iterator = new NotificationIterable($handler, 8);
 
@@ -60,23 +60,27 @@ class NotificationController extends Controller
      * @Route("/inbox/gridfull", name="lc_not_inbox_gridfull")
      * @Template()
      */
-    public function gridFullAction(Request $request = null) {
+    public function gridFullAction(Request $request = null)
+    {
         $sql = $this->getDoctrine()
-        ->getManager ()
-        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
-        ->createQueryBuilder('n')
-        ->select('n.id, case when n.readDate is null then false else true end isread, n.title, n.shortText shorttext, n.createdAt createdat, c.id client_id, c.name client_name, c.picturePath client_picture, cnc.defaultIcon category_default_icon')
-        ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
-        ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
-        ->where('n.person = :person')
-        ->setParameter('person', $this->getUser())
-        ->orderBy('n.id', 'DESC');
+            ->getManager()
+            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
+            ->createQueryBuilder('n')
+            ->select('n.id, case when n.readDate is null then false else true end isread, n.title, n.shortText shorttext, n.createdAt createdat, c.id client_id, c.name client_name, c.picturePath client_picture, cnc.defaultIcon category_default_icon')
+            ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category',
+                'cnc', 'WITH', 'n.category = cnc')
+            ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
+            ->where('n.person = :person')
+            ->setParameter('person', $this->getUser())
+            ->orderBy('n.id', 'DESC');
 
         if ($request->get('client')) {
-            $sql->andWhere('c.id = :client')->setParameter('client', $request->get('client'));
+            $sql->andWhere('c.id = :client')->setParameter('client',
+                $request->get('client'));
         }
         if ($request->get('confignotcli')) {
-            $sql->andWhere('cnc.id = :confignotcli')->setParameter('confignotcli', $request->get('confignotcli'));
+            $sql->andWhere('cnc.id = :confignotcli')->setParameter('confignotcli',
+                $request->get('confignotcli'));
         }
         $grid = new GridHelper();
         $grid->setId('fullOne');
@@ -93,24 +97,27 @@ class NotificationController extends Controller
      * @Route("/inbox/gridpri", name="lc_not_inbox_gridpri")
      * @Template()
      */
-    public function gridPriAction(Request $request = null) {
+    public function gridPriAction(Request $request = null)
+    {
         $id = $request->get('client');
         if (!$id) {
             return $this->gridFullAction();
         }
         $resultset = $this->getDoctrine()
-        ->getManager()
-        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
-        ->createQueryBuilder('cnc')
-        ->select('cnc')
-        ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
-        ->where('c.id = :client')
-        ->setParameter('client', $id)
-        ->getQuery()->setFetchMode('PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category', 'client', ClassMetadata::FETCH_EAGER)->getResult();
-        $grids = array();
+                ->getManager()
+                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
+                ->createQueryBuilder('cnc')
+                ->select('cnc')
+                ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH',
+                    'cnc.client = c')
+                ->where('c.id = :client')
+                ->setParameter('client', $id)
+                ->getQuery()->setFetchMode('PROCERGS\LoginCidadao\CoreBundle\Entity\Notification\Category',
+                'client', ClassMetadata::FETCH_EAGER)->getResult();
+        $grids     = array();
         foreach ($resultset as $rows) {
             $request->query->set('confignotcli', $rows->getId());
-            $temp = $this->gridSimpleAction();
+            $temp                  = $this->gridSimpleAction();
             $grids[$rows->getId()] = $temp['grid'];
         }
         return array('resultset' => $resultset, 'grids' => $grids);
@@ -120,26 +127,28 @@ class NotificationController extends Controller
      * @Route("/inbox/gridsimple", name="lc_not_inbox_gridsimple")
      * @Template()
      */
-    public function gridSimpleAction() {
-        $request = $this->getRequest();
+    public function gridSimpleAction(Request $request)
+    {
         $id = $request->get('confignotcli');
         if (!$id) {
             return $this->gridFullAction();
         }
         $sql = $this->getDoctrine()
-        ->getManager ()
-        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
-        ->createQueryBuilder('n')
-        ->select('n.id, case when n.readDate is null then false else true end isread, n.title, n.shortText shorttext, n.createdAt createdat, c.id client_id, c.name client_name')
-        ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
-        ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
-        ->where('n.person = :person and cnc.id = :configNotCli')
-        ->setParameter('person', $this->getUser())
-        ->setParameter('configNotCli', $id)
-        ->orderBy('n.id', 'DESC');
+            ->getManager()
+            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
+            ->createQueryBuilder('n')
+            ->select('n.id, case when n.readDate is null then false else true end isread, n.title, n.shortText shorttext, n.createdAt createdat, c.id client_id, c.name client_name')
+            ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category',
+                'cnc', 'WITH', 'n.category = cnc')
+            ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
+            ->where('n.person = :person and cnc.id = :configNotCli')
+            ->setParameter('person', $this->getUser())
+            ->setParameter('configNotCli', $id)
+            ->orderBy('n.id', 'DESC');
 
         if ($request->get('client')) {
-            $sql->andWhere('c.id = :client')->setParameter('client', $request->get('client'));
+            $sql->andWhere('c.id = :client')->setParameter('client',
+                $request->get('client'));
         }
 
         $grid = new GridHelper();
@@ -163,7 +172,7 @@ class NotificationController extends Controller
         if ($mode === 0) {
             $return = $this->gridFullAction($request);
             if ($request->get('client')) {
-                $client = $this->getDoctrine()->getManager()->getRepository('PROCERGSOAuthBundle:Client')->find($request->get('client'));
+                $client                = $this->getDoctrine()->getManager()->getRepository('PROCERGSOAuthBundle:Client')->find($request->get('client'));
                 $return['extra_title'] = $client->getName();
             } else {
                 $return['extra_title'] = $this->get('translator')->trans('notification.menu.inbox.all');
@@ -179,17 +188,19 @@ class NotificationController extends Controller
      */
     public function show2Action(Request $request)
     {
-        $em = $this->getDoctrine()->getManager ();
+        $em        = $this->getDoctrine()->getManager();
         $resultset = $em
-        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
-        ->createQueryBuilder('n')
-        ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'cnc', 'WITH', 'n.category = cnc')
-        ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
-        ->where('n.person = :person and n.id = :id')
-        ->setParameter('person', $this->getUser())
-        ->setParameter('id', $request->get('notification'))
-        ->getQuery()->getOneOrNullResult();
-        $a = array('wasread' => false, 'htmltpl' => null);
+                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Notification')
+                ->createQueryBuilder('n')
+                ->join('PROCERGSLoginCidadaoCoreBundle:Notification\Category',
+                    'cnc', 'WITH', 'n.category = cnc')
+                ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH',
+                    'cnc.client = c')
+                ->where('n.person = :person and n.id = :id')
+                ->setParameter('person', $this->getUser())
+                ->setParameter('id', $request->get('notification'))
+                ->getQuery()->getOneOrNullResult();
+        $a         = array('wasread' => false, 'htmltpl' => null);
         if ($resultset) {
             if (!$resultset->isRead()) {
                 $resultset->setReadDate(new \DateTime());
@@ -212,42 +223,47 @@ class NotificationController extends Controller
         if (!$id) {
             return $this->gridFullAction();
         }
-        $em = $this->getDoctrine()->getManager();
+        $em        = $this->getDoctrine()->getManager();
         $resultset = $em
-        ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
-        ->createQueryBuilder('cnc')
-        ->select('cnc, cnp')
-        ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cnc.client = c')
-        ->leftJoin('PROCERGSLoginCidadaoCoreBundle:Notification\PersonNotificationOption', 'cnp', 'with', 'cnp.category = cnc and cnp.person = :person')
-        ->where('c.id = :client ')
-        ->setParameter('client', $id)
-        ->setParameter('person', $this->getUser())
-        ->getQuery()->setFetchMode('PROCERGSLoginCidadaoCoreBundle:Notification\Category', 'client', ClassMetadata::FETCH_EAGER) ->getResult();
+                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Notification\Category')
+                ->createQueryBuilder('cnc')
+                ->select('cnc, cnp')
+                ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH',
+                    'cnc.client = c')
+                ->leftJoin('PROCERGSLoginCidadaoCoreBundle:Notification\PersonNotificationOption',
+                    'cnp', 'with', 'cnp.category = cnc and cnp.person = :person')
+                ->where('c.id = :client ')
+                ->setParameter('client', $id)
+                ->setParameter('person', $this->getUser())
+                ->getQuery()->setFetchMode('PROCERGSLoginCidadaoCoreBundle:Notification\Category',
+                'client', ClassMetadata::FETCH_EAGER)->getResult();
         for ($i = 0, $tot = count($resultset); $i < $tot; $i++) {
-            if ($i%2) {
-                $c =& $resultset[$i];
+            if ($i % 2) {
+                $c = & $resultset[$i];
                 if (!$c) {
-                    $res =& $resultset[$i-1];
-                    $a = new PersonNotificationOption();
+                    $res = & $resultset[$i - 1];
+                    $a   = new PersonNotificationOption();
                     $a->setPerson($this->getUser());
                     $a->setCategory($res);
                     $a->setSendEmail($res->getEmailable());
                     $a->setSendPush(false);
                     $a->setCreatedAt(new \DateTime());
                     $em->persist($a);
-                    $c =& $a;
+                    $c   = & $a;
                 }
-                $formId = 'person-notifcation-category-'.$resultset[$i-1]->getId();
-                $form = $this->createForm(new PersonNotificationOptionFormType(), $c, array(
-                    'action'=> $this->generateUrl('lc_not_config_change'),
+                $formId        = 'person-notifcation-category-'.$resultset[$i - 1]->getId();
+                $form          = $this->createForm(new PersonNotificationOptionFormType(),
+                    $c,
+                    array(
+                    'action' => $this->generateUrl('lc_not_config_change'),
                     'attr' => array(
                         'class' => 'form-ajax',
                         'id' => $formId,
                         'role' => 'form',
-                        'ajax-target' => 'div:has(#'. $formId .'):last'
+                        'ajax-target' => 'div:has(#'.$formId.'):last'
                     )
                 ));
-                $forms[$i-1] = $form->createView();
+                $forms[$i - 1] = $form->createView();
                 unset($resultset[$i]);
             }
         }
@@ -263,37 +279,40 @@ class NotificationController extends Controller
      */
     public function configChangeAction(Request $request)
     {
-        $form = $this->createForm(new PersonNotificationOptionFormType());
-        $config = null;
+        $form    = $this->createForm(new PersonNotificationOptionFormType());
+        $config  = null;
         $manager = $this->getDoctrine()->getManager();
-        if ((($data = $request->get($form->getName())) && ($id = $data['id']))) {
+        if ((($data    = $request->get($form->getName())) && ($id      = $data['id']))) {
             $config = $manager->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')
-            ->createQueryBuilder('cnc')
-            ->select('cnp')
+                    ->createQueryBuilder('cnc')
+                    ->select('cnp')
                     ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH',
-                           'cnc.client = c')
+                        'cnc.client = c')
                     ->join('PROCERGSLoginCidadaoNotificationBundle:PersonNotificationOption',
-                           'cnp', 'with',
-                           'cnp.category = cnc and cnp.person = :person')
-            ->where('cnp.id = :client ')
-            ->setParameter('client', $id)
-            ->setParameter('person', $this->getUser())
-            ->getQuery()->setFetchMode('PROCERGSLoginCidadaoCoreBundle:Notification\PersonNotificationOption', 'category', ClassMetadata::FETCH_EAGER)->getOneOrNullResult();
+                        'cnp', 'with',
+                        'cnp.category = cnc and cnp.person = :person')
+                    ->where('cnp.id = :client ')
+                    ->setParameter('client', $id)
+                    ->setParameter('person', $this->getUser())
+                    ->getQuery()->setFetchMode('PROCERGSLoginCidadaoCoreBundle:Notification\PersonNotificationOption',
+                    'category', ClassMetadata::FETCH_EAGER)->getOneOrNullResult();
         }
         if (!$config) {
             die('dunno');
         }
         $formId = 'person-notifcation-category-'.$config->getCategory()->getId();
-        $form = $this->createForm(new PersonNotificationOptionFormType(), $config, array(
-            'action'=> $this->generateUrl('lc_not_config_change'),
+        $form   = $this->createForm(new PersonNotificationOptionFormType(),
+            $config,
+            array(
+            'action' => $this->generateUrl('lc_not_config_change'),
             'attr' => array(
                 'class' => 'form-ajax',
                 'id' => $formId,
                 'role' => 'form',
-                'ajax-target' => 'div:has(#'. $formId .'):last'
+                'ajax-target' => 'div:has(#'.$formId.'):last'
             )
         ));
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
         if ($form->isValid()) {
             $manager->persist($config);
             $manager->flush();
@@ -311,5 +330,4 @@ class NotificationController extends Controller
     {
         return $this->get('procergs.notification.handler');
     }
-
 }

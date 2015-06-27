@@ -4,7 +4,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\TranslatorInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Form\DataTransformer\StateToStringTransformer;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Country;
@@ -84,7 +84,7 @@ class PersonAddressFormType extends AbstractType
         });
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'PROCERGS\LoginCidadao\CoreBundle\Entity\PersonAddress'

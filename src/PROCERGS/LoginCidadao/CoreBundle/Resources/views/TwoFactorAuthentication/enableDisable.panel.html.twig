@@ -1,4 +1,4 @@
-{% if app.security.isGranted('FEATURE_2FACTOR_AUTH') and app.user.password != null %}
+{% if is_granted('FEATURE_2FACTOR_AUTH') and app.user.password != null %}
     <div class="panel panel-default">
         <div class="panel-heading">
             <h2 class="panel-title">{{ 'Two-Factor Authentication' | trans }}</h2>

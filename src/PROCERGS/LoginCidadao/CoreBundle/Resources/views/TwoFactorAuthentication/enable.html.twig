@@ -11,7 +11,7 @@
         {{ form_start(form, { 'attr': {'role':'form', 'class':'lc_change_password' } }) }}
         {{ form_errors(form) }}
         <div class="form-content">
-            {% if app.security.isGranted('FEATURE_2FACTOR_AUTH') %}
+            {% if is_granted('FEATURE_2FACTOR_AUTH') %}
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title">{{ 'Two-Factor Authentication Activation' | trans }}</h2>
