@@ -41,22 +41,7 @@ class CheckAgreementListener
 
     public function onFilterController(FilterControllerEvent $event)
     {
-        $hasToken = $this->securityContext->getToken() instanceof TokenInterface;
-        if (!$hasToken || false === $this->securityContext->isGranted('ROLE_USER')) {
-            return;
-        }
-        if ($this->securityContext->isGranted('ROLE_ADMIN')) {
-            //return;
-        }
-
-        $controller = $event->getController();
-
-        if (!is_array($controller)) {
-            return;
-        }
-
-        if ($controller[0] instanceof AsseticController ||
-            $controller[0] instanceof ProfilerController) {
+        if (!$this->shouldCheckTerms($event)) {
             return;
         }
 
@@ -74,6 +59,30 @@ class CheckAgreementListener
         }
     }
 
+    private function shouldCheckTerms(FilterControllerEvent $event)
+    {
+        $hasToken = $this->securityContext->getToken() instanceof TokenInterface;
+        if (!$hasToken || false === $this->securityContext->isGranted('ROLE_USER')) {
+            return false;
+        }
+        if ($this->securityContext->isGranted('ROLE_ADMIN')) {
+            return false;
+        }
+
+        $controller = $event->getController();
+
+        if (!is_array($controller)) {
+            return false;
+        }
+
+        if ($controller[0] instanceof AsseticController ||
+            $controller[0] instanceof ProfilerController) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getException();
@@ -86,6 +95,5 @@ class CheckAgreementListener
         $request  = $event->getRequest();
         $response = $this->httpUtils->createRedirectResponse($request, $route);
         $event->setResponse($response);
-        die('ops');
     }
 }
