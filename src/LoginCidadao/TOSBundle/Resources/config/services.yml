@@ -1,0 +1,7 @@
+parameters:
+#    login_cidadao_tos.example.class: LoginCidadao\TOSBundle\Example
+
+services:
+#    login_cidadao_tos.example:
+#        class: %login_cidadao_tos.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
