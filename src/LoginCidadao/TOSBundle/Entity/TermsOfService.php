@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * TermsOfService
  *
- * @ORM\Table()
+ * @ORM\Table(name="terms_of_service")
  * @ORM\Entity(repositoryClass="LoginCidadao\TOSBundle\Entity\TermsOfServiceRepository")
  */
 class TermsOfService implements TOSInterface
@@ -34,7 +34,7 @@ class TermsOfService implements TOSInterface
     /**
      * @var UserInterface
      *
-     * @ORM\ManyToOne(targetEntity="UserInterface")
+     * @ORM\ManyToOne(targetEntity="Symfony\Component\Security\Core\User\UserInterface")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      */
     private $author;

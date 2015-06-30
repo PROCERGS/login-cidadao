@@ -1,0 +1,6 @@
+doctrine:
+    orm:
+        resolve_target_entities:
+            LoginCidadao\TOSBundle\Model\TOSInterface: LoginCidadao\TOSBundle\Entity\TermsOfService
+            LoginCidadao\TOSBundle\Model\AgreementInterface: LoginCidadao\TOSBundle\Entity\Agreement
+            Symfony\Component\Security\Core\User\UserInterface: %user.class%

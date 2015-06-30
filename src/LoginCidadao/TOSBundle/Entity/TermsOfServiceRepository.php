@@ -11,8 +11,20 @@
 namespace LoginCidadao\TOSBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use LoginCidadao\TOSBundle\Model\TOSInterface;
 
 class TermsOfServiceRepository extends EntityRepository
 {
-    //
+
+    /**
+     * @return TOSInterface
+     */
+    public function findLatestTerms()
+    {
+        return $this->createQueryBuilder('t')
+                ->where('t.final = :final')
+                ->orderBy('t.createdAt', 'DESC')
+                ->setParameter('final', true)
+                ->getQuery()->getOneOrNullResult();
+    }
 }

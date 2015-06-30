@@ -1,7 +1,37 @@
 parameters:
-#    login_cidadao_tos.example.class: LoginCidadao\TOSBundle\Example
+    tos.agreement.class: LoginCidadao\TOSBundle\Entity\Agreement
+    tos.terms_of_service.class: LoginCidadao\TOSBundle\Entity\TermsOfService
+
+    tos.manager.class: LoginCidadao\TOSBundle\Model\TOSManager
+    tos.agreement.listener.class: LoginCidadao\TOSBundle\EventListener\CheckAgreementListener
 
 services:
-#    login_cidadao_tos.example:
-#        class: %login_cidadao_tos.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    tos.terms_of_service.repository:
+        class:           Doctrine\ORM\EntityRepository
+        factory_service: doctrine
+        factory_method:  getRepository
+        arguments:
+            - %tos.terms_of_service.class%
+
+    tos.agreement.repository:
+        class:           Doctrine\ORM\EntityRepository
+        factory_service: doctrine
+        factory_method:  getRepository
+        arguments:
+            - %tos.agreement.class%
+
+    tos.manager:
+        class: %tos.manager.class%
+        arguments:
+            - @tos.agreement.repository
+            - @tos.terms_of_service.repository
+
+    tos.agreement.listener:
+        class: %tos.agreement.listener.class%
+        arguments:
+            - @security.context
+            - @tos.manager
+            - @security.http_utils
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onFilterController }
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
