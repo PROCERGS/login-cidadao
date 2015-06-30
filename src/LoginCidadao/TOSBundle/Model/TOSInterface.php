@@ -23,7 +23,7 @@ interface TOSInterface
     /**
      * @param UserInterface $user
      */
-    public function setAuthor(UserInterface $user);
+    public function setAuthor(UserInterface $author);
 
     /**
      * @return \DateTime
