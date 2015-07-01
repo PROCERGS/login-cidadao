@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\TOSBundle\Controller;
 
@@ -16,7 +24,7 @@ class TermsOfServiceController extends Controller
 {
 
     /**
-     * @Route("/terms", name="tos_list")
+     * @Route("/admin/terms", name="tos_admin_list")
      * @Method("GET")
      * @Template()
      * @Secure(roles="ROLE_ADMIN")
@@ -31,7 +39,7 @@ class TermsOfServiceController extends Controller
     }
 
     /**
-     * @Route("/terms/{id}", name="tos_edit", requirements={"id": "\d+"})
+     * @Route("/admin/terms/{id}", name="tos_admin_edit", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
      * @Template()
      * @Secure(roles="ROLE_SUPER_ADMIN")
@@ -53,7 +61,7 @@ class TermsOfServiceController extends Controller
     }
 
     /**
-     * @Route("/terms/new", name="tos_new")
+     * @Route("/admin/terms/new", name="tos_admin_new")
      * @Template()
      * @Secure(roles="ROLE_SUPER_ADMIN")
      */
@@ -66,7 +74,7 @@ class TermsOfServiceController extends Controller
     }
 
     /**
-     * @Route("/terms", name="tos_create")
+     * @Route("/terms", name="tos_admin_create")
      * @Method("POST")
      * @Template("LoginCidadaoTOSBundle:TermsOfService:new.html.twig")
      * @Secure(roles="ROLE_SUPER_ADMIN")
@@ -83,17 +91,31 @@ class TermsOfServiceController extends Controller
             $em->persist($terms);
             $em->flush();
 
-            return $this->redirectToRoute('tos_list');
+            return $this->redirectToRoute('tos_admin_list');
         }
 
         return compact('form');
+    }
+
+    /**
+     * @Route("/terms", name="tos_terms")
+     * @Method("GET")
+     * @Template("LoginCidadaoTOSBundle:TermsOfService:latest.html.twig")
+     * @Secure(roles="IS_AUTHENTICATED_ANONYMOUSLY")
+     */
+    public function showLatestAction()
+    {
+        $termsRepo = $this->getDoctrine()->getRepository('LoginCidadaoTOSBundle:TermsOfService');
+        $latest    = $termsRepo->findLatestTerms();
+
+        return compact('latest');
     }
 
     private function getCreateForm(TOSInterface $terms)
     {
         $form = $this->createForm(new TermsOfServiceType(), $terms,
             array(
-            'action' => $this->generateUrl('tos_create'),
+            'action' => $this->generateUrl('tos_admin_create'),
             'method' => 'POST',
             'translation_domain' => 'LoginCidadaoTOSBundle'
             )
@@ -109,7 +131,7 @@ class TermsOfServiceController extends Controller
     {
         $form = $this->createForm(new TermsOfServiceType(), $terms,
             array(
-            'action' => $this->generateUrl('tos_edit',
+            'action' => $this->generateUrl('tos_admin_edit',
                 array('id' => $terms->getId())),
             'method' => 'POST',
             'translation_domain' => 'LoginCidadaoTOSBundle'

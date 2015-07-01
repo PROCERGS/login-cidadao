@@ -10,7 +10,7 @@
     <p>{{ 'tos.agreement.intro' | trans }}</p>
 
     <div class="terms">
-        {{ latest.terms }}
+        {{ render(controller('LoginCidadaoTOSBundle:TermsOfService:showLatest')) }}
     </div>
 
     {{ form_start(form) }}

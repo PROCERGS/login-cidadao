@@ -10,21 +10,28 @@
 
 namespace LoginCidadao\TOSBundle\Model;
 
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\User\UserInterface;
+use LoginCidadao\TOSBundle\Entity\Agreement;
 use LoginCidadao\TOSBundle\Entity\AgreementRepository;
 use LoginCidadao\TOSBundle\Entity\TermsOfServiceRepository;
 
 class TOSManager
 {
+    /** @var EntityManager */
+    private $em;
+
     /** @var AgreementRepository */
     private $agreementRepo;
 
     /** @var TermsOfServiceRepository */
     private $termsRepo;
 
-    public function __construct(AgreementRepository $agreementRepo,
+    public function __construct(EntityManager $em,
+                                AgreementRepository $agreementRepo,
                                 TermsOfServiceRepository $termsRepo)
     {
+        $this->em            = $em;
         $this->termsRepo     = $termsRepo;
         $this->agreementRepo = $agreementRepo;
     }
@@ -43,5 +50,20 @@ class TOSManager
         ));
 
         return $agreement instanceof AgreementInterface;
+    }
+
+    public function setUserAgreed(UserInterface $user)
+    {
+        if ($this->hasAgreedToLatestTerms($user)) {
+            return;
+        }
+
+        $latest = $this->termsRepo->findLatestTerms();
+
+        $agreement = new Agreement();
+        $agreement->setUser($user)
+            ->setTermsOfService($latest);
+        $this->em->persist($agreement);
+        $this->em->flush();
     }
 }

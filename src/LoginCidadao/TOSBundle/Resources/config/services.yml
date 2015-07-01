@@ -5,6 +5,8 @@ parameters:
     tos.manager.class: LoginCidadao\TOSBundle\Model\TOSManager
     tos.agreement.listener.class: LoginCidadao\TOSBundle\EventListener\CheckAgreementListener
 
+    tos.user_register.listener.class: LoginCidadao\TOSBundle\EventListener\RegistrationSubscriber
+
 services:
     tos.terms_of_service.repository:
         class:           Doctrine\ORM\EntityRepository
@@ -23,6 +25,7 @@ services:
     tos.manager:
         class: %tos.manager.class%
         arguments:
+            - @doctrine.orm.entity_manager
             - @tos.agreement.repository
             - @tos.terms_of_service.repository
 
@@ -35,3 +38,11 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onFilterController }
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+    tos.user_register.listener:
+        class: %tos.user_register.listener.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @tos.manager
+        tags:
+            - { name: kernel.event_subscriber }
