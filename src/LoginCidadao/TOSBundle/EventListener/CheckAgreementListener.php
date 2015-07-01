@@ -66,7 +66,7 @@ class CheckAgreementListener
             return false;
         }
         if ($this->securityContext->isGranted('ROLE_ADMIN')) {
-            //return false;
+            return false;
         }
 
         $controller = $event->getController();

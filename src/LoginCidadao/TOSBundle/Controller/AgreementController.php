@@ -19,12 +19,13 @@ class AgreementController extends Controller
      */
     public function askAction(Request $request)
     {
-        if ($this->agreedToTermsOfService()) {
-            return $this->continueNavigation($request);
-        }
-
         $termsRepo = $this->getDoctrine()->getRepository('LoginCidadaoTOSBundle:TermsOfService');
         $latest    = $termsRepo->findLatestTerms();
+
+        if (!($latest instanceof TOSInterface) ||
+            $this->agreedToTermsOfService()) {
+            return $this->continueNavigation($request);
+        }
 
         $agreement = new Agreement();
         $agreement->setTermsOfService($latest)
