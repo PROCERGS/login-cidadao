@@ -7,6 +7,6 @@
 {% block body %}
     <h1>{{ 'tos.admin.new.link' | trans }}</h1>
 
-    {{ form(form) }}
+    {{ include('LoginCidadaoTOSBundle:TermsOfService:form.html.twig', { 'form': form }) }}
 
 {% endblock %}

@@ -49,7 +49,8 @@ class TOSManager
             'user' => $user
         ));
 
-        return $agreement instanceof AgreementInterface;
+        return $agreement instanceof AgreementInterface &&
+            $agreement->getAgreedAt() > $latest->getUpdatedAt();
     }
 
     public function setUserAgreed(UserInterface $user)

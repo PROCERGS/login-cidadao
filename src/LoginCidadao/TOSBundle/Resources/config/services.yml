@@ -46,3 +46,18 @@ services:
             - @tos.manager
         tags:
             - { name: kernel.event_subscriber }
+
+    tos.markdown.parser.standard:
+        class: cebe\markdown\Markdown
+        arguments: ~
+
+    tos.markdown.parser.github:
+        class: cebe\markdown\GithubMarkdown
+        arguments: ~
+
+    tos.twig.markdown_extension:
+        class: LoginCidadao\TOSBundle\Twig\Extension\MarkdownExtension
+        arguments:
+            - @tos.markdown.parser.standard
+        tags:
+            - { name: twig.extension }

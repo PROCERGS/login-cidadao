@@ -49,7 +49,8 @@ class CheckAgreementListener
 
         if ($this->httpUtils->checkRequestPath($request, 'tos_agree') ||
             $this->httpUtils->checkRequestPath($request, 'tos_terms') ||
-            $request->attributes->get('_controller') == 'LoginCidadaoTOSBundle:Agreement') {
+            $request->attributes->get('_controller') == 'LoginCidadaoTOSBundle:Agreement' ||
+            $request->attributes->get('_controller') == 'LoginCidadaoTOSBundle:TermsOfService:showLatest') {
             return;
         }
 

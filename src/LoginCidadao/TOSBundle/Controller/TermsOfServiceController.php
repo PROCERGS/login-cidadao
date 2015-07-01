@@ -99,7 +99,6 @@ class TermsOfServiceController extends Controller
 
     /**
      * @Route("/terms", name="tos_terms")
-     * @Method("GET")
      * @Template("LoginCidadaoTOSBundle:TermsOfService:latest.html.twig")
      * @Secure(roles="IS_AUTHENTICATED_ANONYMOUSLY")
      */

@@ -1,10 +1,12 @@
 {% extends "::base.html.twig" %}
 
+{% trans_default_domain "LoginCidadaoTOSBundle" %}
+
 {% block title %}{{ 'tos.title' | trans }}{% endblock %}
 
 {% block body %}
     <h1>{{ 'Editing Terms of Service' | trans }}</h1>
 
-    {{ form(form) }}
+    {{ include('LoginCidadaoTOSBundle:TermsOfService:form.html.twig', { 'form': form }) }}
 
 {% endblock %}

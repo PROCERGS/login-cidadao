@@ -21,6 +21,7 @@ tos:
             label: Criar
         button:
             submit: Salvar
+        use_markdown: Use Markdown para formatar os Termos de Uso.
 
     admin:
         new:

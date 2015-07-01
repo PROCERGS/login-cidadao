@@ -18,6 +18,7 @@ tos:
             label: Create
         button:
             submit: Submit
+        use_markdown: Use Markdown to format the Terms of Service.
 
     admin:
         new:
