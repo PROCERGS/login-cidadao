@@ -47,9 +47,9 @@ class CheckAgreementListener
 
         $request = $event->getRequest();
 
-        if ($this->httpUtils->checkRequestPath($request, 'agree') ||
-            $this->httpUtils->checkRequestPath($request, 'terms') ||
-            $request->attributes->get('_controller') == 'LoginCidadaoTOSBundle:???') {
+        if ($this->httpUtils->checkRequestPath($request, 'tos_agree') ||
+            $this->httpUtils->checkRequestPath($request, 'tos_terms') ||
+            $request->attributes->get('_controller') == 'LoginCidadaoTOSBundle:Agreement') {
             return;
         }
 
@@ -66,7 +66,7 @@ class CheckAgreementListener
             return false;
         }
         if ($this->securityContext->isGranted('ROLE_ADMIN')) {
-            return false;
+            //return false;
         }
 
         $controller = $event->getController();
@@ -91,8 +91,10 @@ class CheckAgreementListener
             return;
         }
 
-        $route    = 'agree';
+        $route    = 'tos_agree';
         $request  = $event->getRequest();
+        $request->getSession()->set('tos_continue_url',
+            $request->getRequestUri());
         $response = $this->httpUtils->createRedirectResponse($request, $route);
         $event->setResponse($response);
     }

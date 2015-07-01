@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @ORM\Table(name="agreement")
  * @ORM\Entity(repositoryClass="LoginCidadao\TOSBundle\Entity\AgreementRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Agreement implements AgreementInterface
 {
@@ -43,7 +44,7 @@ class Agreement implements AgreementInterface
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="agreedAt", type="datetime")
+     * @ORM\Column(name="agreed_at", type="datetime")
      */
     private $agreedAt;
 
@@ -90,6 +91,16 @@ class Agreement implements AgreementInterface
         $this->agreedAt = $agreedAt;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setAgreedAtValue()
+    {
+        if (!($this->getAgreedAt() instanceof \DateTime)) {
+            $this->agreedAt = new \DateTime();
+        }
     }
 
     /**

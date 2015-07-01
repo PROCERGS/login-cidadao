@@ -19,6 +19,10 @@ class AgreementController extends Controller
      */
     public function askAction(Request $request)
     {
+        if ($this->agreedToTermsOfService()) {
+            return $this->continueNavigation($request);
+        }
+
         $termsRepo = $this->getDoctrine()->getRepository('LoginCidadaoTOSBundle:TermsOfService');
         $latest    = $termsRepo->findLatestTerms();
 
@@ -30,7 +34,11 @@ class AgreementController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            //
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($agreement);
+            $em->flush();
+
+            return $this->continueNavigation($request);
         }
 
         return compact('latest', 'form');
@@ -50,5 +58,31 @@ class AgreementController extends Controller
             'attr' => array('class' => 'btn-success')
         ));
         return $form;
+    }
+
+    private function agreedToTermsOfService()
+    {
+        $termsRepo     = $this->getDoctrine()->getRepository('LoginCidadaoTOSBundle:TermsOfService');
+        $agreementRepo = $this->getDoctrine()->getRepository('LoginCidadaoTOSBundle:Agreement');
+
+        $user      = $this->getUser();
+        $latest    = $termsRepo->findLatestTerms();
+        $agreement = $agreementRepo->findOneBy(array(
+            'user' => $user,
+            'termsOfService' => $latest
+        ));
+
+        if (!($agreement instanceof AgreementInterface)) {
+            return false;
+        }
+
+        return ($agreement->getAgreedAt() > $latest->getUpdatedAt());
+    }
+
+    private function continueNavigation(Request $request)
+    {
+        $url = $request->getSession()->get('tos_continue_url', '/');
+        $request->getSession()->remove('tos_continue_url');
+        return $this->redirect($url);
     }
 }
