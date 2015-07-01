@@ -1,0 +1,10 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}{{ 'tos.title' | trans }}{% endblock %}
+
+{% block body %}
+    <h1>{{ 'Editing Terms of Service' | trans }}</h1>
+
+    {{ form(form) }}
+
+{% endblock %}

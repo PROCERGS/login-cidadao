@@ -19,6 +19,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @ORM\Table(name="terms_of_service")
  * @ORM\Entity(repositoryClass="LoginCidadao\TOSBundle\Entity\TermsOfServiceRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class TermsOfService implements TOSInterface
 {
@@ -38,6 +39,13 @@ class TermsOfService implements TOSInterface
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
      */
     private $author;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="terms", type="text")
+     */
+    private $terms;
 
     /**
      * @var \DateTime
@@ -94,6 +102,26 @@ class TermsOfService implements TOSInterface
     }
 
     /**
+     * Get terms of service text
+     * 
+     * @return string
+     */
+    public function getTerms()
+    {
+        return $this->terms;
+    }
+
+    /**
+     * Set terms of service text
+     * 
+     * @param string $terms
+     */
+    public function setTerms($terms)
+    {
+        $this->terms = $terms;
+    }
+
+    /**
      * Set createdAt
      *
      * @param \DateTime $createdAt
@@ -104,6 +132,16 @@ class TermsOfService implements TOSInterface
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue()
+    {
+        if (!($this->getCreatedAt() instanceof \DateTime)) {
+            $this->createdAt = new \DateTime();
+        }
     }
 
     /**
@@ -127,6 +165,15 @@ class TermsOfService implements TOSInterface
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function setUpdatedAtValue()
+    {
+        $this->updatedAt = new \DateTime();
     }
 
     /**
