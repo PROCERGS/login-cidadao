@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use LoginCidadao\TOSBundle\Model\TOSInterface;
 use LoginCidadao\TOSBundle\Entity\TermsOfService;
 use LoginCidadao\TOSBundle\Form\TermsOfServiceType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 class TermsOfServiceController extends Controller
 {
@@ -18,6 +19,7 @@ class TermsOfServiceController extends Controller
      * @Route("/terms", name="tos_list")
      * @Method("GET")
      * @Template()
+     * @Secure(roles="ROLE_ADMIN")
      */
     public function listAction()
     {
@@ -32,6 +34,7 @@ class TermsOfServiceController extends Controller
      * @Route("/terms/{id}", name="tos_edit", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
      * @Template()
+     * @Secure(roles="ROLE_SUPER_ADMIN")
      */
     public function editAction(Request $request, $id)
     {
@@ -52,6 +55,7 @@ class TermsOfServiceController extends Controller
     /**
      * @Route("/terms/new", name="tos_new")
      * @Template()
+     * @Secure(roles="ROLE_SUPER_ADMIN")
      */
     public function newAction()
     {
@@ -65,6 +69,7 @@ class TermsOfServiceController extends Controller
      * @Route("/terms", name="tos_create")
      * @Method("POST")
      * @Template("LoginCidadaoTOSBundle:TermsOfService:new.html.twig")
+     * @Secure(roles="ROLE_SUPER_ADMIN")
      */
     public function createAction(Request $request)
     {
@@ -84,7 +89,7 @@ class TermsOfServiceController extends Controller
         return compact('form');
     }
 
-    public function getCreateForm(TOSInterface $terms)
+    private function getCreateForm(TOSInterface $terms)
     {
         $form = $this->createForm(new TermsOfServiceType(), $terms,
             array(
@@ -100,13 +105,14 @@ class TermsOfServiceController extends Controller
         return $form;
     }
 
-    public function getEditForm(TOSInterface $terms)
+    private function getEditForm(TOSInterface $terms)
     {
         $form = $this->createForm(new TermsOfServiceType(), $terms,
             array(
             'action' => $this->generateUrl('tos_edit',
                 array('id' => $terms->getId())),
             'method' => 'POST',
+            'translation_domain' => 'LoginCidadaoTOSBundle'
             )
         );
         $form->add('submit', 'submit',
@@ -114,5 +120,11 @@ class TermsOfServiceController extends Controller
             'label' => 'Save', 'attr' => array('class' => 'btn-success')
         ));
         return $form;
+    }
+
+    private function redirectToRoute($route, array $parameters = array(),
+                                     $status = 302)
+    {
+        return $this->redirect($this->generateUrl($route, $parameters), $status);
     }
 }

@@ -1,0 +1,32 @@
+tos:
+    title: Termos de Uso
+    agreement:
+        title: Os Termos de Uso mudaram!
+        intro: >
+            Para melhor atendê-lo, nossos Termos de Uso foram modificados.
+            Por favor, leia a nova versão cuidadosamente e marque a caixa a
+            seguir se você concordar com os termos expostos.
+        ask: >
+            Por favor, leia a nova versão cuidadosamente e marque a caixa a
+            seguir se você concorda com os termos.
+
+    form:
+        agreed_at:
+            label: Eu Concordo
+        terms:
+            label: Termos de Uso
+        final:
+            label: Finalizado
+        create:
+            label: Criar
+        button:
+            submit: Salvar
+
+    admin:
+        new:
+            title: Nova Versão dos Termos de Uso
+            link: Nova Versão
+        edit: Editar
+        list:
+            title: Versões Disponíveis
+            item: Versão de %date%

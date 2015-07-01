@@ -13,6 +13,7 @@ namespace LoginCidadao\TOSBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use LoginCidadao\TOSBundle\Model\TOSInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * TermsOfService
@@ -20,6 +21,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table(name="terms_of_service")
  * @ORM\Entity(repositoryClass="LoginCidadao\TOSBundle\Entity\TermsOfServiceRepository")
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity(fields={"createdAt"})
  */
 class TermsOfService implements TOSInterface
 {

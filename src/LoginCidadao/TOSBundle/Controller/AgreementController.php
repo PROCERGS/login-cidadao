@@ -4,6 +4,7 @@ namespace LoginCidadao\TOSBundle\Controller;
 
 use LoginCidadao\TOSBundle\Entity\Agreement;
 use LoginCidadao\TOSBundle\Form\AgreementType;
+use LoginCidadao\TOSBundle\Model\TOSInterface;
 use LoginCidadao\TOSBundle\Model\AgreementInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -55,7 +56,7 @@ class AgreementController extends Controller
         ));
         $form->add('submit', 'submit',
             array(
-            'label' => 'tos.agreement.form.button.submit',
+            'label' => 'tos.form.button.submit',
             'attr' => array('class' => 'btn-success')
         ));
         return $form;
@@ -66,8 +67,13 @@ class AgreementController extends Controller
         $termsRepo     = $this->getDoctrine()->getRepository('LoginCidadaoTOSBundle:TermsOfService');
         $agreementRepo = $this->getDoctrine()->getRepository('LoginCidadaoTOSBundle:Agreement');
 
-        $user      = $this->getUser();
-        $latest    = $termsRepo->findLatestTerms();
+        $user   = $this->getUser();
+        $latest = $termsRepo->findLatestTerms();
+
+        if (!($latest instanceof TOSInterface)) {
+            return true;
+        }
+
         $agreement = $agreementRepo->findOneBy(array(
             'user' => $user,
             'termsOfService' => $latest
