@@ -16,36 +16,36 @@
     <div class="form-group">
         {{ form_label(form1.username) }}
         {{ form_errors(form1.username) }}
-        {{ form_widget(form1.username, {'attr' : {'placeholder' : 'security.login.username', 'onKeyUp' : 'validator.onKeyUpMultiformat(this, event)', 'class':'form-control', 'value' : last_username }}) }}
+        {{ form_widget(form1.username, {'attr' : {'placeholder' : 'security.login.username', 'tabindex': '1', 'onKeyUp' : 'validator.onKeyUpMultiformat(this, event)', 'class':'form-control', 'value' : last_username }}) }}
     </div>
 
     <div class="form-group">
         <label for="{{ form1.password.vars.id }}" class="required" style="display: block">
             {{ 'form.plainPassword' | trans }}
-            <a id="resetting_request" target="_blank" class="pull-right" href="{{ path('fos_user_resetting_request') }}">{{ 'resseting.forgot_password' | trans }}</a>
+            <a id="resetting_request" target="_blank" tabindex="6" class="pull-right" href="{{ path('fos_user_resetting_request') }}">{{ 'resseting.forgot_password' | trans }}</a>
         </label>
         {{ form_errors(form1.password) }}
-        {{ form_widget(form1.password, {'attr' : {'placeholder' : 'security.login.password', 'class':'form-control'}}) }}
+        {{ form_widget(form1.password, {'attr' : {'placeholder' : 'security.login.password', 'tabindex': '2', 'class':'form-control'}}) }}
     </div>
 
     {% if form1.recaptcha is defined %}
         <div class="form-group captcha-container">
             {{ include("PROCERGSLoginCidadaoCoreBundle::common.recaptcha.html.twig") }}
             {% form_theme form1 'EWZRecaptchaBundle:Form:ewz_recaptcha_widget.html.twig' %}
-            {{ form_widget(form1.recaptcha, { 'attr': {'options' : {'theme' : 'custom'}}}) }}
+            {{ form_widget(form1.recaptcha, { 'attr': {'options' : {'theme' : 'custom'}, 'tabindex': '2' } }) }}
         </div>
     {% endif %}
 
     <div class="form-group">
         <div class="checkbox remember-group">
             <label>
-                <input type="checkbox" id="remember_me" name="_remember_me" value="on" />{{ 'security.login.remember_me'|trans }}
+                <input type="checkbox" id="remember_me" name="_remember_me" value="on" tabindex="4" />{{ 'security.login.remember_me'|trans }}
             </label>
         </div>
     </div>
 
     <div class="text-right">
-        <button type="submit" class="btn btn-block btn-success">{{ 'security.login.submit'|trans }}</button>
+        <button type="submit" class="btn btn-block btn-success" tabindex="5">{{ 'security.login.submit'|trans }}</button>
     </div>
 </div>
 
