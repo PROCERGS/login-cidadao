@@ -32,7 +32,7 @@ class CountryManager implements LocationManagerInterface
 
     public function findAll()
     {
-        $this->repository->findBy(array('reviewed' => Country::REVIEWED_OK),
-            array('name' => 'ASC'));
+        return $this->repository->findBy(array('reviewed' => Country::REVIEWED_OK),
+                array('name' => 'ASC'));
     }
 }
