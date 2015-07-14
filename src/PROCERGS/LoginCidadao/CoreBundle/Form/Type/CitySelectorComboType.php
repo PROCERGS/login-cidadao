@@ -32,6 +32,7 @@ class CitySelectorComboType extends AbstractType
 
     /** @var ProfileEditListner */
     private $profileEditSubscriber;
+
     /** @var TranslatorInterface */
     private $translator;
 
