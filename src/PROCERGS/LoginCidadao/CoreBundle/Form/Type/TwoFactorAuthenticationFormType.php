@@ -2,10 +2,10 @@
 
 namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 
 class TwoFactorAuthenticationFormType extends AbstractType
 {
@@ -15,16 +15,31 @@ class TwoFactorAuthenticationFormType extends AbstractType
         $builder
             //->add('googleAuthenticatorSecret', 'hidden')
             ->add('googleAuthenticatorSecret', 'text',
-                  array(
+                array(
                 'read_only' => true,
                 'label' => "Authenticator Secret"
             ))
-            ->add('verification', 'text', array(
+            ->add('verification', 'text',
+                array(
                 'label' => 'Generated Code',
                 'mapped' => false
-            ))
+        ));
+        if (strlen($builder->getData()->getPassword()) == 0) {
+            $builder->add('plainPassword', 'repeated',
+                array(
+                'type' => 'password'
+            ));
+        } else {
+            $builder->add('current_password', 'password',
+                array(
+                'required' => true,
+                'constraints' => new UserPassword(),
+                'mapped' => false
+            ));
+        }
+        $builder
             ->add('enable', 'submit',
-                  array(
+                array(
                 'attr' => array('class' => 'btn btn-success'),
                 'label' => 'Activate Two-Factor Authentication')
         );
@@ -41,5 +56,4 @@ class TwoFactorAuthenticationFormType extends AbstractType
     {
         return 'lc_2fa';
     }
-
 }
