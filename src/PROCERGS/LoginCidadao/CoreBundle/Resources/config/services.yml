@@ -316,5 +316,6 @@ services:
             - @lc.state_manager
             - @lc.city_manager
             - @procergs_logincidadao.profile_edit
+            - @translator
         tags:
             - { name: form.type, alias: lc_location }
