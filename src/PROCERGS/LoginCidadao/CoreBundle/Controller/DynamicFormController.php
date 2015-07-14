@@ -44,6 +44,11 @@ class DynamicFormController extends Controller
 
         $scope = $this->intersectScopes($authorizedScope, $requestedScope);
 
+        if (count($scope) === 1 && array_search('email', $scope) !== false && $person->getEmailConfirmedAt()
+            instanceof \DateTime) {
+            //return $this->redirect($request->get('redirect_url', null));
+        }
+
         $placeOfBirth = new SelectData();
         $placeOfBirth->getFromObject($person);
 
@@ -176,10 +181,6 @@ class DynamicFormController extends Controller
                 break;
             case 'id_cards':
                 $this->addIdCard($formBuilder, $person);
-                break;
-            case 'email':
-                $this->addPersonField($formBuilder, $person, 'email', null,
-                    array('required' => true));
                 break;
             case 'mobile':
                 $this->addPersonField($formBuilder, $person, 'mobile', null,
@@ -421,6 +422,12 @@ class DynamicFormController extends Controller
         $authorizedScope = $this->getScopeAsArray($authorizedScope);
         $requestedScope  = $this->getScopeAsArray($requestedScope);
 
-        return array_intersect($authorizedScope, $requestedScope);
+        $result = array_intersect($authorizedScope, $requestedScope);
+
+        if (empty($result) && array_search('email', $requestedScope) !== false) {
+            $result[] = 'email';
+        }
+
+        return $result;
     }
 }

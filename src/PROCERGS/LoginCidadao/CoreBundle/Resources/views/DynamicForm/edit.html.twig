@@ -4,48 +4,55 @@
 
 {% block content %}
     <div id="profile-edit" class="content profile-edit">
-        <h1 class="visible-xs">{{ 'Complete Missing Fields' | trans }}</h1>
+        {% if scope | length == 1 and scope | first == 'email' %}
+            <p>[informar usuário sobre confirmação de email]
+            <p>[oferecer link para reenvio do email]
+            <p>[long polling aguardando confirmação do email]
+        {% else %}
+            <h1 class="visible-xs">{{ 'Complete Missing Fields' | trans }}</h1>
 
-        <p>{% trans with { '%client%': client.name } %}<strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.{% endtrans %}</p>
+            <p>{% trans with { '%client%': client.name } %}<strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.{% endtrans %}</p>
 
-        {{ form_start(form) }}
-        {{ form_errors(form) }}
-        {% if form.person is defined or form.placeOfBirth is defined %}
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title">{{ 'Personal Details' | trans }}</h2>
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {% if form.person is defined or form.placeOfBirth is defined %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">{{ 'Personal Details' | trans }}</h2>
+                    </div>
+                    <div class="panel-body">
+                        {% if form.person is defined %}
+                            {{ form_row(form.person) }}
+                        {% endif %}
+
+                        {% if form.placeOfBirth is defined %}
+                            {{ form_row(form.placeOfBirth) }}
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="panel-body">
-                    {% if form.person is defined %}
-                        {{ form_row(form.person) }}
-                    {% endif %}
+            {% endif %}
 
-                    {% if form.placeOfBirth is defined %}
-                        {{ form_row(form.placeOfBirth) }}
-                    {% endif %}
+            {% if form.idcard is defined %}
+                <div class="id-card-forms-placeholder">
+                    {{ include("PROCERGSLoginCidadaoCoreBundle:IdCard:form.component.html.twig", {'form': form.idcard, 'hide_footer': true }) }}
+                </div>
+            {% endif %}
+
+            {% if form.address is defined %}
+                {{ include("PROCERGSLoginCidadaoCoreBundle:PersonAddress:form.component.html.twig", {'form': form.address, 'embeded': true, 'hide_footer': true, 'name_as_normal_field': true }) }}
+            {% endif %}
+
+            <div class="row">
+                <div class="col-sm-10" style="margin-top: 5px;">
+                    {{ 'After completing your information, click the following button to continue:' | trans }}
+                </div>
+                <div class="col-sm-2 text-right">
+                    <input type="submit" value="{{ 'Send'|trans }}" class="btn btn-success">
                 </div>
             </div>
-        {% endif %}
+            {{ form_end(form) }}
 
-        {% if form.idcard is defined %}
-            <div class="id-card-forms-placeholder">
-                {{ include("PROCERGSLoginCidadaoCoreBundle:IdCard:form.component.html.twig", {'form': form.idcard, 'hide_footer': true }) }}
-            </div>
         {% endif %}
-
-        {% if form.address is defined %}
-            {{ include("PROCERGSLoginCidadaoCoreBundle:PersonAddress:form.component.html.twig", {'form': form.address, 'embeded': true, 'hide_footer': true, 'name_as_normal_field': true }) }}
-        {% endif %}
-
-        <div class="row">
-            <div class="col-sm-10" style="margin-top: 5px;">
-                {{ 'After completing your information, click the following button to continue:' | trans }}
-            </div>
-            <div class="col-sm-2 text-right">
-                <input type="submit" value="{{ 'Send'|trans }}" class="btn btn-success">
-            </div>
-        </div>
-        {{ form_end(form) }}
     </div>
 {% endblock %}
 
