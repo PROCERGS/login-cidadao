@@ -367,6 +367,7 @@ class ProfileEditListner implements EventSubscriberInterface
                 $state->setName($stateText);
                 $state->setCountry($data->getCountry());
                 $this->em->persist($state);
+                $this->em->flush($state);
             }
             $data->setState($state)
                 ->setCity(null);
