@@ -142,20 +142,6 @@
                             {% endif %}
                         </div>
                     {% endif %}
-                    {% if app.user.nfgAccessToken is null %}
-                        <div class="connect nfg disabled">
-                            <a data-href="{{ path('nfg_bind') }}" href="javascript:void(0);" class="col-xs-11 col-xs-offset-1 username nfgpopup">{{ 'Connect to the Nota Fiscal Gaúcha' | trans }}</a>
-                        </div>
-                    {% else %}
-                        <div class="connect nfg">
-                            <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.cpf | formatCpf }}</span>
-                            {% if app.user.hasPassword %}
-                                <a class="col-xs-2 unlink text-right"  href="{{ path('nfg_unbind') }}">
-                                    <span class="glyphicon glyphicon-remove"></span>
-                                </a>
-                            {% endif %}
-                        </div>
-                    {% endif %}
                 </div>
             </div>
 

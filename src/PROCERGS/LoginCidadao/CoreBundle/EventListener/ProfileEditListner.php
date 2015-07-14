@@ -16,15 +16,11 @@ use PROCERGS\LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
 use PROCERGS\LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer;
 use FOS\UserBundle\Mailer\MailerInterface;
 use Doctrine\ORM\EntityManager;
-use PROCERGS\LoginCidadao\CoreBundle\Helper\DneHelper;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\City;
 use Assetic\Exception\Exception;
-use PROCERGS\LoginCidadao\CoreBundle\Helper\NfgWsHelper;
-use PROCERGS\LoginCidadao\CoreBundle\Exception\NfgException;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\LcValidationException;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
-use PROCERGS\LoginCidadao\CoreBundle\Exception\MissingNfgAccessTokenException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
 use PROCERGS\LoginCidadao\CoreBundle\DynamicFormEvents;
 use PROCERGS\LoginCidadao\CoreBundle\Model\DynamicFormData;
@@ -47,8 +43,6 @@ class ProfileEditListner implements EventSubscriberInterface
     private $cpfEmptyTime;
     protected $em;
     protected $dne;
-    protected $voterRegistration;
-    protected $nfg;
     protected $userManager;
 
     public function __construct(TwigSwiftMailer $mailer,
@@ -92,9 +86,6 @@ class ProfileEditListner implements EventSubscriberInterface
         $this->cpf               = $this->security->getToken()
             ->getUser()
             ->getCpf();
-        $this->voterRegistration = $this->security->getToken()
-            ->getUser()
-            ->getVoterRegistration();
     }
 
     public function onProfileEditSuccess(FormEvent $event)
@@ -162,7 +153,6 @@ class ProfileEditListner implements EventSubscriberInterface
     public function onProfileDocEditSuccess(FormEvent $event)
     {
         $user = $event->getForm()->getData();
-        $this->checkVoterRegistrationChanged($user);
         $this->checkCPFChanged($user);
     }
 
@@ -174,16 +164,6 @@ class ProfileEditListner implements EventSubscriberInterface
     public function setEntityManager(EntityManager $var)
     {
         $this->em = $var;
-    }
-
-    public function setDneHelper(DneHelper $var)
-    {
-        $this->dne = $var;
-    }
-
-    public function setNfgHelper(NfgWsHelper $var)
-    {
-        $this->nfg = $var;
     }
 
     public function setUserManager($var)
@@ -215,117 +195,6 @@ class ProfileEditListner implements EventSubscriberInterface
             } else {
                 $cpfExpiryDate = new \DateTime($this->cpfEmptyTime);
                 $user->setCpfExpiration($cpfExpiryDate);
-            }
-        }
-    }
-
-    private function solveVoterRegistrationConflict(Person $user, Person $other,
-                                                    $isNfgValidated = null)
-    {
-        $currentUser = $this->security->getToken()->getUser();
-        if (is_null($isNfgValidated)) {
-            try {
-                $isNfgValidated = $this->nfg->isVoterRegistrationValid($currentUser,
-                    $user->getVoterRegistration());
-            } catch (MissingNfgAccessTokenException $e) {
-                $isNfgValidated = null;
-            }
-        }
-        if ($isNfgValidated) {
-            $this->em->beginTransaction();
-            try {
-                $voterRegistration = $user->getVoterRegistration();
-                $user->setVoterRegistration(null);
-                $this->em->persist($user);
-
-                $other->setVoterRegistration(null);
-                $this->em->persist($other);
-
-                $this->notificationsHelper->revokedVoterRegistrationNotification($other);
-
-                $user->setVoterRegistration($voterRegistration);
-                $this->em->persist($user);
-                $this->em->flush();
-
-                $this->em->commit();
-            } catch (\Exception $up) {
-                $this->em->rollback();
-                throw $up;
-            }
-        } else {
-            throw new LcValidationException('voterregistration.conflict.ask.nfg');
-        }
-    }
-
-    private function checkVoterRegistrationChanged(Person &$user)
-    {
-        if (null === $user->getVoterRegistration() || strlen($user->getVoterRegistration())
-            == 0) {
-            return;
-        }
-        $aUser = $this->security->getToken()->getUser();
-        if ($user->getVoterRegistration() != $this->voterRegistration) {
-            if ($aUser->getNfgAccessToken()) {
-                $this->nfg->setAccessToken($aUser->getNfgAccessToken());
-                $this->nfg->setTituloEleitoral($user->getVoterRegistration());
-                $nfgReturn1 = $this->nfg->consultaCadastro();
-                if ($nfgReturn1['CodSitRetorno'] != 1) {
-                    throw new NfgException($nfgReturn1['MsgRetorno']);
-                }
-                if (!isset($nfgReturn1['CodCpf'], $nfgReturn1['NomeConsumidor'],
-                        $nfgReturn1['EmailPrinc'])) {
-                    throw new NfgException('nfg.missing.required.fields');
-                }
-            }
-            $personRepo  = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
-            $otherPerson = $personRepo->findOneBy(array(
-                'voterRegistration' => $user->getVoterRegistration()
-            ));
-            if ($otherPerson) {
-                if (isset($nfgReturn1)) {
-                    if (isset($nfgReturn1['CodSitTitulo']) && $nfgReturn1['CodSitTitulo']
-                        != 0) {
-                        if ($nfgReturn1['CodSitTitulo'] == 1) {
-                            $className = $this->em->getClassMetadata(get_class($aUser))->getName();
-                            $uk        = $this->em->getUnitOfWork();
-                            $a         = $uk->getOriginalEntityData($user);
-                            $uk->detach($user);
-
-                            $otherPerson->setVoterRegistration(null);
-                            $this->em->persist($otherPerson);
-
-                            $uk->registerManaged($user,
-                                array('id' => $user->getId()), $a);
-
-                            $this->notificationsHelper->revokedVoterRegistrationNotification($otherPerson);
-
-                            $aNfgProfile = $aUser->getNfgProfile();
-                            $aNfgProfile->setVoterRegistrationSit($nfgReturn1['CodSitTitulo']);
-                            $aNfgProfile->setVoterRegistration($user->getVoterRegistration());
-                            $this->em->persist($aNfgProfile);
-                        } else {
-                            throw new LcValidationException('voterreg.already.used.but.nfg.mismatch');
-                        }
-                    } else {
-                        throw new LcValidationException('voterreg.already.used.but.nfg.offer');
-                    }
-                } else {
-                    throw new LcValidationException('voterreg.already.used');
-                }
-            } else {
-                if (isset($nfgReturn1)) {
-                    if (isset($nfgReturn1['CodSitTitulo']) && $nfgReturn1['CodSitTitulo']
-                        != 0) {
-                        if ($nfgReturn1['CodSitTitulo'] == 1) {
-                            $aNfgProfile = $aUser->getNfgProfile();
-                            $aNfgProfile->setVoterRegistrationSit($nfgReturn1['CodSitTitulo']);
-                            $aNfgProfile->setVoterRegistration($user->getVoterRegistration());
-                            $this->em->persist($aNfgProfile);
-                        } else {
-                            throw new LcValidationException('voterreg.nfg.fixit');
-                        }
-                    }
-                }
             }
         }
     }
@@ -367,6 +236,7 @@ class ProfileEditListner implements EventSubscriberInterface
                 $state->setName($stateText);
                 $state->setCountry($data->getCountry());
                 $this->em->persist($state);
+                $this->em->flush($state);
             }
             $data->setState($state)
                 ->setCity(null);

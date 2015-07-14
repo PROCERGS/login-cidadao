@@ -189,13 +189,13 @@
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
     #lc-navbar .brand a {
-        background-image: url('../images/meu_logo2x.png') !important;
+        background-image: url('../images/navbar_logo2x.png') !important;
         background-size: 155px;
     }
 }
 
 #lc-navbar .brand a {
-    background-image: url('../images/meu_logo.png');
+    background-image: url('../images/navbar_logo.png');
     background-repeat: no-repeat;
     height: 42px;
     padding: 0;
