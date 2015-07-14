@@ -145,6 +145,7 @@ security:
 
         - { path: ^/logout/if-not-remembered, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/terms$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
         - { path: ^/, roles: IS_AUTHENTICATED_REMEMBERED }
         - { path: ^/profile/edit, roles: IS_AUTHENTICATED_FULLY }

@@ -4,8 +4,68 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "498a3cb85d6ad97c5fa79953e9279a34",
+    "hash": "7cfcdfb0974cf10e2dc178ef4d9484bf",
     "packages": [
+        {
+            "name": "cebe/markdown",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cebe/markdown.git",
+                "reference": "54a2c49de31cc44e864ebf0500a35ef21d0010b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cebe/markdown/zipball/54a2c49de31cc44e864ebf0500a35ef21d0010b2",
+                "reference": "54a2c49de31cc44e864ebf0500a35ef21d0010b2",
+                "shasum": ""
+            },
+            "require": {
+                "lib-pcre": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "cebe/indent": "*",
+                "facebook/xhprof": "*@dev",
+                "phpunit/phpunit": "4.1.*"
+            },
+            "bin": [
+                "bin/markdown"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "cebe\\markdown\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Carsten Brandt",
+                    "email": "mail@cebe.cc",
+                    "homepage": "http://cebe.cc/",
+                    "role": "Creator"
+                }
+            ],
+            "description": "A super fast, highly extensible markdown parser for PHP",
+            "homepage": "https://github.com/cebe/markdown#readme",
+            "keywords": [
+                "extensible",
+                "fast",
+                "gfm",
+                "markdown",
+                "markdown-extra"
+            ],
+            "time": "2015-03-06 05:28:07"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.0",
@@ -141,7 +201,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -208,7 +268,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -485,7 +545,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -539,7 +599,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -1661,7 +1721,7 @@
             ],
             "authors": [
                 {
-                    "name": "Johannes M. Schmitt",
+                    "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -1731,7 +1791,7 @@
             ],
             "authors": [
                 {
-                    "name": "Johannes M. Schmitt",
+                    "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -2144,7 +2204,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/7c8b01021522cb429e5127a4c9175efa44a9cb69",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/a343bb7c45fb0e9ef1fb3da94befe96fdf55e1f2",
                 "reference": "3889e7ff245dde6ad802e3c61d73fdf1bf4d3329",
                 "shasum": ""
             },
@@ -2242,9 +2302,9 @@
             ],
             "authors": [
                 {
-                    "name": "Johannes M. Schmitt",
+                    "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -2292,9 +2352,9 @@
             ],
             "authors": [
                 {
-                    "name": "Johannes M. Schmitt",
+                    "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -2309,17 +2369,17 @@
         },
         {
             "name": "procergs/login-cidadao-badges-bundle",
-            "version": "dev-cleanup",
+            "version": "dev-master",
             "target-dir": "PROCERGS/LoginCidadao/BadgesBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/login-cidadao-badges-bundle.git",
-                "reference": "fcaccb4df3c42e28f7529af91d959f7b3ad6be56"
+                "reference": "34b64807ec526c37edd014a7d612deda08689570"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/fcaccb4df3c42e28f7529af91d959f7b3ad6be56",
-                "reference": "fcaccb4df3c42e28f7529af91d959f7b3ad6be56",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/3a154019dc346b745afc68b15fa5d190b0ed4a8d",
+                "reference": "34b64807ec526c37edd014a7d612deda08689570",
                 "shasum": ""
             },
             "require": {
@@ -2331,6 +2391,7 @@
                     "PROCERGS\\LoginCidadao\\BadgesBundle": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2346,11 +2407,7 @@
                 "badges",
                 "login-cidadao"
             ],
-            "support": {
-                "source": "https://github.com/PROCERGS/login-cidadao-badges-bundle/tree/cleanup",
-                "issues": "https://github.com/PROCERGS/login-cidadao-badges-bundle/issues"
-            },
-            "time": "2015-06-26 18:33:47"
+            "time": "2015-01-14 17:48:06"
         },
         {
             "name": "procergs/login-cidadao-igp-bundle",
@@ -2400,6 +2457,49 @@
             "time": "2015-01-27 20:29:29"
         },
         {
+            "name": "procergs/tos-bundle",
+            "version": "1.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PROCERGS/tos-bundle.git",
+                "reference": "621b2d0332d63c4d17ecd7870a8dc3b7404a448c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/621b2d0332d63c4d17ecd7870a8dc3b7404a448c",
+                "reference": "621b2d0332d63c4d17ecd7870a8dc3b7404a448c",
+                "shasum": ""
+            },
+            "require": {
+                "cebe/markdown": "^1.1",
+                "doctrine/doctrine-bundle": "1.2.*",
+                "doctrine/orm": ">=2.2.3,<2.4-dev",
+                "friendsofsymfony/user-bundle": "~2.0@dev",
+                "php": ">=5.3.3",
+                "sensio/framework-extra-bundle": "2.3.*",
+                "symfony/symfony": "2.3.*",
+                "twig/extensions": "1.0.*"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "LoginCidadao\\TOSBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "AGPLv3"
+            ],
+            "authors": [
+                {
+                    "name": "Guilherme Donato",
+                    "email": "guilhermednt@users.noreply.github.com"
+                }
+            ],
+            "description": "Terms of Service Bundle",
+            "time": "2015-07-02 20:18:20"
+        },
+        {
             "name": "psr/log",
             "version": "1.0.0",
             "source": {
@@ -2447,7 +2547,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scheb/two-factor-bundle/zipball/45851693b074981942c8edd3c584b7d70e37257a",
+                "url": "https://api.github.com/repos/scheb/two-factor-bundle/zipball/69c104c1dc864a25b7bea0894daaef283c612be5",
                 "reference": "b93f8021cfc4d90e766e630e8886980fdc843572",
                 "shasum": ""
             },

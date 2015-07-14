@@ -303,3 +303,7 @@ footer .inner-row {
     padding-right: 30px!important;
   }
 }
+
+.terms-of-service h1 {
+    font-size: 24px;
+}

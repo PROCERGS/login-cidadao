@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
 #    - { resource: memcached.yml }
+    - { resource: @LoginCidadaoTOSBundle/Resources/config/config.yml }
 
 framework:
     #esi:             ~
@@ -44,7 +45,7 @@ twig:
 assetic:
     debug:          %kernel.debug%
     use_controller: false
-    bundles:        [ "PROCERGSLoginCidadaoCoreBundle", "PROCERGSLoginCidadaoNotificationBundle" ]
+    bundles:        [ "PROCERGSLoginCidadaoCoreBundle", "PROCERGSLoginCidadaoNotificationBundle", "LoginCidadaoTOSBundle" ]
     #java: /usr/bin/java
     assets:
       bootstrap_fonts_woff:
