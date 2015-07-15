@@ -3,10 +3,13 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormBuilderInterface;
+use FOS\UserBundle\FOSUserEvents;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonAddress;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\DynamicForm\DynamicPersonType;
@@ -44,8 +47,8 @@ class DynamicFormController extends Controller
 
         $scope = $this->intersectScopes($authorizedScope, $requestedScope);
 
-        if (count($scope) === 1 && array_search('email', $scope) !== false && $person->getEmailConfirmedAt()
-            instanceof \DateTime) {
+        $waitEmail = count($scope) === 1 && array_search('email', $scope) !== false;
+        if ($waitEmail && $person->getEmailConfirmedAt() instanceof \DateTime) {
             //return $this->redirect($request->get('redirect_url', null));
         }
 
@@ -58,6 +61,12 @@ class DynamicFormController extends Controller
             ->setScope($request->get('scope', null))
             ->setPlaceOfBirth($placeOfBirth);
 
+        $dispatcher = $this->getDispatcher();
+
+        $event = new \FOS\UserBundle\Event\GetResponseUserEvent($person,
+            $request);
+        $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $event);
+
         $formBuilder = $this->createFormBuilder($data,
             array('cascade_validation' => true));
         foreach ($scope as $curr) {
@@ -69,10 +78,11 @@ class DynamicFormController extends Controller
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $dispatcher = $this->getDispatcher();
-            $event      = new \FOS\UserBundle\Event\FormEvent($form, $request);
+            $event = new \FOS\UserBundle\Event\FormEvent($form, $request);
             $dispatcher->dispatch(DynamicFormEvents::POST_FORM_VALIDATION,
                 $event);
+
+            $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_SUCCESS, $event);
 
             $em           = $this->getDoctrine()->getManager();
             $person       = $formBuilder->getData()->getPerson();
@@ -97,19 +107,54 @@ class DynamicFormController extends Controller
                 $em->persist($idCard);
             }
 
+            $response = $this->redirect($formBuilder->getData()->getRedirectUrl());
+            $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_COMPLETED,
+                new \FOS\UserBundle\Event\FilterUserResponseEvent($person,
+                $request, $response));
+
             $em->flush();
 
             $dispatcher->dispatch(DynamicFormEvents::POST_FORM_EDIT, $event);
 
             $dispatcher->dispatch(DynamicFormEvents::PRE_REDIRECT, $event);
 
-            return $this->redirect($formBuilder->getData()->getRedirectUrl());
+            $person = $userManager->findUserByUsername($person->getUsername());
+            if (!$waitEmail || $waitEmail && $person->getConfirmationToken() === null) {
+                return $response;
+            }
         }
 
         $viewData = compact('client', 'scope', 'authorizedScope');
 
         $viewData['form'] = $form->createView();
         return $viewData;
+    }
+
+    /**
+     * @Route("/wait/validate/email", name="wait_valid_email")
+     * @Method("GET")
+     * @Template()
+     */
+    public function checkEmailAction(Request $request)
+    {
+        $user = $this->getUser();
+
+        if ($user->getConfirmationToken() === null) {
+            $result = true;
+        } else {
+            $updatedAt = \DateTime::createFromFormat('Y-m-d H:i:s',
+                    $request->get('updated_at'));
+
+            if (!($updatedAt instanceof \DateTime)) {
+                $updatedAt = new \DateTime();
+            }
+
+            $em     = $this->getDoctrine()->getManager();
+            $person = $user->waitUpdate($em, $updatedAt);
+            $result = $person->getConfirmationToken() === null;
+        }
+
+        return new JsonResponse($result);
     }
 
     /**
@@ -178,6 +223,10 @@ class DynamicFormController extends Controller
                         'class' => 'form-control cpf'
                     )
                 ));
+                break;
+            case 'email':
+                $this->addPersonField($formBuilder, $person, 'email', null,
+                    array('required' => true));
                 break;
             case 'id_cards':
                 $this->addIdCard($formBuilder, $person);
