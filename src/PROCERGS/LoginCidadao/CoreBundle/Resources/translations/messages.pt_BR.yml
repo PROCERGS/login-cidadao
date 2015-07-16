@@ -710,6 +710,10 @@ Surname: Sobrenome
 <strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.: <strong>%client%</strong> precisa de detalhes adicionais sobre você. Por favor, complete as informações em branco a seguir para continuar.
 Personal Details: Informações Pessoais
 Complete Missing Fields: Complete as Informações em Branco
+'Use accounts from other services': 'Use contas de outros serviços'
+'If you prefer, it''s possible to use other services to login or create your account.': 'Se preferir, é possível usar os seguintes serviços para acessar ou criar sua conta:'
+Type your password to confirm the activation.: Digite sua senha para confirmar a ativação.
+Current password: Senha atual
 <strong>%client%</strong> requires that you have a validated email in order to proceed.: <strong>%client%</strong> precisa que você possua um email validado antes de continuar.
 Validating your email address is pretty simple and fast. You just have to click the link or button in the email we sent you.: Validar seu endereço de email é bastante fácil e rápido. Você só precisa clicar no link ou botão no email que lhe enviamos.
 After you validate your email address this screen will change automatically and you'll proceed to <strong>%client%</strong>.: Depois de validar seu email, essa tela vai mudar <strong>automaticamente</strong> e você poderá prosseguir para <strong>%client%</strong>.

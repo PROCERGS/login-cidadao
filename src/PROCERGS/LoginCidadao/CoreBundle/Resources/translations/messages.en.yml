@@ -259,6 +259,9 @@ Surname: Surname
 <strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.: <strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.
 Personal Details: Personal Details
 Complete Missing Fields: Complete Missing Fields
+If you prefer, it's possible to use other services to login or create your account.: If you prefer, it's possible to use other services to login or create your account.
+Type your password to confirm the activation.: Type your password to confirm the activation.
+Current password: Current password
 <strong>%client%</strong> requires that you have a validated email in order to proceed.: <strong>%client%</strong> requires that you have a validated email in order to proceed.
 Validating your email address is pretty simple and fast. You just have to click the link or button in the email we sent you.: Validating your email address is pretty simple and fast. You just have to click the link or button in the email we sent you.
 After you validate your email address this screen will change automatically and you'll proceed to <strong>%client%</strong>.: After you validate your email address this screen will change <strong>automatically</strong> and you'll proceed to <strong>%client%</strong>.
