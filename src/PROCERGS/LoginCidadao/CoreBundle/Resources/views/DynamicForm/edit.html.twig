@@ -12,27 +12,36 @@
 
                 <p>{% trans %}Validating your email address is pretty simple and fast. You just have to click the link or button in the email we sent you.{% endtrans %}</p>
 
-                <p>{% trans %}If you are having trouble to find the confirmation email, please make sure it isn't in the junk mail section of your email program or site.{% endtrans %}</p>
+                <p>{% trans with { '%client%': client.name } %}After you validate your email address this screen will change automatically and you'll proceed to <strong>%client%</strong>.{% endtrans %}</p>
 
-                <p>{% trans %}If you are certain the email was not received, it's possible that you mistyped your email address. You can change you email address below.{% endtrans %}</p>
+                <div class="text-center">
+                    <button class="btn btn-link show-help-email">{% trans %}I'm having trouble finding the confirmation email{% endtrans %}</button>
+                </div>
 
-                {{ form_start(form) }}
-                {{ form_errors(form) }}
-                {% if form.person is defined or form.placeOfBirth is defined %}
-                    {{ form_row(form.person) }}
-                    <div class="row">
-                        <div class="col-sm-10" style="margin-top: 5px;">
-                            {{ 'After completing your information, click the following button to continue:' | trans }}
+                <div class="help-email" style="display: none;">
+                    <p>{% trans %}If you are having trouble to find the confirmation email, please make sure it isn't in the junk mail section of your email program or site.{% endtrans %}</p>
+
+                    <p>{% trans %}If you are certain the email was not received, it's possible that you mistyped your email address. You can change you email address below.{% endtrans %}</p>
+
+                    {{ form_start(form) }}
+                    {{ form_errors(form) }}
+                    {% if form.person is defined or form.placeOfBirth is defined %}
+                        {{ form_row(form.person.email, { 'attr': { 'data-original': form.person.vars.value.email } }) }}
+                        <div class="row data-changed" style="display: none">
+                            <div class="col-sm-10" style="margin-top: 5px;">
+                                {{ 'If your email is mistyped, correct it and click the following button.' | trans }}
+                            </div>
+                            <div class="col-sm-2 text-right">
+                                <input type="submit" value="{{ 'Change Email'|trans }}" class="btn btn-success">
+                            </div>
                         </div>
-                        <div class="col-sm-2 text-right">
-                            <input type="submit" value="{{ 'Send'|trans }}" class="btn btn-success">
-                        </div>
-                    </div>
-                {% endif %}
-                {{ form_end(form) }}
+                    {% endif %}
+                    {{ form_end(form) }}
+                </div>
             </div>
-            <div class="email-validate-success text-center hidden">
-                <a class="btn btn-success" href="{{ form.vars.value.redirectUrl }}">Voltar para {{ client.name }}</a>
+            <div class="email-validate-success text-center" style="display: none">
+                <p>{{ 'Your email was successfully validated.' | trans }}</p>
+                <a class="btn btn-success" href="{{ form.vars.value.redirectUrl }}">{{ 'Back to %client%' | trans({ '%client%': client.name }) }}</a>
             </div>
         {% else %}
             <h1 class="visible-xs">{{ 'Complete Missing Fields' | trans }}</h1>
@@ -100,6 +109,20 @@
 
         {% if wait_email %}
                 dynamicForm.validEmail.wait();
+
+                $('button.show-help-email').on('click', function () {
+                    $(this).fadeOut('fast', function () {
+                        $('.help-email').fadeIn();
+                    });
+                });
+
+                $('input[data-original]').on('change keyup', function () {
+                    if ($(this).val() != $(this).data('original')) {
+                        $('.data-changed').fadeIn();
+                    } else {
+                        $('.data-changed').fadeOut();
+                    }
+                });
         {% endif %}
             });
 
@@ -117,8 +140,11 @@
                         $.get(dynamicForm.validEmail.longPollingUrl, function (data) {
                             console.log(data);
                             if (data === true) {
-                                //alert("Email verificado com sucesso!");
-                                //window.location = dynamicForm.redirectUrl;
+                                $('.email-validate-waiting').slideUp();
+                                $('.email-validate-success').slideDown().promise().done(function () {
+                                    alert("Email verificado com sucesso!");
+                                    window.location = dynamicForm.redirectUrl;
+                                });
                             }
                         }).fail(function () {
                             dynamicForm.validEmail.wait();
@@ -129,6 +155,13 @@
             };
     </script>
 {% endblock javascripts %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets  '@PROCERGSLoginCidadaoCoreBundle/Resources/public/css/dynamic_form.css' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock stylesheets %}
 
 {% block content_columns %}container{% endblock %}
 {% block sidebar %}{% endblock %}

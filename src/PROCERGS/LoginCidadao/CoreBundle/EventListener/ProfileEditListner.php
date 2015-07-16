@@ -102,7 +102,7 @@ class ProfileEditListner implements EventSubscriberInterface
     {
         $user = $event->getForm()->getData();
         if ($user instanceof DynamicFormData) {
-            $user->getPerson()->checkEmailPending();
+            $this->checkEmailChanged($user->getPerson());
         }
         if (!($user instanceof PersonInterface)) {
             return;

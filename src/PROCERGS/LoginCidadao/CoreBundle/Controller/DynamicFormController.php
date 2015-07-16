@@ -82,6 +82,8 @@ class DynamicFormController extends Controller
             $dispatcher->dispatch(DynamicFormEvents::POST_FORM_VALIDATION,
                 $event);
 
+            $event = new \FOS\UserBundle\Event\FormEvent($form->get('person'),
+                $request);
             $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_SUCCESS, $event);
 
             $em           = $this->getDoctrine()->getManager();
@@ -121,6 +123,13 @@ class DynamicFormController extends Controller
             $person = $userManager->findUserByUsername($person->getUsername());
             if (!$waitEmail || $waitEmail && $person->getConfirmationToken() === null) {
                 return $response;
+            } else {
+                $params = $request->query->all();
+
+                $params['clientId'] = $clientId;
+
+                $url = $this->generateUrl('client_dynamic_form', $params);
+                return $this->redirect($url);
             }
         }
 
