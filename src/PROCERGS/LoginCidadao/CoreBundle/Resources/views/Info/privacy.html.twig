@@ -2,59 +2,34 @@
 
 {% block body %}
 
-{% block notificationExtreme %}
-{{ include("PROCERGSLoginCidadaoCoreBundle::notification_extreme.html.twig", { columns: 'col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3' } ) }}
-{% endblock %}
+    {% block notificationExtreme %}
+        {{ include("PROCERGSLoginCidadaoCoreBundle::notification_extreme.html.twig", { columns: 'col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3' } ) }}
+    {% endblock %}
 
-<div class="row">
-    <div class="col-xs-12 text-center header-shadows">
-        <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
-        <h2 class="slogan hidden-xs">{% trans %}One account. The entire Government.{% endtrans %}</h2>
-    </div>
-</div>
-
-<div class="row">
-    <div class="general-content col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
-
-        <div class="title text-center">
-            <h4>{% trans %}Privacy and Terms of Service{% endtrans %}</h3>
-        </div>
-
-        <div class="text">
-          <strong>Atenção: Leia atentamente estes termos antes de utilizar este site. O uso deste site indica que você aceita estes termos. Caso não aceite estes termos, não utilize este site.</strong>
-        </div>
-
-        <div class="text">
-            <p>O Usuário declara e se responsabiliza pela veracidade de todos os dados fornecidos ao Site no momento de seu Cadastro e em qualquer atualização posterior, ficando responsável pela sua exatidão e autenticidade.</p>
-
-            <p>Poderá ser solicitado o registro de informações pessoais para autorizar o acesso a determinados serviços.</p>
-
-            <p>É nosso compromisso não comercializar, nem ceder estas informações para nossos clientes ou terceiros ou a outras empresas que trabalham em nosso nome.</p>
-
-            <p>Zelamos pela privacidade dos dados, porém nos comprometemos a revelar os dados pessoais quando solicitados por autoridade judicial.</p>
-
-            <p>Todos os materiais do Site, incluindo marcas, logotipos, sistemas, produtos, bases de dados, arquivos, imagens, vídeos ou materiais de qualquer natureza veiculados no Site são protegidos pela legislação de Propriedade Intelectual.</p>
-
-            <p>Será caracterizado como infração, através da legislação vigente, o uso indevido de materiais protegidos por propriedade intelectual apresentados no Site, sujeitando o Usuário infrator às medidas judiciais cabíveis.</p>
-
-            <p>Os materiais poderão ser acessados, utilizados e impressos para uso pessoal do Usuário, portanto, não será permitido copiar, modificar, criar artigos, transferir ou vender informação (software, banco de dados, lista de usuários) ou qualquer outro produto obtidos através do site para uso comercial.</p>
-
-            <p>Além disso, o Usuário não poderá:</p>
-
-            <ul>
-              <li>- Cadastrar endereço de correio eletrônico falso;</li>
-              <li>- Transmitir ou enviar informações de terceiros;</li>
-              <li>- Alterar, apagar ou corromper dados e informações do Site;</li>
-              <li>- Violar a privacidade de outros Usuários do Site;</li>
-              <li>- Utilizar os produtos e serviços disponíveis no Site para outros fins, diferentes daqueles a que se destinam;</li>
-              <li>- Divulgar no Site materiais ilegais, agressivos, discriminatórios, caluniosos, terroristas, obscenos, ameaçadores, invasivos a privacidade de terceiros ou todo tipo de material condenável de qualquer tipo que sejam prejudiciais a outros indivíduos;</li>
-              <li>- Utilizar o Site para disseminar qualquer material que contenha vírus, worms e outros programas de computador que possam causar danos aos Usuários do Site.</li>
-            </ul>
-
-            <p>Este Termo de Uso é regido e interpretado pelas leis da República Federativa do Brasil e todas discussões e ações judiciais relacionados a essas condições de uso serão determinados de acordo com essa legislação.</p>
+    <div class="row">
+        <div class="col-xs-12 text-center header-shadows">
+            <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
+            <h2 class="slogan hidden-xs">{% trans %}One account. The entire Government.{% endtrans %}</h2>
         </div>
     </div>
-</div>
+
+    <div class="row">
+        <div class="general-content col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+            <h1>{% trans %}Privacy and Terms of Service{% endtrans %}</h1>
+
+            <div class="text">
+                <p><strong>Atenção</strong>: Leia atentamente estes termos antes de utilizar este site. O uso deste site indica que você aceita estes termos. Caso não aceite estes termos, não utilize este site.</p>
+            </div>
+
+            <div class="text terms-of-service">
+                {% if app.user != null %}
+                    {{ render(controller('LoginCidadaoTOSBundle:TermsOfService:showLatest', { 'username': app.user.username })) }}
+                {% else %}
+                    {{ render(controller('LoginCidadaoTOSBundle:TermsOfService:showLatest')) }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block stylesheets_custom %}

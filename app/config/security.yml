@@ -125,7 +125,6 @@ security:
         - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }
 
         - { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/nfg, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
         - { path: ^/connect/twitter$, role: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -146,6 +145,7 @@ security:
 
         - { path: ^/logout/if-not-remembered, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/terms$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
         - { path: ^/, roles: IS_AUTHENTICATED_REMEMBERED }
         - { path: ^/profile/edit, roles: IS_AUTHENTICATED_FULLY }

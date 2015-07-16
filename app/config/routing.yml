@@ -1,3 +1,9 @@
+# Terms of Service
+tos:
+    resource: "@LoginCidadaoTOSBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 # Notifications
 procergs_login_cidadao_notification:
     type: rest

@@ -15,8 +15,6 @@ use Symfony\Component\Security\Core\Exception\DisabledException;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\LoginFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\Generic\ValidationBundle\Validator\Constraints\CEP;
-use PROCERGS\LoginCidadao\CoreBundle\Helper\NfgHelper;
-use PROCERGS\LoginCidadao\CoreBundle\Helper\DneHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\FormError;

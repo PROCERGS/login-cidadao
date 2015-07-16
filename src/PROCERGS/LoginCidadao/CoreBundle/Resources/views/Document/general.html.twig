@@ -11,45 +11,10 @@
                 <div class="form-group">
                     {{ form_label(generalDocsForm.cpf) }}
                     {% if generalDocsForm.cpf.vars.value is not null %}
-                        {% if app.user.nfgAccessToken is null %}
-                            {{ form_widget(generalDocsForm.cpf, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }}
-                        {% else %}
-                            {{ form_widget(generalDocsForm.cpf, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}
-                            <span> {{ generalDocsForm.cpf.vars.value|formatCpf }} </span>
-                        {% endif %}
+                        {{ form_widget(generalDocsForm.cpf, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }}
                     {% endif %}
                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                     {{ form_errors(generalDocsForm.cpf) }}
-                </div>
-                <div class="form-group">
-                    {{ form_label(generalDocsForm.voterRegistration) }}
-                    {% if app.user.nfgAccessToken is not null %}
-                        {% if generalDocsForm.voterRegistration.vars.value is null or generalDocsForm.voterRegistration.vars.value == '' %}
-                            {{ form_widget(generalDocsForm.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
-                            {{ form_errors(generalDocsForm.voterRegistration) }}
-                            <span class="extra">{% trans %}Don't know your Voter Registration number?{% endtrans %}<a target='blank' href="{{ tre_search_link }}">{{ 'Search it!' | trans }}</a></span>
-                            <span class="extra">{% trans %}Use your account on Nota Fiscal Gaúcha and validate your Voter Registration{% endtrans %}</span>
-                        {% else %}
-                            {% if app.user.nfgProfile != null and (app.user.nfgProfile.voterRegistrationSit is null or app.user.nfgProfile.voterRegistrationSit == 0) %}
-                                {{ form_widget(generalDocsForm.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
-                                {{ form_errors(generalDocsForm.voterRegistration) }}
-                                <span class="extra">{% trans %}Use your account on Nota Fiscal Gaúcha and authorize us to validate your Voter Registration{% endtrans %}</span>
-                            {% elseif app.user.nfgProfile != null and app.user.nfgProfile.voterRegistrationSit == 1 %}
-                                {{ form_widget(generalDocsForm.voterRegistration, {'attr': {'type': 'hidden', 'style' : 'display: none;'}}) }}
-                                {{ form_errors(generalDocsForm.voterRegistration) }}
-                                <span>{{ generalDocsForm.voterRegistration.vars.value }}</span>
-                            {% else %}
-                                {{ form_widget(generalDocsForm.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
-                                {{ form_errors(generalDocsForm.voterRegistration) }}
-                                <span class="extra">{% trans %}The Voter Registration used is not valid according to Nota Fiscal Gaúcha. Please type your Voter Registration correctly{% endtrans %}</span>
-                            {% endif %}
-                        {% endif %}
-                    {% else %}
-                        {{ form_widget(generalDocsForm.voterRegistration, {'attr': {'class': 'form-control', 'maxlength' : '12'}}) }}
-                        {{ form_errors(generalDocsForm.voterRegistration) }}
-                        <span class="extra">{% trans %}Don't know your Voter Registration number?{% endtrans %} <a target='blank' href="{{ tre_search_link }}">{{ 'Search it!' | trans }}</a></span>
-                        {% endif %}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                 </div>
 
             </div>

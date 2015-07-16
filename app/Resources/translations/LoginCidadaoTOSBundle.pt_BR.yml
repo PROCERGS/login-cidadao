@@ -1,0 +1,14 @@
+tos:
+    menu:
+        admin:
+            list: Terms of Service
+    form:
+        final.label: Publicado
+        save.label: Salvar
+    last_change:
+        label: 'Última modificação em %date%'
+        date: d/m/Y \à\s H:i:s
+    agreement:
+        current_agreement:
+            label: Você aceitou esses termos em %date%
+            date: d/m/Y \à\s H:i:s
