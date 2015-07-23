@@ -675,3 +675,15 @@ Personal Details: Informações Pessoais
 Complete Missing Fields: Complete as Informações em Branco
 'Use accounts from other services': 'Use contas de outros serviços'
 'If you prefer, it''s possible to use other services to login or create your account.': 'Se preferir, é possível usar os seguintes serviços para acessar ou criar sua conta:'
+Type your password to confirm the activation.: Digite sua senha para confirmar a ativação.
+Current password: Senha atual
+<strong>%client%</strong> requires that you have a validated email in order to proceed.: <strong>%client%</strong> precisa que você possua um email validado antes de continuar.
+Validating your email address is pretty simple and fast. You just have to click the link or button in the email we sent you.: Validar seu endereço de email é bastante fácil e rápido. Você só precisa clicar no link ou botão no email que lhe enviamos.
+After you validate your email address this screen will change automatically and you'll proceed to <strong>%client%</strong>.: Depois de validar seu email, essa tela vai mudar <strong>automaticamente</strong> e você poderá prosseguir para <strong>%client%</strong>.
+I'm having trouble finding the confirmation email: Estou tendo dificuldade em encontrar o email de confirmação
+If you are having trouble to find the confirmation email, please make sure it isn't in the junk mail section of your email program or site.: Se você está tendo dificuldades em encontrar o email de confirmação, por favor verifique se ele não se encontra na caixa de spam ou lixo eletrônico do seu email.
+If you are certain the email was not received, it's possible that you mistyped your email address. You can change you email address below.: Se você tem certeza de que o email não foi recebido, é possível que seu endereço esteja com erro de digitação. Verifique e, se necessário, altere o email no campo abaixo.
+If your email is mistyped, correct it and click the following button.: Se seu email estava incorreto, corrija-o e clique no botão a seguir.
+Change Email: Trocar Email
+Your email was successfully validated.: Seu email foi validado com sucesso.
+Back to %client%: Voltar para %client%

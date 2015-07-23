@@ -1,0 +1,28 @@
+<ul class="nav nav-pills nav-stacked">
+    {% block menu_admin_items %}
+        <li class="profile glyph">
+            <a href="{{ path('lc_home') }}" role="button">
+                <i class="glyphicon glyphicon-arrow-left icon"></i>
+                <span>{{ 'Back to main menu'|trans }}</span>
+            </a>
+        </li>
+        <li class="services glyph {{ myController == 'Admin\\Client' ? 'active' }}">
+            <a href="{{ path('lc_admin_app') }}">
+                <span>{{ 'admin.apps.list'|trans() }}</span>
+                <i class="glyphicon glyphicon-th icon"></i>
+            </a>
+        </li>
+        <li class="services glyph {{ myController == 'Admin\\Suggestion' ? 'active' }}">
+            <a href="{{ path('lc_admin_sugg') }}">
+                <span>{{ 'admin.sugg.list'|trans() }}</span>
+                <i class="glyphicon glyphicon-th-list icon"></i>
+            </a>
+        </li>
+        <li class="services glyph {{ myController == 'Admin\\Person' ? 'active' }}">
+            <a href="{{ path('lc_admin_person') }}">
+                <span>{{ 'admin.person.list'|trans() }}</span>
+                <i class="glyphicon glyphicon-user icon"></i>
+            </a>
+        </li>
+    {% endblock %}
+</ul>

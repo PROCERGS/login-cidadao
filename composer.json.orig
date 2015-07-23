@@ -16,7 +16,11 @@
         },
         {
             "type" : "vcs",
+<<<<<<< Updated upstream
             "url" : "https://github.com/PROCERGS/login-cidadao-badges-bundle"
+=======
+            "url" : "https://github.com/guilhermednt/CPTermsBundle"
+>>>>>>> Stashed changes
         }
     ],
     "require" : {
@@ -50,11 +54,14 @@
         "procergs/login-cidadao-badges-bundle": "dev-cleanup",
         "procergs/login-cidadao-igp-bundle": "dev-master",
         "scheb/two-factor-bundle": "dev-master",
-        "symfony/phpunit-bridge": "^2.7",
-        "procergs/tos-bundle": "^1.0"
+<<<<<<< Updated upstream
+        "symfony/phpunit-bridge": "^2.7"
     },
     "require-dev": {
         "sensio/generator-bundle" : "~2.3"
+=======
+        "cp/terms-bundle": "~1.0"
+>>>>>>> Stashed changes
     },
     "scripts" : {
         "post-root-package-install": [

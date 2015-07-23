@@ -4,6 +4,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use PROCERGS\OAuthBundle\Entity\Client;
@@ -20,6 +21,7 @@ use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Model\LocationAwareInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Model\SelectData;
+use PROCERGS\Generic\LongPolling\LongPollingUtils;
 
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository")
@@ -984,12 +986,12 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     /**
      * @ORM\PreUpdate
      */
-    public function setUpdatedAt($updatedAt = null)
+    public function setUpdatedAt($var = NULL)
     {
-        if ($updatedAt instanceof \DateTime) {
-            $this->updatedAt = $updatedAt;
+        if ($var === null) {
+            $this->updatedAt = new \DateTime();
         } else {
-            $this->updatedAt = new \DateTime('now');
+            $this->updatedAt = $var;
         }
         return $this;
     }
@@ -1202,5 +1204,39 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function setPlaceOfBirth(SelectData $location)
     {
         $location->toObject($this);
+    }
+
+    public function waitUpdate(EntityManager $em, \DateTime $updatedAt)
+    {
+        $id            = $this->getId();
+        $lastUpdatedAt = null;
+        $callback      = $this->getCheckUpdateCallback($em, $id, $updatedAt,
+            $lastUpdatedAt);
+        return LongPollingUtils::runTimeLimited($callback);
+    }
+
+    private function getCheckUpdateCallback(EntityManager $em, $id, $updatedAt,
+                                            $lastUpdatedAt)
+    {
+        $people = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+        return function() use ($id, $people, $em, $updatedAt, $lastUpdatedAt) {
+            $em->clear();
+            $person = $people->find($id);
+            if (!$person->getUpdatedAt()) {
+                return false;
+            }
+
+            if ($person->getUpdatedAt() > $updatedAt) {
+                return $person;
+            }
+
+            if ($lastUpdatedAt === null) {
+                $lastUpdatedAt = $person->getUpdatedAt();
+            } elseif ($person->getUpdatedAt() != $lastUpdatedAt) {
+                return $person;
+            }
+
+            return false;
+        };
     }
 }

@@ -16,7 +16,6 @@ use Doctrine\ORM\EntityManager;
 
 class LoggedInUserListener
 {
-
     /** @var SecurityContextInterface */
     private $context;
 
@@ -37,11 +36,11 @@ class LoggedInUserListener
                                 TranslatorInterface $translator,
                                 EntityManager $em)
     {
-        $this->context = $context;
-        $this->router = $router;
-        $this->session = $session;
+        $this->context    = $context;
+        $this->router     = $router;
+        $this->session    = $session;
         $this->translator = $translator;
-        $this->em = $em;
+        $this->em         = $em;
     }
 
     public function onKernelRequest(GetResponseEvent $event)
@@ -84,16 +83,15 @@ class LoggedInUserListener
     protected function checkUnconfirmedEmail()
     {
         $token = $this->context->getToken();
-        $user = $token->getUser();
+        $user  = $token->getUser();
         if (is_null($user->getEmailConfirmedAt())) {
             $params = array('%url%' => $this->router->generate('lc_resend_confirmation_email'));
-            $title = $this->translator->trans('notification.unconfirmed.email.title');
-            $text = $this->translator->trans('notification.unconfirmed.email.shortText',
-                                             $params);
-            $alert = sprintf("<strong>%s</strong> %s", $title, $text);
+            $title  = $this->translator->trans('notification.unconfirmed.email.title');
+            $text   = $this->translator->trans('notification.unconfirmed.email.shortText',
+                $params);
+            $alert  = sprintf("<strong>%s</strong> %s", $title, $text);
 
             $this->session->getFlashBag()->add('alert.unconfirmed.email', $alert);
         }
     }
-
 }

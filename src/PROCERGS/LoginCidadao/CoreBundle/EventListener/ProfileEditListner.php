@@ -25,6 +25,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
 use PROCERGS\LoginCidadao\CoreBundle\DynamicFormEvents;
 use PROCERGS\LoginCidadao\CoreBundle\Model\DynamicFormData;
 use PROCERGS\LoginCidadao\CoreBundle\Model\SelectData;
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class ProfileEditListner implements EventSubscriberInterface
 {
@@ -91,6 +92,12 @@ class ProfileEditListner implements EventSubscriberInterface
     public function onProfileEditSuccess(FormEvent $event)
     {
         $user = $event->getForm()->getData();
+        if ($user instanceof DynamicFormData) {
+            $this->checkEmailChanged($user->getPerson());
+        }
+        if (!($user instanceof PersonInterface)) {
+            return;
+        }
 
         if (!$user->getState() && $event->getForm()->has('ufsteppe')) {
             $steppe = ucwords(strtolower(trim($event->getForm()->get('ufsteppe')->getData())));
@@ -236,6 +243,7 @@ class ProfileEditListner implements EventSubscriberInterface
                 $state->setName($stateText);
                 $state->setCountry($data->getCountry());
                 $this->em->persist($state);
+                $this->em->flush($state);
             }
             $data->setState($state)
                 ->setCity(null);

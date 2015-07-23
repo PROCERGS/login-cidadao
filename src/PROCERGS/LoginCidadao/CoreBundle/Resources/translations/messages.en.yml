@@ -246,3 +246,15 @@ Surname: Surname
 Personal Details: Personal Details
 Complete Missing Fields: Complete Missing Fields
 If you prefer, it's possible to use other services to login or create your account.: If you prefer, it's possible to use other services to login or create your account.
+Type your password to confirm the activation.: Type your password to confirm the activation.
+Current password: Current password
+<strong>%client%</strong> requires that you have a validated email in order to proceed.: <strong>%client%</strong> requires that you have a validated email in order to proceed.
+Validating your email address is pretty simple and fast. You just have to click the link or button in the email we sent you.: Validating your email address is pretty simple and fast. You just have to click the link or button in the email we sent you.
+After you validate your email address this screen will change automatically and you'll proceed to <strong>%client%</strong>.: After you validate your email address this screen will change <strong>automatically</strong> and you'll proceed to <strong>%client%</strong>.
+I'm having trouble finding the confirmation email: I'm having trouble finding the confirmation email
+If you are having trouble to find the confirmation email, please make sure it isn't in the junk mail section of your email program or site.: If you are having trouble to find the confirmation email, please make sure it isn't in the junk mail section of your email program or site.
+If you are certain the email was not received, it's possible that you mistyped your email address. You can change you email address below.: If you are certain the email was not received, it's possible that you mistyped your email address. You can change you email address below.
+If your email is mistyped, correct it and click the following button.: If your email is mistyped, correct it and click the following button.
+Change Email: Change Email
+Your email was successfully validated.: Your email was successfully validated.
+Back to %client%: Back to %client%

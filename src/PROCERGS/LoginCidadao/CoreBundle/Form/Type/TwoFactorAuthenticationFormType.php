@@ -2,9 +2,10 @@
 
 namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 
 class TwoFactorAuthenticationFormType extends AbstractType
 {
@@ -21,7 +22,21 @@ class TwoFactorAuthenticationFormType extends AbstractType
                 array(
                 'label' => 'Generated Code',
                 'mapped' => false
-            ))
+        ));
+        if (strlen($builder->getData()->getPassword()) == 0) {
+            $builder->add('plainPassword', 'repeated',
+                array(
+                'type' => 'password'
+            ));
+        } else {
+            $builder->add('current_password', 'password',
+                array(
+                'required' => true,
+                'constraints' => new UserPassword(),
+                'mapped' => false
+            ));
+        }
+        $builder
             ->add('enable', 'submit',
                 array(
                 'attr' => array('class' => 'btn btn-success'),

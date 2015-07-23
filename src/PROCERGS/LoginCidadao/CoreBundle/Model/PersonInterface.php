@@ -4,6 +4,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Model;
 
 use PROCERGS\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation as JMS;
+use Doctrine\ORM\EntityManager;
 
 interface PersonInterface
 {
@@ -198,4 +199,10 @@ interface PersonInterface
     public function getGoogleAuthenticatorSecret();
 
     public function setGoogleAuthenticatorSecret($googleAuthenticatorSecret);
+    /**
+     * @param EntityManager $em
+     * @param \DateTime $updatedAt
+     * @return PersonInterface
+     */
+    public function waitUpdate(EntityManager $em, \DateTime $updatedAt);
 }

@@ -2,9 +2,11 @@
 
 namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -31,14 +33,19 @@ class CitySelectorComboType extends AbstractType
     /** @var ProfileEditListner */
     private $profileEditSubscriber;
 
+    /** @var TranslatorInterface */
+    private $translator;
+
     /** @var string */
     private $level;
 
     public function __construct(CountryManager $countryManager,
                                 StateManager $stateManager,
                                 CityManager $cityManager,
-                                ProfileEditListner $profileEditSubscriber)
+                                ProfileEditListner $profileEditSubscriber,
+                                TranslatorInterface $translator)
     {
+        $this->translator            = $translator;
         $this->cityManager           = $cityManager;
         $this->stateManager          = $stateManager;
         $this->countryManager        = $countryManager;
@@ -202,5 +209,23 @@ class CitySelectorComboType extends AbstractType
     public function getName()
     {
         return 'lc_location';
+    }
+
+    public function finishView(FormView $view, FormInterface $form,
+                               array $options)
+    {
+        $collator     = new \Collator($this->translator->getLocale());
+        $translator   = $this->translator;
+        $sortFunction = function ($a, $b) use ($collator, $translator) {
+            return $collator->compare($translator->trans($a->label),
+                    $translator->trans($b->label));
+        };
+        usort($view->children['country']->vars['choices'], $sortFunction);
+        if (array_key_exists('state', $view->children)) {
+            usort($view->children['state']->vars['choices'], $sortFunction);
+        }
+        if (array_key_exists('city', $view->children)) {
+            usort($view->children['city']->vars['choices'], $sortFunction);
+        }
     }
 }
