@@ -74,3 +74,6 @@ parameters:
 
     # Default Country ISO 2
     default_country_iso2: BR
+
+    # Should missing translations be logged in dev?
+    log_translator: false
