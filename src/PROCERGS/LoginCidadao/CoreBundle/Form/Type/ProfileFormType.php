@@ -20,11 +20,9 @@ class ProfileFormType extends BaseType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        //parent::buildForm($builder, $options);
         $country = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Country')->findOneBy(array(
             'iso2' => $this->defaultCountryIso2));
-        $builder/* ->add('username', null,
-              array('label' => 'form.username', 'translation_domain' => 'FOSUserBundle')) */
+        $builder
             ->add('email', 'email',
                 array('label' => 'form.email', 'translation_domain' => 'FOSUserBundle'))
             ->add('firstName', 'text',
@@ -61,8 +59,9 @@ class ProfileFormType extends BaseType
             array(
             'required' => false,
             'class' => 'PROCERGSLoginCidadaoCoreBundle:Country',
-            'property' => 'name',
+            'choice_label' => 'name',
             'preferred_choices' => array($country),
+            'choice_translation_domain' => true,
             'query_builder' => function(EntityRepository $er) {
             return $er->createQueryBuilder('u')
                     ->where('u.reviewed = :reviewed')

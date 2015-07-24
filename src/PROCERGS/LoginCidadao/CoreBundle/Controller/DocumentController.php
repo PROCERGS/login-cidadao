@@ -37,7 +37,7 @@ class DocumentController extends Controller
         $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $event);
 
         $form = $this->createForm(new DocFormType(), $user);
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
         if ($form->isValid()) {
             $event = new FormEvent($form, $request);
             $dispatcher->dispatch(ProfileEditListner::PROFILE_DOC_EDIT_SUCCESS,

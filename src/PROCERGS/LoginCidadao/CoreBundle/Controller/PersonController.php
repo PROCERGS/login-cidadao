@@ -46,16 +46,16 @@ class PersonController extends Controller
      * @Route("/person/authorization/{clientId}/revoke", name="lc_revoke")
      * @Template()
      */
-    public function revokeAuthorizationAction($clientId)
+    public function revokeAuthorizationAction(Request $request, $clientId)
     {
         $form = $this->createForm('procergs_revoke_authorization');
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $security = $this->get('security.context');
-            $em = $this->getDoctrine()->getManager();
-            $tokens = $em->getRepository('PROCERGSOAuthBundle:AccessToken');
-            $clients = $em->getRepository('PROCERGSOAuthBundle:Client');
+            $security   = $this->get('security.context');
+            $em         = $this->getDoctrine()->getManager();
+            $tokens     = $em->getRepository('PROCERGSOAuthBundle:AccessToken');
+            $clients    = $em->getRepository('PROCERGSOAuthBundle:Client');
             $translator = $this->get('translator');
 
             try {
@@ -66,21 +66,22 @@ class PersonController extends Controller
 
                 $user = $security->getToken()->getUser();
 
-                $client = $clients->find($clientId);
-                $accessTokens = $tokens->findBy(array(
+                $client         = $clients->find($clientId);
+                $accessTokens   = $tokens->findBy(array(
                     'client' => $client,
                     'user' => $user
                 ));
-                $refreshTokens = $em->getRepository('PROCERGSOAuthBundle:RefreshToken')
-                        ->findBy(array(
+                $refreshTokens  = $em->getRepository('PROCERGSOAuthBundle:RefreshToken')
+                    ->findBy(array(
                     'client' => $client,
                     'user' => $user
                 ));
                 $authorizations = $user->getAuthorizations();
-                $success = false;
+                $success        = false;
 
                 foreach ($authorizations as $auth) {
-                    if ($auth->getPerson()->getId() == $user->getId() && $auth->getClient()->getId() == $clientId) {
+                    if ($auth->getPerson()->getId() == $user->getId() && $auth->getClient()->getId()
+                        == $clientId) {
 
                         foreach ($accessTokens as $accessToken) {
                             $em->remove($accessToken);
@@ -94,7 +95,7 @@ class PersonController extends Controller
                         $em->flush();
 
                         $this->get('session')->getFlashBag()->add('success',
-                                $translator->trans('Authorization successfully revoked.'));
+                            $translator->trans('Authorization successfully revoked.'));
                         $success = true;
                     }
                 }
@@ -104,20 +105,20 @@ class PersonController extends Controller
                 }
             } catch (AccessDeniedException $e) {
                 $this->get('session')->getFlashBag()->add('error',
-                        $translator->trans("Access Denied."));
+                    $translator->trans("Access Denied."));
             } catch (\Exception $e) {
                 $this->get('session')->getFlashBag()->add('error',
-                        $translator->trans("Wasn't possible to disable this service."));
+                    $translator->trans("Wasn't possible to disable this service."));
                 $this->get('session')->getFlashBag()->add('error',
-                        $e->getMessage());
+                    $e->getMessage());
             }
         } else {
             $this->get('session')->getFlashBag()->add('error',
-                    $translator->trans("Wasn't possible to disable this service."));
+                $translator->trans("Wasn't possible to disable this service."));
         }
 
         return $this->redirect($this->generateUrl('lc_app_details',
-                                array('clientId' => $clientId)));
+                    array('clientId' => $clientId)));
     }
 
     /**
@@ -126,11 +127,11 @@ class PersonController extends Controller
     public function checkEmailAvailableAction(Request $request)
     {
         $translator = $this->get('translator');
-        $email = $request->get('email');
+        $email      = $request->get('email');
 
         $person = $this->getDoctrine()
-                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')
-                ->findByEmail($email);
+            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')
+            ->findByEmail($email);
 
         $data = array('valid' => true);
         if (count($person) > 0) {
@@ -150,24 +151,24 @@ class PersonController extends Controller
      * @Route("/profile/change-username", name="lc_update_username")
      * @Template()
      */
-    public function updateUsernameAction()
+    public function updateUsernameAction(Request $request)
     {
-        $user = $this->getUser();
+        $user        = $this->getUser();
         $userManager = $this->get('fos_user.user_manager');
 
         $formBuilder = $this->createFormBuilder($user)
-                ->add('username', 'text')
-                ->add('save', 'submit');
+            ->add('username', 'text')
+            ->add('save', 'submit');
 
         $emptyPassword = strlen($user->getPassword()) == 0;
         if ($emptyPassword) {
             $formBuilder->add('plainPassword', 'repeated',
-                    array(
+                array(
                 'type' => 'password'
             ));
         } else {
             $formBuilder->add('current_password', 'password',
-                    array(
+                array(
                 'required' => true,
                 'constraints' => new UserPassword(),
                 'mapped' => false
@@ -176,9 +177,9 @@ class PersonController extends Controller
 
         $form = $formBuilder->getForm();
 
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
         if ($form->isValid()) {
-            $data = $form->getData();
+            $data               = $form->getData();
             $hasChangedPassword = $data->getPassword() == '';
             $user->setUsername($data->getUsername());
 
@@ -186,14 +187,13 @@ class PersonController extends Controller
 
             $translator = $this->get('translator');
             $this->get('session')->getFlashBag()->add('success',
-                    $translator->trans('Updated username successfully!'));
+                $translator->trans('Updated username successfully!'));
 
             $response = $this->redirect($this->generateUrl('lc_update_username'));
             if ($hasChangedPassword) {
-                $request = $this->getRequest();
                 $dispatcher = $this->get('event_dispatcher');
                 $dispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_COMPLETED,
-                        new FilterUserResponseEvent($user, $request, $response));
+                    new FilterUserResponseEvent($user, $request, $response));
             }
             return $response;
         }
@@ -208,15 +208,16 @@ class PersonController extends Controller
     public function registrationCpfAction(Request $request)
     {
         $person = $this->getUser();
-        if (is_numeric($cpf = preg_replace('/[^0-9]/', '', $request->get('cpf'))) && strlen($cpf) == 11) {
+        if (is_numeric($cpf    = preg_replace('/[^0-9]/', '',
+                $request->get('cpf'))) && strlen($cpf) == 11) {
             $person->setCpf($cpf);
         }
         $formBuilder = $this->createFormBuilder($person);
         if (!$person->getCpf()) {
             $formBuilder->add('cpf', 'text', array('required' => true));
         }
-        $form = $formBuilder->getForm();
-        $form->handleRequest($this->getRequest());
+        $form     = $formBuilder->getForm();
+        $form->handleRequest($request);
         $messages = '';
         if ($form->isValid()) {
             $person->setCpfExpiration(null);
@@ -233,19 +234,19 @@ class PersonController extends Controller
      */
     public function unlinkFacebookAction()
     {
-        $person = $this->getUser();
+        $person     = $this->getUser();
         $translator = $this->get('translator');
         if ($person->hasPassword()) {
             $person->setFacebookId(null)
-                    ->setFacebookUsername(null);
+                ->setFacebookUsername(null);
             $userManager = $this->get('fos_user.user_manager');
             $userManager->updateUser($person);
 
             $this->get('session')->getFlashBag()->add('success',
-                    $translator->trans("social-networks.unlink.facebook.success"));
+                $translator->trans("social-networks.unlink.facebook.success"));
         } else {
             $this->get('session')->getFlashBag()->add('error',
-                    $translator->trans("social-networks.unlink.no-password"));
+                $translator->trans("social-networks.unlink.no-password"));
         }
 
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));
@@ -256,20 +257,20 @@ class PersonController extends Controller
      */
     public function unlinkTwitterAction()
     {
-        $person = $this->getUser();
+        $person     = $this->getUser();
         $translator = $this->get('translator');
         if ($person->hasPassword()) {
             $person->setTwitterId(null)
-                    ->setTwitterUsername(null)
-                    ->setTwitterAccessToken(null);
+                ->setTwitterUsername(null)
+                ->setTwitterAccessToken(null);
             $userManager = $this->get('fos_user.user_manager');
             $userManager->updateUser($person);
 
             $this->get('session')->getFlashBag()->add('success',
-                    $translator->trans("social-networks.unlink.twitter.success"));
+                $translator->trans("social-networks.unlink.twitter.success"));
         } else {
             $this->get('session')->getFlashBag()->add('error',
-                    $translator->trans("social-networks.unlink.no-password"));
+                $translator->trans("social-networks.unlink.no-password"));
         }
 
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));
@@ -280,20 +281,20 @@ class PersonController extends Controller
      */
     public function unlinkGoogleAction()
     {
-        $person = $this->getUser();
+        $person     = $this->getUser();
         $translator = $this->get('translator');
         if ($person->hasPassword()) {
             $person->setGoogleId(null)
-                    ->setGoogleUsername(null)
-                    ->setGoogleAccessToken(null);
+                ->setGoogleUsername(null)
+                ->setGoogleAccessToken(null);
             $userManager = $this->get('fos_user.user_manager');
             $userManager->updateUser($person);
 
             $this->get('session')->getFlashBag()->add('success',
-                    $translator->trans("social-networks.unlink.google.success"));
+                $translator->trans("social-networks.unlink.google.success"));
         } else {
             $this->get('session')->getFlashBag()->add('error',
-                    $translator->trans("social-networks.unlink.no-password"));
+                $translator->trans("social-networks.unlink.no-password"));
         }
 
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));
@@ -304,20 +305,20 @@ class PersonController extends Controller
      */
     public function resendConfirmationEmail()
     {
-        $mailer = $this->get('fos_user.mailer');
+        $mailer     = $this->get('fos_user.mailer');
         $translator = $this->get('translator');
-        $person = $this->getUser();
+        $person     = $this->getUser();
 
         if (is_null($person->getEmailConfirmedAt())) {
             if (is_null($person->getConfirmationToken())) {
                 $tokenGenerator = new TokenGenerator();
                 $person->setConfirmationToken($tokenGenerator->generateToken());
-                $userManager = $this->get('fos_user.user_manager');
+                $userManager    = $this->get('fos_user.user_manager');
                 $userManager->updateUser($person);
             }
             $mailer->sendConfirmationEmailMessage($person);
             $this->get('session')->getFlashBag()->add('success',
-                    $translator->trans("email-confirmation.resent"));
+                $translator->trans("email-confirmation.resent"));
         }
 
         return $this->redirect($this->generateUrl('fos_user_profile_edit'));
@@ -329,27 +330,27 @@ class PersonController extends Controller
      */
     public function docEditAction(Request $request)
     {
-        $user = $this->getUser();
+        $user       = $this->getUser();
         $dispatcher = $this->get('event_dispatcher');
 
         $event = new GetResponseUserEvent($user, $request);
         $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $event);
 
         $form = $this->createForm(new DocFormType(), $user);
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
         if ($form->isValid()) {
 
             $event = new FormEvent($form, $request);
             $dispatcher->dispatch(ProfileEditListner::PROFILE_DOC_EDIT_SUCCESS,
-                    $event);
+                $event);
 
             $userManager = $this->get('fos_user.user_manager');
             $userManager->updateUser($user);
-            $translator = $this->get('translator');
+            $translator  = $this->get('translator');
             $this->get('session')->getFlashBag()->add('success',
-                    $translator->trans("Documents were successfully changed"));
+                $translator->trans("Documents were successfully changed"));
         }
-        $return = $this->docRgListAction($request);
+        $return         = $this->docRgListAction($request);
         $return['form'] = $form->createView();
         return $return;
     }
@@ -363,12 +364,12 @@ class PersonController extends Controller
         if ($id = $request->get('id')) {
             $em = $this->getDoctrine()->getManager();
             $rg = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:IdCard')
-            ->createQueryBuilder('u')
-            ->where('u.person = :person and u.id = :id')
-            ->setParameter('person',$this->getUser())
-            ->setParameter('id', $id)
-            ->getQuery()
-            ->getOneOrNullResult();
+                ->createQueryBuilder('u')
+                ->where('u.person = :person and u.id = :id')
+                ->setParameter('person', $this->getUser())
+                ->setParameter('id', $id)
+                ->getQuery()
+                ->getOneOrNullResult();
             if ($rg) {
                 $em->remove($rg);
                 $em->flush();
@@ -385,32 +386,35 @@ class PersonController extends Controller
     public function docRgEditAction(Request $request)
     {
         $form = $this->createForm(new DocRgFormType());
-        $rg = null;
-        if (($id = $request->get('id')) || (($data = $request->get($form->getName())) && ($id = $data['id']))) {
+        $rg   = null;
+        if (($id   = $request->get('id')) || (($data = $request->get($form->getName()))
+            && ($id   = $data['id']))) {
             $rg = $this->getDoctrine()
-            ->getManager ()
-            ->getRepository('PROCERGSLoginCidadaoCoreBundle:IdCard')->findOneBy(array('person' => $this->getUser(), 'id' => $id));
+                    ->getManager()
+                    ->getRepository('PROCERGSLoginCidadaoCoreBundle:IdCard')->findOneBy(array(
+                'person' => $this->getUser(), 'id' => $id));
         }
         if (!$rg) {
             $rg = new IdCard();
             $rg->setPerson($this->getUser());
         }
         $form = $this->createForm(new DocRgFormType(), $rg);
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
         if ($form->isValid()) {
             $rgNum = str_split($form->get('value')->getData());
-            if ( ($form->get('state')->getData()->getId() == 43) && ($this->checkRGDce($rgNum) != $rgNum[0] || $this->checkRGDcd($rgNum) != $rgNum[9]) ) {
+            if (($form->get('state')->getData()->getId() == 43) && ($this->checkRGDce($rgNum)
+                != $rgNum[0] || $this->checkRGDcd($rgNum) != $rgNum[9])) {
                 $form->get('value')->addError(new FormError($this->get('translator')->trans('This RG is invalid')));
                 return array('form' => $form->createView());
             }
 
             $manager = $this->getDoctrine()->getManager();
-            $dql = $manager->getRepository('PROCERGSLoginCidadaoCoreBundle:IdCard')
-            ->createQueryBuilder('u')
-            ->where('u.person = :person and u.state = :state')
-            ->setParameter('person',$this->getUser())
-            ->setParameter('state', $form->get('state')->getData())
-            ->orderBy('u.id', 'ASC');
+            $dql     = $manager->getRepository('PROCERGSLoginCidadaoCoreBundle:IdCard')
+                ->createQueryBuilder('u')
+                ->where('u.person = :person and u.state = :state')
+                ->setParameter('person', $this->getUser())
+                ->setParameter('state', $form->get('state')->getData())
+                ->orderBy('u.id', 'ASC');
             if ($rg->getId()) {
                 $dql->andWhere('u != :rg')->setParameter('rg', $rg);
             }
@@ -427,42 +431,40 @@ class PersonController extends Controller
         return array('form' => $form->createView());
     }
 
-    private function checkRGDce($rg) {
-      $total = ($rg[1] * 2) + ($rg[2] * 3) + ($rg[3] * 4) + ($rg[4] * 5) + ($rg[5] * 6) + ($rg[6] * 7) + ($rg[7] * 8) + ($rg[8] * 9);
-      $resto = $total % 11;
+    private function checkRGDce($rg)
+    {
+        $total = ($rg[1] * 2) + ($rg[2] * 3) + ($rg[3] * 4) + ($rg[4] * 5) + ($rg[5]
+            * 6) + ($rg[6] * 7) + ($rg[7] * 8) + ($rg[8] * 9);
+        $resto = $total % 11;
 
-      if ($resto == 0 || $resto == 1) {
-          return 1;
-      } else {
-          return 11 - $resto;
-      }
+        if ($resto == 0 || $resto == 1) {
+            return 1;
+        } else {
+            return 11 - $resto;
+        }
     }
 
-    private function checkRGDcd($rg) {
-        $n1 = ($rg[8] * 2) % 9;
-        $n2 = ($rg[6] * 2) % 9;
-        $n3 = ($rg[4] * 2) % 9;
-        $n4 = ($rg[2] * 2) % 9;
-        $n5 = ($rg[0] * 2) % 9;
+    private function checkRGDcd($rg)
+    {
+        $n1    = ($rg[8] * 2) % 9;
+        $n2    = ($rg[6] * 2) % 9;
+        $n3    = ($rg[4] * 2) % 9;
+        $n4    = ($rg[2] * 2) % 9;
+        $n5    = ($rg[0] * 2) % 9;
         $total = $n1 + $n2 + $n3 + $n4 + $n5 + $rg[7] + $rg[5] + $rg[3] + $rg[1];
 
-        if ($rg[8] == 9)
-          $total = $total + 9;
-        if ($rg[6] == 9)
-          $total = $total + 9;
-        if ($rg[4] == 9)
-          $total = $total + 9;
-        if ($rg[2] == 9)
-          $total = $total + 9;
-        if ($rg[0] == 9)
-          $total = $total + 9;
+        if ($rg[8] == 9) $total = $total + 9;
+        if ($rg[6] == 9) $total = $total + 9;
+        if ($rg[4] == 9) $total = $total + 9;
+        if ($rg[2] == 9) $total = $total + 9;
+        if ($rg[0] == 9) $total = $total + 9;
 
         $resto = $total % 10;
 
         if ($resto == 0) {
-          return 1;
+            return 1;
         } else {
-          return 10 - $resto;
+            return 10 - $resto;
         }
     }
 
@@ -499,7 +501,7 @@ class PersonController extends Controller
         /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
         $userManager = $this->get('fos_user.user_manager');
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
-        $dispatcher = $this->get('event_dispatcher');
+        $dispatcher  = $this->get('event_dispatcher');
 
         $user = $userManager->createUser();
         $user->setEnabled(true);
@@ -524,9 +526,9 @@ class PersonController extends Controller
         $form = $formFactory->createForm();
 
         $form->add('firstName', 'text',
-                        array('required' => false, 'label' => 'form.firstName', 'translation_domain' => 'FOSUserBundle'))
-                ->add('surname', 'text',
-                        array('required' => false, 'label' => 'form.surname', 'translation_domain' => 'FOSUserBundle'));
+                array('required' => false, 'label' => 'form.firstName', 'translation_domain' => 'FOSUserBundle'))
+            ->add('surname', 'text',
+                array('required' => false, 'label' => 'form.surname', 'translation_domain' => 'FOSUserBundle'));
 
         $form->setData($user);
 
@@ -536,26 +538,26 @@ class PersonController extends Controller
             if ($form->isValid()) {
                 $event = new FormEvent($form, $request);
                 $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS,
-                        $event);
+                    $event);
 
                 $userManager->updateUser($user);
 
                 if (null === $response = $event->getResponse()) {
-                    $url = $this->get('router')->generate('fos_user_registration_confirmed');
+                    $url      = $this->get('router')->generate('fos_user_registration_confirmed');
                     $response = new RedirectResponse($url);
                 }
 
                 $dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED,
-                        new FilterUserResponseEvent($user, $request, $response));
+                    new FilterUserResponseEvent($user, $request, $response));
 
                 return $response;
             }
         }
 
         return $this->get('templating')->renderResponse('PROCERGSLoginCidadaoCoreBundle:Person:registration/preFilledRegistration.html.twig',
-                        array(
-                    'form' => $form->createView(),
-                    'actionUrl' => 'lc_prefilled_registration'
+                array(
+                'form' => $form->createView(),
+                'actionUrl' => 'lc_prefilled_registration'
         ));
     }
 
@@ -565,12 +567,11 @@ class PersonController extends Controller
      */
     public function badgesListAction(Request $request)
     {
-      $badgesHandler = $this->get('badges.handler');
+        $badgesHandler = $this->get('badges.handler');
 
-      $badges = $badgesHandler->getAvailableBadges();
-      $user = $badgesHandler->evaluate($this->getUser());
+        $badges = $badgesHandler->getAvailableBadges();
+        $user   = $badgesHandler->evaluate($this->getUser());
 
-      return array('allBadges' => $badges, 'userBadges' => $user->getBadges());
+        return array('allBadges' => $badges, 'userBadges' => $user->getBadges());
     }
-
 }

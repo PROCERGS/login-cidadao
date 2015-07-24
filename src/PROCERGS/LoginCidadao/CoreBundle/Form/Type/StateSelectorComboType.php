@@ -4,7 +4,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Country;
@@ -29,14 +29,14 @@ class StateSelectorComboType extends AbstractType
         
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $country = $this->country;
 
         $resolver->setDefaults(array(
             'invalid_message' => 'The selected state was not found',
             'class' => 'PROCERGSLoginCidadaoCoreBundle:State',
-            'property' => 'name',
+            'choice_label' => 'name',
             'empty_value' => '',
             'query_builder' => $this->getFilterFunction($country),
             'label' => 'Place of birth - State',

@@ -2,7 +2,7 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\CommonFormType;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
@@ -31,7 +31,7 @@ class AjaxChoiceType extends CommonFormType
     }
     */
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             //'transformer' => null,

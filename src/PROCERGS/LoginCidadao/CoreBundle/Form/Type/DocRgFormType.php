@@ -30,7 +30,7 @@ class DocRgFormType extends AbstractType
         $builder->add('state', 'entity',array(
             'required' => true,
             'class' => 'PROCERGSLoginCidadaoCoreBundle:State',
-            'property' => 'name',
+            'choice_label' => 'name',
             'query_builder' => function(EntityRepository $er) {
                 $country = $er->createQueryBuilder('h')->getEntityManager()->getRepository('PROCERGSLoginCidadaoCoreBundle:Country')->findOneBy(array('iso2' => 'BR'));
                 return $er->createQueryBuilder('u')

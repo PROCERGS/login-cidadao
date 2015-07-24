@@ -17,14 +17,13 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Category;
 use PROCERGS\LoginCidadao\NotificationBundle\Model\BroadcastPlaceholder;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Placeholder;
-use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PROCERGS\LoginCidadao\NotificationBundle\NotificationEvents;
 use PROCERGS\LoginCidadao\NotificationBundle\Event\NotificationEvent;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\FailedCallback;
 
 class NotificationHandler implements NotificationHandlerInterface
 {
-
     /** @var ObjectManager */
     private $om;
     private $entityClass;
@@ -38,7 +37,7 @@ class NotificationHandler implements NotificationHandlerInterface
     /** @var NotificationType */
     private $notificationType;
 
-    /** @var ContainerAwareEventDispatcher */
+    /** @var EventDispatcherInterface */
     private $dispatcher;
     private $oauthDefaultClientUid;
     private $oauthDefaultClient;
@@ -48,17 +47,17 @@ class NotificationHandler implements NotificationHandlerInterface
     public function __construct(ObjectManager $om, $entityClass,
                                 FormFactoryInterface $formFactory, $mailer,
                                 NotificationType $notificationType,
-                                ContainerAwareEventDispatcher $dispatcher,
+                                EventDispatcherInterface $dispatcher,
                                 $oauthDefaultClientUid, $proxy)
     {
-        $this->om = $om;
-        $this->entityClass = $entityClass;
-        $this->repository = $this->om->getRepository($this->entityClass);
-        $this->formFactory = $formFactory;
-        $this->notificationType = $notificationType;
-        $this->dispatcher = $dispatcher;
+        $this->om                    = $om;
+        $this->entityClass           = $entityClass;
+        $this->repository            = $this->om->getRepository($this->entityClass);
+        $this->formFactory           = $formFactory;
+        $this->notificationType      = $notificationType;
+        $this->dispatcher            = $dispatcher;
         $this->oauthDefaultClientUid = $oauthDefaultClientUid;
-        $this->proxy = $proxy;
+        $this->proxy                 = $proxy;
     }
 
     public function all($limit = 5, $offset = 0, $orderby = null)
@@ -70,7 +69,7 @@ class NotificationHandler implements NotificationHandlerInterface
                                      $offset = 0, $orderby = null)
     {
         return $this->repository->findBy(array('person' => $person), $orderby,
-                                         $limit, $offset);
+                $limit, $offset);
     }
 
     public function getAllFromPersonByClient(PersonInterface $person,
@@ -79,7 +78,7 @@ class NotificationHandler implements NotificationHandlerInterface
                                              $orderby = null)
     {
         return $this->repository->findBy(array('person' => $person, 'sender' => $client),
-                                         $orderby, $limit, $offset);
+                $orderby, $limit, $offset);
     }
 
     public function get($id)
@@ -119,45 +118,43 @@ class NotificationHandler implements NotificationHandlerInterface
                                  PersonInterface $person = null)
     {
         $form = $this->formFactory->create($this->notificationType,
-                                           $notification, compact('method'));
+            $notification, compact('method'));
         $form->submit($parameters, 'PATCH' !== $method);
         if ($form->isValid()) {
 
-            $notification = $form->getData();
+            $notification      = $form->getData();
             $notificationEvent = new NotificationEvent($notification);
 
             $this->dispatcher->dispatch(NotificationEvents::NOTIFICATION_INITIALIZE,
-                                        $notificationEvent);
+                $notificationEvent);
 
             if (null !== $person && $notification->getPerson()->getId() !== $person->getId()) {
                 throw new AccessDeniedHttpException();
             }
             if (null === $notification->getHtmlTemplate()) {
                 $notification->setHtmlTemplate(self::renderHtmlByCategory($notification->getCategory(),
-                                                                          $notification->getPlaceholders(),
-                                                                          $notification->getTitle(),
-                                                                          $notification->getShortText()));
+                        $notification->getPlaceholders(),
+                        $notification->getTitle(), $notification->getShortText()));
             }
             $this->om->persist($notification);
             $this->om->flush($notification);
             $this->dispatcher->dispatch(NotificationEvents::NOTIFICATION_SUCCESS,
-                                        $notificationEvent);
+                $notificationEvent);
 
             $this->dispatcher->dispatch(NotificationEvents::NOTIFICATION_COMPLETED,
-                                        $notificationEvent);
+                $notificationEvent);
             return $notification;
         }
 
-        throw new InvalidFormException('Invalid submitted data ' . print_r($this->getErrorMessages($form),
-                                                                                                   1),
-                                                                                                   $form);
+        throw new InvalidFormException('Invalid submitted data '.print_r($this->getErrorMessages($form),
+            1), $form);
     }
 
     private function getErrorMessages(\Symfony\Component\Form\Form $form)
     {
         $errors = array();
         foreach ($form->getErrors() as $key => $error) {
-            $template = $error->getMessageTemplate();
+            $template   = $error->getMessageTemplate();
             $parameters = $error->getMessageParameters();
 
             foreach ($parameters as $var => $value) {
@@ -199,8 +196,8 @@ class NotificationHandler implements NotificationHandlerInterface
     public function initializeSettings(PersonInterface $person,
                                        ClientInterface $client = null)
     {
-        $om = $this->om;
-        $categoriesRepo = $om->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category');
+        $om               = $this->om;
+        $categoriesRepo   = $om->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category');
         $orphanCategories = $categoriesRepo->findUnconfigured($person, $client);
 
         if (count($orphanCategories) > 0) {
@@ -220,7 +217,7 @@ class NotificationHandler implements NotificationHandlerInterface
 
     public function markRangeAsRead(PersonInterface $person, $start, $end)
     {
-        $om = $this->om;
+        $om            = $this->om;
         $notifications = $om
             ->getRepository('PROCERGSLoginCidadaoNotificationBundle:Notification')
             ->findUntil($person, $start, $end);
@@ -287,7 +284,7 @@ class NotificationHandler implements NotificationHandlerInterface
         $id = $person->getId();
         if (!array_key_exists($id, $this->authenticatedHandlers)) {
             $this->authenticatedHandlers[$id] = new AuthenticatedNotificationHandler($person,
-                                                                                     $this);
+                $this);
         }
         return $this->authenticatedHandlers[$id];
     }
@@ -297,7 +294,7 @@ class NotificationHandler implements NotificationHandlerInterface
                                              ClientInterface $client = null)
     {
         return $this->repository->findNextNotifications($person, $limit,
-                                                        $offset, $client);
+                $offset, $client);
     }
 
     public function countUnread(PersonInterface $person)
@@ -317,7 +314,7 @@ class NotificationHandler implements NotificationHandlerInterface
     {
         $html = $category->getHtmlTemplate();
         return self::_renderHtml($html, $replacePlaceholders, $replaceTitle,
-                                 $replaceShortText);
+                $replaceShortText);
     }
 
     private static function _renderHtml($html, $replacePlaceholders = null,
@@ -333,17 +330,17 @@ class NotificationHandler implements NotificationHandlerInterface
         if (null !== $replacePlaceholders) {
             if (isset($replacePlaceholders[0]) && $replacePlaceholders[0] instanceof BroadcastPlaceholder) {
                 foreach ($replacePlaceholders as $placeholder) {
-                    $html = str_replace('%' . $placeholder->getName() . '%',
-                                        $placeholder->getValue(), $html);
+                    $html = str_replace('%'.$placeholder->getName().'%',
+                        $placeholder->getValue(), $html);
                 }
             } else if (isset($replacePlaceholders[0]) && $replacePlaceholders[0] instanceof Placeholder) {
                 foreach ($replacePlaceholders as $placeholder) {
-                    $html = str_replace('%' . $placeholder->getName() . '%',
-                                        $placeholder->getDefault(), $html);
+                    $html = str_replace('%'.$placeholder->getName().'%',
+                        $placeholder->getDefault(), $html);
                 }
             } else {
                 foreach ($replacePlaceholders as $name => $default) {
-                    $html = str_replace('%' . $name . '%', $default, $html);
+                    $html = str_replace('%'.$name.'%', $default, $html);
                 }
             }
         }
@@ -356,22 +353,21 @@ class NotificationHandler implements NotificationHandlerInterface
                                                  $replaceShortText = null)
     {
         return self::_renderHtml($category->getMailTemplate(),
-                                 $replacePlaceholders, $replaceTitle,
-                                 $replaceShortText);
+                $replacePlaceholders, $replaceTitle, $replaceShortText);
     }
 
     public function getEmailHtml(NotificationInterface $notification)
     {
         return self::_renderHtml($notification->getCategory()->getMailTemplate(),
-                                 $notification->getPlaceholders(),
-                                 $notification->getTitle(),
-                                 $notification->getShortText());
+                $notification->getPlaceholders(), $notification->getTitle(),
+                $notification->getShortText());
     }
 
     public function getLoginCidadaoClient()
     {
         if ($this->oauthDefaultClient === null) {
-            $this->oauthDefaultClient = $this->om->getRepository('PROCERGSOAuthBundle:Client')->findOneBy(array('uid' => $this->oauthDefaultClientUid));
+            $this->oauthDefaultClient = $this->om->getRepository('PROCERGSOAuthBundle:Client')->findOneBy(array(
+                'uid' => $this->oauthDefaultClientUid));
         }
         return $this->oauthDefaultClient;
     }
@@ -400,23 +396,23 @@ class NotificationHandler implements NotificationHandlerInterface
                                   ObjectManager $om)
     {
         if ($notification->getCallbackUrl()) {
-            $secret = $notification->getCategory()->getClient()->getSecret();
-            $base['data'] = json_encode(array(
+            $secret            = $notification->getCategory()->getClient()->getSecret();
+            $base['data']      = json_encode(array(
                 'id' => $notification->getId(),
                 'person_id' => $notification->getPerson()->getId(),
                 'read_date' => $notification->getReadDate()->getTimestamp()
             ));
             $base['signature'] = hash_hmac('sha256', $base['data'], $secret);
-            $dataPost = http_build_query($base);
+            $dataPost          = http_build_query($base);
             curl_setopt($this->ch, CURLOPT_URL, $notification->getCallbackUrl());
             curl_setopt($this->ch, CURLOPT_POST, 1);
             curl_setopt($this->ch, CURLOPT_POSTFIELDS, $dataPost);
-            $curlResponse = curl_exec($this->ch);
-            $code = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
+            $curlResponse      = curl_exec($this->ch);
+            $code              = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
 
             if ($code != '200') {
                 $this->registerFailedCallback($notification, $om, $this->ch,
-                                              $curlResponse);
+                    $curlResponse);
             }
         }
     }
@@ -425,5 +421,4 @@ class NotificationHandler implements NotificationHandlerInterface
     {
         return $this->repository->getUnread($person, $limit);
     }
-
 }

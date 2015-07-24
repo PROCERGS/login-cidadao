@@ -5,7 +5,6 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use FOS\UserBundle\Form\Type\ChangePasswordFormType as BaseType;
 use Symfony\Component\Security\Core\SecurityContextInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ChangePasswordFormType extends BaseType
 {

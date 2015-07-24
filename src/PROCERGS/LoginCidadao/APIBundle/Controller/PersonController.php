@@ -81,12 +81,12 @@ class PersonController extends BaseController
      * @Audit\Loggable(type="SELECT")
      * @REST\View
      */
-    public function waitPersonChangeAction()
+    public function waitPersonChangeAction(Request $request)
     {
         $user      = $this->getUser();
         $scope     = $this->getClientScope($user);
         $updatedAt = \DateTime::createFromFormat('Y-m-d H:i:s',
-                $this->getRequest()->get('updated_at'));
+                $request->get('updated_at'));
 
         if (!($updatedAt instanceof \DateTime)) {
             $updatedAt = new \DateTime();

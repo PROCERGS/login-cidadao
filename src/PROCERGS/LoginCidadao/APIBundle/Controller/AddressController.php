@@ -20,9 +20,8 @@ class AddressController extends FOSRestController
      * @REST\View()
      * @Audit\Loggable(type="SELECT")
      */
-    public function searchCountryAction()
+    public function searchCountryAction(Request $request)
     {
-        $request = $this->getRequest();
         $query = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:Country')
         ->createQueryBuilder('cty')
         ->where('cty.reviewed = ' . Country::REVIEWED_OK)
@@ -35,9 +34,8 @@ class AddressController extends FOSRestController
      * @REST\View()
      * @Audit\Loggable(type="SELECT")
      */
-    public function searchStateAction(Request $request = null)
+    public function searchStateAction(Request $request)
     {
-        $request = $this->getRequest();
         $query = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:State')
         ->createQueryBuilder('state')
         ->where('state.reviewed = ' . Country::REVIEWED_OK);
@@ -56,9 +54,8 @@ class AddressController extends FOSRestController
      * @REST\View()
      * @Audit\Loggable(type="SELECT")
      */
-    public function searchCityAction(Request $request = null)
+    public function searchCityAction(Request $request)
     {
-        $request = $this->getRequest();
         $query = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:City')
         ->createQueryBuilder('c')
         ->where('c.reviewed = ' . Country::REVIEWED_OK);

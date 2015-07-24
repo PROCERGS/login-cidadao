@@ -28,7 +28,7 @@ class NotificationController extends Controller
      * @Route("/new", name="lc_dev_not_new")
      * @Template()
      */
-    public function newAction()
+    public function newAction(Request $request)
     {
         $category = new Category();
         $category->setMailTemplate("%title%\r\n%shorttext%\r\n");
@@ -38,7 +38,7 @@ class NotificationController extends Controller
         $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.category.form.type'),
                                                                                     $category);
 
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
         if ($form->isValid()) {
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($category);
@@ -90,7 +90,7 @@ class NotificationController extends Controller
      * @Route("/edit/{id}", name="lc_dev_not_edit")
      * @Template()
      */
-    public function editAction($id)
+    public function editAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
         $client = $em->getRepository('PROCERGSLoginCidadaoNotificationBundle:Category')
@@ -108,14 +108,14 @@ class NotificationController extends Controller
         }
         $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.category.form.type'),
                                                                                     $client);
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
         if ($form->isValid()) {
             $client->setHtmlTemplate(MarkdownExtra::defaultTransform($form->get('markdownTemplate')->getData()));
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($client);
             $manager->flush();
         }
-        $request = $this->getRequest();
+        $request = $request;
         $request->query->set('category_id', $id);
         $placeholders = $this->placeholderGridAction($request);
         return $this->render('PROCERGSLoginCidadaoCoreBundle:Dev\Notification:new.html.twig',
@@ -168,7 +168,7 @@ class NotificationController extends Controller
         }
         $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.placeholder.form.type'),
                                                                                     $placeholder);
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
         if ($form->isValid()) {
             $em->persist($placeholder);
             $em->flush();

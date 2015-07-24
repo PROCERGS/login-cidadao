@@ -14,22 +14,21 @@ class ExternalController extends Controller
      * @Route("/external/navbar.js", name="lc_navbar_external")
      * @Template()
      */
-    public function navbarAction()
+    public function navbarAction(Request $request)
     {
-        $clientId = $this->getRequest()->get('app_id');
+        $clientId = $request->get('app_id');
         $hasAppId = strlen($clientId) > 0;
 
-        $user = $this->getUser();
+        $user           = $this->getUser();
         $userAuthorized = $hasAppId && $user instanceof Person && $user->isClientAuthorized($clientId);
 
         $external = true;
-        $navbar = $this->renderView('PROCERGSLoginCidadaoCoreBundle:External:navbar.html.twig',
-                compact('external'));
-        $html = json_encode(array('navbar' => $navbar));
+        $navbar   = $this->renderView('PROCERGSLoginCidadaoCoreBundle:External:navbar.html.twig',
+            compact('external'));
+        $html     = json_encode(array('navbar' => $navbar));
         $response = $this->render('PROCERGSLoginCidadaoCoreBundle:External:navbar.js.twig',
-                compact('html', 'userAuthorized'));
+            compact('html', 'userAuthorized'));
         $response->headers->set('Content-Type', 'application/javascript');
         return $response;
     }
-
 }

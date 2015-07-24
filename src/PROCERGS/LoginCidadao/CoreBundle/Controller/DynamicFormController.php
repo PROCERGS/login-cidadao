@@ -70,7 +70,7 @@ class DynamicFormController extends Controller
         $formBuilder = $this->createFormBuilder($data,
             array('cascade_validation' => true));
         foreach ($scope as $curr) {
-            $this->addField($formBuilder, $curr, $person);
+            $this->addField($request, $formBuilder, $curr, $person);
         }
         $formBuilder->add('redirect_url', 'hidden')
             ->add('scope', 'hidden');
@@ -211,11 +211,11 @@ class DynamicFormController extends Controller
         return parent::getUser();
     }
 
-    private function addField(FormBuilderInterface $formBuilder, $scope,
+    private function addField(Request $request,
+                              FormBuilderInterface $formBuilder, $scope,
                               Person $person)
     {
         $placeOfBirthLevel = '';
-        $request           = $this->getRequest();
         switch ($scope) {
             case 'surname':
             case 'full_name':
@@ -312,9 +312,10 @@ class DynamicFormController extends Controller
             array('label' => false));
     }
 
-    private function addIdCard(FormBuilderInterface $formBuilder, Person $person)
+    private function addIdCard(Request $request,
+                               FormBuilderInterface $formBuilder, Person $person)
     {
-        $state    = $this->getStateFromRequest($this->getRequest());
+        $state    = $this->getStateFromRequest($request);
         $formData = $formBuilder->getData();
         foreach ($person->getIdCards() as $idCard) {
             if ($idCard->getState()->getId() === $state->getId()) {

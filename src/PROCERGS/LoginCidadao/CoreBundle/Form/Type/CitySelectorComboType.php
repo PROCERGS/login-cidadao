@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
@@ -58,11 +58,13 @@ class CitySelectorComboType extends AbstractType
             array(
             'empty_value' => '',
             'class' => $this->countryManager->getClass(),
-            'property' => 'name',
+            'choice_label' => 'name',
             'choices' => $this->countryManager->findAll(),
             'attr' => array(
                 'class' => 'form-control location-select country-select'
             ),
+            'translation_domain' => 'messages',
+            'choice_translation_domain' => true,
             'label' => $options['country_label']
         ));
 
@@ -100,7 +102,7 @@ class CitySelectorComboType extends AbstractType
             $form->add('state', 'entity',
                 array(
                 'class' => $stateManager->getClass(),
-                'property' => 'name',
+                'choice_label' => 'name',
                 'empty_value' => '',
                 'choices' => $choices,
                 'attr' => array(
@@ -141,7 +143,7 @@ class CitySelectorComboType extends AbstractType
                 array(
                 'class' => $cityManager->getClass(),
                 'empty_value' => '',
-                'property' => 'name',
+                'choice_label' => 'name',
                 'choices' => $stateId === null ? array() : $cityManager->findByStateId($stateId),
                 'attr' => array(
                     'class' => 'form-control location-select city-select'
@@ -194,7 +196,7 @@ class CitySelectorComboType extends AbstractType
         $builder->addEventSubscriber($this->profileEditSubscriber);
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'PROCERGS\LoginCidadao\CoreBundle\Model\SelectData',
@@ -202,7 +204,8 @@ class CitySelectorComboType extends AbstractType
             'level' => 'city',
             'country_label' => 'Country',
             'state_label' => 'State',
-            'city_label' => 'City'
+            'city_label' => 'City',
+            'translation_domain' => 'messages'
         ));
     }
 
@@ -214,6 +217,9 @@ class CitySelectorComboType extends AbstractType
     public function finishView(FormView $view, FormInterface $form,
                                array $options)
     {
+        if ($view->children['country']->vars['choice_translation_domain'] === false) {
+            return;
+        }
         $collator     = new \Collator($this->translator->getLocale());
         $translator   = $this->translator;
         $sortFunction = function ($a, $b) use ($collator, $translator) {
@@ -221,10 +227,10 @@ class CitySelectorComboType extends AbstractType
                     $translator->trans($b->label));
         };
         usort($view->children['country']->vars['choices'], $sortFunction);
-        if (array_key_exists('state', $view->children)) {
+        if (array_key_exists('state', $view->children) && $view->children['state']->vars['choice_translation_domain']) {
             usort($view->children['state']->vars['choices'], $sortFunction);
         }
-        if (array_key_exists('city', $view->children)) {
+        if (array_key_exists('city', $view->children) && $view->children['city']->vars['choice_translation_domain']) {
             usort($view->children['city']->vars['choices'], $sortFunction);
         }
     }

@@ -5,7 +5,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\True;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\SecurityContext;
 
 class PersonFilterFormType extends AbstractType
@@ -19,7 +19,7 @@ class PersonFilterFormType extends AbstractType
         ));
         $builder->setMethod('GET');
     }
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'csrf_protection' => false,
