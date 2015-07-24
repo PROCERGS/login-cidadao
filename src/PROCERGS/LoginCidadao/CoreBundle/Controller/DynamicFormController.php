@@ -70,7 +70,7 @@ class DynamicFormController extends Controller
         $formBuilder = $this->createFormBuilder($data,
             array('cascade_validation' => true));
         foreach ($scope as $curr) {
-            $this->addField($formBuilder, $curr, $person);
+            $this->addField($request, $formBuilder, $curr, $person);
         }
         $formBuilder->add('redirect_url', 'hidden')
             ->add('scope', 'hidden');
