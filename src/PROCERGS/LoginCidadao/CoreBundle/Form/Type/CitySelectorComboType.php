@@ -64,6 +64,8 @@ class CitySelectorComboType extends AbstractType
             'attr' => array(
                 'class' => 'form-control location-select country-select'
             ),
+            'translation_domain' => 'messages',
+            'choice_translation_domain' => true,
             'label' => $options['country_label']
         ));
 
@@ -205,7 +207,8 @@ class CitySelectorComboType extends AbstractType
             'level' => 'city',
             'country_label' => 'Country',
             'state_label' => 'State',
-            'city_label' => 'City'
+            'city_label' => 'City',
+            'translation_domain' => 'messages'
         ));
     }
 
@@ -217,6 +220,9 @@ class CitySelectorComboType extends AbstractType
     public function finishView(FormView $view, FormInterface $form,
                                array $options)
     {
+        if ($view->children['country']->vars['choice_translation_domain'] === false) {
+            return;
+        }
         $collator     = new \Collator($this->translator->getLocale());
         $translator   = $this->translator;
         $sortFunction = function ($a, $b) use ($collator, $translator) {
@@ -224,10 +230,10 @@ class CitySelectorComboType extends AbstractType
                     $translator->trans($b->label));
         };
         usort($view->children['country']->vars['choices'], $sortFunction);
-        if (array_key_exists('state', $view->children)) {
+        if (array_key_exists('state', $view->children) && $view->children['state']->vars['choice_translation_domain']) {
             usort($view->children['state']->vars['choices'], $sortFunction);
         }
-        if (array_key_exists('city', $view->children)) {
+        if (array_key_exists('city', $view->children) && $view->children['city']->vars['choice_translation_domain']) {
             usort($view->children['city']->vars['choices'], $sortFunction);
         }
     }
