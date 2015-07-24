@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "25ac2f2ac2c7d6623b0098d258d604cf",
+    "hash": "ac1b770e5cafe3391174df6c7256c239",
     "packages": [
         {
             "name": "cebe/markdown",
@@ -2691,12 +2691,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/scheb/two-factor-bundle.git",
-                "reference": "a7902c6e506038ef0a6999d888c1ef72a354c51a"
+                "reference": "6576925e5f2e15bc0f1dc6f42760ace322d568d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scheb/two-factor-bundle/zipball/a7902c6e506038ef0a6999d888c1ef72a354c51a",
-                "reference": "a7902c6e506038ef0a6999d888c1ef72a354c51a",
+                "url": "https://api.github.com/repos/scheb/two-factor-bundle/zipball/6576925e5f2e15bc0f1dc6f42760ace322d568d9",
+                "reference": "6576925e5f2e15bc0f1dc6f42760ace322d568d9",
                 "shasum": ""
             },
             "require": {
@@ -2732,7 +2732,7 @@
                 "two-factor",
                 "two-step"
             ],
-            "time": "2015-07-08 07:16:53"
+            "time": "2015-07-24 14:37:38"
         },
         {
             "name": "sensio/distribution-bundle",
@@ -3682,7 +3682,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.3.9"
+        "php": ">=5.4.16"
     },
     "platform-dev": []
 }
