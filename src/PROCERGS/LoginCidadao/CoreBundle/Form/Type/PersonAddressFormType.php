@@ -47,7 +47,7 @@ class PersonAddressFormType extends AbstractType
         $stateEmptyMessage   = $this->translator->trans('No state found.');
         $countryEmptyMessage = $this->translator->trans('No country found.');
 
-        $builder->add('name')
+        $builder->add('name', 'text', array('label' => 'address.name'))
             ->add('address', 'text', array('required' => true))
             ->add('addressNumber', 'text', array('required' => false))
             ->add('complement', 'text', array('required' => false))
