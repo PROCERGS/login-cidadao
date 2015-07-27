@@ -166,6 +166,7 @@ scope.rgs: 'RGs'
 scope.cep: 'CEP'
 scope.mobile: 'Mobile'
 Addresses: Addresses
+address.name: Address Identification
 'ex: Home Address': 'ex: Home Address'
 'ex: 221B Baker Street': 'ex: 221B Baker Street'
 'ex: apartment 2': 'ex: apartment 2'

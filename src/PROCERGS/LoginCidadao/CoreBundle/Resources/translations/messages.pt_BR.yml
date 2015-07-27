@@ -538,7 +538,8 @@ developer.area: 'Área do desenvolvedor'
 not.createdat: 'Criado em '
 not.shorttext: 'Resumo'
 Addresses: Endereços
-'ex: Home Address': 'ex: Casa'
+address.name: Identificação do Endereço
+'ex: Home Address': 'ex: Casa, Trabalho ou Praias'
 'ex: 221B Baker Street': 'ex: Rua Baker'
 'ex: apartment 2': 'ex: ap. 2'
 'ex: DE24 8SG': 'ex: 90807-123'
