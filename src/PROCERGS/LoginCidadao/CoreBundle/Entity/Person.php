@@ -624,7 +624,19 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      */
     public function getFullName()
     {
-        return $this->getFirstname().' '.$this->getSurname();
+        $fullName = array();
+        if ($this->getFirstname() !== null) {
+            $fullName[] = $this->getFirstname();
+        }
+        if ($this->getSurname() !== null) {
+            $fullName[] = $this->getSurname();
+        }
+
+        if (count($fullName) > 0) {
+            return implode(' ', $fullName);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -922,6 +934,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     {
         return $this->voterRegistration;
     }
+
     /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
      * of 'UploadedFile' is injected into this setter to trigger the  update. If this
