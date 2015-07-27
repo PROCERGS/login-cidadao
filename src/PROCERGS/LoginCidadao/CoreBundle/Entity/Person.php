@@ -600,7 +600,19 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      */
     public function getFullName()
     {
-        return $this->getFirstname().' '.$this->getSurname();
+        $fullName = array();
+        if ($this->getFirstname() !== null) {
+            $fullName[] = $this->getFirstname();
+        }
+        if ($this->getSurname() !== null) {
+            $fullName[] = $this->getSurname();
+        }
+
+        if (count($fullName) > 0) {
+            return implode(' ', $fullName);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -986,12 +998,12 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     /**
      * @ORM\PreUpdate
      */
-    public function setUpdatedAt($var = NULL)
+    public function setUpdatedAt($updatedAt = null)
     {
-        if ($var === null) {
-            $this->updatedAt = new \DateTime();
+        if ($updatedAt instanceof \DateTime) {
+            $this->updatedAt = $updatedAt;
         } else {
-            $this->updatedAt = $var;
+            $this->updatedAt = new \DateTime('now');
         }
         return $this;
     }
