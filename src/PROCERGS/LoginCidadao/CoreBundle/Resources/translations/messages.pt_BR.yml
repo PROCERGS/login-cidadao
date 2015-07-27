@@ -529,7 +529,7 @@ ZIMBABWE: Zimbabwe
 'After registering you''ll receive a confirmation email to proceed the activation of your account.': 'Depois de enviar o formulário você receberá um email de confirmação para proceder com a ativação da sua conta.'
 'Complement' : 'Complemento'
 'Send' : 'Enviar'
-'Issuer': 'Emissor'
+'Issuer': 'Órgão ou Entidade Emissora'
 'Val': 'Número'
 'add': 'Adicionar'
 'General': 'Geral'
@@ -724,3 +724,4 @@ If your email is mistyped, correct it and click the following button.: Se seu em
 Change Email: Trocar Email
 Your email was successfully validated.: Seu email foi validado com sucesso.
 Back to %client%: Voltar para %client%
+Mobile: Celular
