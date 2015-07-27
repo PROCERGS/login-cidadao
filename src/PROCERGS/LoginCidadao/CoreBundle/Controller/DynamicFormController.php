@@ -238,7 +238,7 @@ class DynamicFormController extends Controller
                     array('required' => true));
                 break;
             case 'id_cards':
-                $this->addIdCard($formBuilder, $person);
+                $this->addIdCard($request, $formBuilder, $person);
                 break;
             case 'mobile':
                 $this->addPersonField($formBuilder, $person, 'mobile', null,
@@ -479,7 +479,7 @@ class DynamicFormController extends Controller
     private function intersectScopes($authorizedScope, $requestedScope)
     {
         $authorizedScope = $this->getScopeAsArray($authorizedScope);
-        $requestedScope  = $this->getScopeAsArray($requestedScope);
+        return $requestedScope  = $this->getScopeAsArray($requestedScope);
 
         $result = array_intersect($authorizedScope, $requestedScope);
 
