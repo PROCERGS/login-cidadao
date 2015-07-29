@@ -479,7 +479,7 @@ class DynamicFormController extends Controller
     private function intersectScopes($authorizedScope, $requestedScope)
     {
         $authorizedScope = $this->getScopeAsArray($authorizedScope);
-        return $requestedScope  = $this->getScopeAsArray($requestedScope);
+        $requestedScope  = $this->getScopeAsArray($requestedScope);
 
         $result = array_intersect($authorizedScope, $requestedScope);
 
