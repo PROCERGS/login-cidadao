@@ -5,6 +5,8 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
+use PROCERGS\LoginCidadao\CoreBundle\Model\SelectData;
+use PROCERGS\LoginCidadao\CoreBundle\Model\LocationAwareInterface;
 
 /**
  * @ORM\Entity()
@@ -12,9 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\HasLifecycleCallbacks
  * @JMS\ExclusionPolicy("all")
  */
-class PersonAddress
+class PersonAddress implements LocationAwareInterface
 {
-
     /**
      * @JMS\Expose
      * @JMS\Groups({"addresses"})
@@ -64,7 +65,7 @@ class PersonAddress
      * @var string
      */
     protected $complement;
-    
+
     /**
      * @JMS\Expose
      * @JMS\Groups({"addresses"})
@@ -73,7 +74,7 @@ class PersonAddress
      * @ORM\Column(name="address_number",type="string", nullable=true, length=10)
      * @var string
      */
-    protected $addressNumber;    
+    protected $addressNumber;
 
     /**
      * @JMS\Expose
@@ -105,6 +106,9 @@ class PersonAddress
      */
     protected $postalCode;
 
+    /** @var SelectData */
+    protected $location;
+
     public function getAddress()
     {
         return $this->address;
@@ -114,7 +118,7 @@ class PersonAddress
     {
         return $this->complement;
     }
-    
+
     public function getAddressNumber()
     {
         return $this->addressNumber;
@@ -140,12 +144,12 @@ class PersonAddress
         $this->complement = $var;
         return $this;
     }
-    
+
     public function setAddressNumber($var)
     {
         $this->addressNumber = $var;
         return $this;
-    }    
+    }
 
     public function setCity(City $city = NULL)
     {
@@ -219,4 +223,24 @@ class PersonAddress
         return $this;
     }
 
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    public function setLocation(SelectData $location)
+    {
+        $this->location = $location;
+        return $this;
+    }
+
+    public function __wakeup()
+    {
+        if ($this->location !== null) {
+            $this->location->toObject($this);
+        } else {
+            $this->location = new SelectData();
+            $this->location->getFromObject($this);
+        }
+    }
 }

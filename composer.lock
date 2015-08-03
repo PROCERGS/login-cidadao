@@ -1,11 +1,71 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f08da472e1f6e4c65a082386c0b213e9",
+    "hash": "7cfcdfb0974cf10e2dc178ef4d9484bf",
     "packages": [
+        {
+            "name": "cebe/markdown",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cebe/markdown.git",
+                "reference": "54a2c49de31cc44e864ebf0500a35ef21d0010b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cebe/markdown/zipball/54a2c49de31cc44e864ebf0500a35ef21d0010b2",
+                "reference": "54a2c49de31cc44e864ebf0500a35ef21d0010b2",
+                "shasum": ""
+            },
+            "require": {
+                "lib-pcre": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "cebe/indent": "*",
+                "facebook/xhprof": "*@dev",
+                "phpunit/phpunit": "4.1.*"
+            },
+            "bin": [
+                "bin/markdown"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "cebe\\markdown\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Carsten Brandt",
+                    "email": "mail@cebe.cc",
+                    "homepage": "http://cebe.cc/",
+                    "role": "Creator"
+                }
+            ],
+            "description": "A super fast, highly extensible markdown parser for PHP",
+            "homepage": "https://github.com/cebe/markdown#readme",
+            "keywords": [
+                "extensible",
+                "fast",
+                "gfm",
+                "markdown",
+                "markdown-extra"
+            ],
+            "time": "2015-03-06 05:28:07"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.0",
@@ -671,12 +731,12 @@
             "version": "v3.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/facebook/facebook-php-sdk.git",
+                "url": "https://github.com/facebookarchive/facebook-php-sdk.git",
                 "reference": "98f2be163c96a51166354e467b95dd38aa4b0a19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facebook/facebook-php-sdk/zipball/98f2be163c96a51166354e467b95dd38aa4b0a19",
+                "url": "https://api.github.com/repos/facebookarchive/facebook-php-sdk/zipball/98f2be163c96a51166354e467b95dd38aa4b0a19",
                 "reference": "98f2be163c96a51166354e467b95dd38aa4b0a19",
                 "shasum": ""
             },
@@ -780,7 +840,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSOAuthServerBundle/zipball/18eac304b53a2fa16bca5e2f2bdcc6cf6a88aa03",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSOAuthServerBundle/zipball/0c72d8baf707dce59c59a4daa1549c06e510bbed",
                 "reference": "18eac304b53a2fa16bca5e2f2bdcc6cf6a88aa03",
                 "shasum": ""
             },
@@ -977,7 +1037,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/96e4542c751e074ac018ff9e8915a444f16bd92f",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/3efbc08a97f218d0a4524dee926fc4381e3d0947",
                 "reference": "96e4542c751e074ac018ff9e8915a444f16bd92f",
                 "shasum": ""
             },
@@ -1089,7 +1149,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/25b60de3ec06ea6f12cfa561466f37ff8a938bb9",
+                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/7a1e41685642d8866509cdca8af9077a3c5f0b10",
                 "reference": "25b60de3ec06ea6f12cfa561466f37ff8a938bb9",
                 "shasum": ""
             },
@@ -1550,7 +1610,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/JMSSecurityExtraBundle/zipball/59b777ebaa37803a75803982ddab18c08a47e48f",
+                "url": "https://api.github.com/repos/schmittjoh/JMSSecurityExtraBundle/zipball/75bd0f773b1c645d70eb6174fff67ba5779a291e",
                 "reference": "59b777ebaa37803a75803982ddab18c08a47e48f",
                 "shasum": ""
             },
@@ -1758,7 +1818,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/Gaufrette/zipball/12376684828a013acfdc20bc29a64155d07e0ddf",
+                "url": "https://api.github.com/repos/KnpLabs/Gaufrette/zipball/9d52413665284f9c96e0cef399fc14e68ac0aa5a",
                 "reference": "12376684828a013acfdc20bc29a64155d07e0ddf",
                 "shasum": ""
             },
@@ -1841,7 +1901,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpGaufretteBundle/zipball/c88039e80c728265bc86bc7c2b4312606f606800",
+                "url": "https://api.github.com/repos/KnpLabs/KnpGaufretteBundle/zipball/b928e9776784bbc604eb3a1080b9c85c74404877",
                 "reference": "c88039e80c728265bc86bc7c2b4312606f606800",
                 "shasum": ""
             },
@@ -2062,29 +2122,34 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.10.0",
+            "version": "1.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "25b16e801979098cb2f120e697bfce454b18bf23"
+                "reference": "c31a2c4e8db5da8b46c74cf275d7f109c0f249ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/25b16e801979098cb2f120e697bfce454b18bf23",
-                "reference": "25b16e801979098cb2f120e697bfce454b18bf23",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/c31a2c4e8db5da8b46c74cf275d7f109c0f249ac",
+                "reference": "c31a2c4e8db5da8b46c74cf275d7f109c0f249ac",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0",
                 "psr/log": "~1.0"
             },
+            "provide": {
+                "psr/log-implementation": "1.0.0"
+            },
             "require-dev": {
                 "aws/aws-sdk-php": "~2.4, >2.4.8",
                 "doctrine/couchdb": "~1.0@dev",
                 "graylog2/gelf-php": "~1.0",
-                "phpunit/phpunit": "~3.7.0",
+                "phpunit/phpunit": "~4.0",
                 "raven/raven": "~0.5",
-                "ruflin/elastica": "0.90.*"
+                "ruflin/elastica": "0.90.*",
+                "swiftmailer/swiftmailer": "~5.3",
+                "videlalvaro/php-amqplib": "~2.4"
             },
             "suggest": {
                 "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
@@ -2094,12 +2159,13 @@
                 "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
                 "raven/raven": "Allow sending log messages to a Sentry server",
                 "rollbar/rollbar": "Allow sending log messages to Rollbar",
-                "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
+                "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
+                "videlalvaro/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.10.x-dev"
+                    "dev-master": "1.13.x-dev"
                 }
             },
             "autoload": {
@@ -2115,8 +2181,7 @@
                 {
                     "name": "Jordi Boggiano",
                     "email": "j.boggiano@seld.be",
-                    "homepage": "http://seld.be",
-                    "role": "Developer"
+                    "homepage": "http://seld.be"
                 }
             ],
             "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
@@ -2126,7 +2191,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2014-06-04 16:30:04"
+            "time": "2015-03-09 09:58:04"
         },
         {
             "name": "nelmio/api-doc-bundle",
@@ -2139,7 +2204,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/3889e7ff245dde6ad802e3c61d73fdf1bf4d3329",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/a343bb7c45fb0e9ef1fb3da94befe96fdf55e1f2",
                 "reference": "3889e7ff245dde6ad802e3c61d73fdf1bf4d3329",
                 "shasum": ""
             },
@@ -2313,7 +2378,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/34b64807ec526c37edd014a7d612deda08689570",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/3a154019dc346b745afc68b15fa5d190b0ed4a8d",
                 "reference": "34b64807ec526c37edd014a7d612deda08689570",
                 "shasum": ""
             },
@@ -2392,6 +2457,49 @@
             "time": "2015-01-27 20:29:29"
         },
         {
+            "name": "procergs/tos-bundle",
+            "version": "1.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PROCERGS/tos-bundle.git",
+                "reference": "621b2d0332d63c4d17ecd7870a8dc3b7404a448c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/621b2d0332d63c4d17ecd7870a8dc3b7404a448c",
+                "reference": "621b2d0332d63c4d17ecd7870a8dc3b7404a448c",
+                "shasum": ""
+            },
+            "require": {
+                "cebe/markdown": "^1.1",
+                "doctrine/doctrine-bundle": "1.2.*",
+                "doctrine/orm": ">=2.2.3,<2.4-dev",
+                "friendsofsymfony/user-bundle": "~2.0@dev",
+                "php": ">=5.3.3",
+                "sensio/framework-extra-bundle": "2.3.*",
+                "symfony/symfony": "2.3.*",
+                "twig/extensions": "1.0.*"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "LoginCidadao\\TOSBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "AGPLv3"
+            ],
+            "authors": [
+                {
+                    "name": "Guilherme Donato",
+                    "email": "guilhermednt@users.noreply.github.com"
+                }
+            ],
+            "description": "Terms of Service Bundle",
+            "time": "2015-07-02 20:18:20"
+        },
+        {
             "name": "psr/log",
             "version": "1.0.0",
             "source": {
@@ -2439,7 +2547,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scheb/two-factor-bundle/zipball/b93f8021cfc4d90e766e630e8886980fdc843572",
+                "url": "https://api.github.com/repos/scheb/two-factor-bundle/zipball/69c104c1dc864a25b7bea0894daaef283c612be5",
                 "reference": "b93f8021cfc4d90e766e630e8886980fdc843572",
                 "shasum": ""
             },
@@ -3000,24 +3108,23 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.3.19",
+            "version": "v2.3.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "1fc05758044fa1cf54460d7d4aff5f55b0f1b0db"
+                "reference": "6dfe5551b71d156739a0df1043ba81b326e36f4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/1fc05758044fa1cf54460d7d4aff5f55b0f1b0db",
-                "reference": "1fc05758044fa1cf54460d7d4aff5f55b0f1b0db",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/6dfe5551b71d156739a0df1043ba81b326e36f4a",
+                "reference": "6dfe5551b71d156739a0df1043ba81b326e36f4a",
                 "shasum": ""
             },
             "require": {
-                "doctrine/common": "~2.2",
+                "doctrine/common": "~2.3",
                 "php": ">=5.3.3",
                 "psr/log": "~1.0",
-                "symfony/icu": "~1.0",
-                "twig/twig": "~1.12"
+                "twig/twig": "~1.12,>=1.12.3"
             },
             "replace": {
                 "symfony/browser-kit": "self.version",
@@ -3062,10 +3169,11 @@
                 "doctrine/data-fixtures": "1.0.*",
                 "doctrine/dbal": "~2.2",
                 "doctrine/orm": "~2.2,>=2.2.3",
-                "ircmaxell/password-compat": "1.0.*",
+                "ircmaxell/password-compat": "~1.0",
                 "monolog/monolog": "~1.3",
-                "ocramius/proxy-manager": ">=0.3.1,<0.4-dev",
-                "propel/propel1": "1.6.*"
+                "ocramius/proxy-manager": "~0.3.1",
+                "propel/propel1": "~1.6",
+                "symfony/phpunit-bridge": "~2.7"
             },
             "type": "library",
             "extra": {
@@ -3091,32 +3199,32 @@
             ],
             "authors": [
                 {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
-                },
-                {
                     "name": "Fabien Potencier",
                     "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
                 }
             ],
             "description": "The Symfony PHP framework",
-            "homepage": "http://symfony.com",
+            "homepage": "https://symfony.com",
             "keywords": [
                 "framework"
             ],
-            "time": "2014-09-03 09:45:27"
+            "time": "2015-05-29 22:16:04"
         },
         {
             "name": "twig/extensions",
             "version": "v1.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fabpot/Twig-extensions.git",
+                "url": "https://github.com/twigphp/Twig-extensions.git",
                 "reference": "f91a82ec225e5bb108e01a0f93c9be04f84dcfa0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig-extensions/zipball/f91a82ec225e5bb108e01a0f93c9be04f84dcfa0",
+                "url": "https://api.github.com/repos/twigphp/Twig-extensions/zipball/f91a82ec225e5bb108e01a0f93c9be04f84dcfa0",
                 "reference": "f91a82ec225e5bb108e01a0f93c9be04f84dcfa0",
                 "shasum": ""
             },
@@ -3160,12 +3268,12 @@
             "version": "v1.16.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fabpot/Twig.git",
+                "url": "https://github.com/twigphp/Twig.git",
                 "reference": "8ce37115802e257a984a82d38254884085060024"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/8ce37115802e257a984a82d38254884085060024",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/8ce37115802e257a984a82d38254884085060024",
                 "reference": "8ce37115802e257a984a82d38254884085060024",
                 "shasum": ""
             },
@@ -3214,41 +3322,55 @@
         },
         {
             "name": "vich/uploader-bundle",
-            "version": "v0.9.0",
-            "target-dir": "Vich/UploaderBundle",
+            "version": "v0.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dustin10/VichUploaderBundle.git",
-                "reference": "16d63218fe9efc39c807a6a1516714c541295a39"
+                "reference": "65d244d5e6ef62b4978585cdeb283b6cdab05f6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dustin10/VichUploaderBundle/zipball/16d63218fe9efc39c807a6a1516714c541295a39",
-                "reference": "16d63218fe9efc39c807a6a1516714c541295a39",
+                "url": "https://api.github.com/repos/dustin10/VichUploaderBundle/zipball/65d244d5e6ef62b4978585cdeb283b6cdab05f6b",
+                "reference": "65d244d5e6ef62b4978585cdeb283b6cdab05f6b",
                 "shasum": ""
             },
             "require": {
+                "jms/metadata": "~1.5",
                 "php": ">=5.3.2",
-                "symfony/framework-bundle": "~2.0"
+                "symfony/finder": ">=2.0",
+                "symfony/framework-bundle": "~2.3",
+                "symfony/property-access": "~2.3"
             },
             "require-dev": {
-                "doctrine/common": "@stable",
-                "doctrine/dbal": "@stable",
-                "doctrine/mongodb-odm": "dev-master",
-                "doctrine/orm": "@stable",
-                "knplabs/knp-gaufrette-bundle": "0.2.*",
-                "twig/twig": "@stable"
+                "doctrine/doctrine-bundle": "*",
+                "doctrine/mongodb-odm": "@dev",
+                "doctrine/orm": "*",
+                "knplabs/knp-gaufrette-bundle": "*",
+                "matthiasnoback/symfony-dependency-injection-test": "0.*",
+                "mikey179/vfsstream": "~1.0",
+                "oneup/flysystem-bundle": "dev-master",
+                "phpunit/phpunit": "~4.0",
+                "symfony/symfony": "*"
             },
             "suggest": {
                 "doctrine/doctrine-bundle": "*",
                 "doctrine/mongodb-odm-bundle": "*",
+                "doctrine/orm": ">=2.2.3",
+                "doctrine/phpcr-odm": "~1.0",
                 "knplabs/knp-gaufrette-bundle": "*",
-                "phpunit/phpunit": "~3.7@stable"
+                "symfony/yaml": "@stable",
+                "willdurand/propel-eventdispatcher-bundle": ">=1.2"
             },
             "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
-                "psr-0": {
-                    "Vich\\UploaderBundle": ""
+                "psr-4": {
+                    "Vich\\UploaderBundle\\": "",
+                    "Vich\\TestBundle\\": "Tests/Fixtures/App/src/TestBundle/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -3258,8 +3380,7 @@
             "authors": [
                 {
                     "name": "Dustin Dobervich",
-                    "email": "ddobervich@gmail.com",
-                    "homepage": "http://www.dobervich.com"
+                    "email": "ddobervich@gmail.com"
                 }
             ],
             "description": "Ease file uploads attached to entities",
@@ -3268,7 +3389,7 @@
                 "file uploads",
                 "upload"
             ],
-            "time": "2013-08-07 16:13:51"
+            "time": "2014-12-12 10:26:46"
         },
         {
             "name": "willdurand/jsonp-callback-validator",

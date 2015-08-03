@@ -13,8 +13,7 @@ use JMS\Serializer\Annotation\Groups;
  */
 class Country
 {
-
-    const REVIEWED_OK = 0;
+    const REVIEWED_OK     = 0;
     const REVIEWED_IGNORE = 1;
 
     /**
@@ -73,9 +72,16 @@ class Country
      */
     protected $preference;
 
+    /**
+     * @ORM\OneToMany(targetEntity="State", mappedBy="country", cascade={"remove"}, orphanRemoval=true)
+     * @var State[]
+     */
+    protected $states;
+
     public function __construct($id = null)
     {
         $this->setId($id);
+        $this->states = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId()
@@ -174,4 +180,8 @@ class Country
         return $this->reviewed;
     }
 
+    public function getStates()
+    {
+        return $this->states;
+    }
 }

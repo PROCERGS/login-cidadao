@@ -3,8 +3,8 @@ Welcome!: Bem-vindo!
 'Welcome to the Citizen''s Login service.': 'Seja bem-vindo ao Login Cidadão.'
 'Here you''ll find all you need to know about the service.': 'Aqui você encontrará tudo que você precisa saber sobre esse serviço.'
 'You might start by logging in or %link_start%registering%link_end%.': 'Você pode começar acessando o sistema ou %link_start%cadastrando-se%link_end%.'
-security.login.username: 'CPF, nome de usuário ou email'
-security.login.password: Senha
+security.login.username: 'Email ou CPF'
+security.login.password: Digite sua senha
 security.login.remember_me: 'Lembrar meus dados'
 security.login.submit: Entrar
 'Welcome %user.name%': 'Bem-vindo, %user.name%'
@@ -529,7 +529,7 @@ ZIMBABWE: Zimbabwe
 'After registering you''ll receive a confirmation email to proceed the activation of your account.': 'Depois de enviar o formulário você receberá um email de confirmação para proceder com a ativação da sua conta.'
 'Complement' : 'Complemento'
 'Send' : 'Enviar'
-'Issuer': 'Emissor'
+'Issuer': 'Órgão ou Entidade Emissora'
 'Val': 'Número'
 'add': 'Adicionar'
 'General': 'Geral'
@@ -575,7 +575,8 @@ developer.area: 'Área do desenvolvedor'
 not.createdat: 'Criado em '
 not.shorttext: 'Resumo'
 Addresses: Endereços
-'ex: Home Address': 'ex: Casa'
+address.name: Identificação do Endereço
+'ex: Home Address': 'exemplos: Casa ou Trabalho'
 'ex: 221B Baker Street': 'ex: Rua Baker'
 'ex: apartment 2': 'ex: ap. 2'
 'ex: DE24 8SG': 'ex: 90807-123'
@@ -700,3 +701,28 @@ log.date.format: 'd/m/Y H:i:s'
 'Information changed at %date%': 'Alterou informações em %date%'
 'Back to services': 'Voltar para os serviços'
 You don't have any activity log.: Você ainda não possui nenhum registro de atividade.
+scope.logout: 'Permitir deslogar'
+'Search it!': 'Pesquise aqui!'
+'Don''t know your postal code?': 'Não sabe seu código postal?'
+'Select a state below:': 'Selecione um estado abaixo:'
+Firstname: Nome
+Surname: Sobrenome
+'After completing your information, click the following button to continue:': 'Depois de completar suas informações, clique no botão a seguir para continuar:'
+<strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.: <strong>%client%</strong> precisa de detalhes adicionais sobre você. Por favor, complete as informações em branco a seguir para continuar.
+Personal Details: Informações Pessoais
+Complete Missing Fields: Complete as Informações em Branco
+'Use accounts from other services': 'Use contas de outros serviços'
+'If you prefer, it''s possible to use other services to login or create your account.': 'Se preferir, é possível usar os seguintes serviços para acessar ou criar sua conta:'
+Type your password to confirm the activation.: Digite sua senha para confirmar a ativação.
+Current password: Senha atual
+<strong>%client%</strong> requires that you have a validated email in order to proceed.: <strong>%client%</strong> precisa que você possua um email validado antes de continuar.
+Validating your email address is pretty simple and fast. You just have to click the link or button in the email we sent you.: Validar seu endereço de email é bastante fácil e rápido. Você só precisa clicar no link ou botão no email que lhe enviamos.
+After you validate your email address this screen will change automatically and you'll proceed to <strong>%client%</strong>.: Depois de validar seu email, essa tela vai mudar <strong>automaticamente</strong> e você poderá prosseguir para <strong>%client%</strong>.
+I'm having trouble finding the confirmation email: Estou tendo dificuldade em encontrar o email de confirmação
+If you are having trouble to find the confirmation email, please make sure it isn't in the junk mail section of your email program or site.: Se você está tendo dificuldades em encontrar o email de confirmação, por favor verifique se ele não se encontra na caixa de spam ou lixo eletrônico do seu email.
+If you are certain the email was not received, it's possible that you mistyped your email address. You can change you email address below.: Se você tem certeza de que o email não foi recebido, é possível que seu endereço esteja com erro de digitação. Verifique e, se necessário, altere o email no campo abaixo.
+If your email is mistyped, correct it and click the following button.: Se seu email estava incorreto, corrija-o e clique no botão a seguir.
+Change Email: Trocar Email
+Your email was successfully validated.: Seu email foi validado com sucesso.
+Back to %client%: Voltar para %client%
+Mobile: Celular

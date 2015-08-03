@@ -5,6 +5,7 @@ body.no-scroll {
 .settings-content {
     background-color: #F1F1F1;
     max-width: 960px;
+    border: solid 1px #D0D0D0;
 }
 
 .limit-960>div {
@@ -38,6 +39,7 @@ body.no-scroll {
     padding: 0;
     overflow-y: auto;
     max-width: 255px !important;
+    box-shadow: 4px 4px 8px #2C2C2C;
 }
 
 @media (min-width: 768px) {
@@ -172,7 +174,7 @@ body.no-scroll {
     }
 
     .settings-content h1 {
-      margin-top: -20px;
+        margin-top: -20px;
     }
 }
 
@@ -236,14 +238,10 @@ body.no-scroll {
         margin: 15px 20px 10px;
     }
 
-    footer .content {
-        background: none;
-    }
-
     footer .inner-row {
-        background-color: #222;
         margin: 0;
     }
+
 
 }
 
@@ -278,7 +276,7 @@ body.no-scroll {
 }
 
 #profile-edit .btn-upload {
-  margin-top: 5px;
+    margin-top: 5px;
 }
 
 #profile-edit .file-upload .file-name {
@@ -373,6 +371,35 @@ body.no-scroll {
     display: none;
 }
 
+#profile-edit .file-upload input[type=file] {
+    display: none;
+}
+
+#profile-edit .file-upload .btn-upload,
+#profile-edit .file-upload .form-group,
+#profile-edit .file-upload .form-group .checkbox {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#profile-edit .file-upload .btn-facebook-profile-pic-preview {
+    padding: 4px;
+}
+
+#profile-edit .file-upload .facebook-profile-pic-preview {
+    max-height: 35.9px;
+}
+
+#profile-edit .file-upload .activity-desc {
+    margin-top: 5px;
+    font-size: 90%;
+}
+
+#profile-edit .file-upload .activity-desc .upload,
+#profile-edit .file-upload .activity-desc .facebook-pic {
+    display: none;
+}
+
 .applications .service:hover {
     background-color: #E2EFDE!important;
 }
@@ -382,7 +409,7 @@ body.no-scroll {
 }
 
 .service .link-detail {
-  padding-left: 0;
+    padding-left: 0;
 }
 
 
@@ -684,90 +711,90 @@ dl.id-card-details {
 }
 
 label + .glyphicon-pencil {
-  cursor: pointer;
-  margin-left: 5px;
-  margin-top: -3px;
+    cursor: pointer;
+    margin-left: 5px;
+    margin-top: -3px;
 }
 
 #person_resume_form_type_roles label {
-  float: left;
-  width: 50%;
+    float: left;
+    width: 50%;
 }
 
 #person_resume_form_type_roles input[type='checkbox'] {
-  float: right;
-  width: 50%;
+    float: right;
+    width: 50%;
 }
 
 #statistics .item {
-  background-color: #F9F9F9;
-  color: #000;
-  display: block;
-  margin-bottom: 10px;
-  padding: 15px 0;
-  text-align: center;
+    background-color: #F9F9F9;
+    color: #000;
+    display: block;
+    margin-bottom: 10px;
+    padding: 15px 0;
+    text-align: center;
 }
 
 #statistics .item:hover {
-  background-color: #E2EFDE;
+    background-color: #E2EFDE;
 }
 
 #statistics .glyphicon, #statistics .service-img {
-  display: block;
-  font-size: 22px;
-  margin-bottom: 8px;
+    display: block;
+    font-size: 22px;
+    margin-bottom: 8px;
 }
 
 #statistics .qty {
-  font-size: 17px;
-  font-weight: bold;
+    font-size: 17px;
+    font-weight: bold;
 }
 
 .statistics-badges .badge-box {
-  margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 
 .statistics-badges .badge-icon {
-  margin-bottom: 10px!important;
-  margin-top: 10px!important;
+    margin-bottom: 10px!important;
+    margin-top: 10px!important;
 }
 
 .statistics-badges .badge-title {
-  text-align: center;
-  word-wrap: break-word;
+    text-align: center;
+    word-wrap: break-word;
 }
 
 .statistics-badges .progress {
-  margin-bottom: 5px;
-  margin-top: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
 }
 
 .statistics-badges .badge-single {
-  padding-top: 25px;
+    padding-top: 25px;
 }
 
 .statistics-badges .badge-count {
-  padding-left: 0;
-  margin-top: 3px;
+    padding-left: 0;
+    margin-top: 3px;
 }
 
 .statistics-badges .wrap {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .statistics-badges .badge-progress {
-  padding-left: 0;
+    padding-left: 0;
 }
 
 @media (max-width: 767px) {
 
-  .statistics-badges .badge-single {
-    padding-top: 0;
-  }
+    .statistics-badges .badge-single {
+        padding-top: 0;
+    }
 
-  .statistics-badges .progress {
-    margin-top: 10px;
-  }
+    .statistics-badges .progress {
+        margin-top: 10px;
+    }
 }
 
 .backup-codes {
@@ -785,88 +812,88 @@ label + .glyphicon-pencil {
 }
 
 .badges-list .media {
-  margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 .badges-list .badge-img {
-  height: 60px;
-  line-height: 60px;
-  text-align: center;
-  vertical-align: middle;
-  width: 60px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    vertical-align: middle;
+    width: 60px;
 }
 
 .badges-list .badge-icon {
-  border-radius: 50%;
-  box-shadow: inset 1px 2px 7px #FFF, 1px 1px 4px #CCC;
-  color: #FFF;
-  height: 60px;
-  line-height: 54px;
-  margin: 0 auto;
-  text-align: center;
-  vertical-align: middle;
-  width: 60px;
+    border-radius: 50%;
+    box-shadow: inset 1px 2px 7px #FFF, 1px 1px 4px #CCC;
+    color: #FFF;
+    height: 60px;
+    line-height: 54px;
+    margin: 0 auto;
+    text-align: center;
+    vertical-align: middle;
+    width: 60px;
 }
 
 .badges-list .badge-icon:before {
-  font-size: 22px;
-  text-shadow: 1px 1px 2px #CCC;
+    font-size: 22px;
+    text-shadow: 1px 1px 2px #CCC;
 }
 
 .badges-list .locked .badge-icon {
-  background-color: #CCC;
-  border-color: #000;
-  color: #CCC;
-  opacity: 0.2;
+    background-color: #CCC;
+    border-color: #000;
+    color: #CCC;
+    opacity: 0.2;
 }
 
 .badges-list .locked .media-body {
-  color: #CCC;
+    color: #CCC;
 }
 
 .badges-list .badge-has_cpf {
-  background-color: #8DDAFC;
-  border: solid 1px #5AB9DB;
+    background-color: #8DDAFC;
+    border: solid 1px #5AB9DB;
 }
 
 .badges-list .badge-has_cpf:before {
-  content: "CPF";
+    content: "CPF";
 }
 
 .badges-list .badge-valid_email {
-  background-color: #FF7171;
-  border: solid 1px #D58D8D;
+    background-color: #FF7171;
+    border: solid 1px #D58D8D;
 }
 
 .badges-list .badge-valid_email:before {
-  content: "@";
-  font-size: 30px;
+    content: "@";
+    font-size: 30px;
 }
 
 .badges-list .badge-nfg_access_lvl {
-  background-color: #FAB60F;
-  border: solid 1px #D58D8D;
+    background-color: #FAB60F;
+    border: solid 1px #D58D8D;
 }
 
 .badges-list .badge-nfg_access_lvl:before {
-  content: "NFG";
+    content: "NFG";
 }
 
 .badges-list .badge-voter_registration {
-  background-color: #C3EC87;
-  border: solid 1px #A0BBA6;
+    background-color: #C3EC87;
+    border: solid 1px #A0BBA6;
 }
 
 .badges-list .badge-voter_registration:before {
-  content: "TSE";
+    content: "TSE";
 }
 
 .badges-list .badge-valid_id_card_rs {
-  background-color: #599600;
-  border: solid 1px #A0BBA6;
+    background-color: #599600;
+    border: solid 1px #A0BBA6;
 }
 
 .badges-list .badge-valid_id_card_rs:before {
-  content: "IGP"
+    content: "IGP"
 }
 
 #dashboard .profile-picture {
@@ -877,31 +904,31 @@ label + .glyphicon-pencil {
 }
 
 #dashboard .service-img, #dashboard .badge-icon {
-  display: block;
-  float: left;
-  margin: 5px;
+    display: block;
+    float: left;
+    margin: 5px;
 }
 
 #dashboard .about .glyphicon {
-  font-size: 14px;
-  margin-right: 3px;
+    font-size: 14px;
+    margin-right: 3px;
 }
 
 #dashboard .birthdate {
-  margin-left: 19px;
-  font-size: 11px;
-  margin-top: -2px;
-  margin-bottom: 5px;
+    margin-left: 19px;
+    font-size: 11px;
+    margin-top: -2px;
+    margin-bottom: 5px;
 }
 
 #dashboard .notification {
-  background: none repeat scroll 0 0 rgba(220, 240, 255, 0.9);
+    background: none repeat scroll 0 0 rgba(220, 240, 255, 0.9);
 }
 
 #dashboard .log-type {
-  margin-right: 5px;
+    margin-right: 5px;
 }
 
 #dashboard .log-about {
-  font-size: 11px;
+    font-size: 11px;
 }

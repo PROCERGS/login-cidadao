@@ -1,76 +1,61 @@
-<div class="{{ common_row_class }}" style="{{ common_row_style is defined ? common_row_style : '' }}">
-  <div id="register-box" class="lc-box">
-    <h3 class="title text-center">{% trans %}Create your account{% endtrans %}</h3>
+{% trans_default_domain 'FOSUserBundle' %}
+<h1 class="title">{{ 'form.register.call_to_action' | trans }}</h1>
 
-    <button type="button" class="btn btn-link btn-xs toggle-lc-box" id="btn-login-back">{% trans %}Back to login{% endtrans %}</button>
-
-    {% for type, messages in app.session.flashbag.all() %}
-    {% for message in messages %}
-    <div class="flash-{{ type }}">
-      {{ message }}
-    </div>
-    {% endfor %}
-    {% endfor %}
-
-    {% trans_default_domain 'FOSUserBundle' %}
-    {% if actionUrl is not defined %}
+{% if actionUrl is not defined %}
     {% set actionUrl = 'fos_user_registration_register' %}
-    {% endif%}
-    {{ form_start(form, {'action': path(actionUrl), 'attr': {'role':'form', 'class':'fos_user_registration_register clearfix'}}) }}
-    <div class="form-content">
-      {{ form_errors(form) }}
-      {% if form.firstName is defined %}
-      <div class="form-group">
-        {{ form_label(form.firstName, 'form.firstName' | trans, {'label_attr': {'class': 'sr-only'}}) }}
-        {{ form_widget(form.firstName, {'attr': {'class': 'form-control', 'placeholder' : 'form.firstName' }}) }}
-        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-        {{ form_errors(form.firstName) }}
-      </div>
-      {% endif %}
+{% endif%}
 
-      {% if form.surname is defined %}
-      <div class="form-group">
-        {{ form_label(form.surname, 'form.surname' | trans, {'label_attr': {'class': 'sr-only'}}) }}
-        {{ form_widget(form.surname, {'attr': {'class': 'form-control', 'placeholder' : 'form.surname' }}) }}
-        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-        {{ form_errors(form.surname) }}
-      </div>
-      {% endif %}
+{{ form_start(form, {'action': path(actionUrl), 'attr': {'role':'form', 'class':'fos_user_registration_register clearfix'}}) }}
 
-      <div class="form-group">
-        {{ form_label(form.email, 'form.email' | trans, {'label_attr': {'class': 'sr-only'}}) }}
-        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder' : 'form.email' }}) }}
+{% for type, messages in app.session.flashbag.peekAll() %}
+    {% for message in messages %}
+        <div class="flash-{{ type }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+<div class="form-content">
+    {{ form_errors(form) }}
+    {% if form.firstName is defined %}
+        <div class="form-group">
+            {{ form_label(form.firstName, 'form.firstName' | trans) }}
+            {{ form_widget(form.firstName, {'attr': {'class': 'form-control', 'placeholder' : 'form.firstName.example' }}) }}
+            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            {{ form_errors(form.firstName) }}
+        </div>
+    {% endif %}
+
+    {% if form.surname is defined %}
+        <div class="form-group">
+            {{ form_label(form.surname, 'form.surname' | trans) }}
+            {{ form_widget(form.surname, {'attr': {'class': 'form-control', 'placeholder' : 'form.surname.example' }}) }}
+            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            {{ form_errors(form.surname) }}
+        </div>
+    {% endif %}
+
+    <div class="form-group">
+        {{ form_label(form.email, 'form.email' | trans) }}
+        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder' : 'form.email.example' }}) }}
         <span class="glyphicon glyphicon-remove form-control-feedback"></span>
         {{ form_errors(form.email) }}
-      </div>
+    </div>
 
-      <div class="form-group">
-        {{ form_label(form.plainPassword, 'form.plainPassword' | trans, {'label_attr': {'class': 'sr-only'}}) }}
-        {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'placeholder' : 'form.plainPassword' }}) }}
+    <div class="form-group">
+        {{ form_label(form.plainPassword, 'form.plainPassword' | trans) }}
+        {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'placeholder' : 'form.plainPassword.example' }}) }}
         {{ form_errors(form.plainPassword) }}
-      </div>
+    </div>
 
-      <div class="form-group">
-        {{ form_label(form.mobile, 'form.phone' | trans, {'label_attr': {'class': 'sr-only'}}) }}
-        {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'placeholder' : ('form.phone' | trans) }}) }}
+    <div class="form-group">
+        {{ form_label(form.mobile, 'form.phone' | trans) }}
+        {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'placeholder' : ('form.phone.example' | trans) }}) }}
         {{ form_errors(form.mobile) }}
-      </div>
-
-      <p class='terms'>{% trans with { '%linkTerms%': path("lc_privacy")} %}By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.{% endtrans %}</p>
-
-      <button class="btn btn-success" type="submit">{{ 'registration.submit'|trans }}</button>
-    </div>
-    {{ form_end(form) }}
-    <div class="connect-box">
-      <div><hr><span>{% trans %}or{% endtrans %}</span></div>
-      <p>{% trans %}Use accounts from other services{% endtrans %}</p>
-      <div class="row">
-        <div class="col-sm-4 no-right-padding text-center"><a class="connect facebook" data-href="{{ path("lc_link_facebook") }}">Facebook</a></div>
-        <div class="col-sm-4 no-right-padding text-center"><a class="connect twitter" href="{{ path('lc_before_register_twitter') }}">Twitter</a></div>
-        <div class="col-sm-4 text-center"><a class="connect google" href="{{ path('hwi_oauth_service_redirect', {'service': 'google'}) }}">Google</a></div>
-        <div class="col-sm-4 no-right-padding text-center"><a class="connect nfg nfgpopup" data-href="{{ path('nfg_create') }}">NFG</a></div>
-      </div>
     </div>
 
-  </div>
+    <p class='terms'>{% trans with { '%linkTerms%': path("lc_privacy")} %}By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.{% endtrans %}</p>
+
+    <button class="btn btn-block btn-success" type="submit">{{ 'registration.submit'|trans }}</button>
 </div>
+{{ form_end(form) }}

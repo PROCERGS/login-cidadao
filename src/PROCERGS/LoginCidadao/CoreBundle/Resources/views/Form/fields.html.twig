@@ -8,6 +8,13 @@
     {% endspaceless %}
 {% endblock form_row %}
 
+{% block checkbox_widget -%}
+    {%- if attr.class is not defined -%}
+    {%- set attr = attr|merge({ 'class': '' }) -%}
+    {%- endif -%}
+    <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+{%- endblock checkbox_widget %}
+
 {% block widget_attributes -%}
     id="{{ id }}" name="{{ full_name }}"
     {%- if read_only %} readonly="readonly"{% endif -%}

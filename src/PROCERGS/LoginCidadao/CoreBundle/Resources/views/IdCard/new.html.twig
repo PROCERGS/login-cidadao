@@ -11,9 +11,9 @@
                 <div class="row clearfix">
                     {{ form_errors(form) }}
                     <div class="col-md-12">
-						{% for child in form -%}
-        					{{ form_row(child) }}
-						{%- endfor %}
+                        {% for child in form %}
+                            {{ form_row(child) }}
+                        {% endfor %}
                     </div>
                 </div>
             </div>

@@ -562,20 +562,29 @@ var lcAcWidget = {
 };
 $(function() {
 
-    // add bootstrap classes to forms
-    $('.form-group input, .form-group select').not('.form-control').addClass('form-control');
-    $('.form-group .input-error').not(':empty').parent('.form-group').addClass('has-error has-feedback');
-    $('form .has-error .form-control').on('focusin', function() {
-        $(this).parent('.form-group').removeClass('has-error has-feedback');
-    });
-
     $('.file-upload .btn-upload').on('click', function() {
-        $(this).siblings('input[type="file"]').trigger('click');
+        $('input[type="file"]', '.file-upload').trigger('click');
     });
 
     $('.file-upload input[type="file"]').change(function() {
-        var val = $(this).val();
-        $(this).siblings('.file-name').html(val.match(/[^\\/]+$/)[0]);
+        var fileName = $(this).val().match(/[^\\/]+$/)[0];
+        $('.file-upload .activity-desc span.upload strong').html(fileName).parent().show();
+        $(this).siblings('.file-name').html(fileName);
+    });
+
+    $('.file-upload .buttons-toggle input[type=radio]').on('change', function() {
+        $('.file-upload .activity-desc>span').hide();
+        var file = $('input[type="file"]', '.file-upload');
+        if ($('.use-facebook').is(":checked")) {
+            file.wrap('<form>').parent('form').trigger('reset');
+            file.unwrap();
+            $('.file-upload .activity-desc span.facebook-pic').show();
+        } else {
+            if (file.val() !== "") {
+                var fileName = file.val().match(/[^\\/]+$/)[0];
+                $('.file-upload .activity-desc span.upload strong').html(fileName).parent().show();
+            }
+        }
     });
 
     // sidebar behavior on mobile

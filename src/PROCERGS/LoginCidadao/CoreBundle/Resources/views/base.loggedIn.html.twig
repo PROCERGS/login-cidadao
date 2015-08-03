@@ -1,5 +1,6 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle::base.html.twig' %}
 
+{% block content_columns %}col-sm-7 col-sm-offset-4{% endblock %}
 {% block body %}
 
     <div id="notification-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="{{ 'notification'|trans }}" aria-hidden="true">
@@ -106,7 +107,7 @@
             </div>
         {% endblock sidebar %}
 
-        <div class="col-sm-7 col-sm-offset-4 limit-960">
+        <div class="{{ block('content_columns') }} limit-960">
             {% for flashMessage in app.session.flashbag.get('success') %}
                 <div class="alert alert-success alert-bar">
                     {{ flashMessage }}
@@ -130,7 +131,7 @@
 {% endblock body %}
 
 {% block footer %}
-    {% set columns = 'col-sm-7 col-sm-offset-4' %}
+    {% set columns = 'col-sm-7 col-sm-offset-4 logged' %}
     {{ include("PROCERGSLoginCidadaoCoreBundle::footer.html.twig") }}
 {% endblock %}
 

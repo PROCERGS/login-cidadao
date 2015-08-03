@@ -33,18 +33,6 @@
                 }
             }
         };
-        var addressEdit = {};
-        addressEdit.addStateMessage = "{{ 'add.other.state'| trans }}";
-        addressEdit.addCityMessage = "{{ 'add.other.city'| trans }}";
-        addressEdit.loadMessage = "{{ 'field.loader'| trans }}";
-	    addressEdit.countryId = '#{{ form.country.vars.id }}';
-	    addressEdit.stateId = '#{{ form.state.vars.id }}';
-	    addressEdit.cityId = '#{{ form.city.vars.id }}';
-	    addressEdit.stateSteppeId = '#{{ form.statesteppe.vars.id }}';
-	    addressEdit.citySteppeId = '#{{ form.citysteppe.vars.id }}';
-	    addressEdit.urlSearchState = '{{ path('lc_search_city_by_state') }}';
-	    addressEdit.urlSearchCountry = '{{ path('lc_search_state_by_country') }}';
-	    addressEdit.preferredcountriesId = '#{{ form.preferredcountries.vars.id }}';        
-        
+
     </script>
 {% endblock %}

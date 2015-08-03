@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
 #    - { resource: memcached.yml }
+    - { resource: @LoginCidadaoTOSBundle/Resources/config/config.yml }
 
 framework:
     #esi:             ~
@@ -39,19 +40,20 @@ twig:
         background_picture_link: %background_picture.link%
         app_router: "@router"
         tre_search_link: "%tre_search_link%"
+        postalcode_search_link: "%postalcode_search_link%"
 
 # Assetic Configuration
 assetic:
     debug:          %kernel.debug%
     use_controller: false
-    bundles:        [ "PROCERGSLoginCidadaoCoreBundle", "PROCERGSLoginCidadaoNotificationBundle" ]
+    bundles:        [ "PROCERGSLoginCidadaoCoreBundle", "PROCERGSLoginCidadaoNotificationBundle", "LoginCidadaoTOSBundle" ]
     #java: /usr/bin/java
     assets:
       bootstrap_fonts_woff:
           inputs:
               - 'bundles/procergslogincidadaocore/bootstrap/3.3.1/fonts/glyphicons-halflings-regular.woff'
           output: fonts/glyphicons-halflings-regular.woff
-      bootstrap_fonts_ttf:            
+      bootstrap_fonts_ttf:
           inputs:
               - 'bundles/procergslogincidadaocore/bootstrap/3.3.1/fonts/glyphicons-halflings-regular.ttf'
           output: fonts/glyphicons-halflings-regular.ttf
@@ -248,7 +250,7 @@ parameters:
     user.class: PROCERGS\LoginCidadao\CoreBundle\Entity\Person
     buzz.client.class: Donato\Generic\HWIOAuthProxyBundle\Buzz\Client\CurlProxy
     hwi_oauth.resource_owner.twitter.class: PROCERGS\LoginCidadao\CoreBundle\OAuth\ResourceOwner\TwitterResourceOwner
-    lc_supported_scopes: 'id username first_name last_name full_name name cpf birthdate email city picture public_profile voter_registration badges country state city addresses id_cards get_all_notifications notifications cep mobile'
+    lc_supported_scopes: 'id username first_name last_name full_name name cpf birthdate email city picture public_profile voter_registration badges country state city addresses id_cards get_all_notifications notifications cep mobile logout'
     lc_idcard_country_acronym: BR
 
 ewz_recaptcha:
@@ -287,8 +289,7 @@ knp_gaufrette:
 vich_uploader:
     db_driver:  orm
     twig:       true
-    gaufrette:  true
-    storage:    vich_uploader.storage.gaufrette
+    storage:    gaufrette
     mappings:
         user_image:
             uri_prefix:         %uri_root%/uploads/profile-pictures

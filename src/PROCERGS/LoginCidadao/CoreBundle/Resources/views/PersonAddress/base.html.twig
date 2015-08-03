@@ -5,17 +5,23 @@
 {% block content %}
     <div class="content addresses">
         <h1 class="visible-xs">{{ 'Addresses' | trans }}</h1>
-        {% block addresses %}{% endblock %}
-    </div>
+    {% block addresses %}{% endblock %}
+</div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     {% javascripts  '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/typeahead.bundle.js'
                     '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/handlebars-v2.0.0.js'
-                    '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/person.address.js' %}
+                    '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/dynamic-form/locationSelect.js'
+    %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
+    <script>
+        $(document).ready(function () {
+            locationSelection.formUrl = '{{ path('dynamic_form_location') }}';
+        });
+    </script>
 {% endblock %}
 
 {% block stylesheets_custom %}

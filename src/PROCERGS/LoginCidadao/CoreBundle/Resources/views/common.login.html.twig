@@ -1,76 +1,52 @@
-    <div class="{{ common_row_class }}" style="{{ common_row_style is defined ? common_row_style : '' }}">
-    <div id="login-box" class="lc-box">
-        <h3 class="title text-center">{% trans %}Your login{% endtrans %}</h3>
+{% trans_default_domain 'FOSUserBundle' %}
+<h1 class="title">{{ 'form.login.call_to_action' | trans }}</h1>
+{{ form_start(form1, {'action' : path("fos_user_security_check"), 'attr' : {'role' : 'form'}}) }}
+<div class="form-content">
 
-        {% for type, messages in app.session.flashbag.all() %}
-        {% for message in messages %}
-        <div class="flash-{{ type }}">
-          {{ message }}
-        </div>
-        {% endfor %}
-        {% endfor %}
-
-        {% trans_default_domain 'FOSUserBundle' %}
-
-        {{ form_start(form1, {'action' : path("fos_user_security_check"), 'attr' : {'role' : 'form'}}) }}
-        <div class="form-content">
-          <p style="margin-top:30px;">
-            {% trans with { '%link_start%': '<a id="register-request" href="javascript:void(0);" class="register-link toggle-lc-box"><strong>', '%link_end%': '</strong></a>' } %}Log in now %link_start%or create your account here!%link_end%{% endtrans %}
-          </p>
-
-          <div class="form-group">
-            {% if error is defined and error is not null %}
+    {% if error is defined and error is not null %}
+        <div class="form-group">
             <div class="input-error alert-danger">
-              <ul>
-                <li>{{ error.messageKey|trans({}, 'security') }}</li>
-              </ul>
+                <ul>
+                    <li>{{ error.messageKey|trans({}, 'security') }}</li>
+                </ul>
             </div>
-            {% endif %}
-          </div>
+        </div>
+    {% endif %}
 
-          <div class="form-group">
-            {{ form_label(form1.username, null, {'label_attr' : {'class': 'sr-only'}}) }}
-            {{ form_errors(form1.username) }}
-            {{ form_widget(form1.username, {'attr' : {'placeholder' : 'security.login.username', 'onKeyUp' : 'validator.onKeyUpMultiformat(this, event)', 'class':'form-control', 'value' : last_username }}) }}
-          </div>
+    <div class="form-group">
+        {{ form_label(form1.username) }}
+        {{ form_errors(form1.username) }}
+        {{ form_widget(form1.username, {'attr' : {'placeholder' : 'security.login.username', 'tabindex': '1', 'onKeyUp' : 'validator.onKeyUpMultiformat(this, event)', 'class':'form-control', 'value' : last_username }}) }}
+    </div>
 
-          <div class="form-group">
-            {{ form_label(form1.password, null , {'label_attr' : {'class': 'sr-only'}}) }}
-            {{ form_errors(form1.password) }}
-            {{ form_widget(form1.password, {'attr' : {'placeholder' : 'security.login.password', 'class':'form-control'}}) }}
-          </div>
+    <div class="form-group">
+        <label for="{{ form1.password.vars.id }}" class="required" style="display: block">
+            {{ 'form.plainPassword' | trans }}
+            <a id="resetting_request" target="_blank" tabindex="6" class="pull-right" href="{{ path('fos_user_resetting_request') }}">{{ 'resseting.forgot_password' | trans }}</a>
+        </label>
+        {{ form_errors(form1.password) }}
+        {{ form_widget(form1.password, {'attr' : {'placeholder' : 'security.login.password', 'tabindex': '2', 'class':'form-control'}}) }}
+    </div>
 
-          {% if form1.recaptcha is defined %}
-          <div class="form-group captcha-container">
+    {% if form1.recaptcha is defined %}
+        <div class="form-group captcha-container">
             {{ include("PROCERGSLoginCidadaoCoreBundle::common.recaptcha.html.twig") }}
             {% form_theme form1 'EWZRecaptchaBundle:Form:ewz_recaptcha_widget.html.twig' %}
-            {{ form_widget(form1.recaptcha, { 'attr': {'options' : {'theme' : 'custom'}}}) }}
-          </div>
-          {% endif %}
-
-          <div class="form-group clearfix">
-            <div class="checkbox remember-group">
-              <label>
-                <input type="checkbox" id="remember_me" name="_remember_me" value="on" />{{ 'security.login.remember_me'|trans }}
-              </label>
-            </div>
-            <a id="resetting_request" target="_blank" class="pull-right" href="{{ path('fos_user_resetting_request') }}">{{ 'resseting.forgot_password' | trans }}</a>
-          </div>
-
-          <button type="submit" class="btn btn-success center-block">{{ 'security.login.submit'|trans }}</button>
+            {{ form_widget(form1.recaptcha, { 'attr': {'options' : {'theme' : 'custom'}, 'tabindex': '2' } }) }}
         </div>
+    {% endif %}
 
-        {{ form_end(form1) }}
-
-        <div class="connect-box">
-          <div><hr><span>{% trans %}or{% endtrans %}</span></div>
-          <p>{% trans %}Use accounts from other services{% endtrans %}</p>
-          <div class="row">
-            <div class="col-sm-12 col-md-4 text-center"><a class="connect facebook" data-href="{{ path("lc_link_facebook") }}">Facebook</a></div>
-            <div class="col-sm-12 col-md-4 text-center"><a class="connect twitter" href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}">Twitter</a></div>
-            <div class="col-sm-12 col-md-4 text-center"><a class="connect google" href="{{ path('hwi_oauth_service_redirect', {'service': 'google'}) }}">Google</a></div>
-            <div class="col-sm-12 col-md-4 text-center"><a class="connect nfg nfgpopup" data-href="{{ path('nfg_login') }}">NFG</a></div>
-          </div>
+    <div class="form-group">
+        <div class="checkbox remember-group">
+            <label>
+                <input type="checkbox" id="remember_me" name="_remember_me" value="on" tabindex="4" />{{ 'security.login.remember_me'|trans }}
+            </label>
         </div>
-      </div>
     </div>
+
+    <div class="text-right">
+        <button type="submit" class="btn btn-block btn-success" tabindex="5">{{ 'security.login.submit'|trans }}</button>
+    </div>
+</div>
+
+{{ form_end(form1) }}
