@@ -37,7 +37,7 @@ class PlaceholderFormType extends AbstractType
                       array(
             'required' => true,
             'class' => 'PROCERGSLoginCidadaoNotificationBundle:Category',
-            'property' => 'name',
+            'choice_label' => 'name',
             'query_builder' => function (EntityRepository $er) use(&$user) {
                 return $er->createQueryBuilder('u')
                         ->join('PROCERGSOAuthBundle:Client', 'c', 'with',

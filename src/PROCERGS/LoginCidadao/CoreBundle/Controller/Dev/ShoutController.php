@@ -125,7 +125,7 @@ class ShoutController extends Controller
      * @Route("/edit/{id}", name="lc_dev_shout_edit")
      * @Template()
      */
-    public function editAction($id)
+    public function editAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
         $client = $em->getRepository('PROCERGSOAuthBundle:Client')
@@ -135,7 +135,7 @@ class ShoutController extends Controller
         }
         $form = $this->createForm('procergs_logincidadao.client.base.form.type',
                                   $client);
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
         $messages = '';
         if ($form->isValid()) {
             $client->setAllowedGrantTypes(Client::getAllGrants());

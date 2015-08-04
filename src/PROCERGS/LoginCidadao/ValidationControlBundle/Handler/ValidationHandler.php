@@ -2,7 +2,7 @@
 
 namespace PROCERGS\LoginCidadao\ValidationControlBundle\Handler;
 
-use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PROCERGS\LoginCidadao\ValidationControlBundle\ValidationEvents;
 use PROCERGS\LoginCidadao\ValidationControlBundle\Event\InstantiateIdCardEvent;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
@@ -18,10 +18,10 @@ use Symfony\Component\Form\FormInterface;
 class ValidationHandler
 {
 
-    /** @var ContainerAwareEventDispatcher */
+    /** @var EventDispatcherInterface */
     private $dispatcher;
 
-    public function __construct(ContainerAwareEventDispatcher $dispatcher)
+    public function __construct(EventDispatcherInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;
     }

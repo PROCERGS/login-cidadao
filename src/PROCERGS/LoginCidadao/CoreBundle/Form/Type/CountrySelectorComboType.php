@@ -4,7 +4,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Country;
 
@@ -21,11 +21,11 @@ class CountrySelectorComboType extends AbstractType
         
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'class' => 'PROCERGSLoginCidadaoCoreBundle:Country',
-            'property' => 'name',
+            'choice_label' => 'name',
             'empty_value' => '',
             'query_builder' => $this->getFilterFunction(),
             'label' => 'Place of birth - Country',

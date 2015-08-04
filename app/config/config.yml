@@ -6,7 +6,9 @@ imports:
 
 framework:
     #esi:             ~
-    translator:      { fallback: %locale% }
+    translator:
+        enabled: true
+        fallback: %locale%
     secret:          %secret%
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -32,7 +34,7 @@ twig:
         resources:
             - 'PROCERGSLoginCidadaoCoreBundle:Form:fields.html.twig'
     globals:
-        fos_csrf_provider: "@form.csrf_provider"
+        fos_csrf_provider: "@security.csrf.token_manager"
         notifications_helper: "@notifications.helper"
         background_helper: "@background.helper"
         facebook_app_id: "%facebook_app_id%"

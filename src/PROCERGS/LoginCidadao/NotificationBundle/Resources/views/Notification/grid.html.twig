@@ -11,22 +11,22 @@
 {% endblock grid_row_action %}
 
 {% block grid_row_data %}
-<div class="pull-left">
-  {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
-  {% if row.sender.pictureWebPath != '' %}
-      {% set asset_url = '/' ~ row.sender.pictureWebPath  %}
-  {% endif %}
-  <img alt="{{ row.sender.name }}" class="media-object" src="{{ asset_url }}" width="50" height="50" />
-  {% endimage %}
-</div>
-<div class="media-body">
-  <h5 class="media-heading">{{ row.title }}</h5>
-  <div class="client-name">{{ row.sender.name }}</div>
-  <div class="date">{{ 'notification.receivedAt'|trans }} {{ row.createdat|date('d/m/Y H:i:s') }}</div>
-  {% if row.readDate is not null  %}
-  <div class="date">{{ 'notification.readAt'|trans }} {{ row.readDate|date('d/m/Y H:i:s') }}</div>
-  {% endif %}
-</div>
+    <div class="pull-left">
+        {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+        {% if row.sender.pictureWebPath != '' %}
+            {% set asset_url = '/' ~ row.sender.pictureWebPath  %}
+        {% endif %}
+        <img alt="{{ row.sender.name }}" class="media-object" src="{{ asset_url }}" width="50" height="50" />
+        {% endimage %}
+    </div>
+    <div class="media-body">
+        <h5 class="media-heading">{{ row.title }}</h5>
+        <div class="client-name">{{ row.sender.name }}</div>
+        <div class="date">{{ 'notification.receivedAt'|trans }} {{ row.createdat|date('d/m/Y H:i:s') }}</div>
+        {% if row.readDate is not null  %}
+            <div class="date">{{ 'notification.readAt'|trans }} {{ row.readDate|date('d/m/Y H:i:s') }}</div>
+        {% endif %}
+    </div>
 {% endblock grid_row_data %}
 
 
@@ -39,15 +39,15 @@
     {% endif %}
     <div class="notification-line {{ openId is defined and row.id == openId ? 'notification-open' : '' }} menu-item">
         <a class="row media notification common-grid-result {{ row.isread  ? 'notification-read' : 'notification-unread' }} {{ grid.rlast ? 'row-last' }}"
-             title="{{ 'Click to read'|trans }}"
-             data-notification-id="{{ row.id }}"
-             href="{{ url }}">
+           title="{{ 'Click to read'|trans }}"
+           data-notification-id="{{ row.id }}"
+           href="{{ url }}">
             {{ block('grid_row_action') }}
             {{ block('grid_row_data') }}
         </a>
         <div class="row notification-content common-grid-result" data-loaded="{{ row.isRead ? 'true' : 'false' }}">
             {% if row.isRead %}
-            {{ row.renderHtml() | raw }}
+                {{ row.renderHtml() | raw }}
             {% endif %}
         </div>
     </div>
@@ -57,7 +57,7 @@
     {% if not grid.rlast and grid.isInfiniteGrid %}
         {% set routeParams = { 'offset': grid.iterable.nextOffset } %}
         {% if grid.routeParams.clientId is defined %}
-        {% set routeParams = { 'offset': grid.iterable.nextOffset, 'clientId': grid.routeParams.clientId } %}
+            {% set routeParams = { 'offset': grid.iterable.nextOffset, 'clientId': grid.routeParams.clientId } %}
         {% endif %}
         <a href="{{ path(grid.route, routeParams) }}" class="btn btn-block btn-info btn-more notification-load-more" data-next-offset="{{ grid.iterable.nextOffset }}"
            data-per-page="{{ grid.perPage }}" data-loading-text="{{ 'loading...'|trans }}">

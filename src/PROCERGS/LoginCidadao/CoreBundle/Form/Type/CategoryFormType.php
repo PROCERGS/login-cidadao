@@ -3,7 +3,6 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -57,7 +56,7 @@ class CategoryFormType extends CommonFormType
                     'required' => true,
                     'label' => 'Service',
                     'class' => 'PROCERGSOAuthBundle:Client',
-                    'property' => 'name',
+                    'choice_label' => 'name',
                     'query_builder' => function (EntityRepository $er) use($person) {
                         return $er->createQueryBuilder('c')
                                 ->where(':person MEMBER OF c.owners')

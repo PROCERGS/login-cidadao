@@ -23,13 +23,13 @@ class ClientController extends Controller
      * @Route("/new", name="lc_dev_client_new")
      * @Template()
      */
-    public function newAction()
+    public function newAction(Request $request)
     {
         $client = new Client();
         $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.base.form.type'),
                                                                                     $client);
 
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
         $messages = '';
         if ($form->isValid()) {
             $clientManager = $this->container->get('fos_oauth_server.client_manager');
@@ -135,7 +135,7 @@ class ClientController extends Controller
      * @Route("/edit/{id}", name="lc_dev_client_edit")
      * @Template()
      */
-    public function editAction($id)
+    public function editAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
         $client = $em->getRepository('PROCERGSOAuthBundle:Client')->createQueryBuilder('c')
@@ -149,7 +149,7 @@ class ClientController extends Controller
         $form = $this->get('form.factory')->
             create($this->get('procergs_logincidadao.client.base.form.type'),
                               $client);
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
         $messages = '';
         if ($form->isValid()) {
             $client->setAllowedGrantTypes(Client::getAllGrants());

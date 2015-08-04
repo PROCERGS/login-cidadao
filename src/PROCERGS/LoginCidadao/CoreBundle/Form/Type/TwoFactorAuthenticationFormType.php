@@ -4,8 +4,9 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class TwoFactorAuthenticationFormType extends AbstractType
 {
@@ -13,9 +14,8 @@ class TwoFactorAuthenticationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            //->add('googleAuthenticatorSecret', 'hidden')
             ->add('googleAuthenticatorSecret', 'text',
-                array(
+                  array(
                 'read_only' => true,
                 'label' => "Authenticator Secret"
             ))
@@ -39,13 +39,13 @@ class TwoFactorAuthenticationFormType extends AbstractType
         }
         $builder
             ->add('enable', 'submit',
-                array(
+                  array(
                 'attr' => array('class' => 'btn btn-success'),
                 'label' => 'Activate Two-Factor Authentication')
         );
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'PROCERGS\LoginCidadao\CoreBundle\Entity\Person'
@@ -56,4 +56,5 @@ class TwoFactorAuthenticationFormType extends AbstractType
     {
         return 'lc_2fa';
     }
+
 }

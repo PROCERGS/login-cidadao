@@ -4,12 +4,7 @@ namespace PROCERGS\LoginCidadao\NotificationBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use PROCERGS\LoginCidadao\NotificationBundle\Entity\CategoryRepository;
-use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository;
-use PROCERGS\LoginCidadao\NotificationBundle\Entity\PlaceholderRepository;
-use PROCERGS\LoginCidadao\NotificationBundle\Entity\Category;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class BroadcastSettingsType extends AbstractType
 {
@@ -45,9 +40,9 @@ class BroadcastSettingsType extends AbstractType
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'PROCERGS\LoginCidadao\NotificationBundle\Model\BroadcastSettings'
