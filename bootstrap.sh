@@ -3,9 +3,9 @@
 yum -y install deltarpm
 yum -y update
 yum -y install policycoreutils-python
-yum -y install gcc httpd postgresql-server epel-release memcached
+yum -y install gcc nginx postgresql-server epel-release memcached
 yum -y install nodejs
-yum -y install --disablerepo=epel --skip-broken php*
+yum -y install --disablerepo=epel --skip-broken php* php-xcache
 yum -y install git
 yum -y install samba samba-client samba-common
 
@@ -18,14 +18,15 @@ firewall-cmd --zone=public --add-port=80/tcp --permanent
 
 # php-fpm setup
 systemctl enable php-fpm.service
+cp /vagrant/provisioning/php.ini /etc/php.ini
+cp /vagrant/provisioning/xcache.ini /etc/php.d/xcache.ini
 systemctl restart php-fpm.service
 
-# httpd setup
-systemctl enable httpd.service
-rm /etc/httpd/conf.d/welcome.conf
-cp /vagrant/provisioning/httpd.vhost.conf /etc/httpd/conf.d/login-cidadao.conf
-cp /vagrant/provisioning/php.ini /etc/php.ini
-systemctl restart httpd.service
+# nginx setup
+systemctl enable nginx.service
+cp /vagrant/provisioning/login_cidadao.conf /etc/nginx/conf.d/login_cidadao.conf
+cp /vagrant/provisioning/nginx.conf /etc/nginx/nginx.conf
+systemctl restart nginx.service
 
 # PostgreSQL setup
 postgresql-setup initdb

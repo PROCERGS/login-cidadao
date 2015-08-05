@@ -1,0 +1,86 @@
+;; this is an example, it won't work unless properly configured into php.ini
+[xcache-common]
+;; non-Windows example:
+extension = xcache.so
+;; Windows example:
+; extension = php_xcache.dll
+
+[xcache.admin]
+xcache.admin.enable_auth = On
+
+; use http://xcache.lighttpd.net/demo/cacher/mkpassword.php to generate your encrypted password
+xcache.admin.user = "mOo"
+xcache.admin.pass = "md5 encrypted password"
+
+[xcache]
+; ini only settings, all the values here is default unless explained
+
+; select low level shm implemenation
+xcache.shm_scheme =        "mmap"
+; to disable: xcache.size=0
+; to enable : xcache.size=64M etc (any size > 0) and your system mmap allows
+xcache.size  =               60M
+; set to cpu count (cat /proc/cpuinfo |grep -c processor)
+xcache.count =                 1
+; just a hash hints, you can always store count(items) > slots
+xcache.slots =                8K
+; ttl of the cache item, 0=forever
+xcache.ttl   =                 0
+; interval of gc scanning expired items, 0=no scan, other values is in seconds
+xcache.gc_interval =           0
+
+; same as aboves but for variable cache
+xcache.var_size  =            4M
+xcache.var_count =             1
+xcache.var_slots =            8K
+; default value for $ttl parameter of xcache_*() functions
+xcache.var_ttl   =             0
+; hard limit ttl that cannot be exceed by xcache_*() functions. 0=unlimited
+xcache.var_maxttl   =          0
+xcache.var_gc_interval =     300
+
+; mode:0, const string specified by xcache.var_namespace
+; mode:1, $_SERVER[xcache.var_namespace]
+; mode:2, uid or gid (specified by xcache.var_namespace)
+xcache.var_namespace_mode =    0
+xcache.var_namespace =        ""
+
+; N/A for /dev/zero
+xcache.readonly_protection = Off
+; for *nix, xcache.mmap_path is a file path, not directory. (auto create/overwrite)
+; Use something like "/tmp/xcache" instead of "/dev/*" if you want to turn on ReadonlyProtection
+; different process group of php won't share the same /tmp/xcache
+; for win32, xcache.mmap_path=anonymous map name, not file path
+xcache.mmap_path =    "/dev/zero"
+
+
+; Useful when XCache crash. leave it blank(disabled) or "/tmp/phpcore/" (writable by php)
+xcache.coredump_directory =   ""
+; Windows only. leave it as 0 (default) until you're told by XCache dev
+xcache.coredump_type =         0
+
+; disable cache after crash
+xcache.disable_on_crash =    Off
+
+; enable experimental documented features for each release if available
+xcache.experimental =        Off
+
+; per request settings. can ini_set, .htaccess etc
+; WARNING set xcache.cacher=On only when no other cache installed
+; Will create conflicts with php-opcache or php-pecl-zendopcache
+xcache.cacher =              Off
+xcache.stat   =               On
+xcache.optimizer =           Off
+
+[xcache.coverager]
+; enabling this feature will impact performance
+; enabled only if xcache.coverager == On && xcache.coveragedump_directory == "non-empty-value"
+
+; per request settings. can ini_set, .htaccess etc
+; enable coverage data collecting and xcache_coverager_start/stop/get/clean() functions
+xcache.coverager =           Off
+xcache.coverager_autostart =  On
+
+; set in php ini file only
+; make sure it's readable (open_basedir is checked) by coverage viewer script
+xcache.coveragedump_directory = ""
