@@ -267,20 +267,7 @@ knp_gaufrette:
     adapters:
         user_local_adapter:
             local:
-                directory: %kernel.root_dir%/../web/uploads/profile-pictures
-#        user_ftp_adapter:
-#            ftp:
-#                host: corona.procergs.com.br
-#                username: %user_profile_ftp_username%
-#                password: %user_profile_ftp_password%
-#                directory: %user_profile_ftp_directory%
-#                create: false
-#                mode: FTP_BINARY
-#        user_cache_adapter:
-#            cache:
-#                source: user_ftp_adapter
-#                cache: user_local_adapter
-#                ttl: 1800
+                directory: %user_profile_upload_dir%
 
     filesystems:
         user_image_fs:

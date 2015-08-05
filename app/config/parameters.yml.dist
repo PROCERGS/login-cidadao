@@ -51,10 +51,7 @@ parameters:
     background_picture.link: 'http://www.flickr.com/photos/lordjedi/2295119043/'
     mailer_receiver_mail: ~
 
-    user_profile_ftp_host: ftp.host
-    user_profile_ftp_username: ftp_username
-    user_profile_ftp_password: ftp_password
-    user_profile_ftp_directory: /ftp/path/to/web/uploads/profile-pictures
+    user_profile_upload_dir: %kernel.root_dir%/../web/uploads/profile-pictures
     tre_search_link: 'http://www.tse.jus.br/eleitor/servicos/titulo-e-local-de-votacao/consulta-por-nome'
     uri_root: /
 
