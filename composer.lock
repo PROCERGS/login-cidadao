@@ -1181,7 +1181,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/3efbc08a97f218d0a4524dee926fc4381e3d0947",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/336d9cd8ba0c5a462b3e70be144a7bef5377b219",
                 "reference": "3efbc08a97f218d0a4524dee926fc4381e3d0947",
                 "shasum": ""
             },
@@ -1293,7 +1293,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/7a1e41685642d8866509cdca8af9077a3c5f0b10",
+                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/2b934a2029905f22e8fd7478c9e463e8fea0af13",
                 "reference": "7a1e41685642d8866509cdca8af9077a3c5f0b10",
                 "shasum": ""
             },
@@ -2349,7 +2349,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/0699c45dcc02f98626431996e288deb93f34a6ab",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/874c8752e6114fd2d384d93d48e859a680f2ae9d",
                 "reference": "0699c45dcc02f98626431996e288deb93f34a6ab",
                 "shasum": ""
             },
@@ -2608,23 +2608,23 @@
         },
         {
             "name": "procergs/tos-bundle",
-            "version": "1.0.9",
+            "version": "1.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/tos-bundle.git",
-                "reference": "2dd9cd6a5440e52aadff9b7bdfb670a9fdc2a9e9"
+                "reference": "d07133bc1d0634722d253175272d17a524e94663"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/2dd9cd6a5440e52aadff9b7bdfb670a9fdc2a9e9",
-                "reference": "2dd9cd6a5440e52aadff9b7bdfb670a9fdc2a9e9",
+                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/d07133bc1d0634722d253175272d17a524e94663",
+                "reference": "d07133bc1d0634722d253175272d17a524e94663",
                 "shasum": ""
             },
             "require": {
                 "cebe/markdown": "^1.1",
                 "doctrine/doctrine-bundle": ">=1.2",
                 "doctrine/orm": ">=2.2.3,<2.4-dev",
-                "friendsofsymfony/user-bundle": "~2.0@dev",
+                "friendsofsymfony/user-bundle": ">=1.3",
                 "php": ">=5.3.3",
                 "symfony/symfony": ">=2.3.0"
             },
@@ -2645,7 +2645,7 @@
                 }
             ],
             "description": "Terms of Service Bundle",
-            "time": "2015-07-23 23:51:40"
+            "time": "2015-08-14 13:45:22"
         },
         {
             "name": "psr/log",
@@ -2695,7 +2695,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scheb/two-factor-bundle/zipball/6576925e5f2e15bc0f1dc6f42760ace322d568d9",
+                "url": "https://api.github.com/repos/scheb/two-factor-bundle/zipball/0d5ff8dfb8833a1ee2af10e02c6f26f82cd00676",
                 "reference": "6576925e5f2e15bc0f1dc6f42760ace322d568d9",
                 "shasum": ""
             },
