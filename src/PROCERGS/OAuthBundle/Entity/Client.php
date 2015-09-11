@@ -27,7 +27,6 @@ use PROCERGS\OAuthBundle\Model\ClientInterface;
  */
 class Client extends BaseClient implements UniqueEntityInterface, ClientInterface
 {
-
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -140,8 +139,8 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     public function __construct()
     {
         parent::__construct();
-        $this->authorizations = new ArrayCollection();
-        $this->owners = new ArrayCollection();
+        $this->authorizations       = new ArrayCollection();
+        $this->owners               = new ArrayCollection();
         $this->maxNotificationLevel = Notification::LEVEL_NORMAL;
     }
 
@@ -235,7 +234,13 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
 
     public function getAllowedScopes()
     {
-        return $this->allowedScopes;
+        $scopes = $this->allowedScopes;
+
+        if (!is_array($scopes)) {
+            $scopes = array('public_profile');
+        }
+
+        return $scopes;
     }
 
     public function setAllowedScopes(array $allowedScopes)
@@ -247,7 +252,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
 
     public function getAbsolutePicturePath()
     {
-        return null === $this->picturePath ? null : $this->getPictureUploadRootDir() . DIRECTORY_SEPARATOR . $this->picturePath;
+        return null === $this->picturePath ? null : $this->getPictureUploadRootDir().DIRECTORY_SEPARATOR.$this->picturePath;
     }
 
     public function getPictureWebPath()
@@ -257,17 +262,17 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
 
     protected function getPictureUploadRootDir()
     {
-        return __DIR__ . '/../../../../web/' . self::getPictureUploadDir();
+        return __DIR__.'/../../../../web/'.self::getPictureUploadDir();
     }
 
     protected static function getPictureUploadDir()
     {
         return 'uploads/client-pictures';
     }
-    
+
     public static function resolvePictureWebPath($var)
     {
-        return null === $var ? null : self::getPictureUploadDir() . '/' . $var;
+        return null === $var ? null : self::getPictureUploadDir().'/'.$var;
     }
 
     public function setPictureFile(File $pictureFile = null)
@@ -275,7 +280,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         $this->pictureFile = $pictureFile;
         if (isset($this->picturePath)) {
             $this->tempPicturePath = $this->picturePath;
-            $this->picturePath = null;
+            $this->picturePath     = null;
         } else {
             $this->picturePath = null;
         }
@@ -305,7 +310,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         );
 
         if (isset($this->tempPicturePath) && $this->tempPicturePath != $this->picturePath) {
-            @unlink($this->getPictureUploadRootDir() . DIRECTORY_SEPARATOR . $this->tempPicturePath);
+            @unlink($this->getPictureUploadRootDir().DIRECTORY_SEPARATOR.$this->tempPicturePath);
             $this->tempPicturePath = null;
         }
 
@@ -319,8 +324,8 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     public function preUpload()
     {
         if (null !== $this->getPictureFile()) {
-            $filename = sha1($this->getId());
-            $this->picturePath = "$filename." . $this->getPictureFile()->guessExtension();
+            $filename          = sha1($this->getId());
+            $this->picturePath = "$filename.".$this->getPictureFile()->guessExtension();
         }
     }
 
@@ -379,9 +384,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         $this->owners = $owners;
         return $this;
     }
-
     /* Unique Interface Stuff */
-
     /**
      * @ORM\Column(type="string", nullable=true, unique=true)
      * @var string
@@ -409,4 +412,19 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         return $this;
     }
 
+    /**
+     * Compatibility with OIDC code
+     */
+    public function getClientId()
+    {
+        return $this->getPublicId();
+    }
+
+    /**
+     * Compatibility with OIDC code
+     */
+    public function getClientSecret()
+    {
+        return $this->getSecret();
+    }
 }

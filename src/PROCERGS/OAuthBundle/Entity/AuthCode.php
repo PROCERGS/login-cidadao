@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AuthCode extends BaseAuthCode
 {
-
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -31,4 +30,19 @@ class AuthCode extends BaseAuthCode
      */
     protected $user;
 
+    /**
+     * @ORM\Column(name="id_token", type="string", length=255, nullable=true)
+     */
+    protected $idToken;
+
+    public function getIdToken()
+    {
+        return $this->idToken;
+    }
+
+    public function setIdToken($idToken)
+    {
+        $this->idToken = $idToken;
+        return $this;
+    }
 }
