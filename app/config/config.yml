@@ -255,6 +255,8 @@ parameters:
     lc_supported_scopes: 'id username first_name last_name full_name name cpf birthdate email city picture public_profile voter_registration badges country state city addresses id_cards get_all_notifications notifications cep mobile logout'
     lc_idcard_country_acronym: BR
 
+    oauth2.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\OIDC\UserProvider
+
 ewz_recaptcha:
     public_key:   %recaptcha_public_key%
     private_key:  %recaptcha_private_key%

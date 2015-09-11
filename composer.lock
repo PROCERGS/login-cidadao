@@ -4,8 +4,151 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ac1b770e5cafe3391174df6c7256c239",
+    "hash": "85afe0f7d096ec30df5b123017457bf6",
     "packages": [
+        {
+            "name": "bshaffer/oauth2-server-bundle",
+            "version": "dev-develop",
+            "target-dir": "OAuth2/ServerBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bshaffer/oauth2-server-bundle.git",
+                "reference": "ba58464b412967dee027c58018cfb940d51588a5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bshaffer/oauth2-server-bundle/zipball/ba58464b412967dee027c58018cfb940d51588a5",
+                "reference": "ba58464b412967dee027c58018cfb940d51588a5",
+                "shasum": ""
+            },
+            "require": {
+                "bshaffer/oauth2-server-httpfoundation-bridge": ">=1.0",
+                "bshaffer/oauth2-server-php": ">=1.0",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "doctrine/orm": "2.4.*",
+                "symfony/symfony": "2.5.*"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "OAuth2\\ServerBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brent Shaffer",
+                    "email": "bshafs@gmail.com"
+                }
+            ],
+            "description": "Symfony OAuth2ServerBundle",
+            "homepage": "http://github.com/bshaffer/oauth2-server-bundle",
+            "keywords": [
+                "oauth",
+                "oauth2",
+                "security"
+            ],
+            "time": "2015-07-24 21:52:56"
+        },
+        {
+            "name": "bshaffer/oauth2-server-httpfoundation-bridge",
+            "version": "v1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bshaffer/oauth2-server-httpfoundation-bridge.git",
+                "reference": "d9c4b6e30443a688df810db641d8433150bf71af"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bshaffer/oauth2-server-httpfoundation-bridge/zipball/d9c4b6e30443a688df810db641d8433150bf71af",
+                "reference": "d9c4b6e30443a688df810db641d8433150bf71af",
+                "shasum": ""
+            },
+            "require": {
+                "bshaffer/oauth2-server-php": ">=0.9",
+                "php": ">=5.3.0",
+                "symfony/http-foundation": ">=2.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "OAuth2\\HttpFoundationBridge": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brent Shaffer",
+                    "email": "bshafs@gmail.com",
+                    "homepage": "http://brentertainment.com"
+                }
+            ],
+            "description": "A bridge to HttpFoundation for oauth2-server-php",
+            "homepage": "http://github.com/bshaffer/oauth2-server-httpfoundation-bridge",
+            "keywords": [
+                "auth",
+                "httpfoundation",
+                "oauth",
+                "oauth2"
+            ],
+            "time": "2014-08-27 15:40:29"
+        },
+        {
+            "name": "bshaffer/oauth2-server-php",
+            "version": "v1.7.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bshaffer/oauth2-server-php.git",
+                "reference": "7fde34c417e0f6542dfbe6aedf8132eb5575acfb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bshaffer/oauth2-server-php/zipball/7fde34c417e0f6542dfbe6aedf8132eb5575acfb",
+                "reference": "7fde34c417e0f6542dfbe6aedf8132eb5575acfb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "suggest": {
+                "aws/aws-sdk-php": "Required to use the DynamoDB storage engine",
+                "predis/predis": "Required to use the Redis storage engine",
+                "thobbs/phpcassa": "Required to use the Cassandra storage engine"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "OAuth2": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brent Shaffer",
+                    "email": "bshafs@gmail.com",
+                    "homepage": "http://brentertainment.com"
+                }
+            ],
+            "description": "OAuth2 Server for PHP",
+            "homepage": "http://github.com/bshaffer/oauth2-server-php",
+            "keywords": [
+                "auth",
+                "oauth",
+                "oauth2"
+            ],
+            "time": "2015-05-21 20:07:03"
+        },
         {
             "name": "cebe/markdown",
             "version": "1.1.0",
@@ -1181,7 +1324,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/336d9cd8ba0c5a462b3e70be144a7bef5377b219",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/6b7bb04c6d507bb5356bf70b2d1bc30ce64ffc60",
                 "reference": "3efbc08a97f218d0a4524dee926fc4381e3d0947",
                 "shasum": ""
             },
@@ -1293,7 +1436,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/2b934a2029905f22e8fd7478c9e463e8fea0af13",
+                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/e5995827e95cb6401f050010469f4c4f2e11bd93",
                 "reference": "7a1e41685642d8866509cdca8af9077a3c5f0b10",
                 "shasum": ""
             },
@@ -2041,7 +2184,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpGaufretteBundle/zipball/b928e9776784bbc604eb3a1080b9c85c74404877",
+                "url": "https://api.github.com/repos/KnpLabs/KnpGaufretteBundle/zipball/b6dbd93d1263f3f57d9c0b5e3b5935b281fcbd9c",
                 "reference": "b928e9776784bbc604eb3a1080b9c85c74404877",
                 "shasum": ""
             },
@@ -2695,7 +2838,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scheb/two-factor-bundle/zipball/0d5ff8dfb8833a1ee2af10e02c6f26f82cd00676",
+                "url": "https://api.github.com/repos/scheb/two-factor-bundle/zipball/ef6830dbbf62b22efd335db8f64bf0f51d4284a2",
                 "reference": "6576925e5f2e15bc0f1dc6f42760ace322d568d9",
                 "shasum": ""
             },
@@ -3677,7 +3820,8 @@
         "jms/security-extra-bundle": 20,
         "procergs/login-cidadao-badges-bundle": 20,
         "procergs/login-cidadao-igp-bundle": 20,
-        "scheb/two-factor-bundle": 20
+        "scheb/two-factor-bundle": 20,
+        "bshaffer/oauth2-server-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

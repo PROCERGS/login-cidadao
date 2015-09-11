@@ -1,0 +1,17 @@
+parameters:
+    oauth2.storage.authorization_code.class: LoginCidadao\OpenIDBundle\Storage\AuthorizationCode
+    oauth2.storage.client_credentials.class: LoginCidadao\OpenIDBundle\Storage\ClientCredentials
+    oauth2.storage.refresh_token.class: LoginCidadao\OpenIDBundle\Storage\RefreshToken
+    oauth2.storage.access_token.class: LoginCidadao\OpenIDBundle\Storage\AccessToken
+
+    oauth2.storage.user_claims.class: LoginCidadao\OpenIDBundle\Storage\UserClaims
+    oauth2.storage.public_key.class: LoginCidadao\OpenIDBundle\Storage\PublicKey
+
+services:
+    oauth2.storage.user_claims:
+        class: %oauth2.storage.user_claims.class%
+        arguments: [ @doctrine.orm.entity_manager ]
+
+    oauth2.storage.public_key:
+        class: %oauth2.storage.public_key.class%
+        arguments: [ @doctrine.orm.entity_manager ]

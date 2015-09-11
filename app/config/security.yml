@@ -23,10 +23,12 @@ security:
             id: procergs_logincidadao.user_provider
         fos_facebook_provider:
             id: fos_facebook.user.login
+        oauth2:
+            id: oauth2.user_provider
 
     firewalls:
         oauth_token:
-            pattern:  ^/oauth/v2/token
+            pattern:  ^/(oauth/v2/)?token
             security: false
 
         dev:
@@ -125,6 +127,7 @@ security:
         - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }
 
         - { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/.well-known, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/nfg, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 

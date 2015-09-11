@@ -1,3 +1,14 @@
+# OpenID Connect
+oauth2_server:
+    resource: "@OAuth2ServerBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+lc_oidc:
+    resource: "@LoginCidadaoOpenIDBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 # Terms of Service
 tos:
     resource: "@LoginCidadaoTOSBundle/Controller/"
