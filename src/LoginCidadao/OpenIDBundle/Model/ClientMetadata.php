@@ -14,19 +14,37 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class ClientMetadata
 {
-    /** @Assert\NotBlank() */
+    /**
+     * @Assert\NotBlank()
+     * @Assert\All({
+     *      @Assert\NotBlank,
+     *      @Assert\Url
+     * })
+     */
     protected $redirect_uris;
-    protected $response_types;
-    protected $grant_types;
-    protected $application_type;
+    protected $response_types   = array('code');
+    protected $grant_types      = array('authorization_code');
+    protected $application_type = 'web';
     protected $contacts;
     protected $client_name;
+
+    /** @Assert\Url */
     protected $logo_uri;
+
+    /** @Assert\Url */
     protected $client_uri;
+
+    /** @Assert\Url */
     protected $policy_uri;
+
+    /** @Assert\Url */
     protected $tos_uri;
+
+    /** @Assert\Url */
     protected $jwks_uri;
     protected $jwks;
+
+    /** @Assert\Url */
     protected $sector_identifier_uri;
     protected $subject_type;
     protected $id_token_signed_response_alg;
@@ -41,10 +59,26 @@ class ClientMetadata
     protected $token_endpoint_auth_method;
     protected $token_endpoint_auth_signing_alg;
     protected $default_max_age;
-    protected $require_auth_time;
+    protected $require_auth_time = false;
     protected $default_acr_values;
+
+    /** @Assert\Url */
     protected $initiate_login_uri;
+
+    /**
+     * @Assert\All({
+     *      @Assert\Url
+     * })
+     */
     protected $request_uris;
+
+    public function __construct()
+    {
+        $this->response_types    = array('code');
+        $this->grant_types       = array('authorization_code');
+        $this->application_type  = 'web';
+        $this->require_auth_time = false;
+    }
 
     public function getRedirectUris()
     {

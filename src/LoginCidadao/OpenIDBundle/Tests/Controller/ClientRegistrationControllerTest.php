@@ -23,6 +23,42 @@ class ClientRegistrationControllerTest extends WebTestCase
         $this->assertJsonResponse($client->getResponse(), 201, false);
     }
 
+    public function testRegisterInvalidRedirectUri()
+    {
+        $client = static::createClient();
+
+        $data = array(
+            'redirect_uris' => array('this.is.an.invalid.test')
+        );
+
+        $client->request(
+            'POST', '/openid/connect/register', array(), array(),
+            array('CONTENT_TYPE' => 'application/json'), json_encode($data)
+        );
+
+        $this->assertJsonResponse($client->getResponse(), 400, false);
+        $response = json_decode($client->getResponse()->getContent());
+        $this->assertEquals('invalid_redirect_uri', $response->error);
+    }
+
+    public function testRegisterInvalidMetadata()
+    {
+        $client = static::createClient();
+
+        $data = array(
+            'logo_uri' => array('this.is.an.invalid.uri')
+        );
+
+        $client->request(
+            'POST', '/openid/connect/register', array(), array(),
+            array('CONTENT_TYPE' => 'application/json'), json_encode($data)
+        );
+
+        $this->assertJsonResponse($client->getResponse(), 400, false);
+        $response = json_decode($client->getResponse()->getContent());
+        $this->assertEquals('invalid_client_metadata', $response->error);
+    }
+
     protected function assertJsonResponse($response, $statusCode = 200,
                                           $checkValidJson = true,
                                           $contentType = 'application/json')

@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use FOS\RestBundle\Controller\Annotations as REST;
 use LoginCidadao\OpenIDBundle\Form\ClientMetadataForm;
 use LoginCidadao\OpenIDBundle\Model\ClientMetadata;
+use LoginCidadao\OpenIDBundle\Exception\DynamicRegistrationException;
 
 /**
  * @REST\Route("/openid/connect")
@@ -35,15 +36,29 @@ class ClientRegistrationController extends FOSRestController
         if ($form->isValid()) {
             return $this->view($form->getData(), 201);
         } else {
-            $errors = $form->getErrors();
-            var_dump($errors->count());
-            var_dump($form);
-            die();
+            $error = $this->handleFormErrors($form->getErrors(true));
+            return $this->view($error->getData(), 400);
         }
+    }
 
-        return new JsonResponse(array(
-            'error' => 'invalid_client_metadata',
-            'error_description' => 'Missing client metadata.'
-        ));
+    /**
+     * @param \Symfony\Component\Form\FormError[] $errors
+     * @return DynamicRegistrationException
+     */
+    private function handleFormErrors($errors)
+    {
+        foreach ($errors as $error) {
+            $cause    = $error->getCause();
+            $value    = $cause->getInvalidValue();
+            $property = str_replace('data.', '', $cause->getPropertyPath());
+
+            if (strpos($property, 'redirect_uris') !== false) {
+                return new DynamicRegistrationException('Invalid redirect uri: '.$value,
+                    DynamicRegistrationException::ERROR_INVALID_REDIRECT_URI);
+            } else {
+                return new DynamicRegistrationException("Invalid value for '{$property}': {$value}",
+                    DynamicRegistrationException::ERROR_INVALID_CLIENT_METADATA);
+            }
+        }
     }
 }
