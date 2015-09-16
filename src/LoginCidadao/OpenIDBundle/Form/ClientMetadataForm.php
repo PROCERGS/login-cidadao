@@ -19,19 +19,22 @@ class ClientMetadataForm extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('redirect_uris')
+        $builder
+            ->add('client_id')
+            ->add('client_secret')
+            ->add('redirect_uris')
             ->add('response_types')
             ->add('grant_types')
             ->add('application_type')
             ->add('contacts')
             ->add('client_name')
-            ->add('logo_uri')
-            ->add('client_uri')
-            ->add('policy_uri')
-            ->add('tos_uri')
+            ->add('logo_uri', 'text')
+            ->add('client_uri', 'text')
+            ->add('policy_uri', 'text')
+            ->add('tos_uri', 'text')
             ->add('jwks_uri')
             ->add('jwks')
-            ->add('sector_identifier_uri')
+            ->add('sector_identifier_uri', 'text')
             ->add('subject_type')
             ->add('id_token_signed_response_alg')
             ->add('id_token_encrypted_response_alg')
@@ -47,7 +50,7 @@ class ClientMetadataForm extends AbstractType
             ->add('default_max_age')
             ->add('require_auth_time')
             ->add('default_acr_values')
-            ->add('initiate_login_uri')
+            ->add('initiate_login_uri', 'text')
             ->add('request_uris');
     }
 

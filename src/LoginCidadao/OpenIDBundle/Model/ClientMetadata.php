@@ -11,62 +11,138 @@
 namespace LoginCidadao\OpenIDBundle\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use PROCERGS\OAuthBundle\Entity\Client;
 
 class ClientMetadata
 {
+    protected $client_id;
+    protected $client_secret;
+
     /**
-     * @Assert\NotBlank()
      * @Assert\All({
+     *      @Assert\Type(type="string"),
      *      @Assert\NotBlank,
      *      @Assert\Url
      * })
      */
     protected $redirect_uris;
-    protected $response_types   = array('code');
-    protected $grant_types      = array('authorization_code');
+
+    /**
+     * @Assert\All({
+     *      @Assert\Type("string")
+     * })
+     */
+    protected $response_types = array('code');
+
+    /**
+     * @Assert\All({
+     *      @Assert\Type("string")
+     * })
+     */
+    protected $grant_types = array('authorization_code');
+
+    /** @Assert\Type(type="string") */
     protected $application_type = 'web';
+
+    /** @Assert\Type(type="array") */
     protected $contacts;
+
+    /** @Assert\Type(type="string") */
     protected $client_name;
 
-    /** @Assert\Url */
+    /**
+     * @Assert\Type(type="string")
+     * @Assert\Url
+     */
     protected $logo_uri;
 
-    /** @Assert\Url */
+    /**
+     * @Assert\Type(type="string")
+     * @Assert\Url
+     */
     protected $client_uri;
 
-    /** @Assert\Url */
+    /**
+     * @Assert\Type(type="string")
+     * @Assert\Url
+     */
     protected $policy_uri;
 
-    /** @Assert\Url */
+    /**
+     * @Assert\Url
+     * @Assert\Type(type="string")
+     */
     protected $tos_uri;
 
-    /** @Assert\Url */
+    /**
+     * @Assert\Url
+     * @Assert\Type(type="string")
+     */
     protected $jwks_uri;
+
+    /** @Assert\Type(type="string") */
     protected $jwks;
 
-    /** @Assert\Url */
+    /**
+     * @Assert\Url
+     * @Assert\Type(type="string")
+     */
     protected $sector_identifier_uri;
+
+    /** @Assert\Type(type="string") */
     protected $subject_type;
+
+    /** @Assert\Type(type="string") */
     protected $id_token_signed_response_alg;
+
+    /** @Assert\Type(type="string") */
     protected $id_token_encrypted_response_alg;
+
+    /** @Assert\Type(type="string") */
     protected $id_token_encrypted_response_enc;
+
+    /** @Assert\Type(type="string") */
     protected $userinfo_signed_response_alg;
+
+    /** @Assert\Type(type="string") */
     protected $userinfo_encrypted_response_alg;
+
+    /** @Assert\Type(type="string") */
     protected $userinfo_encrypted_response_enc;
+
+    /** @Assert\Type(type="string") */
     protected $request_object_signing_alg;
+
+    /** @Assert\Type(type="string") */
     protected $request_object_encryption_alg;
+
+    /** @Assert\Type(type="string") */
     protected $request_object_encryption_enc;
+
+    /** @Assert\Type(type="string") */
     protected $token_endpoint_auth_method;
+
+    /** @Assert\Type(type="string") */
     protected $token_endpoint_auth_signing_alg;
+
+    /** @Assert\Type(type="integer") */
     protected $default_max_age;
+
+    /** @Assert\Type(type="boolean") */
     protected $require_auth_time = false;
+
+    /** @Assert\Type(type="array") */
     protected $default_acr_values;
 
-    /** @Assert\Url */
+    /**
+     * @Assert\Url
+     * @Assert\Type(type="string")
+     */
     protected $initiate_login_uri;
 
     /**
      * @Assert\All({
+     *      @Assert\Type("string"),
      *      @Assert\Url
      * })
      */
@@ -408,5 +484,88 @@ class ClientMetadata
     {
         $this->request_uris = $request_uris;
         return $this;
+    }
+
+    public function getClientId()
+    {
+        return $this->client_id;
+    }
+
+    public function getClientSecret()
+    {
+        return $this->client_secret;
+    }
+
+    public function setClientId($client_id)
+    {
+        $this->client_id = $client_id;
+        return $this;
+    }
+
+    public function setClientSecret($client_secret)
+    {
+        $this->client_secret = $client_secret;
+        return $this;
+    }
+
+    /**
+     * @param Client $client
+     * @return ClientMetadata
+     */
+    public function fromClient(Client $client)
+    {
+        $this->setGrantTypes($client->getAllowedGrantTypes())
+            ->setClientUri($client->getSiteUrl())
+            ->setTosUri($client->getTermsOfUseUrl())
+            ->setClientName($client->getName())
+            ->setRedirectUris($client->getRedirectUris());
+
+        $this->setClientId($client->getPublicId())
+            ->setClientSecret($client->getSecret());
+
+        return $this;
+    }
+
+    /**
+     * @return Client
+     */
+    public function toClient()
+    {
+        $name    = $this->getClientName();
+        $hasName = $name !== null && strlen($name) > 0;
+
+        $grantTypes   = $this->getGrantTypes();
+        $clientUri    = $this->getClientUri();
+        $tosUri       = $this->getTosUri();
+        $clientName   = $this->getClientName();
+        $redirectUris = $this->getRedirectUris();
+
+        $client = new Client();
+
+        if ($grantTypes) {
+            $client->setAllowedGrantTypes($grantTypes);
+        }
+
+        if ($clientUri) {
+            $client->setLandingPageUrl($clientUri)
+                ->setSiteUrl($clientUri);
+        }
+
+        if ($tosUri) {
+            $client->setTermsOfUseUrl($tosUri);
+        }
+
+        if ($clientName) {
+            $client->setName($clientName);
+        }
+
+        if ($redirectUris) {
+            $client->setRedirectUris($redirectUris);
+        }
+
+        $client->setVisible($hasName)
+            ->setPublished(false);
+
+        return $client;
     }
 }

@@ -9,6 +9,7 @@ use FOS\RestBundle\Controller\Annotations as REST;
 use LoginCidadao\OpenIDBundle\Form\ClientMetadataForm;
 use LoginCidadao\OpenIDBundle\Model\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Exception\DynamicRegistrationException;
+use PROCERGS\OAuthBundle\Entity\Client;
 
 /**
  * @REST\Route("/openid/connect")
@@ -34,7 +35,10 @@ class ClientRegistrationController extends FOSRestController
 
         $form->handleRequest($request);
         if ($form->isValid()) {
-            return $this->view($form->getData(), 201);
+            $metadata = $form->getData();
+            $client   = $this->registerClient($metadata);
+
+            return $this->view($metadata->fromClient($client), 201);
         } else {
             $error = $this->handleFormErrors($form->getErrors(true));
             return $this->view($error->getData(), 400);
@@ -53,12 +57,21 @@ class ClientRegistrationController extends FOSRestController
             $property = str_replace('data.', '', $cause->getPropertyPath());
 
             if (strpos($property, 'redirect_uris') !== false) {
-                return new DynamicRegistrationException('Invalid redirect uri: '.$value,
+                return new DynamicRegistrationException('Invalid redirect URIs: '.$cause->getMessage(),
                     DynamicRegistrationException::ERROR_INVALID_REDIRECT_URI);
             } else {
                 return new DynamicRegistrationException("Invalid value for '{$property}': {$value}",
                     DynamicRegistrationException::ERROR_INVALID_CLIENT_METADATA);
             }
         }
+    }
+
+    /**
+     * @param ClientMetadata $data
+     * @return Client
+     */
+    private function registerClient(ClientMetadata $data)
+    {
+        return $data->toClient();
     }
 }

@@ -21,6 +21,9 @@ class ClientRegistrationControllerTest extends WebTestCase
         );
 
         $this->assertJsonResponse($client->getResponse(), 201, false);
+        $response = json_decode($client->getResponse()->getContent());
+        $this->assertNotEmpty($response->client_id);
+        $this->assertNotEmpty($response->client_secret);
     }
 
     public function testRegisterInvalidRedirectUri()
@@ -46,13 +49,15 @@ class ClientRegistrationControllerTest extends WebTestCase
         $client = static::createClient();
 
         $data = array(
-            'logo_uri' => array('this.is.an.invalid.uri')
+            'redirect_uris' => array('https://valid.uri.com/'),
+            'logo_uri' => 'this.is.an.invalid.uri'
         );
 
         $client->request(
             'POST', '/openid/connect/register', array(), array(),
             array('CONTENT_TYPE' => 'application/json'), json_encode($data)
         );
+        echo json_encode($data);
 
         $this->assertJsonResponse($client->getResponse(), 400, false);
         $response = json_decode($client->getResponse()->getContent());
