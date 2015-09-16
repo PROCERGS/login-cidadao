@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "85afe0f7d096ec30df5b123017457bf6",
+    "hash": "3ea234adbf6da646c1332a713aebc214",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-bundle",
-            "version": "dev-develop",
+            "version": "v0.3",
             "target-dir": "OAuth2/ServerBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bshaffer/oauth2-server-bundle.git",
-                "reference": "ba58464b412967dee027c58018cfb940d51588a5"
+                "reference": "6cf47170f70351df85613982a1e29a4056646bfd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bshaffer/oauth2-server-bundle/zipball/ba58464b412967dee027c58018cfb940d51588a5",
-                "reference": "ba58464b412967dee027c58018cfb940d51588a5",
+                "url": "https://api.github.com/repos/bshaffer/oauth2-server-bundle/zipball/6cf47170f70351df85613982a1e29a4056646bfd",
+                "reference": "6cf47170f70351df85613982a1e29a4056646bfd",
                 "shasum": ""
             },
             "require": {
@@ -53,7 +53,7 @@
                 "oauth2",
                 "security"
             ],
-            "time": "2015-07-24 21:52:56"
+            "time": "2014-10-15 22:50:28"
         },
         {
             "name": "bshaffer/oauth2-server-httpfoundation-bridge",
@@ -1324,7 +1324,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/6b7bb04c6d507bb5356bf70b2d1bc30ce64ffc60",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/757fc8f1b1362970328568114e8fca35cdbe1df2",
                 "reference": "3efbc08a97f218d0a4524dee926fc4381e3d0947",
                 "shasum": ""
             },
@@ -2184,7 +2184,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpGaufretteBundle/zipball/b6dbd93d1263f3f57d9c0b5e3b5935b281fcbd9c",
+                "url": "https://api.github.com/repos/KnpLabs/KnpGaufretteBundle/zipball/bf9652537f8458b105613db64fdbc7ea087256fc",
                 "reference": "b928e9776784bbc604eb3a1080b9c85c74404877",
                 "shasum": ""
             },
@@ -3820,8 +3820,7 @@
         "jms/security-extra-bundle": 20,
         "procergs/login-cidadao-badges-bundle": 20,
         "procergs/login-cidadao-igp-bundle": 20,
-        "scheb/two-factor-bundle": 20,
-        "bshaffer/oauth2-server-bundle": 20
+        "scheb/two-factor-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

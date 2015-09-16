@@ -4,6 +4,10 @@ oauth2_server:
     type:     annotation
     prefix:   /
 
+lc_oidc_dr:
+    type:     rest
+    resource: LoginCidadao\OpenIDBundle\Controller\ClientRegistrationController
+
 lc_oidc:
     resource: "@LoginCidadaoOpenIDBundle/Controller/"
     type:     annotation
@@ -35,10 +39,10 @@ hwi_oauth_redirect:
     prefix:   /connect
 
 twitter_login:
-    pattern: /login/check-twitter
+    path: /login/check-twitter
 
 google_login:
-    pattern: /login/check-google
+    path: /login/check-google
 
 #API
 procergs_login_cidadao_api:
@@ -63,7 +67,7 @@ procergs_login_cidadao_core:
     prefix:   /
 lc_home:
     defaults: { _controller: FOSUserBundle:Security:login }
-    pattern:   /
+    path:   /
 
 # Audit
 simple_things_entity_audit:
@@ -103,17 +107,17 @@ fos_user_change_password:
 
 # FOSFacebook
 _security_check_facebook:
-    pattern:   /facebook/login_check
+    path:   /facebook/login_check
     defaults:  { _controller: PROCERGSLoginCidadaoCoreBundle:Person:loginFb }
 
 _security_facebook_logout:
-  pattern:  /facebook/logout
+  path:  /facebook/logout
 
 fos_facebook_channel:
     resource: "@FOSFacebookBundle/Resources/config/routing.xml"
 
 user_couple_fb_with_account:
-    pattern: /user/couple/facebook
+    path: /user/couple/facebook
     defaults: { _controller: PROCERGSLoginCidadaoCoreBundle:Person:connectFacebookWithAccount }
 
 # Static Pages

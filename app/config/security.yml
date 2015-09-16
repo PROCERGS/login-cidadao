@@ -128,6 +128,7 @@ security:
 
         - { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/.well-known, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/openid/connect, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/nfg, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
