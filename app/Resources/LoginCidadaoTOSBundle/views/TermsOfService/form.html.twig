@@ -1,0 +1,10 @@
+{% trans_default_domain "LoginCidadaoTOSBundle" %}
+<p>{{ 'tos.form.use_markdown' | trans }}</p>
+
+{{ form_start(form) }}
+{{ form_row(form.terms, { 'attr': { 'rows': 20 } }) }}
+{{ form_widget(form.final) }} {{ form_label(form.final) }}
+<div class="text-right">
+    {{ form_row(form.submit, { 'attr': { 'class': 'btn-block' } }) }}
+</div>
+{{ form_end(form) }}

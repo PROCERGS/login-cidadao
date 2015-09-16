@@ -4,7 +4,7 @@ namespace PROCERGS\LoginCidadao\NotificationBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\CategoryRepository;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonRepository;
@@ -13,13 +13,12 @@ use Symfony\Component\Form\FormEvents;
 
 class BroadcastType extends AbstractType
 {
-
     private $person;
     private $clientId;
 
     public function __construct(PersonInterface $person, $clientId)
     {
-        $this->person = $person;
+        $this->person   = $person;
         $this->clientId = $clientId;
     }
 
@@ -29,8 +28,8 @@ class BroadcastType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $person = $this->person;
-        $clientId = $this->clientId;
+        $person          = $this->person;
+        $clientId        = $this->clientId;
         $receiversConfig = array(
             'label' => 'Receivers',
             'ajax_choice_attr' => array(
@@ -48,29 +47,31 @@ class BroadcastType extends AbstractType
                 'search_prop_label' => 'dev.broadcasts.receivers.filter'
             ),
             'required' => true,
-            'empty_data'  => null,
+            'empty_data' => null,
             'class' => 'PROCERGSLoginCidadaoCoreBundle:Person',
             'property' => 'fullNameOrUsername'
         );
         $builder->add('category', 'entity',
-              array(
-                  'required' => true,
-                  'empty_data'  => null,
-                'class' => 'PROCERGS\LoginCidadao\NotificationBundle\Entity\Category',
-                'property' => 'name',
-                'query_builder' => function (CategoryRepository $repository) use ($person, $clientId) {
-                    return $repository->getOwnedCategoriesQuery($person)
+            array(
+            'required' => true,
+            'empty_data' => null,
+            'class' => 'PROCERGS\LoginCidadao\NotificationBundle\Entity\Category',
+            'property' => 'name',
+            'query_builder' => function (CategoryRepository $repository) use ($person, $clientId) {
+                return $repository->getOwnedCategoriesQuery($person)
                         ->andWhere('c.id = :clientId')
                         ->setParameter('clientId', $clientId);
-                }
-            ));
-        $builder->add('client_id', 'hidden', array('required' => false, 'mapped' => false, 'data' => $clientId));
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use (&$receiversConfig, &$person, $clientId) {
-            $entity = $event->getData();
-            $form = $event->getForm();
+            }
+        ));
+        $builder->add('client_id', 'hidden',
+            array('required' => false, 'mapped' => false, 'data' => $clientId));
+        $builder->addEventListener(FormEvents::PRE_SUBMIT,
+            function (FormEvent $event) use (&$receiversConfig, &$person, $clientId) {
+            $entity                           = $event->getData();
+            $form                             = $event->getForm();
             $receiversConfig['query_builder'] = function (PersonRepository $repository) use ($clientId, &$entity) {
                 $sql = $repository->getFindAuthorizedByClientIdQuery($clientId);
-                if (!empty( $entity['receivers']) ) {
+                if (!empty($entity['receivers'])) {
                     $sql->andWhere('p.id in (:receivers)');
                     $sql->setParameter('receivers', $entity['receivers']);
                 }
@@ -78,9 +79,10 @@ class BroadcastType extends AbstractType
             };
             $form->add('receivers', 'ajax_choice', $receiversConfig);
         });
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use (&$receiversConfig, &$person, &$clientId) {
-            $entity = $event->getData();
-            $form = $event->getForm();
+        $builder->addEventListener(FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) use (&$receiversConfig, &$person, &$clientId) {
+            $entity                           = $event->getData();
+            $form                             = $event->getForm();
             $receiversConfig['query_builder'] = function (PersonRepository $repository) {
                 $sql = $repository->createQueryBuilder('u');
                 $sql->where('1 != 1');
@@ -91,9 +93,9 @@ class BroadcastType extends AbstractType
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'PROCERGS\LoginCidadao\NotificationBundle\Entity\Broadcast'
@@ -107,5 +109,4 @@ class BroadcastType extends AbstractType
     {
         return 'broadcast_settings';
     }
-
 }

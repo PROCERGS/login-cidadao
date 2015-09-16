@@ -20,13 +20,16 @@ resetting.reset.submit: 'Change password'
 form.group_name: 'Group name'
 form.username: Username
 form.email: Email
+form.email.example: your@email.com
 form.current_password: 'Current password'
 form.password: Password
 form.password_confirmation: Verification
 form.new_password: 'New password'
 form.new_password_confirmation: 'Verification:'
 form.firstName: Firstname
+form.firstName.example: John
 form.surname: Surname
+form.surname.example: Doe
 form.birthdate: Birthday
 form.cep: Postal Code
 form.cpf: CPF
@@ -47,7 +50,9 @@ change_password.submit: 'Change Password'
 'Connect with Facebook': 'Connect with Facebook'
 'Connect with Twitter': 'Connect with Twitter'
 form.plainPassword: Password
+form.plainPassword.example: Create a password
 form.phone: Phone
+form.phone.example: +55 51 1234-5678
 (optional): (optional)
 'Reset Password': 'Reset Password'
 'Enter your username or email': 'Enter your username or email'
@@ -80,3 +85,9 @@ Personal Information: Personal Information
 Contact Information: Contact Information
 Social Networks and other connections: Social Networks and other connections
 Account Password: Account Password
+Use your Facebook picture: Use your Facebook picture
+Remove your picture: Remove your picture
+Your profile picure will be changed to <strong></strong>: Your profile picure will be changed to <strong></strong>
+Your Facebook profile picure will be used.: Your Facebook profile picure will be used.
+form.register.call_to_action: I'm not registered yet
+form.login.call_to_action: I'm alreay registered

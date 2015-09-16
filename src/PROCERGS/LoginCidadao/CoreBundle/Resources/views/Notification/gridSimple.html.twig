@@ -1,9 +1,0 @@
-{% extends "PROCERGSLoginCidadaoCoreBundle:Notification:gridFull.html.twig" %}
-
-{% block grid_header %}
-{% endblock grid_header %}
-
-{% block grid_row_data %}  
-  <div class="date">{{ row.createdat|date('d/m/Y h:i:s') }}</div>
-  <h6 class="title">{{ row.title }}</h6>
-{% endblock grid_row_data %}

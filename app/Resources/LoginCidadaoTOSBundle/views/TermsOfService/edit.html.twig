@@ -1,0 +1,24 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle:Admin:base.html.twig" %}
+
+{% trans_default_domain "LoginCidadaoTOSBundle" %}
+
+{% block content %}
+    <div id="client_id" class="content">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">
+                    {{ 'tos.title' | trans }}
+                </h2>
+            </div>
+            <div class="panel-body">
+                <div class="row clearfix">
+                    <div class="col-md-12">
+                        {{ include('LoginCidadaoTOSBundle:TermsOfService:form.html.twig', { 'form': form }) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock content %}
+{% block title %}{{ 'tos.title' | trans }}{% endblock %}

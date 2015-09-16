@@ -1,44 +1,57 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle::base.html.twig' %}
 
 {% block body %}
-{% set form1 = lc_getForm() %}
-{% set form = lc_getFormFactory() %}
+    {% set form1 = lc_getForm() %}
+    {% set form = lc_getFormFactory() %}
 
-<div class="row">
-    <div class="col-xs-12 text-center header-shadows">
-        <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
-        <h2 class="slogan hidden-xs">{% trans %}One account. The entire Government.{% endtrans %}</h2>
+
+    <div class="row lc-main-title">
+        <div class="col-12 text-center">
+            <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
+            <h2 class="hidden-xs">{% trans %}One account. The entire Government.{% endtrans %}</h2>
+        </div>
     </div>
-</div>
 
 
-<div class="row">
-    {% set common_row_class = 'col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4' %}
-    {% set common_row_style = 'display: none;' %}
-    {{ include("PROCERGSLoginCidadaoCoreBundle::common.register.html.twig") }}
-    {% set common_row_style = '' %}
-    {{ include("PROCERGSLoginCidadaoCoreBundle::common.login.html.twig") }}
-</div>
-{% endblock %}
+    <div class="container lc-box-group">
 
-{% block credits %}
-<div class="bg-credits">{% trans with { '%name%': background_helper.backgroundImage.author, '%link%': background_helper.backgroundImage.url } %}<a href="%link%">Background picture</a> by %name%{% endtrans %}</div>
+        <div class="row">
+            <div class="col-md-5">
+                <div class="box box-register">
+                    {{ include('PROCERGSLoginCidadaoCoreBundle::common.register.html.twig') }}
+                </div>
+            </div>
+
+            <div class="col-md-2"></div>
+
+            <div class="col-md-5">
+                <div class="box">
+                    {{ include('PROCERGSLoginCidadaoCoreBundle::common.login.html.twig') }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="box connect-box lc-box clearfix">
+                    <h3>{% trans %}Use accounts from other services{% endtrans %}</h3>
+                    <p>{% trans %}If you prefer, it's possible to use other services to login or create your account.{% endtrans %}</p>
+                    <div class="row">
+                        <div class="col-md-3 text-center"><a class="connect facebook" data-href="{{ path("lc_link_facebook") }}">Facebook</a></div>
+                        <div class="col-md-3 text-center"><a class="connect twitter" href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}">Twitter</a></div>
+                        <div class="col-md-3 text-center"><a class="connect google" href="{{ path('hwi_oauth_service_redirect', {'service': 'google'}) }}">Google</a></div>
+                        <div class="col-md-3 text-center"><a class="connect nfg nfgpopup" data-href="{{ path('nfg_login') }}">NFG</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 {% endblock %}
 
 {% block stylesheets_custom %}
     {% stylesheets '@lc_base_css' 'bundles/procergslogincidadaocore/css/home/*.css' filter='cssrewrite' filter='?uglifycss' %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
-{% endblock %}
-
-{% block javascripts %}
-{{ parent() }}
-<script>
-$(function(){
-  $(".toggle-lc-box").click(function(event){
-    $('#login-box').parent().toggle();
-    $("#register-box").parent().toggle();
-  });
-});
-</script>
 {% endblock %}

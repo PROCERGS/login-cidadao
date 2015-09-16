@@ -6,12 +6,27 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DefaultControllerTest extends WebTestCase
 {
-    public function testIndex()
+
+    /**
+     * @dataProvider urlProvider
+     */
+    public function testAnonymousPages($url)
     {
-        $client = static::createClient();
+        $client = self::createClient();
+        $client->request('GET', $url);
 
-        $crawler = $client->request('GET', '/hello/Fabien');
+        $this->assertTrue($client->getResponse()->isSuccessful());
+    }
 
-        $this->assertTrue($crawler->filter('html:contains("Hello Fabien")')->count() > 0);
+    public function urlProvider()
+    {
+        return array(
+            array('/'),
+            array('/login'),
+            array('/about'),
+            array('/privacy'),
+            array('/contact'),
+            array('/help'),
+        );
     }
 }

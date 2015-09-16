@@ -5,3 +5,11 @@
 form .input-error {
     padding: 0 12px;
 }
+
+/* Display labels */
+label.sr-only {
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    position: relative !important;
+}

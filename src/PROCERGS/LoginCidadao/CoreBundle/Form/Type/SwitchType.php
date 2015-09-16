@@ -2,7 +2,7 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\CommonFormType;
 
 class SwitchType extends CommonFormType
@@ -17,7 +17,7 @@ class SwitchType extends CommonFormType
         return 'switch';
     }
     
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'attr' => array(

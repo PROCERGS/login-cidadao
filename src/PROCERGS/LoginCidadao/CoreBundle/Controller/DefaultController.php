@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\IgpWsHelper;
 use Doctrine\ORM\Query;
+use PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class DefaultController extends Controller
 {
@@ -22,9 +24,9 @@ class DefaultController extends Controller
     /**
      * @Route("/login/facebook", name="lc_link_facebook")
      */
-    public function facebookLoginAction()
+    public function facebookLoginAction(Request $request)
     {
-        $shouldLogout = $this->getRequest()->get('logout');
+        $shouldLogout = $request->get('logout');
         if (!is_null($shouldLogout)) {
             $this->get('session')->set('facebook.logout', true);
         }
@@ -112,11 +114,11 @@ class DefaultController extends Controller
      * @Route("/logout/if-not-remembered", name="lc_logout_not_remembered")
      * @Template()
      */
-    public function logoutIfNotRememberedAction()
+    public function logoutIfNotRememberedAction(Request $request)
     {
         $result['logged_out'] = false;
         if ($this->getUser() instanceof UserInterface) {
-            if ($this->getRequest()->cookies->has('REMEMBERME')) {
+            if ($request->cookies->has('REMEMBERME')) {
                 $result = array('logged_out' => false);
             } else {
                 $this->get("request")->getSession()->invalidate();
@@ -128,7 +130,7 @@ class DefaultController extends Controller
         }
 
         $response = new JsonResponse();
-        $userAgent = $this->getRequest()->headers->get('User-Agent');
+        $userAgent = $request->headers->get('User-Agent');
         if (preg_match('/(?i)msie [1-9]/', $userAgent)) {
             $response->headers->set('Content-Type', 'text/json');
         }
@@ -190,6 +192,49 @@ class DefaultController extends Controller
                    'logs' => $logs,
                    'notifications' => $notifications,
                    'defaultClientUid' => $defaultClientUid);
+    }
+
+    /**
+     * @Route("/logout/if-not-remembered/{key}", name="lc_logout_not_remembered_safe")
+     * @Template()
+     */
+    public function safeLogoutIfNotRememberedAction(Request $request, $key)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $logoutKeys = $em->getRepository('PROCERGSLoginCidadaoAPIBundle:LogoutKey');
+        $logoutKey = $logoutKeys->findActiveByKey($key);
+
+        if (! ($logoutKey instanceof LogoutKey)) {
+            throw new AccessDeniedHttpException("Invalid logout key.");
+        }
+
+        $result['logged_out'] = false;
+        if ($this->getUser() instanceof UserInterface) {
+            if ($request->cookies->has('REMEMBERME')) {
+                $result = array(
+                    'logged_out' => false
+                );
+            } else {
+                $this->get("request")
+                    ->getSession()
+                    ->invalidate();
+                $this->get("security.context")->setToken(null);
+                $result['logged_out'] = true;
+            }
+        } else {
+            $result['logged_out'] = true;
+        }
+
+        $response = new JsonResponse();
+        $userAgent = $request->headers->get('User-Agent');
+        if (preg_match('/(?i)msie [1-9]/', $userAgent)) {
+            $response->headers->set('Content-Type', 'text/json');
+        }
+
+        $em->remove($logoutKey);
+        $em->flush();
+
+        return $response->setData($result);
     }
 
 }

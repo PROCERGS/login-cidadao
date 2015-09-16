@@ -19,6 +19,8 @@ use PROCERGS\OAuthBundle\Model\ClientInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use PROCERGS\OAuthBundle\Model\ClientUser;
 use PROCERGS\LoginCidadao\APIBundle\Security\Audit\Annotation as Audit;
+use PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PersonController extends BaseController
 {
@@ -80,24 +82,24 @@ class PersonController extends BaseController
      * @Audit\Loggable(type="SELECT")
      * @REST\View
      */
-    public function waitPersonChangeAction()
+    public function waitPersonChangeAction(Request $request)
     {
-        $user = $this->getUser();
-        $scope = $this->getClientScope($user);
+        $user      = $this->getUser();
+        $scope     = $this->getClientScope($user);
         $updatedAt = \DateTime::createFromFormat('Y-m-d H:i:s',
-                                                 $this->getRequest()->get('updated_at'));
+                $request->get('updated_at'));
 
         if (!($updatedAt instanceof \DateTime)) {
             $updatedAt = new \DateTime();
         }
 
-        $id = $user->getId();
+        $id            = $user->getId();
         $lastUpdatedAt = null;
-        $callback = $this->getCheckUpdateCallback($id, $updatedAt,
-                                                  $lastUpdatedAt);
-        $person = $this->runTimeLimited($callback);
-        $context = SerializationContext::create()->setGroups($scope);
-        $view = $this->view($person)
+        $callback      = $this->getCheckUpdateCallback($id, $updatedAt,
+            $lastUpdatedAt);
+        $person        = $this->runTimeLimited($callback);
+        $context       = SerializationContext::create()->setGroups($scope);
+        $view          = $this->view($person)
             ->setSerializationContext($context);
         return $this->handleView($view);
     }
@@ -105,11 +107,11 @@ class PersonController extends BaseController
     private function runTimeLimited($callback, $waitTime = 1)
     {
         $maxExecutionTime = ini_get('max_execution_time');
-        $limit = $maxExecutionTime ? $maxExecutionTime - 2 : 60;
-        $startTime = time();
+        $limit            = $maxExecutionTime ? $maxExecutionTime - 2 : 60;
+        $startTime        = time();
         while ($limit > 0) {
             $result = call_user_func($callback);
-            $delta = time() - $startTime;
+            $delta  = time() - $startTime;
 
             if ($result !== false) {
                 return $result;
@@ -127,7 +129,7 @@ class PersonController extends BaseController
 
     private function getCheckUpdateCallback($id, $updatedAt, $lastUpdatedAt)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em     = $this->getDoctrine()->getEntityManager();
         $people = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
         return function() use ($id, $people, $em, $updatedAt, $lastUpdatedAt) {
             $em->clear();
@@ -158,13 +160,14 @@ class PersonController extends BaseController
      */
     public function sendNotificationAction(Request $request)
     {
-        $token = $this->get('security.context')->getToken();
-        $accessToken = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:AccessToken')->findOneBy(array('token' => $token->getToken()));
-        $client = $accessToken->getClient();
+        $token       = $this->get('security.context')->getToken();
+        $accessToken = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:AccessToken')->findOneBy(array(
+            'token' => $token->getToken()));
+        $client      = $accessToken->getClient();
 
         $body = json_decode($request->getContent(), 1);
 
-        $chkAuth = $this->getDoctrine()
+        $chkAuth   = $this->getDoctrine()
             ->getManager()
             ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
             ->createQueryBuilder('a')
@@ -174,25 +177,29 @@ class PersonController extends BaseController
             ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'a.client = c')
             ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH',
                    'cnc.client = c')
-            ->where('c.id = ' . $client->getId() . ' and p.id = :person_id and cnc.id = :config_id')
+            ->where('c.id = '.$client->getId().' and p.id = :person_id and cnc.id = :config_id')
             ->getQuery();
-        $rowR = array();
-        $em = $this->getDoctrine()->getManager();
+        $rowR      = array();
+        $em        = $this->getDoctrine()->getManager();
         $validator = $this->get('validator');
 
         foreach ($body as $idx => $row) {
             if (isset($row['person_id'])) {
-                $res = $chkAuth->setParameters(array('person_id' => $row['person_id'], 'config_id' => $row['config_id']))->getResult();
+                $res = $chkAuth->setParameters(array('person_id' => $row['person_id'],
+                        'config_id' => $row['config_id']))->getResult();
                 if (!$res) {
                     $rowR[$idx] = array('person_id' => $row['person_id'], 'error' => 'missing authorization or configuration');
                     continue;
                 }
-                $not = new Notification();
+                $not    = new Notification();
                 $not->setPerson($res[0]);
                 $not->setConfigNotCli($res[1])
-                    ->setIcon(isset($row['icon']) && $row['icon'] ? $row['icon'] : $not->getConfigNotCli()->getIcon())
-                    ->setTitle(isset($row['title']) && $row['title'] ? $row['title'] : $not->getConfigNotCli()->getTitle())
-                    ->setShortText(isset($row['shorttext']) && $row['shorttext'] ? $row['shorttext'] : $not->getConfigNotCli()->getShortText())
+                    ->setIcon(isset($row['icon']) && $row['icon'] ? $row['icon']
+                                : $not->getConfigNotCli()->getIcon())
+                    ->setTitle(isset($row['title']) && $row['title'] ? $row['title']
+                                : $not->getConfigNotCli()->getTitle())
+                    ->setShortText(isset($row['shorttext']) && $row['shorttext']
+                                ? $row['shorttext'] : $not->getConfigNotCli()->getShortText())
                     ->setText($row['text'])
                     ->parseHtmlTemplate($not->getConfigNotCli()->getHtmlTemplate());
                 $errors = $validator->validate($not);
@@ -206,6 +213,61 @@ class PersonController extends BaseController
         }
         $em->flush();
         return $this->handleView($this->view($rowR));
+    }
+
+    /**
+     * Generates and returns a logout key for the user.
+     *
+     * @ApiDoc(
+     * resource = true,
+     * description = "Generates and returns a logout key for the user.",
+     * output = {
+     * "class"="PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey",
+     * "groups" = {"key"}
+     * },
+     * statusCodes = {
+     * 200 = "Returned when successful"
+     * }
+     * )
+     * @REST\Get("/person/{id}/logout-key")
+     * @REST\View(templateVar="logoutKey")
+     *
+     * @throws NotFoundHttpException
+     */
+    public function getLogoutKeyAction($id)
+    {
+        $token       = $this->get('security.context')->getToken();
+        $accessToken = $this->getDoctrine()
+            ->getRepository('PROCERGSOAuthBundle:AccessToken')
+            ->findOneBy(array(
+            'token' => $token->getToken()
+        ));
+        $client      = $accessToken->getClient();
+
+        $people = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+        $person = $people->find($id);
+
+        if (!$person->isAuthorizedClient($client, 'logout')) {
+            throw new AccessDeniedHttpException("Not authorized");
+        }
+
+        $logoutKey = new LogoutKey();
+        $logoutKey->setPerson($person);
+        $logoutKey->setClient($client);
+        $logoutKey->setKey($logoutKey->generateKey());
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($logoutKey);
+        $em->flush();
+
+        $result = array(
+            'key' => $logoutKey->getKey(),
+            'url' => $this->generateUrl('lc_logout_not_remembered_safe',
+                array(
+                'key' => $logoutKey->getKey()
+            ), UrlGeneratorInterface::ABSOLUTE_URL)
+        );
+        return $result;
     }
 
 }

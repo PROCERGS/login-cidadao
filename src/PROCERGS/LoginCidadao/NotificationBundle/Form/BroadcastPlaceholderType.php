@@ -4,7 +4,7 @@ namespace PROCERGS\LoginCidadao\NotificationBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
 
 class BroadcastPlaceholderType extends AbstractType
@@ -21,9 +21,9 @@ class BroadcastPlaceholderType extends AbstractType
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'PROCERGS\LoginCidadao\NotificationBundle\Model\BroadcastPlaceholder',
@@ -35,5 +35,4 @@ class BroadcastPlaceholderType extends AbstractType
     {
         return 'broadcast_placeholder';
     }
-
 }

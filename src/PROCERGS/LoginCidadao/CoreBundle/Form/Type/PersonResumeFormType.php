@@ -9,12 +9,11 @@ use Symfony\Component\Form\FormEvents;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\CommonFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\SecurityHelper;
 
 class PersonResumeFormType extends CommonFormType
 {
-
     /** @var SecurityHelper */
     private $securityHelper;
 
@@ -23,7 +22,7 @@ class PersonResumeFormType extends CommonFormType
         $this->securityHelper = $securityHelper;
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'available_roles' => array()
@@ -33,29 +32,29 @@ class PersonResumeFormType extends CommonFormType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('username', null,
-                      array(
+            array(
             'read_only' => 'true',
         ));
         $builder->add('email', 'email',
-                      array(
+            array(
             'label' => 'form.email',
             'read_only' => 'true',
             'translation_domain' => 'FOSUserBundle'
         ));
         $builder->add('firstName', 'text',
-                      array(
+            array(
             'label' => 'form.firstName',
             'read_only' => 'true',
             'translation_domain' => 'FOSUserBundle'
         ));
         $builder->add('surname', 'text',
-                      array(
+            array(
             'label' => 'form.surname',
             'read_only' => 'true',
             'translation_domain' => 'FOSUserBundle'
         ));
         $builder->add('birthdate', 'birthday',
-                      array(
+            array(
             'required' => false,
             'read_only' => 'true',
             'format' => 'yyyy-MM-dd',
@@ -64,7 +63,7 @@ class PersonResumeFormType extends CommonFormType
             'translation_domain' => 'FOSUserBundle'
         ));
         $builder->add('mobile', null,
-                      array(
+            array(
             'required' => false,
             'read_only' => 'true',
             'label' => 'form.mobile',
@@ -73,17 +72,17 @@ class PersonResumeFormType extends CommonFormType
 
         $user = $this->getUser();
 
-        $allRoles = $this->translateRoles($builder->getOption('available_roles'));
+        $allRoles       = $this->translateRoles($builder->getOption('available_roles'));
         $securityHelper = $this->securityHelper;
-        $security = $this->security;
+        $security       = $this->security;
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
-                                   function (FormEvent $event) use ($user, &$allRoles, &$securityHelper, &$security) {
+            function (FormEvent $event) use ($user, &$allRoles, &$securityHelper, &$security) {
             $person = $event->getData();
-            $form = PersonResumeFormType::populateCountryStateCity($person,
-                                                                   $event->getForm());
+            $form   = PersonResumeFormType::populateCountryStateCity($person,
+                    $event->getForm());
 
             $roles = PersonResumeFormType::filterRoles($person, $user, $form,
-                                                       $allRoles, $securityHelper, $security);
+                    $allRoles, $securityHelper, $security);
         });
     }
 
@@ -93,18 +92,18 @@ class PersonResumeFormType extends CommonFormType
     }
 
     public static function populateCountryStateCity(PersonInterface $person,
-                                                     FormInterface $form)
+                                                    FormInterface $form)
     {
         $country = $person->getCountry();
-        $state = $person->getState();
-        $city = $person->getCity();
+        $state   = $person->getState();
+        $city    = $person->getCity();
 
         $countryName = '';
         if ($country) {
             $countryName = $country->getName();
         }
         $form->add('country', 'text',
-                   array(
+            array(
             'required' => true,
             'mapped' => false,
             'read_only' => true,
@@ -116,7 +115,7 @@ class PersonResumeFormType extends CommonFormType
             $stateName = $state->getName();
         }
         $form->add('state', 'text',
-                   array(
+            array(
             'required' => true,
             'read_only' => 'true',
             'mapped' => false,
@@ -129,7 +128,7 @@ class PersonResumeFormType extends CommonFormType
             $cityName = $city->getName();
         }
         $form->add('city', 'text',
-                   array(
+            array(
             'required' => true,
             'read_only' => 'true',
             'mapped' => false,
@@ -153,11 +152,12 @@ class PersonResumeFormType extends CommonFormType
     }
 
     public static function filterRoles(PersonInterface $person,
-                                 PersonInterface $loggedUser,
-                                 FormInterface $form, array $roles, $securityHelper, $security)
+                                       PersonInterface $loggedUser,
+                                       FormInterface $form, array $roles,
+                                       $securityHelper, $security)
     {
-        $loggedUserLevel = $securityHelper->getLoggedInUserLevel();
-        $targetPersonLevel = $securityHelper->getTargetPersonLevel($person);
+        $loggedUserLevel        = $securityHelper->getLoggedInUserLevel();
+        $targetPersonLevel      = $securityHelper->getTargetPersonLevel($person);
         $isLoggedUserSuperAdmin = $security->isGranted('ROLE_SUPER_ADMIN');
 
         $filteredRoles = array();
@@ -175,7 +175,7 @@ class PersonResumeFormType extends CommonFormType
         }
 
         $form->add('roles', 'choice',
-                   array(
+            array(
             'choices' => $filteredRoles,
             'multiple' => true,
             'read_only' => ($targetPersonLevel > $loggedUserLevel),
@@ -183,5 +183,4 @@ class PersonResumeFormType extends CommonFormType
         ));
         return $filteredRoles;
     }
-
 }

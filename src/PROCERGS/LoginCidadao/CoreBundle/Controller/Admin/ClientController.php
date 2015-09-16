@@ -57,7 +57,7 @@ class ClientController extends Controller
      * @Route("/edit/{id}", name="lc_admin_app_edit")
      * @Template()
      */
-    public function editAction($id)
+    public function editAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
         $client = $em->getRepository('PROCERGSOAuthBundle:Client')->find($id);
@@ -65,7 +65,7 @@ class ClientController extends Controller
             return $this->redirect($this->generateUrl('lc_admin_app_new'));
         }
         $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.form.type'), $client);
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
         $messages = '';
         if ($form->isValid()) {
             $client->setAllowedGrantTypes(Client::getAllGrants());

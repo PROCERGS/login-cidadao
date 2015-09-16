@@ -4,24 +4,23 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Country;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
-use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use PROCERGS\LoginCidadao\ValidationControlBundle\ValidationEvents;
 
 class IdCardType extends AbstractType
 {
-
     protected $countryAcronym;
 
     public function __construct($countryAcronym,
-                                ContainerAwareEventDispatcher $dispatcher)
+                                EventDispatcherInterface $dispatcher)
     {
         $this->countryAcronym = $countryAcronym;
-        $this->dispatcher = $dispatcher;
+        $this->dispatcher     = $dispatcher;
     }
 
     /**
@@ -33,53 +32,53 @@ class IdCardType extends AbstractType
     {
         $countryAcronym = $this->countryAcronym;
         $builder->add('id', 'hidden',
-                      array(
+            array(
             'required' => false
         ));
         $builder->add('state', 'entity',
-                      array(
+            array(
             'required' => true,
             'class' => 'PROCERGSLoginCidadaoCoreBundle:State',
-            'property' => 'name',
+            'choice_label' => 'name',
             'read_only' => true,
             'query_builder' => function (EntityRepository $er) use($countryAcronym) {
                 return $er->createQueryBuilder('s')
                         ->join('PROCERGSLoginCidadaoCoreBundle:Country', 'c',
-                               'WITH', 's.country = c')
-                        ->where('s.reviewed = ' . Country::REVIEWED_OK)
+                            'WITH', 's.country = c')
+                        ->where('s.reviewed = '.Country::REVIEWED_OK)
                         ->andWhere('c.iso2 = :country')
                         ->setParameter('country', $countryAcronym)
                         ->orderBy('s.name', 'ASC');
             }
         ));
         $builder->add('issuer', 'text',
-                      array(
+            array(
             'required' => true
         ));
         $builder->add('value', 'text',
-                      array(
+            array(
             'required' => true,
-            'label' => 'Idcard value'
+            'label' => 'Idcard value',
         ));
 
         $dispatcher = $this->dispatcher;
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
-                                   function (FormEvent $event) use ($dispatcher) {
+            function (FormEvent $event) use ($dispatcher) {
             $dispatcher->dispatch(ValidationEvents::ID_CARD_FORM_PRE_SET_DATA,
-                                  $event);
+                $event);
         });
         $builder->addEventListener(FormEvents::PRE_SUBMIT,
-                                   function (FormEvent $event) use ($dispatcher) {
+            function (FormEvent $event) use ($dispatcher) {
             $dispatcher->dispatch(ValidationEvents::ID_CARD_FORM_PRE_SUBMIT,
-                                  $event);
+                $event);
         });
     }
 
     /**
      *
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'PROCERGS\LoginCidadao\CoreBundle\Entity\IdCard'
@@ -94,5 +93,4 @@ class IdCardType extends AbstractType
     {
         return 'lc_idcard_form';
     }
-
 }

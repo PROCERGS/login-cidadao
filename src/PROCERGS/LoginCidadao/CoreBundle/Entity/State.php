@@ -65,7 +65,7 @@ class State
 
     /**
      * @Groups({"typeahead", "public_profile"})
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Country")
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Country", inversedBy="states")
      * @ORM\JoinColumn(name="country_id", referencedColumnName="id")
      */
     protected $country;
@@ -83,7 +83,7 @@ class State
 
     /**
      * @ORM\OneToMany(targetEntity="City", mappedBy="state", cascade={"remove"}, orphanRemoval=true)
-     * @var
+     * @var City
      */
     protected $cities;
 

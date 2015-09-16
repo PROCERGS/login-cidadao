@@ -1,0 +1,21 @@
+<div class="panel panel-default id-card-panel">
+    <div class="panel-heading">
+        <h2 class="panel-title">{{ 'ID Card'|trans }}</h2>
+    </div>
+    <div class="panel-body">
+        <div class="row clearfix">
+            {{ form_errors(form) }}
+            <div class="col-md-12">
+                {% for child in form %}
+                    {{ form_row(child) }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% if hide_footer is defined and hide_footer == true %}
+    {% else %}
+        <div class="panel-footer text-right">
+            <input type="submit" value="{{ 'Send'|trans }}" class="btn btn-success">
+        </div>
+    {% endif %}
+</div>

@@ -73,7 +73,7 @@ class PersonController extends Controller
      * @Route("/edit/{id}", name="lc_admin_person_edit")
      * @Template()
      */
-    public function editAction($id)
+    public function editAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
         $person = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->find($id);
@@ -99,7 +99,7 @@ class PersonController extends Controller
             $this->get('procergs_logincidadao.person.resume.form.type'),
                        $person, array('available_roles' => $rolesNames)
         );
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
         if ($form->isValid()) {
             $securityHelper = $this->get('lc.security.helper');
             $loggedUserLevel = $securityHelper->getLoggedInUserLevel();

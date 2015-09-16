@@ -6,6 +6,7 @@ use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -25,11 +26,13 @@ use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\MissingNfgAccessTokenException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
-use PROCERGS\Generic\ValidationBundle\Validator\Constraints\CEPValidator;
+use PROCERGS\LoginCidadao\CoreBundle\DynamicFormEvents;
+use PROCERGS\LoginCidadao\CoreBundle\Model\DynamicFormData;
+use PROCERGS\LoginCidadao\CoreBundle\Model\SelectData;
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class ProfileEditListner implements EventSubscriberInterface
 {
-
     const PROFILE_DOC_EDIT_SUCCESS = 'lc.profile.doc.edit.success';
 
     private $mailer;
@@ -58,13 +61,13 @@ class ProfileEditListner implements EventSubscriberInterface
                                 NotificationsHelper $notificationsHelper,
                                 $emailUnconfirmedTime)
     {
-        $this->mailer = $mailer;
-        $this->fosMailer = $fosMailer;
-        $this->tokenGenerator = $tokenGenerator;
-        $this->router = $router;
-        $this->session = $session;
-        $this->security = $security;
-        $this->notificationsHelper = $notificationsHelper;
+        $this->mailer               = $mailer;
+        $this->fosMailer            = $fosMailer;
+        $this->tokenGenerator       = $tokenGenerator;
+        $this->router               = $router;
+        $this->session              = $session;
+        $this->security             = $security;
+        $this->notificationsHelper  = $notificationsHelper;
         $this->emailUnconfirmedTime = $emailUnconfirmedTime;
     }
 
@@ -76,29 +79,36 @@ class ProfileEditListner implements EventSubscriberInterface
         return array(
             FOSUserEvents::PROFILE_EDIT_INITIALIZE => 'onProfileEditInitialize',
             FOSUserEvents::PROFILE_EDIT_SUCCESS => 'onProfileEditSuccess',
-            ProfileEditListner::PROFILE_DOC_EDIT_SUCCESS => 'onProfileDocEditSuccess'
+            ProfileEditListner::PROFILE_DOC_EDIT_SUCCESS => 'onProfileDocEditSuccess',
+            FormEvents::POST_SUBMIT => 'registerTextualLocation'
         );
     }
 
     public function onProfileEditInitialize(GetResponseUserEvent $event)
     {
         // required, because when Success's event is called, session already contains new email
-        $this->email = $this->security->getToken()
-                ->getUser()
-                ->getEmail();
-        $this->cpf = $this->security->getToken()
-                ->getUser()
-                ->getCpf();
+        $this->email             = $this->security->getToken()
+            ->getUser()
+            ->getEmail();
+        $this->cpf               = $this->security->getToken()
+            ->getUser()
+            ->getCpf();
         $this->voterRegistration = $this->security->getToken()
-                ->getUser()
-                ->getVoterRegistration();
+            ->getUser()
+            ->getVoterRegistration();
     }
 
     public function onProfileEditSuccess(FormEvent $event)
     {
         $user = $event->getForm()->getData();
-        
-        if (!$user->getState()) {
+        if ($user instanceof DynamicFormData) {
+            $this->checkEmailChanged($user->getPerson());
+        }
+        if (!($user instanceof PersonInterface)) {
+            return;
+        }
+
+        if (!$user->getState() && $event->getForm()->has('ufsteppe')) {
             $steppe = ucwords(strtolower(trim($event->getForm()->get('ufsteppe')->getData())));
             if ($steppe) {
                 if ($user->getCountry()) {
@@ -110,7 +120,7 @@ class ProfileEditListner implements EventSubscriberInterface
                     throw new LcValidationException('required.field.country');
                 }
                 $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:State');
-                $ent = $repo->findOneBy(array(
+                $ent  = $repo->findOneBy(array(
                     'name' => $steppe,
                     'country' => $user->getCountry()
                 ));
@@ -123,7 +133,7 @@ class ProfileEditListner implements EventSubscriberInterface
                 $user->setState($ent);
             }
         }
-        if (!$user->getCity()) {
+        if (!$user->getCity() && $event->getForm()->has('citysteppe')) {
             $steppe = ucwords(strtolower(trim($event->getForm()->get('citysteppe')->getData())));
             if ($steppe) {
                 if ($user->getState()) {
@@ -135,7 +145,7 @@ class ProfileEditListner implements EventSubscriberInterface
                     throw new LcValidationException('required.field.state');
                 }
                 $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:City');
-                $ent = $repo->findOneBy(array(
+                $ent  = $repo->findOneBy(array(
                     'name' => $steppe,
                     'state' => $user->getState()
                 ));
@@ -223,7 +233,7 @@ class ProfileEditListner implements EventSubscriberInterface
         if (is_null($isNfgValidated)) {
             try {
                 $isNfgValidated = $this->nfg->isVoterRegistrationValid($currentUser,
-                        $user->getVoterRegistration());
+                    $user->getVoterRegistration());
             } catch (MissingNfgAccessTokenException $e) {
                 $isNfgValidated = null;
             }
@@ -256,7 +266,8 @@ class ProfileEditListner implements EventSubscriberInterface
 
     private function checkVoterRegistrationChanged(Person &$user)
     {
-        if (null === $user->getVoterRegistration() || strlen($user->getVoterRegistration()) == 0) {
+        if (null === $user->getVoterRegistration() || strlen($user->getVoterRegistration())
+            == 0) {
             return;
         }
         $aUser = $this->security->getToken()->getUser();
@@ -269,27 +280,29 @@ class ProfileEditListner implements EventSubscriberInterface
                     throw new NfgException($nfgReturn1['MsgRetorno']);
                 }
                 if (!isset($nfgReturn1['CodCpf'], $nfgReturn1['NomeConsumidor'],
-                                $nfgReturn1['EmailPrinc'])) {
+                        $nfgReturn1['EmailPrinc'])) {
                     throw new NfgException('nfg.missing.required.fields');
                 }
             }
-            $personRepo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+            $personRepo  = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
             $otherPerson = $personRepo->findOneBy(array(
                 'voterRegistration' => $user->getVoterRegistration()
             ));
             if ($otherPerson) {
                 if (isset($nfgReturn1)) {
-                    if (isset($nfgReturn1['CodSitTitulo']) && $nfgReturn1['CodSitTitulo'] != 0) {
+                    if (isset($nfgReturn1['CodSitTitulo']) && $nfgReturn1['CodSitTitulo']
+                        != 0) {
                         if ($nfgReturn1['CodSitTitulo'] == 1) {
                             $className = $this->em->getClassMetadata(get_class($aUser))->getName();
-                            $uk = $this->em->getUnitOfWork();
-                            $a = $uk->getOriginalEntityData($user);
+                            $uk        = $this->em->getUnitOfWork();
+                            $a         = $uk->getOriginalEntityData($user);
                             $uk->detach($user);
 
                             $otherPerson->setVoterRegistration(null);
                             $this->em->persist($otherPerson);
 
-                            $uk->registerManaged($user, array('id' => $user->getId()),$a);
+                            $uk->registerManaged($user,
+                                array('id' => $user->getId()), $a);
 
                             $this->notificationsHelper->revokedVoterRegistrationNotification($otherPerson);
 
@@ -308,7 +321,8 @@ class ProfileEditListner implements EventSubscriberInterface
                 }
             } else {
                 if (isset($nfgReturn1)) {
-                    if (isset($nfgReturn1['CodSitTitulo']) && $nfgReturn1['CodSitTitulo'] != 0) {
+                    if (isset($nfgReturn1['CodSitTitulo']) && $nfgReturn1['CodSitTitulo']
+                        != 0) {
                         if ($nfgReturn1['CodSitTitulo'] == 1) {
                             $aNfgProfile = $aUser->getNfgProfile();
                             $aNfgProfile->setVoterRegistrationSit($nfgReturn1['CodSitTitulo']);
@@ -323,4 +337,83 @@ class ProfileEditListner implements EventSubscriberInterface
         }
     }
 
+    public function registerTextualLocation(\Symfony\Component\Form\FormEvent $event)
+    {
+        $this->registerTextualState($event);
+        $this->registerTextualCity($event);
+    }
+
+    private function registerTextualState(\Symfony\Component\Form\FormEvent $event)
+    {
+        $data = $event->getForm()->getData();
+        if (!($data instanceof SelectData)) {
+            return;
+        }
+        $form = $event->getForm();
+        if ($form->has('state_text')) {
+            $stateTextInput = $form->get('state_text')->getData();
+            $stateText      = ucwords(strtolower(trim($stateTextInput)));
+            if (!$stateText) {
+                return;
+            }
+            if (!$data->getCountry()) {
+                throw new LcValidationException('required.field.country');
+            }
+            $isPreferred = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Country')->isPreferred($data->getCountry());
+            if ($isPreferred) {
+                throw new LcValidationException('restrict.location.creation');
+            }
+
+            $repo  = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:State');
+            $state = $repo->findOneBy(array(
+                'name' => $stateText,
+                'country' => $data->getCountry()
+            ));
+            if (!$state) {
+                $state = new State();
+                $state->setName($stateText);
+                $state->setCountry($data->getCountry());
+                $this->em->persist($state);
+                $this->em->flush($state);
+            }
+            $data->setState($state)
+                ->setCity(null);
+        }
+    }
+
+    private function registerTextualCity(\Symfony\Component\Form\FormEvent $event)
+    {
+        $data = $event->getForm()->getData();
+        if (!($data instanceof SelectData)) {
+            return;
+        }
+        $form = $event->getForm();
+        if ($form->has('city_text')) {
+            $cityTextInput = $form->get('city_text')->getData();
+            $cityText      = ucwords(strtolower(trim($cityTextInput)));
+            if (!$cityText) {
+                return;
+            }
+            if (!$data->getState()) {
+                throw new LcValidationException('required.field.state');
+            }
+            $isPreferred = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Country')->isPreferred($data->getCountry());
+            if ($isPreferred) {
+                throw new LcValidationException('restrict.location.creation');
+            }
+
+            $repo = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:City');
+            $city = $repo->findOneBy(array(
+                'name' => $cityText,
+                'state' => $data->getState()
+            ));
+            if (!$city) {
+                $city = new City();
+                $city->setName($cityText);
+                $city->setState($data->getState());
+                $this->em->persist($city);
+            }
+            $data->setCity($city);
+        }
+    }
 }

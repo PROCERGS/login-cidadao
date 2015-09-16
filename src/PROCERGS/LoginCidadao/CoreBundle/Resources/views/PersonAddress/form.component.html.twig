@@ -1,41 +1,40 @@
 {% if form is not defined and edit_form is defined %}
     {% set form = edit_form %}
 {% endif %}
-{{ form_start(form) }}
-{% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
+{% if embeded is defined and embeded == true %}
+{% else %}
+    {{ form_start(form) }}
+    {% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
+{% endif %}
 <a name="form" class="anchor"></a>
 <div class="panel panel-default">
     <div class="panel-heading">
         <h4 class="panel-title" style="padding-top: 7.5px;">
-            {{ form_label(form.name, null, {'label_attr': {'class': 'sr-only2' | trans} }) }}
-            {{ form_widget(form.name, {'attr': {'placeholder': 'ex: Home Address' | trans} }) }}
-            {{ form_errors(form.name) }}
+            {% if name_as_normal_field is defined and name_as_normal_field == true %}
+                {{ 'Address' | trans }}
+            {% else %}
+                {{ form_label(form.name, null, {'label_attr': {'class': 'sr-only2' | trans} }) }}
+                {{ form_widget(form.name, {'attr': {'placeholder': 'ex: Home Address' | trans} }) }}
+                {{ form_errors(form.name) }}
+            {% endif %}
         </h4>
     </div>
 
     <div class="panel-body">
-        <div class="form-group">
-            {{ form_label(form.country) }}
-            {{ form_widget(form.country, {'attr': {'placeholder': 'ex: Brazil' | trans} }) }}
-            {{ form_errors(form.country) }}
-        </div>
+        {% if name_as_normal_field is defined and name_as_normal_field == true %}
+            <div class="form-group">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name, {'attr': {'placeholder': 'ex: Home Address' | trans} }) }}
+                {{ form_errors(form.name) }}
+            </div>
+        {% endif %}
         <div class="form-group">
             {{ form_label(form.postalCode) }}
             {{ form_widget(form.postalCode, {'attr': {'placeholder': 'ex: DE24 8SG' | trans} }) }}
-            {{ form_errors(form.postalCode) }}
+            <span class="extra">{% trans %}Don't know your postal code?{% endtrans %}<a target='blank' href="{{ postalcode_search_link }}">{{ 'Search it!' | trans }}</a></span>
+                {{ form_errors(form.postalCode) }}
         </div>
-        <div class="form-group">
-            {{ form_label(form.state) }}
-            {{ form_widget(form.state, {'attr': {'placeholder': 'ex: Rio Grande do Sul' | trans} }) }}
-            {{ form_widget(form.statesteppe, {'attr': {'style': 'display: none;'}}) }}
-            {{ form_errors(form.state) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(form.city) }}
-            {{ form_widget(form.city, {'attr': {'placeholder': 'ex: Porto Alegre' | trans} }) }}
-            {{ form_widget(form.citysteppe, {'attr': {'style': 'display: none;'}}) }}
-            {{ form_errors(form.city) }}
-        </div>
+        {{ form_row(form.location) }}
         <div class="form-group">
             {{ form_label(form.address) }}
             {{ form_widget(form.address, {'attr': {'placeholder': 'ex: 221B Baker Street' | trans} }) }}
@@ -52,10 +51,16 @@
             {{ form_errors(form.complement) }}
         </div>
     </div>
-    <div class="panel-footer">
-        <div class="form-group text-right">
-            {{ form_row(form.save) }}
+    {% if hide_footer is defined and hide_footer == true %}
+    {% else %}
+        <div class="panel-footer">
+            <div class="form-group text-right">
+                <input type="submit" value="{{ 'Send'|trans }}" class="btn btn-success">
+            </div>
         </div>
-    </div>
+    {% endif %}
 </div>
-{{ form_end(form) }}
+{% if embeded is defined and embeded == true %}
+{% else %}
+    {{ form_end(form) }}
+{% endif %}

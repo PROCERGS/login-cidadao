@@ -35,12 +35,12 @@ class PersonAddressController extends Controller
     public function newAddressAction(Request $request)
     {
         $address = new PersonAddress();
-        $form = $this->createForm('lc_person_address', $address);
+        $form    = $this->createForm('lc_person_address', $address);
 
         $form->handleRequest($request);
 
         $em = $this->getDoctrine()->getManager();
-        if ($form->isValid() && $this->checkAddressLocation($address, $form, $em)) {
+        if ($form->isValid()) {
             $address->setPerson($this->getUser());
             $em->persist($address);
             $em->flush();
@@ -51,8 +51,10 @@ class PersonAddressController extends Controller
 
         return compact('form', 'deleteForms');
     }
-    
-    private function checkAddressLocation(&$address, &$form, &$em) {
+
+    private function checkAddressLocation(&$address, $form, &$em)
+    {
+        $form = $form->get('location');
         if (!$address->getCountry()) {
             $form->get('country')->addError(new FormError($this->get('translator')->trans('required.field')));
             return false;
@@ -62,7 +64,7 @@ class PersonAddressController extends Controller
             $steppe = ucwords(strtolower(trim($form->get('statesteppe')->getData())));
             if ($steppe) {
                 $repo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:State');
-                $ent = $repo->findOneBy(array(
+                $ent  = $repo->findOneBy(array(
                     'name' => $steppe,
                     'country' => $address->getCountry()
                 ));
@@ -90,7 +92,7 @@ class PersonAddressController extends Controller
             }
             if ($state && $steppe) {
                 $repo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:City');
-                $ent = $repo->findOneBy(array(
+                $ent  = $repo->findOneBy(array(
                     'name' => $steppe,
                     'state' => $state
                 ));
@@ -114,25 +116,35 @@ class PersonAddressController extends Controller
      * @Route("/person/addresses/{id}/edit", name="lc_person_addresses_edit")
      * @Template("PROCERGSLoginCidadaoCoreBundle:PersonAddress:newAddress.html.twig")
      */
-    public function editAction($id)
+    public function editAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em        = $this->getDoctrine()->getManager();
         $addresses = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:PersonAddress');
-        $address = $addresses->find($id);
+        $address   = $addresses->find($id);
         if ($address->getPerson()->getId() !== $this->getUser()->getId()) {
             throw new AccessDeniedException();
         }
+        if ($address->getId() > 0) {
+            $city = $address->getCity();
+            if ($city instanceof City) {
+                $state   = $city->getState();
+                $country = $state->getCountry();
+                $address->getLocation()->setCity($city)
+                    ->setState($state)->setCountry($country);
+            }
+        }
 
         $form = $this->createForm('lc_person_address', $address);
-        $form->handleRequest($this->getRequest());
+        $form->handleRequest($request);
 
-        if ($form->isValid() && $this->checkAddressLocation($address, $form, $em)) {
+        if ($form->isValid()) {
             $address->setPerson($this->getUser());
+
             $em->flush();
             return $this->redirect($this->generateUrl('lc_person_addresses'));
         }
         $deleteForms = $this->getDeleteForms();
-        $edit_form = $form->createView();
+        $edit_form   = $form->createView();
 
         return compact('edit_form', 'deleteForms');
     }
@@ -141,17 +153,17 @@ class PersonAddressController extends Controller
      * @Route("/person/addresses/{id}/remove", name="lc_person_addresses_delete")
      * @Template()
      */
-    public function deleteAction($id)
+    public function deleteAction(Request $request, $id)
     {
         $translator = $this->get('translator');
-        $form = $this->createForm(new RemovePersonAddressFormType());
-        $form->handleRequest($this->getRequest());
+        $form       = $this->createForm(new RemovePersonAddressFormType());
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $person = $this->getUser();
-            $em = $this->getDoctrine()->getManager();
+            $person    = $this->getUser();
+            $em        = $this->getDoctrine()->getManager();
             $addresses = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:PersonAddress');
-            $address = $addresses->find($id);
+            $address   = $addresses->find($id);
 
             try {
                 if ($address->getPerson()->getId() !== $person->getId()) {
@@ -161,16 +173,16 @@ class PersonAddressController extends Controller
                 $em->flush();
             } catch (AccessDeniedException $e) {
                 $this->get('session')->getFlashBag()->add('error',
-                                                          $translator->trans("Access Denied."));
+                    $translator->trans("Access Denied."));
             } catch (\Exception $e) {
                 $this->get('session')->getFlashBag()->add('error',
-                                                          $translator->trans("Wasn't possible to remove this address."));
+                    $translator->trans("Wasn't possible to remove this address."));
                 $this->get('session')->getFlashBag()->add('error',
-                                                          $e->getMessage());
+                    $e->getMessage());
             }
         } else {
             $this->get('session')->getFlashBag()->add('error',
-                                                      $translator->trans("Wasn't possible to remove this address."));
+                $translator->trans("Wasn't possible to remove this address."));
         }
 
         return $this->redirect($this->generateUrl('lc_person_addresses'));
@@ -178,18 +190,17 @@ class PersonAddressController extends Controller
 
     protected function getDeleteForms()
     {
-        $person = $this->getUser();
+        $person      = $this->getUser();
         $deleteForms = array();
-        $addresses = $person->getAddresses();
+        $addresses   = $person->getAddresses();
 
         if (is_array($addresses) || $addresses instanceof Collection) {
             foreach ($addresses as $address) {
-                $data = array('address_id' => $address->getId());
+                $data                           = array('address_id' => $address->getId());
                 $deleteForms[$address->getId()] = $this->createForm(new RemovePersonAddressFormType(),
-                                                                    $data)->createView();
+                        $data)->createView();
             }
         }
         return $deleteForms;
     }
-
 }

@@ -1,0 +1,11 @@
+{{ form_row(form.country) }}
+{% if form.state is defined %}
+    {{ form_row(form.state) }}
+{% elseif form.state_text is defined %}
+    {{ form_row(form.state_text) }}
+{% endif %}
+{% if form.city is defined %}
+    {{ form_row(form.city) }}
+{% elseif form.city_text is defined %}
+    {{ form_row(form.city_text) }}
+{% endif %}

@@ -11,7 +11,7 @@
         {{ form_start(form, { 'attr': {'role':'form', 'class':'lc_change_password' } }) }}
         {{ form_errors(form) }}
         <div class="form-content">
-            {% if app.security.isGranted('FEATURE_2FACTOR_AUTH') %}
+            {% if is_granted('FEATURE_2FACTOR_AUTH') %}
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title">{{ 'Two-Factor Authentication Activation' | trans }}</h2>
@@ -33,6 +33,14 @@
 
                                 <p>{% trans %}After you finish configuring your code generator app, type the generated code below so that we can make sure it's working correctly.{% endtrans %}</p>
                                 {{ form_row(form.verification) }}
+
+                                {% if form.current_password is defined %}
+                                    <p>{% trans %}Type your password to confirm the activation.{% endtrans %}</p>
+                                    {{ form_row(form.current_password) }}
+                                {% else %}
+                                    <p>{% trans %}You don't have a password yet. Please create one below. This password can be used to login using your email or username.{% endtrans %}</p>
+                                    {{ form_row(form.password) }}
+                                {% endif %}
                             </div>
                         </div>
                     </div>

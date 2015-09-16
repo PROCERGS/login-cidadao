@@ -79,7 +79,7 @@ security:
 
             form_login:
                 provider:       fos_userbundle
-                csrf_provider:  form.csrf_provider
+                csrf_provider:  security.csrf.token_manager
                 login_path:     /login
                 use_forward:    false
                 check_path:     /login_check
@@ -99,7 +99,7 @@ security:
             pattern:  ^/oauth/v2/auth
             form_login:
                 provider: fos_userbundle
-                csrf_provider: form.csrf_provider
+                csrf_provider: security.csrf.token_manager
                 check_path: /oauth/v2/auth_login_check
                 login_path: /oauth/v2/auth_login
                 always_use_default_target_path: false
@@ -146,6 +146,7 @@ security:
 
         - { path: ^/logout/if-not-remembered, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/terms$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
         - { path: ^/, roles: IS_AUTHENTICATED_REMEMBERED }
         - { path: ^/profile/edit, roles: IS_AUTHENTICATED_FULLY }
