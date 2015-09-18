@@ -2,7 +2,7 @@
 oauth2_server:
     resource: "@OAuth2ServerBundle/Controller/"
     type:     annotation
-    prefix:   /
+    prefix:   /openid/connect/
 
 lc_oidc_dr:
     type:     rest
