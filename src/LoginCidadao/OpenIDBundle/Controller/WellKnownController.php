@@ -16,9 +16,17 @@ class WellKnownController extends Controller
      */
     public function wellKnownAction()
     {
-        $authEndpoint  = $this->generateUrl('_authorize_validate', array(),
+        $authEndpoint   = $this->generateUrl('_authorize_validate', array(),
             UrlGeneratorInterface::ABSOLUTE_URL);
-        $tokenEndpoint = $this->generateUrl('_token', array(),
+        $tokenEndpoint  = $this->generateUrl('_token', array(),
+            UrlGeneratorInterface::ABSOLUTE_URL);
+        $personEndpoint = $this->generateUrl('get_person',
+            array('_format' => 'json'), UrlGeneratorInterface::ABSOLUTE_URL);
+
+        $registrationEndpoint = $this->generateUrl('oidc_dynamic_registration',
+            array(), UrlGeneratorInterface::ABSOLUTE_URL);
+
+        $jwksUri = $this->generateUrl('oidc_jwks', array(),
             UrlGeneratorInterface::ABSOLUTE_URL);
 
         $data = array(
@@ -31,16 +39,21 @@ class WellKnownController extends Controller
             'token_endpoint_auth_signing_alg_values_supported' => array(
                 "RS256", "ES256"
             ),
-            'userinfo_endpoint' => '',
-            'check_session_iframe' => '',
-            'end_session_endpoint' => '',
-            'jwks_uri' => '',
-            'registration_endpoint' => '',
+            'id_token_signing_alg_values_supported' => array(
+                'RS256'
+            ),
+            'userinfo_endpoint' => $personEndpoint,
+            //'check_session_iframe' => '',
+            //'end_session_endpoint' => '',
+            'jwks_uri' => $jwksUri,
+            'registration_endpoint' => $registrationEndpoint,
             'scopes_supported' => '',
             'response_types_supported' => array(
                 "code", "code id_token", "id_token", "token id_token"
             ),
-            // ...
+            'subject_types_supported' => array(
+                'public'
+            )
         );
 
         return new \Symfony\Component\HttpFoundation\JsonResponse($data);
