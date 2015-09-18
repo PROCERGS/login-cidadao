@@ -2,6 +2,7 @@
 
 namespace LoginCidadao\OpenIDBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -36,7 +37,8 @@ class ClientRegistrationController extends FOSRestController
         $form->handleRequest($request);
         if ($form->isValid()) {
             $metadata = $form->getData();
-            $client   = $this->registerClient($metadata);
+            $em       = $this->getDoctrine()->getManager();
+            $client   = $this->registerClient($em, $metadata);
 
             return $this->view($metadata->fromClient($client), 201);
         } else {
@@ -70,8 +72,27 @@ class ClientRegistrationController extends FOSRestController
      * @param ClientMetadata $data
      * @return Client
      */
-    private function registerClient(ClientMetadata $data)
+    private function registerClient(EntityManager $em, ClientMetadata $data)
     {
-        return $data->toClient();
+        $client = $data->toClient();
+
+        if ($client->getName() === null) {
+            $firstUrl = $client->getRedirectUris()[0];
+            $client->setName($firstUrl);
+        }
+        if ($client->getDescription() === null) {
+            $client->setDescription('');
+        }
+        if ($client->getTermsOfUseUrl() === null) {
+            $client->setTermsOfUseUrl('');
+        }
+        if ($client->getSiteUrl() === null) {
+            $client->setSiteUrl('');
+        }
+
+        $em->persist($client);
+        $em->flush();
+
+        return $client;
     }
 }
