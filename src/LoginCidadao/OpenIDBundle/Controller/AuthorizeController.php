@@ -1,17 +1,16 @@
 <?php
 
-namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
+namespace LoginCidadao\OpenIDBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-class OpenIdConnectController extends Controller
+class AuthorizeController extends Controller
 {
 
     /**
-     * @Route("/authorize", name="_authorize_handle")
+     * @Route("/openid/connect/authorize", name="_authorize_handle")
      * @Method({"POST"})
      */
     public function handleAuthorizeAction()
