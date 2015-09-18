@@ -29,7 +29,13 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
             'issuer' => $container->getParameter('site_domain'),
             'allow_implicit' => true
         );
-        //var_dump($args); die();
         $definition->setArguments($args);
+
+        if ($container->hasDefinition('gaufrette.jwks_fs_filesystem')) {
+            $filesystem = new Reference('gaufrette.jwks_fs_filesystem');
+            $fileName   = $container->getParameter('jwks_private_key_file');
+            $container->getDefinition('oauth2.storage.public_key')
+                ->addMethodCall('setFilesystem', array($filesystem, $fileName));
+        }
     }
 }
