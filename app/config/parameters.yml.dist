@@ -81,3 +81,7 @@ parameters:
 
     # Should missing translations be logged in dev?
     log_translator: false
+
+    # OpenID Connect
+    jwks_dir: %kernel.root_dir%/../app/config/jwks
+    jwks_private_key_file: private.pem
