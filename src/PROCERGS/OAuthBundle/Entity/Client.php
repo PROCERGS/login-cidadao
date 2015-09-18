@@ -142,6 +142,11 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         $this->authorizations       = new ArrayCollection();
         $this->owners               = new ArrayCollection();
         $this->maxNotificationLevel = Notification::LEVEL_NORMAL;
+
+        $this->allowedScopes = array(
+            'public_profile',
+            'openid'
+        );
     }
 
     public static function getAllGrants()
