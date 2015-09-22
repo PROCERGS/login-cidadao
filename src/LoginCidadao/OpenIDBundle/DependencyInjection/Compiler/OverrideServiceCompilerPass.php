@@ -19,6 +19,8 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container)
     {
+        $issuer = $container->getParameter('jwt_iss');
+
         $definition = $container->getDefinition('oauth2.server');
         $args       = $definition->getArguments();
 
@@ -26,7 +28,7 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
         $args['storage'][] = new Reference('oauth2.storage.public_key');
         $args['config']    = array(
             'use_openid_connect' => true,
-            'issuer' => $container->getParameter('site_domain'),
+            'issuer' => $issuer,
             'allow_implicit' => true
         );
         $definition->setArguments($args);
@@ -36,6 +38,12 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
             $fileName   = $container->getParameter('jwks_private_key_file');
             $container->getDefinition('oauth2.storage.public_key')
                 ->addMethodCall('setFilesystem', array($filesystem, $fileName));
+        }
+
+        if ($container->hasDefinition('oauth2.storage.access_token')) {
+            $dispatcher = new Reference('event_dispatcher');
+            $container->getDefinition('oauth2.storage.access_token')
+                ->addMethodCall('setEventDispatcher', array($dispatcher));
         }
     }
 }
