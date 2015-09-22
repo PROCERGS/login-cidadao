@@ -59,13 +59,17 @@ class AuthorizationCode implements AuthorizationCodeInterface
         }
 
         if ($code instanceof \PROCERGS\OAuthBundle\Entity\AuthCode) {
-            return array(
+            $response = array(
                 'client_id' => $code->getClient()->getClientId(),
                 'user_id' => $code->getUser()->getId(),
                 'expires' => $code->getExpiresAt(),
                 'redirect_uri' => $code->getRedirectUri(),
                 'scope' => $code->getScope()
             );
+            if ($code->getIdToken()) {
+                $response['id_token'] = $code->getIdToken();
+            }
+            return $response;
         }
     }
 

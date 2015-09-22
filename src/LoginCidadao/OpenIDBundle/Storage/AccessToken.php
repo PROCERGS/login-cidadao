@@ -57,7 +57,8 @@ class AccessToken extends BaseClass implements AccessTokenInterface
             'client_id' => $client->getClientId(),
             'user_id' => $accessToken->getUserId(),
             'expires' => $accessToken->getExpires()->getTimestamp(),
-            'scope' => $accessToken->getScope()
+            'scope' => $accessToken->getScope(),
+            'id_token' => $accessToken->getIdToken()
         );
     }
 
@@ -80,7 +81,7 @@ class AccessToken extends BaseClass implements AccessTokenInterface
      * @ingroup oauth2_section_4
      */
     public function setAccessToken($oauth_token, $client_id, $user_id, $expires,
-                                   $scope = null)
+                                   $scope = null, $id_token = null)
     {
         // Get Client Entity
         $id     = explode('_', $client_id);
@@ -105,6 +106,7 @@ class AccessToken extends BaseClass implements AccessTokenInterface
         $accessToken->setUser($user);
         $accessToken->setExpiresAt($expires);
         $accessToken->setScope($scope);
+        $accessToken->setIdToken($id_token);
 
         // Store Access Token
         $this->em->persist($accessToken);
