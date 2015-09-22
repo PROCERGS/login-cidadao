@@ -37,7 +37,7 @@ class WellKnownController extends Controller
                 "client_secret_basic", "private_key_jwt"
             ),
             'token_endpoint_auth_signing_alg_values_supported' => array(
-                "RS256", "ES256"
+                "RS256"//, "ES256"
             ),
             'id_token_signing_alg_values_supported' => array(
                 'RS256'
