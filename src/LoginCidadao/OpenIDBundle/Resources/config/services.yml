@@ -4,6 +4,8 @@ parameters:
     oauth2.storage.refresh_token.class: LoginCidadao\OpenIDBundle\Storage\RefreshToken
     oauth2.storage.access_token.class: LoginCidadao\OpenIDBundle\Storage\AccessToken
 
+    oauth2.grant_type.authorization_code.class: OAuth2\OpenID\GrantType\AuthorizationCode
+
     oauth2.storage.user_claims.class: LoginCidadao\OpenIDBundle\Storage\UserClaims
     oauth2.storage.public_key.class: LoginCidadao\OpenIDBundle\Storage\PublicKey
 
