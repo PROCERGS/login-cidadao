@@ -30,7 +30,7 @@ class WellKnownController extends Controller
             UrlGeneratorInterface::ABSOLUTE_URL);
 
         $data = array(
-            'issuer' => 'https://'.$this->getParameter('site_domain'),
+            'issuer' => $this->getParameter('jwt_iss'),
             'authorization_endpoint' => $authEndpoint,
             'token_endpoint' => $tokenEndpoint,
             'token_endpoint_auth_methods_supported' => array(

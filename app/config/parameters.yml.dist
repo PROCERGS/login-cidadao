@@ -83,5 +83,9 @@ parameters:
     log_translator: false
 
     # OpenID Connect
+    # JWT Config
+    #  - this is necessary since we can't access the oidc.issuer_url in the Compiler Pass
+    jwt_iss: http://%site_domain%%base_path%
+    # JWKS Config
     jwks_dir: %kernel.root_dir%/../app/config/jwks
     jwks_private_key_file: private.pem
