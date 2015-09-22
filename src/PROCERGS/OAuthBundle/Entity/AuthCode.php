@@ -31,7 +31,7 @@ class AuthCode extends BaseAuthCode
     protected $user;
 
     /**
-     * @ORM\Column(name="id_token", type="string", length=255, nullable=true)
+     * @ORM\Column(name="id_token", type="text", nullable=true)
      */
     protected $idToken;
 
