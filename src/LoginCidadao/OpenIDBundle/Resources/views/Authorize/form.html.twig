@@ -1,0 +1,38 @@
+<form action="?{{ qs|url_encode }}" method="post" class="fos_oauth_server_authorize">
+    <h3>{% trans %}Authorize Application{% endtrans %}</h3>
+
+    <div class="connect-diagram row">
+        <div class="col-xs-5 text-right">
+            <img src="{{ include("PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" width="90">
+        </div>
+        <div class="col-xs-2 text-center">
+            <i class="glyphicon glyphicon-chevron-right"></i>
+        </div>
+        <div class="col-xs-5 text-left">
+            {% if client.metadata is defined and client.metadata.logoUri is not null %}
+                {{ client.metadata.logoUri }}
+            {% else %}
+                <img src="//placehold.it/90x90" alt="" class="img-rounded">
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-offset-2 col-sm-8">
+            <p class="msg">{% trans with {'%client_name%': client.name} %}The application <strong>%client_name%</strong> wants to access the following information about you:{% endtrans %}</p>
+
+            <ul class="permissions">
+                {% for scope in scopes %}
+                    <li>{{ scope }}</li>
+                    {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="row buttons">
+        <div class="col-xs-12 text-center">
+            <input type="submit" name="rejected" value="{{ 'authorize.reject'|trans({}, 'FOSOAuthServerBundle') }}" class="btn btn-danger" />
+            <input type="submit" name="accepted" value="{{ 'authorize.accept'|trans({}, 'FOSOAuthServerBundle') }}" class="btn btn-success" />
+        </div>
+    </div>
+</form>
