@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use FOS\RestBundle\Controller\Annotations as REST;
 use LoginCidadao\OpenIDBundle\Form\ClientMetadataForm;
-use LoginCidadao\OpenIDBundle\Model\ClientMetadata;
+use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Exception\DynamicRegistrationException;
 use PROCERGS\OAuthBundle\Entity\Client;
 
@@ -58,12 +58,16 @@ class ClientRegistrationController extends FOSRestController
             $value    = $cause->getInvalidValue();
             $property = str_replace('data.', '', $cause->getPropertyPath());
 
-            if (strpos($property, 'redirect_uris') !== false) {
-                return new DynamicRegistrationException('Invalid redirect URIs: '.$cause->getMessage(),
-                    DynamicRegistrationException::ERROR_INVALID_REDIRECT_URI);
-            } else {
-                return new DynamicRegistrationException("Invalid value for '{$property}': {$value}",
-                    DynamicRegistrationException::ERROR_INVALID_CLIENT_METADATA);
+            switch ($property) {
+                case 'redirect_uris':
+                    return new DynamicRegistrationException('Invalid redirect URIs: '.$cause->getMessage(),
+                        DynamicRegistrationException::ERROR_INVALID_REDIRECT_URI);
+                case 'sector_identifier_uri':
+                    return new DynamicRegistrationException("Invalid value for '{$property}': {$cause->getMessage()}",
+                        DynamicRegistrationException::ERROR_INVALID_CLIENT_METADATA);
+                default:
+                    return new DynamicRegistrationException("Invalid value for '{$property}': {$value}",
+                        DynamicRegistrationException::ERROR_INVALID_CLIENT_METADATA);
             }
         }
     }
@@ -91,6 +95,10 @@ class ClientRegistrationController extends FOSRestController
         }
 
         $em->persist($client);
+
+        $data->setClient($client);
+        $em->persist($data);
+
         $em->flush();
 
         return $client;
