@@ -8,15 +8,39 @@
  * file that was distributed with this source code.
  */
 
-namespace LoginCidadao\OpenIDBundle\Model;
+namespace LoginCidadao\OpenIDBundle\Entity;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use LoginCidadao\OpenIDBundle\Constraints\SectorIdentifier;
 use Symfony\Component\Validator\Constraints as Assert;
 use PROCERGS\OAuthBundle\Entity\Client;
+use Doctrine\ORM\Mapping as ORM;
+use League\Uri\Schemes\Http as HttpUri;
 
+/**
+ * @ORM\Entity
+ * @UniqueEntity("client")
+ * @ORM\HasLifecycleCallbacks
+ * @ORM\Table(name="client_metadata")
+ * @SectorIdentifier
+ */
 class ClientMetadata
 {
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
     protected $client_id;
     protected $client_secret;
+
+    /**
+     * @var Client
+     * @ORM\OneToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="metadata")
+     * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
+     */
+    protected $client;
 
     /**
      * @Assert\All({
@@ -24,6 +48,7 @@ class ClientMetadata
      *      @Assert\NotBlank,
      *      @Assert\Url
      * })
+     * @ORM\Column(name="redirect_uris", type="json_array", nullable=false)
      */
     protected $redirect_uris;
 
@@ -31,6 +56,7 @@ class ClientMetadata
      * @Assert\All({
      *      @Assert\Type("string")
      * })
+     * @ORM\Column(name="response_types", type="simple_array", nullable=false)
      */
     protected $response_types = array('code');
 
@@ -38,105 +64,169 @@ class ClientMetadata
      * @Assert\All({
      *      @Assert\Type("string")
      * })
+     * @ORM\Column(type="simple_array", nullable=false)
      */
     protected $grant_types = array('authorization_code');
 
-    /** @Assert\Type(type="string") */
+    /**
+     * @Assert\Type(type="string")
+     * @ORM\Column(name="application_type", type="string", length=100, nullable=false)
+     */
     protected $application_type = 'web';
 
-    /** @Assert\Type(type="array") */
+    /**
+     * @Assert\Type(type="array")
+     * @ORM\Column(type="simple_array", nullable=true)
+     */
     protected $contacts;
 
-    /** @Assert\Type(type="string") */
+    /**
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", nullable=true)
+     */
     protected $client_name;
 
     /**
      * @Assert\Type(type="string")
      * @Assert\Url
+     * @ORM\Column(type="string", length=2000, nullable=true)
      */
     protected $logo_uri;
 
     /**
      * @Assert\Type(type="string")
      * @Assert\Url
+     * @ORM\Column(type="string", length=2000, nullable=true)
      */
     protected $client_uri;
 
     /**
      * @Assert\Type(type="string")
      * @Assert\Url
+     * @ORM\Column(type="string", length=2000, nullable=true)
      */
     protected $policy_uri;
 
     /**
      * @Assert\Url
      * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=2000, nullable=true)
      */
     protected $tos_uri;
 
     /**
      * @Assert\Url
      * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=2000, nullable=true)
      */
     protected $jwks_uri;
 
-    /** @Assert\Type(type="string") */
+    /**
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="text", nullable=true)
+     */
     protected $jwks;
 
     /**
      * @Assert\Url
      * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=2000, nullable=true)
      */
     protected $sector_identifier_uri;
 
-    /** @Assert\Type(type="string") */
+    /**
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
     protected $subject_type;
 
-    /** @Assert\Type(type="string") */
+    /**
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
     protected $id_token_signed_response_alg;
 
-    /** @Assert\Type(type="string") */
+    /**
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
     protected $id_token_encrypted_response_alg;
 
-    /** @Assert\Type(type="string") */
+    /**
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
     protected $id_token_encrypted_response_enc;
 
-    /** @Assert\Type(type="string") */
+    /**
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
     protected $userinfo_signed_response_alg;
 
-    /** @Assert\Type(type="string") */
+    /**
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
     protected $userinfo_encrypted_response_alg;
 
-    /** @Assert\Type(type="string") */
+    /**
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
     protected $userinfo_encrypted_response_enc;
 
-    /** @Assert\Type(type="string") */
+    /**
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
     protected $request_object_signing_alg;
 
-    /** @Assert\Type(type="string") */
+    /**
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
     protected $request_object_encryption_alg;
 
-    /** @Assert\Type(type="string") */
+    /**
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
     protected $request_object_encryption_enc;
 
-    /** @Assert\Type(type="string") */
+    /**
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
     protected $token_endpoint_auth_method;
 
-    /** @Assert\Type(type="string") */
+    /**
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
     protected $token_endpoint_auth_signing_alg;
 
-    /** @Assert\Type(type="integer") */
+    /**
+     * @Assert\Type(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
+     */
     protected $default_max_age;
 
-    /** @Assert\Type(type="boolean") */
+    /**
+     * @Assert\Type(type="boolean")
+     */
     protected $require_auth_time = false;
 
-    /** @Assert\Type(type="array") */
+    /**
+     * @Assert\Type(type="array")
+     * @ORM\Column(type="simple_array", nullable=true)
+     */
     protected $default_acr_values;
 
     /**
      * @Assert\Url
      * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=2000, nullable=true)
      */
     protected $initiate_login_uri;
 
@@ -145,6 +235,7 @@ class ClientMetadata
      *      @Assert\Type("string"),
      *      @Assert\Url
      * })
+     * @ORM\Column(type="simple_array", nullable=true)
      */
     protected $request_uris;
 
@@ -567,5 +658,51 @@ class ClientMetadata
             ->setPublished(false);
 
         return $client;
+    }
+
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    public function setClient(Client $client)
+    {
+        $this->client = $client;
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function checkDefaults()
+    {
+        if (!$this->getGrantTypes()) {
+            $this->setGrantTypes(array('authorization_code'));
+        }
+
+        if (!$this->getResponseTypes()) {
+            $this->setResponseTypes(array('code'));
+        }
+
+        if (!$this->getApplicationType()) {
+            $this->setApplicationType('web');
+        }
+
+        if (!$this->getRequireAuthTime()) {
+            $this->setRequireAuthTime(false);
+        }
+    }
+
+    public function getSectorIdentifier()
+    {
+        $siUri = $this->getSectorIdentifierUri();
+        if ($siUri) {
+            $uri = $siUri;
+        } else {
+            $uris = $this->getRedirectUris();
+            $uri  = reset($uris);
+        }
+
+        return HttpUri::createFromString($uri)->getHost();
     }
 }

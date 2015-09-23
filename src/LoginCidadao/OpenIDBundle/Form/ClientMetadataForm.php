@@ -58,7 +58,7 @@ class ClientMetadataForm extends AbstractType
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults(array(
-            'data_class' => 'LoginCidadao\OpenIDBundle\Model\ClientMetadata',
+            'data_class' => 'LoginCidadao\OpenIDBundle\Entity\ClientMetadata',
             'csrf_protection' => false
         ));
     }
