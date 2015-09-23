@@ -24,13 +24,8 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
         $definition = $container->getDefinition('oauth2.server');
         $args       = $definition->getArguments();
 
-        $args['storage'][] = new Reference('oauth2.storage.user_claims');
-        $args['storage'][] = new Reference('oauth2.storage.public_key');
-        $args['config']    = array(
-            'use_openid_connect' => true,
-            'issuer' => $issuer,
-            'allow_implicit' => true
-        );
+        $args['oauth2.server.storage'][] = new Reference('oauth2.storage.user_claims');
+        $args['oauth2.server.storage'][] = new Reference('oauth2.storage.public_key');
         $definition->setArguments($args);
 
         if ($container->hasDefinition('gaufrette.jwks_fs_filesystem')) {
