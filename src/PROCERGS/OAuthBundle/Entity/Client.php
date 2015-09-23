@@ -136,6 +136,12 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
      */
     protected $logoutKeys;
 
+    /**
+     * @var \LoginCidadao\OpenIDBundle\Entity\ClientMetadata
+     * @ORM\OneToOne(targetEntity="LoginCidadao\OpenIDBundle\Entity\ClientMetadata", mappedBy="client")
+     */
+    protected $metadata;
+
     public function __construct()
     {
         parent::__construct();
@@ -217,23 +223,37 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
 
     public function getLandingPageUrl()
     {
+        if ($this->getMetadata()) {
+            return $this->getMetadata()->getClientUri();
+        }
         return $this->landingPageUrl;
     }
 
     public function setLandingPageUrl($landingPageUrl)
     {
-        $this->landingPageUrl = $landingPageUrl;
+        if ($this->getMetadata()) {
+            $this->getMetadata()->setClientUri($landingPageUrl);
+        } else {
+            $this->landingPageUrl = $landingPageUrl;
+        }
         return $this;
     }
 
     public function getTermsOfUseUrl()
     {
+        if ($this->getMetadata()) {
+            return $this->getMetadata()->getTosUri();
+        }
         return $this->termsOfUseUrl;
     }
 
     public function setTermsOfUseUrl($termsOfUseUrl)
     {
-        $this->termsOfUseUrl = $termsOfUseUrl;
+        if ($this->getMetadata()) {
+            $this->getMetadata()->setTosUri($termsOfUseUrl);
+        } else {
+            $this->termsOfUseUrl = $termsOfUseUrl;
+        }
         return $this;
     }
 
@@ -257,11 +277,17 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
 
     public function getAbsolutePicturePath()
     {
+        if ($this->getMetadata() && $this->getMetadata()->getLogoUri()) {
+            return $this->getMetadata()->getLogoUri();
+        }
         return null === $this->picturePath ? null : $this->getPictureUploadRootDir().DIRECTORY_SEPARATOR.$this->picturePath;
     }
 
     public function getPictureWebPath()
     {
+        if ($this->getMetadata() && $this->getMetadata()->getLogoUri()) {
+            return $this->getMetadata()->getLogoUri();
+        }
         return self::resolvePictureWebPath($this->picturePath);
     }
 
@@ -431,5 +457,16 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     public function getClientSecret()
     {
         return $this->getSecret();
+    }
+
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
+
+    public function setMetadata(\LoginCidadao\OpenIDBundle\Entity\ClientMetadata $metadata)
+    {
+        $this->metadata = $metadata;
+        return $this;
     }
 }
