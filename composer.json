@@ -48,7 +48,7 @@
         "scheb/two-factor-bundle": "dev-master",
         "procergs/tos-bundle": "^1.0",
         "symfony/phpunit-bridge": "^2.7",
-        "bshaffer/oauth2-server-bundle": "^0.3",
+        "bshaffer/oauth2-server-bundle": "dev-develop",
         "phpseclib/phpseclib": "2.0.0",
         "gree/jose": "^2.0",
         "league/uri": "^4.0"

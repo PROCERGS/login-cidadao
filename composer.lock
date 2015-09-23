@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "66d17aae6677049e12c3911b603d0712",
+    "hash": "b8d2dbba1e6780ac3dc6a18409d27dd2",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-bundle",
-            "version": "v0.3",
+            "version": "dev-develop",
             "target-dir": "OAuth2/ServerBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bshaffer/oauth2-server-bundle.git",
-                "reference": "6cf47170f70351df85613982a1e29a4056646bfd"
+                "reference": "f341ce44fba436c429c2e0261e4428952a523328"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bshaffer/oauth2-server-bundle/zipball/6cf47170f70351df85613982a1e29a4056646bfd",
-                "reference": "6cf47170f70351df85613982a1e29a4056646bfd",
+                "url": "https://api.github.com/repos/bshaffer/oauth2-server-bundle/zipball/f341ce44fba436c429c2e0261e4428952a523328",
+                "reference": "f341ce44fba436c429c2e0261e4428952a523328",
                 "shasum": ""
             },
             "require": {
@@ -53,7 +53,7 @@
                 "oauth2",
                 "security"
             ],
-            "time": "2014-10-15 22:50:28"
+            "time": "2015-09-22 20:25:05"
         },
         {
             "name": "bshaffer/oauth2-server-httpfoundation-bridge",
@@ -4137,7 +4137,8 @@
         "jms/security-extra-bundle": 20,
         "procergs/login-cidadao-badges-bundle": 20,
         "procergs/login-cidadao-igp-bundle": 20,
-        "scheb/two-factor-bundle": 20
+        "scheb/two-factor-bundle": 20,
+        "bshaffer/oauth2-server-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
