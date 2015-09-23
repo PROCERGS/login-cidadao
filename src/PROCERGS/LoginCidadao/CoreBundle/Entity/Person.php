@@ -36,8 +36,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     LocationAwareInterface
 {
     /**
-     * @JMS\Expose
-     * @JMS\Groups({"public_profile"})
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")

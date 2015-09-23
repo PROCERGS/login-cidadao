@@ -257,9 +257,15 @@ services:
     procergs.person.serialize.listenner:
         class: %procergs.person.serialize.listenner.class%
         scope: request
-        arguments: [ @vich_uploader.templating.helper.uploader_helper, @templating.helper.assets, @kernel, @request ]
+        arguments:
+            - @vich_uploader.templating.helper.uploader_helper
+            - @templating.helper.assets
+            - @kernel
+            - @request
+            - @lc_accesstoken_manager
         tags:
             - { name: jms_serializer.event_listener, event: serializer.pre_serialize, method: onPreSerialize }
+            - { name: jms_serializer.event_listener, event: serializer.post_serialize, method: onPostSerialize }
 
     procergs_logincidadao.person.address.form.type:
         class: %procergs_logincidadao.person.address.form.type.class%

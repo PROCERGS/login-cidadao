@@ -52,7 +52,7 @@ class WellKnownController extends Controller
                 "code", "code id_token", "id_token", "token id_token"
             ),
             'subject_types_supported' => array(
-                'public'
+                'pairwise'
             )
         );
 
