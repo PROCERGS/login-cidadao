@@ -1,4 +1,6 @@
 parameters:
+    oidc.person.serialize.listenner.class: LoginCidadao\OpenIDBundle\EventListenner\PersonSerializeEventListenner
+
     oauth2.storage.authorization_code.class: LoginCidadao\OpenIDBundle\Storage\AuthorizationCode
     oauth2.storage.client_credentials.class: LoginCidadao\OpenIDBundle\Storage\ClientCredentials
     oauth2.storage.refresh_token.class: LoginCidadao\OpenIDBundle\Storage\RefreshToken
@@ -17,3 +19,11 @@ services:
     oauth2.storage.public_key:
         class: %oauth2.storage.public_key.class%
         arguments: [ @doctrine.orm.entity_manager ]
+
+    oidc.person.serialize.listenner:
+        class: %oidc.person.serialize.listenner.class%
+        arguments:
+            - @lc_accesstoken_manager
+            - %secret%
+        tags:
+            - { name: jms_serializer.event_listener, event: serializer.post_serialize, method: onPostSerialize }

@@ -24,18 +24,13 @@ class PersonSerializeEventListenner implements EventSubscriberInterface
     /** @var Request */
     protected $request;
 
-    /** @var AccessTokenManager */
-    protected $accessTokenManager;
-
     public function __construct(UploaderHelper $uploaderHelper, $templateHelper,
-                                Kernel $kernel, Request $request,
-                                AccessTokenManager $accessTokenManager)
+                                Kernel $kernel, Request $request)
     {
-        $this->uploaderHelper     = $uploaderHelper;
-        $this->templateHelper     = $templateHelper;
-        $this->kernel             = $kernel;
-        $this->request            = $request;
-        $this->accessTokenManager = $accessTokenManager;
+        $this->uploaderHelper = $uploaderHelper;
+        $this->templateHelper = $templateHelper;
+        $this->kernel         = $kernel;
+        $this->request        = $request;
     }
 
     public static function getSubscribedEvents()
@@ -68,27 +63,6 @@ class PersonSerializeEventListenner implements EventSubscriberInterface
 
     public function onPostSerialize(ObjectEvent $event)
     {
-        $this->setSubjectIdentifier($event);
-    }
-
-    private function setSubjectIdentifier(ObjectEvent $event)
-    {
-        $client   = $this->accessTokenManager->getTokenClient();
-        $metadata = $client->getMetadata();
-
-        $id = $event->getObject()->getId();
-        if ($metadata === null || $metadata->getSubjectType() === 'public') {
-            $event->getVisitor()->addData('sub', $id);
-            $event->getVisitor()->addData('id', $id);
-            return;
-        }
-
-        if ($metadata->getSubjectType() === 'pairwise') {
-            $sectorIdentifier = $metadata->getSectorIdentifier();
-            $salt             = $this->kernel->getContainer()->getParameter('secret');
-            $pairwise         = hash('sha256', $sectorIdentifier.$id.$salt);
-            $event->getVisitor()->addData('sub', $pairwise);
-            $event->getVisitor()->addData('id', $pairwise);
-        }
+        //
     }
 }
