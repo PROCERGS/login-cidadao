@@ -691,6 +691,14 @@ class ClientMetadata
         if (!$this->getRequireAuthTime()) {
             $this->setRequireAuthTime(false);
         }
+
+        if (!$this->getIdTokenSignedResponseAlg()) {
+            $this->setIdTokenSignedResponseAlg('RS256');
+        }
+
+        if (!$this->getTokenEndpointAuthMethod()) {
+            $this->setTokenEndpointAuthMethod('client_secret_basic');
+        }
     }
 
     public function getSectorIdentifier()
