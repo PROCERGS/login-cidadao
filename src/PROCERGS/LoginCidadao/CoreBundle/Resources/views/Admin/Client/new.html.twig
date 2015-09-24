@@ -1,58 +1,144 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle:Admin:base.html.twig' %}
 {% block content %}
-<div id="profile-edit" class="content clearfix">
-    <h1>{{ 'Service'|trans }}</h1>
-    <div class="form-content">
-        {% form_theme form 'PROCERGSLoginCidadaoCoreBundle::Form/fields.html.twig' %}
+    <div id="service-edit" class="content clearfix">
+        <h1 class="visible-xs">{% trans %}Service{% endtrans %}</h1>
+
         {{ form_start(form, {'attr' : {'role' : 'form'}}) }}
         {{ form_errors(form) }}
-        <div class="row clearfix">
-            <div class="col-md-5">
-                {% if client is defined and client.getPictureWebPath != '' %}
-                    <img src="/{{ client.getPictureWebPath }}"/>
-                {% else %}
-          {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
-          <img src="{{ asset_url }}"/>
-          {% endimage %}
-                {% endif %}
-               <div class="file-upload text-center">
-                    <button type="button" class="btn btn-success btn-upload">{% trans %}Upload another picture{% endtrans %}</button>
-                    <div class="file-name"></div>
-                    {{ form_widget(form.pictureFile) }}
+        <div class="form-content">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <div class="media clearfix">
+                            <div class="pull-left picture-panel-header">
+                                {% if client is defined and client.getPictureWebPath != '' and client.metadata is null %}
+                                    <img src="/{{ client.getPictureWebPath }}"/>
+                                {% elseif client.metadata is not null and client.metadata.logoUri is not null %}
+                                    <img src="{{ client.metadata.logoUri }}"/>
+                                {% else %}
+                                    {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+                                    <img src="{{ asset_url }}"/>
+                                    {% endimage %}
+                                {% endif %}
+                                <button type="button" data-toggle="collapse" data-target="#change-image-collapse" class="btn btn-xs btn-link btn-block change-picture" title="{% trans %}Upload another picture{% endtrans %}">{{ 'Change' | trans }}</button>
+                            </div>
+                            <div class="media-body">
+                                <h2 class="media-heading personal-info">{{ 'Service Description' | trans }}</h2>
+                                <p>{{ 'Client ID:' | trans }} {{ client.clientId }}</p>
+                                <p>
+                                    {{ 'Client Secret:' | trans }}
+                                    <span class="collapse" id="secret-collapse">{{ client.secret }}</span>
+                                    <button type="button" class="btn btn-sm btn-link" data-toggle="collapse" data-target="#secret-collapse" aria-expanded="false" aria-controls="secret-collapse">{{ 'view secret' | trans }}</button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-info picture-upload-box collapse" id="change-image-collapse" style="margin-bottom: 0">
+                    <div class="panel-heading clearfix">
+                        <div class="file-upload">
+                            <div class="buttons-toggle" data-toggle="buttons" role="group">
+                                <label class="btn btn-lg btn-success btn-upload" data-toggle="tooltip" data-placement="bottom" title="{{ 'Upload another picture' | trans }}">
+                                    <input class="upload-picture" type="radio" name="img-button" value="0">
+                                    <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+                                </label>
+                            </div>
+
+                            <div class="activity-desc">
+                                <span class="upload">{{ 'Your profile picure will be changed to <strong></strong>' | trans | raw }}</span>
+                                <span class="facebook-pic">{{ 'Your Facebook profile picure will be used.' | trans }}</span>
+                            </div>
+
+                            {{ form_widget(form.pictureFile) }}
+                            {{ form_errors(form.pictureFile) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    {{ form_row(form.name) }}
+                    {{ form_row(form.description) }}
+                    {{ form_row(form.siteUrl) }}
+                    {{ form_row(form.metadata.logo_uri) }}
+                    {{ form_row(form.landingPageUrl) }}
+                    {{ form_row(form.termsOfUseUrl) }}
+                    {{ form_row(form.published) }}
+                    {{ form_row(form.visible) }}
                 </div>
             </div>
-            <div class="col-md-7">
-                {{ form_row(form.name) }}
-                {{ form_row(form.description) }}
-                {{ form_row(form.siteUrl) }}
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{ 'Basic OAuth 2 and OpenID Connect Setup' | trans }}</h2>
+                </div>
+                <div class="panel-body">
+                    {{ form_row(form.redirectUris) }}
+                </div>
             </div>
-            <div class="col-md-12">
-                {{ form_row(form.redirectUris) }}
-                {{ form_row(form.landingPageUrl) }}
-                {{ form_row(form.termsOfUseUrl) }}
-                {{ form_row(form.published) }}
-                {{ form_row(form.visible) }}
-                {% if form.publicId is defined %}
-                    {{ form_row(form.publicId) }}
-                    {{ form_row(form.secret) }}
-                    {{ form_row(form.owners) }}
-                {% endif %}
+
+            {% if form.metadata is defined and form.metadata is not null %}
+                {% set metadata = form.metadata %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                            {{ 'Advanced OAuth 2 and OpenID Connect Setup' | trans }}
+                            <button type="button" class="btn btn-xs btn-info" data-toggle="collapse" data-target="#advanced-oidc-options" aria-expanded="false" aria-controls="advanced-oidc-options">{{ 'toggle options' | trans }}</button>
+                        </h2>
+                    </div>
+                    <div class="panel-body collapse" id="advanced-oidc-options">
+                        {{ form_row(metadata.application_type) }}
+                        {{ form_row(metadata.subject_type) }}
+                        {{ form_row(metadata.sector_identifier_uri) }}
+                        {{ form_row(metadata.policy_uri) }}
+                        {{ form_row(metadata.jwks_uri) }}
+                        {{ form_row(metadata.response_types) }}
+                        {{ form_row(metadata.grant_types) }}
+                        {{ form_row(metadata.request_uris) }}
+                        {{ form_row(metadata.jwks) }}
+                        {{ form_row(metadata.require_auth_time) }}
+                        {{ form_row(metadata.default_max_age) }}
+                        {{ form_row(metadata.default_acr_values) }}
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                            {{ 'OpenID Connect Signing and Cryptography Setup' | trans }}
+                            <button type="button" class="btn btn-xs btn-info" data-toggle="collapse" data-target="#crypto-oidc-options" aria-expanded="false" aria-controls="crypto-oidc-options">{{ 'toggle options' | trans }}</button>
+                        </h2>
+                    </div>
+                    <div class="panel-body collapse" id="crypto-oidc-options">
+                        {{ form_row(metadata.id_token_signed_response_alg) }}
+                        {{ form_row(metadata.id_token_encrypted_response_alg) }}
+                        {{ form_row(metadata.id_token_encrypted_response_enc) }}
+                        {{ form_row(metadata.userinfo_signed_response_alg) }}
+                        {{ form_row(metadata.userinfo_encrypted_response_alg) }}
+                        {{ form_row(metadata.userinfo_encrypted_response_enc) }}
+                        {{ form_row(metadata.request_object_signing_alg) }}
+                        {{ form_row(metadata.request_object_encryption_alg) }}
+                        {{ form_row(metadata.request_object_encryption_enc) }}
+                        {{ form_row(metadata.token_endpoint_auth_method) }}
+                        {{ form_row(metadata.token_endpoint_auth_signing_alg) }}
+                    </div>
+                </div>
+            {% endif %}
+            {% if form.publicId is defined %}
+                {{ form_row(form.owners) }}
+            {% endif %}
+            <div class="form-bar text-right">
+                <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
             </div>
-        </div>
-        <div class="form-bar text-right">
-            <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
         </div>
         {{ form_end(form) }}
     </div>
-</div>
-<style type="text/css">
-  .ac-search-enable {
-    cursor: pointer;
-    margin: 0 10px;
-  }
+    <style type="text/css">
+        .ac-search-enable {
+            cursor: pointer;
+            margin: 0 10px;
+        }
 
-  .ac-scrollspy-opts, .ac-scrollspy-opts-selected {
-    height: 350px;
-  }
-</style>
+        .ac-scrollspy-opts, .ac-scrollspy-opts-selected {
+            height: 350px;
+        }
+    </style>
 {% endblock %}

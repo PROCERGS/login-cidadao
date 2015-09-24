@@ -169,11 +169,19 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
 
     public function setName($name)
     {
+        if ($this->getMetadata()) {
+            $this->getMetadata()->setClientName($name);
+        }
         $this->name = $name;
+
+        return $this;
     }
 
     public function getName()
     {
+        if ($this->getMetadata()) {
+            return $this->getMetadata()->getClientName();
+        }
         return $this->name;
     }
 
@@ -189,11 +197,19 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
 
     public function setSiteUrl($url)
     {
+        if ($this->getMetadata()) {
+            $this->getMetadata()->setClientUri($url);
+        }
         $this->siteUrl = $url;
+
+        return $this;
     }
 
     public function getSiteUrl()
     {
+        if ($this->getMetadata()) {
+            return $this->getMetadata()->getClientUri();
+        }
         return $this->siteUrl;
     }
 
@@ -224,7 +240,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     public function getLandingPageUrl()
     {
         if ($this->getMetadata()) {
-            return $this->getMetadata()->getClientUri();
+            return $this->getMetadata()->getInitiateLoginUri();
         }
         return $this->landingPageUrl;
     }
@@ -232,10 +248,9 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     public function setLandingPageUrl($landingPageUrl)
     {
         if ($this->getMetadata()) {
-            $this->getMetadata()->setClientUri($landingPageUrl);
-        } else {
-            $this->landingPageUrl = $landingPageUrl;
+            $this->getMetadata()->setInitiateLoginUri($landingPageUrl);
         }
+        $this->landingPageUrl = $landingPageUrl;
         return $this;
     }
 
@@ -251,9 +266,9 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     {
         if ($this->getMetadata()) {
             $this->getMetadata()->setTosUri($termsOfUseUrl);
-        } else {
-            $this->termsOfUseUrl = $termsOfUseUrl;
         }
+        $this->termsOfUseUrl = $termsOfUseUrl;
+
         return $this;
     }
 
@@ -467,6 +482,24 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     public function setMetadata(\LoginCidadao\OpenIDBundle\Entity\ClientMetadata $metadata)
     {
         $this->metadata = $metadata;
+        return $this;
+    }
+
+    public function getRedirectUris()
+    {
+        if ($this->getMetadata()) {
+            return $this->getMetadata()->getRedirectUris();
+        }
+        return parent::getRedirectUris();
+    }
+
+    public function setRedirectUris(array $redirectUris)
+    {
+        if ($this->getMetadata()) {
+            $this->getMetadata()->setRedirectUris($redirectUris);
+        } else {
+            parent::setRedirectUris($redirectUris);
+        }
         return $this;
     }
 }

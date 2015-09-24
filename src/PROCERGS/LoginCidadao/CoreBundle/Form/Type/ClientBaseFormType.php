@@ -23,6 +23,8 @@ class ClientBaseFormType extends AbstractType
             'required' => true,
             'attr' => array('rows' => 4)
         ));
+        $builder->add('metadata',
+            new \LoginCidadao\OpenIDBundle\Form\ClientMetadataWebForm());
         $builder->add('siteUrl', 'text',
             array(
             'required' => true
@@ -90,18 +92,6 @@ class ClientBaseFormType extends AbstractType
             $entity = $event->getData();
             $form   = $event->getForm();
             if ($entity->getId()) {
-                $form->add('publicId', 'textarea',
-                    array(
-                    'required' => false,
-                    'read_only' => true,
-                    'attr' => array('rows' => 4)
-                ));
-                $form->add('secret', 'textarea',
-                    array(
-                    'required' => false,
-                    'read_only' => true,
-                    'attr' => array('rows' => 4)
-                ));
                 $form->add('owners', 'ajax_choice',
                     array(
                     'label' => 'dev.ac.owners',

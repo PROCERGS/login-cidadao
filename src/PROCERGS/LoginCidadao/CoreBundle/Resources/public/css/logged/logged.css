@@ -932,3 +932,17 @@ label + .glyphicon-pencil {
 #dashboard .log-about {
     font-size: 11px;
 }
+
+#service-edit .panel-heading h2 {
+    font-size: 22px;
+}
+#service-edit .panel-heading p {
+    font-size: 14px;
+}
+#service-edit #secret-collapse.collapse.in {
+    display: inline-block !important;
+}
+#service-edit .picture-panel-header img {
+    max-width: 100%;
+    max-height: 55px;
+}
