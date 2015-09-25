@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace LoginCidadao\OpenIDBundle\Model;
+namespace LoginCidadao\OpenIDBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 use PROCERGS\OAuthBundle\Model\AccessTokenManager;
