@@ -23,20 +23,24 @@
 
             <ul class="permissions">
                 {% for scope in scopes %}
-                    <li>
-                        {% if scope.scope == 'openid' %}
+                    {% if scope.scope == 'openid' %}
+                        <input type="hidden" name="scope[]" value="{{ scope.scope }}">
+                    {% elseif scope.scope == 'public_profile' %}
+                        <li>
                             <label for="scope_{{ loop.index }}">
-                                <input type="checkbox" checked disabled value="{{ scope.scope }}" id="scope_{{ loop.index }}">
+                                <input type="checkbox" name="scope[]" checked disabled value="{{ scope.scope }}" id="scope_{{ loop.index }}">
                                 {{ ('scope.' ~ scope.scope) | trans }}
                                 <input type="hidden" name="scope[]" value="{{ scope.scope }}">
                             </label>
-                        {% else %}
+                        </li>
+                    {% else %}
+                        <li>
                             <label for="scope_{{ loop.index }}">
                                 <input type="checkbox" name="scope[]" checked value="{{ scope.scope }}" id="scope_{{ loop.index }}">
                                 {{ ('scope.' ~ scope.scope) | trans }}
                             </label>
-                        {% endif %}
-                    </li>
+                        </li>
+                    {% endif %}
                 {% endfor %}
             </ul>
         </div>
