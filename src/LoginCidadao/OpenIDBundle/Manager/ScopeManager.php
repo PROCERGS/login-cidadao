@@ -26,44 +26,6 @@ class ScopeManager extends BaseManager implements ScopeManagerInterface
     }
 
     /**
-     * Creates a new scope
-     *
-     * @param string $scope
-     *
-     * @param string $description
-     *
-     * @param string $name
-     *
-     * @return Scope
-     */
-    public function createScope($scope, $description = null, $name = null)
-    {
-        $scopeObject = new Scope();
-        $scopeObject->setName($name);
-        $scopeObject->setScope($scope);
-        $scopeObject->setDescription($description);
-
-        // Store Scope
-        $this->em->persist($scopeObject);
-        $this->em->flush();
-
-        return $scopeObject;
-    }
-
-    /**
-     * Find a single scope by the scope
-     *
-     * @param $scope
-     * @return Scope
-     */
-    public function findScopeByScope($scope)
-    {
-        $scopeObject = $this->em->getRepository('LoginCidadaoOpenIDBundle:Scope')->find($scope);
-
-        return $scopeObject;
-    }
-
-    /**
      * Find all the scopes by an array of scopes
      *
      * @param array $scopes
@@ -71,9 +33,9 @@ class ScopeManager extends BaseManager implements ScopeManagerInterface
      */
     public function findScopesByScopes(array $scopes)
     {
-        $scopeObjects = $this->em->getRepository('LoginCidadaoOpenIDBundle:Scope')
+        $scopeObjects = $this->em->getRepository('OAuth2ServerBundle:Scope')
                 ->createQueryBuilder('a')
-                ->where('a.scope in (?1)')
+                ->where('a.scope IN (?1)')
                 ->setParameter(1, $scopes)
                 ->getQuery()->getResult();
 

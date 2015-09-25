@@ -2,6 +2,7 @@
 
 namespace LoginCidadao\OpenIDBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -14,8 +15,11 @@ class AuthorizeController extends Controller
      * @Route("/openid/connect/authorize", name="_authorize_handle")
      * @Method({"POST"})
      */
-    public function handleAuthorizeAction()
+    public function handleAuthorizeAction(Request $request)
     {
+        $scope = $request->request->get('scope');
+        $request->request->set('scope', implode(' ', $scope));
+
         $server = $this->get('oauth2.server');
 
         return $server->handleAuthorizeRequest($this->get('oauth2.request'),
@@ -33,15 +37,19 @@ class AuthorizeController extends Controller
         $client = $em->getRepository('PROCERGSOAuthBundle:Client')
             ->find($id[0]);
 
-
-        $scopes       = array();
-        $scopeStorage = $this->get('oauth2.storage.scope');
-        foreach (explode(' ', $scope) as $scope) {
-            $scopes[] = $scopeStorage->getDescriptionForScope($scope);
-        }
+        $scopeManager = $this->getScopeManager();
+        $scopes       = $scopeManager->findScopesByScopes(explode(' ', $scope));
 
         $qs = compact('client_id', 'scope', 'response_type', 'redirect_uri',
             'state', 'nonce');
         return compact('qs', 'scopes', 'client');
+    }
+
+    /**
+     * @return \OAuth2\ServerBundle\Manager\ScopeManager
+     */
+    private function getScopeManager()
+    {
+        return $this->get('oauth2.scope_manager');
     }
 }
