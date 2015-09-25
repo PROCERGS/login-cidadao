@@ -9,11 +9,7 @@
             <i class="glyphicon glyphicon-chevron-right"></i>
         </div>
         <div class="col-xs-5 text-left">
-            {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
-                <img src="/{{ client.getPictureWebPath }}" width="90" height="90" alt="" class="img-rounded">
-            {% else %}
-                <img src="//placehold.it/90x90" alt="" class="img-rounded">
-            {% endif %}
+            <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': client }) }}" width="90" height="90" alt="" class="img-rounded">
         </div>
     </div>
 

@@ -36,8 +36,9 @@
                                 {% if form.image.delete is defined %}
                                     {% do form.image.delete.setRendered %}
                                     {% if app.user.socialNetworksPicture is not null %}
-                                        <label class="btn btn-lg btn-info btn-facebook-profile-pic-preview" data-toggle="tooltip" data-placement="bottom" title="{{ 'Use your Facebook picture' | trans }}">
-                                            <input class="use-facebook" type="radio" name="{{ form.image.delete.vars.full_name }}" autocomplete="off"> <img class="facebook-profile-pic-preview" src="{{ app.user.socialNetworksPicture }}" >
+                                        <label class="btn btn-lg btn-info btn-external-pic-preview" data-toggle="tooltip" data-placement="bottom" title="{{ 'Use your Facebook picture' | trans }}">
+                                            <input class="use-facebook" type="radio" name="{{ form.image.delete.vars.full_name }}" autocomplete="off">
+                                            <img class="facebook-profile-pic-preview" src="{{ app.user.socialNetworksPicture }}" >
                                         </label>
                                     {% else %}
                                         <label class="btn btn-lg btn-danger">

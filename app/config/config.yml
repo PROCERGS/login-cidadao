@@ -272,6 +272,9 @@ knp_gaufrette:
         user_local_adapter:
             local:
                 directory: %user_profile_upload_dir%
+        client_local_adapter:
+            local:
+                directory: %client_image_upload_dir%
         jwks_local_adapter:
             local:
                 directory: %jwks_dir%
@@ -279,6 +282,8 @@ knp_gaufrette:
     filesystems:
         user_image_fs:
             adapter:    user_local_adapter
+        client_image_fs:
+            adapter:    client_local_adapter
         jwks_fs:
             adapter:    jwks_local_adapter
 
@@ -290,6 +295,11 @@ vich_uploader:
         user_image:
             uri_prefix:         %uri_root%/uploads/profile-pictures
             upload_destination: user_image_fs
+            namer:              vich_uploader.namer_uniqid
+            inject_on_load:     false
+        client_image:
+            uri_prefix:         %uri_root%/uploads/client-pictures
+            upload_destination: client_image_fs
             namer:              vich_uploader.namer_uniqid
             inject_on_load:     false
 

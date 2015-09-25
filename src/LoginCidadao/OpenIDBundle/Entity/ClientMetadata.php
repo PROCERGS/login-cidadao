@@ -37,7 +37,7 @@ class ClientMetadata
 
     /**
      * @var Client
-     * @ORM\OneToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="metadata")
+     * @ORM\OneToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="metadata", cascade={"persist"})
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      */
     protected $client;

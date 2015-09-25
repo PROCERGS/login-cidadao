@@ -17,6 +17,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Model\AbstractUniqueEntity;
 use PROCERGS\LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\OAuthBundle\Entity\ClientRepository")
@@ -24,6 +25,7 @@ use PROCERGS\OAuthBundle\Model\ClientInterface;
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity("name")
  * @JMS\ExclusionPolicy("all")
+ * @Vich\Uploadable
  */
 class Client extends BaseClient implements UniqueEntityInterface, ClientInterface
 {
@@ -97,15 +99,25 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     protected $categories;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\File(
+     *      maxSize="2M",
+     *      maxSizeMessage="The maxmimum allowed file size is 2MB.",
+     *      mimeTypes={"image/png", "image/jpeg", "image/pjpeg"},
+     *      mimeTypesMessage="Only JPEG and PNG images are allowed."
+     * )
+     * @Vich\UploadableField(mapping="client_image", fileNameProperty="imageName")
+     * @var File $image
+     * @JMS\Since("1.0.2")
      */
-    protected $picturePath;
-    protected $tempPicturePath;
+    protected $image;
 
     /**
-     * @Assert\File(maxSize="6000000")
+     * @ORM\Column(type="string", length=255, name="image_name", nullable=true)
+     *
+     * @var string $imageName
+     * @JMS\Since("1.0.2")
      */
-    protected $pictureFile;
+    protected $imageName;
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
@@ -138,9 +150,14 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
 
     /**
      * @var \LoginCidadao\OpenIDBundle\Entity\ClientMetadata
-     * @ORM\OneToOne(targetEntity="LoginCidadao\OpenIDBundle\Entity\ClientMetadata", mappedBy="client")
+     * @ORM\OneToOne(targetEntity="LoginCidadao\OpenIDBundle\Entity\ClientMetadata", mappedBy="client", cascade={"persist"})
      */
     protected $metadata;
+
+    /**
+     * @ORM\Column(name="updated_at", type="datetime")
+     */
+    protected $updatedAt;
 
     public function __construct()
     {
@@ -290,101 +307,6 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         return $this;
     }
 
-    public function getAbsolutePicturePath()
-    {
-        if ($this->getMetadata() && $this->getMetadata()->getLogoUri()) {
-            return $this->getMetadata()->getLogoUri();
-        }
-        return null === $this->picturePath ? null : $this->getPictureUploadRootDir().DIRECTORY_SEPARATOR.$this->picturePath;
-    }
-
-    public function getPictureWebPath()
-    {
-        if ($this->getMetadata() && $this->getMetadata()->getLogoUri()) {
-            return $this->getMetadata()->getLogoUri();
-        }
-        return self::resolvePictureWebPath($this->picturePath);
-    }
-
-    protected function getPictureUploadRootDir()
-    {
-        return __DIR__.'/../../../../web/'.self::getPictureUploadDir();
-    }
-
-    protected static function getPictureUploadDir()
-    {
-        return 'uploads/client-pictures';
-    }
-
-    public static function resolvePictureWebPath($var)
-    {
-        return null === $var ? null : self::getPictureUploadDir().'/'.$var;
-    }
-
-    public function setPictureFile(File $pictureFile = null)
-    {
-        $this->pictureFile = $pictureFile;
-        if (isset($this->picturePath)) {
-            $this->tempPicturePath = $this->picturePath;
-            $this->picturePath     = null;
-        } else {
-            $this->picturePath = null;
-        }
-    }
-
-    /**
-     *
-     * @return File
-     */
-    public function getPictureFile()
-    {
-        return $this->pictureFile;
-    }
-
-    /**
-     * @ORM\PostPersist()
-     * @ORM\PostUpdate()
-     */
-    public function uploadPicture()
-    {
-        if (null === $this->getPictureFile()) {
-            return;
-        }
-
-        $this->getPictureFile()->move(
-            $this->getPictureUploadRootDir(), $this->picturePath
-        );
-
-        if (isset($this->tempPicturePath) && $this->tempPicturePath != $this->picturePath) {
-            @unlink($this->getPictureUploadRootDir().DIRECTORY_SEPARATOR.$this->tempPicturePath);
-            $this->tempPicturePath = null;
-        }
-
-        $this->pictureFile = null;
-    }
-
-    /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
-     */
-    public function preUpload()
-    {
-        if (null !== $this->getPictureFile()) {
-            $filename          = sha1($this->getId());
-            $this->picturePath = "$filename.".$this->getPictureFile()->guessExtension();
-        }
-    }
-
-    /**
-     * @ORM\PostRemove()
-     */
-    public function removePicturePostRemoval()
-    {
-        if ($file = $this->getAbsolutePicturePath()) {
-            unlink($file);
-        }
-    }
-
     public function isVisible()
     {
         return $this->visible;
@@ -500,6 +422,59 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         } else {
             parent::setRedirectUris($redirectUris);
         }
+        return $this;
+    }
+
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the  update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        if ($this->image) {
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    /**
+     * @return File
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param string $imageName
+     */
+    public function setImageName($imageName)
+    {
+        $this->imageName = $imageName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageName()
+    {
+        return $this->imageName;
+    }
+
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
         return $this;
     }
 }
