@@ -55,7 +55,7 @@ class LoggedInUserListener
         }
 
         $_route = $event->getRequest()->attributes->get('_route');
-        if ($this->context->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->context->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if (!($token->getUser() instanceof PersonInterface)) {
                 // We don't have a PersonInterface... Nothing to do here.
                 return;
