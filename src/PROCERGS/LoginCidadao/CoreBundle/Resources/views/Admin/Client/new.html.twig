@@ -1,4 +1,8 @@
 {% extends 'PROCERGSLoginCidadaoCoreBundle:Admin:base.html.twig' %}
+{% if form.metadata is defined and form.metadata is not null %}
+    {% set metadata = form.metadata %}
+{% endif %}
+
 {% block content %}
     <div id="service-edit" class="content clearfix">
         <h1 class="visible-xs">{% trans %}Service{% endtrans %}</h1>
@@ -33,7 +37,7 @@
                                 {% set imageDeleteName = (form.image.delete is defined) ? form.image.delete.vars.full_name : 'img-button' %}
                                 {% if form.image.delete is defined %}
                                     {% do form.image.delete.setRendered %}
-                                    {% if client.metadata is not null and client.metadata.logoUri is not null %}
+                                    {% if metadata is defined and client.metadata.logoUri is not null %}
                                         <label class="btn btn-lg btn-info btn-external-pic-preview" data-toggle="tooltip" data-placement="bottom" title="{{ 'Use the client-specified image' | trans }}">
                                             <input class="use-external" type="radio" name="{{ form.image.delete.vars.full_name }}" autocomplete="off">
                                             <img class="external-pic-preview" src="{{ client.metadata.logoUri }}" width="100%" >
@@ -75,11 +79,14 @@
                 </div>
                 <div class="panel-body">
                     {{ form_row(form.redirectUris) }}
+                    {% if metadata is defined %}
+                        {{ form_row(metadata.response_types) }}
+                        {{ form_row(metadata.grant_types) }}
+                    {% endif %}
                 </div>
             </div>
 
-            {% if form.metadata is defined and form.metadata is not null %}
-                {% set metadata = form.metadata %}
+            {% if metadata is defined %}
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title">
@@ -93,8 +100,6 @@
                         {{ form_row(metadata.sector_identifier_uri) }}
                         {{ form_row(metadata.policy_uri) }}
                         {{ form_row(metadata.jwks_uri) }}
-                        {{ form_row(metadata.response_types) }}
-                        {{ form_row(metadata.grant_types) }}
                         {{ form_row(metadata.request_uris) }}
                         {{ form_row(metadata.jwks) }}
                         {{ form_row(metadata.require_auth_time) }}
