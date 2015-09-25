@@ -71,10 +71,10 @@ class ClientController extends Controller
 
         if ($form->isValid()) {
             $metadata = $form->get('metadata')->getData();
-
             $client->setAllowedGrantTypes(Client::getAllGrants());
             $client->setMetadata($metadata);
             $metadata->setClient($client);
+
             $clientManager = $this->container->get('fos_oauth_server.client_manager');
             $clientManager->updateClient($client);
 

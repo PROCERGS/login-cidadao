@@ -253,6 +253,7 @@
 #lc-navbar .profile-card .profile-picture {
     min-width: 30px;
     max-height: 30px;
+    margin-top: -5px;
 }
 
 #lc-navbar .dropdown-menu {
