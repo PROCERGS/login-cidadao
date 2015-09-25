@@ -947,3 +947,7 @@ label + .glyphicon-pencil {
     max-width: 100%;
     max-height: 55px;
 }
+
+#oauth-box h1 {
+    font-size: 32px;
+}

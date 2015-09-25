@@ -17,13 +17,16 @@ class AuthorizeController extends Controller
      */
     public function handleAuthorizeAction(Request $request)
     {
-        $scope = $request->request->get('scope');
+        $scope         = $request->request->get('scope');
+        $is_authorized = $request->request->has('rejected') === false || $request->request->has('accepted')
+            === true;
         $request->request->set('scope', implode(' ', $scope));
 
         $server = $this->get('oauth2.server');
 
         return $server->handleAuthorizeRequest($this->get('oauth2.request'),
-                $this->get('oauth2.response'), true, $this->getUser()->getId());
+                $this->get('oauth2.response'), $is_authorized,
+                $this->getUser()->getId());
     }
 
     /**

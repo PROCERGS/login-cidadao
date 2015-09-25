@@ -1,51 +1,65 @@
 <form action="?{{ qs|url_encode }}" method="post" class="fos_oauth_server_authorize">
-    <h3>{% trans %}Authorize Application{% endtrans %}</h3>
+    <h1>{% trans with { '%client_name%': client.name } %}Authorize <strong>%client_name%</strong> to access your information?{% endtrans %}</h1>
 
-    <div class="connect-diagram row">
-        <div class="col-xs-5 text-right">
-            <img src="{{ include("PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" width="90" class="img-rounded">
-        </div>
-        <div class="col-xs-2 text-center">
-            <i class="glyphicon glyphicon-chevron-right"></i>
-        </div>
-        <div class="col-xs-5 text-left">
-            <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': client }) }}" class="media-object" width="90" height="90" alt="" class="img-rounded">
+    <div class="panel">
+        <div class="panel-body">
+            <div class="connect-diagram row">
+                <div class="col-xs-5 text-right">
+                    <img src="{{ include("PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" width="70" class="img-rounded">
+                </div>
+                <div class="col-xs-2 text-center">
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                </div>
+                <div class="col-xs-5 text-left">
+                    <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': client }) }}" class="media-object" width="70" height="70" alt="" class="img-rounded">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-offset-2 col-sm-8">
+                    <p class="msg">{% trans with {'%client_name%': client.name} %}<strong>%client_name%</strong> will be granted the following information and permissions:{% endtrans %}</p>
+
+                    <ul class="permissions">
+                        {% for scope in scopes %}
+                            {% if scope.scope == 'openid' %}
+                                <input type="hidden" name="scope[]" value="{{ scope.scope }}">
+                            {% elseif scope.scope == 'public_profile' %}
+                                <li>
+                                    <label for="scope_{{ loop.index }}">
+                                        <input type="checkbox" name="scope[]" checked disabled value="{{ scope.scope }}" id="scope_{{ loop.index }}">
+                                        {{ ('scope.' ~ scope.scope) | trans }}
+                                        <input type="hidden" name="scope[]" value="{{ scope.scope }}">
+                                    </label>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <label for="scope_{{ loop.index }}">
+                                        <input type="checkbox" name="scope[]" checked value="{{ scope.scope }}" id="scope_{{ loop.index }}">
+                                        {{ ('scope.' ~ scope.scope) | trans }}
+                                    </label>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row buttons">
+                <div class="col-xs-6 text-center">
+                    <input type="submit" name="rejected" value="{{ 'authorize.reject'|trans({}, 'FOSOAuthServerBundle') }}" class="btn btn-link" style="color: #b00" >
+                </div>
+                <div class="col-xs-6 text-center">
+                    <input type="submit" name="accepted" value="{{ 'authorize.accept'|trans({}, 'FOSOAuthServerBundle') }}" class="btn btn-success" style="padding-right: 20px; padding-left: 20px;" >
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-xs-12 col-sm-offset-2 col-sm-8">
-            <p class="msg">{% trans with {'%client_name%': client.name} %}The application <strong>%client_name%</strong> wants to access the following information about you:{% endtrans %}</p>
+        <div class="col-xs-12">
+            <h2>{% trans with { '%client_name%': client.name } %}About <strong>%client_name%</strong>{% endtrans %}</h2>
+            <p>{{ client.description | nl2br }}</p>
 
-            <ul class="permissions">
-                {% for scope in scopes %}
-                    {% if scope.scope == 'openid' %}
-                        <input type="hidden" name="scope[]" value="{{ scope.scope }}">
-                    {% elseif scope.scope == 'public_profile' %}
-                        <li>
-                            <label for="scope_{{ loop.index }}">
-                                <input type="checkbox" name="scope[]" checked disabled value="{{ scope.scope }}" id="scope_{{ loop.index }}">
-                                {{ ('scope.' ~ scope.scope) | trans }}
-                                <input type="hidden" name="scope[]" value="{{ scope.scope }}">
-                            </label>
-                        </li>
-                    {% else %}
-                        <li>
-                            <label for="scope_{{ loop.index }}">
-                                <input type="checkbox" name="scope[]" checked value="{{ scope.scope }}" id="scope_{{ loop.index }}">
-                                {{ ('scope.' ~ scope.scope) | trans }}
-                            </label>
-                        </li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-
-    <div class="row buttons">
-        <div class="col-xs-12 text-center">
-            <input type="submit" name="rejected" value="{{ 'authorize.reject'|trans({}, 'FOSOAuthServerBundle') }}" class="btn btn-danger" />
-            <input type="submit" name="accepted" value="{{ 'authorize.accept'|trans({}, 'FOSOAuthServerBundle') }}" class="btn btn-success" />
         </div>
     </div>
 </form>
