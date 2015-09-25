@@ -37,8 +37,13 @@ class AuthorizeController extends Controller
         $client = $em->getRepository('PROCERGSOAuthBundle:Client')
             ->find($id[0]);
 
+        $scope = explode(' ', $scope);
+        if (array_search('public_profile', $scope) === false) {
+            $scope[] = 'public_profile';
+        }
+
         $scopeManager = $this->getScopeManager();
-        $scopes       = $scopeManager->findScopesByScopes(explode(' ', $scope));
+        $scopes       = $scopeManager->findScopesByScopes($scope);
 
         $qs = compact('client_id', 'scope', 'response_type', 'redirect_uri',
             'state', 'nonce');
