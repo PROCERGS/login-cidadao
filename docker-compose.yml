@@ -22,3 +22,14 @@ db:
         MYSQL_DATABASE: login_cidadao
         MYSQL_USER: logincidadao
         MYSQL_PASSWORD: logincidadao
+
+# Suporte ao banco PostgreSQL
+# db:
+#     image: compose/pgsql
+#     ports:
+#         - "5432:5432"
+#     environment:
+#         POSTGRES_USER: logincidadao
+#         POSTGRES_PASSWORD: logincidadao
+#     volumes:
+#         - /data/login_cidadao:/data
