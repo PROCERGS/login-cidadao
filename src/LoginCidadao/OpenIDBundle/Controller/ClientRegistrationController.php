@@ -11,6 +11,7 @@ use LoginCidadao\OpenIDBundle\Form\ClientMetadataForm;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Exception\DynamicRegistrationException;
 use PROCERGS\OAuthBundle\Entity\Client;
+use League\Uri\Schemes\Http as HttpUri;
 
 /**
  * @REST\Route("/openid/connect")
@@ -81,7 +82,7 @@ class ClientRegistrationController extends FOSRestController
         $client = $data->toClient();
 
         if ($client->getName() === null) {
-            $firstUrl = $client->getRedirectUris()[0];
+            $firstUrl = $this->getHost($client->getRedirectUris()[0]);
             $client->setName($firstUrl);
         }
         if ($client->getDescription() === null) {
@@ -102,5 +103,10 @@ class ClientRegistrationController extends FOSRestController
         $em->flush();
 
         return $client;
+    }
+
+    private function getHost($uri)
+    {
+        return HttpUri::createFromString($uri)->getHost();
     }
 }
