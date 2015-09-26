@@ -55,11 +55,13 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-xs-12">
-            <h2>{% trans with { '%client_name%': client.name } %}About <strong>%client_name%</strong>{% endtrans %}</h2>
-            <p>{{ client.description | nl2br }}</p>
+    {% if client.description | trim | length > 0 %}
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>{% trans with { '%client_name%': client.name } %}About <strong>%client_name%</strong>{% endtrans %}</h2>
+                <p>{{ client.description | nl2br }}</p>
 
+            </div>
         </div>
-    </div>
+    {% endif %}
 </form>
