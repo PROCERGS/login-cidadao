@@ -197,6 +197,10 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     public function getName()
     {
         if ($this->getMetadata()) {
+            if ($this->getMetadata()->getClientName() === null &&
+                $this->name !== null) {
+                $this->getMetadata()->setClientName($this->name);
+            }
             return $this->getMetadata()->getClientName();
         }
         return $this->name;
@@ -472,9 +476,17 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt($updatedAt)
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function setUpdatedAt($updatedAt = null)
     {
-        $this->updatedAt = $updatedAt;
+        if ($updatedAt instanceof \DateTime) {
+            $this->updatedAt = $updatedAt;
+        } else {
+            $this->updatedAt = new \DateTime('now');
+        }
         return $this;
     }
 }
