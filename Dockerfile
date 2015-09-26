@@ -10,8 +10,8 @@ RUN apt-get update \
     && echo extension=apcu.so > /usr/local/etc/php/conf.d/apcu.ini \
     && docker-php-ext-install zip mbstring intl pdo_mysql
 
-ADD compose/vhost.conf /etc/apache2/sites-enabled/000-default.conf
-ADD compose/php.ini /usr/local/etc/php/php.ini
+COPY compose/vhost.conf /etc/apache2/sites-enabled/000-default.conf
+COPY compose/php.ini /usr/local/etc/php/php.ini
 
 RUN a2enmod rewrite
 
@@ -20,7 +20,7 @@ RUN curl -sS https://getcomposer.org/installer | php \
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-ADD . /var/www/symfony
+COPY . /var/www/symfony
 
 RUN usermod -u 1000 www-data
 RUN chown -R www-data:www-data /var/www/symfony/app/cache
@@ -29,3 +29,5 @@ RUN chown -R 744 /var/www/symfony/app/cache
 RUN chown -R 744 /var/www/symfony/app/logs
 
 WORKDIR /var/www/symfony
+RUN composer install
+CMD /var/www/symfony/entrypoint.sh
