@@ -2,10 +2,13 @@
 
 namespace LoginCidadao\OpenIDBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class WellKnownController extends Controller
 {
@@ -14,7 +17,7 @@ class WellKnownController extends Controller
      * @Route("/.well-known/openid-configuration", name="oidc_wellknown")
      * @Method({"GET"})
      */
-    public function wellKnownAction()
+    public function openidConfigAction()
     {
         $authEndpoint   = $this->generateUrl('_authorize_validate', array(),
             UrlGeneratorInterface::ABSOLUTE_URL);
@@ -56,6 +59,32 @@ class WellKnownController extends Controller
             )
         );
 
-        return new \Symfony\Component\HttpFoundation\JsonResponse($data);
+        return new JsonResponse($data);
+    }
+
+    /**
+     * @Route("/.well-known/webfinger")
+     * @Method({"GET"})
+     */
+    public function webFingerAction(Request $request)
+    {
+        $resource = $request->get('resource');
+        $rel      = $request->get('rel');
+
+        if ($rel !== 'http://openid.net/specs/connect/1.0/issuer') {
+            throw new BadRequestHttpException('Invalid "rel"');
+        }
+
+        $response = array(
+            'subject' => $resource,
+            'links' => array(
+                array(
+                    'rel' => $rel,
+                    'href' => $this->getParameter('jwt_iss')
+                )
+            )
+        );
+
+        return new JsonResponse($response);
     }
 }
