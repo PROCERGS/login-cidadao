@@ -2,20 +2,20 @@
 
 namespace LoginCidadao\OpenIDBundle\Controller;
 
+use League\Uri\UriParser;
 use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use FOS\RestBundle\Controller\Annotations as REST;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class WellKnownController extends Controller
+class WellKnownController extends FOSRestController
 {
 
     /**
-     * @Route("/.well-known/openid-configuration", name="oidc_wellknown")
-     * @Method({"GET"})
+     * @REST\Get("/.well-known/openid-configuration", name="oidc_wellknown", defaults={"_format"="json"})
+     * @REST\View(templateVar="oidc_config")
      */
     public function openidConfigAction()
     {
@@ -63,17 +63,18 @@ class WellKnownController extends Controller
     }
 
     /**
-     * @Route("/.well-known/webfinger")
-     * @Method({"GET"})
+     * @REST\Get("/.well-known/webfinger", name="oidc_provider_discovery", defaults={"_format"="json"})
+     * @REST\View(templateVar="webfinger")
      */
     public function webFingerAction(Request $request)
     {
-        $resource = $request->get('resource');
-        $rel      = $request->get('rel');
+        $rel = $request->get('rel');
 
         if ($rel !== 'http://openid.net/specs/connect/1.0/issuer') {
-            throw new BadRequestHttpException('Invalid "rel"');
+            throw new BadRequestHttpException('Unsupported "rel" value.');
         }
+
+        $resource = $this->validateSubjectResource($request->get('resource'));
 
         $response = array(
             'subject' => $resource,
@@ -86,5 +87,38 @@ class WellKnownController extends Controller
         );
 
         return new JsonResponse($response);
+    }
+
+    private function validateSubjectResource($resource)
+    {
+        if (strpos($resource, 'acct:') === 0) {
+            $resource  = preg_replace('/@/', '%40', $resource, 1);
+            $parseable = preg_replace('/^acct:/', 'acct://', $resource, 1);
+        } else {
+            $parseable = $resource;
+        }
+
+        $parser  = new UriParser();
+        $default = array(
+            'scheme' => null,
+            'user' => null,
+            'host' => null,
+        );
+
+        $parts = array_merge($default, $parser->parse($parseable));
+
+        if ($parts['scheme'] === null) {
+            if ($parts['host'] !== null && $parts['user'] !== null) {
+                $parts['scheme'] = 'acct';
+            } else {
+                $parts['scheme'] = 'https';
+            }
+        }
+
+        if ($parts['scheme'] === null || $parts['host'] === null) {
+            throw new BadRequestHttpException("Invalid resource");
+        }
+
+        return $resource;
     }
 }

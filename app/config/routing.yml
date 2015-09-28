@@ -8,6 +8,10 @@ lc_oidc_dr:
     type:     rest
     resource: LoginCidadao\OpenIDBundle\Controller\ClientRegistrationController
 
+lc_oidc_discovery:
+    type:     rest
+    resource: LoginCidadao\OpenIDBundle\Controller\WellKnownController
+
 lc_oidc:
     resource: "@LoginCidadaoOpenIDBundle/Controller/"
     type:     annotation
