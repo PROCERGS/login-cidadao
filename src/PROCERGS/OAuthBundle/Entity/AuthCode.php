@@ -35,6 +35,11 @@ class AuthCode extends BaseAuthCode
      */
     protected $idToken;
 
+    /**
+     * @ORM\Column(name="session_id", type="string", length=255, nullable=true)
+     */
+    protected $sessionId;
+
     public function getIdToken()
     {
         return $this->idToken;
@@ -43,6 +48,17 @@ class AuthCode extends BaseAuthCode
     public function setIdToken($idToken)
     {
         $this->idToken = $idToken;
+        return $this;
+    }
+
+    public function getSessionId()
+    {
+        return $this->sessionId;
+    }
+
+    public function setSessionId($sessionId)
+    {
+        $this->sessionId = $sessionId;
         return $this;
     }
 }

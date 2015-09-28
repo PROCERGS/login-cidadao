@@ -11,11 +11,16 @@
 namespace LoginCidadao\OpenIDBundle\Storage;
 
 use OAuth2\OpenID\Storage\AuthorizationCodeInterface;
+use LoginCidadao\OpenIDBundle\Storage\SessionState;
 use Doctrine\ORM\EntityManager;
 
 class AuthorizationCode implements AuthorizationCodeInterface
 {
+    /** @var EntityManager */
     private $em;
+
+    /** @var SessionState */
+    private $sessionStateStorage;
 
     public function __construct(EntityManager $EntityManager)
     {
@@ -68,6 +73,9 @@ class AuthorizationCode implements AuthorizationCodeInterface
             );
             if ($code->getIdToken()) {
                 $response['id_token'] = $code->getIdToken();
+            }
+            if ($code->getSessionId()) {
+                $response['session_id'] = $code->getSessionId();
             }
             return $response;
         }
@@ -124,6 +132,7 @@ class AuthorizationCode implements AuthorizationCodeInterface
         $authorizationCode->setExpiresAt($expires);
         $authorizationCode->setScope($scope);
         $authorizationCode->setIdToken($id_token);
+        $authorizationCode->setSessionId($this->sessionStateStorage->getSessionId());
 
         $this->em->persist($authorizationCode);
         $this->em->flush();
@@ -147,5 +156,10 @@ class AuthorizationCode implements AuthorizationCodeInterface
             ->findOneBy(array('token' => $code));
         $this->em->remove($code);
         $this->em->flush();
+    }
+
+    public function setSessionStateStorage(SessionState $sessionStateStorage)
+    {
+        $this->sessionStateStorage = $sessionStateStorage;
     }
 }

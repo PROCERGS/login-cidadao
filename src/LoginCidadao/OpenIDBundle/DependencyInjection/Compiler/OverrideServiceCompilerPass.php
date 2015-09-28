@@ -40,5 +40,16 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
             $container->getDefinition('oauth2.storage.access_token')
                 ->addMethodCall('setEventDispatcher', array($dispatcher));
         }
+
+        if ($container->hasDefinition('oauth2.grant_type.authorization_code')) {
+            $sessionState = new Reference('oidc.storage.session_state');
+            $container->getDefinition('oauth2.grant_type.authorization_code')
+                ->addMethodCall('setSessionStateStorage', array($sessionState));
+        }
+        if ($container->hasDefinition('oauth2.storage.authorization_code')) {
+            $sessionState = new Reference('oidc.storage.session_state');
+            $container->getDefinition('oauth2.storage.authorization_code')
+                ->addMethodCall('setSessionStateStorage', array($sessionState));
+        }
     }
 }
