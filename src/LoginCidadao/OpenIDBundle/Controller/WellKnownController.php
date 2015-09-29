@@ -32,6 +32,11 @@ class WellKnownController extends FOSRestController
         $jwksUri = $this->generateUrl('oidc_jwks', array(),
             UrlGeneratorInterface::ABSOLUTE_URL);
 
+        $checkSessionEndpoint = $this->generateUrl('oidc_check_session_iframe',
+            array(), UrlGeneratorInterface::ABSOLUTE_URL);
+        $endSessionEndpoint   = $this->generateUrl('oidc_end_session_endpoint',
+            array(), UrlGeneratorInterface::ABSOLUTE_URL);
+
         $data = array(
             'issuer' => $this->getParameter('jwt_iss'),
             'authorization_endpoint' => $authEndpoint,
@@ -46,11 +51,11 @@ class WellKnownController extends FOSRestController
                 'RS256'
             ),
             'userinfo_endpoint' => $personEndpoint,
-            //'check_session_iframe' => '',
-            //'end_session_endpoint' => '',
+            'check_session_iframe' => $checkSessionEndpoint,
+            'end_session_endpoint' => $endSessionEndpoint,
             'jwks_uri' => $jwksUri,
             'registration_endpoint' => $registrationEndpoint,
-            'scopes_supported' => '',
+            'scopes_supported' => explode(' ', $this->getParameter('lc_supported_scopes')),
             'response_types_supported' => array(
                 "code", "code id_token", "id_token", "token id_token"
             ),
