@@ -23,7 +23,7 @@ class SessionManagementController extends Controller
 {
 
     /**
-     * @Route("/session/check")
+     * @Route("/session/check", name="oidc_check_session_iframe")
      * @Method({"GET"})
      * @Template
      */
@@ -33,7 +33,7 @@ class SessionManagementController extends Controller
     }
 
     /**
-     * @Route("/session/end")
+     * @Route("/session/end", name="oidc_end_session_endpoint")
      */
     public function endSessionAction(Request $request)
     {
