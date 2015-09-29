@@ -11,21 +11,24 @@
 namespace LoginCidadao\OpenIDBundle\Storage;
 
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\Security\Core\Util\SecureRandom;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class SessionState
 {
     /** @var EntityManager */
     protected $em;
 
-    /** @var SessionInterface */
-    protected $session;
+    /** @var TokenStorageInterface */
+    protected $tokenStorage;
 
-    public function __construct(EntityManager $em, SessionInterface $session)
+    public function __construct(EntityManager $em,
+                                TokenStorageInterface $tokenStorage)
     {
-        $this->em      = $em;
-        $this->session = $session;
+        $this->em           = $em;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function getSessionState($client_id, $sessionId)
@@ -43,7 +46,12 @@ class SessionState
 
     public function getSessionId()
     {
-        return $this->session->getId();
+        $token = $this->tokenStorage->getToken();
+        if ($token !== null) {
+            return hash('sha256', $token->serialize());
+        } else {
+            return '';
+        }
     }
 
     /**
@@ -54,5 +62,21 @@ class SessionState
     {
         $id = explode('_', $client_id);
         return $this->em->getRepository('PROCERGSOAuthBundle:Client')->find($id[0]);
+    }
+
+    public function onKernelResponse(FilterResponseEvent $event)
+    {
+        if (!$event->isMasterRequest()) {
+            return;
+        }
+        $token = $this->tokenStorage->getToken();
+        if ($token !== null) {
+            $state  = hash('sha256', $token->serialize());
+            $cookie = new Cookie('session_state', $state, 0, '/', null, false,
+                false);
+            $event->getResponse()->headers->setCookie($cookie);
+        } else {
+            $event->getResponse()->headers->removeCookie('session_state');
+        }
     }
 }

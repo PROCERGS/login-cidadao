@@ -32,7 +32,9 @@ services:
         class: %oidc.storage.session_state.class%
         arguments:
             - @doctrine.orm.entity_manager
-            - @session
+            - @security.token_storage
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
 
     oidc.person.serialize.listenner:
         class: %oidc.person.serialize.listenner.class%
