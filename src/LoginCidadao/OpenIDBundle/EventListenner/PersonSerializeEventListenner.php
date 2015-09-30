@@ -35,6 +35,9 @@ class PersonSerializeEventListenner implements EventSubscriberInterface
 
     public function onPostSerialize(ObjectEvent $event)
     {
+        if (!($event->getObject() instanceof PersonInterface)) {
+            return;
+        }
         $this->setSubjectIdentifier($event);
         $this->addOpenIdConnectCompatibility($event);
     }
