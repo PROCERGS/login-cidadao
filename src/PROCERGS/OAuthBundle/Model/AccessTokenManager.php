@@ -32,6 +32,15 @@ class AccessTokenManager
     }
 
     /**
+     * @return boolean
+     */
+    public function hasToken()
+    {
+        $securityToken = $this->tokenStorage->getToken();
+        return ($securityToken instanceof OAuthToken);
+    }
+
+    /**
      * @param string $token
      * @throws AccessDeniedException when no token is found in the current session
      * @return AccessToken
