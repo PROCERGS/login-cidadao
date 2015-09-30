@@ -20,9 +20,11 @@ class JsonWebKeyController extends FOSRestController
     public function getAction()
     {
         $keyStorage = $this->get('oauth2.storage.public_key');
-        $pubKey    = new RSA();
+        $pubKey     = new RSA();
         $pubKey->loadKey($keyStorage->getPublicKey());
-        $publicKey = \JOSE_JWK::encode($pubKey);
+        $publicKey  = \JOSE_JWK::encode($pubKey);
+
+        $publicKey->components['kid'] = 'pub';
 
         $jwks = new \JOSE_JWKSet(array($publicKey));
 
