@@ -10,7 +10,9 @@
 
 namespace LoginCidadao\OpenIDBundle\Controller;
 
+use League\Uri\Schemes\Http as HttpUri;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -33,10 +35,60 @@ class SessionManagementController extends Controller
     }
 
     /**
+     * @Route("/session/origins", name="oidc_get_origins")
+     * @Method({"GET"})
+     * @Template
+     */
+    public function getOriginsAction(Request $request)
+    {
+        $client = $this->getClient($request->get('client_id'));
+
+        $uris   = array();
+        $uris[] = $client->getSiteUrl();
+        $uris[] = $client->getTermsOfUseUrl();
+        $uris[] = $client->getLandingPageUrl();
+        if ($client->getMetadata()) {
+            $meta   = $client->getMetadata();
+            $uris[] = $meta->getClientUri();
+            $uris[] = $meta->getInitiateLoginUri();
+            $uris[] = $meta->getPolicyUri();
+            $uris[] = $meta->getSectorIdentifierUri();
+            $uris[] = $meta->getTosUri();
+            $uris   = array_merge($uris, $meta->getRedirectUris(),
+                $meta->getRequestUris());
+        }
+
+        $result = array_unique(
+            array_map(function ($value) {
+                if ($value === null) {
+                    return;
+                }
+                $uri = HttpUri::createFromString($value)->withFragment('')
+                        ->withPath('')->withQuery('')->withUserInfo('');
+                return $uri->__toString();
+            }, array_filter($uris))
+        );
+
+        return new JsonResponse(array_values($result));
+    }
+
+    /**
      * @Route("/session/end", name="oidc_end_session_endpoint")
      */
     public function endSessionAction(Request $request)
     {
         //
+    }
+
+    /**
+     * @param string $clientId
+     * @return \PROCERGS\OAuthBundle\Entity\Client
+     */
+    private function getClient($clientId)
+    {
+        $clientId = explode('_', $clientId);
+        $id       = $clientId[0];
+        return $this->getDoctrine()->getManager()
+                ->getRepository('PROCERGSOAuthBundle:Client')->find($id);
     }
 }

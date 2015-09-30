@@ -2,21 +2,42 @@
     <head>
         <meta charset="utf-8">
         <title>OpenID Connect Session Management op_iframe</title>
-        <script src="https://crypto-js.googlecode.com/svn/tags/3.0.2/build/rollups/sha256.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256.js"></script>
         <script language="JavaScript" type="text/javascript">
             window.addEventListener("message", receiveMessage, false);
-            var data = "24_pc6pnxp3pvkw4oco84gcgkc4wo4ok0cgswogg48gsc48ssk8c 5d67ca6132e8bd138ab4b969695d8589de9a74184dae65b27467ddc9728d76d8.e5108fff4abb553e041e09a4691498";
+
+            var Client = function (clientId) {
+                this.client_id = clientId;
+
+                var self = this;
+                $.getJSON('{{ url('oidc_get_origins') }}', {client_id: clientId}, function (data) {
+                    self.origins = data;
+                });
+            };
+            Client.prototype.validateOrigin = function (origin) {
+                if (this.origins === null) {
+                    return false;
+                }
+                return $.inArray(origin, this.origins);
+            };
+
+            var data = "24_pc6pnxp3pvkw4oco84gcgkc4wo4ok0cgswogg48gsc48ssk8c 65abba3fd336c696a53f4426785ecf71952a1428763e011a63a665dab9709888.49057598eaaa908a945c562ed67366";
             console.log(validateSessionState(data, 'http://teste.com'));
 
             function validateSessionState(data, origin) {
 
                 var client_id = data.split(' ')[0];
+                var client = new Client(client_id);
+                if (!client.validateOrigin(origin)) {
+                    console.log("Invalid origin!");
+                    return 'error';
+                }
+
                 var session_state = data.split(' ')[1];
                 var salt = session_state.split('.')[1];
-
-                var opss = getCookieValue('PHPSESSID'); // from Cookie or use API access
+                var opss = getCookieValue('session_state'); // from Cookie or use API access
                 var ss = CryptoJS.SHA256(client_id + origin + opss + salt) + "." + salt;
-
                 if (session_state === ss) {
                     return 'unchanged';
                 } else {
@@ -25,13 +46,10 @@
             }
 
             function receiveMessage(e) {
-                var origin = "{# client.metadata.client_uri #}"; // origin from client_id
-                if (e.origin !== origin) {
-                    return;
-                }
-
                 var stat = validateSessionState(e.data, e.origin);
-                e.source.postMessage(stat, e.origin);
+                if (stat !== false) {
+                    e.source.postMessage(stat, e.origin);
+                }
             }
 
             function getCookieValue(a, b) {
