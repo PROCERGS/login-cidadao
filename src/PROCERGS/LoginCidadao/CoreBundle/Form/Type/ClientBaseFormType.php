@@ -8,12 +8,22 @@ use PROCERGS\LoginCidadao\CoreBundle\Form\DataTransformer\FromArray;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class ClientBaseFormType extends AbstractType
 {
+    /** @var AuthorizationCheckerInterface */
+    protected $security;
+
+    public function __construct(AuthorizationCheckerInterface $security)
+    {
+        $this->security = $security;
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $security = $this->security;
+
         $builder->add('name', 'text',
             array(
             'required' => true

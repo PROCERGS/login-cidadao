@@ -191,6 +191,8 @@ services:
 
     procergs_logincidadao.client.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientFormType
+        arguments:
+            - @security.authorization_checker
         tags:
             - { name: form.type, alias: client_form_type }
         calls:
@@ -198,6 +200,8 @@ services:
 
     procergs_logincidadao.client.base.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientBaseFormType
+        arguments:
+            - @security.authorization_checker
         tags:
             - { name: form.type, alias: client_base_form_type }
 

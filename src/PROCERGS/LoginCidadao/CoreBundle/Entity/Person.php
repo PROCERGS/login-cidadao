@@ -61,7 +61,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"last_name","full_name","family_name","middle_name"})
+     * @JMS\Groups({"last_name","full_name","family_name","middle_name","name"})
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank(message="Please enter your surname.", groups={"Profile"})
      * @Assert\Length(
@@ -77,7 +77,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"username"})
+     * @JMS\Groups({"username","preferred_username"})
      * @PROCERGSAssert\Username
      * @Assert\NotBlank
      * @Assert\Length(
@@ -615,7 +615,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     /**
      * Get the full name of the user (first + last name)
-     * @JMS\Groups({"full_name"})
+     * @JMS\Groups({"full_name", "name"})
      * @JMS\VirtualProperty
      * @JMS\SerializedName("full_name")
      * @return string

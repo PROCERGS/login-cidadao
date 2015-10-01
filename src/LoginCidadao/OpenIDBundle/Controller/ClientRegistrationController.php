@@ -107,6 +107,9 @@ class ClientRegistrationController extends FOSRestController
             }
         }
 
+        $publicScopes = explode(' ', $this->getParameter('lc_public_scopes'));
+        $client->setAllowedScopes($publicScopes);
+
         $em->persist($client);
 
         $data->setClient($client);

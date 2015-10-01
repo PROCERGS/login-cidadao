@@ -65,8 +65,7 @@ class ClientController extends Controller
         if (!$client) {
             return $this->redirect($this->generateUrl('lc_admin_app_new'));
         }
-        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.form.type'),
-            $client);
+        $form = $this->createForm('client_form_type', $client);
         $form->handleRequest($request);
 
         if ($form->isValid()) {

@@ -3,6 +3,8 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
 
 class ClientFormType extends ClientBaseFormType
 {
@@ -16,6 +18,17 @@ class ClientFormType extends ClientBaseFormType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
+
+        $security = $this->security;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) use ($security) {
+            $form = $event->getForm();
+
+            if ($security->isGranted('ROLE_EDIT_CLIENT_ALLOWED_SCOPES')) {
+                $form->add('allowedScopes', 'collection');
+            }
+        });
     }
 
     public function getName()

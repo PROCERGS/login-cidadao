@@ -72,7 +72,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     protected $termsOfUseUrl;
 
     /**
-     * @ORM\Column(type="array", nullable=false)
+     * @ORM\Column(type="simple_array", nullable=false)
      */
     protected $allowedScopes;
 
