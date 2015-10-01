@@ -45,12 +45,6 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
                 ->addMethodCall('setFilesystem', array($filesystem, $fileName));
         }
 
-        if ($container->hasDefinition('oauth2.storage.access_token')) {
-            $dispatcher = new Reference('event_dispatcher');
-            $container->getDefinition('oauth2.storage.access_token')
-                ->addMethodCall('setEventDispatcher', array($dispatcher));
-        }
-
         if ($container->hasDefinition('oauth2.grant_type.authorization_code')) {
             $sessionState = new Reference('oidc.storage.session_state');
             $container->getDefinition('oauth2.grant_type.authorization_code')

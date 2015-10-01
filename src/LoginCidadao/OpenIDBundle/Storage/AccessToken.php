@@ -12,31 +12,16 @@ namespace LoginCidadao\OpenIDBundle\Storage;
 
 use OAuth2\ServerBundle\Storage\AccessToken as BaseClass;
 use OAuth2\Storage\AccessTokenInterface;
-use OAuth2\ServerBundle\Entity\Client;
 use Doctrine\ORM\EntityManager;
-use FOS\OAuthServerBundle\Event\OAuthEvent;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class AccessToken extends BaseClass implements AccessTokenInterface
 {
     /** @var EntityManager */
     private $em;
 
-    /** @var EventDispatcherInterface */
-    private $dispatcher;
-
     public function __construct(EntityManager $EntityManager)
     {
         $this->em = $EntityManager;
-    }
-
-    public function setEventDispatcher(EventDispatcherInterface $dispatcher)
-    {
-        $this->dispatcher = $dispatcher;
-
-        return $this;
     }
 
     /**
@@ -123,18 +108,8 @@ class AccessToken extends BaseClass implements AccessTokenInterface
         $accessToken->setScope($scope);
         $accessToken->setIdToken($id_token);
 
-        $this->registerAuthorization($client, $user, $scope);
-
         // Store Access Token and Authorization
         $this->em->persist($accessToken);
         $this->em->flush();
-    }
-
-    private function registerAuthorization(\PROCERGS\OAuthBundle\Entity\Client $client,
-                                           Person $person, $scope)
-    {
-        $event = new OAuthEvent($person, $client, true);
-        $this->dispatcher->dispatch(OAuthEvent::POST_AUTHORIZATION_PROCESS,
-            $event);
     }
 }
