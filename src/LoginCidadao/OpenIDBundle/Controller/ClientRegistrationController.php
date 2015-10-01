@@ -95,6 +95,18 @@ class ClientRegistrationController extends FOSRestController
             $client->setSiteUrl('');
         }
 
+        if (!empty($data->getContacts())) {
+            $owners = $em->getRepository($this->getParameter('user.class'))
+                ->findByEmail($data->getContacts());
+
+            foreach ($owners as $person) {
+                if ($person->getConfirmationToken() !== null) {
+                    continue;
+                }
+                $client->getOwners()->add($person);
+            }
+        }
+
         $em->persist($client);
 
         $data->setClient($client);
