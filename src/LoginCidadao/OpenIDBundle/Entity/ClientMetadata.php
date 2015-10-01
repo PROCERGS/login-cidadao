@@ -75,7 +75,9 @@ class ClientMetadata
     protected $application_type = 'web';
 
     /**
-     * @Assert\Type(type="array")
+     * @Assert\All({
+     *      @Assert\Type("string")
+     * })
      * @ORM\Column(type="simple_array", nullable=true)
      */
     protected $contacts;
