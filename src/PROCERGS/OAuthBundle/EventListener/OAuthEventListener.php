@@ -80,6 +80,6 @@ class OAuthEventListener
         $scope = $this->request->query->get('scope',
             $this->request->request->get($form.'[scope]', '', true));
 
-        return explode(' ', $scope);
+        return !is_array($scope) ? explode(' ', $scope) : $scope;
     }
 }

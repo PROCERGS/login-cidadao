@@ -2,6 +2,7 @@
 
 namespace LoginCidadao\OpenIDBundle\Controller;
 
+use FOS\OAuthServerBundle\Event\OAuthEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -24,9 +25,18 @@ class AuthorizeController extends Controller
 
         $server = $this->get('oauth2.server');
 
-        return $server->handleAuthorizeRequest($this->get('oauth2.request'),
-                $this->get('oauth2.response'), $is_authorized,
-                $this->getUser()->getId());
+        $response = $server->handleAuthorizeRequest($this->get('oauth2.request'),
+            $this->get('oauth2.response'), $is_authorized,
+            $this->getUser()->getId());
+
+        $id     = explode('_', $request->get('client_id'));
+        $em     = $this->getDoctrine()->getManager();
+        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->find($id[0]);
+        $event  = new OAuthEvent($this->getUser(), $client, $is_authorized);
+        $this->get('event_dispatcher')->dispatch(OAuthEvent::POST_AUTHORIZATION_PROCESS,
+            $event);
+
+        return $response;
     }
 
     /**
