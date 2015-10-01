@@ -19,10 +19,40 @@ class ScopeManager extends BaseManager implements ScopeManagerInterface
 {
     private $em;
 
+    /** @var OAuth2\ServerBundle\Entity\Scope[] */
+    private $scopes = array();
+
     public function __construct(EntityManager $entityManager)
     {
         parent::__construct($entityManager);
         $this->em = $entityManager;
+    }
+
+    public function setScopes($scopes)
+    {
+        if (!is_array($scopes)) {
+            $scopes = explode(' ', $scopes);
+        }
+
+        $this->scopes = array();
+        foreach ($scopes as $scope) {
+            $scopeObj = new \OAuth2\ServerBundle\Entity\Scope();
+            $scopeObj->setScope($scope);
+            $scopeObj->setDescription($scope);
+
+            $this->scopes[$scope] = $scopeObj;
+        }
+    }
+
+    /**
+     * Find a single scope by the scope
+     *
+     * @param $scope
+     * @return Scope
+     */
+    public function findScopeByScope($scope)
+    {
+        return $this->scopes[$scope];
     }
 
     /**
@@ -33,12 +63,12 @@ class ScopeManager extends BaseManager implements ScopeManagerInterface
      */
     public function findScopesByScopes(array $scopes)
     {
-        $scopeObjects = $this->em->getRepository('OAuth2ServerBundle:Scope')
-                ->createQueryBuilder('a')
-                ->where('a.scope IN (?1)')
-                ->setParameter(1, $scopes)
-                ->getQuery()->getResult();
-
-        return $scopeObjects;
+        $result = array();
+        foreach ($this->scopes as $scope => $obj) {
+            if (array_search($scope, $scopes) !== false) {
+                $result[$scope] = $obj;
+            }
+        }
+        return $result;
     }
 }
