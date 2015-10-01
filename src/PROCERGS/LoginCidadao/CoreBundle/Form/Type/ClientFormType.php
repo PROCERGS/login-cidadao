@@ -8,11 +8,17 @@ use Symfony\Component\Form\FormEvent;
 
 class ClientFormType extends ClientBaseFormType
 {
-    protected $lcScope;
+    protected $supportedScopes;
+    protected $publicScopes;
+    protected $reservedScopes;
 
-    public function setLcScope($var)
+    public function setScopes($publicScopes, $reservedScopes)
     {
-        $this->lcScope = $var;
+        $this->reservedScopes = explode(' ', $reservedScopes);
+        $this->publicScopes   = explode(' ', $publicScopes);
+
+
+        $this->supportedScopes = $this->publicScopes + $this->reservedScopes;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -20,13 +26,23 @@ class ClientFormType extends ClientBaseFormType
         parent::buildForm($builder, $options);
 
         $security = $this->security;
+        $public   = array_combine($this->publicScopes, $this->publicScopes);
+        $reserved = array_combine($this->reservedScopes, $this->reservedScopes);
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) use ($security) {
+            function (FormEvent $event) use ($security, $public, $reserved) {
             $form = $event->getForm();
 
             if ($security->isGranted('ROLE_EDIT_CLIENT_ALLOWED_SCOPES')) {
-                $form->add('allowedScopes', 'collection');
+                $form->add('allowedScopes', 'choice',
+                    array(
+                    'choices' => array(
+                        'Public Scopes' => $public,
+                        'Restricted Scopes' => $reserved,
+                    ),
+                    'multiple' => true,
+                    'choices_as_values' => false,
+                ));
             }
         });
     }

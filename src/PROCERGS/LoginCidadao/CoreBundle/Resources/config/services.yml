@@ -196,7 +196,7 @@ services:
         tags:
             - { name: form.type, alias: client_form_type }
         calls:
-            - [setLcScope, ["%lc_supported_scopes%"]]
+            - [setScopes, ["%lc_public_scopes%", "%lc_reserved_scopes%"]]
 
     procergs_logincidadao.client.base.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientBaseFormType
