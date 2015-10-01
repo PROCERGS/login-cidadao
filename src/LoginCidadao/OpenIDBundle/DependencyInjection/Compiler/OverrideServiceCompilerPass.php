@@ -26,6 +26,16 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
 
         $args['oauth2.server.storage'][] = new Reference('oauth2.storage.user_claims');
         $args['oauth2.server.storage'][] = new Reference('oauth2.storage.public_key');
+
+        $args['oauth2.server.grant_types'] = array();
+
+        $args['oauth2.server.response_types'] = array(
+            'token' => new Reference('oauth2.response_types.token'),
+            'code' => new Reference('oauth2.response_types.code'),
+            'id_token' => new Reference('oauth2.response_types.id_token'),
+            'id_token token' => new Reference('oauth2.response_types.id_token_token'),
+            'code id_token' => new Reference('oauth2.response_types.code_id_token'),
+        );
         $definition->setArguments($args);
 
         if ($container->hasDefinition('gaufrette.jwks_fs_filesystem')) {
@@ -50,6 +60,12 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
             $sessionState = new Reference('oidc.storage.session_state');
             $container->getDefinition('oauth2.storage.authorization_code')
                 ->addMethodCall('setSessionStateStorage', array($sessionState));
+        }
+
+        if ($container->hasDefinition('oauth2.scope_manager')) {
+            $scopes = $container->getParameter('lc_supported_scopes');
+            $container->getDefinition('oauth2.scope_manager')
+                ->addMethodCall('setScopes', array($scopes));
         }
     }
 }
