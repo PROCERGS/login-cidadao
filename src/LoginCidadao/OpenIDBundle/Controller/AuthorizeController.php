@@ -56,7 +56,9 @@ class AuthorizeController extends Controller
         }
 
         $scopeManager = $this->getScopeManager();
-        $scopes       = $scopeManager->findScopesByScopes($scope);
+        $scopes       = array_map(function ($value) {
+            return $value->getScope();
+        }, $scopeManager->findScopesByScopes($scope));
 
         $qs = compact('client_id', 'scope', 'response_type', 'redirect_uri',
             'state', 'nonce');
