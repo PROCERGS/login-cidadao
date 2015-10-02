@@ -14,6 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use LoginCidadao\OpenIDBundle\Constraints\SectorIdentifier;
 use Symfony\Component\Validator\Constraints as Assert;
 use PROCERGS\OAuthBundle\Entity\Client;
+use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\Mapping as ORM;
 use League\Uri\Schemes\Http as HttpUri;
 
@@ -22,6 +23,7 @@ use League\Uri\Schemes\Http as HttpUri;
  * @UniqueEntity("client")
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="client_metadata")
+ * @JMS\ExclusionPolicy("all")
  * @SectorIdentifier
  */
 class ClientMetadata
@@ -43,6 +45,8 @@ class ClientMetadata
     protected $client;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\All({
      *      @Assert\Type(type="string"),
      *      @Assert\NotBlank,
@@ -53,6 +57,8 @@ class ClientMetadata
     protected $redirect_uris;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\All({
      *      @Assert\Type("string")
      * })
@@ -61,6 +67,8 @@ class ClientMetadata
     protected $response_types = array('code');
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\All({
      *      @Assert\Type("string")
      * })
@@ -69,12 +77,16 @@ class ClientMetadata
     protected $grant_types = array('authorization_code');
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
      * @ORM\Column(name="application_type", type="string", length=100, nullable=false)
      */
     protected $application_type = 'web';
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\All({
      *      @Assert\Type("string")
      * })
@@ -83,12 +95,16 @@ class ClientMetadata
     protected $contacts;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", nullable=true)
      */
     protected $client_name;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
      * @Assert\Url
      * @ORM\Column(type="string", length=2000, nullable=true)
@@ -96,6 +112,8 @@ class ClientMetadata
     protected $logo_uri;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
      * @Assert\Url
      * @ORM\Column(type="string", length=2000, nullable=true)
@@ -103,6 +121,8 @@ class ClientMetadata
     protected $client_uri;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
      * @Assert\Url
      * @ORM\Column(type="string", length=2000, nullable=true)
@@ -110,6 +130,8 @@ class ClientMetadata
     protected $policy_uri;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Url
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
@@ -117,6 +139,8 @@ class ClientMetadata
     protected $tos_uri;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Url
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
@@ -124,12 +148,16 @@ class ClientMetadata
     protected $jwks_uri;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="text", nullable=true)
      */
     protected $jwks;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Url
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
@@ -137,95 +165,127 @@ class ClientMetadata
     protected $sector_identifier_uri;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     protected $subject_type;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     protected $id_token_signed_response_alg;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     protected $id_token_encrypted_response_alg;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     protected $id_token_encrypted_response_enc;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     protected $userinfo_signed_response_alg;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     protected $userinfo_encrypted_response_alg;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     protected $userinfo_encrypted_response_enc;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     protected $request_object_signing_alg;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     protected $request_object_encryption_alg;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     protected $request_object_encryption_enc;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     protected $token_endpoint_auth_method;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     protected $token_endpoint_auth_signing_alg;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="integer")
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $default_max_age;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="boolean")
      */
     protected $require_auth_time = false;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="array")
      * @ORM\Column(type="simple_array", nullable=true)
      */
     protected $default_acr_values;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\Url
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
@@ -233,6 +293,8 @@ class ClientMetadata
     protected $initiate_login_uri;
 
     /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
      * @Assert\All({
      *      @Assert\Type("string"),
      *      @Assert\Url
@@ -240,6 +302,14 @@ class ClientMetadata
      * @ORM\Column(type="simple_array", nullable=true)
      */
     protected $request_uris;
+
+    /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $registration_access_token;
 
     public function __construct()
     {
@@ -579,13 +649,29 @@ class ClientMetadata
         return $this;
     }
 
+    /**
+     * @JMS\Groups({"client_metadata"})
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("client_id")
+     */
     public function getClientId()
     {
+        if ($this->client_id === null && $this->client) {
+            return $this->client->getClientId();
+        }
         return $this->client_id;
     }
 
+    /**
+     * @JMS\Groups({"client_metadata"})
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("client_secret")
+     */
     public function getClientSecret()
     {
+        if ($this->client_id === null && $this->client) {
+            return $this->client->getClientSecret();
+        }
         return $this->client_secret;
     }
 
@@ -714,5 +800,10 @@ class ClientMetadata
         }
 
         return HttpUri::createFromString($uri)->getHost();
+    }
+
+    public function getRegistrationAccessToken()
+    {
+        return $this->registration_access_token;
     }
 }
