@@ -87,7 +87,7 @@ Yes: Sim
 'Continue Registration': 'Continuar Cadastro'
 form.voterRegistration: 'Título de Eleitor'
 'Don''t know your Voter Registration number?': 'Não sabe seu Título de Eleitor?'
-facebook.token.error: 'Aparentemente houve um erro a autenticação com o Facebook. Por favor, tente logar novamente!'
+facebook.token.error: 'Aparentemente houve um erro na autenticação com o Facebook. Por favor, tente logar novamente!'
 facebook.nousername: 'Conectado ao Facebook'
 twitter.nousername: 'Conectado ao Twitter'
 'Use your account on Nota Fiscal Gaúcha and validate your Voter Registration': 'Use sua conta na Nota Fiscal Gaúcha e valide seu Título de Eleitor'
