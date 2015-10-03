@@ -255,7 +255,7 @@ parameters:
     lc_public_scopes_oidc: 'openid sub name given_name family_name full_name preferred_username picture email email_verified birthdate phone_number address updated_at'
     lc_public_scopes_oauth2: 'public_profile username first_name last_name full_name cpf city public_profile country state addresses id_cards mobile logout'
     lc_public_scopes: %lc_public_scopes_oidc% %lc_public_scopes_oauth2%
-    lc_reserved_scopes: 'get_all_notifications notifications'
+    lc_reserved_scopes: 'get_all_notifications notifications voter_registration'
     lc_supported_scopes: %lc_public_scopes% %lc_reserved_scopes%
     lc_idcard_country_acronym: BR
 
