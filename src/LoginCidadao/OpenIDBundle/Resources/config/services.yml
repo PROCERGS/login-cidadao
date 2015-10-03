@@ -20,6 +20,7 @@ parameters:
         use_openid_connect: true
         issuer: %jwt_iss%
         allow_implicit: true
+        enforce_state: false
 
 services:
     oauth2.storage.user_claims:
