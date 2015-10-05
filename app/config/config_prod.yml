@@ -1,6 +1,9 @@
 imports:
     - { resource: config.yml }
 
+parameters:
+    base_path: ''
+
 framework:
     translator:
         logging: false

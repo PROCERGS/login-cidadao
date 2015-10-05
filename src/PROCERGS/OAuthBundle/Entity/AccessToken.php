@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AccessToken extends BaseAccessToken
 {
-
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -30,10 +29,26 @@ class AccessToken extends BaseAccessToken
      */
     protected $user;
 
+    /**
+     * @ORM\Column(name="id_token", type="text", nullable=true)
+     * @var string
+     */
+    protected $idToken;
+
     public function setExpired()
     {
         $now = new \DateTime();
         $this->setExpiresAt($now->getTimestamp());
     }
-    
+
+    public function getIdToken()
+    {
+        return $this->idToken;
+    }
+
+    public function setIdToken($idToken)
+    {
+        $this->idToken = $idToken;
+        return $this;
+    }
 }

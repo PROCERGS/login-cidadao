@@ -20,18 +20,14 @@
                                 <li class="list-group-item service clearfix">
                                     <div class="media clearfix">
                                         <div class="pull-left">
-                                            {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
-                                                <img src="/{{ auth.client.getPictureWebPath }}" width="65" height="65" alt="" class="media-object">
-                                            {% else %}
-                                                <img src="//placehold.it/65x65" alt="">
-                                            {% endif %}
+                                            <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': auth.client }) }}" width="65" height="65" alt="" class="media-object">
                                         </div>
                                         <div class="media-body">
                                             <h5 class="media-heading">{{ auth.client.name }}</h5>
                                             <a href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}" class="btn btn-link btn-sm pull-left link-detail"><span class="glyphicon glyphicon-info-sign"></span> {% trans %}Service's details{%  endtrans %}</a>
                                         </div>
                                         <a href="{{ auth.client.siteUrl }}" target="_blank" class="btn btn-link btn-sm pull-right"><span class="glyphicon glyphicon-link"></span> {% trans %}Go to service's page{%  endtrans %}</a>
-                                    </a>
+                                        </a>
                                 </li>
 
                             {% endif %}
@@ -56,11 +52,7 @@
                             <li class="list-group-item service">
                                 <div class="media clearfix">
                                     <div class="pull-left">
-                                        {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
-                                            <img src="/{{ client.getPictureWebPath }}" width="65" height="65" alt="" class="media-object">
-                                        {% else %}
-                                            <img src="//placehold.it/65x65" alt="">
-                                        {% endif %}
+                                        <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': client }) }}" width="65" height="65" alt="" class="media-object">
                                     </div>
                                     <div class="media-body">
                                         <h5 class="media-heading">{{ client.name }}</h5>

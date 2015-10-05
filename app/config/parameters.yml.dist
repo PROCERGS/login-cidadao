@@ -59,6 +59,7 @@ parameters:
     nfg_hmac_secret: ~
 
     user_profile_upload_dir: %kernel.root_dir%/../web/uploads/profile-pictures
+    client_image_upload_dir: '%kernel.root_dir%/../web/uploads/client-pictures'
     tre_search_link: 'http://www.tse.jus.br/eleitor/servicos/titulo-e-local-de-votacao/consulta-por-nome'
     uri_root: /
 
@@ -81,3 +82,11 @@ parameters:
 
     # Should missing translations be logged in dev?
     log_translator: false
+
+    # OpenID Connect
+    # JWT Config
+    #  - this is necessary since we can't access the oidc.issuer_url in the Compiler Pass
+    jwt_iss: http://%site_domain%%base_path%
+    # JWKS Config
+    jwks_dir: %kernel.root_dir%/../app/config/jwks
+    jwks_private_key_file: private.pem

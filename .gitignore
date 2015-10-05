@@ -5,9 +5,11 @@
 /app/bootstrap.php.cache
 /app/cache/*
 /app/config/parameters.yml
+/app/config/jwks/*
 /app/logs/*
 !app/cache/.gitkeep
 !app/logs/.gitkeep
+!app/config/jwks/.gitkeep
 /build/
 /vendor/
 /bin/

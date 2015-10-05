@@ -19,34 +19,26 @@ class ClientController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $clients = $em->getRepository('PROCERGSOAuthBundle:Client');
-        $client = $clients->find($clientId);
-        $clientScopes = $client->getAllowedScopes();
-
-        $user = $this->getUser();
-
-        $clientScopes = $client->getAllowedScopes();
+        $client  = $clients->find($clientId);
+        $user    = $this->getUser();
 
         $authorization = $this->getDoctrine()
-                ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
-                ->findOneBy(array(
+            ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
+            ->findOneBy(array(
             'person' => $user,
             'client' => $client
         ));
-        $userScopes = empty($authorization) ? array() : $authorization->getScope();
-        $clientScopes = empty($clientScopes) ? array() : $clientScopes;
 
-        $mergeAuth = array_merge($clientScopes, $userScopes);
+        $userScopes = empty($authorization) ? array() : $authorization->getScope();
 
         $scopes = array();
-        foreach ($mergeAuth as $s) {
-            $scopes[$s] = in_array($s, $userScopes) ? true : false;
+        foreach ($userScopes as $s) {
+            $scopes[$s] = true;
         }
 
         $form = $this->createForm('procergs_revoke_authorization',
-                array('client_id' => $clientId));
-        $form = $form->createView();
+                array('client_id' => $clientId))->createView();
 
         return compact('user', 'client', 'scopes', 'form');
     }
-
 }

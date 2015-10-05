@@ -38,14 +38,6 @@ interface ClientInterface extends BaseInterface
 
     public function setTermsOfUseUrl($termsOfUseUrl);
 
-    public function getAbsolutePicturePath();
-
-    public function getPictureWebPath();
-
-    public function setPictureFile(File $pictureFile = null);
-
-    public function getPictureFile();
-
     public function isVisible();
 
     public function setVisible($visible);
@@ -61,4 +53,30 @@ interface ClientInterface extends BaseInterface
     public function getOwners();
 
     public function setOwners(ArrayCollection $owners);
+
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the  update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $image
+     */
+    public function setImage($image);
+
+    /**
+     * @return File
+     */
+    public function getImage();
+
+    /**
+     * @param string $imageName
+     */
+    public function setImageName($imageName);
+
+    /**
+     * @return string
+     */
+    public function getImageName();
 }
