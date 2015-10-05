@@ -4,6 +4,7 @@ namespace PROCERGS\LoginCidadao\APIBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations as REST;
 use JMS\Serializer\SerializationContext;
+use PROCERGS\LoginCidadao\APIBundle\Exception\RequestTimeoutException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -92,13 +93,63 @@ class PersonController extends BaseController
             $updatedAt = new \DateTime();
         }
 
-        $em     = $this->getDoctrine()->getManager();
-        $person = $user->waitUpdate($em, $updatedAt);
-
-        $context = SerializationContext::create()->setGroups($scope);
-        $view    = $this->view($person)
+        $id            = $user->getId();
+        $lastUpdatedAt = null;
+        $callback      = $this->getCheckUpdateCallback($id, $updatedAt,
+            $lastUpdatedAt);
+        $person        = $this->runTimeLimited($callback);
+        $context       = SerializationContext::create()->setGroups($scope);
+        $view          = $this->view($person)
             ->setSerializationContext($context);
         return $this->handleView($view);
+    }
+
+    private function runTimeLimited($callback, $waitTime = 1)
+    {
+        $maxExecutionTime = ini_get('max_execution_time');
+        $limit            = $maxExecutionTime ? $maxExecutionTime - 2 : 60;
+        $startTime        = time();
+        while ($limit > 0) {
+            $result = call_user_func($callback);
+            $delta  = time() - $startTime;
+
+            if ($result !== false) {
+                return $result;
+            }
+
+            $limit -= $delta;
+            if ($limit <= 0) {
+                break;
+            }
+            $startTime = time();
+            sleep($waitTime);
+        }
+        throw new RequestTimeoutException("Request Timeout");
+    }
+
+    private function getCheckUpdateCallback($id, $updatedAt, $lastUpdatedAt)
+    {
+        $em     = $this->getDoctrine()->getEntityManager();
+        $people = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+        return function() use ($id, $people, $em, $updatedAt, $lastUpdatedAt) {
+            $em->clear();
+            $person = $people->find($id);
+            if (!$person->getUpdatedAt()) {
+                return false;
+            }
+
+            if ($person->getUpdatedAt() > $updatedAt) {
+                return $person;
+            }
+
+            if ($lastUpdatedAt === null) {
+                $lastUpdatedAt = $person->getUpdatedAt();
+            } elseif ($person->getUpdatedAt() != $lastUpdatedAt) {
+                return $person;
+            }
+
+            return false;
+        };
     }
 
     /**
@@ -122,10 +173,10 @@ class PersonController extends BaseController
             ->createQueryBuilder('a')
             ->select('cnc, p')
             ->join('PROCERGSLoginCidadaoCoreBundle:Person', 'p', 'WITH',
-                'a.person = p')
+                   'a.person = p')
             ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'a.client = c')
             ->join('PROCERGSLoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH',
-                'cnc.client = c')
+                   'cnc.client = c')
             ->where('c.id = '.$client->getId().' and p.id = :person_id and cnc.id = :config_id')
             ->getQuery();
         $rowR      = array();
@@ -214,8 +265,9 @@ class PersonController extends BaseController
             'url' => $this->generateUrl('lc_logout_not_remembered_safe',
                 array(
                 'key' => $logoutKey->getKey()
-                ), UrlGeneratorInterface::ABSOLUTE_URL)
+            ), UrlGeneratorInterface::ABSOLUTE_URL)
         );
         return $result;
     }
+
 }

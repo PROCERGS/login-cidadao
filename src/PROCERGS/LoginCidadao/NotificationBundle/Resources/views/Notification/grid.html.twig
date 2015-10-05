@@ -12,12 +12,7 @@
 
 {% block grid_row_data %}
     <div class="pull-left">
-        {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
-        {% if row.sender.pictureWebPath != '' %}
-            {% set asset_url = '/' ~ row.sender.pictureWebPath  %}
-        {% endif %}
-        <img alt="{{ row.sender.name }}" class="media-object" src="{{ asset_url }}" width="50" height="50" />
-        {% endimage %}
+        <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': row.sender }) }}" width="50" height="50" />
     </div>
     <div class="media-body">
         <h5 class="media-heading">{{ row.title }}</h5>

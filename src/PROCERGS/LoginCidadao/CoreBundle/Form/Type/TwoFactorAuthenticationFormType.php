@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class TwoFactorAuthenticationFormType extends AbstractType
 {
@@ -14,7 +15,7 @@ class TwoFactorAuthenticationFormType extends AbstractType
     {
         $builder
             ->add('googleAuthenticatorSecret', 'text',
-                array(
+                  array(
                 'read_only' => true,
                 'label' => "Authenticator Secret"
             ))
@@ -38,7 +39,7 @@ class TwoFactorAuthenticationFormType extends AbstractType
         }
         $builder
             ->add('enable', 'submit',
-                array(
+                  array(
                 'attr' => array('class' => 'btn btn-success'),
                 'label' => 'Activate Two-Factor Authentication')
         );

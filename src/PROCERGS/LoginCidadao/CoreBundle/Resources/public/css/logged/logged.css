@@ -263,11 +263,11 @@ body.no-scroll {
     max-width: 100%;
 }
 
-#profile-edit .file-upload {
+.picture-upload-box .file-upload {
     color: #000;
 }
 
-#profile-edit .file-upload input[type="file"] {
+.picture-upload-box .file-upload input[type="file"] {
     cursor: pointer;
     position: relative;
     top: -28px;
@@ -275,11 +275,11 @@ body.no-scroll {
     width: 100%;
 }
 
-#profile-edit .btn-upload {
+.picture-upload-box .btn-upload {
     margin-top: 5px;
 }
 
-#profile-edit .file-upload .file-name {
+.picture-upload-box .file-upload .file-name {
     margin: 5px 0;
 }
 
@@ -362,32 +362,33 @@ body.no-scroll {
     display: none;
 }
 
-#profile-edit .file-upload input[type=file] {
+.picture-upload-box .file-upload input[type=file] {
     display: none;
 }
 
-#profile-edit .file-upload .btn-upload,
-#profile-edit .file-upload .form-group,
-#profile-edit .file-upload .form-group .checkbox {
+.picture-upload-box .file-upload .btn-upload,
+.picture-upload-box .file-upload .form-group,
+.picture-upload-box .file-upload .form-group .checkbox {
     margin-top: 0;
     margin-bottom: 0;
 }
 
-#profile-edit .file-upload .btn-facebook-profile-pic-preview {
+.picture-upload-box .file-upload .btn-external-pic-preview {
     padding: 4px;
 }
 
-#profile-edit .file-upload .facebook-profile-pic-preview {
-    max-height: 35.9px;
+.picture-upload-box .file-upload .btn-external-pic-preview {
+    max-height: 45px;
+    max-width: 45px;
 }
 
-#profile-edit .file-upload .activity-desc {
+.picture-upload-box .file-upload .activity-desc {
     margin-top: 5px;
     font-size: 90%;
 }
 
-#profile-edit .file-upload .activity-desc .upload,
-#profile-edit .file-upload .activity-desc .facebook-pic {
+.picture-upload-box .file-upload .activity-desc .upload,
+.picture-upload-box .file-upload .activity-desc .facebook-pic {
     display: none;
 }
 
@@ -904,4 +905,22 @@ label + .glyphicon-pencil {
 
 #dashboard .log-about {
     font-size: 11px;
+}
+
+#service-edit .panel-heading h2 {
+    font-size: 22px;
+}
+#service-edit .panel-heading p {
+    font-size: 14px;
+}
+#service-edit #secret-collapse.collapse.in {
+    display: inline-block !important;
+}
+#service-edit .picture-panel-header img {
+    max-width: 100%;
+    max-height: 55px;
+}
+
+#oauth-box h1 {
+    font-size: 32px;
 }

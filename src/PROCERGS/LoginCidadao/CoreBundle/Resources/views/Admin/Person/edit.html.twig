@@ -79,11 +79,7 @@
                     <li class="list-group-item service clearfix">
                       <div class="media clearfix">
                         <div class="pull-left">
-                          {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
-                            <img src="/{{ auth.client.getPictureWebPath }}" width="65" height="65" alt="" class="media-object">
-                            {% else %}
-                            <img src="//placehold.it/65x65" alt="">
-                          {% endif %}
+                          <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': auth.client }) }}" width="65" height="65" alt="" class="media-object">
                         </div>
                         <div class="media-body">
                           <h5 class="media-heading">{{ auth.client.name }}</h5>

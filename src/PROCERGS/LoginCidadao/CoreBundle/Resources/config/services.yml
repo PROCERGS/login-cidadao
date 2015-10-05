@@ -177,13 +177,17 @@ services:
 
     procergs_logincidadao.client.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientFormType
+        arguments:
+            - @security.authorization_checker
         tags:
             - { name: form.type, alias: client_form_type }
         calls:
-            - [setLcScope, ["%lc_supported_scopes%"]]
+            - [setScopes, ["%lc_public_scopes%", "%lc_reserved_scopes%"]]
 
     procergs_logincidadao.client.base.form.type:
         class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientBaseFormType
+        arguments:
+            - @security.authorization_checker
         tags:
             - { name: form.type, alias: client_base_form_type }
 
@@ -235,9 +239,14 @@ services:
     procergs.person.serialize.listenner:
         class: %procergs.person.serialize.listenner.class%
         scope: request
-        arguments: [ @vich_uploader.templating.helper.uploader_helper, @templating.helper.assets, @kernel, @request ]
+        arguments:
+            - @vich_uploader.templating.helper.uploader_helper
+            - @templating.helper.assets
+            - @kernel
+            - @request
         tags:
             - { name: jms_serializer.event_listener, event: serializer.pre_serialize, method: onPreSerialize }
+            - { name: jms_serializer.event_listener, event: serializer.post_serialize, method: onPostSerialize }
 
     procergs_logincidadao.person.address.form.type:
         class: %procergs_logincidadao.person.address.form.type.class%
