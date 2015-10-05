@@ -59,7 +59,6 @@ class CitySelectorComboType extends AbstractType
             'empty_value' => '',
             'class' => $this->countryManager->getClass(),
             'choice_label' => 'name',
-            'property' => 'name',
             'choices' => $this->countryManager->findAll(),
             'attr' => array(
                 'class' => 'form-control location-select country-select'
@@ -104,7 +103,6 @@ class CitySelectorComboType extends AbstractType
                 array(
                 'class' => $stateManager->getClass(),
                 'choice_label' => 'name',
-                'property' => 'name',
                 'empty_value' => '',
                 'choices' => $choices,
                 'attr' => array(
@@ -146,7 +144,6 @@ class CitySelectorComboType extends AbstractType
                 'class' => $cityManager->getClass(),
                 'empty_value' => '',
                 'choice_label' => 'name',
-                'property' => 'name',
                 'choices' => $stateId === null ? array() : $cityManager->findByStateId($stateId),
                 'attr' => array(
                     'class' => 'form-control location-select city-select'
