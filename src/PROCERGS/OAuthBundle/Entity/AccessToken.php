@@ -51,4 +51,20 @@ class AccessToken extends BaseAccessToken
         $this->idToken = $idToken;
         return $this;
     }
+
+    public function getUserId($pairwiseSubjectIdSalt)
+    {
+        $id     = $this->getUser()->getId();
+        $client = $this->getClient();
+
+        if ($client instanceof Client && $client->getMetadata()) {
+            $metadata = $client->getMetadata();
+            if ($metadata->getSubjectType() === 'pairwise') {
+                $sectorIdentifier = $metadata->getSectorIdentifier();
+                $salt             = $pairwiseSubjectIdSalt;
+                return hash('sha256', $sectorIdentifier.$id.$salt);
+            }
+        }
+        return $id;
+    }
 }
