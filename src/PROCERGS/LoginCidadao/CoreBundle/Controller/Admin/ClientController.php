@@ -1,4 +1,5 @@
 <?php
+
 namespace PROCERGS\LoginCidadao\CoreBundle\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -36,8 +37,8 @@ class ClientController extends Controller
      */
     public function gridAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $sql = $em->getRepository('PROCERGSOAuthBundle:Client')
+        $em   = $this->getDoctrine()->getManager();
+        $sql  = $em->getRepository('PROCERGSOAuthBundle:Client')
             ->createQueryBuilder('c')
             ->addOrderBy('c.id', 'desc');
         ;
@@ -54,32 +55,38 @@ class ClientController extends Controller
     }
 
     /**
-     * @Route("/edit/{id}", name="lc_admin_app_edit")
+     * @Route("/{id}/edit", name="lc_admin_app_edit")
      * @Template()
      */
     public function editAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em     = $this->getDoctrine()->getManager();
         $client = $em->getRepository('PROCERGSOAuthBundle:Client')->find($id);
-        if (! $client) {
+        if (!$client) {
             return $this->redirect($this->generateUrl('lc_admin_app_new'));
         }
-        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.form.type'), $client);
+        $form = $this->createForm('client_form_type', $client);
         $form->handleRequest($request);
-        $messages = '';
+
         if ($form->isValid()) {
+            $metadata = $form->get('metadata')->getData();
             $client->setAllowedGrantTypes(Client::getAllGrants());
+            $client->setMetadata($metadata);
+            $metadata->setClient($client);
+
             $clientManager = $this->container->get('fos_oauth_server.client_manager');
             $clientManager->updateClient($client);
+
             $translator = $this->get('translator');
             $this->get('session')->getFlashBag()->add('success',
-                    $translator->trans('Updated successfully!'));
-            $messages = 'aeee';
+                $translator->trans('Updated successfully!'));
+
+            return $this->redirectToRoute('lc_admin_app_edit', compact('id'));
         }
-        return $this->render('PROCERGSLoginCidadaoCoreBundle:Admin\Client:new.html.twig', array(
-            'form' => $form->createView(),
-            'client' => $client,
-            'messages' => $messages
+        return $this->render('PROCERGSLoginCidadaoCoreBundle:Admin\Client:new.html.twig',
+                array(
+                'form' => $form->createView(),
+                'client' => $client
         ));
     }
 
@@ -93,12 +100,12 @@ class ClientController extends Controller
 
         $clientManager = $this->container->get('fos_oauth_server.client_manager');
         $em->beginTransaction();
-        $input = 'Lorem Ipsum ';
-        $person = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->find($id);
+        $input         = 'Lorem Ipsum ';
+        $person        = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')->find($id);
         foreach (range(1, 1) as $val1) {
             $client = new Client();
             $client->setPerson($person);
-            $client->setName("Sample client $val1 ". uniqid());
+            $client->setName("Sample client $val1 ".uniqid());
             $client->setDescription('Sample client');
             $client->setSiteUrl("http://localhost");
             $client->setRedirectUris(array('http://localhost'));
@@ -111,13 +118,13 @@ class ClientController extends Controller
 
             $list = array();
             foreach (range(1, 20) as $val2) {
-                $cm = "Sample category $val2 ";
+                $cm       = "Sample category $val2 ";
                 $category = new Category();
                 $category->setClient($client);
-                $category->setName($cm. uniqid());
+                $category->setName($cm.uniqid());
                 $category->setDefaultIcon('glyphicon glyphicon-envelope');
-                $category->setDefaultTitle($cm ." title");
-                $category->setDefaultShortText($cm ." shorttext");
+                $category->setDefaultTitle($cm." title");
+                $category->setDefaultShortText($cm." shorttext");
                 $category->setMailTemplate("%title%\r\n%shorttext%\r\n");
                 $category->setMailSenderAddress($person->getEmail());
                 $category->setEmailable(true);
@@ -125,23 +132,24 @@ class ClientController extends Controller
                 $category->setHtmlTemplate(MarkdownExtra::defaultTransform($category->getMarkdownTemplate()));
                 $em->persist($category);
                 foreach (range(1, 20) as $val3) {
-                    $r = rand(1, 19);
+                    $r   = rand(1, 19);
                     $msg = array();
-                    if ($r%2) {
-                        $msg['title'] = str_repeat($input, $r);
+                    if ($r % 2) {
+                        $msg['title']     = str_repeat($input, $r);
                         $msg['shorttext'] = str_repeat($input, $r);
                     }
-                    $not = new Notification();
+                    $not    = new Notification();
                     $not->setPerson($person);
                     $not->setCategory($category);
                     $not->setIcon($category->getDefaultIcon());
                     $not->setTitle(isset($msg['title']) ? $msg['title'] : $category->getDefaultTitle());
-                    $not->setShortText(isset($msg['shorttext']) ? $msg['shorttext'] : $category->getDefaultShortText());
+                    $not->setShortText(isset($msg['shorttext']) ? $msg['shorttext']
+                                : $category->getDefaultShortText());
                     $not->parseHtmlTemplate($category->getHtmlTemplate());
                     $em->persist($not);
-                    $list[] =& $not;
+                    $list[] = & $not;
                 }
-                $list[] =& $category;
+                $list[] = & $category;
             }
             $em->flush();
             $em->clear($client);

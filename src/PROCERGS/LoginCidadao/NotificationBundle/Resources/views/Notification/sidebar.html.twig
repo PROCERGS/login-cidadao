@@ -31,12 +31,7 @@
             <li class="nav-divider"></li>
             <li>
                 <a href="#" data-toggle="collapse" data-target="#collapse{{ cli.id }}" class="collapse-toggle">
-                    {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
-                    {% if cli.picture_path is not null %}
-                        {% set asset_url = '/' ~ lc_client_picture_web_path(cli.picture_path)  %}
-                    {% endif %}
-                    <img alt="{{ cli.name }}" class="media-object notification-sidebar-main-img" src="{{ asset_url }}"/>
-                    {% endimage %}
+                    <img alt="{{ cli.name }}" class="media-object notification-sidebar-main-img" src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': cli }) }}"/>
                     <span>{{ cli.name }}</span>
                     <div class="icon-count">
                         <span id="inbox-count-unread-{{ cli.id }}" class="badge notification-count">
