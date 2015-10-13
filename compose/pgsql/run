@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+
+POSTGRESQL_USER=${POSTGRESQL_USER:-"logincidadao"}
+POSTGRESQL_PASS=${POSTGRESQL_PASS:-"logincidadao"}
+POSTGRESQL_DB=${POSTGRESQL_DB:-"login_cidadao"}
+
+POSTGRESQL_BIN_PATH=/usr/lib/postgresql/9.3/bin
+POSTGRESQL_CONFIG_FILE=/etc/postgresql/9.3/main/postgresql.conf
+POSTGRESQL_DATA=/data
+
+if find $POSTGRESQL_DATA -maxdepth 0 -empty | read v; then
+    mkdir -p $POSTGRESQL_DATA
+    chown -R postgres:postgres $POSTGRESQL_DATA
+    sudo -u postgres $POSTGRESQL_BIN_PATH/initdb -D $POSTGRESQL_DATA -E utf8 --locale en_US.UTF-8
+
+    sudo -u postgres $POSTGRESQL_BIN_PATH/postgres --single --config-file=$POSTGRESQL_CONFIG_FILE <<< "CREATE USER $POSTGRESQL_USER WITH SUPERUSER;"
+    sudo -u postgres $POSTGRESQL_BIN_PATH/postgres --single --config-file=$POSTGRESQL_CONFIG_FILE <<< "ALTER USER $POSTGRESQL_USER WITH PASSWORD '$POSTGRESQL_PASS';"
+    sudo -u postgres $POSTGRESQL_BIN_PATH/postgres --single --config-file=$POSTGRESQL_CONFIG_FILE <<< "CREATE DATABASE $POSTGRESQL_DB OWNER $POSTGRESQL_USER;"
+fi
+
+sudo -u postgres $POSTGRESQL_BIN_PATH/postgres --config-file=$POSTGRESQL_CONFIG_FILE -c listen-addresses=*
