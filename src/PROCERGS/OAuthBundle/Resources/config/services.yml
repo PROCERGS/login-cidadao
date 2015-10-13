@@ -1,5 +1,5 @@
 parameters:
-#    procergso_auth.example.class: PROCERGS\OAuthBundle\Example
+    lc_accesstoken_manager.class: PROCERGS\OAuthBundle\Model\AccessTokenManager
 
 services:
     oauth_event_listener:
@@ -12,3 +12,9 @@ services:
     procergs_logincidadao.oauth.client_manager:
         class: PROCERGS\OAuthBundle\Entity\ClientManager
         parent: fos_oauth_server.client_manager.default
+
+    lc_accesstoken_manager:
+        class: %lc_accesstoken_manager.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @security.token_storage

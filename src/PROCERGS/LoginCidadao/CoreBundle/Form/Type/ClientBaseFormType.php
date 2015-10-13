@@ -8,12 +8,22 @@ use PROCERGS\LoginCidadao\CoreBundle\Form\DataTransformer\FromArray;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class ClientBaseFormType extends AbstractType
 {
+    /** @var AuthorizationCheckerInterface */
+    protected $security;
+
+    public function __construct(AuthorizationCheckerInterface $security)
+    {
+        $this->security = $security;
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $security = $this->security;
+
         $builder->add('name', 'text',
             array(
             'required' => true
@@ -23,6 +33,8 @@ class ClientBaseFormType extends AbstractType
             'required' => true,
             'attr' => array('rows' => 4)
         ));
+        $builder->add('metadata',
+            new \LoginCidadao\OpenIDBundle\Form\ClientMetadataWebForm());
         $builder->add('siteUrl', 'text',
             array(
             'required' => true
@@ -42,7 +54,12 @@ class ClientBaseFormType extends AbstractType
         ));
 
 
-        $builder->add('pictureFile');
+        $builder->add('image', 'vich_file',
+            array(
+            'required' => false,
+            'allow_delete' => true, // not mandatory, default is true
+            'download_link' => true, // not mandatory, default is true
+        ));
         $builder->add('id', 'hidden',
             array(
             'required' => false
@@ -90,18 +107,6 @@ class ClientBaseFormType extends AbstractType
             $entity = $event->getData();
             $form   = $event->getForm();
             if ($entity->getId()) {
-                $form->add('publicId', 'textarea',
-                    array(
-                    'required' => false,
-                    'read_only' => true,
-                    'attr' => array('rows' => 4)
-                ));
-                $form->add('secret', 'textarea',
-                    array(
-                    'required' => false,
-                    'read_only' => true,
-                    'attr' => array('rows' => 4)
-                ));
                 $form->add('owners', 'ajax_choice',
                     array(
                     'label' => 'dev.ac.owners',

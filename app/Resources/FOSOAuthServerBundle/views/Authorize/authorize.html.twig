@@ -1,1 +1,1 @@
-{{ include("PROCERGSLoginCidadaoCoreBundle:Authorization:new.html.twig") }}
+{{ include("LoginCidadaoOpenIDBundle:Authorize:authorize.html.twig", { 'scopes': form.vars.value.scope|split(' ') }) }}

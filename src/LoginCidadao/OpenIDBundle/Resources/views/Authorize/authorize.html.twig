@@ -1,0 +1,17 @@
+{% extends "PROCERGSLoginCidadaoCoreBundle::base.html.twig" %}
+
+{% block body %}
+
+{% block notificationExtreme %}
+{{ include("PROCERGSLoginCidadaoCoreBundle::notification_extreme.html.twig", { columns: 'col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3' } ) }}
+{% endblock %}
+
+<div class="row">
+    <div class="general-content col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3 clearfix">
+      <div class="well" id="oauth-box">
+        {{ include("LoginCidadaoOpenIDBundle:Authorize:form.html.twig") }}
+      </div>
+    </div>
+</div>
+
+{% endblock body %}
