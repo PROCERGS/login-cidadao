@@ -1,4 +1,4 @@
-FROM php:5.4-apache
+FROM php:5.5-apache
 
 RUN apt-get update \
     && apt-get install -y git libssl-dev zlib1g-dev libicu-dev g++ php5-mysql nodejs nodejs-legacy npm \
