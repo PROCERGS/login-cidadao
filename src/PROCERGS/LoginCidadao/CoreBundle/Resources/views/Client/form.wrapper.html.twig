@@ -1,0 +1,25 @@
+{% extends parentView %}
+
+{% block content %}
+    {{ include('PROCERGSLoginCidadaoCoreBundle:Client:form.html.twig') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/components/show-tooltip.js' filter='uglifyjs2' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script src="{{ asset('assets/vendor/clipboard/dist/clipboard.min.js') }}"></script>
+    <script>
+        var clipboard = new Clipboard('.clipboard');
+
+        clipboard.on('success', function (e) {
+            e.clearSelection();
+
+            showTooltip(e.trigger, '{{ 'Copied' | trans }}');
+        });
+        clipboard.on('error', function (e) {
+            showTooltip(e.trigger, '{{ 'Press CTRL + C or ⌘ + C to copy' | trans }}');
+        });
+    </script>
+{% endblock %}

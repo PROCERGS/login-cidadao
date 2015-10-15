@@ -1,4 +1,1 @@
-{% extends 'PROCERGSLoginCidadaoCoreBundle:Dev:base.html.twig' %}
-{% block content %}
-    {{ include('PROCERGSLoginCidadaoCoreBundle:Client:form.html.twig') }}
-{% endblock %}
+{{ include('PROCERGSLoginCidadaoCoreBundle:Client:form.wrapper.html.twig', { 'parentView': 'PROCERGSLoginCidadaoCoreBundle:Dev:base.html.twig' }) }}

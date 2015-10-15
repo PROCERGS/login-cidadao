@@ -61,5 +61,11 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
             $container->getDefinition('oauth2.scope_manager')
                 ->addMethodCall('setScopes', array($scopes));
         }
+
+        if ($container->hasDefinition('oauth2.storage.access_token')) {
+            $secret = $container->getParameter('secret');
+            $container->getDefinition('oauth2.storage.access_token')
+                ->addMethodCall('setPairwiseSubjectIdSalt', array($secret));
+        }
     }
 }

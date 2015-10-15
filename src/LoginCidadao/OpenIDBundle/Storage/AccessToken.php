@@ -19,6 +19,9 @@ class AccessToken extends BaseClass implements AccessTokenInterface
     /** @var EntityManager */
     private $em;
 
+    /** @var string */
+    private $pairwiseSubjectIdSalt;
+
     public function __construct(EntityManager $EntityManager)
     {
         $this->em = $EntityManager;
@@ -55,8 +58,8 @@ class AccessToken extends BaseClass implements AccessTokenInterface
 
         return array(
             'client_id' => $client->getClientId(),
-            'user_id' => $accessToken->getUserId(),
-            'expires' => $accessToken->getExpires()->getTimestamp(),
+            'user_id' => $accessToken->getUserId($this->pairwiseSubjectIdSalt),
+            'expires' => $accessToken->getExpiresAt(),
             'scope' => $accessToken->getScope(),
             'id_token' => $accessToken->getIdToken()
         );
@@ -111,5 +114,10 @@ class AccessToken extends BaseClass implements AccessTokenInterface
         // Store Access Token and Authorization
         $this->em->persist($accessToken);
         $this->em->flush();
+    }
+
+    public function setPairwiseSubjectIdSalt($pairwiseSubjectIdSalt)
+    {
+        $this->pairwiseSubjectIdSalt = $pairwiseSubjectIdSalt;
     }
 }
