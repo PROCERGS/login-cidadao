@@ -22,7 +22,7 @@
                             <h2 class="media-heading personal-info">{{ 'Service Description' | trans }}</h2>
                             {% if client is defined %}
                                 <p>{{ 'Client ID:' | trans }} <span class="clientId">{{ client.clientId }}</span>
-                                    <button type="button" class="btn btn-sm btn-default clipboard" data-clipboard-target=".clientId" data-toggle="tooltip">
+                                    <button type="button" class="btn btn-xs btn-default clipboard" data-clipboard-target=".clientId" data-toggle="tooltip">
                                         <span class="glyphicon glyphicon-copy" aria-hidden="true" title="{{ 'Copy' | trans }}"></span>
                                     </button>
                                 </p>
@@ -31,7 +31,7 @@
                                     <span class="collapse" id="secret-collapse">
                                         <span class="clientSecret">{{ client.secret }}</span>
 
-                                        <button type="button" class="btn btn-sm btn-default clipboard" data-clipboard-target=".clientSecret" data-toggle="tooltip">
+                                        <button type="button" class="btn btn-xs btn-default clipboard" data-clipboard-target=".clientSecret" data-toggle="tooltip">
                                             <span class="glyphicon glyphicon-copy" aria-hidden="true" title="{{ 'Copy' | trans }}"></span>
                                         </button>
                                     </span>
@@ -95,6 +95,27 @@
                     {{ form_row(metadata.response_types) }}
                     {{ form_row(metadata.grant_types) }}
                 {% endif %}
+
+                <h3>{{ 'OAuth 2 Endpoints' | trans }}</h3>
+                <dl>
+                    <dt>{{ 'Authorization Endpoint' | trans }}
+                    <dd>
+                        <span class="auth-endpoint">{{ url('_authorize_validate') }}</span>
+
+                        <button type="button" class="btn btn-xs btn-info clipboard" data-clipboard-target=".auth-endpoint" data-toggle="tooltip">
+                            <span class="glyphicon glyphicon-copy" aria-hidden="true" title="{{ 'Copy' | trans }}"></span>
+                        </button>
+                    </dd>
+
+                    <dt>{{ 'Token Endpoint' | trans }}
+                    <dd>
+                        <span class="token-endpoint">{{ url('_token') }}</span>
+
+                        <button type="button" class="btn btn-xs btn-info clipboard" data-clipboard-target=".token-endpoint" data-toggle="tooltip">
+                            <span class="glyphicon glyphicon-copy" aria-hidden="true" title="{{ 'Copy' | trans }}"></span>
+                        </button>
+                    </dd>
+                </dl>
             </div>
         </div>
 
