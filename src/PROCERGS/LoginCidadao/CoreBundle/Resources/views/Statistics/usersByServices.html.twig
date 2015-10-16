@@ -7,7 +7,7 @@
         {% for item in data %}
             <div class="col-md-4">
                 <div class="item">
-                    <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': client }) }}" width="65" height="65" alt="" class="service-img center-block">
+                    <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': item.client }) }}" width="65" height="65" alt="" class="service-img center-block">
                     <div>{{ item.client.name | trans }}</div>
                     <div class="qty">{{ item.qty }}</div>
                 </div>
