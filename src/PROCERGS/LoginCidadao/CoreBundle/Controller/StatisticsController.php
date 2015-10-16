@@ -38,15 +38,15 @@ class StatisticsController extends Controller
         $badges = $badgesHandler->getAvailableBadges();
         foreach ($badges as $client => $badge) {
             foreach ($badge as $name => $desc) {
-                $filterBadge = new Badge($client, $name);
-                $count = $badgesHandler->countBearers($filterBadge);
-                $b = array_shift($count);
+                $filterBadge     = new Badge($client, $name);
+                $count           = $badgesHandler->countBearers($filterBadge);
+                $b               = array_shift($count);
                 $data[$client][] = $b;
             }
         }
 
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+        $em         = $this->getDoctrine()->getManager();
+        $repo       = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
         $totalUsers = $repo->getCountAll();
 
         return array("data" => $data, "totalUsers" => $totalUsers['qty']);
@@ -58,7 +58,7 @@ class StatisticsController extends Controller
      */
     public function usersByRegionAction($type)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em   = $this->getDoctrine()->getManager();
         $repo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
         if ($type == "country") {
             $data = $repo->getCountByCountry();
@@ -66,13 +66,13 @@ class StatisticsController extends Controller
             $data = $repo->getCountByState();
         }
 
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+        $em         = $this->getDoctrine()->getManager();
+        $repo       = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
         $totalUsers = $repo->getCountAll();
 
 
         return $this->render('PROCERGSLoginCidadaoCoreBundle:Statistics:usersByRegion.html.twig',
-                             array('data' => $data, 'totalUsers' => $totalUsers));
+                array('data' => $data, 'totalUsers' => $totalUsers));
     }
 
     /**
@@ -81,12 +81,12 @@ class StatisticsController extends Controller
      */
     public function usersByCityAction($stateId)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em   = $this->getDoctrine()->getManager();
         $repo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
         $data = $repo->getCountByCity($stateId);
 
         return $this->render('PROCERGSLoginCidadaoCoreBundle:Statistics:usersByCity.html.twig',
-                             array('data' => $data));
+                array('data' => $data));
     }
 
     /**
@@ -95,11 +95,10 @@ class StatisticsController extends Controller
      */
     public function usersByServicesAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $em   = $this->getDoctrine()->getManager();
         $repo = $em->getRepository('PROCERGSOAuthBundle:Client');
-        $data = $repo->getCountPerson();
+        $data = $repo->getCountPerson($this->getUser());
 
         return array("data" => $data);
     }
-
 }
