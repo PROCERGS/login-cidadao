@@ -11,7 +11,6 @@ use PROCERGS\OAuthBundle\Entity\Client;
  */
 class Authorization
 {
-
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -74,9 +73,9 @@ class Authorization
      */
     public function getScope()
     {
-        $scope = $this->enforcePublicProfileScope($this->scope);
+        $scope = $this->enforcePublicProfileScope(array_filter($this->scope));
 
-        return $scope;
+        return array_unique($scope);
     }
 
     /**
@@ -84,7 +83,7 @@ class Authorization
      */
     public function setScope(array $scope)
     {
-        $scope = $this->enforcePublicProfileScope($scope);
+        $scope       = $this->enforcePublicProfileScope($scope);
         $this->scope = $scope;
     }
 

@@ -24,17 +24,9 @@ class ClientController extends Controller
 
         $authorization = $this->getDoctrine()
             ->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization')
-            ->findOneBy(array(
-            'person' => $user,
-            'client' => $client
-        ));
+            ->findOneBy(array('person' => $user, 'client' => $client));
 
-        $userScopes = empty($authorization) ? array() : $authorization->getScope();
-
-        $scopes = array();
-        foreach ($userScopes as $s) {
-            $scopes[$s] = true;
-        }
+        $scopes = empty($authorization) ? array() : $authorization->getScope();
 
         $form = $this->createForm('procergs_revoke_authorization',
                 array('client_id' => $clientId))->createView();
