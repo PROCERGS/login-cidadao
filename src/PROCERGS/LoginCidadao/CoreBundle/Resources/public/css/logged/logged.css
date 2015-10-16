@@ -951,3 +951,7 @@ label + .glyphicon-pencil {
 #oauth-box h1 {
     font-size: 32px;
 }
+
+#app-detail.client-details.content .permissions .label .glyphicon {
+    font-size: 75%;
+}

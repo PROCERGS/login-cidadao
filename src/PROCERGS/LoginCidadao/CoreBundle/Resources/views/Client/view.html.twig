@@ -20,8 +20,12 @@
                     {% if user.hasAuthorization(client) %}
                         <div class="permissions">
                             <p>{% trans %}This service uses the following data from your Login Citizen account{%  endtrans %}:</p>
-                            {% for auth, status in scopes %}
-                                <span class="label {{ status ? 'label-success' : 'label-danger' }}">{{ ('scope.' ~ auth) | trans }}</span>
+                            {% for scope in scopes if scope != "openid" %}
+                                {% if ('scope_details.' ~ scope) | trans != ('scope_details.' ~ scope) %}
+                                    {{ include('PROCERGSLoginCidadaoCoreBundle::common.scope.details.html.twig', { 'scope': scope }) }}
+                                {% else %}
+                                    <span class="label label-success">{{ ('scope.' ~ scope) | trans }}</span>
+                                {% endif %}
                             {% endfor %}
                         </div>
                     {% endif %}
@@ -31,7 +35,7 @@
 
         <div class="msg text-center clearfix">
             {% if client.published or user.hasAuthorization(client) %}
-                {%   if user.hasAuthorization(client) %}
+                {% if user.hasAuthorization(client) %}
                     <div class="alert alert-success app-status" role="alert">{% trans %}This service is already active in your Citizen's Login account{%  endtrans %}</div>
                     <button type="button" class="btn btn-link btn-sm pull-right" id="app-deactivate">{% trans %}Deactivate this service{% endtrans %}</button>
 
@@ -44,10 +48,10 @@
                             <a role="button" class="btn btn-default cancel">{% trans %}No{%  endtrans %}</a>
                         </p>
                     </div>
-                {%   else %}
+                {% else %}
                     <p class="alert alert-danger app-status">{% trans %}This service is not active in your Citizen's Login account{%  endtrans %}</p>
                     <a href="{{ client.landingPageUrl }}" class="btn btn-success" role="button" id="app-activate">{% trans %}Activate this service{% endtrans %}</a>
-                {%   endif %}
+                {% endif %}
             {% else %}
                 <p class="alert alert-info app-status">{% trans %}This service is not available yet. Stay tuned for the launch date.{% endtrans %}</p>
             {% endif %}
@@ -71,6 +75,8 @@
             $('#deactivate-box .cancel').on('click', function () {
                 $(this).closest('#deactivate-box').slideUp();
             });
+
+            $('[data-toggle="popover"]').popover();
         });
     </script>
 {% endblock %}

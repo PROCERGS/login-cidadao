@@ -21,6 +21,7 @@ scope.voter_registration: Voter Registration
 scope.badges: Badges
 scope.picture: Picture
 scope.public_profile: Public Profile
+scope_details.public_profile: Your public profile contains your first name, age range and your certificates (badges).
 scope.get_all_notifications: Read all your Notifications
 scope.notifications: Send Notifications
 'Authorized Applications': 'Authorized Applications'
