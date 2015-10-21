@@ -49,7 +49,7 @@
                             {% set imageDeleteName = (form.image.delete is defined) ? form.image.delete.vars.full_name : 'img-button' %}
                             {% if form.image.delete is defined %}
                                 {% do form.image.delete.setRendered %}
-                                {% if metadata is defined and client.metadata.logoUri is not null %}
+                                {% if metadata is defined and client.metadata is not null and client.metadata.logoUri is not null %}
                                     <label class="btn btn-lg btn-info btn-external-pic-preview" data-toggle="tooltip" data-placement="bottom" title="{{ 'Use the client-specified image' | trans }}">
                                         <input class="use-external" type="radio" name="{{ form.image.delete.vars.full_name }}" autocomplete="off">
                                         <img class="external-pic-preview" src="{{ client.metadata.logoUri }}" width="100%" >
