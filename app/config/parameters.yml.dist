@@ -32,7 +32,7 @@ parameters:
 
     http_proxy:
         type: HTTP
-        host: proxy.procergs.reders
+        host: host.domain.tld
         port: 3128
         auth: 'login:senha'
 
