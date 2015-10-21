@@ -113,7 +113,7 @@ class ClientRegistrationController extends FOSRestController
             $client->setSiteUrl('');
         }
 
-        if (!empty($data->getContacts())) {
+        if (count($data->getContacts()) > 0) {
             $owners = $em->getRepository($this->getParameter('user.class'))
                 ->findByEmail($data->getContacts());
 
