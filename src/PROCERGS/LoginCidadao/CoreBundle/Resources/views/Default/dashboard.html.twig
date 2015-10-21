@@ -48,11 +48,7 @@
                  {% for auth in app.user.getAuthorizations %}
                     {% if auth.client.uid != defaultClientUid %}
                       <a href="{{ auth.client.siteUrl }}" target="_blank" title="{{ auth.client.name }}">
-                      {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
-                        <img src="/{{ auth.client.getPictureWebPath }}" width="65" height="65" alt="" class="media-object service-img">
-                      {% else %}
-                        <img src="//placehold.it/65x65" alt="" class="service-img">
-                      {% endif %}
+                      <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': auth.client }) }}" width="65" height="65" class="media-object service-img">
                       </a>
                     {% endif %}
                  {% endfor %}
@@ -143,11 +139,7 @@
                   {% for log in logs.activity %}
                   <li class="media">
                     <div class="media-left">
-                      {% if log.client.getPictureWebPath is not null and log.client.getPictureWebPath != '' %}
-                      <img src="/{{ log.client.getPictureWebPath }}" width="35" alt="">
-                      {% else %}
-                      <img src="//placehold.it/14x14" alt="">
-                      {% endif %}
+                      <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': log.client }) }}" width="35" alt="">
                     </div>
 
                     <div class="media-body">

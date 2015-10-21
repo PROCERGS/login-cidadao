@@ -184,4 +184,9 @@ class Country
     {
         return $this->states;
     }
+
+    public function getPreference()
+    {
+        return $this->preference;
+    }
 }

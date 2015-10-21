@@ -1,0 +1,177 @@
+{% if form.metadata is defined and form.metadata is not null %}
+    {% set metadata = form.metadata %}
+{% endif %}
+
+<div id="service-edit" class="content clearfix">
+    <h1 class="visible-xs">{% trans %}Service{% endtrans %}</h1>
+
+    {{ form_start(form, {'attr' : {'role' : 'form'} }) }}
+    {{ form_errors(form) }}
+    <div class="form-content">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <div class="media clearfix">
+                        <div class="pull-left picture-panel-header">
+                            {% if client is defined %}
+                                <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': client }) }}"/>
+                                <button type="button" data-toggle="collapse" data-target="#change-image-collapse" class="btn btn-xs btn-link btn-block change-picture" title="{% trans %}Upload another picture{% endtrans %}">{{ 'Change' | trans }}</button>
+                            {% endif %}
+                        </div>
+                        <div class="media-body">
+                            <h2 class="media-heading personal-info">{{ 'Service Description' | trans }}</h2>
+                            {% if client is defined %}
+                                <p>{{ 'Client ID:' | trans }} <span class="clientId">{{ client.clientId }}</span>
+                                    <button type="button" class="btn btn-xs btn-default clipboard" data-clipboard-target=".clientId" data-toggle="tooltip">
+                                        <span class="glyphicon glyphicon-copy" aria-hidden="true" title="{{ 'Copy' | trans }}"></span>
+                                    </button>
+                                </p>
+                                <p>
+                                    {{ 'Client Secret:' | trans }}
+                                    <span class="collapse" id="secret-collapse">
+                                        <span class="clientSecret">{{ client.secret }}</span>
+
+                                        <button type="button" class="btn btn-xs btn-default clipboard" data-clipboard-target=".clientSecret" data-toggle="tooltip">
+                                            <span class="glyphicon glyphicon-copy" aria-hidden="true" title="{{ 'Copy' | trans }}"></span>
+                                        </button>
+                                    </span>
+                                    <button type="button" class="btn btn-sm btn-link" data-toggle="collapse" data-target="#secret-collapse" aria-expanded="false" aria-controls="secret-collapse">{{ 'view secret' | trans }}</button>
+                                </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-info picture-upload-box collapse {% if client is not defined %}in{% endif %}" id="change-image-collapse" style="margin-bottom: 0">
+                <div class="panel-heading clearfix">
+                    <div class="file-upload">
+                        <div class="buttons-toggle" data-toggle="buttons" role="group">
+                            {% set imageDeleteName = (form.image.delete is defined) ? form.image.delete.vars.full_name : 'img-button' %}
+                            {% if form.image.delete is defined %}
+                                {% do form.image.delete.setRendered %}
+                                {% if metadata is defined and client.metadata is not null and client.metadata.logoUri is not null %}
+                                    <label class="btn btn-lg btn-info btn-external-pic-preview" data-toggle="tooltip" data-placement="bottom" title="{{ 'Use the client-specified image' | trans }}">
+                                        <input class="use-external" type="radio" name="{{ form.image.delete.vars.full_name }}" autocomplete="off">
+                                        <img class="external-pic-preview" src="{{ client.metadata.logoUri }}" width="100%" >
+                                    </label>
+                                {% endif %}
+                            {% endif %}
+
+                            <label class="btn btn-lg btn-success btn-upload" data-toggle="tooltip" data-placement="bottom" title="{{ 'Upload another picture' | trans }}">
+                                <input class="upload-picture" type="radio" name="img-button" value="0">
+                                <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+                            </label>
+                        </div>
+
+                        <div class="activity-desc">
+                            <span class="upload">{{ 'Your profile picure will be changed to <strong></strong>' | trans | raw }}</span>
+                            <span class="facebook-pic">{{ 'Your Facebook profile picure will be used.' | trans }}</span>
+                        </div>
+
+                        {{ form_widget(form.image.file) }}
+                        {{ form_errors(form.image) }}
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                {{ form_row(form.name) }}
+                {{ form_row(form.description) }}
+                {{ form_row(form.siteUrl) }}
+                {{ form_row(form.metadata.logo_uri) }}
+                {{ form_row(form.landingPageUrl) }}
+                {{ form_row(form.termsOfUseUrl) }}
+                {{ form_row(form.published) }}
+                {{ form_row(form.visible) }}
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">{{ 'Basic OAuth 2 and OpenID Connect Setup' | trans }}</h2>
+            </div>
+            <div class="panel-body">
+                {{ form_row(form.redirectUris) }}
+                {% if metadata is defined %}
+                    {{ form_row(metadata.response_types) }}
+                    {{ form_row(metadata.grant_types) }}
+                {% endif %}
+
+                <h3>{{ 'OAuth 2 Endpoints' | trans }}</h3>
+                <dl>
+                    <dt>{{ 'Authorization Endpoint' | trans }}
+                    <dd>
+                        <span class="auth-endpoint">{{ url('_authorize_validate') }}</span>
+
+                        <button type="button" class="btn btn-xs btn-info clipboard" data-clipboard-target=".auth-endpoint" data-toggle="tooltip">
+                            <span class="glyphicon glyphicon-copy" aria-hidden="true" title="{{ 'Copy' | trans }}"></span>
+                        </button>
+                    </dd>
+
+                    <dt>{{ 'Token Endpoint' | trans }}
+                    <dd>
+                        <span class="token-endpoint">{{ url('_token') }}</span>
+
+                        <button type="button" class="btn btn-xs btn-info clipboard" data-clipboard-target=".token-endpoint" data-toggle="tooltip">
+                            <span class="glyphicon glyphicon-copy" aria-hidden="true" title="{{ 'Copy' | trans }}"></span>
+                        </button>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        {% if metadata is defined %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">
+                        {{ 'Advanced OAuth 2 and OpenID Connect Setup' | trans }}
+                        <button type="button" class="btn btn-xs btn-info" data-toggle="collapse" data-target="#advanced-oidc-options" aria-expanded="false" aria-controls="advanced-oidc-options">{{ 'toggle options' | trans }}</button>
+                    </h2>
+                </div>
+                <div class="panel-body collapse" id="advanced-oidc-options">
+                    {% if form.allowedScopes is defined %}
+                        {{ form_row(form.allowedScopes) }}
+                    {% endif %}
+                    {{ form_row(metadata.application_type) }}
+                    {{ form_row(metadata.subject_type) }}
+                    {{ form_row(metadata.sector_identifier_uri) }}
+                    {{ form_row(metadata.policy_uri) }}
+                    {{ form_row(metadata.jwks_uri) }}
+                    {{ form_row(metadata.request_uris) }}
+                    {{ form_row(metadata.jwks) }}
+                    {{ form_row(metadata.require_auth_time) }}
+                    {{ form_row(metadata.default_max_age) }}
+                    {{ form_row(metadata.default_acr_values) }}
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">
+                        {{ 'OpenID Connect Signing and Cryptography Setup' | trans }}
+                        <button type="button" class="btn btn-xs btn-info" data-toggle="collapse" data-target="#crypto-oidc-options" aria-expanded="false" aria-controls="crypto-oidc-options">{{ 'toggle options' | trans }}</button>
+                    </h2>
+                </div>
+                <div class="panel-body collapse" id="crypto-oidc-options">
+                    {{ form_row(metadata.id_token_signed_response_alg) }}
+                    {{ form_row(metadata.id_token_encrypted_response_alg) }}
+                    {{ form_row(metadata.id_token_encrypted_response_enc) }}
+                    {{ form_row(metadata.userinfo_signed_response_alg) }}
+                    {{ form_row(metadata.userinfo_encrypted_response_alg) }}
+                    {{ form_row(metadata.userinfo_encrypted_response_enc) }}
+                    {{ form_row(metadata.request_object_signing_alg) }}
+                    {{ form_row(metadata.request_object_encryption_alg) }}
+                    {{ form_row(metadata.request_object_encryption_enc) }}
+                    {{ form_row(metadata.token_endpoint_auth_method) }}
+                    {{ form_row(metadata.token_endpoint_auth_signing_alg) }}
+                </div>
+            </div>
+        {% endif %}
+        {% if form.publicId is defined %}
+            {{ form_row(form.owners) }}
+        {% endif %}
+        <div class="form-bar text-right">
+            <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>

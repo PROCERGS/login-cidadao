@@ -21,6 +21,7 @@ scope.voter_registration: Título de eleitor
 scope.badges: Medalhas
 scope.picture: Foto
 scope.public_profile: 'Perfil Público'
+scope_details.public_profile: São informações do perfil público o seu primeiro nome, sua faixa etária e seus certificados (medalhas)
 scope.get_all_notifications: 'Ler suas Notificações'
 scope.notifications: 'Enviar Notificações'
 'Authorized Applications': 'Aplicativos Autorizados'
@@ -71,8 +72,9 @@ CPF: CPF
 CEP: CEP
 'To confirm your change, type your current password below:': 'Para confirmar suas alterações, digite sua senha atual abaixo:'
 'Current password:': 'Senha atual:'
-'Authorize Application': 'Autorizar Aplicação'
-'The application <strong>%client_name%</strong> wants to access the following information about you:': 'A aplicação <strong>%client_name%</strong> deseja acessar as seguintes informações sobre você:'
+'Authorize <strong>%client_name%</strong> to access your information?': 'Permitir que <strong>%client_name%</strong> acesse suas informações?'
+'<strong>%client_name%</strong> will be granted the following information and permissions:': 'As seguintes informações e permissões serão fornecidas para <strong>%client_name%</strong>:'
+'About <strong>%client_name%</strong>': 'Sobre <strong>%client_name%</strong>'
 'Edit profile': 'Editar informações'
 cpf_reminder.subject: 'Você não tem um CPF associado no Login Cidadão'
 cpf_reminder.message: "Olá, %name%\n\nNós notamos que sua conta não tem um CPF associado a ela ainda.\n\nPor favor, visite o Login Cidadão até o dia %date% para completar essa informação. Após essa data, sua conta poderá ser suspensa.\n"
@@ -726,3 +728,6 @@ Change Email: Trocar Email
 Your email was successfully validated.: Seu email foi validado com sucesso.
 Back to %client%: Voltar para %client%
 Mobile: Celular
+Copy: Copiar
+Copied: Copiado
+Press CTRL + C or ⌘ + C to copy: Pressione CTRL + C ou ⌘ + C para copiar

@@ -21,6 +21,7 @@ scope.voter_registration: Voter Registration
 scope.badges: Badges
 scope.picture: Picture
 scope.public_profile: Public Profile
+scope_details.public_profile: Your public profile contains your first name, age range and your certificates (badges).
 scope.get_all_notifications: Read all your Notifications
 scope.notifications: Send Notifications
 'Authorized Applications': 'Authorized Applications'
@@ -43,8 +44,9 @@ Help: Help
 'Click again to confirm': 'Click again to confirm'
 'Please, wait...': 'Please, wait...'
 Revoked: Revoked
-'Authorize Application': 'Authorize Application'
-'The applicaton <strong>%client_name%</strong> wants to access the following information about you:': 'The application <strong>%client_name%</strong> wants to access the following information about you:'
+'Authorize <strong>%client_name%</strong> to access your information?': 'Authorize <strong>%client_name%</strong> to access your information?'
+'<strong>%client_name%</strong> will be granted the following information and permissions:': '<strong>%client_name%</strong> will be granted the following information and permissions:'
+'About <strong>%client_name%</strong>': 'About <strong>%client_name%</strong>'
 'Edit profile': 'Edit profile'
 Username: Username
 Email: Email
@@ -117,7 +119,6 @@ notification.unconfirmed.email.text: "<p>To use this system you must use a valid
 notification.empty.password.title: 'You don''t have a password!'
 notification.empty.password.shortText: 'Click here to define your password.'
 notification.empty.password.text: ''
-'The application <strong>%client_name%</strong> wants to access the following information about you:': 'The application <strong>%client_name%</strong> wants to access the following information about you:'
 'This service is already active in your Citizen''s Login account': 'This service is already active in your Citizen''s Login account'
 'Deactivate this service': 'Deactivate this service'
 'This service is not active in your Citizen''s Login account': 'This service is not active in your Citizen''s Login account'
@@ -274,3 +275,6 @@ Change Email: Change Email
 Your email was successfully validated.: Your email was successfully validated.
 Back to %client%: Back to %client%
 Mobile: Mobile
+Copy: Copy
+Copied: Copied
+Press CTRL + C or ⌘ + C to copy: Press CTRL + C or ⌘ + C to copy

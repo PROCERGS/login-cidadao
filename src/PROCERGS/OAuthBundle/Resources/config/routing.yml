@@ -1,11 +1,11 @@
 procergso_auth_homepage:
-    pattern:  /hello/{name}
+    path:  /hello/{name}
     defaults: { _controller: PROCERGSOAuthBundle:Default:index }
 
 procergs_oauth_init:
-    pattern: /initClient
+    path: /initClient
     defaults: { _controller: PROCERGSOAuthBundle:Client:initClient }
-    
+
 procergs_oauth_getid:
-    pattern: /getPub/{id}
+    path: /getPub/{id}
     defaults: { _controller: PROCERGSOAuthBundle:Client:getPublicId }

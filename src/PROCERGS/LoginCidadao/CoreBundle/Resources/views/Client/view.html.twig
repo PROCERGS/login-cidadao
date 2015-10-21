@@ -3,78 +3,80 @@
 {% block title %}{{ client.name }} | {{ parent() }}{% endblock title %}
 
 {% block content %}
-<div id="app-detail" class="client-details content">
-<h1 class="visible-xs">{% trans %}Services{% endtrans %}</h1>
+    <div id="app-detail" class="client-details content">
+        <h1 class="visible-xs">{% trans %}Services{% endtrans %}</h1>
 
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <div class="media">
-          <a class="pull-left" href="#">
-          {% if client.getPictureWebPath is not null and client.getPictureWebPath != '' %}
-              <img src="/{{ client.getPictureWebPath }}" alt="" class="media-object" width="100" height="100">
-          {% else %}
-              <img src="//placehold.it/220x220" alt="" class="media-object" width="100">
-          {% endif %}
-          </a>
-          <div class="media-body">
-            <h3 class="media-heading">{{ client.name }}</h3>
-            {{ client.description }}
-          </div>
-          <a href="{{ client.siteUrl }}" target="_blank" class="btn btn-link btn-sm pull-right"><span class="glyphicon glyphicon-link"></span> {% trans %}Go to service's page{%  endtrans %}</a>
-          {% if user.hasAuthorization(client) %}
-          <div class="permissions">
-                <p>{% trans %}This service uses the following data from your Login Citizen account{%  endtrans %}:</p>
-                {% for auth, status in scopes %}
-                <span class="label {{ status ? 'label-success' : 'label-danger' }}">{{ ('scope.' ~ auth) | trans }}</span>
-                {% endfor %}
-          </div>
-          {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': client }) }}" alt="" class="media-object" width="100" height="100">
+                    </a>
+                    <div class="media-body">
+                        <h3 class="media-heading">{{ client.name }}</h3>
+                        {{ client.description }}
+                    </div>
+                    <a href="{{ client.siteUrl }}" target="_blank" class="btn btn-link btn-sm pull-right"><span class="glyphicon glyphicon-link"></span> {% trans %}Go to service's page{%  endtrans %}</a>
+                    {% if user.hasAuthorization(client) %}
+                        <div class="permissions">
+                            <p>{% trans %}This service uses the following data from your Login Citizen account{%  endtrans %}:</p>
+                            {% for scope in scopes if scope != "openid" %}
+                                {% if ('scope_details.' ~ scope) | trans != ('scope_details.' ~ scope) %}
+                                    {{ include('PROCERGSLoginCidadaoCoreBundle::common.scope.details.html.twig', { 'scope': scope }) }}
+                                {% else %}
+                                    <span class="label label-success">{{ ('scope.' ~ scope) | trans }}</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
+
+        <div class="msg text-center clearfix">
+            {% if client.published or user.hasAuthorization(client) %}
+                {% if user.hasAuthorization(client) %}
+                    <div class="alert alert-success app-status" role="alert">{% trans %}This service is already active in your Citizen's Login account{%  endtrans %}</div>
+                    <button type="button" class="btn btn-link btn-sm pull-right" id="app-deactivate">{% trans %}Deactivate this service{% endtrans %}</button>
+
+                    <div class="alert alert-danger" id="deactivate-box">
+                        <h4>{% trans %}Do you really want to disable this service?{%  endtrans %}</h4>
+                        <p>
+                            {{ form_start(form, {'action': path('lc_revoke', { clientId: client.id }), 'attr': {'role':'form'}}) }}
+                            <button type="submit" class="btn btn-danger">{% trans %}Yes{%  endtrans %}</button>
+                            {{ form_end(form) }}
+                            <a role="button" class="btn btn-default cancel">{% trans %}No{%  endtrans %}</a>
+                        </p>
+                    </div>
+                {% else %}
+                    <p class="alert alert-danger app-status">{% trans %}This service is not active in your Citizen's Login account{%  endtrans %}</p>
+                    <a href="{{ client.landingPageUrl }}" class="btn btn-success" role="button" id="app-activate">{% trans %}Activate this service{% endtrans %}</a>
+                {% endif %}
+            {% else %}
+                <p class="alert alert-info app-status">{% trans %}This service is not available yet. Stay tuned for the launch date.{% endtrans %}</p>
+            {% endif %}
+
+            <a href="{{ path('lc_authorization_list') }}" class="btn btn-link btn-sm pull-left" role="button">{% trans %}Back to services{% endtrans %}</a>
+
         </div>
+
     </div>
-
-    <div class="msg text-center clearfix">
-    {% if client.published or user.hasAuthorization(client) %}
-    {%   if user.hasAuthorization(client) %}
-        <div class="alert alert-success app-status" role="alert">{% trans %}This service is already active in your Citizen's Login account{%  endtrans %}</div>
-        <button type="button" class="btn btn-link btn-sm pull-right" id="app-deactivate">{% trans %}Deactivate this service{% endtrans %}</button>
-
-        <div class="alert alert-danger" id="deactivate-box">
-            <h4>{% trans %}Do you really want to disable this service?{%  endtrans %}</h4>
-            <p>
-                {{ form_start(form, {'action': path('lc_revoke', { clientId: client.id }), 'attr': {'role':'form'}}) }}
-                <button type="submit" class="btn btn-danger">{% trans %}Yes{%  endtrans %}</button>
-                {{ form_end(form) }}
-                <a role="button" class="btn btn-default cancel">{% trans %}No{%  endtrans %}</a>
-            </p>
-        </div>
-    {%   else %}
-        <p class="alert alert-danger app-status">{% trans %}This service is not active in your Citizen's Login account{%  endtrans %}</p>
-        <a href="{{ client.landingPageUrl }}" class="btn btn-success" role="button" id="app-activate">{% trans %}Activate this service{% endtrans %}</a>
-    {%   endif %}
-    {% else %}
-        <p class="alert alert-info app-status">{% trans %}This service is not available yet. Stay tuned for the launch date.{% endtrans %}</p>
-    {% endif %}
-
-    <a href="{{ path('lc_authorization_list') }}" class="btn btn-link btn-sm pull-left" role="button">{% trans %}Back to services{% endtrans %}</a>
-
-    </div>
-
-</div>
 
 {% endblock %}
 
 {% block javascripts %}
-{{ parent() }}
-<script>
-    $(document).ready(function() {
-        $('#app-deactivate').on('click', function() {
-            $('#deactivate-box').slideDown();
-        });
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            $('#app-deactivate').on('click', function () {
+                $('#deactivate-box').slideDown();
+            });
 
-        $('#deactivate-box .cancel').on('click', function() {
-            $(this).closest('#deactivate-box').slideUp();
+            $('#deactivate-box .cancel').on('click', function () {
+                $(this).closest('#deactivate-box').slideUp();
+            });
+
+            $('[data-toggle="popover"]').popover();
         });
-    });
-</script>
+    </script>
 {% endblock %}

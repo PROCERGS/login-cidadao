@@ -1,0 +1,16 @@
+{% set url = '//' ~ app.request.host %}
+{% if app.request.port != 80 %}
+    {% set url =  url ~ ':' ~ app.request.port %}
+{% endif %}
+
+{%  if client.imageName is null %}
+    {% if client.metadata is not null and client.metadata.logoUri is not null %}
+        {{ client.metadata.logouri }}
+    {% else %}
+        {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+        {{ url ~ asset_url }}
+        {% endimage %}
+    {% endif %}
+{% else %}
+    {{ url ~ vich_uploader_asset(client, 'image') }}
+{% endif %}

@@ -1,0 +1,80 @@
+parameters:
+    oidc.person.serialize.listenner.class: LoginCidadao\OpenIDBundle\EventListenner\PersonSerializeEventListenner
+    oidc.storage.session_state.class: LoginCidadao\OpenIDBundle\Storage\SessionState
+
+    oauth2.storage.authorization_code.class: LoginCidadao\OpenIDBundle\Storage\AuthorizationCode
+    oauth2.storage.client_credentials.class: LoginCidadao\OpenIDBundle\Storage\ClientCredentials
+    oauth2.storage.refresh_token.class: LoginCidadao\OpenIDBundle\Storage\RefreshToken
+    oauth2.storage.access_token.class: LoginCidadao\OpenIDBundle\Storage\AccessToken
+
+    oauth2.grant_type.authorization_code.class: LoginCidadao\OpenIDBundle\GrantType\AuthorizationCode
+    
+    oauth2.response_types.id_token.class: LoginCidadao\OpenIDBundle\ResponseType\IdToken
+
+    oauth2.storage.user_claims.class: LoginCidadao\OpenIDBundle\Storage\UserClaims
+    oauth2.storage.public_key.class: LoginCidadao\OpenIDBundle\Storage\PublicKey
+
+    oauth2.scope_manager.class: LoginCidadao\OpenIDBundle\Manager\ScopeManager
+
+    oauth2.server.config:
+        use_openid_connect: true
+        issuer: %jwt_iss%
+        allow_implicit: true
+        enforce_state: false
+
+services:
+    oauth2.storage.user_claims:
+        class: %oauth2.storage.user_claims.class%
+        arguments: [ @doctrine.orm.entity_manager ]
+
+    oauth2.storage.public_key:
+        class: %oauth2.storage.public_key.class%
+        arguments: [ @doctrine.orm.entity_manager ]
+
+    oidc.storage.session_state:
+        class: %oidc.storage.session_state.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @security.token_storage
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+
+    oidc.person.serialize.listenner:
+        class: %oidc.person.serialize.listenner.class%
+        arguments:
+            - @lc_accesstoken_manager
+            - %secret%
+        tags:
+            - { name: jms_serializer.event_listener, event: serializer.post_serialize, method: onPostSerialize }
+
+    oauth2.response_types.token:
+        class: OAuth2\ResponseType\AccessToken
+        arguments:
+            - @oauth2.storage.access_token
+            - @oauth2.storage.refresh_token
+            - %oauth2.server.config%
+
+    oauth2.response_types.code:
+        class: OAuth2\OpenID\ResponseType\AuthorizationCode
+        arguments:
+            - @oauth2.storage.authorization_code
+            - %oauth2.server.config%
+
+    oauth2.response_types.id_token:
+        class: %oauth2.response_types.id_token.class%
+        arguments:
+            - @oauth2.storage.user_claims
+            - @oauth2.storage.public_key
+            - %oauth2.server.config%
+
+    oauth2.response_types.id_token_token:
+        class: OAuth2\OpenID\ResponseType\IdTokenToken
+        arguments:
+            - @oauth2.response_types.token
+            - @oauth2.response_types.id_token
+
+    oauth2.response_types.code_id_token:
+        class: OAuth2\OpenID\ResponseType\CodeIdToken
+        arguments:
+            - @oauth2.response_types.code
+            - @oauth2.response_types.id_token

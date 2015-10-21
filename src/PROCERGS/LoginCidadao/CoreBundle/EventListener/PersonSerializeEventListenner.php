@@ -4,14 +4,15 @@ namespace PROCERGS\LoginCidadao\CoreBundle\EventListener;
 
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\PreSerializeEvent;
+use JMS\Serializer\EventDispatcher\ObjectEvent;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpFoundation\Request;
+use PROCERGS\OAuthBundle\Model\AccessTokenManager;
 use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class PersonSerializeEventListenner implements EventSubscriberInterface
 {
-
     protected $templateHelper;
 
     /** @var UploaderHelper */
@@ -28,8 +29,8 @@ class PersonSerializeEventListenner implements EventSubscriberInterface
     {
         $this->uploaderHelper = $uploaderHelper;
         $this->templateHelper = $templateHelper;
-        $this->kernel = $kernel;
-        $this->request = $request;
+        $this->kernel         = $kernel;
+        $this->request        = $request;
     }
 
     public static function getSubscribedEvents()
@@ -39,6 +40,11 @@ class PersonSerializeEventListenner implements EventSubscriberInterface
                 'event' => 'serializer.pre_serialize',
                 'method' => 'onPreSerialize',
                 'class' => 'PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface'
+            ),
+            array(
+                'event' => 'serializer.post_serialize',
+                'method' => 'onPostSerialize',
+                'class' => 'PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface'
             )
         );
     }
@@ -47,12 +53,16 @@ class PersonSerializeEventListenner implements EventSubscriberInterface
     {
         $person = $event->getObject();
         if ($person instanceof PersonInterface) {
-            $imgHelper = $this->uploaderHelper;
+            $imgHelper      = $this->uploaderHelper;
             $templateHelper = $this->templateHelper;
-            $isDev = $this->kernel->getEnvironment() === 'dev';
+            $isDev          = $this->kernel->getEnvironment() === 'dev';
             $person->prepareAPISerialize($imgHelper, $templateHelper, $isDev,
-                                         $this->request);
+                $this->request);
         }
     }
 
+    public function onPostSerialize(ObjectEvent $event)
+    {
+        //
+    }
 }

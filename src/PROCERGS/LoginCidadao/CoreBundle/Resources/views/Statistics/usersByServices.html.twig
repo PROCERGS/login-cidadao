@@ -1,22 +1,18 @@
 {% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 {% block content %}
-  <div id="statistics" class="content statistics-services clearfix">
+    <div id="statistics" class="content statistics-services clearfix">
 
-    <h1>{{ 'statistics.userByService'|trans }}</h1>
+        <h1>{{ 'statistics.userByService'|trans }}</h1>
 
-    {% for item in data %}
-      <div class="col-md-4">
-        <div class="item">
-          {% if item.client.getPictureWebPath is not null and item.client.getPictureWebPath != '' %}
-            <img src="/{{ item.client.getPictureWebPath }}" width="65" height="65" alt="" class="service-img center-block">
-            {% else %}
-            <img src="//placehold.it/65x65" alt="" class="service-img center-block">
-          {% endif %}
-          <div>{{ item.client.name | trans }}</div>
-          <div class="qty">{{ item.qty }}</div>
-        </div>
-      </div>
-    {% endfor %}
+        {% for item in data %}
+            <div class="col-md-4">
+                <div class="item">
+                    <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': item.client }) }}" width="65" height="65" alt="" class="service-img center-block">
+                    <div>{{ item.client.name | trans }}</div>
+                    <div class="qty">{{ item.qty }}</div>
+                </div>
+            </div>
+        {% endfor %}
 
-  </div>
+    </div>
 {% endblock %}

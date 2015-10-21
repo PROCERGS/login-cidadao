@@ -50,6 +50,9 @@ class AppKernel extends Kernel
             new PROCERGS\LoginCidadao\ValidationControlBundle\PROCERGSLoginCidadaoValidationControlBundle(),
 
             new LoginCidadao\TOSBundle\LoginCidadaoTOSBundle(),
+
+            new OAuth2\ServerBundle\OAuth2ServerBundle(),
+            new LoginCidadao\OpenIDBundle\LoginCidadaoOpenIDBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

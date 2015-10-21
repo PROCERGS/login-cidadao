@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AccessToken extends BaseAccessToken
 {
-
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -30,10 +29,42 @@ class AccessToken extends BaseAccessToken
      */
     protected $user;
 
+    /**
+     * @ORM\Column(name="id_token", type="text", nullable=true)
+     * @var string
+     */
+    protected $idToken;
+
     public function setExpired()
     {
         $now = new \DateTime();
         $this->setExpiresAt($now->getTimestamp());
     }
-    
+
+    public function getIdToken()
+    {
+        return $this->idToken;
+    }
+
+    public function setIdToken($idToken)
+    {
+        $this->idToken = $idToken;
+        return $this;
+    }
+
+    public function getUserId($pairwiseSubjectIdSalt)
+    {
+        $id     = $this->getUser()->getId();
+        $client = $this->getClient();
+
+        if ($client instanceof Client && $client->getMetadata()) {
+            $metadata = $client->getMetadata();
+            if ($metadata->getSubjectType() === 'pairwise') {
+                $sectorIdentifier = $metadata->getSectorIdentifier();
+                $salt             = $pairwiseSubjectIdSalt;
+                return hash('sha256', $sectorIdentifier.$id.$salt);
+            }
+        }
+        return $id;
+    }
 }

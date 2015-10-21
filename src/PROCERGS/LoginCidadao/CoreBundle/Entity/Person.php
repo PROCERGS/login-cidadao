@@ -36,8 +36,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     LocationAwareInterface
 {
     /**
-     * @JMS\Expose
-     * @JMS\Groups({"public_profile"})
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -47,7 +45,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"first_name","full_name","public_profile"})
+     * @JMS\Groups({"first_name","full_name","public_profile","given_name"})
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank(message="Please enter your name.", groups={"Profile"})
      * @Assert\Length(
@@ -63,7 +61,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"last_name","full_name"})
+     * @JMS\Groups({"last_name","full_name","family_name","middle_name","name"})
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank(message="Please enter your surname.", groups={"Profile"})
      * @Assert\Length(
@@ -79,7 +77,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"public_profile"})
+     * @JMS\Groups({"username","preferred_username"})
      * @PROCERGSAssert\Username
      * @Assert\NotBlank
      * @Assert\Length(
@@ -129,7 +127,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"mobile"})
+     * @JMS\Groups({"mobile","phone_number"})
      * @ORM\Column(type="string", nullable=true)
      * @JMS\Since("1.0")
      */
@@ -310,7 +308,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"public_profile"})
+     * @JMS\Groups({"public_profile","picture"})
      * @JMS\Since("1.0.2")
      */
     protected $profilePicutreUrl;
@@ -318,7 +316,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @JMS\Expose
-     * @JMS\Groups({"public_profile"})
+     * @JMS\Groups({"public_profile","updated_at"})
      * @var \DateTime $updatedAt
      * @JMS\Since("1.0.2")
      */
@@ -380,7 +378,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"addresses"})
+     * @JMS\Groups({"addresses","address"})
      * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonAddress", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
      */
     protected $addresses;
@@ -617,7 +615,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     /**
      * Get the full name of the user (first + last name)
-     * @JMS\Groups({"full_name"})
+     * @JMS\Groups({"full_name", "name"})
      * @JMS\VirtualProperty
      * @JMS\SerializedName("full_name")
      * @return string
@@ -1330,5 +1328,45 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
             return false;
         };
+    }
+
+    /**
+     * @JMS\Groups({"public_profile"})
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("given_name")
+     */
+    public function getGivenName()
+    {
+        return $this->getFirstName();
+    }
+
+    /**
+     * @JMS\Groups({"full_name"})
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("family_name")
+     */
+    public function getFamilyName()
+    {
+        return $this->getSurname();
+    }
+
+    /**
+     * @JMS\Groups({"mobile", "phone_number"})
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("phone_number")
+     */
+    public function getPhoneNumber()
+    {
+        return $this->getMobile();
+    }
+
+    /**
+     * @JMS\Groups({"mobile", "phone_number"})
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("phone_number_verified")
+     */
+    public function getPhoneNumberVerified()
+    {
+        return false;
     }
 }

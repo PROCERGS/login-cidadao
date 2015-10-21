@@ -43,7 +43,7 @@
                 <button type="button" class="btn dropdown-toggle profile-card" data-toggle="dropdown">
                     <span class="profile-username">{{ app.user.username }}</span>
                     <span class="profile-picture-container">
-                        <img src="{{ include("PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" alt="" class="profile-picture" width="30" height="30">
+                        <img src="{{ include("PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" alt="" class="profile-picture img-circle" width="30" height="30">
                     </span>
                 </button>
                 <ul class="dropdown-menu clearfix">
@@ -71,11 +71,7 @@
                         <li class="app">
                             <a href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}" class="media menu-item clearfix">
                               <div class="pull-left">
-                                {% if auth.client.getPictureWebPath is not null and auth.client.getPictureWebPath != '' %}
-                                    <img src="//{{ app.request.host ~ '/' ~ auth.client.getPictureWebPath }}" alt="" class="media-object" width="50" height="50">
-                                {% else %}
-                                    <img src="//placehold.it/50x50" alt="" class="media-object">
-                                {% endif %}
+                                <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': auth.client }) }}" alt="" class="media-object" width="50" height="50"/>
                               </div>
                               <div class="media-body">
                                 <h5 class="media-heading">{{ auth.client.name }}</h5>
