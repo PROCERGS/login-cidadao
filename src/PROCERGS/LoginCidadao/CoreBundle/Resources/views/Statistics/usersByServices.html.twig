@@ -5,14 +5,85 @@
         <h1>{{ 'statistics.userByService'|trans }}</h1>
 
         {% for item in data %}
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="item">
+                        <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': item.client }) }}" width="65" height="65" alt="" class="service-img center-block">
+                        <div>{{ item.client.name | trans }}</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                </div>
+                <div class="col-md-3">
+                    <div class="qty">{{ item.total }}</div>
+                </div>
+            </div>
+
             <div class="col-md-4">
                 <div class="item">
                     <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': item.client }) }}" width="65" height="65" alt="" class="service-img center-block">
                     <div>{{ item.client.name | trans }}</div>
-                    <div class="qty">{{ item.qty }}</div>
+                    <div class="qty">{{ item.total }}</div>
                 </div>
             </div>
+
         {% endfor %}
 
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['line']}]}"></script>
+    <script>
+        google.setOnLoadCallback(updateChart);
+
+        function formatNumber(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function drawStuff(chartData) {
+            var data = new google.visualization.arrayToDataTable(chartData);
+
+            var options = {
+                title: 'Votos por Minuto',
+                width: '100%',
+                legend: {position: 'none'},
+                chart: {subtitle: 'Consulta Popular 2015 - 19/08/2015'},
+                bar: {groupWidth: "90%"}
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('top_x_div'));
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+        }
+        ;
+
+        function updateChart() {
+            $.getJSON('{{ path('lc_statistics_service_users_day', { '_format': 'json' }) }}', function (rawData) {
+                var chartData = [
+                    ['Time', 'Votes']
+                ];
+                var total = 0;
+                for (var index = 0; index < rawData.length; ++index) {
+                    var time = rawData[index].time;
+                    var votes = rawData[index].votes;
+                    chartData.push([new Date(time), votes]);
+                    total += votes;
+                    if (index === rawData.length - 2) {
+                        $('.last-minute').html(time.split(' ')[1]);
+                        $('.vpm').html(votes);
+                    }
+                }
+                drawStuff(chartData);
+
+                $('.total').html(formatNumber(total));
+            }).always(function () {
+                setTimeout(function () {
+                    updateChart();
+                }, 20000);
+            });
+        }
+        ;
+    </script>
 {% endblock %}

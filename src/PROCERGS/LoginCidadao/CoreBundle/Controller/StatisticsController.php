@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use PROCERGS\LoginCidadao\CoreBundle\Form\Type\PersonFilterFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Model\Badge;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @Route("/statistics")
@@ -93,12 +94,94 @@ class StatisticsController extends Controller
      * @Route("/users/services", name="lc_statistics_user_services")
      * @Template()
      */
-    public function usersByServicesAction()
+    public function usersByServicesAction(Request $request)
     {
-        $em   = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('PROCERGSOAuthBundle:Client');
-        $data = $repo->getCountPerson($this->getUser());
+        $data = $this->getUsersByService(10, null, $request->getRequestFormat());
 
-        return array("data" => $data);
+        $repo   = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:Client');
+        $totals = $repo->getCountPerson($this->getUser());
+
+        return compact('data');
+    }
+
+    /**
+     * @Route("/services/users-by-day.{_format}",
+     *          name="lc_statistics_service_users_day",
+     *          defaults={"_format": "html", "clientId": null}
+     * )
+     * @Template()
+     */
+    public function usersByServiceByDayAction(Request $request, $clientId = null)
+    {
+        $data = $this->getUsersByService(10, $clientId,
+            $request->getRequestFormat());
+
+        if ($request->getRequestFormat() === 'json') {
+            return new JsonResponse($data);
+        }
+
+        return compact('data');
+    }
+
+    /**
+     * @Route("/services/users-by-day-week.{_format}",
+     *          name="lc_statistics_service_users_day_week",
+     *          defaults={"_format": "html", "clientId": null}
+     * )
+     * @Template()
+     */
+    public function usersByServiceByDayOfWeekAction(Request $request)
+    {
+        $em      = $this->getDoctrine()->getManager();
+        $repo    = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization');
+        $rawData = $repo->statsUsersByServiceByDayOfWeek();
+
+        if ($request->getRequestFormat() === 'json') {
+            return new JsonResponse($rawData);
+        }
+
+        $data = $rawData;
+
+        return compact('data');
+    }
+
+    private function getUsersByService($days, $clientId = null, $format = 'html')
+    {
+        $em        = $this->getDoctrine()->getManager();
+        $repo      = $em->getRepository('PROCERGSOAuthBundle:Client');
+        $rawData   = $repo->statsUsersByServiceByDay($days, $clientId);
+        $rawTotals = $repo->getCountPerson($this->getUser(), $clientId);
+
+        var_dump($rawData); die();
+
+        if ($format === 'json') {
+            //return $rawData;
+        }
+
+        $totals = array();
+        foreach ($rawTotals as $entry) {
+            $client = $entry['client'];
+
+            $totals[$client->getId()] = array('client' => $client, 'total' => $entry['qty']);
+        }
+
+        $data  = array();
+        $total = array();
+        foreach ($rawData as $stat) {
+            $id     = $stat['client'];
+            $client = $totals[$id]['client'];
+            $total  = $totals[$id]['total'];
+            $count  = $stat['users'];
+            $day    = $stat['day'];
+            @$totalPeriod[$id] += $count;
+
+            $data[$id]['client']       = $client;
+            $data[$id]['total_period'] = $totalPeriod[$id];
+            $data[$id]['total']        = $total;
+            $data[$id]['days']         = $days;
+            $data[$id]['data'][]       = array($day, $count);
+        }
+
+        return $data;
     }
 }

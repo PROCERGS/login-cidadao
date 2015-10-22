@@ -18,7 +18,8 @@ class ClientRepository extends EntityRepository
                 ->getOneOrNullResult();
     }
 
-    public function getCountPerson(PersonInterface $person = null)
+    public function getCountPerson(PersonInterface $person = null,
+                                   $clientId = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('count(a.id) AS qty, c AS client')
@@ -33,6 +34,39 @@ class ClientRepository extends EntityRepository
             $qb->orWhere('a.person = :person')->setParameter('person', $person);
         }
 
+        if ($clientId !== null) {
+            $qb->andWhere('c.id = :clientId')
+                ->setParameter('clientId', $clientId);
+        }
+
         return $qb->getQuery()->getResult();
+    }
+
+    public function statsUsersByServiceByDay($days, $clientId = null,
+                                             PersonInterface $person = null)
+    {
+        $date = new \DateTime("-$days days");
+
+        $query = $this->createQueryBuilder('c')
+            ->select('DATE(a.createdAt) AS day, c.id AS client, COUNT(a.id) AS users')
+            ->join('c.authorizations', 'a')
+            ->where('a.createdAt >= :date')
+            ->andWhere('c.published = true')
+            ->groupBy('day, client')
+            ->setParameter('date', $date);
+
+        if ($clientId !== null) {
+            $query
+                ->andWhere('a.client = :clientId')
+                ->setParameter('clientId', $clientId);
+        }
+
+        if ($person !== null) {
+            $query
+                ->orWhere('a.person = :person')
+                ->setParameter('person', $person);
+        }
+
+        return $query->getQuery()->getScalarResult();
     }
 }
