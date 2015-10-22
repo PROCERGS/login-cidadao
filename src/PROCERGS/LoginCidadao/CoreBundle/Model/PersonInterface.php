@@ -155,7 +155,7 @@ interface PersonInterface
      */
     public function getImageName();
 
-    public function setProfilePictureUrl($profilePicutreUrl);
+    public function setProfilePictureUrl($profilePictureUrl);
 
     public function getProfilePictureUrl();
 
