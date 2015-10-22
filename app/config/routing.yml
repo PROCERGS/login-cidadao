@@ -17,6 +17,16 @@ lc_oidc:
     type:     annotation
     prefix:   /
 
+fos_oauth_server_authorize:
+    path: /oauth/v2/auth
+    methods:  [GET]
+    defaults:  { _controller: LoginCidadaoOpenIDBundle:Authorize:validateAuthorize }
+
+fos_oauth_server_authorize_post:
+    path: /oauth/v2/auth
+    methods:  [POST]
+    defaults:  { _controller: LoginCidadaoOpenIDBundle:Authorize:handleAuthorize }
+
 # Terms of Service
 tos:
     resource: "@LoginCidadaoTOSBundle/Controller/"
@@ -85,16 +95,6 @@ procergso_auth:
 
 fos_oauth_server_token:
     resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
-
-fos_oauth_server_authorize:
-    path: /oauth/v2/auth
-    methods:  [GET]
-    defaults:  { _controller: OAuth2ServerBundle:Authorize:validateAuthorize }
-    
-fos_oauth_server_authorize_post:
-    path: /oauth/v2/auth
-    methods:  [POST]
-    defaults:  { _controller: LoginCidadaoOpenIDBundle:Authorize:handleAuthorize }
 
 # UserBundle
 fos_user_security:
