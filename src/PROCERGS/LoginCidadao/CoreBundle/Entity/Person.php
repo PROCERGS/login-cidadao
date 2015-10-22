@@ -287,7 +287,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Groups({"public_profile","picture"})
      * @JMS\Since("1.0.2")
      */
-    protected $profilePicutreUrl;
+    protected $profilePictureUrl;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -895,16 +895,16 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         return $this->imageName;
     }
 
-    public function setProfilePictureUrl($profilePicutreUrl)
+    public function setProfilePictureUrl($profilePictureUrl)
     {
-        $this->profilePicutreUrl = $profilePicutreUrl;
+        $this->profilePictureUrl = $profilePictureUrl;
 
         return $this;
     }
 
     public function getProfilePictureUrl()
     {
-        return $this->profilePicutreUrl;
+        return $this->profilePictureUrl;
     }
 
     /**
