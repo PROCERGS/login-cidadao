@@ -1,0 +1,3 @@
+login_cidadao_stats_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: LoginCidadaoStatsBundle:Default:index }

@@ -1,0 +1,14 @@
+parameters:
+    statistics.handler.class: LoginCidadao\StatsBundle\Handler\StatsHandler
+
+services:
+    statistics.repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: [@doctrine.orm.entity_manager, getRepository]
+        arguments:
+            - LoginCidadao\StatsBundle\Entity\Statistics
+
+    statistics.handler:
+        class: %statistics.handler.class%
+        arguments:
+            - @statistics.repository

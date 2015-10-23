@@ -100,27 +100,8 @@ class StatisticsController extends Controller
         $data = $this->getNewUsersByService(30, null,
             $request->getRequestFormat());
 
-        //die(var_dump($data[1]['data']));
-
-        $evo = array();
-        foreach ($data as $clientNewUsers) {
-            $client = $clientNewUsers['client'];
-            $total  = $clientNewUsers['total'];
-            $id     = $client->getId();
-
-            $newInPeriod  = $clientNewUsers['total_period'];
-            $currentTotal = $total - $newInPeriod;
-
-            $evo[$id] = array();
-            foreach ($clientNewUsers['data'] as $clientData) {
-                $date = $clientData[0];
-                $currentTotal += $clientData[1];
-
-                $evo[$id][] = array(
-                    $date, $currentTotal
-                );
-            }
-        }
+        $evo = $this->get('statistics.handler')->get('client.users');
+        die(var_dump($evo));
 
         return compact('data', 'evo');
     }
