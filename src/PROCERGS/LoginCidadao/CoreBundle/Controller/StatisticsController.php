@@ -12,6 +12,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Form\Type\PersonFilterFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Model\Badge;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
 
 /**
  * @Route("/statistics")
@@ -96,10 +97,10 @@ class StatisticsController extends Controller
      */
     public function usersByServicesAction(Request $request)
     {
-        $data = $this->getUsersByService(10, null, $request->getRequestFormat());
+        $data = $this->getUsersByService(30, null, $request->getRequestFormat());
 
-        $repo   = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:Client');
-        $totals = $repo->getCountPerson($this->getUser());
+        $repo = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:Client');
+        //$data = $repo->getCountPerson($this->getUser());
 
         return compact('data');
     }
@@ -113,7 +114,7 @@ class StatisticsController extends Controller
      */
     public function usersByServiceByDayAction(Request $request, $clientId = null)
     {
-        $data = $this->getUsersByService(10, $clientId,
+        $data = $this->getUsersByService(30, $clientId,
             $request->getRequestFormat());
 
         if ($request->getRequestFormat() === 'json') {
@@ -149,10 +150,9 @@ class StatisticsController extends Controller
     {
         $em        = $this->getDoctrine()->getManager();
         $repo      = $em->getRepository('PROCERGSOAuthBundle:Client');
-        $rawData   = $repo->statsUsersByServiceByDay($days, $clientId);
+        $rawData   = $repo->statsUsersByServiceByDay($days, $clientId,
+            $this->getUser());
         $rawTotals = $repo->getCountPerson($this->getUser(), $clientId);
-
-        var_dump($rawData); die();
 
         if ($format === 'json') {
             //return $rawData;

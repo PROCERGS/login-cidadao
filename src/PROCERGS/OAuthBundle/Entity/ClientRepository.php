@@ -71,9 +71,16 @@ class ClientRepository extends EntityRepository
         }
 
         if ($person !== null) {
-            $query
-                ->orWhere('a.person = :person')
-                ->setParameter('person', $person);
+            $clients = $this->getEntityManager()->createQueryBuilder()
+                    ->select('c.id')
+                    ->from($this->getEntityName(), 'c', 'c.id')
+                    ->join('c.authorizations', 'a')
+                    ->where('a.person = :person')
+                    ->setParameters(compact('person'))
+                    ->getQuery()->getArrayResult();
+
+            $ids = array_keys($clients);
+            $query->orWhere('c.id IN (:clients)')->setParameter('clients', $ids);
         }
 
         return $query->getQuery()->getScalarResult();

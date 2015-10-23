@@ -729,11 +729,8 @@ label + .glyphicon-pencil {
 
 #statistics .item {
     background-color: #F9F9F9;
-    color: #000;
-    display: block;
-    margin-bottom: 10px;
-    padding: 15px 0;
-    text-align: center;
+    margin: 15px 0;
+    padding: 10px 0;
 }
 
 #statistics .item:hover {
@@ -747,7 +744,15 @@ label + .glyphicon-pencil {
 }
 
 #statistics .qty {
-    font-size: 17px;
+    text-align: center;
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+
+    display: flex;
+    align-items: center;
+}
+#statistics .qty strong {
+    display: block;
+    font-size: 24px;
     font-weight: bold;
 }
 
