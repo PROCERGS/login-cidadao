@@ -31,7 +31,16 @@ class ClientRepository extends EntityRepository
             ->orderBy('qty', 'DESC');
 
         if ($person !== null) {
-            $qb->orWhere('a.person = :person')->setParameter('person', $person);
+            $clients = $this->getEntityManager()->createQueryBuilder()
+                    ->select('c.id')
+                    ->from($this->getEntityName(), 'c', 'c.id')
+                    ->join('c.authorizations', 'a')
+                    ->where('a.person = :person')
+                    ->setParameters(compact('person'))
+                    ->getQuery()->getArrayResult();
+
+            $ids = array_keys($clients);
+            $qb->orWhere('c.id IN (:clients)')->setParameter('clients', $ids);
         }
 
         if ($clientId !== null) {
