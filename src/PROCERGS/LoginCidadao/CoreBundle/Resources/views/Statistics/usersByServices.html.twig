@@ -6,18 +6,16 @@
 
         {% for item in data %}
             <div class="row item">
-                <div class="col-md-3 text-center">
+                <div class="col-md-2 text-center">
                     <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': item.client }) }}" width="65" height="65" alt="" class="service-img center-block">
                     <span class="client-name">{{ item.client.name | trans }}</span>
                 </div>
-                <div class="col-md-6">
-
+                <div class="col-md-7">
+                    <div id="client-chart-{{ item.client.id }}"></div>
                 </div>
                 <div class="col-md-3 qty">
-                    <div class="vcenter">
-                        <strong>{{ (item.total + 50000) | number_format(0, ',', '.') }}</strong>
-                        <small>{{ 'users' | trans }}</small>
-                    </div>
+                    <strong>{{ (item.total) | number_format(0, ',', '.') }}</strong>
+                    <small>{{ 'Users' | trans }}</small>
                 </div>
             </div>
         {% endfor %}
@@ -27,57 +25,80 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['line']}]}"></script>
-    <script>
-        google.setOnLoadCallback(updateChart);
-        
-        var data = {{ item.data | json_encode }};
+    <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['corechart'], 'language': '{{ app.request.locale }}'}]}"></script>
+    <script>var data = {{ evo | json_encode | raw }};</script>
 
+    <script>
+                google.setOnLoadCallback(updateChart);
         function formatNumber(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
 
-        function drawStuff(chartData) {
-            var data = new google.visualization.arrayToDataTable(chartData);
-
-            var options = {
-                title: 'Votos por Minuto',
-                width: '100%',
-                legend: {position: 'none'},
-                chart: {subtitle: 'Consulta Popular 2015 - 19/08/2015'},
-                bar: {groupWidth: "90%"}
-            };
-
-            var chart = new google.charts.Bar(document.getElementById('top_x_div'));
-            chart.draw(data, google.charts.Bar.convertOptions(options));
-        }
-        ;
-
         function updateChart() {
-            $.getJSON('{{ path('lc_statistics_service_users_day', { '_format': 'json' }) }}', function (rawData) {
-                var chartData = [
-                    ['Time', 'Votes']
-                ];
-                var total = 0;
-                for (var index = 0; index < rawData.length; ++index) {
-                    var time = rawData[index].time;
-                    var votes = rawData[index].votes;
-                    chartData.push([new Date(time), votes]);
-                    total += votes;
-                    if (index === rawData.length - 2) {
-                        $('.last-minute').html(time.split(' ')[1]);
-                        $('.vpm').html(votes);
-                    }
-                }
-                drawStuff(chartData);
+            var chartsOptions = [];
+            $.each(data, function (clientId) {
+                var chartData = new google.visualization.DataTable();
+                chartData.addColumn('date', '{{ 'Date' | trans }}');
+                chartData.addColumn('number', '{{ 'Users' | trans }}');
 
-                $('.total').html(formatNumber(total));
-            }).always(function () {
-                setTimeout(function () {
-                    updateChart();
-                }, 20000);
+                var last = {
+                    date: null,
+                    users: 0
+                };
+
+                for (var index = 0; index < this.length; ++index) {
+                    var date = this[index][0];
+                    var users = this[index][1];
+                    chartData.addRow([new Date(date), users]);
+                }
+                chartData.sort(0);
+                var options = {
+                    height: 100,
+                    interpolateNulls: true,
+                    backgroundColor: 'transparent',
+                    tooltip: {
+                        textStyle: {fontSize: 14},
+                        ignoreBounds: true,
+                        trigger: 'none'
+                    },
+                    legend: {position: 'none'},
+                    hAxis: {
+                        title: '',
+                        gridlines: {
+                            count: -1,
+                            units: {
+                                months: {format: ['MMM']},
+                                days: {format: ["dd 'de' MMM"]},
+                            }
+                        },
+                        minorGridlines: {
+                            units: {
+                                days: {format: ['dd']},
+                            }
+                        }
+                    },
+                    vAxis: {gridlines: {count: 3}},
+                    axisTitlesPosition: 'none'
+                }
+
+                chartsOptions.push({
+                    id: clientId,
+                    data: chartData,
+                    options: options
+                });
             });
+            drawCharts(chartsOptions);
         }
-        ;
+
+        function drawCharts(chartsOptions, index) {
+            var curIndex = index || 0;
+            var chartOptions = chartsOptions[curIndex];
+            var chart = new google.visualization.LineChart(document.getElementById("client-chart-" + chartOptions.id));
+            google.visualization.events.addOneTimeListener(chart, 'ready', function () {
+                if (curIndex < chartsOptions.length - 1)
+                    drawCharts(chartsOptions, curIndex + 1);
+            });
+            chart.draw(chartOptions.data, chartOptions.options);
+        }
     </script>
 {% endblock %}

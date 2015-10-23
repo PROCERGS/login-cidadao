@@ -62,6 +62,7 @@ class ClientRepository extends EntityRepository
             ->where('a.createdAt >= :date')
             ->andWhere('c.published = true')
             ->groupBy('day, client')
+            ->orderBy('day')
             ->setParameter('date', $date);
 
         if ($clientId !== null) {
@@ -80,7 +81,9 @@ class ClientRepository extends EntityRepository
                     ->getQuery()->getArrayResult();
 
             $ids = array_keys($clients);
-            $query->orWhere('c.id IN (:clients)')->setParameter('clients', $ids);
+            $query->orWhere($query->expr()
+                    ->andX('a.createdAt >= :date', 'c.id IN (:clients)')
+            )->setParameter('clients', $ids);
         }
 
         return $query->getQuery()->getScalarResult();

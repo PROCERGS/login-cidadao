@@ -97,12 +97,32 @@ class StatisticsController extends Controller
      */
     public function usersByServicesAction(Request $request)
     {
-        $data = $this->getUsersByService(30, null, $request->getRequestFormat());
+        $data = $this->getNewUsersByService(30, null,
+            $request->getRequestFormat());
 
-        $repo = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:Client');
-        //$data = $repo->getCountPerson($this->getUser());
+        //die(var_dump($data[1]['data']));
 
-        return compact('data');
+        $evo = array();
+        foreach ($data as $clientNewUsers) {
+            $client = $clientNewUsers['client'];
+            $total  = $clientNewUsers['total'];
+            $id     = $client->getId();
+
+            $newInPeriod  = $clientNewUsers['total_period'];
+            $currentTotal = $total - $newInPeriod;
+
+            $evo[$id] = array();
+            foreach ($clientNewUsers['data'] as $clientData) {
+                $date = $clientData[0];
+                $currentTotal += $clientData[1];
+
+                $evo[$id][] = array(
+                    $date, $currentTotal
+                );
+            }
+        }
+
+        return compact('data', 'evo');
     }
 
     /**
@@ -114,7 +134,7 @@ class StatisticsController extends Controller
      */
     public function usersByServiceByDayAction(Request $request, $clientId = null)
     {
-        $data = $this->getUsersByService(30, $clientId,
+        $data = $this->getNewUsersByService(30, $clientId,
             $request->getRequestFormat());
 
         if ($request->getRequestFormat() === 'json') {
@@ -146,7 +166,8 @@ class StatisticsController extends Controller
         return compact('data');
     }
 
-    private function getUsersByService($days, $clientId = null, $format = 'html')
+    private function getNewUsersByService($days, $clientId = null,
+                                          $format = 'html')
     {
         $em        = $this->getDoctrine()->getManager();
         $repo      = $em->getRepository('PROCERGSOAuthBundle:Client');
