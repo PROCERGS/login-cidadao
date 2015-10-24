@@ -26,4 +26,17 @@ class StatsHandler
     {
         return $this->repo->findStatsByIndexKeyDate($index, $key, $afterDate);
     }
+
+    public function getIndexed($index, $key = null, \DateTime $afterDate = null)
+    {
+        return $this->repo->findIndexedStatsByIndexKeyDate($index, $key,
+                $afterDate);
+    }
+
+    public function getIndexedUniqueDate($index, $key = null,
+                                         \DateTime $afterDate = null)
+    {
+        return $this->repo->findIndexedUniqueStatsByIndexKeyDate($index, $key,
+                $afterDate);
+    }
 }
