@@ -6,13 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
-use PROCERGS\LoginCidadao\CoreBundle\Form\Type\PersonFilterFormType;
-use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Model\Badge;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+use JMS\Serializer\SerializationContext;
 
 /**
  * @Route("/statistics")
@@ -68,10 +64,7 @@ class StatisticsController extends Controller
             $data = $repo->getCountByState();
         }
 
-        $em         = $this->getDoctrine()->getManager();
-        $repo       = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
         $totalUsers = $repo->getCountAll();
-
 
         return $this->render('PROCERGSLoginCidadaoCoreBundle:Statistics:usersByRegion.html.twig',
                 array('data' => $data, 'totalUsers' => $totalUsers));
@@ -97,13 +90,18 @@ class StatisticsController extends Controller
      */
     public function usersByServicesAction(Request $request)
     {
-        $data = $this->getNewUsersByService(30, null,
-            $request->getRequestFormat());
+        $repo   = $this->getDoctrine()
+            ->getRepository('PROCERGSOAuthBundle:Client');
+        $totals = $repo->getCountPerson($this->getUser());
 
-        $evo = $this->get('statistics.handler')->get('client.users');
-        die(var_dump($evo));
+        $evoData = $this->getStatsHandler()->getIndexedUniqueDate('client.users',
+            null, new \DateTime('-30 days'));
 
-        return compact('data', 'evo');
+        $context    = SerializationContext::create()->setGroups('date');
+        $serializer = $this->get('jms_serializer');
+        $evo        = $serializer->serialize($evoData, 'json', $context);
+
+        return compact('totals', 'evo');
     }
 
     /**
@@ -185,5 +183,13 @@ class StatisticsController extends Controller
         }
 
         return $data;
+    }
+
+    /**
+     * @return \LoginCidadao\StatsBundle\Handler\StatsHandler
+     */
+    private function getStatsHandler()
+    {
+        return $this->get('statistics.handler');
     }
 }

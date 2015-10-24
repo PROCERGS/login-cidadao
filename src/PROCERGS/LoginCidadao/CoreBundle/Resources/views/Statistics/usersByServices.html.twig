@@ -4,7 +4,7 @@
 
         <h1>{{ 'statistics.userByService'|trans }}</h1>
 
-        {% for item in data %}
+        {% for item in totals %}
             <div class="row item">
                 <div class="col-md-2 text-center">
                     <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': item.client }) }}" width="65" height="65" alt="" class="service-img center-block">
@@ -12,9 +12,10 @@
                 </div>
                 <div class="col-md-7">
                     <div id="client-chart-{{ item.client.id }}"></div>
+                    <div class="no-activity text-center">{{ 'No recent activity' | trans }}</div>
                 </div>
                 <div class="col-md-3 qty">
-                    <strong>{{ (item.total) | number_format(0, ',', '.') }}</strong>
+                    <strong>{{ (item.qty) | number_format(0, ',', '.') }}</strong>
                     <small>{{ 'Users' | trans }}</small>
                 </div>
             </div>
@@ -26,10 +27,11 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['corechart'], 'language': '{{ app.request.locale }}'}]}"></script>
-    <script>var data = {{ evo | json_encode | raw }};</script>
+    <script>var data = {{ evo | raw }};</script>
 
     <script>
                 google.setOnLoadCallback(updateChart);
+
         function formatNumber(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
@@ -47,8 +49,8 @@
                 };
 
                 for (var index = 0; index < this.length; ++index) {
-                    var date = this[index][0];
-                    var users = this[index][1];
+                    var date = this[index].timestamp;
+                    var users = this[index].value;
                     chartData.addRow([new Date(date), users]);
                 }
                 chartData.sort(0);
@@ -79,7 +81,7 @@
                     },
                     vAxis: {gridlines: {count: 3}},
                     axisTitlesPosition: 'none'
-                }
+                };
 
                 chartsOptions.push({
                     id: clientId,
@@ -93,7 +95,9 @@
         function drawCharts(chartsOptions, index) {
             var curIndex = index || 0;
             var chartOptions = chartsOptions[curIndex];
-            var chart = new google.visualization.LineChart(document.getElementById("client-chart-" + chartOptions.id));
+            var element = $("#client-chart-" + chartOptions.id);
+            element.siblings('.no-activity').hide();
+            var chart = new google.visualization.LineChart(element[0]);
             google.visualization.events.addOneTimeListener(chart, 'ready', function () {
                 if (curIndex < chartsOptions.length - 1)
                     drawCharts(chartsOptions, curIndex + 1);
