@@ -11,6 +11,7 @@
 namespace LoginCidadao\StatsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Statistics
@@ -40,6 +41,7 @@ class Statistics
      * @var string
      *
      * @ORM\Column(name="index", type="string", length=255)
+     * @JMS\Groups({"date","datetime"})
      */
     private $index;
 
@@ -47,6 +49,7 @@ class Statistics
      * @var string
      *
      * @ORM\Column(name="key", type="string", length=255)
+     * @JMS\Groups({"date","datetime"})
      */
     private $key;
 
@@ -54,6 +57,7 @@ class Statistics
      * @var integer
      *
      * @ORM\Column(name="value", type="integer")
+     * @JMS\Groups({"date","datetime"})
      */
     private $value;
 
@@ -157,5 +161,27 @@ class Statistics
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("timestamp")
+     * @JMS\Groups({"date"})
+     * @return string
+     */
+    public function getDate()
+    {
+        return $this->getTimestamp()->format('Y-m-d');
+    }
+
+    /**
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("timestamp")
+     * @JMS\Groups({"datetime"})
+     * @return string
+     */
+    public function getDateTime()
+    {
+        return $this->getTimestamp()->format('Y-m-d H:i:s');
     }
 }
