@@ -278,3 +278,9 @@ Mobile: Mobile
 Copy: Copy
 Copied: Copied
 Press CTRL + C or ⌘ + C to copy: Press CTRL + C or ⌘ + C to copy
+Users: Users
+No recent activity: No recent activity
+Information about authorizations granted to services.: Information about authorizations granted to services.
+See how many users have each badge.: See how many users have each badge.
+Users by Location: Users by Location
+Information about people's location. Either by <a href="%country_url%">Country</a> or by <a href="%state_url%">State</a>: Information about people's location. Either by <a href="%country_url%">Country</a> or by <a href="%state_url%">State</a>
