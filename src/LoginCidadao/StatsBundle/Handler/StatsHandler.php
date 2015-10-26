@@ -17,7 +17,7 @@ class StatsHandler
     /** @var StatisticsRepository */
     protected $repo;
 
-    public function __construct(StatisticsRepository $repo)
+    public function setStatsRepo(StatisticsRepository $repo)
     {
         $this->repo = $repo;
     }
