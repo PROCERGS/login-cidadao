@@ -16,8 +16,14 @@ use JMS\Serializer\Annotation as JMS;
 /**
  * Statistics
  *
- * @ORM\Table(name="statistics")
  * @ORM\Entity(repositoryClass="LoginCidadao\StatsBundle\Entity\StatisticsRepository")
+ * @ORM\Table(name="statistics",indexes={
+ *      @ORM\Index(name="idx_timestamp_index_key", columns={"timestamp", "index", "key"}),
+ *      @ORM\Index(name="idx_timestamp_index", columns={"timestamp", "index"}),
+ *      @ORM\Index(name="idx_timestamp_key", columns={"timestamp", "key"}),
+ *      @ORM\Index(name="idx_index", columns={"index"}),
+ *      @ORM\Index(name="idx_key", columns={"key"}),
+ * })
  */
 class Statistics
 {
