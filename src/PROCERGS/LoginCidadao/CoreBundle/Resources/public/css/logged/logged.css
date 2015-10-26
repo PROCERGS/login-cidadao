@@ -743,6 +743,11 @@ label + .glyphicon-pencil {
     margin-bottom: 8px;
 }
 
+#statistics .no-activity {
+    padding-top: 30px;
+    font-size: 16px;
+}
+
 #statistics .qty {
     padding-top: 10px;
 }
