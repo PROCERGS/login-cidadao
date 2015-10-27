@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b8d2dbba1e6780ac3dc6a18409d27dd2",
-    "content-hash": "74c0766e67d63662db64f9f6c3eb795c",
+    "hash": "b02a562d80f49536fd66ab3cf1a11dca",
+    "content-hash": "fd7370cbce70146e40405da89da77838",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-bundle",
@@ -2674,26 +2674,28 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "9af37448fa2f82856d068205afa96e9874527672"
+                "reference": "8b7dfdd913528a3e024a6d1c8a0dfdfe675f4131"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/874c8752e6114fd2d384d93d48e859a680f2ae9d",
-                "reference": "0699c45dcc02f98626431996e288deb93f34a6ab",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/8b7dfdd913528a3e024a6d1c8a0dfdfe675f4131",
+                "reference": "8b7dfdd913528a3e024a6d1c8a0dfdfe675f4131",
                 "shasum": ""
             },
             "require": {
                 "michelf/php-markdown": "~1.4",
+                "php": ">=5.3",
                 "symfony/console": "~2.3",
                 "symfony/framework-bundle": "~2.3",
                 "symfony/twig-bundle": "~2.3"
             },
             "conflict": {
                 "jms/serializer": "<0.12",
-                "jms/serializer-bundle": "<0.11"
+                "jms/serializer-bundle": "<0.11",
+                "twig/twig": "<1.12"
             },
             "require-dev": {
-                "dunglas/api-bundle": "~1.0@beta",
+                "dunglas/api-bundle": "~1.0",
                 "friendsofsymfony/rest-bundle": "~1.0",
                 "jms/serializer-bundle": ">=0.11",
                 "sensio/framework-extra-bundle": "~3.0",
@@ -2716,7 +2718,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.9.x-dev"
+                    "dev-master": "2.10.x-dev"
                 }
             },
             "autoload": {
@@ -2745,7 +2747,61 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2015-07-10 09:15:36"
+            "time": "2015-10-27 16:29:36"
+        },
+        {
+            "name": "oro/doctrine-extensions",
+            "version": "1.0.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orocrm/doctrine-extensions.git",
+                "reference": "0abf1f4e3b612a9e6f82a7207f10545719f2d64e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orocrm/doctrine-extensions/zipball/0abf1f4e3b612a9e6f82a7207f10545719f2d64e",
+                "reference": "0abf1f4e3b612a9e6f82a7207f10545719f2d64e",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/orm": ">=2.2.3",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "doctrine/data-fixtures": "dev-master",
+                "doctrine/orm": "<2.5.0",
+                "phpunit/phpunit": "4.*",
+                "symfony/yaml": ">=2.0.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Oro\\DBAL": "src/",
+                    "Oro\\ORM": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Oro, Inc",
+                    "homepage": "http://www.orocrm.com"
+                }
+            ],
+            "description": "Doctrine Extensions for MySQL and PostgreSQL.",
+            "homepage": "https://github.com/orocrm/doctrine-extensions/",
+            "keywords": [
+                "database",
+                "doctrine",
+                "dql",
+                "function",
+                "mysql",
+                "postgresql",
+                "type"
+            ],
+            "time": "2015-10-08 13:56:38"
         },
         {
             "name": "phpcollection/phpcollection",
@@ -2937,17 +2993,17 @@
         },
         {
             "name": "procergs/login-cidadao-badges-bundle",
-            "version": "dev-master",
+            "version": "dev-cleanup",
             "target-dir": "PROCERGS/LoginCidadao/BadgesBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/login-cidadao-badges-bundle.git",
-                "reference": "617436bd165cf52ff0955918aeb12d40a93878d7"
+                "reference": "fcaccb4df3c42e28f7529af91d959f7b3ad6be56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/617436bd165cf52ff0955918aeb12d40a93878d7",
-                "reference": "617436bd165cf52ff0955918aeb12d40a93878d7",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/fcaccb4df3c42e28f7529af91d959f7b3ad6be56",
+                "reference": "fcaccb4df3c42e28f7529af91d959f7b3ad6be56",
                 "shasum": ""
             },
             "require": {
@@ -2959,7 +3015,6 @@
                     "PROCERGS\\LoginCidadao\\BadgesBundle": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2975,7 +3030,11 @@
                 "badges",
                 "login-cidadao"
             ],
-            "time": "2015-10-05 01:41:38"
+            "support": {
+                "source": "https://github.com/PROCERGS/login-cidadao-badges-bundle/tree/cleanup",
+                "issues": "https://github.com/PROCERGS/login-cidadao-badges-bundle/issues"
+            },
+            "time": "2015-06-26 18:33:47"
         },
         {
             "name": "procergs/login-cidadao-igp-bundle",
@@ -4158,7 +4217,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.4.16"
+        "php": ">=5.3.9"
     },
     "platform-dev": []
 }
