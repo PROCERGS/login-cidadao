@@ -3,26 +3,6 @@
 {% block content_columns %}col-sm-7 col-sm-offset-4{% endblock %}
 {% block body %}
 
-    <div id="notification-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="{{ 'notification'|trans }}" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times;</span>
-                        <span class="sr-only">Close</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel">{{ 'Notifications'|trans }}</h4>
-                </div>
-                <div class="modal-body">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     <div class="row limit-960">
         {% block sidebar %}
             <div class="settings-nav col-sm-3 col-lg-2">
@@ -121,12 +101,12 @@
             {% endfor %}
 
             <div class="row">
-              <div class="col-sm-12 settings-content">
-                  {% block content %}{% endblock content %}
-              </div>
+                <div class="col-sm-12 settings-content">
+                    {% block content %}
+                    {% endblock %}
+                </div>
             </div>
         </div>
-
     </div>
 {% endblock body %}
 
@@ -148,33 +128,32 @@
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
     <script type="text/javascript">
-    validator.cep.urlQuery = '{{ path('lc_consultaCep2') }}';
-    var notification = {
-        'config': {
-            'mark_as_read_range': '{{ path('js_api_1_put_notification_read_range', { 'start': '0', 'end': '9', '_format': 'json' }) }}',
-            'mark_as_read': '{{ path('js_api_1_put_notification_read', { 'notificationId': '0', '_format': 'json' }) }}',
-            'count_unread': '{{ path('js_api_1_get_notification_count_unread', { '_format': 'json' }) }}',
-            'read_notification': '{{ path('js_api_1_get_notification_html', { 'id': '0', '_format': 'html' }) }}'
-        },
-        'updateNotificationCounters': function() {
-            // Update notifications counts
-            var url = notification.config.count_unread;
-            $.ajax({
-                url: url,
-                type: 'GET',
-                success: function (result) {
-                    $.each(result, function (index, value) {
-                        if (index === 'total') {
-                            $('.notification-total-unread-badge').html(value);
-                        } else {
-                            var client = value.id;
-                            var count = value.total;
-                            $('.notification-count-client[data-client-id=' + client + ']').html(count);
-                        }
-                    });
-                }
-            });
-        }
-    };
+        var notification = {
+            'config': {
+                'mark_as_read_range': '{{ path('js_api_1_put_notification_read_range', { 'start': '0', 'end': '9', '_format': 'json' }) }}',
+                'mark_as_read': '{{ path('js_api_1_put_notification_read', { 'notificationId': '0', '_format': 'json' }) }}',
+                'count_unread': '{{ path('js_api_1_get_notification_count_unread', { '_format': 'json' }) }}',
+                'read_notification': '{{ path('js_api_1_get_notification_html', { 'id': '0', '_format': 'html' }) }}'
+            },
+            'updateNotificationCounters': function () {
+                // Update notifications counts
+                var url = notification.config.count_unread;
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (result) {
+                        $.each(result, function (index, value) {
+                            if (index === 'total') {
+                                $('.notification-total-unread-badge').html(value);
+                            } else {
+                                var client = value.id;
+                                var count = value.total;
+                                $('.notification-count-client[data-client-id=' + client + ']').html(count);
+                            }
+                        });
+                    }
+                });
+            }
+        };
     </script>
 {% endblock %}

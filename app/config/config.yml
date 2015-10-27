@@ -36,7 +36,6 @@ twig:
     globals:
         fos_csrf_provider: "@security.csrf.token_manager"
         notifications_helper: "@notifications.helper"
-        background_helper: "@background.helper"
         facebook_app_id: "%facebook_app_id%"
         background_picture_author: %background_picture.author%
         background_picture_link: %background_picture.link%
@@ -205,7 +204,6 @@ simple_things_entity_audit:
         - PROCERGS\LoginCidadao\CoreBundle\Entity\ClientSuggestion
         - PROCERGS\LoginCidadao\CoreBundle\Entity\Country
         - PROCERGS\LoginCidadao\CoreBundle\Entity\IdCard
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile
         - PROCERGS\LoginCidadao\CoreBundle\Entity\Person
         - PROCERGS\LoginCidadao\CoreBundle\Entity\PersonAddress
         - PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail

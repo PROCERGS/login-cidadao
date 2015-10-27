@@ -116,7 +116,7 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
     {
         if (!($this->getDefaultOAuthClient() instanceof Client)) {
             $uid = $this->getContainer()->getParameter('oauth_default_client.uid');
-            $pictureName = 'meurs_logo.png';
+            $pictureName = 'client_logo.png';
             $picture = new File($dir . DIRECTORY_SEPARATOR . $pictureName);
             $domain = $this->getContainer()->getParameter('site_domain');
             $url = "//$domain";

@@ -130,7 +130,6 @@ security:
         - { path: ^/.well-known, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/openid/connect/authorize, role: IS_AUTHENTICATED_FULLY }
         - { path: ^/openid/connect, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/nfg, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
         - { path: ^/connect/twitter$, role: IS_AUTHENTICATED_ANONYMOUSLY }
