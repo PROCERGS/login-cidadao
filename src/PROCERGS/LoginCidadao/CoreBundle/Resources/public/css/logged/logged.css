@@ -720,11 +720,8 @@ label + .glyphicon-pencil {
 
 #statistics .item {
     background-color: #F9F9F9;
-    color: #000;
-    display: block;
-    margin-bottom: 10px;
-    padding: 15px 0;
-    text-align: center;
+    margin: 15px 0;
+    padding: 10px 0;
 }
 
 #statistics .item:hover {
@@ -737,9 +734,24 @@ label + .glyphicon-pencil {
     margin-bottom: 8px;
 }
 
+#statistics .no-activity {
+    padding-top: 30px;
+    font-size: 16px;
+}
+
 #statistics .qty {
-    font-size: 17px;
+    padding-top: 10px;
+}
+#statistics .qty strong,
+#statistics .qty small {
+    display: block;
+    text-align: center;
+    text-transform: lowercase;
+}
+#statistics .qty strong {
+    font-size: 42px;
     font-weight: bold;
+    color: #444;
 }
 
 .statistics-badges .badge-box {

@@ -6,7 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use PROCERGS\OAuthBundle\Entity\Client;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\AuthorizationRepository")
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="auth",uniqueConstraints={@ORM\UniqueConstraint(name="unique_person_client", columns={"person_id", "client_id"})})
  */
 class Authorization
@@ -35,6 +36,12 @@ class Authorization
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id", nullable=false)
      */
     protected $client;
+
+    /**
+     * @ORM\Column(name="created_at", type="datetime")
+     * @var \DateTime
+     */
+    protected $createdAt;
 
     /**
      * @return Person
@@ -111,5 +118,27 @@ class Authorization
             $scope[] = 'public_profile';
         }
         return $scope;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue()
+    {
+        if (!($this->getCreatedAt() instanceof \DateTime)) {
+            $this->createdAt = new \DateTime();
+        }
     }
 }

@@ -1,0 +1,20 @@
+parameters:
+    statistics.handler.class: LoginCidadao\StatsBundle\Handler\StatsHandler
+    statistics.subscriber.class: LoginCidadao\StatsBundle\EventListener\StatisticsSubscriber
+
+services:
+    statistics.repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: [@doctrine.orm.entity_manager, getRepository]
+        arguments:
+            - LoginCidadao\StatsBundle\Entity\Statistics
+
+    statistics.handler:
+        class: %statistics.handler.class%
+        calls:
+            - [setStatsRepo, [@statistics.repository]]
+
+    statistics.subscriber:
+        class: %statistics.subscriber.class%
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }

@@ -6,11 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
-use PROCERGS\LoginCidadao\CoreBundle\Form\Type\PersonFilterFormType;
-use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 use PROCERGS\LoginCidadao\BadgesControlBundle\Model\Badge;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use JMS\Serializer\SerializationContext;
 
 /**
  * @Route("/statistics")
@@ -66,13 +64,11 @@ class StatisticsController extends Controller
             $data = $repo->getCountByState();
         }
 
-        $em         = $this->getDoctrine()->getManager();
-        $repo       = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
         $totalUsers = $repo->getCountAll();
 
 
         return $this->render('PROCERGSLoginCidadaoCoreBundle:Statistics:usersByRegion.html.twig',
-                array('data' => $data, 'totalUsers' => $totalUsers));
+                             array('data' => $data, 'totalUsers' => $totalUsers));
     }
 
     /**
@@ -86,19 +82,115 @@ class StatisticsController extends Controller
         $data = $repo->getCountByCity($stateId);
 
         return $this->render('PROCERGSLoginCidadaoCoreBundle:Statistics:usersByCity.html.twig',
-                array('data' => $data));
+                             array('data' => $data));
     }
 
     /**
      * @Route("/users/services", name="lc_statistics_user_services")
      * @Template()
      */
-    public function usersByServicesAction()
+    public function usersByServicesAction(Request $request)
     {
-        $em   = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('PROCERGSOAuthBundle:Client');
-        $data = $repo->getCountPerson($this->getUser());
+        $repo   = $this->getDoctrine()
+            ->getRepository('PROCERGSOAuthBundle:Client');
+        $totals = $repo->getCountPerson($this->getUser());
 
-        return array("data" => $data);
+        $evoData = $this->getStatsHandler()->getIndexedUniqueDate('client.users',
+            null, new \DateTime('-30 days'));
+
+        $context    = SerializationContext::create()->setGroups('date');
+        $serializer = $this->get('jms_serializer');
+        $evo        = $serializer->serialize($evoData, 'json', $context);
+
+        return compact('totals', 'evo');
+    }
+
+    /**
+     * @Route("/services/users-by-day.{_format}",
+     *          name="lc_statistics_service_users_day",
+     *          defaults={"_format": "html", "clientId": null}
+     * )
+     * @Template()
+     */
+    public function usersByServiceByDayAction(Request $request, $clientId = null)
+    {
+        $data = $this->getNewUsersByService(30, $clientId,
+            $request->getRequestFormat());
+
+        if ($request->getRequestFormat() === 'json') {
+            return new JsonResponse($data);
+        }
+
+        return compact('data');
+    }
+
+    /**
+     * @Route("/services/users-by-day-week.{_format}",
+     *          name="lc_statistics_service_users_day_week",
+     *          defaults={"_format": "html", "clientId": null}
+     * )
+     * @Template()
+     */
+    public function usersByServiceByDayOfWeekAction(Request $request)
+    {
+        $em      = $this->getDoctrine()->getManager();
+        $repo    = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization');
+        $rawData = $repo->statsUsersByServiceByDayOfWeek();
+
+        if ($request->getRequestFormat() === 'json') {
+            return new JsonResponse($rawData);
+        }
+
+        $data = $rawData;
+
+        return compact('data');
+    }
+
+    private function getNewUsersByService($days, $clientId = null,
+                                          $format = 'html')
+    {
+        $em        = $this->getDoctrine()->getManager();
+        $repo      = $em->getRepository('PROCERGSOAuthBundle:Client');
+        $rawData   = $repo->statsUsersByServiceByDay($days, $clientId,
+            $this->getUser());
+        $rawTotals = $repo->getCountPerson($this->getUser(), $clientId);
+
+        if ($format === 'json') {
+            //return $rawData;
+        }
+
+        $totals = array();
+        foreach ($rawTotals as $entry) {
+            $client = $entry['client'];
+
+            $totals[$client->getId()] = array('client' => $client, 'total' => $entry['qty']);
+        }
+
+        $data  = array();
+        $total = array();
+        foreach ($rawData as $stat) {
+            $id     = $stat['client'];
+            $client = $totals[$id]['client'];
+            $total  = $totals[$id]['total'];
+            $count  = $stat['users'];
+            $day    = $stat['day'];
+            @$totalPeriod[$id] += $count;
+
+            $data[$id]['client']       = $client;
+            $data[$id]['total_period'] = $totalPeriod[$id];
+            $data[$id]['total']        = $total;
+            $data[$id]['days']         = $days;
+            $data[$id]['data'][]       = array($day, $count);
+        }
+
+        return $data;
+    }
+
+    /**
+     * @return \LoginCidadao\StatsBundle\Handler\StatsHandler
+     */
+    private function getStatsHandler()
+    {
+        return $this->get('statistics.handler');
     }
 }

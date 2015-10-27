@@ -85,7 +85,7 @@ registration.email.click: 'Confirmar Email'
 Yes: Sim
 'Connect to the Nota Fiscal Gaúcha': 'Conectar à Nota Fiscal Gaúcha'
 'Continue Registration': 'Continuar Cadastro'
-facebook.token.error: 'Aparentemente houve um erro a autenticação com o Facebook. Por favor, tente logar novamente!'
+facebook.token.error: 'Aparentemente houve um erro na autenticação com o Facebook. Por favor, tente logar novamente!'
 facebook.nousername: 'Conectado ao Facebook'
 twitter.nousername: 'Conectado ao Twitter'
 security.login.remember_me: 'Manter conectado'
