@@ -314,7 +314,7 @@ services:
 
     lc.security.helper:
         class: %procergs_logincidadao.security.helper.class%
-        arguments: [ @security.context ]
+        arguments: [ @security.authorization_checker ]
 
     account.security_listener:
         class: %account.security_listener.class%
