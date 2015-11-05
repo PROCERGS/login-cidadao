@@ -489,4 +489,15 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         }
         return $this;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllowedGrantTypes()
+    {
+        if ($this->getMetadata()) {
+            return $this->getMetadata()->getGrantTypes();
+        }
+        return parent::getAllowedGrantTypes();
+    }
 }
