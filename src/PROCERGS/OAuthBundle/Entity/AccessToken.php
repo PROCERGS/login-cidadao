@@ -13,7 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  *              column=@ORM\Column(
  *              name     = "scope",
  *              type     = "string",
- *              length   = 1000
+ *              length   = 1000,
+ *              nullable = true
  *          )
  *      )
  * })
