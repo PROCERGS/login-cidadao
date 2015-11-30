@@ -54,6 +54,8 @@ class AppKernel extends Kernel
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new LoginCidadao\OpenIDBundle\LoginCidadaoOpenIDBundle(),
             new LoginCidadao\StatsBundle\LoginCidadaoStatsBundle(),
+
+            new Nelmio\CorsBundle\NelmioCorsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -132,7 +132,7 @@ doctrine:
 
           datetime_functions:
                 date:       Oro\ORM\Query\AST\Functions\SimpleFunction
-          
+
           numeric_functions:
               dayofweek:    Oro\ORM\Query\AST\Functions\SimpleFunction
 
@@ -384,3 +384,10 @@ scheb_two_factor:
     security_tokens:
         - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
         - FOS\FacebookBundle\Security\Authentication\Token\FacebookUserToken
+
+nelmio_cors:
+    paths:
+        '^/api/':
+            allow_origin: ['*']
+            allow_headers: ['*']
+            allow_methods: ['POST', 'PUT', 'GET', 'DELETE']
