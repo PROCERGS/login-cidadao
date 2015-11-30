@@ -1,4 +1,5 @@
 <?php
+
 namespace PROCERGS\LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,25 +14,14 @@ use Symfony\Component\Form\AbstractType;
 
 class DocFormType extends AbstractType
 {
-
     private $em;
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('cpf', 'text', array(
+        $builder->add('cpf', 'text',
+            array(
             'required' => false
         ));
-        $builder->add('voterRegistration', 'text', array(
-            'required' => false
-        ));
-        /*
-        $builder->add('rg', 'text', array(
-            'required' => false
-        ));
-        $builder->add('rgIssuer', 'text', array(
-            'required' => false
-        ));
-        */
     }
 
     public function getName()
