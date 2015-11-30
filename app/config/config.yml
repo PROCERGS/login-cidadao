@@ -133,10 +133,9 @@ doctrine:
 
           datetime_functions:
                 date:       Oro\ORM\Query\AST\Functions\SimpleFunction
-          
+
           numeric_functions:
               dayofweek:    Oro\ORM\Query\AST\Functions\SimpleFunction
-
 # Swiftmailer Configuration
 swiftmailer:
     transport: %mailer_transport%

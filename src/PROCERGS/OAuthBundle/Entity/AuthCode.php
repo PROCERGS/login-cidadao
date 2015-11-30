@@ -8,6 +8,16 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  * @ORM\Table(name="auth_code")
+ * @ORM\AttributeOverrides({
+ *      @ORM\AttributeOverride(name="scope",
+ *              column=@ORM\Column(
+ *              name     = "scope",
+ *              type     = "string",
+ *              length   = 1000,
+ *              nullable = true
+ *          )
+ *      )
+ * })
  */
 class AuthCode extends BaseAuthCode
 {

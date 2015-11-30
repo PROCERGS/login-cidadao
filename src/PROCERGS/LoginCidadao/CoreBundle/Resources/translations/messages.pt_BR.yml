@@ -731,3 +731,9 @@ Mobile: Celular
 Copy: Copiar
 Copied: Copiado
 Press CTRL + C or ⌘ + C to copy: Pressione CTRL + C ou ⌘ + C para copiar
+Users: Usuários
+No recent activity: Sem atividade recente
+Information about authorizations granted to services.: Informações sobre autorizações concedidas a serviços.
+See how many users have each badge.: Veja quantas pessoas possuem cada medalha.
+Users by Location: Usuários por Localização
+Information about people's location. Either by <a href="%country_url%">Country</a> or by <a href="%state_url%">State</a>: Informações sobre a localização das pessoas, tanto <a href="%country_url%">por País</a> quanto <a href="%state_url%">por Estado</a>
