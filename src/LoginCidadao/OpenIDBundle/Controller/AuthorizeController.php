@@ -84,14 +84,17 @@ class AuthorizeController extends BaseController
         $em      = $this->getDoctrine()->getManager();
         $client  = $em->getRepository('PROCERGSOAuthBundle:Client')->find($id[0]);
 
-        $event = $this->get('event_dispatcher')->dispatch(
-            OAuthEvent::PRE_AUTHORIZATION_PROCESS,
-            new OAuthEvent($this->getUser(), $client)
-        );
+        if ($client instanceof \FOS\OAuthServerBundle\Model\ClientInterface) {
+            $event = $this->get('event_dispatcher')->dispatch(
+                OAuthEvent::PRE_AUTHORIZATION_PROCESS,
+                new OAuthEvent($this->getUser(), $client)
+            );
 
-        $server = $this->get('oauth2.server');
-        if ($event->isAuthorizedClient()) {
-            return $this->handleAuthorize($server, $event->isAuthorizedClient());
+            $server = $this->get('oauth2.server');
+            if ($event->isAuthorizedClient()) {
+                return $this->handleAuthorize($server,
+                        $event->isAuthorizedClient());
+            }
         }
 
         return parent::validateAuthorizeAction();
