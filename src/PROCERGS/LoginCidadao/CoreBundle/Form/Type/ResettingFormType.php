@@ -14,6 +14,7 @@ class ResettingFormType extends BaseType
 
         $builder->add('plainPassword', 'repeated', array(
             'type' => 'password',
+            'attr' => array('autocomplete' => 'off'),
             'options' => array('translation_domain' => 'FOSUserBundle'),
             'first_options' => array('label' => 'form.new_password'),
             'second_options' => array('label' => 'form.new_password_confirmation'),

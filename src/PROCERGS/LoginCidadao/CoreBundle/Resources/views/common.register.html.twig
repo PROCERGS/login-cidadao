@@ -44,7 +44,7 @@
 
     <div class="form-group">
         {{ form_label(form.plainPassword, 'form.plainPassword' | trans) }}
-        {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'placeholder' : 'form.plainPassword.example' }}) }}
+        {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'autocomplete': 'off', 'placeholder' : 'form.plainPassword.example' }}) }}
         {{ form_errors(form.plainPassword) }}
     </div>
 
