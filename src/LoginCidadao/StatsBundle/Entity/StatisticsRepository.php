@@ -42,8 +42,20 @@ class StatisticsRepository extends EntityRepository
         return $this->indexResults($data);
     }
 
+    public function findIndexedUniqueStatsByIndexKeyDays($index, $key = null,
+                                                         $days = null)
+    {
+        $query = $this->getFindStatsByIndexKeyDateQuery($index, $key, null,
+            $days);
+        $this->applyGreatestNPerGroupDate($query);
+        $data  = $query->getQuery()->getResult();
+
+        return $this->indexResults($data);
+    }
+
     public function getFindStatsByIndexKeyDateQuery($index, $key = null,
-                                                    \DateTime $afterDate = null)
+                                                    \DateTime $afterDate = null,
+                                                    $days = null)
     {
         $query = $this->createQueryBuilder('s')
             ->where('s.index = :index')
@@ -58,6 +70,11 @@ class StatisticsRepository extends EntityRepository
         if ($afterDate !== null) {
             $query->andWhere('s.timestamp >= :afterDate')
                 ->setParameter('afterDate', $afterDate);
+        }
+
+        if ($days !== null) {
+            $query->setMaxResults($days)
+                ->orderBy('s.timestamp', 'DESC');
         }
 
         return $query;

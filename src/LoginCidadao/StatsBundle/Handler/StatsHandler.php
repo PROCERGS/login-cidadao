@@ -39,4 +39,10 @@ class StatsHandler
         return $this->repo->findIndexedUniqueStatsByIndexKeyDate($index, $key,
                 $afterDate);
     }
+
+    public function getIndexedUniqueLastDays($index, $key = null, $days = null)
+    {
+        return $this->repo->findIndexedUniqueStatsByIndexKeyDays($index, $key,
+                $days);
+    }
 }
