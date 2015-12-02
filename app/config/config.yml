@@ -453,6 +453,7 @@ nelmio_security:
                 - 'https://www.google.com/'
                 - 'https://ajax.googleapis.com/'
                 - 'unsafe-inline'
+                - 'unsafe-eval'
                 - 'self'
 
     # disables content type sniffing for script resources
