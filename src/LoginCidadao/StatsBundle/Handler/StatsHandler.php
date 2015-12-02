@@ -33,10 +33,16 @@ class StatsHandler
                 $afterDate);
     }
 
-    public function getIndexedUniqueDate($index, $key = null,
+    public function getIndexedUniqueDate($index, $keys = null,
                                          \DateTime $afterDate = null)
     {
-        return $this->repo->findIndexedUniqueStatsByIndexKeyDate($index, $key,
+        return $this->repo->findIndexedUniqueStatsByIndexKeyDate($index, $keys,
                 $afterDate);
+    }
+
+    public function getIndexedUniqueLastDays($index, $keys = null, $days = null)
+    {
+        return $this->repo->findIndexedUniqueStatsByIndexKeyDays($index, $keys,
+                $days);
     }
 }
