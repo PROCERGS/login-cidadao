@@ -423,10 +423,13 @@ nelmio_security:
                 - 'http://www.google-analytics.com/'
                 - 'https://www.google-analytics.com/'
                 - 'http://browser-update.org/'
+                - 'https://www.google.com/'
                 - 'unsafe-inline'
                 - 'unsafe-eval'
                 - 'self'
             style-src:
+                - 'https://www.google.com/'
+                - 'https://ajax.googleapis.com/'
                 - 'unsafe-inline'
                 - 'self'
             font-src:
@@ -447,6 +450,8 @@ nelmio_security:
                 - 'http://www.google-analytics.com/'
                 - 'https://www.google-analytics.com/'
                 - 'http://browser-update.org/'
+                - 'https://www.google.com/'
+                - 'https://ajax.googleapis.com/'
                 - 'unsafe-inline'
                 - 'self'
 
