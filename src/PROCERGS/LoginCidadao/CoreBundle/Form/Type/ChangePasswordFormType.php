@@ -8,7 +8,6 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 
 class ChangePasswordFormType extends BaseType
 {
-
     private $context;
 
     public function __construct($class, SecurityContextInterface $context)
@@ -24,10 +23,13 @@ class ChangePasswordFormType extends BaseType
         $emptyPassword = strlen($user->getPassword()) == 0;
         if (!$emptyPassword) {
             parent::buildForm($builder, $options);
+            $builder->get('plainPassword')->setAttribute('autocomplete', 'off');
+            $builder->get('current_password')->setAttribute('autocomplete', 'off');
         } else {
             $builder->add('plainPassword', 'repeated',
-                    array(
+                array(
                 'type' => 'password',
+                'attr' => array('autocomplete' => 'off'),
                 'options' => array('translation_domain' => 'FOSUserBundle'),
                 'first_options' => array('label' => 'form.new_password'),
                 'second_options' => array('label' => 'form.new_password_confirmation'),
@@ -40,5 +42,4 @@ class ChangePasswordFormType extends BaseType
     {
         return 'procergs_change_password';
     }
-
 }

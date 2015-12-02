@@ -57,7 +57,8 @@
         "gree/jose": "^2.0",
         "league/uri": "^4.0",
         "oro/doctrine-extensions": "^1.0",
-        "nelmio/cors-bundle": "^1.4"
+        "nelmio/cors-bundle": "^1.4",
+        "nelmio/security-bundle": "^1.8"
     },
     "require-dev": {
         "sensio/generator-bundle" : "~2.3"

@@ -25,7 +25,7 @@
             <a id="resetting_request" target="_blank" tabindex="6" class="pull-right" href="{{ path('fos_user_resetting_request') }}">{{ 'resseting.forgot_password' | trans }}</a>
         </label>
         {{ form_errors(form1.password) }}
-        {{ form_widget(form1.password, {'attr' : {'placeholder' : 'security.login.password', 'tabindex': '2', 'class':'form-control'}}) }}
+        {{ form_widget(form1.password, {'attr' : {'placeholder' : 'security.login.password', 'autocomplete': 'off', 'tabindex': '2', 'class':'form-control'}}) }}
     </div>
 
     {% if form1.recaptcha is defined %}

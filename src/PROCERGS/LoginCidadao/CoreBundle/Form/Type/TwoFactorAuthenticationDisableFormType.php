@@ -17,6 +17,7 @@ class TwoFactorAuthenticationDisableFormType extends AbstractType
             ->add('current_password', 'password',
                 array(
                 'label' => 'If you want to proceed, type your account\'s password to confirm:',
+                'attr' => array('autocomplete' => 'off'),
                 'required' => true,
                 'constraints' => new UserPassword(),
                 'mapped' => false

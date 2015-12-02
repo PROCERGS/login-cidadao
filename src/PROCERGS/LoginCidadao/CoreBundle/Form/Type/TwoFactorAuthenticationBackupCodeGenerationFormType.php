@@ -16,6 +16,7 @@ class TwoFactorAuthenticationBackupCodeGenerationFormType extends AbstractType
             ->add('current_password', 'password',
                 array(
                 'label' => 'To prevent unauthorized Backup Code generation type your password to confirm:',
+                'attr' => array('autocomplete' => 'off'),
                 'required' => true,
                 'constraints' => new UserPassword(),
                 'mapped' => false
