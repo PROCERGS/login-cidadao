@@ -392,3 +392,76 @@ nelmio_cors:
             allow_origin: ['*']
             allow_headers: ['*']
             allow_methods: ['POST', 'PUT', 'GET', 'DELETE']
+
+nelmio_security:
+    # signs/verifies all cookies
+    signed_cookie:
+        names: [ ]
+    encrypted_cookie:
+        names: [ ]
+    # prevents framing of the entire site
+    clickjacking:
+        paths:
+            '^/.*': DENY
+    # prevents redirections outside the website's domain
+    external_redirects:
+        abort: false
+        log: true
+
+    # prevents inline scripts, unsafe eval, external scripts/images/styles/frames, etc
+    csp:
+        report_logger_service: monolog.logger.security
+        report:
+            report-uri: [/nelmio/csp/report]
+            default-src: [ 'self' ]
+            # There's no flash on our site
+            object-src:
+                - 'none'
+            script-src:
+                - 'https://connect.facebook.net/'
+                - 'http://connect.facebook.net/'
+                - 'http://www.google-analytics.com/'
+                - 'https://www.google-analytics.com/'
+                - 'http://browser-update.org/'
+                - 'https://www.google.com/'
+                - 'unsafe-inline'
+                - 'unsafe-eval'
+                - 'self'
+            style-src:
+                - 'https://www.google.com/'
+                - 'https://ajax.googleapis.com/'
+                - 'unsafe-inline'
+                - 'self'
+            font-src:
+                - 'https://themes.googleusercontent.com/'
+                - 'self'
+            img-src:
+                - '*'
+            frame-src:
+                - 'https://s-static.ak.facebook.com'
+                - 'http://static.ak.facebook.com'
+                - 'https://www.facebook.com'
+        enforce:
+            # see https://github.com/nelmio/NelmioSecurityBundle/issues/32
+            report-uri: [/nelmio/csp/report]
+            script-src:
+                - 'https://connect.facebook.net/'
+                - 'http://connect.facebook.net/'
+                - 'http://www.google-analytics.com/'
+                - 'https://www.google-analytics.com/'
+                - 'http://browser-update.org/'
+                - 'https://www.google.com/'
+                - 'https://ajax.googleapis.com/'
+                - 'unsafe-inline'
+                - 'unsafe-eval'
+                - 'self'
+
+    # disables content type sniffing for script resources
+    content_type:
+        nosniff: true
+
+    # Forces Microsoft's XSS-Protection with
+    # its block mode
+    xss_protection:
+        enabled: false
+        mode_block: false

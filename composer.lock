@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e580243fe2a2914e9929176ae785c3bb",
-    "content-hash": "bd68cb712a5ca1d3efbfd4c5155fc775",
+    "hash": "866be921f493bb9748d78d704a8fd451",
+    "content-hash": "7e78f476bcf5b8922cad4def9b91ff79",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-bundle",
@@ -1489,7 +1489,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/e5995827e95cb6401f050010469f4c4f2e11bd93",
+                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/1239889d504b151e120625d744aa6fbbcf6b6d16",
                 "reference": "e5995827e95cb6401f050010469f4c4f2e11bd93",
                 "shasum": ""
             },
@@ -2302,7 +2302,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpGaufretteBundle/zipball/7edea6cfcc4718573f9cbd7bd1adcaf3c2319e8b",
+                "url": "https://api.github.com/repos/KnpLabs/KnpGaufretteBundle/zipball/0b2750033a353c0a2a6d05f7f0d2a60581257d20",
                 "reference": "7edea6cfcc4718573f9cbd7bd1adcaf3c2319e8b",
                 "shasum": ""
             },
@@ -2678,7 +2678,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/be90e8aad60b7701097b900c4a3a971a50f9862e",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/97707ea5f438622ce31ab836e1d78bb70bfe101d",
                 "reference": "9af37448fa2f82856d068205afa96e9874527672",
                 "shasum": ""
             },
@@ -2801,6 +2801,55 @@
                 "crossdomain"
             ],
             "time": "2015-01-13 17:53:27"
+        },
+        {
+            "name": "nelmio/security-bundle",
+            "version": "1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nelmio/NelmioSecurityBundle.git",
+                "reference": "b45f81f90d95b7c994db675930e9b1623b66ed03"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nelmio/NelmioSecurityBundle/zipball/b45f81f90d95b7c994db675930e9b1623b66ed03",
+                "reference": "b45f81f90d95b7c994db675930e9b1623b66ed03",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/framework-bundle": "~2.3",
+                "symfony/security": "~2.3"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.8.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Nelmio\\SecurityBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nelmio",
+                    "homepage": "http://nelm.io"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://github.com/nelmio/NelmioSecurityBundle/contributors"
+                }
+            ],
+            "description": "Extra security-related features for Symfony2: signed/encrypted cookies, HTTPS/SSL/HSTS handling, cookie session storage, ...",
+            "keywords": [
+                "security"
+            ],
+            "time": "2015-09-12 20:40:16"
         },
         {
             "name": "oro/doctrine-extensions",
@@ -3271,7 +3320,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scheb/two-factor-bundle/zipball/ef6830dbbf62b22efd335db8f64bf0f51d4284a2",
+                "url": "https://api.github.com/repos/scheb/two-factor-bundle/zipball/b0da3a85b181237c3bebde88c99b18745313360b",
                 "reference": "ef6830dbbf62b22efd335db8f64bf0f51d4284a2",
                 "shasum": ""
             },

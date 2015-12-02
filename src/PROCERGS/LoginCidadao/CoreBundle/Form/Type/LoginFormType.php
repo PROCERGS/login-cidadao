@@ -58,6 +58,7 @@ class LoginFormType extends AbstractType
         ));
         $builder->add('password', 'password', array(
             'label' => 'security.login.password',
+            'attr' => array('autocomplete' => 'off'),
             //'translation_domain' => 'PROCERGSLoginCidadaoCoreBundle',
             'mapped' => false
         ));

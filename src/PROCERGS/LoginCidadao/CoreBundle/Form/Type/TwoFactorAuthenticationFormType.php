@@ -27,12 +27,14 @@ class TwoFactorAuthenticationFormType extends AbstractType
         if (strlen($builder->getData()->getPassword()) == 0) {
             $builder->add('plainPassword', 'repeated',
                 array(
-                'type' => 'password'
+                'type' => 'password',
+                'attr' => array('autocomplete' => 'off')
             ));
         } else {
             $builder->add('current_password', 'password',
                 array(
                 'required' => true,
+                'attr' => array('autocomplete' => 'off'),
                 'constraints' => new UserPassword(),
                 'mapped' => false
             ));
