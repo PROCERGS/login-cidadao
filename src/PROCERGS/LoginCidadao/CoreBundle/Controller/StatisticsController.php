@@ -66,8 +66,9 @@ class StatisticsController extends Controller
 
         $totalUsers = $repo->getCountAll();
 
+
         return $this->render('PROCERGSLoginCidadaoCoreBundle:Statistics:usersByRegion.html.twig',
-                array('data' => $data, 'totalUsers' => $totalUsers));
+                             array('data' => $data, 'totalUsers' => $totalUsers));
     }
 
     /**
@@ -81,7 +82,7 @@ class StatisticsController extends Controller
         $data = $repo->getCountByCity($stateId);
 
         return $this->render('PROCERGSLoginCidadaoCoreBundle:Statistics:usersByCity.html.twig',
-                array('data' => $data));
+                             array('data' => $data));
     }
 
     /**

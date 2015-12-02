@@ -1,7 +1,5 @@
 change_username.invalid.username: 'Nomes de usuário devem conter apenas letras não acentuadas, números e underline (_).'
 'Please enter your name.': 'Preencha seu nome.'
-voter_registration.invalid: 'Título de Eleitor inválido'
-form.voter_registration.invalid: 'Título de Eleitor inválido'
 '%string% is not a CPF.': '%string% não é um CPF válido.'
 'A CPF must contain 11 numbers.': 'Um CPF deve conter 11 números.'
 'Invalid CEP.': 'CEP inválido.'

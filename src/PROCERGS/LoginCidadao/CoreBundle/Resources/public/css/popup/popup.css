@@ -15,11 +15,6 @@ header {
     padding: 15px;
 }
 
-header.nfg {
-    background-color: #F0F0F0;
-    padding: 7px 15px 5px;
-}
-
 header h3 {
     margin: 0;
 }
