@@ -20,11 +20,10 @@ use PROCERGS\LoginCidadao\NotificationBundle\Entity\Placeholder;
 
 class NotificationsHelper
 {
-
-    const EMPTY_PASSWORD_TITLE = 'notification.empty.password.title';
+    const EMPTY_PASSWORD_TITLE      = 'notification.empty.password.title';
     const EMPTY_PASSWORD_SHORT_TEXT = 'notification.empty.password.shortText';
-    const EMPTY_PASSWORD_FULL_TEXT = 'notification.empty.password.text';
-    const EMPTY_PASSWORD_CLICK = 'notification.empty.password.click.here';
+    const EMPTY_PASSWORD_FULL_TEXT  = 'notification.empty.password.text';
+    const EMPTY_PASSWORD_CLICK      = 'notification.empty.password.click.here';
 
     /**
      *
@@ -52,15 +51,17 @@ class NotificationsHelper
     private $unconfirmedEmailCategoryId;
     private $emptyPasswordCategoryId;
 
-    public function __construct(EntityManager $em, SecurityContext $context, $container, $unconfirmedEmailCategoryId, $emptyPasswordCategoryId)
+    public function __construct(EntityManager $em, SecurityContext $context,
+                                $container, $unconfirmedEmailCategoryId,
+                                $emptyPasswordCategoryId)
     {
-        $this->em = $em;
-        $this->context = $context;
-        $this->container = $container;
-        $this->router = $this->container->get('router');
-        $this->translator = $this->container->get('translator');
+        $this->em                         = $em;
+        $this->context                    = $context;
+        $this->container                  = $container;
+        $this->router                     = $this->container->get('router');
+        $this->translator                 = $this->container->get('translator');
         $this->unconfirmedEmailCategoryId = $unconfirmedEmailCategoryId;
-        $this->emptyPasswordCategoryId = $emptyPasswordCategoryId;
+        $this->emptyPasswordCategoryId    = $emptyPasswordCategoryId;
     }
 
     private function getRepository()
@@ -89,8 +90,9 @@ class NotificationsHelper
             $handler = $this->getNotificationHandler();
 
             $serializer = $this->container->get('jms_serializer');
-            $context = SerializationContext::create()->setGroups('form');
-            $array = json_decode($serializer->serialize($notification, 'json', $context), true);
+            $context    = SerializationContext::create()->setGroups('form');
+            $array      = json_decode($serializer->serialize($notification,
+                    'json', $context), true);
 
             $handler->patch($notification, array());
         } else {
@@ -99,7 +101,9 @@ class NotificationsHelper
         }
     }
 
-    private function getDefaultNotification(Person $person, $title, $shortText, $text, $icon, Category $category, $notification, $parameters = null)
+    private function getDefaultNotification(Person $person, $title, $shortText,
+                                            $text, $icon, Category $category,
+                                            $notification, $parameters = null)
     {
         $notification->setPerson($person)
             ->setIcon($icon)
@@ -120,13 +124,18 @@ class NotificationsHelper
     {
         $handler = $this->getNotificationHandler();
 
-        $title = $this->translator->trans(self::EMPTY_PASSWORD_TITLE);
-        $shortText = $this->translator->trans(self::EMPTY_PASSWORD_SHORT_TEXT);
-        $text = $this->translator->trans(self::EMPTY_PASSWORD_FULL_TEXT);
-        $icon = 'glyphicon glyphicon-exclamation-sign';
-        $url = $this->container->get('router')
-        ->generate('fos_user_change_password', array(), true);
-        $notification = $this->getDefaultNotification($person, $title, $shortText, $text, $icon, $this->getEmptyPasswordCategory(), new Notification(), array(new Placeholder('link', $url), new Placeholder('linktitle', $title), new Placeholder('linkclick', $this->translator->trans(self::EMPTY_PASSWORD_CLICK))));
+        $title        = $this->translator->trans(self::EMPTY_PASSWORD_TITLE);
+        $shortText    = $this->translator->trans(self::EMPTY_PASSWORD_SHORT_TEXT);
+        $text         = $this->translator->trans(self::EMPTY_PASSWORD_FULL_TEXT);
+        $icon         = 'glyphicon glyphicon-exclamation-sign';
+        $url          = $this->container->get('router')
+            ->generate('fos_user_change_password', array(), true);
+        $notification = $this->getDefaultNotification($person, $title,
+            $shortText, $text, $icon, $this->getEmptyPasswordCategory(),
+            new Notification(),
+            array(new Placeholder('link', $url), new Placeholder('linktitle',
+                $title), new Placeholder('linkclick',
+                $this->translator->trans(self::EMPTY_PASSWORD_CLICK))));
         return $handler->patch($notification, array());
     }
 
@@ -159,38 +168,31 @@ class NotificationsHelper
 
     public function revokedCpfNotification(Person $person)
     {
-        $category = $this->getEmptyPasswordCategory();
-        $handler = $this->getNotificationHandler();
-        $title = $this->translator->trans('notification.nfg.revoked.cpf.title');
-        $shortText = $this->translator->trans('notification.nfg.revoked.cpf.message');
-        $text = $shortText;
-        $icon = 'glyphicon glyphicon-exclamation-sign';
-        $notification = $this->getDefaultNotification($person, $title, $shortText, $text, $icon, $category, new Notification(), array(new Placeholder('link', ''), new Placeholder('linktitle', ''), new Placeholder('linkclick', '')));
+        $category     = $this->getEmptyPasswordCategory();
+        $handler      = $this->getNotificationHandler();
+        $title        = $this->translator->trans('notification.nfg.revoked.cpf.title');
+        $shortText    = $this->translator->trans('notification.nfg.revoked.cpf.message');
+        $text         = $shortText;
+        $icon         = 'glyphicon glyphicon-exclamation-sign';
+        $notification = $this->getDefaultNotification($person, $title,
+            $shortText, $text, $icon, $category, new Notification(),
+            array(new Placeholder('link', ''), new Placeholder('linktitle', ''),
+            new Placeholder('linkclick', '')));
         return $handler->patch($notification, array());
     }
 
     public function overwriteCpfNotification(Person $person)
     {
-        $category = $this->getEmptyPasswordCategory();
-        $handler = $this->getNotificationHandler();
-        $title = $this->translator->trans('notification.nfg.overwrite.cpf.title');
-        $shortText = $this->translator->trans('notification.nfg.overwrite.cpf.message');
-        $text = $shortText;
-        $icon = 'glyphicon glyphicon-exclamation-sign';
-        $notification = $this->getDefaultNotification($person, $title, $shortText, $text, $icon, $category, new Notification(), array(new Placeholder('link', ''), new Placeholder('linktitle', ''), new Placeholder('linkclick', '')));
+        $category     = $this->getEmptyPasswordCategory();
+        $handler      = $this->getNotificationHandler();
+        $title        = $this->translator->trans('notification.nfg.overwrite.cpf.title');
+        $shortText    = $this->translator->trans('notification.nfg.overwrite.cpf.message');
+        $text         = $shortText;
+        $icon         = 'glyphicon glyphicon-exclamation-sign';
+        $notification = $this->getDefaultNotification($person, $title,
+            $shortText, $text, $icon, $category, new Notification(),
+            array(new Placeholder('link', ''), new Placeholder('linktitle', ''),
+            new Placeholder('linkclick', '')));
         return $handler->patch($notification, array());
     }
-
-    public function revokedVoterRegistrationNotification(Person $person)
-    {
-        $category = $this->getEmptyPasswordCategory();
-        $handler = $this->getNotificationHandler();
-        $title = $this->translator->trans('notification.nfg.revoked.voterreg.title');
-        $shortText = $this->translator->trans('notification.nfg.revoked.voterreg.message');
-        $text = $shortText;
-        $icon = 'glyphicon glyphicon-exclamation-sign';
-        $notification = $this->getDefaultNotification($person, $title, $shortText, $text, $icon, $category, new Notification(), array(new Placeholder('link', ''), new Placeholder('linktitle', ''), new Placeholder('linkclick', '')));
-        return $handler->patch($notification, array());
-    }
-
 }

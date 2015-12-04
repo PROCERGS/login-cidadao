@@ -58,5 +58,4 @@ class TwoFactorAuthenticationFormType extends AbstractType
     {
         return 'lc_2fa';
     }
-
 }
