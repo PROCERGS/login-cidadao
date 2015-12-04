@@ -377,6 +377,7 @@ scheb_two_factor:
     google:
         enabled: true
         server_name: %site_domain%
+        issuer: %two_factor_issuer%
         template: PROCERGSLoginCidadaoCoreBundle:TwoFactorAuthentication:form.html.twig
 
     persister: ~

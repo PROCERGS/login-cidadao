@@ -90,3 +90,6 @@ parameters:
     # JWKS Config
     jwks_dir: %kernel.root_dir%/../app/config/jwks
     jwks_private_key_file: private.pem
+
+    # Two Factor Auth
+    two_factor_issuer: Login Cidadão
