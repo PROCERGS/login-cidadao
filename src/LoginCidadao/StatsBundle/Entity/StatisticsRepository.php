@@ -16,48 +16,67 @@ use Doctrine\ORM\QueryBuilder;
 class StatisticsRepository extends EntityRepository
 {
 
-    public function findStatsByIndexKeyDate($index, $key = null,
+    public function findStatsByIndexKeyDate($index, $keys = null,
                                             \DateTime $afterDate = null)
     {
-        $query = $this->getFindStatsByIndexKeyDateQuery($index, $key, $afterDate);
+        $query = $this->getFindStatsByIndexKeyDateQuery($index, $keys,
+            $afterDate);
 
         return $query->getQuery()->getResult();
     }
 
-    public function findIndexedStatsByIndexKeyDate($index, $key = null,
+    public function findIndexedStatsByIndexKeyDate($index, $keys = null,
                                                    \DateTime $afterDate = null)
     {
-        $data = $this->findStatsByIndexKeyDate($index, $key, $afterDate);
+        $data = $this->findStatsByIndexKeyDate($index, $keys, $afterDate);
 
         return $this->indexResults($data);
     }
 
-    public function findIndexedUniqueStatsByIndexKeyDate($index, $key = null,
+    public function findIndexedUniqueStatsByIndexKeyDate($index, $keys = null,
                                                          \DateTime $afterDate = null)
     {
-        $query = $this->getFindStatsByIndexKeyDateQuery($index, $key, $afterDate);
+        $query = $this->getFindStatsByIndexKeyDateQuery($index, $keys,
+            $afterDate);
         $this->applyGreatestNPerGroupDate($query);
         $data  = $query->getQuery()->getResult();
 
         return $this->indexResults($data);
     }
 
-    public function getFindStatsByIndexKeyDateQuery($index, $key = null,
-                                                    \DateTime $afterDate = null)
+    public function findIndexedUniqueStatsByIndexKeyDays($index, $keys = null,
+                                                         $days = null)
+    {
+        $query = $this->getFindStatsByIndexKeyDateQuery($index, $keys, null,
+            $days);
+        $this->applyGreatestNPerGroupDate($query);
+        $data  = $query->getQuery()->getResult();
+
+        return $this->indexResults($data);
+    }
+
+    public function getFindStatsByIndexKeyDateQuery($index, $keys = null,
+                                                    \DateTime $afterDate = null,
+                                                    $days = null)
     {
         $query = $this->createQueryBuilder('s')
             ->where('s.index = :index')
             ->setParameter('index', $index)
         ;
 
-        if ($key !== null) {
-            $query->andWhere('s.key = :key')
-                ->setParameter('key', $key);
+        if ($keys !== null) {
+            $query->andWhere('s.key IN (:keys)')
+                ->setParameter('keys', $keys);
         }
 
         if ($afterDate !== null) {
             $query->andWhere('s.timestamp >= :afterDate')
                 ->setParameter('afterDate', $afterDate);
+        }
+
+        if ($days !== null) {
+            $query->setMaxResults($days)
+                ->orderBy('s.timestamp', 'DESC');
         }
 
         return $query;

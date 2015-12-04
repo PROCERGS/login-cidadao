@@ -95,8 +95,13 @@ class StatisticsController extends Controller
             ->getRepository('PROCERGSOAuthBundle:Client');
         $totals = $repo->getCountPerson($this->getUser());
 
-        $evoData = $this->getStatsHandler()->getIndexedUniqueDate('client.users',
-            null, new \DateTime('-30 days'));
+        $keys = array();
+        foreach ($totals as $total) {
+            $client = $total['client'];
+            $keys[] = $client->getId();
+        }
+        $evoData = $this->getStatsHandler()->getIndexedUniqueLastDays('client.users',
+            $keys, 30);
 
         $context    = SerializationContext::create()->setGroups('date');
         $serializer = $this->get('jms_serializer');

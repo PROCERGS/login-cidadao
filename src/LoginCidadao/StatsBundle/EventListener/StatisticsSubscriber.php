@@ -56,7 +56,11 @@ class StatisticsSubscriber implements EventSubscriber
 
         $counts = $clientRepo->getCountPerson($entity->getPerson(),
             $entity->getClient()->getId());
-        $count  = reset($counts)['qty'] || 0;
+        $count  = $counts[0]['qty'];
+
+        if (!is_int($count)) {
+            $count = 0;
+        }
 
         $statistics = new Statistics();
         $statistics->setIndex('client.users')

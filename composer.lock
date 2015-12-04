@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b2324c805381dafbee09e4f7d7566267",
-    "content-hash": "54bb88c909d397cfced03f6a16e81b79",
+    "hash": "d2a1f2e780c8506ff670e3bc242b85d9",
+    "content-hash": "b5802cdaa1a3115d4a770b21f2a8cd07",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-bundle",
@@ -281,16 +281,16 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "v1.5.1",
+            "version": "v1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "2b9cec5a5e722010cbebc91713d4c11eaa064d5e"
+                "reference": "47c7128262da274f590ae6f86eb137a7a64e82af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/2b9cec5a5e722010cbebc91713d4c11eaa064d5e",
-                "reference": "2b9cec5a5e722010cbebc91713d4c11eaa064d5e",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/47c7128262da274f590ae6f86eb137a7a64e82af",
+                "reference": "47c7128262da274f590ae6f86eb137a7a64e82af",
                 "shasum": ""
             },
             "require": {
@@ -347,7 +347,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2015-11-02 18:35:48"
+            "time": "2015-12-03 10:50:37"
         },
         {
             "name": "doctrine/collections",
@@ -1384,16 +1384,16 @@
         },
         {
             "name": "gree/jose",
-            "version": "2.0.1",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nov/jose-php.git",
-                "reference": "084cdc0873e4b9eec6b1d55c3572f9460fbeec5e"
+                "reference": "012799c5108a2dd0cbc6bf6695e9e8ffd92ae692"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nov/jose-php/zipball/084cdc0873e4b9eec6b1d55c3572f9460fbeec5e",
-                "reference": "084cdc0873e4b9eec6b1d55c3572f9460fbeec5e",
+                "url": "https://api.github.com/repos/nov/jose-php/zipball/012799c5108a2dd0cbc6bf6695e9e8ffd92ae692",
+                "reference": "012799c5108a2dd0cbc6bf6695e9e8ffd92ae692",
                 "shasum": ""
             },
             "require": {
@@ -1435,7 +1435,7 @@
                 "OpenID Connect",
                 "jwt"
             ],
-            "time": "2015-09-08 08:30:38"
+            "time": "2015-12-04 04:06:17"
         },
         {
             "name": "guilhermednt/hwi-oauth-proxy-bundle",
@@ -2682,20 +2682,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "97707ea5f438622ce31ab836e1d78bb70bfe101d"
+                "reference": "49238f44aa73f545c0a927b00251c89a0acf3005"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/97707ea5f438622ce31ab836e1d78bb70bfe101d",
-                "reference": "97707ea5f438622ce31ab836e1d78bb70bfe101d",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/49238f44aa73f545c0a927b00251c89a0acf3005",
+                "reference": "49238f44aa73f545c0a927b00251c89a0acf3005",
                 "shasum": ""
             },
             "require": {
                 "michelf/php-markdown": "~1.4",
                 "php": ">=5.3",
-                "symfony/console": "~2.3",
-                "symfony/framework-bundle": "~2.3",
-                "symfony/twig-bundle": "~2.3"
+                "symfony/console": "~2.3|~3.0",
+                "symfony/framework-bundle": "~2.3|~3.0",
+                "symfony/twig-bundle": "~2.3|~3.0"
             },
             "conflict": {
                 "jms/serializer": "<0.12",
@@ -2706,17 +2706,17 @@
                 "doctrine/doctrine-bundle": "~1.5",
                 "doctrine/orm": "~2.3",
                 "dunglas/api-bundle": "~1.0@dev",
-                "friendsofsymfony/rest-bundle": "~1.0",
+                "friendsofsymfony/rest-bundle": "~1.0|~2.0",
                 "jms/serializer-bundle": ">=0.11",
                 "sensio/framework-extra-bundle": "~3.0",
-                "symfony/browser-kit": "~2.3",
-                "symfony/css-selector": "~2.3",
-                "symfony/finder": "~2.3",
-                "symfony/form": "~2.3",
-                "symfony/phpunit-bridge": "~2.7",
-                "symfony/serializer": "~2.7",
-                "symfony/validator": "~2.3",
-                "symfony/yaml": "~2.3"
+                "symfony/browser-kit": "~2.3|~3.0",
+                "symfony/css-selector": "~2.3|~3.0",
+                "symfony/finder": "~2.3|~3.0",
+                "symfony/form": "~2.3|~3.0",
+                "symfony/phpunit-bridge": "~2.7|~3.0",
+                "symfony/serializer": "~2.7|~3.0",
+                "symfony/validator": "~2.3|~3.0",
+                "symfony/yaml": "~2.3|~3.0"
             },
             "suggest": {
                 "dunglas/api-bundle": "For making use of resources definitions of DunglasApiBundle.",
@@ -2728,7 +2728,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.10.x-dev"
+                    "dev-master": "2.11-dev"
                 }
             },
             "autoload": {
@@ -2757,7 +2757,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2015-11-25 09:13:47"
+            "time": "2015-12-04 08:15:49"
         },
         {
             "name": "nelmio/cors-bundle",
@@ -3327,16 +3327,16 @@
         },
         {
             "name": "scheb/two-factor-bundle",
-            "version": "dev-master",
+            "version": "v1.4.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/scheb/two-factor-bundle.git",
-                "reference": "b0da3a85b181237c3bebde88c99b18745313360b"
+                "reference": "ef6830dbbf62b22efd335db8f64bf0f51d4284a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scheb/two-factor-bundle/zipball/b0da3a85b181237c3bebde88c99b18745313360b",
-                "reference": "b0da3a85b181237c3bebde88c99b18745313360b",
+                "url": "https://api.github.com/repos/scheb/two-factor-bundle/zipball/ef6830dbbf62b22efd335db8f64bf0f51d4284a2",
+                "reference": "ef6830dbbf62b22efd335db8f64bf0f51d4284a2",
                 "shasum": ""
             },
             "require": {
@@ -3372,7 +3372,7 @@
                 "two-factor",
                 "two-step"
             ],
-            "time": "2015-11-15 13:31:23"
+            "time": "2015-08-25 19:58:00"
         },
         {
             "name": "sensio/distribution-bundle",
@@ -4330,7 +4330,6 @@
         "jms/security-extra-bundle": 20,
         "procergs/login-cidadao-badges-bundle": 20,
         "procergs/login-cidadao-igp-bundle": 20,
-        "scheb/two-factor-bundle": 20,
         "bshaffer/oauth2-server-bundle": 20
     },
     "prefer-stable": false,
