@@ -385,6 +385,7 @@ scheb_two_factor:
 
     security_tokens:
         - Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
+        - HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken
         - FOS\FacebookBundle\Security\Authentication\Token\FacebookUserToken
 
 nelmio_cors:
