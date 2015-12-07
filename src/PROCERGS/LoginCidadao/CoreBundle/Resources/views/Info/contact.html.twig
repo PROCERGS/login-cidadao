@@ -27,11 +27,13 @@
                 <div class="form-group">
                     {{ form_row(form.message, { 'attr' : {'placeholder' : 'form.message'|trans, 'class' :'form-control', 'rows': '3' }, 'label_attr' : {'class': 'sr-only'} } ) }}
                 </div>
+                {% if form.recaptcha is defined %}
                 <div class="form-group">
                     {{ include("PROCERGSLoginCidadaoCoreBundle::common.recaptcha.html.twig") }}
                     {% form_theme form 'EWZRecaptchaBundle:Form:ewz_recaptcha_widget.html.twig' %}
                     {{ form_row(form.recaptcha, { 'attr': {'options' : {'theme' : 'custom' } }, 'label_attr': { 'class': 'sr-only' } }) }}
                 </div>
+                {% endif %}
                 <button type="submit" class="btn btn-success pull-right">{{ 'form.submit'|trans }}</button>
             </div>
             {{ form_end(form) }}

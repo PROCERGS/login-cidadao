@@ -8,6 +8,13 @@ use Symfony\Component\Form\AbstractType;
 
 class ContactFormType extends AbstractType
 {
+    /** @var boolean */
+    private $enableCaptcha;
+
+    public function __construct($enableCaptcha = true)
+    {
+        $this->enableCaptcha = $enableCaptcha;
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -26,18 +33,22 @@ class ContactFormType extends AbstractType
             'required' => true,
             'label' => 'form.message',
             'mapped' => false
-        ))->add('recaptcha', 'ewz_recaptcha',
-            array(
-            'attr' => array(
-                'options' => array(
-                    'theme' => 'clean'
-                )
-            ),
-            'mapped' => false,
-            'constraints' => array(
-                new True()
-            )
         ));
+
+        if ($this->enableCaptcha) {
+            $builder->add('recaptcha', 'ewz_recaptcha',
+                array(
+                'attr' => array(
+                    'options' => array(
+                        'theme' => 'clean'
+                    )
+                ),
+                'mapped' => false,
+                'constraints' => array(
+                    new True()
+                )
+            ));
+        }
     }
 
     public function getName()
