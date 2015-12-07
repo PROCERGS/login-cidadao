@@ -33,8 +33,7 @@ class ClientBaseFormType extends AbstractType
             'required' => true,
             'attr' => array('rows' => 4)
         ));
-        $builder->add('metadata',
-            new \LoginCidadao\OpenIDBundle\Form\ClientMetadataWebForm());
+        $builder->add('metadata', 'oidc_client_metadata_form_type');
         $builder->add('siteUrl', 'text',
             array(
             'required' => true

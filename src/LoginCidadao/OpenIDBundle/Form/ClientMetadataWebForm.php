@@ -10,13 +10,23 @@
 
 namespace LoginCidadao\OpenIDBundle\Form;
 
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Form\DataTransformer\FromArray;
 
 class ClientMetadataWebForm extends AbstractType
 {
+    /** @var AuthorizationCheckerInterface */
+    protected $security;
+
+    public function __construct(AuthorizationCheckerInterface $security)
+    {
+        $this->security = $security;
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -49,18 +59,11 @@ class ClientMetadataWebForm extends AbstractType
                 array(
                 'choices' => array('web' => 'web', 'native' => 'native')
             ))
-/*            ->add($builder->create('contacts', 'textarea',
-                    array('required' => false)
-                )->addModelTransformer(new FromArray()))*/
             ->add('logo_uri', 'url')
             ->add('policy_uri', 'url', array('required' => false))
             ->add('jwks_uri', 'url', array('required' => false))
             ->add('jwks', 'text', array('required' => false))
             ->add('sector_identifier_uri', 'url', array('required' => false))
-            ->add('subject_type', 'choice',
-                array(
-                'choices' => array('public' => 'public', 'pairwise' => 'pairwise')
-            ))
             ->add('id_token_signed_response_alg', 'text',
                 array('required' => false))
             ->add('id_token_encrypted_response_alg', 'text',
@@ -96,6 +99,8 @@ class ClientMetadataWebForm extends AbstractType
             ->add($builder->create('default_acr_values', 'textarea',
                     array('required' => false)
                 )->addModelTransformer(new FromArray()))
+            ->addEventListener(FormEvents::PRE_SET_DATA,
+                $this->getCheckSubjectTypeCallback())
         ;
     }
 
@@ -110,6 +115,21 @@ class ClientMetadataWebForm extends AbstractType
 
     public function getName()
     {
-        return '';
+        return 'oidc_client_metadata_form_type';
+    }
+
+    private function getCheckSubjectTypeCallback()
+    {
+        $security = $this->security;
+        return function (FormEvent $event) use ($security) {
+            $form = $event->getForm();
+
+            if ($security->isGranted('ROLE_EDIT_CLIENT_SUBJECT_TYPE')) {
+                $choices = array(
+                    'pairwise' => 'pairwise', 'public' => 'public'
+                );
+                $form->add('subject_type', 'choice', compact('choices'));
+            }
+        };
     }
 }

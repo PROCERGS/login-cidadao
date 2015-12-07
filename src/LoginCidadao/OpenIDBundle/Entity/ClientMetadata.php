@@ -170,7 +170,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $subject_type;
+    protected $subject_type = 'pairwise';
 
     /**
      * @JMS\Expose
