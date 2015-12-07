@@ -86,3 +86,6 @@ parameters:
 
     # Two Factor Auth
     two_factor_issuer: Login Cidadão
+
+    # Enables or disables the contact form's captcha
+    contact_form.captcha: true

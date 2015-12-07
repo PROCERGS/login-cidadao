@@ -80,7 +80,7 @@ class DefaultController extends Controller
      */
     public function contactAction(Request $request)
     {
-        $form = $this->createForm(new ContactFormType());
+        $form = $this->createForm('contact_form_type');
         $form->handleRequest($request);
         $translator = $this->get('translator');
         $message = $translator->trans('contact.form.sent');
