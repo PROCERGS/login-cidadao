@@ -6,16 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ContactFormType;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail;
-use PROCERGS\OAuthBundle\Entity\Client;
-use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ClientNotCatFormType;
 use Michelf\MarkdownExtra;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Category;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Placeholder;
-use PROCERGS\LoginCidadao\CoreBundle\Form\Type\PlaceholderFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\GridHelper;
 
 /**

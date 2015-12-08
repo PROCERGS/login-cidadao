@@ -6,6 +6,11 @@ parameters:
     database_user:     root
     database_password: ~
 
+    # Trusted proxies (http://symfony.com/doc/current/cookbook/request/load_balancer_reverse_proxy.html)
+    trusted_proxies: ~
+    # IPs allowed to access dev environment
+    dev_allowed: [ 127.0.0.0/8 ]
+
     memcached_host: 127.0.0.1
     memcached_port: 11211
     session_prefix: lc_sess_
@@ -86,3 +91,6 @@ parameters:
 
     # Two Factor Auth
     two_factor_issuer: Login Cidadão
+
+    # Enables or disables the contact form's captcha
+    contact_form.captcha: true
