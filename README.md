@@ -27,6 +27,7 @@ Dependencies
  
  System Configuration
   * php timezone (date.timezone = America/Sao_Paulo)
+  * write permission to app/cache app/logs web/uploads
 
 Docs
 ====
