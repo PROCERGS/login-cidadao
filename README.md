@@ -61,9 +61,9 @@ Test on default: http://localhost:8000
 
 ### Using Vagrant
 ## Requirements
-	* virtualbox
-	* [vagrant](https://www.vagrantup.com/)
-	* vagrant plugin [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest) for port forward
+* virtualbox
+* [vagrant](https://www.vagrantup.com/)
+* vagrant plugin [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest) for port forward
 
 ## Before you start
 It's highly recommended to create your `app/config/parameters.yml` before installing to avoid database connection problems.
