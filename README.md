@@ -52,9 +52,27 @@ It's highly recommended to create your `app/config/parameters.yml` before instal
 You can start by using `app/config/parameters.yml.dist` as a template by simply copying it to the same folder but naming it as `parameters.yml`, then edit the default values.
 
 ### Running the script
+Check if your environment meets Symfony's prerequesites:
+    `php app/check.php`
 Just execute the `install.sh` script and follow instructions in case of errors or warnings.
- 
+Run:
+	`php app/console server:run`
+Test on default: http://localhost:8000
 
+### Using Vagrant
+## Requirements
+	* virtualbox
+	* [vagrant](https://www.vagrantup.com/)
+	* vagrant plugin [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest) for port forward
+
+## Before you start
+It's highly recommended to create your `app/config/parameters.yml` before installing to avoid database connection problems.
+
+You can start by using `app/config/parameters.yml.vagrant` as a template by simply copying it to the same folder but naming it as `parameters.yml`, then edit the default values. Do not edit database values if you want to use the default vm database.
+
+## Run
+	`vagrant up`
+	
 Setting up on Windows
 ---------------------
 Currently we do not have a setup script for Windows, but it should be pretty straightforward to convert the install.sh to be Windows compatible.
