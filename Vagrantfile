@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 $dependencies = <<SCRIPT
     # Instalando pacotes do php.
-    # Observe que aqui vamos optar por usar o postgres, mas é possível usar mysql sem problemas
+    # Observe que aqui vamos optar por usar o postgres, mas e possivel usar mysql sem problemas
     sudo apt-get install -y php5 php5-curl php5-intl php5-pgsql php5-memcache
 
     sudo apt-get install -y memcached php5-memcached
@@ -28,15 +28,16 @@ $dependencies = <<SCRIPT
 SCRIPT
 
 $setup = <<SCRIPT
-    createdb lc
+    #createdb lc
     cd /vagrant
-    cp app/config/parameters.yml.vagrant app/config/parameters.yml
+    if [ ! -f app/config/parameters.yml ]; then
+    	cp app/config/parameters.yml.vagrant app/config/parameters.yml
+    fi
     source install.sh
 SCRIPT
 
 $runserver = <<SCRIPT
-    # TODO: botar o php -s da vida aqui pra rodar
-
+    php /vagrant/app/console --env=dev server:start 0.0.0.0:8000
 SCRIPT
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
@@ -50,7 +51,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "debian/jessie64"
   # config.vm.network :forwarded_port, guest: 80, host: 3131
-  config.vm.network :forwarded_port, guest: 8080, host: 8080
+  config.vm.network "forwarded_port", guest: 8000, host: 8000
   config.vm.provision "shell", inline: $dependencies
   config.vm.provision "shell",
         inline: $setup,
@@ -64,6 +65,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  config.vm.synced_folder "/home/bruno/devel/login-cidadao", "/vagrant"
+  config.vm.synced_folder "./", "/vagrant"
   # owner: "mapas", group: "mapas"
 end

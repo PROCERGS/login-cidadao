@@ -7,7 +7,7 @@ parameters:
     database_password: ~
 
     # Trusted proxies (http://symfony.com/doc/current/cookbook/request/load_balancer_reverse_proxy.html)
-    trusted_proxies: ~
+    trusted_proxies: []
     # IPs allowed to access dev environment
     dev_allowed: [ 127.0.0.0/8 ]
 
@@ -41,7 +41,7 @@ parameters:
         port: 3128
         auth: 'login:senha'
 
-    site_domain: meu.rs.gov.br
+    site_domain: localhost
     mailer_sender_mail: webmaster@example.com
     mailer_sender_name: webmaster
     recaptcha_public_key: ~
