@@ -140,7 +140,7 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
             $client->setPublished(true);
             $client->setVisible(false);
             $client->setUid($uid);
-            $client->setPictureFile($picture);
+            $client->setImage($picture);
             $clientManager->updateClient($client);
             $output->writeln('Default Client created.');
         }
