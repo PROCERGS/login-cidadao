@@ -35,7 +35,7 @@ class AccessToken extends BaseAccessToken
     protected $client;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person")
+     * @ORM\ManyToOne(targetEntity="LoginCidadao\CoreBundle\Entity\Person")
      */
     protected $user;
 

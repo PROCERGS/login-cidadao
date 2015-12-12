@@ -2,10 +2,10 @@
 
 namespace PROCERGS\OAuthBundle\Entity;
 
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
+use LoginCidadao\CoreBundle\Entity\Authorization;
 use FOS\OAuthServerBundle\Entity\Client as BaseClient;
 use Doctrine\ORM\Mapping as ORM;
-use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
+use LoginCidadao\NotificationBundle\Entity\Notification;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Tests\Fixtures\Publisher;
@@ -13,9 +13,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation as JMS;
 use OAuth2\OAuth2;
 use Doctrine\Common\Collections\ArrayCollection;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
-use PROCERGS\LoginCidadao\CoreBundle\Model\AbstractUniqueEntity;
-use PROCERGS\LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
+use LoginCidadao\CoreBundle\Entity\Person;
+use LoginCidadao\CoreBundle\Model\AbstractUniqueEntity;
+use LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -77,7 +77,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     protected $allowedScopes;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization", mappedBy="client", cascade={"remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="LoginCidadao\CoreBundle\Entity\Authorization", mappedBy="client", cascade={"remove"}, orphanRemoval=true)
      */
     protected $authorizations;
 
@@ -89,12 +89,12 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     protected $siteUrl;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification", mappedBy="sender")
+     * @ORM\OneToMany(targetEntity="LoginCidadao\NotificationBundle\Entity\Notification", mappedBy="sender")
      */
     protected $notifications;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\NotificationBundle\Entity\Category", mappedBy="client")
+     * @ORM\OneToMany(targetEntity="LoginCidadao\NotificationBundle\Entity\Category", mappedBy="client")
      */
     protected $categories;
 
@@ -134,7 +134,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     protected $visible;
 
     /**
-     * @ORM\ManyToMany(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="clients"  )
+     * @ORM\ManyToMany(targetEntity="LoginCidadao\CoreBundle\Entity\Person", inversedBy="clients"  )
      * @ORM\JoinTable(name="client_owners",
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id")}
@@ -144,7 +144,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     protected $owners;
 
     /**
-     * @ORM\OneToMany(targetEntity="PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey", mappedBy="client")
+     * @ORM\OneToMany(targetEntity="LoginCidadao\APIBundle\Entity\LogoutKey", mappedBy="client")
      */
     protected $logoutKeys;
 

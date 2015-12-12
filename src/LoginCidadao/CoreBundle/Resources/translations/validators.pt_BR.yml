@@ -1,0 +1,5 @@
+change_username.invalid.username: 'Nomes de usuário devem conter apenas letras não acentuadas, números e underline (_).'
+'Please enter your name.': 'Preencha seu nome.'
+'This document is already in use.': 'Esse documento já está sendo usado.'
+'You already have an ID Card in this state.': 'Você já cadastrou um documento de identidade nesse Estado.'
+'This field accepts only letters and numbers': 'Esse campo apenas aceita letras e números'

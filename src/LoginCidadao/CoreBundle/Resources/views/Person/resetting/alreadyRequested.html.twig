@@ -1,0 +1,32 @@
+{% extends 'LoginCidadaoCoreBundle::base.html.twig' %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-xs-12 text-center header-shadows">
+        <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
+        <h2 class="slogan hidden-xs">{% trans %}One account. The entire Government.{% endtrans %}</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="general-content col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+        {% trans_default_domain 'FOSUserBundle' %}
+
+        <div class="col-md-12 title">
+            <h3>{% trans %}Reset Password{% endtrans %}</h3>
+        </div>
+
+        <div class="col-md-12">
+            <p class="message">{{ 'resetting.password_already_requested'|trans }}</p>
+            <a href="{{ path('lc_home') }}" class='btn btn-success' />ok<a/>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets_custom %}
+    {% stylesheets '@lc_base_css' 'bundles/logincidadaocore/css/home/*.css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "LoginCidadaoCoreBundle:Document:base.html.twig" %}
+
+{% block documents_content %}
+    <h1 class="visible-xs">{% trans %}Documents{% endtrans %}</h1>
+
+    {% trans_default_domain 'FOSUserBundle' %}
+    <div class="form-content">
+
+        {% if generalDocsForm is defined %}
+            {{ include("LoginCidadaoCoreBundle:Document:general.html.twig", { 'generalDocsForm': generalDocsForm }) }}
+        {% else %}
+            {{ render(controller('LoginCidadaoCoreBundle:Document:general')) }}
+        {% endif %}
+
+        {{ render(controller('LoginCidadaoCoreBundle:IdCard:list')) }}
+
+        <a name="id-card-forms-placeholder" class="anchor"></a>
+        <div class="id-card-forms-placeholder">
+            {% block id_card_forms_placeholder %}{% endblock %}
+        </div>
+    </div>
+{% endblock documents_content %}
+
+{% block javascripts %}
+{{ parent() }}
+{% javascripts '@LoginCidadaoCoreBundle/Resources/public/js/idCard.js'
+               '@LoginCidadaoCoreBundle/Resources/public/js/components/jquery-scrollto.js' filter='uglifyjs2' %}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% endblock javascripts %}

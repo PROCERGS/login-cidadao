@@ -44,7 +44,7 @@ client_secret = "";
 //name server
 api_context = "Meu"
 //scopes
-api_scopes = "id username full_name cpf birthdate email city picture public_profile voter_registration badges country state city addresses id_cards get_all_notifications notifications cep mobile";
+api_scopes = "id username full_name cpf birthdate email city picture public_profile badges country state city addresses id_cards get_all_notifications notifications cep mobile";
 //address to request user data
 api_url = "https://meu.rs.gov.br/api/v1/person.json";
 ```

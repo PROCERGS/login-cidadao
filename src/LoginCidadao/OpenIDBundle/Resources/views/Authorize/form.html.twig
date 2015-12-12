@@ -6,13 +6,13 @@
         <div class="panel-body">
             <div class="connect-diagram row">
                 <div class="col-xs-5 text-right">
-                    <img src="{{ include("PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" width="70" class="img-rounded">
+                    <img src="{{ include("LoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" width="70" class="img-rounded">
                 </div>
                 <div class="col-xs-2 text-center">
                     <i class="glyphicon glyphicon-chevron-right"></i>
                 </div>
                 <div class="col-xs-5 text-left">
-                    <img src="{{ include('PROCERGSLoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': client }) }}" class="media-object" width="70" height="70" alt="" class="img-rounded">
+                    <img src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': client }) }}" class="media-object" width="70" height="70" alt="" class="img-rounded">
                 </div>
             </div>
 

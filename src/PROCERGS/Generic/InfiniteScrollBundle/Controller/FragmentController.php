@@ -4,7 +4,7 @@ namespace PROCERGS\Generic\InfiniteScrollBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use PROCERGS\Generic\InfiniteScrollBundle\Model\NotificationIterable;
-use PROCERGS\LoginCidadao\NotificationBundle\Handler\NotificationHandlerInterface;
+use LoginCidadao\NotificationBundle\Handler\NotificationHandlerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 

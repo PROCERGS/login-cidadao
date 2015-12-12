@@ -3,7 +3,7 @@
 namespace PROCERGS\OAuthBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class ClientRepository extends EntityRepository
 {
@@ -22,12 +22,12 @@ class ClientRepository extends EntityRepository
                                    $clientId = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select('count(a.id) AS qty, c AS client')
-            ->from('PROCERGSLoginCidadaoCoreBundle:Authorization', 'a')
+              ->select('count(a.id) AS qty, c AS client')
+              ->from('LoginCidadaoCoreBundle:Authorization', 'a')
             ->innerJoin('PROCERGSOAuthBundle:Client', 'c', 'WITH',
                 'a.client = c')
-            ->where('c.published = true')
-            ->groupBy('a.client, c')
+              ->where('c.published = true')
+              ->groupBy('a.client, c')
             ->orderBy('qty', 'DESC');
 
         if ($person !== null) {
@@ -41,7 +41,7 @@ class ClientRepository extends EntityRepository
 
             $ids = array_keys($clients);
             $qb->orWhere('c.id IN (:clients)')->setParameter('clients', $ids);
-        }
+    }
 
         if ($clientId !== null) {
             $qb->andWhere('c.id = :clientId')

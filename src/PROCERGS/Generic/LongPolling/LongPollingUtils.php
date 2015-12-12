@@ -10,7 +10,7 @@
 
 namespace PROCERGS\Generic\LongPolling;
 
-use PROCERGS\LoginCidadao\APIBundle\Exception\RequestTimeoutException;
+use LoginCidadao\APIBundle\Exception\RequestTimeoutException;
 
 class LongPollingUtils
 {

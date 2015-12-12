@@ -3,7 +3,7 @@
 namespace PROCERGS\OAuthBundle\Model;
 
 use FOS\OAuthServerBundle\Model\ClientInterface as BaseInterface;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
+use LoginCidadao\CoreBundle\Entity\Authorization;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
 

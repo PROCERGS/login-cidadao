@@ -4,7 +4,7 @@ namespace PROCERGS\OAuthBundle\Entity;
 use FOS\OAuthServerBundle\Entity\ClientManager as FOSClientManager;
 use FOS\OAuthServerBundle\Model\ClientInterface;
 use Doctrine\ORM\PersistentCollection;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
+use LoginCidadao\CoreBundle\Entity\Person;
 
 class ClientManager extends FOSClientManager
 {
