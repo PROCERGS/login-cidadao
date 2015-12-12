@@ -98,7 +98,7 @@ class AccessToken extends BaseClass implements AccessTokenInterface
         if ($user_id === null) {
             return null;
         } else {
-            $user = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')
+            $user = $this->em->getRepository('LoginCidadaoCoreBundle:Person')
                 ->find($user_id);
         }
 

@@ -1,0 +1,10 @@
+{% extends "LoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block title %}{{ 'Notifications' | trans }} | {{ parent() }}{% endblock title %}
+
+{% block sidebar %}
+    {% if clientId is not defined %}
+        {% set clientId = null %}
+    {% endif %}
+    {{ render(controller("LoginCidadaoNotificationBundle:Notification:sidebar", { 'route': app.request.attributes.get('_route'), 'clientId': clientId })) }}
+{% endblock %}

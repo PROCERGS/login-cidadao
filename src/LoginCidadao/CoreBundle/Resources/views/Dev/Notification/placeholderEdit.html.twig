@@ -1,0 +1,21 @@
+{% form_theme form 'LoginCidadaoCoreBundle::Form/fields.html.twig' %}
+
+{{ form_start(form, {'action': path('lc_dev_not_placeholder_edit'), 'attr': {'role':'form', 'id': 'form_placeholder', 'class' : 'form-ajax', 'ajax-target' : 'div:has(#form_placeholder):last'} }) }}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title">{{ 'Placeholder'|trans }}</h2>
+    </div>
+    <div class="panel-body">
+        <div class="row clearfix">
+            {{ form_errors(form) }}
+            <div class="col-md-12">
+                {{ form_row(form.name) }}
+                {{ form_row(form.default) }}
+                <div class="form-bar text-right">
+                    <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}

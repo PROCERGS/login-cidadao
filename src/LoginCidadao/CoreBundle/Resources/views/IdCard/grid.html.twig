@@ -1,0 +1,77 @@
+{% extends "LoginCidadaoCoreBundle::grid_layout.html.twig" %}
+
+{% block grid_header_action %}
+    <div class="col-md-2">{{ 'Actions'|trans }}</div>
+{% endblock grid_header_action %}
+
+{% block grid_header_data %}
+    <div class="col-md-1">{{ 'State'|trans }}</div>
+    <div class="col-md-9">{{ 'Document'|trans }}</div>
+{% endblock grid_header_data %}
+
+{% block grid_body_empty %}
+{% endblock grid_body_empty %}
+
+{% block grid_row %}
+    <div class="row common-grid-result">
+        <div class="col-md-2 action-column-grid">
+            <div class="btn-group btn-group-justified">
+                <div class="btn-group">
+                    <a href="{{ path('lc_person_id_cards_edit', { id: row.id }) }}" class="btn btn-warning edit-row-grid">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                        <span class="label-action-column-grid">{{ 'Edit'|trans }} </span>
+                    </a>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-danger remove-row-grid" data-id="{{ row.id }}">
+                        <span class="glyphicon glyphicon-remove"></span>
+                        <span class="label-action-column-grid"> {{ 'Remove'|trans }} </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <dt>{{ 'State'|trans }}</dt>
+            <dd>{{ row.iso6 }}</dd>
+        </div>
+        <div class="col-md-9">
+            <dt>{{ 'Document'|trans }}</dt>
+            <dd>{{ row.value }}</dd>
+        </div>
+    </div>
+    <div class="confirm-removal" data-id="{{ row.id }}">
+        {% set form = deleteForms[row.id] %}
+        {{ form_start(form, {'action': path('lc_person_id_cards_delete', { id: row.id }), 'attr': {'role': 'form'}}) }}
+        <div class="panel panel-danger remove-box" data-id-card-id="{{ row.id }}" style="margin-bottom: 0">
+            <div class="panel-heading clearfix">
+                <span class="pull-left">{{ 'Are you sure you want to remove this ID Card?' | trans }}</span>
+                <span class="pull-right">
+                    {{ form_widget(form.delete) }}
+                    <button type="button" class="btn btn-default btn-xs cancel">{{ 'No' | trans }}</button>
+                </span>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock grid_row %}
+
+{% block grid_infinite_pagination %}
+    <div class="btn-group btn-group-justified">
+        {% if not grid.getRlast and grid.isInfiniteGrid %}
+            {% set routeParams = { 'page': grid.page + 1 } %}
+            <div class="btn-group">
+                {# <button type="button" class="btn btn-default infinitescroll-next-button " data-retrive="#{{ grid.getId }}"> #}
+                <a href="{{ path(grid.route, routeParams) }}" class="btn btn-default id-card-load-more"
+                   data-next-offset="{{ grid.page + 1 }}">
+                    <span class="glyphicon glyphicon glyphicon-list"></span> {{ 'more'|trans }}
+                </a>
+                {# </button> #}
+            </div>
+        {% endif %}
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary" id="new_rg">
+                <span class="glyphicon glyphicon glyphicon-plus"></span> {{ 'add'|trans }}
+            </button>
+        </div>
+    </div>
+{% endblock grid_infinite_pagination %}

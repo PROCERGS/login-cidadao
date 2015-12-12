@@ -23,7 +23,7 @@ class ClientPerson
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person", inversedBy="clients")
+     * @ORM\ManyToOne(targetEntity="LoginCidadao\CoreBundle\Entity\Person", inversedBy="clients")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
     protected $person;

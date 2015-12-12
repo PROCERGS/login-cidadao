@@ -1,0 +1,37 @@
+parameters:
+    notifications.helper.class: LoginCidadao\NotificationBundle\Helper\NotificationsHelper
+    procergs.notification.handler.class: LoginCidadao\NotificationBundle\Handler\NotificationHandler
+    procergs.notification.class: LoginCidadao\NotificationBundle\Entity\Notification
+    notification_oauth_event_listener.class: LoginCidadao\NotificationBundle\EventListener\OAuthAuthorizationListener
+
+services:
+    notifications.helper:
+        class: %notifications.helper.class%
+        arguments: ["@doctrine.orm.entity_manager", "@security.context", "@service_container", %notifications_categories_alert.uid%, %notifications_categories_alert.uid%]
+
+    procergs.notification.handler:
+        class: %procergs.notification.handler.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+            - %procergs.notification.class%
+            - @form.factory
+            - @procergs_logincidadao.mailer
+            - @procergs_logincidadao.notification.type
+            - @event_dispatcher
+            - %oauth_default_client.uid%
+            - %http_proxy%
+        tags:
+            - { name: "security.secure_service" }
+
+    notification_oauth_event_listener:
+        class:  %notification_oauth_event_listener.class%
+        arguments: [ "@doctrine.orm.entity_manager", "@procergs.notification.handler" ]
+        tags:
+            - { name: kernel.event_listener, event: fos_oauth_server.post_authorization_process, method: onPostAuthorizationProcess }
+
+    procergs_logincidadao.notification.type:
+        class: LoginCidadao\NotificationBundle\Form\NotificationType
+        tags:
+            - { name: form.type, alias: form_notification_type }
+        calls:
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]

@@ -35,7 +35,7 @@ class AuthCode extends BaseAuthCode
     protected $client;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person")
+     * @ORM\ManyToOne(targetEntity="LoginCidadao\CoreBundle\Entity\Person")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $user;

@@ -4,7 +4,7 @@ namespace PROCERGS\OAuthBundle\EventListener;
 
 use FOS\OAuthServerBundle\Event\OAuthEvent;
 use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
+use LoginCidadao\CoreBundle\Entity\Authorization;
 
 class OAuthEventListener
 {
@@ -16,7 +16,7 @@ class OAuthEventListener
     public function __construct(Doctrine $doctrine, $container)
     {
         $this->doctrine   = $doctrine;
-        $this->personRepo = $this->doctrine->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+        $this->personRepo = $this->doctrine->getRepository('LoginCidadaoCoreBundle:Person');
         $this->request    = $container->get('request');
         $this->form       = $container->get('fos_oauth_server.authorize.form');
     }
@@ -45,7 +45,7 @@ class OAuthEventListener
         $scope = $this->getScope();
 
         $em          = $this->doctrine->getManager();
-        $authRepo    = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Authorization');
+        $authRepo    = $em->getRepository('LoginCidadaoCoreBundle:Authorization');
         $currentAuth = $authRepo->findOneBy(array(
             'person' => $user,
             'client' => $client

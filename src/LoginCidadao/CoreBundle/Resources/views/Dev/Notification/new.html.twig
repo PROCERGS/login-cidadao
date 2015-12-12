@@ -1,0 +1,143 @@
+{% extends 'LoginCidadaoCoreBundle:Dev:base.html.twig' %}
+{% block content %}
+<div class="content">
+<h1 class="visible-xs">{{ 'Category'|trans }}</h1>
+
+<div id="notification_id">
+    {% form_theme form 'LoginCidadaoCoreBundle::Form/fields.html.twig' %}
+    {{ form_start(form, {'attr' : {'role' : 'form'}}) }}
+    {{ form_errors(form) }}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">{{ 'General'|trans }}</h2>
+        </div>
+        <div class="panel-body">
+            <div class="row clearfix">
+                <div class="col-md-12">
+                    {{ form_row(form.id)}}
+                    {{ form_row(form.client)}}
+                    {{ form_row(form.name)}}
+                    {{ form_row(form.defaultIcon)}}
+                    {% if form.defaultTitle is defined %}
+                        {{ form_row(form.defaultTitle)}}
+                        {{ form_row(form.defaultShortText)}}
+                    {% endif %}
+                    {{ form_row(form.emailable)}}
+                    {{ form_row(form.mailSenderAddress)}}
+
+                    <div class="form-bar text-right">
+                        <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if form.markdownTemplate is defined %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">{{ 'Templates'|trans }}</h2>
+        </div>
+        <div class="panel-body">
+            <div class="row clearfix">
+                <div class="col-md-12">
+                    {{ form_row(form.markdownTemplate) }}
+                    {{ form_row(form.mailTemplate) }}
+                    <div class="form-bar text-right">
+                        <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {{ form_end(form) }}
+</div>
+{% if placeholderGrid is defined %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title">{{ 'Placeholders'|trans }}</h2>
+    </div>
+    <div class="panel-body">
+        <div class="row clearfix">
+            <div class="col-md-12">
+                <div id="placeholder-grid-place">
+                    {{ include("LoginCidadaoCoreBundle:Dev/Notification:placeholderGrid.html.twig", {'grid': placeholderGrid} ) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+<div id="placeholder-edit"></div>
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+var categoryId = '#{{ form.id.vars.id }}';
+var routePlaceholderEdit = '{{ path('lc_dev_not_placeholder_edit') }}';
+var routePlaceholderRemove = '{{ path('lc_dev_not_placeholder_remove') }}';
+var routePlaceholderGrid = '{{ path('lc_dev_not_placeholder_grid') }}';
+var placeholderGrid = {};
+placeholderGrid.getGrid = function() {
+  if (!$(categoryId).length) {
+  }
+  $.ajax({
+    type: 'get',
+    url: routePlaceholderGrid + '?category_id='+ $(categoryId).val(),
+    dataType : 'html',
+    success : function(data, textStatus, jqXHR) {
+      $('#placeholder-grid-place').html(data);
+      $('html, body').animate({scrollTop: $('#placeholder-grid-place').offset().top});
+    }
+    });
+};
+$(document).on('click', '#new_placeholder',  function() {
+  if (!$(categoryId).length) {
+    return;
+  }
+  $.ajax({
+    type: 'get',
+    url: routePlaceholderEdit + '?category_id='+ $(categoryId).val(),
+    dataType : 'html',
+    success : function(data, textStatus, jqXHR) {
+      $('#placeholder-edit').html(data);
+      $('html, body').animate({scrollTop: $('#placeholder-edit').offset().top});
+    }
+    });
+});
+$(document).on('click', '#placeholder-grid .edit-row-grid',  function() {
+  if (!$(categoryId).length) {
+    return;
+  }
+  var $id = $.parseJSON($(this).attr('data-row')).id;
+  $.ajax({
+    type: 'get',
+    url: routePlaceholderEdit + '?id='+ $id,
+    dataType : 'html',
+    success : function(data, textStatus, jqXHR) {
+      $('#placeholder-edit').html(data);
+      $('html, body').animate({scrollTop: $('#placeholder-edit').offset().top});
+    }
+    });
+});
+$(document).on('click', '#placeholder-grid .remove-row-grid',  function() {
+  if (!$(categoryId).length) {
+    return;
+  }
+  var $id = $.parseJSON($(this).attr('data-row')).id;
+  $.ajax({
+    type: 'get',
+    url: routePlaceholderRemove + '?id='+ $id,
+    dataType : 'html',
+    success : function(data, textStatus, jqXHR) {
+      $('#placeholder-edit').html(data);
+    }
+    });
+});
+</script>
+{% endblock %}

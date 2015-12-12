@@ -1,0 +1,110 @@
+{% extends "LoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+{% block content %}
+    <div id="statistics" class="content statistics-services clearfix">
+
+        <h1>{{ 'statistics.userByService'|trans }}</h1>
+
+        {% for item in totals %}
+            <div class="row item" data-client-row="{{ item.client.id }}">
+                <div class="col-md-2 text-center">
+                    <img src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': item.client }) }}" width="65" height="65" alt="" class="service-img center-block">
+                    <span class="client-name">{{ item.client.name | trans }}</span>
+                </div>
+                <div class="col-md-7">
+                    <div id="client-chart-{{ item.client.id }}"></div>
+                    <div class="no-activity text-center">{{ 'No recent activity' | trans }}</div>
+                </div>
+                <div class="col-md-3 qty">
+                    <strong>{{ (item.qty) | number_format(0, ',', '.') }}</strong>
+                    <small>{{ 'Users' | trans }}</small>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/vendor/moment/min/moment-with-locales.min.js') }}"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['corechart'], 'language': '{{ app.request.locale }}'}]}"></script>
+    <script>var data = {{ evo | raw }};</script>
+
+    <script>
+                google.setOnLoadCallback(updateChart);
+
+        function formatNumber(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function getTooltipText(date, users) {
+            return moment(date).format('LL') + " - " + formatNumber(users);
+        }
+
+        function updateChart() {
+            moment.locale('{{ app.request.locale }}');
+            var chartsOptions = [];
+            $.each(data, function (clientId) {
+                var chartData = new google.visualization.DataTable();
+                chartData.addColumn('date', '{{ 'Date' | trans }}');
+                chartData.addColumn('number', '{{ 'Users' | trans }}');
+                chartData.addColumn({type: 'string', role: 'tooltip'});
+
+                var date = null;
+                for (var index = 0; index < this.length; ++index) {
+                    date = this[index].timestamp;
+                    var users = this[index].value;
+                    chartData.addRow([new Date(date), users, getTooltipText(date, users)]);
+                }
+                date = new Date();
+                var last = parseInt($('[data-client-row=' + clientId + '] strong').html().replace(/[.,]/, ''));
+                chartData.addRow([date, last, getTooltipText(date, formatNumber(last))]);
+
+                chartData.sort(0);
+                var options = {
+                    height: 100,
+                    interpolateNulls: true,
+                    backgroundColor: 'transparent',
+                    legend: {position: 'none'},
+                    hAxis: {
+                        title: '',
+                        gridlines: {
+                            count: -1,
+                            units: {
+                                months: {format: ['MMM']},
+                                days: {format: ["dd 'de' MMM"]},
+                                hours: {format: ["dd/MM hh:mm"]},
+                            }
+                        },
+                        minorGridlines: {
+                            units: {
+                                days: {format: ['dd']},
+                            }
+                        }
+                    },
+                    vAxis: {gridlines: {count: 3}},
+                    axisTitlesPosition: 'none'
+                };
+
+                chartsOptions.push({
+                    id: clientId,
+                    data: chartData,
+                    options: options
+                });
+            });
+            drawCharts(chartsOptions);
+        }
+
+        function drawCharts(chartsOptions, index) {
+            var curIndex = index || 0;
+            var chartOptions = chartsOptions[curIndex];
+            var element = $("#client-chart-" + chartOptions.id);
+            element.siblings('.no-activity').hide();
+            var chart = new google.visualization.LineChart(element[0]);
+            google.visualization.events.addOneTimeListener(chart, 'ready', function () {
+                if (curIndex < chartsOptions.length - 1)
+                    drawCharts(chartsOptions, curIndex + 1);
+            });
+            chart.draw(chartOptions.data, chartOptions.options);
+        }
+    </script>
+{% endblock %}

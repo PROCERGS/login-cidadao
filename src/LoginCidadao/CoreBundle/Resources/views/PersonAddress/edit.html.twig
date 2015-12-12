@@ -1,0 +1,8 @@
+{% extends "LoginCidadaoCoreBundle:PersonAddress:base.html.twig" %}
+
+{% block addresses %}
+    {{ include("LoginCidadaoCoreBundle:PersonAddress:list.component.html.twig") }}
+    <div class="form-bar text-center clearfix">
+      <a href="{{ path('lc_person_addresses_new') }}#form" class="btn btn-success">{{ 'New Address' | trans }}</a>
+    </div>
+{% endblock %}

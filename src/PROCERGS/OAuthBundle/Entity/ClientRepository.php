@@ -3,7 +3,7 @@
 namespace PROCERGS\OAuthBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class ClientRepository extends EntityRepository
 {
@@ -23,7 +23,7 @@ class ClientRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
               ->select('count(a.id) AS qty, c AS client')
-              ->from('PROCERGSLoginCidadaoCoreBundle:Authorization', 'a')
+              ->from('LoginCidadaoCoreBundle:Authorization', 'a')
             ->innerJoin('PROCERGSOAuthBundle:Client', 'c', 'WITH',
                 'a.client = c')
               ->where('c.published = true')

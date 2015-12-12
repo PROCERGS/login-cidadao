@@ -1,0 +1,9 @@
+{% extends "LoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block title %}{{ 'Documents' | trans }} | {{ parent() }}{% endblock title %}
+
+{% block content %}
+    <div id="profile-edit" class="content">
+{% block documents_content %}{% endblock documents_content %}
+    </div>
+{% endblock content %}

@@ -19,7 +19,7 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new FOS\OAuthServerBundle\FOSOAuthServerBundle(),
             new PROCERGS\OAuthBundle\PROCERGSOAuthBundle(),
-            new PROCERGS\LoginCidadao\CoreBundle\PROCERGSLoginCidadaoCoreBundle(),
+            new LoginCidadao\CoreBundle\LoginCidadaoCoreBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new FOS\RestBundle\FOSRestBundle(),
 
@@ -29,7 +29,7 @@ class AppKernel extends Kernel
             new Donato\Generic\HWIOAuthProxyBundle\DonatoGenericHWIOAuthProxyBundle(),
 
             new PROCERGS\Generic\LocaleBundle\PROCERGSGenericLocaleBundle(),
-            new PROCERGS\LoginCidadao\APIBundle\PROCERGSLoginCidadaoAPIBundle(),
+            new LoginCidadao\APIBundle\LoginCidadaoAPIBundle(),
             new PROCERGS\Generic\ValidationBundle\PROCERGSGenericValidationBundle(),
             new EWZ\Bundle\RecaptchaBundle\EWZRecaptchaBundle(),
 
@@ -41,13 +41,13 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             
-            new PROCERGS\LoginCidadao\BadgesControlBundle\PROCERGSLoginCidadaoBadgesControlBundle(),
-            new PROCERGS\LoginCidadao\BadgesBundle\PROCERGSLoginCidadaoBadgesBundle(),
-            new PROCERGS\LoginCidadao\NotificationBundle\PROCERGSLoginCidadaoNotificationBundle(),
+            new LoginCidadao\BadgesControlBundle\LoginCidadaoBadgesControlBundle(),
+            //new LoginCidadao\BadgesBundle\LoginCidadaoBadgesBundle(),
+            new LoginCidadao\NotificationBundle\LoginCidadaoNotificationBundle(),
             
             new Scheb\TwoFactorBundle\SchebTwoFactorBundle(),
-            new PROCERGS\LoginCidadao\IgpBundle\PROCERGSLoginCidadaoIgpBundle(),
-            new PROCERGS\LoginCidadao\ValidationControlBundle\PROCERGSLoginCidadaoValidationControlBundle(),
+            //new LoginCidadao\IgpBundle\LoginCidadaoIgpBundle(),
+            new LoginCidadao\ValidationControlBundle\LoginCidadaoValidationControlBundle(),
 
             new LoginCidadao\TOSBundle\LoginCidadaoTOSBundle(),
 

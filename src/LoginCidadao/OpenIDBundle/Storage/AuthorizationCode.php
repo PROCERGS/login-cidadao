@@ -118,7 +118,7 @@ class AuthorizationCode implements AuthorizationCodeInterface
         if ($user_id === null) {
             $user = null;
         } else {
-            $user = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')
+            $user = $this->em->getRepository('LoginCidadaoCoreBundle:Person')
                 ->find($user_id);
         }
 

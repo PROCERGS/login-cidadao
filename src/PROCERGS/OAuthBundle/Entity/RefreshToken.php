@@ -36,7 +36,7 @@ class RefreshToken extends BaseRefreshToken
     protected $client;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\Person")
+     * @ORM\ManyToOne(targetEntity="LoginCidadao\CoreBundle\Entity\Person")
      */
     protected $user;
 

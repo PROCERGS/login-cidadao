@@ -1,0 +1,69 @@
+{% extends 'LoginCidadaoCoreBundle::base.html.twig' %}
+
+{% block body %}
+
+{% block notificationExtreme %}
+{{ include("LoginCidadaoCoreBundle::notification_extreme.html.twig", { columns: 'col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3' } ) }}
+{% endblock %}
+
+{% trans_default_domain 'messages' %}
+<div class="row">
+    <div class="col-xs-12 text-center header-shadows">
+        <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
+        <h2 class="slogan hidden-xs">{% trans %}One account. The entire Government.{% endtrans %}</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="general-content col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+        {% trans_default_domain 'help' %}
+
+        <div class="title text-center">
+            <h4>{{ 'label29'|trans }}</h3>
+        </div>
+
+        <div class="text lc_help">
+        <h2>{{ 'label1'|trans }}</h2>
+        <p>{{ 'label2'|trans }}</p>
+        <h2>{{ 'label3'|trans }}</h2>
+        <ol >
+          <li>{{ 'label4'|trans }}</li>
+          <li>{{ 'label5'|trans }}</li>
+          <li>{{ 'label6'|trans }}</li>
+        </ol>
+        <h2>{{ 'label7'|trans }}</h2>
+        <p>{{ 'label8'|trans }}</p>
+        <p>{{ 'label9'|trans }}</p>
+        <ol>
+        <li>{{ 'label10'|trans }}</li>
+        <li>{{ 'label11'|trans }}</li>
+        <li>{{ 'label12'|trans }}</li>
+        </ol>
+        <h2>{{ 'label13'|trans }}</h2>
+        <ol>
+        <li>{{ 'label14'|trans }}</li>
+        <li>{{ 'label15'|trans }}</li>
+        <li>{{ 'label16'|trans }}</li>
+        <li>{{ 'label17'|trans }}</li>
+        <li>{{ 'label18'|trans }}</li>
+        <li>{{ 'label19'|trans }}</li>
+        </ol>
+        <h2>{{ 'label20'|trans }}</h2>
+        <p>{{ 'label21'|trans }}</p>
+        <p>{{ 'label22'|trans }}</p>
+        <h2>{{ 'label23'|trans }}</h2>
+        <p>{{ 'label24'|trans }}</p>
+        <h2>{{ 'label25'|trans }}</h2>
+        <p>{{ 'label26'|trans }}</p>
+        <h2>{{ 'label27'|trans }}</h2>
+        <p>{{ 'label28'|trans }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets_custom %}
+    {% stylesheets '@lc_base_css' 'bundles/logincidadaocore/css/home/*.css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}

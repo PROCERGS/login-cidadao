@@ -13,7 +13,7 @@ namespace LoginCidadao\OpenIDBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use PROCERGS\LoginCidadao\CoreBundle\Form\DataTransformer\FromArray;
+use LoginCidadao\CoreBundle\Form\DataTransformer\FromArray;
 
 class ClientMetadataWebForm extends AbstractType
 {

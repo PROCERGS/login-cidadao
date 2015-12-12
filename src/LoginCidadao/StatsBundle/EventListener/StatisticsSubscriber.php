@@ -14,7 +14,7 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use LoginCidadao\StatsBundle\Entity\Statistics;
 use LoginCidadao\StatsBundle\Handler\StatsHandler;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
+use LoginCidadao\CoreBundle\Entity\Authorization;
 
 class StatisticsSubscriber implements EventSubscriber
 {
