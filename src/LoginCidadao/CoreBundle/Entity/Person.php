@@ -362,7 +362,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     /**
      * @ORM\Column(name="google_authenticator_secret", type="string", nullable=true)
      */
-    private $googleAuthenticatorSecret;
+    protected $googleAuthenticatorSecret;
 
     /**
      * @JMS\Expose
@@ -377,7 +377,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Exclude
      * @ORM\OneToMany(targetEntity="BackupCode", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
      */
-    private $backupCodes;
+    protected $backupCodes;
 
     public function __construct()
     {
