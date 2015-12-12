@@ -13,14 +13,10 @@
         {
             "type" : "vcs",
             "url" : "https://github.com/PROCERGS/EWZRecaptchaBundle"
-        },
-        {
-            "type" : "vcs",
-            "url" : "https://github.com/PROCERGS/login-cidadao-badges-bundle"
         }
     ],
     "require" : {
-        "php" : ">=5.3.9",
+        "php" : ">=5.4.16",
         "symfony/symfony" : "2.7.*",
         "doctrine/orm" : "~2.2,>=2.2.3,<2.5",
         "doctrine/dbal": "<2.5",
@@ -47,7 +43,7 @@
         "michelf/php-markdown": "1.4.1",
         "nelmio/api-doc-bundle": "@dev",
         "jms/security-extra-bundle": "dev-master",
-        "procergs/login-cidadao-badges-bundle": "dev-cleanup",
+        "procergs/login-cidadao-badges-bundle": "dev-master",
         "procergs/login-cidadao-igp-bundle": "dev-master",
         "scheb/two-factor-bundle": "^1.4,<1.5",
         "procergs/tos-bundle": "^1.0",
