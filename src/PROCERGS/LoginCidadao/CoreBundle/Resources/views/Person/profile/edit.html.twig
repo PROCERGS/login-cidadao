@@ -1,4 +1,4 @@
-{% extends "PROCERGSLoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+{% extends "LoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
 {% block title %}{{ 'Profile' | trans }} | {{ parent() }}{% endblock title %}
 
@@ -18,7 +18,7 @@
                     <div class="panel-title">
                         <div class="media clearfix">
                             <div class="pull-left">
-                                <img src="{{ include("PROCERGSLoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" class="profile-picture">
+                                <img src="{{ include("LoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" class="profile-picture">
                                 <button type="button" class="btn btn-xs btn-link btn-block change-picture" title="{% trans %}Upload another picture{% endtrans %}">{{ 'Change' | trans }}</button>
                             </div>
                             <div class="media-body">
@@ -69,7 +69,7 @@
                     {{ form_row(form.surname) }}
                     {{ form_row(form.birthdate) }}
                     {{ form_row(form.nationality) }}
-                    {{ include('PROCERGSLoginCidadaoCoreBundle:Form:location.form.html.twig', { form: form.placeOfBirth }) }}
+                    {{ include('LoginCidadaoCoreBundle:Form:location.form.html.twig', { form: form.placeOfBirth }) }}
                 </div>
             </div>
 
@@ -143,7 +143,7 @@
                             {% endif %}
                         </div>
                     {% endif %}
-                    {{ render(controller('LoginCidadaoCoreBundle:Person:connectNfgFragment')) }}
+                    {{ render(controller('PROCERGSLoginCidadaoCoreBundle:Person:connectNfgFragment')) }}
                 </div>
             </div>
 
