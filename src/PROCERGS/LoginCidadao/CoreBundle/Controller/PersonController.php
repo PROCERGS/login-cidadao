@@ -158,17 +158,21 @@ class PersonController extends BaseController
 
         $meuRSHelper = $this->get('meurs.helper');
 
-        $response['personMeuRS'] = $meuRSHelper->getPersonMeuRS($this->getUser(), true);
+        $response['personMeuRS'] = $meuRSHelper
+            ->getPersonMeuRS($this->getUser(), true);
 
         return $response;
     }
 
+    /**
+     * @Template()
+     */
     public function connectNfgFragmentAction()
     {
         $repo = $this->get('meurs.entities.person_meurs.repository');
 
         return array(
-            'personMeuRS' => $repo->findBy(array(
+            'personMeuRS' => $repo->findOneBy(array(
                 'person' => $this->getUser()
             ))
         );
