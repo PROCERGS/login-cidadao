@@ -84,6 +84,7 @@ assetic:
           - 'bundles/logincidadaocore/bootstrap/3.3.1/css/bootstrap-theme.min.css'
           - 'bundles/logincidadaocore/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
           - 'bundles/logincidadaocore/css/general.css'
+          - 'bundles/logincidadaocore/css/navbar.css'
           - 'bundles/logincidadaocore/css/ac.widget.css'
           - 'bundles/logincidadaocore/css/common.grid.css'
           - 'bundles/logincidadaocore/css/custom.recaptcha.css'
