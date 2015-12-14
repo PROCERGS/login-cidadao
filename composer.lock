@@ -2957,9 +2957,9 @@
             ],
             "authors": [
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -3118,12 +3118,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/login-cidadao-badges-bundle.git",
-                "reference": "8a1a254bbcf42d10374ac6c868150a2a832cfd19"
+                "reference": "fa5d2fb4a4f9c1569aae5e61e18908beab26ce82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/8a1a254bbcf42d10374ac6c868150a2a832cfd19",
-                "reference": "8a1a254bbcf42d10374ac6c868150a2a832cfd19",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/fa5d2fb4a4f9c1569aae5e61e18908beab26ce82",
+                "reference": "fa5d2fb4a4f9c1569aae5e61e18908beab26ce82",
                 "shasum": ""
             },
             "require": {
@@ -3151,7 +3151,7 @@
                 "badges",
                 "login-cidadao"
             ],
-            "time": "2015-12-14 19:26:22"
+            "time": "2015-12-14 22:14:59"
         },
         {
             "name": "procergs/login-cidadao-igp-bundle",
