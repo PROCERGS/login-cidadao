@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 
@@ -23,11 +31,12 @@ class DocumentController extends BaseController
     {
         $response = parent::generalAction($request);
 
-        $repo = $this->get('meurs.entities.person_meurs.repository');
+        if (is_array($response)) {
+            $meuRSHelper = $this->get('meurs.helper');
 
-        $response['personMeuRS'] = $repo->findBy(array(
-            'person' => $this->getUser()
-        ));
+            $response['personMeuRS'] = $meuRSHelper->getPersonMeuRS($this->getUser(),
+                true);
+        }
 
         return $response;
     }
