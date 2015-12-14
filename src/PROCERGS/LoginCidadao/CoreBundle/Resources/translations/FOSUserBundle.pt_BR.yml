@@ -1,0 +1,112 @@
+registration.submit: 'Criar conta'
+registration.check_email: 'Um email foi enviado para o endereço %email%. Para para ativar a sua conta, clique no link na mensagem.'
+registration.confirmed: 'Parabéns, %username%. A sua conta foi ativada.'
+registration.back: 'Retornar para a página de origem.'
+registration.email.subject: 'Confirmação de email para %username%!'
+registration.email.message: "Olá, %username%!\n\nPara completar a validação da sua conta, clique no link: %confirmationUrl%\n\nAtenciosamente, A Equipe.\n"
+registration.email.message.html: "Olá, %username%!<br><br>Para completar a validação da sua conta clique no botão a seguir."
+registration.register: 'Registre-se aqui!'
+profile.edit.submit: Salvar
+profile.show.username: Usuário
+profile.show.email: Email
+layout.logged_in_as: 'Conectado como %username%'
+layout.logout: Sair
+layout.login: Login
+form.group_name: 'Nome do Grupo:'
+form.username: 'Escolha seu nome de usuário:'
+form.email: Email
+form.email.example: seu@email.com
+form.current_password: 'Senha atual:'
+form.plainPassword: Senha
+form.plainPassword.example: Crie uma senha
+form.password: 'Criar uma senha:'
+form.password_confirmation: 'Confirme sua senha:'
+form.new_password: 'Nova senha:'
+form.new_password_confirmation: 'Repita a senha:'
+form.firstName: Nome
+form.firstName.example: Fulano
+form.surname: Sobrenome
+form.surname.example: de Tal
+form.birthdate: 'Data de nascimento'
+form.cep: CEP
+form.cpf: CPF
+form.city: Cidade
+form.phone: Telefone
+form.phone.example: (51) 99999-9999
+form.mobile: Celular
+form.mobile.example: (51) 99999-9999
+resseting.forgot_password: 'Esqueceu sua senha?'
+resetting.request.invalid_username: 'O CPF, nome de usuário ou email "%username%" não está cadastrado.'
+resetting.request.username: 'Email ou CPF:'
+resetting.request.submit: 'Recuperar senha'
+resetting.check_email: 'Foi enviado um email para %email%. Para recuperar a sua senha, clique no link da mensagem.'
+resetting.email.subject: 'Redefinir senha'
+resetting.email.message: 'Alguém solicitou recentemente para redefinir sua senha do Login Cidadão.'
+resetting.reset.submit: 'Alterar senha'
+resetting.password_already_requested: 'Este usuário já solicitou uma senha nas últimas 24 horas.'
+change_password.submit: 'Alterar senha'
+change_password.flash.success: 'Senha alterada com sucesso!.'
+'As a safety measure we need you to type your password to confirm any changes.': 'Como medida de segurança, por favor informe sua senha para confirmar quaisquer mudanças.'
+'Reset Password': 'Redefinir senha'
+Cancel: Cancelar
+'Enter your username or email': 'Informe seu CPF, nome de usuário ou email'
+form.adress: Logradouro
+form.district: Bairro
+form.state: Estado
+form.map: 'ver mapa'
+form.adressnumber: Número
+grid.search.noresult: 'Nenhum registro encontrado'
+grid.search.title: Resultados
+grid.search.button: Pesquisar
+cep.search.title: 'Consulta cep'
+email.changed.message.subject: 'Seu email foi alterado!'
+email.changed.message.text: "Olá, %name%!\n\nEstamos lhe enviando esse email para informar-lhe que seu endereço de email foi alterado para %email%.\n\nSe não foi você quem fez essa mudança, por favor entre em contato com a equipe do Login Cidadão pois seu cadastro pode ter sido comprometido!\n"
+email.changed.message.text.html: "Olá, %name%!<br><br>Estamos lhe enviando esse email para informar-lhe que seu endereço de email foi alterado para %email%.<br><br>Se não foi você quem fez essa mudança, por favor entre em contato com a equipe do Login Cidadão pois seu cadastro pode ter sido comprometido!"
+'Connect with Facebook': 'Conectar usando Facebook'
+'Connect with Twitter': 'Conectar usando Twitter'
+'Register with Twitter': 'Registrar usando Twitter'
+'Since twitter won''t share your email, we need you to type your email manually.': 'Infelizmente o twitter não compartilha seu endereço de email, portanto você terá que digitá-lo manualmente.'
+'This email will be used for future contact and can also be user to log in, so this must be a valid email.': 'Este email será usado para contatos futuros e também pode ser usado para acessar o sistema, por tanto certifique-se de digitar um endereço de email válido.'
+'Email:': 'Email:'
+Continue: Continuar
+'Don''t know your CEP?': 'Não sabe seu CEP?'
+'Search it!': 'Pesquise aqui!'
+'Your address': 'Seu endereço'
+form.message: Mensagem
+form.submit: Enviar
+security.login.submit: Entrar
+'Use accounts from other services': 'Use contas de outros serviços'
+or: ou
+registration.email.click: 'Confirmar Email'
+'Log in using your Citizen''s Login': 'Acesse usando seu Login Cidadão'
+'Upload another picture': 'Enviar outra foto'
+'By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.': 'Ao clicar em criar conta, você concorda com a <a href="%linkTerms%">Privacidade e Termos de uso</a> do serviço, incluindo nosso uso de cookies.'
+'Do you really want to unlink <strong class="social-network-name"></strong>?': 'Tem certeza que deseja desvincular sua conta do <strong class="social-network-name"></strong>?'
+Yes: Sim
+'Connect to the Nota Fiscal Gaúcha': 'Conectar à Nota Fiscal Gaúcha'
+'Continue Registration': 'Continuar Cadastro'
+form.voterRegistration: 'Título de Eleitor'
+'Don''t know your Voter Registration number?': 'Não sabe seu Título de Eleitor?'
+facebook.token.error: 'Aparentemente houve um erro na autenticação com o Facebook. Por favor, tente logar novamente!'
+facebook.nousername: 'Conectado ao Facebook'
+twitter.nousername: 'Conectado ao Twitter'
+'Use your account on Nota Fiscal Gaúcha and validate your Voter Registration': 'Use sua conta na Nota Fiscal Gaúcha e valide seu Título de Eleitor'
+'Use your account on Nota Fiscal Gaúcha and authorize us to validate your Voter Registration': 'Use sua conta na Nota Fiscal Gaúcha e autorize a validação de Título de Eleitor'
+'The Voter Registration used is not valid according to Nota Fiscal Gaúcha. Please type your Voter Registration correctly': 'O Título informado não é valido pela Nota Fiscal Gaúcha. Por favor, informe corretamente seu Título de Eleitor'
+security.login.remember_me: 'Manter conectado'
+'Log in now %link_start%or create your account here!%link_end%': 'Acesse agora %link_start%ou crie sua conta aqui!%link_end%'
+'Connect with Google': 'Conectar usando Google'
+'General': 'Geral'
+'RG' : 'RG'
+'add': 'Adicionar'
+Change: Alterar
+Personal Information: Informações Pessoais
+Contact Information: Informações de Contato
+Social Networks and other connections: Redes Sociais e outras conexões
+Account Password: Senha da sua Conta
+Use your Facebook picture: Usar sua foto do Facebook
+Remove your picture: Remover foto do perfil
+Your profile picure will be changed to <strong></strong>: Sua foto de perfil será trocada para <strong></strong>
+Your Facebook profile picure will be used.: Sua foto de perfil do Facebook será usada.
+form.register.call_to_action: Quero me cadastrar
+form.login.call_to_action: Já tenho cadastro

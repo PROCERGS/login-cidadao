@@ -1,0 +1,4 @@
+lc_core:
+    resource: "@LoginCidadaoCoreBundle/Controller/"
+    type: annotation
+    prefix: /

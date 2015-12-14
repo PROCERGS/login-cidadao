@@ -82,8 +82,7 @@ procergs_generic_locale:
     prefix:   /locale
 
 procergs_login_cidadao_core:
-    resource: "@LoginCidadaoCoreBundle/Controller/"
-    type:     annotation
+    resource: "@LoginCidadaoCoreBundle/Resources/config/routing.yml"
     prefix:   /
 lc_home:
     defaults: { _controller: FOSUserBundle:Security:login }
