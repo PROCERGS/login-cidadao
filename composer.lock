@@ -1326,7 +1326,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/45d6f40178216a840885b4ca6d7de9e67068568a",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/e39b040e272c72f0a090c67d802e1d3b2d0b0313",
                 "reference": "45d6f40178216a840885b4ca6d7de9e67068568a",
                 "shasum": ""
             },
@@ -2313,7 +2313,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpGaufretteBundle/zipball/0b2750033a353c0a2a6d05f7f0d2a60581257d20",
+                "url": "https://api.github.com/repos/KnpLabs/KnpGaufretteBundle/zipball/45dc19248b1c919a44082aab161b36e9f4f6715d",
                 "reference": "0b2750033a353c0a2a6d05f7f0d2a60581257d20",
                 "shasum": ""
             },
@@ -2690,7 +2690,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/49238f44aa73f545c0a927b00251c89a0acf3005",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/93b189b16ad0d410eb9b300eae7ab0ad7d8edede",
                 "reference": "49238f44aa73f545c0a927b00251c89a0acf3005",
                 "shasum": ""
             },
@@ -2957,9 +2957,9 @@
             ],
             "authors": [
                 {
-                    "name": "Johannes M. Schmitt",
+                    "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -3114,16 +3114,16 @@
         {
             "name": "procergs/login-cidadao-badges-bundle",
             "version": "dev-master",
-            "target-dir": "PROCERGS/LoginCidadao/BadgesBundle",
+            "target-dir": "LoginCidadao/BadgesBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/login-cidadao-badges-bundle.git",
-                "reference": "617436bd165cf52ff0955918aeb12d40a93878d7"
+                "reference": "8a1a254bbcf42d10374ac6c868150a2a832cfd19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/617436bd165cf52ff0955918aeb12d40a93878d7",
-                "reference": "617436bd165cf52ff0955918aeb12d40a93878d7",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/8a1a254bbcf42d10374ac6c868150a2a832cfd19",
+                "reference": "8a1a254bbcf42d10374ac6c868150a2a832cfd19",
                 "shasum": ""
             },
             "require": {
@@ -3132,7 +3132,7 @@
             "type": "symfony-bundle",
             "autoload": {
                 "psr-0": {
-                    "PROCERGS\\LoginCidadao\\BadgesBundle": ""
+                    "LoginCidadao\\BadgesBundle": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -3151,7 +3151,7 @@
                 "badges",
                 "login-cidadao"
             ],
-            "time": "2015-10-05 01:41:38"
+            "time": "2015-12-14 19:26:22"
         },
         {
             "name": "procergs/login-cidadao-igp-bundle",
