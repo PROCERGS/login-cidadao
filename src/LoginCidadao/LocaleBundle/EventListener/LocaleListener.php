@@ -1,6 +1,6 @@
 <?php
 
-namespace PROCERGS\Generic\LocaleBundle\EventListener;
+namespace LoginCidadao\LocaleBundle\EventListener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
