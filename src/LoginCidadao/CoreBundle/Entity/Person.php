@@ -13,7 +13,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use PROCERGS\Generic\ValidationBundle\Validator\Constraints as PROCERGSAssert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
-use LoginCidadao\NotificationBundle\Entity\NotificationToken;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\OAuthBundle\Model\ClientInterface;
 use Doctrine\Common\Collections\Collection;
@@ -362,7 +361,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     /**
      * @ORM\Column(name="google_authenticator_secret", type="string", nullable=true)
      */
-    private $googleAuthenticatorSecret;
+    protected $googleAuthenticatorSecret;
 
     /**
      * @JMS\Expose
@@ -377,7 +376,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Exclude
      * @ORM\OneToMany(targetEntity="BackupCode", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
      */
-    private $backupCodes;
+    protected $backupCodes;
 
     public function __construct()
     {
