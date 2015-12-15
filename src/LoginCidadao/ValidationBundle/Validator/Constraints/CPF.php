@@ -1,6 +1,6 @@
 <?php
 
-namespace PROCERGS\Generic\ValidationBundle\Validator\Constraints;
+namespace LoginCidadao\ValidationBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 

@@ -1,3 +1,0 @@
-procergs_generic_validation_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: PROCERGSGenericValidationBundle:Default:index }
