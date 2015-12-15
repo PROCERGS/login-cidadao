@@ -15,7 +15,7 @@ use FOS\UserBundle\Form\Factory\FactoryInterface;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use PROCERGS\Generic\ValidationBundle\Validator\Constraints\UsernameValidator;
+use LoginCidadao\ValidationBundle\Validator\Constraints\UsernameValidator;
 
 class FOSUBUserProvider extends BaseClass
 {

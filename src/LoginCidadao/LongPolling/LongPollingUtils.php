@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace PROCERGS\Generic\LongPolling;
+namespace LoginCidadao\LongPolling;
 
 use LoginCidadao\APIBundle\Exception\RequestTimeoutException;
 
