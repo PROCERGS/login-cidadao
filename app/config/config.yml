@@ -47,7 +47,6 @@ twig:
 assetic:
     debug:          %kernel.debug%
     use_controller: false
-    bundles:        [ "LoginCidadaoCoreBundle", "LoginCidadaoNotificationBundle", "LoginCidadaoTOSBundle" ]
     #java: /usr/bin/java
     assets:
       bootstrap_fonts_woff:
