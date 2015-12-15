@@ -4,7 +4,7 @@ namespace LoginCidadao\APIBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use PROCERGS\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 
 /**
  * ActionLogRepository
@@ -19,7 +19,7 @@ class ActionLogRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('l')
             ->select('l, c')
-            ->innerJoin('PROCERGSOAuthBundle:Client', 'c', 'WITH',
+            ->innerJoin('LoginCidadaoOAuthBundle:Client', 'c', 'WITH',
                         'c.id = l.clientId')
             ->where('l.userId = :person_id')
             ->setParameter('person_id', $person->getId())

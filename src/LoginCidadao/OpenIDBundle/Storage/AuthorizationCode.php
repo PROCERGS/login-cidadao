@@ -56,14 +56,14 @@ class AuthorizationCode implements AuthorizationCodeInterface
     public function getAuthorizationCode($code)
     {
         // Get Code
-        $code = $this->em->getRepository('PROCERGSOAuthBundle:AuthCode')
+        $code = $this->em->getRepository('LoginCidadaoOAuthBundle:AuthCode')
             ->findOneBy(array('token' => $code));
 
         if (!$code) {
             return null;
         }
 
-        if ($code instanceof \PROCERGS\OAuthBundle\Entity\AuthCode) {
+        if ($code instanceof \LoginCidadao\OAuthBundle\Entity\AuthCode) {
             $response = array(
                 'client_id' => $code->getClient()->getClientId(),
                 'user_id' => $code->getUser()->getId(),
@@ -112,7 +112,7 @@ class AuthorizationCode implements AuthorizationCodeInterface
                                          $id_token = null)
     {
         $id     = explode('_', $client_id);
-        $client = $this->em->getRepository('PROCERGSOAuthBundle:Client')
+        $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
             ->find($id[0]);
 
         if ($user_id === null) {
@@ -124,7 +124,7 @@ class AuthorizationCode implements AuthorizationCodeInterface
 
         if (!$client) throw new \Exception('Unknown client identifier');
 
-        $authorizationCode = new \PROCERGS\OAuthBundle\Entity\AuthCode();
+        $authorizationCode = new \LoginCidadao\OAuthBundle\Entity\AuthCode();
         $authorizationCode->setToken($code);
         $authorizationCode->setClient($client);
         $authorizationCode->setUser($user);
@@ -152,7 +152,7 @@ class AuthorizationCode implements AuthorizationCodeInterface
      */
     public function expireAuthorizationCode($code)
     {
-        $code = $this->em->getRepository('PROCERGSOAuthBundle:AuthCode')
+        $code = $this->em->getRepository('LoginCidadaoOAuthBundle:AuthCode')
             ->findOneBy(array('token' => $code));
         $this->em->remove($code);
         $this->em->flush();

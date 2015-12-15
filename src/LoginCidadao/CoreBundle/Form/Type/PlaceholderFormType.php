@@ -40,7 +40,7 @@ class PlaceholderFormType extends AbstractType
             'choice_label' => 'name',
             'query_builder' => function (EntityRepository $er) use(&$user) {
                 return $er->createQueryBuilder('u')
-                        ->join('PROCERGSOAuthBundle:Client', 'c', 'with',
+                        ->join('LoginCidadaoOAuthBundle:Client', 'c', 'with',
                                'u.client = c')
                         ->where(':person MEMBER OF c.owners')
                         ->setParameter('person', $user)

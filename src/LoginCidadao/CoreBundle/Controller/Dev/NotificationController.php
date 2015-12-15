@@ -66,7 +66,7 @@ class NotificationController extends Controller
         $sql = $this->getDoctrine()->getManager()
             ->getRepository('LoginCidadaoNotificationBundle:Category')
             ->createQueryBuilder('u')
-            ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'u.client = c')
+            ->join('LoginCidadaoOAuthBundle:Client', 'c', 'with', 'u.client = c')
             ->where(':person MEMBER OF c.owners')
             ->setParameter('person', $this->getUser())
             ->orderBy('u.id', 'desc');
@@ -89,7 +89,7 @@ class NotificationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $client = $em->getRepository('LoginCidadaoNotificationBundle:Category')
             ->createQueryBuilder('u')
-            ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'u.client = c')
+            ->join('LoginCidadaoOAuthBundle:Client', 'c', 'with', 'u.client = c')
             ->where(':person MEMBER OF c.owners')
             ->andWhere('u.id = :id')
             ->setParameter('person', $this->getUser())
@@ -134,7 +134,7 @@ class NotificationController extends Controller
                 ->createQueryBuilder('u')
                 ->join('LoginCidadaoNotificationBundle:Category',
                        'cat', 'with', 'u.category = cat')
-                ->join('PROCERGSOAuthBundle:Client', 'c', 'with',
+                ->join('LoginCidadaoOAuthBundle:Client', 'c', 'with',
                        'cat.client = c')
                 ->where(':person MEMBER OF c.owners')
                 ->andWhere('u.id = :id')
@@ -146,7 +146,7 @@ class NotificationController extends Controller
         } elseif (($categoryId = $request->get('category_id')) || (($data = $request->get($form->getName())) && ($categoryId = $data['category']))) {
             $category = $em->getRepository('LoginCidadaoNotificationBundle:Category')
                 ->createQueryBuilder('u')
-                ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'u.client = c')
+                ->join('LoginCidadaoOAuthBundle:Client', 'c', 'with', 'u.client = c')
                 ->where(':person MEMBER OF c.owners')
                 ->andWhere('u.id = :id')
                 ->setParameter('person', $this->getUser())
@@ -184,7 +184,7 @@ class NotificationController extends Controller
             ->createQueryBuilder('u')
             ->join('LoginCidadaoNotificationBundle:Category',
                    'cat', 'with', 'u.category = cat')
-            ->join('PROCERGSOAuthBundle:Client', 'c', 'with', 'cat.client = c')
+            ->join('LoginCidadaoOAuthBundle:Client', 'c', 'with', 'cat.client = c')
             ->where(':person MEMBER OF c.owners')
             ->andWhere('cat.id = :id')
             ->setParameter('person', $this->getUser())
@@ -214,7 +214,7 @@ class NotificationController extends Controller
                 ->createQueryBuilder('u')
                 ->join('LoginCidadaoNotificationBundle:Category',
                        'cat', 'with', 'u.category = cat')
-                ->join('PROCERGSOAuthBundle:Client', 'c', 'with',
+                ->join('LoginCidadaoOAuthBundle:Client', 'c', 'with',
                        'cat.client = c')
                 ->where(':person MEMBER OF c.owners')
                 ->andWhere('u.id = :id')

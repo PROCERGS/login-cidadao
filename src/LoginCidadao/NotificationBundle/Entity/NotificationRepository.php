@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use LoginCidadao\CoreBundle\Entity\Person;
 use Doctrine\ORM\Query;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use PROCERGS\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 
 class NotificationRepository extends EntityRepository
 {
@@ -58,7 +58,7 @@ class NotificationRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder('n')
             ->select('c')
             ->from('LoginCidadaoNotificationBundle:Notification', 'n')
-            ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'n.sender = c')
+            ->join('LoginCidadaoOAuthBundle:Client', 'c', 'WITH', 'n.sender = c')
             ->where('n.person = :person')
             ->andWhere('n.readDate IS NULL')
             ->setParameter('person', $person)

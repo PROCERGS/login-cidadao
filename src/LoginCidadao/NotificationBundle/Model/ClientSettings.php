@@ -2,7 +2,7 @@
 
 namespace LoginCidadao\NotificationBundle\Model;
 
-use PROCERGS\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 

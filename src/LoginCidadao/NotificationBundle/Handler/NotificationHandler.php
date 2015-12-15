@@ -9,7 +9,7 @@ use LoginCidadao\NotificationBundle\Form\NotificationType;
 use LoginCidadao\NotificationBundle\Model\NotificationInterface;
 use LoginCidadao\NotificationBundle\Exception\InvalidFormException;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use PROCERGS\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\NotificationBundle\Model\CategoryInterface;
 use LoginCidadao\NotificationBundle\Entity\PersonNotificationOption;
 use LoginCidadao\NotificationBundle\Model\NotificationSettings;
@@ -366,7 +366,7 @@ class NotificationHandler implements NotificationHandlerInterface
     public function getLoginCidadaoClient()
     {
         if ($this->oauthDefaultClient === null) {
-            $this->oauthDefaultClient = $this->om->getRepository('PROCERGSOAuthBundle:Client')->findOneBy(array(
+            $this->oauthDefaultClient = $this->om->getRepository('LoginCidadaoOAuthBundle:Client')->findOneBy(array(
                 'uid' => $this->oauthDefaultClientUid));
         }
         return $this->oauthDefaultClient;

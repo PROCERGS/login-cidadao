@@ -2,7 +2,7 @@
 
 namespace LoginCidadao\CoreBundle\Model;
 
-use PROCERGS\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\EntityManager;
 
@@ -33,7 +33,7 @@ interface PersonInterface
 
     /**
      * Checks if a given Client can access this Person's specified scope.
-     * @param \PROCERGS\OAuthBundle\Entity\Client $client
+     * @param \LoginCidadao\OAuthBundle\Entity\Client $client
      * @param mixed $scope can be a single scope or an array with several.
      * @return boolean
      */
@@ -42,7 +42,7 @@ interface PersonInterface
     /**
      * Checks if this Person has any authorization for a given Client.
      * WARNING: Note that it does NOT validate scope!
-     * @param \PROCERGS\OAuthBundle\Entity\Client | integer $client
+     * @param \LoginCidadao\OAuthBundle\Entity\Client | integer $client
      */
     public function hasAuthorization($client);
 

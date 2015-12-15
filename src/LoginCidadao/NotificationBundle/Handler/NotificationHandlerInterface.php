@@ -4,7 +4,7 @@ namespace LoginCidadao\NotificationBundle\Handler;
 
 use LoginCidadao\NotificationBundle\Model\NotificationInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use PROCERGS\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\NotificationBundle\Model\CategoryInterface;
 use LoginCidadao\NotificationBundle\Model\NotificationSettings;
 

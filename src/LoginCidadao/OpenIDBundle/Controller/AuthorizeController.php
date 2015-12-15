@@ -30,7 +30,7 @@ class AuthorizeController extends BaseController
 
         $id     = explode('_', $request->get('client_id'));
         $em     = $this->getDoctrine()->getManager();
-        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->find($id[0]);
+        $client = $em->getRepository('LoginCidadaoOAuthBundle:Client')->find($id[0]);
         $event  = new OAuthEvent($this->getUser(), $client, $is_authorized);
         $this->get('event_dispatcher')->dispatch(OAuthEvent::POST_AUTHORIZATION_PROCESS,
             $event);
@@ -46,7 +46,7 @@ class AuthorizeController extends BaseController
     {
         $id     = explode('_', $client_id);
         $em     = $this->getDoctrine()->getManager();
-        $client = $em->getRepository('PROCERGSOAuthBundle:Client')
+        $client = $em->getRepository('LoginCidadaoOAuthBundle:Client')
             ->find($id[0]);
 
         $scope = explode(' ', $scope);
@@ -82,7 +82,7 @@ class AuthorizeController extends BaseController
         $request = $this->getRequest();
         $id      = explode('_', $request->get('client_id'));
         $em      = $this->getDoctrine()->getManager();
-        $client  = $em->getRepository('PROCERGSOAuthBundle:Client')->find($id[0]);
+        $client  = $em->getRepository('LoginCidadaoOAuthBundle:Client')->find($id[0]);
 
         if ($client instanceof \FOS\OAuthServerBundle\Model\ClientInterface) {
             $event = $this->get('event_dispatcher')->dispatch(

@@ -15,9 +15,9 @@ use LoginCidadao\NotificationBundle\Entity\Notification;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use PROCERGS\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use PROCERGS\OAuthBundle\Model\ClientUser;
+use LoginCidadao\OAuthBundle\Model\ClientUser;
 use LoginCidadao\APIBundle\Security\Audit\Annotation as Audit;
 use LoginCidadao\APIBundle\Entity\LogoutKey;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -161,7 +161,7 @@ class PersonController extends BaseController
     public function sendNotificationAction(Request $request)
     {
         $token       = $this->get('security.context')->getToken();
-        $accessToken = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:AccessToken')->findOneBy(array(
+        $accessToken = $this->getDoctrine()->getRepository('LoginCidadaoOAuthBundle:AccessToken')->findOneBy(array(
             'token' => $token->getToken()));
         $client      = $accessToken->getClient();
 
@@ -174,7 +174,7 @@ class PersonController extends BaseController
             ->select('cnc, p')
             ->join('LoginCidadaoCoreBundle:Person', 'p', 'WITH',
                    'a.person = p')
-            ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'a.client = c')
+            ->join('LoginCidadaoOAuthBundle:Client', 'c', 'WITH', 'a.client = c')
             ->join('LoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH',
                    'cnc.client = c')
             ->where('c.id = '.$client->getId().' and p.id = :person_id and cnc.id = :config_id')
@@ -238,7 +238,7 @@ class PersonController extends BaseController
     {
         $token       = $this->get('security.context')->getToken();
         $accessToken = $this->getDoctrine()
-            ->getRepository('PROCERGSOAuthBundle:AccessToken')
+            ->getRepository('LoginCidadaoOAuthBundle:AccessToken')
             ->findOneBy(array(
             'token' => $token->getToken()
         ));

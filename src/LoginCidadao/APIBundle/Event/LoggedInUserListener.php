@@ -7,7 +7,7 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use SimpleThings\EntityAudit\AuditConfiguration;
 use Symfony\Component\HttpKernel\HttpKernel;
-use PROCERGS\OAuthBundle\Model\ClientUser;
+use LoginCidadao\OAuthBundle\Model\ClientUser;
 use Doctrine\ORM\EntityManager;
 
 class LoggedInUserListener
@@ -51,7 +51,7 @@ class LoggedInUserListener
         // Handling Client Credentials
         if ($token->getUser() === null) {
             $accessToken = $this->em->
-                getRepository('PROCERGSOAuthBundle:AccessToken')->
+                getRepository('LoginCidadaoOAuthBundle:AccessToken')->
                 findOneBy(array('token' => $token->getToken()));
             $client = $accessToken->getClient();
 

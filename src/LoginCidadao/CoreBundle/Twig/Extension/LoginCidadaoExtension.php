@@ -2,7 +2,7 @@
 namespace LoginCidadao\CoreBundle\Twig\Extension;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use PROCERGS\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Entity\Client;
 
 class LoginCidadaoExtension extends \Twig_Extension
 {

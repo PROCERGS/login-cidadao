@@ -5,12 +5,12 @@ namespace LoginCidadao\NotificationBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use LoginCidadao\NotificationBundle\Model\CategoryInterface;
-use PROCERGS\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\NotificationBundle\Entity\Notification;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
 use LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
-use PROCERGS\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use Michelf\MarkdownExtra;
 
 /**
@@ -90,7 +90,7 @@ class Category implements CategoryInterface, UniqueEntityInterface
     /**
      * @var string
      * @Assert\NotBlank()
-     * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="categories")
+     * @ORM\ManyToOne(targetEntity="LoginCidadao\OAuthBundle\Entity\Client", inversedBy="categories")
      * @ORM\JoinColumn(name="sender_id", referencedColumnName="id")
      */
     private $client;

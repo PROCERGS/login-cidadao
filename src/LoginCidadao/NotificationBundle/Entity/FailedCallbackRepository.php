@@ -3,7 +3,7 @@
 namespace LoginCidadao\NotificationBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-use PROCERGS\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use Doctrine\ORM\QueryBuilder;
 
 class FailedCallbackRepository extends EntityRepository

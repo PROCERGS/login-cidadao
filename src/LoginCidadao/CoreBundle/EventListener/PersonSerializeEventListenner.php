@@ -8,7 +8,7 @@ use JMS\Serializer\EventDispatcher\ObjectEvent;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpFoundation\Request;
-use PROCERGS\OAuthBundle\Model\AccessTokenManager;
+use LoginCidadao\OAuthBundle\Model\AccessTokenManager;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class PersonSerializeEventListenner implements EventSubscriberInterface

@@ -18,7 +18,7 @@ class ClientController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $clients = $em->getRepository('PROCERGSOAuthBundle:Client');
+        $clients = $em->getRepository('LoginCidadaoOAuthBundle:Client');
         $client  = $clients->find($clientId);
         $user    = $this->getUser();
 

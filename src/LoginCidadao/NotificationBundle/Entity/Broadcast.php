@@ -4,7 +4,7 @@ namespace LoginCidadao\NotificationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use PROCERGS\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\CoreBundle\Entity\Person;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as JMS;

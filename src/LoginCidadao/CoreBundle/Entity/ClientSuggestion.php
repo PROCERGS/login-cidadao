@@ -2,7 +2,7 @@
 namespace LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use PROCERGS\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\CoreBundle\Entity\Person;
 
 /**

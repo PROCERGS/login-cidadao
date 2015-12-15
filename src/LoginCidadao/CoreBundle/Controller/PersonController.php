@@ -62,8 +62,8 @@ class PersonController extends Controller
         if ($form->isValid()) {
             $security   = $this->get('security.context');
             $em         = $this->getDoctrine()->getManager();
-            $tokens     = $em->getRepository('PROCERGSOAuthBundle:AccessToken');
-            $clients    = $em->getRepository('PROCERGSOAuthBundle:Client');
+            $tokens     = $em->getRepository('LoginCidadaoOAuthBundle:AccessToken');
+            $clients    = $em->getRepository('LoginCidadaoOAuthBundle:Client');
             $translator = $this->get('translator');
 
             try {
@@ -79,7 +79,7 @@ class PersonController extends Controller
                     'client' => $client,
                     'user' => $user
                 ));
-                $refreshTokens  = $em->getRepository('PROCERGSOAuthBundle:RefreshToken')
+                $refreshTokens  = $em->getRepository('LoginCidadaoOAuthBundle:RefreshToken')
                     ->findBy(array(
                     'client' => $client,
                     'user' => $user

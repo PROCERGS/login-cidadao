@@ -8,8 +8,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use PROCERGS\OAuthBundle\Model\ClientInterface;
-use PROCERGS\OAuthBundle\Model\ClientUser;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OAuthBundle\Model\ClientUser;
 
 class BaseController extends FOSRestController
 {
@@ -74,7 +74,7 @@ class BaseController extends FOSRestController
     {
         $token = $this->get('security.context')->getToken();
         $accessToken = $this->getDoctrine()->
-            getRepository('PROCERGSOAuthBundle:AccessToken')->
+            getRepository('LoginCidadaoOAuthBundle:AccessToken')->
             findOneBy(array('token' => $token->getToken()));
         $client = $accessToken->getClient();
         return $client;

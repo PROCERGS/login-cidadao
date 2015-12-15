@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use PROCERGS\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\CoreBundle\Helper\GridHelper;
 use LoginCidadao\NotificationBundle\Entity\Notification;
 use LoginCidadao\NotificationBundle\Entity\Category;
@@ -35,7 +35,7 @@ class ClientController extends Controller
     public function gridAction(Request $request)
     {
         $em   = $this->getDoctrine()->getManager();
-        $sql  = $em->getRepository('PROCERGSOAuthBundle:Client')
+        $sql  = $em->getRepository('LoginCidadaoOAuthBundle:Client')
             ->createQueryBuilder('c')
             ->addOrderBy('c.id', 'desc');
         ;
@@ -58,7 +58,7 @@ class ClientController extends Controller
     public function editAction(Request $request, $id)
     {
         $em     = $this->getDoctrine()->getManager();
-        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->find($id);
+        $client = $em->getRepository('LoginCidadaoOAuthBundle:Client')->find($id);
         if (!$client) {
             return $this->redirect($this->generateUrl('lc_admin_app_new'));
         }

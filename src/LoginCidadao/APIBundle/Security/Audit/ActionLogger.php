@@ -114,7 +114,7 @@ class ActionLogger
             return;
         }
 
-        $accessTokenRepo = $this->em->getRepository('PROCERGSOAuthBundle:AccessToken');
+        $accessTokenRepo = $this->em->getRepository('LoginCidadaoOAuthBundle:AccessToken');
         $accessToken = $accessTokenRepo->findOneBy(array(
             'token' => $token->getToken()
         ));

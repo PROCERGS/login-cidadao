@@ -3,7 +3,7 @@
 namespace LoginCidadao\NotificationBundle\Model;
 
 use LoginCidadao\NotificationBundle\Handler\AuthenticatedNotificationHandlerInterface;
-use PROCERGS\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 
 class ClientNotificationIterable extends NotificationIterable
 {

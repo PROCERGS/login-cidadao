@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Translation\TranslatorInterface;
 use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use PROCERGS\OAuthBundle\Model\ClientUser;
+use LoginCidadao\OAuthBundle\Model\ClientUser;
 use Doctrine\ORM\EntityManager;
 
 class LoggedInUserListener

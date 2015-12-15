@@ -13,7 +13,7 @@ use LoginCidadao\NotificationBundle\Form\SettingsType;
 use LoginCidadao\NotificationBundle\Model\NotificationIterable;
 use LoginCidadao\NotificationBundle\Model\ClientNotificationIterable;
 use LoginCidadao\CoreBundle\Helper\GridHelper;
-use PROCERGS\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 
 class NotificationController extends Controller
 {
@@ -53,7 +53,7 @@ class NotificationController extends Controller
             $offset = null;
         }
 
-        $client = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:Client')
+        $client = $this->getDoctrine()->getRepository('LoginCidadaoOAuthBundle:Client')
             ->find($clientId);
 
         $grid = $this->getNotificationGrid($offset, 10, $client)->createView($request);
@@ -70,7 +70,7 @@ class NotificationController extends Controller
         $person = $this->getUser();
         if (null !== $clientId) {
             $client = $this->getDoctrine()
-                ->getRepository('PROCERGSOAuthBundle:Client')
+                ->getRepository('LoginCidadaoOAuthBundle:Client')
                 ->find($clientId);
             if (!$client instanceof ClientInterface || !$person->hasAuthorization($client)) {
                 throw new AccessDeniedHttpException();
@@ -115,7 +115,7 @@ class NotificationController extends Controller
     public function getGridClientFragmentAction(Request $request, $clientId,
                                                 $offset = 0)
     {
-        $client = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:Client')
+        $client = $this->getDoctrine()->getRepository('LoginCidadaoOAuthBundle:Client')
             ->find($clientId);
         $grid   = $this->getNotificationGrid($offset, 10, $client)->createView($request);
 

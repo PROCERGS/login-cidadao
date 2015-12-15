@@ -4,7 +4,7 @@ namespace LoginCidadao\NotificationBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use PROCERGS\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use Doctrine\ORM\QueryBuilder;
 
 class CategoryRepository extends EntityRepository
@@ -40,7 +40,7 @@ class CategoryRepository extends EntityRepository
         $qb = $this->getEntityManager()
             ->getRepository('LoginCidadaoNotificationBundle:Category')
             ->createQueryBuilder('cat')
-            ->join('PROCERGSOAuthBundle:Client', 'c', 'WITH', 'cat.client = c')
+            ->join('LoginCidadaoOAuthBundle:Client', 'c', 'WITH', 'cat.client = c')
             ->where(':person MEMBER OF c.owners')
             ->setParameter('person', $person)
             ->orderBy('cat.id', 'DESC');
