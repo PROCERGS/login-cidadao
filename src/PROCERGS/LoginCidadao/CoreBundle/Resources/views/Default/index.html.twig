@@ -40,6 +40,24 @@
                         <div class="col-md-3 text-center"><a class="connect facebook" data-href="{{ path("lc_link_facebook") }}">Facebook</a></div>
                         <div class="col-md-3 text-center"><a class="connect twitter" href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}">Twitter</a></div>
                         <div class="col-md-3 text-center"><a class="connect google" href="{{ path('hwi_oauth_service_redirect', {'service': 'google'}) }}">Google</a></div>
+                        <style scoped>
+                            .lc-box .nfg {
+                                background-position: 2px 0;
+                                background-color: #EF9618;
+                                {% image '@LoginCidadaoCoreBundle/Resources/public/images/meurs_connect_nfg_home.png' %}
+                                background-image: url('{{ asset_url | e('css') }}');
+                                {% endimage %}
+                            }
+
+                            @media (max-width: 767px) {
+                                .lc-box .nfg {
+                                    background-position: 0;
+                                    {% image '@LoginCidadaoCoreBundle/Resources/public/images/meurs_connect_nfg.png' %}
+                                    background-image: url('{{ asset_url | e('css') }}');
+                                    {% endimage %}
+                                }
+                            }
+                        </style>
                         <div class="col-md-3 text-center"><a class="connect nfg nfgpopup" data-href="{{ path('nfg_login') }}">NFG</a></div>
                     </div>
                 </div>
