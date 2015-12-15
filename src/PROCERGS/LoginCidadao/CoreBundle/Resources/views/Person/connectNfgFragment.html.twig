@@ -2,7 +2,7 @@
     #profile-edit .nfg {
         background-color: #EF9618;
         {% image '@LoginCidadaoCoreBundle/Resources/public/images/meurs_connect_nfg.png' %}
-        background-image: url('{{ asset_url }}');
+        background-image: url('{{ asset_url | e('css') }}');
         {% endimage %}
         background-repeat: no-repeat;
         white-space: nowrap;
