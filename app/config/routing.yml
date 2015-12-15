@@ -77,7 +77,7 @@ NelmioApiDocBundle:
 
 # login-cidadao
 procergs_generic_locale:
-    resource: "@PROCERGSGenericLocaleBundle/Controller/"
+    resource: "@LoginCidadaoLocaleBundle/Controller/"
     type:     annotation
     prefix:   /locale
 
@@ -95,7 +95,7 @@ simple_things_entity_audit:
 
 # OAuth Routes
 procergso_auth:
-    resource: "@PROCERGSOAuthBundle/Resources/config/routing.yml"
+    resource: "@LoginCidadaoOAuthBundle/Resources/config/routing.yml"
     prefix:   /auth
 
 fos_oauth_server_token:

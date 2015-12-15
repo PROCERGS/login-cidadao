@@ -146,10 +146,10 @@ swiftmailer:
 
 fos_oauth_server:
   db_driver: orm
-  client_class:         PROCERGS\OAuthBundle\Entity\Client
-  access_token_class:   PROCERGS\OAuthBundle\Entity\AccessToken
-  refresh_token_class:  PROCERGS\OAuthBundle\Entity\RefreshToken
-  auth_code_class:      PROCERGS\OAuthBundle\Entity\AuthCode
+  client_class:         LoginCidadao\OAuthBundle\Entity\Client
+  access_token_class:   LoginCidadao\OAuthBundle\Entity\AccessToken
+  refresh_token_class:  LoginCidadao\OAuthBundle\Entity\RefreshToken
+  auth_code_class:      LoginCidadao\OAuthBundle\Entity\AuthCode
   service:
       user_provider: fos_user.user_manager
       client_manager: procergs_logincidadao.oauth.client_manager
@@ -214,10 +214,10 @@ simple_things_entity_audit:
         - LoginCidadao\NotificationBundle\Entity\PersonNotificationOption
         - LoginCidadao\NotificationBundle\Entity\Placeholder
 
-        - PROCERGS\OAuthBundle\Entity\AccessToken
-        - PROCERGS\OAuthBundle\Entity\AuthCode
-        - PROCERGS\OAuthBundle\Entity\Client
-        - PROCERGS\OAuthBundle\Entity\RefreshToken
+        - LoginCidadao\OAuthBundle\Entity\AccessToken
+        - LoginCidadao\OAuthBundle\Entity\AuthCode
+        - LoginCidadao\OAuthBundle\Entity\Client
+        - LoginCidadao\OAuthBundle\Entity\RefreshToken
 
 fos_facebook:
     alias:  facebook
