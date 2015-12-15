@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Form\Type;
 
@@ -26,7 +34,7 @@ class DocFormType extends AbstractType
 
     public function getName()
     {
-        return 'procergs_person_doc';
+        return 'person_doc_form_type';
     }
 
     public function setEntityManager(EntityManager $em)
