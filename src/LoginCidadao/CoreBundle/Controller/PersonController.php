@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Controller;
 
@@ -336,7 +344,7 @@ class PersonController extends Controller
         $event = new GetResponseUserEvent($user, $request);
         $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $event);
 
-        $form = $this->createForm(new DocFormType(), $user);
+        $form = $this->createForm('person_doc_form_type', $user);
         $form->handleRequest($request);
         if ($form->isValid()) {
 

@@ -42,7 +42,7 @@ class AppKernel extends Kernel
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             
             new LoginCidadao\BadgesControlBundle\LoginCidadaoBadgesControlBundle(),
-            //new LoginCidadao\BadgesBundle\LoginCidadaoBadgesBundle(),
+            new LoginCidadao\BadgesBundle\LoginCidadaoBadgesBundle(),
             new LoginCidadao\NotificationBundle\LoginCidadaoNotificationBundle(),
             
             new Scheb\TwoFactorBundle\SchebTwoFactorBundle(),
