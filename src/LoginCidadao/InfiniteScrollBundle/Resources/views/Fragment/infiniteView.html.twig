@@ -3,13 +3,13 @@
         {% block infiniteView_items %}
             <ul>
                 {% for item in infiniteView %}
-                    {{ include('PROCERGSGenericInfiniteScrollBundle:Fragment:item.html.twig', { 'item': item }) }}
+                    {{ include('LoginCidadaoInfiniteScrollBundle:Fragment:item.html.twig', { 'item': item }) }}
                 {% endfor %}
             </ul>
         {% endblock infiniteView_items %}
 
         {% block infiniteView_next %}
-            {{ include('PROCERGSGenericInfiniteScrollBundle:Fragment:next.html.twig', { 'infiniteView': infiniteView }) }}
+            {{ include('LoginCidadaoInfiniteScrollBundle:Fragment:next.html.twig', { 'infiniteView': infiniteView }) }}
         {% endblock infiniteView_next %}
     </div>
 {% endblock infiniteView %}

@@ -1,6 +1,6 @@
 <?php
 
-namespace PROCERGS\Generic\InfiniteScrollBundle\Model;
+namespace LoginCidadao\InfiniteScrollBundle\Model;
 
 abstract class AbstractInfiniteIterable implements \Iterator
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace PROCERGS\Generic\InfiniteScrollBundle;
+namespace LoginCidadao\InfiniteScrollBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class PROCERGSGenericInfiniteScrollBundle extends Bundle
+class LoginCidadaoInfiniteScrollBundle extends Bundle
 {
 }
