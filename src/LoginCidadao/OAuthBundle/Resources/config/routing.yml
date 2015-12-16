@@ -1,7 +1,7 @@
-procergs_oauth_init:
+lc_oauth_init:
     path: /initClient
     defaults: { _controller: LoginCidadaoOAuthBundle:Client:initClient }
 
-procergs_oauth_getid:
+lc_oauth_getid:
     path: /getPub/{id}
     defaults: { _controller: LoginCidadaoOAuthBundle:Client:getPublicId }

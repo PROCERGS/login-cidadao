@@ -1,6 +1,6 @@
 parameters:
     badges.handler.class: LoginCidadao\BadgesControlBundle\Handler\BadgesHandler
-    procergs_login_cidadao_badges_control.subscriber.class: LoginCidadao\BadgesControlBundle\Event\BadgesSubscriber
+    lc.badges_control.subscriber.class: LoginCidadao\BadgesControlBundle\Event\BadgesSubscriber
     lc_badges_control.serializer.subscriber.class: LoginCidadao\BadgesControlBundle\Event\SerializationSubscriber
 
 services:
@@ -8,8 +8,8 @@ services:
         class: %badges.handler.class%
         arguments: [ @event_dispatcher ]
     
-    procergs_login_cidadao_badges_control.subscriber:
-        class: %procergs_login_cidadao_badges_control.subscriber.class%
+    lc.badges_control.subscriber:
+        class: %lc.badges_control.subscriber.class%
         arguments: [ @badges.handler ]
         tags:
             - { name: kernel.event_subscriber }

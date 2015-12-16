@@ -20,7 +20,7 @@ security:
             chain:
                 providers: [fos_userbundle, fos_facebook_provider]
         fos_userbundle:
-            id: procergs_logincidadao.user_provider
+            id: lc.user_provider
         fos_facebook_provider:
             id: fos_facebook.user.login
         oauth2:
@@ -77,7 +77,7 @@ security:
                 default_target_path: fos_user_profile_edit
                 success_handler: security.authentication.success_handler
                 oauth_user_provider:
-                    service:  procergs.hwi_twitter.user_provider
+                    service:  lc.hwi_twitter.user_provider
 
             form_login:
                 provider:       fos_userbundle

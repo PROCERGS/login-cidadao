@@ -1,36 +1,36 @@
 # API
-procergs_login_cidadao_api_core:
+lc_api_core:
     resource: "@LoginCidadaoAPIBundle/Controller"
     defaults: { _format: json }
     prefix:   /
 
-procergs_login_cidadao_Notification:
+lc_Notification:
     type: rest
     prefix: /
     resource: "@LoginCidadaoAPIBundle/Controller/NotificationController.php"
     name_prefix: api_1_
     defaults: { _format: json }
 
-procergs_login_cidadao_NotificationCallback:
+lc_NotificationCallback:
     type: rest
     prefix: /
     resource: "@LoginCidadaoAPIBundle/Controller/NotificationCallbackController.php"
     name_prefix: api_1_
     defaults: { _format: json }
 
-procergs_login_cidadao_Person:
+lc_Person:
     type: rest
     prefix: /
     resource: "@LoginCidadaoAPIBundle/Controller/PersonController.php"
     defaults: { _format: json }
 
-procergs_login_cidadao_Badge:
+lc_Badge:
     type: rest
     prefix: /
     resource: "@LoginCidadaoAPIBundle/Controller/BadgeController.php"
     defaults: { _format: json }
 
-procergs_login_cidadao_PersonAddress:
+lc_PersonAddress:
     type: rest
     prefix: /
     resource: "@LoginCidadaoAPIBundle/Controller/PersonAddressController.php"

@@ -18,7 +18,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('procergs_login_cidadao_validation_control');
+        $rootNode = $treeBuilder->root('lc_validation_control');
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for

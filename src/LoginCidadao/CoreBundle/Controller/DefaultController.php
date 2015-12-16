@@ -182,7 +182,7 @@ class DefaultController extends Controller
       $logs['activity'] = $logRepo->getWithClientByPerson($this->getUser(), 3);
 
       // notifications
-      $notificationHandler = $this->get('procergs.notification.handler');
+      $notificationHandler = $this->get('lc.notification.handler');
       $notifications = $notificationHandler->getUnread($this->getUser());
 
       $defaultClientUid = $this->container->getParameter('oauth_default_client.uid');

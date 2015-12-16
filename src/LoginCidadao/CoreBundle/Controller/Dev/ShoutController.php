@@ -130,7 +130,7 @@ class ShoutController extends Controller
         if (!$client) {
             return $this->redirect($this->generateUrl('lc_dev_shout_new'));
         }
-        $form = $this->createForm('procergs_logincidadao.client.base.form.type',
+        $form = $this->createForm('lc.client.base.form.type',
                                   $client);
         $form->handleRequest($request);
         $messages = '';

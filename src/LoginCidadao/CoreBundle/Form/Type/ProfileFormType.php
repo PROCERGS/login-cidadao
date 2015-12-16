@@ -76,7 +76,7 @@ class ProfileFormType extends BaseType
 
     public function getName()
     {
-        return 'procergs_person_profile';
+        return 'lc_person_profile';
     }
 
     public function setEntityManager(EntityManager $em)

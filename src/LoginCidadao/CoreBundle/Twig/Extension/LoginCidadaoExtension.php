@@ -86,7 +86,7 @@ class LoginCidadaoExtension extends \Twig_Extension
         return 'login_twig_extension';
     }
 
-    public function getForm($name = 'procergs_logincidadao.login.form.type')
+    public function getForm($name = 'lc.login.form.type')
     {
         return $this->container->get('form.factory')->create($this->container->get($name))->createView();
     }

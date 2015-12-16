@@ -166,7 +166,7 @@ class NotificationController extends BaseController
      */
     private function getNotificationHandler()
     {
-        return $this->container->get('procergs.notification.handler');
+        return $this->container->get('lc.notification.handler');
     }
 
     /**

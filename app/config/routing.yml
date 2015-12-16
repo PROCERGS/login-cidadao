@@ -40,7 +40,7 @@ tos:
     prefix:   /
 
 # Notifications
-procergs_login_cidadao_notification:
+lc_notification:
     type: rest
     resource: "@LoginCidadaoNotificationBundle/Resources/config/routing.yml"
     prefix:   /
@@ -65,7 +65,7 @@ google_login:
     path: /login/check-google
 
 #API
-procergs_login_cidadao_api:
+lc_api:
     type: rest
     resource: "@LoginCidadaoAPIBundle/Resources/config/routing.yml"
     prefix:   /api/v1
@@ -76,12 +76,12 @@ NelmioApiDocBundle:
     prefix:   /api/doc
 
 # login-cidadao
-procergs_generic_locale:
+lc_locale:
     resource: "@LoginCidadaoLocaleBundle/Controller/"
     type:     annotation
     prefix:   /locale
 
-procergs_login_cidadao_core:
+lc_core:
     resource: "@LoginCidadaoCoreBundle/Resources/config/routing.yml"
     prefix:   /
 lc_home:
@@ -94,7 +94,7 @@ simple_things_entity_audit:
     prefix: /audit
 
 # OAuth Routes
-procergso_auth:
+lc_oauth:
     resource: "@LoginCidadaoOAuthBundle/Resources/config/routing.yml"
     prefix:   /auth
 

@@ -56,7 +56,7 @@ class PersonController extends Controller
      */
     public function revokeAuthorizationAction(Request $request, $clientId)
     {
-        $form = $this->createForm('procergs_revoke_authorization');
+        $form = $this->createForm('lc_revoke_authorization');
         $form->handleRequest($request);
 
         if ($form->isValid()) {

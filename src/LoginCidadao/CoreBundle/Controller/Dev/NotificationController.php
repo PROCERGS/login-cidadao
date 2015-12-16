@@ -29,7 +29,7 @@ class NotificationController extends Controller
         $category->setMailSenderAddress($this->getUser()->getEmail());
         $category->setEmailable(true);
         $category->setMarkdownTemplate("%title%\r\n--\r\n\r\n> %shorttext%\r\n\r\n");
-        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.category.form.type'),
+        $form = $this->container->get('form.factory')->create($this->container->get('lc.category.form.type'),
                                                                                     $category);
 
         $form->handleRequest($request);
@@ -100,7 +100,7 @@ class NotificationController extends Controller
         if (!$client) {
             return $this->redirect($this->generateUrl('lc_dev_not'));
         }
-        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.category.form.type'),
+        $form = $this->container->get('form.factory')->create($this->container->get('lc.category.form.type'),
                                                                                     $client);
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -126,7 +126,7 @@ class NotificationController extends Controller
      */
     public function placeholderEditAction(Request $request)
     {
-        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.placeholder.form.type'));
+        $form = $this->container->get('form.factory')->create($this->container->get('lc.placeholder.form.type'));
         $placeholder = null;
         $em = $this->getDoctrine()->getManager();
         if (($id = $request->get('id')) || (($data = $request->get($form->getName())) && ($id = $data['id']))) {
@@ -160,7 +160,7 @@ class NotificationController extends Controller
         if (!$placeholder) {
             die('dunno');
         }
-        $form = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.placeholder.form.type'),
+        $form = $this->container->get('form.factory')->create($this->container->get('lc.placeholder.form.type'),
                                                                                     $placeholder);
         $form->handleRequest($request);
         if ($form->isValid()) {

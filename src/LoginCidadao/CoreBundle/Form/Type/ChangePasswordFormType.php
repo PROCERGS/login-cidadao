@@ -40,6 +40,6 @@ class ChangePasswordFormType extends BaseType
 
     public function getName()
     {
-        return 'procergs_change_password';
+        return 'lc_change_password';
     }
 }

@@ -136,7 +136,7 @@ class NotificationController extends Controller
      */
     private function getNotificationHandler()
     {
-        return $this->get('procergs.notification.handler');
+        return $this->get('lc.notification.handler');
     }
 
     private function getNotificationGrid($offset = 0, $perIteration = 10,

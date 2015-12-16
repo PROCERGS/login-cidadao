@@ -22,7 +22,7 @@ class ClientController extends Controller
     public function newAction(Request $request)
     {
         $client = new Client();
-        $form   = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.base.form.type'),
+        $form   = $this->container->get('form.factory')->create($this->container->get('lc.client.base.form.type'),
             $client);
 
         $form->handleRequest($request);
@@ -143,7 +143,7 @@ class ClientController extends Controller
             return $this->redirect($this->generateUrl('lc_dev_client_new'));
         }
         $form     = $this->get('form.factory')->
-            create($this->get('procergs_logincidadao.client.base.form.type'),
+            create($this->get('lc.client.base.form.type'),
             $client);
         $form->handleRequest($request);
         $messages = '';
