@@ -48,7 +48,6 @@
         "nelmio/api-doc-bundle": "@dev",
         "jms/security-extra-bundle": "dev-master",
         "procergs/login-cidadao-badges-bundle": "dev-refactoring",
-        "procergs/login-cidadao-igp-bundle": "dev-master",
         "scheb/two-factor-bundle": "^1.4,<1.5",
         "procergs/tos-bundle": "^1.0",
         "symfony/phpunit-bridge": "^2.7",
