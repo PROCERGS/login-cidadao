@@ -12,6 +12,7 @@ parameters:
     procergs_logincidadao.city.selector.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\CitySelectorType
     procergs_logincidadao.state.selector.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\StateSelectorType
     procergs_logincidadao.country.selector.form.type.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\CountrySelectorType
+    lc.contact.form.class: PROCERGS\LoginCidadao\CoreBundle\Form\Type\ContactFormType
     procergs_logincidadao.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
     procergs_logincidadao.user_manager.class: PROCERGS\LoginCidadao\CoreBundle\Security\User\Manager\UserManager
     procergs_logincidadao.user_register.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\RegisterListner
@@ -350,3 +351,9 @@ services:
             - @translator
         tags:
             - { name: form.type, alias: lc_location }
+
+    lc.contact.form:
+        class: %lc.contact.form.class%
+        arguments: [%contact_form.captcha%]
+        tags:
+            - { name: form.type, alias: contact_form_type }
