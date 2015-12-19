@@ -57,6 +57,8 @@ class AppKernel extends Kernel
 
             new Nelmio\CorsBundle\NelmioCorsBundle(),
             new Nelmio\SecurityBundle\NelmioSecurityBundle(),
+            new Liip\MonitorBundle\LiipMonitorBundle(),
+            new PROCERGS\LoginCidadao\MonitorBundle\PROCERGSLoginCidadaoMonitorBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

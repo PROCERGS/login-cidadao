@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9c40fede22322f287e7c6916cd720476",
-    "content-hash": "217173fcf8977f75c1f3c24b1d141089",
+    "hash": "9a4dee067d7047afbf4ddcf3d0e28683",
+    "content-hash": "3d603a0b43f21102f5d997bcf9c1d37d",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-bundle",
@@ -490,31 +490,33 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "2.3.5",
+            "version": "v2.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "d5067b0b7e5ef59ba165dcc116c539400bf957ff"
+                "reference": "a370e5b95e509a7809d11f3d280acfc9310d464b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/d5067b0b7e5ef59ba165dcc116c539400bf957ff",
-                "reference": "d5067b0b7e5ef59ba165dcc116c539400bf957ff",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/a370e5b95e509a7809d11f3d280acfc9310d464b",
+                "reference": "a370e5b95e509a7809d11f3d280acfc9310d464b",
                 "shasum": ""
             },
             "require": {
-                "doctrine/common": ">=2.3.0,<2.5-dev",
+                "doctrine/common": "~2.4",
                 "php": ">=5.3.2"
             },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.3.x-dev"
-                }
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*",
+                "symfony/console": "~2.0"
             },
+            "suggest": {
+                "symfony/console": "For helpful console commands such as SQL execution and import of files."
+            },
+            "type": "library",
             "autoload": {
                 "psr-0": {
-                    "Doctrine\\DBAL": "lib/"
+                    "Doctrine\\DBAL\\": "lib/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -547,7 +549,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2014-09-15 11:44:29"
+            "time": "2015-01-12 21:57:01"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -891,23 +893,28 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "v2.3.6",
+            "version": "v2.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "c2135b38216c6c8a410e764792aa368e946f2ae5"
+                "reference": "5aedac1e5c5caaeac14798822c70325dc242d467"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/c2135b38216c6c8a410e764792aa368e946f2ae5",
-                "reference": "c2135b38216c6c8a410e764792aa368e946f2ae5",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/5aedac1e5c5caaeac14798822c70325dc242d467",
+                "reference": "5aedac1e5c5caaeac14798822c70325dc242d467",
                 "shasum": ""
             },
             "require": {
-                "doctrine/dbal": "2.3.*",
+                "doctrine/collections": "~1.1",
+                "doctrine/dbal": "~2.4",
                 "ext-pdo": "*",
                 "php": ">=5.3.2",
-                "symfony/console": "2.*"
+                "symfony/console": "~2.0"
+            },
+            "require-dev": {
+                "satooshi/php-coveralls": "dev-master",
+                "symfony/yaml": "~2.1"
             },
             "suggest": {
                 "symfony/yaml": "If you want to use YAML Metadata Mapping Driver"
@@ -919,12 +926,12 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3.x-dev"
+                    "dev-master": "2.4.x-dev"
                 }
             },
             "autoload": {
                 "psr-0": {
-                    "Doctrine\\ORM": "lib/"
+                    "Doctrine\\ORM\\": "lib/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -933,23 +940,20 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
-                    "email": "jonwage@gmail.com",
-                    "homepage": "http://www.jwage.com/",
-                    "role": "Creator"
-                },
-                {
-                    "name": "Guilherme Blanco",
-                    "email": "guilhermeblanco@gmail.com",
-                    "homepage": "http://www.instaclick.com"
-                },
-                {
                     "name": "Roman Borschel",
                     "email": "roman@code-factory.org"
                 },
                 {
                     "name": "Benjamin Eberlei",
                     "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
+                },
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com"
                 }
             ],
             "description": "Object-Relational-Mapper for PHP",
@@ -958,7 +962,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2014-06-03 19:53:45"
+            "time": "2015-08-31 13:19:01"
         },
         {
             "name": "excelwebzone/recaptcha-bundle",
@@ -1325,7 +1329,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/45d6f40178216a840885b4ca6d7de9e67068568a",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/e39b040e272c72f0a090c67d802e1d3b2d0b0313",
                 "reference": "45d6f40178216a840885b4ca6d7de9e67068568a",
                 "shasum": ""
             },
@@ -2014,7 +2018,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/JMSSecurityExtraBundle/zipball/75bd0f773b1c645d70eb6174fff67ba5779a291e",
+                "url": "https://api.github.com/repos/schmittjoh/JMSSecurityExtraBundle/zipball/bbd5eb78da4d510478f1bb60959feefac083d474",
                 "reference": "75bd0f773b1c645d70eb6174fff67ba5779a291e",
                 "shasum": ""
             },
@@ -2309,7 +2313,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpGaufretteBundle/zipball/0b2750033a353c0a2a6d05f7f0d2a60581257d20",
+                "url": "https://api.github.com/repos/KnpLabs/KnpGaufretteBundle/zipball/45dc19248b1c919a44082aab161b36e9f4f6715d",
                 "reference": "0b2750033a353c0a2a6d05f7f0d2a60581257d20",
                 "shasum": ""
             },
@@ -2548,6 +2552,78 @@
             "time": "2015-11-03 07:54:30"
         },
         {
+            "name": "liip/monitor-bundle",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/liip/LiipMonitorBundle.git",
+                "reference": "2bc3ac894ac892773e41328c742b7b3ba0b29138"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/liip/LiipMonitorBundle/zipball/2bc3ac894ac892773e41328c742b7b3ba0b29138",
+                "reference": "2bc3ac894ac892773e41328c742b7b3ba0b29138",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.9|^7.0",
+                "symfony/framework-bundle": "~2.3|~3.0",
+                "zendframework/zenddiagnostics": "^1.0.2"
+            },
+            "require-dev": {
+                "guzzle/guzzle": "~3.8",
+                "matthiasnoback/symfony-dependency-injection-test": "^0.7.4",
+                "sensiolabs/security-checker": "~1.3|~2.0|~3.0",
+                "swiftmailer/swiftmailer": "~5.4",
+                "symfony/expression-language": "~2.3|~3.0"
+            },
+            "suggest": {
+                "sensio/distribution-bundle": "To be able to use the composer ScriptHandler",
+                "symfony/expression-language": "To use the Expression check"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Liip\\MonitorBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Liip AG",
+                    "homepage": "http://www.liip.ch/"
+                },
+                {
+                    "name": "Alvaro Videla",
+                    "email": "alvaro.videla@liip.ch"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://github.com/liip/LiipMonitorBundle/contributors"
+                },
+                {
+                    "name": "Kevin Bond",
+                    "homepage": "http://zenstruck.com/"
+                }
+            ],
+            "description": "Liip Monitor Bundle",
+            "keywords": [
+                "check",
+                "health",
+                "monitor",
+                "monitoring"
+            ],
+            "time": "2015-12-11 12:54:40"
+        },
+        {
             "name": "michelf/php-markdown",
             "version": "1.4.1",
             "source": {
@@ -2686,7 +2762,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/49238f44aa73f545c0a927b00251c89a0acf3005",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/1ae2cfa9a50279d722d6b6e7b02322cef948d55d",
                 "reference": "97707ea5f438622ce31ab836e1d78bb70bfe101d",
                 "shasum": ""
             },
@@ -2951,9 +3027,9 @@
             ],
             "authors": [
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -3116,7 +3192,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/617436bd165cf52ff0955918aeb12d40a93878d7",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/eb88b7aab40a820dc394bb160a37e335875fd64e",
                 "reference": "617436bd165cf52ff0955918aeb12d40a93878d7",
                 "shasum": ""
             },
@@ -3195,23 +3271,66 @@
             "time": "2015-01-27 20:29:29"
         },
         {
-            "name": "procergs/tos-bundle",
-            "version": "1.0.11",
+            "name": "procergs/meurs-monitor-bundle",
+            "version": "v1.0.1",
+            "target-dir": "PROCERGS/LoginCidadao/MonitorBundle",
             "source": {
                 "type": "git",
-                "url": "https://github.com/PROCERGS/tos-bundle.git",
-                "reference": "d07133bc1d0634722d253175272d17a524e94663"
+                "url": "https://github.com/PROCERGS/meurs-monitor-bundle.git",
+                "reference": "9e136a12644a4fff570282c7b7225e0dcd500ba2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/d07133bc1d0634722d253175272d17a524e94663",
-                "reference": "d07133bc1d0634722d253175272d17a524e94663",
+                "url": "https://api.github.com/repos/PROCERGS/meurs-monitor-bundle/zipball/9e136a12644a4fff570282c7b7225e0dcd500ba2",
+                "reference": "9e136a12644a4fff570282c7b7225e0dcd500ba2",
+                "shasum": ""
+            },
+            "require": {
+                "liip/monitor-bundle": "^2.2",
+                "php": ">=5.4.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "PROCERGS\\LoginCidadao\\MonitorBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guilherme Donato",
+                    "email": "packagist@cadastro.dona.to"
+                }
+            ],
+            "description": "Monitor Bundle to be used by PROCERGS",
+            "homepage": "https://github.com/PROCERGS/meurs-monitor-bundle",
+            "keywords": [
+                "login-cidadao",
+                "monitor"
+            ],
+            "time": "2015-12-19 13:45:23"
+        },
+        {
+            "name": "procergs/tos-bundle",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PROCERGS/tos-bundle.git",
+                "reference": "bb4872bcc8fd8be8f8754412c9e7574eb4292557"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/bb4872bcc8fd8be8f8754412c9e7574eb4292557",
+                "reference": "bb4872bcc8fd8be8f8754412c9e7574eb4292557",
                 "shasum": ""
             },
             "require": {
                 "cebe/markdown": "^1.1",
                 "doctrine/doctrine-bundle": ">=1.2",
-                "doctrine/orm": ">=2.2.3,<2.4-dev",
+                "doctrine/orm": ">=2.2.3,<2.5",
                 "friendsofsymfony/user-bundle": ">=1.3",
                 "php": ">=5.3.3",
                 "symfony/symfony": ">=2.3.0"
@@ -3233,7 +3352,7 @@
                 }
             ],
             "description": "Terms of Service Bundle",
-            "time": "2015-08-14 13:45:22"
+            "time": "2015-12-14 20:59:16"
         },
         {
             "name": "psr/http-message",
@@ -4261,6 +4380,68 @@
                 "negotiation"
             ],
             "time": "2015-10-01 07:42:40"
+        },
+        {
+            "name": "zendframework/zenddiagnostics",
+            "version": "v1.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/ZendDiagnostics.git",
+                "reference": "6ffffbeec9a9d69aad394a9ceee55cf4bcdd4b2d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/ZendDiagnostics/zipball/6ffffbeec9a9d69aad394a9ceee55cf4bcdd4b2d",
+                "reference": "6ffffbeec9a9d69aad394a9ceee55cf4bcdd4b2d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "doctrine/migrations": "~1.0@dev",
+                "guzzle/http": "3.*",
+                "guzzle/plugin-mock": "3.*",
+                "phpunit/phpunit": "4.7.*",
+                "predis/predis": "0.8.*",
+                "sensiolabs/security-checker": "1.3.*@dev",
+                "symfony/yaml": "v2.3.11",
+                "videlalvaro/php-amqplib": "2.*",
+                "zendframework/zend-loader": "2.*"
+            },
+            "suggest": {
+                "doctrine/migrations": "Required by Check\\DoctrineMigration",
+                "ext-bcmath": "Required by Check\\CpuPerformance",
+                "guzzle/http": "Required by Check\\GuzzleHttpService",
+                "predis/predis": "Required by Check\\Redis",
+                "sensiolabs/security-checker": "Required by Check\\SecurityAdvisory",
+                "symfony/yaml": "Required by Check\\YamlFile",
+                "videlalvaro/php-amqplib": "Required by Check\\RabbitMQ"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "ZendDiagnostics\\": "src/",
+                    "ZendDiagnosticsTest\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "A set of components for performing diagnostic tests in PHP applications",
+            "homepage": "https://github.com/zendframework/ZendDiagnostics",
+            "keywords": [
+                "diagnostics",
+                "php",
+                "test"
+            ],
+            "time": "2015-10-01 15:37:41"
         }
     ],
     "packages-dev": [
