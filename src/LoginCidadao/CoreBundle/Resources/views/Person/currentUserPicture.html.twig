@@ -1,0 +1,15 @@
+{%  set url = '//' ~ app.request.host %}
+{%  if app.request.port != 80 %}
+{%    set url =  url ~ ':' ~ app.request.port %}
+{%  endif %}
+{%  if targetPerson.imageName is null %}
+{%      if targetPerson.getSocialNetworksPicture is not null %}
+{{ targetPerson.getSocialNetworksPicture }}
+{%      else %}
+{% image '@LoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+{{ url ~ asset_url }}
+{% endimage %}
+{%      endif %}
+{%  else %}
+{{ url ~ vich_uploader_asset(targetPerson, 'image') }}
+{%  endif %}

@@ -1,0 +1,42 @@
+{% extends "LoginCidadaoCoreBundle::base.html.twig" %}
+
+{% block body %}
+
+{% block notificationExtreme %}
+{{ include("LoginCidadaoCoreBundle::notification_extreme.html.twig", { columns: 'col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3' } ) }}
+{% endblock %}
+
+<div class="row">
+    <div class="col-xs-12 text-center header-shadows">
+        <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
+        <h2 class="slogan hidden-xs">{% trans %}One account. The entire Government.{% endtrans %}</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="general-content col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+        {% trans_default_domain 'FOSUserBundle' %}
+
+        <div class="title">
+            <h3>{% trans %}Reset Password{% endtrans %}</h3>
+        </div>
+
+        {{ form_start(form, {'action': path('fos_user_resetting_reset', {'token': token}), 'attr': {'role':'form', 'class':'user_resetting_reset'}}) }}
+            {{ form_errors(form) }}
+            <div class="form-content">
+                {{ form_row(form.plainPassword.first) }}
+                {{ form_row(form.plainPassword.second) }}
+
+                {{ form_widget(form.save, { 'label': 'resetting.reset.submit' | trans,  'attr': { 'class': 'btn btn-success' } }) }}
+                <a href="{{ path('lc_home') }}" class='btn btn-default' />{% trans %}Cancel{% endtrans %}<a/>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets_custom %}
+    {% stylesheets '@lc_base_css' 'bundles/logincidadaocore/css/home/*.css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}

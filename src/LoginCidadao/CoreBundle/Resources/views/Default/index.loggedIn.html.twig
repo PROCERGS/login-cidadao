@@ -1,0 +1,167 @@
+{% extends 'LoginCidadaoCoreBundle::base.loggedIn.html.twig' %}
+
+{% set cpf = user.cpf %}
+{% set cep = user.cep %}
+
+{% if cpf != null %}
+    {% set cpf = user.cpf|split('', 3) %}
+{% endif %}
+
+{% if cep != null %}
+    {% set cep = user.cep|split('', 5) %}
+{% endif %}
+
+{% block content %}
+
+<dl>
+    <dt>{{ 'Username' | trans }}
+        <dd>{{ user.username }}</dd>
+
+        <dt>{{ 'Email' | trans }}</dt>
+        <dd>{{ user.email }}</dd>
+
+        {% if (user.birthdate != null) %}
+        <dt>{{ 'Birthdate' | trans }}</dt>
+        <dd>{{ user.birthdate|date('d/m/Y') }}</dd>
+        {% endif %}
+
+        {% if cpf != null %}
+        <dt>{{ 'CPF' | trans }}</dt>
+        <dd>{{ "%s.%s.%s-%s" | format(cpf[0], cpf[1], cpf[2], cpf[3]) }}</dd>
+        {% endif %}
+
+        {% if cep != null %}
+        <dt>{{ 'CEP' | trans }}</dt>
+        <dd>{{ "%s-%s" | format(cep[0], cep[1]) }}</dd>
+        {% endif %}
+    </dt>
+</dl>
+
+<div id="profile" class="pull-left col-md-4" style="display:none;">
+    <div class="head">
+        {% image '@LoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
+        <img src="{{ asset_url }}" alt="" class="pull-left" width="102" height="105">
+        {% endimage %}
+        <div class="basic">
+            <h4 class="profile-name text-left">{{ user.fullname }}</h4>
+            <p class="text-left">CPF: 999.999.999</p>
+        </div>
+        <p style="clear:both; font-size:12px; margin-bottom: 3px;">Situação do cadastro</p>
+        <div class="progress">
+          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+            <span class="txt">40%</span>
+          </div>
+        </div>
+        <a href="#" class="toggle"></a>
+    </div>
+
+    <div class="info">
+        <dl>
+            <dt>{{ 'Username' | trans }}
+                <dd>{{ user.username }}</dd>
+
+                <dt>{{ 'Email' | trans }}</dt>
+                <dd>{{ user.email }}</dd>
+
+                {% if (user.birthdate != null) %}
+                <dt>{{ 'Birthdate' | trans }}</dt>
+                <dd>{{ user.birthdate|date('d/m/Y') }}</dd>
+                {% endif %}
+
+                {% if cpf != null %}
+                <dt>{{ 'CPF' | trans }}</dt>
+                <dd>{{ "%s.%s.%s-%s" | format(cpf[0], cpf[1], cpf[2], cpf[3]) }}</dd>
+                {% endif %}
+
+                {% if cep != null %}
+                <dt>{{ 'CEP' | trans }}</dt>
+                <dd>{{ "%s-%s" | format(cep[0], cep[1]) }}</dd>
+                {% endif %}
+            </dt>
+        </dl>
+        <p class="text-left"><a href="{{ path('fos_user_profile_edit') }}" class="edit">{% trans %}Edit profile{%  endtrans %}</a></p>
+    </div>
+</div>
+
+
+<ul id="applications" class="pull-right list col-md-8">
+{% for auth in user.getAuthorizations %}
+    <li>
+        <img src="//placehold.it/120x120" alt="" class="img-rounded center-block">
+        <h4 class="center-block text-center">{{ auth.client.name }}</h4>
+
+        {#
+        <a href="{{ path('ui_revoke', { 'clientId': auth.client.id }) }}" data-token="{{ csrf_token(path('ui_revoke', { 'clientId': auth.client.id })) }}" class="btn btn-float btn-danger revoke">{{ 'Revoke Access' | trans }}</a>
+        <p>
+        {% for scope in auth.scope %}
+            <span class="label label-default">{{ ('scope.' ~ scope) | trans }}</span>
+        {% endfor %}
+        </p>
+        #}
+
+        <div class="app-switch pull-right">
+            <a class="btn activate" role="button">{% trans %}Activate{%  endtrans %}</a>
+        </div>
+    </li>
+{% endfor %}
+
+{% for client in apps %}
+    <li>
+        <img src="//placehold.it/120x120" alt="" class="img-rounded center-block">
+        <h4 class="center-block text-center">
+            <a href="{{ client.siteUrl }}">{{ client.name }}</a>
+        </h4>
+        <div class="app-switch pull-right">
+            <a class="btn deactivate" role="button">{% trans %}Deactivate{%  endtrans %}</a>
+        </div>
+    </li>
+{% endfor %}
+</ul>
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    $(document).ready(function(){
+        $(".list-group-item").on('click', 'a.btn-danger.revoke', function(event) {
+            $(this).removeClass("btn-danger")
+                    .addClass("btn-warning")
+                    .html("{{ 'Click again to confirm' | trans }}");
+            event.stopPropagation();
+            event.preventDefault();
+        });
+        $(".list-group-item").on('click', 'a.btn-warning.revoke', function(event) {
+            var button = $(this);
+            button.addClass('disabled')
+                    .prop('disabled', true)
+                    .html("{{ 'Please, wait...' | trans }}");
+
+            $.post(
+                button.attr('href'),
+                { token: button.data('token') },
+                function (data) {
+                    button.addClass("btn-success disabled")
+                            .removeClass("btn-danger btn-warning")
+                            .html("{{ 'Revoked' | trans }}")
+                            .click(function(e) {
+                                e.preventDefault();
+                            });
+                }
+            ).fail(function () {
+                button.addClass("btn-danger")
+                        .removeClass("btn-warning disabled")
+                        .prop("disabled", false)
+                        .html("{{ 'Revoke Access' | trans }}");
+            });
+
+            event.stopPropagation();
+            event.preventDefault();
+        });
+        $(".list-group-item").on('click', 'a:disabled', function(event) {
+            event.stopPropagation();
+            event.preventDefault();
+        });
+    });
+</script>
+{% endblock %}

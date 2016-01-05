@@ -1,0 +1,39 @@
+{% extends 'LoginCidadaoCoreBundle::base.html.twig' %}
+
+{% block body %}
+
+    {% block notificationExtreme %}
+        {{ include("LoginCidadaoCoreBundle::notification_extreme.html.twig", { columns: 'col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3' } ) }}
+    {% endblock %}
+
+    <div class="row">
+        <div class="col-xs-12 text-center header-shadows">
+            <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
+            <h2 class="slogan hidden-xs">{% trans %}One account. The entire Government.{% endtrans %}</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="general-content col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+            <h1>{% trans %}Privacy and Terms of Service{% endtrans %}</h1>
+
+            <div class="text">
+                <p><strong>Atenção</strong>: Leia atentamente estes termos antes de utilizar este site. O uso deste site indica que você aceita estes termos. Caso não aceite estes termos, não utilize este site.</p>
+            </div>
+
+            <div class="text terms-of-service">
+                {% if app.user != null %}
+                    {{ render(controller('LoginCidadaoTOSBundle:TermsOfService:showLatest', { 'username': app.user.username })) }}
+                {% else %}
+                    {{ render(controller('LoginCidadaoTOSBundle:TermsOfService:showLatest')) }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets_custom %}
+    {% stylesheets '@lc_base_css' 'bundles/logincidadaocore/css/home/*.css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}

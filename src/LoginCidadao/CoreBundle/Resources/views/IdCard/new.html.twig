@@ -1,0 +1,26 @@
+{% extends "LoginCidadaoCoreBundle:Document:documents.html.twig" %}
+
+{% block id_card_forms_placeholder %}
+    <div class="id-card-forms-placeholder">
+        {{ form_start(form, {'action': path('lc_person_id_cards_new'), 'attr': {'role':'form', 'id': 'form-rg' } }) }}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">{{ 'New ID Card'|trans }}</h2>
+            </div>
+            <div class="panel-body">
+                <div class="row clearfix">
+                    {{ form_errors(form) }}
+                    <div class="col-md-12">
+                        {% for child in form %}
+                            {{ form_row(child) }}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer text-right">
+                <input type="submit" value="{{ 'Add'|trans }}" class="btn btn-success">
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock id_card_forms_placeholder %}

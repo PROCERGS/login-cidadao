@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d57b0e9ef0d16d50fe7934de87c52a74",
-    "content-hash": "dce07009392c2a16999e39ec15547a4c",
+    "hash": "007de2e189fab29d7a51ec3db2a8cc8d",
+    "content-hash": "489fb7824f6e10413268b78ae22bd5bd",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-bundle",
@@ -1049,7 +1049,6 @@
                 "facebook",
                 "sdk"
             ],
-            "abandoned": "facebook/php-sdk-v4",
             "time": "2012-08-14 17:28:20"
         },
         {
@@ -1110,7 +1109,6 @@
             "keywords": [
                 "facebook"
             ],
-            "abandoned": "hwi/oauth-bundle",
             "time": "2013-12-11 20:21:13"
         },
         {
@@ -2694,12 +2692,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "93b189b16ad0d410eb9b300eae7ab0ad7d8edede"
+                "reference": "1ae2cfa9a50279d722d6b6e7b02322cef948d55d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/93b189b16ad0d410eb9b300eae7ab0ad7d8edede",
-                "reference": "93b189b16ad0d410eb9b300eae7ab0ad7d8edede",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/1ae2cfa9a50279d722d6b6e7b02322cef948d55d",
+                "reference": "1ae2cfa9a50279d722d6b6e7b02322cef948d55d",
                 "shasum": ""
             },
             "require": {
@@ -2769,7 +2767,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2015-12-11 08:12:17"
+            "time": "2015-12-16 15:17:51"
         },
         {
             "name": "nelmio/cors-bundle",
@@ -3121,17 +3119,17 @@
         },
         {
             "name": "procergs/login-cidadao-badges-bundle",
-            "version": "dev-cleanup",
-            "target-dir": "PROCERGS/LoginCidadao/BadgesBundle",
+            "version": "dev-refactoring",
+            "target-dir": "LoginCidadao/BadgesBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/login-cidadao-badges-bundle.git",
-                "reference": "fcaccb4df3c42e28f7529af91d959f7b3ad6be56"
+                "reference": "cd8e2742f00d254853c01a1d319d99aa729c014a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/fcaccb4df3c42e28f7529af91d959f7b3ad6be56",
-                "reference": "fcaccb4df3c42e28f7529af91d959f7b3ad6be56",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/cd8e2742f00d254853c01a1d319d99aa729c014a",
+                "reference": "cd8e2742f00d254853c01a1d319d99aa729c014a",
                 "shasum": ""
             },
             "require": {
@@ -3140,7 +3138,7 @@
             "type": "symfony-bundle",
             "autoload": {
                 "psr-0": {
-                    "PROCERGS\\LoginCidadao\\BadgesBundle": ""
+                    "LoginCidadao\\BadgesBundle": ""
                 }
             },
             "license": [
@@ -3159,57 +3157,10 @@
                 "login-cidadao"
             ],
             "support": {
-                "source": "https://github.com/PROCERGS/login-cidadao-badges-bundle/tree/cleanup",
+                "source": "https://github.com/PROCERGS/login-cidadao-badges-bundle/tree/refactoring",
                 "issues": "https://github.com/PROCERGS/login-cidadao-badges-bundle/issues"
             },
-            "time": "2015-06-26 18:33:47"
-        },
-        {
-            "name": "procergs/login-cidadao-igp-bundle",
-            "version": "dev-master",
-            "target-dir": "PROCERGS/LoginCidadao/IgpBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PROCERGS/login-cidadao-igp-bundle.git",
-                "reference": "d46a9b718cfdac1845d3e8e540c32ed79ed6e281"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-igp-bundle/zipball/d46a9b718cfdac1845d3e8e540c32ed79ed6e281",
-                "reference": "d46a9b718cfdac1845d3e8e540c32ed79ed6e281",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-0": {
-                    "PROCERGS\\LoginCidadao\\IgpBundle": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Guilherme Donato",
-                    "email": "packagist@cadastro.dona.to"
-                },
-                {
-                    "name": "lordvacilaoerrocerto",
-                    "email": "lordvacilaoerrocerto@users.noreply.github.com"
-                }
-            ],
-            "description": "Login Cidadão's Badge and Validation Bundle",
-            "homepage": "https://github.com/PROCERGS/login-cidadao-igp-bundle",
-            "keywords": [
-                "badges",
-                "login-cidadao",
-                "validation"
-            ],
-            "time": "2015-01-27 20:29:29"
+            "time": "2015-12-15 18:48:02"
         },
         {
             "name": "procergs/tos-bundle",
@@ -4343,7 +4294,6 @@
         "nelmio/api-doc-bundle": 20,
         "jms/security-extra-bundle": 20,
         "procergs/login-cidadao-badges-bundle": 20,
-        "procergs/login-cidadao-igp-bundle": 20,
         "bshaffer/oauth2-server-bundle": 20
     },
     "prefer-stable": false,

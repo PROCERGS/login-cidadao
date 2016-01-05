@@ -11,7 +11,7 @@
 namespace LoginCidadao\OpenIDBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
-use PROCERGS\OAuthBundle\Model\AccessTokenManager;
+use LoginCidadao\OAuthBundle\Model\AccessTokenManager;
 
 class ClientManager
 {

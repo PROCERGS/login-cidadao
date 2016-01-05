@@ -14,7 +14,7 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use LoginCidadao\StatsBundle\Entity\Statistics;
 use LoginCidadao\StatsBundle\Handler\StatsHandler;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization;
+use LoginCidadao\CoreBundle\Entity\Authorization;
 
 class StatisticsSubscriber implements EventSubscriber
 {
@@ -52,7 +52,7 @@ class StatisticsSubscriber implements EventSubscriber
         }
 
         $clientRepo = $args->getEntityManager()
-            ->getRepository('PROCERGSOAuthBundle:Client');
+            ->getRepository('LoginCidadaoOAuthBundle:Client');
 
         $counts = $clientRepo->getCountPerson($entity->getPerson(),
             $entity->getClient()->getId());

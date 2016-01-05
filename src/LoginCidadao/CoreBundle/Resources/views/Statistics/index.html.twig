@@ -1,0 +1,46 @@
+{% extends "LoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+{% block content %}
+    <div id="statistics" class="content">
+
+        <h1 class="visible-xs">{{ 'statistics.list'|trans }}</h1>
+
+        <div class="media">
+            <div class="media-left">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+            </div>
+            <div class="media-body">
+                <h2 class="media-heading">
+                    <a href="{{ path('lc_statistics_user_services') }}">{{ 'Users by Services'|trans }}</a>
+                </h2>
+                <p>{{ 'Information about authorizations granted to services.' | trans }}</p>
+            </div>
+        </div>
+
+        <div class="media">
+            <div class="media-left">
+                <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span>
+            </div>
+            <div class="media-body">
+                <h2 class="media-heading">
+                    <a href="{{ path('lc_statistics_user_badge') }}">{{ 'Users by Badges'|trans }}</a>
+                </h2>
+                <p>{{ 'See how many users have each badge.' | trans }}</p>
+            </div>
+        </div>
+
+        <div class="media">
+            <div class="media-left">
+                <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+            </div>
+            <div class="media-body">
+                <h2 class="media-heading">{{ 'Users by Location'|trans }}</h2>
+                <p>
+                    {% trans with { '%country_url%': path('lc_statistics_user_region', {'type': 'country'}), '%state_url%': path('lc_statistics_user_region', {'type': 'state'}) } %}
+                        Information about people's location. Either by <a href="%country_url%">Country</a> or by <a href="%state_url%">State</a>
+                    {% endtrans %}
+                </p>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

@@ -18,8 +18,8 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new FOS\OAuthServerBundle\FOSOAuthServerBundle(),
-            new PROCERGS\OAuthBundle\PROCERGSOAuthBundle(),
-            new PROCERGS\LoginCidadao\CoreBundle\PROCERGSLoginCidadaoCoreBundle(),
+            new LoginCidadao\OAuthBundle\LoginCidadaoOAuthBundle(),
+            new LoginCidadao\CoreBundle\LoginCidadaoCoreBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new FOS\RestBundle\FOSRestBundle(),
 
@@ -28,9 +28,9 @@ class AppKernel extends Kernel
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new Donato\Generic\HWIOAuthProxyBundle\DonatoGenericHWIOAuthProxyBundle(),
 
-            new PROCERGS\Generic\LocaleBundle\PROCERGSGenericLocaleBundle(),
-            new PROCERGS\LoginCidadao\APIBundle\PROCERGSLoginCidadaoAPIBundle(),
-            new PROCERGS\Generic\ValidationBundle\PROCERGSGenericValidationBundle(),
+            new LoginCidadao\LocaleBundle\LoginCidadaoLocaleBundle(),
+            new LoginCidadao\APIBundle\LoginCidadaoAPIBundle(),
+            new LoginCidadao\ValidationBundle\LoginCidadaoValidationBundle(),
             new EWZ\Bundle\RecaptchaBundle\EWZRecaptchaBundle(),
 
             new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
@@ -41,13 +41,13 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             
-            new PROCERGS\LoginCidadao\BadgesControlBundle\PROCERGSLoginCidadaoBadgesControlBundle(),
-            new PROCERGS\LoginCidadao\BadgesBundle\PROCERGSLoginCidadaoBadgesBundle(),
-            new PROCERGS\LoginCidadao\NotificationBundle\PROCERGSLoginCidadaoNotificationBundle(),
+            new LoginCidadao\BadgesControlBundle\LoginCidadaoBadgesControlBundle(),
+            new LoginCidadao\BadgesBundle\LoginCidadaoBadgesBundle(),
+            new LoginCidadao\NotificationBundle\LoginCidadaoNotificationBundle(),
             
             new Scheb\TwoFactorBundle\SchebTwoFactorBundle(),
-            new PROCERGS\LoginCidadao\IgpBundle\PROCERGSLoginCidadaoIgpBundle(),
-            new PROCERGS\LoginCidadao\ValidationControlBundle\PROCERGSLoginCidadaoValidationControlBundle(),
+            //new LoginCidadao\IgpBundle\LoginCidadaoIgpBundle(),
+            new LoginCidadao\ValidationControlBundle\LoginCidadaoValidationControlBundle(),
 
             new LoginCidadao\TOSBundle\LoginCidadaoTOSBundle(),
 

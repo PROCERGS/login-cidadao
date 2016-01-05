@@ -1,0 +1,41 @@
+<form action="{{ path('fos_oauth_server_authorize') }}" method="POST" class="fos_oauth_server_authorize" {{ form_enctype(form) }}>
+    <h3>{% trans %}Authorize Application{% endtrans %}</h3>
+
+    <div class="connect-diagram row">
+        <div class="col-xs-5 text-right">
+            <img src="{{ include("LoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" width="90">
+        </div>
+        <div class="col-xs-2 text-center">
+            <i class="glyphicon glyphicon-chevron-right"></i>
+        </div>
+        <div class="col-xs-5 text-left">
+            <img src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': client }) }}" width="90" height="90" alt="" class="img-rounded">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-offset-2 col-sm-8">
+            <p class="msg">{% trans with {'%client_name%': client.name} %}The application <strong>%client_name%</strong> wants to access the following information about you:{% endtrans %}</p>
+
+            <ul class="permissions">
+            {% for scope in form.vars.value.scope|split(' ') %}
+                <li>{{ ('scope.' ~ scope) | trans }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="row buttons">
+        <div class="col-xs-12 text-center">
+            <input type="submit" name="rejected" value="{{ 'authorize.reject'|trans({}, 'FOSOAuthServerBundle') }}" class="btn btn-danger" />
+            <input type="submit" name="accepted" value="{{ 'authorize.accept'|trans({}, 'FOSOAuthServerBundle') }}" class="btn btn-success" />
+        </div>
+    </div>
+
+    {{ form_row(form.client_id) }}
+    {{ form_row(form.response_type) }}
+    {{ form_row(form.redirect_uri) }}
+    {{ form_row(form.state) }}
+    {{ form_row(form.scope) }}
+    {{ form_rest(form) }}
+</form>

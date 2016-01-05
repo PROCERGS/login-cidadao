@@ -1,0 +1,42 @@
+{% extends "LoginCidadaoCoreBundle::grid_layout.html.twig" %}
+{% block grid %}
+<div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">{{ 'grid.search.title'|trans }}</h2>
+        </div>
+        <div class="panel-body">
+            <div class="row clearfix">
+                <div class="col-md-12">
+                    {{ parent() }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock grid %}
+
+{% block grid_header_action %}
+{% endblock grid_header_action %}
+
+{% block grid_header_data %}
+<div class="col-md-3">{{ 'sugg.username'|trans }}</div>
+<div class="col-md-2">{{ 'sugg.createdAt'|trans }}</div>
+<div class="col-md-6">{{ 'sugg.shorttext'|trans }}</div>
+{% endblock grid_header_data %}
+
+{% block grid_row_action %}
+{% endblock grid_row_action %}
+
+{% block grid_row_data %}
+<div class="col-md-3">
+    <dt>{{ 'sugg.username'|trans }}</dt>
+    <dd ><div style="word-wrap: break-word;">{{ row.username }}</div></dd>
+</div>
+<div class="col-md-2">
+    <dt>{{ 'sugg.createdAt'|trans }}</dt>
+    <dd ><div style="word-wrap: break-word;">{{ row.createdAt|date('d/m/Y h:i:s') }}</div></dd>
+</div>
+<div class="col-md-6">
+    <dt>{{ 'sugg.shorttext'|trans }}</dt>
+    <dd ><div style="word-wrap: break-word;">{{ row.shorttext }}</div></dd>
+</div>
+{% endblock grid_row_data %}
