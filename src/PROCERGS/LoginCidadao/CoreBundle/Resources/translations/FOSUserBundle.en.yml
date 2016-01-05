@@ -1,0 +1,93 @@
+profile.edit.submit: Update
+profile.show.username: Username
+profile.show.email: Email
+registration.check_email: 'An email has been sent to %email%. It contains an activation link you must click to activate your account.'
+registration.confirmed: 'Congrats %username%, your account is now activated.'
+registration.back: 'Back to the originating page.'
+registration.email.subject: '%username%''s email confirmation!'
+registration.email.message: "Hello %username%!\n\nTo finish activating your account - please visit %confirmationUrl%\n\nRegards, the Staff\n"
+registration.submit: Register
+registration.register: Register
+resseting.forgot_password: 'Forgot your password?'
+resetting.password_already_requested: 'The password for this user has already been requested within the last 24 hours.'
+resetting.check_email: 'An email has been sent to %email%. It contains a link you must click to reset your password.'
+resetting.email.subject: 'Reset Password'
+resetting.email.message: 'Someone recently requested to reset your password Citizen''s Login.'
+resetting.request.invalid_username: 'The username or email address "%username%" does not exist.'
+resetting.request.username: 'Username or email address:'
+resetting.request.submit: 'Reset password'
+resetting.reset.submit: 'Change password'
+form.group_name: 'Group name'
+form.username: Username
+form.email: Email
+form.email.example: your@email.com
+form.current_password: 'Current password'
+form.password: Password
+form.password_confirmation: Verification
+form.new_password: 'New password'
+form.new_password_confirmation: 'Verification:'
+form.firstName: Firstname
+form.firstName.example: John
+form.surname: Surname
+form.surname.example: Doe
+form.birthdate: Birthday
+form.cep: Postal Code
+form.cpf: CPF
+form.city: City
+form.adress: Address
+form.district: District
+form.state: State
+form.map: 'open on map'
+grid.search.noresult: 'No results found'
+grid.search.title: Results
+grid.search.button: Search
+cep.search.title: 'Search CEP'
+email.changed.message.subject: 'Your email was changed!'
+email.changed.message.text: "Hello, %name%!\n\nWe are sending you this email to let you know that your email address was changed to %email%.\n\nIf you didn't change it, please contact us since this might be a security breach!\n"
+form.district: Neighborhood
+layout.logout: Logout
+change_password.submit: 'Change Password'
+'Connect with Facebook': 'Connect with Facebook'
+'Connect with Twitter': 'Connect with Twitter'
+form.plainPassword: Password
+form.plainPassword.example: Create a password
+form.phone: Phone
+form.phone.example: +55 51 1234-5678
+(optional): (optional)
+'Reset Password': 'Reset Password'
+'Enter your username or email': 'Enter your username or email'
+Cancel: Cancel
+form.message: Mensagem
+form.submit: Enviar
+'Log in using your Citizen''s Login': 'Log in using your Citizen''s Login'
+'Connect using Facebook': 'Connect using Facebook'
+'Connect using Twitter': 'Connect using Twitter'
+'Register with Twitter': 'Register with Twitter'
+'Since twitter won''t share your email, we need you to type your email manually.': 'Since twitter won''t share your email, we need you to type your email manually.'
+'This email will be used for future contact and can also be user to log in, so this must be a valid email.': 'This email will be used for future contact and can also be user to log in, so this must be a valid email.'
+'Email:': 'Email:'
+'Continue Registration': 'Continue Registration'
+'Don''t know your CEP?': 'Don''t know your CEP?'
+'Search it!': 'Search it!'
+'Your address': 'Your address'
+security.login.submit: 'Log in'
+or: or
+'Use your social networks': 'Use your social networks'
+registration.email.click: 'click here to confirm your email'
+'Upload another picture': 'Upload another picture'
+'Do you really want to unlink <strong class="social-network-name"></strong>?': 'Do you really want to unlink <strong class="social-network-name"></strong>?'
+Yes: Yes
+'Use accounts from other services': 'Use accounts from other services'
+'Connect to the Nota Fiscal Gaúcha': 'Connect to the Nota Fiscal Gaúcha'
+'By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.': 'By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.'
+Change: Change
+Personal Information: Personal Information
+Contact Information: Contact Information
+Social Networks and other connections: Social Networks and other connections
+Account Password: Account Password
+Use your Facebook picture: Use your Facebook picture
+Remove your picture: Remove your picture
+Your profile picure will be changed to <strong></strong>: Your profile picure will be changed to <strong></strong>
+Your Facebook profile picure will be used.: Your Facebook profile picure will be used.
+form.register.call_to_action: I'm not registered yet
+form.login.call_to_action: I'm alreay registered

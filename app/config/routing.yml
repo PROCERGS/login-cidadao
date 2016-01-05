@@ -45,7 +45,7 @@ tos:
     prefix:   /
 
 # Notifications
-lc_notification:
+procergs_login_cidadao_notification:
     type: rest
     resource: "@LoginCidadaoNotificationBundle/Resources/config/routing.yml"
     prefix:   /

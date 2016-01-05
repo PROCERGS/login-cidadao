@@ -1,0 +1,75 @@
+{% extends 'LoginCidadaoCoreBundle::base.html.twig' %}
+
+{% block body %}
+    {% set form1 = lc_getForm() %}
+    {% set form = lc_getFormFactory() %}
+
+
+    <div class="row lc-main-title">
+        <div class="col-12 text-center">
+            <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
+            <h2 class="hidden-xs">{% trans %}One account. The entire Government.{% endtrans %}</h2>
+        </div>
+    </div>
+
+
+    <div class="container lc-box-group">
+
+        <div class="row">
+            <div class="col-md-5">
+                <div class="box box-register">
+                    {{ include('LoginCidadaoCoreBundle::common.register.html.twig') }}
+                </div>
+            </div>
+
+            <div class="col-md-2"></div>
+
+            <div class="col-md-5">
+                <div class="box">
+                    {{ include('LoginCidadaoCoreBundle::common.login.html.twig') }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="box connect-box lc-box clearfix">
+                    <h3>{% trans %}Use accounts from other services{% endtrans %}</h3>
+                    <p>{% trans %}If you prefer, it's possible to use other services to login or create your account.{% endtrans %}</p>
+                    <div class="row">
+                        <div class="col-md-3 text-center"><a class="connect facebook" data-href="{{ path("lc_link_facebook") }}">Facebook</a></div>
+                        <div class="col-md-3 text-center"><a class="connect twitter" href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}">Twitter</a></div>
+                        <div class="col-md-3 text-center"><a class="connect google" href="{{ path('hwi_oauth_service_redirect', {'service': 'google'}) }}">Google</a></div>
+                        <style scoped>
+                            .lc-box .nfg {
+                                background-position: 2px 0;
+                                background-color: #EF9618;
+                                {% image '@LoginCidadaoCoreBundle/Resources/public/images/meurs_connect_nfg_home.png' %}
+                                background-image: url('{{ asset_url | e('css') }}');
+                                {% endimage %}
+                            }
+
+                            @media (max-width: 767px) {
+                                .lc-box .nfg {
+                                    background-position: 0;
+                                    {% image '@LoginCidadaoCoreBundle/Resources/public/images/meurs_connect_nfg.png' %}
+                                    background-image: url('{{ asset_url | e('css') }}');
+                                    {% endimage %}
+                                }
+                            }
+                        </style>
+                        <div class="col-md-3 text-center"><a class="connect nfg nfgpopup" data-href="{{ path('nfg_login') }}">NFG</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block stylesheets_custom %}
+    {% stylesheets '@lc_base_css' 'bundles/logincidadaocore/css/home/*.css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}

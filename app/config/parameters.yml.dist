@@ -7,7 +7,7 @@ parameters:
     database_password: ~
 
     # Trusted proxies (http://symfony.com/doc/current/cookbook/request/load_balancer_reverse_proxy.html)
-    trusted_proxies: []
+    trusted_proxies: [ ]
     # IPs allowed to access dev environment
     dev_allowed: [ 127.0.0.0/8 ]
     # IPs allowed to access monitoring endpoint
@@ -43,7 +43,7 @@ parameters:
         port: 3128
         auth: 'login:senha'
 
-    site_domain: localhost
+    site_domain: meu.rs.gov.br
     mailer_sender_mail: webmaster@example.com
     mailer_sender_name: webmaster
     recaptcha_public_key: ~
@@ -57,6 +57,13 @@ parameters:
     background_picture.author: 'Guilherme da Silva Donato'
     background_picture.link: 'http://www.flickr.com/photos/lordjedi/2295119043/'
     mailer_receiver_mail: ~
+    nfg_ws_url: ~
+    soe_organization: ~
+    soe_username: ~
+    soe_password: ~
+    nfg_url_auth: ~
+    nfg_url_login: ~
+    nfg_hmac_secret: ~
 
     user_profile_upload_dir: %kernel.root_dir%/../web/uploads/profile-pictures
     client_image_upload_dir: '%kernel.root_dir%/../web/uploads/client-pictures'
