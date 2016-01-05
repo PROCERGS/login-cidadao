@@ -82,13 +82,13 @@ class SessionManagementController extends Controller
 
     /**
      * @param string $clientId
-     * @return \PROCERGS\OAuthBundle\Entity\Client
+     * @return \LoginCidadao\OAuthBundle\Entity\Client
      */
     private function getClient($clientId)
     {
         $clientId = explode('_', $clientId);
         $id       = $clientId[0];
         return $this->getDoctrine()->getManager()
-                ->getRepository('PROCERGSOAuthBundle:Client')->find($id);
+                ->getRepository('LoginCidadaoOAuthBundle:Client')->find($id);
     }
 }

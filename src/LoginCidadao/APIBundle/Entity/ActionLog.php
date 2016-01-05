@@ -4,7 +4,7 @@ namespace LoginCidadao\APIBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use PROCERGS\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 
 /**
  * ActionLog

@@ -147,24 +147,6 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/igp/consult", name="lc_ipg_consutl")
-     * @Template()
-     */
-    public function igpConsultAction(Request $request)
-    {
-        $igp = $this->get('procergs_logincidadao.igpws');
-        //$rcs = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Person')->createQueryBuilder('p')->select('p.cpf')->where('p.cpf is not null')->getQuery()->getResult(Query::HYDRATE_ARRAY);
-        echo "<pre>";
-        $rcs[] = array('cpf' => '1000450741');
-        foreach ($rcs as $rc) {
-            $igp->setCpf($rc['cpf']);
-            $rc['igp'] = $igp->consultar();
-            print_r($rc);
-        }
-        die();
-    }
-
-    /**
      * @Route("/dashboard", name="lc_dashboard")
      * @Template()
      */
@@ -182,7 +164,7 @@ class DefaultController extends Controller
       $logs['activity'] = $logRepo->getWithClientByPerson($this->getUser(), 3);
 
       // notifications
-      $notificationHandler = $this->get('procergs.notification.handler');
+      $notificationHandler = $this->get('lc.notification.handler');
       $notifications = $notificationHandler->getUnread($this->getUser());
 
       $defaultClientUid = $this->container->getParameter('oauth_default_client.uid');

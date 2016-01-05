@@ -92,7 +92,7 @@ class StatisticsController extends Controller
     public function usersByServicesAction(Request $request)
     {
         $repo   = $this->getDoctrine()
-            ->getRepository('PROCERGSOAuthBundle:Client');
+            ->getRepository('LoginCidadaoOAuthBundle:Client');
         $totals = $repo->getCountPerson($this->getUser());
 
         $keys = array();
@@ -155,7 +155,7 @@ class StatisticsController extends Controller
                                           $format = 'html')
     {
         $em        = $this->getDoctrine()->getManager();
-        $repo      = $em->getRepository('PROCERGSOAuthBundle:Client');
+        $repo      = $em->getRepository('LoginCidadaoOAuthBundle:Client');
         $rawData   = $repo->statsUsersByServiceByDay($days, $clientId,
             $this->getUser());
         $rawTotals = $repo->getCountPerson($this->getUser(), $clientId);

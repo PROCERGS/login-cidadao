@@ -83,7 +83,7 @@ class BroadcastController extends Controller
     public function clientsAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $clients = $em->getRepository('PROCERGSOAuthBundle:Client')->createQueryBuilder('c')
+        $clients = $em->getRepository('LoginCidadaoOAuthBundle:Client')->createQueryBuilder('c')
             ->where(':person MEMBER OF c.owners')
             ->innerJoin('LoginCidadaoNotificationBundle:Category', 'cat', 'WITH',
                         'c.id = cat.client')

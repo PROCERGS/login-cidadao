@@ -1,7 +1,0 @@
-parameters:
-#    procergs_generic_validation.example.class: PROCERGS\Generic\ValidationBundle\Example
-
-services:
-#    procergs_generic_validation.example:
-#        class: %procergs_generic_validation.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]

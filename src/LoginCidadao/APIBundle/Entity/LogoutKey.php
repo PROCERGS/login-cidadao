@@ -44,9 +44,9 @@ class LogoutKey
     protected $person;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="logoutKeys")
+     * @ORM\ManyToOne(targetEntity="LoginCidadao\OAuthBundle\Entity\Client", inversedBy="logoutKeys")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id", nullable=false)
-     * @var \PROCERGS\OAuthBundle\Entity\Client
+     * @var \LoginCidadao\OAuthBundle\Entity\Client
      */
     protected $client;
 

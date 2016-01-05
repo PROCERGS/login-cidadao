@@ -2,7 +2,7 @@
 
 namespace LoginCidadao\NotificationBundle\Model;
 
-use PROCERGS\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 
 interface CategoryInterface
 {

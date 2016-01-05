@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
-use PROCERGS\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\CoreBundle\Helper\GridHelper;
 
 /**
@@ -22,7 +22,7 @@ class ClientController extends Controller
     public function newAction(Request $request)
     {
         $client = new Client();
-        $form   = $this->container->get('form.factory')->create($this->container->get('procergs_logincidadao.client.base.form.type'),
+        $form   = $this->container->get('form.factory')->create($this->container->get('lc.client.base.form.type'),
             $client);
 
         $form->handleRequest($request);
@@ -61,7 +61,7 @@ class ClientController extends Controller
     public function gridAction(Request $request)
     {
         $em   = $this->getDoctrine()->getManager();
-        $sql  = $em->getRepository('PROCERGSOAuthBundle:Client')->createQueryBuilder('c')
+        $sql  = $em->getRepository('LoginCidadaoOAuthBundle:Client')->createQueryBuilder('c')
             ->where(':person MEMBER OF c.owners')
             ->setParameter('person', $this->getUser())
             ->addOrderBy('c.id', 'desc');
@@ -134,7 +134,7 @@ class ClientController extends Controller
     public function editAction(Request $request, $id)
     {
         $em     = $this->getDoctrine()->getManager();
-        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->createQueryBuilder('c')
+        $client = $em->getRepository('LoginCidadaoOAuthBundle:Client')->createQueryBuilder('c')
                 ->where(':person MEMBER OF c.owners')
                 ->andWhere('c.id = :id')
                 ->setParameters(array('id' => $id, 'person' => $this->getUser()))
@@ -143,7 +143,7 @@ class ClientController extends Controller
             return $this->redirect($this->generateUrl('lc_dev_client_new'));
         }
         $form     = $this->get('form.factory')->
-            create($this->get('procergs_logincidadao.client.base.form.type'),
+            create($this->get('lc.client.base.form.type'),
             $client);
         $form->handleRequest($request);
         $messages = '';

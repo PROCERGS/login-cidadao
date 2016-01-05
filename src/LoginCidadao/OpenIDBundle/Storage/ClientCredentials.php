@@ -42,7 +42,7 @@ class ClientCredentials extends BaseClass
     {
         // Get Client
         $id     = explode('_', $client_id);
-        $client = $this->em->getRepository('PROCERGSOAuthBundle:Client')
+        $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
             ->find($id[0]);
 
         // If client exists check secret
@@ -80,7 +80,7 @@ class ClientCredentials extends BaseClass
     {
         // Get Client
         $id     = explode('_', $client_id);
-        $client = $this->em->getRepository('PROCERGSOAuthBundle:Client')
+        $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
             ->find($id[0]);
 
         if (!$client) {
@@ -113,7 +113,7 @@ class ClientCredentials extends BaseClass
     public function isPublicClient($client_id)
     {
         $id     = explode('_', $client_id);
-        $client = $this->em->getRepository('PROCERGSOAuthBundle:Client')
+        $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
             ->find($id[0]);
 
         if (!$client) {
@@ -135,7 +135,7 @@ class ClientCredentials extends BaseClass
     {
         // Get Client
         $id     = explode('_', $client_id);
-        $client = $this->em->getRepository('PROCERGSOAuthBundle:Client')
+        $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
             ->find($id[0]);
 
         if (!$client) {

@@ -48,7 +48,7 @@ class RefreshToken extends BaseClass implements RefreshTokenInterface
      */
     public function getRefreshToken($refresh_token)
     {
-        $refreshToken = $this->em->getRepository('PROCERGSOAuthBundle:RefreshToken')
+        $refreshToken = $this->em->getRepository('LoginCidadaoOAuthBundle:RefreshToken')
             ->findOneBy(array('token' => $refresh_token));
 
         if (!$refreshToken) {
@@ -96,7 +96,7 @@ class RefreshToken extends BaseClass implements RefreshTokenInterface
     {
         // Get Client Entity
         $id     = explode('_', $client_id);
-        $client = $this->em->getRepository('PROCERGSOAuthBundle:Client')
+        $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
             ->find($id[0]);
 
         if (!$client) {
@@ -111,7 +111,7 @@ class RefreshToken extends BaseClass implements RefreshTokenInterface
         }
 
         // Create Refresh Token
-        $refreshToken = new \PROCERGS\OAuthBundle\Entity\RefreshToken();
+        $refreshToken = new \LoginCidadao\OAuthBundle\Entity\RefreshToken();
         $refreshToken->setToken($refresh_token);
         $refreshToken->setClient($client);
         $refreshToken->setUser($user);
@@ -141,7 +141,7 @@ class RefreshToken extends BaseClass implements RefreshTokenInterface
      */
     public function unsetRefreshToken($refresh_token)
     {
-        $refreshToken = $this->em->getRepository('PROCERGSOAuthBundle:RefreshToken')
+        $refreshToken = $this->em->getRepository('LoginCidadaoOAuthBundle:RefreshToken')
             ->findOneBy(array('token' => $refresh_token));
         $this->em->remove($refreshToken);
         $this->em->flush();

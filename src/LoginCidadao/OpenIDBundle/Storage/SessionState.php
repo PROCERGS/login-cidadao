@@ -56,12 +56,12 @@ class SessionState
 
     /**
      * @param string $client_id
-     * @return \PROCERGS\OAuthBundle\Entity\Client
+     * @return \LoginCidadao\OAuthBundle\Entity\Client
      */
     private function getClient($client_id)
     {
         $id = explode('_', $client_id);
-        return $this->em->getRepository('PROCERGSOAuthBundle:Client')->find($id[0]);
+        return $this->em->getRepository('LoginCidadaoOAuthBundle:Client')->find($id[0]);
     }
 
     public function onKernelResponse(FilterResponseEvent $event)

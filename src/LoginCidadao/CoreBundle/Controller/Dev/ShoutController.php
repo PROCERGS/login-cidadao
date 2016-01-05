@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
-use PROCERGS\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\CoreBundle\Helper\GridHelper;
 
 /**
@@ -125,12 +125,12 @@ class ShoutController extends Controller
     public function editAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $client = $em->getRepository('PROCERGSOAuthBundle:Client')
+        $client = $em->getRepository('LoginCidadaoOAuthBundle:Client')
             ->findOneOwned($this->getUser(), $id);
         if (!$client) {
             return $this->redirect($this->generateUrl('lc_dev_shout_new'));
         }
-        $form = $this->createForm('procergs_logincidadao.client.base.form.type',
+        $form = $this->createForm('lc.client.base.form.type',
                                   $client);
         $form->handleRequest($request);
         $messages = '';

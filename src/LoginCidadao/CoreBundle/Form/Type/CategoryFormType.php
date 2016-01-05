@@ -55,7 +55,7 @@ class CategoryFormType extends CommonFormType
                            array(
                     'required' => true,
                     'label' => 'Service',
-                    'class' => 'PROCERGSOAuthBundle:Client',
+                    'class' => 'LoginCidadaoOAuthBundle:Client',
                     'choice_label' => 'name',
                     'query_builder' => function (EntityRepository $er) use($person) {
                         return $er->createQueryBuilder('c')

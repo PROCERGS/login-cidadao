@@ -49,7 +49,7 @@ class LoginCidadaoListener extends UsernamePasswordFormAuthenticationListener
         $doctrine->getManager()->persist($accessSession);
         $doctrine->getManager()->flush();
         $request->getSession()->set(SecurityContextInterface::LAST_USERNAME, $vars['username']);
-        $formType = $this->container->get('procergs_logincidadao.login.form.type');
+        $formType = $this->container->get('lc.login.form.type');
         $formType->setVerifyCaptcha($accessSession->getVal() >= $this->container->getParameter('brute_force_threshold'));
         $form = $this->container->get('form.factory')->create($formType);
         $form->handleRequest($request);

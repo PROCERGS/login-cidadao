@@ -9,8 +9,8 @@ use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use PROCERGS\OAuthBundle\Model\ClientUser;
-use PROCERGS\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OAuthBundle\Model\ClientUser;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\APIBundle\Security\Audit\Annotation as Audit;
 
@@ -166,7 +166,7 @@ class NotificationController extends BaseController
      */
     private function getNotificationHandler()
     {
-        return $this->container->get('procergs.notification.handler');
+        return $this->container->get('lc.notification.handler');
     }
 
     /**

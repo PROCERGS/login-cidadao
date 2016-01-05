@@ -36,7 +36,7 @@ class PersonRepository extends EntityRepository
         return $this->createQueryBuilder('p')
                 ->innerJoin('LoginCidadaoCoreBundle:Authorization', 'a',
                             'WITH', 'a.person = p')
-                ->innerJoin('PROCERGSOAuthBundle:Client', 'c', 'WITH',
+                ->innerJoin('LoginCidadaoOAuthBundle:Client', 'c', 'WITH',
                             'a.client = c')
                 ->andWhere('c.id = :clientId')
                 ->setParameter('clientId', $clientId)

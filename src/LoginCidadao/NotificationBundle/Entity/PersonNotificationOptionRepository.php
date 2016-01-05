@@ -4,7 +4,7 @@ namespace LoginCidadao\NotificationBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use PROCERGS\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\NotificationBundle\Model\CategoryInterface;
 use Doctrine\ORM\QueryBuilder;
 
@@ -22,7 +22,7 @@ class PersonNotificationOptionRepository extends EntityRepository
                    's')
             ->join('LoginCidadaoNotificationBundle:Category', 'c',
                    'WITH', 's.category = c')
-            ->innerJoin('PROCERGSOAuthBundle:Client', 'cli', 'WITH',
+            ->innerJoin('LoginCidadaoOAuthBundle:Client', 'cli', 'WITH',
                         'c.client = cli')
             ->innerJoin('LoginCidadaoCoreBundle:Authorization', 'a',
                         'WITH', 'a.client = cli AND a.person = s.person');

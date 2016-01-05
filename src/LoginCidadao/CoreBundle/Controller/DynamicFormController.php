@@ -21,7 +21,7 @@ use LoginCidadao\CoreBundle\Entity\IdCard;
 use LoginCidadao\CoreBundle\Model\IdCardInterface;
 use LoginCidadao\ValidationControlBundle\Handler\ValidationHandler;
 use LoginCidadao\CoreBundle\Model\SelectData;
-use PROCERGS\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\CoreBundle\DynamicFormEvents;
 
 class DynamicFormController extends Controller
@@ -453,7 +453,7 @@ class DynamicFormController extends Controller
         }
 
         return $this->getDoctrine()
-                ->getRepository('PROCERGSOAuthBundle:Client')
+                ->getRepository('LoginCidadaoOAuthBundle:Client')
                 ->findOneBy($params);
     }
 

@@ -18,7 +18,7 @@ class AuthorizationController extends Controller
     public function listAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $clients = $em->getRepository('PROCERGSOAuthBundle:Client');
+        $clients = $em->getRepository('LoginCidadaoOAuthBundle:Client');
 
         $user = $this->getUser();
         $allApps = $clients->findAll();

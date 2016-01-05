@@ -15,7 +15,7 @@ class RevokeAuthorizationFormType extends BaseType
 
     public function getName()
     {
-        return 'procergs_revoke_authorization';
+        return 'lc_revoke_authorization';
     }
 
 }

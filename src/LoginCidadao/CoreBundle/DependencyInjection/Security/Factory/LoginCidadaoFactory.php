@@ -13,6 +13,6 @@ class LoginCidadaoFactory extends FormLoginFactory
     
     protected function getListenerId()
     {
-        return 'procergs_logincidadao.security.authentication.listener';
+        return 'lc.security.authentication.listener';
     }
 }

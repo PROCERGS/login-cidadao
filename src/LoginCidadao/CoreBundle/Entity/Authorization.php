@@ -3,7 +3,7 @@
 namespace LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use PROCERGS\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Entity\Client;
 
 /**
  * @ORM\Entity(repositoryClass="LoginCidadao\CoreBundle\Entity\AuthorizationRepository")
@@ -32,7 +32,7 @@ class Authorization
     protected $person;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="authorizations")
+     * @ORM\ManyToOne(targetEntity="LoginCidadao\OAuthBundle\Entity\Client", inversedBy="authorizations")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id", nullable=false)
      */
     protected $client;
@@ -68,7 +68,7 @@ class Authorization
     }
 
     /**
-     * @param \PROCERGS\OAuthBundle\Entity\Client $client
+     * @param \LoginCidadao\OAuthBundle\Entity\Client $client
      */
     public function setClient(Client $client = null)
     {

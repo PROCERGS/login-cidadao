@@ -3,7 +3,7 @@
 namespace LoginCidadao\NotificationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use PROCERGS\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\NotificationBundle\Model\NotificationInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -116,7 +116,7 @@ class Notification implements NotificationInterface
     private $person;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="notifications")
+     * @ORM\ManyToOne(targetEntity="LoginCidadao\OAuthBundle\Entity\Client", inversedBy="notifications")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id", onDelete="CASCADE")
      * @JMS\Expose
      * @JMS\Groups({"public", "form"})

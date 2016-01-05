@@ -1,0 +1,7 @@
+lc_oauth_init:
+    path: /initClient
+    defaults: { _controller: LoginCidadaoOAuthBundle:Client:initClient }
+
+lc_oauth_getid:
+    path: /getPub/{id}
+    defaults: { _controller: LoginCidadaoOAuthBundle:Client:getPublicId }

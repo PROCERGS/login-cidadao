@@ -44,7 +44,7 @@ class DocRgFormType extends AbstractType
 
     public function getName()
     {
-        return 'procergs_person_doc';
+        return 'lc_person_doc';
     }
 
     public function setEntityManager(EntityManager $em)

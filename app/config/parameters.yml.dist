@@ -10,6 +10,8 @@ parameters:
     trusted_proxies: [ ]
     # IPs allowed to access dev environment
     dev_allowed: [ 127.0.0.0/8 ]
+    # IPs allowed to access monitoring endpoint
+    allowed_monitors: [ 127.0.0.0/8 ]
 
     memcached_host: 127.0.0.1
     memcached_port: 11211
@@ -70,9 +72,6 @@ parameters:
 
     google_app_key: YOUR_API_KEY
     google_app_secret: YOUR_API_SECRET
-    igp_ws_url: ~
-    igp_username: ~
-    igp_password: ~
 
     # Default Client
     oauth_default_client.uid: login-cidadao

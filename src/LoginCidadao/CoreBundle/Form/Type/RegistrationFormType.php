@@ -35,6 +35,6 @@ class RegistrationFormType extends BaseType
 
     public function getName()
     {
-        return 'procergs_person_registration';
+        return 'lc_person_registration';
     }
 }

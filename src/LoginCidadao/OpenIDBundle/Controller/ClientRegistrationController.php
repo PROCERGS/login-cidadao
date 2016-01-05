@@ -4,7 +4,7 @@ namespace LoginCidadao\OpenIDBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
 use League\Uri\Schemes\Http as HttpUri;
-use PROCERGS\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -167,7 +167,7 @@ class ClientRegistrationController extends FOSRestController
         $entityId = $parts[0];
         $publicId = $parts[1];
 
-        $client = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:Client')
+        $client = $this->getDoctrine()->getRepository('LoginCidadaoOAuthBundle:Client')
             ->findOneBy(array('id' => $entityId, 'randomId' => $publicId));
 
         if (!$client) {

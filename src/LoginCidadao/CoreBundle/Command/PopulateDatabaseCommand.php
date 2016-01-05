@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\ORM\EntityManager;
 use LoginCidadao\NotificationBundle\Entity\Category;
-use PROCERGS\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use Symfony\Component\HttpFoundation\File\File;
 
 class PopulateDatabaseCommand extends ContainerAwareCommand
@@ -140,7 +140,7 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
             $client->setPublished(true);
             $client->setVisible(false);
             $client->setUid($uid);
-            $client->setPictureFile($picture);
+            $client->setImage($picture);
             $clientManager->updateClient($client);
             $output->writeln('Default Client created.');
         }
@@ -177,7 +177,7 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
     {
         $em = $this->getManager();
         $uid = $this->getContainer()->getParameter('oauth_default_client.uid');
-        $client = $em->getRepository('PROCERGSOAuthBundle:Client')->findOneByUid($uid);
+        $client = $em->getRepository('LoginCidadaoOAuthBundle:Client')->findOneByUid($uid);
 
         return $client;
     }

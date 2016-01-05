@@ -1,3 +1,8 @@
+# Monitor
+_monitor:
+    resource: "@LiipMonitorBundle/Resources/config/routing.xml"
+    prefix: /monitor/health
+
 #Nelmio Security
 nelmio_security:
     path:     /nelmio/csp/report
@@ -65,7 +70,7 @@ google_login:
     path: /login/check-google
 
 #API
-procergs_login_cidadao_api:
+lc_api:
     type: rest
     resource: "@LoginCidadaoAPIBundle/Resources/config/routing.yml"
     prefix:   /api/v1
@@ -76,12 +81,12 @@ NelmioApiDocBundle:
     prefix:   /api/doc
 
 # login-cidadao
-procergs_generic_locale:
-    resource: "@PROCERGSGenericLocaleBundle/Controller/"
+lc_locale:
+    resource: "@LoginCidadaoLocaleBundle/Controller/"
     type:     annotation
     prefix:   /locale
 
-procergs_login_cidadao_core:
+lc_core:
     resource: "@LoginCidadaoCoreBundle/Resources/config/routing.yml"
     prefix:   /
 lc_home:
@@ -94,8 +99,8 @@ simple_things_entity_audit:
     prefix: /audit
 
 # OAuth Routes
-procergso_auth:
-    resource: "@PROCERGSOAuthBundle/Resources/config/routing.yml"
+lc_oauth:
+    resource: "@LoginCidadaoOAuthBundle/Resources/config/routing.yml"
     prefix:   /auth
 
 fos_oauth_server_token:

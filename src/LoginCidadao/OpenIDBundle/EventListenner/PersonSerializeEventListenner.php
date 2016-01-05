@@ -4,7 +4,7 @@ namespace LoginCidadao\OpenIDBundle\EventListenner;
 
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
-use PROCERGS\OAuthBundle\Model\AccessTokenManager;
+use LoginCidadao\OAuthBundle\Model\AccessTokenManager;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class PersonSerializeEventListenner implements EventSubscriberInterface

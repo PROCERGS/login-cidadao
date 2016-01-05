@@ -18,7 +18,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('procergs_login_cidadao_notification');
+        $rootNode = $treeBuilder->root('lc_notification');
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for

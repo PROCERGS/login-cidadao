@@ -4,7 +4,7 @@ namespace LoginCidadao\NotificationBundle\Model;
 
 use LoginCidadao\NotificationBundle\Handler\AuthenticatedNotificationHandlerInterface;
 use LoginCidadao\NotificationBundle\Model\NotificationInterface;
-use PROCERGS\Generic\InfiniteScrollBundle\Model\AbstractInfiniteIterable;
+use LoginCidadao\InfiniteScrollBundle\Model\AbstractInfiniteIterable;
 
 class NotificationIterable extends AbstractInfiniteIterable
 {

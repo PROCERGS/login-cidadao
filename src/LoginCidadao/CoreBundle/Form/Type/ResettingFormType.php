@@ -25,6 +25,6 @@ class ResettingFormType extends BaseType
 
     public function getName()
     {
-        return 'procergs_person_resetting';
+        return 'lc_person_resetting';
     }
 }

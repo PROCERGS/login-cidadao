@@ -1,7 +1,0 @@
-parameters:
-#    procergs_generic_infinite_scroll.example.class: PROCERGS\Generic\InfiniteScrollBundle\Example
-
-services:
-#    procergs_generic_infinite_scroll.example:
-#        class: %procergs_generic_infinite_scroll.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]

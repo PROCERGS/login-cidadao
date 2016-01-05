@@ -1,6 +1,0 @@
-services:
-    procergs_generic_locale.locale_listener:
-        class: PROCERGS\Generic\LocaleBundle\EventListener\LocaleListener
-        arguments: ["%kernel.default_locale%"]
-        tags:
-            - { name: kernel.event_subscriber }

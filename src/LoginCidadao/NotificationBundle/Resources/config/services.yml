@@ -1,7 +1,7 @@
 parameters:
     notifications.helper.class: LoginCidadao\NotificationBundle\Helper\NotificationsHelper
-    procergs.notification.handler.class: LoginCidadao\NotificationBundle\Handler\NotificationHandler
-    procergs.notification.class: LoginCidadao\NotificationBundle\Entity\Notification
+    lc.notification.handler.class: LoginCidadao\NotificationBundle\Handler\NotificationHandler
+    lc.notification.class: LoginCidadao\NotificationBundle\Entity\Notification
     notification_oauth_event_listener.class: LoginCidadao\NotificationBundle\EventListener\OAuthAuthorizationListener
 
 services:
@@ -9,14 +9,14 @@ services:
         class: %notifications.helper.class%
         arguments: ["@doctrine.orm.entity_manager", "@security.context", "@service_container", %notifications_categories_alert.uid%, %notifications_categories_alert.uid%]
 
-    procergs.notification.handler:
-        class: %procergs.notification.handler.class%
+    lc.notification.handler:
+        class: %lc.notification.handler.class%
         arguments:
             - @doctrine.orm.entity_manager
-            - %procergs.notification.class%
+            - %lc.notification.class%
             - @form.factory
-            - @procergs_logincidadao.mailer
-            - @procergs_logincidadao.notification.type
+            - @lc.mailer
+            - @lc.notification.type
             - @event_dispatcher
             - %oauth_default_client.uid%
             - %http_proxy%
@@ -25,11 +25,11 @@ services:
 
     notification_oauth_event_listener:
         class:  %notification_oauth_event_listener.class%
-        arguments: [ "@doctrine.orm.entity_manager", "@procergs.notification.handler" ]
+        arguments: [ "@doctrine.orm.entity_manager", "@lc.notification.handler" ]
         tags:
             - { name: kernel.event_listener, event: fos_oauth_server.post_authorization_process, method: onPostAuthorizationProcess }
 
-    procergs_logincidadao.notification.type:
+    lc.notification.type:
         class: LoginCidadao\NotificationBundle\Form\NotificationType
         tags:
             - { name: form.type, alias: form_notification_type }

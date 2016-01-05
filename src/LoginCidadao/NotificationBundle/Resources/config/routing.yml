@@ -1,9 +1,9 @@
-procergs_login_cidadao_notification:
+lc_notification:
     resource: "@LoginCidadaoNotificationBundle/Controller/"
     type:     annotation
     prefix:   /
 
-procergs_login_cidadao_notification_jsapi:
+lc_notification_jsapi:
     resource: "@LoginCidadaoNotificationBundle/Controller/JsAPI/NotificationController.php"
     prefix:   /jsapi/v1
     type: rest

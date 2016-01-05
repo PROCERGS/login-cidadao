@@ -7,15 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\SecurityContext;
-use Symfony\Component\Security\Core\Exception\DisabledException;
-use LoginCidadao\CoreBundle\Form\Type\LoginFormType;
-use LoginCidadao\CoreBundle\Entity\Person;
-use PROCERGS\Generic\ValidationBundle\Validator\Constraints\CEP;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\FormError;
 
 class TwitterController extends Controller

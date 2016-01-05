@@ -96,7 +96,7 @@ class PersonController extends Controller
         $rolesNames = array_keys($roles);
 
         $form = $this->get('form.factory')->create(
-            $this->get('procergs_logincidadao.person.resume.form.type'),
+            $this->get('lc.person.resume.form.type'),
                        $person, array('available_roles' => $rolesNames)
         );
         $form->handleRequest($request);

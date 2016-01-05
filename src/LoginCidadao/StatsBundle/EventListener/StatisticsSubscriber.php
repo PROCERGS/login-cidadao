@@ -52,7 +52,7 @@ class StatisticsSubscriber implements EventSubscriber
         }
 
         $clientRepo = $args->getEntityManager()
-            ->getRepository('PROCERGSOAuthBundle:Client');
+            ->getRepository('LoginCidadaoOAuthBundle:Client');
 
         $counts = $clientRepo->getCountPerson($entity->getPerson(),
             $entity->getClient()->getId());

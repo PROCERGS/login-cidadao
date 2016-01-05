@@ -13,7 +13,7 @@ namespace LoginCidadao\OpenIDBundle\Entity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use LoginCidadao\OpenIDBundle\Constraints\SectorIdentifier;
 use Symfony\Component\Validator\Constraints as Assert;
-use PROCERGS\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\Mapping as ORM;
 use League\Uri\Schemes\Http as HttpUri;
@@ -39,7 +39,7 @@ class ClientMetadata
 
     /**
      * @var Client
-     * @ORM\OneToOne(targetEntity="PROCERGS\OAuthBundle\Entity\Client", inversedBy="metadata", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="LoginCidadao\OAuthBundle\Entity\Client", inversedBy="metadata", cascade={"persist"})
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      */
     protected $client;

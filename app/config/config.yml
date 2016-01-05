@@ -146,13 +146,13 @@ swiftmailer:
 
 fos_oauth_server:
   db_driver: orm
-  client_class:         PROCERGS\OAuthBundle\Entity\Client
-  access_token_class:   PROCERGS\OAuthBundle\Entity\AccessToken
-  refresh_token_class:  PROCERGS\OAuthBundle\Entity\RefreshToken
-  auth_code_class:      PROCERGS\OAuthBundle\Entity\AuthCode
+  client_class:         LoginCidadao\OAuthBundle\Entity\Client
+  access_token_class:   LoginCidadao\OAuthBundle\Entity\AccessToken
+  refresh_token_class:  LoginCidadao\OAuthBundle\Entity\RefreshToken
+  auth_code_class:      LoginCidadao\OAuthBundle\Entity\AuthCode
   service:
       user_provider: fos_user.user_manager
-      client_manager: procergs_logincidadao.oauth.client_manager
+      client_manager: lc.oauth.client_manager
       options:
           supported_scopes: %lc_supported_scopes%
 
@@ -168,11 +168,11 @@ fos_user:
               address: %mailer_sender_mail%
               sender_name: %mailer_sender_name%
         form:
-            type: procergs_person_registration
+            type: lc_person_registration
             validation_groups:  [LoginCidadaoRegistration]
     profile:
         form:
-            type: procergs_person_profile
+            type: lc_person_profile
     resetting:
         email:
             template: LoginCidadaoCoreBundle:Person:resetting/email.html.twig
@@ -180,13 +180,13 @@ fos_user:
                 address:        %mailer_sender_mail%
                 sender_name:    %mailer_sender_name%
         form:
-            type:               procergs_person_resetting
+            type:               lc_person_resetting
     service:
-        user_manager: procergs_logincidadao.user_manager
+        user_manager: lc.user_manager
         mailer: fos_user.mailer.twig_swift
     change_password:
         form:
-            type:               procergs_change_password
+            type:               lc_change_password
 
 # Audit Trail
 simple_things_entity_audit:
@@ -214,10 +214,10 @@ simple_things_entity_audit:
         - LoginCidadao\NotificationBundle\Entity\PersonNotificationOption
         - LoginCidadao\NotificationBundle\Entity\Placeholder
 
-        - PROCERGS\OAuthBundle\Entity\AccessToken
-        - PROCERGS\OAuthBundle\Entity\AuthCode
-        - PROCERGS\OAuthBundle\Entity\Client
-        - PROCERGS\OAuthBundle\Entity\RefreshToken
+        - LoginCidadao\OAuthBundle\Entity\AccessToken
+        - LoginCidadao\OAuthBundle\Entity\AuthCode
+        - LoginCidadao\OAuthBundle\Entity\Client
+        - LoginCidadao\OAuthBundle\Entity\RefreshToken
 
 fos_facebook:
     alias:  facebook
@@ -229,7 +229,7 @@ fos_facebook:
 hwi_oauth:
     connect:
         confirmation: false
-        account_connector: procergs.hwi_twitter.user_provider
+        account_connector: lc.hwi_twitter.user_provider
     firewall_name: main
     fosub:
         username_iterations: 30
@@ -464,3 +464,23 @@ nelmio_security:
     xss_protection:
         enabled: false
         mode_block: false
+
+liip_monitor:
+    enable_controller: true
+    checks:
+        memcache:
+            main:
+                host: %memcached_host%
+                port: %memcached_port%
+
+        doctrine_dbal: default
+
+        readable_directory:
+            - '%kernel.cache_dir%'
+            - '%user_profile_upload_dir%'
+            - '%client_image_upload_dir%'
+
+        writable_directory:
+            - '%kernel.cache_dir%'
+            - '%user_profile_upload_dir%'
+            - '%client_image_upload_dir%'

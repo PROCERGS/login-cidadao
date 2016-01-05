@@ -7,20 +7,20 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
-use PROCERGS\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use PROCERGS\Generic\ValidationBundle\Validator\Constraints as PROCERGSAssert;
+use LoginCidadao\ValidationBundle\Validator\Constraints as LCAssert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use PROCERGS\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use Doctrine\Common\Collections\Collection;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 use LoginCidadao\CoreBundle\Model\LocationAwareInterface;
 use LoginCidadao\CoreBundle\Model\SelectData;
-use PROCERGS\Generic\LongPolling\LongPollingUtils;
+use LoginCidadao\LongPolling\LongPollingUtils;
 
 /**
  * @ORM\Entity(repositoryClass="LoginCidadao\CoreBundle\Entity\PersonRepository")
@@ -77,7 +77,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     /**
      * @JMS\Expose
      * @JMS\Groups({"username","preferred_username"})
-     * @PROCERGSAssert\Username
+     * @LCAssert\Username
      * @Assert\NotBlank
      * @Assert\Length(
      *     min="1",
@@ -92,7 +92,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Expose
      * @JMS\Groups({"cpf"})
      * @ORM\Column(type="string", nullable=true, unique=true)
-     * @PROCERGSAssert\CPF
+     * @LCAssert\CPF
      * @JMS\Since("1.0")
      */
     protected $cpf;
@@ -233,7 +233,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     protected $broadcasts;
 
     /**
-     * @ORM\ManyToMany(targetEntity="PROCERGS\OAuthBundle\Entity\Client", mappedBy="owners")
+     * @ORM\ManyToMany(targetEntity="LoginCidadao\OAuthBundle\Entity\Client", mappedBy="owners")
      */
     protected $clients;
 
@@ -473,7 +473,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     /**
      * Checks if a given Client can access this Person's specified scope.
-     * @param \PROCERGS\OAuthBundle\Entity\Client $client
+     * @param \LoginCidadao\OAuthBundle\Entity\Client $client
      * @param mixed $scope can be a single scope or an array with several.
      * @return boolean
      */
@@ -508,7 +508,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     /**
      * Checks if this Person has any authorization for a given Client.
      * WARNING: Note that it does NOT validate scope!
-     * @param \PROCERGS\OAuthBundle\Entity\Client | integer $client
+     * @param \LoginCidadao\OAuthBundle\Entity\Client | integer $client
      */
     public function hasAuthorization($client)
     {

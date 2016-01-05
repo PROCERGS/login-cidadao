@@ -12,17 +12,15 @@ use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
-use LoginCidadao\NotificationBundle\Entity\Notification;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use PROCERGS\Generic\ValidationBundle\Validator\Constraints\UsernameValidator;
+use LoginCidadao\ValidationBundle\Validator\Constraints\UsernameValidator;
 use Doctrine\ORM\EntityManager;
 use LoginCidadao\CoreBundle\Exception\LcEmailException;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 
 class RegisterListner implements EventSubscriberInterface
 {
-
     private $router;
 
     /** \Symfony\Component\HttpFoundation\Session\Session * */
@@ -30,6 +28,7 @@ class RegisterListner implements EventSubscriberInterface
     private $translator;
     private $mailer;
     private $tokenGenerator;
+
     /** @var NotificationsHelper */
     private $notificationsHelper;
     private $emailUnconfirmedTime;
@@ -43,17 +42,18 @@ class RegisterListner implements EventSubscriberInterface
                                 MailerInterface $mailer,
                                 TokenGeneratorInterface $tokenGenerator,
                                 NotificationsHelper $notificationsHelper,
-                                $emailUnconfirmedTime, $lcSupportedScopes, $notificationHandler)
+                                $emailUnconfirmedTime, $lcSupportedScopes,
+                                $notificationHandler)
     {
-        $this->router = $router;
-        $this->session = $session;
-        $this->translator = $translator;
-        $this->mailer = $mailer;
-        $this->tokenGenerator = $tokenGenerator;
-        $this->notificationsHelper = $notificationsHelper;
+        $this->router               = $router;
+        $this->session              = $session;
+        $this->translator           = $translator;
+        $this->mailer               = $mailer;
+        $this->tokenGenerator       = $tokenGenerator;
+        $this->notificationsHelper  = $notificationsHelper;
         $this->emailUnconfirmedTime = $emailUnconfirmedTime;
-        $this->lcSupportedScopes = $lcSupportedScopes;
-        $this->notificationHandler = $notificationHandler;
+        $this->lcSupportedScopes    = $lcSupportedScopes;
+        $this->notificationHandler  = $notificationHandler;
     }
 
     /**
@@ -89,7 +89,7 @@ class RegisterListner implements EventSubscriberInterface
             return $event->setResponse(new RedirectResponse($this->router->generate('lc_home')));
         }
 
-        $email = explode('@', $user->getEmailCanonical(), 2);
+        $email    = explode('@', $user->getEmailCanonical(), 2);
         $username = $email[0];
         if (!UsernameValidator::isUsernameValid($username)) {
             $url = $this->router->generate('lc_update_username');
@@ -108,9 +108,9 @@ class RegisterListner implements EventSubscriberInterface
         $auth->setScope(explode(' ', $this->lcSupportedScopes));
         $this->em->persist($auth);
         $this->em->flush();
-        
+
         $this->mailer->sendConfirmationEmailMessage($user);
-        
+
         if (strlen($user->getPassword()) == 0) {
             $this->notificationsHelper->enforceEmptyPasswordNotification($user);
         }
@@ -122,8 +122,8 @@ class RegisterListner implements EventSubscriberInterface
         $event->getUser()->setEmailExpiration(null);
 
         $this->session->getFlashBag()->add('success',
-                                           $this->translator->trans('registration.confirmed',
-                                                                    array(
+            $this->translator->trans('registration.confirmed',
+                array(
                 '%username%' => $event->getUser()->getFirstName()
                 ), 'FOSUserBundle'));
         $this->session->getFlashBag()->get('alert.unconfirmed.email');
@@ -136,5 +136,4 @@ class RegisterListner implements EventSubscriberInterface
     {
         $this->em = $var;
     }
-
 }

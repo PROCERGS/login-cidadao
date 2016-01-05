@@ -4,8 +4,8 @@ namespace LoginCidadao\CoreBundle\Helper;
 
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\QueryBuilder;
-use PROCERGS\Generic\InfiniteScrollBundle\Model\AbstractInfiniteIterable;
-use PROCERGS\Generic\InfiniteScrollBundle\Model\QueryBuilderIterator;
+use LoginCidadao\InfiniteScrollBundle\Model\AbstractInfiniteIterable;
+use LoginCidadao\InfiniteScrollBundle\Model\QueryBuilderIterator;
 
 class GridHelper
 {

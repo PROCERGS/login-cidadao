@@ -39,7 +39,7 @@ class NotificationType extends CommonFormType
                 )
                 ->add('sender', 'entity',
                     NotificationType::getPreSubmitParams(
-                        'PROCERGSOAuthBundle:Client', 'randomId',
+                        'LoginCidadaoOAuthBundle:Client', 'randomId',
                         NotificationType::getSenderQuery($data)
                     )
                 )
@@ -96,7 +96,7 @@ class NotificationType extends CommonFormType
             ))
             ->add('sender', 'entity',
                 array(
-                'class' => 'PROCERGSOAuthBundle:Client',
+                'class' => 'LoginCidadaoOAuthBundle:Client',
                 'property' => 'randomId',
                 'query_builder' => $emptyEntityQuery
             ))
