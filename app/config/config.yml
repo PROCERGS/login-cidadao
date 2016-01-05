@@ -464,3 +464,23 @@ nelmio_security:
     xss_protection:
         enabled: false
         mode_block: false
+
+liip_monitor:
+    enable_controller: true
+    checks:
+        memcache:
+            main:
+                host: %memcached_host%
+                port: %memcached_port%
+
+        doctrine_dbal: default
+
+        readable_directory:
+            - '%kernel.cache_dir%'
+            - '%user_profile_upload_dir%'
+            - '%client_image_upload_dir%'
+
+        writable_directory:
+            - '%kernel.cache_dir%'
+            - '%user_profile_upload_dir%'
+            - '%client_image_upload_dir%'

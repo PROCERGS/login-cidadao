@@ -1,3 +1,8 @@
+# Monitor
+_monitor:
+    resource: "@LiipMonitorBundle/Resources/config/routing.xml"
+    prefix: /monitor/health
+
 #Nelmio Security
 nelmio_security:
     path:     /nelmio/csp/report

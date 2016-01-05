@@ -136,6 +136,8 @@ security:
         - { path: ^/connect/google$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login/facebook$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
+        - { path: ^/monitor/health, role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_monitors% }
+
         - { path: ^/contact$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/general$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/privacy$, role: IS_AUTHENTICATED_ANONYMOUSLY }
