@@ -59,7 +59,8 @@
         "oro/doctrine-extensions": "^1.0",
         "nelmio/cors-bundle": "^1.4",
         "nelmio/security-bundle": "^1.8",
-        "liip/monitor-bundle": "^2.2"
+        "liip/monitor-bundle": "^2.2",
+        "procergs/meurs-monitor-bundle": "^1.0"
     },
     "require-dev": {
         "sensio/generator-bundle" : "~2.3"
