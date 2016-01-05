@@ -476,9 +476,6 @@ liip_monitor:
                 host: %memcached_host%
                 port: %memcached_port%
 
-        security_advisory:
-            lock_file: '%kernel.root_dir%/../composer.lock'
-
         doctrine_dbal: default
 
         readable_directory:
