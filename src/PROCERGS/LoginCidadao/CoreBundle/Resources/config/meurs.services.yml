@@ -2,10 +2,10 @@ parameters:
     meurs.helper.class: PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper
     meurs.person_meurs.form.class: PROCERGS\LoginCidadao\CoreBundle\Form\PersonMeuRSType
     meurs.person_meurs.voter_registration.form.class: PROCERGS\LoginCidadao\CoreBundle\Form\PersonMeuRSVoterRegistrationType
-    
+
     meurs.profile_edit.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\ProfileEditListner
     procergs_logincidadao.nfgws.class: PROCERGS\LoginCidadao\CoreBundle\Helper\NfgWsHelper
-    
+
     lc.person_doc.form.class: PROCERGS\LoginCidadao\CoreBundle\Form\DocFormType
 
 services:
@@ -18,7 +18,7 @@ services:
 
     meurs.profile_edit:
         class: %meurs.profile_edit.class%
-        arguments: ["@procergs_logincidadao.mailer", "@fos_user.mailer", "@fos_user.util.token_generator", "@router", "@session", "@security.context", "@notifications.helper", "%registration.email.unconfirmed_time%"]
+        arguments: ["@lc.mailer", "@fos_user.mailer", "@fos_user.util.token_generator", "@router", "@session", "@security.context", "@notifications.helper", "%registration.email.unconfirmed_time%"]
         calls:
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
             - [setNfgHelper, ["@procergs_logincidadao.nfgws"]]
