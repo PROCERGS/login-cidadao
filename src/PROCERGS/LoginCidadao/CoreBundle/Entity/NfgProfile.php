@@ -178,12 +178,12 @@ class NfgProfile
      * @ORM\PrePersist
      * @ORM\PreUpdate
      */
-    public function setUpdatedAt($var = NULL)
+    public function setUpdatedAt($updatedAt = null)
     {
-        if ($var === null) {
-            $this->updatedAt = new \DateTime();
+        if ($updatedAt instanceof \DateTime) {
+            $this->updatedAt = $updatedAt;
         } else {
-            $this->updatedAt = $var;
+            $this->updatedAt = new \DateTime('now');
         }
         return $this;
     }
