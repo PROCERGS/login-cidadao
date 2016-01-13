@@ -28,7 +28,7 @@ class MeuRSHelper
     /**
      * @param \LoginCidadao\CoreBundle\Model\PersonInterface $person
      * @param boolean $create
-     * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS
+     * @return PersonMeuRS
      */
     public function getPersonMeuRS(PersonInterface $person, $create = false)
     {

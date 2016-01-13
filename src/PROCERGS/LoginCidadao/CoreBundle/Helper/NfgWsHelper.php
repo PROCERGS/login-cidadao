@@ -2,10 +2,8 @@
 
 namespace PROCERGS\LoginCidadao\CoreBundle\Helper;
 
-use LoginCidadao\CoreBundle\Model\PersonInterface;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
+use LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\MissingNfgAccessTokenException;
-use Doctrine\ORM\EntityRepository;
 
 /* sample http to test raw send
 
@@ -191,11 +189,11 @@ class NfgWsHelper
                                              $voterRegistration = null)
     {
         if (is_null($voterRegistration)) {
-            $voterRegistration = $this->meuRSHelper->getVoterRegistration();
+            $voterRegistration = $this->meuRSHelper->getVoterRegistration($person);
         }
 
         if ($this->meuRSHelper->getNfgAccessToken()) {
-            $this->setAccessToken($this->meuRSHelper->getNfgAccessToken());
+            $this->setAccessToken($this->meuRSHelper->getNfgAccessToken($person));
             $this->setTituloEleitoral($voterRegistration);
             $nfgData = $this->consultaCadastro();
 

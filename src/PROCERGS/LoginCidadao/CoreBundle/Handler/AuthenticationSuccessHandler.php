@@ -10,11 +10,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\RouterInterface;
 use Doctrine\ORM\EntityManager;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\AccessSession;
+use LoginCidadao\CoreBundle\Entity\AccessSession;
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use PROCERGS\LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
+use LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
 
 class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 {

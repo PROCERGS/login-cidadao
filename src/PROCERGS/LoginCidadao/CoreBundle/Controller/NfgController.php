@@ -1,15 +1,12 @@
 <?php
+
 namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use PROCERGS\LoginCidadao\CoreBundle\Form\Type\ContactFormType;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\NfgException;
 use FOS\UserBundle\Event\FormEvent;
@@ -17,7 +14,7 @@ use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
-use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper;
 
 /**
  * @Route("/nfg")
@@ -27,25 +24,26 @@ class NfgController extends Controller
 
     protected function toNfg($url, $callback, $useSession = false)
     {
-        $nfg = $this->get('procergs_logincidadao.nfgws');
+        $nfg              = $this->get('procergs_logincidadao.nfgws');
         $parm['accessid'] = $nfg->obterAccessID();
         if ($useSession) {
             $this->getRequest()
                 ->getSession()
                 ->set('ticketacessologin', $parm['accessid']);
         }
-        $parm['urlretorno'] = $this->generateUrl($callback, array(), UrlGeneratorInterface::ABSOLUTE_URL);
+        $parm['urlretorno'] = $this->generateUrl($callback, array(),
+            UrlGeneratorInterface::ABSOLUTE_URL);
         // $url = $this->container->getParameter('nfg_url_auth') . '?' . http_build_query($parm);
-        $url = $this->container->getParameter($url) . '?accessid=' . $parm['accessid'] . '&urlretorno=' . $parm['urlretorno'];
+        $url                = $this->container->getParameter($url).'?accessid='.$parm['accessid'].'&urlretorno='.$parm['urlretorno'];
         //IE referer stuff, dont kill me
         return new Response('<html><head><meta name="referrer" content="always"/></head><body><script type="text/javascript">document.location= "'.$url.'";</script></body></html>');
     }
 
     protected function checkAccessToken($voterRegistration = NULL)
     {
-        $request = $this->getRequest();
+        $request   = $this->getRequest();
         $paccessid = $request->get('paccessid');
-        if (! $paccessid) {
+        if (!$paccessid) {
             throw new NfgException('nfg.missing.token');
         }
         $nfg = $this->get('procergs_logincidadao.nfgws');
@@ -57,7 +55,8 @@ class NfgController extends Controller
         if ($result1['CodSitRetorno'] != 1) {
             throw new NfgException($result1['MsgRetorno']);
         }
-        if (! isset($result1['CodCpf'], $result1['NomeConsumidor'], $result1['EmailPrinc'])) {
+        if (!isset($result1['CodCpf'], $result1['NomeConsumidor'],
+                $result1['EmailPrinc'])) {
             throw new NfgException('nfg.missing.required.fields');
         }
         $result1['paccessid'] = $paccessid;
@@ -74,7 +73,8 @@ class NfgController extends Controller
                 $otherPersonNfg = $otherPerson->getNfgProfile();
                 if ($otherPersonNfg->getAccessLvl() == 1) {
                     if ($result1['CodNivelAcesso'] == 1) {
-                        throw new NfgException('notification.nfg.already.bind.but.weak', NfgException::E_BIND);
+                        throw new NfgException('notification.nfg.already.bind.but.weak',
+                        NfgException::E_BIND);
                     } else {
                         $otherPerson->setCpf(null);
                         $otherPerson->setNfgAccessToken(null);
@@ -84,11 +84,13 @@ class NfgController extends Controller
                         $this->container->get('notifications.helper')->revokedCpfNotification($otherPerson);
                     }
                 } else {
-                    throw new NfgException('notification.nfg.already.bind', NfgException::E_BIND);
+                    throw new NfgException('notification.nfg.already.bind',
+                    NfgException::E_BIND);
                 }
             } else {
                 if ($result1['CodNivelAcesso'] == 1) {
-                    throw new NfgException('notification.nfg.already.cpf.but.weak', NfgException::E_BIND);
+                    throw new NfgException('notification.nfg.already.cpf.but.weak',
+                    NfgException::E_BIND);
                 } else {
                     $otherPerson->setCpf(null);
                     //@TODO do no use updateUser
@@ -114,28 +116,28 @@ class NfgController extends Controller
      */
     public function createBackAction(Request $request)
     {
-        $result1 = $this->checkAccessToken();
-        $em = $this->getDoctrine()->getManager();
+        $result1    = $this->checkAccessToken();
+        $em         = $this->getDoctrine()->getManager();
         $personRepo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
         if ($personRepo->findOneBy(array(
-            'cpf' => $result1['CodCpf']
-        ))) {
+                'cpf' => $result1['CodCpf']
+            ))) {
             throw new NfgException('nfg.cpf.already.used');
         }
         if ($personRepo->findOneBy(array(
-            'email' => $result1['EmailPrinc']
-        ))) {
+                'email' => $result1['EmailPrinc']
+            ))) {
             throw new NfgException('nfg.email.already.used');
         }
 
         $formFactory = $this->container->get('fos_user.registration.form.factory');
         $userManager = $this->container->get('fos_user.user_manager');
-        $dispatcher = $this->container->get('event_dispatcher');
+        $dispatcher  = $this->container->get('event_dispatcher');
 
         $nfgProfile = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:NfgProfile')->findOneBy(array(
             'cpf' => $result1['CodCpf']
         ));
-        if (! $nfgProfile) {
+        if (!$nfgProfile) {
             $nfgProfile = new NfgProfile();
             $nfgProfile->setCpf($result1['CodCpf']);
         }
@@ -151,7 +153,8 @@ class NfgController extends Controller
         $user->setCpf($result1['CodCpf']);
         $user->setEmail($result1['EmailPrinc']);
         if ($result1['DtNasc']) {
-            $user->setBirthdate(new \DateTime(str_replace('T', ' ', $result1['DtNasc'])));
+            $user->setBirthdate(new \DateTime(str_replace('T', ' ',
+                    $result1['DtNasc'])));
             $nfgProfile->setBirthdate($user->getBirthdate());
         }
         if (isset($result1['NroFoneContato'])) {
@@ -183,11 +186,12 @@ class NfgController extends Controller
         $userManager->updateUser($user);
 
         if (null === $response = $event->getResponse()) {
-            $url = $this->container->get('router')->generate('fos_user_registration_confirmed');
+            $url      = $this->container->get('router')->generate('fos_user_registration_confirmed');
             $response = new RedirectResponse($url);
         }
 
-        $dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
+        $dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED,
+            new FilterUserResponseEvent($user, $request, $response));
 
         return $response;
     }
@@ -205,26 +209,27 @@ class NfgController extends Controller
      */
     public function loginBacktAction(Request $request)
     {
-        $cpf = $request->get('cpf');
+        $cpf      = $request->get('cpf');
         $accessid = $request->get('accessid');
-        $prsec = $request->get('prsec');
+        $prsec    = $request->get('prsec');
         if (null == $accessid || null == $cpf || null == $prsec) {
             throw new NfgException('nfg.corrupted.callback');
         }
-        $sig = hash_hmac('sha256', "$cpf$accessid", $this->container->getParameter('nfg_hmac_secret'));
+        $sig = hash_hmac('sha256', "$cpf$accessid",
+            $this->container->getParameter('nfg_hmac_secret'));
         if (false == $sig || strcmp(strtoupper($sig), $prsec) !== 0) {
             throw new NfgException('nfg.corrupted.callback');
         }
         if ($request->getSession()->get('ticketacessologin') != $accessid) {
             throw new NfgException('nfg.accessid.mismatch');
         }
-        $cpf = str_pad($cpf, 11, "0", STR_PAD_LEFT);
-        $em = $this->getDoctrine()->getManager();
+        $cpf        = str_pad($cpf, 11, "0", STR_PAD_LEFT);
+        $em         = $this->getDoctrine()->getManager();
         $personRepo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
-        $user = $personRepo->findOneBy(array(
+        $user       = $personRepo->findOneBy(array(
             'cpf' => $cpf
         ));
-        if (! $user || ! $user->getNfgAccessToken()) {
+        if (!$user || !$user->getNfgAccessToken()) {
             throw new NfgException('nfg.user.notfound');
         }
         $response = $this->redirect($this->generateUrl('lc_home'));
@@ -252,13 +257,14 @@ class NfgController extends Controller
      */
     public function bindBackAction(Request $request)
     {
-        $person = $this->getUser();
-        if (! $person) {
+        $person   = $this->getUser();
+        $meuRSHelper = $this->getMeuRSHelper();
+        if (!$person) {
             return $this->redirect($this->generateUrl('lc_home'));
         }
-        $result1 = $this->checkAccessToken($person->getVoterRegistration());
-        $em = $this->getDoctrine()->getManager();
-        $personRepo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+        $result1    = $this->checkAccessToken($meuRSHelper->getVoterRegistration($person));
+        $em         = $this->getDoctrine()->getManager();
+        $personRepo = $em->getRepository('LoginCidadaoCoreBundle:Person');
 
         if ($person->getCpf()) {
             if ($person->getCpf() == $result1['CodCpf']) {
@@ -277,21 +283,22 @@ class NfgController extends Controller
         $nfgProfile = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:NfgProfile')->findOneBy(array(
             'cpf' => $result1['CodCpf']
         ));
-        if (! $nfgProfile) {
+        if (!$nfgProfile) {
             $nfgProfile = new NfgProfile();
             $nfgProfile->setCpf($result1['CodCpf']);
         }
         $nfgProfile->setName($result1['NomeConsumidor']);
         $nfgProfile->setEmail($result1['EmailPrinc']);
         if (isset($result1['DtNasc'])) {
-            $nfgProfile->setBirthdate(new \DateTime(str_replace('T', ' ', $result1['DtNasc'])));
-            if (! $person->getBirthdate()) {
+            $nfgProfile->setBirthdate(new \DateTime(str_replace('T', ' ',
+                    $result1['DtNasc'])));
+            if (!$person->getBirthdate()) {
                 $person->setBirthdate($nfgProfile->getBirthdate());
             }
         }
         if (isset($result1['NroFoneContato'])) {
             $nfgProfile->setMobile($result1['NroFoneContato']);
-            if (! $person->getMobile()) {
+            if (!$person->getMobile()) {
                 $person->setMobile($nfgProfile->getMobile());
             }
         }
@@ -301,14 +308,15 @@ class NfgController extends Controller
         if (isset($result1['CodSitTitulo'])) {
             $nfgProfile->setVoterRegistrationSit($result1['CodSitTitulo']);
             if (1 == $result1['CodSitTitulo']) {
-                $nfgProfile->setVoterRegistration($person->getVoterRegistration());
+                $nfgProfile->setVoterRegistration($meuRSHelper->getVoterRegistration($person));
             }
         }
         $em->persist($nfgProfile);
 
-        $person->setNfgProfile($nfgProfile);
-        $person->setNfgAccessToken($result1['paccessid']);
-        if (! $person->getFirstName() || ! $person->getSurname()) {
+        $personMeuRS = $meuRSHelper->getPersonMeuRS($person);
+        $personMeuRS->setNfgProfile($nfgProfile);
+        $personMeuRS->setNfgAccessToken($result1['paccessid']);
+        if (!$person->getFirstName() || !$person->getSurname()) {
             $nome = explode(' ', $result1['NomeConsumidor']);
             $person->setFirstName(array_shift($nome));
             $person->setSurname(implode(' ', $nome));
@@ -330,5 +338,13 @@ class NfgController extends Controller
             $this->container->get('fos_user.user_manager')->updateUser($person);
         }
         return $this->redirect($this->generateUrl('lc_home'));
+    }
+
+    /**
+     * @return MeuRSHelper
+     */
+    private function getMeuRSHelper()
+    {
+        return $this->get('meurs.helper');
     }
 }
