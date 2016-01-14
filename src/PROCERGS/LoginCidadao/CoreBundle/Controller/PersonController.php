@@ -11,28 +11,9 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use JMS\Serializer\SerializationContext;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use LoginCidadao\CoreBundle\Controller\PersonController as BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
-use FOS\UserBundle\FOSUserEvents;
-use FOS\UserBundle\Event\FilterUserResponseEvent;
-use FOS\UserBundle\Util\TokenGenerator;
-use LoginCidadao\CoreBundle\Form\Type\DocFormType;
-use FOS\UserBundle\Event\GetResponseUserEvent;
-use FOS\UserBundle\Event\FormEvent;
-use LoginCidadao\CoreBundle\EventListener\ProfileEditListner;
-use LoginCidadao\CoreBundle\Form\Type\DocRgFormType;
-use LoginCidadao\CoreBundle\Entity\IdCard;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\FormError;
-use LoginCidadao\BadgesBundle\BadgesEvents;
-use LoginCidadao\BadgesBundle\Event\EvaluateBadgesEvent;
-use LoginCidadao\BadgesBundle\Event\ListBadgesEvent;
-use LoginCidadao\CoreBundle\Helper\GridHelper;
 
 class PersonController extends BaseController
 {
