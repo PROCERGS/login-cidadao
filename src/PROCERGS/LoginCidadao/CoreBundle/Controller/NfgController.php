@@ -68,38 +68,45 @@ class NfgController extends Controller
         $otherPerson = $personRepo->findOneBy(array(
             'cpf' => $result1['CodCpf']
         ));
-        if ($otherPerson) {
-            if ($otherPerson->getNfgAccessToken()) {
-                $otherPersonNfg = $otherPerson->getNfgProfile();
-                if ($otherPersonNfg->getAccessLvl() == 1) {
-                    if ($result1['CodNivelAcesso'] == 1) {
-                        throw new NfgException('notification.nfg.already.bind.but.weak',
-                        NfgException::E_BIND);
-                    } else {
-                        $otherPerson->setCpf(null);
-                        $otherPerson->setNfgAccessToken(null);
-                        $otherPerson->setNfgProfile(null);
-                        //@TODO do no use updateUser
-                        $this->container->get('fos_user.user_manager')->updateUser($otherPerson);
-                        $this->container->get('notifications.helper')->revokedCpfNotification($otherPerson);
-                    }
-                } else {
-                    throw new NfgException('notification.nfg.already.bind',
-                    NfgException::E_BIND);
-                }
+        if (!$otherPerson) {
+            return;
+        }
+
+        if ($otherPerson->getNfgAccessToken()) {
+            $this->solveConflict($result1, $otherPerson);
+        } else {
+            if ($result1['CodNivelAcesso'] == 1) {
+                throw new NfgException('notification.nfg.already.cpf.but.weak',
+                NfgException::E_BIND);
             } else {
-                if ($result1['CodNivelAcesso'] == 1) {
-                    throw new NfgException('notification.nfg.already.cpf.but.weak',
-                    NfgException::E_BIND);
-                } else {
-                    $otherPerson->setCpf(null);
-                    //@TODO do no use updateUser
-                    $this->container->get('fos_user.user_manager')->updateUser($otherPerson);
-                    $this->container->get('notifications.helper')->revokedCpfNotification($otherPerson);
-                }
+                $this->notifyAndClearCpfAndNfg($otherPerson);
+            }
+        }
+    }
+
+    private function notifyAndClearCpfAndNfg(Person $person)
+    {
+        $person->setCpf(null);
+        $person->setNfgAccessToken(null);
+        $person->setNfgProfile(null);
+        //@TODO do no use updateUser
+        $this->container->get('fos_user.user_manager')->updateUser($person);
+        $this->container->get('notifications.helper')->revokedCpfNotification($person);
+    }
+
+    private function solveConflict($thisPerson, Person $otherPerson)
+    {
+        $otherPersonNfg = $otherPerson->getNfgProfile();
+        if ($otherPersonNfg->getAccessLvl() == 1) {
+            if ($thisPerson['CodNivelAcesso'] == 1) {
+                throw new NfgException('notification.nfg.already.bind.but.weak',
+                NfgException::E_BIND);
+            } else {
+                $this->notifyAndClearCpfAndNfg($otherPerson);
             }
         } else {
-            // the champion
+            throw new NfgException('notification.nfg.already.bind',
+            NfgException::E_BIND);
         }
     }
 
@@ -257,7 +264,7 @@ class NfgController extends Controller
      */
     public function bindBackAction(Request $request)
     {
-        $person   = $this->getUser();
+        $person      = $this->getUser();
         $meuRSHelper = $this->getMeuRSHelper();
         if (!$person) {
             return $this->redirect($this->generateUrl('lc_home'));
@@ -267,9 +274,7 @@ class NfgController extends Controller
         $personRepo = $em->getRepository('LoginCidadaoCoreBundle:Person');
 
         if ($person->getCpf()) {
-            if ($person->getCpf() == $result1['CodCpf']) {
-                // ok
-            } else {
+            if ($person->getCpf() != $result1['CodCpf']) {
                 $this->checkOtherPerson($result1, $em, $personRepo);
 
                 $person->setCpf($result1['CodCpf']);
