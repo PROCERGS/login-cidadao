@@ -62,6 +62,7 @@ class AppKernel extends Kernel
             // PROCERGS
             new PROCERGS\LoginCidadao\CoreBundle\PROCERGSLoginCidadaoCoreBundle(),
             new PROCERGS\LoginCidadao\MonitorBundle\PROCERGSLoginCidadaoMonitorBundle(),
+            new MeuRS\BadgesBundle\MeuRSBadgesBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

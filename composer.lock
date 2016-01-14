@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "50927ff13360767455821df922b077ce",
-    "content-hash": "84aab819545cecdcf82d38d3ff72a446",
+    "hash": "29c1e82931e0689d882c639b5228b78e",
+    "content-hash": "a938a5589e031b0a3cea7965246679d2",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-bundle",
@@ -18,7 +18,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bshaffer/oauth2-server-bundle/zipball/f341ce44fba436c429c2e0261e4428952a523328",
+                "url": "https://api.github.com/repos/bshaffer/oauth2-server-bundle/zipball/141bc7c3d8a94fe523fe6e31e71a626572a6e01f",
                 "reference": "f341ce44fba436c429c2e0261e4428952a523328",
                 "shasum": ""
             },
@@ -1122,7 +1122,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSOAuthServerBundle/zipball/0c72d8baf707dce59c59a4daa1549c06e510bbed",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSOAuthServerBundle/zipball/61f20a2816ec5c4f59c41c2f36f0c3ec87eaa763",
                 "reference": "0c72d8baf707dce59c59a4daa1549c06e510bbed",
                 "shasum": ""
             },
@@ -1330,7 +1330,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/e5e7a2b8984da8dfedaf44adc7e5f60a62ad280c",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/6ccff96434c0ac7fee077d1dce90966341dfd278",
                 "reference": "e5e7a2b8984da8dfedaf44adc7e5f60a62ad280c",
                 "shasum": ""
             },
@@ -2769,7 +2769,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/1ae2cfa9a50279d722d6b6e7b02322cef948d55d",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/5d9c47bbad2e064340cabfd3f96f5057a80773c4",
                 "reference": "1ae2cfa9a50279d722d6b6e7b02322cef948d55d",
                 "shasum": ""
             },
@@ -3192,17 +3192,17 @@
         },
         {
             "name": "procergs/login-cidadao-badges-bundle",
-            "version": "dev-master",
+            "version": "dev-refactoring",
             "target-dir": "LoginCidadao/BadgesBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/login-cidadao-badges-bundle.git",
-                "reference": "eb88b7aab40a820dc394bb160a37e335875fd64e"
+                "reference": "cd8e2742f00d254853c01a1d319d99aa729c014a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/eb88b7aab40a820dc394bb160a37e335875fd64e",
-                "reference": "eb88b7aab40a820dc394bb160a37e335875fd64e",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/cd8e2742f00d254853c01a1d319d99aa729c014a",
+                "reference": "cd8e2742f00d254853c01a1d319d99aa729c014a",
                 "shasum": ""
             },
             "require": {
@@ -3230,10 +3230,10 @@
                 "login-cidadao"
             ],
             "support": {
-                "source": "https://github.com/PROCERGS/login-cidadao-badges-bundle/tree/master",
+                "source": "https://github.com/PROCERGS/login-cidadao-badges-bundle/tree/refactoring",
                 "issues": "https://github.com/PROCERGS/login-cidadao-badges-bundle/issues"
             },
-            "time": "2015-12-15 17:11:26"
+            "time": "2015-12-15 18:48:02"
         },
         {
             "name": "procergs/login-cidadao-igp-bundle",
@@ -3281,6 +3281,50 @@
                 "validation"
             ],
             "time": "2015-01-27 20:29:29"
+        },
+        {
+            "name": "procergs/meurs-badges-bundle",
+            "version": "v1.0.2",
+            "target-dir": "MeuRS/BadgesBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PROCERGS/meurs-badges-bundle.git",
+                "reference": "e8ec3f5caad5093b74621fc00cdb18ab4e4c34d5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PROCERGS/meurs-badges-bundle/zipball/e8ec3f5caad5093b74621fc00cdb18ab4e4c34d5",
+                "reference": "e8ec3f5caad5093b74621fc00cdb18ab4e4c34d5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "MeuRS\\BadgesBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guilherme Donato",
+                    "email": "packagist@cadastro.dona.to"
+                }
+            ],
+            "description": "Meu RS Badge Bundle",
+            "homepage": "https://github.com/PROCERGS/meurs-badges-bundle",
+            "keywords": [
+                "Meu RS",
+                "badges",
+                "login-cidadao",
+                "meurs"
+            ],
+            "time": "2016-01-14 17:19:49"
         },
         {
             "name": "procergs/meurs-monitor-bundle",

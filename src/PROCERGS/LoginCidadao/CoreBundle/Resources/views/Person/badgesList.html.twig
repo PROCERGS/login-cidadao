@@ -43,7 +43,10 @@
 
 {% block stylesheets_custom %}
     {{- parent() -}}
-    {% stylesheets '@LoginCidadaoBadgesBundle/Resources/public/css/badges.css' filter='cssrewrite' filter='?uglifycss' %}
+    {% stylesheets
+            '@LoginCidadaoBadgesBundle/Resources/public/css/badges.css'
+            '@MeuRSBadgesBundle/Resources/public/css/badges.css'
+        filter='cssrewrite' filter='?uglifycss' %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 {% endblock %}
