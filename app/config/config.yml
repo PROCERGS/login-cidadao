@@ -123,6 +123,10 @@ doctrine:
     orm:
         auto_generate_proxy_classes: %kernel.debug%
         auto_mapping: true
+        resolve_target_entities:
+            LoginCidadao\CoreBundle\Model\PersonInterface: %user.class%
+            LoginCidadao\OAuthBundle\Model\OrganizationInterface: %organization.class%
+            LoginCidadao\OAuthBundle\Model\ClientInterface: %oauth_client.class%
         dql:
           string_functions:
             right: LoginCidadao\CoreBundle\DQL\Right
@@ -218,6 +222,7 @@ simple_things_entity_audit:
         - LoginCidadao\OAuthBundle\Entity\AuthCode
         - LoginCidadao\OAuthBundle\Entity\Client
         - LoginCidadao\OAuthBundle\Entity\RefreshToken
+        - LoginCidadao\OAuthBundle\Entity\Organization
 
 fos_facebook:
     alias:  facebook
@@ -262,6 +267,8 @@ parameters:
     lc_idcard_country_acronym: BR
 
     oauth2.user_provider.class: LoginCidadao\CoreBundle\Security\OIDC\UserProvider
+    organization.class: LoginCidadao\OAuthBundle\Entity\Organization
+    oauth_client.class: LoginCidadao\OAuthBundle\Entity\Client
 
 ewz_recaptcha:
     public_key:   %recaptcha_public_key%
