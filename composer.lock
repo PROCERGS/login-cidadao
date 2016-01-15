@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "29c1e82931e0689d882c639b5228b78e",
-    "content-hash": "a938a5589e031b0a3cea7965246679d2",
+    "hash": "dd310d3b5890be731a2776e302f488ea",
+    "content-hash": "b0063ed6910038a221304a7b773858bb",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-bundle",
@@ -3283,50 +3283,6 @@
             "time": "2015-01-27 20:29:29"
         },
         {
-            "name": "procergs/meurs-badges-bundle",
-            "version": "v1.0.2",
-            "target-dir": "MeuRS/BadgesBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PROCERGS/meurs-badges-bundle.git",
-                "reference": "e8ec3f5caad5093b74621fc00cdb18ab4e4c34d5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/meurs-badges-bundle/zipball/e8ec3f5caad5093b74621fc00cdb18ab4e4c34d5",
-                "reference": "e8ec3f5caad5093b74621fc00cdb18ab4e4c34d5",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-0": {
-                    "MeuRS\\BadgesBundle": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Guilherme Donato",
-                    "email": "packagist@cadastro.dona.to"
-                }
-            ],
-            "description": "Meu RS Badge Bundle",
-            "homepage": "https://github.com/PROCERGS/meurs-badges-bundle",
-            "keywords": [
-                "Meu RS",
-                "badges",
-                "login-cidadao",
-                "meurs"
-            ],
-            "time": "2016-01-14 17:19:49"
-        },
-        {
             "name": "procergs/meurs-monitor-bundle",
             "version": "v1.0.1",
             "target-dir": "PROCERGS/LoginCidadao/MonitorBundle",
@@ -3368,6 +3324,51 @@
                 "monitor"
             ],
             "time": "2015-12-19 13:45:23"
+        },
+        {
+            "name": "procergs/nfg-badges-bundle",
+            "version": "v1.1.1",
+            "target-dir": "NFG/BadgesBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PROCERGS/nfg-badges-bundle.git",
+                "reference": "8d13ca90e16e4a8357881b983b6624a6b66c3fec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PROCERGS/nfg-badges-bundle/zipball/de8f7f2deefcf93d5a5a35917b3b4a08324cc643",
+                "reference": "8d13ca90e16e4a8357881b983b6624a6b66c3fec",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "NFG\\BadgesBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guilherme Donato",
+                    "email": "packagist@cadastro.dona.to"
+                }
+            ],
+            "description": "Meu RS NFG Badge Bundle",
+            "homepage": "https://github.com/PROCERGS/nfg-badges-bundle",
+            "keywords": [
+                "Meu RS",
+                "badges",
+                "login-cidadao",
+                "meurs",
+                "nfg"
+            ],
+            "time": "2016-01-15 11:50:24"
         },
         {
             "name": "procergs/tos-bundle",
