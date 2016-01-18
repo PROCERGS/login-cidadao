@@ -1,0 +1,16 @@
+<div class="panel panel-default">
+    <div class="panel-heading clearfix">
+        <div class="panel-title">{{ panel_title }}</div>
+    </div>
+    {{ form_start(form) }}
+    <div class="panel-body">
+        {{ form_row(form.name) }}
+        {{ form_row(form.domain) }}
+    </div>
+    <div class="panel-footer">
+        <div class="form-group text-right">
+            <input type="submit" value="{{ form_action_label }}" class="btn btn-success">
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>

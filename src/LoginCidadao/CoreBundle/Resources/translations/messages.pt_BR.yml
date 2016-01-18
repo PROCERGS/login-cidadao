@@ -700,3 +700,26 @@ Information about authorizations granted to services.: Informações sobre autor
 See how many users have each badge.: Veja quantas pessoas possuem cada medalha.
 Users by Location: Usuários por Localização
 Information about people's location. Either by <a href="%country_url%">Country</a> or by <a href="%state_url%">State</a>: Informações sobre a localização das pessoas, tanto <a href="%country_url%">por País</a> quanto <a href="%state_url%">por Estado</a>
+organizations:
+    menu.label: Organizações
+    page.title: Organizações
+    list:
+        user:
+            title: Minhas Organizações
+            empty: Você não está em uma Organização
+        all:
+            title: Outras Organizações
+            empty: Nenhuma organização encontrada
+    new:
+        title: Nova Organização
+        form_title: Nova Organização
+        form_action_label: Criar
+        button_title: Criar Organização
+        button_label: Nova Organização
+    edit:
+        title: Editando Organização %name%
+        form_title: Editando Organização %name%
+        form_action_label: Salvar
+    form:
+        name.label: Nome
+        domain.label: Domínio

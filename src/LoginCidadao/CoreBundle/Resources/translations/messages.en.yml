@@ -270,3 +270,26 @@ Information about authorizations granted to services.: Information about authori
 See how many users have each badge.: See how many users have each badge.
 Users by Location: Users by Location
 Information about people's location. Either by <a href="%country_url%">Country</a> or by <a href="%state_url%">State</a>: Information about people's location. Either by <a href="%country_url%">Country</a> or by <a href="%state_url%">State</a>
+organizations:
+    menu.label: Organizations
+    page.title: Organizations
+    list:
+        user:
+            title: My Organizations
+            empty: You are not in any Organization
+        all:
+            title: Other Organizations
+            empty: There are no Organizations
+    new:
+        title: New Organization
+        form_title: New Organization
+        form_action_label: Create
+        button_title: Create Organization
+        button_label: New Organization
+    edit:
+        title: Editing Organization %name%
+        form_title: Editing Organization %name%
+        form_action_label: Save
+    form:
+        name.label: Name
+        domain.label: Domain

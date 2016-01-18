@@ -1,0 +1,26 @@
+<div class="panel panel-default">
+    <div class="panel-heading clearfix">
+        <h4 class="panel-title pull-left" style="padding-top: 7.5px;">{{ panel_title }}</h4>
+        <div class="btn-group pull-right">
+            <a href="{{ path('lc_organizations_new') }}" class="btn btn-info btn-sm" title="{{ 'organizations.new.button_title' | trans }}">
+                <span class="glyphicon glyphicon-plus"></span>
+                {{ 'organizations.new.button_label' | trans }}
+            </a>
+        </div>
+    </div>
+
+    {% if organizations is empty %}
+        <div class="panel-body text-center">{{ empty_message }}</div>
+    {% else %}
+        <ul class="panel-body list-group">
+            {% for organization in organizations %}
+                <li class="list-group-item">
+                    <a href="{{ path('lc_organizations_edit', { 'id': organization.id }) }}" class="text-primary">
+                        <strong class="list-group-item-heading">{{- organization.name -}}</strong>
+                        <p class="list-group-item-text">{{- organization.domain -}}</p>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
