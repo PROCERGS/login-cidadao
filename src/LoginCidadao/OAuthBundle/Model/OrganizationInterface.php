@@ -47,14 +47,14 @@ interface OrganizationInterface
     public function setMembers(array $members);
 
     /**
-     * @return boolean
+     * @return \DateTime
      */
-    public function isVerified();
+    public function getVerifiedAt();
 
     /**
-     * @param boolean $verified
+     * @param \DateTime $verifiedAt
      */
-    public function setVerified($verified);
+    public function setVerifiedAt($verifiedAt);
 
     /**
      * @return string

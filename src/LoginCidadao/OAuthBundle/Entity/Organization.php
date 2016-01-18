@@ -15,10 +15,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="LoginCidadao\OAuthBundle\Entity\OrganizationRepository")
  * @ORM\Table(name="organization")
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity("domain")
@@ -34,6 +35,7 @@ class Organization implements OrganizationInterface
 
     /**
      * @ORM\Column(type="string", nullable=false, unique=true)
+     * @Assert\NotBlank
      * @var string
      */
     protected $name;
@@ -49,10 +51,10 @@ class Organization implements OrganizationInterface
     protected $members;
 
     /**
-     * @ORM\Column(type="boolean", nullable=false)
-     * @var boolean
+     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
      */
-    protected $verified;
+    protected $verifiedAt;
 
     /**
      * @ORM\Column(type="string", nullable=false, unique=true)
@@ -116,20 +118,20 @@ class Organization implements OrganizationInterface
     }
 
     /**
-     * @return boolean
+     * @return \DateTime
      */
-    public function isVerified()
+    public function getVerifiedAt()
     {
-        return $this->verified;
+        return $this->verifiedAt;
     }
 
     /**
-     * @param boolean $verified
+     * @param \DateTime $verifiedAt
      * @return \Organization
      */
-    public function setVerified($verified)
+    public function setVerifiedAt($verifiedAt)
     {
-        $this->verified = $verified;
+        $this->verifiedAt = $verifiedAt;
 
         return $this;
     }
