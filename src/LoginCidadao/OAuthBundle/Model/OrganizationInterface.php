@@ -72,8 +72,27 @@ interface OrganizationInterface
     public function getClients();
 
     /**
-     *
      * @param ClientInterface[] $clients
      */
     public function setClients(array $clients);
+
+    /**
+     * @return string
+     */
+    public function getValidationUrl();
+
+    /**
+     * @param string $validationUrl
+     */
+    public function setValidationUrl($validationUrl);
+
+    /**
+     * @return string
+     */
+    public function getValidationSecret();
+
+    /**
+     * @param string $validationSecret
+     */
+    public function setValidationSecret($validationSecret);
 }

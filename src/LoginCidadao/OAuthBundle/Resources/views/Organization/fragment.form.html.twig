@@ -6,10 +6,18 @@
     <div class="panel-body">
         {{ form_row(form.name) }}
         {{ form_row(form.domain) }}
+        {% if is_granted('ROLE_ORGANIZATIONS_VALIDATE') and form.vars.value.validationSecret is not empty %}
+            {{ form_row(form.validationUrl) }}
+            <div class="well">
+                <p>{{ 'organizations.validate.instructions' | trans({'%input%': 'organizations.form.validationUrl.label' | trans}) | raw }}</p>
+                <p class="text-center"><strong>{{ organization.validationSecret }}</strong></p>
+            </div>
+        {% endif %}
     </div>
     <div class="panel-footer">
         <div class="form-group text-right">
-            <input type="submit" value="{{ form_action_label }}" class="btn btn-success">
+            <a href="{{ form_cancel_url }}" class="btn">{{ 'Cancel' | trans }}</a>
+            <button type="submit" class="btn btn-success">{{ form_action_label }}</button>
         </div>
     </div>
     {{ form_end(form) }}

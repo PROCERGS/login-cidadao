@@ -290,6 +290,18 @@ organizations:
         title: Editing Organization %name%
         form_title: Editing Organization %name%
         form_action_label: Save
+    show:
+        title: %name% information
+        services_count:
+            label: Services Available
+            count: '{0} No services|{1} One service|]1,Inf[ %count% services'
+        members_count:
+            label: Members
+            count: '{0} No members|{1} One member|]1,Inf[ %count% members'
     form:
         name.label: Name
         domain.label: Domain
+        validationUrl.label: Validation Url
+    validate:
+        call_to_action: Validate
+        instructions: To validate this organization, create a file in the given domain containing the following code and type the address to this file in the field %input%.

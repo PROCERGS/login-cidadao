@@ -13,9 +13,17 @@ namespace LoginCidadao\OAuthBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class OrganizationType extends AbstractType
 {
+    /** @var AuthorizationCheckerInterface */
+    protected $authorizationChecker;
+
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker)
+    {
+        $this->authorizationChecker = $authorizationChecker;
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -24,9 +32,18 @@ class OrganizationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text', array('label' => 'organizations.form.name.label'))
-            ->add('domain', 'text', array('label' => 'organizations.form.domain.label'))
+            ->add('name', 'text',
+                array('label' => 'organizations.form.name.label'))
+            ->add('domain', 'text',
+                array('label' => 'organizations.form.domain.label'))
         ;
+        if ($this->authorizationChecker->isGranted('ROLE_ORGANIZATIONS_VALIDATE')) {
+            $builder->add('validationUrl', 'url',
+                array(
+                'required' => false,
+                'label' => 'organizations.form.validationUrl.label'
+            ));
+        }
     }
 
     /**

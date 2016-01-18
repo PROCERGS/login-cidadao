@@ -14,11 +14,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use LoginCidadao\OAuthBundle\Entity\Organization;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 
 /**
  * @Route("/organizations")
+ * @Security("has_role('FEATURE_ORGANIZATIONS')")
  */
 class OrganizationController extends Controller
 {
@@ -44,6 +46,7 @@ class OrganizationController extends Controller
     /**
      * @Route("/new", name="lc_organizations_new")
      * @Template()
+     * @Security("has_role('ROLE_ORGANIZATIONS_CREATE')")
      */
     public function newAction(Request $request)
     {
@@ -68,6 +71,7 @@ class OrganizationController extends Controller
     /**
      * @Route("/{id}/edit", name="lc_organizations_edit")
      * @Template()
+     * @Security("has_role('ROLE_ORGANIZATIONS_EDIT')")
      */
     public function editAction(Request $request, $id)
     {
@@ -79,6 +83,7 @@ class OrganizationController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         if ($form->isValid()) {
+            $organization->getValidationSecret();
             $em->persist($organization);
             $em->flush();
 
@@ -86,6 +91,30 @@ class OrganizationController extends Controller
         }
 
         return compact('form', 'organization');
+    }
+
+    /**
+     * @Route("/{id}/validate", name="lc_organizations_validate")
+     * @Template()
+     */
+    public function validateAction(Request $request, $id)
+    {
+        $organization = $this->getOr404($id);
+
+        $form = $this->createForm('lc_organization', $organization);
+
+        return compact('form', 'organization');
+    }
+
+    /**
+     * @Route("/{id}", name="lc_organizations_show")
+     * @Template()
+     */
+    public function showAction(Request $request, $id)
+    {
+        $organization = $this->getOr404($id);
+
+        return compact('organization');
     }
 
     private function getOr404($id)
@@ -108,8 +137,13 @@ class OrganizationController extends Controller
                 ->findByMember($this->getUser());
     }
 
+    /**
+     * @Security("has_role('ROLE_ORGANIZATIONS_LIST_ALL')")
+     */
     private function fetchOtherOrganizations()
     {
-        return array();
+        return $this->getDoctrine()
+                ->getRepository('LoginCidadaoOAuthBundle:Organization')
+                ->findByNotMember($this->getUser());
     }
 }

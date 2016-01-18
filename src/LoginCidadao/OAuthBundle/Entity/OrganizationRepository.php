@@ -24,4 +24,13 @@ class OrganizationRepository extends EntityRepository
 
         return $query->getQuery()->getResult();
     }
+
+    public function findByNotMember(PersonInterface $person)
+    {
+        $query = $this->createQueryBuilder('o')
+            ->where(':person NOT MEMBER OF o.members')
+            ->setParameters(compact('person'));
+
+        return $query->getQuery()->getResult();
+    }
 }

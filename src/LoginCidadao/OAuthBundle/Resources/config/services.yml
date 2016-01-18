@@ -22,5 +22,6 @@ services:
 
     lc.organization.form:
         class: %lc.organization.form.class%
+        arguments: ['@security.authorization_checker']
         tags:
             - { name: form.type, alias: lc_organization }

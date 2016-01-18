@@ -8,7 +8,7 @@
         <h1 class="visible-xs">{{ 'organizations.edit.title' | trans({'%name%': organization.name }) }}</h1>
 
         <div class="form-content">
-            {{ include('LoginCidadaoOAuthBundle:Organization:fragment.form.html.twig', { 'panel_title': 'organizations.edit.form_title' | trans({'%name%': organization.name }), 'form_action_label': 'organizations.edit.form_action_label' | trans }) }}
+            {{ include('LoginCidadaoOAuthBundle:Organization:fragment.form.html.twig', { 'form_cancel_url': path('lc_organizations_list'), 'panel_title': 'organizations.edit.form_title' | trans({'%name%': organization.name }), 'form_action_label': 'organizations.edit.form_action_label' | trans }) }}
         </div>
     </div>
 {% endblock %}

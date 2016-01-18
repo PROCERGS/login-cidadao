@@ -17,12 +17,14 @@ use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\Util\SecureRandom;
 
 /**
  * @ORM\Entity(repositoryClass="LoginCidadao\OAuthBundle\Entity\OrganizationRepository")
  * @ORM\Table(name="organization")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity("domain")
+ * @UniqueEntity("name")
  */
 class Organization implements OrganizationInterface
 {
@@ -68,10 +70,24 @@ class Organization implements OrganizationInterface
      */
     protected $clients;
 
+    /**
+     * @Assert\Url
+     * @ORM\Column(type="string", nullable=true, unique=true)
+     * @var string
+     */
+    protected $validationUrl;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string
+     */
+    protected $validationSecret;
+
     public function __construct()
     {
         $this->members = new ArrayCollection();
         $this->clients = new ArrayCollection();
+        $this->initializeValidationCode();
     }
 
     public function getId()
@@ -158,5 +174,44 @@ class Organization implements OrganizationInterface
         $this->clients = $clients;
 
         return $this;
+    }
+
+    public function getValidationUrl()
+    {
+        return $this->validationUrl;
+    }
+
+    public function setValidationUrl($validationUrl)
+    {
+        $this->validationUrl = $validationUrl;
+
+        return $this;
+    }
+
+    public function getValidationSecret()
+    {
+        $this->initializeValidationCode();
+        return $this->validationSecret;
+    }
+
+    public function setValidationSecret($validationSecret)
+    {
+        $this->validationSecret = $validationSecret;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    private function initializeValidationCode()
+    {
+        if ($this->validationSecret) {
+            return;
+        }
+        $generator = new SecureRandom();
+        $random    = bin2hex($generator->nextBytes(35));
+        $this->setValidationSecret($random);
     }
 }

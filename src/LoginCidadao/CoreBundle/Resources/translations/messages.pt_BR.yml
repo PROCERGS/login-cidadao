@@ -720,6 +720,18 @@ organizations:
         title: Editando Organização %name%
         form_title: Editando Organização %name%
         form_action_label: Salvar
+    show:
+        title: Informações da Organização %name%
+        services_count:
+            label: Serviços Cadastrados
+            count: '{0} Nenhum serviço|{1} Um serviço|]1,Inf[ %count% serviços'
+        members_count:
+            label: Integrantes
+            count: '{0} Nenhum membro|{1} Um membro|]1,Inf[ %count% membros'
     form:
         name.label: Nome
         domain.label: Domínio
+        validationUrl.label: URL para Validação
+    validate:
+        call_to_action: Validar
+        instructions: Para validar essa organização, crie um arquivo no domínio informado contendo o código a seguir e informe o endereço desse arquivo no campo <code>%input%</code>.
