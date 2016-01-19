@@ -12,6 +12,7 @@ namespace LoginCidadao\OAuthBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -37,7 +38,8 @@ class OrganizationType extends AbstractType
             ->add('domain', 'text',
                 array('label' => 'organizations.form.domain.label'))
         ;
-        if ($this->authorizationChecker->isGranted('ROLE_ORGANIZATIONS_VALIDATE') && $builder->getData()->getId()) {
+        if ($this->authorizationChecker->isGranted('ROLE_ORGANIZATIONS_VALIDATE')
+            && $builder->getData()->getId()) {
             $builder->add('validationUrl', 'url',
                 array(
                 'required' => false,
@@ -46,14 +48,19 @@ class OrganizationType extends AbstractType
         }
     }
 
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'LoginCidadao\OAuthBundle\Entity\Organization'
+        ));
+    }
+
     /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'LoginCidadao\OAuthBundle\Entity\Organization'
-        ));
+        $this->configureOptions($resolver);
     }
 
     /**
