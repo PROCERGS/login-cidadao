@@ -239,4 +239,14 @@ class Organization implements OrganizationInterface
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
+    public function isVerified()
+    {
+        return $this->getVerifiedAt() instanceof \DateTime;
+    }
 }

@@ -740,3 +740,12 @@ organizations:
         not_verified: Validação Pendente
         verified: Verificada
         instructions: Para validar essa organização, crie um arquivo no domínio informado contendo o código a seguir e informe o endereço desse arquivo no campo <code>%input%</code>.
+        on_authorize:
+            warn_not_verified:
+                attention: Atenção!
+                text: Esse serviço está sendo oferecido por uma organização não verificada. Confira, a seguir, as informações dessa organização antes de autorizar.
+            info:
+                provided_by: Esse serviço é oferecido por <strong>%name%</strong> (<a class="text-danger">%domain%</a> %label%)
+                warn_trust: Autorize apenas se você confia na organização <strong>%name%</strong>
+                domain_verified: Domínio Verificado
+                domain_not_verified: Domínio não Verificado

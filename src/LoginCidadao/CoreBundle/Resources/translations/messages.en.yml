@@ -310,8 +310,10 @@ organizations:
         not_verified: Pending Validation
         verified: Verified
         instructions: To validate this organization, create a file in the given domain containing the following code and type the address to this file in the field %input%.
-        error:
-            invalid_domain: 'Your domain doesn''t match the domain used on the Validation URL'
-            code_not_found: 'Your validation code wasn''t found in the given address.'
-            query_string: Your validation URL cannot contain a query string.
-            code_in_url: Your validation code cannot be in the URL.
+        on_authorize:
+            warn_not_verified:
+                attention: Caution!
+                text: 'This service is being offered by an unverified organization. Check, below, this organization''s information before authorizing this service.'
+            info:
+                provided_by: This service is offered by <strong>%name%</strong> (<a class="text-danger">%domain%</a>).
+                warn_trust: Authorize it only if you trust <strong>%name%</strong>

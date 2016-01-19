@@ -1,5 +1,17 @@
 {% if 'public_profile' not in scopes %}{% set scopes = scopes | merge(['public_profile']) %}{% endif %}
+{% set verified %}<span class="label label-success" title="{{ 'organizations.validation.on_authorize.info.domain_verified' | trans }}"><span class="glyphicon glyphicon-ok"></span></span>{% endset %}
+{% set not_verified %}<span class="label label-danger" title="{{ 'organizations.validation.on_authorize.info.domain_not_verified' | trans }}"><span class="glyphicon glyphicon-alert"></span></span>{% endset %}
 <form action="{{ qs is defined ? '?' ~ qs|url_encode : path('fos_oauth_server_authorize') }}" method="post" class="fos_oauth_server_authorize">
+    {% if client.organization.isVerified is sameas(false) %}
+        {% set status_label = not_verified %}
+        <div class="alert bg-danger" role="alert">
+            <strong>{{ 'organizations.validation.on_authorize.warn_not_verified.attention' | trans }}</strong>
+            <p>{{ 'organizations.validation.on_authorize.warn_not_verified.text' | trans }}</p>
+        </div>
+    {% else %}
+        {% set status_label = verified %}
+    {% endif %}
+
     <h1>{% trans with { '%client_name%': client.name } %}Authorize <strong>%client_name%</strong> to access your information?{% endtrans %}</h1>
 
     <div class="panel">
@@ -42,6 +54,15 @@
                             {% endif %}
                         {% endfor %}
                     </ul>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 text-center">
+                    <div class="well well-sm">
+                        <p>{{ 'organizations.validation.on_authorize.info.provided_by' | trans({'%name%': client.organization.name | striptags, '%domain%': client.organization.domain | striptags, '%label%': status_label }) | raw }}</p>
+                        <p>{{ 'organizations.validation.on_authorize.info.warn_trust' | trans({'%name%': client.organization.name | striptags, '%domain%': client.organization.domain | striptags}) | raw }}</p>
+                    </div>
                 </div>
             </div>
 

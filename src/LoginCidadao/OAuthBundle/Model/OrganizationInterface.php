@@ -100,4 +100,9 @@ interface OrganizationInterface
      * @return boolean
      */
     public function checkValidation();
+
+    /**
+     * @return boolean
+     */
+    public function isVerified();
 }
