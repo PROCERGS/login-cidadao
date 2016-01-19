@@ -1,8 +1,6 @@
 {% extends "LoginCidadaoCoreBundle::grid_layout.html.twig" %}
 
 {% block grid_header_data %}
-{#<div class="col-md-3">{{ 'CPF'|trans }}</div>
-<div class="col-md-2">{{ 'Email'|trans }}</div>#}
 <div class="col-md-11">{{ 'organizations.form.members.name.label'|trans }}</div>
 {% endblock grid_header_data %}
 
@@ -20,14 +18,6 @@
 {% endblock grid_row_action %}
 
 {% block grid_row_data %}
-{#<div class="col-md-3">
-    <dt>{{ 'CPF'|trans }}</dt>
-    <dd ><div style="word-wrap: break-word;">{{ row.cpf }}</div></dd>
-</div>
-<div class="col-md-2">
-    <dt>{{ 'Email'|trans }}</dt>
-    <dd ><div style="word-wrap: break-word;">{{ row.email }}</div></dd>
-</div>#}
 <div class="col-md-11">
     <dt>{{ 'dev.grid.fullNameOrUsername'|trans }}</dt>
     <dd ><div style="word-wrap: break-word;">{{ row.fullNameOrUsername }}</div></dd>

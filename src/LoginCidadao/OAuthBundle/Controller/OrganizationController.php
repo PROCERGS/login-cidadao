@@ -77,6 +77,10 @@ class OrganizationController extends Controller
     {
         $organization = $this->getOr404($id);
 
+        if (!$organization->getMembers()->contains($this->getUser())) {
+            $this->denyAccessUnlessGranted('ROLE_ORGANIZATIONS_EDIT_ANY_ORG');
+        }
+
         $form = $this->createForm('lc_organization', $organization);
 
         $form->handleRequest($request);

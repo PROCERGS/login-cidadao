@@ -28,7 +28,11 @@
                             {{ 'organizations.validation.not_verified' | trans }}
                         </span>
                     {% endif %}
-                    <a href="{{ path(is_granted('ROLE_ORGANIZATIONS_EDIT') ? 'lc_organizations_edit' : 'lc_organizations_show', { 'id': organization.id }) }}" class="text-primary">
+                    {% set route = 'lc_organizations_show' %}
+                    {% if is_granted('ROLE_ORGANIZATIONS_EDIT_ANY_ORG') or (is_granted('ROLE_ORGANIZATIONS_EDIT') and app.user in organization.members) %}
+                        {% set route = 'lc_organizations_edit' %}
+                    {% endif %}
+                    <a href="{{ path(route, { 'id': organization.id }) }}" class="text-primary">
                         <strong class="list-group-item-heading">{{- organization.name -}}</strong>
                         <p class="list-group-item-text">{{- organization.domain -}}</p>
                     </a>
