@@ -34,13 +34,20 @@
 
                     <ul class="permissions">
                         {% for scope in scopes|sort %}
+                            {% if ('scope_details.' ~ scope) | trans != ('scope_details.' ~ scope) %}
+                                {% set details = include('LoginCidadaoCoreBundle::common.scope.details.attr.html.twig', { 'scope': scope }) %}
+                                {% set handle = include('LoginCidadaoCoreBundle::common.scope.details.handle.html.twig', { 'scope': scope }) %}
+                            {% else %}
+                                {% set details = '' %}
+                                {% set handle = '' %}
+                            {% endif %}
                             {% if scope == 'openid' %}
                                 <input type="hidden" name="scope[]" value="{{ scope }}">
                             {% elseif scope == 'public_profile' %}
                                 <li>
                                     <label for="scope_{{ loop.index }}">
                                         <input type="checkbox" name="scope[]" checked disabled value="{{ scope }}" id="scope_{{ loop.index }}">
-                                        {{ ('scope.' ~ scope) | trans }}
+                                        <span {{ details | raw }}>{{ ('scope.' ~ scope) | trans }} {{ handle | raw }}</span>
                                         <input type="hidden" name="scope[]" value="{{ scope }}">
                                     </label>
                                 </li>
