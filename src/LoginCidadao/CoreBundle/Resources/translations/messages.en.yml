@@ -302,6 +302,10 @@ organizations:
         name.label: Name
         domain.label: Domain
         validationUrl.label: Validation Url
+        members:
+            label: Members
+            search.label: Search by Tax ID, email, name or username
+            name.label: Name
     validation:
         not_verified: Pending Validation
         verified: Verified

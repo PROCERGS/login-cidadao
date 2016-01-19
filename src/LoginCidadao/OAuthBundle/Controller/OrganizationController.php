@@ -69,7 +69,7 @@ class OrganizationController extends Controller
     }
 
     /**
-     * @Route("/{id}/edit", name="lc_organizations_edit")
+     * @Route("/{id}/edit", name="lc_organizations_edit", requirements={"id" = "\d+"})
      * @Template()
      * @Security("has_role('ROLE_ORGANIZATIONS_EDIT')")
      */
@@ -94,20 +94,7 @@ class OrganizationController extends Controller
     }
 
     /**
-     * @Route("/{id}/validate", name="lc_organizations_validate")
-     * @Template()
-     */
-    public function validateAction(Request $request, $id)
-    {
-        $organization = $this->getOr404($id);
-
-        $form = $this->createForm('lc_organization', $organization);
-
-        return compact('form', 'organization');
-    }
-
-    /**
-     * @Route("/{id}", name="lc_organizations_show")
+     * @Route("/{id}", name="lc_organizations_show", requirements={"id" = "\d+"})
      * @Template()
      */
     public function showAction(Request $request, $id)

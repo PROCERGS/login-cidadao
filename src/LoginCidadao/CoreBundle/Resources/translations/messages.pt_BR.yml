@@ -732,6 +732,10 @@ organizations:
         name.label: Nome
         domain.label: Domínio
         validationUrl.label: URL para Validação
+        members:
+            label: Membros
+            search.label: Pesquisar por Nome, email, CPF ou nome de usuário
+            name.label: Nome
     validation:
         not_verified: Validação Pendente
         verified: Verificada
