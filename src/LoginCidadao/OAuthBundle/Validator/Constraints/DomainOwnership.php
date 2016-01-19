@@ -18,10 +18,6 @@ use Symfony\Component\Validator\Constraint;
  */
 class DomainOwnership extends Constraint
 {
-    public $unknown         = "Domain validation failed.";
-    public $domainMismatch  = "Your domain doesn't match the domain used on the Validation URL";
-    public $invalidResponse = "Your validation code wasn't found.";
-    public $invalidUrl      = "Invalid Validation URL. Check that it's a valid URL and that it doesn't have a query string.";
 
     public function validatedBy()
     {

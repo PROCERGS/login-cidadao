@@ -42,9 +42,7 @@ class DomainOwnershipValidator extends ConstraintValidator
         $response = curl_exec($ch);
 
         if (strstr($response, $organization->getValidationSecret()) === false) {
-            $this->context->buildViolation($constraint->invalidResponse)
-                ->atPath('validationUrl')
-                ->addViolation();
+            $this->buildUrlViolation('organizations.validation.error.code_not_found');
         }
 
         $organization->setVerifiedAt(new \DateTime());
