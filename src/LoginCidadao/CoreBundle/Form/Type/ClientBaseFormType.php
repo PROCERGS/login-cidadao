@@ -32,12 +32,16 @@ class ClientBaseFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $person = $this->tokenStorage->getToken()->getUser();
+        $checker = $this->security;
+        $person  = $this->tokenStorage->getToken()->getUser();
 
-        $organizationQueryBuilder = function (EntityRepository $er) use ($person) {
-            return $er->createQueryBuilder('o')
-                    ->where(':person MEMBER OF o.members')
+        $organizationQueryBuilder = function (EntityRepository $er) use ($person, $checker) {
+            $query = $er->createQueryBuilder('o');
+            if (!$checker->isGranted('ROLE_ORGANIZATIONS_BIND_CLIENT_ANY_ORG')) {
+                $query->where(':person MEMBER OF o.members')
                     ->setParameters(compact('person'));
+            }
+            return $query;
         };
 
         $builder->add('name', 'text', array('required' => true))
@@ -64,14 +68,17 @@ class ClientBaseFormType extends AbstractType
                 array(
                 'required' => false
             ))
-            ->add('organization', 'entity',
-                array(
-                'class' => 'LoginCidadaoOAuthBundle:Organization',
-                'query_builder' => $organizationQueryBuilder
-            ))
             ->add('published', 'switch', array('required' => false))
             ->add('visible', 'switch', array('required' => false))
         ;
+
+        if ($checker->isGranted('ROLE_ORGANIZATIONS_BIND_CLIENT')) {
+            $builder->add('organization', 'entity',
+                array(
+                'class' => 'LoginCidadaoOAuthBundle:Organization',
+                'query_builder' => $organizationQueryBuilder
+            ));
+        }
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT,
             function (FormEvent $event) {
