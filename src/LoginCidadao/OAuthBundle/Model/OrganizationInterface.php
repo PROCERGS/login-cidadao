@@ -95,4 +95,9 @@ interface OrganizationInterface
      * @param string $validationSecret
      */
     public function setValidationSecret($validationSecret);
+
+    /**
+     * @return boolean
+     */
+    public function checkValidation();
 }

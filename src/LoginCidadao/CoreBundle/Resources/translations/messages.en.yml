@@ -302,6 +302,12 @@ organizations:
         name.label: Name
         domain.label: Domain
         validationUrl.label: Validation Url
-    validate:
-        call_to_action: Validate
+    validation:
+        not_verified: Pending Validation
+        verified: Verified
         instructions: To validate this organization, create a file in the given domain containing the following code and type the address to this file in the field %input%.
+        error:
+            invalid_domain: 'Your domain doesn''t match the domain used on the Validation URL'
+            code_not_found: 'Your validation code wasn''t found in the given address.'
+            query_string: Your validation URL cannot contain a query string.
+            code_in_url: Your validation code cannot be in the URL.

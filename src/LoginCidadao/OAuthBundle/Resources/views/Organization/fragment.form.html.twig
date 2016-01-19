@@ -6,10 +6,10 @@
     <div class="panel-body">
         {{ form_row(form.name) }}
         {{ form_row(form.domain) }}
-        {% if is_granted('ROLE_ORGANIZATIONS_VALIDATE') and form.vars.value.validationSecret is not empty %}
+        {% if is_granted('ROLE_ORGANIZATIONS_VALIDATE') and organization is defined %}
             {{ form_row(form.validationUrl) }}
             <div class="well">
-                <p>{{ 'organizations.validate.instructions' | trans({'%input%': 'organizations.form.validationUrl.label' | trans}) | raw }}</p>
+                <p>{{ 'organizations.validation.instructions' | trans({'%input%': 'organizations.form.validationUrl.label' | trans}) | raw }}</p>
                 <p class="text-center"><strong>{{ organization.validationSecret }}</strong></p>
             </div>
         {% endif %}

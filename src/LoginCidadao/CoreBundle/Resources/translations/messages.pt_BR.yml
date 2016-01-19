@@ -732,6 +732,7 @@ organizations:
         name.label: Nome
         domain.label: Domínio
         validationUrl.label: URL para Validação
-    validate:
-        call_to_action: Validar
+    validation:
+        not_verified: Validação Pendente
+        verified: Verificada
         instructions: Para validar essa organização, crie um arquivo no domínio informado contendo o código a seguir e informe o endereço desse arquivo no campo <code>%input%</code>.

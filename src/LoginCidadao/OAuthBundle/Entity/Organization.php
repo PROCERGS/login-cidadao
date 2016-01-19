@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
+use LoginCidadao\OAuthBundle\Validator\Constraints\DomainOwnership;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\Util\SecureRandom;
@@ -25,6 +26,7 @@ use Symfony\Component\Security\Core\Util\SecureRandom;
  * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity("domain")
  * @UniqueEntity("name")
+ * @DomainOwnership
  */
 class Organization implements OrganizationInterface
 {
@@ -82,6 +84,12 @@ class Organization implements OrganizationInterface
      * @var string
      */
     protected $validationSecret;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string
+     */
+    protected $validatedUrl;
 
     public function __construct()
     {
@@ -211,7 +219,24 @@ class Organization implements OrganizationInterface
             return;
         }
         $generator = new SecureRandom();
-        $random    = bin2hex($generator->nextBytes(35));
+        $random    = base64_encode($generator->nextBytes(35));
         $this->setValidationSecret($random);
+    }
+
+    public function checkValidation()
+    {
+        if ($this->validatedUrl !== $this->getValidationUrl()) {
+            $this->setVerifiedAt(null);
+            $this->validatedUrl = null;
+            return false;
+        }
+        return true;
+    }
+
+    public function setValidatedUrl($validatedUrl)
+    {
+        $this->validatedUrl = $validatedUrl;
+
+        return $this;
     }
 }

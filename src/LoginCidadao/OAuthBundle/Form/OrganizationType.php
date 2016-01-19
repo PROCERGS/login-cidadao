@@ -37,7 +37,7 @@ class OrganizationType extends AbstractType
             ->add('domain', 'text',
                 array('label' => 'organizations.form.domain.label'))
         ;
-        if ($this->authorizationChecker->isGranted('ROLE_ORGANIZATIONS_VALIDATE')) {
+        if ($this->authorizationChecker->isGranted('ROLE_ORGANIZATIONS_VALIDATE') && $builder->getData()->getId()) {
             $builder->add('validationUrl', 'url',
                 array(
                 'required' => false,

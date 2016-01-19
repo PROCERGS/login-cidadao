@@ -17,11 +17,16 @@
         <ul class="panel-body list-group">
             {% for organization in organizations %}
                 <li class="list-group-item">
-                    {% if is_granted('ROLE_ORGANIZATIONS_VALIDATE') and app.user in organization.members %}
-                        <a href="{{ path('lc_organizations_validate', { 'id': organization.id }) }}" class="pull-right btn btn-sm btn-warning">
+                    {% if organization.verifiedAt is not null %}
+                        <span class="label label-success pull-right">
+                            <span class="glyphicon glyphicon-ok"></span>
+                            {{ 'organizations.validation.verified' | trans }}
+                        </span>
+                    {% else %}
+                        <span class="label label-warning pull-right">
                             <span class="glyphicon glyphicon-exclamation-sign"></span>
-                            {{ 'organizations.validate.call_to_action' | trans }}
-                        </a>
+                            {{ 'organizations.validation.not_verified' | trans }}
+                        </span>
                     {% endif %}
                     <a href="{{ path(is_granted('ROLE_ORGANIZATIONS_EDIT') ? 'lc_organizations_edit' : 'lc_organizations_show', { 'id': organization.id }) }}" class="text-primary">
                         <strong class="list-group-item-heading">{{- organization.name -}}</strong>
