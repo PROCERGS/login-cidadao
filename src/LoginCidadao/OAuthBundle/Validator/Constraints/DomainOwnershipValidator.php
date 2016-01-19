@@ -20,6 +20,7 @@ class DomainOwnershipValidator extends ConstraintValidator
     public function validate($organization, Constraint $constraint)
     {
         if (!$organization->getValidationUrl()) {
+            $organization->checkValidation();
             return;
         }
 
