@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use LoginCidadao\OpenIDBundle\Form\ClientMetadataWebForm;
 
 class ClientBaseFormType extends AbstractType
@@ -16,13 +17,29 @@ class ClientBaseFormType extends AbstractType
     /** @var AuthorizationCheckerInterface */
     protected $security;
 
+    /** @var TokenStorageInterface */
+    protected $tokenStorage;
+
     public function __construct(AuthorizationCheckerInterface $security)
     {
         $this->security = $security;
     }
 
+    public function setTokenStorage(TokenStorageInterface $tokenStorage)
+    {
+        $this->tokenStorage = $tokenStorage;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $person = $this->tokenStorage->getToken()->getUser();
+
+        $organizationQueryBuilder = function (EntityRepository $er) use ($person) {
+            return $er->createQueryBuilder('o')
+                    ->where(':person MEMBER OF o.members')
+                    ->setParameters(compact('person'));
+        };
+
         $builder->add('name', 'text', array('required' => true))
             ->add('description', 'textarea',
                 array('required' => true, 'attr' => array('rows' => 4)))
@@ -47,7 +64,11 @@ class ClientBaseFormType extends AbstractType
                 array(
                 'required' => false
             ))
-            ->add('organization', null, array('required' => false))
+            ->add('organization', 'entity',
+                array(
+                'class' => 'LoginCidadaoOAuthBundle:Organization',
+                'query_builder' => $organizationQueryBuilder
+            ))
             ->add('published', 'switch', array('required' => false))
             ->add('visible', 'switch', array('required' => false))
         ;
