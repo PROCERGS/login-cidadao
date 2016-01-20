@@ -14,6 +14,10 @@
             </div>
         {% endif %}
 
+        {% if form.trusted is defined %}
+            {{ form_row(form.trusted) }}
+        {% endif %}
+
         {% if (is_granted('ROLE_ORGANIZATIONS_MANAGE_MEMBERS') and form.members is defined) or is_granted('ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG') %}
             {{ form_row(form.members) }}
         {% endif %}

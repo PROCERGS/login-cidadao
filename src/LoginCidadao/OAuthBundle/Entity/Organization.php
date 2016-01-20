@@ -91,11 +91,18 @@ class Organization implements OrganizationInterface
      */
     protected $validatedUrl;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     * @var boolean
+     */
+    protected $trusted;
+
     public function __construct()
     {
         $this->members = new ArrayCollection();
         $this->clients = new ArrayCollection();
         $this->initializeValidationCode();
+        $this->trusted = false;
     }
 
     public function getId()
@@ -248,5 +255,22 @@ class Organization implements OrganizationInterface
     public function isVerified()
     {
         return $this->getVerifiedAt() instanceof \DateTime;
+    }
+
+    public function isTrusted()
+    {
+        return $this->trusted;
+    }
+
+    /**
+     *
+     * @param boolean $trusted
+     * @return \LoginCidadao\OAuthBundle\Entity\Organization
+     */
+    public function setTrusted($trusted)
+    {
+        $this->trusted = $trusted;
+
+        return $this;
     }
 }

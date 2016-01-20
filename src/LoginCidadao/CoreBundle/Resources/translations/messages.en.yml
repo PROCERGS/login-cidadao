@@ -302,6 +302,7 @@ organizations:
         name.label: Name
         domain.label: Domain
         validationUrl.label: Validation Url
+        trusted.label: Trusted Organization
         members:
             label: Members
             search.label: Search by Tax ID, email, name or username
@@ -317,3 +318,12 @@ organizations:
             info:
                 provided_by: This service is offered by <strong>%name%</strong> (<a class="text-danger">%domain%</a>).
                 warn_trust: Authorize it only if you trust <strong>%name%</strong>
+                domain_verified: Domain Verified
+                domain_not_verified: Domain not Verified
+                no_organization:
+                    provided_by: This service isn't bound to any organization
+                    warn_trust: <strong>Do not authorize</strong> if you are not sure this is a trustworthy service
+    trust:
+        warn_untrusted:
+            attention: Caution!
+            text: This service is offered by an organization we do not trust. Athorize only if you trust this organization.

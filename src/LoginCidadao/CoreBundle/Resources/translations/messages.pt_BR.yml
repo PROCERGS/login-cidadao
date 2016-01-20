@@ -732,6 +732,7 @@ organizations:
         name.label: Nome
         domain.label: Domínio
         validationUrl.label: URL para Validação
+        trusted.label: Organização Confiável
         members:
             label: Membros
             search.label: Pesquisar por Nome, email, CPF ou nome de usuário
@@ -749,3 +750,10 @@ organizations:
                 warn_trust: Autorize apenas se você confia na organização <strong>%name%</strong>
                 domain_verified: Domínio Verificado
                 domain_not_verified: Domínio não Verificado
+                no_organization:
+                    provided_by: Esse serviço não foi associado a nenhuma organização
+                    warn_trust: <strong>Não autorize</strong>, caso não tenha certeza de que se trata de um serviço confiável
+    trust:
+        warn_untrusted:
+            attention: Cuidado!
+            text: Esse serviço está sendo oferecido por uma organização que não confiamos. Apenas autorize caso <strong>você</strong> confie nesta organização.

@@ -105,4 +105,15 @@ interface OrganizationInterface
      * @return boolean
      */
     public function isVerified();
+
+    /**
+     * Indicates whether or not this Organization is approved/trusted by
+     * login-cidadao.
+     */
+    public function isTrusted();
+
+    /**
+     * @param boolean $trusted
+     */
+    public function setTrusted($trusted);
 }

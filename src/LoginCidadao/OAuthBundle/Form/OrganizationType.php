@@ -55,6 +55,10 @@ class OrganizationType extends AbstractType
                 array('label' => 'organizations.form.domain.label'))
         ;
 
+        if ($this->authorizationChecker->isGranted('ROLE_ORGANIZATIONS_CAN_TRUST')) {
+            $builder->add('trusted', 'switch',
+                array('label' => 'organizations.form.trusted.label', 'required' => false));
+        }
         if ($this->authorizationChecker->isGranted('ROLE_ORGANIZATIONS_VALIDATE')
             && $builder->getData()->getId()) {
             $builder->add('validationUrl', 'url',

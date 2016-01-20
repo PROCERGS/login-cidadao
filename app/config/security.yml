@@ -4,9 +4,12 @@ security:
         FOS\UserBundle\Model\UserInterface: sha512
 
     role_hierarchy:
-        ROLE_USER:          FEATURE_PROD
-        ROLE_DEV:           ROLE_USER
-        ROLE_SUPER:         ROLE_DEV
+        ROLE_USER:
+            - FEATURE_PROD
+        ROLE_DEV:
+            - ROLE_USER
+        ROLE_SUPER:
+            - ROLE_DEV
         ROLE_ADMIN:
             - ROLE_SUPER
             - ROLE_EDIT_CLIENT_ALLOWED_SCOPES
@@ -22,6 +25,7 @@ security:
             - ROLE_ORGANIZATIONS_EDIT_ANY_ORG
             - ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG
             - ROLE_ORGANIZATIONS_BIND_CLIENT_ANY_ORG
+            - ROLE_ORGANIZATIONS_CAN_TRUST
 
         FEATURE_ALPHA:      FEATURE_BETA, FEATURE_ORGANIZATIONS
         FEATURE_BETA:       FEATURE_PROD
