@@ -163,7 +163,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     /**
      * @var OrganizationInterface
      * @ORM\ManyToOne(targetEntity="LoginCidadao\OAuthBundle\Model\OrganizationInterface", inversedBy="clients")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $organization;
 
