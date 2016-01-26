@@ -62,7 +62,7 @@ class OrganizationController extends Controller
             $em->persist($organization);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('lc_organizations_list'));
+            return $this->redirectToRoute('lc_organizations_list');
         }
 
         return compact('form');
@@ -91,7 +91,7 @@ class OrganizationController extends Controller
             $em->persist($organization);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('lc_organizations_list'));
+            return $this->redirectToRoute('lc_organizations_list');
         }
 
         return compact('form', 'organization');
@@ -108,6 +108,41 @@ class OrganizationController extends Controller
         return compact('organization');
     }
 
+    /**
+     * @Route("/{id}/delete", name="lc_organizations_delete", requirements={"id" = "\d+"})
+     * @Template()
+     */
+    public function deleteAction(Request $request, $id)
+    {
+        $organization = $this->getOr404($id);
+
+        $em   = $this->getDoctrine()->getManager();
+        $form = $this->createFormBuilder($organization)
+            ->add('delete', 'submit',
+                array(
+                'label' => 'organizations.form.delete.yes',
+                'attr' => array('class' => 'btn-danger')
+            ))
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em->remove($organization);
+            $em->flush();
+
+            $translator = $this->get('translator');
+            $params     = array('%name%' => $organization->getName());
+            $message    = $translator->trans('organizations.form.delete.success',
+                $params);
+            $this->get('session')->getFlashBag()->add('success', $message);
+
+            return $this->redirectToRoute('lc_organizations_list');
+        }
+
+        return compact('organization', 'form');
+    }
+
     private function getOr404($id)
     {
         $organization = $this->getDoctrine()
@@ -117,7 +152,7 @@ class OrganizationController extends Controller
         if ($organization instanceof OrganizationInterface) {
             return $organization;
         } else {
-            throw new $this->createNotFoundException();
+            throw $this->createNotFoundException();
         }
     }
 

@@ -307,6 +307,14 @@ organizations:
             label: Members
             search.label: Search by Tax ID, email, name or username
             name.label: Name
+        delete:
+            panel.title: Delete <strong>%name%</strong>?
+            warn: 'Deleting an organization cannot be undone. If you do it by mistake you''ll have to create another organization and bind it''s services again.'
+            button: Delete
+            confirm: 'Are you sure you want to delete this organization? This organization''s services will have no organization bound to it!'
+            yes: Yes, DELETE this organization
+            no: Don't delete it
+            success: Organization %name% was deleted.
     validation:
         not_verified: Pending Validation
         verified: Verified

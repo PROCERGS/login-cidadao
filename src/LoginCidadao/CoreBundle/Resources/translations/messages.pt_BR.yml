@@ -737,6 +737,14 @@ organizations:
             label: Membros
             search.label: Pesquisar por Nome, email, CPF ou nome de usuário
             name.label: Nome
+        delete:
+            panel.title: Excluir <strong>%name%</strong>?
+            warn: A exclusão de uma organização não pode ser desfeita. Caso exclua por engano você terá que criar uma nova organização e associar os serviços a ela.
+            button: Excluir
+            confirm: Tem certeza que deseja excluir essa organização? Os serviços associados ficarão sem uma organização!
+            yes: Sim, REMOVA essa organização
+            no: Não remova
+            success: Organização %name% excluída com sucesso.
     validation:
         not_verified: Validação Pendente
         verified: Verificada
