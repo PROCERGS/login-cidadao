@@ -75,6 +75,8 @@ class ClientBaseFormType extends AbstractType
         if ($checker->isGranted('ROLE_ORGANIZATIONS_BIND_CLIENT')) {
             $builder->add('organization', 'entity',
                 array(
+                'required' => false,
+                'placeholder' => 'organizations.form.client_form.placeholder',
                 'class' => 'LoginCidadaoOAuthBundle:Organization',
                 'query_builder' => $organizationQueryBuilder
             ));

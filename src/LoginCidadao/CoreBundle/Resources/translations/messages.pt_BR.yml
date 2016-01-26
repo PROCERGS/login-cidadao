@@ -745,6 +745,7 @@ organizations:
             yes: Sim, REMOVA essa organização
             no: Não remova
             success: Organização %name% excluída com sucesso.
+        client_form.placeholder: Selecione uma Organização
     validation:
         not_verified: Validação Pendente
         verified: Verificada

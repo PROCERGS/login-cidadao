@@ -315,6 +315,7 @@ organizations:
             yes: Yes, DELETE this organization
             no: Don't delete it
             success: Organization %name% was deleted.
+        client_form.placeholder: Select an Organization
     validation:
         not_verified: Pending Validation
         verified: Verified
