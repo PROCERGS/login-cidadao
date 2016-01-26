@@ -8,6 +8,7 @@ use OAuth2\ServerBundle\Controller\AuthorizeController as BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 
 class AuthorizeController extends BaseController
