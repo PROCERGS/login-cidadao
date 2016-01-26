@@ -766,3 +766,15 @@ organizations:
         warn_untrusted:
             attention: Cuidado!
             text: Esse serviço está sendo oferecido por uma organização que não confiamos. Apenas autorize caso <strong>você</strong> confie nesta organização.
+FEATURE_ORGANIZATIONS: Funcionalidade de Organizações
+ROLE_ORGANIZATIONS_BIND_CLIENT: 'Organizações: pode associar serviços em organizações das quais é membro'
+ROLE_ORGANIZATIONS_BIND_CLIENT_ANY_ORG: 'Organizações: pode associar serviços em qualquer organização'
+ROLE_ORGANIZATIONS_CREATE: 'Organizações: pode criar organizações'
+ROLE_ORGANIZATIONS_EDIT: 'Organizações: pode editar organizações das quais é membro'
+ROLE_ORGANIZATIONS_EDIT_ANY_ORG: 'Organizações: pode editar qualquer organização'
+ROLE_ORGANIZATIONS_VALIDATE: 'Organizações: pode validar domínio de organizações'
+ROLE_ORGANIZATIONS_LIST_ALL: 'Organizações: pode listar organizações das quais não é membro'
+ROLE_ORGANIZATIONS_DELETE: 'Organizações: pode excluir organizações das quais é membro'
+ROLE_ORGANIZATIONS_DELETE_ANY_ORG: 'Organizações: pode excluir quaisquer organizações'
+ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG: 'Organizações: pode gerenciar membros de qualquer organização'
+ROLE_ORGANIZATIONS_CAN_TRUST: 'Organizações: pode marcar uma organização como confiável'

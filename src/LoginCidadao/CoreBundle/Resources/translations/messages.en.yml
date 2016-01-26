@@ -336,3 +336,15 @@ organizations:
         warn_untrusted:
             attention: Caution!
             text: This service is offered by an organization we do not trust. Athorize only if you trust this organization.
+FEATURE_ORGANIZATIONS: Organizations Feature
+ROLE_ORGANIZATIONS_BIND_CLIENT: 'Organizations: can bind services to organizations where is member'
+ROLE_ORGANIZATIONS_BIND_CLIENT_ANY_ORG: 'Organizations: can bind services to any organization'
+ROLE_ORGANIZATIONS_CREATE: 'Organizations: can create organizations'
+ROLE_ORGANIZATIONS_EDIT: 'Organizations: can edit organizations where is member'
+ROLE_ORGANIZATIONS_EDIT_ANY_ORG: 'Organizations: can edit any organizations'
+ROLE_ORGANIZATIONS_VALIDATE: 'Organizations: can validate organization''s domains'
+ROLE_ORGANIZATIONS_LIST_ALL: 'Organizations: can list organizations where is not a member'
+ROLE_ORGANIZATIONS_DELETE: 'Organizations: can delete organizations where is a member'
+ROLE_ORGANIZATIONS_DELETE_ANY_ORG: 'Organizations: can delete any organizations'
+ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG: 'Organizations: can manage members of any organization'
+ROLE_ORGANIZATIONS_CAN_TRUST: 'Organizations: can flag an organization as trusted'
