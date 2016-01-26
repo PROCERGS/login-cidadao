@@ -45,7 +45,11 @@ class SecurityHelper
     public function getRoleLevel($role)
     {
         $map = $this->getRoleMapping();
-        return $map[$role];
+        if (array_key_exists($role, $map)) {
+            return $map[$role];
+        } else {
+            return max(array_values($map));
+        }
     }
 
     private function getRoleMapping()
