@@ -20,7 +20,7 @@ class ActionLogRepository extends EntityRepository
         $query = $this->createQueryBuilder('l')
             ->select('l, c')
             ->innerJoin('LoginCidadaoOAuthBundle:Client', 'c', 'WITH',
-                        'c.id = l.clientId')
+                'c.id = l.clientId')
             ->where('l.userId = :person_id')
             ->setParameter('person_id', $person->getId())
             ->orderBy('l.createdAt', 'DESC');
@@ -54,7 +54,10 @@ class ActionLogRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('l')
             ->where('l.userId = :person_id')
+            ->andWhere('l.actionType IN (:type)')
             ->setParameter('person_id', $person->getId())
+            ->setParameter('type',
+                array(ActionLog::TYPE_LOGIN, ActionLog::TYPE_IMPERSONATE))
             ->orderBy('l.createdAt', 'DESC');
 
         if ($limit > 0) {
@@ -63,5 +66,4 @@ class ActionLogRepository extends EntityRepository
 
         return $query->getQuery()->getResult();
     }
-
 }

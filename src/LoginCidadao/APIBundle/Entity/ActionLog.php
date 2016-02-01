@@ -23,12 +23,12 @@ use LoginCidadao\OAuthBundle\Model\ClientInterface;
  */
 class ActionLog
 {
-
-    const TYPE_SELECT = 'SELECT';
-    const TYPE_UPDATE = 'UPDATE';
-    const TYPE_CREATE = 'CREATE';
-    const TYPE_DELETE = 'DELETE';
-    const TYPE_LOGIN = 'LOGIN';
+    const TYPE_SELECT      = 'SELECT';
+    const TYPE_UPDATE      = 'UPDATE';
+    const TYPE_CREATE      = 'CREATE';
+    const TYPE_DELETE      = 'DELETE';
+    const TYPE_LOGIN       = 'LOGIN';
+    const TYPE_IMPERSONATE = 'IMPERSONATE';
 
     /**
      * @var integer
@@ -441,5 +441,4 @@ class ActionLog
         $this->client = $client;
         return $this;
     }
-
 }
