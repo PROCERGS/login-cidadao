@@ -9,61 +9,79 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use LoginCidadao\OpenIDBundle\Form\ClientMetadataWebForm;
 
 class ClientBaseFormType extends AbstractType
 {
     /** @var AuthorizationCheckerInterface */
     protected $security;
 
+    /** @var TokenStorageInterface */
+    protected $tokenStorage;
+
     public function __construct(AuthorizationCheckerInterface $security)
     {
         $this->security = $security;
     }
 
+    public function setTokenStorage(TokenStorageInterface $tokenStorage)
+    {
+        $this->tokenStorage = $tokenStorage;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $security = $this->security;
+        $checker = $this->security;
+        $person  = $this->tokenStorage->getToken()->getUser();
 
-        $builder->add('name', 'text',
-            array(
-            'required' => true
-        ));
-        $builder->add('description', 'textarea',
-            array(
-            'required' => true,
-            'attr' => array('rows' => 4)
-        ));
-        $builder->add('metadata',
-            new \LoginCidadao\OpenIDBundle\Form\ClientMetadataWebForm());
-        $builder->add('siteUrl', 'text',
-            array(
-            'required' => true
-        ));
-        $builder->add($builder->create('redirectUris', 'textarea',
+        $organizationQueryBuilder = function (EntityRepository $er) use ($person, $checker) {
+            $query = $er->createQueryBuilder('o');
+            if (!$checker->isGranted('ROLE_ORGANIZATIONS_BIND_CLIENT_ANY_ORG')) {
+                $query->where(':person MEMBER OF o.members')
+                    ->setParameters(compact('person'));
+            }
+            return $query;
+        };
+
+        $builder->add('name', 'text', array('required' => true))
+            ->add('description', 'textarea',
+                array('required' => true, 'attr' => array('rows' => 4)))
+            ->add('metadata', new ClientMetadataWebForm())
+            ->add('siteUrl', 'text', array('required' => true))
+            ->add($builder->create('redirectUris', 'textarea',
+                    array(
+                    'required' => true,
+                    'attr' => array('rows' => 4)
+                ))
+                ->addModelTransformer(new FromArray())
+            )
+            ->add('landingPageUrl', 'text', array('required' => true))
+            ->add('termsOfUseUrl', 'text', array('required' => true))
+            ->add('image', 'vich_file',
                 array(
-                'required' => true,
-                'attr' => array('rows' => 4)
-            ))->addModelTransformer(new FromArray()));
-        $builder->add('landingPageUrl', 'text',
-            array(
-            'required' => true
-        ));
-        $builder->add('termsOfUseUrl', 'text',
-            array(
-            'required' => true
-        ));
+                'required' => false,
+                'allow_delete' => true, // not mandatory, default is true
+                'download_link' => true, // not mandatory, default is true
+            ))
+            ->add('id', 'hidden',
+                array(
+                'required' => false
+            ))
+            ->add('published', 'switch', array('required' => false))
+            ->add('visible', 'switch', array('required' => false))
+        ;
 
+        if ($checker->isGranted('ROLE_ORGANIZATIONS_BIND_CLIENT')) {
+            $builder->add('organization', 'entity',
+                array(
+                'required' => false,
+                'placeholder' => 'organizations.form.client_form.placeholder',
+                'class' => 'LoginCidadaoOAuthBundle:Organization',
+                'query_builder' => $organizationQueryBuilder
+            ));
+        }
 
-        $builder->add('image', 'vich_file',
-            array(
-            'required' => false,
-            'allow_delete' => true, // not mandatory, default is true
-            'download_link' => true, // not mandatory, default is true
-        ));
-        $builder->add('id', 'hidden',
-            array(
-            'required' => false
-        ));
         $builder->addEventListener(FormEvents::PRE_SUBMIT,
             function (FormEvent $event) {
             $entity = $event->getData();
@@ -101,7 +119,9 @@ class ClientBaseFormType extends AbstractType
                 return $sql;
             }
             ));
-        });
+        })
+        ;
+
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
             function (FormEvent $event) {
             $entity = $event->getData();
@@ -136,14 +156,6 @@ class ClientBaseFormType extends AbstractType
                 ));
             }
         });
-        $builder->add('published', 'switch',
-            array(
-            'required' => false
-        ));
-        $builder->add('visible', 'switch',
-            array(
-            'required' => false
-        ));
     }
 
     public function getName()

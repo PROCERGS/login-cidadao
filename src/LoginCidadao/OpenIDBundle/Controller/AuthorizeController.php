@@ -8,6 +8,8 @@ use OAuth2\ServerBundle\Controller\AuthorizeController as BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 
 class AuthorizeController extends BaseController
 {
@@ -25,15 +27,13 @@ class AuthorizeController extends BaseController
         $request->request->set('scope', implode(' ', $scope));
 
         $server = $this->get('oauth2.server');
+        $client = $this->getClient($request);
 
         $response = $this->handleAuthorize($server, $is_authorized);
 
-        $id     = explode('_', $request->get('client_id'));
-        $em     = $this->getDoctrine()->getManager();
-        $client = $em->getRepository('LoginCidadaoOAuthBundle:Client')->find($id[0]);
-        $event  = new OAuthEvent($this->getUser(), $client, $is_authorized);
-        $this->get('event_dispatcher')->dispatch(OAuthEvent::POST_AUTHORIZATION_PROCESS,
-            $event);
+        $event = new OAuthEvent($this->getUser(), $client, $is_authorized);
+        $this->get('event_dispatcher')
+            ->dispatch(OAuthEvent::POST_AUTHORIZATION_PROCESS, $event);
 
         return $response;
     }
@@ -44,10 +44,7 @@ class AuthorizeController extends BaseController
     public function authorizeAction($client_id, $scope, $response_type,
                                     $redirect_uri, $state = null, $nonce = null)
     {
-        $id     = explode('_', $client_id);
-        $em     = $this->getDoctrine()->getManager();
-        $client = $em->getRepository('LoginCidadaoOAuthBundle:Client')
-            ->find($id[0]);
+        $client = $this->getClient($client_id);
 
         $scope = explode(' ', $scope);
         if (array_search('public_profile', $scope) === false) {
@@ -59,9 +56,11 @@ class AuthorizeController extends BaseController
             return $value->getScope();
         }, $scopeManager->findScopesByScopes($scope));
 
+        $warnUntrusted = $this->shouldWarnUntrusted($client);
+
         $qs = compact('client_id', 'scope', 'response_type', 'redirect_uri',
             'state', 'nonce');
-        return compact('qs', 'scopes', 'client');
+        return compact('qs', 'scopes', 'client', 'warnUntrusted');
     }
 
     /**
@@ -80,9 +79,7 @@ class AuthorizeController extends BaseController
     public function validateAuthorizeAction()
     {
         $request = $this->getRequest();
-        $id      = explode('_', $request->get('client_id'));
-        $em      = $this->getDoctrine()->getManager();
-        $client  = $em->getRepository('LoginCidadaoOAuthBundle:Client')->find($id[0]);
+        $client  = $this->getClient($request);
 
         if ($client instanceof \FOS\OAuthServerBundle\Model\ClientInterface) {
             $event = $this->get('event_dispatcher')->dispatch(
@@ -105,5 +102,35 @@ class AuthorizeController extends BaseController
         return $server->handleAuthorizeRequest($this->get('oauth2.request'),
                 $this->get('oauth2.response'), $is_authorized,
                 $this->getUser()->getId());
+    }
+
+    private function getClient($fullId)
+    {
+        if ($fullId instanceof Request) {
+            $fullId = $fullId->get('client_id');
+        }
+
+        $id = explode('_', $fullId);
+        $er = $this->getDoctrine()
+            ->getRepository('LoginCidadaoOAuthBundle:Client');
+
+        return $er->find($id[0]);
+    }
+
+    private function shouldWarnUntrusted(ClientInterface $client)
+    {
+        $authorizeUntrusted = $this->getParameter('warn_untrusted');
+
+        if ($client->getOrganization() instanceof OrganizationInterface) {
+            $isTrusted = $client->getOrganization()->isTrusted();
+        } else {
+            $isTrusted = false;
+        }
+
+        if ($isTrusted || $authorizeUntrusted) {
+            return false; // do not warn
+        }
+
+        return true; // warn
     }
 }

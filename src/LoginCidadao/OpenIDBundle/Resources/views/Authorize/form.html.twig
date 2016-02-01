@@ -1,5 +1,26 @@
 {% if 'public_profile' not in scopes %}{% set scopes = scopes | merge(['public_profile']) %}{% endif %}
+{% set verified %}<span class="label label-success" title="{{ 'organizations.validation.on_authorize.info.domain_verified' | trans }}"><span class="glyphicon glyphicon-ok"></span></span>{% endset %}
+{% set not_verified %}<span class="label label-danger" title="{{ 'organizations.validation.on_authorize.info.domain_not_verified' | trans }}"><span class="glyphicon glyphicon-alert"></span></span>{% endset %}
 <form action="{{ qs is defined ? '?' ~ qs|url_encode : path('fos_oauth_server_authorize') }}" method="post" class="fos_oauth_server_authorize">
+    {% if is_granted('FEATURE_ORGANIZATIONS') %}
+        {% if client.organization is empty or client.organization.isVerified is sameas(false) %}
+            {% set status_label = not_verified %}
+            <div class="alert bg-danger" role="alert">
+                <strong>{{ 'organizations.validation.on_authorize.warn_not_verified.attention' | trans }}</strong>
+                <p>{{ 'organizations.validation.on_authorize.warn_not_verified.text' | trans }}</p>
+            </div>
+        {% else %}
+            {% set status_label = verified %}
+        {% endif %}
+
+        {% if warnUntrusted %}
+            <div class="alert bg-warning" role="alert">
+                <strong>{{ 'organizations.trust.warn_untrusted.attention' | trans | raw }}</strong>
+                <p>{{ 'organizations.trust.warn_untrusted.text' | trans | raw }}</p>
+            </div>
+        {% endif %}
+    {% endif %}
+
     <h1>{% trans with { '%client_name%': client.name } %}Authorize <strong>%client_name%</strong> to access your information?{% endtrans %}</h1>
 
     <div class="panel">
@@ -22,13 +43,20 @@
 
                     <ul class="permissions">
                         {% for scope in scopes|sort %}
+                            {% if ('scope_details.' ~ scope) | trans != ('scope_details.' ~ scope) %}
+                                {% set details = include('LoginCidadaoCoreBundle::common.scope.details.attr.html.twig', { 'scope': scope }) %}
+                                {% set handle = include('LoginCidadaoCoreBundle::common.scope.details.handle.html.twig', { 'scope': scope }) %}
+                            {% else %}
+                                {% set details = '' %}
+                                {% set handle = '' %}
+                            {% endif %}
                             {% if scope == 'openid' %}
                                 <input type="hidden" name="scope[]" value="{{ scope }}">
                             {% elseif scope == 'public_profile' %}
                                 <li>
                                     <label for="scope_{{ loop.index }}">
                                         <input type="checkbox" name="scope[]" checked disabled value="{{ scope }}" id="scope_{{ loop.index }}">
-                                        {{ ('scope.' ~ scope) | trans }}
+                                        <span {{ details | raw }}>{{ ('scope.' ~ scope) | trans }} {{ handle | raw }}</span>
                                         <input type="hidden" name="scope[]" value="{{ scope }}">
                                     </label>
                                 </li>
@@ -44,6 +72,22 @@
                     </ul>
                 </div>
             </div>
+
+            {% if is_granted('FEATURE_ORGANIZATIONS') %}
+                <div class="row">
+                    <div class="col-xs-12 text-center">
+                        <div class="well well-sm">
+                            {% if client.organization is not empty %}
+                                <p>{{ 'organizations.validation.on_authorize.info.provided_by' | trans({'%name%': client.organization.name | striptags, '%domain%': client.organization.domain | striptags, '%label%': status_label }) | raw }}</p>
+                                <p>{{ 'organizations.validation.on_authorize.info.warn_trust' | trans({'%name%': client.organization.name | striptags, '%domain%': client.organization.domain | striptags}) | raw }}</p>
+                            {% else %}
+                                <p>{{ 'organizations.validation.on_authorize.info.no_organization.provided_by' | trans | raw }}</p>
+                                <p>{{ 'organizations.validation.on_authorize.info.no_organization.warn_trust' | trans | raw }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
 
             <div class="row buttons">
                 <div class="col-xs-6 text-center">

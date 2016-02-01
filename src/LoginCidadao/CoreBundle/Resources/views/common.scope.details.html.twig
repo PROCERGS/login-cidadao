@@ -1,6 +1,5 @@
-<a tabindex="0" class="label label-success" role="button" data-toggle="popover" data-trigger="focus"
-   title="{{ ('scope.' ~ scope) | trans }}"
-   data-content="{{ ('scope_details.' ~ scope) | trans }}">
+<a class="label label-success"
+   {{ include('LoginCidadaoCoreBundle::common.scope.details.attr.html.twig', { 'scope': scope }) }}>
     {{ ('scope.' ~ scope) | trans }}
-    <span class="glyphicon glyphicon-plus-sign" title="{{ 'What is this?' | trans }}"></span>
+    {{ include('LoginCidadaoCoreBundle::common.scope.details.handle.html.twig', { 'scope': scope }) }}
 </a>&NegativeVeryThinSpace;

@@ -173,6 +173,7 @@ class PersonResumeFormType extends CommonFormType
 
             $filteredRoles[$role] = $name;
         }
+        asort($filteredRoles);
 
         $form->add('roles', 'choice',
             array(
