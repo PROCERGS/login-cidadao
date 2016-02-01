@@ -1,0 +1,18 @@
+{% extends "LoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block title %}{{ 'organizations.page.title' | trans }} | {{ parent() }}{% endblock title %}
+
+{% block content %}
+    <div class="content organizations">
+
+        <h1 class="visible-xs">{{ 'organizations.page.title' | trans }}</h1>
+
+        <div class="form-content">
+            {{ include('LoginCidadaoOAuthBundle:Organization:fragment.list.html.twig', { 'organizations': myOrganizations, 'panel_title': 'organizations.list.user.title' | trans, empty_message: 'organizations.list.user.empty' | trans }) }}
+
+            {% if is_granted('ROLE_ORGANIZATIONS_LIST_ALL') %}
+                {{ include('LoginCidadaoOAuthBundle:Organization:fragment.list.html.twig', { 'organizations': otherOrganizations, 'panel_title': 'organizations.list.all.title' | trans, empty_message: 'organizations.list.all.empty' | trans }) }}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

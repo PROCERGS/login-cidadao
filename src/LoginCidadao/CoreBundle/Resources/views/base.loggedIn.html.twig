@@ -67,6 +67,14 @@
                             <i class="glyphicon glyphicon-stats icon"></i>
                         </a>
                     </li>
+                    {% if app.user is not null and is_granted('FEATURE_ORGANIZATIONS') %}
+                        <li class="services glyph {{ app.request.attributes.get('_route') starts with 'lc_organizations_' ? 'active' }}">
+                            <a href="{{ path('lc_organizations_list') }}" class="clearfix">
+                                <span>{{ 'organizations.menu.label' | trans }}</span>
+                                <i class="icon glyphicon glyphicon-briefcase"></i>
+                            </a>
+                        </li>
+                    {% endif %}
                     {% if app.user is not null and is_granted('ROLE_SUPER') %}
                         <li class="services glyph">
                             <a href="{{ path('lc_admin') }}" class="clearfix">

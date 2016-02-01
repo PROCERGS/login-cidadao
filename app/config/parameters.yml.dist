@@ -100,3 +100,6 @@ parameters:
 
     # Enables or disables the contact form's captcha
     contact_form.captcha: true
+
+    # Warn users about untrusted Organizations?
+    warn_untrusted: true

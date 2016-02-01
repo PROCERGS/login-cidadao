@@ -3,3 +3,8 @@ change_username.invalid.username: 'Nomes de usuário devem conter apenas letras 
 'This document is already in use.': 'Esse documento já está sendo usado.'
 'You already have an ID Card in this state.': 'Você já cadastrou um documento de identidade nesse Estado.'
 'This field accepts only letters and numbers': 'Esse campo apenas aceita letras e números'
+organizations.validation.error:
+    invalid_domain: O domínio informado na URL para Validação é diferente do domínio da Organização
+    code_not_found: O código de verificação não foi encontrado nesse endereço
+    query_string: A URL para Validação não pode conter uma query string
+    code_in_url: Seu código de validação não pode estar na URL para Validação!

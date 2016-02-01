@@ -17,6 +17,7 @@ use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Model\AbstractUniqueEntity;
 use LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
@@ -158,6 +159,13 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
      * @ORM\Column(name="updated_at", type="datetime")
      */
     protected $updatedAt;
+
+    /**
+     * @var OrganizationInterface
+     * @ORM\ManyToOne(targetEntity="LoginCidadao\OAuthBundle\Model\OrganizationInterface", inversedBy="clients")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $organization;
 
     public function __construct()
     {
@@ -499,5 +507,24 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
             return $this->getMetadata()->getGrantTypes();
         }
         return parent::getAllowedGrantTypes();
+    }
+
+    /**
+     * @return OrganizationInterface
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
+    }
+
+    /**
+     * @param OrganizationInterface $organization
+     * @return \LoginCidadao\OAuthBundle\Entity\Client
+     */
+    public function setOrganization(OrganizationInterface $organization)
+    {
+        $this->organization = $organization;
+
+        return $this;
     }
 }
