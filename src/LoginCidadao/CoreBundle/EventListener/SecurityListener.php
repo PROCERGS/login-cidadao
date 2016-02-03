@@ -4,12 +4,11 @@ namespace LoginCidadao\CoreBundle\EventListener;
 
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\Event\SwitchUserEvent;
+use Symfony\Component\Security\Core\Role\SwitchUserRole;
 use Symfony\Component\HttpFoundation\Session\Session;
 use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
-use LoginCidadao\APIBundle\Security\Audit\Annotation\Loggable;
 
 class SecurityListener
 {
@@ -47,15 +46,25 @@ class SecurityListener
     {
         $tokenStorage = $this->tokenStorage;
         $authChecker  = $this->authChecker;
+        $target       = $event->getTargetUser();
 
         if ($authChecker->isGranted('ROLE_PREVIOUS_ADMIN')) {
+            // Impersonator is going back to normal
             foreach ($tokenStorage->getToken()->getRoles() as $role) {
                 if ($role instanceof SwitchUserRole) {
-                    $impersonatingUser = $role->getSource()->getUser();
+                    $impersonator = $role->getSource()->getUser();
                     break;
                 }
             }
-            $impersonatingUser;
+            $isImpersonating = false;
+        } else {
+            // Impersonator is becoming the target user
+            $impersonator    = $this->tokenStorage->getToken()->getUser();
+            $isImpersonating = true;
         }
+
+        $controllerAction = array($this, 'onSwitchUser');
+        $this->logger->registerImpersonate($event->getRequest(), $target,
+            $impersonator, $controllerAction, $isImpersonating);
     }
 }
