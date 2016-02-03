@@ -23,12 +23,13 @@ use LoginCidadao\OAuthBundle\Model\ClientInterface;
  */
 class ActionLog
 {
-    const TYPE_SELECT      = 'SELECT';
-    const TYPE_UPDATE      = 'UPDATE';
-    const TYPE_CREATE      = 'CREATE';
-    const TYPE_DELETE      = 'DELETE';
-    const TYPE_LOGIN       = 'LOGIN';
-    const TYPE_IMPERSONATE = 'IMPERSONATE';
+    const TYPE_SELECT        = 'SELECT';
+    const TYPE_UPDATE        = 'UPDATE';
+    const TYPE_CREATE        = 'CREATE';
+    const TYPE_DELETE        = 'DELETE';
+    const TYPE_LOGIN         = 'LOGIN';
+    const TYPE_IMPERSONATE   = 'IMPERSONATE';
+    const TYPE_DEIMPERSONATE = 'DEIMPERSONATE';
 
     /**
      * @var integer
@@ -47,6 +48,8 @@ class ActionLog
     private $accessToken;
 
     /**
+     * OAuth Client id or impersonating user id when action type is TYPE_IMPERSONATE
+     *
      * @var integer
      *
      * @ORM\Column(name="client_id", type="integer", nullable=true)
