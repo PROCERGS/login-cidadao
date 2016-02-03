@@ -96,3 +96,9 @@ parameters:
 
     # Warn users about untrusted Organizations?
     warn_untrusted: true
+
+    # Should login be allowed from this third-party providers?
+    third_party_login:
+        facebook: true
+        twitter: true
+        google: true
