@@ -782,6 +782,9 @@ admin:
         pending:
             title: Relatórios Pendentes
             list_item: <strong>%log_id%</strong> - %date% - %person%
+        list:
+            title: Relatórios Existentes
+            list_item: <strong>%date%</strong> - %person%
         new:
             title: Novo Relatório de Impersonation
             submit: Salvar

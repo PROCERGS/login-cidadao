@@ -25,16 +25,23 @@ class ImpersonationReportController extends Controller
 {
 
     /**
-     * @Route("/index", name="lc_admin_impersonation_report_index")
+     * @Route("/", name="lc_admin_impersonation_report_index")
      * @Template()
      */
     public function indexAction()
     {
-        $repo    = $this->getDoctrine()
+        $logRepo    = $this->getDoctrine()
             ->getRepository('LoginCidadaoAPIBundle:ActionLog');
-        $pending = $repo->findImpersonatonsWithoutReports(null,
+        $reportRepo = $this->getDoctrine()
+            ->getRepository('LoginCidadaoCoreBundle:ImpersonationReport');
+
+        $pending = $logRepo->findImpersonatonsWithoutReports(null,
             $this->getUser(), true);
-        return compact('pending');
+        $reports = $reportRepo->findBy(array(
+            'impersonator' => $this->getUser()
+        ));
+
+        return compact('pending', 'reports');
     }
 
     /**
@@ -88,7 +95,7 @@ class ImpersonationReportController extends Controller
     }
 
     /**
-     * @Route("/edit")
+     * @Route("/{id}/edit", name="lc_admin_impersonation_report_edit", requirements={"id" = "\d+"})
      * @Template()
      */
     public function editAction()
