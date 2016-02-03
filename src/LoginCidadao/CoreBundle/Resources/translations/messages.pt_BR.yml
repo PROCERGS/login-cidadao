@@ -141,7 +141,6 @@ No: Não
 social-networks.unlink.no-password: 'Você não pode desvincular uma rede social sem definir uma senha antes.'
 social-networks.unlink.facebook.success: 'Facebook desvinculado com sucesso.'
 social-networks.unlink.twitter.success: 'Twitter desvinculado com sucesso.'
-admin.apps.list: 'Gerenciar Serviços'
 'Upload another picture': 'Enviar outra imagem'
 'New Service': 'Novo Serviço'
 Service: Serviço
@@ -196,9 +195,6 @@ sugg.shorttext: 'Resumo'
 sugg.text: 'Sugestão'
 sugg.dateini: 'Data inicial'
 sugg.dateend: 'Data final'
-admin.sugg.list: 'Gerenciar sugestões'
-admin.sugg.list.title: 'Busca de sugestões'
-admin.sugg.show.title: 'Sugestão'
 facebook.token.error: 'Aparentemente houve um erro a autenticação com o Facebook. Por favor, tente logar novamente!'
 facebook.nousername: 'Conectado ao Facebook'
 twitter.nousername: 'Conectado ao Twitter'
@@ -522,8 +518,6 @@ Templates: 'Modelos'
 'Mail template': 'Modelo html do e-mail'
 Placeholders: 'Marcadores de posição'
 Placeholder: 'Marcador de posição'
-admin.person.list: 'Gerenciar pessoas'
-admin.person.list.title:  'Busca de pessoas'
 ROLE_USER: Usuário
 ROLE_FACEBOOK: Associado com Facebook
 ROLE_DEV: Desenvolvedor
@@ -535,7 +529,6 @@ FEATURE_ALPHA: Funcionalidades Alpha
 FEATURE_BETA: Funcionalidades Beta
 FEATURE_2FACTOR_AUTH: Funcionalidade de Autenticação por 2 Fatores
 'Roles': 'Perfis'
-admin.area: 'Área do administrator'
 developer.area: 'Área do desenvolvedor'
 not.createdat: 'Criado em '
 not.shorttext: 'Resumo'
@@ -780,3 +773,29 @@ access_log:
     login: Acessado por <span class="label label-info">%ip%</span> em <span class="label label-info">%date%</span>
     impersonation: <span class="label label-info">Suporte técnico</span> em <span class="label label-info">%date%</span>
 log.date.format: 'd/m/Y H:i:s'
+admin:
+    title: 'Área do Administrator'
+    impersonation_report:
+        menu: Relatórios de Impersonation
+        title: Relatórios de Impersonation
+        disclosure: '<strong>Todas</strong> informações aqui presentes podem ser solicitadas pelo usuário afetado a qualquer momento.'
+        pending:
+            title: Relatórios Pendentes
+            list_item: <strong>%log_id%</strong> - %date% - %person%
+        new:
+            title: Novo Relatório de Impersonation
+            submit: Salvar
+        form:
+            target.label: 'Pessoa acessada:'
+            datetime.label: 'Data e Hora do Acesso:'
+            report:
+                label: Descrição do Acesso
+                help: Faça um breve relato dos motivos do acesso e cite quais ações foram realizadas.
+    apps.list: 'Gerenciar Serviços'
+    sugg:
+        list: 'Gerenciar sugestões'
+        list.title: 'Busca de sugestões'
+        show.title: 'Sugestão'
+    person:
+        list: 'Gerenciar pessoas'
+        list.title:  'Busca de pessoas'

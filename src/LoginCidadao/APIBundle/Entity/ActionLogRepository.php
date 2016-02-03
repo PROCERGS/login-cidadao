@@ -66,4 +66,66 @@ class ActionLogRepository extends EntityRepository
 
         return $query->getQuery()->getResult();
     }
+
+    /**
+     * @param int $limit
+     * @param PersonInterface $impersonator
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function getImpersonatonsWithoutReportsQuery($limit = null,
+                                                         PersonInterface $impersonator
+    = null)
+    {
+        $query = $this->createQueryBuilder('l')
+            ->leftJoin('LoginCidadaoCoreBundle:ImpersonationReport', 'r',
+                'WITH', 'r.actionLog = l')
+            ->where('r.id IS NULL')
+            ->andWhere('l.actionType = :type')
+            ->setParameter('type', ActionLog::TYPE_IMPERSONATE)
+        ;
+
+        if ($impersonator instanceof PersonInterface) {
+            $query->andWhere('l.clientId = :impersonatorId')
+                ->setParameter('impersonatorId', $impersonator->getId())
+            ;
+        }
+
+        if ($limit > 0) {
+            $query->setMaxResults($limit);
+        }
+
+        return $query;
+    }
+
+    public function findImpersonatonsWithoutReports($limit = null,
+                                                    PersonInterface $impersonator
+    = null, $returnArray = false)
+    {
+        $query = $this->getImpersonatonsWithoutReportsQuery($limit,
+            $impersonator);
+
+        if (!$returnArray) {
+            $query->select('l');
+
+            return $query->getQuery()->getResult();
+        } else {
+            $query->select('l.id AS log_id, l.createdAt AS date, p.firstName AS person_name')
+                ->join('LoginCidadaoCoreBundle:Person', 'p', 'WITH',
+                    'l.userId = p.id')
+            ;
+
+            return $query->getQuery()->getScalarResult();
+        }
+    }
+
+    public function countImpersonatonsWithoutReports($limit = null,
+                                                     PersonInterface $impersonator
+    = null)
+    {
+        $query = $this->getImpersonatonsWithoutReportsQuery($limit,
+            $impersonator);
+        $query->select('COUNT(l)');
+
+        return $query->getQuery()->getSingleScalarResult();
+    }
 }

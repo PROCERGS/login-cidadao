@@ -113,7 +113,6 @@ notification.empty.password.text: ''
 'Deactivate this service': 'Deactivate this service'
 'This service is not active in your Citizen''s Login account': 'This service is not active in your Citizen''s Login account'
 'Activate this service': 'Activate this service'
-admin.apps.list: 'Manage Apps'
 social-networks.unlink.no-password: 'You must define a password before unlinking any social network.'
 social-networks.unlink.facebook.success: 'Facebook successfully unlinked.'
 social-networks.unlink.twitter.success: 'Twitter successfully unlinked.'
@@ -354,3 +353,15 @@ access_log:
     login: Access from <span class="label label-info">%ip%</span>, <span class="label label-info">%date%</span>
     impersonation: <span class="label label-info">Technical support</span>, <span class="label label-info">%date%</span>
 log.date.format: 'm/d/Y H:i:s'
+admin:
+    title: 'Admin Area'
+    impersonation_report:
+        menu: Impersonation Reports
+    apps.list: 'Manage Apps'
+    sugg:
+        list: 'Manage Suggestions'
+        list.title: 'Search Suggestions'
+        show.title: 'Suggestion'
+    person:
+        list: 'Manage People'
+        list.title:  'Search People'

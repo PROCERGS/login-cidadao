@@ -1,0 +1,35 @@
+{% extends "LoginCidadaoCoreBundle:Admin:ImpersonationReport\\base.html.twig" %}
+
+{% block impersonation_report_content %}
+    <div id="new_impersonation_report" class="content">
+        <h1 class="visible-xs">{{ 'admin.impersonation_report.title' | trans }}</h1>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">{{ 'admin.impersonation_report.new.title' | trans }}</h2>
+            </div>
+            {{ form_start(form) }}
+            <div class="panel-body">
+                <div class="form-group">
+                    <label>{{ 'admin.impersonation_report.form.target.label' | trans }}</label>
+                    <span class="">{{ report.target.fullName }}</span>
+                </div>
+                <div class="form-group">
+                    <label>{{ 'admin.impersonation_report.form.datetime.label' | trans }}</label>
+                    <span>{{ report.actionLog.createdAt | date('log.date.format' | trans) }}</span>
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.report) }}
+                    {{ form_errors(form.report) }}
+                    {{ form_widget(form.report) }}
+                    <p class="help-block">{{ 'admin.impersonation_report.form.report.help' | trans }}</p>
+                </div>
+
+            </div>
+            <div class="panel-footer text-right">
+                <button type="submit" class="btn btn-success">{{ 'admin.impersonation_report.new.submit' | trans }}</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
