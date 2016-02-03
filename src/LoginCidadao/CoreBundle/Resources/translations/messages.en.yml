@@ -348,3 +348,9 @@ ROLE_ORGANIZATIONS_DELETE: 'Organizations: can delete organizations where is a m
 ROLE_ORGANIZATIONS_DELETE_ANY_ORG: 'Organizations: can delete any organizations'
 ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG: 'Organizations: can manage members of any organization'
 ROLE_ORGANIZATIONS_CAN_TRUST: 'Organizations: can flag an organization as trusted'
+access_log:
+    panel_title: Access Log
+    date.format: m/d/Y H:i
+    login: Access from <span class="label label-info">%ip%</span>, <span class="label label-info">%date%</span>
+    impersonation: <span class="label label-info">Technical support</span>, <span class="label label-info">%date%</span>
+log.date.format: 'm/d/Y H:i:s'

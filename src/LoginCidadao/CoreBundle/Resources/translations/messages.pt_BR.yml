@@ -658,10 +658,6 @@ Check the services available: Conheça os serviços disponíveis
 Dashboard: 'Início'
 badges.list.title: 'O que são as medalhas?'
 badges.list.description: 'Medalhas são os indicadores de validações que sua identidade virtual possui. Elas permitem que os demais sistemas integrados ao Login Cidadão possam melhorar a sua experiência ao utilizar os serviços ofertados.'
-Login Log: Registro de acesso
-'Login by <span class="label label-info">%ip%</span> at <span class="label label-info">%date%</span>': 'Acessado por <span class="label label-info">%ip%</span> em <span class="label label-info">%date%</span>'
-log.date.format: 'd/m/Y H:i:s'
-'Login by <span class="label label-info">%ip%</span> at <span class="label label-info">%date%</span>': 'Acessado por <span class="label label-info">%ip%</span> em <span class="label label-info">%date%</span>'
 'Information viewed at %date%': 'Visualizou informações em %date%'
 'Information changed at %date%': 'Alterou informações em %date%'
 'Back to services': 'Voltar para os serviços'
@@ -778,3 +774,9 @@ ROLE_ORGANIZATIONS_DELETE: 'Organizações: pode excluir organizações das quai
 ROLE_ORGANIZATIONS_DELETE_ANY_ORG: 'Organizações: pode excluir quaisquer organizações'
 ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG: 'Organizações: pode gerenciar membros de qualquer organização'
 ROLE_ORGANIZATIONS_CAN_TRUST: 'Organizações: pode marcar uma organização como confiável'
+access_log:
+    panel_title: Registro de acesso
+    date.format: d/m/Y H:i
+    login: Acessado por <span class="label label-info">%ip%</span> em <span class="label label-info">%date%</span>
+    impersonation: <span class="label label-info">Suporte técnico</span> em <span class="label label-info">%date%</span>
+log.date.format: 'd/m/Y H:i:s'
