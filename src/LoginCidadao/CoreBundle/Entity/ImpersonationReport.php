@@ -63,6 +63,11 @@ class ImpersonationReport
      */
     protected $createdAt;
 
+    /**
+     * @ORM\Column(name="updated_at", type="datetime")
+     */
+    protected $updatedAt;
+
     public function getId()
     {
         return $this->id;
@@ -136,6 +141,28 @@ class ImpersonationReport
     {
         if (!($this->getCreatedAt() instanceof \DateTime)) {
             $this->createdAt = new \DateTime();
+        }
+    }
+
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function setUpdatedAtValue()
+    {
+        if (!($this->getUpdatedAt() instanceof \DateTime)) {
+            $this->updatedAt = new \DateTime();
         }
     }
 }

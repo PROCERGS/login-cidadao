@@ -8,28 +8,7 @@
             <div class="panel-heading">
                 <h2 class="panel-title">{{ 'admin.impersonation_report.new.title' | trans }}</h2>
             </div>
-            {{ form_start(form) }}
-            <div class="panel-body">
-                <div class="form-group">
-                    <label>{{ 'admin.impersonation_report.form.target.label' | trans }}</label>
-                    <span class="">{{ report.target.fullName | default(report.target.email) }}</span>
-                </div>
-                <div class="form-group">
-                    <label>{{ 'admin.impersonation_report.form.datetime.label' | trans }}</label>
-                    <span>{{ report.actionLog.createdAt | date('log.date.format' | trans) }}</span>
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.report) }}
-                    {{ form_errors(form.report) }}
-                    {{ form_widget(form.report) }}
-                    <p class="help-block">{{ 'admin.impersonation_report.form.report.help' | trans }}</p>
-                </div>
-
-            </div>
-            <div class="panel-footer text-right">
-                <button type="submit" class="btn btn-success">{{ 'admin.impersonation_report.new.submit' | trans }}</button>
-            </div>
-            {{ form_end(form) }}
+            {{ include('LoginCidadaoCoreBundle:Admin:ImpersonationReport\\form.html.twig', { 'submit': 'admin.impersonation_report.new.submit' | trans }) }}
         </div>
     </div>
 {% endblock %}

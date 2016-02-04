@@ -789,6 +789,9 @@ admin:
         new:
             title: Novo Relatório de Impersonation
             submit: Salvar
+        edit:
+            title: Editando Relatório de Impersonation
+            submit: Salvar
         form:
             target.label: 'Pessoa acessada:'
             datetime.label: 'Data e Hora do Acesso:'

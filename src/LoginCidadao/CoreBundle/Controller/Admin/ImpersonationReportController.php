@@ -11,9 +11,12 @@
 namespace LoginCidadao\CoreBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use LoginCidadao\CoreBundle\Form\ImpersonationReportType;
 use LoginCidadao\CoreBundle\Entity\ImpersonationReport;
 use LoginCidadao\APIBundle\Entity\ActionLog;
@@ -50,32 +53,11 @@ class ImpersonationReportController extends Controller
      */
     public function newAction(Request $request, $logId)
     {
-        $logRepo    = $this->getDoctrine()
-            ->getRepository('LoginCidadaoAPIBundle:ActionLog');
-        $reportRepo = $this->getDoctrine()
-            ->getRepository('LoginCidadaoCoreBundle:ImpersonationReport');
-        $personRepo = $this->getDoctrine()
-            ->getRepository('LoginCidadaoCoreBundle:Person');
+        $log = $this->getActionLogOr404($logId);
 
-        $report = new ImpersonationReport();
-
-        $log = $logRepo->find($logId);
-        if ($log instanceof ActionLog) {
-            $existingReport = $reportRepo->findOneBy(array('actionLog' => $log));
-            if ($existingReport instanceof ImpersonationReport) {
-                $this->addFlash('error', "This action was already reported.");
-                return $this->redirectToRoute('lc_admin_impersonation_report_index');
-            }
-
-            $impersonatorId = $log->getClientId();
-
-            if ($impersonatorId !== $this->getUser()->getId()) {
-                throw $this->createAccessDeniedException("You cannot fill other person's report!");
-            }
-
-            $targetUser = $personRepo->find($log->getUserId());
-            $report->setTarget($targetUser)
-                ->setActionLog($log);
+        $report = $this->getNewReport($log);
+        if ($report instanceof RedirectResponse) {
+            return $report;
         }
 
         $report->setImpersonator($this->getUser());
@@ -98,8 +80,95 @@ class ImpersonationReportController extends Controller
      * @Route("/{id}/edit", name="lc_admin_impersonation_report_edit", requirements={"id" = "\d+"})
      * @Template()
      */
-    public function editAction()
+    public function editAction(Request $request, $id)
     {
-        return array();
+        $report = $this->getOr404($id);
+
+        $form = $this->createForm(new ImpersonationReportType(), $report);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($report);
+            $em->flush();
+
+            return $this->redirectToRoute('lc_admin_impersonation_report_index');
+        }
+
+        return array('form' => $form->createView(), 'report' => $report);
+    }
+
+    /**
+     *
+     * @param integer $id
+     * @return ActionLog
+     * @throws NotFoundHttpException
+     */
+    private function getActionLogOr404($id)
+    {
+        $logRepo = $this->getDoctrine()
+            ->getRepository('LoginCidadaoAPIBundle:ActionLog');
+
+        $log = $logRepo->find($id);
+
+        if ($log instanceof ActionLog) {
+            return $log;
+        }
+
+        throw $this->createNotFoundException();
+    }
+
+    /**
+     *
+     * @param integer $id
+     * @return ActionLog
+     * @throws NotFoundHttpException
+     */
+    private function getOr404($id)
+    {
+        $reportRepo = $this->getDoctrine()
+            ->getRepository('LoginCidadaoCoreBundle:ImpersonationReport');
+
+        $report = $reportRepo->find($id);
+
+        if ($report instanceof ImpersonationReport) {
+            return $report;
+        }
+
+        throw $this->createNotFoundException();
+    }
+
+    /**
+     *
+     * @param ActionLog $log
+     * @return ImpersonationReport | RedirectResponse
+     * @throws AccessDeniedException
+     */
+    private function getNewReport(ActionLog $log)
+    {
+        $reportRepo = $this->getDoctrine()
+            ->getRepository('LoginCidadaoCoreBundle:ImpersonationReport');
+        $personRepo = $this->getDoctrine()
+            ->getRepository('LoginCidadaoCoreBundle:Person');
+
+        $report = new ImpersonationReport();
+
+        $existingReport = $reportRepo->findOneBy(array('actionLog' => $log));
+        if ($existingReport instanceof ImpersonationReport) {
+            $this->addFlash('error', "This action was already reported.");
+            return $this->redirectToRoute('lc_admin_impersonation_report_index');
+        }
+
+        $impersonatorId = $log->getClientId();
+
+        if ($impersonatorId !== $this->getUser()->getId()) {
+            throw $this->createAccessDeniedException("You cannot fill other person's report!");
+        }
+
+        $targetUser = $personRepo->find($log->getUserId());
+        $report->setTarget($targetUser)
+            ->setActionLog($log);
+
+        return $report;
     }
 }
