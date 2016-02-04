@@ -768,10 +768,12 @@ ROLE_ORGANIZATIONS_DELETE_ANY_ORG: 'Organizações: pode excluir quaisquer organ
 ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG: 'Organizações: pode gerenciar membros de qualquer organização'
 ROLE_ORGANIZATIONS_CAN_TRUST: 'Organizações: pode marcar uma organização como confiável'
 access_log:
-    panel_title: Registro de acesso
+    panel_title: Registros de Acesso
     date.format: d/m/Y H:i
     login: Acessado por <span class="label label-info">%ip%</span> em <span class="label label-info">%date%</span>
     impersonation: <span class="label label-info">Suporte técnico</span> em <span class="label label-info">%date%</span>
+    page:
+        title: Registros de Acesso
 log.date.format: 'd/m/Y H:i:s'
 admin:
     title: 'Área do Administrator'
