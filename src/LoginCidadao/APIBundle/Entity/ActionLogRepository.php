@@ -20,7 +20,7 @@ class ActionLogRepository extends EntityRepository
         $query = $this->createQueryBuilder('l')
             ->select('l, c')
             ->innerJoin('LoginCidadaoOAuthBundle:Client', 'c', 'WITH',
-                        'c.id = l.clientId')
+                'c.id = l.clientId')
             ->where('l.userId = :person_id')
             ->setParameter('person_id', $person->getId())
             ->orderBy('l.createdAt', 'DESC');
@@ -54,7 +54,10 @@ class ActionLogRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('l')
             ->where('l.userId = :person_id')
+            ->andWhere('l.actionType IN (:type)')
             ->setParameter('person_id', $person->getId())
+            ->setParameter('type',
+                array(ActionLog::TYPE_LOGIN, ActionLog::TYPE_IMPERSONATE))
             ->orderBy('l.createdAt', 'DESC');
 
         if ($limit > 0) {
@@ -64,4 +67,63 @@ class ActionLogRepository extends EntityRepository
         return $query->getQuery()->getResult();
     }
 
+    /**
+     * @param int $limit
+     * @param PersonInterface $impersonator
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function getImpersonatonsWithoutReportsQuery($limit = null,
+                                                         PersonInterface $impersonator
+    = null)
+    {
+        $query = $this->createQueryBuilder('l')
+            ->leftJoin('LoginCidadaoCoreBundle:ImpersonationReport', 'r',
+                'WITH', 'r.actionLog = l')
+            ->where('r.id IS NULL')
+            ->andWhere('l.actionType = :type')
+            ->setParameter('type', ActionLog::TYPE_IMPERSONATE)
+        ;
+
+        if ($impersonator instanceof PersonInterface) {
+            $query->andWhere('l.clientId = :impersonatorId')
+                ->setParameter('impersonatorId', $impersonator->getId())
+            ;
+        }
+
+        if ($limit > 0) {
+            $query->setMaxResults($limit);
+        }
+
+        return $query;
+    }
+
+    public function findImpersonatonsWithoutReports($limit = null,
+                                                    PersonInterface $impersonator
+    = null, $returnArray = false)
+    {
+        $query = $this->getImpersonatonsWithoutReportsQuery($limit,
+            $impersonator);
+
+        if (!$returnArray) {
+            $query->select('l');
+
+            return $query->getQuery()->getResult();
+        } else {
+            $query->select('l.id AS log_id, l.createdAt AS date, COALESCE(p.firstName, p.email) AS person_name')
+                ->join('LoginCidadaoCoreBundle:Person', 'p', 'WITH',
+                    'l.userId = p.id')
+            ;
+
+            return $query->getQuery()->getScalarResult();
+        }
+    }
+
+    public function countImpersonatonsWithoutReports(PersonInterface $impersonator
+    = null)
+    {
+        $query = $this->getImpersonatonsWithoutReportsQuery(null, $impersonator);
+        $query->select('COUNT(l)');
+
+        return $query->getQuery()->getSingleScalarResult();
+    }
 }

@@ -1,0 +1,10 @@
+{% extends "LoginCidadaoCoreBundle:Admin:base.html.twig" %}
+
+{% block content %}
+    <div class="alert alert-warning" role="alert">
+        {{ 'admin.impersonation_report.disclosure' | trans | raw }}
+    </div>
+
+    {% block impersonation_report_content %}
+    {% endblock %}
+{% endblock %}

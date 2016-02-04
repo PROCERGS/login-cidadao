@@ -12,6 +12,12 @@
                 <i class="glyphicon glyphicon-th icon"></i>
             </a>
         </li>
+        <li class="services glyph {{ myController == 'Admin\\ImpersonationReport' ? 'active' }}">
+            <a href="{{ path('lc_admin_impersonation_report_index') }}">
+                <span>{{ 'admin.impersonation_report.menu'|trans() }}</span>
+                <i class="glyphicon glyphicon-sunglasses icon"></i>
+            </a>
+        </li>
         <li class="services glyph {{ myController == 'Admin\\Suggestion' ? 'active' }}">
             <a href="{{ path('lc_admin_sugg') }}">
                 <span>{{ 'admin.sugg.list'|trans() }}</span>
