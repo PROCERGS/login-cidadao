@@ -700,3 +700,81 @@ Information about authorizations granted to services.: Informações sobre autor
 See how many users have each badge.: Veja quantas pessoas possuem cada medalha.
 Users by Location: Usuários por Localização
 Information about people's location. Either by <a href="%country_url%">Country</a> or by <a href="%state_url%">State</a>: Informações sobre a localização das pessoas, tanto <a href="%country_url%">por País</a> quanto <a href="%state_url%">por Estado</a>
+organizations:
+    menu.label: Organizações
+    page.title: Organizações
+    list:
+        user:
+            title: Minhas Organizações
+            empty: Você não está em uma Organização
+        all:
+            title: Outras Organizações
+            empty: Nenhuma organização encontrada
+    new:
+        title: Nova Organização
+        form_title: Nova Organização
+        form_action_label: Criar
+        button_title: Criar Organização
+        button_label: Nova Organização
+    edit:
+        title: Editando Organização %name%
+        form_title: Editando Organização %name%
+        form_action_label: Salvar
+    show:
+        title: Informações da Organização %name%
+        services_count:
+            label: Serviços Cadastrados
+            count: '{0} Nenhum serviço|{1} Um serviço|]1,Inf[ %count% serviços'
+        members_count:
+            label: Integrantes
+            count: '{0} Nenhum membro|{1} Um membro|]1,Inf[ %count% membros'
+    form:
+        name.label: Nome
+        domain.label: Domínio
+        validationUrl.label: URL para Validação
+        trusted.label: Organização Confiável
+        members:
+            label: Membros
+            search.label: Pesquisar por Nome, email, CPF ou nome de usuário
+            name.label: Nome
+        delete:
+            panel.title: Excluir <strong>%name%</strong>?
+            warn: A exclusão de uma organização não pode ser desfeita. Caso exclua por engano você terá que criar uma nova organização e associar os serviços a ela.
+            button: Excluir
+            confirm: Tem certeza que deseja excluir essa organização? Os serviços associados ficarão sem uma organização!
+            yes: Sim, REMOVA essa organização
+            no: Não remova
+            success: Organização %name% excluída com sucesso.
+        client_form.placeholder: Selecione uma Organização
+    validation:
+        not_verified: Validação Pendente
+        verified: Verificada
+        instructions: Para validar essa organização, crie um arquivo no domínio informado contendo o código a seguir e informe o endereço desse arquivo no campo <code>%input%</code>.
+        on_authorize:
+            warn_not_verified:
+                attention: Atenção!
+                text: Esse serviço está sendo oferecido por uma organização não verificada. Confira, a seguir, as informações dessa organização antes de autorizar.
+            info:
+                provided_by: Esse serviço é oferecido por <strong>%name%</strong> (<a class="text-danger">%domain%</a> %label%)
+                warn_trust: Autorize apenas se você confia na organização <strong>%name%</strong>
+                domain_verified: Domínio Verificado
+                domain_not_verified: Domínio não Verificado
+                no_organization:
+                    provided_by: Esse serviço não foi associado a nenhuma organização
+                    warn_trust: <strong>Não autorize</strong>, caso não tenha certeza de que se trata de um serviço confiável
+    trust:
+        warn_untrusted:
+            attention: Cuidado!
+            text: Esse serviço está sendo oferecido por uma organização que não confiamos. Apenas autorize caso <strong>você</strong> confie nesta organização.
+FEATURE_ORGANIZATIONS: Funcionalidade de Organizações
+ROLE_ORGANIZATIONS_BIND_CLIENT: 'Organizações: pode associar serviços em organizações das quais é membro'
+ROLE_ORGANIZATIONS_BIND_CLIENT_ANY_ORG: 'Organizações: pode associar serviços em qualquer organização'
+ROLE_ORGANIZATIONS_CREATE: 'Organizações: pode criar organizações'
+ROLE_ORGANIZATIONS_EDIT: 'Organizações: pode editar organizações das quais é membro'
+ROLE_ORGANIZATIONS_EDIT_ANY_ORG: 'Organizações: pode editar qualquer organização'
+ROLE_ORGANIZATIONS_VALIDATE: 'Organizações: pode validar domínio de organizações'
+ROLE_ORGANIZATIONS_LIST_ALL: 'Organizações: pode listar organizações das quais não é membro'
+ROLE_ORGANIZATIONS_DELETE: 'Organizações: pode excluir organizações das quais é membro'
+ROLE_ORGANIZATIONS_DELETE_ANY_ORG: 'Organizações: pode excluir quaisquer organizações'
+ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG: 'Organizações: pode gerenciar membros de qualquer organização'
+ROLE_ORGANIZATIONS_CAN_TRUST: 'Organizações: pode marcar uma organização como confiável'

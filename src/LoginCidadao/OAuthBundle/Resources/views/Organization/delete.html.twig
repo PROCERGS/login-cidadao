@@ -1,0 +1,24 @@
+<div class="collapse" id="deleteOrg">
+    <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+            <div class="panel-title">{{ 'organizations.form.delete.panel.title' | trans({'%name%': organization.name|e}) | raw }}</div>
+        </div>
+
+        <div class="panel-body">
+            <p>{{ 'organizations.form.delete.warn' | trans }}</p>
+            <p>{{ 'organizations.form.delete.confirm' | trans }}</p>
+        </div>
+        <div class="panel-footer">
+            {{ form_start(form, { 'action': path('lc_organizations_delete', { 'id': organization.id }), 'attr': {'role': 'form', 'class': 'row'} }) }}
+            <div class="col-md-6">
+                {{ form_widget(form.delete) }}
+            </div>
+            <div class="col-md-6 text-right">
+                <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#deleteOrg" aria-expanded="false" aria-controls="deleteOrg">
+                    {{ 'organizations.form.delete.no' | trans }}
+                </button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>

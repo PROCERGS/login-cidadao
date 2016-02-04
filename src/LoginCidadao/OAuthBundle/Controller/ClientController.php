@@ -10,7 +10,7 @@ use LoginCidadao\OAuthBundle\Entity\Client;
 class ClientController extends Controller
 {
     /**
-     * @Route("/initClient")
+     * @Route("/auth/initClient", name="lc_oauth_init")
      * @Template()
      */
     public function initClientAction()
@@ -33,7 +33,7 @@ class ClientController extends Controller
     }
     
     /**
-     * @Route("/getPub/{id}")
+     * @Route("/auth/getPub/{id}", name="lc_oauth_getid")
      */
     public function getPublicIdAction($id)
     {
