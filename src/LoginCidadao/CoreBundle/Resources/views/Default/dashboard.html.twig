@@ -125,7 +125,8 @@
                                         <span class="glyphicon glyphicon-exclamation-sign text-warning" aria-hidden="true"></span>
                                         {{ 'access_log.impersonation' | trans({'%ip%': log.ip | e ,'%date%': log.createdAt|date('access_log.date.format'|trans)|e}) | raw }}
                                     {% endif %}
-                                {% endfor %}
+                                </li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>
