@@ -795,6 +795,7 @@ admin:
         form:
             target.label: 'Pessoa acessada:'
             datetime.label: 'Data e Hora do Acesso:'
+            last_update.label: 'Última Atualização:'
             report:
                 label: Descrição do Acesso
                 help: Faça um breve relato dos motivos do acesso e cite quais ações foram realizadas.
