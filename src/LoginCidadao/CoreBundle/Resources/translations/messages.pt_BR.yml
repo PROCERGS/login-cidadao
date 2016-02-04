@@ -786,6 +786,7 @@ admin:
         list:
             title: Relatórios Existentes
             list_item: <strong>%date%</strong> - %person%
+            list_item_complete: <span class="label label-info">%impersonator%</span> em %date%
         new:
             title: Novo Relatório de Impersonation
             submit: Salvar
@@ -796,6 +797,7 @@ admin:
             target.label: 'Pessoa acessada:'
             datetime.label: 'Data e Hora do Acesso:'
             last_update.label: 'Última Atualização:'
+            cancel.button: Cancelar
             report:
                 label: Descrição do Acesso
                 help: Faça um breve relato dos motivos do acesso e cite quais ações foram realizadas.
