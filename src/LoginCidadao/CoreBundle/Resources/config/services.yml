@@ -185,11 +185,14 @@ services:
             - { name: form.type, alias: client_form_type }
         calls:
             - [setScopes, ["%lc_public_scopes%", "%lc_reserved_scopes%"]]
+            - [setTokenStorage, [@security.token_storage]]
 
     lc.client.base.form.type:
         class: LoginCidadao\CoreBundle\Form\Type\ClientBaseFormType
         arguments:
             - @security.authorization_checker
+        calls:
+            - [setTokenStorage, [@security.token_storage]]
         tags:
             - { name: form.type, alias: client_base_form_type }
 

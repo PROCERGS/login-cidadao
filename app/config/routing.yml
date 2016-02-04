@@ -101,7 +101,7 @@ simple_things_entity_audit:
 # OAuth Routes
 lc_oauth:
     resource: "@LoginCidadaoOAuthBundle/Resources/config/routing.yml"
-    prefix:   /auth
+    prefix:   /
 
 fos_oauth_server_token:
     resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"

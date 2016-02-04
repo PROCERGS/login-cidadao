@@ -4,16 +4,36 @@ security:
         FOS\UserBundle\Model\UserInterface: sha512
 
     role_hierarchy:
-        ROLE_USER:          FEATURE_PROD
-        ROLE_DEV:           ROLE_USER
-        ROLE_SUPER:         ROLE_DEV
-        ROLE_ADMIN:         ROLE_SUPER, ROLE_EDIT_CLIENT_ALLOWED_SCOPES
-        ROLE_SUPER_ADMIN:   ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH, FEATURE_ALPHA
+        ROLE_USER:
+            - FEATURE_PROD
+        ROLE_DEV:
+            - ROLE_USER
+            - ROLE_ORGANIZATIONS_BIND_CLIENT
+        ROLE_SUPER:
+            - ROLE_DEV
+            - ROLE_ORGANIZATIONS_CREATE
+            - ROLE_ORGANIZATIONS_EDIT
+            - ROLE_ORGANIZATIONS_VALIDATE
+            - ROLE_ORGANIZATIONS_LIST_ALL
+        ROLE_ADMIN:
+            - ROLE_SUPER
+            - ROLE_EDIT_CLIENT_ALLOWED_SCOPES
+            - ROLE_ORGANIZATIONS_DELETE
+        ROLE_SUPER_ADMIN:
+            - ROLE_ADMIN
+            - ROLE_ALLOWED_TO_SWITCH
+            - FEATURE_ALPHA
+            - ROLE_ORGANIZATIONS_EDIT_ANY_ORG
+            - ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG
+            - ROLE_ORGANIZATIONS_BIND_CLIENT_ANY_ORG
+            - ROLE_ORGANIZATIONS_CAN_TRUST
+            - ROLE_ORGANIZATIONS_DELETE_ANY_ORG
 
-        FEATURE_ALPHA:      FEATURE_BETA
+        FEATURE_ALPHA:      FEATURE_BETA, FEATURE_ORGANIZATIONS
         FEATURE_BETA:       FEATURE_PROD
         FEATURE_PROD:       FEATURE_2FACTOR_AUTH
         FEATURE_IGP_VALIDATION:
+        FEATURE_ORGANIZATIONS:
 
     providers:
         chainprovider:

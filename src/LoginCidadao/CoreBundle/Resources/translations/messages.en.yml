@@ -270,3 +270,81 @@ Information about authorizations granted to services.: Information about authori
 See how many users have each badge.: See how many users have each badge.
 Users by Location: Users by Location
 Information about people's location. Either by <a href="%country_url%">Country</a> or by <a href="%state_url%">State</a>: Information about people's location. Either by <a href="%country_url%">Country</a> or by <a href="%state_url%">State</a>
+organizations:
+    menu.label: Organizations
+    page.title: Organizations
+    list:
+        user:
+            title: My Organizations
+            empty: You are not in any Organization
+        all:
+            title: Other Organizations
+            empty: There are no Organizations
+    new:
+        title: New Organization
+        form_title: New Organization
+        form_action_label: Create
+        button_title: Create Organization
+        button_label: New Organization
+    edit:
+        title: Editing Organization %name%
+        form_title: Editing Organization %name%
+        form_action_label: Save
+    show:
+        title: %name% information
+        services_count:
+            label: Services Available
+            count: '{0} No services|{1} One service|]1,Inf[ %count% services'
+        members_count:
+            label: Members
+            count: '{0} No members|{1} One member|]1,Inf[ %count% members'
+    form:
+        name.label: Name
+        domain.label: Domain
+        validationUrl.label: Validation Url
+        trusted.label: Trusted Organization
+        members:
+            label: Members
+            search.label: Search by Tax ID, email, name or username
+            name.label: Name
+        delete:
+            panel.title: Delete <strong>%name%</strong>?
+            warn: 'Deleting an organization cannot be undone. If you do it by mistake you''ll have to create another organization and bind it''s services again.'
+            button: Delete
+            confirm: 'Are you sure you want to delete this organization? This organization''s services will have no organization bound to it!'
+            yes: Yes, DELETE this organization
+            no: Don't delete it
+            success: Organization %name% was deleted.
+        client_form.placeholder: Select an Organization
+    validation:
+        not_verified: Pending Validation
+        verified: Verified
+        instructions: To validate this organization, create a file in the given domain containing the following code and type the address to this file in the field %input%.
+        on_authorize:
+            warn_not_verified:
+                attention: Caution!
+                text: 'This service is being offered by an unverified organization. Check, below, this organization''s information before authorizing this service.'
+            info:
+                provided_by: This service is offered by <strong>%name%</strong> (<a class="text-danger">%domain%</a>).
+                warn_trust: Authorize it only if you trust <strong>%name%</strong>
+                domain_verified: Domain Verified
+                domain_not_verified: Domain not Verified
+                no_organization:
+                    provided_by: This service isn't bound to any organization
+                    warn_trust: <strong>Do not authorize</strong> if you are not sure this is a trustworthy service
+    trust:
+        warn_untrusted:
+            attention: Caution!
+            text: This service is offered by an organization we do not trust. Athorize only if you trust this organization.
+FEATURE_ORGANIZATIONS: Organizations Feature
+ROLE_ORGANIZATIONS_BIND_CLIENT: 'Organizations: can bind services to organizations where is member'
+ROLE_ORGANIZATIONS_BIND_CLIENT_ANY_ORG: 'Organizations: can bind services to any organization'
+ROLE_ORGANIZATIONS_CREATE: 'Organizations: can create organizations'
+ROLE_ORGANIZATIONS_EDIT: 'Organizations: can edit organizations where is member'
+ROLE_ORGANIZATIONS_EDIT_ANY_ORG: 'Organizations: can edit any organizations'
+ROLE_ORGANIZATIONS_VALIDATE: 'Organizations: can validate organization''s domains'
+ROLE_ORGANIZATIONS_LIST_ALL: 'Organizations: can list organizations where is not a member'
+ROLE_ORGANIZATIONS_DELETE: 'Organizations: can delete organizations where is a member'
+ROLE_ORGANIZATIONS_DELETE_ANY_ORG: 'Organizations: can delete any organizations'
+ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG: 'Organizations: can manage members of any organization'
+ROLE_ORGANIZATIONS_CAN_TRUST: 'Organizations: can flag an organization as trusted'
