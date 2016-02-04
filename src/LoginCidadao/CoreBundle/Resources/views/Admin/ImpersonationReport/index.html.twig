@@ -28,12 +28,20 @@
             <div class="panel-body">
                 <div class="list-group">
                     {% for report in reports %}
-                        <a href="{{ path('lc_admin_impersonation_report_edit', { 'id': report.id }) }}" class="list-group-item">
-                            {{ 'admin.impersonation_report.list.list_item' | trans({ '%date%': report.createdAt | date('log.date.format' | trans) | e, '%person%': report.target.fullName | default(report.target.email) | e }) | raw }}
-                        </a>
-                    {% endfor %}
-                </div>
+                        {% if is_granted('ROLE_IMPERSONATION_REPORTS_EDIT') %}
+                            <a href="{{ path('lc_admin_impersonation_report_edit', { 'id': report.id }) }}" class="list-group-item">
+                            {% else %}
+                                <div class="list-group-item">
+                                {% endif %}
+                                {{ 'admin.impersonation_report.list.list_item' | trans({ '%date%': report.createdAt | date('log.date.format' | trans) | e, '%person%': report.target.fullName | default(report.target.email) | e }) | raw }}
+                                {% if is_granted('ROLE_IMPERSONATION_REPORTS_EDIT') %}
+                            </a>
+                        {% else %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
             </div>
         </div>
     </div>
+</div>
 {% endblock %}

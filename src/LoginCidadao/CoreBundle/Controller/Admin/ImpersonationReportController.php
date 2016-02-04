@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use LoginCidadao\CoreBundle\Form\ImpersonationReportType;
@@ -23,6 +24,7 @@ use LoginCidadao\APIBundle\Entity\ActionLog;
 
 /**
  * @Route("/admin/impersonation/reports")
+ * @Security("has_role('FEATURE_IMPERSONATION_REPORTS')")
  */
 class ImpersonationReportController extends Controller
 {
@@ -79,6 +81,7 @@ class ImpersonationReportController extends Controller
     /**
      * @Route("/{id}/edit", name="lc_admin_impersonation_report_edit", requirements={"id" = "\d+"})
      * @Template()
+     * @Security("has_role('ROLE_IMPERSONATION_REPORTS_EDIT')")
      */
     public function editAction(Request $request, $id)
     {
