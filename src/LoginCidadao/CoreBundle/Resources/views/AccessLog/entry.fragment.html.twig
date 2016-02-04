@@ -1,0 +1,6 @@
+{% if log.actionType == 'LOGIN' %}
+    {% trans with {'%ip%': log.ip | e ,'%date%': log.createdAt|date('access_log.date.format'|trans)|e} %}access_log.login{% endtrans %}
+{% elseif log.actionType == 'IMPERSONATE' %}
+    <span class="glyphicon glyphicon-exclamation-sign text-warning" aria-hidden="true"></span>
+    {{ 'access_log.impersonation' | trans({'%ip%': log.ip | e ,'%date%': log.createdAt|date('access_log.date.format'|trans)|e}) | raw }}
+{% endif %}

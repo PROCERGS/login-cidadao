@@ -119,13 +119,9 @@
                             {% endif %}
                             {% for log in logs.logins %}
                                 <li class="list-group-item">
-                                    {% if log.actionType == 'LOGIN' %}
-                                        {% trans with {'%ip%': log.ip | e ,'%date%': log.createdAt|date('access_log.date.format'|trans)|e} %}access_log.login{% endtrans %}
-                                    {% elseif log.actionType == 'IMPERSONATE' %}
-                                        <span class="glyphicon glyphicon-exclamation-sign text-warning" aria-hidden="true"></span>
-                                        {{ 'access_log.impersonation' | trans({'%ip%': log.ip | e ,'%date%': log.createdAt|date('access_log.date.format'|trans)|e}) | raw }}
-                                    {% endif %}
-                                {% endfor %}
+                                    {{ include('LoginCidadaoCoreBundle:AccessLog:entry.fragment.html.twig', { 'log': log }) }}
+                                </li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>
@@ -151,9 +147,9 @@
                                         <h5 class="media-heading">{{ log.client.name }}</h5>
 
                                         {% if log.actionType == 'SELECT' %}
-                                            <span class="log-about">{% trans with {'%date%': log.createdAt | date('log.date.format' | trans) } %}Information viewed at %date%{% endtrans %}</span>
+                                            <span data-log-id="{{ log.id }}" class="log-about">{% trans with {'%date%': log.createdAt | date('log.date.format' | trans) } %}Information viewed at %date%{% endtrans %}</span>
                                         {% else %}
-                                            <span class="log-about">{% trans with {'%date%': log.createdAt | date('log.date.format' | trans) } %}Information changed at %date%{% endtrans %}</span>
+                                            <span data-log-id="{{ log.id }}" class="log-about">{% trans with {'%date%': log.createdAt | date('log.date.format' | trans) } %}Information changed at %date%{% endtrans %}</span>
                                         {% endif %}
                                     </div>
                                 </li>
