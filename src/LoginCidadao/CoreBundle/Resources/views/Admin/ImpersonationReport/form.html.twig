@@ -21,6 +21,9 @@
 
 </div>
 <div class="panel-footer text-right">
+    <a href="{{ path('lc_admin_impersonation_report_index') }}" class="btn btn-default">
+        {{ 'admin.impersonation_report.form.cancel.button' | trans }}
+    </a>
     <button type="submit" class="btn btn-success">{{ submit }}</button>
 </div>
 {{ form_end(form) }}
