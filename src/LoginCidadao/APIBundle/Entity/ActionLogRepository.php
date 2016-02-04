@@ -17,12 +17,20 @@ class ActionLogRepository extends EntityRepository
 
     public function getWithClientByPerson(PersonInterface $person, $limit = null)
     {
+        $excludeTypes = array(
+            ActionLog::TYPE_IMPERSONATE,
+            ActionLog::TYPE_DEIMPERSONATE,
+            ActionLog::TYPE_LOGIN
+        );
+
         $query = $this->createQueryBuilder('l')
             ->select('l, c')
             ->innerJoin('LoginCidadaoOAuthBundle:Client', 'c', 'WITH',
                 'c.id = l.clientId')
             ->where('l.userId = :person_id')
+            ->andWhere('l.actionType NOT IN (:excludeTypes)')
             ->setParameter('person_id', $person->getId())
+            ->setParameter('excludeTypes', $excludeTypes)
             ->orderBy('l.createdAt', 'DESC');
 
         if ($limit > 0) {
