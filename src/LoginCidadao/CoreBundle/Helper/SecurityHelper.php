@@ -92,7 +92,7 @@ class SecurityHelper
 
         $url = $this->router->generate('lc_admin_impersonation_report_index');
 
-        $parameters = array('%url%' => $url);
+        $parameters = array('%url%' => $url, '%count%' => $count);
         $message    = 'admin.impersonation_report.pending.notification';
         $this->extremeNotificationsHelper
             ->addTransChoice($message, $count, $parameters);
