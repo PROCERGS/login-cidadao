@@ -161,8 +161,6 @@ class ImpersonationReport
      */
     public function setUpdatedAtValue()
     {
-        if (!($this->getUpdatedAt() instanceof \DateTime)) {
-            $this->updatedAt = new \DateTime();
-        }
+        $this->updatedAt = new \DateTime();
     }
 }
