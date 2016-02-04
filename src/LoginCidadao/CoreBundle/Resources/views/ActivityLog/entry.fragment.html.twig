@@ -1,0 +1,15 @@
+<div class="media">
+    <div class="media-left">
+        <img src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': log.client }) }}" width="35" alt="">
+    </div>
+
+    <div class="media-body">
+        <h5 class="media-heading">{{ log.client.name }}</h5>
+
+        {% if log.actionType == 'SELECT' %}
+            <span data-log-id="{{ log.id }}" class="log-about">{% trans with {'%date%': log.createdAt | date('log.date.format' | trans) } %}Information viewed at %date%{% endtrans %}</span>
+        {% else %}
+            <span data-log-id="{{ log.id }}" class="log-about">{% trans with {'%date%': log.createdAt | date('log.date.format' | trans) } %}Information changed at %date%{% endtrans %}</span>
+        {% endif %}
+    </div>
+</div>

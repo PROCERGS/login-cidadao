@@ -774,6 +774,8 @@ access_log:
     impersonation: <span class="label label-info">Suporte técnico</span> em <span class="label label-info">%date%</span>
     page:
         title: Registros de Acesso
+activity_log:
+    page.title: Registros de Atividade de Serviços
 log.date.format: 'd/m/Y H:i:s'
 admin:
     title: 'Área do Administrator'
