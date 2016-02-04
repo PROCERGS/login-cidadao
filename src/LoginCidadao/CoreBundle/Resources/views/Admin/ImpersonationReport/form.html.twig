@@ -1,0 +1,29 @@
+{{ form_start(form) }}
+<div class="panel-body">
+    <div class="form-group">
+        <label>{{ 'admin.impersonation_report.form.target.label' | trans }}</label>
+        <span class="">{{ report.target.fullName | default(report.target.email) }}</span>
+    </div>
+    <div class="form-group">
+        <label>{{ 'admin.impersonation_report.form.datetime.label' | trans }}</label>
+        <span>{{ report.actionLog.createdAt | date('log.date.format' | trans) }}</span>
+    </div>
+    <div class="form-group">
+        <label>{{ 'admin.impersonation_report.form.last_update.label' | trans }}</label>
+        <span>{{ report.updatedAt | default(report.createdAt | default(report.actionLog.createdAt)) | date('log.date.format' | trans) }}</span>
+    </div>
+    <div class="form-group">
+        {{ form_label(form.report) }}
+        {{ form_errors(form.report) }}
+        {{ form_widget(form.report) }}
+        <p class="help-block">{{ 'admin.impersonation_report.form.report.help' | trans }}</p>
+    </div>
+
+</div>
+<div class="panel-footer text-right">
+    <a href="{{ path('lc_admin_impersonation_report_index') }}" class="btn btn-default">
+        {{ 'admin.impersonation_report.form.cancel.button' | trans }}
+    </a>
+    <button type="submit" class="btn btn-success">{{ submit }}</button>
+</div>
+{{ form_end(form) }}
