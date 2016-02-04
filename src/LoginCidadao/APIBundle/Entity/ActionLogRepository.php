@@ -109,7 +109,7 @@ class ActionLogRepository extends EntityRepository
 
             return $query->getQuery()->getResult();
         } else {
-            $query->select('l.id AS log_id, l.createdAt AS date, p.firstName AS person_name')
+            $query->select('l.id AS log_id, l.createdAt AS date, COALESCE(p.firstName, p.email) AS person_name')
                 ->join('LoginCidadaoCoreBundle:Person', 'p', 'WITH',
                     'l.userId = p.id')
             ;
@@ -118,12 +118,10 @@ class ActionLogRepository extends EntityRepository
         }
     }
 
-    public function countImpersonatonsWithoutReports($limit = null,
-                                                     PersonInterface $impersonator
+    public function countImpersonatonsWithoutReports(PersonInterface $impersonator
     = null)
     {
-        $query = $this->getImpersonatonsWithoutReportsQuery($limit,
-            $impersonator);
+        $query = $this->getImpersonatonsWithoutReportsQuery(null, $impersonator);
         $query->select('COUNT(l)');
 
         return $query->getQuery()->getSingleScalarResult();
