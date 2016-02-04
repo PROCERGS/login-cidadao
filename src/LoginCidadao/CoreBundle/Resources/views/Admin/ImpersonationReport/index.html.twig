@@ -29,7 +29,7 @@
                 <div class="list-group">
                     {% for report in reports %}
                         <a href="{{ path('lc_admin_impersonation_report_edit', { 'id': report.id }) }}" class="list-group-item">
-                            {{ 'admin.impersonation_report.list.list_item' | trans({ '%date%': report.createdAt | date('log.date.format' | trans) | e, '%person%': report.target.fullName | e }) | raw }}
+                            {{ 'admin.impersonation_report.list.list_item' | trans({ '%date%': report.createdAt | date('log.date.format' | trans) | e, '%person%': report.target.fullName | default(report.target.email) | e }) | raw }}
                         </a>
                     {% endfor %}
                 </div>
