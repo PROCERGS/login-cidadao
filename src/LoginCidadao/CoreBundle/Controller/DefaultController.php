@@ -160,7 +160,7 @@ class DefaultController extends Controller
       // logs
       $em = $this->getDoctrine()->getManager();
       $logRepo = $em->getRepository('LoginCidadaoAPIBundle:ActionLog');
-      $logs['logins'] = $logRepo->findLoginsByPerson($this->getUser(), 3);
+      $logs['logins'] = $logRepo->findLoginsByPerson($this->getUser(), 4);
       $logs['activity'] = $logRepo->getWithClientByPerson($this->getUser(), 3);
 
       // notifications
