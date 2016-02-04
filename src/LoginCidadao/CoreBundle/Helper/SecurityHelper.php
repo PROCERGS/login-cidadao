@@ -2,24 +2,41 @@
 
 namespace LoginCidadao\CoreBundle\Helper;
 
-use LoginCidadao\CoreBundle\Model\PersonInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Routing\RouterInterface;
+use LoginCidadao\APIBundle\Entity\ActionLogRepository;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class SecurityHelper
 {
     /** @var AuthorizationCheckerInterface */
-    private $security;
+    private $authChecker;
 
-    public function __construct(AuthorizationCheckerInterface $security)
+    /** @var ActionLogRepository */
+    private $actionLogRepo;
+
+    /** @var ExtremeNotificationsHelper */
+    private $extremeNotificationsHelper;
+
+    /** @var RouterInterface */
+    private $router;
+
+    public function __construct(AuthorizationCheckerInterface $authChecker,
+                                ActionLogRepository $actionLogRepo,
+                                ExtremeNotificationsHelper $extremeNotificationsHelper,
+                                RouterInterface $router)
     {
-        $this->security = $security;
+        $this->authChecker                = $authChecker;
+        $this->actionLogRepo              = $actionLogRepo;
+        $this->extremeNotificationsHelper = $extremeNotificationsHelper;
+        $this->router                     = $router;
     }
 
     public function getLoggedInUserLevel()
     {
         $level = 0;
         foreach ($this->getRoleMapping() as $role => $lvl) {
-            if ($this->security->isGranted($role)) {
+            if ($this->authChecker->isGranted($role)) {
                 $level = $lvl;
                 break;
             }
@@ -63,5 +80,21 @@ class SecurityHelper
         );
         arsort($map);
         return $map;
+    }
+
+    public function checkPendingImpersonateReport(PersonInterface $impersonator)
+    {
+        $count = $this->actionLogRepo->countImpersonatonsWithoutReports($impersonator);
+
+        if ($count <= 0) {
+            return;
+        }
+
+        $url = $this->router->generate('lc_admin_impersonation_report_index');
+
+        $parameters = array('%url%' => $url);
+        $message    = 'admin.impersonation_report.pending.notification';
+        $this->extremeNotificationsHelper
+            ->addTransChoice($message, $count, $parameters);
     }
 }

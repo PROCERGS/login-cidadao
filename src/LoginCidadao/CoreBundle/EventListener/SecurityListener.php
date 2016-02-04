@@ -7,8 +7,11 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\Event\SwitchUserEvent;
 use Symfony\Component\Security\Core\Role\SwitchUserRole;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernel;
 use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
+use LoginCidadao\CoreBundle\Helper\SecurityHelper;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class SecurityListener
 {
@@ -18,20 +21,21 @@ class SecurityListener
     /** @var TokenStorageInterface */
     private $tokenStorage;
 
-    /** @var Session */
-    private $session;
+    /** @var SecurityHelper */
+    private $securityHelper;
 
     /** @var ActionLogger */
     private $logger;
 
     public function __construct(AuthorizationCheckerInterface $authChecker,
                                 TokenStorageInterface $tokenStorage,
-                                Session $session, ActionLogger $logger)
+                                SecurityHelper $securityHelper,
+                                ActionLogger $logger)
     {
-        $this->tokenStorage = $tokenStorage;
-        $this->authChecker  = $authChecker;
-        $this->session      = $session;
-        $this->logger       = $logger;
+        $this->tokenStorage   = $tokenStorage;
+        $this->authChecker    = $authChecker;
+        $this->securityHelper = $securityHelper;
+        $this->logger         = $logger;
     }
 
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
@@ -66,5 +70,32 @@ class SecurityListener
         $controllerAction = array($this, 'onSwitchUser');
         $this->logger->registerImpersonate($event->getRequest(), $target,
             $impersonator, $controllerAction, $isImpersonating);
+    }
+
+    public function onKernelRequest(GetResponseEvent $event)
+    {
+        if (HttpKernel::MASTER_REQUEST != $event->getRequestType()) {
+            // don't do anything if it's not the master request
+            return;
+        }
+        $token = $this->tokenStorage->getToken();
+        if (is_null($token)) {
+            return;
+        }
+
+        if ($this->authChecker->isGranted('FEATURE_IMPERSONATION_REPORTS')) {
+            if (!($token->getUser() instanceof PersonInterface)) {
+                // We don't have a PersonInterface... Nothing to do here.
+                return;
+            }
+
+            $this->checkPendingImpersonateReport();
+        }
+    }
+
+    public function checkPendingImpersonateReport()
+    {
+        $person = $this->tokenStorage->getToken()->getUser();
+        $this->securityHelper->checkPendingImpersonateReport($person);
     }
 }
