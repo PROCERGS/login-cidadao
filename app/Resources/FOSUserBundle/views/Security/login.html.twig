@@ -1,1 +1,1 @@
-{{ include("LoginCidadaoCoreBundle:Default:index.html.twig") }}
+{{ render(controller("LoginCidadaoCoreBundle:Default:index", { 'lastUsername': last_username })) }}
