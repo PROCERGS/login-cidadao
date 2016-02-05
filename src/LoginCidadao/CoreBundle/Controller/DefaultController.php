@@ -31,11 +31,11 @@ class DefaultController extends Controller
             $this->get('session')->set('facebook.logout', true);
         }
 
-        $api = $this->container->get('fos_facebook.api');
-        $scope = implode(',',
-                         $this->container->getParameter('facebook_app_scope'));
-        $callback = $this->container->get('router')->generate('_security_check_facebook',
-                                                              array(), true);
+        $api          = $this->container->get('fos_facebook.api');
+        $scope        = implode(',',
+            $this->container->getParameter('facebook_app_scope'));
+        $callback     = $this->container->get('router')->generate('_security_check_facebook',
+            array(), true);
         $redirect_url = $api->getLoginUrl(array(
             'scope' => $scope,
             'redirect_uri' => $callback
@@ -62,7 +62,7 @@ class DefaultController extends Controller
     public function generalAction()
     {
         return $this->render('LoginCidadaoCoreBundle:Info:terms.html.twig',
-                             compact('user', 'apps'));
+                compact('user', 'apps'));
     }
 
     /**
@@ -80,19 +80,19 @@ class DefaultController extends Controller
      */
     public function contactAction(Request $request)
     {
-        $form = $this->createForm('contact_form_type');
+        $form       = $this->createForm('contact_form_type');
         $form->handleRequest($request);
         $translator = $this->get('translator');
-        $message = $translator->trans('contact.form.sent');
+        $message    = $translator->trans('contact.form.sent');
         if ($form->isValid()) {
-            $email = new SentEmail();
+            $email     = new SentEmail();
             $email
                 ->setType('contact-mail')
-                ->setSubject('Fale conosco - ' . $form->get('firstName')->getData())
+                ->setSubject('Fale conosco - '.$form->get('firstName')->getData())
                 ->setSender($form->get('email')->getData())
                 ->setReceiver($this->container->getParameter('mailer_receiver_mail'))
                 ->setMessage($form->get('message')->getData());
-            $mailer = $this->get('mailer');
+            $mailer    = $this->get('mailer');
             $swiftMail = $email->getSwiftMail();
             if ($mailer->send($swiftMail)) {
                 $em = $this->getDoctrine()->getManager();
@@ -105,7 +105,7 @@ class DefaultController extends Controller
             return $this->redirect($url);
         }
         return $this->render('LoginCidadaoCoreBundle:Info:contact.html.twig',
-                             array(
+                array(
                 'form' => $form->createView()
         ));
     }
@@ -129,7 +129,7 @@ class DefaultController extends Controller
             $result['logged_out'] = true;
         }
 
-        $response = new JsonResponse();
+        $response  = new JsonResponse();
         $userAgent = $request->headers->get('User-Agent');
         if (preg_match('/(?i)msie [1-9]/', $userAgent)) {
             $response->headers->set('Content-Type', 'text/json');
@@ -152,28 +152,28 @@ class DefaultController extends Controller
      */
     public function dashboardAction()
     {
-      // badges
-      $badgesHandler = $this->get('badges.handler');
-      $badges = $badgesHandler->getAvailableBadges();
-      $userBadges = $badgesHandler->evaluate($this->getUser())->getBadges();
+        // badges
+        $badgesHandler = $this->get('badges.handler');
+        $badges        = $badgesHandler->getAvailableBadges();
+        $userBadges    = $badgesHandler->evaluate($this->getUser())->getBadges();
 
-      // logs
-      $em = $this->getDoctrine()->getManager();
-      $logRepo = $em->getRepository('LoginCidadaoAPIBundle:ActionLog');
-      $logs['logins'] = $logRepo->findLoginsByPerson($this->getUser(), 4);
-      $logs['activity'] = $logRepo->getWithClientByPerson($this->getUser(), 3);
+        // logs
+        $em               = $this->getDoctrine()->getManager();
+        $logRepo          = $em->getRepository('LoginCidadaoAPIBundle:ActionLog');
+        $logs['logins']   = $logRepo->findLoginsByPerson($this->getUser(), 4);
+        $logs['activity'] = $logRepo->getWithClientByPerson($this->getUser(), 3);
 
-      // notifications
-      $notificationHandler = $this->get('lc.notification.handler');
-      $notifications = $notificationHandler->getUnread($this->getUser());
+        // notifications
+        $notificationHandler = $this->get('lc.notification.handler');
+        $notifications       = $notificationHandler->getUnread($this->getUser());
 
-      $defaultClientUid = $this->container->getParameter('oauth_default_client.uid');
+        $defaultClientUid = $this->container->getParameter('oauth_default_client.uid');
 
-      return array('allBadges' => $badges,
-                   'userBadges' => $userBadges,
-                   'logs' => $logs,
-                   'notifications' => $notifications,
-                   'defaultClientUid' => $defaultClientUid);
+        return array('allBadges' => $badges,
+            'userBadges' => $userBadges,
+            'logs' => $logs,
+            'notifications' => $notifications,
+            'defaultClientUid' => $defaultClientUid);
     }
 
     /**
@@ -182,11 +182,11 @@ class DefaultController extends Controller
      */
     public function safeLogoutIfNotRememberedAction(Request $request, $key)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em         = $this->getDoctrine()->getManager();
         $logoutKeys = $em->getRepository('LoginCidadaoAPIBundle:LogoutKey');
-        $logoutKey = $logoutKeys->findActiveByKey($key);
+        $logoutKey  = $logoutKeys->findActiveByKey($key);
 
-        if (! ($logoutKey instanceof LogoutKey)) {
+        if (!($logoutKey instanceof LogoutKey)) {
             throw new AccessDeniedHttpException("Invalid logout key.");
         }
 
@@ -207,7 +207,7 @@ class DefaultController extends Controller
             $result['logged_out'] = true;
         }
 
-        $response = new JsonResponse();
+        $response  = new JsonResponse();
         $userAgent = $request->headers->get('User-Agent');
         if (preg_match('/(?i)msie [1-9]/', $userAgent)) {
             $response->headers->set('Content-Type', 'text/json');
@@ -219,4 +219,14 @@ class DefaultController extends Controller
         return $response->setData($result);
     }
 
+    /**
+     * @Route("/_home", name="lc_index")
+     * @Template()
+     */
+    public function indexAction($lastUsername)
+    {
+        return array(
+            'last_username' => $lastUsername
+        );
+    }
 }
