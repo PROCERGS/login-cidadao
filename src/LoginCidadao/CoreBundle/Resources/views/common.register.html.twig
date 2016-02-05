@@ -7,7 +7,7 @@
 
 {{ form_start(form, {'action': path(actionUrl), 'attr': {'role':'form', 'class':'fos_user_registration_register clearfix'}}) }}
 
-{% for type, messages in app.session.flashbag.peekAll() %}
+{% for type, messages in app.session.flashbag.all %}
     {% for message in messages %}
         <div class="flash-{{ type }}">
             {{ message }}
