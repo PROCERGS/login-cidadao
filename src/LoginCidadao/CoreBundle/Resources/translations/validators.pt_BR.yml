@@ -8,3 +8,5 @@ organizations.validation.error:
     code_not_found: O código de verificação não foi encontrado nesse endereço
     query_string: A URL para Validação não pode conter uma query string
     code_in_url: Seu código de validação não pode estar na URL para Validação!
+admin.impersonation_report.validation.error:
+    report.short: Elabore mais sobre o acesso realizado. Não esqueça de incluir os motivos do acesso e as ações realizadas.

@@ -113,7 +113,6 @@ notification.empty.password.text: ''
 'Deactivate this service': 'Deactivate this service'
 'This service is not active in your Citizen''s Login account': 'This service is not active in your Citizen''s Login account'
 'Activate this service': 'Activate this service'
-admin.apps.list: 'Manage Apps'
 social-networks.unlink.no-password: 'You must define a password before unlinking any social network.'
 social-networks.unlink.facebook.success: 'Facebook successfully unlinked.'
 social-networks.unlink.twitter.success: 'Twitter successfully unlinked.'
@@ -348,3 +347,48 @@ ROLE_ORGANIZATIONS_DELETE: 'Organizations: can delete organizations where is a m
 ROLE_ORGANIZATIONS_DELETE_ANY_ORG: 'Organizations: can delete any organizations'
 ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG: 'Organizations: can manage members of any organization'
 ROLE_ORGANIZATIONS_CAN_TRUST: 'Organizations: can flag an organization as trusted'
+access_log:
+    panel_title: Access Log
+    date.format: m/d/Y H:i
+    login: Access from <span class="label label-info">%ip%</span>, <span class="label label-info">%date%</span>
+    impersonation: <span class="label label-info">Technical support</span>, <span class="label label-info">%date%</span>
+    page.title: Access Log
+activity_log:
+    page.title: Services Activity Log
+log.date.format: 'm/d/Y H:i:s'
+admin:
+    title: Admin Area
+    impersonation_report:
+        menu: Impersonation Reports
+        title: Impersonation Reports
+        disclosure: '<strong>All</strong> information contained in reports can be requested by the target users at any time.'
+        pending:
+            title: Pending Reports
+            list_item: <strong>%log_id%</strong> - %date% - %person%
+            notification: '{1} You have a pending report. <a href="%url%">Click here</a> to fill it.|]1,Inf[ You have %count% reports pending. <a href="%url%">Click here</a> to fill them.'
+        list:
+            title: Reports
+            list_item: <strong>%date%</strong> - %person%
+            list_item_complete: <span class="label label-info">%impersonator%</span>, %date%
+        new:
+            title: New Impersonation Report
+            submit: Create
+        edit:
+            title: Editing Impersonation Report
+            submit: Save
+        form:
+            target.label: 'Target person:'
+            datetime.label: 'Access date and time:'
+            last_update.label: 'Last update:'
+            cancel.button: Cancel
+            report:
+                label: Report
+                help: Make a brief report about the reasons and actions related to this access.
+    apps.list: 'Manage Apps'
+    sugg:
+        list: 'Manage Suggestions'
+        list.title: 'Search Suggestions'
+        show.title: 'Suggestion'
+    person:
+        list: 'Manage People'
+        list.title:  'Search People'
