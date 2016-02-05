@@ -4,7 +4,6 @@
     {% set form1 = lc_getForm() %}
     {% set form = lc_getFormFactory() %}
 
-
     <div class="row lc-main-title">
         <div class="col-12 text-center">
             <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
@@ -12,24 +11,21 @@
         </div>
     </div>
 
-
     <div class="container lc-box-group">
 
-        <div class="row">
-            <div class="col-md-5">
+        {% embed "LoginCidadaoCoreBundle:Default:login_register.html.twig" %}
+            {% block left %}
                 <div class="box box-register">
                     {{ include('LoginCidadaoCoreBundle::common.register.html.twig') }}
                 </div>
-            </div>
+            {% endblock %}
 
-            <div class="col-md-2"></div>
-
-            <div class="col-md-5">
+            {% block right %}
                 <div class="box">
                     {{ include('LoginCidadaoCoreBundle::common.login.html.twig') }}
                 </div>
-            </div>
-        </div>
+            {% endblock %}
+        {% endembed %}
 
         {% if third_party_login is not empty %}
             <div class="row">
@@ -53,8 +49,6 @@
             </div>
         {% endif %}
     </div>
-
-
 {% endblock %}
 
 {% block stylesheets_custom %}
