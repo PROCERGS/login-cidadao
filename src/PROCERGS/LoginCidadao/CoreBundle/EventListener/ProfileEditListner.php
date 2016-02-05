@@ -20,7 +20,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\City;
 use Assetic\Exception\Exception;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\NfgWsHelper;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\NfgException;
-use PROCERGS\LoginCidadao\CoreBundle\Exception\LcValidationException;
+use LoginCidadao\CoreBundle\Exception\LcValidationException;
 use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
 use LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\MissingNfgAccessTokenException;
