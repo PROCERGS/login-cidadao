@@ -223,7 +223,7 @@ class DefaultController extends Controller
      * @Route("/_home", name="lc_index")
      * @Template()
      */
-    public function indexAction($lastUsername)
+    public function indexAction(Request $request, $lastUsername)
     {
         return array(
             'last_username' => $lastUsername
