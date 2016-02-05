@@ -2,21 +2,16 @@
 
 namespace LoginCidadao\CoreBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
-use LoginCidadao\CoreBundle\Form\Type\ContactFormType;
-use LoginCidadao\CoreBundle\Entity\SentEmail;
-use LoginCidadao\CoreBundle\Entity\State;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
-use LoginCidadao\CoreBundle\Helper\IgpWsHelper;
-use Doctrine\ORM\Query;
-use LoginCidadao\APIBundle\Entity\LogoutKey;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use LoginCidadao\CoreBundle\Entity\SentEmail;
+use LoginCidadao\APIBundle\Entity\LogoutKey;
 
 class DefaultController extends Controller
 {
@@ -42,17 +37,6 @@ class DefaultController extends Controller
         ));
 
         return new RedirectResponse($redirect_url);
-    }
-
-    /**
-     * @Route("/lc_home_gateway", name="lc_home_gateway")
-     * @Template()
-     */
-    public function gatewayAction()
-    {
-        return array(
-            'home1' => $this->generateUrl('lc_home', array(), true)
-        );
     }
 
     /**
@@ -138,15 +122,6 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/login/cert", name="lc_login_cert")
-     * @Template()
-     */
-    public function loginCertAction(Request $request)
-    {
-        die(print_r($_REQUEST));
-    }
-
-    /**
      * @Route("/dashboard", name="lc_dashboard")
      * @Template()
      */
@@ -193,13 +168,9 @@ class DefaultController extends Controller
         $result['logged_out'] = false;
         if ($this->getUser() instanceof UserInterface) {
             if ($request->cookies->has('REMEMBERME')) {
-                $result = array(
-                    'logged_out' => false
-                );
+                $result = array('logged_out' => false);
             } else {
-                $this->get("request")
-                    ->getSession()
-                    ->invalidate();
+                $this->get("request")->getSession()->invalidate();
                 $this->get("security.context")->setToken(null);
                 $result['logged_out'] = true;
             }
