@@ -17,11 +17,16 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 
 class MeuRSHelper
 {
+    /** @var EntityManager */
+    protected $em;
+
     /** @var Doctrine\ORM\EntityRepository */
     protected $personMeuRSRepository;
 
-    public function __construct(EntityRepository $personMeuRSRepository)
+    public function __construct(EntityManager $em,
+                                EntityRepository $personMeuRSRepository)
     {
+        $this->em                    = $em;
         $this->personMeuRSRepository = $personMeuRSRepository;
     }
 
@@ -39,6 +44,8 @@ class MeuRSHelper
         if ($create && !($personMeuRS instanceof PersonMeuRS)) {
             $personMeuRS = new PersonMeuRS();
             $personMeuRS->setPerson($person);
+            $this->em->persist($personMeuRS);
+            $this->em->flush($personMeuRS);
         }
 
         return $personMeuRS;

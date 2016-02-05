@@ -39,6 +39,7 @@ services:
     meurs.helper:
         class: %meurs.helper.class%
         arguments:
+            - @doctrine.orm.entity_manager
             - @meurs.entities.person_meurs.repository
 
     meurs.person_meurs.form:
