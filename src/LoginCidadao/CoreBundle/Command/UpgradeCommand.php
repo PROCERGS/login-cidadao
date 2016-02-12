@@ -7,6 +7,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Doctrine\ORM\EntityManager;
 
 class UpgradeCommand extends ContainerAwareCommand
@@ -22,9 +23,12 @@ class UpgradeCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->clearMetadata($output);
-        $this->cacheClear($output);
-        //$this->installAssets($output);
+        $io = new SymfonyStyle($input, $output);
+        $io->title("Running upgrade tasks...");
+        $this->clearMetadata($io);
+        $this->clearCache($io, 'prod');
+        $this->checkDatabase($io);
+        $this->installAssets($io);
     }
 
     /**
@@ -36,85 +40,116 @@ class UpgradeCommand extends ContainerAwareCommand
         return $this->getContainer()->get('doctrine')->getManager();
     }
 
-    private function clearMetadata(OutputInterface $output)
+    private function clearMetadata(SymfonyStyle $io)
     {
-        $output->writeln("Clearing Doctrine Metadata...");
+        $io->section("Clearing Doctrine Metadata...");
         $command = $this->getApplication()->find('doctrine:cache:clear-metadata');
 
         $envs = $this->getEnvsInput();
+        $io->progressStart(count($envs));
         foreach ($envs as $env => $input) {
             $cmdOutput  = new BufferedOutput();
             $returnCode = $command->run($input, $cmdOutput);
 
-            if ($returnCode === 0) {
-                $out = explode("\n", trim($cmdOutput->fetch()));
-                $output->writeln("[$env]\t- ".end($out));
+            if ($returnCode !== 0) {
+                $io->newLine(2);
+                $io->error("Couldn't clear metadata cache on $env");
+                return;
             }
+            $io->progressAdvance();
         }
+        $io->progressFinish();
     }
 
-    private function installAssets(OutputInterface $output)
+    private function installAssets(SymfonyStyle $io)
     {
-        $output->write("Installing assets...\t");
-        $input    = $this->getEnvsInput()['prod'];
+        $io->section("Installing assets...");
+        $input    = $this->getEnvsInput('prod');
         $commands = array('assets:install', 'assetic:dump');
+        $io->progressStart(count($commands));
         foreach ($commands as $command) {
             $cmdOutput  = new BufferedOutput();
             $returnCode = $this->getApplication()
                     ->find($command)->run($input, $cmdOutput);
 
             if ($returnCode !== 0) {
-                $output->writeln("[FAIL]");
-                $output->writeln("$command failed. Run it separately to find out why.");
+                $io->newLine(2);
+                $io->error("$command failed. Run it separately to find out why.");
                 return;
             }
+            $io->progressAdvance();
         }
-        $output->writeln("[DONE]");
+        $io->progressFinish();
     }
 
-    private function cacheClear(OutputInterface $output)
+    private function clearCache(SymfonyStyle $io, $env)
     {
-        $output->write("Clearing cache...\t");
-        $input   = new ArrayInput(array('--env' => 'dev', '--no-warmup'));
+        $io->section("Clearing cache...");
+        $io->progressStart(1);
+        $input   = $this->getEnvsInput($env);
         $command = $this->getApplication()->find('cache:clear');
 
         $cmdOutput  = new BufferedOutput();
         $returnCode = $command->run($input, $cmdOutput);
 
         if ($returnCode !== 0) {
-            $output->writeln("[FAIL]");
-            $output->writeln("cache:clear command failed. You may need to manually delete the cache folders.");
+            $io->error("cache:clear command failed. You may need to manually delete the cache folders.");
             return;
         }
 
-        $output->writeln("[DONE]");
-        return;
-
-        $envs = $this->getEnvsInput(array('--no-warmup'));
-        foreach ($envs as $env => $input) {
-            $cmdOutput = new BufferedOutput();
-            try {
-                $returnCode = $command->run($input, $cmdOutput);
-            } catch (\Exception $e) {
-                $returnCode = false;
-            }
-
-            if ($returnCode !== 0) {
-                $output->writeln("[FAIL]");
-                $output->writeln("cache:clear command failed. You may need to manually delete the cache folders.");
-                return;
-            }
-            $output->writeln("$env done");
-        }
-        $output->writeln("[DONE]");
+        $io->progressFinish();
     }
 
-    private function getEnvsInput($custom = array())
+    private function getEnvsInput($env = null)
     {
-        return array(
-            'prod' => new ArrayInput(array_merge(array('--env' => 'prod'),
-                    $custom)),
-            'env' => new ArrayInput(array_merge(array('--env' => 'dev'), $custom))
+        $envs = array(
+            'prod' => new ArrayInput(array('--env' => 'prod')),
+            'dev' => new ArrayInput(array('--env' => 'dev'))
         );
+
+        if ($env === null) {
+            return $envs;
+        } else {
+            return $envs[$env];
+        }
+    }
+
+    private function checkDatabase(SymfonyStyle $io)
+    {
+        $io->section("Checking database schema...");
+        $cmdOutput = new BufferedOutput();
+        $command   = $this->getApplication()->find('doctrine:schema:update');
+        $input     = new ArrayInput(array('--env' => 'dev', '--dump-sql' => true));
+
+        $command->run($input, $cmdOutput);
+
+        $output = $cmdOutput->fetch();
+        if (strstr($output, 'Nothing to update') !== false) {
+            $io->success(trim($output));
+            return;
+        }
+
+        $this->updateSchema($io, explode("\n", trim($output)));
+    }
+
+    private function updateSchema(SymfonyStyle $io, $queries)
+    {
+        $io->caution("Your database schema needs to be updated. The following queries will be run:");
+        $io->listing($queries);
+        if ($io->confirm("Should we run this queries now?", false) === false) {
+            return;
+        }
+
+        $cmdOutput = new BufferedOutput();
+        $command   = $this->getApplication()->find('doctrine:schema:update');
+        $force     = new ArrayInput(array('--env' => 'dev', '--dump-sql' => true,
+            '--force' => true));
+        $command->run($force, $cmdOutput);
+
+        $result = $cmdOutput->fetch();
+        if (strstr($result, 'Database schema updated successfully!') === false) {
+            $io->error("Couldn't update the schema. Run 'doctrine:schema:update' separately to find out why");
+        }
+        $io->success("Database schema updated successfully!");
     }
 }
