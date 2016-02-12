@@ -51,6 +51,7 @@ change_password.submit: 'Change Password'
 'Connect with Twitter': 'Connect with Twitter'
 form.plainPassword: Password
 form.plainPassword.example: Create a password
+form.plainPassword.confirm.example: Type your password again
 form.phone: Phone
 form.phone.example: +55 51 1234-5678
 (optional): (optional)

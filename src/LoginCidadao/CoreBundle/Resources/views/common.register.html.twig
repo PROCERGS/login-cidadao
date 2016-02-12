@@ -35,24 +35,8 @@
         </div>
     {% endif %}
 
-    <div class="form-group">
-        {{ form_label(form.email, 'form.email' | trans) }}
-        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder' : 'form.email.example' }}) }}
-        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-        {{ form_errors(form.email) }}
-    </div>
-
-    <div class="form-group">
-        {{ form_label(form.plainPassword, 'form.plainPassword' | trans) }}
-        {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'autocomplete': 'off', 'placeholder' : 'form.plainPassword.example' }}) }}
-        {{ form_errors(form.plainPassword) }}
-    </div>
-
-    <div class="form-group">
-        {{ form_label(form.mobile, 'form.phone' | trans) }}
-        {{ form_widget(form.mobile, {'attr': {'class': 'form-control', 'placeholder' : ('form.phone.example' | trans) }}) }}
-        {{ form_errors(form.mobile) }}
-    </div>
+    {{ form_widget(form) }}
+    {{ form_errors(form.plainPassword) }}
 
     <p class='terms'>{% trans with { '%linkTerms%': path("lc_privacy")} %}By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.{% endtrans %}</p>
 

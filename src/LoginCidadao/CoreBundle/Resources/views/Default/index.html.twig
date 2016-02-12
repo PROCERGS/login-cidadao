@@ -2,7 +2,9 @@
 
 {% block body %}
     {% set form1 = lc_getForm() %}
-    {% set form = lc_getFormFactory() %}
+    {% if form is not defined %}
+        {% set form = lc_getFormFactory() %}
+    {% endif %}
 
     <div class="row lc-main-title">
         <div class="col-12 text-center">
