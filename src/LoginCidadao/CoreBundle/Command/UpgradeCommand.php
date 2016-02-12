@@ -151,5 +151,7 @@ class UpgradeCommand extends ContainerAwareCommand
             $io->error("Couldn't update the schema. Run 'doctrine:schema:update' separately to find out why");
         }
         $io->success("Database schema updated successfully!");
+
+        $this->clearMetadata($io);
     }
 }
