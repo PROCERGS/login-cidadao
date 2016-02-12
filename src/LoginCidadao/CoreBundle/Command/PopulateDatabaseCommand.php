@@ -18,7 +18,7 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('login-cidadao:database:populate')
+            ->setName('lc:database:populate')
             ->setDescription('Populates the database.')
             ->addArgument('dump_folder', InputArgument::REQUIRED, 'Where are the dumps?');
     }
