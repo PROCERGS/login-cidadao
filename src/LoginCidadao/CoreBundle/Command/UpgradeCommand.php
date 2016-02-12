@@ -84,7 +84,7 @@ class UpgradeCommand extends ContainerAwareCommand
 
     private function clearCache(SymfonyStyle $io, $env)
     {
-        $io->section("Clearing cache...");
+        $io->section("Clearing cache ($env)...");
         $io->progressStart(1);
         $input   = $this->getEnvsInput($env);
         $command = $this->getApplication()->find('cache:clear');
