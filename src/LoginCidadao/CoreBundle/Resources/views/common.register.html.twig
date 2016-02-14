@@ -36,7 +36,6 @@
     {% endif %}
 
     {{ form_widget(form) }}
-    {{ form_errors(form.plainPassword) }}
 
     <p class='terms'>{% trans with { '%linkTerms%': path("lc_privacy")} %}By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.{% endtrans %}</p>
 
