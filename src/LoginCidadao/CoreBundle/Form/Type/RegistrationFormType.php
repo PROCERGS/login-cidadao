@@ -15,20 +15,29 @@ class RegistrationFormType extends BaseType
                 array(
                 'required' => true,
                 'label' => 'form.email',
-                'translation_domain' => 'FOSUserBundle')
+                'attr' => array('placeholder' => 'form.email.example'),
+                'translation_domain' => 'FOSUserBundle'
+                )
             )
-            ->add('plainPassword', 'password',
+            ->add('plainPassword', 'repeated',
                 array(
                 'required' => true,
-                'label' => 'form.password',
-                'attr' => array('autocomplete' => 'off'),
-                'translation_domain' => 'FOSUserBundle')
-            )
-            ->add('mobile', null,
-                array(
-                'required' => false,
-                'label' => 'form.mobile',
-                'translation_domain' => 'FOSUserBundle')
+                'type' => 'password',
+                'attr' => array(
+                    'autocomplete' => 'off',
+                    'placeholder' => 'form.plainPassword.example'
+                ),
+                'options' => array('translation_domain' => 'FOSUserBundle'),
+                'first_options' => array(
+                    'label' => 'form.password',
+                    'attr' => array('placeholder' => 'form.plainPassword.example')
+                ),
+                'second_options' => array(
+                    'label' => 'form.password_confirmation',
+                    'attr' => array('placeholder' => 'form.plainPassword.confirm.example')
+                ),
+                'invalid_message' => 'fos_user.password.mismatch'
+                )
             )
         ;
     }
