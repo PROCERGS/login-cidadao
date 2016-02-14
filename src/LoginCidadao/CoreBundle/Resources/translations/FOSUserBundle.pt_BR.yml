@@ -19,6 +19,7 @@ form.email.example: seu@email.com
 form.current_password: 'Senha atual:'
 form.plainPassword: Senha
 form.plainPassword.example: Crie uma senha
+form.plainPassword.confirm.example: Digite sua senha novamente
 form.password: 'Criar uma senha:'
 form.password_confirmation: 'Confirme sua senha:'
 form.new_password: 'Nova senha:'
