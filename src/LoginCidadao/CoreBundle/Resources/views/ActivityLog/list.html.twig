@@ -1,0 +1,25 @@
+{% extends "LoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block title %}{{ 'activity_log.page.title' | trans }} | {{ parent() }}{% endblock title %}
+
+{% block content %}
+    <div class="content organizations">
+
+        <h1 class="visible-xs">{{ 'activity_log.page.title' | trans }}</h1>
+
+        <div class="form-content">
+            <div class="panel panel-default">
+                <div class="panel-heading">{{ 'activity_log.page.title' | trans }}</div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        {% for log in logs %}
+                            <li class="list-group-item">
+                                {{ include('LoginCidadaoCoreBundle:ActivityLog:entry.fragment.html.twig', { 'log': log }) }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

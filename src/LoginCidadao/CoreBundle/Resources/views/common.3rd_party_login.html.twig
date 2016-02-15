@@ -1,0 +1,28 @@
+{% set providers_count = 0 %}
+{% for provider, status in third_party_login %}
+    {% if status == true %}
+        {% set providers_count = providers_count + 1 %}
+    {% endif %}
+{% endfor %}
+{% if third_party_login is not empty and providers_count > 0 %}
+    {% set columns = 12 / providers_count %}
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div class="box connect-box lc-box clearfix">
+                <h3>{% trans %}Use accounts from other services{% endtrans %}</h3>
+                <p>{% trans %}If you prefer, it's possible to use other services to login or create your account.{% endtrans %}</p>
+                <div class="row">
+                    {% if third_party_login.facebook | default(false) %}
+                        <div class="col-md-{{ columns }} text-center"><a class="connect facebook" data-href="{{ path("lc_link_facebook") }}">Facebook</a></div>
+                    {% endif %}
+                    {% if third_party_login.twitter | default(false) %}
+                        <div class="col-md-{{ columns }} text-center"><a class="connect twitter" href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}">Twitter</a></div>
+                    {% endif %}
+                    {% if third_party_login.google | default(false) %}
+                        <div class="col-md-{{ columns }} text-center"><a class="connect google" href="{{ path('hwi_oauth_service_redirect', {'service': 'google'}) }}">Google</a></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

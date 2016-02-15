@@ -207,6 +207,7 @@ simple_things_entity_audit:
         - LoginCidadao\CoreBundle\Entity\ClientSuggestion
         - LoginCidadao\CoreBundle\Entity\Country
         - LoginCidadao\CoreBundle\Entity\IdCard
+        - LoginCidadao\CoreBundle\Entity\ImpersonationReport
         - LoginCidadao\CoreBundle\Entity\Person
         - LoginCidadao\CoreBundle\Entity\PersonAddress
         - LoginCidadao\CoreBundle\Entity\SentEmail

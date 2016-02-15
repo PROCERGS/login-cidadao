@@ -33,17 +33,23 @@ class ClientFormType extends ClientBaseFormType
             function (FormEvent $event) use ($security, $public, $reserved) {
             $form = $event->getForm();
 
-            if ($security->isGranted('ROLE_EDIT_CLIENT_ALLOWED_SCOPES')) {
-                $form->add('allowedScopes', 'choice',
-                    array(
-                    'choices' => array(
-                        'Public Scopes' => $public,
-                        'Restricted Scopes' => $reserved,
-                    ),
-                    'multiple' => true,
-                    'choices_as_values' => false,
-                ));
+            if ($security->isGranted('ROLE_EDIT_CLIENT_ALLOWED_SCOPES') === false) {
+                return;
             }
+
+            $choices = array(
+                'Public Scopes' => $public
+            );
+            if ($security->isGranted('ROLE_EDIT_CLIENT_ALLOWED_RESTRICTED_SCOPES')) {
+                $choices['Restricted Scopes'] = $reserved;
+            }
+
+            $form->add('allowedScopes', 'choice',
+                array(
+                'choices' => $choices,
+                'multiple' => true,
+                'choices_as_values' => false,
+            ));
         });
     }
 

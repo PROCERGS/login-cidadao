@@ -14,7 +14,6 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class ActionLogger
 {
-
     /** @var SecurityContextInterface */
     protected $security;
 
@@ -31,20 +30,20 @@ class ActionLogger
                                 AuditConfiguration $auditConfig,
                                 EntityManager $em)
     {
-        $this->security = $security;
+        $this->security    = $security;
         $this->auditConfig = $auditConfig;
-        $this->em = $em;
+        $this->em          = $em;
     }
 
     public function logActivity(Request $request, Loggable $annotation,
                                 array $controllerAction)
     {
-        $token = $this->security->getToken();
-        $user = $token->getUser();
+        $token         = $this->security->getToken();
+        $user          = $token->getUser();
         $auditUsername = $this->auditConfig->getCurrentUsername();
 
         $log = $this->initLog($request, $annotation->getType(),
-                              $controllerAction, $auditUsername);
+            $controllerAction, $auditUsername);
 
         if ($user instanceof PersonInterface) {
             $log->setUserId($user->getId());
@@ -74,7 +73,7 @@ class ActionLogger
     private function getActionLog($id)
     {
         $repo = $this->em->getRepository('LoginCidadaoAPIBundle:ActionLog');
-        $log = $repo->find($id);
+        $log  = $repo->find($id);
 
         if ($log instanceof ActionLog) {
             return $log;
@@ -94,7 +93,7 @@ class ActionLogger
                              $auditUsername)
     {
         $controller = get_class($controllerAction[0]);
-        $action = $controllerAction[1];
+        $action     = $controllerAction[1];
 
         $log = new ActionLog();
         $log->setController($controller);
@@ -115,7 +114,7 @@ class ActionLogger
         }
 
         $accessTokenRepo = $this->em->getRepository('LoginCidadaoOAuthBundle:AccessToken');
-        $accessToken = $accessTokenRepo->findOneBy(array(
+        $accessToken     = $accessTokenRepo->findOneBy(array(
             'token' => $token->getToken()
         ));
 
@@ -124,17 +123,39 @@ class ActionLogger
         $log->setUserId($accessToken->getUser()->getId());
     }
 
-    public function registerLogin(Request $request, PersonInterface $person, array $controllerAction)
+    public function registerLogin(Request $request, PersonInterface $person,
+                                  array $controllerAction)
     {
         $auditUsername = $this->auditConfig->getCurrentUsername();
-        $actionType = ActionLog::TYPE_LOGIN;
+        $actionType    = ActionLog::TYPE_LOGIN;
 
         $log = $this->initLog($request, $actionType, $controllerAction,
-                              $auditUsername);
+            $auditUsername);
         $log->setUserId($person->getId());
 
         $this->em->persist($log);
         $this->em->flush($log);
     }
 
+    public function registerImpersonate(Request $request,
+                                        PersonInterface $person,
+                                        PersonInterface $impersonator,
+                                        array $controllerAction,
+                                        $isImpersonating)
+    {
+        $auditUsername = $this->auditConfig->getCurrentUsername();
+        if ($isImpersonating) {
+            $actionType = ActionLog::TYPE_IMPERSONATE;
+        } else {
+            $actionType = ActionLog::TYPE_DEIMPERSONATE;
+        }
+
+        $log = $this->initLog($request, $actionType, $controllerAction,
+            $auditUsername);
+        $log->setUserId($person->getId());
+        $log->setClientId($impersonator->getId());
+
+        $this->em->persist($log);
+        $this->em->flush($log);
+    }
 }

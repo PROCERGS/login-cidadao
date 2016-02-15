@@ -2,8 +2,9 @@
 
 {% block body %}
     {% set form1 = lc_getForm() %}
-    {% set form = lc_getFormFactory() %}
-
+    {% if form is not defined %}
+        {% set form = lc_getFormFactory() %}
+    {% endif %}
 
     <div class="row lc-main-title">
         <div class="col-12 text-center">
@@ -12,49 +13,24 @@
         </div>
     </div>
 
-
     <div class="container lc-box-group">
 
-        <div class="row">
-            <div class="col-md-5">
+        {% embed "LoginCidadaoCoreBundle:Default:login_register.html.twig" %}
+            {% block left %}
                 <div class="box box-register">
                     {{ include('LoginCidadaoCoreBundle::common.register.html.twig') }}
                 </div>
-            </div>
+            {% endblock %}
 
-            <div class="col-md-2"></div>
-
-            <div class="col-md-5">
+            {% block right %}
                 <div class="box">
                     {{ include('LoginCidadaoCoreBundle::common.login.html.twig') }}
                 </div>
-            </div>
-        </div>
+            {% endblock %}
+        {% endembed %}
 
-        {% if third_party_login is not empty %}
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <div class="box connect-box lc-box clearfix">
-                        <h3>{% trans %}Use accounts from other services{% endtrans %}</h3>
-                        <p>{% trans %}If you prefer, it's possible to use other services to login or create your account.{% endtrans %}</p>
-                        <div class="row">
-                            {% if third_party_login.facebook | default(false) %}
-                                <div class="col-md-4 text-center"><a class="connect facebook" data-href="{{ path("lc_link_facebook") }}">Facebook</a></div>
-                            {% endif %}
-                            {% if third_party_login.twitter | default(false) %}
-                                <div class="col-md-4 text-center"><a class="connect twitter" href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}">Twitter</a></div>
-                            {% endif %}
-                            {% if third_party_login.google | default(false) %}
-                                <div class="col-md-4 text-center"><a class="connect google" href="{{ path('hwi_oauth_service_redirect', {'service': 'google'}) }}">Google</a></div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
+        {{ include('LoginCidadaoCoreBundle::common.3rd_party_login.html.twig') }}
     </div>
-
-
 {% endblock %}
 
 {% block stylesheets_custom %}

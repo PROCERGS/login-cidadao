@@ -34,6 +34,7 @@ parameters:
     lc.idcard.form.class: LoginCidadao\CoreBundle\Form\Type\IdCardType
     lc.security.helper.class: LoginCidadao\CoreBundle\Helper\SecurityHelper
     account.security_listener.class: LoginCidadao\CoreBundle\EventListener\SecurityListener
+    lc.extreme_notifications.helper.class: LoginCidadao\CoreBundle\Helper\ExtremeNotificationsHelper
 
 services:
     lc.command.populate_database:
@@ -297,13 +298,23 @@ services:
 
     lc.security.helper:
         class: %lc.security.helper.class%
-        arguments: [ @security.authorization_checker ]
+        arguments:
+            - @security.authorization_checker
+            - @lc.action_log.repository
+            - @lc.extreme_notifications.helper
+            - @router
 
     account.security_listener:
         class: %account.security_listener.class%
-        arguments: [ @security.context, @session, @lc.action_logger ]
+        arguments:
+            - @security.authorization_checker
+            - @security.token_storage
+            - @lc.security.helper
+            - @lc.action_logger
         tags:
             - { name: kernel.event_listener, event: security.interactive_login, method: onSecurityInteractiveLogin }
+            - { name: kernel.event_listener, event: security.switch_user, method: onSwitchUser }
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
     lc.country_manager:
         class: LoginCidadao\CoreBundle\Model\Manager\CountryManager
@@ -344,3 +355,9 @@ services:
         class: %lc.person_doc.form.class%
         tags:
             - { name: form.type, alias: person_doc_form_type }
+
+    lc.extreme_notifications.helper:
+        class: %lc.extreme_notifications.helper.class%
+        arguments:
+            - @session
+            - @translator

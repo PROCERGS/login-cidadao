@@ -20,3 +20,10 @@ services:
     lc.action_logger:
         class: %lc.action_logger.class%
         arguments: [ "@security.context", "@simplethings_entityaudit.config", "@doctrine.orm.entity_manager" ]
+
+    lc.action_log.repository:
+        myrepository:
+        class: Doctrine\ORM\EntityRepository
+        factory: [@doctrine.orm.entity_manager, getRepository]
+        arguments:
+            - LoginCidadao\APIBundle\Entity\ActionLog

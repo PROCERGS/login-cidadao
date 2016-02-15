@@ -1,0 +1,47 @@
+{% extends "LoginCidadaoCoreBundle:Admin:ImpersonationReport\\base.html.twig" %}
+
+{% block impersonation_report_content %}
+    <div id="impersonation_reports" class="content">
+        <h1 class="visible-xs">{{ 'admin.impersonation_report.title' | trans }}</h1>
+
+        {% if pending is not empty %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{ 'admin.impersonation_report.pending.title' | trans }}</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="list-group">
+                        {% for log in pending %}
+                            <a href="{{ path('lc_admin_impersonation_report_new', { 'logId': log.log_id }) }}" class="list-group-item">
+                                {{ 'admin.impersonation_report.pending.list_item' | trans({'%log_id%': log.log_id | e, '%date%': log.date | date('log.date.format' | trans) | e, '%person%': log.person_name | e }) | raw }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">{{ 'admin.impersonation_report.list.title' | trans }}</h2>
+            </div>
+            <div class="panel-body">
+                <div class="list-group">
+                    {% for report in reports %}
+                        {% if is_granted('ROLE_IMPERSONATION_REPORTS_EDIT') %}
+                            <a href="{{ path('lc_admin_impersonation_report_edit', { 'id': report.id }) }}" class="list-group-item">
+                            {% else %}
+                                <div class="list-group-item">
+                                {% endif %}
+                                {{ 'admin.impersonation_report.list.list_item' | trans({ '%date%': report.createdAt | date('log.date.format' | trans) | e, '%person%': report.target.fullName | default(report.target.email) | e }) | raw }}
+                                {% if is_granted('ROLE_IMPERSONATION_REPORTS_EDIT') %}
+                            </a>
+                        {% else %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
