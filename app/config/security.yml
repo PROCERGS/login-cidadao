@@ -6,6 +6,10 @@ security:
             algorithm: bcrypt
             cost: 15
 
+        # The following two lines ensure BC for PR #357
+        Symfony\Component\Security\Core\User\User: sha512
+        FOS\UserBundle\Model\UserInterface: sha512
+
     role_hierarchy:
         ROLE_USER:
             - FEATURE_PROD

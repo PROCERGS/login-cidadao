@@ -380,7 +380,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     /**
      * @JMS\Exclude
-     * @ORM\Column(name="password_encoder_name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="password_encoder_name", type="string", length=255, nullable=true)
      */
     protected $passwordEncoderName;
 
@@ -1308,6 +1308,13 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     public function getEncoderName()
     {
-        return $this->passwordEncoderName;
+        $encoder = $this->passwordEncoderName;
+
+        // BC for PR #357
+        if ($encoder === null || strlen($encoder) < 1) {
+            return null;
+        }
+
+        return $encoder;
     }
 }
