@@ -152,7 +152,10 @@ services:
 
     lc.change_password_listener:
         class: %lc.change.password.listener.class%
-        arguments: ["@router", "@notifications.helper"]
+        arguments:
+            - @router
+            - @notifications.helper
+            - %default_password_encoder%
         tags:
             - { name: kernel.event_subscriber }
 
@@ -168,7 +171,13 @@ services:
 
     kernel.listener.logged_in_user_listener:
         class: %kernel.listener.logged_in_user_listener.class%
-        arguments: [ "@security.context", "@router", "@session", "@translator", "@doctrine.orm.entity_manager" ]
+        arguments:
+            - @security.context
+            - @router
+            - @session
+            - @translator
+            - @doctrine.orm.entity_manager
+            - %default_password_encoder%
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 

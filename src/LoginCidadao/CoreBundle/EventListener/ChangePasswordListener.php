@@ -12,15 +12,22 @@ use FOS\UserBundle\Event\FilterUserResponseEvent;
 
 class ChangePasswordListener implements EventSubscriberInterface
 {
-
+    /** @var UrlGeneratorInterface */
     private $router;
+
+    /** @var NotificationsHelper */
     private $notificationHelper;
 
+    /** @var string */
+    private $defaultPasswordEncoder;
+
     public function __construct(UrlGeneratorInterface $router,
-                                NotificationsHelper $notificationHelper)
+                                NotificationsHelper $notificationHelper,
+                                $defaultPasswordEncoder)
     {
-        $this->router = $router;
-        $this->notificationHelper = $notificationHelper;
+        $this->router                 = $router;
+        $this->notificationHelper     = $notificationHelper;
+        $this->defaultPasswordEncoder = $defaultPasswordEncoder;
     }
 
     /**
@@ -37,6 +44,7 @@ class ChangePasswordListener implements EventSubscriberInterface
     public function onChangePasswordSuccess(FormEvent $event)
     {
         $person = $event->getForm()->getData();
+        $person->setPasswordEncoderName($this->defaultPasswordEncoder);
         $this->notificationHelper->clearEmptyPasswordNotification($person);
 
         $url = $this->router->generate('fos_user_change_password');
@@ -48,5 +56,4 @@ class ChangePasswordListener implements EventSubscriberInterface
         $user = $event->getUser();
         $this->notificationHelper->clearEmptyPasswordNotification($user);
     }
-
 }

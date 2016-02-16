@@ -1,7 +1,10 @@
 security:
     encoders:
-        Symfony\Component\Security\Core\User\User: sha512
-        FOS\UserBundle\Model\UserInterface: sha512
+        sha512:
+            algorithm: sha512
+        bcrypt:
+            algorithm: bcrypt
+            cost: 15
 
     role_hierarchy:
         ROLE_USER:

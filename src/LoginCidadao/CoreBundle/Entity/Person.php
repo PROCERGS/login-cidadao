@@ -2,25 +2,25 @@
 
 namespace LoginCidadao\CoreBundle\Entity;
 
-use FOS\UserBundle\Model\User as BaseUser;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Constraints as Assert;
-use LoginCidadao\OAuthBundle\Entity\Client;
-use JMS\Serializer\Annotation as JMS;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use LoginCidadao\ValidationBundle\Validator\Constraints as LCAssert;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\HttpFoundation\File\File;
-use LoginCidadao\CoreBundle\Model\PersonInterface;
-use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
-use LoginCidadao\CoreBundle\Model\LocationAwareInterface;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use JMS\Serializer\Annotation as JMS;
+use FOS\UserBundle\Model\User as BaseUser;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\CoreBundle\Model\SelectData;
 use LoginCidadao\LongPolling\LongPollingUtils;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\CoreBundle\Model\LocationAwareInterface;
+use LoginCidadao\ValidationBundle\Validator\Constraints as LCAssert;
 
 /**
  * @ORM\Entity(repositoryClass="LoginCidadao\CoreBundle\Entity\PersonRepository")
@@ -377,6 +377,12 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @ORM\OneToMany(targetEntity="BackupCode", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
      */
     protected $backupCodes;
+
+    /**
+     * @JMS\Exclude
+     * @ORM\Column(name="password_encoder_name", type="string", length=255, nullable=false)
+     */
+    protected $passwordEncoderName;
 
     public function __construct()
     {
@@ -1287,5 +1293,21 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function getPhoneNumberVerified()
     {
         return false;
+    }
+
+    public function getPasswordEncoderName()
+    {
+        return $this->passwordEncoderName;
+    }
+
+    public function setPasswordEncoderName($passwordEncoderName)
+    {
+        $this->passwordEncoderName = $passwordEncoderName;
+        return $this;
+    }
+
+    public function getEncoderName()
+    {
+        return $this->passwordEncoderName;
     }
 }
