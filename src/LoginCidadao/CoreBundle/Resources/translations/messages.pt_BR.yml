@@ -812,3 +812,5 @@ admin:
     person:
         list: 'Gerenciar pessoas'
         list.title:  'Busca de pessoas'
+force_password_change:
+    description: Por favor, atualize sua senha para melhorar a segurança de sua conta.

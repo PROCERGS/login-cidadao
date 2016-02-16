@@ -2,17 +2,15 @@
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Translation\TranslatorInterface;
-use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 use LoginCidadao\CoreBundle\Exception\RedirectResponseException;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use LoginCidadao\OAuthBundle\Model\ClientUser;
 use Doctrine\ORM\EntityManager;
 
 class LoggedInUserListener
@@ -118,6 +116,7 @@ class LoggedInUserListener
         if ($person->getEncoderName() === $this->defaultPasswordEncoder) {
             return;
         }
+        $this->session->set('force_password_change', true);
 
         if ($route === 'fos_user_change_password') {
             return;
