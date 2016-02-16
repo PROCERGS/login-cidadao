@@ -103,5 +103,5 @@ parameters:
         twitter: true
         google: true
 
-    # Password Encoder (CRITICAL: Read https://github.com/PROCERGS/login-cidadao/pull/357 for important instructions)
+    # Password Encoder
     default_password_encoder: bcrypt
