@@ -104,4 +104,4 @@ parameters:
         google: true
 
     # Password Encoder
-    default_password_encoder: sha512
+    default_password_encoder: bcrypt
