@@ -1,0 +1,10 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}LoginCidadaoCoreBundle:InvalidateSessions:debug{% endblock %}
+
+{% block body %}
+    {{ dump(metadata) }}
+    {{ dump(metadata.created) }}
+    {{ dump(metadata.lastUsed) }}
+    {{ dump(now) }}
+{% endblock %}
