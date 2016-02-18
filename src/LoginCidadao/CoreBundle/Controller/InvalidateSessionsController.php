@@ -10,11 +10,12 @@
 
 namespace LoginCidadao\CoreBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use LoginCidadao\CoreBundle\Entity\InvalidateSessionRequest;
+use LoginCidadao\CoreBundle\Form\InvalidateSessionRequestType;
 
 /**
  * @Route("/invalidate")
@@ -23,40 +24,28 @@ class InvalidateSessionsController extends Controller
 {
 
     /**
-     * @Route("/debug")
+     * @Route("/invalidate", name="lc_invalidate_sessions")
      * @Template()
      */
-    public function debugAction()
+    public function invalidateAction(Request $request)
     {
-        $metadata = $this->getSession()->getMetadataBag();
-        $now      = time();
+        $invalidate = new InvalidateSessionRequest();
 
-        return compact('metadata', 'now');
-    }
+        $type = new InvalidateSessionRequestType();
+        $form = $this->createForm($type, $invalidate);
+        $form->handleRequest($request);
 
-    /**
-     * @Route("/invalidate")
-     * @Template()
-     */
-    public function invalidateAction()
-    {
-        $request = new InvalidateSessionRequest();
-        $request->setPerson($this->getUser())
-            ->setRequestedAt(new \DateTime());
+        if ($form->isValid()) {
+            $invalidate->setPerson($this->getUser())
+                ->setRequestedAt(new \DateTime());
 
-        $em = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($invalidate);
+            $em->flush($invalidate);
 
-        $em->persist($request);
-        $em->flush($request);
+            die("ok");
+        }
 
-        return array();
-    }
-
-    /**
-     * @return SessionInterface
-     */
-    private function getSession()
-    {
-        return $this->get('session');
+        return compact('form');
     }
 }

@@ -8,6 +8,8 @@
             <h1 class="visible-xs">{{ 'Security' | trans }}</h1>
             {{ include("LoginCidadaoCoreBundle:Person:changePassword.html.twig") }}
 
+            {{ render(controller("LoginCidadaoCoreBundle:InvalidateSessions:invalidate")) }}
+
             {{ include("LoginCidadaoCoreBundle:TwoFactorAuthentication:enableDisable.panel.html.twig") }}
         </div>
     </div>
