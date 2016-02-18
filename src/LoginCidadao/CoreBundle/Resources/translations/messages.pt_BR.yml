@@ -818,3 +818,4 @@ invalidate_sessions:
     title: Desconectar Todas Sessões
     description: Ao acionar o botão a seguir, todas suas sessões serão descontectadas. Se você esqueceu sua conta conectada em um computador, por exemplo, você pode usar essa funcionalidade para garantir que ninguém consiga usar essa conexão para acessar sua conta.
     form.button: Desconectar Todas Sessões
+2fa.collapse: Exibir Opções
