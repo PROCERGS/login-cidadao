@@ -43,7 +43,7 @@ class InvalidateSessionsController extends Controller
             $em->persist($invalidate);
             $em->flush($invalidate);
 
-            die("ok");
+            return $this->redirectToRoute('fos_user_security_logout');
         }
 
         return compact('form');
