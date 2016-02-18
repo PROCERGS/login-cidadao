@@ -43,6 +43,7 @@ class ChangePasswordListener implements EventSubscriberInterface
     {
         return array(
             FOSUserEvents::CHANGE_PASSWORD_SUCCESS => 'onChangePasswordSuccess',
+            FOSUserEvents::CHANGE_PASSWORD_SUCCESS => 'setPasswordEncoderName',
             FOSUserEvents::RESETTING_RESET_SUCCESS => 'setPasswordEncoderName',
             FOSUserEvents::REGISTRATION_SUCCESS => 'setPasswordEncoderName',
             FOSUserEvents::CHANGE_PASSWORD_COMPLETED => 'onChangePasswordCompleted',
