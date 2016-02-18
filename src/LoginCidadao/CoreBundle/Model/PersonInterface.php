@@ -2,11 +2,12 @@
 
 namespace LoginCidadao\CoreBundle\Model;
 
+use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\EntityManager;
 
-interface PersonInterface
+interface PersonInterface extends EncoderAwareInterface
 {
 
     public function getEmail();
@@ -199,6 +200,7 @@ interface PersonInterface
     public function getGoogleAuthenticatorSecret();
 
     public function setGoogleAuthenticatorSecret($googleAuthenticatorSecret);
+
     /**
      * @param EntityManager $em
      * @param \DateTime $updatedAt

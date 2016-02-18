@@ -392,3 +392,5 @@ admin:
     person:
         list: 'Manage People'
         list.title:  'Search People'
+force_password_change:
+    description: Please update your password to improve your account's security.
