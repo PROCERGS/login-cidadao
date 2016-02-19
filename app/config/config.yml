@@ -30,9 +30,8 @@ twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
     exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
-    form:
-        resources:
-            - 'LoginCidadaoCoreBundle:Form:fields.html.twig'
+    form_themes:
+        - 'LoginCidadaoCoreBundle:Form:fields.html.twig'
     globals:
         fos_csrf_provider: "@security.csrf.token_manager"
         notifications_helper: "@notifications.helper"
