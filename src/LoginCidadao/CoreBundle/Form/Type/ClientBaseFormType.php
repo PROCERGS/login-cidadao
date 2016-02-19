@@ -45,11 +45,13 @@ class ClientBaseFormType extends AbstractType
         };
 
         $builder->add('name', 'text', array('required' => true))
-            ->add('description', 'textarea',
+            ->add('description',
+                'Symfony\Component\Form\Extension\Core\Type\TextareaType',
                 array('required' => true, 'attr' => array('rows' => 4)))
             ->add('metadata', new ClientMetadataWebForm())
             ->add('siteUrl', 'text', array('required' => true))
-            ->add($builder->create('redirectUris', 'textarea',
+            ->add($builder->create('redirectUris',
+                    'Symfony\Component\Form\Extension\Core\Type\TextareaType',
                     array(
                     'required' => true,
                     'attr' => array('rows' => 4)

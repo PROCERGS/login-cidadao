@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c0c25cf0cb5d5d1243fd51494c37ad36",
-    "content-hash": "b2b68f3ca69c654087bb07a771ea86c2",
+    "hash": "0ab64d209112d6ec4e69d55dea3ec2ee",
+    "content-hash": "2422eeeddefa17ae874f99d0ad1b1c12",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-bundle",
@@ -3281,17 +3281,17 @@
         },
         {
             "name": "procergs/login-cidadao-badges-bundle",
-            "version": "dev-refactoring",
+            "version": "2.0.0",
             "target-dir": "LoginCidadao/BadgesBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/login-cidadao-badges-bundle.git",
-                "reference": "cd8e2742f00d254853c01a1d319d99aa729c014a"
+                "reference": "177241dfec6357f2f1e93e4aa7529ed92f2806b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/cd8e2742f00d254853c01a1d319d99aa729c014a",
-                "reference": "cd8e2742f00d254853c01a1d319d99aa729c014a",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/177241dfec6357f2f1e93e4aa7529ed92f2806b6",
+                "reference": "177241dfec6357f2f1e93e4aa7529ed92f2806b6",
                 "shasum": ""
             },
             "require": {
@@ -3319,23 +3319,23 @@
                 "login-cidadao"
             ],
             "support": {
-                "source": "https://github.com/PROCERGS/login-cidadao-badges-bundle/tree/refactoring",
+                "source": "https://github.com/PROCERGS/login-cidadao-badges-bundle/tree/2.0.0",
                 "issues": "https://github.com/PROCERGS/login-cidadao-badges-bundle/issues"
             },
-            "time": "2015-12-15 18:48:02"
+            "time": "2016-02-19 17:24:12"
         },
         {
             "name": "procergs/tos-bundle",
-            "version": "1.1.0",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/tos-bundle.git",
-                "reference": "bb4872bcc8fd8be8f8754412c9e7574eb4292557"
+                "reference": "c8664534cb3bffa0271f2991eda36340c143ebd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/bb4872bcc8fd8be8f8754412c9e7574eb4292557",
-                "reference": "bb4872bcc8fd8be8f8754412c9e7574eb4292557",
+                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/c8664534cb3bffa0271f2991eda36340c143ebd9",
+                "reference": "c8664534cb3bffa0271f2991eda36340c143ebd9",
                 "shasum": ""
             },
             "require": {
@@ -3363,7 +3363,7 @@
                 }
             ],
             "description": "Terms of Service Bundle",
-            "time": "2015-12-14 20:59:16"
+            "time": "2016-02-19 17:18:29"
         },
         {
             "name": "psr/http-message",
@@ -4982,7 +4982,6 @@
         "knplabs/gaufrette": 20,
         "nelmio/api-doc-bundle": 20,
         "jms/security-extra-bundle": 20,
-        "procergs/login-cidadao-badges-bundle": 20,
         "bshaffer/oauth2-server-bundle": 20
     },
     "prefer-stable": false,

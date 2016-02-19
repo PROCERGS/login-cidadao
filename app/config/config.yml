@@ -176,7 +176,7 @@ fos_user:
             validation_groups:  [LoginCidadaoRegistration]
     profile:
         form:
-            type: lc_person_profile
+            type: LoginCidadao\CoreBundle\Form\Type\ProfileFormType
     resetting:
         email:
             template: LoginCidadaoCoreBundle:Person:resetting/email.html.twig

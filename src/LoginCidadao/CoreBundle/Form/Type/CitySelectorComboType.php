@@ -55,9 +55,9 @@ class CitySelectorComboType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $preferredChoiceCallback = $this->getPreferredChoiceCallback();
-        $builder->add('country', 'entity',
+        $builder->add('country', 'Symfony\Bridge\Doctrine\Form\Type\EntityType',
             array(
-            'empty_value' => '',
+            'placeholder' => '',
             'class' => $this->countryManager->getClass(),
             'choice_label' => 'name',
             'choices' => $this->countryManager->findAll(),
@@ -87,7 +87,7 @@ class CitySelectorComboType extends AbstractType
                 if ($form->has('state')) {
                     $form->remove('state');
                 }
-                $form->add('state_text', (empty($choices) ? 'text' : 'hidden'),
+                $form->add('state_text', (empty($choices) ? 'Symfony\Component\Form\Extension\Core\Type\TextType' : 'Symfony\Component\Form\Extension\Core\Type\HiddenType'),
                     array(
                     'label' => $options['state_label'],
                     //'mapped' => false,
@@ -101,11 +101,11 @@ class CitySelectorComboType extends AbstractType
                     $form->remove('state_text');
                 }
             }
-            $form->add('state', 'entity',
+            $form->add('state', 'Symfony\Bridge\Doctrine\Form\Type\EntityType',
                 array(
                 'class' => $stateManager->getClass(),
                 'choice_label' => 'name',
-                'empty_value' => '',
+                'placeholder' => '',
                 'choices' => $choices,
                 'attr' => array(
                     'class' => 'form-control location-select state-select'
@@ -128,7 +128,7 @@ class CitySelectorComboType extends AbstractType
                 if ($form->has('city')) {
                     $form->remove('city');
                 }
-                $form->add('city_text', 'text',
+                $form->add('city_text', 'Symfony\Component\Form\Extension\Core\Type\TextType',
                     array(
                     'label' => $options['city_label'],
                     //'mapped' => false,
@@ -142,10 +142,10 @@ class CitySelectorComboType extends AbstractType
                     $form->remove('city_text');
                 }
             }
-            $form->add('city', 'entity',
+            $form->add('city', 'Symfony\Bridge\Doctrine\Form\Type\EntityType',
                 array(
                 'class' => $cityManager->getClass(),
-                'empty_value' => '',
+                'placeholder' => '',
                 'choice_label' => 'name',
                 'choices' => $stateId === null ? array() : $cityManager->findByStateId($stateId),
                 'attr' => array(
@@ -210,11 +210,6 @@ class CitySelectorComboType extends AbstractType
             'city_label' => 'City',
             'translation_domain' => 'messages'
         ));
-    }
-
-    public function getName()
-    {
-        return 'lc_location';
     }
 
     public function finishView(FormView $view, FormInterface $form,

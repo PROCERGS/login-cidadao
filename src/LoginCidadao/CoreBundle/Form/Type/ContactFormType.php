@@ -28,7 +28,8 @@ class ContactFormType extends AbstractType
             'required' => true,
             'label' => 'form.email',
             'mapped' => false
-        ))->add('message', 'textarea',
+        ))->add('message',
+            'Symfony\Component\Form\Extension\Core\Type\TextareaType',
             array(
             'required' => true,
             'label' => 'form.message',

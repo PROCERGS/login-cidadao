@@ -17,10 +17,10 @@ class AuthorizationController extends Controller
      */
     public function listAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em      = $this->getDoctrine()->getManager();
         $clients = $em->getRepository('LoginCidadaoOAuthBundle:Client');
 
-        $user = $this->getUser();
+        $user    = $this->getUser();
         $allApps = $clients->findAll();
 
         $apps = array();
@@ -34,18 +34,18 @@ class AuthorizationController extends Controller
             }
         }
 
-        $sugg = new ClientSuggestion();
+        $sugg        = new ClientSuggestion();
         $formBuilder = $this->createFormBuilder($sugg);
-        $formBuilder->add('text', 'textarea');
-        $form = $formBuilder->getForm();
+        $formBuilder->add('text',
+            'Symfony\Component\Form\Extension\Core\Type\TextareaType');
+        $form        = $formBuilder->getForm();
 
-        $suggs = $em->getRepository('LoginCidadaoCoreBundle:ClientSuggestion')->findBy(array('person' => $user),
-                array('createdAt' => 'desc'), 6);
-        $form = $form->createView();
+        $suggs = $em->getRepository('LoginCidadaoCoreBundle:ClientSuggestion')->findBy(array(
+            'person' => $user), array('createdAt' => 'desc'), 6);
+        $form  = $form->createView();
 
         $defaultClientUid = $this->container->getParameter('oauth_default_client.uid');
 
         return compact('user', 'apps', 'form', 'suggs', 'defaultClientUid');
     }
-
 }

@@ -15,9 +15,10 @@ class ClientSettingsType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('options', 'collection',
+        $builder->add('options',
+            'Symfony\Component\Form\Extension\Core\Type\CollectionType',
             array(
-            'type' => new PersonNotificationOptionType(),
+            'type' => 'LoginCidadao\NotificationBundle\Form\PersonNotificationOptionType',
             'allow_add' => false,
             'allow_delete' => false
         ));
@@ -32,10 +33,5 @@ class ClientSettingsType extends AbstractType
             'data_class' => 'LoginCidadao\NotificationBundle\Model\ClientSettings',
             'csrf_protection' => true
         ));
-    }
-
-    public function getName()
-    {
-        return 'settings';
     }
 }

@@ -11,20 +11,16 @@ class PersonNotificationOptionFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('sendEmail', 'choice',
+        $builder->add('sendEmail',
+            'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
             array(
             'choices' => array('0' => 'No', '1' => 'Yes'),
             'expanded' => true,
             'required' => true
-        ))->add('id', 'hidden',
+        ))->add('id', 'Symfony\Component\Form\Extension\Core\Type\HiddenType',
             array(
             'required' => false,
             'read_only' => true
         ));
-    }
-
-    public function getName()
-    {
-        return 'person_notification_option_form_type';
     }
 }

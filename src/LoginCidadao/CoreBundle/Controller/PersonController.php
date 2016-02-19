@@ -56,7 +56,7 @@ class PersonController extends Controller
      */
     public function revokeAuthorizationAction(Request $request, $clientId)
     {
-        $form = $this->createForm('lc_revoke_authorization');
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\RevokeAuthorizationFormType');
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -345,7 +345,8 @@ class PersonController extends Controller
         $event = new GetResponseUserEvent($user, $request);
         $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $event);
 
-        $form = $this->createForm('person_doc_form_type', $user);
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\DocFormType',
+            $user);
         $form->handleRequest($request);
         if ($form->isValid()) {
 

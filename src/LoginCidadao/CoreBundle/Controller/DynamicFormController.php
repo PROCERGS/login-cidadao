@@ -313,7 +313,7 @@ class DynamicFormController extends Controller
         }
         $formBuilder->getData()->setAddress($address);
 
-        $formBuilder->add('address', 'lc_person_address',
+        $formBuilder->add('address', 'LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType',
             array('label' => false));
     }
 
@@ -379,7 +379,8 @@ class DynamicFormController extends Controller
     private function addPlaceOfBirth(FormBuilderInterface $formBuilder, $level)
     {
 
-        $formBuilder->add('placeOfBirth', 'lc_location',
+        $formBuilder->add('placeOfBirth',
+            'LoginCidadao\CoreBundle\Form\Type\CitySelectorComboType',
             array(
             'level' => $level,
             'city_label' => 'Place of birth - City',

@@ -24,7 +24,8 @@ class ImpersonationReportType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('report', 'textarea',
+            ->add('report',
+                'Symfony\Component\Form\Extension\Core\Type\TextareaType',
                 array('label' => 'admin.impersonation_report.form.report.label'))
         ;
     }
