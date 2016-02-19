@@ -72,7 +72,7 @@ class BaseController extends FOSRestController
      */
     protected function getClient()
     {
-        $token = $this->get('security.context')->getToken();
+        $token = $this->get('security.token_storage')->getToken();
         $accessToken = $this->getDoctrine()->
             getRepository('LoginCidadaoOAuthBundle:AccessToken')->
             findOneBy(array('token' => $token->getToken()));

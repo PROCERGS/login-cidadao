@@ -106,7 +106,7 @@ class DefaultController extends Controller
                 $result = array('logged_out' => false);
             } else {
                 $this->get("request")->getSession()->invalidate();
-                $this->get("security.context")->setToken(null);
+                $this->get("security.token_storage")->setToken(null);
                 $result['logged_out'] = true;
             }
         } else {
@@ -171,7 +171,7 @@ class DefaultController extends Controller
                 $result = array('logged_out' => false);
             } else {
                 $this->get("request")->getSession()->invalidate();
-                $this->get("security.context")->setToken(null);
+                $this->get("security.token_storage")->setToken(null);
                 $result['logged_out'] = true;
             }
         } else {

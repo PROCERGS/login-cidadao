@@ -136,7 +136,15 @@ services:
 
     lc.profile_edit:
         class: %lc.profile_edit.class%
-        arguments: ["@lc.mailer", "@fos_user.mailer", "@fos_user.util.token_generator", "@router", "@session", "@security.context", "@notifications.helper", "%registration.email.unconfirmed_time%"]
+        arguments:
+            - @lc.mailer
+            - @fos_user.mailer
+            - @fos_user.util.token_generator
+            - @router
+            - @session
+            - @security.token_storage
+            - @notifications.helper
+            - %registration.email.unconfirmed_time%
         tags:
             - { name: kernel.event_subscriber }
         calls:
@@ -146,7 +154,9 @@ services:
 
     lc.change.password.form.type:
         class: %lc.change.password.form.type.class%
-        arguments: [%fos_user.model.user.class%, "@security.context"]
+        arguments:
+            - %fos_user.model.user.class%
+            - @security.token_storage
         tags:
             - { name: form.type, alias: lc_change_password }
 
@@ -213,7 +223,7 @@ services:
         tags:
             - { name: form.type, alias: category_form_type }
         calls:
-            - [setSecurity, ["@security.context"]]
+            - [setTokenStorage, ["@security.token_storage"]]
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
 
     lc.placeholder.form.type:
@@ -221,7 +231,7 @@ services:
         tags:
             - { name: form.type, alias: placeholder_form_type }
         calls:
-            - [setSecurity, ["@security.context"]]
+            - [setTokenStorage, ["@security.token_storage"]]
 
     lc.form.type.hidden_entity:
         class: LoginCidadao\CoreBundle\Form\Type\HiddenEntityType
@@ -251,7 +261,7 @@ services:
         calls:
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
             - [setTranslator, ["@translator"]]
-            - [setSecurity, ["@security.context"]]
+            - [setTokenStorage, ["@security.token_storage"]]
 
     lc.person.serialize.listenner:
         class: %lc.person.serialize.listenner.class%

@@ -6,7 +6,10 @@ parameters:
 services:
     lc.api.logged_in_user_listener:
         class: %lc_api_access_token_definer.class%
-        arguments: [ "@doctrine.orm.entity_manager", "@security.context", "@simplethings_entityaudit.config" ]
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @security.token_storage
+            - @simplethings_entityaudit.config
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
@@ -19,7 +22,10 @@ services:
 
     lc.action_logger:
         class: %lc.action_logger.class%
-        arguments: [ "@security.context", "@simplethings_entityaudit.config", "@doctrine.orm.entity_manager" ]
+        arguments:
+            - @security.token_storage
+            - @simplethings_entityaudit.config
+            - @doctrine.orm.entity_manager
 
     lc.action_log.repository:
         myrepository:

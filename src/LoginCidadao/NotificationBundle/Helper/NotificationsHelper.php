@@ -2,21 +2,16 @@
 
 namespace LoginCidadao\NotificationBundle\Helper;
 
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use LoginCidadao\NotificationBundle\Model\NotificationInterface;
-use Symfony\Component\Security\Core\SecurityContext;
 use Doctrine\ORM\EntityManager;
-use LoginCidadao\CoreBundle\Entity\Person;
-use LoginCidadao\NotificationBundle\Entity\Notification;
-use LoginCidadao\NotificationBundle\Entity\Category;
-use LoginCidadao\NotificationBundle\Exception\MissingCategoryException;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Serializer;
-use LoginCidadao\NotificationBundle\Form\NotificationType;
 use JMS\Serializer\SerializationContext;
-use LoginCidadao\NotificationBundle\Handler\NotificationHandler;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use LoginCidadao\CoreBundle\Entity\Person;
+use LoginCidadao\NotificationBundle\Entity\Category;
 use LoginCidadao\NotificationBundle\Entity\Placeholder;
+use LoginCidadao\NotificationBundle\Entity\Notification;
+use LoginCidadao\NotificationBundle\Model\NotificationInterface;
+use LoginCidadao\NotificationBundle\Exception\MissingCategoryException;
 
 class NotificationsHelper
 {
@@ -33,9 +28,9 @@ class NotificationsHelper
 
     /**
      *
-     * @var SecurityContext
+     * @var TokenStorageInterface
      */
-    private $context;
+    private $tokenStorage;
 
     /**
      * @var \Symfony\Component\Routing\Router
@@ -51,12 +46,13 @@ class NotificationsHelper
     private $unconfirmedEmailCategoryId;
     private $emptyPasswordCategoryId;
 
-    public function __construct(EntityManager $em, SecurityContext $context,
-                                $container, $unconfirmedEmailCategoryId,
+    public function __construct(EntityManager $em,
+                                TokenStorageInterface $tokenStorage, $container,
+                                $unconfirmedEmailCategoryId,
                                 $emptyPasswordCategoryId)
     {
         $this->em                         = $em;
-        $this->context                    = $context;
+        $this->tokenStorage               = $tokenStorage;
         $this->container                  = $container;
         $this->router                     = $this->container->get('router');
         $this->translator                 = $this->container->get('translator');
@@ -71,7 +67,7 @@ class NotificationsHelper
 
     public function getUser()
     {
-        return $this->context->getToken()->getUser();
+        return $this->tokenStorage->getToken()->getUser();
     }
 
     public function getUnread($level = null)
@@ -145,7 +141,7 @@ class NotificationsHelper
      */
     public function clearEmptyPasswordNotification(Person $person)
     {
-
+        //
     }
 
     private function getEmptyPasswordCategory()

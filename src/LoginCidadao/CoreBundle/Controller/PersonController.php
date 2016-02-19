@@ -60,19 +60,20 @@ class PersonController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $security   = $this->get('security.context');
-            $em         = $this->getDoctrine()->getManager();
-            $tokens     = $em->getRepository('LoginCidadaoOAuthBundle:AccessToken');
-            $clients    = $em->getRepository('LoginCidadaoOAuthBundle:Client');
-            $translator = $this->get('translator');
+            $tokenStorage = $this->get('security.token_storage');
+            $authChecker  = $this->get('security.authorization_checker');
+            $em           = $this->getDoctrine()->getManager();
+            $tokens       = $em->getRepository('LoginCidadaoOAuthBundle:AccessToken');
+            $clients      = $em->getRepository('LoginCidadaoOAuthBundle:Client');
+            $translator   = $this->get('translator');
 
             try {
 
-                if (false === $security->isGranted('ROLE_USER')) {
+                if (false === $authChecker->isGranted('ROLE_USER')) {
                     throw new AccessDeniedException();
                 }
 
-                $user = $security->getToken()->getUser();
+                $user = $tokenStorage->getToken()->getUser();
 
                 $client         = $clients->find($clientId);
                 $accessTokens   = $tokens->findBy(array(

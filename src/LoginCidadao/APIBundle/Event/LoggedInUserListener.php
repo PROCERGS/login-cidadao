@@ -2,8 +2,8 @@
 
 namespace LoginCidadao\APIBundle\Event;
 
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use SimpleThings\EntityAudit\AuditConfiguration;
 use Symfony\Component\HttpKernel\HttpKernel;
@@ -16,18 +16,18 @@ class LoggedInUserListener
     /** @var EntityManager */
     private $em;
 
-    /** @var SecurityContextInterface */
-    private $context;
+    /** @var TokenStorageInterface */
+    private $tokenStorage;
 
     /** @var AuditConfiguration */
     private $auditConfig;
 
     public function __construct(EntityManager $em,
-                                SecurityContextInterface $context,
+                                TokenStorageInterface $tokenStorage,
                                 AuditConfiguration $auditConfig)
     {
         $this->em = $em;
-        $this->context = $context;
+        $this->tokenStorage = $tokenStorage;
         $this->auditConfig = $auditConfig;
     }
 
@@ -37,7 +37,7 @@ class LoggedInUserListener
             // don't do anything if it's not the master request
             return;
         }
-        $token = $this->context->getToken();
+        $token = $this->tokenStorage->getToken();
         if (is_null($token)) {
             return;
         }

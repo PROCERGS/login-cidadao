@@ -2,26 +2,25 @@
 
 namespace LoginCidadao\CoreBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 abstract class CommonFormType extends AbstractType
 {
-
     protected $em;
 
-    /** @var SecurityContext */
-    protected $security;
+    /** @var TokenStorageInterface */
+    protected $tokenStorage;
     protected $translator;
     protected $router;
 
-    public function setSecurity(SecurityContext $security)
+    public function setTokenStorage(TokenStorageInterface $tokenStorage)
     {
-        $this->security = $security;
+        $this->tokenStorage = $tokenStorage;
         return $this;
     }
 
@@ -33,10 +32,10 @@ abstract class CommonFormType extends AbstractType
 
     public function getUser()
     {
-        if (!$this->security) {
-            throw new \LogicException('The SecurityBundle is not registered in your application.');
+        if (!$this->tokenStorage) {
+            throw new \LogicException('Token Storage is not available.');
         }
-        if (null === $token = $this->security->getToken()) {
+        if (null === $token = $this->tokenStorage->getToken()) {
             return;
         }
 
@@ -62,5 +61,4 @@ abstract class CommonFormType extends AbstractType
     {
         return $this->router->generate($route, $parameters, $referenceType);
     }
-
 }
