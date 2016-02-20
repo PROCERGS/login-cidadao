@@ -49,19 +49,22 @@ class OrganizationType extends AbstractType
         };
 
         $builder
-            ->add('name', 'text',
+            ->add('name', 'Symfony\Component\Form\Extension\Core\Type\TextType',
                 array('label' => 'organizations.form.name.label'))
-            ->add('domain', 'text',
+            ->add('domain',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
                 array('label' => 'organizations.form.domain.label'))
         ;
 
         if ($this->authorizationChecker->isGranted('ROLE_ORGANIZATIONS_CAN_TRUST')) {
-            $builder->add('trusted', 'switch',
+            $builder->add('trusted',
+                'LoginCidadao\CoreBundle\Form\Type\SwitchType',
                 array('label' => 'organizations.form.trusted.label', 'required' => false));
         }
         if ($this->authorizationChecker->isGranted('ROLE_ORGANIZATIONS_VALIDATE')
             && $builder->getData()->getId()) {
-            $builder->add('validationUrl', 'url',
+            $builder->add('validationUrl',
+                'Symfony\Component\Form\Extension\Core\Type\UrlType',
                 array(
                 'required' => false,
                 'label' => 'organizations.form.validationUrl.label'
@@ -85,14 +88,6 @@ class OrganizationType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $this->configureOptions($resolver);
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'lc_organization';
     }
 
     private function prepareMembersField(FormBuilderInterface $builder,
@@ -128,7 +123,8 @@ class OrganizationType extends AbstractType
                 return $sql;
             };
 
-            $form->add('members', 'ajax_choice',
+            $form->add('members',
+                'LoginCidadao\CoreBundle\Form\Type\AjaxChoiceType',
                 array(
                 'label' => 'organizations.form.members.label',
                 'ajax_choice_attr' => array(
@@ -166,7 +162,8 @@ class OrganizationType extends AbstractType
             };
 
             if ($entity->getId()) {
-                $form->add('members', 'ajax_choice',
+                $form->add('members',
+                    'LoginCidadao\CoreBundle\Form\Type\AjaxChoiceType',
                     array(
                     'label' => 'organizations.form.members.label',
                     'ajax_choice_attr' => array(

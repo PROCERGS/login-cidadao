@@ -190,7 +190,7 @@ fos_user:
         mailer: fos_user.mailer.twig_swift
     change_password:
         form:
-            type:               lc_change_password
+            type: LoginCidadao\CoreBundle\Form\Type\ChangePasswordFormType
 
 # Audit Trail
 simple_things_entity_audit:

@@ -28,9 +28,10 @@ class ChangePasswordFormType extends BaseType
             $builder->get('current_password')->setAttribute('autocomplete',
                 'off');
         } else {
-            $builder->add('plainPassword', 'repeated',
+            $builder->add('plainPassword',
+                'Symfony\Component\Form\Extension\Core\Type\RepeatedType',
                 array(
-                'type' => 'password',
+                'type' => 'Symfony\Component\Form\Extension\Core\Type\PasswordType',
                 'attr' => array('autocomplete' => 'off'),
                 'options' => array('translation_domain' => 'FOSUserBundle'),
                 'first_options' => array('label' => 'form.new_password'),
@@ -38,10 +39,5 @@ class ChangePasswordFormType extends BaseType
                 'invalid_message' => 'fos_user.password.mismatch',
             ));
         }
-    }
-
-    public function getName()
-    {
-        return 'lc_change_password';
     }
 }

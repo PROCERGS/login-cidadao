@@ -52,7 +52,8 @@ class OrganizationController extends Controller
     {
         $organization = new Organization();
 
-        $form = $this->createForm('lc_organization', $organization);
+        $form = $this->createForm('LoginCidadao\OAuthBundle\Form\OrganizationType',
+            $organization);
 
         $form->handleRequest($request);
 
@@ -81,7 +82,8 @@ class OrganizationController extends Controller
             $this->denyAccessUnlessGranted('ROLE_ORGANIZATIONS_EDIT_ANY_ORG');
         }
 
-        $form = $this->createForm('lc_organization', $organization);
+        $form = $this->createForm('LoginCidadao\OAuthBundle\Form\OrganizationType',
+            $organization);
 
         $form->handleRequest($request);
 

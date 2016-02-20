@@ -166,17 +166,21 @@ class PersonController extends Controller
         $userManager = $this->get('fos_user.user_manager');
 
         $formBuilder = $this->createFormBuilder($user)
-            ->add('username', 'text')
-            ->add('save', 'submit');
+            ->add('username',
+                'Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('save',
+            'Symfony\Component\Form\Extension\Core\Type\SubmitType');
 
         $emptyPassword = strlen($user->getPassword()) == 0;
         if ($emptyPassword) {
-            $formBuilder->add('plainPassword', 'repeated',
+            $formBuilder->add('plainPassword',
+                'Symfony\Component\Form\Extension\Core\Type\RepeatedType',
                 array(
                 'type' => 'password'
             ));
         } else {
-            $formBuilder->add('current_password', 'password',
+            $formBuilder->add('current_password',
+                'Symfony\Component\Form\Extension\Core\Type\PasswordType',
                 array(
                 'required' => true,
                 'constraints' => new UserPassword(),

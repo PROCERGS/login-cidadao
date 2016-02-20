@@ -15,7 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use LoginCidadao\CoreBundle\Entity\InvalidateSessionRequest;
-use LoginCidadao\CoreBundle\Form\InvalidateSessionRequestType;
 
 /**
  * @Route("/invalidate")
@@ -31,7 +30,7 @@ class InvalidateSessionsController extends Controller
     {
         $invalidate = new InvalidateSessionRequest();
 
-        $type = new InvalidateSessionRequestType();
+        $type = 'LoginCidadao\CoreBundle\Form\InvalidateSessionRequestType';
         $form = $this->createForm($type, $invalidate);
         $form->handleRequest($request);
 
