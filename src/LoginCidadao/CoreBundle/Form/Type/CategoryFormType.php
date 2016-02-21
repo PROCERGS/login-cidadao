@@ -22,7 +22,8 @@ class CategoryFormType extends CommonFormType
             if ($cat->getId()) {
                 $name = $cat->getClient()
                     ->getName();
-                $form->add('client', 'text',
+                $form->add('client',
+                    'Symfony\Component\Form\Extension\Core\Type\TextType',
                     array(
                     'required' => true,
                     'label' => 'Service',
@@ -42,18 +43,21 @@ class CategoryFormType extends CommonFormType
                     'required' => true,
                     'attr' => array('rows' => 4)
                 ));
-                $form->add('id', 'integer',
+                $form->add('id',
+                    'Symfony\Component\Form\Extension\Core\Type\IntegerType',
                     array(
                     'required' => false,
                     'read_only' => true
                 ));
             } else {
-                $form->add('id', 'hidden',
+                $form->add('id',
+                    'Symfony\Component\Form\Extension\Core\Type\HiddenType',
                     array(
                     'required' => false,
                     'read_only' => true
                 ));
-                $form->add('client', 'entity',
+                $form->add('client',
+                    'Symfony\Bridge\Doctrine\Form\Type\EntityType',
                     array(
                     'required' => true,
                     'label' => 'Service',
@@ -68,11 +72,13 @@ class CategoryFormType extends CommonFormType
                 ));
             }
         });
-        $builder->add('name', 'text',
+        $builder->add('name',
+            'Symfony\Component\Form\Extension\Core\Type\TextType',
             array(
             'required' => true
         ));
-        $builder->add('defaultIcon', 'choice',
+        $builder->add('defaultIcon',
+            'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
             array(
             'choices' => array(
                 'glyphicon glyphicon-envelope' => 'envelope',
@@ -80,19 +86,23 @@ class CategoryFormType extends CommonFormType
             ),
             'required' => true
         ));
-        $builder->add('defaultTitle', 'text',
+        $builder->add('defaultTitle',
+            'Symfony\Component\Form\Extension\Core\Type\TextType',
             array(
             'required' => true
         ));
-        $builder->add('defaultShortText', 'text',
+        $builder->add('defaultShortText',
+            'Symfony\Component\Form\Extension\Core\Type\TextType',
             array(
             'required' => true
         ));
-        $builder->add('mailSenderAddress', 'text',
+        $builder->add('mailSenderAddress',
+            'Symfony\Component\Form\Extension\Core\Type\TextType',
             array(
             'required' => true
         ));
-        $builder->add('emailable', 'choice',
+        $builder->add('emailable',
+            'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
             array(
             'choices' => array(
                 '0' => 'No',
@@ -100,10 +110,5 @@ class CategoryFormType extends CommonFormType
             ),
             'required' => true
         ));
-    }
-
-    public function getName()
-    {
-        return 'category_form_type';
     }
 }

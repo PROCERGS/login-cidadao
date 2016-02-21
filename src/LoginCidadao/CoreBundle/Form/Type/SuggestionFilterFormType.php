@@ -2,24 +2,23 @@
 
 namespace LoginCidadao\CoreBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
-use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\True;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\SecurityContext;
 
 class SuggestionFilterFormType extends AbstractType
 {
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('username', 'text',
+        $builder->add('username',
+            'Symfony\Component\Form\Extension\Core\Type\TextType',
             array(
             'required' => false,
             'label' => 'sugg.username'
         ));
-        $builder->add('dateini', 'date',
+        $builder->add('dateini',
+            'Symfony\Component\Form\Extension\Core\Type\DateType',
             array(
             'required' => false,
             'format' => 'dd/MM/yyyy',
@@ -28,7 +27,8 @@ class SuggestionFilterFormType extends AbstractType
             'label' => 'sugg.dateini',
             'attr' => array('pattern' => '[0-9/]*', 'class' => 'date')
         ));
-        $builder->add('dateend', 'date',
+        $builder->add('dateend',
+            'Symfony\Component\Form\Extension\Core\Type\DateType',
             array(
             'required' => false,
             'format' => 'dd/MM/yyyy',
@@ -37,7 +37,8 @@ class SuggestionFilterFormType extends AbstractType
             'label' => 'sugg.dateend',
             'attr' => array('pattern' => '[0-9/]*', 'class' => 'date')
         ));
-        $builder->add('text', 'text',
+        $builder->add('text',
+            'Symfony\Component\Form\Extension\Core\Type\TextType',
             array(
             'required' => false,
             'label' => 'sugg.text'
@@ -50,10 +51,5 @@ class SuggestionFilterFormType extends AbstractType
         $resolver->setDefaults(array(
             'csrf_protection' => false,
         ));
-    }
-
-    public function getName()
-    {
-        return 'sugg_filt_form_type';
     }
 }
