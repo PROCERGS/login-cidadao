@@ -27,17 +27,12 @@ class LoginCidadaoExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('lc_getForm', 'getForm',
+            new \Twig_SimpleFunction('lc_getForm', array($this, 'getForm'),
                 array('is_safe' => array('html'))
             ),
-            new \Twig_SimpleFunction('lc_getFormFactory', 'getFormFactory',
+            new \Twig_SimpleFunction('lc_getFormFactory',
+                array($this, 'getFormFactory'),
                 array('is_safe' => array('html'))
-            ),
-            new \Twig_SimpleFunction('lc_render', 'lcRender',
-                array('is_safe' => array('html'))
-            ),
-            new \Twig_SimpleFunction('lc_client_picture_web_path',
-                'lcClientPictureWebPath', array('is_safe' => array('html'))
             )
         );
     }
@@ -46,20 +41,12 @@ class LoginCidadaoExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFilter('formatCep', array($this, 'formatCep')),
-            new \Twig_SimpleFilter('formatCpf', array($this, 'formatCpf')),
         );
     }
 
     public function formatCep($var)
     {
         $var = substr($var, 0, 5).'-'.substr($var, 5, 3);
-        return $var;
-    }
-
-    public function formatCpf($var)
-    {
-        $var = substr($var, 0, 3).'.'.substr($var, 3, 3).'.'.substr($var, 6, 3).'-'.substr($var,
-                9);
         return $var;
     }
 
@@ -73,25 +60,15 @@ class LoginCidadaoExtension extends \Twig_Extension
         return 'login_twig_extension';
     }
 
-    public function getForm($name = 'lc.login.form.type')
+    public function getForm($name = 'LoginCidadao\CoreBundle\Form\Type\LoginFormType')
     {
         return $this->container->get('form.factory')
-                ->create($this->container->get($name))
+                ->create($name)
                 ->createView();
     }
 
     public function getFormFactory($name = 'fos_user.registration.form.factory')
     {
         return $this->container->get($name)->createForm()->createView();
-    }
-
-    public function lcRender($name)
-    {
-        return '';
-    }
-
-    public function lcClientPictureWebPath($var)
-    {
-        return Client::resolvePictureWebPath($var);
     }
 }
