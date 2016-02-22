@@ -9,8 +9,6 @@ parameters:
     lc.change.password.form.type.class: LoginCidadao\CoreBundle\Form\Type\ChangePasswordFormType
     lc.person.address.form.type.class: LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType
     lc.city.selector.form.type.class: LoginCidadao\CoreBundle\Form\Type\CitySelectorType
-    lc.state.selector.form.type.class: LoginCidadao\CoreBundle\Form\Type\StateSelectorType
-    lc.country.selector.form.type.class: LoginCidadao\CoreBundle\Form\Type\CountrySelectorType
     lc.contact.form.class: LoginCidadao\CoreBundle\Form\Type\ContactFormType
     lc.person_doc.form.class: LoginCidadao\CoreBundle\Form\Type\DocFormType
     lc.user_provider.class: LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
@@ -285,18 +283,6 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         tags:
             - { name: form.type, alias: city_selector }
-
-    lc.state.selector.form.type:
-        class: %lc.state.selector.form.type.class%
-        arguments: ["@doctrine.orm.entity_manager"]
-        tags:
-            - { name: form.type, alias: state_selector }
-
-    lc.country.selector.form.type:
-        class: %lc.country.selector.form.type.class%
-        arguments: ["@doctrine.orm.entity_manager"]
-        tags:
-            - { name: form.type, alias: country_selector }
 
     lc.idcard.form:
         class: %lc.idcard.form.class%
