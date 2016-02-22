@@ -11,7 +11,8 @@ class RegistrationFormType extends BaseType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', 'email',
+            ->add('email',
+                'Symfony\Component\Form\Extension\Core\Type\EmailType',
                 array(
                 'required' => true,
                 'label' => 'form.email',
@@ -19,7 +20,8 @@ class RegistrationFormType extends BaseType
                 'translation_domain' => 'FOSUserBundle'
                 )
             )
-            ->add('plainPassword', 'repeated',
+            ->add('plainPassword',
+                'Symfony\Component\Form\Extension\Core\Type\RepeatedType',
                 array(
                 'required' => true,
                 'type' => 'password',
