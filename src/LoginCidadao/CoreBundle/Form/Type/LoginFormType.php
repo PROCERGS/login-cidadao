@@ -2,12 +2,11 @@
 
 namespace LoginCidadao\CoreBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
-use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\True;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\SecurityContext;
+use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\True;
 
 class LoginFormType extends AbstractType
 {
@@ -30,7 +29,7 @@ class LoginFormType extends AbstractType
             $request = $this->container->get('request');
             $session = $request->getSession();
             if (null !== $session) {
-                $lastUsername        = $session->get(SecurityContext::LAST_USERNAME);
+                $lastUsername        = $session->get(Security::LAST_USERNAME);
                 $doctrine            = $this->container->get('doctrine');
                 $vars                = array(
                     'ip' => $request->getClientIp(),

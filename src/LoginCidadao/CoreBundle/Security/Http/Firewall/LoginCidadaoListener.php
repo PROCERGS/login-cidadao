@@ -3,11 +3,11 @@
 namespace LoginCidadao\CoreBundle\Security\Http\Firewall;
 
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormFactoryInterface;
 use LoginCidadao\CoreBundle\Entity\AccessSession;
 use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener;
 
@@ -57,7 +57,7 @@ class LoginCidadaoListener extends UsernamePasswordFormAuthenticationListener
         $accessSession = $this->registerAttempt($request);
 
         $request->getSession()->set(
-            SecurityContextInterface::LAST_USERNAME, $options['username']
+            Security::LAST_USERNAME, $options['username']
         );
 
         $formType      = 'LoginCidadao\CoreBundle\Form\Type\LoginFormType';
