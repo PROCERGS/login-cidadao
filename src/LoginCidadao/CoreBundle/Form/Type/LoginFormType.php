@@ -51,19 +51,18 @@ class LoginFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $this->setVerifyCaptcha($options['check_captcha']);
+
         $builder->add('username',
             'Symfony\Component\Form\Extension\Core\Type\TextType',
             array(
             'label' => 'security.login.username',
-            //'translation_domain' => 'LoginCidadaoCoreBundle',
-            //'attr' => array('placeholder' => 'security.login.username')
         ));
         $builder->add('password',
             'Symfony\Component\Form\Extension\Core\Type\PasswordType',
             array(
             'label' => 'security.login.password',
             'attr' => array('autocomplete' => 'off'),
-            //'translation_domain' => 'LoginCidadaoCoreBundle',
             'mapped' => false
         ));
 
@@ -94,7 +93,8 @@ class LoginFormType extends AbstractType
         $resolver->setDefaults(array(
             'csrf_protection' => true,
             'csrf_field_name' => 'csrf_token',
-            'intention' => 'authenticate'
+            'intention' => 'authenticate',
+            'check_captcha' => null
         ));
     }
 }
