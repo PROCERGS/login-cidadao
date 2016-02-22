@@ -123,6 +123,10 @@ services:
         abstract: true
         calls:
             - [setContainer, ["@service_container"]]
+            - [setFormFactory, ["@form.factory"]]
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+            - [setTranslator, ["@translator"]]
+            - [setBruteForceThreshold, [%brute_force_threshold%]]
 
     lc.user_register:
         class: %lc.user_register.class%
