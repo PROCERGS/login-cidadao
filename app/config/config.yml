@@ -172,7 +172,7 @@ fos_user:
               address: %mailer_sender_mail%
               sender_name: %mailer_sender_name%
         form:
-            type: lc_person_registration
+            type: LoginCidadao\CoreBundle\Form\Type\RegistrationFormType
             validation_groups:  [LoginCidadaoRegistration]
     profile:
         form:
