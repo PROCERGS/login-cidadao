@@ -24,7 +24,7 @@ class RegistrationFormType extends BaseType
                 'Symfony\Component\Form\Extension\Core\Type\RepeatedType',
                 array(
                 'required' => true,
-                'type' => 'password',
+                'type' => 'Symfony\Component\Form\Extension\Core\Type\PasswordType',
                 'attr' => array(
                     'autocomplete' => 'off',
                     'placeholder' => 'form.plainPassword.example'
@@ -44,7 +44,7 @@ class RegistrationFormType extends BaseType
         ;
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'lc_person_registration';
     }

@@ -83,7 +83,7 @@ class LoginFormType extends AbstractType
         }
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'login_form_type';
     }
@@ -93,7 +93,7 @@ class LoginFormType extends AbstractType
         $resolver->setDefaults(array(
             'csrf_protection' => true,
             'csrf_field_name' => 'csrf_token',
-            'intention' => 'authenticate',
+            'csrf_token_id' => 'authenticate',
             'check_captcha' => null
         ));
     }
