@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Instalação - Login Cidadão</title>
+  
+
+  <link rel="shortcut icon" href="../images/favicon.ico">
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../css/main.css" rel="stylesheet">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Instalação";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script>
+  <script src="../js/theme.js"></script> 
+  <script src="../javascript/main.js"></script>
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Login Cidadão</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="..">Sobre a plataforma</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Instalação</span></li>
+
+        
+            
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Instalação</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#instalacao-login-cidadao">Instalação Login Cidadão</a></li>
+                
+                    <li><a class="toctree-l4" href="#server-user">Server User</a></li>
+                
+                    <li><a class="toctree-l4" href="#instalando-dependencias">Instalando Dependências</a></li>
+                
+                    <li><a class="toctree-l4" href="#navegando-em-modo-de-desenvolvimento">Navegando em modo de desenvolvimento</a></li>
+                
+                    <li><a class="toctree-l4" href="#alguns-comandos-praticos">Alguns comandos práticos</a></li>
+                
+                    <li><a class="toctree-l4" href="#adicionando-servicos">Adicionando serviços</a></li>
+                
+                    <li><a class="toctree-l4" href="#integrando-com-o-mapas-culturais">Integrando com o Mapas Culturais</a></li>
+                
+            
+            </ul>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Login Cidadão</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Instalação &raquo;</li>
+        
+      
+    
+    <li>Instalação</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="instalacao-login-cidadao">Instalação <a href="https://github.com/PROCERGS/login-cidadao">Login Cidadão</a></h1>
+<p>Esta documentação foi baseada em um servidor GNU/Linux Debian 8.1. Se sua intenção é instalar em sistema de base diferente algumas adaptações podem ser necessárias. </p>
+<h2 id="server-user">Server User</h2>
+<p>Para instalar a aplicação é necessário ter acesso a dois usuários: um usuário padrão e um usuário com poderes de sudo. Você pode usar o usuário padrão de costume de seu servidor e o root, mas recomendamos criar um usuário só para o gerenciamente do Login Cidadão, facilitando assim o controle e o registro de logs do sistema. </p>
+<pre><code>    // logado como root, crie o novo user:
+    # useradd --create-home --groups sudo -s /bin/bash login-cidadao
+    // Insira uma senha para o novo user
+    # passwd login-cidadao
+</code></pre>
+
+<h2 id="instalando-dependencias">Instalando Dependências</h2>
+<p>Para que o Login Cidadão funcione corretamente será necessário que estejam instaladas as seguintes dependências: 
+<em> PHP &gt;=5.3.3
+</em> composer
+<em> node.js
+</em> PHP Extensions
+  * php5-curl
+  * php5-intl
+  * php5-mysql ou php5-pgsql ou integração de base de dados de sua preferência
+  * php5-memcache (Também é possível usar php5-memcached mas será necessário mudar algumas classes de Memcache para Memcached)</p>
+<pre><code>    // Instalando pacotes do php. 
+    // Observe que aqui vamos optar por usar o postgres, mas é possível usar mysql sem problemas
+    $ sudo apt-get install php5 php5-curl php5-intl php5-pgsql php5-memcache
+
+    // Instalando Composer
+    $ sudo apt-get install curl
+    $ sudo curl -sS https://getcomposer.org/installer | php
+    $ sudo mv composer.phar /usr/local/bin/composer
+
+    // Instalando nodejs
+    $ sudo curl -sL https://deb.nodesource.com/setup_5.x | bash -
+    $ sudo apt-get install --yes nodejs
+</code></pre>
+
+<h4 id="obtendo-o-login-cidadao-e-instalando"><a href="id:obter">Obtendo o Login Cidadão e instalando</a></h4>
+<p>Após instalar as dependências, clone o repositório da aplicação. Recomendamos fazer isso com o usuário criado e dentro de uma estrutura de diretórios padrão /var/www/login-cidadao, mas é possível adaptar para qualquer contexto. </p>
+<pre><code>    $ `git clone https://github.com/PROCERGS/login-cidadao.git`
+</code></pre>
+
+<ol>
+<li>
+<p>Entre no diretório criado<br />
+<code>cd login-cidadao</code></p>
+</li>
+<li>
+<p>Mude para o branch <code>symfony2.7</code> (este branch é experimental atualmente, 07.07.2015, mas funciona)<br />
+<code>git checkout symfony2.7</code></p>
+</li>
+<li>
+<p>Crie um arquivo <code>app/config/parameters.yml</code> a partir de <code>app/config/parameters.yml.dist</code> e edite com suas modificações</p>
+</li>
+<li>
+<p>Verifique se todas os requisitos estão sendo cumpridos antes de iniciar a instalação
+    <code>php app/check.php</code></p>
+</li>
+<li>
+<p>Se a verificação for bem sucedida inicie a instalação
+    <code>./install.sh</code></p>
+</li>
+</ol>
+<h4 id="arquivo-de-configuracao-parametersyml">Arquivo de configuração <code>parameters.yml</code></h4>
+<p><code>locale:</code> -&gt; substitua pelo seu locale (ex. pt_BR)</p>
+<p><code>secret:</code> -&gt; substitua por uma longa cadeia de letras, números e símbolos</p>
+<p><code>site_domain:</code> -&gt; substitua pelo seu domínio/subdomínio</p>
+<p><code>recaptcha_public_key:</code> e <code>recaptcha_private_key:</code> -&gt; gere essas chaves em https://www.google.com/recaptcha/</p>
+<p><code>registration.cpf.empty_time:</code> e <code>registration.email.unconfirmed_time:</code> -&gt; define quanto tempo deve ser dado para que o usuário confirme o CPF e o email, respectivamente</p>
+<p><code>brute_force_threshold:</code> -&gt; quantas tentativas devem ser toleradas antes de considerar um ataque de força bruta</p>
+<h4 id="apache">Apache</h4>
+<p>Exemplo de arquivo de configuração do Apache.</p>
+<pre><code>&lt;VirtualHost *:80&gt;
+    ServerName sub.dominio.com.br
+    ServerAdmin usuario@email
+
+    DocumentRoot /var/www/login-cidadao/web
+
+    &lt;Directory / &gt;
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride All
+        Order allow,deny
+        allow from all
+    &lt;/Directory&gt;
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+&lt;/VirtualHost&gt;
+</code></pre>
+
+<ul>
+<li>
+<p>Em <code>DocumentRoot</code> é preciso apontar para o diretório <code>web</code>, neste exemplo o caminho completo é <code>/var/www/login-cidadao/web</code>.</p>
+</li>
+<li>
+<p>ServerName deve ser preenchido com o domínio (ex. dominio.com.br) ou subdomínio completo (ex. sub.dominio.com.br)</p>
+</li>
+</ul>
+<h3 id="primeiros-passos-pos-instalacao"><a href="id:pos-instalacao">Primeiros passos pós-instalação</a></h3>
+<ol>
+<li>
+<p>Adicione os seguintes aliases ao seu arquivo <code>.bashrc</code><br />
+<code>alias prod='php app/console --env=prod'</code><br />
+<code>alias dev='php app/console --env=dev'</code></p>
+</li>
+<li>
+<p>Atualize o perfil do terminal<br />
+<code>source ~/.bashrc</code></p>
+<ul>
+<li>Obs.: Etapa desnecessária para logins futuros já que o .bashrc será executado no processo de login.</li>
+</ul>
+</li>
+<li>
+<p>Processe e ative todos os assets<br />
+<code>prod assets:install</code><br />
+<code>prod assetic:dump</code></p>
+</li>
+<li>
+<p>Dar poderes de super administrador para o primeiro usuário<br />
+<code>prod fos:user:promote &lt;username&gt; ROLE_SUPER_ADMIN</code></p>
+<ul>
+<li>
+<p>Obs. 1: Substitua "<username>" pelo nome do usuário como mostrado na área superior direita da página, geralmente o que precede o '@' do email usado na hora da criação do usuário.</p>
+</li>
+<li>
+<p>Obs. 2: Para confirmar visualmente o novo papel de super administrador faça um logout e depois um login. Junto ao nome deverá haver um campo 'impersonate', ver esse campo é a confirmação.</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="navegando-em-modo-de-desenvolvimento">Navegando em modo de desenvolvimento</h2>
+<p>Adicione <code>/app_dev.php</code> na URL.</p>
+<h2 id="alguns-comandos-praticos">Alguns comandos práticos</h2>
+<p>Assume-se que as estapas 1 e 2 dos <a href="#pos-instalacao">Primeiros passos pós-instalação</a> tenham sido cumpridos para seguir estes comandos.</p>
+<ul>
+<li>Limpar o cache<br />
+<code>prod cache:clear</code><br />
+<code>dev cache:clear</code><br />
+    se não funcionar, em última instância use<br />
+<code>rm -rf app/cache/*</code></li>
+<li>Criar ou atualizar os assets<br />
+<code>prod assets:install</code><br />
+<code>prod assetic:dump</code></li>
+<li>Criar ou atualizar os vendors (útil, por exemplo, quando se muda de branch)<br />
+<code>composer install</code></li>
+</ul>
+<h2 id="adicionando-servicos">Adicionando serviços</h2>
+<p>em breve</p>
+<h2 id="integrando-com-o-mapas-culturais">Integrando com o Mapas Culturais</h2>
+<pre><code>'auth.provider' =&gt; 'OpauthLoginCidadao',
+'auth.config' =&gt; array(
+    'client_id' =&gt; 'minha_chave_publica',
+    'client_secret' =&gt; 'minha_chave_privada',
+    'auth_endpoint' =&gt; 'https://sub.dominio/oauth/v2/auth',
+    'token_endpoint' =&gt; 'https://sub.dominio/oauth/v2/token',
+    'user_info_endpoint' =&gt; 'https://sub.dominio/api/v1/person.json'
+),
+</code></pre>
+
+<ul>
+<li>Obs. 1: As chaves pública e privada são geradas na adição do serviço.  </li>
+<li>Obs. 2: substituir o domínio/subdomínio das três últimas linhas.</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href=".." class="btn btn-neutral" title="Sobre a plataforma"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+      <p>Licenciado através da <a href="https://github.com/PROCERGS/login-cidadao/blob/master/LICENSE" target="_blank">AGPL V3</a>.</p>
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+
+</body>
+</html>
