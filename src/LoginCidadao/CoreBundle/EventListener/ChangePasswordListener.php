@@ -6,21 +6,34 @@ use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 
 class ChangePasswordListener implements EventSubscriberInterface
 {
-
+    /** @var UrlGeneratorInterface */
     private $router;
+
+    /** @var NotificationsHelper */
     private $notificationHelper;
 
+    /** @var SessionInterface */
+    private $session;
+
+    /** @var string */
+    private $defaultPasswordEncoder;
+
     public function __construct(UrlGeneratorInterface $router,
-                                NotificationsHelper $notificationHelper)
+                                NotificationsHelper $notificationHelper,
+                                SessionInterface $session,
+                                $defaultPasswordEncoder)
     {
-        $this->router = $router;
-        $this->notificationHelper = $notificationHelper;
+        $this->router                 = $router;
+        $this->notificationHelper     = $notificationHelper;
+        $this->session                = $session;
+        $this->defaultPasswordEncoder = $defaultPasswordEncoder;
     }
 
     /**
@@ -30,6 +43,9 @@ class ChangePasswordListener implements EventSubscriberInterface
     {
         return array(
             FOSUserEvents::CHANGE_PASSWORD_SUCCESS => 'onChangePasswordSuccess',
+            FOSUserEvents::CHANGE_PASSWORD_SUCCESS => 'setPasswordEncoderName',
+            FOSUserEvents::RESETTING_RESET_SUCCESS => 'setPasswordEncoderName',
+            FOSUserEvents::REGISTRATION_SUCCESS => 'setPasswordEncoderName',
             FOSUserEvents::CHANGE_PASSWORD_COMPLETED => 'onChangePasswordCompleted',
         );
     }
@@ -43,10 +59,16 @@ class ChangePasswordListener implements EventSubscriberInterface
         $event->setResponse(new RedirectResponse($url));
     }
 
+    public function setPasswordEncoderName(FormEvent $event)
+    {
+        $person = $event->getForm()->getData();
+        $person->setPasswordEncoderName($this->defaultPasswordEncoder);
+        $this->session->remove('force_password_change');
+    }
+
     public function onChangePasswordCompleted(FilterUserResponseEvent $event)
     {
         $user = $event->getUser();
         $this->notificationHelper->clearEmptyPasswordNotification($user);
     }
-
 }

@@ -1,6 +1,5 @@
 {% extends "LoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 
-
 {% block title %}{{ 'Security' | trans }} | {{ parent() }}{% endblock title %}
 
 {% block content %}
@@ -8,6 +7,8 @@
         <div class="content security clearfix">
             <h1 class="visible-xs">{{ 'Security' | trans }}</h1>
             {{ include("LoginCidadaoCoreBundle:Person:changePassword.html.twig") }}
+
+            {{ render(controller("LoginCidadaoCoreBundle:InvalidateSessions:invalidate")) }}
 
             {{ include("LoginCidadaoCoreBundle:TwoFactorAuthentication:enableDisable.panel.html.twig") }}
         </div>
