@@ -123,31 +123,9 @@ Ex.:
 * domínio da instalação
 * Endereço do remetente de emails da aplicação (Ex.: noreply@seu-dominio.com)
 
-## 
+## Acertando permissões de acesso
 
-  // Certifique-se de estar dentro do diretório raiz do projeto
-  $ cd /var/www/login-cidadao
-  // Instalando as dependências
-  $ composer install
-
-
-parametrizar a aplicação. Será necessário criar um arquivo `app/config/parameters.yml` a partir do template contido em `app/config/parameters.yml.vagrant`. 
- 
-
-```
-	// Copiando o arquivo de template para o arquivo default
-	$ sudo cp /var/www/login-cidadao/app/config/parameters.yml.dist /var/www/login-cidadao/app/config/parameters.yml
-```
-
-O conteúdo do arquivo é este: 
-
-```
-```
-
-
-# Acertando permissões de acesso
-
-É necessário que as permissões do diretório estejam de acordo com as permissões do Nginx. 
+É necessário que as permissões do diretório estejam de acordo com as permissões do Nginx para que os arquivos sejam acessados publicamente. 
 
 ```
     // Entre no diretório criado 
@@ -186,9 +164,24 @@ Depois de efetuar as mudanças no permissionamento dos arquivos, aplique o coman
 	drwxr-xr-x  5 login-cidadao www-data   4096 Dec 15 20:33 web
 
 ```
+## Baixando dependencias via Composer
 
+  // Certifique-se de estar dentro do diretório raiz do projeto
+  $ cd /var/www/login-cidadao
+  // Quando estiver rodando o composer, o arquivo parameters.yml (arquivo de parametros da instância) 
+  // será preenchido automaticamente. Fique atento as informações inseridas
+  // Instalando as dependências
+  $ composer install
 
+## Parametrizando manualmente
 
+Caso a parametrização via composer seja interrompida ou tenha dados que precisem ser completados, você pode alterar manualmente no arquivo `parameters.yml` a partir do template contido em `app/config/parameters.yml.dist`. 
+ 
+
+```
+	// Copiando o arquivo de template para o arquivo default
+	$ sudo cp /var/www/login-cidadao/app/config/parameters.yml.dist /var/www/login-cidadao/app/config/parameters.yml
+```
 
 
 Fique atento aos seguintes pontos: 
