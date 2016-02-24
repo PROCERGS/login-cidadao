@@ -392,3 +392,10 @@ admin:
     person:
         list: 'Manage People'
         list.title:  'Search People'
+force_password_change:
+    description: Please update your password to improve your account's security.
+invalidate_sessions:
+    title: Disconnect All Sessions
+    description: By clicking the following button all your sessions will be disconnected. This is useful if you forgot you account connected in a computer and wants to be sure nobody can use your account from that computer until you log back in.
+    form.button: Disconnect All Sessions
+2fa.collapse: Show Options

@@ -13,8 +13,9 @@ namespace LoginCidadao\CoreBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class ImpersonationReportType extends AbstractType
+class InvalidateSessionRequestType extends AbstractType
 {
 
     /**
@@ -24,8 +25,12 @@ class ImpersonationReportType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('report', 'textarea',
-                array('label' => 'admin.impersonation_report.form.report.label'))
+            ->add('invalidate', new SubmitType(),
+                array(
+                'attr' => array('class' => 'btn-warning'),
+                    'label' => 'invalidate_sessions.form.button'
+                )
+            )
         ;
     }
 
@@ -35,7 +40,7 @@ class ImpersonationReportType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'LoginCidadao\CoreBundle\Entity\ImpersonationReport'
+            'data_class' => 'LoginCidadao\CoreBundle\Entity\InvalidateSessionRequest'
         ));
     }
 
@@ -44,6 +49,6 @@ class ImpersonationReportType extends AbstractType
      */
     public function getName()
     {
-        return 'logincidadao_corebundle_impersonationreport';
+        return 'lc_invalidate_session_request';
     }
 }

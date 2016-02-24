@@ -46,7 +46,7 @@ resetting.email.message: 'Alguém solicitou recentemente para redefinir sua senh
 resetting.reset.submit: 'Alterar senha'
 resetting.password_already_requested: 'Este usuário já solicitou uma senha nas últimas 24 horas.'
 change_password.submit: 'Alterar senha'
-change_password.flash.success: 'Senha alterada com sucesso!.'
+change_password.flash.success: 'Senha alterada com sucesso!'
 'As a safety measure we need you to type your password to confirm any changes.': 'Como medida de segurança, por favor informe sua senha para confirmar quaisquer mudanças.'
 'Reset Password': 'Redefinir senha'
 Cancel: Cancelar

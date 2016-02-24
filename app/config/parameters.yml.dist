@@ -102,3 +102,6 @@ parameters:
         facebook: true
         twitter: true
         google: true
+
+    # Password Encoder
+    default_password_encoder: bcrypt

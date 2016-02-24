@@ -1,0 +1,12 @@
+{% if is_granted('FEATURE_INVALIDATE_SESSIONS') %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">{{ 'invalidate_sessions.title' | trans }}</h2>
+        </div>
+        <div class="panel-body">
+            {{ form_start(form, { 'action': path('lc_invalidate_sessions') }) }}
+            <p>{{ 'invalidate_sessions.description' | trans }}</p>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endif %}
