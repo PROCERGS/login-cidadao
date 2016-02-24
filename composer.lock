@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b5417d7db227d65e627e907db4a9db46",
-    "content-hash": "4beb9aa1649033dd5f66ac11e4785bbd",
+    "hash": "4128003c1a1b66887a9c4e358b9ca26c",
+    "content-hash": "af1a3f5891d8a9cb0517c4b2b9f73737",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-bundle",
@@ -2509,16 +2509,16 @@
         },
         {
             "name": "league/uri",
-            "version": "4.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/uri.git",
-                "reference": "a4f0ea3323745214c955af2f6451d7743f30a076"
+                "reference": "2b55324e69044b0df6eb27a26a28fd9616d001ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/uri/zipball/a4f0ea3323745214c955af2f6451d7743f30a076",
-                "reference": "a4f0ea3323745214c955af2f6451d7743f30a076",
+                "url": "https://api.github.com/repos/thephpleague/uri/zipball/977c560ed6522bb7ccfa5d3dccb0a1ffec23dfec",
+                "reference": "2b55324e69044b0df6eb27a26a28fd9616d001ea",
                 "shasum": ""
             },
             "require": {
@@ -2569,7 +2569,7 @@
                 "url",
                 "ws"
             ],
-            "time": "2016-02-18 14:46:01"
+            "time": "2015-06-22 09:41:06"
         },
         {
             "name": "liip/monitor-bundle",
@@ -4501,7 +4501,8 @@
         "nelmio/api-doc-bundle": 20,
         "jms/security-extra-bundle": 20,
         "procergs/login-cidadao-badges-bundle": 20,
-        "bshaffer/oauth2-server-bundle": 20
+        "bshaffer/oauth2-server-bundle": 20,
+        "league/uri": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
