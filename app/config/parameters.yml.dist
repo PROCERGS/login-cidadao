@@ -1,9 +1,9 @@
 parameters:
-    database_driver:   pdo_mysql
+    database_driver:   pdo_pgsql
     database_host:     127.0.0.1
     database_port:     ~
     database_name:     symfony
-    database_user:     root
+    database_user:     symfony
     database_password: ~
 
     # Trusted proxies (http://symfony.com/doc/current/cookbook/request/load_balancer_reverse_proxy.html)
