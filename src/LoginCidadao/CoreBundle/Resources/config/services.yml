@@ -104,7 +104,7 @@ services:
 
     lc.user_manager:
         class: %lc.user_manager.class%
-        arguments: ["@security.encoder_factory", "@fos_user.util.username_canonicalizer", "@fos_user.util.email_canonicalizer", "@fos_user.entity_manager", %user.class%, "@service_container"]
+        arguments: ["@security.encoder_factory", "@fos_user.util.username_canonicalizer", "@fos_user.util.email_canonicalizer", "@fos_user.object_manager", %user.class%, "@service_container"]
 
     lc.login.form.type:
         class: LoginCidadao\CoreBundle\Form\Type\LoginFormType
