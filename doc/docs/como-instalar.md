@@ -81,30 +81,30 @@ Após instalar as dependências, clone o repositório da aplicação e mude as p
 
 Agora vamos instalar as dependências. Após esse processo você deverá preencher os parametros relativos a sua instalação. Portanto é necessário que você tenha as seguintes informações em mãos: 
 
-# Informações de acesso ao banco de dados
+#### Informações de acesso ao banco de dados
 * Endereço do host da base de dados
 * Porta de acesso
 * Usuário
 * Senha
 * Schema (Nome do banco)
 
-# Loadbalance
+#### Loadbalance
 * IPs dos servidores de load balance (Para mais informações consulta a [documentação do Symfony](http://symfony.com/doc/2.8/cookbook/request/load_balancer_reverse_proxy.html) sobre o assunto).
 
-# Acesso de desenvolvimento e monitoramento
+#### Acesso de desenvolvimento e monitoramento
 * IPs com acesso ao ambiente de desenvolvimento
 * IPs com acesso as páginas de monitoria (endpoints)
 
-# Memcache e sessões
+#### Memcache e sessões
 * Endereços (IP e porta) usados no memcache
 * Prefixo da sessão
 * Tempo de vida da sessão
 
-# Envio de email
+#### Envio de email
 * Essas informações variam de acordo com o tipo de serviço escolhido. 
 Ver [Documentação Symfony](http://symfony.com/doc/2.8/cookbook/email/email.html)
 
-# Secret
+#### Secret
 Gere uma string secreta para composição de cifragem
 
 Ex.:
@@ -113,13 +113,13 @@ Ex.:
     secret:            CrieSuaStringAleatoria
 ```
 
-# Chaves de APIs de terceiros
+#### Chaves de APIs de terceiros
 * Facebook
 * Google
 * Twitter
 * Recaptcha
 
-# Dominio e contatos
+#### Dominio e contatos
 * domínio da instalação
 * Endereço do remetente de emails da aplicação (Ex.: noreply@seu-dominio.com)
 
