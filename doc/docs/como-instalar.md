@@ -3,7 +3,7 @@ Esta documentação foi baseada em um servidor GNU/Linux Debian 8.1. Se sua inte
 
 ## Server User
 Para instalar a aplicação é necessário ter acesso a dois usuários: um usuário padrão e um usuário com poderes de sudo. Você pode usar o usuário padrão de costume de seu servidor e o root, mas recomendamos criar um usuário só para o gerenciamente do Login Cidadão, facilitando assim o controle e o registro de logs do sistema. 
-```
+```bash
     // logado como root, crie o novo user:
     # useradd --create-home --groups sudo -s /bin/bash login-cidadao
     // Insira uma senha para o novo user
@@ -24,7 +24,7 @@ Para que o Login Cidadão funcione corretamente será necessário que estejam in
   * php5-mysql ou php5-pgsql ou integração de base de dados de sua preferência
   * php5-memcache (Também é possível usar php5-memcached mas será necessário mudar algumas classes de Memcache para Memcached)
 
-```
+```bash
     // Atualize a lista de pacotes do seu servidor
     $ sudo apt-get update
 
@@ -58,7 +58,7 @@ O Login Cidadão usa o Composer, um gerenciador de dependências PHP. Ele permit
 
 Para instalar:
 
-```
+```bash
     // Instalando Composer
     $ sudo curl -sS https://getcomposer.org/installer | php
     $ sudo mv composer.phar /usr/local/bin/composer
@@ -176,7 +176,20 @@ Depois de efetuar as mudanças no permissionamento dos arquivos, aplique o coman
 ## Parametrizando manualmente
 
 Caso a parametrização via composer seja interrompida ou tenha dados que precisem ser completados, você pode alterar manualmente no arquivo `parameters.yml` a partir do template contido em `app/config/parameters.yml.dist`. 
- 
+
+## Configurando Ngix
+
+## Certificado SSL
+
+Ver "Usando Certificado SSL"
+
+## Envio de email
+
+## Configurações de serviços 
+
+* Ver Configurações
+
+
 
 ```
 	// Copiando o arquivo de template para o arquivo default
