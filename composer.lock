@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ec1b9d10399da71ad9f7f814ca2ee5d2",
-    "content-hash": "1bc2a23fbb1c62b547be51c522b1980c",
+    "hash": "f37c132aa466f34dbe02e1d28fb3e1d8",
+    "content-hash": "12a58e494a8d1e9ccb75b976532078b2",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-bundle",
@@ -3301,16 +3301,16 @@
         },
         {
             "name": "procergs/tos-bundle",
-            "version": "1.2.3",
+            "version": "1.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/tos-bundle.git",
-                "reference": "e090bf8eb7151cac7056f6aa5090eb93d1ed2c82"
+                "reference": "acba39eb6bcbba1eb6230d56deb625f35d5fd5a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/e090bf8eb7151cac7056f6aa5090eb93d1ed2c82",
-                "reference": "e090bf8eb7151cac7056f6aa5090eb93d1ed2c82",
+                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/acba39eb6bcbba1eb6230d56deb625f35d5fd5a6",
+                "reference": "acba39eb6bcbba1eb6230d56deb625f35d5fd5a6",
                 "shasum": ""
             },
             "require": {
@@ -3338,7 +3338,7 @@
                 }
             ],
             "description": "Terms of Service Bundle",
-            "time": "2016-02-21 12:54:49"
+            "time": "2016-02-25 03:00:18"
         },
         {
             "name": "psr/http-message",
