@@ -69,9 +69,12 @@ class ClientRegistrationController extends FOSRestController
     private function handleFormErrors($errors)
     {
         foreach ($errors as $error) {
-            $cause    = $error->getCause();
-            $value    = $cause->getInvalidValue();
-            $property = str_replace('data.', '', $cause->getPropertyPath());
+            $cause         = $error->getCause();
+            $value         = $cause->getInvalidValue();
+            $propertyRegex = '/^data\\.([a-zA-Z0-9_]+).*$/';
+            $property      = preg_replace($propertyRegex, '$1',
+                $cause->getPropertyPath());
+            //$property      = str_replace('data.', '', $cause->getPropertyPath());
 
             switch ($property) {
                 case 'redirect_uris':
