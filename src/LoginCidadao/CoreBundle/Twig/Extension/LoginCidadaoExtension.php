@@ -37,7 +37,7 @@ class LoginCidadaoExtension extends \Twig_Extension
                     'html'
                 )
             )),
-            'lc_render' => new \Twig_Function_Method($this, 'lcRender', array(
+            'lc_render' => new \Twig_SimpleFunction('lcRender', $this, array(
                 'is_safe' => array(
                     'html'
                 )
