@@ -11,17 +11,17 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Doctrine\ORM\EntityManager;
 
-class UpgradeCommand extends ContainerAwareCommand
+class DeployCommand extends ContainerAwareCommand
 {
     private $updateDb = false;
 
     protected function configure()
     {
         $this
-            ->setName('lc:upgrade')
+            ->setName('lc:deploy')
             ->addOption('--update-db', null, InputOption::VALUE_NONE,
                 'Update database schema without prompting')
-            ->setDescription('Perform basic upgrade commands.')
+            ->setDescription('Perform basic deploy commands.')
         ;
     }
 
@@ -30,7 +30,7 @@ class UpgradeCommand extends ContainerAwareCommand
         $this->updateDb = $input->getOption('update-db');
 
         $io = new SymfonyStyle($input, $output);
-        $io->title("Running upgrade tasks...");
+        $io->title("Running deploy tasks...");
         $this->clearMetadata($io);
         $this->clearCache($io, 'prod');
         $this->checkDatabase($io);
