@@ -5,8 +5,10 @@ pages:
   - Documentação em Português:
     - Instalação:
       - 'Instalação': como-instalar.md
-  - English Version:
 theme: readthedocs
+markdown_extensions:
+  - fenced_code
+  - codehilite
 copyright: Licenciado através da <a href="https://github.com/PROCERGS/login-cidadao/blob/master/LICENSE" target="_blank">AGPL V3</a>.
 site_favicon: images/favicon.ico
 extra_css:
