@@ -15,12 +15,12 @@ before_script:
 - composer self-update
 - composer install --prefer-source
 - chmod -R 777 app/cache app/logs web/uploads
-- psql -c "create user symfony with password '';" -U postgres
-- psql -c "create database symfony with owner symfony" -U postgres
+- psql -c "create user logincidadao with password '';" -U postgres
+- psql -c "create database logincidadao with owner logincidadao" -U postgres
 - echo y | php app/console doctrine:schema:update --force
 - echo y | php app/console lc:database:populate batch/
 
-#script: phpunit -c app 
+script: phpunit -c app 
 
 after_script:
 - wget https://scrutinizer-ci.com/ocular.phar
