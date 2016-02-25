@@ -20,7 +20,7 @@ before_script:
 - echo y | php app/console doctrine:schema:update --force
 - echo y | php app/console lc:database:populate batch/
 
-script: phpunit -c app
+script: phpunit -c app --coverage-clover=coverage.clover
 
 after_script:
 - wget https://scrutinizer-ci.com/ocular.phar
