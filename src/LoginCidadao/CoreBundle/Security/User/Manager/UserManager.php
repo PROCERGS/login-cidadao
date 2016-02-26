@@ -81,20 +81,20 @@ class UserManager extends BaseManager
      * @return string
      */
     public function getNextAvailableUsername($username, $maxIterations = 10,
-                                             $default = null)
+                                                $default = null)
     {
         $i = 0;
         $testName = $username;
 
         do {
             $user = $this->findUserByUsername($testName);
-        } while ($user !== null && $i < $maxIterations && $testName = $username . $i++);
+        } while ($user !== null && $i < $maxIterations && $testName = $username.$i++);
 
         if (is_null($user)) {
             return $testName;
         } else {
             if (is_null($default)) {
-                return "$username@" . time();
+                return "$username@".time();
             } else {
                 return $default;
             }
@@ -102,7 +102,7 @@ class UserManager extends BaseManager
     }
 
     public function findUserByUsernameOrEmail($username) {
-       if (is_numeric($cpf = preg_replace('/[^0-9]/', '', $username)) && strlen($cpf) == 11) {
+        if (is_numeric($cpf = preg_replace('/[^0-9]/', '', $username)) && strlen($cpf) == 11) {
             $person = parent::findUserBy(array('cpf' => $cpf));
             if ($person !== null) {
                 return $person;

@@ -29,7 +29,7 @@ class NotificationController extends Controller
         $category->setMailSenderAddress($this->getUser()->getEmail());
         $category->setEmailable(true);
         $category->setMarkdownTemplate("%title%\r\n--\r\n\r\n> %shorttext%\r\n\r\n");
-        $form     = $this->createForm('LoginCidadao\CoreBundle\Form\Type\CategoryFormType',
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\CategoryFormType',
             $category);
 
         $form->handleRequest($request);
@@ -129,8 +129,8 @@ class NotificationController extends Controller
         $form        = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PlaceholderFormType');
         $placeholder = null;
         $em          = $this->getDoctrine()->getManager();
-        if (($id          = $request->get('id')) || (($data        = $request->get($form->getName()))
-            && ($id          = $data['id']))) {
+        if (($id = $request->get('id')) || (($data = $request->get($form->getName()))
+            && ($id = $data['id']))) {
             $placeholder = $em->getRepository('LoginCidadaoNotificationBundle:Placeholder')
                 ->createQueryBuilder('u')
                 ->join('LoginCidadaoNotificationBundle:Category', 'cat', 'with',
@@ -144,9 +144,9 @@ class NotificationController extends Controller
                 ->orderBy('u.id', 'desc')
                 ->getQuery()
                 ->getSingleResult();
-        } elseif (($categoryId = $request->get('category_id')) || (($data       = $request->get($form->getName()))
+        } elseif (($categoryId = $request->get('category_id')) || (($data = $request->get($form->getName()))
             && ($categoryId = $data['category']))) {
-            $category    = $em->getRepository('LoginCidadaoNotificationBundle:Category')
+            $category = $em->getRepository('LoginCidadaoNotificationBundle:Category')
                 ->createQueryBuilder('u')
                 ->join('LoginCidadaoOAuthBundle:Client', 'c', 'with',
                     'u.client = c')

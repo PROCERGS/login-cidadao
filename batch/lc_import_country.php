@@ -1,7 +1,7 @@
 <?php
 require 'stuff.php';
 $config = parse_ini_file($argv[1]);
-if (! $config) {
+if (!$config) {
     echo "Couldn't parse the config file.";
     exit(1);
 }
@@ -9,7 +9,7 @@ if (! $config) {
 function getCountryPostal($config)
 {
     $filename = getTempNam();
-    if (! file_get_contents_curl("http://www.geopostcodes.com/inc/download.php?f=Countries&t=9", $filename)) {
+    if (!file_get_contents_curl("http://www.geopostcodes.com/inc/download.php?f=Countries&t=9", $filename)) {
         return false;
     }
 
@@ -20,7 +20,7 @@ function getCountryPostal($config)
     unlink($filename);
     $filename = "GeoPC_Countries.csv";
     $f = fopen($filename, 'rb');
-    if (! $f) {
+    if (!$f) {
         return false;
     }
     $row = fgetcsv($f, null, ';');
@@ -40,7 +40,7 @@ function getCountryPostal($config)
     $st2 = $pdo->prepare('update country set postal_format = ?, postal_name = ? where id = ?');
     $st3 = $pdo->prepare('insert into country (id, name, postal_format, postal_name, iso2) values (nextval(\'country_id_seq\'), ?,?,?,?)');
     while ($row = fgetcsv($f, null, ';')) {
-        if (! $st1->execute(array(
+        if (!$st1->execute(array(
             $row[0]
         ))) {
             return false;
@@ -49,7 +49,7 @@ function getCountryPostal($config)
             $st2->bindParam(1, trim2($row[3]), PDO::PARAM_STR | PDO::PARAM_NULL);
             $st2->bindParam(2, trim2($row[4]), PDO::PARAM_STR | PDO::PARAM_NULL);
             $st2->bindParam(3, $r[0]['id'], PDO::PARAM_INT);
-            if (! $st2->execute()) {
+            if (!$st2->execute()) {
                 print_r($row);
                 print_r($pdo->errorInfo());
                 exit(1);
@@ -59,7 +59,7 @@ function getCountryPostal($config)
             $st3->bindParam(2, trim2($row[3]), PDO::PARAM_STR | PDO::PARAM_NULL);
             $st3->bindParam(3, trim2($row[4]), PDO::PARAM_STR | PDO::PARAM_NULL);
             $st3->bindParam(4, trim($row[0]), PDO::PARAM_STR | PDO::PARAM_NULL);
-            if (! $st3->execute()) {
+            if (!$st3->execute()) {
                 print_r($row);
                 print_r($pdo->errorInfo());
                 return false;
@@ -74,7 +74,7 @@ function getCountryPostal($config)
 function updateByNsg($config)
 {
     $filename = getTempNam();
-    if (! file_get_contents_curl('https://nsgreg.nga.mil/NSGDOC/files/doc/Document/GENC%20Standard%20Index%20XML%20Ed2.0.zip', $filename, 'https://nsgreg.nga.mil/doc/view?i=2382')) {
+    if (!file_get_contents_curl('https://nsgreg.nga.mil/NSGDOC/files/doc/Document/GENC%20Standard%20Index%20XML%20Ed2.0.zip', $filename, 'https://nsgreg.nga.mil/doc/view?i=2382')) {
         return false;
     }
 
@@ -87,14 +87,14 @@ function updateByNsg($config)
     unlink($filename);
     $filename = realpath("./GENC Standard Index Ed2.0.xml");
     $dom = new DOMDocument();
-    if (! $dom->load($filename)) {
+    if (!$dom->load($filename)) {
         return false;
     }
     $dom->documentElement->removeAttributeNS('http://api.nsgreg.nga.mil/schema/genc/2.0', 'genc');
     $xpath = new DOMXPath($dom);
     // $nodes = $xpath->query('//GENCStandardBaselineIndex/GeopoliticalEntity[encoding/char3Code][encoding/char2Code][encoding/numericCode][name]');
     $nodes = $xpath->query('//GENCStandardBaselineIndex/GeopoliticalEntity');
-    if (! $nodes || ! $nodes->length) {
+    if (!$nodes || !$nodes->length) {
         return false;
     }
     $pdo = getPDOConnection($config);
@@ -106,7 +106,7 @@ function updateByNsg($config)
     $pdo->beginTransaction();
     foreach ($nodes as $node) {
         $char3Code = $node->getElementsByTagName('char3Code')->item(0)->nodeValue;
-        if (! $st1->execute(array(
+        if (!$st1->execute(array(
             $char3Code
         ))) {
             print_r($char3Code);
@@ -114,7 +114,7 @@ function updateByNsg($config)
             return false;
         }
         if ($r = $st1->fetchAll()) {
-            if (! $st2->execute(array(
+            if (!$st2->execute(array(
                 $node->getElementsByTagName('name')
                     ->item(0)->nodeValue,
                 $r[0]['id']
@@ -124,7 +124,7 @@ function updateByNsg($config)
                 return false;
             }
         } else {
-            if (! $st3->execute(array(
+            if (!$st3->execute(array(
                 $node->getElementsByTagName('name')
                     ->item(0)->nodeValue,
                 $node->getElementsByTagName('char2Code')
@@ -154,12 +154,12 @@ function updateByNsg($config)
     $xpath = new DOMXPath($dom);
     // $nodes = $xpath->query('//GENCStandardBaselineIndex/AdministrativeSubdivision[country][encoding/char6Code][name]');
     $nodes = $xpath->query('//GENCStandardBaselineIndex/AdministrativeSubdivision');
-    if (! $nodes || ! $nodes->length) {
+    if (!$nodes || !$nodes->length) {
         return false;
     }
     foreach ($nodes as $node) {
         $char6Code = $node->getElementsByTagName('char6Code')->item(0)->nodeValue;
-        if (! $st1->execute(array(
+        if (!$st1->execute(array(
             $char6Code
         ))) {
             print_r($char6Code);
@@ -167,7 +167,7 @@ function updateByNsg($config)
             exit(1);
         }
         if ($r = $st1->fetchAll()) {
-            if (! $st3->execute(array(
+            if (!$st3->execute(array(
                 $char6Code,
                 $node->getElementsByTagName('name')
                     ->item(0)->nodeValue,
@@ -180,7 +180,7 @@ function updateByNsg($config)
                 exit(1);
             }
         } else {
-            if (! $st2->execute(array(
+            if (!$st2->execute(array(
                 $node->getElementsByTagName('country')
                     ->item(0)->nodeValue,
                 $node->getElementsByTagName('name')
@@ -191,7 +191,7 @@ function updateByNsg($config)
                 exit(1);
             }
             if ($r = $st2->fetchAll()) {
-                if (! $st3->execute(array(
+                if (!$st3->execute(array(
                     $char6Code,
                     $node->getElementsByTagName('name')
                         ->item(0)->nodeValue,
@@ -204,7 +204,7 @@ function updateByNsg($config)
                     exit(1);
                 }
             } else {
-                if (! $st4->execute(array(
+                if (!$st4->execute(array(
                     $node->getElementsByTagName('country')
                         ->item(0)->nodeValue,
                     $char6Code,

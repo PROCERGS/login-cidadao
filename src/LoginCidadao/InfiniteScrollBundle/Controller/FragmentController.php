@@ -14,7 +14,7 @@ class FragmentController extends Controller
     public function fragmentAction($name)
     {
         return $this->render('LoginCidadaoInfiniteScrollBundle:Default:index.html.twig',
-                             array('name' => $name));
+                                array('name' => $name));
     }
 
     /**
@@ -29,9 +29,9 @@ class FragmentController extends Controller
 
         foreach ($iterator as $notifications) {
             foreach ($notifications as $notification) {
-                echo $notification->getId() . PHP_EOL;
+                echo $notification->getId().PHP_EOL;
             }
-            echo '-----' . PHP_EOL;
+            echo '-----'.PHP_EOL;
         }
         die();
     }

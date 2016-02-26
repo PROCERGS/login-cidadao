@@ -16,7 +16,7 @@ class CategoryFormType extends CommonFormType
         $person = $this->getUser();
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) use($person) {
+            function(FormEvent $event) use($person) {
             $cat  = $event->getData();
             $form = $event->getForm();
             if ($cat->getId()) {
@@ -63,7 +63,7 @@ class CategoryFormType extends CommonFormType
                     'label' => 'Service',
                     'class' => 'LoginCidadaoOAuthBundle:Client',
                     'choice_label' => 'name',
-                    'query_builder' => function (EntityRepository $er) use($person) {
+                    'query_builder' => function(EntityRepository $er) use($person) {
                         return $er->createQueryBuilder('c')
                                 ->where(':person MEMBER OF c.owners')
                                 ->setParameter('person', $person)

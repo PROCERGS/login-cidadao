@@ -112,7 +112,7 @@ class UserProvider extends OAuth2UserProvider implements UserProviderInterface
      * @return UserInterface
      */
     public function createUser($username, $password, array $roles = array(),
-                               array $scopes = array())
+                                array $scopes = array())
     {
         $user = parent::createUser();
 

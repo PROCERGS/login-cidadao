@@ -81,7 +81,7 @@ class ClientController extends Controller
      */
     public function gridDeveloperFilterAction(Request $request)
     {
-        $grid  = new GridHelper();
+        $grid = new GridHelper();
         $grid->setId('developer-filter-grid');
         $grid->setPerPage(5);
         $grid->setMaxResult(5);
@@ -109,7 +109,7 @@ class ClientController extends Controller
      */
     public function gridDeveloperAction(Request $request)
     {
-        $grid  = new GridHelper();
+        $grid = new GridHelper();
         $grid->setId('developer-grid');
         $grid->setPerPage(5);
         $grid->setMaxResult(5);

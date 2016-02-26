@@ -68,7 +68,7 @@ class BroadcastSettings
         return $this->category;
     }
     
-     public function setCategory($category)
+        public function setCategory($category)
     {
         $this->$category = $category;
         return $this;
@@ -82,7 +82,7 @@ class BroadcastSettings
         return $this->broadcast->getTitle();
     }
     
-     public function setTitle($title)
+        public function setTitle($title)
     {
         $this->broadcast->setTitle($title);
         return $this;
@@ -96,7 +96,7 @@ class BroadcastSettings
         return $this->broadcast->getShortText();
     }
     
-     public function setShortText($shortText)
+        public function setShortText($shortText)
     {
         $this->broadcast->setShortText($shortText);
         return $this;

@@ -32,7 +32,7 @@ class PlaceholderFormType extends AbstractType
             'required' => true,
             'class' => 'LoginCidadaoNotificationBundle:Category',
             'choice_label' => 'name',
-            'query_builder' => function (EntityRepository $er) use(&$user) {
+            'query_builder' => function(EntityRepository $er) use(&$user) {
                 return $er->createQueryBuilder('u')
                         ->join('LoginCidadaoOAuthBundle:Client', 'c', 'with',
                             'u.client = c')

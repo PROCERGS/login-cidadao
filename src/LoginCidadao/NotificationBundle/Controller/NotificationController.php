@@ -139,7 +139,7 @@ class NotificationController extends Controller
     }
 
     private function getNotificationGrid($offset = 0, $perIteration = 10,
-                                         ClientInterface $client = null)
+                                            ClientInterface $client = null)
     {
         $handler = $this->getAuthenticatedNotificationHandler();
         if ($client instanceof ClientInterface) {

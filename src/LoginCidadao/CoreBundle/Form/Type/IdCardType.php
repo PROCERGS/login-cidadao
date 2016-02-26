@@ -41,7 +41,7 @@ class IdCardType extends AbstractType
             'class' => 'LoginCidadaoCoreBundle:State',
             'choice_label' => 'name',
             'read_only' => true,
-            'query_builder' => function (EntityRepository $er) use($countryAcronym) {
+            'query_builder' => function(EntityRepository $er) use($countryAcronym) {
                 return $er->createQueryBuilder('s')
                         ->join('LoginCidadaoCoreBundle:Country', 'c',
                             'WITH', 's.country = c')
@@ -63,12 +63,12 @@ class IdCardType extends AbstractType
 
         $dispatcher = $this->dispatcher;
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) use ($dispatcher) {
+            function(FormEvent $event) use ($dispatcher) {
             $dispatcher->dispatch(ValidationEvents::ID_CARD_FORM_PRE_SET_DATA,
                 $event);
         });
         $builder->addEventListener(FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) use ($dispatcher) {
+            function(FormEvent $event) use ($dispatcher) {
             $dispatcher->dispatch(ValidationEvents::ID_CARD_FORM_PRE_SUBMIT,
                 $event);
         });

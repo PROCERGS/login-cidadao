@@ -8,7 +8,6 @@ use LoginCidadao\ValidationControlBundle\Event\InstantiateIdCardEvent;
 use LoginCidadao\CoreBundle\Entity\State;
 use LoginCidadao\CoreBundle\Model\IdCardInterface;
 use LoginCidadao\CoreBundle\Entity\IdCard;
-use LoginCidadao\ValidationControlBundle\Validator\Constraints\IdCardValidator;
 use Symfony\Component\Validator\Constraint;
 use LoginCidadao\ValidationControlBundle\Event\IdCardValidateEvent;
 use Symfony\Component\Validator\ExecutionContextInterface;
@@ -46,8 +45,8 @@ class ValidationHandler
     }
 
     public function idCardValidate(ExecutionContextInterface $validator,
-                                   Constraint $constraint,
-                                   IdCardInterface $idCard)
+                                    Constraint $constraint,
+                                    IdCardInterface $idCard)
     {
         $event = new IdCardValidateEvent($validator, $constraint, $idCard);
         $this->dispatcher->dispatch(ValidationEvents::ID_CARD_VALIDATE, $event);

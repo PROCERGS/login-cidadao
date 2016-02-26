@@ -81,7 +81,7 @@ class ActionLogRepository extends EntityRepository
      * @return \Doctrine\ORM\QueryBuilder
      */
     private function getImpersonatonsWithoutReportsQuery($limit = null,
-                                                         PersonInterface $impersonator
+                                                            PersonInterface $impersonator
     = null)
     {
         $query = $this->createQueryBuilder('l')

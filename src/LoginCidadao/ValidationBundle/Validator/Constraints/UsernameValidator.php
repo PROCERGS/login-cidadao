@@ -28,10 +28,10 @@ class UsernameValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint)
     {
-        if (! isset($value) || $value === null || ! strlen(trim($value))) {
+        if (!isset($value) || $value === null || !strlen(trim($value))) {
             return;
         }
-        if (! self::isUsernameValid($value)) {
+        if (!self::isUsernameValid($value)) {
             $this->context->addViolation($constraint->message);
         }
     }

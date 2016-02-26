@@ -41,13 +41,13 @@ class DocumentController extends Controller
         if ($form->isValid()) {
             $event = new FormEvent($form, $request);
             $dispatcher->dispatch(ProfileEditListner::PROFILE_DOC_EDIT_SUCCESS,
-                                  $event);
+                                    $event);
 
             $userManager = $this->get('fos_user.user_manager');
             $userManager->updateUser($user);
             $translator = $this->get('translator');
             $this->get('session')->getFlashBag()->add('success',
-                                                      $translator->trans("Documents were successfully changed"));
+                                                        $translator->trans("Documents were successfully changed"));
             return $this->redirect($this->generateUrl('lc_documents'));
         }
 

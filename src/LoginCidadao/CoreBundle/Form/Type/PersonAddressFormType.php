@@ -6,14 +6,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\TranslatorInterface;
-use LoginCidadao\CoreBundle\Form\DataTransformer\StateToStringTransformer;
 use LoginCidadao\CoreBundle\Entity\Country;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use LoginCidadao\CoreBundle\Entity\State;
-use LoginCidadao\CoreBundle\Entity\City;
 use LoginCidadao\CoreBundle\Entity\PersonAddress;
 use LoginCidadao\CoreBundle\Model\SelectData;
 

@@ -32,7 +32,7 @@ class PublicKey implements PublicKeyInterface
     }
 
     public function setFilesystem(Filesystem $filesystem,
-                                  $fileName = 'private.pem')
+                                    $fileName = 'private.pem')
     {
         $this->filesystem = $filesystem;
         $this->fileName   = $fileName;

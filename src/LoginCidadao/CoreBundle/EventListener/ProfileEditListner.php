@@ -177,7 +177,7 @@ class ProfileEditListner implements EventSubscriberInterface
         $this->userManager = $var;
     }
 
-    private function checkEmailChanged(Person &$user)
+    private function checkEmailChanged(Person & $user)
     {
         if ($user->getEmail() !== $this->email) {
             if (is_null($user->getConfirmationToken())) {
@@ -193,7 +193,7 @@ class ProfileEditListner implements EventSubscriberInterface
         }
     }
 
-    private function checkCPFChanged(Person &$user)
+    private function checkCPFChanged(Person & $user)
     {
         if ($user->getCpf() !== $this->cpf) {
             if ($user->getCpf()) {

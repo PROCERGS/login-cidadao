@@ -19,9 +19,9 @@ class PersonNotificationOptionRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('s')
             ->from('LoginCidadaoNotificationBundle:PersonNotificationOption',
-                   's')
+                    's')
             ->join('LoginCidadaoNotificationBundle:Category', 'c',
-                   'WITH', 's.category = c')
+                    'WITH', 's.category = c')
             ->innerJoin('LoginCidadaoOAuthBundle:Client', 'cli', 'WITH',
                         'c.client = cli')
             ->innerJoin('LoginCidadaoCoreBundle:Authorization', 'a',
@@ -31,14 +31,14 @@ class PersonNotificationOptionRepository extends EntityRepository
     }
 
     public function findByClient(PersonInterface $person,
-                                 ClientInterface $client)
+                                    ClientInterface $client)
     {
         return $this->findByPerson($person, null, $client);
     }
 
     public function findByPerson(PersonInterface $person,
-                                 CategoryInterface $category = null,
-                                 ClientInterface $client = null)
+                                    CategoryInterface $category = null,
+                                    ClientInterface $client = null)
     {
         $qb = $this->getBaseQuery()
             ->where('s.person = :person')
@@ -48,7 +48,7 @@ class PersonNotificationOptionRepository extends EntityRepository
 
         if (null !== $category) {
             $qb->andWhere('s.category = :category')->setParameter('category',
-                                                                  $category);
+                                                                    $category);
         }
         if (null !== $client) {
             $qb->andWhere('c.client = :client')->setParameter('client', $client);

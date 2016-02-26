@@ -22,6 +22,6 @@ class Right extends FunctionNode
 
     public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
     {
-        return 'RIGHT(' . $this->var1->dispatch($sqlWalker) . ', ' . $this->var2->dispatch($sqlWalker) . ')'; // (7)
+        return 'RIGHT('.$this->var1->dispatch($sqlWalker).', '.$this->var2->dispatch($sqlWalker).')'; // (7)
     }
 }

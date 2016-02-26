@@ -12,27 +12,27 @@ class Zip_Manager extends \ZipArchive
 
         $this->createDir($directory);
 
-        $copySource = 'zip://' . $this->filename . '#';
-        for ($i = 0; $i < $this->numFiles; $i ++) {
+        $copySource = 'zip://'.$this->filename.'#';
+        for ($i = 0; $i < $this->numFiles; $i++) {
             $entry = $this->getNameIndex($i);
             $filename = basename($entry);
 
             if ($this->matchFileToFilter($filename, $filters)) {
                 $base = dirname($entry);
-                $newPath = $directory . DIRECTORY_SEPARATOR . $base . DIRECTORY_SEPARATOR;
+                $newPath = $directory.DIRECTORY_SEPARATOR.$base.DIRECTORY_SEPARATOR;
                 $this->createDir($newPath);
 
                 // extract file
-                copy($copySource . $entry, $newPath . $filename);
+                copy($copySource.$entry, $newPath.$filename);
             }
         }
     }
 
     protected function createDir($path)
     {
-        if (! is_dir($path)) {
-            if (! mkdir($path, self::CHMOD, true)) {
-                throw new Exception('unable to create path ' . $path);
+        if (!is_dir($path)) {
+            if (!mkdir($path, self::CHMOD, true)) {
+                throw new Exception('unable to create path '.$path);
             }
         }
     }
@@ -47,7 +47,7 @@ class Zip_Manager extends \ZipArchive
 
         foreach ($filters as $i => $filter) {
 
-            if (! ctype_alnum($filter[0]) && preg_match($filter, $filename)) {
+            if (!ctype_alnum($filter[0]) && preg_match($filter, $filename)) {
                 return true;
             }
         }
@@ -71,7 +71,7 @@ function file_get_contents_curl($url, $file, $referer = null)
     $ch = curl_init();
     // curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     $f = fopen($file, 'wb');
-    if (! $f) {
+    if (!$f) {
         return false;
     }
     curl_setopt($ch, CURLOPT_FILE, $f);
@@ -84,7 +84,7 @@ function file_get_contents_curl($url, $file, $referer = null)
     }
     $result = curl_exec($ch);
     if (!$result) {
-        echo curl_error ($ch );
+        echo curl_error($ch);
     }
     curl_close($ch);
     fclose($f);
@@ -119,9 +119,9 @@ function utf8_encode_recursivo($in)
         foreach ($in as $key => $value) {
             $out[utf8_encode_recursivo($key)] = utf8_encode_recursivo($value);
         }
-    } elseif(is_string($in)) {
-        if(!mb_check_encoding($in, 'UTF-8')
-            OR !($in === mb_convert_encoding(mb_convert_encoding($in, 'UTF-32', 'UTF-8' ), 'UTF-8', 'UTF-32'))) {
+    } elseif (is_string($in)) {
+        if (!mb_check_encoding($in, 'UTF-8')
+            OR !($in === mb_convert_encoding(mb_convert_encoding($in, 'UTF-32', 'UTF-8'), 'UTF-8', 'UTF-32'))) {
                 $in = mb_convert_encoding($in, 'UTF-8');
             }
             return $in;
