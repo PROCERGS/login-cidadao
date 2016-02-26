@@ -42,7 +42,8 @@ class ClientMetadataWebForm extends AbstractType
                 'choices' => array(
                     'authorization_code' => 'authorization_code',
                     'implicit' => 'implicit',
-                    'refresh_token' => 'refresh_token'
+                    'refresh_token' => 'refresh_token',
+                    'client_credentials' => 'client_credentials'
                 )
             ))
             ->add('application_type', 'choice',
