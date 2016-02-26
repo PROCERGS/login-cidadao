@@ -72,7 +72,7 @@ class PersonAddressFormType extends AbstractType
             ->add('postalCode');
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
-            function(FormEvent $event) {
+            function (FormEvent $event) {
             $data = $event->getData();
             if ($data instanceof PersonAddress) {
                 if ($data->getCity()) {
@@ -84,7 +84,7 @@ class PersonAddressFormType extends AbstractType
             }
         });
         $builder->addEventListener(FormEvents::POST_SUBMIT,
-            function(FormEvent $event) {
+            function (FormEvent $event) {
             $address = $event->getData();
             if ($address instanceof PersonAddress) {
                 $address->getLocation()->toObject($address);

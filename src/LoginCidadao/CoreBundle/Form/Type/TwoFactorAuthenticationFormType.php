@@ -15,7 +15,7 @@ class TwoFactorAuthenticationFormType extends AbstractType
     {
         $builder
             ->add('googleAuthenticatorSecret', 'text',
-                    array(
+                array(
                 'read_only' => true,
                 'label' => "Authenticator Secret"
             ))
@@ -29,7 +29,8 @@ class TwoFactorAuthenticationFormType extends AbstractType
                 array(
                 'type' => 'password',
                 'attr' => array('autocomplete' => 'off')
-            ));
+                )
+            );
         } else {
             $builder->add('current_password', 'password',
                 array(
@@ -37,13 +38,15 @@ class TwoFactorAuthenticationFormType extends AbstractType
                 'attr' => array('autocomplete' => 'off'),
                 'constraints' => new UserPassword(),
                 'mapped' => false
-            ));
+                )
+            );
         }
         $builder
             ->add('enable', 'submit',
-                    array(
+                array(
                 'attr' => array('class' => 'btn btn-success'),
-                'label' => 'Activate Two-Factor Authentication')
+                'label' => 'Activate Two-Factor Authentication'
+                )
         );
     }
 

@@ -28,7 +28,7 @@ class PlaceOfBirthType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
-            function(FormEvent $event) {
+            function (FormEvent $event) {
             $form   = $event->getForm()->getParent();
             $person = $form->getData();
 
@@ -38,7 +38,7 @@ class PlaceOfBirthType extends AbstractType
             $form->add('city', new CitySelectorComboType($person->getState()));
         });
         $builder->addEventListener(FormEvents::PRE_SUBMIT,
-            function(FormEvent $event) {
+            function (FormEvent $event) {
             $data = $event->getData();
             $form = $event->getForm()->getParent();
 
