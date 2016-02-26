@@ -4,6 +4,7 @@ filter:
         - 'app/*'
         - 'web/*'
         - 'spec/*'
+        - 'src/*'
 tools:
 #    php_mess_detector: true
 #    php_cs_fixer:
@@ -50,7 +51,7 @@ build:
             - chmod -R 777 app/cache app/logs web/uploads
             - composer self-update
             - composer install --prefer-dist --no-interaction
-            - psql -c "CREATE ROLE logincidadao WITH PASSWORD '';"
+            - psql -c "CREATE ROLE logincidadao WITH PASSWORD 'logincidadao';"
             - psql -c 'CREATE DATABASE logincidadao WITH OWNER logincidadao'
 
     project_setup:
