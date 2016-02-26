@@ -50,7 +50,7 @@ class ClientMetadata
      * @Assert\All({
      *      @Assert\Type(type="string"),
      *      @Assert\NotBlank,
-     *      @Assert\Url
+     *      @Assert\Url(checkDNS = true)
      * })
      * @ORM\Column(name="redirect_uris", type="json_array", nullable=false)
      */
@@ -106,7 +106,7 @@ class ClientMetadata
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
-     * @Assert\Url
+     * @Assert\Url(checkDNS = true)
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
     protected $logo_uri;
@@ -115,7 +115,7 @@ class ClientMetadata
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
-     * @Assert\Url
+     * @Assert\Url(checkDNS = true)
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
     protected $client_uri;
@@ -124,7 +124,7 @@ class ClientMetadata
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
-     * @Assert\Url
+     * @Assert\Url(checkDNS = true)
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
     protected $policy_uri;
@@ -132,7 +132,7 @@ class ClientMetadata
     /**
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
-     * @Assert\Url
+     * @Assert\Url(checkDNS = true)
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
@@ -141,7 +141,7 @@ class ClientMetadata
     /**
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
-     * @Assert\Url
+     * @Assert\Url(checkDNS = true)
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
@@ -158,7 +158,7 @@ class ClientMetadata
     /**
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
-     * @Assert\Url
+     * @Assert\Url(checkDNS = true)
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
@@ -286,7 +286,7 @@ class ClientMetadata
     /**
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
-     * @Assert\Url
+     * @Assert\Url(checkDNS = true)
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
@@ -297,7 +297,7 @@ class ClientMetadata
      * @JMS\Groups({"client_metadata"})
      * @Assert\All({
      *      @Assert\Type("string"),
-     *      @Assert\Url
+     *      @Assert\Url(checkDNS = true)
      * })
      * @ORM\Column(type="simple_array", nullable=true)
      */

@@ -1122,7 +1122,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSOAuthServerBundle/zipball/b7c550fe3ad910d2de112f055f86b11e4525000b",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSOAuthServerBundle/zipball/0c72d8baf707dce59c59a4daa1549c06e510bbed",
                 "reference": "0c72d8baf707dce59c59a4daa1549c06e510bbed",
                 "shasum": ""
             },
@@ -1330,7 +1330,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/e770bfa2fd0fc665f55cd7cfeb34bddeffb892f4",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/e5e7a2b8984da8dfedaf44adc7e5f60a62ad280c",
                 "reference": "e39b040e272c72f0a090c67d802e1d3b2d0b0313",
                 "shasum": ""
             },
@@ -2066,7 +2066,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/JMSSecurityExtraBundle/zipball/d70399b25f41afd8277335cedc3c9b3acdc3759d",
+                "url": "https://api.github.com/repos/schmittjoh/JMSSecurityExtraBundle/zipball/bbd5eb78da4d510478f1bb60959feefac083d474",
                 "reference": "75bd0f773b1c645d70eb6174fff67ba5779a291e",
                 "shasum": ""
             },
@@ -2277,7 +2277,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/Gaufrette/zipball/93ba4672b012c74bfe419c033eae1c0a48b1b493",
+                "url": "https://api.github.com/repos/KnpLabs/Gaufrette/zipball/f160ce4da034008696bcffb69cb8e889c500cbd1",
                 "reference": "434dddb4319bde3ebb3421b77f321440bada8e42",
                 "shasum": ""
             },
@@ -2810,7 +2810,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/07545629aa99441cfec1c18619050a346ea273f9",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/1ae2cfa9a50279d722d6b6e7b02322cef948d55d",
                 "reference": "1ae2cfa9a50279d722d6b6e7b02322cef948d55d",
                 "shasum": ""
             },
@@ -3326,16 +3326,16 @@
         },
         {
             "name": "procergs/tos-bundle",
-            "version": "1.2.3",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/tos-bundle.git",
-                "reference": "e090bf8eb7151cac7056f6aa5090eb93d1ed2c82"
+                "reference": "bb4872bcc8fd8be8f8754412c9e7574eb4292557"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/e090bf8eb7151cac7056f6aa5090eb93d1ed2c82",
-                "reference": "e090bf8eb7151cac7056f6aa5090eb93d1ed2c82",
+                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/bb4872bcc8fd8be8f8754412c9e7574eb4292557",
+                "reference": "bb4872bcc8fd8be8f8754412c9e7574eb4292557",
                 "shasum": ""
             },
             "require": {
@@ -3363,7 +3363,7 @@
                 }
             ],
             "description": "Terms of Service Bundle",
-            "time": "2016-02-21 12:54:49"
+            "time": "2015-12-14 20:59:16"
         },
         {
             "name": "psr/http-message",
@@ -4505,16 +4505,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.8.2",
+            "version": "v2.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "f3e6a82bcbea4db3b56df08e491e20a1faae82b5"
+                "reference": "cc69dbd24b4b2e6de60b2414ef95da2794f459a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/f3e6a82bcbea4db3b56df08e491e20a1faae82b5",
-                "reference": "f3e6a82bcbea4db3b56df08e491e20a1faae82b5",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/cc69dbd24b4b2e6de60b2414ef95da2794f459a2",
+                "reference": "cc69dbd24b4b2e6de60b2414ef95da2794f459a2",
                 "shasum": ""
             },
             "require": {
@@ -4634,7 +4634,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2016-01-14 12:01:11"
+            "time": "2015-11-23 11:58:08"
         },
         {
             "name": "twig/twig",
@@ -4987,7 +4987,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.4"
+        "php": ">=5.3.9"
     },
     "platform-dev": []
 }
