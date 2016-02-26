@@ -14,10 +14,13 @@ matrix:
 addons:
   postgresql: "9.3"
 
+services:
+- memcached
+
 before_script:
 - cp app/config/parameters.yml.dist app/config/parameters.yml
 - composer self-update
-- composer install --prefer-source
+- composer install --prefer-dist
 - chmod -R 777 app/cache app/logs web/uploads
 - psql -c "create user logincidadao with password '';" -U postgres
 - psql -c "create database logincidadao with owner logincidadao" -U postgres
