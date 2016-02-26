@@ -3,7 +3,7 @@
 {% set not_verified %}<span class="label label-danger" title="{{ 'organizations.validation.on_authorize.info.domain_not_verified' | trans }}"><span class="glyphicon glyphicon-alert"></span></span>{% endset %}
 <form action="{{ qs is defined ? '?' ~ qs|url_encode : path('fos_oauth_server_authorize') }}" method="post" class="fos_oauth_server_authorize">
     {% if is_granted('FEATURE_ORGANIZATIONS') %}
-        {% if client.organization is empty or client.organization.isVerified is sameas(false) %}
+        {% if client.organization is empty or client.organization.isVerified is same as(false) %}
             {% set status_label = not_verified %}
             <div class="alert bg-danger" role="alert">
                 <strong>{{ 'organizations.validation.on_authorize.warn_not_verified.attention' | trans }}</strong>

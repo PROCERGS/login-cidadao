@@ -1,10 +1,34 @@
+sudo: false
 language: php
 
+env:
+- SYMFONY_DEPRECATIONS_HELPER=weak
+
 php:
-  - 5.3.3
-  - 5.3
-  - 5.4
+- 5.5
 
-before_script: composer install -n
+matrix:
+  fast_finish: true
 
-script: phpunit -c app
+addons:
+  postgresql: "9.3"
+
+services:
+- memcached
+
+before_script:
+- echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+- cp app/config/parameters.yml.dist app/config/parameters.yml
+- composer self-update
+- composer install --prefer-dist
+- chmod -R 777 app/cache app/logs web/uploads
+- psql -c "create user logincidadao with password '';" -U postgres
+- psql -c "create database logincidadao with owner logincidadao" -U postgres
+- echo y | php app/console doctrine:schema:update --force
+- echo y | php app/console lc:database:populate batch/
+
+script: phpunit -c app 
+
+after_script:
+- wget https://scrutinizer-ci.com/ocular.phar
+- php ocular.phar code-coverage:upload --format=php-clover coverage.clover

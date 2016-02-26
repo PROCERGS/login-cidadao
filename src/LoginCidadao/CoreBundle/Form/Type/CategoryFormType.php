@@ -16,43 +16,49 @@ class CategoryFormType extends CommonFormType
         $person = $this->getUser();
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
-                                   function (FormEvent $event) use($person) {
-            $cat = $event->getData();
+            function (FormEvent $event) use($person) {
+            $cat  = $event->getData();
             $form = $event->getForm();
             if ($cat->getId()) {
                 $name = $cat->getClient()
                     ->getName();
-                $form->add('client', 'text',
-                           array(
+                $form->add('client',
+                    'Symfony\Component\Form\Extension\Core\Type\TextType',
+                    array(
                     'required' => true,
                     'label' => 'Service',
                     'mapped' => false,
                     'read_only' => true,
                     'data' => $name,
                 ));
-                $form->add('mailTemplate', 'textarea',
-                           array(
+                $form->add('mailTemplate',
+                    'Symfony\Component\Form\Extension\Core\Type\TextareaType',
+                    array(
                     'required' => true,
                     'attr' => array('rows' => 4)
                 ));
-                $form->add('markdownTemplate', 'textarea',
-                           array(
+                $form->add('markdownTemplate',
+                    'Symfony\Component\Form\Extension\Core\Type\TextareaType',
+                    array(
                     'required' => true,
                     'attr' => array('rows' => 4)
                 ));
-                $form->add('id', 'integer',
-                           array(
+                $form->add('id',
+                    'Symfony\Component\Form\Extension\Core\Type\IntegerType',
+                    array(
                     'required' => false,
                     'read_only' => true
                 ));
             } else {
-                $form->add('id', 'hidden',
-                           array(
+                $form->add('id',
+                    'Symfony\Component\Form\Extension\Core\Type\HiddenType',
+                    array(
                     'required' => false,
                     'read_only' => true
                 ));
-                $form->add('client', 'entity',
-                           array(
+                $form->add('client',
+                    'Symfony\Bridge\Doctrine\Form\Type\EntityType',
+                    array(
                     'required' => true,
                     'label' => 'Service',
                     'class' => 'LoginCidadaoOAuthBundle:Client',
@@ -66,32 +72,38 @@ class CategoryFormType extends CommonFormType
                 ));
             }
         });
-        $builder->add('name', 'text',
-                      array(
+        $builder->add('name',
+            'Symfony\Component\Form\Extension\Core\Type\TextType',
+            array(
             'required' => true
         ));
-        $builder->add('defaultIcon', 'choice',
-                      array(
+        $builder->add('defaultIcon',
+            'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
+            array(
             'choices' => array(
                 'glyphicon glyphicon-envelope' => 'envelope',
                 'glyphicon glyphicon-exclamation-sign' => 'exclamation-sign'
             ),
             'required' => true
         ));
-        $builder->add('defaultTitle', 'text',
-                      array(
+        $builder->add('defaultTitle',
+            'Symfony\Component\Form\Extension\Core\Type\TextType',
+            array(
             'required' => true
         ));
-        $builder->add('defaultShortText', 'text',
-                      array(
+        $builder->add('defaultShortText',
+            'Symfony\Component\Form\Extension\Core\Type\TextType',
+            array(
             'required' => true
         ));
-        $builder->add('mailSenderAddress', 'text',
-                      array(
+        $builder->add('mailSenderAddress',
+            'Symfony\Component\Form\Extension\Core\Type\TextType',
+            array(
             'required' => true
         ));
-        $builder->add('emailable', 'choice',
-                      array(
+        $builder->add('emailable',
+            'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
+            array(
             'choices' => array(
                 '0' => 'No',
                 '1' => 'Yes'
@@ -99,10 +111,4 @@ class CategoryFormType extends CommonFormType
             'required' => true
         ));
     }
-
-    public function getName()
-    {
-        return 'category_form_type';
-    }
-
 }

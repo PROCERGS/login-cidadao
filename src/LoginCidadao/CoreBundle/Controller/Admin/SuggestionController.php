@@ -1,4 +1,5 @@
 <?php
+
 namespace LoginCidadao\CoreBundle\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,7 +21,7 @@ class SuggestionController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $form = $this->createForm(new SuggestionFilterFormType());
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\SuggestionFilterFormType');
         $form = $form->createView();
         return compact('form');
     }
@@ -31,15 +32,16 @@ class SuggestionController extends Controller
      */
     public function listQueryAction(Request $request)
     {
-        $form = $this->createForm(new SuggestionFilterFormType());
+        $form           = $this->createForm('LoginCidadao\CoreBundle\Form\Type\SuggestionFilterFormType');
         $form->handleRequest($request);
         $result['grid'] = null;
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $sql = $em->createQueryBuilder();
+            $em    = $this->getDoctrine()->getManager();
+            $sql   = $em->createQueryBuilder();
             $sql->select('cs.id, cs.createdAt, cs.text shorttext, u.username');
             $sql->from('LoginCidadaoCoreBundle:ClientSuggestion', 'cs');
-            $sql->join('LoginCidadaoCoreBundle:Person', 'u', 'WITH', 'cs.person = u');
+            $sql->join('LoginCidadaoCoreBundle:Person', 'u', 'WITH',
+                'cs.person = u');
             $sql->where('1=1');
             $parms = $form->getData();
             if (isset($parms['username'][0])) {
@@ -56,7 +58,8 @@ class SuggestionController extends Controller
             }
             if (isset($parms['text'][0])) {
                 $sql->andWhere("cs.text like ?4");
-                $sql->setParameter('4', '%'.addcslashes($parms['text'], '\\%_').'%');
+                $sql->setParameter('4',
+                    '%'.addcslashes($parms['text'], '\\%_').'%');
             }
             $sql->addOrderBy('cs.createdAt');
 

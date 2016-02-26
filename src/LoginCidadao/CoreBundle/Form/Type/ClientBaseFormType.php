@@ -44,36 +44,50 @@ class ClientBaseFormType extends AbstractType
             return $query;
         };
 
-        $builder->add('name', 'text', array('required' => true))
-            ->add('description', 'textarea',
+        $builder->add('name',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
+                array('required' => true))
+            ->add('description',
+                'Symfony\Component\Form\Extension\Core\Type\TextareaType',
                 array('required' => true, 'attr' => array('rows' => 4)))
-            ->add('metadata', new ClientMetadataWebForm())
-            ->add('siteUrl', 'text', array('required' => true))
-            ->add($builder->create('redirectUris', 'textarea',
+            ->add('metadata',
+                'LoginCidadao\OpenIDBundle\Form\ClientMetadataWebForm')
+            ->add('siteUrl',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
+                array('required' => true))
+            ->add($builder->create('redirectUris',
+                    'Symfony\Component\Form\Extension\Core\Type\TextareaType',
                     array(
                     'required' => true,
                     'attr' => array('rows' => 4)
                 ))
                 ->addModelTransformer(new FromArray())
             )
-            ->add('landingPageUrl', 'text', array('required' => true))
-            ->add('termsOfUseUrl', 'text', array('required' => true))
-            ->add('image', 'vich_file',
+            ->add('landingPageUrl',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
+                array('required' => true))
+            ->add('termsOfUseUrl',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
+                array('required' => true))
+            ->add('image', 'Vich\UploaderBundle\Form\Type\VichFileType',
                 array(
                 'required' => false,
                 'allow_delete' => true, // not mandatory, default is true
                 'download_link' => true, // not mandatory, default is true
             ))
-            ->add('id', 'hidden',
+            ->add('id', 'Symfony\Component\Form\Extension\Core\Type\HiddenType',
                 array(
                 'required' => false
             ))
-            ->add('published', 'switch', array('required' => false))
-            ->add('visible', 'switch', array('required' => false))
+            ->add('published', 'LoginCidadao\CoreBundle\Form\Type\SwitchType',
+                array('required' => false))
+            ->add('visible', 'LoginCidadao\CoreBundle\Form\Type\SwitchType',
+                array('required' => false))
         ;
 
         if ($checker->isGranted('ROLE_ORGANIZATIONS_BIND_CLIENT')) {
-            $builder->add('organization', 'entity',
+            $builder->add('organization',
+                'Symfony\Bridge\Doctrine\Form\Type\EntityType',
                 array(
                 'required' => false,
                 'placeholder' => 'organizations.form.client_form.placeholder',
@@ -86,7 +100,8 @@ class ClientBaseFormType extends AbstractType
             function (FormEvent $event) {
             $entity = $event->getData();
             $form   = $event->getForm();
-            $form->add('owners', 'ajax_choice',
+            $form->add('owners',
+                'LoginCidadao\CoreBundle\Form\Type\AjaxChoiceType',
                 array(
                 'label' => 'dev.ac.owners',
                 'ajax_choice_attr' => array(
@@ -127,7 +142,8 @@ class ClientBaseFormType extends AbstractType
             $entity = $event->getData();
             $form   = $event->getForm();
             if ($entity->getId()) {
-                $form->add('owners', 'ajax_choice',
+                $form->add('owners',
+                    'LoginCidadao\CoreBundle\Form\Type\AjaxChoiceType',
                     array(
                     'label' => 'dev.ac.owners',
                     'ajax_choice_attr' => array(
@@ -156,10 +172,5 @@ class ClientBaseFormType extends AbstractType
                 ));
             }
         });
-    }
-
-    public function getName()
-    {
-        return 'client_base_form_type';
     }
 }

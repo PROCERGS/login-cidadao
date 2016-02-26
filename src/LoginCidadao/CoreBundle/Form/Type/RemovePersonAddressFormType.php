@@ -11,16 +11,13 @@ class RemovePersonAddressFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('address_id', 'hidden')
-            ->add('delete', 'submit', array(
+            ->add('address_id',
+                'Symfony\Component\Form\Extension\Core\Type\HiddenType')
+            ->add('delete',
+                'Symfony\Component\Form\Extension\Core\Type\HiddenType',
+                array(
                 'attr' => array('class' => 'btn btn-danger btn-xs'),
                 'label' => 'Yes, remove')
         );
     }
-
-    public function getName()
-    {
-        return 'lc_remove_person_address';
-    }
-
 }

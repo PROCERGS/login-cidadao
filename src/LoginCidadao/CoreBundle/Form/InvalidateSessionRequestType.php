@@ -12,8 +12,7 @@ namespace LoginCidadao\CoreBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class InvalidateSessionRequestType extends AbstractType
 {
@@ -25,30 +24,23 @@ class InvalidateSessionRequestType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('invalidate', new SubmitType(),
+            ->add('invalidate',
+                'Symfony\Component\Form\Extension\Core\Type\SubmitType',
                 array(
                 'attr' => array('class' => 'btn-warning'),
-                    'label' => 'invalidate_sessions.form.button'
+                'label' => 'invalidate_sessions.form.button'
                 )
             )
         ;
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'LoginCidadao\CoreBundle\Entity\InvalidateSessionRequest'
         ));
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'lc_invalidate_session_request';
     }
 }

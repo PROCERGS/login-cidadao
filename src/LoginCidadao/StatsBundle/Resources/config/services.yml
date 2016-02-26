@@ -5,14 +5,14 @@ parameters:
 services:
     statistics.repository:
         class: Doctrine\ORM\EntityRepository
-        factory: [@doctrine.orm.entity_manager, getRepository]
+        factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
             - LoginCidadao\StatsBundle\Entity\Statistics
 
     statistics.handler:
         class: %statistics.handler.class%
         calls:
-            - [setStatsRepo, [@statistics.repository]]
+            - [setStatsRepo, ["@statistics.repository"]]
 
     statistics.subscriber:
         class: %statistics.subscriber.class%

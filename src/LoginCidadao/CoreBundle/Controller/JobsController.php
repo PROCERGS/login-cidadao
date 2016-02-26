@@ -5,10 +5,6 @@ namespace LoginCidadao\CoreBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\SecurityContext;
-use Symfony\Component\Security\Core\Exception\DisabledException;
 use LoginCidadao\CoreBundle\Entity\SentEmail;
 
 class JobsController extends Controller
@@ -20,19 +16,19 @@ class JobsController extends Controller
      */
     public function cpfCheckAction()
     {
-        $mailType = 'cpf-reminder';
+        $mailType   = 'cpf-reminder';
         $translator = $this->get('translator');
 
         $subject = $translator->trans('cpf_reminder.subject');
 
-        $from = $this->container->getParameter('mailer_sender_mail');
-        $em = $this->getDoctrine()->getManager();
+        $from       = $this->container->getParameter('mailer_sender_mail');
+        $em         = $this->getDoctrine()->getManager();
         $personRepo = $this->getDoctrine()
-                ->getRepository('LoginCidadaoCoreBundle:Person');
-        $emailRepo = $this->getDoctrine()
-                ->getRepository('LoginCidadaoCoreBundle:SentEmail');
+            ->getRepository('LoginCidadaoCoreBundle:Person');
+        $emailRepo  = $this->getDoctrine()
+            ->getRepository('LoginCidadaoCoreBundle:SentEmail');
 
-        $users = $personRepo->findAllPendingCPFUntilDate(new \DateTime());
+        $users     = $personRepo->findAllPendingCPFUntilDate(new \DateTime());
         $todayMail = $emailRepo->findAllSentInTheLast24h($mailType, true);
 
         $mailCount = 0;
@@ -44,11 +40,11 @@ class JobsController extends Controller
 
             $email = new SentEmail();
             $email->setType($mailType)
-                    ->setSubject($subject)
-                    ->setSender($from)
-                    ->setReceiver($to)
-                    ->setMessage($this->renderView('LoginCidadaoCoreBundle:Jobs:cpf_check.html.twig',
-                                    compact('user')));
+                ->setSubject($subject)
+                ->setSender($from)
+                ->setReceiver($to)
+                ->setMessage($this->renderView('LoginCidadaoCoreBundle:Jobs:cpf_check.html.twig',
+                        compact('user')));
 
             if ($this->get('mailer')->send($email->getSwiftMail())) {
                 $em->persist($email);
@@ -66,8 +62,8 @@ class JobsController extends Controller
      */
     public function emailCleanupAction()
     {
-        $personRepo = $this->getDoctrine()
-                ->getRepository('LoginCidadaoCoreBundle:Person');
+        $personRepo          = $this->getDoctrine()
+            ->getRepository('LoginCidadaoCoreBundle:Person');
         $missingConfirmation = $personRepo->findUnconfirmedEmailUntilDate(new \DateTime());
 
         $deleted = array();
@@ -80,10 +76,10 @@ class JobsController extends Controller
                     $em->remove($person);
                 } else {
                     $person->setEmail($previous)
-                            ->setEmailConfirmedAt(new \DateTime())
-                            ->setEmailExpiration(null)
-                            ->setPreviousValidEmail(null)
-                            ->setConfirmationToken(null);
+                        ->setEmailConfirmedAt(new \DateTime())
+                        ->setEmailExpiration(null)
+                        ->setPreviousValidEmail(null)
+                        ->setConfirmationToken(null);
                     $this->get('notifications.helper')->clearUnconfirmedEmailNotification($person);
                     $this->get('fos_user.user_manager')->updateUser($person);
                 }
@@ -93,5 +89,4 @@ class JobsController extends Controller
 
         return compact('deleted');
     }
-
 }

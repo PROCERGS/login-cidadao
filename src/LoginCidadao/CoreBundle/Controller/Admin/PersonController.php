@@ -2,7 +2,6 @@
 
 namespace LoginCidadao\CoreBundle\Controller\Admin;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,7 +22,7 @@ class PersonController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $form = $this->createForm(new PersonFilterFormType());
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PersonFilterFormType');
         $form = $form->createView();
         return compact('form');
     }
@@ -34,7 +33,7 @@ class PersonController extends Controller
      */
     public function gridAction(Request $request)
     {
-        $form           = $this->createForm(new PersonFilterFormType());
+        $form           = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PersonFilterFormType');
         $form->handleRequest($request);
         $result['grid'] = null;
         if ($form->isValid()) {

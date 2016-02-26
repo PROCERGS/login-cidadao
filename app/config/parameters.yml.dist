@@ -10,7 +10,7 @@ parameters:
     # Database user
     database_user:     logincidadao
     # Database password (use ~ for socket)
-    database_password: ~
+    database_password: logincidadao
 
     # Trusted proxies (http://symfony.com/doc/current/cookbook/request/load_balancer_reverse_proxy.html)
     trusted_proxies: []

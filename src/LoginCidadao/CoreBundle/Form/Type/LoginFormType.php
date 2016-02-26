@@ -1,16 +1,15 @@
 <?php
+
 namespace LoginCidadao\CoreBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
-use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\True;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\SecurityContext;
+use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\True;
 
 class LoginFormType extends AbstractType
 {
-
     protected $container;
 
     public function setContainer($var)
@@ -22,7 +21,6 @@ class LoginFormType extends AbstractType
     {
         return $this->container;
     }
-
     private $verifyCaptcha;
 
     public function hasVerifyCaptcha()
@@ -31,14 +29,15 @@ class LoginFormType extends AbstractType
             $request = $this->container->get('request');
             $session = $request->getSession();
             if (null !== $session) {
-                $lastUsername = $session->get(SecurityContext::LAST_USERNAME);
-                $doctrine = $this->container->get('doctrine');
-                $vars = array(
+                $lastUsername        = $session->get(Security::LAST_USERNAME);
+                $doctrine            = $this->container->get('doctrine');
+                $vars                = array(
                     'ip' => $request->getClientIp(),
                     'username' => $lastUsername
                 );
-                $accessSession = $doctrine->getRepository('LoginCidadaoCoreBundle:AccessSession')->findOneBy($vars);
-                $this->verifyCaptcha = ($accessSession && $accessSession->getVal() >= $this->container->getParameter('brute_force_threshold'));
+                $accessSession       = $doctrine->getRepository('LoginCidadaoCoreBundle:AccessSession')->findOneBy($vars);
+                $this->verifyCaptcha = ($accessSession && $accessSession->getVal()
+                    >= $this->container->getParameter('brute_force_threshold'));
             }
         }
         return $this->verifyCaptcha;
@@ -51,20 +50,25 @@ class LoginFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('username', 'text', array(
+        $this->setVerifyCaptcha($options['check_captcha']);
+
+        $builder->add('username',
+            'Symfony\Component\Form\Extension\Core\Type\TextType',
+            array(
             'label' => 'security.login.username',
-            //'translation_domain' => 'LoginCidadaoCoreBundle',
-            //'attr' => array('placeholder' => 'security.login.username')
         ));
-        $builder->add('password', 'password', array(
+        $builder->add('password',
+            'Symfony\Component\Form\Extension\Core\Type\PasswordType',
+            array(
             'label' => 'security.login.password',
             'attr' => array('autocomplete' => 'off'),
-            //'translation_domain' => 'LoginCidadaoCoreBundle',
             'mapped' => false
         ));
 
-         if ($this->hasVerifyCaptcha()) {
-            $builder->add('recaptcha', 'ewz_recaptcha', array(
+        if ($this->hasVerifyCaptcha()) {
+            $builder->add('recaptcha',
+                'EWZ\Bundle\RecaptchaBundle\Form\Type\RecaptchaType',
+                array(
                 'attr' => array(
                     'options' => array(
                         'theme' => 'clean'
@@ -78,7 +82,7 @@ class LoginFormType extends AbstractType
         }
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'login_form_type';
     }
@@ -88,7 +92,8 @@ class LoginFormType extends AbstractType
         $resolver->setDefaults(array(
             'csrf_protection' => true,
             'csrf_field_name' => 'csrf_token',
-            'intention' => 'authenticate'
+            'csrf_token_id' => 'authenticate',
+            'check_captcha' => null
         ));
     }
 }

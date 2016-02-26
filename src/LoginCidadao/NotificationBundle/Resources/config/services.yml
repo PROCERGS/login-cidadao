@@ -7,17 +7,22 @@ parameters:
 services:
     notifications.helper:
         class: %notifications.helper.class%
-        arguments: ["@doctrine.orm.entity_manager", "@security.context", "@service_container", %notifications_categories_alert.uid%, %notifications_categories_alert.uid%]
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@security.token_storage"
+            - "@service_container"
+            - %notifications_categories_alert.uid%
+            - %notifications_categories_alert.uid%
 
     lc.notification.handler:
         class: %lc.notification.handler.class%
         arguments:
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
             - %lc.notification.class%
-            - @form.factory
-            - @lc.mailer
-            - @lc.notification.type
-            - @event_dispatcher
+            - "@form.factory"
+            - "@lc.mailer"
+            - "@lc.notification.type"
+            - "@event_dispatcher"
             - %oauth_default_client.uid%
             - %http_proxy%
         tags:

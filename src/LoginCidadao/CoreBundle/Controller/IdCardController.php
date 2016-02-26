@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use LoginCidadao\CoreBundle\Helper\GridHelper;
 use LoginCidadao\CoreBundle\Form\Type\RemoveIdCardFormType;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use Doctrine\Common\Collections\Collection;
@@ -103,7 +102,7 @@ class IdCardController extends Controller
     public function deleteAction(Request $request, $id)
     {
         $translator = $this->get('translator');
-        $form       = $this->createForm(new RemoveIdCardFormType());
+        $form       = $this->createForm('LoginCidadao\CoreBundle\Form\Type\RemoveIdCardFormType');
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -159,8 +158,10 @@ class IdCardController extends Controller
         if (is_array($idCards) || $idCards instanceof Collection) {
             foreach ($idCards as $idCard) {
                 $data                          = array('id_card_id' => $idCard->getId());
-                $deleteForms[$idCard->getId()] = $this->createForm(new RemoveIdCardFormType(),
-                        $data)->createView();
+                $deleteForms[$idCard->getId()] = $this->createForm(
+                        'LoginCidadao\CoreBundle\Form\Type\RemoveIdCardFormType',
+                        $data)
+                    ->createView();
             }
         }
         return $deleteForms;

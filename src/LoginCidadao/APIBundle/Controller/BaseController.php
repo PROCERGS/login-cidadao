@@ -5,11 +5,9 @@ namespace LoginCidadao\APIBundle\Controller;
 use FOS\RestBundle\Controller\FOSRestController;
 use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
-use LoginCidadao\OAuthBundle\Model\ClientUser;
 
 class BaseController extends FOSRestController
 {
@@ -33,11 +31,11 @@ class BaseController extends FOSRestController
         $person = $this->getUser();
         $serializer = $this->get('jms_serializer');
         return $serializer->serialize($person, 'json',
-                                      SerializationContext::create()->setGroups($scope));
+                                        SerializationContext::create()->setGroups($scope));
     }
 
     protected function getClientScope(PersonInterface $user,
-                                      ClientInterface $client = null)
+                                        ClientInterface $client = null)
     {
         if ($client === null) {
             $client = $this->getClient();
@@ -72,7 +70,7 @@ class BaseController extends FOSRestController
      */
     protected function getClient()
     {
-        $token = $this->get('security.context')->getToken();
+        $token = $this->get('security.token_storage')->getToken();
         $accessToken = $this->getDoctrine()->
             getRepository('LoginCidadaoOAuthBundle:AccessToken')->
             findOneBy(array('token' => $token->getToken()));
