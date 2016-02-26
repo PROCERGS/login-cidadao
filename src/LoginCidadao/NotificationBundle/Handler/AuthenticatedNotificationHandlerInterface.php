@@ -65,8 +65,9 @@ interface AuthenticatedNotificationHandlerInterface
     /**
      * Retrieves a person's settings.
      *
-     * @param CategoryInterface|null $client optionally filter by category
-     * @param ClientInterface|null $client optionally filter by client
+     * @param null|CategoryInterface $client optionally filter by category
+     * @param null|ClientInterface $client optionally filter by client
+     * @return PersonNotificationOption[]
      */
     public function getSettings(
         CategoryInterface $category = null,
