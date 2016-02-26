@@ -19,15 +19,15 @@ class ClientRepository extends EntityRepository
     }
 
     public function getCountPerson(PersonInterface $person = null,
-                                   $clientId = null)
+                                    $clientId = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-              ->select('count(a.id) AS qty, c AS client')
-              ->from('LoginCidadaoCoreBundle:Authorization', 'a')
+                ->select('count(a.id) AS qty, c AS client')
+                ->from('LoginCidadaoCoreBundle:Authorization', 'a')
             ->innerJoin('LoginCidadaoOAuthBundle:Client', 'c', 'WITH',
                 'a.client = c')
-              ->where('c.published = true')
-              ->groupBy('a.client, c')
+                ->where('c.published = true')
+                ->groupBy('a.client, c')
             ->orderBy('qty', 'DESC');
 
         if ($person !== null) {
@@ -52,7 +52,7 @@ class ClientRepository extends EntityRepository
     }
 
     public function statsUsersByServiceByDay($days, $clientId = null,
-                                             PersonInterface $person = null)
+                                                PersonInterface $person = null)
     {
         $date = new \DateTime("-$days days");
 

@@ -3,7 +3,6 @@
 namespace LoginCidadao\NotificationBundle\Handler;
 
 use LoginCidadao\NotificationBundle\Model\NotificationInterface;
-use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\NotificationBundle\Model\CategoryInterface;
 use LoginCidadao\NotificationBundle\Model\NotificationSettings;
@@ -25,7 +24,7 @@ interface AuthenticatedNotificationHandlerInterface
      *
      * @param int $limit   the limit of the result
      * @param int $offset  starting from the offset
-     * @param int $orderby the ordering criteria
+     * @param int|null $orderby the ordering criteria
      *
      * @return array
      */
@@ -40,8 +39,11 @@ interface AuthenticatedNotificationHandlerInterface
      *
      * @return array
      */
-    public function allIdOffset($limit = 5, $offset = 0,
-                                ClientInterface $client = null);
+    public function allIdOffset(
+        $limit = 5,
+        $offset = 0,
+        ClientInterface $client = null
+    );
 
     /**
      * Get a list of an user's Notifications restricted by Client.
@@ -49,21 +51,28 @@ interface AuthenticatedNotificationHandlerInterface
      * @param ClientInterface  $client  the requesting Client
      * @param int              $limit   the limit of the result
      * @param int              $offset  starting from the offset
-     * @param int              $orderby the ordering criteria
+     * @param int|null         $orderby the ordering criteria
      *
      * @return array
      */
-    public function getAllFromClient(ClientInterface $client, $limit = 5,
-                                        $offset = 0, $orderby = null);
+    public function getAllFromClient(
+        ClientInterface $client,
+        $limit = 5,
+        $offset = 0,
+        $orderby = null
+    );
 
     /**
      * Retrieves a person's settings.
      *
-     * @param CategoryInterface $client optionally filter by category
-     * @param ClientInterface $client optionally filter by client
+     * @param null|CategoryInterface $client optionally filter by category
+     * @param null|ClientInterface $client optionally filter by client
+     * @return PersonNotificationOption[]
      */
-    public function getSettings(CategoryInterface $category = null,
-                                ClientInterface $client = null);
+    public function getSettings(
+        CategoryInterface $category = null,
+        ClientInterface $client = null
+    );
 
     /**
      * Ensures that the Person has all it's notifications setup.
@@ -82,12 +91,14 @@ interface AuthenticatedNotificationHandlerInterface
 
     /**
      *
-     * @param ClientInterface $client filter by client
-     * @param CategoryInterface $category filter by category
+     * @param ClientInterface|null $client filter by client
+     * @param CategoryInterface|null $category filter by category
      * @return NotificationSettings PersonNotificationOptions grouped by Client
      */
-    public function getGroupedSettings(ClientInterface $client = null,
-                                        CategoryInterface $category = null);
+    public function getGroupedSettings(
+        ClientInterface $client = null,
+        CategoryInterface $category = null
+    );
 
     /**
      * Return a person's number of unread notifications.

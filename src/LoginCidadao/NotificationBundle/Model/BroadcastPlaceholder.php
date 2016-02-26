@@ -3,7 +3,6 @@
 namespace LoginCidadao\NotificationBundle\Model;
 
 use LoginCidadao\NotificationBundle\Entity\Placeholder;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 
 class BroadcastPlaceholder
@@ -34,13 +33,13 @@ class BroadcastPlaceholder
 
     public function getValue()
     {
-      return $this->value;
+        return $this->value;
     }
 
     public function setValue($value)
     {
-      $this->value = $value;
-      return $this;
+        $this->value = $value;
+        return $this;
     }
     
     public function getName()

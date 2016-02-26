@@ -11,15 +11,15 @@ class PlaceholderRepository extends EntityRepository
 {
 
     public function findOwnedPlaceholdersByCategoryId(PersonInterface $person,
-                                                      $categoryId)
+                                                        $categoryId)
     {
         return $this->getEntityManager()
                 ->getRepository('LoginCidadaoNotificationBundle:Placeholder')
                 ->createQueryBuilder('p')
                 ->join('LoginCidadaoNotificationBundle:Category', 'cat',
-                       'WITH', 'p.category = cat')
+                        'WITH', 'p.category = cat')
                 ->join('LoginCidadaoOAuthBundle:Client', 'c', 'WITH',
-                       'cat.client = c')
+                        'cat.client = c')
                 ->where(':person MEMBER OF c.owners')
                 ->andWhere('cat.id = :categoryId')
                 ->setParameter('person', $person)

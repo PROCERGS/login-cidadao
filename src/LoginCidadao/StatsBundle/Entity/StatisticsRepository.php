@@ -26,7 +26,7 @@ class StatisticsRepository extends EntityRepository
     }
 
     public function findIndexedStatsByIndexKeyDate($index, $keys = null,
-                                                   \DateTime $afterDate = null)
+                                                    \DateTime $afterDate = null)
     {
         $data = $this->findStatsByIndexKeyDate($index, $keys, $afterDate);
 
@@ -34,7 +34,7 @@ class StatisticsRepository extends EntityRepository
     }
 
     public function findIndexedUniqueStatsByIndexKeyDate($index, $keys = null,
-                                                         \DateTime $afterDate = null)
+                                                            \DateTime $afterDate = null)
     {
         $query = $this->getFindStatsByIndexKeyDateQuery($index, $keys,
             $afterDate);
@@ -45,7 +45,7 @@ class StatisticsRepository extends EntityRepository
     }
 
     public function findIndexedUniqueStatsByIndexKeyDays($index, $keys = null,
-                                                         $days = null)
+                                                            $days = null)
     {
         $query = $this->getFindStatsByIndexKeyDateQuery($index, $keys, null,
             $days);

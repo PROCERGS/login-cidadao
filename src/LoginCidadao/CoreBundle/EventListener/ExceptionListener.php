@@ -55,7 +55,7 @@ class ExceptionListener
             $this->session->getFlashBag()->add('error', $this->translator->trans($exception->getMessage()));
             $url = $this->router->generate('fos_user_profile_edit');
             $event->setResponse(new RedirectResponse($url));
-        }elseif ($exception instanceof NotFoundHttpException) {
+        } elseif ($exception instanceof NotFoundHttpException) {
             $request = $event->getRequest();
             $route = $request->get('_route');
 
