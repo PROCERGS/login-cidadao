@@ -45,6 +45,8 @@ tools:
     php_loc: true
     php_pdepend: true
 build:
+    environment:
+        memcached: true
     tests:
         override:
             -
