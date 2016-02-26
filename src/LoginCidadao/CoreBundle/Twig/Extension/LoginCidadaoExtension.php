@@ -3,7 +3,6 @@
 namespace LoginCidadao\CoreBundle\Twig\Extension;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use LoginCidadao\OAuthBundle\Entity\Client;
 
 class LoginCidadaoExtension extends \Twig_Extension
 {
