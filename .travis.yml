@@ -15,6 +15,7 @@ addons:
   postgresql: "9.3"
 
 before_script:
+- echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 - cp app/config/parameters.yml.dist app/config/parameters.yml
 - composer self-update
 - composer install --prefer-source
