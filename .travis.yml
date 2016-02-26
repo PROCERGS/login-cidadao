@@ -1,5 +1,9 @@
 sudo: false
 language: php
+
+env:
+- SYMFONY_DEPRECATIONS_HELPER=weak
+
 php:
 - 5.5
 - hhvm

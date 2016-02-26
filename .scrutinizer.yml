@@ -49,6 +49,7 @@ build:
         override:
             -
                 command: 'phpunit --coverage-clover=some-file'
+                environment: { SYMFONY_DEPRECATIONS_HELPER: weak }
                 coverage:
                     file: 'some-file'
                     format: 'php-clover'
