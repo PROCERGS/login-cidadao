@@ -3,6 +3,7 @@ Esta documentação foi baseada em um servidor GNU/Linux Debian 8.1. Se sua inte
 
 ## Server User
 Para instalar a aplicação é necessário ter acesso a dois usuários: um usuário padrão e um usuário com poderes de sudo. Você pode usar o usuário padrão de costume de seu servidor e o root, mas recomendamos criar um usuário só para o gerenciamente do Login Cidadão, facilitando assim o controle e o registro de logs do sistema. 
+
 ```bash
     // logado como root, crie o novo user:
     # useradd --create-home --groups sudo -s /bin/bash login-cidadao
@@ -35,7 +36,7 @@ Para que o Login Cidadão funcione corretamente será necessário que estejam in
 
     //Caso tenha algum gerenciador de bases de dados(mysql ou postgres) você poderá usá-lo. 
     //Se não tiver, instale o banco que quer usar. Optamos aqui por postgres
-    $ sudo apt-get install postgresql
+    $ sudo apt-get install postgresql postgresql-client
 
     // Instale o git para auxiliá-lo no processo de obtenção do código da aplicação
     $ sudo apt-get install git
@@ -45,13 +46,32 @@ Para que o Login Cidadão funcione corretamente será necessário que estejam in
     
     // Instalando pacotes do php. 
     // Observe que aqui vamos optar por usar o postgres, mas é possível usar mysql sem problemas
-    $ sudo apt-get install php5 php5-cli php5-curl php5-intl php5-pgsql php5-memcache
+    $ sudo apt-get install php5 php5-cli php5-fpm php5-curl php5-intl php5-pgsql php5-memcache
        
     // Instalando nodejs
     $ sudo curl -sL https://deb.nodesource.com/setup_5.x | bash -
     $ sudo apt-get install --yes nodejs
 
 ```
+
+## Cheque os requisitos do PHP 
+
+Verifique se todas os requisitos estão sendo cumpridos antes de iniciar a instalação
+    `php app/check.php`
+ 
+
+## Configurando base de dados
+
+Crie um usuário no postgres e depois uma base. Sugerimos usar o mesmo nome. 
+
+```
+  //Como root, crie um usuário que funcionará via socket
+  # sudo -u postgres psql -c "CREATE USER logincidadao"
+  // Em seguinda, crie a base de dados
+  # sudo -u postgres createdb --owner mapas mapas
+
+```
+
 ## Instalando Composer
 
 O Login Cidadão usa o Composer, um gerenciador de dependências PHP. Ele permite que você declare bibliotecas como dependências no projeto que irá gerenciar. Para saber mais, acesse: https://getcomposer.org/doc/00-intro.md
@@ -179,6 +199,101 @@ Caso a parametrização via composer seja interrompida ou tenha dados que precis
 
 ## Configurando Ngix
 
+
+
+```
+server {
+
+  # url do site
+  server_name  http://logindacultura.sp.gov.br;
+
+  # diretório raiz da aplicação
+  root  /var/www/login-cidadao/web;
+
+  # arquivos de log de erro da aplicação
+  # access_log   /var/log/login-cidadao/nginx.access.log;
+  # error_log    /var/log/login-cidadao/nginx.error.log;
+
+  listen 80 default_server;
+  listen [::]:80 ipv6only=on default_server;
+  listen [::]:443 default_server ssl spdy ipv6only=off;
+
+  add_header Strict-Transport-Security max-age=63072000;
+  ssl_session_timeout 5m;
+  ssl_protocols  TLSv1 TLSv1.1 TLSv1.2;
+  ssl_ciphers  'AES256+EECDH:AES256+EDH';
+  ssl_prefer_server_ciphers   on;
+  ssl_session_cache           shared:SSL:10m;
+  ssl_dhparam                 /etc/ssl/certs/dhparam.pem;
+
+  # Caminho do certificado
+  ssl_certificate /etc/letsencrypt/live/logindacultura.sp.gov.br/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/logindacultura.sp.gov.br/privkey.pem;
+
+
+  # arquivos ativos que a aplicação tem de responder
+  index index.php index.html index.htm;
+
+  rewrite ^/app\.php/?(.*)$ /$1 permanent;
+
+  try_files $uri @rewriteapp;
+
+  location @rewriteapp {
+    rewrite ^(.*)$ /app.php/$1 last;
+  }
+
+  # location / {
+  #     try_files $uri $uri/ /index.php?$args;
+  # }
+
+#  location ~* \.(js|css|png|jpg|jpeg|gif|ico|woff)$ {
+#           expires 1w;
+#           log_not_found off;
+#  }
+
+  # Deny all . files
+  location ~ /\.ht {
+          deny all;
+  }
+
+  # PHP
+  location ~ ^/(app|app_dev|memcached)\.php(/|$) {
+	# fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        # fastcgi_buffers 4 256k;
+        # fastcgi_buffer_size 128k;
+        # fastcgi_busy_buffers_size 256k;
+        include fastcgi_params;
+        fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_pass unix:/var/run/php5-fpm-logincidadao.sock;
+        client_max_body_size 0;
+        fastcgi_index app.php;
+        # send_timeout 1800;
+        # fastcgi_read_timeout 1800;
+        # proxy_cache_lock off;
+        # fastcgi_pass 127.0.0.1:9000;
+  }
+  # Statics
+        location /(bundles|media) {
+                access_log off;
+                expires 30d;
+
+                try_files $uri @rewriteapp;
+        }
+  charset utf-8;
+}
+
+# server {
+#   listen *:80;
+#   server_name http://logindacultura.sp.gov.br;
+#   return 301 $scheme://logindacultura.sp.gov.br/$request_uri;
+# }
+```
+
+
+  //Faça um link simbólico para o arquivo
+  $ sudo ln -s /etc/nginx/sites-available/login-cidadao.conf /etc/nginx/sites-enabled/login-cidadao.conf
+
+
 ## Certificado SSL
 
 Ver "Usando Certificado SSL"
@@ -219,20 +334,6 @@ Se você estiver usando
 
 
 
-5. Cheque os requisitos do PHP 
-
-Verifique se todas os requisitos estão sendo cumpridos antes de iniciar a instalação
-    `php app/check.php`
- 
-
-## Configurando base de dados
-
-Crie um usuário no postgres e depois uma base. Sugerimos usar o mesmo nome. 
-
-```
-  $ sudo -u postgres createuser -d login-cidadao
-  $ createdb login-cidadao
-```
 
 7. Se a verificação for bem sucedida inicie a instalação
     `./install.sh`
@@ -265,29 +366,9 @@ Faça as alterações necessárias!
 
 
 
-  //Faça um link simbólico para o arquivo
-  $ sudo ln -s /etc/nginx/sites-available/login-cidadao.conf /etc/nginx/sites-enabled/login-cidadao.conf
 ```
 
  
-```
-<VirtualHost *:80>
-    ServerName sub.dominio.com.br
-    ServerAdmin usuario@email
- 
-    DocumentRoot /var/www/login-cidadao/web
- 
-    <Directory / >
-        Options Indexes FollowSymLinks MultiViews
-        AllowOverride All
-        Order allow,deny
-        allow from all
-    </Directory>
- 
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
-</VirtualHost>
-```
  
 * Em `DocumentRoot` é preciso apontar para o diretório `web`, neste exemplo o caminho completo é `/var/www/login-cidadao/web`.
  
@@ -295,13 +376,20 @@ Faça as alterações necessárias!
  
 ### [Primeiros passos pós-instalação](id:pos-instalacao)
  
-1. Adicione os seguintes aliases ao seu arquivo `.bashrc`  
-    `alias prod='php app/console --env=prod'`  
-    `alias dev='php app/console --env=dev'`
- 
-2. Atualize o perfil do terminal  
-    `source ~/.bashrc`
-    * Obs.: Etapa desnecessária para logins futuros já que o .bashrc será executado no processo de login.
+Adicione os seguintes aliases ao seu arquivo `.bashrc` (que fica no home de seu usuário).
+
+```
+  //Abra o arquivo
+  $ nano ~./bashrc
+  //Adicione as linhas abaixo no final do arquivo
+
+    alias prod='php app/console --env=prod'
+    alias dev='php app/console --env=dev'
+
+  //Atualize o perfil do terminal  
+  $ source ~/.bashrc
+  // Obs.: Etapa desnecessária para logins futuros já que o .bashrc será executado no processo de login.
+```
  
 3. Processe e ative todos os assets  
     `prod assets:install`  
