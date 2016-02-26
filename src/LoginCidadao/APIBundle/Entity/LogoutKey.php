@@ -3,7 +3,6 @@
 namespace LoginCidadao\APIBundle\Entity;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\Util\SecureRandom;
 use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\OAuthServerBundle\Model\Client;
@@ -95,8 +94,7 @@ class LogoutKey
 
     public function generateKey()
     {
-        $generator = new SecureRandom();
-        return sha1($generator->nextBytes(250));
+        return sha1(random_bytes(250));
     }
 
     public function getClient()

@@ -160,7 +160,7 @@ class PersonController extends BaseController
      */
     public function sendNotificationAction(Request $request)
     {
-        $token       = $this->get('security.context')->getToken();
+        $token       = $this->get('security.token_storage')->getToken();
         $accessToken = $this->getDoctrine()->getRepository('LoginCidadaoOAuthBundle:AccessToken')->findOneBy(array(
             'token' => $token->getToken()));
         $client      = $accessToken->getClient();
@@ -235,7 +235,7 @@ class PersonController extends BaseController
      */
     public function getLogoutKeyAction($id)
     {
-        $token       = $this->get('security.context')->getToken();
+        $token       = $this->get('security.token_storage')->getToken();
         $accessToken = $this->getDoctrine()
             ->getRepository('LoginCidadaoOAuthBundle:AccessToken')
             ->findOneBy(array(

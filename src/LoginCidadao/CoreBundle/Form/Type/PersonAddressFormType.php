@@ -47,11 +47,21 @@ class PersonAddressFormType extends AbstractType
         $stateEmptyMessage   = $this->translator->trans('No state found.');
         $countryEmptyMessage = $this->translator->trans('No country found.');
 
-        $builder->add('name', 'text', array('label' => 'address.name'))
-            ->add('address', 'text', array('required' => true))
-            ->add('addressNumber', 'text', array('required' => false))
-            ->add('complement', 'text', array('required' => false))
-            ->add('location', 'lc_location', array('level' => 'city'));
+        $builder->add('name',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
+                array('label' => 'address.name'))
+            ->add('address',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
+                array('required' => true))
+            ->add('addressNumber',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
+                array('required' => false))
+            ->add('complement',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
+                array('required' => false))
+            ->add('location',
+                'LoginCidadao\CoreBundle\Form\Type\CitySelectorComboType',
+                array('level' => 'city'));
 
         if (isset($this->preferredCountries[0])) {
             $id = $this->preferredCountries[0]->getId();
@@ -59,7 +69,8 @@ class PersonAddressFormType extends AbstractType
             $id = null;
         }
 
-        $builder->add('preferredcountries', 'hidden',
+        $builder->add('preferredcountries',
+                'Symfony\Component\Form\Extension\Core\Type\HiddenType',
                 array("data" => $id, "required" => false, "mapped" => false))
             ->add('postalCode');
 
@@ -89,10 +100,5 @@ class PersonAddressFormType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'LoginCidadao\CoreBundle\Entity\PersonAddress'
         ));
-    }
-
-    public function getName()
-    {
-        return 'lc_person_address';
     }
 }

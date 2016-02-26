@@ -188,7 +188,7 @@ class NotificationController extends BaseController
 
     protected function validateNotification(Request $request)
     {
-        $token = $this->get('security.context')->getToken();
+        $token = $this->get('security.token_storage')->getToken();
         $user = $token->getUser();
         if ($user instanceof ClientUser) {
             return $this->validateNotificationAsClient($user->getClient(),

@@ -29,8 +29,8 @@ class NotificationController extends Controller
         $category->setMailSenderAddress($this->getUser()->getEmail());
         $category->setEmailable(true);
         $category->setMarkdownTemplate("%title%\r\n--\r\n\r\n> %shorttext%\r\n\r\n");
-        $form = $this->container->get('form.factory')->create($this->container->get('lc.category.form.type'),
-                                                                                    $category);
+        $form     = $this->createForm('LoginCidadao\CoreBundle\Form\Type\CategoryFormType',
+            $category);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -38,7 +38,7 @@ class NotificationController extends Controller
             $manager->persist($category);
             $manager->flush();
             return $this->redirect($this->generateUrl('lc_dev_not_edit',
-                                                      array(
+                        array(
                         'id' => $category->getId()
             )));
         }
@@ -62,8 +62,8 @@ class NotificationController extends Controller
      */
     public function gridAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $sql = $this->getDoctrine()->getManager()
+        $em   = $this->getDoctrine()->getManager();
+        $sql  = $this->getDoctrine()->getManager()
             ->getRepository('LoginCidadaoNotificationBundle:Category')
             ->createQueryBuilder('u')
             ->join('LoginCidadaoOAuthBundle:Client', 'c', 'with', 'u.client = c')
@@ -86,7 +86,7 @@ class NotificationController extends Controller
      */
     public function editAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em     = $this->getDoctrine()->getManager();
         $client = $em->getRepository('LoginCidadaoNotificationBundle:Category')
             ->createQueryBuilder('u')
             ->join('LoginCidadaoOAuthBundle:Client', 'c', 'with', 'u.client = c')
@@ -100,8 +100,8 @@ class NotificationController extends Controller
         if (!$client) {
             return $this->redirect($this->generateUrl('lc_dev_not'));
         }
-        $form = $this->container->get('form.factory')->create($this->container->get('lc.category.form.type'),
-                                                                                    $client);
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\CategoryFormType',
+            $client);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $client->setHtmlTemplate(MarkdownExtra::defaultTransform($form->get('markdownTemplate')->getData()));
@@ -109,11 +109,11 @@ class NotificationController extends Controller
             $manager->persist($client);
             $manager->flush();
         }
-        $request = $request;
+        $request      = $request;
         $request->query->set('category_id', $id);
         $placeholders = $this->placeholderGridAction($request);
         return $this->render('LoginCidadaoCoreBundle:Dev\Notification:new.html.twig',
-                             array(
+                array(
                 'form' => $form->createView(),
                 'client' => $client,
                 'placeholderGrid' => $placeholders['grid']
@@ -126,16 +126,17 @@ class NotificationController extends Controller
      */
     public function placeholderEditAction(Request $request)
     {
-        $form = $this->container->get('form.factory')->create($this->container->get('lc.placeholder.form.type'));
+        $form        = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PlaceholderFormType');
         $placeholder = null;
-        $em = $this->getDoctrine()->getManager();
-        if (($id = $request->get('id')) || (($data = $request->get($form->getName())) && ($id = $data['id']))) {
+        $em          = $this->getDoctrine()->getManager();
+        if (($id          = $request->get('id')) || (($data        = $request->get($form->getName()))
+            && ($id          = $data['id']))) {
             $placeholder = $em->getRepository('LoginCidadaoNotificationBundle:Placeholder')
                 ->createQueryBuilder('u')
-                ->join('LoginCidadaoNotificationBundle:Category',
-                       'cat', 'with', 'u.category = cat')
+                ->join('LoginCidadaoNotificationBundle:Category', 'cat', 'with',
+                    'u.category = cat')
                 ->join('LoginCidadaoOAuthBundle:Client', 'c', 'with',
-                       'cat.client = c')
+                    'cat.client = c')
                 ->where(':person MEMBER OF c.owners')
                 ->andWhere('u.id = :id')
                 ->setParameter('person', $this->getUser())
@@ -143,10 +144,12 @@ class NotificationController extends Controller
                 ->orderBy('u.id', 'desc')
                 ->getQuery()
                 ->getSingleResult();
-        } elseif (($categoryId = $request->get('category_id')) || (($data = $request->get($form->getName())) && ($categoryId = $data['category']))) {
-            $category = $em->getRepository('LoginCidadaoNotificationBundle:Category')
+        } elseif (($categoryId = $request->get('category_id')) || (($data       = $request->get($form->getName()))
+            && ($categoryId = $data['category']))) {
+            $category    = $em->getRepository('LoginCidadaoNotificationBundle:Category')
                 ->createQueryBuilder('u')
-                ->join('LoginCidadaoOAuthBundle:Client', 'c', 'with', 'u.client = c')
+                ->join('LoginCidadaoOAuthBundle:Client', 'c', 'with',
+                    'u.client = c')
                 ->where(':person MEMBER OF c.owners')
                 ->andWhere('u.id = :id')
                 ->setParameter('person', $this->getUser())
@@ -160,8 +163,9 @@ class NotificationController extends Controller
         if (!$placeholder) {
             die('dunno');
         }
-        $form = $this->container->get('form.factory')->create($this->container->get('lc.placeholder.form.type'),
-                                                                                    $placeholder);
+
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PlaceholderFormType',
+            $placeholder);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $em->persist($placeholder);
@@ -179,12 +183,13 @@ class NotificationController extends Controller
     public function placeholderGridAction(Request $request)
     {
         $categoryId = $request->get('category_id');
-        $em = $this->getDoctrine()->getManager();
-        $sql = $em->getRepository('LoginCidadaoNotificationBundle:Placeholder')
+        $em         = $this->getDoctrine()->getManager();
+        $sql        = $em->getRepository('LoginCidadaoNotificationBundle:Placeholder')
             ->createQueryBuilder('u')
-            ->join('LoginCidadaoNotificationBundle:Category',
-                   'cat', 'with', 'u.category = cat')
-            ->join('LoginCidadaoOAuthBundle:Client', 'c', 'with', 'cat.client = c')
+            ->join('LoginCidadaoNotificationBundle:Category', 'cat', 'with',
+                'u.category = cat')
+            ->join('LoginCidadaoOAuthBundle:Client', 'c', 'with',
+                'cat.client = c')
             ->where(':person MEMBER OF c.owners')
             ->andWhere('cat.id = :id')
             ->setParameter('person', $this->getUser())
@@ -209,13 +214,13 @@ class NotificationController extends Controller
     public function placeholderRemoveAction(Request $request)
     {
         if ($id = $request->get('id')) {
-            $em = $this->getDoctrine()->getManager();
+            $em          = $this->getDoctrine()->getManager();
             $placeholder = $em->getRepository('LoginCidadaoNotificationBundle:Placeholder')
                 ->createQueryBuilder('u')
-                ->join('LoginCidadaoNotificationBundle:Category',
-                       'cat', 'with', 'u.category = cat')
+                ->join('LoginCidadaoNotificationBundle:Category', 'cat', 'with',
+                    'u.category = cat')
                 ->join('LoginCidadaoOAuthBundle:Client', 'c', 'with',
-                       'cat.client = c')
+                    'cat.client = c')
                 ->where(':person MEMBER OF c.owners')
                 ->andWhere('u.id = :id')
                 ->setParameter('person', $this->getUser())
@@ -231,5 +236,4 @@ class NotificationController extends Controller
         $resp = new Response('<script>placeholderGrid.getGrid();</script>');
         return $resp;
     }
-
 }

@@ -23,7 +23,7 @@ class PersonController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $form = $this->createForm(new PersonFilterFormType());
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PersonFilterFormType');
         $form = $form->createView();
         return compact('form');
     }
@@ -34,7 +34,7 @@ class PersonController extends Controller
      */
     public function gridAction(Request $request)
     {
-        $form           = $this->createForm(new PersonFilterFormType());
+        $form           = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PersonFilterFormType');
         $form->handleRequest($request);
         $result['grid'] = null;
         if ($form->isValid()) {

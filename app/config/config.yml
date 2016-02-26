@@ -1,8 +1,8 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
-#    - { resource: memcached.yml }
-    - { resource: @LoginCidadaoTOSBundle/Resources/config/config.yml }
+    - { resource: memcached.yml }
+    - { resource: "@LoginCidadaoTOSBundle/Resources/config/config.yml" }
 
 framework:
     #esi:             ~
@@ -30,9 +30,8 @@ twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
     exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
-    form:
-        resources:
-            - 'LoginCidadaoCoreBundle:Form:fields.html.twig'
+    form_themes:
+        - 'LoginCidadaoCoreBundle:Form:fields.html.twig'
     globals:
         fos_csrf_provider: "@security.csrf.token_manager"
         notifications_helper: "@notifications.helper"
@@ -170,11 +169,11 @@ fos_user:
               address: %mailer_sender_mail%
               sender_name: %mailer_sender_name%
         form:
-            type: lc_person_registration
+            type: LoginCidadao\CoreBundle\Form\Type\RegistrationFormType
             validation_groups:  [LoginCidadaoRegistration]
     profile:
         form:
-            type: lc_person_profile
+            type: LoginCidadao\CoreBundle\Form\Type\ProfileFormType
     resetting:
         email:
             template: LoginCidadaoCoreBundle:Person:resetting/email.html.twig
@@ -188,7 +187,7 @@ fos_user:
         mailer: fos_user.mailer.twig_swift
     change_password:
         form:
-            type:               lc_change_password
+            type: LoginCidadao\CoreBundle\Form\Type\ChangePasswordFormType
 
 # Audit Trail
 simple_things_entity_audit:

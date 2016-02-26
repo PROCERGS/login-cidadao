@@ -62,7 +62,8 @@ class ClientController extends Controller
         if (!$client) {
             return $this->redirect($this->generateUrl('lc_admin_app_new'));
         }
-        $form = $this->createForm('client_form_type', $client);
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\ClientFormType',
+            $client);
         $form->handleRequest($request);
 
         if ($form->isValid()) {

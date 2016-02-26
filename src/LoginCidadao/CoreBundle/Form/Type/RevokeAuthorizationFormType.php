@@ -12,10 +12,4 @@ class RevokeAuthorizationFormType extends BaseType
     {
         //parent::buildForm($builder, $options);
     }
-
-    public function getName()
-    {
-        return 'lc_revoke_authorization';
-    }
-
 }

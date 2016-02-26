@@ -86,7 +86,7 @@ security:
             switch_user: true
 
             remember_me:
-                key:      "%secret%"
+                secret:      "%secret%"
                 lifetime: 31536000 # 365 days in seconds
                 path:     /
                 domain:   ~
@@ -114,7 +114,7 @@ security:
 
             form_login:
                 provider:       fos_userbundle
-                csrf_provider:  security.csrf.token_manager
+                csrf_token_generator:  security.csrf.token_manager
                 login_path:     /login
                 use_forward:    false
                 check_path:     /login_check
@@ -134,7 +134,7 @@ security:
             pattern:  ^/oauth/v2/auth
             form_login:
                 provider: fos_userbundle
-                csrf_provider: security.csrf.token_manager
+                csrf_token_generator: security.csrf.token_manager
                 check_path: /oauth/v2/auth_login_check
                 login_path: /oauth/v2/auth_login
                 always_use_default_target_path: false

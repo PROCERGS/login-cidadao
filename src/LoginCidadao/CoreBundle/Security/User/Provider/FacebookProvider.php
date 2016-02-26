@@ -92,7 +92,7 @@ class FacebookProvider implements UserProviderInterface
 
         if (!empty($fbdata)) {
 
-            $currentUserObj = $this->container->get('security.context')->getToken()->getUser();
+            $currentUserObj = $this->container->get('security.token_storage')->getToken()->getUser();
 
             $user = $this->findUserByUsername($currentUserObj->getUsername());
 
@@ -117,7 +117,7 @@ class FacebookProvider implements UserProviderInterface
 
     public function loadUserByUsername($username)
     {
-        $secToken = $this->container->get('security.context')->getToken();
+        $secToken = $this->container->get('security.token_storage')->getToken();
         if (!is_null($secToken) && !is_null($secToken->getUser())) {
             $currentUserObj = $secToken->getUser();
         } else {

@@ -38,23 +38,19 @@ class ClientFormType extends ClientBaseFormType
             }
 
             $choices = array(
-                'Public Scopes' => $public
+                'Public Scopes' => array_flip($public)
             );
             if ($security->isGranted('ROLE_EDIT_CLIENT_ALLOWED_RESTRICTED_SCOPES')) {
-                $choices['Restricted Scopes'] = $reserved;
+                $choices['Restricted Scopes'] = array_flip($reserved);
             }
 
-            $form->add('allowedScopes', 'choice',
+            $form->add('allowedScopes',
+                'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
                 array(
                 'choices' => $choices,
                 'multiple' => true,
-                'choices_as_values' => false,
+                'choices_as_values' => true,
             ));
         });
-    }
-
-    public function getName()
-    {
-        return 'client_form_type';
     }
 }

@@ -2,8 +2,8 @@
 
 namespace LoginCidadao\APIBundle\Security\Audit;
 
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\HttpFoundation\Request;
 use SimpleThings\EntityAudit\AuditConfiguration;
 use Doctrine\ORM\EntityManager;
@@ -14,8 +14,8 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class ActionLogger
 {
-    /** @var SecurityContextInterface */
-    protected $security;
+    /** @var TokenStorageInterface */
+    protected $tokenStorage;
 
     /** @var AuditConfiguration */
     protected $auditConfig;
@@ -26,19 +26,19 @@ class ActionLogger
     /** @var Request */
     protected $request;
 
-    public function __construct(SecurityContextInterface $security,
+    public function __construct(TokenStorageInterface $tokenStorage,
                                 AuditConfiguration $auditConfig,
                                 EntityManager $em)
     {
-        $this->security    = $security;
-        $this->auditConfig = $auditConfig;
-        $this->em          = $em;
+        $this->tokenStorage = $tokenStorage;
+        $this->auditConfig  = $auditConfig;
+        $this->em           = $em;
     }
 
     public function logActivity(Request $request, Loggable $annotation,
                                 array $controllerAction)
     {
-        $token         = $this->security->getToken();
+        $token         = $this->tokenStorage->getToken();
         $user          = $token->getUser();
         $auditUsername = $this->auditConfig->getCurrentUsername();
 

@@ -12,6 +12,7 @@ namespace LoginCidadao\CoreBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ImpersonationReportType extends AbstractType
@@ -24,15 +25,13 @@ class ImpersonationReportType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('report', 'textarea',
+            ->add('report',
+                'Symfony\Component\Form\Extension\Core\Type\TextareaType',
                 array('label' => 'admin.impersonation_report.form.report.label'))
         ;
     }
 
-    /**
-     * @param OptionsResolverInterface $resolver
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'LoginCidadao\CoreBundle\Entity\ImpersonationReport'
@@ -40,10 +39,10 @@ class ImpersonationReportType extends AbstractType
     }
 
     /**
-     * @return string
+     * @param OptionsResolverInterface $resolver
      */
-    public function getName()
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        return 'logincidadao_corebundle_impersonationreport';
+        $this->configureOptions($resolver);
     }
 }

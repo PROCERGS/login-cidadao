@@ -23,13 +23,17 @@ class ProfileFormType extends BaseType
         $country = $this->em->getRepository('LoginCidadaoCoreBundle:Country')->findOneBy(array(
             'iso2' => $this->defaultCountryIso2));
         $builder
-            ->add('email', 'email',
+            ->add('email',
+                'Symfony\Component\Form\Extension\Core\Type\EmailType',
                 array('label' => 'form.email', 'translation_domain' => 'FOSUserBundle'))
-            ->add('firstName', 'text',
+            ->add('firstName',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
                 array('label' => 'form.firstName', 'translation_domain' => 'FOSUserBundle'))
-            ->add('surname', 'text',
+            ->add('surname',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
                 array('label' => 'form.surname', 'translation_domain' => 'FOSUserBundle'))
-            ->add('birthdate', 'birthday',
+            ->add('birthdate',
+                'Symfony\Component\Form\Extension\Core\Type\BirthdayType',
                 array(
                 'required' => false,
                 'format' => 'dd/MM/yyyy',
@@ -41,13 +45,14 @@ class ProfileFormType extends BaseType
             )
             ->add('mobile', null,
                 array('required' => false, 'label' => 'form.mobile', 'translation_domain' => 'FOSUserBundle'))
-            ->add('image', 'vich_file',
+            ->add('image', 'Vich\UploaderBundle\Form\Type\VichFileType',
                 array(
                 'required' => false,
                 'allow_delete' => true, // not mandatory, default is true
                 'download_link' => true, // not mandatory, default is true
             ))
-            ->add('placeOfBirth', 'lc_location',
+            ->add('placeOfBirth',
+                'LoginCidadao\CoreBundle\Form\Type\CitySelectorComboType',
                 array(
                 'level' => 'city',
                 'city_label' => 'Place of birth - City',
@@ -55,7 +60,8 @@ class ProfileFormType extends BaseType
                 'country_label' => 'Place of birth - Country',
             ))
         ;
-        $builder->add('nationality', 'entity',
+        $builder->add('nationality',
+            'Symfony\Bridge\Doctrine\Form\Type\EntityType',
             array(
             'required' => false,
             'class' => 'LoginCidadaoCoreBundle:Country',
@@ -70,7 +76,8 @@ class ProfileFormType extends BaseType
         },
             'label' => 'Nationality'
         ));
-        $builder->add('defaultCountry', 'hidden',
+        $builder->add('defaultCountry',
+            'Symfony\Component\Form\Extension\Core\Type\HiddenType',
             array("data" => $country->getId(), "required" => false, "mapped" => false));
     }
 
