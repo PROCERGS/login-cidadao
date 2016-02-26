@@ -15,7 +15,7 @@ addons:
   postgresql: "9.3"
 
 before_script:
-- pecl install memcache
+- pecl install -s memcache
 - cp app/config/parameters.yml.dist app/config/parameters.yml
 - composer self-update
 - composer install --prefer-source
