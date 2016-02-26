@@ -42,7 +42,7 @@ class OrganizationType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $members = function (EntityRepository $er) {
+        $members = function(EntityRepository $er) {
             return $er->createQueryBuilder('p')
                     ->innerJoin('LoginCidadaoOAuthBundle:Organization', 'o',
                         'WITH', 'p MEMBER OF o.members');
@@ -91,7 +91,7 @@ class OrganizationType extends AbstractType
     }
 
     private function prepareMembersField(FormBuilderInterface $builder,
-                                         OrganizationInterface $organization)
+                                            OrganizationInterface $organization)
     {
         $checker = $this->authorizationChecker;
         $person  = $this->tokenStorage->getToken()->getUser();
@@ -107,7 +107,7 @@ class OrganizationType extends AbstractType
         }
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) {
+            function(FormEvent $event) {
             $entity = $event->getData();
             $form   = $event->getForm();
 
@@ -150,7 +150,7 @@ class OrganizationType extends AbstractType
         });
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) {
+            function(FormEvent $event) {
             $entity = $event->getData();
             $form   = $event->getForm();
 

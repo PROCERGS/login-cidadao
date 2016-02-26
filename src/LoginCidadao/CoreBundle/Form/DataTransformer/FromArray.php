@@ -17,7 +17,7 @@ class FromArray implements DataTransformerInterface
 
     public function reverseTransform($number)
     {
-        if (! $number) {
+        if (!$number) {
             return null;
         }
         

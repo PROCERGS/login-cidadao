@@ -90,7 +90,7 @@ class ActionLogger
      * @return ActionLog
      */
     private function initLog(Request $request, $actionType, $controllerAction,
-                             $auditUsername)
+                                $auditUsername)
     {
         $controller = get_class($controllerAction[0]);
         $action     = $controllerAction[1];
@@ -124,7 +124,7 @@ class ActionLogger
     }
 
     public function registerLogin(Request $request, PersonInterface $person,
-                                  array $controllerAction)
+                                    array $controllerAction)
     {
         $auditUsername = $this->auditConfig->getCurrentUsername();
         $actionType    = ActionLog::TYPE_LOGIN;

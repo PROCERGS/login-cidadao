@@ -70,7 +70,7 @@ class DefaultController extends Controller
         $translator = $this->get('translator');
         $message    = $translator->trans('contact.form.sent');
         if ($form->isValid()) {
-            $email     = new SentEmail();
+            $email = new SentEmail();
             $email
                 ->setType('contact-mail')
                 ->setSubject('Fale conosco - '.$form->get('firstName')->getData())

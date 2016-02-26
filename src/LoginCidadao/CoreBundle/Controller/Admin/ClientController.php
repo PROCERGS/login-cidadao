@@ -136,7 +136,7 @@ class ClientController extends Controller
                         $msg['title']     = str_repeat($input, $r);
                         $msg['shorttext'] = str_repeat($input, $r);
                     }
-                    $not    = new Notification();
+                    $not = new Notification();
                     $not->setPerson($person);
                     $not->setCategory($category);
                     $not->setIcon($category->getDefaultIcon());

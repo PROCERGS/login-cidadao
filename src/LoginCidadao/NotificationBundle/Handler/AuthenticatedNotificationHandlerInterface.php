@@ -54,7 +54,7 @@ interface AuthenticatedNotificationHandlerInterface
      * @return array
      */
     public function getAllFromClient(ClientInterface $client, $limit = 5,
-                                     $offset = 0, $orderby = null);
+                                        $offset = 0, $orderby = null);
 
     /**
      * Retrieves a person's settings.
@@ -87,7 +87,7 @@ interface AuthenticatedNotificationHandlerInterface
      * @return NotificationSettings PersonNotificationOptions grouped by Client
      */
     public function getGroupedSettings(ClientInterface $client = null,
-                                       CategoryInterface $category = null);
+                                        CategoryInterface $category = null);
 
     /**
      * Return a person's number of unread notifications.

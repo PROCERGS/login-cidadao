@@ -76,7 +76,7 @@ class PersonController extends Controller
                     'client' => $client,
                     'user' => $user
                 ));
-                $refreshTokens  = $em->getRepository('LoginCidadaoOAuthBundle:RefreshToken')
+                $refreshTokens = $em->getRepository('LoginCidadaoOAuthBundle:RefreshToken')
                     ->findBy(array(
                     'client' => $client,
                     'user' => $user
@@ -217,7 +217,7 @@ class PersonController extends Controller
     public function registrationCpfAction(Request $request)
     {
         $person = $this->getUser();
-        if (is_numeric($cpf    = preg_replace('/[^0-9]/', '',
+        if (is_numeric($cpf = preg_replace('/[^0-9]/', '',
                 $request->get('cpf'))) && strlen($cpf) == 11) {
             $person->setCpf($cpf);
         }
@@ -397,8 +397,8 @@ class PersonController extends Controller
     {
         $form = $this->createForm(new DocRgFormType());
         $rg   = null;
-        if (($id   = $request->get('id')) || (($data = $request->get($form->getName()))
-            && ($id   = $data['id']))) {
+        if (($id = $request->get('id')) || (($data = $request->get($form->getName()))
+            && ($id = $data['id']))) {
             $rg = $this->getDoctrine()
                     ->getManager()
                     ->getRepository('LoginCidadaoCoreBundle:IdCard')->findOneBy(array(
@@ -463,11 +463,21 @@ class PersonController extends Controller
         $n5    = ($rg[0] * 2) % 9;
         $total = $n1 + $n2 + $n3 + $n4 + $n5 + $rg[7] + $rg[5] + $rg[3] + $rg[1];
 
-        if ($rg[8] == 9) $total = $total + 9;
-        if ($rg[6] == 9) $total = $total + 9;
-        if ($rg[4] == 9) $total = $total + 9;
-        if ($rg[2] == 9) $total = $total + 9;
-        if ($rg[0] == 9) $total = $total + 9;
+        if ($rg[8] == 9) {
+            $total = $total + 9;
+        }
+        if ($rg[6] == 9) {
+            $total = $total + 9;
+        }
+        if ($rg[4] == 9) {
+            $total = $total + 9;
+        }
+        if ($rg[2] == 9) {
+            $total = $total + 9;
+        }
+        if ($rg[0] == 9) {
+            $total = $total + 9;
+        }
 
         $resto = $total % 10;
 

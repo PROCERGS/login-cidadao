@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 use LoginCidadao\NotificationBundle\Entity\Notification;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
-use JMS\Serializer\Tests\Fixtures\Publisher;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation as JMS;
 use OAuth2\OAuth2;

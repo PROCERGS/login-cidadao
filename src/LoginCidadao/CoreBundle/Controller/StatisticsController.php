@@ -68,7 +68,7 @@ class StatisticsController extends Controller
 
 
         return $this->render('LoginCidadaoCoreBundle:Statistics:usersByRegion.html.twig',
-                             array('data' => $data, 'totalUsers' => $totalUsers));
+                                array('data' => $data, 'totalUsers' => $totalUsers));
     }
 
     /**
@@ -82,7 +82,7 @@ class StatisticsController extends Controller
         $data = $repo->getCountByCity($stateId);
 
         return $this->render('LoginCidadaoCoreBundle:Statistics:usersByCity.html.twig',
-                             array('data' => $data));
+                                array('data' => $data));
     }
 
     /**
@@ -152,7 +152,7 @@ class StatisticsController extends Controller
     }
 
     private function getNewUsersByService($days, $clientId = null,
-                                          $format = 'html')
+                                            $format = 'html')
     {
         $em        = $this->getDoctrine()->getManager();
         $repo      = $em->getRepository('LoginCidadaoOAuthBundle:Client');

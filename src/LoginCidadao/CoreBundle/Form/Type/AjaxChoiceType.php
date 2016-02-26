@@ -37,7 +37,7 @@ class AjaxChoiceType extends CommonFormType
      * @param array $options            
      */
     public function buildView(FormView $view, FormInterface $form,
-                              array $options)
+                                array $options)
     {
         if (array_key_exists('ajax_choice_attr', $options)) {
             $nForm                                    = $form->getParent()->getName();

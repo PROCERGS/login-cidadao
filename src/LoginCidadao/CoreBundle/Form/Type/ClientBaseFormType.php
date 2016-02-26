@@ -35,7 +35,7 @@ class ClientBaseFormType extends AbstractType
         $checker = $this->security;
         $person  = $this->tokenStorage->getToken()->getUser();
 
-        $organizationQueryBuilder = function (EntityRepository $er) use ($person, $checker) {
+        $organizationQueryBuilder = function(EntityRepository $er) use ($person, $checker) {
             $query = $er->createQueryBuilder('o');
             if (!$checker->isGranted('ROLE_ORGANIZATIONS_BIND_CLIENT_ANY_ORG')) {
                 $query->where(':person MEMBER OF o.members')
@@ -97,7 +97,7 @@ class ClientBaseFormType extends AbstractType
         }
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) {
+            function(FormEvent $event) {
             $entity = $event->getData();
             $form   = $event->getForm();
             $form->add('owners',
@@ -138,7 +138,7 @@ class ClientBaseFormType extends AbstractType
         ;
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) {
+            function(FormEvent $event) {
             $entity = $event->getData();
             $form   = $event->getForm();
             if ($entity->getId()) {

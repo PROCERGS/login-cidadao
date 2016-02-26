@@ -2,7 +2,7 @@
 require 'stuff.php';
 ini_set('memory_limit', -1);
 $config = parse_ini_file($argv[1]);
-if (! $config) {
+if (!$config) {
     echo "Couldn't parse the config file.";
     exit(1);
 }

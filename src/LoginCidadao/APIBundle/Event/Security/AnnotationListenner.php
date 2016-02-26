@@ -36,7 +36,7 @@ class AnnotationListenner
         foreach ($this->reader->getMethodAnnotations($method) as $annotation) {
             if ($annotation instanceof Loggable) {
                 $this->logger->logActivity($event->getRequest(), $annotation,
-                                           $controller);
+                                            $controller);
             }
         }
     }

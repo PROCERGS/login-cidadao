@@ -2,17 +2,10 @@
 
 namespace LoginCidadao\NotificationBundle\Handler;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\Form\FormFactoryInterface;
 use LoginCidadao\NotificationBundle\Handler\NotificationHandlerInterface;
-use LoginCidadao\NotificationBundle\Form\NotificationType;
-use LoginCidadao\NotificationBundle\Model\NotificationInterface;
-use LoginCidadao\NotificationBundle\Exception\InvalidFormException;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\NotificationBundle\Model\CategoryInterface;
-use LoginCidadao\NotificationBundle\Entity\PersonNotificationOption;
-use LoginCidadao\NotificationBundle\Model\NotificationSettings;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class AuthenticatedNotificationHandler implements AuthenticatedNotificationHandlerInterface
@@ -45,7 +38,7 @@ class AuthenticatedNotificationHandler implements AuthenticatedNotificationHandl
     }
 
     public function getAllFromClient(ClientInterface $client, $limit = 5,
-                                     $offset = 0, $orderby = null)
+                                        $offset = 0, $orderby = null)
     {
         return $this->handler->getAllFromPersonByClient($this->person, $client,
                                                         $limit, $offset,
@@ -78,10 +71,10 @@ class AuthenticatedNotificationHandler implements AuthenticatedNotificationHandl
     }
 
     public function getGroupedSettings(ClientInterface $client = null,
-                                       CategoryInterface $category = null)
+                                        CategoryInterface $category = null)
     {
         return $this->handler->getGroupedSettings($this->person, $client,
-                                                  $category);
+                                                    $category);
     }
 
     public function countUnread()

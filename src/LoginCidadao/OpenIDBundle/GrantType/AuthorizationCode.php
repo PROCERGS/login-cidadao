@@ -20,7 +20,7 @@ class AuthorizationCode extends BaseAuthorizationCode
     private $sessionStateStorage;
 
     public function createAccessToken(AccessTokenInterface $accessToken,
-                                      $client_id, $user_id, $scope)
+                                        $client_id, $user_id, $scope)
     {
         $token = parent::createAccessToken($accessToken, $client_id, $user_id,
                 $scope);

@@ -52,7 +52,7 @@ class NotificationController extends BaseController
      * @return array
      */
     public function getNotificationsAction(Request $request,
-                                           ParamFetcherInterface $paramFetcher)
+                                            ParamFetcherInterface $paramFetcher)
     {
         $offset = $paramFetcher->get('offset');
         $offset = null == $offset ? 0 : $offset;
@@ -64,13 +64,13 @@ class NotificationController extends BaseController
 
         if (array_search('get_all_notifications', $scopes) === false) {
             $notifications = $this->getNotificationHandler()->getAllFromPersonByClient($person,
-                                                                                       $client,
-                                                                                       $limit,
-                                                                                       $offset);
+                                                                                        $client,
+                                                                                        $limit,
+                                                                                        $offset);
         } else {
             $notifications = $this->getNotificationHandler()->getAllFromPerson($person,
-                                                                               $limit,
-                                                                               $offset);
+                                                                                $limit,
+                                                                                $offset);
         }
 
         return $this->renderWithContext($notifications);
@@ -192,7 +192,7 @@ class NotificationController extends BaseController
         $user = $token->getUser();
         if ($user instanceof ClientUser) {
             return $this->validateNotificationAsClient($user->getClient(),
-                                                       $request);
+                                                        $request);
         } elseif ($user instanceof PersonInterface) {
             return $this->validateNotificationAsPerson($user, $request);
         } else {

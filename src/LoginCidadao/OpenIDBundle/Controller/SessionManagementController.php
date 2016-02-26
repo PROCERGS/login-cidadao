@@ -59,7 +59,7 @@ class SessionManagementController extends Controller
         }
 
         $result = array_unique(
-            array_map(function ($value) {
+            array_map(function($value) {
                 if ($value === null) {
                     return;
                 }

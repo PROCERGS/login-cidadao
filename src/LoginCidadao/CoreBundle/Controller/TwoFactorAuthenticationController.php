@@ -65,7 +65,7 @@ class TwoFactorAuthenticationController extends Controller
     {
         $person = $this->getPerson();
         $form = $this->createForm(new TwoFactorAuthenticationDisableFormType(),
-                                  $person);
+                                    $person);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -89,7 +89,7 @@ class TwoFactorAuthenticationController extends Controller
     {
         $person = $this->getPerson();
         $form = $this->createForm(new TwoFactorAuthenticationBackupCodeGenerationFormType(),
-                                  $person);
+                                    $person);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -146,7 +146,7 @@ class TwoFactorAuthenticationController extends Controller
     }
 
     protected function removeBackupCodes(EntityManager $em,
-                                         PersonInterface $person)
+                                            PersonInterface $person)
     {
         $backupCodes = $person->getBackupCodes();
         foreach ($backupCodes as $backupCode) {
@@ -155,7 +155,7 @@ class TwoFactorAuthenticationController extends Controller
     }
 
     protected function generateBackupCodes(EntityManager $em,
-                                           PersonInterface $person)
+                                            PersonInterface $person)
     {
         $backupCodes = array();
         while (count($backupCodes) < 10) {
