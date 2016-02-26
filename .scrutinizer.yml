@@ -49,7 +49,7 @@ build:
         before:
             - chmod -R 777 app/cache app/logs web/uploads
             - composer self-upate
-            - composer install --prefer-source --no-interactionbefore:
+            - composer install --prefer-dist --no-interaction
             - psql -c "CREATE ROLE logincidadao WITH PASSWORD '';"
             - psql -c 'CREATE DATABASE logincidadao WITH OWNER logincidadao'
 
