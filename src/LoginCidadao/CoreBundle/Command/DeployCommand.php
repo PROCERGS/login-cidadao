@@ -6,25 +6,31 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Doctrine\ORM\EntityManager;
 
-class UpgradeCommand extends ContainerAwareCommand
+class DeployCommand extends ContainerAwareCommand
 {
+    private $updateDb = false;
 
     protected function configure()
     {
         $this
-            ->setName('lc:upgrade')
-            ->setDescription('Perform basic upgrade commands.')
+            ->setName('lc:deploy')
+            ->addOption('--update-db', null, InputOption::VALUE_NONE,
+                'Update database schema without prompting')
+            ->setDescription('Perform basic deploy commands.')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->updateDb = $input->getOption('update-db');
+
         $io = new SymfonyStyle($input, $output);
-        $io->title("Running upgrade tasks...");
+        $io->title("Running deploy tasks...");
         $this->clearMetadata($io);
         $this->clearCache($io, 'prod');
         $this->checkDatabase($io);
@@ -136,7 +142,8 @@ class UpgradeCommand extends ContainerAwareCommand
     {
         $io->caution("Your database schema needs to be updated. The following queries will be run:");
         $io->listing($queries);
-        if ($io->confirm("Should we run this queries now?", false) === false) {
+        if ($this->updateDb === false &&
+            $io->confirm("Should we run this queries now?", false) === false) {
             return;
         }
 

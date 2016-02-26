@@ -19,6 +19,7 @@ use LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use League\Uri\Schemes\Http as HttpUri;
 
 /**
  * @ORM\Entity(repositoryClass="LoginCidadao\OAuthBundle\Entity\ClientRepository")
@@ -526,5 +527,17 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         $this->organization = $organization;
 
         return $this;
+    }
+
+    public function ownsDomain($domain)
+    {
+        foreach ($this->getRedirectUris() as $redirectUrl) {
+            $uri = HttpUri::createFromString($redirectUrl);
+            if ($uri->getHost() == $domain) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

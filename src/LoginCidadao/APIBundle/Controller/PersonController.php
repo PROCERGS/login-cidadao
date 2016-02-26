@@ -172,11 +172,10 @@ class PersonController extends BaseController
             ->getRepository('LoginCidadaoCoreBundle:Authorization')
             ->createQueryBuilder('a')
             ->select('cnc, p')
-            ->join('LoginCidadaoCoreBundle:Person', 'p', 'WITH',
-                   'a.person = p')
+            ->join('LoginCidadaoCoreBundle:Person', 'p', 'WITH', 'a.person = p')
             ->join('LoginCidadaoOAuthBundle:Client', 'c', 'WITH', 'a.client = c')
             ->join('LoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH',
-                   'cnc.client = c')
+                'cnc.client = c')
             ->where('c.id = '.$client->getId().' and p.id = :person_id and cnc.id = :config_id')
             ->getQuery();
         $rowR      = array();
@@ -247,7 +246,7 @@ class PersonController extends BaseController
         $people = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Person');
         $person = $people->find($id);
 
-        if (!$person->isAuthorizedClient($client, 'logout')) {
+        if (!$person->hasAuthorization($client)) {
             throw new AccessDeniedHttpException("Not authorized");
         }
 
@@ -265,9 +264,8 @@ class PersonController extends BaseController
             'url' => $this->generateUrl('lc_logout_not_remembered_safe',
                 array(
                 'key' => $logoutKey->getKey()
-            ), UrlGeneratorInterface::ABSOLUTE_URL)
+                ), UrlGeneratorInterface::ABSOLUTE_URL)
         );
         return $result;
     }
-
 }

@@ -28,6 +28,17 @@ function die {
   exit 1
 }
 
+function setTimezone {
+  echo "date.timezone = $2" | sudo tee --append $1
+}
+
+function askTimezone {
+  if [ -n "$PHP_TIMEZONE" ]; then
+    return
+  fi
+  read -p "What's your timezone? " -e -i "America/Sao_Paulo" PHP_TIMEZONE
+}
+
 ###############################
 # Setting up Permissions
 ###############################
@@ -50,6 +61,29 @@ if [ $SKIP_ACL -ne 1 ]; then
     fi
   fi
   echo $OK
+fi
+
+###############################
+# Configuring PHP timezones
+###############################
+PHP_INI_CLI="/etc/php5/cli/php.ini"
+PHP_INI_FPM="/etc/php5/fpm/php.ini"
+PHP_TIMEZONE=""
+
+if [ -f $PHP_INI_CLI ]; then
+  CLI_TIMEZONE=`php -c $PHP_INI_CLI -i | grep date.timezone | grep 'no value' | wc -l`
+  if [ $CLI_TIMEZONE = "1" ]; then
+    askTimezone
+    setTimezone $PHP_INI_CLI $PHP_TIMEZONE
+  fi
+fi
+
+if [ -f $PHP_INI_FPM ]; then
+  FPM_TIMEZONE=`php -c $PHP_INI_FPM -i | grep date.timezone | grep 'no value' | wc -l`
+  if [ $FPM_TIMEZONE = "1" ]; then
+    askTimezone
+    setTimezone $PHP_INI_FPM $PHP_TIMEZONE
+  fi
 fi
 
 ###############################
