@@ -5,7 +5,6 @@ namespace LoginCidadao\CoreBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\ORM\EntityManager;
 use LoginCidadao\NotificationBundle\Entity\Category;
@@ -97,7 +96,7 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
     private function loopInsert($dir, $fileName, $query, $prepareFunction, $debug = false)
     {
         $entries = 0;
-        $file = $dir . DIRECTORY_SEPARATOR . $fileName;
+        $file = $dir.DIRECTORY_SEPARATOR.$fileName;
         if (($handle = fopen($file, 'r')) !== false) {
             while (($row = fgetcsv($handle)) !== false) {
                 $data = $prepareFunction($row);
@@ -117,7 +116,7 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
         if (!($this->getDefaultOAuthClient() instanceof Client)) {
             $uid = $this->getContainer()->getParameter('oauth_default_client.uid');
             $pictureName = 'client_logo.png';
-            $picture = new File($dir . DIRECTORY_SEPARATOR . $pictureName);
+            $picture = new File($dir.DIRECTORY_SEPARATOR.$pictureName);
             $domain = $this->getContainer()->getParameter('site_domain');
             $url = "//$domain";
             $grantTypes = array(

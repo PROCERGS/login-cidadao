@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use LoginCidadao\CoreBundle\Helper\GridHelper;
 use LoginCidadao\CoreBundle\Form\Type\RemoveIdCardFormType;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use Doctrine\Common\Collections\Collection;

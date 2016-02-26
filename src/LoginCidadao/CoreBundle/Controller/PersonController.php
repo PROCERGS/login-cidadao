@@ -11,7 +11,6 @@
 namespace LoginCidadao\CoreBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -29,9 +28,6 @@ use LoginCidadao\CoreBundle\Form\Type\DocRgFormType;
 use LoginCidadao\CoreBundle\Entity\IdCard;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\FormError;
-use LoginCidadao\BadgesBundle\BadgesEvents;
-use LoginCidadao\BadgesBundle\Event\EvaluateBadgesEvent;
-use LoginCidadao\BadgesBundle\Event\ListBadgesEvent;
 use LoginCidadao\CoreBundle\Helper\GridHelper;
 
 class PersonController extends Controller

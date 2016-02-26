@@ -10,8 +10,6 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use LoginCidadao\CoreBundle\Entity\State;
 use LoginCidadao\CoreBundle\Model\SelectData;
 use LoginCidadao\CoreBundle\Model\Manager\CityManager;
@@ -74,7 +72,7 @@ class CitySelectorComboType extends AbstractType
         $cityManager  = $this->cityManager;
         $level        = $options['level'];
 
-        $refreshState = function (FormInterface $form, $countryId = null) use ($options, $stateManager, $level, $preferredChoiceCallback) {
+        $refreshState = function(FormInterface $form, $countryId = null) use ($options, $stateManager, $level, $preferredChoiceCallback) {
             if ($level === 'country') {
                 return;
             }
@@ -115,7 +113,7 @@ class CitySelectorComboType extends AbstractType
             ));
         };
 
-        $refreshCity = function (FormInterface $form, $stateId = null) use ($options, $cityManager, $level) {
+        $refreshCity = function(FormInterface $form, $stateId = null) use ($options, $cityManager, $level) {
             if ($level === 'country' || $level === 'state') {
                 return;
             }
@@ -156,7 +154,7 @@ class CitySelectorComboType extends AbstractType
         };
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) use ($refreshState, $refreshCity, $level) {
+            function(FormEvent $event) use ($refreshState, $refreshCity, $level) {
             $form = $event->getForm();
             $data = $event->getData();
 
@@ -179,7 +177,7 @@ class CitySelectorComboType extends AbstractType
         });
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) use ($refreshState, $refreshCity, $level) {
+            function(FormEvent $event) use ($refreshState, $refreshCity, $level) {
             $form = $event->getForm();
             $data = $event->getData();
 
@@ -213,14 +211,14 @@ class CitySelectorComboType extends AbstractType
     }
 
     public function finishView(FormView $view, FormInterface $form,
-                               array $options)
+                                 array $options)
     {
         if ($view->children['country']->vars['choice_translation_domain'] === false) {
             return;
         }
         $collator     = new \Collator($this->translator->getLocale());
         $translator   = $this->translator;
-        $sortFunction = function ($a, $b) use ($collator, $translator) {
+        $sortFunction = function($a, $b) use ($collator, $translator) {
             return $collator->compare($translator->trans($a->label),
                     $translator->trans($b->label));
         };
@@ -235,7 +233,7 @@ class CitySelectorComboType extends AbstractType
 
     private function getPreferredChoiceCallback()
     {
-        return function ($choice, $key) {
+        return function($choice, $key) {
             return $choice->getPreference() > 0;
         };
     }

@@ -7,15 +7,11 @@ use JMS\Serializer\SerializationContext;
 use LoginCidadao\APIBundle\Exception\RequestTimeoutException;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\Authorization;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use LoginCidadao\NotificationBundle\Entity\Notification;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use LoginCidadao\OAuthBundle\Model\ClientUser;
 use LoginCidadao\APIBundle\Security\Audit\Annotation as Audit;
@@ -167,7 +163,7 @@ class PersonController extends BaseController
 
         $body = json_decode($request->getContent(), 1);
 
-        $chkAuth   = $this->getDoctrine()
+        $chkAuth = $this->getDoctrine()
             ->getManager()
             ->getRepository('LoginCidadaoCoreBundle:Authorization')
             ->createQueryBuilder('a')
@@ -190,7 +186,7 @@ class PersonController extends BaseController
                     $rowR[$idx] = array('person_id' => $row['person_id'], 'error' => 'missing authorization or configuration');
                     continue;
                 }
-                $not    = new Notification();
+                $not = new Notification();
                 $not->setPerson($res[0]);
                 $not->setConfigNotCli($res[1])
                     ->setIcon(isset($row['icon']) && $row['icon'] ? $row['icon']
@@ -241,7 +237,7 @@ class PersonController extends BaseController
             ->findOneBy(array(
             'token' => $token->getToken()
         ));
-        $client      = $accessToken->getClient();
+        $client = $accessToken->getClient();
 
         $people = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Person');
         $person = $people->find($id);
