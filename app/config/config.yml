@@ -489,3 +489,7 @@ liip_monitor:
             - '%kernel.cache_dir%'
             - '%user_profile_upload_dir%'
             - '%client_image_upload_dir%'
+
+services:
+    fos_user.doctrine_registry:
+        alias: doctrine

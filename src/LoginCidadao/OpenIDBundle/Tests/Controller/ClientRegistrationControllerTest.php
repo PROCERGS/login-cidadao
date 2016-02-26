@@ -12,7 +12,7 @@ class ClientRegistrationControllerTest extends WebTestCase
         $client = static::createClient();
 
         $data = array(
-            'redirect_uris' => array('http://this.is.a.test/callback')
+            'redirect_uris' => array('http://google.com/test')
         );
 
         $client->request(
@@ -49,7 +49,7 @@ class ClientRegistrationControllerTest extends WebTestCase
         $client = static::createClient();
 
         $data = array(
-            'redirect_uris' => array('https://valid.uri.com/'),
+            'redirect_uris' => array('https://google.com/valid/'),
             'logo_uri' => 'this.is.an.invalid.uri'
         );
 
@@ -57,7 +57,6 @@ class ClientRegistrationControllerTest extends WebTestCase
             'POST', '/openid/connect/register', array(), array(),
             array('CONTENT_TYPE' => 'application/json'), json_encode($data)
         );
-        echo json_encode($data);
 
         $this->assertJsonResponse($client->getResponse(), 400, false);
         $response = json_decode($client->getResponse()->getContent());
