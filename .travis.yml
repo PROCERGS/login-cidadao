@@ -6,7 +6,6 @@ env:
 
 php:
 - 5.5
-- hhvm
 
 matrix:
   fast_finish: true
