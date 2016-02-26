@@ -41,27 +41,3 @@ tools:
     php_cpd: true
     php_loc: true
     php_pdepend: true
-#build:
-#    environment:
-#        memcached: true
-#        
-#    dependencies:
-#        before:
-#            - chmod -R 777 app/cache app/logs web/uploads
-#            - composer self-update
-#            - composer install --prefer-dist --no-interaction
-#            - psql -c "CREATE ROLE logincidadao WITH PASSWORD 'logincidadao';"
-#            - psql -c 'CREATE DATABASE logincidadao WITH OWNER logincidadao'
-#
-#    project_setup:
-#        before:
-#            - echo y | php app/console doctrine:schema:update --force
-#            - echo y | php app/console lc:database:populate batch/
-#    tests:
-#        override:
-#            -
-#                command: 'phpunit -c app'
-#                environment: { SYMFONY_DEPRECATIONS_HELPER: weak }
-#                coverage:
-#                    file: 'some-file'
-#                    format: 'php-clover'
