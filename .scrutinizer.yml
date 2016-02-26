@@ -48,9 +48,9 @@ build:
     dependencies:
         before:
             - chmod -R 777 app/cache app/logs web/uploads
-            - composer install --dev --prefer-source --no-interaction
-            - psql -c "create role logincidadao with password '';" -U postgres
-            - psql -c 'create database logincidadao;' -U postgres
+            - composer install --dev --prefer-dist --no-interactionbefore:
+            - psql -c "CREATE ROLE logincidadao WITH PASSWORD '';"
+            - psql -c 'CREATE DATABASE logincidadao WITH OWNER logincidadao'
 
     project_setup:
         before:
