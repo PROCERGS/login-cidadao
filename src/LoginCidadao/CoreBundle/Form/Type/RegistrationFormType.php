@@ -11,7 +11,8 @@ class RegistrationFormType extends BaseType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', 'email',
+            ->add('email',
+                'Symfony\Component\Form\Extension\Core\Type\EmailType',
                 array(
                 'required' => true,
                 'label' => 'form.email',
@@ -19,10 +20,11 @@ class RegistrationFormType extends BaseType
                 'translation_domain' => 'FOSUserBundle'
                 )
             )
-            ->add('plainPassword', 'repeated',
+            ->add('plainPassword',
+                'Symfony\Component\Form\Extension\Core\Type\RepeatedType',
                 array(
                 'required' => true,
-                'type' => 'password',
+                'type' => 'Symfony\Component\Form\Extension\Core\Type\PasswordType',
                 'attr' => array(
                     'autocomplete' => 'off',
                     'placeholder' => 'form.plainPassword.example'
@@ -42,7 +44,7 @@ class RegistrationFormType extends BaseType
         ;
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'lc_person_registration';
     }

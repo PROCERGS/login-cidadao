@@ -15,7 +15,7 @@ class StateRepository extends EntityRepository
                 ->select('s')
                 ->from('LoginCidadaoCoreBundle:State', 's')
                 ->join('LoginCidadaoCoreBundle:Country', 'c', 'WITH',
-                       's.country = c')
+                        's.country = c')
                 ->where('s.name LIKE :string OR LOWER(s.name) LIKE :string')
                 ->addOrderBy('c.preference', 'DESC')
                 ->addOrderBy('s.name', 'ASC')
@@ -47,10 +47,10 @@ class StateRepository extends EntityRepository
     
     public function findStateByPreferredCountry($countryAcronym)
     {
-        return $this->createQueryBuilder('s')->join('LoginCidadaoCoreBundle:Country', 'c', 'WITH', 's.country = c')->where('s.reviewed = ' . Country::REVIEWED_OK)
+        return $this->createQueryBuilder('s')->join('LoginCidadaoCoreBundle:Country', 'c', 'WITH', 's.country = c')->where('s.reviewed = '.Country::REVIEWED_OK)
                         ->andWhere('c.iso2 = :country')
                         ->setParameter('country', $countryAcronym)
-                        ->orderBy('s.name', 'ASC')->getQuery()->getResult();;
+                        ->orderBy('s.name', 'ASC')->getQuery()->getResult(); ;
     }
 
 }

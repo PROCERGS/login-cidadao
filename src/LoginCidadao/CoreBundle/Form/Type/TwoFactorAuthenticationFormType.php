@@ -6,7 +6,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
-use Symfony\Component\Translation\TranslatorInterface;
 
 class TwoFactorAuthenticationFormType extends AbstractType
 {
@@ -15,21 +14,25 @@ class TwoFactorAuthenticationFormType extends AbstractType
     {
         $builder
             ->add('googleAuthenticatorSecret', 'text',
-                  array(
+                array(
                 'read_only' => true,
                 'label' => "Authenticator Secret"
-            ))
+                )
+            )
             ->add('verification', 'text',
                 array(
                 'label' => 'Generated Code',
                 'mapped' => false
-        ));
+                )
+            )
+        ;
         if (strlen($builder->getData()->getPassword()) == 0) {
             $builder->add('plainPassword', 'repeated',
                 array(
                 'type' => 'password',
                 'attr' => array('autocomplete' => 'off')
-            ));
+                )
+            );
         } else {
             $builder->add('current_password', 'password',
                 array(
@@ -37,14 +40,17 @@ class TwoFactorAuthenticationFormType extends AbstractType
                 'attr' => array('autocomplete' => 'off'),
                 'constraints' => new UserPassword(),
                 'mapped' => false
-            ));
+                )
+            );
         }
         $builder
             ->add('enable', 'submit',
-                  array(
+                array(
                 'attr' => array('class' => 'btn btn-success'),
-                'label' => 'Activate Two-Factor Authentication')
-        );
+                'label' => 'Activate Two-Factor Authentication'
+                )
+            )
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -42,7 +42,7 @@ interface NotificationHandlerInterface
      * @return NotificationInterface[]
      */
     public function getAllFromPerson(PersonInterface $person, $limit = 5,
-                                     $offset = 0, $orderby = null);
+                                        $offset = 0, $orderby = null);
 
     /**
      * Same as getAllFromPerson but uses the notification's id as the offset.
@@ -55,8 +55,8 @@ interface NotificationHandlerInterface
      * @return NotificationInterface[]
      */
     public function getAllFromPersonIdOffset(PersonInterface $person,
-                                             $limit = 5, $offset = 0,
-                                             ClientInterface $client = null);
+                                                $limit = 5, $offset = 0,
+                                                ClientInterface $client = null);
 
     /**
      * Get a list of an user's Notifications restricted by Client.
@@ -70,9 +70,9 @@ interface NotificationHandlerInterface
      * @return NotificationInterface[]
      */
     public function getAllFromPersonByClient(PersonInterface $person,
-                                             ClientInterface $client,
-                                             $limit = 5, $offset = 0,
-                                             $orderby = null);
+                                                ClientInterface $client,
+                                                $limit = 5, $offset = 0,
+                                                $orderby = null);
 
     /**
      * Post Notification, creates a new Notification
@@ -142,7 +142,7 @@ interface NotificationHandlerInterface
      * @return boolean
      */
     public function initializeSettings(PersonInterface $person,
-                                       ClientInterface $client);
+                                        ClientInterface $client);
 
     /**
      * Mark the specified range of IDs as read.
@@ -163,8 +163,8 @@ interface NotificationHandlerInterface
      * @return NotificationSettings PersonNotificationOptions grouped by Client
      */
     public function getGroupedSettings(PersonInterface $person,
-                                       ClientInterface $client = null,
-                                       CategoryInterface $category = null);
+                                        ClientInterface $client = null,
+                                        CategoryInterface $category = null);
 
     /**
      *

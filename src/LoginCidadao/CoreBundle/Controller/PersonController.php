@@ -11,7 +11,6 @@
 namespace LoginCidadao\CoreBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -29,9 +28,6 @@ use LoginCidadao\CoreBundle\Form\Type\DocRgFormType;
 use LoginCidadao\CoreBundle\Entity\IdCard;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\FormError;
-use LoginCidadao\BadgesBundle\BadgesEvents;
-use LoginCidadao\BadgesBundle\Event\EvaluateBadgesEvent;
-use LoginCidadao\BadgesBundle\Event\ListBadgesEvent;
 use LoginCidadao\CoreBundle\Helper\GridHelper;
 
 class PersonController extends Controller
@@ -56,30 +52,31 @@ class PersonController extends Controller
      */
     public function revokeAuthorizationAction(Request $request, $clientId)
     {
-        $form = $this->createForm('lc_revoke_authorization');
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\RevokeAuthorizationFormType');
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $security   = $this->get('security.context');
-            $em         = $this->getDoctrine()->getManager();
-            $tokens     = $em->getRepository('LoginCidadaoOAuthBundle:AccessToken');
-            $clients    = $em->getRepository('LoginCidadaoOAuthBundle:Client');
-            $translator = $this->get('translator');
+            $tokenStorage = $this->get('security.token_storage');
+            $authChecker  = $this->get('security.authorization_checker');
+            $em           = $this->getDoctrine()->getManager();
+            $tokens       = $em->getRepository('LoginCidadaoOAuthBundle:AccessToken');
+            $clients      = $em->getRepository('LoginCidadaoOAuthBundle:Client');
+            $translator   = $this->get('translator');
 
             try {
 
-                if (false === $security->isGranted('ROLE_USER')) {
+                if (false === $authChecker->isGranted('ROLE_USER')) {
                     throw new AccessDeniedException();
                 }
 
-                $user = $security->getToken()->getUser();
+                $user = $tokenStorage->getToken()->getUser();
 
                 $client         = $clients->find($clientId);
                 $accessTokens   = $tokens->findBy(array(
                     'client' => $client,
                     'user' => $user
                 ));
-                $refreshTokens  = $em->getRepository('LoginCidadaoOAuthBundle:RefreshToken')
+                $refreshTokens = $em->getRepository('LoginCidadaoOAuthBundle:RefreshToken')
                     ->findBy(array(
                     'client' => $client,
                     'user' => $user
@@ -165,17 +162,21 @@ class PersonController extends Controller
         $userManager = $this->get('fos_user.user_manager');
 
         $formBuilder = $this->createFormBuilder($user)
-            ->add('username', 'text')
-            ->add('save', 'submit');
+            ->add('username',
+                'Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('save',
+            'Symfony\Component\Form\Extension\Core\Type\SubmitType');
 
         $emptyPassword = strlen($user->getPassword()) == 0;
         if ($emptyPassword) {
-            $formBuilder->add('plainPassword', 'repeated',
+            $formBuilder->add('plainPassword',
+                'Symfony\Component\Form\Extension\Core\Type\RepeatedType',
                 array(
                 'type' => 'password'
             ));
         } else {
-            $formBuilder->add('current_password', 'password',
+            $formBuilder->add('current_password',
+                'Symfony\Component\Form\Extension\Core\Type\PasswordType',
                 array(
                 'required' => true,
                 'constraints' => new UserPassword(),
@@ -216,7 +217,7 @@ class PersonController extends Controller
     public function registrationCpfAction(Request $request)
     {
         $person = $this->getUser();
-        if (is_numeric($cpf    = preg_replace('/[^0-9]/', '',
+        if (is_numeric($cpf = preg_replace('/[^0-9]/', '',
                 $request->get('cpf'))) && strlen($cpf) == 11) {
             $person->setCpf($cpf);
         }
@@ -344,7 +345,8 @@ class PersonController extends Controller
         $event = new GetResponseUserEvent($user, $request);
         $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $event);
 
-        $form = $this->createForm('person_doc_form_type', $user);
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\DocFormType',
+            $user);
         $form->handleRequest($request);
         if ($form->isValid()) {
 
@@ -395,8 +397,8 @@ class PersonController extends Controller
     {
         $form = $this->createForm(new DocRgFormType());
         $rg   = null;
-        if (($id   = $request->get('id')) || (($data = $request->get($form->getName()))
-            && ($id   = $data['id']))) {
+        if (($id = $request->get('id')) || (($data = $request->get($form->getName()))
+            && ($id = $data['id']))) {
             $rg = $this->getDoctrine()
                     ->getManager()
                     ->getRepository('LoginCidadaoCoreBundle:IdCard')->findOneBy(array(
@@ -461,11 +463,21 @@ class PersonController extends Controller
         $n5    = ($rg[0] * 2) % 9;
         $total = $n1 + $n2 + $n3 + $n4 + $n5 + $rg[7] + $rg[5] + $rg[3] + $rg[1];
 
-        if ($rg[8] == 9) $total = $total + 9;
-        if ($rg[6] == 9) $total = $total + 9;
-        if ($rg[4] == 9) $total = $total + 9;
-        if ($rg[2] == 9) $total = $total + 9;
-        if ($rg[0] == 9) $total = $total + 9;
+        if ($rg[8] == 9) {
+            $total = $total + 9;
+        }
+        if ($rg[6] == 9) {
+            $total = $total + 9;
+        }
+        if ($rg[4] == 9) {
+            $total = $total + 9;
+        }
+        if ($rg[2] == 9) {
+            $total = $total + 9;
+        }
+        if ($rg[0] == 9) {
+            $total = $total + 9;
+        }
 
         $resto = $total % 10;
 

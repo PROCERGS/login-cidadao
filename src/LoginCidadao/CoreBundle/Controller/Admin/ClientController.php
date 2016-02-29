@@ -62,7 +62,8 @@ class ClientController extends Controller
         if (!$client) {
             return $this->redirect($this->generateUrl('lc_admin_app_new'));
         }
-        $form = $this->createForm('client_form_type', $client);
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\ClientFormType',
+            $client);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -135,7 +136,7 @@ class ClientController extends Controller
                         $msg['title']     = str_repeat($input, $r);
                         $msg['shorttext'] = str_repeat($input, $r);
                     }
-                    $not    = new Notification();
+                    $not = new Notification();
                     $not->setPerson($person);
                     $not->setCategory($category);
                     $not->setIcon($category->getDefaultIcon());

@@ -19,7 +19,7 @@ class FailedCallbackRepository extends EntityRepository
             ->getRepository('LoginCidadaoNotificationBundle:FailedCallback')
             ->createQueryBuilder('f')
             ->join('LoginCidadaoNotificationBundle:Notification', 'n',
-                   'WITH', 'f.notification = n')
+                    'WITH', 'f.notification = n')
             ->where('n.sender = :client')
             ->setParameter('client', $client);
         return $qb->getQuery()->getResult();

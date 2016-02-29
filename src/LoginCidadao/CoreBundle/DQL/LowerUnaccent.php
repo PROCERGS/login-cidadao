@@ -28,6 +28,6 @@ class LowerUnaccent extends FunctionNode
 
     public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
     {
-        return 'lower_unaccent(' . $this->var1->dispatch($sqlWalker) . ')'; // (7)
+        return 'lower_unaccent('.$this->var1->dispatch($sqlWalker).')'; // (7)
     }
 }

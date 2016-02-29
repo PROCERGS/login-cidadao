@@ -15,9 +15,9 @@ class CityRepository extends EntityRepository
             ->select('c')
             ->from('LoginCidadaoCoreBundle:City', 'c')
             ->join('LoginCidadaoCoreBundle:State', 's', 'WITH',
-                   'c.state = s')
+                    'c.state = s')
             ->join('LoginCidadaoCoreBundle:Country', 'co', 'WITH',
-                   's.country = co')
+                    's.country = co')
             ->where('c.name LIKE :string OR LOWER(c.name) LIKE :string')
             ->addOrderBy('s.preference', 'DESC')
             ->addOrderBy('c.name', 'ASC')

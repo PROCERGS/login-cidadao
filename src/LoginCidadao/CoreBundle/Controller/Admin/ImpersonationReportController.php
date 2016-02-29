@@ -64,7 +64,8 @@ class ImpersonationReportController extends Controller
 
         $report->setImpersonator($this->getUser());
 
-        $form = $this->createForm(new ImpersonationReportType(), $report);
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\ImpersonationReportType',
+            $report);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -87,7 +88,8 @@ class ImpersonationReportController extends Controller
     {
         $report = $this->getOr404($id);
 
-        $form = $this->createForm(new ImpersonationReportType(), $report);
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\ImpersonationReportType',
+            $report);
         $form->handleRequest($request);
 
         if ($form->isValid()) {

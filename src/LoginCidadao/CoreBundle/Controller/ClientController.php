@@ -28,7 +28,7 @@ class ClientController extends Controller
 
         $scopes = empty($authorization) ? array() : $authorization->getScope();
 
-        $form = $this->createForm('lc_revoke_authorization',
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\RevokeAuthorizationFormType',
                 array('client_id' => $clientId))->createView();
 
         return compact('user', 'client', 'scopes', 'form');

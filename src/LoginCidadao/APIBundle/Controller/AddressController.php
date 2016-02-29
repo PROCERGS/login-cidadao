@@ -3,7 +3,6 @@
 namespace LoginCidadao\APIBundle\Controller;
 
 use FOS\RestBundle\Controller\FOSRestController;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Symfony\Component\HttpFoundation\Request;
 use LoginCidadao\CoreBundle\Entity\Country;
@@ -24,7 +23,7 @@ class AddressController extends FOSRestController
     {
         $query = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Country')
         ->createQueryBuilder('cty')
-        ->where('cty.reviewed = ' . Country::REVIEWED_OK)
+        ->where('cty.reviewed = '.Country::REVIEWED_OK)
         ->orderBy('cty.id', 'ASC');
         return $this->handleView($this->view($query->getQuery()->getResult(Query::HYDRATE_ARRAY)));
     }
@@ -38,7 +37,7 @@ class AddressController extends FOSRestController
     {
         $query = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:State')
         ->createQueryBuilder('state')
-        ->where('state.reviewed = ' . Country::REVIEWED_OK);
+        ->where('state.reviewed = '.Country::REVIEWED_OK);
         $country = $request->get('country_id');
         if ($country) {
             $query->join('LoginCidadaoCoreBundle:Country', 'cty', 'WITH', 'state.country = cty');
@@ -58,7 +57,7 @@ class AddressController extends FOSRestController
     {
         $query = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:City')
         ->createQueryBuilder('c')
-        ->where('c.reviewed = ' . Country::REVIEWED_OK);
+        ->where('c.reviewed = '.Country::REVIEWED_OK);
         $country = $request->get('country_id');
         $state = $request->get('state_id');
         if ($country || $state) {

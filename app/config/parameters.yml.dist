@@ -1,85 +1,109 @@
 parameters:
-    database_driver:   pdo_mysql
-    database_host:     127.0.0.1
+    # Database Manager. pdo_pgsql for Postgres or pdo_mysql for MySQL
+    database_driver:   pdo_pgsql
+    # Database address (use ~ for socket)
+    database_host:     localhost
+    # Database port (use ~ for socket)
     database_port:     ~
-    database_name:     symfony
-    database_user:     root
-    database_password: ~
+    # Database name (schema)
+    database_name:     logincidadao
+    # Database user
+    database_user:     logincidadao
+    # Database password (use ~ for socket)
+    database_password: logincidadao
 
     # Trusted proxies (http://symfony.com/doc/current/cookbook/request/load_balancer_reverse_proxy.html)
-    trusted_proxies: [ ]
+    trusted_proxies: []
     # IPs allowed to access dev environment
     dev_allowed: [ 127.0.0.0/8 ]
     # IPs allowed to access monitoring endpoint
     allowed_monitors: [ 127.0.0.0/8 ]
 
+    # Memcached server address
     memcached_host: 127.0.0.1
+    # Memcached server port
     memcached_port: 11211
+    # Session prefix
     session_prefix: lc_sess_
+    # Session lifetime (seconds)
     session_lifetime: 86400
 
+    # Email transport (read the following doc for the following settings: http://symfony.com/doc/2.8/cookbook/email/email.html)
     mailer_transport:  smtp
     mailer_host:       127.0.0.1
     mailer_user:       ~
     mailer_password:   ~
 
-    locale:            en
+    # Translation locale
+    locale:            pt_BR
+    # Your application's secret. Should be the same for all servers
     secret:            ThisTokenIsNotSoSecretChangeIt
 
+    # (dev only) Show the profiler toolbar by default
     web_profiler_toolbar: true
 
+    # Facebook App ID
     facebook_app_id: facebook_app_id_here
+    # Facebook App Secret
     facebook_app_secret: facebook_app_secret_here
-    facebook_app_url: facebook_app_url
+    # Leave it as is
     facebook_app_this_url: "https://%site_domain%"
+    # Leave it as is
     facebook_app_scope: [email, user_about_me, user_birthday, user_location]
 
+    # Twitter API Key
     twitter_app_key:    twitter_app_key_goes_here
+    # Twitter API Secret
     twitter_app_secret: twitter_app_secret_here
 
-    http_proxy:
-        type: HTTP
-        host: host.domain.tld
-        port: 3128
-        auth: 'login:senha'
-
-    site_domain: meu.rs.gov.br
-    mailer_sender_mail: webmaster@example.com
-    mailer_sender_name: webmaster
+    # Recaptcha Public Key
     recaptcha_public_key: ~
+    # Recaptcha Private Key
     recaptcha_private_key: ~
-    # This must be compatible with strtotime()
-    registration.cpf.empty_time: '+1 month'
-    # Compatible with strtotime() but without + and - sign
-    registration.email.unconfirmed_time: '1 day'
-    brute_force_threshold: 4
 
-    background_picture.author: 'Guilherme da Silva Donato'
-    background_picture.link: 'http://www.flickr.com/photos/lordjedi/2295119043/'
-    mailer_receiver_mail: ~
-    nfg_ws_url: ~
-    soe_organization: ~
-    soe_username: ~
-    soe_password: ~
-    nfg_url_auth: ~
-    nfg_url_login: ~
-    nfg_hmac_secret: ~
-
-    user_profile_upload_dir: %kernel.root_dir%/../web/uploads/profile-pictures
-    client_image_upload_dir: '%kernel.root_dir%/../web/uploads/client-pictures'
-    tre_search_link: 'http://www.tse.jus.br/eleitor/servicos/titulo-e-local-de-votacao/consulta-por-nome'
-    uri_root: /
-
+    # Google API Key
     google_app_key: YOUR_API_KEY
+    # Google API Secret
     google_app_secret: YOUR_API_SECRET
 
-    # Default Client
-    oauth_default_client.uid: login-cidadao
-    # Notification's categories IDs
-    notifications_categories_alert.uid: login-cidadao-alert
+    # Should login be allowed from this third-party providers?
+    third_party_login:
+        facebook: true
+        twitter: true
+        google: true
 
-    # Postal Code Search Link
-    postalcode_search_link: 'http://m.correios.com.br/movel/buscaCep.do'
+    # Proxy setup (you probably don't need this)
+    http_proxy: ~
+
+    # Your domain
+    site_domain: localhost
+    # Email sender address (usually a no-reply address)
+    mailer_sender_mail: no-reply@%site_domain%
+    # Email sender name
+    mailer_sender_name: Login Cidadão
+    # This must be compatible with strtotime()
+    # You probably don't need to change this
+    registration.cpf.empty_time: '+1 month'
+    # Compatible with strtotime() but without + and - sign
+    # You probably don't need to change this
+    registration.email.unconfirmed_time: '1 day'
+    # After how many attempts should users be challenged by captcha?
+    brute_force_threshold: 4
+
+    # (dev only) http://symfony.com/doc/current/cookbook/email/dev_environment.html#sending-to-a-specified-address
+    mailer_receiver_mail: ~
+
+    # Pictures upload directory
+    user_profile_upload_dir: %kernel.root_dir%/../web/uploads/profile-pictures
+    # Client (services) pictures upload directory
+    client_image_upload_dir: '%kernel.root_dir%/../web/uploads/client-pictures'
+    # Uploaded images URI prefix
+    uri_root: /
+
+    # Default Client UID (no need to change)
+    oauth_default_client.uid: login-cidadao
+    # Notification's categories IDs (no need to change)
+    notifications_categories_alert.uid: login-cidadao-alert
 
     # Default Country ISO 2
     default_country_iso2: BR
@@ -88,14 +112,14 @@ parameters:
     log_translator: false
 
     # OpenID Connect
-    # JWT Config
-    #  - this is necessary since we can't access the oidc.issuer_url in the Compiler Pass
+    # JWT Config (no need to change)
+    #  - it is necessary since we can't access the oidc.issuer_url in the Compiler Pass
     jwt_iss: http://%site_domain%%base_path%
     # JWKS Config
     jwks_dir: %kernel.root_dir%/../app/config/jwks
     jwks_private_key_file: private.pem
 
-    # Two Factor Auth
+    # Two Factor Auth Issuer Name
     two_factor_issuer: Login Cidadão
 
     # Enables or disables the contact form's captcha
@@ -104,8 +128,13 @@ parameters:
     # Warn users about untrusted Organizations?
     warn_untrusted: true
 
-    # Should login be allowed from this third-party providers?
-    third_party_login:
-        facebook: true
-        twitter: true
-        google: true
+    # Password Encoder
+    default_password_encoder: bcrypt
+
+    nfg_ws_url: ~
+    soe_organization: ~
+    soe_username: ~
+    soe_password: ~
+    nfg_url_auth: ~
+    nfg_url_login: ~
+    nfg_hmac_secret: ~

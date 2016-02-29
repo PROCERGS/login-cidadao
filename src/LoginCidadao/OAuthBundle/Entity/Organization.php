@@ -18,7 +18,6 @@ use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 use LoginCidadao\OAuthBundle\Validator\Constraints\DomainOwnership;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\Util\SecureRandom;
 
 /**
  * @ORM\Entity(repositoryClass="LoginCidadao\OAuthBundle\Entity\OrganizationRepository")
@@ -225,8 +224,7 @@ class Organization implements OrganizationInterface
         if ($this->validationSecret) {
             return;
         }
-        $generator = new SecureRandom();
-        $random    = base64_encode($generator->nextBytes(35));
+        $random = base64_encode(random_bytes(35));
         $this->setValidationSecret($random);
     }
 

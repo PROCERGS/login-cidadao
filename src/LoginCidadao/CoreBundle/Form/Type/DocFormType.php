@@ -11,14 +11,8 @@
 namespace LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Doctrine\ORM\EntityRepository;
-use LoginCidadao\CoreBundle\Entity\Country;
-use LoginCidadao\CoreBundle\Entity\State;
-use LoginCidadao\CoreBundle\Entity\City;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\AbstractType;
+use Doctrine\ORM\EntityManager;
 
 class DocFormType extends AbstractType
 {
@@ -26,15 +20,11 @@ class DocFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('cpf', 'text',
+        $builder->add('cpf',
+            'Symfony\Component\Form\Extension\Core\Type\TextType',
             array(
             'required' => false
         ));
-    }
-
-    public function getName()
-    {
-        return 'person_doc_form_type';
     }
 
     public function setEntityManager(EntityManager $em)

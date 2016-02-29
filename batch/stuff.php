@@ -12,27 +12,27 @@ class Zip_Manager extends \ZipArchive
 
         $this->createDir($directory);
 
-        $copySource = 'zip://' . $this->filename . '#';
-        for ($i = 0; $i < $this->numFiles; $i ++) {
+        $copySource = 'zip://'.$this->filename.'#';
+        for ($i = 0; $i < $this->numFiles; $i++) {
             $entry = $this->getNameIndex($i);
             $filename = basename($entry);
 
             if ($this->matchFileToFilter($filename, $filters)) {
                 $base = dirname($entry);
-                $newPath = $directory . DIRECTORY_SEPARATOR . $base . DIRECTORY_SEPARATOR;
+                $newPath = $directory.DIRECTORY_SEPARATOR.$base.DIRECTORY_SEPARATOR;
                 $this->createDir($newPath);
 
                 // extract file
-                copy($copySource . $entry, $newPath . $filename);
+                copy($copySource.$entry, $newPath.$filename);
             }
         }
     }
 
     protected function createDir($path)
     {
-        if (! is_dir($path)) {
-            if (! mkdir($path, self::CHMOD, true)) {
-                throw new Exception('unable to create path ' . $path);
+        if (!is_dir($path)) {
+            if (!mkdir($path, self::CHMOD, true)) {
+                throw new Exception('unable to create path '.$path);
             }
         }
     }
@@ -47,7 +47,7 @@ class Zip_Manager extends \ZipArchive
 
         foreach ($filters as $i => $filter) {
 
-            if (! ctype_alnum($filter[0]) && preg_match($filter, $filename)) {
+            if (!ctype_alnum($filter[0]) && preg_match($filter, $filename)) {
                 return true;
             }
         }
@@ -71,7 +71,7 @@ function file_get_contents_curl($url, $file, $referer = null)
     $ch = curl_init();
     // curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     $f = fopen($file, 'wb');
-    if (! $f) {
+    if (!$f) {
         return false;
     }
     curl_setopt($ch, CURLOPT_FILE, $f);
@@ -84,7 +84,7 @@ function file_get_contents_curl($url, $file, $referer = null)
     }
     $result = curl_exec($ch);
     if (!$result) {
-        echo curl_error ($ch );
+        echo curl_error($ch);
     }
     curl_close($ch);
     fclose($f);
@@ -119,9 +119,9 @@ function utf8_encode_recursivo($in)
         foreach ($in as $key => $value) {
             $out[utf8_encode_recursivo($key)] = utf8_encode_recursivo($value);
         }
-    } elseif(is_string($in)) {
-        if(!mb_check_encoding($in, 'UTF-8')
-            OR !($in === mb_convert_encoding(mb_convert_encoding($in, 'UTF-32', 'UTF-8' ), 'UTF-8', 'UTF-32'))) {
+    } elseif (is_string($in)) {
+        if (!mb_check_encoding($in, 'UTF-8')
+            OR !($in === mb_convert_encoding(mb_convert_encoding($in, 'UTF-32', 'UTF-8'), 'UTF-8', 'UTF-32'))) {
                 $in = mb_convert_encoding($in, 'UTF-8');
             }
             return $in;
@@ -129,120 +129,4 @@ function utf8_encode_recursivo($in)
         return $in;
     }
     return $out;
-}
-class DneHelper
-{
-
-    protected $url = 'http://dne.procergs.reders/dne/controller.jsp';
-
-    protected $key = 'h3d8s74gf5';
-
-    protected $ch;
-
-    protected $cookie;
-
-    protected $proxy;
-
-    public function setProxy($var)
-    {
-        $this->proxy = $var;
-    }
-
-    private function _common($header = array())
-    {
-        $this->ch = curl_init();
-        curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($this->ch, CURLOPT_HEADER, 0);
-        curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
-        if (ini_get('open_basedir')) {
-
-        } else {
-            curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
-        }
-        $proxy = $this->proxy;
-        if (isset($proxy['type'], $proxy['host'], $proxy['port'])) {
-            curl_setopt($this->ch, CURLOPT_PROXYTYPE, $proxy['type']);
-            curl_setopt($this->ch, CURLOPT_PROXY, $proxy['host']);
-            curl_setopt($this->ch, CURLOPT_PROXYPORT, $proxy['port']);
-            if (isset($proxy['auth'])) {
-                curl_setopt($this->ch, CURLOPT_PROXYUSERPWD, $proxy['auth']);
-            }
-        }
-        $headApp = array(
-            'Accept: */*',
-            'Accept-Language: pt-BR,pt;q=0.8,en-US;q=0.5,en;q=0.3',
-            'Connection: keep-alive',
-            'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
-            'Host: dne.procergs.reders',
-            'Pragma: no-cache',
-            'Referer: http://dne.procergs.reders/dne/',
-            'User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0',
-            'X-Requested-With: XMLHttpRequest'
-        );
-        $headApp = array_merge($headApp, $header);
-        curl_setopt($this->ch, CURLOPT_HTTPHEADER, $headApp);
-        if (! $this->cookie) {
-            $tmp = getenv('TMPDIR');
-            if ($tmp && @is_writable($tmp)) {
-                $tmpDir = $tmp;
-            } elseif (function_exists('sys_get_temp_dir') && @is_writable(sys_get_temp_dir())) {
-                $tmpDir = sys_get_temp_dir();
-            }
-            $this->cookie = tempnam($tmpDir, "dne");
-        }
-        curl_setopt($this->ch, CURLOPT_COOKIEFILE, $this->cookie);
-        curl_setopt($this->ch, CURLOPT_COOKIEJAR, $this->cookie);
-    }
-
-    public function findByCep($var)
-    {
-        $this->_common();
-        $data = http_build_query(array(
-            'action' => 'buscaporcep',
-            'key' => $this->key,
-            'cep' => $var
-        ));
-        $url = $this->url . '?' . $data;
-        curl_setopt($this->ch, CURLOPT_URL, $url);
-        $result = curl_exec($this->ch);
-        curl_close($this->ch);
-        return $this->_decode($result);
-    }
-
-    public function find($var = array())
-    {
-        $this->_common();
-        $data = http_build_query(array(
-            'logradouro' => isset($var['logradouro']) ? $var['logradouro'] : '',
-            'localidade' => isset($var['localidade']) ? $var['localidade'] : '',
-            'state' => isset($var['state']) ? $var['state'] : '',
-            'numero' => isset($var['numero']) ? $var['numero'] : ''
-        ));
-        $dataGet = http_build_query(array(
-            'action' => 'pesquisa',
-            'key' => $this->key
-        ));
-        curl_setopt($this->ch, CURLOPT_URL, $this->url . '?' . $dataGet);
-        curl_setopt($this->ch, CURLOPT_POST, 1);
-        curl_setopt($this->ch, CURLOPT_POSTFIELDS, $data);
-        $result = curl_exec($this->ch);
-        curl_close($this->ch);
-        return $this->_decode($result);
-    }
-
-    private function _decode(&$result) {
-        if ($result === false) {
-            return false;
-        }
-        $dom = new \DOMDocument();
-        if (! @$dom->loadXML($result)) {
-            return false;
-        }
-        $node = $dom->getElementsByTagName('valor');
-        if (! $node) {
-            return false;
-        }
-        return json_decode($node->item(0)->nodeValue, true);
-    }
-
 }

@@ -21,10 +21,12 @@ class ClientMetadataWebForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add($builder->create('request_uris', 'textarea',
+            ->add($builder->create('request_uris',
+                    'Symfony\Component\Form\Extension\Core\Type\TextareaType',
                     array('required' => false)
                 )->addModelTransformer(new FromArray()))
-            ->add('response_types', 'choice',
+            ->add('response_types',
+                'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
                 array(
                 'multiple' => true,
                 'choices' => array(
@@ -36,50 +38,72 @@ class ClientMetadataWebForm extends AbstractType
                     'code token id_token' => 'code token id_token',
                 )
             ))
-            ->add('grant_types', 'choice',
+            ->add('grant_types',
+                'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
                 array(
                 'multiple' => true,
                 'choices' => array(
                     'authorization_code' => 'authorization_code',
                     'implicit' => 'implicit',
-                    'refresh_token' => 'refresh_token'
+                    'refresh_token' => 'refresh_token',
+                    'client_credentials' => 'client_credentials'
                 )
             ))
-            ->add('application_type', 'choice',
+            ->add('application_type',
+                'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
                 array(
                 'choices' => array('web' => 'web', 'native' => 'native')
             ))
-/*            ->add($builder->create('contacts', 'textarea',
-                    array('required' => false)
-                )->addModelTransformer(new FromArray()))*/
-            ->add('logo_uri', 'url')
-            ->add('policy_uri', 'url', array('required' => false))
-            ->add('jwks_uri', 'url', array('required' => false))
-            ->add('jwks', 'text', array('required' => false))
-            ->add('sector_identifier_uri', 'url', array('required' => false))
-            ->add('subject_type', 'choice',
+            /*            ->add($builder->create('contacts', 'textarea',
+              array('required' => false)
+              )->addModelTransformer(new FromArray())) */
+            ->add('logo_uri',
+                'Symfony\Component\Form\Extension\Core\Type\UrlType')
+            ->add('policy_uri',
+                'Symfony\Component\Form\Extension\Core\Type\UrlType',
+                array('required' => false))
+            ->add('jwks_uri',
+                'Symfony\Component\Form\Extension\Core\Type\UrlType',
+                array('required' => false))
+            ->add('jwks', 'Symfony\Component\Form\Extension\Core\Type\TextType',
+                array('required' => false))
+            ->add('sector_identifier_uri',
+                'Symfony\Component\Form\Extension\Core\Type\UrlType',
+                array('required' => false))
+            ->add('subject_type',
+                'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
                 array(
                 'choices' => array('public' => 'public', 'pairwise' => 'pairwise')
             ))
-            ->add('id_token_signed_response_alg', 'text',
+            ->add('id_token_signed_response_alg',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
                 array('required' => false))
-            ->add('id_token_encrypted_response_alg', 'text',
+            ->add('id_token_encrypted_response_alg',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
                 array('required' => false))
-            ->add('id_token_encrypted_response_enc', 'text',
+            ->add('id_token_encrypted_response_enc',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
                 array('required' => false))
-            ->add('userinfo_signed_response_alg', 'text',
+            ->add('userinfo_signed_response_alg',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
                 array('required' => false))
-            ->add('userinfo_encrypted_response_alg', 'text',
+            ->add('userinfo_encrypted_response_alg',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
                 array('required' => false))
-            ->add('userinfo_encrypted_response_enc', 'text',
+            ->add('userinfo_encrypted_response_enc',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
                 array('required' => false))
-            ->add('request_object_signing_alg', 'text',
+            ->add('request_object_signing_alg',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
                 array('required' => false))
-            ->add('request_object_encryption_alg', 'text',
+            ->add('request_object_encryption_alg',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
                 array('required' => false))
-            ->add('request_object_encryption_enc', 'text',
+            ->add('request_object_encryption_enc',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
                 array('required' => false))
-            ->add('token_endpoint_auth_method', 'choice',
+            ->add('token_endpoint_auth_method',
+                'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
                 array(
                 'choices' => array(
                     'client_secret_basic' => 'client_secret_basic',
@@ -89,11 +113,17 @@ class ClientMetadataWebForm extends AbstractType
                     'none' => 'none'
                 )
             ))
-            ->add('token_endpoint_auth_signing_alg', 'text',
+            ->add('token_endpoint_auth_signing_alg',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
                 array('required' => false))
-            ->add('default_max_age', 'integer', array('required' => false))
-            ->add('require_auth_time', 'switch', array('required' => false))
-            ->add($builder->create('default_acr_values', 'textarea',
+            ->add('default_max_age',
+                'Symfony\Component\Form\Extension\Core\Type\IntegerType',
+                array('required' => false))
+            ->add('require_auth_time',
+                'LoginCidadao\CoreBundle\Form\Type\SwitchType',
+                array('required' => false))
+            ->add($builder->create('default_acr_values',
+                    'Symfony\Component\Form\Extension\Core\Type\TextareaType',
                     array('required' => false)
                 )->addModelTransformer(new FromArray()))
         ;
@@ -108,7 +138,7 @@ class ClientMetadataWebForm extends AbstractType
         ));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return '';
     }

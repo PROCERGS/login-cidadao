@@ -22,7 +22,7 @@ class ClientController extends Controller
     public function newAction(Request $request)
     {
         $client = new Client();
-        $form   = $this->container->get('form.factory')->create($this->container->get('lc.client.base.form.type'),
+        $form   = $this->createForm('LoginCidadao\CoreBundle\Form\Type\ClientFormType',
             $client);
 
         $form->handleRequest($request);
@@ -81,7 +81,7 @@ class ClientController extends Controller
      */
     public function gridDeveloperFilterAction(Request $request)
     {
-        $grid  = new GridHelper();
+        $grid = new GridHelper();
         $grid->setId('developer-filter-grid');
         $grid->setPerPage(5);
         $grid->setMaxResult(5);
@@ -109,7 +109,7 @@ class ClientController extends Controller
      */
     public function gridDeveloperAction(Request $request)
     {
-        $grid  = new GridHelper();
+        $grid = new GridHelper();
         $grid->setId('developer-grid');
         $grid->setPerPage(5);
         $grid->setMaxResult(5);
@@ -142,8 +142,8 @@ class ClientController extends Controller
         if (!$client) {
             return $this->redirect($this->generateUrl('lc_dev_client_new'));
         }
-        $form     = $this->get('form.factory')->
-            create($this->get('lc.client.base.form.type'),
+
+        $form     = $this->createForm('LoginCidadao\CoreBundle\Form\Type\ClientFormType',
             $client);
         $form->handleRequest($request);
         $messages = '';

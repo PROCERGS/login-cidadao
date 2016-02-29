@@ -35,7 +35,7 @@ class PersonAddressController extends Controller
     public function newAddressAction(Request $request)
     {
         $address = new PersonAddress();
-        $form    = $this->createForm('lc_person_address', $address);
+        $form    = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType', $address);
 
         $form->handleRequest($request);
 
@@ -134,7 +134,7 @@ class PersonAddressController extends Controller
             }
         }
 
-        $form = $this->createForm('lc_person_address', $address);
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType', $address);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -156,7 +156,7 @@ class PersonAddressController extends Controller
     public function deleteAction(Request $request, $id)
     {
         $translator = $this->get('translator');
-        $form       = $this->createForm(new RemovePersonAddressFormType());
+        $form       = $this->createForm('LoginCidadao\CoreBundle\Form\Type\RemovePersonAddressFormType');
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -197,8 +197,10 @@ class PersonAddressController extends Controller
         if (is_array($addresses) || $addresses instanceof Collection) {
             foreach ($addresses as $address) {
                 $data                           = array('address_id' => $address->getId());
-                $deleteForms[$address->getId()] = $this->createForm(new RemovePersonAddressFormType(),
-                        $data)->createView();
+                $deleteForms[$address->getId()] = $this->createForm(
+                        'LoginCidadao\CoreBundle\Form\Type\RemovePersonAddressFormType',
+                        $data)
+                    ->createView();
             }
         }
         return $deleteForms;

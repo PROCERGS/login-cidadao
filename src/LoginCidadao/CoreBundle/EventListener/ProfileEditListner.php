@@ -2,30 +2,27 @@
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
+use Doctrine\ORM\EntityManager;
 use FOS\UserBundle\FOSUserEvents;
-use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Event\FormEvent;
+use FOS\UserBundle\Mailer\MailerInterface;
+use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
-use LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer;
-use FOS\UserBundle\Mailer\MailerInterface;
-use Doctrine\ORM\EntityManager;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use LoginCidadao\CoreBundle\Entity\City;
-use Assetic\Exception\Exception;
-use LoginCidadao\CoreBundle\Exception\LcValidationException;
-use LoginCidadao\NotificationBundle\Entity\Notification;
-use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\State;
-use LoginCidadao\CoreBundle\DynamicFormEvents;
-use LoginCidadao\CoreBundle\Model\DynamicFormData;
+use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Model\SelectData;
+use LoginCidadao\CoreBundle\Model\DynamicFormData;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer;
+use LoginCidadao\CoreBundle\Exception\LcValidationException;
+use LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
 
 class ProfileEditListner implements EventSubscriberInterface
 {
@@ -36,7 +33,9 @@ class ProfileEditListner implements EventSubscriberInterface
     private $tokenGenerator;
     private $router;
     private $session;
-    private $security;
+
+    /** @var TokenStorageInterface */
+    private $tokenStorage;
     private $notificationsHelper;
     private $emailUnconfirmedTime;
     protected $email;
@@ -51,7 +50,7 @@ class ProfileEditListner implements EventSubscriberInterface
                                 TokenGeneratorInterface $tokenGenerator,
                                 UrlGeneratorInterface $router,
                                 SessionInterface $session,
-                                SecurityContextInterface $security,
+                                TokenStorageInterface $tokenStorage,
                                 NotificationsHelper $notificationsHelper,
                                 $emailUnconfirmedTime)
     {
@@ -60,7 +59,7 @@ class ProfileEditListner implements EventSubscriberInterface
         $this->tokenGenerator       = $tokenGenerator;
         $this->router               = $router;
         $this->session              = $session;
-        $this->security             = $security;
+        $this->tokenStorage         = $tokenStorage;
         $this->notificationsHelper  = $notificationsHelper;
         $this->emailUnconfirmedTime = $emailUnconfirmedTime;
     }
@@ -81,10 +80,10 @@ class ProfileEditListner implements EventSubscriberInterface
     public function onProfileEditInitialize(GetResponseUserEvent $event)
     {
         // required, because when Success's event is called, session already contains new email
-        $this->email             = $this->security->getToken()
+        $this->email = $this->tokenStorage->getToken()
             ->getUser()
             ->getEmail();
-        $this->cpf               = $this->security->getToken()
+        $this->cpf   = $this->tokenStorage->getToken()
             ->getUser()
             ->getCpf();
     }
@@ -178,7 +177,7 @@ class ProfileEditListner implements EventSubscriberInterface
         $this->userManager = $var;
     }
 
-    private function checkEmailChanged(Person &$user)
+    private function checkEmailChanged(Person & $user)
     {
         if ($user->getEmail() !== $this->email) {
             if (is_null($user->getConfirmationToken())) {
@@ -194,7 +193,7 @@ class ProfileEditListner implements EventSubscriberInterface
         }
     }
 
-    private function checkCPFChanged(Person &$user)
+    private function checkCPFChanged(Person & $user)
     {
         if ($user->getCpf() !== $this->cpf) {
             if ($user->getCpf()) {

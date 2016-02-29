@@ -84,7 +84,7 @@ class AccessToken extends BaseClass implements AccessTokenInterface
      * @ingroup oauth2_section_4
      */
     public function setAccessToken($oauth_token, $client_id, $user_id, $expires,
-                                   $scope = null, $id_token = null)
+                                    $scope = null, $id_token = null)
     {
         // Get Client Entity
         $id     = explode('_', $client_id);

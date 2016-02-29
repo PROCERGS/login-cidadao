@@ -59,10 +59,10 @@ class FOSUBUserProvider extends BaseClass
 
         $service = $response->getResourceOwner()->getName();
 
-        $setter = 'set' . ucfirst($service);
-        $setter_id = $setter . 'Id';
-        $setter_token = $setter . 'AccessToken';
-        $setter_username = $setter . 'Username';
+        $setter = 'set'.ucfirst($service);
+        $setter_id = $setter.'Id';
+        $setter_token = $setter.'AccessToken';
+        $setter_username = $setter.'Username';
 
         if (null !== $previousUser = $this->userManager->findUserBy(array("{$service}Id" => $username))) {
             throw new AlreadyLinkedAccount();
@@ -91,10 +91,10 @@ class FOSUBUserProvider extends BaseClass
 
 
         $service = $response->getResourceOwner()->getName();
-        $setter = 'set' . ucfirst($service);
-        $setter_id = $setter . 'Id';
-        $setter_token = $setter . 'AccessToken';
-        $setter_username = $setter . 'Username';
+        $setter = 'set'.ucfirst($service);
+        $setter_id = $setter.'Id';
+        $setter_token = $setter.'AccessToken';
+        $setter_username = $setter.'Username';
 
         $newUser = false;
         $user = $this->userManager->findUserBy(array("{$service}Id" => $username));
@@ -169,7 +169,7 @@ class FOSUBUserProvider extends BaseClass
         $user = parent::loadUserByOAuthUserResponse($response);
 
         $serviceName = $response->getResourceOwner()->getName();
-        $setter = 'set' . ucfirst($serviceName) . 'AccessToken';
+        $setter = 'set'.ucfirst($serviceName).'AccessToken';
 
         $user->$setter($response->getAccessToken());
 

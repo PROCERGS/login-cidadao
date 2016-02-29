@@ -66,16 +66,16 @@ class NotificationHandler implements NotificationHandlerInterface
     }
 
     public function getAllFromPerson(PersonInterface $person, $limit = 5,
-                                     $offset = 0, $orderby = null)
+                                        $offset = 0, $orderby = null)
     {
         return $this->repository->findBy(array('person' => $person), $orderby,
                 $limit, $offset);
     }
 
     public function getAllFromPersonByClient(PersonInterface $person,
-                                             ClientInterface $client,
-                                             $limit = 5, $offset = 0,
-                                             $orderby = null)
+                                                ClientInterface $client,
+                                                $limit = 5, $offset = 0,
+                                                $orderby = null)
     {
         return $this->repository->findBy(array('person' => $person, 'sender' => $client),
                 $orderby, $limit, $offset);
@@ -114,8 +114,8 @@ class NotificationHandler implements NotificationHandlerInterface
      * @throws \LoginCidadao\CoreBundle\Exception\Notification\InvalidFormException
      */
     private function processForm(NotificationInterface $notification,
-                                 array $parameters, $method = "PUT",
-                                 PersonInterface $person = null)
+                                    array $parameters, $method = "PUT",
+                                    PersonInterface $person = null)
     {
         $form = $this->formFactory->create($this->notificationType,
             $notification, compact('method'));
@@ -194,7 +194,7 @@ class NotificationHandler implements NotificationHandlerInterface
     }
 
     public function initializeSettings(PersonInterface $person,
-                                       ClientInterface $client = null)
+                                        ClientInterface $client = null)
     {
         $om               = $this->om;
         $categoriesRepo   = $om->getRepository('LoginCidadaoNotificationBundle:Category');
@@ -266,8 +266,8 @@ class NotificationHandler implements NotificationHandlerInterface
     }
 
     public function getGroupedSettings(PersonInterface $person,
-                                       ClientInterface $client = null,
-                                       CategoryInterface $category = null)
+                                        ClientInterface $client = null,
+                                        CategoryInterface $category = null)
     {
         $settings = new NotificationSettings();
 
@@ -290,8 +290,8 @@ class NotificationHandler implements NotificationHandlerInterface
     }
 
     public function getAllFromPersonIdOffset(PersonInterface $person,
-                                             $limit = 5, $offset = 0,
-                                             ClientInterface $client = null)
+                                                $limit = 5, $offset = 0,
+                                                ClientInterface $client = null)
     {
         return $this->repository->findNextNotifications($person, $limit,
                 $offset, $client);
@@ -348,9 +348,9 @@ class NotificationHandler implements NotificationHandlerInterface
     }
 
     public static function renderEmailByCategory($category,
-                                                 $replacePlaceholders = null,
-                                                 $replaceTitle = null,
-                                                 $replaceShortText = null)
+                                                    $replacePlaceholders = null,
+                                                    $replaceTitle = null,
+                                                    $replaceShortText = null)
     {
         return self::_renderHtml($category->getMailTemplate(),
                 $replacePlaceholders, $replaceTitle, $replaceShortText);
@@ -373,8 +373,8 @@ class NotificationHandler implements NotificationHandlerInterface
     }
 
     protected function registerFailedCallback(NotificationInterface $notification,
-                                              ObjectManager $om, $ch,
-                                              $curlResponse)
+                                                ObjectManager $om, $ch,
+                                                $curlResponse)
     {
         $info = curl_getinfo($ch);
 
@@ -393,7 +393,7 @@ class NotificationHandler implements NotificationHandlerInterface
     }
 
     private function sendCallback(NotificationInterface $notification,
-                                  ObjectManager $om)
+                                    ObjectManager $om)
     {
         if ($notification->getCallbackUrl()) {
             $secret            = $notification->getCategory()->getClient()->getSecret();

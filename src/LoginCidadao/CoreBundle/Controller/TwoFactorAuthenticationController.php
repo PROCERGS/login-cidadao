@@ -11,7 +11,6 @@ use LoginCidadao\CoreBundle\Form\Type\TwoFactorAuthenticationFormType;
 use LoginCidadao\CoreBundle\Form\Type\TwoFactorAuthenticationDisableFormType;
 use LoginCidadao\CoreBundle\Form\Type\TwoFactorAuthenticationBackupCodeGenerationFormType;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Security\Core\Util\SecureRandom;
 use LoginCidadao\CoreBundle\Entity\BackupCode;
 use Doctrine\ORM\EntityManager;
 use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
@@ -66,7 +65,7 @@ class TwoFactorAuthenticationController extends Controller
     {
         $person = $this->getPerson();
         $form = $this->createForm(new TwoFactorAuthenticationDisableFormType(),
-                                  $person);
+                                    $person);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -90,7 +89,7 @@ class TwoFactorAuthenticationController extends Controller
     {
         $person = $this->getPerson();
         $form = $this->createForm(new TwoFactorAuthenticationBackupCodeGenerationFormType(),
-                                  $person);
+                                    $person);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -147,7 +146,7 @@ class TwoFactorAuthenticationController extends Controller
     }
 
     protected function removeBackupCodes(EntityManager $em,
-                                         PersonInterface $person)
+                                            PersonInterface $person)
     {
         $backupCodes = $person->getBackupCodes();
         foreach ($backupCodes as $backupCode) {
@@ -156,12 +155,11 @@ class TwoFactorAuthenticationController extends Controller
     }
 
     protected function generateBackupCodes(EntityManager $em,
-                                           PersonInterface $person)
+                                            PersonInterface $person)
     {
-        $generator = new SecureRandom();
         $backupCodes = array();
         while (count($backupCodes) < 10) {
-            $code = bin2hex($generator->nextBytes(5));
+            $code = bin2hex(random_bytes(5));
             $backupCode = new BackupCode();
             $backupCode->setPerson($person);
             $backupCode->setCode($code);

@@ -9,7 +9,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use LoginCidadao\NotificationBundle\Handler\AuthenticatedNotificationHandlerInterface;
 use LoginCidadao\NotificationBundle\Handler\NotificationHandlerInterface;
-use LoginCidadao\NotificationBundle\Form\SettingsType;
 use LoginCidadao\NotificationBundle\Model\NotificationIterable;
 use LoginCidadao\NotificationBundle\Model\ClientNotificationIterable;
 use LoginCidadao\CoreBundle\Helper\GridHelper;
@@ -83,7 +82,7 @@ class NotificationController extends Controller
             ->getAuthenticatedHandler($person);
         $handler->initializeSettings();
 
-        $form = $this->createForm(new SettingsType(),
+        $form = $this->createForm('LoginCidadao\NotificationBundle\Form\SettingsType',
             $handler->getGroupedSettings($client));
 
         $form->handleRequest($request);
@@ -140,7 +139,7 @@ class NotificationController extends Controller
     }
 
     private function getNotificationGrid($offset = 0, $perIteration = 10,
-                                         ClientInterface $client = null)
+                                            ClientInterface $client = null)
     {
         $handler = $this->getAuthenticatedNotificationHandler();
         if ($client instanceof ClientInterface) {

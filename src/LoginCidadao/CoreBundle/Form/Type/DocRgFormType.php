@@ -27,14 +27,14 @@ class DocRgFormType extends AbstractType
         $builder->add('id', 'hidden', array(
             'required' => false
         ));
-        $builder->add('state', 'entity',array(
+        $builder->add('state', 'entity', array(
             'required' => true,
             'class' => 'LoginCidadaoCoreBundle:State',
             'choice_label' => 'name',
             'query_builder' => function(EntityRepository $er) {
                 $country = $er->createQueryBuilder('h')->getEntityManager()->getRepository('LoginCidadaoCoreBundle:Country')->findOneBy(array('iso2' => 'BR'));
                 return $er->createQueryBuilder('u')
-                ->where('u.reviewed = ' . Country::REVIEWED_OK)
+                ->where('u.reviewed = '.Country::REVIEWED_OK)
                 ->andWhere('u.country = :country')
                 ->setParameter('country', $country)
                 ->orderBy('u.name', 'ASC');

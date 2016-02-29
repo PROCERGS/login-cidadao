@@ -2,13 +2,13 @@
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
-use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
-use JMS\Serializer\EventDispatcher\PreSerializeEvent;
-use JMS\Serializer\EventDispatcher\ObjectEvent;
-use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpFoundation\Request;
-use LoginCidadao\OAuthBundle\Model\AccessTokenManager;
+use Symfony\Component\HttpFoundation\RequestStack;
+use JMS\Serializer\EventDispatcher\ObjectEvent;
+use JMS\Serializer\EventDispatcher\PreSerializeEvent;
+use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
+use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class PersonSerializeEventListenner implements EventSubscriberInterface
@@ -25,12 +25,12 @@ class PersonSerializeEventListenner implements EventSubscriberInterface
     protected $request;
 
     public function __construct(UploaderHelper $uploaderHelper, $templateHelper,
-                                Kernel $kernel, Request $request)
+                                Kernel $kernel, RequestStack $requestStack)
     {
         $this->uploaderHelper = $uploaderHelper;
         $this->templateHelper = $templateHelper;
         $this->kernel         = $kernel;
-        $this->request        = $request;
+        $this->request        = $requestStack->getCurrentRequest();
     }
 
     public static function getSubscribedEvents()

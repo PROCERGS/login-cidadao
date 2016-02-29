@@ -9,8 +9,6 @@ parameters:
     lc.change.password.form.type.class: LoginCidadao\CoreBundle\Form\Type\ChangePasswordFormType
     lc.person.address.form.type.class: LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType
     lc.city.selector.form.type.class: LoginCidadao\CoreBundle\Form\Type\CitySelectorType
-    lc.state.selector.form.type.class: LoginCidadao\CoreBundle\Form\Type\StateSelectorType
-    lc.country.selector.form.type.class: LoginCidadao\CoreBundle\Form\Type\CountrySelectorType
     lc.contact.form.class: LoginCidadao\CoreBundle\Form\Type\ContactFormType
     lc.person_doc.form.class: LoginCidadao\CoreBundle\Form\Type\DocFormType
     lc.user_provider.class: LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
@@ -104,7 +102,7 @@ services:
 
     lc.user_manager:
         class: %lc.user_manager.class%
-        arguments: ["@security.encoder_factory", "@fos_user.util.username_canonicalizer", "@fos_user.util.email_canonicalizer", "@fos_user.entity_manager", %user.class%, "@service_container"]
+        arguments: ["@security.encoder_factory", "@fos_user.util.username_canonicalizer", "@fos_user.util.email_canonicalizer", "@fos_user.object_manager", %user.class%, "@service_container"]
 
     lc.login.form.type:
         class: LoginCidadao\CoreBundle\Form\Type\LoginFormType
@@ -125,6 +123,10 @@ services:
         abstract: true
         calls:
             - [setContainer, ["@service_container"]]
+            - [setFormFactory, ["@form.factory"]]
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+            - [setTranslator, ["@translator"]]
+            - [setBruteForceThreshold, [%brute_force_threshold%]]
 
     lc.user_register:
         class: %lc.user_register.class%
@@ -136,7 +138,15 @@ services:
 
     lc.profile_edit:
         class: %lc.profile_edit.class%
-        arguments: ["@lc.mailer", "@fos_user.mailer", "@fos_user.util.token_generator", "@router", "@session", "@security.context", "@notifications.helper", "%registration.email.unconfirmed_time%"]
+        arguments:
+            - "@lc.mailer"
+            - "@fos_user.mailer"
+            - "@fos_user.util.token_generator"
+            - "@router"
+            - "@session"
+            - "@security.token_storage"
+            - "@notifications.helper"
+            - %registration.email.unconfirmed_time%
         tags:
             - { name: kernel.event_subscriber }
         calls:
@@ -146,13 +156,19 @@ services:
 
     lc.change.password.form.type:
         class: %lc.change.password.form.type.class%
-        arguments: [%fos_user.model.user.class%, "@security.context"]
+        arguments:
+            - %fos_user.model.user.class%
+            - "@security.token_storage"
         tags:
             - { name: form.type, alias: lc_change_password }
 
     lc.change_password_listener:
         class: %lc.change.password.listener.class%
-        arguments: ["@router", "@notifications.helper"]
+        arguments:
+            - "@router"
+            - "@notifications.helper"
+            - "@session"
+            - %default_password_encoder%
         tags:
             - { name: kernel.event_subscriber }
 
@@ -168,7 +184,14 @@ services:
 
     kernel.listener.logged_in_user_listener:
         class: %kernel.listener.logged_in_user_listener.class%
-        arguments: [ "@security.context", "@router", "@session", "@translator", "@doctrine.orm.entity_manager" ]
+        arguments:
+            - "@security.token_storage"
+            - "@security.authorization_checker"
+            - "@router"
+            - "@session"
+            - "@translator"
+            - "@doctrine.orm.entity_manager"
+            - %default_password_encoder%
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
@@ -181,19 +204,19 @@ services:
     lc.client.form.type:
         class: LoginCidadao\CoreBundle\Form\Type\ClientFormType
         arguments:
-            - @security.authorization_checker
+            - "@security.authorization_checker"
         tags:
             - { name: form.type, alias: client_form_type }
         calls:
             - [setScopes, ["%lc_public_scopes%", "%lc_reserved_scopes%"]]
-            - [setTokenStorage, [@security.token_storage]]
+            - [setTokenStorage, ["@security.token_storage"]]
 
     lc.client.base.form.type:
         class: LoginCidadao\CoreBundle\Form\Type\ClientBaseFormType
         arguments:
-            - @security.authorization_checker
+            - "@security.authorization_checker"
         calls:
-            - [setTokenStorage, [@security.token_storage]]
+            - [setTokenStorage, ["@security.token_storage"]]
         tags:
             - { name: form.type, alias: client_base_form_type }
 
@@ -202,7 +225,7 @@ services:
         tags:
             - { name: form.type, alias: category_form_type }
         calls:
-            - [setSecurity, ["@security.context"]]
+            - [setTokenStorage, ["@security.token_storage"]]
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
 
     lc.placeholder.form.type:
@@ -210,7 +233,7 @@ services:
         tags:
             - { name: form.type, alias: placeholder_form_type }
         calls:
-            - [setSecurity, ["@security.context"]]
+            - [setTokenStorage, ["@security.token_storage"]]
 
     lc.form.type.hidden_entity:
         class: LoginCidadao\CoreBundle\Form\Type\HiddenEntityType
@@ -234,22 +257,21 @@ services:
 
     lc.person.resume.form.type:
         class: LoginCidadao\CoreBundle\Form\Type\PersonResumeFormType
-        arguments: [ @lc.security.helper ]
+        arguments: [ "@lc.security.helper" ]
         tags:
             - { name: form.type, alias: person_resume_form_type }
         calls:
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
             - [setTranslator, ["@translator"]]
-            - [setSecurity, ["@security.context"]]
+            - [setTokenStorage, ["@security.token_storage"]]
 
     lc.person.serialize.listenner:
         class: %lc.person.serialize.listenner.class%
-        scope: request
         arguments:
-            - @vich_uploader.templating.helper.uploader_helper
-            - @templating.helper.assets
-            - @kernel
-            - @request
+            - "@vich_uploader.templating.helper.uploader_helper"
+            - "@templating.helper.assets"
+            - "@kernel"
+            - "@request_stack"
         tags:
             - { name: jms_serializer.event_listener, event: serializer.pre_serialize, method: onPreSerialize }
             - { name: jms_serializer.event_listener, event: serializer.post_serialize, method: onPostSerialize }
@@ -266,51 +288,39 @@ services:
         tags:
             - { name: form.type, alias: city_selector }
 
-    lc.state.selector.form.type:
-        class: %lc.state.selector.form.type.class%
-        arguments: ["@doctrine.orm.entity_manager"]
-        tags:
-            - { name: form.type, alias: state_selector }
-
-    lc.country.selector.form.type:
-        class: %lc.country.selector.form.type.class%
-        arguments: ["@doctrine.orm.entity_manager"]
-        tags:
-            - { name: form.type, alias: country_selector }
-
     lc.idcard.form:
         class: %lc.idcard.form.class%
-        arguments: [ %lc_idcard_country_acronym%, @event_dispatcher ]
+        arguments: [ %lc_idcard_country_acronym%, "@event_dispatcher" ]
         tags:
             - { name: form.type, alias: lc_idcard_form }
 
     lc.notification.subscriber:
         class: %lc.notification.subscriber.class%
-        arguments: [ @lc.notification.handler, @lc.mailer ]
+        arguments: [ "@lc.notification.handler", "@lc.mailer" ]
         tags:
             - { name: kernel.event_subscriber }
 
     lc.feature_hierarchy.voter:
         class: %security.access.role_hierarchy_voter.class%
-        arguments: [ @security.role_hierarchy, 'FEATURE_' ]
+        arguments: [ "@security.role_hierarchy", 'FEATURE_' ]
         tags:
             - { name: security.voter }
 
     lc.security.helper:
         class: %lc.security.helper.class%
         arguments:
-            - @security.authorization_checker
-            - @lc.action_log.repository
-            - @lc.extreme_notifications.helper
-            - @router
+            - "@security.authorization_checker"
+            - "@lc.action_log.repository"
+            - "@lc.extreme_notifications.helper"
+            - "@router"
 
     account.security_listener:
         class: %account.security_listener.class%
         arguments:
-            - @security.authorization_checker
-            - @security.token_storage
-            - @lc.security.helper
-            - @lc.action_logger
+            - "@security.authorization_checker"
+            - "@security.token_storage"
+            - "@lc.security.helper"
+            - "@lc.action_logger"
         tags:
             - { name: kernel.event_listener, event: security.interactive_login, method: onSecurityInteractiveLogin }
             - { name: kernel.event_listener, event: security.switch_user, method: onSwitchUser }
@@ -319,29 +329,29 @@ services:
     lc.country_manager:
         class: LoginCidadao\CoreBundle\Model\Manager\CountryManager
         arguments:
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
             - LoginCidadao\CoreBundle\Entity\Country
 
     lc.state_manager:
         class: LoginCidadao\CoreBundle\Model\Manager\StateManager
         arguments:
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
             - LoginCidadao\CoreBundle\Entity\State
 
     lc.city_manager:
         class: LoginCidadao\CoreBundle\Model\Manager\CityManager
         arguments:
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
             - LoginCidadao\CoreBundle\Entity\City
 
     lc.location.type:
         class: LoginCidadao\CoreBundle\Form\Type\CitySelectorComboType
         arguments:
-            - @lc.country_manager
-            - @lc.state_manager
-            - @lc.city_manager
-            - @lc.profile_edit
-            - @translator
+            - "@lc.country_manager"
+            - "@lc.state_manager"
+            - "@lc.city_manager"
+            - "@lc.profile_edit"
+            - "@translator"
         tags:
             - { name: form.type, alias: lc_location }
 
@@ -359,5 +369,5 @@ services:
     lc.extreme_notifications.helper:
         class: %lc.extreme_notifications.helper.class%
         arguments:
-            - @session
-            - @translator
+            - "@session"
+            - "@translator"

@@ -3,7 +3,6 @@
 namespace LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use LoginCidadao\CoreBundle\Form\Type\CommonFormType;
@@ -76,7 +75,7 @@ class PersonResumeFormType extends CommonFormType
         $securityHelper = $this->securityHelper;
         $security       = $this->security;
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) use ($user, &$allRoles, &$securityHelper, &$security) {
+            function(FormEvent $event) use ($user, &$allRoles, &$securityHelper, &$security) {
             $person = $event->getData();
             $form   = PersonResumeFormType::populateCountryStateCity($person,
                     $event->getForm());
@@ -152,9 +151,9 @@ class PersonResumeFormType extends CommonFormType
     }
 
     public static function filterRoles(PersonInterface $person,
-                                       PersonInterface $loggedUser,
-                                       FormInterface $form, array $roles,
-                                       $securityHelper, $security)
+                                        PersonInterface $loggedUser,
+                                        FormInterface $form, array $roles,
+                                        $securityHelper, $security)
     {
         $loggedUserLevel        = $securityHelper->getLoggedInUserLevel();
         $targetPersonLevel      = $securityHelper->getTargetPersonLevel($person);

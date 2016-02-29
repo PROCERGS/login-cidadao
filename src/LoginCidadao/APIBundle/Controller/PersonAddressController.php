@@ -2,10 +2,8 @@
 
 namespace LoginCidadao\APIBundle\Controller;
 
-use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
-use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use LoginCidadao\APIBundle\Security\Audit\Annotation as Audit;

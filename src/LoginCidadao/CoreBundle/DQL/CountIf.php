@@ -19,6 +19,6 @@ class CountIf extends FunctionNode
 
     public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
     {
-        return 'count(case when ' . $this->var1->dispatch($sqlWalker) . ' then 1 else null end)'; // (7)
+        return 'count(case when '.$this->var1->dispatch($sqlWalker).' then 1 else null end)'; // (7)
     }
 }

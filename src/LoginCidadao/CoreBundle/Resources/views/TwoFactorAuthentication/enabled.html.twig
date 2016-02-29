@@ -1,0 +1,40 @@
+<div class="collapse 2fa-settings in text-center">
+    <button class="btn btn-link" type="button" data-toggle="collapse" data-target=".2fa-settings" aria-expanded="false" aria-controls="2fa-settings">
+        {{ '2fa.collapse' | trans }}
+    </button>
+</div>
+
+<div class="collapse 2fa-settings" id="2fa-settings">
+    <p>{{ 'Your account is protected by Two-Factor Authentication. If you wish to disable it you can do so further below.' | trans }}</p>
+
+    <h3>{{ 'Backup Codes' | trans }}</h3>
+    <p>{{ 'Backup Codes are special codes that can be used to access your account. They can be used only once each and replace a regular generated code. Backup Codes are extremelly important to prevent you from losing access to your account if you lose your smartphone.' | trans }}</p>
+    <p>{% trans %}Your Backup Codes can be found in the following box. Please <strong>save them</strong> in a safe location because if you lose them you can <strong>permanently</strong> lose access to your account.{% endtrans %}</p>
+
+    <div class="row">
+        <ul class="backup-codes well well-sm col-sm-offset-3 col-sm-6">
+            {% for backupCode in app.user.backupCodes %}
+                <li class="backup-code text-center">
+                    {{ backupCode.used ? '<s>' : '' }}
+                    {{ backupCode.code }}
+                    {{ backupCode.used ? '</s>' : '' }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <h4>{{ 'Generate new Backup Codes' | trans }}</h4>
+    <p>{% trans %}If your backup codes have been compromised or if you have already used too many of them, you can click the button bellow to generate new ones, but keep in mind that the current Backup Codes you see above will be <strong>deleted</strong> and will stop working.{% endtrans %}</p>
+
+    <p class="text-center">
+        <a href="{{ path('2fa_backup_codes_generate') }}" class="btn btn-success">{{ 'Generate new Backup Codes' | trans }}</a>
+    </p>
+
+    <h3>{{ 'Disable Two-Factor Authentication' | trans }}</h3>
+    <p>{{ 'Currently your account safety is pretty good. If for some reason you need to disable Two-Factor Authentication you can do so in the button below.' | trans }}</p>
+    <p>{{ 'If you change your mind, remember that you can always enable it back again.' | trans }}</p>
+
+    <p class="text-center">
+        <a href="{{ path('2fa_disable') }}" class="btn btn-xs btn-danger">{{ 'Disable Two-Factor Authentication' | trans }}</a>
+    </p>
+</div>
