@@ -23,7 +23,6 @@ parameters:
     memcached_host: 127.0.0.1
     # Memcached server port
     memcached_port: 11211
-
     # Session prefix
     session_prefix: lc_sess_
     # Session lifetime (seconds)
@@ -78,19 +77,16 @@ parameters:
 
     # Your domain
     site_domain: localhost
-
     # Email sender address (usually a no-reply address)
     mailer_sender_mail: no-reply@%site_domain%
     # Email sender name
     mailer_sender_name: Login Cidadão
-
     # This must be compatible with strtotime()
     # You probably don't need to change this
     registration.cpf.empty_time: '+1 month'
     # Compatible with strtotime() but without + and - sign
     # You probably don't need to change this
     registration.email.unconfirmed_time: '1 day'
-
     # After how many attempts should users be challenged by captcha?
     brute_force_threshold: 4
 
@@ -101,7 +97,6 @@ parameters:
     user_profile_upload_dir: %kernel.root_dir%/../web/uploads/profile-pictures
     # Client (services) pictures upload directory
     client_image_upload_dir: '%kernel.root_dir%/../web/uploads/client-pictures'
-
     # Uploaded images URI prefix
     uri_root: /
 
@@ -120,7 +115,6 @@ parameters:
     # JWT Config (no need to change)
     #  - it is necessary since we can't access the oidc.issuer_url in the Compiler Pass
     jwt_iss: http://%site_domain%%base_path%
-
     # JWKS Config
     jwks_dir: %kernel.root_dir%/../app/config/jwks
     jwks_private_key_file: private.pem
@@ -137,3 +131,10 @@ parameters:
     # Password Encoder
     default_password_encoder: bcrypt
 
+    nfg_ws_url: ~
+    soe_organization: ~
+    soe_username: ~
+    soe_password: ~
+    nfg_url_auth: ~
+    nfg_url_login: ~
+    nfg_hmac_secret: ~

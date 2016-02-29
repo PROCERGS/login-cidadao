@@ -168,6 +168,7 @@ security:
         - { path: ^/connect/twitter$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/connect/google$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login/facebook$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/nfg/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
         - { path: ^/monitor/health, role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_monitors% }
 
