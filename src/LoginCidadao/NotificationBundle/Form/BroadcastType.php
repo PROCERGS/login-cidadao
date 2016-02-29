@@ -57,7 +57,7 @@ class BroadcastType extends AbstractType
             'empty_data' => null,
             'class' => 'LoginCidadao\NotificationBundle\Entity\Category',
             'property' => 'name',
-            'query_builder' => function (CategoryRepository $repository) use ($person, $clientId) {
+            'query_builder' => function(CategoryRepository $repository) use ($person, $clientId) {
                 return $repository->getOwnedCategoriesQuery($person)
                         ->andWhere('c.id = :clientId')
                         ->setParameter('clientId', $clientId);
@@ -66,10 +66,10 @@ class BroadcastType extends AbstractType
         $builder->add('client_id', 'hidden',
             array('required' => false, 'mapped' => false, 'data' => $clientId));
         $builder->addEventListener(FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) use (&$receiversConfig, &$person, $clientId) {
+            function(FormEvent $event) use (&$receiversConfig, &$person, $clientId) {
             $entity                           = $event->getData();
             $form                             = $event->getForm();
-            $receiversConfig['query_builder'] = function (PersonRepository $repository) use ($clientId, &$entity) {
+            $receiversConfig['query_builder'] = function(PersonRepository $repository) use ($clientId, &$entity) {
                 $sql = $repository->getFindAuthorizedByClientIdQuery($clientId);
                 if (!empty($entity['receivers'])) {
                     $sql->andWhere('p.id in (:receivers)');
@@ -80,10 +80,10 @@ class BroadcastType extends AbstractType
             $form->add('receivers', 'ajax_choice', $receiversConfig);
         });
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) use (&$receiversConfig, &$person, &$clientId) {
+            function(FormEvent $event) use (&$receiversConfig, &$person, &$clientId) {
             $entity                           = $event->getData();
             $form                             = $event->getForm();
-            $receiversConfig['query_builder'] = function (PersonRepository $repository) {
+            $receiversConfig['query_builder'] = function(PersonRepository $repository) {
                 $sql = $repository->createQueryBuilder('u');
                 $sql->where('1 != 1');
                 return $sql;

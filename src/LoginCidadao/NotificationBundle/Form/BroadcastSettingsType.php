@@ -29,7 +29,7 @@ class BroadcastSettingsType extends AbstractType
 
         $builder
             ->add('placeholders', 'collection',
-                   array(
+                    array(
                     'type' => new BroadcastPlaceholderType()
             ))
             ->add('title', 'text', array("required"=> true))

@@ -4,7 +4,6 @@ namespace LoginCidadao\NotificationBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use LoginCidadao\CoreBundle\Entity\Person;
-use Doctrine\ORM\Query;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 
@@ -12,8 +11,8 @@ class NotificationRepository extends EntityRepository
 {
 
     public function findNextNotifications(Person $person, $items = 8,
-                                          $lastId = 0,
-                                          ClientInterface $client = null)
+                                            $lastId = 0,
+                                            ClientInterface $client = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('n')
@@ -75,7 +74,7 @@ class NotificationRepository extends EntityRepository
         return $this->getEntityManager()->createQueryBuilder('n')
                 ->select('COUNT(n.id) total')
                 ->from('LoginCidadaoNotificationBundle:Notification',
-                       'n')
+                        'n')
                 ->where('n.person = :person')
                 ->andWhere('n.readDate IS NULL')
                 ->setParameter('person', $person)

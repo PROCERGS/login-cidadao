@@ -12,7 +12,7 @@ class DynamicFormEvents
     /**
      * This event is triggered just after the form information gets persisted.
      */
-    const POST_FORM_EDIT       = 'dynamicform_post_edit';
+    const POST_FORM_EDIT = 'dynamicform_post_edit';
 
     /**
      * This event is triggered before redirecting the user to the target URL.

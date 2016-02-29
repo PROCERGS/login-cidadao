@@ -211,7 +211,7 @@ class CitySelectorComboType extends AbstractType
     }
 
     public function finishView(FormView $view, FormInterface $form,
-                                 array $options)
+                                    array $options)
     {
         if ($view->children['country']->vars['choice_translation_domain'] === false) {
             return;

@@ -52,7 +52,7 @@ class AuthorizeController extends BaseController
         }
 
         $scopeManager = $this->getScopeManager();
-        $scopes       = array_map(function ($value) {
+        $scopes       = array_map(function($value) {
             return $value->getScope();
         }, $scopeManager->findScopesByScopes($scope));
 

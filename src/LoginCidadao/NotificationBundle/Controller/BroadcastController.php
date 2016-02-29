@@ -14,7 +14,6 @@ use LoginCidadao\NotificationBundle\Model\BroadcastPlaceholder;
 use LoginCidadao\NotificationBundle\Entity\Notification;
 use LoginCidadao\CoreBundle\Helper\GridHelper;
 use LoginCidadao\NotificationBundle\Entity\Broadcast;
-use LoginCidadao\NotificationBundle\Handler\NotificationHandler;
 
 /**
  * @Route("/dev/broadcasts")
@@ -32,7 +31,7 @@ class BroadcastController extends Controller
         return array('grid' => $grid->createView($request));
     }
 
-    private function getBroadcastGrid(){
+    private function getBroadcastGrid() {
         $em = $this->getDoctrine()->getManager();
         $sql = $em->getRepository('LoginCidadaoNotificationBundle:Broadcast')->createQueryBuilder('c')
             ->where('c.person = :person')
@@ -112,7 +111,7 @@ class BroadcastController extends Controller
             $em->persist($broadcast);
             $em->flush();
             $url = $this->generateUrl('lc_dev_broadcast_settings',
-              array('broadcastId' => $broadcast->getId()));
+                array('broadcastId' => $broadcast->getId()));
             return $this->redirect($url);
         }
 
@@ -138,23 +137,23 @@ class BroadcastController extends Controller
 
         $form->handleRequest($request);
         if ($form->isValid()) {
-          $placeholders = $form->get('placeholders')->getData();
-          $broadcast->setHtmlTemplate($placeholders, $form->get('title')->getData(), $form->get('shortText')->getData());
+            $placeholders = $form->get('placeholders')->getData();
+            $broadcast->setHtmlTemplate($placeholders, $form->get('title')->getData(), $form->get('shortText')->getData());
 
-          $translator = $this->get('translator');
-          if ($form->get('saveAndAdd')->isClicked()) {
+            $translator = $this->get('translator');
+            if ($form->get('saveAndAdd')->isClicked()) {
             $this->sendBroadcast($broadcast, $form->get('shortText')->getData(), $form->get('title')->getData());
             $broadcast->setSent(true);
             $this->get('session')->getFlashBag()->add('success', $translator->trans("Broadcast sent"));
-          } else {
+            } else {
             $this->get('session')->getFlashBag()->add('success', $translator->trans("Broadcast saved"));
-          }
+            }
 
-          $em = $this->getDoctrine()->getManager();
-          $em->persist($broadcast);
-          $em->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($broadcast);
+            $em->flush();
 
-          return $this->redirect($this->generateUrl('lc_dev_broadcasts'));
+            return $this->redirect($this->generateUrl('lc_dev_broadcasts'));
         }
 
         return array('form' => $form->createView());
@@ -165,18 +164,18 @@ class BroadcastController extends Controller
         $html = $broadcast->getHtmlTemplate();
 
         foreach ($broadcast->getReceivers() as $person) {
-          $notification = new Notification();
-          $notification->setIcon($broadcast->getCategory()->getDefaultIcon());
-          //$notification->setCallbackUrl("url");
-          $notification->setShortText($shortText);
-          $notification->setTitle($title);
-          $notification->setHtmlTemplate($html);
-          $notification->setPerson($person);
-          $notification->setSender($broadcast->getCategory()->getClient());
-          $notification->setCategory($broadcast->getCategory());
-          $notification->setMailTemplate($broadcast->getMailTemplate());
+            $notification = new Notification();
+            $notification->setIcon($broadcast->getCategory()->getDefaultIcon());
+            //$notification->setCallbackUrl("url");
+            $notification->setShortText($shortText);
+            $notification->setTitle($title);
+            $notification->setHtmlTemplate($html);
+            $notification->setPerson($person);
+            $notification->setSender($broadcast->getCategory()->getClient());
+            $notification->setCategory($broadcast->getCategory());
+            $notification->setMailTemplate($broadcast->getMailTemplate());
 
-          $helper->send($notification);
+            $helper->send($notification);
         }
     }
 
@@ -199,7 +198,7 @@ class BroadcastController extends Controller
             $sql = $em->getRepository('LoginCidadaoCoreBundle:Person')->getFindAuthorizedByClientIdQuery($parms['client_id']);
             $sql->andWhere('p.cpf like ?1 or p.username like ?1 or p.email like ?1 or p.firstName like ?1 or p.surname like ?1');
             $sql->setParameter('1',
-                '%' . addcslashes($parms['username'], '\\%_') . '%');
+                '%'.addcslashes($parms['username'], '\\%_').'%');
             $sql->addOrderBy('p.id', 'desc');
             $grid->setQueryBuilder($sql);
         }

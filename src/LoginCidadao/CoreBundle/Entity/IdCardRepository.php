@@ -13,7 +13,7 @@ class IdCardRepository extends EntityRepository
         $qb = $this->createQueryBuilder('u')
             ->select('u.id, u.value, right(s.iso6, 2) iso6')
             ->join('LoginCidadaoCoreBundle:State', 's', 'with',
-                   'u.state = s')
+                    'u.state = s')
             ->where('u.person = :person')
             ->setParameters(array('person' => $person))
             ->orderBy('u.id', 'desc');
@@ -33,7 +33,7 @@ class IdCardRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('i')
             ->join('LoginCidadaoCoreBundle:State', 's', 'with',
-                   'i.state = s')
+                    'i.state = s')
             ->where('i.person = :person')
             ->setParameters(array('person' => $person))
             ->orderBy('s.acronym', 'asc');

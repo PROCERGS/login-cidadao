@@ -35,7 +35,7 @@ class CEPValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint)
     {
-        if (!isset($value) || $value  === null || !strlen(trim($value))) {
+        if (!isset($value) || $value === null || !strlen(trim($value))) {
             return;
         }
         if (!self::checkLength($value)) {
@@ -53,9 +53,9 @@ class CEPValidator extends ConstraintValidator
         for ($i = 0; $i < $a; $i++) {
             if ($postal[$i] != '"') {
                 if (is_numeric($postal[$i])) {
-                    $exp .= '[0-'. $postal[$i].']{1}';
+                    $exp .= '[0-'.$postal[$i].']{1}';
                 } else if ($postal[$i] == ' ') {
-                    $exp .= "\\". $postal[$i];
+                    $exp .= "\\".$postal[$i];
                 } else {
                     $exp .= $postal[$i];
                 }

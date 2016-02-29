@@ -22,8 +22,8 @@ class ClientNotificationIterable extends NotificationIterable
     protected function getCurrentData()
     {
         return $this->handler->allIdOffset($this->getPerIteration(),
-                                           $this->getOffset(),
-                                           $this->client);
+                                            $this->getOffset(),
+                                            $this->client);
     }
 
 }

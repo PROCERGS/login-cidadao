@@ -2,10 +2,7 @@
 
 namespace LoginCidadao\NotificationBundle\Controller\JsAPI;
 
-use FOS\RestBundle\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Symfony\Component\HttpFoundation\Request;
-use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\Controller\Annotations as REST;
 use FOS\RestBundle\Controller\FOSRestController;
 use LoginCidadao\NotificationBundle\Handler\NotificationHandlerInterface;

@@ -224,7 +224,7 @@ class Organization implements OrganizationInterface
         if ($this->validationSecret) {
             return;
         }
-        $random    = base64_encode(random_bytes(35));
+        $random = base64_encode(random_bytes(35));
         $this->setValidationSecret($random);
     }
 

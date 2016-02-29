@@ -30,7 +30,7 @@ class ClientFormType extends ClientBaseFormType
         $reserved = array_combine($this->reservedScopes, $this->reservedScopes);
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) use ($security, $public, $reserved) {
+            function(FormEvent $event) use ($security, $public, $reserved) {
             $form = $event->getForm();
 
             if ($security->isGranted('ROLE_EDIT_CLIENT_ALLOWED_SCOPES') === false) {

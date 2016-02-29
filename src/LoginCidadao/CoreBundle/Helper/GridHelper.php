@@ -79,7 +79,7 @@ class GridHelper
      * @param QueryBuilder $var
      * @return GridHelper
      */
-    public function setQueryBuilder(QueryBuilder &$queryBuilder)
+    public function setQueryBuilder(QueryBuilder & $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;
         // create QueryBuilderIterator for legacy code

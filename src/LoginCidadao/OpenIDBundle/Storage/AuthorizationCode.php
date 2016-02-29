@@ -108,8 +108,8 @@ class AuthorizationCode implements AuthorizationCodeInterface
      * @ingroup oauth2_section_4
      */
     public function setAuthorizationCode($code, $client_id, $user_id,
-                                         $redirect_uri, $expires, $scope = null,
-                                         $id_token = null)
+                                            $redirect_uri, $expires, $scope = null,
+                                            $id_token = null)
     {
         $id     = explode('_', $client_id);
         $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
@@ -122,7 +122,9 @@ class AuthorizationCode implements AuthorizationCodeInterface
                 ->find($user_id);
         }
 
-        if (!$client) throw new \Exception('Unknown client identifier');
+        if (!$client) {
+            throw new \Exception('Unknown client identifier');
+        }
 
         $authorizationCode = new \LoginCidadao\OAuthBundle\Entity\AuthCode();
         $authorizationCode->setToken($code);

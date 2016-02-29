@@ -96,7 +96,7 @@ class NotificationIterable extends AbstractInfiniteIterable
     protected function getCurrentData()
     {
         $notifications = $this->handler->allIdOffset($this->getPerIteration(),
-                                                     $this->getOffset());
+                                                        $this->getOffset());
 
         return $notifications;
     }

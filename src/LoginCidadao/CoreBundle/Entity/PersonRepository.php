@@ -3,7 +3,6 @@
 namespace LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
 
 class PersonRepository extends EntityRepository
 {

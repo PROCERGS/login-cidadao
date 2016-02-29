@@ -63,17 +63,17 @@ class ShoutController extends Controller
         $form = $this->createFormBuilder();
         foreach ($placeholders as $placeholder) {
             $form->add('place_' . $placeholder->getId(), 'text',
-                       array(
+                        array(
                 'label' => $placeholder->getName(),
                 'data' => $placeholder->getDefault()
             ));
         }
         $form->add('id', 'hidden',
-                   array(
+                    array(
             'data' => $categoryId
         ));
         $form->add('owners', 'ajax_choice',
-                   array(
+                    array(
             'attr' => array(
                 'data-ac-route' => $this->generateUrl('lc_dev_shout_step_category'),
                 'data-ac-search-prop' => 'name',
@@ -131,7 +131,7 @@ class ShoutController extends Controller
             return $this->redirect($this->generateUrl('lc_dev_shout_new'));
         }
         $form = $this->createForm('lc.client.base.form.type',
-                                  $client);
+                                    $client);
         $form->handleRequest($request);
         $messages = '';
         if ($form->isValid()) {
@@ -141,7 +141,7 @@ class ShoutController extends Controller
             $messages = 'aeee';
         }
         return $this->render('LoginCidadaoCoreBundle:Dev\Client:new.html.twig',
-                             array(
+                                array(
                 'form' => $form->createView(),
                 'client' => $client,
                 'messages' => $messages

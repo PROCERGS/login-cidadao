@@ -11,7 +11,7 @@ class CategoryRepository extends EntityRepository
 {
 
     public function findUnconfigured(PersonInterface $person,
-                                     ClientInterface $client = null)
+                                        ClientInterface $client = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('c')
@@ -19,7 +19,7 @@ class CategoryRepository extends EntityRepository
             ->innerJoin('LoginCidadaoCoreBundle:Authorization', 'a',
                         'WITH', 'a.client = c.client AND a.person = :person')
             ->leftJoin('LoginCidadaoNotificationBundle:PersonNotificationOption',
-                       'o', 'WITH', 'o.category = c AND a.person = o.person')
+                        'o', 'WITH', 'o.category = c AND a.person = o.person')
             ->where('o is null')
             ->setParameter('person', $person);
 

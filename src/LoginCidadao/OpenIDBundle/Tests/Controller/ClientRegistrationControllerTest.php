@@ -64,8 +64,8 @@ class ClientRegistrationControllerTest extends WebTestCase
     }
 
     protected function assertJsonResponse($response, $statusCode = 200,
-                                          $checkValidJson = true,
-                                          $contentType = 'application/json')
+                                            $checkValidJson = true,
+                                            $contentType = 'application/json')
     {
         $this->assertEquals(
             $statusCode, $response->getStatusCode(), $response->getContent()

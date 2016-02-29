@@ -34,7 +34,7 @@ class StatsHandler
     }
 
     public function getIndexedUniqueDate($index, $keys = null,
-                                         \DateTime $afterDate = null)
+                                            \DateTime $afterDate = null)
     {
         return $this->repo->findIndexedUniqueStatsByIndexKeyDate($index, $keys,
                 $afterDate);
