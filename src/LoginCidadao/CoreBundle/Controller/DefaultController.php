@@ -69,7 +69,7 @@ class DefaultController extends Controller
         $translator = $this->get('translator');
         $message    = $translator->trans('contact.form.sent');
         if ($form->isValid()) {
-            $email = new SentEmail();
+            $email     = new SentEmail();
             $email
                 ->setType('contact-mail')
                 ->setSubject('Fale conosco - '.$form->get('firstName')->getData())
@@ -163,8 +163,8 @@ class DefaultController extends Controller
 
         $redirectUrl = $request->get('redirect_url');
         if ($redirectUrl !== null) {
-            $uri = parse_url($redirectUrl);
-            if ($client->ownsDomain($uri[PHP_URL_HOST])) {
+            $host = parse_url($redirectUrl, PHP_URL_HOST);
+            if ($client->ownsDomain($host)) {
                 return $this->redirect($redirectUrl);
             } else {
                 $result['error'] = "Invalid redirect_url domain. It doesn't appear to belong to {$client->getName()}";

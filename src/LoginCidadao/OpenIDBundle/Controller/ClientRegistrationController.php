@@ -142,8 +142,7 @@ class ClientRegistrationController extends FOSRestController
 
     private function getHost($uri)
     {
-        $parsed = parse_url($uri);
-        return $parsed[PHP_URL_HOST];
+        return parse_url($uri, PHP_URL_HOST);
     }
 
     private function parseJsonRequest(Request $request)

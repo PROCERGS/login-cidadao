@@ -103,22 +103,22 @@ class WellKnownController extends FOSRestController
         }
 
         $default = array(
-            PHP_URL_SCHEME => null,
-            PHP_URL_USER => null,
-            PHP_URL_HOST => null,
+            'scheme' => null,
+            'user' => null,
+            'host' => null,
         );
 
         $parts = array_merge($default, parse_url($parseable));
 
-        if ($parts[PHP_URL_SCHEME] === null) {
-            if ($parts[PHP_URL_HOST] !== null && $parts[PHP_URL_USER] !== null) {
-                $parts[PHP_URL_SCHEME] = 'acct';
+        if ($parts['scheme'] === null) {
+            if ($parts['host'] !== null && $parts['user'] !== null) {
+                $parts['scheme'] = 'acct';
             } else {
-                $parts[PHP_URL_SCHEME] = 'https';
+                $parts['scheme'] = 'https';
             }
         }
 
-        if ($parts[PHP_URL_SCHEME] === null || $parts[PHP_URL_HOST] === null) {
+        if ($parts['scheme'] === null || $parts['host'] === null) {
             throw new BadRequestHttpException("Invalid resource");
         }
 

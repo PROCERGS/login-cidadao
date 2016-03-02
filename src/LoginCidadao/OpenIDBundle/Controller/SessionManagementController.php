@@ -64,11 +64,11 @@ class SessionManagementController extends Controller
                 }
                 $uri = parse_url($value);
 
-                $uri[PHP_URL_FRAGMENT] = '';
-                $uri[PHP_URL_PATH]     = '';
-                $uri[PHP_URL_QUERY]    = '';
-                $uri[PHP_URL_USER]     = '';
-                $uri[PHP_URL_PASS]     = '';
+                $uri['fragment'] = '';
+                $uri['path']     = '';
+                $uri['query']    = '';
+                $uri['user']     = '';
+                $uri['pass']     = '';
                 return $this->unparseUrl($uri);
             }, array_filter($uris))
         );

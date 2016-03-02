@@ -530,8 +530,8 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     public function ownsDomain($domain)
     {
         foreach ($this->getRedirectUris() as $redirectUrl) {
-            $uri = parse_url($redirectUrl);
-            if ($uri[PHP_URL_HOST] == $domain) {
+            $host = parse_url($redirectUrl, PHP_URL_HOST);
+            if ($host == $domain) {
                 return true;
             }
         }

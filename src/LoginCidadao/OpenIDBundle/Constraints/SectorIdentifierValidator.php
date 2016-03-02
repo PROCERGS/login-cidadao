@@ -33,7 +33,7 @@ class SectorIdentifierValidator extends ConstraintValidator
 
         $hosts = array();
         foreach ($redirectUris as $uri) {
-            @$hosts[$uri[PHP_URL_HOST]] += 1;
+            @$hosts[$uri['host']] += 1;
         }
 
         if (!$sectorIdentifier && count($hosts) > 1) {

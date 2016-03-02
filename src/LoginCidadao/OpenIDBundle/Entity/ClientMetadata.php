@@ -798,8 +798,7 @@ class ClientMetadata
             $uri  = reset($uris);
         }
 
-        $parsed = parse_url($uri);
-        return $parsed[PHP_URL_HOST];
+        return parse_url($uri, PHP_URL_HOST);
     }
 
     public function getRegistrationAccessToken()

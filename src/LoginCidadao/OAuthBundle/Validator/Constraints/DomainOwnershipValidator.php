@@ -60,12 +60,12 @@ class DomainOwnershipValidator extends ConstraintValidator
             $response = false;
         }
 
-        if ($uri[PHP_URL_HOST] !== $domain) {
+        if ($uri['host'] !== $domain) {
             $this->buildUrlViolation('organizations.validation.error.invalid_domain');
             $response = false;
         }
 
-        if ($uri[PHP_URL_QUERY]) {
+        if ($uri['query']) {
             $this->buildUrlViolation('organizations.validation.error.query_string');
             $response = false;
         }
