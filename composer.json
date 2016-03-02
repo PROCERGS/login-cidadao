@@ -54,7 +54,6 @@
         "bshaffer/oauth2-server-bundle": "dev-develop",
         "phpseclib/phpseclib": "2.0.0",
         "gree/jose": "^2.0",
-        "league/uri": "^4.0",
         "oro/doctrine-extensions": "^1.0",
         "nelmio/cors-bundle": "^1.4",
         "nelmio/security-bundle": "^1.8",
