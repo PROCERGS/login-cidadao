@@ -12,7 +12,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use LoginCidadao\CoreBundle\Entity\SentEmail;
 use LoginCidadao\APIBundle\Entity\LogoutKey;
-use League\Uri\Schemes\Http as HttpUri;
 
 class DefaultController extends Controller
 {
@@ -164,8 +163,8 @@ class DefaultController extends Controller
 
         $redirectUrl = $request->get('redirect_url');
         if ($redirectUrl !== null) {
-            $uri = HttpUri::createFromString($redirectUrl);
-            if ($client->ownsDomain($uri->getHost())) {
+            $uri = parse_url($redirectUrl);
+            if ($client->ownsDomain($uri[PHP_URL_HOST])) {
                 return $this->redirect($redirectUrl);
             } else {
                 $result['error'] = "Invalid redirect_url domain. It doesn't appear to belong to {$client->getName()}";

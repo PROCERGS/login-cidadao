@@ -16,7 +16,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\Mapping as ORM;
-use League\Uri\Schemes\Http as HttpUri;
 
 /**
  * @ORM\Entity
@@ -799,7 +798,8 @@ class ClientMetadata
             $uri  = reset($uris);
         }
 
-        return HttpUri::createFromString($uri)->getHost();
+        $parsed = parse_url($uri);
+        return $parsed[PHP_URL_HOST];
     }
 
     public function getRegistrationAccessToken()
