@@ -1,0 +1,60 @@
+parameters:
+    meurs.helper.class: PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper
+    meurs.person_meurs.form.class: PROCERGS\LoginCidadao\CoreBundle\Form\PersonMeuRSType
+    meurs.person_meurs.voter_registration.form.class: PROCERGS\LoginCidadao\CoreBundle\Form\PersonMeuRSVoterRegistrationType
+
+    meurs.profile_edit.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\ProfileEditListner
+    procergs_logincidadao.nfgws.class: PROCERGS\LoginCidadao\CoreBundle\Helper\NfgWsHelper
+
+    lc.person_doc.form.class: PROCERGS\LoginCidadao\CoreBundle\Form\DocFormType
+
+services:
+    meurs.entities.person_meurs.repository:
+        class: Doctrine\ORM\EntityRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments:
+            - PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS
+
+    meurs.profile_edit:
+        class: %meurs.profile_edit.class%
+        arguments: ["@lc.mailer", "@fos_user.mailer", "@fos_user.util.token_generator", "@router", "@session", "@security.context", "@notifications.helper", "%registration.email.unconfirmed_time%"]
+        calls:
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+            - [setNfgHelper, ["@procergs_logincidadao.nfgws"]]
+            - [setUserManager, ["@fos_user.user_manager"]]
+            - [setMeuRSHelper, [@meurs.helper] ]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    procergs_logincidadao.nfgws:
+        class: %procergs_logincidadao.nfgws.class%
+        calls:
+            - [setMeuRSHelper, [@meurs.helper] ]
+            - [setUrl, [%nfg_ws_url%]]
+            - [setOrganizacao, [%soe_organization%]]
+            - [setUsuario, [%soe_username%]]
+            - [setSenha, [%soe_password%]]
+
+    meurs.helper:
+        class: %meurs.helper.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @meurs.entities.person_meurs.repository
+
+    meurs.person_meurs.form:
+        class: %meurs.person_meurs.form.class%
+        tags:
+            - { name: form.type, alias: person_meurs_type }
+
+    meurs.person_meurs.voter_registration.form:
+        class: %meurs.person_meurs.voter_registration.form.class%
+        tags:
+            - { name: form.type, alias: person_meurs_voter_registration_type }
+
+    lc.person_doc.form:
+        class: %lc.person_doc.form.class%
+        calls:
+            - [setMeuRSHelper, [@meurs.helper] ]
+        tags:
+            - { name: form.type, alias: person_doc_form_type }
