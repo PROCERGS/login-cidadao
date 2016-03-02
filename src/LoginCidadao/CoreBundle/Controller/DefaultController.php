@@ -12,7 +12,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use LoginCidadao\CoreBundle\Entity\SentEmail;
 use LoginCidadao\APIBundle\Entity\LogoutKey;
-use League\Uri\Schemes\Http as HttpUri;
 
 class DefaultController extends Controller
 {
@@ -70,7 +69,7 @@ class DefaultController extends Controller
         $translator = $this->get('translator');
         $message    = $translator->trans('contact.form.sent');
         if ($form->isValid()) {
-            $email = new SentEmail();
+            $email     = new SentEmail();
             $email
                 ->setType('contact-mail')
                 ->setSubject('Fale conosco - '.$form->get('firstName')->getData())
@@ -164,8 +163,8 @@ class DefaultController extends Controller
 
         $redirectUrl = $request->get('redirect_url');
         if ($redirectUrl !== null) {
-            $uri = HttpUri::createFromString($redirectUrl);
-            if ($client->ownsDomain($uri->getHost())) {
+            $host = parse_url($redirectUrl, PHP_URL_HOST);
+            if ($client->ownsDomain($host)) {
                 return $this->redirect($redirectUrl);
             } else {
                 $result['error'] = "Invalid redirect_url domain. It doesn't appear to belong to {$client->getName()}";

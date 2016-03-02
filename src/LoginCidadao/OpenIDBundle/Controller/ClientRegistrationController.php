@@ -3,7 +3,6 @@
 namespace LoginCidadao\OpenIDBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
-use League\Uri\Schemes\Http as HttpUri;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\Request;
@@ -143,7 +142,7 @@ class ClientRegistrationController extends FOSRestController
 
     private function getHost($uri)
     {
-        return HttpUri::createFromString($uri)->getHost();
+        return parse_url($uri, PHP_URL_HOST);
     }
 
     private function parseJsonRequest(Request $request)
@@ -181,7 +180,7 @@ class ClientRegistrationController extends FOSRestController
     }
 
     private function checkRegistrationAccessToken(Request $request,
-                                                    Client $client)
+                                                  Client $client)
     {
         $raw = $request->get('access_token',
             $request->headers->get('authorization'));

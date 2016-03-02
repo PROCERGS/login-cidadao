@@ -10,7 +10,6 @@
 
 namespace LoginCidadao\OpenIDBundle\Constraints;
 
-use League\Uri\Schemes\Http as HttpUri;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
@@ -27,17 +26,17 @@ class SectorIdentifierValidator extends ConstraintValidator
 
         $redirectUris = $this->parseUris($value->getRedirectUris());
         if ($value->getSectorIdentifierUri() !== null) {
-            $sectorIdentifier = HttpUri::createFromString();
+            $sectorIdentifier = parse_url($value->getSectorIdentifierUri());
         } else {
             $sectorIdentifier = null;
         }
 
         $hosts = array();
         foreach ($redirectUris as $uri) {
-            @$hosts[$uri->getHost()] += 1;
+            @$hosts[$uri['host']] += 1;
         }
 
-        if (!($sectorIdentifier instanceof HttpUri) && count($hosts) > 1) {
+        if (!$sectorIdentifier && count($hosts) > 1) {
             $message = 'sector_identifier_uri is required when multiple hosts are used in redirect_uris. (#rfc.section.8.1)';
             $this->context->buildViolation($message)
                 ->atPath('sector_identifier_uri')
@@ -48,10 +47,10 @@ class SectorIdentifierValidator extends ConstraintValidator
 
     /**
      * @param array $uris
-     * @return HttpUri[]
+     * @return string[][]
      */
     private function parseUris(array $uris)
     {
-        return array_map('League\Uri\Schemes\Http::createFromString', $uris);
+        return array_map('parse_url', $uris);
     }
 }

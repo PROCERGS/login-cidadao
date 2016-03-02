@@ -12,7 +12,6 @@ namespace LoginCidadao\OAuthBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use League\Uri\Schemes\Http as HttpUri;
 
 class DomainOwnershipValidator extends ConstraintValidator
 {
@@ -52,21 +51,21 @@ class DomainOwnershipValidator extends ConstraintValidator
 
     private function checkUrl($validationUrl, $domain, $validationCode)
     {
-        $uri = HttpUri::createFromString($validationUrl);
+        $uri = parse_url($validationUrl);
 
-        $response = $uri->__toString();
+        $response = $validationUrl;
 
         if (strstr($response, urlencode($validationCode)) !== false) {
             $this->buildUrlViolation('organizations.validation.error.code_in_url');
             $response = false;
         }
 
-        if ($uri->getHost() !== $domain) {
+        if ($uri['host'] !== $domain) {
             $this->buildUrlViolation('organizations.validation.error.invalid_domain');
             $response = false;
         }
 
-        if ($uri->getQuery()) {
+        if ($uri['query']) {
             $this->buildUrlViolation('organizations.validation.error.query_string');
             $response = false;
         }

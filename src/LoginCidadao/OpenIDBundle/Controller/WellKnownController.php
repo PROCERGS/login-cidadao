@@ -2,7 +2,6 @@
 
 namespace LoginCidadao\OpenIDBundle\Controller;
 
-use League\Uri\UriParser;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -55,7 +54,8 @@ class WellKnownController extends FOSRestController
             'end_session_endpoint' => $endSessionEndpoint,
             'jwks_uri' => $jwksUri,
             'registration_endpoint' => $registrationEndpoint,
-            'scopes_supported' => explode(' ', $this->getParameter('lc_supported_scopes')),
+            'scopes_supported' => explode(' ',
+                $this->getParameter('lc_supported_scopes')),
             'response_types_supported' => array(
                 "code", "code id_token", "id_token", "token id_token"
             ),
@@ -97,20 +97,18 @@ class WellKnownController extends FOSRestController
     private function validateSubjectResource($resource)
     {
         if (strpos($resource, 'acct:') === 0) {
-            $resource  = preg_replace('/@/', '%40', $resource, 1);
             $parseable = preg_replace('/^acct:/', 'acct://', $resource, 1);
         } else {
             $parseable = $resource;
         }
 
-        $parser  = new UriParser();
         $default = array(
             'scheme' => null,
             'user' => null,
             'host' => null,
         );
 
-        $parts = array_merge($default, $parser->parse($parseable));
+        $parts = array_merge($default, parse_url($parseable));
 
         if ($parts['scheme'] === null) {
             if ($parts['host'] !== null && $parts['user'] !== null) {
