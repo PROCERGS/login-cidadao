@@ -8,7 +8,6 @@ use LoginCidadao\BadgesControlBundle\Handler\BadgesHandler;
 
 class BadgesSubscriber implements EventSubscriberInterface
 {
-
     /** @var BadgesHandler */
     protected $handler;
 
@@ -20,22 +19,22 @@ class BadgesSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            BadgesEvents::BADGES_REGISTER_EVALUATOR => array('onRegisterEvaluator', 0),
+            BadgesEvents::BADGES_REGISTER_EVALUATOR => array('onRegisterEvaluator',
+                0),
             BadgesEvents::BADGES_EVALUATE => array('onBadgeEvaluate', 0)
         );
     }
 
     public function onBadgeEvaluate(EvaluateBadgesEvent $event)
     {
-        error_log("Evaluating on LC");
+        //
     }
 
     public function onRegisterEvaluator(RegisterEvaluatorEvent $event)
     {
         $evaluator = $event->getEvaluator();
-        $id = $evaluator->getName();
+        $id        = $evaluator->getName();
         $this->handler->register($evaluator);
         error_log("Evaluator $id registered");
     }
-
 }
