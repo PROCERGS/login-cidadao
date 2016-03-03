@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
 use LoginCidadao\CoreBundle\Exception\RedirectResponseException;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use Doctrine\ORM\EntityManager;
@@ -61,7 +62,7 @@ class LoggedInUserListener
         }
         $token = $this->tokenStorage->getToken();
 
-        if (is_null($token) ||
+        if (is_null($token) || $token instanceof OAuthToken ||
             $this->authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') === false) {
             return;
         }
