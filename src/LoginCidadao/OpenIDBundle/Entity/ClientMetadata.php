@@ -312,10 +312,11 @@ class ClientMetadata
 
     public function __construct()
     {
-        $this->response_types    = array('code');
-        $this->grant_types       = array('authorization_code');
-        $this->application_type  = 'web';
+        $this->response_types = array('code');
+        $this->grant_types = array('authorization_code');
+        $this->application_type = 'web';
         $this->require_auth_time = false;
+        $this->subject_type = 'pairwise';
     }
 
     public function getRedirectUris()
@@ -326,6 +327,7 @@ class ClientMetadata
     public function setRedirectUris($redirect_uris)
     {
         $this->redirect_uris = $redirect_uris;
+
         return $this;
     }
 
@@ -337,6 +339,7 @@ class ClientMetadata
     public function setResponseTypes($response_types)
     {
         $this->response_types = $response_types;
+
         return $this;
     }
 
@@ -348,6 +351,7 @@ class ClientMetadata
     public function setGrantTypes($grant_types)
     {
         $this->grant_types = $grant_types;
+
         return $this;
     }
 
@@ -359,6 +363,7 @@ class ClientMetadata
     public function setApplicationType($application_type)
     {
         $this->application_type = $application_type;
+
         return $this;
     }
 
@@ -370,6 +375,7 @@ class ClientMetadata
     public function setContacts($contacts)
     {
         $this->contacts = $contacts;
+
         return $this;
     }
 
@@ -381,6 +387,7 @@ class ClientMetadata
     public function setClientName($client_name)
     {
         $this->client_name = $client_name;
+
         return $this;
     }
 
@@ -392,6 +399,7 @@ class ClientMetadata
     public function setLogoUri($logo_uri)
     {
         $this->logo_uri = $logo_uri;
+
         return $this;
     }
 
@@ -403,6 +411,7 @@ class ClientMetadata
     public function setClientUri($client_uri)
     {
         $this->client_uri = $client_uri;
+
         return $this;
     }
 
@@ -414,6 +423,7 @@ class ClientMetadata
     public function setPolicyUri($policy_uri)
     {
         $this->policy_uri = $policy_uri;
+
         return $this;
     }
 
@@ -425,6 +435,7 @@ class ClientMetadata
     public function setTosUri($tos_uri)
     {
         $this->tos_uri = $tos_uri;
+
         return $this;
     }
 
@@ -436,6 +447,7 @@ class ClientMetadata
     public function setJwksUri($jwks_uri)
     {
         $this->jwks_uri = $jwks_uri;
+
         return $this;
     }
 
@@ -447,6 +459,7 @@ class ClientMetadata
     public function setJwks($jwks)
     {
         $this->jwks = $jwks;
+
         return $this;
     }
 
@@ -458,6 +471,7 @@ class ClientMetadata
     public function setSectorIdentifierUri($sector_identifier_uri)
     {
         $this->sector_identifier_uri = $sector_identifier_uri;
+
         return $this;
     }
 
@@ -469,6 +483,7 @@ class ClientMetadata
     public function setSubjectType($subject_type)
     {
         $this->subject_type = $subject_type;
+
         return $this;
     }
 
@@ -480,6 +495,7 @@ class ClientMetadata
     public function setIdTokenSignedResponseAlg($id_token_signed_response_alg)
     {
         $this->id_token_signed_response_alg = $id_token_signed_response_alg;
+
         return $this;
     }
 
@@ -491,6 +507,7 @@ class ClientMetadata
     public function setIdTokenEncryptedResponseAlg($id_token_encrypted_response_alg)
     {
         $this->id_token_encrypted_response_alg = $id_token_encrypted_response_alg;
+
         return $this;
     }
 
@@ -502,6 +519,7 @@ class ClientMetadata
     public function setIdTokenEncryptedResponseEnc($id_token_encrypted_response_enc)
     {
         $this->id_token_encrypted_response_enc = $id_token_encrypted_response_enc;
+
         return $this;
     }
 
@@ -513,6 +531,7 @@ class ClientMetadata
     public function setUserinfoSignedResponseAlg($userinfo_signed_response_alg)
     {
         $this->userinfo_signed_response_alg = $userinfo_signed_response_alg;
+
         return $this;
     }
 
@@ -524,6 +543,7 @@ class ClientMetadata
     public function setUserinfoEncryptedResponseAlg($userinfo_encrypted_response_alg)
     {
         $this->userinfo_encrypted_response_alg = $userinfo_encrypted_response_alg;
+
         return $this;
     }
 
@@ -535,6 +555,7 @@ class ClientMetadata
     public function setUserinfoEncryptedResponseEnc($userinfo_encrypted_response_enc)
     {
         $this->userinfo_encrypted_response_enc = $userinfo_encrypted_response_enc;
+
         return $this;
     }
 
@@ -546,6 +567,7 @@ class ClientMetadata
     public function setRequestObjectSigningAlg($request_object_signing_alg)
     {
         $this->request_object_signing_alg = $request_object_signing_alg;
+
         return $this;
     }
 
@@ -557,6 +579,7 @@ class ClientMetadata
     public function setRequestObjectEncryptionAlg($request_object_encryption_alg)
     {
         $this->request_object_encryption_alg = $request_object_encryption_alg;
+
         return $this;
     }
 
@@ -568,6 +591,7 @@ class ClientMetadata
     public function setRequestObjectEncryptionEnc($request_object_encryption_enc)
     {
         $this->request_object_encryption_enc = $request_object_encryption_enc;
+
         return $this;
     }
 
@@ -579,6 +603,7 @@ class ClientMetadata
     public function setTokenEndpointAuthMethod($token_endpoint_auth_method)
     {
         $this->token_endpoint_auth_method = $token_endpoint_auth_method;
+
         return $this;
     }
 
@@ -590,6 +615,7 @@ class ClientMetadata
     public function setTokenEndpointAuthSigningAlg($token_endpoint_auth_signing_alg)
     {
         $this->token_endpoint_auth_signing_alg = $token_endpoint_auth_signing_alg;
+
         return $this;
     }
 
@@ -601,6 +627,7 @@ class ClientMetadata
     public function setDefaultMaxAge($default_max_age)
     {
         $this->default_max_age = $default_max_age;
+
         return $this;
     }
 
@@ -612,6 +639,7 @@ class ClientMetadata
     public function setRequireAuthTime($require_auth_time)
     {
         $this->require_auth_time = $require_auth_time;
+
         return $this;
     }
 
@@ -623,6 +651,7 @@ class ClientMetadata
     public function setDefaultAcrValues($default_acr_values)
     {
         $this->default_acr_values = $default_acr_values;
+
         return $this;
     }
 
@@ -634,6 +663,7 @@ class ClientMetadata
     public function setInitiateLoginUri($initiate_login_uri)
     {
         $this->initiate_login_uri = $initiate_login_uri;
+
         return $this;
     }
 
@@ -645,6 +675,7 @@ class ClientMetadata
     public function setRequestUris($request_uris)
     {
         $this->request_uris = $request_uris;
+
         return $this;
     }
 
@@ -658,6 +689,7 @@ class ClientMetadata
         if ($this->client_id === null && $this->client) {
             return $this->client->getClientId();
         }
+
         return $this->client_id;
     }
 
@@ -671,18 +703,21 @@ class ClientMetadata
         if ($this->client_id === null && $this->client) {
             return $this->client->getClientSecret();
         }
+
         return $this->client_secret;
     }
 
     public function setClientId($client_id)
     {
         $this->client_id = $client_id;
+
         return $this;
     }
 
     public function setClientSecret($client_secret)
     {
         $this->client_secret = $client_secret;
+
         return $this;
     }
 
@@ -709,13 +744,13 @@ class ClientMetadata
      */
     public function toClient()
     {
-        $name    = $this->getClientName();
+        $name = $this->getClientName();
         $hasName = $name !== null && strlen($name) > 0;
 
-        $grantTypes   = $this->getGrantTypes();
-        $clientUri    = $this->getClientUri();
-        $tosUri       = $this->getTosUri();
-        $clientName   = $this->getClientName();
+        $grantTypes = $this->getGrantTypes();
+        $clientUri = $this->getClientUri();
+        $tosUri = $this->getTosUri();
+        $clientName = $this->getClientName();
         $redirectUris = $this->getRedirectUris();
 
         $client = new Client();
@@ -755,6 +790,7 @@ class ClientMetadata
     public function setClient(Client $client)
     {
         $this->client = $client;
+
         return $this;
     }
 
@@ -795,7 +831,7 @@ class ClientMetadata
             $uri = $siUri;
         } else {
             $uris = $this->getRedirectUris();
-            $uri  = reset($uris);
+            $uri = reset($uris);
         }
 
         return parse_url($uri, PHP_URL_HOST);

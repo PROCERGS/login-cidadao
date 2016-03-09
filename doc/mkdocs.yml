@@ -3,8 +3,8 @@ site_description: Torne seu serviços públicos mais eficientes através da ado�
 pages:
   - Sobre a plataforma: 'index.md'
   - Documentação em Português:
-    - Instalação:
-      - 'Instalação': como-instalar.md
+      - 'Como instalar': como-instalar.md
+      - 'Configurar serviços terceiros': adicionando-servicos.md
 theme: readthedocs
 markdown_extensions:
   - fenced_code

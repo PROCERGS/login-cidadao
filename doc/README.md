@@ -28,7 +28,7 @@ All documents here were generated with mkdocs.
 1 - After clone the repo, get the diretory and run mkdocs:
 
 ```
-$ cd login-cidadao-docs
+$ cd docs
 $ mkdocs serve
 ```
 
