@@ -363,12 +363,6 @@ Copie o scritp padrão para o repositório de seu nginx
 ```
 
 Faça as alterações necessárias! 
-
-
-
-```
-
- 
  
 * Em `DocumentRoot` é preciso apontar para o diretório `web`, neste exemplo o caminho completo é `/var/www/login-cidadao/web`.
  
@@ -423,7 +417,7 @@ Assume-se que as estapas 1 e 2 dos [Primeiros passos pós-instalação](#pos-ins
  
 ## Adicionando serviços
  
-em breve
+Veja em detalhe como configurar cada rede social utilizada pelo LC em [configurando servicos de terceiros](adicionando-servicos)
  
 ## Integrando com o Mapas Culturais
  
