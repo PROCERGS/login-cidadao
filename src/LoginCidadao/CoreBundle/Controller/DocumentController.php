@@ -36,7 +36,7 @@ class DocumentController extends Controller
         $event = new GetResponseUserEvent($user, $request);
         $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $event);
 
-        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\DocFormType', $user);
+        $form = $this->createForm($this->getParameter('lc.person_doc.form.class'), $user);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $event = new FormEvent($form, $request);
