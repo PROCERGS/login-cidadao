@@ -36,6 +36,7 @@ class DocumentController extends BaseController
 
             $response['personMeuRS'] = $meuRSHelper->getPersonMeuRS($this->getUser(),
                 true);
+            $response['tre_search_link'] = $this->getParameter('tre_search_link');
         }
 
         return $response;
