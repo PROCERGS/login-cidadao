@@ -12,6 +12,7 @@ namespace LoginCidadao\StatsBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use LoginCidadao\StatsBundle\Entity\Statistics;
 use LoginCidadao\StatsBundle\Handler\StatsHandler;
 use LoginCidadao\CoreBundle\Entity\Authorization;
@@ -51,12 +52,17 @@ class StatisticsSubscriber implements EventSubscriber
             return;
         }
 
+        /** @var ClientRepository $clientRepo */
         $clientRepo = $args->getEntityManager()
             ->getRepository('LoginCidadaoOAuthBundle:Client');
 
         $counts = $clientRepo->getCountPerson($entity->getPerson(),
             $entity->getClient()->getId());
-        $count  = $counts[0]['qty'];
+        if (count($counts) > 0) {
+            $count = $counts[0]['qty'];
+        } else {
+            $count = 0;
+        }
 
         if (!is_int($count)) {
             $count = 0;
