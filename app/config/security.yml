@@ -172,6 +172,7 @@ security:
 
         - { path: ^/monitor/health, role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_monitors% }
 
+        - { path: ^/nelmio/csp/report$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/contact$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/general$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/privacy$, role: IS_AUTHENTICATED_ANONYMOUSLY }
