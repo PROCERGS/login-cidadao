@@ -17,6 +17,7 @@ security:
             - ROLE_USER
             - ROLE_ORGANIZATIONS_BIND_CLIENT
             - ROLE_EDIT_CLIENT_ALLOWED_SCOPES
+            - FEATURE_EDIT_USERNAME
         ROLE_SUPER:
             - ROLE_DEV
             - ROLE_ORGANIZATIONS_CREATE
@@ -47,6 +48,7 @@ security:
         FEATURE_IGP_VALIDATION:
         FEATURE_ORGANIZATIONS:
         FEATURE_IMPERSONATION_REPORTS:
+        FEATURE_EDIT_USERNAME:
 
     providers:
         chainprovider:
