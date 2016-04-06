@@ -40,16 +40,6 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/general", name="lc_general")
-     * @Template()
-     */
-    public function generalAction()
-    {
-        return $this->render('LoginCidadaoCoreBundle:Info:terms.html.twig',
-                compact('user', 'apps'));
-    }
-
-    /**
      * @Route("/help", name="lc_help")
      * @Template()
      */
