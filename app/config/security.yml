@@ -173,21 +173,14 @@ security:
 
         - { path: ^/monitor/health, role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_monitors% }
 
-        - { path: ^/contact$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/general$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/privacy$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/about$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/help$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/(contact|privacy|about|help|register)$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/person/checkEmailAvailable, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
-        - { path: ^/job, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/job, role: ROLE_SUPER_ADMIN }
         - { path: ^/external/navbar.js, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
         - { path: ^/logout/if-not-remembered, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/terms$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
         - { path: ^/, roles: IS_AUTHENTICATED_REMEMBERED }
         - { path: ^/profile/edit, roles: IS_AUTHENTICATED_FULLY }
