@@ -77,6 +77,7 @@ assetic:
           - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.js'
           - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.local.js'
           - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.visible.min.js'
+          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.preventDoubleSubmission.js'
           - '@LoginCidadaoCoreBundle/Resources/public/js/general.js'
       lc_base_css:
         inputs:
