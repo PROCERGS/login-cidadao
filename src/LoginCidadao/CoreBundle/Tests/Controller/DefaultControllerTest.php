@@ -12,7 +12,7 @@ class DefaultControllerTest extends WebTestCase
      */
     public function testAnonymousPages($url)
     {
-        $client = self::createClient();
+        $client = self::createClient(array(), array('HTTPS' => true));
         $client->request('GET', $url);
 
         $this->assertTrue($client->getResponse()->isSuccessful());
