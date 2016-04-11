@@ -18,6 +18,18 @@ class DefaultControllerTest extends WebTestCase
         $this->assertTrue($client->getResponse()->isSuccessful());
     }
 
+    /**
+     * @dataProvider urlProvider
+     */
+    public function testHttps($url)
+    {
+        $client = self::createClient(array(), array('HTTPS' => false));
+        $client->request('GET', $url);
+
+        $this->assertFalse($client->getResponse()->isSuccessful());
+        $this->assertEquals(301, $client->getResponse()->getStatusCode());
+    }
+
     public function urlProvider()
     {
         return array(
