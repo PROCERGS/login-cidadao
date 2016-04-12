@@ -50,6 +50,10 @@ class StatisticsRepository extends EntityRepository
         $query = $this->getFindStatsByIndexKeyDateQuery($index, $keys, null,
             $days);
         $this->applyGreatestNPerGroupDate($query);
+        var_dump(compact('index', 'keys', 'days'));
+        var_dump($query->getDQL());
+        var_dump($query->getQuery()->getSQL());
+        die();
         $data  = $query->getQuery()->getResult();
 
         return $this->indexResults($data);

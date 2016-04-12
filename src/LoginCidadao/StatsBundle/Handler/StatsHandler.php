@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\StatsBundle\Handler;
 
+use LoginCidadao\StatsBundle\Entity\Statistics;
 use LoginCidadao\StatsBundle\Entity\StatisticsRepository;
 
 class StatsHandler
@@ -29,20 +30,48 @@ class StatsHandler
 
     public function getIndexed($index, $key = null, \DateTime $afterDate = null)
     {
-        return $this->repo->findIndexedStatsByIndexKeyDate($index, $key,
-                $afterDate);
+        return $this->repo->findIndexedStatsByIndexKeyDate(
+            $index,
+            $key,
+            $afterDate
+        );
     }
 
-    public function getIndexedUniqueDate($index, $keys = null,
-                                            \DateTime $afterDate = null)
-    {
-        return $this->repo->findIndexedUniqueStatsByIndexKeyDate($index, $keys,
-                $afterDate);
+    public function getIndexedUniqueDate(
+        $index,
+        $keys = null,
+        \DateTime $afterDate = null
+    ) {
+        return $this->repo->findIndexedUniqueStatsByIndexKeyDate(
+            $index,
+            $keys,
+            $afterDate
+        );
     }
 
     public function getIndexedUniqueLastDays($index, $keys = null, $days = null)
     {
-        return $this->repo->findIndexedUniqueStatsByIndexKeyDays($index, $keys,
-                $days);
+        return $this->repo->findIndexedUniqueStatsByIndexKeyDays(
+            $index,
+            $keys,
+            $days
+        );
+    }
+
+    /**
+     * @param \DateTime $date
+     * @param $index
+     * @param $key
+     * @return null|Statistics
+     */
+    public function getOneByDate(\DateTime $date, $index, $key)
+    {
+        return $this->repo->findOneBy(
+            array(
+                'timestamp' => $date,
+                'index' => $index,
+                'key' => $key,
+            )
+        );
     }
 }
