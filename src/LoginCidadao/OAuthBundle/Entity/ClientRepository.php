@@ -36,8 +36,15 @@ class ClientRepository extends EntityRepository
             ->orderBy('qty', 'DESC');
 
         if ($person !== null) {
-            $qb->leftJoin('a.person', 'p')
-                ->orWhere('p.id IS NOT NULL');
+            $clients = $this->getEntityManager()->createQueryBuilder()
+                ->select('IDENTITY(a.client)')
+                ->from('LoginCidadaoCoreBundle:Authorization', 'a')
+                ->where('a.person = :person')
+                ->setParameter('person', $person)
+                ->getQuery()->getScalarResult();
+
+            $qb->orWhere('a.id IN (:clients)')
+                ->setParameter('clients', $clients);
         }
 
         if ($clientId !== null) {
@@ -45,32 +52,9 @@ class ClientRepository extends EntityRepository
                 ->setParameter('clientId', $clientId);
         }
 
-        $items = $this->injectObject($qb->getQuery()->getResult(), 'client');
+        $result = $qb->getQuery()->getResult();
 
-        return $items;
-    }
-
-    private function injectObject(array $items = [], $idKey)
-    {
-        $ids = [];
-        foreach ($items as $item) {
-            $ids[] = $item[$idKey];
-        }
-
-        $clients = $this->findBy(['id' => $ids]);
-        $indexedClients = [];
-        foreach ($clients as $client) {
-            $indexedClients[$client->getId()] = $client;
-        }
-
-        return array_map(
-            function ($item) use ($idKey, $indexedClients) {
-                $id = $item[$idKey];
-                $item[$idKey] = $indexedClients[$id];
-                return $item;
-            },
-            $items
-        );
+        return $this->injectObject($result, 'client');
     }
 
     public function statsUsersByServiceByDay(
@@ -112,5 +96,29 @@ class ClientRepository extends EntityRepository
         }
 
         return $query->getQuery()->getScalarResult();
+    }
+
+    private function injectObject(array $items = [], $idKey)
+    {
+        $ids = [];
+        foreach ($items as $item) {
+            $ids[] = $item[$idKey];
+        }
+
+        $clients = $this->findBy(['id' => $ids]);
+        $indexedClients = [];
+        foreach ($clients as $client) {
+            $indexedClients[$client->getId()] = $client;
+        }
+
+        return array_map(
+            function ($item) use ($idKey, $indexedClients) {
+                $id = $item[$idKey];
+                $item[$idKey] = $indexedClients[$id];
+
+                return $item;
+            },
+            $items
+        );
     }
 }
