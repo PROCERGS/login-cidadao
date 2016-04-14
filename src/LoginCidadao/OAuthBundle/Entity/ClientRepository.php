@@ -11,49 +11,73 @@ class ClientRepository extends EntityRepository
     public function findOneOwned(PersonInterface $person, $id)
     {
         return $this->createQueryBuilder('c')
-                ->where(':person MEMBER OF c.owners')
-                ->andWhere('c.id = :id ')
-                ->setParameters(compact('person', 'id'))
-                ->getQuery()
-                ->getOneOrNullResult();
+            ->where(':person MEMBER OF c.owners')
+            ->andWhere('c.id = :id ')
+            ->setParameters(compact('person', 'id'))
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
-    public function getCountPerson(PersonInterface $person = null,
-                                    $clientId = null)
-    {
+    public function getCountPerson(
+        PersonInterface $person = null,
+        $clientId = null
+    ) {
         $qb = $this->getEntityManager()->createQueryBuilder()
-                ->select('count(a.id) AS qty, c AS client')
-                ->from('LoginCidadaoCoreBundle:Authorization', 'a')
-            ->innerJoin('LoginCidadaoOAuthBundle:Client', 'c', 'WITH',
-                'a.client = c')
-                ->where('c.published = true')
-                ->groupBy('a.client, c')
+            ->select('count(a.id) AS qty, c.id AS client')
+            ->from('LoginCidadaoCoreBundle:Authorization', 'a')
+            ->innerJoin(
+                'LoginCidadaoOAuthBundle:Client',
+                'c',
+                'WITH',
+                'a.client = c'
+            )
+            ->where('c.published = true')
+            ->groupBy('a.client, c.id')
             ->orderBy('qty', 'DESC');
 
         if ($person !== null) {
-            $clients = $this->getEntityManager()->createQueryBuilder()
-                    ->select('c.id')
-                    ->from($this->getEntityName(), 'c', 'c.id')
-                    ->join('c.authorizations', 'a')
-                    ->where('a.person = :person')
-                    ->setParameters(compact('person'))
-                    ->getQuery()->getArrayResult();
-
-            $ids = array_keys($clients);
-            $qb->orWhere('c.id IN (:clients)')->setParameter('clients', $ids);
-    }
+            $qb->leftJoin('a.person', 'p')
+                ->orWhere('p.id IS NOT NULL');
+        }
 
         if ($clientId !== null) {
             $qb->andWhere('c.id = :clientId')
                 ->setParameter('clientId', $clientId);
         }
 
-        return $qb->getQuery()->getResult();
+        $items = $this->injectObject($qb->getQuery()->getResult(), 'client');
+
+        return $items;
     }
 
-    public function statsUsersByServiceByDay($days, $clientId = null,
-                                                PersonInterface $person = null)
+    private function injectObject(array $items = [], $idKey)
     {
+        $ids = [];
+        foreach ($items as $item) {
+            $ids[] = $item[$idKey];
+        }
+
+        $clients = $this->findBy(['id' => $ids]);
+        $indexedClients = [];
+        foreach ($clients as $client) {
+            $indexedClients[$client->getId()] = $client;
+        }
+
+        return array_map(
+            function ($item) use ($idKey, $indexedClients) {
+                $id = $item[$idKey];
+                $item[$idKey] = $indexedClients[$id];
+                return $item;
+            },
+            $items
+        );
+    }
+
+    public function statsUsersByServiceByDay(
+        $days,
+        $clientId = null,
+        PersonInterface $person = null
+    ) {
         $date = new \DateTime("-$days days");
 
         $query = $this->createQueryBuilder('c')
@@ -73,15 +97,16 @@ class ClientRepository extends EntityRepository
 
         if ($person !== null) {
             $clients = $this->getEntityManager()->createQueryBuilder()
-                    ->select('c.id')
-                    ->from($this->getEntityName(), 'c', 'c.id')
-                    ->join('c.authorizations', 'a')
-                    ->where('a.person = :person')
-                    ->setParameters(compact('person'))
-                    ->getQuery()->getArrayResult();
+                ->select('c.id')
+                ->from($this->getEntityName(), 'c', 'c.id')
+                ->join('c.authorizations', 'a')
+                ->where('a.person = :person')
+                ->setParameters(compact('person'))
+                ->getQuery()->getArrayResult();
 
             $ids = array_keys($clients);
-            $query->orWhere($query->expr()
+            $query->orWhere(
+                $query->expr()
                     ->andX('a.createdAt >= :date', 'c.id IN (:clients)')
             )->setParameter('clients', $ids);
         }

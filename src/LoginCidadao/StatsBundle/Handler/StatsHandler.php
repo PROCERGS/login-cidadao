@@ -28,12 +28,12 @@ class StatsHandler
         return $this->repo->findStatsByIndexKeyDate($index, $key, $afterDate);
     }
 
-    public function getIndexed($index, $key = null, \DateTime $afterDate = null)
+    public function getIndexed($index, $key = null, $days = null)
     {
-        return $this->repo->findIndexedStatsByIndexKeyDate(
+        return $this->repo->findIndexedStatsByIndexKeyDays(
             $index,
             $key,
-            $afterDate
+            $days
         );
     }
 
