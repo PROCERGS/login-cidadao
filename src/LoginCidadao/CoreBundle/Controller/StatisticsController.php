@@ -2,6 +2,7 @@
 
 namespace LoginCidadao\CoreBundle\Controller;
 
+use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -91,6 +92,7 @@ class StatisticsController extends Controller
      */
     public function usersByServicesAction(Request $request)
     {
+        /** @var ClientRepository $repo */
         $repo   = $this->getDoctrine()
             ->getRepository('LoginCidadaoOAuthBundle:Client');
         $totals = $repo->getCountPerson($this->getUser());
@@ -100,8 +102,7 @@ class StatisticsController extends Controller
             $client = $total['client'];
             $keys[] = $client->getId();
         }
-        $evoData = $this->getStatsHandler()->getIndexedUniqueLastDays('client.users',
-            $keys, 30);
+        $evoData = $this->getStatsHandler()->getIndexed('agg.client.users', $keys, 30);
 
         $context    = SerializationContext::create()->setGroups('date');
         $serializer = $this->get('jms_serializer');

@@ -16,53 +16,53 @@ use Doctrine\ORM\QueryBuilder;
 class StatisticsRepository extends EntityRepository
 {
 
-    public function findStatsByIndexKeyDate($index, $keys = null,
-                                            \DateTime $afterDate = null)
-    {
-        $query = $this->getFindStatsByIndexKeyDateQuery($index, $keys,
-            $afterDate);
+    public function findIndexedStatsByIndexKeyDays(
+        $index,
+        $keys = null,
+        $days = null
+    ) {
+        $data = $this->findStatsByIndexKeyDays($index, $keys, $days);
+
+        return $this->indexResults($data);
+    }
+
+    public function findStatsByIndexKeyDays(
+        $index,
+        $keys = null,
+        $days = null
+    ) {
+        $query = $this->getFindStatsByIndexKeyDateQuery(
+            $index,
+            $keys,
+            null,
+            $days
+        );
+
+        return $query->getQuery()->getResult();
+    }
+    public function findStatsByIndexKeyDate(
+        $index,
+        $keys = null,
+        \DateTime $afterDate = null
+    ) {
+        $query = $this->getFindStatsByIndexKeyDateQuery(
+            $index,
+            $keys,
+            $afterDate
+        );
 
         return $query->getQuery()->getResult();
     }
 
-    public function findIndexedStatsByIndexKeyDate($index, $keys = null,
-                                                    \DateTime $afterDate = null)
-    {
-        $data = $this->findStatsByIndexKeyDate($index, $keys, $afterDate);
-
-        return $this->indexResults($data);
-    }
-
-    public function findIndexedUniqueStatsByIndexKeyDate($index, $keys = null,
-                                                            \DateTime $afterDate = null)
-    {
-        $query = $this->getFindStatsByIndexKeyDateQuery($index, $keys,
-            $afterDate);
-        $this->applyGreatestNPerGroupDate($query);
-        $data  = $query->getQuery()->getResult();
-
-        return $this->indexResults($data);
-    }
-
-    public function findIndexedUniqueStatsByIndexKeyDays($index, $keys = null,
-                                                            $days = null)
-    {
-        $query = $this->getFindStatsByIndexKeyDateQuery($index, $keys, null,
-            $days);
-        $this->applyGreatestNPerGroupDate($query);
-        $data  = $query->getQuery()->getResult();
-
-        return $this->indexResults($data);
-    }
-
-    public function getFindStatsByIndexKeyDateQuery($index, $keys = null,
-                                                    \DateTime $afterDate = null,
-                                                    $days = null)
-    {
+    public function getFindStatsByIndexKeyDateQuery(
+        $index,
+        $keys = null,
+        \DateTime $afterDate = null,
+        $days = null
+    ) {
         $query = $this->createQueryBuilder('s')
             ->where('s.index = :index')
-            ->setParameter('index', $index)
-        ;
+            ->setParameter('index', $index);
 
         if ($keys !== null) {
             $query->andWhere('s.key IN (:keys)')
@@ -82,19 +82,6 @@ class StatisticsRepository extends EntityRepository
         return $query;
     }
 
-    public function applyGreatestNPerGroupDate(QueryBuilder $qb)
-    {
-        $qb->distinct();
-        $qb2 = $this->createQueryBuilder('ss')
-            ->select('MAX(ss.timestamp)')
-            ->where('DATE(ss.timestamp) = DATE(s.timestamp)')
-        ;
-
-        $qb->innerJoin($this->getEntityName(), 'sub', 'WITH',
-            $qb->expr()->eq('s.timestamp', '('.$qb2->getDQL().')'))
-        ;
-    }
-
     /**
      * @param Statistics[] $data
      * @return Statistics[]
@@ -107,5 +94,53 @@ class StatisticsRepository extends EntityRepository
         }
 
         return $result;
+    }
+
+    public function findIndexedUniqueStatsByIndexKeyDate(
+        $index,
+        $keys = null,
+        \DateTime $afterDate = null
+    ) {
+        $query = $this->getFindStatsByIndexKeyDateQuery(
+            $index,
+            $keys,
+            $afterDate
+        );
+        $this->applyGreatestNPerGroupDate($query);
+        $data = $query->getQuery()->getResult();
+
+        return $this->indexResults($data);
+    }
+
+    public function applyGreatestNPerGroupDate(QueryBuilder $qb)
+    {
+        $qb->distinct();
+        $qb2 = $this->createQueryBuilder('ss')
+            ->select('MAX(ss.timestamp)')
+            ->where('DATE(ss.timestamp) = DATE(s.timestamp)');
+
+        $qb->innerJoin(
+            $this->getEntityName(),
+            'sub',
+            'WITH',
+            $qb->expr()->eq('s.timestamp', '('.$qb2->getDQL().')')
+        );
+    }
+
+    public function findIndexedUniqueStatsByIndexKeyDays(
+        $index,
+        $keys = null,
+        $days = null
+    ) {
+        $query = $this->getFindStatsByIndexKeyDateQuery(
+            $index,
+            $keys,
+            null,
+            $days
+        );
+        $this->applyGreatestNPerGroupDate($query);
+        $data = $query->getQuery()->getResult();
+
+        return $this->indexResults($data);
     }
 }
