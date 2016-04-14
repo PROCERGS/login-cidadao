@@ -79,14 +79,4 @@ interface ClientInterface extends BaseInterface
      * @return string
      */
     public function getImageName();
-
-    /**
-     * @return OrganizationInterface
-     */
-    public function getOrganization();
-
-    /**
-     * @param \LoginCidadao\OAuthBundle\Model\OrganizationInterface $organization
-     */
-    public function setOrganization(OrganizationInterface $organization);
 }

@@ -720,6 +720,7 @@ organizations:
     form:
         name.label: Nome
         domain.label: Domínio
+        sectorIdentifierUri.label: URI de Sector Identifier
         validationUrl.label: URL para Validação
         trusted.label: Organização Confiável
         members:
