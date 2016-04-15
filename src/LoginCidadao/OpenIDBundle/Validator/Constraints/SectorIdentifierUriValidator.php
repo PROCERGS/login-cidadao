@@ -15,6 +15,7 @@ use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Entity\Organization;
 use LoginCidadao\OAuthBundle\Entity\OrganizationRepository;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
+use LoginCidadao\OpenIDBundle\Validator\SectorIdentifierUriChecker;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -24,13 +25,17 @@ class SectorIdentifierUriValidator extends ConstraintValidator
     /** @var OrganizationRepository */
     private $orgRepo;
 
+    /** @var SectorIdentifierUriChecker */
+    private $uriChecker;
+
     /**
      * SectorIdentifierUriValidator constructor.
      * @param OrganizationRepository $orgRepo
      */
-    public function __construct(OrganizationRepository $orgRepo)
+    public function __construct(OrganizationRepository $orgRepo, SectorIdentifierUriChecker $uriChecker)
     {
         $this->orgRepo = $orgRepo;
+        $this->uriChecker = $uriChecker;
     }
 
     /**
@@ -48,20 +53,7 @@ class SectorIdentifierUriValidator extends ConstraintValidator
         /** @var Organization $organization */
         $organization = $this->orgRepo->findOneBy(compact('sectorIdentifierUri'));
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $sectorIdentifierUri);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-        $allowedUris = json_decode(trim(curl_exec($ch)));
-
-        $success = true;
-        foreach ($metadata->getRedirectUris() as $uri) {
-            if (array_search($uri, $allowedUris) === false) {
-                $success = false;
-                $this->buildUrlViolation('client.edit.sector_identifier_uri.not_allowed');
-            }
-        }
-
+        $success = $this->uriChecker->check($metadata, $sectorIdentifierUri);
         if (!$success) {
             $metadata->setOrganization(null);
         }
