@@ -95,5 +95,6 @@ services:
         class: %validator.sector_identifier_uri.class%
         arguments:
             - "@organization.repository"
+            - "@checker.sector_identifier_uri"
         tags:
             - { name: validator.constraint_validator, alias: sector_identifier_uri }
