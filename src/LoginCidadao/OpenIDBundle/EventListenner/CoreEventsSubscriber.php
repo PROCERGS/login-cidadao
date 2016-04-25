@@ -24,17 +24,23 @@ class CoreEventsSubscriber implements EventSubscriberInterface
     /** @var SectorIdentifierUriChecker */
     protected $sectorIdentifierUriChecker;
 
+    /** @var boolean */
+    protected $revalidateSectorIdentifierUriOnAuth;
+
     /**
      * CoreEventsListener constructor.
      * @param EntityManager $em
      * @param SectorIdentifierUriChecker $sectorIdentifierUriChecker
+     * @param boolean $revalidateSectorIdentifierUriOnAuth
      */
     public function __construct(
         EntityManager $em,
-        SectorIdentifierUriChecker $sectorIdentifierUriChecker
+        SectorIdentifierUriChecker $sectorIdentifierUriChecker,
+        $revalidateSectorIdentifierUriOnAuth
     ) {
         $this->em = $em;
         $this->sectorIdentifierUriChecker = $sectorIdentifierUriChecker;
+        $this->revalidateSectorIdentifierUriOnAuth = $revalidateSectorIdentifierUriOnAuth;
     }
 
 
@@ -49,6 +55,10 @@ class CoreEventsSubscriber implements EventSubscriberInterface
 
     public function onGetClient(GetClientEvent $event)
     {
+        if ($this->revalidateSectorIdentifierUriOnAuth === false) {
+            return;
+        }
+
         $repo = $this->em->getRepository('LoginCidadaoOpenIDBundle:ClientMetadata');
         $metadata = $repo->findOneBy(
             array(

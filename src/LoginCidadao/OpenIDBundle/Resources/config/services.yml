@@ -106,6 +106,7 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@checker.sector_identifier_uri"
+            - "%revalidate_sector_identifier_uri_on_auth%"
         tags:
             - { name: kernel.event_subscriber }
 
