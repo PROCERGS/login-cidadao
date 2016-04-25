@@ -158,7 +158,7 @@ class ClientMetadata
     /**
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
-     * @Assert\Url(checkDNS = true)
+     * @Assert\Url(checkDNS = true, protocols = {"https"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
