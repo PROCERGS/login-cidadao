@@ -89,6 +89,8 @@ services:
             - LoginCidadao\OAuthBundle\Entity\Organization
 
     checker.sector_identifier_uri:
+        arguments:
+            - "@doctrine.orm.entity_manager"
         class: %checker.sector_identifier_uri.class%
 
     validator.sector_identifier_uri:
@@ -98,3 +100,18 @@ services:
             - "@checker.sector_identifier_uri"
         tags:
             - { name: validator.constraint_validator, alias: sector_identifier_uri }
+
+    oidc.core.events_subscriber:
+        class: LoginCidadao\OpenIDBundle\EventListenner\CoreEventsSubscriber
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@checker.sector_identifier_uri"
+        tags:
+            - { name: kernel.event_subscriber }
+
+    lc.client_manager:
+        class: LoginCidadao\OpenIDBundle\Manager\ClientManager
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
+            - ""

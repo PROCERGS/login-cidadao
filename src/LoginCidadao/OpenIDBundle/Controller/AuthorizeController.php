@@ -5,6 +5,7 @@ namespace LoginCidadao\OpenIDBundle\Controller;
 use FOS\OAuthServerBundle\Event\OAuthEvent;
 use LoginCidadao\OAuthBundle\Entity\Organization;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
+use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use LoginCidadao\OpenIDBundle\Validator\SectorIdentifierUriChecker;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\HttpFoundation\Request;
@@ -136,11 +137,10 @@ class AuthorizeController extends BaseController
             $fullId = $fullId->get('client_id');
         }
 
-        $id = explode('_', $fullId);
-        $er = $this->getDoctrine()
-            ->getRepository('LoginCidadaoOAuthBundle:Client');
+        /** @var ClientManager $clientManager */
+        $clientManager = $this->get('lc.client_manager');
 
-        return $er->find($id[0]);
+        return $clientManager->getClientById($fullId);
     }
 
     private function shouldWarnUntrusted(ClientInterface $client)
