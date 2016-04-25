@@ -9,7 +9,7 @@ class JsonWebKeyControllerTest extends WebTestCase
 
     public function testGet()
     {
-        $client = static::createClient();
+        $client = static::createClient(array(), array('HTTPS' => true));
 
         $client->request('GET', '/openid/connect/jwks');
 
@@ -23,12 +23,16 @@ class JsonWebKeyControllerTest extends WebTestCase
         }
     }
 
-    protected function assertJsonResponse($response, $statusCode = 200,
-                                          $checkValidJson = true,
-                                          $contentType = 'application/json')
-    {
+    protected function assertJsonResponse(
+        $response,
+        $statusCode = 200,
+        $checkValidJson = true,
+        $contentType = 'application/json'
+    ) {
         $this->assertEquals(
-            $statusCode, $response->getStatusCode(), $response->getContent()
+            $statusCode,
+            $response->getStatusCode(),
+            $response->getContent()
         );
         $this->assertTrue(
             $response->headers->contains('Content-Type', $contentType),
@@ -36,7 +40,8 @@ class JsonWebKeyControllerTest extends WebTestCase
         );
         if ($checkValidJson) {
             $decode = json_decode($response->getContent());
-            $this->assertTrue(($decode != null && $decode != false),
+            $this->assertTrue(
+                ($decode != null && $decode != false),
                 'is response valid json: ['.$response->getContent().']'
             );
         }

@@ -48,7 +48,7 @@ class PersonSerializeEventListenner implements EventSubscriberInterface
         $metadata = $client->getMetadata();
 
         $id = $event->getObject()->getId();
-        if ($metadata === null || $metadata->getSubjectType() === 'public') {
+        if ($metadata === null || $metadata->getSubjectType() !== 'pairwise') {
             $event->getVisitor()->addData('sub', $id);
             $event->getVisitor()->addData('id', $id);
             return;

@@ -10,8 +10,9 @@
 
 namespace LoginCidadao\OpenIDBundle\Entity;
 
+use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use LoginCidadao\OpenIDBundle\Constraints\SectorIdentifier;
+use LoginCidadao\OpenIDBundle\Validator\Constraints\SectorIdentifierUri;
 use Symfony\Component\Validator\Constraints as Assert;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation as JMS;
@@ -23,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="client_metadata")
  * @JMS\ExclusionPolicy("all")
- * @SectorIdentifier
+ * @SectorIdentifierUri
  */
 class ClientMetadata
 {
@@ -157,7 +158,7 @@ class ClientMetadata
     /**
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
-     * @Assert\Url(checkDNS = true)
+     * @Assert\Url(checkDNS = true, protocols = {"https"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
@@ -309,6 +310,13 @@ class ClientMetadata
      * @ORM\Column(type="string", nullable=true)
      */
     protected $registration_access_token;
+
+    /**
+     * @var OrganizationInterface
+     * @ORM\ManyToOne(targetEntity="LoginCidadao\OAuthBundle\Model\OrganizationInterface", inversedBy="clients")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $organization;
 
     public function __construct()
     {
@@ -693,6 +701,13 @@ class ClientMetadata
         return $this->client_id;
     }
 
+    public function setClientId($client_id)
+    {
+        $this->client_id = $client_id;
+
+        return $this;
+    }
+
     /**
      * @JMS\Groups({"client_metadata"})
      * @JMS\VirtualProperty
@@ -705,13 +720,6 @@ class ClientMetadata
         }
 
         return $this->client_secret;
-    }
-
-    public function setClientId($client_id)
-    {
-        $this->client_id = $client_id;
-
-        return $this;
     }
 
     public function setClientSecret($client_secret)
@@ -840,5 +848,21 @@ class ClientMetadata
     public function getRegistrationAccessToken()
     {
         return $this->registration_access_token;
+    }
+
+    /**
+     * @return OrganizationInterface
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
+    }
+
+    /**
+     * @param OrganizationInterface $organization
+     */
+    public function setOrganization($organization = null)
+    {
+        $this->organization = $organization;
     }
 }

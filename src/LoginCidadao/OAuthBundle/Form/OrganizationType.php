@@ -29,11 +29,12 @@ class OrganizationType extends AbstractType
     /** @var TokenStorageInterface */
     protected $tokenStorage;
 
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker,
-                                TokenStorageInterface $tokenStorage)
-    {
+    public function __construct(
+        AuthorizationCheckerInterface $authorizationChecker,
+        TokenStorageInterface $tokenStorage
+    ) {
         $this->authorizationChecker = $authorizationChecker;
-        $this->tokenStorage         = $tokenStorage;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -42,33 +43,51 @@ class OrganizationType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $members = function(EntityRepository $er) {
+        $members = function (EntityRepository $er) {
             return $er->createQueryBuilder('p')
-                    ->innerJoin('LoginCidadaoOAuthBundle:Organization', 'o',
-                        'WITH', 'p MEMBER OF o.members');
+                ->innerJoin(
+                    'LoginCidadaoOAuthBundle:Organization',
+                    'o',
+                    'WITH',
+                    'p MEMBER OF o.members'
+                );
         };
 
         $builder
-            ->add('name', 'Symfony\Component\Form\Extension\Core\Type\TextType',
-                array('label' => 'organizations.form.name.label'))
-            ->add('domain',
+            ->add(
+                'name',
                 'Symfony\Component\Form\Extension\Core\Type\TextType',
-                array('label' => 'organizations.form.domain.label'))
-        ;
+                array('label' => 'organizations.form.name.label')
+            )
+            ->add(
+                'domain',
+                'Symfony\Component\Form\Extension\Core\Type\TextType',
+                array('label' => 'organizations.form.domain.label')
+            )
+            ->add(
+                'sectorIdentifierUri',
+                'Symfony\Component\Form\Extension\Core\Type\UrlType',
+                array('label' => 'organizations.form.sectorIdentifierUri.label')
+            );
 
         if ($this->authorizationChecker->isGranted('ROLE_ORGANIZATIONS_CAN_TRUST')) {
-            $builder->add('trusted',
+            $builder->add(
+                'trusted',
                 'LoginCidadao\CoreBundle\Form\Type\SwitchType',
-                array('label' => 'organizations.form.trusted.label', 'required' => false));
+                array('label' => 'organizations.form.trusted.label', 'required' => false)
+            );
         }
         if ($this->authorizationChecker->isGranted('ROLE_ORGANIZATIONS_VALIDATE')
-            && $builder->getData()->getId()) {
-            $builder->add('validationUrl',
+            && $builder->getData()->getId()
+        ) {
+            $builder->add(
+                'validationUrl',
                 'Symfony\Component\Form\Extension\Core\Type\UrlType',
                 array(
-                'required' => false,
-                'label' => 'organizations.form.validationUrl.label'
-            ));
+                    'required' => false,
+                    'label' => 'organizations.form.validationUrl.label',
+                )
+            );
         }
 
         $organization = $builder->getData();
@@ -77,9 +96,11 @@ class OrganizationType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'LoginCidadao\OAuthBundle\Entity\Organization'
-        ));
+        $resolver->setDefaults(
+            array(
+                'data_class' => 'LoginCidadao\OAuthBundle\Entity\Organization',
+            )
+        );
     }
 
     /**
@@ -90,102 +111,117 @@ class OrganizationType extends AbstractType
         $this->configureOptions($resolver);
     }
 
-    private function prepareMembersField(FormBuilderInterface $builder,
-                                            OrganizationInterface $organization)
-    {
+    private function prepareMembersField(
+        FormBuilderInterface $builder,
+        OrganizationInterface $organization
+    ) {
         $checker = $this->authorizationChecker;
-        $person  = $this->tokenStorage->getToken()->getUser();
+        $person = $this->tokenStorage->getToken()->getUser();
 
         if (!$checker->isGranted('ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG') &&
-            !$checker->isGranted('ROLE_ORGANIZATIONS_MANAGE_MEMBERS')) {
+            !$checker->isGranted('ROLE_ORGANIZATIONS_MANAGE_MEMBERS')
+        ) {
             return;
         }
 
         if (!$organization->getMembers()->contains($person) &&
-            !$checker->isGranted('ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG')) {
+            !$checker->isGranted('ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG')
+        ) {
             return;
         }
 
-        $builder->addEventListener(FormEvents::PRE_SUBMIT,
-            function(FormEvent $event) {
-            $entity = $event->getData();
-            $form   = $event->getForm();
+        $builder->addEventListener(
+            FormEvents::PRE_SUBMIT,
+            function (FormEvent $event) {
+                $entity = $event->getData();
+                $form = $event->getForm();
 
-            $qb = function(EntityRepository $er) use ($entity) {
-                $sql = $er->createQueryBuilder('u');
-                if (!empty($entity['members'])) {
-                    $sql->where('u.id in (:members)');
-                    $sql->setParameter('members', $entity['members']);
-                    $sql->orderBy('u.username', 'ASC');
-                } else {
-                    $sql->where('1 != 1');
-                }
-                return $sql;
-            };
+                $qb = function (EntityRepository $er) use ($entity) {
+                    $sql = $er->createQueryBuilder('u');
+                    if (!empty($entity['members'])) {
+                        $sql->where('u.id in (:members)');
+                        $sql->setParameter('members', $entity['members']);
+                        $sql->orderBy('u.username', 'ASC');
+                    } else {
+                        $sql->where('1 != 1');
+                    }
 
-            $form->add('members',
-                'LoginCidadao\CoreBundle\Form\Type\AjaxChoiceType',
-                array(
-                'label' => 'organizations.form.members.label',
-                'ajax_choice_attr' => array(
-                    'filter' => array(
-                        'route' => 'lc_organizations_members_filter',
-                        'search_prop' => 'username',
-                        'extra_form_prop' => array('service_id' => 'id')
-                    ),
-                    'selected' => array(
-                        'route' => 'lc_organizations_members',
-                        'extra_form_prop' => array('person_id' => 'members')
-                    ),
-                    'property_value' => 'id',
-                    'property_text' => 'fullNameOrUsername',
-                    'search_prop_label' => 'organizations.form.members.search.label'
-                ),
-                'required' => false,
-                'class' => 'LoginCidadaoCoreBundle:Person',
-                'choice_label' => 'fullNameOrUsername',
-                'query_builder' => $qb
-            ))
-            ;
-        });
+                    return $sql;
+                };
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA,
-            function(FormEvent $event) {
-            $entity = $event->getData();
-            $form   = $event->getForm();
-
-            $qb = function(EntityRepository $er) use (&$entity) {
-                return $er->createQueryBuilder('p')
-                        ->innerJoin('LoginCidadaoOAuthBundle:Organization', 'o',
-                            'WITH', 'p MEMBER OF o.members')
-                        ->orderBy('p.username', 'ASC');
-            };
-
-            if ($entity->getId()) {
-                $form->add('members',
+                $form->add(
+                    'members',
                     'LoginCidadao\CoreBundle\Form\Type\AjaxChoiceType',
                     array(
-                    'label' => 'organizations.form.members.label',
-                    'ajax_choice_attr' => array(
-                        'filter' => array(
-                            'route' => 'lc_organizations_members_filter',
-                            'search_prop' => 'username',
-                            'extra_form_prop' => array('service_id' => 'id')
+                        'label' => 'organizations.form.members.label',
+                        'ajax_choice_attr' => array(
+                            'filter' => array(
+                                'route' => 'lc_organizations_members_filter',
+                                'search_prop' => 'username',
+                                'extra_form_prop' => array('service_id' => 'id'),
+                            ),
+                            'selected' => array(
+                                'route' => 'lc_organizations_members',
+                                'extra_form_prop' => array('person_id' => 'members'),
+                            ),
+                            'property_value' => 'id',
+                            'property_text' => 'fullNameOrUsername',
+                            'search_prop_label' => 'organizations.form.members.search.label',
                         ),
-                        'selected' => array(
-                            'route' => 'lc_organizations_members',
-                            'extra_form_prop' => array('person_id' => 'members')
-                        ),
-                        'property_value' => 'id',
-                        'property_text' => 'fullNameOrUsername',
-                        'search_prop_label' => 'organizations.form.members.search.label'
-                    ),
-                    'required' => false,
-                    'class' => 'LoginCidadaoCoreBundle:Person',
-                    'choice_label' => 'fullNameOrUsername',
-                    'query_builder' => $qb
-                ));
+                        'required' => false,
+                        'class' => 'LoginCidadaoCoreBundle:Person',
+                        'choice_label' => 'fullNameOrUsername',
+                        'query_builder' => $qb,
+                    )
+                );
             }
-        });
+        );
+
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) {
+                $entity = $event->getData();
+                $form = $event->getForm();
+
+                $qb = function (EntityRepository $er) use (&$entity) {
+                    return $er->createQueryBuilder('p')
+                        ->innerJoin(
+                            'LoginCidadaoOAuthBundle:Organization',
+                            'o',
+                            'WITH',
+                            'p MEMBER OF o.members'
+                        )
+                        ->orderBy('p.username', 'ASC');
+                };
+
+                if ($entity->getId()) {
+                    $form->add(
+                        'members',
+                        'LoginCidadao\CoreBundle\Form\Type\AjaxChoiceType',
+                        array(
+                            'label' => 'organizations.form.members.label',
+                            'ajax_choice_attr' => array(
+                                'filter' => array(
+                                    'route' => 'lc_organizations_members_filter',
+                                    'search_prop' => 'username',
+                                    'extra_form_prop' => array('service_id' => 'id'),
+                                ),
+                                'selected' => array(
+                                    'route' => 'lc_organizations_members',
+                                    'extra_form_prop' => array('person_id' => 'members'),
+                                ),
+                                'property_value' => 'id',
+                                'property_text' => 'fullNameOrUsername',
+                                'search_prop_label' => 'organizations.form.members.search.label',
+                            ),
+                            'required' => false,
+                            'class' => 'LoginCidadaoCoreBundle:Person',
+                            'choice_label' => 'fullNameOrUsername',
+                            'query_builder' => $qb,
+                        )
+                    );
+                }
+            }
+        );
     }
 }

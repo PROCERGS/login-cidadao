@@ -300,6 +300,7 @@ organizations:
     form:
         name.label: Name
         domain.label: Domain
+        sectorIdentifierUri.label: Sector Identifier URI
         validationUrl.label: Validation Url
         trusted.label: Trusted Organization
         members:
