@@ -16,7 +16,6 @@ use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Model\AbstractUniqueEntity;
 use LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
-use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
@@ -158,24 +157,22 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
      * @ORM\Column(name="updated_at", type="datetime")
      */
     protected $updatedAt;
-
     /**
-     * @var OrganizationInterface
-     * @ORM\ManyToOne(targetEntity="LoginCidadao\OAuthBundle\Model\OrganizationInterface", inversedBy="clients")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\Column(type="string", nullable=true, unique=true)
+     * @var string
      */
-    protected $organization;
+    private $uid;
 
     public function __construct()
     {
         parent::__construct();
-        $this->authorizations       = new ArrayCollection();
-        $this->owners               = new ArrayCollection();
+        $this->authorizations = new ArrayCollection();
+        $this->owners = new ArrayCollection();
         $this->maxNotificationLevel = Notification::LEVEL_NORMAL;
 
         $this->allowedScopes = array(
             'public_profile',
-            'openid'
+            'openid',
         );
     }
 
@@ -191,6 +188,21 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         );
     }
 
+    public function getName()
+    {
+        if ($this->getMetadata()) {
+            if ($this->getMetadata()->getClientName() === null &&
+                $this->name !== null
+            ) {
+                $this->getMetadata()->setClientName($this->name);
+            }
+
+            return $this->getMetadata()->getClientName();
+        }
+
+        return $this->name;
+    }
+
     public function setName($name)
     {
         if ($this->getMetadata()) {
@@ -201,16 +213,9 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         return $this;
     }
 
-    public function getName()
+    public function getDescription()
     {
-        if ($this->getMetadata()) {
-            if ($this->getMetadata()->getClientName() === null &&
-                $this->name !== null) {
-                $this->getMetadata()->setClientName($this->name);
-            }
-            return $this->getMetadata()->getClientName();
-        }
-        return $this->name;
+        return $this->description;
     }
 
     public function setDescription($description)
@@ -218,9 +223,13 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         $this->description = $description;
     }
 
-    public function getDescription()
+    public function getSiteUrl()
     {
-        return $this->description;
+        if ($this->getMetadata()) {
+            return $this->getMetadata()->getClientUri();
+        }
+
+        return $this->siteUrl;
     }
 
     public function setSiteUrl($url)
@@ -231,14 +240,6 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         $this->siteUrl = $url;
 
         return $this;
-    }
-
-    public function getSiteUrl()
-    {
-        if ($this->getMetadata()) {
-            return $this->getMetadata()->getClientUri();
-        }
-        return $this->siteUrl;
     }
 
     public function getAuthorizations()
@@ -270,6 +271,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         if ($this->getMetadata()) {
             return $this->getMetadata()->getInitiateLoginUri();
         }
+
         return $this->landingPageUrl;
     }
 
@@ -279,6 +281,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
             $this->getMetadata()->setInitiateLoginUri($landingPageUrl);
         }
         $this->landingPageUrl = $landingPageUrl;
+
         return $this;
     }
 
@@ -287,6 +290,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         if ($this->getMetadata()) {
             return $this->getMetadata()->getTosUri();
         }
+
         return $this->termsOfUseUrl;
     }
 
@@ -345,6 +349,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     public function setId($var)
     {
         $this->id = $var;
+
         return $this;
     }
 
@@ -358,17 +363,14 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         return $this->owners;
     }
 
+    /* Unique Interface Stuff */
+
     public function setOwners(ArrayCollection $owners)
     {
         $this->owners = $owners;
+
         return $this;
     }
-    /* Unique Interface Stuff */
-    /**
-     * @ORM\Column(type="string", nullable=true, unique=true)
-     * @var string
-     */
-    private $uid;
 
     /**
      * Gets the Unique Id of the Entity.
@@ -415,6 +417,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     public function setMetadata(\LoginCidadao\OpenIDBundle\Entity\ClientMetadata $metadata)
     {
         $this->metadata = $metadata;
+
         return $this;
     }
 
@@ -423,6 +426,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         if ($this->getMetadata()) {
             return $this->getMetadata()->getRedirectUris();
         }
+
         return parent::getRedirectUris();
     }
 
@@ -433,7 +437,16 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         } else {
             parent::setRedirectUris($redirectUris);
         }
+
         return $this;
+    }
+
+    /**
+     * @return File
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 
     /**
@@ -455,11 +468,11 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     }
 
     /**
-     * @return File
+     * @return string
      */
-    public function getImage()
+    public function getImageName()
     {
-        return $this->image;
+        return $this->imageName;
     }
 
     /**
@@ -468,14 +481,6 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     public function setImageName($imageName)
     {
         $this->imageName = $imageName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getImageName()
-    {
-        return $this->imageName;
     }
 
     public function getUpdatedAt()
@@ -494,6 +499,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         } else {
             $this->updatedAt = new \DateTime('now');
         }
+
         return $this;
     }
 
@@ -505,26 +511,8 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         if ($this->getMetadata()) {
             return $this->getMetadata()->getGrantTypes();
         }
+
         return parent::getAllowedGrantTypes();
-    }
-
-    /**
-     * @return OrganizationInterface
-     */
-    public function getOrganization()
-    {
-        return $this->organization;
-    }
-
-    /**
-     * @param OrganizationInterface $organization
-     * @return \LoginCidadao\OAuthBundle\Entity\Client
-     */
-    public function setOrganization(OrganizationInterface $organization)
-    {
-        $this->organization = $organization;
-
-        return $this;
     }
 
     public function ownsDomain($domain)

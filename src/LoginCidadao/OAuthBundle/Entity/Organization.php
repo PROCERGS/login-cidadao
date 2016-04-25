@@ -16,6 +16,7 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 use LoginCidadao\OAuthBundle\Validator\Constraints\DomainOwnership;
+use LoginCidadao\OAuthBundle\Validator\Constraints\SectorIdentifier;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -26,6 +27,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity("domain")
  * @UniqueEntity("name")
  * @DomainOwnership
+ * @SectorIdentifier
  */
 class Organization implements OrganizationInterface
 {
@@ -37,7 +39,7 @@ class Organization implements OrganizationInterface
     protected $id;
 
     /**
-     * @ORM\Column(type="string", nullable=false, unique=true)
+     * @ORM\Column(name="name", type="string", nullable=false, unique=true)
      * @Assert\NotBlank
      * @var string
      */
@@ -54,47 +56,54 @@ class Organization implements OrganizationInterface
     protected $members;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(name="verified_at", type="datetime", nullable=true)
      * @var \DateTime
      */
     protected $verifiedAt;
 
     /**
-     * @ORM\Column(type="string", nullable=false, unique=true)
+     * @ORM\Column(name="domain", type="string", nullable=false, unique=true)
      * @var string
      */
     protected $domain;
 
     /**
-     * @ORM\OneToMany(targetEntity="LoginCidadao\OAuthBundle\Model\ClientInterface", mappedBy="organization")
+     * @ORM\OneToMany(targetEntity="LoginCidadao\OpenIDBundle\Entity\ClientMetadata", mappedBy="organization")
      * @var ClientInterface
      */
     protected $clients;
 
     /**
      * @Assert\Url
-     * @ORM\Column(type="string", nullable=true, unique=true)
+     * @ORM\Column(name="validation_url", type="string", nullable=true, unique=true)
      * @var string
      */
     protected $validationUrl;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(name="validation_secret", type="string", nullable=true)
      * @var string
      */
     protected $validationSecret;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(name="validated_url", type="string", nullable=true)
      * @var string
      */
     protected $validatedUrl;
 
     /**
-     * @ORM\Column(type="boolean", nullable=false)
+     * @ORM\Column(name="trusted", type="boolean", nullable=false)
      * @var boolean
      */
     protected $trusted;
+
+    /**
+     * @Assert\Url
+     * @ORM\Column(name="sector_identifier_uri", type="string", nullable=true, unique=true)
+     * @var string
+     */
+    protected $sectorIdentifierUri;
 
     public function __construct()
     {
@@ -205,6 +214,7 @@ class Organization implements OrganizationInterface
     public function getValidationSecret()
     {
         $this->initializeValidationCode();
+
         return $this->validationSecret;
     }
 
@@ -215,26 +225,15 @@ class Organization implements OrganizationInterface
         return $this;
     }
 
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    private function initializeValidationCode()
-    {
-        if ($this->validationSecret) {
-            return;
-        }
-        $random = base64_encode(random_bytes(35));
-        $this->setValidationSecret($random);
-    }
-
     public function checkValidation()
     {
         if ($this->validatedUrl !== $this->getValidationUrl()) {
             $this->setVerifiedAt(null);
             $this->validatedUrl = null;
+
             return false;
         }
+
         return true;
     }
 
@@ -271,4 +270,35 @@ class Organization implements OrganizationInterface
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getSectorIdentifierUri()
+    {
+        return $this->sectorIdentifierUri;
+    }
+
+    /**
+     * @param string $sectorIdentifierUri
+     */
+    public function setSectorIdentifierUri($sectorIdentifierUri)
+    {
+        $this->sectorIdentifierUri = $sectorIdentifierUri;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    private function initializeValidationCode()
+    {
+        if ($this->validationSecret) {
+            return;
+        }
+        $random = base64_encode(random_bytes(35));
+        $this->setValidationSecret($random);
+    }
+
+
 }
