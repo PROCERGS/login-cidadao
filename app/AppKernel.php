@@ -58,6 +58,8 @@ class AppKernel extends Kernel
             new Nelmio\CorsBundle\NelmioCorsBundle(),
             new Nelmio\SecurityBundle\NelmioSecurityBundle(),
             new Liip\MonitorBundle\LiipMonitorBundle(),
+
+            new Donato\PathWellBundle\DonatoPathWellBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
