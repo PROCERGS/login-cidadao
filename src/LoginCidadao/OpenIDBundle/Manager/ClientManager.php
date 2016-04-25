@@ -11,26 +11,39 @@
 namespace LoginCidadao\OpenIDBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
-use LoginCidadao\OAuthBundle\Model\AccessTokenManager;
+use LoginCidadao\CoreBundle\Event\GetClientEvent;
+use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ClientManager
 {
+    /** @var EventDispatcherInterface */
+    protected $dispatcher;
+
     /** @var EntityManager */
     private $em;
 
-    /** @var AccessTokenManager */
-    private $accessTokenManager;
-
-    public function __construct(EntityManager $em,
-                                AccessTokenManager $accessTokenManager)
-    {
+    public function __construct(
+        EntityManager $em,
+        EventDispatcherInterface $dispatcher
+    ) {
         $this->em = $em;
-
-        $this->accessTokenManager = $accessTokenManager;
+        $this->dispatcher = $dispatcher;
     }
 
-    public function getClient()
+    public function getClientById($id)
     {
-        
+        if (strstr($id, '_') !== false) {
+            $parts = explode('_', $id);
+            $id = $parts[0];
+        }
+
+        $repo = $this->em->getRepository('LoginCidadaoOAuthBundle:Client');
+
+        $client = $repo->find($id);
+        $event = new GetClientEvent($client);
+        $this->dispatcher->dispatch(LoginCidadaoCoreEvents::GET_CLIENT, $event);
+
+        return $event->getClient();
     }
 }

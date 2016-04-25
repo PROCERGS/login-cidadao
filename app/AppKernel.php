@@ -59,6 +59,8 @@ class AppKernel extends Kernel
             new Nelmio\SecurityBundle\NelmioSecurityBundle(),
             new Liip\MonitorBundle\LiipMonitorBundle(),
 
+            new Donato\PathWellBundle\DonatoPathWellBundle(),
+
             // PROCERGS
             new PROCERGS\LoginCidadao\CoreBundle\PROCERGSLoginCidadaoCoreBundle(),
             new PROCERGS\LoginCidadao\MonitorBundle\PROCERGSLoginCidadaoMonitorBundle(),

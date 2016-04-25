@@ -21,6 +21,7 @@ class ClientMetadataWebForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('organization', 'text', array('disabled' => true))
             ->add($builder->create('request_uris',
                     'Symfony\Component\Form\Extension\Core\Type\TextareaType',
                     array('required' => false)
