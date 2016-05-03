@@ -6,6 +6,7 @@
     <div class="panel-body">
         {{ form_row(form.name) }}
         {{ form_row(form.domain) }}
+        {{ form_row(form.sectorIdentifierUri) }}
         {% if is_granted('ROLE_ORGANIZATIONS_VALIDATE') and organization is defined %}
             {{ form_row(form.validationUrl) }}
             <div class="well">

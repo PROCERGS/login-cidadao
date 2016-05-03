@@ -65,7 +65,7 @@ class DomainOwnershipValidator extends ConstraintValidator
             $response = false;
         }
 
-        if ($uri['query']) {
+        if (array_key_exists('query', $uri) && $uri['query']) {
             $this->buildUrlViolation('organizations.validation.error.query_string');
             $response = false;
         }

@@ -21,6 +21,7 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\CoreBundle\Model\LocationAwareInterface;
 use LoginCidadao\ValidationBundle\Validator\Constraints as LCAssert;
+use Donato\PathWellBundle\Validator\Constraints\PathWell;
 
 /**
  * @ORM\Entity(repositoryClass="LoginCidadao\CoreBundle\Entity\PersonRepository")
@@ -87,6 +88,19 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Since("1.0")
      */
     protected $username;
+
+    /**
+     * @JMS\Exclude
+     * @PathWell(
+     *     groups={"Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration"}
+     * )
+     * @Assert\Length(
+     *     min=8,
+     *     max=4096,
+     *     groups={"Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration"}
+     * )
+     */
+    protected $plainPassword;
 
     /**
      * @JMS\Expose
@@ -1316,5 +1330,14 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         }
 
         return $encoder;
+    }
+
+    public function getShortDisplayName()
+    {
+        if ($this->getGivenName()) {
+            return $this->getGivenName();
+        } else {
+            return $this->getEmail();
+        }
     }
 }

@@ -137,3 +137,5 @@ parameters:
     # Password Encoder
     default_password_encoder: bcrypt
 
+    # Should sector_identifier_uri be revalidated on each auth request?
+    revalidate_sector_identifier_uri_on_auth: true

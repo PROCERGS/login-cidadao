@@ -135,6 +135,10 @@ class LoggedInUserListener
 
     private function checkSessionInvalidation(GetResponseEvent $event)
     {
+        if (!$this->authChecker->isGranted('FEATURE_INVALIDATE_SESSIONS')) {
+            return;
+        }
+
         $person  = $this->tokenStorage->getToken()->getUser();
         $repo    = $this->getInvalidateSessionRequestRepository();
         $request = $repo->findMostRecent($person);
