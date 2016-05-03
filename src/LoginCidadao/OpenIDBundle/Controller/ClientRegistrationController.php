@@ -3,8 +3,7 @@
 namespace LoginCidadao\OpenIDBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
-use League\Uri\Schemes\Http as HttpUri;
-use PROCERGS\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -69,9 +68,12 @@ class ClientRegistrationController extends FOSRestController
     private function handleFormErrors($errors)
     {
         foreach ($errors as $error) {
-            $cause    = $error->getCause();
-            $value    = $cause->getInvalidValue();
-            $property = str_replace('data.', '', $cause->getPropertyPath());
+            $cause         = $error->getCause();
+            $value         = $cause->getInvalidValue();
+            $propertyRegex = '/^data\\.([a-zA-Z0-9_]+).*$/';
+            $property      = preg_replace($propertyRegex, '$1',
+                $cause->getPropertyPath());
+            //$property      = str_replace('data.', '', $cause->getPropertyPath());
 
             switch ($property) {
                 case 'redirect_uris':
@@ -140,7 +142,7 @@ class ClientRegistrationController extends FOSRestController
 
     private function getHost($uri)
     {
-        return HttpUri::createFromString($uri)->getHost();
+        return parse_url($uri, PHP_URL_HOST);
     }
 
     private function parseJsonRequest(Request $request)
@@ -167,7 +169,7 @@ class ClientRegistrationController extends FOSRestController
         $entityId = $parts[0];
         $publicId = $parts[1];
 
-        $client = $this->getDoctrine()->getRepository('PROCERGSOAuthBundle:Client')
+        $client = $this->getDoctrine()->getRepository('LoginCidadaoOAuthBundle:Client')
             ->findOneBy(array('id' => $entityId, 'randomId' => $publicId));
 
         if (!$client) {

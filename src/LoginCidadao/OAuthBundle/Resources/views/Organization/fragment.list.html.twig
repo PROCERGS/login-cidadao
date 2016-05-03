@@ -1,0 +1,43 @@
+<div class="panel panel-default">
+    <div class="panel-heading clearfix">
+        <h4 class="panel-title pull-left" style="padding-top: 7.5px;">{{ panel_title }}</h4>
+        {% if is_granted('ROLE_ORGANIZATIONS_CREATE') %}
+            <div class="btn-group pull-right">
+                <a href="{{ path('lc_organizations_new') }}" class="btn btn-info btn-sm" title="{{ 'organizations.new.button_title' | trans }}">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    {{ 'organizations.new.button_label' | trans }}
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if organizations is empty %}
+        <div class="panel-body text-center">{{ empty_message }}</div>
+    {% else %}
+        <ul class="panel-body list-group">
+            {% for organization in organizations %}
+                <li class="list-group-item">
+                    {% if organization.verifiedAt is not null %}
+                        <span class="label label-success pull-right">
+                            <span class="glyphicon glyphicon-ok"></span>
+                            {{ 'organizations.validation.verified' | trans }}
+                        </span>
+                    {% else %}
+                        <span class="label label-warning pull-right">
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            {{ 'organizations.validation.not_verified' | trans }}
+                        </span>
+                    {% endif %}
+                    {% set route = 'lc_organizations_show' %}
+                    {% if is_granted('ROLE_ORGANIZATIONS_EDIT_ANY_ORG') or (is_granted('ROLE_ORGANIZATIONS_EDIT') and app.user in organization.members) %}
+                        {% set route = 'lc_organizations_edit' %}
+                    {% endif %}
+                    <a href="{{ path(route, { 'id': organization.id }) }}" class="text-primary">
+                        <strong class="list-group-item-heading">{{- organization.name -}}</strong>
+                        <p class="list-group-item-text">{{- organization.domain -}}</p>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>

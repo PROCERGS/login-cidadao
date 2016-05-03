@@ -1,0 +1,35 @@
+{% extends "LoginCidadaoCoreBundle::grid_layout.html.twig" %}
+
+{% block grid_header_data %}
+<div class="col-md-3">{{ 'CPF'|trans }}</div>
+<div class="col-md-2">{{ 'Email'|trans }}</div>
+<div class="col-md-6">{{ 'dev.grid.fullNameOrUsername'|trans }}</div>
+{% endblock grid_header_data %}
+
+{% block grid_row_action %}
+<div class="col-md-1 action-column-grid">
+    <div class="btn-group btn-group-justified">
+        <div class="btn-group">
+            <button type="button" class="btn btn-info btn-xs ac-search-select" id="{{ grid.getId }}-row-{{ row.id }}"  data-row="{{ {'id':row.id, 'fullNameOrUsername': row.fullNameOrUsername}|json_encode }}" title="{{ 'Move'|trans }}">
+                <span class="glyphicon glyphicon-arrow-down"></span>
+                <span class="label-action-column-grid">{{ 'Move'|trans }} </span>
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock grid_row_action %}
+
+{% block grid_row_data %}
+<div class="col-md-3">
+    <dt>{{ 'CPF'|trans }}</dt>
+    <dd ><div style="word-wrap: break-word;">{{ row.cpf }}</div></dd>
+</div>
+<div class="col-md-2">
+    <dt>{{ 'Email'|trans }}</dt>
+    <dd ><div style="word-wrap: break-word;">{{ row.email }}</div></dd>
+</div>
+<div class="col-md-6">
+    <dt>{{ 'dev.grid.fullNameOrUsername'|trans }}</dt>
+    <dd ><div style="word-wrap: break-word;">{{ row.fullNameOrUsername }}</div></dd>
+</div>
+{% endblock grid_row_data %}

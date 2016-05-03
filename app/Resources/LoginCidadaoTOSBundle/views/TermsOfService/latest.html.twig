@@ -1,7 +1,11 @@
 {% trans_default_domain "LoginCidadaoTOSBundle" %}
-{{ latest.terms | markdown | raw }}
+{% if latest is not empty and latest.terms is not empty %}
+    {{ latest.terms | markdown | raw }}
 
-<p>{{ 'tos.last_change.label' | trans({ '%date%': latest.updatedAt | date('tos.last_change.date' | trans) }) }}</p>
-{% if agreement is defined and agreement != null %}
-    <p>{{ 'tos.agreement.current_agreement.label' | trans({ '%date%': agreement.agreedAt | date('tos.last_change.date' | trans) }) }}</p>
+    <p>{{ 'tos.last_change.label' | trans({ '%date%': latest.updatedAt | date('tos.last_change.date' | trans) }) }}</p>
+    {% if agreement is defined and agreement != null %}
+        <p>{{ 'tos.agreement.current_agreement.label' | trans({ '%date%': agreement.agreedAt | date('tos.last_change.date' | trans) }) }}</p>
+    {% endif %}
+{% else %}
+    {{ 'tos.last_change.not_found' | trans }}
 {% endif %}

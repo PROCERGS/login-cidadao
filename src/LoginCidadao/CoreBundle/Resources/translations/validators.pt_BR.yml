@@ -1,0 +1,13 @@
+change_username.invalid.username: 'Nomes de usuário devem conter apenas letras não acentuadas, números e underline (_).'
+'Please enter your name.': 'Preencha seu nome.'
+'This document is already in use.': 'Esse documento já está sendo usado.'
+'You already have an ID Card in this state.': 'Você já cadastrou um documento de identidade nesse Estado.'
+'This field accepts only letters and numbers': 'Esse campo apenas aceita letras e números'
+organizations.validation.error:
+    invalid_domain: O domínio informado é diferente do domínio da Organização
+    code_not_found: O código de verificação não foi encontrado nesse endereço
+    query_string: A URL não pode conter uma query string
+    code_in_url: Seu código de validação não pode estar na URL para Validação!
+admin.impersonation_report.validation.error:
+    report.short: Elabore mais sobre o acesso realizado. Não esqueça de incluir os motivos do acesso e as ações realizadas.
+client.edit.sector_identifier_uri.not_allowed: Todas as suas URIs para Redirectionamento precisam estar listadas pelo seu Sector Identifier

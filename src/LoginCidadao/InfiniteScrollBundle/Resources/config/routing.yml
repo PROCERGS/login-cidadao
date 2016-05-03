@@ -1,0 +1,4 @@
+lc_infinite_scroll:
+    resource: "@LoginCidadaoInfiniteScrollBundle/Controller/"
+    type:     annotation
+    prefix:   /

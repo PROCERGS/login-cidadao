@@ -1,0 +1,20 @@
+{% extends "LoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block body %}
+
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="flash-{{ type }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {% trans_default_domain 'FOSUserBundle' %}
+
+    <div class="fos_user_user_show">
+        <p>{{ 'profile.show.username'|trans }}: {{ user.shortDisplayName }}</p>
+        <p>{{ 'profile.show.email'|trans }}: {{ user.email }}</p>
+    </div>
+
+{% endblock %}

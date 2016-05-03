@@ -1,0 +1,38 @@
+html, body { height: 100%; }
+
+body {
+    background-color: #dddedc;
+    background-image: none;
+}
+
+body > .container {
+    padding: 0;
+}
+
+header {
+    background-color: #039935;
+    color: #FFF;
+    padding: 15px;
+}
+
+header h3 {
+    margin: 0;
+}
+
+.popup-content .form-content {
+    padding: 20px 60px;
+}
+
+.popup-content .form-bar {
+    background-color: #d9d9d9;
+    padding: 10px;
+}
+
+
+/* Postal Code Search */
+@media (min-width: 768px) {
+  #login-box {
+    margin-top: 20px;
+  }
+}
+

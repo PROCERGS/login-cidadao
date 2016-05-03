@@ -1,0 +1,14 @@
+{% extends "LoginCidadaoCoreBundle:Admin:ImpersonationReport\\base.html.twig" %}
+
+{% block impersonation_report_content %}
+    <div id="new_impersonation_report" class="content">
+        <h1 class="visible-xs">{{ 'admin.impersonation_report.title' | trans }}</h1>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">{{ 'admin.impersonation_report.edit.title' | trans }}</h2>
+            </div>
+            {{ include('LoginCidadaoCoreBundle:Admin:ImpersonationReport\\form.html.twig', { 'submit': 'admin.impersonation_report.edit.submit' | trans }) }}
+        </div>
+    </div>
+{% endblock %}

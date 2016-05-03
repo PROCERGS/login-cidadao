@@ -1,0 +1,22 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block subject %}
+    {% autoescape false %}
+        {{ 'email.changed.message.subject' | trans }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+{{ 'email.changed.message.text' | trans({ '%name%': user.firstName, '%email%': user.email }) }}
+{% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+{% autoescape false %}
+{{ include("LoginCidadaoCoreBundle::common.email.html.twig", {
+    'subject' : 'email.changed.message.subject' | trans,
+    'msg' : 'email.changed.message.text.html' | trans({ '%name%': user.firstName, '%email%': user.email }) | raw
+} ) }}
+{% endautoescape %}
+{% endblock %}

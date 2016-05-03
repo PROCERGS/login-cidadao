@@ -1,0 +1,14 @@
+{% extends "LoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block title %}{{ 'organizations.page.title' | trans }} | {{ parent() }}{% endblock title %}
+
+{% block content %}
+    <div class="content organizations">
+
+        <h1 class="visible-xs">{{ 'organizations.new.title' | trans }}</h1>
+
+        <div class="form-content">
+            {{ include('LoginCidadaoOAuthBundle:Organization:fragment.form.html.twig', { 'form_cancel_url': path('lc_organizations_list'), 'panel_title': 'organizations.new.form_title' | trans, 'form_action_label': 'organizations.new.form_action_label' | trans }) }}
+        </div>
+    </div>
+{% endblock %}

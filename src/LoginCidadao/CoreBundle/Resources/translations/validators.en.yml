@@ -1,0 +1,9 @@
+change_username.invalid.username: 'Usernames must contain only letters, numbers and underline (_).'
+organizations.validation.error:
+    invalid_domain: The domain given is not the same as the Organization''s
+    code_not_found: The code was not found in this address
+    query_string: The URL cannot have a query string
+    code_in_url: Your validation code must not be in the validation URL!
+admin.impersonation_report.validation.error:
+    report.short: Please elaborate on your description. Don''t forget to include the reasons of such access as well as the actions that were made.
+client.edit.sector_identifier_uri.not_allowed: All your Redirect URIs MUST be listed in the Sector Identifier list

@@ -1,4 +1,0 @@
-procergs_generic_infinite_scroll:
-    resource: "@PROCERGSGenericInfiniteScrollBundle/Controller/"
-    type:     annotation
-    prefix:   /

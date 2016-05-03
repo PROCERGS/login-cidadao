@@ -1,0 +1,4 @@
+lc_oauth_routes:
+    resource: "@LoginCidadaoOAuthBundle/Controller"
+    type: annotation
+    prefix: /

@@ -1,26 +1,61 @@
 security:
     encoders:
+        sha512:
+            algorithm: sha512
+        bcrypt:
+            algorithm: bcrypt
+            cost: 15
+
+        # The following two lines ensure BC for PR #357
         Symfony\Component\Security\Core\User\User: sha512
         FOS\UserBundle\Model\UserInterface: sha512
 
     role_hierarchy:
-        ROLE_USER:          FEATURE_PROD
-        ROLE_DEV:           ROLE_USER
-        ROLE_SUPER:         ROLE_DEV
-        ROLE_ADMIN:         ROLE_SUPER, ROLE_EDIT_CLIENT_ALLOWED_SCOPES
-        ROLE_SUPER_ADMIN:   ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH, FEATURE_ALPHA
+        ROLE_USER:
+            - FEATURE_PROD
+        ROLE_DEV:
+            - ROLE_USER
+            - ROLE_ORGANIZATIONS_BIND_CLIENT
+            - ROLE_EDIT_CLIENT_ALLOWED_SCOPES
+            - FEATURE_EDIT_USERNAME
+        ROLE_SUPER:
+            - ROLE_DEV
+            - ROLE_ORGANIZATIONS_CREATE
+            - ROLE_ORGANIZATIONS_EDIT
+            - ROLE_ORGANIZATIONS_VALIDATE
+            - ROLE_ORGANIZATIONS_LIST_ALL
+        ROLE_ADMIN:
+            - ROLE_SUPER
+            - ROLE_EDIT_CLIENT_ALLOWED_RESTRICTED_SCOPES
+            - ROLE_ORGANIZATIONS_DELETE
+        ROLE_SUPER_ADMIN:
+            - ROLE_ADMIN
+            - ROLE_ALLOWED_TO_SWITCH
+            - FEATURE_ALPHA
+            - ROLE_ORGANIZATIONS_EDIT_ANY_ORG
+            - ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG
+            - ROLE_ORGANIZATIONS_BIND_CLIENT_ANY_ORG
+            - ROLE_ORGANIZATIONS_CAN_TRUST
+            - ROLE_ORGANIZATIONS_DELETE_ANY_ORG
+            - ROLE_IMPERSONATION_REPORTS_EDIT
+            - ROLE_IMPERSONATION_REPORTS_LIST_ALL
 
-        FEATURE_ALPHA:      FEATURE_BETA
-        FEATURE_BETA:       FEATURE_PROD
-        FEATURE_PROD:       FEATURE_2FACTOR_AUTH
+        ROLE_ALLOWED_TO_SWITCH: FEATURE_IMPERSONATION_REPORTS
+        ROLE_EDIT_CLIENT_ALLOWED_RESTRICTED_SCOPES: ROLE_EDIT_CLIENT_ALLOWED_SCOPES
+        FEATURE_ALPHA:  FEATURE_BETA, FEATURE_ORGANIZATIONS
+        FEATURE_BETA:   FEATURE_PROD, FEATURE_INVALIDATE_SESSIONS
+        FEATURE_PROD:   FEATURE_2FACTOR_AUTH
         FEATURE_IGP_VALIDATION:
+        FEATURE_ORGANIZATIONS:
+        FEATURE_IMPERSONATION_REPORTS:
+        FEATURE_EDIT_USERNAME:
 
     providers:
         chainprovider:
             chain:
                 providers: [fos_userbundle, fos_facebook_provider]
         fos_userbundle:
-            id: procergs_logincidadao.user_provider
+            id: lc.user_provider
         fos_facebook_provider:
             id: fos_facebook.user.login
         oauth2:
@@ -53,7 +88,7 @@ security:
             switch_user: true
 
             remember_me:
-                key:      "%secret%"
+                secret:      "%secret%"
                 lifetime: 31536000 # 365 days in seconds
                 path:     /
                 domain:   ~
@@ -77,11 +112,11 @@ security:
                 default_target_path: fos_user_profile_edit
                 success_handler: security.authentication.success_handler
                 oauth_user_provider:
-                    service:  procergs.hwi_twitter.user_provider
+                    service:  lc.hwi_twitter.user_provider
 
             form_login:
                 provider:       fos_userbundle
-                csrf_provider:  security.csrf.token_manager
+                csrf_token_generator:  security.csrf.token_manager
                 login_path:     /login
                 use_forward:    false
                 check_path:     /login_check
@@ -101,7 +136,7 @@ security:
             pattern:  ^/oauth/v2/auth
             form_login:
                 provider: fos_userbundle
-                csrf_provider: security.csrf.token_manager
+                csrf_token_generator: security.csrf.token_manager
                 check_path: /oauth/v2/auth_login_check
                 login_path: /oauth/v2/auth_login
                 always_use_default_target_path: false
@@ -118,46 +153,41 @@ security:
           anonymous:  true
 
     access_control:
-        - { path: ^/admin, role: [ROLE_SUPER] }
-        - { path: ^/dev, role: [ROLE_DEV] }
+        - { path: ^/admin, role: [ROLE_SUPER], requires_channel: https }
+        - { path: ^/dev, role: [ROLE_DEV], requires_channel: https }
 
-        - { path: ^/api/v1/address/(cities|states|countries)/search, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/v1/address/cities/prefetch, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/v1/public/lc_consultaCep2, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ] }
+        - { path: ^/api/v1/address/(cities|states|countries)/search, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/api/v1/address/cities/prefetch, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/api/v1/public/lc_consultaCep2, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ], requires_channel: https }
 
-        - { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/.well-known, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/openid/connect/authorize, role: IS_AUTHENTICATED_FULLY }
-        - { path: ^/openid/connect, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/nfg, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/.well-known, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/openid/connect/authorize, role: IS_AUTHENTICATED_FULLY, requires_channel: https }
+        - { path: ^/openid/connect, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
 
-        - { path: ^/connect/twitter$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/connect/google$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/login/facebook$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/connect/twitter$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/connect/google$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/login/facebook$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/nfg/login$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
 
-        - { path: ^/monitor/health, role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_monitors% }
-        - { path: ^/public/status, role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_monitors% }
+        - { path: ^/monitor/health, role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_monitors%, requires_channel: https }
+        - { path: ^/public/status, role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_monitors%, requires_channel: https }
 
-        - { path: ^/contact$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/general$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/privacy$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/about$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/help$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/person/checkEmailAvailable, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/nelmio/csp/report$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/(contact|privacy|about|help|register)$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/person/checkEmailAvailable, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
 
-        - { path: ^/job, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/external/navbar.js, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/job, role: ROLE_SUPER_ADMIN, requires_channel: https }
+        - { path: ^/external/navbar.js, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
 
-        - { path: ^/logout/if-not-remembered, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/terms$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/logout/if-not-remembered, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
 
-        - { path: ^/, roles: IS_AUTHENTICATED_REMEMBERED }
-        - { path: ^/profile/edit, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/profile/change-username, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/profile/change-password, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/person, role: IS_AUTHENTICATED_REMEMBERED }
+        - { path: ^/, roles: IS_AUTHENTICATED_REMEMBERED, requires_channel: https }
+        - { path: ^/profile/edit, roles: IS_AUTHENTICATED_FULLY, requires_channel: https }
+        - { path: ^/profile/change-username, roles: IS_AUTHENTICATED_FULLY, requires_channel: https }
+        - { path: ^/profile/change-password, roles: IS_AUTHENTICATED_FULLY, requires_channel: https }
+        - { path: ^/person, role: IS_AUTHENTICATED_REMEMBERED, requires_channel: https }

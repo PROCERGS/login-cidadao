@@ -1,0 +1,11 @@
+{% extends "LoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block sidebar %}
+    {{ include("LoginCidadaoCoreBundle:Admin:extensible.sidebar.html.twig") }}
+{% endblock %}
+
+{% block content %}
+    <div id="profile-edit" class="content clearfix">
+        <h1>{{ 'Welcome admin'|trans }}</h1>
+    </div>
+{% endblock content %}

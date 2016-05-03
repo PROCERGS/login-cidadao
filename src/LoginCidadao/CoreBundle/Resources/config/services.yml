@@ -1,0 +1,373 @@
+parameters:
+    security.authentication.success_handler.class: LoginCidadao\CoreBundle\Handler\AuthenticationSuccessHandler
+    fos_facebook.user.login.class: LoginCidadao\CoreBundle\Security\User\Provider\FacebookProvider
+    lc.hwi_twitter.user_provider.class: LoginCidadao\CoreBundle\Security\User\Provider\FOSUBUserProvider
+    lc.person.registration.form.type.class: LoginCidadao\CoreBundle\Form\Type\RegistrationFormType
+    lc.person.profile.form.type.class: LoginCidadao\CoreBundle\Form\Type\ProfileFormType
+    lc.person.revoke_authorization.form.type.class: LoginCidadao\CoreBundle\Form\Type\RevokeAuthorizationFormType
+    lc.person.resetting.form.type.class: LoginCidadao\CoreBundle\Form\Type\ResettingFormType
+    lc.change.password.form.type.class: LoginCidadao\CoreBundle\Form\Type\ChangePasswordFormType
+    lc.person.address.form.type.class: LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType
+    lc.city.selector.form.type.class: LoginCidadao\CoreBundle\Form\Type\CitySelectorType
+    lc.contact.form.class: LoginCidadao\CoreBundle\Form\Type\ContactFormType
+    lc.person_doc.form.class: LoginCidadao\CoreBundle\Form\Type\DocFormType
+    lc.user_provider.class: LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
+    lc.user_manager.class: LoginCidadao\CoreBundle\Security\User\Manager\UserManager
+    lc.user_register.class: LoginCidadao\CoreBundle\EventListener\RegisterListner
+    lc.profile_edit.class: LoginCidadao\CoreBundle\EventListener\ProfileEditListner
+    lc.change.password.listener.class: LoginCidadao\CoreBundle\EventListener\ChangePasswordListener
+    lc.resetting.listener.class: LoginCidadao\CoreBundle\EventListener\ResettingListener
+    lc.mailer.class: LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer
+    kernel.listener.logged_in_user_listener.class: LoginCidadao\CoreBundle\EventListener\LoggedInUserListener
+    kernel.listener.exceptions_listener.class: LoginCidadao\CoreBundle\EventListener\ExceptionListener
+    lc.notification.subscriber.class: LoginCidadao\CoreBundle\EventListener\NotificationsSubscriber
+
+    lc.emailChanged.template: LoginCidadaoCoreBundle:Person:emailChangedMessage.html.twig
+    lc.notification.email.template: LoginCidadaoCoreBundle:Email:notification.html.twig
+
+    lc.postalcode.search.form.type.class: LoginCidadao\CoreBundle\Form\Type\SearchPostalCodeFormType
+
+    lc.person.serialize.listenner.class: LoginCidadao\CoreBundle\EventListener\PersonSerializeEventListenner
+
+    lc.idcard.form.class: LoginCidadao\CoreBundle\Form\Type\IdCardType
+    lc.security.helper.class: LoginCidadao\CoreBundle\Helper\SecurityHelper
+    account.security_listener.class: LoginCidadao\CoreBundle\EventListener\SecurityListener
+    lc.extreme_notifications.helper.class: LoginCidadao\CoreBundle\Helper\ExtremeNotificationsHelper
+
+services:
+    lc.command.populate_database:
+        class: LoginCidadao\CoreBundle\Command\PopulateDatabaseCommand
+        tags:
+            - { name: console.command }
+
+    security.authentication.success_handler:
+        class: %security.authentication.success_handler.class%
+        public: false
+        arguments: ["@router", [], "@doctrine.orm.entity_manager", "@session", "@security.http_utils", "@notifications.helper"]
+        calls:
+            - [setContainer, ["@service_container"]]
+
+    fos_facebook.user.login:
+        class: %fos_facebook.user.login.class%
+        arguments:
+            facebook: "@fos_facebook.api"
+            userManager: "@fos_user.user_manager"
+            validator: "@validator"
+            container: "@service_container"
+            dispatcher: "@event_dispatcher"
+            formFactory: "@fos_user.registration.form.factory"
+
+    lc.hwi_twitter.user_provider:
+        class: %lc.hwi_twitter.user_provider.class%
+        arguments: [ "@fos_user.user_manager", "@session", "@event_dispatcher", "@service_container", "@fos_user.registration.form.factory", { twitter: twitterId, google: googleId }, %http_proxy% ]
+
+    lc.person.registration.form.type:
+        class: %lc.person.registration.form.type.class%
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: lc_person_registration }
+
+    lc.person.profile.form.type:
+        class: %lc.person.profile.form.type.class%
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: lc_person_profile }
+        calls:
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+            - [ setDefaultCountryIso2, [%default_country_iso2%] ]
+
+    lc.person.revoke_authorization.form.type:
+        class: %lc.person.revoke_authorization.form.type.class%
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: lc_revoke_authorization }
+
+    lc.person.resetting.form.type:
+        class: %lc.person.resetting.form.type.class%
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: lc_person_resetting }
+
+    lc.postalcode.search.form.type:
+        class: %lc.postalcode.search.form.type.class%
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: search_postalcode_form_type }
+        calls:
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+
+    lc.user_provider:
+        class: %lc.user_provider.class%
+        arguments: ["@fos_user.user_manager"]
+
+    lc.user_manager:
+        class: %lc.user_manager.class%
+        arguments: ["@security.encoder_factory", "@fos_user.util.username_canonicalizer", "@fos_user.util.email_canonicalizer", "@fos_user.object_manager", %user.class%, "@service_container"]
+
+    lc.login.form.type:
+        class: LoginCidadao\CoreBundle\Form\Type\LoginFormType
+        tags:
+            - { name: form.type, alias: login_form_type }
+        calls:
+            - [setContainer, ["@service_container"]]
+
+    lc.login.twig.extension:
+        class: LoginCidadao\CoreBundle\Twig\Extension\LoginCidadaoExtension
+        arguments: ["@service_container"]
+        tags:
+            - { name: twig.extension, alias: login_twig_extension }
+
+    lc.security.authentication.listener:
+        class: LoginCidadao\CoreBundle\Security\Http\Firewall\LoginCidadaoListener
+        parent: security.authentication.listener.form
+        abstract: true
+        calls:
+            - [setContainer, ["@service_container"]]
+            - [setFormFactory, ["@form.factory"]]
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+            - [setTranslator, ["@translator"]]
+            - [setBruteForceThreshold, [%brute_force_threshold%]]
+
+    lc.user_register:
+        class: %lc.user_register.class%
+        arguments: ["@router", "@session", "@translator", "@fos_user.mailer", "@fos_user.util.token_generator", "@notifications.helper", "%registration.email.unconfirmed_time%", "%lc_supported_scopes%", "@lc.notification.handler" ]
+        tags:
+            - { name: kernel.event_subscriber }
+        calls:
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+
+    lc.profile_edit:
+        class: %lc.profile_edit.class%
+        arguments:
+            - "@lc.mailer"
+            - "@fos_user.mailer"
+            - "@fos_user.util.token_generator"
+            - "@router"
+            - "@session"
+            - "@security.token_storage"
+            - "@notifications.helper"
+            - %registration.email.unconfirmed_time%
+        tags:
+            - { name: kernel.event_subscriber }
+        calls:
+            - [setCpfEmptyTime, ["%registration.cpf.empty_time%"]]
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+            - [setUserManager, ["@fos_user.user_manager"]]
+
+    lc.change.password.form.type:
+        class: %lc.change.password.form.type.class%
+        arguments:
+            - %fos_user.model.user.class%
+            - "@security.token_storage"
+        tags:
+            - { name: form.type, alias: lc_change_password }
+
+    lc.change_password_listener:
+        class: %lc.change.password.listener.class%
+        arguments:
+            - "@router"
+            - "@notifications.helper"
+            - "@session"
+            - %default_password_encoder%
+        tags:
+            - { name: kernel.event_subscriber }
+
+    lc.resetting_listener:
+        class: %lc.resetting.listener.class%
+        arguments: ["@router", %fos_user.resetting.token_ttl%]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    lc.mailer:
+        class: %lc.mailer.class%
+        arguments: [ "@mailer", "@router", "@twig", { "template": { "confirmation": %fos_user.registration.confirmation.template%, "resetting": %fos_user.resetting.email.template%, "email_changed": %lc.emailChanged.template%, "notification_email": %lc.notification.email.template% }, "from_email": { "confirmation": %fos_user.registration.confirmation.from_email%, "resetting": %fos_user.resetting.email.from_email%, "email_changed": %mailer_sender_mail%, "email_sender_name": %mailer_sender_name% } } ]
+
+    kernel.listener.logged_in_user_listener:
+        class: %kernel.listener.logged_in_user_listener.class%
+        arguments:
+            - "@security.token_storage"
+            - "@security.authorization_checker"
+            - "@router"
+            - "@session"
+            - "@translator"
+            - "@doctrine.orm.entity_manager"
+            - %default_password_encoder%
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    kernel.listener.exceptions_listener:
+        class: %kernel.listener.exceptions_listener.class%
+        arguments: [ "@session", "@router", "@translator" ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+    lc.client.form.type:
+        class: LoginCidadao\CoreBundle\Form\Type\ClientFormType
+        arguments:
+            - "@security.authorization_checker"
+        tags:
+            - { name: form.type, alias: client_form_type }
+        calls:
+            - [setScopes, ["%lc_public_scopes%", "%lc_reserved_scopes%"]]
+            - [setTokenStorage, ["@security.token_storage"]]
+
+    lc.client.base.form.type:
+        class: LoginCidadao\CoreBundle\Form\Type\ClientBaseFormType
+        arguments:
+            - "@security.authorization_checker"
+        calls:
+            - [setTokenStorage, ["@security.token_storage"]]
+        tags:
+            - { name: form.type, alias: client_base_form_type }
+
+    lc.category.form.type:
+        class: LoginCidadao\CoreBundle\Form\Type\CategoryFormType
+        tags:
+            - { name: form.type, alias: category_form_type }
+        calls:
+            - [setTokenStorage, ["@security.token_storage"]]
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+
+    lc.placeholder.form.type:
+        class: LoginCidadao\CoreBundle\Form\Type\PlaceholderFormType
+        tags:
+            - { name: form.type, alias: placeholder_form_type }
+        calls:
+            - [setTokenStorage, ["@security.token_storage"]]
+
+    lc.form.type.hidden_entity:
+        class: LoginCidadao\CoreBundle\Form\Type\HiddenEntityType
+        tags:
+            - { name: form.type, alias: hidden_entity }
+
+    lc.form.type.switch:
+        class: LoginCidadao\CoreBundle\Form\Type\SwitchType
+        tags:
+            - { name: form.type, alias: switch }
+        calls:
+            - [setTranslator, ["@translator"]]
+
+    lc.form.type.ajax_choice:
+        class: LoginCidadao\CoreBundle\Form\Type\AjaxChoiceType
+        tags:
+            - { name: form.type, alias: ajax_choice }
+        calls:
+            - [setTranslator, ["@translator"]]
+            - [setRouter, ["@router"]]
+
+    lc.person.resume.form.type:
+        class: LoginCidadao\CoreBundle\Form\Type\PersonResumeFormType
+        arguments: [ "@lc.security.helper" ]
+        tags:
+            - { name: form.type, alias: person_resume_form_type }
+        calls:
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+            - [setTranslator, ["@translator"]]
+            - [setTokenStorage, ["@security.token_storage"]]
+
+    lc.person.serialize.listenner:
+        class: %lc.person.serialize.listenner.class%
+        arguments:
+            - "@vich_uploader.templating.helper.uploader_helper"
+            - "@templating.helper.assets"
+            - "@kernel"
+            - "@request_stack"
+        tags:
+            - { name: jms_serializer.event_listener, event: serializer.pre_serialize, method: onPreSerialize }
+            - { name: jms_serializer.event_listener, event: serializer.post_serialize, method: onPostSerialize }
+
+    lc.person.address.form.type:
+        class: %lc.person.address.form.type.class%
+        arguments: [ "@translator", "@doctrine.orm.entity_manager" ]
+        tags:
+            - { name: form.type, alias: lc_person_address }
+
+    lc.city.selector.form.type:
+        class: %lc.city.selector.form.type.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: form.type, alias: city_selector }
+
+    lc.idcard.form:
+        class: %lc.idcard.form.class%
+        arguments: [ %lc_idcard_country_acronym%, "@event_dispatcher" ]
+        tags:
+            - { name: form.type, alias: lc_idcard_form }
+
+    lc.notification.subscriber:
+        class: %lc.notification.subscriber.class%
+        arguments: [ "@lc.notification.handler", "@lc.mailer" ]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    lc.feature_hierarchy.voter:
+        class: %security.access.role_hierarchy_voter.class%
+        arguments: [ "@security.role_hierarchy", 'FEATURE_' ]
+        tags:
+            - { name: security.voter }
+
+    lc.security.helper:
+        class: %lc.security.helper.class%
+        arguments:
+            - "@security.authorization_checker"
+            - "@lc.action_log.repository"
+            - "@lc.extreme_notifications.helper"
+            - "@router"
+
+    account.security_listener:
+        class: %account.security_listener.class%
+        arguments:
+            - "@security.authorization_checker"
+            - "@security.token_storage"
+            - "@lc.security.helper"
+            - "@lc.action_logger"
+        tags:
+            - { name: kernel.event_listener, event: security.interactive_login, method: onSecurityInteractiveLogin }
+            - { name: kernel.event_listener, event: security.switch_user, method: onSwitchUser }
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    lc.country_manager:
+        class: LoginCidadao\CoreBundle\Model\Manager\CountryManager
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - LoginCidadao\CoreBundle\Entity\Country
+
+    lc.state_manager:
+        class: LoginCidadao\CoreBundle\Model\Manager\StateManager
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - LoginCidadao\CoreBundle\Entity\State
+
+    lc.city_manager:
+        class: LoginCidadao\CoreBundle\Model\Manager\CityManager
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - LoginCidadao\CoreBundle\Entity\City
+
+    lc.location.type:
+        class: LoginCidadao\CoreBundle\Form\Type\CitySelectorComboType
+        arguments:
+            - "@lc.country_manager"
+            - "@lc.state_manager"
+            - "@lc.city_manager"
+            - "@lc.profile_edit"
+            - "@translator"
+        tags:
+            - { name: form.type, alias: lc_location }
+
+    lc.contact.form:
+        class: %lc.contact.form.class%
+        arguments: [%contact_form.captcha%]
+        tags:
+            - { name: form.type, alias: contact_form_type }
+
+    lc.person_doc.form:
+        class: %lc.person_doc.form.class%
+        tags:
+            - { name: form.type, alias: person_doc_form_type }
+
+    lc.extreme_notifications.helper:
+        class: %lc.extreme_notifications.helper.class%
+        arguments:
+            - "@session"
+            - "@translator"

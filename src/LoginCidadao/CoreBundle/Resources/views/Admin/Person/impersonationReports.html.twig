@@ -1,0 +1,35 @@
+{% if reports is not empty %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">{{ 'admin.impersonation_report.list.title' |trans }}</h2>
+        </div>
+        <div class="panel-body">
+
+            <div class="list-group" id="accordion" role="tablist" aria-multiselectable="true">
+                {% for report in reports %}
+                    <div class="">
+                        <div class="list-group-item" role="tab" id="report_header_{{ report.id }}">
+                            <h4 class="panel-title">
+                                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#report_content_{{ report.id }}" aria-expanded="true" aria-controls="report_content_{{ report.id }}">
+                                    {{ 'admin.impersonation_report.list.list_item_complete' | trans({ '%impersonator%': report.impersonator.fullName | default(report.impersonator.email) | e, '%date%': report.actionLog.createdAt | date('log.date.format' | trans) | e }) | raw }}
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="report_content_{{ report.id }}" class="collapse" role="tabpanel" aria-labelledby="report_header_{{ report.id }}">
+                            <div class="list-group-item well well-sm">
+                                <div class="form-group">
+                                    <label>{{ 'admin.impersonation_report.form.last_update.label' | trans }}</label>
+                                    <span>{{ report.updatedAt | default(report.createdAt | default(report.actionLog.createdAt)) | date('log.date.format' | trans) }}</span>
+                                </div>
+                                <div class="form-group">
+                                    <label>{{ 'admin.impersonation_report.form.report.label' | trans }}</label>
+                                    <textarea readonly class="form-control form-control-static">{{ report.report }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}

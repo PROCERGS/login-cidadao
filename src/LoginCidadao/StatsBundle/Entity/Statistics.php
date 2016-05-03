@@ -18,11 +18,11 @@ use JMS\Serializer\Annotation as JMS;
  *
  * @ORM\Entity(repositoryClass="LoginCidadao\StatsBundle\Entity\StatisticsRepository")
  * @ORM\Table(name="statistics",indexes={
- *      @ORM\Index(name="idx_timestamp_index_key", columns={"timestamp", "index", "key"}),
- *      @ORM\Index(name="idx_timestamp_index", columns={"timestamp", "index"}),
- *      @ORM\Index(name="idx_timestamp_key", columns={"timestamp", "key"}),
- *      @ORM\Index(name="idx_index", columns={"index"}),
- *      @ORM\Index(name="idx_key", columns={"key"}),
+ *      @ORM\Index(name="idx_timestamp_index_key", columns={"stats_timestamp", "stats_index", "stats_key"}),
+ *      @ORM\Index(name="idx_timestamp_index", columns={"stats_timestamp", "stats_index"}),
+ *      @ORM\Index(name="idx_timestamp_key", columns={"stats_timestamp", "stats_key"}),
+ *      @ORM\Index(name="idx_index", columns={"stats_index"}),
+ *      @ORM\Index(name="idx_key", columns={"stats_key"}),
  * })
  */
 class Statistics
@@ -39,14 +39,14 @@ class Statistics
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="timestamp", type="datetime")
+     * @ORM\Column(name="stats_timestamp", type="datetime")
      */
     private $timestamp;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="index", type="string", length=255)
+     * @ORM\Column(name="stats_index", type="string", length=255)
      * @JMS\Groups({"date","datetime"})
      */
     private $index;
@@ -54,7 +54,7 @@ class Statistics
     /**
      * @var string
      *
-     * @ORM\Column(name="key", type="string", length=255)
+     * @ORM\Column(name="stats_key", type="string", length=255)
      * @JMS\Groups({"date","datetime"})
      */
     private $key;
@@ -62,7 +62,7 @@ class Statistics
     /**
      * @var integer
      *
-     * @ORM\Column(name="value", type="integer")
+     * @ORM\Column(name="stats_value", type="integer")
      * @JMS\Groups({"date","datetime"})
      */
     private $value;

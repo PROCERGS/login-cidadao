@@ -52,7 +52,7 @@ tos:
 # Notifications
 procergs_login_cidadao_notification:
     type: rest
-    resource: "@PROCERGSLoginCidadaoNotificationBundle/Resources/config/routing.yml"
+    resource: "@LoginCidadaoNotificationBundle/Resources/config/routing.yml"
     prefix:   /
 
 #HWI OAuth
@@ -75,9 +75,9 @@ google_login:
     path: /login/check-google
 
 #API
-procergs_login_cidadao_api:
+lc_api:
     type: rest
-    resource: "@PROCERGSLoginCidadaoAPIBundle/Resources/config/routing.yml"
+    resource: "@LoginCidadaoAPIBundle/Resources/config/routing.yml"
     prefix:   /api/v1
 
 # API Doc
@@ -86,14 +86,13 @@ NelmioApiDocBundle:
     prefix:   /api/doc
 
 # login-cidadao
-procergs_generic_locale:
-    resource: "@PROCERGSGenericLocaleBundle/Controller/"
+lc_locale:
+    resource: "@LoginCidadaoLocaleBundle/Controller/"
     type:     annotation
     prefix:   /locale
 
-procergs_login_cidadao_core:
-    resource: "@PROCERGSLoginCidadaoCoreBundle/Controller/"
-    type:     annotation
+lc_core:
+    resource: "@LoginCidadaoCoreBundle/Resources/config/routing.yml"
     prefix:   /
 lc_home:
     defaults: { _controller: FOSUserBundle:Security:login }
@@ -105,9 +104,9 @@ simple_things_entity_audit:
     prefix: /audit
 
 # OAuth Routes
-procergso_auth:
-    resource: "@PROCERGSOAuthBundle/Resources/config/routing.yml"
-    prefix:   /auth
+lc_oauth:
+    resource: "@LoginCidadaoOAuthBundle/Resources/config/routing.yml"
+    prefix:   /
 
 fos_oauth_server_token:
     resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
@@ -135,7 +134,7 @@ fos_user_change_password:
 # FOSFacebook
 _security_check_facebook:
     path:   /facebook/login_check
-    defaults:  { _controller: PROCERGSLoginCidadaoCoreBundle:Person:loginFb }
+    defaults:  { _controller: LoginCidadaoCoreBundle:Person:loginFb }
 
 _security_facebook_logout:
   path:  /facebook/logout
@@ -145,17 +144,17 @@ fos_facebook_channel:
 
 user_couple_fb_with_account:
     path: /user/couple/facebook
-    defaults: { _controller: PROCERGSLoginCidadaoCoreBundle:Person:connectFacebookWithAccount }
+    defaults: { _controller: LoginCidadaoCoreBundle:Person:connectFacebookWithAccount }
 
 # Static Pages
 lc_about:
     path: /about
     defaults:
         _controller: FrameworkBundle:Template:template
-        template:    'PROCERGSLoginCidadaoCoreBundle:Info:about.html.twig'
+        template:    'LoginCidadaoCoreBundle:Info:about.html.twig'
 
 lc_privacy:
     path: /privacy
     defaults:
         _controller: FrameworkBundle:Template:template
-        template:    'PROCERGSLoginCidadaoCoreBundle:Info:privacy.html.twig'
+        template:    'LoginCidadaoCoreBundle:Info:privacy.html.twig'

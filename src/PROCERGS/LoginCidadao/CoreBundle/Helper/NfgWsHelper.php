@@ -2,7 +2,7 @@
 
 namespace PROCERGS\LoginCidadao\CoreBundle\Helper;
 
-use PROCERGS\LoginCidadao\CoreBundle\Entity\Person;
+use LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\MissingNfgAccessTokenException;
 
 /* sample http to test raw send
@@ -31,7 +31,6 @@ use PROCERGS\LoginCidadao\CoreBundle\Exception\MissingNfgAccessTokenException;
 
 class NfgWsHelper
 {
-
     protected $url;
     protected $client;
     protected $accessToken;
@@ -40,6 +39,9 @@ class NfgWsHelper
     protected $usuario;
     protected $senha;
     protected $error;
+
+    /** @var MeuRSHelper */
+    protected $meuRSHelper;
 
     public function setUrl($var)
     {
@@ -87,7 +89,7 @@ class NfgWsHelper
         try {
             if (!$this->client) {
                 $this->client = new \SoapClient($this->url,
-                        array(
+                    array(
                     'cache_wsdl' => WSDL_CACHE_NONE,
                     'trace' => true
                 ));
@@ -110,7 +112,7 @@ class NfgWsHelper
             return false;
         }
         $dom = new \DOMDocument();
-        if (!@$dom->loadXML($a = $result->ConsultaCadastroResult)) {
+        if (!@$dom->loadXML($a   = $result->ConsultaCadastroResult)) {
             return false;
         }
         foreach (array('CodSitRetorno', 'MsgRetorno', 'CodNivelAcesso') as $val) {
@@ -121,14 +123,15 @@ class NfgWsHelper
             $retorno[$val] = $node->item(0)->nodeValue;
         }
         if ($retorno['CodSitRetorno'] == 1 && $retorno['CodNivelAcesso'] > 1) {
-            foreach (array('NomeConsumidor', 'DtNasc', 'EmailPrinc', 'NroFoneContato', 'CodSitTitulo', 'CodCpf') as $val) {
+            foreach (array('NomeConsumidor', 'DtNasc', 'EmailPrinc', 'NroFoneContato',
+            'CodSitTitulo', 'CodCpf') as $val) {
                 $node = $dom->getElementsByTagName($val);
                 if (!$node->length || !strlen($node->item(0)->nodeValue)) {
                     continue;
                 }
                 if ($val === 'CodCpf') {
                     $retorno[$val] = str_pad($node->item(0)->nodeValue, 11, "0",
-                            STR_PAD_LEFT);
+                        STR_PAD_LEFT);
                 } else {
                     $retorno[$val] = $node->item(0)->nodeValue;
                 }
@@ -136,7 +139,6 @@ class NfgWsHelper
         }
         return $retorno;
     }
-
     /*
       POST /LoginCidadaoWS/service.svc HTTP/1.1
       Host: m-nfg-des.procergs.reders
@@ -163,7 +165,7 @@ class NfgWsHelper
         try {
             if (!$this->client) {
                 $this->client = new \SoapClient($this->url,
-                        array(
+                    array(
                     'cache_wsdl' => WSDL_CACHE_NONE,
                     'trace' => true
                 ));
@@ -184,14 +186,14 @@ class NfgWsHelper
     }
 
     public function isVoterRegistrationValid(Person $person,
-                                              $voterRegistration = null)
+                                             $voterRegistration = null)
     {
         if (is_null($voterRegistration)) {
-            $voterRegistration = $person->getVoterRegistration();
+            $voterRegistration = $this->meuRSHelper->getVoterRegistration($person);
         }
 
-        if ($person->getNfgAccessToken()) {
-            $this->setAccessToken($person->getNfgAccessToken());
+        if ($this->meuRSHelper->getNfgAccessToken()) {
+            $this->setAccessToken($this->meuRSHelper->getNfgAccessToken($person));
             $this->setTituloEleitoral($voterRegistration);
             $nfgData = $this->consultaCadastro();
 
@@ -204,11 +206,12 @@ class NfgWsHelper
             // TODO: this shuldn't be here! It's NOT this method's job to validate
             // if the WebService's request was successful!
             if (!isset($nfgData['CodCpf'], $nfgData['NomeConsumidor'],
-                            $nfgData['EmailPrinc'])) {
+                    $nfgData['EmailPrinc'])) {
                 throw new NfgException('nfg.missing.required.fields');
             }
 
-            if (array_key_exists('CodSitTitulo', $nfgData) && $nfgData['CodSitTitulo'] == 1) {
+            if (array_key_exists('CodSitTitulo', $nfgData) && $nfgData['CodSitTitulo']
+                == 1) {
                 return true;
             }
         } else {
@@ -218,4 +221,10 @@ class NfgWsHelper
         return false;
     }
 
+    public function setMeuRSHelper(MeuRSHelper $meuRSHelper)
+    {
+        $this->meuRSHelper = $meuRSHelper;
+
+        return $this;
+    }
 }

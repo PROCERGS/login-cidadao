@@ -2,10 +2,14 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: memcached.yml }
-    - { resource: @LoginCidadaoTOSBundle/Resources/config/config.yml }
+    - { resource: "@LoginCidadaoTOSBundle/Resources/config/config.yml" }
 
 framework:
     #esi:             ~
+    assets:
+        version: '2016-03-29'
+        version_format: '%%s?version=%%s'
+        base_path: ~
     translator:
         enabled: true
         fallback: %locale%
@@ -30,25 +34,20 @@ twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
     exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
-    form:
-        resources:
-            - 'PROCERGSLoginCidadaoCoreBundle:Form:fields.html.twig'
+    form_themes:
+        - 'LoginCidadaoCoreBundle:Form:fields.html.twig'
     globals:
         fos_csrf_provider: "@security.csrf.token_manager"
         notifications_helper: "@notifications.helper"
-        background_helper: "@background.helper"
         facebook_app_id: "%facebook_app_id%"
-        background_picture_author: %background_picture.author%
-        background_picture_link: %background_picture.link%
         app_router: "@router"
-        tre_search_link: "%tre_search_link%"
-        postalcode_search_link: "%postalcode_search_link%"
+        postalcode_search_link: 
+        third_party_login: %third_party_login%
 
 # Assetic Configuration
 assetic:
     debug:          %kernel.debug%
     use_controller: false
-    bundles:        [ "PROCERGSLoginCidadaoCoreBundle", "PROCERGSLoginCidadaoNotificationBundle", "LoginCidadaoTOSBundle" ]
     #java: /usr/bin/java
     assets:
       bootstrap_fonts_woff:
@@ -69,33 +68,34 @@ assetic:
           output: fonts/glyphicons-halflings-regular.eot
       lc_base_js:
         inputs:
-          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery/1.11.0/jquery.min.js'
-          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/bootstrap/3.3.1/js/bootstrap.min.js'
-          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/js/bootstrap-switch.min.js'
-          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/hinclude/0.9.5/hinclude.min.js'
-          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
-          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.placeholder.js'
-          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.js'
-          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.local.js'
-          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/jquery.visible.min.js'
-          - '@PROCERGSLoginCidadaoCoreBundle/Resources/public/js/general.js'
+          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery/1.11.0/jquery.min.js'
+          - '@LoginCidadaoCoreBundle/Resources/public/bootstrap/3.3.1/js/bootstrap.min.js'
+          - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/js/bootstrap-switch.min.js'
+          - '@LoginCidadaoCoreBundle/Resources/public/js/hinclude/0.9.5/hinclude.min.js'
+          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
+          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.placeholder.js'
+          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.js'
+          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.local.js'
+          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.visible.min.js'
+          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.preventDoubleSubmission.js'
+          - '@LoginCidadaoCoreBundle/Resources/public/js/general.js'
       lc_base_css:
         inputs:
           - 'assets/vendor/bootstrap/dist/css/bootstrap.min.css'
-          - 'bundles/procergslogincidadaocore/bootstrap/3.3.1/css/bootstrap-theme.min.css'
-          - 'bundles/procergslogincidadaocore/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
-          - 'bundles/procergslogincidadaocore/css/general.css'
-          - 'bundles/procergslogincidadaocore/css/navbar.css'
-          - 'bundles/procergslogincidadaocore/css/ac.widget.css'
-          - 'bundles/procergslogincidadaocore/css/common.grid.css'
-          - 'bundles/procergslogincidadaocore/css/custom.recaptcha.css'
-          - 'bundles/procergslogincidadaocore/css/list.buttons.css'
-          - 'bundles/procergslogincidadaocore/css/notification.css'
+          - 'bundles/logincidadaocore/bootstrap/3.3.1/css/bootstrap-theme.min.css'
+          - 'bundles/logincidadaocore/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
+          - 'bundles/logincidadaocore/css/general.css'
+          - 'bundles/logincidadaocore/css/navbar.css'
+          - 'bundles/logincidadaocore/css/ac.widget.css'
+          - 'bundles/logincidadaocore/css/common.grid.css'
+          - 'bundles/logincidadaocore/css/custom.recaptcha.css'
+          - 'bundles/logincidadaocore/css/list.buttons.css'
+          - 'bundles/logincidadaocore/css/notification.css'
       lc_logged_css:
         inputs:
           - '@lc_base_css'
-          - 'bundles/procergslogincidadaocore/css/logged/logged.css'
-          - 'bundles/procergslogincidadaonotification/css/notifications.css'
+          - 'bundles/logincidadaocore/css/logged/logged.css'
+          - 'bundles/logincidadaonotification/css/notifications.css'
 
     filters:
         cssrewrite: ~
@@ -125,11 +125,15 @@ doctrine:
     orm:
         auto_generate_proxy_classes: %kernel.debug%
         auto_mapping: true
+        resolve_target_entities:
+            LoginCidadao\CoreBundle\Model\PersonInterface: %user.class%
+            LoginCidadao\OAuthBundle\Model\OrganizationInterface: %organization.class%
+            LoginCidadao\OAuthBundle\Model\ClientInterface: %oauth_client.class%
         dql:
           string_functions:
-            right: PROCERGS\LoginCidadao\CoreBundle\DQL\Right
-            countif: PROCERGS\LoginCidadao\CoreBundle\DQL\CountIf
-            lowerunaccent: PROCERGS\LoginCidadao\CoreBundle\DQL\LowerUnaccent
+            right: LoginCidadao\CoreBundle\DQL\Right
+            countif: LoginCidadao\CoreBundle\DQL\CountIf
+            lowerunaccent: LoginCidadao\CoreBundle\DQL\LowerUnaccent
 
           datetime_functions:
                 date:       Oro\ORM\Query\AST\Functions\SimpleFunction
@@ -148,13 +152,13 @@ swiftmailer:
 
 fos_oauth_server:
   db_driver: orm
-  client_class:         PROCERGS\OAuthBundle\Entity\Client
-  access_token_class:   PROCERGS\OAuthBundle\Entity\AccessToken
-  refresh_token_class:  PROCERGS\OAuthBundle\Entity\RefreshToken
-  auth_code_class:      PROCERGS\OAuthBundle\Entity\AuthCode
+  client_class:         LoginCidadao\OAuthBundle\Entity\Client
+  access_token_class:   LoginCidadao\OAuthBundle\Entity\AccessToken
+  refresh_token_class:  LoginCidadao\OAuthBundle\Entity\RefreshToken
+  auth_code_class:      LoginCidadao\OAuthBundle\Entity\AuthCode
   service:
       user_provider: fos_user.user_manager
-      client_manager: procergs_logincidadao.oauth.client_manager
+      client_manager: lc.oauth.client_manager
       options:
           supported_scopes: %lc_supported_scopes%
 
@@ -165,30 +169,30 @@ fos_user:
     registration:
         confirmation:
             enabled: false
-            template: PROCERGSLoginCidadaoCoreBundle:Person:registration/email.html.twig
+            template: LoginCidadaoCoreBundle:Person:registration/email.html.twig
             from_email:
               address: %mailer_sender_mail%
               sender_name: %mailer_sender_name%
         form:
-            type: procergs_person_registration
+            type: LoginCidadao\CoreBundle\Form\Type\RegistrationFormType
             validation_groups:  [LoginCidadaoRegistration]
     profile:
         form:
-            type: procergs_person_profile
+            type: LoginCidadao\CoreBundle\Form\Type\ProfileFormType
     resetting:
         email:
-            template: PROCERGSLoginCidadaoCoreBundle:Person:resetting/email.html.twig
+            template: LoginCidadaoCoreBundle:Person:resetting/email.html.twig
             from_email:
                 address:        %mailer_sender_mail%
                 sender_name:    %mailer_sender_name%
         form:
-            type:               procergs_person_resetting
+            type:               lc_person_resetting
     service:
-        user_manager: procergs_logincidadao.user_manager
+        user_manager: lc.user_manager
         mailer: fos_user.mailer.twig_swift
     change_password:
         form:
-            type:               procergs_change_password
+            type: LoginCidadao\CoreBundle\Form\Type\ChangePasswordFormType
 
 # Audit Trail
 simple_things_entity_audit:
@@ -196,31 +200,32 @@ simple_things_entity_audit:
         - updatedAt
         - lastLogin
     audited_entities:
-        - PROCERGS\LoginCidadao\APIBundle\Entity\LogoutKey
+        - LoginCidadao\APIBundle\Entity\LogoutKey
 
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\Authorization
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\BackupCode
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\City
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\ClientSuggestion
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\Country
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\IdCard
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\Person
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\PersonAddress
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\SentEmail
-        - PROCERGS\LoginCidadao\CoreBundle\Entity\State
+        - LoginCidadao\CoreBundle\Entity\Authorization
+        - LoginCidadao\CoreBundle\Entity\BackupCode
+        - LoginCidadao\CoreBundle\Entity\City
+        - LoginCidadao\CoreBundle\Entity\ClientSuggestion
+        - LoginCidadao\CoreBundle\Entity\Country
+        - LoginCidadao\CoreBundle\Entity\IdCard
+        - LoginCidadao\CoreBundle\Entity\ImpersonationReport
+        - LoginCidadao\CoreBundle\Entity\Person
+        - LoginCidadao\CoreBundle\Entity\PersonAddress
+        - LoginCidadao\CoreBundle\Entity\SentEmail
+        - LoginCidadao\CoreBundle\Entity\State
 
-        - PROCERGS\LoginCidadao\NotificationBundle\Entity\Broadcast
-        - PROCERGS\LoginCidadao\NotificationBundle\Entity\Category
-        - PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification
-        - PROCERGS\LoginCidadao\NotificationBundle\Entity\NotificationToken
-        - PROCERGS\LoginCidadao\NotificationBundle\Entity\PersonNotificationOption
-        - PROCERGS\LoginCidadao\NotificationBundle\Entity\Placeholder
+        - LoginCidadao\NotificationBundle\Entity\Broadcast
+        - LoginCidadao\NotificationBundle\Entity\Category
+        - LoginCidadao\NotificationBundle\Entity\Notification
+        - LoginCidadao\NotificationBundle\Entity\NotificationToken
+        - LoginCidadao\NotificationBundle\Entity\PersonNotificationOption
+        - LoginCidadao\NotificationBundle\Entity\Placeholder
 
-        - PROCERGS\OAuthBundle\Entity\AccessToken
-        - PROCERGS\OAuthBundle\Entity\AuthCode
-        - PROCERGS\OAuthBundle\Entity\Client
-        - PROCERGS\OAuthBundle\Entity\RefreshToken
+        - LoginCidadao\OAuthBundle\Entity\AccessToken
+        - LoginCidadao\OAuthBundle\Entity\AuthCode
+        - LoginCidadao\OAuthBundle\Entity\Client
+        - LoginCidadao\OAuthBundle\Entity\RefreshToken
+        - LoginCidadao\OAuthBundle\Entity\Organization
 
 fos_facebook:
     alias:  facebook
@@ -232,7 +237,7 @@ fos_facebook:
 hwi_oauth:
     connect:
         confirmation: false
-        account_connector: procergs.hwi_twitter.user_provider
+        account_connector: lc.hwi_twitter.user_provider
     firewall_name: main
     fosub:
         username_iterations: 30
@@ -254,9 +259,9 @@ hwi_oauth:
         verify_peer: false
 
 parameters:
-    user.class: PROCERGS\LoginCidadao\CoreBundle\Entity\Person
+    user.class: LoginCidadao\CoreBundle\Entity\Person
     buzz.client.class: Donato\Generic\HWIOAuthProxyBundle\Buzz\Client\CurlProxy
-    hwi_oauth.resource_owner.twitter.class: PROCERGS\LoginCidadao\CoreBundle\OAuth\ResourceOwner\TwitterResourceOwner
+    hwi_oauth.resource_owner.twitter.class: LoginCidadao\CoreBundle\OAuth\ResourceOwner\TwitterResourceOwner
     lc_public_scopes_oidc: 'openid sub name given_name family_name full_name preferred_username picture email email_verified birthdate phone_number address updated_at'
     lc_public_scopes_oauth2: 'public_profile username first_name last_name full_name cpf city public_profile country state addresses id_cards mobile logout'
     lc_public_scopes: %lc_public_scopes_oidc% %lc_public_scopes_oauth2%
@@ -264,7 +269,9 @@ parameters:
     lc_supported_scopes: %lc_public_scopes% %lc_reserved_scopes%
     lc_idcard_country_acronym: BR
 
-    oauth2.user_provider.class: PROCERGS\LoginCidadao\CoreBundle\Security\OIDC\UserProvider
+    oauth2.user_provider.class: LoginCidadao\CoreBundle\Security\OIDC\UserProvider
+    organization.class: LoginCidadao\OAuthBundle\Entity\Organization
+    oauth_client.class: LoginCidadao\OAuthBundle\Entity\Client
 
 ewz_recaptcha:
     public_key:   %recaptcha_public_key%
@@ -372,13 +379,13 @@ scheb_two_factor:
         mailer: swiftmailer
         sender_email: %mailer_sender_mail%
         digits: 6
-        template: PROCERGSLoginCidadaoCoreBundle:TwoFactorAuthentication:form.html.twig
+        template: LoginCidadaoCoreBundle:TwoFactorAuthentication:form.html.twig
 
     google:
         enabled: true
         server_name: %site_domain%
         issuer: %two_factor_issuer%
-        template: PROCERGSLoginCidadaoCoreBundle:TwoFactorAuthentication:form.html.twig
+        template: LoginCidadaoCoreBundle:TwoFactorAuthentication:form.html.twig
 
     persister: ~
     model_manager_name: ~
@@ -487,3 +494,7 @@ liip_monitor:
             - '%kernel.cache_dir%'
             - '%user_profile_upload_dir%'
             - '%client_image_upload_dir%'
+
+services:
+    fos_user.doctrine_registry:
+        alias: doctrine

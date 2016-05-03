@@ -1,0 +1,257 @@
+{% extends "LoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block title %}{{ 'Profile' | trans }} | {{ parent() }}{% endblock title %}
+
+{% block content %}
+    <div id="profile-edit" class="content profile-edit">
+
+        <h1 class="visible-xs">{% trans %}Profile{% endtrans %}</h1>
+
+        {% trans_default_domain 'FOSUserBundle' %}
+
+        {{ form_start(form, {'action': path('fos_user_profile_edit'), 'attr': {'role':'form' } }) }}
+        {{ form_errors(form) }}
+
+        <div class="form-content">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <div class="media clearfix">
+                            <div class="pull-left">
+                                <img src="{{ include("LoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" class="profile-picture">
+                                <button type="button" class="btn btn-xs btn-link btn-block change-picture" title="{% trans %}Upload another picture{% endtrans %}">{{ 'Change' | trans }}</button>
+                            </div>
+                            <div class="media-body">
+                                <h2 class="media-heading personal-info">{{ 'Personal Information' | trans }}</h2>
+                                {{ app.user.shortDisplayName }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-info picture-upload-box" style="margin-bottom: 0">
+                    <div class="panel-heading clearfix">
+                        <div class="file-upload">
+                            <div class="buttons-toggle" data-toggle="buttons" role="group">
+                                {% set imageDeleteName = (form.image.delete is defined) ? form.image.delete.vars.full_name : 'img-button' %}
+                                {% if form.image.delete is defined %}
+                                    {% do form.image.delete.setRendered %}
+                                    {% if app.user.socialNetworksPicture is not null %}
+                                        <label class="btn btn-lg btn-info btn-external-pic-preview" data-toggle="tooltip" data-placement="bottom" title="{{ 'Use your Facebook picture' | trans }}">
+                                            <input class="use-facebook" type="radio" name="{{ form.image.delete.vars.full_name }}" autocomplete="off">
+                                            <img class="facebook-profile-pic-preview" src="{{ app.user.socialNetworksPicture }}" >
+                                        </label>
+                                    {% else %}
+                                        <label class="btn btn-lg btn-danger">
+                                            <input type="radio" name="{{ form.image.delete.vars.full_name }}" autocomplete="off">
+                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                        </label>
+                                    {% endif %}
+                                {% endif %}
+
+                                <label class="btn btn-lg btn-success btn-upload" data-toggle="tooltip" data-placement="bottom" title="{{ 'Upload another picture' | trans }}">
+                                    <input class="upload-picture" type="radio" name="{{ imageDeleteName }}" value="0">
+                                    <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+                                </label>
+                            </div>
+
+                            <div class="activity-desc">
+                                <span class="upload">{{ 'Your profile picure will be changed to <strong></strong>' | trans | raw }}</span>
+                                <span class="facebook-pic">{{ 'Your Facebook profile picure will be used.' | trans }}</span>
+                            </div>
+
+                            {{ form_widget(form.image.file) }}
+                            {{ form_errors(form.image) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    {{ form_row(form.firstName) }}
+                    {{ form_row(form.surname) }}
+                    {{ form_row(form.birthdate) }}
+                    {{ form_row(form.nationality) }}
+                    {{ include('LoginCidadaoCoreBundle:Form:location.form.html.twig', { form: form.placeOfBirth }) }}
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{ 'Contact Information' | trans }}</h2>
+                </div>
+                <div class="panel-body">
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.mobile) }}
+                </div>
+            </div>
+
+            {% if third_party_login is not empty %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">{{ 'Social Networks and other connections' | trans }}</h2>
+                    </div>
+                    <div class="panel-body">
+                        {% if third_party_login.facebook | default(false) %}
+                            {% if app.user.facebookId is null %}
+                                <div class="connect facebook disabled">
+                                    <a class="col-xs-11 col-xs-offset-1 username" href="{{ path('lc_link_facebook') }}">{{ 'Connect with Facebook' | trans }}</a>
+                                </div>
+                            {% else %}
+                                <div class="connect facebook">
+                                    {% if app.user.facebookUsername is not null %}
+                                        <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.facebookUsername }}</span>
+                                    {% else %}
+                                        <span class="col-xs-9 col-xs-offset-1 username">{{ 'facebook.nousername'|trans }}</span>
+                                    {% endif %}
+                                    {% if app.user.hasPassword %}
+                                        <a class="col-xs-2 unlink text-right"  href="{{ path('lc_unlink_facebook') }}">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if third_party_login.twitter | default(false) %}
+                            {% if app.user.twitterId is null %}
+                                <div class="connect twitter disabled">
+                                    <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="col-xs-11 col-xs-offset-1 username">{{ 'Connect with Twitter' | trans }}</a>
+                                </div>
+                            {% else %}
+                                <div class="connect twitter">
+                                    {% if app.user.twitterUsername is not null %}
+                                        <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.twitterUsername }}</span>
+                                    {% else %}
+                                        <span class="col-xs-9 col-xs-offset-1 username">{{ 'twitter.nousername'|trans }}</span>
+                                    {% endif %}
+                                    {% if app.user.hasPassword %}
+                                        <a class="col-xs-2 unlink text-right" href="{{ path('lc_unlink_twitter') }}">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if third_party_login.google | default(false) %}
+                            {% if app.user.googleId is null %}
+                                <div class="connect google disabled">
+                                    <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google'}) }}" class="col-xs-11 col-xs-offset-1 username">{{ 'Connect with Google' | trans }}</a>
+                                </div>
+                            {% else %}
+                                <div class="connect google">
+                                    {% if app.user.googleUsername is not null %}
+                                        <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.googleUsername }}</span>
+                                    {% else %}
+                                        <span class="col-xs-9 col-xs-offset-1 username">{{ 'google.nousername'|trans }}</span>
+                                    {% endif %}
+                                    {% if app.user.hasPassword %}
+                                        <a class="col-xs-2 unlink text-right" href="{{ path('lc_unlink_google') }}">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row social-networks">
+                    <div class="col-xs-12">
+
+                        <div class="row unlink-confirmation">
+                            <div class="alert alert-danger col-xs-10 col-xs-offset-1">
+                                <p class="title">{% trans %}Do you really want to unlink <strong class="social-network-name"></strong>?{%  endtrans %}</p>
+
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <a href="#" class="btn btn-danger btn-sm btn-block confirm">{% trans %}Yes{% endtrans %}</a>
+                                    </div>
+                                    <div class="col-xs-6 text-right">
+                                        <a role="button" class="btn btn-default btn-sm btn-block cancel">{% trans %}Cancel{%  endtrans %}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="row">
+                {% for type, messages in app.session.flashbag.all() %}
+                    {% for message in messages %}
+                        <div class="col-md-12">
+                            <div class="text-center bg-success flash-{{ type }}">
+                                {{ message }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-bar text-right">
+            <input class="btn btn-success" type="submit" value="{{ 'profile.edit.submit'|trans }}" />
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+                '@LoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
+                '@LoginCidadaoCoreBundle/Resources/public/js/dynamic-form/locationSelect.js'
+    filter='uglifyjs2'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script>
+
+        $('.birthdate').mask('00/00/0000', {'translation': {0: {pattern: /[0-9*]/}}});
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+
+        $(document).ready(function () {
+            locationSelection.formUrl = '{{ path('dynamic_form_location') }}';
+            locationSelection.defaultCountry = $("#{{ form.defaultCountry.vars.id }}").val();
+        });
+
+        $(document).ready(function () {
+            $('.change-picture').click(function () {
+                $('.picture-upload-box').slideToggle();
+            });
+
+            $('.search-cep').click(function (event) {
+                event.preventDefault();
+                validator.cep.popupConsult(this, event, 'profileEdit.popLocation');
+                return false;
+            });
+
+            $(".connect a.unlink").on('click', function () {
+                var confirmDialog = $('.unlink-confirmation');
+                var parent = $(this).parent();
+                var href = $(this).attr('href');
+                var serviceName = '';
+                if (parent.is('.facebook')) {
+                    serviceName = 'facebook';
+                } else if (parent.is('.twitter')) {
+                    serviceName = 'twitter';
+                }
+                confirmDialog.slideUp('fast', function () {
+                    $('a.confirm', $('.unlink-confirmation')).attr('href', href);
+                    $('.social-network-name', $('.unlink-confirmation')).html(serviceName);
+                    confirmDialog.insertAfter(parent).slideDown();
+                });
+
+                return false;
+            });
+
+            $('.unlink-confirmation .cancel').on('click', function () {
+                $('.unlink-confirmation').slideUp();
+            });
+        });
+    </script>
+{% endblock %}

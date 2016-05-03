@@ -1,0 +1,402 @@
+Hello!: Hello!
+Welcome!: Welcome!
+'Welcome to the Citizen''s Login service.': 'Welcome to the Citizen''s Login service.'
+'Here you''ll find all you need to know about the service.': 'Here you''ll find all you need to know about the service.'
+'You might start by logging in or %link_start%registering%link_end%.': 'You might start by logging in or %link_start%registering%link_end%.'
+security.login.username: 'Email or CPF'
+security.login.password: Type your password
+security.login.remember_me: 'Remember me'
+security.login.submit: 'Log in'
+'Welcome %user.name%': 'Welcome %user.name%'
+scope.id: 'Unique Identifier'
+scope.username: Username
+scope.name: Name
+scope.surname: Surname
+scope.full_name: 'Full Name'
+scope.cpf: CPF
+scope.email: Email
+scope.birthdate: Birthdate
+scope.city: City
+scope.badges: Badges
+scope.picture: Picture
+scope.public_profile: Public Profile
+scope_details.public_profile: Your public profile contains your first name, age range and your certificates (badges).
+scope.get_all_notifications: Read all your Notifications
+scope.notifications: Send Notifications
+'Authorized Applications': 'Authorized Applications'
+'Description:': 'Description:'
+'Access scope:': 'Access scope:'
+'One account. All that the Government offers.': 'One account. All that the Government offers.'
+'Citizen''s Login': 'Citizen''s Login'
+'Captcha is invalid.': 'Captcha is invalid.'
+'Need help?': 'Need help?'
+'%link_start%Create your account%link_end%': '%link_start%Create your account%link_end%'
+'One account to all of the Government''s services': 'One account to all of the Government''s services'
+'Available services': 'Available services'
+'Privacy and Terms of Service': 'Privacy and Terms of Service'
+Help: Help
+'Available Applications and Sites': 'Available Applications and Sites'
+'Revoke Access': 'Revoke Access'
+'Visit Site': 'Visit Site'
+'Click again to confirm': 'Click again to confirm'
+'Please, wait...': 'Please, wait...'
+Revoked: Revoked
+'Authorize <strong>%client_name%</strong> to access your information?': 'Authorize <strong>%client_name%</strong> to access your information?'
+'<strong>%client_name%</strong> will be granted the following information and permissions:': '<strong>%client_name%</strong> will be granted the following information and permissions:'
+'About <strong>%client_name%</strong>': 'About <strong>%client_name%</strong>'
+'Edit profile': 'Edit profile'
+Username: Username
+Email: Email
+Birthdate: Birthdate
+CPF: CPF
+CEP: CEP
+'We''re almost done!': 'We''re almost done!'
+'Your account is created, but we recommend you choose a better username.': 'Your account is created, but we recommend you choose a better username.'
+'Your username will be used to quickly refer to yourself on Citizen''s Login, just like Twitter''s @ replies.': 'Your username will be used to quickly refer to yourself on Citizen''s Login, just like Twitter''s @ replies.'
+'Username:': 'Username:'
+'We''ll also need you to type your email address, since Twitter didn''t tell it to us.': 'We''ll also need you to type your email address, since Twitter didn''t tell it to us.'
+'Email:': 'Email:'
+'You''ll need a password': 'You''ll need a password'
+'To make sure that you can access the Citizen''s Login even if you lose access to your Facebook or Twitter account, please define a password.': 'To make sure that you can access the Citizen''s Login even if you lose access to your Facebook or Twitter account, please define a password.'
+'Type in your password here:': 'Type in your password here:'
+'And then confirm it here:': 'And then confirm it here:'
+'To confirm your change, type your current password below:': 'To confirm your change, type your current password below:'
+'Current password:': 'Current password:'
+Save: Save
+'Logo Nota Fiscal Gaúcha': 'Logo Nota Fiscal Gaúcha'
+'Useful Information': 'Useful Information'
+'Content License': 'Content License'
+'Privacy Policy': 'Privacy Policy'
+'GitHub Repository': 'GitHub Repository'
+Contact: Contact
+'About the Government': 'About the Government'
+Government: Government
+Profile: Profile
+Services: Services
+Notifications: Notifications
+'Change Username': 'Change Username'
+'Change password': 'Change Password'
+Activate: Activate
+Deactivate: Deactivate
+cpf_reminder.subject: 'We noticed that your account doesn''t have a CPF associated with it yet.'
+cpf_reminder.message: "Hello, %name%\n\nWe noticed that your account doesn''t have a CPF associated with it yet.\n\nPlease consider visiting Citizen''s Login until %date% to complete this information. After that date, your account might be suspended.\n"
+'Toggle Navigation': 'Toggle Navigation'
+'Log in': 'Log in'
+Applications: Applications
+'View all services': 'View all services'
+'View all notifications': 'View all notifications'
+'You don''t have any unread notification.': 'You don''t have any unread notification.'
+'You don''t have any notifications yet.': 'You don''t have any notifications yet.'
+Activated: Activated
+Deactivated: Deactivated
+'Your account is created, but you must have a CPF.': 'Your account is created, but you must have a CPF.'
+'Your CPF will give some realibility to your account.': 'Your CPF will give some realibility to your account.'
+'With only one account': 'With only one account'
+'Access to all services offered by the Government': 'Access to all services offered by the Government'
+'With only the password and CPF. Making accessing the services much simpler.': 'With only the password and CPF. Making accessing the services much simpler.'
+'Create your account': 'Create your account'
+'Change username': 'Change username'
+exception.alreadyLinkedAccount: 'This account is already linked with another user. You have to unlink from that user before linking to this current user.'
+contact.title: 'Fale conosco'
+cpf.registration.title: 'Registro de CPF'
+'Your login': 'Your login'
+'<a href="%link%">Background picture</a> by %name%': '<a href="%link%">Background picture</a> by %name%'
+'Active Services': 'Active Services'
+'Other Services': 'Other Services'
+notification.unconfirmed.email.title: 'Unconfirmed Email!'
+notification.unconfirmed.email.shortText: 'If you don''t confirm you email in due time your account will be erased. Follow instructions sent to your email.'
+notification.unconfirmed.email.text: "<p>To use this system you must use a valid email address.</p> <p>If you don't confirm you email clicking on the link sent to your email address your account will be removed.</p>\n"
+notification.empty.password.title: 'You don''t have a password!'
+notification.empty.password.shortText: 'Click here to define your password.'
+notification.empty.password.text: ''
+'This service is already active in your Citizen''s Login account': 'This service is already active in your Citizen''s Login account'
+'Deactivate this service': 'Deactivate this service'
+'This service is not active in your Citizen''s Login account': 'This service is not active in your Citizen''s Login account'
+'Activate this service': 'Activate this service'
+social-networks.unlink.no-password: 'You must define a password before unlinking any social network.'
+social-networks.unlink.facebook.success: 'Facebook successfully unlinked.'
+social-networks.unlink.twitter.success: 'Twitter successfully unlinked.'
+'Mark as read': 'Mark as read'
+'New Service': 'New Service'
+Name: Name
+Description: Description
+URL: URL
+'Redirect URIs': 'Redirect URIs'
+'Allowed Scopes': 'Allowed Scopes'
+'Allowed Grant Types': 'Allowed Grant Types'
+'Landing Page': 'Landing Page'
+'Terms of Use': 'Terms of Use'
+'Upload another picture': 'Upload another picture'
+Create: Create
+Service: Service
+Actions: Actions
+Details: Details
+Edit: Edit
+'No services registered.': 'No services registered.'
+Public id : Public Key (Public Id)
+Secret : Private Key (Secret)
+'Secret/Private Key': 'Secret/Private Key'
+'Public Id': 'Public Id'
+Active: Active
+'There are no active services yet.': 'There are no active services yet.'
+Inactive: Inactive
+'Suggest a Service': 'Suggest a Service'
+Suggestion: Suggestion
+Send: Send
+'Your last suggested Services': 'Your last suggested Services'
+'Login Cidadão': 'Citizen Login'
+'Do you really want to disable this service?': 'Do you really want to disable this service?'
+Yes: Yes
+No: No
+'This service uses the following data from your Login Citizen account': 'This service uses the following data from your Login Citizen account'
+'This service is not available yet. Stay tuned for the launch date.': 'This service is not available yet. Stay tuned for the launch date.'
+
+'With only one account, the citizen will be able to use government''s digital services.': 'With only one account, the citizen will be able to use government''s digital services.'
+'One account. The entire Government.': 'One account. The entire Government.'
+'Creative commons': Creative commons
+lc.html.title: 'Citizen''s Login'
+'About Citizen''s Login': 'About Citizen''s Login'
+'This is the Citizen Login': 'This is the Citizen Login'
+'To enjoy all the benefits of Citizen Login, please check your information and submit the following form.': 'To enjoy all the benefits of Citizen Login, please check your information and submit the following form.'
+'After registering you''ll receive a confirmation email to proceed the activation of your account.': 'After registering you''ll receive a confirmation email to proceed the activation of your account.'
+scope.country: 'Country'
+scope.state: State
+scope.address: Address
+scope.rgs: 'RGs'
+scope.cep: 'CEP'
+scope.mobile: 'Mobile'
+Addresses: Addresses
+address.name: Address Identification
+'ex: Home Address': 'ex: Home Address'
+'ex: 221B Baker Street': 'ex: 221B Baker Street'
+'ex: apartment 2': 'ex: apartment 2'
+'ex: DE24 8SG': 'ex: DE24 8SG'
+'ex: London': 'ex: London'
+New Address: New Address
+Are you sure you want to remove this address?: Are you sure you want to remove this address?
+Yes, remove: Yes, remove
+Remove: Remove
+If the address is in another country leave the city blank and fill in this information in the second line of your address.: If the address is in another country leave the city blank and fill in this information in the second line of your address.
+No city found.: No city found.
+'You don''t have an address registered yet. Use the button below to add one.': You don't have no address registered yet. Use the button below to add one.
+No more documents: No more documents
+ID Cards: ID Cards
+ID Card: ID Card
+New ID Card: New ID Card
+Add: Add
+Are you sure you want to remove this ID Card?: Are you sure you want to remove this ID Card?
+Click here to <strong>add an ID Card</strong>: Click here to <strong>add an ID Card</strong>
+Two-Factor Authentication: Two-Factor Authentication
+Enter the code generated by your code generator device.: Enter the code generated by your code generator device.
+Authentication Code: Authentication Code
+View this notification on Citizen Login: View this notification on Citizen Login
+contact.form.sent: Your message has been sent. Thank you for contacting us.
+Two-Factor Authentication is <strong>disabled</strong>. To enhance the security level of your account, click Enable.: Two-Factor Authentication is <strong>disabled</strong>. To enhance the security level of your account, click Enable.
+Enable: Enable
+By enabling Two-Factor Authentication you add a very strong layer of security to your account because access will only be granted after typing a code generated by your smartphone.: By enabling Two-Factor Authentication you add a very strong layer of security to your account because access will only be granted after typing a code generated by your smartphone.
+Two-Factor Authentication Activation: Two-Factor Authentication Activation
+Enable Two-Factor Authentication: Enable Two-Factor Authentication
+Two-Factor Authentication is a form of authentication that requires a secret code to be typed after you enter your password.: Two-Factor Authentication is a form of authentication that requires a secret code to be typed after you enter your password.
+The secret code can only be generated by a single device that you own and carry with you and it has a limited lifetime. This way even if someone steals your password, your account will still be protected by that code.: The secret code can only be generated by a single device that you own and carry with you and it has a limited lifetime. This way even if someone steals your password, your account will still be protected by that code.
+Enabling Two-Factor Authentication: Enabling Two-Factor Authentication
+Before you start, make sure to download and install some code generation app onto your smartphone. If you don't know any, we can recommend you Google's Authenticator app.: Before you start, make sure to download and install some code generation app onto your smartphone. If you don't know any, we can recommend you Google's Authenticator app.
+Having the app installed, open it and select the option to add a new service and scan the QRCode below or you can type the secret manually if your app of choice does not have a QRCode scanner.: Having the app installed, open it and select the option to add a new service and scan the QRCode below or you can type the secret manually if your app of choice does not have a QRCode scanner.
+Authenticator Secret: Authenticator Secret
+Activate Two-Factor Authentication: Activate Two-Factor Authentication
+After you finish configuring your code generator app, type the generated code below so that we can make sure it's working correctly.: After you finish configuring your code generator app, type the generated code below so that we can make sure it's working correctly.
+Generated Code: Generated Code
+Invalid code! Make sure you configured your app correctly and your smartphone's time is adjusted.: Invalid code! Make sure you configured your app correctly and your smartphone's time is adjusted.
+scheb_two_factor.code_invalid: Invalid code! Make sure your smartphone's clock is correct.
+Two-Factor Authentication Enabled.: Two-Factor Authentication Enabled.
+Security: Security
+Your account is protected by Two-Factor Authentication. If you wish to disable it you can do so further below.: Your account is protected by Two-Factor Authentication. If you wish to disable it you can do so further below.
+Backup Codes: Backup Codes
+Backup Codes are special codes that can be used to access your account. They can be used only once each and replace a regular generated code. Backup Codes are extremelly important to prevent you from losing access to your account if you lose your smartphone.: Backup Codes are special codes that can be used to access your account. They can be used only once each and replace a regular generated code. Backup Codes are extremelly important to prevent you from losing access to your account if you lose your smartphone.
+Your Backup Codes can be found in the following box. Please <strong>save them</strong> in a safe location because if you lose them you can <strong>permanently</strong> lose access to your account.: Your Backup Codes can be found in the following box. Please <strong>save them</strong> in a safe location because if you lose them you can <strong>permanently</strong> lose access to your account.
+Disable Two-Factor Authentication: Disable Two-Factor Authentication
+Currently your account safety is pretty good. If for some reason you need to disable Two-Factor Authentication you can do so in the button below.: Currently your account safety is pretty good. If for some reason you need to disable Two-Factor Authentication you can do so in the button below.
+If you change your mind, remember that you can always enable it back again.: If you change your mind, remember that you can always enable it back again.
+Confirm Two-Factor Authentication Deactivation: Confirm Two-Factor Authentication Deactivation
+'By disabling Two-Factor Authentication you are reducing your account''s security.': 'If you want to proceed, type your account''s password to confirm:'
+'If you want to proceed, type your account''s password to confirm': 'If you want to proceed, type your account''s password to confirm:'
+I understand the risks. Disable Two-Factor Authentication: I understand the risks. Disable Two-Factor Authentication
+Keep it activated: Keep it activated
+Generate new Backup Codes: Generate new Backup Codes
+If your backup codes have been compromised or if you have already used too many of them, you can click the button bellow to generate new ones, but keep in mind that the current Backup Codes you see above will be <strong>deleted</strong> and will stop working.: If your backup codes have been compromised or if you have already used too many of them, you can click the button bellow to generate new ones, but keep in mind that the current Backup Codes you see above will be <strong>deleted</strong> and will stop working.
+'To prevent unauthorized Backup Code generation type your password to confirm:': 'To prevent unauthorized Backup Code generation type your password to confirm:'
+Confirm Backup Codes Generation: Confirm Backup Codes Generation
+ROLE_USER: User
+ROLE_FACEBOOK: Linked with Facebook
+ROLE_DEV: Developer
+ROLE_SUPER: Super User
+ROLE_ADMIN: Administrator
+ROLE_SUPER_ADMIN: Super Administrator
+FEATURE_PROD: Production Features
+FEATURE_ALPHA: Alpha Features
+FEATURE_BETA: Beta Features
+FEATURE_2FACTOR_AUTH: Two Factor Authentication Feature
+birthdate.format: 'm/d/Y'
+Activity Log: Activity Log
+Badges: Badges
+You don't have any activity log.: You don't have any activity log.
+'Select a state below:': 'Select a state below:'
+Firstname: First name
+Surname: Surname
+'After completing your information, click the following button to continue:': 'After completing your information, click the following button to continue:'
+<strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.: <strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.
+Personal Details: Personal Details
+Complete Missing Fields: Complete Missing Fields
+If you prefer, it's possible to use other services to login or create your account.: If you prefer, it's possible to use other services to login or create your account.
+Type your password to confirm the activation.: Type your password to confirm the activation.
+Current password: Current password
+<strong>%client%</strong> requires that you have a validated email in order to proceed.: <strong>%client%</strong> requires that you have a validated email in order to proceed.
+Validating your email address is pretty simple and fast. You just have to click the link or button in the email we sent you.: Validating your email address is pretty simple and fast. You just have to click the link or button in the email we sent you.
+After you validate your email address this screen will change automatically and you'll proceed to <strong>%client%</strong>.: After you validate your email address this screen will change <strong>automatically</strong> and you'll proceed to <strong>%client%</strong>.
+I'm having trouble finding the confirmation email: I'm having trouble finding the confirmation email
+If you are having trouble to find the confirmation email, please make sure it isn't in the junk mail section of your email program or site.: If you are having trouble to find the confirmation email, please make sure it isn't in the junk mail section of your email program or site.
+If you are certain the email was not received, it's possible that you mistyped your email address. You can change you email address below.: If you are certain the email was not received, it's possible that you mistyped your email address. You can change you email address below.
+If your email is mistyped, correct it and click the following button.: If your email is mistyped, correct it and click the following button.
+Change Email: Change Email
+Your email was successfully validated.: Your email was successfully validated.
+Back to %client%: Back to %client%
+Mobile: Mobile
+Copy: Copy
+Copied: Copied
+Press CTRL + C or ⌘ + C to copy: Press CTRL + C or ⌘ + C to copy
+Users: Users
+No recent activity: No recent activity
+Information about authorizations granted to services.: Information about authorizations granted to services.
+See how many users have each badge.: See how many users have each badge.
+Users by Location: Users by Location
+Information about people's location. Either by <a href="%country_url%">Country</a> or by <a href="%state_url%">State</a>: Information about people's location. Either by <a href="%country_url%">Country</a> or by <a href="%state_url%">State</a>
+organizations:
+    menu.label: Organizations
+    page.title: Organizations
+    list:
+        user:
+            title: My Organizations
+            empty: You are not in any Organization
+        all:
+            title: Other Organizations
+            empty: There are no Organizations
+    new:
+        title: New Organization
+        form_title: New Organization
+        form_action_label: Create
+        button_title: Create Organization
+        button_label: New Organization
+    edit:
+        title: Editing Organization %name%
+        form_title: Editing Organization %name%
+        form_action_label: Save
+    show:
+        title: %name% information
+        services_count:
+            label: Services Available
+            count: '{0} No services|{1} One service|]1,Inf[ %count% services'
+        members_count:
+            label: Members
+            count: '{0} No members|{1} One member|]1,Inf[ %count% members'
+    form:
+        name.label: Name
+        domain.label: Domain
+        sectorIdentifierUri.label: Sector Identifier URI
+        validationUrl.label: Validation Url
+        trusted.label: Trusted Organization
+        members:
+            label: Members
+            search.label: Search by Tax ID, email, name or username
+            name.label: Name
+        delete:
+            panel.title: Delete <strong>%name%</strong>?
+            warn: 'Deleting an organization cannot be undone. If you do it by mistake you''ll have to create another organization and bind it''s services again.'
+            button: Delete
+            confirm: 'Are you sure you want to delete this organization? This organization''s services will have no organization bound to it!'
+            yes: Yes, DELETE this organization
+            no: Don't delete it
+            success: Organization %name% was deleted.
+        client_form.placeholder: Select an Organization
+    validation:
+        not_verified: Pending Validation
+        verified: Verified
+        instructions: To validate this organization, create a file in the given domain containing the following code and type the address to this file in the field %input%.
+        on_authorize:
+            warn_not_verified:
+                attention: Caution!
+                text: 'This service is being offered by an unverified organization. Check, below, this organization''s information before authorizing this service.'
+            info:
+                provided_by: This service is offered by <strong>%name%</strong> (<a class="text-danger">%domain%</a>).
+                warn_trust: Authorize it only if you trust <strong>%name%</strong>
+                domain_verified: Domain Verified
+                domain_not_verified: Domain not Verified
+                no_organization:
+                    provided_by: This service isn't bound to any organization
+                    warn_trust: <strong>Do not authorize</strong> if you are not sure this is a trustworthy service
+    trust:
+        warn_untrusted:
+            attention: Caution!
+            text: This service is offered by an organization we do not trust. Athorize only if you trust this organization.
+FEATURE_ORGANIZATIONS: Organizations Feature
+ROLE_ORGANIZATIONS_BIND_CLIENT: 'Organizations: can bind services to organizations where is member'
+ROLE_ORGANIZATIONS_BIND_CLIENT_ANY_ORG: 'Organizations: can bind services to any organization'
+ROLE_ORGANIZATIONS_CREATE: 'Organizations: can create organizations'
+ROLE_ORGANIZATIONS_EDIT: 'Organizations: can edit organizations where is member'
+ROLE_ORGANIZATIONS_EDIT_ANY_ORG: 'Organizations: can edit any organizations'
+ROLE_ORGANIZATIONS_VALIDATE: 'Organizations: can validate organization''s domains'
+ROLE_ORGANIZATIONS_LIST_ALL: 'Organizations: can list organizations where is not a member'
+ROLE_ORGANIZATIONS_DELETE: 'Organizations: can delete organizations where is a member'
+ROLE_ORGANIZATIONS_DELETE_ANY_ORG: 'Organizations: can delete any organizations'
+ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG: 'Organizations: can manage members of any organization'
+ROLE_ORGANIZATIONS_CAN_TRUST: 'Organizations: can flag an organization as trusted'
+access_log:
+    panel_title: Access Log
+    date.format: m/d/Y H:i
+    login: Access from <span class="label label-info">%ip%</span>, <span class="label label-info">%date%</span>
+    impersonation: <span class="label label-info">Technical support</span>, <span class="label label-info">%date%</span>
+    page.title: Access Log
+activity_log:
+    page.title: Services Activity Log
+log.date.format: 'm/d/Y H:i:s'
+admin:
+    title: Admin Area
+    impersonation_report:
+        menu: Impersonation Reports
+        title: Impersonation Reports
+        disclosure: '<strong>All</strong> information contained in reports can be requested by the target users at any time.'
+        pending:
+            title: Pending Reports
+            list_item: <strong>%log_id%</strong> - %date% - %person%
+            notification: '{1} You have a pending report. <a href="%url%">Click here</a> to fill it.|]1,Inf[ You have %count% reports pending. <a href="%url%">Click here</a> to fill them.'
+        list:
+            title: Reports
+            list_item: <strong>%date%</strong> - %person%
+            list_item_complete: <span class="label label-info">%impersonator%</span>, %date%
+        new:
+            title: New Impersonation Report
+            submit: Create
+        edit:
+            title: Editing Impersonation Report
+            submit: Save
+        form:
+            target.label: 'Target person:'
+            datetime.label: 'Access date and time:'
+            last_update.label: 'Last update:'
+            cancel.button: Cancel
+            report:
+                label: Report
+                help: Make a brief report about the reasons and actions related to this access.
+    apps.list: 'Manage Apps'
+    sugg:
+        list: 'Manage Suggestions'
+        list.title: 'Search Suggestions'
+        show.title: 'Suggestion'
+    person:
+        list: 'Manage People'
+        list.title:  'Search People'
+force_password_change:
+    description: Please update your password to improve your account's security.
+invalidate_sessions:
+    title: Disconnect All Sessions
+    description: By clicking the following button all your sessions will be disconnected. This is useful if you forgot you account connected in a computer and wants to be sure nobody can use your account from that computer until you log back in.
+    form.button: Disconnect All Sessions
+2fa.collapse: Show Options

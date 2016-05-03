@@ -1,0 +1,9 @@
+lc_core:
+    resource: "../../src/LoginCidadao/CoreBundle/Controller/"
+    type: annotation
+    prefix: /
+
+meurs_core:
+    resource: "@PROCERGSLoginCidadaoCoreBundle/Controller/"
+    type: annotation
+    prefix: /

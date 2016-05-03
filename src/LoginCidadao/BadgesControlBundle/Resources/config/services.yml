@@ -1,0 +1,21 @@
+parameters:
+    badges.handler.class: LoginCidadao\BadgesControlBundle\Handler\BadgesHandler
+    lc.badges_control.subscriber.class: LoginCidadao\BadgesControlBundle\Event\BadgesSubscriber
+    lc_badges_control.serializer.subscriber.class: LoginCidadao\BadgesControlBundle\Event\SerializationSubscriber
+
+services:
+    badges.handler:
+        class: %badges.handler.class%
+        arguments: [ "@event_dispatcher" ]
+
+    lc.badges_control.subscriber:
+        class: %lc.badges_control.subscriber.class%
+        arguments: [ "@badges.handler" ]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    lc_badges_control.serializer.subscriber:
+        class: %lc_badges_control.serializer.subscriber.class%
+        arguments: [ "@badges.handler" ]
+        tags:
+            - { name: jms_serializer.event_listener, event: serializer.pre_serialize, method: onPreSerialize }

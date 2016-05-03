@@ -1,0 +1,44 @@
+<div class="panel panel-default">
+    <div class="panel-heading clearfix">
+        <div class="panel-title">{{ panel_title }}</div>
+    </div>
+    {{ form_start(form) }}
+    <div class="panel-body">
+        {{ form_row(form.name) }}
+        {{ form_row(form.domain) }}
+        {{ form_row(form.sectorIdentifierUri) }}
+        {% if is_granted('ROLE_ORGANIZATIONS_VALIDATE') and organization is defined %}
+            {{ form_row(form.validationUrl) }}
+            <div class="well">
+                <p>{{ 'organizations.validation.instructions' | trans({'%input%': 'organizations.form.validationUrl.label' | trans}) | raw }}</p>
+                <p class="text-center"><strong>{{ organization.validationSecret }}</strong></p>
+            </div>
+        {% endif %}
+
+        {% if form.trusted is defined %}
+            {{ form_row(form.trusted) }}
+        {% endif %}
+
+        {% if form.members is defined and (is_granted('ROLE_ORGANIZATIONS_MANAGE_MEMBERS') or is_granted('ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG')) %}
+            {{ form_row(form.members) }}
+        {% endif %}
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-md-6">
+                {% if organization is defined and (is_granted('ROLE_ORGANIZATIONS_DELETE') or is_granted('ROLE_ORGANIZATIONS_DELETE_ANY_ORG')) %}
+                    {{ include('LoginCidadaoOAuthBundle:Organization:fragment.delete.button.html.twig') }}
+                {% endif %}
+            </div>
+            <div class="col-md-6 text-right">
+                <a href="{{ form_cancel_url }}" class="btn">{{ 'Cancel' | trans }}</a>
+                <button type="submit" class="btn btn-success">{{ form_action_label }}</button>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>
+
+{% if organization is defined and (is_granted('ROLE_ORGANIZATIONS_DELETE') or is_granted('ROLE_ORGANIZATIONS_DELETE_ANY_ORG')) %}
+    {{ render(controller('LoginCidadaoOAuthBundle:Organization:delete', { 'id': organization.id })) }}
+{% endif %}
