@@ -1,0 +1,9 @@
+{% extends "LoginCidadaoCoreBundle:Document:documents.html.twig" %}
+
+{% block id_card_forms_placeholder %}
+    <div class="id-card-forms-placeholder">
+        {{ form_start(form, {'action': path('lc_person_id_cards_edit', { id: id }), 'attr': {'role':'form', 'id': 'form-rg' } }) }}
+        {{ include("LoginCidadaoCoreBundle:IdCard:form.component.html.twig", {'form': form.address }) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock id_card_forms_placeholder %}

@@ -1,7 +1,0 @@
-<section class="component notifications {% if navbar is defined and navbar %}small{% endif %}">
-{% for notification in notifications %}
-    <a class="media clearfix" href="#" data-notification-id="{{ notification.id }}">
-        {{ include('PROCERGSLoginCidadaoNotificationBundle:Notification:item.component.html.twig', { 'notification': notification } ) }}
-    </a>
-{% endfor %}
-</section>

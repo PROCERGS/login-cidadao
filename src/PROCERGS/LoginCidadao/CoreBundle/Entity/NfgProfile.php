@@ -1,4 +1,5 @@
 <?php
+
 namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -13,7 +14,6 @@ use JMS\Serializer\Annotation\Groups;
  */
 class NfgProfile
 {
-
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -68,7 +68,7 @@ class NfgProfile
      * @Groups({"nfgprofile"})
      */
     protected $updatedAt;
-    
+
     /**
      * @ORM\Column(name="voter_reg_sit", type="integer", nullable=true)
      * @Groups({"nfgprofile"})
@@ -168,12 +168,12 @@ class NfgProfile
         $this->voterRegistrationSit = $var;
         return $this;
     }
-    
+
     public function getVoterRegistrationSit()
     {
         return $this->voterRegistrationSit;
     }
-    
+
     /**
      * @ORM\PrePersist
      * @ORM\PreUpdate

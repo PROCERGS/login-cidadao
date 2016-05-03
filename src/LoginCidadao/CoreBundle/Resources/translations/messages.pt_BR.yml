@@ -1,0 +1,822 @@
+Hello!: Olá!
+Welcome!: Bem-vindo!
+'Welcome to the Citizen''s Login service.': 'Seja bem-vindo ao Login Cidadão.'
+'Here you''ll find all you need to know about the service.': 'Aqui você encontrará tudo que você precisa saber sobre esse serviço.'
+'You might start by logging in or %link_start%registering%link_end%.': 'Você pode começar acessando o sistema ou %link_start%cadastrando-se%link_end%.'
+security.login.username: 'Email ou CPF'
+security.login.password: Digite sua senha
+security.login.remember_me: 'Lembrar meus dados'
+security.login.submit: Entrar
+'Welcome %user.name%': 'Bem-vindo, %user.name%'
+scope.id: 'Identificador Único'
+scope.username: Username
+scope.name: Nome
+scope.surname: Sobrenome
+scope.full_name: 'Nome Completo'
+scope.cpf: CPF
+scope.email: Email
+scope.birthdate: 'Data de Nascimento'
+scope.city: Cidade
+scope.badges: Medalhas
+scope.picture: Foto
+scope.public_profile: 'Perfil Público'
+scope_details.public_profile: São informações do perfil público o seu primeiro nome, sua faixa etária e seus certificados (medalhas)
+scope.get_all_notifications: 'Ler suas Notificações'
+scope.notifications: 'Enviar Notificações'
+'Authorized Applications': 'Aplicativos Autorizados'
+'Description:': 'Descrição:'
+'Access scope:': 'Escopo de acesso:'
+'Revoke Access': 'Revogar Acesso'
+'Visit Site': 'Visitar Site'
+'Click again to confirm': 'Clique para confirmar'
+'Please, wait...': 'Por favor, aguarde...'
+Revoked: Revogado
+'Available Applications and Sites': 'Sites e Aplicativos Disponíveis'
+'Authorization successfully revoked.': 'Autorização revogada com sucesso.'
+'Authorization not found.': 'Autorização não encontrada.'
+'Captcha is invalid.': 'Captcha invalido.'
+'Wasn''t possible to disable this service.': 'Não foi possível desativar este serviço.'
+'Access Denied.': 'Acesso negado.'
+'Citizen''s Login': 'Login Cidadão'
+'One account. All the Government.': 'Um cadastro. Acesso por todo o Governo'
+'%link_start%Create your account%link_end%': '%link_start%Crie seu Login Cidadão%link_end%'
+'Sign in with your Citizen''s Login': 'Acesse com seu Login Cidadão'
+'One account. All that the Government offers.': 'Uma conta. Tudo o que o Governo oferece.'
+'Need help?': 'Não consegue conectar?'
+'One account to all of the Government''s services': 'Uma conta única para todos os serviços do Governo'
+'Available services': 'Serviços disponíveis'
+'Privacy and Terms of Service': 'Privacidade e Termos de Uso'
+Help: Ajuda
+'Logo Nota Fiscal Gaúcha': 'Logo Nota Fiscal Gaúcha'
+'We''re almost done!': 'Quase pronto!'
+'Your account is created, but we recommend you choose a better username.': 'Sua conta foi criada, mas recomendamos que escolha um nome de usuário melhor.'
+'Your username will be used to quickly refer to yourself on Citizen''s Login, just like Twitter''s @ replies.': 'Seu nome de usuário será usado para se referir a você rapidamente no Login Cidadão, da mesma forma que as citações com @ do Twitter.'
+'Username:': 'Username:'
+Save: Salvar
+'You''ll need a password': 'Você precisa de uma senha'
+'To make sure that you can access the Citizen''s Login even if you lose access to your Facebook or Twitter account, please define a password.': 'Para garantir que você consiga acessar seu Login Cidadão mesmo que você perca acesso às suas contas do Facebook ou do Twitter, por favor defina uma senha.'
+'Type in your password here:': 'Digite sua senha aqui:'
+'And then confirm it here:': 'E confirme ela aqui:'
+'Save username and password': 'Salvar nome de usuário e senha'
+'We''ll also need you to type your email address, since Twitter didn''t tell it to us.': 'Nós também precisaremos que você digite seu email, já que o Twitter não repassa essa informação.'
+'Email:': 'Email:'
+'The email is already used': 'Este email já está sendo usado'
+'The username is already used': 'Este nome de usuário já está sendo usado'
+Username: 'Nome de usuário'
+Email: Email
+Birthdate: 'Data de Nascimento'
+CPF: CPF
+CEP: CEP
+'To confirm your change, type your current password below:': 'Para confirmar suas alterações, digite sua senha atual abaixo:'
+'Current password:': 'Senha atual:'
+'Authorize <strong>%client_name%</strong> to access your information?': 'Permitir que <strong>%client_name%</strong> acesse suas informações?'
+'<strong>%client_name%</strong> will be granted the following information and permissions:': 'As seguintes informações e permissões serão fornecidas para <strong>%client_name%</strong>:'
+'About <strong>%client_name%</strong>': 'Sobre <strong>%client_name%</strong>'
+'Edit profile': 'Editar informações'
+cpf_reminder.subject: 'Você não tem um CPF associado no Login Cidadão'
+cpf_reminder.message: "Olá, %name%\n\nNós notamos que sua conta não tem um CPF associado a ela ainda.\n\nPor favor, visite o Login Cidadão até o dia %date% para completar essa informação. Após essa data, sua conta poderá ser suspensa.\n"
+Activated: Ativado
+Active: Ativado
+Deactivated: Desativado
+Inactive: Inativo
+'Connect using Facebook': 'Conectar usando Facebook'
+'Open your account': 'Abra sua conta'
+'Toggle Navigation': 'Abrir/fechar Menu'
+'Log in': Entrar
+'Connect using Twitter': 'Conectar usando Twitter'
+'With only one account': 'Com apenas uma conta'
+'Access to all services offered by the Government': 'Acesse todos os serviços oferecidos pelo governo do estado'
+'With only the password and CPF. Making accessing the services much simpler.': 'Com apenas sua senha e seu CPF. Tornando o acesso aos serviços muito mais simples.'
+'Create your account': 'Crie sua conta'
+'Your login': 'Seu login'
+Profile: Perfil
+Services: Serviços
+Notifications: Notificações
+'Change password': 'Alterar senha'
+Settings: Configurações
+Situation: 'Situação do cadastro'
+Activate: Ativar
+Deactivate: Desativar
+Applications: Aplicativos
+'Your account is created, but you must have a CPF.': 'A sua conta foi criada, mas você precisa de um CPF.'
+'Your CPF will give some realibility to your account.': 'Seu CPF vai dar mais confiabilidade ao seu cadastro.'
+'Change Username': 'Alterar nome de usuário'
+'You don''t have any unread notification.': 'Você não tem notificações não lidas.'
+'You don''t have any notifications yet.': 'Você ainda não possui notificações'
+'Change username': 'Alterar nome de usuário'
+'Updated username successfully!': 'Nome de usuário alterado com sucesso!'
+'View all notifications': 'Ver todas notificações'
+email-confirmation.resent: 'As instruções para confirmação de email foram reenviadas.'
+notification.unconfirmed.email.title: 'Email não confirmado!'
+notification.unconfirmed.email.shortText: 'Caso não confirme seu email em prazo hábil, sua conta será removida. Siga as instruções enviadas por email. <a href="%url%">Reenviar email</a>'
+notification.unconfirmed.email.text: "<p>Para utilizar o Login Cidadão, é necessário que você utilize um endereço de email válido.</p> <p>Caso você não confirme seu endereço de email acessando o link que lhe foi enviado, sua conta será excluída.</p>\n"
+notification.empty.password.title: 'Você não tem uma senha!'
+notification.empty.password.shortText: 'Para melhorar sua segurança e reduzir o risco de ficar sem acesso à sua conta, crie uma senha'
+notification.empty.password.text: ''
+notification.empty.password.click.here: 'clicando aqui'
+'Useful Information': 'Informações Úteis'
+'Content License': 'Licença do Conteúdo'
+'Privacy Policy': 'Política de Privacidade'
+'GitHub Repository': 'Repositório no GitHub'
+Contact: Contato
+'About the Government': 'Sobre o Governo'
+Government: Governo
+'view all services': 'ver todos serviços'
+exception.alreadyLinkedAccount: 'Essa conta já está conectada a um outro usuário. Você deve desfazer essa conexão antes de tentar linkar com o usuário atual.'
+'<a href="%link%">Background picture</a> by %name%': '<a href="%link%">Imagem de fundo</a> por %name%'
+contact.title: 'Contato'
+cpf.registration.title: 'Registro de CPF'
+'Active Services': 'Serviços Ativos'
+'Other Services': 'Demais serviços'
+'Log in using your Citizen''s Login': 'Entre usando seu Login Cidadão'
+'This service is already active in your Citizen''s Login account': 'Este serviço já está ativo na sua conta do Login Cidadão'
+'This service is not active in your Citizen''s Login account': 'Este serviço não está ativo na sua conta do Login Cidadão'
+'Activate this service': 'Ativar este serviço'
+'Deactivate this service': 'Desativar este serviço'
+'Do you really want to disable this service?': 'Você quer mesmo desativar este serviço?'
+Yes: Sim
+No: Não
+'This service uses the following data from your Login Citizen account': 'Este serviço utiliza os seguintes dados da sua conta do Login Cidadão'
+'Mark as read': 'Marcar como lido'
+social-networks.unlink.no-password: 'Você não pode desvincular uma rede social sem definir uma senha antes.'
+social-networks.unlink.facebook.success: 'Facebook desvinculado com sucesso.'
+social-networks.unlink.twitter.success: 'Twitter desvinculado com sucesso.'
+'Upload another picture': 'Enviar outra imagem'
+'New Service': 'Novo Serviço'
+Service: Serviço
+URL: URL
+Actions: Ações
+Details: Detalhes
+Edit: Editar
+'No services registered.': 'Nenhum Serviço registrado'
+'There are no active services yet.': 'Você ainda não possui nenhum serviço ativo.'
+Name: Nome
+Description: Descrição
+'Redirect uris': 'URIs para Redirectionamento'
+'Landing page url': 'URL da pagina de destino'
+'Terms of use url': 'URL dos Termos de Uso'
+'Site url': 'URL do site'
+more: 'Mais'
+'Published' : 'Publicado'
+'Visible' : 'Visível'
+Public id : Chave Pública (Identificado Público)
+Secret : Chave Privada (Secret)
+Create: Criar
+'Secret/Private Key': 'Segredo/Chave Privada'
+'Public Id': 'Identificador Público'
+registration.email.registered: 'Esse e-mail já está sendo utilizado'
+'Suggest a Service': 'Sugira um serviço'
+Suggestion: Sugestão
+client.suggestion.registered: 'Sua sugestão foi registrada'
+'Your last suggested Services': 'Seus últimos serviços sugeridos'
+Send: Enviar
+'Login Cidadão': 'Login Cidadão'
+'About Citizen''s Login': 'Sobre o Login Cidadão'
+'This service is not available yet. Stay tuned for the launch date.': 'Esse serviço ainda não está ativo. Aguarde a data de lançamento.'
+recaptcha.instructions.image: 'Digite o texto:'
+recaptcha.instructions.audio: 'Digite o que você ouve:'
+recaptcha.instructions.new.challenge: 'Obter um novo desafio'
+recaptcha.instructions.new.image: 'Obter um desafio visual'
+recaptcha.instructions.new.audio: 'Obter um desafio de áudio'
+recaptcha.instructions.help: 'Ajuda'
+recaptcha.instructions.img: 'Imagem de desafio reCAPTCHA'
+'With only one account, the citizen will be able to use government''s digital services.': 'Com apenas um cadastro, o cidadão poderá utilizar os serviços digitais do governo.'
+'One account. The entire Government.': 'Uma conta. O Governo Inteiro.'
+'Creative commons': Licença creative commons
+lc.html.title: 'Login Cidadão'
+form.published: 'Publicado'
+form.visible: 'Visivel'
+grid.search.noresult: 'Nenhum registro encontrado'
+grid.search.title: Resultados
+grid.search.button: Pesquisar
+sugg.username: 'Nome do usuario'
+sugg.createdAt: 'Criado em '
+sugg.shorttext: 'Resumo'
+sugg.text: 'Sugestão'
+sugg.dateini: 'Data inicial'
+sugg.dateend: 'Data final'
+facebook.token.error: 'Aparentemente houve um erro a autenticação com o Facebook. Por favor, tente logar novamente!'
+facebook.nousername: 'Conectado ao Facebook'
+twitter.nousername: 'Conectado ao Twitter'
+'Page not found.': 'Página não encontrada.'
+'This e-mail is already confirmed.': 'Este e-mail já está confirmado.'
+social-networks.unlink.google.success: 'Google desvinculado com sucesso.'
+google.nousername: 'Conectado ao Google'
+Cpf: 'CPF'
+Country: 'Pais'
+State: Estado
+City: 'Cidade'
+Address: Endereço
+'Documents': 'Documentos'
+'Documents were successfully changed': 'Documentos foram alterados com sucesso'
+'cep not match country mask.': 'CEP não é válido para o pais selecionado.'
+'cep not found.': 'CEP não encontrado'
+ARUBA: Aruba
+AFGHANISTAN: Afeganistão
+ANGOLA: Angola
+ANGUILLA: Anguila
+ALBANIA: Albânia
+ANDORRA: Andorra
+UNITED ARAB EMIRATES: Emirados Árabes Unidos
+ARGENTINA: Argentina
+ARMENIA: Armênia
+AMERICAN SAMOA: Samoa Americana
+ANTARCTICA: Antarctica
+FRENCH SOUTHERN AND ANTARCTIC LANDS: Antárctica Francês
+ANTIGUA AND BARBUDA: Antígua E Barbuda
+AUSTRALIA: Austrália
+AUSTRIA: Áustria
+UNKNOWN: Desconhecido
+GUANTANAMO BAY NAVAL BASE: Base Naval de Guantánamo
+AZERBAIJAN: Azerbaijão
+BURUNDI: Burundi
+BELGIUM: Bélgica
+BENIN: Benin
+BONAIRE, SINT EUSTATIUS, AND SABA: Bonaire, Santo Eustáquio, e Saba
+BURKINA FASO: Burkina Faso
+BANGLADESH: Bangladesh
+BULGARIA: Bulgária
+BAHRAIN: Bahrain
+BAHAMAS, THE: Bahamas
+BOSNIA AND HERZEGOVINA: Bósnia e Herzegovina
+SAINT BARTHELEMY: São Bartolomeu
+BELARUS: Belarus
+BELIZE: Belize
+BERMUDA: Bermuda
+BOLIVIA: Bolívia
+BRAZIL: Brasil
+BARBADOS: Barbados
+BRUNEI: Brunei
+BHUTAN: Butão
+BOUVET ISLAND: Bouvet Island
+BOTSWANA: Botsuana
+CENTRAL AFRICAN REPUBLIC: Central Africano República
+CANADA: Canada
+COCOS (KEELING) ISLANDS: Cocos (KEELING) Ilhas
+SWITZERLAND: Suíça
+CHILE: Chile
+CHINA: China
+CÔTE D’IVOIRE: Costa Do Marfim
+CAMEROON: Camarões
+CONGO (KINSHASA): Congo (KINSHASA)
+CONGO (BRAZZAVILLE): Congo (BRAZZAVILLE)
+COOK ISLANDS: Ilhas Cook
+COLOMBIA: Colômbia
+COMOROS: Comores
+CLIPPERTON ISLAND: Ilha Clipperton
+CABO VERDE: Cabo Verde
+COSTA RICA: Costa Rica
+CUBA: Cuba
+CURAÇAO: Curaçao
+CHRISTMAS ISLAND: Ilha De Natal
+CAYMAN ISLANDS: Ilhas Cayman
+CYPRUS: Chipre
+CZECH REPUBLIC: República Checa
+GERMANY: Alemanha
+DIEGO GARCIA: Diego Garcia
+DJIBOUTI: Djibouti
+DOMINICA: Dominica
+DENMARK: Dinamarca
+DOMINICAN REPUBLIC: República Dominicana
+ALGERIA: Argélia
+ECUADOR: Equador
+EGYPT: Egito
+ERITREA: Eritréia
+WESTERN SAHARA: Sahara Ocidental
+SPAIN: Espanha
+ESTONIA: Estónia
+ETHIOPIA: Etiópia
+FINLAND: Finlândia
+FIJI: Fiji
+FALKLAND ISLANDS (ISLAS MALVINAS): Das Malvinas (ISLAS Malvinas)
+FRANCE: France
+FAROE ISLANDS: Ilhas Faroe
+MICRONESIA, FEDERATED STATES OF: Micronésia Of
+GABON: Gabão
+UNITED KINGDOM: Reino Unido
+GEORGIA: Georgia
+GUERNSEY: Guernsey
+GHANA: Gana
+GIBRALTAR: Gibraltar
+GUINEA: Guiné
+GUADELOUPE: Guadalupe
+GAMBIA, THE: Gâmbia
+GUINEA-BISSAU: Guiné-Bissau
+EQUATORIAL GUINEA: Guiné Equatorial
+GREECE: Grécia
+GRENADA: Granada
+GREENLAND: Groenlândia
+GUATEMALA: Guatemala
+FRENCH GUIANA: Guiana Francesa
+GUAM: Guam
+GUYANA: Guiana
+HONG KONG: Hong Kong
+HEARD ISLAND AND MCDONALD ISLANDS: Heard E Mcdonald Ilhas
+HONDURAS: Honduras
+CROATIA: Croácia
+HAITI: Haiti
+HUNGARY: Hungria
+INDONESIA: Indonésia
+ISLE OF MAN: Ilha De Man
+INDIA: Índia
+BRITISH INDIAN OCEAN TERRITORY: British Indian Ocean Território
+IRELAND: Irlanda
+IRAN: Irã
+IRAQ: Iraque
+ICELAND: Islândia
+ISRAEL: Israel
+ITALY: Itália
+JAMAICA: Jamaica
+JERSEY: Jersey
+JORDAN: Jordan
+JAPAN: Japan
+KAZAKHSTAN: Cazaquistão
+KENYA: Quênia
+KYRGYZSTAN: Quirguistão
+CAMBODIA: Cambodia
+KIRIBATI: Quiribati
+SAINT KITTS AND NEVIS: São Cristóvão e Névis
+KOREA, SOUTH: Coreia do Sul
+KUWAIT: Kuwait
+LAOS: Laos
+LEBANON: Líbano
+LIBERIA: Libéria
+LIBYA: Líbia
+SAINT LUCIA: Santa Lúcia
+LIECHTENSTEIN: Liechtenstein
+SRI LANKA: Sri Lanka
+LESOTHO: Lesotho
+LITHUANIA: Lituânia
+LUXEMBOURG: Luxemburgo
+LATVIA: Latvia
+MACAU: Macau
+SAINT MARTIN: Saint Martin
+MOROCCO: Marrocos
+MONACO: Monaco
+MOLDOVA: Moldávia
+MADAGASCAR: Madagascar
+MALDIVES: Maldivas
+MEXICO: Mexico
+MARSHALL ISLANDS: Marshall Islands
+MACEDONIA: Macedônia
+MALI: Mali
+MALTA: Malta
+BURMA: Burma
+MONTENEGRO: Montenegro
+MONGOLIA: Mongólia
+NORTHERN MARIANA ISLANDS: Ilhas Marianas do Norte
+MOZAMBIQUE: Moçambique
+MAURITANIA: Mauritânia
+MONTSERRAT: Montserrat
+MARTINIQUE: Martinica
+MAURITIUS: Maurício
+MALAWI: Malawi
+MALAYSIA: Malásia
+MAYOTTE: Mayotte
+NAMIBIA: Namíbia
+NEW CALEDONIA: New Caledonia
+NIGER: Níger
+NORFOLK ISLAND: Norfolk Island
+NIGERIA: Nigéria
+NICARAGUA: Nicarágua
+NIUE: Niue
+NETHERLANDS: Países Baixos
+NORWAY: Noruega
+NEPAL: Nepal
+NAURU: Nauru
+NEW ZEALAND: Nova Zelândia
+OMAN: Omã
+PAKISTAN: Paquistão
+PANAMA: Panamá
+PITCAIRN ISLANDS: Pitcairn Ilhas
+PERU: Peru
+PHILIPPINES: Filipinas
+PALAU: Palau
+PAPUA NEW GUINEA: Papua Nova Guiné
+POLAND: Polónia
+PUERTO RICO: Puerto Rico
+KOREA, NORTH: Coreia do Norte
+PORTUGAL: Portugal
+PARAGUAY: Paraguai
+FRENCH POLYNESIA: Polinésia Francesa
+QATAR: Qatar
+REUNION: Reunion
+ROMANIA: Roménia
+RUSSIA: Rússia
+RWANDA: Ruanda
+SAUDI ARABIA: Arábia Saudita
+SUDAN: Sudão
+SENEGAL: Senegal
+SINGAPORE: Cingapura
+SOUTH GEORGIA AND SOUTH SANDWICH ISLANDS: Geórgia do Sul e Sandwich do Sul
+SAINT HELENA, ASCENSION, AND TRISTAN DA CUNHA: Santa Helena, Ascensão e Tristão da Cunha
+SOLOMON ISLANDS: Ilhas Salomão
+SIERRA LEONE: Serra Leoa
+EL SALVADOR: El Salvador
+SAN MARINO: San Marino
+SOMALIA: Somália
+SAINT PIERRE AND MIQUELON: São Pedro e Miquelon
+SERBIA: Sérvia
+SOUTH SUDAN: Sudão do Sul
+SAO TOME AND PRINCIPE: São Tomé e Príncipe
+SURINAME: Suriname
+SLOVAKIA: Eslováquia
+SLOVENIA: Eslovénia
+SWEDEN: Suécia
+SWAZILAND: Suazilândia
+SINT MAARTEN: Sint Maarten
+SEYCHELLES: Seicheles
+SYRIA: Síria
+TURKS AND CAICOS ISLANDS: Ilhas Turks e Caicos
+CHAD: Chad
+TOGO: Togo
+THAILAND: Tailândia
+TAJIKISTAN: Tajikistan
+TOKELAU: Tokelau
+TURKMENISTAN: Turkmenistan
+TIMOR-LESTE: Timor-Leste
+TONGA: Tonga
+TRINIDAD AND TOBAGO: Trinidad e Tobago
+TUNISIA: Tunísia
+TURKEY: Peru
+TUVALU: Tuvalu
+TAIWAN: Taiwan
+TANZANIA: Tanzânia
+UGANDA: Uganda
+UKRAINE: Ucrânia
+URUGUAY: Uruguai
+UNITED STATES: Estados Unidos
+UZBEKISTAN: Uzbequistão
+VATICAN CITY: Cidade do Vaticano
+SAINT VINCENT AND THE GRENADINES: São Vicente e Granadinas
+VENEZUELA: Venezuela
+VIRGIN ISLANDS, BRITISH: Virgin Islands, British
+VIRGIN ISLANDS, U.S.: Ilhas Virgens, EUA
+VIETNAM: Vietnã
+VANUATU: Vanuatu
+WALLIS AND FUTUNA: Wallis e Futuna
+SAMOA: Samoa
+ASHMORE AND CARTIER ISLANDS: Ashmore e Cartier Ilhas
+BASSAS DA INDIA: Bassas da Índia
+BAKER ISLAND: Baker Island
+CORAL SEA ISLANDS: Ilhas Mar de Coral
+EUROPA ISLAND: Europa Island
+GLORIOSO ISLANDS: Ilhas Gloriosas
+GAZA STRIP: Faixa de Gaza
+HOWLAND ISLAND: Ilha Howland
+JOHNSTON ATOLL: Atol Johnston
+JAN MAYEN: Jan Mayen
+JUAN DE NOVA ISLAND: Juan de Nova Ilha
+JARVIS ISLAND: Ilha Jarvis
+KINGMAN REEF: Recife Kingman
+KOSOVO: Kosovo
+MIDWAY ISLANDS: Ilhas Midway
+NAVASSA ISLAND: Ilha Navassa
+PALMYRA ATOLL: Atol Palmyra
+PARACEL ISLANDS: Ilhas Paracel
+AKROTIRI: Akrotiri
+SPRATLY ISLANDS: Ilhas Spratly
+SVALBARD: Svalbard
+TROMELIN ISLAND: Tromelin Island
+WEST BANK: West Bank
+WAKE ISLAND: Ilha Wake
+DHEKELIA: Dhekelia
+YEMEN: Iêmen
+SOUTH AFRICA: África do Sul
+ZAMBIA: Zâmbia
+ZIMBABWE: Zimbabwe
+'This is the Citizen Login': 'Esse é o Login Cidadão'
+'To enjoy all the benefits of Citizen Login, please check your information and submit the following form.': 'Para aproveitar todos os benefícios do Login Cidadão, por favor verifique seus dados no formulário de cadastro e clique em Criar conta.'
+'After registering you''ll receive a confirmation email to proceed the activation of your account.': 'Depois de enviar o formulário você receberá um email de confirmação para proceder com a ativação da sua conta.'
+'Complement' : 'Complemento'
+'Send' : 'Enviar'
+'Issuer': 'Órgão ou Entidade Emissora'
+'Val': 'Número'
+'add': 'Adicionar'
+'General': 'Geral'
+'RG' : 'RG'
+scope.country: 'Pais'
+scope.uf: 'UF'
+scope.adress: 'Logradouro'
+scope.adress_number: 'Número do logradouro'
+scope.adress_complement: 'Complemento do logradouro'
+scope.rgs: 'RGs'
+scope.cep: 'CEP'
+scope.mobile: 'Celular'
+Category : 'Categoria'
+Categorys : 'Categorias'
+'Config notifications' : 'Configurar notificações'
+Default: 'Valor padrão'
+'Default icon': 'Icone padrão'
+'Default title': 'Titulo padrão'
+'Default short text': 'Resumo padrão'
+Emailable: 'Enviar e-mail'
+'Send email': 'Enviar e-mail'
+'Mail sender address': 'Remetente do e-mail'
+Templates: 'Modelos'
+'Markdown template': 'Modelo markdown da mensagem'
+'Mail template': 'Modelo html do e-mail'
+Placeholders: 'Marcadores de posição'
+Placeholder: 'Marcador de posição'
+ROLE_USER: Usuário
+ROLE_FACEBOOK: Associado com Facebook
+ROLE_DEV: Desenvolvedor
+ROLE_SUPER: Super Usuário
+ROLE_ADMIN: Administrador
+ROLE_SUPER_ADMIN: Super Administrador
+FEATURE_PROD: Funcionalidades de Produção
+FEATURE_ALPHA: Funcionalidades Alpha
+FEATURE_BETA: Funcionalidades Beta
+FEATURE_2FACTOR_AUTH: Funcionalidade de Autenticação por 2 Fatores
+'Roles': 'Perfis'
+developer.area: 'Área do desenvolvedor'
+not.createdat: 'Criado em '
+not.shorttext: 'Resumo'
+Addresses: Endereços
+address.name: Identificação do Endereço
+'ex: Home Address': 'exemplos: Casa ou Trabalho'
+'ex: 221B Baker Street': 'ex: Rua Baker'
+'ex: apartment 2': 'ex: ap. 2'
+'ex: DE24 8SG': 'ex: 90807-123'
+'ex: London': 'ex: Porto Alegre'
+New Address: Adicionar Endereço
+dev.client.persons.filter: 'Pesquisa por cpf, e-mail, nome ou nome de usuário'
+ac.search.result: 'Resultado da pesquisa'
+ac.selected.itens: 'Itens vinculados ou a vincular'
+Move: 'Mover'
+Cancel: 'Cancelar'
+Undo: 'Desfazer'
+Commit: 'Consignar'
+Search: 'Pesquisar'
+dev.grid.fullNameOrUsername: 'Nome ou nome de usuário'
+dev.ac.owners: 'Proprietarios'
+Are you sure you want to remove this address?: Tem certeza que deseja remover esse endereço?
+Yes, remove: Sim, remover
+Remove: Remover
+If the address is in another country leave the city blank and fill in this information in the second line of your address.: Se o endereço é de outro país, deixe o campo da cidade em branco e preencha essa informação na segunda linha do endereço.
+'This RG is invalid' : 'Esse RG é inválido'
+'You already have an ID registered for this State' : 'Você ja tem um RG cadastrado para esse Estado'
+No city found.: Nenhuma cidade encontrada com esse nome.
+'You don''t have an address registered yet. Use the button below to add one.': Você não tem um endereço cadastrado ainda. Use o botão a seguir para adicionar um.
+No more documents: Não há outros documentos
+ID Cards: Documentos de Identidade
+ID Card: Documento de Identidade
+New ID Card: Novo Documento de Identidade
+Add: Adicionar
+Are you sure you want to remove this ID Card?: Você tem certeza que deseja remover este Documento de Identidade?
+Click here to <strong>add an ID Card</strong>: Clique aqui para <strong>adicionar um Documento de Identidade</strong>
+Two-Factor Authentication: Autenticação por Dois Fatores
+Enter the code generated by your code generator device.: Digite o código gerado pelo seu dispositivo gerador de códigos.
+Authentication Code: Código de Autenticação
+View this notification on Citizen Login: Abra essa notificação no Login Cidadão
+'Postal code' : 'Código postal'
+scope.id_cards : 'Documentos de Identidade'
+scope.state: 'Estado'
+scope.addresses: 'Endereços'
+Nationality: 'Nacionalidade'
+Place of birth - State: 'Naturalidade - Estado'
+Place of birth - City: 'Naturalidade - Cidade'
+required.field: 'Este campo é obrigatorio'
+Address number: 'Número do endereço'
+scope.first_name: Nome
+scope.last_name: Sobrenome
+add.other.state: '- Outro estado -'
+add.other.city: '- Outra cidade -'
+required.field.country: 'Obrigatório preencher campo sobre a nacionalidade'
+required.field.state: 'Obrigatório preencher campo sobre o nacionalidade - estado'
+restrict.location.creation: 'Não é possivel criar nova localização'
+field.loader : 'Carregando...'
+Updated successfully! : 'Atualizado com sucesso'
+contact.form.sent: Sua mensagem foi enviada. Agradecemos por entrar em contato conosco.
+previous page: 'página anterior'
+statistics.list: 'Estatísticas'
+statistics.userByBadge: 'Estatísticas - Usuários por Medalha'
+statistics.userByRegion: 'Estatísticas - Usuários por Região'
+statistics.userByService: 'Estatísticas - Usuários por Serviço'
+statistics.checkCities: 'Ver cidades'
+Users by Badges: 'Usuários por Medalha'
+Users by Country: 'Usuários por País'
+Users by State: 'Usuários por Estado'
+Users by Services: 'Usuários por Serviços'
+'Already logged in!': 'Você já está logado!'
+'Please logout to register new account.': 'Por favor, desloge para poder registrar uma nova conta.'
+'You don''t have any badges yet!': 'Você ainda não tem medalhas!'
+Two-Factor Authentication is <strong>disabled</strong>. To enhance the security level of your account, click Enable.: A Autenticação em Dois Fatores está <strong>desativada</strong>. Para melhorar o nível de segurança da sua conta, clique no botão a seguir.
+Enable: Habilitar
+By enabling Two-Factor Authentication you add a very strong layer of security to your account because access will only be granted after typing a code generated by your smartphone.: Ao habilitar a Autenticação em Dois Fatores você adiciona uma camada de segurança muito forte em sua conta porque só será possível acessá-la depois de informar um código gerado por seu smartphone.
+Two-Factor Authentication Activation: Ativação da Autenticação em Dois Fatores
+Enable Two-Factor Authentication: Ativar Autenticação em Dois Fatores
+Two-Factor Authentication is a form of authentication that requires a secret code to be typed after you enter your password.: Autenticação em Dois Fatores é uma forma de autenticação que exige, depois de informar a senha, a digitação de um código secreto gerado por um smartphone.
+The secret code can only be generated by a single device that you own and carry with you and it has a limited lifetime. This way even if someone steals your password, your account will still be protected by that code.: Esse código secreto, que tem um curto tempo de validade, só pode ser gerado por um único dispositivo que você possui e carrega consigo. Dessa forma, mesmo que alguém roube sua senha sua conta estará segura pois seria necessário roubar, também, seu smartphone.
+Enabling Two-Factor Authentication: Ativando Autenticação em Dois Fatores
+Before you start, make sure to download and install some code generation app onto your smartphone. If you don't know any, we can recommend you Google's Authenticator app.: Antes de começar, certifique-se de que instalou algum aplicativo de geração de códigos em seu smartphone. Se você não conhece nenhum podemos recomendar o aplicativo do Google, Google Authenticator.
+Having the app installed, open it and select the option to add a new service and scan the QRCode below or you can type the secret manually if your app of choice does not have a QRCode scanner.: Tendo o aplicativo instalado, abra-o, selecione a opção de adicionar um novo serviço e realize a leitura do QRCode abaixo. Caso seu aparelho ou aplicativo não seja capaz de ler o código, é possível digitar o código secreto, exibido sob o QRCode, manualmente.
+Authenticator Secret: Código Secreto
+Activate Two-Factor Authentication: Ativar Autenticação em Dois Fatores
+After you finish configuring your code generator app, type the generated code below so that we can make sure it's working correctly.: Depois que você terminar de configurar o aplicativo gerador de códigos, digite o código gerado no campo a seguir para que tenhamos certeza de the tudo está funcionando corretamente.
+Generated Code: Código Gerado
+Invalid code! Make sure you configured your app correctly and your smartphone's time is adjusted.: Código inválido! Certifique-se de que o aplicativo está configurado corretamente e que o relógio do seu smartphone está ajustado.
+scheb_two_factor.code_invalid: Código inválido! Certifique-se de que o relógio do seu smartphone está ajustado.
+Two-Factor Authentication enabled.: Autenticação em Dois Fatores ativada.
+Security: Segurança
+Your account is protected by Two-Factor Authentication. If you wish to disable it you can do so further below.: Sua conta está protegida por Autenticação em Dois Fatores. Se você deseja desativar isso, você pode fazê-lo abaixo.
+Backup Codes: Códigos Alternativos
+Backup Codes are special codes that can be used to access your account. They can be used only once each and replace a regular generated code. Backup Codes are extremelly important to prevent you from losing access to your account if you lose your smartphone.: Códigos Alternativos são códigos especiais que podem ser usados para acessar sua conta. Cada um pode ser usado apenas uma vez e eles substituem a digitação de códigos gerados normalmente por seu smartphone. Códigos Alternativos são extremamente importantes para prevenir que você perca acesso à sua conta no caso de perda de seu smartphone.
+Your Backup Codes can be found in the following box. Please <strong>save them</strong> in a safe location because if you lose them you can <strong>permanently</strong> lose access to your account.: Seus Códigos Alternativos podem ser encontrados no quadro a seguir. Por favor, <strong>guarde-os</strong> em um local seguro pois caso você os extravie é possível que você perca acesso à sua conta <strong>permanentemente</strong>.
+Disable Two-Factor Authentication: Desativar Autenticação em Dois Fatores
+Currently your account safety is pretty good. If for some reason you need to disable Two-Factor Authentication you can do so in the button below.: Atualmente a segurança da sua conta está bastante forte mas se, por algum motivo, você deseja desativar a Autenticação em Dois Fatores você pode pressionar o botão a seguir.
+If you change your mind, remember that you can always enable it back again.: Se você mudar de ideia, lembre-se que você pode reativar a Autenticação em Dois Fatores a qualquer momento.
+Confirm Two-Factor Authentication Deactivation: Confirmar Desativação da Autenticação em Dois Fatores
+'By disabling Two-Factor Authentication you are reducing your account''s security.': 'Ao desativar a Autenticação em Dois Fatores você está reduzindo o nível de segurança da sua conta.'
+'If you want to proceed, type your account''s password to confirm:': 'Se você deseja prosseguir, digite a senha da sua conta para confirmar a alteração:'
+I understand the risks. Disable Two-Factor Authentication: Entendo os riscos, desative a Autenticação em Dois Fatores
+Keep it activated: Manter Ativada
+Two-Factor Authentication disabled.: Autenticação em Dois Fatores desativada.
+Generate new Backup Codes: Gerar novos Códigos Alternativos
+If your backup codes have been compromised or if you have already used too many of them, you can click the button bellow to generate new ones, but keep in mind that the current Backup Codes you see above will be <strong>deleted</strong> and will stop working.: Se seus códigos alternativos foram comprometidos ou se você já usou muitos deles, você pode clicar no botão a seguir para gerar novos códigos, mas tenha em mente que os códigos atuais que você pode ver acima vão ser <strong>apagados</strong> e não funcionarão mais.
+'To prevent unauthorized Backup Code generation type your password to confirm:': 'Para impedir geração não autorizada de Códigos Alternativos, digite sua senha para confirmar:'
+Confirm Backup Codes Generation: Confirmação da Geração de Códigos Alternativos
+Service's details: "Detalhes do serviço"
+Go to service's page: "Acessar o site do serviço"
+notification.receivedAt: "Recebida em:"
+notification.readAt: "Lida em:"
+Place of birth - Country: 'Naturalidade - Pais'
+'Idcard value': 'Número'
+Back to login: 'Voltar parar o login'
+birthdate.format: 'd/m/Y'
+Activity Log: Registro de Atividade
+Badges: Medalhas
+You don't have any active service.: Você não tem nenhum serviço ativo.
+Check the services available: Conheça os serviços disponíveis
+Dashboard: 'Início'
+badges.list.title: 'O que são as medalhas?'
+badges.list.description: 'Medalhas são os indicadores de validações que sua identidade virtual possui. Elas permitem que os demais sistemas integrados ao Login Cidadão possam melhorar a sua experiência ao utilizar os serviços ofertados.'
+'Information viewed at %date%': 'Visualizou informações em %date%'
+'Information changed at %date%': 'Alterou informações em %date%'
+'Back to services': 'Voltar para os serviços'
+You don't have any activity log.: Você ainda não possui nenhum registro de atividade.
+scope.logout: 'Permitir deslogar'
+'Search it!': 'Pesquise aqui!'
+'Don''t know your postal code?': 'Não sabe seu código postal?'
+'Select a state below:': 'Selecione um estado abaixo:'
+Firstname: Nome
+Surname: Sobrenome
+'After completing your information, click the following button to continue:': 'Depois de completar suas informações, clique no botão a seguir para continuar:'
+<strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.: <strong>%client%</strong> precisa de detalhes adicionais sobre você. Por favor, complete as informações em branco a seguir para continuar.
+Personal Details: Informações Pessoais
+Complete Missing Fields: Complete as Informações em Branco
+'Use accounts from other services': 'Use contas de outros serviços'
+'If you prefer, it''s possible to use other services to login or create your account.': 'Se preferir, é possível usar os seguintes serviços para acessar ou criar sua conta:'
+Type your password to confirm the activation.: Digite sua senha para confirmar a ativação.
+Current password: Senha atual
+<strong>%client%</strong> requires that you have a validated email in order to proceed.: <strong>%client%</strong> precisa que você possua um email validado antes de continuar.
+Validating your email address is pretty simple and fast. You just have to click the link or button in the email we sent you.: Validar seu endereço de email é bastante fácil e rápido. Você só precisa clicar no link ou botão no email que lhe enviamos.
+After you validate your email address this screen will change automatically and you'll proceed to <strong>%client%</strong>.: Depois de validar seu email, essa tela vai mudar <strong>automaticamente</strong> e você poderá prosseguir para <strong>%client%</strong>.
+I'm having trouble finding the confirmation email: Estou tendo dificuldade em encontrar o email de confirmação
+If you are having trouble to find the confirmation email, please make sure it isn't in the junk mail section of your email program or site.: Se você está tendo dificuldades em encontrar o email de confirmação, por favor verifique se ele não se encontra na caixa de spam ou lixo eletrônico do seu email.
+If you are certain the email was not received, it's possible that you mistyped your email address. You can change you email address below.: Se você tem certeza de que o email não foi recebido, é possível que seu endereço esteja com erro de digitação. Verifique e, se necessário, altere o email no campo abaixo.
+If your email is mistyped, correct it and click the following button.: Se seu email estava incorreto, corrija-o e clique no botão a seguir.
+Change Email: Trocar Email
+Your email was successfully validated.: Seu email foi validado com sucesso.
+Back to %client%: Voltar para %client%
+Mobile: Celular
+Copy: Copiar
+Copied: Copiado
+Press CTRL + C or ⌘ + C to copy: Pressione CTRL + C ou ⌘ + C para copiar
+Users: Usuários
+No recent activity: Sem atividade recente
+Information about authorizations granted to services.: Informações sobre autorizações concedidas a serviços.
+See how many users have each badge.: Veja quantas pessoas possuem cada medalha.
+Users by Location: Usuários por Localização
+Information about people's location. Either by <a href="%country_url%">Country</a> or by <a href="%state_url%">State</a>: Informações sobre a localização das pessoas, tanto <a href="%country_url%">por País</a> quanto <a href="%state_url%">por Estado</a>
+organizations:
+    menu.label: Organizações
+    page.title: Organizações
+    list:
+        user:
+            title: Minhas Organizações
+            empty: Você não está em uma Organização
+        all:
+            title: Outras Organizações
+            empty: Nenhuma organização encontrada
+    new:
+        title: Nova Organização
+        form_title: Nova Organização
+        form_action_label: Criar
+        button_title: Criar Organização
+        button_label: Nova Organização
+    edit:
+        title: Editando Organização %name%
+        form_title: Editando Organização %name%
+        form_action_label: Salvar
+    show:
+        title: Informações da Organização %name%
+        services_count:
+            label: Serviços Cadastrados
+            count: '{0} Nenhum serviço|{1} Um serviço|]1,Inf[ %count% serviços'
+        members_count:
+            label: Integrantes
+            count: '{0} Nenhum membro|{1} Um membro|]1,Inf[ %count% membros'
+    form:
+        name.label: Nome
+        domain.label: Domínio
+        sectorIdentifierUri.label: URI de Sector Identifier
+        validationUrl.label: URL para Validação
+        trusted.label: Organização Confiável
+        members:
+            label: Membros
+            search.label: Pesquisar por Nome, email, CPF ou nome de usuário
+            name.label: Nome
+        delete:
+            panel.title: Excluir <strong>%name%</strong>?
+            warn: A exclusão de uma organização não pode ser desfeita. Caso exclua por engano você terá que criar uma nova organização e associar os serviços a ela.
+            button: Excluir
+            confirm: Tem certeza que deseja excluir essa organização? Os serviços associados ficarão sem uma organização!
+            yes: Sim, REMOVA essa organização
+            no: Não remova
+            success: Organização %name% excluída com sucesso.
+        client_form.placeholder: Selecione uma Organização
+    validation:
+        not_verified: Validação Pendente
+        verified: Verificada
+        instructions: Para validar essa organização, crie um arquivo no domínio informado contendo o código a seguir e informe o endereço desse arquivo no campo <code>%input%</code>.
+        on_authorize:
+            warn_not_verified:
+                attention: Atenção!
+                text: Esse serviço está sendo oferecido por uma organização não verificada. Confira, a seguir, as informações dessa organização antes de autorizar.
+            info:
+                provided_by: Esse serviço é oferecido por <strong>%name%</strong> (<a class="text-danger">%domain%</a> %label%)
+                warn_trust: Autorize apenas se você confia na organização <strong>%name%</strong>
+                domain_verified: Domínio Verificado
+                domain_not_verified: Domínio não Verificado
+                no_organization:
+                    provided_by: Esse serviço não foi associado a nenhuma organização
+                    warn_trust: <strong>Não autorize</strong>, caso não tenha certeza de que se trata de um serviço confiável
+    trust:
+        warn_untrusted:
+            attention: Cuidado!
+            text: Esse serviço está sendo oferecido por uma organização que não confiamos. Apenas autorize caso <strong>você</strong> confie nesta organização.
+FEATURE_ORGANIZATIONS: Funcionalidade de Organizações
+ROLE_ORGANIZATIONS_BIND_CLIENT: 'Organizações: pode associar serviços em organizações das quais é membro'
+ROLE_ORGANIZATIONS_BIND_CLIENT_ANY_ORG: 'Organizações: pode associar serviços em qualquer organização'
+ROLE_ORGANIZATIONS_CREATE: 'Organizações: pode criar organizações'
+ROLE_ORGANIZATIONS_EDIT: 'Organizações: pode editar organizações das quais é membro'
+ROLE_ORGANIZATIONS_EDIT_ANY_ORG: 'Organizações: pode editar qualquer organização'
+ROLE_ORGANIZATIONS_VALIDATE: 'Organizações: pode validar domínio de organizações'
+ROLE_ORGANIZATIONS_LIST_ALL: 'Organizações: pode listar organizações das quais não é membro'
+ROLE_ORGANIZATIONS_DELETE: 'Organizações: pode excluir organizações das quais é membro'
+ROLE_ORGANIZATIONS_DELETE_ANY_ORG: 'Organizações: pode excluir quaisquer organizações'
+ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG: 'Organizações: pode gerenciar membros de qualquer organização'
+ROLE_ORGANIZATIONS_CAN_TRUST: 'Organizações: pode marcar uma organização como confiável'
+access_log:
+    panel_title: Registros de Acesso
+    date.format: d/m/Y H:i
+    login: Acessado por <span class="label label-info">%ip%</span> em <span class="label label-info">%date%</span>
+    impersonation: <span class="label label-info">Suporte técnico</span> em <span class="label label-info">%date%</span>
+    page.title: Registros de Acesso
+activity_log:
+    page.title: Registros de Atividade de Serviços
+log.date.format: 'd/m/Y H:i:s'
+admin:
+    title: 'Área do Administrator'
+    impersonation_report:
+        menu: Relatórios de Impersonation
+        title: Relatórios de Impersonation
+        disclosure: '<strong>Todas</strong> informações aqui presentes podem ser solicitadas pelo usuário afetado a qualquer momento.'
+        pending:
+            title: Relatórios Pendentes
+            list_item: <strong>%log_id%</strong> - %date% - %person%
+            notification: '{1} Você tem um relatório pendente. <a href="%url%">Clique aqui</a> para completá-lo.|]1,Inf[ Você tem %count% relatórios pendentes. <a href="%url%">Clique aqui</a> para completá-los.'
+        list:
+            title: Relatórios Existentes
+            list_item: <strong>%date%</strong> - %person%
+            list_item_complete: <span class="label label-info">%impersonator%</span> em %date%
+        new:
+            title: Novo Relatório de Impersonation
+            submit: Salvar
+        edit:
+            title: Editando Relatório de Impersonation
+            submit: Salvar
+        form:
+            target.label: 'Pessoa acessada:'
+            datetime.label: 'Data e Hora do Acesso:'
+            last_update.label: 'Última Atualização:'
+            cancel.button: Cancelar
+            report:
+                label: Descrição do Acesso
+                help: Faça um breve relato dos motivos do acesso e cite quais ações foram realizadas.
+    apps.list: 'Gerenciar Serviços'
+    sugg:
+        list: 'Gerenciar sugestões'
+        list.title: 'Busca de sugestões'
+        show.title: 'Sugestão'
+    person:
+        list: 'Gerenciar pessoas'
+        list.title:  'Busca de pessoas'
+force_password_change:
+    description: Por favor, atualize sua senha para melhorar a segurança de sua conta.
+invalidate_sessions:
+    title: Desconectar Todas Sessões
+    description: Ao acionar o botão a seguir, todas suas sessões serão descontectadas. Se você esqueceu sua conta conectada em um computador, por exemplo, você pode usar essa funcionalidade para garantir que ninguém consiga usar essa conexão para acessar sua conta.
+    form.button: Desconectar Todas Sessões
+2fa.collapse: Exibir Opções

@@ -1,0 +1,5 @@
+<a class="label label-success"
+   {{ include('LoginCidadaoCoreBundle::common.scope.details.attr.html.twig', { 'scope': scope }) }}>
+    {{ ('scope.' ~ scope) | trans }}
+    {{ include('LoginCidadaoCoreBundle::common.scope.details.handle.html.twig', { 'scope': scope }) }}
+</a>&NegativeVeryThinSpace;

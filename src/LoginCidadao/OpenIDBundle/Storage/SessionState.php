@@ -13,7 +13,6 @@ namespace LoginCidadao\OpenIDBundle\Storage;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\Security\Core\Util\SecureRandom;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class SessionState
@@ -33,11 +32,10 @@ class SessionState
 
     public function getSessionState($client_id, $sessionId)
     {
-        $generator = new SecureRandom();
-        $client    = $this->getClient($client_id);
+        $client = $this->getClient($client_id);
 
         $url  = $client->getMetadata()->getClientUri();
-        $salt = bin2hex($generator->nextBytes(15));
+        $salt = bin2hex(random_bytes(15));
 
         $state = $client_id.$url.$sessionId.$salt;
 
@@ -56,12 +54,12 @@ class SessionState
 
     /**
      * @param string $client_id
-     * @return \PROCERGS\OAuthBundle\Entity\Client
+     * @return \LoginCidadao\OAuthBundle\Entity\Client
      */
     private function getClient($client_id)
     {
         $id = explode('_', $client_id);
-        return $this->em->getRepository('PROCERGSOAuthBundle:Client')->find($id[0]);
+        return $this->em->getRepository('LoginCidadaoOAuthBundle:Client')->find($id[0]);
     }
 
     public function onKernelResponse(FilterResponseEvent $event)

@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{% trans %}Login Cidadão{% endtrans %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body style="margin:0;">
+    <table cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;width:98%">
+        <tbody>
+            <tr>
+                <td style="font-family:'Open Sans',arial;font-size:12px;padding:0px;background:#e0e1e5">
+                    <table width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;width:100%">
+                        <tbody>
+                            <tr>
+                                <td style="font-size:11px;font-family:'Open Sans',arial;padding:0;border-left:none;border-right:none;border-top:none;border-bottom:none">
+                                    <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse">
+                                        <tbody>
+                                            <tr>
+                                                <td style="padding:0;width:100%">
+                                                    <table width="100%" cellspacing="0" cellpadding="0" bgcolor="#039936" style="border-collapse:collapse;width:100%;background:#039936;border-color:#0a1f4f;border-style:solid;border-width:0px 0px 1px 0px;height:47px">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <center>
+                                                                        <table width="610" cellspacing="0" cellpadding="0" height="44" style="border-collapse:collapse">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td align="left" style="width:100%;line-height:47px">
+                                                                                        <table cellspacing="0" cellpadding="0" style="border-collapse:collapse">
+                                                                                            <tbody>
+                                                                                                <tr>
+                                                                                                    <td><a target="_blank" style="color:#ffffff;text-decoration:none;font-weight:bold;font-family:lucida grande,tahoma,verdana,arial,sans-serif;vertical-align:baseline;font-size:20px;letter-spacing:-0.03em;text-align:left" href="{{path('lc_home')}}"> {% trans %}Login Cidadão{% endtrans %} </a></td>
+                                                                                                    <td width="10" style="width:10px"></td>
+                                                                                                </tr>
+                                                                                            </tbody>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </center>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:0;width:100%">
+                                                    <table width="100%" cellspacing="0" cellpadding="0" bgcolor="#e0e1e5" style="border-collapse:collapse">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td height="19">&nbsp;</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    <center>
+                                                                        <table width="610" cellspacing="0" cellpadding="0" style="border-collapse:collapse">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td align="left" style="background-color:#ffffff;border-color:#c1c2c4;border-style:solid;display:block;border-width:1px;border-radius:5px;overflow:hidden">
+                                                                                        <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse">
+                                                                                            <tbody>
+                                                                                                <tr>
+                                                                                                    <td style="padding:35px">
+                                                                                                        <table cellspacing="0" cellpadding="0" style="border-collapse:collapse;width:100%">
+                                                                                                            <tbody>
+                                                                                                                <tr>
+                                                                                                                    <td colspan="2" style="font-size:14px;font-family:'Open Sans',arial;padding-bottom:6px">
+                                                                                                                        <div>{{ msg | raw }}</div>
+                                                                                                                    </td>
+                                                                                                                </tr>
+                                                                                                                <tr>
+                                                                                                                    <td style="font-size:11px;font-family:'Open Sans',arial;padding-top:6px;padding-bottom:6px"></td>
+                                                                                                                </tr>
+                                                                                                                {% if url is defined %}
+                                                                                                                {% if urlsubject is not defined %}
+                                                                                                                {% set urlsubject = subject %}
+                                                                                                                {% endif %}
+                                                                                                                <tr>
+                                                                                                                    <td style="font-size:11px;font-family:'Open Sans',arial;padding-top:6px">
+                                                                                                                        <a target="_blank" style="color:#3b5998;text-decoration:none" href="{{ url }}">
+                                                                                                                            <table width="100%" cellspacing="0" cellpadding="0" bgcolor="#039935" style="border-collapse:collapse;display:block;font-size:14px;text-align:center" align="center">
+                                                                                                                                <tbody>
+                                                                                                                                    <tr>
+                                                                                                                                        <td height="7" style="line-height:7px" colspan="3">&nbsp;</td>
+                                                                                                                                    </tr>
+                                                                                                                                    <tr>
+                                                                                                                                        <td width="16" style="display:block;width:16px">&nbsp;</td>
+                                                                                                                                        <td width="100%" style="text-align:center">
+                                                                                                                                            <a target="_blank" style="color:#3b5998;text-decoration:none;display:block" href="{{ url }}">
+                                                                                                                                                <center><font size="3"><span style="font-family:Helvetica Neue,Helvetica,Lucida Grande,tahoma,verdana,arial,sans-serif;font-size:14px;color:#ffffff">{{ urlsubject }}</span></font></center>
+                                                                                                                                            </a>
+                                                                                                                                        </td>
+                                                                                                                                        <td width="16" style="display:block;width:16px">&nbsp;</td>
+                                                                                                                                    </tr>
+                                                                                                                                    <tr>
+                                                                                                                                        <td height="7" style="line-height:7px" colspan="3">&nbsp;</td>
+                                                                                                                                    </tr>
+                                                                                                                                </tbody>
+                                                                                                                            </table>
+                                                                                                                        </a>
+                                                                                                                    </td>
+                                                                                                                    <td width="70%">&nbsp;</td>
+                                                                                                                </tr>
+                                                                                                                {% endif %}
+                                                                                                            </tbody>
+                                                                                                        </table>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </tbody>
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </center>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                            <td style="padding:0;width:100%">
+                                                <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <center>
+                                                                    <table width="610" cellspacing="0" cellpadding="0" style="border-collapse:collapse">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <table width="610" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse">
+                                                                                        <tbody>
+                                                                                            <tr>
+                                                                                                <td style="font-size:12px;font-family:Helvetica Neue,Helvetica,Lucida Grande,tahoma,verdana,arial,sans-serif;padding:18px 0;border-left:none;border-right:none;border-top:none;border-bottom:none;color:#6a7180;font-weight:300;line-height:16px;text-align:center;border:none">
+                                                                                                    Copyleft @2014
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </center>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</body>
+</html>

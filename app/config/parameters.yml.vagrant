@@ -1,0 +1,93 @@
+parameters:
+	database_driver:   pdo_pgsql
+    database_host:     ~
+    database_port:     ~
+    database_name:     lc
+    database_user:     vagrant
+    database_password: ~
+
+    # Trusted proxies (http://symfony.com/doc/current/cookbook/request/load_balancer_reverse_proxy.html)
+    trusted_proxies: []
+    # IPs allowed to access dev environment
+    dev_allowed: [ 127.0.0.0/8 ]
+
+    memcached_host: 127.0.0.1
+    memcached_port: 11211
+    session_prefix: lc_sess_
+    session_lifetime: 86400
+
+    mailer_transport:  smtp
+    mailer_host:       127.0.0.1
+    mailer_user:       ~
+    mailer_password:   ~
+
+    locale:            en
+    secret:            ThisTokenIsNotSoSecretChangeIt
+
+    web_profiler_toolbar: true
+
+    facebook_app_id: facebook_app_id_here
+    facebook_app_secret: facebook_app_secret_here
+    facebook_app_url: facebook_app_url
+    facebook_app_this_url: "https://%site_domain%"
+    facebook_app_scope: [email, user_about_me, user_birthday, user_location]
+
+    twitter_app_key:    twitter_app_key_goes_here
+    twitter_app_secret: twitter_app_secret_here
+
+    http_proxy:
+        type: HTTP
+        host: host.domain.tld
+        port: 3128
+        auth: 'login:senha'
+
+    site_domain: localhost
+    mailer_sender_mail: webmaster@example.com
+    mailer_sender_name: webmaster
+    recaptcha_public_key: ~
+    recaptcha_private_key: ~
+    # This must be compatible with strtotime()
+    registration.cpf.empty_time: '+1 month'
+    # Compatible with strtotime() but without + and - sign
+    registration.email.unconfirmed_time: '1 day'
+    brute_force_threshold: 4
+
+    background_picture.author: 'Guilherme da Silva Donato'
+    background_picture.link: 'http://www.flickr.com/photos/lordjedi/2295119043/'
+    mailer_receiver_mail: ~
+
+    user_profile_upload_dir: %kernel.root_dir%/../web/uploads/profile-pictures
+    client_image_upload_dir: '%kernel.root_dir%/../web/uploads/client-pictures'
+    tre_search_link: 'http://www.tse.jus.br/eleitor/servicos/titulo-e-local-de-votacao/consulta-por-nome'
+    uri_root: /
+
+    google_app_key: YOUR_API_KEY
+    google_app_secret: YOUR_API_SECRET
+
+    # Default Client
+    oauth_default_client.uid: login-cidadao
+    # Notification's categories IDs
+    notifications_categories_alert.uid: login-cidadao-alert
+
+    # Postal Code Search Link
+    postalcode_search_link: 'http://m.correios.com.br/movel/buscaCep.do'
+
+    # Default Country ISO 2
+    default_country_iso2: BR
+
+    # Should missing translations be logged in dev?
+    log_translator: false
+
+    # OpenID Connect
+    # JWT Config
+    #  - this is necessary since we can't access the oidc.issuer_url in the Compiler Pass
+    jwt_iss: http://%site_domain%%base_path%
+    # JWKS Config
+    jwks_dir: %kernel.root_dir%/../app/config/jwks
+    jwks_private_key_file: private.pem
+
+    # Two Factor Auth
+    two_factor_issuer: Login Cidadão
+
+    # Enables or disables the contact form's captcha
+    contact_form.captcha: true

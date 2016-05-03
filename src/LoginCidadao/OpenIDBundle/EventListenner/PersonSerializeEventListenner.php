@@ -4,8 +4,8 @@ namespace LoginCidadao\OpenIDBundle\EventListenner;
 
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
-use PROCERGS\OAuthBundle\Model\AccessTokenManager;
-use PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OAuthBundle\Model\AccessTokenManager;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class PersonSerializeEventListenner implements EventSubscriberInterface
 {
@@ -28,7 +28,7 @@ class PersonSerializeEventListenner implements EventSubscriberInterface
             array(
                 'event' => 'serializer.post_serialize',
                 'method' => 'onPostSerialize',
-                'class' => 'PROCERGS\LoginCidadao\CoreBundle\Model\PersonInterface'
+                'class' => 'LoginCidadao\CoreBundle\Model\PersonInterface'
             )
         );
     }
@@ -48,7 +48,7 @@ class PersonSerializeEventListenner implements EventSubscriberInterface
         $metadata = $client->getMetadata();
 
         $id = $event->getObject()->getId();
-        if ($metadata === null || $metadata->getSubjectType() === 'public') {
+        if ($metadata === null || $metadata->getSubjectType() !== 'pairwise') {
             $event->getVisitor()->addData('sub', $id);
             $event->getVisitor()->addData('id', $id);
             return;

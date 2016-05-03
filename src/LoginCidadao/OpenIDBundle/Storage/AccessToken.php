@@ -46,7 +46,7 @@ class AccessToken extends BaseClass implements AccessTokenInterface
      */
     public function getAccessToken($oauth_token)
     {
-        $accessToken = $this->em->getRepository('PROCERGSOAuthBundle:AccessToken')
+        $accessToken = $this->em->getRepository('LoginCidadaoOAuthBundle:AccessToken')
             ->findOneBy(array('token' => $oauth_token));
 
         if (!$accessToken) {
@@ -84,11 +84,11 @@ class AccessToken extends BaseClass implements AccessTokenInterface
      * @ingroup oauth2_section_4
      */
     public function setAccessToken($oauth_token, $client_id, $user_id, $expires,
-                                   $scope = null, $id_token = null)
+                                    $scope = null, $id_token = null)
     {
         // Get Client Entity
         $id     = explode('_', $client_id);
-        $client = $this->em->getRepository('PROCERGSOAuthBundle:Client')
+        $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
             ->find($id[0]);
 
         if (!$client) {
@@ -98,12 +98,12 @@ class AccessToken extends BaseClass implements AccessTokenInterface
         if ($user_id === null) {
             return null;
         } else {
-            $user = $this->em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person')
+            $user = $this->em->getRepository('LoginCidadaoCoreBundle:Person')
                 ->find($user_id);
         }
 
         // Create Access Token
-        $accessToken = new \PROCERGS\OAuthBundle\Entity\AccessToken();
+        $accessToken = new \LoginCidadao\OAuthBundle\Entity\AccessToken();
         $accessToken->setToken($oauth_token);
         $accessToken->setClient($client);
         $accessToken->setUser($user);

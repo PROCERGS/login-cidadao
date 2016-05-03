@@ -1,78 +1,99 @@
 Login Cidadão
 =============
 
+[![Build Status](https://travis-ci.org/redelivre/login-cidadao.svg?branch=master)](https://travis-ci.org/redelivre/login-cidadao)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/redelivre/login-cidadao/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/redelivre/login-cidadao/?branch=master)
 [![Join the chat at https://gitter.im/PROCERGS/login-cidadao](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/PROCERGS/login-cidadao?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-This is the source code for the 'Login Cidadão' (Citizen's Login) project.
+## Requirements
 
-This project's main objective is to provide a way for citizens to authenticate against official online services, eliminating the need to create and maintain several credentials on several services.
+Running an Identity Provider is not an easy task.
+If you plan to maintain one yourself, you MUST:
 
-It also allows government agencies to better understand its citizen's needs and learn how to interact more effectively with them.
+**FULLY understand**:
+ * [RFC 7231 - Response Status Codes](https://tools.ietf.org/html/rfc7231#section-6)
+ * [OpenID Connect Core 1.0 - TLS Requirements](http://openid.net/specs/openid-connect-core-1_0.html#TLSRequirements)
+ * [RFC 6749 - Ensuring Endpoint Authenticity](http://tools.ietf.org/html/rfc6749#section-10.9)
+ * How to debug a REST API
+ * How to debug PHP code
+ * You SHOULD NOT be using plain OAuth 2.0
 
-*Note*: Since this project is just on it's initial stages, it's not recommended to fork it just yet.
+Have at least a **very good** understanding of:
+ * [OpenID Connect Core 1.0](http://openid.net/specs/openid-connect-core-1_0.html)
+ * [OpenID Connect Discovery 1.0](http://openid.net/specs/openid-connect-discovery-1_0.html)
+ * [OpenID Connect Dynamic Client Registration 1.0](http://openid.net/specs/openid-connect-registration-1_0.html)
+ * [RFC 6749](http://tools.ietf.org/html/rfc6749)
 
-Dependencies
-============
+To perform customizations you **MUST** have a good understanding of:
+ * [The Symfony Book](https://symfony.com/doc/2.8/book/index.html)
+ * [The Symfony Cookbook](https://symfony.com/doc/2.8/cookbook/index.html)
 
- * PHP >=5.3.3
- * composer
- * node.js
+If you fail to comply with the aforementioned requirements you and your users are very likely going to get hurt
 
- PHP Extensions
+## OS Dependencies
+
+ * PHP >=5.4
+ * [composer](https://getcomposer.org)
+ * [node.js](http://nvm.sh)
+ * [memcached](https://memcached.org/)
+
+### PHP Extensions
   * php5-curl
   * php5-intl
   * php5-mysql or php5-pgsql or your preferred driver
   * php5-memcache (you can use php5-memcached instead, just remember to change the `Memcache` classes to `Memcached`)
 
-Docs
-====
+### System Configuration
+  * php timezone (example: `date.timezone = America/Sao_Paulo`)
+  * write permission to `app/cache`, `app/logs` and `web/uploads`
+
+## Docs
 
 [ Read the docs ](app/Resources/doc/index.md)
 
-Setup - Development
-===================
+## Setup (Development)
 
-Setting up on Linux
--------------------
-
-### Requirements
+### Linux
+#### Requirements
  * Sudoer user
  * PHP CLI
  * ACL-enabled filesystem
  * Composer
 
-### Before you start
+#### Before you start
 It's highly recommended to create your `app/config/parameters.yml` before installing to avoid database connection problems.
 
 You can start by using `app/config/parameters.yml.dist` as a template by simply copying it to the same folder but naming it as `parameters.yml`, then edit the default values.
 
-### Running the script
-Just execute the `install.sh` script and follow instructions in case of errors or warnings.
- 
+#### Running the script
+Check if your environment meets Symfony's prerequesites:
+``` bash
+php app/check.php
+```
 
-Setting up on Windows
----------------------
-Currently we do not have a setup script for Windows, but it should be pretty straightforward to convert the install.sh to be Windows compatible.
+Just execute the `install.sh` script and follow instructions in case of errors or warnings. Then run:
+``` bash
+php app/console server:run
+```
+Browse to `http://localhost:8000`
 
-General Steps for Installation
-------------------------------
+### Vagrant
 
-1. Make sure the following directories are writeable by your http/PHP user via ACL permissions ([you can read more here](http://symfony.com/doc/current/book/installation.html)):
-  * app/cache
-  * app/logs
-  * web/uploads
-2. Make sure you have all dependencies and needed PHP extensions installed.
-3. Check if your environment meets Symfony's prerequesites:
+#### Requirements
+* virtualbox
+* [vagrant](https://www.vagrantup.com/)
+* vagrant plugin [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest) for port forward
 
-    `$ php app/check.php`
+#### Before you start
+It's highly recommended to create your `app/config/parameters.yml` before installing to avoid database connection problems.
 
-4. Run `$ composer install`
-5. Create the database if you didn't do it yet:
+You can start by using `app/config/parameters.yml.vagrant` as a template by simply copying it to the same folder but naming it as `parameters.yml`, then edit the default values. Do not edit database values if you want to use the default vm database.
 
-    `$ php app/console doctrine:database:create`
+#### Run
+``` bash
+$ vagrant up
+```
 
-6. Create the schema:
+### General Steps for Installation
 
-    `$ php app/console doctrine:schema:create`
-
-7. Point your server's Document Root to the /web folder and make sure app.php is your index. Symfony already comes with .htaccess to do it for you on Apache.
+[Instructions in Brazilian Portuguese](doc/docs/como-instalar.md)

@@ -1,28 +1,27 @@
 <?php
+/*
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use LoginCidadao\CoreBundle\Controller\DocumentController as BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
-use PROCERGS\LoginCidadao\CoreBundle\EventListener\ProfileEditListner;
-use PROCERGS\LoginCidadao\CoreBundle\Form\Type\DocFormType;
+use LoginCidadao\CoreBundle\EventListener\ProfileEditListner;
+use LoginCidadao\CoreBundle\Form\Type\DocFormType;
 
-class DocumentController extends Controller
+class DocumentController extends BaseController
 {
-
-    /**
-     * @Route("/person/documents", name="lc_documents")
-     * @Template()
-     */
-    public function documentsAction(Request $request)
-    {
-        return $this->generalAction($request);
-    }
 
     /**
      * @Route("/person/documents/general", name="lc_documents_general")
@@ -30,30 +29,16 @@ class DocumentController extends Controller
      */
     public function generalAction(Request $request)
     {
-        $user = $this->getUser();
-        $dispatcher = $this->get('event_dispatcher');
+        $response = parent::generalAction($request);
 
-        $event = new GetResponseUserEvent($user, $request);
-        $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $event);
+        if (is_array($response)) {
+            $meuRSHelper = $this->get('meurs.helper');
 
-        $form = $this->createForm(new DocFormType(), $user);
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $event = new FormEvent($form, $request);
-            $dispatcher->dispatch(ProfileEditListner::PROFILE_DOC_EDIT_SUCCESS,
-                                  $event);
-
-            $userManager = $this->get('fos_user.user_manager');
-            $userManager->updateUser($user);
-            $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('success',
-                                                      $translator->trans("Documents were successfully changed"));
-            return $this->redirect($this->generateUrl('lc_documents'));
+            $response['personMeuRS'] = $meuRSHelper->getPersonMeuRS($this->getUser(),
+                true);
+            $response['tre_search_link'] = $this->getParameter('tre_search_link');
         }
 
-        return array(
-            'generalDocsForm' => $form->createView()
-        );
+        return $response;
     }
-
 }

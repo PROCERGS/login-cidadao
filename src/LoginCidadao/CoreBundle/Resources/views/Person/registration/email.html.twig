@@ -1,0 +1,25 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block subject %}
+{% autoescape false %}
+{{ 'registration.email.subject'|trans({'%username%': user.shortDisplayName, '%confirmationUrl%': confirmationUrl}) }}
+{% endautoescape %}
+{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+{{ 'registration.email.message'|trans({'%username%': user.shortDisplayName, '%confirmationUrl%': confirmationUrl}) }}
+{% endautoescape %}
+{% endblock %}
+
+
+{% block body_html %}
+{% autoescape false %}
+{{ include("LoginCidadaoCoreBundle::common.email.html.twig", {
+    'subject' : 'registration.email.subject' | trans({'%username%': user.shortDisplayName}),
+    'msg' : 'registration.email.message.html' | trans({'%username%': user.shortDisplayName}) | raw,
+    'url' : confirmationUrl,
+    'urlsubject' : 'registration.email.click' | trans
+} ) }}
+{% endautoescape %}
+{% endblock %}

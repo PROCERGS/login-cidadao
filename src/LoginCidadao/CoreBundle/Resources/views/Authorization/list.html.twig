@@ -1,0 +1,165 @@
+{% extends "LoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block title %}{{ 'Services' | trans }} | {{ parent() }}{% endblock title %}
+
+{% block content %}
+    <div class="content applications">
+
+        <h1 class="visible-xs">{% trans %}Services{% endtrans %}</h1>
+
+        {# ################# #
+         #  ACTIVE SERVICES  #
+         # ################# #}
+        <div class="panel panel-default">
+            <div class="panel-heading"><h2 class="panel-title">{% trans %}Active Services{% endtrans %}</h2></div>
+            <div class="panel-body">
+                {% if user.getAuthorizations|length > 0 %}
+                    <ul class="list-group">
+                        {% for auth in user.getAuthorizations %}
+                            {% if auth.client.uid != defaultClientUid %}
+                                <li class="list-group-item service clearfix">
+                                    <div class="media clearfix">
+                                        <div class="pull-left">
+                                            <img src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': auth.client }) }}" width="65" height="65" alt="" class="media-object">
+                                        </div>
+                                        <div class="media-body">
+                                            <h5 class="media-heading">{{ auth.client.name }}</h5>
+                                            <a href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}" class="btn btn-link btn-sm pull-left link-detail"><span class="glyphicon glyphicon-info-sign"></span> {% trans %}Service's details{%  endtrans %}</a>
+                                        </div>
+                                        <a href="{{ auth.client.siteUrl }}" target="_blank" class="btn btn-link btn-sm pull-right"><span class="glyphicon glyphicon-link"></span> {% trans %}Go to service's page{%  endtrans %}</a>
+                                        </a>
+                                </li>
+
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+
+                {% else %}
+                    <p class="empty">{% trans %}There are no active services yet.{%  endtrans %}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {# ################ #
+         #  OTHER SERVICES  #
+         # ################ #}
+        {% if apps|length > 0 %}
+            <div class="panel panel-default">
+                <div class="panel-heading"><h2 class="panel-title">{% trans %}Other Services{% endtrans %}</h2></div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        {% for client in apps %}
+                            <li class="list-group-item service">
+                                <div class="media clearfix">
+                                    <div class="pull-left">
+                                        <img src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': client }) }}" width="65" height="65" alt="" class="media-object">
+                                    </div>
+                                    <div class="media-body">
+                                        <h5 class="media-heading">{{ client.name }}</h5>
+                                        <a href="{{ path('lc_app_details', {'clientId': client.id}) }}" class="btn btn-link btn-sm pull-left link-detail"><span class="glyphicon glyphicon-info-sign"></span> Detalhes do serviço</a>
+                                    </div>
+                                    <a href="{{ client.siteUrl }}" target="_blank" class="btn btn-link btn-sm pull-right"><span class="glyphicon glyphicon-link"></span> Acessar o site do serviço</a>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+
+
+        {# ################# #
+         #  SUGGESTION FORM  #
+         # ################# #}
+        <div class="panel panel-default">
+            <div class="panel-heading"><h2 class="panel-title">{{ 'Suggest a Service' | trans }}</h2></div>
+            <div class="panel-body">
+                {{ form_start(form, {'action': path('lc_suggestions_new_service'), 'attr': {'role':'form' } }) }}
+                {{ form_errors(form) }}
+                <div class="row">
+                    <div class="col-sm-12">
+                        {{ form_row(form.text, { 'label': 'Suggestion'|trans } ) }}
+                        <div class="text-right">
+                            <input class="btn btn-success" type="submit" value="{{ 'Send' |trans }}" />
+                        </div>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+                <div class="row">
+                    {% for type, messages in app.session.flashbag.all() %}
+                        {% for message in messages %}
+                            <div class="col-sm-12">
+                                <div class="text-center bg-success flash-{{ type }}">
+                                    {{ message }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+            </section>
+
+            <div class="last-suggestions clearfix">
+                <h5 class="title">{{ 'Your last suggested Services'|trans }}</h5>
+                {% if suggs|length > 0 %}
+                    {% for sugg in suggs %}
+                        <span class="label label-info">{{ sugg.text }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts '@LoginCidadaoCoreBundle/Resources/public/js/components/salvatore.min.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script>
+
+        $(function () {
+            // switch display application list
+            $('.app-toggle .btn').on('click', function () {
+
+                if (!$(this).hasClass('active')) {
+
+                    $('.app-toggle .btn').removeClass('active');
+                    $(this).addClass('active');
+                    $('#applications .list-group').css({'margin-top': '-30px', 'opacity': 0});
+
+                    var self = $(this);
+                    setTimeout(function () {
+                        switch (self.data("display")) {
+                            case 'list':
+                                $('#applications ul').removeClass('grid').addClass('list');
+                                break;
+                            case 'grid':
+                                $('#applications ul').removeClass('list').addClass('grid');
+                                break;
+                        }
+                        $('#applications .list-group').css({'margin-top': 0, 'opacity': 1});
+                    }, 1000);
+
+                }
+            });
+
+            $(window).resize(function () {
+
+                if ($(this).width() < 768) {
+                    $('.app-toggle .btn[data-display="grid"]').trigger('click');
+                    $('.app-toggle .btn[data-display="list"]').attr('disabled', 'disabled');
+                } else {
+                    $('.app-toggle .btn[data-display="list"]').removeAttr('disabled');
+                }
+
+            });
+
+        });
+
+    </script>
+{% endblock %}

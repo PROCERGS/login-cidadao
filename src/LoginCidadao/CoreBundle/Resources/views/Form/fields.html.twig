@@ -1,0 +1,171 @@
+{% block form_row %}
+    {% spaceless %}
+    <div class="form-group {%- if errors[0] is defined %} has-error has-feedback {% endif -%}">
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+        {{ form_errors(form) }}
+    </div>
+    {% endspaceless %}
+{% endblock form_row %}
+
+{% block checkbox_widget -%}
+    {%- if attr.class is not defined -%}
+    {%- set attr = attr|merge({ 'class': '' }) -%}
+    {%- endif -%}
+    <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+{%- endblock checkbox_widget %}
+
+{% block widget_attributes -%}
+    id="{{ id }}" name="{{ full_name }}"
+    {%- if read_only %} readonly="readonly"{% endif -%}
+    {%- if disabled %} disabled="disabled"{% endif -%}
+    {%- if required %} required="required"{% endif -%}
+    {%- if attr.class is not defined %}
+        class="form-control"
+    {% endif -%}
+    {%- for attrname, attrvalue in attr -%}
+        {{- " " -}}
+        {%- if attrname in ['placeholder', 'title'] -%}
+            {{- attrname }}="{{ attrvalue|trans({}, translation_domain) }}"
+        {%- elseif attrvalue is same as(true) -%}
+            {{- attrname }}="{{ attrname }}"
+        {%- elseif attrvalue is not same as(false) -%}
+            {{- attrname }}="{{ attrvalue }}"
+        {%- endif -%}
+    {%- endfor -%}
+{%- endblock widget_attributes %}
+
+{% block birthday_widget -%}
+{% if widget == 'single_text' %}
+{{- block('form_widget_simple') -}}
+{% else -%}
+<div {%- if attr.class is not defined %} class="form-inline birthdate" {% endif -%} {{ block('widget_container_attributes') }}>
+{{- date_pattern|replace({
+'{{ year }}': form_widget(form.year),
+'{{ month }}': form_widget(form.month),
+'{{ day }}': form_widget(form.day),
+})|raw -}}
+</div>
+{%- endif %}
+{%- endblock birthday_widget %}
+
+{% block form_errors %}
+    {% spaceless %}
+    {% if errors[0] is defined %}
+        {% if compound %}
+            <div class="alert alert-danger">
+                <ul>
+                {% for error in errors %}
+                    <li>{{ error.message }}</li>
+                {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            <div class="input-error">
+                <ul>
+                {%- for error in errors -%}
+                    <li>{{ error.message }}</li>
+                {%- endfor -%}
+                </ul>
+            </div>
+        {% endif %}
+    {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
+
+{% block hidden_entity_row -%}
+{% spaceless %}
+<div style="display:none;">{{ form_widget(form) }}</div>
+{% endspaceless %}
+{%- endblock hidden_entity_row %}
+
+{% block switch_widget -%}
+<p>{{ block('checkbox_widget') }}</p>
+{%- endblock switch_widget %}
+
+{% block ajax_choice_label -%}
+{{ block('form_label') }}<a class="glyphicon glyphicon-pencil ac-search-enable btn btn-primary btn-xs" data-ac-reference="{{ id }}" type="button" ></a><div class="ac-search-loader"></div>
+{%- endblock ajax_choice_label %}
+
+{% block ajax_choice_widget -%}
+    {% if required and empty_value is none and not empty_value_in_choices and not multiple -%}
+        {% set required = false %}
+    {%- endif -%}
+    <div class="ac-sandbox">
+        {% set options = choices -%}
+        <div class="ac-tags-toolbar btn-toolbar collapse in" role="toolbar">
+            {%- if options|length > 0 -%}
+            {% for group_label, choice in options %}
+                {%- if choice is not iterable -%}
+                    <div class="btn-group">
+                        <span class="label label-info" type="button">{{ choice.label|trans({}, translation_domain) }}</span>
+                    </div>
+                {%- endif -%}
+            {% endfor %}
+            {%- endif -%}
+        </div>
+        <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+            {% if empty_value is not none -%}
+                <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
+            {%- endif %}
+            {%- if preferred_choices|length > 0 -%}
+                {% set options = preferred_choices %}
+                {{- block('ajax_choice_options') -}}
+                {% if choices|length > 0 and separator is not none -%}
+                    <option disabled="disabled">{{ separator }}</option>
+                {%- endif %}
+            {%- endif -%}
+            {% set options = choices -%}
+            {{- block('ajax_choice_options') -}}
+        </select>
+        <div class="ac-magicbox collapse">
+            <label>{{ ajax_choice_search_prop_label|trans() }}</label>
+            <div class="input-group">
+                <input type="text" class="form-control"/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" {%- if ajax_choice_attr is defined %} data-ac-attr="{{ ajax_choice_attr|json_encode }}"{% endif -%}>{{ 'Search'|trans }}</button>
+                </span>
+            </div>
+            <div class="ac-scrollspy-opts-group">
+                <label>{{ 'ac.search.result'|trans }}</label>
+                <div class="ac-scrollspy-opts"></div>
+            </div>
+            <div class="ac-scrollspy-opts-selected-group">
+                <label>{{ 'ac.selected.itens'|trans }}</label>
+                <div class="ac-scrollspy-opts-selected"></div>
+            </div>
+            <div class="btn-group btn-group-justified">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default ac-search-cancel" data-ac-reference="{{ id }}">
+                    <span class="glyphicon glyphicon-remove-sign"></span> {{ 'Cancel'|trans }}
+                  </button>
+              </div>
+              <div class="btn-group">
+                    <button type="button" class="btn btn-primary ac-search-commit" data-ac-reference="{{ id }}">
+                    <span class="glyphicon glyphicon-ok-sign"></span> {{ 'add'|trans }}
+                  </button>
+              </div>
+            </div>
+        </div>
+    </div>
+{%- endblock ajax_choice_widget %}
+
+{% block ajax_choice_options -%}
+    {% for group_label, choice in options %}
+        {%- if choice is iterable -%}
+            <optgroup label="{{ group_label|trans({}, translation_domain) }}">
+                {% set options = choice %}
+                {{- block('choice_widget_options') -}}
+            </optgroup>
+        {%- else -%}
+            <option value="{{ choice.value }}" selected="selected">{{ choice.label|trans({}, translation_domain) }}</option>
+        {%- endif -%}
+    {% endfor %}
+{%- endblock ajax_choice_options %}
+
+{% block submit_widget -%}
+    {% set attr = attr|merge({'class': 'btn btn-success' ~ (attr.class is defined ? ' ' ~ attr.class : '')} ) %}
+    {% set type = type|default('submit') -%}
+    {{ block('button_widget') }}
+{%- endblock submit_widget %}

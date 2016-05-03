@@ -1,0 +1,27 @@
+{% trans_default_domain 'FOSUserBundle' %}
+{{ form_start(generalDocsForm, {'action': path('lc_documents'), 'attr': {'role':'form' } }) }}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title">{{ 'General'|trans }}</h2>
+    </div>
+    <div class="panel-body">
+        {{ form_errors(generalDocsForm) }}
+        <div class="row">
+            <div class="col-md-7">
+                <div class="form-group">
+                    {{ form_label(generalDocsForm.cpf) }}
+                    {% if generalDocsForm.cpf.vars.value is not null %}
+                        {{ form_widget(generalDocsForm.cpf, {'attr': {'class': 'form-control', 'maxlength' : '14'}}) }}
+                    {% endif %}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    {{ form_errors(generalDocsForm.cpf) }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer text-right">
+        <input class="btn btn-success" type="submit" value="{{ 'profile.edit.submit'|trans }}" />
+    </div>
+</div>
+{{ form_end(generalDocsForm) }}

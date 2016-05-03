@@ -1,0 +1,36 @@
+{% extends 'LoginCidadaoCoreBundle::base.html.twig' %}
+
+{% block body %}
+
+{% block notificationExtreme %}
+{{ include("LoginCidadaoCoreBundle::notification_extreme.html.twig", { columns: 'col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3' } ) }}
+{% endblock %}
+
+<div class="row">
+    <div class="col-xs-12 text-center header-shadows">
+        <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
+        <h2 class="slogan hidden-xs">{% trans %}One account. The entire Government.{% endtrans %}</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="general-content col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+
+        <div class="title text-center">
+            <h4>{% trans %}About Citizen's Login{% endtrans %}</h3>
+        </div>
+
+        <div class="text">
+            <p>O Login Cidadão tem o objetivo de promover a integração, o cadastro e a autenticação do cidadão junto às ferramentas e os Serviços Digitais do Governo, facilitando o relacionamento da pessoa física com o Governo do Estado e abrindo caminho para a adoção de uma Identidade Digital para as cidadãs e os cidadãos gaúchos.</p>
+
+            <p>A iniciativa promove a desburocratização e a integração de sistemas, diminui a possibilidade de fraudes e padroniza o acesso às bases de dados do Estado, ao passo que permite o registro automatizado e o acompanhamento sistemático da interação dos cidadãos com os serviços digitais geridos pela Administração Estadual.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets_custom %}
+    {% stylesheets '@lc_base_css' 'bundles/logincidadaocore/css/home/*.css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}

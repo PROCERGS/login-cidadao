@@ -1,0 +1,7 @@
+parameters:
+#    lc_infinite_scroll.example.class: LoginCidadao\InfiniteScrollBundle\Example
+
+services:
+#    lc_infinite_scroll.example:
+#        class: %lc_infinite_scroll.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

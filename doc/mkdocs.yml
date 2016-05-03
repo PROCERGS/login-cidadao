@@ -1,0 +1,17 @@
+site_name: Login Cidadão
+site_description: Torne seu serviços públicos mais eficientes através da adoção de um sistema de autenticação único!
+pages:
+  - Sobre a plataforma: 'index.md'
+  - Documentação em Português:
+      - 'Como instalar': como-instalar.md
+      - 'Configurar serviços terceiros': adicionando-servicos.md
+theme: readthedocs
+markdown_extensions:
+  - fenced_code
+  - codehilite
+copyright: Licenciado através da <a href="https://github.com/PROCERGS/login-cidadao/blob/master/LICENSE" target="_blank">AGPL V3</a>.
+site_favicon: images/favicon.ico
+extra_css:
+  - css/main.css
+extra_javascript:
+  - javascript/main.js

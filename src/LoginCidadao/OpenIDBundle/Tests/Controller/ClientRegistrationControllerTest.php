@@ -9,15 +9,19 @@ class ClientRegistrationControllerTest extends WebTestCase
 
     public function testRegister()
     {
-        $client = static::createClient();
+        $client = static::createClient(array(), array('HTTPS' => true));
 
         $data = array(
-            'redirect_uris' => array('http://this.is.a.test/callback')
+            'redirect_uris' => array('http://google.com/test'),
         );
 
         $client->request(
-            'POST', '/openid/connect/register', array(), array(),
-            array('CONTENT_TYPE' => 'application/json'), json_encode($data)
+            'POST',
+            '/openid/connect/register',
+            array(),
+            array(),
+            array('CONTENT_TYPE' => 'application/json'),
+            json_encode($data)
         );
 
         $this->assertJsonResponse($client->getResponse(), 201, false);
@@ -26,17 +30,45 @@ class ClientRegistrationControllerTest extends WebTestCase
         $this->assertNotEmpty($response->client_secret);
     }
 
+    protected function assertJsonResponse(
+        $response,
+        $statusCode = 200,
+        $checkValidJson = true,
+        $contentType = 'application/json'
+    ) {
+        $this->assertEquals(
+            $statusCode,
+            $response->getStatusCode(),
+            $response->getContent()
+        );
+        $this->assertTrue(
+            $response->headers->contains('Content-Type', $contentType),
+            $response->headers
+        );
+        if ($checkValidJson) {
+            $decode = json_decode($response->getContent());
+            $this->assertTrue(
+                ($decode != null && $decode != false),
+                'is response valid json: ['.$response->getContent().']'
+            );
+        }
+    }
+
     public function testRegisterInvalidRedirectUri()
     {
-        $client = static::createClient();
+        $client = static::createClient(array(), array('HTTPS' => true));
 
         $data = array(
-            'redirect_uris' => array('this.is.an.invalid.test')
+            'redirect_uris' => array('this.is.an.invalid.test'),
         );
 
         $client->request(
-            'POST', '/openid/connect/register', array(), array(),
-            array('CONTENT_TYPE' => 'application/json'), json_encode($data)
+            'POST',
+            '/openid/connect/register',
+            array(),
+            array(),
+            array('CONTENT_TYPE' => 'application/json'),
+            json_encode($data)
         );
 
         $this->assertJsonResponse($client->getResponse(), 400, false);
@@ -46,40 +78,24 @@ class ClientRegistrationControllerTest extends WebTestCase
 
     public function testRegisterInvalidMetadata()
     {
-        $client = static::createClient();
+        $client = static::createClient(array(), array('HTTPS' => true));
 
         $data = array(
-            'redirect_uris' => array('https://valid.uri.com/'),
-            'logo_uri' => 'this.is.an.invalid.uri'
+            'redirect_uris' => array('https://google.com/valid/'),
+            'logo_uri' => 'this.is.an.invalid.uri',
         );
 
         $client->request(
-            'POST', '/openid/connect/register', array(), array(),
-            array('CONTENT_TYPE' => 'application/json'), json_encode($data)
+            'POST',
+            '/openid/connect/register',
+            array(),
+            array(),
+            array('CONTENT_TYPE' => 'application/json'),
+            json_encode($data)
         );
-        echo json_encode($data);
 
         $this->assertJsonResponse($client->getResponse(), 400, false);
         $response = json_decode($client->getResponse()->getContent());
         $this->assertEquals('invalid_client_metadata', $response->error);
-    }
-
-    protected function assertJsonResponse($response, $statusCode = 200,
-                                          $checkValidJson = true,
-                                          $contentType = 'application/json')
-    {
-        $this->assertEquals(
-            $statusCode, $response->getStatusCode(), $response->getContent()
-        );
-        $this->assertTrue(
-            $response->headers->contains('Content-Type', $contentType),
-            $response->headers
-        );
-        if ($checkValidJson) {
-            $decode = json_decode($response->getContent());
-            $this->assertTrue(($decode != null && $decode != false),
-                'is response valid json: ['.$response->getContent().']'
-            );
-        }
     }
 }

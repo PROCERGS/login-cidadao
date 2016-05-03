@@ -1,0 +1,15 @@
+{% extends 'LoginCidadaoCoreBundle::base.html.twig' %}
+
+{% block header %}
+<header><h3>Login Cidadão</h3></header>
+{% endblock %}
+
+
+{% block stylesheets_custom %}
+{% stylesheets '@lc_base_css' 'bundles/logincidadaocore/css/popup/popup.css' filter='cssrewrite' filter='?uglifycss' %}
+<link rel="stylesheet" href="{{ asset_url }}" />
+{% endstylesheets %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

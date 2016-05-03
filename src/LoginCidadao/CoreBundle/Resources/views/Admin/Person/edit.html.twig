@@ -1,0 +1,107 @@
+{% extends 'LoginCidadaoCoreBundle:Admin:base.html.twig' %}
+{% block content %}
+    <div class="content">
+
+        <h1 class="visible-xs">{{ 'Profile'|trans }}</h1>
+
+        <div id="admin-person-edit">
+            {% form_theme form 'LoginCidadaoCoreBundle::Form/fields.html.twig' %}
+            {{ form_start(form, {'attr' : {'role' : 'form'}}) }}
+            {{ form_errors(form) }}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{ 'General'|trans }}</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="row clearfix">
+                        <div class="col-md-5">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <img src="{{ include("LoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': person}) }}" alt="" class="col-xs-12 img-responsive"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            {{ form_row(form.username) }}
+                            {{ form_row(form.firstName) }}
+                            {{ form_row(form.surname) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.email) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.birthdate) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.country) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.state) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.city) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.mobile) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if form.roles is defined %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">{{ 'Security'|trans }}</h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row clearfix">
+                            <div class="col-md-12">
+                                {{ form_row(form.roles) }}
+                                <div class="form-bar text-right">
+                                    <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            {{ form_end(form) }}
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{ 'Services'|trans }}</h2>
+                </div>
+                <div class="panel-body">
+                    {% if user.getAuthorizations|length > 0 %}
+                        <ul class="list-group">
+                            {% for auth in user.getAuthorizations %}
+                                {% if auth.client.uid != defaultClientUid %}
+                                    <li class="list-group-item service clearfix">
+                                        <div class="media clearfix">
+                                            <div class="pull-left">
+                                                <img src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': auth.client }) }}" width="65" height="65" alt="" class="media-object">
+                                            </div>
+                                            <div class="media-body">
+                                                <h5 class="media-heading">{{ auth.client.name }}</h5>
+                                                <a href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}" class="btn btn-link btn-sm pull-left link-detail"><span class="glyphicon glyphicon-info-sign"></span> {% trans %}Service's details{%  endtrans %}</a>
+                                            </div>
+                                        </div>
+                                        <a href="{{ auth.client.siteUrl }}" class="btn btn-link btn-sm pull-right"><span class="glyphicon glyphicon-link"></span> {% trans %}Go to service's page{%  endtrans %}</a>
+                                    </li>
+
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+
+                    {% else %}
+                        <p class="empty">{% trans %}There are no active services yet.{%  endtrans %}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if is_granted('FEATURE_IMPERSONATION_REPORTS') %}
+                {{ render(controller('LoginCidadaoCoreBundle:Admin/Person:impersonationReports', { 'id': person.id })) }}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

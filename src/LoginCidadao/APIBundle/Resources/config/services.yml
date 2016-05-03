@@ -1,0 +1,35 @@
+parameters:
+    lc_api_access_token_definer.class: LoginCidadao\APIBundle\Event\LoggedInUserListener
+    lc.action_logger.class: LoginCidadao\APIBundle\Security\Audit\ActionLogger
+    lc.action_logger.listenner.class: LoginCidadao\APIBundle\Event\Security\AnnotationListenner
+
+services:
+    lc.api.logged_in_user_listener:
+        class: %lc_api_access_token_definer.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@security.token_storage"
+            - "@simplethings_entityaudit.config"
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    lc.action_logger.listenner:
+        class: %lc.action_logger.listenner.class%
+        arguments: [ "@annotation_reader", "@lc.action_logger" ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 1 }
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 1 }
+
+    lc.action_logger:
+        class: %lc.action_logger.class%
+        arguments:
+            - "@security.token_storage"
+            - "@simplethings_entityaudit.config"
+            - "@doctrine.orm.entity_manager"
+
+    lc.action_log.repository:
+        myrepository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - LoginCidadao\APIBundle\Entity\ActionLog
