@@ -1,0 +1,67 @@
+{% extends 'LoginCidadaoCoreBundle::base.html.twig' %}
+
+{% block body %}
+    {% set form1 = lc_getForm() %}
+    {% if form is not defined %}
+        {% set form = lc_getFormFactory() %}
+    {% endif %}
+
+    <div class="row lc-main-title hidden-xs">
+        <div class="col-12 text-center">
+            <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
+            <h2>{% trans %}One account. The entire Government.{% endtrans %}</h2>
+        </div>
+    </div>
+
+    <div class="container lc-box-group">
+
+        {% embed "LoginCidadaoCoreBundle:Default:login_register.html.twig" %}
+            {% block left %}
+                <div class="box box-register">
+                    {{ include('LoginCidadaoCoreBundle::common.register.html.twig') }}
+                </div>
+            {% endblock %}
+
+            {% block right %}
+                <div class="box">
+                    {{ include('LoginCidadaoCoreBundle::common.login.html.twig') }}
+                </div>
+            {% endblock %}
+        {% endembed %}
+
+        {{ include('LoginCidadaoCoreBundle::common.3rd_party_login.html.twig') }}
+    </div>
+{% endblock %}
+
+{% block stylesheets_custom %}
+    {% stylesheets '@lc_base_css' 'bundles/logincidadaocore/css/home/*.css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+    <style type="text/css">
+        .lc-box .nfg {
+            background-position: 2px 0;
+            background-color: #EF9618;
+        {% image '@LoginCidadaoCoreBundle/Resources/public/images/meurs_connect_nfg_home.png' %}
+            background-image: url('{{ asset_url | e('css') }}');
+        {% endimage %}
+        }
+
+        @media (max-width: 767px) {
+            .lc-box .nfg {
+                background-position: 0;
+            {% image '@LoginCidadaoCoreBundle/Resources/public/images/meurs_connect_nfg.png' %}
+                background-image: url('{{ asset_url | e('css') }}');
+            {% endimage %}
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function(){
+            $('form').preventDoubleSubmission();
+        });
+    </script>
+{% endblock %}
