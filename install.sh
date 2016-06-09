@@ -166,7 +166,7 @@ if [ "$?" -ne 0 ]; then
     echo $FAIL
     die "\\nThere was a problem installing the database. Here is the error returned:\\n\\n$SCHEMA_CREATE"
   else
-    POPULATE=$(php app/console login-cidadao:database:populate batch/ 2>&1)
+    POPULATE=$(php app/console lc:database:populate batch/ 2>&1)
   fi
 fi
 echo $OK
