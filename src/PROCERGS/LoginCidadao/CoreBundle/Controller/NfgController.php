@@ -2,6 +2,7 @@
 
 namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
@@ -59,9 +60,12 @@ class NfgController extends Controller
      */
     public function createBackAction(Request $request)
     {
+        /** @var MeuRSHelper $meursHelper */
+        $meursHelper = $this->get('meurs.helper');
+
         $result1 = $this->checkAccessToken();
         $em = $this->getDoctrine()->getManager();
-        $personRepo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+        $personRepo = $em->getRepository('LoginCidadaoCoreBundle:Person');
         if ($personRepo->findOneBy(
             array(
                 'cpf' => $result1['CodCpf'],
@@ -125,8 +129,8 @@ class NfgController extends Controller
         $nome = explode(' ', $result1['NomeConsumidor']);
         $user->setFirstName(array_shift($nome));
         $user->setSurname(implode(' ', $nome));
+
         $em->persist($nfgProfile);
-        $user->setNfgProfile($nfgProfile);
 
         $event = new GetResponseUserEvent($user, $request);
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, $event);
@@ -142,6 +146,11 @@ class NfgController extends Controller
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
 
         $userManager->updateUser($user);
+
+        $personMeuRS = $meursHelper->getPersonMeuRS($user, true);
+        $personMeuRS->setNfgProfile($nfgProfile);
+        $em->persist($personMeuRS);
+        $em->flush($personMeuRS);
 
         if (null === $response = $event->getResponse()) {
             $url = $this->container->get('router')->generate('fos_user_registration_confirmed');
@@ -195,6 +204,9 @@ class NfgController extends Controller
      */
     public function loginBacktAction(Request $request)
     {
+        /** @var MeuRSHelper $meursHelper */
+        $meursHelper = $this->get('meurs.helper');
+
         $cpf = $request->get('cpf');
         $accessid = $request->get('accessid');
         $prsec = $request->get('prsec');
@@ -214,13 +226,20 @@ class NfgController extends Controller
         }
         $cpf = str_pad($cpf, 11, "0", STR_PAD_LEFT);
         $em = $this->getDoctrine()->getManager();
-        $personRepo = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:Person');
+        $personRepo = $em->getRepository('LoginCidadaoCoreBundle:Person');
         $user = $personRepo->findOneBy(
             array(
                 'cpf' => $cpf,
             )
         );
-        if (!$user || !$user->getNfgAccessToken()) {
+
+        if ($user instanceof PersonInterface) {
+            $personMeuRS = $meursHelper->getPersonMeuRS($user, true);
+        } else {
+            $personMeuRS = null;
+        }
+
+        if (!$user || !$personMeuRS->getNfgAccessToken()) {
             throw new NfgException('nfg.user.notfound');
         }
         $response = $this->redirect($this->generateUrl('lc_home'));
