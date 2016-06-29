@@ -58,3 +58,11 @@ services:
             - [setMeuRSHelper, [@meurs.helper] ]
         tags:
             - { name: form.type, alias: person_doc_form_type }
+
+    rs.person.serialize.listenner:
+        class: PROCERGS\LoginCidadao\CoreBundle\EventListener\PersonSerializeEventListenner
+        arguments:
+            - "@meurs.helper"
+            - "@jms_serializer"
+        tags:
+            - { name: jms_serializer.event_listener, event: serializer.post_serialize, method: onPostSerialize }
