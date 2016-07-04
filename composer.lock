@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ffe8edfd458e4e4db2ec48fcca704a0e",
-    "content-hash": "849ca699ba95c8ba9c1aaa409534af0c",
+    "hash": "36a2ac016e6c51a1135593dcfd104507",
+    "content-hash": "98ed90fbfcedf5d1f235a375eebdacd4",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-bundle",
@@ -1051,6 +1051,7 @@
                 "facebook",
                 "sdk"
             ],
+            "abandoned": "facebook/php-sdk-v4",
             "time": "2012-08-14 17:28:20"
         },
         {
@@ -1111,6 +1112,7 @@
             "keywords": [
                 "facebook"
             ],
+            "abandoned": "hwi/oauth-bundle",
             "time": "2013-12-11 20:21:13"
         },
         {
@@ -1499,16 +1501,16 @@
         },
         {
             "name": "guilhermednt/pathwell-bundle",
-            "version": "v0.0.3",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guilhermednt/pathwell-bundle.git",
-                "reference": "0cf3521af71b711b5824d4563d7be8f4ca3c77be"
+                "reference": "e43a53e68ec4136326ce50acd4961a35da681e2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guilhermednt/pathwell-bundle/zipball/0cf3521af71b711b5824d4563d7be8f4ca3c77be",
-                "reference": "0cf3521af71b711b5824d4563d7be8f4ca3c77be",
+                "url": "https://api.github.com/repos/guilhermednt/pathwell-bundle/zipball/e43a53e68ec4136326ce50acd4961a35da681e2a",
+                "reference": "e43a53e68ec4136326ce50acd4961a35da681e2a",
                 "shasum": ""
             },
             "require": {
@@ -1533,7 +1535,7 @@
                 }
             ],
             "description": "Symfony Bundle implementing PathWell Topology password policy",
-            "time": "2016-04-01 17:00:22"
+            "time": "2016-07-04 18:48:36"
         },
         {
             "name": "hwi/oauth-bundle",

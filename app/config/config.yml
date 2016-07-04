@@ -494,3 +494,6 @@ liip_monitor:
 services:
     fos_user.doctrine_registry:
         alias: doctrine
+
+donato_path_well:
+    enabled: '%check_pathwell_topologies%'
