@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "10c7013865451576a653f1f1aaf5c0b7",
-    "content-hash": "7c3d1305f44c79976ed0fa8fe9a9504b",
+    "hash": "36a2ac016e6c51a1135593dcfd104507",
+    "content-hash": "98ed90fbfcedf5d1f235a375eebdacd4",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-bundle",
@@ -281,33 +281,33 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "v1.5.4",
+            "version": "v1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "47cdc76ceb95cc591d9c79a36dc3794975b5d136"
+                "reference": "f8af318d14bdb0eff0336795b428b547bd39ccb6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/47cdc76ceb95cc591d9c79a36dc3794975b5d136",
-                "reference": "47cdc76ceb95cc591d9c79a36dc3794975b5d136",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/f8af318d14bdb0eff0336795b428b547bd39ccb6",
+                "reference": "f8af318d14bdb0eff0336795b428b547bd39ccb6",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2"
+                "php": "~5.5|~7.0"
             },
             "conflict": {
                 "doctrine/common": ">2.2,<2.4"
             },
             "require-dev": {
-                "phpunit/phpunit": ">=3.7",
+                "phpunit/phpunit": "~4.8|~5.0",
                 "predis/predis": "~1.0",
                 "satooshi/php-coveralls": "~0.6"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.5.x-dev"
+                    "dev-master": "1.6.x-dev"
                 }
             },
             "autoload": {
@@ -347,7 +347,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2015-12-19 05:03:47"
+            "time": "2015-12-31 16:37:02"
         },
         {
             "name": "doctrine/collections",
@@ -417,16 +417,16 @@
         },
         {
             "name": "doctrine/common",
-            "version": "v2.5.3",
+            "version": "v2.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "10f1f19651343f87573129ca970aef1a47a6f29e"
+                "reference": "a579557bc689580c19fee4e27487a67fe60defc0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/common/zipball/10f1f19651343f87573129ca970aef1a47a6f29e",
-                "reference": "10f1f19651343f87573129ca970aef1a47a6f29e",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/a579557bc689580c19fee4e27487a67fe60defc0",
+                "reference": "a579557bc689580c19fee4e27487a67fe60defc0",
                 "shasum": ""
             },
             "require": {
@@ -435,20 +435,20 @@
                 "doctrine/collections": "1.*",
                 "doctrine/inflector": "1.*",
                 "doctrine/lexer": "1.*",
-                "php": ">=5.3.2"
+                "php": "~5.5|~7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~3.7"
+                "phpunit/phpunit": "~4.8|~5.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5.x-dev"
+                    "dev-master": "2.7.x-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Doctrine\\Common\\": "lib/"
+                "psr-4": {
+                    "Doctrine\\Common\\": "lib/Doctrine/Common"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -486,7 +486,7 @@
                 "persistence",
                 "spl"
             ],
-            "time": "2015-12-25 13:10:16"
+            "time": "2015-12-25 13:18:31"
         },
         {
             "name": "doctrine/dbal",
@@ -1051,6 +1051,7 @@
                 "facebook",
                 "sdk"
             ],
+            "abandoned": "facebook/php-sdk-v4",
             "time": "2012-08-14 17:28:20"
         },
         {
@@ -1111,6 +1112,7 @@
             "keywords": [
                 "facebook"
             ],
+            "abandoned": "hwi/oauth-bundle",
             "time": "2013-12-11 20:21:13"
         },
         {
@@ -1335,12 +1337,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "def27463609e24af410b2606f0062de46fab5662"
+                "reference": "16b04c49af05dd3fb381e4abe04f0e5e231ac76d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/def27463609e24af410b2606f0062de46fab5662",
-                "reference": "def27463609e24af410b2606f0062de46fab5662",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/16b04c49af05dd3fb381e4abe04f0e5e231ac76d",
+                "reference": "16b04c49af05dd3fb381e4abe04f0e5e231ac76d",
                 "shasum": ""
             },
             "require": {
@@ -1396,7 +1398,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2016-04-28 10:51:07"
+            "time": "2016-03-08 11:05:28"
         },
         {
             "name": "gree/jose",
@@ -1499,16 +1501,16 @@
         },
         {
             "name": "guilhermednt/pathwell-bundle",
-            "version": "v0.0.3",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guilhermednt/pathwell-bundle.git",
-                "reference": "0cf3521af71b711b5824d4563d7be8f4ca3c77be"
+                "reference": "e43a53e68ec4136326ce50acd4961a35da681e2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guilhermednt/pathwell-bundle/zipball/0cf3521af71b711b5824d4563d7be8f4ca3c77be",
-                "reference": "0cf3521af71b711b5824d4563d7be8f4ca3c77be",
+                "url": "https://api.github.com/repos/guilhermednt/pathwell-bundle/zipball/e43a53e68ec4136326ce50acd4961a35da681e2a",
+                "reference": "e43a53e68ec4136326ce50acd4961a35da681e2a",
                 "shasum": ""
             },
             "require": {
@@ -1533,7 +1535,7 @@
                 }
             ],
             "description": "Symfony Bundle implementing PathWell Topology password policy",
-            "time": "2016-04-01 17:00:22"
+            "time": "2016-07-04 18:48:36"
         },
         {
             "name": "hwi/oauth-bundle",
@@ -3263,94 +3265,6 @@
             "time": "2016-02-19 17:24:12"
         },
         {
-            "name": "procergs/meurs-monitor-bundle",
-            "version": "v1.0.1",
-            "target-dir": "PROCERGS/LoginCidadao/MonitorBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PROCERGS/meurs-monitor-bundle.git",
-                "reference": "9e136a12644a4fff570282c7b7225e0dcd500ba2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/meurs-monitor-bundle/zipball/9e136a12644a4fff570282c7b7225e0dcd500ba2",
-                "reference": "9e136a12644a4fff570282c7b7225e0dcd500ba2",
-                "shasum": ""
-            },
-            "require": {
-                "liip/monitor-bundle": "^2.2",
-                "php": ">=5.4.0"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-0": {
-                    "PROCERGS\\LoginCidadao\\MonitorBundle": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Guilherme Donato",
-                    "email": "packagist@cadastro.dona.to"
-                }
-            ],
-            "description": "Monitor Bundle to be used by PROCERGS",
-            "homepage": "https://github.com/PROCERGS/meurs-monitor-bundle",
-            "keywords": [
-                "login-cidadao",
-                "monitor"
-            ],
-            "time": "2015-12-19 13:45:23"
-        },
-        {
-            "name": "procergs/nfg-badges-bundle",
-            "version": "v1.1.1",
-            "target-dir": "NFG/BadgesBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PROCERGS/nfg-badges-bundle.git",
-                "reference": "de8f7f2deefcf93d5a5a35917b3b4a08324cc643"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/nfg-badges-bundle/zipball/de8f7f2deefcf93d5a5a35917b3b4a08324cc643",
-                "reference": "de8f7f2deefcf93d5a5a35917b3b4a08324cc643",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-0": {
-                    "NFG\\BadgesBundle": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Guilherme Donato",
-                    "email": "packagist@cadastro.dona.to"
-                }
-            ],
-            "description": "Meu RS NFG Badge Bundle",
-            "homepage": "https://github.com/PROCERGS/nfg-badges-bundle",
-            "keywords": [
-                "Meu RS",
-                "badges",
-                "login-cidadao",
-                "meurs",
-                "nfg"
-            ],
-            "time": "2016-01-15 11:52:24"
-        },
-        {
             "name": "procergs/tos-bundle",
             "version": "1.2.4",
             "source": {
@@ -3480,17 +3394,17 @@
         },
         {
             "name": "sensio/distribution-bundle",
-            "version": "v3.0.36",
+            "version": "v3.0.35",
             "target-dir": "Sensio/Bundle/DistributionBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioDistributionBundle.git",
-                "reference": "964a56e855acac38d4a81920b3a86543f7e8492f"
+                "reference": "abc5b0ce28f72f838922aa0e0a107ba270dbabb5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/964a56e855acac38d4a81920b3a86543f7e8492f",
-                "reference": "964a56e855acac38d4a81920b3a86543f7e8492f",
+                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/abc5b0ce28f72f838922aa0e0a107ba270dbabb5",
+                "reference": "abc5b0ce28f72f838922aa0e0a107ba270dbabb5",
                 "shasum": ""
             },
             "require": {
@@ -3536,7 +3450,7 @@
                 "configuration",
                 "distribution"
             ],
-            "time": "2016-04-25 20:46:43"
+            "time": "2015-12-08 17:53:19"
         },
         {
             "name": "sensio/framework-extra-bundle",

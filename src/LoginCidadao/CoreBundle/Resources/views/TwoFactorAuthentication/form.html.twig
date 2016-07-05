@@ -34,3 +34,12 @@
         </div>
     </div>
 {% endblock body %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function(){
+            $('form').preventDoubleSubmission();
+        });
+    </script>
+{% endblock %}
