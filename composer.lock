@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "36a2ac016e6c51a1135593dcfd104507",
-    "content-hash": "98ed90fbfcedf5d1f235a375eebdacd4",
+    "hash": "fbac8cf4145d21978c749fa48b018ccc",
+    "content-hash": "e27fc5242c41307a354a20bc7d8f03c5",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-bundle",
@@ -3263,6 +3263,94 @@
                 "issues": "https://github.com/PROCERGS/login-cidadao-badges-bundle/issues"
             },
             "time": "2016-02-19 17:24:12"
+        },
+        {
+            "name": "procergs/meurs-monitor-bundle",
+            "version": "v1.0.1",
+            "target-dir": "PROCERGS/LoginCidadao/MonitorBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PROCERGS/meurs-monitor-bundle.git",
+                "reference": "9e136a12644a4fff570282c7b7225e0dcd500ba2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PROCERGS/meurs-monitor-bundle/zipball/9e136a12644a4fff570282c7b7225e0dcd500ba2",
+                "reference": "9e136a12644a4fff570282c7b7225e0dcd500ba2",
+                "shasum": ""
+            },
+            "require": {
+                "liip/monitor-bundle": "^2.2",
+                "php": ">=5.4.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "PROCERGS\\LoginCidadao\\MonitorBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guilherme Donato",
+                    "email": "packagist@cadastro.dona.to"
+                }
+            ],
+            "description": "Monitor Bundle to be used by PROCERGS",
+            "homepage": "https://github.com/PROCERGS/meurs-monitor-bundle",
+            "keywords": [
+                "login-cidadao",
+                "monitor"
+            ],
+            "time": "2015-12-19 13:45:23"
+        },
+        {
+            "name": "procergs/nfg-badges-bundle",
+            "version": "v1.1.1",
+            "target-dir": "NFG/BadgesBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PROCERGS/nfg-badges-bundle.git",
+                "reference": "de8f7f2deefcf93d5a5a35917b3b4a08324cc643"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PROCERGS/nfg-badges-bundle/zipball/de8f7f2deefcf93d5a5a35917b3b4a08324cc643",
+                "reference": "de8f7f2deefcf93d5a5a35917b3b4a08324cc643",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "NFG\\BadgesBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guilherme Donato",
+                    "email": "packagist@cadastro.dona.to"
+                }
+            ],
+            "description": "Meu RS NFG Badge Bundle",
+            "homepage": "https://github.com/PROCERGS/nfg-badges-bundle",
+            "keywords": [
+                "Meu RS",
+                "badges",
+                "login-cidadao",
+                "meurs",
+                "nfg"
+            ],
+            "time": "2016-01-15 11:52:24"
         },
         {
             "name": "procergs/tos-bundle",
