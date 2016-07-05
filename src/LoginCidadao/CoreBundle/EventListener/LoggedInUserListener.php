@@ -3,6 +3,7 @@
 namespace LoginCidadao\CoreBundle\EventListener;
 
 use Symfony\Component\HttpKernel\HttpKernel;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -38,18 +39,21 @@ class LoggedInUserListener
     /** @var string */
     private $defaultPasswordEncoder;
 
-    public function __construct(TokenStorageInterface $tokenStorage,
-                                AuthorizationCheckerInterface $authChecker,
-                                RouterInterface $router, Session $session,
-                                TranslatorInterface $translator,
-                                EntityManager $em, $defaultPasswordEncoder)
-    {
+    public function __construct(
+        TokenStorageInterface $tokenStorage,
+        AuthorizationCheckerInterface $authChecker,
+        RouterInterface $router,
+        Session $session,
+        TranslatorInterface $translator,
+        EntityManager $em,
+        $defaultPasswordEncoder
+    ) {
         $this->tokenStorage = $tokenStorage;
-        $this->authChecker  = $authChecker;
-        $this->router       = $router;
-        $this->session      = $session;
-        $this->translator   = $translator;
-        $this->em           = $em;
+        $this->authChecker = $authChecker;
+        $this->router = $router;
+        $this->session = $session;
+        $this->translator = $translator;
+        $this->em = $em;
 
         $this->defaultPasswordEncoder = $defaultPasswordEncoder;
     }
@@ -63,7 +67,8 @@ class LoggedInUserListener
         $token = $this->tokenStorage->getToken();
 
         if (is_null($token) || $token instanceof OAuthToken ||
-            $this->authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') === false) {
+            $this->authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') === false
+        ) {
             return;
         }
         if (!($token->getUser() instanceof PersonInterface)) {
@@ -98,19 +103,22 @@ class LoggedInUserListener
         } else {
             $url = $this->router->generate('lc_dashboard');
         }
+
         return $this->redirectUrl($url);
     }
 
     protected function checkUnconfirmedEmail()
     {
         $token = $this->tokenStorage->getToken();
-        $user  = $token->getUser();
+        $user = $token->getUser();
         if (is_null($user->getEmailConfirmedAt())) {
             $params = array('%url%' => $this->router->generate('lc_resend_confirmation_email'));
-            $title  = $this->translator->trans('notification.unconfirmed.email.title');
-            $text   = $this->translator->trans('notification.unconfirmed.email.shortText',
-                $params);
-            $alert  = sprintf("<strong>%s</strong> %s", $title, $text);
+            $title = $this->translator->trans('notification.unconfirmed.email.title');
+            $text = $this->translator->trans(
+                'notification.unconfirmed.email.shortText',
+                $params
+            );
+            $alert = sprintf("<strong>%s</strong> %s", $title, $text);
 
             $this->session->getFlashBag()->add('alert.unconfirmed.email', $alert);
         }
@@ -119,7 +127,16 @@ class LoggedInUserListener
     private function passwordEncoderMigration(GetResponseEvent $event)
     {
         $person = $this->tokenStorage->getToken()->getUser();
-        $route  = $event->getRequest()->get('_route');
+        $route = $event->getRequest()->get('_route');
+
+        if ($route === 'tos_agree'
+            || $route === 'tos_terms'
+            || $event->getRequest()->attributes->get('_controller') == 'LoginCidadaoTOSBundle:Agreement'
+            || $event->getRequest()->attributes->get('_controller') == 'LoginCidadaoTOSBundle:TermsOfService:showLatest'
+            || $event->getRequestType() === HttpKernelInterface::SUB_REQUEST
+        ) {
+            return;
+        }
 
         if ($person->getEncoderName() === $this->defaultPasswordEncoder) {
             return;
@@ -139,13 +156,14 @@ class LoggedInUserListener
             return;
         }
 
-        $person  = $this->tokenStorage->getToken()->getUser();
-        $repo    = $this->getInvalidateSessionRequestRepository();
+        $person = $this->tokenStorage->getToken()->getUser();
+        $repo = $this->getInvalidateSessionRequestRepository();
         $request = $repo->findMostRecent($person);
 
         $sessionCreation = $this->session->getMetadataBag()->getCreated();
         if ($request === null ||
-            $sessionCreation > $request->getRequestedAt()->getTimestamp()) {
+            $sessionCreation > $request->getRequestedAt()->getTimestamp()
+        ) {
             return;
         }
 
@@ -159,12 +177,13 @@ class LoggedInUserListener
     private function getInvalidateSessionRequestRepository()
     {
         return $this->em
-                ->getRepository('LoginCidadaoCoreBundle:InvalidateSessionRequest');
+            ->getRepository('LoginCidadaoCoreBundle:InvalidateSessionRequest');
     }
 
     private function redirectRoute($name, $parameters = array())
     {
         $url = $this->router->generate($name, $parameters);
+
         return $this->redirectUrl($url);
     }
 
