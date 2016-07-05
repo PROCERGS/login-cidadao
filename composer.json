@@ -58,7 +58,7 @@
         "nelmio/cors-bundle": "^1.4",
         "nelmio/security-bundle": "^1.8",
         "liip/monitor-bundle": "^2.2",
-        "guilhermednt/pathwell-bundle": "0.0.3",
+        "guilhermednt/pathwell-bundle": "^0.1",
         "procergs/meurs-monitor-bundle": "^1.0",
         "procergs/nfg-badges-bundle": "^1.1"
     },

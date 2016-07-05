@@ -140,6 +140,9 @@ parameters:
     # Should sector_identifier_uri be revalidated on each auth request?
     revalidate_sector_identifier_uri_on_auth: true
 
+    # Should passwords be checked for PathWell Topologies?
+    check_pathwell_topologies: true
+
     nfg_ws_url: ~
     soe_organization: ~
     soe_username: ~
