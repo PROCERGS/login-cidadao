@@ -180,7 +180,7 @@ class ProfileEditListner implements EventSubscriberInterface
             return;
         }
         if ($this->meuRSHelper->getNfgAccessToken($aUser)) {
-            $this->nfg->setAccessToken($aUser->getNfgAccessToken());
+            $this->nfg->setAccessToken($this->meuRSHelper->getNfgAccessToken($aUser));
             $this->nfg->setTituloEleitoral($personVoterReg);
             $nfgReturn1 = $this->nfg->consultaCadastro();
             if ($nfgReturn1['CodSitRetorno'] != 1) {
