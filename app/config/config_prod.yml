@@ -22,6 +22,7 @@ monolog:
             handler:      nested
             excluded_404s:
                 - ^/bundles
+                - ^/logout/if-not-remembered
         nested:
             type:  stream
             path:  %kernel.logs_dir%/%kernel.environment%.log
