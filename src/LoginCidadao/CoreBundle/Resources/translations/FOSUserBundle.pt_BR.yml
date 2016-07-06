@@ -84,7 +84,6 @@ registration.email.click: 'Confirmar Email'
 'By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.': 'Ao clicar em criar conta, você concorda com a <a href="%linkTerms%">Privacidade e Termos de uso</a> do serviço, incluindo nosso uso de cookies.'
 'Do you really want to unlink <strong class="social-network-name"></strong>?': 'Tem certeza que deseja desvincular sua conta do <strong class="social-network-name"></strong>?'
 Yes: Sim
-'Connect to the Nota Fiscal Gaúcha': 'Conectar à Nota Fiscal Gaúcha'
 'Continue Registration': 'Continuar Cadastro'
 facebook.token.error: 'Aparentemente houve um erro na autenticação com o Facebook. Por favor, tente logar novamente!'
 facebook.nousername: 'Conectado ao Facebook'
