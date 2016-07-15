@@ -371,3 +371,13 @@ services:
         arguments:
             - "@session"
             - "@translator"
+
+    lc.check_deploy_subscriber:
+        class: LoginCidadao\CoreBundle\EventListener\CheckDeployEventSubscriber
+        arguments:
+            - "@cache"
+            - "@doctrine.orm.entity_manager"
+            - '%oauth_default_client.uid%'
+            - '%notifications_categories_alert.uid%'
+        tags:
+            - { name: kernel.event_subscriber }
