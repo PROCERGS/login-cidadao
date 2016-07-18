@@ -75,11 +75,14 @@ assetic:
           - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.visible.min.js'
           - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.preventDoubleSubmission.js'
           - '@LoginCidadaoCoreBundle/Resources/public/js/general.js'
-      lc_base_css:
+      bootstrap_css:
         inputs:
           - 'assets/vendor/bootstrap/dist/css/bootstrap.min.css'
-          - 'bundles/logincidadaocore/bootstrap/3.3.1/css/bootstrap-theme.min.css'
-          - 'bundles/logincidadaocore/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
+          - '@LoginCidadaoCoreBundle/Resources/public/bootstrap/3.3.1/css/bootstrap-theme.min.css'
+          - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
+      lc_base_css:
+        inputs:
+          - '@bootstrap_css'
           - 'bundles/logincidadaocore/css/general.css'
           - 'bundles/logincidadaocore/css/navbar.css'
           - 'bundles/logincidadaocore/css/ac.widget.css'
