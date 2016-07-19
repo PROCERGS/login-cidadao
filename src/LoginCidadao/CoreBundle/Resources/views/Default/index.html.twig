@@ -4,23 +4,28 @@
 {% endblock %}
 
 {% block footer %}
-    <footer class="row">
-        <div class="content col-xs-12 text-center">
-            <span>Copyleft @2014, 2016</span>
-        </div>
+    <footer>
+        <p class="text-center">Copyleft @2014, 2016</p>
     </footer>
 {% endblock %}
 
 {% block body %}
-
-    <div class="vertical-cente r">
+    <div class="vertical-center">
         <div class="panel panel-home center-block">
             <div class="panel-heading">
-                <img src="" alt="" class="logo">
-                <a href="#register" class="btn btn-home-register pull-right">{{ 'home.register.button' | trans }}</a>
-                <a href="#login" class="btn btn-home-login pull-right" style="display: none">
-                    {{ 'home.login.button' | trans }}
-                </a>
+                <div class="heading-container">
+                    {% image '@LoginCidadaoCoreBundle/Resources/public/images/logo.png' %}
+                    <img src="{{ asset_url }}" alt="" class="logo">
+                    {% endimage %}
+                </div>
+                <div class="heading-container text-right">
+                    <a href="{{ path('fos_user_registration_register', {'✔': ''}) }}"
+                       class="btn btn-home-register">{{ 'home.register.button' | trans }}</a>
+                    <a href="{{ path('fos_user_security_login', {'✔': ''}) }}" class="btn btn-home-login"
+                       style="display: none">
+                        {{ 'home.login.button' | trans }}
+                    </a>
+                </div>
             </div>
             <div class="panel-body">
                 <div class="login">
@@ -35,40 +40,22 @@
                 </div>
             </div>
             <div class="panel-footer">
-                {{ include('LoginCidadaoCoreBundle::common.3rd_party_login.html.twig') }}
+
+                <div class="panel panel-3rd-party-login">
+                    <div class="panel-heading">
+                        <h2>Entre usando</h2>
+                    </div>
+                    <div class="panel-body">
+                        {{ include('LoginCidadaoCoreBundle::common.3rd_party_login.html.twig') }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    {#
-    {% set form1 = lc_getForm() %}
-    {% if form is not defined %}
-        {% set form = lc_getFormFactory() %}
-    {% endif %}
-
-    <div class="container lc-box-group">
-
-        {% embed "LoginCidadaoCoreBundle:Default:login_register.html.twig" %}
-            {% block left %}
-                <div class="box box-register">
-                    {{ include('LoginCidadaoCoreBundle::common.register.html.twig') }}
-                </div>
-            {% endblock %}
-
-            {% block right %}
-                <div class="box">
-                    {{ include('LoginCidadaoCoreBundle::common.login.html.twig') }}
-                </div>
-            {% endblock %}
-        {% endembed %}
-
-        {{ include('LoginCidadaoCoreBundle::common.3rd_party_login.html.twig') }}
-    </div>
-    #}
 {% endblock %}
 
 {% block stylesheets_custom %}
-    {% stylesheets '@bootstrap_css' '@LoginCidadaoCoreBundle/Resources/public/css/home/home2.css' filter='cssrewrite' filter='?uglifycss' %}
+    {% stylesheets '@bootstrap_css' 'bundles/logincidadaocore/css/home/home2.css' filter='cssrewrite' filter='?uglifycss' %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock %}
@@ -93,16 +80,18 @@
         function showBoxes(element) {
             if ($(element).is('.btn-home-login')) {
                 $('.registration').not('a').slideUp('medium', function () {
-                    $('.btn-home-register').show();
-                    $(element).hide();
+                    $(element).fadeOut('fast', function () {
+                        $('.btn-home-register').fadeIn();
+                    });
                     $('.login').not('a').slideDown('medium', function () {
                         $('.login form input:first').focus();
                     });
                 });
             } else {
                 $('.login').not('a').slideUp('medium', function () {
-                    $('.btn-home-login').show();
-                    $(element).hide();
+                    $(element).fadeOut('fast', function () {
+                        $('.btn-home-login').fadeIn();
+                    });
                     $('.registration').not('a').slideDown('medium', function () {
                         $('.registration form input:first').focus();
                     });
