@@ -1,5 +1,10 @@
 {% extends 'LoginCidadaoCoreBundle::base.html.twig' %}
 
+{% set is_lc_home = app.request.attributes.get('_route') == 'lc_home' %}
+{% set is_login_page = is_lc_home or app.request.attributes.get('_route') == 'fos_user_security_login' %}
+{% set is_register_page = app.request.attributes.get('_route') == 'fos_user_registration_register' %}
+{% set requested_page = is_login_page ? 'login' : 'register' %}
+
 {% block header %}
 {% endblock %}
 
@@ -18,21 +23,21 @@
                     <img src="{{ asset_url }}" alt="" class="logo">
                     {% endimage %}
                 </div>
-                <div class="heading-container text-right">
-                    <a href="{{ path('fos_user_registration_register', {'✔': ''}) }}"
-                       class="btn btn-home-register">{{ 'home.register.button' | trans }}</a>
-                    <a href="{{ path('fos_user_security_login', {'✔': ''}) }}" class="btn btn-home-login"
-                       style="display: none">
+                <div class="heading-container buttons text-right">
+                    <a href="{{ path('fos_user_registration_register') }}" class="btn btn-home-register"
+                            {{ is_register_page ? 'style="display: none"' : '' }}>{{ 'home.register.button' | trans }}</a>
+                    <a href="{{ path('fos_user_security_login') }}" class="btn btn-home-login"
+                            {{ is_login_page ? 'style="display: none"' : '' }}>
                         {{ 'home.login.button' | trans }}
                     </a>
                 </div>
             </div>
             <div class="panel-body">
-                <div class="login">
+                <div class="login" {{ is_register_page ? 'style="display: none"' : '' }}>
                     {% set form1 = lc_getForm() %}
                     {{ include('LoginCidadaoCoreBundle::common.login.html.twig') }}
                 </div>
-                <div class="registration" style="display: none">
+                <div class="registration" {{ is_login_page ? 'style="display: none"' : '' }}>
                     {% if form is not defined %}
                         {% set form = lc_getFormFactory() %}
                     {% endif %}
@@ -66,10 +71,14 @@
         $(document).ready(function () {
             $('form').preventDoubleSubmission();
 
+            var current = $('.panel-home .heading-container a.btn').not(':visible').get(0);
+            var button = $(current).is('.btn-home-login') ? 'btn-home-login' : 'btn-home-register';
+            history.replaceState({'button': button}, '', $(current).attr('href'));
+
             $('.panel-heading .btn').on('click', function (event) {
                 event.stopPropagation();
                 if ($(this).is('a')) {
-                    var button = $(this).is('.btn-home-login') ? 'login' : 'registration';
+                    var button = $(this).is('.btn-home-login') ? 'btn-home-login' : 'btn-home-register';
                     history.pushState({'button': button}, '', $(this).attr('href'));
                 }
                 showBoxes(this);
@@ -100,13 +109,8 @@
         }
 
         window.onpopstate = function (event) {
-            if ($(window).width() >= 768) {
-                return;
-            }
             if (event.state) {
                 showBoxes($("a." + event.state.button));
-            } else {
-                $('.box-register').not('a').slideUp('medium');
             }
         };
     </script>
