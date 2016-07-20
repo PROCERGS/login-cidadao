@@ -97,7 +97,9 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * )
      * @Assert\Length(
      *     min=8,
-     *     max=4096,
+     *     max=72,
+     *     maxMessage="person.validation.password.length.max",
+     *     minMessage="person.validation.password.length.min",
      *     groups={"Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration"}
      * )
      */
