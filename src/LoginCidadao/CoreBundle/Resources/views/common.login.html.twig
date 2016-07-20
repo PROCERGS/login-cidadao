@@ -29,11 +29,7 @@
     </div>
 
     {% if form1.recaptcha is defined %}
-        <div class="form-group captcha-container">
-            {{ include("LoginCidadaoCoreBundle::common.recaptcha.html.twig") }}
-            {% form_theme form1 'EWZRecaptchaBundle:Form:ewz_recaptcha_widget.html.twig' %}
-            {{ form_widget(form1.recaptcha, { 'attr': {'options' : {'theme' : 'custom'}, 'tabindex': '2' } }) }}
-        </div>
+        {{ form_widget(form1.recaptcha) }}
     {% endif %}
 
     <div class="form-group">

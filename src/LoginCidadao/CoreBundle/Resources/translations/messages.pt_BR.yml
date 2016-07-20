@@ -174,13 +174,6 @@ Send: Enviar
 'Login Cidadão': 'Login Cidadão'
 'About Citizen''s Login': 'Sobre o Login Cidadão'
 'This service is not available yet. Stay tuned for the launch date.': 'Esse serviço ainda não está ativo. Aguarde a data de lançamento.'
-recaptcha.instructions.image: 'Digite o texto:'
-recaptcha.instructions.audio: 'Digite o que você ouve:'
-recaptcha.instructions.new.challenge: 'Obter um novo desafio'
-recaptcha.instructions.new.image: 'Obter um desafio visual'
-recaptcha.instructions.new.audio: 'Obter um desafio de áudio'
-recaptcha.instructions.help: 'Ajuda'
-recaptcha.instructions.img: 'Imagem de desafio reCAPTCHA'
 'With only one account, the citizen will be able to use government''s digital services.': 'Com apenas um cadastro, o cidadão poderá utilizar os serviços digitais do governo.'
 'One account. The entire Government.': 'Uma conta. O Governo Inteiro.'
 'Creative commons': Licença creative commons
