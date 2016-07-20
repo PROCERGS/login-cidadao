@@ -28,6 +28,7 @@ use Donato\PathWellBundle\Validator\Constraints\PathWell;
  * @ORM\Table(name="person")
  * @UniqueEntity("cpf")
  * @UniqueEntity("username")
+ * @UniqueEntity(fields="email", errorPath="email", message="fos_user.email.already_used", groups={"LoginCidadaoRegistration", "Registration", "Profile"})
  * @ORM\HasLifecycleCallbacks
  * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
