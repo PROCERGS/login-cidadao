@@ -1,49 +1,123 @@
 {% extends 'LoginCidadaoCoreBundle::base.html.twig' %}
 
+{% set is_lc_home = app.request.attributes.get('_route') == 'lc_home' %}
+{% set is_login_page = is_lc_home or app.request.attributes.get('_route') == 'fos_user_security_login' %}
+{% set is_register_page = app.request.attributes.get('_route') == 'fos_user_registration_register' %}
+{% set requested_page = is_login_page ? 'login' : 'register' %}
+
+{% block header %}
+{% endblock %}
+
+{% block footer %}
+    <footer>
+        <ul class="no-first dashed text-center">
+            <li><a href="{{ path('lc_help') }}">{{ 'Help' | trans }}</a></li>
+            <li><a href="{{ path('lc_contact') }}">{{ 'Contact' | trans }}</a></li>
+            <li><a href="https://github.com/PROCERGS/login-cidadao/" target="_blank">{% trans %}GitHub Repository{% endtrans %}</a></li>
+            <li>Copyleft @2014, 2016</li>
+        </ul>
+    </footer>
+{% endblock %}
+
 {% block body %}
-    {% set form1 = lc_getForm() %}
-    {% if form is not defined %}
-        {% set form = lc_getFormFactory() %}
-    {% endif %}
-
-    <div class="row lc-main-title hidden-xs">
-        <div class="col-12 text-center">
-            <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
-            <h2>{% trans %}One account. The entire Government.{% endtrans %}</h2>
-        </div>
-    </div>
-
-    <div class="container lc-box-group">
-
-        {% embed "LoginCidadaoCoreBundle:Default:login_register.html.twig" %}
-            {% block left %}
-                <div class="box box-register">
-                    {{ include('LoginCidadaoCoreBundle::common.register.html.twig') }}
+    <div class="vertical-center">
+        <div class="panel panel-home center-block">
+            <div class="panel-heading">
+                <div class="heading-container">
+                    {% image '@LoginCidadaoCoreBundle/Resources/public/images/logo.png' %}
+                    <img src="{{ asset_url }}" alt="" class="logo">
+                    {% endimage %}
                 </div>
-            {% endblock %}
-
-            {% block right %}
-                <div class="box">
+                <div class="heading-container buttons text-right">
+                    <a href="{{ path('fos_user_registration_register') }}" class="btn btn-home-register"
+                            {{ is_register_page ? 'style="display: none"' : '' }}>{{ 'home.register.button' | trans }}</a>
+                    <a href="{{ path('fos_user_security_login') }}" class="btn btn-home-login"
+                            {{ is_login_page ? 'style="display: none"' : '' }}>
+                        {{ 'home.login.button' | trans }}
+                    </a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="login" {{ is_register_page ? 'style="display: none"' : '' }}>
+                    {% set form1 = lc_getForm() %}
                     {{ include('LoginCidadaoCoreBundle::common.login.html.twig') }}
                 </div>
-            {% endblock %}
-        {% endembed %}
+                <div class="registration" {{ is_login_page ? 'style="display: none"' : '' }}>
+                    {% if form is not defined %}
+                        {% set form = lc_getFormFactory() %}
+                    {% endif %}
+                    {{ include('LoginCidadaoCoreBundle::common.register.html.twig') }}
+                </div>
+            </div>
+            <div class="panel-footer">
 
-        {{ include('LoginCidadaoCoreBundle::common.3rd_party_login.html.twig') }}
+                <div class="panel panel-3rd-party-login">
+                    <div class="panel-heading">
+                        <h2>Entre usando</h2>
+                    </div>
+                    <div class="panel-body">
+                        {{ include('LoginCidadaoCoreBundle::common.3rd_party_login.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
 {% block stylesheets_custom %}
-    {% stylesheets '@lc_base_css' 'bundles/logincidadaocore/css/home/*.css' filter='cssrewrite' filter='?uglifycss' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% stylesheets '@bootstrap_css' 'bundles/logincidadaocore/css/forms.css' 'bundles/logincidadaocore/css/home/home2.css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="//www.google.com/recaptcha/api.js?hl={{ app.request.locale }}"></script>
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
             $('form').preventDoubleSubmission();
+
+            var current = $('.panel-home .heading-container a.btn').not(':visible').get(0);
+            var button = $(current).is('.btn-home-login') ? 'btn-home-login' : 'btn-home-register';
+            history.replaceState({'button': button}, '', $(current).attr('href'));
+
+            $('.panel-heading .btn').on('click', function (event) {
+                event.stopPropagation();
+                if ($(this).is('a')) {
+                    var button = $(this).is('.btn-home-login') ? 'btn-home-login' : 'btn-home-register';
+                    history.pushState({'button': button}, '', $(this).attr('href'));
+                }
+                showBoxes(this);
+                return false;
+            });
         });
+
+        function showBoxes(element) {
+            if ($(element).is('.btn-home-login')) {
+                $('.registration').not('a').slideUp('medium', function () {
+                    $(element).fadeOut('fast', function () {
+                        $('.btn-home-register').fadeIn();
+                    });
+                    $('.login').not('a').slideDown('medium', function () {
+                        $('.login form input:first').focus();
+                    });
+                });
+            } else {
+                $('.login').not('a').slideUp('medium', function () {
+                    $(element).fadeOut('fast', function () {
+                        $('.btn-home-login').fadeIn();
+                    });
+                    $('.registration').not('a').slideDown('medium', function () {
+                        $('.registration form input:first').focus();
+                    });
+                });
+            }
+        }
+
+        window.onpopstate = function (event) {
+            if (event.state) {
+                showBoxes($("a." + event.state.button));
+            }
+        };
     </script>
 {% endblock %}

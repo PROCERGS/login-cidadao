@@ -3,49 +3,58 @@
 {{ form_start(form1, {'action' : path("fos_user_security_check"), 'attr' : {'role' : 'form'}}) }}
 <div class="form-content">
 
-    {% if error is defined and error is not null %}
-        <div class="form-group">
-            <div class="input-error alert-danger">
-                <ul>
-                    <li>{{ error.messageKey|trans({}, 'security') }}</li>
-                </ul>
+    {% if error | default(null) is not null %}
+        {% if error.class | default(null) == 'LoginCidadao\\CoreBundle\\Exception\\RecaptchaException' %}
+            {% set recaptcha_error = error %}
+        {% else %}
+            <div class="form-error">
+                {{ error.message | trans({}, 'security') }}
             </div>
-        </div>
+        {% endif %}
     {% endif %}
 
     <div class="form-group">
         {{ form_label(form1.username) }}
         {{ form_errors(form1.username) }}
-        {{ form_widget(form1.username, {'attr' : {'placeholder' : 'security.login.username', 'tabindex': '1', 'onKeyUp' : 'validator.onKeyUpMultiformat(this, event)', 'class':'form-control', 'value' : last_username | default('') }}) }}
+        {{ form_widget(form1.username, {'attr' : {'placeholder' : 'security.login.username.placeholder', 'tabindex': '1', 'onKeyUp' : 'validator.onKeyUpMultiformat(this, event)', 'class':'form-control', 'value' : last_username | default('') }}) }}
     </div>
 
     <div class="form-group">
         <label for="{{ form1.password.vars.id }}" class="required" style="display: block">
             {{ 'form.plainPassword' | trans }}
-            <a id="resetting_request" target="_blank" tabindex="6" class="pull-right" href="{{ path('fos_user_resetting_request') }}">{{ 'resseting.forgot_password' | trans }}</a>
+            <a id="resetting_request" target="_blank" tabindex="6" class="pull-right"
+               href="{{ path('fos_user_resetting_request') }}">{{ 'resseting.forgot_password' | trans }}</a>
         </label>
         {{ form_errors(form1.password) }}
         {{ form_widget(form1.password, {'attr' : {'placeholder' : 'security.login.password', 'autocomplete': 'off', 'tabindex': '2', 'class':'form-control'}}) }}
     </div>
 
     {% if form1.recaptcha is defined %}
-        <div class="form-group captcha-container">
-            {{ include("LoginCidadaoCoreBundle::common.recaptcha.html.twig") }}
-            {% form_theme form1 'EWZRecaptchaBundle:Form:ewz_recaptcha_widget.html.twig' %}
-            {{ form_widget(form1.recaptcha, { 'attr': {'options' : {'theme' : 'custom'}, 'tabindex': '2' } }) }}
+        <div class="form-group {{ recaptcha_error is defined ? 'has-error' : '' }}">
+            {{ form_widget(form1.recaptcha) }}
+            {% if recaptcha_error is defined %}
+                <div class="help-block input-error">
+                    <ul>
+                        <li>{{ recaptcha_error.message | trans({}, 'security') }}</li>
+                    </ul>
+                </div>
+            {% endif %}
+            {{ form_errors(form1.recaptcha) }}
         </div>
     {% endif %}
 
     <div class="form-group">
         <div class="checkbox remember-group">
             <label>
-                <input type="checkbox" id="remember_me" name="_remember_me" value="on" tabindex="4" />{{ 'security.login.remember_me'|trans }}
+                <input type="checkbox" id="remember_me" name="_remember_me" value="on"
+                       tabindex="4"/>{{ 'security.login.remember_me'|trans }}
             </label>
         </div>
     </div>
 
     <div class="text-right">
-        <button type="submit" class="btn btn-block btn-success" tabindex="5">{{ 'security.login.submit'|trans }}</button>
+        <button type="submit" class="btn btn-block btn-success"
+                tabindex="5">{{ 'security.login.submit'|trans }}</button>
     </div>
 </div>
 
