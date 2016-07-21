@@ -13,7 +13,8 @@
         <ul class="no-first dashed text-center">
             <li><a href="{{ path('lc_help') }}">{{ 'Help' | trans }}</a></li>
             <li><a href="{{ path('lc_contact') }}">{{ 'Contact' | trans }}</a></li>
-            <li><a href="https://github.com/PROCERGS/login-cidadao/" target="_blank">{% trans %}GitHub Repository{% endtrans %}</a></li>
+            <li><a href="https://github.com/PROCERGS/login-cidadao/" target="_blank">{% trans %}GitHub
+                    Repository{% endtrans %}</a></li>
             <li>Copyleft @2014, 2016</li>
         </ul>
     </footer>
@@ -48,10 +49,9 @@
                 </div>
             </div>
             <div class="panel-footer">
-
                 <div class="panel panel-3rd-party-login">
                     <div class="panel-heading">
-                        <h2>Entre usando</h2>
+                        <h2>{{ 'home.3rd_party.call_to_action' | trans }}</h2>
                     </div>
                     <div class="panel-body">
                         {{ include('LoginCidadaoCoreBundle::common.3rd_party_login.html.twig') }}

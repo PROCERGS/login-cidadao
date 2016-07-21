@@ -404,3 +404,4 @@ invalidate_sessions:
 home:
     register.button: Sign up
     login.button: Login
+    3rd_party.call_to_action: Login using
