@@ -24,9 +24,7 @@
         <div class="panel panel-home center-block">
             <div class="panel-heading">
                 <div class="heading-container">
-                    {% image '@LoginCidadaoCoreBundle/Resources/public/images/logo.png' %}
-                    <img src="{{ asset_url }}" alt="" class="logo">
-                    {% endimage %}
+                    {{ include('LoginCidadaoCoreBundle::common.home_logo.html.twig') }}
                 </div>
                 <div class="heading-container buttons text-right">
                     <a href="{{ path('fos_user_registration_register') }}" class="btn btn-home-register"
