@@ -78,7 +78,7 @@ class LoginFormType extends AbstractType
                 [
                     'label' => false,
                     'mapped' => false,
-                    'constraints' => new Recaptcha2(['groups' => ['LoginCidadaoRegistration', 'Registration']]),
+                    'constraints' => new Recaptcha2(),
                 ]
             );
         }

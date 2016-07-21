@@ -11,3 +11,11 @@
     padding-left: 1.5em;
     font-size: 12px;
 }
+
+form .form-error {
+    border: 1px solid #a94442;
+    border-radius: 4px;
+    padding: 10px;
+    color: #a94442;
+    margin-bottom: 5px;
+}
