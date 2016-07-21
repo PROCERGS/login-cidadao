@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-html,body {
+html, body {
     background-color: #f9f9f9;
 }
 
@@ -48,6 +48,7 @@ html,body {
     .panel-home > .panel-heading {
         display: block;
     }
+
     .panel-home > .panel-heading .heading-container {
         display: block;
         text-align: center;
@@ -98,6 +99,24 @@ html,body {
 .terms {
     color: #666;
     font-size: 12px;
+}
+
+footer ul.dashed {
+    list-style-type: none;
+}
+
+footer ul.dashed > li {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+footer ul.dashed.no-first > li:first-child:before {
+    content: none;
+}
+
+footer ul.dashed > li:before {
+    content: "-";
+    margin-right: 5px;
 }
 
 /* 3rd Party Login */
