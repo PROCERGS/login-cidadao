@@ -50,7 +50,7 @@ class ClientMetadata
      * @Assert\All({
      *      @Assert\Type(type="string"),
      *      @Assert\NotBlank,
-     *      @Assert\Url(checkDNS = true)
+     *      @Assert\Url(checkDNS = false)
      * })
      * @ORM\Column(name="redirect_uris", type="json_array", nullable=false)
      */

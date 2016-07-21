@@ -59,6 +59,11 @@ class AppKernel extends Kernel
             new Liip\MonitorBundle\LiipMonitorBundle(),
 
             new Donato\PathWellBundle\DonatoPathWellBundle(),
+
+            // PROCERGS
+            new PROCERGS\LoginCidadao\CoreBundle\PROCERGSLoginCidadaoCoreBundle(),
+            new PROCERGS\LoginCidadao\MonitorBundle\PROCERGSLoginCidadaoMonitorBundle(),
+            new NFG\BadgesBundle\NFGBadgesBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

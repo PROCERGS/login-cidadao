@@ -3,6 +3,11 @@ _monitor:
     resource: "@LiipMonitorBundle/Resources/config/routing.xml"
     prefix: /monitor/health
 
+procergs_monitoring:
+    resource: "@PROCERGSLoginCidadaoMonitorBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 #Nelmio Security
 nelmio_security:
     path:     /nelmio/csp/report
@@ -45,7 +50,7 @@ tos:
     prefix:   /
 
 # Notifications
-lc_notification:
+procergs_login_cidadao_notification:
     type: rest
     resource: "@LoginCidadaoNotificationBundle/Resources/config/routing.yml"
     prefix:   /
