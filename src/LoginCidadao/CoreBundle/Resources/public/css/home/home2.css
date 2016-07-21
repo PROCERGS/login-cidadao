@@ -115,7 +115,7 @@ footer ul.dashed.no-first > li:first-child:before {
 }
 
 footer ul.dashed > li:before {
-    content: "-";
+    content: "- ";
     margin-right: 5px;
 }
 
