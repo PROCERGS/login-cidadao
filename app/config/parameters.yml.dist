@@ -58,9 +58,9 @@ parameters:
     twitter_app_secret: twitter_app_secret_here
 
     # Recaptcha Public Key
-    recaptcha_public_key: ~
+    recaptcha_public_key: YOUR_RECAPTCHA_SITE_KEY_HERE
     # Recaptcha Private Key
-    recaptcha_private_key: ~
+    recaptcha_private_key: YOUR_RECAPTCHA_SITE_SECRET_HERE
 
     # Google API Key
     google_app_key: YOUR_API_KEY

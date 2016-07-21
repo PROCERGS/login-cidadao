@@ -31,7 +31,7 @@ class AppKernel extends Kernel
             new LoginCidadao\LocaleBundle\LoginCidadaoLocaleBundle(),
             new LoginCidadao\APIBundle\LoginCidadaoAPIBundle(),
             new LoginCidadao\ValidationBundle\LoginCidadaoValidationBundle(),
-            new EWZ\Bundle\RecaptchaBundle\EWZRecaptchaBundle(),
+            new Beelab\Recaptcha2Bundle\BeelabRecaptcha2Bundle(),
 
             new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
             new Vich\UploaderBundle\VichUploaderBundle(),
@@ -46,7 +46,6 @@ class AppKernel extends Kernel
             new LoginCidadao\NotificationBundle\LoginCidadaoNotificationBundle(),
             
             new Scheb\TwoFactorBundle\SchebTwoFactorBundle(),
-            //new LoginCidadao\IgpBundle\LoginCidadaoIgpBundle(),
             new LoginCidadao\ValidationControlBundle\LoginCidadaoValidationControlBundle(),
 
             new LoginCidadao\TOSBundle\LoginCidadaoTOSBundle(),

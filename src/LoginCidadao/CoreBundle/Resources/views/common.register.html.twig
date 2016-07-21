@@ -21,7 +21,6 @@
         <div class="form-group">
             {{ form_label(form.firstName, 'form.firstName' | trans) }}
             {{ form_widget(form.firstName, {'attr': {'class': 'form-control', 'placeholder' : 'form.firstName.example' }}) }}
-            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
             {{ form_errors(form.firstName) }}
         </div>
     {% endif %}
@@ -30,7 +29,6 @@
         <div class="form-group">
             {{ form_label(form.surname, 'form.surname' | trans) }}
             {{ form_widget(form.surname, {'attr': {'class': 'form-control', 'placeholder' : 'form.surname.example' }}) }}
-            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
             {{ form_errors(form.surname) }}
         </div>
     {% endif %}

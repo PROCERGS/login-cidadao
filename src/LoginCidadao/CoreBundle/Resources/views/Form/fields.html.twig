@@ -61,8 +61,7 @@
                 </ul>
             </div>
         {% else %}
-            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-            <div class="input-error">
+            <div class="help-block input-error">
                 <ul>
                 {%- for error in errors -%}
                     <li>{{ error.message }}</li>

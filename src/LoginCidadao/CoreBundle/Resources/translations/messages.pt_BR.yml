@@ -4,6 +4,7 @@ Welcome!: Bem-vindo!
 'Here you''ll find all you need to know about the service.': 'Aqui você encontrará tudo que você precisa saber sobre esse serviço.'
 'You might start by logging in or %link_start%registering%link_end%.': 'Você pode começar acessando o sistema ou %link_start%cadastrando-se%link_end%.'
 security.login.username: 'Email ou CPF'
+security.login.username.placeholder: 'Digite seu email'
 security.login.password: Digite sua senha
 security.login.remember_me: 'Lembrar meus dados'
 security.login.submit: Entrar
@@ -173,13 +174,6 @@ Send: Enviar
 'Login Cidadão': 'Login Cidadão'
 'About Citizen''s Login': 'Sobre o Login Cidadão'
 'This service is not available yet. Stay tuned for the launch date.': 'Esse serviço ainda não está ativo. Aguarde a data de lançamento.'
-recaptcha.instructions.image: 'Digite o texto:'
-recaptcha.instructions.audio: 'Digite o que você ouve:'
-recaptcha.instructions.new.challenge: 'Obter um novo desafio'
-recaptcha.instructions.new.image: 'Obter um desafio visual'
-recaptcha.instructions.new.audio: 'Obter um desafio de áudio'
-recaptcha.instructions.help: 'Ajuda'
-recaptcha.instructions.img: 'Imagem de desafio reCAPTCHA'
 'With only one account, the citizen will be able to use government''s digital services.': 'Com apenas um cadastro, o cidadão poderá utilizar os serviços digitais do governo.'
 'One account. The entire Government.': 'Uma conta. O Governo Inteiro.'
 'Creative commons': Licença creative commons
@@ -820,3 +814,6 @@ invalidate_sessions:
     description: Ao acionar o botão a seguir, todas suas sessões serão descontectadas. Se você esqueceu sua conta conectada em um computador, por exemplo, você pode usar essa funcionalidade para garantir que ninguém consiga usar essa conexão para acessar sua conta.
     form.button: Desconectar Todas Sessões
 2fa.collapse: Exibir Opções
+home:
+    register.button: Cadastre-se
+    login.button: Entrar

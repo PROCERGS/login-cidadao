@@ -2,8 +2,8 @@
 
 namespace LoginCidadao\CoreBundle\Form\Type;
 
+use Beelab\Recaptcha2Bundle\Validator\Constraints\Recaptcha2;
 use Symfony\Component\Form\FormBuilderInterface;
-use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\True;
 use Symfony\Component\Form\AbstractType;
 
 class ContactFormType extends AbstractType
@@ -37,18 +37,15 @@ class ContactFormType extends AbstractType
         ));
 
         if ($this->enableCaptcha) {
-            $builder->add('recaptcha', 'ewz_recaptcha',
-                array(
-                'attr' => array(
-                    'options' => array(
-                        'theme' => 'clean'
-                    )
-                ),
-                'mapped' => false,
-                'constraints' => array(
-                    new True()
-                )
-            ));
+            $builder->add(
+                'recaptcha',
+                'Beelab\Recaptcha2Bundle\Form\Type\RecaptchaType',
+                [
+                    'label' => false,
+                    'mapped' => false,
+                    'constraints' => new Recaptcha2(['groups' => ['LoginCidadaoRegistration', 'Registration']]),
+                ]
+            );
         }
     }
 
