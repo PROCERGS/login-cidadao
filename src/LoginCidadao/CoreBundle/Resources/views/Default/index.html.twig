@@ -65,7 +65,7 @@
 {% endblock %}
 
 {% block stylesheets_custom %}
-    {% stylesheets '@bootstrap_css' 'bundles/logincidadaocore/css/forms.css' 'bundles/logincidadaocore/css/login_register/*.css' filter='cssrewrite' filter='?uglifycss' %}
+    {% stylesheets '@bootstrap_css' 'bundles/logincidadaocore/css/forms.css' '@lc_login_register_css' filter='cssrewrite' filter='?uglifycss' %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock %}
