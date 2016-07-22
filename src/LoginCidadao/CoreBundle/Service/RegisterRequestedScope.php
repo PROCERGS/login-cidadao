@@ -8,12 +8,15 @@
  * file that was distributed with this source code.
  */
 
-namespace LoginCidadao\OpenIDBundle\Service;
+namespace LoginCidadao\CoreBundle\Service;
 
 use Symfony\Component\HttpFoundation\Request;
 
 class RegisterRequestedScope
 {
+    /**
+     * @param Request $request
+     */
     public function registerRequestedScope(Request $request)
     {
         $route = $request->get('_route');
@@ -23,5 +26,13 @@ class RegisterRequestedScope
 
             $session->set('requested_scope', $request->get('scope'));
         }
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function clearRequestedScope(Request $request)
+    {
+        $request->getSession()->remove('requested_scope');
     }
 }

@@ -383,3 +383,12 @@ services:
             - '%notifications_categories_alert.uid%'
         tags:
             - { name: kernel.event_subscriber }
+
+    lc.register_requested_scope:
+        class: LoginCidadao\CoreBundle\Service\RegisterRequestedScope
+
+    lc.login_entry_point:
+        class: LoginCidadao\CoreBundle\EventListener\LoginEntryPoint
+        arguments:
+            - "@security.http_utils"
+            - "@lc.register_requested_scope"

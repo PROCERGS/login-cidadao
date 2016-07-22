@@ -10,7 +10,7 @@
 
 namespace LoginCidadao\OpenIDBundle\EventListener;
 
-use LoginCidadao\OpenIDBundle\Service\RegisterRequestedScope;
+use LoginCidadao\CoreBundle\Service\RegisterRequestedScope;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
