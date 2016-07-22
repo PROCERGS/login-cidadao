@@ -23,6 +23,8 @@ parameters:
     memcached_host: 127.0.0.1
     # Memcached server port
     memcached_port: 11211
+    # Memcached cache prefix
+    memcached_prefix: lc_cache_
 
     # Session prefix
     session_prefix: lc_sess_

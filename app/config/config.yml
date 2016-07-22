@@ -84,6 +84,9 @@ assetic:
           - 'assets/vendor/bootstrap/dist/css/bootstrap.min.css'
           - '@LoginCidadaoCoreBundle/Resources/public/bootstrap/3.3.1/css/bootstrap-theme.min.css'
           - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
+      lc_login_register_css:
+        inputs:
+          - 'bundles/logincidadaocore/css/login_register/*.css'
       lc_base_css:
         inputs:
           - '@bootstrap_css'

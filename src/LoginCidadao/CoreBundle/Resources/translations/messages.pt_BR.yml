@@ -817,3 +817,4 @@ invalidate_sessions:
 home:
     register.button: Cadastre-se
     login.button: Entrar
+    3rd_party.call_to_action: Entre usando
