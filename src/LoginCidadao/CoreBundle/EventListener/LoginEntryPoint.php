@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace LoginCidadao\OpenIDBundle\EventListener;
+namespace LoginCidadao\CoreBundle\EventListener;
 
 use LoginCidadao\CoreBundle\Service\RegisterRequestedScope;
 use Symfony\Component\HttpFoundation\Request;
