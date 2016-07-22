@@ -121,4 +121,14 @@ class ClientRepository extends EntityRepository
             $items
         );
     }
+
+    /**
+     * @return mixed
+     */
+    public function countClients()
+    {
+        return $this->createQueryBuilder('c')
+            ->select('COUNT(c)')
+            ->getQuery()->getSingleScalarResult();
+    }
 }
