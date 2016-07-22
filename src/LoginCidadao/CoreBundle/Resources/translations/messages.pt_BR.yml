@@ -823,8 +823,9 @@ person.form:
         label: Nome
         placeholder: Digite seu nome
     surname:
-         label: Sobrenome
-         placeholder: Digite seu sobrenome
-    cpf.placeholder: Digite seu CPF
+        label: Sobrenome
+        placeholder: Digite seu sobrenome
+    cpf:
+        placeholder: Digite seu CPF
     birthdate.placeholder: dd/mm/aaaa
     mobile.placeholder: Digite seu telefone celular

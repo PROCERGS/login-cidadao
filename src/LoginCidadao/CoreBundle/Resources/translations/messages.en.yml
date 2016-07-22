@@ -410,8 +410,9 @@ person.form:
         label: Name
         placeholder: Type your name
     surname:
-         label: Last name
-         placeholder: Type your last name
-    cpf.placeholder: Type your CPF (brazilian taxpayer ID)
+        label: Last name
+        placeholder: Type your last name
+    cpf:
+        placeholder: Type your CPF (brazilian taxpayer ID)
     birthdate.placeholder: dd/mm/yyyy
     mobile.placeholder: Type your mobile phone
