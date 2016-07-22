@@ -2,6 +2,7 @@
 
 namespace LoginCidadao\CoreBundle\Security\Http\Firewall;
 
+use LoginCidadao\CoreBundle\Exception\RecaptchaException;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,55 +40,76 @@ class LoginCidadaoListener extends UsernamePasswordFormAuthenticationListener
     private function getFilter(Request $request)
     {
         if ($this->options['post_only']) {
-            $username = trim($request->request->get($this->options['username_parameter'],
-                    null, true));
+            $username = trim(
+                $request->request->get(
+                    $this->options['username_parameter'],
+                    null,
+                    true
+                )
+            );
         } else {
-            $username = trim($request->get($this->options['username_parameter'],
-                    null, true));
+            $username = trim(
+                $request->get(
+                    $this->options['username_parameter'],
+                    null,
+                    true
+                )
+            );
         }
+
         return array(
             'ip' => $request->getClientIp(),
-            'username' => $username
+            'username' => $username,
         );
     }
 
     protected function attemptAuthentication(Request $request)
     {
-        $options       = $this->getFilter($request);
+        $options = $this->getFilter($request);
         $accessSession = $this->registerAttempt($request);
 
         $request->getSession()->set(
-            Security::LAST_USERNAME, $options['username']
+            Security::LAST_USERNAME,
+            $options['username']
         );
 
-        $formType      = 'LoginCidadao\CoreBundle\Form\Type\LoginFormType';
+        $formType = 'LoginCidadao\CoreBundle\Form\Type\LoginFormType';
         $check_captcha = $accessSession->getVal() >= $this->bruteForceThreshold;
 
-        $form = $this->formFactory->create($formType, null,
-            compact('check_captcha'));
+        $form = $this->formFactory->create($formType, null, compact('check_captcha'));
         $form->handleRequest($request);
         if (!$form->isValid()) {
             $translator = $this->translator;
-            throw new BadCredentialsException($translator->trans('Captcha is invalid.'));
+            foreach ($form->getErrors() as $error) {
+                if ($error->getOrigin()->getName() === 'recaptcha') {
+                    throw new RecaptchaException($error->getMessage());
+                }
+                throw new BadCredentialsException($translator->trans($error->getMessage()));
+            }
+            throw new BadCredentialsException();
         }
+
         return parent::attemptAuthentication($request);
     }
 
     public function setBruteForceThreshold($bruteForceThreshold)
     {
         $this->bruteForceThreshold = $bruteForceThreshold;
+
         return $this;
     }
 
     public function setFormFactory(FormFactoryInterface $formFactory)
     {
         $this->formFactory = $formFactory;
+
         return $this;
     }
 
     public function setEntityManager(EntityManager $em)
     {
         $this->em = $em;
+
         return $this;
     }
 
@@ -102,6 +124,7 @@ class LoginCidadaoListener extends UsernamePasswordFormAuthenticationListener
             $accessSession = new AccessSession();
             $accessSession->fromArray($options);
         }
+
         return $accessSession;
     }
 
@@ -118,6 +141,7 @@ class LoginCidadaoListener extends UsernamePasswordFormAuthenticationListener
     public function setTranslator(TranslatorInterface $translator)
     {
         $this->translator = $translator;
+
         return $this;
     }
 }

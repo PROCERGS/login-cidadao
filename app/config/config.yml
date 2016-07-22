@@ -75,16 +75,21 @@ assetic:
           - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.visible.min.js'
           - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.preventDoubleSubmission.js'
           - '@LoginCidadaoCoreBundle/Resources/public/js/general.js'
-      lc_base_css:
+      bootstrap_css:
         inputs:
           - 'assets/vendor/bootstrap/dist/css/bootstrap.min.css'
-          - 'bundles/logincidadaocore/bootstrap/3.3.1/css/bootstrap-theme.min.css'
-          - 'bundles/logincidadaocore/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
+          - '@LoginCidadaoCoreBundle/Resources/public/bootstrap/3.3.1/css/bootstrap-theme.min.css'
+          - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
+      lc_login_register_css:
+        inputs:
+          - 'bundles/logincidadaocore/css/login_register/*.css'
+      lc_base_css:
+        inputs:
+          - '@bootstrap_css'
           - 'bundles/logincidadaocore/css/general.css'
           - 'bundles/logincidadaocore/css/navbar.css'
           - 'bundles/logincidadaocore/css/ac.widget.css'
           - 'bundles/logincidadaocore/css/common.grid.css'
-          - 'bundles/logincidadaocore/css/custom.recaptcha.css'
           - 'bundles/logincidadaocore/css/list.buttons.css'
           - 'bundles/logincidadaocore/css/notification.css'
       lc_logged_css:
@@ -269,12 +274,9 @@ parameters:
     organization.class: LoginCidadao\OAuthBundle\Entity\Organization
     oauth_client.class: LoginCidadao\OAuthBundle\Entity\Client
 
-ewz_recaptcha:
-    public_key:   %recaptcha_public_key%
-    private_key:  %recaptcha_private_key%
-    secure:       true
-    locale_key:   kernel.default_locale
-    http_proxy: %http_proxy%
+beelab_recaptcha2:
+    site_key: "%recaptcha_public_key%"
+    secret: "%recaptcha_private_key%"
 
 # Uploader
 knp_gaufrette:
@@ -429,6 +431,7 @@ nelmio_security:
                 - 'https://www.google-analytics.com/'
                 - 'http://browser-update.org/'
                 - 'https://www.google.com/'
+                - 'https://www.gstatic.com/recaptcha/'
                 - 'unsafe-inline'
                 - 'unsafe-eval'
                 - 'self'
@@ -456,6 +459,7 @@ nelmio_security:
                 - 'https://www.google-analytics.com/'
                 - 'http://browser-update.org/'
                 - 'https://www.google.com/'
+                - 'https://www.gstatic.com/recaptcha/'
                 - 'https://ajax.googleapis.com/'
                 - 'unsafe-inline'
                 - 'unsafe-eval'

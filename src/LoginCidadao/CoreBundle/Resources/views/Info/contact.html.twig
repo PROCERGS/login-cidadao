@@ -28,11 +28,7 @@
                     {{ form_row(form.message, { 'attr' : {'placeholder' : 'form.message'|trans, 'class' :'form-control', 'rows': '3' }, 'label_attr' : {'class': 'sr-only'} } ) }}
                 </div>
                 {% if form.recaptcha is defined %}
-                <div class="form-group">
-                    {{ include("LoginCidadaoCoreBundle::common.recaptcha.html.twig") }}
-                    {% form_theme form 'EWZRecaptchaBundle:Form:ewz_recaptcha_widget.html.twig' %}
-                    {{ form_row(form.recaptcha, { 'attr': {'options' : {'theme' : 'custom' } }, 'label_attr': { 'class': 'sr-only' } }) }}
-                </div>
+                    {{ form_widget(form.recaptcha) }}
                 {% endif %}
                 <button type="submit" class="btn btn-success pull-right">{{ 'form.submit'|trans }}</button>
             </div>
@@ -42,7 +38,12 @@
 {% endblock %}
 
 {% block stylesheets_custom %}
-    {% stylesheets '@lc_base_css' 'bundles/logincidadaocore/css/home/*.css' filter='cssrewrite' filter='?uglifycss' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% stylesheets '@lc_base_css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="//www.google.com/recaptcha/api.js?hl={{ app.request.locale }}"></script>
 {% endblock %}
