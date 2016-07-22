@@ -15,7 +15,6 @@ use LoginCidadao\CoreBundle\Event\GetClientEvent;
 use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
 use LoginCidadao\OpenIDBundle\Validator\SectorIdentifierUriChecker;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\KernelEvents;
 
 class CoreEventsSubscriber implements EventSubscriberInterface
 {
@@ -51,7 +50,6 @@ class CoreEventsSubscriber implements EventSubscriberInterface
             LoginCidadaoCoreEvents::GET_CLIENT => array(
                 array('onGetClient', 10),
             ),
-            KernelEvents::EXCEPTION
         );
     }
 

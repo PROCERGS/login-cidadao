@@ -102,6 +102,7 @@ interface PersonInterface extends EncoderAwareInterface
 
     public function getEmailExpiration();
 
+    public function getConfirmationToken();
     public function setConfirmationToken($confirmationToken);
 
     public function setFacebookUsername($facebookUsername);
