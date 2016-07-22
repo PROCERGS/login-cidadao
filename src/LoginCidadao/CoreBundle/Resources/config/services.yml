@@ -63,7 +63,9 @@ services:
 
     lc.person.registration.form.type:
         class: %lc.person.registration.form.type.class%
-        arguments: [%fos_user.model.user.class%]
+        arguments:
+            - "%fos_user.model.user.class%"
+            - "@session"
         tags:
             - { name: form.type, alias: lc_person_registration }
 

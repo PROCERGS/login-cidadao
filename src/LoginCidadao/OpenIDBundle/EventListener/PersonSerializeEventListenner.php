@@ -1,6 +1,6 @@
 <?php
 
-namespace LoginCidadao\OpenIDBundle\EventListenner;
+namespace LoginCidadao\OpenIDBundle\EventListener;
 
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\ObjectEvent;

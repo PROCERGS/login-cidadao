@@ -86,6 +86,7 @@ security:
             context: context_key
             pattern: ^/(?!api|!oauth)
             switch_user: true
+            entry_point: lc.login_entry_point
 
             remember_me:
                 secret:      "%secret%"
