@@ -4,6 +4,8 @@ namespace LoginCidadao\CoreBundle\EventListener;
 
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
+use LoginCidadao\CoreBundle\Service\RegisterRequestedScope;
+use LoginCidadao\NotificationBundle\Handler\NotificationHandler;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -25,8 +27,14 @@ class RegisterListner implements EventSubscriberInterface
 
     /** \Symfony\Component\HttpFoundation\Session\Session * */
     private $session;
+
+    /** @var TranslatorInterface */
     private $translator;
+
+    /** @var MailerInterface */
     private $mailer;
+
+    /** @var TokenGeneratorInterface */
     private $tokenGenerator;
 
     /** @var NotificationsHelper */
@@ -34,7 +42,12 @@ class RegisterListner implements EventSubscriberInterface
     private $emailUnconfirmedTime;
     protected $em;
     private $lcSupportedScopes;
+
+    /** @var NotificationHandler */
     private $notificationHandler;
+
+    /** @var RegisterRequestedScope */
+    private $registerRequestedScope;
 
     public function __construct(
         UrlGeneratorInterface $router,
@@ -45,7 +58,8 @@ class RegisterListner implements EventSubscriberInterface
         NotificationsHelper $notificationsHelper,
         $emailUnconfirmedTime,
         $lcSupportedScopes,
-        $notificationHandler
+        NotificationHandler $notificationHandler,
+        RegisterRequestedScope $registerRequestedScope
     ) {
         $this->router = $router;
         $this->session = $session;
@@ -56,6 +70,7 @@ class RegisterListner implements EventSubscriberInterface
         $this->emailUnconfirmedTime = $emailUnconfirmedTime;
         $this->lcSupportedScopes = $lcSupportedScopes;
         $this->notificationHandler = $notificationHandler;
+        $this->registerRequestedScope = $registerRequestedScope;
     }
 
     /**
@@ -110,6 +125,8 @@ class RegisterListner implements EventSubscriberInterface
         if (strlen($user->getPassword()) == 0) {
             $this->notificationsHelper->enforceEmptyPasswordNotification($user);
         }
+
+        $this->registerRequestedScope->clearRequestedScope($event->getRequest());
     }
 
     public function onEmailConfirmed(GetResponseUserEvent $event)
