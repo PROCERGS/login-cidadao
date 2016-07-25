@@ -10,17 +10,14 @@
 
 namespace LoginCidadao\CoreBundle\Model;
 
-class ConfirmEmailTask extends Task
+class MigratePasswordEncoderTask extends Task
 {
-    /** @var bool */
-    private $isMandatory;
-
     /**
      * @return string
      */
     public function getName()
     {
-        return 'lc.task.confirm_email';
+        return 'lc.force_password_change';
     }
 
     /**
@@ -28,15 +25,13 @@ class ConfirmEmailTask extends Task
      */
     public function getTarget()
     {
-        return ['task_confirm_email', []];
+        return ['fos_user_change_password', []];
     }
 
     public function getTaskRoutes()
     {
         return [
-            'task_confirm_email',
-            'fos_user_registration_confirm',
-            'wait_valid_email',
+            'fos_user_change_password',
         ];
     }
 
@@ -45,18 +40,7 @@ class ConfirmEmailTask extends Task
      */
     public function isMandatory()
     {
-        return $this->isMandatory;
-    }
-
-    /**
-     * @param boolean $isMandatory
-     * @return ConfirmEmailTask
-     */
-    public function setIsMandatory($isMandatory)
-    {
-        $this->isMandatory = $isMandatory;
-
-        return $this;
+        return true;
     }
 
     /**
@@ -64,6 +48,6 @@ class ConfirmEmailTask extends Task
      */
     public function getPriority()
     {
-        return 100;
+        return 50;
     }
 }

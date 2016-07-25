@@ -395,7 +395,9 @@ admin:
         list: 'Manage People'
         list.title:  'Search People'
 force_password_change:
+    title: Update your password to continue
     description: Please update your password to improve your account's security.
+    submit: Save
 invalidate_sessions:
     title: Disconnect All Sessions
     description: By clicking the following button all your sessions will be disconnected. This is useful if you forgot you account connected in a computer and wants to be sure nobody can use your account from that computer until you log back in.
@@ -417,3 +419,13 @@ person.form:
         placeholder: Type your CPF (brazilian taxpayer ID)
     birthdate.placeholder: dd/mm/yyyy
     mobile.placeholder: Type your mobile phone
+tasks.confirm_email:
+    title: Confirm your email to continue
+    body: An email was sent to the address you registered. Open this email and click the confirmation button on the message.
+    resend:
+        title: Didn''t receive it?
+        body: You checked even your spam folder and didn''t find the message? Don''t worry, you can sent it again by clicking the following button.
+        button: Resend Email
+    resent.alert: Another message was sent
+    success.alert: Email successfuly verified!
+Close: Close

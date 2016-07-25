@@ -4,6 +4,7 @@ namespace LoginCidadao\CoreBundle\EventListener;
 
 use LoginCidadao\CoreBundle\Event\GetTasksEvent;
 use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
+use LoginCidadao\CoreBundle\Model\MigratePasswordEncoderTask;
 use LoginCidadao\CoreBundle\Model\Task;
 use LoginCidadao\CoreBundle\Service\IntentManager;
 use Symfony\Component\EventDispatcher\Event;
@@ -230,7 +231,7 @@ class LoggedInUserListener
         );
 
         foreach ($tasks as $task) {
-            if (false === $task->isIsMandatory()) {
+            if (false === $task->isMandatory()) {
                 continue; // search first mandatory task
             }
         }
@@ -240,6 +241,9 @@ class LoggedInUserListener
         }
         $target = $task->getTarget();
 
+        if ($task instanceof MigratePasswordEncoderTask) {
+            $this->session->set('force_password_change', true);
+        }
         // If the user is not trying to access one of the task's routes, redirect to the default route
         if (false === $task->isTaskRoute($event->getRequest()->get('_route'))) {
             $this->intentManager->setIntent($event->getRequest(), false);

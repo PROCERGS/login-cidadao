@@ -415,5 +415,6 @@ services:
             - "@security.token_storage"
             - "@security.http_utils"
             - "%require_email_validation%"
+            - "%default_password_encoder%"
         tags:
             - { name: kernel.event_subscriber }

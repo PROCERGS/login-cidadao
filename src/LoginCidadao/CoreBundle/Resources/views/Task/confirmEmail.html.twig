@@ -1,13 +1,5 @@
 {% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
 
-{% block panel_footer_class %}hidden{% endblock %}
-
-{% block top_buttons %}
-    <a href="{{ path('fos_user_security_logout') }}" class="btn btn-compact-logout">
-        {{ 'compact.logout.button' | trans }}
-    </a>
-{% endblock %}
-
 {% block panel_body_class %}task-email-validation{% endblock %}
 
 {% block panel_body %}

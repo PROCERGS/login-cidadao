@@ -31,7 +31,7 @@ abstract class Task
     /**
      * @return boolean
      */
-    public abstract function isIsMandatory();
+    public abstract function isMandatory();
 
     /**
      * @return int

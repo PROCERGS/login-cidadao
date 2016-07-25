@@ -13,9 +13,8 @@ namespace LoginCidadao\CoreBundle\EventListener;
 use LoginCidadao\CoreBundle\Event\GetTasksEvent;
 use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
 use LoginCidadao\CoreBundle\Model\ConfirmEmailTask;
+use LoginCidadao\CoreBundle\Model\MigratePasswordEncoderTask;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use LoginCidadao\CoreBundle\Model\Task;
-use LoginCidadao\CoreBundle\Service\IntentManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
@@ -41,11 +40,13 @@ class TaskSubscriber implements EventSubscriberInterface
     public function __construct(
         TokenStorage $tokenStorage,
         HttpUtils $httpUtils,
-        $mandatoryEmailValidation
+        $mandatoryEmailValidation,
+        $defaultPasswordEncoder
     ) {
         $this->tokenStorage = $tokenStorage;
         $this->httpUtils = $httpUtils;
         $this->options['mandatoryEmailValidation'] = $mandatoryEmailValidation;
+        $this->options['defaultPasswordEncoder'] = $defaultPasswordEncoder;
     }
 
 
@@ -61,6 +62,7 @@ class TaskSubscriber implements EventSubscriberInterface
      */
     public function onGetTasks(GetTasksEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
+        /** @var PersonInterface $user */
         $user = $this->tokenStorage->getToken()->getUser();
         if (!($user instanceof PersonInterface)) {
             return;
@@ -70,6 +72,10 @@ class TaskSubscriber implements EventSubscriberInterface
             $task = (new ConfirmEmailTask())
                 ->setIsMandatory(true);
             $event->addTask($task);
+        }
+
+        if (true || $user->getEncoderName() !== $this->options['defaultPasswordEncoder']) {
+            $event->addTask(new MigratePasswordEncoderTask());
         }
     }
 }

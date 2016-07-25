@@ -24,6 +24,11 @@
                 </div>
                 <div class="heading-container buttons text-right">
                     {% block top_buttons %}
+                        {% if app.user != null %}
+                            <a href="{{ path('fos_user_security_logout') }}" class="btn btn-compact-logout">
+                                {{ 'compact.logout.button' | trans }}
+                            </a>
+                        {% endif %}
                     {% endblock %}
                 </div>
             </div>
@@ -31,7 +36,7 @@
                 {% block panel_body %}
                 {% endblock %}
             </div>
-            <div class="panel-footer {% block panel_footer_class %}{% endblock %}">
+            <div class="panel-footer {% block panel_footer_class %}hidden{% endblock %}">
                 {% block panel_footer %}
                 {% endblock %}
             </div>
