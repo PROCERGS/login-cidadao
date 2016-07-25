@@ -405,3 +405,14 @@ home:
     register.button: Sign up
     login.button: Login
     3rd_party.call_to_action: Login using
+person.form:
+    firstName:
+        label: Name
+        placeholder: Type your name
+    surname:
+        label: Last name
+        placeholder: Type your last name
+    cpf:
+        placeholder: Type your CPF (brazilian taxpayer ID)
+    birthdate.placeholder: dd/mm/yyyy
+    mobile.placeholder: Type your mobile phone

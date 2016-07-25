@@ -91,3 +91,4 @@ Your profile picure will be changed to <strong></strong>: Your profile picure wi
 Your Facebook profile picure will be used.: Your Facebook profile picure will be used.
 form.register.call_to_action: I'm not registered yet
 form.login.call_to_action: I'm alreay registered
+person.form.birthdate.placeholder: dd/mm/yyyy

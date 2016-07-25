@@ -63,7 +63,9 @@ services:
 
     lc.person.registration.form.type:
         class: %lc.person.registration.form.type.class%
-        arguments: [%fos_user.model.user.class%]
+        arguments:
+            - "%fos_user.model.user.class%"
+            - "@session"
         tags:
             - { name: form.type, alias: lc_person_registration }
 
@@ -130,7 +132,17 @@ services:
 
     lc.user_register:
         class: %lc.user_register.class%
-        arguments: ["@router", "@session", "@translator", "@fos_user.mailer", "@fos_user.util.token_generator", "@notifications.helper", "%registration.email.unconfirmed_time%", "%lc_supported_scopes%", "@lc.notification.handler" ]
+        arguments:
+            - "@router"
+            - "@session"
+            - "@translator"
+            - "@fos_user.mailer"
+            - "@fos_user.util.token_generator"
+            - "@notifications.helper"
+            - "%registration.email.unconfirmed_time%"
+            - "%lc_supported_scopes%"
+            - "@lc.notification.handler"
+            - "@lc.register_requested_scope"
         tags:
             - { name: kernel.event_subscriber }
         calls:
@@ -381,3 +393,12 @@ services:
             - '%notifications_categories_alert.uid%'
         tags:
             - { name: kernel.event_subscriber }
+
+    lc.register_requested_scope:
+        class: LoginCidadao\CoreBundle\Service\RegisterRequestedScope
+
+    lc.login_entry_point:
+        class: LoginCidadao\CoreBundle\EventListener\LoginEntryPoint
+        arguments:
+            - "@security.http_utils"
+            - "@lc.register_requested_scope"

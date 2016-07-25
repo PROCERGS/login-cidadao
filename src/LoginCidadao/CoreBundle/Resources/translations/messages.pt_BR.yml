@@ -818,3 +818,14 @@ home:
     register.button: Cadastre-se
     login.button: Entrar
     3rd_party.call_to_action: Entre usando
+person.form:
+    firstName:
+        label: Nome
+        placeholder: Digite seu nome
+    surname:
+        label: Sobrenome
+        placeholder: Digite seu sobrenome
+    cpf:
+        placeholder: Digite seu CPF
+    birthdate.placeholder: dd/mm/aaaa
+    mobile.placeholder: Digite seu telefone celular
