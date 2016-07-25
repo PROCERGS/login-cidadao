@@ -35,6 +35,8 @@ class ConfirmEmailTask extends Task
     {
         return [
             'task_confirm_email',
+            'fos_user_registration_confirm',
+            'wait_valid_email',
         ];
     }
 

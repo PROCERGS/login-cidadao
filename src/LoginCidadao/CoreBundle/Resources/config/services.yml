@@ -204,7 +204,8 @@ services:
             - "@translator"
             - "@doctrine.orm.entity_manager"
             - "@lc.intent.manager"
-            - %default_password_encoder%
+            - "%default_password_encoder%"
+            - "%require_email_validation%"
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
@@ -413,6 +414,6 @@ services:
         arguments:
             - "@security.token_storage"
             - "@security.http_utils"
-            - true
+            - "%require_email_validation%"
         tags:
             - { name: kernel.event_subscriber }

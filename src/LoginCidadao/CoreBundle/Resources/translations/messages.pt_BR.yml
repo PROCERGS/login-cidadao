@@ -818,6 +818,7 @@ home:
     register.button: Cadastre-se
     login.button: Entrar
     3rd_party.call_to_action: Entre usando
+compact.logout.button: Sair
 person.form:
     firstName:
         label: Nome
@@ -829,3 +830,13 @@ person.form:
         placeholder: Digite seu CPF
     birthdate.placeholder: dd/mm/aaaa
     mobile.placeholder: Digite seu telefone celular
+tasks.confirm_email:
+    title: Confirme seu email para continuar
+    body: Um email foi enviado para o endereço informado em seu cadastro. Abra esse email e clique no botão de confirmação presente na mensagem.
+    resend:
+        title: Não recebeu?
+        body: Já verificou até mesmo em sua caixa de spam e não encontrou a mensagem? Não se preocupe, você pode reenviar essa mensagem clicando no botão logo abaixo.
+        button: Reenviar Email
+    resent.alert: Mensagem reenviada
+    success.alert: Email verificado com sucesso!
+Close: Fechar

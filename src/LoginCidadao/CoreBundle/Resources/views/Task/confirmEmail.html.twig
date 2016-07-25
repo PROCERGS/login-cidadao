@@ -1,19 +1,69 @@
-{% extends "LoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
 
-{% block content %}
-    <div class="content">
-        <h1>You must confirm your email!</h1>
+{% block panel_footer_class %}hidden{% endblock %}
 
-        <p>Hello, this is the email confirmation page placeholder.</p>
-    </div>
+{% block top_buttons %}
+    <a href="{{ path('fos_user_security_logout') }}" class="btn btn-compact-logout">
+        {{ 'compact.logout.button' | trans }}
+    </a>
 {% endblock %}
 
-{% block content_columns %}container{% endblock %}
-{% block sidebar %}{% endblock %}
-{% block notificationExtreme %}
-    {{ include("LoginCidadaoCoreBundle::notification_extreme.html.twig", { columns: block('content_columns') } ) }}
+{% block panel_body_class %}task-email-validation{% endblock %}
+
+{% block panel_body %}
+    {% for type, messages in app.session.flashbag.all %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="{{ 'Close' | trans }}"><span
+                            aria-hidden="true">&times;</span></button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <h1>
+        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+        {{ 'tasks.confirm_email.title' | trans }}
+    </h1>
+
+    <p class="main">{{ 'tasks.confirm_email.body' | trans }}</p>
+
+    <h2>{{ 'tasks.confirm_email.resend.title' | trans }}</h2>
+    <p>{{ 'tasks.confirm_email.resend.body' | trans }}</p>
+    <a class="btn btn-block btn-danger"
+       href="{{ path('task_confirm_email', {'resend': '✓'}) }}">{{ 'tasks.confirm_email.resend.button' | trans }}</a>
 {% endblock %}
-{% block footer %}
-    {% set columns = block('content_columns') %}
-    {{ include("LoginCidadaoCoreBundle::footer.html.twig") }}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            dynamicForm.validEmail.wait();
+        });
+
+        var dynamicForm = {
+            'validEmail': {
+                'longPollingUrl': '{{ path('wait_valid_email') }}',
+                'wait': function () {
+                    $.get(dynamicForm.validEmail.longPollingUrl, function (data) {
+                        if (data === true) {
+                            $('.email-validate-waiting').slideUp();
+                            $('.email-validate-success').slideDown().promise().done(function () {
+                                alert("{{ 'tasks.confirm_email.success.alert' | trans }}");
+                                window.location = '{{ targetUrl }}';
+                            });
+                        }
+                    }).fail(function () {
+                        dynamicForm.validEmail.wait();
+                    });
+                }
+            },
+        };
+    </script>
+{% endblock %}
+
+{% block stylesheets_custom %}
+    {% stylesheets '@lc_task_email_validation_css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
 {% endblock %}

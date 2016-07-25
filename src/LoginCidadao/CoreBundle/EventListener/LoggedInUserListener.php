@@ -48,6 +48,9 @@ class LoggedInUserListener
     /** @var string */
     private $defaultPasswordEncoder;
 
+    /** @var boolean */
+    private $requireEmailValidation;
+
     public function __construct(
         TokenStorageInterface $tokenStorage,
         AuthorizationCheckerInterface $authChecker,
@@ -56,7 +59,8 @@ class LoggedInUserListener
         TranslatorInterface $translator,
         EntityManager $em,
         IntentManager $intentManager,
-        $defaultPasswordEncoder
+        $defaultPasswordEncoder,
+        $requireEmailValidation
     ) {
         $this->tokenStorage = $tokenStorage;
         $this->authChecker = $authChecker;
@@ -67,6 +71,7 @@ class LoggedInUserListener
         $this->intentManager = $intentManager;
 
         $this->defaultPasswordEncoder = $defaultPasswordEncoder;
+        $this->requireEmailValidation = $requireEmailValidation;
     }
 
     public function onKernelRequest(GetResponseEvent $event, $eventName, EventDispatcherInterface $dispatcher)
@@ -91,11 +96,11 @@ class LoggedInUserListener
             $this->checkSessionInvalidation($event);
             $this->handleTargetPath($event);
             $this->passwordEncoderMigration($event);
-            $this->checkUnconfirmedEmail();
             $tasks = $this->checkTasks($event, $dispatcher);
             if (!$tasks) {
                 $this->checkIntent($event);
             }
+            $this->checkUnconfirmedEmail();
         } catch (RedirectResponseException $e) {
             $event->setResponse($e->getResponse());
         }
@@ -124,6 +129,10 @@ class LoggedInUserListener
 
     protected function checkUnconfirmedEmail()
     {
+        if ($this->requireEmailValidation) {
+            // Thre is a Task for that already
+            return;
+        }
         $token = $this->tokenStorage->getToken();
         $user = $token->getUser();
         if (is_null($user->getEmailConfirmedAt())) {

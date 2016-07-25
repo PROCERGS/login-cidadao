@@ -144,3 +144,6 @@ parameters:
 
     # Should passwords be checked for PathWell Topologies?
     check_pathwell_topologies: true
+
+    # When true, users won't be able to do anything before validating their email
+    require_email_validation: true
