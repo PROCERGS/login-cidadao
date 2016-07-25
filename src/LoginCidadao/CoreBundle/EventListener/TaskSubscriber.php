@@ -36,6 +36,7 @@ class TaskSubscriber implements EventSubscriberInterface
      * @param TokenStorage $tokenStorage
      * @param HttpUtils $httpUtils
      * @param bool $mandatoryEmailValidation
+     * @param $defaultPasswordEncoder
      */
     public function __construct(
         TokenStorage $tokenStorage,
@@ -60,7 +61,7 @@ class TaskSubscriber implements EventSubscriberInterface
     /**
      * @param GetTasksEvent $event
      */
-    public function onGetTasks(GetTasksEvent $event, $eventName, EventDispatcherInterface $dispatcher)
+    public function onGetTasks(GetTasksEvent $event)
     {
         /** @var PersonInterface $user */
         $user = $this->tokenStorage->getToken()->getUser();
@@ -74,7 +75,7 @@ class TaskSubscriber implements EventSubscriberInterface
             $event->addTask($task);
         }
 
-        if (true || $user->getEncoderName() !== $this->options['defaultPasswordEncoder']) {
+        if ($user->getEncoderName() !== $this->options['defaultPasswordEncoder']) {
             $event->addTask(new MigratePasswordEncoderTask());
         }
     }

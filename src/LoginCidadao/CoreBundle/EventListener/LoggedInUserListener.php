@@ -96,7 +96,6 @@ class LoggedInUserListener
         try {
             $this->checkSessionInvalidation($event);
             $this->handleTargetPath($event);
-            $this->passwordEncoderMigration($event);
             $tasks = $this->checkTasks($event, $dispatcher);
             if (!$tasks) {
                 $this->checkIntent($event);
@@ -147,32 +146,6 @@ class LoggedInUserListener
 
             $this->session->getFlashBag()->add('alert.unconfirmed.email', $alert);
         }
-    }
-
-    private function passwordEncoderMigration(GetResponseEvent $event)
-    {
-        $person = $this->tokenStorage->getToken()->getUser();
-        $route = $event->getRequest()->get('_route');
-
-        if ($route === 'tos_agree'
-            || $route === 'tos_terms'
-            || $event->getRequest()->attributes->get('_controller') == 'LoginCidadaoTOSBundle:Agreement'
-            || $event->getRequest()->attributes->get('_controller') == 'LoginCidadaoTOSBundle:TermsOfService:showLatest'
-            || $event->getRequestType() === HttpKernelInterface::SUB_REQUEST
-        ) {
-            return;
-        }
-
-        if ($person->getEncoderName() === $this->defaultPasswordEncoder) {
-            return;
-        }
-        $this->session->set('force_password_change', true);
-
-        if ($route === 'fos_user_change_password') {
-            return;
-        }
-
-        return $this->redirectRoute('fos_user_change_password');
     }
 
     private function checkSessionInvalidation(GetResponseEvent $event)
