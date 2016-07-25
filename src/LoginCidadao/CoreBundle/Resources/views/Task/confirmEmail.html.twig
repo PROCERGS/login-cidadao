@@ -1,0 +1,19 @@
+{% extends "LoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block content %}
+    <div class="content">
+        <h1>You must confirm your email!</h1>
+
+        <p>Hello, this is the email confirmation page placeholder.</p>
+    </div>
+{% endblock %}
+
+{% block content_columns %}container{% endblock %}
+{% block sidebar %}{% endblock %}
+{% block notificationExtreme %}
+    {{ include("LoginCidadaoCoreBundle::notification_extreme.html.twig", { columns: block('content_columns') } ) }}
+{% endblock %}
+{% block footer %}
+    {% set columns = block('content_columns') %}
+    {{ include("LoginCidadaoCoreBundle::footer.html.twig") }}
+{% endblock %}

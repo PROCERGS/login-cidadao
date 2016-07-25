@@ -2,6 +2,12 @@
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
+use LoginCidadao\CoreBundle\Event\GetTasksEvent;
+use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
+use LoginCidadao\CoreBundle\Model\Task;
+use LoginCidadao\CoreBundle\Service\IntentManager;
+use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -36,6 +42,9 @@ class LoggedInUserListener
     /** @var EntityManager */
     private $em;
 
+    /** @var IntentManager */
+    private $intentManager;
+
     /** @var string */
     private $defaultPasswordEncoder;
 
@@ -46,6 +55,7 @@ class LoggedInUserListener
         Session $session,
         TranslatorInterface $translator,
         EntityManager $em,
+        IntentManager $intentManager,
         $defaultPasswordEncoder
     ) {
         $this->tokenStorage = $tokenStorage;
@@ -54,11 +64,12 @@ class LoggedInUserListener
         $this->session = $session;
         $this->translator = $translator;
         $this->em = $em;
+        $this->intentManager = $intentManager;
 
         $this->defaultPasswordEncoder = $defaultPasswordEncoder;
     }
 
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(GetResponseEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         if (HttpKernel::MASTER_REQUEST != $event->getRequestType()) {
             // don't do anything if it's not the master request
@@ -81,6 +92,10 @@ class LoggedInUserListener
             $this->handleTargetPath($event);
             $this->passwordEncoderMigration($event);
             $this->checkUnconfirmedEmail();
+            $tasks = $this->checkTasks($event, $dispatcher);
+            if (!$tasks) {
+                $this->checkIntent($event);
+            }
         } catch (RedirectResponseException $e) {
             $event->setResponse($e->getResponse());
         }
@@ -190,5 +205,47 @@ class LoggedInUserListener
     private function redirectUrl($url)
     {
         throw new RedirectResponseException(new RedirectResponse($url));
+    }
+
+    private function checkTasks(GetResponseEvent $event, EventDispatcherInterface $dispatcher)
+    {
+        $tasksEvent = new GetTasksEvent($event->getRequest());
+        $dispatcher->dispatch(LoginCidadaoCoreEvents::GET_TASKS, $tasksEvent);
+
+        $tasks = $tasksEvent->getTasks();
+        usort(
+            $tasks,
+            function (Task $a, Task $b) {
+                return $a->getPriority() < $b->getPriority();
+            }
+        );
+
+        foreach ($tasks as $task) {
+            if (false === $task->isIsMandatory()) {
+                continue; // search first mandatory task
+            }
+        }
+
+        if (!isset($task)) {
+            return false;
+        }
+        $target = $task->getTarget();
+
+        // If the user is not trying to access one of the task's routes, redirect to the default route
+        if (false === $task->isTaskRoute($event->getRequest()->get('_route'))) {
+            $this->intentManager->setIntent($event->getRequest(), false);
+            $this->redirectRoute($target[0], $target[1]);
+        }
+
+        return true;
+    }
+
+    private function checkIntent(GetResponseEvent $event)
+    {
+        $intent = $this->intentManager->consumeIntent($event->getRequest());
+
+        if ($intent) {
+            $this->redirectUrl($intent);
+        }
     }
 }

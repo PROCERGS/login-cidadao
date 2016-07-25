@@ -12,19 +12,24 @@ namespace LoginCidadao\CoreBundle\Event;
 
 use LoginCidadao\CoreBundle\Model\Task;
 use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\HttpFoundation\Request;
 
 class GetTasksEvent extends Event
 {
     /** @var Task[] */
     protected $tasks;
 
+    /** @var Request */
+    protected $request;
+
     /**
      * GetClientEvent constructor.
-     * @param \LoginCidadao\CoreBundle\Model\Task[] $tasks
+     * @param Request $request
      */
-    public function __construct(array $tasks = [])
+    public function __construct(Request $request)
     {
-        $this->tasks = $tasks;
+        $this->request = $request;
+        $this->tasks = [];
     }
 
     /**
@@ -49,5 +54,13 @@ class GetTasksEvent extends Event
     public function addTask(Task $task)
     {
         $this->tasks[] = $task;
+    }
+
+    /**
+     * @return Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
     }
 }

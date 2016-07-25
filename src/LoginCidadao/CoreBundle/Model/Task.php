@@ -10,71 +10,40 @@
 
 namespace LoginCidadao\CoreBundle\Model;
 
-class Task
+abstract class Task
 {
-    /** @var string Url where the user should execute the task */
-    protected $target;
-
-    /** @var bool */
-    protected $isMandatory;
-
-    /** @var int */
-    protected $priority;
 
     /**
      * @return string
      */
-    public function getTarget()
-    {
-        return $this->target;
-    }
+    public abstract function getName();
 
     /**
-     * @param string $target
-     * @return Task
+     * @return array in the form ['route name', ['route' => 'params']]
      */
-    public function setTarget($target)
-    {
-        $this->target = $target;
+    public abstract function getTarget();
 
-        return $this;
-    }
+    /**
+     * @return array
+     */
+    public abstract function getTaskRoutes();
 
     /**
      * @return boolean
      */
-    public function isIsMandatory()
-    {
-        return $this->isMandatory;
-    }
-
-    /**
-     * @param boolean $isMandatory
-     * @return Task
-     */
-    public function setIsMandatory($isMandatory)
-    {
-        $this->isMandatory = $isMandatory;
-
-        return $this;
-    }
+    public abstract function isIsMandatory();
 
     /**
      * @return int
      */
-    public function getPriority()
-    {
-        return $this->priority;
-    }
+    public abstract function getPriority();
 
     /**
-     * @param int $priority
-     * @return Task
+     * @param $routeName
+     * @return bool
      */
-    public function setPriority($priority)
+    public function isTaskRoute($routeName)
     {
-        $this->priority = $priority;
-
-        return $this;
+        return in_array($routeName, $this->getTaskRoutes());
     }
 }

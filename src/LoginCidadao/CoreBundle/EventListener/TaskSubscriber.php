@@ -12,45 +12,54 @@ namespace LoginCidadao\CoreBundle\EventListener;
 
 use LoginCidadao\CoreBundle\Event\GetTasksEvent;
 use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
+use LoginCidadao\CoreBundle\Model\ConfirmEmailTask;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Model\Task;
 use LoginCidadao\CoreBundle\Service\IntentManager;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Http\HttpUtils;
 
 class TaskSubscriber implements EventSubscriberInterface
 {
-    /** @var IntentManager */
-    protected $intentManager;
-
     /** @var TokenStorage */
     protected $tokenStorage;
+
+    /** @var HttpUtils */
+    protected $httpUtils;
 
     /** @var array */
     protected $options;
 
     /**
      * TaskSubscriber constructor.
-     * @param IntentManager $intentManager
      * @param TokenStorage $tokenStorage
+     * @param HttpUtils $httpUtils
      * @param bool $mandatoryEmailValidation
      */
-    public function __construct(IntentManager $intentManager, TokenStorage $tokenStorage, $mandatoryEmailValidation)
-    {
-        $this->intentManager = $intentManager;
+    public function __construct(
+        TokenStorage $tokenStorage,
+        HttpUtils $httpUtils,
+        $mandatoryEmailValidation
+    ) {
         $this->tokenStorage = $tokenStorage;
+        $this->httpUtils = $httpUtils;
         $this->options['mandatoryEmailValidation'] = $mandatoryEmailValidation;
     }
 
 
     public static function getSubscribedEvents()
     {
-        return array(
-            LoginCidadaoCoreEvents::GET_TASKS => array('onGetTasks', 0),
-        );
+        return [
+            LoginCidadaoCoreEvents::GET_TASKS => ['onGetTasks', 0],
+        ];
     }
 
-    public function onGetTasks(GetTasksEvent $event)
+    /**
+     * @param GetTasksEvent $event
+     */
+    public function onGetTasks(GetTasksEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         $user = $this->tokenStorage->getToken()->getUser();
         if (!($user instanceof PersonInterface)) {
@@ -58,10 +67,8 @@ class TaskSubscriber implements EventSubscriberInterface
         }
 
         if ($this->options['mandatoryEmailValidation'] && $user->getConfirmationToken()) {
-            $task = new Task();
-            $task->setTarget('')
-                ->setIsMandatory(true)
-                ->setPriority(10);
+            $task = (new ConfirmEmailTask())
+                ->setIsMandatory(true);
             $event->addTask($task);
         }
     }

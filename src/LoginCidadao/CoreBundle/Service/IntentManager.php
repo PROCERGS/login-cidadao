@@ -18,11 +18,14 @@ class IntentManager
 
     /**
      * @param Request $request
+     * @param bool $override
      */
-    public function setIntent(Request $request)
+    public function setIntent(Request $request, $override = false)
     {
         if ($request->hasSession() && $request->isMethodSafe() && !$request->isXmlHttpRequest()) {
-            $request->getSession()->set(self::SESSION_INTENT_KEY, $request->getUri());
+            if ($override || false === $this->hasIntent($request)) {
+                $request->getSession()->set(self::SESSION_INTENT_KEY, $request->getUri());
+            }
         }
     }
 
@@ -49,5 +52,10 @@ class IntentManager
         }
 
         return $intent;
+    }
+
+    public function hasIntent(Request $request)
+    {
+        return $request->hasSession() && $request->getSession()->has(self::SESSION_INTENT_KEY);
     }
 }
