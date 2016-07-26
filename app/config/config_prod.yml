@@ -24,3 +24,18 @@ monolog:
             type:  stream
             path:  %kernel.logs_dir%/%kernel.environment%.log
             level: debug
+#        mail:
+#            type:         fingers_crossed
+#            action_level: critical
+#            handler:      deduplicated
+#        deduplicated:
+#            type:    deduplication
+#            handler: swift
+#        swift:
+#            type:         swift_mailer
+#            from_email:   '%mailer_sender_mail%'
+#            to_email:     '%mailer_receiver_mail%'
+#            subject:      '[login-cidadao:MONOLOG] %%message%%'
+#            level:        debug
+#            formatter:    monolog.formatter.html
+#            content_type: text/html
