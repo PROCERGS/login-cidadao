@@ -58,7 +58,6 @@ class LoggedInUserListener
         RouterInterface $router,
         Session $session,
         TranslatorInterface $translator,
-        EntityManager $em,
         IntentManager $intentManager,
         $defaultPasswordEncoder,
         $requireEmailValidation
@@ -68,7 +67,6 @@ class LoggedInUserListener
         $this->router = $router;
         $this->session = $session;
         $this->translator = $translator;
-        $this->em = $em;
         $this->intentManager = $intentManager;
 
         $this->defaultPasswordEncoder = $defaultPasswordEncoder;
@@ -94,7 +92,6 @@ class LoggedInUserListener
         }
 
         try {
-            $this->checkSessionInvalidation($event);
             $this->handleTargetPath($event);
             $tasks = $this->checkTasks($event, $dispatcher);
             if (!$tasks) {
@@ -146,36 +143,6 @@ class LoggedInUserListener
 
             $this->session->getFlashBag()->add('alert.unconfirmed.email', $alert);
         }
-    }
-
-    private function checkSessionInvalidation(GetResponseEvent $event)
-    {
-        if (!$this->authChecker->isGranted('FEATURE_INVALIDATE_SESSIONS')) {
-            return;
-        }
-
-        $person = $this->tokenStorage->getToken()->getUser();
-        $repo = $this->getInvalidateSessionRequestRepository();
-        $request = $repo->findMostRecent($person);
-
-        $sessionCreation = $this->session->getMetadataBag()->getCreated();
-        if ($request === null ||
-            $sessionCreation > $request->getRequestedAt()->getTimestamp()
-        ) {
-            return;
-        }
-
-        //$this->tokenStorage->setToken(null);
-        return $this->redirectRoute('fos_user_security_logout');
-    }
-
-    /**
-     * @return \LoginCidadao\CoreBundle\Entity\InvalidateSessionRequestRepository
-     */
-    private function getInvalidateSessionRequestRepository()
-    {
-        return $this->em
-            ->getRepository('LoginCidadaoCoreBundle:InvalidateSessionRequest');
     }
 
     private function redirectRoute($name, $parameters = array())

@@ -10,14 +10,16 @@
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
+use LoginCidadao\CoreBundle\Entity\InvalidateSessionRequestRepository;
 use LoginCidadao\CoreBundle\Event\GetTasksEvent;
 use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
 use LoginCidadao\CoreBundle\Model\ConfirmEmailTask;
+use LoginCidadao\CoreBundle\Model\InvalidateSessionTask;
 use LoginCidadao\CoreBundle\Model\MigratePasswordEncoderTask;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
 class TaskSubscriber implements EventSubscriberInterface
@@ -25,8 +27,14 @@ class TaskSubscriber implements EventSubscriberInterface
     /** @var TokenStorage */
     protected $tokenStorage;
 
+    /** @var AuthorizationCheckerInterface */
+    protected $authChecker;
+
     /** @var HttpUtils */
     protected $httpUtils;
+
+    /** @var InvalidateSessionRequestRepository */
+    protected $invalidateSessionRequestRepository;
 
     /** @var array */
     protected $options;
@@ -34,18 +42,24 @@ class TaskSubscriber implements EventSubscriberInterface
     /**
      * TaskSubscriber constructor.
      * @param TokenStorage $tokenStorage
+     * @param AuthorizationCheckerInterface $authChecker
      * @param HttpUtils $httpUtils
+     * @param InvalidateSessionRequestRepository $invalidateSessionRequestRepository
      * @param bool $mandatoryEmailValidation
      * @param $defaultPasswordEncoder
      */
     public function __construct(
         TokenStorage $tokenStorage,
+        AuthorizationCheckerInterface $authChecker,
         HttpUtils $httpUtils,
+        InvalidateSessionRequestRepository $invalidateSessionRequestRepository,
         $mandatoryEmailValidation,
         $defaultPasswordEncoder
     ) {
         $this->tokenStorage = $tokenStorage;
+        $this->authChecker = $authChecker;
         $this->httpUtils = $httpUtils;
+        $this->invalidateSessionRequestRepository = $invalidateSessionRequestRepository;
         $this->options['mandatoryEmailValidation'] = $mandatoryEmailValidation;
         $this->options['defaultPasswordEncoder'] = $defaultPasswordEncoder;
     }
@@ -78,5 +92,27 @@ class TaskSubscriber implements EventSubscriberInterface
         if ($user->getEncoderName() !== $this->options['defaultPasswordEncoder']) {
             $event->addTask(new MigratePasswordEncoderTask());
         }
+
+        $this->checkSessionInvalidation($event);
+    }
+
+    private function checkSessionInvalidation(GetTasksEvent $event)
+    {
+        if (!$this->authChecker->isGranted('FEATURE_INVALIDATE_SESSIONS')) {
+            return;
+        }
+
+        $person = $this->tokenStorage->getToken()->getUser();
+        $repo = $this->invalidateSessionRequestRepository;
+        $request = $repo->findMostRecent($person);
+
+        $sessionCreation = $event->getRequest()->getSession()->getMetadataBag()->getCreated();
+        if ($request === null ||
+            $sessionCreation > $request->getRequestedAt()->getTimestamp()
+        ) {
+            return;
+        }
+
+        $event->addTask(new InvalidateSessionTask());
     }
 }
