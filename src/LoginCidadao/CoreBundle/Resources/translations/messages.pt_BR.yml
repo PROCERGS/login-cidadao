@@ -1,14 +1,8 @@
-Hello!: Olá!
-Welcome!: Bem-vindo!
-'Welcome to the Citizen''s Login service.': 'Seja bem-vindo ao Login Cidadão.'
-'Here you''ll find all you need to know about the service.': 'Aqui você encontrará tudo que você precisa saber sobre esse serviço.'
-'You might start by logging in or %link_start%registering%link_end%.': 'Você pode começar acessando o sistema ou %link_start%cadastrando-se%link_end%.'
 security.login.username: 'Email ou CPF'
 security.login.username.placeholder: 'Digite seu email'
 security.login.password: Digite sua senha
 security.login.remember_me: 'Lembrar meus dados'
 security.login.submit: Entrar
-'Welcome %user.name%': 'Bem-vindo, %user.name%'
 scope.id: 'Identificador Único'
 scope.username: Username
 scope.name: Nome
@@ -24,25 +18,18 @@ scope.public_profile: 'Perfil Público'
 scope_details.public_profile: São informações do perfil público o seu primeiro nome, sua faixa etária e seus certificados (medalhas)
 scope.get_all_notifications: 'Ler suas Notificações'
 scope.notifications: 'Enviar Notificações'
-'Authorized Applications': 'Aplicativos Autorizados'
-'Description:': 'Descrição:'
-'Access scope:': 'Escopo de acesso:'
 'Revoke Access': 'Revogar Acesso'
 'Visit Site': 'Visitar Site'
 'Click again to confirm': 'Clique para confirmar'
 'Please, wait...': 'Por favor, aguarde...'
 Revoked: Revogado
-'Available Applications and Sites': 'Sites e Aplicativos Disponíveis'
 'Authorization successfully revoked.': 'Autorização revogada com sucesso.'
 'Authorization not found.': 'Autorização não encontrada.'
-'Captcha is invalid.': 'Captcha invalido.'
 'Wasn''t possible to disable this service.': 'Não foi possível desativar este serviço.'
 'Access Denied.': 'Acesso negado.'
 'Citizen''s Login': 'Login Cidadão'
-'One account. All the Government.': 'Um cadastro. Acesso por todo o Governo'
 '%link_start%Create your account%link_end%': '%link_start%Crie seu Login Cidadão%link_end%'
 'Sign in with your Citizen''s Login': 'Acesse com seu Login Cidadão'
-'One account. All that the Government offers.': 'Uma conta. Tudo o que o Governo oferece.'
 'Need help?': 'Não consegue conectar?'
 'One account to all of the Government''s services': 'Uma conta única para todos os serviços do Governo'
 'Available services': 'Serviços disponíveis'
@@ -50,8 +37,6 @@ Revoked: Revogado
 Help: Ajuda
 'Logo Nota Fiscal Gaúcha': 'Logo Nota Fiscal Gaúcha'
 'We''re almost done!': 'Quase pronto!'
-'Your account is created, but we recommend you choose a better username.': 'Sua conta foi criada, mas recomendamos que escolha um nome de usuário melhor.'
-'Your username will be used to quickly refer to yourself on Citizen''s Login, just like Twitter''s @ replies.': 'Seu nome de usuário será usado para se referir a você rapidamente no Login Cidadão, da mesma forma que as citações com @ do Twitter.'
 'Username:': 'Username:'
 Save: Salvar
 'You''ll need a password': 'Você precisa de uma senha'
@@ -59,7 +44,6 @@ Save: Salvar
 'Type in your password here:': 'Digite sua senha aqui:'
 'And then confirm it here:': 'E confirme ela aqui:'
 'Save username and password': 'Salvar nome de usuário e senha'
-'We''ll also need you to type your email address, since Twitter didn''t tell it to us.': 'Nós também precisaremos que você digite seu email, já que o Twitter não repassa essa informação.'
 'Email:': 'Email:'
 'The email is already used': 'Este email já está sendo usado'
 'The username is already used': 'Este nome de usuário já está sendo usado'
