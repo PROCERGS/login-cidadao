@@ -39,7 +39,6 @@ class ChangePasswordListener implements EventSubscriberInterface
             FOSUserEvents::CHANGE_PASSWORD_SUCCESS => 'onChangePasswordSuccess',
             FOSUserEvents::RESETTING_RESET_SUCCESS => 'setPasswordEncoderName',
             FOSUserEvents::REGISTRATION_SUCCESS => 'setPasswordEncoderName',
-            FOSUserEvents::CHANGE_PASSWORD_COMPLETED => 'onChangePasswordCompleted',
         );
     }
 
@@ -55,24 +54,10 @@ class ChangePasswordListener implements EventSubscriberInterface
         $event->setResponse(new RedirectResponse($url));
     }
 
-    private function clearNotification(FormEvent $event)
-    {
-        $person = $event->getForm()->getData();
-        // TODO: DEPRECATE NOTIFICATIONS
-        //$this->notificationHelper->clearEmptyPasswordNotification($person);
-    }
-
     public function setPasswordEncoderName(FormEvent $event)
     {
         $person = $event->getForm()->getData();
         $person->setPasswordEncoderName($this->defaultPasswordEncoder);
         $this->session->remove('force_password_change');
-    }
-
-    public function onChangePasswordCompleted(FilterUserResponseEvent $event)
-    {
-        $user = $event->getUser();
-        // TODO: DEPRECATE NOTIFICATIONS
-        //$this->notificationHelper->clearEmptyPasswordNotification($user);
     }
 }
