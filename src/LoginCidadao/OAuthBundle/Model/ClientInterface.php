@@ -26,10 +26,6 @@ interface ClientInterface extends BaseInterface
 
     public function removeAuthorization(Authorization $authorization);
 
-    public function getMaxNotificationLevel();
-
-    public function setMaxNotificationLevel($maxNotificationLevel);
-
     public function getLandingPageUrl();
 
     public function setLandingPageUrl($landingPageUrl);

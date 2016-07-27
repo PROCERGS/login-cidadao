@@ -4,20 +4,6 @@ lc_api_core:
     defaults: { _format: json }
     prefix:   /
 
-lc_Notification:
-    type: rest
-    prefix: /
-    resource: "@LoginCidadaoAPIBundle/Controller/NotificationController.php"
-    name_prefix: api_1_
-    defaults: { _format: json }
-
-lc_NotificationCallback:
-    type: rest
-    prefix: /
-    resource: "@LoginCidadaoAPIBundle/Controller/NotificationCallbackController.php"
-    name_prefix: api_1_
-    defaults: { _format: json }
-
 lc_Person:
     type: rest
     prefix: /

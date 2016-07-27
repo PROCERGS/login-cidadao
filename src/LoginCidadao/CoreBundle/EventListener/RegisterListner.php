@@ -11,12 +11,10 @@ use FOS\UserBundle\Util\TokenGeneratorInterface;
 use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
-use LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use LoginCidadao\ValidationBundle\Validator\Constraints\UsernameValidator;
 use Doctrine\ORM\EntityManager;
-use LoginCidadao\CoreBundle\Exception\LcEmailException;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 
 class RegisterListner implements EventSubscriberInterface
@@ -29,12 +27,9 @@ class RegisterListner implements EventSubscriberInterface
     private $mailer;
     private $tokenGenerator;
 
-    /** @var NotificationsHelper */
-    private $notificationsHelper;
     private $emailUnconfirmedTime;
     protected $em;
     private $lcSupportedScopes;
-    private $notificationHandler;
 
     public function __construct(
         UrlGeneratorInterface $router,
@@ -42,20 +37,16 @@ class RegisterListner implements EventSubscriberInterface
         TranslatorInterface $translator,
         MailerInterface $mailer,
         TokenGeneratorInterface $tokenGenerator,
-        NotificationsHelper $notificationsHelper,
         $emailUnconfirmedTime,
-        $lcSupportedScopes,
-        $notificationHandler
+        $lcSupportedScopes
     ) {
         $this->router = $router;
         $this->session = $session;
         $this->translator = $translator;
         $this->mailer = $mailer;
         $this->tokenGenerator = $tokenGenerator;
-        $this->notificationsHelper = $notificationsHelper;
         $this->emailUnconfirmedTime = $emailUnconfirmedTime;
         $this->lcSupportedScopes = $lcSupportedScopes;
-        $this->notificationHandler = $notificationHandler;
     }
 
     /**
@@ -100,7 +91,8 @@ class RegisterListner implements EventSubscriberInterface
         $user = $event->getUser();
         $auth = new Authorization();
         $auth->setPerson($user);
-        $auth->setClient($this->notificationHandler->getLoginCidadaoClient());
+        // TODO: DEPRECATE NOTIFICATIONS
+        //$auth->setClient($this->notificationHandler->getLoginCidadaoClient());
         $auth->setScope(explode(' ', $this->lcSupportedScopes));
         $this->em->persist($auth);
         $this->em->flush();
@@ -108,7 +100,8 @@ class RegisterListner implements EventSubscriberInterface
         $this->mailer->sendConfirmationEmailMessage($user);
 
         if (strlen($user->getPassword()) == 0) {
-            $this->notificationsHelper->enforceEmptyPasswordNotification($user);
+            // TODO: DEPRECATE NOTIFICATIONS
+            //$this->notificationsHelper->enforceEmptyPasswordNotification($user);
         }
     }
 

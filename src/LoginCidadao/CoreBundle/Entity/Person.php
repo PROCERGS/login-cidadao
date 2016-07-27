@@ -240,16 +240,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     protected $previousValidEmail;
 
     /**
-     * @ORM\OneToMany(targetEntity="LoginCidadao\NotificationBundle\Entity\Notification", mappedBy="person")
-     */
-    protected $notifications;
-
-    /**
-     * @ORM\OneToMany(targetEntity="LoginCidadao\NotificationBundle\Entity\Broadcast", mappedBy="person")
-     */
-    protected $broadcasts;
-
-    /**
      * @ORM\ManyToMany(targetEntity="LoginCidadao\OAuthBundle\Entity\Client", mappedBy="owners")
      */
     protected $clients;
@@ -347,16 +337,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     protected $idCards;
 
     /**
-     * @ORM\OneToMany(targetEntity="LoginCidadao\NotificationBundle\Entity\NotificationToken", mappedBy="person")
-     */
-    protected $notificationTokens;
-
-    /**
-     * @ORM\OneToMany(targetEntity="LoginCidadao\NotificationBundle\Entity\PersonNotificationOption", mappedBy="person")
-     */
-    protected $notificationOptions;
-
-    /**
      * @JMS\Expose
      * @JMS\Groups({"public_profile"})
      * @var array
@@ -404,14 +384,11 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function __construct()
     {
         parent::__construct();
-        $this->authorizations      = new ArrayCollection();
-        $this->notificationTokens  = new ArrayCollection();
-        $this->notificationOptions = new ArrayCollection();
-        $this->notifications       = new ArrayCollection();
-        $this->clients             = new ArrayCollection();
-        $this->logoutKeys          = new ArrayCollection();
-        $this->addresses           = new ArrayCollection();
-        $this->backupCodes         = new ArrayCollection();
+        $this->authorizations = new ArrayCollection();
+        $this->clients = new ArrayCollection();
+        $this->logoutKeys = new ArrayCollection();
+        $this->addresses = new ArrayCollection();
+        $this->backupCodes = new ArrayCollection();
     }
 
     public function getEmail()
@@ -467,7 +444,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     public function setMobile($mobile)
     {
-        $mobile       = preg_replace('/[^0-9]/', '', $mobile);
+        $mobile = preg_replace('/[^0-9]/', '', $mobile);
         $this->mobile = $mobile;
     }
 
@@ -475,6 +452,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     {
         $this->authorizations->add($authorization);
         $authorization->setPerson($this);
+
         return $this;
     }
 
@@ -483,6 +461,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         if ($this->authorizations->contains($authorization)) {
             $this->authorizations->removeElement($authorization);
         }
+
         return $this;
     }
 
@@ -509,6 +488,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
                 return $auth->hasScopes($scope);
             }
         }
+
         return false;
     }
 
@@ -525,6 +505,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
                 return $auth->getScope();
             }
         }
+
         return null;
     }
 
@@ -549,6 +530,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
                 }
             }
         }
+
         return false;
     }
 
@@ -643,8 +625,9 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      */
     public function getDataValid()
     {
-        $terms['cpf']   = is_numeric($this->cpf);
+        $terms['cpf'] = is_numeric($this->cpf);
         $terms['email'] = is_null($this->getConfirmationToken());
+
         return $terms;
     }
 
@@ -770,11 +753,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         return null;
     }
 
-    public function getNotifications()
-    {
-        return $this->notifications;
-    }
-
     public function getClients()
     {
         return $this->clients;
@@ -783,20 +761,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function setClients($var)
     {
         return $this->clients = $var;
-    }
-
-    public function checkEmailPending()
-    {
-        $confirmToken  = $this->getConfirmationToken();
-        $notifications = $this->getNotifications();
-
-        if (is_null($confirmToken)) {
-            foreach ($notifications as $notification) {
-                if ($notification->getTitle() === 'notification.unconfirmed.email.title') {
-                    $notification->setRead(true);
-                }
-            }
-        }
     }
 
     public function setEmailExpiration($emailExpiration)
@@ -837,6 +801,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function setFacebookAccessToken($facebookAccessToken)
     {
         $this->facebookAccessToken = $facebookAccessToken;
+
         return $this;
     }
 
@@ -861,12 +826,14 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function hasPassword()
     {
         $password = $this->getPassword();
+
         return strlen($password) > 0;
     }
 
     public function setState(State $state = null)
     {
         $this->state = $state;
+
         return $this;
     }
 
@@ -980,13 +947,16 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         return $this;
     }
 
-    public function prepareAPISerialize($imageHelper, $templateHelper, $isDev,
-                                        $request)
-    {
+    public function prepareAPISerialize(
+        $imageHelper,
+        $templateHelper,
+        $isDev,
+        $request
+    ) {
         // User's profile picture
         if ($this->hasLocalProfilePicture()) {
             $picturePath = $imageHelper->asset($this, 'image');
-            $pictureUrl  = $request->getUriForPath($picturePath);
+            $pictureUrl = $request->getUriForPath($picturePath);
             if ($isDev) {
                 $pictureUrl = str_replace('/app_dev.php', '', $pictureUrl);
             }
@@ -996,7 +966,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         if (is_null($pictureUrl)) {
             // TODO: fix this and make it comply to DRY
             $picturePath = $templateHelper->getUrl('bundles/logincidadaocore/images/userav.png');
-            $pictureUrl  = $request->getUriForPath($picturePath);
+            $pictureUrl = $request->getUriForPath($picturePath);
             if ($isDev) {
                 $pictureUrl = str_replace('/app_dev.php', '', $pictureUrl);
             }
@@ -1012,6 +982,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
                 return true;
             }
         }
+
         return false;
     }
 
@@ -1025,6 +996,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         } else {
             $this->updatedAt = new \DateTime('now');
         }
+
         return $this;
     }
 
@@ -1072,6 +1044,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function setCountry(Country $country = null)
     {
         $this->country = $country;
+
         return $this;
     }
 
@@ -1083,6 +1056,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function setComplement($var)
     {
         $this->complement = $var;
+
         return $this;
     }
 
@@ -1104,6 +1078,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function mergeBadges(array $badges)
     {
         $this->badges = array_merge($this->badges, $badges);
+
         return $this;
     }
 
@@ -1112,6 +1087,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         if (null === $this->firstName) {
             return $this->username;
         }
+
         return $this->getFullName();
     }
 
@@ -1131,26 +1107,14 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function setLogoutKeys($logoutKeys)
     {
         $this->logoutKeys = $logoutKeys;
+
         return $this;
     }
 
     public function setAddresses($addresses)
     {
         $this->addresses = $addresses;
-        return $this;
-    }
 
-    /**
-     * @return ArrayCollection
-     */
-    public function getNotificationOptions()
-    {
-        return $this->notificationOptions;
-    }
-
-    public function setNotificationOptions(ArrayCollection $notificationOptions)
-    {
-        $this->notificationOptions = $notificationOptions;
         return $this;
     }
 
@@ -1172,6 +1136,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function setGoogleAuthenticatorSecret($googleAuthenticatorSecret)
     {
         $this->googleAuthenticatorSecret = $googleAuthenticatorSecret;
+
         return $this;
     }
 
@@ -1183,6 +1148,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function setBackupCodes(ArrayCollection $backupCodes)
     {
         $this->backupCodes = $backupCodes;
+
         return $this;
     }
 
@@ -1197,6 +1163,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function isBackupCode($code)
     {
         $backupCode = $this->findBackupCode($code);
+
         return $backupCode !== false && $backupCode->getUsed() === false;
     }
 
@@ -1212,12 +1179,14 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
                 return $backupCode;
             }
         }
+
         return false;
     }
 
     public function setNationality($var)
     {
         $this->nationality = $var;
+
         return $this;
     }
 
@@ -1230,6 +1199,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     {
         $location = new SelectData();
         $location->getFromObject($this);
+
         return $location;
     }
 
@@ -1240,18 +1210,27 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     public function waitUpdate(EntityManager $em, \DateTime $updatedAt)
     {
-        $id            = $this->getId();
+        $id = $this->getId();
         $lastUpdatedAt = null;
-        $callback      = $this->getCheckUpdateCallback($em, $id, $updatedAt,
-            $lastUpdatedAt);
+        $callback = $this->getCheckUpdateCallback(
+            $em,
+            $id,
+            $updatedAt,
+            $lastUpdatedAt
+        );
+
         return LongPollingUtils::runTimeLimited($callback);
     }
 
-    private function getCheckUpdateCallback(EntityManager $em, $id, $updatedAt,
-                                            $lastUpdatedAt)
-    {
+    private function getCheckUpdateCallback(
+        EntityManager $em,
+        $id,
+        $updatedAt,
+        $lastUpdatedAt
+    ) {
         $people = $em->getRepository('LoginCidadaoCoreBundle:Person');
-        return function() use ($id, $people, $em, $updatedAt, $lastUpdatedAt) {
+
+        return function () use ($id, $people, $em, $updatedAt, $lastUpdatedAt) {
             $em->clear();
             $person = $people->find($id);
             if (!$person->getUpdatedAt()) {
@@ -1320,6 +1299,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function setPasswordEncoderName($passwordEncoderName)
     {
         $this->passwordEncoderName = $passwordEncoderName;
+
         return $this;
     }
 

@@ -8,16 +8,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 
 class ChangePasswordListener implements EventSubscriberInterface
 {
     /** @var UrlGeneratorInterface */
     private $router;
-
-    /** @var NotificationsHelper */
-    private $notificationHelper;
 
     /** @var SessionInterface */
     private $session;
@@ -26,12 +22,10 @@ class ChangePasswordListener implements EventSubscriberInterface
     private $defaultPasswordEncoder;
 
     public function __construct(UrlGeneratorInterface $router,
-                                NotificationsHelper $notificationHelper,
                                 SessionInterface $session,
                                 $defaultPasswordEncoder)
     {
         $this->router                 = $router;
-        $this->notificationHelper     = $notificationHelper;
         $this->session                = $session;
         $this->defaultPasswordEncoder = $defaultPasswordEncoder;
     }
@@ -52,7 +46,6 @@ class ChangePasswordListener implements EventSubscriberInterface
     public function onChangePasswordSuccess(FormEvent $event)
     {
         $this->setPasswordEncoderName($event);
-        $this->clearNotification($event);
         $this->redirectToPasswordChangePage($event);
     }
 
@@ -65,7 +58,8 @@ class ChangePasswordListener implements EventSubscriberInterface
     private function clearNotification(FormEvent $event)
     {
         $person = $event->getForm()->getData();
-        $this->notificationHelper->clearEmptyPasswordNotification($person);
+        // TODO: DEPRECATE NOTIFICATIONS
+        //$this->notificationHelper->clearEmptyPasswordNotification($person);
     }
 
     public function setPasswordEncoderName(FormEvent $event)
@@ -78,6 +72,7 @@ class ChangePasswordListener implements EventSubscriberInterface
     public function onChangePasswordCompleted(FilterUserResponseEvent $event)
     {
         $user = $event->getUser();
-        $this->notificationHelper->clearEmptyPasswordNotification($user);
+        // TODO: DEPRECATE NOTIFICATIONS
+        //$this->notificationHelper->clearEmptyPasswordNotification($user);
     }
 }
