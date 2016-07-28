@@ -18,7 +18,7 @@ use LoginCidadao\ValidationBundle\Validator\Constraints\UsernameValidator;
 use Doctrine\ORM\EntityManager;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 
-class RegisterListner implements EventSubscriberInterface
+class RegisterListener implements EventSubscriberInterface
 {
     private $router;
 
@@ -34,8 +34,6 @@ class RegisterListner implements EventSubscriberInterface
     /** @var TokenGeneratorInterface */
     private $tokenGenerator;
 
-    /** @var NotificationsHelper */
-    private $notificationsHelper;
     private $emailUnconfirmedTime;
     protected $em;
     private $lcSupportedScopes;
