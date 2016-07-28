@@ -4,7 +4,7 @@ security:
             algorithm: sha512
         bcrypt:
             algorithm: bcrypt
-            cost: 15
+            cost: 14
 
         # The following two lines ensure BC for PR #357
         Symfony\Component\Security\Core\User\User: sha512
@@ -173,8 +173,10 @@ security:
         - { path: ^/connect/twitter$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/connect/google$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/login/facebook$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/nfg/(login|create), role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
 
         - { path: ^/monitor/health, role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_monitors%, requires_channel: https }
+        - { path: ^/public/status, role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_monitors%, requires_channel: https }
 
         - { path: ^/nelmio/csp/report$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/(contact|privacy|about|help|register), role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
