@@ -6,6 +6,10 @@ imports:
 
 framework:
     #esi:             ~
+    assets:
+        version: '2016-03-29'
+        version_format: '%%s?version=%%s'
+        base_path: ~
     translator:
         enabled: true
         fallback: %locale%
