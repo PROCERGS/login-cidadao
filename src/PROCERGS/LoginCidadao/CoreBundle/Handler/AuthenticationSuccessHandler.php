@@ -13,7 +13,6 @@ use Doctrine\ORM\EntityManager;
 use LoginCidadao\CoreBundle\Entity\AccessSession;
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
 
 class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 {
@@ -21,7 +20,6 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
     private $router;
     private $em;
     protected $container;
-    private $notificationsHelper;
 
     public function setContainer($var)
     {
@@ -40,14 +38,12 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
      */
     public function __construct(RouterInterface $router, $options,
                                 EntityManager $em, Session $session,
-                                HttpUtils $httpUtils,
-                                NotificationsHelper $notificationsHelper)
+                                HttpUtils $httpUtils)
     {
         parent::__construct($httpUtils, $options);
         $this->router = $router;
         $this->em = $em;
         $this->session = $session;
-        $this->notificationsHelper = $notificationsHelper;
     }
 
     /**

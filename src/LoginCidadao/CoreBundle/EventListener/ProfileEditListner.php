@@ -22,7 +22,6 @@ use LoginCidadao\CoreBundle\Model\DynamicFormData;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer;
 use LoginCidadao\CoreBundle\Exception\LcValidationException;
-use LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
 
 class ProfileEditListner implements EventSubscriberInterface
 {
@@ -36,7 +35,6 @@ class ProfileEditListner implements EventSubscriberInterface
 
     /** @var TokenStorageInterface */
     private $tokenStorage;
-    private $notificationsHelper;
     private $emailUnconfirmedTime;
     protected $email;
     protected $cpf;
@@ -51,7 +49,6 @@ class ProfileEditListner implements EventSubscriberInterface
                                 UrlGeneratorInterface $router,
                                 SessionInterface $session,
                                 TokenStorageInterface $tokenStorage,
-                                NotificationsHelper $notificationsHelper,
                                 $emailUnconfirmedTime)
     {
         $this->mailer               = $mailer;
@@ -60,7 +57,6 @@ class ProfileEditListner implements EventSubscriberInterface
         $this->router               = $router;
         $this->session              = $session;
         $this->tokenStorage         = $tokenStorage;
-        $this->notificationsHelper  = $notificationsHelper;
         $this->emailUnconfirmedTime = $emailUnconfirmedTime;
     }
 

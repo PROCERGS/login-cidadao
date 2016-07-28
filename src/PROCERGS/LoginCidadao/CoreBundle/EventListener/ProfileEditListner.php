@@ -12,7 +12,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
 use LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer;
 use FOS\UserBundle\Mailer\MailerInterface;
 use Doctrine\ORM\EntityManager;
@@ -21,7 +20,6 @@ use Assetic\Exception\Exception;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\NfgWsHelper;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\NfgException;
 use LoginCidadao\CoreBundle\Exception\LcValidationException;
-use PROCERGS\LoginCidadao\NotificationBundle\Entity\Notification;
 use LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Exception\MissingNfgAccessTokenException;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\State;
@@ -42,7 +40,6 @@ class ProfileEditListner implements EventSubscriberInterface
     private $router;
     private $session;
     private $security;
-    private $notificationsHelper;
     private $emailUnconfirmedTime;
     protected $email;
     protected $cpf;
@@ -61,7 +58,6 @@ class ProfileEditListner implements EventSubscriberInterface
                                 UrlGeneratorInterface $router,
                                 SessionInterface $session,
                                 SecurityContextInterface $security,
-                                NotificationsHelper $notificationsHelper,
                                 $emailUnconfirmedTime)
     {
         $this->mailer               = $mailer;
@@ -70,7 +66,6 @@ class ProfileEditListner implements EventSubscriberInterface
         $this->router               = $router;
         $this->session              = $session;
         $this->security             = $security;
-        $this->notificationsHelper  = $notificationsHelper;
         $this->emailUnconfirmedTime = $emailUnconfirmedTime;
     }
 
@@ -151,7 +146,7 @@ class ProfileEditListner implements EventSubscriberInterface
                 $this->meuRSHelper->setVoterRegistration($this->em, $other, null);
                 $this->em->persist($other);
 
-                $this->notificationsHelper->revokedVoterRegistrationNotification($other);
+                // TODO: notify user
 
                 $this->meuRSHelper->setVoterRegistration($this->em, $user,
                     $voterRegistration);
@@ -215,7 +210,7 @@ class ProfileEditListner implements EventSubscriberInterface
 
             $uk->registerManaged($person, array('id' => $person->getId()), $a);
 
-            $this->notificationsHelper->revokedVoterRegistrationNotification($otherPerson);
+            // TODO: notify user
 
             $aNfgProfile = $aUser->getNfgProfile();
             $aNfgProfile->setVoterRegistrationSit($nfgReturn1['CodSitTitulo']);

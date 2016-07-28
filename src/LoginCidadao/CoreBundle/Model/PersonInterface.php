@@ -92,16 +92,13 @@ interface PersonInterface extends EncoderAwareInterface
 
     public function getSocialNetworksPicture();
 
-    public function getNotifications();
-
     public function getClients();
-
-    public function checkEmailPending();
 
     public function setEmailExpiration($emailExpiration);
 
     public function getEmailExpiration();
 
+    public function getConfirmationToken();
     public function setConfirmationToken($confirmationToken);
 
     public function setFacebookUsername($facebookUsername);

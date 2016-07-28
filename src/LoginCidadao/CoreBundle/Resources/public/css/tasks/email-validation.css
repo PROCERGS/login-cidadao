@@ -1,0 +1,49 @@
+/*
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+.task-email-validation h1 {
+    font-size: 25px !important;
+    padding: 0 10px;
+    margin-bottom: 25px;
+}
+.task-email-validation h1 .glyphicon {
+    display: block;
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+
+.task-email-validation p {
+    padding: 0 10px;
+    text-align: justify;
+}
+.task-email-validation p.main {
+    margin-bottom: 20px;
+    text-align: center;
+    /*color: #666;*/
+}
+
+.task-email-validation ol li {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.task-email-validation h2 {
+    font-size: 20px !important;
+    padding: 0 10px;
+    margin-top: 50px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.task-email-validation .btn-danger {
+    margin: 30px 0;
+    background: #ac0000 !important;
+    text-transform: uppercase;
+    font-weight: bold;
+}

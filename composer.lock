@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "12fa2f2928dfcff40a0af7a89aa816e7",
-    "content-hash": "931e8d11d78004466b75b00d4d3897fb",
+    "hash": "deb73565e61f4385b6c8e0db206c682a",
+    "content-hash": "b55c69ac27d2cc1825bcda38b06cf27e",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -2111,12 +2111,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/JMSSecurityExtraBundle.git",
-                "reference": "df12cd85ec422696f7be46486f5216f00c0cdf3c"
+                "reference": "26c175a4429af626039f2fc97b59a6d2e40bd894"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/JMSSecurityExtraBundle/zipball/df12cd85ec422696f7be46486f5216f00c0cdf3c",
-                "reference": "df12cd85ec422696f7be46486f5216f00c0cdf3c",
+                "url": "https://api.github.com/repos/schmittjoh/JMSSecurityExtraBundle/zipball/26c175a4429af626039f2fc97b59a6d2e40bd894",
+                "reference": "26c175a4429af626039f2fc97b59a6d2e40bd894",
                 "shasum": ""
             },
             "require": {
@@ -2179,7 +2179,7 @@
                 "secure",
                 "security"
             ],
-            "time": "2016-05-10 15:07:25"
+            "time": "2016-07-28 13:27:55"
         },
         {
             "name": "jms/serializer",
@@ -3413,16 +3413,16 @@
         },
         {
             "name": "procergs/tos-bundle",
-            "version": "1.2.4",
+            "version": "1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/tos-bundle.git",
-                "reference": "acba39eb6bcbba1eb6230d56deb625f35d5fd5a6"
+                "reference": "5103794578ae3e2dc64b290fa3587d96d3bd27fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/acba39eb6bcbba1eb6230d56deb625f35d5fd5a6",
-                "reference": "acba39eb6bcbba1eb6230d56deb625f35d5fd5a6",
+                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/5103794578ae3e2dc64b290fa3587d96d3bd27fc",
+                "reference": "5103794578ae3e2dc64b290fa3587d96d3bd27fc",
                 "shasum": ""
             },
             "require": {
@@ -3450,7 +3450,7 @@
                 }
             ],
             "description": "Terms of Service Bundle",
-            "time": "2016-02-25 03:00:18"
+            "time": "2016-07-25 16:56:58"
         },
         {
             "name": "psr/log",

@@ -43,7 +43,6 @@ class AppKernel extends Kernel
             
             new LoginCidadao\BadgesControlBundle\LoginCidadaoBadgesControlBundle(),
             new LoginCidadao\BadgesBundle\LoginCidadaoBadgesBundle(),
-            new LoginCidadao\NotificationBundle\LoginCidadaoNotificationBundle(),
             
             new Scheb\TwoFactorBundle\SchebTwoFactorBundle(),
             new LoginCidadao\ValidationControlBundle\LoginCidadaoValidationControlBundle(),

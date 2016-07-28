@@ -2,7 +2,7 @@ parameters:
     validator.sector_identifier_uri.class: LoginCidadao\OpenIDBundle\Validator\Constraints\SectorIdentifierUriValidator
     checker.sector_identifier_uri.class: LoginCidadao\OpenIDBundle\Validator\SectorIdentifierUriChecker
 
-    oidc.person.serialize.listenner.class: LoginCidadao\OpenIDBundle\EventListenner\PersonSerializeEventListenner
+    oidc.person.serialize.listener.class: LoginCidadao\OpenIDBundle\EventListener\PersonSerializeEventListener
     oidc.storage.session_state.class: LoginCidadao\OpenIDBundle\Storage\SessionState
 
     oauth2.storage.authorization_code.class: LoginCidadao\OpenIDBundle\Storage\AuthorizationCode
@@ -42,8 +42,8 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
 
-    oidc.person.serialize.listenner:
-        class: %oidc.person.serialize.listenner.class%
+    oidc.person.serialize.listener:
+        class: %oidc.person.serialize.listener.class%
         arguments:
             - "@lc_accesstoken_manager"
             - %secret%
@@ -102,7 +102,7 @@ services:
             - { name: validator.constraint_validator, alias: sector_identifier_uri }
 
     oidc.core.events_subscriber:
-        class: LoginCidadao\OpenIDBundle\EventListenner\CoreEventsSubscriber
+        class: LoginCidadao\OpenIDBundle\EventListener\CoreEventsSubscriber
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@checker.sector_identifier_uri"

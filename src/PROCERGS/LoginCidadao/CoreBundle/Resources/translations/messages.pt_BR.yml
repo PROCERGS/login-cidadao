@@ -22,8 +22,6 @@ scope.badges: Medalhas
 scope.picture: Foto
 scope.public_profile: 'Perfil Público'
 scope_details.public_profile: São informações do perfil público o seu primeiro nome, sua faixa etária e seus certificados (medalhas)
-scope.get_all_notifications: 'Ler suas Notificações'
-scope.notifications: 'Enviar Notificações'
 'Authorized Applications': 'Aplicativos Autorizados'
 'Description:': 'Descrição:'
 'Access scope:': 'Escopo de acesso:'
@@ -94,7 +92,6 @@ Inactive: Inativo
 'Your login': 'Seu login'
 Profile: Perfil
 Services: Serviços
-Notifications: Notificações
 'Change password': 'Alterar senha'
 Settings: Configurações
 Situation: 'Situação do cadastro'
@@ -104,19 +101,12 @@ Applications: Aplicativos
 'Your account is created, but you must have a CPF.': 'A sua conta foi criada, mas você precisa de um CPF.'
 'Your CPF will give some realibility to your account.': 'Seu CPF vai dar mais confiabilidade ao seu cadastro.'
 'Change Username': 'Alterar nome de usuário'
-'You don''t have any unread notification.': 'Você não tem notificações não lidas.'
-'You don''t have any notifications yet.': 'Você ainda não possui notificações'
 'Change username': 'Alterar nome de usuário'
 'Updated username successfully!': 'Nome de usuário alterado com sucesso!'
-'View all notifications': 'Ver todas notificações'
 email-confirmation.resent: 'As instruções para confirmação de email foram reenviadas.'
 notification.unconfirmed.email.title: 'Email não confirmado!'
 notification.unconfirmed.email.shortText: 'Caso não confirme seu email em prazo hábil, sua conta será removida. Siga as instruções enviadas por email. <a href="%url%">Reenviar email</a>'
 notification.unconfirmed.email.text: "<p>Para utilizar o Login Cidadão, é necessário que você utilize um endereço de email válido.</p> <p>Caso você não confirme seu endereço de email acessando o link que lhe foi enviado, sua conta será excluída.</p>\n"
-notification.empty.password.title: 'Você não tem uma senha!'
-notification.empty.password.shortText: 'Para melhorar sua segurança e reduzir o risco de ficar sem acesso à sua conta, crie uma senha'
-notification.empty.password.text: ''
-notification.empty.password.click.here: 'clicando aqui'
 'Useful Information': 'Informações Úteis'
 'Content License': 'Licença do Conteúdo'
 'Privacy Policy': 'Política de Privacidade'
@@ -178,14 +168,6 @@ Create: Criar
 registration.email.registered: 'Esse e-mail já está sendo utilizado'
 nfg.missing.token: 'Está faltando a token de acesso da Nota Fiscal Gaúcha'
 nfg.missing.required.fields: 'Para utilizar o login cidadão você precisa autorizar no mínimo os campos Nome, E-mail e CPF na Nota Fiscal Gaúcha'
-notification.nfg.already.bind.but.weak: 'Essa conta da Nota Fiscal Gaúcha já está vinculada em uma conta do login cidadao, todavia ainda é possivel vincula-la na sua conta, caso você complemente mais ainda seus dados na sua conta da Nota Fiscal Gaúcha'
-notification.nfg.revoked.cpf.title: 'Revogação do seu CPF'
-notification.nfg.revoked.cpf.message.short: 'Foi retirado o CPF da sua conta'
-notification.nfg.revoked.cpf.message: 'Foi retirado o CPF da sua conta, pois outro usuario apresentou dados, aparentemente, mais confiaveis, para utiliza-lo'
-notification.nfg.already.cpf.but.weak: 'Esse CPF já está vinculada em uma conta do login cidadao, todavia ainda é possivel vincula-la na sua conta, caso você complemente mais ainda seus dados na sua conta da Nota Fiscal Gaúcha'
-notification.nfg.overwrite.cpf.title: 'Foi alterado seu CPF'
-notification.nfg.overwrite.cpf.message.short: 'O sistema alterou automaticamente seu CPF pelo valor da sua conta da Nota Fiscal Gaúcha'
-notification.nfg.overwrite.cpf.message: 'O sistema alterou automaticamente seu CPF pelo valor da sua conta da Nota Fiscal Gaúcha'
 nfg.cpf.already.used: 'Já existe uma conta utilizando esse CPF'
 nfg.email.already.used: 'Já existe um conta utlizando esse e-mail'
 nfg.corrupted.callback: 'Aparentemente os dados enviados pela Nota Fiscal Gaúcha estão corrompidos, por favor entre em contato com o administrador do sistema'
@@ -233,11 +215,7 @@ voterregistration.invalid: 'O título de eleitor informado é inválido ou perte
 voterreg.already.used: 'Esse Título de eleitor já esta sendo utilizado por outra conta!'
 voterreg.already.used.but.nfg.offer: 'Esse Título de eleitor já esta sendo utilizado, mas você ainda pode modificar isso se autorizar a validação de Título de Eleitor na sua conta Nota Fiscal Gaúcha!'
 voterreg.already.used.but.nfg.mismatch: 'Esse Título de eleitor informado não é valido pela sua conta Nota Fiscal Gaúcha, por favor, verifique o valor digitado'
-notification.nfg.revoked.voterreg.title: 'Revogação do seu Título de Eleitor'
-notification.nfg.revoked.voterreg.message.short: 'Foi retirado o Título de Eleitor da sua conta'
-notification.nfg.revoked.voterreg.message: 'Foi retirado o Título de Eleitor da sua conta, pois outro usuario apresentou dados, aparentemente, mais confiaveis, para utiliza-lo'
 voterreg.nfg.fixit: 'O Título informado não é valido pela Nota Fiscal Gaúcha. Por favor, informe corretamente seu Título de Eleitor'
-notification.nfg.already.bind: 'Essa conta da Nota Fiscal Gaúcha já está vinculada em uma conta do login cidadao.'
 'Page not found.': 'Página não encontrada.'
 'This e-mail is already confirmed.': 'Este e-mail já está confirmado.'
 social-networks.unlink.google.success: 'Google desvinculado com sucesso.'
@@ -546,7 +524,6 @@ scope.cep: 'CEP'
 scope.mobile: 'Celular'
 Category : 'Categoria'
 Categorys : 'Categorias'
-'Config notifications' : 'Configurar notificações'
 Default: 'Valor padrão'
 'Default icon': 'Icone padrão'
 'Default title': 'Titulo padrão'
@@ -612,8 +589,7 @@ Click here to <strong>add an ID Card</strong>: Clique aqui para <strong>adiciona
 Two-Factor Authentication: Autenticação por Dois Fatores
 Enter the code generated by your code generator device.: Digite o código gerado pelo seu dispositivo gerador de códigos.
 Authentication Code: Código de Autenticação
-View this notification on Citizen Login: Abra essa notificação no Login Cidadão
-'Postal code' : 'Código postal'
+'Postal code': 'Código postal'
 scope.id_cards : 'Documentos de Identidade'
 scope.state: 'Estado'
 scope.addresses: 'Endereços'
@@ -682,8 +658,6 @@ If your backup codes have been compromised or if you have already used too many 
 Confirm Backup Codes Generation: Confirmação da Geração de Códigos Alternativos
 Service's details: "Detalhes do serviço"
 Go to service's page: "Acessar o site do serviço"
-notification.receivedAt: "Recebida em:"
-notification.readAt: "Lida em:"
 Place of birth - Country: 'Naturalidade - Pais'
 'Idcard value': 'Número'
 Back to login: 'Voltar parar o login'
