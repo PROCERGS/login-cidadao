@@ -23,7 +23,7 @@ use FOS\UserBundle\Util\TokenGenerator;
 use LoginCidadao\CoreBundle\Form\Type\DocFormType;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Event\FormEvent;
-use LoginCidadao\CoreBundle\EventListener\ProfileEditListner;
+use LoginCidadao\CoreBundle\EventListener\ProfileEditListener;
 use LoginCidadao\CoreBundle\Form\Type\DocRgFormType;
 use LoginCidadao\CoreBundle\Entity\IdCard;
 use Symfony\Component\HttpFoundation\Response;
@@ -351,7 +351,7 @@ class PersonController extends Controller
         if ($form->isValid()) {
 
             $event = new FormEvent($form, $request);
-            $dispatcher->dispatch(ProfileEditListner::PROFILE_DOC_EDIT_SUCCESS,
+            $dispatcher->dispatch(ProfileEditListener::PROFILE_DOC_EDIT_SUCCESS,
                 $event);
 
             $userManager = $this->get('fos_user.user_manager');

@@ -15,7 +15,7 @@ use LoginCidadao\CoreBundle\Model\SelectData;
 use LoginCidadao\CoreBundle\Model\Manager\CityManager;
 use LoginCidadao\CoreBundle\Model\Manager\StateManager;
 use LoginCidadao\CoreBundle\Model\Manager\CountryManager;
-use LoginCidadao\CoreBundle\EventListener\ProfileEditListner;
+use LoginCidadao\CoreBundle\EventListener\ProfileEditListener;
 
 class CitySelectorComboType extends AbstractType
 {
@@ -28,7 +28,7 @@ class CitySelectorComboType extends AbstractType
     /** @var CountryManager */
     private $countryManager;
 
-    /** @var ProfileEditListner */
+    /** @var ProfileEditListener */
     private $profileEditSubscriber;
 
     /** @var TranslatorInterface */
@@ -40,7 +40,7 @@ class CitySelectorComboType extends AbstractType
     public function __construct(CountryManager $countryManager,
                                 StateManager $stateManager,
                                 CityManager $cityManager,
-                                ProfileEditListner $profileEditSubscriber,
+                                ProfileEditListener $profileEditSubscriber,
                                 TranslatorInterface $translator)
     {
         $this->translator            = $translator;
