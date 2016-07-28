@@ -7,59 +7,6 @@
  * file that was distributed with this source code.
  */
 
-html, body {
-    background-color: #f9f9f9;
-}
-
-.vertical-center {
-    min-height: 100%;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-}
-
-.container-fluid {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-.panel-home {
-    width: 23em;
-    -webkit-box-shadow: 3px 3px 10px 1px #ccc;
-    box-shadow: 3px 3px 10px 1px #ccc;
-}
-
-.panel-home > .panel-heading {
-    padding-top: 6px;
-    padding-bottom: 6px;
-    background-color: #033;
-    color: #fff;
-    display: table;
-    width: 100%;
-    min-height: 60px;
-}
-
-.panel-home > .panel-heading .heading-container {
-    display: table-cell;
-    vertical-align: middle;
-}
-
-@media (max-width: 270px) {
-    .panel-home > .panel-heading {
-        display: block;
-    }
-
-    .panel-home > .panel-heading .heading-container {
-        display: block;
-        text-align: center;
-    }
-}
-
-.panel-home .panel-heading img.logo {
-    max-width: 115px;
-    max-height: 50px;
-}
-
 .btn.btn-home-register {
     background-color: #690;
     color: #fff;
@@ -71,18 +18,12 @@ html, body {
     font-weight: bold;
 }
 
-.panel-home .panel-body h1 {
-    margin-top: 0;
-    font-size: 18px;
-    text-align: center;
-}
-
-.panel-home .panel-body > .login,
-.panel-home .panel-body > .registration {
+.panel-compact .panel-body > .login,
+.panel-compact .panel-body > .registration {
     width: 100%;
 }
 
-.panel-home > .panel-footer {
+.panel-compact > .panel-footer {
     background-color: transparent;
 }
 
@@ -99,24 +40,6 @@ html, body {
 .terms {
     color: #666;
     font-size: 12px;
-}
-
-footer ul.dashed {
-    list-style-type: none;
-}
-
-footer ul.dashed > li {
-    display: inline-block;
-    margin-right: 5px;
-}
-
-footer ul.dashed.no-first > li:first-child:before {
-    content: none;
-}
-
-footer ul.dashed > li:before {
-    content: "- ";
-    margin-right: 5px;
 }
 
 /* 3rd Party Login */

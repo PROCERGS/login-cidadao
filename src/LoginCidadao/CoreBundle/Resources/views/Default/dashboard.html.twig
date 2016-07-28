@@ -71,7 +71,7 @@
 
         <div class="row">
             {# Badges #}
-            <div class="col-xs-12 col-md-6 badges-list">
+            <div class="col-xs-12 col-md-12 badges-list">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         {{ 'Badges' | trans }}
@@ -92,28 +92,6 @@
                                 {% endif %}
                             {% endfor %}
                         {% endfor %}
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        {% trans %}Notifications{% endtrans %}
-                    </div>
-                    <div class="panel-body">
-                        <div class="list-group">
-                            {% if notifications|length == 0 %}
-                                <div class="alert alert-warning" role="alert">{% trans %}You don't have any unread
-                                    notification.{% endtrans %}</div>
-                            {% endif %}
-                            {% for notification in notifications %}
-                                <a href="{{ path('lc_notifications', { id: notification.id }) }}"
-                                   class="list-group-item notification">
-                                    {{ notification.sender.name }} - {{ notification.title }}
-                                    - {{ notification.createdAt|date("d/m/Y H:i:s") }}
-                                </a>
-                            {% endfor %}
-                        </div>
                     </div>
                 </div>
             </div>

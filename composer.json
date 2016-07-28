@@ -44,7 +44,7 @@
         "jms/security-extra-bundle": "dev-master",
         "procergs/login-cidadao-badges-bundle": "^2.0",
         "scheb/two-factor-bundle": "^1.4,<1.5",
-        "procergs/tos-bundle": "^1.2",
+        "procergs/tos-bundle": "^1.3",
         "symfony/phpunit-bridge": "^2.7",
         "bshaffer/oauth2-server-bundle": "dev-develop",
         "phpseclib/phpseclib": "2.0.0",

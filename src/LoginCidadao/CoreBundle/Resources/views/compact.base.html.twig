@@ -1,0 +1,51 @@
+{% extends 'LoginCidadaoCoreBundle::base.html.twig' %}
+
+{% block header %}
+{% endblock %}
+
+{% block footer %}
+    <footer>
+        <ul class="no-first dashed text-center">
+            <li><a href="{{ path('lc_help') }}">{{ 'Help' | trans }}</a></li>
+            <li><a href="{{ path('lc_contact') }}">{{ 'Contact' | trans }}</a></li>
+            <li><a href="https://github.com/PROCERGS/login-cidadao/"
+                   target="_blank">{{ 'GitHub Repository' | trans }}</a></li>
+            <li>Copyleft @2014, 2016</li>
+        </ul>
+    </footer>
+{% endblock %}
+
+{% block body %}
+    <div class="vertical-center">
+        <div class="panel panel-compact center-block">
+            <div class="panel-heading">
+                <div class="heading-container">
+                    {{ include('LoginCidadaoCoreBundle::common.compact.logo.html.twig') }}
+                </div>
+                <div class="heading-container buttons text-right">
+                    {% block top_buttons %}
+                        {% if app.user != null %}
+                            <a href="{{ path('fos_user_security_logout') }}" class="btn btn-compact-logout">
+                                {{ 'compact.logout.button' | trans }}
+                            </a>
+                        {% endif %}
+                    {% endblock %}
+                </div>
+            </div>
+            <div class="panel-body {% block panel_body_class %}{% endblock %}">
+                {% block panel_body %}
+                {% endblock %}
+            </div>
+            <div class="panel-footer {% block panel_footer_class %}hidden{% endblock %}">
+                {% block panel_footer %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets_custom %}
+    {% stylesheets '@lc_compact_layout_css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock %}

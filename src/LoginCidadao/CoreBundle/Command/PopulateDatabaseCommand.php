@@ -7,7 +7,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\ORM\EntityManager;
-use LoginCidadao\NotificationBundle\Entity\Category;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -27,7 +26,6 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
         $dir = realpath($input->getArgument('dump_folder'));
         $this->loadDumpFiles($dir, $output);
         $this->createDefaultOAuthClient($dir, $output);
-        $this->createCategories($output);
     }
 
     private function loadDumpFiles($dir, OutputInterface $output)
@@ -142,30 +140,6 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
             $client->setImage($picture);
             $clientManager->updateClient($client);
             $output->writeln('Default Client created.');
-        }
-    }
-
-    protected function createCategories(OutputInterface $output)
-    {
-        $em = $this->getManager();
-        $categories = $em->getRepository('LoginCidadaoNotificationBundle:Category');
-
-        $alertCategoryUid = $this->getContainer()->getParameter('notifications_categories_alert.uid');
-        $alertCategory = $categories->findOneByUid($alertCategoryUid);
-
-        if (!($alertCategory instanceof Category)) {
-            $alertCategory = new Category();
-            $alertCategory->setClient($this->getDefaultOAuthClient())
-                ->setDefaultShortText('Alert')
-                ->setDefaultTitle('Alert')
-                ->setDefaultIcon('alert')
-                ->setMarkdownTemplate('%shorttext%')
-                ->setEmailable(false)
-                ->setName('Alerts')
-                ->setUid($alertCategoryUid);
-            $em->persist($alertCategory);
-            $em->flush();
-            $output->writeln('Alert category created.');
         }
     }
 

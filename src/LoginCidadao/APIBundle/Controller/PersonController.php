@@ -8,7 +8,6 @@ use LoginCidadao\APIBundle\Exception\RequestTimeoutException;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 use Symfony\Component\HttpFoundation\Request;
-use LoginCidadao\NotificationBundle\Entity\Notification;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
@@ -146,68 +145,6 @@ class PersonController extends BaseController
 
             return false;
         };
-    }
-
-    /**
-     * @REST\Post("/person/sendnotification")
-     * @REST\View
-     * @Audit\Loggable(type="CREATE")
-     * @deprecated since version 1.0.2
-     */
-    public function sendNotificationAction(Request $request)
-    {
-        $token       = $this->get('security.token_storage')->getToken();
-        $accessToken = $this->getDoctrine()->getRepository('LoginCidadaoOAuthBundle:AccessToken')->findOneBy(array(
-            'token' => $token->getToken()));
-        $client      = $accessToken->getClient();
-
-        $body = json_decode($request->getContent(), 1);
-
-        $chkAuth = $this->getDoctrine()
-            ->getManager()
-            ->getRepository('LoginCidadaoCoreBundle:Authorization')
-            ->createQueryBuilder('a')
-            ->select('cnc, p')
-            ->join('LoginCidadaoCoreBundle:Person', 'p', 'WITH', 'a.person = p')
-            ->join('LoginCidadaoOAuthBundle:Client', 'c', 'WITH', 'a.client = c')
-            ->join('LoginCidadaoCoreBundle:ConfigNotCli', 'cnc', 'WITH',
-                'cnc.client = c')
-            ->where('c.id = '.$client->getId().' and p.id = :person_id and cnc.id = :config_id')
-            ->getQuery();
-        $rowR      = array();
-        $em        = $this->getDoctrine()->getManager();
-        $validator = $this->get('validator');
-
-        foreach ($body as $idx => $row) {
-            if (isset($row['person_id'])) {
-                $res = $chkAuth->setParameters(array('person_id' => $row['person_id'],
-                        'config_id' => $row['config_id']))->getResult();
-                if (!$res) {
-                    $rowR[$idx] = array('person_id' => $row['person_id'], 'error' => 'missing authorization or configuration');
-                    continue;
-                }
-                $not = new Notification();
-                $not->setPerson($res[0]);
-                $not->setConfigNotCli($res[1])
-                    ->setIcon(isset($row['icon']) && $row['icon'] ? $row['icon']
-                                : $not->getConfigNotCli()->getIcon())
-                    ->setTitle(isset($row['title']) && $row['title'] ? $row['title']
-                                : $not->getConfigNotCli()->getTitle())
-                    ->setShortText(isset($row['shorttext']) && $row['shorttext']
-                                ? $row['shorttext'] : $not->getConfigNotCli()->getShortText())
-                    ->setText($row['text'])
-                    ->parseHtmlTemplate($not->getConfigNotCli()->getHtmlTemplate());
-                $errors = $validator->validate($not);
-                if (!count($errors)) {
-                    $em->persist($not);
-                    $rowR[$idx] = array('person_id' => $row['person_id'], 'notification_id' => $not->getId());
-                } else {
-                    $rowR[$idx] = array('person_id' => $row['person_id'], 'error' => (string) $errors);
-                }
-            }
-        }
-        $em->flush();
-        return $this->handleView($this->view($rowR));
     }
 
     /**
