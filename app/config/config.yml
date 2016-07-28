@@ -100,12 +100,10 @@ assetic:
           - 'bundles/logincidadaocore/css/ac.widget.css'
           - 'bundles/logincidadaocore/css/common.grid.css'
           - 'bundles/logincidadaocore/css/list.buttons.css'
-          - 'bundles/logincidadaocore/css/notification.css'
       lc_logged_css:
         inputs:
           - '@lc_base_css'
           - 'bundles/logincidadaocore/css/logged/logged.css'
-          - 'bundles/logincidadaonotification/css/notifications.css'
 
     filters:
         cssrewrite: ~
@@ -224,13 +222,6 @@ simple_things_entity_audit:
         - LoginCidadao\CoreBundle\Entity\SentEmail
         - LoginCidadao\CoreBundle\Entity\State
 
-        - LoginCidadao\NotificationBundle\Entity\Broadcast
-        - LoginCidadao\NotificationBundle\Entity\Category
-        - LoginCidadao\NotificationBundle\Entity\Notification
-        - LoginCidadao\NotificationBundle\Entity\NotificationToken
-        - LoginCidadao\NotificationBundle\Entity\PersonNotificationOption
-        - LoginCidadao\NotificationBundle\Entity\Placeholder
-
         - LoginCidadao\OAuthBundle\Entity\AccessToken
         - LoginCidadao\OAuthBundle\Entity\AuthCode
         - LoginCidadao\OAuthBundle\Entity\Client
@@ -275,7 +266,7 @@ parameters:
     lc_public_scopes_oidc: 'openid sub name given_name family_name full_name preferred_username picture email email_verified birthdate phone_number address updated_at'
     lc_public_scopes_oauth2: 'public_profile username first_name last_name full_name cpf city public_profile country state addresses id_cards mobile logout'
     lc_public_scopes: %lc_public_scopes_oidc% %lc_public_scopes_oauth2%
-    lc_reserved_scopes: 'get_all_notifications notifications voter_registration'
+    lc_reserved_scopes: 'voter_registration'
     lc_supported_scopes: %lc_public_scopes% %lc_reserved_scopes%
     lc_idcard_country_acronym: BR
 

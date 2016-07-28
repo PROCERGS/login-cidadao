@@ -10,13 +10,8 @@ registration.submit: Register
 registration.register: Register
 resseting.forgot_password: 'Forgot your password?'
 resetting.password_already_requested: 'The password for this user has already been requested within the last 24 hours.'
-resetting.check_email: 'An email has been sent to %email%. It contains a link you must click to reset your password.'
 resetting.email.subject: 'Reset Password'
 resetting.email.message: 'Someone recently requested to reset your password Citizen''s Login.'
-resetting.request.invalid_username: 'The username or email address "%username%" does not exist.'
-resetting.request.username: 'Username or email address:'
-resetting.request.submit: 'Reset password'
-resetting.reset.submit: 'Change password'
 form.group_name: 'Group name'
 form.username: Username
 form.email: Email

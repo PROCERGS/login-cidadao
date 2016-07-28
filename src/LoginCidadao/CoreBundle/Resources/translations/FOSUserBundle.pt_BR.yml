@@ -37,13 +37,8 @@ form.phone.example: (51) 99999-9999
 form.mobile: Celular
 form.mobile.example: (51) 99999-9999
 resseting.forgot_password: 'Esqueceu sua senha?'
-resetting.request.invalid_username: 'O CPF, nome de usuário ou email "%username%" não está cadastrado.'
-resetting.request.username: 'Email ou CPF:'
-resetting.request.submit: 'Recuperar senha'
-resetting.check_email: 'Foi enviado um email para %email%. Para recuperar a sua senha, clique no link da mensagem.'
 resetting.email.subject: 'Redefinir senha'
 resetting.email.message: 'Alguém solicitou recentemente para redefinir sua senha do Login Cidadão.'
-resetting.reset.submit: 'Alterar senha'
 resetting.password_already_requested: 'Este usuário já solicitou uma senha nas últimas 24 horas.'
 change_password.submit: 'Alterar senha'
 change_password.flash.success: 'Senha alterada com sucesso!'
