@@ -13,8 +13,8 @@ parameters:
     lc.person_doc.form.class: LoginCidadao\CoreBundle\Form\Type\DocFormType
     lc.user_provider.class: LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
     lc.user_manager.class: LoginCidadao\CoreBundle\Security\User\Manager\UserManager
-    lc.user_register.class: LoginCidadao\CoreBundle\EventListener\RegisterListner
-    lc.profile_edit.class: LoginCidadao\CoreBundle\EventListener\ProfileEditListner
+    lc.user_register.class: LoginCidadao\CoreBundle\EventListener\RegisterListener
+    lc.profile_edit.class: LoginCidadao\CoreBundle\EventListener\ProfileEditListener
     lc.change.password.listener.class: LoginCidadao\CoreBundle\EventListener\ChangePasswordListener
     lc.resetting.listener.class: LoginCidadao\CoreBundle\EventListener\ResettingListener
     lc.mailer.class: LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer
@@ -26,7 +26,7 @@ parameters:
 
     lc.postalcode.search.form.type.class: LoginCidadao\CoreBundle\Form\Type\SearchPostalCodeFormType
 
-    lc.person.serialize.listenner.class: LoginCidadao\CoreBundle\EventListener\PersonSerializeEventListenner
+    lc.person.serialize.listenner.class: LoginCidadao\CoreBundle\EventListener\PersonSerializeEventListener
 
     lc.idcard.form.class: LoginCidadao\CoreBundle\Form\Type\IdCardType
     lc.security.helper.class: LoginCidadao\CoreBundle\Helper\SecurityHelper

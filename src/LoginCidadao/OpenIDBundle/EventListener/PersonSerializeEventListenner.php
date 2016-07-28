@@ -7,7 +7,7 @@ use JMS\Serializer\EventDispatcher\ObjectEvent;
 use LoginCidadao\OAuthBundle\Model\AccessTokenManager;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 
-class PersonSerializeEventListenner implements EventSubscriberInterface
+class PersonSerializeEventListener implements EventSubscriberInterface
 {
     /** @var AccessTokenManager */
     protected $accessTokenManager;

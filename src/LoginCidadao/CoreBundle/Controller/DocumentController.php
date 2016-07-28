@@ -9,8 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
-use LoginCidadao\CoreBundle\EventListener\ProfileEditListner;
-use LoginCidadao\CoreBundle\Form\Type\DocFormType;
+use LoginCidadao\CoreBundle\EventListener\ProfileEditListener;
 
 class DocumentController extends Controller
 {
@@ -40,7 +39,7 @@ class DocumentController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $event = new FormEvent($form, $request);
-            $dispatcher->dispatch(ProfileEditListner::PROFILE_DOC_EDIT_SUCCESS,
+            $dispatcher->dispatch(ProfileEditListener::PROFILE_DOC_EDIT_SUCCESS,
                                     $event);
 
             $userManager = $this->get('fos_user.user_manager');
