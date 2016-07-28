@@ -174,10 +174,6 @@
     }
 }
 
-#lc-navbar .notifications .glyphicon {
-    top: 3px;
-}
-
 #lc-navbar .brand img {
     position: relative;
     top: -4px;
@@ -369,11 +365,6 @@
 
 #lc-navbar .app a:hover {
   background-image: none;
-}
-
-
-#lc-navbar .notifications li a {
-    border-bottom: solid 1px #CCC;
 }
 
 .notification-extreme {

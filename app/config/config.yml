@@ -34,7 +34,6 @@ twig:
         - 'LoginCidadaoCoreBundle:Form:fields.html.twig'
     globals:
         fos_csrf_provider: "@security.csrf.token_manager"
-        notifications_helper: "@notifications.helper"
         facebook_app_id: "%facebook_app_id%"
         app_router: "@router"
         postalcode_search_link: 

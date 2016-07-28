@@ -20,7 +20,6 @@ parameters:
     lc.mailer.class: LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer
     kernel.listener.logged_in_user_listener.class: LoginCidadao\CoreBundle\EventListener\LoggedInUserListener
     kernel.listener.exceptions_listener.class: LoginCidadao\CoreBundle\EventListener\ExceptionListener
-    lc.notification.subscriber.class: LoginCidadao\CoreBundle\EventListener\NotificationsSubscriber
 
     lc.emailChanged.template: LoginCidadaoCoreBundle:Person:emailChangedMessage.html.twig
     lc.notification.email.template: LoginCidadaoCoreBundle:Email:notification.html.twig
@@ -43,7 +42,7 @@ services:
     security.authentication.success_handler:
         class: %security.authentication.success_handler.class%
         public: false
-        arguments: ["@router", [], "@doctrine.orm.entity_manager", "@session", "@security.http_utils", "@notifications.helper"]
+        arguments: ["@router", [], "@doctrine.orm.entity_manager", "@session", "@security.http_utils"]
         calls:
             - [setContainer, ["@service_container"]]
 
@@ -138,10 +137,8 @@ services:
             - "@translator"
             - "@fos_user.mailer"
             - "@fos_user.util.token_generator"
-            - "@notifications.helper"
             - "%registration.email.unconfirmed_time%"
             - "%lc_supported_scopes%"
-            - "@lc.notification.handler"
             - "@lc.register_requested_scope"
         tags:
             - { name: kernel.event_subscriber }
@@ -157,7 +154,6 @@ services:
             - "@router"
             - "@session"
             - "@security.token_storage"
-            - "@notifications.helper"
             - %registration.email.unconfirmed_time%
         tags:
             - { name: kernel.event_subscriber }
@@ -178,7 +174,6 @@ services:
         class: %lc.change.password.listener.class%
         arguments:
             - "@router"
-            - "@notifications.helper"
             - "@session"
             - %default_password_encoder%
         tags:
@@ -307,12 +302,6 @@ services:
         tags:
             - { name: form.type, alias: lc_idcard_form }
 
-    lc.notification.subscriber:
-        class: %lc.notification.subscriber.class%
-        arguments: [ "@lc.notification.handler", "@lc.mailer" ]
-        tags:
-            - { name: kernel.event_subscriber }
-
     lc.feature_hierarchy.voter:
         class: %security.access.role_hierarchy_voter.class%
         arguments: [ "@security.role_hierarchy", 'FEATURE_' ]
@@ -391,7 +380,6 @@ services:
             - "@cache"
             - "@doctrine.orm.entity_manager"
             - '%oauth_default_client.uid%'
-            - '%notifications_categories_alert.uid%'
         tags:
             - { name: kernel.event_subscriber }
 

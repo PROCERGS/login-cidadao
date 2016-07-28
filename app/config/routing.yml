@@ -44,12 +44,6 @@ tos:
     type:     annotation
     prefix:   /
 
-# Notifications
-lc_notification:
-    type: rest
-    resource: "@LoginCidadaoNotificationBundle/Resources/config/routing.yml"
-    prefix:   /
-
 #HWI OAuth
 hwi_oauth_security:
     resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"

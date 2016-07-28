@@ -5,7 +5,6 @@ namespace LoginCidadao\OAuthBundle\Entity;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 use FOS\OAuthServerBundle\Entity\Client as BaseClient;
 use Doctrine\ORM\Mapping as ORM;
-use LoginCidadao\NotificationBundle\Entity\Notification;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -52,11 +51,6 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     protected $description;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
-     */
-    protected $maxNotificationLevel;
-
-    /**
      * @ORM\Column(type="string", length=2000, nullable=true)
      * @JMS\Expose
      * @JMS\Groups({"public"})
@@ -86,16 +80,6 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
      * @JMS\Groups({"public"})
      */
     protected $siteUrl;
-
-    /**
-     * @ORM\OneToMany(targetEntity="LoginCidadao\NotificationBundle\Entity\Notification", mappedBy="sender")
-     */
-    protected $notifications;
-
-    /**
-     * @ORM\OneToMany(targetEntity="LoginCidadao\NotificationBundle\Entity\Category", mappedBy="client")
-     */
-    protected $categories;
 
     /**
      * @Assert\File(
@@ -168,7 +152,6 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         parent::__construct();
         $this->authorizations = new ArrayCollection();
         $this->owners = new ArrayCollection();
-        $this->maxNotificationLevel = Notification::LEVEL_NORMAL;
 
         $this->allowedScopes = array(
             'public_profile',
@@ -252,18 +235,6 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         if ($this->authorizations->contains($authorization)) {
             $this->authorizations->removeElement($authorization);
         }
-    }
-
-    public function getMaxNotificationLevel()
-    {
-        return $this->maxNotificationLevel;
-    }
-
-    public function setMaxNotificationLevel($maxNotificationLevel)
-    {
-        $this->maxNotificationLevel = $maxNotificationLevel;
-
-        return $this;
     }
 
     public function getLandingPageUrl()
