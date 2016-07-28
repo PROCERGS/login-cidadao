@@ -11,7 +11,7 @@ use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 
-class PersonSerializeEventListenner implements EventSubscriberInterface
+class PersonSerializeEventListener implements EventSubscriberInterface
 {
     protected $templateHelper;
 

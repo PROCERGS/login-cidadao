@@ -23,7 +23,7 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer;
 use LoginCidadao\CoreBundle\Exception\LcValidationException;
 
-class ProfileEditListner implements EventSubscriberInterface
+class ProfileEditListener implements EventSubscriberInterface
 {
     const PROFILE_DOC_EDIT_SUCCESS = 'lc.profile.doc.edit.success';
 
@@ -68,7 +68,7 @@ class ProfileEditListner implements EventSubscriberInterface
         return array(
             FOSUserEvents::PROFILE_EDIT_INITIALIZE => 'onProfileEditInitialize',
             FOSUserEvents::PROFILE_EDIT_SUCCESS => 'onProfileEditSuccess',
-            ProfileEditListner::PROFILE_DOC_EDIT_SUCCESS => 'onProfileDocEditSuccess',
+            ProfileEditListener::PROFILE_DOC_EDIT_SUCCESS => 'onProfileDocEditSuccess',
             FormEvents::POST_SUBMIT => 'registerTextualLocation'
         );
     }
