@@ -2,6 +2,13 @@
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
+use LoginCidadao\CoreBundle\Event\GetTasksEvent;
+use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
+use LoginCidadao\CoreBundle\Model\MigratePasswordEncoderTask;
+use LoginCidadao\CoreBundle\Model\Task;
+use LoginCidadao\CoreBundle\Service\IntentManager;
+use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -36,8 +43,14 @@ class LoggedInUserListener
     /** @var EntityManager */
     private $em;
 
+    /** @var IntentManager */
+    private $intentManager;
+
     /** @var string */
     private $defaultPasswordEncoder;
+
+    /** @var boolean */
+    private $requireEmailValidation;
 
     public function __construct(
         TokenStorageInterface $tokenStorage,
@@ -45,20 +58,22 @@ class LoggedInUserListener
         RouterInterface $router,
         Session $session,
         TranslatorInterface $translator,
-        EntityManager $em,
-        $defaultPasswordEncoder
+        IntentManager $intentManager,
+        $defaultPasswordEncoder,
+        $requireEmailValidation
     ) {
         $this->tokenStorage = $tokenStorage;
         $this->authChecker = $authChecker;
         $this->router = $router;
         $this->session = $session;
         $this->translator = $translator;
-        $this->em = $em;
+        $this->intentManager = $intentManager;
 
         $this->defaultPasswordEncoder = $defaultPasswordEncoder;
+        $this->requireEmailValidation = $requireEmailValidation;
     }
 
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(GetResponseEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         if (HttpKernel::MASTER_REQUEST != $event->getRequestType()) {
             // don't do anything if it's not the master request
@@ -77,9 +92,11 @@ class LoggedInUserListener
         }
 
         try {
-            $this->checkSessionInvalidation($event);
             $this->handleTargetPath($event);
-            $this->passwordEncoderMigration($event);
+            $tasks = $this->checkTasks($event, $dispatcher);
+            if (!$tasks) {
+                $this->checkIntent($event);
+            }
             $this->checkUnconfirmedEmail();
         } catch (RedirectResponseException $e) {
             $event->setResponse($e->getResponse());
@@ -109,6 +126,10 @@ class LoggedInUserListener
 
     protected function checkUnconfirmedEmail()
     {
+        if ($this->requireEmailValidation) {
+            // Thre is a Task for that already
+            return;
+        }
         $token = $this->tokenStorage->getToken();
         $user = $token->getUser();
         if (is_null($user->getEmailConfirmedAt())) {
@@ -124,62 +145,6 @@ class LoggedInUserListener
         }
     }
 
-    private function passwordEncoderMigration(GetResponseEvent $event)
-    {
-        $person = $this->tokenStorage->getToken()->getUser();
-        $route = $event->getRequest()->get('_route');
-
-        if ($route === 'tos_agree'
-            || $route === 'tos_terms'
-            || $event->getRequest()->attributes->get('_controller') == 'LoginCidadaoTOSBundle:Agreement'
-            || $event->getRequest()->attributes->get('_controller') == 'LoginCidadaoTOSBundle:TermsOfService:showLatest'
-            || $event->getRequestType() === HttpKernelInterface::SUB_REQUEST
-        ) {
-            return;
-        }
-
-        if ($person->getEncoderName() === $this->defaultPasswordEncoder) {
-            return;
-        }
-        $this->session->set('force_password_change', true);
-
-        if ($route === 'fos_user_change_password') {
-            return;
-        }
-
-        return $this->redirectRoute('fos_user_change_password');
-    }
-
-    private function checkSessionInvalidation(GetResponseEvent $event)
-    {
-        if (!$this->authChecker->isGranted('FEATURE_INVALIDATE_SESSIONS')) {
-            return;
-        }
-
-        $person = $this->tokenStorage->getToken()->getUser();
-        $repo = $this->getInvalidateSessionRequestRepository();
-        $request = $repo->findMostRecent($person);
-
-        $sessionCreation = $this->session->getMetadataBag()->getCreated();
-        if ($request === null ||
-            $sessionCreation > $request->getRequestedAt()->getTimestamp()
-        ) {
-            return;
-        }
-
-        //$this->tokenStorage->setToken(null);
-        return $this->redirectRoute('fos_user_security_logout');
-    }
-
-    /**
-     * @return \LoginCidadao\CoreBundle\Entity\InvalidateSessionRequestRepository
-     */
-    private function getInvalidateSessionRequestRepository()
-    {
-        return $this->em
-            ->getRepository('LoginCidadaoCoreBundle:InvalidateSessionRequest');
-    }
-
     private function redirectRoute($name, $parameters = array())
     {
         $url = $this->router->generate($name, $parameters);
@@ -190,5 +155,50 @@ class LoggedInUserListener
     private function redirectUrl($url)
     {
         throw new RedirectResponseException(new RedirectResponse($url));
+    }
+
+    private function checkTasks(GetResponseEvent $event, EventDispatcherInterface $dispatcher)
+    {
+        $tasksEvent = new GetTasksEvent($event->getRequest());
+        $dispatcher->dispatch(LoginCidadaoCoreEvents::GET_TASKS, $tasksEvent);
+
+        $tasks = $tasksEvent->getTasks();
+        usort(
+            $tasks,
+            function (Task $a, Task $b) {
+                return $a->getPriority() < $b->getPriority();
+            }
+        );
+
+        foreach ($tasks as $task) {
+            if (false === $task->isMandatory()) {
+                continue; // search first mandatory task
+            }
+        }
+
+        if (!isset($task)) {
+            return false;
+        }
+        $target = $task->getTarget();
+
+        if ($task instanceof MigratePasswordEncoderTask) {
+            $this->session->set('force_password_change', true);
+        }
+        // If the user is not trying to access one of the task's routes, redirect to the default route
+        if (false === $task->isTaskRoute($event->getRequest()->get('_route'))) {
+            $this->intentManager->setIntent($event->getRequest(), false);
+            $this->redirectRoute($target[0], $target[1]);
+        }
+
+        return true;
+    }
+
+    private function checkIntent(GetResponseEvent $event)
+    {
+        $intent = $this->intentManager->consumeIntent($event->getRequest());
+
+        if ($intent) {
+            $this->redirectUrl($intent);
+        }
     }
 }

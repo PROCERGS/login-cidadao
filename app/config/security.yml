@@ -28,6 +28,7 @@ security:
             - ROLE_SUPER
             - ROLE_EDIT_CLIENT_ALLOWED_RESTRICTED_SCOPES
             - ROLE_ORGANIZATIONS_DELETE
+            - ROLE_SKIP_TOS_AGREEMENT
         ROLE_SUPER_ADMIN:
             - ROLE_ADMIN
             - ROLE_ALLOWED_TO_SWITCH

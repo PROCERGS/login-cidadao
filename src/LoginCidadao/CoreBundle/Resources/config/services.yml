@@ -202,8 +202,9 @@ services:
             - "@router"
             - "@session"
             - "@translator"
-            - "@doctrine.orm.entity_manager"
-            - %default_password_encoder%
+            - "@lc.intent.manager"
+            - "%default_password_encoder%"
+            - "%require_email_validation%"
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
@@ -397,8 +398,31 @@ services:
     lc.register_requested_scope:
         class: LoginCidadao\CoreBundle\Service\RegisterRequestedScope
 
+    lc.intent.manager:
+        class: LoginCidadao\CoreBundle\Service\IntentManager
+
     lc.login_entry_point:
         class: LoginCidadao\CoreBundle\EventListener\LoginEntryPoint
         arguments:
             - "@security.http_utils"
             - "@lc.register_requested_scope"
+            - "@lc.intent.manager"
+
+    lc.invalidate_session_request.repository:
+        myrepository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - LoginCidadao\CoreBundle\Entity\InvalidateSessionRequest
+
+    lc.tasks.subscriber:
+        class: LoginCidadao\CoreBundle\EventListener\TaskSubscriber
+        arguments:
+            - "@security.token_storage"
+            - "@security.authorization_checker"
+            - "@security.http_utils"
+            - "@lc.invalidate_session_request.repository"
+            - "%require_email_validation%"
+            - "%default_password_encoder%"
+        tags:
+            - { name: kernel.event_subscriber }

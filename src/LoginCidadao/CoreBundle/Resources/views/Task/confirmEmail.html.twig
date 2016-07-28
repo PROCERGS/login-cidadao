@@ -1,0 +1,61 @@
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
+
+{% block panel_body_class %}task-email-validation{% endblock %}
+
+{% block panel_body %}
+    {% for type, messages in app.session.flashbag.all %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="{{ 'Close' | trans }}"><span
+                            aria-hidden="true">&times;</span></button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <h1>
+        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+        {{ 'tasks.confirm_email.title' | trans }}
+    </h1>
+
+    <p class="main">{{ 'tasks.confirm_email.body' | trans }}</p>
+
+    <h2>{{ 'tasks.confirm_email.resend.title' | trans }}</h2>
+    <p>{{ 'tasks.confirm_email.resend.body' | trans }}</p>
+    <a class="btn btn-block btn-danger"
+       href="{{ path('task_confirm_email', {'resend': '✓'}) }}">{{ 'tasks.confirm_email.resend.button' | trans }}</a>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            dynamicForm.validEmail.wait();
+        });
+
+        var dynamicForm = {
+            'validEmail': {
+                'longPollingUrl': '{{ path('wait_valid_email') }}',
+                'wait': function () {
+                    $.get(dynamicForm.validEmail.longPollingUrl, function (data) {
+                        if (data === true) {
+                            $('.email-validate-waiting').slideUp();
+                            $('.email-validate-success').slideDown().promise().done(function () {
+                                alert("{{ 'tasks.confirm_email.success.alert' | trans }}");
+                                window.location = '{{ targetUrl }}';
+                            });
+                        }
+                    }).fail(function () {
+                        dynamicForm.validEmail.wait();
+                    });
+                }
+            },
+        };
+    </script>
+{% endblock %}
+
+{% block stylesheets_custom %}
+    {% stylesheets '@lc_task_email_validation_css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock %}

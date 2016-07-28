@@ -1,69 +1,46 @@
-{% extends 'LoginCidadaoCoreBundle::base.html.twig' %}
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
 
 {% set is_lc_home = app.request.attributes.get('_route') == 'lc_home' %}
 {% set is_login_page = is_lc_home or app.request.attributes.get('_route') == 'fos_user_security_login' %}
 {% set is_register_page = app.request.attributes.get('_route') == 'fos_user_registration_register' %}
 {% set requested_page = is_login_page ? 'login' : 'register' %}
 
-{% block header %}
+{% block top_buttons %}
+    <a href="{{ path('fos_user_registration_register') }}" class="btn btn-home-register"
+            {{ is_register_page ? 'style="display: none"' : '' }}>{{ 'home.register.button' | trans }}</a>
+    <a href="{{ path('fos_user_security_login') }}" class="btn btn-home-login"
+            {{ is_login_page ? 'style="display: none"' : '' }}>
+        {{ 'home.login.button' | trans }}
+    </a>
 {% endblock %}
 
-{% block footer %}
-    <footer>
-        <ul class="no-first dashed text-center">
-            <li><a href="{{ path('lc_help') }}">{{ 'Help' | trans }}</a></li>
-            <li><a href="{{ path('lc_contact') }}">{{ 'Contact' | trans }}</a></li>
-            <li><a href="https://github.com/PROCERGS/login-cidadao/"
-                   target="_blank">{{ 'GitHub Repository' | trans }}</a></li>
-            <li>Copyleft @2014, 2016</li>
-        </ul>
-    </footer>
+{% block panel_body %}
+    <div class="login" {{ is_register_page ? 'style="display: none"' : '' }}>
+        {% set form1 = lc_getForm() %}
+        {{ include('LoginCidadaoCoreBundle::common.login.html.twig') }}
+    </div>
+    <div class="registration" {{ is_login_page ? 'style="display: none"' : '' }}>
+        {% if form is not defined %}
+            {% set form = lc_getFormFactory() %}
+        {% endif %}
+        {{ include('LoginCidadaoCoreBundle::common.register.html.twig') }}
+    </div>
 {% endblock %}
 
-{% block body %}
-    <div class="vertical-center">
-        <div class="panel panel-home center-block">
-            <div class="panel-heading">
-                <div class="heading-container">
-                    {{ include('LoginCidadaoCoreBundle::common.home_logo.html.twig') }}
-                </div>
-                <div class="heading-container buttons text-right">
-                    <a href="{{ path('fos_user_registration_register') }}" class="btn btn-home-register"
-                            {{ is_register_page ? 'style="display: none"' : '' }}>{{ 'home.register.button' | trans }}</a>
-                    <a href="{{ path('fos_user_security_login') }}" class="btn btn-home-login"
-                            {{ is_login_page ? 'style="display: none"' : '' }}>
-                        {{ 'home.login.button' | trans }}
-                    </a>
-                </div>
-            </div>
-            <div class="panel-body">
-                <div class="login" {{ is_register_page ? 'style="display: none"' : '' }}>
-                    {% set form1 = lc_getForm() %}
-                    {{ include('LoginCidadaoCoreBundle::common.login.html.twig') }}
-                </div>
-                <div class="registration" {{ is_login_page ? 'style="display: none"' : '' }}>
-                    {% if form is not defined %}
-                        {% set form = lc_getFormFactory() %}
-                    {% endif %}
-                    {{ include('LoginCidadaoCoreBundle::common.register.html.twig') }}
-                </div>
-            </div>
-            <div class="panel-footer">
-                <div class="panel panel-3rd-party-login">
-                    <div class="panel-heading">
-                        <h2>{{ 'home.3rd_party.call_to_action' | trans }}</h2>
-                    </div>
-                    <div class="panel-body">
-                        {{ include('LoginCidadaoCoreBundle::common.3rd_party_login.html.twig') }}
-                    </div>
-                </div>
-            </div>
+
+{% block panel_footer %}
+    <div class="panel panel-3rd-party-login">
+        <div class="panel-heading">
+            <h2>{{ 'home.3rd_party.call_to_action' | trans }}</h2>
+        </div>
+        <div class="panel-body">
+            {{ include('LoginCidadaoCoreBundle::common.3rd_party_login.html.twig') }}
         </div>
     </div>
 {% endblock %}
 
 {% block stylesheets_custom %}
-    {% stylesheets '@bootstrap_css' 'bundles/logincidadaocore/css/forms.css' '@lc_login_register_css' filter='cssrewrite' filter='?uglifycss' %}
+    {% stylesheets '@lc_login_register_css' filter='cssrewrite' filter='?uglifycss' %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock %}
