@@ -62,8 +62,13 @@ html, body {
 
 .panel-compact .panel-body h1 {
     margin-top: 0;
+    margin-bottom: 20px;
     font-size: 18px;
     text-align: center;
+}
+
+.panel-compact .panel-body p {
+    text-align: justify;
 }
 
 .panel-compact > .panel-footer {
@@ -88,7 +93,7 @@ footer ul.dashed > li:before {
     margin-right: 5px;
 }
 
-.btn.btn-compact-logout {
+.btn.btn-compact-text {
     background-color: transparent;
     color: #fff;
     font-weight: bold;
