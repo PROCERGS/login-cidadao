@@ -12,7 +12,6 @@ resseting.forgot_password: 'Forgot your password?'
 resetting.password_already_requested: 'The password for this user has already been requested within the last 24 hours.'
 resetting.email.subject: 'Reset Password'
 resetting.email.message: 'Someone recently requested to reset your password Citizen''s Login.'
-resetting.reset.submit: 'Change password'
 form.group_name: 'Group name'
 form.username: Username
 form.email: Email

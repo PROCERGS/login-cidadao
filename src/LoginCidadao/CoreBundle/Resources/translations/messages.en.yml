@@ -421,3 +421,6 @@ resetting.request.username.label: 'Email:'
 resetting.request.username.placeholder: Type your Email
 resetting.request.submit: Recover Password
 resetting.check_email: An email with password recovery instructions was sent to you. Open the email and click the link in the message.
+resetting.reset.title: Creating new Password
+resetting.reset.description: Fill the following fields to create a new password.
+resetting.reset.submit: Change password
