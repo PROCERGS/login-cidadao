@@ -84,29 +84,6 @@
                   <li class="text-center"><a href="{{ url('lc_authorization_list') }}" class="btn btn-block btn-info btn-more">{% trans %}view all services{% endtrans %}</a></li>
                 </ul>
             </li>
-
-            {# Notifications #}
-            <li class="btn-group notifications pull-right dropdown-keep-open">
-                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans %}Notifications{% endtrans %}">
-                    <i class="glyphicon glyphicon-bell">
-                        {% set unreadTotal = notifications_helper.getTotalUnread %}
-                        {% if unreadTotal > 0 %}
-                            {% if unreadTotal > 99 %}
-                                {% set unreadTotal = '99+' %}
-                            {% endif %}
-                            <span class="label label-danger notification-total-unread-badge">{{ unreadTotal }}</span>
-                        {% endif %}
-                    </i>
-                </button>
-                <ul class="dropdown-menu clearfix">
-                    <li class="dropdown-header">
-                        {{ 'Notifications'|trans }}
-                    </li>
-                    <li class="navbar-scrollspy-notification" data-offset="0" data-spy="scroll">
-                        {{ render(controller("LoginCidadaoNotificationBundle:Notification:navbar")) }}
-                    </li>
-                </ul>
-            </li>
         {% endif %}
         </ul>
 

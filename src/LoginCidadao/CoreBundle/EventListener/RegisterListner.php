@@ -5,7 +5,6 @@ namespace LoginCidadao\CoreBundle\EventListener;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 use LoginCidadao\CoreBundle\Service\RegisterRequestedScope;
-use LoginCidadao\NotificationBundle\Handler\NotificationHandler;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -13,12 +12,10 @@ use FOS\UserBundle\Util\TokenGeneratorInterface;
 use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
-use LoginCidadao\NotificationBundle\Helper\NotificationsHelper;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use LoginCidadao\ValidationBundle\Validator\Constraints\UsernameValidator;
 use Doctrine\ORM\EntityManager;
-use LoginCidadao\CoreBundle\Exception\LcEmailException;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 
 class RegisterListner implements EventSubscriberInterface
@@ -43,9 +40,6 @@ class RegisterListner implements EventSubscriberInterface
     protected $em;
     private $lcSupportedScopes;
 
-    /** @var NotificationHandler */
-    private $notificationHandler;
-
     /** @var RegisterRequestedScope */
     private $registerRequestedScope;
 
@@ -55,10 +49,8 @@ class RegisterListner implements EventSubscriberInterface
         TranslatorInterface $translator,
         MailerInterface $mailer,
         TokenGeneratorInterface $tokenGenerator,
-        NotificationsHelper $notificationsHelper,
         $emailUnconfirmedTime,
         $lcSupportedScopes,
-        NotificationHandler $notificationHandler,
         RegisterRequestedScope $registerRequestedScope
     ) {
         $this->router = $router;
@@ -66,10 +58,8 @@ class RegisterListner implements EventSubscriberInterface
         $this->translator = $translator;
         $this->mailer = $mailer;
         $this->tokenGenerator = $tokenGenerator;
-        $this->notificationsHelper = $notificationsHelper;
         $this->emailUnconfirmedTime = $emailUnconfirmedTime;
         $this->lcSupportedScopes = $lcSupportedScopes;
-        $this->notificationHandler = $notificationHandler;
         $this->registerRequestedScope = $registerRequestedScope;
     }
 
@@ -115,7 +105,8 @@ class RegisterListner implements EventSubscriberInterface
         $user = $event->getUser();
         $auth = new Authorization();
         $auth->setPerson($user);
-        $auth->setClient($this->notificationHandler->getLoginCidadaoClient());
+        // TODO: DEPRECATE NOTIFICATIONS
+        //$auth->setClient($this->notificationHandler->getLoginCidadaoClient());
         $auth->setScope(explode(' ', $this->lcSupportedScopes));
         $this->em->persist($auth);
         $this->em->flush();
@@ -123,7 +114,8 @@ class RegisterListner implements EventSubscriberInterface
         $this->mailer->sendConfirmationEmailMessage($user);
 
         if (strlen($user->getPassword()) == 0) {
-            $this->notificationsHelper->enforceEmptyPasswordNotification($user);
+            // TODO: DEPRECATE NOTIFICATIONS
+            //$this->notificationsHelper->enforceEmptyPasswordNotification($user);
         }
 
         $this->registerRequestedScope->clearRequestedScope($event->getRequest());
