@@ -41,7 +41,7 @@
         "friendsofsymfony/rest-bundle": "1.7.*",
         "michelf/php-markdown": "1.4.1",
         "nelmio/api-doc-bundle": "@dev",
-        "jms/security-extra-bundle": "dev-master",
+        "jms/security-extra-bundle": "^1.6",
         "procergs/login-cidadao-badges-bundle": "^2.0",
         "scheb/two-factor-bundle": "^1.4,<1.5",
         "procergs/tos-bundle": "^1.3",
