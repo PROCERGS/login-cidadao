@@ -27,3 +27,10 @@ services:
             - "@security.token_storage"
         tags:
             - { name: form.type, alias: lc_organization }
+
+    lc.client.repository:
+        myrepository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - LoginCidadao\OAuthBundle\Entity\Client
