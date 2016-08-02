@@ -39,7 +39,9 @@
 
         {{ form_row(form.email) }}
 
-        <button class="btn btn-block btn-success">{{ 'tasks.confirm_email.resend.before.button' | trans }}</button>
+        <button type="submit" class="btn btn-block btn-success">
+            {{ 'tasks.confirm_email.resend.before.button' | trans }}
+        </button>
         {{ form_end(form) }}
     </div>
 {% endblock %}

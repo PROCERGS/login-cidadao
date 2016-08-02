@@ -29,8 +29,10 @@ class TaskController extends Controller
     {
         /** @var IntentManager $intentManager */
         $intentManager = $this->get('lc.intent.manager');
+        /** @var PersonInterface $person */
         $person = $this->getUser();
         $resend = $request->get('resend', false);
+        $originalEmail = $person->getEmail();
 
         $hasIntent = $intentManager->hasIntent($request);
         $targetUrl = $hasIntent ? $intentManager->getIntent($request) : $this->generateUrl(
@@ -69,7 +71,11 @@ class TaskController extends Controller
             $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_COMPLETED, $event);
             $response = $event->getResponse();
 
-            $this->flashEmailSent($request->getSession());
+            if ($originalEmail !== $person->getEmail()) {
+                $this->flashEmailSent();
+            } else {
+                $resend = true;
+            }
         }
 
         if ($resend) {
@@ -96,21 +102,16 @@ class TaskController extends Controller
             }
             $mailer->sendConfirmationEmailMessage($person);
 
-            $this->flashEmailSent($session);
+            $this->flashEmailSent();
 
             return $this->redirectToRoute('task_confirm_email');
         }
     }
 
-    private function flashEmailSent(SessionInterface $session)
+    private function flashEmailSent()
     {
-        if ($session instanceof Session) {
-            /** @var TranslatorInterface $translator */
-            $translator = $this->get('translator');
-            $session->getFlashBag()->add(
-                'success',
-                $translator->trans("tasks.confirm_email.resent.alert")
-            );
-        }
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
+        $this->addFlash('success', $translator->trans("tasks.confirm_email.resent.alert"));
     }
 }
