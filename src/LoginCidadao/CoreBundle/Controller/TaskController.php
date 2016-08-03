@@ -15,8 +15,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class TaskController extends Controller
@@ -32,13 +30,11 @@ class TaskController extends Controller
         /** @var PersonInterface $person */
         $person = $this->getUser();
         $resend = $request->get('resend', false);
+        $notifySent = $request->get('resent', false);
         $originalEmail = $person->getEmail();
 
         $hasIntent = $intentManager->hasIntent($request);
-        $targetUrl = $hasIntent ? $intentManager->getIntent($request) : $this->generateUrl(
-            'task_confirm_email',
-            ['success' => '✓']
-        );
+        $targetUrl = $hasIntent ? $intentManager->getIntent($request) : $this->generateUrl('lc_dashboard');
 
         if ($person->getEmailConfirmedAt()) {
             if ($hasIntent) {
@@ -57,29 +53,32 @@ class TaskController extends Controller
 
         $response = null;
         $form->handleRequest($request);
+        $emailChanged = $originalEmail !== $person->getEmail();
         if ($form->isValid()) {
-            /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
-            $userManager = $this->get('fos_user.user_manager');
+            if ($emailChanged) {
+                /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+                $userManager = $this->get('fos_user.user_manager');
 
-            $event = new FormEvent($form, $request);
-            $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_SUCCESS, $event);
+                $event = new FormEvent($form, $request);
+                $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_SUCCESS, $event);
 
-            $userManager->updateUser($person);
+                $userManager->updateUser($person);
 
-            $response = $this->redirectToRoute('task_confirm_email');
-            $event = new FilterUserResponseEvent($person, $request, $response);
-            $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_COMPLETED, $event);
-            $response = $event->getResponse();
-
-            if ($originalEmail !== $person->getEmail()) {
-                $this->flashEmailSent();
+                $response = $this->redirectToRoute('task_confirm_email', ['resent' => '✓']);
+                $event = new FilterUserResponseEvent($person, $request, $response);
+                $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_COMPLETED, $event);
+                $response = $event->getResponse();
             } else {
                 $resend = true;
             }
         }
 
+        if ($emailChanged || $notifySent) {
+            $this->flashEmailSent();
+        }
+
         if ($resend) {
-            $this->resendEmailConfirmation($request->getSession(), $person);
+            $this->resendEmailConfirmation($person);
         }
 
         if ($response instanceof Response) {
@@ -89,7 +88,7 @@ class TaskController extends Controller
         return ['targetUrl' => $targetUrl, 'form' => $form->createView()];
     }
 
-    private function resendEmailConfirmation(SessionInterface $session, PersonInterface $person)
+    private function resendEmailConfirmation(PersonInterface $person)
     {
         $mailer = $this->get('fos_user.mailer');
 
