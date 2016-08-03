@@ -5,6 +5,7 @@ namespace LoginCidadao\CoreBundle\EventListener;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 use LoginCidadao\CoreBundle\Service\RegisterRequestedScope;
+use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -41,15 +42,23 @@ class RegisterListener implements EventSubscriberInterface
     /** @var RegisterRequestedScope */
     private $registerRequestedScope;
 
+    /** @var ClientRepository */
+    public $clientRepository;
+
+    /** @var string */
+    private $defaultClientUid;
+
     public function __construct(
         UrlGeneratorInterface $router,
         SessionInterface $session,
         TranslatorInterface $translator,
         MailerInterface $mailer,
         TokenGeneratorInterface $tokenGenerator,
+        RegisterRequestedScope $registerRequestedScope,
+        ClientRepository $clientRepository,
         $emailUnconfirmedTime,
         $lcSupportedScopes,
-        RegisterRequestedScope $registerRequestedScope
+        $defaultClientUid
     ) {
         $this->router = $router;
         $this->session = $session;
@@ -59,6 +68,8 @@ class RegisterListener implements EventSubscriberInterface
         $this->emailUnconfirmedTime = $emailUnconfirmedTime;
         $this->lcSupportedScopes = $lcSupportedScopes;
         $this->registerRequestedScope = $registerRequestedScope;
+        $this->clientRepository = $clientRepository;
+        $this->defaultClientUid = $defaultClientUid;
     }
 
     /**
@@ -103,8 +114,7 @@ class RegisterListener implements EventSubscriberInterface
         $user = $event->getUser();
         $auth = new Authorization();
         $auth->setPerson($user);
-        // TODO: DEPRECATE NOTIFICATIONS
-        //$auth->setClient($this->notificationHandler->getLoginCidadaoClient());
+        $auth->setClient($this->clientRepository->findOneBy(['uid' => $this->defaultClientUid]));
         $auth->setScope(explode(' ', $this->lcSupportedScopes));
         $this->em->persist($auth);
         $this->em->flush();
@@ -113,6 +123,7 @@ class RegisterListener implements EventSubscriberInterface
 
         if (strlen($user->getPassword()) == 0) {
             // TODO: DEPRECATE NOTIFICATIONS
+            // TODO: create an optional task offering users to set a password
             //$this->notificationsHelper->enforceEmptyPasswordNotification($user);
         }
 
