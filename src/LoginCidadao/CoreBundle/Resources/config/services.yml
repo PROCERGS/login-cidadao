@@ -137,9 +137,11 @@ services:
             - "@translator"
             - "@fos_user.mailer"
             - "@fos_user.util.token_generator"
+            - "@lc.register_requested_scope"
+            - "@lc.client.repository"
             - "%registration.email.unconfirmed_time%"
             - "%lc_supported_scopes%"
-            - "@lc.register_requested_scope"
+            - "%oauth_default_client.uid%"
         tags:
             - { name: kernel.event_subscriber }
         calls:
