@@ -3,7 +3,8 @@ Login Cidadão
 
 [![Build Status](https://travis-ci.org/redelivre/login-cidadao.svg?branch=master)](https://travis-ci.org/redelivre/login-cidadao)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/redelivre/login-cidadao/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/redelivre/login-cidadao/?branch=master)
-[![Join the chat at https://gitter.im/PROCERGS/login-cidadao](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/PROCERGS/login-cidadao?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://telegram.me/IdentidadeDigital](https://patrolavia.github.io/telegram-badge/chat.png)](https://telegram.me/IdentidadeDigital)
+[![Receive updates at https://telegram.me/logincidadao](https://patrolavia.github.io/telegram-badge/follow.png)](https://telegram.me/logincidadao)
 
 ## Requirements
 
