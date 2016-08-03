@@ -96,6 +96,7 @@ assetic:
         inputs:
           - '@lc_compact_layout_css'
           - 'bundles/logincidadaocore/css/login_register/*.css'
+          - 'bundles/procergslogincidadaocore/css/login_register/*.css'
       lc_base_css:
         inputs:
           - '@bootstrap_css'
