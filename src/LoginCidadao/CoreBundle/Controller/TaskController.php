@@ -53,8 +53,9 @@ class TaskController extends Controller
 
         $response = null;
         $form->handleRequest($request);
-        $emailChanged = $originalEmail !== $person->getEmail();
+        $emailChanged = false;
         if ($form->isValid()) {
+            $emailChanged = $originalEmail !== $person->getEmail();
             if ($emailChanged) {
                 /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
                 $userManager = $this->get('fos_user.user_manager');
