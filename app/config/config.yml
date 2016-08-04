@@ -88,6 +88,7 @@ assetic:
           - '@bootstrap_css'
           - 'bundles/logincidadaocore/css/forms.css'
           - 'bundles/logincidadaocore/css/compact/*.css'
+          - 'bundles/procergslogincidadaocore/css/compact/*.css'
       lc_task_email_validation_css:
         inputs:
           - '@lc_compact_layout_css'
