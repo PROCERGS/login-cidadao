@@ -42,35 +42,42 @@ class SessionManagementController extends Controller
     {
         $client = $this->getClient($request->get('client_id'));
 
-        $uris   = array();
+        $uris = array();
         $uris[] = $client->getSiteUrl();
         $uris[] = $client->getTermsOfUseUrl();
         $uris[] = $client->getLandingPageUrl();
         if ($client->getMetadata()) {
-            $meta   = $client->getMetadata();
+            $meta = $client->getMetadata();
             $uris[] = $meta->getClientUri();
             $uris[] = $meta->getInitiateLoginUri();
             $uris[] = $meta->getPolicyUri();
             $uris[] = $meta->getSectorIdentifierUri();
             $uris[] = $meta->getTosUri();
-            $uris   = array_merge($uris, $meta->getRedirectUris(),
-                $meta->getRequestUris());
+            $uris = array_merge(
+                $uris,
+                $meta->getRedirectUris(),
+                $meta->getRequestUris()
+            );
         }
 
         $result = array_unique(
-            array_map(function($value) {
-                if ($value === null) {
-                    return;
-                }
-                $uri = parse_url($value);
+            array_map(
+                function ($value) {
+                    if ($value === null) {
+                        return;
+                    }
+                    $uri = parse_url($value);
 
-                $uri['fragment'] = '';
-                $uri['path']     = '';
-                $uri['query']    = '';
-                $uri['user']     = '';
-                $uri['pass']     = '';
-                return $this->unparseUrl($uri);
-            }, array_filter($uris))
+                    $uri['fragment'] = '';
+                    $uri['path'] = '';
+                    $uri['query'] = '';
+                    $uri['user'] = '';
+                    $uri['pass'] = '';
+
+                    return $this->unparseUrl($uri);
+                },
+                array_filter($uris)
+            )
         );
 
         return new JsonResponse(array_values($result));
@@ -91,23 +98,25 @@ class SessionManagementController extends Controller
     private function getClient($clientId)
     {
         $clientId = explode('_', $clientId);
-        $id       = $clientId[0];
+        $id = $clientId[0];
+
         return $this->getDoctrine()->getManager()
-                ->getRepository('LoginCidadaoOAuthBundle:Client')->find($id);
+            ->getRepository('LoginCidadaoOAuthBundle:Client')->find($id);
     }
 
     private function unparseUrl($parsed_url)
     {
-        $scheme   = isset($parsed_url['scheme']) ? $parsed_url['scheme'].'://' : '';
-        $host     = isset($parsed_url['host']) ? $parsed_url['host'] : '';
-        $port     = isset($parsed_url['port']) ? ':'.$parsed_url['port'] : '';
-        $user     = isset($parsed_url['user']) ? $parsed_url['user'] : '';
-        $pass     = isset($parsed_url['pass']) ? ':'.$parsed_url['pass'] : '';
-        $pass     = ($user || $pass) ? "$pass@" : '';
-        $path     = isset($parsed_url['path']) ? $parsed_url['path'] : '';
-        $query    = isset($parsed_url['query']) ? '?'.$parsed_url['query'] : '';
+        $scheme = isset($parsed_url['scheme']) ? $parsed_url['scheme'].'://' : '';
+        $host = isset($parsed_url['host']) ? $parsed_url['host'] : '';
+        $port = isset($parsed_url['port']) ? ':'.$parsed_url['port'] : '';
+        $user = isset($parsed_url['user']) ? $parsed_url['user'] : '';
+        $pass = isset($parsed_url['pass']) ? ':'.$parsed_url['pass'] : '';
+        $pass = ($user || $pass) ? "$pass@" : '';
+        $path = isset($parsed_url['path']) ? $parsed_url['path'] : '';
+        $query = isset($parsed_url['query']) ? '?'.$parsed_url['query'] : '';
         $fragment = isset($parsed_url['fragment']) ? '#'.$parsed_url['fragment']
-                : '';
+            : '';
+
         return "$scheme$user$pass$host$port$path$query$fragment";
     }
 }
