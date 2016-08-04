@@ -13,6 +13,7 @@ namespace LoginCidadao\CoreBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DocFormType extends AbstractType
 {
@@ -20,16 +21,29 @@ class DocFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('cpf',
+        $builder->add(
+            'cpf',
             'Symfony\Component\Form\Extension\Core\Type\TextType',
             array(
-            'required' => false
-        ));
+                'required' => false,
+            )
+        );
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(
+            [
+                'data_class' => 'LoginCidadao\CoreBundle\Entity\Person',
+                'validation_groups' => ['Profile'],
+            ]
+        );
     }
 
     public function setEntityManager(EntityManager $em)
     {
         $this->em = $em;
+
         return $this;
     }
 }
