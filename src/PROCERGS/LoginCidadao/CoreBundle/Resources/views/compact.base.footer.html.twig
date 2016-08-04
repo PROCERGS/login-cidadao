@@ -1,0 +1,18 @@
+<footer>
+    <div class="logos text-center">
+        {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/procergs.svg' %}
+        <img src="{{ asset_url }}" alt="PROCERGS" class="logo-procergs logo">
+        {% endimage %}
+        {% image '@PROCERGSLoginCidadaoCoreBundle/Resources/public/images/logo_rs.png' %}
+        <img src="{{ asset_url }}" alt="Governo do Estado do Rio Grande do Sul" class="logo-gov logo">
+        {% endimage %}
+    </div>
+
+    <ul class="no-first dashed text-center">
+        <li><a href="{{ path('lc_help') }}">{{ 'Help' | trans }}</a></li>
+        <li><a href="{{ path('lc_contact') }}">{{ 'Contact' | trans }}</a></li>
+        <li><a href="https://github.com/PROCERGS/login-cidadao/"
+               target="_blank">{{ 'GitHub Repository' | trans }}</a></li>
+        <li>Copyleft @2014, 2016</li>
+    </ul>
+</footer>
