@@ -75,6 +75,12 @@ html, body {
     background-color: transparent;
 }
 
+footer {
+    border-top: 1px solid #e8e8e8;
+    background-color: #fff;
+    padding-top: 30px;
+}
+
 footer ul.dashed {
     list-style-type: none;
 }
