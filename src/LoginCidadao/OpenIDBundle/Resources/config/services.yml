@@ -46,7 +46,7 @@ services:
         class: %oidc.person.serialize.listener.class%
         arguments:
             - "@lc_accesstoken_manager"
-            - %secret%
+            - "@oidc.subject_identifier.service"
         tags:
             - { name: jms_serializer.event_listener, event: serializer.post_serialize, method: onPostSerialize }
 
@@ -116,3 +116,8 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@event_dispatcher"
             - ""
+
+    oidc.subject_identifier.service:
+        class: LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService
+        arguments:
+            - %secret%
