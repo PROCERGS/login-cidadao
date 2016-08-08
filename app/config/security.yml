@@ -90,6 +90,7 @@ security:
             entry_point: lc.login_entry_point
 
             remember_me:
+                name: "%session.remember_me.name%"
                 secret:      "%secret%"
                 lifetime: 31536000 # 365 days in seconds
                 path:     /
