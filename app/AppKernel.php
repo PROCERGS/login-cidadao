@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new LoginCidadao\CoreBundle\LoginCidadaoCoreBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new FOS\RestBundle\FOSRestBundle(),
+            new Bmatzner\FontAwesomeBundle\BmatznerFontAwesomeBundle(),
 
             new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
             new FOS\FacebookBundle\FOSFacebookBundle(),

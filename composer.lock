@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "919f27f0e3a645d623063607f96f2b48",
-    "content-hash": "3f3be1408903b49fdc919198071d6b47",
+    "hash": "3b30b25bf9b4ec8cffeafea4c4307585",
+    "content-hash": "906d48d8a4348c3b6bbf2689bd0e52c8",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -63,6 +63,53 @@
                 "symfony"
             ],
             "time": "2016-01-26 10:13:49"
+        },
+        {
+            "name": "bmatzner/fontawesome-bundle",
+            "version": "4.6.1",
+            "target-dir": "Bmatzner/FontAwesomeBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bmatzner/BmatznerFontAwesomeBundle.git",
+                "reference": "e52f9f684017b410041850e16dc49a197ef4edab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bmatzner/BmatznerFontAwesomeBundle/zipball/e52f9f684017b410041850e16dc49a197ef4edab",
+                "reference": "e52f9f684017b410041850e16dc49a197ef4edab",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/framework-bundle": ">=2.1|~3.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Bmatzner\\FontAwesomeBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT",
+                "CC BY 3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Bernd Matzner",
+                    "email": "bernd@matznermatzner.de",
+                    "homepage": "http://berndmatzner.de"
+                }
+            ],
+            "description": "FontAwesome Bundle for Symfony2",
+            "homepage": "http://fortawesome.github.com/Font-Awesome/",
+            "keywords": [
+                "css",
+                "graphics",
+                "symfony",
+                "typography",
+                "webfonts"
+            ],
+            "time": "2016-05-02 14:02:07"
         },
         {
             "name": "bshaffer/oauth2-server-bundle",
