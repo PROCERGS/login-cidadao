@@ -833,3 +833,12 @@ resetting.check_email: Foi enviado um email com instruções para recuperação 
 resetting.reset.title: Criando Nova Senha
 resetting.reset.description: Preencha os campos a seguir para criar uma nova senha para sua conta.
 resetting.reset.submit: Alterar senha
+openid.session.end:
+    title:
+    logging_out: Sua sessão está sendo encerrada.
+    logged_out: Sua sessão foi encerrada.
+    continue_to: Você continuará para <strong>%host%</strong>
+    submit: Continuar
+    client:
+        logging_out: <strong>%client%</strong> está encerrando sua sessão.
+        logged_out: Sua sessão foi encerrada por <strong>%client%</strong>

@@ -10,6 +10,11 @@
 
 namespace LoginCidadao\OpenIDBundle\Controller;
 
+use LoginCidadao\CoreBundle\Helper\SecurityHelper;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OpenIDBundle\Form\EndSessionForm;
+use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
 use LoginCidadao\OpenIDBundle\Storage\PublicKey;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -86,44 +91,78 @@ class SessionManagementController extends Controller
 
     /**
      * @Route("/session/end", name="oidc_end_session_endpoint")
+     * @Template
      */
     public function endSessionAction(Request $request)
     {
+        $view = 'LoginCidadaoOpenIDBundle:SessionManagement:endSession.html.twig';
         $idToken = $request->get('id_token_hint');
         $postLogoutUri = $request->get('post_logout_redirect_uris', null);
 
-        $getConsent = true;
-        if ($idToken) {
-            if ($this->checkIdToken($idToken)) {
-                $getConsent = false;
-            } else {
-                // TODO: ask consent or report error (possible attack)?
-                die("invalid ID Token");
-            }
+        $alwaysGetLogoutConsent = $this->alwaysGetLogoutConsent();
+        $alwaysGetRedirectConsent = $this->alwaysGetRedirectConsent();
+        if ($idToken && false === $this->checkIdToken($idToken)) {
+            // TODO: ask consent or report error (possible attack)?
+            die("invalid ID Token");
         }
+        $client = $this->getIdTokenClient($idToken);
 
         $validatedPostLogoutUri = $this->validatePostLogoutUri($postLogoutUri, $idToken);
+        $postLogoutHost = null;
         if ($postLogoutUri) {
             $postLogoutUri = $this->addStateToUri($postLogoutUri, $request->get('state', null));
+            $postLogoutHost = parse_url($postLogoutUri)['host'];
         }
 
-        if ($getConsent) {
-            var_dump("do you wanna leave?");
-            if ($postLogoutUri) {
-                var_dump("and continue to $postLogoutUri afterwards?");
-            }
+        if ($alwaysGetRedirectConsent && $postLogoutUri) {
+            $getRedirectConsent = true;
         } else {
-            var_dump("logged out!");
-            if ($postLogoutUri && !$validatedPostLogoutUri) {
-                var_dump("Do you want to go to $postLogoutUri ?");
+            $getRedirectConsent = false;
+        }
+
+        $form = $this->createForm(
+            new EndSessionForm(),
+            ['logout' => true, 'redirect' => true],
+            [
+                'getLogoutConsent' => $alwaysGetLogoutConsent,
+                'getRedirectConsent' => $getRedirectConsent,
+            ]
+        );
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $data = $form->getData();
+
+            if (false === $getRedirectConsent || $data['redirect']) {
+                $response = $this->redirect($postLogoutUri);
+            } else {
+                $response = $this->redirectToRoute('lc_home');
             }
+            if (false === $alwaysGetLogoutConsent || $data['logout']) {
+                $this->getSecurityHelper()->logout($request, $response);
+            }
+
+            return $response;
         }
 
-        if ($postLogoutUri) {
-            var_dump($postLogoutUri);
+        $params = [
+            'form' => $form->createView(),
+            'client' => $client,
+            'postLogoutUri' => $postLogoutUri,
+            'postLogoutHost' => $postLogoutHost,
+            'alwaysGetLogoutConsent' => $alwaysGetLogoutConsent,
+            'getRedirectConsent' => $getRedirectConsent,
+        ];
+
+        if (false === $alwaysGetLogoutConsent) {
+            $params['loggedOut'] = true;
+            $response = $this->render($view, $params);
+            $response = $this->getSecurityHelper()->logout($request, $response);
+        } else {
+            $params['loggedOut'] = false;
+            $response = $this->render($view, $params);
         }
 
-        die();
+        return $response;
     }
 
     /**
@@ -168,10 +207,17 @@ class SessionManagementController extends Controller
         try {
             @$idToken->verify($publicKeyStorage->getPublicKey($idToken->claims['aud']));
 
-            return true;
+            $person = $this->getUser();
+            if (!($person instanceof PersonInterface)) {
+                return false;
+            }
+
+            $client = $this->getClient($idToken->claims['aud']);
+
+            return $idToken->claims['sub'] === $this->getSubjectIdentifier($person, $client);
         } catch (\JOSE_Exception_VerificationFailed $e) {
             // TODO: ask consent or report error (possible attack)?
-            die("invalid ID Token");
+            die("invalid ID Token!");
         } catch (\Exception $e) {
             // TODO: ask consent or report error (possible attack)?
             die("other error");
@@ -200,10 +246,10 @@ class SessionManagementController extends Controller
 
         $idToken = $this->getIdToken($idToken);
         $client = $this->getClient($idToken->claims['aud']);
-        // TODO: get client's allowed post_logout_uri and check if it contains $postLogoutUri
-        var_dump($client->getName());
 
-        $validatedPostLogoutUri = true;
+        // TODO: get client's allowed post_logout_uri and check if it contains $postLogoutUri
+
+        return true;
     }
 
     private function addStateToUri($postLogoutUri, $state)
@@ -222,5 +268,60 @@ class SessionManagementController extends Controller
         } else {
             return $postLogoutUri;
         }
+    }
+
+    private function rememberMe(Request $request)
+    {
+        $rememberMeCookieName = $this->getParameter('session.remember_me.name');
+
+        return $request->cookies->has($rememberMeCookieName);
+    }
+
+    /**
+     * @return bool
+     */
+    private function alwaysGetLogoutConsent()
+    {
+        return $this->getParameter('rp_initiated_logout.logout.always_get_consent');
+    }
+
+    /**
+     * @return bool
+     */
+    private function alwaysGetRedirectConsent()
+    {
+        return $this->getParameter('rp_initiated_logout.redirect.always_get_consent');
+    }
+
+    /**
+     * @param string|\JOSE_JWT $idToken
+     * @return \LoginCidadao\OAuthBundle\Entity\Client
+     */
+    private function getIdTokenClient($idToken)
+    {
+        if ($idToken === null) {
+            return false;
+        }
+
+        $idToken = $this->getIdToken($idToken);
+        $client = $this->getClient($idToken->claims['aud']);
+
+        return $client;
+    }
+
+    /**
+     * @return SecurityHelper
+     */
+    private function getSecurityHelper()
+    {
+        return $this->get('lc.security.helper');
+    }
+
+    private function getSubjectIdentifier(PersonInterface $person, ClientInterface $client)
+    {
+        /** @var SubjectIdentifierService $service */
+        $service = $this->get('oidc.subject_identifier.service');
+
+        return $service->getSubjectIdentifier($person, $client->getMetadata());
     }
 }
