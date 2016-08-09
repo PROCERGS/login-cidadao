@@ -430,6 +430,7 @@ openid.session.end:
     logged_out: You are logged out.
     continue_to: You'll continue to <strong>%host%</strong>
     submit: Continue
+    home_button: Go to home page
     client:
         logging_out: <strong>%client%</strong> is logging you out.
         logged_out: You were logged out by <strong>%client%</strong>

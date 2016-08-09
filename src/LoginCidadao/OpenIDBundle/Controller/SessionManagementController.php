@@ -13,6 +13,7 @@ namespace LoginCidadao\OpenIDBundle\Controller;
 use LoginCidadao\CoreBundle\Helper\SecurityHelper;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OpenIDBundle\Entity\ClientMetadataRepository;
 use LoginCidadao\OpenIDBundle\Form\EndSessionForm;
 use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
 use LoginCidadao\OpenIDBundle\Storage\PublicKey;
@@ -98,20 +99,27 @@ class SessionManagementController extends Controller
         $view = 'LoginCidadaoOpenIDBundle:SessionManagement:endSession.html.twig';
         $idToken = $request->get('id_token_hint');
         $postLogoutUri = $request->get('post_logout_redirect_uris', null);
+        $loggedOut = !$this->isGranted('IS_AUTHENTICATED_REMEMBERED');
 
+        $client = null;
         $alwaysGetLogoutConsent = $this->alwaysGetLogoutConsent();
         $alwaysGetRedirectConsent = $this->alwaysGetRedirectConsent();
-        if ($idToken && false === $this->checkIdToken($idToken)) {
-            // TODO: ask consent or report error (possible attack)?
-            die("invalid ID Token");
+        if ($idToken) {
+            if ($this->checkIdToken($idToken)) {
+                $client = $this->getIdTokenClient($idToken);
+            } else {
+                // We didn't receive a valid ID Token, therefore we should ask user for consent
+                $alwaysGetLogoutConsent = true;
+            }
         }
-        $client = $this->getIdTokenClient($idToken);
 
-        $validatedPostLogoutUri = $this->validatePostLogoutUri($postLogoutUri, $idToken);
         $postLogoutHost = null;
-        if ($postLogoutUri) {
+        if ($this->validatePostLogoutUri($postLogoutUri, $idToken)) {
             $postLogoutUri = $this->addStateToUri($postLogoutUri, $request->get('state', null));
             $postLogoutHost = parse_url($postLogoutUri)['host'];
+        } else {
+            var_dump("invalid URI");
+            $postLogoutUri = null;
         }
 
         if ($alwaysGetRedirectConsent && $postLogoutUri) {
@@ -120,11 +128,20 @@ class SessionManagementController extends Controller
             $getRedirectConsent = false;
         }
 
+        $getLogoutConsent = $loggedOut ? false : $alwaysGetLogoutConsent;
+
+        if ($postLogoutUri && false === ($getRedirectConsent || $getLogoutConsent)) {
+            // TODO: remove die()
+            die("REDIRECT");
+
+            return $this->redirect($postLogoutUri);
+        }
+
         $form = $this->createForm(
             new EndSessionForm(),
             ['logout' => true, 'redirect' => true],
             [
-                'getLogoutConsent' => $alwaysGetLogoutConsent,
+                'getLogoutConsent' => $getLogoutConsent,
                 'getRedirectConsent' => $getRedirectConsent,
             ]
         );
@@ -149,16 +166,16 @@ class SessionManagementController extends Controller
             'client' => $client,
             'postLogoutUri' => $postLogoutUri,
             'postLogoutHost' => $postLogoutHost,
-            'alwaysGetLogoutConsent' => $alwaysGetLogoutConsent,
+            'getLogoutConsent' => $getLogoutConsent,
             'getRedirectConsent' => $getRedirectConsent,
+            'loggedOut' => $loggedOut,
         ];
 
-        if (false === $alwaysGetLogoutConsent) {
+        if ($getLogoutConsent) {
             $params['loggedOut'] = true;
             $response = $this->render($view, $params);
             $response = $this->getSecurityHelper()->logout($request, $response);
         } else {
-            $params['loggedOut'] = false;
             $response = $this->render($view, $params);
         }
 
@@ -207,14 +224,7 @@ class SessionManagementController extends Controller
         try {
             @$idToken->verify($publicKeyStorage->getPublicKey($idToken->claims['aud']));
 
-            $person = $this->getUser();
-            if (!($person instanceof PersonInterface)) {
-                return false;
-            }
-
-            $client = $this->getClient($idToken->claims['aud']);
-
-            return $idToken->claims['sub'] === $this->getSubjectIdentifier($person, $client);
+            return true;
         } catch (\JOSE_Exception_VerificationFailed $e) {
             // TODO: ask consent or report error (possible attack)?
             die("invalid ID Token!");
@@ -222,6 +232,22 @@ class SessionManagementController extends Controller
             // TODO: ask consent or report error (possible attack)?
             die("other error");
         }
+    }
+
+    /**
+     * @param PersonInterface $person
+     * @param mixed $idToken
+     * @return bool
+     */
+    private function checkIdTokenSub(PersonInterface $person, $idToken)
+    {
+        if (!($person instanceof PersonInterface)) {
+            return false;
+        }
+
+        $client = $this->getClient($idToken->claims['aud']);
+
+        return $idToken->claims['sub'] === $this->getSubjectIdentifier($person, $client);
     }
 
     /**
@@ -240,16 +266,18 @@ class SessionManagementController extends Controller
 
     private function validatePostLogoutUri($postLogoutUri, $idToken)
     {
-        if ($idToken === null || $postLogoutUri === null) {
+        if ($postLogoutUri === null) {
             return false;
+        }
+
+        if ($idToken === null) {
+            return !empty($this->findClientByPostLogoutRedirectUri($postLogoutUri));
         }
 
         $idToken = $this->getIdToken($idToken);
         $client = $this->getClient($idToken->claims['aud']);
 
-        // TODO: get client's allowed post_logout_uri and check if it contains $postLogoutUri
-
-        return true;
+        return false !== array_search($postLogoutUri, $client->getMetadata()->getPostLogoutRedirectUris());
     }
 
     private function addStateToUri($postLogoutUri, $state)
@@ -323,5 +351,13 @@ class SessionManagementController extends Controller
         $service = $this->get('oidc.subject_identifier.service');
 
         return $service->getSubjectIdentifier($person, $client->getMetadata());
+    }
+
+    private function findClientByPostLogoutRedirectUri($postLogoutUri)
+    {
+        /** @var ClientMetadataRepository $repo */
+        $repo = $this->get('oidc.client_metadata.repository');
+
+        return $repo->findByPostLogoutRedirectUri($postLogoutUri);
     }
 }

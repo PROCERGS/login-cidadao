@@ -121,3 +121,9 @@ services:
         class: LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService
         arguments:
             - %secret%
+
+    oidc.client_metadata.repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - LoginCidadao\OpenIDBundle\Entity\ClientMetadata

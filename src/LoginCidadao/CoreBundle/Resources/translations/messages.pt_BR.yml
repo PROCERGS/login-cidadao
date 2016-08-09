@@ -839,6 +839,7 @@ openid.session.end:
     logged_out: Sua sessão foi encerrada.
     continue_to: Você continuará para <strong>%host%</strong>
     submit: Continuar
+    home_button: Ir para a página inicial
     client:
         logging_out: <strong>%client%</strong> está encerrando sua sessão.
         logged_out: Sua sessão foi encerrada por <strong>%client%</strong>
