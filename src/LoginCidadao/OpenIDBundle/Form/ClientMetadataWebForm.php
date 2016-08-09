@@ -23,9 +23,13 @@ class ClientMetadataWebForm extends AbstractType
         $builder
             ->add('organization', 'text', array('disabled' => true))
             ->add($builder->create('request_uris',
-                    'Symfony\Component\Form\Extension\Core\Type\TextareaType',
-                    array('required' => false)
-                )->addModelTransformer(new FromArray()))
+                'Symfony\Component\Form\Extension\Core\Type\TextareaType',
+                array('required' => false)
+            )->addModelTransformer(new FromArray()))
+            ->add($builder->create('post_logout_redirect_uris',
+                'Symfony\Component\Form\Extension\Core\Type\TextareaType',
+                array('required' => false)
+            )->addModelTransformer(new FromArray()))
             ->add('response_types',
                 'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
                 array(
