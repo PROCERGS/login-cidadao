@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\OpenIDBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use LoginCidadao\OpenIDBundle\Validator\Constraints\SectorIdentifierUri;
@@ -19,7 +20,7 @@ use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="LoginCidadao\OpenIDBundle\Entity\ClientMetadataRepository")
  * @UniqueEntity("client")
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="client_metadata")
@@ -50,7 +51,7 @@ class ClientMetadata
      * @Assert\All({
      *      @Assert\Type(type="string"),
      *      @Assert\NotBlank,
-     *      @Assert\Url(checkDNS = true)
+     *      @Assert\Url(checkDNS = false)
      * })
      * @ORM\Column(name="redirect_uris", type="json_array", nullable=false)
      */
@@ -106,7 +107,7 @@ class ClientMetadata
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
-     * @Assert\Url(checkDNS = true)
+     * @Assert\Url(checkDNS = false)
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
     protected $logo_uri;
@@ -115,7 +116,7 @@ class ClientMetadata
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
-     * @Assert\Url(checkDNS = true)
+     * @Assert\Url(checkDNS = false)
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
     protected $client_uri;
@@ -124,7 +125,7 @@ class ClientMetadata
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
-     * @Assert\Url(checkDNS = true)
+     * @Assert\Url(checkDNS = false)
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
     protected $policy_uri;
@@ -132,7 +133,7 @@ class ClientMetadata
     /**
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
-     * @Assert\Url(checkDNS = true)
+     * @Assert\Url(checkDNS = false)
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
@@ -141,7 +142,7 @@ class ClientMetadata
     /**
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
-     * @Assert\Url(checkDNS = true)
+     * @Assert\Url(checkDNS = false)
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
@@ -158,7 +159,7 @@ class ClientMetadata
     /**
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
-     * @Assert\Url(checkDNS = true, protocols = {"https"})
+     * @Assert\Url(checkDNS = false, protocols = {"http", "https"})
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
@@ -286,7 +287,7 @@ class ClientMetadata
     /**
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
-     * @Assert\Url(checkDNS = true)
+     * @Assert\Url(checkDNS = false)
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
@@ -297,7 +298,7 @@ class ClientMetadata
      * @JMS\Groups({"client_metadata"})
      * @Assert\All({
      *      @Assert\Type("string"),
-     *      @Assert\Url(checkDNS = true)
+     *      @Assert\Url(checkDNS = false)
      * })
      * @ORM\Column(type="simple_array", nullable=true)
      */
@@ -317,6 +318,17 @@ class ClientMetadata
      * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $organization;
+
+    /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
+     * @Assert\All({
+     *      @Assert\Type("string"),
+     *      @Assert\Url(checkDNS = false)
+     * })
+     * @ORM\Column(type="simple_array", nullable=true)
+     */
+    protected $post_logout_redirect_uris;
 
     public function __construct()
     {
@@ -864,5 +876,24 @@ class ClientMetadata
     public function setOrganization($organization = null)
     {
         $this->organization = $organization;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPostLogoutRedirectUris()
+    {
+        return $this->post_logout_redirect_uris;
+    }
+
+    /**
+     * @param array
+     * @return ClientMetadata
+     */
+    public function setPostLogoutRedirectUris($post_logout_redirect_uris)
+    {
+        $this->post_logout_redirect_uris = $post_logout_redirect_uris;
+
+        return $this;
     }
 }
