@@ -12,6 +12,7 @@
     {% endfor %}
 
     {{ form_start(form) }}
+    {{ form_errors(form) }}
     {% if getLogoutConsent and not loggedOut %}
         <div class="switch-panel switch-mini">
             <div class="switch-label">

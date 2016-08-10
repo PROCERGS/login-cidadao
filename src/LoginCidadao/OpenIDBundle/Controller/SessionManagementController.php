@@ -121,6 +121,7 @@ class SessionManagementController extends Controller
 
         $authorizedRedirect = !$getLogoutConsent && !$getRedirectConsent;
         $authorizedLogout = !$getLogoutConsent;
+        $formChecked = false;
 
         $form = $this->createForm(
             new EndSessionForm(),
@@ -136,6 +137,7 @@ class SessionManagementController extends Controller
 
             $authorizedRedirect = false === $getRedirectConsent || $data['redirect'];
             $authorizedLogout = false === $getLogoutConsent || $data['logout'];
+            $formChecked = true;
         }
 
         $params = [
@@ -148,24 +150,24 @@ class SessionManagementController extends Controller
             'loggedOut' => $loggedOut,
         ];
 
+        if (($getLogoutConsent || $getRedirectConsent)
+            && !$authorizedRedirect
+            && $formChecked
+        ) {
+            $view = 'LoginCidadaoOpenIDBundle:SessionManagement:endSession.finished.html.twig';
+        }
+
         $response = null;
         if ($postLogoutUri && $authorizedRedirect) {
             $response = $this->redirect($postLogoutUri);
         }
 
-        if ($authorizedLogout) {
+        if ($authorizedLogout && !$loggedOut) {
             if (!$response) {
                 $params['loggedOut'] = true;
                 $response = $this->render($view, $params);
             }
             $response = $this->getSecurityHelper()->logout($request, $response);
-        }
-
-        if (($getLogoutConsent || $getRedirectConsent)
-            && !$authorizedRedirect
-            && $form->isSubmitted()
-        ) {
-            $view = 'LoginCidadaoOpenIDBundle:SessionManagement:endSession.finished.html.twig';
         }
 
         return $response ?: $this->render($view, $params);
