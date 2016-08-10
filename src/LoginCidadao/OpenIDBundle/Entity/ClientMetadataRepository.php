@@ -19,7 +19,7 @@ class ClientMetadataRepository extends EntityRepository
         /** @var ClientMetadata[] $results */
         $results = $this->createQueryBuilder('m')
             ->where('m.post_logout_redirect_uris LIKE :uri')
-            ->setParameter('uri', $uri)
+            ->setParameter('uri', "%$uri%")
             ->getQuery()->getResult();
 
         $response = [];
