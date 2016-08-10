@@ -428,9 +428,11 @@ openid.session.end:
     title:
     logging_out: You are being logged out.
     logged_out: You are logged out.
+    not_logged_out: You were not logged out.
     continue_to: You'll continue to <strong>%host%</strong>
     submit: Continue
     home_button: Go to home page
     client:
         logging_out: <strong>%client%</strong> is logging you out.
         logged_out: You were logged out by <strong>%client%</strong>
+        not_logged_out: You were NOT logged out by <strong>%client%</strong>

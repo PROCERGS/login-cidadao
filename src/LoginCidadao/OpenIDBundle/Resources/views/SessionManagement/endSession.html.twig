@@ -12,7 +12,7 @@
     {% endfor %}
 
     {{ form_start(form) }}
-    {% if getLogoutConsent %}
+    {% if getLogoutConsent and not loggedOut %}
         <div class="switch-panel switch-mini">
             <div class="switch-label">
                 {% if client %}
@@ -45,7 +45,7 @@
                 {{ 'openid.session.end.continue_to' | trans({'%host%': postLogoutHost | escape}) | raw }}
             </div>
             <div class="switch text-center checkbox">
-                {% if getRedirectConsent %}
+                {% if form.redirect is defined %}
                     {{ form_widget(form.redirect, {'attr': {'data-size': 'mini'} }) }}
                     <label for="{{ form.redirect.vars.id }}"></label>
                 {% endif %}

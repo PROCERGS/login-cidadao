@@ -17,6 +17,7 @@ use LoginCidadao\OpenIDBundle\Entity\ClientMetadataRepository;
 use LoginCidadao\OpenIDBundle\Form\EndSessionForm;
 use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
 use LoginCidadao\OpenIDBundle\Storage\PublicKey;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -96,29 +97,19 @@ class SessionManagementController extends Controller
      */
     public function endSessionAction(Request $request)
     {
+        $alwaysGetRedirectConsent = $this->alwaysGetRedirectConsent();
+
         $view = 'LoginCidadaoOpenIDBundle:SessionManagement:endSession.html.twig';
         $idToken = $request->get('id_token_hint');
         $postLogoutUri = $request->get('post_logout_redirect_uris', null);
         $loggedOut = !$this->isGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        $client = null;
-        $alwaysGetLogoutConsent = $this->alwaysGetLogoutConsent();
-        $alwaysGetRedirectConsent = $this->alwaysGetRedirectConsent();
-        if ($idToken) {
-            if ($this->checkIdToken($idToken)) {
-                $client = $this->getIdTokenClient($idToken);
-            } else {
-                // We didn't receive a valid ID Token, therefore we should ask user for consent
-                $alwaysGetLogoutConsent = true;
-            }
-        }
+        $getLogoutConsent = $this->shouldGetLogoutConsent($idToken, $loggedOut);
 
         $postLogoutHost = null;
         if ($this->validatePostLogoutUri($postLogoutUri, $idToken)) {
             $postLogoutUri = $this->addStateToUri($postLogoutUri, $request->get('state', null));
             $postLogoutHost = parse_url($postLogoutUri)['host'];
         } else {
-            var_dump("invalid URI");
             $postLogoutUri = null;
         }
 
@@ -128,14 +119,8 @@ class SessionManagementController extends Controller
             $getRedirectConsent = false;
         }
 
-        $getLogoutConsent = $loggedOut ? false : $alwaysGetLogoutConsent;
-
-        if ($postLogoutUri && false === ($getRedirectConsent || $getLogoutConsent)) {
-            // TODO: remove die()
-            die("REDIRECT");
-
-            return $this->redirect($postLogoutUri);
-        }
+        $authorizedRedirect = !$getLogoutConsent && !$getRedirectConsent;
+        $authorizedLogout = !$getLogoutConsent;
 
         $form = $this->createForm(
             new EndSessionForm(),
@@ -149,21 +134,13 @@ class SessionManagementController extends Controller
         if ($form->isValid()) {
             $data = $form->getData();
 
-            if (false === $getRedirectConsent || $data['redirect']) {
-                $response = $this->redirect($postLogoutUri);
-            } else {
-                $response = $this->redirectToRoute('lc_home');
-            }
-            if (false === $alwaysGetLogoutConsent || $data['logout']) {
-                $this->getSecurityHelper()->logout($request, $response);
-            }
-
-            return $response;
+            $authorizedRedirect = false === $getRedirectConsent || $data['redirect'];
+            $authorizedLogout = false === $getLogoutConsent || $data['logout'];
         }
 
         $params = [
             'form' => $form->createView(),
-            'client' => $client,
+            'client' => $this->getLogoutClient($idToken),
             'postLogoutUri' => $postLogoutUri,
             'postLogoutHost' => $postLogoutHost,
             'getLogoutConsent' => $getLogoutConsent,
@@ -171,15 +148,27 @@ class SessionManagementController extends Controller
             'loggedOut' => $loggedOut,
         ];
 
-        if ($getLogoutConsent) {
-            $params['loggedOut'] = true;
-            $response = $this->render($view, $params);
-            $response = $this->getSecurityHelper()->logout($request, $response);
-        } else {
-            $response = $this->render($view, $params);
+        $response = null;
+        if ($postLogoutUri && $authorizedRedirect) {
+            $response = $this->redirect($postLogoutUri);
         }
 
-        return $response;
+        if ($authorizedLogout) {
+            if (!$response) {
+                $params['loggedOut'] = true;
+                $response = $this->render($view, $params);
+            }
+            $response = $this->getSecurityHelper()->logout($request, $response);
+        }
+
+        if (($getLogoutConsent || $getRedirectConsent)
+            && !$authorizedRedirect
+            && $form->isSubmitted()
+        ) {
+            $view = 'LoginCidadaoOpenIDBundle:SessionManagement:endSession.finished.html.twig';
+        }
+
+        return $response ?: $this->render($view, $params);
     }
 
     /**
@@ -359,5 +348,31 @@ class SessionManagementController extends Controller
         $repo = $this->get('oidc.client_metadata.repository');
 
         return $repo->findByPostLogoutRedirectUri($postLogoutUri);
+    }
+
+    private function shouldGetLogoutConsent($idToken, $loggedOut)
+    {
+        $getLogoutConsent = $loggedOut ? false : $this->alwaysGetLogoutConsent();
+
+        if ($idToken) {
+            if (false === $this->checkIdToken($idToken)) {
+                // We didn't receive a valid ID Token, therefore we should ask user for consent
+                $getLogoutConsent = true;
+            }
+        }
+
+        return $getLogoutConsent;
+    }
+
+    private function getLogoutClient($idToken)
+    {
+        $client = null;
+        if ($idToken) {
+            if ($this->checkIdToken($idToken)) {
+                $client = $this->getIdTokenClient($idToken);
+            }
+        }
+
+        return $client;
     }
 }
