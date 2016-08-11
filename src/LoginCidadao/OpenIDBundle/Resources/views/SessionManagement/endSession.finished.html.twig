@@ -13,17 +13,21 @@
 
     <div class="switch-panel switch-mini">
         <div class="switch-label">
-            {% if loggedOut %}
-                {% if client %}
-                    {{ 'openid.session.end.client.logged_out' | trans({'%client%': client.name | escape}) | raw }}
-                {% else %}
-                    {{ 'openid.session.end.logged_out' | trans }}
-                {% endif %}
+            {% if error | default(false) %}
+                <p>{{ error | trans }}</p>
             {% else %}
-                {% if client %}
-                    {{ 'openid.session.end.client.not_logged_out' | trans({'%client%': client.name | escape}) | raw }}
+                {% if loggedOut %}
+                    {% if client %}
+                        {{ 'openid.session.end.client.logged_out' | trans({'%client%': client.name | escape}) | raw }}
+                    {% else %}
+                        {{ 'openid.session.end.logged_out' | trans }}
+                    {% endif %}
                 {% else %}
-                    {{ 'openid.session.end.not_logged_out' | trans | raw }}
+                    {% if client %}
+                        {{ 'openid.session.end.client.not_logged_out' | trans({'%client%': client.name | escape}) | raw }}
+                    {% else %}
+                        {{ 'openid.session.end.not_logged_out' | trans | raw }}
+                    {% endif %}
                 {% endif %}
             {% endif %}
         </div>

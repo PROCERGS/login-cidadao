@@ -14,6 +14,7 @@ use LoginCidadao\CoreBundle\Helper\SecurityHelper;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadataRepository;
+use LoginCidadao\OpenIDBundle\Exception\IdTokenValidationException;
 use LoginCidadao\OpenIDBundle\Form\EndSessionForm;
 use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
 use LoginCidadao\OpenIDBundle\Storage\PublicKey;
@@ -24,6 +25,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Route("/openid/connect")
@@ -100,25 +102,19 @@ class SessionManagementController extends Controller
         $alwaysGetRedirectConsent = $this->alwaysGetRedirectConsent();
 
         $view = 'LoginCidadaoOpenIDBundle:SessionManagement:endSession.html.twig';
-        $idToken = $request->get('id_token_hint');
-        $postLogoutUri = $request->get('post_logout_redirect_uris', null);
-        $loggedOut = !$this->isGranted('IS_AUTHENTICATED_REMEMBERED');
-        $getLogoutConsent = $this->shouldGetLogoutConsent($idToken, $loggedOut);
+        $finishedView = 'LoginCidadaoOpenIDBundle:SessionManagement:endSession.finished.html.twig';
+        try {
+            $idToken = $request->get('id_token_hint');
+            $postLogoutUri = $request->get('post_logout_redirect_uris', null);
+            $loggedOut = !$this->isGranted('IS_AUTHENTICATED_REMEMBERED');
+            $getLogoutConsent = $this->shouldGetLogoutConsent($idToken, $loggedOut);
 
-        $postLogoutHost = null;
-        if ($this->validatePostLogoutUri($postLogoutUri, $idToken)) {
-            $postLogoutUri = $this->addStateToUri($postLogoutUri, $request->get('state', null));
-            $postLogoutHost = parse_url($postLogoutUri)['host'];
-        } else {
-            $postLogoutUri = null;
+            list($postLogoutUri, $postLogoutHost) = $this->getPostLogoutInfo($request, $postLogoutUri, $idToken);
+        } catch (IdTokenValidationException $e) {
+            return $this->render($finishedView, ['error' => 'openid.session.end.invalid_id_token']);
         }
 
-        if ($alwaysGetRedirectConsent && $postLogoutUri) {
-            $getRedirectConsent = true;
-        } else {
-            $getRedirectConsent = false;
-        }
-
+        $getRedirectConsent = $alwaysGetRedirectConsent && $postLogoutUri;
         $authorizedRedirect = !$getLogoutConsent && !$getRedirectConsent;
         $authorizedLogout = !$getLogoutConsent;
         $formChecked = false;
@@ -154,7 +150,7 @@ class SessionManagementController extends Controller
             && !$authorizedRedirect
             && $formChecked
         ) {
-            $view = 'LoginCidadaoOpenIDBundle:SessionManagement:endSession.finished.html.twig';
+            $view = $finishedView;
         }
 
         $response = null;
@@ -205,6 +201,7 @@ class SessionManagementController extends Controller
     /**
      * @param mixed $idToken a JWT ID Token as a \JOSE_JWT object or string
      * @return bool true if $idToken is valid, false otherwise
+     * @throws IdTokenValidationException
      */
     private function checkIdToken($idToken)
     {
@@ -217,11 +214,9 @@ class SessionManagementController extends Controller
 
             return true;
         } catch (\JOSE_Exception_VerificationFailed $e) {
-            // TODO: ask consent or report error (possible attack)?
-            die("invalid ID Token!");
+            throw new IdTokenValidationException($e->getMessage(), Response::HTTP_BAD_REQUEST, $e);
         } catch (\Exception $e) {
-            // TODO: ask consent or report error (possible attack)?
-            die("other error");
+            throw new IdTokenValidationException($e->getMessage(), Response::HTTP_BAD_REQUEST, $e);
         }
     }
 
@@ -376,5 +371,18 @@ class SessionManagementController extends Controller
         }
 
         return $client;
+    }
+
+    private function getPostLogoutInfo(Request $request, $postLogoutUri, $idToken)
+    {
+        $postLogoutHost = null;
+        if ($this->validatePostLogoutUri($postLogoutUri, $idToken)) {
+            $postLogoutUri = $this->addStateToUri($postLogoutUri, $request->get('state', null));
+            $postLogoutHost = parse_url($postLogoutUri)['host'];
+        } else {
+            $postLogoutUri = null;
+        }
+
+        return [$postLogoutUri, $postLogoutHost];
     }
 }

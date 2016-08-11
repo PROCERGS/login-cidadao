@@ -432,6 +432,7 @@ openid.session.end:
     continue_to: You'll continue to <strong>%host%</strong>
     submit: Continue
     home_button: Go to home page
+    invalid_id_token: Invalid request. The ID Token is not valid.
     client:
         logging_out: <strong>%client%</strong> is logging you out.
         logged_out: You were logged out by <strong>%client%</strong>
