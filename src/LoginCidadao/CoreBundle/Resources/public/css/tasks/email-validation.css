@@ -43,7 +43,13 @@
 
 .task-email-validation .btn-danger {
     margin: 30px 0;
-    background: #ac0000 !important;
+    background: #ac0000;
     text-transform: uppercase;
     font-weight: bold;
+}
+
+.task-email-validation .btn-danger.btn-outline {
+    color: #ac0000;
+    border-width: 2px;
+    border-color: #ac0000;
 }

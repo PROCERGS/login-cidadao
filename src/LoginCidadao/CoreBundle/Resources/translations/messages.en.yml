@@ -411,6 +411,10 @@ tasks.confirm_email:
         title: Didn''t receive it?
         body: You checked even your spam folder and didn''t find the message? Don''t worry, you can sent it again by clicking the following button.
         button: Resend Email
+        before:
+            title: Before we send your email
+            body: Before resending your email, please check that your email address below is correct and fix it if necessary.
+            button: Send Validation Email
     resent.alert: Another message was sent
     success.alert: Email successfuly verified!
 Close: Close
@@ -424,3 +428,16 @@ resetting.check_email: An email with password recovery instructions was sent to 
 resetting.reset.title: Creating new Password
 resetting.reset.description: Fill the following fields to create a new password.
 resetting.reset.submit: Change password
+openid.session.end:
+    title:
+    logging_out: You are being logged out.
+    logged_out: You are logged out.
+    not_logged_out: You were not logged out.
+    continue_to: You'll continue to <strong>%host%</strong>
+    submit: Continue
+    home_button: Go to home page
+    invalid_id_token: Invalid request. The ID Token is not valid.
+    client:
+        logging_out: <strong>%client%</strong> is logging you out.
+        logged_out: You were logged out by <strong>%client%</strong>
+        not_logged_out: You were NOT logged out by <strong>%client%</strong>

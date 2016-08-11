@@ -1,5 +1,7 @@
 {% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
 
+{% set form_has_errors = not form.vars.valid %}
+
 {% block panel_body_class %}task-email-validation{% endblock %}
 
 {% block panel_body %}
@@ -20,10 +22,30 @@
 
     <p class="main">{{ 'tasks.confirm_email.body' | trans }}</p>
 
-    <h2>{{ 'tasks.confirm_email.resend.title' | trans }}</h2>
-    <p>{{ 'tasks.confirm_email.resend.body' | trans }}</p>
-    <a class="btn btn-block btn-danger"
-       href="{{ path('task_confirm_email', {'resend': '✓'}) }}">{{ 'tasks.confirm_email.resend.button' | trans }}</a>
+    <div class="collapse {{ not form_has_errors ? 'in' : '' }} collapse-resend">
+        <h2>{{ 'tasks.confirm_email.resend.title' | trans }}</h2>
+        <p>{{ 'tasks.confirm_email.resend.body' | trans }}</p>
+    </div>
+    {# {{ path('task_confirm_email', {'resend': '✓'}) }} #}
+
+    <button class="btn btn-block btn-danger resend" type="button"
+            data-toggle="collapse" data-target=".collapse-resend"
+            aria-expanded="false" aria-controls="collapse-resend">
+        {{ 'tasks.confirm_email.resend.button' | trans }}
+    </button>
+
+    <div class="collapse collapse-resend check-before-resend {{ form_has_errors ? 'in' : '' }}">
+        {{ form_start(form) }}
+        <h2>{{ 'tasks.confirm_email.resend.before.title' | trans }}</h2>
+        <p>{{ 'tasks.confirm_email.resend.before.body' | trans }}</p>
+
+        {{ form_row(form.email) }}
+
+        <button type="submit" class="btn btn-block btn-success">
+            {{ 'tasks.confirm_email.resend.before.button' | trans }}
+        </button>
+        {{ form_end(form) }}
+    </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -31,6 +53,14 @@
     <script>
         $(document).ready(function () {
             dynamicForm.validEmail.wait();
+
+            $('.check-before-resend').on('shown.bs.collapse', function () {
+                $('input[type=email]', this).focus();
+            });
+
+            $('.btn.resend').on('click', function () {
+                $(this).toggleClass('btn-outline');
+            });
         });
 
         var dynamicForm = {
@@ -49,7 +79,7 @@
                         dynamicForm.validEmail.wait();
                     });
                 }
-            },
+            }
         };
     </script>
 {% endblock %}
