@@ -2,13 +2,15 @@
 
 namespace LoginCidadao\CoreBundle\Model;
 
+use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\EntityManager;
 
-interface PersonInterface extends EncoderAwareInterface
+interface PersonInterface extends EncoderAwareInterface, UserInterface
 {
+    public function getId();
 
     public function getEmail();
 

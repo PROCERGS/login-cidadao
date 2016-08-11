@@ -125,7 +125,7 @@ class DefaultController extends Controller
 
         $result['logged_out'] = false;
         if ($this->getUser() instanceof UserInterface) {
-            if ($request->cookies->has('REMEMBERME')) {
+            if ($request->cookies->has($this->getParameter('session.remember_me.name'))) {
                 $result = array('logged_out' => false);
             } else {
                 $this->get("request")->getSession()->invalidate();

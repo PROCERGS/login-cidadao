@@ -6,20 +6,22 @@ use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
 use LoginCidadao\OAuthBundle\Model\AccessTokenManager;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
 
 class PersonSerializeEventListener implements EventSubscriberInterface
 {
     /** @var AccessTokenManager */
     protected $accessTokenManager;
 
-    /** @var string */
-    protected $pairwiseSubjectIdSalt;
+    /** @var SubjectIdentifierService */
+    protected $subjectIdentifierService;
 
-    public function __construct(AccessTokenManager $accessTokenManager,
-                                $pairwiseSubjectIdSalt)
-    {
-        $this->accessTokenManager    = $accessTokenManager;
-        $this->pairwiseSubjectIdSalt = $pairwiseSubjectIdSalt;
+    public function __construct(
+        AccessTokenManager $accessTokenManager,
+        SubjectIdentifierService $subjectIdentifierService
+    ) {
+        $this->accessTokenManager = $accessTokenManager;
+        $this->subjectIdentifierService = $subjectIdentifierService;
     }
 
     public static function getSubscribedEvents()
@@ -28,8 +30,8 @@ class PersonSerializeEventListener implements EventSubscriberInterface
             array(
                 'event' => 'serializer.post_serialize',
                 'method' => 'onPostSerialize',
-                'class' => 'LoginCidadao\CoreBundle\Model\PersonInterface'
-            )
+                'class' => 'LoginCidadao\CoreBundle\Model\PersonInterface',
+            ),
         );
     }
 
@@ -44,28 +46,17 @@ class PersonSerializeEventListener implements EventSubscriberInterface
 
     private function setSubjectIdentifier(ObjectEvent $event)
     {
-        $client   = $this->accessTokenManager->getTokenClient();
+        $client = $this->accessTokenManager->getTokenClient();
         $metadata = $client->getMetadata();
 
-        $id = $event->getObject()->getId();
-        if ($metadata === null || $metadata->getSubjectType() !== 'pairwise') {
-            $event->getVisitor()->addData('sub', $id);
-            $event->getVisitor()->addData('id', $id);
-            return;
-        }
-
-        if ($metadata->getSubjectType() === 'pairwise') {
-            $sectorIdentifier = $metadata->getSectorIdentifier();
-            $salt             = $this->pairwiseSubjectIdSalt;
-            $pairwise         = hash('sha256', $sectorIdentifier.$id.$salt);
-            $event->getVisitor()->addData('sub', $pairwise);
-            $event->getVisitor()->addData('id', $pairwise);
-        }
+        $sub = $this->subjectIdentifierService->getSubjectIdentifier($event->getObject(), $metadata);
+        $event->getVisitor()->addData('sub', $sub);
+        $event->getVisitor()->addData('id', $sub);
     }
 
     private function addOpenIdConnectCompatibility(ObjectEvent $event)
     {
-        $person  = $event->getObject();
+        $person = $event->getObject();
         $visitor = $event->getVisitor();
 
         if (!($person instanceof PersonInterface)) {
@@ -73,7 +64,9 @@ class PersonSerializeEventListener implements EventSubscriberInterface
         }
 
         $visitor->addData('picture', $person->getProfilePictureUrl());
-        $visitor->addData('email_verified',
-            $person->getEmailConfirmedAt() instanceof \DateTime);
+        $visitor->addData(
+            'email_verified',
+            $person->getEmailConfirmedAt() instanceof \DateTime
+        );
     }
 }

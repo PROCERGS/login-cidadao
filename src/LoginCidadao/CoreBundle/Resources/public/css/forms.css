@@ -19,3 +19,28 @@ form .form-error {
     color: #a94442;
     margin-bottom: 5px;
 }
+
+.switch-panel {
+    margin-bottom: 35px;
+    display: table;
+    width: 100%;
+}
+
+.switch-panel .switch {
+    width: 10%;
+}
+
+.switch-panel .switch-label {
+    width: 90%;
+}
+
+.switch-panel .switch,
+.switch-panel .switch-label {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0 5px;
+}
+
+.switch-panel.switch-mini .bootstrap-switch-mini {
+    min-width: 55px;
+}

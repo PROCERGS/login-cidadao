@@ -820,6 +820,10 @@ tasks.confirm_email:
         title: Não recebeu?
         body: Já verificou até mesmo em sua caixa de spam e não encontrou a mensagem? Não se preocupe, você pode reenviar essa mensagem clicando no botão logo abaixo.
         button: Reenviar Email
+        before:
+            title: Já vamos enviar seu email
+            body: Antes de reenviar, por favor confirme se o endereço a seguir está correto e corrija se necessário.
+            button: Enviar Email de Verificação
     resent.alert: Mensagem reenviada
     success.alert: Email verificado com sucesso!
 Close: Fechar
@@ -833,3 +837,16 @@ resetting.check_email: Foi enviado um email com instruções para recuperação 
 resetting.reset.title: Criando Nova Senha
 resetting.reset.description: Preencha os campos a seguir para criar uma nova senha para sua conta.
 resetting.reset.submit: Alterar senha
+openid.session.end:
+    title:
+    logging_out: Sua sessão está sendo encerrada.
+    logged_out: Sua sessão foi encerrada.
+    not_logged_out: Sua sessão <strong>não</strong> foi encerrada.
+    continue_to: Você continuará para <strong>%host%</strong>
+    submit: Continuar
+    home_button: Ir para a página inicial
+    invalid_id_token: Requisição inválida. O ID Token informado não é válido.
+    client:
+        logging_out: <strong>%client%</strong> está encerrando sua sessão.
+        logged_out: Sua sessão foi encerrada por <strong>%client%</strong>
+        not_logged_out: Sua sessão <strong>não</strong> foi encerrada por <strong>%client%</strong>
