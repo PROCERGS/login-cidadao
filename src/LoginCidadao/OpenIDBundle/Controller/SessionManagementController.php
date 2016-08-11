@@ -257,7 +257,7 @@ class SessionManagementController extends Controller
         }
 
         if ($idToken === null) {
-            return !empty($this->findClientByPostLogoutRedirectUri($postLogoutUri));
+            return count($this->findClientByPostLogoutRedirectUri($postLogoutUri)) > 0;
         }
 
         $idToken = $this->getIdToken($idToken);
