@@ -24,7 +24,8 @@ $(document).ready(function () {
         return false;
     });
 
-    $('input.cpf').mask('000.000.000-00');
+    $('input.cpf').mask('000.000.000-00', {'translation': {0: {pattern: /[0-9*]/}}});
+    $('input.birthdate').mask('00/00/0000', {'translation': {0: {pattern: /[0-9*]/}}});
 });
 
 function showBoxes(element) {
