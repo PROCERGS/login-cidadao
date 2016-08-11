@@ -111,3 +111,9 @@ footer ul.dashed > li:before {
     color: #fff;
     font-weight: bold;
 }
+
+.btn-outline {
+    background-color: transparent !important;
+    text-shadow: none !important;
+    outline: none !important;
+}

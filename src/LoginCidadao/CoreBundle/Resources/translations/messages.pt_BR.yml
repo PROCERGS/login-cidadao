@@ -820,6 +820,10 @@ tasks.confirm_email:
         title: Não recebeu?
         body: Já verificou até mesmo em sua caixa de spam e não encontrou a mensagem? Não se preocupe, você pode reenviar essa mensagem clicando no botão logo abaixo.
         button: Reenviar Email
+        before:
+            title: Já vamos enviar seu email
+            body: Antes de reenviar, por favor confirme se o endereço a seguir está correto e corrija se necessário.
+            button: Enviar Email de Verificação
     resent.alert: Mensagem reenviada
     success.alert: Email verificado com sucesso!
 Close: Fechar

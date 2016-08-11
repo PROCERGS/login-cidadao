@@ -411,6 +411,10 @@ tasks.confirm_email:
         title: Didn''t receive it?
         body: You checked even your spam folder and didn''t find the message? Don''t worry, you can sent it again by clicking the following button.
         button: Resend Email
+        before:
+            title: Before we send your email
+            body: Before resending your email, please check that your email address below is correct and fix it if necessary.
+            button: Send Validation Email
     resent.alert: Another message was sent
     success.alert: Email successfuly verified!
 Close: Close
