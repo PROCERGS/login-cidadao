@@ -7,6 +7,11 @@
  * file that was distributed with this source code.
  */
 
+.vertical-center-with-footer {
+    min-height: 85% !important;
+    min-height: 85vh !important;
+}
+
 footer .logos {
     margin-bottom: 20px;
 }
