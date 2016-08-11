@@ -30,6 +30,8 @@ parameters:
     session_prefix: lc_sess_
     # Session lifetime (seconds)
     session_lifetime: 86400
+    # Session Remember Me Cookie Name
+    session.remember_me.name: REMEMBERME
 
     # Email transport (read the following doc for the following settings: http://symfony.com/doc/2.8/cookbook/email/email.html)
     mailer_transport:  smtp
@@ -147,3 +149,9 @@ parameters:
 
     # When true, users won't be able to do anything before validating their email
     require_email_validation: true
+
+    # Always get user consent at RP-Initiated Logout
+    rp_initiated_logout.logout.always_get_consent: true
+
+    # Always get user consent when redirecting after RP-Initiated Logout
+    rp_initiated_logout.redirect.always_get_consent: false

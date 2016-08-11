@@ -1,0 +1,42 @@
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
+
+{% block panel_body %}
+    {% for type, messages in app.session.flashbag.all %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="{{ 'Close' | trans }}"><span
+                            aria-hidden="true">&times;</span></button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <div class="switch-panel switch-mini">
+        <div class="switch-label">
+            {% if error | default(false) %}
+                <p>{{ error | trans }}</p>
+            {% else %}
+                {% if loggedOut %}
+                    {% if client %}
+                        {{ 'openid.session.end.client.logged_out' | trans({'%client%': client.name | escape}) | raw }}
+                    {% else %}
+                        {{ 'openid.session.end.logged_out' | trans }}
+                    {% endif %}
+                {% else %}
+                    {% if client %}
+                        {{ 'openid.session.end.client.not_logged_out' | trans({'%client%': client.name | escape}) | raw }}
+                    {% else %}
+                        {{ 'openid.session.end.not_logged_out' | trans | raw }}
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            <a href="{{ path('lc_home') }}"
+               class="btn btn-success btn-block">{{ 'openid.session.end.home_button' | trans }}</a>
+        </div>
+    </div>
+{% endblock %}

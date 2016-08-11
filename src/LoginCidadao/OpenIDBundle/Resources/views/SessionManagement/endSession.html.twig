@@ -1,0 +1,68 @@
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
+
+{% block panel_body %}
+    {% for type, messages in app.session.flashbag.all %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="{{ 'Close' | trans }}"><span
+                            aria-hidden="true">&times;</span></button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+    {% if getLogoutConsent and not loggedOut %}
+        <div class="switch-panel switch-mini">
+            <div class="switch-label">
+                {% if client %}
+                    {{ 'openid.session.end.client.logging_out' | trans({'%client%': client.name | escape}) | raw }}
+                {% else %}
+                    {{ 'openid.session.end.logging_out' | trans }}
+                {% endif %}
+            </div>
+            <div class="switch text-center checkbox checkbox-primary">
+                {{ form_widget(form.logout, {'attr': {'data-size': 'mini'} }) }}
+                <label for="{{ form.logout.vars.id }}"></label>
+            </div>
+        </div>
+    {% endif %}
+    {% if loggedOut %}
+        <div class="switch-panel switch-mini">
+            <div class="switch-label">
+                {% if client %}
+                    {{ 'openid.session.end.client.logged_out' | trans({'%client%': client.name | escape}) | raw }}
+                {% else %}
+                    {{ 'openid.session.end.logged_out' | trans }}
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    {% if postLogoutHost %}
+        <div class="switch-panel switch-mini">
+            <div class="switch-label">
+                {{ 'openid.session.end.continue_to' | trans({'%host%': postLogoutHost | escape}) | raw }}
+            </div>
+            <div class="switch text-center checkbox">
+                {% if form.redirect is defined %}
+                    {{ form_widget(form.redirect, {'attr': {'data-size': 'mini'} }) }}
+                    <label for="{{ form.redirect.vars.id }}"></label>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            {% if getLogoutConsent or getRedirectConsent %}
+                <button class="btn btn-block btn-success"
+                        type="submit">{{ 'openid.session.end.submit' | trans }}</button>
+            {% else %}
+                <a href="{{ path('lc_home') }}" class="btn btn-success btn-block">{{ 'openid.session.end.home_button' | trans }}</a>
+            {% endif %}
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

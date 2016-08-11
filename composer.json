@@ -54,7 +54,8 @@
         "nelmio/security-bundle": "^1.8",
         "liip/monitor-bundle": "^2.2",
         "guilhermednt/pathwell-bundle": "^0.1",
-        "beelab/recaptcha2-bundle": "^1.0"
+        "beelab/recaptcha2-bundle": "^1.0",
+        "bmatzner/fontawesome-bundle": "^4.6"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

@@ -82,8 +82,10 @@ assetic:
       lc_compact_layout_css:
         inputs:
           - '@bootstrap_css'
+          - 'bundles/bmatznerfontawesome/css/font-awesome.min.css'
           - 'bundles/logincidadaocore/css/forms.css'
           - 'bundles/logincidadaocore/css/compact/*.css'
+          - 'bundles/logincidadaocore/css/components/awesome-bootstrap-checkbox.css'
       lc_task_email_validation_css:
         inputs:
           - '@lc_compact_layout_css'

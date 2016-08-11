@@ -314,9 +314,11 @@ services:
         class: %lc.security.helper.class%
         arguments:
             - "@security.authorization_checker"
+            - "@security.token_storage"
             - "@lc.action_log.repository"
             - "@lc.extreme_notifications.helper"
             - "@router"
+            - "%session.remember_me.name%"
 
     account.security_listener:
         class: %account.security_listener.class%
