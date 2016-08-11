@@ -109,6 +109,7 @@ class RegistrationFormType extends BaseType
                             'class' => 'form-control cpf',
                             'placeholder' => 'person.form.cpf.placeholder',
                             'maxlength' => 14,
+                            'pattern' => '[0-9/]*',
                         ],
                     ]
                 );
