@@ -28,7 +28,7 @@ use Donato\PathWellBundle\Validator\Constraints\PathWell;
  * @ORM\Table(name="person")
  * @UniqueEntity("cpf", message="person.validation.cpf.already_used", groups={"LoginCidadaoRegistration", "Registration", "Profile"})
  * @UniqueEntity("username")
- * @UniqueEntity(fields="email", errorPath="email", message="fos_user.email.already_used", groups={"LoginCidadaoRegistration", "Registration"})
+ * @UniqueEntity(fields="email", errorPath="email", message="fos_user.email.already_used", groups={"LoginCidadaoRegistration", "Registration", "LoginCidadaoEmailForm"})
  * @ORM\HasLifecycleCallbacks
  * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
@@ -118,6 +118,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Expose
      * @JMS\Groups({"email"})
      * @JMS\Since("1.0")
+     * @Assert\Email(groups={"Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration", "LoginCidadaoEmailForm"})
      */
     protected $email;
 

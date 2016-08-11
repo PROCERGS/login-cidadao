@@ -25,6 +25,7 @@ $(document).ready(function () {
     });
 
     $('input.cpf').mask('000.000.000-00');
+    $('input.birthdate').mask('00/00/0000');
 });
 
 function showBoxes(element) {
