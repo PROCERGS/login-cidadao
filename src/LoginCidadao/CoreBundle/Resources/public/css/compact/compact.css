@@ -88,6 +88,10 @@ footer {
     padding-top: 30px;
 }
 
+footer ul {
+    padding: 0;
+}
+
 footer ul.dashed {
     list-style-type: none;
 }
