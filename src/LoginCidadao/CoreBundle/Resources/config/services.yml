@@ -418,3 +418,13 @@ services:
             - "%default_password_encoder%"
         tags:
             - { name: kernel.event_subscriber }
+
+    lc.form.type.tel:
+        class: LoginCidadao\CoreBundle\Form\Type\TelType
+        tags:
+            - { name: form.type, alias: tel }
+
+    lc.form.type.birthday_tel:
+        class: LoginCidadao\CoreBundle\Form\Type\BirthdayTelType
+        tags:
+            - { name: form.type, alias: birthday_tel }
