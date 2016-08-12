@@ -20,11 +20,13 @@ class SuggestionController extends Controller
      */
     public function newClientSuggestionAction(Request $request)
     {
-        $sugg        = new ClientSuggestion();
+        $sugg = new ClientSuggestion();
         $formBuilder = $this->createFormBuilder($sugg);
-        $formBuilder->add('text',
-            'Symfony\Component\Form\Extension\Core\Type\TextareaType');
-        $form        = $formBuilder->getForm();
+        $formBuilder->add(
+            'text',
+            'Symfony\Component\Form\Extension\Core\Type\TextareaType'
+        );
+        $form = $formBuilder->getForm();
 
         $em = $this->getDoctrine()->getManager();
         if ($request->isMethod('POST')) {
@@ -33,12 +35,15 @@ class SuggestionController extends Controller
                 $sugg->setPerson($this->getUser());
                 $em->persist($sugg);
                 $em->flush();
-                $bag        = $request->getSession()->getFlashBag();
+                $bag = $request->getSession()->getFlashBag();
                 $translator = $this->get('translator');
-                $bag->add('success',
-                    $translator->trans('client.suggestion.registered'));
+                $bag->add(
+                    'success',
+                    $translator->trans('client.suggestion.registered')
+                );
             }
         }
+
         return $this->redirect($this->generateUrl('lc_authorization_list'));
     }
 }

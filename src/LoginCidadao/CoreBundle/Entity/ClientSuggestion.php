@@ -49,7 +49,7 @@ class ClientSuggestion
      * Set text
      *
      * @param string $text
-     * @return Notification
+     * @return ClientSuggestion
      */
     public function setText($text)
     {
@@ -71,13 +71,14 @@ class ClientSuggestion
     /**
      * @ORM\PrePersist
      */
-    public function setCreatedAt($var = null)
+    public function setCreatedAt($createdAt = null)
     {
-        if ($var === null) {
-            $this->createdAt = new \DateTime();
-        } else {
+        if ($createdAt instanceof \DateTime) {
             $this->createdAt = $createdAt;
+        } else {
+            $this->createdAt = new \DateTime();
         }
+
         return $this;
     }
 
