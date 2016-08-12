@@ -109,7 +109,7 @@ class RegistrationFormType extends BaseType
                             'class' => 'form-control cpf',
                             'placeholder' => 'person.form.cpf.placeholder',
                             'maxlength' => 14,
-                            'pattern' => '[0-9]*',
+                            'type' => 'tel',
                         ],
                     ]
                 );
@@ -137,7 +137,7 @@ class RegistrationFormType extends BaseType
                         'label' => 'form.birthdate',
                         'translation_domain' => 'FOSUserBundle',
                         'attr' => [
-                            'pattern' => '[0-9]*',
+                            'type' => 'tel',
                             'class' => 'form-control birthdate',
                             'placeholder' => 'person.form.birthdate.placeholder',
                         ],
