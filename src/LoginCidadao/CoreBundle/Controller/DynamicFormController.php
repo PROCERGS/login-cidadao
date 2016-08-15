@@ -3,6 +3,7 @@
 namespace LoginCidadao\CoreBundle\Controller;
 
 use LoginCidadao\APIBundle\Exception\RequestTimeoutException;
+use LoginCidadao\CoreBundle\Service\IntentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -49,6 +50,9 @@ class DynamicFormController extends Controller
 
         $scope = $requestedScope;// $this->intersectScopes($authorizedScope, $requestedScope);
 
+        /** @var IntentManager $intentManager */
+        $intentManager = $this->get('lc.intent.manager');
+
         $waitEmail = count($scope) === 1 && array_search('email', $scope) !== false;
         if ($waitEmail && $person->getEmailConfirmedAt() instanceof \DateTime) {
             //return $this->redirect($request->get('redirect_url', null));
@@ -59,7 +63,7 @@ class DynamicFormController extends Controller
 
         $data = new DynamicFormData();
         $data->setPerson($person)
-            ->setRedirectUrl($request->get('redirect_url', null))
+            ->setRedirectUrl($request->get('redirect_url', $intentManager->getIntent($request)))
             ->setScope($request->get('scope', null))
             ->setPlaceOfBirth($placeOfBirth);
 
