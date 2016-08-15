@@ -47,7 +47,7 @@ class DynamicFormController extends Controller
         $authorizedScope = $person->getClientScope($client);
         $requestedScope  = explode(' ', $request->get('scope', null));
 
-        $scope = $this->intersectScopes($authorizedScope, $requestedScope);
+        $scope = $requestedScope;// $this->intersectScopes($authorizedScope, $requestedScope);
 
         $waitEmail = count($scope) === 1 && array_search('email', $scope) !== false;
         if ($waitEmail && $person->getEmailConfirmedAt() instanceof \DateTime) {
