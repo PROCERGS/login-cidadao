@@ -428,3 +428,7 @@ services:
         class: LoginCidadao\CoreBundle\Form\Type\BirthdayTelType
         tags:
             - { name: form.type, alias: birthday_tel }
+
+    # LoginCidadao\CoreBundle\Service\AbstractPhoneVerificationService
+    lc.base_phone_verification_service:
+        abstract: true
