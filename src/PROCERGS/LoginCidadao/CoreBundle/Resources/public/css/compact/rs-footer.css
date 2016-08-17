@@ -12,6 +12,10 @@
     min-height: 85vh !important;
 }
 
+footer {
+    padding-top: 10px;
+}
+
 footer .logos {
     margin-bottom: 20px;
 }
