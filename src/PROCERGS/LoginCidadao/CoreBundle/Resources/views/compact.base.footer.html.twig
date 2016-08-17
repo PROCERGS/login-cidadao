@@ -8,7 +8,12 @@
         {% endimage %}
     </div>
 
-    <ul class="no-first dashed text-center">
+    <ul class="no-first dashed text-center small">
+        <li><a href="{{ path('lc_about') }}">{% trans %}About Citizen's Login{% endtrans %}</a></li>
+        <li><a href="{{ path('lc_privacy') }}">{% trans %}Privacy and Terms of Service{% endtrans %}</a></li>
+    </ul>
+
+    <ul class="no-first dashed text-center small">
         <li><a href="{{ path('lc_help') }}">{{ 'Help' | trans }}</a></li>
         <li><a href="{{ path('lc_contact') }}">{{ 'Contact' | trans }}</a></li>
         <li><a href="https://github.com/PROCERGS/login-cidadao/"
