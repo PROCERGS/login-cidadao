@@ -79,7 +79,7 @@ security:
                 server_url: %facebook_app_this_url%
                 login_path: /login
                 check_path: /facebook/login_check
-                default_target_path: fos_user_profile_edit
+                default_target_path: lc_dashboard
                 success_handler: security.authentication.success_handler
                 provider: fos_facebook_provider
 
@@ -101,7 +101,7 @@ security:
                 server_url: %facebook_app_this_url%
                 login_path: /login
                 check_path: /facebook/login_check
-                default_target_path: fos_user_profile_edit
+                default_target_path: lc_dashboard
                 success_handler: security.authentication.success_handler
                 provider: fos_facebook_provider
 
@@ -112,7 +112,7 @@ security:
                 login_path:   /login
                 use_forward:  false
                 failure_path: /login
-                default_target_path: fos_user_profile_edit
+                default_target_path: lc_dashboard
                 success_handler: security.authentication.success_handler
                 oauth_user_provider:
                     service:  lc.hwi_twitter.user_provider
@@ -127,7 +127,7 @@ security:
                 password_parameter: login_form_type[password]
                 csrf_parameter: login_form_type[csrf_token]
                 always_use_default_target_path: false
-                default_target_path:            fos_user_profile_edit
+                default_target_path:            lc_dashboard
                 target_path_parameter:          _target_path
                 use_referer:                    true
 
@@ -143,7 +143,7 @@ security:
                 check_path: /oauth/v2/auth_login_check
                 login_path: /oauth/v2/auth_login
                 always_use_default_target_path: false
-                default_target_path:            fos_user_profile_edit
+                default_target_path:            lc_dashboard
                 target_path_parameter:          _target_path
                 use_referer:                    true
             anonymous: false
