@@ -77,6 +77,12 @@ html, body {
 .panel-compact .panel-body p {
     text-align: justify;
 }
+.panel-compact .panel-body p.text-center {
+    text-align: center;
+}
+.panel-compact .panel-body p.text-right {
+    text-align: right;
+}
 
 .panel-compact > .panel-footer {
     background-color: transparent;
@@ -117,7 +123,12 @@ footer ul.dashed > li:before {
 }
 
 .btn-outline {
-    background-color: transparent !important;
+    background: none !important;
     text-shadow: none !important;
     outline: none !important;
+}
+.btn-outline.btn-danger {
+    color: #ac0000;
+    border-width: 2px;
+    border-color: #ac0000;
 }
