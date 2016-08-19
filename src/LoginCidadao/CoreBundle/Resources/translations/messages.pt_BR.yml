@@ -711,8 +711,8 @@ organizations:
                 attention: Atenção!
                 text: Esse serviço está sendo oferecido por uma organização não verificada. Confira, a seguir, as informações dessa organização antes de autorizar.
             info:
-                provided_by: Esse serviço é oferecido por <strong>%name%</strong> (<a class="text-danger">%domain%</a> %label%)
-                warn_trust: Autorize apenas se você confia na organização <strong>%name%</strong>
+                provided_by: Esse serviço é oferecido por <strong>%name%</strong> (<a class="text-danger">%domain%</a> %label%).
+                warn_trust: Autorize apenas se você confia nessa organização.
                 domain_verified: Domínio Verificado
                 domain_not_verified: Domínio não Verificado
                 no_organization:
@@ -849,5 +849,5 @@ openid.session.end:
         not_logged_out: Sua sessão <strong>não</strong> foi encerrada por <strong>%client%</strong>
 authorization:
     title: Permitir que <strong>%client_name%</strong> acesse suas informações?
-    description: 'As seguintes informações e permissões serão fornecidas para <strong>%client_name%</strong>:'
+    description: 'As seguintes informações e permissões serão fornecidas:'
     about: 'Sobre <strong>%client_name%</strong>'
