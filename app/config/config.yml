@@ -45,67 +45,71 @@ assetic:
     use_controller: false
     #java: /usr/bin/java
     assets:
-      bootstrap_fonts_woff:
-          inputs:
-              - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.woff'
-          output: fonts/glyphicons-halflings-regular.woff
-      bootstrap_fonts_ttf:
-          inputs:
-              - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf'
-          output: fonts/glyphicons-halflings-regular.ttf
-      bootstrap_fonts_svg:
-          inputs:
-              - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.svg'
-          output: fonts/glyphicons-halflings-regular.svg
-      bootstrap_fonts_eot:
-          inputs:
-              - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.eot'
-          output: fonts/glyphicons-halflings-regular.eot
-      lc_base_js:
-        inputs:
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery/1.11.0/jquery.min.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/bootstrap/3.3.1/js/bootstrap.min.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/js/bootstrap-switch.min.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/hinclude/0.9.5/hinclude.min.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.placeholder.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.local.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.visible.min.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.preventDoubleSubmission.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/general.js'
-      bootstrap_css:
-        inputs:
-          - 'assets/vendor/bootstrap/dist/css/bootstrap.min.css'
-          - '@LoginCidadaoCoreBundle/Resources/public/bootstrap/3.3.1/css/bootstrap-theme.min.css'
-          - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
-      lc_compact_layout_css:
-        inputs:
-          - '@bootstrap_css'
-          - 'bundles/bmatznerfontawesome/css/font-awesome.min.css'
-          - 'bundles/logincidadaocore/css/forms.css'
-          - 'bundles/logincidadaocore/css/compact/*.css'
-          - 'bundles/logincidadaocore/css/components/awesome-bootstrap-checkbox.css'
-      lc_task_email_validation_css:
-        inputs:
-          - '@lc_compact_layout_css'
-          - 'bundles/logincidadaocore/css/tasks/email-validation.css'
-      lc_login_register_css:
-        inputs:
-          - '@lc_compact_layout_css'
-          - 'bundles/logincidadaocore/css/login_register/*.css'
-      lc_base_css:
-        inputs:
-          - '@bootstrap_css'
-          - 'bundles/logincidadaocore/css/general.css'
-          - 'bundles/logincidadaocore/css/navbar.css'
-          - 'bundles/logincidadaocore/css/ac.widget.css'
-          - 'bundles/logincidadaocore/css/common.grid.css'
-          - 'bundles/logincidadaocore/css/list.buttons.css'
-      lc_logged_css:
-        inputs:
-          - '@lc_base_css'
-          - 'bundles/logincidadaocore/css/logged/logged.css'
+        bootstrap_fonts_woff:
+            inputs:
+                - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.woff'
+            output: fonts/glyphicons-halflings-regular.woff
+        bootstrap_fonts_ttf:
+            inputs:
+                - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf'
+            output: fonts/glyphicons-halflings-regular.ttf
+        bootstrap_fonts_svg:
+            inputs:
+                - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.svg'
+            output: fonts/glyphicons-halflings-regular.svg
+        bootstrap_fonts_eot:
+            inputs:
+                - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.eot'
+            output: fonts/glyphicons-halflings-regular.eot
+        lc_base_js:
+            inputs:
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery/1.11.0/jquery.min.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/bootstrap/3.3.1/js/bootstrap.min.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/js/bootstrap-switch.min.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/hinclude/0.9.5/hinclude.min.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.placeholder.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.local.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.visible.min.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.preventDoubleSubmission.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/general.js'
+        bootstrap_css:
+            inputs:
+                - 'assets/vendor/bootstrap/dist/css/bootstrap.min.css'
+                - '@LoginCidadaoCoreBundle/Resources/public/bootstrap/3.3.1/css/bootstrap-theme.min.css'
+                - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
+        lc_compact_layout_css:
+            inputs:
+                - '@bootstrap_css'
+                - 'bundles/bmatznerfontawesome/css/font-awesome.min.css'
+                - 'bundles/logincidadaocore/css/forms.css'
+                - 'bundles/logincidadaocore/css/compact/*.css'
+                - 'bundles/logincidadaocore/css/components/awesome-bootstrap-checkbox.css'
+        lc_task_email_validation_css:
+            inputs:
+                - '@lc_compact_layout_css'
+                - 'bundles/logincidadaocore/css/tasks/email-validation.css'
+        lc_login_register_css:
+            inputs:
+                - '@lc_compact_layout_css'
+                - 'bundles/logincidadaocore/css/login_register/*.css'
+        lc_authorization_css:
+            inputs:
+                - '@lc_compact_layout_css'
+                - 'bundles/logincidadaocore/css/authorization/*.css'
+        lc_base_css:
+            inputs:
+                - '@bootstrap_css'
+                - 'bundles/logincidadaocore/css/general.css'
+                - 'bundles/logincidadaocore/css/navbar.css'
+                - 'bundles/logincidadaocore/css/ac.widget.css'
+                - 'bundles/logincidadaocore/css/common.grid.css'
+                - 'bundles/logincidadaocore/css/list.buttons.css'
+        lc_logged_css:
+            inputs:
+                - '@lc_base_css'
+                - 'bundles/logincidadaocore/css/logged/logged.css'
 
     filters:
         cssrewrite: ~

@@ -29,9 +29,6 @@ Help: Help
 'Click again to confirm': 'Click again to confirm'
 'Please, wait...': 'Please, wait...'
 Revoked: Revoked
-'Authorize <strong>%client_name%</strong> to access your information?': 'Authorize <strong>%client_name%</strong> to access your information?'
-'<strong>%client_name%</strong> will be granted the following information and permissions:': '<strong>%client_name%</strong> will be granted the following information and permissions:'
-'About <strong>%client_name%</strong>': 'About <strong>%client_name%</strong>'
 'Edit profile': 'Edit profile'
 Username: Username
 Email: Email
@@ -441,3 +438,7 @@ openid.session.end:
         logging_out: <strong>%client%</strong> is logging you out.
         logged_out: You were logged out by <strong>%client%</strong>
         not_logged_out: You were NOT logged out by <strong>%client%</strong>
+authorization:
+    title: Authorize <strong>%client_name%</strong> to access your information?
+    description: '<strong>%client_name%</strong> will be granted the following information and permissions:'
+    about: 'About <strong>%client_name%</strong>'
