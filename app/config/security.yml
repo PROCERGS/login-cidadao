@@ -167,7 +167,7 @@ security:
         - { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/.well-known, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/openid/connect/(session|jwks|register|verify|token), role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        - { path: ^/openid/connect/authorize, role: IS_AUTHENTICATED_FULLY, requires_channel: https }
+        - { path: ^/openid/connect/authorize, role: IS_AUTHENTICATED_REMEMBERED, requires_channel: https }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
 
