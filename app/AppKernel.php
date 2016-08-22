@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new LoginCidadao\CoreBundle\LoginCidadaoCoreBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new FOS\RestBundle\FOSRestBundle(),
+            new Bmatzner\FontAwesomeBundle\BmatznerFontAwesomeBundle(),
 
             new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
             new FOS\FacebookBundle\FOSFacebookBundle(),
@@ -31,7 +32,7 @@ class AppKernel extends Kernel
             new LoginCidadao\LocaleBundle\LoginCidadaoLocaleBundle(),
             new LoginCidadao\APIBundle\LoginCidadaoAPIBundle(),
             new LoginCidadao\ValidationBundle\LoginCidadaoValidationBundle(),
-            new EWZ\Bundle\RecaptchaBundle\EWZRecaptchaBundle(),
+            new Beelab\Recaptcha2Bundle\BeelabRecaptcha2Bundle(),
 
             new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
             new Vich\UploaderBundle\VichUploaderBundle(),
@@ -43,10 +44,8 @@ class AppKernel extends Kernel
             
             new LoginCidadao\BadgesControlBundle\LoginCidadaoBadgesControlBundle(),
             new LoginCidadao\BadgesBundle\LoginCidadaoBadgesBundle(),
-            new LoginCidadao\NotificationBundle\LoginCidadaoNotificationBundle(),
             
             new Scheb\TwoFactorBundle\SchebTwoFactorBundle(),
-            //new LoginCidadao\IgpBundle\LoginCidadaoIgpBundle(),
             new LoginCidadao\ValidationControlBundle\LoginCidadaoValidationControlBundle(),
 
             new LoginCidadao\TOSBundle\LoginCidadaoTOSBundle(),
@@ -68,6 +67,7 @@ class AppKernel extends Kernel
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+            $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();

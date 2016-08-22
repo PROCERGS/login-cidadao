@@ -2,13 +2,15 @@
 
 namespace LoginCidadao\CoreBundle\Model;
 
+use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\EntityManager;
 
-interface PersonInterface extends EncoderAwareInterface
+interface PersonInterface extends EncoderAwareInterface, UserInterface
 {
+    public function getId();
 
     public function getEmail();
 
@@ -92,16 +94,13 @@ interface PersonInterface extends EncoderAwareInterface
 
     public function getSocialNetworksPicture();
 
-    public function getNotifications();
-
     public function getClients();
-
-    public function checkEmailPending();
 
     public function setEmailExpiration($emailExpiration);
 
     public function getEmailExpiration();
 
+    public function getConfirmationToken();
     public function setConfirmationToken($confirmationToken);
 
     public function setFacebookUsername($facebookUsername);

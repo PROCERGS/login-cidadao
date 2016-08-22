@@ -1,49 +1,54 @@
-{% extends 'LoginCidadaoCoreBundle::base.html.twig' %}
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
 
-{% block body %}
-    {% set form1 = lc_getForm() %}
-    {% if form is not defined %}
-        {% set form = lc_getFormFactory() %}
-    {% endif %}
+{% set is_lc_home = app.request.attributes.get('_route') == 'lc_home' %}
+{% set is_login_page = is_lc_home or app.request.attributes.get('_route') == 'fos_user_security_login' %}
+{% set is_register_page = app.request.attributes.get('_route') == 'fos_user_registration_register' %}
+{% set requested_page = is_login_page ? 'login' : 'register' %}
 
-    <div class="row lc-main-title hidden-xs">
-        <div class="col-12 text-center">
-            <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
-            <h2>{% trans %}One account. The entire Government.{% endtrans %}</h2>
-        </div>
+{% block top_buttons %}
+    <a href="{{ path('fos_user_registration_register') }}" class="btn btn-home-register"
+            {{ is_register_page ? 'style="display: none"' : '' }}>{{ 'home.register.button' | trans }}</a>
+    <a href="{{ path('fos_user_security_login') }}" class="btn btn-home-login"
+            {{ is_login_page ? 'style="display: none"' : '' }}>
+        {{ 'home.login.button' | trans }}
+    </a>
+{% endblock %}
+
+{% block panel_body %}
+    <div class="login" {{ is_register_page ? 'style="display: none"' : '' }}>
+        {% set form1 = lc_getForm() %}
+        {{ include('LoginCidadaoCoreBundle::common.login.html.twig') }}
     </div>
+    <div class="registration" {{ is_login_page ? 'style="display: none"' : '' }}>
+        {% if form is not defined %}
+            {% set form = lc_getFormFactory() %}
+        {% endif %}
+        {{ include('LoginCidadaoCoreBundle::common.register.html.twig') }}
+    </div>
+{% endblock %}
 
-    <div class="container lc-box-group">
-
-        {% embed "LoginCidadaoCoreBundle:Default:login_register.html.twig" %}
-            {% block left %}
-                <div class="box box-register">
-                    {{ include('LoginCidadaoCoreBundle::common.register.html.twig') }}
-                </div>
-            {% endblock %}
-
-            {% block right %}
-                <div class="box">
-                    {{ include('LoginCidadaoCoreBundle::common.login.html.twig') }}
-                </div>
-            {% endblock %}
-        {% endembed %}
-
-        {{ include('LoginCidadaoCoreBundle::common.3rd_party_login.html.twig') }}
+{% block panel_footer_class %}{% endblock %}
+{% block panel_footer %}
+    <div class="panel panel-3rd-party-login">
+        <div class="panel-heading">
+            <h2>{{ 'home.3rd_party.call_to_action' | trans }}</h2>
+        </div>
+        <div class="panel-body">
+            {{ include('LoginCidadaoCoreBundle::common.3rd_party_login.html.twig') }}
+        </div>
     </div>
 {% endblock %}
 
 {% block stylesheets_custom %}
-    {% stylesheets '@lc_base_css' 'bundles/logincidadaocore/css/home/*.css' filter='cssrewrite' filter='?uglifycss' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% stylesheets '@lc_login_register_css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    <script>
-        $(document).ready(function(){
-            $('form').preventDoubleSubmission();
-        });
-    </script>
+    <script src="//www.google.com/recaptcha/api.js?hl={{ app.request.locale }}"></script>
+    {% javascripts '@LoginCidadaoCoreBundle/Resources/public/js/login_register/*.js' filter='?uglifyjs2' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}

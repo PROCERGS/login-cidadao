@@ -93,6 +93,7 @@
             <div class="panel-body">
                 {{ form_row(form.redirectUris) }}
                 {% if metadata is defined %}
+                    {{ form_row(metadata.post_logout_redirect_uris) }}
                     {{ form_row(metadata.response_types) }}
                     {{ form_row(metadata.grant_types) }}
                 {% endif %}

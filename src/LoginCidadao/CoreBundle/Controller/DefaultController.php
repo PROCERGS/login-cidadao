@@ -101,16 +101,11 @@ class DefaultController extends Controller
         $logs['logins']   = $logRepo->findLoginsByPerson($this->getUser(), 4);
         $logs['activity'] = $logRepo->getWithClientByPerson($this->getUser(), 3);
 
-        // notifications
-        $notificationHandler = $this->get('lc.notification.handler');
-        $notifications       = $notificationHandler->getUnread($this->getUser());
-
         $defaultClientUid = $this->container->getParameter('oauth_default_client.uid');
 
         return array('allBadges' => $badges,
             'userBadges' => $userBadges,
             'logs' => $logs,
-            'notifications' => $notifications,
             'defaultClientUid' => $defaultClientUid);
     }
 
@@ -130,7 +125,7 @@ class DefaultController extends Controller
 
         $result['logged_out'] = false;
         if ($this->getUser() instanceof UserInterface) {
-            if ($request->cookies->has('REMEMBERME')) {
+            if ($request->cookies->has($this->getParameter('session.remember_me.name'))) {
                 $result = array('logged_out' => false);
             } else {
                 $this->get("request")->getSession()->invalidate();

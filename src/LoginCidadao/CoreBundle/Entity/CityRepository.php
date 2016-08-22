@@ -14,10 +14,18 @@ class CityRepository extends EntityRepository
         $qb
             ->select('c')
             ->from('LoginCidadaoCoreBundle:City', 'c')
-            ->join('LoginCidadaoCoreBundle:State', 's', 'WITH',
-                    'c.state = s')
-            ->join('LoginCidadaoCoreBundle:Country', 'co', 'WITH',
-                    's.country = co')
+            ->join(
+                'LoginCidadaoCoreBundle:State',
+                's',
+                'WITH',
+                'c.state = s'
+            )
+            ->join(
+                'LoginCidadaoCoreBundle:Country',
+                'co',
+                'WITH',
+                's.country = co'
+            )
             ->where('c.name LIKE :string OR LOWER(c.name) LIKE :string')
             ->addOrderBy('s.preference', 'DESC')
             ->addOrderBy('c.name', 'ASC')
@@ -39,13 +47,23 @@ class CityRepository extends EntityRepository
     {
         $em = $this->getEntityManager();
         $states = $em->getRepository('LoginCidadaoCoreBundle:State')
-                ->createQueryBuilder('s')
-                ->orderBy('s.preference', 'DESC')
-                ->setMaxResults(1)
-                ->getQuery()->getResult();
+            ->createQueryBuilder('s')
+            ->orderBy('s.preference', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()->getResult();
         $state = reset($states);
         $cities = $state->getCities();
+
         return $cities;
     }
 
+    /**
+     * @return mixed
+     */
+    public function countCities()
+    {
+        return $this->createQueryBuilder('c')
+            ->select('COUNT(c)')
+            ->getQuery()->getSingleScalarResult();
+    }
 }

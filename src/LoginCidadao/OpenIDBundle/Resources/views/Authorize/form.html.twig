@@ -1,112 +1,103 @@
 {% if 'public_profile' not in scopes %}{% set scopes = scopes | merge(['public_profile']) %}{% endif %}
-{% set verified %}<span class="label label-success" title="{{ 'organizations.validation.on_authorize.info.domain_verified' | trans }}"><span class="glyphicon glyphicon-ok"></span></span>{% endset %}
-{% set not_verified %}<span class="label label-danger" title="{{ 'organizations.validation.on_authorize.info.domain_not_verified' | trans }}"><span class="glyphicon glyphicon-alert"></span></span>{% endset %}
-<form action="{{ qs is defined ? '?' ~ qs|url_encode : path('fos_oauth_server_authorize') }}" method="post" class="fos_oauth_server_authorize">
+{% set verified %}
+    <span class="label label-success"
+          title="{{ 'organizations.validation.on_authorize.info.domain_verified' | trans }}">
+        <span class="glyphicon glyphicon-ok"></span>
+    </span>
+{% endset %}
+{% set not_verified %}
+    <span class="label label-danger"
+          title="{{ 'organizations.validation.on_authorize.info.domain_not_verified' | trans }}">
+        <span class="glyphicon glyphicon-alert"></span>
+    </span>
+{% endset %}
+
+<form action="{{ qs is defined ? '?' ~ qs|url_encode : path('fos_oauth_server_authorize') }}"
+      method="post" class="fos_oauth_server_authorize">
     {% if is_granted('FEATURE_ORGANIZATIONS') %}
         {% if organization is empty or organization.isVerified is same as(false) %}
             {% set status_label = not_verified %}
-            <div class="alert bg-danger" role="alert">
-                <strong>{{ 'organizations.validation.on_authorize.warn_not_verified.attention' | trans }}</strong>
+            <div class="alert bg-danger small" role="alert">
+                <strong class="text-center center-block">{{ 'organizations.validation.on_authorize.warn_not_verified.attention' | trans }}</strong>
                 <p>{{ 'organizations.validation.on_authorize.warn_not_verified.text' | trans }}</p>
             </div>
         {% else %}
             {% set status_label = verified %}
-        {% endif %}
 
-        {% if warnUntrusted %}
-            <div class="alert bg-warning" role="alert">
-                <strong>{{ 'organizations.trust.warn_untrusted.attention' | trans | raw }}</strong>
-                <p>{{ 'organizations.trust.warn_untrusted.text' | trans | raw }}</p>
+            {% if warnUntrusted %}
+                <div class="alert bg-warning small" role="alert">
+                    <strong class="text-center center-block">{{ 'organizations.trust.warn_untrusted.attention' | trans | raw }}</strong>
+                    <p>{{ 'organizations.trust.warn_untrusted.text' | trans | raw }}</p>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+    <h1>{{ 'authorization.title' | trans({ '%client_name%': client.name | e }) | raw }}</h1>
+
+    <p class="msg">{{ 'authorization.description' | trans({'%client_name%': client.name | e}) | raw }}</p>
+
+    <ul class="permissions">
+        {% for scope in scopes|sort %}
+            {% if ('scope_details.' ~ scope) | trans != ('scope_details.' ~ scope) %}
+                {% set details = include('LoginCidadaoCoreBundle::common.scope.details.attr.html.twig', { 'scope': scope }) %}
+                {% set handle = include('LoginCidadaoCoreBundle::common.scope.details.handle.html.twig', { 'scope': scope }) %}
+            {% else %}
+                {% set details = '' %}
+                {% set handle = '' %}
+            {% endif %}
+            {% if scope == 'openid' %}
+                <input type="hidden" name="scope[]" value="{{ scope }}">
+            {% elseif scope == 'public_profile' %}
+                <li class="checkbox">
+                    <input type="checkbox" name="scope[]" checked disabled value="{{ scope }}" data-size="mini"
+                           id="scope_{{ loop.index }}">
+                    <label for="scope_{{ loop.index }}">
+                    </label>
+                    <span {{ details | raw }}>{{ ('scope.' ~ scope) | trans }} {{ handle | raw }}</span>
+                    <input type="hidden" name="scope[]" value="{{ scope }}">
+                </li>
+            {% else %}
+                <li class="checkbox checkbox-primary">
+                    <input type="checkbox" name="scope[]" checked value="{{ scope }}" data-size="mini"
+                           id="scope_{{ loop.index }}">
+                    <label for="scope_{{ loop.index }}">{{ ('scope.' ~ scope) | trans }}</label>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+
+    {% if is_granted('FEATURE_ORGANIZATIONS') %}
+        {% if organization is not empty %}
+            <div class="organization-status alert bg-success small" role="alert">
+                <p>
+                    {{ 'organizations.validation.on_authorize.info.provided_by' | trans({'%name%': organization.name | striptags, '%domain%': organization.domain | striptags, '%label%': status_label }) | raw }}
+                    {{ 'organizations.validation.on_authorize.info.warn_trust' | trans({'%name%': organization.name | striptags, '%domain%': organization.domain | striptags}) | raw }}
+                </p>
+            </div>
+        {% else %}
+            <div class="organization-status alert bg-danger small" role="alert">
+                <p>
+                    {{ 'organizations.validation.on_authorize.info.no_organization.provided_by' | trans | raw }}
+                    {{ 'organizations.validation.on_authorize.info.no_organization.warn_trust' | trans | raw }}
+                </p>
             </div>
         {% endif %}
     {% endif %}
 
-    <h1>{% trans with { '%client_name%': client.name } %}Authorize <strong>%client_name%</strong> to access your information?{% endtrans %}</h1>
-
-    <div class="panel">
-        <div class="panel-body">
-            <div class="connect-diagram row">
-                <div class="col-xs-5 text-right">
-                    <img src="{{ include("LoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" width="70" class="img-rounded">
-                </div>
-                <div class="col-xs-2 text-center">
-                    <i class="glyphicon glyphicon-chevron-right"></i>
-                </div>
-                <div class="col-xs-5 text-left">
-                    <img src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': client }) }}" class="media-object" width="70" height="70" alt="" class="img-rounded">
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-xs-12 col-sm-offset-2 col-sm-8">
-                    <p class="msg">{% trans with {'%client_name%': client.name} %}<strong>%client_name%</strong> will be granted the following information and permissions:{% endtrans %}</p>
-
-                    <ul class="permissions">
-                        {% for scope in scopes|sort %}
-                            {% if ('scope_details.' ~ scope) | trans != ('scope_details.' ~ scope) %}
-                                {% set details = include('LoginCidadaoCoreBundle::common.scope.details.attr.html.twig', { 'scope': scope }) %}
-                                {% set handle = include('LoginCidadaoCoreBundle::common.scope.details.handle.html.twig', { 'scope': scope }) %}
-                            {% else %}
-                                {% set details = '' %}
-                                {% set handle = '' %}
-                            {% endif %}
-                            {% if scope == 'openid' %}
-                                <input type="hidden" name="scope[]" value="{{ scope }}">
-                            {% elseif scope == 'public_profile' %}
-                                <li>
-                                    <label for="scope_{{ loop.index }}">
-                                        <input type="checkbox" name="scope[]" checked disabled value="{{ scope }}" id="scope_{{ loop.index }}">
-                                        <span {{ details | raw }}>{{ ('scope.' ~ scope) | trans }} {{ handle | raw }}</span>
-                                        <input type="hidden" name="scope[]" value="{{ scope }}">
-                                    </label>
-                                </li>
-                            {% else %}
-                                <li>
-                                    <label for="scope_{{ loop.index }}">
-                                        <input type="checkbox" name="scope[]" checked value="{{ scope }}" id="scope_{{ loop.index }}">
-                                        {{ ('scope.' ~ scope) | trans }}
-                                    </label>
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-
-            {% if is_granted('FEATURE_ORGANIZATIONS') %}
-                <div class="row">
-                    <div class="col-xs-12 text-center">
-                        <div class="well well-sm">
-                            {% if organization is not empty %}
-                                <p>{{ 'organizations.validation.on_authorize.info.provided_by' | trans({'%name%': organization.name | striptags, '%domain%': organization.domain | striptags, '%label%': status_label }) | raw }}</p>
-                                <p>{{ 'organizations.validation.on_authorize.info.warn_trust' | trans({'%name%': organization.name | striptags, '%domain%': organization.domain | striptags}) | raw }}</p>
-                            {% else %}
-                                <p>{{ 'organizations.validation.on_authorize.info.no_organization.provided_by' | trans | raw }}</p>
-                                <p>{{ 'organizations.validation.on_authorize.info.no_organization.warn_trust' | trans | raw }}</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
-
-            <div class="row buttons">
-                <div class="col-xs-6 text-center">
-                    <input type="submit" name="rejected" value="{{ 'authorize.reject'|trans({}, 'FOSOAuthServerBundle') }}" class="btn btn-link" style="color: #b00" >
-                </div>
-                <div class="col-xs-6 text-center">
-                    <input type="submit" name="accepted" value="{{ 'authorize.accept'|trans({}, 'FOSOAuthServerBundle') }}" class="btn btn-success" style="padding-right: 20px; padding-left: 20px;" >
-                </div>
-            </div>
-        </div>
+    <div class="buttons">
+        <button type="submit" name="accepted" class="btn btn-block btn-success">
+            {{ 'authorize.accept'|trans({}, 'FOSOAuthServerBundle') }}
+        </button>
+        <button type="submit" name="rejected" class="btn btn-block btn-danger btn-outline" style="color: #b00">
+            {{ 'authorize.reject'|trans({}, 'FOSOAuthServerBundle') }}
+        </button>
     </div>
 
     {% if client.description | trim | length > 0 %}
-        <div class="row">
-            <div class="col-xs-12">
-                <h2>{% trans with { '%client_name%': client.name } %}About <strong>%client_name%</strong>{% endtrans %}</h2>
-                <p>{{ client.description | nl2br }}</p>
-
-            </div>
+        <div class="authz-about-service">
+            <h2>{{ 'authorization.about' | trans({ '%client_name%': client.name | e }) | raw }}</h2>
+            <p>{{ client.description | nl2br }}</p>
         </div>
     {% endif %}
 </form>

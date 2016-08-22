@@ -4,9 +4,113 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fbac8cf4145d21978c749fa48b018ccc",
-    "content-hash": "e27fc5242c41307a354a20bc7d8f03c5",
+    "hash": "0cc17c1e8ba450e6319c07db9804f5f3",
+    "content-hash": "7f4385bb0120cfdffbb3510a2e9afb99",
     "packages": [
+        {
+            "name": "beelab/recaptcha2-bundle",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Bee-Lab/BeelabRecaptcha2Bundle.git",
+                "reference": "f0f566168739a38ab3828156496830702e7807b1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Bee-Lab/BeelabRecaptcha2Bundle/zipball/f0f566168739a38ab3828156496830702e7807b1",
+                "reference": "f0f566168739a38ab3828156496830702e7807b1",
+                "shasum": ""
+            },
+            "require": {
+                "google/recaptcha": "^1.1",
+                "php": ">=5.3.8",
+                "symfony/dependency-injection": "~2.4|~3.0",
+                "symfony/form": "~2.4|~3.0",
+                "symfony/framework-bundle": "~2.4|~3.0",
+                "symfony/validator": "~2.4|~3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*",
+                "symfony/expression-language": "~2.4|~3.0",
+                "symfony/phpunit-bridge": "~2.7|~3.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Beelab\\Recaptcha2Bundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Massimiliano Arione",
+                    "email": "massimiliano.arione@bee-lab.net"
+                }
+            ],
+            "description": "Provide Google Recaptch2 form type ",
+            "homepage": "https://bee-lab.net",
+            "keywords": [
+                "form",
+                "recaptcha",
+                "symfony"
+            ],
+            "time": "2016-08-21 11:36:07"
+        },
+        {
+            "name": "bmatzner/fontawesome-bundle",
+            "version": "4.6.1",
+            "target-dir": "Bmatzner/FontAwesomeBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bmatzner/BmatznerFontAwesomeBundle.git",
+                "reference": "e52f9f684017b410041850e16dc49a197ef4edab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bmatzner/BmatznerFontAwesomeBundle/zipball/e52f9f684017b410041850e16dc49a197ef4edab",
+                "reference": "e52f9f684017b410041850e16dc49a197ef4edab",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/framework-bundle": ">=2.1|~3.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Bmatzner\\FontAwesomeBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT",
+                "CC BY 3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Bernd Matzner",
+                    "email": "bernd@matznermatzner.de",
+                    "homepage": "http://berndmatzner.de"
+                }
+            ],
+            "description": "FontAwesome Bundle for Symfony2",
+            "homepage": "http://fortawesome.github.com/Font-Awesome/",
+            "keywords": [
+                "css",
+                "graphics",
+                "symfony",
+                "typography",
+                "webfonts"
+            ],
+            "time": "2016-05-02 14:02:07"
+        },
         {
             "name": "bshaffer/oauth2-server-bundle",
             "version": "dev-develop",
@@ -553,16 +657,16 @@
         },
         {
             "name": "doctrine/doctrine-bundle",
-            "version": "1.6.3",
+            "version": "1.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "fd51907c6c76acaa8a5234822a4f901c1500afc1"
+                "reference": "dd40b0a7fb16658cda9def9786992b8df8a49be7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/fd51907c6c76acaa8a5234822a4f901c1500afc1",
-                "reference": "fd51907c6c76acaa8a5234822a4f901c1500afc1",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/dd40b0a7fb16658cda9def9786992b8df8a49be7",
+                "reference": "dd40b0a7fb16658cda9def9786992b8df8a49be7",
                 "shasum": ""
             },
             "require": {
@@ -571,6 +675,7 @@
                 "jdorn/sql-formatter": "~1.1",
                 "php": ">=5.3.2",
                 "symfony/console": "~2.3|~3.0",
+                "symfony/dependency-injection": "~2.3|~3.0",
                 "symfony/doctrine-bridge": "~2.2|~3.0",
                 "symfony/framework-bundle": "~2.3|~3.0"
             },
@@ -629,7 +734,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2016-04-21 19:55:56"
+            "time": "2016-08-10 15:35:22"
         },
         {
             "name": "doctrine/doctrine-cache-bundle",
@@ -968,50 +1073,6 @@
             "time": "2015-08-31 13:19:01"
         },
         {
-            "name": "excelwebzone/recaptcha-bundle",
-            "version": "dev-test-proxy",
-            "target-dir": "EWZ/Bundle/RecaptchaBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PROCERGS/EWZRecaptchaBundle.git",
-                "reference": "a5eb4d6fb86a66a073db382b7d83dfdfa9648dda"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/EWZRecaptchaBundle/zipball/a5eb4d6fb86a66a073db382b7d83dfdfa9648dda",
-                "reference": "a5eb4d6fb86a66a073db382b7d83dfdfa9648dda",
-                "shasum": ""
-            },
-            "require": {
-                "symfony/framework-bundle": "2.*"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-0": {
-                    "EWZ\\Bundle\\RecaptchaBundle\\": ""
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael H. Arieli",
-                    "email": "excelwebzone@gmail.com",
-                    "homepage": "http://excelwebzone.com/"
-                }
-            ],
-            "description": "This bundle provides easy reCAPTCHA form field integration",
-            "homepage": "https://github.com/excelwebzone/EWZRecaptchaBundle",
-            "keywords": [
-                "recaptcha"
-            ],
-            "support": {
-                "source": "https://github.com/PROCERGS/EWZRecaptchaBundle/tree/test-proxy"
-            },
-            "time": "2014-04-28 11:56:26"
-        },
-        {
             "name": "facebook/php-sdk",
             "version": "v3.2.0",
             "source": {
@@ -1338,12 +1399,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "298f27ce696deaa6ecd72e6ba563f892a17e0512"
+                "reference": "07ec96d93f03650e7480e0637fcd51eee6575c12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/298f27ce696deaa6ecd72e6ba563f892a17e0512",
-                "reference": "298f27ce696deaa6ecd72e6ba563f892a17e0512",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/07ec96d93f03650e7480e0637fcd51eee6575c12",
+                "reference": "07ec96d93f03650e7480e0637fcd51eee6575c12",
                 "shasum": ""
             },
             "require": {
@@ -1352,6 +1413,9 @@
                 "symfony/framework-bundle": "~2.3|~3.0",
                 "symfony/security-bundle": "~2.3|~3.0",
                 "symfony/twig-bundle": "~2.3|~3.0"
+            },
+            "conflict": {
+                "symfony/doctrine-bridge": "<2.3"
             },
             "require-dev": {
                 "doctrine/doctrine-bundle": "~1.3",
@@ -1399,20 +1463,65 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2016-06-21 10:34:42"
+            "time": "2016-08-04 10:13:39"
         },
         {
-            "name": "gree/jose",
-            "version": "2.1.0",
+            "name": "google/recaptcha",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/nov/jose-php.git",
-                "reference": "012799c5108a2dd0cbc6bf6695e9e8ffd92ae692"
+                "url": "https://github.com/google/recaptcha.git",
+                "reference": "2b7e00566afca82a38a1d3adb8e42c118006296e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nov/jose-php/zipball/012799c5108a2dd0cbc6bf6695e9e8ffd92ae692",
-                "reference": "012799c5108a2dd0cbc6bf6695e9e8ffd92ae692",
+                "url": "https://api.github.com/repos/google/recaptcha/zipball/2b7e00566afca82a38a1d3adb8e42c118006296e",
+                "reference": "2b7e00566afca82a38a1d3adb8e42c118006296e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.5.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ReCaptcha\\": "src/ReCaptcha"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Client library for reCAPTCHA, a free service that protect websites from spam and abuse.",
+            "homepage": "http://www.google.com/recaptcha/",
+            "keywords": [
+                "Abuse",
+                "captcha",
+                "recaptcha",
+                "spam"
+            ],
+            "time": "2015-09-02 17:23:59"
+        },
+        {
+            "name": "gree/jose",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nov/jose-php.git",
+                "reference": "a7fa2b3a02ce62f1edc1804dd93bc81e7cb59f8c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nov/jose-php/zipball/a7fa2b3a02ce62f1edc1804dd93bc81e7cb59f8c",
+                "reference": "a7fa2b3a02ce62f1edc1804dd93bc81e7cb59f8c",
                 "shasum": ""
             },
             "require": {
@@ -1454,7 +1563,7 @@
                 "OpenID Connect",
                 "jwt"
             ],
-            "time": "2015-12-04 04:06:17"
+            "time": "2016-08-05 04:25:18"
         },
         {
             "name": "guilhermednt/hwi-oauth-proxy-bundle",
@@ -2049,16 +2158,16 @@
         },
         {
             "name": "jms/security-extra-bundle",
-            "version": "dev-master",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/JMSSecurityExtraBundle.git",
-                "reference": "df12cd85ec422696f7be46486f5216f00c0cdf3c"
+                "reference": "d70399b25f41afd8277335cedc3c9b3acdc3759d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/JMSSecurityExtraBundle/zipball/df12cd85ec422696f7be46486f5216f00c0cdf3c",
-                "reference": "df12cd85ec422696f7be46486f5216f00c0cdf3c",
+                "url": "https://api.github.com/repos/schmittjoh/JMSSecurityExtraBundle/zipball/d70399b25f41afd8277335cedc3c9b3acdc3759d",
+                "reference": "d70399b25f41afd8277335cedc3c9b3acdc3759d",
                 "shasum": ""
             },
             "require": {
@@ -2121,7 +2230,7 @@
                 "secure",
                 "security"
             ],
-            "time": "2016-05-10 15:07:25"
+            "time": "2016-02-03 15:29:16"
         },
         {
             "name": "jms/serializer",
@@ -2660,16 +2769,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.20.0",
+            "version": "1.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "55841909e2bcde01b5318c35f2b74f8ecc86e037"
+                "reference": "f42fbdfd53e306bda545845e4dbfd3e72edb4952"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/55841909e2bcde01b5318c35f2b74f8ecc86e037",
-                "reference": "55841909e2bcde01b5318c35f2b74f8ecc86e037",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/f42fbdfd53e306bda545845e4dbfd3e72edb4952",
+                "reference": "f42fbdfd53e306bda545845e4dbfd3e72edb4952",
                 "shasum": ""
             },
             "require": {
@@ -2734,7 +2843,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2016-07-02 14:02:10"
+            "time": "2016-07-29 03:23:52"
         },
         {
             "name": "nelmio/api-doc-bundle",
@@ -2743,12 +2852,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "463dea9af6bc182a3958df5d62f4592c8724ce06"
+                "reference": "e6e424687ed934256bf9c68585eff0fbb40c13c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/463dea9af6bc182a3958df5d62f4592c8724ce06",
-                "reference": "463dea9af6bc182a3958df5d62f4592c8724ce06",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/e6e424687ed934256bf9c68585eff0fbb40c13c4",
+                "reference": "e6e424687ed934256bf9c68585eff0fbb40c13c4",
                 "shasum": ""
             },
             "require": {
@@ -2819,7 +2928,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2016-06-16 15:04:18"
+            "time": "2016-08-04 09:03:43"
         },
         {
             "name": "nelmio/cors-bundle",
@@ -2986,16 +3095,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v2.0.2",
+            "version": "v1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "088c04e2f261c33bed6ca5245491cfca69195ccf"
+                "reference": "c7e26a21ba357863de030f0b9e701c7d04593774"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/088c04e2f261c33bed6ca5245491cfca69195ccf",
-                "reference": "088c04e2f261c33bed6ca5245491cfca69195ccf",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/c7e26a21ba357863de030f0b9e701c7d04593774",
+                "reference": "c7e26a21ba357863de030f0b9e701c7d04593774",
                 "shasum": ""
             },
             "require": {
@@ -3030,20 +3139,20 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2016-04-03 06:00:07"
+            "time": "2016-03-18 20:34:03"
         },
         {
             "name": "phpcollection/phpcollection",
-            "version": "0.4.0",
+            "version": "0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/php-collection.git",
-                "reference": "b8bf55a0a929ca43b01232b36719f176f86c7e83"
+                "reference": "f2bcff45c0da7c27991bbc1f90f47c4b7fb434a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/php-collection/zipball/b8bf55a0a929ca43b01232b36719f176f86c7e83",
-                "reference": "b8bf55a0a929ca43b01232b36719f176f86c7e83",
+                "url": "https://api.github.com/repos/schmittjoh/php-collection/zipball/f2bcff45c0da7c27991bbc1f90f47c4b7fb434a6",
+                "reference": "f2bcff45c0da7c27991bbc1f90f47c4b7fb434a6",
                 "shasum": ""
             },
             "require": {
@@ -3052,7 +3161,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.3-dev"
+                    "dev-master": "0.4-dev"
                 }
             },
             "autoload": {
@@ -3066,10 +3175,8 @@
             ],
             "authors": [
                 {
-                    "name": "Johannes Schmitt",
-                    "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
-                    "role": "Developer of wrapped JMSSerializerBundle"
+                    "name": "Johannes M. Schmitt",
+                    "email": "schmittjoh@gmail.com"
                 }
             ],
             "description": "General-Purpose Collection Library for PHP",
@@ -3080,7 +3187,7 @@
                 "sequence",
                 "set"
             ],
-            "time": "2014-03-11 13:46:42"
+            "time": "2015-05-17 12:39:23"
         },
         {
             "name": "phpoption/phpoption",
@@ -3355,16 +3462,16 @@
         },
         {
             "name": "procergs/tos-bundle",
-            "version": "1.2.4",
+            "version": "1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/tos-bundle.git",
-                "reference": "acba39eb6bcbba1eb6230d56deb625f35d5fd5a6"
+                "reference": "5103794578ae3e2dc64b290fa3587d96d3bd27fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/acba39eb6bcbba1eb6230d56deb625f35d5fd5a6",
-                "reference": "acba39eb6bcbba1eb6230d56deb625f35d5fd5a6",
+                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/5103794578ae3e2dc64b290fa3587d96d3bd27fc",
+                "reference": "5103794578ae3e2dc64b290fa3587d96d3bd27fc",
                 "shasum": ""
             },
             "require": {
@@ -3392,7 +3499,7 @@
                 }
             ],
             "description": "Terms of Service Bundle",
-            "time": "2016-02-25 03:00:18"
+            "time": "2016-07-25 16:56:58"
         },
         {
             "name": "psr/log",
@@ -3735,23 +3842,23 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.4.2",
+            "version": "v5.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "d8db871a54619458a805229a057ea2af33c753e8"
+                "reference": "4cc92842069c2bbc1f28daaaf1d2576ec4dfe153"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/d8db871a54619458a805229a057ea2af33c753e8",
-                "reference": "d8db871a54619458a805229a057ea2af33c753e8",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/4cc92842069c2bbc1f28daaaf1d2576ec4dfe153",
+                "reference": "4cc92842069c2bbc1f28daaaf1d2576ec4dfe153",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "mockery/mockery": "~0.9.1,<0.9.4"
+                "mockery/mockery": "~0.9.1"
             },
             "type": "library",
             "extra": {
@@ -3784,7 +3891,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2016-05-01 08:45:47"
+            "time": "2016-07-08 11:51:25"
         },
         {
             "name": "symfony/assetic-bundle",
@@ -3918,7 +4025,7 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v2.8.8",
+            "version": "v2.8.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
@@ -4542,16 +4649,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.8.8",
+            "version": "v2.8.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "038d13264f732f9bba850c423e374dc72874d1a6"
+                "reference": "df02dd5d3f7decb3a05c6d0f31054b4263625dcb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/038d13264f732f9bba850c423e374dc72874d1a6",
-                "reference": "038d13264f732f9bba850c423e374dc72874d1a6",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/df02dd5d3f7decb3a05c6d0f31054b4263625dcb",
+                "reference": "df02dd5d3f7decb3a05c6d0f31054b4263625dcb",
                 "shasum": ""
             },
             "require": {
@@ -4672,7 +4779,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2016-06-30 15:42:24"
+            "time": "2016-07-30 08:48:52"
         },
         {
             "name": "twig/twig",
@@ -5015,13 +5122,12 @@
         "friendsofsymfony/user-bundle": 20,
         "friendsofsymfony/oauth-server-bundle": 20,
         "hwi/oauth-bundle": 20,
-        "excelwebzone/recaptcha-bundle": 20,
         "guilhermednt/hwi-oauth-proxy-bundle": 20,
         "knplabs/knp-gaufrette-bundle": 20,
         "knplabs/gaufrette": 20,
         "nelmio/api-doc-bundle": 20,
-        "jms/security-extra-bundle": 20,
-        "bshaffer/oauth2-server-bundle": 20
+        "bshaffer/oauth2-server-bundle": 20,
+        "beelab/recaptcha2-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

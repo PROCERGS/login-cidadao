@@ -4,7 +4,6 @@
     <div class="row">
         <div class="col-xs-12 text-center header-shadows">
             <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
-            <h2 class="slogan hidden-xs">{% trans %}One account. The entire Government.{% endtrans %}</h2>
         </div>
     </div>
 
@@ -17,7 +16,7 @@
 {% endblock body %}
 
 {% block stylesheets_custom %}
-    {% stylesheets '@lc_base_css' 'bundles/logincidadaocore/css/home/*.css' filter='cssrewrite' filter='?uglifycss' %}
+    {% stylesheets '@lc_base_css' filter='cssrewrite' filter='?uglifycss' %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 {% endblock %}

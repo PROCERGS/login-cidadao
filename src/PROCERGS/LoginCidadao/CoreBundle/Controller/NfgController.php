@@ -282,7 +282,7 @@ class NfgController extends Controller
                 $this->checkOtherPerson($result1, $em, $personRepo);
 
                 $person->setCpf($result1['CodCpf']);
-                $this->container->get('notifications.helper')->overwriteCpfNotification($otherPerson);
+                // TODO: notify user
             }
         } else {
             $this->checkOtherPerson($result1, $em, $personRepo);
@@ -405,7 +405,7 @@ class NfgController extends Controller
         $person->setNfgProfile(null);
         //@TODO do no use updateUser
         $this->container->get('fos_user.user_manager')->updateUser($person);
-        $this->container->get('notifications.helper')->revokedCpfNotification($person);
+        // TODO: notify user
     }
 
     /**

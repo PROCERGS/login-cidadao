@@ -2,6 +2,7 @@
 
 namespace LoginCidadao\CoreBundle\Controller;
 
+use LoginCidadao\APIBundle\Exception\RequestTimeoutException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -23,6 +24,7 @@ use LoginCidadao\ValidationControlBundle\Handler\ValidationHandler;
 use LoginCidadao\CoreBundle\Model\SelectData;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\CoreBundle\DynamicFormEvents;
+use Symfony\Component\HttpFoundation\Response;
 
 class DynamicFormController extends Controller
 {
@@ -164,7 +166,11 @@ class DynamicFormController extends Controller
             }
 
             $em     = $this->getDoctrine()->getManager();
-            $person = $user->waitUpdate($em, $updatedAt);
+            try {
+                $person = $user->waitUpdate($em, $updatedAt);
+            } catch (RequestTimeoutException $e) {
+                return new JsonResponse(false, Response::HTTP_REQUEST_TIMEOUT);
+            }
             $result = $person->getConfirmationToken() === null;
         }
 

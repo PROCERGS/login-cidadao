@@ -43,12 +43,6 @@
                             <i class="glyphicon glyphicon-th icon"></i>
                         </a>
                     </li>
-                    <li class="services glyph">
-                        <a href="{{ path('lc_notifications') }}" class="clearfix">
-                            <span>{% trans %}Notifications{% endtrans %}</span>
-                            <i class="glyphicon glyphicon-bell icon"></i>
-                        </a>
-                    </li>
                     {% if is_granted('FEATURE_EDIT_USERNAME') %}
                         <li class="username {{ app.request.attributes.get('_route') == 'lc_update_username' ? 'active' }}">
                             <a href="{{ path('lc_update_username') }}" class="clearfix">
@@ -130,40 +124,4 @@
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    {% javascripts '@LoginCidadaoNotificationBundle/Resources/public/js/notifications.js' filter='uglifyjs2' %}
-    <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-    <script type="text/javascript">
-        var notification = {
-            'config': {
-                'mark_as_read_range': '{{ path('js_api_1_put_notification_read_range', { 'start': '0', 'end': '9', '_format': 'json' }) }}',
-                'mark_as_read': '{{ path('js_api_1_put_notification_read', { 'notificationId': '0', '_format': 'json' }) }}',
-                'count_unread': '{{ path('js_api_1_get_notification_count_unread', { '_format': 'json' }) }}',
-                'read_notification': '{{ path('js_api_1_get_notification_html', { 'id': '0', '_format': 'html' }) }}'
-            },
-            'updateNotificationCounters': function () {
-                // Update notifications counts
-                var url = notification.config.count_unread;
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    success: function (result) {
-                        $.each(result, function (index, value) {
-                            if (index === 'total') {
-                                $('.notification-total-unread-badge').html(value);
-                            } else {
-                                var client = value.id;
-                                var count = value.total;
-                                $('.notification-count-client[data-client-id=' + client + ']').html(count);
-                            }
-                        });
-                    }
-                });
-            }
-        };
-    </script>
 {% endblock %}

@@ -7,7 +7,7 @@ imports:
 framework:
     #esi:             ~
     assets:
-        version: '2016-03-29'
+        version: '2016-08-11'
         version_format: '%%s?version=%%s'
         base_path: ~
     translator:
@@ -38,7 +38,6 @@ twig:
         - 'LoginCidadaoCoreBundle:Form:fields.html.twig'
     globals:
         fos_csrf_provider: "@security.csrf.token_manager"
-        notifications_helper: "@notifications.helper"
         facebook_app_id: "%facebook_app_id%"
         app_router: "@router"
         postalcode_search_link: 
@@ -50,52 +49,73 @@ assetic:
     use_controller: false
     #java: /usr/bin/java
     assets:
-      bootstrap_fonts_woff:
-          inputs:
-              - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.woff'
-          output: fonts/glyphicons-halflings-regular.woff
-      bootstrap_fonts_ttf:
-          inputs:
-              - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf'
-          output: fonts/glyphicons-halflings-regular.ttf
-      bootstrap_fonts_svg:
-          inputs:
-              - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.svg'
-          output: fonts/glyphicons-halflings-regular.svg
-      bootstrap_fonts_eot:
-          inputs:
-              - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.eot'
-          output: fonts/glyphicons-halflings-regular.eot
-      lc_base_js:
-        inputs:
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery/1.11.0/jquery.min.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/bootstrap/3.3.1/js/bootstrap.min.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/js/bootstrap-switch.min.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/hinclude/0.9.5/hinclude.min.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.placeholder.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.local.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.visible.min.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.preventDoubleSubmission.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/general.js'
-      lc_base_css:
-        inputs:
-          - 'assets/vendor/bootstrap/dist/css/bootstrap.min.css'
-          - 'bundles/logincidadaocore/bootstrap/3.3.1/css/bootstrap-theme.min.css'
-          - 'bundles/logincidadaocore/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
-          - 'bundles/logincidadaocore/css/general.css'
-          - 'bundles/logincidadaocore/css/navbar.css'
-          - 'bundles/logincidadaocore/css/ac.widget.css'
-          - 'bundles/logincidadaocore/css/common.grid.css'
-          - 'bundles/logincidadaocore/css/custom.recaptcha.css'
-          - 'bundles/logincidadaocore/css/list.buttons.css'
-          - 'bundles/logincidadaocore/css/notification.css'
-      lc_logged_css:
-        inputs:
-          - '@lc_base_css'
-          - 'bundles/logincidadaocore/css/logged/logged.css'
-          - 'bundles/logincidadaonotification/css/notifications.css'
+        bootstrap_fonts_woff:
+            inputs:
+                - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.woff'
+            output: fonts/glyphicons-halflings-regular.woff
+        bootstrap_fonts_ttf:
+            inputs:
+                - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf'
+            output: fonts/glyphicons-halflings-regular.ttf
+        bootstrap_fonts_svg:
+            inputs:
+                - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.svg'
+            output: fonts/glyphicons-halflings-regular.svg
+        bootstrap_fonts_eot:
+            inputs:
+                - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.eot'
+            output: fonts/glyphicons-halflings-regular.eot
+        lc_base_js:
+            inputs:
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery/1.11.0/jquery.min.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/bootstrap/3.3.1/js/bootstrap.min.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/js/bootstrap-switch.min.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/hinclude/0.9.5/hinclude.min.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.placeholder.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.local.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.visible.min.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.preventDoubleSubmission.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/general.js'
+        bootstrap_css:
+            inputs:
+                - 'assets/vendor/bootstrap/dist/css/bootstrap.min.css'
+                - '@LoginCidadaoCoreBundle/Resources/public/bootstrap/3.3.1/css/bootstrap-theme.min.css'
+                - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
+        lc_compact_layout_css:
+            inputs:
+                - '@bootstrap_css'
+                - 'bundles/bmatznerfontawesome/css/font-awesome.min.css'
+                - 'bundles/logincidadaocore/css/forms.css'
+                - 'bundles/logincidadaocore/css/compact/*.css'
+                - 'bundles/logincidadaocore/css/components/awesome-bootstrap-checkbox.css'
+                - 'bundles/procergslogincidadaocore/css/compact/*.css'
+        lc_task_email_validation_css:
+            inputs:
+                - '@lc_compact_layout_css'
+                - 'bundles/logincidadaocore/css/tasks/email-validation.css'
+        lc_login_register_css:
+            inputs:
+                - '@lc_compact_layout_css'
+                - 'bundles/logincidadaocore/css/login_register/*.css'
+                - 'bundles/procergslogincidadaocore/css/login_register/*.css'
+        lc_authorization_css:
+            inputs:
+                - '@lc_compact_layout_css'
+                - 'bundles/logincidadaocore/css/authorization/*.css'
+        lc_base_css:
+            inputs:
+                - '@bootstrap_css'
+                - 'bundles/logincidadaocore/css/general.css'
+                - 'bundles/logincidadaocore/css/navbar.css'
+                - 'bundles/logincidadaocore/css/ac.widget.css'
+                - 'bundles/logincidadaocore/css/common.grid.css'
+                - 'bundles/logincidadaocore/css/list.buttons.css'
+        lc_logged_css:
+            inputs:
+                - '@lc_base_css'
+                - 'bundles/logincidadaocore/css/logged/logged.css'
 
     filters:
         cssrewrite: ~
@@ -214,13 +234,6 @@ simple_things_entity_audit:
         - LoginCidadao\CoreBundle\Entity\SentEmail
         - LoginCidadao\CoreBundle\Entity\State
 
-        - LoginCidadao\NotificationBundle\Entity\Broadcast
-        - LoginCidadao\NotificationBundle\Entity\Category
-        - LoginCidadao\NotificationBundle\Entity\Notification
-        - LoginCidadao\NotificationBundle\Entity\NotificationToken
-        - LoginCidadao\NotificationBundle\Entity\PersonNotificationOption
-        - LoginCidadao\NotificationBundle\Entity\Placeholder
-
         - LoginCidadao\OAuthBundle\Entity\AccessToken
         - LoginCidadao\OAuthBundle\Entity\AuthCode
         - LoginCidadao\OAuthBundle\Entity\Client
@@ -265,7 +278,7 @@ parameters:
     lc_public_scopes_oidc: 'openid sub name given_name family_name full_name preferred_username picture email email_verified birthdate phone_number address updated_at'
     lc_public_scopes_oauth2: 'public_profile username first_name last_name full_name cpf city public_profile country state addresses id_cards mobile logout'
     lc_public_scopes: %lc_public_scopes_oidc% %lc_public_scopes_oauth2%
-    lc_reserved_scopes: 'get_all_notifications notifications voter_registration'
+    lc_reserved_scopes: 'voter_registration'
     lc_supported_scopes: %lc_public_scopes% %lc_reserved_scopes%
     lc_idcard_country_acronym: BR
 
@@ -273,12 +286,10 @@ parameters:
     organization.class: LoginCidadao\OAuthBundle\Entity\Organization
     oauth_client.class: LoginCidadao\OAuthBundle\Entity\Client
 
-ewz_recaptcha:
-    public_key:   %recaptcha_public_key%
-    private_key:  %recaptcha_private_key%
-    secure:       true
-    locale_key:   kernel.default_locale
-    http_proxy: %http_proxy%
+beelab_recaptcha2:
+    request_method: curl_post
+    site_key: "%recaptcha_public_key%"
+    secret: "%recaptcha_private_key%"
 
 # Uploader
 knp_gaufrette:
@@ -433,6 +444,8 @@ nelmio_security:
                 - 'https://www.google-analytics.com/'
                 - 'http://browser-update.org/'
                 - 'https://www.google.com/'
+                - 'https://www.gstatic.com/recaptcha/'
+                - 'http://www.google.com/recaptcha/'
                 - 'unsafe-inline'
                 - 'unsafe-eval'
                 - 'self'
@@ -460,6 +473,8 @@ nelmio_security:
                 - 'https://www.google-analytics.com/'
                 - 'http://browser-update.org/'
                 - 'https://www.google.com/'
+                - 'https://www.gstatic.com/recaptcha/'
+                - 'http://www.google.com/recaptcha/'
                 - 'https://ajax.googleapis.com/'
                 - 'unsafe-inline'
                 - 'unsafe-eval'
@@ -501,3 +516,6 @@ services:
 
 donato_path_well:
     enabled: '%check_pathwell_topologies%'
+
+login_cidadao_tos:
+    use_tasks: true

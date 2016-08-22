@@ -80,7 +80,6 @@ class JobsController extends Controller
                         ->setEmailExpiration(null)
                         ->setPreviousValidEmail(null)
                         ->setConfirmationToken(null);
-                    $this->get('notifications.helper')->clearUnconfirmedEmailNotification($person);
                     $this->get('fos_user.user_manager')->updateUser($person);
                 }
             }

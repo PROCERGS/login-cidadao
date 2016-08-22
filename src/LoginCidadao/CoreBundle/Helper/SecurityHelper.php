@@ -2,6 +2,9 @@
 
 namespace LoginCidadao\CoreBundle\Helper;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Routing\RouterInterface;
 use LoginCidadao\APIBundle\Entity\ActionLogRepository;
@@ -12,6 +15,9 @@ class SecurityHelper
     /** @var AuthorizationCheckerInterface */
     private $authChecker;
 
+    /** @var TokenStorage */
+    private $tokenStorage;
+
     /** @var ActionLogRepository */
     private $actionLogRepo;
 
@@ -21,15 +27,23 @@ class SecurityHelper
     /** @var RouterInterface */
     private $router;
 
-    public function __construct(AuthorizationCheckerInterface $authChecker,
-                                ActionLogRepository $actionLogRepo,
-                                ExtremeNotificationsHelper $extremeNotificationsHelper,
-                                RouterInterface $router)
-    {
-        $this->authChecker                = $authChecker;
-        $this->actionLogRepo              = $actionLogRepo;
+    /** @var string */
+    private $cookieRememberMeName;
+
+    public function __construct(
+        AuthorizationCheckerInterface $authChecker,
+        TokenStorage $tokenStorage,
+        ActionLogRepository $actionLogRepo,
+        ExtremeNotificationsHelper $extremeNotificationsHelper,
+        RouterInterface $router,
+        $cookieRememberMeName
+    ) {
+        $this->authChecker = $authChecker;
+        $this->tokenStorage = $tokenStorage;
+        $this->actionLogRepo = $actionLogRepo;
         $this->extremeNotificationsHelper = $extremeNotificationsHelper;
-        $this->router                     = $router;
+        $this->router = $router;
+        $this->cookieRememberMeName = $cookieRememberMeName;
     }
 
     public function getLoggedInUserLevel()
@@ -79,6 +93,7 @@ class SecurityHelper
             'ROLE_USER' => 0,
         );
         arsort($map);
+
         return $map;
     }
 
@@ -93,8 +108,28 @@ class SecurityHelper
         $url = $this->router->generate('lc_admin_impersonation_report_index');
 
         $parameters = array('%url%' => $url, '%count%' => $count);
-        $message    = 'admin.impersonation_report.pending.notification';
+        $message = 'admin.impersonation_report.pending.notification';
         $this->extremeNotificationsHelper
             ->addTransChoice($message, $count, $parameters);
+    }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
+    public function logout(Request $request, Response $response)
+    {
+        $this->tokenStorage->setToken(null);
+        $request->getSession()->invalidate();
+
+        $cookieNames = [
+            $this->cookieRememberMeName,
+        ];
+        foreach ($cookieNames as $cookieName) {
+            $response->headers->clearCookie($cookieName);
+        }
+
+        return $response;
     }
 }

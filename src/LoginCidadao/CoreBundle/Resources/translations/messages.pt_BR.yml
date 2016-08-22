@@ -1,13 +1,8 @@
-Hello!: Olá!
-Welcome!: Bem-vindo!
-'Welcome to the Citizen''s Login service.': 'Seja bem-vindo ao Login Cidadão.'
-'Here you''ll find all you need to know about the service.': 'Aqui você encontrará tudo que você precisa saber sobre esse serviço.'
-'You might start by logging in or %link_start%registering%link_end%.': 'Você pode começar acessando o sistema ou %link_start%cadastrando-se%link_end%.'
 security.login.username: 'Email ou CPF'
+security.login.username.placeholder: 'Digite seu email'
 security.login.password: Digite sua senha
 security.login.remember_me: 'Lembrar meus dados'
 security.login.submit: Entrar
-'Welcome %user.name%': 'Bem-vindo, %user.name%'
 scope.id: 'Identificador Único'
 scope.username: Username
 scope.name: Nome
@@ -20,28 +15,19 @@ scope.city: Cidade
 scope.badges: Medalhas
 scope.picture: Foto
 scope.public_profile: 'Perfil Público'
-scope_details.public_profile: São informações do perfil público o seu primeiro nome, sua faixa etária e seus certificados (medalhas)
-scope.get_all_notifications: 'Ler suas Notificações'
-scope.notifications: 'Enviar Notificações'
-'Authorized Applications': 'Aplicativos Autorizados'
-'Description:': 'Descrição:'
-'Access scope:': 'Escopo de acesso:'
+scope_details.public_profile: Primeiro nome e faixa etária
 'Revoke Access': 'Revogar Acesso'
 'Visit Site': 'Visitar Site'
 'Click again to confirm': 'Clique para confirmar'
 'Please, wait...': 'Por favor, aguarde...'
 Revoked: Revogado
-'Available Applications and Sites': 'Sites e Aplicativos Disponíveis'
 'Authorization successfully revoked.': 'Autorização revogada com sucesso.'
 'Authorization not found.': 'Autorização não encontrada.'
-'Captcha is invalid.': 'Captcha invalido.'
 'Wasn''t possible to disable this service.': 'Não foi possível desativar este serviço.'
 'Access Denied.': 'Acesso negado.'
 'Citizen''s Login': 'Login Cidadão'
-'One account. All the Government.': 'Um cadastro. Acesso por todo o Governo'
 '%link_start%Create your account%link_end%': '%link_start%Crie seu Login Cidadão%link_end%'
 'Sign in with your Citizen''s Login': 'Acesse com seu Login Cidadão'
-'One account. All that the Government offers.': 'Uma conta. Tudo o que o Governo oferece.'
 'Need help?': 'Não consegue conectar?'
 'One account to all of the Government''s services': 'Uma conta única para todos os serviços do Governo'
 'Available services': 'Serviços disponíveis'
@@ -49,8 +35,6 @@ Revoked: Revogado
 Help: Ajuda
 'Logo Nota Fiscal Gaúcha': 'Logo Nota Fiscal Gaúcha'
 'We''re almost done!': 'Quase pronto!'
-'Your account is created, but we recommend you choose a better username.': 'Sua conta foi criada, mas recomendamos que escolha um nome de usuário melhor.'
-'Your username will be used to quickly refer to yourself on Citizen''s Login, just like Twitter''s @ replies.': 'Seu nome de usuário será usado para se referir a você rapidamente no Login Cidadão, da mesma forma que as citações com @ do Twitter.'
 'Username:': 'Username:'
 Save: Salvar
 'You''ll need a password': 'Você precisa de uma senha'
@@ -58,7 +42,6 @@ Save: Salvar
 'Type in your password here:': 'Digite sua senha aqui:'
 'And then confirm it here:': 'E confirme ela aqui:'
 'Save username and password': 'Salvar nome de usuário e senha'
-'We''ll also need you to type your email address, since Twitter didn''t tell it to us.': 'Nós também precisaremos que você digite seu email, já que o Twitter não repassa essa informação.'
 'Email:': 'Email:'
 'The email is already used': 'Este email já está sendo usado'
 'The username is already used': 'Este nome de usuário já está sendo usado'
@@ -69,9 +52,6 @@ CPF: CPF
 CEP: CEP
 'To confirm your change, type your current password below:': 'Para confirmar suas alterações, digite sua senha atual abaixo:'
 'Current password:': 'Senha atual:'
-'Authorize <strong>%client_name%</strong> to access your information?': 'Permitir que <strong>%client_name%</strong> acesse suas informações?'
-'<strong>%client_name%</strong> will be granted the following information and permissions:': 'As seguintes informações e permissões serão fornecidas para <strong>%client_name%</strong>:'
-'About <strong>%client_name%</strong>': 'Sobre <strong>%client_name%</strong>'
 'Edit profile': 'Editar informações'
 cpf_reminder.subject: 'Você não tem um CPF associado no Login Cidadão'
 cpf_reminder.message: "Olá, %name%\n\nNós notamos que sua conta não tem um CPF associado a ela ainda.\n\nPor favor, visite o Login Cidadão até o dia %date% para completar essa informação. Após essa data, sua conta poderá ser suspensa.\n"
@@ -91,7 +71,6 @@ Inactive: Inativo
 'Your login': 'Seu login'
 Profile: Perfil
 Services: Serviços
-Notifications: Notificações
 'Change password': 'Alterar senha'
 Settings: Configurações
 Situation: 'Situação do cadastro'
@@ -101,11 +80,8 @@ Applications: Aplicativos
 'Your account is created, but you must have a CPF.': 'A sua conta foi criada, mas você precisa de um CPF.'
 'Your CPF will give some realibility to your account.': 'Seu CPF vai dar mais confiabilidade ao seu cadastro.'
 'Change Username': 'Alterar nome de usuário'
-'You don''t have any unread notification.': 'Você não tem notificações não lidas.'
-'You don''t have any notifications yet.': 'Você ainda não possui notificações'
 'Change username': 'Alterar nome de usuário'
 'Updated username successfully!': 'Nome de usuário alterado com sucesso!'
-'View all notifications': 'Ver todas notificações'
 email-confirmation.resent: 'As instruções para confirmação de email foram reenviadas.'
 notification.unconfirmed.email.title: 'Email não confirmado!'
 notification.unconfirmed.email.shortText: 'Caso não confirme seu email em prazo hábil, sua conta será removida. Siga as instruções enviadas por email. <a href="%url%">Reenviar email</a>'
@@ -173,13 +149,6 @@ Send: Enviar
 'Login Cidadão': 'Login Cidadão'
 'About Citizen''s Login': 'Sobre o Login Cidadão'
 'This service is not available yet. Stay tuned for the launch date.': 'Esse serviço ainda não está ativo. Aguarde a data de lançamento.'
-recaptcha.instructions.image: 'Digite o texto:'
-recaptcha.instructions.audio: 'Digite o que você ouve:'
-recaptcha.instructions.new.challenge: 'Obter um novo desafio'
-recaptcha.instructions.new.image: 'Obter um desafio visual'
-recaptcha.instructions.new.audio: 'Obter um desafio de áudio'
-recaptcha.instructions.help: 'Ajuda'
-recaptcha.instructions.img: 'Imagem de desafio reCAPTCHA'
 'With only one account, the citizen will be able to use government''s digital services.': 'Com apenas um cadastro, o cidadão poderá utilizar os serviços digitais do governo.'
 'One account. The entire Government.': 'Uma conta. O Governo Inteiro.'
 'Creative commons': Licença creative commons
@@ -505,7 +474,6 @@ scope.cep: 'CEP'
 scope.mobile: 'Celular'
 Category : 'Categoria'
 Categorys : 'Categorias'
-'Config notifications' : 'Configurar notificações'
 Default: 'Valor padrão'
 'Default icon': 'Icone padrão'
 'Default title': 'Titulo padrão'
@@ -566,10 +534,8 @@ Add: Adicionar
 Are you sure you want to remove this ID Card?: Você tem certeza que deseja remover este Documento de Identidade?
 Click here to <strong>add an ID Card</strong>: Clique aqui para <strong>adicionar um Documento de Identidade</strong>
 Two-Factor Authentication: Autenticação por Dois Fatores
-Enter the code generated by your code generator device.: Digite o código gerado pelo seu dispositivo gerador de códigos.
 Authentication Code: Código de Autenticação
-View this notification on Citizen Login: Abra essa notificação no Login Cidadão
-'Postal code' : 'Código postal'
+'Postal code': 'Código postal'
 scope.id_cards : 'Documentos de Identidade'
 scope.state: 'Estado'
 scope.addresses: 'Endereços'
@@ -745,8 +711,8 @@ organizations:
                 attention: Atenção!
                 text: Esse serviço está sendo oferecido por uma organização não verificada. Confira, a seguir, as informações dessa organização antes de autorizar.
             info:
-                provided_by: Esse serviço é oferecido por <strong>%name%</strong> (<a class="text-danger">%domain%</a> %label%)
-                warn_trust: Autorize apenas se você confia na organização <strong>%name%</strong>
+                provided_by: Esse serviço é oferecido por <strong>%name%</strong> (<a class="text-danger">%domain%</a> %label%).
+                warn_trust: Autorize apenas se você confia nessa organização.
                 domain_verified: Domínio Verificado
                 domain_not_verified: Domínio não Verificado
                 no_organization:
@@ -814,9 +780,74 @@ admin:
         list: 'Gerenciar pessoas'
         list.title:  'Busca de pessoas'
 force_password_change:
+    title: Atualize sua senha para continuar
     description: Por favor, atualize sua senha para melhorar a segurança de sua conta.
+    submit: Salvar
 invalidate_sessions:
     title: Desconectar Todas Sessões
     description: Ao acionar o botão a seguir, todas suas sessões serão descontectadas. Se você esqueceu sua conta conectada em um computador, por exemplo, você pode usar essa funcionalidade para garantir que ninguém consiga usar essa conexão para acessar sua conta.
     form.button: Desconectar Todas Sessões
-2fa.collapse: Exibir Opções
+2fa:
+    auth:
+        title: Autenticação por Dois Fatores
+        ask_code: Digite o código gerado pelo seu dispositivo gerador de códigos.
+        label: Código de Autenticação
+        placeholder: Código de Autenticação
+    collapse: Exibir Opções
+home:
+    register.button: Cadastre-se
+    login.button: Entrar
+    3rd_party.call_to_action: Entre usando
+compact.logout.button: Sair
+person.form:
+    firstName:
+        label: Nome
+        placeholder: Digite seu nome
+    surname:
+        label: Sobrenome
+        placeholder: Digite seu sobrenome
+    cpf:
+        placeholder: Digite seu CPF
+    birthdate.placeholder: dd/mm/aaaa
+    mobile.placeholder: Digite seu telefone celular
+tasks.confirm_email:
+    title: Confirme seu email para continuar
+    body: Um email foi enviado para o endereço informado em seu cadastro. Abra esse email e clique no botão de confirmação presente na mensagem.
+    resend:
+        title: Não recebeu?
+        body: Já verificou até mesmo em sua caixa de spam e não encontrou a mensagem? Não se preocupe, você pode reenviar essa mensagem clicando no botão logo abaixo.
+        button: Reenviar Email
+        before:
+            title: Já vamos enviar seu email
+            body: Antes de reenviar, por favor confirme se o endereço a seguir está correto e corrija se necessário.
+            button: Enviar Email de Verificação
+    resent.alert: Mensagem reenviada
+    success.alert: Email verificado com sucesso!
+Close: Fechar
+resetting.request.title: Recuperação de Senha
+resetting.request.description: Para alterar sua senha, digite seu email ou CPF a seguir e lhe enviaremos um email com instruções para criação de uma nova senha.
+resetting.request.invalid_username: '"%username%" não está cadastrado.'
+resetting.request.username.label: 'Email ou CPF:'
+resetting.request.username.placeholder: Digite seu email Email ou CPF
+resetting.request.submit: Recuperar senha
+resetting.check_email: Foi enviado um email com instruções para recuperação de senha para o endereço cadastrado. Acesse seu email e clique no link presente na mensagem enviada.
+resetting.reset.title: Criando Nova Senha
+resetting.reset.description: Preencha os campos a seguir para criar uma nova senha para sua conta.
+resetting.reset.submit: Alterar senha
+openid.session.end:
+    title:
+    logging_out: Sua sessão está sendo encerrada.
+    logged_out: Sua sessão foi encerrada.
+    not_logged_out: Sua sessão <strong>não</strong> foi encerrada.
+    continue_to: Você continuará para <strong>%host%</strong>
+    submit: Continuar
+    home_button: Ir para a página inicial
+    invalid_id_token: Requisição inválida. O ID Token informado não é válido.
+    client:
+        logging_out: <strong>%client%</strong> está encerrando sua sessão.
+        logged_out: Sua sessão foi encerrada por <strong>%client%</strong>
+        not_logged_out: Sua sessão <strong>não</strong> foi encerrada por <strong>%client%</strong>
+authorization:
+    title: Permitir que <strong>%client_name%</strong> acesse suas informações?
+    description: 'As seguintes informações e permissões serão fornecidas:'
+    about: 'Sobre <strong>%client_name%</strong>'

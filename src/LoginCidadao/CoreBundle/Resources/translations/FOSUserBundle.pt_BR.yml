@@ -37,13 +37,8 @@ form.phone.example: (51) 99999-9999
 form.mobile: Celular
 form.mobile.example: (51) 99999-9999
 resseting.forgot_password: 'Esqueceu sua senha?'
-resetting.request.invalid_username: 'O CPF, nome de usuário ou email "%username%" não está cadastrado.'
-resetting.request.username: 'Email ou CPF'
-resetting.request.submit: 'Recuperar senha'
-resetting.check_email: 'Foi enviado um email para %email%. Para recuperar a sua senha, clique no link da mensagem.'
 resetting.email.subject: 'Redefinir senha'
 resetting.email.message: 'Alguém solicitou recentemente para redefinir sua senha do Login Cidadão. Se você não fez essa solicitação, apenas ignore essa mensagem.'
-resetting.reset.submit: 'Alterar senha'
 resetting.password_already_requested: 'Este usuário já solicitou uma senha nas últimas 24 horas.'
 change_password.submit: 'Alterar senha'
 change_password.flash.success: 'Senha alterada com sucesso!'
@@ -84,7 +79,6 @@ registration.email.click: 'Confirmar Email'
 'By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.': 'Ao clicar em criar conta, você concorda com a <a href="%linkTerms%">Privacidade e Termos de uso</a> do serviço, incluindo nosso uso de cookies.'
 'Do you really want to unlink <strong class="social-network-name"></strong>?': 'Tem certeza que deseja desvincular sua conta do <strong class="social-network-name"></strong>?'
 Yes: Sim
-'Connect to the Nota Fiscal Gaúcha': 'Conectar à Nota Fiscal Gaúcha'
 'Continue Registration': 'Continuar Cadastro'
 facebook.token.error: 'Aparentemente houve um erro na autenticação com o Facebook. Por favor, tente logar novamente!'
 facebook.nousername: 'Conectado ao Facebook'
@@ -104,5 +98,6 @@ Use your Facebook picture: Usar sua foto do Facebook
 Remove your picture: Remover foto do perfil
 Your profile picure will be changed to <strong></strong>: Sua foto de perfil será trocada para <strong></strong>
 Your Facebook profile picure will be used.: Sua foto de perfil do Facebook será usada.
-form.register.call_to_action: Quero me cadastrar
-form.login.call_to_action: Já tenho cadastro
+form.register.call_to_action: Cadastre-se aqui
+form.login.call_to_action: Entrar no Login Cidadão
+person.form.birthdate.placeholder: dd/mm/aaaa

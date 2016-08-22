@@ -13,21 +13,20 @@ parameters:
     lc.person_doc.form.class: LoginCidadao\CoreBundle\Form\Type\DocFormType
     lc.user_provider.class: LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
     lc.user_manager.class: LoginCidadao\CoreBundle\Security\User\Manager\UserManager
-    lc.user_register.class: LoginCidadao\CoreBundle\EventListener\RegisterListner
-    lc.profile_edit.class: LoginCidadao\CoreBundle\EventListener\ProfileEditListner
+    lc.user_register.class: LoginCidadao\CoreBundle\EventListener\RegisterListener
+    lc.profile_edit.class: LoginCidadao\CoreBundle\EventListener\ProfileEditListener
     lc.change.password.listener.class: LoginCidadao\CoreBundle\EventListener\ChangePasswordListener
     lc.resetting.listener.class: LoginCidadao\CoreBundle\EventListener\ResettingListener
     lc.mailer.class: LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer
     kernel.listener.logged_in_user_listener.class: LoginCidadao\CoreBundle\EventListener\LoggedInUserListener
     kernel.listener.exceptions_listener.class: LoginCidadao\CoreBundle\EventListener\ExceptionListener
-    lc.notification.subscriber.class: LoginCidadao\CoreBundle\EventListener\NotificationsSubscriber
 
     lc.emailChanged.template: LoginCidadaoCoreBundle:Person:emailChangedMessage.html.twig
     lc.notification.email.template: LoginCidadaoCoreBundle:Email:notification.html.twig
 
     lc.postalcode.search.form.type.class: LoginCidadao\CoreBundle\Form\Type\SearchPostalCodeFormType
 
-    lc.person.serialize.listenner.class: LoginCidadao\CoreBundle\EventListener\PersonSerializeEventListenner
+    lc.person.serialize.listenner.class: LoginCidadao\CoreBundle\EventListener\PersonSerializeEventListener
 
     lc.idcard.form.class: LoginCidadao\CoreBundle\Form\Type\IdCardType
     lc.security.helper.class: LoginCidadao\CoreBundle\Helper\SecurityHelper
@@ -43,9 +42,10 @@ services:
     security.authentication.success_handler:
         class: %security.authentication.success_handler.class%
         public: false
-        arguments: ["@router", [], "@doctrine.orm.entity_manager", "@session", "@security.http_utils", "@notifications.helper"]
-        calls:
-            - [setContainer, ["@service_container"]]
+        arguments:
+            - "@security.http_utils"
+            - "@doctrine.orm.entity_manager"
+            - []
 
     fos_facebook.user.login:
         class: %fos_facebook.user.login.class%
@@ -63,7 +63,9 @@ services:
 
     lc.person.registration.form.type:
         class: %lc.person.registration.form.type.class%
-        arguments: [%fos_user.model.user.class%]
+        arguments:
+            - "%fos_user.model.user.class%"
+            - "@session"
         tags:
             - { name: form.type, alias: lc_person_registration }
 
@@ -130,7 +132,17 @@ services:
 
     lc.user_register:
         class: %lc.user_register.class%
-        arguments: ["@router", "@session", "@translator", "@fos_user.mailer", "@fos_user.util.token_generator", "@notifications.helper", "%registration.email.unconfirmed_time%", "%lc_supported_scopes%", "@lc.notification.handler" ]
+        arguments:
+            - "@router"
+            - "@session"
+            - "@translator"
+            - "@fos_user.mailer"
+            - "@fos_user.util.token_generator"
+            - "@lc.register_requested_scope"
+            - "@lc.client.repository"
+            - "%registration.email.unconfirmed_time%"
+            - "%lc_supported_scopes%"
+            - "%oauth_default_client.uid%"
         tags:
             - { name: kernel.event_subscriber }
         calls:
@@ -145,7 +157,6 @@ services:
             - "@router"
             - "@session"
             - "@security.token_storage"
-            - "@notifications.helper"
             - %registration.email.unconfirmed_time%
         tags:
             - { name: kernel.event_subscriber }
@@ -166,7 +177,6 @@ services:
         class: %lc.change.password.listener.class%
         arguments:
             - "@router"
-            - "@notifications.helper"
             - "@session"
             - %default_password_encoder%
         tags:
@@ -190,8 +200,9 @@ services:
             - "@router"
             - "@session"
             - "@translator"
-            - "@doctrine.orm.entity_manager"
-            - %default_password_encoder%
+            - "@lc.intent.manager"
+            - "%default_password_encoder%"
+            - "%require_email_validation%"
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
@@ -294,12 +305,6 @@ services:
         tags:
             - { name: form.type, alias: lc_idcard_form }
 
-    lc.notification.subscriber:
-        class: %lc.notification.subscriber.class%
-        arguments: [ "@lc.notification.handler", "@lc.mailer" ]
-        tags:
-            - { name: kernel.event_subscriber }
-
     lc.feature_hierarchy.voter:
         class: %security.access.role_hierarchy_voter.class%
         arguments: [ "@security.role_hierarchy", 'FEATURE_' ]
@@ -310,9 +315,11 @@ services:
         class: %lc.security.helper.class%
         arguments:
             - "@security.authorization_checker"
+            - "@security.token_storage"
             - "@lc.action_log.repository"
             - "@lc.extreme_notifications.helper"
             - "@router"
+            - "%session.remember_me.name%"
 
     account.security_listener:
         class: %account.security_listener.class%
@@ -371,3 +378,54 @@ services:
         arguments:
             - "@session"
             - "@translator"
+
+    lc.check_deploy_subscriber:
+        class: LoginCidadao\CoreBundle\EventListener\CheckDeployEventSubscriber
+        arguments:
+            - "@cache"
+            - "@doctrine.orm.entity_manager"
+            - '%oauth_default_client.uid%'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    lc.register_requested_scope:
+        class: LoginCidadao\CoreBundle\Service\RegisterRequestedScope
+
+    lc.intent.manager:
+        class: LoginCidadao\CoreBundle\Service\IntentManager
+
+    lc.login_entry_point:
+        class: LoginCidadao\CoreBundle\EventListener\LoginEntryPoint
+        arguments:
+            - "@security.http_utils"
+            - "@lc.register_requested_scope"
+            - "@lc.intent.manager"
+
+    lc.invalidate_session_request.repository:
+        myrepository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - LoginCidadao\CoreBundle\Entity\InvalidateSessionRequest
+
+    lc.tasks.subscriber:
+        class: LoginCidadao\CoreBundle\EventListener\TaskSubscriber
+        arguments:
+            - "@security.token_storage"
+            - "@security.authorization_checker"
+            - "@security.http_utils"
+            - "@lc.invalidate_session_request.repository"
+            - "%require_email_validation%"
+            - "%default_password_encoder%"
+        tags:
+            - { name: kernel.event_subscriber }
+
+    lc.form.type.tel:
+        class: LoginCidadao\CoreBundle\Form\Type\TelType
+        tags:
+            - { name: form.type, alias: tel }
+
+    lc.form.type.birthday_tel:
+        class: LoginCidadao\CoreBundle\Form\Type\BirthdayTelType
+        tags:
+            - { name: form.type, alias: birthday_tel }

@@ -28,3 +28,14 @@ services:
     session.handler.memcached:
         class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcacheSessionHandler
         arguments: ["@session.memcached", { prefix: %session_prefix%, expiretime: %session_lifetime% } ]
+
+    memcached:
+        class: Memcache
+        calls:
+            - [ addServer, [ '%memcached_host%', '%memcached_port%' ]]
+
+    cache:
+        class: Doctrine\Common\Cache\MemcacheCache
+        calls:
+            - [setMemcache, ["@memcached"]]
+            - [setNamespace, ['%memcached_prefix%']]
