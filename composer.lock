@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "df52311736caebaf64a3b72bebe1c907",
-    "content-hash": "599e2fa851c1e7dff8844e74adb46dfa",
+    "hash": "0cc17c1e8ba450e6319c07db9804f5f3",
+    "content-hash": "7f4385bb0120cfdffbb3510a2e9afb99",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
-            "version": "v1.0.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Bee-Lab/BeelabRecaptcha2Bundle.git",
-                "reference": "68a3bba6ff1a23d05d9d6598d2f662f960046718"
+                "reference": "f0f566168739a38ab3828156496830702e7807b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Bee-Lab/BeelabRecaptcha2Bundle/zipball/68a3bba6ff1a23d05d9d6598d2f662f960046718",
-                "reference": "68a3bba6ff1a23d05d9d6598d2f662f960046718",
+                "url": "https://api.github.com/repos/Bee-Lab/BeelabRecaptcha2Bundle/zipball/f0f566168739a38ab3828156496830702e7807b1",
+                "reference": "f0f566168739a38ab3828156496830702e7807b1",
                 "shasum": ""
             },
             "require": {
@@ -62,7 +62,7 @@
                 "recaptcha",
                 "symfony"
             ],
-            "time": "2016-01-26 10:13:49"
+            "time": "2016-08-21 11:36:07"
         },
         {
             "name": "bmatzner/fontawesome-bundle",
@@ -5126,7 +5126,8 @@
         "knplabs/knp-gaufrette-bundle": 20,
         "knplabs/gaufrette": 20,
         "nelmio/api-doc-bundle": 20,
-        "bshaffer/oauth2-server-bundle": 20
+        "bshaffer/oauth2-server-bundle": 20,
+        "beelab/recaptcha2-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
