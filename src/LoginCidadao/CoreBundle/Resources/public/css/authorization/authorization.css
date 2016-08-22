@@ -1,0 +1,41 @@
+/*
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+.alert {
+    padding: 10px;
+}
+
+ul.permissions {
+    margin: 30px 0;
+}
+
+ul.permissions .popover {
+    font-size: 0.8em;
+}
+
+.buttons button {
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.authz-about-service {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #eee;
+    padding: 15px 10px;
+}
+
+.authz-about-service h2 {
+    margin-top: 0;
+    font-size: 16px;
+}
+
+.organization-status .label {
+    padding: 0.2em 0.1em 0.2em 0.3em;
+}

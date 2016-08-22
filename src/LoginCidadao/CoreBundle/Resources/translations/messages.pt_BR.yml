@@ -15,7 +15,7 @@ scope.city: Cidade
 scope.badges: Medalhas
 scope.picture: Foto
 scope.public_profile: 'Perfil Público'
-scope_details.public_profile: São informações do perfil público o seu primeiro nome, sua faixa etária e seus certificados (medalhas)
+scope_details.public_profile: Primeiro nome e faixa etária
 'Revoke Access': 'Revogar Acesso'
 'Visit Site': 'Visitar Site'
 'Click again to confirm': 'Clique para confirmar'
@@ -52,9 +52,6 @@ CPF: CPF
 CEP: CEP
 'To confirm your change, type your current password below:': 'Para confirmar suas alterações, digite sua senha atual abaixo:'
 'Current password:': 'Senha atual:'
-'Authorize <strong>%client_name%</strong> to access your information?': 'Permitir que <strong>%client_name%</strong> acesse suas informações?'
-'<strong>%client_name%</strong> will be granted the following information and permissions:': 'As seguintes informações e permissões serão fornecidas para <strong>%client_name%</strong>:'
-'About <strong>%client_name%</strong>': 'Sobre <strong>%client_name%</strong>'
 'Edit profile': 'Editar informações'
 cpf_reminder.subject: 'Você não tem um CPF associado no Login Cidadão'
 cpf_reminder.message: "Olá, %name%\n\nNós notamos que sua conta não tem um CPF associado a ela ainda.\n\nPor favor, visite o Login Cidadão até o dia %date% para completar essa informação. Após essa data, sua conta poderá ser suspensa.\n"
@@ -714,8 +711,8 @@ organizations:
                 attention: Atenção!
                 text: Esse serviço está sendo oferecido por uma organização não verificada. Confira, a seguir, as informações dessa organização antes de autorizar.
             info:
-                provided_by: Esse serviço é oferecido por <strong>%name%</strong> (<a class="text-danger">%domain%</a> %label%)
-                warn_trust: Autorize apenas se você confia na organização <strong>%name%</strong>
+                provided_by: Esse serviço é oferecido por <strong>%name%</strong> (<a class="text-danger">%domain%</a> %label%).
+                warn_trust: Autorize apenas se você confia nessa organização.
                 domain_verified: Domínio Verificado
                 domain_not_verified: Domínio não Verificado
                 no_organization:
@@ -850,3 +847,7 @@ openid.session.end:
         logging_out: <strong>%client%</strong> está encerrando sua sessão.
         logged_out: Sua sessão foi encerrada por <strong>%client%</strong>
         not_logged_out: Sua sessão <strong>não</strong> foi encerrada por <strong>%client%</strong>
+authorization:
+    title: Permitir que <strong>%client_name%</strong> acesse suas informações?
+    description: 'As seguintes informações e permissões serão fornecidas:'
+    about: 'Sobre <strong>%client_name%</strong>'

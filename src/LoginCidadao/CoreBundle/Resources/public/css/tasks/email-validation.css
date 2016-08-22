@@ -47,9 +47,3 @@
     text-transform: uppercase;
     font-weight: bold;
 }
-
-.task-email-validation .btn-danger.btn-outline {
-    color: #ac0000;
-    border-width: 2px;
-    border-color: #ac0000;
-}
