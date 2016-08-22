@@ -72,7 +72,7 @@
                             $('.email-validate-waiting').slideUp();
                             $('.email-validate-success').slideDown().promise().done(function () {
                                 alert("{{ 'tasks.confirm_email.success.alert' | trans }}");
-                                window.location = '{{ targetUrl }}';
+                                window.location = '{{ targetUrl | escape('js') }}';
                             });
                         }
                     }).fail(function () {

@@ -15,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AuthorizeController extends BaseController
 {
@@ -176,7 +177,11 @@ class AuthorizeController extends BaseController
 
         if ($metadata->getOrganization() === null && $metadata->getSectorIdentifierUri()) {
             $sectorIdentifierUri = $metadata->getSectorIdentifierUri();
-            $verified = $this->getSectorIdentifierUriChecker()->check($metadata, $sectorIdentifierUri);
+            try {
+                $verified = $this->getSectorIdentifierUriChecker()->check($metadata, $sectorIdentifierUri);
+            } catch (HttpException $e) {
+                $verified = false;
+            }
             $uri = parse_url($sectorIdentifierUri);
             $domain = $uri['host'];
 
