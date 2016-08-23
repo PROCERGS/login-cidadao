@@ -13,6 +13,7 @@ namespace LoginCidadao\OpenIDBundle\EventListener;
 use Doctrine\ORM\EntityManager;
 use LoginCidadao\CoreBundle\Event\GetClientEvent;
 use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
+use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Validator\SectorIdentifierUriChecker;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -65,6 +66,8 @@ class CoreEventsSubscriber implements EventSubscriberInterface
                 'client' => $event->getClient(),
             )
         );
-        $this->sectorIdentifierUriChecker->recheck($metadata);
+        if ($metadata instanceof ClientMetadata) {
+            $this->sectorIdentifierUriChecker->recheck($metadata);
+        }
     }
 }
