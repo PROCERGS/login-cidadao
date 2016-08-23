@@ -382,9 +382,10 @@ services:
     lc.check_deploy_subscriber:
         class: LoginCidadao\CoreBundle\EventListener\CheckDeployEventSubscriber
         arguments:
-            - "@cache"
             - "@doctrine.orm.entity_manager"
             - '%oauth_default_client.uid%'
+        calls:
+            - ["setCacheProvider", ["@?cache"]]
         tags:
             - { name: kernel.event_subscriber }
 
