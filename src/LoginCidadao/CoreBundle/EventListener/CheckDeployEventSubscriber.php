@@ -2,7 +2,7 @@
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
-use Doctrine\Common\Cache\MemcacheCache;
+use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\ORM\EntityManager;
 use LoginCidadao\CoreBundle\Entity\CityRepository;
 use LoginCidadao\OAuthBundle\Entity\Client;
@@ -15,7 +15,7 @@ class CheckDeployEventSubscriber implements EventSubscriberInterface
 {
     const CHECK_DEPLOY_KEY = 'check_deploy';
 
-    /** @var MemcacheCache */
+    /** @var CacheProvider */
     private $cache;
 
     /** @var CityRepository */
@@ -28,16 +28,22 @@ class CheckDeployEventSubscriber implements EventSubscriberInterface
     private $defaultClientUid;
 
     public function __construct(
-        MemcacheCache $cache,
         EntityManager $em,
         $defaultClientUid
     ) {
-
-
-        $this->cache = $cache;
         $this->cityRepository = $em->getRepository('LoginCidadaoCoreBundle:City');
         $this->clientRepository = $em->getRepository('LoginCidadaoOAuthBundle:Client');
         $this->defaultClientUid = $defaultClientUid;
+
+        $this->cache = null;
+    }
+
+    /**
+     * @param CacheProvider $cache
+     */
+    public function setCacheProvider(CacheProvider $cache = null)
+    {
+        $this->cache = $cache;
     }
 
     /**
@@ -52,7 +58,7 @@ class CheckDeployEventSubscriber implements EventSubscriberInterface
 
     public function checkDeploy(GetResponseEvent $event)
     {
-        if ($this->cache->contains(self::CHECK_DEPLOY_KEY)) {
+        if (null === $this->cache || $this->cache->contains(self::CHECK_DEPLOY_KEY)) {
             return;
         }
 
