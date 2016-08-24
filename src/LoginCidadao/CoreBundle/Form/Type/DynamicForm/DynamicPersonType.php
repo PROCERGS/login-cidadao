@@ -26,7 +26,8 @@ class DynamicPersonType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'LoginCidadao\CoreBundle\Entity\Person'
+            'data_class' => 'LoginCidadao\CoreBundle\Entity\Person',
+            'validation_groups' => ['Profile'],
         ));
     }
 
