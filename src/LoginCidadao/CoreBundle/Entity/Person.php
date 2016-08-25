@@ -788,17 +788,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         return $this->emailExpiration;
     }
 
-    public function setConfirmationToken($confirmationToken)
-    {
-        parent::setConfirmationToken($confirmationToken);
-
-        // fixes issue PROCERGS#428
-        // TODO: a setter shouldn't change another attribute!
-        if ($this->getConfirmationToken() !== null) {
-            $this->setEmailConfirmedAt(null);
-        }
-    }
-
     public function setFacebookUsername($facebookUsername)
     {
         $this->facebookUsername = $facebookUsername;
