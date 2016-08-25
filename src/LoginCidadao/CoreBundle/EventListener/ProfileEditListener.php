@@ -183,6 +183,7 @@ class ProfileEditListener implements EventSubscriberInterface
             // send confirmation token to new email
             $user->setConfirmationToken($this->tokenGenerator->generateToken());
             $user->setEmailExpiration(new \DateTime("+$this->emailUnconfirmedTime"));
+            $user->setEmailConfirmedAt(null);
             $this->fosMailer->sendConfirmationEmailMessage($user);
 
             $this->mailer->sendEmailChangedMessage($user, $this->email);
