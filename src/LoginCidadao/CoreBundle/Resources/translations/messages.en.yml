@@ -442,3 +442,6 @@ authorization:
     title: Authorize <strong>%client_name%</strong> to access your information?
     description: '<strong>%client_name%</strong> will be granted the following information and permissions:'
     about: 'About <strong>%client_name%</strong>'
+tasks.fill_email:
+    title: Informe um endereço de Email
+    body: O serviço usado para criar sua conta, %service%, não nos enviou seu endereço de email. Por favor, digite seu endereço a seguir para continuar.

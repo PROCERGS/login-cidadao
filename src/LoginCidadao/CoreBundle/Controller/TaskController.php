@@ -7,6 +7,7 @@ use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Util\TokenGenerator;
 use FOS\UserBundle\Event\GetResponseUserEvent;
+use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Service\IntentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,6 +21,9 @@ use Symfony\Component\Translation\TranslatorInterface;
 class TaskController extends Controller
 {
     /**
+     * @param Request $request
+     * @return array|null|\Symfony\Component\HttpFoundation\RedirectResponse|Response
+     *
      * @Route("/confirm-email", name="task_confirm_email")
      * @Template()
      */
@@ -87,6 +91,39 @@ class TaskController extends Controller
         }
 
         return ['targetUrl' => $targetUrl, 'form' => $form->createView()];
+    }
+
+    /**
+     * @param Request $request
+     * @param $service
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @Route("/register/fill-email/{service}", name="task_fill_email")
+     * @Template()
+     */
+    public function fillEmailAction(Request $request, $service)
+    {
+        $session = $request->getSession();
+        $userInfo = $session->get("$service.userinfo");
+
+        $person = new Person();
+        $person->setEmail($userInfo['email']);
+
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\EmailFormType', $person);
+
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $session->set("$service.email", $form->getData()->getEmail());
+
+            return $this->redirect(
+                $this->generateUrl(
+                    'hwi_oauth_service_redirect',
+                    array('service' => 'twitter')
+                )
+            );
+        }
+
+        return ['form' => $form->createView(), 'service' => $service];
     }
 
     private function resendEmailConfirmation(PersonInterface $person)

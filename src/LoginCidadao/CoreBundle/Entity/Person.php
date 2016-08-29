@@ -83,7 +83,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @Assert\NotBlank
      * @Assert\Length(
      *     min="1",
-     *     max="33",
+     *     max="40",
      *     groups={"Registration", "Profile"}
      * )
      * @JMS\Since("1.0")

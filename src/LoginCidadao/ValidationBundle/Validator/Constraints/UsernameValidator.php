@@ -11,14 +11,12 @@ class UsernameValidator extends ConstraintValidator
 {
 
     /**
-     * Currently only checks if the value is numeric.
-     *
-     * @param string $cep            
-     * @return boolean
+     * @param $var
+     * @return bool
      */
     public static function isUsernameValid($var)
     {
-        return preg_match('/^[A-Za-z0-9_.]+$/i', $var) && ($a = strlen($var)) && $a >= 1 && $a <= 33;
+        return preg_match('/^[A-Za-z0-9_.-]+$/i', $var) && ($a = strlen($var)) && $a >= 1 && $a <= 40;
     }
 
     public static function getValidUsername()

@@ -851,3 +851,6 @@ authorization:
     title: Permitir que <strong>%client_name%</strong> acesse suas informações?
     description: 'As seguintes informações e permissões serão fornecidas:'
     about: 'Sobre <strong>%client_name%</strong>'
+tasks.fill_email:
+    title: Informe um endereço de Email
+    body: O serviço usado para criar sua conta, %service%, não nos enviou seu endereço de email. Por favor, digite seu endereço a seguir para continuar.
