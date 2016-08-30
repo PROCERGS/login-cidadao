@@ -619,6 +619,18 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     }
 
     /**
+     * Get the full name of the user (first + last name)
+     * @JMS\Groups({"full_name", "name"})
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("name")
+     * @return string
+     */
+    public function getOIDCName()
+    {
+        return $this->getFullName();
+    }
+
+    /**
      * @JMS\Groups({"badges", "public_profile"})
      * @JMS\VirtualProperty
      * @JMS\SerializedName("deprecated_badges")
@@ -774,17 +786,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function getEmailExpiration()
     {
         return $this->emailExpiration;
-    }
-
-    public function setConfirmationToken($confirmationToken)
-    {
-        parent::setConfirmationToken($confirmationToken);
-
-        // fixes issue PROCERGS#428
-        // TODO: a setter shouldn't change another attribute!
-        if ($this->getConfirmationToken() !== null) {
-            $this->setEmailConfirmedAt(null);
-        }
     }
 
     public function setFacebookUsername($facebookUsername)
@@ -1268,7 +1269,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     }
 
     /**
-     * @JMS\Groups({"full_name"})
+     * @JMS\Groups({"full_name","name"})
      * @JMS\VirtualProperty
      * @JMS\SerializedName("family_name")
      */
