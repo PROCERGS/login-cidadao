@@ -1,9 +1,29 @@
 {% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
 
+{% set request_id = app.request.headers.get('X-Request-Id') %}
 {% block panel_body_class %}error-page{% endblock %}
 
 {% block panel_body %}
     <h1>{{ 'error.generic.title' | trans }}</h1>
 
-    <p>{{ 'error.generic.body' | trans({'%contact_url%': path('lc_contact', {'correlationId': app.request.headers.get('X-Request-Id') | e}) }) | raw }}</p>
+    <p>{{ 'error.generic.body' | trans({'%contact_url%': path('lc_contact', {'correlationId': request_id | e}) }) | raw }}</p>
+{% endblock %}
+
+{% block panel_footer %}
+    <dl>
+        <dt>X-Request-Id</dt>
+        <dd>{{ request_id }}</dd>
+    </dl>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts '@LoginCidadaoCoreBundle/Resources/public/js/components/egg.min.js' filter='?uglifyjs2' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+        new Egg("r,i,d", function() {
+            $('.panel-footer.hidden').removeClass('hidden');
+        }).listen();
+    </script>
 {% endblock %}
