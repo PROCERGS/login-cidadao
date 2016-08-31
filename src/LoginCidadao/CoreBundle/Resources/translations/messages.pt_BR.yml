@@ -852,8 +852,8 @@ authorization:
     description: 'As seguintes informações e permissões serão fornecidas:'
     about: 'Sobre <strong>%client_name%</strong>'
 error.generic:
-    title: Ocorreu um erro
-    body: Ocorreu um erro ao processar essa página. Caso esse seja um problema recorrente você pode <a href="%contact_url%">entrar em contato</a> para obter ajuda.
+    title: Ocorreu um erro 😞
+    body: Caso esse seja um problema recorrente você pode <a href="%contact_url%">entrar em contato</a> para obter ajuda.
 error.404:
     title: Página não encontrada
     body: A página solicitada não foi encontrada. Verifique se o endereço utilizado está correto e tente novamente.
