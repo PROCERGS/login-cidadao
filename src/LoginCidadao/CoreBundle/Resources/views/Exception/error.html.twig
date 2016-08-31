@@ -3,5 +3,5 @@
 {% block panel_body %}
     <h1>{{ 'error.generic.title' | trans }}</h1>
 
-    <p>{{ 'error.generic.body' | trans({'%contact_url%': '#'}) | raw }}</p>
+    <p>{{ 'error.generic.body' | trans({'%contact_url%': path('lc_contact', {'correlationId': app.request.headers.get('X-Request-Id') | e}) }) | raw }}</p>
 {% endblock %}
