@@ -443,7 +443,7 @@ authorization:
     description: '<strong>%client_name%</strong> will be granted the following information and permissions:'
     about: 'About <strong>%client_name%</strong>'
 error.generic:
-    title: Error
+    title: There was an error 😞
     body: There was an error processing this page. If this is a recurring problem you can <a href="%contact_url%">contact us</a> to get help.
 error.404:
     title: Page not found
