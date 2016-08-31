@@ -1,22 +1,7 @@
-{% extends 'LoginCidadaoCoreBundle::base.html.twig' %}
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
 
-{% block body %}
-    <div class="row">
-        <div class="col-xs-12 text-center header-shadows">
-            <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
-        </div>
-    </div>
+{% block panel_body %}
+    <h1>{{ 'error.generic.title' | trans }}</h1>
 
-    <div class="row">
-        <div id="page-not-found" class="general-content col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3 text-center">
-            <h3 class="title">{% trans %}Ops!{% endtrans %}</h3>
-            <p class="text">{% trans %}Page not found.{% endtrans %}</p>
-        </div>
-    </div>
-{% endblock body %}
-
-{% block stylesheets_custom %}
-    {% stylesheets '@lc_base_css' filter='cssrewrite' filter='?uglifycss' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+    <p>{{ 'error.generic.body' | trans({'%contact_url%': '#'}) | raw }}</p>
 {% endblock %}

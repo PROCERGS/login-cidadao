@@ -442,3 +442,9 @@ authorization:
     title: Authorize <strong>%client_name%</strong> to access your information?
     description: '<strong>%client_name%</strong> will be granted the following information and permissions:'
     about: 'About <strong>%client_name%</strong>'
+error.generic:
+    title: Error
+    body: There was an error processing this page. If this is a recurring problem you can <a href="%contact_url%">contact us</a> to get help.
+error.404:
+    title: Page not found
+    body: The requested page couldn't be located. Checkout for any URL misspelling.
