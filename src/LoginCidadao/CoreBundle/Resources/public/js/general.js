@@ -1,16 +1,3 @@
-// Fix navbar/settings nav position on small devices
-$(document).ready(function () {
-    var navbar = $('#lc-navbar');
-    var settingsNav = $(".settings-nav");
-    $(window).scroll(function () {
-        if (navbar.visible(true)) {
-            settingsNav.removeClass("top");
-        } else {
-            settingsNav.addClass("top");
-        }
-    })
-})
-
 if (typeof String.prototype.repeat !== 'function') {
     String.prototype.repeat = function (num) {
         return new Array(num + 1).join(this);

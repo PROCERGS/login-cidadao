@@ -133,3 +133,9 @@ footer ul.dashed > li:before {
     border-width: 2px;
     border-color: #ac0000;
 }
+
+.error-page h2 {
+    text-align: center;
+    font-size: 20px;
+    margin-top: 0;
+}

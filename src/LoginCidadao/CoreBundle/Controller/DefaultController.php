@@ -49,23 +49,27 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/contact", name="lc_contact")
+     * @Route("/contact/{correlationId}", defaults={"correlationId" = null}, name="lc_contact")
      * @Template()
      */
-    public function contactAction(Request $request)
+    public function contactAction(Request $request, $correlationId = null)
     {
         $form       = $this->createForm('contact_form_type');
         $form->handleRequest($request);
         $translator = $this->get('translator');
         $message    = $translator->trans('contact.form.sent');
         if ($form->isValid()) {
+            $emailMessage = $form->get('message')->getData();
+            if ($correlationId !== null) {
+                $emailMessage = "<p>$emailMessage</p><p>Correlation Id: {$correlationId}</p>";
+            }
             $email     = new SentEmail();
             $email
                 ->setType('contact-mail')
                 ->setSubject('Fale conosco - '.$form->get('firstName')->getData())
                 ->setSender($form->get('email')->getData())
                 ->setReceiver($this->container->getParameter('mailer_receiver_mail'))
-                ->setMessage($form->get('message')->getData());
+                ->setMessage($emailMessage);
             $mailer    = $this->get('mailer');
             $swiftMail = $email->getSwiftMail();
             if ($mailer->send($swiftMail)) {
