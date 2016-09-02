@@ -63,10 +63,14 @@ class TaskSubscriber implements EventSubscriberInterface
      */
     public function onGetTasks(GetTasksEvent $event)
     {
-        /** @var PersonInterface $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        try {
+            /** @var PersonInterface $user */
+            $user = $this->tokenStorage->getToken()->getUser();
 
-        if (!($user instanceof PersonInterface)) {
+            if (!($user instanceof PersonInterface)) {
+                return;
+            }
+        } catch (\Exception $e) {
             return;
         }
 
