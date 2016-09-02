@@ -15,6 +15,10 @@ Debug::enable();
 require_once __DIR__.'/../app/AppKernel.php';
 
 $kernel = new AppKernel('dev', true);
+
+$generator = new \Qandidate\Stack\UuidRequestIdGenerator();
+$stack = new \Qandidate\Stack\RequestId($kernel, $generator);
+
 $kernel->loadClassCache();
 
 try {
@@ -37,6 +41,6 @@ if (!IpUtils::checkIp($clientIp, $allowed)) {
     exit("You ($clientIp) are not allowed to access this file.");
 }
 
-$response = $kernel->handle($request);
+$response = $stack->handle($request);
 $response->send();
 $kernel->terminate($request, $response);

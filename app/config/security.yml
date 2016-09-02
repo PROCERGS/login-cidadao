@@ -159,6 +159,8 @@ security:
         - { path: ^/admin, role: [ROLE_SUPER], requires_channel: https }
         - { path: ^/dev, role: [ROLE_DEV], requires_channel: https }
 
+        - { path: ^/_error, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+
         - { path: ^/api/v1/address/(cities|states|countries)/search, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/api/v1/address/cities/prefetch, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/api/v1/public/lc_consultaCep2, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

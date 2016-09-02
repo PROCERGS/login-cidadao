@@ -56,12 +56,14 @@
         "guilhermednt/pathwell-bundle": "^0.1",
         "beelab/recaptcha2-bundle": "dev-master",
         "bmatzner/fontawesome-bundle": "^4.6",
+        "qandidate/stack-request-id": "^0.4.0",
         "paragonie/random_compat": "1.4.*",
         "procergs/meurs-monitor-bundle": "^1.0",
         "procergs/nfg-badges-bundle": "^1.1"
     },
     "require-dev": {
-        "sensio/generator-bundle": "~2.3"
+        "sensio/generator-bundle": "~2.3",
+        "phpunit/phpunit": "^4.8"
     },
     "scripts": {
         "post-root-package-install": [
