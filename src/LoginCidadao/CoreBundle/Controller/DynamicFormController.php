@@ -604,12 +604,9 @@ class DynamicFormController extends Controller
         if ($intentManager->hasIntent($request)) {
             $intent = $intentManager->consumeIntent($request);
 
-            var_dump($this->getSkipUrl($intent));
-            die();
-
             return $this->redirect($this->getSkipUrl($intent));
         } else {
-            throw new BadRequestHttpException();
+            return $this->redirectToRoute('lc_dashboard');
         }
     }
 }
