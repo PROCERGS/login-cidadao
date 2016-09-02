@@ -843,6 +843,10 @@ dynamic_form:
     submit:
         label: 'Depois de completar suas informações, clique no botão a seguir para continuar:'
         button: Salvar
+    skip:
+        open_warning: Pular etapa
+        warning: Se você escolher pular essa etapa agora, é possível que o serviço acessado solicite essas informações novamente ou negue seu acesso. Além disso, vamos sugerir essa etapa novamente a cada acesso.
+        confirm: Pular mesmo assim
     email_verification:
         body: <strong>%client%</strong> precisa que você possua um email validado antes de continuar.
         how_to: Validar seu endereço de email é bastante fácil e rápido. Você só precisa clicar no link ou botão no email que lhe enviamos.

@@ -434,6 +434,10 @@ dynamic_form:
     submit:
         label: 'After completing your information, click the following button to continue:'
         button: Save
+    skip:
+        open_warning: Skip this step
+        warning: If you chose to skip this step now, it is possible that the service you are trying to access will ask you again for this information or will deny your access. Also, we'll keep suggesting this step on each new access.
+        confirm: Skip anyway
     email_verification:
         body: <strong>%client%</strong> requires that you have a validated email in order to proceed.
         how_to: Validating your email address is pretty simple and fast. You just have to click the link or button in the email we sent you.

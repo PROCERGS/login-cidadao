@@ -74,7 +74,16 @@
 
         <p>{{ 'dynamic_form.submit.label' | trans }}</p>
         <input type="submit" value="{{ 'dynamic_form.submit.button' | trans }}" class="btn btn-block btn-success">
-        <a href="{{ form.vars.value.redirectUrl }}" class="btn btn-link skip">Skip</a>
+
+        <a href="{{ skipUrl }}"
+           class="btn btn-block btn-link collapse-confirm collapse in skip" type="button"
+           data-toggle="collapse" data-target=".collapse-confirm"
+           aria-expanded="false" aria-controls="collapse-confirm">{{ 'dynamic_form.skip.open_warning' | trans }}</a>
+        <div class="collapse collapse-confirm">
+            <p class="help-block">{{ 'dynamic_form.skip.warning' | trans }}</p>
+            <a href="{{ skipUrl }}" class="btn btn-block btn-link">{{ 'dynamic_form.skip.confirm' | trans }}</a>
+        </div>
+
         {{ form_end(form) }}
 
     {% endif %}
@@ -113,6 +122,8 @@
                 }
             });
             {% endif %}
+
+            $('a.skip').attr('href', '#skip');
         });
 
         var dynamicForm = {
