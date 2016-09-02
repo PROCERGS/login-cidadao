@@ -201,6 +201,7 @@ services:
             - "@session"
             - "@translator"
             - "@lc.intent.manager"
+            - "@lc.tasks.manager"
             - "%default_password_encoder%"
             - "%require_email_validation%"
         tags:
@@ -430,6 +431,11 @@ services:
         class: LoginCidadao\CoreBundle\Form\Type\BirthdayTelType
         tags:
             - { name: form.type, alias: birthday_tel }
+
+    lc.tasks.manager:
+        class: LoginCidadao\CoreBundle\Service\TasksManager
+        calls:
+          - ["setSession", ["@?session"]]
 
     qandidate.stack.request_id.monolog_processor:
         class: Qandidate\Stack\RequestId\MonologProcessor

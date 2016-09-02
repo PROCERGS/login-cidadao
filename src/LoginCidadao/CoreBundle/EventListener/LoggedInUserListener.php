@@ -7,8 +7,10 @@ use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
 use LoginCidadao\CoreBundle\Model\MigratePasswordEncoderTask;
 use LoginCidadao\CoreBundle\Model\Task;
 use LoginCidadao\CoreBundle\Service\IntentManager;
+use LoginCidadao\CoreBundle\Service\TasksManager;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -46,6 +48,9 @@ class LoggedInUserListener
     /** @var IntentManager */
     private $intentManager;
 
+    /** @var TasksManager */
+    private $tasksManager;
+
     /** @var string */
     private $defaultPasswordEncoder;
 
@@ -59,6 +64,7 @@ class LoggedInUserListener
         Session $session,
         TranslatorInterface $translator,
         IntentManager $intentManager,
+        TasksManager $tasksManager,
         $defaultPasswordEncoder,
         $requireEmailValidation
     ) {
@@ -68,6 +74,7 @@ class LoggedInUserListener
         $this->session = $session;
         $this->translator = $translator;
         $this->intentManager = $intentManager;
+        $this->tasksManager = $tasksManager;
 
         $this->defaultPasswordEncoder = $defaultPasswordEncoder;
         $this->requireEmailValidation = $requireEmailValidation;
@@ -161,31 +168,25 @@ class LoggedInUserListener
     {
         $tasksEvent = new GetTasksEvent($event->getRequest());
         $dispatcher->dispatch(LoginCidadaoCoreEvents::GET_TASKS, $tasksEvent);
+        $routeName = $event->getRequest()->get('_route');
 
         $tasks = $tasksEvent->getTasks();
-        usort(
-            $tasks,
-            function (Task $a, Task $b) {
-                return $a->getPriority() < $b->getPriority();
-            }
-        );
+        $task = $this->tasksManager->getNextTask($tasks, $routeName);
 
-        foreach ($tasks as $task) {
-            if (false === $task->isMandatory()) {
-                continue; // search first mandatory task
-            }
-        }
-
-        if (!isset($task)) {
+        if (!($task instanceof Task)) {
             return false;
         }
+        if ($this->tasksManager->checkTaskSkipped($task)) {
+            return false;
+        }
+
         $target = $task->getTarget();
 
         if ($task instanceof MigratePasswordEncoderTask) {
             $this->session->set('force_password_change', true);
         }
         // If the user is not trying to access one of the task's routes, redirect to the default route
-        if (false === $task->isTaskRoute($event->getRequest()->get('_route'))) {
+        if (false === $task->isTaskRoute($routeName)) {
             $this->intentManager->setIntent($event->getRequest(), false);
             $this->redirectRoute($target[0], $target[1]);
         }
