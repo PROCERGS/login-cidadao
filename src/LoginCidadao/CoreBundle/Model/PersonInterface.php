@@ -3,6 +3,9 @@
 namespace LoginCidadao\CoreBundle\Model;
 
 use FOS\UserBundle\Model\UserInterface;
+use LoginCidadao\CoreBundle\Entity\City;
+use LoginCidadao\CoreBundle\Entity\Country;
+use LoginCidadao\CoreBundle\Entity\State;
 use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation as JMS;
@@ -101,6 +104,7 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface
     public function getEmailExpiration();
 
     public function getConfirmationToken();
+
     public function setConfirmationToken($confirmationToken);
 
     public function setFacebookUsername($facebookUsername);
@@ -160,12 +164,16 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface
 
     public function setSuggestions($suggestions);
 
-    public function prepareAPISerialize($imageHelper, $templateHelper, $isDev,
-                                        $request);
+    public function prepareAPISerialize(
+        $imageHelper,
+        $templateHelper,
+        $isDev,
+        $request
+    );
 
     public function isClientAuthorized($app_id);
 
-    public function setUpdatedAt($var = NULL);
+    public function setUpdatedAt($var = null);
 
     public function getUpdatedAt();
 
@@ -206,4 +214,19 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface
      * @return PersonInterface
      */
     public function waitUpdate(EntityManager $em, \DateTime $updatedAt);
+
+    /**
+     * @return City
+     */
+    public function getCity();
+
+    /**
+     * @return State
+     */
+    public function getState();
+
+    /**
+     * @return Country
+     */
+    Public function getCountry();
 }
