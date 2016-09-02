@@ -134,5 +134,6 @@ services:
             - "@security.token_storage"
             - "@security.authorization_checker"
             - "@security.http_utils"
+            - "@lc.client_manager"
         tags:
             - { name: kernel.event_subscriber }

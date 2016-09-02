@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\OpenIDBundle\EventListener;
 
+use FOS\OAuthServerBundle\Event\OAuthEvent;
 use LoginCidadao\CoreBundle\Entity\City;
 use LoginCidadao\CoreBundle\Entity\Country;
 use LoginCidadao\CoreBundle\Entity\State;
@@ -17,7 +18,9 @@ use LoginCidadao\CoreBundle\Event\GetTasksEvent;
 use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
 use LoginCidadao\CoreBundle\Model\CompleteUserInfoTask;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use LoginCidadao\ValidationBundle\Validator\Constraints\CPFValidator;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -34,20 +37,26 @@ class TaskSubscriber implements EventSubscriberInterface
     /** @var HttpUtils */
     protected $httpUtils;
 
+    /** @var ClientManager */
+    private $clientManager;
+
     /**
      * TaskSubscriber constructor.
      * @param TokenStorage $tokenStorage
      * @param AuthorizationCheckerInterface $authChecker
      * @param HttpUtils $httpUtils
+     * @param ClientManager $clientManager
      */
     public function __construct(
         TokenStorage $tokenStorage,
         AuthorizationCheckerInterface $authChecker,
-        HttpUtils $httpUtils
+        HttpUtils $httpUtils,
+        ClientManager $clientManager
     ) {
         $this->tokenStorage = $tokenStorage;
         $this->authChecker = $authChecker;
         $this->httpUtils = $httpUtils;
+        $this->clientManager = $clientManager;
     }
 
 
@@ -61,7 +70,7 @@ class TaskSubscriber implements EventSubscriberInterface
     /**
      * @param GetTasksEvent $event
      */
-    public function onGetTasks(GetTasksEvent $event)
+    public function onGetTasks(GetTasksEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         try {
             /** @var PersonInterface $user */
@@ -78,6 +87,9 @@ class TaskSubscriber implements EventSubscriberInterface
         $route = $request->get('_route');
         $clientId = $request->get('client_id', $request->attributes->get('clientId'));
         if (!$clientId) {
+            return;
+        }
+        if ($this->isAuthorizedClient($dispatcher, $clientId)) {
             return;
         }
         $task = new CompleteUserInfoTask($clientId);
@@ -141,5 +153,18 @@ class TaskSubscriber implements EventSubscriberInterface
         }
 
         return $value && strlen($value) > 0;
+    }
+
+    private function isAuthorizedClient(EventDispatcherInterface $dispatcher, $clientId)
+    {
+        $client = $this->clientManager->getClientById($clientId);
+
+        /** @var OAuthEvent $event */
+        $event = $dispatcher->dispatch(
+            OAuthEvent::PRE_AUTHORIZATION_PROCESS,
+            new OAuthEvent($this->tokenStorage->getToken()->getUser(), $client)
+        );
+
+        return $event->isAuthorizedClient();
     }
 }
