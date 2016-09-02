@@ -73,6 +73,15 @@ class TasksManager
 
     /**
      * @param Task $task
+     * @return string
+     */
+    private function getSessionKey(Task $task)
+    {
+        return self::TASK_SKIPPED_PREFIX_SESSION_KEY.$task->getSkipId();
+    }
+
+    /**
+     * @param Task $task
      */
     private function markSkipped(Task $task)
     {
@@ -80,7 +89,7 @@ class TasksManager
             return;
         }
 
-        $this->session->set(self::TASK_SKIPPED_PREFIX_SESSION_KEY.$task->getName(), true);
+        $this->session->set($this->getSessionKey($task), true);
     }
 
     /**
@@ -93,6 +102,6 @@ class TasksManager
             return false;
         }
 
-        return $this->session->has(self::TASK_SKIPPED_PREFIX_SESSION_KEY.$task->getName());
+        return $this->session->has($this->getSessionKey($task));
     }
 }

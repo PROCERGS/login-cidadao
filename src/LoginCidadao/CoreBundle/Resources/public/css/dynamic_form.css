@@ -1,3 +1,11 @@
 .help-email {
     margin-top: 25px;
 }
+
+.collapse-confirm {
+    margin-top: 20px;
+}
+
+a.skip {
+    color: #777;
+}

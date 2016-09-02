@@ -63,4 +63,16 @@ abstract class Task
     {
         return $routeName === $this->getSkipRoute();
     }
+
+    /**
+     * Returns a value that can be used to identify a task in the "skip" context.
+     *
+     * For example if a Task is specific to a given RP this method could return something like {TASK_NAME}_{RP_ID}
+     *
+     * @return string
+     */
+    public function getSkipId()
+    {
+        return $this->getName();
+    }
 }

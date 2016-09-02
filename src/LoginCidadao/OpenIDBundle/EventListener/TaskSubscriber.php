@@ -74,13 +74,18 @@ class TaskSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $task = new CompleteUserInfoTask();
         $request = $event->getRequest();
         $route = $request->get('_route');
+        $clientId = $request->get('client_id', $request->attributes->get('clientId'));
+        if (!$clientId) {
+            return;
+        }
+        $task = new CompleteUserInfoTask($clientId);
         $scopes = $request->get('scope', false);
+        $skipped = $task->isSkipRoute($route);
         if (
             $route !== '_authorize_validate'
-            && !$task->isSkipRoute($route)
+            && !$skipped
             && (false === $task->isTaskRoute($route) || !$scopes)
         ) {
             return;
@@ -95,10 +100,8 @@ class TaskSubscriber implements EventSubscriberInterface
             $emptyClaims[] = $scope;
         }
 
-        if (count($emptyClaims) > 0) {
-            $task
-                ->setClientId($request->get('client_id'))
-                ->setScope($emptyClaims);
+        if (count($emptyClaims) > 0 || $skipped) {
+            $task->setScope($emptyClaims);
             $event->addTask($task);
         }
     }

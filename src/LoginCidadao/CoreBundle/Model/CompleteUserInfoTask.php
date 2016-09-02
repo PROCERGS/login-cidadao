@@ -21,8 +21,12 @@ class CompleteUserInfoTask extends Task
     /** @var string */
     private $scope = '';
 
-    public function __construct()
+    public function __construct($clientId)
     {
+        if (null === $clientId) {
+            throw new \InvalidArgumentException("Missing client_id");
+        }
+        $this->clientId = $clientId;
         $this->setIsMandatory(false);
     }
 
@@ -87,17 +91,6 @@ class CompleteUserInfoTask extends Task
     }
 
     /**
-     * @param string $clientId
-     * @return CompleteUserInfoTask
-     */
-    public function setClientId($clientId)
-    {
-        $this->clientId = $clientId;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getScope()
@@ -122,4 +115,11 @@ class CompleteUserInfoTask extends Task
     {
         return 'dynamic_form_skip';
     }
+
+    public function getSkipId()
+    {
+        return $this->getName().'_'.$this->getClientId();
+    }
+
+
 }
