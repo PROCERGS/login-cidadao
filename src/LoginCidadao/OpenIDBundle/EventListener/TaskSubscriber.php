@@ -76,6 +76,7 @@ class TaskSubscriber implements EventSubscriberInterface
         $scopes = $request->get('scope', false);
         if (
             $route !== '_authorize_validate'
+            && !$task->isSkipRoute($route)
             && (false === $task->isTaskRoute($route) || !$scopes)
         ) {
             return;

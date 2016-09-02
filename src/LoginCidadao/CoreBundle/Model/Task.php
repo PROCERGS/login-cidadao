@@ -29,6 +29,14 @@ abstract class Task
     public abstract function getTaskRoutes();
 
     /**
+     * @return string
+     */
+    public function getSkipRoute()
+    {
+        return null;
+    }
+
+    /**
      * @return boolean
      */
     public abstract function isMandatory();
@@ -45,5 +53,14 @@ abstract class Task
     public function isTaskRoute($routeName)
     {
         return in_array($routeName, $this->getTaskRoutes());
+    }
+
+    /**
+     * @param $routeName
+     * @return bool
+     */
+    public function isSkipRoute($routeName)
+    {
+        return $routeName === $this->getSkipRoute();
     }
 }

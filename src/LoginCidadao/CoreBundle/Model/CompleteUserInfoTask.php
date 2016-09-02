@@ -112,9 +112,14 @@ class CompleteUserInfoTask extends Task
     public function setScope($scope)
     {
         $scope = !is_array($scope) ?: implode(' ', $scope);
-        
+
         $this->scope = $scope;
 
         return $this;
+    }
+
+    public function getSkipRoute()
+    {
+        return 'dynamic_form_skip';
     }
 }
