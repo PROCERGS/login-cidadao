@@ -62,7 +62,7 @@ class DynamicFormController extends Controller
         $placeOfBirth = new SelectData();
         $placeOfBirth->getFromObject($person);
         $intentUrl = $intentManager->getIntent($request);
-        $skipUrl = $this->generateUrl('dynamic_form_skip', ['client_id' => $clientId]);
+        $skipUrl = $request->get('redirect_url', $this->generateUrl('dynamic_form_skip', ['client_id' => $clientId]));
 
         $data = new DynamicFormData();
         $data->setPerson($person)
