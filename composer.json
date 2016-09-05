@@ -13,6 +13,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/PROCERGS/login-cidadao-badges-bundle"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/PROCERGS/stack-request-id"
         }
     ],
     "require": {
@@ -56,7 +60,8 @@
         "guilhermednt/pathwell-bundle": "^0.1",
         "beelab/recaptcha2-bundle": "dev-master",
         "bmatzner/fontawesome-bundle": "^4.6",
-        "qandidate/stack-request-id": "^0.4.0",
+        "ramsey/uuid": "~3.0",
+        "qandidate/stack-request-id": "dev-ramsey-uuid-v3",
         "paragonie/random_compat": "1.4.*",
         "procergs/meurs-monitor-bundle": "^1.0",
         "procergs/nfg-badges-bundle": "^1.1"
