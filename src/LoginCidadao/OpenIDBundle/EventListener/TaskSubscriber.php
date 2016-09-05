@@ -41,7 +41,7 @@ class TaskSubscriber implements EventSubscriberInterface
     private $clientManager;
 
     /** @var bool */
-    private $skipCompletionTaskIfAuthorized = false;
+    private $skipCompletionTaskIfAuthorized;
 
     /**
      * TaskSubscriber constructor.
