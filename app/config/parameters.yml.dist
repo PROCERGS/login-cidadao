@@ -158,4 +158,4 @@ parameters:
 
     # When true, during the authorization process, the user will only be prompted to fill in missing information
     # if it's a new authorization
-    pre_authorization.complete_information_task.skip: true
+    pre_authorization.complete_information_task.skip_if_authorized: true

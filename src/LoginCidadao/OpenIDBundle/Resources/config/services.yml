@@ -136,6 +136,6 @@ services:
             - "@security.http_utils"
             - "@lc.client_manager"
         calls:
-            - ["setSkipCompletionTaskIfAuthorized", ["%pre_authorization.complete_information_task.skip%"]]
+            - ["setSkipCompletionTaskIfAuthorized", ["%pre_authorization.complete_information_task.skip_if_authorized%"]]
         tags:
             - { name: kernel.event_subscriber }
