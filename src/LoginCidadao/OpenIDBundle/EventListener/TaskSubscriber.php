@@ -40,6 +40,9 @@ class TaskSubscriber implements EventSubscriberInterface
     /** @var ClientManager */
     private $clientManager;
 
+    /** @var bool */
+    private $skipCompletionTaskIfAuthorized = false;
+
     /**
      * TaskSubscriber constructor.
      * @param TokenStorage $tokenStorage
@@ -89,7 +92,7 @@ class TaskSubscriber implements EventSubscriberInterface
         if (!$clientId) {
             return;
         }
-        if ($this->isAuthorizedClient($dispatcher, $clientId)) {
+        if ($this->skipCompletionTaskIfAuthorized && $this->isAuthorizedClient($dispatcher, $clientId)) {
             return;
         }
         $task = new CompleteUserInfoTask($clientId);
@@ -166,5 +169,10 @@ class TaskSubscriber implements EventSubscriberInterface
         );
 
         return $event->isAuthorizedClient();
+    }
+
+    public function setSkipCompletionTaskIfAuthorized($skip)
+    {
+        $this->skipCompletionTaskIfAuthorized = $skip;
     }
 }
