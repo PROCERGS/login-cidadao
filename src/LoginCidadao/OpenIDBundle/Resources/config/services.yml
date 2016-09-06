@@ -128,7 +128,7 @@ services:
         arguments:
             - LoginCidadao\OpenIDBundle\Entity\ClientMetadata
 
-    lc.tasks.subscriber:
+    lc.oidc.tasks.subscriber:
         class: LoginCidadao\OpenIDBundle\EventListener\TaskSubscriber
         arguments:
             - "@security.token_storage"
