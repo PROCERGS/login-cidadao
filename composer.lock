@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cb665e05c879fc3d523620144bc03bc8",
-    "content-hash": "d37c2e28de8b3b676d0c4d86783c796a",
+    "hash": "ad724484312f0967c067841623193c35",
+    "content-hash": "a4d8df0d361e301c6e63f0b700ddacf3",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -1399,12 +1399,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "b7b93061dbaccec6acbedab7f200869e20909861"
+                "reference": "ad099dc0d59652c591d7c099c61c3d18d3a77553"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/b7b93061dbaccec6acbedab7f200869e20909861",
-                "reference": "b7b93061dbaccec6acbedab7f200869e20909861",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/ad099dc0d59652c591d7c099c61c3d18d3a77553",
+                "reference": "ad099dc0d59652c591d7c099c61c3d18d3a77553",
                 "shasum": ""
             },
             "require": {
@@ -1463,7 +1463,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2016-09-02 11:25:50"
+            "time": "2016-09-06 12:16:03"
         },
         {
             "name": "google/recaptcha",
