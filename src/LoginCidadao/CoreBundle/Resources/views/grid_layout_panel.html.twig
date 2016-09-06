@@ -20,7 +20,7 @@
         {# GRID BODY #}
         {% block grid_body %}
             <div class="panel panel-default">
-                {% if grid.resultset not empty %}
+                {% if grid.resultset is not empty %}
 
                     {# GRID HEADER #}
                     {% block grid_header %}
