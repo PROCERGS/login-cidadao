@@ -6,9 +6,9 @@ Para instalar a aplicação é necessário ter acesso a dois usuários: um usuá
 
 ```bash
     // logado como root, crie o novo user:
-    # useradd --create-home --groups sudo -s /bin/bash login-cidadao
+    # useradd --create-home --groups sudo -s /bin/bash logincidadao
     // Insira uma senha para o novo user
-    # passwd login-cidadao
+    # passwd logincidadao
 ``` 
 
 ## Instalando Dependências
