@@ -5,6 +5,7 @@ namespace LoginCidadao\CoreBundle\Security\User\Provider;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseClass;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\CoreBundle\Security\Exception\DuplicateEmailException;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -158,7 +159,7 @@ class FOSUBUserProvider extends BaseClass
         if (count($errors) > 0) {
             foreach ($errors as $error) {
                 if ($error->getPropertyPath() === 'email') {
-                    throw new MissingEmailException($service);
+                    throw new DuplicateEmailException($service);
                 }
             }
         }

@@ -462,3 +462,9 @@ dynamic_form:
 tasks.fill_email:
     title: Informe um endereço de Email
     body: O serviço usado para criar sua conta, %service%, não nos enviou seu endereço de email. Por favor, digite seu endereço a seguir para continuar.
+duplicate_email:
+    title: This email is already in use
+    body: You tried to register using an email that belongs to an existing account.
+    tip: If what you tried to do was to connect a service to your account you'll have to login into this account to then connect it.
+    button.login: Login
+

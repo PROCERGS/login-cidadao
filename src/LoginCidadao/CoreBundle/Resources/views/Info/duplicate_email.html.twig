@@ -1,0 +1,12 @@
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
+
+{% block panel_body_class %}task-fill-email{% endblock %}
+
+{% block panel_body %}
+    <h1>{{ 'duplicate_email.title' | trans }}</h1>
+
+    <p>{{ 'duplicate_email.body' | trans }}</p>
+    <p>{{ 'duplicate_email.tip' | trans }}</p>
+
+    <a href="{{ path('fos_user_security_login') }}" class="btn btn-block btn-success">{{ 'duplicate_email.button.login' | trans }}</a>
+{% endblock %}
