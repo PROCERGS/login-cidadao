@@ -2,7 +2,7 @@
 
 ## Antes de Começar
 
-Certifique-se de que você tem todos os dados descritos [ aqui ](integration.md#basic_info) antes de seguir o tutorial.
+Certifique-se de que você tem todos os dados descritos [ aqui ](lc_develop_integration.md#basic_info) antes de seguir o tutorial.
 
 ### Dependências
 
@@ -10,8 +10,8 @@ Para conectar no Login Cidadão usando `Java` é utilizado o cliente OAuth [Apac
 
 ```xml
 	<properties>
-		<oltu.oauth2.version>1.0.0</oltu.oauth2.version>		
-	</properties>	
+		<oltu.oauth2.version>1.0.0</oltu.oauth2.version>
+	</properties>
 	<dependencies>
 		<!-- idm deps -->
 		<dependency>
@@ -248,4 +248,3 @@ public static void getResource(OAuthParams oauthParams) throws OAuthSystemExcept
 
 ```
 
-[ Voltar ao Índice ](index.md)
