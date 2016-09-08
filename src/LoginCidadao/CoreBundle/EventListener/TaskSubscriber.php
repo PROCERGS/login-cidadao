@@ -68,7 +68,7 @@ class TaskSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            LoginCidadaoCoreEvents::GET_TASKS => ['onGetTasks', 0],
+            LoginCidadaoCoreEvents::GET_TASKS => ['onGetTasks', 100],
         ];
     }
 

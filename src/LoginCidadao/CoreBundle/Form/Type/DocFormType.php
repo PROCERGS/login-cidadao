@@ -35,7 +35,7 @@ class DocFormType extends AbstractType
         $resolver->setDefaults(
             [
                 'data_class' => 'LoginCidadao\CoreBundle\Entity\Person',
-                'validation_groups' => ['Profile'],
+                'validation_groups' => ['Documents'],
             ]
         );
     }

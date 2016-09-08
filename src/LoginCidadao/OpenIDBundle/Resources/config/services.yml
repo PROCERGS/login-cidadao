@@ -127,3 +127,15 @@ services:
         factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
             - LoginCidadao\OpenIDBundle\Entity\ClientMetadata
+
+    lc.oidc.tasks.subscriber:
+        class: LoginCidadao\OpenIDBundle\EventListener\TaskSubscriber
+        arguments:
+            - "@security.token_storage"
+            - "@security.authorization_checker"
+            - "@security.http_utils"
+            - "@lc.client_manager"
+        calls:
+            - ["setSkipCompletionTaskIfAuthorized", ["%pre_authorization.complete_information_task.skip_if_authorized%"]]
+        tags:
+            - { name: kernel.event_subscriber }

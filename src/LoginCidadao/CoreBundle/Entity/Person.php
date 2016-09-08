@@ -26,9 +26,9 @@ use Donato\PathWellBundle\Validator\Constraints\PathWell;
 /**
  * @ORM\Entity(repositoryClass="LoginCidadao\CoreBundle\Entity\PersonRepository")
  * @ORM\Table(name="person")
- * @UniqueEntity("cpf", message="person.validation.cpf.already_used", groups={"LoginCidadaoRegistration", "Registration", "Profile"})
+ * @UniqueEntity("cpf", message="person.validation.cpf.already_used", groups={"LoginCidadaoRegistration", "Registration", "Profile", "Dynamic"})
  * @UniqueEntity("username")
- * @UniqueEntity(fields="email", errorPath="email", message="fos_user.email.already_used", groups={"LoginCidadaoRegistration", "Registration", "LoginCidadaoEmailForm"})
+ * @UniqueEntity(fields="email", errorPath="email", message="fos_user.email.already_used", groups={"LoginCidadaoRegistration", "Registration", "LoginCidadaoEmailForm", "Dynamic"})
  * @ORM\HasLifecycleCallbacks
  * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
@@ -109,7 +109,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Expose
      * @JMS\Groups({"cpf"})
      * @ORM\Column(type="string", nullable=true, unique=true)
-     * @LCAssert\CPF
+     * @LCAssert\CPF(groups={"Documents"})
      * @JMS\Since("1.0")
      */
     protected $cpf;

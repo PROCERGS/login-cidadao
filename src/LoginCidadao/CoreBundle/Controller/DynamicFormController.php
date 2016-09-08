@@ -3,6 +3,7 @@
 namespace LoginCidadao\CoreBundle\Controller;
 
 use LoginCidadao\APIBundle\Exception\RequestTimeoutException;
+use LoginCidadao\CoreBundle\Service\IntentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -25,11 +26,12 @@ use LoginCidadao\CoreBundle\Model\SelectData;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\CoreBundle\DynamicFormEvents;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class DynamicFormController extends Controller
 {
-    const LOCATION_FORM_LEVEL_CITY    = 'city';
-    const LOCATION_FORM_LEVEL_STATE   = 'state';
+    const LOCATION_FORM_LEVEL_CITY = 'city';
+    const LOCATION_FORM_LEVEL_STATE = 'state';
     const LOCATION_FORM_LEVEL_COUNTRY = 'country';
 
     /**
@@ -43,11 +45,14 @@ class DynamicFormController extends Controller
             throw $this->createNotFoundException("Client not found.");
         }
 
-        $person          = $this->getUser();
+        $person = $this->getUser();
         $authorizedScope = $person->getClientScope($client);
-        $requestedScope  = explode(' ', $request->get('scope', null));
+        $requestedScope = explode(' ', $request->get('scope', null));
 
-        $scope = $this->intersectScopes($authorizedScope, $requestedScope);
+        $scope = $requestedScope;// $this->intersectScopes($authorizedScope, $requestedScope);
+
+        /** @var IntentManager $intentManager */
+        $intentManager = $this->get('lc.intent.manager');
 
         $waitEmail = count($scope) === 1 && array_search('email', $scope) !== false;
         if ($waitEmail && $person->getEmailConfirmedAt() instanceof \DateTime) {
@@ -56,21 +61,27 @@ class DynamicFormController extends Controller
 
         $placeOfBirth = new SelectData();
         $placeOfBirth->getFromObject($person);
+        $intentUrl = $intentManager->getIntent($request);
+        $skipUrl = $request->get('redirect_url', $this->generateUrl('dynamic_form_skip', ['client_id' => $clientId]));
 
         $data = new DynamicFormData();
         $data->setPerson($person)
-            ->setRedirectUrl($request->get('redirect_url', null))
+            ->setRedirectUrl($request->get('redirect_url', $intentUrl))
             ->setScope($request->get('scope', null))
             ->setPlaceOfBirth($placeOfBirth);
 
         $dispatcher = $this->getDispatcher();
 
-        $event = new \FOS\UserBundle\Event\GetResponseUserEvent($person,
-            $request);
+        $event = new \FOS\UserBundle\Event\GetResponseUserEvent(
+            $person,
+            $request
+        );
         $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $event);
 
-        $formBuilder = $this->createFormBuilder($data,
-            array('cascade_validation' => true));
+        $formBuilder = $this->createFormBuilder(
+            $data,
+            array('cascade_validation' => true)
+        );
         foreach ($scope as $curr) {
             $this->addField($request, $formBuilder, $curr, $person);
         }
@@ -81,20 +92,26 @@ class DynamicFormController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $event = new \FOS\UserBundle\Event\FormEvent($form, $request);
-            $dispatcher->dispatch(DynamicFormEvents::POST_FORM_VALIDATION,
-                $event);
+            $dispatcher->dispatch(
+                DynamicFormEvents::POST_FORM_VALIDATION,
+                $event
+            );
 
             if ($form->has('person')) {
-                $event = new \FOS\UserBundle\Event\FormEvent($form->get('person'),
-                    $request);
-                $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_SUCCESS,
-                    $event);
+                $event = new \FOS\UserBundle\Event\FormEvent(
+                    $form->get('person'),
+                    $request
+                );
+                $dispatcher->dispatch(
+                    FOSUserEvents::PROFILE_EDIT_SUCCESS,
+                    $event
+                );
             }
 
-            $em           = $this->getDoctrine()->getManager();
-            $person       = $formBuilder->getData()->getPerson();
-            $address      = $formBuilder->getData()->getAddress();
-            $idCard       = $formBuilder->getData()->getIdCard();
+            $em = $this->getDoctrine()->getManager();
+            $person = $formBuilder->getData()->getPerson();
+            $address = $formBuilder->getData()->getAddress();
+            $idCard = $formBuilder->getData()->getIdCard();
             $placeOfBirth = $formBuilder->getData()->getPlaceOfBirth();
 
             if ($placeOfBirth instanceof SelectData) {
@@ -115,9 +132,13 @@ class DynamicFormController extends Controller
             }
 
             $response = $this->redirect($formBuilder->getData()->getRedirectUrl());
-            $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_COMPLETED,
-                new \FOS\UserBundle\Event\FilterUserResponseEvent($person,
-                $request, $response));
+            $dispatcher->dispatch(
+                FOSUserEvents::PROFILE_EDIT_COMPLETED,
+                new \FOS\UserBundle\Event\FilterUserResponseEvent(
+                    $person,
+                    $request, $response
+                )
+            );
 
             $em->flush();
 
@@ -136,13 +157,15 @@ class DynamicFormController extends Controller
                 $params['clientId'] = $clientId;
 
                 $url = $this->generateUrl('client_dynamic_form', $params);
+
                 return $this->redirect($url);
             }
         }
 
-        $viewData = compact('client', 'scope', 'authorizedScope');
+        $viewData = compact('client', 'scope', 'authorizedScope', 'skipUrl');
 
         $viewData['form'] = $form->createView();
+
         return $viewData;
     }
 
@@ -158,14 +181,16 @@ class DynamicFormController extends Controller
         if ($user->getConfirmationToken() === null) {
             $result = true;
         } else {
-            $updatedAt = \DateTime::createFromFormat('Y-m-d H:i:s',
-                    $request->get('updated_at'));
+            $updatedAt = \DateTime::createFromFormat(
+                'Y-m-d H:i:s',
+                $request->get('updated_at')
+            );
 
             if (!($updatedAt instanceof \DateTime)) {
                 $updatedAt = new \DateTime();
             }
 
-            $em     = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
             try {
                 $person = $user->waitUpdate($em, $updatedAt);
             } catch (RequestTimeoutException $e) {
@@ -184,8 +209,8 @@ class DynamicFormController extends Controller
     public function locationFormAction(Request $request)
     {
         $country = $this->getCountry($request);
-        $state   = $this->getState($request);
-        $city    = $this->getCity($request);
+        $state = $this->getState($request);
+        $city = $this->getCity($request);
 
         $locationData = new \LoginCidadao\CoreBundle\Model\SelectData();
 
@@ -204,11 +229,13 @@ class DynamicFormController extends Controller
         }
 
         $level = $request->get('level');
-        $data  = new DynamicFormData();
+        $data = new DynamicFormData();
         $data->setPlaceOfBirth($locationData);
 
-        $formBuilder = $this->createFormBuilder($data,
-            array('cascade_validation' => true));
+        $formBuilder = $this->createFormBuilder(
+            $data,
+            array('cascade_validation' => true)
+        );
         $this->addPlaceOfBirth($formBuilder, $level);
 
         return array('form' => $formBuilder->getForm()->createView());
@@ -222,50 +249,81 @@ class DynamicFormController extends Controller
         return parent::getUser();
     }
 
-    private function addField(Request $request,
-                                FormBuilderInterface $formBuilder, $scope,
-                                Person $person)
-    {
+    private function addField(
+        Request $request,
+        FormBuilderInterface $formBuilder,
+        $scope,
+        Person $person
+    ) {
         $placeOfBirthLevel = '';
         switch ($scope) {
             case 'surname':
             case 'full_name':
-                $this->addPersonField($formBuilder, $person, 'firstname', null,
-                    array('required' => true));
-                $this->addPersonField($formBuilder, $person, 'surname', null,
-                    array('required' => true));
+                $this->addPersonField(
+                    $formBuilder,
+                    $person,
+                    'firstname',
+                    null,
+                    array('required' => true)
+                );
+                $this->addPersonField(
+                    $formBuilder,
+                    $person,
+                    'surname',
+                    null,
+                    array('required' => true)
+                );
                 break;
             case 'cpf':
-                $this->addPersonField($formBuilder, $person, 'cpf', null,
+                $this->addPersonField(
+                    $formBuilder,
+                    $person,
+                    'cpf',
+                    null,
                     array(
-                    'required' => true,
-                    'attr' => array(
-                        'class' => 'form-control cpf'
+                        'required' => true,
+                        'attr' => array(
+                            'class' => 'form-control cpf',
+                        ),
                     )
-                ));
+                );
                 break;
             case 'email':
-                $this->addPersonField($formBuilder, $person, 'email', null,
-                    array('required' => true));
+                $this->addPersonField(
+                    $formBuilder,
+                    $person,
+                    'email',
+                    null,
+                    array('required' => true)
+                );
                 break;
             case 'id_cards':
                 $this->addIdCard($request, $formBuilder, $person);
                 break;
             case 'mobile':
-                $this->addPersonField($formBuilder, $person, 'mobile', null,
-                    array('required' => true));
+                $this->addPersonField(
+                    $formBuilder,
+                    $person,
+                    'mobile',
+                    null,
+                    array('required' => true)
+                );
                 break;
             case 'birthdate':
-                $this->addPersonField($formBuilder, $person, 'birthdate',
+                $this->addPersonField(
+                    $formBuilder,
+                    $person,
+                    'birthdate',
                     'birthday',
                     array(
-                    'required' => true,
-                    'format' => 'dd/MM/yyyy',
-                    'widget' => 'single_text',
-                    'label' => 'form.birthdate',
-                    'translation_domain' => 'FOSUserBundle',
-                    'attr' => array('pattern' => '[0-9/]*', 'class' => 'form-control birthdate')
-                ));
+                        'required' => true,
+                        'format' => 'dd/MM/yyyy',
+                        'widget' => 'single_text',
+                        'label' => 'form.birthdate',
+                        'translation_domain' => 'FOSUserBundle',
+                        'attr' => array('pattern' => '[0-9/]*', 'class' => 'form-control birthdate'),
+                    )
+                );
                 break;
             case 'city':
                 $placeOfBirthLevel = 'city';
@@ -282,7 +340,7 @@ class DynamicFormController extends Controller
             case 'addresses':
 
                 $addressAction = $request->get('address_action', 'edit');
-                $new           = $addressAction === 'new' ? true : false;
+                $new = $addressAction === 'new' ? true : false;
                 $this->addAddresses($formBuilder, $person, $new);
                 break;
             default:
@@ -290,28 +348,34 @@ class DynamicFormController extends Controller
         }
     }
 
-    private function getPersonForm(FormBuilderInterface $formBuilder,
-                                    Person $person)
-    {
+    private function getPersonForm(
+        FormBuilderInterface $formBuilder,
+        Person $person
+    ) {
         if ($formBuilder->has('person') === false) {
-            $formBuilder->add('person', new DynamicPersonType(),
-                array('label' => false));
+            $formBuilder->add(
+                'person',
+                new DynamicPersonType(),
+                array('label' => false)
+            );
         }
 
         return $formBuilder->get('person');
     }
 
-    private function addAddresses(FormBuilderInterface $formBuilder,
-                                    Person $person, $new = true)
-    {
+    private function addAddresses(
+        FormBuilderInterface $formBuilder,
+        Person $person,
+        $new = true
+    ) {
         $addresses = $person->getAddresses();
-        $address   = new PersonAddress();
+        $address = new PersonAddress();
         $address->setLocation(new SelectData());
         if ($new === false && $addresses->count() > 0) {
             $address = $addresses->last();
-            $city    = $address->getCity();
+            $city = $address->getCity();
             if ($city instanceof City) {
-                $state   = $city->getState();
+                $state = $city->getState();
                 $country = $state->getCountry();
                 $address->getLocation()->setCity($city)
                     ->setState($state)->setCountry($country);
@@ -319,14 +383,19 @@ class DynamicFormController extends Controller
         }
         $formBuilder->getData()->setAddress($address);
 
-        $formBuilder->add('address', 'LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType',
-            array('label' => false));
+        $formBuilder->add(
+            'address',
+            'LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType',
+            array('label' => false)
+        );
     }
 
-    private function addIdCard(Request $request,
-                                FormBuilderInterface $formBuilder, Person $person)
-    {
-        $state    = $this->getStateFromRequest($request);
+    private function addIdCard(
+        Request $request,
+        FormBuilderInterface $formBuilder,
+        Person $person
+    ) {
+        $state = $this->getStateFromRequest($request);
         $formData = $formBuilder->getData();
         foreach ($person->getIdCards() as $idCard) {
             if ($idCard->getState()->getId() === $state->getId()) {
@@ -337,7 +406,7 @@ class DynamicFormController extends Controller
 
         if (!($formData->getIdCard() instanceof IdCard)) {
             $validationHandler = $this->getValidationHandler();
-            $idCard            = $validationHandler->instantiateIdCard($state);
+            $idCard = $validationHandler->instantiateIdCard($state);
             $idCard->setPerson($person);
             $formData->setIdCard($idCard);
         }
@@ -345,10 +414,13 @@ class DynamicFormController extends Controller
         $formBuilder->add('idcard', 'lc_idcard_form', array('label' => false));
     }
 
-    private function addPersonField(FormBuilderInterface $formBuilder,
-                                    Person $person, $field, $type = null,
-                                    $options = array())
-    {
+    private function addPersonField(
+        FormBuilderInterface $formBuilder,
+        Person $person,
+        $field,
+        $type = null,
+        $options = array()
+    ) {
         $personForm = $this->getPersonForm($formBuilder, $person);
         $personForm->add($field, $type, $options);
     }
@@ -385,14 +457,17 @@ class DynamicFormController extends Controller
     private function addPlaceOfBirth(FormBuilderInterface $formBuilder, $level)
     {
 
-        $formBuilder->add('placeOfBirth',
+        $formBuilder->add(
+            'placeOfBirth',
             'LoginCidadao\CoreBundle\Form\Type\CitySelectorComboType',
             array(
-            'level' => $level,
-            'city_label' => 'Place of birth - City',
-            'state_label' => 'Place of birth - State',
-            'country_label' => 'Place of birth - Country',
-        ));
+                'level' => $level,
+                'city_label' => 'Place of birth - City',
+                'state_label' => 'Place of birth - State',
+                'country_label' => 'Place of birth - Country',
+            )
+        );
+
         return;
     }
 
@@ -403,6 +478,7 @@ class DynamicFormController extends Controller
             return null;
         }
         $repo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:City');
+
         return $repo->find($id);
     }
 
@@ -413,6 +489,7 @@ class DynamicFormController extends Controller
             return null;
         }
         $repo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:State');
+
         return $repo->find($id);
     }
 
@@ -423,13 +500,14 @@ class DynamicFormController extends Controller
             return null;
         }
         $repo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Country');
+
         return $repo->find($id);
     }
 
     private function fetchPlaceOfBirthData($data)
     {
-        $cityRepo   = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:City');
-        $stateRepo  = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:State');
+        $cityRepo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:City');
+        $stateRepo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:State');
         $coutryRepo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Country');
 
         $result = array();
@@ -453,15 +531,15 @@ class DynamicFormController extends Controller
         if (count($parsing) > 1) {
             $params = array(
                 'id' => $parsing[0],
-                'randomId' => $parsing[1]
+                'randomId' => $parsing[1],
             );
         } else {
             $params = array('id' => $clientId);
         }
 
         return $this->getDoctrine()
-                ->getRepository('LoginCidadaoOAuthBundle:Client')
-                ->findOneBy($params);
+            ->getRepository('LoginCidadaoOAuthBundle:Client')
+            ->findOneBy($params);
     }
 
     /**
@@ -491,7 +569,7 @@ class DynamicFormController extends Controller
     private function intersectScopes($authorizedScope, $requestedScope)
     {
         $authorizedScope = $this->getScopeAsArray($authorizedScope);
-        $requestedScope  = $this->getScopeAsArray($requestedScope);
+        $requestedScope = $this->getScopeAsArray($requestedScope);
 
         $result = array_intersect($authorizedScope, $requestedScope);
 
@@ -500,5 +578,35 @@ class DynamicFormController extends Controller
         }
 
         return $result;
+    }
+
+    private function getSkipUrl($redirectUrl)
+    {
+        $url = parse_url($redirectUrl);
+        parse_str($url['query'], $query);
+        $query['skip_dynamic_form'] = true;
+        $skipUrl = str_replace($url['query'], http_build_query($query), $redirectUrl);
+
+        return $skipUrl;
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @Route("/dynamic-form/skip", name="dynamic_form_skip")
+     */
+    public function skipAction(Request $request)
+    {
+        /** @var IntentManager $intentManager */
+        $intentManager = $this->get('lc.intent.manager');
+
+        if ($intentManager->hasIntent($request)) {
+            $intent = $intentManager->consumeIntent($request);
+
+            return $this->redirect($this->getSkipUrl($intent));
+        } else {
+            return $this->redirectToRoute('lc_dashboard');
+        }
     }
 }

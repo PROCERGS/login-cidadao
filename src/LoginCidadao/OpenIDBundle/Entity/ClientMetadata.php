@@ -796,7 +796,7 @@ class ClientMetadata
             $client->setRedirectUris($redirectUris);
         }
 
-        $client->setVisible($hasName)
+        $client->setVisible(false)
             ->setPublished(false);
 
         return $client;

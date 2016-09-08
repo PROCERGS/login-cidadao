@@ -13,11 +13,15 @@
         {
             "type": "vcs",
             "url": "https://github.com/PROCERGS/login-cidadao-badges-bundle"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/PROCERGS/stack-request-id"
         }
     ],
     "require": {
         "php": ">=5.4.16",
-        "symfony/symfony": "2.8.*",
+        "symfony/symfony": "2.8.* !=2.8.10",
         "doctrine/orm": "~2.4",
         "doctrine/dbal": "<2.5",
         "doctrine/doctrine-bundle": "~1.5",
@@ -56,10 +60,12 @@
         "guilhermednt/pathwell-bundle": "^0.1",
         "beelab/recaptcha2-bundle": "^1.0",
         "bmatzner/fontawesome-bundle": "^4.6",
-        "ramsey/uuid": "^3.5"
+        "ramsey/uuid": "^3.5",
+        "qandidate/stack-request-id": "dev-ramsey-uuid-v3"
     },
     "require-dev": {
-        "sensio/generator-bundle": "~2.3"
+        "sensio/generator-bundle": "~2.3",
+        "phpunit/phpunit": "^4.8"
     },
     "scripts": {
         "post-root-package-install": [

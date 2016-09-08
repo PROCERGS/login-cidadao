@@ -4,6 +4,7 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\Request;
+use LoginCidadao\CoreBundle\Security\Compatibility\RamseyUuidFeatureSet;
 
 // If you don't want to setup permissions the proper way, just uncomment the following PHP line
 // read http://symfony.com/doc/current/book/installation.html#configuration-and-setup for more information
@@ -15,6 +16,12 @@ Debug::enable();
 require_once __DIR__.'/../app/AppKernel.php';
 
 $kernel = new AppKernel('dev', true);
+
+$uuidFactory = new \Ramsey\Uuid\UuidFactory(new RamseyUuidFeatureSet());
+\Ramsey\Uuid\Uuid::setFactory($uuidFactory);
+$generator = new \Qandidate\Stack\UuidRequestIdGenerator();
+$stack = new \Qandidate\Stack\RequestId($kernel, $generator);
+
 $kernel->loadClassCache();
 
 try {
@@ -36,6 +43,6 @@ if (!IpUtils::checkIp($request->getClientIp(), $allowed)) {
     exit('You are not allowed to access this file.');
 }
 
-$response = $kernel->handle($request);
+$response = $stack->handle($request);
 $response->send();
 $kernel->terminate($request, $response);

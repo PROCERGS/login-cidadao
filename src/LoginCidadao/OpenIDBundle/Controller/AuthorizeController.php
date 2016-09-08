@@ -149,7 +149,7 @@ class AuthorizeController extends BaseController
         $warnUntrusted = $this->getParameter('warn_untrusted');
         $metadata = $this->getMetadata($client);
 
-        if ($metadata->getOrganization() instanceof OrganizationInterface) {
+        if ($metadata && $metadata->getOrganization() instanceof OrganizationInterface) {
             $isTrusted = $metadata->getOrganization()->isTrusted();
         } else {
             $isTrusted = false;
