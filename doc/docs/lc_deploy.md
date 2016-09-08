@@ -49,7 +49,7 @@ Para que o Login Cidadão funcione corretamente será necessário que estejam in
     $ sudo apt-get install php5 php5-cli php5-fpm php5-curl php5-intl php5-pgsql php5-memcache
        
     // Instalando nodejs
-    $ sudo curl -sL https://deb.nodesource.com/setup_5.x | bash -
+    $ sudo curl -sL https://deb.nodesource.com/setup_4.x | bash -
     $ sudo apt-get install --yes nodejs
 
 ```
