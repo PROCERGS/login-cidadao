@@ -54,12 +54,6 @@ Para que o Login Cidadão funcione corretamente será necessário que estejam in
 
 ```
 
-## Cheque os requisitos do PHP 
-
-Verifique se todas os requisitos estão sendo cumpridos antes de iniciar a instalação
-    `php app/check.php`
- 
-
 ## Configurando base de dados
 
 Crie um usuário no postgres e depois uma base. Sugerimos usar o mesmo nome. 
@@ -68,7 +62,7 @@ Crie um usuário no postgres e depois uma base. Sugerimos usar o mesmo nome.
   //Como root, crie um usuário que funcionará via socket
   # sudo -u postgres psql -c "CREATE USER logincidadao"
   // Em seguinda, crie a base de dados
-  # sudo -u postgres createdb --owner mapas mapas
+  # sudo -u postgres createdb --owner logincidadao logincidadao
 
 ```
 
@@ -97,7 +91,12 @@ Após instalar as dependências, clone o repositório da aplicação e mude as p
 
 
 ```
+## Cheque os requisitos do PHP 
 
+Verifique se todas os requisitos estão sendo cumpridos antes de iniciar a instalação
+    `php app/check.php`
+ 
+ 
 ## Parametrizando a aplicação - pré-instalação
 
 Agora vamos instalar as dependências. Após esse processo você deverá preencher os parametros relativos a sua instalação. Portanto é necessário que você tenha as seguintes informações em mãos: 
