@@ -87,7 +87,8 @@ Para instalar:
 
 ## Obtendo o Login Cidadão 
 
-Após instalar as dependências, clone o repositório da aplicação e mude as permissões dos arquivos para operar com apache ou nginx. Recomendamos fazer isso com o usuário criado e dentro de uma estrutura de diretórios padrão /var/www/login-cidadao, mas é possível adaptar para qualquer contexto. 
+Após instalar as dependências, clone o repositório da aplicação e mude as permissões dos arquivos para operar com apache ou nginx. Recomendamos fazer isso com o usuário criado e dentro de uma estrutura de diretórios padrão /var/www/login-cidadao, mas é possível adaptar para qualquer contexto. ***O branch ativo para deploy neste repositório (rede livre) é o master***. 
+
 ```
     //Logado como login-cidadao user, vá para o diretório /var/www
     $ cd /var/www
