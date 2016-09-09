@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ad724484312f0967c067841623193c35",
-    "content-hash": "a4d8df0d361e301c6e63f0b700ddacf3",
+    "hash": "8a70b6c4fb909a294012c71b0a7e4abd",
+    "content-hash": "67ac8be53a6044613302b11ac93ceb54",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -1399,12 +1399,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "e12f8bfe51ebbc18d9ef8b18d427d4b4a54a8ee5"
+                "reference": "528f0a93aebb641a0bc6471cc24562fbd01432cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/e12f8bfe51ebbc18d9ef8b18d427d4b4a54a8ee5",
-                "reference": "e12f8bfe51ebbc18d9ef8b18d427d4b4a54a8ee5",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/528f0a93aebb641a0bc6471cc24562fbd01432cb",
+                "reference": "528f0a93aebb641a0bc6471cc24562fbd01432cb",
                 "shasum": ""
             },
             "require": {
@@ -1463,7 +1463,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2016-09-08 09:48:50"
+            "time": "2016-09-09 10:00:40"
         },
         {
             "name": "google/recaptcha",
@@ -2005,16 +2005,16 @@
         },
         {
             "name": "jms/di-extra-bundle",
-            "version": "1.7.1",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/JMSDiExtraBundle.git",
-                "reference": "27c3fc7150550ccc0731290b2c1ceb57449f909d"
+                "reference": "7c8e23ffd65eb05f7b76869aa8ef1949e90789c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/JMSDiExtraBundle/zipball/27c3fc7150550ccc0731290b2c1ceb57449f909d",
-                "reference": "27c3fc7150550ccc0731290b2c1ceb57449f909d",
+                "url": "https://api.github.com/repos/schmittjoh/JMSDiExtraBundle/zipball/7c8e23ffd65eb05f7b76869aa8ef1949e90789c7",
+                "reference": "7c8e23ffd65eb05f7b76869aa8ef1949e90789c7",
                 "shasum": ""
             },
             "require": {
@@ -2036,6 +2036,7 @@
                 "sensio/framework-extra-bundle": "~2.0|~3.0",
                 "symfony/browser-kit": "~2.3|~3.0",
                 "symfony/class-loader": "~2.3|~3.0",
+                "symfony/expression-language": "~2.6|~3.0",
                 "symfony/form": "~2.3|~3.0",
                 "symfony/phpunit-bridge": "~2.7",
                 "symfony/security-bundle": "~2.3",
@@ -2070,7 +2071,7 @@
                 "annotations",
                 "dependency injection"
             ],
-            "time": "2016-04-18 22:27:09"
+            "time": "2016-09-09 12:35:58"
         },
         {
             "name": "jms/metadata",

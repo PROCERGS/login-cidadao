@@ -6,9 +6,9 @@ Para instalar a aplicação é necessário ter acesso a dois usuários: um usuá
 
 ```bash
     // logado como root, crie o novo user:
-    # useradd --create-home --groups sudo -s /bin/bash login-cidadao
+    # useradd --create-home --groups sudo -s /bin/bash logincidadao
     // Insira uma senha para o novo user
-    # passwd login-cidadao
+    # passwd logincidadao
 ``` 
 
 ## Instalando Dependências
@@ -49,16 +49,10 @@ Para que o Login Cidadão funcione corretamente será necessário que estejam in
     $ sudo apt-get install php5 php5-cli php5-fpm php5-curl php5-intl php5-pgsql php5-memcache
        
     // Instalando nodejs
-    $ sudo curl -sL https://deb.nodesource.com/setup_5.x | bash -
+    $ sudo curl -sL https://deb.nodesource.com/setup_4.x | bash -
     $ sudo apt-get install --yes nodejs
 
 ```
-
-## Cheque os requisitos do PHP 
-
-Verifique se todas os requisitos estão sendo cumpridos antes de iniciar a instalação
-    `php app/check.php`
- 
 
 ## Configurando base de dados
 
@@ -68,7 +62,7 @@ Crie um usuário no postgres e depois uma base. Sugerimos usar o mesmo nome.
   //Como root, crie um usuário que funcionará via socket
   # sudo -u postgres psql -c "CREATE USER logincidadao"
   // Em seguinda, crie a base de dados
-  # sudo -u postgres createdb --owner mapas mapas
+  # sudo -u postgres createdb --owner logincidadao logincidadao
 
 ```
 
@@ -87,7 +81,8 @@ Para instalar:
 
 ## Obtendo o Login Cidadão 
 
-Após instalar as dependências, clone o repositório da aplicação e mude as permissões dos arquivos para operar com apache ou nginx. Recomendamos fazer isso com o usuário criado e dentro de uma estrutura de diretórios padrão /var/www/login-cidadao, mas é possível adaptar para qualquer contexto. 
+Após instalar as dependências, clone o repositório da aplicação e mude as permissões dos arquivos para operar com apache ou nginx. Recomendamos fazer isso com o usuário criado e dentro de uma estrutura de diretórios padrão /var/www/login-cidadao, mas é possível adaptar para qualquer contexto. ***O branch ativo para deploy neste repositório (rede livre) é o master***. 
+
 ```
     //Logado como login-cidadao user, vá para o diretório /var/www
     $ cd /var/www
@@ -96,7 +91,12 @@ Após instalar as dependências, clone o repositório da aplicação e mude as p
 
 
 ```
+## Cheque os requisitos do PHP 
 
+Verifique se todas os requisitos estão sendo cumpridos antes de iniciar a instalação
+    `php app/check.php`
+ 
+ 
 ## Parametrizando a aplicação - pré-instalação
 
 Agora vamos instalar as dependências. Após esse processo você deverá preencher os parametros relativos a sua instalação. Portanto é necessário que você tenha as seguintes informações em mãos: 

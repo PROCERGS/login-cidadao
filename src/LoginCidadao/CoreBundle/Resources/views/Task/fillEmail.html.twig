@@ -1,0 +1,42 @@
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
+
+{% set form_has_errors = not form.vars.valid %}
+
+{% block panel_body_class %}task-fill-email{% endblock %}
+
+{% block panel_body %}
+    {% for type, messages in app.session.flashbag.all %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="{{ 'Close' | trans }}"><span
+                            aria-hidden="true">&times;</span></button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <h1>{{ 'tasks.fill_email.title' | trans }}</h1>
+
+    {{ form_start(form) }}
+
+    <p>{{ 'tasks.fill_email.body' | trans({'%service%': service | capitalize}) }}</p>
+    {{ form_row(form.email) }}
+
+    <button type="submit" class="btn btn-block btn-success">
+        {{ 'Continue' | trans }}
+    </button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+
+    </script>
+{% endblock %}
+
+{% block stylesheets_custom %}
+    {% stylesheets '@lc_task_email_validation_css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock %}

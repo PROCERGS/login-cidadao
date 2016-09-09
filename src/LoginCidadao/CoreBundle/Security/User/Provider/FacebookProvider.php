@@ -152,8 +152,6 @@ class FacebookProvider implements UserProviderInterface
                     $user    = $this->userManager->createUser();
                     $user->setEnabled(true);
                     $user->setPassword('');
-                    $user->setEmailConfirmedAt(new \DateTime());
-                    $user->setEmailExpiration(null);
                 } else {
                     $user = $currentUserObj;
                 }

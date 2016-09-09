@@ -47,7 +47,9 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="//www.google.com/recaptcha/api.js?hl={{ app.request.locale }}"></script>
+    {% if form1.recaptcha is defined %}
+        <script src="//www.google.com/recaptcha/api.js?hl={{ app.request.locale }}"></script>
+    {% endif %}
     {% javascripts '@LoginCidadaoCoreBundle/Resources/public/js/login_register/*.js' filter='?uglifyjs2' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
