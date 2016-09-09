@@ -75,9 +75,6 @@ html, body {
     text-align: center;
 }
 
-.panel-compact .panel-body p {
-    text-align: justify;
-}
 .panel-compact .panel-body p.text-center {
     text-align: center;
 }

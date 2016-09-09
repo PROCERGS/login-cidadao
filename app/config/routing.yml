@@ -147,3 +147,9 @@ lc_privacy:
     defaults:
         _controller: FrameworkBundle:Template:template
         template:    'LoginCidadaoCoreBundle:Info:privacy.html.twig'
+
+lc_duplicate_email:
+    path: /register/duplicate-email
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    'LoginCidadaoCoreBundle:Info:duplicate_email.html.twig'

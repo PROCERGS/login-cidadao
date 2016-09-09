@@ -60,7 +60,7 @@
         "guilhermednt/pathwell-bundle": "^0.1",
         "beelab/recaptcha2-bundle": "^1.0",
         "bmatzner/fontawesome-bundle": "^4.6",
-        "ramsey/uuid": "~3.0",
+        "ramsey/uuid": "^3.5",
         "qandidate/stack-request-id": "dev-ramsey-uuid-v3"
     },
     "require-dev": {

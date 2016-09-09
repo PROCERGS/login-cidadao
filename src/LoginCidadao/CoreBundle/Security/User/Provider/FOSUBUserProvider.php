@@ -4,6 +4,10 @@ namespace LoginCidadao\CoreBundle\Security\User\Provider;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseClass;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\CoreBundle\Security\Exception\DuplicateEmailException;
+use Ramsey\Uuid\Uuid;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use LoginCidadao\CoreBundle\Security\Exception\AlreadyLinkedAccount;
@@ -16,30 +20,50 @@ use FOS\UserBundle\Event\FilterUserResponseEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use LoginCidadao\ValidationBundle\Validator\Constraints\UsernameValidator;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class FOSUBUserProvider extends BaseClass
 {
 
+    /** @var UserManagerInterface */
+    protected $userManager;
+
+    /** @var array */
     protected $proxySettings;
+
+    /** @var SessionInterface */
     protected $session;
+
+    /** @var EventDispatcherInterface */
     protected $dispatcher;
+
+    /** @var ContainerInterface */
     protected $container;
+
+    /** @var FactoryInterface */
     protected $formFactory;
 
     /**
      * Constructor.
      *
      * @param UserManagerInterface $userManager FOSUB user provider.
-     * @param array                $properties  Property mapping.
-     * @param array                $proxySettings
+     * @param SessionInterface $session
+     * @param EventDispatcherInterface $dispatcher
+     * @param ContainerInterface $container
+     * @param FactoryInterface $formFactory
+     * @param array $properties Property mapping.
+     * @param array $proxySettings
      */
-    public function __construct(UserManagerInterface $userManager,
-                                SessionInterface $session,
-                                EventDispatcherInterface $dispatcher,
-                                ContainerInterface $container,
-                                FactoryInterface $formFactory,
-                                array $properties, array $proxySettings = null)
-    {
+    public function __construct(
+        UserManagerInterface $userManager,
+        SessionInterface $session,
+        EventDispatcherInterface $dispatcher,
+        ContainerInterface $container,
+        FactoryInterface $formFactory,
+        array $properties,
+        array $proxySettings = null
+    ) {
         $this->userManager = $userManager;
         $this->session = $session;
         $this->dispatcher = $dispatcher;
@@ -54,7 +78,6 @@ class FOSUBUserProvider extends BaseClass
      */
     public function connect(UserInterface $user, UserResponseInterface $response)
     {
-        $property = $this->getProperty($response);
         $username = $response->getUsername();
 
         $service = $response->getResourceOwner()->getName();
@@ -84,96 +107,141 @@ class FOSUBUserProvider extends BaseClass
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
-        $rawResponse = $response->getResponse();
-
-        $username = $response->getUsername();
-        $screenName = $response->getNickname();
-
-
+        $userInfo = $this->getUserInfo($response);
         $service = $response->getResourceOwner()->getName();
+
+        $user = $this->userManager->findUserBy(array("{$service}Id" => $userInfo['id']));
+
+        if ($user instanceof PersonInterface) {
+            $user = parent::loadUserByOAuthUserResponse($response);
+
+            $serviceName = $response->getResourceOwner()->getName();
+            $setter = 'set'.ucfirst($serviceName).'AccessToken';
+
+            $user->$setter($response->getAccessToken());
+
+            return $user;
+        }
+
+        $userInfo = $this->checkEmail($service, $userInfo);
+
+        $user = $this->userManager->createUser();
+        $this->setUserInfo($user, $userInfo, $service);
+
+        if ($userInfo['first_name']) {
+            $user->setFirstName($userInfo['first_name']);
+        }
+        if ($userInfo['family_name']) {
+            $user->setSurname($userInfo['family_name']);
+        }
+
+        $username = Uuid::uuid4()->toString();
+        if (!UsernameValidator::isUsernameValid($username)) {
+            $username = UsernameValidator::getValidUsername();
+        }
+
+        $availableUsername = $this->userManager->getNextAvailableUsername(
+            $username,
+            10,
+            Uuid::uuid4()->toString()
+        );
+
+        $user->setUsername($availableUsername);
+        $user->setEmail($userInfo['email']);
+        $user->setPassword('');
+        $user->setEnabled(true);
+        $this->userManager->updateCanonicalFields($user);
+
+        /** @var ValidatorInterface $validator */
+        $validator = $this->container->get('validator');
+        /** @var ConstraintViolationList $errors */
+        $errors = $validator->validate($user, ['Profile']);
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
+                if ($error->getPropertyPath() === 'email') {
+                    throw new DuplicateEmailException($service);
+                }
+            }
+        }
+
+        $form = $this->formFactory->createForm();
+        $form->setData($user);
+
+        $request = $this->container->get('request');
+        $eventResponse = new RedirectResponse('/');
+        $event = new FormEvent($form, $request);
+        $this->dispatcher->dispatch(
+            FOSUserEvents::REGISTRATION_SUCCESS,
+            $event
+        );
+
+        $this->userManager->updateUser($user);
+
+        $this->dispatcher->dispatch(
+            FOSUserEvents::REGISTRATION_COMPLETED,
+            new FilterUserResponseEvent(
+                $user, $request,
+                $eventResponse
+            )
+        );
+
+        return $user;
+    }
+
+    private function getUserInfo(UserResponseInterface $response)
+    {
+        $fullName = explode(' ', $response->getRealName(), 2);
+
+        $userInfo = [
+            'id' => $response->getUsername(),
+            'email' => $response->getEmail(),
+            'username' => $response->getNickname(),
+            'first_name' => $fullName[0],
+            'family_name' => $fullName[1],
+            'access_token' => $response->getAccessToken(),
+        ];
+
+        return $userInfo;
+    }
+
+    /**
+     * @param PersonInterface $person
+     * @param array $userInfo
+     * @param string $service
+     * @return PersonInterface
+     */
+    private function setUserInfo(PersonInterface $person, array $userInfo, $service)
+    {
         $setter = 'set'.ucfirst($service);
         $setter_id = $setter.'Id';
         $setter_token = $setter.'AccessToken';
         $setter_username = $setter.'Username';
 
-        $newUser = false;
-        $user = $this->userManager->findUserBy(array("{$service}Id" => $username));
+        $person->$setter_id($userInfo['id']);
+        $person->$setter_token($userInfo['access_token']);
+        $person->$setter_username($userInfo['username']);
 
-        if (null === $user) {
-            switch ($service) {
-                case 'twitter':
-                    $email = $this->session->get('twitter.email');
-                    if (!$email) {
-                        throw new MissingEmailException();
-                    } else {
-                        $this->session->remove('twitter.email');
-                    }
-                    $defaultUsername = "$screenName@$service";
-                break;
-                case 'google':
-                    $email = $rawResponse['email'];
-                    $defaultUsername = $email;
-                    break;
-                default:
-                    $email = $rawResponse['email'];
-                    $defaultUsername = $email;
-                break;
-            }
-            $newUser = true;
-            $user = $this->userManager->createUser();
-            $user->$setter_id($username);
-            $user->$setter_token($response->getAccessToken());
-            $user->$setter_username($screenName);
-
-            $fullName = explode(' ', $response->getRealName(), 2);
-            if (isset($fullName[0][1]) && $fullName[0][1] != '') {
-                $user->setFirstName($fullName[0]);
-            }
-            if (isset($fullName[1][1]) && $fullName[1][1] != '') {
-                $user->setSurname($fullName[1]);
-            }
-            
-            if (!UsernameValidator::isUsernameValid($screenName)) {
-                $screenName = UsernameValidator::getValidUsername();
-            }
-            $availableUsername = $this->userManager->getNextAvailableUsername($screenName,
-                    10, $defaultUsername);
-            $user->setUsername($availableUsername);
-            $user->setEmail($email);
-            $user->setPassword('');
-            $user->setEnabled(true);
-            $this->userManager->updateCanonicalFields($user);
-
-            $form = $this->formFactory->createForm();
-            $form->setData($user);
-
-            $request = $this->container->get('request');
-            $eventResponse = new \Symfony\Component\HttpFoundation\RedirectResponse('/');
-            $event = new FormEvent($form, $request);
-            if ($newUser) {
-                $this->dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS,
-                        $event);
-            }
-
-            $this->userManager->updateUser($user);
-
-            if ($newUser) {
-                $this->dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED,
-                        new FilterUserResponseEvent($user, $request,
-                        $eventResponse));
-            }
-
-            return $user;
-        }
-
-        $user = parent::loadUserByOAuthUserResponse($response);
-
-        $serviceName = $response->getResourceOwner()->getName();
-        $setter = 'set'.ucfirst($serviceName).'AccessToken';
-
-        $user->$setter($response->getAccessToken());
-
-        return $user;
+        return $person;
     }
 
+    /**
+     * @param $service
+     * @param $userInfo
+     * @return mixed
+     * @throws MissingEmailException
+     */
+    private function checkEmail($service, $userInfo)
+    {
+        if (!$userInfo['email'] || $this->session->has("$service.email")) {
+            if (!$this->session->get("$service.email")) {
+                $this->session->set("$service.userinfo", $userInfo);
+                throw new MissingEmailException($service);
+            }
+            $userInfo['email'] = $this->session->get("$service.email");
+            $this->session->remove("$service.email");
+            $this->session->remove("$service.userinfo");
+        }
+
+        return $userInfo;
+    }
 }

@@ -83,7 +83,7 @@ class TaskSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if ($this->options['mandatoryEmailValidation'] && $user->getConfirmationToken()) {
+        if ($this->options['mandatoryEmailValidation'] && !($user->getEmailConfirmedAt() instanceof \DateTime)) {
             $task = (new ConfirmEmailTask())
                 ->setIsMandatory(true);
             $event->addTask($task);
