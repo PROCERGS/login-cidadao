@@ -84,7 +84,3 @@ O parâmetro `data` é uma estrutura de dados serializada no formato JSON. Nessa
 ```
 
 O parâmetro `signature` é uma assinatura do tipo `HMAC`, usando a função `sha256` sobre a informação contida no parâmetro `data`. A senha utilizada para fazer essa assinatura é a Chave privada (ou Secret) do Client OAuth. Dessa forma, é possivel garantir a autenticidade do mensagem enviada.
-
-[Voltar à Introdução à API REST](restApiIntro.md)
-
-[Voltar ao índice](index.md)

@@ -46,4 +46,4 @@ Observe que, para sua conveniência, nós já retornamos a URL completa para ond
 
 De posse da Logout Key e da URL você pode alternativamente redirectionar o usuário para essa URL ou abri-la em um frame escondido na sua página.
 
-[ Voltar ao Índice ](index.md)
+

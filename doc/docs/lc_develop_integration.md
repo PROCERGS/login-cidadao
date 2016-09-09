@@ -29,7 +29,7 @@ Tanto as URLs do Login Cidadão quanto as chaves de acesso devem ser obtidas na 
 
 Você pode solicitar quantos e quais escopos desejar, entretanto esteja ciente de que quanto mais informações você solicitar ao usuário menor será a probabilidade do mesmo lhe autorizar a recebê-las, portanto solicite apenas o **absolutamente necessário**.
 
-A lista dos escopos suportados pode ser encontrada [ aqui ](scopes.md).
+A lista dos escopos suportados pode ser encontrada [ aqui ](lc_develop_scopes.md).
 
 ## Exemplos
 
@@ -38,8 +38,8 @@ Em todos os exemplos é necessário ter as [ Informações Básicas ](#basic_inf
 
 Para continuar escolha um dos seguintes exemplos para explicarmos como utilizar a autenticação:
 
-* [ Exemplo utilizando PHP 5.2 ](examplephp5_2.md)
-* [ Exemplo utilizando PHP 5.3 ](examplephp5_3.md)
-* [ Exemplo utilizando Java ](examplejava.md)
+* [ Exemplo utilizando PHP 5.2 ](lc_develop_connecting_with_php5.2_applications.md)
+* [ Exemplo utilizando PHP 5.3 ](lc_develop_connecting_with_php5.3_applications.md)
+* [ Exemplo utilizando Java ](lc_develop_integration.md)
 
-[ Voltar ao Índice ](index.md)
+

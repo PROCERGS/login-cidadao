@@ -1,4 +1,4 @@
-Para a configuração dos serviços descritos abaixo é necessário criar uma imagem representativa da aplicação para o facebook, twitter e google. Aconselho criá-la com tamanho 1024x1024 pois é o tamanho obrigatório no facebook e poderá ser usada nos outros serviços.
+Para a configuração dos serviços descritos abaixo é necessário criar uma imagem (png/jpg) representativa da aplicação para o facebook, twitter e google. Aconselho criá-la com tamanho 1024x1024 pois é o tamanho obrigatório no facebook e poderá ser usada nos outros serviços.
 
 ## Facebook
 

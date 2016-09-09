@@ -292,6 +292,4 @@ Permite acesso de leitura ao telefone celular de uma pessoa. Apenas números ser
 
 ## <a name="logout"></a> logout
 
-Permite que sejam geradas Logou Keys de forma a habilitar um Client OAuth a deslogar um determinado usuário. [ Leia mais aqui ](remoteLogout.md)
-
-[ Voltar ao Índice ](index.md)
+Permite que sejam geradas Logou Keys de forma a habilitar um Client OAuth a deslogar um determinado usuário. [ Leia mais aqui ](lc_config_logout_remote.md)

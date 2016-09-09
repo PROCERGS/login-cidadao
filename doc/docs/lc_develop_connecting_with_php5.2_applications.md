@@ -2,7 +2,7 @@
 
 ## Antes de Começar
 
-Certifique-se de que você tem todos os dados descritos [ aqui ](integration.md#basic_info) antes de seguir o tutorial.
+Certifique-se de que você tem todos os dados descritos [ aqui ](lc_develop_integration.md#basic_info) antes de seguir o tutorial.
 
 ### Dependências
 
@@ -85,4 +85,4 @@ if ($client->exit) {
 
 Uma vez obtido o Access Token podemos pegar os dados do usuário através da variável `$user` que estará populada com as informações solicitadas na propriedade `scope`.
 
-[ Voltar ao Índice ](index.md)
+

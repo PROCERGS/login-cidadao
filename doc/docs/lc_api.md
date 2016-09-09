@@ -89,6 +89,5 @@ Host: meu.rs.gov.br
 Veja também
 -----------
 
-[Enviando Notificações](sendingNotifications.md)
+[Enviando Notificações](lc_api_sending_notifications.md)
 
-[ Voltar ao Índice ](index.md)

@@ -20,4 +20,8 @@ Be sure and configure your application as needed before attempting the "your acc
 
 ## Facebook API
 
+***Documentação incompleta***
+
 ## Recaptcha Key
+
+***Documentação incompleta***
