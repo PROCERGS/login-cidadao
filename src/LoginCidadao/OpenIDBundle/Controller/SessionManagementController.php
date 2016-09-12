@@ -105,7 +105,7 @@ class SessionManagementController extends Controller
         $finishedView = 'LoginCidadaoOpenIDBundle:SessionManagement:endSession.finished.html.twig';
         try {
             $idToken = $request->get('id_token_hint');
-            $postLogoutUri = $request->get('post_logout_redirect_uris', null);
+            $postLogoutUri = $request->get('post_logout_redirect_uri', null);
             $loggedOut = !$this->isGranted('IS_AUTHENTICATED_REMEMBERED');
             $getLogoutConsent = $this->shouldGetLogoutConsent($idToken, $loggedOut);
 
