@@ -478,4 +478,4 @@ contact:
         message:
             label: Message
             placeholder: Describe the technical problem you are having.
-    submit: Send message
+        submit: Send message

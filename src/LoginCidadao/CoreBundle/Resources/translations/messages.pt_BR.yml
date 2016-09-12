@@ -887,4 +887,4 @@ contact:
         message:
             label: Mensagem
             placeholder: Descreva o problema técnico que você está tendo.
-    submit: Enviar
+        submit: Enviar
