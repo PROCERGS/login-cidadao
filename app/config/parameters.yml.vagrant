@@ -122,3 +122,12 @@ parameters:
     # When true, during the authorization process, the user will only be prompted to fill in missing information
     # if it's a new authorization
     pre_authorization.complete_information_task.skip_if_authorized: true
+
+    nfg_ws_url: ~
+    soe_organization: ~
+    soe_username: ~
+    soe_password: ~
+    nfg_url_auth: ~
+    nfg_url_login: ~
+    nfg_hmac_secret: ~
+    tre_search_link: ''
