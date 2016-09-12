@@ -3,7 +3,6 @@
 {% block notificationExtreme %}{% endblock %}
 
 {% block panel_body %}
-    {{ form_start(form, {'attr' : {'role' : 'form'}}) }}
     <div class="form-content">
         {% for flashMessage in app.session.flashbag.get('success') %}
             <div class="alert alert-success alert-bar">
@@ -13,6 +12,9 @@
 
         <h1>{{ 'contact.title' | trans }}</h1>
 
+        <p>{{ 'contact.body' | trans }}</p>
+
+        {{ form_start(form, {'attr' : {'role' : 'form'}}) }}
         {{ form_row(form.name, { 'label_attr' : {'class': 'sr-only' } }) }}
         {{ form_row(form.email, { 'label_attr' : {'class': 'sr-only' } }) }}
         {{ form_row(form.message, { 'attr' : {'class' :'form-control', 'rows': '3' }, 'label_attr' : {'class': 'sr-only'} } ) }}
@@ -20,9 +22,10 @@
         {% if form.recaptcha is defined %}
             {{ form_widget(form.recaptcha) }}
         {% endif %}
+
         <button type="submit" class="btn btn-success pull-right">{{ 'contact.form.submit'|trans }}</button>
+        {{ form_end(form) }}
     </div>
-    {{ form_end(form) }}
 {% endblock %}
 
 {#{% trans_default_domain 'FOSUserBundle' %}#}

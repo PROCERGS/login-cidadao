@@ -877,6 +877,7 @@ duplicate_email:
     button.login: Acessar sua conta
 contact:
     title: Contato
+    body: Para obter suporte técnico relacionado ao Login Cidadão por favor preencha o formulário a seguir descrevendo o problema que você está enfrentando.
     form:
         name:
             label: Nome

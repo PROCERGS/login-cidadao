@@ -468,6 +468,7 @@ duplicate_email:
     button.login: Login
 contact:
     title: Contact us
+    body: To get technical support related to Citizen Login please fill this form describing the problem you are experiencing.
     form:
         name:
             label: Name
