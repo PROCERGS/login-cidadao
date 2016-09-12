@@ -24,21 +24,24 @@ class ContactFormType extends AbstractType
             'text',
             array(
                 'required' => true,
-                'label' => 'form.firstName',
+                'label' => 'contact.form.name.label',
+                'attr' => ['placeholder' => 'contact.form.name.placeholder']
             )
         )->add(
             'email',
             'email',
             array(
                 'required' => true,
-                'label' => 'form.email',
+                'label' => 'contact.form.email.label',
+                'attr' => ['placeholder' => 'contact.form.email.placeholder']
             )
         )->add(
             'message',
             'Symfony\Component\Form\Extension\Core\Type\TextareaType',
             array(
                 'required' => true,
-                'label' => 'form.message',
+                'label' => 'contact.form.message.label',
+                'attr' => ['placeholder' => 'contact.form.message.placeholder']
             )
         );
 

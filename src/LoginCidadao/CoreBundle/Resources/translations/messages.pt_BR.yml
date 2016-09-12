@@ -877,4 +877,14 @@ duplicate_email:
     button.login: Acessar sua conta
 contact:
     title: Contato
+    form:
+        name:
+            label: Nome
+            placeholder: Digite seu nome
+        email:
+            label: Email
+            placeholder: Digite seu email
+        message:
+            label: Mensagem
+            placeholder: Descreva o problema técnico que você está tendo.
     submit: Enviar
