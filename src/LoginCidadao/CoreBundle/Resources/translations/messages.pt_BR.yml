@@ -100,7 +100,6 @@ Government: Governo
 'view all services': 'ver todos serviços'
 exception.alreadyLinkedAccount: 'Essa conta já está conectada a um outro usuário. Você deve desfazer essa conexão antes de tentar linkar com o usuário atual.'
 '<a href="%link%">Background picture</a> by %name%': '<a href="%link%">Imagem de fundo</a> por %name%'
-contact.title: 'Contato'
 cpf.registration.title: 'Registro de CPF'
 'Active Services': 'Serviços Ativos'
 'Other Services': 'Demais serviços'
@@ -876,3 +875,6 @@ duplicate_email:
     body: Você tentou cadastrar-se utilizando um email que já está associado a uma conta existente.
     tip: Se o que você deseja é vincular um serviço à sua conta, é necessário autenticar-se nessa conta para só então fazer a vinculação.
     button.login: Acessar sua conta
+contact:
+    title: Contato
+    submit: Enviar
