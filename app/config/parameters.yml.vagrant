@@ -1,5 +1,5 @@
 parameters:
-	database_driver:   pdo_pgsql
+    database_driver:   pdo_pgsql
     database_host:     ~
     database_port:     ~
     database_name:     lc
@@ -10,11 +10,18 @@ parameters:
     trusted_proxies: []
     # IPs allowed to access dev environment
     dev_allowed: [ 127.0.0.0/8 ]
+    # IPs allowed to access monitoring endpoint
+    allowed_monitors: [ 127.0.0.0/8 ]
 
     memcached_host: 127.0.0.1
     memcached_port: 11211
+    # Memcached cache prefix
+    memcached_prefix: lc_cache_
+
     session_prefix: lc_sess_
     session_lifetime: 86400
+    # Session Remember Me Cookie Name
+    session.remember_me.name: REMEMBERME
 
     mailer_transport:  smtp
     mailer_host:       127.0.0.1
@@ -28,7 +35,6 @@ parameters:
 
     facebook_app_id: facebook_app_id_here
     facebook_app_secret: facebook_app_secret_here
-    facebook_app_url: facebook_app_url
     facebook_app_this_url: "https://%site_domain%"
     facebook_app_scope: [email, user_about_me, user_birthday, user_location]
 
@@ -52,25 +58,25 @@ parameters:
     registration.email.unconfirmed_time: '1 day'
     brute_force_threshold: 4
 
-    background_picture.author: 'Guilherme da Silva Donato'
-    background_picture.link: 'http://www.flickr.com/photos/lordjedi/2295119043/'
     mailer_receiver_mail: ~
 
     user_profile_upload_dir: %kernel.root_dir%/../web/uploads/profile-pictures
     client_image_upload_dir: '%kernel.root_dir%/../web/uploads/client-pictures'
-    tre_search_link: 'http://www.tse.jus.br/eleitor/servicos/titulo-e-local-de-votacao/consulta-por-nome'
     uri_root: /
 
     google_app_key: YOUR_API_KEY
     google_app_secret: YOUR_API_SECRET
 
+    # Should login be allowed from this third-party providers?
+    third_party_login:
+        facebook: true
+        twitter: true
+        google: true
+
     # Default Client
     oauth_default_client.uid: login-cidadao
     # Notification's categories IDs
     notifications_categories_alert.uid: login-cidadao-alert
-
-    # Postal Code Search Link
-    postalcode_search_link: 'http://m.correios.com.br/movel/buscaCep.do'
 
     # Default Country ISO 2
     default_country_iso2: BR
@@ -91,3 +97,28 @@ parameters:
 
     # Enables or disables the contact form's captcha
     contact_form.captcha: true
+
+    # Warn users about untrusted Organizations?
+    warn_untrusted: true
+
+    # Password Encoder
+    default_password_encoder: bcrypt
+
+    # Should sector_identifier_uri be revalidated on each auth request?
+    revalidate_sector_identifier_uri_on_auth: true
+
+    # Should passwords be checked for PathWell Topologies?
+    check_pathwell_topologies: true
+
+    # When true, users won't be able to do anything before validating their email
+    require_email_validation: true
+
+    # Always get user consent at RP-Initiated Logout
+    rp_initiated_logout.logout.always_get_consent: true
+
+    # Always get user consent when redirecting after RP-Initiated Logout
+    rp_initiated_logout.redirect.always_get_consent: false
+
+    # When true, during the authorization process, the user will only be prompted to fill in missing information
+    # if it's a new authorization
+    pre_authorization.complete_information_task.skip_if_authorized: true
