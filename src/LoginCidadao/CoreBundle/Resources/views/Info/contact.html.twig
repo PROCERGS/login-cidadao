@@ -1,49 +1,46 @@
-{% extends 'LoginCidadaoCoreBundle::base.html.twig' %}
-{% trans_default_domain 'FOSUserBundle' %}
-{% block body %}
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
 
-    {% block notificationExtreme %}
-        {{ include("LoginCidadaoCoreBundle::notification_extreme.html.twig", { columns: 'col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3' } ) }}
-    {% endblock %}
+{% block notificationExtreme %}{% endblock %}
+
+{% block panel_body %}
+    <div class="form-content">
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-success alert-bar">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+
+        <h1>{{ 'contact.title' | trans }}</h1>
+
+        <p>{{ 'contact.body' | trans }}</p>
+
+        {{ form_start(form, {'attr' : {'role' : 'form'}}) }}
+        {{ form_row(form.name, { 'label_attr' : {'class': 'sr-only' } }) }}
+        {{ form_row(form.email, { 'label_attr' : {'class': 'sr-only' } }) }}
+        {{ form_row(form.message, { 'attr' : {'class' :'form-control', 'rows': '3' }, 'label_attr' : {'class': 'sr-only'} } ) }}
+
+        {% if form.recaptcha is defined %}
+            {{ form_widget(form.recaptcha) }}
+        {% endif %}
+
+        <button type="submit" class="btn btn-success pull-right">{{ 'contact.form.submit'|trans }}</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{#{% trans_default_domain 'FOSUserBundle' %}#}
+{% block bodyX %}
 
     <div class="row">
         <div class="general-content col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3 clearfix">
-            {{ form_start(form, {'attr' : {'role' : 'form'}}) }}
-            <div class="form-content">
-                {% for flashMessage in app.session.flashbag.get('success') %}
-                    <div class="alert alert-success alert-bar">
-                        {{ flashMessage }}
-                    </div>
-                {% endfor %}
 
-                <h1>{{ 'contact.title'|trans({}, 'messages') }}</h1>
-
-                <div class="form-group">
-                    {{ form_row(form.firstName, { 'attr' : {'placeholder' : 'form.firstName'|trans }, 'label_attr' : {'class': 'sr-only' } }) }}
-                </div>
-                <div class="form-group">
-                    {{ form_row(form.email, { 'attr' : {'placeholder' : 'form.email'|trans }, 'label_attr' : {'class': 'sr-only' } }) }}
-                </div>
-                <div class="form-group">
-                    {{ form_row(form.message, { 'attr' : {'placeholder' : 'form.message'|trans, 'class' :'form-control', 'rows': '3' }, 'label_attr' : {'class': 'sr-only'} } ) }}
-                </div>
-                {% if form.recaptcha is defined %}
-                    {{ form_widget(form.recaptcha) }}
-                {% endif %}
-                <button type="submit" class="btn btn-success pull-right">{{ 'form.submit'|trans }}</button>
-            </div>
-            {{ form_end(form) }}
         </div>
     </div>
 {% endblock %}
 
-{% block stylesheets_custom %}
-    {% stylesheets '@lc_base_css' filter='cssrewrite' filter='?uglifycss' %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script src="//www.google.com/recaptcha/api.js?hl={{ app.request.locale }}"></script>
-{% endblock %}
+{% if form.recaptcha is defined %}
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="//www.google.com/recaptcha/api.js?hl={{ app.request.locale }}"></script>
+    {% endblock %}
+{% endif %}

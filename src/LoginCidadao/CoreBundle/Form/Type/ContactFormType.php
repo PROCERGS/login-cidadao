@@ -5,6 +5,7 @@ namespace LoginCidadao\CoreBundle\Form\Type;
 use Beelab\Recaptcha2Bundle\Validator\Constraints\Recaptcha2;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContactFormType extends AbstractType
 {
@@ -18,23 +19,31 @@ class ContactFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('firstName', 'text',
+        $builder->add(
+            'name',
+            'text',
             array(
-            'required' => true,
-            'label' => 'form.firstName',
-            'mapped' => false
-        ))->add('email', 'email',
+                'required' => true,
+                'label' => 'contact.form.name.label',
+                'attr' => ['placeholder' => 'contact.form.name.placeholder']
+            )
+        )->add(
+            'email',
+            'email',
             array(
-            'required' => true,
-            'label' => 'form.email',
-            'mapped' => false
-        ))->add('message',
+                'required' => true,
+                'label' => 'contact.form.email.label',
+                'attr' => ['placeholder' => 'contact.form.email.placeholder']
+            )
+        )->add(
+            'message',
             'Symfony\Component\Form\Extension\Core\Type\TextareaType',
             array(
-            'required' => true,
-            'label' => 'form.message',
-            'mapped' => false
-        ));
+                'required' => true,
+                'label' => 'contact.form.message.label',
+                'attr' => ['placeholder' => 'contact.form.message.placeholder']
+            )
+        );
 
         if ($this->enableCaptcha) {
             $builder->add(
@@ -48,6 +57,16 @@ class ContactFormType extends AbstractType
             );
         }
     }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(
+            [
+                'data_class' => 'LoginCidadao\CoreBundle\Model\SupportMessage',
+            ]
+        );
+    }
+
 
     public function getName()
     {
