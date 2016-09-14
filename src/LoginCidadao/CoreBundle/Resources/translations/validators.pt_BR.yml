@@ -12,6 +12,11 @@ admin.impersonation_report.validation.error:
     report.short: Elabore mais sobre o acesso realizado. Não esqueça de incluir os motivos do acesso e as ações realizadas.
 client.edit.sector_identifier_uri.not_allowed: Todas as suas URIs para Redirectionamento precisam estar listadas pelo seu Sector Identifier
 person.validation:
+    name.length:
+        min: O nome informado é muito curto.
+        max: O nome informado é muito longo.
+    email.length:
+        max: O email informado é muito longo.
     password.length:
         min: A senha deve ter, ao menos, {{ limit }} caracteres
         max: A senha deve ter, no máximo, {{ limit }} caracteres

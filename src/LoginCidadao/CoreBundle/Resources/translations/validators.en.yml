@@ -8,6 +8,11 @@ admin.impersonation_report.validation.error:
     report.short: Please elaborate on your description. Don''t forget to include the reasons of such access as well as the actions that were made.
 client.edit.sector_identifier_uri.not_allowed: All your Redirect URIs MUST be listed in the Sector Identifier list
 person.validation:
+    name.length:
+        min: This name is too short.
+        max: This name is too long.
+    email.length:
+        max: This email is too long.
     password.length:
         min: The password must have at least {{ limit }} characters
         max: The password must have at most {{ limit }} characters
