@@ -11,6 +11,8 @@ person.validation:
     name.length:
         min: This name is too short.
         max: This name is too long.
+    email.length:
+        max: This email is too long.
     password.length:
         min: The password must have at least {{ limit }} characters
         max: The password must have at most {{ limit }} characters

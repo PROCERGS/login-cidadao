@@ -33,6 +33,10 @@ class SupportMessage
      * @var string
      *
      * @Assert\Email
+     * @Assert\Length(
+     *     max="255",
+     *     maxMessage="person.validation.email.length.max"
+     * )
      */
     private $email;
 
