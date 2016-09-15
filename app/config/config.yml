@@ -77,6 +77,15 @@ assetic:
             inputs:
                 - 'assets/vendor/bootstrap/dist/css/bootstrap.min.css'
                 - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
+        intl_tel_input_css:
+            inputs:
+                - 'bundles/logincidadaocore/intl-tel-input/css/intlTelInput.css'
+        intl_tel_input_js:
+            inputs:
+                - 'bundles/logincidadaocore/intl-tel-input/js/intlTelInput.min.js'
+        intl_tel_input_utils_js:
+            inputs:
+                - 'bundles/logincidadaocore/intl-tel-input/js/utils.js'
         lc_compact_layout_css:
             inputs:
                 - '@bootstrap_css'

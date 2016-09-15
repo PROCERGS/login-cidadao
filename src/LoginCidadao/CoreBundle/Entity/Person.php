@@ -445,7 +445,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     public function setMobile($mobile)
     {
-        $mobile = preg_replace('/[^0-9]/', '', $mobile);
+        $mobile = preg_replace('/[^0-9+]/', '', $mobile);
         $this->mobile = $mobile;
     }
 
