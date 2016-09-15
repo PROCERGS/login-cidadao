@@ -34,7 +34,7 @@ class SupportMessage
      * @var string
      *
      * @Assert\NotBlank
-     * @Assert\Email
+     * @Assert\Email(strict=true)
      * @Assert\Length(
      *     max="255",
      *     maxMessage="person.validation.email.length.max"
