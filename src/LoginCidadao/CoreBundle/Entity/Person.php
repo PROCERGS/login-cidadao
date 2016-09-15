@@ -118,7 +118,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Expose
      * @JMS\Groups({"email"})
      * @JMS\Since("1.0")
-     * @Assert\Email(groups={"Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration", "LoginCidadaoEmailForm"})
+     * @Assert\Email(strict=true, groups={"Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration", "LoginCidadaoEmailForm"})
      */
     protected $email;
 
