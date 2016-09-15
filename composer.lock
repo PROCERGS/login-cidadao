@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8a70b6c4fb909a294012c71b0a7e4abd",
-    "content-hash": "67ac8be53a6044613302b11ac93ceb54",
+    "hash": "08c8c1da283dde6784ea408c198147d3",
+    "content-hash": "4fa93cb0631a85c85cb310f1fcb3e530",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -257,16 +257,16 @@
         },
         {
             "name": "cebe/markdown",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cebe/markdown.git",
-                "reference": "54a2c49de31cc44e864ebf0500a35ef21d0010b2"
+                "reference": "c30eb5e01fe021cc5bba2f9ee0eeef96d4931166"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cebe/markdown/zipball/54a2c49de31cc44e864ebf0500a35ef21d0010b2",
-                "reference": "54a2c49de31cc44e864ebf0500a35ef21d0010b2",
+                "url": "https://api.github.com/repos/cebe/markdown/zipball/c30eb5e01fe021cc5bba2f9ee0eeef96d4931166",
+                "reference": "c30eb5e01fe021cc5bba2f9ee0eeef96d4931166",
                 "shasum": ""
             },
             "require": {
@@ -313,7 +313,7 @@
                 "markdown",
                 "markdown-extra"
             ],
-            "time": "2015-03-06 05:28:07"
+            "time": "2016-09-14 20:40:20"
         },
         {
             "name": "doctrine/annotations",
@@ -1073,6 +1073,58 @@
             "time": "2015-08-31 13:19:01"
         },
         {
+            "name": "egulias/email-validator",
+            "version": "1.2.13",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/egulias/EmailValidator.git",
+                "reference": "b8bb147f46cc9790326ce2440a13be06cc5a63bb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/b8bb147f46cc9790326ce2440a13be06cc5a63bb",
+                "reference": "b8bb147f46cc9790326ce2440a13be06cc5a63bb",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/lexer": "^1.0.1",
+                "php": ">= 5.3.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.24"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Egulias\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eduardo Gulias Davis"
+                }
+            ],
+            "description": "A library for validating emails",
+            "homepage": "https://github.com/egulias/EmailValidator",
+            "keywords": [
+                "email",
+                "emailvalidation",
+                "emailvalidator",
+                "validation",
+                "validator"
+            ],
+            "time": "2016-07-03 21:52:18"
+        },
+        {
             "name": "facebook/php-sdk",
             "version": "v3.2.0",
             "source": {
@@ -1399,12 +1451,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "528f0a93aebb641a0bc6471cc24562fbd01432cb"
+                "reference": "4cb7a29869e4a9bef4f51986d48b1a3af76d3f48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/528f0a93aebb641a0bc6471cc24562fbd01432cb",
-                "reference": "528f0a93aebb641a0bc6471cc24562fbd01432cb",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/4cb7a29869e4a9bef4f51986d48b1a3af76d3f48",
+                "reference": "4cb7a29869e4a9bef4f51986d48b1a3af76d3f48",
                 "shasum": ""
             },
             "require": {
@@ -1463,7 +1515,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2016-09-09 10:00:40"
+            "time": "2016-09-12 15:04:02"
         },
         {
             "name": "google/recaptcha",
@@ -2856,12 +2908,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "e6e424687ed934256bf9c68585eff0fbb40c13c4"
+                "reference": "73d4db51e1f16cda1802e3e0e3977d506971d32d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/e6e424687ed934256bf9c68585eff0fbb40c13c4",
-                "reference": "e6e424687ed934256bf9c68585eff0fbb40c13c4",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/73d4db51e1f16cda1802e3e0e3977d506971d32d",
+                "reference": "73d4db51e1f16cda1802e3e0e3977d506971d32d",
                 "shasum": ""
             },
             "require": {
@@ -2932,7 +2984,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2016-08-04 09:03:43"
+            "time": "2016-09-10 06:38:33"
         },
         {
             "name": "nelmio/cors-bundle",

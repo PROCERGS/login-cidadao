@@ -62,6 +62,7 @@
         "bmatzner/fontawesome-bundle": "^4.6",
         "ramsey/uuid": "^3.5",
         "qandidate/stack-request-id": "dev-ramsey-uuid-v3",
+        "egulias/email-validator": "~1.2",
         "paragonie/random_compat": "1.4.*",
         "procergs/meurs-monitor-bundle": "^1.0",
         "procergs/nfg-badges-bundle": "^1.1"
