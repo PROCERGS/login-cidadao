@@ -100,6 +100,7 @@ assetic:
         lc_login_register_css:
             inputs:
                 - '@lc_compact_layout_css'
+                - '@intl_tel_input_css'
                 - 'bundles/logincidadaocore/css/login_register/*.css'
         lc_authorization_css:
             inputs:

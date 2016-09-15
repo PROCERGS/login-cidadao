@@ -216,6 +216,7 @@
         '@intl_tel_input_js'
         '@LoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
         '@LoginCidadaoCoreBundle/Resources/public/js/dynamic-form/locationSelect.js'
+        '@LoginCidadaoCoreBundle/Resources/public/js/components/intl-tel-input.js'
         filter='uglifyjs2' %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -223,10 +224,7 @@
     <script>
         $('.birthdate').mask('00/00/0000', {'translation': {0: {pattern: /[0-9*]/}}});
         {% javascripts '@intl_tel_input_utils_js' filter='uglifyjs2' %}
-        $(".intl-tel").intlTelInput({
-            preferredCountries: ["br"],
-            utilsScript: '{{ asset_url }}'
-        });
+        var intlTelInputUtilsScriptUrl = '{{ asset_url }}';
         {% endjavascripts %}
 
         $(function () {
@@ -270,12 +268,6 @@
 
             $('.unlink-confirmation .cancel').on('click', function () {
                 $('.unlink-confirmation').slideUp();
-            });
-
-            $("form").submit(function() {
-                $('.intl-tel').each(function() {
-                    $(this).val($(this).intlTelInput("getNumber"));
-                });
             });
         });
     </script>

@@ -136,3 +136,7 @@ footer ul.dashed > li:before {
     font-size: 20px;
     margin-top: 0;
 }
+
+.intl-tel-label {
+    display: block;
+}
