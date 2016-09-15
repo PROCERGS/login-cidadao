@@ -20,6 +20,7 @@ class SupportMessage
 {
     /**
      * @var string
+     * @Assert\NotBlank
      * @Assert\Length(
      *     min=3,
      *     max="255",
@@ -32,6 +33,7 @@ class SupportMessage
     /**
      * @var string
      *
+     * @Assert\NotBlank
      * @Assert\Email
      * @Assert\Length(
      *     max="255",
@@ -42,6 +44,7 @@ class SupportMessage
 
     /**
      * @var string
+     * @Assert\NotBlank
      */
     private $message;
 
