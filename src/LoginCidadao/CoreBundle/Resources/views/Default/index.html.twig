@@ -1,5 +1,6 @@
 {% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
 
+{% set form1 = lc_getForm() %}
 {% set is_lc_home = app.request.attributes.get('_route') == 'lc_home' %}
 {% set is_login_page = is_lc_home or app.request.attributes.get('_route') == 'fos_user_security_login' %}
 {% set is_register_page = app.request.attributes.get('_route') == 'fos_user_registration_register' %}
@@ -16,7 +17,6 @@
 
 {% block panel_body %}
     <div class="login" {{ is_register_page ? 'style="display: none"' : '' }}>
-        {% set form1 = lc_getForm() %}
         {{ include('LoginCidadaoCoreBundle::common.login.html.twig') }}
     </div>
     <div class="registration" {{ is_login_page ? 'style="display: none"' : '' }}>
