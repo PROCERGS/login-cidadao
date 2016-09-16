@@ -109,7 +109,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Expose
      * @JMS\Groups({"cpf"})
      * @ORM\Column(type="string", nullable=true, unique=true)
-     * @LCAssert\CPF(groups={"Documents", "Dynamic"})
+     * @LCAssert\CPF(groups={"Documents", "Dynamic", "LoginCidadaoRegistration"})
      * @JMS\Since("1.0")
      */
     protected $cpf;
