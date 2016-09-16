@@ -13,8 +13,14 @@ $(document).ready(function () {
         utilsScript: intlTelInputUtilsScriptUrl
     });
 
-    $("form").submit(function() {
-        $('.intl-tel').each(function() {
+
+    $(".intl-tel").on('blur', function () {
+        var currentFormat = ($(this).val()[0] === "+") ? intlTelInputUtils.numberFormat.INTERNATIONAL : intlTelInputUtils.numberFormat.NATIONAL;
+        $(this).val($(this).intlTelInput("getNumber", currentFormat));
+    });
+
+    $("form").submit(function () {
+        $('.intl-tel').each(function () {
             $(this).val($(this).intlTelInput("getNumber"));
         });
     });
