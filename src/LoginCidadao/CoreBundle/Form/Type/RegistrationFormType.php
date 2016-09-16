@@ -114,6 +114,7 @@ class RegistrationFormType extends BaseType
                 );
                 break;
             case 'mobile':
+            case 'phone_number':
                 $builder->add(
                     'mobile',
                     null,
