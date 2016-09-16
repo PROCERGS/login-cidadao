@@ -304,7 +304,7 @@ footer .copyright {
 form .input-error {
     background-color: #E64442;
     background-image: none;
-    color: #FFF;
+    color: #FFF !important;
     filter:none;
     font-size: 12px;
     font-weight: 500;
