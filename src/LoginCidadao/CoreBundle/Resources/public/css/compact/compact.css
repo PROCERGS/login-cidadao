@@ -136,3 +136,7 @@ footer ul.dashed > li:before {
     font-size: 20px;
     margin-top: 0;
 }
+
+form .error {
+    color: #ac0000;
+}
