@@ -300,13 +300,18 @@ class DynamicFormController extends Controller
             case 'id_cards':
                 $this->addIdCard($request, $formBuilder, $person);
                 break;
+            case 'phone_number':
             case 'mobile':
                 $this->addPersonField(
                     $formBuilder,
                     $person,
                     'mobile',
                     null,
-                    array('required' => true)
+                    array(
+                        'required' => true,
+                        'attr' => [ 'class' => 'form-control intl-tel' ],
+                        'label_attr' => ['class' => 'intl-tel-label'],
+                    )
                 );
                 break;
             case 'birthdate':
