@@ -5,7 +5,7 @@ env:
 - SYMFONY_DEPRECATIONS_HELPER=weak
 
 php:
-- 5.4
+- 5.4.16
 
 matrix:
   fast_finish: true
