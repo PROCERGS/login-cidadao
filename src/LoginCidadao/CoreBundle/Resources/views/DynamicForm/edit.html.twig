@@ -91,14 +91,21 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {% javascripts  '@LoginCidadaoCoreBundle/Resources/public/js/dynamic-form/idCard.js'
+    {% javascripts
+    '@intl_tel_input_js'
+    '@LoginCidadaoCoreBundle/Resources/public/js/dynamic-form/idCard.js'
     '@LoginCidadaoCoreBundle/Resources/public/js/dynamic-form/locationSelect.js'
     '@LoginCidadaoCoreBundle/Resources/public/js/components/jquery-scrollto.js'
-    '@LoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js' filter='uglifyjs2' %}
+    '@LoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
+    '@LoginCidadaoCoreBundle/Resources/public/js/components/intl-tel-input.js' filter='uglifyjs2' %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
     <script>
+        {% javascripts '@intl_tel_input_utils_js' filter='uglifyjs2' %}
+        var intlTelInputUtilsScriptUrl = '{{ asset_url }}';
+        {% endjavascripts %}
+
         $(document).ready(function () {
             $('.birthdate').mask('00/00/0000', {'translation': {0: {pattern: /[0-9*]/}}});
             $('.cpf').mask('000.000.000-00', {'translation': {0: {pattern: /[0-9*]/}}});
@@ -158,7 +165,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {% stylesheets  '@LoginCidadaoCoreBundle/Resources/public/css/dynamic_form.css' %}
+    {% stylesheets  '@LoginCidadaoCoreBundle/Resources/public/css/dynamic_form.css' '@intl_tel_input_css' filter='cssrewrite' filter='?uglifycss' %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock stylesheets %}

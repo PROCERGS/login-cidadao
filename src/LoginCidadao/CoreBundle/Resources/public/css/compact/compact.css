@@ -140,3 +140,7 @@ footer ul.dashed > li:before {
 form .error {
     color: #ac0000;
 }
+
+.intl-tel-label {
+    display: block;
+}

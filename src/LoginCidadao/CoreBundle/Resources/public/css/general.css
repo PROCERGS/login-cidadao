@@ -502,3 +502,7 @@ form .has-feedback .sr-only ~ .form-control-feedback {
     color: #474747;
     text-shadow: 1px 1px 1px #D8D8D8;
 }
+
+.intl-tel-label {
+    display: block;
+}
