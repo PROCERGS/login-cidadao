@@ -15,6 +15,7 @@ scope.city: City
 scope.badges: Badges
 scope.picture: Picture
 scope.public_profile: Public Profile
+scope.phone_number: Phone Number
 scope_details.public_profile: Your public profile contains your first name, age range and your certificates (badges).
 'Citizen''s Login': 'Citizen''s Login'
 'Need help?': 'Need help?'
@@ -75,7 +76,6 @@ Deactivated: Deactivated
 'Create your account': 'Create your account'
 'Change username': 'Change username'
 exception.alreadyLinkedAccount: 'This account is already linked with another user. You have to unlink from that user before linking to this current user.'
-contact.title: 'Fale conosco'
 cpf.registration.title: 'Registro de CPF'
 'Your login': 'Your login'
 '<a href="%link%">Background picture</a> by %name%': '<a href="%link%">Background picture</a> by %name%'
@@ -219,23 +219,9 @@ You don't have any activity log.: You don't have any activity log.
 'Select a state below:': 'Select a state below:'
 Firstname: First name
 Surname: Surname
-'After completing your information, click the following button to continue:': 'After completing your information, click the following button to continue:'
-<strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.: <strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.
-Personal Details: Personal Details
-Complete Missing Fields: Complete Missing Fields
 If you prefer, it's possible to use other services to login or create your account.: If you prefer, it's possible to use other services to login or create your account.
 Type your password to confirm the activation.: Type your password to confirm the activation.
 Current password: Current password
-<strong>%client%</strong> requires that you have a validated email in order to proceed.: <strong>%client%</strong> requires that you have a validated email in order to proceed.
-Validating your email address is pretty simple and fast. You just have to click the link or button in the email we sent you.: Validating your email address is pretty simple and fast. You just have to click the link or button in the email we sent you.
-After you validate your email address this screen will change automatically and you'll proceed to <strong>%client%</strong>.: After you validate your email address this screen will change <strong>automatically</strong> and you'll proceed to <strong>%client%</strong>.
-I'm having trouble finding the confirmation email: I'm having trouble finding the confirmation email
-If you are having trouble to find the confirmation email, please make sure it isn't in the junk mail section of your email program or site.: If you are having trouble to find the confirmation email, please make sure it isn't in the junk mail section of your email program or site.
-If you are certain the email was not received, it's possible that you mistyped your email address. You can change you email address below.: If you are certain the email was not received, it's possible that you mistyped your email address. You can change you email address below.
-If your email is mistyped, correct it and click the following button.: If your email is mistyped, correct it and click the following button.
-Change Email: Change Email
-Your email was successfully validated.: Your email was successfully validated.
-Back to %client%: Back to %client%
 Mobile: Mobile
 Copy: Copy
 Copied: Copied
@@ -442,3 +428,56 @@ authorization:
     title: Authorize <strong>%client_name%</strong> to access your information?
     description: '<strong>%client_name%</strong> will be granted the following information and permissions:'
     about: 'About <strong>%client_name%</strong>'
+error.generic:
+    title: There was an error 😞
+    body: There was an error processing this page. If this is a recurring problem you can <a href="%contact_url%">contact us</a> to get help.
+error.404:
+    title: Page not found
+    body: The requested page couldn't be located. Checkout for any URL misspelling.
+dynamic_form:
+    title: Complete your information
+    body: <strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.
+    submit:
+        label: 'After completing your information, click the following button to continue:'
+        button: Save
+    skip:
+        open_warning: Skip this step
+        warning: If you chose to skip this step now, it is possible that the service you are trying to access will ask you again for this information or will deny your access. Also, we'll keep suggesting this step on each new access.
+        confirm: Skip anyway
+    email_verification:
+        body: <strong>%client%</strong> requires that you have a validated email in order to proceed.
+        how_to: Validating your email address is pretty simple and fast. You just have to click the link or button in the email we sent you.
+        post_verifying: After you validate your email address this screen will change <strong>automatically</strong> and you'll proceed to <strong>%client%</strong>.
+        success: Your email was successfully validated.
+        back_to_client: Back to %client%
+        help:
+            cant_find_email:
+                title: I'm having trouble finding the confirmation email
+                body: If you are having trouble to find the confirmation email, please make sure it isn't in the junk mail section of your email program or site.
+                change_email:
+                    body: If you are certain the email was not received, it's possible that you mistyped your email address. You can change you email address below.
+                    submit:
+                        label: If your email is mistyped, correct it and click the following button.
+                        button: Change Email
+tasks.fill_email:
+    title: Informe um endereço de Email
+    body: O serviço usado para criar sua conta, %service%, não nos enviou seu endereço de email. Por favor, digite seu endereço a seguir para continuar.
+duplicate_email:
+    title: This email is already in use
+    body: You tried to register using an email that belongs to an existing account.
+    tip: If what you tried to do was to connect a service to your account you'll have to login into this account to then connect it.
+    button.login: Login
+contact:
+    title: Contact us
+    body: To get technical support related to Citizen Login please fill this form describing the problem you are experiencing.
+    form:
+        name:
+            label: Name
+            placeholder: Type your name
+        email:
+            label: Email
+            placeholder: Type your email
+        message:
+            label: Message
+            placeholder: Describe the technical problem you are having.
+        submit: Send message

@@ -114,13 +114,16 @@ class RegistrationFormType extends BaseType
                 );
                 break;
             case 'mobile':
+            case 'phone_number':
                 $builder->add(
                     'mobile',
                     null,
                     [
                         'required' => true,
+                        'label_attr' => ['class' => 'intl-tel-label'],
                         'attr' => [
                             'placeholder' => 'person.form.mobile.placeholder',
+                            'class' => 'form-control intl-tel',
                         ],
                     ]
                 );

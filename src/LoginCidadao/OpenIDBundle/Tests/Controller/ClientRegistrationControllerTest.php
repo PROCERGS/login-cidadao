@@ -13,6 +13,7 @@ class ClientRegistrationControllerTest extends WebTestCase
 
         $data = array(
             'redirect_uris' => array('http://google.com/test'),
+            'post_logout_redirect_uris' => array('https://google.com/'),
         );
 
         $client->request(

@@ -105,7 +105,7 @@ class SessionManagementController extends Controller
         $finishedView = 'LoginCidadaoOpenIDBundle:SessionManagement:endSession.finished.html.twig';
         try {
             $idToken = $request->get('id_token_hint');
-            $postLogoutUri = $request->get('post_logout_redirect_uris', null);
+            $postLogoutUri = $request->get('post_logout_redirect_uri', null);
             $loggedOut = !$this->isGranted('IS_AUTHENTICATED_REMEMBERED');
             $getLogoutConsent = $this->shouldGetLogoutConsent($idToken, $loggedOut);
 
@@ -212,6 +212,10 @@ class SessionManagementController extends Controller
         try {
             @$idToken->verify($publicKeyStorage->getPublicKey($idToken->claims['aud']));
 
+            if (false === $this->checkIdTokenSub($this->getUser(), $idToken)) {
+                throw new IdTokenValidationException('Invalid subject identifier', Response::HTTP_BAD_REQUEST);
+            }
+
             return true;
         } catch (\JOSE_Exception_VerificationFailed $e) {
             throw new IdTokenValidationException($e->getMessage(), Response::HTTP_BAD_REQUEST, $e);
@@ -233,7 +237,9 @@ class SessionManagementController extends Controller
 
         $client = $this->getClient($idToken->claims['aud']);
 
-        return $idToken->claims['sub'] === $this->getSubjectIdentifier($person, $client);
+        $sub = $this->getSubjectIdentifier($person, $client);
+
+        return $idToken->claims['sub'] === $sub;
     }
 
     /**
@@ -282,13 +288,6 @@ class SessionManagementController extends Controller
         } else {
             return $postLogoutUri;
         }
-    }
-
-    private function rememberMe(Request $request)
-    {
-        $rememberMeCookieName = $this->getParameter('session.remember_me.name');
-
-        return $request->cookies->has($rememberMeCookieName);
     }
 
     /**

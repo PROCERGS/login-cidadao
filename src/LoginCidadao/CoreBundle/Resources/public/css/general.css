@@ -304,7 +304,7 @@ footer .copyright {
 form .input-error {
     background-color: #E64442;
     background-image: none;
-    color: #FFF;
+    color: #FFF !important;
     filter:none;
     font-size: 12px;
     font-weight: 500;
@@ -501,4 +501,8 @@ form .has-feedback .sr-only ~ .form-control-feedback {
 .connect-box h3 {
     color: #474747;
     text-shadow: 1px 1px 1px #D8D8D8;
+}
+
+.intl-tel-label {
+    display: block;
 }

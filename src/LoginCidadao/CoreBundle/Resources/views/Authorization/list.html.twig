@@ -74,7 +74,7 @@
         <div class="panel panel-default">
             <div class="panel-heading"><h2 class="panel-title">{{ 'Suggest a Service' | trans }}</h2></div>
             <div class="panel-body">
-                {{ form_start(form, {'action': path('lc_suggestions_new_service'), 'attr': {'role':'form' } }) }}
+                {{ form_start(form, { 'attr': {'role':'form' } }) }}
                 {{ form_errors(form) }}
                 <div class="row">
                     <div class="col-sm-12">
@@ -97,13 +97,12 @@
                     {% endfor %}
                 </div>
             </div>
-            </section>
 
             <div class="last-suggestions clearfix">
                 <h5 class="title">{{ 'Your last suggested Services'|trans }}</h5>
-                {% if suggs|length > 0 %}
-                    {% for sugg in suggs %}
-                        <span class="label label-info">{{ sugg.text }}</span>
+                {% if suggestions|length > 0 %}
+                    {% for suggestion in suggestions %}
+                        <span class="label label-info">{{ suggestion.text }}</span>
                     {% endfor %}
                 {% endif %}
             </div>

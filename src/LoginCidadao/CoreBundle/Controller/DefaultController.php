@@ -2,6 +2,7 @@
 
 namespace LoginCidadao\CoreBundle\Controller;
 
+use LoginCidadao\CoreBundle\Model\SupportMessage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -26,15 +27,22 @@ class DefaultController extends Controller
             $this->get('session')->set('facebook.logout', true);
         }
 
-        $api          = $this->container->get('fos_facebook.api');
-        $scope        = implode(',',
-            $this->container->getParameter('facebook_app_scope'));
-        $callback     = $this->container->get('router')->generate('_security_check_facebook',
-            array(), true);
-        $redirect_url = $api->getLoginUrl(array(
-            'scope' => $scope,
-            'redirect_uri' => $callback
-        ));
+        $api = $this->container->get('fos_facebook.api');
+        $scope = implode(
+            ',',
+            $this->container->getParameter('facebook_app_scope')
+        );
+        $callback = $this->container->get('router')->generate(
+            '_security_check_facebook',
+            array(),
+            true
+        );
+        $redirect_url = $api->getLoginUrl(
+            array(
+                'scope' => $scope,
+                'redirect_uri' => $callback,
+            )
+        );
 
         return new RedirectResponse($redirect_url);
     }
@@ -49,24 +57,29 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/contact", name="lc_contact")
+     * @Route("/contact/{correlationId}", defaults={"correlationId" = null}, name="lc_contact")
      * @Template()
      */
-    public function contactAction(Request $request)
+    public function contactAction(Request $request, $correlationId = null)
     {
-        $form       = $this->createForm('contact_form_type');
+        $data = new SupportMessage();
+        $form = $this->createForm('contact_form_type', $data);
         $form->handleRequest($request);
         $translator = $this->get('translator');
-        $message    = $translator->trans('contact.form.sent');
+        $message = $translator->trans('contact.form.sent');
         if ($form->isValid()) {
-            $email     = new SentEmail();
+            $emailMessage = $data->getMessage();
+            if ($correlationId !== null) {
+                $emailMessage = "<p>$emailMessage</p><p>Correlation Id: {$correlationId}</p>";
+            }
+            $email = new SentEmail();
             $email
                 ->setType('contact-mail')
-                ->setSubject('Fale conosco - '.$form->get('firstName')->getData())
-                ->setSender($form->get('email')->getData())
+                ->setSubject('Fale conosco - '.$data->getName())
+                ->setSender($data->getEmail())
                 ->setReceiver($this->container->getParameter('mailer_receiver_mail'))
-                ->setMessage($form->get('message')->getData());
-            $mailer    = $this->get('mailer');
+                ->setMessage($emailMessage);
+            $mailer = $this->get('mailer');
             $swiftMail = $email->getSwiftMail();
             if ($mailer->send($swiftMail)) {
                 $em = $this->getDoctrine()->getManager();
@@ -76,12 +89,16 @@ class DefaultController extends Controller
             }
 
             $url = $this->generateUrl("lc_contact");
+
             return $this->redirect($url);
         }
-        return $this->render('LoginCidadaoCoreBundle:Info:contact.html.twig',
-                array(
-                'form' => $form->createView()
-        ));
+
+        return $this->render(
+            'LoginCidadaoCoreBundle:Info:contact.html.twig',
+            array(
+                'form' => $form->createView(),
+            )
+        );
     }
 
     /**
@@ -92,21 +109,23 @@ class DefaultController extends Controller
     {
         // badges
         $badgesHandler = $this->get('badges.handler');
-        $badges        = $badgesHandler->getAvailableBadges();
-        $userBadges    = $badgesHandler->evaluate($this->getUser())->getBadges();
+        $badges = $badgesHandler->getAvailableBadges();
+        $userBadges = $badgesHandler->evaluate($this->getUser())->getBadges();
 
         // logs
-        $em               = $this->getDoctrine()->getManager();
-        $logRepo          = $em->getRepository('LoginCidadaoAPIBundle:ActionLog');
-        $logs['logins']   = $logRepo->findLoginsByPerson($this->getUser(), 4);
+        $em = $this->getDoctrine()->getManager();
+        $logRepo = $em->getRepository('LoginCidadaoAPIBundle:ActionLog');
+        $logs['logins'] = $logRepo->findLoginsByPerson($this->getUser(), 4);
         $logs['activity'] = $logRepo->getWithClientByPerson($this->getUser(), 3);
 
         $defaultClientUid = $this->container->getParameter('oauth_default_client.uid');
 
-        return array('allBadges' => $badges,
+        return array(
+            'allBadges' => $badges,
             'userBadges' => $userBadges,
             'logs' => $logs,
-            'defaultClientUid' => $defaultClientUid);
+            'defaultClientUid' => $defaultClientUid,
+        );
     }
 
     /**
@@ -115,9 +134,9 @@ class DefaultController extends Controller
      */
     public function safeLogoutIfNotRememberedAction(Request $request, $key)
     {
-        $em         = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $logoutKeys = $em->getRepository('LoginCidadaoAPIBundle:LogoutKey');
-        $logoutKey  = $logoutKeys->findActiveByKey($key);
+        $logoutKey = $logoutKeys->findActiveByKey($key);
 
         if (!($logoutKey instanceof LogoutKey)) {
             throw new AccessDeniedHttpException("Invalid logout key.");
@@ -136,7 +155,7 @@ class DefaultController extends Controller
             $result['logged_out'] = true;
         }
 
-        $response  = new JsonResponse();
+        $response = new JsonResponse();
         $userAgent = $request->headers->get('User-Agent');
         if (preg_match('/(?i)msie [1-9]/', $userAgent)) {
             $response->headers->set('Content-Type', 'text/json');
@@ -166,7 +185,7 @@ class DefaultController extends Controller
     public function indexAction(Request $request, $lastUsername)
     {
         return array(
-            'last_username' => $lastUsername
+            'last_username' => $lastUsername,
         );
     }
 }

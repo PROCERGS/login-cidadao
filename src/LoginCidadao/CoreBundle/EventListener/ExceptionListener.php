@@ -2,6 +2,7 @@
 namespace LoginCidadao\CoreBundle\EventListener;
 
 use LoginCidadao\CoreBundle\Security\Exception\AlreadyLinkedAccount;
+use LoginCidadao\CoreBundle\Security\Exception\DuplicateEmailException;
 use LoginCidadao\CoreBundle\Security\Exception\MissingEmailException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -38,7 +39,10 @@ class ExceptionListener
             $url = $this->router->generate('fos_user_profile_edit');
             $event->setResponse(new RedirectResponse($url));
         } elseif ($exception instanceof MissingEmailException) {
-            $url = $this->router->generate('lc_before_register_twitter');
+            $url = $this->router->generate('task_fill_email', ['service' => $exception->getService()]);
+            $event->setResponse(new RedirectResponse($url));
+        } elseif ($exception instanceof DuplicateEmailException) {
+            $url = $this->router->generate('lc_duplicate_email');
             $event->setResponse(new RedirectResponse($url));
         } elseif ($exception instanceof LcEmailException) {
             $this->session->getFlashBag()->add('error', $this->translator->trans($exception->getMessage()));
@@ -48,7 +52,7 @@ class ExceptionListener
             $this->session->getFlashBag()->add('error', $this->translator->trans($exception->getMessage()));
             $url = $this->router->generate('lc_home');
             $event->setResponse(new RedirectResponse($url));
-        } elseif ($exception instanceof  LcFcGbException) {
+        } elseif ($exception instanceof LcFcGbException) {
             $url = $this->router->generate('lc_link_facebook');
             $event->setResponse(new RedirectResponse($url));
         } elseif ($exception instanceof LcValidationException) {
@@ -60,7 +64,10 @@ class ExceptionListener
             $route = $request->get('_route');
 
             if ($route == 'fos_user_registration_confirm') {
-                $this->session->getFlashBag()->add('error', $this->translator->trans('This e-mail is already confirmed.'));
+                $this->session->getFlashBag()->add(
+                    'error',
+                    $this->translator->trans('This e-mail is already confirmed.')
+                );
                 $url = $this->router->generate('fos_user_profile_edit');
                 $event->setResponse(new RedirectResponse($url));
             }

@@ -23,7 +23,7 @@
                             </div>
                             <div class="media-body">
                                 <h2 class="media-heading personal-info">{{ 'Personal Information' | trans }}</h2>
-                                {{ app.user.username }}
+                                {{ app.user.shortDisplayName }}
                             </div>
                         </div>
                     </div>
@@ -83,11 +83,13 @@
                 </div>
             </div>
 
+            {% if third_party_login is not empty %}
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h2 class="panel-title">{{ 'Social Networks and other connections' | trans }}</h2>
                 </div>
                 <div class="panel-body">
+                        {% if third_party_login.facebook | default(false) %}
                     {% if app.user.facebookId is null %}
                         <div class="connect facebook disabled">
                             <a class="col-xs-11 col-xs-offset-1 username" href="{{ path('lc_link_facebook') }}">{{ 'Connect with Facebook' | trans }}</a>
@@ -106,7 +108,9 @@
                             {% endif %}
                         </div>
                     {% endif %}
+                        {% endif %}
 
+                        {% if third_party_login.twitter | default(false) %}
                     {% if app.user.twitterId is null %}
                         <div class="connect twitter disabled">
                             <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}" class="col-xs-11 col-xs-offset-1 username">{{ 'Connect with Twitter' | trans }}</a>
@@ -125,6 +129,9 @@
                             {% endif %}
                         </div>
                     {% endif %}
+                        {% endif %}
+
+                        {% if third_party_login.google | default(false) %}
                     {% if app.user.googleId is null %}
                         <div class="connect google disabled">
                             <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google'}) }}" class="col-xs-11 col-xs-offset-1 username">{{ 'Connect with Google' | trans }}</a>
@@ -144,6 +151,7 @@
                         </div>
                     {% endif %}
                     {{ render(controller('LoginCidadaoCoreBundle:Person:connectNfgFragment')) }}
+                        {% endif %}
                 </div>
             </div>
 
@@ -166,6 +174,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
 
             <div class="row">
                 {% for type, messages in app.session.flashbag.all() %}
@@ -191,16 +200,19 @@
     {{ parent() }}
 
     {% javascripts
+        '@intl_tel_input_js'
                 '@LoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
                 '@LoginCidadaoCoreBundle/Resources/public/js/dynamic-form/locationSelect.js'
-    filter='uglifyjs2'
-    %}
+        '@LoginCidadaoCoreBundle/Resources/public/js/components/intl-tel-input.js'
+        filter='uglifyjs2' %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
     <script>
-
         $('.birthdate').mask('00/00/0000', {'translation': {0: {pattern: /[0-9*]/}}});
+        {% javascripts '@intl_tel_input_utils_js' filter='uglifyjs2' %}
+        var intlTelInputUtilsScriptUrl = '{{ asset_url }}';
+        {% endjavascripts %}
 
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
@@ -246,4 +258,10 @@
             });
         });
     </script>
+{% endblock %}
+
+{% block stylesheets_custom %}
+    {% stylesheets '@lc_logged_css' '@intl_tel_input_css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
 {% endblock %}

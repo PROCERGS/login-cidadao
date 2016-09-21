@@ -1,22 +1,29 @@
-{% extends 'LoginCidadaoCoreBundle::base.html.twig' %}
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
 
-{% block body %}
-    <div class="row">
-        <div class="col-xs-12 text-center header-shadows">
-            <h1>{% trans %}Citizen's Login{% endtrans %}</h1>
-        </div>
-    </div>
+{% set request_id = app.request.headers.get('X-Request-Id') %}
+{% block panel_body_class %}error-page{% endblock %}
 
-    <div class="row">
-        <div id="page-not-found" class="general-content col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3 text-center">
-            <h3 class="title">{% trans %}Ops!{% endtrans %}</h3>
-            <p class="text">{% trans %}Page not found.{% endtrans %}</p>
-        </div>
-    </div>
-{% endblock body %}
+{% block panel_body %}
+    <h1>{{ 'error.generic.title' | trans }}</h1>
 
-{% block stylesheets_custom %}
-    {% stylesheets '@lc_base_css' filter='cssrewrite' filter='?uglifycss' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+    <p>{{ 'error.generic.body' | trans({'%contact_url%': path('lc_contact', {'correlationId': request_id | e}) }) | raw }}</p>
+{% endblock %}
+
+{% block panel_footer %}
+    <dl>
+        <dt>X-Request-Id</dt>
+        <dd>{{ request_id }}</dd>
+    </dl>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts '@LoginCidadaoCoreBundle/Resources/public/js/components/egg.min.js' filter='?uglifyjs2' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+        new Egg("r,i,d", function() {
+            $('.panel-footer.hidden').removeClass('hidden');
+        }).listen();
+    </script>
 {% endblock %}

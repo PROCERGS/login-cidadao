@@ -12,14 +12,11 @@ use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Form\ClientMetadataForm;
 use LoginCidadao\OpenIDBundle\Exception\DynamicRegistrationException;
 
-/**
- * @REST\Route("/openid/connect")
- */
 class ClientRegistrationController extends FOSRestController
 {
 
     /**
-     * @REST\Post("/register", name="oidc_dynamic_registration", defaults={"_format"="json"})
+     * @REST\Post("/openid/connect/register", name="oidc_dynamic_registration", defaults={"_format"="json"})
      * @REST\View(templateVar="client")
      */
     public function registerAction(Request $request)
@@ -43,7 +40,7 @@ class ClientRegistrationController extends FOSRestController
     }
 
     /**
-     * @REST\Get("/register/{clientId}", name="oidc_get_client_details", defaults={"_format"="json"})
+     * @REST\Get("/openid/connect/register/{clientId}", name="oidc_get_client_details", defaults={"_format"="json"})
      * @REST\View(templateVar="client")
      */
     public function getDetailsAction(Request $request, $clientId)

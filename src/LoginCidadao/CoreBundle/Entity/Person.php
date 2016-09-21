@@ -26,9 +26,9 @@ use Donato\PathWellBundle\Validator\Constraints\PathWell;
 /**
  * @ORM\Entity(repositoryClass="LoginCidadao\CoreBundle\Entity\PersonRepository")
  * @ORM\Table(name="person")
- * @UniqueEntity("cpf", message="person.validation.cpf.already_used", groups={"LoginCidadaoRegistration", "Registration", "Profile"})
+ * @UniqueEntity("cpf", message="person.validation.cpf.already_used", groups={"LoginCidadaoRegistration", "Registration", "Profile", "Dynamic", "Documents"})
  * @UniqueEntity("username")
- * @UniqueEntity(fields="email", errorPath="email", message="fos_user.email.already_used", groups={"LoginCidadaoRegistration", "Registration", "LoginCidadaoEmailForm"})
+ * @UniqueEntity(fields="email", errorPath="email", message="fos_user.email.already_used", groups={"LoginCidadaoRegistration", "Registration", "LoginCidadaoEmailForm", "Dynamic"})
  * @ORM\HasLifecycleCallbacks
  * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
@@ -83,7 +83,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @Assert\NotBlank
      * @Assert\Length(
      *     min="1",
-     *     max="33",
+     *     max="40",
      *     groups={"Registration", "Profile"}
      * )
      * @JMS\Since("1.0")
@@ -109,7 +109,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Expose
      * @JMS\Groups({"cpf"})
      * @ORM\Column(type="string", nullable=true, unique=true)
-     * @LCAssert\CPF
+     * @LCAssert\CPF(groups={"Documents", "Dynamic", "LoginCidadaoRegistration"})
      * @JMS\Since("1.0")
      */
     protected $cpf;
@@ -118,7 +118,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Expose
      * @JMS\Groups({"email"})
      * @JMS\Since("1.0")
-     * @Assert\Email(groups={"Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration", "LoginCidadaoEmailForm"})
+     * @Assert\Email(strict=true, groups={"Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration", "LoginCidadaoEmailForm"})
      */
     protected $email;
 
@@ -445,7 +445,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     public function setMobile($mobile)
     {
-        $mobile = preg_replace('/[^0-9]/', '', $mobile);
+        $mobile = preg_replace('/[^0-9+]/', '', $mobile);
         $this->mobile = $mobile;
     }
 
