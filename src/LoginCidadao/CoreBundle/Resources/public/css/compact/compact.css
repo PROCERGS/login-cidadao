@@ -137,6 +137,10 @@ footer ul.dashed > li:before {
     margin-top: 0;
 }
 
+form .error {
+    color: #ac0000;
+}
+
 .intl-tel-label {
     display: block;
 }
