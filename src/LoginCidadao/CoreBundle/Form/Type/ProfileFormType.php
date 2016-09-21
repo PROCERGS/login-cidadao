@@ -44,7 +44,13 @@ class ProfileFormType extends BaseType
                 )
             )
             ->add('mobile', null,
-                array('required' => false, 'label' => 'form.mobile', 'translation_domain' => 'FOSUserBundle'))
+                array(
+                    'required' => false,
+                    'label' => 'form.mobile',
+                    'translation_domain' => 'FOSUserBundle',
+                    'attr' => [ 'class' => 'form-control intl-tel' ],
+                    'label_attr' => ['class' => 'intl-tel-label'],
+                ))
             ->add('image', 'Vich\UploaderBundle\Form\Type\VichFileType',
                 array(
                 'required' => false,
