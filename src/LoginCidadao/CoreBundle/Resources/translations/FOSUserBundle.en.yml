@@ -70,20 +70,10 @@ security.login.submit: 'Log in'
 or: or
 'Use your social networks': 'Use your social networks'
 registration.email.click: 'click here to confirm your email'
-'Upload another picture': 'Upload another picture'
-'Do you really want to unlink <strong class="social-network-name"></strong>?': 'Do you really want to unlink <strong class="social-network-name"></strong>?'
 Yes: Yes
 'Use accounts from other services': 'Use accounts from other services'
 'By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.': 'By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.'
-Change: Change
-Personal Information: Personal Information
-Contact Information: Contact Information
-Social Networks and other connections: Social Networks and other connections
 Account Password: Account Password
-Use your Facebook picture: Use your Facebook picture
-Remove your picture: Remove your picture
-Your profile picure will be changed to <strong></strong>: Your profile picure will be changed to <strong></strong>
-Your Facebook profile picure will be used.: Your Facebook profile picure will be used.
 form.register.call_to_action: I'm not registered yet
 form.login.call_to_action: I'm alreay registered
 person.form.birthdate.placeholder: dd/mm/yyyy
