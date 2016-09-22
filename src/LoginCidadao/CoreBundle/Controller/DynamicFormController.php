@@ -257,6 +257,7 @@ class DynamicFormController extends Controller
     ) {
         $placeOfBirthLevel = '';
         switch ($scope) {
+            case 'name':
             case 'surname':
             case 'full_name':
                 $this->addPersonField(
