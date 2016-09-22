@@ -57,6 +57,9 @@ hwi_oauth_redirect:
     resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
     prefix:   /connect
 
+facebook_login:
+    path: /login/check-facebook
+
 twitter_login:
     path: /login/check-twitter
 

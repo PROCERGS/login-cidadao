@@ -260,6 +260,11 @@ hwi_oauth:
             twitter: twitterId
             google: googleId
     resource_owners:
+        facebook:
+            type:           facebook
+            client_id:      %facebook_app_id%
+            client_secret:  %facebook_app_secret%
+            scope:          "email"
         twitter:
             type:           twitter
             client_id:      %twitter_app_key%

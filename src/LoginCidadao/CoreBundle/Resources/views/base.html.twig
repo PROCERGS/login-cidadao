@@ -81,36 +81,41 @@ window.onload=function(){
 <script>
     window.fbAsyncInit = function() {
         FB.init({
-            appId      : '{{ facebook_app_id }}',
-            status     : true, // check login status
-            cookie     : true, // enable cookies to allow the server to access the session
-            xfbml      : false  // parse XFBML
-        });
-
-        FB.getLoginStatus(function(response) {
-        {% if app.session.get('facebook.logout') is not null %}
-            var sessionClean = {{ app.session.remove('facebook.logout') }};
-            FB.logout();
-        {% endif %}
-            var button = $('a.connect.facebook');
-            if (button.length > 0) {
-                var url = button.data('href');
-                if (response.status === 'unknown') {
-                    url += '?logout';
-                }
-                button.attr('href', url);
-            }
-
+            appId: '{{ facebook_app_id }}',
+            status: true,  // check login status
+            cookie: true,  // enable cookies to allow the server to access the session
+            xfbml: false, // parse XFBML
+            version: 'v2.5'
         });
     };
 
-    (function(d){
-        var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement('script'); js.id = id; js.async = true;
-        js.src = "//connect.facebook.net/en_US/all.js";
-        ref.parentNode.insertBefore(js, ref);
-    }(document));
+    // Load the SDK asynchronously
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    function fb_login() {
+        FB.getLoginStatus(function(response) {
+            if (response.status === 'connected') {
+                // connected
+                alert('Already connected, redirect to login page to create token.');
+                document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
+            } else {
+                // not_authorized
+                FB.login(function(response) {
+                    if (response.authResponse) {
+                        document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
+                    } else {
+                        alert('Cancelled.');
+                    }
+                }, {scope: 'email'});
+            }
+        });
+    }
 </script>
 
 <script>

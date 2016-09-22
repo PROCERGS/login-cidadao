@@ -10,7 +10,8 @@
         {% if third_party_login.facebook | default(false) %}
             <div class="col-xs-{{ columns }} text-center">
                 <a class="connect facebook"
-                   data-href="{{ path("lc_link_facebook") }}">Facebook</a>
+                   data-href="{{ path("lc_link_facebook") }}"
+                   onclick="fb_login();">Facebook</a>
             </div>
         {% endif %}
         {% if third_party_login.twitter | default(false) %}
