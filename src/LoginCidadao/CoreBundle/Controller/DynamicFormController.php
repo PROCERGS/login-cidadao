@@ -257,6 +257,7 @@ class DynamicFormController extends Controller
     ) {
         $placeOfBirthLevel = '';
         switch ($scope) {
+            case 'name':
             case 'surname':
             case 'full_name':
                 $this->addPersonField(
@@ -309,7 +310,11 @@ class DynamicFormController extends Controller
                     null,
                     array(
                         'required' => true,
-                        'attr' => [ 'class' => 'form-control intl-tel' ],
+                        'label' => 'person.form.mobile.label',
+                        'attr' => [
+                            'class' => 'form-control intl-tel',
+                            'placeholder' => 'person.form.mobile.placeholder',
+                        ],
                         'label_attr' => ['class' => 'intl-tel-label'],
                     )
                 );
