@@ -130,11 +130,14 @@ class TaskSubscriber implements EventSubscriberInterface
     {
         // 'id_cards', 'addresses'
         switch ($scope) {
+            case 'name':
             case 'full_name':
             case 'surname':
                 $value = $user->getFullName();
+                return $value && strlen($value) > 0 && strlen($user->getSurname()) > 0;
                 break;
             case 'mobile':
+            case 'phone_number':
                 $value = $user->getMobile();
                 break;
             case 'country':
@@ -146,6 +149,7 @@ class TaskSubscriber implements EventSubscriberInterface
             case 'birthdate':
                 return $user->getBirthdate() instanceof \DateTime;
             case 'email':
+            case 'email_verified':
                 return $user->getEmailConfirmedAt() instanceof \DateTime;
             case 'cpf':
                 $cpf = $user->getCpf();
