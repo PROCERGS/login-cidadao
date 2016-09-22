@@ -2,6 +2,7 @@
 
 namespace LoginCidadao\CoreBundle\Security\User\Provider;
 
+use LoginCidadao\CoreBundle\Security\Exception\MissingEmailException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Facebook;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -146,6 +147,10 @@ class FacebookProvider implements UserProviderInterface
             $fbdata = null;
         }
         if (!empty($fbdata)) {
+            if (false === isset($fbdata['email'])) {
+                throw new MissingEmailException('facebook');
+            }
+
             if (empty($user)) {
                 if (!($currentUserObj instanceof UserInterface)) {
                     $newUser = true;
