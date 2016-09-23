@@ -787,8 +787,8 @@ home:
 compact.logout.button: Sair
 person.form:
     firstName:
-        label: Nome
-        placeholder: Digite seu nome
+        label: Primeiro nome
+        placeholder: Digite seu primeiro nome
     surname:
         label: Sobrenome
         placeholder: Digite seu sobrenome
