@@ -79,7 +79,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     /**
      * @JMS\Expose
      * @JMS\Groups({"username","preferred_username"})
-     * @LCAssert\Username
      * @Assert\NotBlank
      * @Assert\Length(
      *     min="1",
