@@ -378,8 +378,8 @@ home:
 compact.logout.button: Logout
 person.form:
     firstName:
-        label: Name
-        placeholder: Type your name
+        label: First name
+        placeholder: Type your first name
     surname:
         label: Last name
         placeholder: Type your last name
