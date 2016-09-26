@@ -87,7 +87,8 @@ class FOSUBUserProvider extends BaseClass
         $setter_token = $setter.'AccessToken';
         $setter_username = $setter.'Username';
 
-        if (null !== $previousUser = $this->userManager->findUserBy(array("{$service}Id" => $username))) {
+        $existingUser = $this->userManager->findUserBy(array("{$service}Id" => $username));
+        if ($existingUser instanceof UserInterface && $existingUser->getId() != $user->getId()) {
             throw new AlreadyLinkedAccount();
             $previousUser->$setter_id(null);
             $previousUser->$setter_token(null);
@@ -98,6 +99,10 @@ class FOSUBUserProvider extends BaseClass
         $user->$setter_id($username);
         $user->$setter_token($response->getAccessToken());
         $user->$setter_username($screenName);
+
+        if ($service === 'facebook') {
+            $this->setFacebookData($user, $response->getResponse());
+        }
 
         $this->userManager->updateUser($user);
     }
@@ -133,6 +138,10 @@ class FOSUBUserProvider extends BaseClass
         }
         if ($userInfo['family_name']) {
             $user->setSurname($userInfo['family_name']);
+        }
+
+        if ($service === 'facebook') {
+            $this->setFacebookData($user, $response->getResponse());
         }
 
         $username = Uuid::uuid4()->toString();
@@ -243,5 +252,33 @@ class FOSUBUserProvider extends BaseClass
         }
 
         return $userInfo;
+    }
+
+    private function setFacebookData($person, $fbdata)
+    {
+        if (!($person instanceof PersonInterface)) {
+            return;
+        }
+
+        if (isset($fbdata['id'])) {
+            $person->setFacebookId($fbdata['id']);
+            $person->addRole('ROLE_FACEBOOK');
+        }
+        if (isset($fbdata['first_name']) && is_null($person->getFirstName())) {
+            $person->setFirstName($fbdata['first_name']);
+        }
+        if (isset($fbdata['last_name']) && is_null($person->getSurname())) {
+            $person->setSurname($fbdata['last_name']);
+        }
+        if (isset($fbdata['email']) && is_null($person->getEmail())) {
+            $person->setEmail($fbdata['email']);
+        }
+        if (isset($fbdata['birthday']) && is_null($person->getBirthdate())) {
+            $date = \DateTime::createFromFormat('m/d/Y', $fbdata['birthday']);
+            $person->setBirthdate($date);
+        }
+        if (isset($fbdata['username']) && is_null($person->getFacebookUsername())) {
+            $person->setFacebookUsername($fbdata['username']);
+        }
     }
 }
