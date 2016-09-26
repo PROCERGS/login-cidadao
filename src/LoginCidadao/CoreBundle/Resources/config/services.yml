@@ -59,7 +59,14 @@ services:
 
     lc.hwi_twitter.user_provider:
         class: %lc.hwi_twitter.user_provider.class%
-        arguments: [ "@fos_user.user_manager", "@session", "@event_dispatcher", "@service_container", "@fos_user.registration.form.factory", { twitter: twitterId, google: googleId }, %http_proxy% ]
+        arguments:
+            - "@fos_user.user_manager"
+            - "@session"
+            - "@event_dispatcher"
+            - "@service_container"
+            - "@fos_user.registration.form.factory"
+            - { facebook: facebookId, twitter: twitterId, google: googleId }
+            - %http_proxy%
 
     lc.person.registration.form.type:
         class: %lc.person.registration.form.type.class%

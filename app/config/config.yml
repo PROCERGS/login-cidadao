@@ -257,6 +257,7 @@ hwi_oauth:
     fosub:
         username_iterations: 30
         properties:
+            facebook: facebookId
             twitter: twitterId
             google: googleId
     resource_owners:
