@@ -787,15 +787,17 @@ home:
 compact.logout.button: Sair
 person.form:
     firstName:
-        label: Nome
-        placeholder: Digite seu nome
+        label: Primeiro nome
+        placeholder: Digite seu primeiro nome
     surname:
         label: Sobrenome
         placeholder: Digite seu sobrenome
     cpf:
         placeholder: Digite seu CPF
     birthdate.placeholder: dd/mm/aaaa
-    mobile.placeholder: Digite seu telefone celular
+    mobile:
+        label: Celular
+        placeholder: Digite seu telefone celular
 tasks.confirm_email:
     title: Confirme seu email para continuar
     body: Um email foi enviado para o endereço informado em seu cadastro. Abra esse email e clique no botão de confirmação presente na mensagem.
@@ -890,3 +892,29 @@ contact:
             label: Mensagem
             placeholder: Descreva o problema técnico que você está tendo.
         submit: Enviar
+profile:
+    title: Perfil
+    picture:
+        change: Alterar
+        upload_another: Upload another picture
+        use_facebook: Usar sua foto do Facebook
+        change_to:
+            template: Sua foto de perfil será trocada para <strong></strong>
+            facebook: Sua foto de perfil do Facebook será usada.
+    personal_info:
+        title: Informações Pessoais
+    contact_info:
+        title: Informações de Contato
+    connections:
+        title: Redes Sociais e outras conexões
+        connect:
+            facebook: Conectar usando FacebookConectar usando Facebook
+            twitter: Conectar usando Twitter
+            google: Conectar usando Google
+        disconnect:
+            confirm:
+                template: Tem certeza que deseja desvincular sua conta do <strong class="social-network-name"></strong>?
+                yes: Sim
+                no: Não
+    submit: Salvar
+scope_details.handle.title: O que é isso?

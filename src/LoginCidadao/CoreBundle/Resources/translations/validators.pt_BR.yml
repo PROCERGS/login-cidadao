@@ -21,3 +21,5 @@ person.validation:
         min: A senha deve ter, ao menos, {{ limit }} caracteres
         max: A senha deve ter, no máximo, {{ limit }} caracteres
     cpf.already_used: Esse CPF já está cadastrado.
+    mobile.length:
+        max: O telefone informado é muito longo. O limite é de 15 números incluíndo os códigos de área de país.

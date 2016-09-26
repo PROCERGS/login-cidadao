@@ -6,7 +6,6 @@ registration.email.subject: 'Confirmação de email para %username%!'
 registration.email.message: "Olá, %username%!\n\nPara completar a validação da sua conta, clique no link: %confirmationUrl%\n\nAtenciosamente, A Equipe.\n"
 registration.email.message.html: "Olá, %username%!<br><br>Para completar a validação da sua conta clique no botão a seguir."
 registration.register: 'Registre-se aqui!'
-profile.edit.submit: Salvar
 profile.show.username: Usuário
 profile.show.email: Email
 layout.logged_in_as: 'Conectado como %username%'
@@ -77,7 +76,6 @@ registration.email.click: 'Confirmar Email'
 'Log in using your Citizen''s Login': 'Acesse usando seu Login Cidadão'
 'Upload another picture': 'Enviar outra foto'
 'By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.': 'Ao clicar em criar conta, você concorda com a <a href="%linkTerms%">Privacidade e Termos de uso</a> do serviço, incluindo nosso uso de cookies.'
-'Do you really want to unlink <strong class="social-network-name"></strong>?': 'Tem certeza que deseja desvincular sua conta do <strong class="social-network-name"></strong>?'
 Yes: Sim
 'Continue Registration': 'Continuar Cadastro'
 facebook.token.error: 'Aparentemente houve um erro na autenticação com o Facebook. Por favor, tente logar novamente!'
@@ -89,15 +87,7 @@ security.login.remember_me: 'Manter conectado'
 'General': 'Geral'
 'RG' : 'RG'
 'add': 'Adicionar'
-Change: Alterar
-Personal Information: Informações Pessoais
-Contact Information: Informações de Contato
-Social Networks and other connections: Redes Sociais e outras conexões
 Account Password: Senha da sua Conta
-Use your Facebook picture: Usar sua foto do Facebook
-Remove your picture: Remover foto do perfil
-Your profile picure will be changed to <strong></strong>: Sua foto de perfil será trocada para <strong></strong>
-Your Facebook profile picure will be used.: Sua foto de perfil do Facebook será usada.
 form.register.call_to_action: Cadastre-se aqui
 form.login.call_to_action: Entrar no Login Cidadão
 person.form.birthdate.placeholder: dd/mm/aaaa

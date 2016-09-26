@@ -17,3 +17,5 @@ person.validation:
         min: The password must have at least {{ limit }} characters
         max: The password must have at most {{ limit }} characters
     cpf.already_used: This CPF is already in use.
+    mobile.length:
+        max: This phone number is too long. The limit is 15 numbers including country and area codes.

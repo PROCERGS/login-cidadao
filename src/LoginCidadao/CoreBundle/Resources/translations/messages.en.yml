@@ -378,15 +378,17 @@ home:
 compact.logout.button: Logout
 person.form:
     firstName:
-        label: Name
-        placeholder: Type your name
+        label: First name
+        placeholder: Type your first name
     surname:
         label: Last name
         placeholder: Type your last name
     cpf:
         placeholder: Type your CPF (brazilian taxpayer ID)
     birthdate.placeholder: dd/mm/yyyy
-    mobile.placeholder: Type your mobile phone
+    mobile:
+        label: Mobile phone
+        placeholder: Type your mobile phone
 tasks.confirm_email:
     title: Confirm your email to continue
     body: An email was sent to the address you registered. Open this email and click the confirmation button on the message.
@@ -481,3 +483,29 @@ contact:
             label: Message
             placeholder: Describe the technical problem you are having.
         submit: Send message
+profile:
+    title: Profile
+    picture:
+        change: Change
+        upload_another: Upload another picture
+        use_facebook: Use your Facebook picture
+        change_to:
+            template: Your profile picure will be changed to <strong></strong>
+            facebook: Your Facebook profile picure will be used
+    personal_info:
+        title: Personal Information
+    contact_info:
+        title: Contact Information
+    connections:
+        title: Social Networks and other connections
+        connect:
+            facebook: Connect with Facebook
+            twitter: Connect with Twitter
+            google: Connect with Google
+        disconnect:
+            confirm:
+                template: Do you really want to unlink <strong class="social-network-name"></strong>?
+                yes: Yes
+                no: No
+    submit: Save
+scope_details.handle.title: What is this?

@@ -46,7 +46,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     /**
      * @JMS\Expose
-     * @JMS\Groups({"first_name","full_name","public_profile","given_name"})
+     * @JMS\Groups({"first_name","full_name","public_profile","given_name","name"})
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank(message="Please enter your name.", groups={"Profile"})
      * @Assert\Length(
@@ -79,7 +79,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     /**
      * @JMS\Expose
      * @JMS\Groups({"username","preferred_username"})
-     * @LCAssert\Username
      * @Assert\NotBlank
      * @Assert\Length(
      *     min="1",
@@ -147,6 +146,10 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Groups({"mobile","phone_number"})
      * @ORM\Column(type="string", nullable=true)
      * @JMS\Since("1.0")
+     * @LCAssert\E164PhoneNumber(
+     *     maxMessage="person.validation.mobile.length.max",
+     *     groups={"Registration", "LoginCidadaoRegistration", "Dynamic", "Profile"}
+     * )
      */
     protected $mobile;
 

@@ -86,6 +86,7 @@ class RegistrationFormType extends BaseType
     private function addDynamicField(FormBuilderInterface $builder, $scope)
     {
         switch ($scope) {
+            case 'name':
             case 'surname':
             case 'full_name':
                 $builder->add(
@@ -119,7 +120,7 @@ class RegistrationFormType extends BaseType
                     'mobile',
                     null,
                     [
-                        'required' => true,
+                        'required' => false,
                         'label_attr' => ['class' => 'intl-tel-label'],
                         'attr' => [
                             'placeholder' => 'person.form.mobile.placeholder',
