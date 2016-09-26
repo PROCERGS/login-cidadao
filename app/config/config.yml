@@ -265,7 +265,7 @@ hwi_oauth:
             type:           facebook
             client_id:      %facebook_app_id%
             client_secret:  %facebook_app_secret%
-            scope:          "email"
+            scope:          "email user_about_me user_birthday user_location"
         twitter:
             type:           twitter
             client_id:      %twitter_app_key%
