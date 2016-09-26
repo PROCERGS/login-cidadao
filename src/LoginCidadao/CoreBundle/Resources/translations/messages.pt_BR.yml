@@ -908,7 +908,7 @@ profile:
     connections:
         title: Redes Sociais e outras conexões
         connect:
-            facebook: Conectar usando FacebookConectar usando Facebook
+            facebook: Conectar usando Facebook
             twitter: Conectar usando Twitter
             google: Conectar usando Google
         disconnect:
