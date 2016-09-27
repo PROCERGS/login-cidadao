@@ -5,11 +5,13 @@ namespace LoginCidadao\OAuthBundle\EventListener;
 use FOS\OAuthServerBundle\Event\OAuthEvent;
 use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
 use LoginCidadao\CoreBundle\Entity\Authorization;
+use Symfony\Component\HttpFoundation\Request;
 
 class OAuthEventListener
 {
     private $doctrine;
     private $personRepo;
+    /** @var Request */
     private $request;
     private $form;
 
@@ -77,9 +79,14 @@ class OAuthEventListener
     protected function getScope()
     {
         $form  = $this->form->getName();
-        $scope = $this->request->query->get('scope',
-            $this->request->request->get($form.'[scope]',
-                $this->request->request->get('scope', ''), true));
+
+        $scope = $this->request->request->get('scope', false);
+        if (!$scope) {
+            $scope = $this->request->query->get('scope', false);
+        }
+        if (!$scope) {
+            $scope = $this->request->request->get("{$form}[scope]", false, true);
+        }
 
         return !is_array($scope) ? explode(' ', $scope) : $scope;
     }
