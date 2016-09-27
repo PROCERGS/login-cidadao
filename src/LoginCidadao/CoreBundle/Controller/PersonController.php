@@ -33,19 +33,6 @@ use LoginCidadao\CoreBundle\Helper\GridHelper;
 class PersonController extends Controller
 {
 
-    public function connectFacebookWithAccountAction()
-    {
-        $fbService = $this->get('fos_facebook.user.login');
-        //todo: check if service is successfully connected.
-        $fbService->connectExistingAccount();
-        return $this->redirect($this->generateUrl('fos_user_profile_edit'));
-    }
-
-    public function loginFbAction()
-    {
-        return $this->redirect($this->generateUrl("_homepage"));
-    }
-
     /**
      * @Route("/person/authorization/{clientId}/revoke", name="lc_revoke")
      * @Template()

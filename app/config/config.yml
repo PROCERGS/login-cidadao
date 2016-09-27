@@ -242,13 +242,6 @@ simple_things_entity_audit:
         - LoginCidadao\OAuthBundle\Entity\RefreshToken
         - LoginCidadao\OAuthBundle\Entity\Organization
 
-fos_facebook:
-    alias:  facebook
-    app_id: %facebook_app_id%
-    secret: %facebook_app_secret%
-    cookie: true
-    permissions: %facebook_app_scope%
-
 hwi_oauth:
     connect:
         confirmation: false
