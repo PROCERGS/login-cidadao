@@ -79,46 +79,6 @@ window.onload=function(){
 </script>
 
 <script>
-    window.fbAsyncInit = function() {
-        FB.init({
-            appId: '{{ facebook_app_id }}',
-            status: true,  // check login status
-            cookie: true,  // enable cookies to allow the server to access the session
-            xfbml: false, // parse XFBML
-            version: 'v2.5'
-        });
-    };
-
-    // Load the SDK asynchronously
-    (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-
-    function fb_login() {
-        FB.getLoginStatus(function(response) {
-            if (response.status === 'connected') {
-                // connected
-                alert('Already connected, redirect to login page to create token.');
-                document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
-            } else {
-                // not_authorized
-                FB.login(function(response) {
-                    if (response.authResponse) {
-                        document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
-                    } else {
-                        alert('Cancelled.');
-                    }
-                }, {scope: 'email'});
-            }
-        });
-    }
-</script>
-
-<script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
