@@ -3385,17 +3385,17 @@
         },
         {
             "name": "procergs/login-cidadao-badges-bundle",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "target-dir": "LoginCidadao/BadgesBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/login-cidadao-badges-bundle.git",
-                "reference": "177241dfec6357f2f1e93e4aa7529ed92f2806b6"
+                "reference": "5bae9483323e240433ff5dc0c9564f82a61e3347"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/177241dfec6357f2f1e93e4aa7529ed92f2806b6",
-                "reference": "177241dfec6357f2f1e93e4aa7529ed92f2806b6",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/5bae9483323e240433ff5dc0c9564f82a61e3347",
+                "reference": "5bae9483323e240433ff5dc0c9564f82a61e3347",
                 "shasum": ""
             },
             "require": {
@@ -3423,10 +3423,10 @@
                 "login-cidadao"
             ],
             "support": {
-                "source": "https://github.com/PROCERGS/login-cidadao-badges-bundle/tree/2.0.0",
+                "source": "https://github.com/PROCERGS/login-cidadao-badges-bundle/tree/2.0.1",
                 "issues": "https://github.com/PROCERGS/login-cidadao-badges-bundle/issues"
             },
-            "time": "2016-02-19 17:24:12"
+            "time": "2016-09-27 18:03:38"
         },
         {
             "name": "procergs/tos-bundle",
