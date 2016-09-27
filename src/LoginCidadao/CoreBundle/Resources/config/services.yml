@@ -1,6 +1,5 @@
 parameters:
     security.authentication.success_handler.class: LoginCidadao\CoreBundle\Handler\AuthenticationSuccessHandler
-    fos_facebook.user.login.class: LoginCidadao\CoreBundle\Security\User\Provider\FacebookProvider
     lc.hwi_twitter.user_provider.class: LoginCidadao\CoreBundle\Security\User\Provider\FOSUBUserProvider
     lc.person.registration.form.type.class: LoginCidadao\CoreBundle\Form\Type\RegistrationFormType
     lc.person.profile.form.type.class: LoginCidadao\CoreBundle\Form\Type\ProfileFormType
@@ -47,19 +46,16 @@ services:
             - "@doctrine.orm.entity_manager"
             - []
 
-    fos_facebook.user.login:
-        class: %fos_facebook.user.login.class%
-        arguments:
-            facebook: "@fos_facebook.api"
-            userManager: "@fos_user.user_manager"
-            validator: "@validator"
-            container: "@service_container"
-            dispatcher: "@event_dispatcher"
-            formFactory: "@fos_user.registration.form.factory"
-
     lc.hwi_twitter.user_provider:
         class: %lc.hwi_twitter.user_provider.class%
-        arguments: [ "@fos_user.user_manager", "@session", "@event_dispatcher", "@service_container", "@fos_user.registration.form.factory", { twitter: twitterId, google: googleId }, %http_proxy% ]
+        arguments:
+            - "@fos_user.user_manager"
+            - "@session"
+            - "@event_dispatcher"
+            - "@service_container"
+            - "@fos_user.registration.form.factory"
+            - { facebook: facebookId, twitter: twitterId, google: googleId }
+            - %http_proxy%
 
     lc.person.registration.form.type:
         class: %lc.person.registration.form.type.class%

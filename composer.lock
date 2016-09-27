@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "08c8c1da283dde6784ea408c198147d3",
-    "content-hash": "4fa93cb0631a85c85cb310f1fcb3e530",
+    "hash": "ec1cc4f478bf91c8432db9e86dabba28",
+    "content-hash": "49eb9f228fc79a984ead9c598d80a86f",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -1125,111 +1125,6 @@
             "time": "2016-07-03 21:52:18"
         },
         {
-            "name": "facebook/php-sdk",
-            "version": "v3.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/facebookarchive/facebook-php-sdk.git",
-                "reference": "98f2be163c96a51166354e467b95dd38aa4b0a19"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/facebookarchive/facebook-php-sdk/zipball/98f2be163c96a51166354e467b95dd38aa4b0a19",
-                "reference": "98f2be163c96a51166354e467b95dd38aa4b0a19",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-json": "*",
-                "php": ">=5.2.0"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache2"
-            ],
-            "authors": [
-                {
-                    "name": "Facebook",
-                    "homepage": "https://github.com/facebook/facebook-php-sdk/contributors"
-                }
-            ],
-            "description": "Facebook PHP SDK",
-            "homepage": "https://github.com/facebook/facebook-php-sdk",
-            "keywords": [
-                "facebook",
-                "sdk"
-            ],
-            "abandoned": "facebook/php-sdk-v4",
-            "time": "2012-08-14 17:28:20"
-        },
-        {
-            "name": "friendsofsymfony/facebook-bundle",
-            "version": "1.3.0",
-            "target-dir": "FOS/FacebookBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/FriendsOfSymfony/FOSFacebookBundle.git",
-                "reference": "593a4ced83a7c2f96c563a54eb6a3261bbab2e14"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSFacebookBundle/zipball/593a4ced83a7c2f96c563a54eb6a3261bbab2e14",
-                "reference": "593a4ced83a7c2f96c563a54eb6a3261bbab2e14",
-                "shasum": ""
-            },
-            "require": {
-                "facebook/php-sdk": "3.2.*",
-                "php": ">=5.3.2",
-                "symfony/http-foundation": "~2.2",
-                "symfony/security": "~2.2"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "3.7.*",
-                "symfony/framework-bundle": "~2.2",
-                "symfony/security-bundle": "~2.2",
-                "symfony/twig-bundle": "~2.2"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.3.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "FOS\\FacebookBundle": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kris Wallsmith",
-                    "email": "kris.wallsmith@gmail.com",
-                    "homepage": "http://kriswallsmith.net/"
-                },
-                {
-                    "name": "FriendsOfSymfony Community",
-                    "homepage": "https://github.com/friendsofsymfony/FOSFacebookBundle/contributors"
-                }
-            ],
-            "description": "Integrate the Facebook Platform into your Symfony2 application.",
-            "homepage": "http://friendsofsymfony.github.com",
-            "keywords": [
-                "facebook"
-            ],
-            "abandoned": "hwi/oauth-bundle",
-            "time": "2013-12-11 20:21:13"
-        },
-        {
             "name": "friendsofsymfony/oauth-server-bundle",
             "version": "dev-master",
             "source": {
@@ -1451,12 +1346,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "4cb7a29869e4a9bef4f51986d48b1a3af76d3f48"
+                "reference": "7abb0ff366c404f2c2b34fd264693071148351a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/4cb7a29869e4a9bef4f51986d48b1a3af76d3f48",
-                "reference": "4cb7a29869e4a9bef4f51986d48b1a3af76d3f48",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/7abb0ff366c404f2c2b34fd264693071148351a2",
+                "reference": "7abb0ff366c404f2c2b34fd264693071148351a2",
                 "shasum": ""
             },
             "require": {
@@ -1490,7 +1385,10 @@
             "autoload": {
                 "psr-4": {
                     "FOS\\UserBundle\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1515,7 +1413,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2016-09-12 15:04:02"
+            "time": "2016-09-26 07:23:44"
         },
         {
             "name": "google/recaptcha",
@@ -2057,16 +1955,16 @@
         },
         {
             "name": "jms/di-extra-bundle",
-            "version": "1.8.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/JMSDiExtraBundle.git",
-                "reference": "7c8e23ffd65eb05f7b76869aa8ef1949e90789c7"
+                "reference": "53d0a974d79f1793a4168fbafe98f273d3e1b3e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/JMSDiExtraBundle/zipball/7c8e23ffd65eb05f7b76869aa8ef1949e90789c7",
-                "reference": "7c8e23ffd65eb05f7b76869aa8ef1949e90789c7",
+                "url": "https://api.github.com/repos/schmittjoh/JMSDiExtraBundle/zipball/53d0a974d79f1793a4168fbafe98f273d3e1b3e0",
+                "reference": "53d0a974d79f1793a4168fbafe98f273d3e1b3e0",
                 "shasum": ""
             },
             "require": {
@@ -2099,7 +1997,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.7-dev"
+                    "dev-master": "1.8-dev"
                 }
             },
             "autoload": {
@@ -2123,7 +2021,7 @@
                 "annotations",
                 "dependency injection"
             ],
-            "time": "2016-09-09 12:35:58"
+            "time": "2016-09-18 13:06:50"
         },
         {
             "name": "jms/metadata",
@@ -2702,16 +2600,16 @@
         },
         {
             "name": "liip/monitor-bundle",
-            "version": "2.3.4",
+            "version": "2.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liip/LiipMonitorBundle.git",
-                "reference": "d7ef494c5d3918fac59de0464548f4174a37d7ba"
+                "reference": "1c1182609d9a6cd9e639c23889a6c986d062b41d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liip/LiipMonitorBundle/zipball/d7ef494c5d3918fac59de0464548f4174a37d7ba",
-                "reference": "d7ef494c5d3918fac59de0464548f4174a37d7ba",
+                "url": "https://api.github.com/repos/liip/LiipMonitorBundle/zipball/1c1182609d9a6cd9e639c23889a6c986d062b41d",
+                "reference": "1c1182609d9a6cd9e639c23889a6c986d062b41d",
                 "shasum": ""
             },
             "require": {
@@ -2720,9 +2618,9 @@
                 "zendframework/zenddiagnostics": "^1.0.2"
             },
             "require-dev": {
-                "guzzle/guzzle": "~3.8",
+                "guzzlehttp/guzzle": "~3.8|~4.0|~5.0|~6.0",
                 "matthiasnoback/symfony-dependency-injection-test": "^0.7.4",
-                "sensiolabs/security-checker": "~1.3|~2.0|~3.0",
+                "sensiolabs/security-checker": "~1.3|~2.0|~3.0|~4.0",
                 "swiftmailer/swiftmailer": "~5.4",
                 "symfony/expression-language": "~2.3|~3.0"
             },
@@ -2770,7 +2668,7 @@
                 "monitor",
                 "monitoring"
             ],
-            "time": "2016-06-06 12:57:09"
+            "time": "2016-09-26 12:12:21"
         },
         {
             "name": "michelf/php-markdown",
@@ -3385,17 +3283,17 @@
         },
         {
             "name": "procergs/login-cidadao-badges-bundle",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "target-dir": "LoginCidadao/BadgesBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/login-cidadao-badges-bundle.git",
-                "reference": "177241dfec6357f2f1e93e4aa7529ed92f2806b6"
+                "reference": "5bae9483323e240433ff5dc0c9564f82a61e3347"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/177241dfec6357f2f1e93e4aa7529ed92f2806b6",
-                "reference": "177241dfec6357f2f1e93e4aa7529ed92f2806b6",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/5bae9483323e240433ff5dc0c9564f82a61e3347",
+                "reference": "5bae9483323e240433ff5dc0c9564f82a61e3347",
                 "shasum": ""
             },
             "require": {
@@ -3423,10 +3321,10 @@
                 "login-cidadao"
             ],
             "support": {
-                "source": "https://github.com/PROCERGS/login-cidadao-badges-bundle/tree/2.0.0",
+                "source": "https://github.com/PROCERGS/login-cidadao-badges-bundle/tree/2.0.1",
                 "issues": "https://github.com/PROCERGS/login-cidadao-badges-bundle/issues"
             },
-            "time": "2016-02-19 17:24:12"
+            "time": "2016-09-27 18:03:38"
         },
         {
             "name": "procergs/meurs-monitor-bundle",
@@ -3559,22 +3457,30 @@
         },
         {
             "name": "psr/log",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
+                "reference": "5277094ed527a1c4477177d102fe4c53551953e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
-                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/5277094ed527a1c4477177d102fe4c53551953e0",
+                "reference": "5277094ed527a1c4477177d102fe4c53551953e0",
                 "shasum": ""
             },
+            "require": {
+                "php": ">=5.3.0"
+            },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
-                "psr-0": {
-                    "Psr\\Log\\": ""
+                "psr-4": {
+                    "Psr\\Log\\": "Psr/Log/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -3588,12 +3494,13 @@
                 }
             ],
             "description": "Common interface for logging libraries",
+            "homepage": "https://github.com/php-fig/log",
             "keywords": [
                 "log",
                 "psr",
                 "psr-3"
             ],
-            "time": "2012-12-21 11:40:51"
+            "time": "2016-09-19 16:02:08"
         },
         {
             "name": "qandidate/stack-request-id",
@@ -4970,16 +4877,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.24.2",
+            "version": "v1.25.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "33093f6e310e6976baeac7b14f3a6ec02f2d79b7"
+                "reference": "f16a634ab08d87e520da5671ec52153d627f10f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/33093f6e310e6976baeac7b14f3a6ec02f2d79b7",
-                "reference": "33093f6e310e6976baeac7b14f3a6ec02f2d79b7",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/f16a634ab08d87e520da5671ec52153d627f10f6",
+                "reference": "f16a634ab08d87e520da5671ec52153d627f10f6",
                 "shasum": ""
             },
             "require": {
@@ -4992,7 +4899,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.24-dev"
+                    "dev-master": "1.25-dev"
                 }
             },
             "autoload": {
@@ -5027,7 +4934,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-09-01 17:50:53"
+            "time": "2016-09-21 23:05:12"
         },
         {
             "name": "vich/uploader-bundle",

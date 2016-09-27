@@ -647,33 +647,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         return $terms;
     }
 
-    /**
-     * @param array
-     */
-    public function setFBData($fbdata)
-    {
-        if (isset($fbdata['id'])) {
-            $this->setFacebookId($fbdata['id']);
-            $this->addRole('ROLE_FACEBOOK');
-        }
-        if (isset($fbdata['first_name']) && is_null($this->getFirstName())) {
-            $this->setFirstName($fbdata['first_name']);
-        }
-        if (isset($fbdata['last_name']) && is_null($this->getSurname())) {
-            $this->setSurname($fbdata['last_name']);
-        }
-        if (isset($fbdata['email']) && is_null($this->getEmail())) {
-            $this->setEmail($fbdata['email']);
-        }
-        if (isset($fbdata['birthday']) && is_null($this->getBirthdate())) {
-            $date = \DateTime::createFromFormat('m/d/Y', $fbdata['birthday']);
-            $this->setBirthdate($date);
-        }
-        if (isset($fbdata['username']) && is_null($this->getFacebookUsername())) {
-            $this->setFacebookUsername($fbdata['username']);
-        }
-    }
-
     public function setCpf($cpf)
     {
         $cpf = trim(preg_replace('/[^0-9]/', '', $cpf));
