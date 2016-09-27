@@ -57,6 +57,9 @@ hwi_oauth_redirect:
     resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
     prefix:   /connect
 
+facebook_login:
+    path: /login/check-facebook
+
 twitter_login:
     path: /login/check-twitter
 
@@ -119,21 +122,6 @@ fos_user_resetting:
 fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
     prefix: /profile
-
-# FOSFacebook
-_security_check_facebook:
-    path:   /facebook/login_check
-    defaults:  { _controller: LoginCidadaoCoreBundle:Person:loginFb }
-
-_security_facebook_logout:
-  path:  /facebook/logout
-
-fos_facebook_channel:
-    resource: "@FOSFacebookBundle/Resources/config/routing.xml"
-
-user_couple_fb_with_account:
-    path: /user/couple/facebook
-    defaults: { _controller: LoginCidadaoCoreBundle:Person:connectFacebookWithAccount }
 
 # Static Pages
 lc_about:
