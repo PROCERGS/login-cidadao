@@ -54,11 +54,9 @@ security:
     providers:
         chainprovider:
             chain:
-                providers: [fos_userbundle, fos_facebook_provider]
+                providers: [fos_userbundle]
         fos_userbundle:
             id: lc.user_provider
-        fos_facebook_provider:
-            id: fos_facebook.user.login
         oauth2:
             id: oauth2.user_provider
 
@@ -70,18 +68,6 @@ security:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
-        main2:
-            pattern: ^/facebook
-            context: context_key
-            fos_facebook:
-                app_url: ""
-                server_url: %facebook_app_this_url%
-                login_path: /login
-                check_path: /facebook/login_check
-                default_target_path: lc_dashboard
-                success_handler: security.authentication.success_handler
-                provider: fos_facebook_provider
 
         main:
             context: context_key
@@ -96,18 +82,10 @@ security:
                 path:     /
                 domain:   ~
 
-            fos_facebook:
-                app_url: ""
-                server_url: %facebook_app_this_url%
-                login_path: /login
-                check_path: /facebook/login_check
-                default_target_path: lc_dashboard
-                success_handler: security.authentication.success_handler
-                provider: fos_facebook_provider
-
             oauth:
                 resource_owners:
-                    twitter:    "/login/check-twitter"
+                    facebook:  facebook_login
+                    twitter:   "/login/check-twitter"
                     google:    "/login/check-google"
                 login_path:   /login
                 use_forward:  false
@@ -173,9 +151,9 @@ security:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
 
+        - { path: ^/connect/facebook$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/connect/twitter$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/connect/google$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        - { path: ^/login/facebook$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
 
         - { path: ^/monitor/health, role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_monitors%, requires_channel: https }
 
