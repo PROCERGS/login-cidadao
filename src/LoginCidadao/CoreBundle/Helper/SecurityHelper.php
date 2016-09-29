@@ -132,4 +132,17 @@ class SecurityHelper
 
         return $response;
     }
+
+    /**
+     * Checks if the attributes are granted against the current authentication token and optionally supplied object.
+     *
+     * @param mixed $attributes
+     * @param mixed $object
+     *
+     * @return bool
+     */
+    public function isGranted($attributes, $object = null)
+    {
+        return $this->authChecker->isGranted($attributes, $object);
+    }
 }
