@@ -7,6 +7,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseClass;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Security\Exception\DuplicateEmailException;
 use Ramsey\Uuid\Uuid;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
@@ -164,10 +165,13 @@ class FOSUBUserProvider extends BaseClass
         /** @var ValidatorInterface $validator */
         $validator = $this->container->get('validator');
         /** @var ConstraintViolationList $errors */
-        $errors = $validator->validate($user, ['Profile']);
+        $errors = $validator->validate($user, ['LoginCidadaoProfile']);
         if (count($errors) > 0) {
             foreach ($errors as $error) {
-                if ($error->getPropertyPath() === 'email') {
+                if ($error->getPropertyPath() === 'email'
+                    && method_exists($error, 'getConstraint')
+                    && $error->getConstraint() instanceof UniqueEntity
+                ) {
                     throw new DuplicateEmailException($service);
                 }
             }
