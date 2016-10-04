@@ -103,7 +103,7 @@
                                         {{ 'profile.connections.connect.facebook' | trans }}</a>
                                 </div>
                             {% else %}
-                                <div class="connect facebook">
+                                <div class="connect facebook" data-service-name="Facebook">
                                     {% if app.user.facebookUsername is not null %}
                                         <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.facebookUsername }}</span>
                                     {% else %}
@@ -125,7 +125,7 @@
                                        class="col-xs-11 col-xs-offset-1 username">{{ 'profile.connections.connect.twitter' | trans }}</a>
                                 </div>
                             {% else %}
-                                <div class="connect twitter">
+                                <div class="connect twitter" data-service-name="Twitter">
                                     {% if app.user.twitterUsername is not null %}
                                         <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.twitterUsername }}</span>
                                     {% else %}
@@ -147,7 +147,7 @@
                                        class="col-xs-11 col-xs-offset-1 username">{{ 'profile.connections.connect.google' | trans }}</a>
                                 </div>
                             {% else %}
-                                <div class="connect google">
+                                <div class="connect google" data-service-name="Google">
                                     {% if app.user.googleUsername is not null %}
                                         <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.googleUsername }}</span>
                                     {% else %}
@@ -245,14 +245,8 @@
                 var confirmDialog = $('.unlink-confirmation');
                 var parent = $(this).parent();
                 var href = $(this).attr('href');
-                var serviceName = '';
-                if (parent.is('.facebook')) {
-                    serviceName = 'Facebook';
-                } else if (parent.is('.twitter')) {
-                    serviceName = 'Twitter';
-                } else if (parent.is('.google')) {
-                    serviceName = 'Google';
-                }
+                var serviceName = parent.data('service-name');
+
                 confirmDialog.slideUp('fast', function () {
                     $('a.confirm', $('.unlink-confirmation')).attr('href', href);
                     $('.social-network-name', $('.unlink-confirmation')).html(serviceName);
