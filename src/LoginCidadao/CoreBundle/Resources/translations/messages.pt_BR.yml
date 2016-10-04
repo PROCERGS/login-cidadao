@@ -15,7 +15,7 @@ scope.city: Cidade
 scope.badges: Medalhas
 scope.picture: Foto
 scope.public_profile: 'Perfil Público'
-scope.phone_number: Telefone
+scope.phone_number: Celular
 scope_details.public_profile: Primeiro nome e faixa etária
 'Revoke Access': 'Revogar Acesso'
 'Visit Site': 'Visitar Site'
