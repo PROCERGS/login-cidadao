@@ -14,7 +14,7 @@ class RemovePersonAddressFormType extends AbstractType
             ->add('address_id',
                 'Symfony\Component\Form\Extension\Core\Type\HiddenType')
             ->add('delete',
-                'Symfony\Component\Form\Extension\Core\Type\HiddenType',
+                'Symfony\Component\Form\Extension\Core\Type\SubmitType',
                 array(
                 'attr' => array('class' => 'btn btn-danger btn-xs'),
                 'label' => 'Yes, remove')
