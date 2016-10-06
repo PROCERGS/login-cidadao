@@ -25,7 +25,6 @@ class AppKernel extends Kernel
             new Bmatzner\FontAwesomeBundle\BmatznerFontAwesomeBundle(),
 
             new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
-            new FOS\FacebookBundle\FOSFacebookBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new Donato\Generic\HWIOAuthProxyBundle\DonatoGenericHWIOAuthProxyBundle(),
 

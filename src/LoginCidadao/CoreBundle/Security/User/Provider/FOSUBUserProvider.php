@@ -7,6 +7,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseClass;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Security\Exception\DuplicateEmailException;
 use Ramsey\Uuid\Uuid;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
@@ -87,7 +88,8 @@ class FOSUBUserProvider extends BaseClass
         $setter_token = $setter.'AccessToken';
         $setter_username = $setter.'Username';
 
-        if (null !== $previousUser = $this->userManager->findUserBy(array("{$service}Id" => $username))) {
+        $existingUser = $this->userManager->findUserBy(array("{$service}Id" => $username));
+        if ($existingUser instanceof UserInterface && $existingUser->getId() != $user->getId()) {
             throw new AlreadyLinkedAccount();
             $previousUser->$setter_id(null);
             $previousUser->$setter_token(null);
@@ -98,6 +100,10 @@ class FOSUBUserProvider extends BaseClass
         $user->$setter_id($username);
         $user->$setter_token($response->getAccessToken());
         $user->$setter_username($screenName);
+
+        if ($service === 'facebook') {
+            $this->setFacebookData($user, $response->getResponse());
+        }
 
         $this->userManager->updateUser($user);
     }
@@ -135,6 +141,10 @@ class FOSUBUserProvider extends BaseClass
             $user->setSurname($userInfo['family_name']);
         }
 
+        if ($service === 'facebook') {
+            $this->setFacebookData($user, $response->getResponse());
+        }
+
         $username = Uuid::uuid4()->toString();
         if (!UsernameValidator::isUsernameValid($username)) {
             $username = UsernameValidator::getValidUsername();
@@ -155,10 +165,13 @@ class FOSUBUserProvider extends BaseClass
         /** @var ValidatorInterface $validator */
         $validator = $this->container->get('validator');
         /** @var ConstraintViolationList $errors */
-        $errors = $validator->validate($user, ['Profile']);
+        $errors = $validator->validate($user, ['LoginCidadaoProfile']);
         if (count($errors) > 0) {
             foreach ($errors as $error) {
-                if ($error->getPropertyPath() === 'email') {
+                if ($error->getPropertyPath() === 'email'
+                    && method_exists($error, 'getConstraint')
+                    && $error->getConstraint() instanceof UniqueEntity
+                ) {
                     throw new DuplicateEmailException($service);
                 }
             }
@@ -243,5 +256,33 @@ class FOSUBUserProvider extends BaseClass
         }
 
         return $userInfo;
+    }
+
+    private function setFacebookData($person, $fbdata)
+    {
+        if (!($person instanceof PersonInterface)) {
+            return;
+        }
+
+        if (isset($fbdata['id'])) {
+            $person->setFacebookId($fbdata['id']);
+            $person->addRole('ROLE_FACEBOOK');
+        }
+        if (isset($fbdata['first_name']) && is_null($person->getFirstName())) {
+            $person->setFirstName($fbdata['first_name']);
+        }
+        if (isset($fbdata['last_name']) && is_null($person->getSurname())) {
+            $person->setSurname($fbdata['last_name']);
+        }
+        if (isset($fbdata['email']) && is_null($person->getEmail())) {
+            $person->setEmail($fbdata['email']);
+        }
+        if (isset($fbdata['birthday']) && is_null($person->getBirthdate())) {
+            $date = \DateTime::createFromFormat('m/d/Y', $fbdata['birthday']);
+            $person->setBirthdate($date);
+        }
+        if (isset($fbdata['username']) && is_null($person->getFacebookUsername())) {
+            $person->setFacebookUsername($fbdata['username']);
+        }
     }
 }

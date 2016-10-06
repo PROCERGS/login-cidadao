@@ -118,7 +118,7 @@ class TaskController extends Controller
             return $this->redirect(
                 $this->generateUrl(
                     'hwi_oauth_service_redirect',
-                    array('service' => 'twitter')
+                    array('service' => $service)
                 )
             );
         }

@@ -15,7 +15,7 @@ scope.city: Cidade
 scope.badges: Medalhas
 scope.picture: Foto
 scope.public_profile: 'Perfil Público'
-scope.phone_number: Telefone
+scope.phone_number: Celular
 scope_details.public_profile: Primeiro nome e faixa etária
 'Revoke Access': 'Revogar Acesso'
 'Visit Site': 'Visitar Site'
@@ -99,7 +99,7 @@ Contact: Contato
 'About the Government': 'Sobre o Governo'
 Government: Governo
 'view all services': 'ver todos serviços'
-exception.alreadyLinkedAccount: 'Essa conta já está conectada a um outro usuário. Você deve desfazer essa conexão antes de tentar linkar com o usuário atual.'
+exception.alreadyLinkedAccount: 'Essa conta já está conectada a um outro usuário. Você deve desfazer essa conexão antes de tentar conectar com o usuário atual.'
 '<a href="%link%">Background picture</a> by %name%': '<a href="%link%">Imagem de fundo</a> por %name%'
 cpf.registration.title: 'Registro de CPF'
 'Active Services': 'Serviços Ativos'
@@ -908,7 +908,7 @@ profile:
     connections:
         title: Redes Sociais e outras conexões
         connect:
-            facebook: Conectar usando FacebookConectar usando Facebook
+            facebook: Conectar usando Facebook
             twitter: Conectar usando Twitter
             google: Conectar usando Google
         disconnect:

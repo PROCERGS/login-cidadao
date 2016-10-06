@@ -26,9 +26,9 @@ use Donato\PathWellBundle\Validator\Constraints\PathWell;
 /**
  * @ORM\Entity(repositoryClass="LoginCidadao\CoreBundle\Entity\PersonRepository")
  * @ORM\Table(name="person")
- * @UniqueEntity("cpf", message="person.validation.cpf.already_used", groups={"LoginCidadaoRegistration", "Registration", "Profile", "Dynamic", "Documents"})
+ * @UniqueEntity("cpf", message="person.validation.cpf.already_used", groups={"LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Documents"})
  * @UniqueEntity("username")
- * @UniqueEntity(fields="email", errorPath="email", message="fos_user.email.already_used", groups={"LoginCidadaoRegistration", "Registration", "LoginCidadaoEmailForm", "Dynamic"})
+ * @UniqueEntity(fields="email", errorPath="email", message="fos_user.email.already_used", groups={"LoginCidadaoRegistration", "Registration", "LoginCidadaoEmailForm", "LoginCidadaoProfile", "Dynamic"})
  * @ORM\HasLifecycleCallbacks
  * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
@@ -48,13 +48,13 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Expose
      * @JMS\Groups({"first_name","full_name","public_profile","given_name","name"})
      * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotBlank(message="Please enter your name.", groups={"Profile"})
+     * @Assert\NotBlank(message="Please enter your name.", groups={"Profile", "LoginCidadaoProfile"})
      * @Assert\Length(
      *     min=3,
      *     max="255",
      *     minMessage="The name is too short.",
      *     maxMessage="The name is too long.",
-     *     groups={"Registration", "Profile"}
+     *     groups={"Registration", "Profile", "LoginCidadaoProfile"}
      * )
      * @JMS\Since("1.0")
      */
@@ -64,13 +64,13 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Expose
      * @JMS\Groups({"last_name","full_name","family_name","middle_name","name"})
      * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotBlank(message="Please enter your surname.", groups={"Profile"})
+     * @Assert\NotBlank(message="Please enter your surname.", groups={"Profile", "LoginCidadaoProfile"})
      * @Assert\Length(
      *     min=1,
      *     max="255",
      *     minMessage="The surname is too short.",
      *     maxMessage="The surname is too long.",
-     *     groups={"Registration", "Profile"}
+     *     groups={"Registration", "Profile", "LoginCidadaoProfile"}
      * )
      * @JMS\Since("1.0")
      */
@@ -83,7 +83,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @Assert\Length(
      *     min="1",
      *     max="40",
-     *     groups={"Registration", "Profile"}
+     *     groups={"Registration", "Profile", "LoginCidadaoProfile"}
      * )
      * @JMS\Since("1.0")
      */
@@ -117,7 +117,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Expose
      * @JMS\Groups({"email"})
      * @JMS\Since("1.0")
-     * @Assert\Email(strict=true, groups={"Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration", "LoginCidadaoEmailForm"})
+     * @Assert\Email(strict=true, groups={"Profile", "LoginCidadaoProfile", "Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration", "LoginCidadaoEmailForm"})
      */
     protected $email;
 
@@ -148,7 +148,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Since("1.0")
      * @LCAssert\E164PhoneNumber(
      *     maxMessage="person.validation.mobile.length.max",
-     *     groups={"Registration", "LoginCidadaoRegistration", "Dynamic", "Profile"}
+     *     groups={"Registration", "LoginCidadaoRegistration", "Dynamic", "Profile", "LoginCidadaoProfile"}
      * )
      */
     protected $mobile;
@@ -645,33 +645,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         $terms['email'] = is_null($this->getConfirmationToken());
 
         return $terms;
-    }
-
-    /**
-     * @param array
-     */
-    public function setFBData($fbdata)
-    {
-        if (isset($fbdata['id'])) {
-            $this->setFacebookId($fbdata['id']);
-            $this->addRole('ROLE_FACEBOOK');
-        }
-        if (isset($fbdata['first_name']) && is_null($this->getFirstName())) {
-            $this->setFirstName($fbdata['first_name']);
-        }
-        if (isset($fbdata['last_name']) && is_null($this->getSurname())) {
-            $this->setSurname($fbdata['last_name']);
-        }
-        if (isset($fbdata['email']) && is_null($this->getEmail())) {
-            $this->setEmail($fbdata['email']);
-        }
-        if (isset($fbdata['birthday']) && is_null($this->getBirthdate())) {
-            $date = \DateTime::createFromFormat('m/d/Y', $fbdata['birthday']);
-            $this->setBirthdate($date);
-        }
-        if (isset($fbdata['username']) && is_null($this->getFacebookUsername())) {
-            $this->setFacebookUsername($fbdata['username']);
-        }
     }
 
     public function setCpf($cpf)

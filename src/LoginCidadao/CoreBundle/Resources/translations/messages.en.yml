@@ -15,7 +15,7 @@ scope.city: City
 scope.badges: Badges
 scope.picture: Picture
 scope.public_profile: Public Profile
-scope.phone_number: Phone Number
+scope.phone_number: Mobile
 scope_details.public_profile: Your public profile contains your first name, age range and your certificates (badges).
 'Citizen''s Login': 'Citizen''s Login'
 'Need help?': 'Need help?'

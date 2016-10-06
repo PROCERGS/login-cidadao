@@ -44,6 +44,7 @@
             </constraint>
             <constraint name="Email">
                 <option name="message">fos_user.email.invalid</option>
+                <option name="strict">true</option>
                 <option name="groups">
                     <value>LoginCidadaoRegistration</value>
                 </option>

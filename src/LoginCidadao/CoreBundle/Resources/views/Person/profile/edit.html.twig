@@ -98,11 +98,12 @@
                         {% if third_party_login.facebook | default(false) %}
                             {% if app.user.facebookId is null %}
                                 <div class="connect facebook disabled">
-                                    <a class="col-xs-11 col-xs-offset-1 username"
-                                       href="{{ path('lc_link_facebook') }}">{{ 'profile.connections.connect.facebook' | trans }}</a>
+                                    <a href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook'}) }}"
+                                       class="col-xs-11 col-xs-offset-1 username">
+                                        {{ 'profile.connections.connect.facebook' | trans }}</a>
                                 </div>
                             {% else %}
-                                <div class="connect facebook">
+                                <div class="connect facebook" data-service-name="Facebook">
                                     {% if app.user.facebookUsername is not null %}
                                         <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.facebookUsername }}</span>
                                     {% else %}
@@ -124,7 +125,7 @@
                                        class="col-xs-11 col-xs-offset-1 username">{{ 'profile.connections.connect.twitter' | trans }}</a>
                                 </div>
                             {% else %}
-                                <div class="connect twitter">
+                                <div class="connect twitter" data-service-name="Twitter">
                                     {% if app.user.twitterUsername is not null %}
                                         <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.twitterUsername }}</span>
                                     {% else %}
@@ -146,7 +147,7 @@
                                        class="col-xs-11 col-xs-offset-1 username">{{ 'profile.connections.connect.google' | trans }}</a>
                                 </div>
                             {% else %}
-                                <div class="connect google">
+                                <div class="connect google" data-service-name="Google">
                                     {% if app.user.googleUsername is not null %}
                                         <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.googleUsername }}</span>
                                     {% else %}
@@ -160,12 +161,6 @@
                                 </div>
                             {% endif %}
                         {% endif %}
-                    </div>
-                </div>
-
-                <div class="row social-networks">
-                    <div class="col-xs-12">
-
                         <div class="row unlink-confirmation">
                             <div class="alert alert-danger col-xs-10 col-xs-offset-1">
                                 <p class="title">{{ 'profile.connections.disconnect.confirm.template' | trans | raw }}</p>
@@ -212,11 +207,11 @@
     {{ parent() }}
 
     {% javascripts
-        '@intl_tel_input_js'
-        '@LoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
-        '@LoginCidadaoCoreBundle/Resources/public/js/dynamic-form/locationSelect.js'
-        '@LoginCidadaoCoreBundle/Resources/public/js/components/intl-tel-input.js'
-        filter='uglifyjs2' %}
+    '@intl_tel_input_js'
+    '@LoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
+    '@LoginCidadaoCoreBundle/Resources/public/js/dynamic-form/locationSelect.js'
+    '@LoginCidadaoCoreBundle/Resources/public/js/components/intl-tel-input.js'
+    filter='uglifyjs2' %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
@@ -250,16 +245,12 @@
                 var confirmDialog = $('.unlink-confirmation');
                 var parent = $(this).parent();
                 var href = $(this).attr('href');
-                var serviceName = '';
-                if (parent.is('.facebook')) {
-                    serviceName = 'facebook';
-                } else if (parent.is('.twitter')) {
-                    serviceName = 'twitter';
-                }
+                var serviceName = parent.data('service-name');
+
                 confirmDialog.slideUp('fast', function () {
                     $('a.confirm', $('.unlink-confirmation')).attr('href', href);
                     $('.social-network-name', $('.unlink-confirmation')).html(serviceName);
-                    confirmDialog.insertAfter(parent).slideDown();
+                    confirmDialog.slideDown();
                 });
 
                 return false;
