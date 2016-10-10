@@ -60,7 +60,8 @@
         "bmatzner/fontawesome-bundle": "^4.6",
         "ramsey/uuid": "^3.5",
         "qandidate/stack-request-id": "dev-ramsey-uuid-v3",
-        "egulias/email-validator": "~1.2"
+        "egulias/email-validator": "~1.2",
+        "misd/phone-number-bundle": "^1.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
