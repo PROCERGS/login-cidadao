@@ -1,5 +1,5 @@
 security.login.username: 'Email ou CPF'
-security.login.username.placeholder: 'Digite seu email'
+security.login.username.placeholder: 'Digite seu email ou CPF'
 security.login.password: Digite sua senha
 security.login.remember_me: 'Lembrar meus dados'
 security.login.submit: Entrar

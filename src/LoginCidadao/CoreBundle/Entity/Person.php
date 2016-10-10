@@ -22,6 +22,7 @@ use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\CoreBundle\Model\LocationAwareInterface;
 use LoginCidadao\ValidationBundle\Validator\Constraints as LCAssert;
 use Donato\PathWellBundle\Validator\Constraints\PathWell;
+use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
 
 /**
  * @ORM\Entity(repositoryClass="LoginCidadao\CoreBundle\Entity\PersonRepository")
@@ -144,10 +145,15 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     /**
      * @JMS\Expose
      * @JMS\Groups({"mobile","phone_number"})
-     * @ORM\Column(type="string", nullable=true)
+     * @JMS\Type("libphonenumber\PhoneNumber")
+     * @ORM\Column(type="phone_number", nullable=true)
      * @JMS\Since("1.0")
      * @LCAssert\E164PhoneNumber(
      *     maxMessage="person.validation.mobile.length.max",
+     *     groups={"Registration", "LoginCidadaoRegistration", "Dynamic", "Profile", "LoginCidadaoProfile"}
+     * )
+     * @AssertPhoneNumber(
+     *     type="mobile",
      *     groups={"Registration", "LoginCidadaoRegistration", "Dynamic", "Profile", "LoginCidadaoProfile"}
      * )
      */

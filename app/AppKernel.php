@@ -58,6 +58,7 @@ class AppKernel extends Kernel
             new Liip\MonitorBundle\LiipMonitorBundle(),
 
             new Donato\PathWellBundle\DonatoPathWellBundle(),
+            new Misd\PhoneNumberBundle\MisdPhoneNumberBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
