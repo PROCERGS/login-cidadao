@@ -31,7 +31,7 @@
         "sensio/distribution-bundle": "~3.0,>=3.0.12",
         "sensio/framework-extra-bundle": "~3.0,>=3.0.2,<3.0.13",
         "incenteev/composer-parameter-handler": "~2.0",
-        "friendsofsymfony/user-bundle": "~2.0@dev",
+        "friendsofsymfony/user-bundle": "dev-master#7abb0ff",
         "friendsofsymfony/oauth-server-bundle": "dev-master",
         "jms/serializer-bundle": "*",
         "simplethings/entity-audit-bundle": "0.7",

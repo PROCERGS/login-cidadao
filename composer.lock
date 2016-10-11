@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a00615f605353a6ae275a98c6ad1f8a7",
-    "content-hash": "6fbbe9d30df2695191ef6d7d8aebd10d",
+    "hash": "d2ab61d9ab55d60f8fdba45ace2b6386",
+    "content-hash": "7d97f2c859fd9765c3b63278fb16ebdb",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -1346,12 +1346,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "9ddfc7e5dc168f929224dc7c9e5401f7b4da1e50"
+                "reference": "7abb0ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/9ddfc7e5dc168f929224dc7c9e5401f7b4da1e50",
-                "reference": "9ddfc7e5dc168f929224dc7c9e5401f7b4da1e50",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/7abb0ff",
+                "reference": "7abb0ff",
                 "shasum": ""
             },
             "require": {
@@ -1366,6 +1366,7 @@
             },
             "require-dev": {
                 "doctrine/doctrine-bundle": "^1.3",
+                "friendsofphp/php-cs-fixer": "^1.11",
                 "phpunit/phpunit": "~4.8|~5.0",
                 "swiftmailer/swiftmailer": "^4.3 || ^5.0",
                 "symfony/console": "^2.7 || ^3.0",
@@ -1414,7 +1415,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2016-10-11 12:45:12"
+            "time": "2016-09-26 07:23:44"
         },
         {
             "name": "giggsey/libphonenumber-for-php",
