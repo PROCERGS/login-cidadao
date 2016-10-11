@@ -58,6 +58,7 @@ class AppKernel extends Kernel
             new Liip\MonitorBundle\LiipMonitorBundle(),
 
             new Donato\PathWellBundle\DonatoPathWellBundle(),
+            new Misd\PhoneNumberBundle\MisdPhoneNumberBundle(),
 
             // PROCERGS
             new PROCERGS\LoginCidadao\CoreBundle\PROCERGSLoginCidadaoCoreBundle(),

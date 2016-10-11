@@ -4,40 +4,40 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ec1cc4f478bf91c8432db9e86dabba28",
-    "content-hash": "49eb9f228fc79a984ead9c598d80a86f",
+    "hash": "a00615f605353a6ae275a98c6ad1f8a7",
+    "content-hash": "6fbbe9d30df2695191ef6d7d8aebd10d",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
-            "version": "dev-master",
+            "version": "dev-legacy",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Bee-Lab/BeelabRecaptcha2Bundle.git",
-                "reference": "f0f566168739a38ab3828156496830702e7807b1"
+                "reference": "68faa7ad55d57f02548f6bc1128e8d8153264f86"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Bee-Lab/BeelabRecaptcha2Bundle/zipball/f0f566168739a38ab3828156496830702e7807b1",
-                "reference": "f0f566168739a38ab3828156496830702e7807b1",
+                "url": "https://api.github.com/repos/Bee-Lab/BeelabRecaptcha2Bundle/zipball/68faa7ad55d57f02548f6bc1128e8d8153264f86",
+                "reference": "68faa7ad55d57f02548f6bc1128e8d8153264f86",
                 "shasum": ""
             },
             "require": {
                 "google/recaptcha": "^1.1",
-                "php": ">=5.3.8",
-                "symfony/dependency-injection": "~2.4|~3.0",
-                "symfony/form": "~2.4|~3.0",
-                "symfony/framework-bundle": "~2.4|~3.0",
-                "symfony/validator": "~2.4|~3.0"
+                "php": ">=5.4",
+                "symfony/dependency-injection": "~2.7|~3.0",
+                "symfony/form": "~2.7|~3.0",
+                "symfony/framework-bundle": "~2.7|~3.0",
+                "symfony/validator": "~2.7|~3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.*",
-                "symfony/expression-language": "~2.4|~3.0",
+                "phpunit/phpunit": "^4.8",
+                "symfony/expression-language": "~2.7|~3.0",
                 "symfony/phpunit-bridge": "~2.7|~3.0"
             },
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1.x-dev"
+                    "dev-master": "1.2.x-dev"
                 }
             },
             "autoload": {
@@ -62,7 +62,7 @@
                 "recaptcha",
                 "symfony"
             ],
-            "time": "2016-08-21 11:36:07"
+            "time": "2016-10-11 13:05:54"
         },
         {
             "name": "bmatzner/fontawesome-bundle",
@@ -1346,32 +1346,33 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "7abb0ff366c404f2c2b34fd264693071148351a2"
+                "reference": "9ddfc7e5dc168f929224dc7c9e5401f7b4da1e50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/7abb0ff366c404f2c2b34fd264693071148351a2",
-                "reference": "7abb0ff366c404f2c2b34fd264693071148351a2",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/9ddfc7e5dc168f929224dc7c9e5401f7b4da1e50",
+                "reference": "9ddfc7e5dc168f929224dc7c9e5401f7b4da1e50",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.9",
-                "symfony/form": "~2.3|~3.0",
-                "symfony/framework-bundle": "~2.3|~3.0",
-                "symfony/security-bundle": "~2.3|~3.0",
-                "symfony/twig-bundle": "~2.3|~3.0"
+                "php": "^5.3.9 || ^7.0",
+                "symfony/form": "^2.7 || ^3.0",
+                "symfony/framework-bundle": "^2.7 || ^3.0",
+                "symfony/security-bundle": "^2.7 || ^3.0",
+                "symfony/twig-bundle": "^2.7 || ^3.0"
             },
             "conflict": {
-                "symfony/doctrine-bridge": "<2.3"
+                "symfony/doctrine-bridge": "<2.7"
             },
             "require-dev": {
-                "doctrine/doctrine-bundle": "~1.3",
-                "swiftmailer/swiftmailer": "~4.3|~5",
-                "symfony/console": "~2.3|~3.0",
-                "symfony/phpunit-bridge": "~2.7|~3.0",
-                "symfony/validator": "~2.3|~3.0",
-                "symfony/yaml": "~2.3|~3.0",
-                "willdurand/propel-typehintable-behavior": "~1.0"
+                "doctrine/doctrine-bundle": "^1.3",
+                "phpunit/phpunit": "~4.8|~5.0",
+                "swiftmailer/swiftmailer": "^4.3 || ^5.0",
+                "symfony/console": "^2.7 || ^3.0",
+                "symfony/phpunit-bridge": "^2.7 || ^3.0",
+                "symfony/validator": "^2.7 || ^3.0",
+                "symfony/yaml": "^2.7 || ^3.0",
+                "willdurand/propel-typehintable-behavior": "^1.0"
             },
             "suggest": {
                 "willdurand/propel-typehintable-behavior": "Needed when using the propel implementation"
@@ -1413,7 +1414,118 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2016-09-26 07:23:44"
+            "time": "2016-10-11 12:45:12"
+        },
+        {
+            "name": "giggsey/libphonenumber-for-php",
+            "version": "7.7.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/giggsey/libphonenumber-for-php.git",
+                "reference": "245324b87d59fe122945f5cf4521c75af2bd472a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/245324b87d59fe122945f5cf4521c75af2bd472a",
+                "reference": "245324b87d59fe122945f5cf4521c75af2bd472a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "giggsey/locale": "^1.0",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "pear/pear-core-minimal": "^1.9",
+                "pear/pear_exception": "^1.0",
+                "pear/versioncontrol_git": "dev-master",
+                "phing/phing": "^2.7",
+                "phpunit/phpunit": "^4.8|^5.0",
+                "satooshi/php-coveralls": "^1.0",
+                "symfony/console": "^2.8|^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "7.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "libphonenumber": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Joshua Gigg",
+                    "email": "giggsey@gmail.com",
+                    "homepage": "http://giggsey.com/"
+                }
+            ],
+            "description": "PHP Port of Google's libphonenumber",
+            "homepage": "https://github.com/giggsey/libphonenumber-for-php",
+            "keywords": [
+                "geocoding",
+                "geolocation",
+                "libphonenumber",
+                "mobile",
+                "phonenumber",
+                "validation"
+            ],
+            "time": "2016-10-06 13:02:39"
+        },
+        {
+            "name": "giggsey/locale",
+            "version": "1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/giggsey/Locale.git",
+                "reference": "d936229da2187025f693f25724c5af2a090f5e7c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/giggsey/Locale/zipball/d936229da2187025f693f25724c5af2a090f5e7c",
+                "reference": "d936229da2187025f693f25724c5af2a090f5e7c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "pear/pear-core-minimal": "^1.9",
+                "pear/pear_exception": "^1.0",
+                "pear/versioncontrol_git": "dev-master",
+                "phing/phing": "~2.7",
+                "phpunit/phpunit": "^4.8|^5.0",
+                "satooshi/php-coveralls": "^1.0",
+                "symfony/console": "^2.8|^3.0",
+                "symfony/filesystem": "^2.8|^3.0",
+                "symfony/finder": "^2.8|^3.0",
+                "symfony/process": "^2.8|^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Giggsey\\Locale\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joshua Gigg",
+                    "email": "giggsey@gmail.com",
+                    "homepage": "http://giggsey.com/"
+                }
+            ],
+            "description": "Locale functions required by libphonenumber-for-php",
+            "time": "2016-10-05 20:26:22"
         },
         {
             "name": "google/recaptcha",
@@ -2722,6 +2834,71 @@
             "time": "2014-05-05 02:43:50"
         },
         {
+            "name": "misd/phone-number-bundle",
+            "version": "v1.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misd-service-development/phone-number-bundle.git",
+                "reference": "2a3e3f0ca5d6c66b95537d3f866594ff1cae4f39"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/misd-service-development/phone-number-bundle/zipball/2a3e3f0ca5d6c66b95537d3f866594ff1cae4f39",
+                "reference": "2a3e3f0ca5d6c66b95537d3f866594ff1cae4f39",
+                "shasum": ""
+            },
+            "require": {
+                "giggsey/libphonenumber-for-php": "~5.7|~6.0|~7.0",
+                "php": ">=5.3.3",
+                "symfony/framework-bundle": "~2.1|~3.0"
+            },
+            "conflict": {
+                "twig/twig": "<1.12.0"
+            },
+            "require-dev": {
+                "doctrine/doctrine-bundle": "~1.0",
+                "jms/serializer-bundle": "~0.11|~1.0",
+                "phpunit/phpunit": "~4.0",
+                "symfony/form": "~2.3|~3.0",
+                "symfony/templating": "~2.1|~3.0",
+                "symfony/twig-bundle": "~2.1|~3.0",
+                "symfony/validator": "~2.1|~3.0"
+            },
+            "suggest": {
+                "doctrine/doctrine-bundle": "Add a DBAL mapping type",
+                "jms/serializer-bundle": "Serialize/deserialize phone numbers",
+                "symfony/form": "Add a data transformer",
+                "symfony/templating": "Format phone numbers in templates",
+                "symfony/twig-bundle": "Format phone numbers in Twig templates",
+                "symfony/validator": "Add a validation constraint"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Misd\\PhoneNumberBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Integrates libphonenumber into your Symfony2 application",
+            "homepage": "https://github.com/misd-service-development/phone-number-bundle",
+            "keywords": [
+                "bundle",
+                "libphonenumber",
+                "phone-number",
+                "phonenumber",
+                "telephone number"
+            ],
+            "time": "2016-09-07 06:50:37"
+        },
+        {
             "name": "monolog/monolog",
             "version": "1.21.0",
             "source": {
@@ -2806,12 +2983,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "73d4db51e1f16cda1802e3e0e3977d506971d32d"
+                "reference": "958e697981ca958a8bf9dc2be890cf23d316367c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/73d4db51e1f16cda1802e3e0e3977d506971d32d",
-                "reference": "73d4db51e1f16cda1802e3e0e3977d506971d32d",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/958e697981ca958a8bf9dc2be890cf23d316367c",
+                "reference": "958e697981ca958a8bf9dc2be890cf23d316367c",
                 "shasum": ""
             },
             "require": {
@@ -2882,7 +3059,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2016-09-10 06:38:33"
+            "time": "2016-10-03 19:10:35"
         },
         {
             "name": "nelmio/cors-bundle",
@@ -3457,16 +3634,16 @@
         },
         {
             "name": "psr/log",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "5277094ed527a1c4477177d102fe4c53551953e0"
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/5277094ed527a1c4477177d102fe4c53551953e0",
-                "reference": "5277094ed527a1c4477177d102fe4c53551953e0",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
                 "shasum": ""
             },
             "require": {
@@ -3500,7 +3677,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-09-19 16:02:08"
+            "time": "2016-10-10 12:19:37"
         },
         {
             "name": "qandidate/stack-request-id",
@@ -3555,16 +3732,16 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "3.5.0",
+            "version": "3.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "a6d15c8618ea3951fd54d34e326b68d3d0bc0786"
+                "reference": "a07797b986671b0dc823885a81d5e3516b931599"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/a6d15c8618ea3951fd54d34e326b68d3d0bc0786",
-                "reference": "a6d15c8618ea3951fd54d34e326b68d3d0bc0786",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/a07797b986671b0dc823885a81d5e3516b931599",
+                "reference": "a07797b986671b0dc823885a81d5e3516b931599",
                 "shasum": ""
             },
             "require": {
@@ -3631,7 +3808,7 @@
                 "identifier",
                 "uuid"
             ],
-            "time": "2016-08-02 18:39:32"
+            "time": "2016-10-02 15:51:17"
         },
         {
             "name": "scheb/two-factor-bundle",
@@ -4119,7 +4296,7 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v2.8.11",
+            "version": "v2.8.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
@@ -4743,16 +4920,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.8.11",
+            "version": "v2.8.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "f588c92c3e263b2eaa2f96a7b1359199eb209b3d"
+                "reference": "6a5bc3257b60098c28fc1bbcacd52000dd2801d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/f588c92c3e263b2eaa2f96a7b1359199eb209b3d",
-                "reference": "f588c92c3e263b2eaa2f96a7b1359199eb209b3d",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/6a5bc3257b60098c28fc1bbcacd52000dd2801d1",
+                "reference": "6a5bc3257b60098c28fc1bbcacd52000dd2801d1",
                 "shasum": ""
             },
             "require": {
@@ -4768,7 +4945,7 @@
                 "symfony/polyfill-php70": "~1.0",
                 "symfony/polyfill-util": "~1.0",
                 "symfony/security-acl": "~2.7|~3.0.0",
-                "twig/twig": "~1.23|~2.0"
+                "twig/twig": "~1.26|~2.0"
             },
             "conflict": {
                 "phpdocumentor/reflection": "<1.0.7"
@@ -4829,7 +5006,8 @@
                 "egulias/email-validator": "~1.2,>=1.2.1",
                 "monolog/monolog": "~1.11",
                 "ocramius/proxy-manager": "~0.4|~1.0|~2.0",
-                "phpdocumentor/reflection": "^1.0.7"
+                "phpdocumentor/reflection": "^1.0.7",
+                "symfony/phpunit-bridge": "~3.2"
             },
             "type": "library",
             "extra": {
@@ -4873,20 +5051,20 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2016-09-07 02:04:25"
+            "time": "2016-10-03 18:44:12"
         },
         {
             "name": "twig/twig",
-            "version": "v1.25.0",
+            "version": "v1.26.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "f16a634ab08d87e520da5671ec52153d627f10f6"
+                "reference": "a09d8ee17ac1cfea29ed60c83960ad685c6a898d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/f16a634ab08d87e520da5671ec52153d627f10f6",
-                "reference": "f16a634ab08d87e520da5671ec52153d627f10f6",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/a09d8ee17ac1cfea29ed60c83960ad685c6a898d",
+                "reference": "a09d8ee17ac1cfea29ed60c83960ad685c6a898d",
                 "shasum": ""
             },
             "require": {
@@ -4899,7 +5077,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.25-dev"
+                    "dev-master": "1.26-dev"
                 }
             },
             "autoload": {
@@ -4934,7 +5112,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-09-21 23:05:12"
+            "time": "2016-10-05 18:57:41"
         },
         {
             "name": "vich/uploader-bundle",
