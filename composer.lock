@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d2ab61d9ab55d60f8fdba45ace2b6386",
-    "content-hash": "7d97f2c859fd9765c3b63278fb16ebdb",
+    "hash": "df441ac1b550e2498e0cb52a22b04d20",
+    "content-hash": "52e620e71b67dd4a06ec17954403bfc5",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -1123,6 +1123,105 @@
                 "validator"
             ],
             "time": "2016-07-03 21:52:18"
+        },
+        {
+            "name": "ejsmont-artur/php-circuit-breaker",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ejsmont-artur/php-circuit-breaker.git",
+                "reference": "5e63a6b8774166bf6e5a591559bf25030e8dcce7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ejsmont-artur/php-circuit-breaker/zipball/5e63a6b8774166bf6e5a591559bf25030e8dcce7",
+                "reference": "5e63a6b8774166bf6e5a591559bf25030e8dcce7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Ejsmont": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Artur Ejsmont",
+                    "homepage": "http://artur.ejsmont.org/blog/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP Circuit Breaker component",
+            "homepage": "https://github.com/ejsmont-artur/php-circuit-breaker",
+            "keywords": [
+                "circuit breaker",
+                "error handling",
+                "graceful"
+            ],
+            "time": "2013-03-17 09:59:05"
+        },
+        {
+            "name": "ejsmont-artur/php-circuit-breaker-bundle",
+            "version": "0.1.6",
+            "target-dir": "Ejsmont/CircuitBreakerBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guilhermednt/php-circuit-breaker-bundle.git",
+                "reference": "aab7d3a8e5889a9836ffd515f6dccbaa31894c7c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guilhermednt/php-circuit-breaker-bundle/zipball/aab7d3a8e5889a9836ffd515f6dccbaa31894c7c",
+                "reference": "aab7d3a8e5889a9836ffd515f6dccbaa31894c7c",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/common": ">=2.0.0",
+                "ejsmont-artur/php-circuit-breaker": ">=0.1.0",
+                "php": ">=5.3.0",
+                "symfony/symfony": "~2.8.0"
+            },
+            "require-dev": {
+                "johnkary/phpunit-speedtrap": "~1.0@dev",
+                "mockery/mockery": "~0.9",
+                "phpdocumentor/phpdocumentor": "2.*",
+                "phpunit/phpunit": "^5.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Ejsmont\\CircuitBreakerBundle": ""
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Artur Ejsmont",
+                    "homepage": "http://artur.ejsmont.org/blog/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP Circuit Breaker Bundle - Symfony 2 integration",
+            "homepage": "https://github.com/ejsmont-artur/php-circuit-breaker-bundle",
+            "keywords": [
+                "circuit breaker",
+                "error handling",
+                "graceful",
+                "symfony2 adapter"
+            ],
+            "support": {
+                "source": "https://github.com/guilhermednt/php-circuit-breaker-bundle/tree/0.1.6"
+            },
+            "time": "2015-12-03 12:46:55"
         },
         {
             "name": "friendsofsymfony/oauth-server-bundle",
