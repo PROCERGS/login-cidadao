@@ -21,7 +21,7 @@ $(document).ready(function () {
 
     $("form").submit(function () {
         $('.intl-tel').each(function () {
-            $(this).val($(this).intlTelInput("getNumber"));
+            $(this).val($(this).intlTelInput("getNumber", intlTelInputUtils.numberFormat.E164));
         });
     });
 });
