@@ -457,6 +457,12 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     {
         if (!($mobile instanceof PhoneNumber)) {
             $mobile = preg_replace('/[^0-9+]/', '', $mobile);
+
+            // PhoneNumberBundle won't work with empty strings.
+            // See https://github.com/misd-service-development/phone-number-bundle/issues/58
+            if (strlen(trim($mobile)) === 0) {
+                $mobile = null;
+            }
         }
         $this->mobile = $mobile;
     }
