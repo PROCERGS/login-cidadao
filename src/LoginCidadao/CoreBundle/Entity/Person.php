@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use libphonenumber\PhoneNumber;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -454,7 +455,15 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     public function setMobile($mobile)
     {
-        $mobile = preg_replace('/[^0-9+]/', '', $mobile);
+        if (!($mobile instanceof PhoneNumber)) {
+            $mobile = preg_replace('/[^0-9+]/', '', $mobile);
+
+            // PhoneNumberBundle won't work with empty strings.
+            // See https://github.com/misd-service-development/phone-number-bundle/issues/58
+            if (strlen(trim($mobile)) === 0) {
+                $mobile = null;
+            }
+        }
         $this->mobile = $mobile;
     }
 
