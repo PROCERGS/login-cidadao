@@ -2,6 +2,7 @@
 
 namespace LoginCidadao\CoreBundle\Controller;
 
+use libphonenumber\PhoneNumberFormat;
 use LoginCidadao\APIBundle\Exception\RequestTimeoutException;
 use LoginCidadao\CoreBundle\Service\IntentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -307,7 +308,7 @@ class DynamicFormController extends Controller
                     $formBuilder,
                     $person,
                     'mobile',
-                    null,
+                    'Misd\PhoneNumberBundle\Form\Type\PhoneNumberType',
                     array(
                         'required' => true,
                         'label' => 'person.form.mobile.label',
@@ -316,6 +317,7 @@ class DynamicFormController extends Controller
                             'placeholder' => 'person.form.mobile.placeholder',
                         ],
                         'label_attr' => ['class' => 'intl-tel-label'],
+                        'format' => PhoneNumberFormat::E164,
                     )
                 );
                 break;
