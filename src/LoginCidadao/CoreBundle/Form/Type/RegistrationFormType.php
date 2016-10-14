@@ -2,6 +2,7 @@
 
 namespace LoginCidadao\CoreBundle\Form\Type;
 
+use libphonenumber\PhoneNumberFormat;
 use Symfony\Component\Form\FormBuilderInterface;
 use FOS\UserBundle\Form\Type\RegistrationFormType as BaseType;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -118,7 +119,7 @@ class RegistrationFormType extends BaseType
             case 'phone_number':
                 $builder->add(
                     'mobile',
-                    null,
+                    'Misd\PhoneNumberBundle\Form\Type\PhoneNumberType',
                     [
                         'required' => false,
                         'label_attr' => ['class' => 'intl-tel-label'],
@@ -126,6 +127,7 @@ class RegistrationFormType extends BaseType
                             'placeholder' => 'person.form.mobile.placeholder',
                             'class' => 'form-control intl-tel',
                         ],
+                        'format' => PhoneNumberFormat::E164,
                     ]
                 );
                 break;
