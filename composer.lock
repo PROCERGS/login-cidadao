@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "df441ac1b550e2498e0cb52a22b04d20",
-    "content-hash": "52e620e71b67dd4a06ec17954403bfc5",
+    "hash": "b9a450b03dffde9affdf2daa16831835",
+    "content-hash": "5f434f108b082203b7f9d559fde7f198",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -1169,17 +1169,17 @@
         },
         {
             "name": "ejsmont-artur/php-circuit-breaker-bundle",
-            "version": "0.1.6",
+            "version": "dev-master",
             "target-dir": "Ejsmont/CircuitBreakerBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guilhermednt/php-circuit-breaker-bundle.git",
-                "reference": "aab7d3a8e5889a9836ffd515f6dccbaa31894c7c"
+                "reference": "e9e55848d68d6850e597db9848311117cd5a22cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guilhermednt/php-circuit-breaker-bundle/zipball/aab7d3a8e5889a9836ffd515f6dccbaa31894c7c",
-                "reference": "aab7d3a8e5889a9836ffd515f6dccbaa31894c7c",
+                "url": "https://api.github.com/repos/guilhermednt/php-circuit-breaker-bundle/zipball/e9e55848d68d6850e597db9848311117cd5a22cb",
+                "reference": "e9e55848d68d6850e597db9848311117cd5a22cb",
                 "shasum": ""
             },
             "require": {
@@ -1192,7 +1192,7 @@
                 "johnkary/phpunit-speedtrap": "~1.0@dev",
                 "mockery/mockery": "~0.9",
                 "phpdocumentor/phpdocumentor": "2.*",
-                "phpunit/phpunit": "^5.0"
+                "phpunit/phpunit": "4.*"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -1219,9 +1219,9 @@
                 "symfony2 adapter"
             ],
             "support": {
-                "source": "https://github.com/guilhermednt/php-circuit-breaker-bundle/tree/0.1.6"
+                "source": "https://github.com/guilhermednt/php-circuit-breaker-bundle/tree/master"
             },
-            "time": "2015-12-03 12:46:55"
+            "time": "2016-10-19 19:45:53"
         },
         {
             "name": "friendsofsymfony/oauth-server-bundle",
@@ -6354,7 +6354,8 @@
         "nelmio/api-doc-bundle": 20,
         "bshaffer/oauth2-server-bundle": 20,
         "beelab/recaptcha2-bundle": 20,
-        "qandidate/stack-request-id": 20
+        "qandidate/stack-request-id": 20,
+        "ejsmont-artur/php-circuit-breaker-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

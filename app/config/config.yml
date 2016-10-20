@@ -528,3 +528,7 @@ donato_path_well:
 
 login_cidadao_tos:
     use_tasks: true
+
+ejsmont_circuit_breaker:
+    threshold: 1
+    retry_timeout: 15
