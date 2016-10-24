@@ -21,6 +21,7 @@
     ],
     "require": {
         "php": ">=5.4.16",
+        "ext-curl": "*",
         "symfony/symfony": "2.8.* !=2.8.10",
         "doctrine/orm": "~2.4",
         "doctrine/dbal": "<2.5",
@@ -62,7 +63,7 @@
         "qandidate/stack-request-id": "dev-ramsey-uuid-v3",
         "egulias/email-validator": "~1.2",
         "paragonie/random_compat": "1.4.*",
-        "procergs/meurs-monitor-bundle": "^1.0",
+        "procergs/meurs-monitor-bundle": "dev-master",
         "procergs/nfg-badges-bundle": "^1.1"
     },
     "require-dev": {

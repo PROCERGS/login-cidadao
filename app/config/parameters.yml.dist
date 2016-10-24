@@ -168,3 +168,4 @@ parameters:
     nfg_url_login: ~
     nfg_hmac_secret: ~
     tre_search_link: ''
+    wsdl_monitor_verify_https: true
