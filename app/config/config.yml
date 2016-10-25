@@ -532,3 +532,15 @@ login_cidadao_tos:
 ejsmont_circuit_breaker:
     threshold: 1
     retry_timeout: 15
+
+procergs_nfg:
+    verify_https: false
+    endpoints:
+        wsdl: "%nfg_ws_url%"
+        login: "%nfg_url_login%"
+        authorization: "%nfg_url_auth%"
+    authentication:
+        organization: "%soe_organization%"
+        username: "%soe_username%"
+        password: "%soe_password%"
+        hmac_secret: "%nfg_hmac_secret%"

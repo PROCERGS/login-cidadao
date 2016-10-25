@@ -1,0 +1,18 @@
+services:
+    procergs.nfg.soap:
+        class: PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoap
+        arguments:
+            - "%procergs.nfg.endpoints.wsdl%"
+            - verify_https: "%procergs.nfg.verify_https%"
+        calls:
+            - [ "setCredentials", [ "@procergs.nfg.credentials" ] ]
+
+    procergs.nfg.service:
+        class: PROCERGS\LoginCidadao\NfgBundle\Service\Nfg
+        arguments:
+            - "@procergs.nfg.soap"
+            - "@router"
+            - "%nfg_url_login%"
+#    procergs_nfg.example:
+#        class: PROCERGS\LoginCidadao\NfgBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
