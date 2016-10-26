@@ -19,7 +19,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
     {
         $accessId = 'access_id'.random_int(10, 9999);
         $soapService = $this->getMock('PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoapInterface');
-        $soapService->expects($this->any())->method('obterAccessID')->willReturn($accessId);
+        $soapService->expects($this->any())->method('getAccessID')->willReturn($accessId);
 
         $circuitBreaker = $this->getMock('Ejsmont\CircuitBreaker\CircuitBreakerInterface');
         $circuitBreaker->expects($this->any())->method('isAvailable')->willReturn(true);
@@ -36,8 +36,9 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $nfg = new Nfg($soapService, $router, $loginEndpoint);
 
         $response = $nfg->login();
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $response);
-        $this->assertContains($accessId, $response->getTargetUrl());
-        $this->assertContains('nfg_callback', $response->getTargetUrl());
+        // TODO: expect RedirectResponse when the Referrer problem at NFG gets fixed.
+        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
+        $this->assertContains($accessId, $response->getContent());
+        $this->assertContains('nfg_callback', $response->getContent());
     }
 }

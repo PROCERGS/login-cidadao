@@ -20,7 +20,7 @@ use Symfony\Component\Routing\RouterInterface;
 class Nfg
 {
     /** @var NfgSoapInterface */
-    private $client;
+    private $nfgSoap;
 
     /** @var RouterInterface */
     private $router;
@@ -42,7 +42,7 @@ class Nfg
         RouterInterface $router,
         $loginEndpoint
     ) {
-        $this->client = $client;
+        $this->nfgSoap = $client;
         $this->router = $router;
         $this->loginEndpoint = $loginEndpoint;
     }
@@ -70,7 +70,7 @@ class Nfg
         }
 
         try {
-            $accessId = $this->client->obterAccessID();
+            $accessId = $this->nfgSoap->getAccessID();
             $this->reportSuccess();
 
             return $accessId;

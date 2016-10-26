@@ -22,28 +22,16 @@ class NfgSoap implements NfgSoapInterface
     /** @var Credentials */
     private $credentials;
 
-    public function __construct($wsdl, array $options = [])
+    public function __construct(\SoapClient $client, Credentials $credentials)
     {
-        $this->client = new \SoapClient($wsdl, $this->getStreamContext($options));
-    }
-
-    /**
-     * @param string $organization
-     * @param string $username
-     * @param string $password
-     * @return NfgSoap $this
-     */
-    public function setCredentials(Credentials $credentials)
-    {
+        $this->client = $client;
         $this->credentials = $credentials;
-
-        return $this;
     }
 
     /**
      * @return string
      */
-    public function obterAccessID()
+    public function getAccessID()
     {
         $authentication = [
             'organizacao' => $this->credentials->getOrganization(),
@@ -53,34 +41,10 @@ class NfgSoap implements NfgSoapInterface
 
         $response = $this->client->ObterAccessID($authentication);
 
-        if (strpos($response->ObterAccessIDResult, ' ')) {
+        if (false !== strpos($response->ObterAccessIDResult, ' ') || !isset($response->ObterAccessIDResult)) {
             throw new NfgServiceUnavailableException($response->ObterAccessIDResult);
         }
 
         return $response->ObterAccessIDResult;
-    }
-
-    private function getStreamContext($options)
-    {
-        if (array_key_exists('verify_https', $options)) {
-            $verifyHttps = $options['verify_https'];
-            unset($options['verify_https']);
-            if (true === $verifyHttps) {
-                return $options;
-            }
-
-            $options['stream_context'] = stream_context_create(
-                [
-                    'ssl' => [
-                        // set some SSL/TLS specific options
-                        'verify_peer' => false,
-                        'verify_peer_name' => false,
-                        'allow_self_signed' => true,
-                    ],
-                ]
-            );
-        }
-
-        return $options;
     }
 }

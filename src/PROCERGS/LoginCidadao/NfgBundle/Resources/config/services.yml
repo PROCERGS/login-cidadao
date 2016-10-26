@@ -2,10 +2,8 @@ services:
     procergs.nfg.soap:
         class: PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoap
         arguments:
-            - "%procergs.nfg.endpoints.wsdl%"
-            - verify_https: "%procergs.nfg.verify_https%"
-        calls:
-            - [ "setCredentials", [ "@procergs.nfg.credentials" ] ]
+            - "@procergs.nfg.soap_client"
+            - "@procergs.nfg.credentials"
 
     procergs.nfg.service:
         class: PROCERGS\LoginCidadao\NfgBundle\Service\Nfg

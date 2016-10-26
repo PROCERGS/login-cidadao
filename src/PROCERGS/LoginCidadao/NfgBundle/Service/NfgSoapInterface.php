@@ -16,5 +16,5 @@ interface NfgSoapInterface
     /**
      * @return string
      */
-    public function obterAccessID();
+    public function getAccessID();
 }
