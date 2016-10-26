@@ -11,14 +11,26 @@
 namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
 use Ejsmont\CircuitBreaker\CircuitBreakerInterface;
+use FOS\UserBundle\Security\LoginManager;
+use LoginCidadao\CoreBundle\Entity\Person;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Helper\UrlHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 
 class Nfg
 {
+    /**
+     * Key used to store the NFG AccessID in session
+     */
+    const ACCESS_ID_SESSION_KEY = 'nfg.access_id';
+
     /** @var NfgSoapInterface */
     private $nfgSoap;
 
@@ -62,6 +74,7 @@ class Nfg
 
     /**
      * @return string
+     * @throws NfgServiceUnavailableException
      */
     private function getAccessId()
     {
@@ -81,11 +94,13 @@ class Nfg
     }
 
     /**
+     * @param SessionInterface $session
      * @return RedirectResponse
      */
-    public function login()
+    public function login(SessionInterface $session)
     {
         $accessId = $this->getAccessId();
+        $session->set(self::ACCESS_ID_SESSION_KEY, $accessId);
         $callbackUrl = $this->router->generate('nfg_callback', [], RouterInterface::ABSOLUTE_URL);
 
         $url = parse_url($this->loginEndpoint);
@@ -99,11 +114,53 @@ class Nfg
 
         // NFG has some bug that causes the application to fail if a Referrer is not present
         // So I'll have to do the redirect in this very ugly manner until this problem gets fixed.
+        $url = http_build_url($url);
+
         // TODO: remove this after NFG gets its bugs fixed
         return new Response(
-            '<html><head><meta name="referrer" content="always"/></head><body><script type="text/javascript">document.location= "'.http_build_url($url).'";</script></body></html>'
+            '<html><head><meta name="referrer" content="always"/></head><body><script type="text/javascript">document.location= "'.$url.'";</script></body></html>'
         );
         //return new RedirectResponse(http_build_url($url));
+    }
+
+    public function loginCallback(
+        SessionInterface $session,
+        LoginManager $loginManager,
+        array $params,
+        $secret
+    ) {
+        $cpf = array_key_exists('cpf', $params) ? $params['cpf'] : null;
+        $accessId = array_key_exists('accessId', $params) ? $params['accessId'] : null;
+        $prsec = array_key_exists('prsec', $params) ? $params['prsec'] : null;
+
+        if (!$cpf || !$accessId || !$prsec) {
+            throw new BadRequestHttpException('Missing CPF, AccessID or PRSEC');
+        }
+
+        $signature = hash_hmac('sha256', "$cpf$accessId", $secret);
+        if (!$signature || strcmp(strtoupper($signature), $prsec) !== 0) {
+            throw new AccessDeniedHttpException('Invalid PRSEC signature');
+        }
+
+        if ($session->get(self::ACCESS_ID_SESSION_KEY) !== $accessId) {
+            throw new AccessDeniedHttpException('Invalid AccessID');
+        }
+
+        // TODO: find user by $cpf
+        $user = new Person();
+        $personMeuRS = new PersonMeuRS();
+        $personMeuRS->setNfgAccessToken('dummy');
+
+        if (!$user || !$personMeuRS->getNfgAccessToken()) {
+            throw new NotFoundHttpException('No user found matching this CPF');
+        }
+
+        $response = new RedirectResponse($this->router->generate('lc_home'));
+
+        // TODO: log $user in
+        $loginManager->logInUser('firewall', $user, $response);
+
+        return $response;
     }
 
     private function reportSuccess()

@@ -31,14 +31,30 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             }
         );
 
+        $session = $this->prophesize('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $session->set(Nfg::ACCESS_ID_SESSION_KEY, $accessId)->shouldBeCalled();
+
         $loginEndpoint = 'https://dum.my/login';
 
         $nfg = new Nfg($soapService, $router, $loginEndpoint);
 
-        $response = $nfg->login();
+        $response = $nfg->login($session->reveal());
         // TODO: expect RedirectResponse when the Referrer problem at NFG gets fixed.
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
         $this->assertContains($accessId, $response->getContent());
         $this->assertContains('nfg_callback', $response->getContent());
+    }
+
+    public function testLoginCallback()
+    {
+        $cpf = '12345678901';
+        $accessId = 'access_id'.random_int(10, 9999);
+        $secret = "my very super secret secret";
+        $prsec = hash_hmac('sha256', "$cpf$accessId", $secret);
+
+        $session = $this->prophesize('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $session->get(Nfg::ACCESS_ID_SESSION_KEY)->shouldBeCalled();
+
+        $this->fail('not implemented yet');
     }
 }
