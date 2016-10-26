@@ -1,4 +1,23 @@
 services:
+    procergs.nfg.credentials:
+        class: PROCERGS\LoginCidadao\NfgBundle\Security\Credentials
+        arguments:
+            - "%procergs.nfg.authentication.organization%"
+            - "%procergs.nfg.authentication.username%"
+            - "%procergs.nfg.authentication.password%"
+        public: false
+
+    procergs.nfg.soap_client.factory:
+        class: PROCERGS\LoginCidadao\NfgBundle\Service\SoapClientFactory
+
+    procergs.nfg.soap_client:
+        class: SoapClient
+        factory: ["@procergs.nfg.soap_client.factory", createClient]
+        arguments:
+            - "%procergs.nfg.endpoints.wsdl%"
+            - "%procergs.nfg.verify_https%"
+        public: false
+
     procergs.nfg.soap:
         class: PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoap
         arguments:
