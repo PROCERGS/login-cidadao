@@ -2,7 +2,6 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\DependencyInjection;
 
-use PROCERGS\LoginCidadao\NfgBundle\Security\Credentials;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Definition;
