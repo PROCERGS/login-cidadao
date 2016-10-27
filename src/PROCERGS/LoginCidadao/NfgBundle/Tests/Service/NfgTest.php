@@ -22,9 +22,8 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $soapService = $this->getSoapService($accessId);
 
         $circuitBreaker = $this->prophesize('\Ejsmont\CircuitBreaker\CircuitBreakerInterface');
-        $circuitBreaker->reportSuccess('service')->shouldBeCalled();
         $circuitBreaker->isAvailable('service')->willReturn(true)->shouldBeCalled();
-        //$circuitBreaker->expects($this->any())->method('isAvailable')->willReturn(true);
+        $circuitBreaker->reportSuccess('service')->shouldBeCalled();
 
         $session = $this->getSession($accessId, 'set');
 
@@ -71,9 +70,10 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             $loginEndpoint
         );
 
-        $nfg->loginCallback(compact('cpf', 'accessId', 'prsec'), $secret);
+        $response = $nfg->loginCallback(compact('cpf', 'accessId', 'prsec'), $secret);
 
-        //$this->fail('not implemented yet');
+        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertEquals('lc_home', $response->getTargetUrl());
     }
 
     private function getRouter()
