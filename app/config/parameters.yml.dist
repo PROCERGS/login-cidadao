@@ -160,11 +160,12 @@ parameters:
     # if it's a new authorization
     pre_authorization.complete_information_task.skip_if_authorized: true
 
-    nfg_ws_url: ~
-    soe_organization: ~
-    soe_username: ~
-    soe_password: ~
-    nfg_url_auth: ~
-    nfg_url_login: ~
-    nfg_hmac_secret: ~
+    nfg_ws_url: 'https://dum.my/service.wsdl'
+    nfg_url_auth: 'https://dum.my/auth'
+    nfg_url_login: 'https://dum.my/login'
+    soe_organization: 'some_organization'
+    soe_username: 'some_user'
+    soe_password: 'the_password'
+    nfg_hmac_secret: 'many secret such private'
     tre_search_link: ''
+    wsdl_monitor_verify_https: true
