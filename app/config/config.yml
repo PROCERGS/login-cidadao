@@ -519,6 +519,26 @@ liip_monitor:
             - '%user_profile_upload_dir%'
             - '%client_image_upload_dir%'
 
+        guzzle_http_service:
+            nfg_wsdl_endpoint:
+                url:    "%nfg_ws_url%"
+                method: GET
+                status_code: 200
+                options:
+                    verify: "%wsdl_monitor_verify_https%"
+            nfg_authZ_endpoint:
+                url:    "%nfg_url_auth%"
+                method: GET
+                status_code: 200
+                options:
+                    verify: "%wsdl_monitor_verify_https%"
+            nfg_login_endpoint:
+                url:    "%nfg_url_login%"
+                method: GET
+                status_code: 200
+                options:
+                    verify: "%wsdl_monitor_verify_https%"
+
 services:
     fos_user.doctrine_registry:
         alias: doctrine
@@ -528,6 +548,14 @@ donato_path_well:
 
 login_cidadao_tos:
     use_tasks: true
+
+procergs_login_cidadao_monitor:
+    checks:
+        wsdl:
+            nfg:
+                label: WSDL Nota Fiscal Gaúcha
+                url: "%nfg_ws_url%"
+                verify_https: "%wsdl_monitor_verify_https%"
 
 ejsmont_circuit_breaker:
     threshold: 1

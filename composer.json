@@ -20,11 +20,16 @@
         },
         {
             "type": "vcs",
+            "url": "https://github.com/PROCERGS/FOSUserBundle"
+        },
+        {
+            "type": "vcs",
             "url": "https://github.com/guilhermednt/php-circuit-breaker-bundle"
         }
     ],
     "require": {
         "php": ">=5.4.16",
+        "ext-curl": "*",
         "symfony/symfony": "2.8.* !=2.8.10",
         "doctrine/orm": "~2.4",
         "doctrine/dbal": "<2.5",
@@ -35,7 +40,7 @@
         "sensio/distribution-bundle": "~3.0,>=3.0.12",
         "sensio/framework-extra-bundle": "~3.0,>=3.0.2,<3.0.13",
         "incenteev/composer-parameter-handler": "~2.0",
-        "friendsofsymfony/user-bundle": "dev-master#7abb0ff",
+        "friendsofsymfony/user-bundle": "2.0.0-alpha3.1",
         "friendsofsymfony/oauth-server-bundle": "dev-master",
         "jms/serializer-bundle": "*",
         "simplethings/entity-audit-bundle": "0.7",
@@ -67,7 +72,7 @@
         "egulias/email-validator": "~1.2",
         "misd/phone-number-bundle": "^1.1",
         "paragonie/random_compat": "1.4.*",
-        "procergs/meurs-monitor-bundle": "^1.0",
+        "procergs/meurs-monitor-bundle": "^1.1",
         "procergs/nfg-badges-bundle": "^1.1",
         "ejsmont-artur/php-circuit-breaker-bundle": "dev-master",
         "jakeasmith/http_build_url": "^1"

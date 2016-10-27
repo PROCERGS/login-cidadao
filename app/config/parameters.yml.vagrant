@@ -131,3 +131,4 @@ parameters:
     soe_password: 'the_password'
     nfg_hmac_secret: 'many secret such private'
     tre_search_link: ''
+    wsdl_monitor_verify_https: true
