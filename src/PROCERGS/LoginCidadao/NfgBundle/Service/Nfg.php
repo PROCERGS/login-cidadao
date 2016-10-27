@@ -16,6 +16,7 @@ use LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Helper\UrlHelper;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -109,7 +110,7 @@ class Nfg
     }
 
     /**
-     * @return RedirectResponse
+     * @return JsonResponse
      */
     public function login()
     {
@@ -131,9 +132,11 @@ class Nfg
         $url = http_build_url($url);
 
         // TODO: remove this after NFG gets its bugs fixed
-        return new Response(
-            '<html><head><meta name="referrer" content="always"/></head><body><script type="text/javascript">document.location= "'.$url.'";</script></body></html>'
-        );
+//        return new Response(
+//            '<html><head><meta name="referrer" content="always"/></head><body><script type="text/javascript">document.location= "'.$url.'";</script></body></html>'
+//        );
+
+        return new JsonResponse(['target' => $url]);
         //return new RedirectResponse(http_build_url($url));
     }
 

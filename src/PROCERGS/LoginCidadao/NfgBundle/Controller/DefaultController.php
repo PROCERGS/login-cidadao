@@ -3,6 +3,7 @@
 namespace PROCERGS\LoginCidadao\NfgBundle\Controller;
 
 use FOS\UserBundle\Security\LoginManager;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -18,7 +19,29 @@ class DefaultController extends Controller
     {
         $nfg = $this->getNfgService();
 
-        return $nfg->login($request->getSession());
+        try {
+            $response = $nfg->login();
+        } catch (NfgServiceUnavailableException $e) {
+            $response = $this->redirectToRoute('nfg_unavailable');
+        }
+
+        return $response;
+    }
+
+    /**
+     * @Route("/connect/wait", name="nfg_wait_connection")
+     */
+    public function waitConnectionAction(Request $request)
+    {
+        return $this->render('PROCERGSNfgBundle::connecting.html.twig');
+    }
+
+    /**
+     * @Route("/unavailable", name="nfg_unavailable")
+     */
+    public function unavailableAction(Request $request)
+    {
+        return new Response('NFG unavailable');
     }
 
     /**

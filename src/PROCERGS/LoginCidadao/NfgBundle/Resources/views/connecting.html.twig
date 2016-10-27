@@ -1,0 +1,100 @@
+{% extends 'LoginCidadaoCoreBundle::base.html.twig' %}
+
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block body %}
+    <div id="loading">
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+            <p>Aguardando Nota Fiscal Gaúcha</p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts '@jquery' filter='?uglifyjs2' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+        $(document).ready(function () {
+            $.get('{{ url('nfg_connect') }}', function (data) {
+                window.location = data.target;
+            }).fail(function () {
+                window.location = '{{ url('nfg_unavailable') }}';
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block metatags %}
+    {{ parent() }}
+    <meta name="referrer" content="always"/>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        body, html {
+            background-color: #f9f9f9;
+            margin: 0;
+        }
+
+        p {
+            font-family: "Open Sans", Arial, sans-serif;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            margin: 0;
+            width: 100%;
+            height: 18px;
+            position: absolute;
+            top: 35%;
+            text-align: center
+        }
+
+        .spinner > div {
+            width: 18px;
+            height: 18px;
+            background-color: #333;
+            border-radius: 100%;
+            display: inline-block;
+            -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+            animation: bouncedelay 1.4s infinite ease-in-out;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both
+        }
+
+        .spinner .bounce1 {
+            -webkit-animation-delay: -.32s;
+            animation-delay: -.32s
+        }
+
+        .spinner .bounce2 {
+            -webkit-animation-delay: -.16s;
+            animation-delay: -.16s
+        }
+
+        @-webkit-keyframes bouncedelay {
+            0%, 80%, 100% {
+                -webkit-transform: scale(0.0)
+            }
+            40% {
+                -webkit-transform: scale(1.0)
+            }
+        }
+
+        @keyframes bouncedelay {
+            0%, 80%, 100% {
+                transform: scale(0.0);
+                -webkit-transform: scale(0.0)
+            }
+            40% {
+                transform: scale(1.0);
+                -webkit-transform: scale(1.0)
+            }
+        }
+    </style>
+{% endblock %}
