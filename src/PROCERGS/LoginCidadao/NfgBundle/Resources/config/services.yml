@@ -29,7 +29,7 @@ services:
         arguments:
             - "@procergs.nfg.soap"
             - "@router"
+            - "@session"
+            - "@fos_user.security.login_manager"
+            - "%fos_user.firewall_name%"
             - "%nfg_url_login%"
-#    procergs_nfg.example:
-#        class: PROCERGS\LoginCidadao\NfgBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]

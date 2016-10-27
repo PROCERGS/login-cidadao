@@ -11,7 +11,7 @@
 namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
 use Ejsmont\CircuitBreaker\CircuitBreakerInterface;
-use FOS\UserBundle\Security\LoginManager;
+use FOS\UserBundle\Security\LoginManagerInterface;
 use LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
@@ -37,6 +37,12 @@ class Nfg
     /** @var RouterInterface */
     private $router;
 
+    /** @var SessionInterface */
+    private $session;
+
+    /** @var LoginManagerInterface */
+    private $loginManager;
+
     /** @var CircuitBreakerInterface */
     private $circuitBreaker;
 
@@ -49,13 +55,22 @@ class Nfg
     /** @var string */
     private $loginEndpoint;
 
+    /** @var string */
+    private $firewallName;
+
     public function __construct(
         NfgSoapInterface $client,
         RouterInterface $router,
+        SessionInterface $session,
+        LoginManagerInterface $loginManager,
+        $firewallName,
         $loginEndpoint
     ) {
         $this->nfgSoap = $client;
         $this->router = $router;
+        $this->session = $session;
+        $this->loginManager = $loginManager;
+        $this->firewallName = $firewallName;
         $this->loginEndpoint = $loginEndpoint;
     }
 
@@ -94,13 +109,12 @@ class Nfg
     }
 
     /**
-     * @param SessionInterface $session
      * @return RedirectResponse
      */
-    public function login(SessionInterface $session)
+    public function login()
     {
         $accessId = $this->getAccessId();
-        $session->set(self::ACCESS_ID_SESSION_KEY, $accessId);
+        $this->session->set(self::ACCESS_ID_SESSION_KEY, $accessId);
         $callbackUrl = $this->router->generate('nfg_callback', [], RouterInterface::ABSOLUTE_URL);
 
         $url = parse_url($this->loginEndpoint);
@@ -124,8 +138,6 @@ class Nfg
     }
 
     public function loginCallback(
-        SessionInterface $session,
-        LoginManager $loginManager,
         array $params,
         $secret
     ) {
@@ -138,11 +150,11 @@ class Nfg
         }
 
         $signature = hash_hmac('sha256', "$cpf$accessId", $secret);
-        if (!$signature || strcmp(strtoupper($signature), $prsec) !== 0) {
-            throw new AccessDeniedHttpException('Invalid PRSEC signature');
+        if (!$signature || strcmp(strtolower($signature), strtolower($prsec)) !== 0) {
+            throw new AccessDeniedHttpException('Invalid PRSEC signature.');
         }
 
-        if ($session->get(self::ACCESS_ID_SESSION_KEY) !== $accessId) {
+        if ($this->session->get(self::ACCESS_ID_SESSION_KEY) !== $accessId) {
             throw new AccessDeniedHttpException('Invalid AccessID');
         }
 
@@ -156,9 +168,7 @@ class Nfg
         }
 
         $response = new RedirectResponse($this->router->generate('lc_home'));
-
-        // TODO: log $user in
-        $loginManager->logInUser('firewall', $user, $response);
+        $this->loginManager->logInUser($this->firewallName, $user, $response);
 
         return $response;
     }

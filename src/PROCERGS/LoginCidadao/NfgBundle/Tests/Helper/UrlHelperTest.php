@@ -18,7 +18,7 @@ class UrlHelperTest extends \PHPUnit_Framework_TestCase
     public function testAddToEmptyQuery()
     {
         $url = parse_url('https://dum.my/something');
-        $query = $url['query'];
+        $query = isset($url['query']) ? $url['query'] : null;
 
         $data = ['key1' => 'val1', 'key2' => 'val2'];
         $expected = http_build_query($data);

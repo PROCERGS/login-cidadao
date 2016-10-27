@@ -12,35 +12,39 @@ namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Service;
 
 
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
+use Prophecy\Argument;
 
 class NfgTest extends \PHPUnit_Framework_TestCase
 {
     public function testLoginRedirect()
     {
         $accessId = 'access_id'.random_int(10, 9999);
-        $soapService = $this->getMock('PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoapInterface');
-        $soapService->expects($this->any())->method('getAccessID')->willReturn($accessId);
+        $soapService = $this->getSoapService($accessId);
 
-        $circuitBreaker = $this->getMock('Ejsmont\CircuitBreaker\CircuitBreakerInterface');
-        $circuitBreaker->expects($this->any())->method('isAvailable')->willReturn(true);
+        $circuitBreaker = $this->prophesize('\Ejsmont\CircuitBreaker\CircuitBreakerInterface');
+        $circuitBreaker->reportSuccess('service')->shouldBeCalled();
+        $circuitBreaker->isAvailable('service')->willReturn(true)->shouldBeCalled();
+        //$circuitBreaker->expects($this->any())->method('isAvailable')->willReturn(true);
 
-        $router = $this->getMock('Symfony\Component\Routing\RouterInterface');
-        $router->expects($this->any())->method('generate')->willReturnCallback(
-            function ($routeName) {
-                return $routeName;
-            }
-        );
+        $session = $this->getSession($accessId, 'set');
 
-        $session = $this->prophesize('Symfony\Component\HttpFoundation\Session\SessionInterface');
-        $session->set(Nfg::ACCESS_ID_SESSION_KEY, $accessId)->shouldBeCalled();
-
+        $firewall = 'firewall';
+        $loginManager = $this->getLoginManager();
         $loginEndpoint = 'https://dum.my/login';
 
-        $nfg = new Nfg($soapService, $router, $loginEndpoint);
+        $nfg = new Nfg(
+            $soapService,
+            $this->getRouter(),
+            $session->reveal(),
+            $loginManager->reveal(),
+            $firewall,
+            $loginEndpoint
+        );
+        $nfg->setCircuitBreaker($circuitBreaker->reveal(), 'service');
 
-        $response = $nfg->login($session->reveal());
+        $response = $nfg->login();
         // TODO: expect RedirectResponse when the Referrer problem at NFG gets fixed.
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
+        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\Response', $response);
         $this->assertContains($accessId, $response->getContent());
         $this->assertContains('nfg_callback', $response->getContent());
     }
@@ -52,9 +56,75 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $secret = "my very super secret secret";
         $prsec = hash_hmac('sha256', "$cpf$accessId", $secret);
 
-        $session = $this->prophesize('Symfony\Component\HttpFoundation\Session\SessionInterface');
-        $session->get(Nfg::ACCESS_ID_SESSION_KEY)->shouldBeCalled();
+        $session = $this->getSession($accessId, 'get');
 
-        $this->fail('not implemented yet');
+        $firewall = 'firewall';
+        $loginManager = $this->getLoginManager(true);
+        $loginEndpoint = 'https://dum.my/login';
+
+        $nfg = new Nfg(
+            $this->getSoapService($accessId),
+            $this->getRouter(),
+            $session->reveal(),
+            $loginManager->reveal(),
+            $firewall,
+            $loginEndpoint
+        );
+
+        $nfg->loginCallback(compact('cpf', 'accessId', 'prsec'), $secret);
+
+        //$this->fail('not implemented yet');
+    }
+
+    private function getRouter()
+    {
+        $router = $this->getMock('\Symfony\Component\Routing\RouterInterface');
+        $router->expects($this->any())->method('generate')->willReturnCallback(
+            function ($routeName) {
+                return $routeName;
+            }
+        );
+
+        return $router;
+    }
+
+    private function getSoapService($accessId)
+    {
+        $soapService = $this->getMock('\PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoapInterface');
+        $soapService->expects($this->any())->method('getAccessID')->willReturn($accessId);
+
+        return $soapService;
+    }
+
+    private function getLoginManager($shouldCallLogInUser = false)
+    {
+        $loginManager = $this->prophesize('\FOS\UserBundle\Security\LoginManagerInterface');
+        $logInUser = $loginManager->logInUser(
+            Argument::type('string'),
+            Argument::type('\FOS\UserBundle\Model\UserInterface'),
+            Argument::type('\Symfony\Component\HttpFoundation\Response')
+        );
+        if ($shouldCallLogInUser) {
+            $logInUser->shouldBeCalled();
+        }
+
+        return $loginManager;
+    }
+
+    private function getSession($accessId, $shouldCall = null)
+    {
+        $session = $this->prophesize('\Symfony\Component\HttpFoundation\Session\SessionInterface');
+        switch ($shouldCall) {
+            case 'get':
+                $session->get(Nfg::ACCESS_ID_SESSION_KEY)->willReturn($accessId)->shouldBeCalled();
+                break;
+            case 'set':
+                $session->set(Nfg::ACCESS_ID_SESSION_KEY, $accessId)->shouldBeCalled();
+                break;
+            default:
+
+        }
+
+        return $session;
     }
 }
