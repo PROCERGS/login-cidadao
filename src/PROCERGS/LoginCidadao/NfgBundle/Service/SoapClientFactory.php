@@ -10,19 +10,12 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
-use Ejsmont\CircuitBreaker\CircuitBreakerInterface;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
+use PROCERGS\LoginCidadao\NfgBundle\Traits\CircuitBreakerAwareTrait;
 
 class SoapClientFactory
 {
-    /** @var CircuitBreakerInterface */
-    private $circuitBreaker;
-
-    /**
-     * This service's name on the Circuit Breaker
-     * @var string
-     */
-    private $cbServiceName;
+    use CircuitBreakerAwareTrait;
 
     public function createClient($wsdl, $verifyHttps = true)
     {
@@ -44,34 +37,18 @@ class SoapClientFactory
                 );
             }
 
-            return @new \SoapClient($wsdl, $options);
+            $client = $this->instantiateSoapClient($wsdl, $options);
+            $this->reportSuccess();
+
+            return $client;
         } catch (\SoapFault $e) {
-            if ($this->circuitBreaker instanceof CircuitBreakerInterface) {
-                $this->circuitBreaker->reportFailure($this->cbServiceName);
-            }
+            $this->reportFailure();
             throw new NfgServiceUnavailableException($e->getMessage(), 500, $e);
         }
     }
 
-    /**
-     * @param CircuitBreakerInterface|null $circuitBreaker
-     * @param null $serviceName
-     * @return SoapClientFactory
-     */
-    public function setCircuitBreaker(CircuitBreakerInterface $circuitBreaker = null, $serviceName = null)
+    public function instantiateSoapClient($wsdl, $options)
     {
-        $this->circuitBreaker = $circuitBreaker;
-        $this->cbServiceName = $serviceName;
-
-        return $this;
-    }
-
-    private function isAvailable()
-    {
-        if ($this->circuitBreaker instanceof CircuitBreakerInterface) {
-            return $this->circuitBreaker->isAvailable($this->cbServiceName);
-        }
-
-        return true;
+        return @new \SoapClient($wsdl, $options);
     }
 }

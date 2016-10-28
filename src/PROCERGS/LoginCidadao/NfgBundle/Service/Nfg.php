@@ -15,8 +15,12 @@ use FOS\UserBundle\Security\LoginManagerInterface;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Helper\UrlHelper;
+use PROCERGS\LoginCidadao\NfgBundle\Traits\CircuitBreakerAwareTrait;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -26,8 +30,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
 
-class Nfg
+class Nfg implements LoggerAwareInterface
 {
+    use CircuitBreakerAwareTrait {
+        reportSuccess as traitReportSuccess;
+        reportFailure as traitReportFailure;
+    }
+
     /**
      * Key used to store the NFG AccessID in session
      */
@@ -45,17 +54,11 @@ class Nfg
     /** @var LoginManagerInterface */
     private $loginManager;
 
-    /** @var PersonRepository */
-    private $personRepository;
+    /** @var MeuRSHelper */
+    private $meuRSHelper;
 
-    /** @var CircuitBreakerInterface */
-    private $circuitBreaker;
-
-    /**
-     * This service's name on the Circuit Breaker
-     * @var string
-     */
-    private $cbServiceName;
+    /** @var LoggerInterface */
+    private $logger;
 
     /** @var string */
     private $loginEndpoint;
@@ -71,7 +74,7 @@ class Nfg
         RouterInterface $router,
         SessionInterface $session,
         LoginManagerInterface $loginManager,
-        PersonRepository $personRepository,
+        MeuRSHelper $meuRSHelper,
         $firewallName,
         $loginEndpoint,
         $authorizationEndpoint
@@ -80,23 +83,10 @@ class Nfg
         $this->router = $router;
         $this->session = $session;
         $this->loginManager = $loginManager;
-        $this->personRepository = $personRepository;
+        $this->meuRSHelper = $meuRSHelper;
         $this->firewallName = $firewallName;
         $this->loginEndpoint = $loginEndpoint;
         $this->authorizationEndpoint = $authorizationEndpoint;
-    }
-
-    /**
-     * @param CircuitBreakerInterface|null $circuitBreaker
-     * @param null $serviceName
-     * @return Nfg
-     */
-    public function setCircuitBreaker(CircuitBreakerInterface $circuitBreaker = null, $serviceName = null)
-    {
-        $this->circuitBreaker = $circuitBreaker;
-        $this->cbServiceName = $serviceName;
-
-        return $this;
     }
 
     /**
@@ -105,7 +95,7 @@ class Nfg
      */
     private function getAccessId()
     {
-        if ($this->circuitBreaker && false === $this->circuitBreaker->isAvailable($this->cbServiceName)) {
+        if (false === $this->isAvailable()) {
             throw new NfgServiceUnavailableException('NFG service is unavailable right now. Try again later.');
         }
 
@@ -114,8 +104,11 @@ class Nfg
             $this->reportSuccess();
 
             return $accessId;
+        } catch (NfgServiceUnavailableException $e) {
+            $this->reportFailure($e);
+            throw $e;
         } catch (\Exception $e) {
-            $this->reportFailure();
+            $this->reportFailure($e);
             throw new NfgServiceUnavailableException($e->getMessage(), 500, $e);
         }
     }
@@ -150,9 +143,9 @@ class Nfg
         }
 
         /** @var PersonInterface $user */
-        $user = $this->personRepository->findOneBy(['cpf' => $cpf]);
-        $personMeuRS = new PersonMeuRS();
+        $personMeuRS = $this->meuRSHelper->getPersonByCpf($this->sanitizeCpf($cpf));
         $personMeuRS->setNfgAccessToken('dummy');
+        $user = $personMeuRS->getPerson();
 
         if (!$user || !$personMeuRS->getNfgAccessToken()) {
             throw new NotFoundHttpException('No user found matching this CPF');
@@ -210,17 +203,38 @@ class Nfg
         //return new RedirectResponse(http_build_url($url));
     }
 
-    private function reportSuccess()
+    protected function reportSuccess()
     {
-        if ($this->circuitBreaker && $this->cbServiceName) {
-            $this->circuitBreaker->reportSuccess($this->cbServiceName);
+        $this->traitReportSuccess();
+
+        if ($this->logger instanceof LoggerInterface) {
+            $this->logger->info('NFG service reported success');
         }
     }
 
-    private function reportFailure()
+    protected function reportFailure(\Exception $e = null)
     {
-        if ($this->circuitBreaker && $this->cbServiceName) {
-            $this->circuitBreaker->reportFailure($this->cbServiceName);
+        $this->traitReportFailure();
+
+        if ($e && $this->logger instanceof LoggerInterface) {
+            $this->logger->error("NFG reported failure: {$e->getMessage()}");
         }
+    }
+
+    /**
+     * Sets a logger instance on the object.
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return void
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
+    private function sanitizeCpf($cpf)
+    {
+        return str_pad($cpf, 11, '0', STR_PAD_LEFT);
     }
 }

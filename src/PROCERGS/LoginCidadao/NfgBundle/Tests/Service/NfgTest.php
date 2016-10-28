@@ -12,6 +12,7 @@ namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Service;
 
 
 use LoginCidadao\CoreBundle\Entity\Person;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
 use Prophecy\Argument;
 
@@ -22,11 +23,11 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $accessId = 'access_id'.random_int(10, 9999);
         $soapService = $this->getSoapService($accessId);
 
-        $circuitBreaker = $this->prophesize('\Ejsmont\CircuitBreaker\CircuitBreakerInterface');
-        $circuitBreaker->isAvailable('service')->willReturn(true)->shouldBeCalled();
-        $circuitBreaker->reportSuccess('service')->shouldBeCalled();
+        $cbService = 'service';
+        $circuitBreaker = $this->getCircuitBreaker($cbService, true);
+        $circuitBreaker->reportSuccess($cbService)->shouldBeCalled();
 
-        $personRepository = $this->getMockBuilder('LoginCidadao\CoreBundle\Entity\PersonRepository')
+        $meuRSHelper = $this->getMockBuilder('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -41,12 +42,12 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             $this->getRouter(),
             $session->reveal(),
             $loginManager->reveal(),
-            $personRepository,
+            $meuRSHelper,
             $firewall,
             $loginEndpoint,
             $authEndpoint
         );
-        $nfg->setCircuitBreaker($circuitBreaker->reveal(), 'service');
+        $nfg->setCircuitBreaker($circuitBreaker->reveal(), $cbService);
 
         $response = $nfg->login();
         // TODO: expect RedirectResponse when the Referrer problem at NFG gets fixed.
@@ -64,8 +65,10 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $person = new Person();
         $person->setCpf($cpf);
-        $personRepository = $this->prophesize('LoginCidadao\CoreBundle\Entity\PersonRepository');
-        $personRepository->findOneBy(['cpf' => $cpf])->willReturn($person)->shouldBeCalled();
+        $personMeuRS = new PersonMeuRS();
+        $personMeuRS->setPerson($person);
+        $meuRSHelper = $this->prophesize('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper');
+        $meuRSHelper->getPersonByCpf($cpf)->willReturn($personMeuRS)->shouldBeCalled();
 
         $session = $this->getSession($accessId, 'get');
 
@@ -79,7 +82,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             $this->getRouter(),
             $session->reveal(),
             $loginManager->reveal(),
-            $personRepository->reveal(),
+            $meuRSHelper->reveal(),
             $firewall,
             $loginEndpoint,
             $authEndpoint
@@ -141,5 +144,18 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         }
 
         return $session;
+    }
+
+    /**
+     * @param string $serviceName
+     * @param bool $isAvailable
+     * @return \Prophecy\Prophecy\ObjectProphecy
+     */
+    private function getCircuitBreaker($serviceName, $isAvailable)
+    {
+        $circuitBreaker = $this->prophesize('\Ejsmont\CircuitBreaker\CircuitBreakerInterface');
+        $circuitBreaker->isAvailable($serviceName)->willReturn($isAvailable)->shouldBeCalled();
+
+        return $circuitBreaker;
     }
 }
