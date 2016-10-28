@@ -33,18 +33,35 @@ class NfgSoap implements NfgSoapInterface
      */
     public function getAccessID()
     {
-        $authentication = [
-            'organizacao' => $this->credentials->getOrganization(),
-            'usuario' => $this->credentials->getUsername(),
-            'senha' => $this->credentials->getPassword(),
-        ];
-
-        $response = $this->client->ObterAccessID($authentication);
+        $response = $this->client->ObterAccessID($this->getAuthentication());
 
         if (false !== strpos($response->ObterAccessIDResult, ' ') || !isset($response->ObterAccessIDResult)) {
             throw new NfgServiceUnavailableException($response->ObterAccessIDResult);
         }
 
         return $response->ObterAccessIDResult;
+    }
+
+    public function getUserInfo($accessToken, $voterRegistration = null)
+    {
+        $params = $this->getAuthentication();
+        $params['accessToken'] = $accessToken;
+        if ($voterRegistration) {
+            $params['voterRegistration'] = $voterRegistration;
+        }
+
+        $response = $this->client->ConsultaCadastro($params);
+
+        // TODO: check if response if valid
+        throw new \RuntimeException('Not implemented yet');
+    }
+
+    private function getAuthentication()
+    {
+        return [
+            'organizacao' => $this->credentials->getOrganization(),
+            'usuario' => $this->credentials->getUsername(),
+            'senha' => $this->credentials->getPassword(),
+        ];
     }
 }

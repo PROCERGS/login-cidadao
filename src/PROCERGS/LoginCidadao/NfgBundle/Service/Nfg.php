@@ -18,12 +18,13 @@ use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Helper\UrlHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Exception\AccountStatusException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class Nfg
 {
@@ -57,6 +58,9 @@ class Nfg
     private $loginEndpoint;
 
     /** @var string */
+    private $authorizationEndpoint;
+
+    /** @var string */
     private $firewallName;
 
     public function __construct(
@@ -65,7 +69,8 @@ class Nfg
         SessionInterface $session,
         LoginManagerInterface $loginManager,
         $firewallName,
-        $loginEndpoint
+        $loginEndpoint,
+        $authorizationEndpoint
     ) {
         $this->nfgSoap = $client;
         $this->router = $router;
@@ -73,6 +78,7 @@ class Nfg
         $this->loginManager = $loginManager;
         $this->firewallName = $firewallName;
         $this->loginEndpoint = $loginEndpoint;
+        $this->authorizationEndpoint = $authorizationEndpoint;
     }
 
     /**
@@ -114,30 +120,7 @@ class Nfg
      */
     public function login()
     {
-        $accessId = $this->getAccessId();
-        $this->session->set(self::ACCESS_ID_SESSION_KEY, $accessId);
-        $callbackUrl = $this->router->generate('nfg_callback', [], RouterInterface::ABSOLUTE_URL);
-
-        $url = parse_url($this->loginEndpoint);
-        $url['query'] = UrlHelper::addToQuery(
-            [
-                'accessid' => $accessId,
-                'urlretorno' => $callbackUrl,
-            ],
-            isset($url['query']) ? $url['query'] : null
-        );
-
-        // NFG has some bug that causes the application to fail if a Referrer is not present
-        // So I'll have to do the redirect in this very ugly manner until this problem gets fixed.
-        $url = http_build_url($url);
-
-        // TODO: remove this after NFG gets its bugs fixed
-//        return new Response(
-//            '<html><head><meta name="referrer" content="always"/></head><body><script type="text/javascript">document.location= "'.$url.'";</script></body></html>'
-//        );
-
-        return new JsonResponse(['target' => $url]);
-        //return new RedirectResponse(http_build_url($url));
+        return $this->redirect($this->loginEndpoint, 'nfg_login_callback');
     }
 
     public function loginCallback(
@@ -171,9 +154,56 @@ class Nfg
         }
 
         $response = new RedirectResponse($this->router->generate('lc_home'));
-        $this->loginManager->logInUser($this->firewallName, $user, $response);
+
+        try {
+            $this->loginManager->logInUser($this->firewallName, $user, $response);
+        } catch (AccountStatusException $e) {
+            // User account is disabled or something like that
+            throw $e;
+        }
 
         return $response;
+    }
+
+    public function connect()
+    {
+        return $this->redirect($this->authorizationEndpoint, 'nfg_connect_callback');
+    }
+
+    public function connectCallback(PersonMeuRS $personMeuRS)
+    {
+        // TODO: check access token
+
+
+
+    }
+
+    private function redirect($endpoint, $callbackRoute)
+    {
+        $accessId = $this->getAccessId();
+        $this->session->set(self::ACCESS_ID_SESSION_KEY, $accessId);
+        $callbackUrl = $this->router->generate($callbackRoute, [], RouterInterface::ABSOLUTE_URL);
+
+        $url = parse_url($endpoint);
+        $url['query'] = UrlHelper::addToQuery(
+            [
+                'accessid' => $accessId,
+                'urlretorno' => $callbackUrl,
+            ],
+            isset($url['query']) ? $url['query'] : null
+        );
+
+        // NFG has some bug that causes the application to fail if a Referrer is not present
+        // So I'll have to do the redirect in this very ugly manner until this problem gets fixed.
+        $url = http_build_url($url);
+
+        // TODO: remove this after NFG gets its bugs fixed
+//        return new Response(
+//            '<html><head><meta name="referrer" content="always"/></head><body><script type="text/javascript">document.location= "'.$url.'";</script></body></html>'
+//        );
+
+        return new JsonResponse(['target' => $url]);
+        //return new RedirectResponse(http_build_url($url));
     }
 
     private function reportSuccess()

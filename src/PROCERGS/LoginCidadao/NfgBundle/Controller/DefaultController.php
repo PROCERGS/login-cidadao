@@ -20,6 +20,22 @@ class DefaultController extends Controller
         $nfg = $this->getNfgService();
 
         try {
+            $response = $nfg->connect();
+        } catch (NfgServiceUnavailableException $e) {
+            $response = $this->redirectToRoute('nfg_unavailable');
+        }
+
+        return $response;
+    }
+
+    /**
+     * @Route("/login", name="nfg_login")
+     */
+    public function loginAction(Request $request)
+    {
+        $nfg = $this->getNfgService();
+
+        try {
             $response = $nfg->login();
         } catch (NfgServiceUnavailableException $e) {
             $response = $this->redirectToRoute('nfg_unavailable');
@@ -45,7 +61,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/callback", name="nfg_callback")
+     * @Route("/login/callback", name="nfg_login_callback")
      */
     public function indexAction(Request $request)
     {

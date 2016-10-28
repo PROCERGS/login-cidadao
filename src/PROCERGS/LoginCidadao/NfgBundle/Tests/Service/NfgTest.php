@@ -30,6 +30,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $firewall = 'firewall';
         $loginManager = $this->getLoginManager();
         $loginEndpoint = 'https://dum.my/login';
+        $authEndpoint = 'https://dum.my/auth';
 
         $nfg = new Nfg(
             $soapService,
@@ -37,7 +38,8 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             $session->reveal(),
             $loginManager->reveal(),
             $firewall,
-            $loginEndpoint
+            $loginEndpoint,
+            $authEndpoint
         );
         $nfg->setCircuitBreaker($circuitBreaker->reveal(), 'service');
 
@@ -45,7 +47,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         // TODO: expect RedirectResponse when the Referrer problem at NFG gets fixed.
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\Response', $response);
         $this->assertContains($accessId, $response->getContent());
-        $this->assertContains('nfg_callback', $response->getContent());
+        $this->assertContains('nfg_login_callback', $response->getContent());
     }
 
     public function testLoginCallback()
@@ -60,6 +62,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $firewall = 'firewall';
         $loginManager = $this->getLoginManager(true);
         $loginEndpoint = 'https://dum.my/login';
+        $authEndpoint = 'https://dum.my/auth';
 
         $nfg = new Nfg(
             $this->getSoapService($accessId),
@@ -67,7 +70,8 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             $session->reveal(),
             $loginManager->reveal(),
             $firewall,
-            $loginEndpoint
+            $loginEndpoint,
+            $authEndpoint
         );
 
         $response = $nfg->loginCallback(compact('cpf', 'accessId', 'prsec'), $secret);

@@ -17,4 +17,9 @@ interface NfgSoapInterface
      * @return string
      */
     public function getAccessID();
+
+    /**
+     * @return mixed
+     */
+    public function getUserInfo($accessToken, $voterRegistration = null);
 }
