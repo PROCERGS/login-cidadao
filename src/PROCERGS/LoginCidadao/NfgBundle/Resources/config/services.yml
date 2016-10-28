@@ -1,4 +1,10 @@
 services:
+    procergs.nfg.person.repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - LoginCidadao\CoreBundle\Entity\Person
+
     procergs.nfg.credentials:
         class: PROCERGS\LoginCidadao\NfgBundle\Security\Credentials
         arguments:
@@ -9,6 +15,8 @@ services:
 
     procergs.nfg.soap_client.factory:
         class: PROCERGS\LoginCidadao\NfgBundle\Service\SoapClientFactory
+        calls:
+            - ['setCircuitBreaker', ["@?circuitBreaker", "%procergs.nfg.circuit_breaker.service_name%"]]
 
     procergs.nfg.soap_client:
         class: SoapClient
@@ -31,5 +39,9 @@ services:
             - "@router"
             - "@session"
             - "@fos_user.security.login_manager"
+            - "@procergs.nfg.person.repository"
             - "%fos_user.firewall_name%"
             - "%nfg_url_login%"
+            - "%nfg_url_auth%"
+        calls:
+            - ['setCircuitBreaker', ["@?circuitBreaker", "%procergs.nfg.circuit_breaker.service_name%"]]
