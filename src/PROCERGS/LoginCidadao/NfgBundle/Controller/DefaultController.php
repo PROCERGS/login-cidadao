@@ -2,6 +2,7 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Controller;
 
+use Ejsmont\CircuitBreaker\CircuitBreakerInterface;
 use FOS\UserBundle\Security\LoginManager;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
@@ -17,9 +18,9 @@ class DefaultController extends Controller
      */
     public function connectAction(Request $request)
     {
-        $nfg = $this->getNfgService();
-
         try {
+            $nfg = $this->getNfgService();
+            
             $response = $nfg->connect();
         } catch (NfgServiceUnavailableException $e) {
             $response = $this->redirectToRoute('nfg_unavailable');
@@ -33,9 +34,9 @@ class DefaultController extends Controller
      */
     public function loginAction(Request $request)
     {
-        $nfg = $this->getNfgService();
-
         try {
+            $nfg = $this->getNfgService();
+
             $response = $nfg->login();
         } catch (NfgServiceUnavailableException $e) {
             $response = $this->redirectToRoute('nfg_unavailable');
@@ -45,10 +46,14 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/connect/wait", name="nfg_wait_connection")
+     * @Route("/wait", name="nfg_wait_connection")
      */
     public function waitConnectionAction(Request $request)
     {
+        if (false === $this->isNfgServiceAvailable()) {
+            return $this->redirectToRoute('nfg_unavailable');
+        }
+
         return $this->render('PROCERGSNfgBundle::connecting.html.twig');
     }
 
@@ -57,7 +62,7 @@ class DefaultController extends Controller
      */
     public function unavailableAction(Request $request)
     {
-        return new Response('NFG unavailable');
+        return $this->render('PROCERGSNfgBundle:Default:unavailable.html.twig');
     }
 
     /**
@@ -87,5 +92,19 @@ class DefaultController extends Controller
     private function getNfgService()
     {
         return $this->get('procergs.nfg.service');
+    }
+
+    private function isNfgServiceAvailable()
+    {
+        $serviceName = $this->getParameter('procergs.nfg.circuit_breaker.service_name');
+        if (false === $this->has('circuitBreaker') || !$serviceName) {
+            // We don't have Circuit Breaker enabled, so we assume the service is available
+            return true;
+        }
+
+        /** @var CircuitBreakerInterface $cb */
+        $cb = $this->get('circuitBreaker');
+
+        return $cb->isAvailable($serviceName);
     }
 }
