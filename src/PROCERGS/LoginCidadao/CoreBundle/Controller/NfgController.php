@@ -4,6 +4,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Controller;
 
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\NfgWsHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -172,6 +173,7 @@ class NfgController extends Controller
         if (!$paccessid) {
             throw new NfgException('nfg.missing.token');
         }
+        /** @var NfgWsHelper $nfg */
         $nfg = $this->get('procergs_logincidadao.nfgws');
         $nfg->setAccessToken($paccessid);
         if ($voterRegistration) {
