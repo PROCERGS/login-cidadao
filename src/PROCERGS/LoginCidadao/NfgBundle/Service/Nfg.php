@@ -12,7 +12,8 @@ namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
 use Ejsmont\CircuitBreaker\CircuitBreakerInterface;
 use FOS\UserBundle\Security\LoginManagerInterface;
-use LoginCidadao\CoreBundle\Entity\Person;
+use LoginCidadao\CoreBundle\Entity\PersonRepository;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Helper\UrlHelper;
@@ -24,7 +25,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class Nfg
 {
@@ -44,6 +44,9 @@ class Nfg
 
     /** @var LoginManagerInterface */
     private $loginManager;
+
+    /** @var PersonRepository */
+    private $personRepository;
 
     /** @var CircuitBreakerInterface */
     private $circuitBreaker;
@@ -68,6 +71,7 @@ class Nfg
         RouterInterface $router,
         SessionInterface $session,
         LoginManagerInterface $loginManager,
+        PersonRepository $personRepository,
         $firewallName,
         $loginEndpoint,
         $authorizationEndpoint
@@ -76,6 +80,7 @@ class Nfg
         $this->router = $router;
         $this->session = $session;
         $this->loginManager = $loginManager;
+        $this->personRepository = $personRepository;
         $this->firewallName = $firewallName;
         $this->loginEndpoint = $loginEndpoint;
         $this->authorizationEndpoint = $authorizationEndpoint;
@@ -144,8 +149,8 @@ class Nfg
             throw new AccessDeniedHttpException('Invalid AccessID');
         }
 
-        // TODO: find user by $cpf
-        $user = new Person();
+        /** @var PersonInterface $user */
+        $user = $this->personRepository->findOneBy(['cpf' => $cpf]);
         $personMeuRS = new PersonMeuRS();
         $personMeuRS->setNfgAccessToken('dummy');
 
@@ -173,7 +178,6 @@ class Nfg
     public function connectCallback(PersonMeuRS $personMeuRS)
     {
         // TODO: check access token
-
 
 
     }

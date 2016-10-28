@@ -11,6 +11,7 @@
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Service;
 
 
+use LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
 use Prophecy\Argument;
 
@@ -25,18 +26,22 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $circuitBreaker->isAvailable('service')->willReturn(true)->shouldBeCalled();
         $circuitBreaker->reportSuccess('service')->shouldBeCalled();
 
-        $session = $this->getSession($accessId, 'set');
+        $personRepository = $this->getMockBuilder('LoginCidadao\CoreBundle\Entity\PersonRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $firewall = 'firewall';
+        $session = $this->getSession($accessId, 'set');
         $loginManager = $this->getLoginManager();
         $loginEndpoint = 'https://dum.my/login';
         $authEndpoint = 'https://dum.my/auth';
+        $firewall = 'firewall';
 
         $nfg = new Nfg(
             $soapService,
             $this->getRouter(),
             $session->reveal(),
             $loginManager->reveal(),
+            $personRepository,
             $firewall,
             $loginEndpoint,
             $authEndpoint
@@ -57,6 +62,11 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $secret = "my very super secret secret";
         $prsec = hash_hmac('sha256', "$cpf$accessId", $secret);
 
+        $person = new Person();
+        $person->setCpf($cpf);
+        $personRepository = $this->prophesize('LoginCidadao\CoreBundle\Entity\PersonRepository');
+        $personRepository->findOneBy(['cpf' => $cpf])->willReturn($person)->shouldBeCalled();
+
         $session = $this->getSession($accessId, 'get');
 
         $firewall = 'firewall';
@@ -69,6 +79,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             $this->getRouter(),
             $session->reveal(),
             $loginManager->reveal(),
+            $personRepository->reveal(),
             $firewall,
             $loginEndpoint,
             $authEndpoint
