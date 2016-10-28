@@ -18,13 +18,9 @@ class DefaultController extends Controller
      */
     public function connectAction(Request $request)
     {
-        try {
-            $nfg = $this->getNfgService();
-            
-            $response = $nfg->connect();
-        } catch (NfgServiceUnavailableException $e) {
-            $response = $this->redirectToRoute('nfg_unavailable');
-        }
+        $nfg = $this->getNfgService();
+
+        $response = $nfg->connect();
 
         return $response;
     }
@@ -34,13 +30,9 @@ class DefaultController extends Controller
      */
     public function loginAction(Request $request)
     {
-        try {
-            $nfg = $this->getNfgService();
+        $nfg = $this->getNfgService();
 
-            $response = $nfg->login();
-        } catch (NfgServiceUnavailableException $e) {
-            $response = $this->redirectToRoute('nfg_unavailable');
-        }
+        $response = $nfg->login();
 
         return $response;
     }
@@ -72,8 +64,6 @@ class DefaultController extends Controller
     {
         $nfg = $this->getNfgService();
 
-        /** @var LoginManager $loginManager */
-        $loginManager = $this->get('fos_user.security.login_manager');
         $params = [
             'cpf' => $request->get('cpf'),
             'accessId' => $request->get('accessid'),
@@ -81,9 +71,9 @@ class DefaultController extends Controller
         ];
         $secret = $this->getParameter('procergs.nfg.authentication.hmac_secret');
 
-        $response = $nfg->loginCallback($request->getSession(), $loginManager, $params, $secret);
+        $response = $nfg->loginCallback($params, $secret);
 
-        return new Response('SUCCESS');
+        return $response;
     }
 
     /**

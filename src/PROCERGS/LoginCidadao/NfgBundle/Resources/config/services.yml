@@ -1,9 +1,10 @@
 services:
-    procergs.nfg.person.repository:
-        class: Doctrine\ORM\EntityRepository
-        factory: ["@doctrine.orm.entity_manager", getRepository]
+    app.exception_listener:
+        class: PROCERGS\LoginCidadao\NfgBundle\EventListener\ExceptionListener
         arguments:
-            - LoginCidadao\CoreBundle\Entity\Person
+            - "@router"
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
 
     procergs.nfg.credentials:
         class: PROCERGS\LoginCidadao\NfgBundle\Security\Credentials
@@ -39,9 +40,10 @@ services:
             - "@router"
             - "@session"
             - "@fos_user.security.login_manager"
-            - "@procergs.nfg.person.repository"
+            - "@meurs.helper"
             - "%fos_user.firewall_name%"
             - "%nfg_url_login%"
             - "%nfg_url_auth%"
         calls:
             - ['setCircuitBreaker', ["@?circuitBreaker", "%procergs.nfg.circuit_breaker.service_name%"]]
+            - ['setLogger', ["@?logger"]]
