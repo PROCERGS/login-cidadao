@@ -114,7 +114,7 @@ class Nfg implements LoggerAwareInterface
     /**
      * @param string $accessToken
      * @param string|null $voterRegistration
-     * @return mixed
+     * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile
      */
     private function getUserInfo($accessToken, $voterRegistration = null)
     {
@@ -123,10 +123,14 @@ class Nfg implements LoggerAwareInterface
         }
 
         try {
-            $userInfo = $this->nfgSoap->getUserInfo($accessToken, $voterRegistration);
+            $nfgProfile = $this->nfgSoap->getUserInfo($accessToken, $voterRegistration);
             $this->reportSuccess();
 
-            return $userInfo;
+            if (array_search(null, [$nfgProfile->getEmail(), $nfgProfile->getCpf(), $nfgProfile->getName()])) {
+                // TODO: throw missing required info exception
+            }
+
+            return $nfgProfile;
         } catch (NfgServiceUnavailableException $e) {
             $this->reportFailure($e);
             throw $e;
@@ -191,15 +195,19 @@ class Nfg implements LoggerAwareInterface
         return $this->redirect($this->authorizationEndpoint, 'nfg_connect_callback');
     }
 
-    public function connectCallback(PersonMeuRS $personMeuRS, $paccessId = null)
+    /**
+     * @param PersonMeuRS $personMeuRS
+     * @param string $paccessId
+     * @return RedirectResponse
+     */
+    public function connectCallback(PersonMeuRS $personMeuRS, $paccessId)
     {
         // TODO: check access token
         if (!$paccessId) {
             throw new BadRequestHttpException("Missing paccessid parameter");
         }
 
-        $userInfo = $this->getUserInfo($paccessId, $personMeuRS->getVoterRegistration());
-        dump($userInfo);
+        $nfgProfile = $this->getUserInfo($paccessId, $personMeuRS->getVoterRegistration());
 
         // TODO: check Person CPF
 
@@ -210,6 +218,7 @@ class Nfg implements LoggerAwareInterface
         // TODO: link NfgProfile to PersonMeuRS
         // TODO: save AccessToken to PersonMeuRS
         // TODO: redirect to Profile?
+        return new RedirectResponse($this->router->generate('lc_home'));
     }
 
     private function redirect($endpoint, $callbackRoute)

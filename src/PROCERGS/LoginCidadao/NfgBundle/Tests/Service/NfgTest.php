@@ -12,6 +12,7 @@ namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Service;
 
 
 use LoginCidadao\CoreBundle\Entity\Person;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
 use Prophecy\Argument;
@@ -96,7 +97,51 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testConnectCallback()
     {
-        $this->fail('Test not implemented!');
+        $accessId = 'access_id'.random_int(10, 9999);
+        $soapService = $this->getSoapService($accessId);
+
+        $cpf = '12345678901';
+        $accessId = 'access_id'.random_int(10, 9999);
+
+        $person = new Person();
+        $person->setCpf($cpf);
+        $personMeuRS = new PersonMeuRS();
+        $personMeuRS
+            ->setVoterRegistration('1234567890')
+            ->setPerson($person);
+
+        $meuRSHelper = $this->prophesize('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper');
+
+        $nfgProfile = new NfgProfile();
+        $nfgProfile->setName('John Doe')
+            ->setEmail('some@email.com')
+            ->setBirthdate('1970-01-01T00:00:00')
+            ->setMobile('5193333333')
+            ->setVoterRegistration($personMeuRS->getVoterRegistration())
+            ->setCpf($cpf)
+            ->setAccessLvl(2);
+        $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
+
+        $firewall = 'firewall';
+        $loginEndpoint = 'https://dum.my/login';
+        $authEndpoint = 'https://dum.my/auth';
+
+        $nfg = new Nfg(
+            $soapService,
+            $this->getRouter(),
+            $this->getSession($accessId, 'none')->reveal(),
+            $this->getLoginManager(false)->reveal(),
+            $meuRSHelper->reveal(),
+            $firewall,
+            $loginEndpoint,
+            $authEndpoint
+        );
+
+        $accessToken = 'access_token'.random_int(10, 9999);
+        $response = $nfg->connectCallback($personMeuRS, $accessToken);
+
+        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertEquals('lc_home', $response->getTargetUrl());
     }
 
     private function getRouter()

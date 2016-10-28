@@ -11,6 +11,8 @@
 namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
 
+use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
+
 interface NfgSoapInterface
 {
     /**
@@ -19,7 +21,7 @@ interface NfgSoapInterface
     public function getAccessID();
 
     /**
-     * @return mixed
+     * @return NfgProfile
      */
     public function getUserInfo($accessToken, $voterRegistration = null);
 }
