@@ -3,8 +3,6 @@
 namespace PROCERGS\LoginCidadao\NfgBundle\Controller;
 
 use Ejsmont\CircuitBreaker\CircuitBreakerInterface;
-use FOS\UserBundle\Security\LoginManager;
-use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -26,6 +24,16 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/connect/callback", name="nfg_connect_callback")
+     */
+    public function connectCallbackAction(Request $request)
+    {
+        $nfg = $this->getNfgService();
+
+        return new Response('Connect Calback');
+    }
+
+    /**
      * @Route("/login", name="nfg_login")
      */
     public function loginAction(Request $request)
@@ -38,15 +46,15 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/wait", name="nfg_wait_connection")
+     * @Route("/wait/{action}", name="nfg_wait", requirements={"action": "(connect|login)"})
      */
-    public function waitConnectionAction(Request $request)
+    public function waitConnectionAction(Request $request, $action)
     {
         if (false === $this->isNfgServiceAvailable()) {
             return $this->redirectToRoute('nfg_unavailable');
         }
 
-        return $this->render('PROCERGSNfgBundle::connecting.html.twig');
+        return $this->render('PROCERGSNfgBundle::connecting.html.twig', compact('action'));
     }
 
     /**
@@ -60,7 +68,7 @@ class DefaultController extends Controller
     /**
      * @Route("/login/callback", name="nfg_login_callback")
      */
-    public function indexAction(Request $request)
+    public function loginCallbackAction(Request $request)
     {
         $nfg = $this->getNfgService();
 

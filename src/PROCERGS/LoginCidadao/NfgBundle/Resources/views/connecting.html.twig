@@ -20,7 +20,7 @@
     {% endjavascripts %}
     <script>
         $(document).ready(function () {
-            $.get('{{ url('nfg_login') }}').success(function (data) {
+            $.get('{{ url('nfg_' ~ action) }}').success(function (data) {
                 if (!data.target) {
                     window.location = '{{ url('nfg_unavailable') }}';
                     return;
