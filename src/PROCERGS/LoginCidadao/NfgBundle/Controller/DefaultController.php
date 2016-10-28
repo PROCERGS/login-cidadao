@@ -3,6 +3,7 @@
 namespace PROCERGS\LoginCidadao\NfgBundle\Controller;
 
 use Ejsmont\CircuitBreaker\CircuitBreakerInterface;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -28,7 +29,13 @@ class DefaultController extends Controller
      */
     public function connectCallbackAction(Request $request)
     {
+        /** @var MeuRSHelper $meuRSHelper */
+        $meuRSHelper = $this->get('meurs.helper');
+        $personMeuRS = $meuRSHelper->getPersonMeuRS($this->getUser());
+
         $nfg = $this->getNfgService();
+
+        $nfg->connectCallback($personMeuRS, $request->get('paccessid'));
 
         return new Response('Connect Calback');
     }

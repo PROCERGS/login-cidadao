@@ -94,6 +94,11 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('lc_home', $response->getTargetUrl());
     }
 
+    public function testConnectCallback()
+    {
+        $this->fail('Test not implemented!');
+    }
+
     private function getRouter()
     {
         $router = $this->getMock('\Symfony\Component\Routing\RouterInterface');

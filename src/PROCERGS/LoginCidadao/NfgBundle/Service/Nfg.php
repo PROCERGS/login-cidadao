@@ -10,9 +10,7 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
-use Ejsmont\CircuitBreaker\CircuitBreakerInterface;
 use FOS\UserBundle\Security\LoginManagerInterface;
-use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper;
@@ -114,6 +112,31 @@ class Nfg implements LoggerAwareInterface
     }
 
     /**
+     * @param string $accessToken
+     * @param string|null $voterRegistration
+     * @return mixed
+     */
+    private function getUserInfo($accessToken, $voterRegistration = null)
+    {
+        if (false === $this->isAvailable()) {
+            throw new NfgServiceUnavailableException('NFG service is unavailable right now. Try again later.');
+        }
+
+        try {
+            $userInfo = $this->nfgSoap->getUserInfo($accessToken, $voterRegistration);
+            $this->reportSuccess();
+
+            return $userInfo;
+        } catch (NfgServiceUnavailableException $e) {
+            $this->reportFailure($e);
+            throw $e;
+        } catch (\Exception $e) {
+            $this->reportFailure($e);
+            throw new NfgServiceUnavailableException($e->getMessage(), 500, $e);
+        }
+    }
+
+    /**
      * @return JsonResponse
      */
     public function login()
@@ -168,11 +191,25 @@ class Nfg implements LoggerAwareInterface
         return $this->redirect($this->authorizationEndpoint, 'nfg_connect_callback');
     }
 
-    public function connectCallback(PersonMeuRS $personMeuRS)
+    public function connectCallback(PersonMeuRS $personMeuRS, $paccessId = null)
     {
         // TODO: check access token
+        if (!$paccessId) {
+            throw new BadRequestHttpException("Missing paccessid parameter");
+        }
 
+        $userInfo = $this->getUserInfo($paccessId, $personMeuRS->getVoterRegistration());
+        dump($userInfo);
 
+        // TODO: check Person CPF
+
+        // TODO: check CPF collision
+
+        // TODO: save NfgProfile
+
+        // TODO: link NfgProfile to PersonMeuRS
+        // TODO: save AccessToken to PersonMeuRS
+        // TODO: redirect to Profile?
     }
 
     private function redirect($endpoint, $callbackRoute)

@@ -11,8 +11,10 @@
 namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
 
+use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Security\Credentials;
+use Symfony\Component\DomCrawler\Crawler;
 
 class NfgSoap implements NfgSoapInterface
 {
@@ -51,9 +53,23 @@ class NfgSoap implements NfgSoapInterface
         }
 
         $response = $this->client->ConsultaCadastro($params);
+        $nfgProfile = new NfgProfile();
+        $crawler = new Crawler($response->ConsultaCadastroResult);
 
-        // TODO: check if response if valid
-        throw new \RuntimeException('Not implemented yet');
+        if ($crawler->filter('CodSitRetorno')->text() != 1) {
+            return null;
+        }
+
+        $nfgProfile
+            ->setName($crawler->filter('NomeConsumidor')->text())
+            ->setEmail($crawler->filter('EmailPrinc')->text())
+            ->setBirthdate($crawler->filter('DtNasc')->text())
+            ->setMobile($crawler->filter('NroFoneContato')->text())// check if it's a mobile phone
+            ->setVoterRegistration($crawler->filter('CodSitTitulo')->text() != 0 ? $voterRegistration : null)
+            ->setCpf($crawler->filter('CodCpf')->text())
+            ->setAccessLvl($crawler->filter('CodNivelAcesso')->text());
+
+        return $nfgProfile;
     }
 
     private function getAuthentication()
