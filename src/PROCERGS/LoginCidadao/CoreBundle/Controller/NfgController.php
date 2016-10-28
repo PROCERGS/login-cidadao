@@ -20,13 +20,13 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper;
 
 /**
- * @Route("/nfg")
+ * @Route("/nfg-old")
  */
 class NfgController extends Controller
 {
 
     /**
-     * @Route("/create", name="nfg_create")
+     * @Route("/create", name="old_nfg_create")
      */
     public function createAction()
     {
@@ -57,7 +57,7 @@ class NfgController extends Controller
     }
 
     /**
-     * @Route("/create/back", name="nfg_createback")
+     * @Route("/create/back", name="old_nfg_createback")
      */
     public function createBackAction(Request $request)
     {
@@ -194,7 +194,7 @@ class NfgController extends Controller
     }
 
     /**
-     * @Route("/login", name="nfg_login")
+     * @Route("/login", name="old_nfg_login")
      */
     public function loginAction()
     {
@@ -202,7 +202,7 @@ class NfgController extends Controller
     }
 
     /**
-     * @Route("/login/back", name="nfg_loginback")
+     * @Route("/login/back", name="old_nfg_loginback")
      */
     public function loginBacktAction(Request $request)
     {
@@ -258,7 +258,7 @@ class NfgController extends Controller
     }
 
     /**
-     * @Route("/bind", name="nfg_bind")
+     * @Route("/bind", name="old_nfg_bind")
      */
     public function bindAction()
     {
@@ -266,7 +266,7 @@ class NfgController extends Controller
     }
 
     /**
-     * @Route("/bind/back", name="nfg_bindback")
+     * @Route("/bind/back", name="old_nfg_bindback")
      */
     public function bindBackAction(Request $request)
     {
@@ -411,7 +411,7 @@ class NfgController extends Controller
     }
 
     /**
-     * @Route("/unbind", name="nfg_unbind")
+     * @Route("/unbind", name="old_nfg_unbind")
      */
     public function unbindAction()
     {
