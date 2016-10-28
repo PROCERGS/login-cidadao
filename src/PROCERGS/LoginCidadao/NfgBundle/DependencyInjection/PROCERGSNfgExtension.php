@@ -4,6 +4,7 @@ namespace PROCERGS\LoginCidadao\NfgBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
@@ -23,7 +24,7 @@ class PROCERGSNfgExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         foreach ($config as $type => $values) {
-            if (false === array_search($type, ['endpoints', 'authentication'])) {
+            if (false === array_search($type, ['endpoints', 'authentication', 'circuit_breaker'])) {
                 continue;
             }
             $prefix = "procergs.nfg.$type.";

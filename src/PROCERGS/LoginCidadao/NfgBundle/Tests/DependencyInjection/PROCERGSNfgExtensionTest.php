@@ -46,10 +46,13 @@ class PROCERGSNfgExtensionTest extends \PHPUnit_Framework_TestCase
     public function testParametersLoaded()
     {
         $config = ConfigurationTest::getSampleConfig();
+        $config['circuit_breaker']['service_name'] = 'cb_service_name';
         $container = $this->createContainer();
         $container->registerExtension(new PROCERGSNfgExtension());
         $container->loadFromExtension('procergs_nfg', $config);
         $this->compileContainer($container);
+
+        $this->assertEquals('cb_service_name', $container->getParameter('procergs.nfg.circuit_breaker.service_name'));
 
         $endpoints = $config['endpoints'];
         $endpointsPrefix = 'procergs.nfg.endpoints.';
