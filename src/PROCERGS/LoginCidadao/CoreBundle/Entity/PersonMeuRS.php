@@ -18,7 +18,7 @@ use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRSRepository")
  * @UniqueEntity("person")
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="person_meurs")

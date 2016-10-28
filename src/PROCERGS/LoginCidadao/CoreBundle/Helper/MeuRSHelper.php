@@ -14,19 +14,21 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRSRepository;
 
 class MeuRSHelper
 {
     /** @var EntityManager */
     protected $em;
 
-    /** @var Doctrine\ORM\EntityRepository */
+    /** @var PersonMeuRSRepository */
     protected $personMeuRSRepository;
 
-    public function __construct(EntityManager $em,
-                                EntityRepository $personMeuRSRepository)
-    {
-        $this->em                    = $em;
+    public function __construct(
+        EntityManager $em,
+        EntityRepository $personMeuRSRepository
+    ) {
+        $this->em = $em;
         $this->personMeuRSRepository = $personMeuRSRepository;
     }
 
@@ -37,9 +39,11 @@ class MeuRSHelper
      */
     public function getPersonMeuRS(PersonInterface $person, $create = false)
     {
-        $personMeuRS = $this->personMeuRSRepository->findOneBy(array(
-            'person' => $person
-        ));
+        $personMeuRS = $this->personMeuRSRepository->findOneBy(
+            array(
+                'person' => $person,
+            )
+        );
 
         if ($create && !($personMeuRS instanceof PersonMeuRS)) {
             $personMeuRS = new PersonMeuRS();
@@ -58,9 +62,11 @@ class MeuRSHelper
         return $personMeuRS ? $personMeuRS->getVoterRegistration() : null;
     }
 
-    public function setVoterRegistration(EntityManager $em,
-                                         PersonInterface $person, $value)
-    {
+    public function setVoterRegistration(
+        EntityManager $em,
+        PersonInterface $person,
+        $value
+    ) {
         $personMeuRS = $this->getPersonMeuRS($person, true);
 
         $personMeuRS->setVoterRegistration($value);
@@ -87,5 +93,14 @@ class MeuRSHelper
             ->findOneBy(compact('voterRegistration'));
 
         return $result ? $result->getPerson() : null;
+    }
+
+    /**
+     * @param $cpf
+     * @return PersonMeuRS|null
+     */
+    public function getPersonByCpf($cpf)
+    {
+        return $this->personMeuRSRepository->getOneByCpf($cpf);
     }
 }

@@ -11,8 +11,7 @@ parameters:
 services:
     meurs.entities.person_meurs.repository:
         class: Doctrine\ORM\EntityRepository
-        factory_service: doctrine.orm.default_entity_manager
-        factory_method: getRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
             - PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS
 
