@@ -562,7 +562,7 @@ procergs_login_cidadao_monitor:
 
 ejsmont_circuit_breaker:
     threshold: 1
-    retry_timeout: 15
+    retry_timeout: 10
 
 procergs_nfg:
     verify_https: false
