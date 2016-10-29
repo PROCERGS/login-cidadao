@@ -11,6 +11,11 @@
 namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
 
+use libphonenumber\NumberParseException;
+use libphonenumber\PhoneNumber;
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberType;
+use libphonenumber\PhoneNumberUtil;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Security\Credentials;
@@ -57,14 +62,27 @@ class NfgSoap implements NfgSoapInterface
         $crawler = new Crawler($response->ConsultaCadastroResult);
 
         if ($crawler->filter('CodSitRetorno')->text() != 1) {
-            return null;
+            throw new \RuntimeException($crawler->filter('MsgRetorno')->text());
+        }
+
+        try {
+            $phoneUtil = PhoneNumberUtil::getInstance();
+            $phoneNumber = $phoneUtil->parse($crawler->filter('NroFoneContato')->text(), 'BR');
+            $allowedTypes = [PhoneNumberType::MOBILE, PhoneNumberType::FIXED_LINE_OR_MOBILE];
+            if (false === array_search($phoneUtil->getNumberType($phoneNumber), $allowedTypes)) {
+                $phoneNumber = null;
+            } else {
+                $phoneNumber = $phoneUtil->format($phoneNumber, PhoneNumberFormat::E164);
+            }
+        } catch (NumberParseException $e) {
+            $phoneNumber = null;
         }
 
         $nfgProfile
             ->setName($crawler->filter('NomeConsumidor')->text())
             ->setEmail($crawler->filter('EmailPrinc')->text())
             ->setBirthdate($crawler->filter('DtNasc')->text())
-            ->setMobile($crawler->filter('NroFoneContato')->text())// check if it's a mobile phone
+            ->setMobile($phoneNumber)
             ->setVoterRegistration($crawler->filter('CodSitTitulo')->text() != 0 ? $voterRegistration : null)
             ->setCpf($crawler->filter('CodCpf')->text())
             ->setAccessLvl($crawler->filter('CodNivelAcesso')->text());

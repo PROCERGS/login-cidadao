@@ -40,11 +40,24 @@ class NfgSoapTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testGetFullUserInfo()
+    {
+        $client = $this->getSoapClientMock();
+        $credentials = new Credentials('org', 'user', 'pass');
+        $nfgSoap = new NfgSoap($client, $credentials);
+
+        $nfgProfile = $nfgSoap->getUserInfo('stub');
+
+        $this->assertContains('Donato', $nfgProfile->getName());
+        $this->assertNotNull($nfgProfile->getMobile());
+        $this->assertStringStartsWith('+55', $nfgProfile->getMobile());
+    }
+
     private function getSoapClientMock()
     {
         $client = $this->getMock(
             '\SoapClient',
-            ['ObterAccessID'],
+            ['ObterAccessID', 'ConsultaCadastro'],
             ['https://dum.my/service.wsdl'],
             '',
             false,
@@ -67,6 +80,29 @@ class NfgSoapTest extends \PHPUnit_Framework_TestCase
                     }
 
                     return json_decode($response);
+                }
+            );
+        $client->expects($this->any())
+            ->method('ConsultaCadastro')
+            ->willReturnCallback(
+                function ($data) {
+                    $xml = <<<XML
+<?xml version="1.0"?>
+<LoginCidadaoServiceED xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <CodSitRetorno>1</CodSitRetorno>
+  <CodNivelAcesso>2</CodNivelAcesso>
+  <CodCpf>2197368044</CodCpf>
+  <NomeConsumidor>Guilherme Da Silva Donato</NomeConsumidor>
+  <DtNasc>1989-08-21T00:00:00</DtNasc>
+  <EmailPrinc>nfg@cadastro.dona.to</EmailPrinc>
+  <NroFoneContato>5193313045</NroFoneContato>
+  <CodSitTitulo>0</CodSitTitulo>
+  <MsgRetorno>Sucesso.</MsgRetorno>
+</LoginCidadaoServiceED>
+XML;
+                    $response = new \stdClass();
+                    $response->ConsultaCadastroResult = $xml;
+                    return $response;
                 }
             );
 

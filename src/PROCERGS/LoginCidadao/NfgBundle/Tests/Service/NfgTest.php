@@ -100,9 +100,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $accessId = 'access_id'.random_int(10, 9999);
         $soapService = $this->getSoapService($accessId);
 
-        $cpf = '12345678901';
-        $accessId = 'access_id'.random_int(10, 9999);
-
+        $cpf = '01234567890';
         $person = new Person();
         $person->setCpf($cpf);
         $personMeuRS = new PersonMeuRS();
@@ -116,9 +114,9 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $nfgProfile->setName('John Doe')
             ->setEmail('some@email.com')
             ->setBirthdate('1970-01-01T00:00:00')
-            ->setMobile('5193333333')
+            ->setMobile('+555193333333')
             ->setVoterRegistration($personMeuRS->getVoterRegistration())
-            ->setCpf($cpf)
+            ->setCpf('1234567890') // NFG teats CPF as integers, hence no leading 0s
             ->setAccessLvl(2);
         $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
 
@@ -142,6 +140,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals('lc_home', $response->getTargetUrl());
+        $this->assertStringStartsWith('+55', $nfgProfile->getMobile());
     }
 
     private function getRouter()
