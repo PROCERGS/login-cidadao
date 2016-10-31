@@ -10,6 +10,7 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
+use Doctrine\ORM\EntityManager;
 use FOS\UserBundle\Security\LoginManagerInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
@@ -41,6 +42,9 @@ class Nfg implements LoggerAwareInterface
      */
     const ACCESS_ID_SESSION_KEY = 'nfg.access_id';
 
+    /** @var EntityManager */
+    private $em;
+
     /** @var NfgSoapInterface */
     private $nfgSoap;
 
@@ -69,6 +73,7 @@ class Nfg implements LoggerAwareInterface
     private $firewallName;
 
     public function __construct(
+        EntityManager $em,
         NfgSoapInterface $client,
         RouterInterface $router,
         SessionInterface $session,
@@ -78,6 +83,7 @@ class Nfg implements LoggerAwareInterface
         $loginEndpoint,
         $authorizationEndpoint
     ) {
+        $this->em = $em;
         $this->nfgSoap = $client;
         $this->router = $router;
         $this->session = $session;
@@ -203,22 +209,25 @@ class Nfg implements LoggerAwareInterface
      */
     public function connectCallback(PersonMeuRS $personMeuRS, $paccessId)
     {
-        // TODO: check access token
         if (!$paccessId) {
             throw new BadRequestHttpException("Missing paccessid parameter");
         }
 
         $nfgProfile = $this->getUserInfo($paccessId, $personMeuRS->getVoterRegistration());
 
-        // TODO: check Person CPF
+        $sanitizedCpf = $this->sanitizeCpf($nfgProfile->getCpf());
+        if (!$personMeuRS->getPerson()->getCpf()) {
+            $personMeuRS->getPerson()->setCpf($sanitizedCpf);
+        }
+
         $this->checkCpf($personMeuRS, $nfgProfile);
 
-        // TODO: check CPF collision
+        $this->em->persist($nfgProfile);
+        $personMeuRS->setNfgProfile($nfgProfile);
+        $personMeuRS->setNfgAccessToken($paccessId);
+        $this->em->flush($nfgProfile);
+        $this->em->flush($personMeuRS);
 
-        // TODO: save NfgProfile
-
-        // TODO: link NfgProfile to PersonMeuRS
-        // TODO: save AccessToken to PersonMeuRS
         // TODO: redirect to Profile?
         return new RedirectResponse($this->router->generate('lc_home'));
     }
@@ -283,18 +292,44 @@ class Nfg implements LoggerAwareInterface
 
     private function sanitizeCpf($cpf)
     {
-        return str_pad($cpf, 11, '0', STR_PAD_LEFT);
+        return str_pad(preg_replace('/[^0-9]/', '', $cpf), 11, '0', STR_PAD_LEFT);
     }
 
+    /**
+     * @param PersonMeuRS $personMeuRS
+     * @param NfgProfile $nfgProfile
+     */
     private function checkCpf(PersonMeuRS $personMeuRS, NfgProfile $nfgProfile)
     {
         $person = $personMeuRS->getPerson();
-        if (!$person->getCpf()) {
+
+        // Check data inconsistency
+        if ($person->getCpf() !== $this->sanitizeCpf($nfgProfile->getCpf())) {
+            // TODO: $person CPF doesn't match CPF from NFG
+        }
+
+        // Check CPF collision
+        $otherPerson = $this->meuRSHelper->getPersonByCpf($person->getCpf());
+        if (null === $otherPerson) {
+            // No collision found. We're good! :)
             return;
         }
+        // TODO: update $otherPerson NfgProfile
 
-        if ($person->getCpf() !== $this->sanitizeCpf($nfgProfile->getCpf())) {
-
+        $personLevel = $personMeuRS->getNfgProfile()->getAccessLvl();
+        $otherPersonLevel = $otherPerson->getNfgProfile()->getAccessLvl();
+        if ($personLevel < 2) {
+            throw new \RuntimeException('e1 or B');
         }
+
+        // From this point we know that $personLevel >= 2
+        if ($otherPersonLevel >= 2) {
+            // We have a tie
+            throw new \RuntimeException('We have a tie.');
+        }
+
+        // At this point we know that $personLevel >= 2 and $otherPersonLevel === 1
+        // TODO: $person gets $otherPerson's CPF
+        // TODO: send email to $otherPerson about this
     }
 }

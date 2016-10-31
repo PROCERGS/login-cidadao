@@ -10,48 +10,33 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Service;
 
-
 use LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
 use Prophecy\Argument;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class NfgTest extends \PHPUnit_Framework_TestCase
 {
     public function testLoginRedirect()
     {
         $accessId = 'access_id'.random_int(10, 9999);
-        $soapService = $this->getSoapService($accessId);
 
         $cbService = 'service';
         $circuitBreaker = $this->getCircuitBreaker($cbService, true);
         $circuitBreaker->reportSuccess($cbService)->shouldBeCalled();
 
-        $meuRSHelper = $this->getMockBuilder('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $session = $this->getSession($accessId, 'set');
-        $loginManager = $this->getLoginManager();
-        $loginEndpoint = 'https://dum.my/login';
-        $authEndpoint = 'https://dum.my/auth';
-        $firewall = 'firewall';
-
-        $nfg = new Nfg(
-            $soapService,
-            $this->getRouter(),
-            $session->reveal(),
-            $loginManager->reveal(),
-            $meuRSHelper,
-            $firewall,
-            $loginEndpoint,
-            $authEndpoint
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'set')->reveal(),
+                'soap' => $this->getSoapService($accessId),
+            ]
         );
         $nfg->setCircuitBreaker($circuitBreaker->reveal(), $cbService);
 
         $response = $nfg->login();
-        // TODO: expect RedirectResponse when the Referrer problem at NFG gets fixed.
+        // TODO: expect RedirectResponse once the Referrer problem at NFG gets fixed.
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\Response', $response);
         $this->assertContains($accessId, $response->getContent());
         $this->assertContains('nfg_login_callback', $response->getContent());
@@ -71,22 +56,13 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $meuRSHelper = $this->prophesize('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper');
         $meuRSHelper->getPersonByCpf($cpf)->willReturn($personMeuRS)->shouldBeCalled();
 
-        $session = $this->getSession($accessId, 'get');
-
-        $firewall = 'firewall';
-        $loginManager = $this->getLoginManager(true);
-        $loginEndpoint = 'https://dum.my/login';
-        $authEndpoint = 'https://dum.my/auth';
-
-        $nfg = new Nfg(
-            $this->getSoapService($accessId),
-            $this->getRouter(),
-            $session->reveal(),
-            $loginManager->reveal(),
-            $meuRSHelper->reveal(),
-            $firewall,
-            $loginEndpoint,
-            $authEndpoint
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'get')->reveal(),
+                'soap' => $this->getSoapService($accessId),
+                'meurs_helper' => $meuRSHelper->reveal(),
+                'login_manager' => $this->getLoginManager(true)->reveal(),
+            ]
         );
 
         $response = $nfg->loginCallback(compact('cpf', 'accessId', 'prsec'), $secret);
@@ -108,31 +84,21 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             ->setVoterRegistration('1234567890')
             ->setPerson($person);
 
-        $meuRSHelper = $this->prophesize('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper');
-
         $nfgProfile = new NfgProfile();
         $nfgProfile->setName('John Doe')
             ->setEmail('some@email.com')
             ->setBirthdate('1970-01-01T00:00:00')
             ->setMobile('+555193333333')
             ->setVoterRegistration($personMeuRS->getVoterRegistration())
-            ->setCpf('1234567890') // NFG teats CPF as integers, hence no leading 0s
+            ->setCpf('1234567890')// NFG treats CPF as integers, hence no leading 0s
             ->setAccessLvl(2);
         $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
 
-        $firewall = 'firewall';
-        $loginEndpoint = 'https://dum.my/login';
-        $authEndpoint = 'https://dum.my/auth';
-
-        $nfg = new Nfg(
-            $soapService,
-            $this->getRouter(),
-            $this->getSession($accessId, 'none')->reveal(),
-            $this->getLoginManager(false)->reveal(),
-            $meuRSHelper->reveal(),
-            $firewall,
-            $loginEndpoint,
-            $authEndpoint
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'soap' => $soapService,
+            ]
         );
 
         $accessToken = 'access_token'.random_int(10, 9999);
@@ -141,6 +107,54 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals('lc_home', $response->getTargetUrl());
         $this->assertStringStartsWith('+55', $nfgProfile->getMobile());
+    }
+
+    private function getNfgService(array $collaborators)
+    {
+        $accessId = 'access_id'.random_int(10, 9999);
+        if (false === array_key_exists('em', $collaborators)) {
+            $collaborators['em'] = $this->getEntityManager();
+        }
+        if (false === array_key_exists('soap', $collaborators)) {
+            $collaborators['soap'] = $this->getSoapService($accessId);
+        }
+        if (false === array_key_exists('router', $collaborators)) {
+            $collaborators['router'] = $this->getRouter();
+        }
+        if (false === array_key_exists('session', $collaborators)) {
+            $collaborators['session'] = $this->getSession($accessId, 'none')->reveal();
+        }
+        if (false === array_key_exists('login_manager', $collaborators)) {
+            $collaborators['login_manager'] = $this->getLoginManager(false)->reveal();
+        }
+        if (false === array_key_exists('meurs_helper', $collaborators)) {
+            $collaborators['meurs_helper'] = $meuRSHelper = $this->prophesize(
+                'PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper'
+            )->reveal();
+        }
+        if (false === array_key_exists('firewall', $collaborators)) {
+            $collaborators['firewall'] = 'firewall';
+        }
+        if (false === array_key_exists('login_endpoint', $collaborators)) {
+            $collaborators['login_endpoint'] = 'https://dum.my/login';
+        }
+        if (false === array_key_exists('auth_endpoint', $collaborators)) {
+            $collaborators['auth_endpoint'] = 'https://dum.my/auth';
+        }
+
+        $nfg = new Nfg(
+            $collaborators['em'],
+            $collaborators['soap'],
+            $collaborators['router'],
+            $collaborators['session'],
+            $collaborators['login_manager'],
+            $collaborators['meurs_helper'],
+            $collaborators['firewall'],
+            $collaborators['login_endpoint'],
+            $collaborators['auth_endpoint']
+        );
+
+        return $nfg;
     }
 
     private function getRouter()
@@ -178,6 +192,11 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         return $loginManager;
     }
 
+    /**
+     * @param $accessId
+     * @param null $shouldCall
+     * @return SessionInterface
+     */
     private function getSession($accessId, $shouldCall = null)
     {
         $session = $this->prophesize('\Symfony\Component\HttpFoundation\Session\SessionInterface');
@@ -206,5 +225,16 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $circuitBreaker->isAvailable($serviceName)->willReturn($isAvailable)->shouldBeCalled();
 
         return $circuitBreaker;
+    }
+
+    private function getEntityManager()
+    {
+        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $em->expects($this->any())->method('persist')->willReturn(true);
+        $em->expects($this->any())->method('flush')->willReturn(true);
+
+        return $em;
     }
 }
