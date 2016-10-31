@@ -12,6 +12,7 @@ namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
 use FOS\UserBundle\Security\LoginManagerInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
@@ -210,6 +211,7 @@ class Nfg implements LoggerAwareInterface
         $nfgProfile = $this->getUserInfo($paccessId, $personMeuRS->getVoterRegistration());
 
         // TODO: check Person CPF
+        $this->checkCpf($personMeuRS, $nfgProfile);
 
         // TODO: check CPF collision
 
@@ -282,5 +284,17 @@ class Nfg implements LoggerAwareInterface
     private function sanitizeCpf($cpf)
     {
         return str_pad($cpf, 11, '0', STR_PAD_LEFT);
+    }
+
+    private function checkCpf(PersonMeuRS $personMeuRS, NfgProfile $nfgProfile)
+    {
+        $person = $personMeuRS->getPerson();
+        if (!$person->getCpf()) {
+            return;
+        }
+
+        if ($person->getCpf() !== $this->sanitizeCpf($nfgProfile->getCpf())) {
+
+        }
     }
 }
