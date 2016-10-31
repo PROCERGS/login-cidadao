@@ -12,7 +12,6 @@ namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
 
 use libphonenumber\NumberParseException;
-use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberType;
 use libphonenumber\PhoneNumberUtil;
