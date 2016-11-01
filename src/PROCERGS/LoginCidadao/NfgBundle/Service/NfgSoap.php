@@ -82,6 +82,7 @@ class NfgSoap implements NfgSoapInterface
             ->setEmail($crawler->filter('EmailPrinc')->text())
             ->setBirthdate($crawler->filter('DtNasc')->text())
             ->setMobile($phoneNumber)
+            ->setVoterRegistrationSit($crawler->filter('CodSitTitulo')->text())
             ->setVoterRegistration($crawler->filter('CodSitTitulo')->text() != 0 ? $voterRegistration : null)
             ->setCpf($crawler->filter('CodCpf')->text())
             ->setAccessLvl($crawler->filter('CodNivelAcesso')->text());
