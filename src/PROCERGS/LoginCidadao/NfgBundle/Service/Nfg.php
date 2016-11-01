@@ -12,6 +12,7 @@ namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use FOS\UserBundle\Security\LoginManagerInterface;
+use libphonenumber\PhoneNumberUtil;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
@@ -306,6 +307,8 @@ class Nfg implements LoggerAwareInterface
         // Check data inconsistency
         if ($person->getCpf() !== $this->sanitizeCpf($nfgProfile->getCpf())) {
             // TODO: $person CPF doesn't match CPF from NFG
+            // TODO: throw exception and redirect to edit CPF
+            throw new \RuntimeException('CPF doesn\'t match CPF from NFG. redirect to edit CPF');
         }
 
         // Check CPF collision
@@ -314,22 +317,17 @@ class Nfg implements LoggerAwareInterface
             // No collision found. We're good! :)
             return;
         }
-        // TODO: update $otherPerson NfgProfile
 
-        $personLevel = $personMeuRS->getNfgProfile()->getAccessLvl();
-        $otherPersonLevel = $otherPerson->getNfgProfile()->getAccessLvl();
-        if ($personLevel < 2) {
-            throw new \RuntimeException('e1 or B');
+        if (!$otherPerson->getNfgProfile()) {
+            // The other person isn't linked with NFG, so $person can safely get the CPF
+            $otherPerson->getPerson()->setCpf(null);
+
+            // TODO: send email to $otherPerson about this
+
+            return;
         }
 
-        // From this point we know that $personLevel >= 2
-        if ($otherPersonLevel >= 2) {
-            // We have a tie
-            throw new \RuntimeException('We have a tie.');
-        }
-
-        // At this point we know that $personLevel >= 2 and $otherPersonLevel === 1
-        // TODO: $person gets $otherPerson's CPF
-        // TODO: send email to $otherPerson about this
+        // Both users are linked to the same NFG account
+        // TODO: ask $person what to do
     }
 }

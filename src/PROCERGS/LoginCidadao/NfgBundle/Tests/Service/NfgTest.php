@@ -71,7 +71,10 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('lc_home', $response->getTargetUrl());
     }
 
-    public function testConnectCallback()
+    /**
+     * This tests a user with CPF filled and with no CPF collision
+     */
+    public function testConnectCallbackWithCpf()
     {
         $accessId = 'access_id'.random_int(10, 9999);
         $soapService = $this->getSoapService($accessId);
@@ -84,14 +87,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             ->setVoterRegistration('1234567890')
             ->setPerson($person);
 
-        $nfgProfile = new NfgProfile();
-        $nfgProfile->setName('John Doe')
-            ->setEmail('some@email.com')
-            ->setBirthdate('1970-01-01T00:00:00')
-            ->setMobile('+555193333333')
-            ->setVoterRegistration($personMeuRS->getVoterRegistration())
-            ->setCpf('1234567890')// NFG treats CPF as integers, hence no leading 0s
-            ->setAccessLvl(2);
+        $nfgProfile = $this->getNfgProfile($personMeuRS->getVoterRegistration());
         $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
 
         $nfg = $this->getNfgService(
@@ -106,7 +102,60 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals('lc_home', $response->getTargetUrl());
-        $this->assertStringStartsWith('+55', $nfgProfile->getMobile());
+
+        // Assert that the CPF was moved to $person
+        $this->assertNotNull($personMeuRS->getNfgAccessToken());
+    }
+
+    /**
+     * Test scenario where the person making the connection does not have a CPF in the profile but there is another
+     * account that user's CPF but without NFG connection.
+     *
+     * The other user's account should have the CPF set to NULL and the current user will be connected to NFG
+     */
+    public function testConnectCallbackWithoutCpfAndSimpleCollision()
+    {
+        $accessId = 'access_id'.random_int(10, 9999);
+        $soapService = $this->getSoapService($accessId);
+
+        $cpf = '01234567890';
+        $person = new Person();
+        $personMeuRS = new PersonMeuRS();
+        $personMeuRS
+            ->setVoterRegistration('1234567890')
+            ->setPerson($person);
+
+        $nfgProfile = $this->getNfgProfile($personMeuRS->getVoterRegistration());
+        $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
+
+        $otherPerson = new Person();
+        $otherPerson->setCpf($cpf);
+        $otherPersonMeuRS = new PersonMeuRS();
+        $otherPersonMeuRS
+            ->setPerson($otherPerson);
+        $meuRSHelper = $this->prophesize('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper');
+        $meuRSHelper->getPersonByCpf($cpf)->willReturn($otherPersonMeuRS)->shouldBeCalled();
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'soap' => $soapService,
+                'meurs_helper' => $meuRSHelper->reveal(),
+            ]
+        );
+
+        $accessToken = 'access_token'.random_int(10, 9999);
+        $response = $nfg->connectCallback($personMeuRS, $accessToken);
+
+        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertEquals('lc_home', $response->getTargetUrl());
+
+        // Assert the connection to NFG was made
+        $this->assertNotNull($personMeuRS->getNfgAccessToken());
+
+        // Assert that the CPF was moved to $person
+        $this->assertNull($otherPerson->getCpf());
+        $this->assertEquals($cpf, $person->getCpf());
     }
 
     private function getNfgService(array $collaborators)
@@ -236,5 +285,19 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $em->expects($this->any())->method('flush')->willReturn(true);
 
         return $em;
+    }
+
+    private function getNfgProfile($voterRegistration = null)
+    {
+        $nfgProfile = new NfgProfile();
+        $nfgProfile->setName('John Doe')
+            ->setEmail('some@email.com')
+            ->setBirthdate('1970-01-01T00:00:00')
+            ->setMobile('+555193333333')
+            ->setVoterRegistration($voterRegistration)
+            ->setCpf('1234567890')// NFG treats CPF as integers, hence no leading 0s
+            ->setAccessLvl(2);
+
+        return $nfgProfile;
     }
 }
