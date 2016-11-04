@@ -17,6 +17,9 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\CpfMismatchException;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Helper\UrlHelper;
 use PROCERGS\LoginCidadao\NfgBundle\Traits\CircuitBreakerAwareTrait;
@@ -135,7 +138,7 @@ class Nfg implements LoggerAwareInterface
             $this->reportSuccess();
 
             if (array_search(null, [$nfgProfile->getEmail(), $nfgProfile->getCpf(), $nfgProfile->getName()])) {
-                // TODO: throw missing required info exception
+                throw new MissingRequiredInformationException('Some needed information was not authorized on NFG.');
             }
 
             return $nfgProfile;
@@ -306,9 +309,8 @@ class Nfg implements LoggerAwareInterface
 
         // Check data inconsistency
         if ($person->getCpf() !== $this->sanitizeCpf($nfgProfile->getCpf())) {
-            // TODO: $person CPF doesn't match CPF from NFG
             // TODO: throw exception and redirect to edit CPF
-            throw new \RuntimeException('CPF doesn\'t match CPF from NFG. redirect to edit CPF');
+            throw new CpfMismatchException("User's CPF doesn't match CPF from NFG.");
         }
 
         // Check CPF collision
@@ -328,6 +330,6 @@ class Nfg implements LoggerAwareInterface
         }
 
         // Both users are linked to the same NFG account
-        // TODO: ask $person what to do
+        throw new NfgAccountCollisionException();
     }
 }

@@ -13,6 +13,7 @@ namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Service;
 use LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
 use Prophecy\Argument;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -156,6 +157,53 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         // Assert that the CPF was moved to $person
         $this->assertNull($otherPerson->getCpf());
         $this->assertEquals($cpf, $person->getCpf());
+    }
+
+    /**
+     * Test scenario where the person making the connection does not have a CPF in the profile but there is another
+     * account that user's CPF. Also, this other account is linked to the same NFG account.
+     */
+    public function testConnectCallbackWithoutCpfAndCollision()
+    {
+        $accessId = 'access_id'.random_int(10, 9999);
+        $accessToken = 'access_token'.random_int(10, 9999);
+        $soapService = $this->getSoapService($accessId);
+
+        $cpf = '01234567890';
+        $voterRegistration = '1234567890';
+        $nfgProfile = $this->getNfgProfile($voterRegistration);
+        $person = new Person();
+        $personMeuRS = new PersonMeuRS();
+        $personMeuRS
+            ->setVoterRegistration($voterRegistration)
+            ->setPerson($person);
+
+        $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
+
+        $otherPerson = new Person();
+        $otherPerson->setCpf($cpf);
+        $otherPersonMeuRS = new PersonMeuRS();
+        $otherPersonMeuRS
+            ->setNfgAccessToken($accessToken)
+            ->setNfgProfile($nfgProfile)
+            ->setPerson($otherPerson);
+        $meuRSHelper = $this->prophesize('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper');
+        $meuRSHelper->getPersonByCpf($cpf)->willReturn($otherPersonMeuRS)->shouldBeCalled();
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'soap' => $soapService,
+                'meurs_helper' => $meuRSHelper->reveal(),
+            ]
+        );
+
+        try {
+            $nfg->connectCallback($personMeuRS, $accessToken);
+            $this->fail('Exception was not thrown!');
+        } catch (NfgAccountCollisionException $e) {
+            $this->assertInstanceOf('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException', $e);
+        }
     }
 
     private function getNfgService(array $collaborators)
