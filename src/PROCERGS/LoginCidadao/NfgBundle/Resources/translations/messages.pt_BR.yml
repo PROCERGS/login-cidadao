@@ -1,0 +1,5 @@
+nfg:
+    unavailable:
+      title: 'Serviço Indisponível'
+      body: 'A Nota Fiscal Gaúcha não está disponível no momento. Por favor, tente novamente mais tarde.'
+      close: 'Fechar'

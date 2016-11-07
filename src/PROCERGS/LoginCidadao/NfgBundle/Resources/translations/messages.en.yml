@@ -1,0 +1,5 @@
+nfg:
+    unavailable:
+      title: 'Service Unavailable'
+      body: 'Nota Fiscal Gaúcha is not available right now. Please try again in a few moments.'
+      close: 'Close'
