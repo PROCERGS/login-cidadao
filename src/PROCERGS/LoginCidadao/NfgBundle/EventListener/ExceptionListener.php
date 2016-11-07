@@ -10,9 +10,13 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\EventListener;
 
+use PROCERGS\LoginCidadao\NfgBundle\Exception\CpfMismatchException;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 class ExceptionListener
@@ -31,9 +35,34 @@ class ExceptionListener
 
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        if ($event->getException() instanceof NfgServiceUnavailableException) {
+        if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
+            return;
+        }
+
+        $e = $event->getException();
+        if ($e instanceof NfgServiceUnavailableException) {
             $url = $this->router->generate('nfg_unavailable', [], RouterInterface::ABSOLUTE_URL);
             $event->setResponse(new RedirectResponse($url));
+
+            return;
+        }
+
+        if ($e instanceof NfgAccountCollisionException) {
+            // Both users are linked to the same NFG account
+            // TODO:
+            return;
+        }
+
+        if ($e instanceof MissingRequiredInformationException) {
+            // TODO: ask user to check all boxes
+            return;
+        }
+
+        if ($e instanceof CpfMismatchException) {
+            $url = $this->router->generate('lc_documents', [], RouterInterface::ABSOLUTE_URL);
+            $event->setResponse(new RedirectResponse($url));
+
+            return;
         }
     }
 }
