@@ -36,6 +36,7 @@ services:
     procergs.nfg.service:
         class: PROCERGS\LoginCidadao\NfgBundle\Service\Nfg
         arguments:
+            - "@doctrine.orm.entity_manager"
             - "@procergs.nfg.soap"
             - "@router"
             - "@session"
