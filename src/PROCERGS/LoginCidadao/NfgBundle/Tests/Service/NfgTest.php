@@ -15,6 +15,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
+use PROCERGS\LoginCidadao\NfgBundle\Tests\TestsUtil;
 use Prophecy\Argument;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -216,7 +217,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             $collaborators['soap'] = $this->getSoapService($accessId);
         }
         if (false === array_key_exists('router', $collaborators)) {
-            $collaborators['router'] = $this->getRouter();
+            $collaborators['router'] = TestsUtil::getRouter($this);
         }
         if (false === array_key_exists('session', $collaborators)) {
             $collaborators['session'] = $this->getSession($accessId, 'none')->reveal();
@@ -252,18 +253,6 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         );
 
         return $nfg;
-    }
-
-    private function getRouter()
-    {
-        $router = $this->getMock('\Symfony\Component\Routing\RouterInterface');
-        $router->expects($this->any())->method('generate')->willReturnCallback(
-            function ($routeName) {
-                return $routeName;
-            }
-        );
-
-        return $router;
     }
 
     private function getSoapService($accessId)
