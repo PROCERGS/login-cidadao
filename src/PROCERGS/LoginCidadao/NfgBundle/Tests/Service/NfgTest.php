@@ -209,7 +209,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testDisconnection()
     {
-        $em = $this->getEntityManager();
+        $em = $this->getEntityManager(['flush' => $this->atLeastOnce()]);
         $em->expects($this->atLeastOnce())->method('remove')->willReturn(true);
 
         $person = new Person();
@@ -334,13 +334,21 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         return $circuitBreaker;
     }
 
-    private function getEntityManager()
+    private function getEntityManager(array $matchers = [])
     {
+        $matchers = array_merge(
+            [
+                'persist' => $this->any(),
+                'flush' => $this->any(),
+            ],
+            $matchers
+        );
+
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $em->expects($this->any())->method('persist')->willReturn(true);
-        $em->expects($this->any())->method('flush')->willReturn(true);
+        $em->expects($matchers['persist'])->method('persist')->willReturn(true);
+        $em->expects($matchers['flush'])->method('flush')->willReturn(true);
 
         return $em;
     }

@@ -242,6 +242,7 @@ class Nfg implements LoggerAwareInterface
         $this->em->remove($personMeuRS->getNfgProfile());
         $personMeuRS->setNfgAccessToken(null);
         $personMeuRS->setNfgProfile(null);
+        $this->em->flush();
 
         // TODO: trigger event to allow response to be changed
         return new RedirectResponse($this->router->generate('fos_user_profile_edit'));
