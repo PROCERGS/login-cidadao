@@ -77,10 +77,13 @@ class NfgSoap implements NfgSoapInterface
             $phoneNumber = null;
         }
 
+        // Input example: 1970-01-01T00:00:00
+        $birthday = \DateTime::createFromFormat('Y-m-d\TH:i:s', $crawler->filter('DtNasc')->text());
+
         $nfgProfile
             ->setName($crawler->filter('NomeConsumidor')->text())
             ->setEmail($crawler->filter('EmailPrinc')->text())
-            ->setBirthdate($crawler->filter('DtNasc')->text())
+            ->setBirthdate($birthday)
             ->setMobile($phoneNumber)
             ->setVoterRegistrationSit($crawler->filter('CodSitTitulo')->text())
             ->setVoterRegistration($crawler->filter('CodSitTitulo')->text() != 0 ? $voterRegistration : null)

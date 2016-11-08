@@ -60,7 +60,8 @@ class NfgSoapTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($name, $nfgProfile->getName());
         $this->assertEquals($email, $nfgProfile->getEmail());
-        $this->assertEquals($birthday, $nfgProfile->getBirthdate());
+        $this->assertInstanceOf('\DateTime', $nfgProfile->getBirthdate());
+        $this->assertEquals($birthday, $nfgProfile->getBirthdate()->format('Y-m-d\TH:i:s'));
         $this->assertNotNull($nfgProfile->getMobile());
         $this->assertEquals("+55$phone", $nfgProfile->getMobile());
         $this->assertEquals($cod_sit_voter_registration, $nfgProfile->getVoterRegistrationSit());
