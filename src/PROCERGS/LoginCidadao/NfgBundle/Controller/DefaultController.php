@@ -90,6 +90,20 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/disconnect", name="nfg_disconnect")
+     */
+    public function disconnectAction(Request $request)
+    {
+        /** @var MeuRSHelper $meuRSHelper */
+        $meuRSHelper = $this->get('meurs.helper');
+        $personMeuRS = $meuRSHelper->getPersonMeuRS($this->getUser());
+
+        $nfg = $this->getNfgService();
+
+        return $nfg->disconnect($personMeuRS);
+    }
+
+    /**
      * @return Nfg
      */
     private function getNfgService()
