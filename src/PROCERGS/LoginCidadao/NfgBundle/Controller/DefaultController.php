@@ -35,9 +35,7 @@ class DefaultController extends Controller
 
         $nfg = $this->getNfgService();
 
-        $nfg->connectCallback($personMeuRS, $request->get('paccessid'));
-
-        return new Response('Connect Calback');
+        return $nfg->connectCallback($personMeuRS, $request->get('paccessid'));
     }
 
     /**
