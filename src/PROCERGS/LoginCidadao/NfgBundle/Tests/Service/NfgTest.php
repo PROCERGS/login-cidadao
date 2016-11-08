@@ -103,7 +103,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $response = $nfg->connectCallback($personMeuRS, $accessToken);
 
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
-        $this->assertEquals('lc_home', $response->getTargetUrl());
+        $this->assertEquals('fos_user_profile_edit', $response->getTargetUrl());
 
         // Assert that the CPF was moved to $person
         $this->assertNotNull($personMeuRS->getNfgAccessToken());
@@ -150,7 +150,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $response = $nfg->connectCallback($personMeuRS, $accessToken);
 
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
-        $this->assertEquals('lc_home', $response->getTargetUrl());
+        $this->assertEquals('fos_user_profile_edit', $response->getTargetUrl());
 
         // Assert the connection to NFG was made
         $this->assertNotNull($personMeuRS->getNfgAccessToken());

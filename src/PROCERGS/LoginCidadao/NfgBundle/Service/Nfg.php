@@ -198,6 +198,7 @@ class Nfg implements LoggerAwareInterface
             throw $e;
         }
 
+        // TODO: trigger event to allow response to be changed
         return $response;
     }
 
@@ -233,7 +234,8 @@ class Nfg implements LoggerAwareInterface
         $this->em->flush($personMeuRS);
 
         // TODO: redirect to Profile?
-        return new RedirectResponse($this->router->generate('lc_home'));
+        // TODO: trigger event to allow response to be changed
+        return new RedirectResponse($this->router->generate('fos_user_profile_edit'));
     }
 
     private function redirect($endpoint, $callbackRoute)
