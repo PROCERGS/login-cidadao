@@ -42,35 +42,86 @@ class NfgSoapTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFullUserInfo()
     {
-        $cpf = '5745778407';
-        $name = 'John Doe';
-        $birthday = '1970-01-01T00:00:00';
-        $email = 'john@doe.test';
-        $phone = '5192345678';
         $voterRegistration = '1234';
-        $cod_sit_voter_registration = '1';
+        $userInfo = [
+            'CodCpf' => '5745778407',
+            'NomeConsumidor' => 'John Doe',
+            'DtNasc' => '1970-01-01T00:00:00',
+            'EmailPrinc' => 'john@doe.test',
+            'NroFoneContato' => '5192345678',
+            'CodSitTitulo' => '1',
+        ];
 
-        $client = $this->getSoapClientMock(
-            compact('cpf', 'name', 'birthday', 'email', 'phone', 'cod_sit_voter_registration')
-        );
+        $client = $this->getSoapClientMock($userInfo);
         $credentials = new Credentials('org', 'user', 'pass');
         $nfgSoap = new NfgSoap($client, $credentials);
 
         $nfgProfile = $nfgSoap->getUserInfo('stub', $voterRegistration);
 
-        $this->assertEquals($name, $nfgProfile->getName());
-        $this->assertEquals($email, $nfgProfile->getEmail());
+        $this->assertEquals($userInfo['NomeConsumidor'], $nfgProfile->getName());
+        $this->assertEquals($userInfo['EmailPrinc'], $nfgProfile->getEmail());
         $this->assertInstanceOf('\DateTime', $nfgProfile->getBirthdate());
-        $this->assertEquals($birthday, $nfgProfile->getBirthdate()->format('Y-m-d\TH:i:s'));
+        $this->assertEquals($userInfo['DtNasc'], $nfgProfile->getBirthdate()->format('Y-m-d\TH:i:s'));
         $this->assertNotNull($nfgProfile->getMobile());
-        $this->assertEquals("+55$phone", $nfgProfile->getMobile());
-        $this->assertEquals($cod_sit_voter_registration, $nfgProfile->getVoterRegistrationSit());
+        $this->assertEquals("+55{$userInfo['NroFoneContato']}", $nfgProfile->getMobile());
+        $this->assertEquals($userInfo['CodSitTitulo'], $nfgProfile->getVoterRegistrationSit());
         $this->assertEquals($voterRegistration, $nfgProfile->getVoterRegistration());
+    }
+
+    public function testPhoneMissing()
+    {
+        $voterRegistration = '1234';
+        $userInfo = [
+            'CodCpf' => '5745778407',
+            'NomeConsumidor' => 'John Doe',
+            'DtNasc' => '1970-01-01T00:00:00',
+            'EmailPrinc' => 'john@doe.test',
+            'NroFoneContato' => null,
+            'CodSitTitulo' => '1',
+        ];
+
+        $client = $this->getSoapClientMock($userInfo);
+        $credentials = new Credentials('org', 'user', 'pass');
+        $nfgSoap = new NfgSoap($client, $credentials);
+
+        $nfgProfile = $nfgSoap->getUserInfo('stub', $voterRegistration);
+
+        $this->assertEquals($userInfo['NomeConsumidor'], $nfgProfile->getName());
+        $this->assertEquals($userInfo['EmailPrinc'], $nfgProfile->getEmail());
+        $this->assertInstanceOf('\DateTime', $nfgProfile->getBirthdate());
+        $this->assertEquals($userInfo['DtNasc'], $nfgProfile->getBirthdate()->format('Y-m-d\TH:i:s'));
+        $this->assertNull($nfgProfile->getMobile());
+        $this->assertEquals($userInfo['CodSitTitulo'], $nfgProfile->getVoterRegistrationSit());
+        $this->assertEquals($voterRegistration, $nfgProfile->getVoterRegistration());
+    }
+
+    public function testMinimalInfo()
+    {
+        $userInfo = [
+            'CodCpf' => true,
+            'NomeConsumidor' => null,
+            'DtNasc' => null,
+            'EmailPrinc' => null,
+            'NroFoneContato' => null,
+            'CodSitTitulo' => '0',
+        ];
+
+        $client = $this->getSoapClientMock($userInfo);
+        $credentials = new Credentials('org', 'user', 'pass');
+        $nfgSoap = new NfgSoap($client, $credentials);
+
+        $nfgProfile = $nfgSoap->getUserInfo('stub');
+
+        $this->assertNull($nfgProfile->getName());
+        $this->assertNull($nfgProfile->getEmail());
+        $this->assertNull($nfgProfile->getBirthdate());
+        $this->assertNull($nfgProfile->getMobile());
+        $this->assertEquals($userInfo['CodSitTitulo'], $nfgProfile->getVoterRegistrationSit());
     }
 
     public function testNotMobilePhone()
     {
-        $client = $this->getSoapClientMock(['phone' => '5133333333']);
+        $client = $this->getSoapClientMock(['NroFoneContato' => '5133333333']);
         $credentials = new Credentials('org', 'user', 'pass');
         $nfgSoap = new NfgSoap($client, $credentials);
 
@@ -81,25 +132,6 @@ class NfgSoapTest extends \PHPUnit_Framework_TestCase
 
     private function getSoapClientMock(array $info = [])
     {
-        if (!array_key_exists('cpf', $info)) {
-            $info['cpf'] = '5745778407';
-        }
-        if (!array_key_exists('name', $info)) {
-            $info['name'] = 'John Doe';
-        }
-        if (!array_key_exists('birthday', $info)) {
-            $info['birthday'] = '1970-01-01T00:00:00';
-        }
-        if (!array_key_exists('email', $info)) {
-            $info['email'] = 'john@doe.test';
-        }
-        if (!array_key_exists('phone', $info)) {
-            $info['phone'] = '5192345678';
-        }
-        if (!array_key_exists('cod_sit_voter_registration', $info)) {
-            $info['cod_sit_voter_registration'] = '0';
-        }
-
         $client = $this->getMock(
             '\SoapClient',
             ['ObterAccessID', 'ConsultaCadastro'],
@@ -127,24 +159,12 @@ class NfgSoapTest extends \PHPUnit_Framework_TestCase
                     return json_decode($response);
                 }
             );
+
+        $xml = $this->getUserInfoXmlResponse($info);
         $client->expects($this->any())
             ->method('ConsultaCadastro')
             ->willReturnCallback(
-                function ($data) use ($info) {
-                    $xml = <<<XML
-<?xml version="1.0"?>
-<LoginCidadaoServiceED xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <CodSitRetorno>1</CodSitRetorno>
-  <CodNivelAcesso>2</CodNivelAcesso>
-  <CodCpf>{$info['cpf']}</CodCpf>
-  <NomeConsumidor>{$info['name']}</NomeConsumidor>
-  <DtNasc>{$info['birthday']}</DtNasc>
-  <EmailPrinc>{$info['email']}</EmailPrinc>
-  <NroFoneContato>{$info['phone']}</NroFoneContato>
-  <CodSitTitulo>{$info['cod_sit_voter_registration']}</CodSitTitulo>
-  <MsgRetorno>Sucesso.</MsgRetorno>
-</LoginCidadaoServiceED>
-XML;
+                function () use ($xml) {
                     $response = new \stdClass();
                     $response->ConsultaCadastroResult = $xml;
 
@@ -153,5 +173,48 @@ XML;
             );
 
         return $client;
+    }
+
+    /**
+     * @param array $info expected keys are:
+     *      CodSitRetorno
+     *      CodNivelAcesso
+     *      CodCpf
+     *      NomeConsumidor
+     *      DtNasc
+     *      EmailPrinc
+     *      NroFoneContato
+     *      CodSitTitulo
+     *      MsgRetorno
+     * @return string
+     */
+    private function getUserInfoXmlResponse($info)
+    {
+        $default = [
+            'CodSitRetorno' => '1',
+            'CodNivelAcesso' => '2',
+            'CodCpf' => '5745778407',
+            'NomeConsumidor' => 'John Doe',
+            'DtNasc' => '1970-01-01T00:00:00',
+            'EmailPrinc' => 'john@doe.test',
+            'NroFoneContato' => '5192345678',
+            'CodSitTitulo' => '0',
+            'MsgRetorno' => 'Sucesso.',
+        ];
+        $info = array_filter(
+            array_merge($default, $info),
+            function ($value) {
+                return $value !== null;
+            }
+        );
+
+        $xml = '<?xml version="1.0"?><LoginCidadaoServiceED xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+
+        foreach ($info as $key => $value) {
+            $xml .= "<$key>$value</$key>";
+        }
+        $xml .= '</LoginCidadaoServiceED>';
+
+        return $xml;
     }
 }

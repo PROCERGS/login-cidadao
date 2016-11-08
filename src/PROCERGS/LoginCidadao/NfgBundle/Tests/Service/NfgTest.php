@@ -13,6 +13,7 @@ namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Service;
 use LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
 use PROCERGS\LoginCidadao\NfgBundle\Tests\TestsUtil;
@@ -71,6 +72,47 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals('lc_home', $response->getTargetUrl());
+    }
+
+    public function testIncompleteInfo()
+    {
+        $nfgProfile = $this->getNfgProfile();
+        $nfgProfile->setCpf(null)
+            ->setEmail(null)
+            ->setName(null)
+            ->setBirthdate(null)
+            ->setMobile(null);
+
+        $accessId = 'access_id'.random_int(10, 9999);
+        $soapService = $this->getSoapService($accessId);
+
+        $cpf = '01234567890';
+        $person = new Person();
+        $person->setCpf($cpf);
+        $personMeuRS = new PersonMeuRS();
+        $personMeuRS
+            ->setVoterRegistration('1234567890')
+            ->setPerson($person);
+
+        $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'soap' => $soapService,
+            ]
+        );
+
+        $accessToken = 'access_token'.random_int(10, 9999);
+        try {
+            $response = $nfg->connectCallback($personMeuRS, $accessToken);
+            $this->fail('MissingRequiredInformationException expected');
+        } catch (MissingRequiredInformationException $e) {
+            $this->assertInstanceOf(
+                'PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException',
+                $e
+            );
+        }
     }
 
     /**

@@ -15,6 +15,7 @@ use PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationExceptio
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -54,7 +55,7 @@ class ExceptionListener
         }
 
         if ($e instanceof MissingRequiredInformationException) {
-            // TODO: ask user to check all boxes
+            $event->setResponse(new Response('Missing info!'));
             return;
         }
 
