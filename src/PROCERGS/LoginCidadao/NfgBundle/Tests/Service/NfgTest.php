@@ -207,6 +207,27 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testDisconnection()
+    {
+        $em = $this->getEntityManager();
+        $em->expects($this->atLeastOnce())->method('remove')->willReturn(true);
+
+        $person = new Person();
+        $personMeuRS = new PersonMeuRS();
+        $personMeuRS
+            ->setNfgAccessToken('not null')
+            ->setNfgProfile($this->getNfgProfile())
+            ->setPerson($person);
+
+        // Run the disconnection method
+        $this
+            ->getNfgService(compact('em'))
+            ->disconnect($personMeuRS);
+
+        $this->assertNull($personMeuRS->getNfgProfile());
+        $this->assertNull($personMeuRS->getNfgAccessToken());
+    }
+
     private function getNfgService(array $collaborators)
     {
         $accessId = 'access_id'.random_int(10, 9999);
