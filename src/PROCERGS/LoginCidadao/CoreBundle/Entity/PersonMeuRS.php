@@ -72,22 +72,24 @@ class PersonMeuRS
      */
     public function getDataValid()
     {
-        $terms['cpf']   = (is_numeric($this->cpf) && strlen($this->nfgAccessToken));
+        $terms['cpf'] = (is_numeric($this->cpf) && strlen($this->nfgAccessToken));
         $terms['email'] = is_null($this->getConfirmationToken());
         if ($this->getNfgProfile()) {
-            $terms['nfg_access_lvl']     = $this->getNfgProfile()->getAccessLvl();
+            $terms['nfg_access_lvl'] = $this->getNfgProfile()->getAccessLvl();
             $terms['voter_registration'] = $this->getNfgProfile()->getVoterRegistrationSit()
-                > 0 ? true : false;
+            > 0 ? true : false;
         } else {
-            $terms['nfg_access_lvl']     = 0;
+            $terms['nfg_access_lvl'] = 0;
             $terms['voter_registration'] = false;
         }
+
         return $terms;
     }
 
     public function setNfgAccessToken($var)
     {
         $this->nfgAccessToken = $var;
+
         return $this;
     }
 
@@ -99,11 +101,12 @@ class PersonMeuRS
     /**
      *
      * @param \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var
-     * @return City
+     * @return PersonMeuRS
      */
-    public function setNfgProfile(\PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var
-    = null)
-    {
+    public function setNfgProfile(
+        \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var
+        = null
+    ) {
         $this->nfgProfile = $var;
 
         return $this;
@@ -124,6 +127,7 @@ class PersonMeuRS
         } else {
             $this->voterRegistration = preg_replace('/[^0-9]/', '', $var);
         }
+
         return $this;
     }
 
@@ -148,12 +152,14 @@ class PersonMeuRS
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
     public function setPerson(PersonInterface $person)
     {
         $this->person = $person;
+
         return $this;
     }
 }
