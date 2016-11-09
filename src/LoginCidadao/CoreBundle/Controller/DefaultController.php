@@ -47,7 +47,7 @@ class DefaultController extends Controller
                 ->setType('contact-mail')
                 ->setSubject('Fale conosco - '.$data->getName())
                 ->setSender($data->getEmail())
-                ->setReceiver($this->container->getParameter('mailer_receiver_mail'))
+                ->setReceiver($this->container->getParameter('contact_form.email'))
                 ->setMessage($emailMessage);
             $mailer = $this->get('mailer');
             $swiftMail = $email->getSwiftMail();
