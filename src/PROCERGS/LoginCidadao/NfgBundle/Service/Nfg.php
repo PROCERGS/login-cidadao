@@ -217,9 +217,10 @@ class Nfg implements LoggerAwareInterface
     /**
      * @param PersonMeuRS $personMeuRS
      * @param string $paccessId
+     * @param bool $overrideExisting
      * @return RedirectResponse
      */
-    public function connectCallback(PersonMeuRS $personMeuRS, $paccessId)
+    public function connectCallback(PersonMeuRS $personMeuRS, $paccessId, $overrideExisting = false)
     {
         if (!$paccessId) {
             throw new BadRequestHttpException("Missing paccessid parameter");
@@ -232,7 +233,7 @@ class Nfg implements LoggerAwareInterface
             $personMeuRS->getPerson()->setCpf($sanitizedCpf);
         }
 
-        $this->checkCpf($personMeuRS, $nfgProfile);
+        $this->checkCpf($personMeuRS, $nfgProfile, $overrideExisting);
 
         $this->em->persist($nfgProfile);
         $personMeuRS->setNfgProfile($nfgProfile);
@@ -244,6 +245,10 @@ class Nfg implements LoggerAwareInterface
         return new RedirectResponse($this->router->generate('fos_user_profile_edit'));
     }
 
+    /**
+     * @param PersonMeuRS $personMeuRS
+     * @return RedirectResponse
+     */
     public function disconnect(PersonMeuRS $personMeuRS)
     {
         $this->em->remove($personMeuRS->getNfgProfile());
@@ -321,8 +326,9 @@ class Nfg implements LoggerAwareInterface
     /**
      * @param PersonMeuRS $personMeuRS
      * @param NfgProfile $nfgProfile
+     * @param bool $overrideExisting
      */
-    private function checkCpf(PersonMeuRS $personMeuRS, NfgProfile $nfgProfile)
+    private function checkCpf(PersonMeuRS $personMeuRS, NfgProfile $nfgProfile, $overrideExisting = false)
     {
         $person = $personMeuRS->getPerson();
 
@@ -349,6 +355,12 @@ class Nfg implements LoggerAwareInterface
         }
 
         // Both users are linked to the same NFG account
-        throw new NfgAccountCollisionException();
+        // What should we do?
+        if (false === $overrideExisting) {
+            throw new NfgAccountCollisionException();
+        }
+        // The user's choice was to remove the previous connection and use this new one
+        // TODO: send email to $otherPerson about this
+        $this->disconnect($otherPerson);
     }
 }
