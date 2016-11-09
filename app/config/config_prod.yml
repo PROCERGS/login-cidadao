@@ -34,7 +34,7 @@ monolog:
 #        swift:
 #            type:         swift_mailer
 #            from_email:   '%mailer_sender_mail%'
-#            to_email:     '%mailer_receiver_mail%'
+#            to_email:     '%logs.email%'
 #            subject:      '[login-cidadao:MONOLOG] %%message%%'
 #            level:        debug
 #            formatter:    monolog.formatter.html
