@@ -3,17 +3,6 @@
 {% block panel_body_class %}nfg-missing-info{% endblock %}
 
 {% block panel_body %}
-    {% for type, messages in app.session.flashbag.all %}
-        {% for message in messages %}
-            <div class="alert alert-{{ type }} alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert"
-                        aria-label="{{ 'nfg.missing_info.close' | trans }}"><span
-                            aria-hidden="true">&times;</span></button>
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
-
     <h1>{{ 'nfg.missing_info.title' | trans }}</h1>
 
     <p>{{ 'nfg.missing_info.body' | trans }}</p>
