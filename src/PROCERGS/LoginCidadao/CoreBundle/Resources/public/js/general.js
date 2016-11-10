@@ -593,8 +593,8 @@ $(function() {
     });
 
     $('.nfgpopup').on('click', function (event){
-      event.preventDefault();
-        window.open($(this).attr('data-href'),'_blank','toolbar=0,location=0,scrollbars=no,resizable=no,top=0,left=500,width=400,height=750');
+        event.preventDefault();
+        window.open($(this).attr('href'),'_blank','toolbar=0,location=0,scrollbars=no,resizable=no,top=0,left=500,width=400,height=750');
         return false;
     });
     $(document).on('click', 'a.link-popup', function (event){
