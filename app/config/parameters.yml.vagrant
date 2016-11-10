@@ -50,6 +50,12 @@ parameters:
     site_domain: localhost
     mailer_sender_mail: webmaster@example.com
     mailer_sender_name: webmaster
+
+    # Contact form email address
+    contact_form.email: '%mailer_receiver_mail%'
+    # Logs email address
+    logs.email: '%mailer_receiver_mail%'
+
     recaptcha_public_key: ~
     recaptcha_private_key: ~
     # This must be compatible with strtotime()

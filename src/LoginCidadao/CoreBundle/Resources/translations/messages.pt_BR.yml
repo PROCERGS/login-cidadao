@@ -918,3 +918,4 @@ profile:
                 no: Não
     submit: Salvar
 scope_details.handle.title: O que é isso?
+flash_message.close: Fechar
