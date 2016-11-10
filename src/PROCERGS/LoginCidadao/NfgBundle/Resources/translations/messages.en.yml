@@ -11,4 +11,7 @@ nfg:
         alert: 'The Nota Fiscal Gaúcha account you used is not connected to a Citizen Login user. For more information, <a href="%help_url%">click here</a>.'
         title: 'Account not connected'
         description: 'You tried to login using a Nota Fiscal Gaúcha account that is not connected to a Citizen Login account.'
-        troubleshooting: 'If you already own an account on Citizen Login, you''l need to access it and activate it''s use with Nota Fiscal Gaúcha.'
+        troubleshooting:
+            login: 'If you already own an account on Citizen Login, you''l need to access it and activate it''s use with Nota Fiscal Gaúcha.'
+            register: 'If you wish to use your information at Nota Fiscal Gaúcha to create an account on Login Cidadão, you can <a class="nfgpopup" href="%register_nfg_url%">click here</a>.'
+        login: 'Go back to the login page'

@@ -51,7 +51,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/wait/{action}", name="nfg_wait", requirements={"action": "(connect|login)"})
+     * @Route("/wait/{action}", name="nfg_wait", requirements={"action": "(connect|login|register)"})
      */
     public function waitConnectionAction(Request $request, $action)
     {
