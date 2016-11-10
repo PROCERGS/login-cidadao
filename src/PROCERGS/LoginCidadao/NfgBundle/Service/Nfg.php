@@ -16,6 +16,7 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\ConnectionNotFoundException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\CpfMismatchException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException;
@@ -165,10 +166,8 @@ class Nfg implements LoggerAwareInterface
         return $this->redirect($this->loginEndpoint, 'nfg_login_callback');
     }
 
-    public function loginCallback(
-        array $params,
-        $secret
-    ) {
+    public function loginCallback(array $params, $secret)
+    {
         $cpf = array_key_exists('cpf', $params) ? $params['cpf'] : null;
         $accessId = array_key_exists('accessId', $params) ? $params['accessId'] : null;
         $prsec = array_key_exists('prsec', $params) ? $params['prsec'] : null;
@@ -188,11 +187,10 @@ class Nfg implements LoggerAwareInterface
 
         /** @var PersonInterface $user */
         $personMeuRS = $this->meuRSHelper->getPersonByCpf($this->sanitizeCpf($cpf));
-        $personMeuRS->setNfgAccessToken('dummy');
         $user = $personMeuRS->getPerson();
 
         if (!$user || !$personMeuRS->getNfgAccessToken()) {
-            throw new NotFoundHttpException('No user found matching this CPF');
+            throw new ConnectionNotFoundException('No user found matching this CPF');
         }
 
         $response = new RedirectResponse($this->router->generate('lc_home'));

@@ -55,7 +55,8 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $person = new Person();
         $person->setCpf($cpf);
         $personMeuRS = new PersonMeuRS();
-        $personMeuRS->setPerson($person);
+        $personMeuRS->setPerson($person)
+            ->setNfgAccessToken('dummy');
         $meuRSHelper = $this->prophesize('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper');
         $meuRSHelper->getPersonByCpf($cpf)->willReturn($personMeuRS)->shouldBeCalled();
 

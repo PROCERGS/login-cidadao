@@ -10,12 +10,14 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\EventListener;
 
+use PROCERGS\LoginCidadao\NfgBundle\Exception\ConnectionNotFoundException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\CpfMismatchException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -63,6 +65,17 @@ class ExceptionListener
 
         if ($e instanceof CpfMismatchException) {
             $url = $this->router->generate('lc_documents', [], RouterInterface::ABSOLUTE_URL);
+            $event->setResponse(new RedirectResponse($url));
+
+            return;
+        }
+
+        if ($e instanceof ConnectionNotFoundException) {
+            $session = $event->getRequest()->getSession();
+            if ($session instanceof Session) {
+                $session->getFlashBag()->add('error', $e->getMessage());
+            }
+            $url = $this->router->generate('fos_user_security_login', [], RouterInterface::ABSOLUTE_URL);
             $event->setResponse(new RedirectResponse($url));
 
             return;
