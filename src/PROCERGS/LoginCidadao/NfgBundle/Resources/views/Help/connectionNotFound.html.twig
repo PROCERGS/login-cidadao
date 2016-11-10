@@ -1,0 +1,10 @@
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
+
+{% block panel_body_class %}nfg-connection-not-found{% endblock %}
+
+{% block panel_body %}
+    <h1>{{ 'nfg.connection_not_found.title' | trans }}</h1>
+
+    <p>{{ 'nfg.connection_not_found.description' | trans }}</p>
+    <p>{{ 'nfg.connection_not_found.troubleshooting' | trans }}</p>
+{% endblock %}

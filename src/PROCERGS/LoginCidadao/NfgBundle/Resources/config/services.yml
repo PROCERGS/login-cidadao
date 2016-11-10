@@ -3,6 +3,7 @@ services:
         class: PROCERGS\LoginCidadao\NfgBundle\EventListener\ExceptionListener
         arguments:
             - "@router"
+            - "@translator"
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
 

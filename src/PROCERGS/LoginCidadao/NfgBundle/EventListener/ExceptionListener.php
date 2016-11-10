@@ -21,19 +21,25 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class ExceptionListener
 {
     /** @var RouterInterface */
     private $router;
 
+    /** @var TranslatorInterface */
+    private $translator;
+
     /**
      * ExceptionListener constructor.
      * @param RouterInterface $router
+     * @param TranslatorInterface $translator
      */
-    public function __construct(RouterInterface $router)
+    public function __construct(RouterInterface $router, TranslatorInterface $translator)
     {
         $this->router = $router;
+        $this->translator = $translator;
     }
 
     public function onKernelException(GetResponseForExceptionEvent $event)
@@ -73,7 +79,13 @@ class ExceptionListener
         if ($e instanceof ConnectionNotFoundException) {
             $session = $event->getRequest()->getSession();
             if ($session instanceof Session) {
-                $session->getFlashBag()->add('error', $e->getMessage());
+                $msg = $this->translator->trans(
+                    'nfg.connection_not_found.alert',
+                    [
+                        '%help_url%' => $this->router->generate('nfg_help_connection_not_found'),
+                    ]
+                );
+                $session->getFlashBag()->add('danger', $msg);
             }
             $url = $this->router->generate('fos_user_security_login', [], RouterInterface::ABSOLUTE_URL);
             $event->setResponse(new RedirectResponse($url));
