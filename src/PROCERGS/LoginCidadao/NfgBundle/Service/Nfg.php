@@ -12,7 +12,6 @@ namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use FOS\UserBundle\Security\LoginManagerInterface;
-use libphonenumber\PhoneNumberUtil;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
@@ -137,7 +136,7 @@ class Nfg implements LoggerAwareInterface
             $nfgProfile = $this->nfgSoap->getUserInfo($accessToken, $voterRegistration);
             $this->reportSuccess();
 
-            $requiredInfo = [$nfgProfile->getEmail(), $nfgProfile->getCpf(), $nfgProfile->getName()];
+            $requiredInfo = [$nfgProfile->getCpf(), $nfgProfile->getBirthdate()];
             $missingRequiredInfo = array_search(
                 null,
                 $requiredInfo
