@@ -1,5 +1,9 @@
 nfg:
     unavailable:
-      title: 'Serviço Indisponível'
-      body: 'A Nota Fiscal Gaúcha não está disponível no momento. Por favor, tente novamente mais tarde.'
-      close: 'Fechar'
+        title: 'Serviço Indisponível'
+        body: 'A Nota Fiscal Gaúcha não está disponível no momento. Por favor, tente novamente mais tarde.'
+        close: 'Fechar'
+    missing_info:
+        title: 'Informações Insuficientes'
+        body: 'Para que a vinculação com a Nota Fiscal Gaúcha seja realizada, precisamos que você autorize acesso ao seu CPF e à sua data de nascimento.'
+        try_again: 'Tentar novamente'

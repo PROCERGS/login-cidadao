@@ -71,6 +71,14 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/missing-info", name="nfg_missing_info")
+     */
+    public function missingInfoAction(Request $request)
+    {
+        return $this->render('PROCERGSNfgBundle:Default:missing-info.html.twig');
+    }
+
+    /**
      * @Route("/login/callback", name="nfg_login_callback")
      */
     public function loginCallbackAction(Request $request)

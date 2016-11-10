@@ -1,5 +1,9 @@
 nfg:
     unavailable:
-      title: 'Service Unavailable'
-      body: 'Nota Fiscal Gaúcha is not available right now. Please try again in a few moments.'
-      close: 'Close'
+        title: 'Service Unavailable'
+        body: 'Nota Fiscal Gaúcha is not available right now. Please try again in a few moments.'
+        close: 'Close'
+    missing_info:
+        title: 'Insuficient Information'
+        body: 'In order to connect with Nota Fiscal Gaúcha we need that you authorize us to access your CPF and your birthday.'
+        try_again: 'Try again'

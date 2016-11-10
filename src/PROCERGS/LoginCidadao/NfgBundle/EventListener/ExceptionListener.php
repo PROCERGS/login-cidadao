@@ -55,7 +55,9 @@ class ExceptionListener
         }
 
         if ($e instanceof MissingRequiredInformationException) {
-            $event->setResponse(new Response('Missing info!'));
+            $url = $this->router->generate('nfg_missing_info', [], RouterInterface::ABSOLUTE_URL);
+            $event->setResponse(new RedirectResponse($url));
+
             return;
         }
 
