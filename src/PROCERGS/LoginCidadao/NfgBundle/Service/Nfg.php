@@ -232,6 +232,7 @@ class Nfg implements LoggerAwareInterface
 
         $this->checkCpf($personMeuRS, $nfgProfile, $overrideExisting);
 
+        // TODO: check duplicate NfgProfile already persisted
         $this->em->persist($nfgProfile);
         $personMeuRS->setNfgProfile($nfgProfile);
         $personMeuRS->setNfgAccessToken($paccessId);
