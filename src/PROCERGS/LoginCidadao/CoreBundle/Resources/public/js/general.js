@@ -594,7 +594,18 @@ $(function() {
 
     $('.nfgpopup').on('click', function (event){
         event.preventDefault();
-        window.open($(this).attr('href'),'_blank','toolbar=0,location=0,scrollbars=no,resizable=no,top=0,left=500,width=400,height=750');
+        var url;
+        if ($(this).data('chooser')) {
+            if ($('form[name=login_form_type]').is(':visible')) {
+                url = $(this).data('login');
+            } else {
+                url = $(this).data('register');
+            }
+        } else {
+            url = $(this).attr('href');
+        }
+
+        window.open(url, '_blank', 'toolbar=0,location=0,scrollbars=no,resizable=no,top=0,left=500,width=400,height=750');
         return false;
     });
     $(document).on('click', 'a.link-popup', function (event){
