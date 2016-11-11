@@ -1,0 +1,20 @@
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
+
+{% block panel_body_class %}nfg-action-chooser{% endblock %}
+
+{% block panel_body %}
+    <h1>{{ 'nfg.action_chooser.title' | trans }}</h1>
+
+    <p>{{ 'nfg.action_chooser.body' | trans }}</p>
+
+    <p>
+        <a class="btn btn-block btn-success" href="{{ path('nfg_wait', { 'action': 'login' }) }}">
+            {{ 'nfg.action_chooser.login' | trans }}
+        </a>
+    </p>
+    <p>
+        <a class="btn btn-block btn-success" href="{{ path('nfg_wait', { 'action': 'register' }) }}">
+            {{ 'nfg.action_chooser.register' | trans }}
+        </a>
+    </p>
+{% endblock %}

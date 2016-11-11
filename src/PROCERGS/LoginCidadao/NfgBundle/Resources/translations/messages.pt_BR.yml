@@ -15,3 +15,8 @@ nfg:
             login: 'Caso você já possua sua conta no Login Cidadão, é necessário <a href="%login_url%">acessá-la</a> para ativar o vínculo com a Nota Fiscal Gaúcha.'
             register: 'Se você deseja usar suas informações na Nota Fiscal Gaúcha para criar uma conta do Login Cidadão, vocè pode <a class="nfgpopup" href="%register_nfg_url%">clicar aqui</a>.'
         login: 'Ir para a página de Login'
+    action_chooser:
+        title: 'Você deseja fazer login ou cadastrar-se?'
+        body: 'Selecione a forma que você deseja utilizar sua conta da Nota Fiscal Gaúcha.'
+        login: 'Login'
+        register: 'Cadastrar-se'

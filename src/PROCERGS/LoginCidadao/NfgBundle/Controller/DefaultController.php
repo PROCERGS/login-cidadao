@@ -13,6 +13,14 @@ use Symfony\Component\HttpFoundation\Response;
 class DefaultController extends Controller
 {
     /**
+     * @Route("/select-action", name="nfg_action_chooser")
+     */
+    public function actionChooserAction()
+    {
+        return $this->render('PROCERGSNfgBundle:Default:actionChooser.html.twig');
+    }
+
+    /**
      * @Route("/connect", name="nfg_connect")
      */
     public function connectAction(Request $request)
