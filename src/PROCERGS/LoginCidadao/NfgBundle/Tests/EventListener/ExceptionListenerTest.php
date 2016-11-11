@@ -47,8 +47,9 @@ class ExceptionListenerTest extends \PHPUnit_Framework_TestCase
     private function getExceptionListener()
     {
         $router = TestsUtil::getRouter($this);
+        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
 
-        return new ExceptionListener($router);
+        return new ExceptionListener($router, $translator);
     }
 
     /**

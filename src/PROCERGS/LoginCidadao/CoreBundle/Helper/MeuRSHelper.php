@@ -96,11 +96,20 @@ class MeuRSHelper
     }
 
     /**
-     * @param $cpf
+     * @param string $cpf
      * @return PersonMeuRS|null
      */
     public function getPersonByCpf($cpf)
     {
         return $this->personMeuRSRepository->getOneByCpf($cpf);
+    }
+
+    /**
+     * @param string $email
+     * @return PersonMeuRS|null
+     */
+    public function getPersonByEmail($email)
+    {
+        return $this->personMeuRSRepository->getOneByEmail($email);
     }
 }

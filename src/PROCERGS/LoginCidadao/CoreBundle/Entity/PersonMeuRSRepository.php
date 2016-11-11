@@ -27,4 +27,18 @@ class PersonMeuRSRepository extends EntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * @param string $email
+     * @return PersonMeuRS|null
+     */
+    public function getOneByEmail($email)
+    {
+        return $this->createQueryBuilder('rs')
+            ->join('rs.person', 'p')
+            ->where('p.email = :email')
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

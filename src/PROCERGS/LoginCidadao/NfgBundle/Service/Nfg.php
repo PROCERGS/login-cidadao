@@ -11,13 +11,21 @@
 namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
 use Doctrine\ORM\EntityManager;
+use FOS\UserBundle\Model\UserManagerInterface;
+use FOS\UserBundle\Event\FilterUserResponseEvent;
+use FOS\UserBundle\Event\FormEvent;
+use FOS\UserBundle\Event\GetResponseUserEvent;
+use FOS\UserBundle\Form\Factory\FormFactory;
+use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Security\LoginManagerInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\ConnectionNotFoundException;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\CpfInUseException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\CpfMismatchException;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\EmailInUseException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
@@ -25,8 +33,10 @@ use PROCERGS\LoginCidadao\NfgBundle\Helper\UrlHelper;
 use PROCERGS\LoginCidadao\NfgBundle\Traits\CircuitBreakerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -75,6 +85,15 @@ class Nfg implements LoggerAwareInterface
     /** @var string */
     private $firewallName;
 
+    /** @var UserManagerInterface */
+    private $userManager;
+
+    /** @var EventDispatcherInterface */
+    private $dispatcher;
+
+    /** @var FormFactory */
+    private $formFactory;
+
     public function __construct(
         EntityManager $em,
         NfgSoapInterface $client,
@@ -82,6 +101,9 @@ class Nfg implements LoggerAwareInterface
         SessionInterface $session,
         LoginManagerInterface $loginManager,
         MeuRSHelper $meuRSHelper,
+        EventDispatcherInterface $dispatcher,
+        UserManagerInterface $userManager,
+        FormFactory $formFactory,
         $firewallName,
         $loginEndpoint,
         $authorizationEndpoint
@@ -92,6 +114,9 @@ class Nfg implements LoggerAwareInterface
         $this->session = $session;
         $this->loginManager = $loginManager;
         $this->meuRSHelper = $meuRSHelper;
+        $this->dispatcher = $dispatcher;
+        $this->userManager = $userManager;
+        $this->formFactory = $formFactory;
         $this->firewallName = $firewallName;
         $this->loginEndpoint = $loginEndpoint;
         $this->authorizationEndpoint = $authorizationEndpoint;
@@ -211,18 +236,24 @@ class Nfg implements LoggerAwareInterface
     }
 
     /**
+     * @param Request $request
      * @param PersonMeuRS $personMeuRS
-     * @param string $paccessId
      * @param bool $overrideExisting
      * @return RedirectResponse
      */
-    public function connectCallback(PersonMeuRS $personMeuRS, $paccessId, $overrideExisting = false)
+    public function connectCallback(Request $request, PersonMeuRS $personMeuRS, $overrideExisting = false)
     {
-        if (!$paccessId) {
+        $response = null;
+        $accessToken = $request->get('paccessid');
+        if (!$accessToken) {
             throw new BadRequestHttpException("Missing paccessid parameter");
         }
 
-        $nfgProfile = $this->getUserInfo($paccessId, $personMeuRS->getVoterRegistration());
+        $nfgProfile = $this->getUserInfo($accessToken, $personMeuRS->getVoterRegistration());
+
+        if (!($personMeuRS->getPerson() instanceof PersonInterface)) {
+            $response = $this->register($request, $personMeuRS, $nfgProfile);
+        }
 
         $sanitizedCpf = $this->sanitizeCpf($nfgProfile->getCpf());
         if (!$personMeuRS->getPerson()->getCpf()) {
@@ -234,11 +265,15 @@ class Nfg implements LoggerAwareInterface
         // TODO: check duplicate NfgProfile already persisted
         $this->em->persist($nfgProfile);
         $personMeuRS->setNfgProfile($nfgProfile);
-        $personMeuRS->setNfgAccessToken($paccessId);
+        $personMeuRS->setNfgAccessToken($accessToken);
         $this->em->flush($nfgProfile);
         $this->em->flush($personMeuRS);
 
         // TODO: trigger event to allow response to be changed
+        if ($response) {
+            return $response;
+        }
+
         return new RedirectResponse($this->router->generate('fos_user_profile_edit'));
     }
 
@@ -359,5 +394,68 @@ class Nfg implements LoggerAwareInterface
         // The user's choice was to remove the previous connection and use this new one
         // TODO: send email to $otherPerson about this
         $this->disconnect($otherPerson);
+    }
+
+    /**
+     * @param NfgProfile $nfgProfile
+     * @return null|RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    private function register(Request $request, PersonMeuRS $personMeuRS, NfgProfile $nfgProfile)
+    {
+        $sanitizedCpf = $this->sanitizeCpf($nfgProfile->getCpf());
+
+        if ($this->meuRSHelper->getPersonByCpf($sanitizedCpf) !== null) {
+            throw new CpfInUseException();
+        }
+
+        if ($this->meuRSHelper->getPersonByEmail($nfgProfile->getEmail()) !== null) {
+            throw new EmailInUseException();
+        }
+
+        $names = explode(' ', $nfgProfile->getName());
+
+        /** @var PersonInterface $user */
+        $user = $this->userManager->createUser();
+        $user
+            ->setFirstName(array_shift($names))
+            ->setSurname(implode(' ', $names))
+            ->setEmail($nfgProfile->getEmail())
+            ->setCpf($sanitizedCpf)
+            ->setBirthdate($nfgProfile->getBirthdate())
+            ->setMobile($nfgProfile->getMobile())
+            ->setPassword('')
+            ->setEnabled(true);
+
+        $event = new GetResponseUserEvent($user, $request);
+        $this->dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, $event);
+
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
+        }
+
+        $form = $this->formFactory->createForm();
+        $form->setData($user);
+
+        $event = new FormEvent($form, $request);
+        $this->dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
+
+        $this->userManager->updateUser($user);
+
+        $personMeuRS->setPerson($user);
+        $personMeuRS->setNfgProfile($nfgProfile);
+        $this->em->persist($personMeuRS);
+        $this->em->flush($personMeuRS);
+
+        if (null === $response = $event->getResponse()) {
+            $url = $this->router->generate('fos_user_registration_confirmed');
+            $response = new RedirectResponse($url);
+        }
+
+        $this->dispatcher->dispatch(
+            FOSUserEvents::REGISTRATION_COMPLETED,
+            new FilterUserResponseEvent($user, $request, $response)
+        );
+
+        return $response;
     }
 }

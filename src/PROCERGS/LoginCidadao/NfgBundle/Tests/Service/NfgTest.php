@@ -10,7 +10,10 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Service;
 
+use FOS\UserBundle\Form\Factory\FormFactory;
+use FOS\UserBundle\Model\UserManagerInterface;
 use LoginCidadao\CoreBundle\Entity\Person;
+use LoginCidadao\CoreBundle\Form\Type\RegistrationFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException;
@@ -18,6 +21,8 @@ use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
 use PROCERGS\LoginCidadao\NfgBundle\Tests\TestsUtil;
 use Prophecy\Argument;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class NfgTest extends \PHPUnit_Framework_TestCase
@@ -105,8 +110,10 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         );
 
         $accessToken = 'access_token'.random_int(10, 9999);
+        $request = $this->getRequest($accessToken);
+
         try {
-            $response = $nfg->connectCallback($personMeuRS, $accessToken);
+            $response = $nfg->connectCallback($request, $personMeuRS);
             $this->fail('MissingRequiredInformationException expected');
         } catch (MissingRequiredInformationException $e) {
             $this->assertInstanceOf(
@@ -114,6 +121,41 @@ class NfgTest extends \PHPUnit_Framework_TestCase
                 $e
             );
         }
+    }
+
+    public function testRegistration()
+    {
+        $accessId = 'access_id'.random_int(10, 9999);
+        $soapService = $this->getSoapService($accessId);
+
+        $nfgProfile = $this->getNfgProfile();
+        $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
+
+        $meuRSHelper = $this->getMockBuilder('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $meuRSHelper->expects($this->atLeastOnce())->method('getPersonByCpf')->willReturn(null);
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'soap' => $soapService,
+                'meurs_helper' => $meuRSHelper,
+            ]
+        );
+
+        $personMeuRS = new PersonMeuRS();
+
+        $accessToken = 'access_token'.random_int(10, 9999);
+        $request = $this->getRequest($accessToken);
+        $response = $nfg->connectCallback($request, $personMeuRS);
+
+        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertEquals('fos_user_registration_confirmed', $response->getTargetUrl());
+
+        // Assert that the CPF was moved to $person
+        $this->assertNotNull($personMeuRS->getNfgAccessToken());
+        $this->assertNotNull($personMeuRS->getNfgProfile());
     }
 
     /**
@@ -143,7 +185,8 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         );
 
         $accessToken = 'access_token'.random_int(10, 9999);
-        $response = $nfg->connectCallback($personMeuRS, $accessToken);
+        $request = $this->getRequest($accessToken);
+        $response = $nfg->connectCallback($request, $personMeuRS);
 
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals('fos_user_profile_edit', $response->getTargetUrl());
@@ -190,7 +233,8 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         );
 
         $accessToken = 'access_token'.random_int(10, 9999);
-        $response = $nfg->connectCallback($personMeuRS, $accessToken);
+        $request = $this->getRequest($accessToken);
+        $response = $nfg->connectCallback($request, $personMeuRS);
 
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals('fos_user_profile_edit', $response->getTargetUrl());
@@ -243,7 +287,8 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         );
 
         try {
-            $nfg->connectCallback($personMeuRS, $accessToken);
+            $request = $this->getRequest($accessToken);
+            $nfg->connectCallback($request, $personMeuRS);
             $this->fail('Exception was not thrown!');
         } catch (NfgAccountCollisionException $e) {
             $this->assertInstanceOf('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException', $e);
@@ -294,6 +339,15 @@ class NfgTest extends \PHPUnit_Framework_TestCase
                 'PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper'
             )->reveal();
         }
+        if (false === array_key_exists('dispatcher', $collaborators)) {
+            $collaborators['dispatcher'] = $this->getDispatcher();
+        }
+        if (false === array_key_exists('form_factory', $collaborators)) {
+            $collaborators['form_factory'] = $this->getFormFactory();
+        }
+        if (false === array_key_exists('user_manager', $collaborators)) {
+            $collaborators['user_manager'] = $this->getUserManager();
+        }
         if (false === array_key_exists('firewall', $collaborators)) {
             $collaborators['firewall'] = 'firewall';
         }
@@ -311,6 +365,9 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             $collaborators['session'],
             $collaborators['login_manager'],
             $collaborators['meurs_helper'],
+            $collaborators['dispatcher'],
+            $collaborators['user_manager'],
+            $collaborators['form_factory'],
             $collaborators['firewall'],
             $collaborators['login_endpoint'],
             $collaborators['auth_endpoint']
@@ -396,6 +453,43 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         return $em;
     }
 
+    /**
+     * @return Request
+     */
+    private function getRequest($accessToken)
+    {
+        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request->expects($this->atLeastOnce())->method('get')->with('paccessid')->willReturn($accessToken);
+
+        return $request;
+    }
+
+    /**
+     * @return EventDispatcherInterface
+     */
+    private function getDispatcher()
+    {
+        return $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+    }
+
+    /**
+     * @return FormFactory
+     */
+    private function getFormFactory()
+    {
+        $formFactory = $this->getMockBuilder('FOS\UserBundle\Form\Factory\FormFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $formFactory->expects($this->any())->method('createForm')->willReturnCallback(
+            function () {
+                return $this->getMock('Symfony\Component\Form\FormInterface');
+            }
+        );
+
+        return $formFactory;
+    }
+
     private function getNfgProfile($voterRegistration = null)
     {
         $nfgProfile = new NfgProfile();
@@ -408,5 +502,20 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             ->setAccessLvl(2);
 
         return $nfgProfile;
+    }
+
+    /**
+     * @return UserManagerInterface
+     */
+    private function getUserManager()
+    {
+        $userManager = $this->getMock('FOS\UserBundle\Model\UserManagerInterface');
+        $userManager->expects($this->any())->method('createUser')->willReturnCallback(
+            function () {
+                return new Person();
+            }
+        );
+
+        return $userManager;
     }
 }
