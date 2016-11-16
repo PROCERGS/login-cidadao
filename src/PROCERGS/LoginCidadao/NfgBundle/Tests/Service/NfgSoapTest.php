@@ -10,6 +10,8 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Service;
 
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberUtil;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Security\Credentials;
 use PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoap;
@@ -58,12 +60,16 @@ class NfgSoapTest extends \PHPUnit_Framework_TestCase
 
         $nfgProfile = $nfgSoap->getUserInfo('stub', $voterRegistration);
 
+        $phoneUtil = PhoneNumberUtil::getInstance();
         $this->assertEquals($userInfo['NomeConsumidor'], $nfgProfile->getName());
         $this->assertEquals($userInfo['EmailPrinc'], $nfgProfile->getEmail());
         $this->assertInstanceOf('\DateTime', $nfgProfile->getBirthdate());
         $this->assertEquals($userInfo['DtNasc'], $nfgProfile->getBirthdate()->format('Y-m-d\TH:i:s'));
         $this->assertNotNull($nfgProfile->getMobile());
-        $this->assertEquals("+55{$userInfo['NroFoneContato']}", $nfgProfile->getMobile());
+        $this->assertEquals(
+            "+55{$userInfo['NroFoneContato']}",
+            $phoneUtil->format($nfgProfile->getMobile(), PhoneNumberFormat::E164)
+        );
         $this->assertEquals($userInfo['CodSitTitulo'], $nfgProfile->getVoterRegistrationSit());
         $this->assertEquals($voterRegistration, $nfgProfile->getVoterRegistration());
     }

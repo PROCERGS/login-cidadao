@@ -6,6 +6,7 @@ nfg:
     missing_info:
         title: 'Insuficient Information'
         body: 'In order to connect with Nota Fiscal Gaúcha we need that you authorize us to access your CPF and your birthday.'
+        level1: 'If you have already authorized all options in the previous page, go to your Nota Fiscal Gaúcha account and make sure your information there is up to date.'
         try_again: 'Try again'
     connection_not_found:
         alert: 'The Nota Fiscal Gaúcha account you used is not connected to a Citizen Login user. For more information, <a href="%help_url%">click here</a>.'

@@ -13,7 +13,6 @@ namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Service;
 use FOS\UserBundle\Form\Factory\FormFactory;
 use FOS\UserBundle\Model\UserManagerInterface;
 use LoginCidadao\CoreBundle\Entity\Person;
-use LoginCidadao\CoreBundle\Form\Type\RegistrationFormType;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException;
@@ -158,6 +157,42 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($personMeuRS->getNfgProfile());
     }
 
+    public function testLevel1Registration()
+    {
+        $accessId = 'access_id'.random_int(10, 9999);
+        $soapService = $this->getSoapService($accessId);
+
+        $nfgProfile = $this->getNfgProfile();
+        $nfgProfile->setAccessLvl(1);
+        $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
+
+        $meuRSHelper = $this->getMockBuilder('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $meuRSHelper->expects($this->atLeastOnce())->method('getPersonByCpf')->willReturn(null);
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'soap' => $soapService,
+                'meurs_helper' => $meuRSHelper,
+            ]
+        );
+
+        $personMeuRS = new PersonMeuRS();
+
+        $accessToken = 'access_token'.random_int(10, 9999);
+        $request = $this->getRequest($accessToken);
+        $response = $nfg->connectCallback($request, $personMeuRS);
+
+        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertEquals('fos_user_registration_confirmed', $response->getTargetUrl());
+
+        // Assert that the CPF was moved to $person
+        $this->assertNotNull($personMeuRS->getNfgAccessToken());
+        $this->assertNotNull($personMeuRS->getNfgProfile());
+    }
+
     /**
      * This tests a user with CPF filled and with no CPF collision
      */
@@ -210,6 +245,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $person = new Person();
         $personMeuRS = new PersonMeuRS();
         $personMeuRS
+            ->setId(1)
             ->setVoterRegistration('1234567890')
             ->setPerson($person);
 
@@ -220,7 +256,8 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $otherPerson->setCpf($cpf);
         $otherPersonMeuRS = new PersonMeuRS();
         $otherPersonMeuRS
-            ->setPerson($otherPerson);
+            ->setPerson($otherPerson)
+            ->setId(2);
         $meuRSHelper = $this->prophesize('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper');
         $meuRSHelper->getPersonByCpf($cpf)->willReturn($otherPersonMeuRS)->shouldBeCalled();
 
@@ -263,6 +300,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $person = new Person();
         $personMeuRS = new PersonMeuRS();
         $personMeuRS
+            ->setId(1)
             ->setVoterRegistration($voterRegistration)
             ->setPerson($person);
 
@@ -272,6 +310,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $otherPerson->setCpf($cpf);
         $otherPersonMeuRS = new PersonMeuRS();
         $otherPersonMeuRS
+            ->setId(2)
             ->setNfgAccessToken($accessToken)
             ->setNfgProfile($nfgProfile)
             ->setPerson($otherPerson);

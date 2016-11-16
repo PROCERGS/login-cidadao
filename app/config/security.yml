@@ -154,7 +154,7 @@ security:
         - { path: ^/connect/facebook$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/connect/twitter$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/connect/google$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        - { path: ^/nfg/(help|select-action|login|create|connect|callback|unavailable|wait), role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/nfg/(help|select-action|login|create|connect|callback|unavailable|wait|missing-info), role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
 
         - { path: ^/monitor/health, role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_monitors%, requires_channel: https }
         - { path: ^/public/status, role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_monitors%, requires_channel: https }

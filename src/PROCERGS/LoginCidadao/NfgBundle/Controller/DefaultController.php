@@ -3,6 +3,8 @@
 namespace PROCERGS\LoginCidadao\NfgBundle\Controller;
 
 use Ejsmont\CircuitBreaker\CircuitBreakerInterface;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
+use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -37,9 +39,13 @@ class DefaultController extends Controller
      */
     public function connectCallbackAction(Request $request)
     {
-        /** @var MeuRSHelper $meuRSHelper */
-        $meuRSHelper = $this->get('meurs.helper');
-        $personMeuRS = $meuRSHelper->getPersonMeuRS($this->getUser());
+        if ($this->getUser() instanceof PersonInterface) {
+            /** @var MeuRSHelper $meuRSHelper */
+            $meuRSHelper = $this->get('meurs.helper');
+            $personMeuRS = $meuRSHelper->getPersonMeuRS($this->getUser());
+        } else {
+            $personMeuRS = new PersonMeuRS();
+        }
 
         $nfg = $this->getNfgService();
 
@@ -59,7 +65,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/wait/{action}", name="nfg_wait", requirements={"action": "(connect|login|register)"})
+     * @Route("/wait/{action}", name="nfg_wait", requirements={"action": "(connect|login)"})
      */
     public function waitConnectionAction(Request $request, $action)
     {

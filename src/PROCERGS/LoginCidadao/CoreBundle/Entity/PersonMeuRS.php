@@ -49,7 +49,7 @@ class PersonMeuRS
     /**
      * @JMS\Expose
      * @JMS\Groups({"nfgprofile"})
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile")
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile", cascade={"persist"})
      * @ORM\JoinColumn(name="nfg_profile_id", referencedColumnName="id")
      * @JMS\Since("1.0.2")
      */

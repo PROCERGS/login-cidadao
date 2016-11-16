@@ -372,7 +372,7 @@ class Nfg implements LoggerAwareInterface
 
         // Check CPF collision
         $otherPerson = $this->meuRSHelper->getPersonByCpf($person->getCpf());
-        if (null === $otherPerson) {
+        if (null === $otherPerson || $otherPerson->getId() === $personMeuRS->getId()) {
             // No collision found. We're good! :)
             return;
         }
@@ -444,7 +444,8 @@ class Nfg implements LoggerAwareInterface
         $personMeuRS->setPerson($user);
         $personMeuRS->setNfgProfile($nfgProfile);
         $this->em->persist($personMeuRS);
-        $this->em->flush($personMeuRS);
+        $this->em->persist($nfgProfile);
+        $this->em->flush();
 
         if (null === $response = $event->getResponse()) {
             $url = $this->router->generate('fos_user_registration_confirmed');

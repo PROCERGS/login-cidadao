@@ -4,6 +4,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
+use libphonenumber\PhoneNumber;
 
 /**
  * City
@@ -136,6 +137,9 @@ class NfgProfile
         return $this;
     }
 
+    /**
+     * @return PhoneNumber
+     */
     public function getMobile()
     {
         return $this->mobile;

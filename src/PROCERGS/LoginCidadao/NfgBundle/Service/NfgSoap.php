@@ -103,8 +103,6 @@ class NfgSoap implements NfgSoapInterface
             $allowedTypes = [PhoneNumberType::MOBILE, PhoneNumberType::FIXED_LINE_OR_MOBILE];
             if (false === array_search($phoneUtil->getNumberType($phoneNumber), $allowedTypes)) {
                 $phoneNumber = null;
-            } else {
-                $phoneNumber = $phoneUtil->format($phoneNumber, PhoneNumberFormat::E164);
             }
         } catch (NumberParseException $e) {
             $phoneNumber = null;
