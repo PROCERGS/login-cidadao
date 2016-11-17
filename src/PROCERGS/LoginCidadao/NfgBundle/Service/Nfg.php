@@ -211,11 +211,11 @@ class Nfg implements LoggerAwareInterface
 
         /** @var PersonInterface $user */
         $personMeuRS = $this->meuRSHelper->getPersonByCpf($this->sanitizeCpf($cpf));
-        $user = $personMeuRS->getPerson();
 
-        if (!$user || !$personMeuRS->getNfgAccessToken()) {
+        if (!$personMeuRS || !$personMeuRS->getPerson() || !$personMeuRS->getNfgAccessToken()) {
             throw new ConnectionNotFoundException('No user found matching this CPF');
         }
+        $user = $personMeuRS->getPerson();
 
         $response = new RedirectResponse($this->router->generate('lc_home'));
 

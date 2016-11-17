@@ -15,6 +15,7 @@ use FOS\UserBundle\Model\UserManagerInterface;
 use LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\ConnectionNotFoundException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
@@ -77,6 +78,35 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals('lc_home', $response->getTargetUrl());
+    }
+
+    public function testLoginNonexistentUser()
+    {
+        $cpf = '12345678901';
+        $accessId = 'access_id'.random_int(10, 9999);
+        $secret = "my very super secret secret";
+        $prsec = hash_hmac('sha256', "$cpf$accessId", $secret);
+
+        $person = new Person();
+        $person->setCpf($cpf);
+        $meuRSHelper = $this->prophesize('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper');
+        $meuRSHelper->getPersonByCpf($cpf)->willReturn(null)->shouldBeCalled();
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'get')->reveal(),
+                'soap' => $this->getSoapService($accessId),
+                'meurs_helper' => $meuRSHelper->reveal(),
+                'login_manager' => $this->getLoginManager(false)->reveal(),
+            ]
+        );
+
+        try {
+            $nfg->loginCallback(compact('cpf', 'accessId', 'prsec'), $secret);
+            $this->fail('Exception not thrown');
+        } catch (ConnectionNotFoundException $e) {
+            $this->assertTrue(true);
+        }
     }
 
     public function testIncompleteInfo()
@@ -423,6 +453,10 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         return $soapService;
     }
 
+    /**
+     * @param bool $shouldCallLogInUser
+     * @return \Prophecy\Prophecy\ObjectProphecy
+     */
     private function getLoginManager($shouldCallLogInUser = false)
     {
         $loginManager = $this->prophesize('\FOS\UserBundle\Security\LoginManagerInterface');
