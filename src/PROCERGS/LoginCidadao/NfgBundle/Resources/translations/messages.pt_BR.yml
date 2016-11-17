@@ -14,7 +14,7 @@ nfg:
         description: 'Você tentou fazer login com uma conta da Nota Fiscal Gaúcha que ainda não está vinculada a uma conta do Login Cidadão.'
         troubleshooting:
             login: 'Caso você já possua sua conta no Login Cidadão, é necessário <a href="%login_url%">acessá-la</a> para ativar o vínculo com a Nota Fiscal Gaúcha.'
-            register: 'Se você deseja usar suas informações na Nota Fiscal Gaúcha para criar uma conta do Login Cidadão, vocè pode <a class="nfgpopup" href="%register_nfg_url%">clicar aqui</a>.'
+            register: 'Se você deseja usar suas informações na Nota Fiscal Gaúcha para criar uma conta do Login Cidadão, você pode <a class="nfgpopup" href="%register_nfg_url%">clicar aqui</a>.'
         login: 'Ir para a página de Login'
     action_chooser:
         title: 'Você deseja fazer login ou cadastrar-se?'
