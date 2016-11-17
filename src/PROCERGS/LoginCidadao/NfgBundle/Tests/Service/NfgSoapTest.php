@@ -30,16 +30,12 @@ class NfgSoapTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidCredentialsGetAccessID()
     {
+        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
+
         $client = $this->getSoapClientMock();
         $credentials = new Credentials('invalid', 'invalid', 'invalid');
         $nfgSoap = new NfgSoap($client, $credentials);
-
-        try {
-            $nfgSoap->getAccessID();
-            $this->fail('An exception was expected when invalid credentials are given.');
-        } catch (NfgServiceUnavailableException $e) {
-            $this->assertEquals('error ', $e->getMessage());
-        }
+        $nfgSoap->getAccessID();
     }
 
     public function testGetFullUserInfo()
@@ -72,6 +68,48 @@ class NfgSoapTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($userInfo['CodSitTitulo'], $nfgProfile->getVoterRegistrationSit());
         $this->assertEquals($voterRegistration, $nfgProfile->getVoterRegistration());
+    }
+
+    public function testInvalidPhone()
+    {
+        $voterRegistration = '1234';
+        $userInfo = [
+            'CodCpf' => '5745778407',
+            'NomeConsumidor' => 'John Doe',
+            'DtNasc' => '1970-01-01T00:00:00',
+            'EmailPrinc' => 'john@doe.test',
+            'NroFoneContato' => 'aa',
+            'CodSitTitulo' => '1',
+        ];
+
+        $client = $this->getSoapClientMock($userInfo);
+        $credentials = new Credentials('org', 'user', 'pass');
+        $nfgSoap = new NfgSoap($client, $credentials);
+
+        $nfgProfile = $nfgSoap->getUserInfo('stub', $voterRegistration);
+
+        $this->assertEquals($userInfo['NomeConsumidor'], $nfgProfile->getName());
+        $this->assertEquals($userInfo['EmailPrinc'], $nfgProfile->getEmail());
+        $this->assertInstanceOf('\DateTime', $nfgProfile->getBirthdate());
+        $this->assertEquals($userInfo['DtNasc'], $nfgProfile->getBirthdate()->format('Y-m-d\TH:i:s'));
+        $this->assertNull($nfgProfile->getMobile());
+        $this->assertEquals($userInfo['CodSitTitulo'], $nfgProfile->getVoterRegistrationSit());
+        $this->assertEquals($voterRegistration, $nfgProfile->getVoterRegistration());
+    }
+
+    public function testErrorResponse()
+    {
+        $this->setExpectedException('RuntimeException');
+        $userInfo = [
+            'CodSitRetorno' => '500',
+            'MsgRetorno' => 'Some error',
+        ];
+
+        $client = $this->getSoapClientMock($userInfo);
+        $credentials = new Credentials('org', 'user', 'pass');
+        $nfgSoap = new NfgSoap($client, $credentials);
+
+        $nfgSoap->getUserInfo('stub');
     }
 
     public function testPhoneMissing()

@@ -23,21 +23,8 @@ class SoapClientFactory
             if (!$this->isAvailable()) {
                 throw new NfgServiceUnavailableException('Circuit Breaker open. Not trying again.');
             }
-            $options = [];
-            if (!$verifyHttps) {
-                $options['stream_context'] = stream_context_create(
-                    [
-                        'ssl' => [
-                            // disable SSL/TLS security checks
-                            'verify_peer' => false,
-                            'verify_peer_name' => false,
-                            'allow_self_signed' => true,
-                        ],
-                    ]
-                );
-            }
 
-            $client = $this->instantiateSoapClient($wsdl, $options);
+            $client = $this->instantiateSoapClient($wsdl, $this->getOptions($verifyHttps));
             $this->reportSuccess();
 
             return $client;
@@ -50,5 +37,27 @@ class SoapClientFactory
     public function instantiateSoapClient($wsdl, $options)
     {
         return @new \SoapClient($wsdl, $options);
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    private function getOptions($verifyHttps)
+    {
+        $options = [];
+        if (!$verifyHttps) {
+            $options['stream_context'] = stream_context_create(
+                [
+                    'ssl' => [
+                        // disable SSL/TLS security checks
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                        'allow_self_signed' => true,
+                    ],
+                ]
+            );
+        }
+
+        return $options;
     }
 }

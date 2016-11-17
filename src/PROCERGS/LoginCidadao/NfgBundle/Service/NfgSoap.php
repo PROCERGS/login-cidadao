@@ -48,6 +48,11 @@ class NfgSoap implements NfgSoapInterface
         return $response->ObterAccessIDResult;
     }
 
+    /**
+     * @param $accessToken
+     * @param string $voterRegistration
+     * @return NfgProfile
+     */
     public function getUserInfo($accessToken, $voterRegistration = null)
     {
         $params = $this->getAuthentication();
