@@ -29,6 +29,7 @@ use PROCERGS\LoginCidadao\NfgBundle\Exception\EmailInUseException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\OverrideResponseException;
 use PROCERGS\LoginCidadao\NfgBundle\Helper\UrlHelper;
 use PROCERGS\LoginCidadao\NfgBundle\Traits\CircuitBreakerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
@@ -252,7 +253,11 @@ class Nfg implements LoggerAwareInterface
         $nfgProfile = $this->getUserInfo($accessToken, $personMeuRS->getVoterRegistration());
 
         if (!($personMeuRS->getPerson() instanceof PersonInterface)) {
-            $response = $this->register($request, $personMeuRS, $nfgProfile);
+            try {
+                $response = $this->register($request, $personMeuRS, $nfgProfile);
+            } catch (OverrideResponseException $e) {
+                return $e->getResponse();
+            }
         }
 
         $sanitizedCpf = $this->sanitizeCpf($nfgProfile->getCpf());
@@ -430,7 +435,7 @@ class Nfg implements LoggerAwareInterface
         $this->dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, $event);
 
         if (null !== $event->getResponse()) {
-            return $event->getResponse();
+            throw new OverrideResponseException($event->getResponse());
         }
 
         $form = $this->formFactory->createForm();

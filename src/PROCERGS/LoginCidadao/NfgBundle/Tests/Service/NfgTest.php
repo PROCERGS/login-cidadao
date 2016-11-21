@@ -10,23 +10,111 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Service;
 
+use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Form\Factory\FormFactory;
+use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Model\UserManagerInterface;
 use LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
-use PROCERGS\LoginCidadao\NfgBundle\Exception\ConnectionNotFoundException;
-use PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException;
-use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
 use PROCERGS\LoginCidadao\NfgBundle\Tests\TestsUtil;
 use Prophecy\Argument;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Exception\AccountExpiredException;
 
 class NfgTest extends \PHPUnit_Framework_TestCase
 {
+    public function testLoginRedirectUnavailableAccessId()
+    {
+        $soapService = $this->getMock('\PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoapInterface');
+        $soapService->expects($this->once())->method('getAccessID')
+            ->willThrowException(new NfgServiceUnavailableException());
+
+        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
+        $accessId = 'access_id'.random_int(10, 9999);
+
+        $cbService = 'service';
+        $circuitBreaker = $this->getCircuitBreaker($cbService, true);
+        $circuitBreaker->reportFailure($cbService)->shouldBeCalled();
+
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger->expects($this->once())->method('error');
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId)->reveal(),
+                'soap' => $soapService,
+            ]
+        );
+        $nfg->setCircuitBreaker($circuitBreaker->reveal(), $cbService);
+        $nfg->setLogger($logger);
+        $nfg->login();
+    }
+
+    public function testLoginRedirectUnavailableUnknownError()
+    {
+        $soapService = $this->getMock('\PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoapInterface');
+        $soapService->expects($this->once())->method('getAccessID')
+            ->willThrowException(new \RuntimeException());
+
+        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
+        $accessId = 'access_id'.random_int(10, 9999);
+
+        $cbService = 'service';
+        $circuitBreaker = $this->getCircuitBreaker($cbService, true);
+        $circuitBreaker->reportFailure($cbService)->shouldBeCalled();
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId)->reveal(),
+                'soap' => $soapService,
+            ]
+        );
+        $nfg->setCircuitBreaker($circuitBreaker->reveal(), $cbService);
+        $nfg->login();
+    }
+
+    public function testLoginRedirectUnavailable()
+    {
+        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
+        $accessId = 'access_id'.random_int(10, 9999);
+
+        $cbService = 'service';
+        $circuitBreaker = $this->getCircuitBreaker($cbService, false);
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId)->reveal(),
+                'soap' => $this->getSoapService($accessId),
+            ]
+        );
+        $nfg->setCircuitBreaker($circuitBreaker->reveal(), $cbService);
+        $nfg->login();
+    }
+
+    public function testConnectRedirectUnavailable()
+    {
+        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
+        $accessId = 'access_id'.random_int(10, 9999);
+
+        $cbService = 'service';
+        $circuitBreaker = $this->getCircuitBreaker($cbService, false);
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId)->reveal(),
+                'soap' => $this->getSoapService($accessId),
+            ]
+        );
+        $nfg->setCircuitBreaker($circuitBreaker->reveal(), $cbService);
+        $nfg->connect();
+    }
+
     public function testLoginRedirect()
     {
         $accessId = 'access_id'.random_int(10, 9999);
@@ -35,6 +123,9 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $circuitBreaker = $this->getCircuitBreaker($cbService, true);
         $circuitBreaker->reportSuccess($cbService)->shouldBeCalled();
 
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger->expects($this->once())->method('info');
+
         $nfg = $this->getNfgService(
             [
                 'session' => $this->getSession($accessId, 'set')->reveal(),
@@ -42,6 +133,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $nfg->setCircuitBreaker($circuitBreaker->reveal(), $cbService);
+        $nfg->setLogger($logger);
 
         $response = $nfg->login();
         // TODO: expect RedirectResponse once the Referrer problem at NFG gets fixed.
@@ -80,8 +172,100 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('lc_home', $response->getTargetUrl());
     }
 
+    public function testLoginCallbackMissingParams()
+    {
+        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\BadRequestHttpException');
+        $cpf = '12345678901';
+        $accessId = 'access_id'.random_int(10, 9999);
+        $secret = "my very super secret secret";
+        $prsec = hash_hmac('sha256', "$cpf$accessId", $secret);
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'soap' => $this->getSoapService($accessId),
+            ]
+        );
+
+        $nfg->loginCallback(compact('accessId', 'prsec'), $secret);
+    }
+
+    public function testLoginCallbackInvalidSignature()
+    {
+        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException');
+        $cpf = '12345678901';
+        $accessId = 'access_id'.random_int(10, 9999);
+        $secret = "my very super secret secret";
+        $prsec = hash_hmac('sha256', "$cpf$accessId", $secret).'_INVALID';
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'soap' => $this->getSoapService($accessId),
+            ]
+        );
+
+        $nfg->loginCallback(compact('cpf', 'accessId', 'prsec'), $secret);
+    }
+
+    public function testLoginCallbackInvalidAccessId()
+    {
+        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException');
+        $cpf = '12345678901';
+        $accessId = 'access_id'.random_int(10, 9999);
+        $secret = "my very super secret secret";
+        $prsec = hash_hmac('sha256', "$cpf$accessId", $secret);
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId.'_INVALID', 'none')->reveal(),
+                'soap' => $this->getSoapService($accessId),
+            ]
+        );
+
+        $nfg->loginCallback(compact('cpf', 'accessId', 'prsec'), $secret);
+    }
+
+    public function testLoginCallbackInactiveUser()
+    {
+        $this->setExpectedException('Symfony\Component\Security\Core\Exception\AccountStatusException');
+
+        $cpf = '12345678901';
+        $accessId = 'access_id'.random_int(10, 9999);
+        $secret = "my very super secret secret";
+        $prsec = hash_hmac('sha256', "$cpf$accessId", $secret);
+
+        $person = new Person();
+        $person->setCpf($cpf);
+        $personMeuRS = new PersonMeuRS();
+        $personMeuRS->setPerson($person)
+            ->setNfgAccessToken('dummy');
+        $meuRSHelper = $this->prophesize('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper');
+        $meuRSHelper->getPersonByCpf($cpf)->willReturn($personMeuRS)->shouldBeCalled();
+
+        $loginManager = $this->getLoginManager();
+        $loginManager->logInUser(
+            Argument::type('string'),
+            Argument::type('\FOS\UserBundle\Model\UserInterface'),
+            Argument::type('\Symfony\Component\HttpFoundation\Response')
+        )->willThrow(new AccountExpiredException())->shouldBeCalled();
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'get')->reveal(),
+                'soap' => $this->getSoapService($accessId),
+                'login_manager' => $loginManager->reveal(),
+                'meurs_helper' => $meuRSHelper->reveal(),
+            ]
+        );
+
+        $nfg->loginCallback(compact('cpf', 'accessId', 'prsec'), $secret);
+    }
+
     public function testLoginNonexistentUser()
     {
+        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\ConnectionNotFoundException');
+
         $cpf = '12345678901';
         $accessId = 'access_id'.random_int(10, 9999);
         $secret = "my very super secret secret";
@@ -101,16 +285,140 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        try {
-            $nfg->loginCallback(compact('cpf', 'accessId', 'prsec'), $secret);
-            $this->fail('Exception not thrown');
-        } catch (ConnectionNotFoundException $e) {
-            $this->assertTrue(true);
-        }
+        $nfg->loginCallback(compact('cpf', 'accessId', 'prsec'), $secret);
+    }
+
+    public function testPreUserInfoUnavailable()
+    {
+        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
+        $accessId = 'access_id'.random_int(10, 9999);
+        $soapService = $this->getSoapService($accessId);
+
+        $cpf = '01234567890';
+        $person = new Person();
+        $person->setCpf($cpf);
+        $personMeuRS = new PersonMeuRS();
+        $personMeuRS
+            ->setVoterRegistration('1234567890')
+            ->setPerson($person);
+
+        $cbService = 'service';
+        $circuitBreaker = $this->getCircuitBreaker($cbService, false);
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'soap' => $soapService,
+            ]
+        );
+        $nfg->setCircuitBreaker($circuitBreaker->reveal(), $cbService);
+
+        $accessToken = 'access_token'.random_int(10, 9999);
+        $request = $this->getRequest($accessToken);
+
+        $nfg->connectCallback($request, $personMeuRS);
+    }
+
+    public function testConnectCallbackMissingAccessToken()
+    {
+        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\BadRequestHttpException');
+        $accessId = 'access_id'.random_int(10, 9999);
+        $soapService = $this->getSoapService($accessId);
+
+        $cpf = '01234567890';
+        $person = new Person();
+        $person->setCpf($cpf);
+        $personMeuRS = new PersonMeuRS();
+        $personMeuRS
+            ->setVoterRegistration('1234567890')
+            ->setPerson($person);
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'soap' => $soapService,
+            ]
+        );
+
+        $request = $this->getRequest(null);
+
+        $nfg->connectCallback($request, $personMeuRS);
+    }
+
+    public function testUserInfoUnavailable()
+    {
+        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
+        $accessId = 'access_id'.random_int(10, 9999);
+
+        $soapService = $this->getMock('\PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoapInterface');
+        $soapService->expects($this->once())->method('getUserInfo')
+            ->willThrowException(new NfgServiceUnavailableException());
+
+        $cpf = '01234567890';
+        $person = new Person();
+        $person->setCpf($cpf);
+        $personMeuRS = new PersonMeuRS();
+        $personMeuRS
+            ->setVoterRegistration('1234567890')
+            ->setPerson($person);
+
+        $cbService = 'service';
+        $circuitBreaker = $this->getCircuitBreaker($cbService, true);
+        $circuitBreaker->reportFailure($cbService)->shouldBeCalled();
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'soap' => $soapService,
+            ]
+        );
+        $nfg->setCircuitBreaker($circuitBreaker->reveal(), $cbService);
+
+        $accessToken = 'access_token'.random_int(10, 9999);
+        $request = $this->getRequest($accessToken);
+
+        $nfg->connectCallback($request, $personMeuRS);
+    }
+
+    public function testUserInfoError()
+    {
+        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
+        $accessId = 'access_id'.random_int(10, 9999);
+
+        $soapService = $this->getMock('\PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoapInterface');
+        $soapService->expects($this->once())->method('getUserInfo')
+            ->willThrowException(new \RuntimeException());
+
+        $cpf = '01234567890';
+        $person = new Person();
+        $person->setCpf($cpf);
+        $personMeuRS = new PersonMeuRS();
+        $personMeuRS
+            ->setVoterRegistration('1234567890')
+            ->setPerson($person);
+
+        $cbService = 'service';
+        $circuitBreaker = $this->getCircuitBreaker($cbService, true);
+        $circuitBreaker->reportFailure($cbService)->shouldBeCalled();
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'soap' => $soapService,
+            ]
+        );
+        $nfg->setCircuitBreaker($circuitBreaker->reveal(), $cbService);
+
+        $accessToken = 'access_token'.random_int(10, 9999);
+        $request = $this->getRequest($accessToken);
+
+        $nfg->connectCallback($request, $personMeuRS);
     }
 
     public function testIncompleteInfo()
     {
+        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException');
+
         $nfgProfile = $this->getNfgProfile();
         $nfgProfile->setCpf(null)
             ->setEmail(null)
@@ -141,15 +449,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $accessToken = 'access_token'.random_int(10, 9999);
         $request = $this->getRequest($accessToken);
 
-        try {
-            $response = $nfg->connectCallback($request, $personMeuRS);
-            $this->fail('MissingRequiredInformationException expected');
-        } catch (MissingRequiredInformationException $e) {
-            $this->assertInstanceOf(
-                'PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException',
-                $e
-            );
-        }
+        $nfg->connectCallback($request, $personMeuRS);
     }
 
     public function testRegistration()
@@ -165,11 +465,23 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $meuRSHelper->expects($this->atLeastOnce())->method('getPersonByCpf')->willReturn(null);
 
+        $dispatcher = $this->getDispatcher();
+        $dispatcher->expects($this->atLeastOnce())->method('dispatch')->willReturnCallback(
+            function ($eventName, $event) {
+                if ($eventName === FOSUserEvents::REGISTRATION_INITIALIZE
+                    && $event instanceof GetResponseUserEvent
+                ) {
+                    $event->setResponse(new RedirectResponse('dummy'));
+                }
+            }
+        );
+
         $nfg = $this->getNfgService(
             [
                 'session' => $this->getSession($accessId, 'none')->reveal(),
                 'soap' => $soapService,
                 'meurs_helper' => $meuRSHelper,
+                'dispatcher' => $dispatcher,
             ]
         );
 
@@ -180,11 +492,64 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $response = $nfg->connectCallback($request, $personMeuRS);
 
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
-        $this->assertEquals('fos_user_registration_confirmed', $response->getTargetUrl());
+        $this->assertEquals('dummy', $response->getTargetUrl());
+    }
 
-        // Assert that the CPF was moved to $person
-        $this->assertNotNull($personMeuRS->getNfgAccessToken());
-        $this->assertNotNull($personMeuRS->getNfgProfile());
+    public function testRegistrationCpfCollision()
+    {
+        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\CpfInUseException');
+
+        $accessId = 'access_id'.random_int(10, 9999);
+        $soapService = $this->getSoapService($accessId);
+
+        $nfgProfile = $this->getNfgProfile();
+        $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
+
+        $meuRSHelper = $this->getMockBuilder('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $meuRSHelper->expects($this->atLeastOnce())->method('getPersonByCpf')->willReturn(new Person());
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'soap' => $soapService,
+                'meurs_helper' => $meuRSHelper,
+            ]
+        );
+
+        $accessToken = 'access_token'.random_int(10, 9999);
+        $request = $this->getRequest($accessToken);
+        $nfg->connectCallback($request, new PersonMeuRS());
+    }
+
+    public function testRegistrationEmailCollision()
+    {
+        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\EmailInUseException');
+
+        $accessId = 'access_id'.random_int(10, 9999);
+        $soapService = $this->getSoapService($accessId);
+
+        $nfgProfile = $this->getNfgProfile();
+        $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
+
+        $meuRSHelper = $this->getMockBuilder('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $meuRSHelper->expects($this->atLeastOnce())->method('getPersonByCpf')->willReturn(null);
+        $meuRSHelper->expects($this->atLeastOnce())->method('getPersonByEmail')->willReturn(new Person());
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'soap' => $soapService,
+                'meurs_helper' => $meuRSHelper,
+            ]
+        );
+
+        $accessToken = 'access_token'.random_int(10, 9999);
+        $request = $this->getRequest($accessToken);
+        $nfg->connectCallback($request, new PersonMeuRS());
     }
 
     public function testLevel1Registration()
@@ -261,6 +626,38 @@ class NfgTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * This tests a user with CPF filled that does not match NFG's CPF
+     */
+    public function testConnectCallbackCpfMismatch()
+    {
+        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\CpfMismatchException');
+        $accessId = 'access_id'.random_int(10, 9999);
+        $soapService = $this->getSoapService($accessId);
+
+        $cpf = '01234567891';
+        $person = new Person();
+        $person->setCpf($cpf);
+        $personMeuRS = new PersonMeuRS();
+        $personMeuRS
+            ->setVoterRegistration('1234567890')
+            ->setPerson($person);
+
+        $nfgProfile = $this->getNfgProfile($personMeuRS->getVoterRegistration());
+        $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'soap' => $soapService,
+            ]
+        );
+
+        $accessToken = 'access_token'.random_int(10, 9999);
+        $request = $this->getRequest($accessToken);
+        $nfg->connectCallback($request, $personMeuRS);
+    }
+
+    /**
      * Test scenario where the person making the connection does not have a CPF in the profile but there is another
      * account that user's CPF but without NFG connection.
      *
@@ -320,6 +717,8 @@ class NfgTest extends \PHPUnit_Framework_TestCase
      */
     public function testConnectCallbackWithoutCpfAndCollision()
     {
+        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException');
+
         $accessId = 'access_id'.random_int(10, 9999);
         $accessToken = 'access_token'.random_int(10, 9999);
         $soapService = $this->getSoapService($accessId);
@@ -355,13 +754,58 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        try {
-            $request = $this->getRequest($accessToken);
-            $nfg->connectCallback($request, $personMeuRS);
-            $this->fail('Exception was not thrown!');
-        } catch (NfgAccountCollisionException $e) {
-            $this->assertInstanceOf('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException', $e);
-        }
+        $request = $this->getRequest($accessToken);
+        $nfg->connectCallback($request, $personMeuRS);
+    }
+
+    /**
+     * Test scenario where the person making the connection does not have a CPF in the profile but there is another
+     * account that user's CPF. Also, this other account is linked to the same NFG account.
+     *
+     * In this scenario, the used opted to override the existing connection
+     */
+    public function testConnectCallbackWithoutCpfAndCollisionWithOverride()
+    {
+        $accessId = 'access_id'.random_int(10, 9999);
+        $accessToken = 'access_token'.random_int(10, 9999);
+        $soapService = $this->getSoapService($accessId);
+
+        $cpf = '01234567890';
+        $voterRegistration = '1234567890';
+        $nfgProfile = $this->getNfgProfile($voterRegistration);
+        $person = new Person();
+        $personMeuRS = new PersonMeuRS();
+        $personMeuRS
+            ->setId(1)
+            ->setVoterRegistration($voterRegistration)
+            ->setPerson($person);
+
+        $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
+
+        $otherPerson = new Person();
+        $otherPerson->setCpf($cpf);
+        $otherPersonMeuRS = new PersonMeuRS();
+        $otherPersonMeuRS
+            ->setId(2)
+            ->setNfgAccessToken($accessToken)
+            ->setNfgProfile($nfgProfile)
+            ->setPerson($otherPerson);
+        $meuRSHelper = $this->prophesize('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper');
+        $meuRSHelper->getPersonByCpf($cpf)->willReturn($otherPersonMeuRS)->shouldBeCalled();
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'soap' => $soapService,
+                'meurs_helper' => $meuRSHelper->reveal(),
+            ]
+        );
+
+        $request = $this->getRequest($accessToken);
+        $nfg->connectCallback($request, $personMeuRS, true);
+
+        $this->assertNull($otherPersonMeuRS->getNfgProfile());
+        $this->assertNull($otherPersonMeuRS->getNfgAccessToken());
     }
 
     public function testDisconnection()

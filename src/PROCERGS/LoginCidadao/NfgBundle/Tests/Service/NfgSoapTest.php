@@ -12,7 +12,6 @@ namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Service;
 
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
-use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Security\Credentials;
 use PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoap;
 

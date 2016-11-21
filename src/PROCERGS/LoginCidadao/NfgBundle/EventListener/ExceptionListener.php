@@ -59,6 +59,7 @@ class ExceptionListener
         if ($e instanceof NfgAccountCollisionException) {
             // Both users are linked to the same NFG account
             // TODO:
+            $event->setResponse(new RedirectResponse('dummy'));
             return;
         }
 

@@ -11,7 +11,10 @@
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests\EventListener;
 
 use PROCERGS\LoginCidadao\NfgBundle\EventListener\ExceptionListener;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\ConnectionNotFoundException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\CpfMismatchException;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Tests\TestsUtil;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -29,6 +32,35 @@ class ExceptionListenerTest extends \PHPUnit_Framework_TestCase
     public function testCpfMismatch()
     {
         $this->expectRedirect(new CpfMismatchException(), 'lc_documents');
+    }
+
+    public function testNfgCollisionException()
+    {
+        $this->expectRedirect(new NfgAccountCollisionException(), 'dummy');
+    }
+
+    public function testMissingRequiredInformationException()
+    {
+        $this->expectRedirect(new MissingRequiredInformationException(), 'nfg_missing_info');
+    }
+
+    public function testConnectionNotFoundExceptionWithoutFlash()
+    {
+        $this->expectRedirect(new ConnectionNotFoundException(), 'fos_user_security_login');
+    }
+
+    public function testConnectionNotFoundExceptionWithFlash()
+    {
+        $session = $this->getSessionWithFlash();
+        $this->expectRedirect(new ConnectionNotFoundException(), 'fos_user_security_login', null, $session);
+    }
+
+    public function testUnrelatedException()
+    {
+        $event = $this->getEvent(new \RuntimeException());
+        $this->getExceptionListener()->onKernelException($event);
+
+        $this->assertNull($event->getResponse());
     }
 
     public function testSubRequest()
@@ -63,29 +95,42 @@ class ExceptionListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return Request
      */
-    private function getRequest()
+    private function getRequest($session = null)
     {
-        return $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request->expects($this->any())->method('getSession')->willReturn($session);
+        return $request;
     }
 
-    private function getEvent(\Exception $e, $requestType = null)
+    private function getEvent(\Exception $e, $requestType = null, $session = null)
     {
         return new GetResponseForExceptionEvent(
             $this->getKernel(),
-            $this->getRequest(),
+            $this->getRequest($session),
             $requestType ? $requestType : HttpKernelInterface::MASTER_REQUEST,
             $e
         );
     }
 
-    private function expectRedirect(\Exception $e, $route, $requestType = null)
+    private function expectRedirect(\Exception $e, $route, $requestType = null, $session = null)
     {
-        $event = $this->getEvent($e, $requestType);
+        $event = $this->getEvent($e, $requestType, $session);
         $this->getExceptionListener()->onKernelException($event);
 
         /** @var RedirectResponse $response */
         $response = $event->getResponse();
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals($route, $response->getTargetUrl());
+    }
+
+    private function getSessionWithFlash()
+    {
+        $flashbag = $this->getMock('Symfony\Component\HttpFoundation\Session\Flash\FlashBag');
+        $flashbag->expects($this->once())->method('add');
+
+        $session = $this->getMock('Symfony\Component\HttpFoundation\Session\Session');
+        $session->expects($this->once())->method('getFlashBag')->willReturn($flashbag);
+
+        return $session;
     }
 }
