@@ -13,6 +13,9 @@ namespace PROCERGS\LoginCidadao\NfgBundle\Tests\DependencyInjection;
 use PROCERGS\LoginCidadao\NfgBundle\DependencyInjection\Configuration;
 use Symfony\Component\Config\Definition\Processor;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
     public static function getSampleConfig()

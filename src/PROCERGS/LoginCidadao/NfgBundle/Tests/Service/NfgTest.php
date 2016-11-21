@@ -27,6 +27,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Exception\AccountExpiredException;
 
+/**
+ * @codeCoverageIgnore
+ */
 class NfgTest extends \PHPUnit_Framework_TestCase
 {
     public function testLoginRedirectUnavailableAccessId()

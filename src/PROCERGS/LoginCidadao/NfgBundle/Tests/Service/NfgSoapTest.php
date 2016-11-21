@@ -15,6 +15,9 @@ use libphonenumber\PhoneNumberUtil;
 use PROCERGS\LoginCidadao\NfgBundle\Security\Credentials;
 use PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoap;
 
+/**
+ * @codeCoverageIgnore
+ */
 class NfgSoapTest extends \PHPUnit_Framework_TestCase
 {
     public function testValidGetAccessID()

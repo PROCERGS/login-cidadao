@@ -12,6 +12,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @codeCoverageIgnore
+ */
 class DefaultController extends Controller
 {
     /**

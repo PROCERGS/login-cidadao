@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class HelpController
  * @package PROCERGS\LoginCidadao\NfgBundle\Controller
+ * @codeCoverageIgnore
  *
  * @Route("/help")
  */
