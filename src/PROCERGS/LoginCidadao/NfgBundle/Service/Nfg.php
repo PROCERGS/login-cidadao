@@ -22,6 +22,9 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper;
+use PROCERGS\LoginCidadao\NfgBundle\Event\GetConnectCallbackResponseEvent;
+use PROCERGS\LoginCidadao\NfgBundle\Event\GetDisconnectCallbackResponseEvent;
+use PROCERGS\LoginCidadao\NfgBundle\Event\GetLoginCallbackResponseEvent;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\ConnectionNotFoundException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\CpfInUseException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\CpfMismatchException;
@@ -31,6 +34,7 @@ use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\OverrideResponseException;
 use PROCERGS\LoginCidadao\NfgBundle\Helper\UrlHelper;
+use PROCERGS\LoginCidadao\NfgBundle\NfgEvents;
 use PROCERGS\LoginCidadao\NfgBundle\Traits\CircuitBreakerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
@@ -38,6 +42,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -227,8 +232,10 @@ class Nfg implements LoggerAwareInterface
             throw $e;
         }
 
-        // TODO: trigger event to allow response to be changed
-        return $response;
+        $event = new GetLoginCallbackResponseEvent($params, $response);
+        $this->dispatcher->dispatch(NfgEvents::LOGIN_CALLBACK_RESPONSE, $event);
+
+        return $event->getResponse();
     }
 
     public function connect()
@@ -240,7 +247,7 @@ class Nfg implements LoggerAwareInterface
      * @param Request $request
      * @param PersonMeuRS $personMeuRS
      * @param bool $overrideExisting
-     * @return RedirectResponse
+     * @return Response
      */
     public function connectCallback(Request $request, PersonMeuRS $personMeuRS, $overrideExisting = false)
     {
@@ -256,7 +263,12 @@ class Nfg implements LoggerAwareInterface
             try {
                 $response = $this->register($request, $personMeuRS, $nfgProfile);
             } catch (OverrideResponseException $e) {
-                return $e->getResponse();
+                $event = new GetConnectCallbackResponseEvent(
+                    $request, $personMeuRS, $overrideExisting, $e->getResponse()
+                );
+                $this->dispatcher->dispatch(NfgEvents::CONNECT_CALLBACK_RESPONSE, $event);
+
+                return $event->getResponse();
             }
         }
 
@@ -274,17 +286,19 @@ class Nfg implements LoggerAwareInterface
         $this->em->flush($nfgProfile);
         $this->em->flush($personMeuRS);
 
-        // TODO: trigger event to allow response to be changed
-        if ($response) {
-            return $response;
+        if (!$response) {
+            $response = new RedirectResponse($this->router->generate('fos_user_profile_edit'));
         }
 
-        return new RedirectResponse($this->router->generate('fos_user_profile_edit'));
+        $event = new GetConnectCallbackResponseEvent($request, $personMeuRS, $overrideExisting, $response);
+        $this->dispatcher->dispatch(NfgEvents::CONNECT_CALLBACK_RESPONSE, $event);
+
+        return $event->getResponse();
     }
 
     /**
      * @param PersonMeuRS $personMeuRS
-     * @return RedirectResponse
+     * @return Response
      */
     public function disconnect(PersonMeuRS $personMeuRS)
     {
@@ -293,8 +307,11 @@ class Nfg implements LoggerAwareInterface
         $personMeuRS->setNfgProfile(null);
         $this->em->flush();
 
-        // TODO: trigger event to allow response to be changed
-        return new RedirectResponse($this->router->generate('fos_user_profile_edit'));
+        $response = new RedirectResponse($this->router->generate('fos_user_profile_edit'));
+        $event = new GetDisconnectCallbackResponseEvent($personMeuRS, $response);
+        $this->dispatcher->dispatch(NfgEvents::CONNECT_CALLBACK_RESPONSE, $event);
+
+        return $event->getResponse();
     }
 
     private function redirect($endpoint, $callbackRoute)
@@ -402,8 +419,11 @@ class Nfg implements LoggerAwareInterface
     }
 
     /**
+     * @param Request $request
+     * @param PersonMeuRS $personMeuRS
      * @param NfgProfile $nfgProfile
-     * @return null|RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return null|RedirectResponse|Response
+     * @throws OverrideResponseException
      */
     private function register(Request $request, PersonMeuRS $personMeuRS, NfgProfile $nfgProfile)
     {
