@@ -20,7 +20,6 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
 use PROCERGS\LoginCidadao\NfgBundle\Tests\TestsUtil;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -169,6 +168,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
+        /** @var RedirectResponse $response */
         $response = $nfg->loginCallback(compact('cpf', 'accessId', 'prsec'), $secret);
 
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
@@ -485,6 +485,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $accessToken = 'access_token'.random_int(10, 9999);
         $request = $this->getRequest($accessToken);
+        /** @var RedirectResponse $response */
         $response = $nfg->connectCallback($request, $personMeuRS);
 
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
@@ -565,6 +566,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $accessToken = 'access_token'.random_int(10, 9999);
         $request = $this->getRequest($accessToken);
+        /** @var RedirectResponse $response */
         $response = $nfg->connectCallback($request, $personMeuRS);
 
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
@@ -603,6 +605,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $accessToken = 'access_token'.random_int(10, 9999);
         $request = $this->getRequest($accessToken);
+        /** @var RedirectResponse $response */
         $response = $nfg->connectCallback($request, $personMeuRS);
 
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
@@ -684,6 +687,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $accessToken = 'access_token'.random_int(10, 9999);
         $request = $this->getRequest($accessToken);
+        /** @var RedirectResponse $response */
         $response = $nfg->connectCallback($request, $personMeuRS);
 
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
@@ -959,6 +963,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $accessToken
      * @return Request
      */
     private function getRequest($accessToken)
@@ -970,7 +975,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return EventDispatcherInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function getDispatcher()
     {
