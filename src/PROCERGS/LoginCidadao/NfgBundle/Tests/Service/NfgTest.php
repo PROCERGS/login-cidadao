@@ -20,7 +20,6 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
 use PROCERGS\LoginCidadao\NfgBundle\Tests\TestsUtil;
-use Prophecy\Argument;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,18 +42,19 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $cbService = 'service';
         $circuitBreaker = $this->getCircuitBreaker($cbService, true);
-        $circuitBreaker->reportFailure($cbService)->shouldBeCalled();
+        $circuitBreaker->expects($this->atLeastOnce())
+            ->method('reportFailure')->with($cbService);
 
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())->method('error');
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId)->reveal(),
+                'session' => $this->getSession($accessId),
                 'soap' => $soapService,
             ]
         );
-        $nfg->setCircuitBreaker($circuitBreaker->reveal(), $cbService);
+        $nfg->setCircuitBreaker($circuitBreaker, $cbService);
         $nfg->setLogger($logger);
         $nfg->login();
     }
@@ -70,15 +70,16 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $cbService = 'service';
         $circuitBreaker = $this->getCircuitBreaker($cbService, true);
-        $circuitBreaker->reportFailure($cbService)->shouldBeCalled();
+        $circuitBreaker->expects($this->atLeastOnce())
+            ->method('reportFailure')->with($cbService);
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId)->reveal(),
+                'session' => $this->getSession($accessId),
                 'soap' => $soapService,
             ]
         );
-        $nfg->setCircuitBreaker($circuitBreaker->reveal(), $cbService);
+        $nfg->setCircuitBreaker($circuitBreaker, $cbService);
         $nfg->login();
     }
 
@@ -92,11 +93,11 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId)->reveal(),
+                'session' => $this->getSession($accessId),
                 'soap' => $this->getSoapService($accessId),
             ]
         );
-        $nfg->setCircuitBreaker($circuitBreaker->reveal(), $cbService);
+        $nfg->setCircuitBreaker($circuitBreaker, $cbService);
         $nfg->login();
     }
 
@@ -110,11 +111,11 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId)->reveal(),
+                'session' => $this->getSession($accessId),
                 'soap' => $this->getSoapService($accessId),
             ]
         );
-        $nfg->setCircuitBreaker($circuitBreaker->reveal(), $cbService);
+        $nfg->setCircuitBreaker($circuitBreaker, $cbService);
         $nfg->connect();
     }
 
@@ -124,22 +125,22 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $cbService = 'service';
         $circuitBreaker = $this->getCircuitBreaker($cbService, true);
-        $circuitBreaker->reportSuccess($cbService)->shouldBeCalled();
+        $circuitBreaker->expects($this->atLeastOnce())
+            ->method('reportSuccess')->with($cbService);
 
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())->method('info');
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'set')->reveal(),
+                'session' => $this->getSession($accessId, 'set'),
                 'soap' => $this->getSoapService($accessId),
             ]
         );
-        $nfg->setCircuitBreaker($circuitBreaker->reveal(), $cbService);
+        $nfg->setCircuitBreaker($circuitBreaker, $cbService);
         $nfg->setLogger($logger);
 
         $response = $nfg->login();
-        // TODO: expect RedirectResponse once the Referrer problem at NFG gets fixed.
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\Response', $response);
         $this->assertContains($accessId, $response->getContent());
         $this->assertContains('nfg_login_callback', $response->getContent());
@@ -157,15 +158,14 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $personMeuRS = new PersonMeuRS();
         $personMeuRS->setPerson($person)
             ->setNfgAccessToken('dummy');
-        $meuRSHelper = $this->prophesize('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper');
-        $meuRSHelper->getPersonByCpf($cpf)->willReturn($personMeuRS)->shouldBeCalled();
+        $meuRSHelper = $this->getMeuRSHelper($cpf, $personMeuRS);
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'get')->reveal(),
+                'session' => $this->getSession($accessId, 'get'),
                 'soap' => $this->getSoapService($accessId),
-                'meurs_helper' => $meuRSHelper->reveal(),
-                'login_manager' => $this->getLoginManager(true)->reveal(),
+                'meurs_helper' => $meuRSHelper,
+                'login_manager' => $this->getLoginManager(true),
             ]
         );
 
@@ -185,7 +185,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'session' => $this->getSession($accessId, 'none'),
                 'soap' => $this->getSoapService($accessId),
             ]
         );
@@ -203,7 +203,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'session' => $this->getSession($accessId, 'none'),
                 'soap' => $this->getSoapService($accessId),
             ]
         );
@@ -221,7 +221,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId.'_INVALID', 'none')->reveal(),
+                'session' => $this->getSession($accessId.'_INVALID', 'none'),
                 'soap' => $this->getSoapService($accessId),
             ]
         );
@@ -243,22 +243,17 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $personMeuRS = new PersonMeuRS();
         $personMeuRS->setPerson($person)
             ->setNfgAccessToken('dummy');
-        $meuRSHelper = $this->prophesize('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper');
-        $meuRSHelper->getPersonByCpf($cpf)->willReturn($personMeuRS)->shouldBeCalled();
+        $meuRSHelper = $this->getMeuRSHelper($cpf, $personMeuRS);
 
         $loginManager = $this->getLoginManager();
-        $loginManager->logInUser(
-            Argument::type('string'),
-            Argument::type('\FOS\UserBundle\Model\UserInterface'),
-            Argument::type('\Symfony\Component\HttpFoundation\Response')
-        )->willThrow(new AccountExpiredException())->shouldBeCalled();
+        $loginManager->method('logInUser')->willThrowException(new AccountExpiredException());
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'get')->reveal(),
+                'session' => $this->getSession($accessId, 'get'),
                 'soap' => $this->getSoapService($accessId),
-                'login_manager' => $loginManager->reveal(),
-                'meurs_helper' => $meuRSHelper->reveal(),
+                'login_manager' => $loginManager,
+                'meurs_helper' => $meuRSHelper,
             ]
         );
 
@@ -276,15 +271,14 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $person = new Person();
         $person->setCpf($cpf);
-        $meuRSHelper = $this->prophesize('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper');
-        $meuRSHelper->getPersonByCpf($cpf)->willReturn(null)->shouldBeCalled();
+        $meuRSHelper = $this->getMeuRSHelper($cpf, null);
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'get')->reveal(),
+                'session' => $this->getSession($accessId, 'get'),
                 'soap' => $this->getSoapService($accessId),
-                'meurs_helper' => $meuRSHelper->reveal(),
-                'login_manager' => $this->getLoginManager(false)->reveal(),
+                'meurs_helper' => $meuRSHelper,
+                'login_manager' => $this->getLoginManager(false),
             ]
         );
 
@@ -310,11 +304,11 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'session' => $this->getSession($accessId, 'none'),
                 'soap' => $soapService,
             ]
         );
-        $nfg->setCircuitBreaker($circuitBreaker->reveal(), $cbService);
+        $nfg->setCircuitBreaker($circuitBreaker, $cbService);
 
         $accessToken = 'access_token'.random_int(10, 9999);
         $request = $this->getRequest($accessToken);
@@ -338,7 +332,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'session' => $this->getSession($accessId, 'none'),
                 'soap' => $soapService,
             ]
         );
@@ -367,15 +361,16 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $cbService = 'service';
         $circuitBreaker = $this->getCircuitBreaker($cbService, true);
-        $circuitBreaker->reportFailure($cbService)->shouldBeCalled();
+        $circuitBreaker->expects($this->atLeastOnce())
+            ->method('reportFailure')->with($cbService);
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'session' => $this->getSession($accessId, 'none'),
                 'soap' => $soapService,
             ]
         );
-        $nfg->setCircuitBreaker($circuitBreaker->reveal(), $cbService);
+        $nfg->setCircuitBreaker($circuitBreaker, $cbService);
 
         $accessToken = 'access_token'.random_int(10, 9999);
         $request = $this->getRequest($accessToken);
@@ -402,15 +397,16 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $cbService = 'service';
         $circuitBreaker = $this->getCircuitBreaker($cbService, true);
-        $circuitBreaker->reportFailure($cbService)->shouldBeCalled();
+        $circuitBreaker->expects($this->atLeastOnce())
+            ->method('reportFailure')->with($cbService);
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'session' => $this->getSession($accessId, 'none'),
                 'soap' => $soapService,
             ]
         );
-        $nfg->setCircuitBreaker($circuitBreaker->reveal(), $cbService);
+        $nfg->setCircuitBreaker($circuitBreaker, $cbService);
 
         $accessToken = 'access_token'.random_int(10, 9999);
         $request = $this->getRequest($accessToken);
@@ -444,7 +440,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'session' => $this->getSession($accessId, 'none'),
                 'soap' => $soapService,
             ]
         );
@@ -463,10 +459,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $nfgProfile = $this->getNfgProfile();
         $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
 
-        $meuRSHelper = $this->getMockBuilder('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $meuRSHelper->expects($this->atLeastOnce())->method('getPersonByCpf')->willReturn(null);
+        $meuRSHelper = $this->getMeuRSHelper($nfgProfile->getCpf(), null);
 
         $dispatcher = $this->getDispatcher();
         $dispatcher->expects($this->atLeastOnce())->method('dispatch')->willReturnCallback(
@@ -481,7 +474,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'session' => $this->getSession($accessId, 'none'),
                 'soap' => $soapService,
                 'meurs_helper' => $meuRSHelper,
                 'dispatcher' => $dispatcher,
@@ -508,14 +501,11 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $nfgProfile = $this->getNfgProfile();
         $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
 
-        $meuRSHelper = $this->getMockBuilder('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $meuRSHelper->expects($this->atLeastOnce())->method('getPersonByCpf')->willReturn(new Person());
+        $meuRSHelper = $this->getMeuRSHelper($nfgProfile->getCpf(), new Person());
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'session' => $this->getSession($accessId, 'none'),
                 'soap' => $soapService,
                 'meurs_helper' => $meuRSHelper,
             ]
@@ -536,15 +526,12 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $nfgProfile = $this->getNfgProfile();
         $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
 
-        $meuRSHelper = $this->getMockBuilder('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $meuRSHelper->expects($this->atLeastOnce())->method('getPersonByCpf')->willReturn(null);
+        $meuRSHelper = $this->getMeuRSHelper($nfgProfile->getCpf(), null);
         $meuRSHelper->expects($this->atLeastOnce())->method('getPersonByEmail')->willReturn(new Person());
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'session' => $this->getSession($accessId, 'none'),
                 'soap' => $soapService,
                 'meurs_helper' => $meuRSHelper,
             ]
@@ -564,14 +551,11 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $nfgProfile->setAccessLvl(1);
         $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
 
-        $meuRSHelper = $this->getMockBuilder('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $meuRSHelper->expects($this->atLeastOnce())->method('getPersonByCpf')->willReturn(null);
+        $meuRSHelper = $this->getMeuRSHelper($nfgProfile->getCpf(), null);
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'session' => $this->getSession($accessId, 'none'),
                 'soap' => $soapService,
                 'meurs_helper' => $meuRSHelper,
             ]
@@ -612,7 +596,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'session' => $this->getSession($accessId, 'none'),
                 'soap' => $soapService,
             ]
         );
@@ -650,7 +634,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'session' => $this->getSession($accessId, 'none'),
                 'soap' => $soapService,
             ]
         );
@@ -688,14 +672,13 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $otherPersonMeuRS
             ->setPerson($otherPerson)
             ->setId(2);
-        $meuRSHelper = $this->prophesize('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper');
-        $meuRSHelper->getPersonByCpf($cpf)->willReturn($otherPersonMeuRS)->shouldBeCalled();
+        $meuRSHelper = $this->getMeuRSHelper($cpf, $otherPersonMeuRS);
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'session' => $this->getSession($accessId, 'none'),
                 'soap' => $soapService,
-                'meurs_helper' => $meuRSHelper->reveal(),
+                'meurs_helper' => $meuRSHelper,
             ]
         );
 
@@ -746,14 +729,13 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             ->setNfgAccessToken($accessToken)
             ->setNfgProfile($nfgProfile)
             ->setPerson($otherPerson);
-        $meuRSHelper = $this->prophesize('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper');
-        $meuRSHelper->getPersonByCpf($cpf)->willReturn($otherPersonMeuRS)->shouldBeCalled();
+        $meuRSHelper = $this->getMeuRSHelper($cpf, $otherPersonMeuRS);
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'session' => $this->getSession($accessId, 'none'),
                 'soap' => $soapService,
-                'meurs_helper' => $meuRSHelper->reveal(),
+                'meurs_helper' => $meuRSHelper,
             ]
         );
 
@@ -793,14 +775,13 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             ->setNfgAccessToken($accessToken)
             ->setNfgProfile($nfgProfile)
             ->setPerson($otherPerson);
-        $meuRSHelper = $this->prophesize('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper');
-        $meuRSHelper->getPersonByCpf($cpf)->willReturn($otherPersonMeuRS)->shouldBeCalled();
+        $meuRSHelper = $this->getMeuRSHelper($cpf, $otherPersonMeuRS);
 
         $nfg = $this->getNfgService(
             [
-                'session' => $this->getSession($accessId, 'none')->reveal(),
+                'session' => $this->getSession($accessId, 'none'),
                 'soap' => $soapService,
-                'meurs_helper' => $meuRSHelper->reveal(),
+                'meurs_helper' => $meuRSHelper,
             ]
         );
 
@@ -845,15 +826,13 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             $collaborators['router'] = TestsUtil::getRouter($this);
         }
         if (false === array_key_exists('session', $collaborators)) {
-            $collaborators['session'] = $this->getSession($accessId, 'none')->reveal();
+            $collaborators['session'] = $this->getSession($accessId, 'none');
         }
         if (false === array_key_exists('login_manager', $collaborators)) {
-            $collaborators['login_manager'] = $this->getLoginManager(false)->reveal();
+            $collaborators['login_manager'] = $this->getLoginManager(false);
         }
         if (false === array_key_exists('meurs_helper', $collaborators)) {
-            $collaborators['meurs_helper'] = $meuRSHelper = $this->prophesize(
-                'PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper'
-            )->reveal();
+            $collaborators['meurs_helper'] = $this->getMeuRSHelper();
         }
         if (false === array_key_exists('dispatcher', $collaborators)) {
             $collaborators['dispatcher'] = $this->getDispatcher();
@@ -902,19 +881,22 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param bool $shouldCallLogInUser
-     * @return \Prophecy\Prophecy\ObjectProphecy
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function getLoginManager($shouldCallLogInUser = false)
     {
-        $loginManager = $this->prophesize('\FOS\UserBundle\Security\LoginManagerInterface');
-        $logInUser = $loginManager->logInUser(
-            Argument::type('string'),
-            Argument::type('\FOS\UserBundle\Model\UserInterface'),
-            Argument::type('\Symfony\Component\HttpFoundation\Response')
-        );
         if ($shouldCallLogInUser) {
-            $logInUser->shouldBeCalled();
+            $frequency = $this->atLeastOnce();
+        } else {
+            $frequency = $this->any();
         }
+        $loginManager = $this->getMock('\FOS\UserBundle\Security\LoginManagerInterface');
+        $loginManager->expects($frequency)
+            ->method('logInUser')->with(
+                $this->isType('string'),
+                $this->isInstanceOf('\FOS\UserBundle\Model\UserInterface'),
+                $this->isInstanceOf('\Symfony\Component\HttpFoundation\Response')
+            );
 
         return $loginManager;
     }
@@ -926,13 +908,15 @@ class NfgTest extends \PHPUnit_Framework_TestCase
      */
     private function getSession($accessId, $shouldCall = null)
     {
-        $session = $this->prophesize('\Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $session = $this->getMock('\Symfony\Component\HttpFoundation\Session\SessionInterface');
         switch ($shouldCall) {
             case 'get':
-                $session->get(Nfg::ACCESS_ID_SESSION_KEY)->willReturn($accessId)->shouldBeCalled();
+                $session->expects($this->atLeastOnce())
+                    ->method('get')->with(Nfg::ACCESS_ID_SESSION_KEY)->willReturn($accessId);
                 break;
             case 'set':
-                $session->set(Nfg::ACCESS_ID_SESSION_KEY, $accessId)->shouldBeCalled();
+                $session->expects($this->atLeastOnce())
+                    ->method('set')->with(Nfg::ACCESS_ID_SESSION_KEY, $accessId);
                 break;
             default:
 
@@ -944,12 +928,13 @@ class NfgTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $serviceName
      * @param bool $isAvailable
-     * @return \Prophecy\Prophecy\ObjectProphecy
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function getCircuitBreaker($serviceName, $isAvailable)
     {
-        $circuitBreaker = $this->prophesize('\Ejsmont\CircuitBreaker\CircuitBreakerInterface');
-        $circuitBreaker->isAvailable($serviceName)->willReturn($isAvailable)->shouldBeCalled();
+        $circuitBreaker = $this->getMock('\Ejsmont\CircuitBreaker\CircuitBreakerInterface');
+        $circuitBreaker->expects($this->atLeastOnce())
+            ->method('isAvailable')->with($serviceName)->willReturn($isAvailable);
 
         return $circuitBreaker;
     }
@@ -1037,5 +1022,19 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         );
 
         return $userManager;
+    }
+
+    private function getMeuRSHelper($expectedCpf = null, $response = null)
+    {
+        $meuRSHelper = $this->getMockBuilder('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        if ($expectedCpf) {
+            $meuRSHelper->expects($this->atLeastOnce())
+                ->method('getPersonByCpf')->with($expectedCpf)->willReturn($response);
+        }
+
+        return $meuRSHelper;
     }
 }
