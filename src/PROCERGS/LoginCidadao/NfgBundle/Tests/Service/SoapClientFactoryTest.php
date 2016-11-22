@@ -30,10 +30,11 @@ class SoapClientFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $serviceName = 'service';
         $circuitBreaker = $this->getCircuitBreaker($serviceName, true);
-        $circuitBreaker->reportFailure($serviceName)->shouldBeCalled();
+        $circuitBreaker->expects($this->atLeastOnce())
+            ->method('reportFailure')->with($serviceName);
 
         $factory = new SoapClientFactory();
-        $factory->setCircuitBreaker($circuitBreaker->reveal(), $serviceName);
+        $factory->setCircuitBreaker($circuitBreaker, $serviceName);
 
         try {
             $factory->createClient('invalid', true);
@@ -47,7 +48,8 @@ class SoapClientFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $serviceName = 'service';
         $circuitBreaker = $this->getCircuitBreaker($serviceName, true);
-        $circuitBreaker->reportSuccess($serviceName)->shouldBeCalled();
+        $circuitBreaker->expects($this->atLeastOnce())
+            ->method('reportSuccess')->with($serviceName);
 
         $factory = $this->getMockBuilder('PROCERGS\LoginCidadao\NfgBundle\Service\SoapClientFactory')
             ->setMethods(['instantiateSoapClient'])
@@ -55,7 +57,7 @@ class SoapClientFactoryTest extends \PHPUnit_Framework_TestCase
         $factory->expects($this->atLeastOnce())
             ->method('instantiateSoapClient')
             ->willReturn($this->getMockBuilder('\SoapClient')->disableOriginalConstructor()->getMock());
-        $factory->setCircuitBreaker($circuitBreaker->reveal(), $serviceName);
+        $factory->setCircuitBreaker($circuitBreaker, $serviceName);
 
         $client = $factory->createClient('invalid', true);
         $this->assertInstanceOf('\SoapClient', $client);
@@ -67,7 +69,7 @@ class SoapClientFactoryTest extends \PHPUnit_Framework_TestCase
         $circuitBreaker = $this->getCircuitBreaker($serviceName, false);
 
         $factory = new SoapClientFactory();
-        $factory->setCircuitBreaker($circuitBreaker->reveal(), $serviceName);
+        $factory->setCircuitBreaker($circuitBreaker, $serviceName);
 
         try {
             $factory->createClient('invalid', true);
@@ -77,10 +79,16 @@ class SoapClientFactoryTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @param string $serviceName
+     * @param boolean $isAvailable
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     private function getCircuitBreaker($serviceName, $isAvailable)
     {
-        $circuitBreaker = $this->prophesize('\Ejsmont\CircuitBreaker\CircuitBreakerInterface');
-        $circuitBreaker->isAvailable($serviceName)->willReturn($isAvailable)->shouldBeCalled();
+        $circuitBreaker = $this->getMock('\Ejsmont\CircuitBreaker\CircuitBreakerInterface');
+        $circuitBreaker->expects($this->atLeastOnce())
+            ->method('isAvailable')->with($serviceName)->willReturn($isAvailable);
 
         return $circuitBreaker;
     }
