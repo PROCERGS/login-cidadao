@@ -1,4 +1,10 @@
 services:
+    procergs.entities.nfgprofile.repository:
+        class: PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfileRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile
+
     app.exception_listener:
         class: PROCERGS\LoginCidadao\NfgBundle\EventListener\ExceptionListener
         arguments:
@@ -46,6 +52,7 @@ services:
             - "@event_dispatcher"
             - "@fos_user.user_manager"
             - "@fos_user.registration.form.factory"
+            - "@procergs.entities.nfgprofile.repository"
             - "%fos_user.firewall_name%"
             - "%nfg_url_login%"
             - "%nfg_url_auth%"

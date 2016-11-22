@@ -15,10 +15,10 @@ use JMS\Serializer\Annotation\Groups;
 use libphonenumber\PhoneNumber;
 
 /**
- * City
+ * NfgProfile
  *
  * @ORM\Table(name="nfg_profile")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfileRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class NfgProfile
