@@ -19,9 +19,10 @@ use FOS\UserBundle\Form\Factory\FormFactory;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Security\LoginManagerInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
+use PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper;
+use PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfileRepository;
 use PROCERGS\LoginCidadao\NfgBundle\Event\GetConnectCallbackResponseEvent;
 use PROCERGS\LoginCidadao\NfgBundle\Event\GetDisconnectCallbackResponseEvent;
 use PROCERGS\LoginCidadao\NfgBundle\Event\GetLoginCallbackResponseEvent;
@@ -100,6 +101,9 @@ class Nfg implements LoggerAwareInterface
     /** @var FormFactory */
     private $formFactory;
 
+    /** @var NfgProfileRepository */
+    private $nfgProfileRepository;
+
     public function __construct(
         EntityManager $em,
         NfgSoapInterface $client,
@@ -110,6 +114,7 @@ class Nfg implements LoggerAwareInterface
         EventDispatcherInterface $dispatcher,
         UserManagerInterface $userManager,
         FormFactory $formFactory,
+        NfgProfileRepository $nfgProfileRepository,
         $firewallName,
         $loginEndpoint,
         $authorizationEndpoint
@@ -123,6 +128,7 @@ class Nfg implements LoggerAwareInterface
         $this->dispatcher = $dispatcher;
         $this->userManager = $userManager;
         $this->formFactory = $formFactory;
+        $this->nfgProfileRepository = $nfgProfileRepository;
         $this->firewallName = $firewallName;
         $this->loginEndpoint = $loginEndpoint;
         $this->authorizationEndpoint = $authorizationEndpoint;
@@ -155,7 +161,7 @@ class Nfg implements LoggerAwareInterface
     /**
      * @param string $accessToken
      * @param string|null $voterRegistration
-     * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile
+     * @return \PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile
      */
     private function getUserInfo($accessToken, $voterRegistration = null)
     {
@@ -280,6 +286,8 @@ class Nfg implements LoggerAwareInterface
         $this->checkCpf($personMeuRS, $nfgProfile, $overrideExisting);
 
         // TODO: check duplicate NfgProfile already persisted
+        $this->syncNfgProfile($nfgProfile);
+
         $this->em->persist($nfgProfile);
         $personMeuRS->setNfgProfile($nfgProfile);
         $personMeuRS->setNfgAccessToken($accessToken);
@@ -472,5 +480,25 @@ class Nfg implements LoggerAwareInterface
         );
 
         return $response;
+    }
+
+    /**
+     * @param NfgProfile $latestNfgProfile
+     */
+    private function syncNfgProfile(NfgProfile $latestNfgProfile)
+    {
+        $existingNfgProfile = $this->nfgProfileRepository->findByCpf($latestNfgProfile->getCpf());
+
+        if ($existingNfgProfile instanceof NfgProfile) {
+            $existingNfgProfile
+                ->setName($latestNfgProfile->getName())
+                ->setEmail($latestNfgProfile->getEmail())
+                ->setBirthdate($latestNfgProfile->getBirthdate())
+                ->setMobile($latestNfgProfile->getMobile())
+                ->setAccessLvl($latestNfgProfile->getAccessLvl())
+                ->setVoterRegistration($latestNfgProfile->getVoterRegistration())
+                ->setVoterRegistrationSit($latestNfgProfile->getVoterRegistrationSit());
+            $latestNfgProfile = $existingNfgProfile;
+        }
     }
 }

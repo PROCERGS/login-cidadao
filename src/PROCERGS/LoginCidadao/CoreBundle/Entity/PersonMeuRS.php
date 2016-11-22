@@ -11,6 +11,7 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 
 use PROCERGS\Generic\ValidationBundle\Validator\Constraints as PROCERGSAssert;
+use PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
@@ -49,7 +50,7 @@ class PersonMeuRS
     /**
      * @JMS\Expose
      * @JMS\Groups({"nfgprofile"})
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile", cascade={"persist"})
      * @ORM\JoinColumn(name="nfg_profile_id", referencedColumnName="id")
      * @JMS\Since("1.0.2")
      */
@@ -100,20 +101,17 @@ class PersonMeuRS
 
     /**
      *
-     * @param \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var
+     * @param \PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile $var
      * @return PersonMeuRS
      */
-    public function setNfgProfile(
-        \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var
-        = null
-    ) {
+    public function setNfgProfile(NfgProfile $var = null) {
         $this->nfgProfile = $var;
 
         return $this;
     }
 
     /**
-     * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile
+     * @return \PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile
      */
     public function getNfgProfile()
     {

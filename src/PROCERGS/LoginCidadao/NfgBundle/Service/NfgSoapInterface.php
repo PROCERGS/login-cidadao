@@ -11,7 +11,7 @@
 namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
 
-use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
+use PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile;
 
 interface NfgSoapInterface
 {

@@ -15,7 +15,7 @@ use FOS\UserBundle\Form\Factory\FormFactory;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Model\UserManagerInterface;
 use LoginCidadao\CoreBundle\Entity\Person;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
+use PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
@@ -492,6 +492,44 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('dummy', $response->getTargetUrl());
     }
 
+    public function testRegistrationWithPreexistingNfgProfile()
+    {
+        $accessId = 'access_id'.random_int(10, 9999);
+        $soapService = $this->getSoapService($accessId);
+
+        $nfgProfile = $this->getNfgProfile();
+        $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
+
+        $meuRSHelper = $this->getMeuRSHelper($nfgProfile->getCpf(), null);
+
+        $oldNfgProfile = $this->getNfgProfile();
+        $oldNfgProfile->setEmail('another@email.com');
+        $nfgProfileRepo = $this->getNfgProfileRepository();
+        $nfgProfileRepo->expects($this->atLeastOnce())
+            ->method('findByCpf')->with($nfgProfile->getCpf())->willReturn($oldNfgProfile);
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none'),
+                'soap' => $soapService,
+                'meurs_helper' => $meuRSHelper,
+                'nfgprofile_repository' => $nfgProfileRepo,
+            ]
+        );
+
+        $personMeuRS = new PersonMeuRS();
+
+        $accessToken = 'access_token'.random_int(10, 9999);
+        $request = $this->getRequest($accessToken);
+        /** @var RedirectResponse $response */
+        $response = $nfg->connectCallback($request, $personMeuRS);
+
+        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertEquals('fos_user_registration_confirmed', $response->getTargetUrl());
+
+        $this->assertEquals($nfgProfile->getEmail(), $oldNfgProfile->getEmail());
+    }
+
     public function testRegistrationCpfCollision()
     {
         $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\CpfInUseException');
@@ -856,6 +894,9 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         if (false === array_key_exists('auth_endpoint', $collaborators)) {
             $collaborators['auth_endpoint'] = 'https://dum.my/auth';
         }
+        if (false === array_key_exists('nfgprofile_repository', $collaborators)) {
+            $collaborators['nfgprofile_repository'] = $this->getNfgProfileRepository();
+        }
 
         $nfg = new Nfg(
             $collaborators['em'],
@@ -867,6 +908,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             $collaborators['dispatcher'],
             $collaborators['user_manager'],
             $collaborators['form_factory'],
+            $collaborators['nfgprofile_repository'],
             $collaborators['firewall'],
             $collaborators['login_endpoint'],
             $collaborators['auth_endpoint']
@@ -1041,5 +1083,12 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         }
 
         return $meuRSHelper;
+    }
+
+    private function getNfgProfileRepository()
+    {
+        return $this->getMockBuilder('PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfileRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }

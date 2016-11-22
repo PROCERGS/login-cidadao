@@ -12,10 +12,9 @@ namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
 
 use libphonenumber\NumberParseException;
-use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberType;
 use libphonenumber\PhoneNumberUtil;
-use PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile;
+use PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Security\Credentials;
 use Symfony\Component\DomCrawler\Crawler;
