@@ -329,17 +329,7 @@ class Nfg implements LoggerAwareInterface
             isset($url['query']) ? $url['query'] : null
         );
 
-        // NFG has some bug that causes the application to fail if a Referrer is not present
-        // So I'll have to do the redirect in this very ugly manner until this problem gets fixed.
-        $url = http_build_url($url);
-
-        // TODO: remove this after NFG gets its bugs fixed
-//        return new Response(
-//            '<html><head><meta name="referrer" content="always"/></head><body><script type="text/javascript">document.location= "'.$url.'";</script></body></html>'
-//        );
-
-        return new JsonResponse(['target' => $url]);
-        //return new RedirectResponse(http_build_url($url));
+        return new JsonResponse(['target' => http_build_url($url)]);
     }
 
     protected function reportSuccess()
@@ -388,7 +378,6 @@ class Nfg implements LoggerAwareInterface
 
         // Check data inconsistency
         if ($person->getCpf() !== $this->sanitizeCpf($nfgProfile->getCpf())) {
-            // TODO: throw exception and redirect to edit CPF
             throw new CpfMismatchException("User's CPF doesn't match CPF from NFG.");
         }
 
