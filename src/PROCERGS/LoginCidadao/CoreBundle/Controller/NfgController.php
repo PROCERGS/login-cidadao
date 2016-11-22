@@ -88,7 +88,7 @@ class NfgController extends Controller
         $userManager = $this->container->get('fos_user.user_manager');
         $dispatcher = $this->container->get('event_dispatcher');
 
-        $nfgProfile = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:NfgProfile')->findOneBy(
+        $nfgProfile = $em->getRepository('PROCERGSNfgBundle:NfgProfile')->findOneBy(
             array(
                 'cpf' => $result1['CodCpf'],
             )
@@ -291,7 +291,7 @@ class NfgController extends Controller
             $person->setCpf($result1['CodCpf']);
         }
 
-        $nfgProfile = $em->getRepository('PROCERGSLoginCidadaoCoreBundle:NfgProfile')->findOneBy(
+        $nfgProfile = $em->getRepository('PROCERGSNfgBundle:NfgProfile')->findOneBy(
             array(
                 'cpf' => $result1['CodCpf'],
             )
