@@ -19,6 +19,7 @@ use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Tests\TestsUtil;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -93,6 +94,7 @@ class ExceptionListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param Session $session
      * @return Request
      */
     private function getRequest($session = null)
