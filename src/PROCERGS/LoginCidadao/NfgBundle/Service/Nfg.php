@@ -286,13 +286,12 @@ class Nfg implements LoggerAwareInterface
         $this->checkCpf($personMeuRS, $nfgProfile, $overrideExisting);
 
         // TODO: check duplicate NfgProfile already persisted
-        $this->syncNfgProfile($nfgProfile);
+        $nfgProfile = $this->syncNfgProfile($nfgProfile);
 
         $this->em->persist($nfgProfile);
         $personMeuRS->setNfgProfile($nfgProfile);
         $personMeuRS->setNfgAccessToken($accessToken);
-        $this->em->flush($nfgProfile);
-        $this->em->flush($personMeuRS);
+        $this->em->flush();
 
         if (!$response) {
             $response = new RedirectResponse($this->router->generate('fos_user_profile_edit'));
@@ -463,6 +462,7 @@ class Nfg implements LoggerAwareInterface
 
         $this->userManager->updateUser($user);
 
+        $nfgProfile = $this->syncNfgProfile($nfgProfile);
         $personMeuRS->setPerson($user);
         $personMeuRS->setNfgProfile($nfgProfile);
         $this->em->persist($personMeuRS);
@@ -484,6 +484,7 @@ class Nfg implements LoggerAwareInterface
 
     /**
      * @param NfgProfile $latestNfgProfile
+     * @return NfgProfile
      */
     private function syncNfgProfile(NfgProfile $latestNfgProfile)
     {
@@ -498,7 +499,9 @@ class Nfg implements LoggerAwareInterface
                 ->setAccessLvl($latestNfgProfile->getAccessLvl())
                 ->setVoterRegistration($latestNfgProfile->getVoterRegistration())
                 ->setVoterRegistrationSit($latestNfgProfile->getVoterRegistrationSit());
-            $latestNfgProfile = $existingNfgProfile;
+            return $existingNfgProfile;
+        } else {
+            return $latestNfgProfile;
         }
     }
 }
