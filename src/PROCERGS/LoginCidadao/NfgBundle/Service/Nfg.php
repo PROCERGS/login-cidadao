@@ -140,9 +140,7 @@ class Nfg implements LoggerAwareInterface
      */
     private function getAccessId()
     {
-        if (false === $this->isAvailable()) {
-            throw new NfgServiceUnavailableException('NFG service is unavailable right now. Try again later.');
-        }
+        $this->checkAvailable();
 
         try {
             $accessId = $this->nfgSoap->getAccessID();
@@ -165,9 +163,7 @@ class Nfg implements LoggerAwareInterface
      */
     private function getUserInfo($accessToken, $voterRegistration = null)
     {
-        if (false === $this->isAvailable()) {
-            throw new NfgServiceUnavailableException('NFG service is unavailable right now. Try again later.');
-        }
+        $this->checkAvailable();
 
         try {
             $nfgProfile = $this->nfgSoap->getUserInfo($accessToken, $voterRegistration);
@@ -339,24 +335,6 @@ class Nfg implements LoggerAwareInterface
         return new JsonResponse(['target' => http_build_url($url)]);
     }
 
-    protected function reportSuccess()
-    {
-        $this->traitReportSuccess();
-
-        if ($this->logger instanceof LoggerInterface) {
-            $this->logger->info('NFG service reported success');
-        }
-    }
-
-    protected function reportFailure(\Exception $e = null)
-    {
-        $this->traitReportFailure();
-
-        if ($e && $this->logger instanceof LoggerInterface) {
-            $this->logger->error("NFG reported failure: {$e->getMessage()}");
-        }
-    }
-
     /**
      * Sets a logger instance on the object.
      *
@@ -499,6 +477,7 @@ class Nfg implements LoggerAwareInterface
                 ->setAccessLvl($latestNfgProfile->getAccessLvl())
                 ->setVoterRegistration($latestNfgProfile->getVoterRegistration())
                 ->setVoterRegistrationSit($latestNfgProfile->getVoterRegistrationSit());
+
             return $existingNfgProfile;
         } else {
             return $latestNfgProfile;

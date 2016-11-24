@@ -11,6 +11,8 @@
 namespace PROCERGS\LoginCidadao\NfgBundle\Traits;
 
 use Ejsmont\CircuitBreaker\CircuitBreakerInterface;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
+use Psr\Log\LoggerInterface;
 
 trait CircuitBreakerAwareTrait
 {
@@ -34,10 +36,12 @@ trait CircuitBreakerAwareTrait
     /**
      * @return bool
      */
-    protected function isAvailable()
+    protected function checkAvailable()
     {
-        if ($this->circuitBreaker instanceof CircuitBreakerInterface) {
-            return $this->circuitBreaker->isAvailable($this->cbServiceName);
+        if ($this->circuitBreaker instanceof CircuitBreakerInterface
+            && false === $this->circuitBreaker->isAvailable($this->cbServiceName)
+        ) {
+            throw new NfgServiceUnavailableException('NFG service is unavailable right now. Try again later.');
         }
 
         return true;
@@ -48,12 +52,20 @@ trait CircuitBreakerAwareTrait
         if ($this->circuitBreaker && $this->cbServiceName) {
             $this->circuitBreaker->reportSuccess($this->cbServiceName);
         }
+
+        if (isset($this->logger) && $this->logger instanceof LoggerInterface) {
+            $this->logger->info('NFG service reported success');
+        }
     }
 
-    protected function reportFailure()
+    protected function reportFailure(\Exception $e = null)
     {
         if ($this->circuitBreaker && $this->cbServiceName) {
             $this->circuitBreaker->reportFailure($this->cbServiceName);
+        }
+
+        if (isset($this->logger) && $e && $this->logger instanceof LoggerInterface) {
+            $this->logger->error("NFG reported failure: {$e->getMessage()}");
         }
     }
 }

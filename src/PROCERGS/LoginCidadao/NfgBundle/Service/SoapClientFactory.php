@@ -12,24 +12,27 @@ namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Traits\CircuitBreakerAwareTrait;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 
-class SoapClientFactory
+class SoapClientFactory implements LoggerAwareInterface
 {
     use CircuitBreakerAwareTrait;
+
+    /** @var LoggerInterface */
+    private $logger;
 
     public function createClient($wsdl, $verifyHttps = true)
     {
         try {
-            if (!$this->isAvailable()) {
-                throw new NfgServiceUnavailableException('Circuit Breaker open. Not trying again.');
-            }
+            $this->checkAvailable();
 
             $client = $this->instantiateSoapClient($wsdl, $this->getOptions($verifyHttps));
             $this->reportSuccess();
 
             return $client;
         } catch (\SoapFault $e) {
-            $this->reportFailure();
+            $this->reportFailure($e);
             throw new NfgServiceUnavailableException($e->getMessage(), 500, $e);
         }
     }
@@ -59,5 +62,17 @@ class SoapClientFactory
         }
 
         return $options;
+    }
+
+    /**
+     * Sets a logger instance on the object.
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return void
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
     }
 }

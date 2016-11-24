@@ -25,6 +25,7 @@ services:
         class: PROCERGS\LoginCidadao\NfgBundle\Service\SoapClientFactory
         calls:
             - ['setCircuitBreaker', ["@?circuitBreaker", "%procergs.nfg.circuit_breaker.service_name%"]]
+            - ['setLogger', ["@?logger"]]
 
     procergs.nfg.soap_client:
         class: SoapClient
