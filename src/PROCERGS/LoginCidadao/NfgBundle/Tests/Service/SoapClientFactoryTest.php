@@ -79,6 +79,26 @@ class SoapClientFactoryTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testLogging()
+    {
+        $successFactory = $this->getValidFactory();
+
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger->expects($this->atLeastOnce())->method('info');
+        $logger->expects($this->atLeastOnce())->method('error');
+
+        $successFactory->setLogger($logger);
+        $successFactory->createClient('valid', true);
+
+        try {
+            $failureFactory = new SoapClientFactory();
+            $failureFactory->setLogger($logger);
+            $failureFactory->createClient('invalid', true);
+        } catch (\Exception $e) {
+            // success
+        }
+    }
+
     /**
      * @param string $serviceName
      * @param boolean $isAvailable
@@ -91,5 +111,20 @@ class SoapClientFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('isAvailable')->with($serviceName)->willReturn($isAvailable);
 
         return $circuitBreaker;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getValidFactory()
+    {
+        $factory = $this->getMockBuilder('PROCERGS\LoginCidadao\NfgBundle\Service\SoapClientFactory')
+            ->setMethods(['instantiateSoapClient'])
+            ->getMock();
+        $factory->expects($this->atLeastOnce())
+            ->method('instantiateSoapClient')
+            ->willReturn($this->getMockBuilder('\SoapClient')->disableOriginalConstructor()->getMock());
+
+        return $factory;
     }
 }
