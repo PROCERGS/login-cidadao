@@ -50,6 +50,7 @@
     background-position: center !important;
     height: 50px !important;
     width: 50px !important;
+    margin: 0 auto;
 }
 
 .connect.facebook {
