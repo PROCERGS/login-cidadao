@@ -7,7 +7,7 @@ imports:
 framework:
     #esi:             ~
     assets:
-        version: '2016-09-21'
+        version: '2016-11-24'
         version_format: '%%s?version=%%s'
         base_path: ~
     translator:
