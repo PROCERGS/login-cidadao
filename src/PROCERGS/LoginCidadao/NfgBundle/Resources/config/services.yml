@@ -54,9 +54,22 @@ services:
             - "@fos_user.user_manager"
             - "@fos_user.registration.form.factory"
             - "@procergs.entities.nfgprofile.repository"
+            - "@procergs.nfg.mailer"
             - "%fos_user.firewall_name%"
             - "%nfg_url_login%"
             - "%nfg_url_auth%"
         calls:
             - ['setCircuitBreaker', ["@?circuitBreaker", "%procergs.nfg.circuit_breaker.service_name%"]]
             - ['setLogger', ["@?logger"]]
+
+    procergs.nfg.mailer:
+        class: PROCERGS\LoginCidadao\NfgBundle\Mailer\TwigSwiftMailer
+        arguments:
+            - "@mailer"
+            - "@router"
+            - "@twig"
+            - template:
+                cpf_lost: "PROCERGSNfgBundle:Email:cpfLost.html.twig"
+              email:
+                name: "%mailer_sender_name%"
+                address: "%mailer_sender_mail%"

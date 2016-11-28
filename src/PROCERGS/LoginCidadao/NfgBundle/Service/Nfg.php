@@ -35,6 +35,7 @@ use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\OverrideResponseException;
 use PROCERGS\LoginCidadao\NfgBundle\Helper\UrlHelper;
+use PROCERGS\LoginCidadao\NfgBundle\Mailer\MailerInterface;
 use PROCERGS\LoginCidadao\NfgBundle\NfgEvents;
 use PROCERGS\LoginCidadao\NfgBundle\Traits\CircuitBreakerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
@@ -105,6 +106,9 @@ class Nfg implements LoggerAwareInterface
     /** @var NfgProfileRepository */
     private $nfgProfileRepository;
 
+    /** @var MailerInterface */
+    private $mailer;
+
     public function __construct(
         EntityManager $em,
         NfgSoapInterface $client,
@@ -116,6 +120,7 @@ class Nfg implements LoggerAwareInterface
         UserManagerInterface $userManager,
         FormFactory $formFactory,
         NfgProfileRepository $nfgProfileRepository,
+        MailerInterface $mailer,
         $firewallName,
         $loginEndpoint,
         $authorizationEndpoint
@@ -130,6 +135,7 @@ class Nfg implements LoggerAwareInterface
         $this->userManager = $userManager;
         $this->formFactory = $formFactory;
         $this->nfgProfileRepository = $nfgProfileRepository;
+        $this->mailer = $mailer;
         $this->firewallName = $firewallName;
         $this->loginEndpoint = $loginEndpoint;
         $this->authorizationEndpoint = $authorizationEndpoint;
@@ -270,7 +276,6 @@ class Nfg implements LoggerAwareInterface
 
         $this->checkCpf($personMeuRS, $nfgProfile, $overrideExisting);
 
-        // TODO: check duplicate NfgProfile already persisted
         $nfgProfile = $this->syncNfgProfile($nfgProfile);
 
         $this->em->persist($nfgProfile);
@@ -366,7 +371,7 @@ class Nfg implements LoggerAwareInterface
             // The other person isn't linked with NFG, so $person can safely get the CPF
             $otherPerson->getPerson()->setCpf(null);
 
-            // TODO: send email to $otherPerson about this
+            $this->mailer->notifyCpfLost($otherPerson->getPerson());
 
             return;
         }
@@ -394,11 +399,16 @@ class Nfg implements LoggerAwareInterface
         $otherPersonMeuRS = $this->meuRSHelper->getPersonByCpf($sanitizedCpf);
 
         if ($otherPersonMeuRS !== null) {
-            if ($otherPersonMeuRS->getNfgAccessToken()) {
+            if ($otherPersonMeuRS->getNfgProfile()) {
+                $otherPersonNfgCpf = $otherPersonMeuRS->getNfgProfile()->getCpf();
+            } else {
+                $otherPersonNfgCpf = null;
+            }
+            if ($otherPersonMeuRS->getNfgAccessToken() && $otherPersonNfgCpf == $sanitizedCpf) {
                 $response = $this->logInUser($otherPersonMeuRS->getPerson());
                 throw new OverrideResponseException($response);
             }
-            throw new CpfInUseException();
+            $this->handleCpfCollision($otherPersonMeuRS);
         }
 
         if ($this->meuRSHelper->getPersonByEmail($nfgProfile->getEmail()) !== null) {
@@ -494,5 +504,17 @@ class Nfg implements LoggerAwareInterface
         $this->dispatcher->dispatch(NfgEvents::LOGIN_CALLBACK_RESPONSE, $event);
 
         return $event->getResponse();
+    }
+
+    private function handleCpfCollision(PersonMeuRS $otherPersonMeuRS)
+    {
+        if (!$otherPersonMeuRS->getNfgAccessToken()) {
+            $otherPersonMeuRS->getPerson()->setCpf(null);
+            $this->mailer->notifyCpfLost($otherPersonMeuRS->getPerson());
+            $this->em->persist($otherPersonMeuRS->getPerson());
+            $this->em->flush($otherPersonMeuRS->getPerson());
+        } else {
+            throw new CpfInUseException();
+        }
     }
 }

@@ -540,7 +540,10 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $nfgProfile = $this->getNfgProfile();
         $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
 
-        $meuRSHelper = $this->getMeuRSHelper($nfgProfile->getCpf(), new PersonMeuRS());
+        $otherPersonMeuRS = new PersonMeuRS();
+        $otherPersonMeuRS->setPerson(new Person());
+        $otherPersonMeuRS->setNfgAccessToken('token');
+        $meuRSHelper = $this->getMeuRSHelper($nfgProfile->getCpf(), $otherPersonMeuRS);
 
         $nfg = $this->getNfgService(
             [
@@ -926,6 +929,9 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         if (false === array_key_exists('nfgprofile_repository', $collaborators)) {
             $collaborators['nfgprofile_repository'] = $this->getNfgProfileRepository();
         }
+        if (false === array_key_exists('mailer', $collaborators)) {
+            $collaborators['mailer'] = $this->getMailer();
+        }
 
         $nfg = new Nfg(
             $collaborators['em'],
@@ -938,6 +944,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             $collaborators['user_manager'],
             $collaborators['form_factory'],
             $collaborators['nfgprofile_repository'],
+            $collaborators['mailer'],
             $collaborators['firewall'],
             $collaborators['login_endpoint'],
             $collaborators['auth_endpoint']
@@ -1119,5 +1126,58 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         return $this->getMockBuilder('PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfileRepository')
             ->disableOriginalConstructor()
             ->getMock();
+    }
+
+    private function getMailer()
+    {
+        return $this->getMock('PROCERGS\LoginCidadao\NfgBundle\Mailer\MailerInterface');
+    }
+
+    public function testRegisterCpfTakeOver()
+    {
+        $accessId = 'access_id'.random_int(10, 9999);
+        $soapService = $this->getSoapService($accessId);
+
+        $nfgProfile = $this->getNfgProfile();
+        $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
+
+        $otherPersonMeuRS = new PersonMeuRS();
+        $otherPersonMeuRS->setPerson(new Person());
+        $otherPersonMeuRS->getPerson()->setCpf($nfgProfile->getCpf());
+        $meuRSHelper = $this->getMeuRSHelper($nfgProfile->getCpf(), $otherPersonMeuRS);
+
+        $dispatcher = $this->getDispatcher();
+        $dispatcher->expects($this->atLeastOnce())->method('dispatch')->willReturnCallback(
+            function ($eventName, $event) {
+                if ($eventName === FOSUserEvents::REGISTRATION_INITIALIZE
+                    && $event instanceof GetResponseUserEvent
+                ) {
+                    $event->setResponse(new RedirectResponse('dummy'));
+                }
+            }
+        );
+
+        $mailer = $this->getMailer();
+        $mailer->expects($this->atLeastOnce())->method('notifyCpfLost');
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none'),
+                'soap' => $soapService,
+                'meurs_helper' => $meuRSHelper,
+                'dispatcher' => $dispatcher,
+                'mailer' => $mailer,
+            ]
+        );
+
+        $personMeuRS = new PersonMeuRS();
+
+        $accessToken = 'access_token'.random_int(10, 9999);
+        $request = $this->getRequest($accessToken);
+        /** @var RedirectResponse $response */
+        $response = $nfg->connectCallback($request, $personMeuRS);
+
+        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertEquals('dummy', $response->getTargetUrl());
     }
 }

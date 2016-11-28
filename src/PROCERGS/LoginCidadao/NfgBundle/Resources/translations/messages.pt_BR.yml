@@ -21,3 +21,9 @@ nfg:
         body: 'Selecione a forma que você deseja utilizar sua conta da Nota Fiscal Gaúcha.'
         login: 'Login'
         register: 'Cadastrar-se'
+    email:
+        cpf_lost:
+            subject: 'Seu CPF foi reivindicado'
+            body:
+                text: 'Olá, %name%!\n\nGostaríamos de lhe avisar que o CPF usado em sua conta foi reivindicado por um outro usuário utilizando uma conta válida da Nota Fiscal Gaúcha. Caso você acredite que isso é um erro, entre em contato com a equipe da Nota Fiscal Gaúcha para mais informações.'
+                html: '<p>Olá, %name%!</p><p>Gostaríamos de lhe avisar que o CPF usado em sua conta foi reivindicado por um outro usuário utilizando uma conta válida da Nota Fiscal Gaúcha. Caso você acredite que isso é um erro, entre em contato com a equipe da Nota Fiscal Gaúcha para mais informações.</p>'

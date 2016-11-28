@@ -21,3 +21,9 @@ nfg:
         body: 'Select how do you want to use your Nota Fiscal Gaúcha account.'
         login: 'Login'
         register: 'Register'
+    email:
+        cpf_lost:
+            subject: 'Your CPF was claimed'
+            body:
+                text: 'Hello, %name%!\n\nWe''d like to let you know that the CPF used by this account was taken by another user using a valid Nota Fiscal Gaúcha account. If you believe this is a mistake, you can ask Nota Fiscal Gaúcha''s team for more information.'
+                html: '<p>Hello, %name%!</p><p>We''d like to let you know that the CPF used by this account was taken by another user using a valid Nota Fiscal Gaúcha account. If you believe this is a mistake, you can ask Nota Fiscal Gaúcha''s team for more information.</p>'
