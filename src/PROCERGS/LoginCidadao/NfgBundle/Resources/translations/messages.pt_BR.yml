@@ -16,6 +16,12 @@ nfg:
             login: 'Caso você já possua sua conta no Login Cidadão, é necessário <a href="%login_url%">acessá-la</a> para ativar o vínculo com a Nota Fiscal Gaúcha.'
             register: 'Se você deseja usar suas informações na Nota Fiscal Gaúcha para criar uma conta do Login Cidadão, você pode <a class="nfgpopup" href="%register_nfg_url%">clicar aqui</a>.'
         login: 'Ir para a página de Login'
+    already_connected:
+        title: 'Conta já viculada'
+        description: 'Você tentou vincular uma conta da Nota Fiscal Gaúcha que já está conectada a outra pessoa, entretanto cada conta da Nota Fiscal Gaúcha só pode estar associada a um único perfil de cada vez.'
+        question: 'O que você deseja fazer?'
+        override: 'Ignorar conexão existente'
+        back_to_profile: 'Voltar à edição do perfil'
     action_chooser:
         title: 'Você deseja fazer login ou cadastrar-se?'
         body: 'Selecione a forma que você deseja utilizar sua conta da Nota Fiscal Gaúcha.'
@@ -27,3 +33,8 @@ nfg:
             body:
                 text: 'Olá, %name%!\n\nGostaríamos de lhe avisar que o CPF usado em sua conta foi reivindicado por um outro usuário utilizando uma conta válida da Nota Fiscal Gaúcha. Caso você acredite que isso é um erro, entre em contato com a equipe da Nota Fiscal Gaúcha para mais informações.'
                 html: '<p>Olá, %name%!</p><p>Gostaríamos de lhe avisar que o CPF usado em sua conta foi reivindicado por um outro usuário utilizando uma conta válida da Nota Fiscal Gaúcha. Caso você acredite que isso é um erro, entre em contato com a equipe da Nota Fiscal Gaúcha para mais informações.</p>'
+        connection_transferred:
+            subject: 'Sua conexão com a Nota Fiscal Gaúcha foi transferida'
+            body:
+                text: 'Olá, %name%.\n\nSua conexão com a Nota Fiscal Gaúcha foi transferia para uma outra conta conforme você solicitou. Se você não fez essa solicitação, entre em contato conosco para obter ajuda.'
+                html: '<p>Olá, %name%.\n\n</p><p>Sua conexão com a Nota Fiscal Gaúcha foi transferia para uma outra conta conforme você solicitou. Se você não fez essa solicitação, entre em contato conosco para obter ajuda.</p>'

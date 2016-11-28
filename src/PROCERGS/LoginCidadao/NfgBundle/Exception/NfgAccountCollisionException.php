@@ -18,14 +18,38 @@ namespace PROCERGS\LoginCidadao\NfgBundle\Exception;
  */
 class NfgAccountCollisionException extends \RuntimeException
 {
+    /** @var string */
+    private $accessToken;
+
     /**
      * NfgAccountCollisionException constructor.
+     * @param string $accessToken
      * @param string $message
      * @param int $code
      * @param \Exception $previous
      */
-    public function __construct($message = "", $code = 0, \Exception $previous = null)
+    public function __construct($accessToken = null, $message = "", $code = 0, \Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
+        $this->accessToken = $accessToken;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccessToken()
+    {
+        return $this->accessToken;
+    }
+
+    /**
+     * @param string $accessToken
+     * @return NfgAccountCollisionException
+     */
+    public function setAccessToken($accessToken)
+    {
+        $this->accessToken = $accessToken;
+
+        return $this;
     }
 }

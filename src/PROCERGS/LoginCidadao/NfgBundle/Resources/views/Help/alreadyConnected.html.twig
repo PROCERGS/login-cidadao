@@ -1,0 +1,18 @@
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
+
+{% block panel_body_class %}nfg-already-connected{% endblock %}
+
+{% block panel_body %}
+    <h1>{{ 'nfg.already_connected.title' | trans }}</h1>
+
+    <p>{{ 'nfg.already_connected.description' | trans }}</p>
+
+    <h2>{{ 'nfg.already_connected.question' | trans }}</h2>
+
+    <p>
+        <a class="btn btn-block btn-primary" href="{{ path('nfg_connect_callback', {'paccessid': access_token, 'override': true}) }}">{{ 'nfg.already_connected.override' | trans }}</a>
+    </p>
+    <p>
+        <a class="btn btn-block btn-primary" href="{{ path('fos_user_profile_edit') }}">{{ 'nfg.already_connected.back_to_profile' | trans }}</a>
+    </p>
+{% endblock %}

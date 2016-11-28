@@ -34,4 +34,15 @@ class HelpController extends Controller
     {
         return $this->render('PROCERGSNfgBundle:Help:connectionNotFound.html.twig');
     }
+
+    /**
+     * @Route("/already-connected", name="nfg_help_already_connected")
+     */
+    public function alreadyConnectedAction(Request $request)
+    {
+        return $this->render(
+            'PROCERGSNfgBundle:Help:alreadyConnected.html.twig',
+            ['access_token' => $request->get('access_token')]
+        );
+    }
 }

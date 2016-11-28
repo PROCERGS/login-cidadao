@@ -57,17 +57,24 @@ class TwigSwiftMailer implements MailerInterface
 
     public function notifyCpfLost(PersonInterface $person)
     {
-        // CPF was claimed by another user using NFG
         $template = $this->parameters['template']['cpf_lost'];
-        $fromEmail = $this->parameters['email']['address'];
-        $fromName = $this->parameters['email']['name'];
-        $from = array($fromEmail => $fromName);
 
         $context = array(
             'person' => $person,
         );
 
-        $this->sendMessage($template, $context, $from, $person->getEmail());
+        $this->sendMessage($template, $context, $this->getFrom(), $person->getEmail());
+    }
+
+    public function notifyConnectionTransferred(PersonInterface $person)
+    {
+        $template = $this->parameters['template']['connection_moved'];
+
+        $context = array(
+            'person' => $person,
+        );
+
+        $this->sendMessage($template, $context, $this->getFrom(), $person->getEmail());
     }
 
     /**
@@ -97,5 +104,13 @@ class TwigSwiftMailer implements MailerInterface
         }
 
         $this->mailer->send($message);
+    }
+
+    private function getFrom()
+    {
+        $fromEmail = $this->parameters['email']['address'];
+        $fromName = $this->parameters['email']['name'];
+
+        return array($fromEmail => $fromName);
     }
 }

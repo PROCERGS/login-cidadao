@@ -70,6 +70,7 @@ services:
             - "@twig"
             - template:
                 cpf_lost: "PROCERGSNfgBundle:Email:cpfLost.html.twig"
+                connection_moved: "PROCERGSNfgBundle:Email:connectionMoved.html.twig"
               email:
                 name: "%mailer_sender_name%"
                 address: "%mailer_sender_mail%"

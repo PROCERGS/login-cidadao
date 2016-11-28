@@ -16,6 +16,12 @@ nfg:
             login: 'If you already own an account on Citizen Login, you''l need to access it and activate it''s use with Nota Fiscal Gaúcha.'
             register: 'If you wish to use your information at Nota Fiscal Gaúcha to create an account on Login Cidadão, you can <a class="nfgpopup" href="%register_nfg_url%">click here</a>.'
         login: 'Go back to the login page'
+    already_connected:
+        title: 'Account already connected'
+        description: 'You tried to connect a Nota Fiscal Gaúcha account that is already connected to another person. Each Nota Fiscal Gaúcha can only be linked to one single profile at a time.'
+        question: 'What would you like to do?'
+        override: 'Ignore existing connection'
+        back_to_profile: 'Go back to the profile editing page'
     action_chooser:
         title: 'Do you wish to login or to register?'
         body: 'Select how do you want to use your Nota Fiscal Gaúcha account.'
@@ -27,3 +33,8 @@ nfg:
             body:
                 text: 'Hello, %name%!\n\nWe''d like to let you know that the CPF used by this account was taken by another user using a valid Nota Fiscal Gaúcha account. If you believe this is a mistake, you can ask Nota Fiscal Gaúcha''s team for more information.'
                 html: '<p>Hello, %name%!</p><p>We''d like to let you know that the CPF used by this account was taken by another user using a valid Nota Fiscal Gaúcha account. If you believe this is a mistake, you can ask Nota Fiscal Gaúcha''s team for more information.</p>'
+        connection_transferred:
+            subject: 'You connection with Nota Fiscal Gaúcha was moved'
+            body:
+                text: 'Hello, %name%.\n\nYou connection with Nota Fiscal Gaúcha was moved to another account as requested by you. If you did not make this request, feel free to contact us for further help.'
+                html: '<p>Hello, %name%.\n\n</p><p>You connection with Nota Fiscal Gaúcha was moved to another account as requested by you. If you did not make this request, feel free to contact us for further help.</p>'

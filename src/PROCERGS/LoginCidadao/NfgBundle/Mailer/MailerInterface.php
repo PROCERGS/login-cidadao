@@ -15,4 +15,5 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 interface MailerInterface
 {
     public function notifyCpfLost(PersonInterface $person);
+    public function notifyConnectionTransferred(PersonInterface $person);
 }

@@ -37,7 +37,7 @@ class ExceptionListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testNfgCollisionException()
     {
-        $this->expectRedirect(new NfgAccountCollisionException(), 'dummy');
+        $this->expectRedirect(new NfgAccountCollisionException(), 'nfg_help_already_connected');
     }
 
     public function testMissingRequiredInformationException()

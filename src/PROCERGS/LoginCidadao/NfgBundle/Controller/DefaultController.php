@@ -51,8 +51,9 @@ class DefaultController extends Controller
         }
 
         $nfg = $this->getNfgService();
+        $override = $request->get('override', false) ? true : false;
 
-        return $nfg->connectCallback($request, $personMeuRS);
+        return $nfg->connectCallback($request, $personMeuRS, $override);
     }
 
     /**

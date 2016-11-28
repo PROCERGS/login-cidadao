@@ -17,39 +17,25 @@ class TwigSwiftMailerTest extends \PHPUnit_Framework_TestCase
 {
     public function testNotifyCpfLostWithHtml()
     {
-        $template = $this->getMockBuilder('Twig_Template')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $template->expects($this->exactly(3))->method('renderBlock')
-            ->willReturnCallback(
-                function ($block) {
-                    return $block;
-                }
-            );
-
-        $this->runNotifyCpfLost($template);
+        $this->runMethod('notifyCpfLost', $this->getTemplate(true));
     }
 
     public function testNotifyCpfLostWithoutHtml()
     {
-        $template = $this->getMockBuilder('Twig_Template')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $template->expects($this->exactly(3))->method('renderBlock')
-            ->willReturnCallback(
-                function ($block) {
-                    if ($block === 'body_html') {
-                        return null;
-                    }
-
-                    return $block;
-                }
-            );
-
-        $this->runNotifyCpfLost($template);
+        $this->runMethod('notifyCpfLost', $this->getTemplate(false));
     }
 
-    public function runNotifyCpfLost($template)
+    public function testNotifyConnectionTransferredWithHtml()
+    {
+        $this->runMethod('notifyConnectionTransferred', $this->getTemplate(true));
+    }
+
+    public function testNotifyConnectionTransferredWithoutHtml()
+    {
+        $this->runMethod('notifyConnectionTransferred', $this->getTemplate(false));
+    }
+
+    public function runMethod($method, $template)
     {
         $swiftMailer = $this->getMockBuilder('Swift_Mailer')
             ->disableOriginalConstructor()
@@ -75,13 +61,32 @@ class TwigSwiftMailerTest extends \PHPUnit_Framework_TestCase
             $urlGenerator,
             $twig,
             [
-                'template' => ['cpf_lost' => 'template'],
+                'template' => ['cpf_lost' => 'template', 'connection_moved' => 'template'],
                 'email' => ['name' => 'Name', 'address' => 'some@email.com'],
             ]
         );
 
         $person = new Person();
         $person->setFirstName('Person');
-        $mailer->notifyCpfLost($person);
+        $mailer->$method($person);
+    }
+
+    private function getTemplate($withHtml = true)
+    {
+        $template = $this->getMockBuilder('Twig_Template')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $template->expects($this->exactly(3))->method('renderBlock')
+            ->willReturnCallback(
+                function ($block) use ($withHtml) {
+                    if ($block === 'body_html' && !$withHtml) {
+                        return null;
+                    }
+
+                    return $block;
+                }
+            );
+
+        return $template;
     }
 }

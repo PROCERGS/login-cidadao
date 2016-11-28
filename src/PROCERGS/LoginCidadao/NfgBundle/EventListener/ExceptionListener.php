@@ -58,8 +58,13 @@ class ExceptionListener
 
         if ($e instanceof NfgAccountCollisionException) {
             // Both users are linked to the same NFG account
-            // TODO:
-            $event->setResponse(new RedirectResponse('dummy'));
+            $url = $this->router->generate(
+                'nfg_help_already_connected',
+                ['access_token' => $e->getAccessToken()],
+                RouterInterface::ABSOLUTE_URL
+            );
+            $event->setResponse(new RedirectResponse($url));
+
             return;
         }
 

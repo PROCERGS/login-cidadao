@@ -274,7 +274,12 @@ class Nfg implements LoggerAwareInterface
             $personMeuRS->getPerson()->setCpf($sanitizedCpf);
         }
 
-        $this->checkCpf($personMeuRS, $nfgProfile, $overrideExisting);
+        try {
+            $this->checkCpf($personMeuRS, $nfgProfile, $overrideExisting);
+        } catch (NfgAccountCollisionException $e) {
+            $e->setAccessToken($accessToken);
+            throw $e;
+        }
 
         $nfgProfile = $this->syncNfgProfile($nfgProfile);
 
@@ -382,8 +387,11 @@ class Nfg implements LoggerAwareInterface
             throw new NfgAccountCollisionException();
         }
         // The user's choice was to remove the previous connection and use this new one
-        // TODO: send email to $otherPerson about this
+        $otherPerson->getPerson()->setCpf(null);
+        $this->em->persist($otherPerson->getPerson());
+        $this->em->flush($otherPerson->getPerson());
         $this->disconnect($otherPerson);
+        $this->mailer->notifyConnectionTransferred($otherPerson->getPerson());
     }
 
     /**
