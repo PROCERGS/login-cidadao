@@ -39,6 +39,7 @@ use PROCERGS\LoginCidadao\NfgBundle\NfgEvents;
 use PROCERGS\LoginCidadao\NfgBundle\Traits\CircuitBreakerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -225,19 +226,7 @@ class Nfg implements LoggerAwareInterface
         }
         $user = $personMeuRS->getPerson();
 
-        $response = new RedirectResponse($this->router->generate('lc_home'));
-
-        try {
-            $this->loginManager->logInUser($this->firewallName, $user, $response);
-        } catch (AccountStatusException $e) {
-            // User account is disabled or something like that
-            throw $e;
-        }
-
-        $event = new GetLoginCallbackResponseEvent($params, $response);
-        $this->dispatcher->dispatch(NfgEvents::LOGIN_CALLBACK_RESPONSE, $event);
-
-        return $event->getResponse();
+        return $this->logInUser($user, $params);
     }
 
     public function connect()
@@ -402,8 +391,13 @@ class Nfg implements LoggerAwareInterface
     private function register(Request $request, PersonMeuRS $personMeuRS, NfgProfile $nfgProfile)
     {
         $sanitizedCpf = $this->sanitizeCpf($nfgProfile->getCpf());
+        $otherPersonMeuRS = $this->meuRSHelper->getPersonByCpf($sanitizedCpf);
 
-        if ($this->meuRSHelper->getPersonByCpf($sanitizedCpf) !== null) {
+        if ($otherPersonMeuRS !== null) {
+            if ($otherPersonMeuRS->getNfgAccessToken()) {
+                $response = $this->logInUser($otherPersonMeuRS->getPerson());
+                throw new OverrideResponseException($response);
+            }
             throw new CpfInUseException();
         }
 
@@ -415,6 +409,7 @@ class Nfg implements LoggerAwareInterface
 
         /** @var PersonInterface $user */
         $user = $this->userManager->createUser();
+        $user->setUsername(Uuid::uuid4()->toString());
         $user
             ->setFirstName(array_shift($names))
             ->setSurname(implode(' ', $names))
@@ -482,5 +477,22 @@ class Nfg implements LoggerAwareInterface
         } else {
             return $latestNfgProfile;
         }
+    }
+
+    private function logInUser(PersonInterface $user, array $params = [])
+    {
+        $response = new RedirectResponse($this->router->generate('lc_home'));
+
+        try {
+            $this->loginManager->logInUser($this->firewallName, $user, $response);
+        } catch (AccountStatusException $e) {
+            // User account is disabled or something like that
+            throw $e;
+        }
+
+        $event = new GetLoginCallbackResponseEvent($params, $response);
+        $this->dispatcher->dispatch(NfgEvents::LOGIN_CALLBACK_RESPONSE, $event);
+
+        return $event->getResponse();
     }
 }

@@ -540,13 +540,42 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $nfgProfile = $this->getNfgProfile();
         $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
 
-        $meuRSHelper = $this->getMeuRSHelper($nfgProfile->getCpf(), new Person());
+        $meuRSHelper = $this->getMeuRSHelper($nfgProfile->getCpf(), new PersonMeuRS());
 
         $nfg = $this->getNfgService(
             [
                 'session' => $this->getSession($accessId, 'none'),
                 'soap' => $soapService,
                 'meurs_helper' => $meuRSHelper,
+            ]
+        );
+
+        $accessToken = 'access_token'.random_int(10, 9999);
+        $request = $this->getRequest($accessToken);
+        $nfg->connectCallback($request, new PersonMeuRS());
+    }
+
+    public function testRegistrationTurnsIntoLogin()
+    {
+        $accessId = 'access_id'.random_int(10, 9999);
+        $soapService = $this->getSoapService($accessId);
+
+        $nfgProfile = $this->getNfgProfile();
+        $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
+
+        $otherPersonMeuRS = new PersonMeuRS();
+        $otherPersonMeuRS
+            ->setNfgProfile($nfgProfile)
+            ->setNfgAccessToken('access_token')
+            ->setPerson(new Person());
+        $meuRSHelper = $this->getMeuRSHelper($nfgProfile->getCpf(), $otherPersonMeuRS);
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none'),
+                'soap' => $soapService,
+                'meurs_helper' => $meuRSHelper,
+                'login_manager' => $this->getLoginManager(true),
             ]
         );
 
