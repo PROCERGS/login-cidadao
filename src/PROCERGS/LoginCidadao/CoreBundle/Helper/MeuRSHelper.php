@@ -96,6 +96,16 @@ class MeuRSHelper
     }
 
     /**
+     * @param $voterRegistration
+     * @return PersonMeuRS|object|null
+     */
+    public function findPersonMeuRSByVoterRegistration($voterRegistration)
+    {
+        return $this->personMeuRSRepository
+            ->findOneBy(compact('voterRegistration'));
+    }
+
+    /**
      * @param string $cpf
      * @return PersonMeuRS|null
      */

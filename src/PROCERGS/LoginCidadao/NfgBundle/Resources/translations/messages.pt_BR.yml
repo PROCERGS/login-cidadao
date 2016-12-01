@@ -38,3 +38,7 @@ nfg:
             body:
                 text: 'Olá, %name%.\n\nSua conexão com a Nota Fiscal Gaúcha foi transferia para uma outra conta conforme você solicitou. Se você não fez essa solicitação, entre em contato conosco para obter ajuda.'
                 html: '<p>Olá, %name%.\n\n</p><p>Sua conexão com a Nota Fiscal Gaúcha foi transferia para uma outra conta conforme você solicitou. Se você não fez essa solicitação, entre em contato conosco para obter ajuda.</p>'
+    error:
+        voter_registration:
+            invalid: 'Título de eleitor inválido'
+            in_use: 'Esse título de eleitor já está sendo usado por outra pessoa. Verifique se digitou corretamente.'

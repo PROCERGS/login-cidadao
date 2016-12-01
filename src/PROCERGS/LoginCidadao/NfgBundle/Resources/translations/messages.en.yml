@@ -38,3 +38,7 @@ nfg:
             body:
                 text: 'Hello, %name%.\n\nYou connection with Nota Fiscal Gaúcha was moved to another account as requested by you. If you did not make this request, feel free to contact us for further help.'
                 html: '<p>Hello, %name%.\n\n</p><p>You connection with Nota Fiscal Gaúcha was moved to another account as requested by you. If you did not make this request, feel free to contact us for further help.</p>'
+    error:
+        voter_registration:
+            invalid: 'Invalid voter registration'
+            in_use: 'This voter registration is already being used by another person. Check if you typed it correctly.'

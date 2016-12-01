@@ -74,3 +74,16 @@ services:
               email:
                 name: "%mailer_sender_name%"
                 address: "%mailer_sender_mail%"
+
+    procergs.nfg.profile_edit.listener:
+        class: PROCERGS\LoginCidadao\NfgBundle\EventListener\ProfileEditSubscriber
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@meurs.helper"
+            - "@procergs.nfg.service"
+            - "@security.token_storage"
+            - "@translator"
+        calls:
+            - ['setLogger', ["@?logger"]]
+        tags:
+            - { name: kernel.event_subscriber }

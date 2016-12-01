@@ -166,9 +166,10 @@ class Nfg implements LoggerAwareInterface
     /**
      * @param string $accessToken
      * @param string|null $voterRegistration
-     * @return \PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile
+     * @param bool $testRequiredInfo
+     * @return NfgProfile
      */
-    private function getUserInfo($accessToken, $voterRegistration = null)
+    public function getUserInfo($accessToken, $voterRegistration = null, $testRequiredInfo = true)
     {
         $this->checkAvailable();
 
@@ -181,7 +182,7 @@ class Nfg implements LoggerAwareInterface
                 null,
                 $requiredInfo
             );
-            if (false !== $missingRequiredInfo) {
+            if ($testRequiredInfo && false !== $missingRequiredInfo) {
                 throw new MissingRequiredInformationException('Some needed information was not authorized on NFG.');
             }
 
@@ -477,7 +478,7 @@ class Nfg implements LoggerAwareInterface
      * @param NfgProfile $latestNfgProfile
      * @return NfgProfile
      */
-    private function syncNfgProfile(NfgProfile $latestNfgProfile)
+    public function syncNfgProfile(NfgProfile $latestNfgProfile)
     {
         $existingNfgProfile = $this->nfgProfileRepository->findByCpf($latestNfgProfile->getCpf());
 
