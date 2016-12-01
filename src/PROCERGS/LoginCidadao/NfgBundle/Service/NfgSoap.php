@@ -57,7 +57,7 @@ class NfgSoap implements NfgSoapInterface
         $params = $this->getAuthentication();
         $params['accessToken'] = $accessToken;
         if ($voterRegistration) {
-            $params['voterRegistration'] = $voterRegistration;
+            $params['tituloEleitoral'] = $voterRegistration;
         }
 
         $response = $this->client->ConsultaCadastro($params);
