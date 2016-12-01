@@ -3,7 +3,6 @@ parameters:
     meurs.person_meurs.form.class: PROCERGS\LoginCidadao\CoreBundle\Form\PersonMeuRSType
     meurs.person_meurs.voter_registration.form.class: PROCERGS\LoginCidadao\CoreBundle\Form\PersonMeuRSVoterRegistrationType
 
-    meurs.profile_edit.class: PROCERGS\LoginCidadao\CoreBundle\EventListener\ProfileEditListner
     procergs_logincidadao.nfgws.class: PROCERGS\LoginCidadao\CoreBundle\Helper\NfgWsHelper
 
     lc.person_doc.form.class: PROCERGS\LoginCidadao\CoreBundle\Form\DocFormType
@@ -14,24 +13,6 @@ services:
         factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
             - PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS
-
-    meurs.profile_edit:
-        class: %meurs.profile_edit.class%
-        arguments:
-            - "@lc.mailer"
-            - "@fos_user.mailer"
-            - "@fos_user.util.token_generator"
-            - "@router"
-            - "@session"
-            - "@security.context"
-            - "%registration.email.unconfirmed_time%"
-        calls:
-            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
-            - [setNfgHelper, ["@procergs_logincidadao.nfgws"]]
-            - [setUserManager, ["@fos_user.user_manager"]]
-            - [setMeuRSHelper, [@meurs.helper] ]
-        tags:
-            - { name: kernel.event_subscriber }
 
     procergs_logincidadao.nfgws:
         class: %procergs_logincidadao.nfgws.class%
