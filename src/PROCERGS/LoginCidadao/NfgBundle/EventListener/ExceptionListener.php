@@ -76,7 +76,7 @@ class ExceptionListener
         }
 
         if ($e instanceof CpfMismatchException) {
-            $url = $this->router->generate('lc_documents', [], RouterInterface::ABSOLUTE_URL);
+            $url = $this->router->generate('nfg_help_cpf_did_not_match', [], RouterInterface::ABSOLUTE_URL);
             $event->setResponse(new RedirectResponse($url));
 
             return;

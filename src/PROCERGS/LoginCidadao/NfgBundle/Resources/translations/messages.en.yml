@@ -22,6 +22,9 @@ nfg:
         question: 'What would you like to do?'
         override: 'Ignore existing connection'
         back_to_profile: 'Go back to the profile editing page'
+    cpf_didnt_match:
+        title: 'Your CPF didn''t match'
+        description: 'The CPF you have in your profile does not match the one used to connect with Nota Fiscal Gaúcha. You can <a href="%url_connect%" class="nfgpopup">try again</a> with the same CPF that is in your profile or <a href="%url_documents%">fix the profile</a>.'
     action_chooser:
         title: 'Do you wish to login or to register?'
         body: 'Select how do you want to use your Nota Fiscal Gaúcha account.'

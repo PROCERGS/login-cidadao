@@ -32,7 +32,7 @@ class ExceptionListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testCpfMismatch()
     {
-        $this->expectRedirect(new CpfMismatchException(), 'lc_documents');
+        $this->expectRedirect(new CpfMismatchException(), 'nfg_help_cpf_did_not_match');
     }
 
     public function testNfgCollisionException()

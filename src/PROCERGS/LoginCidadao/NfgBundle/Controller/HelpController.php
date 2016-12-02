@@ -45,4 +45,15 @@ class HelpController extends Controller
             ['access_token' => $request->get('access_token')]
         );
     }
+
+    /**
+     * @Route("/cpf-didnt-match", name="nfg_help_cpf_did_not_match")
+     */
+    public function cpfDidNotMatchAction(Request $request)
+    {
+        return $this->render(
+            'PROCERGSNfgBundle:Help:cpfDidNotMatch.html.twig',
+            ['access_token' => $request->get('access_token')]
+        );
+    }
 }

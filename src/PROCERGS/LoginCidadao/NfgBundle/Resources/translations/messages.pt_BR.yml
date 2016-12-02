@@ -22,6 +22,9 @@ nfg:
         question: 'O que você deseja fazer?'
         override: 'Ignorar conexão existente'
         back_to_profile: 'Voltar à edição do perfil'
+    cpf_didnt_match:
+        title: 'Seu CPF não confere'
+        description: 'O CPF cadastrado em sua conta não confere com o informado na Nota Fiscal Gaúcha. Você pode <a href="%url_connect%" class="nfgpopup">tentar novamente</a> informando o mesmo CPF que você usou no seu cadastro ou <a href="%url_documents%">corrigir seu cadastro</a>.'
     action_chooser:
         title: 'Você deseja fazer login ou cadastrar-se?'
         body: 'Selecione a forma que você deseja utilizar sua conta da Nota Fiscal Gaúcha.'
