@@ -17,7 +17,7 @@ use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
-use PROCERGS\LoginCidadao\CoreBundle\EventListener\ProfileEditListner;
+use LoginCidadao\CoreBundle\EventListener\ProfileEditListener;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper;
 use PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
@@ -83,7 +83,7 @@ class ProfileEditSubscriber implements EventSubscriberInterface, LoggerAwareInte
         return array(
             FOSUserEvents::PROFILE_EDIT_INITIALIZE => 'onProfileEditInitialize',
             FOSUserEvents::PROFILE_EDIT_SUCCESS => 'onProfileEditSuccess',
-            ProfileEditListner::PROFILE_DOC_EDIT_SUCCESS => 'onProfileDocEditSuccess',
+            ProfileEditListener::PROFILE_DOC_EDIT_SUCCESS => 'onProfileDocEditSuccess',
             FormEvents::POST_SUBMIT => 'registerTextualLocation',
         );
     }
