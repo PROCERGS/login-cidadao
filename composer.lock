@@ -3699,17 +3699,17 @@
         },
         {
             "name": "procergs/nfg-badges-bundle",
-            "version": "v1.1.1",
+            "version": "v1.1.2",
             "target-dir": "NFG/BadgesBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/nfg-badges-bundle.git",
-                "reference": "de8f7f2deefcf93d5a5a35917b3b4a08324cc643"
+                "reference": "43b5bfd744df82fb29794bd37200ae4c679d2e20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/nfg-badges-bundle/zipball/de8f7f2deefcf93d5a5a35917b3b4a08324cc643",
-                "reference": "de8f7f2deefcf93d5a5a35917b3b4a08324cc643",
+                "url": "https://api.github.com/repos/PROCERGS/nfg-badges-bundle/zipball/43b5bfd744df82fb29794bd37200ae4c679d2e20",
+                "reference": "43b5bfd744df82fb29794bd37200ae4c679d2e20",
                 "shasum": ""
             },
             "require": {
@@ -3740,7 +3740,7 @@
                 "meurs",
                 "nfg"
             ],
-            "time": "2016-01-15 11:52:24"
+            "time": "2016-12-02 12:32:06"
         },
         {
             "name": "procergs/tos-bundle",
