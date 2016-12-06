@@ -82,7 +82,6 @@ class ProfileEditSubscriber implements EventSubscriberInterface, LoggerAwareInte
     {
         return array(
             FOSUserEvents::PROFILE_EDIT_INITIALIZE => 'onProfileEditInitialize',
-            FOSUserEvents::PROFILE_EDIT_SUCCESS => 'onProfileEditSuccess',
             ProfileEditListener::PROFILE_DOC_EDIT_SUCCESS => 'onProfileDocEditSuccess',
             FormEvents::POST_SUBMIT => 'registerTextualLocation',
         );
