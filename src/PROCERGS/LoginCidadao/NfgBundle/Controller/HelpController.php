@@ -56,4 +56,12 @@ class HelpController extends Controller
             ['access_token' => $request->get('access_token')]
         );
     }
+
+    /**
+     * @Route("/email-in-use", name="nfg_help_email_in_use")
+     */
+    public function emailInUseAction(Request $request)
+    {
+        return $this->render('PROCERGSNfgBundle:Help:emailInUse.html.twig');
+    }
 }

@@ -22,6 +22,11 @@ nfg:
         question: 'What would you like to do?'
         override: 'Ignore existing connection'
         back_to_profile: 'Go back to the profile editing page'
+    email_in_use:
+        title: 'This email is already in use'
+        description: 'Your email from Nota Fiscal Gaúcha is already being used on another Login Cidadão account.'
+        suggestion: 'If you with to connect your Nota Fiscal Gaúcha account to your Login Cidadão, you have to go to the profile edit page after logging into your Login Cidadão account.'
+        login: 'Go back to the login page'
     cpf_didnt_match:
         title: 'Your CPF didn''t match'
         description: 'The CPF you have in your profile does not match the one used to connect with Nota Fiscal Gaúcha. You can <a href="%url_connect%" class="nfgpopup">try again</a> with the same CPF that is in your profile or <a href="%url_documents%">fix the profile</a>.'

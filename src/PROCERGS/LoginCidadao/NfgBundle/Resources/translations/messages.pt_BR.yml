@@ -22,6 +22,11 @@ nfg:
         question: 'O que você deseja fazer?'
         override: 'Ignorar conexão existente'
         back_to_profile: 'Voltar à edição do perfil'
+    email_in_use:
+        title: 'Esse email já foi usado'
+        description: 'O email cadastrado em sua conta da Nota Fiscal Gaúcha já está em uso em um cadastro do Login Cidadão.'
+        suggestion: 'Se você deseja conectar sua conta da Nota Fiscal Gaúcha com seu Login Cidadão, primeiramente entre na sua conta do Login Cidadão e faça a conexão com a Nota Fiscal Gaúcha na página de edição de perfil.'
+        login: 'Ir para a página de Login'
     cpf_didnt_match:
         title: 'Seu CPF não confere'
         description: 'O CPF cadastrado em sua conta não confere com o informado na Nota Fiscal Gaúcha. Você pode <a href="%url_connect%" class="nfgpopup">tentar novamente</a> informando o mesmo CPF que você usou no seu cadastro ou <a href="%url_documents%">corrigir seu cadastro</a>.'

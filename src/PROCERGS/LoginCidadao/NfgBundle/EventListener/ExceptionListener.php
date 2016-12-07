@@ -12,6 +12,7 @@ namespace PROCERGS\LoginCidadao\NfgBundle\EventListener;
 
 use PROCERGS\LoginCidadao\NfgBundle\Exception\ConnectionNotFoundException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\CpfMismatchException;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\EmailInUseException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
@@ -51,6 +52,13 @@ class ExceptionListener
         $e = $event->getException();
         if ($e instanceof NfgServiceUnavailableException) {
             $url = $this->router->generate('nfg_unavailable', [], RouterInterface::ABSOLUTE_URL);
+            $event->setResponse(new RedirectResponse($url));
+
+            return;
+        }
+
+        if ($e instanceof EmailInUseException) {
+            $url = $this->router->generate('nfg_help_email_in_use', [], RouterInterface::ABSOLUTE_URL);
             $event->setResponse(new RedirectResponse($url));
 
             return;
