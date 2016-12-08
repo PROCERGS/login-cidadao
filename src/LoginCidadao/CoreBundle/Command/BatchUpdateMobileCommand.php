@@ -66,6 +66,7 @@ class BatchUpdateMobileCommand extends ContainerAwareCommand
         $inHandle = fopen($input->getArgument('file'), 'r');
         $outHandle = fopen($input->getOption('output'), 'w+');
 
+        fputs($outHandle, 'BEGIN;'.PHP_EOL);
         while (false !== ($row = fgetcsv($inHandle))) {
             $progress->setMessage($this->getProgressMessage());
 
@@ -88,7 +89,13 @@ class BatchUpdateMobileCommand extends ContainerAwareCommand
 
             continue;
         }
+        fputs($outHandle, 'COMMIT;'.PHP_EOL);
+        fclose($outHandle);
+        fclose($inHandle);
+
         $progress->finish($this->getProgressMessage());
+
+        $io->success("SQL UPDATE queries generated at {$input->getOption('output')}.");
     }
 
     private function getProgressMessage()
@@ -111,6 +118,6 @@ class BatchUpdateMobileCommand extends ContainerAwareCommand
             $where = "mobile = {$old}";
         }
 
-        return "UPDATE person SET mobile = {$new} WHERE {$where};";
+        return "UPDATE person SET updatedat = NOW(), mobile = {$new} WHERE {$where};";
     }
 }
