@@ -1,0 +1,17 @@
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
+
+{% block panel_body_class %}nfg-connection-not-found{% endblock %}
+
+{% block panel_body %}
+    <h1>{{ 'nfg.connection_not_found.title' | trans }}</h1>
+
+    <p>{{ 'nfg.connection_not_found.description' | trans }}</p>
+    <p>{{ 'nfg.connection_not_found.troubleshooting.login' | trans({'%login_url%': path('fos_user_security_login')}) | raw }}</p>
+    <p>{{ 'nfg.connection_not_found.troubleshooting.register' | trans({'%register_nfg_url%': path('nfg_wait', {'action': 'connect'})}) | raw }}</p>
+
+    <p>
+        <a class="btn btn-block btn-success" href="{{ path('fos_user_security_login') }}">
+            {{ 'nfg.connection_not_found.login' | trans }}
+        </a>
+    </p>
+{% endblock %}

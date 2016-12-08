@@ -25,6 +25,17 @@
                 </div>
             </div>
             <div class="panel-body {% block panel_body_class %}{% endblock %}">
+                {% for type, messages in app.session.flashbag.all %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ type }} alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert"
+                                    aria-label="{{ 'flash_message.close' | trans }}"><span
+                                        aria-hidden="true">&times;</span></button>
+                            {{ message | raw }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
                 {% block panel_body %}
                 {% endblock %}
             </div>

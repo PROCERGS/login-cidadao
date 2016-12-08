@@ -1,0 +1,52 @@
+nfg:
+    unavailable:
+        title: 'Service Unavailable'
+        body: 'Nota Fiscal Gaúcha is not available right now. Please try again in a few moments.'
+        close: 'Close'
+    missing_info:
+        title: 'Insuficient Information'
+        body: 'In order to connect with Nota Fiscal Gaúcha we need that you authorize us to access your CPF and your birthday.'
+        level1: 'If you have already authorized all options in the previous page, go to your Nota Fiscal Gaúcha account and make sure your information there is up to date.'
+        try_again: 'Try again'
+    connection_not_found:
+        alert: 'The Nota Fiscal Gaúcha account you used is not connected to a Citizen Login user. For more information, <a href="%help_url%">click here</a>.'
+        title: 'Account not connected'
+        description: 'You tried to login using a Nota Fiscal Gaúcha account that is not connected to a Citizen Login account.'
+        troubleshooting:
+            login: 'If you already own an account on Citizen Login, you''l need to access it and activate it''s use with Nota Fiscal Gaúcha.'
+            register: 'If you wish to use your information at Nota Fiscal Gaúcha to create an account on Login Cidadão, you can <a class="nfgpopup" href="%register_nfg_url%">click here</a>.'
+        login: 'Go back to the login page'
+    already_connected:
+        title: 'Account already connected'
+        description: 'You tried to connect a Nota Fiscal Gaúcha account that is already connected to another person. Each Nota Fiscal Gaúcha can only be linked to one single profile at a time.'
+        question: 'What would you like to do?'
+        override: 'Ignore existing connection'
+        back_to_profile: 'Go back to the profile editing page'
+    email_in_use:
+        title: 'This email is already in use'
+        description: 'Your email from Nota Fiscal Gaúcha is already being used on another Login Cidadão account.'
+        suggestion: 'If you with to connect your Nota Fiscal Gaúcha account to your Login Cidadão, you have to go to the profile edit page after logging into your Login Cidadão account.'
+        login: 'Go back to the login page'
+    cpf_didnt_match:
+        title: 'Your CPF didn''t match'
+        description: 'The CPF you have in your profile does not match the one used to connect with Nota Fiscal Gaúcha. You can <a href="%url_connect%" class="nfgpopup">try again</a> with the same CPF that is in your profile or <a href="%url_documents%">fix the profile</a>.'
+    action_chooser:
+        title: 'Do you wish to login or to register?'
+        body: 'Select how do you want to use your Nota Fiscal Gaúcha account.'
+        login: 'Login'
+        register: 'Register'
+    email:
+        cpf_lost:
+            subject: 'Your CPF was claimed'
+            body:
+                text: 'Hello, %name%!\n\nWe''d like to let you know that the CPF used by this account was taken by another user using a valid Nota Fiscal Gaúcha account. If you believe this is a mistake, you can ask Nota Fiscal Gaúcha''s team for more information.'
+                html: '<p>Hello, %name%!</p><p>We''d like to let you know that the CPF used by this account was taken by another user using a valid Nota Fiscal Gaúcha account. If you believe this is a mistake, you can ask Nota Fiscal Gaúcha''s team for more information.</p>'
+        connection_transferred:
+            subject: 'You connection with Nota Fiscal Gaúcha was moved'
+            body:
+                text: 'Hello, %name%.\n\nYou connection with Nota Fiscal Gaúcha was moved to another account as requested by you. If you did not make this request, feel free to contact us for further help.'
+                html: '<p>Hello, %name%.\n\n</p><p>You connection with Nota Fiscal Gaúcha was moved to another account as requested by you. If you did not make this request, feel free to contact us for further help.</p>'
+    error:
+        voter_registration:
+            invalid: 'Invalid voter registration'
+            in_use: 'This voter registration is already being used by another person. Check if you typed it correctly.'

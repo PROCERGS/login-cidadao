@@ -1,5 +1,5 @@
 security.login.username: 'Email ou CPF'
-security.login.username.placeholder: 'Digite seu email'
+security.login.username.placeholder: 'Digite seu email ou CPF'
 security.login.password: Digite sua senha
 security.login.remember_me: 'Lembrar meus dados'
 security.login.submit: Entrar
@@ -816,7 +816,7 @@ resetting.request.title: Recuperação de Senha
 resetting.request.description: Para alterar sua senha, digite seu email ou CPF a seguir e lhe enviaremos um email com instruções para criação de uma nova senha.
 resetting.request.invalid_username: '"%username%" não está cadastrado.'
 resetting.request.username.label: 'Email ou CPF:'
-resetting.request.username.placeholder: Digite seu email Email ou CPF
+resetting.request.username.placeholder: Digite seu email ou CPF
 resetting.request.submit: Recuperar senha
 resetting.check_email: Foi enviado um email com instruções para recuperação de senha para o endereço cadastrado. Acesse seu email e clique no link presente na mensagem enviada.
 resetting.reset.title: Criando Nova Senha
@@ -918,3 +918,4 @@ profile:
                 no: Não
     submit: Salvar
 scope_details.handle.title: O que é isso?
+flash_message.close: Fechar

@@ -6,8 +6,10 @@ use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 use LoginCidadao\CoreBundle\Service\RegisterRequestedScope;
 use LoginCidadao\OAuthBundle\Entity\ClientRepository;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
 use FOS\UserBundle\Mailer\MailerInterface;
@@ -99,13 +101,16 @@ class RegisterListener implements EventSubscriberInterface
             return $event->setResponse(new RedirectResponse($this->router->generate('lc_home')));
         }
 
-        $email = explode('@', $user->getEmailCanonical(), 2);
-        $username = $email[0];
-        if (!UsernameValidator::isUsernameValid($username)) {
-            $url = $this->router->generate('lc_update_username');
+        if (!$user->getUsername()) {
+            $email = explode('@', $user->getEmailCanonical(), 2);
+            $username = $email[0];
         } else {
-            $url = $this->router->generate('fos_user_profile_edit');
+            $username = $user->getUsername();
         }
+        if (!UsernameValidator::isUsernameValid($username)) {
+            $user->setUsername(Uuid::uuid4()->toString());
+        }
+        $url = $this->router->generate('fos_user_profile_edit');
         $event->setResponse(new RedirectResponse($url));
     }
 

@@ -1,15 +1,24 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
+namespace PROCERGS\LoginCidadao\NfgBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
+use libphonenumber\PhoneNumber;
 
 /**
- * City
+ * NfgProfile
  *
  * @ORM\Table(name="nfg_profile")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfileRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class NfgProfile
@@ -136,6 +145,9 @@ class NfgProfile
         return $this;
     }
 
+    /**
+     * @return PhoneNumber
+     */
     public function getMobile()
     {
         return $this->mobile;
@@ -188,6 +200,9 @@ class NfgProfile
         return $this;
     }
 
+    /**
+     * @return \DateTime
+     */
     public function getUpdatedAt()
     {
         return $this->updatedAt;

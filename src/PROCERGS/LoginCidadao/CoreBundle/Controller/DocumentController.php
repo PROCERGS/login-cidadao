@@ -14,11 +14,6 @@ use LoginCidadao\CoreBundle\Controller\DocumentController as BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
-use FOS\UserBundle\Event\GetResponseUserEvent;
-use FOS\UserBundle\FOSUserEvents;
-use FOS\UserBundle\Event\FormEvent;
-use LoginCidadao\CoreBundle\EventListener\ProfileEditListner;
-use LoginCidadao\CoreBundle\Form\Type\DocFormType;
 
 class DocumentController extends BaseController
 {

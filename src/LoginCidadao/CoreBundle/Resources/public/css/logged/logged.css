@@ -817,7 +817,7 @@ label + .glyphicon-pencil {
     margin-left: 19px;
     font-size: 11px;
     margin-top: -2px;
-    margin-bottom: 5px;
+    margin-bottom:  5px;
 }
 
 #dashboard .log-type {
@@ -848,4 +848,8 @@ label + .glyphicon-pencil {
 
 #app-detail.client-details.content .permissions .label .glyphicon {
     font-size: 75%;
+}
+
+div.intl-tel-input {
+    display: block;
 }

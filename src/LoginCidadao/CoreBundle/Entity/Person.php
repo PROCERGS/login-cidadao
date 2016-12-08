@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use libphonenumber\PhoneNumber;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -22,6 +23,7 @@ use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\CoreBundle\Model\LocationAwareInterface;
 use LoginCidadao\ValidationBundle\Validator\Constraints as LCAssert;
 use Donato\PathWellBundle\Validator\Constraints\PathWell;
+use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
 
 /**
  * @ORM\Entity(repositoryClass="LoginCidadao\CoreBundle\Entity\PersonRepository")
@@ -144,10 +146,15 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     /**
      * @JMS\Expose
      * @JMS\Groups({"mobile","phone_number"})
-     * @ORM\Column(type="string", nullable=true)
+     * @JMS\Type("libphonenumber\PhoneNumber")
+     * @ORM\Column(type="phone_number", nullable=true)
      * @JMS\Since("1.0")
      * @LCAssert\E164PhoneNumber(
      *     maxMessage="person.validation.mobile.length.max",
+     *     groups={"Registration", "LoginCidadaoRegistration", "Dynamic", "Profile", "LoginCidadaoProfile"}
+     * )
+     * @AssertPhoneNumber(
+     *     type="mobile",
      *     groups={"Registration", "LoginCidadaoRegistration", "Dynamic", "Profile", "LoginCidadaoProfile"}
      * )
      */
@@ -439,6 +446,8 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function setBirthdate($birthdate)
     {
         $this->birthdate = $birthdate;
+
+        return $this;
     }
 
     public function getMobile()
@@ -448,8 +457,18 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     public function setMobile($mobile)
     {
-        $mobile = preg_replace('/[^0-9+]/', '', $mobile);
+        if (!($mobile instanceof PhoneNumber)) {
+            $mobile = preg_replace('/[^0-9+]/', '', $mobile);
+
+            // PhoneNumberBundle won't work with empty strings.
+            // See https://github.com/misd-service-development/phone-number-bundle/issues/58
+            if (strlen(trim($mobile)) === 0) {
+                $mobile = null;
+            }
+        }
         $this->mobile = $mobile;
+
+        return $this;
     }
 
     public function addAuthorization(Authorization $authorization)

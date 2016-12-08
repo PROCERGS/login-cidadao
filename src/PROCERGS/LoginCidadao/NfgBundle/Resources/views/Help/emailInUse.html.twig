@@ -1,0 +1,16 @@
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
+
+{% block panel_body_class %}nfg-email-in-use{% endblock %}
+
+{% block panel_body %}
+    <h1>{{ 'nfg.email_in_use.title' | trans }}</h1>
+
+    <p>{{ 'nfg.email_in_use.description' | trans }}</p>
+    <p>{{ 'nfg.email_in_use.suggestion' | trans }}</p>
+
+    <p>
+        <a class="btn btn-block btn-success" href="{{ path('fos_user_security_login') }}">
+            {{ 'nfg.email_in_use.login' | trans }}
+        </a>
+    </p>
+{% endblock %}

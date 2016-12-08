@@ -7,7 +7,7 @@ imports:
 framework:
     #esi:             ~
     assets:
-        version: '2016-09-21'
+        version: '2016-11-24'
         version_format: '%%s?version=%%s'
         base_path: ~
     translator:
@@ -65,9 +65,12 @@ assetic:
             inputs:
                 - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.eot'
             output: fonts/glyphicons-halflings-regular.eot
-        lc_base_js:
+        jquery:
             inputs:
                 - '@LoginCidadaoCoreBundle/Resources/public/js/jquery/1.11.0/jquery.min.js'
+        lc_base_js:
+            inputs:
+                - '@jquery'
                 - '@LoginCidadaoCoreBundle/Resources/public/bootstrap/3.3.1/js/bootstrap.min.js'
                 - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/js/bootstrap-switch.min.js'
                 - '@LoginCidadaoCoreBundle/Resources/public/js/hinclude/0.9.5/hinclude.min.js'
@@ -149,6 +152,8 @@ doctrine:
         # if using pdo_sqlite as your database driver, add the path in parameters.yml
         # e.g. database_path: %kernel.root_dir%/data/data.db3
         # path:     %database_path%
+        types:
+            phone_number: Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType
 
     orm:
         auto_generate_proxy_classes: %kernel.debug%
@@ -554,3 +559,21 @@ procergs_login_cidadao_monitor:
                 label: WSDL Nota Fiscal Gaúcha
                 url: "%nfg_ws_url%"
                 verify_https: "%wsdl_monitor_verify_https%"
+
+ejsmont_circuit_breaker:
+    threshold: 1
+    retry_timeout: 10
+
+procergs_nfg:
+    verify_https: false
+    circuit_breaker:
+        service_name: nfg_service
+    endpoints:
+        wsdl: "%nfg_ws_url%"
+        login: "%nfg_url_login%"
+        authorization: "%nfg_url_auth%"
+    authentication:
+        organization: "%soe_organization%"
+        username: "%soe_username%"
+        password: "%soe_password%"
+        hmac_secret: "%nfg_hmac_secret%"
