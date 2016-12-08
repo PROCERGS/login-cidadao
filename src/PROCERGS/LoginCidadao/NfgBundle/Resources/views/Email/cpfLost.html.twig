@@ -1,0 +1,20 @@
+{% block subject %}
+    {% autoescape false %}
+        {{ 'nfg.email.cpf_lost.subject' | trans }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block body_text %}
+    {% autoescape false %}
+        {{ 'nfg.email.cpf_lost.body.text' | trans({ '%name%': person.shortDisplayName }) }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+    {% autoescape false %}
+        {{ include("LoginCidadaoCoreBundle::common.email.html.twig", {
+            'subject' : 'nfg.email.cpf_lost.subject' | trans,
+            'msg' : 'nfg.email.cpf_lost.body.html' | trans({ '%name%': person.shortDisplayName }) | raw
+        } ) }}
+    {% endautoescape %}
+{% endblock %}

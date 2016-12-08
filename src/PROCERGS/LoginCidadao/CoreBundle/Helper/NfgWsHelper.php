@@ -91,7 +91,17 @@ class NfgWsHelper
                 $this->client = new \SoapClient($this->url,
                     array(
                     'cache_wsdl' => WSDL_CACHE_NONE,
-                    'trace' => true
+                    'trace' => true,
+                        'stream_context' => stream_context_create(
+                            [
+                                'ssl' => [
+                                    // disable SSL/TLS security checks
+                                    'verify_peer' => false,
+                                    'verify_peer_name' => false,
+                                    'allow_self_signed' => true,
+                                ],
+                            ]
+                        )
                 ));
             }
             $parm = array();
@@ -167,7 +177,17 @@ class NfgWsHelper
                 $this->client = new \SoapClient($this->url,
                     array(
                     'cache_wsdl' => WSDL_CACHE_NONE,
-                    'trace' => true
+                    'trace' => true,
+                        'stream_context' => stream_context_create(
+                            [
+                                'ssl' => [
+                                    // disable SSL/TLS security checks
+                                    'verify_peer' => false,
+                                    'verify_peer_name' => false,
+                                    'allow_self_signed' => true,
+                                ],
+                            ]
+                        )
                 ));
             }
             $result = $this->client->ObterAccessID(array(

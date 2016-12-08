@@ -43,7 +43,10 @@
                 }
             </style>
             <div class="col-xs-{{ columns }} text-center">
-                <a class="connect nfg nfgpopup" data-href="{{ path('nfg_login') }}">NFG</a>
+                <a class="connect nfg nfgpopup" href="{{ path('nfg_action_chooser') }}"
+                   data-chooser="true"
+                   data-login="{{ path('nfg_wait', { 'action': 'login' }) }}"
+                   data-register="{{ path('nfg_wait', { 'action': 'connect' }) }}">NFG</a>
             </div>
         {% endif %}
     </div>

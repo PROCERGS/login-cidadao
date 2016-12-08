@@ -509,3 +509,4 @@ profile:
                 no: No
     submit: Save
 scope_details.handle.title: What is this?
+flash_message.close: Close

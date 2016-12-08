@@ -11,6 +11,7 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 
 use PROCERGS\Generic\ValidationBundle\Validator\Constraints as PROCERGSAssert;
+use PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
@@ -18,7 +19,7 @@ use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRSRepository")
  * @UniqueEntity("person")
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="person_meurs")
@@ -49,7 +50,7 @@ class PersonMeuRS
     /**
      * @JMS\Expose
      * @JMS\Groups({"nfgprofile"})
-     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile")
+     * @ORM\ManyToOne(targetEntity="PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile", cascade={"persist"})
      * @ORM\JoinColumn(name="nfg_profile_id", referencedColumnName="id")
      * @JMS\Since("1.0.2")
      */
@@ -72,22 +73,24 @@ class PersonMeuRS
      */
     public function getDataValid()
     {
-        $terms['cpf']   = (is_numeric($this->cpf) && strlen($this->nfgAccessToken));
+        $terms['cpf'] = (is_numeric($this->cpf) && strlen($this->nfgAccessToken));
         $terms['email'] = is_null($this->getConfirmationToken());
         if ($this->getNfgProfile()) {
-            $terms['nfg_access_lvl']     = $this->getNfgProfile()->getAccessLvl();
+            $terms['nfg_access_lvl'] = $this->getNfgProfile()->getAccessLvl();
             $terms['voter_registration'] = $this->getNfgProfile()->getVoterRegistrationSit()
-                > 0 ? true : false;
+            > 0 ? true : false;
         } else {
-            $terms['nfg_access_lvl']     = 0;
+            $terms['nfg_access_lvl'] = 0;
             $terms['voter_registration'] = false;
         }
+
         return $terms;
     }
 
     public function setNfgAccessToken($var)
     {
         $this->nfgAccessToken = $var;
+
         return $this;
     }
 
@@ -98,19 +101,17 @@ class PersonMeuRS
 
     /**
      *
-     * @param \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var
-     * @return City
+     * @param \PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile $var
+     * @return PersonMeuRS
      */
-    public function setNfgProfile(\PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile $var
-    = null)
-    {
+    public function setNfgProfile(NfgProfile $var = null) {
         $this->nfgProfile = $var;
 
         return $this;
     }
 
     /**
-     * @return \PROCERGS\LoginCidadao\CoreBundle\Entity\NfgProfile
+     * @return \PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile
      */
     public function getNfgProfile()
     {
@@ -124,6 +125,7 @@ class PersonMeuRS
         } else {
             $this->voterRegistration = preg_replace('/[^0-9]/', '', $var);
         }
+
         return $this;
     }
 
@@ -148,12 +150,14 @@ class PersonMeuRS
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
     public function setPerson(PersonInterface $person)
     {
         $this->person = $person;
+
         return $this;
     }
 }

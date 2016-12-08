@@ -1,3 +1,8 @@
+procergs_nfg:
+    resource: "@PROCERGSNfgBundle/Controller/"
+    type:     annotation
+    prefix:   /nfg
+
 # Monitor
 _monitor:
     resource: "@LiipMonitorBundle/Resources/config/routing.xml"

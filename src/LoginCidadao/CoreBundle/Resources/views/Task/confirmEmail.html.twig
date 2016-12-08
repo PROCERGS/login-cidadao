@@ -5,16 +5,6 @@
 {% block panel_body_class %}task-email-validation{% endblock %}
 
 {% block panel_body %}
-    {% for type, messages in app.session.flashbag.all %}
-        {% for message in messages %}
-            <div class="alert alert-{{ type }} alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="{{ 'Close' | trans }}"><span
-                            aria-hidden="true">&times;</span></button>
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
-
     <h1>
         <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
         {{ 'tasks.confirm_email.title' | trans }}

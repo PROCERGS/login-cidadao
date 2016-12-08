@@ -17,22 +17,42 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface
 
     public function getEmail();
 
+    /**
+     * @param string $email
+     * @return self
+     */
     public function setEmail($email);
 
     public function getFirstName();
 
+    /**
+     * @param $firstName
+     * @return self
+     */
     public function setFirstName($firstName);
 
     public function getSurname();
 
+    /**
+     * @param $suname
+     * @return self
+     */
     public function setSurname($suname);
 
     public function getBirthdate();
 
+    /**
+     * @param $birthdate
+     * @return self
+     */
     public function setBirthdate($birthdate);
 
     public function getMobile();
 
+    /**
+     * @param $mobile
+     * @return self
+     */
     public function setMobile($mobile);
 
     public function getAuthorizations();
@@ -77,6 +97,10 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface
      */
     public function getFullName();
 
+    /**
+     * @param $cpf
+     * @return self
+     */
     public function setCpf($cpf);
 
     public function getCpf();

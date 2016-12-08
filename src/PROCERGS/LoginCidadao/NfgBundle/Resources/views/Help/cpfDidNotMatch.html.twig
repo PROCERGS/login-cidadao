@@ -1,0 +1,9 @@
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
+
+{% block panel_body_class %}nfg-cpf-didnt-match{% endblock %}
+
+{% block panel_body %}
+    <h1>{{ 'nfg.cpf_didnt_match.title' | trans }}</h1>
+
+    <p>{{ 'nfg.cpf_didnt_match.description' | trans({'%url_connect%': path('nfg_wait', { 'action': 'connect' }), '%url_documents%': path('lc_documents')}) | raw }}</p>
+{% endblock %}

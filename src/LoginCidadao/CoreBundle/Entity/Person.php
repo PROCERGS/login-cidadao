@@ -446,6 +446,8 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function setBirthdate($birthdate)
     {
         $this->birthdate = $birthdate;
+
+        return $this;
     }
 
     public function getMobile()
@@ -465,6 +467,8 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
             }
         }
         $this->mobile = $mobile;
+
+        return $this;
     }
 
     public function addAuthorization(Authorization $authorization)
