@@ -13,6 +13,7 @@ namespace PROCERGS\LoginCidadao\NfgBundle\Tests\EventListener;
 use PROCERGS\LoginCidadao\NfgBundle\EventListener\ExceptionListener;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\ConnectionNotFoundException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\CpfMismatchException;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\EmailInUseException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
@@ -25,6 +26,11 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class ExceptionListenerTest extends \PHPUnit_Framework_TestCase
 {
+    public function testEmailInUse()
+    {
+        $this->expectRedirect(new EmailInUseException(), 'nfg_help_email_in_use');
+    }
+
     public function testServiceUnavailable()
     {
         $this->expectRedirect(new NfgServiceUnavailableException(), 'nfg_unavailable');
@@ -101,6 +107,7 @@ class ExceptionListenerTest extends \PHPUnit_Framework_TestCase
     {
         $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
         $request->expects($this->any())->method('getSession')->willReturn($session);
+
         return $request;
     }
 
