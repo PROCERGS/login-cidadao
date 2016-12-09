@@ -919,3 +919,4 @@ profile:
     submit: Salvar
 scope_details.handle.title: O que é isso?
 flash_message.close: Fechar
+city_selector.no_javascript: 'Os campos referentes à sua Naturalidade não estão disponíveis pois seu navegador não está com JavaScript ativado.'

@@ -510,3 +510,4 @@ profile:
     submit: Save
 scope_details.handle.title: What is this?
 flash_message.close: Close
+city_selector.no_javascript: 'The fields related to your place of birth are unavailable because your browser does not have JavaScript enabled.'
