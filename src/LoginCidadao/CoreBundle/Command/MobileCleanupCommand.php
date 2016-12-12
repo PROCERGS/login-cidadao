@@ -39,7 +39,7 @@ class MobileCleanupCommand extends ContainerAwareCommand
     const VALID = 'valid';
     const VALID_ADDED_9 = 'valid_added_9';
 
-    const REGEX_COUNTRY = '(0|\+?55)?';
+    const REGEX_COUNTRY = '(\+?0|\+?55)?';
     const REGEX_AREA_CODE = '(1[1-9]|2[12478]|3[1-5]|3[7-8]|4[1-9]|5[1345]|6[1-9]|7[134579]|8[1-9]|9[1-9])';
     const REGEX_SUBSCRIBER = '((?:9[6789]|[6789])\d{7})';
 
@@ -148,7 +148,7 @@ class MobileCleanupCommand extends ContainerAwareCommand
 
             return reset($next);
         } catch (ConversionException $e) {
-            preg_match('/(\d+)/', $e->getMessage(), $m);
+            preg_match('/(\+?\d+)/', $e->getMessage(), $m);
             $phone = $this->isRecoverable($m[0]);
             if ($phone instanceof PhoneNumber) {
                 $this->write(self::INVALID_RECOVERED, $m[0], null, $phone);
@@ -199,7 +199,7 @@ class MobileCleanupCommand extends ContainerAwareCommand
         $result = null;
 
         // Replace 0 by +55
-        $regex0to55 = '/^0(1[1-9]|2[12478]|3[1-5]|3[7-8]|4[1-9]|5[1345]|6[1-9]|7[134579]|8[1-9]|9[1-9])([0-9]{8,9})$/';
+        $regex0to55 = '/^[+]?0(1[1-9]|2[12478]|3[1-5]|3[7-8]|4[1-9]|5[1345]|6[1-9]|7[134579]|8[1-9]|9[1-9])([0-9]{8,9})$/';
         if (preg_match($regex0to55, $phone, $m)) {
             $result = "+55{$m[1]}{$m[2]}";
         }
@@ -236,7 +236,7 @@ class MobileCleanupCommand extends ContainerAwareCommand
         $area = $m[2];
         $subscriber = $m[3];
 
-        if ($country == '0' || $country == '+55') {
+        if ($country == '0' || $country == '+0' || $country == '+55') {
             $country = '55';
         }
 
