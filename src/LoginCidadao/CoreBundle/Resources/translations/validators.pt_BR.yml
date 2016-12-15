@@ -21,8 +21,10 @@ person.validation:
         min: A senha deve ter, ao menos, {{ limit }} caracteres
         max: A senha deve ter, no máximo, {{ limit }} caracteres
     cpf.already_used: Esse CPF já está cadastrado.
-    mobile.length:
-        max: O telefone informado é muito longo. O limite é de 15 números incluíndo os códigos de área de país.
+    mobile:
+        9thDigit: Os celulares no Brasil precisam do 9º dígito
+        length:
+            max: O telefone informado é muito longo. O limite é de 15 números incluíndo os códigos de área de país.
 This value is not a valid phone number.: Esse não parece ser um telefone válido.
 This value is not a valid fixed-line number.: Esse número não corresponde a um telefone fixo.
 This value is not a valid mobile number.: Esse número não é um celular.

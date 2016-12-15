@@ -153,6 +153,10 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      *     maxMessage="person.validation.mobile.length.max",
      *     groups={"Registration", "LoginCidadaoRegistration", "Dynamic", "Profile", "LoginCidadaoProfile"}
      * )
+     * @LCAssert\MobilePhoneNumber(
+     *     missing9thDigit="person.validation.mobile.9thDigit",
+     *     groups={"Registration", "LoginCidadaoRegistration", "Dynamic", "Profile", "LoginCidadaoProfile"}
+     * )
      * @AssertPhoneNumber(
      *     type="mobile",
      *     groups={"Registration", "LoginCidadaoRegistration", "Dynamic", "Profile", "LoginCidadaoProfile"}
