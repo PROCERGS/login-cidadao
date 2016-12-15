@@ -20,6 +20,7 @@ use libphonenumber\PhoneNumberType;
 use libphonenumber\PhoneNumberUtil;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
+use LoginCidadao\ValidationBundle\Validator\Constraints\MobilePhoneNumberValidator;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\ProgressIndicator;
 use Symfony\Component\Console\Input\InputArgument;
@@ -38,7 +39,7 @@ class MobileCleanupCommand extends ContainerAwareCommand
     const VALID = 'valid';
     const VALID_ADDED_9 = 'valid_added_9';
 
-    const REGEX_COUNTRY = '(0|\+?55)?';
+    const REGEX_COUNTRY = '(\+?0|\+?55)?';
     const REGEX_AREA_CODE = '(1[1-9]|2[12478]|3[1-5]|3[7-8]|4[1-9]|5[1345]|6[1-9]|7[134579]|8[1-9]|9[1-9])';
     const REGEX_SUBSCRIBER = '((?:9[6789]|[6789])\d{7})';
 
@@ -115,7 +116,7 @@ class MobileCleanupCommand extends ContainerAwareCommand
 
             /** @var PhoneNumber $mobile */
             $mobile = $row['mobile'];
-            if (false === $this->isMobile($mobile)) {
+            if (false === MobilePhoneNumberValidator::isMobile($mobile)) {
                 $added9 = $this->tryToFix($mobile);
                 if (false === $added9) {
                     $this->write(self::IRRECOVERABLE, $mobile, $row['id']);
@@ -147,7 +148,7 @@ class MobileCleanupCommand extends ContainerAwareCommand
 
             return reset($next);
         } catch (ConversionException $e) {
-            preg_match('/(\d+)/', $e->getMessage(), $m);
+            preg_match('/(\+?\d+)/', $e->getMessage(), $m);
             $phone = $this->isRecoverable($m[0]);
             if ($phone instanceof PhoneNumber) {
                 $this->write(self::INVALID_RECOVERED, $m[0], null, $phone);
@@ -186,7 +187,7 @@ class MobileCleanupCommand extends ContainerAwareCommand
         $result->setCountryCode($phone->getCountryCode());
         $result->setNationalNumber(sprintf('%s9%s', $m[1], $m[2]));
 
-        if (false === $this->isMobile($result)) {
+        if (false === MobilePhoneNumberValidator::isMobile($result)) {
             return false;
         }
 
@@ -198,7 +199,7 @@ class MobileCleanupCommand extends ContainerAwareCommand
         $result = null;
 
         // Replace 0 by +55
-        $regex0to55 = '/^0(1[1-9]|2[12478]|3[1-5]|3[7-8]|4[1-9]|5[1345]|6[1-9]|7[134579]|8[1-9]|9[1-9])([0-9]{8,9})$/';
+        $regex0to55 = '/^[+]?0(1[1-9]|2[12478]|3[1-5]|3[7-8]|4[1-9]|5[1345]|6[1-9]|7[134579]|8[1-9]|9[1-9])([0-9]{8,9})$/';
         if (preg_match($regex0to55, $phone, $m)) {
             $result = "+55{$m[1]}{$m[2]}";
         }
@@ -235,7 +236,7 @@ class MobileCleanupCommand extends ContainerAwareCommand
         $area = $m[2];
         $subscriber = $m[3];
 
-        if ($country == '0' || $country == '+55') {
+        if ($country == '0' || $country == '+0' || $country == '+55') {
             $country = '55';
         }
 
@@ -289,24 +290,5 @@ class MobileCleanupCommand extends ContainerAwareCommand
         } else {
             return $phone;
         }
-    }
-
-    private function isMobile($phone)
-    {
-        if (!($phone instanceof PhoneNumber)) {
-            return false;
-        }
-
-        $allowedTypes = [PhoneNumberType::MOBILE, PhoneNumberType::FIXED_LINE_OR_MOBILE];
-        if (false === array_search($this->phoneUtil->getNumberType($phone), $allowedTypes)) {
-            return false;
-        }
-
-        // Brazilian mobile phone without 9th digit
-        if ($phone->getCountryCode() == '55' && strlen($phone->getNationalNumber()) !== 11) {
-            return false;
-        }
-
-        return true;
     }
 }

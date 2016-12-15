@@ -1,11 +1,21 @@
-{{ form_row(form.country) }}
-{% if form.state is defined %}
-    {{ form_row(form.state) }}
-{% elseif form.state_text is defined %}
-    {{ form_row(form.state_text) }}
-{% endif %}
-{% if form.city is defined %}
-    {{ form_row(form.city) }}
-{% elseif form.city_text is defined %}
-    {{ form_row(form.city_text) }}
-{% endif %}
+<div class="city-selector-container hidden">
+    {{ form_row(form.country) }}
+    {% if form.state is defined %}
+        {{ form_row(form.state) }}
+    {% elseif form.state_text is defined %}
+        {{ form_row(form.state_text) }}
+    {% endif %}
+    {% if form.city is defined %}
+        {{ form_row(form.city) }}
+    {% elseif form.city_text is defined %}
+        {{ form_row(form.city_text) }}
+    {% endif %}
+</div>
+<noscript class="has-error">
+    <style>
+        .city-selector-container {
+            display: none !important;
+        }
+    </style>
+    <p class="help-block">{{ 'city_selector.no_javascript' | trans }}</p>
+</noscript>
