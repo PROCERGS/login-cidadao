@@ -1180,4 +1180,27 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals('dummy', $response->getTargetUrl());
     }
+
+    public function testRegisterEmailMissing()
+    {
+        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException');
+
+        $accessId = 'access_id'.random_int(10, 9999);
+        $soapService = $this->getSoapService($accessId);
+
+        $nfgProfile = $this->getNfgProfile();
+        $nfgProfile->setEmail(null);
+        $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none'),
+                'soap' => $soapService,
+            ]
+        );
+
+        $accessToken = 'access_token'.random_int(10, 9999);
+        $request = $this->getRequest($accessToken);
+        $nfg->connectCallback($request, new PersonMeuRS());
+    }
 }
