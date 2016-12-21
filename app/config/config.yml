@@ -242,6 +242,7 @@ simple_things_entity_audit:
         - LoginCidadao\CoreBundle\Entity\Country
         - LoginCidadao\CoreBundle\Entity\IdCard
         - LoginCidadao\CoreBundle\Entity\ImpersonationReport
+        - LoginCidadao\CoreBundle\Entity\InvalidateSessionRequest
         - LoginCidadao\CoreBundle\Entity\Person
         - LoginCidadao\CoreBundle\Entity\PersonAddress
         - LoginCidadao\CoreBundle\Entity\SentEmail
@@ -252,6 +253,10 @@ simple_things_entity_audit:
         - LoginCidadao\OAuthBundle\Entity\Client
         - LoginCidadao\OAuthBundle\Entity\RefreshToken
         - LoginCidadao\OAuthBundle\Entity\Organization
+        - LoginCidadao\OpenIDBundle\Entity\ClientMetadata
+
+        - PROCERGS\LoginCidadao\CoreBunde\Entity\PersonMeuRS
+        - PROCERGS\LoginCidadao\NfgBunde\Entity\NfgProfile
 
 hwi_oauth:
     connect:
