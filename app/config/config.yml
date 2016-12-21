@@ -253,6 +253,9 @@ simple_things_entity_audit:
         - LoginCidadao\OAuthBundle\Entity\RefreshToken
         - LoginCidadao\OAuthBundle\Entity\Organization
 
+        - PROCERGS\LoginCidadao\CoreBunde\Entity\PersonMeuRS
+        - PROCERGS\LoginCidadao\NfgBunde\Entity\NfgProfile
+
 hwi_oauth:
     connect:
         confirmation: false
