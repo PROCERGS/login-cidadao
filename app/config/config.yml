@@ -255,8 +255,8 @@ simple_things_entity_audit:
         - LoginCidadao\OAuthBundle\Entity\Organization
         - LoginCidadao\OpenIDBundle\Entity\ClientMetadata
 
-        - PROCERGS\LoginCidadao\CoreBunde\Entity\PersonMeuRS
-        - PROCERGS\LoginCidadao\NfgBunde\Entity\NfgProfile
+        - PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS
+        - PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile
 
 hwi_oauth:
     connect:
