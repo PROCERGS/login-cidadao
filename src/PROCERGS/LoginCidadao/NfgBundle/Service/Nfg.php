@@ -305,14 +305,15 @@ class Nfg implements LoggerAwareInterface
      */
     public function disconnect(PersonMeuRS $personMeuRS)
     {
-        $this->em->remove($personMeuRS->getNfgProfile());
+        $nfgProfile = $this->nfgProfileRepository->find($personMeuRS->getNfgProfile()->getId());
+        $this->em->remove($nfgProfile);
         $personMeuRS->setNfgAccessToken(null);
         $personMeuRS->setNfgProfile(null);
         $this->em->flush();
 
         $response = new RedirectResponse($this->router->generate('fos_user_profile_edit'));
         $event = new GetDisconnectCallbackResponseEvent($personMeuRS, $response);
-        $this->dispatcher->dispatch(NfgEvents::CONNECT_CALLBACK_RESPONSE, $event);
+        $this->dispatcher->dispatch(NfgEvents::DISCONNECT_CALLBACK_RESPONSE, $event);
 
         return $event->getResponse();
     }
