@@ -177,11 +177,9 @@ class Nfg implements LoggerAwareInterface
             $nfgProfile = $this->nfgSoap->getUserInfo($accessToken, $voterRegistration);
             $this->reportSuccess();
 
-            $requiredInfo = [$nfgProfile->getCpf(), $nfgProfile->getBirthdate()];
-            $missingRequiredInfo = array_search(
-                null,
-                $requiredInfo
-            );
+            $requiredInfo = [$nfgProfile->getName(), $nfgProfile->getCpf(), $nfgProfile->getEmail()];
+            $missingRequiredInfo = array_search(null, $requiredInfo);
+
             if ($testRequiredInfo && false !== $missingRequiredInfo) {
                 throw new MissingRequiredInformationException('Some needed information was not authorized on NFG.');
             }
