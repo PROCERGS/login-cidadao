@@ -451,6 +451,41 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $nfg->connectCallback($request, $personMeuRS);
     }
 
+    public function testMinimalInfo()
+    {
+        $cpf = '01234567890';
+        $nfgProfile = $this->getNfgProfile();
+        $nfgProfile->setCpf($cpf)
+            ->setEmail('some@email.com')
+            ->setName('Fulano')
+            ->setBirthdate(null)
+            ->setMobile(null);
+
+        $accessId = 'access_id'.random_int(10, 9999);
+        $soapService = $this->getSoapService($accessId);
+
+        $person = new Person();
+        $person->setCpf($cpf);
+        $personMeuRS = new PersonMeuRS();
+        $personMeuRS
+            ->setVoterRegistration('1234567890')
+            ->setPerson($person);
+
+        $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
+
+        $nfg = $this->getNfgService(
+            [
+                'session' => $this->getSession($accessId, 'none'),
+                'soap' => $soapService,
+            ]
+        );
+
+        $accessToken = 'access_token'.random_int(10, 9999);
+        $request = $this->getRequest($accessToken);
+
+        $nfg->connectCallback($request, $personMeuRS);
+    }
+
     public function testRegistration()
     {
         $accessId = 'access_id'.random_int(10, 9999);
@@ -540,8 +575,10 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $nfgProfile = $this->getNfgProfile();
         $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
 
+        $otherPerson = new Person();
+        $otherPerson->setCpf($nfgProfile->getCpf());
         $otherPersonMeuRS = new PersonMeuRS();
-        $otherPersonMeuRS->setPerson(new Person());
+        $otherPersonMeuRS->setPerson($otherPerson);
         $otherPersonMeuRS->setNfgAccessToken('token');
         $meuRSHelper = $this->getMeuRSHelper($nfgProfile->getCpf(), $otherPersonMeuRS);
 
