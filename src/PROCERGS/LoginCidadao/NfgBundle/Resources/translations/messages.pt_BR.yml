@@ -5,7 +5,7 @@ nfg:
         close: 'Fechar'
     missing_info:
         title: 'Informações Insuficientes'
-        body: 'Para que a vinculação com a Nota Fiscal Gaúcha seja realizada, precisamos que você autorize acesso ao seu CPF e à sua data de nascimento.'
+        body: 'Para que a vinculação com a Nota Fiscal Gaúcha seja realizada, precisamos que você autorize acesso ao seu nome, CPF e email.'
         level1: 'Se você já autorizou todas as opções na página anterior, acesse seu cadastro da Nota Fiscal Gaúcha e verifique se seus dados estão atualizados.'
         try_again: 'Tentar novamente'
     connection_not_found:

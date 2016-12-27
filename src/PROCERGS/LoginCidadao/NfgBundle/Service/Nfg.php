@@ -177,11 +177,9 @@ class Nfg implements LoggerAwareInterface
             $nfgProfile = $this->nfgSoap->getUserInfo($accessToken, $voterRegistration);
             $this->reportSuccess();
 
-            $requiredInfo = [$nfgProfile->getCpf(), $nfgProfile->getBirthdate()];
-            $missingRequiredInfo = array_search(
-                null,
-                $requiredInfo
-            );
+            $requiredInfo = [$nfgProfile->getName(), $nfgProfile->getCpf(), $nfgProfile->getEmail()];
+            $missingRequiredInfo = array_search(null, $requiredInfo);
+
             if ($testRequiredInfo && false !== $missingRequiredInfo) {
                 throw new MissingRequiredInformationException('Some needed information was not authorized on NFG.');
             }
@@ -226,7 +224,7 @@ class Nfg implements LoggerAwareInterface
         }
 
         /** @var PersonInterface $user */
-        $personMeuRS = $this->meuRSHelper->getPersonByCpf($this->sanitizeCpf($cpf));
+        $personMeuRS = $this->meuRSHelper->getPersonByCpf($this->sanitizeCpf($cpf), true);
 
         if (!$personMeuRS || !$personMeuRS->getPerson() || !$personMeuRS->getNfgAccessToken()) {
             throw new ConnectionNotFoundException('No user found matching this CPF');
@@ -367,7 +365,7 @@ class Nfg implements LoggerAwareInterface
         }
 
         // Check CPF collision
-        $otherPerson = $this->meuRSHelper->getPersonByCpf($person->getCpf());
+        $otherPerson = $this->meuRSHelper->getPersonByCpf($person->getCpf(), true);
         if (null === $otherPerson || $otherPerson->getId() === $personMeuRS->getId()) {
             // No collision found. We're good! :)
             return;
@@ -405,7 +403,7 @@ class Nfg implements LoggerAwareInterface
     private function register(Request $request, PersonMeuRS $personMeuRS, NfgProfile $nfgProfile)
     {
         $sanitizedCpf = $this->sanitizeCpf($nfgProfile->getCpf());
-        $otherPersonMeuRS = $this->meuRSHelper->getPersonByCpf($sanitizedCpf);
+        $otherPersonMeuRS = $this->meuRSHelper->getPersonByCpf($sanitizedCpf, true);
 
         if ($otherPersonMeuRS !== null) {
             if ($otherPersonMeuRS->getNfgProfile()) {

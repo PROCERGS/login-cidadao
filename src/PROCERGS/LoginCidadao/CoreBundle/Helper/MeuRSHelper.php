@@ -12,6 +12,7 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Helper;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRSRepository;
@@ -107,19 +108,43 @@ class MeuRSHelper
 
     /**
      * @param string $cpf
-     * @return PersonMeuRS|null
+     * @param bool $create
+     * @return null|PersonMeuRS
      */
-    public function getPersonByCpf($cpf)
+    public function getPersonByCpf($cpf, $create = false)
     {
-        return $this->personMeuRSRepository->getOneByCpf($cpf);
+        /** @var PersonInterface|null $person */
+        $person = $this->getPersonRepository()->findOneBy(compact('cpf'));
+
+        if (!$person) {
+            return null;
+        }
+
+        return $this->getPersonMeuRS($person, $create);
     }
 
     /**
      * @param string $email
-     * @return PersonMeuRS|null
+     * @param bool $create
+     * @return null|PersonMeuRS
      */
-    public function getPersonByEmail($email)
+    public function getPersonByEmail($email, $create = false)
     {
-        return $this->personMeuRSRepository->getOneByEmail($email);
+        /** @var PersonInterface|null $person */
+        $person = $this->getPersonRepository()->findOneBy(compact('email'));
+
+        if (!$person) {
+            return null;
+        }
+
+        return $this->getPersonMeuRS($person, $create);
+    }
+
+    /**
+     * @return PersonRepository|EntityRepository
+     */
+    private function getPersonRepository()
+    {
+        return $this->em->getRepository('LoginCidadaoCoreBundle:Person');
     }
 }
