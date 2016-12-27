@@ -1,3 +1,4 @@
 Invalid credentials.: Invalid credentials. Check that you typed your email and password correctly.
 Bad credentials.: Invalid credentials. Check that you typed your email and password correctly.
 Invalid ReCaptcha.: Please verify that you are not a robot.
+lc.security.3rd_party.access_denied: You aborted the login process.

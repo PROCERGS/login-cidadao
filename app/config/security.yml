@@ -92,6 +92,7 @@ security:
                 failure_path: /login
                 default_target_path: lc_dashboard
                 success_handler: security.authentication.success_handler
+                failure_handler: lc.authentication.hwi_failure_handler
                 oauth_user_provider:
                     service:  lc.hwi_twitter.user_provider
 
