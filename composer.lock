@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1348096deb6291976deea7c77061ba3c",
-    "content-hash": "5e31481dbd24c9ef0fcd4866d37d4fb8",
+    "hash": "30fbec2735c016d6b185ff837563cf78",
+    "content-hash": "e0c288ecbfd2e840dbf875ac4dd9a29c",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -1621,50 +1621,6 @@
             "time": "2016-08-05 04:25:18"
         },
         {
-            "name": "guilhermednt/hwi-oauth-proxy-bundle",
-            "version": "dev-master",
-            "target-dir": "Donato/Generic/HWIOAuthProxyBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/guilhermednt/hwi-oauth-proxy-bundle.git",
-                "reference": "a0b97b0b880cc1649c68070ae4c4bd51cc50ecb3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/guilhermednt/hwi-oauth-proxy-bundle/zipball/a0b97b0b880cc1649c68070ae4c4bd51cc50ecb3",
-                "reference": "a0b97b0b880cc1649c68070ae4c4bd51cc50ecb3",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-0": {
-                    "Donato\\Generic\\HWIOAuthProxyBundle": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Guilherme Donato",
-                    "email": "packagist@cadastro.dona.to"
-                }
-            ],
-            "description": "Bundle to enable proxy for HWIOAuthBundle",
-            "homepage": "http://github.com/guilhermednt/hwi-oauth-proxy-bundle",
-            "keywords": [
-                "HWIOAuthBundle",
-                "http",
-                "proxy",
-                "service"
-            ],
-            "time": "2014-03-12 17:47:59"
-        },
-        {
             "name": "guilhermednt/pathwell-bundle",
             "version": "v0.1.2",
             "source": {
@@ -1704,34 +1660,38 @@
         },
         {
             "name": "hwi/oauth-bundle",
-            "version": "0.3.x-dev",
-            "target-dir": "HWI/Bundle/OAuthBundle",
+            "version": "0.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hwi/HWIOAuthBundle.git",
-                "reference": "1239889d504b151e120625d744aa6fbbcf6b6d16"
+                "reference": "8815fa226547471638efa8333bcaa8a80a5d64f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/1239889d504b151e120625d744aa6fbbcf6b6d16",
-                "reference": "1239889d504b151e120625d744aa6fbbcf6b6d16",
+                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/8815fa226547471638efa8333bcaa8a80a5d64f3",
+                "reference": "8815fa226547471638efa8333bcaa8a80a5d64f3",
                 "shasum": ""
             },
             "require": {
-                "kriswallsmith/buzz": "~0.7",
+                "kriswallsmith/buzz": "~0.13",
                 "php": ">=5.3.3",
-                "symfony/framework-bundle": "~2.1",
-                "symfony/options-resolver": "~2.1",
-                "symfony/security-bundle": "~2.1"
+                "symfony/form": "~2.3",
+                "symfony/framework-bundle": "~2.3",
+                "symfony/options-resolver": "~2.3",
+                "symfony/security-bundle": "~2.3",
+                "symfony/yaml": "~2.3"
             },
             "conflict": {
                 "twig/twig": "<1.12"
             },
             "require-dev": {
-                "doctrine/orm": "~2.2",
+                "doctrine/orm": "~2.3",
+                "friendsofsymfony/user-bundle": "~1.3|~2.0",
+                "phpunit/phpunit": "~4.8|~5.0",
+                "symfony/phpunit-bridge": "~2.7",
                 "symfony/property-access": "~2.3",
-                "symfony/twig-bundle": "~2.1",
-                "symfony/validator": "~2.1"
+                "symfony/twig-bundle": "~2.3",
+                "symfony/validator": "~2.3"
             },
             "suggest": {
                 "doctrine/doctrine-bundle": "to use Doctrine user provider",
@@ -1742,12 +1702,12 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.3-dev"
+                    "dev-master": "0.4-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "HWI\\Bundle\\OAuthBundle": ""
+                "psr-4": {
+                    "HWI\\Bundle\\OAuthBundle\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1777,21 +1737,29 @@
             "keywords": [
                 "37signals",
                 "Authentication",
+                "Deezer",
+                "EVE Online",
                 "amazon",
+                "auth0",
+                "azure",
                 "bitbucket",
                 "bitly",
                 "box",
+                "bufferapp",
                 "dailymotion",
                 "deviantart",
+                "discogs",
                 "disqus",
                 "dropbox",
                 "eventbrite",
                 "facebook",
                 "firewall",
+                "fiware",
                 "flickr",
                 "foursquare",
                 "github",
                 "google",
+                "hubic",
                 "instagram",
                 "jira",
                 "linkedin",
@@ -1800,23 +1768,35 @@
                 "oauth1",
                 "oauth2",
                 "odnoklassniki",
+                "paypal",
                 "qq",
+                "reddit",
+                "runkeeper",
                 "salesforce",
                 "security",
                 "sensio connect",
                 "sina weibo",
+                "slack",
+                "sound cloud",
+                "spotify",
                 "stack exchange",
                 "stereomood",
+                "strava",
+                "toshl",
+                "trakt",
                 "trello",
                 "twitch",
                 "twitter",
                 "vkontakte",
+                "wechat",
                 "windows live",
                 "wordpress",
+                "xing",
                 "yahoo",
-                "yandex"
+                "yandex",
+                "youtube"
             ],
-            "time": "2015-11-22 17:50:20"
+            "time": "2016-09-11 13:24:27"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -6289,8 +6269,6 @@
     "stability-flags": {
         "friendsofsymfony/user-bundle": 20,
         "friendsofsymfony/oauth-server-bundle": 20,
-        "hwi/oauth-bundle": 20,
-        "guilhermednt/hwi-oauth-proxy-bundle": 20,
         "knplabs/knp-gaufrette-bundle": 20,
         "knplabs/gaufrette": 20,
         "nelmio/api-doc-bundle": 20,
