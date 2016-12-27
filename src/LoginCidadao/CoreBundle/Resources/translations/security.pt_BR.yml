@@ -1,3 +1,4 @@
 Invalid credentials.: As credenciais informadas são inválidas. Verifique se digitou seu email e sua senha corretamente.
 Bad credentials.: As credenciais informadas são inválidas. Verifique se digitou seu email e sua senha corretamente.
 Invalid ReCaptcha.: Por favor, verifique que você não é um robô.
+lc.security.3rd_party.access_denied: Você cancelou o processo de login.

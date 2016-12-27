@@ -26,7 +26,6 @@ class AppKernel extends Kernel
 
             new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
-            new Donato\Generic\HWIOAuthProxyBundle\DonatoGenericHWIOAuthProxyBundle(),
 
             new LoginCidadao\LocaleBundle\LoginCidadaoLocaleBundle(),
             new LoginCidadao\APIBundle\LoginCidadaoAPIBundle(),
