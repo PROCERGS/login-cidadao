@@ -12,6 +12,7 @@ alteração seja realizada na conta do usuário.
 
 UserInfo Endpoint
 -----------------
+    /api/v1/person.json
 
 Esse endpoint serve para atender os requisitos do OpenID Connect
 ([Section 5.3](http://openid.net/specs/openid-connect-core-1_0.html#UserInfo))
@@ -27,6 +28,7 @@ biblioteca OpenID Connect utilizada por seus serviços clientes.
 
 Wait Update Endpoint
 --------------------
+    /api/v1/wait/person/update.json
 
 O Wait Update Endpoint é semelhante ao UserInfo Endpoint no sentido de retornar
 informações sobre o usuário, entretanto esse endpoint realizará um Long Polling
