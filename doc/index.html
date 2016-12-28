@@ -22,9 +22,29 @@
 
     <!-- Initializer -->
     <script>
-        Flatdoc.run({
-            fetcher: Flatdoc.file('docs.md')
-        });
+        var urlParams;
+        var file;
+        (window.onpopstate = function () {
+            var match,
+                pl     = /\+/g,  // Regex for replacing addition symbol with a space
+                search = /([^&=]+)=?([^&]*)/g,
+                decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+                query  = window.location.search.substring(1);
+
+            urlParams = {};
+            while (match = search.exec(query))
+                urlParams[decode(match[1])] = decode(match[2]);
+
+            if (urlParams["doc"]) {
+                file = urlParams["doc"] + '.md';
+            } else {
+                file = 'docs.md';
+            }
+
+            Flatdoc.run({
+                fetcher: Flatdoc.file(file)
+            });
+        })();
     </script>
 </head>
 <body role='flatdoc'>
