@@ -164,7 +164,7 @@ onde você pode alterar posteriormente caso queira fazer algum ajuste.
 É importante lembrar de limpar o cache da aplicação a cada alteração feita
 no diretório `app/config`.
 
-    $ ./app/console cache:clear
+    $ ./app/console cache:clear -e prod
 
 Depois de configurar seu `parameters.yml` você já deve conseguir criar a
 estrutura necessária do banco de dados e, em seguida, popular com os dados
