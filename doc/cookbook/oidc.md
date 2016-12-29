@@ -1,5 +1,5 @@
-Exemplo de OpenID Connect
-=========================
+Exemplo usando OpenID Connect
+=============================
 
 Nesse documento você encontra um exemplo simplificado de implementação de um
 cliente OpenID Connect em PHP. Caso você pretenda utilizar outras linguagens,
@@ -10,16 +10,17 @@ para verificar se existe uma na sua linguagem preferida que implemente o papel d
 Requisitos
 ----------
 
-Para esse exemplo utilizaremos a biblioteca [`jumbojett/openid-connect-php`](https://github.com/jumbojett/OpenID-Connect-PHP)
+Para este exemplo utilizaremos a biblioteca [`jumbojett/openid-connect-php`](https://github.com/jumbojett/OpenID-Connect-PHP)
 por ser uma implementação bastante minimalista mas que já suporta a especificação
 [OpenID Connect Dynamic Client Registration 1.0](http://openid.net/specs/openid-connect-registration-1_0.html).
 
-Para esse exemplo você vai precisar de:
+Você vai precisar de:
 
-  1. PHP 5.2 ou superior;
-  2. Extensão cURL;
-  3. Extensão JSON;
-  4. Permissão de escrita em um diretório.
+  1. *PHP 5.2* ou superior;
+  2. Extensão *cURL*;
+  3. Extensão *JSON*;
+  4. *Permissão de escrita* em um diretório;
+  5. *Login Cidadão* ou outro provedor de identidade compatível com OpenID Connect.
 
 Exemplo
 -------
@@ -72,7 +73,7 @@ try {
     // Obtemos o primeiro nome do usuário logado
     $name = $oidc->requestUserInfo('given_name');
 
-    echo "Hello $name!";
+    echo "<p>Hello $name!</p>";
 } catch (OpenIDConnectClientException $e) {
     echo $e->getMessage();
     echo '<p><a href="/">Try Again</a></p>';
