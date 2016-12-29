@@ -18,8 +18,9 @@ Como em 2013/2014 o OpenID Connect ainda estava em Draft, optou-se por adotar
 OAuth 2.0 como protocolo de autorização para o projeto até que o OpenID Connect
 estivesse pronto.
 
-Tecnologias Usadas
-------------------
+Tecnologias Utilizadas
+----------------------
 
 O Login Cidadão foi construído utilizando o framework PHP **Symfony 2** e visando
-compatibilidade com **PostgreSQL** e **MySQL**.
+compatibilidade com **PostgreSQL** e **MySQL**. Para armazenamento de dados da
+sessão, utiliza-se **Memcached**.
