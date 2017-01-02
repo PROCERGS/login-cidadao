@@ -80,7 +80,7 @@ class PersonResumeFormType extends CommonFormType
         );
         $builder->add(
             'mobile',
-            null,
+            'Misd\PhoneNumberBundle\Form\Type\PhoneNumberType',
             array(
                 'required' => false,
                 'read_only' => 'true',
