@@ -41,4 +41,24 @@ class AuthorizationRepository extends EntityRepository
 
         return $query->getQuery()->getScalarResult();
     }
+
+    public function statsUsersByServiceVisibility($visible = true, $uid = null)
+    {
+        $query = $this->createQueryBuilder('a')
+            ->select('c.id, c.name, c.uid, COUNT(a.id) AS users')
+            ->join('a.client', 'c')
+            ->where('c.visible = :visible')
+            ->setParameter('visible', $visible)
+            ->groupBy('c');
+
+        if ($visible && !$uid) {
+            $query->orWhere('c.uid IS NOT NULL');
+        }
+        if ($visible && null !== $uid) {
+            $query->orWhere('c.uid = :uid')
+                ->setParameter('uid', $uid);
+        }
+
+        return $query->getQuery()->getScalarResult();
+    }
 }
