@@ -45,11 +45,12 @@ class AuthorizationRepository extends EntityRepository
     public function statsUsersByServiceVisibility($visible = true, $uid = null)
     {
         $query = $this->createQueryBuilder('a')
-            ->select('c.id, c.name, c.uid, COUNT(a.id) AS users')
+            ->select("CONCAT(c.id, '_', c.randomId) AS id, c.name, c.siteUrl AS uri, m.logo_uri, c.uid, COUNT(a.id) AS users")
             ->join('a.client', 'c')
+            ->join('c.metadata', 'm')
             ->where('c.visible = :visible')
             ->setParameter('visible', $visible)
-            ->groupBy('c');
+            ->groupBy('c, m');
 
         if ($visible && !$uid) {
             $query->orWhere('c.uid IS NOT NULL');
