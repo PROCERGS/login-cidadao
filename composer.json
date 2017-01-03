@@ -63,6 +63,7 @@
         "nelmio/cors-bundle": "^1.4",
         "nelmio/security-bundle": "^1.8",
         "liip/monitor-bundle": "^2.2",
+        "guzzlehttp/guzzle": "^5.3",
         "guilhermednt/pathwell-bundle": "^0.1",
         "beelab/recaptcha2-bundle": "dev-legacy",
         "bmatzner/fontawesome-bundle": "^4.6",
