@@ -131,7 +131,7 @@ class MeuRSHelper
     public function getPersonByEmail($email, $create = false)
     {
         /** @var PersonInterface|null $person */
-        $person = $this->getPersonRepository()->findOneBy(compact('email'));
+        $person = $this->getPersonRepository()->findOneByEmail($email);
 
         if (!$person) {
             return null;

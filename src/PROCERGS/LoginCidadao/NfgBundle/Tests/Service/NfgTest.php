@@ -14,6 +14,7 @@ use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Form\Factory\FormFactory;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Model\UserManagerInterface;
+use FOS\UserBundle\Util\Canonicalizer;
 use LoginCidadao\CoreBundle\Entity\Person;
 use PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
@@ -970,6 +971,8 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             $collaborators['mailer'] = $this->getMailer();
         }
 
+        $canonicalizer = new Canonicalizer();
+
         $nfg = new Nfg(
             $collaborators['em'],
             $collaborators['soap'],
@@ -982,6 +985,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             $collaborators['form_factory'],
             $collaborators['nfgprofile_repository'],
             $collaborators['mailer'],
+            $canonicalizer,
             $collaborators['firewall'],
             $collaborators['login_endpoint'],
             $collaborators['auth_endpoint']
