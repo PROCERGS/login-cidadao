@@ -12,6 +12,7 @@ namespace LoginCidadao\APIBundle\Controller;
 
 use Doctrine\Common\Cache\CacheProvider;
 use FOS\RestBundle\Controller\Annotations as REST;
+use JMS\Serializer\SerializationContext;
 use LoginCidadao\CoreBundle\Entity\AuthorizationRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -22,6 +23,7 @@ class StatisticsController extends BaseController
 {
 
     const CACHE_PUBLIC_STATISTICS_API_KEY = 'api.public_statistics';
+    const CACHE_LIFE_TIME = 60;
 
     /**
      * Gets the current authorization count for each public Client (service)
@@ -61,7 +63,8 @@ class StatisticsController extends BaseController
             'users_by_service' => $usersByService,
         ];
 
-        $view = $this->view($this->getTotalAndRemoveUid($stats, $uid));
+        $view = $this->view($this->getTotalAndRemoveUid($stats, $uid))
+            ->setSerializationContext(SerializationContext::create()->setSerializeNull(true));
 
         return $this->handleView($view);
     }
@@ -79,7 +82,7 @@ class StatisticsController extends BaseController
 
         $stats = $cache->fetch($id);
         if (false === $stats) {
-            $cache->save($id, $callback(), 60);
+            $cache->save($id, $callback(), self::CACHE_LIFE_TIME);
         }
 
         $stats = $cache->fetch($id);
@@ -110,8 +113,8 @@ class StatisticsController extends BaseController
             function ($service) use (&$total, $uid) {
                 if (array_key_exists('uid', $service) && $service['uid'] === $uid) {
                     $total = $service['users'];
-                    unset($service['uid']);
                 }
+                unset($service['uid']);
 
                 return $service;
             },

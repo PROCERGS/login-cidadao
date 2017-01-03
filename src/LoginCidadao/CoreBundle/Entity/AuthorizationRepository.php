@@ -47,7 +47,7 @@ class AuthorizationRepository extends EntityRepository
         $query = $this->createQueryBuilder('a')
             ->select("CONCAT(c.id, '_', c.randomId) AS id, c.name, c.siteUrl AS uri, m.logo_uri, c.uid, COUNT(a.id) AS users")
             ->join('a.client', 'c')
-            ->join('c.metadata', 'm')
+            ->leftJoin('c.metadata', 'm')
             ->where('c.visible = :visible')
             ->setParameter('visible', $visible)
             ->groupBy('c, m');
