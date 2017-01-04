@@ -5,3 +5,5 @@ form.voter_registration.invalid: 'Título de Eleitor inválido'
 'This document is already in use.': 'Esse documento já está sendo usado.'
 'You already have an ID Card in this state.': 'Você já cadastrou um documento de identidade nesse Estado.'
 'This field accepts only letters and numbers': 'Esse campo apenas aceita letras e números'
+person_rs.validation:
+    voter_registration.already_used: Esse título de eleitor já está cadastrado.

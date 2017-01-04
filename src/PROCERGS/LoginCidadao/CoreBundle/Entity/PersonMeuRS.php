@@ -21,6 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRSRepository")
  * @UniqueEntity("person")
+ * @UniqueEntity(fields="voterRegistration", errorPath="voterRegistration", message="person_rs.validation.voter_registration.already_used", groups={"LoginCidadaoRegistration", "Registration", "LoginCidadaoEmailForm", "LoginCidadaoProfile", "Dynamic"})
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="person_meurs")
  * @JMS\ExclusionPolicy("all")
