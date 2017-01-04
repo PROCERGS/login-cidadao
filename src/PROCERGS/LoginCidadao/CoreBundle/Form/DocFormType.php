@@ -15,6 +15,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DocFormType extends BaseForm
 {
@@ -27,25 +28,21 @@ class DocFormType extends BaseForm
 
         $voterRegistration = array($this, 'voterRegistrationCallback');
         $builder->addEventListener(FormEvents::PRE_SET_DATA, $voterRegistration);
+        $builder->add(
+            'personMeuRS',
+            'PROCERGS\LoginCidadao\CoreBundle\Form\PersonMeuRSVoterRegistrationType',
+            ['compound' => true, 'validation_groups' => ['Documents'], 'cascade_validation' => true]
+        );
     }
 
     public function voterRegistrationCallback(FormEvent $event)
     {
-        $form = $event->getForm();
         $data = $event->getData();
 
         $data->personMeuRS = $this->meuRSHelper
             ->getPersonMeuRS($event->getData(), true);
-        $event->setData($data);
 
-        $form->add('personMeuRS', 'person_meurs_voter_registration_type',
-            array(
-            'compound' => true
-        ));
-        $form->get('personMeuRS')->add('voterRegistration', 'text',
-            array(
-            'required' => false
-        ));
+        return;
     }
 
     public function setMeuRSHelper(MeuRSHelper $meuRSHelper)
@@ -53,5 +50,16 @@ class DocFormType extends BaseForm
         $this->meuRSHelper = $meuRSHelper;
 
         return $this;
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(
+            [
+                'data_class' => 'LoginCidadao\CoreBundle\Entity\Person',
+                'validation_groups' => ['Documents'],
+                'cascade_validation' => true,
+            ]
+        );
     }
 }

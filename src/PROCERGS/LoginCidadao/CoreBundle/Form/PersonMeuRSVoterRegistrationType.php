@@ -24,8 +24,7 @@ class PersonMeuRSVoterRegistrationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('voterRegistration')
-        ;
+            ->add('voterRegistration');
     }
 
     /**
@@ -33,9 +32,12 @@ class PersonMeuRSVoterRegistrationType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS'
-        ));
+        $resolver->setDefaults(
+            array(
+                'data_class' => 'PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS',
+                'validation_groups' => ['Documents'],
+            )
+        );
     }
 
     /**
