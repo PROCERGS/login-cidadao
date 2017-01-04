@@ -18,6 +18,7 @@ use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Form\Factory\FormFactory;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Security\LoginManagerInterface;
+use FOS\UserBundle\Util\CanonicalizerInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
@@ -109,6 +110,9 @@ class Nfg implements LoggerAwareInterface
     /** @var MailerInterface */
     private $mailer;
 
+    /** @var CanonicalizerInterface */
+    private $emailCanonicalizer;
+
     public function __construct(
         EntityManager $em,
         NfgSoapInterface $client,
@@ -121,6 +125,7 @@ class Nfg implements LoggerAwareInterface
         FormFactory $formFactory,
         NfgProfileRepository $nfgProfileRepository,
         MailerInterface $mailer,
+        CanonicalizerInterface $emailCanonicalizer,
         $firewallName,
         $loginEndpoint,
         $authorizationEndpoint
@@ -136,6 +141,7 @@ class Nfg implements LoggerAwareInterface
         $this->formFactory = $formFactory;
         $this->nfgProfileRepository = $nfgProfileRepository;
         $this->mailer = $mailer;
+        $this->emailCanonicalizer = $emailCanonicalizer;
         $this->firewallName = $firewallName;
         $this->loginEndpoint = $loginEndpoint;
         $this->authorizationEndpoint = $authorizationEndpoint;
@@ -422,7 +428,8 @@ class Nfg implements LoggerAwareInterface
             throw new MissingRequiredInformationException('Email was not sent by NFG.');
         }
 
-        if ($this->meuRSHelper->getPersonByEmail($nfgProfile->getEmail()) !== null) {
+        $email = $this->emailCanonicalizer->canonicalize($nfgProfile->getEmail());
+        if ($this->meuRSHelper->getPersonByEmail($email) !== null) {
             throw new EmailInUseException();
         }
 

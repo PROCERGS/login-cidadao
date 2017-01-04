@@ -55,6 +55,7 @@ services:
             - "@fos_user.registration.form.factory"
             - "@procergs.entities.nfgprofile.repository"
             - "@procergs.nfg.mailer"
+            - "@fos_user.util.email_canonicalizer"
             - "%fos_user.firewall_name%"
             - "%nfg_url_login%"
             - "%nfg_url_auth%"
