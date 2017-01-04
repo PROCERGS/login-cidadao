@@ -251,6 +251,7 @@ hwi_oauth:
         confirmation: false
         account_connector: lc.hwi_twitter.user_provider
     firewall_name: main
+    failed_auth_path: fos_user_profile_edit
     fosub:
         username_iterations: 30
         properties:
