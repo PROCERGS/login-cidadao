@@ -55,15 +55,6 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             $this->em->flush();
         }
 
-        // CPF check
-        if ($token->getUser()->isCpfExpired()) {
-            return $this->httpUtils->createRedirectResponse($request, 'lc_registration_cpf');
-        }
-
-        if (strstr($token->getUser()->getUsername(), '@') !== false) {
-            return $this->httpUtils->createRedirectResponse($request, 'lc_update_username');
-        }
-
         return parent::onAuthenticationSuccess($request, $token);
     }
 }
