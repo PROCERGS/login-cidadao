@@ -29,7 +29,7 @@ class PersonMeuRSType extends AbstractType
             ->add('nfgProfile')
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
