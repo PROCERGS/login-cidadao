@@ -29,8 +29,7 @@ class DocumentController extends BaseController
         if (is_array($response)) {
             $meuRSHelper = $this->get('meurs.helper');
 
-            $response['personMeuRS'] = $meuRSHelper->getPersonMeuRS($this->getUser(),
-                true);
+            $response['personMeuRS'] = $meuRSHelper->getPersonMeuRS($this->getUser(), true);
             $response['tre_search_link'] = $this->getParameter('tre_search_link');
         }
 
