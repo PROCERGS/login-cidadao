@@ -22,6 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="LoginCidadao\OpenIDBundle\Entity\ClientMetadataRepository")
  * @UniqueEntity("client")
+ * @UniqueEntity("client_name")
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="client_metadata")
  * @JMS\ExclusionPolicy("all")
