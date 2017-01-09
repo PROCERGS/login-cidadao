@@ -48,7 +48,7 @@ boa performance;
 
   * **PHP 5** ou **7**: a forma mais simples de instalar o Login Cidadão é utilizando
 PHP 5. Caso você queira utilizar PHP 7 serão necessárias algumas modificações
-uma vez que certas extensões tais co0mo a `memcache` (sem um 'd' no final)
+uma vez que certas extensões tais como a `memcache` (sem um 'd' no final)
 não estão disponíveis;
 
   * **PHP Extensions**: além do PHP, serão necessárias algumas extensões
