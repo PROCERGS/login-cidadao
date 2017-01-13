@@ -1,1 +1,10 @@
-Hello {{ name }}!
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
+
+{% block panel_body %}
+<dl>
+    {% for data in report %}
+        <dt>{{ data.client.name }}</dt>
+        <dd>{{ data.access_tokens }}<br>&nbsp;</dd>
+    {% endfor %}
+</dl>
+{% endblock %}
