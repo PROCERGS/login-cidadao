@@ -3,23 +3,44 @@
 namespace PROCERGS\LoginCidadao\AccountingBundle\Controller;
 
 use LoginCidadao\OAuthBundle\Entity\AccessTokenRepository;
+use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class DefaultController extends Controller
 {
     /**
      * @Route("/accounting", name="lc_accounting_data")
+     * @Template()
      */
     public function indexAction()
     {
-        /** @var AccessTokenRepository $repo */
-        $repo = $this->getDoctrine()->getRepository('LoginCidadaoOAuthBundle:AccessToken');
+        /** @var AccessTokenRepository $accessTokens */
+        $accessTokens = $this->getDoctrine()->getRepository('LoginCidadaoOAuthBundle:AccessToken');
 
-        $start = new \DateTime('2017-01-01');
-        $end = new \DateTime('2017-02-01');
-        $data = $repo->getAccounting($start, $end);
-        var_dump($data);
-        die();
+        /** @var ClientRepository $clientsRepo */
+        $clientsRepo = $this->getDoctrine()->getRepository('LoginCidadaoOAuthBundle:Client');
+
+        $start = new \DateTime('-1 month');
+        $end = new \DateTime();
+        $data = $accessTokens->getAccounting($start, $end);
+
+        $clientIds = array_column($data, 'id');
+        $clients = [];
+
+        foreach ($clientsRepo->findBy(['id' => $clientIds]) as $client) {
+            $clients[$client->getId()] = $client;
+        }
+
+        $report = [];
+        foreach ($data as $usage) {
+            $report[] = [
+                'client' => $clients[$usage['id']],
+                'access_tokens' => $usage['access_tokens'],
+            ];
+        }
+
+        return compact('report');
     }
 }
