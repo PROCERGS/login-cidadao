@@ -19,11 +19,13 @@ class AccessTokenRepository extends EntityRepository
     public function getAccounting(\DateTime $start, \DateTime $end)
     {
         $query = $this->createQueryBuilder('a')
-            ->select('a.client, COUNT(a.client)')
+            ->select('c.id, COUNT(a.user) AS access_tokens')
+            ->from('LoginCidadaoOAuthBundle:AccessToken', 'b')
+            ->join('a.client','c')
             ->where('a.createdAt BETWEEN :start AND :end')
-            ->groupBy('a.client')
-            ->setParameters(compact('person'));
+            ->groupBy('c.id')
+            ->setParameters(compact('start', 'end'));
 
-        return $query->getQuery()->getResult();
+        return $query->getQuery()->getScalarResult();
     }
 }
