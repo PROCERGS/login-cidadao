@@ -1,0 +1,3 @@
+procergs_login_cidadao_accounting_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: PROCERGSLoginCidadaoAccountingBundle:Default:index }

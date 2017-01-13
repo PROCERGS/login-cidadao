@@ -1,0 +1,4 @@
+services:
+#    procergs_login_cidadao_accounting.example:
+#        class: PROCERGS\LoginCidadao\AccountingBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
