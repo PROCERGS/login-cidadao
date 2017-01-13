@@ -1,4 +1,14 @@
 services:
-#    procergs_login_cidadao_accounting.example:
-#        class: PROCERGS\LoginCidadao\AccountingBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    procergs.lc.procergs_systems.api.client:
+        class: GuzzleHttp\Client
+        private: true
+
+    procergs.lc.procergs_systems.api:
+        class: PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService
+        arguments:
+            - "@procergs.lc.procergs_systems.api.client"
+            -
+                "apiUri": "%accounting.procergs_systems.api.url%"
+                "organization": "%accounting.procergs_systems.api.organization%"
+                "registration_number": "%accounting.procergs_systems.api.registration_number%"
+                "password": "%accounting.procergs_systems.api.password%"

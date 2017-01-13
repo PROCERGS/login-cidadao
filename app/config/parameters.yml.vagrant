@@ -138,3 +138,7 @@ parameters:
     nfg_hmac_secret: 'many secret such private'
     tre_search_link: ''
     wsdl_monitor_verify_https: true
+    accounting.procergs_systems.api.url: 'https://dum.my/service'
+    accounting.procergs_systems.api.organization: 'some_organization'
+    accounting.procergs_systems.api.registration_number: '12345678'
+    accounting.procergs_systems.api.password: 'very_secret_password'
