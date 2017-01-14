@@ -5,14 +5,15 @@ Nesse capítulo falaremos sobre os princípios da API do Login Cidadão, que seg
 o princípio de que apenas o usuário proprietário da conta deve conseguir alterar
 seus dados, portanto não há nenhuma API com acesso de escrita.
 
-Atualmente o Login Cidadão possui apenas dois endpoints ativos em sua API: o
+Atualmente o Login Cidadão possui apenas três endpoints ativos em sua API: o
 UserInfo endpoint para obter informações do usuário autenticado via OpenID
-Connect e o "Wait Update" para que serviços possam aguardar que uma determinada
-alteração seja realizada na conta do usuário.
+Connect, o "Wait Update" para que serviços possam aguardar que uma determinada
+alteração seja realizada na conta do usuário e um endpoint público com algumas
+estatísticas sobre a quantidade de usuário dos serviços públicos disponíveis.
 
 UserInfo Endpoint
 -----------------
-    /api/v1/person.json
+    GET /api/v1/person.json
 
 Esse endpoint serve para atender os requisitos do OpenID Connect
 ([Section 5.3](http://openid.net/specs/openid-connect-core-1_0.html#UserInfo))
@@ -28,7 +29,7 @@ biblioteca OpenID Connect utilizada por seus serviços clientes.
 
 Wait Update Endpoint
 --------------------
-    /api/v1/wait/person/update.json
+    GET /api/v1/wait/person/update.json
 
 O Wait Update Endpoint é semelhante ao UserInfo Endpoint no sentido de retornar
 informações sobre o usuário, entretanto esse endpoint realizará um Long Polling
@@ -46,3 +47,12 @@ devido a falta de suporte a WebSockets em alguns servidores.
 
 Esse endpoint pode ser acessado da mesma forma que o UserInfo e seu endereço é
 `/api/v1/wait/person/update`.
+
+Estatísticas Públicas
+---------------------
+    GET /api/v1/statistics.json
+
+O endpoint de estatísticas públicas fornece os totais de usuários para cada
+serviço público tal qual o menu de estatísticas do Login Cidadão exibe para
+usuários autenticados, entretanto através desse endpoint os dados são fornecidos
+em JSON e dispensam autenticação.
