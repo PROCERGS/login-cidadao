@@ -27,7 +27,16 @@ class DefaultController extends Controller
 
         /** @var AccountingService $accountingService */
         $accountingService = $this->get('procergs.lc.accounting');
+        $data = $accountingService->getAccounting($start, $end);
 
-        return new JsonResponse($accountingService->getAccounting($start, $end));
+        $response = [
+            'date_interval' => [
+                'start' => $start->format('c'),
+                'end' => $end->format('c'),
+            ],
+            'accounting' => $data,
+        ];
+
+        return new JsonResponse($response);
     }
 }
