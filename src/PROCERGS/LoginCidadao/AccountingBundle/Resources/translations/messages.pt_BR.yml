@@ -1,0 +1,9 @@
+admin.accounting:
+    menu: "Contabilidade"
+    summary:
+        title: "Contabilidade de Serviços"
+        caption: "Access Tokens gerados nos últimos 7 dias"
+        client:
+            name: "Serviço"
+            procergs_initials: "Sigla PROCERGS"
+            access_tokens: "Access Tokens Gerados"
