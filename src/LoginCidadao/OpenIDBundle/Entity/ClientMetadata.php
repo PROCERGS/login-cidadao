@@ -11,6 +11,7 @@
 namespace LoginCidadao\OpenIDBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use LoginCidadao\OpenIDBundle\Validator\Constraints\SectorIdentifierUri;
@@ -390,7 +391,13 @@ class ClientMetadata
 
     public function getContacts()
     {
-        return $this->contacts;
+        $owners = [];
+        if ($this->getClient()) {
+            $owners = array_map(function (PersonInterface $owner) {
+                return $owner->getEmail();
+            }, $this->getClient()->getOwners()->toArray());
+        }
+        return array_unique(array_merge($this->contacts, $owners));
     }
 
     public function setContacts($contacts)
