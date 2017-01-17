@@ -4,6 +4,7 @@ namespace PROCERGS\LoginCidadao\AccountingBundle\Controller;
 
 use LoginCidadao\OAuthBundle\Entity\AccessTokenRepository;
 use LoginCidadao\OAuthBundle\Entity\ClientRepository;
+use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
 use PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -12,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/accounting", name="lc_accounting_data")
+     * @Route("/accounting.{_format}", name="lc_accounting_data", defaults={"_format": "json"})
      */
     public function indexAction()
     {
@@ -33,14 +34,21 @@ class DefaultController extends Controller
             $clients[$client->getId()] = $client;
         }
 
-        /** @var SystemsRegistryService $systemsService */
+        /** @var SystemsRegistryService $systemsRegistry */
         $systemsRegistry = $this->get('procergs.lc.procergs_systems.api');
+
+        $linkRepo = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoAccountingBundle:ProcergsLink');
+        $knownInitials = $systemsRegistry->fetchKnownInitials($clients, $linkRepo);
 
         $report = [];
         foreach ($data as $usage) {
             /** @var \LoginCidadao\OAuthBundle\Entity\Client $client */
             $client = $clients[$usage['id']];
-            $sisInfo = $systemsRegistry->getSystemInitials($client->getRedirectUris());
+            if (array_key_exists($client->getId(), $knownInitials)) {
+                $sisInfo = [$knownInitials[$client->getId()]->getSystemCode()];
+            } else {
+                $sisInfo = $systemsRegistry->getSystemInitials($client);
+            }
             $report[] = [
                 'client' => $client,
                 'procergs' => $sisInfo,
@@ -48,18 +56,21 @@ class DefaultController extends Controller
             ];
         }
 
-        return new JsonResponse(
-            array_map(
-                function ($value) {
-                    /** @var \LoginCidadao\OAuthBundle\Entity\Client $client */
-                    $client = $value['client'];
-                    $value['client'] = $client->getName();
-                    $value['redirect_uris'] = $client->getRedirectUris();
+        $response = array_map(
+            function ($value) {
+                /** @var \LoginCidadao\OAuthBundle\Entity\Client $client */
+                $client = $value['client'];
+                $value['client'] = [
+                    'name' => $client->getName(),
+                    'contacts' => $client->getMetadata()->getContacts(),
+                ];
+                $value['redirect_uris'] = $client->getRedirectUris();
 
-                    return $value;
-                },
-                $report
-            )
+                return $value;
+            },
+            $report
         );
+
+        return new JsonResponse($response);
     }
 }

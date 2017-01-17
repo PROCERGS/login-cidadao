@@ -12,6 +12,8 @@ parameters:
     dev_allowed: [ 127.0.0.0/8 ]
     # IPs allowed to access monitoring endpoint
     allowed_monitors: [ 127.0.0.0/8 ]
+    # IPs allowed to access accounting endpoint
+    allowed_accounting: [ 127.0.0.0/8 ]
 
     memcached_host: 127.0.0.1
     memcached_port: 11211

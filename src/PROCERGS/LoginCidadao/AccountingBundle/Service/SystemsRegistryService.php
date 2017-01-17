@@ -12,6 +12,9 @@ namespace PROCERGS\LoginCidadao\AccountingBundle\Service;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
+use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLinkRepository;
 
 class SystemsRegistryService
 {
@@ -23,6 +26,9 @@ class SystemsRegistryService
 
     /** @var array */
     private $headers;
+
+    /** @var array */
+    private $cache = [];
 
     /**
      * SystemsRegistryService constructor.
@@ -40,12 +46,25 @@ class SystemsRegistryService
         ];
     }
 
-    public function getSystemInitials($urls)
+    public function getSystemInitials(ClientInterface $client)
     {
+        $urls = array_filter(array_merge($client->getRedirectUris()));
+        $hosts = array_unique(
+            array_map(
+                function ($url) {
+                    return parse_url($url)['host'];
+                },
+                $urls
+            )
+        );
+        if ($client->getSiteUrl()) {
+            $hosts[] = $client->getSiteUrl();
+        }
+
         $identifiedSystems = [];
         $systems = [];
-        foreach ($urls as $url) {
-            foreach (array_column($this->fetchUrlInfo($url), 'sistema') as $system) {
+        foreach ($hosts as $host) {
+            foreach (array_column($this->fetchInfo($host), 'sistema') as $system) {
                 if (array_key_exists($system, $systems)) {
                     $systems[$system] += 1;
                 } else {
@@ -67,20 +86,40 @@ class SystemsRegistryService
         return $identifiedSystems;
     }
 
-    private function fetchUrlInfo($url)
+    private function fetchInfo($query)
     {
-        $url = parse_url($url);
-        $requestUrl = str_replace('{host}', $url['host'], $this->apiUri);
+        $hashKey = hash('sha256', $query);
+        if (false === array_key_exists($hashKey, $this->cache)) {
+            $requestUrl = str_replace('{host}', $query, $this->apiUri);
 
-        $response = null;
-        try {
-            $response = $this->client->get($requestUrl, ['headers' => $this->headers]);
-        } catch (ClientException $e) {
-            if ($e->getResponse()->getStatusCode() === 404) {
-                $response = $e->getResponse();
+            $response = null;
+            try {
+                $response = $this->client->get($requestUrl, ['headers' => $this->headers]);
+            } catch (ClientException $e) {
+                if ($e->getResponse()->getStatusCode() === 404) {
+                    $response = $e->getResponse();
+                }
+            }
+            $this->cache[$hashKey] = $response->json();
+        }
+
+        return $this->cache[$hashKey];
+    }
+
+    /**
+     * @param ClientInterface[] $clients OIDC Clients mapped by ID
+     * @return ProcergsLink[]
+     */
+    public function fetchKnownInitials(array $clients, ProcergsLinkRepository $repo)
+    {
+        $result = [];
+        $knownInitials = $repo->findBy(['client' => $clients]);
+        foreach ($knownInitials as $link) {
+            if ($link instanceof ProcergsLink) {
+                $result[$link->getClient()->getId()] = $link;
             }
         }
 
-        return $response->json();
+        return $result;
     }
 }

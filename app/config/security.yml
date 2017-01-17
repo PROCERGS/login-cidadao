@@ -162,6 +162,7 @@ security:
 
         - { path: ^/monitor/health, role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_monitors%, requires_channel: https }
         - { path: ^/public/status, role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_monitors%, requires_channel: https }
+        - { path: ^/accounting, role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_accounting%, requires_channel: https }
 
         - { path: ^/nelmio/csp/report$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/(contact|privacy|about|help|register), role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

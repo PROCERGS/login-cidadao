@@ -257,6 +257,7 @@ simple_things_entity_audit:
 
         - PROCERGS\LoginCidadao\CoreBunde\Entity\PersonMeuRS
         - PROCERGS\LoginCidadao\NfgBunde\Entity\NfgProfile
+        - PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink
 
 hwi_oauth:
     connect:
