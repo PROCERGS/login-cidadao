@@ -55,7 +55,7 @@ class AccountingService
      */
     public function getAccounting(\DateTime $start, \DateTime $end)
     {
-        $data = $this->accessTokenRepository->getAccounting($start, $end);
+        $data = $this->clientRepository->getAccounting($start, $end);
 
         $clientIds = array_column($data, 'id');
 
@@ -90,7 +90,7 @@ class AccountingService
                 $value['client'] = [
                     'client_id' => $client->getPublicId(),
                     'name' => $client->getName(),
-                    'contacts' => $client->getMetadata()->getContacts(),
+                    'contacts' => $client->getContacts(),
                 ];
                 $value['redirect_uris'] = $client->getRedirectUris();
 
