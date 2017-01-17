@@ -22,7 +22,7 @@
                                 {% for item in data %}
                                     <tr>
                                         <td>
-                                            <a href="{{ path('lc_admin_accounting_edit_link', {'clientId': item.client.client_id}) }}">
+                                            <a class="text-info " href="{{ path('lc_admin_accounting_edit_link', {'clientId': item.client.client_id}) }}">
                                                 {{ item.client.name }}
                                             </a>
                                         </td>
