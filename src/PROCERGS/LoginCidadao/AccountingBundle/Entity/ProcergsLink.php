@@ -33,7 +33,7 @@ class ProcergsLink
     /**
      * @var string
      *
-     * @ORM\Column(name="system_code", type="string", length=255)
+     * @ORM\Column(name="system_code", type="string", length=255, nullable=true)
      */
     private $systemCode;
 

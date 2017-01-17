@@ -4,7 +4,7 @@
     <div class="content">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h2 class="panel-title">{{ 'admin.accounting.summary.title'|trans }}</h2>
+                <h2 class="panel-title">{{ 'admin.accounting.summary.title' | trans }}</h2>
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -20,11 +20,15 @@
                             </thead>
                             <tbody>
                                 {% for item in data %}
-                                <tr>
-                                    <td>{{ item.client.name }}</td>
-                                    <td>{{ item.procergs | join(', ') }}</td>
-                                    <td>{{ item.access_tokens }}</td>
-                                </tr>
+                                    <tr>
+                                        <td>
+                                            <a href="{{ path('lc_admin_accounting_edit_link', {'clientId': item.client.client_id}) }}">
+                                                {{ item.client.name }}
+                                            </a>
+                                        </td>
+                                        <td>{{ item.procergs | join(', ') }}</td>
+                                        <td>{{ item.access_tokens }}</td>
+                                    </tr>
                                 {% endfor %}
                             </tbody>
                         </table>

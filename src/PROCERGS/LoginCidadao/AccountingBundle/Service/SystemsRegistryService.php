@@ -115,7 +115,7 @@ class SystemsRegistryService
         $result = [];
         $knownInitials = $repo->findBy(['client' => $clients]);
         foreach ($knownInitials as $link) {
-            if ($link instanceof ProcergsLink) {
+            if ($link instanceof ProcergsLink && $link->getSystemCode() !== null) {
                 $result[$link->getClient()->getId()] = $link;
             }
         }

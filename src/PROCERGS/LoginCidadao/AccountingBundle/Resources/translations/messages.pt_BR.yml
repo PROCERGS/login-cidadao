@@ -6,4 +6,17 @@ admin.accounting:
         client:
             name: "Serviço"
             procergs_initials: "Sigla PROCERGS"
-            access_tokens: "Access Tokens Gerados"
+            access_tokens: "Access Tokens"
+    edit:
+        title: "Editando <strong>%client_name%</strong>"
+        back: "Voltar"
+        client:
+            legend: "Informações do Serviço"
+            client_name.label: "Nome do Serviço"
+            site_url.label: "URL do Serviço / Landing Page"
+            redirect_uris.label: "Redirect URIs"
+            contacts.label: "Responsáveis"
+        form:
+            legend: "Vinculação a Sistemas PROCERGS"
+            system_code.label: "Sigla do Sistema PROCERGS"
+            save: "Salvar"
