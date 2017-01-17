@@ -3,6 +3,13 @@ services:
         class: GuzzleHttp\Client
         private: true
 
+    procergs.lc.procergs_link.repository:
+        myrepository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink
+
     procergs.lc.procergs_systems.api:
         class: PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService
         arguments:
@@ -17,3 +24,6 @@ services:
         class: PROCERGS\LoginCidadao\AccountingBundle\Service\AccountingService
         arguments:
             - "@procergs.lc.procergs_systems.api"
+            - "@lc.access_token.repository"
+            - "@lc.client.repository"
+            - "@procergs.lc.procergs_link.repository"

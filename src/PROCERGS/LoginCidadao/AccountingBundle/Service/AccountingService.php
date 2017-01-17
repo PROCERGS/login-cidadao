@@ -10,7 +10,6 @@
 
 namespace PROCERGS\LoginCidadao\AccountingBundle\Service;
 
-
 use LoginCidadao\OAuthBundle\Entity\AccessTokenRepository;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Entity\ClientRepository;
@@ -33,10 +32,20 @@ class AccountingService
     /**
      * AccountingService constructor.
      * @param SystemsRegistryService $systemsRegistry
+     * @param AccessTokenRepository $accessTokenRepository
+     * @param ClientRepository $clientRepository
+     * @param ProcergsLinkRepository $procergsLinkRepository
      */
-    public function __construct(SystemsRegistryService $systemsRegistry)
-    {
+    public function __construct(
+        SystemsRegistryService $systemsRegistry,
+        AccessTokenRepository $accessTokenRepository,
+        ClientRepository $clientRepository,
+        ProcergsLinkRepository $procergsLinkRepository
+    ) {
         $this->systemsRegistry = $systemsRegistry;
+        $this->accessTokenRepository = $accessTokenRepository;
+        $this->clientRepository = $clientRepository;
+        $this->procergsLinkRepository = $procergsLinkRepository;
     }
 
     /**
