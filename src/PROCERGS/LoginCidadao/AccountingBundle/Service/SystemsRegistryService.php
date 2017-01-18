@@ -108,6 +108,7 @@ class SystemsRegistryService
 
     /**
      * @param ClientInterface[] $clients OIDC Clients mapped by ID
+     * @param ProcergsLinkRepository $repo
      * @return ProcergsLink[]
      */
     public function fetchKnownInitials(array $clients, ProcergsLinkRepository $repo)

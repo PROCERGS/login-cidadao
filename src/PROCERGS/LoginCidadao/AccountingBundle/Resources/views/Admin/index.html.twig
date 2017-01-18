@@ -16,6 +16,7 @@
                                     <th>{{ 'admin.accounting.summary.client.name' | trans }}</th>
                                     <th>{{ 'admin.accounting.summary.client.procergs_initials' | trans }}</th>
                                     <th>{{ 'admin.accounting.summary.client.access_tokens' | trans }}</th>
+                                    <th>{{ 'admin.accounting.summary.client.api_usage' | trans }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -28,6 +29,7 @@
                                         </td>
                                         <td>{{ item.procergs | join(', ') }}</td>
                                         <td>{{ item.access_tokens }}</td>
+                                        <td>{{ item.api_usage }}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
