@@ -132,11 +132,24 @@ class ClientRepository extends EntityRepository
             ->getQuery()->getSingleScalarResult();
     }
 
-    public function getAccounting(\DateTime $start, \DateTime $end)
+    public function getAccessTokenAccounting(\DateTime $start, \DateTime $end)
     {
         $query = $this->createQueryBuilder('c')
             ->select('c.id, COUNT(a) AS access_tokens')
             ->leftJoin('LoginCidadaoOAuthBundle:AccessToken', 'a', 'WITH', 'a.client = c')
+            ->where('a.createdAt BETWEEN :start AND :end')
+            ->orWhere('a.id IS NULL')
+            ->groupBy('c.id')
+            ->setParameters(compact('start', 'end'));
+
+        return $query->getQuery()->getScalarResult();
+    }
+
+    public function getActionLogAccounting(\DateTime $start, \DateTime $end)
+    {
+        $query = $this->createQueryBuilder('c')
+            ->select('c.id, COUNT(a) AS api_usage')
+            ->leftJoin('LoginCidadaoAPIBundle:ActionLog', 'a', 'WITH', 'a.clientId = c.id')
             ->where('a.createdAt BETWEEN :start AND :end')
             ->orWhere('a.id IS NULL')
             ->groupBy('c.id')

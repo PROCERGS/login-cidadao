@@ -94,6 +94,9 @@ class RefreshToken extends BaseClass implements RefreshTokenInterface
     public function setRefreshToken($refresh_token, $client_id, $user_id,
                                     $expires, $scope = null)
     {
+        if (strlen($refresh_token) < 150) {
+            $refresh_token = bin2hex(random_bytes(50));
+        }
         // Get Client Entity
         $id     = explode('_', $client_id);
         $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
