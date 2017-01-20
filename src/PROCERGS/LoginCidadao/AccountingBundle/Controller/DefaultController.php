@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/accounting.{_format}", name="lc_accounting_data", defaults={"_format": "json"})
+     * @Route("/api/v1/accounting.{_format}", name="lc_accounting_data", defaults={"_format": "json"})
      */
     public function indexAction()
     {
@@ -38,5 +38,62 @@ class DefaultController extends Controller
         ];
 
         return new JsonResponse($response);
+    }
+
+    /**
+     * @Route("/api/v1/accounting/gcs-interface.{_format}", name="lc_accounting_gcs_interface", defaults={"_format": "json"})
+     */
+    public function gcsInterfaceAction()
+    {
+        /** @var AccountingService $accountingService */
+        $accountingService = $this->get('procergs.lc.accounting');
+        $data = $accountingService->getAccounting(
+            new \DateTime("first day of previous month"),
+            new \DateTime("last day of previous month")
+        );
+
+        $summary = [];
+        foreach ($data as $client) {
+            $procergsInitials = $client['procergs'];
+            $totalUsage = $client['access_tokens'] + $client['api_usage'];
+            foreach ($procergsInitials as $initials) {
+                if (array_key_exists($initials, $summary)) {
+                    $summary[$initials] += $totalUsage;
+                } else {
+                    $summary[$initials] = $totalUsage;
+                }
+            }
+        }
+
+        $today = new \DateTime();
+        $month = (new \DateTime('-1 month'))->format('mY');
+        $header = [
+            '1',
+            'LOGCIDADAO',
+            $month,
+            $today->format('dmY'),
+        ];
+        $body = [];
+        foreach ($summary as $initials => $usage) {
+            $body[] = implode(
+                ';',
+                [
+                    '2',
+                    'CLIENT ???',
+                    $initials,
+                    $usage,
+                ]
+            );
+        }
+        $tail = [
+            '9',
+            count($body),
+        ];
+
+        echo '<pre>';
+        echo implode(';', $header).PHP_EOL;
+        echo implode("\n", $body).PHP_EOL;
+        echo implode(';', $tail).PHP_EOL;
+        echo '</pre>';
     }
 }
