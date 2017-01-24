@@ -100,6 +100,7 @@ services:
 
     lc.user_manager:
         class: %lc.user_manager.class%
+        lazy: true
         arguments: ["@security.encoder_factory", "@fos_user.util.username_canonicalizer", "@fos_user.util.email_canonicalizer", "@fos_user.object_manager", %user.class%, "@service_container"]
 
     lc.login.form.type:
@@ -332,18 +333,21 @@ services:
 
     lc.country_manager:
         class: LoginCidadao\CoreBundle\Model\Manager\CountryManager
+        lazy: true
         arguments:
             - "@doctrine.orm.entity_manager"
             - LoginCidadao\CoreBundle\Entity\Country
 
     lc.state_manager:
         class: LoginCidadao\CoreBundle\Model\Manager\StateManager
+        lazy: true
         arguments:
             - "@doctrine.orm.entity_manager"
             - LoginCidadao\CoreBundle\Entity\State
 
     lc.city_manager:
         class: LoginCidadao\CoreBundle\Model\Manager\CityManager
+        lazy: true
         arguments:
             - "@doctrine.orm.entity_manager"
             - LoginCidadao\CoreBundle\Entity\City
@@ -391,6 +395,7 @@ services:
 
     lc.intent.manager:
         class: LoginCidadao\CoreBundle\Service\IntentManager
+        lazy: true
 
     lc.login_entry_point:
         class: LoginCidadao\CoreBundle\EventListener\LoginEntryPoint
@@ -430,6 +435,7 @@ services:
 
     lc.tasks.manager:
         class: LoginCidadao\CoreBundle\Service\TasksManager
+        lazy: true
         calls:
           - ["setSession", ["@?session"]]
 

@@ -21,9 +21,10 @@
     ],
     "require": {
         "php": ">=5.4.16",
+        "ext-curl": "*",
         "symfony/symfony": "2.8.* !=2.8.10",
         "doctrine/orm": "~2.4",
-        "doctrine/dbal": "<2.5",
+        "doctrine/dbal": "~2.5",
         "doctrine/doctrine-bundle": "~1.5",
         "symfony/assetic-bundle": "^2.7",
         "symfony/swiftmailer-bundle": "~2.3",
@@ -34,7 +35,7 @@
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "friendsofsymfony/oauth-server-bundle": "dev-master",
         "jms/serializer-bundle": "*",
-        "simplethings/entity-audit-bundle": "0.7",
+        "simplethings/entity-audit-bundle": "^1.0",
         "hwi/oauth-bundle": "^0.4",
         "vich/uploader-bundle": "^0.14.0",
         "knplabs/knp-gaufrette-bundle": "0.2.*@dev",
@@ -54,13 +55,15 @@
         "nelmio/cors-bundle": "^1.4",
         "nelmio/security-bundle": "^1.8",
         "liip/monitor-bundle": "^2.2",
+        "guzzlehttp/guzzle": "^5.3",
         "guilhermednt/pathwell-bundle": "^0.1",
         "beelab/recaptcha2-bundle": "^1.0",
         "bmatzner/fontawesome-bundle": "^4.6",
         "ramsey/uuid": "^3.5",
         "qandidate/stack-request-id": "dev-ramsey-uuid-v3",
         "egulias/email-validator": "~1.2",
-        "misd/phone-number-bundle": "^1.1"
+        "misd/phone-number-bundle": "^1.1",
+        "ocramius/proxy-manager": "^1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
