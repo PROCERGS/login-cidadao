@@ -6,6 +6,7 @@ parameters:
 services:
     badges.handler:
         class: %badges.handler.class%
+        lazy: true
         arguments: [ "@event_dispatcher" ]
 
     lc.badges_control.subscriber:
