@@ -15,15 +15,5 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class AccessTokenRepository extends EntityRepository
 {
-
-    public function getAccounting(\DateTime $start, \DateTime $end)
-    {
-        $query = $this->createQueryBuilder('a')
-            ->select('a.client, COUNT(a.client)')
-            ->where('a.createdAt BETWEEN :start AND :end')
-            ->groupBy('a.client')
-            ->setParameters(compact('person'));
-
-        return $query->getQuery()->getResult();
-    }
+    //
 }
