@@ -37,12 +37,14 @@ services:
 
     procergs.nfg.soap:
         class: PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoap
+        lazy: true
         arguments:
             - "@procergs.nfg.soap_client"
             - "@procergs.nfg.credentials"
 
     procergs.nfg.service:
         class: PROCERGS\LoginCidadao\NfgBundle\Service\Nfg
+        lazy: true
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@procergs.nfg.soap"
@@ -65,6 +67,7 @@ services:
 
     procergs.nfg.mailer:
         class: PROCERGS\LoginCidadao\NfgBundle\Mailer\TwigSwiftMailer
+        lazy: true
         arguments:
             - "@mailer"
             - "@router"
