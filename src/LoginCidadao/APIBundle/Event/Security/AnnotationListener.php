@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
 use LoginCidadao\APIBundle\Security\Audit\Annotation\Loggable;
 
-class AnnotationListenner
+class AnnotationListener
 {
 
     /** @var Reader */
@@ -35,8 +35,7 @@ class AnnotationListenner
 
         foreach ($this->reader->getMethodAnnotations($method) as $annotation) {
             if ($annotation instanceof Loggable) {
-                $this->logger->logActivity($event->getRequest(), $annotation,
-                                            $controller);
+                $this->logger->logActivity($event->getRequest(), $annotation, $controller);
             }
         }
     }

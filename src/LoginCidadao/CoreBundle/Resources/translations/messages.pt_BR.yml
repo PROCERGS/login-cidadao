@@ -919,3 +919,12 @@ profile:
     submit: Salvar
 scope_details.handle.title: O que é isso?
 flash_message.close: Fechar
+city_selector.no_javascript: 'Os campos referentes à sua Naturalidade não estão disponíveis pois seu navegador não está com JavaScript ativado.'
+lc.admin.person.metadata:
+    title: "Metadados"
+    date_format: "d/m/Y H:i:s"
+    createdAt: "Data de Criação da Conta"
+    emailConfirmedAt: "Data de Confirmação de Email"
+    lastLogin: "Último Login"
+    hasCpf: "Cadastrou CPF?"
+    authorization.createdAt: "Data da Autorização"

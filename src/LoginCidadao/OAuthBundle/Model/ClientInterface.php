@@ -4,6 +4,7 @@ namespace LoginCidadao\OAuthBundle\Model;
 
 use FOS\OAuthServerBundle\Model\ClientInterface as BaseInterface;
 use LoginCidadao\CoreBundle\Entity\Authorization;
+use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -75,4 +76,9 @@ interface ClientInterface extends BaseInterface
      * @return string
      */
     public function getImageName();
+
+    /**
+     * @return ClientMetadata
+     */
+    public function getMetadata();
 }

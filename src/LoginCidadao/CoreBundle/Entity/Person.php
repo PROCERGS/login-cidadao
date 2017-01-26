@@ -31,6 +31,7 @@ use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumbe
  * @UniqueEntity("cpf", message="person.validation.cpf.already_used", groups={"LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Documents"})
  * @UniqueEntity("username")
  * @UniqueEntity(fields="email", errorPath="email", message="fos_user.email.already_used", groups={"LoginCidadaoRegistration", "Registration", "LoginCidadaoEmailForm", "LoginCidadaoProfile", "Dynamic"})
+ * @UniqueEntity(fields="emailCanonical", errorPath="email", message="fos_user.email.already_used", groups={"LoginCidadaoRegistration", "Registration", "LoginCidadaoEmailForm", "LoginCidadaoProfile", "Dynamic"})
  * @ORM\HasLifecycleCallbacks
  * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
@@ -151,6 +152,10 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Since("1.0")
      * @LCAssert\E164PhoneNumber(
      *     maxMessage="person.validation.mobile.length.max",
+     *     groups={"Registration", "LoginCidadaoRegistration", "Dynamic", "Profile", "LoginCidadaoProfile"}
+     * )
+     * @LCAssert\MobilePhoneNumber(
+     *     missing9thDigit="person.validation.mobile.9thDigit",
      *     groups={"Registration", "LoginCidadaoRegistration", "Dynamic", "Profile", "LoginCidadaoProfile"}
      * )
      * @AssertPhoneNumber(
