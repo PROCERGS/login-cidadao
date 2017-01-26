@@ -12,6 +12,7 @@ admin.accounting:
             type:
                 internal: "Interno (PROCERGS)"
                 external: "Externo"
+            has_issue: "Foi detectada alguma inconsistência nesse sistema"
     edit:
         title: "Editando <strong>%client_name%</strong>"
         back: "Voltar"

@@ -121,7 +121,8 @@ class AdminController extends Controller
 
             $link = new ProcergsLink();
             $link->setClient($client);
-            $link->setSystemType($systemsRegistry->getTypeFromUrl($client));
+            // we assume it's an internal system (see AccountingService::addReportEntry())
+            $link->setSystemType(ProcergsLink::TYPE_INTERNAL);
         }
 
         return $link;

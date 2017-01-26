@@ -13,7 +13,7 @@
                             <caption>{{ 'admin.accounting.summary.caption' | trans }}</caption>
                             <thead>
                                 <tr>
-                                    <th>{{ 'admin.accounting.summary.client.name' | trans }}</th>
+                                    <th colspan="2">{{ 'admin.accounting.summary.client.name' | trans }}</th>
                                     <th>{{ 'admin.accounting.summary.client.procergs_initials' | trans }}</th>
                                     <th>{{ 'admin.accounting.summary.client.system_type' | trans }}</th>
                                     <th>{{ 'admin.accounting.summary.client.access_tokens' | trans }}</th>
@@ -24,7 +24,16 @@
                                 {% for item in data %}
                                     <tr>
                                         <td>
-                                            <a class="text-info " href="{{ path('lc_admin_accounting_edit_link', {'clientId': item.client.client_id}) }}">
+                                            {% if (item.system_type == 'internal' and item.procergs_initials is empty)
+                                            or item.procergs_initials | length > 1 %}
+                                                <span class="glyphicon glyphicon-exclamation-sign text-danger"
+                                                      title="{{ 'admin.accounting.summary.client.has_issue' | trans }}"
+                                                      aria-label="{{ 'admin.accounting.summary.client.has_issue' | trans }}"></span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a class="text-info "
+                                               href="{{ path('lc_admin_accounting_edit_link', {'clientId': item.client.client_id}) }}">
                                                 {{ item.client.name }}
                                             </a>
                                         </td>

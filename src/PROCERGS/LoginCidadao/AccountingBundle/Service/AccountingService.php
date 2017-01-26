@@ -126,9 +126,14 @@ class AccountingService
         } else {
             $initials = $this->systemsRegistry->getSystemInitials($client);
             if (array_key_exists($clientId, $linked)) {
-                $systemType = $linked[$clientId];
+                $systemType = $linked[$clientId]->getSystemType();
             } else {
-                $systemType = $this->systemsRegistry->getTypeFromUrl($client);
+                // If there is no known link we assume it's an Internal system
+                // If this assumption is false then an alarm will go off to alert the accounting team to fix it
+                $systemType = ProcergsLink::TYPE_INTERNAL;
+
+                // Otherwise we could try to assert the type from the URLs we know
+                //$systemType = $this->systemsRegistry->getTypeFromUrl($client);
             }
             $report[$clientId] = [
                 'client' => $client,
