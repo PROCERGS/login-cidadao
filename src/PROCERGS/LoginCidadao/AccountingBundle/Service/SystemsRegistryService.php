@@ -115,11 +115,11 @@ class SystemsRegistryService
      * @param ProcergsLinkRepository $repo
      * @return ProcergsLink[]
      */
-    public function fetchKnownInitials(array $clients, ProcergsLinkRepository $repo)
+    public function fetchLinked(array $clients, ProcergsLinkRepository $repo)
     {
         $result = [];
-        $knownInitials = $repo->findBy(['client' => $clients]);
-        foreach ($knownInitials as $link) {
+        $linked = $repo->findBy(['client' => $clients]);
+        foreach ($linked as $link) {
             if ($link instanceof ProcergsLink && $link->getSystemCode() !== null) {
                 $result[$link->getClient()->getId()] = $link;
             }

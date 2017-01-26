@@ -67,17 +67,19 @@ class AccountingService
             $clients[$client->getId()] = $client;
         }
 
+        $linked = $this->systemsRegistry->fetchLinked($clients, $this->procergsLinkRepository);
+
         $report = [];
         foreach ($data as $usage) {
             /** @var \LoginCidadao\OAuthBundle\Entity\Client $client */
             $client = $clients[$usage['id']];
-            $report = $this->addReportEntry($report, $client, $usage['access_tokens'], null);
+            $report = $this->addReportEntry($report, $client, $linked, $usage['access_tokens'], null);
         }
 
         foreach ($actionLog as $action) {
             /** @var \LoginCidadao\OAuthBundle\Entity\Client $client */
             $client = $clients[$action['id']];
-            $report = $this->addReportEntry($report, $client, null, $action['api_usage']);
+            $report = $this->addReportEntry($report, $client, $linked, null, $action['api_usage']);
         }
 
         return array_map(
@@ -100,6 +102,7 @@ class AccountingService
     /**
      * @param array $report
      * @param Client $client
+     * @param array $linked
      * @param int|null $accessTokens
      * @param int|null $apiUsage
      * @return array
@@ -107,6 +110,7 @@ class AccountingService
     private function addReportEntry(
         array $report,
         Client $client,
+        array $linked,
         $accessTokens = null,
         $apiUsage = null
     ) {
@@ -120,10 +124,16 @@ class AccountingService
                 $report[$clientId]['api_usage'] = $apiUsage;
             }
         } else {
-            $sisInfo = $this->systemsRegistry->getSystemInitials($client);
+            $initials = $this->systemsRegistry->getSystemInitials($client);
+            if (array_key_exists($clientId, $linked)) {
+                $systemType = $linked[$clientId];
+            } else {
+                $systemType = $this->systemsRegistry->getTypeFromUrl($client);
+            }
             $report[$clientId] = [
                 'client' => $client,
-                'procergs' => $sisInfo,
+                'procergs_initials' => $initials,
+                'system_type' => $systemType,
                 'access_tokens' => $accessTokens ?: 0,
                 'api_usage' => $apiUsage ?: 0,
             ];

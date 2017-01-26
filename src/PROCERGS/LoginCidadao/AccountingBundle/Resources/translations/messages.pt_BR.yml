@@ -6,8 +6,12 @@ admin.accounting:
         client:
             name: "Serviço"
             procergs_initials: "Sigla PROCERGS"
+            system_type: "Tipo de Sistema"
             access_tokens: "Access Tokens"
             api_usage: "Uso de API"
+            type:
+                internal: "Interno (PROCERGS)"
+                external: "Externo"
     edit:
         title: "Editando <strong>%client_name%</strong>"
         back: "Voltar"
