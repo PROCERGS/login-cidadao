@@ -136,10 +136,10 @@ class UserManipulatorProxy extends UserManipulator
     {
         $user = $this->userManager->findUserByUsernameOrEmail($usernameOrEmail);
 
-        if ($user) {
-            return $user->getUsername();
-        } else {
-            return null;
+        if (!$user) {
+            throw new \InvalidArgumentException(sprintf('User identified by "%s" username or email does not exist.', $usernameOrEmail));
         }
+
+        return $user->getUsername();
     }
 }
