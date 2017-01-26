@@ -318,3 +318,9 @@ ao Login Cidadão, você precisará criar o arquivo `logincidadao.conf` no diret
 emissão de certificados HTTPS usando **Let's Encrypt**. Caso você não pretenda 
 utilizar esse serviço, basta remover ou alterar os trechos referentes ao
 Let's Encrypt.
+
+## Pós-Instalação
+
+Agora que você já deve ter uma instância funcional do Login Cidadão, você
+provavelmente deve estar se perguntando qual o procedimento para
+[definir um usuário administrador](?doc=cookbook/admin_user).
