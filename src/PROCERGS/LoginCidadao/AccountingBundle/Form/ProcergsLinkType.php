@@ -10,8 +10,10 @@
 
 namespace PROCERGS\LoginCidadao\AccountingBundle\Form;
 
+use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ProcergsLinkType extends AbstractType
@@ -24,19 +26,23 @@ class ProcergsLinkType extends AbstractType
     {
         $builder
             ->add(
-                'systemCode',
-                null,
+                'systemType',
+                'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
                 [
                     'required' => false,
-                    'label' => 'admin.accounting.edit.form.system_code.label'
+                    'label' => 'admin.accounting.edit.form.system_type.label',
+                    'choices' => [
+                        ProcergsLink::TYPE_INTERNAL => 'admin.accounting.edit.form.system_type.internal.label',
+                        ProcergsLink::TYPE_EXTERNAL => 'admin.accounting.edit.form.system_type.external.label',
+                    ],
                 ]
             );
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             array(
@@ -46,10 +52,10 @@ class ProcergsLinkType extends AbstractType
     }
 
     /**
-     * @return string
+     * @param OptionsResolverInterface $resolver
      */
-    public function getName()
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        return 'procergs_logincidadao_accountingbundle_procergslink';
+        $this->configureOptions($resolver);
     }
 }

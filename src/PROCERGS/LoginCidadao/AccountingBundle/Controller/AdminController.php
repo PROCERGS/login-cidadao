@@ -13,6 +13,7 @@ namespace PROCERGS\LoginCidadao\AccountingBundle\Controller;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
 use PROCERGS\LoginCidadao\AccountingBundle\Service\AccountingService;
+use PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -56,8 +57,11 @@ class AdminController extends Controller
      */
     public function editAction(Request $request, $clientId)
     {
+        /** @var SystemsRegistryService $systemsRegistry */
+        $systemsRegistry = $this->get('procergs.lc.procergs_systems.api');
         $client = $this->getClient($clientId);
         $link = $this->getProcergsLink($client);
+        $initials = $systemsRegistry->getSystemInitials($client);
 
         $form = $this->createForm('PROCERGS\LoginCidadao\AccountingBundle\Form\ProcergsLinkType', $link);
         $form->handleRequest($request);
@@ -72,6 +76,7 @@ class AdminController extends Controller
         return [
             'client' => $client,
             'link' => $link,
+            'initials' => $initials,
             'form' => $form->createView(),
         ];
     }
@@ -106,12 +111,17 @@ class AdminController extends Controller
             return null;
         }
         $repo = $this->getDoctrine()->getRepository('PROCERGSLoginCidadaoAccountingBundle:ProcergsLink');
+
         /** @var ProcergsLink $link */
         $link = $repo->findOneBy(['client' => $client]);
 
         if (!($link instanceof ProcergsLink)) {
+            /** @var SystemsRegistryService $systemsRegistry */
+            $systemsRegistry = $this->get('procergs.lc.procergs_systems.api');
+
             $link = new ProcergsLink();
             $link->setClient($client);
+            $link->setSystemType($systemsRegistry->getTypeFromUrl($client));
         }
 
         return $link;

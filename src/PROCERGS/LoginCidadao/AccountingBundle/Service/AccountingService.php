@@ -67,19 +67,17 @@ class AccountingService
             $clients[$client->getId()] = $client;
         }
 
-        $knownInitials = $this->systemsRegistry->fetchKnownInitials($clients, $this->procergsLinkRepository);
-
         $report = [];
         foreach ($data as $usage) {
             /** @var \LoginCidadao\OAuthBundle\Entity\Client $client */
             $client = $clients[$usage['id']];
-            $report = $this->addReportEntry($report, $client, $knownInitials, $usage['access_tokens'], null);
+            $report = $this->addReportEntry($report, $client, $usage['access_tokens'], null);
         }
 
         foreach ($actionLog as $action) {
             /** @var \LoginCidadao\OAuthBundle\Entity\Client $client */
             $client = $clients[$action['id']];
-            $report = $this->addReportEntry($report, $client, $knownInitials, null, $action['api_usage']);
+            $report = $this->addReportEntry($report, $client, null, $action['api_usage']);
         }
 
         return array_map(
@@ -102,7 +100,6 @@ class AccountingService
     /**
      * @param array $report
      * @param Client $client
-     * @param ProcergsLink[] $knownInitials
      * @param int|null $accessTokens
      * @param int|null $apiUsage
      * @return array
@@ -110,7 +107,6 @@ class AccountingService
     private function addReportEntry(
         array $report,
         Client $client,
-        array $knownInitials,
         $accessTokens = null,
         $apiUsage = null
     ) {
@@ -124,11 +120,7 @@ class AccountingService
                 $report[$clientId]['api_usage'] = $apiUsage;
             }
         } else {
-            if (array_key_exists($client->getId(), $knownInitials)) {
-                $sisInfo = [$knownInitials[$client->getId()]->getSystemCode()];
-            } else {
-                $sisInfo = $this->systemsRegistry->getSystemInitials($client);
-            }
+            $sisInfo = $this->systemsRegistry->getSystemInitials($client);
             $report[$clientId] = [
                 'client' => $client,
                 'procergs' => $sisInfo,

@@ -31,7 +31,11 @@
                         </fieldset>
                         <fieldset>
                             <legend>{{ 'admin.accounting.edit.form.legend' | trans }}</legend>
-                            {{ form_row(form.systemCode) }}
+                            <div class="form-group">
+                                <label class="control-label">{{ 'admin.accounting.edit.client.initials.label' | trans }}</label>
+                                <pre class="form-control-static">{{ initials | join('\n') | default('admin.accounting.edit.client.initials.not_found' | trans) }}</pre>
+                            </div>
+                            {{ form_row(form.systemType) }}
                         </fieldset>
                     </div>
                 </div>

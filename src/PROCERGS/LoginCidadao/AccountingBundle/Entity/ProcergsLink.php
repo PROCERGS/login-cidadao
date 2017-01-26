@@ -14,6 +14,9 @@ use LoginCidadao\OAuthBundle\Entity\Client;
  */
 class ProcergsLink
 {
+    const TYPE_INTERNAL = 'internal';
+    const TYPE_EXTERNAL = 'external';
+
     /**
      * @var integer
      *
@@ -33,9 +36,9 @@ class ProcergsLink
     /**
      * @var string
      *
-     * @ORM\Column(name="system_code", type="string", length=255, nullable=true)
+     * @ORM\Column(name="system_type", type="string", length=255, nullable=true)
      */
-    private $systemCode;
+    private $systemType;
 
     /**
      * @var \DateTime
@@ -85,26 +88,29 @@ class ProcergsLink
     }
 
     /**
-     * Set systemCode
-     *
-     * @param string $systemCode
-     * @return ProcergsLink
+     * @return string
      */
-    public function setSystemCode($systemCode)
+    public function getSystemType()
     {
-        $this->systemCode = $systemCode;
-
-        return $this;
+        return $this->systemType;
     }
 
     /**
-     * Get systemCode
-     *
-     * @return string
+     * @param string $systemType
+     * @return ProcergsLink
      */
-    public function getSystemCode()
+    public function setSystemType($systemType)
     {
-        return $this->systemCode;
+        switch ($systemType) {
+            case self::TYPE_EXTERNAL:
+            case self::TYPE_INTERNAL:
+                $this->systemType = $systemType;
+                break;
+            default:
+                throw new \InvalidArgumentException("Invalid system type '$systemType'");
+        }
+
+        return $this;
     }
 
     /**

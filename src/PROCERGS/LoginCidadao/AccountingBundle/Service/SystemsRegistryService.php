@@ -30,6 +30,9 @@ class SystemsRegistryService
     /** @var array */
     private $cache = [];
 
+    /** @var array */
+    private $internalDomains;
+
     /**
      * SystemsRegistryService constructor.
      * @param Client $client
@@ -44,6 +47,7 @@ class SystemsRegistryService
             'matricula' => $options['registration_number'],
             'senha' => $options['password'],
         ];
+        $this->internalDomains = $options['domains'];
     }
 
     public function getSystemInitials(ClientInterface $client)
@@ -122,5 +126,54 @@ class SystemsRegistryService
         }
 
         return $result;
+    }
+
+    public function getTypeFromUrl(ClientInterface $client)
+    {
+        $hosts = $this->getHosts($client);
+
+        foreach ($hosts as $host) {
+            if ($this->isInternal($host)) {
+                return ProcergsLink::TYPE_INTERNAL;
+            }
+        }
+
+        return ProcergsLink::TYPE_EXTERNAL;
+    }
+
+    private function getHosts(ClientInterface $client)
+    {
+        $urls = array_filter($client->getRedirectUris());
+        if ($client->getSiteUrl()) {
+            $urls[] = $client->getSiteUrl();
+        }
+        $hosts = array_unique(
+            array_map(
+                function ($url) {
+                    return parse_url($url)['host'];
+                },
+                $urls
+            )
+        );
+
+        return $hosts;
+    }
+
+    private function isInternal($host)
+    {
+        $internal = false;
+        foreach ($this->internalDomains as $domain) {
+            $length = strlen($domain);
+            if ($length == 0) {
+                continue;
+            }
+
+            $internal = (substr($host, -$length) === $domain);
+            if ($internal) {
+                return $internal;
+            }
+        }
+
+        return $internal;
     }
 }

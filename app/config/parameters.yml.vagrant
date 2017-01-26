@@ -144,3 +144,6 @@ parameters:
     accounting.procergs_systems.api.organization: 'some_organization'
     accounting.procergs_systems.api.registration_number: '12345678'
     accounting.procergs_systems.api.password: 'very_secret_password'
+    accounting.procergs_systems.domains:
+        - "some.domain.tld"
+        - "other.domain.tld"
