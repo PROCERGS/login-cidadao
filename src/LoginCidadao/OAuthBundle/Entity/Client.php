@@ -5,6 +5,7 @@ namespace LoginCidadao\OAuthBundle\Entity;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 use FOS\OAuthServerBundle\Entity\Client as BaseClient;
 use Doctrine\ORM\Mapping as ORM;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -496,5 +497,19 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         }
 
         return false;
+    }
+
+    public function getContacts()
+    {
+        if ($this->getMetadata()) {
+            return $this->getMetadata()->getContacts();
+        }
+
+        return array_map(
+            function (PersonInterface $owner) {
+                return $owner->getEmail();
+            },
+            $this->getOwners()->toArray()
+        );
     }
 }

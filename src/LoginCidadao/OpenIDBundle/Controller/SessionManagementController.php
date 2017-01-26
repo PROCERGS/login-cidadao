@@ -14,11 +14,11 @@ use LoginCidadao\CoreBundle\Helper\SecurityHelper;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadataRepository;
+use LoginCidadao\OpenIDBundle\Exception\IdTokenSubMismatchException;
 use LoginCidadao\OpenIDBundle\Exception\IdTokenValidationException;
 use LoginCidadao\OpenIDBundle\Form\EndSessionForm;
 use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
 use LoginCidadao\OpenIDBundle\Storage\PublicKey;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -107,7 +107,11 @@ class SessionManagementController extends Controller
             $idToken = $request->get('id_token_hint');
             $postLogoutUri = $request->get('post_logout_redirect_uri', null);
             $loggedOut = !$this->isGranted('IS_AUTHENTICATED_REMEMBERED');
-            $getLogoutConsent = $this->shouldGetLogoutConsent($idToken, $loggedOut);
+            try {
+                $getLogoutConsent = $this->shouldGetLogoutConsent($idToken, $loggedOut);
+            } catch (IdTokenSubMismatchException $e) {
+                $getLogoutConsent = true;
+            }
 
             list($postLogoutUri, $postLogoutHost) = $this->getPostLogoutInfo($request, $postLogoutUri, $idToken);
         } catch (IdTokenValidationException $e) {
@@ -171,7 +175,7 @@ class SessionManagementController extends Controller
 
     /**
      * @param string $clientId
-     * @return \LoginCidadao\OAuthBundle\Entity\Client
+     * @return \LoginCidadao\OAuthBundle\Entity\Client|object
      */
     private function getClient($clientId)
     {
@@ -201,6 +205,7 @@ class SessionManagementController extends Controller
     /**
      * @param mixed $idToken a JWT ID Token as a \JOSE_JWT object or string
      * @return bool true if $idToken is valid, false otherwise
+     * @throws IdTokenSubMismatchException
      * @throws IdTokenValidationException
      */
     private function checkIdToken($idToken)
@@ -213,10 +218,12 @@ class SessionManagementController extends Controller
             @$idToken->verify($publicKeyStorage->getPublicKey($idToken->claims['aud']));
 
             if (false === $this->checkIdTokenSub($this->getUser(), $idToken)) {
-                throw new IdTokenValidationException('Invalid subject identifier', Response::HTTP_BAD_REQUEST);
+                throw new IdTokenSubMismatchException('Invalid subject identifier', Response::HTTP_BAD_REQUEST);
             }
 
             return true;
+        } catch (IdTokenSubMismatchException $e) {
+            throw $e;
         } catch (\JOSE_Exception_VerificationFailed $e) {
             throw new IdTokenValidationException($e->getMessage(), Response::HTTP_BAD_REQUEST, $e);
         } catch (\Exception $e) {
@@ -229,8 +236,13 @@ class SessionManagementController extends Controller
      * @param mixed $idToken
      * @return bool
      */
-    private function checkIdTokenSub(PersonInterface $person, $idToken)
+    private function checkIdTokenSub(PersonInterface $person = null, $idToken)
     {
+        if (null === $person) {
+            // User is logged out
+            return true;
+        }
+
         if (!($person instanceof PersonInterface)) {
             return false;
         }
@@ -308,7 +320,7 @@ class SessionManagementController extends Controller
 
     /**
      * @param string|\JOSE_JWT $idToken
-     * @return \LoginCidadao\OAuthBundle\Entity\Client
+     * @return \LoginCidadao\OAuthBundle\Entity\Client|false
      */
     private function getIdTokenClient($idToken)
     {
@@ -327,7 +339,10 @@ class SessionManagementController extends Controller
      */
     private function getSecurityHelper()
     {
-        return $this->get('lc.security.helper');
+        /** @var SecurityHelper $securityHelper */
+        $securityHelper = $this->get('lc.security.helper');
+
+        return $securityHelper;
     }
 
     private function getSubjectIdentifier(PersonInterface $person, ClientInterface $client)

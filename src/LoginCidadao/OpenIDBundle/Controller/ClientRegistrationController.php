@@ -24,17 +24,18 @@ class ClientRegistrationController extends FOSRestController
         $this->parseJsonRequest($request);
 
         $data = new ClientMetadata();
-        $form = $this->createForm(new ClientMetadataForm(), $data);
+        $form = $this->createForm(new ClientMetadataForm(), $data, ['cascade_validation' => true]);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
             $metadata = $form->getData();
-            $em       = $this->getDoctrine()->getManager();
-            $client   = $this->registerClient($em, $metadata);
+            $em = $this->getDoctrine()->getManager();
+            $client = $this->registerClient($em, $metadata);
 
             return $this->view($metadata->fromClient($client), 201);
         } else {
             $error = $this->handleFormErrors($form->getErrors(true));
+
             return $this->view($error->getData(), 400);
         }
     }
@@ -55,6 +56,7 @@ class ClientRegistrationController extends FOSRestController
         $context = SerializationContext::create()->setGroups("client_metadata");
 
         $view = $this->view($client->getMetadata())->setSerializationContext($context);
+
         return $this->handleView($view);
     }
 
@@ -65,23 +67,32 @@ class ClientRegistrationController extends FOSRestController
     private function handleFormErrors($errors)
     {
         foreach ($errors as $error) {
-            $cause         = $error->getCause();
-            $value         = $cause->getInvalidValue();
+            $cause = $error->getCause();
+            $value = $cause->getInvalidValue();
             $propertyRegex = '/^data\\.([a-zA-Z0-9_]+).*$/';
-            $property      = preg_replace($propertyRegex, '$1',
-                $cause->getPropertyPath());
+            $property = preg_replace(
+                $propertyRegex,
+                '$1',
+                $cause->getPropertyPath()
+            );
             //$property      = str_replace('data.', '', $cause->getPropertyPath());
 
             switch ($property) {
                 case 'redirect_uris':
-                    return new DynamicRegistrationException('Invalid redirect URIs: '.$cause->getMessage(),
-                        DynamicRegistrationException::ERROR_INVALID_REDIRECT_URI);
+                    return new DynamicRegistrationException(
+                        'Invalid redirect URIs: '.$cause->getMessage(),
+                        DynamicRegistrationException::ERROR_INVALID_REDIRECT_URI
+                    );
                 case 'sector_identifier_uri':
-                    return new DynamicRegistrationException("Invalid value for '{$property}': {$cause->getMessage()}",
-                        DynamicRegistrationException::ERROR_INVALID_CLIENT_METADATA);
+                    return new DynamicRegistrationException(
+                        "Invalid value for '{$property}': {$cause->getMessage()}",
+                        DynamicRegistrationException::ERROR_INVALID_CLIENT_METADATA
+                    );
                 default:
-                    return new DynamicRegistrationException("Invalid value for '{$property}': {$value}",
-                        DynamicRegistrationException::ERROR_INVALID_CLIENT_METADATA);
+                    return new DynamicRegistrationException(
+                        "Invalid value for '{$property}'='{$value}': {$cause->getMessage()}",
+                        DynamicRegistrationException::ERROR_INVALID_CLIENT_METADATA
+                    );
             }
         }
     }
@@ -145,8 +156,11 @@ class ClientRegistrationController extends FOSRestController
     private function parseJsonRequest(Request $request)
     {
         $request->setFormat('json', 'application/json');
-        if (0 === strpos($request->headers->get('Content-Type'),
-                'application/json')) {
+        if (0 === strpos(
+                $request->headers->get('Content-Type'),
+                'application/json'
+            )
+        ) {
             $data = json_decode($request->getContent(), true);
             $request->request->replace(is_array($data) ? $data : array());
         }
@@ -160,8 +174,10 @@ class ClientRegistrationController extends FOSRestController
     {
         $parts = explode('_', $clientId, 2);
         if (count($parts) !== 2) {
-            throw new DynamicRegistrationException("Invalid client_id",
-            DynamicRegistrationException::ERROR_INVALID_CLIENT_METADATA);
+            throw new DynamicRegistrationException(
+                "Invalid client_id",
+                DynamicRegistrationException::ERROR_INVALID_CLIENT_METADATA
+            );
         }
         $entityId = $parts[0];
         $publicId = $parts[1];
@@ -176,13 +192,16 @@ class ClientRegistrationController extends FOSRestController
         return $client;
     }
 
-    private function checkRegistrationAccessToken(Request $request,
-                                                  Client $client)
-    {
-        $raw = $request->get('access_token',
-            $request->headers->get('authorization'));
+    private function checkRegistrationAccessToken(
+        Request $request,
+        Client $client
+    ) {
+        $raw = $request->get(
+            'access_token',
+            $request->headers->get('authorization')
+        );
 
-        $token    = str_replace('Bearer ', '', $raw);
+        $token = str_replace('Bearer ', '', $raw);
         $metadata = $client->getMetadata();
         if (!$token || $metadata->getRegistrationAccessToken() !== $token) {
             throw $this->createAccessDeniedException();

@@ -40,12 +40,14 @@ security:
             - ROLE_ORGANIZATIONS_DELETE_ANY_ORG
             - ROLE_IMPERSONATION_REPORTS_EDIT
             - ROLE_IMPERSONATION_REPORTS_LIST_ALL
+            - ROLE_VIEW_USERS_CPF
 
         ROLE_ALLOWED_TO_SWITCH: FEATURE_IMPERSONATION_REPORTS
         ROLE_EDIT_CLIENT_ALLOWED_RESTRICTED_SCOPES: ROLE_EDIT_CLIENT_ALLOWED_SCOPES
+        ROLE_VIEW_USERS_CPF:
         FEATURE_ALPHA:  FEATURE_BETA
-        FEATURE_BETA:   FEATURE_PROD, FEATURE_INVALIDATE_SESSIONS, FEATURE_ORGANIZATIONS
-        FEATURE_PROD:   FEATURE_2FACTOR_AUTH
+        FEATURE_BETA:   FEATURE_PROD, FEATURE_ORGANIZATIONS
+        FEATURE_PROD:   FEATURE_2FACTOR_AUTH, FEATURE_INVALIDATE_SESSIONS
         FEATURE_IGP_VALIDATION:
         FEATURE_ORGANIZATIONS:
         FEATURE_IMPERSONATION_REPORTS:
@@ -92,6 +94,7 @@ security:
                 failure_path: /login
                 default_target_path: lc_dashboard
                 success_handler: security.authentication.success_handler
+                failure_handler: lc.authentication.hwi_failure_handler
                 oauth_user_provider:
                     service:  lc.hwi_twitter.user_provider
 
@@ -142,6 +145,7 @@ security:
         - { path: ^/api/v1/address/(cities|states|countries)/search, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/api/v1/address/cities/prefetch, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/api/v1/public/lc_consultaCep2, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/api/v1/statistics, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ], requires_channel: https }
 
         - { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

@@ -179,7 +179,7 @@ class DynamicFormController extends Controller
     {
         $user = $this->getUser();
 
-        if ($user->getConfirmationToken() === null) {
+        if ($user->getEmailConfirmedAt() instanceof \DateTime) {
             $result = true;
         } else {
             $updatedAt = \DateTime::createFromFormat(
@@ -197,7 +197,7 @@ class DynamicFormController extends Controller
             } catch (RequestTimeoutException $e) {
                 return new JsonResponse(false, Response::HTTP_REQUEST_TIMEOUT);
             }
-            $result = $person->getConfirmationToken() === null;
+            $result = $person->getEmailConfirmedAt() instanceof \DateTime;
         }
 
         return new JsonResponse($result);

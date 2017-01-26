@@ -64,10 +64,11 @@ class ProfileFormType extends BaseType
             ->add('placeOfBirth',
                 'LoginCidadao\CoreBundle\Form\Type\CitySelectorComboType',
                 array(
-                'level' => 'city',
-                'city_label' => 'Place of birth - City',
-                'state_label' => 'Place of birth - State',
-                'country_label' => 'Place of birth - Country',
+                    'required' => false,
+                    'level' => 'city',
+                    'city_label' => 'Place of birth - City',
+                    'state_label' => 'Place of birth - State',
+                    'country_label' => 'Place of birth - Country',
             ))
         ;
         $builder->add('nationality',

@@ -198,34 +198,6 @@ class PersonController extends Controller
     }
 
     /**
-     * @Route("/cpf/register", name="lc_registration_cpf")
-     * @Template("LoginCidadaoCoreBundle:Person:registration/cpf.html.twig")
-     */
-    public function registrationCpfAction(Request $request)
-    {
-        $person = $this->getUser();
-        if (is_numeric($cpf = preg_replace('/[^0-9]/', '',
-                $request->get('cpf'))) && strlen($cpf) == 11) {
-            $person->setCpf($cpf);
-        }
-        $formBuilder = $this->createFormBuilder($person);
-        if (!$person->getCpf()) {
-            $formBuilder->add('cpf', 'text', array('required' => true));
-        }
-        $form     = $formBuilder->getForm();
-        $form->handleRequest($request);
-        $messages = '';
-        if ($form->isValid()) {
-            $person->setCpfExpiration(null);
-            $this->get('fos_user.user_manager')->updateUser($person);
-            return $this->redirect($this->generateUrl('lc_home'));
-        }
-        return array(
-            'form' => $form->createView(), 'messages' => $messages, 'isExpired' => $person->isCpfExpired()
-        );
-    }
-
-    /**
      * @Route("/facebook/unlink", name="lc_unlink_facebook")
      */
     public function unlinkFacebookAction()

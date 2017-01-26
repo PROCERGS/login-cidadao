@@ -10,9 +10,11 @@
 $(document).ready(function () {
     $('form').preventDoubleSubmission();
 
-    var current = $('.panel-home .heading-container a.btn').not(':visible').get(0);
+    var current = $('.panel-compact .heading-container a.btn').not(':visible').get(0);
     var button = $(current).is('.btn-home-login') ? 'btn-home-login' : 'btn-home-register';
-    history.replaceState({'button': button}, '', $(current).attr('href'));
+    if (undefined !== current) {
+        history.replaceState({'button': button}, '', $(current).attr('href'));
+    }
 
     $('.panel-heading .btn').on('click', function (event) {
         event.stopPropagation();
