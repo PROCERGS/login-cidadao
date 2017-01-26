@@ -53,9 +53,14 @@ class DefaultController extends Controller
         );
 
         $summary = [];
+        $summaryErrors = [];
         foreach ($data as $client) {
-            $procergsInitials = $client['procergs'];
+            $procergsInitials = $client['procergs_initials'];
             $totalUsage = $client['access_tokens'] + $client['api_usage'];
+            if (count($procergsInitials) !== 1) {
+                $summaryErrors[] = $totalUsage;
+                continue;
+            }
             foreach ($procergsInitials as $initials) {
                 if (array_key_exists($initials, $summary)) {
                     $summary[$initials] += $totalUsage;
@@ -79,8 +84,19 @@ class DefaultController extends Controller
                 ';',
                 [
                     '2',
-                    'CLIENT ???',
+                    '',
                     $initials,
+                    $usage,
+                ]
+            );
+        }
+        foreach ($summaryErrors as $usage) {
+            $body[] = implode(
+                ';',
+                [
+                    '2',
+                    '',
+                    '',
                     $usage,
                 ]
             );
