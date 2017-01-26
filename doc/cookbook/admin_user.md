@@ -1,5 +1,5 @@
-Criação de usuário Super Admin
-==============================
+Definição de usuário Super Admin
+================================
 
 Após instalar sua instância do Login Cidadão, você já pode acessá-la e criar sua
 conta de usuário. Diferentemente de alguns tipos de software onde o primeiro
