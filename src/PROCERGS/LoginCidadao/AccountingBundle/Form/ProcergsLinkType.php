@@ -29,7 +29,7 @@ class ProcergsLinkType extends AbstractType
                 'systemType',
                 'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
                 [
-                    'required' => false,
+                    'required' => true,
                     'label' => 'admin.accounting.edit.form.system_type.label',
                     'choices' => [
                         ProcergsLink::TYPE_INTERNAL => 'admin.accounting.edit.form.system_type.internal.label',
