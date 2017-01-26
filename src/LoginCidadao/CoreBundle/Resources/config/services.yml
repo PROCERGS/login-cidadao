@@ -438,3 +438,10 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 255 }
             - { name: monolog.processor }
+
+    lc.fos.user_manipulator.proxy:
+        class: LoginCidadao\CoreBundle\Helper\UserManipulatorProxy
+        arguments:
+            - "@fos_user.user_manager"
+            - "@event_dispatcher"
+            - "@service_container"
