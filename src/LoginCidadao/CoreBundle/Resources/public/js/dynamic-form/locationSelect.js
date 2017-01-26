@@ -67,4 +67,6 @@ $(document).ready(function () {
             $('.location-select').removeAttr('disabled');
         });
     });
+
+    $('.city-selector-container').toggleClass('hidden');
 });

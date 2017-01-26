@@ -11,6 +11,7 @@ services:
 
     statistics.handler:
         class: %statistics.handler.class%
+        lazy: true
         calls:
             - [setStatsRepo, ["@statistics.repository"]]
 

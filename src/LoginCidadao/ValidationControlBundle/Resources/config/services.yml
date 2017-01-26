@@ -5,10 +5,12 @@ parameters:
 services:
     validation.handler:
         class: %validation.handler.class%
+        lazy: true
         arguments: [ "@event_dispatcher" ]
 
     validation.idcard.validator:
         class: %validation.idcard.validator.class%
+        lazy: true
         arguments: [ "@validation.handler" ]
         tags:
             - { name: validator.constraint_validator, alias: validation.idcard.validator }

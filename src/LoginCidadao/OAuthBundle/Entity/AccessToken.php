@@ -3,11 +3,13 @@
 namespace LoginCidadao\OAuthBundle\Entity;
 
 use FOS\OAuthServerBundle\Entity\AccessToken as BaseAccessToken;
+use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="LoginCidadao\OAuthBundle\Entity\AccessTokenRepository")
  * @ORM\Table(name="access_token")
+ * @ORM\HasLifecycleCallbacks
  * @ORM\AttributeOverrides({
  *      @ORM\AttributeOverride(name="scope",
  *              column=@ORM\Column(
@@ -45,6 +47,13 @@ class AccessToken extends BaseAccessToken
      */
     protected $idToken;
 
+    /**
+     * @ORM\Column(name="created_at", type="datetime", nullable=true)
+     * @JMS\Since("1.14")
+     * @var \DateTime
+     */
+    protected $createdAt;
+
     public function setExpired()
     {
         $now = new \DateTime();
@@ -59,22 +68,43 @@ class AccessToken extends BaseAccessToken
     public function setIdToken($idToken)
     {
         $this->idToken = $idToken;
+
         return $this;
     }
 
     public function getUserId($pairwiseSubjectIdSalt)
     {
-        $id     = $this->getUser()->getId();
+        $id = $this->getUser()->getId();
         $client = $this->getClient();
 
         if ($client instanceof Client && $client->getMetadata()) {
             $metadata = $client->getMetadata();
             if ($metadata->getSubjectType() === 'pairwise') {
                 $sectorIdentifier = $metadata->getSectorIdentifier();
-                $salt             = $pairwiseSubjectIdSalt;
+                $salt = $pairwiseSubjectIdSalt;
+
                 return hash('sha256', $sectorIdentifier.$id.$salt);
             }
         }
+
         return $id;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue()
+    {
+        if (!($this->getCreatedAt() instanceof \DateTime)) {
+            $this->createdAt = new \DateTime();
+        }
     }
 }

@@ -22,3 +22,9 @@ lc_PersonAddress:
     resource: "@LoginCidadaoAPIBundle/Controller/PersonAddressController.php"
     name_prefix: api_1_
     defaults: { _format: json }
+
+lc_Statistics:
+    type: rest
+    prefix: /
+    resource: "@LoginCidadaoAPIBundle/Controller/StatisticsController.php"
+    defaults: { _format: json }

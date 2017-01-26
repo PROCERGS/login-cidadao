@@ -19,8 +19,8 @@ class CityManager implements LocationManagerInterface
 
     public function __construct(EntityManager $em, $class)
     {
-        $this->em         = $em;
-        $this->class      = $class;
+        $this->em = $em;
+        $this->class = $class;
         $this->repository = $em->getRepository($this->class);
     }
 
@@ -36,14 +36,19 @@ class CityManager implements LocationManagerInterface
 
     public function findByStateId($id)
     {
+        if (false === is_numeric($id)) {
+            return [];
+        }
+
         $reviewed = City::REVIEWED_OK;
+
         return $this->repository->createQueryBuilder('c')
-                ->join('c.state', 's')
-                ->where('s.id = :id')
-                ->andWhere('c.reviewed = :reviewed')
-                ->orderBy('c.name')
-                ->setParameters(compact('id', 'reviewed'))
-                ->getQuery()->getResult();
+            ->join('c.state', 's')
+            ->where('s.id = :id')
+            ->andWhere('c.reviewed = :reviewed')
+            ->orderBy('c.name')
+            ->setParameters(compact('id', 'reviewed'))
+            ->getQuery()->getResult();
     }
 
     public function createCity(City $city)
