@@ -38,11 +38,13 @@ class AdminController extends Controller
         uasort(
             $data,
             function ($a, $b) {
-                if ($a['access_tokens'] === $b['access_tokens']) {
+                $totalA = $a['access_tokens'] + $a['api_usage'];
+                $totalB = $b['access_tokens'] + $b['api_usage'];
+                if ($totalA === $totalB) {
                     return 0;
                 }
 
-                return ($a['access_tokens'] < $b['access_tokens']) ? 1 : -1;
+                return ($totalA < $totalB) ? 1 : -1;
             }
         );
 
