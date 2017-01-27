@@ -1,7 +1,7 @@
 parameters:
     lc_api_access_token_definer.class: LoginCidadao\APIBundle\Event\LoggedInUserListener
     lc.action_logger.class: LoginCidadao\APIBundle\Security\Audit\ActionLogger
-    lc.action_logger.listenner.class: LoginCidadao\APIBundle\Event\Security\AnnotationListenner
+    lc.action_logger.listenner.class: LoginCidadao\APIBundle\Event\Security\AnnotationListener
 
 services:
     lc.api.logged_in_user_listener:
@@ -22,6 +22,7 @@ services:
 
     lc.action_logger:
         class: %lc.action_logger.class%
+        lazy: true
         arguments:
             - "@security.token_storage"
             - "@simplethings_entityaudit.config"

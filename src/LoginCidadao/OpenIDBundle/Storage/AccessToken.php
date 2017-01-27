@@ -13,6 +13,7 @@ namespace LoginCidadao\OpenIDBundle\Storage;
 use OAuth2\ServerBundle\Storage\AccessToken as BaseClass;
 use OAuth2\Storage\AccessTokenInterface;
 use Doctrine\ORM\EntityManager;
+use Ramsey\Uuid\Uuid;
 
 class AccessToken extends BaseClass implements AccessTokenInterface
 {
@@ -86,8 +87,8 @@ class AccessToken extends BaseClass implements AccessTokenInterface
     public function setAccessToken($oauth_token, $client_id, $user_id, $expires,
                                     $scope = null, $id_token = null)
     {
-        if (strlen($oauth_token) < 150) {
-            $oauth_token = bin2hex(random_bytes(50));
+        if (strlen($oauth_token) < 100) {
+            $oauth_token = hash_hmac('sha512', bin2hex(random_bytes(50)), microtime());
         }
         // Get Client Entity
         $id     = explode('_', $client_id);

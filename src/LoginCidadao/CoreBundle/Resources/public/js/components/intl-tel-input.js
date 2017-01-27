@@ -14,7 +14,7 @@ $(document).ready(function () {
     });
 
 
-    $(".intl-tel").on('blur', function () {
+    $(".intl-tel").on('input', function () {
         var currentFormat = ($(this).val()[0] === "+") ? intlTelInputUtils.numberFormat.INTERNATIONAL : intlTelInputUtils.numberFormat.NATIONAL;
         $(this).val($(this).intlTelInput("getNumber", currentFormat));
     });

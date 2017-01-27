@@ -92,9 +92,11 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
         class: %checker.sector_identifier_uri.class%
+        lazy: true
 
     validator.sector_identifier_uri:
         class: %validator.sector_identifier_uri.class%
+        lazy: true
         arguments:
             - "@organization.repository"
             - "@checker.sector_identifier_uri"
@@ -112,6 +114,7 @@ services:
 
     lc.client_manager:
         class: LoginCidadao\OpenIDBundle\Manager\ClientManager
+        lazy: true
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@event_dispatcher"
