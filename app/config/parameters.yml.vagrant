@@ -12,6 +12,8 @@ parameters:
     dev_allowed: [ 127.0.0.0/8 ]
     # IPs allowed to access monitoring endpoint
     allowed_monitors: [ 127.0.0.0/8 ]
+    # IPs allowed to access accounting endpoint
+    allowed_accounting: [ 127.0.0.0/8 ]
 
     memcached_host: 127.0.0.1
     memcached_port: 11211
@@ -138,3 +140,10 @@ parameters:
     nfg_hmac_secret: 'many secret such private'
     tre_search_link: ''
     wsdl_monitor_verify_https: true
+    accounting.procergs_systems.api.url: 'https://dum.my/service'
+    accounting.procergs_systems.api.organization: 'some_organization'
+    accounting.procergs_systems.api.registration_number: '12345678'
+    accounting.procergs_systems.api.password: 'very_secret_password'
+    accounting.procergs_systems.domains:
+        - "some.domain.tld"
+        - "other.domain.tld"
