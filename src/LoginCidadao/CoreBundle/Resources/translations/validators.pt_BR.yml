@@ -17,9 +17,12 @@ person.validation:
         max: O nome informado é muito longo.
     email.length:
         max: O email informado é muito longo.
-    password.length:
-        min: A senha deve ter, ao menos, {{ limit }} caracteres
-        max: A senha deve ter, no máximo, {{ limit }} caracteres
+    password:
+        length:
+            min: A senha deve ter, ao menos, {{ limit }} caracteres
+            max: A senha deve ter, no máximo, {{ limit }} caracteres
+        missingNumbers: Sua senha precisa ter ao menos um número.
+        missingLetters: Sua senha precisa ter ao menos uma letra.
     cpf.already_used: Esse CPF já está cadastrado.
     mobile:
         9thDigit: Os celulares no Brasil precisam do 9º dígito

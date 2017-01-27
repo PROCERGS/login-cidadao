@@ -58,6 +58,7 @@ class AppKernel extends Kernel
 
             new Donato\PathWellBundle\DonatoPathWellBundle(),
             new Misd\PhoneNumberBundle\MisdPhoneNumberBundle(),
+            new Rollerworks\Bundle\PasswordStrengthBundle\RollerworksPasswordStrengthBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
