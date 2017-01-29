@@ -55,7 +55,6 @@ services:
             - "@service_container"
             - "@fos_user.registration.form.factory"
             - { facebook: facebookId, twitter: twitterId, google: googleId }
-            - %http_proxy%
 
     lc.person.registration.form.type:
         class: %lc.person.registration.form.type.class%

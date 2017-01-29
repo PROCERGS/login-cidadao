@@ -77,9 +77,6 @@ parameters:
         twitter: true
         google: true
 
-    # Proxy setup (you probably don't need this)
-    http_proxy: ~
-
     # Your domain
     site_domain: localhost
 
