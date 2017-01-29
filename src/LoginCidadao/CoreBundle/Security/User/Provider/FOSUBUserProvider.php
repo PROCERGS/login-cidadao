@@ -30,9 +30,6 @@ class FOSUBUserProvider extends BaseClass
     /** @var UserManagerInterface */
     protected $userManager;
 
-    /** @var array */
-    protected $proxySettings;
-
     /** @var SessionInterface */
     protected $session;
 
@@ -54,7 +51,6 @@ class FOSUBUserProvider extends BaseClass
      * @param ContainerInterface $container
      * @param FactoryInterface $formFactory
      * @param array $properties Property mapping.
-     * @param array $proxySettings
      */
     public function __construct(
         UserManagerInterface $userManager,
@@ -62,8 +58,7 @@ class FOSUBUserProvider extends BaseClass
         EventDispatcherInterface $dispatcher,
         ContainerInterface $container,
         FactoryInterface $formFactory,
-        array $properties,
-        array $proxySettings = null
+        array $properties
     ) {
         $this->userManager = $userManager;
         $this->session = $session;
@@ -71,7 +66,6 @@ class FOSUBUserProvider extends BaseClass
         $this->container = $container;
         $this->formFactory = $formFactory;
         $this->properties = $properties;
-        $this->proxySettings = $proxySettings;
     }
 
     /**

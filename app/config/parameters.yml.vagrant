@@ -41,12 +41,6 @@ parameters:
     twitter_app_key:    twitter_app_key_goes_here
     twitter_app_secret: twitter_app_secret_here
 
-    http_proxy:
-        type: HTTP
-        host: host.domain.tld
-        port: 3128
-        auth: 'login:senha'
-
     site_domain: localhost
     mailer_sender_mail: webmaster@example.com
     mailer_sender_name: webmaster
