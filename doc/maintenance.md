@@ -94,3 +94,9 @@ invalidados.
 Caso prefira, você pode simplesmente reiniciar o processo do memcached para obter
 o mesmo efeito. Para saber como reiniciar um serviço consulte a documentação
 específica do seu sistema operacional.
+
+Alterando Configurações
+-----------------------
+
+O Login Cidadão possui diversos parâmetros que permitem ajustar seu funcionamento
+de acordo com as necessidades de sua organização.
