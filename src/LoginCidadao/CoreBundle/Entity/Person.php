@@ -24,6 +24,7 @@ use LoginCidadao\CoreBundle\Model\LocationAwareInterface;
 use LoginCidadao\ValidationBundle\Validator\Constraints as LCAssert;
 use Donato\PathWellBundle\Validator\Constraints\PathWell;
 use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
+use Rollerworks\Bundle\PasswordStrengthBundle\Validator\Constraints as RollerworksPassword;
 
 /**
  * @ORM\Entity(repositoryClass="LoginCidadao\CoreBundle\Entity\PersonRepository")
@@ -96,6 +97,12 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Exclude
      * @PathWell(
      *     groups={"Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration"}
+     * )
+     * @RollerworksPassword\PasswordRequirements(
+     *     requireLetters=true,
+     *     requireNumbers=true,
+     *     missingLettersMessage="person.validation.password.missingLetters",
+     *     missingNumbersMessage="person.validation.password.missingNumbers"
      * )
      * @Assert\Length(
      *     min=8,
