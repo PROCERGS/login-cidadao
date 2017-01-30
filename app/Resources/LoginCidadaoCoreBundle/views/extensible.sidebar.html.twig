@@ -1,0 +1,14 @@
+{% extends "LoginCidadaoCoreBundle::sidebar.html.twig" %}
+
+{% block menu_items %}
+    {{ parent() }}
+    {% if is_granted('ROLE_ACCOUNTING_VIEW') %}
+        {% set myController = app.request.get('_template').get('controller') | default('') | trim %}
+        <li class="services glyph {{ myController == 'Admin' ? 'active' }}">
+            <a href="{{ path('lc_admin_accounting_summary') }}">
+                <span>{{ 'admin.accounting.menu' | trans }}</span>
+                <i class="glyphicon glyphicon-usd icon"></i>
+            </a>
+        </li>
+    {% endif %}
+{% endblock %}

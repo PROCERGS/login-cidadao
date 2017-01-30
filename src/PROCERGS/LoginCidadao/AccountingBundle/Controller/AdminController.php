@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 class AdminController extends Controller
 {
     /**
-     * @Route("/admin/accounting", name="lc_admin_accounting_summary")
+     * @Route("/accounting", name="lc_admin_accounting_summary")
      * @Template
      * @Security("has_role('ROLE_ACCOUNTING_VIEW')")
      */
@@ -56,7 +56,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/admin/accounting/{clientId}", name="lc_admin_accounting_edit_link")
+     * @Route("/accounting/{clientId}", name="lc_admin_accounting_edit_link")
      * @Template
      * @Security("has_role('ROLE_ACCOUNTING_EDIT')")
      */
