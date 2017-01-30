@@ -17,6 +17,7 @@ use PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 
 class AdminController extends Controller
@@ -24,6 +25,7 @@ class AdminController extends Controller
     /**
      * @Route("/admin/accounting", name="lc_admin_accounting_summary")
      * @Template
+     * @Security("has_role('ROLE_ACCOUNTING_VIEW')")
      */
     public function indexAction()
     {
@@ -56,6 +58,7 @@ class AdminController extends Controller
     /**
      * @Route("/admin/accounting/{clientId}", name="lc_admin_accounting_edit_link")
      * @Template
+     * @Security("has_role('ROLE_ACCOUNTING_EDIT')")
      */
     public function editAction(Request $request, $clientId)
     {
