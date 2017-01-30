@@ -4,40 +4,40 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "305d4c5dca35480db1d9b54fed96505c",
-    "content-hash": "b487c6165de73536008b6c3d8de644f0",
+    "hash": "46daa8d3727549a33b58173af76b20f7",
+    "content-hash": "09d54e379b4fc906ddb227f4d2a9bd9a",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
-            "version": "v1.0.1",
+            "version": "dev-legacy",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Bee-Lab/BeelabRecaptcha2Bundle.git",
-                "reference": "68a3bba6ff1a23d05d9d6598d2f662f960046718"
+                "reference": "68faa7ad55d57f02548f6bc1128e8d8153264f86"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Bee-Lab/BeelabRecaptcha2Bundle/zipball/68a3bba6ff1a23d05d9d6598d2f662f960046718",
-                "reference": "68a3bba6ff1a23d05d9d6598d2f662f960046718",
+                "url": "https://api.github.com/repos/Bee-Lab/BeelabRecaptcha2Bundle/zipball/68faa7ad55d57f02548f6bc1128e8d8153264f86",
+                "reference": "68faa7ad55d57f02548f6bc1128e8d8153264f86",
                 "shasum": ""
             },
             "require": {
                 "google/recaptcha": "^1.1",
-                "php": ">=5.3.8",
-                "symfony/dependency-injection": "~2.4|~3.0",
-                "symfony/form": "~2.4|~3.0",
-                "symfony/framework-bundle": "~2.4|~3.0",
-                "symfony/validator": "~2.4|~3.0"
+                "php": ">=5.4",
+                "symfony/dependency-injection": "~2.7|~3.0",
+                "symfony/form": "~2.7|~3.0",
+                "symfony/framework-bundle": "~2.7|~3.0",
+                "symfony/validator": "~2.7|~3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.*",
-                "symfony/expression-language": "~2.4|~3.0",
+                "phpunit/phpunit": "^4.8",
+                "symfony/expression-language": "~2.7|~3.0",
                 "symfony/phpunit-bridge": "~2.7|~3.0"
             },
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1.x-dev"
+                    "dev-master": "1.2.x-dev"
                 }
             },
             "autoload": {
@@ -62,7 +62,7 @@
                 "recaptcha",
                 "symfony"
             ],
-            "time": "2016-01-26 10:13:49"
+            "time": "2016-10-11 13:05:54"
         },
         {
             "name": "bmatzner/fontawesome-bundle",
@@ -1140,6 +1140,105 @@
             "time": "2016-07-03 21:52:18"
         },
         {
+            "name": "ejsmont-artur/php-circuit-breaker",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ejsmont-artur/php-circuit-breaker.git",
+                "reference": "5e63a6b8774166bf6e5a591559bf25030e8dcce7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ejsmont-artur/php-circuit-breaker/zipball/5e63a6b8774166bf6e5a591559bf25030e8dcce7",
+                "reference": "5e63a6b8774166bf6e5a591559bf25030e8dcce7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Ejsmont": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Artur Ejsmont",
+                    "homepage": "http://artur.ejsmont.org/blog/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP Circuit Breaker component",
+            "homepage": "https://github.com/ejsmont-artur/php-circuit-breaker",
+            "keywords": [
+                "circuit breaker",
+                "error handling",
+                "graceful"
+            ],
+            "time": "2013-03-17 09:59:05"
+        },
+        {
+            "name": "ejsmont-artur/php-circuit-breaker-bundle",
+            "version": "dev-master",
+            "target-dir": "Ejsmont/CircuitBreakerBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guilhermednt/php-circuit-breaker-bundle.git",
+                "reference": "e9e55848d68d6850e597db9848311117cd5a22cb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guilhermednt/php-circuit-breaker-bundle/zipball/e9e55848d68d6850e597db9848311117cd5a22cb",
+                "reference": "e9e55848d68d6850e597db9848311117cd5a22cb",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/common": ">=2.0.0",
+                "ejsmont-artur/php-circuit-breaker": ">=0.1.0",
+                "php": ">=5.3.0",
+                "symfony/symfony": "~2.8.0"
+            },
+            "require-dev": {
+                "johnkary/phpunit-speedtrap": "~1.0@dev",
+                "mockery/mockery": "~0.9",
+                "phpdocumentor/phpdocumentor": "2.*",
+                "phpunit/phpunit": "4.*"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Ejsmont\\CircuitBreakerBundle": ""
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Artur Ejsmont",
+                    "homepage": "http://artur.ejsmont.org/blog/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP Circuit Breaker Bundle - Symfony 2 integration",
+            "homepage": "https://github.com/ejsmont-artur/php-circuit-breaker-bundle",
+            "keywords": [
+                "circuit breaker",
+                "error handling",
+                "graceful",
+                "symfony2 adapter"
+            ],
+            "support": {
+                "source": "https://github.com/guilhermednt/php-circuit-breaker-bundle/tree/master"
+            },
+            "time": "2016-10-19 19:45:53"
+        },
+        {
             "name": "friendsofsymfony/oauth-server-bundle",
             "version": "dev-master",
             "source": {
@@ -2077,6 +2176,42 @@
             "time": "2014-11-20 16:49:30"
         },
         {
+            "name": "jakeasmith/http_build_url",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jakeasmith/http_build_url.git",
+                "reference": "15bdd686e5178ddfa3e88de60fa585adffb292bb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jakeasmith/http_build_url/zipball/15bdd686e5178ddfa3e88de60fa585adffb292bb",
+                "reference": "15bdd686e5178ddfa3e88de60fa585adffb292bb",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/http_build_url.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jake A. Smith",
+                    "email": "theman@jakeasmith.com"
+                }
+            ],
+            "description": "Provides functionality for http_build_url() to environments without pecl_http.",
+            "time": "2015-05-06 12:27:20"
+        },
+        {
             "name": "jdorn/sql-formatter",
             "version": "v1.2.17",
             "source": {
@@ -2381,16 +2516,16 @@
         },
         {
             "name": "jms/security-extra-bundle",
-            "version": "dev-master",
+            "version": "1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/JMSSecurityExtraBundle.git",
-                "reference": "c4a5dda496cca7b2ce89796928ec472095b13b1a"
+                "reference": "8d3b81d62601dcbafafc5e0c2d20f3383e475525"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/JMSSecurityExtraBundle/zipball/c4a5dda496cca7b2ce89796928ec472095b13b1a",
-                "reference": "c4a5dda496cca7b2ce89796928ec472095b13b1a",
+                "url": "https://api.github.com/repos/schmittjoh/JMSSecurityExtraBundle/zipball/8d3b81d62601dcbafafc5e0c2d20f3383e475525",
+                "reference": "8d3b81d62601dcbafafc5e0c2d20f3383e475525",
                 "shasum": ""
             },
             "require": {
@@ -2453,7 +2588,7 @@
                 "secure",
                 "security"
             ],
-            "time": "2016-11-11 10:06:32"
+            "time": "2016-08-04 14:40:55"
         },
         {
             "name": "jms/serializer",
@@ -3453,16 +3588,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v2.0.4",
+            "version": "v1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "a9b97968bcde1c4de2a5ec6cbd06a0f6c919b46e"
+                "reference": "c7e26a21ba357863de030f0b9e701c7d04593774"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/a9b97968bcde1c4de2a5ec6cbd06a0f6c919b46e",
-                "reference": "a9b97968bcde1c4de2a5ec6cbd06a0f6c919b46e",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/c7e26a21ba357863de030f0b9e701c7d04593774",
+                "reference": "c7e26a21ba357863de030f0b9e701c7d04593774",
                 "shasum": ""
             },
             "require": {
@@ -3497,7 +3632,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2016-11-07 23:38:38"
+            "time": "2016-03-18 20:34:03"
         },
         {
             "name": "phpcollection/phpcollection",
@@ -3729,6 +3864,103 @@
                 "issues": "https://github.com/PROCERGS/login-cidadao-badges-bundle/issues"
             },
             "time": "2016-09-27 18:03:38"
+        },
+        {
+            "name": "procergs/meurs-monitor-bundle",
+            "version": "v1.1.0",
+            "target-dir": "PROCERGS/LoginCidadao/MonitorBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PROCERGS/meurs-monitor-bundle.git",
+                "reference": "c0a5355802b41090277438bcf449f9dd0d2b0efd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PROCERGS/meurs-monitor-bundle/zipball/c0a5355802b41090277438bcf449f9dd0d2b0efd",
+                "reference": "c0a5355802b41090277438bcf449f9dd0d2b0efd",
+                "shasum": ""
+            },
+            "require": {
+                "liip/monitor-bundle": "^2.2",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "ejsmont-artur/php-circuit-breaker-bundle": "dev-master",
+                "phpunit/phpunit": "4.*",
+                "symfony/expression-language": "~2.4|~3.0",
+                "symfony/phpunit-bridge": "~2.7|~3.0"
+            },
+            "suggest": {
+                "ejsmont-artur/php-circuit-breaker-bundle": "Allows a Circuit Breaker to be notified of a check's failure."
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "PROCERGS\\LoginCidadao\\MonitorBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guilherme Donato",
+                    "email": "packagist@cadastro.dona.to"
+                }
+            ],
+            "description": "Monitor Bundle to be used by PROCERGS",
+            "homepage": "https://github.com/PROCERGS/meurs-monitor-bundle",
+            "keywords": [
+                "login-cidadao",
+                "monitor"
+            ],
+            "time": "2016-10-26 12:42:20"
+        },
+        {
+            "name": "procergs/nfg-badges-bundle",
+            "version": "v1.1.2",
+            "target-dir": "NFG/BadgesBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PROCERGS/nfg-badges-bundle.git",
+                "reference": "43b5bfd744df82fb29794bd37200ae4c679d2e20"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PROCERGS/nfg-badges-bundle/zipball/43b5bfd744df82fb29794bd37200ae4c679d2e20",
+                "reference": "43b5bfd744df82fb29794bd37200ae4c679d2e20",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "NFG\\BadgesBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guilherme Donato",
+                    "email": "packagist@cadastro.dona.to"
+                }
+            ],
+            "description": "Meu RS NFG Badge Bundle",
+            "homepage": "https://github.com/PROCERGS/nfg-badges-bundle",
+            "keywords": [
+                "Meu RS",
+                "badges",
+                "login-cidadao",
+                "meurs",
+                "nfg"
+            ],
+            "time": "2016-12-02 12:32:06"
         },
         {
             "name": "procergs/tos-bundle",
@@ -6600,14 +6832,15 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "friendsofsymfony/user-bundle": 20,
+        "friendsofsymfony/user-bundle": 15,
         "friendsofsymfony/oauth-server-bundle": 20,
         "knplabs/knp-gaufrette-bundle": 20,
         "knplabs/gaufrette": 20,
         "nelmio/api-doc-bundle": 20,
-        "jms/security-extra-bundle": 20,
         "bshaffer/oauth2-server-bundle": 20,
-        "qandidate/stack-request-id": 20
+        "beelab/recaptcha2-bundle": 20,
+        "qandidate/stack-request-id": 20,
+        "ejsmont-artur/php-circuit-breaker-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

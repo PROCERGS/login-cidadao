@@ -1,0 +1,93 @@
+services:
+    procergs.entities.nfgprofile.repository:
+        class: PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfileRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile
+
+    app.exception_listener:
+        class: PROCERGS\LoginCidadao\NfgBundle\EventListener\ExceptionListener
+        arguments:
+            - "@router"
+            - "@translator"
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+
+    procergs.nfg.credentials:
+        class: PROCERGS\LoginCidadao\NfgBundle\Security\Credentials
+        arguments:
+            - "%procergs.nfg.authentication.organization%"
+            - "%procergs.nfg.authentication.username%"
+            - "%procergs.nfg.authentication.password%"
+        public: false
+
+    procergs.nfg.soap_client.factory:
+        class: PROCERGS\LoginCidadao\NfgBundle\Service\SoapClientFactory
+        calls:
+            - ['setCircuitBreaker', ["@?circuitBreaker", "%procergs.nfg.circuit_breaker.service_name%"]]
+            - ['setLogger', ["@?logger"]]
+
+    procergs.nfg.soap_client:
+        class: SoapClient
+        factory: ["@procergs.nfg.soap_client.factory", createClient]
+        arguments:
+            - "%procergs.nfg.endpoints.wsdl%"
+            - "%procergs.nfg.verify_https%"
+        public: false
+
+    procergs.nfg.soap:
+        class: PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoap
+        lazy: true
+        arguments:
+            - "@procergs.nfg.soap_client"
+            - "@procergs.nfg.credentials"
+
+    procergs.nfg.service:
+        class: PROCERGS\LoginCidadao\NfgBundle\Service\Nfg
+        lazy: true
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@procergs.nfg.soap"
+            - "@router"
+            - "@session"
+            - "@fos_user.security.login_manager"
+            - "@meurs.helper"
+            - "@event_dispatcher"
+            - "@fos_user.user_manager"
+            - "@fos_user.registration.form.factory"
+            - "@procergs.entities.nfgprofile.repository"
+            - "@procergs.nfg.mailer"
+            - "@fos_user.util.email_canonicalizer"
+            - "%fos_user.firewall_name%"
+            - "%nfg_url_login%"
+            - "%nfg_url_auth%"
+        calls:
+            - ['setCircuitBreaker', ["@?circuitBreaker", "%procergs.nfg.circuit_breaker.service_name%"]]
+            - ['setLogger', ["@?logger"]]
+
+    procergs.nfg.mailer:
+        class: PROCERGS\LoginCidadao\NfgBundle\Mailer\TwigSwiftMailer
+        lazy: true
+        arguments:
+            - "@mailer"
+            - "@router"
+            - "@twig"
+            - template:
+                cpf_lost: "PROCERGSNfgBundle:Email:cpfLost.html.twig"
+                connection_moved: "PROCERGSNfgBundle:Email:connectionMoved.html.twig"
+              email:
+                name: "%mailer_sender_name%"
+                address: "%mailer_sender_mail%"
+
+    procergs.nfg.profile_edit.listener:
+        class: PROCERGS\LoginCidadao\NfgBundle\EventListener\ProfileEditSubscriber
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@meurs.helper"
+            - "@procergs.nfg.service"
+            - "@security.token_storage"
+            - "@translator"
+        calls:
+            - ['setLogger', ["@?logger"]]
+        tags:
+            - { name: kernel.event_subscriber }

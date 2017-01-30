@@ -1,0 +1,52 @@
+nfg:
+    unavailable:
+        title: 'Serviço Indisponível'
+        body: 'A Nota Fiscal Gaúcha não está disponível no momento. Por favor, tente novamente mais tarde.'
+        close: 'Fechar'
+    missing_info:
+        title: 'Informações Insuficientes'
+        body: 'Para que a vinculação com a Nota Fiscal Gaúcha seja realizada, precisamos que você autorize acesso ao seu nome, CPF e email.'
+        level1: 'Se você já autorizou todas as opções na página anterior, acesse seu cadastro da Nota Fiscal Gaúcha e verifique se seus dados estão atualizados.'
+        try_again: 'Tentar novamente'
+    connection_not_found:
+        alert: 'A conta da Nota Fiscal Gaúcha utilizada não está vinculada a um usuário do Login Cidadão. Para mais informações, <a href="%help_url%">clique aqui</a>.'
+        title: 'Conta não vinculada'
+        description: 'Você tentou fazer login com uma conta da Nota Fiscal Gaúcha que ainda não está vinculada a uma conta do Login Cidadão.'
+        troubleshooting:
+            login: 'Caso você já possua sua conta no Login Cidadão, é necessário <a href="%login_url%">acessá-la</a> para ativar o vínculo com a Nota Fiscal Gaúcha.'
+            register: 'Se você deseja usar suas informações na Nota Fiscal Gaúcha para criar uma conta do Login Cidadão, você pode <a class="nfgpopup" href="%register_nfg_url%">clicar aqui</a>.'
+        login: 'Ir para a página de Login'
+    already_connected:
+        title: 'Conta já viculada'
+        description: 'Você tentou vincular uma conta da Nota Fiscal Gaúcha que já está conectada a outra pessoa, entretanto cada conta da Nota Fiscal Gaúcha só pode estar associada a um único perfil de cada vez.'
+        question: 'O que você deseja fazer?'
+        override: 'Ignorar conexão existente'
+        back_to_profile: 'Voltar à edição do perfil'
+    email_in_use:
+        title: 'Esse email já foi usado'
+        description: 'O email cadastrado em sua conta da Nota Fiscal Gaúcha já está em uso em um cadastro do Login Cidadão.'
+        suggestion: 'Se você deseja conectar sua conta da Nota Fiscal Gaúcha com seu Login Cidadão, primeiramente entre na sua conta do Login Cidadão e faça a conexão com a Nota Fiscal Gaúcha na página de edição de perfil.'
+        login: 'Ir para a página de Login'
+    cpf_didnt_match:
+        title: 'Seu CPF não confere'
+        description: 'O CPF cadastrado em sua conta não confere com o informado na Nota Fiscal Gaúcha. Você pode <a href="%url_connect%" class="nfgpopup">tentar novamente</a> informando o mesmo CPF que você usou no seu cadastro ou <a href="%url_documents%">corrigir seu cadastro</a>.'
+    action_chooser:
+        title: 'Você deseja fazer login ou cadastrar-se?'
+        body: 'Selecione a forma que você deseja utilizar sua conta da Nota Fiscal Gaúcha.'
+        login: 'Login'
+        register: 'Cadastrar-se'
+    email:
+        cpf_lost:
+            subject: 'Seu CPF foi reivindicado'
+            body:
+                text: 'Olá, %name%!\n\nGostaríamos de lhe avisar que o CPF usado em sua conta foi reivindicado por um outro usuário utilizando uma conta válida da Nota Fiscal Gaúcha. Caso você acredite que isso é um erro, entre em contato com a equipe da Nota Fiscal Gaúcha para mais informações.'
+                html: '<p>Olá, %name%!</p><p>Gostaríamos de lhe avisar que o CPF usado em sua conta foi reivindicado por um outro usuário utilizando uma conta válida da Nota Fiscal Gaúcha. Caso você acredite que isso é um erro, entre em contato com a equipe da Nota Fiscal Gaúcha para mais informações.</p>'
+        connection_transferred:
+            subject: 'Sua conexão com a Nota Fiscal Gaúcha foi transferida'
+            body:
+                text: 'Olá, %name%.\n\nSua conexão com a Nota Fiscal Gaúcha foi transferia para uma outra conta conforme você solicitou. Se você não fez essa solicitação, entre em contato conosco para obter ajuda.'
+                html: '<p>Olá, %name%.\n\n</p><p>Sua conexão com a Nota Fiscal Gaúcha foi transferia para uma outra conta conforme você solicitou. Se você não fez essa solicitação, entre em contato conosco para obter ajuda.</p>'
+    error:
+        voter_registration:
+            invalid: 'Título de eleitor inválido'
+            in_use: 'Esse título de eleitor já está sendo usado por outra pessoa. Verifique se digitou corretamente.'

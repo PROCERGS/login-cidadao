@@ -6,6 +6,10 @@ imports:
 
 framework:
     #esi:             ~
+    assets:
+        version: '2016-11-24'
+        version_format: '%%s?version=%%s'
+        base_path: ~
     translator:
         enabled: true
         fallback: %locale%
@@ -61,9 +65,12 @@ assetic:
             inputs:
                 - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.eot'
             output: fonts/glyphicons-halflings-regular.eot
-        lc_base_js:
+        jquery:
             inputs:
                 - '@LoginCidadaoCoreBundle/Resources/public/js/jquery/1.11.0/jquery.min.js'
+        lc_base_js:
+            inputs:
+                - '@jquery'
                 - '@LoginCidadaoCoreBundle/Resources/public/bootstrap/3.3.1/js/bootstrap.min.js'
                 - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/js/bootstrap-switch.min.js'
                 - '@LoginCidadaoCoreBundle/Resources/public/js/hinclude/0.9.5/hinclude.min.js'
@@ -93,6 +100,7 @@ assetic:
                 - 'bundles/logincidadaocore/css/forms.css'
                 - 'bundles/logincidadaocore/css/compact/*.css'
                 - 'bundles/logincidadaocore/css/components/awesome-bootstrap-checkbox.css'
+                - 'bundles/procergslogincidadaocore/css/compact/*.css'
         lc_task_email_validation_css:
             inputs:
                 - '@lc_compact_layout_css'
@@ -102,6 +110,7 @@ assetic:
                 - '@lc_compact_layout_css'
                 - '@intl_tel_input_css'
                 - 'bundles/logincidadaocore/css/login_register/*.css'
+                - 'bundles/procergslogincidadaocore/css/login_register/*.css'
         lc_authorization_css:
             inputs:
                 - '@lc_compact_layout_css'
@@ -246,6 +255,10 @@ simple_things_entity_audit:
         - LoginCidadao\OAuthBundle\Entity\Organization
         - LoginCidadao\OpenIDBundle\Entity\ClientMetadata
 
+        - PROCERGS\LoginCidadao\CoreBunde\Entity\PersonMeuRS
+        - PROCERGS\LoginCidadao\NfgBunde\Entity\NfgProfile
+        - PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink
+
 hwi_oauth:
     connect:
         confirmation: false
@@ -293,6 +306,7 @@ parameters:
     oauth_client.class: LoginCidadao\OAuthBundle\Entity\Client
 
 beelab_recaptcha2:
+    request_method: curl_post
     site_key: "%recaptcha_public_key%"
     secret: "%recaptcha_private_key%"
 
@@ -450,6 +464,7 @@ nelmio_security:
                 - 'http://browser-update.org/'
                 - 'https://www.google.com/'
                 - 'https://www.gstatic.com/recaptcha/'
+                - 'http://www.google.com/recaptcha/'
                 - 'unsafe-inline'
                 - 'unsafe-eval'
                 - 'self'
@@ -478,6 +493,7 @@ nelmio_security:
                 - 'http://browser-update.org/'
                 - 'https://www.google.com/'
                 - 'https://www.gstatic.com/recaptcha/'
+                - 'http://www.google.com/recaptcha/'
                 - 'https://ajax.googleapis.com/'
                 - 'unsafe-inline'
                 - 'unsafe-eval'
@@ -513,6 +529,26 @@ liip_monitor:
             - '%user_profile_upload_dir%'
             - '%client_image_upload_dir%'
 
+        guzzle_http_service:
+            nfg_wsdl_endpoint:
+                url:    "%nfg_ws_url%"
+                method: GET
+                status_code: 200
+                options:
+                    verify: "%wsdl_monitor_verify_https%"
+            nfg_authZ_endpoint:
+                url:    "%nfg_url_auth%"
+                method: GET
+                status_code: 200
+                options:
+                    verify: "%wsdl_monitor_verify_https%"
+            nfg_login_endpoint:
+                url:    "%nfg_url_login%"
+                method: GET
+                status_code: 200
+                options:
+                    verify: "%wsdl_monitor_verify_https%"
+
 services:
     fos_user.doctrine_registry:
         alias: doctrine
@@ -522,3 +558,29 @@ donato_path_well:
 
 login_cidadao_tos:
     use_tasks: true
+
+procergs_login_cidadao_monitor:
+    checks:
+        wsdl:
+            nfg:
+                label: WSDL Nota Fiscal Gaúcha
+                url: "%nfg_ws_url%"
+                verify_https: "%wsdl_monitor_verify_https%"
+
+ejsmont_circuit_breaker:
+    threshold: 1
+    retry_timeout: 10
+
+procergs_nfg:
+    verify_https: false
+    circuit_breaker:
+        service_name: nfg_service
+    endpoints:
+        wsdl: "%nfg_ws_url%"
+        login: "%nfg_url_login%"
+        authorization: "%nfg_url_auth%"
+    authentication:
+        organization: "%soe_organization%"
+        username: "%soe_username%"
+        password: "%soe_password%"
+        hmac_secret: "%nfg_hmac_secret%"

@@ -18,6 +18,8 @@ parameters:
     dev_allowed: [ 127.0.0.0/8 ]
     # IPs allowed to access monitoring endpoint
     allowed_monitors: [ 127.0.0.0/8 ]
+    # IPs allowed to access accounting endpoint
+    allowed_accounting: [ 127.0.0.0/8 ]
 
     # Memcached server address
     memcached_host: 127.0.0.1
@@ -154,3 +156,22 @@ parameters:
     # When true, during the authorization process, the user will only be prompted to fill in missing information
     # if it's a new authorization
     pre_authorization.complete_information_task.skip_if_authorized: true
+
+    nfg_ws_url: 'https://dum.my/service.wsdl'
+    nfg_url_auth: 'https://dum.my/auth'
+    nfg_url_login: 'https://dum.my/login'
+    soe_organization: 'some_organization'
+    soe_username: 'some_user'
+    soe_password: 'the_password'
+    nfg_hmac_secret: 'many secret such private'
+    tre_search_link: ''
+    wsdl_monitor_verify_https: true
+
+    # Accounting: URL da API de busca do Cadastro de Sistemas
+    accounting.procergs_systems.api.url: 'https://dum.my/service'
+    accounting.procergs_systems.api.organization: 'some_organization'
+    accounting.procergs_systems.api.registration_number: '12345678'
+    accounting.procergs_systems.api.password: 'very_secret_password'
+    accounting.procergs_systems.domains:
+        - "some.domain.tld"
+        - "other.domain.tld"

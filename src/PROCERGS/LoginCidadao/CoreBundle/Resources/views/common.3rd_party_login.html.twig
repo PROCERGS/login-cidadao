@@ -1,0 +1,53 @@
+{% set providers_count = 0 %}
+{% for provider, status in third_party_login %}
+    {% if status == true %}
+        {% set providers_count = providers_count + 1 %}
+    {% endif %}
+{% endfor %}
+{% if third_party_login is not empty and providers_count > 0 %}
+    {% set columns = 12 / providers_count %}
+    <div class="row">
+        {% if third_party_login.facebook | default(false) %}
+            <div class="col-xs-{{ columns }} text-center">
+                <a class="connect facebook"
+                   href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook'}) }}">Facebook</a>
+            </div>
+        {% endif %}
+        {% if third_party_login.twitter | default(false) %}
+            <div class="col-xs-{{ columns }} text-center">
+                <a class="connect twitter"
+                   href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}">Twitter</a>
+            </div>
+        {% endif %}
+        {% if third_party_login.google | default(false) %}
+            <div class="col-xs-{{ columns }} text-center">
+                <a class="connect google"
+                   href="{{ path('hwi_oauth_service_redirect', {'service': 'google'}) }}">Google</a>
+            </div>
+        {% endif %}
+        {% if third_party_login.nfg | default(false) %}
+            <style scoped>
+                .lc-box .nfg {
+                    background-position: 2px 0;
+                    background-color: #EF9618;
+                {% image '@LoginCidadaoCoreBundle/Resources/public/images/meurs_connect_nfg_home.png' %} background-image: url('{{ asset_url | e('css') }}');
+                {% endimage %}
+                }
+
+                @media (max-width: 767px) {
+                    .lc-box .nfg {
+                        background-position: 0;
+                    {% image '@LoginCidadaoCoreBundle/Resources/public/images/meurs_connect_nfg.png' %} background-image: url('{{ asset_url | e('css') }}');
+                    {% endimage %}
+                    }
+                }
+            </style>
+            <div class="col-xs-{{ columns }} text-center">
+                <a class="connect nfg nfgpopup" href="{{ path('nfg_action_chooser') }}"
+                   data-chooser="true"
+                   data-login="{{ path('nfg_wait', { 'action': 'login' }) }}"
+                   data-register="{{ path('nfg_wait', { 'action': 'connect' }) }}">NFG</a>
+            </div>
+        {% endif %}
+    </div>
+{% endif %}

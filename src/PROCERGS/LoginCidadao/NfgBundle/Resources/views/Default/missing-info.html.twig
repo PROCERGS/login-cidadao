@@ -1,0 +1,17 @@
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
+
+{% block panel_body_class %}nfg-missing-info{% endblock %}
+
+{% block panel_body %}
+    <h1>{{ 'nfg.missing_info.title' | trans }}</h1>
+
+    <p>{{ 'nfg.missing_info.body' | trans }}</p>
+
+    <p>{{ 'nfg.missing_info.level1' | trans }}</p>
+
+    <p>
+        <a class="btn btn-block btn-success nfgpopup" href="{{ path('nfg_wait', { 'action': 'connect' }) }}">
+            {{ 'nfg.missing_info.try_again' | trans }}
+        </a>
+    </p>
+{% endblock %}

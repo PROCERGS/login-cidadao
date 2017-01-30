@@ -14,7 +14,7 @@
     bootstrap                   = "bootstrap.php.cache" >
 
     <php>
-        <ini name="error_reporting" value="0" />
+        <ini name="error_reporting" value="E_ALL" />
     </php>
     
     <testsuites>

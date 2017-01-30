@@ -1,0 +1,271 @@
+{% extends "LoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block title %}{{ 'profile.title' | trans }} | {{ parent() }}{% endblock title %}
+
+{% block content %}
+    <div id="profile-edit" class="content profile-edit">
+
+        <h1 class="visible-xs">{{ 'profile.title' | trans }}</h1>
+
+        {{ form_start(form, {'action': path('fos_user_profile_edit'), 'attr': {'role':'form' } }) }}
+        {{ form_errors(form) }}
+
+        <div class="form-content">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <div class="media clearfix">
+                            <div class="pull-left">
+                                <img src="{{ include("LoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}"
+                                     class="profile-picture">
+                                <button type="button" class="btn btn-xs btn-link btn-block change-picture"
+                                        title="{{ 'profile.picture.upload_another' | trans }}">{{ 'profile.picture.change' | trans }}</button>
+                            </div>
+                            <div class="media-body">
+                                <h2 class="media-heading personal-info">{{ 'profile.personal_info.title' | trans }}</h2>
+                                {{ app.user.shortDisplayName }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-info picture-upload-box" style="margin-bottom: 0">
+                    <div class="panel-heading clearfix">
+                        <div class="file-upload">
+                            <div class="buttons-toggle" data-toggle="buttons" role="group">
+                                {% set imageDeleteName = (form.image.delete is defined) ? form.image.delete.vars.full_name : 'img-button' %}
+                                {% if form.image.delete is defined %}
+                                    {% do form.image.delete.setRendered %}
+                                    {% if app.user.socialNetworksPicture is not null %}
+                                        <label class="btn btn-lg btn-info btn-external-pic-preview"
+                                               data-toggle="tooltip" data-placement="bottom"
+                                               title="{{ 'profile.picture.use_facebook' | trans }}">
+                                            <input class="use-facebook" type="radio"
+                                                   name="{{ form.image.delete.vars.full_name }}" autocomplete="off">
+                                            <img class="facebook-profile-pic-preview"
+                                                 src="{{ app.user.socialNetworksPicture }}">
+                                        </label>
+                                    {% else %}
+                                        <label class="btn btn-lg btn-danger">
+                                            <input type="radio" name="{{ form.image.delete.vars.full_name }}"
+                                                   autocomplete="off">
+                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                        </label>
+                                    {% endif %}
+                                {% endif %}
+
+                                <label class="btn btn-lg btn-success btn-upload" data-toggle="tooltip"
+                                       data-placement="bottom" title="{{ 'profile.picture.upload_another' | trans }}">
+                                    <input class="upload-picture" type="radio" name="{{ imageDeleteName }}" value="0">
+                                    <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+                                </label>
+                            </div>
+
+                            <div class="activity-desc">
+                                <span class="upload">{{ 'profile.picture.change_to.template' | trans | raw }}</span>
+                                <span class="facebook-pic">{{ 'profile.picture.change_to.facebook' | trans }}</span>
+                            </div>
+
+                            {{ form_widget(form.image.file) }}
+                            {{ form_errors(form.image) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    {{ form_row(form.firstName) }}
+                    {{ form_row(form.surname) }}
+                    {{ form_row(form.birthdate) }}
+                    {{ form_row(form.nationality) }}
+                    {{ include('LoginCidadaoCoreBundle:Form:location.form.html.twig', { form: form.placeOfBirth }) }}
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{ 'profile.contact_info.title' | trans }}</h2>
+                </div>
+                <div class="panel-body">
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.mobile) }}
+                </div>
+            </div>
+
+            {% if third_party_login is not empty %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">{{ 'profile.connections.title' | trans }}</h2>
+                    </div>
+                    <div class="panel-body">
+                        {% if third_party_login.facebook | default(false) %}
+                            {% if app.user.facebookId is null %}
+                                <div class="connect facebook disabled">
+                                    <a href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook'}) }}"
+                                       class="col-xs-11 col-xs-offset-1 username">
+                                        {{ 'profile.connections.connect.facebook' | trans }}</a>
+                                </div>
+                            {% else %}
+                                <div class="connect facebook" data-service-name="Facebook">
+                                    {% if app.user.facebookUsername is not null %}
+                                        <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.facebookUsername }}</span>
+                                    {% else %}
+                                        <span class="col-xs-9 col-xs-offset-1 username">{{ 'facebook.nousername'|trans }}</span>
+                                    {% endif %}
+                                    {% if app.user.hasPassword %}
+                                        <a class="col-xs-2 unlink text-right" href="{{ path('lc_unlink_facebook') }}">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if third_party_login.twitter | default(false) %}
+                            {% if app.user.twitterId is null %}
+                                <div class="connect twitter disabled">
+                                    <a href="{{ path('hwi_oauth_service_redirect', {'service': 'twitter'}) }}"
+                                       class="col-xs-11 col-xs-offset-1 username">{{ 'profile.connections.connect.twitter' | trans }}</a>
+                                </div>
+                            {% else %}
+                                <div class="connect twitter" data-service-name="Twitter">
+                                    {% if app.user.twitterUsername is not null %}
+                                        <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.twitterUsername }}</span>
+                                    {% else %}
+                                        <span class="col-xs-9 col-xs-offset-1 username">{{ 'twitter.nousername'|trans }}</span>
+                                    {% endif %}
+                                    {% if app.user.hasPassword %}
+                                        <a class="col-xs-2 unlink text-right" href="{{ path('lc_unlink_twitter') }}">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if third_party_login.google | default(false) %}
+                            {% if app.user.googleId is null %}
+                                <div class="connect google disabled">
+                                    <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google'}) }}"
+                                       class="col-xs-11 col-xs-offset-1 username">{{ 'profile.connections.connect.google' | trans }}</a>
+                                </div>
+                            {% else %}
+                                <div class="connect google" data-service-name="Google">
+                                    {% if app.user.googleUsername is not null %}
+                                        <span class="col-xs-9 col-xs-offset-1 username">{{ app.user.googleUsername }}</span>
+                                    {% else %}
+                                        <span class="col-xs-9 col-xs-offset-1 username">{{ 'google.nousername'|trans }}</span>
+                                    {% endif %}
+                                    {% if app.user.hasPassword %}
+                                        <a class="col-xs-2 unlink text-right" href="{{ path('lc_unlink_google') }}">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                            {{ render(controller('LoginCidadaoCoreBundle:Person:connectNfgFragment')) }}
+                        {% endif %}
+                        <div class="row unlink-confirmation">
+                            <div class="alert alert-danger col-xs-10 col-xs-offset-1">
+                                <p class="title">{{ 'profile.connections.disconnect.confirm.template' | trans | raw }}</p>
+
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <a href="#" class="btn btn-danger btn-sm btn-block confirm">
+                                            {{ 'profile.connections.disconnect.confirm.yes' | trans }}
+                                        </a>
+                                    </div>
+                                    <div class="col-xs-6 text-right">
+                                        <a role="button" class="btn btn-default btn-sm btn-block cancel">
+                                            {{ 'profile.connections.disconnect.confirm.no' | trans }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="row">
+                {% for type, messages in app.session.flashbag.all() %}
+                    {% for message in messages %}
+                        <div class="col-md-12">
+                            <div class="text-center bg-success flash-{{ type }}">
+                                {{ message }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-bar text-right">
+            <input class="btn btn-success" type="submit" value="{{ 'profile.submit'|trans }}"/>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+    '@intl_tel_input_js'
+    '@LoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
+    '@LoginCidadaoCoreBundle/Resources/public/js/dynamic-form/locationSelect.js'
+    '@LoginCidadaoCoreBundle/Resources/public/js/components/intl-tel-input.js'
+    filter='uglifyjs2' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script>
+        $('.birthdate').mask('00/00/0000', {'translation': {0: {pattern: /[0-9*]/}}});
+        {% javascripts '@intl_tel_input_utils_js' filter='uglifyjs2' %}
+        var intlTelInputUtilsScriptUrl = '{{ asset_url }}';
+        {% endjavascripts %}
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+
+        $(document).ready(function () {
+            locationSelection.formUrl = '{{ path('dynamic_form_location') }}';
+            locationSelection.defaultCountry = $("#{{ form.defaultCountry.vars.id }}").val();
+        });
+
+        $(document).ready(function () {
+            $('.change-picture').click(function () {
+                $('.picture-upload-box').slideToggle();
+            });
+
+            $('.search-cep').click(function (event) {
+                event.preventDefault();
+                validator.cep.popupConsult(this, event, 'profileEdit.popLocation');
+                return false;
+            });
+
+            $(".connect a.unlink").on('click', function () {
+                var confirmDialog = $('.unlink-confirmation');
+                var parent = $(this).parent();
+                var href = $(this).attr('href');
+                var serviceName = parent.data('service-name');
+
+                confirmDialog.slideUp('fast', function () {
+                    $('a.confirm', $('.unlink-confirmation')).attr('href', href);
+                    $('.social-network-name', $('.unlink-confirmation')).html(serviceName);
+                    confirmDialog.slideDown();
+                });
+
+                return false;
+            });
+
+            $('.unlink-confirmation .cancel').on('click', function () {
+                $('.unlink-confirmation').slideUp();
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block stylesheets_custom %}
+    {% stylesheets '@lc_logged_css' '@intl_tel_input_css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock %}

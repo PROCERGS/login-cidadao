@@ -37,10 +37,11 @@ try {
 
 $request = Request::createFromGlobals();
 
-$allowed = $params['parameters']['dev_allowed'];
-if (!IpUtils::checkIp($request->getClientIp(), $allowed)) {
+$allowed  = $params['parameters']['dev_allowed'];
+$clientIp = $request->getClientIp();
+if (!IpUtils::checkIp($clientIp, $allowed)) {
     header('HTTP/1.0 403 Forbidden');
-    exit('You are not allowed to access this file.');
+    exit("You ($clientIp) are not allowed to access this file.");
 }
 
 $response = $stack->handle($request);
