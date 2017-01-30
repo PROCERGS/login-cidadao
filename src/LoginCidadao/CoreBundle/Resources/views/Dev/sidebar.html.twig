@@ -1,17 +1,19 @@
 {% set myController = app.request.get('_template').get('controller')|trim %}
 <div class="settings-nav col-sm-3 col-lg-2">
     <ul class="nav nav-pills nav-stacked">
-        <li class="profile glyph">
-          <a href="{{ path('lc_home') }}" role="button">
-            <i class="glyphicon glyphicon-arrow-left icon"></i>
-            <span>{{ 'Back to main menu'|trans }}</span>
-          </a>
-        </li>
-        <li class="profile glyph {{ myController == 'Dev\\Client' ? 'active' }}">
-            <a href="{{ path('lc_dev_client') }}">
-                <span>{{ 'Services'|trans }}</span>
-                <i class="glyphicon glyphicon-th icon"></i>
-            </a>
-        </li>
+        {% block menu_dev_items %}
+            <li class="profile glyph">
+                <a href="{{ path('lc_home') }}" role="button">
+                    <i class="glyphicon glyphicon-arrow-left icon"></i>
+                    <span>{{ 'Back to main menu'|trans }}</span>
+                </a>
+            </li>
+            <li class="profile glyph {{ myController == 'Dev\\Client' ? 'active' }}">
+                <a href="{{ path('lc_dev_client') }}">
+                    <span>{{ 'Services'|trans }}</span>
+                    <i class="glyphicon glyphicon-th icon"></i>
+                </a>
+            </li>
+        {% endblock %}
     </ul>
 </div>

@@ -2,12 +2,6 @@
 
 {% block menu_admin_items %}
     {{ parent() }}
-    <li class="services glyph {{ myController == 'Admin' ? 'active' }}">
-        <a href="{{ path('lc_admin_accounting_summary') }}">
-            <span>{{ 'admin.accounting.menu' | trans }}</span>
-            <i class="glyphicon glyphicon-usd icon"></i>
-        </a>
-    </li>
     {% trans_default_domain "LoginCidadaoTOSBundle" %}
     <li class="services glyph {{ myController == 'TermsOfService' ? 'active' }}">
         <a href="{{ path('tos_admin_list') }}">
