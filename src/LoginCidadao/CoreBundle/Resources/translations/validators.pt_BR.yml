@@ -27,6 +27,6 @@ person.validation:
             max: O telefone informado é muito longo. O limite é de 15 números incluíndo os códigos de área de país.
 This value is not a valid phone number.: Esse não parece ser um telefone válido.
 This value is not a valid fixed-line number.: Esse número não corresponde a um telefone fixo.
-This value is not a valid mobile number.: Esse número não é um celular. Digite o código de área e o número do celular.
+This value is not a valid mobile number.: Esse número não é um celular. Verifique se digitou o código de área.
 This value is not a valid pager number.: Esse número não é um pager.
 This value is not a valid personal number.: Esse número não é um número pessoal.
