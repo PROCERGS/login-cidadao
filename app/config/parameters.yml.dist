@@ -90,9 +90,6 @@ parameters:
     # Logs email address
     logs.email: '%mailer_receiver_mail%'
 
-    # This must be compatible with strtotime()
-    # You probably don't need to change this
-    registration.cpf.empty_time: '+1 month'
     # Compatible with strtotime() but without + and - sign
     # You probably don't need to change this
     registration.email.unconfirmed_time: '1 day'
