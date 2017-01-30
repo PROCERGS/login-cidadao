@@ -11,52 +11,6 @@ class JobsController extends Controller
 {
 
     /**
-     * @Route("/job/cpf-reminder")
-     * @Template()
-     */
-    public function cpfCheckAction()
-    {
-        $mailType   = 'cpf-reminder';
-        $translator = $this->get('translator');
-
-        $subject = $translator->trans('cpf_reminder.subject');
-
-        $from       = $this->container->getParameter('mailer_sender_mail');
-        $em         = $this->getDoctrine()->getManager();
-        $personRepo = $this->getDoctrine()
-            ->getRepository('LoginCidadaoCoreBundle:Person');
-        $emailRepo  = $this->getDoctrine()
-            ->getRepository('LoginCidadaoCoreBundle:SentEmail');
-
-        $users     = $personRepo->findAllPendingCPFUntilDate(new \DateTime());
-        $todayMail = $emailRepo->findAllSentInTheLast24h($mailType, true);
-
-        $mailCount = 0;
-        foreach ($users as $user) {
-            $to = $user->getEmailCanonical();
-            if (array_key_exists($to, $todayMail)) {
-                continue;
-            }
-
-            $email = new SentEmail();
-            $email->setType($mailType)
-                ->setSubject($subject)
-                ->setSender($from)
-                ->setReceiver($to)
-                ->setMessage($this->renderView('LoginCidadaoCoreBundle:Jobs:cpf_check.html.twig',
-                        compact('user')));
-
-            if ($this->get('mailer')->send($email->getSwiftMail())) {
-                $em->persist($email);
-                $em->flush();
-                $mailCount++;
-            }
-        }
-
-        return compact('mailCount');
-    }
-
-    /**
      * @Route("/job/email-cleanup")
      * @Template()
      */

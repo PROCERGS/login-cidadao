@@ -14,18 +14,10 @@ class PersonRepository extends EntityRepository
                 ->getResult();
     }
 
-    public function findAllPendingCPFUntilDate($date)
-    {
-        return $this->getEntityManager()
-                ->createQuery('SELECT p FROM LoginCidadaoCoreBundle:Person p WHERE p.cpf IS NULL AND p.cpfExpiration >= :date')
-                ->setParameter('date', $date)
-                ->getResult();
-    }
-
     public function findUnconfirmedEmailUntilDate(\DateTime $dateLimit)
     {
         return $this->getEntityManager()
-                ->createQuery('SELECT p FROM LoginCidadaoCoreBundle:Person p WHERE p.confirmationToken IS NOT NULL AND p.emailExpiration <= :date')
+                ->createQuery('SELECT p FROM LoginCidadaoCoreBundle:Person p WHERE p.emailConfirmedAt IS NULL AND p.emailExpiration <= :date')
                 ->setParameter('date', $dateLimit)
                 ->getResult();
     }

@@ -1,1 +1,0 @@
-{{ include("LoginCidadaoCoreBundle::common.email.html.twig", {'subject' : 'cpf_reminder.subject'|trans , 'msg' : 'cpf_reminder.message' | trans({'%name%': user.firstName, '%date%': user.cpfExpiration | date('d/m/Y')}) } ) }}
