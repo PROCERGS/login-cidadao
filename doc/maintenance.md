@@ -99,4 +99,7 @@ Alterando Configurações
 -----------------------
 
 O Login Cidadão possui diversos parâmetros que permitem ajustar seu funcionamento
-de acordo com as necessidades de sua organização.
+de acordo com as necessidades de sua organização. Cada um dos parâmetros está
+brevemente descrito no arquivo `app/config/parameters.yml.dist` e você também
+encontra uma descrição mais detalhada no capítulo sobre [parâmetros do Login
+Cidadão](parameters.md).
