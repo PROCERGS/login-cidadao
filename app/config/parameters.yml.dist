@@ -51,10 +51,6 @@ parameters:
     facebook_app_id: facebook_app_id_here
     # Facebook App Secret
     facebook_app_secret: facebook_app_secret_here
-    # Leave it as is
-    facebook_app_this_url: "https://%site_domain%"
-    # Leave it as is
-    facebook_app_scope: [email, user_about_me, user_birthday, user_location]
 
     # Twitter API Key
     twitter_app_key:    twitter_app_key_goes_here
