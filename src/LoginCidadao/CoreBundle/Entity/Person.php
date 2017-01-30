@@ -99,6 +99,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      *     groups={"Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration"}
      * )
      * @RollerworksPassword\PasswordRequirements(
+     *     minLength=false,
      *     requireLetters=true,
      *     requireNumbers=true,
      *     missingLettersMessage="person.validation.password.missingLetters",
