@@ -1,9 +1,9 @@
 {% extends "LoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
 {% block sidebar %}
-{{ include("LoginCidadaoCoreBundle:Dev:sidebar.html.twig") }}
+    {{ include("LoginCidadaoCoreBundle:Dev:extensible.sidebar.html.twig") }}
 {% endblock %}
 {% block content %}
-<div id="profile-edit" class="content clearfix">
-    <h1>{{ 'Welcome developer'|trans }}</h1>
-</div>
+    <div id="profile-edit" class="content clearfix">
+        <h1>{{ 'Welcome developer'|trans }}</h1>
+    </div>
 {% endblock content %}
