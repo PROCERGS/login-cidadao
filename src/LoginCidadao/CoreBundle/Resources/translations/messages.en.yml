@@ -60,8 +60,6 @@ Services: Services
 'Change password': 'Change Password'
 Activate: Activate
 Deactivate: Deactivate
-cpf_reminder.subject: 'We noticed that your account doesn''t have a CPF associated with it yet.'
-cpf_reminder.message: "Hello, %name%\n\nWe noticed that your account doesn''t have a CPF associated with it yet.\n\nPlease consider visiting Citizen''s Login until %date% to complete this information. After that date, your account might be suspended.\n"
 'Toggle Navigation': 'Toggle Navigation'
 'Log in': 'Log in'
 Applications: Applications

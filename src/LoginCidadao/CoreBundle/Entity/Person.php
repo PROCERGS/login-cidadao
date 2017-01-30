@@ -133,12 +133,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     protected $birthdate;
 
     /**
-     * @ORM\Column(name="cpf_expiration", type="date", nullable=true)
-     * @JMS\Since("1.0")
-     */
-    protected $cpfExpiration;
-
-    /**
      * @ORM\Column(name="email_expiration", type="datetime", nullable=true)
      * @JMS\Since("1.0")
      */
@@ -685,18 +679,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         return $this->cpf;
     }
 
-    public function setCpfExpiration($cpfExpiration)
-    {
-        $this->cpfExpiration = $cpfExpiration;
-
-        return $this;
-    }
-
-    public function getCpfExpiration()
-    {
-        return $this->cpfExpiration;
-    }
-
     /**
      * @param \LoginCidadao\CoreBundle\Entity\City $city
      * @return City
@@ -818,12 +800,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function getPreviousValidEmail()
     {
         return $this->previousValidEmail;
-    }
-
-    public function isCpfExpired()
-    {
-        return ($this->getCpfExpiration() instanceof \DateTime && $this->getCpfExpiration()
-            <= new \DateTime());
     }
 
     public function hasPassword()
