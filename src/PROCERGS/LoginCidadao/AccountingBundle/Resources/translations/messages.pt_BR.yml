@@ -1,0 +1,34 @@
+admin.accounting:
+    menu: "Contabilidade"
+    summary:
+        title: "Contabilidade de Serviços"
+        caption: "Access Tokens gerados nos últimos 7 dias"
+        client:
+            name: "Serviço"
+            procergs_initials: "Sigla PROCERGS"
+            system_type: "Tipo de Sistema"
+            access_tokens: "Access Tokens"
+            api_usage: "Uso de API"
+            type:
+                internal: "Interno (PROCERGS)"
+                external: "Externo"
+            has_issue: "Foi detectada alguma inconsistência nesse sistema"
+    edit:
+        title: "Editando <strong>%client_name%</strong>"
+        back: "Voltar"
+        client:
+            legend: "Informações do Serviço"
+            client_name.label: "Nome do Serviço"
+            site_url.label: "URL do Serviço / Landing Page"
+            redirect_uris.label: "Redirect URIs"
+            contacts.label: "Responsáveis"
+            initials:
+                label: "Sigla PROCERGS"
+                not_found: "Não encontrada"
+        form:
+            legend: "Vinculação a Sistemas PROCERGS"
+            system_type:
+                label: "Tipo de Sistema"
+                internal.label: "Interno (PROCERGS)"
+                external.label: "Externo"
+            save: "Salvar"

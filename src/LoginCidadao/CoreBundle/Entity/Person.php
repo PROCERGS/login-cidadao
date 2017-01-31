@@ -24,6 +24,7 @@ use LoginCidadao\CoreBundle\Model\LocationAwareInterface;
 use LoginCidadao\ValidationBundle\Validator\Constraints as LCAssert;
 use Donato\PathWellBundle\Validator\Constraints\PathWell;
 use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
+use Rollerworks\Bundle\PasswordStrengthBundle\Validator\Constraints as RollerworksPassword;
 
 /**
  * @ORM\Entity(repositoryClass="LoginCidadao\CoreBundle\Entity\PersonRepository")
@@ -97,6 +98,13 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @PathWell(
      *     groups={"Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration"}
      * )
+     * @RollerworksPassword\PasswordRequirements(
+     *     minLength=false,
+     *     requireLetters=true,
+     *     requireNumbers=true,
+     *     missingLettersMessage="person.validation.password.missingLetters",
+     *     missingNumbersMessage="person.validation.password.missingNumbers"
+     * )
      * @Assert\Length(
      *     min=8,
      *     max=72,
@@ -131,12 +139,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Since("1.0")
      */
     protected $birthdate;
-
-    /**
-     * @ORM\Column(name="cpf_expiration", type="date", nullable=true)
-     * @JMS\Since("1.0")
-     */
-    protected $cpfExpiration;
 
     /**
      * @ORM\Column(name="email_expiration", type="datetime", nullable=true)
@@ -689,18 +691,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         return $this->cpf;
     }
 
-    public function setCpfExpiration($cpfExpiration)
-    {
-        $this->cpfExpiration = $cpfExpiration;
-
-        return $this;
-    }
-
-    public function getCpfExpiration()
-    {
-        return $this->cpfExpiration;
-    }
-
     /**
      * @param \LoginCidadao\CoreBundle\Entity\City $city
      * @return City
@@ -822,12 +812,6 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function getPreviousValidEmail()
     {
         return $this->previousValidEmail;
-    }
-
-    public function isCpfExpired()
-    {
-        return ($this->getCpfExpiration() instanceof \DateTime && $this->getCpfExpiration()
-            <= new \DateTime());
     }
 
     public function hasPassword()

@@ -55,7 +55,6 @@ services:
             - "@service_container"
             - "@fos_user.registration.form.factory"
             - { facebook: facebookId, twitter: twitterId, google: googleId }
-            - %http_proxy%
 
     lc.person.registration.form.type:
         class: %lc.person.registration.form.type.class%
@@ -100,6 +99,7 @@ services:
 
     lc.user_manager:
         class: %lc.user_manager.class%
+        lazy: true
         arguments: ["@security.encoder_factory", "@fos_user.util.username_canonicalizer", "@fos_user.util.email_canonicalizer", "@fos_user.object_manager", %user.class%, "@service_container"]
 
     lc.login.form.type:
@@ -157,7 +157,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
         calls:
-            - [setCpfEmptyTime, ["%registration.cpf.empty_time%"]]
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
             - [setUserManager, ["@fos_user.user_manager"]]
 
@@ -332,18 +331,21 @@ services:
 
     lc.country_manager:
         class: LoginCidadao\CoreBundle\Model\Manager\CountryManager
+        lazy: true
         arguments:
             - "@doctrine.orm.entity_manager"
             - LoginCidadao\CoreBundle\Entity\Country
 
     lc.state_manager:
         class: LoginCidadao\CoreBundle\Model\Manager\StateManager
+        lazy: true
         arguments:
             - "@doctrine.orm.entity_manager"
             - LoginCidadao\CoreBundle\Entity\State
 
     lc.city_manager:
         class: LoginCidadao\CoreBundle\Model\Manager\CityManager
+        lazy: true
         arguments:
             - "@doctrine.orm.entity_manager"
             - LoginCidadao\CoreBundle\Entity\City
@@ -391,6 +393,7 @@ services:
 
     lc.intent.manager:
         class: LoginCidadao\CoreBundle\Service\IntentManager
+        lazy: true
 
     lc.login_entry_point:
         class: LoginCidadao\CoreBundle\EventListener\LoginEntryPoint
@@ -430,6 +433,7 @@ services:
 
     lc.tasks.manager:
         class: LoginCidadao\CoreBundle\Service\TasksManager
+        lazy: true
         calls:
           - ["setSession", ["@?session"]]
 
@@ -444,3 +448,18 @@ services:
         arguments:
             - "@http_kernel"
             - "@security.http_utils"
+
+    lc.request.referer_logger:
+        class: LoginCidadao\CoreBundle\EventListener\RequestListener
+        calls:
+            - [ 'setLogger', ["@logger"] ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+            - { name: monolog.logger, channel: request }
+
+    lc.fos.user_manipulator.proxy:
+        class: LoginCidadao\CoreBundle\Helper\UserManipulatorProxy
+        arguments:
+            - "@fos_user.user_manager"
+            - "@event_dispatcher"
+            - "@service_container"

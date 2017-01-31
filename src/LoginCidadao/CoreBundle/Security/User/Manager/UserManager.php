@@ -28,13 +28,7 @@ class UserManager extends BaseManager
 
     public function createUser()
     {
-        $user = parent::createUser();
-
-        $expityTime = $this->container->getParameter("registration.cpf.empty_time");
-        $cpfExpiryDate = new \DateTime($expityTime);
-        $user->setCpfExpiration($cpfExpiryDate);
-
-        return $user;
+        return parent::createUser();
     }
 
     /**

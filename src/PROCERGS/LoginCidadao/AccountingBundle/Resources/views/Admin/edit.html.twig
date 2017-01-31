@@ -1,0 +1,58 @@
+{% extends "LoginCidadaoCoreBundle::base.loggedIn.html.twig" %}
+
+{% block content %}
+    <div class="content">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">{{ 'admin.accounting.edit.title' | trans({'%client_name%': client.name | e}) | raw }}</h2>
+            </div>
+            {{ form_start(form) }}
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <fieldset>
+                            <legend>{{ 'admin.accounting.edit.client.legend' | trans }}</legend>
+                            <div class="form-group">
+                                <label class="control-label">{{ 'admin.accounting.edit.client.client_name.label' | trans }}</label>
+                                <p class="form-control-static">{{ client.name }}</p>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">{{ 'admin.accounting.edit.client.site_url.label' | trans }}</label>
+                                <pre class="form-control-static">{{ client.siteUrl }}</pre>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">{{ 'admin.accounting.edit.client.redirect_uris.label' | trans }}</label>
+                                <pre class="form-control-static">{{ client.redirectUris | join('\n') }}</pre>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">{{ 'admin.accounting.edit.client.contacts.label' | trans }}</label>
+                                <pre class="form-control-static">{{ client.contacts | join('\n') }}</pre>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <legend>{{ 'admin.accounting.edit.form.legend' | trans }}</legend>
+                            <div class="form-group">
+                                <label class="control-label">{{ 'admin.accounting.edit.client.initials.label' | trans }}</label>
+                                <pre class="form-control-static">{{ initials | join('\n') | default('admin.accounting.edit.client.initials.not_found' | trans) }}</pre>
+                            </div>
+                            {{ form_row(form.systemType) }}
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-md-6">
+                        <a class="btn btn-default"
+                           href="{{ path('lc_admin_accounting_summary') }}">{{ 'admin.accounting.edit.back' | trans }}</a>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <button class="btn btn-success"
+                                type="submit">{{ 'admin.accounting.edit.form.save' | trans }}</button>
+                    </div>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

@@ -44,6 +44,14 @@ class Authorization
     protected $createdAt;
 
     /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * @return Person
      */
     public function getPerson()

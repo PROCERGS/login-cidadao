@@ -58,6 +58,7 @@ class AppKernel extends Kernel
 
             new Donato\PathWellBundle\DonatoPathWellBundle(),
             new Misd\PhoneNumberBundle\MisdPhoneNumberBundle(),
+            new Rollerworks\Bundle\PasswordStrengthBundle\RollerworksPasswordStrengthBundle(),
 
             // PROCERGS
             new PROCERGS\LoginCidadao\CoreBundle\PROCERGSLoginCidadaoCoreBundle(),
@@ -65,6 +66,7 @@ class AppKernel extends Kernel
             new NFG\BadgesBundle\NFGBadgesBundle(),
             new Ejsmont\CircuitBreakerBundle\EjsmontCircuitBreakerBundle(),
             new PROCERGS\LoginCidadao\NfgBundle\PROCERGSNfgBundle(),
+            new PROCERGS\LoginCidadao\AccountingBundle\PROCERGSLoginCidadaoAccountingBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

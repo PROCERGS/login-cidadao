@@ -60,8 +60,6 @@ Services: Services
 'Change password': 'Change Password'
 Activate: Activate
 Deactivate: Deactivate
-cpf_reminder.subject: 'We noticed that your account doesn''t have a CPF associated with it yet.'
-cpf_reminder.message: "Hello, %name%\n\nWe noticed that your account doesn''t have a CPF associated with it yet.\n\nPlease consider visiting Citizen''s Login until %date% to complete this information. After that date, your account might be suspended.\n"
 'Toggle Navigation': 'Toggle Navigation'
 'Log in': 'Log in'
 Applications: Applications
@@ -511,3 +509,11 @@ profile:
 scope_details.handle.title: What is this?
 flash_message.close: Close
 city_selector.no_javascript: 'The fields related to your place of birth are unavailable because your browser does not have JavaScript enabled.'
+lc.admin.person.metadata:
+    title: "Metadata"
+    date_format: "m/d/Y H:i:s"
+    createdAt: "Account Creation Date"
+    emailConfirmedAt: "Email Confirmation Date"
+    lastLogin: "Last Login"
+    hasCpf: "Does this person has a CPF/Taxpayer ID?"
+    authorization.createdAt: "Authorization Date"
