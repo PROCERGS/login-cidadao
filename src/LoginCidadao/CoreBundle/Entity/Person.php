@@ -112,6 +112,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      *     minMessage="person.validation.password.length.min",
      *     groups={"Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration"}
      * )
+     * @Assert\NotBlank(message="person.validation.password.blank", groups={"Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration"})
      */
     protected $plainPassword;
 

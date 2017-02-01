@@ -23,6 +23,7 @@ person.validation:
             max: A senha deve ter, no máximo, {{ limit }} caracteres
         missingNumbers: Sua senha precisa ter ao menos um número.
         missingLetters: Sua senha precisa ter ao menos uma letra.
+        blank: Você precisa criar uma senha.
     cpf.already_used: Esse CPF já está cadastrado.
     mobile:
         9thDigit: Os celulares no Brasil precisam do 9º dígito
