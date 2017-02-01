@@ -29,6 +29,7 @@ class ActionLog
     const TYPE_LOGIN         = 'LOGIN';
     const TYPE_IMPERSONATE   = 'IMPERSONATE';
     const TYPE_DEIMPERSONATE = 'DEIMPERSONATE';
+    const TYPE_PROFILE_VIEW  = 'PROFILE_VIEW';
 
     /**
      * @var integer
