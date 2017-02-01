@@ -3,6 +3,7 @@
 namespace LoginCidadao\APIBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 
@@ -217,5 +218,52 @@ class ActionLogRepository extends EntityRepository
         }
 
         return $result;
+    }
+
+    public function groupProfileViewsByActor()
+    {
+        $query = $this->createQueryBuilder('l')
+            ->select('p AS person, l.clientId AS person_id, l.auditUsername, COUNT(l) AS views')
+            ->leftJoin('LoginCidadaoCoreBundle:Person', 'p', 'WITH', 'p.id = l.clientId')
+            ->where('l.actionType = :type')
+            ->groupBy('p', 'l.clientId', 'l.auditUsername')
+            ->orderBy('views', 'DESC')
+            ->setParameter('type', ActionLog::TYPE_PROFILE_VIEW);
+
+        $result = $query->getQuery()->getResult();
+
+        return $result;
+    }
+
+    public function listProfileViewsByActor($person)
+    {
+        if ($person instanceof PersonInterface) {
+            $personId = $person->getId();
+        } else {
+            $personId = $person;
+        }
+        $query = $this->createQueryBuilder('l')
+            ->select('l, p')
+            ->leftJoin('LoginCidadaoCoreBundle:Person', 'p', 'WITH', 'p.id = l.userId')
+            ->where('l.actionType = :type')
+            ->andWhere('l.clientId = :personId')
+            ->orderBy('l.createdAt', 'DESC')
+            ->setParameter('type', ActionLog::TYPE_PROFILE_VIEW)
+            ->setParameter('personId', $personId);
+        $result = $query->getQuery()->getResult();
+
+        $response = [
+            'action_log' => [],
+            'person' => [],
+        ];
+        foreach ($result as $object) {
+            if ($object instanceof PersonInterface) {
+                $response['person'][$object->getId()] = $object;
+            } elseif ($object instanceof ActionLog) {
+                $response['action_log'][$object->getId()] = $object;
+            }
+        }
+
+        return $response;
     }
 }

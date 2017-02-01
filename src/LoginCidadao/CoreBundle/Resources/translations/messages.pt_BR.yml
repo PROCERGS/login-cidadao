@@ -764,6 +764,21 @@ admin:
     person:
         list: 'Gerenciar pessoas'
         list.title:  'Busca de pessoas'
+        profile_views_status:
+            menu: 'Auditoria da Gerência de Pessoas'
+            title: 'Auditoria da Gerência de Pessoas'
+            summary:
+                caption: 'Quantidade de vizualizações de perfis por administrador'
+                actor: 'Administrador'
+                count: 'Vizualizações de Perfis'
+                details.title: 'Ver detalhes'
+            details:
+                caption: 'Perfis vizualizados por %name%'
+                person: 'Pessoa'
+                username: 'Username'
+                date: 'Data'
+                date_format: 'd/m/Y H:i:s'
+                user_deleted: 'Conta Removida'
 force_password_change:
     title: Atualize sua senha para continuar
     description: Por favor, atualize sua senha para melhorar a segurança de sua conta.

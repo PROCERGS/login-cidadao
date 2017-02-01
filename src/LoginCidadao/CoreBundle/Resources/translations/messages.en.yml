@@ -359,6 +359,21 @@ admin:
     person:
         list: 'Manage People'
         list.title:  'Search People'
+        profile_views_status:
+            menu: 'Person Management Auditing'
+            title: 'Person Management Auditing'
+            summary:
+                caption: 'Amount of profiles viewed by each administrator'
+                actor: 'Administrator'
+                count: 'Profiles viewed'
+                details.title: 'Show details'
+            details:
+                caption: 'Profiles viewed by %name%'
+                person: 'Person'
+                username: 'Username'
+                date: 'Date'
+                date_format: 'm/d/Y H:i:s'
+                user_deleted: 'Account Removed'
 force_password_change:
     title: Update your password to continue
     description: Please update your password to improve your account's security.

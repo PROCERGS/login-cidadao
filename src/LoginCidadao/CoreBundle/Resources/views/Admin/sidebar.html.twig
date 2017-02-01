@@ -34,6 +34,14 @@
                     <i class="glyphicon glyphicon-user icon"></i>
                 </a>
             </li>
+            {% if is_granted('ROLE_AUDIT_PROFILE_VIEWS') %}
+                <li class="services glyph {{ myController == 'Admin\\ProfileViews' ? 'active' }}">
+                    <a href="{{ path('lc_admin_profile_views_report') }}">
+                        <span>{{ 'admin.person.profile_views_status.menu'|trans() }}</span>
+                        <i class="glyphicon glyphicon-user icon"></i>
+                    </a>
+                </li>
+            {% endif %}
         {% endblock %}
     </ul>
 </div>

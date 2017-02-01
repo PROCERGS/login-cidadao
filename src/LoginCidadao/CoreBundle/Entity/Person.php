@@ -1303,6 +1303,15 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         return $encoder;
     }
 
+    public function getLongDisplayName()
+    {
+        if ($this->getFullName()) {
+            return $this->getFullName();
+        } else {
+            return $this->getEmail();
+        }
+    }
+
     public function getShortDisplayName()
     {
         if ($this->getGivenName()) {
