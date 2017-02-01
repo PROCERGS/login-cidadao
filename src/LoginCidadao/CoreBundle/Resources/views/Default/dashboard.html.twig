@@ -133,13 +133,14 @@
                     </div>
                     <div class="panel-body">
                         <ul class="media-list">
-                            {% if logs.activity|length == 0 %}
-                                <div class="alert alert-warning" role="alert">{% trans %}You don't have any activity
-                                    log.{% endtrans %}</div>
+                            {% if logs.activity.action_log|length == 0 %}
+                                <div class="alert alert-warning" role="alert">
+                                    {{ 'You don\'t have any activity log.' | trans }}
+                                </div>
                             {% endif %}
-                            {% for log in logs.activity %}
+                            {% for log in logs.activity.action_log %}
                                 <li class="media">
-                                    {{ include('LoginCidadaoCoreBundle:ActivityLog:entry.fragment.html.twig', { 'log': log }) }}
+                                    {{ include('LoginCidadaoCoreBundle:ActivityLog:entry.fragment.html.twig', { 'log': log, 'clients': logs.activity.client, 'admins': logs.activity.person }) }}
                                 </li>
                             {% endfor %}
                         </ul>

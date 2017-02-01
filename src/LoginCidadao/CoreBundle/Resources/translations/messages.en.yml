@@ -317,6 +317,11 @@ access_log:
     page.title: Access Log
 activity_log:
     page.title: Services Activity Log
+    page.title: 'Registros de Atividade de Serviços'
+    admin.name: 'Tech support'
+    viewed_info: 'Information viewed at %date%'
+    changed_info: 'Information changed at %date%'
+
 log.date.format: 'm/d/Y H:i:s'
 admin:
     title: Admin Area
