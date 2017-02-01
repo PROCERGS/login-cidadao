@@ -19,6 +19,7 @@ person.validation:
             max: The password must have at most {{ limit }} characters
         missingNumbers: Your password must include at least one number.
         missingLetters: Your password must include at least one letter.
+        blank: You have to create a password.
     cpf.already_used: This CPF is already in use.
     mobile:
         9thDigit: Brazilian cellphones need the 9th digit
