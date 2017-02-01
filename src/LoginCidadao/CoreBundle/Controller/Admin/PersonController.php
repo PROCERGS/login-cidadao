@@ -2,6 +2,7 @@
 
 namespace LoginCidadao\CoreBundle\Controller\Admin;
 
+use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,6 +25,7 @@ class PersonController extends Controller
     {
         $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PersonFilterFormType');
         $form = $form->createView();
+
         return compact('form');
     }
 
@@ -33,20 +35,24 @@ class PersonController extends Controller
      */
     public function gridAction(Request $request)
     {
-        $form           = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PersonFilterFormType');
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PersonFilterFormType');
         $form->handleRequest($request);
         $result['grid'] = null;
         if ($form->isValid()) {
-            $em    = $this->getDoctrine()->getManager();
-            $sql   = $em->createQueryBuilder();
+            $em = $this->getDoctrine()->getManager();
+            $sql = $em->createQueryBuilder();
             $sql->select('u');
             $sql->from('LoginCidadaoCoreBundle:Person', 'u');
             $sql->where('1=1');
             $parms = $form->getData();
             if (isset($parms['username'][0])) {
-                $sql->andWhere('u.cpf like ?1 or LowerUnaccent(u.username) like LowerUnaccent(?1) or LowerUnaccent(u.email) like LowerUnaccent(?1) or LowerUnaccent(u.firstName) like LowerUnaccent(?1) or LowerUnaccent(u.surname) like LowerUnaccent(?1)');
-                $sql->setParameter('1',
-                    '%'.addcslashes($parms['username'], '\\%_').'%');
+                $sql->andWhere(
+                    'u.cpf like ?1 or LowerUnaccent(u.username) like LowerUnaccent(?1) or LowerUnaccent(u.email) like LowerUnaccent(?1) or LowerUnaccent(u.firstName) like LowerUnaccent(?1) or LowerUnaccent(u.surname) like LowerUnaccent(?1)'
+                );
+                $sql->setParameter(
+                    '1',
+                    '%'.addcslashes($parms['username'], '\\%_').'%'
+                );
             }
             $sql->addOrderBy('u.id', 'desc');
 
@@ -57,13 +63,17 @@ class PersonController extends Controller
             $grid->setQueryBuilder($sql);
             $grid->setInfiniteGrid(true);
             $grid->setRoute('lc_admin_person_grid');
-            $grid->setRouteParams(array(
-                $form->getName()
-            ));
+            $grid->setRouteParams(
+                array(
+                    $form->getName(),
+                )
+            );
+
             return array(
-                'grid' => $grid->createView($request)
+                'grid' => $grid->createView($request),
             );
         }
+
         return $result;
     }
 
@@ -73,42 +83,47 @@ class PersonController extends Controller
      */
     public function editAction(Request $request, $id)
     {
+        /** @var PersonInterface $person */
         $person = $this->getDoctrine()
-                ->getRepository('LoginCidadaoCoreBundle:Person')->find($id);
+            ->getRepository('LoginCidadaoCoreBundle:Person')->find($id);
         if (!$person) {
             return $this->redirect($this->generateUrl('lc_admin_person'));
         }
 
+        /** @var ActionLogger $actionLogger */
+        $actionLogger = $this->get('lc.action_logger');
+        $actionLogger->registerProfileView($request, $person, $this->getUser(), [$this, 'editAction']);
+
         $form = $this->createPersonForm($person);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $securityHelper    = $this->get('lc.security.helper');
-            $loggedUserLevel   = $securityHelper->getLoggedInUserLevel();
+            $securityHelper = $this->get('lc.security.helper');
+            $loggedUserLevel = $securityHelper->getLoggedInUserLevel();
             $targetPersonLevel = $securityHelper->getTargetPersonLevel($person);
 
             if ($loggedUserLevel >= $targetPersonLevel) {
                 $userManager = $this->get('fos_user.user_manager');
                 $userManager->updateUser($person);
-                $translator  = $this->get('translator');
+                $translator = $this->get('translator');
                 $translator->trans('Updated successfully.');
             }
         }
 
-        $user             = $this->getUser();
+        $user = $this->getUser();
         $defaultClientUid = $this->container->getParameter('oauth_default_client.uid');
 
         return array(
             'form' => $form->createView(),
             'person' => $person,
             'user' => $user,
-            'defaultClientUid' => $defaultClientUid
+            'defaultClientUid' => $defaultClientUid,
         );
     }
 
     private function getRolesNames()
     {
         $rolesHierarchy = $this->container->getParameter('security.role_hierarchy.roles');
-        $roles          = array();
+        $roles = array();
 
         foreach ($rolesHierarchy as $role => $children) {
             $roles[$role] = $children;
@@ -127,8 +142,9 @@ class PersonController extends Controller
         $rolesNames = $this->getRolesNames();
 
         return $this->get('form.factory')->create(
-                $this->get('lc.person.resume.form.type'), $person,
-                array('available_roles' => $rolesNames)
+            $this->get('lc.person.resume.form.type'),
+            $person,
+            array('available_roles' => $rolesNames)
         );
     }
 
@@ -139,8 +155,8 @@ class PersonController extends Controller
     public function impersonationReportsAction($id)
     {
         $reports = array();
-        $person  = $this->getDoctrine()
-                ->getRepository('LoginCidadaoCoreBundle:Person')->find($id);
+        $person = $this->getDoctrine()
+            ->getRepository('LoginCidadaoCoreBundle:Person')->find($id);
 
         if ($person instanceof PersonInterface) {
             $reportRepo = $this->getDoctrine()
