@@ -4,15 +4,16 @@ namespace LoginCidadao\CoreBundle\Controller\Admin;
 
 use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use LoginCidadao\CoreBundle\Helper\GridHelper;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use LoginCidadao\CoreBundle\Form\Type\PersonFilterFormType;
 
 /**
  * @Route("/admin/person")
+ * @Security("has_role('ROLE_PERSON_EDIT')")
  */
 class PersonController extends Controller
 {
