@@ -81,10 +81,6 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface
 
     public function getCpf();
 
-    public function setCpfExpiration($cpfExpiration);
-
-    public function getCpfExpiration();
-
     public function setCreatedAt(\DateTime $createdAt);
 
     public function getCreatedAt();
@@ -114,8 +110,6 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface
     public function setPreviousValidEmail($previousValidEmail);
 
     public function getPreviousValidEmail();
-
-    public function isCpfExpired();
 
     public function hasPassword();
 

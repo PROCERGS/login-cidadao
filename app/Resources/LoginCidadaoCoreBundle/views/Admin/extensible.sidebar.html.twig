@@ -1,7 +1,8 @@
 {% extends "LoginCidadaoCoreBundle:Admin:sidebar.html.twig" %}
-{% trans_default_domain "LoginCidadaoTOSBundle" %}
+
 {% block menu_admin_items %}
     {{ parent() }}
+    {% trans_default_domain "LoginCidadaoTOSBundle" %}
     <li class="services glyph {{ myController == 'TermsOfService' ? 'active' }}">
         <a href="{{ path('tos_admin_list') }}">
             <span>{{ 'tos.menu.admin.list' | trans() }}</span>
