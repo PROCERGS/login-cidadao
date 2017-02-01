@@ -17,7 +17,7 @@ class ActivityLogController extends Controller
     public function listAction()
     {
         $repo = $this->getActionLogRepository();
-        $logs = $repo->getWithClientByPerson($this->getUser(), 50);
+        $logs = $repo->getActivityLogsByTarget($this->getUser(), 50, $this->isGranted('FEATURE_SHOW_PROFILE_VIEWS'));
 
         return compact('logs');
     }

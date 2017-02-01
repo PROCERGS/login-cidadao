@@ -12,9 +12,9 @@
                 <div class="panel-heading">{{ 'activity_log.page.title' | trans }}</div>
                 <div class="panel-body">
                     <ul class="list-group">
-                        {% for log in logs %}
+                        {% for log in logs.action_log %}
                             <li class="list-group-item">
-                                {{ include('LoginCidadaoCoreBundle:ActivityLog:entry.fragment.html.twig', { 'log': log }) }}
+                                {{ include('LoginCidadaoCoreBundle:ActivityLog:entry.fragment.html.twig', { 'log': log, 'clients': logs.client, 'admins': logs.person }) }}
                             </li>
                         {% endfor %}
                     </ul>
