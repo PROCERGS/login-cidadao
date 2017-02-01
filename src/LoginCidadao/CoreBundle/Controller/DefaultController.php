@@ -89,11 +89,7 @@ class DefaultController extends Controller
         /** @var ActionLogRepository $logRepo */
         $logRepo = $em->getRepository('LoginCidadaoAPIBundle:ActionLog');
         $logs['logins'] = $logRepo->findLoginsByPerson($this->getUser(), 5);
-        $logs['activity'] = $logRepo->getActivityLogsByTarget(
-            $this->getUser(),
-            4,
-            $this->isGranted('FEATURE_SHOW_PROFILE_VIEWS')
-        );
+        $logs['activity'] = $logRepo->getActivityLogsByTarget($this->getUser(), 4);
 
         $defaultClientUid = $this->container->getParameter('oauth_default_client.uid');
 
