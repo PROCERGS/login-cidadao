@@ -153,7 +153,13 @@ class ActionLogRepository extends EntityRepository
         return $query->getQuery()->getSingleScalarResult();
     }
 
-    public function getActivityLogsByTarget(PersonInterface $target, $limit = null, $includeProfileViews = false)
+    /**
+     * @param PersonInterface $target
+     * @param null $limit
+     * @param bool $showProfileViews
+     * @return array
+     */
+    public function getActivityLogsByTarget(PersonInterface $target, $limit = null, $showProfileViews = false)
     {
         $excludeTypes = [
             ActionLog::TYPE_IMPERSONATE,
@@ -161,7 +167,7 @@ class ActionLogRepository extends EntityRepository
             ActionLog::TYPE_LOGIN,
         ];
 
-        if (false === $includeProfileViews) {
+        if (false === $showProfileViews) {
             $excludeTypes[] = ActionLog::TYPE_PROFILE_VIEW;
         }
 
