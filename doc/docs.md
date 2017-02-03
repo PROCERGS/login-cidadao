@@ -111,6 +111,25 @@ demonstrado no passo-a-passo.
 Se você não tem experiência com Git, você pode consultar a documentação
 do GitHub sobre [como clonar um repositório](https://help.github.com/articles/cloning-a-repository/).
 
+### Preparação do Banco de Dados
+
+Caso você ainda não tenha configurado seu banco de dados, esse é o momento ideal.
+Tenha em mente que o *Doctrine* pode conectar-se ao seu banco de dados de duas
+formas, a primeira é utilizando um login e senha e um endereço IP e a segunda é
+com um *Socket Unix*. Você deve configurar seu banco de dados de acordo com a forma
+desejada e configurar o Login Cidadão para utilizar o tipo de conexão escolhido.
+
+#### Utilizando *Unix Sockets*
+
+No caso de conexão via sockets, que a documentação do *Symfony* não cobre muito
+bem, você deverá utilizar o valor `~` para os parâmetros `database_host`,
+`database_port` e `database_password`, bastando informar os valores dos parâmetros
+`database_name` e `database_user` conforme configuração do seu banco de dados.
+
+Independentemente da forma de conexão escolhida, você deverá criar um *schema*
+para utilização do Login Cidadão e informar o nome desse *schema* no parâmetro
+`database_name`.
+
 ### Instalando o Login Cidadão
 
 A partir desse ponto, consideramos que você já tenha instalado os softwares
