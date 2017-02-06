@@ -51,10 +51,6 @@ parameters:
     facebook_app_id: facebook_app_id_here
     # Facebook App Secret
     facebook_app_secret: facebook_app_secret_here
-    # Leave it as is
-    facebook_app_this_url: "https://%site_domain%"
-    # Leave it as is
-    facebook_app_scope: [email, user_about_me, user_birthday, user_location]
 
     # Twitter API Key
     twitter_app_key:    twitter_app_key_goes_here
@@ -77,9 +73,6 @@ parameters:
         twitter: true
         google: true
 
-    # Proxy setup (you probably don't need this)
-    http_proxy: ~
-
     # Your domain
     site_domain: localhost
 
@@ -88,9 +81,11 @@ parameters:
     # Email sender name
     mailer_sender_name: Login Cidadão
 
-    # This must be compatible with strtotime()
-    # You probably don't need to change this
-    registration.cpf.empty_time: '+1 month'
+    # Contact form email address
+    contact_form.email: '%mailer_receiver_mail%'
+    # Logs email address
+    logs.email: '%mailer_receiver_mail%'
+
     # Compatible with strtotime() but without + and - sign
     # You probably don't need to change this
     registration.email.unconfirmed_time: '1 day'
@@ -155,3 +150,7 @@ parameters:
 
     # Always get user consent when redirecting after RP-Initiated Logout
     rp_initiated_logout.redirect.always_get_consent: false
+
+    # When true, during the authorization process, the user will only be prompted to fill in missing information
+    # if it's a new authorization
+    pre_authorization.complete_information_task.skip_if_authorized: true

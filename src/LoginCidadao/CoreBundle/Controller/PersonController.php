@@ -33,19 +33,6 @@ use LoginCidadao\CoreBundle\Helper\GridHelper;
 class PersonController extends Controller
 {
 
-    public function connectFacebookWithAccountAction()
-    {
-        $fbService = $this->get('fos_facebook.user.login');
-        //todo: check if service is successfully connected.
-        $fbService->connectExistingAccount();
-        return $this->redirect($this->generateUrl('fos_user_profile_edit'));
-    }
-
-    public function loginFbAction()
-    {
-        return $this->redirect($this->generateUrl("_homepage"));
-    }
-
     /**
      * @Route("/person/authorization/{clientId}/revoke", name="lc_revoke")
      * @Template()
@@ -208,34 +195,6 @@ class PersonController extends Controller
         }
 
         return array('form' => $form->createView(), 'emptyPassword' => $emptyPassword);
-    }
-
-    /**
-     * @Route("/cpf/register", name="lc_registration_cpf")
-     * @Template("LoginCidadaoCoreBundle:Person:registration/cpf.html.twig")
-     */
-    public function registrationCpfAction(Request $request)
-    {
-        $person = $this->getUser();
-        if (is_numeric($cpf = preg_replace('/[^0-9]/', '',
-                $request->get('cpf'))) && strlen($cpf) == 11) {
-            $person->setCpf($cpf);
-        }
-        $formBuilder = $this->createFormBuilder($person);
-        if (!$person->getCpf()) {
-            $formBuilder->add('cpf', 'text', array('required' => true));
-        }
-        $form     = $formBuilder->getForm();
-        $form->handleRequest($request);
-        $messages = '';
-        if ($form->isValid()) {
-            $person->setCpfExpiration(null);
-            $this->get('fos_user.user_manager')->updateUser($person);
-            return $this->redirect($this->generateUrl('lc_home'));
-        }
-        return array(
-            'form' => $form->createView(), 'messages' => $messages, 'isExpired' => $person->isCpfExpired()
-        );
     }
 
     /**

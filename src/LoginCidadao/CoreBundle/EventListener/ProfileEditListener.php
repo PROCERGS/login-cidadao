@@ -38,7 +38,6 @@ class ProfileEditListener implements EventSubscriberInterface
     private $emailUnconfirmedTime;
     protected $email;
     protected $cpf;
-    private $cpfEmptyTime;
     protected $em;
     protected $dne;
     protected $userManager;
@@ -158,11 +157,6 @@ class ProfileEditListener implements EventSubscriberInterface
         $this->checkCPFChanged($user);
     }
 
-    public function setCpfEmptyTime($var)
-    {
-        $this->cpfEmptyTime = $var;
-    }
-
     public function setEntityManager(EntityManager $var)
     {
         $this->em = $var;
@@ -183,6 +177,7 @@ class ProfileEditListener implements EventSubscriberInterface
             // send confirmation token to new email
             $user->setConfirmationToken($this->tokenGenerator->generateToken());
             $user->setEmailExpiration(new \DateTime("+$this->emailUnconfirmedTime"));
+            $user->setEmailConfirmedAt(null);
             $this->fosMailer->sendConfirmationEmailMessage($user);
 
             $this->mailer->sendEmailChangedMessage($user, $this->email);
@@ -192,12 +187,7 @@ class ProfileEditListener implements EventSubscriberInterface
     private function checkCPFChanged(Person & $user)
     {
         if ($user->getCpf() !== $this->cpf) {
-            if ($user->getCpf()) {
-                $user->setCpfExpiration(null);
-            } else {
-                $cpfExpiryDate = new \DateTime($this->cpfEmptyTime);
-                $user->setCpfExpiration($cpfExpiryDate);
-            }
+            // CPF changed
         }
     }
 

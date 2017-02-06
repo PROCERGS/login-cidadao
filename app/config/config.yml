@@ -45,67 +45,79 @@ assetic:
     use_controller: false
     #java: /usr/bin/java
     assets:
-      bootstrap_fonts_woff:
-          inputs:
-              - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.woff'
-          output: fonts/glyphicons-halflings-regular.woff
-      bootstrap_fonts_ttf:
-          inputs:
-              - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf'
-          output: fonts/glyphicons-halflings-regular.ttf
-      bootstrap_fonts_svg:
-          inputs:
-              - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.svg'
-          output: fonts/glyphicons-halflings-regular.svg
-      bootstrap_fonts_eot:
-          inputs:
-              - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.eot'
-          output: fonts/glyphicons-halflings-regular.eot
-      lc_base_js:
-        inputs:
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery/1.11.0/jquery.min.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/bootstrap/3.3.1/js/bootstrap.min.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/js/bootstrap-switch.min.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/hinclude/0.9.5/hinclude.min.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.placeholder.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.local.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.visible.min.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.preventDoubleSubmission.js'
-          - '@LoginCidadaoCoreBundle/Resources/public/js/general.js'
-      bootstrap_css:
-        inputs:
-          - 'assets/vendor/bootstrap/dist/css/bootstrap.min.css'
-          - '@LoginCidadaoCoreBundle/Resources/public/bootstrap/3.3.1/css/bootstrap-theme.min.css'
-          - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
-      lc_compact_layout_css:
-        inputs:
-          - '@bootstrap_css'
-          - 'bundles/bmatznerfontawesome/css/font-awesome.min.css'
-          - 'bundles/logincidadaocore/css/forms.css'
-          - 'bundles/logincidadaocore/css/compact/*.css'
-          - 'bundles/logincidadaocore/css/components/awesome-bootstrap-checkbox.css'
-      lc_task_email_validation_css:
-        inputs:
-          - '@lc_compact_layout_css'
-          - 'bundles/logincidadaocore/css/tasks/email-validation.css'
-      lc_login_register_css:
-        inputs:
-          - '@lc_compact_layout_css'
-          - 'bundles/logincidadaocore/css/login_register/*.css'
-      lc_base_css:
-        inputs:
-          - '@bootstrap_css'
-          - 'bundles/logincidadaocore/css/general.css'
-          - 'bundles/logincidadaocore/css/navbar.css'
-          - 'bundles/logincidadaocore/css/ac.widget.css'
-          - 'bundles/logincidadaocore/css/common.grid.css'
-          - 'bundles/logincidadaocore/css/list.buttons.css'
-      lc_logged_css:
-        inputs:
-          - '@lc_base_css'
-          - 'bundles/logincidadaocore/css/logged/logged.css'
+        bootstrap_fonts_woff:
+            inputs:
+                - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.woff'
+            output: fonts/glyphicons-halflings-regular.woff
+        bootstrap_fonts_ttf:
+            inputs:
+                - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf'
+            output: fonts/glyphicons-halflings-regular.ttf
+        bootstrap_fonts_svg:
+            inputs:
+                - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.svg'
+            output: fonts/glyphicons-halflings-regular.svg
+        bootstrap_fonts_eot:
+            inputs:
+                - 'assets/vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.eot'
+            output: fonts/glyphicons-halflings-regular.eot
+        lc_base_js:
+            inputs:
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery/1.11.0/jquery.min.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/bootstrap/3.3.1/js/bootstrap.min.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/js/bootstrap-switch.min.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/hinclude/0.9.5/hinclude.min.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.placeholder.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.infinitescroll.local.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/jquery.preventDoubleSubmission.js'
+                - '@LoginCidadaoCoreBundle/Resources/public/js/general.js'
+        bootstrap_css:
+            inputs:
+                - 'assets/vendor/bootstrap/dist/css/bootstrap.min.css'
+                - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
+        intl_tel_input_css:
+            inputs:
+                - 'bundles/logincidadaocore/intl-tel-input/css/intlTelInput.css'
+        intl_tel_input_js:
+            inputs:
+                - 'bundles/logincidadaocore/intl-tel-input/js/intlTelInput.min.js'
+        intl_tel_input_utils_js:
+            inputs:
+                - 'bundles/logincidadaocore/intl-tel-input/js/utils.js'
+        lc_compact_layout_css:
+            inputs:
+                - '@bootstrap_css'
+                - 'bundles/bmatznerfontawesome/css/font-awesome.min.css'
+                - 'bundles/logincidadaocore/css/forms.css'
+                - 'bundles/logincidadaocore/css/compact/*.css'
+                - 'bundles/logincidadaocore/css/components/awesome-bootstrap-checkbox.css'
+        lc_task_email_validation_css:
+            inputs:
+                - '@lc_compact_layout_css'
+                - 'bundles/logincidadaocore/css/tasks/email-validation.css'
+        lc_login_register_css:
+            inputs:
+                - '@lc_compact_layout_css'
+                - '@intl_tel_input_css'
+                - 'bundles/logincidadaocore/css/login_register/*.css'
+        lc_authorization_css:
+            inputs:
+                - '@lc_compact_layout_css'
+                - 'bundles/logincidadaocore/css/authorization/*.css'
+        lc_base_css:
+            inputs:
+                - '@bootstrap_css'
+                - 'bundles/logincidadaocore/css/general.css'
+                - 'bundles/logincidadaocore/css/navbar.css'
+                - 'bundles/logincidadaocore/css/ac.widget.css'
+                - 'bundles/logincidadaocore/css/common.grid.css'
+                - 'bundles/logincidadaocore/css/list.buttons.css'
+        lc_logged_css:
+            inputs:
+                - '@lc_base_css'
+                - 'bundles/logincidadaocore/css/logged/logged.css'
 
     filters:
         cssrewrite: ~
@@ -131,6 +143,8 @@ doctrine:
         # if using pdo_sqlite as your database driver, add the path in parameters.yml
         # e.g. database_path: %kernel.root_dir%/data/data.db3
         # path:     %database_path%
+        types:
+            phone_number: Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType
 
     orm:
         auto_generate_proxy_classes: %kernel.debug%
@@ -219,6 +233,7 @@ simple_things_entity_audit:
         - LoginCidadao\CoreBundle\Entity\Country
         - LoginCidadao\CoreBundle\Entity\IdCard
         - LoginCidadao\CoreBundle\Entity\ImpersonationReport
+        - LoginCidadao\CoreBundle\Entity\InvalidateSessionRequest
         - LoginCidadao\CoreBundle\Entity\Person
         - LoginCidadao\CoreBundle\Entity\PersonAddress
         - LoginCidadao\CoreBundle\Entity\SentEmail
@@ -229,25 +244,26 @@ simple_things_entity_audit:
         - LoginCidadao\OAuthBundle\Entity\Client
         - LoginCidadao\OAuthBundle\Entity\RefreshToken
         - LoginCidadao\OAuthBundle\Entity\Organization
-
-fos_facebook:
-    alias:  facebook
-    app_id: %facebook_app_id%
-    secret: %facebook_app_secret%
-    cookie: true
-    permissions: %facebook_app_scope%
+        - LoginCidadao\OpenIDBundle\Entity\ClientMetadata
 
 hwi_oauth:
     connect:
         confirmation: false
         account_connector: lc.hwi_twitter.user_provider
     firewall_name: main
+    failed_auth_path: fos_user_profile_edit
     fosub:
         username_iterations: 30
         properties:
+            facebook: facebookId
             twitter: twitterId
             google: googleId
     resource_owners:
+        facebook:
+            type:           facebook
+            client_id:      %facebook_app_id%
+            client_secret:  %facebook_app_secret%
+            scope:          "email user_about_me user_birthday user_location"
         twitter:
             type:           twitter
             client_id:      %twitter_app_key%

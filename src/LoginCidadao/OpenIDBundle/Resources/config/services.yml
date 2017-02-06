@@ -51,7 +51,7 @@ services:
             - { name: jms_serializer.event_listener, event: serializer.post_serialize, method: onPostSerialize }
 
     oauth2.response_types.token:
-        class: OAuth2\ResponseType\AccessToken
+        class: LoginCidadao\OpenIDBundle\ResponseType\AccessToken
         arguments:
             - "@oauth2.storage.access_token"
             - "@oauth2.storage.refresh_token"
@@ -92,9 +92,11 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
         class: %checker.sector_identifier_uri.class%
+        lazy: true
 
     validator.sector_identifier_uri:
         class: %validator.sector_identifier_uri.class%
+        lazy: true
         arguments:
             - "@organization.repository"
             - "@checker.sector_identifier_uri"
@@ -112,6 +114,7 @@ services:
 
     lc.client_manager:
         class: LoginCidadao\OpenIDBundle\Manager\ClientManager
+        lazy: true
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@event_dispatcher"
@@ -127,3 +130,15 @@ services:
         factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
             - LoginCidadao\OpenIDBundle\Entity\ClientMetadata
+
+    lc.oidc.tasks.subscriber:
+        class: LoginCidadao\OpenIDBundle\EventListener\TaskSubscriber
+        arguments:
+            - "@security.token_storage"
+            - "@security.authorization_checker"
+            - "@security.http_utils"
+            - "@lc.client_manager"
+        calls:
+            - ["setSkipCompletionTaskIfAuthorized", ["%pre_authorization.complete_information_task.skip_if_authorized%"]]
+        tags:
+            - { name: kernel.event_subscriber }

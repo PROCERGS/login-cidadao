@@ -1,6 +1,5 @@
 parameters:
     security.authentication.success_handler.class: LoginCidadao\CoreBundle\Handler\AuthenticationSuccessHandler
-    fos_facebook.user.login.class: LoginCidadao\CoreBundle\Security\User\Provider\FacebookProvider
     lc.hwi_twitter.user_provider.class: LoginCidadao\CoreBundle\Security\User\Provider\FOSUBUserProvider
     lc.person.registration.form.type.class: LoginCidadao\CoreBundle\Form\Type\RegistrationFormType
     lc.person.profile.form.type.class: LoginCidadao\CoreBundle\Form\Type\ProfileFormType
@@ -42,23 +41,20 @@ services:
     security.authentication.success_handler:
         class: %security.authentication.success_handler.class%
         public: false
-        arguments: ["@router", [], "@doctrine.orm.entity_manager", "@session", "@security.http_utils"]
-        calls:
-            - [setContainer, ["@service_container"]]
-
-    fos_facebook.user.login:
-        class: %fos_facebook.user.login.class%
         arguments:
-            facebook: "@fos_facebook.api"
-            userManager: "@fos_user.user_manager"
-            validator: "@validator"
-            container: "@service_container"
-            dispatcher: "@event_dispatcher"
-            formFactory: "@fos_user.registration.form.factory"
+            - "@security.http_utils"
+            - "@doctrine.orm.entity_manager"
+            - []
 
     lc.hwi_twitter.user_provider:
         class: %lc.hwi_twitter.user_provider.class%
-        arguments: [ "@fos_user.user_manager", "@session", "@event_dispatcher", "@service_container", "@fos_user.registration.form.factory", { twitter: twitterId, google: googleId }, %http_proxy% ]
+        arguments:
+            - "@fos_user.user_manager"
+            - "@session"
+            - "@event_dispatcher"
+            - "@service_container"
+            - "@fos_user.registration.form.factory"
+            - { facebook: facebookId, twitter: twitterId, google: googleId }
 
     lc.person.registration.form.type:
         class: %lc.person.registration.form.type.class%
@@ -103,6 +99,7 @@ services:
 
     lc.user_manager:
         class: %lc.user_manager.class%
+        lazy: true
         arguments: ["@security.encoder_factory", "@fos_user.util.username_canonicalizer", "@fos_user.util.email_canonicalizer", "@fos_user.object_manager", %user.class%, "@service_container"]
 
     lc.login.form.type:
@@ -160,7 +157,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
         calls:
-            - [setCpfEmptyTime, ["%registration.cpf.empty_time%"]]
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
             - [setUserManager, ["@fos_user.user_manager"]]
 
@@ -200,6 +196,7 @@ services:
             - "@session"
             - "@translator"
             - "@lc.intent.manager"
+            - "@lc.tasks.manager"
             - "%default_password_encoder%"
             - "%require_email_validation%"
         tags:
@@ -334,18 +331,21 @@ services:
 
     lc.country_manager:
         class: LoginCidadao\CoreBundle\Model\Manager\CountryManager
+        lazy: true
         arguments:
             - "@doctrine.orm.entity_manager"
             - LoginCidadao\CoreBundle\Entity\Country
 
     lc.state_manager:
         class: LoginCidadao\CoreBundle\Model\Manager\StateManager
+        lazy: true
         arguments:
             - "@doctrine.orm.entity_manager"
             - LoginCidadao\CoreBundle\Entity\State
 
     lc.city_manager:
         class: LoginCidadao\CoreBundle\Model\Manager\CityManager
+        lazy: true
         arguments:
             - "@doctrine.orm.entity_manager"
             - LoginCidadao\CoreBundle\Entity\City
@@ -381,9 +381,10 @@ services:
     lc.check_deploy_subscriber:
         class: LoginCidadao\CoreBundle\EventListener\CheckDeployEventSubscriber
         arguments:
-            - "@cache"
             - "@doctrine.orm.entity_manager"
             - '%oauth_default_client.uid%'
+        calls:
+            - ["setCacheProvider", ["@?cache"]]
         tags:
             - { name: kernel.event_subscriber }
 
@@ -392,6 +393,7 @@ services:
 
     lc.intent.manager:
         class: LoginCidadao\CoreBundle\Service\IntentManager
+        lazy: true
 
     lc.login_entry_point:
         class: LoginCidadao\CoreBundle\EventListener\LoginEntryPoint
@@ -428,6 +430,39 @@ services:
         class: LoginCidadao\CoreBundle\Form\Type\BirthdayTelType
         tags:
             - { name: form.type, alias: birthday_tel }
+
+    lc.tasks.manager:
+        class: LoginCidadao\CoreBundle\Service\TasksManager
+        lazy: true
+        calls:
+          - ["setSession", ["@?session"]]
+
+    qandidate.stack.request_id.monolog_processor:
+        class: Qandidate\Stack\RequestId\MonologProcessor
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 255 }
+            - { name: monolog.processor }
+
+    lc.authentication.hwi_failure_handler:
+        class: LoginCidadao\CoreBundle\Security\HWIAuthenticationFailureHandler
+        arguments:
+            - "@http_kernel"
+            - "@security.http_utils"
+
+    lc.request.referer_logger:
+        class: LoginCidadao\CoreBundle\EventListener\RequestListener
+        calls:
+            - [ 'setLogger', ["@logger"] ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+            - { name: monolog.logger, channel: request }
+
+    lc.fos.user_manipulator.proxy:
+        class: LoginCidadao\CoreBundle\Helper\UserManipulatorProxy
+        arguments:
+            - "@fos_user.user_manager"
+            - "@event_dispatcher"
+            - "@service_container"
 
     # LoginCidadao\CoreBundle\Service\AbstractPhoneVerificationService
     lc.base_phone_verification_service:

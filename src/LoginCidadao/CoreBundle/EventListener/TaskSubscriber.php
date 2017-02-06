@@ -68,7 +68,7 @@ class TaskSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            LoginCidadaoCoreEvents::GET_TASKS => ['onGetTasks', 0],
+            LoginCidadaoCoreEvents::GET_TASKS => ['onGetTasks', 100],
         ];
     }
 
@@ -83,7 +83,7 @@ class TaskSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if ($this->options['mandatoryEmailValidation'] && $user->getConfirmationToken()) {
+        if ($this->options['mandatoryEmailValidation'] && !($user->getEmailConfirmedAt() instanceof \DateTime)) {
             $task = (new ConfirmEmailTask())
                 ->setIsMandatory(true);
             $event->addTask($task);

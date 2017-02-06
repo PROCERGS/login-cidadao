@@ -2,6 +2,7 @@
 
 namespace LoginCidadao\CoreBundle\Form\Type;
 
+use libphonenumber\PhoneNumberFormat;
 use Symfony\Component\Form\FormBuilderInterface;
 use FOS\UserBundle\Form\Type\ProfileFormType as BaseType;
 use Doctrine\ORM\EntityRepository;
@@ -43,8 +44,17 @@ class ProfileFormType extends BaseType
                 'attr' => array('pattern' => '[0-9/]*', 'class' => 'form-control birthdate')
                 )
             )
-            ->add('mobile', null,
-                array('required' => false, 'label' => 'form.mobile', 'translation_domain' => 'FOSUserBundle'))
+            ->add('mobile', 'Misd\PhoneNumberBundle\Form\Type\PhoneNumberType',
+                array(
+                    'required' => false,
+                    'label' => 'person.form.mobile.label',
+                    'attr' => [
+                        'class' => 'form-control intl-tel',
+                        'placeholder' => 'person.form.mobile.placeholder',
+                    ],
+                    'label_attr' => ['class' => 'intl-tel-label'],
+                    'format' => PhoneNumberFormat::E164,
+                ))
             ->add('image', 'Vich\UploaderBundle\Form\Type\VichFileType',
                 array(
                 'required' => false,
@@ -54,10 +64,11 @@ class ProfileFormType extends BaseType
             ->add('placeOfBirth',
                 'LoginCidadao\CoreBundle\Form\Type\CitySelectorComboType',
                 array(
-                'level' => 'city',
-                'city_label' => 'Place of birth - City',
-                'state_label' => 'Place of birth - State',
-                'country_label' => 'Place of birth - Country',
+                    'required' => false,
+                    'level' => 'city',
+                    'city_label' => 'Place of birth - City',
+                    'state_label' => 'Place of birth - State',
+                    'country_label' => 'Place of birth - Country',
             ))
         ;
         $builder->add('nationality',

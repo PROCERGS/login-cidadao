@@ -23,6 +23,7 @@ class ClientMetadataForm extends AbstractType
             ->add('client_id')
             ->add('client_secret')
             ->add('redirect_uris')
+            ->add('post_logout_redirect_uris')
             ->add('response_types')
             ->add('grant_types')
             ->add('application_type')

@@ -2,6 +2,7 @@
 
 namespace LoginCidadao\CoreBundle\Form\Type;
 
+use libphonenumber\PhoneNumberFormat;
 use Symfony\Component\Form\FormBuilderInterface;
 use FOS\UserBundle\Form\Type\RegistrationFormType as BaseType;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -86,6 +87,7 @@ class RegistrationFormType extends BaseType
     private function addDynamicField(FormBuilderInterface $builder, $scope)
     {
         switch ($scope) {
+            case 'name':
             case 'surname':
             case 'full_name':
                 $builder->add(
@@ -114,14 +116,18 @@ class RegistrationFormType extends BaseType
                 );
                 break;
             case 'mobile':
+            case 'phone_number':
                 $builder->add(
                     'mobile',
-                    null,
+                    'Misd\PhoneNumberBundle\Form\Type\PhoneNumberType',
                     [
-                        'required' => true,
+                        'required' => false,
+                        'label_attr' => ['class' => 'intl-tel-label'],
                         'attr' => [
                             'placeholder' => 'person.form.mobile.placeholder',
+                            'class' => 'form-control intl-tel',
                         ],
+                        'format' => PhoneNumberFormat::E164,
                     ]
                 );
                 break;

@@ -25,9 +25,7 @@ class AppKernel extends Kernel
             new Bmatzner\FontAwesomeBundle\BmatznerFontAwesomeBundle(),
 
             new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
-            new FOS\FacebookBundle\FOSFacebookBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
-            new Donato\Generic\HWIOAuthProxyBundle\DonatoGenericHWIOAuthProxyBundle(),
 
             new LoginCidadao\LocaleBundle\LoginCidadaoLocaleBundle(),
             new LoginCidadao\APIBundle\LoginCidadaoAPIBundle(),
@@ -59,6 +57,8 @@ class AppKernel extends Kernel
             new Liip\MonitorBundle\LiipMonitorBundle(),
 
             new Donato\PathWellBundle\DonatoPathWellBundle(),
+            new Misd\PhoneNumberBundle\MisdPhoneNumberBundle(),
+            new Rollerworks\Bundle\PasswordStrengthBundle\RollerworksPasswordStrengthBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

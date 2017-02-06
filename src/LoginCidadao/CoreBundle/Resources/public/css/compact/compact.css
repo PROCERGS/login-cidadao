@@ -8,6 +8,7 @@
  */
 
 html, body {
+    font-family: "Open Sans", Arial, sans-serif;
     background-color: #f9f9f9;
 }
 
@@ -74,8 +75,11 @@ html, body {
     text-align: center;
 }
 
-.panel-compact .panel-body p {
-    text-align: justify;
+.panel-compact .panel-body p.text-center {
+    text-align: center;
+}
+.panel-compact .panel-body p.text-right {
+    text-align: right;
 }
 
 .panel-compact > .panel-footer {
@@ -117,7 +121,26 @@ footer ul.dashed > li:before {
 }
 
 .btn-outline {
-    background-color: transparent !important;
+    background: none !important;
     text-shadow: none !important;
     outline: none !important;
+}
+.btn-outline.btn-danger {
+    color: #ac0000;
+    border-width: 2px;
+    border-color: #ac0000;
+}
+
+.error-page h2 {
+    text-align: center;
+    font-size: 20px;
+    margin-top: 0;
+}
+
+form .error {
+    color: #ac0000;
+}
+
+.intl-tel-label {
+    display: block;
 }

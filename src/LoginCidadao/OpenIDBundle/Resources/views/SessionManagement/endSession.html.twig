@@ -1,16 +1,6 @@
 {% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
 
 {% block panel_body %}
-    {% for type, messages in app.session.flashbag.all %}
-        {% for message in messages %}
-            <div class="alert alert-{{ type }} alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="{{ 'Close' | trans }}"><span
-                            aria-hidden="true">&times;</span></button>
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
-
     {{ form_start(form) }}
     {{ form_errors(form) }}
     {% if getLogoutConsent and not loggedOut %}

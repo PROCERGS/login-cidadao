@@ -1,5 +1,5 @@
 security.login.username: 'Email ou CPF'
-security.login.username.placeholder: 'Digite seu email'
+security.login.username.placeholder: 'Digite seu email ou CPF'
 security.login.password: Digite sua senha
 security.login.remember_me: 'Lembrar meus dados'
 security.login.submit: Entrar
@@ -15,7 +15,8 @@ scope.city: Cidade
 scope.badges: Medalhas
 scope.picture: Foto
 scope.public_profile: 'Perfil Público'
-scope_details.public_profile: São informações do perfil público o seu primeiro nome, sua faixa etária e seus certificados (medalhas)
+scope.phone_number: Celular
+scope_details.public_profile: Primeiro nome e faixa etária
 'Revoke Access': 'Revogar Acesso'
 'Visit Site': 'Visitar Site'
 'Click again to confirm': 'Clique para confirmar'
@@ -52,12 +53,7 @@ CPF: CPF
 CEP: CEP
 'To confirm your change, type your current password below:': 'Para confirmar suas alterações, digite sua senha atual abaixo:'
 'Current password:': 'Senha atual:'
-'Authorize <strong>%client_name%</strong> to access your information?': 'Permitir que <strong>%client_name%</strong> acesse suas informações?'
-'<strong>%client_name%</strong> will be granted the following information and permissions:': 'As seguintes informações e permissões serão fornecidas para <strong>%client_name%</strong>:'
-'About <strong>%client_name%</strong>': 'Sobre <strong>%client_name%</strong>'
 'Edit profile': 'Editar informações'
-cpf_reminder.subject: 'Você não tem um CPF associado no Login Cidadão'
-cpf_reminder.message: "Olá, %name%\n\nNós notamos que sua conta não tem um CPF associado a ela ainda.\n\nPor favor, visite o Login Cidadão até o dia %date% para completar essa informação. Após essa data, sua conta poderá ser suspensa.\n"
 Activated: Ativado
 Active: Ativado
 Deactivated: Desativado
@@ -101,9 +97,8 @@ Contact: Contato
 'About the Government': 'Sobre o Governo'
 Government: Governo
 'view all services': 'ver todos serviços'
-exception.alreadyLinkedAccount: 'Essa conta já está conectada a um outro usuário. Você deve desfazer essa conexão antes de tentar linkar com o usuário atual.'
+exception.alreadyLinkedAccount: 'Essa conta já está conectada a um outro usuário. Você deve desfazer essa conexão antes de tentar conectar com o usuário atual.'
 '<a href="%link%">Background picture</a> by %name%': '<a href="%link%">Imagem de fundo</a> por %name%'
-contact.title: 'Contato'
 cpf.registration.title: 'Registro de CPF'
 'Active Services': 'Serviços Ativos'
 'Other Services': 'Demais serviços'
@@ -630,24 +625,10 @@ scope.logout: 'Permitir deslogar'
 'Select a state below:': 'Selecione um estado abaixo:'
 Firstname: Nome
 Surname: Sobrenome
-'After completing your information, click the following button to continue:': 'Depois de completar suas informações, clique no botão a seguir para continuar:'
-<strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.: <strong>%client%</strong> precisa de detalhes adicionais sobre você. Por favor, complete as informações em branco a seguir para continuar.
-Personal Details: Informações Pessoais
-Complete Missing Fields: Complete as Informações em Branco
 'Use accounts from other services': 'Use contas de outros serviços'
 'If you prefer, it''s possible to use other services to login or create your account.': 'Se preferir, é possível usar os seguintes serviços para acessar ou criar sua conta:'
 Type your password to confirm the activation.: Digite sua senha para confirmar a ativação.
 Current password: Senha atual
-<strong>%client%</strong> requires that you have a validated email in order to proceed.: <strong>%client%</strong> precisa que você possua um email validado antes de continuar.
-Validating your email address is pretty simple and fast. You just have to click the link or button in the email we sent you.: Validar seu endereço de email é bastante fácil e rápido. Você só precisa clicar no link ou botão no email que lhe enviamos.
-After you validate your email address this screen will change automatically and you'll proceed to <strong>%client%</strong>.: Depois de validar seu email, essa tela vai mudar <strong>automaticamente</strong> e você poderá prosseguir para <strong>%client%</strong>.
-I'm having trouble finding the confirmation email: Estou tendo dificuldade em encontrar o email de confirmação
-If you are having trouble to find the confirmation email, please make sure it isn't in the junk mail section of your email program or site.: Se você está tendo dificuldades em encontrar o email de confirmação, por favor verifique se ele não se encontra na caixa de spam ou lixo eletrônico do seu email.
-If you are certain the email was not received, it's possible that you mistyped your email address. You can change you email address below.: Se você tem certeza de que o email não foi recebido, é possível que seu endereço esteja com erro de digitação. Verifique e, se necessário, altere o email no campo abaixo.
-If your email is mistyped, correct it and click the following button.: Se seu email estava incorreto, corrija-o e clique no botão a seguir.
-Change Email: Trocar Email
-Your email was successfully validated.: Seu email foi validado com sucesso.
-Back to %client%: Voltar para %client%
 Mobile: Celular
 Copy: Copiar
 Copied: Copiado
@@ -714,8 +695,8 @@ organizations:
                 attention: Atenção!
                 text: Esse serviço está sendo oferecido por uma organização não verificada. Confira, a seguir, as informações dessa organização antes de autorizar.
             info:
-                provided_by: Esse serviço é oferecido por <strong>%name%</strong> (<a class="text-danger">%domain%</a> %label%)
-                warn_trust: Autorize apenas se você confia na organização <strong>%name%</strong>
+                provided_by: Esse serviço é oferecido por <strong>%name%</strong> (<a class="text-danger">%domain%</a> %label%).
+                warn_trust: Autorize apenas se você confia nessa organização.
                 domain_verified: Domínio Verificado
                 domain_not_verified: Domínio não Verificado
                 no_organization:
@@ -804,15 +785,17 @@ home:
 compact.logout.button: Sair
 person.form:
     firstName:
-        label: Nome
-        placeholder: Digite seu nome
+        label: Primeiro nome
+        placeholder: Digite seu primeiro nome
     surname:
         label: Sobrenome
         placeholder: Digite seu sobrenome
     cpf:
         placeholder: Digite seu CPF
     birthdate.placeholder: dd/mm/aaaa
-    mobile.placeholder: Digite seu telefone celular
+    mobile:
+        label: Celular
+        placeholder: Digite seu telefone celular
 tasks.confirm_email:
     title: Confirme seu email para continuar
     body: Um email foi enviado para o endereço informado em seu cadastro. Abra esse email e clique no botão de confirmação presente na mensagem.
@@ -831,7 +814,7 @@ resetting.request.title: Recuperação de Senha
 resetting.request.description: Para alterar sua senha, digite seu email ou CPF a seguir e lhe enviaremos um email com instruções para criação de uma nova senha.
 resetting.request.invalid_username: '"%username%" não está cadastrado.'
 resetting.request.username.label: 'Email ou CPF:'
-resetting.request.username.placeholder: Digite seu email Email ou CPF
+resetting.request.username.placeholder: Digite seu email ou CPF
 resetting.request.submit: Recuperar senha
 resetting.check_email: Foi enviado um email com instruções para recuperação de senha para o endereço cadastrado. Acesse seu email e clique no link presente na mensagem enviada.
 resetting.reset.title: Criando Nova Senha
@@ -850,3 +833,96 @@ openid.session.end:
         logging_out: <strong>%client%</strong> está encerrando sua sessão.
         logged_out: Sua sessão foi encerrada por <strong>%client%</strong>
         not_logged_out: Sua sessão <strong>não</strong> foi encerrada por <strong>%client%</strong>
+authorization:
+    title: Permitir que <strong>%client_name%</strong> acesse suas informações?
+    description: 'As seguintes informações e permissões serão fornecidas:'
+    about: 'Sobre <strong>%client_name%</strong>'
+error.generic:
+    title: Ocorreu um erro 😞
+    body: Caso esse seja um problema recorrente você pode <a href="%contact_url%">entrar em contato</a> para obter ajuda.
+error.404:
+    title: Página não encontrada
+    body: A página solicitada não foi encontrada. Verifique se o endereço utilizado está correto e tente novamente.
+dynamic_form:
+    title: Complete suas informações
+    body: <strong>%client%</strong> precisa de detalhes adicionais sobre você. Por favor, complete as informações em branco a seguir para continuar.
+    submit:
+        label: 'Depois de completar suas informações, clique no botão a seguir para continuar:'
+        button: Salvar
+    skip:
+        open_warning: Pular etapa
+        warning: Se você escolher pular essa etapa agora, é possível que o serviço acessado solicite essas informações novamente ou negue seu acesso. Além disso, vamos sugerir essa etapa novamente a cada acesso.
+        confirm: Pular mesmo assim
+    email_verification:
+        body: <strong>%client%</strong> precisa que você possua um email validado antes de continuar.
+        how_to: Validar seu endereço de email é bastante fácil e rápido. Você só precisa clicar no link ou botão no email que lhe enviamos.
+        post_verifying: Depois de validar seu email, essa tela vai mudar <strong>automaticamente</strong> e você poderá prosseguir para <strong>%client%</strong>.
+        success: Seu email foi validado com sucesso.
+        back_to_client: Voltar para %client%
+        help:
+            cant_find_email:
+                title: Estou tendo dificuldade em encontrar o email de confirmação
+                body: Se você está tendo dificuldades em encontrar o email de confirmação, por favor verifique se ele não se encontra na caixa de spam ou lixo eletrônico do seu email.
+                change_email:
+                    body: Se você tem certeza de que o email não foi recebido, é possível que seu endereço esteja com erro de digitação. Verifique e, se necessário, altere o email no campo abaixo.
+                    submit:
+                        label: Se seu email estava incorreto, corrija-o e clique no botão a seguir.
+                        button: Trocar Email
+tasks.fill_email:
+    title: Informe um endereço de Email
+    body: O serviço usado para criar sua conta, %service%, não nos enviou seu endereço de email. Por favor, digite seu endereço a seguir para continuar.
+duplicate_email:
+    title: Esse email já está sendo usado
+    body: Você tentou cadastrar-se utilizando um email que já está associado a uma conta existente.
+    tip: Se o que você deseja é vincular um serviço à sua conta, é necessário autenticar-se nessa conta para só então fazer a vinculação.
+    button.login: Acessar sua conta
+contact:
+    title: Contato
+    body: Para obter suporte técnico relacionado ao Login Cidadão por favor preencha o formulário a seguir descrevendo o problema que você está enfrentando.
+    form:
+        name:
+            label: Nome
+            placeholder: Digite seu nome
+        email:
+            label: Email
+            placeholder: Digite seu email
+        message:
+            label: Mensagem
+            placeholder: Descreva o problema técnico que você está tendo.
+        submit: Enviar
+profile:
+    title: Perfil
+    picture:
+        change: Alterar
+        upload_another: Upload another picture
+        use_facebook: Usar sua foto do Facebook
+        change_to:
+            template: Sua foto de perfil será trocada para <strong></strong>
+            facebook: Sua foto de perfil do Facebook será usada.
+    personal_info:
+        title: Informações Pessoais
+    contact_info:
+        title: Informações de Contato
+    connections:
+        title: Redes Sociais e outras conexões
+        connect:
+            facebook: Conectar usando Facebook
+            twitter: Conectar usando Twitter
+            google: Conectar usando Google
+        disconnect:
+            confirm:
+                template: Tem certeza que deseja desvincular sua conta do <strong class="social-network-name"></strong>?
+                yes: Sim
+                no: Não
+    submit: Salvar
+scope_details.handle.title: O que é isso?
+flash_message.close: Fechar
+city_selector.no_javascript: 'Os campos referentes à sua Naturalidade não estão disponíveis pois seu navegador não está com JavaScript ativado.'
+lc.admin.person.metadata:
+    title: "Metadados"
+    date_format: "d/m/Y H:i:s"
+    createdAt: "Data de Criação da Conta"
+    emailConfirmedAt: "Data de Confirmação de Email"
+    lastLogin: "Último Login"
+    hasCpf: "Cadastrou CPF?"
+    authorization.createdAt: "Data da Autorização"

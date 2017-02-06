@@ -13,6 +13,7 @@ namespace LoginCidadao\OpenIDBundle\Storage;
 use OAuth2\ServerBundle\Storage\AccessToken as BaseClass;
 use OAuth2\Storage\AccessTokenInterface;
 use Doctrine\ORM\EntityManager;
+use Ramsey\Uuid\Uuid;
 
 class AccessToken extends BaseClass implements AccessTokenInterface
 {
