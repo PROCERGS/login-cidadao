@@ -103,7 +103,8 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      *     requireLetters=true,
      *     requireNumbers=true,
      *     missingLettersMessage="person.validation.password.missingLetters",
-     *     missingNumbersMessage="person.validation.password.missingNumbers"
+     *     missingNumbersMessage="person.validation.password.missingNumbers",
+     *     groups={"Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration"}
      * )
      * @Assert\Length(
      *     min=8,
@@ -112,7 +113,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      *     minMessage="person.validation.password.length.min",
      *     groups={"Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration"}
      * )
-     * @Assert\NotBlank(message="person.validation.password.blank", groups={"Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration"})
+     * @Assert\NotBlank(message="person.validation.password.not_blank", groups={"Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration"})
      */
     protected $plainPassword;
 
@@ -130,6 +131,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Groups({"email"})
      * @JMS\Since("1.0")
      * @Assert\Email(strict=true, groups={"Profile", "LoginCidadaoProfile", "Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration", "LoginCidadaoEmailForm"})
+     * @Assert\NotBlank(message="person.validation.email.not_blank", groups={"Profile", "LoginCidadaoProfile", "Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration", "LoginCidadaoEmailForm"})
      */
     protected $email;
 
@@ -454,6 +456,8 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     public function setBirthdate($birthdate)
     {
         $this->birthdate = $birthdate;
+
+        return $this;
     }
 
     public function getMobile()
@@ -473,6 +477,8 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
             }
         }
         $this->mobile = $mobile;
+
+        return $this;
     }
 
     public function addAuthorization(Authorization $authorization)
