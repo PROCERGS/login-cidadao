@@ -24,7 +24,8 @@ organização. Além disso, por se tratar de softwares mantidos por terceiros,
 os passos necessários para sua instalação podem variar com o tempo ou com
 a versão escolhida.
 
-Portanto, você deve providenciar a instalação dos seguintes componentes:
+Portanto, você deve providenciar a instalação dos seguintes componentes
+**atualizados**:
 
   * **Linux ou Mac OS X**: o Login Cidadão suporta oficialmente apenas
 Linux e, consequentemente, Mac. Você provavelmente conseguirá instalar em
