@@ -30,7 +30,7 @@ Permissões de acesso por IP
   - **dev_allowed**: IPs autorizados a acessar em modo desenvolvimento
   (`/app_dev.php`);
   
-  - **allowed_monitores**: IPs autorizados a acessar os endpoints de monitoria;
+  - **allowed_monitors**: IPs autorizados a acessar os endpoints de monitoria;
 
 Memcached e Sessões
 -------------------
