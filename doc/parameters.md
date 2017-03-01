@@ -105,8 +105,8 @@ Segurança
 Modo de Desenvolvimento
 -----------------------
 
-  - **web_profiler_toolbar**: defines whether or not the developers' toolbar
-  should be displayed when accessing in the development mode;
+  - **web_profiler_toolbar**: determina se a dev toolbar deve ser exibida no modo de
+  desenvolvimento;
 
 Login com Serviços de Terceiros
 -------------------------------
