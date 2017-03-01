@@ -337,10 +337,55 @@ ao Login Cidadão, você precisará criar o arquivo `logincidadao.conf` no diret
 **Importante:** nesse exemplo temos configurações específicas para permitir a 
 emissão de certificados HTTPS usando **Let's Encrypt**. Caso você não pretenda 
 utilizar esse serviço, basta remover ou alterar os trechos referentes ao
-Let's Encrypt.
+*Let's Encrypt* e executar os passos requeridos por seu provedor de certificados.
+
+**Importante:** caso queira utilizar *Let's Encrypt* e essa seja a primeira emissão
+de certificado para o domínio desejado, você precisará comentar as opções
+`ssl_certificate` e `ssl_certificate_key`, caso contrário não será possível
+reiniciar o `nginx` haja visto que os certificados ali informados ainda não existem.
+
+Após modificar esse arquivo de configuração de acordo com seu ambiente e reiniciar
+o `nginx` será a hora de configurar o Let's Encrypt ou seu certificado HTTPS obtido
+de outra forma.
+
+### Utilizando Let's Encrypt
+
+Para realizar a instalação de um certificado HTTPS *Let's Encrypt* pela primeira
+vez, você deverá comentar as opções `ssl_certificate` e `ssl_certificate_key` em
+seu `logincidadao.conf` que criamos na etapa anterior. Depois de comentar as linhas
+citadas, reinicie o `nginx` de acordo com seu sistema operacional.
+
+Agora basta seguir as instruções de utilização do [Certbot](https://certbot.eff.org/),
+lembrando de informar que você está utilizando `nginx` e seu sistema operacional
+escolhido. A documentação do *Certbot* irá lhe guiar na instalação do Certbot
+bem como na instalação do seu certificado HTTPS. A forma de instalação a ser usada
+deve ser *webroot* e você deve informar o diretório `/var/letsencrypt`.
+
+Por exemplo, caso queira usar o dominio `meu.logincidadao.org`, o comando será da
+seguinte forma:
+
+    certbot certonly --webroot -w /var/letsencrypt -d meu.logincidadao.org
+
+Caso tenha configurado tudo corretamente você encontrará os certificados nos
+diretórios informados pelo *certbot*. Agora basta descomentar as linhas
+`ssl_certificate` e `ssl_certificate_key` e reiniciar o *nginx* para concluir a
+instalação.
+
+#### Renovação Automática
+
+Como os certificados emitidos pelo serviço *Let's Encrypt* tem validade de apenas
+90 dias, é recomendado que se configure a renovação automática dos certificados.
+
+A configuração é bastante simples, você só precisa adicionar a seguinte linha
+em seu *crontab*:
+
+    0 14 * * * certbot renew --post-hook "systemctl reload nginx"
+
+**Importante:** observe que há um comando "post-hook", que é executado depois da
+renovação. Caso em seu sistema operacional o comando para recarregar as
+configurações do *nginx* seja diferente, lembre-se de alterar de acordo.
 
 ## Pós-Instalação
 
 Agora que você já deve ter uma instância funcional do Login Cidadão, você
-provavelmente deve estar se perguntando qual o procedimento para
-[definir um usuário administrador](?doc=cookbook/admin_user).
+provavelmente deseja [definir um usuário administrador](?doc=cookbook/admin_user).
