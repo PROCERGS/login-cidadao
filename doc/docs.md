@@ -47,20 +47,20 @@ para receber as requisições HTTPS, você precisará de um desses dois
 softwares. Recomendamos o [**nginx**](https://nginx.org/) por apresentar
 boa performance;
 
-  * **PHP 5** ou **7**: a forma mais simples de instalar o Login Cidadão é utilizando
-PHP 5. Caso você queira utilizar PHP 7 serão necessárias algumas modificações
-uma vez que certas extensões tais como a `memcache` (sem um 'd' no final)
-não estão disponíveis;
+  * **PHP 5** ou **7**: a forma mais simples de instalar o Login Cidadão é
+utilizando PHP 5. Caso você queira utilizar PHP 7 serão necessárias algumas
+modificações uma vez que certas extensões tais como a `memcache` (sem um 'd'
+no final) não estão disponíveis;
 
   * **PHP Extensions**: além do PHP, serão necessárias algumas extensões
 para o correto funcionamento do Login Cidadão, tais como `curl`,
 `intl`, `memcache`. Note que a disponibilidade de algumas extensões pode
 variar de acordo com a versão do PHP que você estiver usando;
 
-  * [**php-fpm**](https://php-fpm.org/): esse será o componente responsável por processar as
-requisições PHP. Caso você escolha usar *Apache*, é possível fazer com que
-ele processe também as requisições PHP sem a necessidade de um componente
-adicional;
+  * [**php-fpm**](https://php-fpm.org/): esse será o componente responsável
+por processar as requisições PHP. Caso você escolha usar *Apache*, é possível
+fazer com que ele processe também as requisições PHP sem a necessidade de um
+componente adicional;
 
   * [**PostgreSQL**](https://www.postgresql.org/) ou
 [**MySQL**](https://www.mysql.com/): as informações do Login Cidadão podem
@@ -176,7 +176,8 @@ que está faltando a `ext-curl` você pode solicitar a instalação do pacote
 Após a conclusão da instalação das dependências, o composer executará
 scripts de pós-instalação do Symfony onde serão solicitados os parâmetros
 do seu ambiente de forma iterativa. Você pode consultar a descrição dos
-parâmetros no arquivo `app/config/parameters.yml.dist`.
+parâmetros no arquivo `app/config/parameters.yml.dist` ou, em maiores detalhes,
+na [documentação específica](parameters.md).
 
 Os parâmetros da sua instância serão salvos no arquivo `app/config/parameters.yml`,
 onde você pode alterar posteriormente caso queira fazer algum ajuste.
@@ -214,8 +215,9 @@ você precisa ter um software para recebê-las e esse será o papel do `php-fpm`
 Começaremos criando o arquivo `logincidadao.conf` dentro do diretório
 `/etc/php5/fpm/pool.d`.
 
-**Nota:** Caso esse diretório não exista no seu sistema operacional você deve consultar
-a documentação específica para seu sistema para definir o caminho correto.
+**Nota:** Caso esse diretório não exista no seu sistema operacional você deve
+consultar a documentação específica para seu sistema para definir o caminho
+correto.
 
 Abra o arquivo recém criado (`/etc/php5/fpm/pool.d/logincidadao.conf`) no seu
 editor preferido e deixe-o conforme o exemplo:
