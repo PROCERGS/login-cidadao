@@ -71,13 +71,13 @@ os caches sejam limpos.
 O cache de aplicação geralmente é limpo na execução do comando de deploy. Caso
 ocorra algum problema, você pode fazer a limpeza manualmente, bastando remover
 as pastas `app/cache/dev` e `app/cache/prod`
- 
+
     $ rm -rf app/cache{dev,prod}
-     
+
 #### Cache no Memcached
 
-Caso você tenha problemas relacionados à Entidades do Doctrine ou outros
-problemas relacionados a banco de dados após uma atualização, é provável que
+Caso você tenha problemas relacionados a Entidades do Doctrine ou outras
+dificuldades relacionadas a banco de dados após uma atualização, é provável que
 a limpeza do cache de metadados do Doctrine tenha falhado. Esse é um problema
 frequente em sistemas CentOS e RHEL 7 e a única forma conhecida de contorná-lo
 é limpando totalmente o cache do `memcached` de forma manual.
@@ -93,7 +93,7 @@ invalidados.
 
 Caso prefira, você pode simplesmente reiniciar o processo do memcached para obter
 o mesmo efeito. Para saber como reiniciar um serviço consulte a documentação
-específica do seu sistema operacional.
+específica do `memcached` para seu sistema operacional.
 
 Alterando Configurações
 -----------------------
