@@ -11,14 +11,17 @@ person.validation:
     name.length:
         min: This name is too short.
         max: This name is too long.
-    email.length:
-        max: This email is too long.
+    email:
+        length:
+            max: This email is too long.
+        not_blank: Type an email address.
     password:
         length:
             min: The password must have at least {{ limit }} characters
             max: The password must have at most {{ limit }} characters
         missingNumbers: Your password must include at least one number.
         missingLetters: Your password must include at least one letter.
+        not_blank: Please type a password.
     cpf.already_used: This CPF is already in use.
     mobile:
         9thDigit: Brazilian cellphones need the 9th digit
