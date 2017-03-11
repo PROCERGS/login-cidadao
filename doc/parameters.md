@@ -30,7 +30,7 @@ Permissões de acesso por IP
   - **dev_allowed**: IPs autorizados a acessar em modo desenvolvimento
   (`/app_dev.php`);
   
-  - **allowed_monitores**: IPs autorizados a acessar os endpoints de monitoria;
+  - **allowed_monitors**: IPs autorizados a acessar os endpoints de monitoria;
 
 Memcached e Sessões
 -------------------
@@ -105,8 +105,8 @@ Segurança
 Modo de Desenvolvimento
 -----------------------
 
-  - **web_profiler_toolbar**: defines whether or not the developers' toolbar
-  should be displayed when accessing in the development mode;
+  - **web_profiler_toolbar**: determina se a dev toolbar deve ser exibida no modo de
+  desenvolvimento;
 
 Login com Serviços de Terceiros
 -------------------------------
