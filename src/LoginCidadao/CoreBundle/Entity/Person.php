@@ -501,8 +501,17 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     /**
      * @return Authorization[]
      */
-    public function getAuthorizations()
+    public function getAuthorizations($uidToIgnore = null)
     {
+        if ($uidToIgnore !== null) {
+            return array_filter(
+                $this->authorizations->toArray(),
+                function (Authorization $authorization) use ($uidToIgnore) {
+                    return $authorization->getClient()->getUid() != $uidToIgnore;
+                }
+            );
+        }
+
         return $this->authorizations;
     }
 
