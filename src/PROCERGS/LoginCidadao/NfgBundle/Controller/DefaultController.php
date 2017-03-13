@@ -45,7 +45,7 @@ class DefaultController extends Controller
         if ($this->getUser() instanceof PersonInterface) {
             /** @var MeuRSHelper $meuRSHelper */
             $meuRSHelper = $this->get('meurs.helper');
-            $personMeuRS = $meuRSHelper->getPersonMeuRS($this->getUser());
+            $personMeuRS = $meuRSHelper->getPersonMeuRS($this->getUser(), true);
         } else {
             $personMeuRS = new PersonMeuRS();
         }
