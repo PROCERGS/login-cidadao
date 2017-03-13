@@ -393,11 +393,15 @@ class ClientMetadata
     {
         $owners = [];
         if ($this->getClient()) {
-            $owners = array_map(function (PersonInterface $owner) {
-                return $owner->getEmail();
-            }, $this->getClient()->getOwners()->toArray());
+            $owners = array_map(
+                function (PersonInterface $owner) {
+                    return $owner->getEmail();
+                },
+                $this->getClient()->getOwners()->toArray()
+            );
         }
         $contacts = is_array($this->contacts) ? $this->contacts : [];
+
         return array_unique(array_merge($contacts, $owners));
     }
 
@@ -892,7 +896,12 @@ class ClientMetadata
      */
     public function getPostLogoutRedirectUris()
     {
-        return $this->post_logout_redirect_uris;
+        return array_map(
+            function ($value) {
+                return self::canonicalizeUri($value);
+            },
+            $this->post_logout_redirect_uris
+        );
     }
 
     /**
@@ -904,5 +913,35 @@ class ClientMetadata
         $this->post_logout_redirect_uris = $post_logout_redirect_uris;
 
         return $this;
+    }
+
+    /**
+     * Add trailing slashes
+     */
+    public static function canonicalizeUri($uri)
+    {
+        $parsed = parse_url($uri);
+        if (array_key_exists('path', $parsed) === false) {
+            $parsed['path'] = '/';
+        }
+        $unparsed = self::unparseUrl($parsed);
+
+        return $unparsed;
+    }
+
+    private static function unparseUrl($parsed_url)
+    {
+        $scheme = isset($parsed_url['scheme']) ? $parsed_url['scheme'].'://' : '';
+        $host = isset($parsed_url['host']) ? $parsed_url['host'] : '';
+        $port = isset($parsed_url['port']) ? ':'.$parsed_url['port'] : '';
+        $user = isset($parsed_url['user']) ? $parsed_url['user'] : '';
+        $pass = isset($parsed_url['pass']) ? ':'.$parsed_url['pass'] : '';
+        $pass = ($user || $pass) ? "$pass@" : '';
+        $path = isset($parsed_url['path']) ? $parsed_url['path'] : '';
+        $query = isset($parsed_url['query']) ? '?'.$parsed_url['query'] : '';
+        $fragment = isset($parsed_url['fragment']) ? '#'.$parsed_url['fragment']
+            : '';
+
+        return "$scheme$user$pass$host$port$path$query$fragment";
     }
 }

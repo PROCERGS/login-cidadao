@@ -13,6 +13,7 @@ namespace LoginCidadao\OpenIDBundle\Controller;
 use LoginCidadao\CoreBundle\Helper\SecurityHelper;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadataRepository;
 use LoginCidadao\OpenIDBundle\Exception\IdTokenSubMismatchException;
 use LoginCidadao\OpenIDBundle\Exception\IdTokenValidationException;
@@ -273,6 +274,8 @@ class SessionManagementController extends Controller
         if ($postLogoutUri === null) {
             return false;
         }
+
+        $postLogoutUri = ClientMetadata::canonicalizeUri($postLogoutUri);
 
         if ($idToken === null) {
             return count($this->findClientByPostLogoutRedirectUri($postLogoutUri)) > 0;
