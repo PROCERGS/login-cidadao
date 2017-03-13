@@ -397,7 +397,8 @@ class ClientMetadata
                 return $owner->getEmail();
             }, $this->getClient()->getOwners()->toArray());
         }
-        return array_unique(array_merge($this->contacts, $owners));
+        $contacts = is_array($this->contacts) ? $this->contacts : [];
+        return array_unique(array_merge($contacts, $owners));
     }
 
     public function setContacts($contacts)
