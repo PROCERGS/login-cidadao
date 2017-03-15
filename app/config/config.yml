@@ -38,6 +38,7 @@ twig:
         app_router: "@router"
         postalcode_search_link: 
         third_party_login: %third_party_login%
+        password_hint: "@password_hint"
 
 # Assetic Configuration
 assetic:
