@@ -930,3 +930,20 @@ dashboard:
     logs:
         login.no_entries: Ainda não há um histórico de logins.
         activity.no_entries: Ainda não foi registrada nenhuma atividade.
+password_hint:
+    and: e
+    requirements:
+        letters: letras
+        numbers: números
+        special: caracteres especiais
+    range:
+        with_reqs: Senha de %min% a %max% %reqs%.
+        no_reqs: Senha de %min% a %max% caracteres.
+    min:
+        with_reqs: Senha de, no mínimo, %min% %reqs%.
+        no_reqs: Senha de, no mínimo, %min% caracteres.
+    max:
+        with_reqs: Senha de, no máximo, %max% %reqs%.
+        no_reqs: Senha de, no máximo, %max% caracteres.
+    no_limit:
+        with_reqs: Senha com %reqs%.

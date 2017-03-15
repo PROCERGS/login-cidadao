@@ -522,3 +522,20 @@ dashboard:
     logs:
         login.no_entries: No login history yet.
         activity.no_entries: No activities were registered yet.
+password_hint:
+    and: and
+    requirements:
+        letters: letters
+        numbers: numbers
+        special: special characters
+    range:
+        with_reqs: Password with %min% to %max% %reqs%.
+        no_reqs: Password with %min% to %max% characters.
+    min:
+        with_reqs: Password with at least %min% %reqs%.
+        no_reqs: Password with at least %min% characters.
+    max:
+        with_reqs: Password with at most %max% %reqs%.
+        no_reqs: Password with at most %max% characters.
+    no_limit:
+        with_reqs: Password with %reqs%.
