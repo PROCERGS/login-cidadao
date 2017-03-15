@@ -463,3 +463,10 @@ services:
             - "@fos_user.user_manager"
             - "@event_dispatcher"
             - "@service_container"
+
+    password_hint:
+        class: LoginCidadao\CoreBundle\Service\PasswordHintService
+        arguments:
+            - "@validator"
+            - "@translator"
+            - "%user.class%"
