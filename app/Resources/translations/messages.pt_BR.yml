@@ -1,0 +1,4 @@
+password_hint:
+    range:
+        with_reqs: Senha de %min% ou mais %reqs%.
+        no_reqs: Senha de %min% ou mais caracteres.
