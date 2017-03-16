@@ -635,7 +635,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $nfgProfile = $this->getNfgProfile();
         $soapService->expects($this->atLeastOnce())->method('getUserInfo')->willReturn($nfgProfile);
 
-        $meuRSHelper = $this->getMeuRSHelper($nfgProfile->getCpf(), null);
+        $meuRSHelper = $this->getMeuRSHelper();
         $meuRSHelper->expects($this->atLeastOnce())->method('getPersonByEmail')->willReturn(new Person());
 
         $nfg = $this->getNfgService(

@@ -12,6 +12,11 @@
                 <div class="panel-heading">{{ 'activity_log.page.title' | trans }}</div>
                 <div class="panel-body">
                     <ul class="list-group">
+                        {% if logs | length == 0 %}
+                            <div class="alert alert-warning" role="alert">
+                                {{ 'dashboard.logs.activity.no_entries' | trans }}
+                            </div>
+                        {% endif %}
                         {% for log in logs %}
                             <li class="list-group-item">
                                 {{ include('LoginCidadaoCoreBundle:ActivityLog:entry.fragment.html.twig', { 'log': log }) }}

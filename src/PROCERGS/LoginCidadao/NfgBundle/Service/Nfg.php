@@ -408,6 +408,11 @@ class Nfg implements LoggerAwareInterface
      */
     private function register(Request $request, PersonMeuRS $personMeuRS, NfgProfile $nfgProfile)
     {
+        $email = $this->emailCanonicalizer->canonicalize($nfgProfile->getEmail());
+        if ($this->meuRSHelper->getPersonByEmail($email, true) !== null) {
+            throw new EmailInUseException();
+        }
+
         $sanitizedCpf = $this->sanitizeCpf($nfgProfile->getCpf());
         $otherPersonMeuRS = $this->meuRSHelper->getPersonByCpf($sanitizedCpf, true);
 
@@ -426,11 +431,6 @@ class Nfg implements LoggerAwareInterface
 
         if ($nfgProfile->getEmail() === null) {
             throw new MissingRequiredInformationException('Email was not sent by NFG.');
-        }
-
-        $email = $this->emailCanonicalizer->canonicalize($nfgProfile->getEmail());
-        if ($this->meuRSHelper->getPersonByEmail($email) !== null) {
-            throw new EmailInUseException();
         }
 
         $names = explode(' ', $nfgProfile->getName());
