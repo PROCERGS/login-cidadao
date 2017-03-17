@@ -39,6 +39,7 @@ twig:
         postalcode_search_link: 
         third_party_login: %third_party_login%
         password_hint: "@password_hint"
+        intl_tel_input_preferred_countries: ["br"]
 
 # Assetic Configuration
 assetic:

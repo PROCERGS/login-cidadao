@@ -219,6 +219,7 @@
         $('.birthdate').mask('00/00/0000', {'translation': {0: {pattern: /[0-9*]/}}});
         {% javascripts '@intl_tel_input_utils_js' filter='uglifyjs2' %}
         var intlTelInputUtilsScriptUrl = '{{ asset_url }}';
+        var intlTelInputPreferredCountries = {{ intl_tel_input_preferred_countries | json_encode | raw }};
         {% endjavascripts %}
 
         $(function () {

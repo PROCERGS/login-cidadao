@@ -104,6 +104,7 @@
     <script>
         {% javascripts '@intl_tel_input_utils_js' filter='uglifyjs2' %}
         var intlTelInputUtilsScriptUrl = '{{ asset_url }}';
+        var intlTelInputPreferredCountries = {{ intl_tel_input_preferred_countries | json_encode | raw }};
         {% endjavascripts %}
 
         $(document).ready(function () {

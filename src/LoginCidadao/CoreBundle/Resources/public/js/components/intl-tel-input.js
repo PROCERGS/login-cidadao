@@ -9,7 +9,7 @@
 
 $(document).ready(function () {
     $(".intl-tel").intlTelInput({
-        preferredCountries: ["br"],
+        preferredCountries: intlTelInputPreferredCountries,
         utilsScript: intlTelInputUtilsScriptUrl
     });
 
