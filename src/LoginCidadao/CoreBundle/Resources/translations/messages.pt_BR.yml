@@ -123,7 +123,6 @@ Actions: Ações
 Details: Detalhes
 Edit: Editar
 'No services registered.': 'Nenhum Serviço registrado'
-'There are no active services yet.': 'Você ainda não possui nenhum serviço ativo.'
 Name: Nome
 Description: Descrição
 'Redirect uris': 'URIs para Redirectionamento'
@@ -610,15 +609,12 @@ Back to login: 'Voltar parar o login'
 birthdate.format: 'd/m/Y'
 Activity Log: Registro de Atividade
 Badges: Medalhas
-You don't have any active service.: Você não tem nenhum serviço ativo.
-Check the services available: Conheça os serviços disponíveis
 Dashboard: 'Início'
 badges.list.title: 'O que são as medalhas?'
 badges.list.description: 'Medalhas são os indicadores de validações que sua identidade virtual possui. Elas permitem que os demais sistemas integrados ao Login Cidadão possam melhorar a sua experiência ao utilizar os serviços ofertados.'
 'Information viewed at %date%': 'Visualizou informações em %date%'
 'Information changed at %date%': 'Alterou informações em %date%'
 'Back to services': 'Voltar para os serviços'
-You don't have any activity log.: Você ainda não possui nenhum registro de atividade.
 scope.logout: 'Permitir deslogar'
 'Search it!': 'Pesquise aqui!'
 'Don''t know your postal code?': 'Não sabe seu código postal?'
@@ -926,3 +922,28 @@ lc.admin.person.metadata:
     lastLogin: "Último Login"
     hasCpf: "Cadastrou CPF?"
     authorization.createdAt: "Data da Autorização"
+dashboard:
+    active_services:
+        no_entries: Você ainda não ativou nenhum serviço.
+        check_available: Conheça os serviços disponíveis
+        more: Veja todos seus serviços ativos
+    logs:
+        login.no_entries: Ainda não há um histórico de logins.
+        activity.no_entries: Ainda não foi registrada nenhuma atividade.
+password_hint:
+    and: e
+    requirements:
+        letters: letras
+        numbers: números
+        special: caracteres especiais
+    range:
+        with_reqs: Senha de %min% a %max% %reqs%.
+        no_reqs: Senha de %min% a %max% caracteres.
+    min:
+        with_reqs: Senha de, no mínimo, %min% %reqs%.
+        no_reqs: Senha de, no mínimo, %min% caracteres.
+    max:
+        with_reqs: Senha de, no máximo, %max% %reqs%.
+        no_reqs: Senha de, no máximo, %max% caracteres.
+    no_limit:
+        with_reqs: Senha com %reqs%.
