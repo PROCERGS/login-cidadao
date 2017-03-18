@@ -79,8 +79,7 @@ Ao fim da execução do script, assumindo que nada de errado ocorra, você dever
 ter uma instalação básica do Login Cidadão com:
 
  - Um arquivo output.log contendo o resultado da execução;
- - Um certificado HTTPS válido para o domínio informado;
- - Um *cronjob* que fará a renovação automática do certificado obtido;
+ - Um certificado HTTPS válido para o domínio informado com renovação automática;
  - Um servidor *Postfix* para envio de emails;
  - Um servidor *PostgreSQL* com o banco de dados do Login Cidadão configurado;
  - Um servidor HTTPS *nginx* atuando como proxy reverso;
