@@ -62,7 +62,6 @@ curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - >>output.log 2>&1
 apt-get install -y curl gettext-base git nodejs memcached >>output.log 2>&1
 apt-get install -y nginx >>output.log 2>&1
 apt-get install -y postgresql postgresql-client >>output.log 2>&1
-#apt-get install -y exim4 mailutils >>output.log 2>&1
 apt-get install -y php5 php5-cli php5-fpm php5-curl php5-intl php5-pgsql php5-memcache >>output.log 2>&1
 apt-get install -y certbot -t jessie-backports >>output.log 2>&1
 
