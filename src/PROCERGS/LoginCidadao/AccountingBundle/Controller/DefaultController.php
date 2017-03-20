@@ -62,10 +62,11 @@ class DefaultController extends Controller
                 continue;
             }
             foreach ($procergsInitials as $initials) {
-                if (array_key_exists($initials, $summary)) {
-                    $summary[$initials] += $totalUsage;
+                $summary[$initials]['owner'] = implode(' ', $client['procergs_owner']);
+                if (array_key_exists('usage', $summary[$initials])) {
+                    $summary[$initials]['usage'] += $totalUsage;
                 } else {
-                    $summary[$initials] = $totalUsage;
+                    $summary[$initials]['usage'] = $totalUsage;
                 }
             }
         }
@@ -79,14 +80,14 @@ class DefaultController extends Controller
             $today->format('dmY'),
         ];
         $body = [];
-        foreach ($summary as $initials => $usage) {
+        foreach ($summary as $initials => $sysInfo) {
             $body[] = implode(
                 ';',
                 [
                     '2',
-                    '',
+                    $sysInfo['owner'],
                     $initials,
-                    $usage,
+                    $sysInfo['usage'],
                 ]
             );
         }

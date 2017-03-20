@@ -67,6 +67,7 @@ class AdminController extends Controller
         $client = $this->getClient($clientId);
         $link = $this->getProcergsLink($client);
         $initials = $systemsRegistry->getSystemInitials($client);
+        $owners = $systemsRegistry->getSystemOwners($client);
 
         $form = $this->createForm('PROCERGS\LoginCidadao\AccountingBundle\Form\ProcergsLinkType', $link);
         $form->handleRequest($request);
@@ -82,6 +83,7 @@ class AdminController extends Controller
             'client' => $client,
             'link' => $link,
             'initials' => $initials,
+            'owners' => $owners,
             'form' => $form->createView(),
         ];
     }

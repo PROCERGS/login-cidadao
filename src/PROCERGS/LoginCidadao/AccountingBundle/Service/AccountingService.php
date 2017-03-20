@@ -125,6 +125,7 @@ class AccountingService
             }
         } else {
             $initials = $this->systemsRegistry->getSystemInitials($client);
+            $owners = $this->systemsRegistry->getSystemOwners($client);
             if (array_key_exists($clientId, $linked)) {
                 $systemType = $linked[$clientId]->getSystemType();
             } else {
@@ -138,6 +139,7 @@ class AccountingService
             $report[$clientId] = [
                 'client' => $client,
                 'procergs_initials' => $initials,
+                'procergs_owner' => $owners,
                 'system_type' => $systemType,
                 'access_tokens' => $accessTokens ?: 0,
                 'api_usage' => $apiUsage ?: 0,
