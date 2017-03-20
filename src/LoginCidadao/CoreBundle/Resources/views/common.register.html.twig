@@ -3,7 +3,7 @@
 
 {% if actionUrl is not defined %}
     {% set actionUrl = 'fos_user_registration_register' %}
-{% endif%}
+{% endif %}
 
 {{ form_start(form, {'action': path(actionUrl), 'attr': {'role':'form', 'class':'fos_user_registration_register clearfix'}}) }}
 
@@ -29,9 +29,22 @@
         {{ form_row(form.cpf) }}
     {% endif %}
 
+    {{ form_row(form.email) }}
+
+    <div class="form-group">
+        {{ form_label(form.plainPassword.first) }}
+        <em class="help-block">{{ password_hint.hintString }}</em>
+        {{ form_widget(form.plainPassword.first) }}
+        {{ form_errors(form.plainPassword.first) }}
+    </div>
+
+        {{ form_row(form.plainPassword.second) }}
+
     {{ form_widget(form) }}
 
-    <p class='terms'>{% trans with { '%linkTerms%': path("lc_privacy")} %}By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.{% endtrans %}</p>
+    <p class='terms'>
+        {% trans with { '%linkTerms%': path("lc_privacy")} %}By clicking on create account, you agree to our <a href="%linkTerms%">Privacy and Terms of Service</a>, including our Use of Cookies.{% endtrans %}
+    </p>
 
     <button class="btn btn-block btn-success" type="submit">{{ 'registration.submit'|trans }}</button>
 </div>

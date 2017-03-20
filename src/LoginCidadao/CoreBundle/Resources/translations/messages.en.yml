@@ -114,7 +114,6 @@ Secret : Private Key (Secret)
 'Secret/Private Key': 'Secret/Private Key'
 'Public Id': 'Public Id'
 Active: Active
-'There are no active services yet.': 'There are no active services yet.'
 Inactive: Inactive
 'Suggest a Service': 'Suggest a Service'
 Suggestion: Suggestion
@@ -213,7 +212,6 @@ FEATURE_2FACTOR_AUTH: Two Factor Authentication Feature
 birthdate.format: 'm/d/Y'
 Activity Log: Activity Log
 Badges: Badges
-You don't have any activity log.: You don't have any activity log.
 'Select a state below:': 'Select a state below:'
 Firstname: First name
 Surname: Surname
@@ -537,3 +535,27 @@ lc.admin.person.metadata:
     lastLogin: "Last Login"
     hasCpf: "Does this person has a CPF/Taxpayer ID?"
     authorization.createdAt: "Authorization Date"
+dashboard:
+    active_services:
+        no_entries: You didn't connect to any service.
+        check_available: Check the services available
+    logs:
+        login.no_entries: No login history yet.
+        activity.no_entries: No activities were registered yet.
+password_hint:
+    and: and
+    requirements:
+        letters: letters
+        numbers: numbers
+        special: special characters
+    range:
+        with_reqs: Password with %min% to %max% %reqs%.
+        no_reqs: Password with %min% to %max% characters.
+    min:
+        with_reqs: Password with at least %min% %reqs%.
+        no_reqs: Password with at least %min% characters.
+    max:
+        with_reqs: Password with at most %max% %reqs%.
+        no_reqs: Password with at most %max% characters.
+    no_limit:
+        with_reqs: Password with %reqs%.

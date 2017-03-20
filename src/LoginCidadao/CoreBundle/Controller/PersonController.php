@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use FOS\UserBundle\FOSUserEvents;
@@ -141,6 +142,7 @@ class PersonController extends Controller
 
     /**
      * @Route("/profile/change-username", name="lc_update_username")
+     * @Security("has_role('FEATURE_EDIT_USERNAME')")
      * @Template()
      */
     public function updateUsernameAction(Request $request)
