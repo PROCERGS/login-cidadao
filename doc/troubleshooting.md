@@ -121,3 +121,18 @@ comandos que você deverá digitar):
     OK
     > quit
     Connection closed by foreign host.
+
+Erro no fluxo de Autorização (`redirect_uri_mismatch`)
+------------------------------------------------------
+
+    {
+        error: "redirect_uri_mismatch",
+        error_description: "The redirect URI provided is missing or does not match",
+        error_uri: "#section-3.1.2"
+    }
+
+Caso você encontre o erro identificado como `redirect_uri_mismatch` durante o
+processo de autorização de algum serviço, isso significa que a requisição de
+autorização está sendo gerada com uma URI errada ou não cadastrada para o
+serviço em questão. Acesse o menu do Desenvolvedor ou do Administrador e ajuste
+as configurações do serviço para incluir a URI desejada.
