@@ -5,7 +5,7 @@ A seguir demonstraremos os passos para instalação do Login Cidadão em ambient
 *Debian* utilizando *nginx*, *Postgres*, *Postfix* e *Let's Encrypt*. Recomendamos
 que você não se baseie apenas nos passos apresentados aqui no caso de um servidor
 de produção. Para servidores de produção ou para ambientes diferentes do exposto,
-consulte as [instruções completas](docs.md) com explicações mais amplas.
+consulte as [instruções completas](index.md) com explicações mais amplas.
 
 Antes de começar
 ----------------
