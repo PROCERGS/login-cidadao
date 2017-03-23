@@ -31,7 +31,7 @@ instalação em Debian](cookbook/install_debian.md) esse usuário é `logincidad
     sudo su logincidadao
 
 Além de estar utilizando o usuário correto, para que os comandos funcionem
-corretamente você deve estar na raiz do projeto que, no caso de exemplo de
+corretamente você deve estar na raiz do projeto que, no caso do exemplo de
 instalação em Debian, localiza-se em `/home/logincidadao/login-cidadao`.
 
     cd /home/logincidadao/login-cidadao
