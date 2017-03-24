@@ -8,7 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace LoginCidadao\CoreBundle\Model;
+namespace LoginCidadao\PhoneVerificationBundle\Model;
+
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 
 interface PhoneVerificationInterface
 {
@@ -47,4 +49,9 @@ interface PhoneVerificationInterface
      * @return PhoneVerificationInterface
      */
     public function setVerifiedAt($verifiedAt);
+
+    /**
+     * @return bool
+     */
+    public function isVerified();
 }

@@ -402,6 +402,14 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      */
     protected $passwordEncoderName;
 
+    /**
+     * @JMS\Expose
+     * @JMS\Groups({"public_profile"})
+     * @JMS\SerializedName("phone_number_verified")
+     * @var bool
+     */
+    protected $phoneNumberVerified = false;
+
     public function __construct()
     {
         parent::__construct();
@@ -1285,13 +1293,22 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     }
 
     /**
-     * @JMS\Groups({"mobile", "phone_number"})
-     * @JMS\VirtualProperty
-     * @JMS\SerializedName("phone_number_verified")
+     * @param bool $verified
+     * @return $this
+     */
+    public function setPhoneNumberVerified($verified = false)
+    {
+        $this->phoneNumberVerified = $verified;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
      */
     public function getPhoneNumberVerified()
     {
-        return false;
+        return $this->phoneNumberVerified;
     }
 
     public function getPasswordEncoderName()
