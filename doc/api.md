@@ -56,3 +56,18 @@ O endpoint de estatísticas públicas fornece os totais de usuários para cada
 serviço público tal qual o menu de estatísticas do Login Cidadão exibe para
 usuários autenticados, entretanto através desse endpoint os dados são fornecidos
 em JSON e dispensam autenticação.
+
+**Exemplo de Retorno:**
+
+    {
+        users_by_service: [
+            {
+                id: "public_client_id",
+                name: "Client Name",
+                uri: "https://client.address",
+                logo_uri: "https://client.address/logo.png",
+                users: 12345
+            }
+        ],
+        total_users: 12345
+    }
