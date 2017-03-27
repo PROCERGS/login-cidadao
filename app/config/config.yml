@@ -523,3 +523,7 @@ donato_path_well:
 
 login_cidadao_tos:
     use_tasks: true
+
+login_cidadao_phone_verification:
+    verification_code:
+        length: 6

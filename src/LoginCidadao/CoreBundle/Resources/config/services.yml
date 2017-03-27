@@ -470,7 +470,3 @@ services:
             - "@validator"
             - "@translator"
             - "%user.class%"
-
-    # LoginCidadao\CoreBundle\Service\AbstractPhoneVerificationService
-    lc.base_phone_verification_service:
-        abstract: true

@@ -8,19 +8,19 @@
  * file that was distributed with this source code.
  */
 
-namespace LoginCidadao\CoreBundle\EventListener;
+namespace LoginCidadao\PhoneVerificationBundle\Event;
 
 use JMS\Serializer\EventDispatcher\PreSerializeEvent;
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use LoginCidadao\PhoneVerificationBundle\Service\AbstractPhoneVerificationService;
+use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService;
 
-class PersonSerializeEventSubscriber implements EventSubscriberInterface
+class PersonSerializeEventListener implements EventSubscriberInterface
 {
-    /** @var AbstractPhoneVerificationService */
+    /** @var PhoneVerificationService */
     protected $phoneVerificationService;
 
-    public function setPhoneVerificationService(AbstractPhoneVerificationService $phoneVerificationService)
+    public function setPhoneVerificationService(PhoneVerificationService $phoneVerificationService)
     {
         $this->phoneVerificationService = $phoneVerificationService;
     }

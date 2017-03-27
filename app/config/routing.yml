@@ -90,6 +90,10 @@ lc_home:
     defaults: { _controller: FOSUserBundle:Security:login }
     path:   /
 
+lc_phone_verification:
+    resource: "@LoginCidadaoPhoneVerificationBundle/Resources/config/routing.yml"
+    prefix:   /
+
 # Audit
 simple_things_entity_audit:
     resource: "@SimpleThingsEntityAuditBundle/Resources/config/routing.yml"
