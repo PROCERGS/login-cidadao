@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Model;
 
+use libphonenumber\PhoneNumber;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 
 interface PhoneVerificationInterface
@@ -28,15 +29,15 @@ interface PhoneVerificationInterface
 
     /**
      * Get the phone being verified
-     * @return mixed
+     * @return PhoneNumber
      */
     public function getPhone();
 
     /**
-     * @param mixed $phone
+     * @param PhoneNumber $phone
      * @return PhoneVerificationInterface
      */
-    public function setPhone($phone);
+    public function setPhone(PhoneNumber $phone);
 
     /**
      * Get the date when the phone was validated
@@ -54,4 +55,18 @@ interface PhoneVerificationInterface
      * @return bool
      */
     public function isVerified();
+
+    /**
+     * Set verificationCode
+     *
+     * @param string $verificationCode
+     * @return PhoneVerificationInterface
+     */
+    public function setVerificationCode($verificationCode);
+
+    /**
+     * Get verificationCode
+     * @return string
+     */
+    public function getVerificationCode();
 }

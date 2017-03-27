@@ -1,0 +1,4 @@
+lc_core:
+    resource: "@LoginCidadaoPhoneVerificationBundle/Controller/"
+    type: annotation
+    prefix: /

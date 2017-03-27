@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Event;
 
+use libphonenumber\PhoneNumber;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use Symfony\Component\EventDispatcher\Event;
 
@@ -18,13 +19,18 @@ class PhoneChangedEvent extends Event
     /** @var PersonInterface */
     private $person;
 
+    /** @var PhoneNumber */
+    private $oldPhone;
+
     /**
      * PhoneChangedEvent constructor.
      * @param PersonInterface $person
+     * @param PhoneNumber $oldPhone
      */
-    public function __construct(PersonInterface $person)
+    public function __construct(PersonInterface $person, PhoneNumber $oldPhone)
     {
         $this->person = $person;
+        $this->oldPhone = $oldPhone;
     }
 
     /**
@@ -33,5 +39,10 @@ class PhoneChangedEvent extends Event
     public function getPerson()
     {
         return $this->person;
+    }
+
+    public function getOldPhone()
+    {
+        return $this->oldPhone;
     }
 }

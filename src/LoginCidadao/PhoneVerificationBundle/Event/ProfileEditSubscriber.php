@@ -69,7 +69,7 @@ class ProfileEditSubscriber implements EventSubscriberInterface
         }
 
         if ($this->originalPhone !== $person->getMobile()) {
-            $phoneChangedEvent = new PhoneChangedEvent($person);
+            $phoneChangedEvent = new PhoneChangedEvent($person, $this->originalPhone);
             $dispatcher->dispatch(PhoneVerificationEvents::PHONE_CHANGED, $phoneChangedEvent);
         }
     }

@@ -11,16 +11,48 @@
 namespace LoginCidadao\PhoneVerificationBundle\Event;
 
 
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberUtil;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
-use LoginCidadao\PhoneVerificationBundle\Service\AbstractPhoneVerificationService;
+use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class PhoneVerificationSubscriber implements EventSubscriberInterface
+class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwareInterface
 {
-    /** @var AbstractPhoneVerificationService */
+    use LoggerAwareTrait, LoggerTrait;
+
+    /** @var PhoneVerificationService */
     private $phoneVerificationService;
+
+    /**
+     * PhoneVerificationSubscriber constructor.
+     * @param PhoneVerificationService $phoneVerificationService
+     */
+    public function __construct(PhoneVerificationService $phoneVerificationService)
+    {
+        $this->phoneVerificationService = $phoneVerificationService;
+    }
+
+    /**
+     * Logs with an arbitrary level.
+     *
+     * @param mixed $level
+     * @param string $message
+     * @param array $context
+     *
+     * @return void
+     */
+    protected function log($level, $message, array $context = array())
+    {
+        if ($this->logger) {
+            $this->logger->log($level, $message, $context);
+        }
+    }
 
     /**
      * Returns an array of event names this subscriber wants to listen to.
@@ -44,7 +76,7 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface
     {
         return [
             PhoneVerificationEvents::PHONE_CHANGED => 'onPhoneChange',
-            PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED => 'onCodeRequest',
+            PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED => 'onVerificationRequest',
             PhoneVerificationEvents::PHONE_VERIFIED => 'onVerify',
         ];
     }
@@ -57,11 +89,40 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $oldPhoneVerification = $this->phoneVerificationService->getPhoneVerification($person, $person->getMobile());
+        $phoneUtil = PhoneNumberUtil::getInstance();
+        $this->info(
+            'Phone changed from {old} to {new} for user {id}',
+            [
+                'id' => $person->getId(),
+                'old' => $phoneUtil->format($event->getOldPhone(), PhoneNumberFormat::E164),
+                'new' => $phoneUtil->format($person->getMobile(), PhoneNumberFormat::E164),
+            ]
+        );
+        $oldPhoneVerification = $this->phoneVerificationService->getPhoneVerification($person, $event->getOldPhone());
         if ($oldPhoneVerification) {
             $this->phoneVerificationService->removePhoneVerification($oldPhoneVerification);
         }
 
+        if ($person->getMobile()) {
+            $phoneVerification = $this->phoneVerificationService->createPhoneVerification(
+                $person,
+                $person->getMobile()
+            );
+        }
+
         $dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED, $event);
+    }
+
+    public function onVerificationRequest(PhoneChangedEvent $event)
+    {
+        $person = $event->getPerson();
+        $phoneUtil = PhoneNumberUtil::getInstance();
+        $this->info(
+            'Phone Verification requested for {phone} for user {user_id}',
+            [
+                'user_id' => $person->getId(),
+                'phone' => $phoneUtil->format($person->getMobile(), PhoneNumberFormat::E164),
+            ]
+        );
     }
 }

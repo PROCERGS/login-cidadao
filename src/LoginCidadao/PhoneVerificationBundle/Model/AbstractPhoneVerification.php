@@ -17,6 +17,6 @@ abstract class AbstractPhoneVerification implements PhoneVerificationInterface
      */
     public function isVerified()
     {
-        return $this->getVerifiedAt() <= new \DateTime();
+        return $this->getVerifiedAt() instanceof \DateTime && $this->getVerifiedAt() <= new \DateTime();
     }
 }

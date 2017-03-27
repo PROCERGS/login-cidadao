@@ -20,7 +20,11 @@ class PersonSerializeEventListener implements EventSubscriberInterface
     /** @var PhoneVerificationService */
     protected $phoneVerificationService;
 
-    public function setPhoneVerificationService(PhoneVerificationService $phoneVerificationService)
+    /**
+     * PersonSerializeEventListener constructor.
+     * @param PhoneVerificationService $phoneVerificationService
+     */
+    public function __construct(PhoneVerificationService $phoneVerificationService)
     {
         $this->phoneVerificationService = $phoneVerificationService;
     }
@@ -43,12 +47,7 @@ class PersonSerializeEventListener implements EventSubscriberInterface
             return;
         }
 
-        if ($this->phoneVerificationService) {
-            $phoneVerification = $this->phoneVerificationService->getPhoneVerification(
-                $person,
-                $person->getMobile()
-            );
-            $person->setPhoneNumberVerified($phoneVerification && $phoneVerification->isVerified());
-        }
+        $phoneVerification = $this->phoneVerificationService->getPhoneVerification($person, $person->getMobile());
+        $person->setPhoneNumberVerified($phoneVerification && $phoneVerification->isVerified());
     }
 }
