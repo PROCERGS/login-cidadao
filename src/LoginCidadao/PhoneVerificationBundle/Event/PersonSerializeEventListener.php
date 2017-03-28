@@ -15,7 +15,7 @@ use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService;
 
-class PersonSerializeEventListener implements EventSubscriberInterface
+class PersonSerializeEventListener
 {
     /** @var PhoneVerificationService */
     protected $phoneVerificationService;
@@ -27,17 +27,6 @@ class PersonSerializeEventListener implements EventSubscriberInterface
     public function __construct(PhoneVerificationService $phoneVerificationService)
     {
         $this->phoneVerificationService = $phoneVerificationService;
-    }
-
-    public static function getSubscribedEvents()
-    {
-        return [
-            [
-                'event' => 'serializer.pre_serialize',
-                'method' => 'onPreSerialize',
-                'class' => 'LoginCidadao\CoreBundle\Model\PersonInterface',
-            ],
-        ];
     }
 
     public function onPreSerialize(PreSerializeEvent $event)
