@@ -85,10 +85,6 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
     {
         $person = $event->getPerson();
 
-        if (!($person instanceof PersonInterface)) {
-            return;
-        }
-
         $phoneUtil = PhoneNumberUtil::getInstance();
         $this->info(
             'Phone changed from {old} to {new} for user {id}',
