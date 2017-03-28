@@ -63,7 +63,6 @@ class ProfileEditSubscriber implements EventSubscriberInterface
     public function onProfileEditSuccess(FormEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         $person = $event->getForm()->getData();
-
         if (!($person instanceof PersonInterface)) {
             return;
         }
