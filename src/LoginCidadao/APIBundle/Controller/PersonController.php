@@ -2,6 +2,7 @@
 
 namespace LoginCidadao\APIBundle\Controller;
 
+use FOS\RestBundle\Context\Context;
 use FOS\RestBundle\Controller\Annotations as REST;
 use JMS\Serializer\SerializationContext;
 use LoginCidadao\APIBundle\Exception\RequestTimeoutException;
@@ -54,7 +55,7 @@ class PersonController extends BaseController
         }
 
         $view = $this->view($person)
-            ->setSerializationContext($this->getSerializationContext($scope));
+            ->setContext($this->getSerializationContext($scope));
         return $this->handleView($view);
     }
 
@@ -81,8 +82,7 @@ class PersonController extends BaseController
     {
         $user      = $this->getUser();
         $scope     = $this->getClientScope($user);
-        $updatedAt = \DateTime::createFromFormat('Y-m-d H:i:s',
-                $request->get('updated_at'));
+        $updatedAt = \DateTime::createFromFormat('Y-m-d H:i:s', $request->get('updated_at'));
 
         if (!($updatedAt instanceof \DateTime)) {
             $updatedAt = new \DateTime();
@@ -90,12 +90,10 @@ class PersonController extends BaseController
 
         $id            = $user->getId();
         $lastUpdatedAt = null;
-        $callback      = $this->getCheckUpdateCallback($id, $updatedAt,
-            $lastUpdatedAt);
+        $callback      = $this->getCheckUpdateCallback($id, $updatedAt, $lastUpdatedAt);
         $person        = $this->runTimeLimited($callback);
-        $context       = SerializationContext::create()->setGroups($scope);
-        $view          = $this->view($person)
-            ->setSerializationContext($context);
+        $context       = $this->getSerializationContext($scope);
+        $view          = $this->view($person)->setContext($context);
         return $this->handleView($view);
     }
 
