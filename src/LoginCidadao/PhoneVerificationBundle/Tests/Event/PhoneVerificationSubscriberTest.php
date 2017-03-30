@@ -27,10 +27,6 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
             PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED,
             PhoneVerificationSubscriber::getSubscribedEvents()
         );
-        $this->assertArrayHasKey(
-            PhoneVerificationEvents::PHONE_VERIFIED,
-            PhoneVerificationSubscriber::getSubscribedEvents()
-        );
     }
 
     public function testOnPhoneChange()

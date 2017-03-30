@@ -12,6 +12,9 @@ namespace LoginCidadao\PhoneVerificationBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use libphonenumber\PhoneNumber;
+use LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationEvent;
+use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification;
 use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository;
@@ -28,17 +31,23 @@ class PhoneVerificationService
     /** @var PhoneVerificationRepository */
     private $phoneVerificationRepository;
 
+    /** @var EventDispatcherInterface */
+    private $dispatcher;
+
     /**
      * PhoneVerificationService constructor.
      * @param PhoneVerificationOptions $options
      * @param EntityManager $em
+     * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(
         PhoneVerificationOptions $options,
-        EntityManager $em
+        EntityManager $em,
+        EventDispatcherInterface $dispatcher
     ) {
         $this->options = $options;
         $this->em = $em;
+        $this->dispatcher = $dispatcher;
         $this->phoneVerificationRepository = $this->em
             ->getRepository('LoginCidadaoPhoneVerificationBundle:PhoneVerification');
     }
@@ -161,12 +170,42 @@ class PhoneVerificationService
         return $code;
     }
 
+    /**
+     * Verifies code without dispatching any event or making any changes.
+     *
+     * @param $provided
+     * @param $expected
+     * @return bool
+     */
     public function checkVerificationCode($provided, $expected)
     {
         if ($this->options->isCaseSensitive()) {
             return $provided === $expected;
         } else {
             return strtolower($provided) === strtolower($expected);
+        }
+    }
+
+    /**
+     * Verifies a phone and dispatches event.
+     *
+     * @param PhoneVerificationInterface $phoneVerification
+     * @param $providedCode
+     * @return bool
+     */
+    public function verify(PhoneVerificationInterface $phoneVerification, $providedCode)
+    {
+        if ($this->checkVerificationCode($providedCode, $phoneVerification->getVerificationCode())) {
+            $phoneVerification->setVerifiedAt(new \DateTime());
+            $this->em->persist($phoneVerification);
+            $this->em->flush($phoneVerification);
+
+            $event = new PhoneVerificationEvent($phoneVerification, $providedCode);
+            $this->dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFIED, $event);
+
+            return true;
+        } else {
+            return false;
         }
     }
 }

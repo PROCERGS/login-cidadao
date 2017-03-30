@@ -34,15 +34,10 @@ class VerificationController extends Controller
         /** @var PhoneVerificationInterface[] $pendingVerifications */
         $pendingVerifications = $phoneVerificationService->getAllPendingPhoneVerification($this->getUser());
 
-        $em = $this->getDoctrine()->getManager();
         $success = false;
         foreach ($pendingVerifications as $verification) {
-            if ($phoneVerificationService->checkVerificationCode($code, $verification->getVerificationCode())) {
-                $verification->setVerifiedAt(new \DateTime());
-                $em->persist($verification);
-                $em->flush($verification);
+            if ($phoneVerificationService->verify($verification, $code)) {
                 $success = true;
-                break;
             }
         }
 

@@ -23,6 +23,13 @@ class PhoneVerificationServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
+    private function getDispatcher()
+    {
+        return $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
     /**
      * @param array $arguments
      * @return PhoneVerificationService
@@ -33,6 +40,12 @@ class PhoneVerificationServiceTest extends \PHPUnit_Framework_TestCase
             $em = $arguments['em'];
         } else {
             $em = $this->getEntityManager();
+        }
+
+        if (array_key_exists('dispatcher', $arguments)) {
+            $dispatcher = $arguments['dispatcher'];
+        } else {
+            $dispatcher = $this->getDispatcher();
         }
 
         if (array_key_exists('options', $arguments)) {
@@ -53,7 +66,7 @@ class PhoneVerificationServiceTest extends \PHPUnit_Framework_TestCase
 
         $em->expects($this->once())->method('getRepository')->willReturn($repository);
 
-        return new PhoneVerificationService($options, $em);
+        return new PhoneVerificationService($options, $em, $dispatcher);
     }
 
     public function testGetPhoneVerification()
@@ -168,5 +181,45 @@ class PhoneVerificationServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($service->checkVerificationCode('abc', 'abc'));
         $this->assertTrue($service->checkVerificationCode('ABC', 'abc'));
+    }
+
+    public function testSuccessfulVerify()
+    {
+        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
+        $phoneVerification = $this->getMock($phoneVerificationClass);
+        $phoneVerification->expects($this->once())->method('setVerifiedAt');
+        $phoneVerification->expects($this->atLeastOnce())->method('getVerificationCode')->willReturn('123');
+
+        $em = $this->getEntityManager();
+        $em->expects($this->once())->method('persist');
+        $em->expects($this->once())->method('flush');
+
+        $dispatcher = $this->getDispatcher();
+        $dispatcher->expects($this->once())->method('dispatch');
+
+        $service = $this->getService(compact('em', 'dispatcher'));
+        $result = $service->verify($phoneVerification, '123');
+
+        $this->assertTrue($result);
+    }
+
+    public function testUnsuccessfulVerify()
+    {
+        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
+        $phoneVerification = $this->getMock($phoneVerificationClass);
+        $phoneVerification->expects($this->never())->method('setVerifiedAt');
+        $phoneVerification->expects($this->atLeastOnce())->method('getVerificationCode')->willReturn('321');
+
+        $em = $this->getEntityManager();
+        $em->expects($this->never())->method('persist');
+        $em->expects($this->never())->method('flush');
+
+        $dispatcher = $this->getDispatcher();
+        $dispatcher->expects($this->never())->method('dispatch');
+
+        $service = $this->getService(compact('em', 'dispatcher'));
+        $result = $service->verify($phoneVerification, '123');
+
+        $this->assertFalse($result);
     }
 }

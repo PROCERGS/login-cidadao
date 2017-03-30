@@ -13,7 +13,6 @@ namespace LoginCidadao\PhoneVerificationBundle\Event;
 
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
-use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService;
 use Psr\Log\LoggerAwareInterface;
@@ -77,7 +76,6 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
         return [
             PhoneVerificationEvents::PHONE_CHANGED => 'onPhoneChange',
             PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED => 'onVerificationRequest',
-            PhoneVerificationEvents::PHONE_VERIFIED => 'onVerify',
         ];
     }
 
@@ -100,7 +98,7 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
         }
 
         if ($person->getMobile()) {
-            $phoneVerification = $this->phoneVerificationService->createPhoneVerification(
+            $this->phoneVerificationService->createPhoneVerification(
                 $person,
                 $person->getMobile()
             );

@@ -13,12 +13,12 @@ namespace LoginCidadao\PhoneVerificationBundle;
 class PhoneVerificationEvents
 {
     /**
-     * This event is triggered when the user changes the phone number in the profile.
+     * This event is triggered AFTER the user changes the phone number in the profile.
      */
     const PHONE_CHANGED = 'lc.phone_verification.phone_changed';
 
     /**
-     * This event is triggered when the user's phone gets verified.
+     * This event is triggered AFTER the user's phone gets verified.
      */
     const PHONE_VERIFIED = 'lc.phone_verification.phone_verified';
 
