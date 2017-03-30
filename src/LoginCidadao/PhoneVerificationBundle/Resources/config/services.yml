@@ -13,6 +13,7 @@ services:
         arguments:
             - "@phone_verification.options"
             - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
 
     phone_verification.events.subscriber:
         class: LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationSubscriber
