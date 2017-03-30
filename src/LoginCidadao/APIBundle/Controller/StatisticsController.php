@@ -63,7 +63,8 @@ class StatisticsController extends BaseController
             'users_by_service' => $usersByService,
         ];
 
-        $view = $this->view($this->getTotalAndRemoveUid($stats, $uid));
+        $view = $this->view($this->getTotalAndRemoveUid($stats, $uid))
+            ->setSerializationContext(SerializationContext::create()->setSerializeNull(true));
 
         return $this->handleView($view);
     }

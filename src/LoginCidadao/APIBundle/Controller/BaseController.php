@@ -2,7 +2,6 @@
 
 namespace LoginCidadao\APIBundle\Controller;
 
-use FOS\RestBundle\Context\Context;
 use FOS\RestBundle\Controller\FOSRestController;
 use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -23,7 +22,7 @@ class BaseController extends FOSRestController
         }
 
         $view = $this->view($content)
-            ->setContext($context);
+            ->setSerializationContext($context);
         return $this->handleView($view);
     }
 
@@ -31,7 +30,8 @@ class BaseController extends FOSRestController
     {
         $person = $this->getUser();
         $serializer = $this->get('jms_serializer');
-        return $serializer->serialize($person, 'json', SerializationContext::create()->setGroups($scope));
+        return $serializer->serialize($person, 'json',
+                                        SerializationContext::create()->setGroups($scope));
     }
 
     protected function getClientScope(PersonInterface $user,
@@ -60,9 +60,7 @@ class BaseController extends FOSRestController
 
     protected function getSerializationContext($scope)
     {
-        $context = new Context();
-        $context->setGroups($scope);
-        return $context;
+        return SerializationContext::create()->setGroups($scope);
     }
 
     /**

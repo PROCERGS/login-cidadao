@@ -3,7 +3,6 @@
 namespace LoginCidadao\OpenIDBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
-use FOS\RestBundle\Context\Context;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,10 +53,9 @@ class ClientRegistrationController extends FOSRestController
         }
         $this->checkRegistrationAccessToken($request, $client);
 
-        $context = new Context();
-        $context->setGroups("client_metadata");
+        $context = SerializationContext::create()->setGroups("client_metadata");
 
-        $view = $this->view($client->getMetadata())->setContext($context);
+        $view = $this->view($client->getMetadata())->setSerializationContext($context);
 
         return $this->handleView($view);
     }

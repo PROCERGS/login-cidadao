@@ -338,7 +338,7 @@ vich_uploader:
 
 # Disabling annotations is needed by FOS Rest Bundle
 sensio_framework_extra:
-    view: { annotations: true }
+    view: { annotations: false }
     router: { annotations: true }
     request: { converters: true }
 
@@ -353,8 +353,6 @@ fos_rest:
             xml: true
         templating_formats:
             html: true
-    serializer:
-        serialize_null: true
 #    format_listener:
 #        rules:
 #            - { path: ^/api/v1, priorities: [ html, json, xml ], fallback_format: json, prefer_extension: true }
