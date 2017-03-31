@@ -59,6 +59,7 @@ class AppKernel extends Kernel
             new Donato\PathWellBundle\DonatoPathWellBundle(),
             new Misd\PhoneNumberBundle\MisdPhoneNumberBundle(),
             new Rollerworks\Bundle\PasswordStrengthBundle\RollerworksPasswordStrengthBundle(),
+            new LoginCidadao\PhoneVerificationBundle\LoginCidadaoPhoneVerificationBundle(),
 
             // PROCERGS
             new PROCERGS\LoginCidadao\CoreBundle\PROCERGSLoginCidadaoCoreBundle(),

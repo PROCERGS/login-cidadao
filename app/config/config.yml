@@ -560,6 +560,10 @@ donato_path_well:
 login_cidadao_tos:
     use_tasks: true
 
+login_cidadao_phone_verification:
+    verification_code:
+        length: 6
+
 procergs_login_cidadao_monitor:
     checks:
         wsdl:

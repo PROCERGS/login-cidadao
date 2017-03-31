@@ -1,0 +1,38 @@
+services:
+    phone_verification.options:
+        class: LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationOptions
+        arguments:
+            - "%lc.phone_verification.options.code.length%"
+            - "%lc.phone_verification.options.code.use_numbers%"
+            - "%lc.phone_verification.options.code.case_sensitive%"
+            - "%lc.phone_verification.options.code.use_lower%"
+            - "%lc.phone_verification.options.code.use_upper%"
+
+    phone_verification:
+        class: LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService
+        arguments:
+            - "@phone_verification.options"
+            - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
+
+    phone_verification.events.subscriber:
+        class: LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationSubscriber
+        arguments:
+            - "@phone_verification"
+        calls:
+            - ['setLogger', ["@?logger"]]
+        tags:
+            - { name: kernel.event_subscriber }
+            - { name: monolog.logger, channel: phone_verification }
+
+    phone_verification.profile_edit.subscriber:
+        class: LoginCidadao\PhoneVerificationBundle\Event\ProfileEditSubscriber
+        tags:
+            - { name: kernel.event_subscriber }
+
+    phone_verification.person.serialize.listener:
+        class: LoginCidadao\PhoneVerificationBundle\Event\PersonSerializeEventListener
+        arguments:
+            - "@phone_verification"
+        tags:
+            - { name: jms_serializer.event_listener, event: serializer.pre_serialize, method: onPreSerialize }
