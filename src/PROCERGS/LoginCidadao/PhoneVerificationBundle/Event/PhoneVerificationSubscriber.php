@@ -13,6 +13,7 @@ namespace PROCERGS\LoginCidadao\PhoneVerificationBundle\Event;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use LoginCidadao\PhoneVerificationBundle\Event\PhoneChangedEvent;
+use LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
 use PROCERGS\Sms\SmsService;
 use Psr\Log\LoggerAwareInterface;
@@ -84,12 +85,14 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
         ];
     }
 
-    public function onVerificationRequest(PhoneChangedEvent $event)
+    public function onVerificationRequest(SendPhoneVerificationEvent $event)
     {
-        $person = $event->getPerson();
+        $phoneVerification = $event->getPhoneVerification();
+        $code = $phoneVerification->getVerificationCode();
+        $person = $phoneVerification->getPerson();
         $phoneUtil = PhoneNumberUtil::getInstance();
 
-        $message = $this->translator->trans('phone_verification.sms.message', ['%code%' => 666]);
+        $message = $this->translator->trans('phone_verification.sms.message', ['%code%' => $code]);
         $transactionId = $this->smsService->easySend($person->getMobile(), $message);
 
         $this->info(
