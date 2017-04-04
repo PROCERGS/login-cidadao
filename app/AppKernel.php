@@ -68,6 +68,9 @@ class AppKernel extends Kernel
             new Ejsmont\CircuitBreakerBundle\EjsmontCircuitBreakerBundle(),
             new PROCERGS\LoginCidadao\NfgBundle\PROCERGSNfgBundle(),
             new PROCERGS\LoginCidadao\AccountingBundle\PROCERGSLoginCidadaoAccountingBundle(),
+            new Circle\RestClientBundle\CircleRestClientBundle(),
+            new PROCERGS\SmsServiceBundle\PROCERGSSmsServiceBundle(),
+            new PROCERGS\LoginCidadao\PhoneVerificationBundle\PROCERGSLoginCidadaoPhoneVerificationBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

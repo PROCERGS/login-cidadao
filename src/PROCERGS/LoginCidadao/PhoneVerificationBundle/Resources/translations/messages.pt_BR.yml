@@ -1,0 +1,2 @@
+phone_verification:
+    sms.message: Seu código de verificação é %code%.

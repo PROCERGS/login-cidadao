@@ -589,3 +589,14 @@ procergs_nfg:
         username: "%soe_username%"
         password: "%soe_password%"
         hmac_secret: "%nfg_hmac_secret%"
+
+procergs_sms_service:
+    uri:
+        send: "%tpd_base_uri%/rest/sms"
+        receive: "%tpd_base_uri%/rest/sms/recebido"
+        status: "%tpd_base_uri%/rest/sms/status"
+    system:
+        id: "%tpd_system_id%"
+        key: "%tpd_system_key%"
+    service_order: "%tpd_service_order%"
+    from: "LC"

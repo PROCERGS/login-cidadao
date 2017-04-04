@@ -1,0 +1,4 @@
+procergs_phone_verification:
+    resource: "@PROCERGSLoginCidadaoPhoneVerificationBundle/Controller/"
+    type: annotation
+    prefix: /

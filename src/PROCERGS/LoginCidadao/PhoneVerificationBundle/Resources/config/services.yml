@@ -1,0 +1,11 @@
+services:
+    procergs_phone_verification.events.subscriber:
+        class: PROCERGS\LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationSubscriber
+        arguments:
+            - "@sms"
+            - "@translator"
+        calls:
+            - ['setLogger', ["@?logger"]]
+        tags:
+            - { name: kernel.event_subscriber }
+            - { name: monolog.logger, channel: phone_verification }

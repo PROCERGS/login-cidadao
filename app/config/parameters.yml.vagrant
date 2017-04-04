@@ -137,3 +137,8 @@ parameters:
     accounting.procergs_systems.domains:
         - "some.domain.tld"
         - "other.domain.tld"
+
+    tpd_base_uri: 'https://some.address/sms'
+    tpd_system_id: 'SYSTEM'
+    tpd_system_key: 'SeCrEt_KeY'
+    tpd_service_order: 1234

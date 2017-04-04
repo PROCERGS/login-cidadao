@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a3cec5998400774fb26278588ed92fd8",
-    "content-hash": "eca2a6a09b41e8e6719eabe47f1f9d72",
+    "hash": "9f7a6300170c78396398b25d8f46a17e",
+    "content-hash": "50eb4fdc2a367f3dfca4ee84f5d24227",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -321,6 +321,56 @@
                 "markdown-extra"
             ],
             "time": "2016-09-14 20:40:20"
+        },
+        {
+            "name": "ci/restclientbundle",
+            "version": "2.0.2",
+            "target-dir": "Circle/RestClientBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CircleOfNice/CiRestClientBundle.git",
+                "reference": "196c09582b31dd1e7953ba4825b441ad09f4853c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CircleOfNice/CiRestClientBundle/zipball/196c09582b31dd1e7953ba4825b441ad09f4853c",
+                "reference": "196c09582b31dd1e7953ba4825b441ad09f4853c",
+                "shasum": ""
+            },
+            "require-dev": {
+                "ext-curl": "*",
+                "php": ">=5.4",
+                "symfony/config": ">=2.1",
+                "symfony/dependency-injection": ">=2.1",
+                "symfony/http-kernel": ">=2.1",
+                "symfony/yaml": ">=2.1"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Circle\\RestClientBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL"
+            ],
+            "authors": [
+                {
+                    "name": "Circle.ai",
+                    "email": "info@circle.ai"
+                }
+            ],
+            "description": "Provides REST request methods. Mapper bundle for php internal curl library",
+            "keywords": [
+                "REST client curl POST GET PUT DELETE OPTIONS CONNECT PATCH TRACE HEAD content-type payload library plugin"
+            ],
+            "time": "2016-08-28 09:01:46"
         },
         {
             "name": "doctrine/annotations",
@@ -1542,16 +1592,16 @@
         },
         {
             "name": "giggsey/libphonenumber-for-php",
-            "version": "8.1.0",
+            "version": "8.3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-                "reference": "ba82f4f7e9bb9509e6bcddd42e07bebf6f6b2e92"
+                "reference": "4336e5c695ed8574f402304634bdda943dfaa27c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/ba82f4f7e9bb9509e6bcddd42e07bebf6f6b2e92",
-                "reference": "ba82f4f7e9bb9509e6bcddd42e07bebf6f6b2e92",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/4336e5c695ed8574f402304634bdda943dfaa27c",
+                "reference": "4336e5c695ed8574f402304634bdda943dfaa27c",
                 "shasum": ""
             },
             "require": {
@@ -1577,7 +1627,13 @@
             "autoload": {
                 "psr-4": {
                     "libphonenumber\\": "src/"
-                }
+                },
+                "exclude-from-classmap": [
+                    "/src/data/",
+                    "/src/carrier/data/",
+                    "/src/geocoding/data/",
+                    "/src/timezone/data/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1600,7 +1656,7 @@
                 "phonenumber",
                 "validation"
             ],
-            "time": "2017-01-25 11:07:04"
+            "time": "2017-03-15 09:50:58"
         },
         {
             "name": "giggsey/locale",
@@ -3963,6 +4019,47 @@
             "time": "2016-12-02 12:32:06"
         },
         {
+            "name": "procergs/sms-service",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PROCERGS/sms-service.git",
+                "reference": "bd41878d58b980e32aa89357bb8015030349a8b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PROCERGS/sms-service/zipball/bd41878d58b980e32aa89357bb8015030349a8b4",
+                "reference": "bd41878d58b980e32aa89357bb8015030349a8b4",
+                "shasum": ""
+            },
+            "require": {
+                "ci/restclientbundle": "^2.0",
+                "giggsey/libphonenumber-for-php": "~8.0",
+                "php": ">=5.4.16",
+                "psr/log": "^1.0",
+                "symfony/http-foundation": ">=2.8",
+                "symfony/http-kernel": ">=2.8"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PROCERGS\\Sms\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Guilherme Donato",
+                    "email": "guilhermednt@users.noreply.github.com"
+                }
+            ],
+            "description": "PROCERGS SMS Service",
+            "time": "2017-04-04 18:59:21"
+        },
+        {
             "name": "procergs/tos-bundle",
             "version": "1.3.1",
             "source": {
@@ -4504,12 +4601,12 @@
             "version": "v1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/simplethings/EntityAudit.git",
+                "url": "https://github.com/simplethings/EntityAuditBundle.git",
                 "reference": "bcdd118356ef451da2f6986fbeab68184e084bf0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplethings/EntityAudit/zipball/bcdd118356ef451da2f6986fbeab68184e084bf0",
+                "url": "https://api.github.com/repos/simplethings/EntityAuditBundle/zipball/bcdd118356ef451da2f6986fbeab68184e084bf0",
                 "reference": "bcdd118356ef451da2f6986fbeab68184e084bf0",
                 "shasum": ""
             },
