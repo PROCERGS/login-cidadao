@@ -68,13 +68,14 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $person = new Person();
         $person->setMobile(PhoneNumberUtil::getInstance()->parse('+5551999999999', 'BR'));
 
-        $oldPhone = PhoneNumberUtil::getInstance()->parse('+5551999998888', 'BR');
-        $event = $this->getMockBuilder('LoginCidadao\PhoneVerificationBundle\Event\PhoneChangedEvent')
-            ->setConstructorArgs([$person, $oldPhone])
-            ->getMock();
+        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
+        $phoneVerification = $this->getMock($phoneVerificationClass);
+        $phoneVerification->expects($this->any())->method('getPerson')->willReturn($person);
 
-        $event->expects($this->any())->method('getPerson')->willReturn($person);
-        $event->expects($this->any())->method('getOldPhone')->willReturn($oldPhone);
+        $event = $this->getMockBuilder('LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent')
+            ->setConstructorArgs([$phoneVerification])
+            ->getMock();
+        $event->expects($this->once())->method('getPhoneVerification')->willReturn($phoneVerification);
 
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger->expects($this->atLeastOnce())->method('log');

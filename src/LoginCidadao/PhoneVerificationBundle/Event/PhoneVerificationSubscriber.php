@@ -107,9 +107,9 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
         $dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED, $event);
     }
 
-    public function onVerificationRequest(PhoneChangedEvent $event)
+    public function onVerificationRequest(SendPhoneVerificationEvent $event)
     {
-        $person = $event->getPerson();
+        $person = $event->getPhoneVerification()->getPerson();
         $phoneUtil = PhoneNumberUtil::getInstance();
         $this->info(
             'Phone Verification requested for {phone} for user {user_id}',
