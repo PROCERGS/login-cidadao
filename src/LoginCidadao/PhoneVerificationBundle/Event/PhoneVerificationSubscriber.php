@@ -98,13 +98,14 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
         }
 
         if ($person->getMobile()) {
-            $this->phoneVerificationService->createPhoneVerification(
+            $phoneVerification = $this->phoneVerificationService->createPhoneVerification(
                 $person,
                 $person->getMobile()
             );
-        }
 
-        $dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED, $event);
+            $sendEvent = new SendPhoneVerificationEvent($phoneVerification);
+            $dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED, $sendEvent);
+        }
     }
 
     public function onVerificationRequest(SendPhoneVerificationEvent $event)
