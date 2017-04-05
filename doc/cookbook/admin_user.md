@@ -20,5 +20,8 @@ No exemplo a seguir vamos supor que o email seja `fulano@detal.com`
 
     $ ./app/console lc:user:promote fulano@detal.com --super
 
+Para saber mais sobre os comandos do Symfony, você pode consultar a
+[Introdução à CLI do Symfony](../commands.md).
+
 **Lembrete**: Após realizar a promoção do usuário, é importante que essa pessoa
 saia e faça login novamente para que as permissões sejam atualizadas na sessão.
