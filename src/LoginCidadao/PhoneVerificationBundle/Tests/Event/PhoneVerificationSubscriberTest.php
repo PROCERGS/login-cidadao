@@ -42,12 +42,16 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $event->expects($this->any())->method('getPerson')->willReturn($person);
         $event->expects($this->any())->method('getOldPhone')->willReturn($oldPhone);
 
+        $phoneVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
+
         $phoneVerificationServiceClass = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService';
         $phoneVerificationService = $this->getMockBuilder($phoneVerificationServiceClass)
             ->disableOriginalConstructor()
             ->getMock();
         $phoneVerificationService->expects($this->once())->method('getPhoneVerification')
-            ->willReturn($this->getMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface'));
+            ->willReturn($phoneVerification);
+        $phoneVerificationService->expects($this->once())->method('createPhoneVerification')
+            ->willReturn($phoneVerification);
 
         $dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
             ->disableOriginalConstructor()
