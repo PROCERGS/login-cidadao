@@ -49,6 +49,13 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function getPhoneVerificationSubscriber()
     {
+        $verificationSentService = $this->getMockBuilder(
+            'PROCERGS\LoginCidadao\PhoneVerificationBundle\Service\VerificationSentService'
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $verificationSentService->expects($this->once())->method('registerVerificationSent');
+
         $smsService = $this->getMockBuilder('PROCERGS\Sms\SmsService')
             ->disableOriginalConstructor()
             ->getMock();
@@ -60,7 +67,7 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())->method('log');
 
-        $subscriber = new PhoneVerificationSubscriber($smsService, $translator);
+        $subscriber = new PhoneVerificationSubscriber($verificationSentService, $smsService, $translator);
         $subscriber->setLogger($logger);
 
         return $subscriber;

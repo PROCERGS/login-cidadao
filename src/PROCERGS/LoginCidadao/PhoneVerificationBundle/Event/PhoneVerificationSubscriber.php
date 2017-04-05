@@ -10,11 +10,13 @@
 
 namespace PROCERGS\LoginCidadao\PhoneVerificationBundle\Event;
 
+use Doctrine\ORM\EntityManager;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use LoginCidadao\PhoneVerificationBundle\Event\PhoneChangedEvent;
 use LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
+use PROCERGS\LoginCidadao\PhoneVerificationBundle\Service\VerificationSentService;
 use PROCERGS\Sms\SmsService;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -26,6 +28,11 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
 {
     use LoggerAwareTrait, LoggerTrait;
 
+    /**
+     * @var VerificationSentService
+     */
+    private $verificationSentService;
+
     /** @var SmsService */
     private $smsService;
 
@@ -35,11 +42,16 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
     /**
      * PhoneVerificationSubscriber constructor.
      *
+     * @param VerificationSentService $verificationSentService
      * @param SmsService $smsService
      * @param TranslatorInterface $translator
      */
-    public function __construct(SmsService $smsService, TranslatorInterface $translator)
-    {
+    public function __construct(
+        VerificationSentService $verificationSentService,
+        SmsService $smsService,
+        TranslatorInterface $translator
+    ) {
+        $this->verificationSentService = $verificationSentService;
         $this->smsService = $smsService;
         $this->translator = $translator;
     }
@@ -103,5 +115,7 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
                 'transaction_id' => $transactionId,
             ]
         );
+
+        $this->verificationSentService->registerVerificationSent($phoneVerification, $transactionId, $message);
     }
 }

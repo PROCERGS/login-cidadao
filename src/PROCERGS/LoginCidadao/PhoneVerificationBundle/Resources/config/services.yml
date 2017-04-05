@@ -2,6 +2,7 @@ services:
     procergs_phone_verification.events.subscriber:
         class: PROCERGS\LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationSubscriber
         arguments:
+            - "@verification_sent"
             - "@sms"
             - "@translator"
         calls:
@@ -9,3 +10,8 @@ services:
         tags:
             - { name: kernel.event_subscriber }
             - { name: monolog.logger, channel: phone_verification }
+
+    verification_sent:
+        class: PROCERGS\LoginCidadao\PhoneVerificationBundle\Service\VerificationSentService
+        arguments:
+            - "@doctrine.orm.entity_manager"
