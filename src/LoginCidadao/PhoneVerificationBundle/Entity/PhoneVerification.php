@@ -37,7 +37,7 @@ class PhoneVerification extends AbstractPhoneVerification implements PhoneVerifi
      * @var PersonInterface
      *
      * @ORM\ManyToOne(targetEntity="LoginCidadao\CoreBundle\Entity\Person")
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="person_id", referencedColumnName="id", unique=false)
      */
     private $person;
 
