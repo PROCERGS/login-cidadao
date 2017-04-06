@@ -79,6 +79,11 @@ class PhoneVerificationService
      */
     public function createPhoneVerification(PersonInterface $person, PhoneNumber $phone)
     {
+        $existingVerification = $this->getPhoneVerification($person, $phone);
+        if ($existingVerification instanceof PhoneVerificationInterface) {
+            $this->removePhoneVerification($existingVerification);
+        }
+
         $phoneVerification = new PhoneVerification();
         $phoneVerification->setPerson($person)
             ->setPhone($phone)
