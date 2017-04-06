@@ -29,7 +29,7 @@ class DefaultController extends Controller
         /** @var PhoneVerificationService $phoneVerificationService */
         $phoneVerificationService = $this->get('phone_verification');
 
-        $phoneVerifications = $phoneVerificationService->getPendingPhoneVerification(
+        $phoneVerification = $phoneVerificationService->getPendingPhoneVerification(
             $this->getUser(),
             $this->getUser()->getMobile()
         );
@@ -39,15 +39,14 @@ class DefaultController extends Controller
 
         $sent = 0;
         $notSent = 0;
-        foreach ($phoneVerifications as $phoneVerification) {
-            if (!$this->canResend($phoneVerification)) {
-                $notSent++;
-                continue;
-            }
+        if (!$this->canResend($phoneVerification)) {
+            $notSent++;
+        } else {
             $event = new SendPhoneVerificationEvent($phoneVerification);
             $dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED, $event);
             $sent++;
         }
+
         die("sent: $sent | not sent: $notSent");
     }
 
