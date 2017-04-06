@@ -148,7 +148,7 @@ cat <<EOT
 
 => Generating Diffie-Hellman Parameters...
 EOT
-openssl dhparam -out /etc/ssl/certs/dhparam.pem 1024
+openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 
 cat <<EOT
 => Adding nginx configuration...
