@@ -21,6 +21,7 @@ use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
  *
  * @ORM\Table(name="phone_verification")
  * @ORM\Entity(repositoryClass="LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class PhoneVerification extends AbstractPhoneVerification implements PhoneVerificationInterface
 {
@@ -54,6 +55,13 @@ class PhoneVerification extends AbstractPhoneVerification implements PhoneVerifi
      * @ORM\Column(name="verified_at", type="datetime", nullable=true)
      */
     private $verifiedAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     */
+    private $createdAt;
 
     /**
      * @var string
@@ -162,5 +170,23 @@ class PhoneVerification extends AbstractPhoneVerification implements PhoneVerifi
     public function getVerificationCode()
     {
         return $this->verificationCode;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue()
+    {
+        if (!($this->getCreatedAt() instanceof \DateTime)) {
+            $this->createdAt = new \DateTime();
+        }
     }
 }

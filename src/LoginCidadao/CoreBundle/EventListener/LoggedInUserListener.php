@@ -134,7 +134,7 @@ class LoggedInUserListener
     protected function checkUnconfirmedEmail()
     {
         if ($this->requireEmailValidation) {
-            // Thre is a Task for that already
+            // There is a Task for that already
             return;
         }
         $token = $this->tokenStorage->getToken();
