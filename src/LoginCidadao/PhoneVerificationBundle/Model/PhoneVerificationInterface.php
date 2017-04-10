@@ -69,4 +69,9 @@ interface PhoneVerificationInterface
      * @return string
      */
     public function getVerificationCode();
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt();
 }
