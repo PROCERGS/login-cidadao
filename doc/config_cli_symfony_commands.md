@@ -26,7 +26,7 @@ Como usar?
 
 Para utilizar essa versátil ferramenta é ideal que você tenha se autenticado
 como o usuário responsável por executar o Login Cidadão. No caso do [exemplo de
-instalação em Debian](cookbook/install_debian.md) esse usuário é `logincidadao`.
+instalação em Debian](cookbook/deploy_debian_os.md) esse usuário é `logincidadao`.
 
     sudo su logincidadao
 
