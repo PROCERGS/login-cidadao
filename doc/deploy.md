@@ -1,6 +1,6 @@
 Login Cidadão
 =============
-> If you looking for a cookbook, take a look in [Deploy recipe with Debian os](cookbook/deploy_debian_os.md)
+
 
 Login Cidadão é um software livre que atua como um provedor de identidade
 implementado protocolos como **OpenID Connect** e **OAuth 2**. Seu foco de
@@ -9,6 +9,7 @@ no projeto que impeça seu isso por entes privados.
 
 Instalação
 ----------
+> If you looking for a cookbook, take a look in [Deploy recipe with Debian os](cookbook/deploy_debian_os.md)
 
 ### Arquitetura
 O Login Cidadão é escrito em PHP com apoio do framework **Symfony 2**
