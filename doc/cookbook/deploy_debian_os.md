@@ -20,7 +20,7 @@ máquina virtual.
 
 ### Domínio e Conectividade
 
-Certifique-se de que o hostname desejado já está apontando para o(s) endereço(s)
+Certifique-se de que o hostname desejado (https://suaurl.gov.br) já está apontando para o(s) endereço(s)
 IP de seu servidor e que esses endereços sejam acessíveis pela Internet. Isso é
 fundamental para que o script de instalação consiga obter o certificado HTTPS
 necessário.
