@@ -10,7 +10,17 @@
 
 namespace LoginCidadao\TaskStackBundle\Model;
 
-interface TaskTargetInterface
+abstract class AbstractTask implements TaskInterface
 {
-    //
+    /** @var array */
+    protected $routes = [];
+
+    /**
+     * @param string $routeName
+     * @return boolean
+     */
+    public function isTaskRoute($routeName)
+    {
+        return in_array($routeName, $this->getRoutes());
+    }
 }

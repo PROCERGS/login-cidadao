@@ -63,6 +63,7 @@
                             $('.email-validate-success').slideDown().promise().done(function () {
                                 alert("{{ 'tasks.confirm_email.success.alert' | trans }}");
                                 window.location = '{{ targetUrl | escape('js') }}';
+                                //location.reload(true);
                             });
                         }
                     }).fail(function () {

@@ -18,21 +18,9 @@ interface TaskInterface
     public function getRoutes();
 
     /**
-     * @param array|null $routes
-     * @return TaskInterface
-     */
-    public function setRoutes(array $routes = null);
-
-    /**
      * @return TaskTargetInterface
      */
     public function getTarget();
-
-    /**
-     * @param TaskTargetInterface $target
-     * @return TaskInterface
-     */
-    public function setTarget(TaskTargetInterface $target);
 
     /**
      * @return boolean
@@ -46,11 +34,11 @@ interface TaskInterface
     public function isTaskRoute($routeName);
 
     /**
-     * Returns a value that can be used to identify a task in the "skip" context.
+     * Returns a value that can be used to identify a task. This is used to avoid repeated Tasks in the TaskStack.
      *
      * If a Task is specific to a given RP this method could return something like {TASK_NAME}_{RP_ID}
      *
      * @return string
      */
-    public function getSkipId();
+    public function getId();
 }

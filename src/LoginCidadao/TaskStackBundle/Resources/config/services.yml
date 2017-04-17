@@ -1,4 +1,15 @@
 services:
-#    login_cidadao_task_stack.example:
-#        class: LoginCidadao\TaskStackBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    task_stack.manager:
+        class: LoginCidadao\TaskStackBundle\Service\TaskStackManager
+        arguments:
+            - "@session"
+            - "@security.token_storage"
+            - "@router"
+            - "@event_dispatcher"
+
+    task_stack.request_subscriber:
+        class: LoginCidadao\TaskStackBundle\Event\RequestSubscriber
+        arguments:
+            - "@task_stack.manager"
+        tags:
+            - { name: kernel.event_subscriber }

@@ -10,25 +10,30 @@
 
 namespace LoginCidadao\CoreBundle\Model;
 
-class InvalidateSessionTask extends Task
+use LoginCidadao\TaskStackBundle\Model\AbstractTask;
+use LoginCidadao\TaskStackBundle\Model\TaskTargetInterface;
+
+class InvalidateSessionTask extends AbstractTask
 {
+    /**
+     * InvalidateSessionTask constructor.
+     *
+     * @param TaskTargetInterface $target
+     */
+    public function __construct(TaskTargetInterface $target)
+    {
+        $this->target = $target;
+    }
+
     /**
      * @return string
      */
-    public function getName()
+    public function getId()
     {
         return 'lc.invalidate_session';
     }
 
-    /**
-     * @return array
-     */
-    public function getTarget()
-    {
-        return ['fos_user_security_logout', []];
-    }
-
-    public function getTaskRoutes()
+    public function getRoutes()
     {
         return [
             'fos_user_security_logout',
@@ -41,14 +46,5 @@ class InvalidateSessionTask extends Task
     public function isMandatory()
     {
         return true;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        // Top priority since it's a security Task
-        return PHP_INT_MAX;
     }
 }
