@@ -10,25 +10,33 @@
 
 namespace LoginCidadao\CoreBundle\Model;
 
-class MigratePasswordEncoderTask extends Task
+use LoginCidadao\TaskStackBundle\Model\AbstractTask;
+use LoginCidadao\TaskStackBundle\Model\TaskTargetInterface;
+
+class MigratePasswordEncoderTask extends AbstractTask
 {
+    /** @var TaskTargetInterface */
+    private $target;
+
+    /**
+     * MigratePasswordEncoderTask constructor.
+     *
+     * @param TaskTargetInterface $target
+     */
+    public function __construct(TaskTargetInterface $target)
+    {
+        $this->target = $target;
+    }
+
     /**
      * @return string
      */
-    public function getName()
+    public function getId()
     {
         return 'lc.force_password_change';
     }
 
-    /**
-     * @return array
-     */
-    public function getTarget()
-    {
-        return ['fos_user_change_password', []];
-    }
-
-    public function getTaskRoutes()
+    public function getRoutes()
     {
         return [
             'fos_user_change_password',
@@ -44,10 +52,10 @@ class MigratePasswordEncoderTask extends Task
     }
 
     /**
-     * @return int
+     * @return TaskTargetInterface
      */
-    public function getPriority()
+    public function getTarget()
     {
-        return 50;
+        return $this->target;
     }
 }

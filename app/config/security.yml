@@ -79,6 +79,8 @@ security:
             context: context_key
             pattern: ^/(?!api|!oauth)
             switch_user: true
+            # If you wish to replace this service ensure that
+            # the new one dispatches the AUTHENTICATION_ENTRY_POINT_START event
             entry_point: lc.login_entry_point
 
             remember_me:

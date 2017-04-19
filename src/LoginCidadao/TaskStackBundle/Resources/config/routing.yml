@@ -1,0 +1,3 @@
+login_cidadao_task_stack_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: LoginCidadaoTaskStackBundle:Default:index }
