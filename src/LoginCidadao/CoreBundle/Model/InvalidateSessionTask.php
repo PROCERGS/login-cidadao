@@ -15,6 +15,9 @@ use LoginCidadao\TaskStackBundle\Model\TaskTargetInterface;
 
 class InvalidateSessionTask extends AbstractTask
 {
+    /** @var TaskTargetInterface */
+    private $target;
+
     /**
      * InvalidateSessionTask constructor.
      *
@@ -46,5 +49,13 @@ class InvalidateSessionTask extends AbstractTask
     public function isMandatory()
     {
         return true;
+    }
+
+    /**
+     * @return TaskTargetInterface
+     */
+    public function getTarget()
+    {
+        return $this->target;
     }
 }
