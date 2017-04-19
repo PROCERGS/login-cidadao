@@ -49,7 +49,7 @@ class TaskController extends Controller
                 $stackManager->setTaskSkipped($task);
             }
 
-            return $stackManager->processRequest($request, $targetUrl);
+            return $stackManager->processRequest($request, $this->redirect($targetUrl));
         }
 
         /** @var EventDispatcher $dispatcher */
