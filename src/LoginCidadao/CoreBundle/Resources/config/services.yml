@@ -197,7 +197,6 @@ services:
             - "@translator"
             - "@lc.intent.manager"
             - "@lc.tasks.manager"
-            - "%default_password_encoder%"
             - "%require_email_validation%"
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
