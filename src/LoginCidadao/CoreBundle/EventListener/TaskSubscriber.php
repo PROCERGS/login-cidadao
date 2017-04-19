@@ -108,8 +108,6 @@ class TaskSubscriber implements EventSubscriberInterface
         $task = new InvalidateSessionTask($target);
 
         if (!$this->authChecker->isGranted('FEATURE_INVALIDATE_SESSIONS')) {
-            $event->setTaskSkipped($task);
-
             return;
         }
 
@@ -118,11 +116,10 @@ class TaskSubscriber implements EventSubscriberInterface
 
         $sessionCreation = $event->getRequest()->getSession()->getMetadataBag()->getCreated();
         if ($request === null || $sessionCreation > $request->getRequestedAt()->getTimestamp()) {
-            $event->setTaskSkipped($task);
-
             return;
         }
 
+        $event->setTaskSkipped($task, false);
         $event->addTask($task);
     }
 }
