@@ -9,9 +9,11 @@ services:
             - "%procergs.sms.system.key%"
             - "%procergs.sms.service_order%"
             - "%procergs.sms.from.prefix%"
+        lazy: true
 
     sms:
         class: PROCERGS\Sms\SmsService
         arguments:
             - "@circle.restclient"
             - "@sms.config"
+        lazy: true
