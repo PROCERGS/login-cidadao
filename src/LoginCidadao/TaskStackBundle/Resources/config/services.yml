@@ -6,6 +6,7 @@ services:
             - "@security.token_storage"
             - "@router"
             - "@event_dispatcher"
+        lazy: true
 
     task_stack.request_subscriber:
         class: LoginCidadao\TaskStackBundle\Event\RequestSubscriber
