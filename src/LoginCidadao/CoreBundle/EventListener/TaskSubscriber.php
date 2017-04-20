@@ -11,16 +11,17 @@
 namespace LoginCidadao\CoreBundle\EventListener;
 
 use LoginCidadao\CoreBundle\Entity\InvalidateSessionRequestRepository;
-use LoginCidadao\CoreBundle\Event\GetTasksEvent;
-use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
 use LoginCidadao\CoreBundle\Model\ConfirmEmailTask;
 use LoginCidadao\CoreBundle\Model\InvalidateSessionTask;
 use LoginCidadao\CoreBundle\Model\MigratePasswordEncoderTask;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\TaskStackBundle\Event\GetTasksEvent;
+use LoginCidadao\TaskStackBundle\Model\RouteTaskTarget;
+use LoginCidadao\TaskStackBundle\TaskStackEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Http\HttpUtils;
 
 class TaskSubscriber implements EventSubscriberInterface
 {
@@ -29,9 +30,6 @@ class TaskSubscriber implements EventSubscriberInterface
 
     /** @var AuthorizationCheckerInterface */
     protected $authChecker;
-
-    /** @var HttpUtils */
-    protected $httpUtils;
 
     /** @var InvalidateSessionRequestRepository */
     protected $invalidateSessionRequestRepository;
@@ -43,7 +41,6 @@ class TaskSubscriber implements EventSubscriberInterface
      * TaskSubscriber constructor.
      * @param TokenStorage $tokenStorage
      * @param AuthorizationCheckerInterface $authChecker
-     * @param HttpUtils $httpUtils
      * @param InvalidateSessionRequestRepository $invalidateSessionRequestRepository
      * @param bool $mandatoryEmailValidation
      * @param $defaultPasswordEncoder
@@ -51,14 +48,12 @@ class TaskSubscriber implements EventSubscriberInterface
     public function __construct(
         TokenStorage $tokenStorage,
         AuthorizationCheckerInterface $authChecker,
-        HttpUtils $httpUtils,
         InvalidateSessionRequestRepository $invalidateSessionRequestRepository,
         $mandatoryEmailValidation,
         $defaultPasswordEncoder
     ) {
         $this->tokenStorage = $tokenStorage;
         $this->authChecker = $authChecker;
-        $this->httpUtils = $httpUtils;
         $this->invalidateSessionRequestRepository = $invalidateSessionRequestRepository;
         $this->options['mandatoryEmailValidation'] = $mandatoryEmailValidation;
         $this->options['defaultPasswordEncoder'] = $defaultPasswordEncoder;
@@ -68,51 +63,63 @@ class TaskSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            LoginCidadaoCoreEvents::GET_TASKS => ['onGetTasks', 100],
+            TaskStackEvents::GET_TASKS => ['onGetTasks', 100],
         ];
     }
 
-    /**
-     * @param GetTasksEvent $event
-     */
     public function onGetTasks(GetTasksEvent $event)
     {
         /** @var PersonInterface $user */
         $user = $this->tokenStorage->getToken()->getUser();
-        if (!($user instanceof PersonInterface)) {
+        if (!$user instanceof PersonInterface) {
             return;
         }
 
-        if ($this->options['mandatoryEmailValidation'] && !($user->getEmailConfirmedAt() instanceof \DateTime)) {
-            $task = (new ConfirmEmailTask())
-                ->setIsMandatory(true);
-            $event->addTask($task);
-        }
-
-        if ($user->getEncoderName() !== $this->options['defaultPasswordEncoder']) {
-            $event->addTask(new MigratePasswordEncoderTask());
-        }
-
-        $this->checkSessionInvalidation($event);
+        $this->checkEmailTask($event, $user);
+        $this->checkPasswordMigrationTask($event, $user);
+        $this->checkSessionInvalidation($event, $user);
     }
 
-    private function checkSessionInvalidation(GetTasksEvent $event)
+    private function checkEmailTask(GetTasksEvent $event, PersonInterface $user)
     {
+        $target = new RouteTaskTarget('task_confirm_email');
+        $task = new ConfirmEmailTask($target, true);
+
+        if ($this->options['mandatoryEmailValidation'] && !($user->getEmailConfirmedAt() instanceof \DateTime)) {
+            $event->forceAddUniqueTask($task);
+        }
+    }
+
+    private function checkPasswordMigrationTask(GetTasksEvent $event, PersonInterface $user)
+    {
+        $target = new RouteTaskTarget('fos_user_change_password');
+        $task = new MigratePasswordEncoderTask($target);
+
+        if ($user->getEncoderName() !== $this->options['defaultPasswordEncoder']) {
+            $event->addTask($task);
+        } else {
+            $event->setTaskSkipped($task);
+        }
+    }
+
+    private function checkSessionInvalidation(GetTasksEvent $event, PersonInterface $person)
+    {
+        $target = new RouteTaskTarget('fos_user_security_logout');
+        $task = new InvalidateSessionTask($target);
+
         if (!$this->authChecker->isGranted('FEATURE_INVALIDATE_SESSIONS')) {
             return;
         }
 
-        $person = $this->tokenStorage->getToken()->getUser();
         $repo = $this->invalidateSessionRequestRepository;
         $request = $repo->findMostRecent($person);
 
         $sessionCreation = $event->getRequest()->getSession()->getMetadataBag()->getCreated();
-        if ($request === null ||
-            $sessionCreation > $request->getRequestedAt()->getTimestamp()
-        ) {
+        if ($request === null || $sessionCreation > $request->getRequestedAt()->getTimestamp()) {
             return;
         }
 
-        $event->addTask(new InvalidateSessionTask());
+        $event->setTaskSkipped($task, false);
+        $event->addTask($task);
     }
 }

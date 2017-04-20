@@ -197,7 +197,6 @@ services:
             - "@translator"
             - "@lc.intent.manager"
             - "@lc.tasks.manager"
-            - "%default_password_encoder%"
             - "%require_email_validation%"
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
@@ -390,6 +389,7 @@ services:
 
     lc.register_requested_scope:
         class: LoginCidadao\CoreBundle\Service\RegisterRequestedScope
+        lazy: true
 
     lc.intent.manager:
         class: LoginCidadao\CoreBundle\Service\IntentManager
@@ -399,8 +399,8 @@ services:
         class: LoginCidadao\CoreBundle\EventListener\LoginEntryPoint
         arguments:
             - "@security.http_utils"
+            - "@event_dispatcher"
             - "@lc.register_requested_scope"
-            - "@lc.intent.manager"
 
     lc.invalidate_session_request.repository:
         myrepository:
@@ -414,7 +414,6 @@ services:
         arguments:
             - "@security.token_storage"
             - "@security.authorization_checker"
-            - "@security.http_utils"
             - "@lc.invalidate_session_request.repository"
             - "%require_email_validation%"
             - "%default_password_encoder%"
@@ -448,6 +447,7 @@ services:
         arguments:
             - "@http_kernel"
             - "@security.http_utils"
+        lazy: true
 
     lc.request.referer_logger:
         class: LoginCidadao\CoreBundle\EventListener\RequestListener
@@ -470,3 +470,4 @@ services:
             - "@validator"
             - "@translator"
             - "%user.class%"
+        lazy: true

@@ -60,6 +60,7 @@ class AppKernel extends Kernel
             new Misd\PhoneNumberBundle\MisdPhoneNumberBundle(),
             new Rollerworks\Bundle\PasswordStrengthBundle\RollerworksPasswordStrengthBundle(),
             new LoginCidadao\PhoneVerificationBundle\LoginCidadaoPhoneVerificationBundle(),
+            new LoginCidadao\TaskStackBundle\LoginCidadaoTaskStackBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
