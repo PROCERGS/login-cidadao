@@ -8,8 +8,11 @@ use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Util\TokenGenerator;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use LoginCidadao\CoreBundle\Entity\Person;
+use LoginCidadao\CoreBundle\Model\ConfirmEmailTask;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use LoginCidadao\CoreBundle\Service\IntentManager;
+use LoginCidadao\TaskStackBundle\Model\RouteTaskTarget;
+use LoginCidadao\TaskStackBundle\Model\UrlTaskTarget;
+use LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -29,23 +32,24 @@ class TaskController extends Controller
      */
     public function confirmEmailAction(Request $request)
     {
-        /** @var IntentManager $intentManager */
-        $intentManager = $this->get('lc.intent.manager');
         /** @var PersonInterface $person */
         $person = $this->getUser();
         $resend = $request->get('resend', false);
         $notifySent = $request->get('resent', false);
         $originalEmail = $person->getEmail();
 
-        $hasIntent = $intentManager->hasIntent($request);
-        $targetUrl = $hasIntent ? $intentManager->getIntent($request) : $this->generateUrl('lc_dashboard');
+        /** @var TaskStackManagerInterface $stackManager */
+        $stackManager = $this->get('task_stack.manager');
+        $targetUrl = $this->getTargetUrl($stackManager);
 
         if ($person->getEmailConfirmedAt()) {
-            if ($hasIntent) {
-                return $this->redirect($intentManager->consumeIntent($request));
-            } else {
-                return $this->redirectToRoute('lc_dashboard');
+            $task = $stackManager->getCurrentTask();
+
+            if ($task instanceof ConfirmEmailTask) {
+                $stackManager->setTaskSkipped($task);
             }
+
+            return $stackManager->processRequest($request, $this->redirect($targetUrl));
         }
 
         /** @var EventDispatcher $dispatcher */
@@ -150,5 +154,20 @@ class TaskController extends Controller
         /** @var TranslatorInterface $translator */
         $translator = $this->get('translator');
         $this->addFlash('success', $translator->trans("tasks.confirm_email.resent.alert"));
+    }
+
+    private function getTargetUrl(TaskStackManagerInterface $stackManager)
+    {
+        $nextTask = $stackManager->getNextTask();
+        if ($nextTask) {
+            $target = $nextTask->getTarget();
+            if ($target instanceof RouteTaskTarget) {
+                return $this->generateUrl($target->getRoute(), $target->getParameters());
+            } elseif ($target instanceof UrlTaskTarget) {
+                return $target->getUrl();
+            }
+        }
+
+        return $this->generateUrl('lc_dashboard');
     }
 }

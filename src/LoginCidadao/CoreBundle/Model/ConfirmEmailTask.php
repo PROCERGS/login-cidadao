@@ -10,28 +10,41 @@
 
 namespace LoginCidadao\CoreBundle\Model;
 
-class ConfirmEmailTask extends Task
+use LoginCidadao\TaskStackBundle\Model\AbstractTask;
+use LoginCidadao\TaskStackBundle\Model\TaskTargetInterface;
+
+class ConfirmEmailTask extends AbstractTask
 {
     /** @var bool */
     private $isMandatory;
 
+    /** @var TaskTargetInterface */
+    private $target;
+
     /**
+     * ConfirmEmailTask constructor.
+     * @param TaskTargetInterface $target
+     * @param bool $mandatory
+     */
+    public function __construct(TaskTargetInterface $target, $mandatory = false)
+    {
+        $this->target = $target;
+        $this->isMandatory = $mandatory;
+    }
+
+    /**
+     * Returns a value that can be used to identify a task. This is used to avoid repeated Tasks in the TaskStack.
+     *
+     * If a Task is specific to a given RP this method could return something like {TASK_NAME}_{RP_ID}
+     *
      * @return string
      */
-    public function getName()
+    public function getId()
     {
         return 'lc.task.confirm_email';
     }
 
-    /**
-     * @return array
-     */
-    public function getTarget()
-    {
-        return ['task_confirm_email', []];
-    }
-
-    public function getTaskRoutes()
+    public function getRoutes()
     {
         return [
             'task_confirm_email',
@@ -49,21 +62,10 @@ class ConfirmEmailTask extends Task
     }
 
     /**
-     * @param boolean $isMandatory
-     * @return ConfirmEmailTask
+     * @return TaskTargetInterface
      */
-    public function setIsMandatory($isMandatory)
+    public function getTarget()
     {
-        $this->isMandatory = $isMandatory;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPriority()
-    {
-        return 100;
+        return $this->target;
     }
 }
