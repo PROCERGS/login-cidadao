@@ -7,6 +7,7 @@ services:
             - "%lc.phone_verification.options.code.case_sensitive%"
             - "%lc.phone_verification.options.code.use_lower%"
             - "%lc.phone_verification.options.code.use_upper%"
+        lazy: true
 
     phone_verification:
         class: LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService
@@ -14,6 +15,7 @@ services:
             - "@phone_verification.options"
             - "@doctrine.orm.entity_manager"
             - "@event_dispatcher"
+        lazy: true
 
     phone_verification.events.subscriber:
         class: LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationSubscriber
@@ -36,3 +38,12 @@ services:
             - "@phone_verification"
         tags:
             - { name: jms_serializer.event_listener, event: serializer.pre_serialize, method: onPreSerialize }
+
+    phone_verification.tasks.subscriber:
+        class: LoginCidadao\PhoneVerificationBundle\Event\TaskSubscriber
+        arguments:
+            - "@security.token_storage"
+            - "@phone_verification"
+            - true
+        tags:
+            - { name: kernel.event_subscriber }
