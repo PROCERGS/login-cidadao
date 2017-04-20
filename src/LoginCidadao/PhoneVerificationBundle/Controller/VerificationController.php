@@ -23,10 +23,10 @@ use Symfony\Component\HttpFoundation\Request;
 class VerificationController extends Controller
 {
     /**
-     * @Route("/verify/{code}")
+     * @Route("/verify", name="lc_verify_phone")
      * @Template()
      */
-    public function verifyAction(Request $request, $code)
+    public function verifyAction(Request $request)
     {
         /** @var PhoneVerificationService $phoneVerificationService */
         $phoneVerificationService = $this->get('phone_verification');
@@ -34,6 +34,7 @@ class VerificationController extends Controller
         /** @var PhoneVerificationInterface[] $pendingVerifications */
         $pendingVerifications = $phoneVerificationService->getAllPendingPhoneVerification($this->getUser());
 
+        $code = $request->get('code');
         $success = false;
         foreach ($pendingVerifications as $verification) {
             if ($phoneVerificationService->verify($verification, $code)) {
@@ -43,5 +44,4 @@ class VerificationController extends Controller
 
         return compact('success');
     }
-
 }
