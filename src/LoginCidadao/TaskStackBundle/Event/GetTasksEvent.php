@@ -46,6 +46,19 @@ class GetTasksEvent extends Event
     }
 
     /**
+     * @param TaskInterface $task
+     * @return $this
+     */
+    public function addTaskIfStackEmpty(TaskInterface $task)
+    {
+        if ($this->stackManager->countTasks() === 0) {
+            $this->addTask($task);
+        }
+
+        return $this;
+    }
+
+    /**
      * Sets the task as not skipped and adds it using <code>addTask</code>.
      * @param TaskInterface $task
      * @return $this

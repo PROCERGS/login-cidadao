@@ -69,8 +69,6 @@ class TaskSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $task = new ConfirmPhoneTask();
-        // TODO: only add if Stack is empty
-        $event->addTask($task);
+        $event->addTaskIfStackEmpty(new ConfirmPhoneTask());
     }
 }
