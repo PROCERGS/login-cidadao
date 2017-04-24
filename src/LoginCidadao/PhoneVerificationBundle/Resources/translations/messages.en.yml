@@ -1,0 +1,20 @@
+tasks:
+    verify_phone:
+        title: Phone Verification
+        sms_sent: We sent you a verification code to the phone you informed in your profile.
+        type_code: Please, check your SMS and type the code you've received.
+        form:
+            label: Verification Code
+            placeholder: Type the code you received
+            submit: Verify
+        didnt_receive:
+            button: Didn't receive your code?
+        skip:
+            open_warning: Confirm later
+            warning: Without a verified phone some functionalities may not be available. Are you sure you want to verify later?
+            confirm: Yes, I'll do the verification later
+        resend:
+            before:
+                title: Resend Code
+                body: Click the button bellow to resend your verification code.
+                button: Resend

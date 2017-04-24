@@ -1,7 +1,53 @@
-{% extends "::base.html.twig" %}
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
 
-{% block title %}LoginCidadaoPhoneVerificationBundle:Verification:verify{% endblock %}
+{% block panel_body_class %}task-phone-verification{% endblock %}
 
-{% block body %}
-    {{ dump(success) }}
+{% block panel_body %}
+    <h1>{{ 'tasks.verify_phone.title' | trans }}</h1>
+
+    <p class="main">{{ 'tasks.verify_phone.sms_sent' | trans }}</p>
+    <p class="main">{{ 'tasks.verify_phone.type_code' | trans }}</p>
+
+    <form>
+        <div class="form-group">
+            <label class="sr-only" for="codeInput">{{ 'tasks.verify_phone.form.label' | trans }}</label>
+            <div class="input-group">
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
+                </div>
+                <input type="tel" pattern="[0-9]*" class="form-control" id="codeInput"
+                       placeholder="{{ 'tasks.verify_phone.form.placeholder' | trans }}">
+            </div>
+        </div>
+
+        <button class="btn btn-block btn-success" type="button">
+            {{ 'tasks.verify_phone.form.submit' | trans }}
+        </button>
+    </form>
+
+    {# Resend #}
+    <button class="btn btn-block btn-link btn-success resend" type="button"
+            data-toggle="collapse" data-target=".collapse-resend"
+            aria-expanded="false" aria-controls="collapse-resend">
+        {{ 'tasks.verify_phone.didnt_receive.button' | trans }}
+    </button>
+    <div class="collapse collapse-resend check-before-resend">
+        <h2>{{ 'tasks.verify_phone.resend.before.title' | trans }}</h2>
+        <p>{{ 'tasks.verify_phone.resend.before.body' | trans }}</p>
+
+        <button type="submit" class="btn btn-block btn-success">
+            {{ 'tasks.verify_phone.resend.before.button' | trans }}
+        </button>
+    </div>
+    {# END OF Resend #}
+
+    {# Skip #}
+    <a href="#" class="btn btn-block btn-link collapse-confirm collapse in skip" type="button"
+       data-toggle="collapse" data-target=".collapse-confirm"
+       aria-expanded="false" aria-controls="collapse-confirm">{{ 'tasks.verify_phone.skip.open_warning' | trans }}</a>
+    <div class="collapse collapse-confirm">
+        <p class="help-block">{{ 'tasks.verify_phone.skip.warning' | trans }}</p>
+        <a href="#" class="btn btn-block btn-link">{{ 'tasks.verify_phone.skip.confirm' | trans }}</a>
+    </div>
+    {# END OF Skip #}
 {% endblock %}

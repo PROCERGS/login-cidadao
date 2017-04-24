@@ -1,0 +1,20 @@
+tasks:
+    verify_phone:
+        title: Verificação de Celular
+        sms_sent: Foi enviado um código de verificação para o telefone cadastrado em seu perfil.
+        type_code: Por favor, verifique suas SMS e digite o código recebido.
+        form:
+            label: Código de Verificação
+            placeholder: Digite o código recebido
+            submit: Verificar
+        didnt_receive:
+            button: Não recebeu seu código?
+        skip:
+            open_warning: Confirmar mais tarde
+            warning: Sem um telefone confirmado, algumas funcionalidades podem não estar disponíveis. Tem certeza que deseja confirmar outra hora?
+            confirm: Sim, confirmar mais tarde
+        resend:
+            before:
+                title: Reenviar Código
+                body: Clique no botão a seguir para reenviar o código de verificação.
+                button: Reenviar
