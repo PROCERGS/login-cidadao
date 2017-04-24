@@ -6,6 +6,7 @@ tasks:
         form:
             label: Código de Verificação
             placeholder: Digite o código recebido
+            code.invalid_code: O código digitado é inválido. Verifique se você digitou corretamente e tente novamente.
             submit: Verificar
         didnt_receive:
             button: Não recebeu seu código?

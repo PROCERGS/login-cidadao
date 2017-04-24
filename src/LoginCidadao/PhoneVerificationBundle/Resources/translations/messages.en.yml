@@ -6,6 +6,7 @@ tasks:
         form:
             label: Verification Code
             placeholder: Type the code you received
+            code.invalid_code: The code typed is invalid. Check it for any typos and try again.
             submit: Verify
         didnt_receive:
             button: Didn't receive your code?

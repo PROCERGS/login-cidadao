@@ -8,22 +8,23 @@
     <p class="main">{{ 'tasks.verify_phone.sms_sent' | trans }}</p>
     <p class="main">{{ 'tasks.verify_phone.type_code' | trans }}</p>
 
-    <form>
-        <div class="form-group">
-            <label class="sr-only" for="codeInput">{{ 'tasks.verify_phone.form.label' | trans }}</label>
-            <div class="input-group">
-                <div class="input-group-addon">
-                    <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
-                </div>
-                <input type="tel" pattern="[0-9]*" class="form-control" id="codeInput"
-                       placeholder="{{ 'tasks.verify_phone.form.placeholder' | trans }}">
+    {{ form_start(form) }}
+    <div class="form-group">
+        {{ form_label(form.verificationCode, null, {'label_attr': {'class': 'sr-only'}}) }}
+        <label class="sr-only" for="codeInput">{{ 'tasks.verify_phone.form.label' | trans }}</label>
+        <div class="input-group">
+            <div class="input-group-addon">
+                <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
             </div>
+            {{ form_widget(form.verificationCode) }}
         </div>
+        <div class="has-error">{{ form_errors(form.verificationCode) }}</div>
+    </div>
 
-        <button class="btn btn-block btn-success" type="button">
-            {{ 'tasks.verify_phone.form.submit' | trans }}
-        </button>
-    </form>
+    <button class="btn btn-block btn-success" type="submit">
+        {{ 'tasks.verify_phone.form.submit' | trans }}
+    </button>
+    {{ form_end(form) }}
 
     {# Resend #}
     <button class="btn btn-block btn-link btn-success resend" type="button"

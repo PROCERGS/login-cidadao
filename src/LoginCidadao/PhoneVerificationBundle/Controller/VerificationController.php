@@ -15,7 +15,9 @@ use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * @codeCoverageIgnore
@@ -28,20 +30,36 @@ class VerificationController extends Controller
      */
     public function verifyAction(Request $request)
     {
-        /** @var PhoneVerificationService $phoneVerificationService */
-        $phoneVerificationService = $this->get('phone_verification');
+        $form = $this->createForm('LoginCidadao\PhoneVerificationBundle\Form\PhoneVerificationType');
+        $form->handleRequest($request);
 
-        /** @var PhoneVerificationInterface[] $pendingVerifications */
-        $pendingVerifications = $phoneVerificationService->getAllPendingPhoneVerification($this->getUser());
+        if ($form->isValid()) {
+            /** @var PhoneVerificationService $phoneVerificationService */
+            $phoneVerificationService = $this->get('phone_verification');
 
-        $code = $request->get('code');
-        $success = false;
-        foreach ($pendingVerifications as $verification) {
-            if ($phoneVerificationService->verify($verification, $code)) {
-                $success = true;
+            /** @var PhoneVerificationInterface[] $pendingVerifications */
+            $pendingVerifications = $phoneVerificationService->getAllPendingPhoneVerification($this->getUser());
+
+            /** @var PhoneVerificationInterface $phoneVerification */
+            $phoneVerification = $form->getData();
+            $code = $form->getData()['verificationCode'];
+
+            $success = false;
+            foreach ($pendingVerifications as $verification) {
+                if ($phoneVerificationService->verify($verification, $code)) {
+                    $success = true;
+                }
+            }
+
+            if (!$success) {
+                /** @var TranslatorInterface $translator */
+                $translator = $this->get('translator');
+
+                $error = new FormError($translator->trans('tasks.verify_phone.form.code.invalid_code'));
+                $form->get('verificationCode')->addError($error);
             }
         }
 
-        return compact('success');
+        return ['form' => $form->createView()];
     }
 }

@@ -47,3 +47,10 @@ services:
             - true
         tags:
             - { name: kernel.event_subscriber }
+
+    phone_verification.form:
+        class: LoginCidadao\PhoneVerificationBundle\Form\PhoneVerificationType
+        arguments:
+            - "@phone_verification.options"
+        tags:
+            - { name: form.type }
