@@ -16,11 +16,11 @@ use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService;
 use LoginCidadao\TaskStackBundle\Event\GetTasksEvent;
 use LoginCidadao\TaskStackBundle\TaskStackEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class TaskSubscriber implements EventSubscriberInterface
 {
-    /** @var TokenStorage */
+    /** @var TokenStorageInterface */
     private $tokenStorage;
 
     /** @var PhoneVerificationService */
@@ -31,12 +31,12 @@ class TaskSubscriber implements EventSubscriberInterface
 
     /**
      * TaskSubscriber constructor.
-     * @param TokenStorage $tokenStorage
+     * @param TokenStorageInterface $tokenStorage
      * @param PhoneVerificationService $phoneVerificationService
      * @param bool $verificationEnabled
      */
     public function __construct(
-        TokenStorage $tokenStorage,
+        TokenStorageInterface $tokenStorage,
         PhoneVerificationService $phoneVerificationService,
         $verificationEnabled = false
     ) {
