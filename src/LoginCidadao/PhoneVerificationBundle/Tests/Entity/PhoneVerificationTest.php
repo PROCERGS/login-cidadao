@@ -36,7 +36,8 @@ class PhoneVerificationTest extends \PHPUnit_Framework_TestCase
         $phoneVerification->setPerson($person)
             ->setPhone($phone)
             ->setVerifiedAt($date)
-            ->setVerificationCode($code);
+            ->setVerificationCode($code)
+            ->setCreatedAtValue();
 
         $this->assertEquals($person, $phoneVerification->getPerson());
         $this->assertEquals($phone, $phoneVerification->getPhone());
@@ -44,5 +45,7 @@ class PhoneVerificationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($code, $phoneVerification->getVerificationCode());
         $this->assertTrue($phoneVerification->isVerified());
         $this->assertNull($phoneVerification->getId());
+        $this->assertNotNull($phoneVerification->getCreatedAt());
+        $this->assertInstanceOf('\DateTime', $phoneVerification->getCreatedAt());
     }
 }

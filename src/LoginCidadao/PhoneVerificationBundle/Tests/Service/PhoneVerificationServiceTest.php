@@ -30,6 +30,16 @@ class PhoneVerificationServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
+    private function getPhoneVerificationRepository()
+    {
+        $repoClass = 'LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository';
+        $repository = $this->getMockBuilder($repoClass)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        return $repository;
+    }
+
     /**
      * @param array $arguments
      * @return PhoneVerificationService
@@ -74,10 +84,7 @@ class PhoneVerificationServiceTest extends \PHPUnit_Framework_TestCase
         $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
         $phoneVerification = $this->getMock($phoneVerificationClass);
 
-        $repoClass = 'LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository';
-        $repository = $this->getMockBuilder($repoClass)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $repository = $this->getPhoneVerificationRepository();
         $repository->expects($this->once())->method('findOneBy')->willReturn($phoneVerification);
 
         $service = $this->getService(compact('repository'));
@@ -90,16 +97,22 @@ class PhoneVerificationServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testCreatePhoneVerification()
     {
+        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
+        $existingPhoneVerification = $this->getMock($phoneVerificationClass);
+
+        $repository = $this->getPhoneVerificationRepository();
+        $repository->expects($this->atLeastOnce())->method('findOneBy')->willReturn($existingPhoneVerification);
+
         $em = $this->getEntityManager();
         $em->expects($this->once())->method('persist');
-        $em->expects($this->once())->method('flush');
+        $em->expects($this->once())->method('remove')->with($existingPhoneVerification);
+        $em->expects($this->exactly(2))->method('flush');
 
-        $service = $this->getService(compact('em'));
+        $service = $this->getService(compact('em', 'repository'));
 
         $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $phone = $this->getMock('libphonenumber\PhoneNumber');
 
-        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
         $this->assertInstanceOf($phoneVerificationClass, $service->createPhoneVerification($person, $phone));
     }
 
@@ -143,11 +156,8 @@ class PhoneVerificationServiceTest extends \PHPUnit_Framework_TestCase
         $em->expects($this->once())->method('persist');
         $em->expects($this->once())->method('flush');
 
-        $repoClass = 'LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository';
-        $repository = $this->getMockBuilder($repoClass)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $repository->expects($this->once())->method('findOneBy')->willReturn(null);
+        $repository = $this->getPhoneVerificationRepository();
+        $repository->expects($this->atLeastOnce())->method('findOneBy')->willReturn(null);
 
         $service = $this->getService(compact('repository', 'em'));
 
