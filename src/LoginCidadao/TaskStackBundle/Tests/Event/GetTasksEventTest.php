@@ -30,4 +30,37 @@ class GetTasksEventTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($request, $event->getRequest());
     }
+
+    public function testAddTaskIfStackEmpty()
+    {
+        $tasks = [];
+        $task = $this->getMock('LoginCidadao\TaskStackBundle\Model\TaskInterface');
+
+        $stackManager = $this->getMock('LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface');
+        $stackManager->expects($this->atLeastOnce())->method('addNotSkippedTaskOnce')
+            ->with($task)->willReturnCallback(
+                function ($task) use (&$tasks) {
+                    foreach ($tasks as $t) {
+                        if ($t == $task) {
+                            return $this;
+                        }
+                    }
+                    $tasks[] = $task;
+
+                    return $this;
+                }
+            );
+        $stackManager->expects($this->atLeastOnce())->method('countTasks')->willReturnCallback(
+            function () use ($tasks) {
+                return count($tasks);
+            }
+        );
+
+        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $event = new GetTasksEvent($stackManager, $request);
+
+        $event->addTaskIfStackEmpty($task);
+        $event->addTaskIfStackEmpty($task);
+        $this->assertEquals(1, count($tasks));
+    }
 }
