@@ -12,10 +12,6 @@
     stopOnFailure               = "false"
     syntaxCheck                 = "false"
     bootstrap                   = "bootstrap.php.cache" >
-
-    <php>
-        <ini name="error_reporting" value="0" />
-    </php>
     
     <testsuites>
         <testsuite name="Project Test Suite">
