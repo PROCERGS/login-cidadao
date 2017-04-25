@@ -22,6 +22,9 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->booleanNode('enabled')
+                    ->defaultFalse()
+                ->end()
                 ->arrayNode('verification_code')
                     ->addDefaultsIfNotSet()
                     ->children()

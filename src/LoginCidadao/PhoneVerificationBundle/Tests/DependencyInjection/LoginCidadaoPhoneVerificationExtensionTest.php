@@ -49,6 +49,10 @@ class LoginCidadaoPhoneVerificationExtensionTest extends \PHPUnit_Framework_Test
         $this->compileContainer($container);
 
         $this->assertEquals(
+            $config['enabled'],
+            $container->getParameter('lc.phone_verification.options.enabled')
+        );
+        $this->assertEquals(
             $config['verification_code']['length'],
             $container->getParameter('lc.phone_verification.options.code.length')
         );

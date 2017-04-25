@@ -45,7 +45,7 @@ services:
         arguments:
             - "@security.token_storage"
             - "@phone_verification"
-            - true
+            - "%lc.phone_verification.options.enabled%"
         tags:
             - { name: kernel.event_subscriber }
 

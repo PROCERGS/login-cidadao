@@ -525,5 +525,6 @@ login_cidadao_tos:
     use_tasks: true
 
 login_cidadao_phone_verification:
+    enabled: true
     verification_code:
         length: 6

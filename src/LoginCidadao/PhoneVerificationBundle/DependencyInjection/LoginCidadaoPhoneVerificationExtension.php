@@ -22,6 +22,8 @@ class LoginCidadaoPhoneVerificationExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        $container->setParameter("lc.phone_verification.options.enabled", $config['enabled']);
+
         foreach ($config['verification_code'] as $key => $value) {
             $container->setParameter("lc.phone_verification.options.code.{$key}", $value);
         }
