@@ -65,10 +65,11 @@ class TaskSubscriber implements EventSubscriberInterface
         }
 
         $pending = $this->phoneVerificationService->getAllPendingPhoneVerification($user);
-        if (count($pending) <= 0) {
+        if (!is_array($pending) || count($pending) === 0) {
             return;
         }
 
-        $event->addTaskIfStackEmpty(new ConfirmPhoneTask());
+        $verification = reset($pending);
+        $event->addTaskIfStackEmpty(new ConfirmPhoneTask($verification->getId()));
     }
 }

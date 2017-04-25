@@ -17,14 +17,16 @@ class ConfirmPhoneTaskTest extends \PHPUnit_Framework_TestCase
 {
     public function testTask()
     {
-        $task = new ConfirmPhoneTask();
+        $id = random_int(1, 9999);
+        $task = new ConfirmPhoneTask($id);
         /** @var RouteTaskTarget $target */
         $target = $task->getTarget();
         $route = 'lc_verify_phone';
 
-        $this->assertEquals('lc.confirm_phone', $task->getId());
+        $this->assertEquals("lc.confirm_phone_{$id}", $task->getId());
         $this->assertInstanceOf('LoginCidadao\TaskStackBundle\Model\RouteTaskTarget', $target);
         $this->assertEquals($route, $target->getRoute());
+        $this->assertEquals($id, $target->getParameters()['id']);
         $this->assertContains($route, $task->getRoutes());
         $this->assertFalse($task->isMandatory());
     }

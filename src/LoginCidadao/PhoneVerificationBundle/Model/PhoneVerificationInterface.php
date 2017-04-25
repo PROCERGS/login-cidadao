@@ -16,6 +16,12 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 interface PhoneVerificationInterface
 {
     /**
+     * Get the verification's id
+     * @return mixed
+     */
+    public function getId();
+
+    /**
      * Get the phone's owner
      * @return PersonInterface
      */

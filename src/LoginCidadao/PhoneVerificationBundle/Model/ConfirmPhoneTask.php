@@ -16,15 +16,20 @@ use LoginCidadao\TaskStackBundle\Model\TaskTargetInterface;
 
 class ConfirmPhoneTask extends AbstractTask
 {
+    /** @var mixed */
+    private $verificationId;
+
     /** @var TaskTargetInterface */
     private $target;
 
     /**
      * ConfirmPhoneTask constructor.
+     * @param mixed $verificationId
      */
-    public function __construct()
+    public function __construct($verificationId)
     {
-        $this->target = new RouteTaskTarget('lc_verify_phone');
+        $this->verificationId = $verificationId;
+        $this->target = new RouteTaskTarget('lc_verify_phone', ['id' => $verificationId]);
     }
 
     /**
@@ -36,7 +41,7 @@ class ConfirmPhoneTask extends AbstractTask
      */
     public function getId()
     {
-        return 'lc.confirm_phone';
+        return "lc.confirm_phone_{$this->verificationId}";
     }
 
     /**
@@ -44,7 +49,10 @@ class ConfirmPhoneTask extends AbstractTask
      */
     public function getRoutes()
     {
-        return ['lc_verify_phone'];
+        return [
+            'lc_verify_phone',
+            'lc_resend_verification_code',
+        ];
     }
 
     /**

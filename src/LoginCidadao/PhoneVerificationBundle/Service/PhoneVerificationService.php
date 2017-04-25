@@ -13,6 +13,7 @@ namespace LoginCidadao\PhoneVerificationBundle\Service;
 use Doctrine\ORM\EntityManager;
 use libphonenumber\PhoneNumber;
 use LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationEvent;
+use LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
@@ -66,6 +67,43 @@ class PhoneVerificationService
             [
                 'person' => $person,
                 'phone' => $phone,
+            ]
+        );
+
+        return $phoneVerification;
+    }
+
+    /**
+     * @param PersonInterface $person
+     * @param mixed $id
+     * @return PhoneVerificationInterface
+     */
+    public function getPhoneVerificationById(PersonInterface $person, $id)
+    {
+        /** @var PhoneVerificationInterface $phoneVerification */
+        $phoneVerification = $this->phoneVerificationRepository->findOneBy(
+            [
+                'person' => $person,
+                'id' => $id,
+            ]
+        );
+
+        return $phoneVerification;
+    }
+
+    /**
+     * @param PersonInterface $person
+     * @param mixed $id
+     * @return PhoneVerificationInterface
+     */
+    public function getPendingPhoneVerificationById(PersonInterface $person, $id)
+    {
+        /** @var PhoneVerificationInterface $phoneVerification */
+        $phoneVerification = $this->phoneVerificationRepository->findOneBy(
+            [
+                'person' => $person,
+                'id' => $id,
+                'verifiedAt' => null,
             ]
         );
 
@@ -212,5 +250,11 @@ class PhoneVerificationService
         } else {
             return false;
         }
+    }
+
+    public function resendVerificationCode(PhoneVerificationInterface $phoneVerification)
+    {
+        $event = new SendPhoneVerificationEvent($phoneVerification);
+        $this->dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED, $event);
     }
 }
