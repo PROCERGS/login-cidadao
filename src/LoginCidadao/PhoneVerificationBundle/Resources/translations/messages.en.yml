@@ -4,9 +4,11 @@ tasks:
         sms_sent: We sent you a verification code to the phone you informed in your profile.
         type_code: Please, check your SMS and type the code you've received.
         form:
-            label: Verification Code
-            placeholder: Type the code you received
-            code.invalid_code: The code typed is invalid. Check it for any typos and try again.
+            verificationCode:
+                label: Verification Code
+                placeholder: Type the code you received
+            errors:
+                verificationCode.invalid_code: The code typed is invalid. Check it for any typos and try again.
             submit: Verify
         didnt_receive:
             button: Didn't receive your code?

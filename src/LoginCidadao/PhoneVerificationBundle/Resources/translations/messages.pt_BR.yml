@@ -4,9 +4,11 @@ tasks:
         sms_sent: Foi enviado um código de verificação para o telefone cadastrado em seu perfil.
         type_code: Por favor, verifique suas SMS e digite o código recebido.
         form:
-            label: Código de Verificação
-            placeholder: Digite o código recebido
-            code.invalid_code: O código digitado é inválido. Verifique se você digitou corretamente e tente novamente.
+            verificationCode:
+                label: Código de Verificação
+                placeholder: Digite o código recebido
+            errors:
+                verificationCode.invalid_code: O código digitado é inválido. Verifique se você digitou corretamente e tente novamente.
             submit: Verificar
         didnt_receive:
             button: Não recebeu seu código?

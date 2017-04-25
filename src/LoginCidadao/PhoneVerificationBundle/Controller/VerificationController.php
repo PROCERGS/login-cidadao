@@ -50,7 +50,7 @@ class VerificationController extends Controller
                 /** @var TranslatorInterface $translator */
                 $translator = $this->get('translator');
 
-                $error = new FormError($translator->trans('tasks.verify_phone.form.code.invalid_code'));
+                $error = new FormError($translator->trans('tasks.verify_phone.form.errors.verificationCode.invalid_code'));
                 $form->get('verificationCode')->addError($error);
             }
         }

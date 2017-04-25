@@ -43,9 +43,9 @@ class PhoneVerificationType extends AbstractType
             'verificationCode',
             $type,
             [
-                'label' => 'tasks.verify_phone.form.label',
+                'label' => 'tasks.verify_phone.form.verificationCode.label',
                 'attr' => [
-                    'placeholder' => 'tasks.verify_phone.form.placeholder',
+                    'placeholder' => 'tasks.verify_phone.form.verificationCode.placeholder',
                 ],
             ]
         );
