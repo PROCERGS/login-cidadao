@@ -36,9 +36,9 @@
         <h2>{{ 'tasks.verify_phone.resend.before.title' | trans }}</h2>
         <p>{{ 'tasks.verify_phone.resend.before.body' | trans }}</p>
 
-        <button type="submit" class="btn btn-block btn-success">
+        <a href="{{ path('lc_resend_verification_code', {id: verification.id}) }}" class="btn btn-block btn-success">
             {{ 'tasks.verify_phone.resend.before.button' | trans }}
-        </button>
+        </a>
     </div>
     {# END OF Resend #}
 
