@@ -25,6 +25,9 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
                 'use_lower' => false,
                 'use_upper' => false,
             ],
+            'sms' => [
+                'resend_timeout' => '+5 minutes',
+            ],
         ];
     }
 

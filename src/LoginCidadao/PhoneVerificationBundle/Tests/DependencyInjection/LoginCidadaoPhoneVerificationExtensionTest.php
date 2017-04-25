@@ -68,5 +68,9 @@ class LoginCidadaoPhoneVerificationExtensionTest extends \PHPUnit_Framework_Test
             $config['verification_code']['use_lower'],
             $container->getParameter('lc.phone_verification.options.code.use_lower')
         );
+        $this->assertEquals(
+            $config['sms']['resend_timeout'],
+            $container->getParameter('lc.phone_verification.options.sms.resend_timeout')
+        );
     }
 }

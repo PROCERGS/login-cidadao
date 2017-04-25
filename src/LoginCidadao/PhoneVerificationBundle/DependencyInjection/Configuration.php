@@ -20,27 +20,38 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('login_cidadao_phone_verification');
 
-        $rootNode->children()
-            ->arrayNode('verification_code')
-            ->addDefaultsIfNotSet()
+        $rootNode
             ->children()
-                ->integerNode('length')
-                    ->defaultValue(6)
+                ->arrayNode('verification_code')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->integerNode('length')
+                            ->defaultValue(6)
+                        ->end()
+                        ->booleanNode('use_numbers')
+                            ->defaultTrue()
+                        ->end()
+                        ->booleanNode('case_sensitive')
+                            ->defaultFalse()
+                        ->end()
+                        ->booleanNode('use_lower')
+                            ->defaultFalse()
+                        ->end()
+                        ->booleanNode('use_upper')
+                            ->defaultFalse()
+                        ->end()
+                    ->end()
                 ->end()
-                ->booleanNode('use_numbers')
-                    ->defaultTrue()
+
+                ->arrayNode('sms')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('resend_timeout')
+                            ->defaultValue('+5 minutes')
+                        ->end()
+                    ->end()
                 ->end()
-                ->booleanNode('case_sensitive')
-                    ->defaultFalse()
-                ->end()
-                ->booleanNode('use_lower')
-                    ->defaultFalse()
-                ->end()
-                ->booleanNode('use_upper')
-                    ->defaultFalse()
-                ->end()
-            ->end()
-        ->end();
+            ->end();
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for

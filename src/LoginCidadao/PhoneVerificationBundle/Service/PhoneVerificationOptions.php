@@ -27,6 +27,9 @@ class PhoneVerificationOptions
     /** @var int */
     private $length;
 
+    /** @var string */
+    private $smsResendTimeout;
+
     /**
      * PhoneVerificationOptions constructor.
      * @param int $length
@@ -34,14 +37,16 @@ class PhoneVerificationOptions
      * @param bool $caseSensitive
      * @param bool $useLowerCase
      * @param bool $useUpperCase
+     * @param $smsResendTimeout
      */
-    public function __construct($length, $useNumbers, $caseSensitive, $useLowerCase, $useUpperCase)
+    public function __construct($length, $useNumbers, $caseSensitive, $useLowerCase, $useUpperCase, $smsResendTimeout)
     {
         $this->length = $length;
         $this->useNumbers = $useNumbers;
         $this->caseSensitive = $caseSensitive;
         $this->useLowerCase = $useLowerCase;
         $this->useUpperCase = $useUpperCase;
+        $this->smsResendTimeout = $smsResendTimeout;
     }
 
     /**
@@ -82,5 +87,10 @@ class PhoneVerificationOptions
     public function getLength()
     {
         return $this->length;
+    }
+
+    public function getSmsResendTimeout()
+    {
+        return $this->smsResendTimeout;
     }
 }
