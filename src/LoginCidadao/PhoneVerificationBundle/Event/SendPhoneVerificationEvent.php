@@ -10,8 +10,8 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Event;
 
-use LoginCidadao\PhoneVerificationBundle\Entity\SentVerification;
 use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
+use LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 class SendPhoneVerificationEvent extends Event
@@ -19,7 +19,7 @@ class SendPhoneVerificationEvent extends Event
     /** @var PhoneVerificationInterface */
     private $phoneVerification;
 
-    /** @var SentVerification */
+    /** @var SentVerificationInterface */
     private $sentVerification;
 
     /**
@@ -40,7 +40,7 @@ class SendPhoneVerificationEvent extends Event
     }
 
     /**
-     * @return SentVerification
+     * @return SentVerificationInterface
      */
     public function getSentVerification()
     {
@@ -48,7 +48,7 @@ class SendPhoneVerificationEvent extends Event
     }
 
     /**
-     * @param SentVerification $sentVerification
+     * @param SentVerificationInterface $sentVerification
      */
     public function setSentVerification($sentVerification)
     {

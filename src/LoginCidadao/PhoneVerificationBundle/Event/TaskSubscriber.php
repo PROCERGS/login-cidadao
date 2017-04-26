@@ -11,6 +11,7 @@
 namespace LoginCidadao\PhoneVerificationBundle\Event;
 
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\PhoneVerificationBundle\Exception\VerificationNotSentException;
 use LoginCidadao\PhoneVerificationBundle\Model\ConfirmPhoneTask;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
 use LoginCidadao\TaskStackBundle\Event\GetTasksEvent;
@@ -70,6 +71,17 @@ class TaskSubscriber implements EventSubscriberInterface
         }
 
         $verification = reset($pending);
+        $lastSentVerification = $this->phoneVerificationService->getLastSentVerification($verification);
+
+        if ($verification && !$lastSentVerification) {
+            try {
+                $this->phoneVerificationService->sendVerificationCode($verification);
+            } catch (VerificationNotSentException $e) {
+                // could not send the verification code, do not add the task
+                return;
+            }
+        }
+
         $event->addTaskIfStackEmpty(new ConfirmPhoneTask($verification->getId()));
     }
 }
