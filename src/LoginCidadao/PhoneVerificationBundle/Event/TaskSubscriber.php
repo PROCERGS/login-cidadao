@@ -12,7 +12,7 @@ namespace LoginCidadao\PhoneVerificationBundle\Event;
 
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\PhoneVerificationBundle\Model\ConfirmPhoneTask;
-use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService;
+use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
 use LoginCidadao\TaskStackBundle\Event\GetTasksEvent;
 use LoginCidadao\TaskStackBundle\TaskStackEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -23,7 +23,7 @@ class TaskSubscriber implements EventSubscriberInterface
     /** @var TokenStorageInterface */
     private $tokenStorage;
 
-    /** @var PhoneVerificationService */
+    /** @var PhoneVerificationServiceInterface */
     private $phoneVerificationService;
 
     /** @var bool */
@@ -32,12 +32,12 @@ class TaskSubscriber implements EventSubscriberInterface
     /**
      * TaskSubscriber constructor.
      * @param TokenStorageInterface $tokenStorage
-     * @param PhoneVerificationService $phoneVerificationService
+     * @param PhoneVerificationServiceInterface $phoneVerificationService
      * @param bool $verificationEnabled
      */
     public function __construct(
         TokenStorageInterface $tokenStorage,
-        PhoneVerificationService $phoneVerificationService,
+        PhoneVerificationServiceInterface $phoneVerificationService,
         $verificationEnabled = false
     ) {
         $this->tokenStorage = $tokenStorage;

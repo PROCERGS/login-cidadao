@@ -281,4 +281,16 @@ class PhoneVerificationServiceTest extends \PHPUnit_Framework_TestCase
         $service = $this->getService(compact('dispatcher'));
         $service->resendVerificationCode($phoneVerification);
     }
+
+    public function testRegisterVerificationSent()
+    {
+        $sentVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface');
+
+        $em = $this->getEntityManager();
+        $em->expects($this->once())->method('persist')->with($sentVerification);
+        $em->expects($this->once())->method('flush')->with($sentVerification);
+
+        $service = $this->getService(['em' => $em]);
+        $service->registerVerificationSent($sentVerification);
+    }
 }

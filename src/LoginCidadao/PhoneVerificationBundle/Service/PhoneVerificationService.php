@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use libphonenumber\PhoneNumber;
 use LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationEvent;
 use LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent;
+use LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
@@ -21,7 +22,7 @@ use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification;
 use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
 
-class PhoneVerificationService
+class PhoneVerificationService implements PhoneVerificationServiceInterface
 {
     /** @var PhoneVerificationOptions */
     private $options;
@@ -252,9 +253,20 @@ class PhoneVerificationService
         }
     }
 
+    /**
+     * @param PhoneVerificationInterface $phoneVerification
+     */
     public function resendVerificationCode(PhoneVerificationInterface $phoneVerification)
     {
         $event = new SendPhoneVerificationEvent($phoneVerification);
         $this->dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED, $event);
+    }
+
+    public function registerVerificationSent(SentVerificationInterface $sentVerification)
+    {
+        $this->em->persist($sentVerification);
+        $this->em->flush($sentVerification);
+
+        return $sentVerification;
     }
 }

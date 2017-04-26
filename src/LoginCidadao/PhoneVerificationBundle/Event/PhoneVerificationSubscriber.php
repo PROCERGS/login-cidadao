@@ -14,7 +14,7 @@ namespace LoginCidadao\PhoneVerificationBundle\Event;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
-use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService;
+use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerTrait;
@@ -25,14 +25,14 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
 {
     use LoggerAwareTrait, LoggerTrait;
 
-    /** @var PhoneVerificationService */
+    /** @var PhoneVerificationServiceInterface */
     private $phoneVerificationService;
 
     /**
      * PhoneVerificationSubscriber constructor.
-     * @param PhoneVerificationService $phoneVerificationService
+     * @param PhoneVerificationServiceInterface $phoneVerificationService
      */
-    public function __construct(PhoneVerificationService $phoneVerificationService)
+    public function __construct(PhoneVerificationServiceInterface $phoneVerificationService)
     {
         $this->phoneVerificationService = $phoneVerificationService;
     }
@@ -76,6 +76,7 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
         return [
             PhoneVerificationEvents::PHONE_CHANGED => 'onPhoneChange',
             PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED => 'onVerificationRequest',
+            PhoneVerificationEvents::PHONE_VERIFICATION_CODE_SENT => 'onCodeSent',
         ];
     }
 
@@ -119,5 +120,11 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
                 'phone' => $phoneUtil->format($person->getMobile(), PhoneNumberFormat::E164),
             ]
         );
+    }
+
+    public function onCodeSent(SendPhoneVerificationEvent $event)
+    {
+        $sentVerification = $event->getSentVerification();
+        $this->phoneVerificationService->registerVerificationSent($sentVerification);
     }
 }

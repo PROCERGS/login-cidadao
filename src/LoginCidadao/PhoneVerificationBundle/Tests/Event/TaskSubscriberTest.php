@@ -34,10 +34,8 @@ class TaskSubscriberTest extends \PHPUnit_Framework_TestCase
 
     private function getPhoneVerificationService()
     {
-        $class = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService';
-        $phoneVerificationService = $this->getMockBuilder($class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $class = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface';
+        $phoneVerificationService = $this->getMock($class);
 
         return $phoneVerificationService;
     }

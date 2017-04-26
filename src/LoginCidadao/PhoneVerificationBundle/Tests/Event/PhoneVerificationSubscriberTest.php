@@ -44,10 +44,8 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $phoneVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
 
-        $phoneVerificationServiceClass = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService';
-        $phoneVerificationService = $this->getMockBuilder($phoneVerificationServiceClass)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $phoneVerificationServiceClass = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface';
+        $phoneVerificationService = $this->getMock($phoneVerificationServiceClass);
         $phoneVerificationService->expects($this->once())->method('getPhoneVerification')
             ->willReturn($phoneVerification);
         $phoneVerificationService->expects($this->once())->method('createPhoneVerification')
@@ -64,10 +62,8 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testOnVerificationRequest()
     {
-        $phoneVerificationServiceClass = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService';
-        $phoneVerificationService = $this->getMockBuilder($phoneVerificationServiceClass)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $phoneVerificationServiceClass = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface';
+        $phoneVerificationService = $this->getMock($phoneVerificationServiceClass);
 
         $person = new Person();
         $person->setMobile(PhoneNumberUtil::getInstance()->parse('+5551999999999', 'BR'));
@@ -87,5 +83,22 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $listener = new PhoneVerificationSubscriber($phoneVerificationService);
         $listener->setLogger($logger);
         $listener->onVerificationRequest($event);
+    }
+
+    public function testOnCodeSent()
+    {
+        $sentVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface');
+
+        $phoneVerificationServiceClass = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface';
+        $phoneVerificationService = $this->getMock($phoneVerificationServiceClass);
+        $phoneVerificationService->expects($this->once())->method('registerVerificationSent')->with($sentVerification);
+
+        $event = $this->getMockBuilder('LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $event->expects($this->once())->method('getSentVerification')->willReturn($sentVerification);
+
+        $listener = new PhoneVerificationSubscriber($phoneVerificationService);
+        $listener->onCodeSent($event);
     }
 }
