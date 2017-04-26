@@ -17,7 +17,11 @@ tasks:
             warning: Without a verified phone some functionalities may not be available. Are you sure you want to verify later?
             confirm: Yes, I'll do the verification later
         resend:
-            before:
-                title: Resend Code
-                body: Click the button bellow to resend your verification code.
-                button: Resend
+            waiting:
+                please_wait: If you didn't receive the message yet, please wait <span class="resend-time-left">until %date%</span>.
+                date_format: m/d/Y H:i
+            timeout:
+                body: Didn't get the message? You can use the button below to resend the message.
+                button: Resend message
+            errors:
+                too_many_requests: It's not possible to resend the verification code yet. Please, retry later.

@@ -12,8 +12,10 @@ namespace LoginCidadao\PhoneVerificationBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use libphonenumber\PhoneNumber;
+use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationEvent;
 use LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent;
+use LoginCidadao\PhoneVerificationBundle\Exception\VerificationNotSentException;
 use LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -21,6 +23,7 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification;
 use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class PhoneVerificationService implements PhoneVerificationServiceInterface
 {
@@ -32,6 +35,9 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
 
     /** @var PhoneVerificationRepository */
     private $phoneVerificationRepository;
+
+    /** @var SentVerificationRepository */
+    private $sentVerificationRepository;
 
     /** @var EventDispatcherInterface */
     private $dispatcher;
@@ -52,6 +58,8 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
         $this->dispatcher = $dispatcher;
         $this->phoneVerificationRepository = $this->em
             ->getRepository('LoginCidadaoPhoneVerificationBundle:PhoneVerification');
+        $this->sentVerificationRepository = $this->em
+            ->getRepository('LoginCidadaoPhoneVerificationBundle:SentVerification');
     }
 
     /**
@@ -253,13 +261,33 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
         }
     }
 
-    /**
-     * @param PhoneVerificationInterface $phoneVerification
-     */
-    public function resendVerificationCode(PhoneVerificationInterface $phoneVerification)
+    public function sendVerificationCode(PhoneVerificationInterface $phoneVerification)
     {
         $event = new SendPhoneVerificationEvent($phoneVerification);
         $this->dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED, $event);
+
+        $sentVerification = $event->getSentVerification();
+
+        if (!$sentVerification) {
+            throw new VerificationNotSentException();
+        }
+
+        return $sentVerification;
+    }
+
+    public function resendVerificationCode(PhoneVerificationInterface $phoneVerification)
+    {
+        $nextDate = $this->getNextResendDate($phoneVerification);
+        if ($nextDate > new \DateTime()) {
+            // We can't resend the verification code yet
+            $retryAfter = $nextDate->getTimestamp() - time();
+            throw new TooManyRequestsHttpException(
+                $retryAfter,
+                "tasks.verify_phone.resend.errors.too_many_requests"
+            );
+        }
+
+        $this->sendVerificationCode($phoneVerification);
     }
 
     public function registerVerificationSent(SentVerificationInterface $sentVerification)
@@ -268,5 +296,22 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
         $this->em->flush($sentVerification);
 
         return $sentVerification;
+    }
+
+    public function getLastSentVerification(PhoneVerificationInterface $phoneVerification)
+    {
+        return $this->sentVerificationRepository->getLastVerificationSent($phoneVerification);
+    }
+
+    public function getNextResendDate(PhoneVerificationInterface $phoneVerification)
+    {
+        $lastSentVerification = $this->getLastSentVerification($phoneVerification);
+        if (!$lastSentVerification) {
+            return new \DateTime();
+        }
+
+        $timeout = \DateInterval::createFromDateString($this->options->getSmsResendTimeout());
+
+        return $lastSentVerification->getSentAt()->add($timeout);
     }
 }

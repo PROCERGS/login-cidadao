@@ -26,18 +26,20 @@
     {{ form_end(form) }}
 
     {# Resend #}
-    <button class="btn btn-block btn-link btn-success resend" type="button"
-            data-toggle="collapse" data-target=".collapse-resend"
-            aria-expanded="false" aria-controls="collapse-resend">
-        {{ 'tasks.verify_phone.didnt_receive.button' | trans }}
-    </button>
-    <div class="collapse collapse-resend check-before-resend">
-        <h2>{{ 'tasks.verify_phone.resend.before.title' | trans }}</h2>
-        <p>{{ 'tasks.verify_phone.resend.before.body' | trans }}</p>
+    <div class="resend-verification-code">
+        {% if nextResend %}
+            <p>{{ 'tasks.verify_phone.resend.waiting.please_wait' | trans({'%date%': nextResend | date('tasks.verify_phone.resend.waiting.date_format' | trans)}) | raw }}</p>
+        {% endif %}
 
-        <a href="{{ path('lc_resend_verification_code', {id: verification.id}) }}" class="btn btn-block btn-success">
-            {{ 'tasks.verify_phone.resend.before.button' | trans }}
-        </a>
+        <div class="resend-timeout {{ nextResend ? 'hidden' }}">
+            <p>
+                {{ 'tasks.verify_phone.resend.timeout.body' | trans }}
+            </p>
+            <a href="{{ path('lc_resend_verification_code', {id: verification.id}) }}"
+               class="btn btn-block btn-success resend">
+                {{ 'tasks.verify_phone.resend.timeout.button' | trans }}
+            </a>
+        </div>
     </div>
     {# END OF Resend #}
 
@@ -50,4 +52,32 @@
         <a href="#" class="btn btn-block btn-link">{{ 'tasks.verify_phone.skip.confirm' | trans }}</a>
     </div>
     {# END OF Skip #}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/vendor/moment/min/moment-with-locales.min.js') }}"></script>
+    <script>
+        {% if nextResend %}
+        $(function () {
+            moment.locale('{{ app.request.locale }}');
+            var timeLeftInterval = null;
+            var nextResend = moment("{{ nextResend | date('Y-m-d H:i:s') }}", "YYYYMMDD hh:mm:ss");
+
+            var updateTimeLeft = function () {
+                var timeLeft = $('.resend-time-left');
+                if (moment().isBefore(nextResend)) {
+                    timeLeft.html(nextResend.fromNow(true));
+                } else {
+                    $('.resend-timeout').removeClass('hidden');
+                    timeLeft.parent().remove();
+                    clearInterval(timeLeftInterval);
+                }
+            };
+
+            updateTimeLeft();
+            timeLeftInterval = setInterval(updateTimeLeft, 3000);
+        });
+        {% endif %}
+    </script>
 {% endblock %}

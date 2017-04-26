@@ -13,11 +13,27 @@ namespace LoginCidadao\PhoneVerificationBundle\Service;
 use libphonenumber\PhoneNumber;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerification;
+use LoginCidadao\PhoneVerificationBundle\Exception\VerificationNotSentException;
 use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
 use LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 interface PhoneVerificationServiceInterface
 {
+    /**
+     * @param PersonInterface $person
+     * @param mixed $phone
+     * @return PhoneVerificationInterface
+     */
+    public function createPhoneVerification(PersonInterface $person, PhoneNumber $phone);
+
+    /**
+     * @param PersonInterface $person
+     * @param mixed $phone
+     * @return PhoneVerificationInterface
+     */
+    public function enforcePhoneVerification(PersonInterface $person, PhoneNumber $phone);
+
     /**
      * Gets phone verification record (PhoneVerificationInterface) for the given phone number.
      *
@@ -44,13 +60,6 @@ interface PhoneVerificationServiceInterface
     /**
      * @param PersonInterface $person
      * @param mixed $phone
-     * @return PhoneVerificationInterface
-     */
-    public function createPhoneVerification(PersonInterface $person, PhoneNumber $phone);
-
-    /**
-     * @param PersonInterface $person
-     * @param mixed $phone
      * @return PhoneVerificationInterface|null
      */
     public function getPendingPhoneVerification(PersonInterface $person, PhoneNumber $phone);
@@ -66,13 +75,6 @@ interface PhoneVerificationServiceInterface
      * @return bool
      */
     public function removePhoneVerification(PhoneVerificationInterface $phoneVerification);
-
-    /**
-     * @param PersonInterface $person
-     * @param mixed $phone
-     * @return PhoneVerificationInterface
-     */
-    public function enforcePhoneVerification(PersonInterface $person, PhoneNumber $phone);
 
     /**
      * Verifies code without dispatching any event or making any changes.
@@ -93,7 +95,18 @@ interface PhoneVerificationServiceInterface
     public function verify(PhoneVerificationInterface $phoneVerification, $providedCode);
 
     /**
+     * Sends the verification code
+     *
      * @param PhoneVerificationInterface $phoneVerification
+     * @return SentVerificationInterface
+     * @throws VerificationNotSentException
+     */
+    public function sendVerificationCode(PhoneVerificationInterface $phoneVerification);
+
+    /**
+     * @param PhoneVerificationInterface $phoneVerification
+     * @throws TooManyRequestsHttpException
+     * @throws VerificationNotSentException
      */
     public function resendVerificationCode(PhoneVerificationInterface $phoneVerification);
 
@@ -102,4 +115,20 @@ interface PhoneVerificationServiceInterface
      * @return SentVerification
      */
     public function registerVerificationSent(SentVerificationInterface $sentVerification);
+
+    /**
+     * @param PhoneVerificationInterface $phoneVerification
+     * @return SentVerificationInterface
+     */
+    public function getLastSentVerification(PhoneVerificationInterface $phoneVerification);
+
+    /**
+     * Returns the date when a new verification code request will be possible.
+     *
+     * This is essentially the last message sent plus the resend timeout.
+     *
+     * @param PhoneVerificationInterface $phoneVerification
+     * @return \DateTime
+     */
+    public function getNextResendDate(PhoneVerificationInterface $phoneVerification);
 }

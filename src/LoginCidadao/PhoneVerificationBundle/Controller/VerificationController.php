@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Controller;
 
+use LoginCidadao\PhoneVerificationBundle\Exception\VerificationNotSentException;
 use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService;
 use LoginCidadao\TaskStackBundle\Service\TaskStackManager;
@@ -36,6 +37,7 @@ class VerificationController extends Controller
         /** @var PhoneVerificationService $phoneVerificationService */
         $phoneVerificationService = $this->get('phone_verification');
 
+
         /** @var PhoneVerificationInterface $pendingVerifications */
         $verification = $phoneVerificationService->getPendingPhoneVerificationById($this->getUser(), $id);
 
@@ -50,7 +52,9 @@ class VerificationController extends Controller
                 /** @var TranslatorInterface $translator */
                 $translator = $this->get('translator');
 
-                $error = new FormError($translator->trans('tasks.verify_phone.form.errors.verificationCode.invalid_code'));
+                $error = new FormError(
+                    $translator->trans('tasks.verify_phone.form.errors.verificationCode.invalid_code')
+                );
                 $form->get('verificationCode')->addError($error);
             }
         }
@@ -61,10 +65,15 @@ class VerificationController extends Controller
             $task = $taskStackManager->getCurrentTask();
             $taskStackManager->setTaskSkipped($task);
 
-            return $taskStackManager->processRequest($request, $this->redirectToRoute('lc_dashboard'));
+            return $taskStackManager->processRequest($request, $this->redirectToRoute('VERIFICATION_SUCCESS'));
         }
 
-        return ['verification' => $verification, 'form' => $form->createView()];
+        $nextResend = $phoneVerificationService->getNextResendDate($verification);
+        if ($nextResend <= new \DateTime()) {
+            $nextResend = false;
+        }
+
+        return ['verification' => $verification, 'nextResend' => $nextResend, 'form' => $form->createView()];
     }
 
     /**
@@ -81,13 +90,14 @@ class VerificationController extends Controller
         try {
             $phoneVerificationService->resendVerificationCode($verification);
 
-            // TODO: flash message sent
-            return $this->redirectToRoute('lc_verify_phone', ['id' => $id]);
+            // TODO: flash "message sent"
         } catch (TooManyRequestsHttpException $e) {
+            // TODO: flash "message not sent. you have to wait until Y-m-d H:i"
+        } catch (VerificationNotSentException $e) {
             // TODO: error, message not sent
-            die('not sent');
+            die('error. not sent');
         }
 
-        return [];
+        return $this->redirectToRoute('lc_verify_phone', ['id' => $id]);
     }
 }
