@@ -77,6 +77,21 @@ interface PhoneVerificationInterface
     public function getVerificationCode();
 
     /**
+     * Set the Verification Token used to perform "one-click verification".
+     *
+     * @param string $verificationToken
+     * @return PhoneVerificationInterface
+     */
+    public function setVerificationToken($verificationToken);
+
+    /**
+     * Get the Verification Token used to perform "one-click verification".
+     *
+     * @return string
+     */
+    public function getVerificationToken();
+
+    /**
      * @return \DateTime
      */
     public function getCreatedAt();

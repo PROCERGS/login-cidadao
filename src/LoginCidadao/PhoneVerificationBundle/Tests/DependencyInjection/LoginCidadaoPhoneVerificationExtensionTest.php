@@ -76,5 +76,9 @@ class LoginCidadaoPhoneVerificationExtensionTest extends \PHPUnit_Framework_Test
             $config['sms']['resend_timeout'],
             $container->getParameter('lc.phone_verification.options.sms.resend_timeout')
         );
+        $this->assertEquals(
+            $config['verification_token']['length'],
+            $container->getParameter('lc.phone_verification.options.token.length')
+        );
     }
 }

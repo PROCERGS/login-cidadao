@@ -44,18 +44,18 @@ interface PhoneVerificationServiceInterface
     public function getPhoneVerification(PersonInterface $person, PhoneNumber $phone);
 
     /**
-     * @param PersonInterface $person
      * @param mixed $id
+     * @param PersonInterface $person
      * @return PhoneVerificationInterface
      */
-    public function getPhoneVerificationById(PersonInterface $person, $id);
+    public function getPhoneVerificationById($id, PersonInterface $person = null);
 
     /**
      * @param PersonInterface $person
      * @param mixed $id
      * @return PhoneVerificationInterface
      */
-    public function getPendingPhoneVerificationById(PersonInterface $person, $id);
+    public function getPendingPhoneVerificationById($id, PersonInterface $person = null);
 
     /**
      * @param PersonInterface $person
@@ -131,4 +131,15 @@ interface PhoneVerificationServiceInterface
      * @return \DateTime
      */
     public function getNextResendDate(PhoneVerificationInterface $phoneVerification);
+
+    /**
+     * Verifies the phone number using the id and the verification token.
+     *
+     * This will call <code>verify()</code>
+     *
+     * @param PhoneVerificationInterface $phoneVerification
+     * @param string $providedToken
+     * @return bool
+     */
+    public function verifyToken(PhoneVerificationInterface $phoneVerification, $providedToken);
 }

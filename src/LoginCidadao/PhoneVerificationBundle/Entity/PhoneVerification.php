@@ -71,6 +71,13 @@ class PhoneVerification extends AbstractPhoneVerification implements PhoneVerifi
     private $verificationCode;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="verification_token", type="string", length=255, nullable=false)
+     */
+    private $verificationToken;
+
+    /**
      * Get id
      *
      * @return integer
@@ -188,5 +195,24 @@ class PhoneVerification extends AbstractPhoneVerification implements PhoneVerifi
         if (!($this->getCreatedAt() instanceof \DateTime)) {
             $this->createdAt = new \DateTime();
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getVerificationToken()
+    {
+        return $this->verificationToken;
+    }
+
+    /**
+     * @param string $verificationToken
+     * @return PhoneVerification
+     */
+    public function setVerificationToken($verificationToken)
+    {
+        $this->verificationToken = $verificationToken;
+
+        return $this;
     }
 }

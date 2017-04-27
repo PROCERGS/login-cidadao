@@ -32,17 +32,20 @@ class PhoneVerificationTest extends \PHPUnit_Framework_TestCase
         $phone = $this->getMock('libphonenumber\PhoneNumber');
         $date = new \DateTime();
         $code = '123456';
+        $token = 'abcdef';
 
         $phoneVerification->setPerson($person)
             ->setPhone($phone)
             ->setVerifiedAt($date)
             ->setVerificationCode($code)
+            ->setVerificationToken($token)
             ->setCreatedAtValue();
 
         $this->assertEquals($person, $phoneVerification->getPerson());
         $this->assertEquals($phone, $phoneVerification->getPhone());
         $this->assertEquals($date, $phoneVerification->getVerifiedAt());
         $this->assertEquals($code, $phoneVerification->getVerificationCode());
+        $this->assertEquals($token, $phoneVerification->getVerificationToken());
         $this->assertTrue($phoneVerification->isVerified());
         $this->assertNull($phoneVerification->getId());
         $this->assertNotNull($phoneVerification->getCreatedAt());

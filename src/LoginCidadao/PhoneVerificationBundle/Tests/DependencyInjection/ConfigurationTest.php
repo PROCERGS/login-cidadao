@@ -26,6 +26,9 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
                 'use_lower' => false,
                 'use_upper' => false,
             ],
+            'verification_token' => [
+                'length' => 6,
+            ],
             'sms' => [
                 'resend_timeout' => '+5 minutes',
             ],
