@@ -98,7 +98,9 @@ class VerificationController extends Controller
      */
     public function successAction(Request $request)
     {
-        return new JsonResponse('Success placeholder');
+        return [
+            'target' => '#',
+        ];
     }
 
     /**

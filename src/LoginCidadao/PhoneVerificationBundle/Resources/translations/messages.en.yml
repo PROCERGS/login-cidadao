@@ -3,6 +3,9 @@ tasks:
         title: Phone Verification
         sms_sent: We sent you a verification code to the phone you informed in your profile.
         type_code: Please, check your SMS and type the code you've received.
+        success:
+            body: Your phone was successfuly verified!
+            continue: Continue
         form:
             verificationCode:
                 label: Verification Code
