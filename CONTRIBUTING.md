@@ -24,7 +24,7 @@ identificado e corrigido mais rapidamente:
   - Sistema Operacional e sua versão (ex: Debian 8);
   - Versão do Login Cidadão (informe o commit que você está usando);
   - Tipo de usuário (ex: não autenticado, usuário normal, administrador...);
-  - Você fez alguma modificação que não constam em um commit? Explique.
+  - Você fez alguma modificação que não consta em um commit? Explique.
 
 Solicitações de Novas Funcionalidades
 -------------------------------------
@@ -48,4 +48,5 @@ para que seu código seja aceito:
   - Certifique-se de que seu código seja 100% coberto por testes unitários,
 quando aplicável;
   - Lembre de incluir o cabeçalho com informações sobre a licença do Login
-Cidadão.
+Cidadão;
+  - Faça suas alterações sobre o branch `master`.
