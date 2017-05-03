@@ -1,23 +1,19 @@
-Login Cidadão
-=============
+Instalação Detalhada do Login Cidadão
+=====================================
 
+> **Se você procura instruções passo-a-passo, como uma receita, verifique as
+[instruções para instalação em Debian](cookbook/deploy_debian_os.md).**
 
-Login Cidadão é um software livre que atua como um provedor de identidade
-implementado protocolos como **OpenID Connect** e **OAuth 2**. Seu foco de
-utilização é em entidades governamentais, entretanto não há nenhuma restrição
-no projeto que impeça seu isso por entes privados.
+## Arquitetura
 
-Instalação
-----------
-> If you looking for a cookbook, take a look in [Deploy recipe with Debian os](cookbook/deploy_debian_os.md)
-
-### Arquitetura
 O Login Cidadão é escrito em PHP com apoio do framework **Symfony 2**
 e utiliza **Doctrine** para persistência de dados, suportando tanto
 **MySQL** quanto **PostgreSQL**. Além disso, você vai precisar de um
-servidor **memcached** para armazenamento de sessões e cache de metadados.
+servidor **memcached** para armazenamento de sessões e cache de metadados
+do Doctrine.
 
-### O que você vai precisar
+## O que você vai precisar
+
 Essa documentação não irá descrever os passos necessários para instalar
 os componentes necessários que não sejam específicos do Login Cidadão
 visto que a configuração de cada um pode variar significativamente de
@@ -83,7 +79,7 @@ forma que ele seja acessível a partir de qualquer diretório do sistema;
   * [**Node.js**](https://nodejs.org/en/): é um runtime JavaScript
 utilizado pelo Login Cidadão para gerar assets tais como scripts e CSS.
 
-### Tipos de Instalação
+## Tipos de Instalação
 
 Atualmente o Login Cidadão é uma aplicação inteira e não um *Bundle*. Isso
 quer dizer que você não o instala em uma aplicação *Symfony 2* já existente
@@ -97,7 +93,7 @@ Existem planos para transformar o Login Cidadão em um *Bundle*, o que irá
 facilitar o processo de instalação e customização, mas ainda não temos
 previsão para que isso ocorra.
 
-#### Instalação personalizada
+### Instalação personalizada
 Se você deseja fazer alterações em sua instalação, é necessário que você
 primeiramente crie um fork do projeto base. Dessa forma você conseguirá
 manter sua instalação atualizada com o projeto principal sem perder suas
@@ -106,7 +102,7 @@ modificações.
 Para orientações sobre como fazer um fork, verifique a
 [documentação do GitHub](https://help.github.com/articles/fork-a-repo/).
 
-#### Instalação Padrão
+### Instalação Padrão
 Utilizar o Login Cidadão sem nenhuma alteração é a forma mais fácil e rápida
 de iniciar. Para isso, basta clonar o repositório principal conforme será
 demonstrado no passo-a-passo.
@@ -114,7 +110,7 @@ demonstrado no passo-a-passo.
 Se você não tem experiência com Git, você pode consultar a documentação
 do GitHub sobre [como clonar um repositório](https://help.github.com/articles/cloning-a-repository/).
 
-### Preparação do Banco de Dados
+## Preparação do Banco de Dados
 
 Caso você ainda não tenha configurado seu banco de dados, esse é o momento ideal.
 Tenha em mente que o *Doctrine* pode conectar-se ao seu banco de dados de duas
@@ -122,7 +118,7 @@ formas, a primeira é utilizando um login e senha e um endereço IP e a segunda 
 com um *Socket Unix*. Você deve configurar seu banco de dados de acordo com a forma
 desejada e configurar o Login Cidadão para utilizar o tipo de conexão escolhido.
 
-#### Utilizando *Unix Sockets*
+### Utilizando *Unix Sockets*
 
 No caso de conexão via sockets, que a documentação do *Symfony* não cobre muito
 bem, você deverá utilizar o valor `~` para os parâmetros `database_host`,
@@ -133,7 +129,7 @@ Independentemente da forma de conexão escolhida, você deverá criar um *schema
 para utilização do Login Cidadão e informar o nome desse *schema* no parâmetro
 `database_name`.
 
-### Instalando o Login Cidadão
+## Instalando o Login Cidadão
 
 A partir desse ponto, consideramos que você já tenha instalado os softwares
 necessários listados nos itens anteriores além de ter conferido o nosso
@@ -179,7 +175,7 @@ Após a conclusão da instalação das dependências, o composer executará
 scripts de pós-instalação do Symfony onde serão solicitados os parâmetros
 do seu ambiente de forma iterativa. Você pode consultar a descrição dos
 parâmetros no arquivo `app/config/parameters.yml.dist` ou, em maiores detalhes,
-na [documentação específica](parameters.md).
+na [documentação específica](config_parameters.md).
 
 Os parâmetros da sua instância serão salvos no arquivo `app/config/parameters.yml`,
 onde você pode alterar posteriormente caso queira fazer algum ajuste.
@@ -209,7 +205,7 @@ receba suas requisições e as encaminhe para o PHP. Para isso, no próximo
 capítulo, configuraremos o `php-fpm` para aceitar requisições para o Login
 Cidadão, inclusive usando o usuário correto.
 
-### Configurando o php-fpm
+## Configurando o php-fpm
 
 Antes de configurar seu servidor HTTPS para encaminhar as requisições ao PHP,
 você precisa ter um software para recebê-las e esse será o papel do `php-fpm`.
@@ -249,7 +245,7 @@ Após configurar o arquivo `/etc/php5/fpm/pool.d/logincidadao.conf` conforme as
 instruções, salve-o e reinicie o serviço do `php-fpm` utilizando os comandos
 pertinentes ao seu sistema operacional.
 
-### Configurando o servidor HTTPS
+## Configurando o servidor HTTPS
 
 Estando com o Login Cidadão instalado e configurado e tendo o `php-fpm` pronto
 para receber as requisições, você só precisa configurar um servidor HTTPS.
@@ -352,7 +348,7 @@ Após modificar esse arquivo de configuração de acordo com seu ambiente e rein
 o `nginx` será a hora de configurar o Let's Encrypt ou seu certificado HTTPS obtido
 de outra forma.
 
-### Utilizando Let's Encrypt
+## Utilizando Let's Encrypt
 
 Para realizar a instalação de um certificado HTTPS *Let's Encrypt* pela primeira
 vez, você deverá comentar as opções `ssl_certificate` e `ssl_certificate_key` em
@@ -375,7 +371,7 @@ diretórios informados pelo *certbot*. Agora basta descomentar as linhas
 `ssl_certificate` e `ssl_certificate_key` e reiniciar o *nginx* para concluir a
 instalação.
 
-#### Renovação Automática
+### Renovação Automática
 
 Como os certificados emitidos pelo serviço *Let's Encrypt* tem validade de apenas
 90 dias, é recomendado que se configure a renovação automática dos certificados.
@@ -389,7 +385,7 @@ em seu *crontab*:
 renovação. Caso em seu sistema operacional o comando para recarregar as
 configurações do *nginx* seja diferente, lembre-se de alterar de acordo.
 
-## Pós-Instalação
+# Pós-Instalação
 
 Agora que você já deve ter uma instância funcional do Login Cidadão, você
 provavelmente deseja [definir um usuário administrador](?doc=cookbook/admin_user).
