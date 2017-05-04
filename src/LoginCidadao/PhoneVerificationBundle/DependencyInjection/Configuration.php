@@ -46,6 +46,15 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
 
+                ->arrayNode('verification_token')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->integerNode('length')
+                            ->defaultValue(6)
+                        ->end()
+                    ->end()
+                ->end()
+
                 ->arrayNode('sms')
                     ->addDefaultsIfNotSet()
                     ->children()

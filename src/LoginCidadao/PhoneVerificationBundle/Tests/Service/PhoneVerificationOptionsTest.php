@@ -22,6 +22,7 @@ class PhoneVerificationOptionsTest extends \PHPUnit_Framework_TestCase
         $useUpper = true;
         $caseSensitive = true;
         $smsResendTimeout = '+10 minutes';
+        $tokenLength = 5;
 
         $options = new PhoneVerificationOptions(
             $length,
@@ -29,7 +30,8 @@ class PhoneVerificationOptionsTest extends \PHPUnit_Framework_TestCase
             $caseSensitive,
             $useLower,
             $useUpper,
-            $smsResendTimeout
+            $smsResendTimeout,
+            $tokenLength
         );
 
         $this->assertEquals($length, $options->getLength());
@@ -38,5 +40,6 @@ class PhoneVerificationOptionsTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($options->isUseUpperCase());
         $this->assertTrue($options->isCaseSensitive());
         $this->assertEquals($smsResendTimeout, $options->getSmsResendTimeout());
+        $this->assertEquals($tokenLength, $options->getVerificationTokenLength());
     }
 }

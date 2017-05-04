@@ -24,6 +24,7 @@ use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification;
 use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class PhoneVerificationService implements PhoneVerificationServiceInterface
 {
@@ -87,15 +88,15 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
      * @param mixed $id
      * @return PhoneVerificationInterface
      */
-    public function getPhoneVerificationById(PersonInterface $person, $id)
+    public function getPhoneVerificationById($id, PersonInterface $person = null)
     {
+        $criteria = ['id' => $id];
+        if ($person) {
+            $criteria['person'] = $person;
+        }
+
         /** @var PhoneVerificationInterface $phoneVerification */
-        $phoneVerification = $this->phoneVerificationRepository->findOneBy(
-            [
-                'person' => $person,
-                'id' => $id,
-            ]
-        );
+        $phoneVerification = $this->phoneVerificationRepository->findOneBy($criteria);
 
         return $phoneVerification;
     }
@@ -105,16 +106,18 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
      * @param mixed $id
      * @return PhoneVerificationInterface
      */
-    public function getPendingPhoneVerificationById(PersonInterface $person, $id)
+    public function getPendingPhoneVerificationById($id, PersonInterface $person = null)
     {
+        $criteria = [
+            'id' => $id,
+            'verifiedAt' => null,
+        ];
+        if ($person) {
+            $criteria['person'] = $person;
+        }
+
         /** @var PhoneVerificationInterface $phoneVerification */
-        $phoneVerification = $this->phoneVerificationRepository->findOneBy(
-            [
-                'person' => $person,
-                'id' => $id,
-                'verifiedAt' => null,
-            ]
-        );
+        $phoneVerification = $this->phoneVerificationRepository->findOneBy($criteria);
 
         return $phoneVerification;
     }
@@ -134,7 +137,8 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
         $phoneVerification = new PhoneVerification();
         $phoneVerification->setPerson($person)
             ->setPhone($phone)
-            ->setVerificationCode($this->generateVerificationCode());
+            ->setVerificationCode($this->generateVerificationCode())
+            ->setVerificationToken($this->generateVerificationToken());
 
         $this->em->persist($phoneVerification);
         $this->em->flush($phoneVerification);
@@ -220,6 +224,14 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
         }
 
         return $code;
+    }
+
+    private function generateVerificationToken()
+    {
+        $length = $this->options->getVerificationTokenLength();
+
+        // We divide by 2 otherwise the resulting string would be twice as long
+        return bin2hex(random_bytes($length / 2));
     }
 
     /**
@@ -313,5 +325,19 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
         $timeout = \DateInterval::createFromDateString($this->options->getSmsResendTimeout());
 
         return $lastSentVerification->getSentAt()->add($timeout);
+    }
+
+    public function verifyToken(PhoneVerificationInterface $phoneVerification, $token)
+    {
+        if ($phoneVerification->isVerified()) {
+            return true;
+        }
+
+        if ($phoneVerification->getVerificationToken() !== $token) {
+            // TODO: add translated message
+            throw new AccessDeniedException();
+        }
+
+        return $this->verify($phoneVerification, $phoneVerification->getVerificationCode());
     }
 }

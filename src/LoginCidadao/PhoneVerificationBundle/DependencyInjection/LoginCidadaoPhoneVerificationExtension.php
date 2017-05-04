@@ -27,6 +27,9 @@ class LoginCidadaoPhoneVerificationExtension extends Extension
         foreach ($config['verification_code'] as $key => $value) {
             $container->setParameter("lc.phone_verification.options.code.{$key}", $value);
         }
+        foreach ($config['verification_token'] as $key => $value) {
+            $container->setParameter("lc.phone_verification.options.token.{$key}", $value);
+        }
         foreach ($config['sms'] as $key => $value) {
             $container->setParameter("lc.phone_verification.options.sms.{$key}", $value);
         }

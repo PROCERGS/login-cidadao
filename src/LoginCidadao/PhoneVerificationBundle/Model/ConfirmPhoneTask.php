@@ -52,6 +52,7 @@ class ConfirmPhoneTask extends AbstractTask
         return [
             'lc_verify_phone',
             'lc_resend_verification_code',
+            'lc_phone_verification_verify_link',
         ];
     }
 

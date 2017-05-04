@@ -11,6 +11,7 @@
 namespace LoginCidadao\PhoneVerificationBundle\Tests\Event;
 
 use LoginCidadao\PhoneVerificationBundle\Event\TaskSubscriber;
+use LoginCidadao\PhoneVerificationBundle\Exception\VerificationNotSentException;
 use LoginCidadao\TaskStackBundle\TaskStackEvents;
 
 class TaskSubscriberTest extends \PHPUnit_Framework_TestCase
@@ -69,6 +70,25 @@ class TaskSubscriberTest extends \PHPUnit_Framework_TestCase
         $event = $this->getMockBuilder('LoginCidadao\TaskStackBundle\Event\GetTasksEvent')
             ->disableOriginalConstructor()->getMock();
         $event->expects($this->once())->method('addTaskIfStackEmpty');
+
+        $subscriber = new TaskSubscriber($tokenStorage, $phoneVerificationService, true);
+        $subscriber->onGetTasks($event);
+    }
+
+    public function testOnGetTasksSendFailed()
+    {
+        $phoneVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
+        $tokenStorage = $this->getTokenStorage();
+
+        $phoneVerificationService = $this->getPhoneVerificationService();
+        $phoneVerificationService->expects($this->once())->method('getAllPendingPhoneVerification')
+            ->willReturn([$phoneVerification]);
+        $phoneVerificationService->expects($this->once())->method('sendVerificationCode')->willThrowException(
+            new VerificationNotSentException()
+        );
+
+        $event = $this->getMockBuilder('LoginCidadao\TaskStackBundle\Event\GetTasksEvent')
+            ->disableOriginalConstructor()->getMock();
 
         $subscriber = new TaskSubscriber($tokenStorage, $phoneVerificationService, true);
         $subscriber->onGetTasks($event);
