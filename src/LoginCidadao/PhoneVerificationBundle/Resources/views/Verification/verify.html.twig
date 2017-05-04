@@ -28,16 +28,16 @@
     {# Resend #}
     <div class="resend-verification-code">
         {% if nextResend %}
-            <p>{{ 'tasks.verify_phone.resend.waiting.please_wait' | trans({'%date%': nextResend | date('tasks.verify_phone.resend.waiting.date_format' | trans)}) | raw }}</p>
+            <p style="padding: 25px 0 0" class="text-centercando o diff, percebi que esqueci de migrar al help-block">{{ 'tasks.verify_phone.resend.waiting.please_wait' | trans({'%date%': nextResend | date('tasks.verify_phone.resend.waiting.date_format' | trans)}) | raw }}</p>
         {% endif %}
 
-        <div class="resend-timeout {{ nextResend ? 'hidden' }}">
+        <div class="resend-timeout {{ nextResend ? 'hidden' }}" style="padding: 25px 10px 0">
             <p>
                 {{ 'tasks.verify_phone.resend.timeout.body' | trans }}
             </p>
             <a href="{{ path('lc_resend_verification_code', {id: verification.id}) }}"
-               class="btn btn-block btn-success resend">
-                {{ 'tasks.verify_phone.resend.timeout.button' | trans }}
+               class="btn btn-block btn-link resend">
+                {{ 'tasks.verify_phone.resend.timeout.button' | trans({'%phone%': verification.phone | phone_number_format('NATIONAL')}) }}
             </a>
         </div>
     </div>

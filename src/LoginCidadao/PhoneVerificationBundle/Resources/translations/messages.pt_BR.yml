@@ -3,6 +3,9 @@ tasks:
         title: Verificação de Celular
         sms_sent: Foi enviado um código de verificação para o telefone cadastrado em seu perfil.
         type_code: Por favor, verifique suas SMS e digite o código recebido.
+        success:
+            body: Seu telefone foi verificado com sucesso.
+            continue: Continuar
         form:
             verificationCode:
                 label: Código de Verificação
@@ -18,10 +21,10 @@ tasks:
             confirm: Sim, confirmar mais tarde
         resend:
             waiting:
-                please_wait: Se ainda não recebeu a mensagem no seu celular, por favor, aguarde <span class="resend-time-left">até %date%</span>.
+                please_wait: Por favor, aguarde <span class="resend-time-left">até %date%</span> antes de solicitar o reenvio da mensagem.
                 date_format: d/m/Y H:i
             timeout:
-                body: Não recebeu a mensagem? Você pode usar o botão a seguir para tentar reenviar a mensagem.
-                button: Reenviar mensagem
+                body: Caso não tenha recebido a mensagem, você pode solicitar o reenvio a seguir.
+                button: Reenviar SMS para %phone%
             errors:
                 too_many_requests: Ainda não é possível reenviar o código de verificação. Aguarde alguns minutos e tente novamente.

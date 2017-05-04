@@ -3,6 +3,9 @@ tasks:
         title: Phone Verification
         sms_sent: We sent you a verification code to the phone you informed in your profile.
         type_code: Please, check your SMS and type the code you've received.
+        success:
+            body: Your phone was successfuly verified!
+            continue: Continue
         form:
             verificationCode:
                 label: Verification Code
@@ -18,10 +21,10 @@ tasks:
             confirm: Yes, I'll do the verification later
         resend:
             waiting:
-                please_wait: If you didn't receive the message yet, please wait <span class="resend-time-left">until %date%</span>.
+                please_wait: Please, wait <span class="resend-time-left">until %date%</span> before asking to resend the message.
                 date_format: m/d/Y H:i
             timeout:
-                body: Didn't get the message? You can use the button below to resend the message.
-                button: Resend message
+                body: If you didn't get the message, you can ask to resend it below.
+                button: Resend SMS to %phone%
             errors:
                 too_many_requests: It's not possible to resend the verification code yet. Please, retry later.
