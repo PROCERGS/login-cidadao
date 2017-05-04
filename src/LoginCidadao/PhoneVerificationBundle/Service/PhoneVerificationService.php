@@ -12,15 +12,21 @@ namespace LoginCidadao\PhoneVerificationBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use libphonenumber\PhoneNumber;
+use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationEvent;
+use LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent;
+use LoginCidadao\PhoneVerificationBundle\Exception\VerificationNotSentException;
+use LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification;
 use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class PhoneVerificationService
+class PhoneVerificationService implements PhoneVerificationServiceInterface
 {
     /** @var PhoneVerificationOptions */
     private $options;
@@ -30,6 +36,9 @@ class PhoneVerificationService
 
     /** @var PhoneVerificationRepository */
     private $phoneVerificationRepository;
+
+    /** @var SentVerificationRepository */
+    private $sentVerificationRepository;
 
     /** @var EventDispatcherInterface */
     private $dispatcher;
@@ -50,6 +59,8 @@ class PhoneVerificationService
         $this->dispatcher = $dispatcher;
         $this->phoneVerificationRepository = $this->em
             ->getRepository('LoginCidadaoPhoneVerificationBundle:PhoneVerification');
+        $this->sentVerificationRepository = $this->em
+            ->getRepository('LoginCidadaoPhoneVerificationBundle:SentVerification');
     }
 
     /**
@@ -74,6 +85,45 @@ class PhoneVerificationService
 
     /**
      * @param PersonInterface $person
+     * @param mixed $id
+     * @return PhoneVerificationInterface
+     */
+    public function getPhoneVerificationById($id, PersonInterface $person = null)
+    {
+        $criteria = ['id' => $id];
+        if ($person) {
+            $criteria['person'] = $person;
+        }
+
+        /** @var PhoneVerificationInterface $phoneVerification */
+        $phoneVerification = $this->phoneVerificationRepository->findOneBy($criteria);
+
+        return $phoneVerification;
+    }
+
+    /**
+     * @param PersonInterface $person
+     * @param mixed $id
+     * @return PhoneVerificationInterface
+     */
+    public function getPendingPhoneVerificationById($id, PersonInterface $person = null)
+    {
+        $criteria = [
+            'id' => $id,
+            'verifiedAt' => null,
+        ];
+        if ($person) {
+            $criteria['person'] = $person;
+        }
+
+        /** @var PhoneVerificationInterface $phoneVerification */
+        $phoneVerification = $this->phoneVerificationRepository->findOneBy($criteria);
+
+        return $phoneVerification;
+    }
+
+    /**
+     * @param PersonInterface $person
      * @param mixed $phone
      * @return PhoneVerificationInterface
      */
@@ -87,7 +137,8 @@ class PhoneVerificationService
         $phoneVerification = new PhoneVerification();
         $phoneVerification->setPerson($person)
             ->setPhone($phone)
-            ->setVerificationCode($this->generateVerificationCode());
+            ->setVerificationCode($this->generateVerificationCode())
+            ->setVerificationToken($this->generateVerificationToken());
 
         $this->em->persist($phoneVerification);
         $this->em->flush($phoneVerification);
@@ -175,6 +226,14 @@ class PhoneVerificationService
         return $code;
     }
 
+    private function generateVerificationToken()
+    {
+        $length = $this->options->getVerificationTokenLength();
+
+        // We divide by 2 otherwise the resulting string would be twice as long
+        return bin2hex(random_bytes($length / 2));
+    }
+
     /**
      * Verifies code without dispatching any event or making any changes.
      *
@@ -212,5 +271,73 @@ class PhoneVerificationService
         } else {
             return false;
         }
+    }
+
+    public function sendVerificationCode(PhoneVerificationInterface $phoneVerification)
+    {
+        $event = new SendPhoneVerificationEvent($phoneVerification);
+        $this->dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED, $event);
+
+        $sentVerification = $event->getSentVerification();
+
+        if (!$sentVerification) {
+            throw new VerificationNotSentException();
+        }
+
+        return $sentVerification;
+    }
+
+    public function resendVerificationCode(PhoneVerificationInterface $phoneVerification)
+    {
+        $nextDate = $this->getNextResendDate($phoneVerification);
+        if ($nextDate > new \DateTime()) {
+            // We can't resend the verification code yet
+            $retryAfter = $nextDate->getTimestamp() - time();
+            throw new TooManyRequestsHttpException(
+                $retryAfter,
+                "tasks.verify_phone.resend.errors.too_many_requests"
+            );
+        }
+
+        $this->sendVerificationCode($phoneVerification);
+    }
+
+    public function registerVerificationSent(SentVerificationInterface $sentVerification)
+    {
+        $this->em->persist($sentVerification);
+        $this->em->flush($sentVerification);
+
+        return $sentVerification;
+    }
+
+    public function getLastSentVerification(PhoneVerificationInterface $phoneVerification)
+    {
+        return $this->sentVerificationRepository->getLastVerificationSent($phoneVerification);
+    }
+
+    public function getNextResendDate(PhoneVerificationInterface $phoneVerification)
+    {
+        $lastSentVerification = $this->getLastSentVerification($phoneVerification);
+        if (!$lastSentVerification) {
+            return new \DateTime();
+        }
+
+        $timeout = \DateInterval::createFromDateString($this->options->getSmsResendTimeout());
+
+        return $lastSentVerification->getSentAt()->add($timeout);
+    }
+
+    public function verifyToken(PhoneVerificationInterface $phoneVerification, $token)
+    {
+        if ($phoneVerification->isVerified()) {
+            return true;
+        }
+
+        if ($phoneVerification->getVerificationToken() !== $token) {
+            // TODO: add translated message
+            throw new AccessDeniedException();
+        }
+
+        return $this->verify($phoneVerification, $phoneVerification->getVerificationCode());
     }
 }

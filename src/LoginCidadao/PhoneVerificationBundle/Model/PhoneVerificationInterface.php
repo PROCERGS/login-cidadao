@@ -16,6 +16,12 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 interface PhoneVerificationInterface
 {
     /**
+     * Get the verification's id
+     * @return mixed
+     */
+    public function getId();
+
+    /**
      * Get the phone's owner
      * @return PersonInterface
      */
@@ -69,6 +75,21 @@ interface PhoneVerificationInterface
      * @return string
      */
     public function getVerificationCode();
+
+    /**
+     * Set the Verification Token used to perform "one-click verification".
+     *
+     * @param string $verificationToken
+     * @return PhoneVerificationInterface
+     */
+    public function setVerificationToken($verificationToken);
+
+    /**
+     * Get the Verification Token used to perform "one-click verification".
+     *
+     * @return string
+     */
+    public function getVerificationToken();
 
     /**
      * @return \DateTime

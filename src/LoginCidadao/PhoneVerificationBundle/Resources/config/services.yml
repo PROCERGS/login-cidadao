@@ -7,6 +7,9 @@ services:
             - "%lc.phone_verification.options.code.case_sensitive%"
             - "%lc.phone_verification.options.code.use_lower%"
             - "%lc.phone_verification.options.code.use_upper%"
+            - "%lc.phone_verification.options.sms.resend_timeout%"
+            - "%lc.phone_verification.options.token.length%"
+        lazy: true
 
     phone_verification:
         class: LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService
@@ -14,6 +17,7 @@ services:
             - "@phone_verification.options"
             - "@doctrine.orm.entity_manager"
             - "@event_dispatcher"
+        lazy: true
 
     phone_verification.events.subscriber:
         class: LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationSubscriber
@@ -30,9 +34,32 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    phone_verification.user_registration.subscriber:
+        class: LoginCidadao\PhoneVerificationBundle\Event\UserRegistrationSubscriber
+        arguments:
+            - "@phone_verification"
+        tags:
+            - { name: kernel.event_subscriber }
+
     phone_verification.person.serialize.listener:
         class: LoginCidadao\PhoneVerificationBundle\Event\PersonSerializeEventListener
         arguments:
             - "@phone_verification"
         tags:
             - { name: jms_serializer.event_listener, event: serializer.pre_serialize, method: onPreSerialize }
+
+    phone_verification.tasks.subscriber:
+        class: LoginCidadao\PhoneVerificationBundle\Event\TaskSubscriber
+        arguments:
+            - "@security.token_storage"
+            - "@phone_verification"
+            - "%lc.phone_verification.options.enabled%"
+        tags:
+            - { name: kernel.event_subscriber }
+
+    phone_verification.form:
+        class: LoginCidadao\PhoneVerificationBundle\Form\PhoneVerificationType
+        arguments:
+            - "@phone_verification.options"
+        tags:
+            - { name: form.type }

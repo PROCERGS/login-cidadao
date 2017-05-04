@@ -18,12 +18,19 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public static function getSampleConfig()
     {
         return [
+            'enabled' => false,
             'verification_code' => [
                 'length' => 6,
                 'use_numbers' => true,
                 'case_sensitive' => false,
                 'use_lower' => false,
                 'use_upper' => false,
+            ],
+            'verification_token' => [
+                'length' => 6,
+            ],
+            'sms' => [
+                'resend_timeout' => '+5 minutes',
             ],
         ];
     }

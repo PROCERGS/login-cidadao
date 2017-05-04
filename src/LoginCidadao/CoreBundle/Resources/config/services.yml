@@ -389,6 +389,7 @@ services:
 
     lc.register_requested_scope:
         class: LoginCidadao\CoreBundle\Service\RegisterRequestedScope
+        lazy: true
 
     lc.intent.manager:
         class: LoginCidadao\CoreBundle\Service\IntentManager
@@ -446,6 +447,7 @@ services:
         arguments:
             - "@http_kernel"
             - "@security.http_utils"
+        lazy: true
 
     lc.request.referer_logger:
         class: LoginCidadao\CoreBundle\EventListener\RequestListener
@@ -468,3 +470,4 @@ services:
             - "@validator"
             - "@translator"
             - "%user.class%"
+        lazy: true

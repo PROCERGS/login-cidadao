@@ -49,6 +49,10 @@ class LoginCidadaoPhoneVerificationExtensionTest extends \PHPUnit_Framework_Test
         $this->compileContainer($container);
 
         $this->assertEquals(
+            $config['enabled'],
+            $container->getParameter('lc.phone_verification.options.enabled')
+        );
+        $this->assertEquals(
             $config['verification_code']['length'],
             $container->getParameter('lc.phone_verification.options.code.length')
         );
@@ -67,6 +71,14 @@ class LoginCidadaoPhoneVerificationExtensionTest extends \PHPUnit_Framework_Test
         $this->assertEquals(
             $config['verification_code']['use_lower'],
             $container->getParameter('lc.phone_verification.options.code.use_lower')
+        );
+        $this->assertEquals(
+            $config['sms']['resend_timeout'],
+            $container->getParameter('lc.phone_verification.options.sms.resend_timeout')
+        );
+        $this->assertEquals(
+            $config['verification_token']['length'],
+            $container->getParameter('lc.phone_verification.options.token.length')
         );
     }
 }

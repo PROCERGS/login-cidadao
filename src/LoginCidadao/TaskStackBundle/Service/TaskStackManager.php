@@ -229,4 +229,14 @@ class TaskStackManager implements TaskStackManagerInterface
 
         return null;
     }
+
+    /**
+     * Counts how many Tasks are in the Stack
+     *
+     * @return int
+     */
+    public function countTasks()
+    {
+        return $this->getStack()->count();
+    }
 }

@@ -21,13 +21,25 @@ class PhoneVerificationOptionsTest extends \PHPUnit_Framework_TestCase
         $useLower = true;
         $useUpper = true;
         $caseSensitive = true;
+        $smsResendTimeout = '+10 minutes';
+        $tokenLength = 5;
 
-        $options = new PhoneVerificationOptions($length, $useNumbers, $caseSensitive, $useLower, $useUpper);
+        $options = new PhoneVerificationOptions(
+            $length,
+            $useNumbers,
+            $caseSensitive,
+            $useLower,
+            $useUpper,
+            $smsResendTimeout,
+            $tokenLength
+        );
 
         $this->assertEquals($length, $options->getLength());
         $this->assertTrue($options->isUseNumbers());
         $this->assertTrue($options->isUseLowerCase());
         $this->assertTrue($options->isUseUpperCase());
         $this->assertTrue($options->isCaseSensitive());
+        $this->assertEquals($smsResendTimeout, $options->getSmsResendTimeout());
+        $this->assertEquals($tokenLength, $options->getVerificationTokenLength());
     }
 }

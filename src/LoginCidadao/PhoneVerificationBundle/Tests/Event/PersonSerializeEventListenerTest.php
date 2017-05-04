@@ -56,10 +56,8 @@ class PersonSerializeEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     private function getPhoneVerificationService()
     {
-        $phoneVerificationServiceClass = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService';
-        $phoneVerificationService = $this->getMockBuilder($phoneVerificationServiceClass)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $phoneVerificationServiceClass = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface';
+        $phoneVerificationService = $this->getMock($phoneVerificationServiceClass);
 
         $phoneVerificationService->expects($this->any())->method('getPhoneVerification')
             ->willReturnCallback(

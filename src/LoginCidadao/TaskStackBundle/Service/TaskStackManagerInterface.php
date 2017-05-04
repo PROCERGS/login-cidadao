@@ -60,4 +60,11 @@ interface TaskStackManagerInterface
      * @return TaskInterface|null
      */
     public function getNextTask();
+
+    /**
+     * Counts how many Tasks are in the Stack
+     *
+     * @return int
+     */
+    public function countTasks();
 }

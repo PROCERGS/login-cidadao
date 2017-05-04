@@ -28,4 +28,9 @@ class PhoneVerificationEvents
      * This can trigger a service to send SMS or to call the user's phone.
      */
     const PHONE_VERIFICATION_REQUESTED = 'lc.phone_verification.requested';
+
+    /**
+     * This event is triggered after the verification code is sent.
+     */
+    const PHONE_VERIFICATION_CODE_SENT = 'lc.phone_verification.code_sent';
 }

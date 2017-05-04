@@ -11,9 +11,9 @@
 namespace LoginCidadao\PhoneVerificationBundle\Event;
 
 use JMS\Serializer\EventDispatcher\PreSerializeEvent;
-use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService;
+use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
 
 class PersonSerializeEventListener
 {
@@ -22,9 +22,9 @@ class PersonSerializeEventListener
 
     /**
      * PersonSerializeEventListener constructor.
-     * @param PhoneVerificationService $phoneVerificationService
+     * @param PhoneVerificationService|PhoneVerificationServiceInterface $phoneVerificationService
      */
-    public function __construct(PhoneVerificationService $phoneVerificationService)
+    public function __construct(PhoneVerificationServiceInterface $phoneVerificationService)
     {
         $this->phoneVerificationService = $phoneVerificationService;
     }

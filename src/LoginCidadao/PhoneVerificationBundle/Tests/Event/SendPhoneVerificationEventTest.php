@@ -19,8 +19,12 @@ class SendPhoneVerificationEventTest extends \PHPUnit_Framework_TestCase
         $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
         $phoneVerification = $this->getMock($phoneVerificationClass);
 
+        $sentVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface');
+
         $event = new SendPhoneVerificationEvent($phoneVerification);
+        $event->setSentVerification($sentVerification);
 
         $this->assertEquals($phoneVerification, $event->getPhoneVerification());
+        $this->assertEquals($sentVerification, $event->getSentVerification());
     }
 }
