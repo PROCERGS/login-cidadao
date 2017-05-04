@@ -34,6 +34,13 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    phone_verification.user_registration.subscriber:
+        class: LoginCidadao\PhoneVerificationBundle\Event\UserRegistrationSubscriber
+        arguments:
+            - "@phone_verification"
+        tags:
+            - { name: kernel.event_subscriber }
+
     phone_verification.person.serialize.listener:
         class: LoginCidadao\PhoneVerificationBundle\Event\PersonSerializeEventListener
         arguments:
