@@ -107,9 +107,6 @@ lc_home:
 lc_phone_verification:
     resource: "@LoginCidadaoPhoneVerificationBundle/Resources/config/routing.yml"
     prefix:   /
-procergs_lc_phone_verification:
-    resource: "@PROCERGSLoginCidadaoPhoneVerificationBundle/Resources/config/routing.yml"
-    prefix:   /
 
 # Audit
 simple_things_entity_audit:

@@ -39,9 +39,18 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $event->expects($this->once())->method('getPhoneVerification')->willReturn($phoneVerification);
+        $event->expects($this->once())->method('setSentVerification')->with(
+            $this->isInstanceOf('LoginCidadao\PhoneVerificationBundle\Entity\SentVerification')
+        );
+
+        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher->expects($this->once())->method('dispatch')->with(
+            PhoneVerificationEvents::PHONE_VERIFICATION_CODE_SENT,
+            $event
+        );
 
         $subscriber = $this->getPhoneVerificationSubscriber();
-        $subscriber->onVerificationRequest($event);
+        $subscriber->onVerificationRequest($event, PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED, $dispatcher);
     }
 
     /**
@@ -49,13 +58,6 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function getPhoneVerificationSubscriber()
     {
-        $verificationSentService = $this->getMockBuilder(
-            'PROCERGS\LoginCidadao\PhoneVerificationBundle\Service\VerificationSentService'
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $verificationSentService->expects($this->once())->method('registerVerificationSent');
-
         $smsService = $this->getMockBuilder('PROCERGS\Sms\SmsService')
             ->disableOriginalConstructor()
             ->getMock();
@@ -64,10 +66,17 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
         $translator->expects($this->once())->method('trans')->willReturn('message');
 
+        $router = $this->getMock('Symfony\Component\Routing\RouterInterface');
+        $router->expects($this->once())->method('generate')->willReturnCallback(
+            function ($routeName) {
+                return $routeName;
+            }
+        );
+
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())->method('log');
 
-        $subscriber = new PhoneVerificationSubscriber($verificationSentService, $smsService, $translator);
+        $subscriber = new PhoneVerificationSubscriber($smsService, $translator, $router);
         $subscriber->setLogger($logger);
 
         return $subscriber;

@@ -10,28 +10,23 @@
 
 namespace PROCERGS\LoginCidadao\PhoneVerificationBundle\Event;
 
-use Doctrine\ORM\EntityManager;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
-use LoginCidadao\PhoneVerificationBundle\Event\PhoneChangedEvent;
+use LoginCidadao\PhoneVerificationBundle\Entity\SentVerification;
 use LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
-use PROCERGS\LoginCidadao\PhoneVerificationBundle\Service\VerificationSentService;
 use PROCERGS\Sms\SmsService;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerTrait;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait, LoggerTrait;
-
-    /**
-     * @var VerificationSentService
-     */
-    private $verificationSentService;
 
     /** @var SmsService */
     private $smsService;
@@ -39,21 +34,24 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
     /** @var TranslatorInterface */
     private $translator;
 
+    /** @var RouterInterface */
+    private $router;
+
     /**
      * PhoneVerificationSubscriber constructor.
      *
-     * @param VerificationSentService $verificationSentService
      * @param SmsService $smsService
      * @param TranslatorInterface $translator
+     * @param RouterInterface $router
      */
     public function __construct(
-        VerificationSentService $verificationSentService,
         SmsService $smsService,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        RouterInterface $router
     ) {
-        $this->verificationSentService = $verificationSentService;
         $this->smsService = $smsService;
         $this->translator = $translator;
+        $this->router = $router;
     }
 
     /**
@@ -97,14 +95,22 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
         ];
     }
 
-    public function onVerificationRequest(SendPhoneVerificationEvent $event)
-    {
+    public function onVerificationRequest(
+        SendPhoneVerificationEvent $event,
+        $eventName,
+        EventDispatcherInterface $dispatcher
+    ) {
         $phoneVerification = $event->getPhoneVerification();
         $code = $phoneVerification->getVerificationCode();
         $person = $phoneVerification->getPerson();
         $phoneUtil = PhoneNumberUtil::getInstance();
+        $link = $this->router->generate(
+            'lc_phone_verification_verify_link',
+            ['id' => $phoneVerification->getId(), 'token' => $phoneVerification->getVerificationToken()],
+            RouterInterface::ABSOLUTE_URL
+        );
 
-        $message = $this->translator->trans('phone_verification.sms.message', ['%code%' => $code]);
+        $message = $this->translator->trans('phone_verification.sms.message', ['%code%' => $code, '%link%' => $link]);
         $transactionId = $this->smsService->easySend($person->getMobile(), $message);
 
         $this->info(
@@ -116,6 +122,14 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
             ]
         );
 
-        $this->verificationSentService->registerVerificationSent($phoneVerification, $transactionId, $message);
+        $sentVerification = new SentVerification();
+        $sentVerification
+            ->setPhoneVerification($phoneVerification)
+            ->setSentAt(new \DateTime())
+            ->setTransactionId($transactionId)
+            ->setMessageSent($message);
+
+        $event->setSentVerification($sentVerification);
+        $dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFICATION_CODE_SENT, $event);
     }
 }
