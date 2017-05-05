@@ -1,0 +1,30 @@
+tasks:
+    verify_phone:
+        title: Verificação de Celular
+        sms_sent: Foi enviado um código de verificação para o telefone cadastrado em seu perfil.
+        type_code: Por favor, verifique suas SMS e digite o código recebido.
+        success:
+            body: Seu telefone foi verificado com sucesso.
+            continue: Continuar
+        form:
+            verificationCode:
+                label: Código de Verificação
+                placeholder: Digite o código recebido
+            errors:
+                verificationCode.invalid_code: O código digitado é inválido. Verifique se você digitou corretamente e tente novamente.
+            submit: Verificar
+        didnt_receive:
+            button: Não recebeu seu código?
+        skip:
+            open_warning: Confirmar mais tarde
+            warning: Sem um telefone confirmado, algumas funcionalidades podem não estar disponíveis. Tem certeza que deseja confirmar outra hora?
+            confirm: Sim, confirmar mais tarde
+        resend:
+            waiting:
+                please_wait: Por favor, aguarde <span class="resend-time-left">até %date%</span> antes de solicitar o reenvio da mensagem.
+                date_format: d/m/Y H:i
+            timeout:
+                body: Caso não tenha recebido a mensagem, você pode solicitar o reenvio a seguir.
+                button: Reenviar SMS para %phone%
+            errors:
+                too_many_requests: Ainda não é possível reenviar o código de verificação. Aguarde alguns minutos e tente novamente.

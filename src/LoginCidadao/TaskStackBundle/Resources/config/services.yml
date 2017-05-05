@@ -1,0 +1,16 @@
+services:
+    task_stack.manager:
+        class: LoginCidadao\TaskStackBundle\Service\TaskStackManager
+        arguments:
+            - "@session"
+            - "@security.token_storage"
+            - "@router"
+            - "@event_dispatcher"
+        lazy: true
+
+    task_stack.request_subscriber:
+        class: LoginCidadao\TaskStackBundle\Event\RequestSubscriber
+        arguments:
+            - "@task_stack.manager"
+        tags:
+            - { name: kernel.event_subscriber }

@@ -42,17 +42,11 @@ class LoggedInUserListener
     /** @var TranslatorInterface */
     private $translator;
 
-    /** @var EntityManager */
-    private $em;
-
     /** @var IntentManager */
     private $intentManager;
 
     /** @var TasksManager */
     private $tasksManager;
-
-    /** @var string */
-    private $defaultPasswordEncoder;
 
     /** @var boolean */
     private $requireEmailValidation;
@@ -65,7 +59,6 @@ class LoggedInUserListener
         TranslatorInterface $translator,
         IntentManager $intentManager,
         TasksManager $tasksManager,
-        $defaultPasswordEncoder,
         $requireEmailValidation
     ) {
         $this->tokenStorage = $tokenStorage;
@@ -76,7 +69,6 @@ class LoggedInUserListener
         $this->intentManager = $intentManager;
         $this->tasksManager = $tasksManager;
 
-        $this->defaultPasswordEncoder = $defaultPasswordEncoder;
         $this->requireEmailValidation = $requireEmailValidation;
     }
 
@@ -134,7 +126,7 @@ class LoggedInUserListener
     protected function checkUnconfirmedEmail()
     {
         if ($this->requireEmailValidation) {
-            // Thre is a Task for that already
+            // There is a Task for that already
             return;
         }
         $token = $this->tokenStorage->getToken();

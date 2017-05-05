@@ -3,6 +3,7 @@
 namespace LoginCidadao\APIBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 
@@ -18,15 +19,20 @@ class ActionLogRepository extends EntityRepository
     public function getWithClientByPerson(PersonInterface $person, $limit = null)
     {
         $excludeTypes = array(
+            ActionLog::TYPE_PROFILE_VIEW,
             ActionLog::TYPE_IMPERSONATE,
             ActionLog::TYPE_DEIMPERSONATE,
-            ActionLog::TYPE_LOGIN
+            ActionLog::TYPE_LOGIN,
         );
 
         $query = $this->createQueryBuilder('l')
             ->select('l, c')
-            ->innerJoin('LoginCidadaoOAuthBundle:Client', 'c', 'WITH',
-                'c.id = l.clientId')
+            ->innerJoin(
+                'LoginCidadaoOAuthBundle:Client',
+                'c',
+                'WITH',
+                'c.id = l.clientId'
+            )
             ->where('l.userId = :person_id')
             ->andWhere('l.actionType NOT IN (:excludeTypes)')
             ->setParameter('person_id', $person->getId())
@@ -39,7 +45,7 @@ class ActionLogRepository extends EntityRepository
 
         $result = array(
             'actionLogs' => array(),
-            'clients' => array()
+            'clients' => array(),
         );
         foreach ($query->getQuery()->getResult() as $item) {
             $object = '';
@@ -64,8 +70,10 @@ class ActionLogRepository extends EntityRepository
             ->where('l.userId = :person_id')
             ->andWhere('l.actionType IN (:type)')
             ->setParameter('person_id', $person->getId())
-            ->setParameter('type',
-                array(ActionLog::TYPE_LOGIN, ActionLog::TYPE_IMPERSONATE))
+            ->setParameter(
+                'type',
+                array(ActionLog::TYPE_LOGIN, ActionLog::TYPE_IMPERSONATE)
+            )
             ->orderBy('l.createdAt', 'DESC');
 
         if ($limit > 0) {
@@ -80,22 +88,25 @@ class ActionLogRepository extends EntityRepository
      * @param PersonInterface $impersonator
      * @return \Doctrine\ORM\QueryBuilder
      */
-    private function getImpersonatonsWithoutReportsQuery($limit = null,
-                                                            PersonInterface $impersonator
-    = null)
-    {
+    private function getImpersonatonsWithoutReportsQuery(
+        $limit = null,
+        PersonInterface $impersonator
+        = null
+    ) {
         $query = $this->createQueryBuilder('l')
-            ->leftJoin('LoginCidadaoCoreBundle:ImpersonationReport', 'r',
-                'WITH', 'r.actionLog = l')
+            ->leftJoin(
+                'LoginCidadaoCoreBundle:ImpersonationReport',
+                'r',
+                'WITH',
+                'r.actionLog = l'
+            )
             ->where('r.id IS NULL')
             ->andWhere('l.actionType = :type')
-            ->setParameter('type', ActionLog::TYPE_IMPERSONATE)
-        ;
+            ->setParameter('type', ActionLog::TYPE_IMPERSONATE);
 
         if ($impersonator instanceof PersonInterface) {
             $query->andWhere('l.clientId = :impersonatorId')
-                ->setParameter('impersonatorId', $impersonator->getId())
-            ;
+                ->setParameter('impersonatorId', $impersonator->getId());
         }
 
         if ($limit > 0) {
@@ -105,12 +116,16 @@ class ActionLogRepository extends EntityRepository
         return $query;
     }
 
-    public function findImpersonatonsWithoutReports($limit = null,
-                                                    PersonInterface $impersonator
-    = null, $returnArray = false)
-    {
-        $query = $this->getImpersonatonsWithoutReportsQuery($limit,
-            $impersonator);
+    public function findImpersonatonsWithoutReports(
+        $limit = null,
+        PersonInterface $impersonator
+        = null,
+        $returnArray = false
+    ) {
+        $query = $this->getImpersonatonsWithoutReportsQuery(
+            $limit,
+            $impersonator
+        );
 
         if (!$returnArray) {
             $query->select('l');
@@ -118,20 +133,137 @@ class ActionLogRepository extends EntityRepository
             return $query->getQuery()->getResult();
         } else {
             $query->select('l.id AS log_id, l.createdAt AS date, COALESCE(p.firstName, p.email) AS person_name')
-                ->join('LoginCidadaoCoreBundle:Person', 'p', 'WITH',
-                    'l.userId = p.id')
-            ;
+                ->join(
+                    'LoginCidadaoCoreBundle:Person',
+                    'p',
+                    'WITH',
+                    'l.userId = p.id'
+                );
 
             return $query->getQuery()->getScalarResult();
         }
     }
 
-    public function countImpersonatonsWithoutReports(PersonInterface $impersonator
-    = null)
-    {
+    public function countImpersonatonsWithoutReports(
+        PersonInterface $impersonator
+        = null
+    ) {
         $query = $this->getImpersonatonsWithoutReportsQuery(null, $impersonator);
         $query->select('COUNT(l)');
 
         return $query->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * @param PersonInterface $target
+     * @param null $limit
+     * @param bool $showProfileViews
+     * @return array
+     */
+    public function getActivityLogsByTarget(PersonInterface $target, $limit = null, $showProfileViews = false)
+    {
+        $excludeTypes = [
+            ActionLog::TYPE_IMPERSONATE,
+            ActionLog::TYPE_DEIMPERSONATE,
+            ActionLog::TYPE_LOGIN,
+        ];
+
+        if (false === $showProfileViews) {
+            $excludeTypes[] = ActionLog::TYPE_PROFILE_VIEW;
+        }
+
+        $personActions = [ActionLog::TYPE_PROFILE_VIEW];
+
+        $query = $this->createQueryBuilder('l')
+            ->select('l, c, p')
+            ->leftJoin(
+                'LoginCidadaoOAuthBundle:Client',
+                'c',
+                'WITH',
+                'c.id = l.clientId AND l.actionType NOT IN (:personActions)'
+            )
+            ->leftJoin(
+                'LoginCidadaoCoreBundle:Person',
+                'p',
+                'WITH',
+                'p.id = l.clientId AND l.actionType IN (:personActions)'
+            )
+            ->where('l.userId = :person_id')
+            ->andWhere('l.actionType NOT IN (:excludeTypes)')
+            ->setParameter('person_id', $target->getId())
+            ->setParameter('excludeTypes', $excludeTypes)
+            ->setParameter('personActions', $personActions)
+            ->orderBy('l.createdAt', 'DESC');
+
+        if ($limit > 0) {
+            $query->setMaxResults($limit);
+        }
+
+        $result = [
+            'action_log' => [],
+            'client' => [],
+            'person' => [],
+        ];
+        foreach ($query->getQuery()->getResult() as $object) {
+            if ($object instanceof ActionLog) {
+                $objectType = 'action_log';
+            } elseif ($object instanceof ClientInterface) {
+                $objectType = 'client';
+            } elseif ($object instanceof PersonInterface) {
+                $objectType = 'person';
+            } else {
+                continue;
+            }
+            $result[$objectType][$object->getId()] = $object;
+        }
+
+        return $result;
+    }
+
+    public function groupProfileViewsByActor()
+    {
+        $query = $this->createQueryBuilder('l')
+            ->select('p AS person, l.clientId AS person_id, l.auditUsername, COUNT(l) AS views')
+            ->leftJoin('LoginCidadaoCoreBundle:Person', 'p', 'WITH', 'p.id = l.clientId')
+            ->where('l.actionType = :type')
+            ->groupBy('p', 'l.clientId', 'l.auditUsername')
+            ->orderBy('views', 'DESC')
+            ->setParameter('type', ActionLog::TYPE_PROFILE_VIEW);
+
+        $result = $query->getQuery()->getResult();
+
+        return $result;
+    }
+
+    public function listProfileViewsByActor($person)
+    {
+        if ($person instanceof PersonInterface) {
+            $personId = $person->getId();
+        } else {
+            $personId = $person;
+        }
+        $query = $this->createQueryBuilder('l')
+            ->select('l, p')
+            ->leftJoin('LoginCidadaoCoreBundle:Person', 'p', 'WITH', 'p.id = l.userId')
+            ->where('l.actionType = :type')
+            ->andWhere('l.clientId = :personId')
+            ->orderBy('l.createdAt', 'DESC')
+            ->setParameter('type', ActionLog::TYPE_PROFILE_VIEW)
+            ->setParameter('personId', $personId);
+        $result = $query->getQuery()->getResult();
+
+        $response = [
+            'action_log' => [],
+            'person' => [],
+        ];
+        foreach ($result as $object) {
+            if ($object instanceof PersonInterface) {
+                $response['person'][$object->getId()] = $object;
+            } elseif ($object instanceof ActionLog) {
+                $response['action_log'][$object->getId()] = $object;
+            }
+        }
+
+        return $response;
     }
 }
