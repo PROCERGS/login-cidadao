@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
@@ -24,40 +32,47 @@ class PersonSerializeEventListener implements EventSubscriberInterface
     /** @var Request */
     protected $request;
 
-    public function __construct(UploaderHelper $uploaderHelper, $templateHelper,
-                                Kernel $kernel, RequestStack $requestStack)
-    {
+    public function __construct(
+        UploaderHelper $uploaderHelper,
+        $templateHelper,
+        Kernel $kernel,
+        RequestStack $requestStack
+    ) {
         $this->uploaderHelper = $uploaderHelper;
         $this->templateHelper = $templateHelper;
-        $this->kernel         = $kernel;
-        $this->request        = $requestStack->getCurrentRequest();
+        $this->kernel = $kernel;
+        $this->request = $requestStack->getCurrentRequest();
     }
 
     public static function getSubscribedEvents()
     {
-        return array(
-            array(
+        return [
+            [
                 'event' => 'serializer.pre_serialize',
                 'method' => 'onPreSerialize',
-                'class' => 'LoginCidadao\CoreBundle\Model\PersonInterface'
-            ),
-            array(
+                'class' => 'LoginCidadao\CoreBundle\Model\PersonInterface',
+            ],
+            [
                 'event' => 'serializer.post_serialize',
                 'method' => 'onPostSerialize',
-                'class' => 'LoginCidadao\CoreBundle\Model\PersonInterface'
-            )
-        );
+                'class' => 'LoginCidadao\CoreBundle\Model\PersonInterface',
+            ],
+        ];
     }
 
     public function onPreSerialize(PreSerializeEvent $event)
     {
         $person = $event->getObject();
         if ($person instanceof PersonInterface) {
-            $imgHelper      = $this->uploaderHelper;
+            $imgHelper = $this->uploaderHelper;
             $templateHelper = $this->templateHelper;
-            $isDev          = $this->kernel->getEnvironment() === 'dev';
-            $person->prepareAPISerialize($imgHelper, $templateHelper, $isDev,
-                $this->request);
+            $isDev = $this->kernel->getEnvironment() === 'dev';
+            $person->prepareAPISerialize(
+                $imgHelper,
+                $templateHelper,
+                $isDev,
+                $this->request
+            );
         }
     }
 
