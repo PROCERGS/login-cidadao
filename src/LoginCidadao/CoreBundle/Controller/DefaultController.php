@@ -2,6 +2,7 @@
 
 namespace LoginCidadao\CoreBundle\Controller;
 
+use LoginCidadao\APIBundle\Entity\ActionLogRepository;
 use LoginCidadao\CoreBundle\Model\SupportMessage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -84,9 +85,11 @@ class DefaultController extends Controller
 
         // logs
         $em = $this->getDoctrine()->getManager();
+
+        /** @var ActionLogRepository $logRepo */
         $logRepo = $em->getRepository('LoginCidadaoAPIBundle:ActionLog');
-        $logs['logins'] = $logRepo->findLoginsByPerson($this->getUser(), 4);
-        $logs['activity'] = $logRepo->getWithClientByPerson($this->getUser(), 3);
+        $logs['logins'] = $logRepo->findLoginsByPerson($this->getUser(), 5);
+        $logs['activity'] = $logRepo->getActivityLogsByTarget($this->getUser(), 4);
 
         $defaultClientUid = $this->container->getParameter('oauth_default_client.uid');
 

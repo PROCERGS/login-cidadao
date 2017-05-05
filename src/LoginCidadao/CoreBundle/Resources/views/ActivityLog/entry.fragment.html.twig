@@ -1,15 +1,35 @@
+{% if log.actionType != 'PROFILE_VIEW' %}
+    {% set actor = clients[log.clientId] %}
+{% else %}
+    {% set actor = admins[log.clientId] %}
+{% endif %}
 <div class="media">
     <div class="media-left">
-        <img src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': log.client }) }}" width="35" alt="">
+        {% if log.actionType != 'PROFILE_VIEW' %}
+            <img src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': actor }) }}"
+                 width="35" alt="">
+        {% else %}
+            <span class="glyphicon glyphicon-question-sign text-center text-info" style="width: 35px"></span>
+        {% endif %}
     </div>
 
     <div class="media-body">
-        <h5 class="media-heading">{{ log.client.name }}</h5>
+        <h5 class="media-heading">
+            {% if log.actionType != 'PROFILE_VIEW' %}
+                {{ actor.name }}
+            {% else %}
+                {{ 'activity_log.admin.name' | trans }}
+            {% endif %}
+        </h5>
 
-        {% if log.actionType == 'SELECT' %}
-            <span data-log-id="{{ log.id }}" class="log-about">{% trans with {'%date%': log.createdAt | date('log.date.format' | trans) } %}Information viewed at %date%{% endtrans %}</span>
+        {% if log.actionType in ['SELECT', 'PROFILE_VIEW'] %}
+            <span data-log-id="{{ log.id }}" class="log-about">
+                {{ 'activity_log.viewed_info' | trans({'%date%': log.createdAt | date('log.date.format' | trans) }) }}
+            </span>
         {% else %}
-            <span data-log-id="{{ log.id }}" class="log-about">{% trans with {'%date%': log.createdAt | date('log.date.format' | trans) } %}Information changed at %date%{% endtrans %}</span>
+            <span data-log-id="{{ log.id }}" class="log-about">
+                {{ 'activity_log.changed_info' | trans({'%date%': log.createdAt | date('log.date.format' | trans) }) }}
+            </span>
         {% endif %}
     </div>
 </div>
