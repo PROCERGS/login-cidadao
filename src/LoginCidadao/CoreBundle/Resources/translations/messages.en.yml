@@ -315,6 +315,11 @@ access_log:
     page.title: Access Log
 activity_log:
     page.title: Services Activity Log
+    page.title: 'Registros de Atividade de Serviços'
+    admin.name: 'Tech support'
+    viewed_info: 'Information viewed at %date%'
+    changed_info: 'Information changed at %date%'
+
 log.date.format: 'm/d/Y H:i:s'
 admin:
     title: Admin Area
@@ -352,6 +357,21 @@ admin:
     person:
         list: 'Manage People'
         list.title:  'Search People'
+        profile_views_status:
+            menu: 'Person Management Auditing'
+            title: 'Person Management Auditing'
+            summary:
+                caption: 'Amount of profiles viewed by each administrator'
+                actor: 'Administrator'
+                count: 'Profiles viewed'
+                details.title: 'Show details'
+            details:
+                caption: 'Profiles viewed by %name%'
+                person: 'Person'
+                username: 'Username'
+                date: 'Date'
+                date_format: 'm/d/Y H:i:s'
+                user_deleted: 'Account Removed'
 force_password_change:
     title: Update your password to continue
     description: Please update your password to improve your account's security.
