@@ -1,104 +1,79 @@
 <div class="navbar navbar-inverse" role="navigation" id="lc-navbar">
     <div class="container">
         <ul id="lc-navbar-ul">
-        {% if app.user != null %}
-            <li>
-                <button type="button" class="btn btn-default navbar-toggle" id="toggle-settings-nav">
-                    <span class="sr-only">{% trans %}Toggle Navigation{% endtrans %}</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </li>
-        {% endif %}
+            {% if app.user != null %}
+                <li>
+                    <button type="button" class="btn btn-default navbar-toggle" id="toggle-settings-nav">
+                        <span class="sr-only">{{ 'Toggle Navigation' | trans }}</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </li>
+            {% endif %}
 
             <li class="brand">
                 <a href="{{ url('lc_home') }}" class="btn">
-                    {% trans %}Login Cidadão{% endtrans %}
+                    {{ 'Login Cidadão' | trans }}
                 </a>
             </li>
 
-        {% if app.user == null %}
-            <li class="pull-right">
-                {% if app.request.attributes.get('_route') != 'fos_user_security_login' %}
-                    <a href="{{ url("fos_user_security_login") }}" class="btn btn-login btn-success navbar-btn">{{ 'Log in' | trans }}</a>
-                {% endif %}
-            </li>
-        {% else %}
+            {% if app.user == null %}
+                <li class="pull-right">
+                    {% if app.request.attributes.get('_route') != 'fos_user_security_login' %}
+                        <a href="{{ url("fos_user_security_login") }}"
+                           class="btn btn-login btn-success navbar-btn">{{ 'Log in' | trans }}</a>
+                    {% endif %}
+                </li>
+            {% else %}
 
-            {% if is_granted('ROLE_ALLOWED_TO_SWITCH') or is_granted('ROLE_PREVIOUS_ADMIN') %}
-            <li class="impersonation pull-right">
-                {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-                    <a class="impersonation-exit btn btn-danger btn-xs" href="?_switch_user=_exit">Back to Normal</a>
-                {% else %}
-                    <form method="get">
-                        <input class="impersonation-username" type="text" name="_switch_user" placeholder="Impersonate" />
-                    </form>
-                {% endif %}
-            </li>
-            {% endif %}
-
-            {# Profile Card #}
-            <li class="btn-group pull-right profile">
-                <button type="button" class="btn dropdown-toggle profile-card" data-toggle="dropdown">
-                    <span class="profile-username">{{ app.user.shortDisplayName }}</span>
-                    <span class="profile-picture-container">
-                        <img src="{{ include("LoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}" alt="" class="profile-picture img-circle" width="30" height="30">
-                    </span>
-                </button>
-                <ul class="dropdown-menu clearfix">
-                    <li>
-                        <a href="{{ url('fos_user_profile_edit') }}" class="menu-item">{% trans %}Profile{% endtrans %}</a>
+                {% if is_granted('ROLE_ALLOWED_TO_SWITCH') or is_granted('ROLE_PREVIOUS_ADMIN') %}
+                    <li class="impersonation pull-right">
+                        {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                            <a class="impersonation-exit btn btn-danger btn-xs" href="?_switch_user=_exit">Back to
+                                Normal</a>
+                        {% else %}
+                            <form method="get">
+                                <input class="impersonation-username" type="text" name="_switch_user"
+                                       placeholder="Impersonate"/>
+                            </form>
+                        {% endif %}
                     </li>
-                    <li>
-                        <a href="{{ url('fos_user_security_logout') }}" class="menu-item">{% trans from "FOSUserBundle" %}layout.logout{% endtrans %}</a>
-                    </li>
-                </ul>
-            </li>
+                {% endif %}
 
-            {# Apps list #}
-            <li class="btn-group apps pull-right">
-                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" title="{% trans %}Applications{% endtrans %}">
-                    <i class="glyphicon glyphicon-th"></i>
-                </button>
-                <ul class="dropdown-menu clearfix">
-                  <li class="dropdown-header">
-                    {{ 'Services'|trans }}
-                  </li>
-                  <li>
-                    <ul class="navbar-scrollspy-app"  data-offset="0" data-spy="scroll">
-                    {% for auth in app.user.getAuthorizations %}
-                        <li class="app">
-                            <a href="{{ path('lc_app_details', {'clientId': auth.client.id}) }}" class="media menu-item clearfix">
-                              <div class="pull-left">
-                                <img src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': auth.client }) }}" alt="" class="media-object" width="50" height="50"/>
-                              </div>
-                              <div class="media-body">
-                                <h5 class="media-heading">{{ auth.client.name }}</h5>
-                              </div>
+                {# Profile Card #}
+                <li class="btn-group pull-right profile">
+                    <button type="button" class="btn dropdown-toggle profile-card" data-toggle="dropdown">
+                        <span class="profile-username">{{ app.user.shortDisplayName }}</span>
+                        <span class="profile-picture-container">
+                            <img src="{{ include("LoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': app.user}) }}"
+                                 alt="" class="profile-picture img-circle" width="30" height="30">
+                        </span>
+                    </button>
+                    <ul class="dropdown-menu clearfix">
+                        <li>
+                            <a href="{{ url('fos_user_profile_edit') }}" class="menu-item">{{ 'Profile' | trans }}</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('fos_user_security_logout') }}" class="menu-item">
+                                {% trans from "FOSUserBundle" %}layout.logout{% endtrans %}
                             </a>
                         </li>
-                    {% endfor %}
                     </ul>
-                  </li>
-                  <li class="text-center"><a href="{{ url('lc_authorization_list') }}" class="btn btn-block btn-info btn-more">{% trans %}view all services{% endtrans %}</a></li>
-                </ul>
-            </li>
-        {% endif %}
+                </li>
+            {% endif %}
         </ul>
 
     </div>
 </div>
 
 {% if external is defined and external == true %}
-<script>
-    $(function() {
-      $("#lc-navbar .dropdown-toggle").on("click", function() {
-          console.log('passei aqui');
-          debugger;
-        var menu = $(this).next(".dropdown-menu").toggle();
-        $("#lc-navbar .dropdown-menu").not(menu).hide();
-      });
-    });
-</script>
+    <script>
+        $(function () {
+            $("#lc-navbar .dropdown-toggle").on("click", function () {
+                var menu = $(this).next(".dropdown-menu").toggle();
+                $("#lc-navbar .dropdown-menu").not(menu).hide();
+            });
+        });
+    </script>
 {% endif %}
