@@ -27,7 +27,7 @@ class PhoneChangedEvent extends Event
      * @param PersonInterface $person
      * @param PhoneNumber $oldPhone
      */
-    public function __construct(PersonInterface $person, PhoneNumber $oldPhone)
+    public function __construct(PersonInterface $person, PhoneNumber $oldPhone = null)
     {
         $this->person = $person;
         $this->oldPhone = $oldPhone;
