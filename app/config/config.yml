@@ -592,6 +592,11 @@ procergs_nfg:
         password: "%soe_password%"
         hmac_secret: "%nfg_hmac_secret%"
 
+circle_rest_client:
+    curl:
+        defaults:
+            CURLOPT_FOLLOWLOCATION: false
+
 procergs_sms_service:
     uri:
         send: "%tpd_base_uri%/rest/sms"
