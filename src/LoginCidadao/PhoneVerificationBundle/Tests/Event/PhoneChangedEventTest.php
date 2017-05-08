@@ -14,7 +14,7 @@ use LoginCidadao\PhoneVerificationBundle\Event\PhoneChangedEvent;
 
 class PhoneChangedEventTest extends \PHPUnit_Framework_TestCase
 {
-    public function testEvent()
+    public function testEventChangePhone()
     {
         $person = $this->getMock('LoginCidadao\CoreBundle\Entity\Person');
         $phone = $this->getMock('libphonenumber\PhoneNumber');
@@ -22,5 +22,15 @@ class PhoneChangedEventTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($person, $event->getPerson());
         $this->assertEquals($phone, $event->getOldPhone());
+    }
+
+
+    public function testEventSetPhone()
+    {
+        $person = $this->getMock('LoginCidadao\CoreBundle\Entity\Person');
+        $event = new PhoneChangedEvent($person, null);
+
+        $this->assertEquals($person, $event->getPerson());
+        $this->assertNull($event->getOldPhone());
     }
 }

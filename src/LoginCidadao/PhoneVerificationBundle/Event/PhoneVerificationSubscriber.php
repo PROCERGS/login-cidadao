@@ -83,17 +83,24 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
     public function onPhoneChange(PhoneChangedEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         $person = $event->getPerson();
+        $oldPhone = $event->getOldPhone();
 
         $phoneUtil = PhoneNumberUtil::getInstance();
         $this->info(
             'Phone changed from {old} to {new} for user {id}',
             [
                 'id' => $person->getId(),
-                'old' => $phoneUtil->format($event->getOldPhone(), PhoneNumberFormat::E164),
+                'old' => $oldPhone ? $phoneUtil->format($oldPhone, PhoneNumberFormat::E164) : null,
                 'new' => $phoneUtil->format($person->getMobile(), PhoneNumberFormat::E164),
             ]
         );
-        $oldPhoneVerification = $this->phoneVerificationService->getPhoneVerification($person, $event->getOldPhone());
+
+        if ($oldPhone) {
+            $oldPhoneVerification = $this->phoneVerificationService->getPhoneVerification($person, $oldPhone);
+        } else {
+            $oldPhoneVerification = null;
+        }
+
         if ($oldPhoneVerification) {
             $this->phoneVerificationService->removePhoneVerification($oldPhoneVerification);
         }
