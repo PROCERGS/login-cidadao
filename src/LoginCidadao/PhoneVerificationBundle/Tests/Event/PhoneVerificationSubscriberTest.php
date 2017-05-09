@@ -88,6 +88,30 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $listener->onPhoneChange($event, PhoneVerificationEvents::PHONE_CHANGED, $dispatcher);
     }
 
+    public function testOnPhoneUnset()
+    {
+        $oldPhone = PhoneNumberUtil::getInstance()->parse('+5551999999999', 'BR');
+        $person = new Person();
+        $person->setMobile(null);
+
+        $event = $this->getMockBuilder('LoginCidadao\PhoneVerificationBundle\Event\PhoneChangedEvent')
+            ->setConstructorArgs([$person, null])
+            ->getMock();
+
+        $event->expects($this->any())->method('getPerson')->willReturn($person);
+        $event->expects($this->any())->method('getOldPhone')->willReturn($oldPhone);
+
+        $phoneVerificationServiceClass = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface';
+        $phoneVerificationService = $this->getMock($phoneVerificationServiceClass);
+
+        $dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $listener = new PhoneVerificationSubscriber($phoneVerificationService);
+        $listener->onPhoneChange($event, PhoneVerificationEvents::PHONE_CHANGED, $dispatcher);
+    }
+
     public function testOnVerificationRequest()
     {
         $phoneVerificationServiceClass = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface';
