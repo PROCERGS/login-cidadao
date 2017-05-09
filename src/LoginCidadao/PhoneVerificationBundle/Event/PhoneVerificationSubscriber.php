@@ -84,6 +84,7 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
     {
         $person = $event->getPerson();
         $oldPhone = $event->getOldPhone();
+        $newPhone = $person->getMobile();
 
         $phoneUtil = PhoneNumberUtil::getInstance();
         $this->info(
@@ -91,7 +92,7 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
             [
                 'id' => $person->getId(),
                 'old' => $oldPhone ? $phoneUtil->format($oldPhone, PhoneNumberFormat::E164) : null,
-                'new' => $phoneUtil->format($person->getMobile(), PhoneNumberFormat::E164),
+                'new' => $newPhone ? $phoneUtil->format($newPhone, PhoneNumberFormat::E164) : null,
             ]
         );
 
@@ -105,10 +106,10 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
             $this->phoneVerificationService->removePhoneVerification($oldPhoneVerification);
         }
 
-        if ($person->getMobile()) {
+        if ($newPhone) {
             $phoneVerification = $this->phoneVerificationService->createPhoneVerification(
                 $person,
-                $person->getMobile()
+                $newPhone
             );
 
             $sendEvent = new SendPhoneVerificationEvent($phoneVerification);
