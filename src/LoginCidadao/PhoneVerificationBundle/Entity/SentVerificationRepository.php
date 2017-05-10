@@ -20,9 +20,23 @@ class SentVerificationRepository extends EntityRepository
 {
     public function getLastVerificationSent(PhoneVerificationInterface $phoneVerification)
     {
-        return $this->findOneBy(
-            ['phone' => $phoneVerification->getPhone()],
-            ['sentAt' => 'DESC']
-        );
+        $query = $this->createQueryBuilder('s')
+            ->where('s.phone = :phone')
+            ->orderBy('s.sentAt', 'DESC')
+            ->setParameter('phone', $phoneVerification->getPhone());
+
+        // Filter only SentVerification that belong to this PhoneVerification
+        if ($phoneVerification->isVerified()) {
+            $query
+                ->andWhere('s.sentAt BETWEEN :created AND :verified')
+                ->setParameter('created', $phoneVerification->getCreatedAt())
+                ->setParameter('verified', $phoneVerification->getVerifiedAt());
+        } else {
+            $query
+                ->andWhere('s.sentAt >= :created')
+                ->setParameter('created', $phoneVerification->getCreatedAt());
+        }
+
+        return $query->setMaxResults(1)->getQuery()->getOneOrNullResult();
     }
 }
