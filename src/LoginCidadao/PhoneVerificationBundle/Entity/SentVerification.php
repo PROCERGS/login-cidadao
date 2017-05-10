@@ -33,6 +33,7 @@ class SentVerification implements SentVerificationInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
     /**
      * @var PhoneNumber
      *
@@ -46,12 +47,14 @@ class SentVerification implements SentVerificationInterface
      * @ORM\Column(name="sent_at", type="datetime", nullable=false)
      */
     private $sentAt;
+
     /**
      * @var string
      *
      * @ORM\Column(name="message_sent", type="string", length=255, nullable=true)
      */
     private $messageSent;
+
     /**
      * @var string
      *
