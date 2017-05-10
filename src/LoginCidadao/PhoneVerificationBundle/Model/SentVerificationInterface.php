@@ -10,6 +10,8 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Model;
 
+use libphonenumber\PhoneNumber;
+
 interface SentVerificationInterface
 {
     /**
@@ -18,15 +20,15 @@ interface SentVerificationInterface
     public function getId();
 
     /**
-     * @return PhoneVerificationInterface
+     * @return PhoneNumber
      */
-    public function getPhoneVerification();
+    public function getPhone();
 
     /**
-     * @param PhoneVerificationInterface $phoneVerification
+     * @param PhoneNumber $phone
      * @return SentVerificationInterface
      */
-    public function setPhoneVerification(PhoneVerificationInterface $phoneVerification);
+    public function setPhone(PhoneNumber $phone);
 
     /**
      * @return \DateTime

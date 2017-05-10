@@ -11,13 +11,16 @@
 namespace LoginCidadao\PhoneVerificationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
+use libphonenumber\PhoneNumber;
 use LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface;
 
 /**
  * Class SentVerification
  *
- * @ORM\Table(name="sent_verification")
+ * @ORM\Table(
+ *     name="sent_verification",
+ *     indexes={@ORM\Index(name="idx_phone", columns={"phone"})}
+ * )
  * @ORM\Entity(repositoryClass="LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository")
  */
 class SentVerification implements SentVerificationInterface
@@ -31,12 +34,12 @@ class SentVerification implements SentVerificationInterface
      */
     private $id;
     /**
-     * @var PhoneVerificationInterface
+     * @var PhoneNumber
      *
-     * @ORM\ManyToOne(targetEntity="LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification")
-     * @ORM\JoinColumn(name="verification_id", referencedColumnName="id", unique=false)
+     * @ORM\Column(type="phone_number", nullable=false)
      */
-    private $phoneVerification;
+    private $phone;
+
     /**
      * @var \DateTime
      *
@@ -65,20 +68,20 @@ class SentVerification implements SentVerificationInterface
     }
 
     /**
-     * @return PhoneVerificationInterface
+     * @return PhoneNumber
      */
-    public function getPhoneVerification()
+    public function getPhone()
     {
-        return $this->phoneVerification;
+        return $this->phone;
     }
 
     /**
-     * @param PhoneVerificationInterface $phoneVerification
+     * @param PhoneNumber $phone
      * @return SentVerificationInterface
      */
-    public function setPhoneVerification(PhoneVerificationInterface $phoneVerification)
+    public function setPhone(PhoneNumber $phone)
     {
-        $this->phoneVerification = $phoneVerification;
+        $this->phone = $phone;
 
         return $this;
     }

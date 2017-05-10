@@ -21,7 +21,7 @@ class SentVerificationRepository extends EntityRepository
     public function getLastVerificationSent(PhoneVerificationInterface $phoneVerification)
     {
         return $this->findOneBy(
-            ['phoneVerification' => $phoneVerification],
+            ['phone' => $phoneVerification->getPhone()],
             ['sentAt' => 'DESC']
         );
     }
