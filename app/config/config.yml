@@ -248,6 +248,9 @@ simple_things_entity_audit:
         - LoginCidadao\OAuthBundle\Entity\Organization
         - LoginCidadao\OpenIDBundle\Entity\ClientMetadata
 
+        - LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification
+        - LoginCidadao\PhoneVerificationBundle\Entity\SentVerification
+
 hwi_oauth:
     connect:
         confirmation: false
