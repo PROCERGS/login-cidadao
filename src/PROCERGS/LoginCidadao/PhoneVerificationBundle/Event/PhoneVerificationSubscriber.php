@@ -15,6 +15,7 @@ use libphonenumber\PhoneNumberUtil;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerification;
 use LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
+use PROCERGS\Sms\Exception\SmsServiceException;
 use PROCERGS\Sms\SmsService;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -111,25 +112,40 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
         );
 
         $message = $this->translator->trans('phone_verification.sms.message', ['%code%' => $code, '%link%' => $link]);
-        $transactionId = $this->smsService->easySend($person->getMobile(), $message);
 
-        $this->info(
-            'Phone Verification sent to {phone} for user {user_id}. Transaction ID: {transaction_id}',
-            [
-                'user_id' => $person->getId(),
-                'phone' => $phoneUtil->format($person->getMobile(), PhoneNumberFormat::E164),
-                'transaction_id' => $transactionId,
-            ]
-        );
+        try {
+            $transactionId = $this->smsService->easySend($phoneVerification->getPhone(), $message);
 
-        $sentVerification = new SentVerification();
-        $sentVerification
-            ->setPhoneVerification($phoneVerification)
-            ->setSentAt(new \DateTime())
-            ->setTransactionId($transactionId)
-            ->setMessageSent($message);
+            $this->info(
+                'Phone Verification sent to {phone} for user {user_id}. Transaction ID: {transaction_id}',
+                [
+                    'user_id' => $person->getId(),
+                    'phone' => $phoneUtil->format($phoneVerification->getPhone(), PhoneNumberFormat::E164),
+                    'transaction_id' => $transactionId,
+                ]
+            );
 
-        $event->setSentVerification($sentVerification);
-        $dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFICATION_CODE_SENT, $event);
+            $sentVerification = new SentVerification();
+            $sentVerification
+                ->setPhone($phoneVerification->getPhone())
+                ->setSentAt(new \DateTime())
+                ->setTransactionId($transactionId)
+                ->setMessageSent($message);
+
+            $event->setSentVerification($sentVerification);
+            $dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFICATION_CODE_SENT, $event);
+        } catch (SmsServiceException $e) {
+            $this->error(
+                'Phone Verification NOT sent to {phone} for user {user_id}. Error message: [{error_code}] {error_message}',
+                [
+                    'user_id' => $person->getId(),
+                    'phone' => $phoneUtil->format($phoneVerification->getPhone(), PhoneNumberFormat::E164),
+                    'error_message' => $e->getMessage(),
+                    'error_code' => $e->getCode(),
+                ]
+            );
+
+            // TODO: should we do something?
+        }
     }
 }
