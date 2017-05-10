@@ -28,8 +28,7 @@ class SentVerificationTest extends \PHPUnit_Framework_TestCase
     {
         $sentVerification = new SentVerification();
 
-        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
-        $phoneVerification = $this->getMock($phoneVerificationClass);
+        $phone = $this->getMock('libphonenumber\PhoneNumber');
         $message = 'some message';
         $transactionId = '1234567890';
         $date = new \DateTime();
@@ -37,13 +36,13 @@ class SentVerificationTest extends \PHPUnit_Framework_TestCase
         $sentVerification
             ->setMessageSent($message)
             ->setTransactionId($transactionId)
-            ->setPhoneVerification($phoneVerification)
+            ->setPhone($phone)
             ->setSentAt($date);
 
         $this->assertNull($sentVerification->getId());
         $this->assertEquals($message, $sentVerification->getMessageSent());
         $this->assertEquals($transactionId, $sentVerification->getTransactionId());
-        $this->assertEquals($phoneVerification, $sentVerification->getPhoneVerification());
+        $this->assertEquals($phone, $sentVerification->getPhone());
         $this->assertInstanceOf('\DateTime', $sentVerification->getSentAt());
         $this->assertEquals($date, $sentVerification->getSentAt());
     }
