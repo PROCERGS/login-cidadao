@@ -19,7 +19,7 @@ use LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface;
  *
  * @ORM\Table(
  *     name="sent_verification",
- *     indexes={@ORM\Index(name="idx_phone", columns={"phone_number"})}
+ *     indexes={@ORM\Index(name="idx_phone", columns={"phone"})}
  * )
  * @ORM\Entity(repositoryClass="LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository")
  */
