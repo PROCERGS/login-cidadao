@@ -531,7 +531,9 @@ lc.admin.person.metadata:
     title: "Metadata"
     date_format: "m/d/Y H:i:s"
     createdAt: "Account Creation Date"
-    emailConfirmedAt: "Email Confirmation Date"
+    emailConfirmedAt:
+        label: "Email Confirmation Date"
+        empty: "Email not confirmed"
     lastLogin: "Last Login"
     hasCpf: "Does this person has a CPF/Taxpayer ID?"
     authorization.createdAt: "Authorization Date"
