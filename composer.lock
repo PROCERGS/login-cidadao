@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ffe6170f8eb4b34b54a7c3dc1afe4ffe",
-    "content-hash": "0decf0dceb513c34e01674cb4073b366",
+    "hash": "d54080e3ac294b690ad5b65f44e026b2",
+    "content-hash": "3aa777d2411158926a0ca5a000e27f83",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -1290,16 +1290,16 @@
         },
         {
             "name": "eljam/circuit-breaker",
-            "version": "dev-php54",
+            "version": "dev-replace-contains",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guilhermednt/circuit-breaker.git",
-                "reference": "4ee4bf88ebc8c18aa601b3d87bdcacf8ee426f95"
+                "reference": "9fd3074ea8d26e8f79574a5f46666492fa4c13b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guilhermednt/circuit-breaker/zipball/4ee4bf88ebc8c18aa601b3d87bdcacf8ee426f95",
-                "reference": "4ee4bf88ebc8c18aa601b3d87bdcacf8ee426f95",
+                "url": "https://api.github.com/repos/guilhermednt/circuit-breaker/zipball/9fd3074ea8d26e8f79574a5f46666492fa4c13b5",
+                "reference": "9fd3074ea8d26e8f79574a5f46666492fa4c13b5",
                 "shasum": ""
             },
             "require": {
@@ -1335,9 +1335,9 @@
             ],
             "description": "A php Circuit Breaker",
             "support": {
-                "source": "https://github.com/guilhermednt/circuit-breaker/tree/php54"
+                "source": "https://github.com/guilhermednt/circuit-breaker/tree/replace-contains"
             },
-            "time": "2017-05-10 20:55:14"
+            "time": "2017-05-11 20:22:44"
         },
         {
             "name": "friendsofsymfony/oauth-server-bundle",

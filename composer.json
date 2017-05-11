@@ -83,7 +83,7 @@
         "ejsmont-artur/php-circuit-breaker-bundle": "dev-master",
         "jakeasmith/http_build_url": "^1",
         "procergs/sms-service": "^1.1",
-        "eljam/circuit-breaker": "dev-php54"
+        "eljam/circuit-breaker": "dev-replace-contains"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
