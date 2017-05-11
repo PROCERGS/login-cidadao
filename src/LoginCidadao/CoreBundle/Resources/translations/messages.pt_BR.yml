@@ -936,7 +936,10 @@ lc.admin.person.metadata:
     createdAt: "Data de Criação da Conta"
     emailConfirmedAt: "Data de Confirmação de Email"
     lastLogin: "Último Login"
-    hasCpf: "Cadastrou CPF?"
+    hasCpf:
+        label: "Cadastrou CPF?"
+        yes: "Sim"
+        no: "Não"
     authorization.createdAt: "Data da Autorização"
 dashboard:
     active_services:
@@ -963,3 +966,13 @@ password_hint:
         no_reqs: Senha de, no máximo, %max% caracteres.
     no_limit:
         with_reqs: Senha com %reqs%.
+services:
+    title: Serviços
+    active_services:
+        title: Serviços Ativos
+        details: Detalhes do Serviço
+        go_to: Acessar Serviço
+    unauthorized:
+        title: Demais Serviços
+        details: Detalhes do Serviço
+        go_to: Acessar Serviço

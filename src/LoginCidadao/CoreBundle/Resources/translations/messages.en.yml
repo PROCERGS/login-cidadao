@@ -533,7 +533,10 @@ lc.admin.person.metadata:
     createdAt: "Account Creation Date"
     emailConfirmedAt: "Email Confirmation Date"
     lastLogin: "Last Login"
-    hasCpf: "Does this person has a CPF/Taxpayer ID?"
+    hasCpf:
+        label: "Filled CPF/Taxpayer ID?"
+        yes: "Yes"
+        no: "No"
     authorization.createdAt: "Authorization Date"
 dashboard:
     active_services:
@@ -559,3 +562,13 @@ password_hint:
         no_reqs: Password with at most %max% characters.
     no_limit:
         with_reqs: Password with %reqs%.
+services:
+    title: Services
+    active_services:
+        title: Active Services
+        details: Service's Details
+        go_to: Go to Service
+    unauthorized:
+        title: Other Services
+        details: Service's Details
+        go_to: Go to Service
