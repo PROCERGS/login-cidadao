@@ -15,7 +15,9 @@ person.validation:
     name.length:
         min: O nome informado é muito curto.
         max: O nome informado é muito longo.
-    birthdate:
+    age:
+        future: Parece que você ainda não nasceu. Verifique a data informada.
+        min: Você precisa ter ao menos {{ limit }} anos.
         max: Data de nascimento inválida.
     email:
         length:

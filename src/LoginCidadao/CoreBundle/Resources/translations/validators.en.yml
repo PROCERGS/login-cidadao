@@ -11,7 +11,9 @@ person.validation:
     name.length:
         min: This name is too short.
         max: This name is too long.
-    birthdate:
+    age:
+        future: It seems that you are not born yet. Check your date of birth.
+        min: You have to be older than {{ limit }} years to register.
         max: Invalid date of birth.
     email:
         length:
