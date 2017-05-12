@@ -3,8 +3,9 @@ tasks:
         title: Phone Verification
         sms_sent: We sent you a verification code to the phone you informed in your profile.
         type_code: Please, check your SMS and type the code you've received.
-        success:
-            body: Your phone was successfuly verified!
+        success: Your phone is now verified.
+        failure: We couldn't verify your phone. Make sure the link you used is correct or click bellow to continue to your account.
+        response:
             continue: Continue
         form:
             verificationCode:
@@ -26,5 +27,7 @@ tasks:
             timeout:
                 body: If you didn't get the message, you can ask to resend it below.
                 button: Resend SMS to %phone%
+            success: Message sent. Wait a few minutes until it arives.
             errors:
                 too_many_requests: It's not possible to resend the verification code yet. Please, retry later.
+                unavailable: The SMS service is not available right now. Please, wait a few minutes and try again.
