@@ -3,6 +3,7 @@
 namespace LoginCidadao\CoreBundle\Controller\Admin;
 
 use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
+use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -38,44 +39,29 @@ class PersonController extends Controller
     {
         $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PersonFilterFormType');
         $form->handleRequest($request);
-        $result['grid'] = null;
+        $gridView = null;
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $sql = $em->createQueryBuilder();
-            $sql->select('u');
-            $sql->from('LoginCidadaoCoreBundle:Person', 'u');
-            $sql->where('1=1');
-            $parms = $form->getData();
-            if (isset($parms['username'][0])) {
-                $sql->andWhere(
-                    'u.cpf like ?1 or LowerUnaccent(u.username) like LowerUnaccent(?1) or LowerUnaccent(u.email) like LowerUnaccent(?1) or LowerUnaccent(u.firstName) like LowerUnaccent(?1) or LowerUnaccent(u.surname) like LowerUnaccent(?1)'
-                );
-                $sql->setParameter(
-                    '1',
-                    '%'.addcslashes($parms['username'], '\\%_').'%'
-                );
-            }
-            $sql->addOrderBy('u.id', 'desc');
+            $data = $form->getData();
 
             $grid = new GridHelper();
             $grid->setId('person-grid');
             $grid->setPerPage(5);
             $grid->setMaxResult(5);
-            $grid->setQueryBuilder($sql);
             $grid->setInfiniteGrid(true);
             $grid->setRoute('lc_admin_person_grid');
-            $grid->setRouteParams(
-                array(
-                    $form->getName(),
-                )
-            );
+            $grid->setRouteParams([$form->getName()]);
 
-            return array(
-                'grid' => $grid->createView($request),
-            );
+            if ($data['username']) {
+                /** @var PersonRepository $repo */
+                $repo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Person');
+                $query = $repo->getSmartSearchQuery($data['username']);
+                $grid->setQueryBuilder($query);
+            }
+
+            $gridView = $grid->createView($request);
         }
 
-        return $result;
+        return ['grid' => $gridView];
     }
 
     /**

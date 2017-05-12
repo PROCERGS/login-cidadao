@@ -1,12 +1,11 @@
 {% extends "LoginCidadaoCoreBundle::grid_layout.html.twig" %}
 {% block grid %}
-<style type="text/css">
-.action-column-grid .glyphicon-pencil {
-  margin-left: -6px;
-}
-
-</style>
-<div class="panel panel-default">
+    <style type="text/css">
+        .action-column-grid .glyphicon-pencil {
+            margin-left: -6px;
+        }
+    </style>
+    <div class="panel panel-default">
         <div class="panel-heading">
             <h2 class="panel-title">{{ 'grid.search.title'|trans }}</h2>
         </div>
@@ -21,42 +20,51 @@
 {% endblock grid %}
 
 {% block grid_header_data %}
-<div class="col-md-3">{{ 'cpf'|trans }}</div>
-<div class="col-md-2">{{ 'username'|trans }}</div>
-<div class="col-md-2">{{ 'email'|trans }}</div>
-<div class="col-md-4">{{ 'name'|trans }}</div>
+    <div class="col-md-2">{{ 'cpf'|trans }}</div>
+    <div class="col-md-2">{{ 'username'|trans }}</div>
+    <div class="col-md-3">{{ 'email'|trans }}</div>
+    <div class="col-md-4">{{ 'name'|trans }}</div>
 {% endblock grid_header_data %}
 
 {% block grid_row_action %}
-<div class="col-md-1 action-column-grid">
-    <div class="btn-group btn-group-justified">
-        <div class="btn-group">
-            <a title="{{ 'Edit'|trans }}" href="{{ path('lc_admin_person_edit', {id: row.id}) }}">
-            <button type="button" class="btn btn-warning edit-row-grid" id="{{ grid.getId }}-row-{{ row.id }}"  data-row="{{ grid.getRouteParams|merge({'id':row.id})|json_encode }}">
-                <span class="glyphicon glyphicon-pencil"></span>
-                <span class="label-action-column-grid">{{ 'edit'|trans }} </span>
-            </button>
-            </a>
+    <div class="col-md-1 action-column-grid">
+        <div class="btn-group btn-group-justified">
+            <div class="btn-group">
+                <a title="{{ 'Edit'|trans }}" href="{{ path('lc_admin_person_edit', {id: row.id}) }}">
+                    <button type="button" class="btn btn-warning edit-row-grid" id="{{ grid.getId }}-row-{{ row.id }}"
+                            data-row="{{ grid.getRouteParams|merge({'id':row.id})|json_encode }}">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                        <span class="label-action-column-grid">{{ 'edit'|trans }} </span>
+                    </button>
+                </a>
+            </div>
         </div>
     </div>
-</div>
 {% endblock grid_row_action %}
 
 {% block grid_row_data %}
-<div class="col-md-3">
-    <dt>{{ 'cpf'|trans }}</dt>
-    <dd ><div style="word-wrap: break-word;">{{ row.cpf }}</div></dd>
-</div>
-<div class="col-md-2">
-    <dt>{{ 'username'|trans }}</dt>
-    <dd ><div style="word-wrap: break-word;">{{ row.username }}</div></dd>
-</div>
-<div class="col-md-2">
-    <dt>{{ 'name'|trans }}</dt>
-    <dd ><div style="word-wrap: break-word;">{{ row.email }}</div></dd>
-</div>
-<div class="col-md-4">
-    <dt>{{ 'name'|trans }}</dt>
-    <dd ><div style="word-wrap: break-word;">{{ row.getFullName }}</div></dd>
-</div>
+    <div class="col-md-2">
+        <dt>{{ 'cpf'|trans }}</dt>
+        <dd>
+            <div style="word-wrap: break-word;">{{ row.cpf }}</div>
+        </dd>
+    </div>
+    <div class="col-md-2">
+        <dt>{{ 'username'|trans }}</dt>
+        <dd>
+            <div style="word-wrap: break-word;">{{ row.username }}</div>
+        </dd>
+    </div>
+    <div class="col-md-3">
+        <dt>{{ 'name'|trans }}</dt>
+        <dd>
+            <div style="word-wrap: break-word;">{{ row.email }}</div>
+        </dd>
+    </div>
+    <div class="col-md-4">
+        <dt>{{ 'name'|trans }}</dt>
+        <dd>
+            <div style="word-wrap: break-word;">{{ row.getFullName }}</div>
+        </dd>
+    </div>
 {% endblock grid_row_data %}
