@@ -10,7 +10,6 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Controller;
 
-use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\PhoneVerificationBundle\Exception\VerificationNotSentException;
 use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
@@ -19,10 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -31,22 +27,8 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 class VerificationController extends Controller
 {
-    private function getVerificationOr404($id)
-    {
-        /** @var PhoneVerificationServiceInterface $phoneVerificationService */
-        $phoneVerificationService = $this->get('phone_verification');
-
-        $verification = $phoneVerificationService->getPhoneVerificationById($id);
-
-        if (!$verification) {
-            throw new NotFoundHttpException();
-        }
-
-        return $verification;
-    }
-
     /**
-     * @Route("/verify/{id}", name="lc_verify_phone")
+     * @Route("/task/verify-phone/{id}", name="lc_verify_phone")
      * @Template()
      */
     public function verifyAction(Request $request, $id)
@@ -79,9 +61,11 @@ class VerificationController extends Controller
             /** @var TaskStackManagerInterface $taskStackManager */
             $taskStackManager = $this->get('task_stack.manager');
             $task = $taskStackManager->getCurrentTask();
-            $taskStackManager->setTaskSkipped($task);
+            if ($task) {
+                $taskStackManager->setTaskSkipped($task);
+            }
 
-            return $taskStackManager->processRequest($request, $this->redirectToRoute('lc_phone_verification_success'));
+            return $taskStackManager->processRequest($request, $this->redirectToRoute('lc_dashboard'));
         }
 
         $nextResend = $phoneVerificationService->getNextResendDate($verification);
@@ -93,18 +77,22 @@ class VerificationController extends Controller
     }
 
     /**
-     * @Route("/phone-verification/success", name="lc_phone_verification_success")
-     * @Template()
+     * @Route("/task/verify-phone/{id}/success", name="lc_phone_verification_success")
+     * @Template("LoginCidadaoPhoneVerificationBundle:Verification:response.html.twig")
      */
-    public function successAction(Request $request)
+    public function successAction(Request $request, $id)
     {
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
+
         return [
-            'target' => '#',
+            'message' => $translator->trans('tasks.verify_phone.success'),
+            'target' => $this->generateUrl('lc_dashboard'),
         ];
     }
 
     /**
-     * @Route("/resend/{id}", name="lc_resend_verification_code")
+     * @Route("/task/verify-phone/{id}/resend", name="lc_phone_verification_code_resend")
      * @Template()
      */
     public function resendAction(Request $request, $id)
@@ -117,15 +105,35 @@ class VerificationController extends Controller
         try {
             $phoneVerificationService->resendVerificationCode($verification);
 
-            // TODO: flash "message sent"
+            $result = ['type' => 'success', 'message' => 'tasks.verify_phone.resend.success'];
         } catch (TooManyRequestsHttpException $e) {
-            // TODO: flash "message not sent. you have to wait until Y-m-d H:i"
+            $result = ['type' => 'danger', 'message' => 'tasks.verify_phone.resend.errors.too_many_requests'];
         } catch (VerificationNotSentException $e) {
-            // TODO: error, message not sent
-            die('error. not sent');
+            $result = ['type' => 'danger', 'message' => 'tasks.verify_phone.resend.errors.unavailable'];
         }
 
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
+        $this->addFlash($result['type'], $translator->trans($result['message']));
+
         return $this->redirectToRoute('lc_verify_phone', ['id' => $id]);
+    }
+
+    /**
+     * @Route("/task/verify-phone/{id}/skip", name="lc_phone_verification_skip")
+     * @Template()
+     */
+    public function skipAction(Request $request, $id)
+    {
+        /** @var TaskStackManagerInterface $taskStackManager */
+        $taskStackManager = $this->get('task_stack.manager');
+
+        $task = $taskStackManager->getCurrentTask();
+        if ($task) {
+            $taskStackManager->setTaskSkipped($task);
+        }
+
+        return $taskStackManager->processRequest($request, $this->redirectToRoute('lc_dashboard'));
     }
 
     /**
@@ -141,25 +149,21 @@ class VerificationController extends Controller
         /** @var PhoneVerificationServiceInterface $phoneVerificationService */
         $phoneVerificationService = $this->get('phone_verification');
 
-        $verification = $this->getVerificationOr404($id);
+        $verification = $phoneVerificationService->getPhoneVerificationById($id);
 
-        $redirectSuccess = $this->redirectToRoute('lc_phone_verification_success');
-        if (!$verification) {
-            throw new NotFoundHttpException();
+        if (!$verification || false === $phoneVerificationService->verifyToken($verification, $token)) {
+            /** @var TranslatorInterface $translator */
+            $translator = $this->get('translator');
+
+            return $this->render(
+                'LoginCidadaoPhoneVerificationBundle:Verification:response.html.twig',
+                [
+                    'message' => $translator->trans('tasks.verify_phone.failure'),
+                    'target' => $this->generateUrl('lc_dashboard'),
+                ]
+            );
         }
 
-        try {
-            if ($phoneVerificationService->verifyToken($verification, $token)) {
-                return $redirectSuccess;
-            } else {
-                return new JsonResponse(false);
-            }
-        } catch (NotFoundHttpException $e) {
-            if ($this->getUser() instanceof PersonInterface) {
-                return $this->redirectToRoute('lc_verify_phone', ['id' => $id]);
-            } else {
-                throw $e;
-            }
-        }
+        return $this->redirectToRoute('lc_phone_verification_success', ['id' => $verification->getId()]);
     }
 }

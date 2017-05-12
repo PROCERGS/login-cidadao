@@ -334,8 +334,7 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
         }
 
         if ($phoneVerification->getVerificationToken() !== $token) {
-            // TODO: add translated message
-            throw new AccessDeniedException();
+            return false;
         }
 
         return $this->verify($phoneVerification, $phoneVerification->getVerificationCode());
