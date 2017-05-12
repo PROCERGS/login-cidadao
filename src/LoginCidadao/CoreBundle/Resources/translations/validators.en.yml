@@ -26,7 +26,7 @@ person.validation:
         missingNumbers: Your password must include at least one number.
         missingLetters: Your password must include at least one letter.
         not_blank: Please type a password.
-    cpf.already_used: This CPF is already in use.
+    cpf.already_used: This CPF is already in use by another account.
     mobile:
         9thDigit: Brazilian cellphones need the 9th digit
         length:

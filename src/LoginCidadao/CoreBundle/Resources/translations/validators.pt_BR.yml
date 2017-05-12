@@ -30,7 +30,7 @@ person.validation:
         missingNumbers: Sua senha precisa ter ao menos um número.
         missingLetters: Sua senha precisa ter ao menos uma letra.
         not_blank: Informe uma senha.
-    cpf.already_used: Esse CPF já está cadastrado.
+    cpf.already_used: Esse CPF já está cadastrado em outra conta.
     mobile:
         9thDigit: Os celulares no Brasil precisam do 9º dígito
         length:
