@@ -85,33 +85,18 @@ email-confirmation.resent: 'As instruções para confirmação de email foram re
 notification.unconfirmed.email.title: 'Email não confirmado!'
 notification.unconfirmed.email.shortText: 'Caso não confirme seu email em prazo hábil, sua conta será removida. Siga as instruções enviadas por email. <a href="%url%">Reenviar email</a>'
 notification.unconfirmed.email.text: "<p>Para utilizar o Login Cidadão, é necessário que você utilize um endereço de email válido.</p> <p>Caso você não confirme seu endereço de email acessando o link que lhe foi enviado, sua conta será excluída.</p>\n"
-notification.empty.password.title: 'Você não tem uma senha!'
-notification.empty.password.shortText: 'Para melhorar sua segurança e reduzir o risco de ficar sem acesso à sua conta, crie uma senha'
-notification.empty.password.text: ''
-notification.empty.password.click.here: 'clicando aqui'
 'Useful Information': 'Informações Úteis'
 'Content License': 'Licença do Conteúdo'
 'Privacy Policy': 'Política de Privacidade'
 'GitHub Repository': 'Repositório no GitHub'
 Contact: Contato
-'About the Government': 'Sobre o Governo'
-Government: Governo
 'view all services': 'ver todos serviços'
 exception.alreadyLinkedAccount: 'Essa conta já está conectada a um outro usuário. Você deve desfazer essa conexão antes de tentar conectar com o usuário atual.'
 '<a href="%link%">Background picture</a> by %name%': '<a href="%link%">Imagem de fundo</a> por %name%'
 cpf.registration.title: 'Registro de CPF'
-'Active Services': 'Serviços Ativos'
-'Other Services': 'Demais serviços'
 'Log in using your Citizen''s Login': 'Entre usando seu Login Cidadão'
-'This service is already active in your Citizen''s Login account': 'Este serviço já está ativo na sua conta do Login Cidadão'
-'This service is not active in your Citizen''s Login account': 'Este serviço não está ativo na sua conta do Login Cidadão'
-'Activate this service': 'Ativar este serviço'
-'Deactivate this service': 'Desativar este serviço'
-'Do you really want to disable this service?': 'Você quer mesmo desativar este serviço?'
 Yes: Sim
 No: Não
-'This service uses the following data from your Login Citizen account': 'Este serviço utiliza os seguintes dados da sua conta do Login Cidadão'
-'Mark as read': 'Marcar como lido'
 social-networks.unlink.no-password: 'Você não pode desvincular uma rede social sem definir uma senha antes.'
 social-networks.unlink.facebook.success: 'Facebook desvinculado com sucesso.'
 social-networks.unlink.twitter.success: 'Twitter desvinculado com sucesso.'
@@ -145,7 +130,6 @@ client.suggestion.registered: 'Sua sugestão foi registrada'
 Send: Enviar
 'Login Cidadão': 'Login Cidadão'
 'About Citizen''s Login': 'Sobre o Login Cidadão'
-'This service is not available yet. Stay tuned for the launch date.': 'Esse serviço ainda não está ativo. Aguarde a data de lançamento.'
 'With only one account, the citizen will be able to use government''s digital services.': 'Com apenas um cadastro, o cidadão poderá utilizar os serviços digitais do governo.'
 'One account. The entire Government.': 'Uma conta. O Governo Inteiro.'
 'Creative commons': Licença creative commons
@@ -612,7 +596,6 @@ Badges: Medalhas
 Dashboard: 'Início'
 badges.list.title: 'O que são as medalhas?'
 badges.list.description: 'Medalhas são os indicadores de validações que sua identidade virtual possui. Elas permitem que os demais sistemas integrados ao Login Cidadão possam melhorar a sua experiência ao utilizar os serviços ofertados.'
-'Back to services': 'Voltar para os serviços'
 scope.logout: 'Permitir deslogar'
 'Search it!': 'Pesquise aqui!'
 'Don''t know your postal code?': 'Não sabe seu código postal?'
@@ -976,3 +959,16 @@ services:
         title: Demais Serviços
         details: Detalhes do Serviço
         go_to: Acessar Serviço
+    details:
+        back: Voltar para os serviços
+        authorized_scopes: Este serviço utiliza os seguintes dados da sua conta do Login Cidadão
+        go_to: Acessar o site do serviço
+        active: Este serviço já está ativo na sua conta do Login Cidadão
+        not_active: Este serviço não está ativo na sua conta do Login Cidadão
+        activate: Ativar este serviço
+        wait_launch: Esse serviço ainda não está ativo. Aguarde a data de lançamento.
+        deactivate:
+            label: Desativar este serviço
+            confirm: Você quer mesmo desativar este serviço?
+            yes: Sim
+            no: Não

@@ -449,7 +449,6 @@ body.no-scroll {
 
 .client-details #deactivate-box {
     background-image: none;
-    display: none;
     clear: both;
 }
 
