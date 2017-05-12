@@ -934,7 +934,9 @@ lc.admin.person.metadata:
     title: "Metadados"
     date_format: "d/m/Y H:i:s"
     createdAt: "Data de Criação da Conta"
-    emailConfirmedAt: "Data de Confirmação de Email"
+    emailConfirmedAt:
+        label: "Data de Confirmação de Email"
+        empty: "Email não confirmado"
     lastLogin: "Último Login"
     hasCpf: "Cadastrou CPF?"
     authorization.createdAt: "Data da Autorização"
