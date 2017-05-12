@@ -82,7 +82,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="lastLogin">{{ 'lc.admin.person.metadata.hasCpf' | trans }}</label>
+                                <label for="lastLogin">{{ 'lc.admin.person.metadata.hasCpf.label' | trans }}</label>
                                 <span id="lastLogin" class="form-control" readonly="readonly">
                                     {% if person.cpf is not null %}
                                         {% if is_granted('ROLE_VIEW_USERS_CPF') %}

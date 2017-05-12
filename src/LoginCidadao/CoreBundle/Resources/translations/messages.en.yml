@@ -52,8 +52,6 @@ Save: Save
 'Privacy Policy': 'Privacy Policy'
 'GitHub Repository': 'GitHub Repository'
 Contact: Contact
-'About the Government': 'About the Government'
-Government: Government
 Profile: Profile
 Services: Services
 'Change Username': 'Change Username'
@@ -77,22 +75,13 @@ exception.alreadyLinkedAccount: 'This account is already linked with another use
 cpf.registration.title: 'Registro de CPF'
 'Your login': 'Your login'
 '<a href="%link%">Background picture</a> by %name%': '<a href="%link%">Background picture</a> by %name%'
-'Active Services': 'Active Services'
-'Other Services': 'Other Services'
 notification.unconfirmed.email.title: 'Unconfirmed Email!'
 notification.unconfirmed.email.shortText: 'If you don''t confirm you email in due time your account will be erased. Follow instructions sent to your email.'
 notification.unconfirmed.email.text: "<p>To use this system you must use a valid email address.</p> <p>If you don't confirm you email clicking on the link sent to your email address your account will be removed.</p>\n"
-notification.empty.password.title: 'You don''t have a password!'
-notification.empty.password.shortText: 'Click here to define your password.'
-notification.empty.password.text: ''
 'This service is already active in your Citizen''s Login account': 'This service is already active in your Citizen''s Login account'
-'Deactivate this service': 'Deactivate this service'
-'This service is not active in your Citizen''s Login account': 'This service is not active in your Citizen''s Login account'
-'Activate this service': 'Activate this service'
 social-networks.unlink.no-password: 'You must define a password before unlinking any social network.'
 social-networks.unlink.facebook.success: 'Facebook successfully unlinked.'
 social-networks.unlink.twitter.success: 'Twitter successfully unlinked.'
-'Mark as read': 'Mark as read'
 'New Service': 'New Service'
 Name: Name
 Description: Description
@@ -120,12 +109,8 @@ Suggestion: Suggestion
 Send: Send
 'Your last suggested Services': 'Your last suggested Services'
 'Login Cidadão': 'Citizen Login'
-'Do you really want to disable this service?': 'Do you really want to disable this service?'
 Yes: Yes
 No: No
-'This service uses the following data from your Login Citizen account': 'This service uses the following data from your Login Citizen account'
-'This service is not available yet. Stay tuned for the launch date.': 'This service is not available yet. Stay tuned for the launch date.'
-
 'With only one account, the citizen will be able to use government''s digital services.': 'With only one account, the citizen will be able to use government''s digital services.'
 'One account. The entire Government.': 'One account. The entire Government.'
 'Creative commons': Creative commons
@@ -535,7 +520,10 @@ lc.admin.person.metadata:
         label: "Email Confirmation Date"
         empty: "Email not confirmed"
     lastLogin: "Last Login"
-    hasCpf: "Does this person has a CPF/Taxpayer ID?"
+    hasCpf:
+        label: "Filled CPF/Taxpayer ID?"
+        yes: "Yes"
+        no: "No"
     authorization.createdAt: "Authorization Date"
 dashboard:
     active_services:
@@ -561,3 +549,26 @@ password_hint:
         no_reqs: Password with at most %max% characters.
     no_limit:
         with_reqs: Password with %reqs%.
+services:
+    title: Services
+    active_services:
+        title: Active Services
+        details: Service's Details
+        go_to: Go to Service
+    unauthorized:
+        title: Other Services
+        details: Service's Details
+        go_to: Go to Service
+    details:
+        back: Back to services list
+        authorized_scopes: This service uses the following data from your account
+        go_to: Visit this service's page
+        active: This service is already active in your account
+        not_active: This service is not active in your account
+        activate: Activate this service
+        wait_launch: This service is not available yet. Stay tuned for the launch date.
+        deactivate:
+            label: Deactivate this service
+            confirm: Do you really want to disable this service?
+            yes: Yes
+            no: No
