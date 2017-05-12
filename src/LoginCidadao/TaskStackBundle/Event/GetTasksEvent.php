@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\TaskStackBundle\Event;
 
+use LoginCidadao\TaskStackBundle\Model\IntentTask;
 use LoginCidadao\TaskStackBundle\Model\TaskInterface;
 use LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface;
 use Symfony\Component\EventDispatcher\Event;
@@ -46,12 +47,27 @@ class GetTasksEvent extends Event
     }
 
     /**
+     * Only add the task if the Stack is empty.
+     *
+     * If the Stack contains only one IntentTask task, then the Stack will be considered empty.
+     *
      * @param TaskInterface $task
      * @return $this
      */
     public function addTaskIfStackEmpty(TaskInterface $task)
     {
-        if ($this->stackManager->countTasks() === 0) {
+        $count = $this->stackManager->countTasks();
+
+        if ($count >= 2) {
+            return $this;
+        }
+
+        if ($count === 0) {
+            $this->addTask($task);
+        }
+
+        $currentTask = $this->stackManager->getCurrentTask();
+        if ($count === 1 && $currentTask instanceof IntentTask) {
             $this->addTask($task);
         }
 

@@ -448,7 +448,6 @@ class PhoneVerificationServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testVerifyTokenInvalidToken()
     {
-        $this->setExpectedException('Symfony\Component\Security\Core\Exception\AccessDeniedException');
         $token = 'abc123';
 
         $phoneVerification = $this->getPhoneVerification();
@@ -456,6 +455,6 @@ class PhoneVerificationServiceTest extends \PHPUnit_Framework_TestCase
         $phoneVerification->expects($this->once())->method('getVerificationToken')->willReturn($token);
 
         $service = $this->getService();
-        $this->assertTrue($service->verifyToken($phoneVerification, 'wrong'));
+        $this->assertFalse($service->verifyToken($phoneVerification, 'wrong'));
     }
 }
