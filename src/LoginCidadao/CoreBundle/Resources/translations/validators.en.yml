@@ -11,6 +11,10 @@ person.validation:
     name.length:
         min: This name is too short.
         max: This name is too long.
+    age:
+        future: It seems that you are not born yet. Check your date of birth.
+        min: You have to be older than {{ limit }} years to register.
+        max: Invalid date of birth.
     email:
         length:
             max: This email is too long.
@@ -22,7 +26,7 @@ person.validation:
         missingNumbers: Your password must include at least one number.
         missingLetters: Your password must include at least one letter.
         not_blank: Please type a password.
-    cpf.already_used: This CPF is already in use.
+    cpf.already_used: This CPF is already in use by another account.
     mobile:
         9thDigit: Brazilian cellphones need the 9th digit
         length:

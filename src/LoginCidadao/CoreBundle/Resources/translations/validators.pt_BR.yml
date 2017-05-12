@@ -15,6 +15,10 @@ person.validation:
     name.length:
         min: O nome informado é muito curto.
         max: O nome informado é muito longo.
+    age:
+        future: Parece que você ainda não nasceu. Verifique a data informada.
+        min: Você precisa ter ao menos {{ limit }} anos.
+        max: Data de nascimento inválida.
     email:
         length:
             max: O email informado é muito longo.
@@ -26,7 +30,7 @@ person.validation:
         missingNumbers: Sua senha precisa ter ao menos um número.
         missingLetters: Sua senha precisa ter ao menos uma letra.
         not_blank: Informe uma senha.
-    cpf.already_used: Esse CPF já está cadastrado.
+    cpf.already_used: Esse CPF já está cadastrado em outra conta.
     mobile:
         9thDigit: Os celulares no Brasil precisam do 9º dígito
         length:
