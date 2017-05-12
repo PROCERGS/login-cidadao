@@ -140,6 +140,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Groups({"birthdate"})
      * @ORM\Column(type="date", nullable=true)
      * @JMS\Since("1.0")
+     * @LCAssert\Age(max="150", groups={"Profile", "LoginCidadaoProfile", "Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration", "LoginCidadaoEmailForm"})
      */
     protected $birthdate;
 
