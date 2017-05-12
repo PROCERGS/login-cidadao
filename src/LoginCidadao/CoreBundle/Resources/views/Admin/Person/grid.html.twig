@@ -20,9 +20,9 @@
 {% endblock grid %}
 
 {% block grid_header_data %}
-    <div class="col-md-3">{{ 'cpf'|trans }}</div>
+    <div class="col-md-2">{{ 'cpf'|trans }}</div>
     <div class="col-md-2">{{ 'username'|trans }}</div>
-    <div class="col-md-2">{{ 'email'|trans }}</div>
+    <div class="col-md-3">{{ 'email'|trans }}</div>
     <div class="col-md-4">{{ 'name'|trans }}</div>
 {% endblock grid_header_data %}
 
@@ -43,7 +43,7 @@
 {% endblock grid_row_action %}
 
 {% block grid_row_data %}
-    <div class="col-md-3">
+    <div class="col-md-2">
         <dt>{{ 'cpf'|trans }}</dt>
         <dd>
             <div style="word-wrap: break-word;">{{ row.cpf }}</div>
@@ -55,7 +55,7 @@
             <div style="word-wrap: break-word;">{{ row.username }}</div>
         </dd>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-3">
         <dt>{{ 'name'|trans }}</dt>
         <dd>
             <div style="word-wrap: break-word;">{{ row.email }}</div>
