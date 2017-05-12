@@ -27,6 +27,9 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface
 
     public function setSurname($suname);
 
+    /**
+     * @return \DateTime
+     */
     public function getBirthdate();
 
     public function setBirthdate($birthdate);

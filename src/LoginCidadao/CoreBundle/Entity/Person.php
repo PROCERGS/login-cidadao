@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use JMS\Serializer\Annotation as JMS;
 use FOS\UserBundle\Model\User as BaseUser;
@@ -1350,6 +1351,21 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
             return $this->getGivenName();
         } else {
             return $this->getEmail();
+        }
+    }
+
+    /**
+     * @Assert\Callback()
+     * @param ExecutionContextInterface $context
+     */
+    public function validateBirthdate(ExecutionContextInterface $context)
+    {
+        $age = $this->getBirthdate()->diff(new \DateTime());
+        if ($age->y > 150) {
+            $context
+                ->buildViolation('person.validation.birthdate.max')
+                ->atPath('birthdate')
+                ->addViolation();
         }
     }
 }
