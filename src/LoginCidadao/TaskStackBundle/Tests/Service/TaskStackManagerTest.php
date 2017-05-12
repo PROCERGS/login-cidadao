@@ -55,10 +55,10 @@ class TaskStackManagerTest extends \PHPUnit_Framework_TestCase
 
     private function getStackManager($params = [])
     {
-        $session = $params['session'] ?: $this->getSession();
-        $tokenStorage = $params['token_storage'] ?: $this->getTokenStorage();
-        $router = $params['router'] ?: $this->getRouter();
-        $dispatcher = $params['dispatcher'] ?: $this->getDispatcher();
+        $session = isset($params['session']) ? $params['session'] : $this->getSession();
+        $tokenStorage = isset($params['token_storage']) ? $params['token_storage'] : $this->getTokenStorage();
+        $router = isset($params['router']) ? $params['router'] : $this->getRouter();
+        $dispatcher = isset($params['dispatcher']) ? $params['dispatcher'] : $this->getDispatcher();
 
         $manager = new TaskStackManager(
             $session, $tokenStorage, $router, $dispatcher
@@ -265,5 +265,19 @@ class TaskStackManagerTest extends \PHPUnit_Framework_TestCase
         $manager->addNotSkippedTaskOnce($task3);
 
         $this->assertEquals($task2, $manager->getNextTask());
+    }
+
+    public function testCountTasks()
+    {
+        $task1 = $this->getTask('task1');
+        $task2 = $this->getTask('task2');
+        $task3 = $this->getTask('task3');
+
+        $manager = $this->getStackManager();
+        $manager->addNotSkippedTaskOnce($task1);
+        $manager->addNotSkippedTaskOnce($task2);
+        $manager->addNotSkippedTaskOnce($task3);
+
+        $this->assertEquals(3, $manager->countTasks());
     }
 }
