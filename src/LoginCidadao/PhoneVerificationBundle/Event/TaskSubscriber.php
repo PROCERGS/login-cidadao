@@ -78,9 +78,7 @@ class TaskSubscriber implements EventSubscriberInterface
         if ($pendingVerification && !$lastSentVerification) {
             try {
                 if ($user->getMobile() != $pendingVerification->getPhone()) {
-                    // Remove orphan verifications
-                    $this->phoneVerificationService->removePhoneVerification($pendingVerification);
-
+                    // Orphan verification. Do not add a task
                     return;
                 }
                 $this->phoneVerificationService->sendVerificationCode($pendingVerification);
