@@ -367,7 +367,7 @@ class PhoneVerificationServiceTest extends \PHPUnit_Framework_TestCase
             );
 
         $service = $this->getService(compact('dispatcher'));
-        $service->resendVerificationCode($phoneVerification);
+        $service->sendVerificationCode($phoneVerification);
     }
 
     public function testResendVerificationCodeFailure()
@@ -386,7 +386,7 @@ class PhoneVerificationServiceTest extends \PHPUnit_Framework_TestCase
         $options->expects($this->once())->method('getSmsResendTimeout')->willReturn('+5 minutes');
 
         $service = $this->getService(['sent_verification_repository' => $repository, 'options' => $options]);
-        $service->resendVerificationCode($phoneVerification);
+        $service->sendVerificationCode($phoneVerification);
     }
 
     public function testRegisterVerificationSent()

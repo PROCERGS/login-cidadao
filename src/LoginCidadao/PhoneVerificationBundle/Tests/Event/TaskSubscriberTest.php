@@ -10,19 +10,25 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Tests\Event;
 
+use libphonenumber\PhoneNumberType;
 use LoginCidadao\PhoneVerificationBundle\Event\TaskSubscriber;
 use LoginCidadao\PhoneVerificationBundle\Exception\VerificationNotSentException;
 use LoginCidadao\TaskStackBundle\TaskStackEvents;
 
 class TaskSubscriberTest extends \PHPUnit_Framework_TestCase
 {
-    private function getTokenStorage($shouldBeUsed = true, $userClass = 'LoginCidadao\CoreBundle\Model\PersonInterface')
+    private function getUser($userClass = 'LoginCidadao\CoreBundle\Model\PersonInterface')
+    {
+        return $this->getMock($userClass);
+    }
+
+    private function getTokenStorage($shouldBeUsed = true, $user = null)
     {
         $tokenStorage = $this->getMock(
             'Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface'
         );
         if ($shouldBeUsed) {
-            $user = $this->getMock($userClass);
+            $user = $user ?: $this->getUser();
 
             $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
             $token->expects($this->atLeastOnce())->method('getUser')->willReturn($user);
@@ -75,6 +81,26 @@ class TaskSubscriberTest extends \PHPUnit_Framework_TestCase
         $subscriber->onGetTasks($event);
     }
 
+    public function testOnGetTasksOrphanVerification()
+    {
+        $user = $this->getUser();
+        $user->expects($this->once())->method('getMobile')->willReturn(null);
+
+        $phoneVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
+        $phoneVerification->expects($this->once())->method('getPhone')->willReturn(new PhoneNumberType());
+        $tokenStorage = $this->getTokenStorage(true, $user);
+
+        $phoneVerificationService = $this->getPhoneVerificationService();
+        $phoneVerificationService->expects($this->once())->method('getAllPendingPhoneVerification')
+            ->willReturn([$phoneVerification]);
+
+        $event = $this->getMockBuilder('LoginCidadao\TaskStackBundle\Event\GetTasksEvent')
+            ->disableOriginalConstructor()->getMock();
+
+        $subscriber = new TaskSubscriber($tokenStorage, $phoneVerificationService, true);
+        $subscriber->onGetTasks($event);
+    }
+
     public function testOnGetTasksSendFailed()
     {
         $phoneVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
@@ -96,7 +122,10 @@ class TaskSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testUnsupportedUser()
     {
-        $tokenStorage = $this->getTokenStorage(true, 'Symfony\Component\Security\Core\User\UserInterface');
+        $tokenStorage = $this->getTokenStorage(
+            true,
+            $this->getUser('Symfony\Component\Security\Core\User\UserInterface')
+        );
         $phoneVerificationService = $this->getPhoneVerificationService();
 
         $event = $this->getMockBuilder('LoginCidadao\TaskStackBundle\Event\GetTasksEvent')

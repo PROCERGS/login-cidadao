@@ -104,13 +104,6 @@ interface PhoneVerificationServiceInterface
     public function sendVerificationCode(PhoneVerificationInterface $phoneVerification);
 
     /**
-     * @param PhoneVerificationInterface $phoneVerification
-     * @throws TooManyRequestsHttpException
-     * @throws VerificationNotSentException
-     */
-    public function resendVerificationCode(PhoneVerificationInterface $phoneVerification);
-
-    /**
      * @param SentVerificationInterface $sentVerification
      * @return SentVerification
      */
