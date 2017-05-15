@@ -10,11 +10,11 @@
 
 namespace PROCERGS\LoginCidadao\PhoneVerificationBundle\Tests\DependencyInjection;
 
-use PROCERGS\LoginCidadao\PhoneVerificationBundle\DependencyInjection\PROCERGSLoginCidadaoPhoneVerificationExtension;
+use PROCERGS\LoginCidadao\PhoneVerificationBundle\DependencyInjection\PROCERGSPhoneVerificationExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
-class PROCERGSLoginCidadaoPhoneVerificationExtensionTest extends \PHPUnit_Framework_TestCase
+class PROCERGSPhoneVerificationExtensionTest extends \PHPUnit_Framework_TestCase
 {
     private function createContainer()
     {
@@ -41,11 +41,20 @@ class PROCERGSLoginCidadaoPhoneVerificationExtensionTest extends \PHPUnit_Framew
 
     public function testParametersLoaded()
     {
-        $config = [];
+        $config = ConfigurationTest::getConfig(5, 20);
 
         $container = $this->createContainer();
-        $container->registerExtension(new PROCERGSLoginCidadaoPhoneVerificationExtension());
-        $container->loadFromExtension('procergs_login_cidadao_phone_verification', $config);
+        $container->registerExtension(new PROCERGSPhoneVerificationExtension());
+        $container->loadFromExtension('procergs_phone_verification', $config);
         $this->compileContainer($container);
+
+        $this->assertEquals(
+            $config['max_failures'],
+            $container->getParameter('procergs_phone_verification.max_failures')
+        );
+        $this->assertEquals(
+            $config['reset_timeout'],
+            $container->getParameter('procergs_phone_verification.reset_timeout')
+        );
     }
 }

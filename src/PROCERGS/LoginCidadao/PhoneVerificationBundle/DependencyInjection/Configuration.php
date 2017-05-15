@@ -26,11 +26,19 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('procergs_login_cidadao_phone_verification');
+        $rootNode = $treeBuilder->root('procergs_phone_verification');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->children()
+                ->integerNode('max_failures')
+                    ->min(1)
+                    ->defaultValue(2)
+                ->end()
+                ->integerNode('reset_timeout')
+                    ->min(1)
+                    ->defaultValue(10)
+                ->end()
+            ->end();
 
         return $treeBuilder;
     }

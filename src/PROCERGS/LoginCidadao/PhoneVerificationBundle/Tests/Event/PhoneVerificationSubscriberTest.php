@@ -113,12 +113,14 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         return $phoneVerification;
     }
 
-    private function getEvent(PhoneVerificationInterface $phoneVerification, $sent = true)
+    private function getEvent(PhoneVerificationInterface $phoneVerification = null, $sent = true)
     {
         $event = $this->getMockBuilder('LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent')
             ->disableOriginalConstructor()
             ->getMock();
-        $event->expects($this->once())->method('getPhoneVerification')->willReturn($phoneVerification);
+
+        $event->expects($this->atLeastOnce())->method('getPhoneVerification')->willReturn($phoneVerification);
+
         if ($sent) {
             $event->expects($this->once())->method('setSentVerification')->with(
                 $this->isInstanceOf('LoginCidadao\PhoneVerificationBundle\Entity\SentVerification')

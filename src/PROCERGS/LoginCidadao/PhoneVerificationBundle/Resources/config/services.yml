@@ -16,7 +16,7 @@ services:
         class: Eljam\CircuitBreaker\Breaker
         arguments:
             - "phone_verification.sms"
-            - { max_failure: 3, reset_timeout: 10 }
+            - { max_failure: "%procergs_phone_verification.max_failures%", reset_timeout: "%procergs_phone_verification.reset_timeout%" }
             - "@cache"
             - null
             - "@event_dispatcher"
