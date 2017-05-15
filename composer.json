@@ -78,7 +78,8 @@
         "procergs/nfg-badges-bundle": "^1.1",
         "ejsmont-artur/php-circuit-breaker-bundle": "dev-master",
         "jakeasmith/http_build_url": "^1",
-        "procergs/sms-service": "^1.1"
+        "procergs/sms-service": "^1.1",
+        "eljam/circuit-breaker": ">=0.1.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

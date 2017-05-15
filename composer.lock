@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9f7a6300170c78396398b25d8f46a17e",
-    "content-hash": "50eb4fdc2a367f3dfca4ee84f5d24227",
+    "hash": "b3090ff6b937b42c5672608de9f55ab2",
+    "content-hash": "06aed86b57497d04e08c5e06da8fcccf",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -1287,6 +1287,50 @@
                 "source": "https://github.com/guilhermednt/php-circuit-breaker-bundle/tree/master"
             },
             "time": "2016-10-19 19:45:53"
+        },
+        {
+            "name": "eljam/circuit-breaker",
+            "version": "v0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eljam/circuit-breaker.git",
+                "reference": "21df7ec572ed497143866f436f5fc02576e77d8d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eljam/circuit-breaker/zipball/21df7ec572ed497143866f436f5fc02576e77d8d",
+                "reference": "21df7ec572ed497143866f436f5fc02576e77d8d",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/cache": "^1.5|^1.6",
+                "php": ">=5.4.0",
+                "symfony/event-dispatcher": "^2.8|^3.1",
+                "symfony/options-resolver": "^2.8|^3.1"
+            },
+            "require-dev": {
+                "mmoreram/php-formatter": "^1.1",
+                "phpunit/phpunit": "^4.8",
+                "satooshi/php-coveralls": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Eljam\\CircuitBreaker\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "eljam",
+                    "email": "guillaume.cavana@gmail.com"
+                }
+            ],
+            "description": "A php Circuit Breaker",
+            "time": "2017-05-14 17:15:19"
         },
         {
             "name": "friendsofsymfony/oauth-server-bundle",

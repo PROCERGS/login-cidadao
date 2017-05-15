@@ -12,7 +12,7 @@ namespace PROCERGS\LoginCidadao\PhoneVerificationBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class PROCERGSLoginCidadaoPhoneVerificationBundle extends Bundle
+class PROCERGSPhoneVerificationBundle extends Bundle
 {
     //
 }

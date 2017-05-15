@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class PROCERGSLoginCidadaoPhoneVerificationExtension extends Extension
+class PROCERGSPhoneVerificationExtension extends Extension
 {
     /**
      * {@inheritdoc}
@@ -29,6 +29,10 @@ class PROCERGSLoginCidadaoPhoneVerificationExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+
+        foreach ($config as $key => $value) {
+            $container->setParameter("procergs_phone_verification.{$key}", $value);
+        }
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');

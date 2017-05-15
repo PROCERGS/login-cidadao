@@ -10,11 +10,16 @@
 
 namespace PROCERGS\LoginCidadao\PhoneVerificationBundle\Event;
 
+use Eljam\CircuitBreaker\Breaker;
+use Eljam\CircuitBreaker\Exception\CircuitOpenException;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerification;
 use LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent;
+use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
+use PROCERGS\Sms\Exception\SmsServiceException;
 use PROCERGS\Sms\SmsService;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -37,21 +42,27 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
     /** @var RouterInterface */
     private $router;
 
+    /** @var Breaker */
+    private $breaker;
+
     /**
      * PhoneVerificationSubscriber constructor.
      *
      * @param SmsService $smsService
      * @param TranslatorInterface $translator
      * @param RouterInterface $router
+     * @param Breaker $breaker
      */
     public function __construct(
         SmsService $smsService,
         TranslatorInterface $translator,
-        RouterInterface $router
+        RouterInterface $router,
+        Breaker $breaker
     ) {
         $this->smsService = $smsService;
         $this->translator = $translator;
         $this->router = $router;
+        $this->breaker = $breaker;
     }
 
     /**
@@ -102,8 +113,6 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
     ) {
         $phoneVerification = $event->getPhoneVerification();
         $code = $phoneVerification->getVerificationCode();
-        $person = $phoneVerification->getPerson();
-        $phoneUtil = PhoneNumberUtil::getInstance();
         $link = $this->router->generate(
             'lc_phone_verification_verify_link',
             ['id' => $phoneVerification->getId(), 'token' => $phoneVerification->getVerificationToken()],
@@ -111,25 +120,76 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
         );
 
         $message = $this->translator->trans('phone_verification.sms.message', ['%code%' => $code, '%link%' => $link]);
-        $transactionId = $this->smsService->easySend($person->getMobile(), $message);
 
-        $this->info(
-            'Phone Verification sent to {phone} for user {user_id}. Transaction ID: {transaction_id}',
+        try {
+            $this->sendSmsAndRegister($event, $dispatcher, $message);
+        } catch (CircuitOpenException $e) {
+            $this->logSmsFailed($phoneVerification->getPerson(), $phoneVerification, 'SMS Service unavailable.');
+        } catch (\Exception $e) {
+            $this->logSmsFailed($phoneVerification->getPerson(), $phoneVerification, $e->getMessage(), $e->getCode());
+        }
+    }
+
+    private function sendSmsAndRegister(
+        SendPhoneVerificationEvent $event,
+        EventDispatcherInterface $dispatcher,
+        $message
+    ) {
+        $phoneVerification = $event->getPhoneVerification();
+        $transactionId = $this->protectedSendSms($this->smsService, $phoneVerification, $message);
+
+        if ($transactionId) {
+            $sentVerification = new SentVerification();
+            $sentVerification
+                ->setPhone($phoneVerification->getPhone())
+                ->setSentAt(new \DateTime())
+                ->setTransactionId($transactionId)
+                ->setMessageSent($message);
+
+            $event->setSentVerification($sentVerification);
+            $dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFICATION_CODE_SENT, $event);
+        }
+    }
+
+    private function protectedSendSms(
+        SmsService $smsService,
+        PhoneVerificationInterface $phoneVerification,
+        $message
+    ) {
+        return $this->breaker->protect(
+            function () use ($smsService, $phoneVerification, $message) {
+                $transactionId = $smsService->easySend($phoneVerification->getPhone(), $message);
+
+                $phoneUtil = PhoneNumberUtil::getInstance();
+                $this->info(
+                    'Phone Verification sent to {phone} for user {user_id}. Transaction ID: {transaction_id}',
+                    [
+                        'user_id' => $phoneVerification->getPerson()->getId(),
+                        'phone' => $phoneUtil->format($phoneVerification->getPhone(), PhoneNumberFormat::E164),
+                        'transaction_id' => $transactionId,
+                    ]
+                );
+
+                return $transactionId;
+            }
+        );
+    }
+
+    private function logSmsFailed(
+        PersonInterface $person,
+        PhoneVerificationInterface $phoneVerification,
+        $message,
+        $code = null
+    ) {
+        $phoneUtil = PhoneNumberUtil::getInstance();
+        $this->error(
+            'Phone Verification NOT sent to {phone} for user {user_id}: [{error_code}] {error_message}',
             [
                 'user_id' => $person->getId(),
-                'phone' => $phoneUtil->format($person->getMobile(), PhoneNumberFormat::E164),
-                'transaction_id' => $transactionId,
+                'phone' => $phoneUtil->format($phoneVerification->getPhone(), PhoneNumberFormat::E164),
+                'error_code' => $code,
+                'error_message' => $message,
             ]
         );
-
-        $sentVerification = new SentVerification();
-        $sentVerification
-            ->setPhoneVerification($phoneVerification)
-            ->setSentAt(new \DateTime())
-            ->setTransactionId($transactionId)
-            ->setMessageSent($message);
-
-        $event->setSentVerification($sentVerification);
-        $dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFICATION_CODE_SENT, $event);
     }
 }

@@ -10,6 +10,12 @@
 
 namespace PROCERGS\LoginCidadao\PhoneVerificationBundle\Tests\Event;
 
+use Eljam\CircuitBreaker\Breaker;
+use Eljam\CircuitBreaker\Exception\CircuitOpenException;
+use libphonenumber\PhoneNumber;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent;
+use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
 use PROCERGS\LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationSubscriber;
 
@@ -23,45 +29,57 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testOnVerificationRequest()
+    public function testOnVerificationRequestClosedCircuitBreaker()
     {
         $phoneNumber = $this->getMock('libphonenumber\PhoneNumber');
-
         $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
-        $person->expects($this->atLeastOnce())->method('getMobile')->willReturn($phoneNumber);
-
-        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
-        $phoneVerification = $this->getMock($phoneVerificationClass);
-        $phoneVerification->expects($this->any())->method('getPerson')->willReturn($person);
-        $phoneVerification->expects($this->any())->method('getVerificationCode')->willReturn(123456);
-
-        $event = $this->getMockBuilder('LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $event->expects($this->once())->method('getPhoneVerification')->willReturn($phoneVerification);
-        $event->expects($this->once())->method('setSentVerification')->with(
-            $this->isInstanceOf('LoginCidadao\PhoneVerificationBundle\Entity\SentVerification')
-        );
-
-        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
-        $dispatcher->expects($this->once())->method('dispatch')->with(
-            PhoneVerificationEvents::PHONE_VERIFICATION_CODE_SENT,
-            $event
-        );
+        $phoneVerification = $this->getPhoneVerification($person, $phoneNumber);
+        $event = $this->getEvent($phoneVerification, true);
+        $dispatcher = $this->getDispatcher($event);
 
         $subscriber = $this->getPhoneVerificationSubscriber();
         $subscriber->onVerificationRequest($event, PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED, $dispatcher);
     }
 
+    public function testOnVerificationRequestOpenCircuitBreaker()
+    {
+        $phoneNumber = $this->getMock('libphonenumber\PhoneNumber');
+        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $phoneVerification = $this->getPhoneVerification($person, $phoneNumber);
+        $event = $this->getEvent($phoneVerification, false);
+        $dispatcher = $this->getDispatcher();
+        $breaker = $this->getBreaker(new CircuitOpenException());
+
+        $subscriber = $this->getPhoneVerificationSubscriber($breaker, false);
+        $subscriber->onVerificationRequest($event, PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED, $dispatcher);
+    }
+
+    public function testOnVerificationRequestCloseCircuitBreaker()
+    {
+        $phoneNumber = $this->getMock('libphonenumber\PhoneNumber');
+        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $phoneVerification = $this->getPhoneVerification($person, $phoneNumber);
+        $event = $this->getEvent($phoneVerification, false);
+        $dispatcher = $this->getDispatcher();
+        $breaker = $this->getBreaker(new \Exception("Generic error"));
+
+        $subscriber = $this->getPhoneVerificationSubscriber($breaker, false);
+        $subscriber->onVerificationRequest($event, PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED, $dispatcher);
+    }
+
     /**
+     * @param Breaker|null $breaker
+     * @param bool $expectEasySend
      * @return PhoneVerificationSubscriber
      */
-    private function getPhoneVerificationSubscriber()
+    private function getPhoneVerificationSubscriber(Breaker $breaker = null, $expectEasySend = true)
     {
         $smsService = $this->getMockBuilder('PROCERGS\Sms\SmsService')
             ->disableOriginalConstructor()
             ->getMock();
-        $smsService->expects($this->once())->method('easySend')->willReturn('012345');
+        if ($expectEasySend) {
+            $smsService->expects($this->once())->method('easySend')->willReturn('012345');
+        }
 
         $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
         $translator->expects($this->once())->method('trans')->willReturn('message');
@@ -73,12 +91,69 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
             }
         );
 
+        $breaker = $breaker ?: new Breaker('breaker');
+
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())->method('log');
 
-        $subscriber = new PhoneVerificationSubscriber($smsService, $translator, $router);
+        $subscriber = new PhoneVerificationSubscriber($smsService, $translator, $router, $breaker);
         $subscriber->setLogger($logger);
 
         return $subscriber;
+    }
+
+    private function getPhoneVerification(PersonInterface $person, PhoneNumber $phoneNumber)
+    {
+        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
+        $phoneVerification = $this->getMock($phoneVerificationClass);
+        $phoneVerification->expects($this->any())->method('getPerson')->willReturn($person);
+        $phoneVerification->expects($this->any())->method('getVerificationCode')->willReturn(123456);
+        $phoneVerification->expects($this->any())->method('getPhone')->willReturn($phoneNumber);
+
+        return $phoneVerification;
+    }
+
+    private function getEvent(PhoneVerificationInterface $phoneVerification = null, $sent = true)
+    {
+        $event = $this->getMockBuilder('LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $event->expects($this->atLeastOnce())->method('getPhoneVerification')->willReturn($phoneVerification);
+
+        if ($sent) {
+            $event->expects($this->once())->method('setSentVerification')->with(
+                $this->isInstanceOf('LoginCidadao\PhoneVerificationBundle\Entity\SentVerification')
+            );
+        }
+
+        return $event;
+    }
+
+    private function getDispatcher(SendPhoneVerificationEvent $event = null)
+    {
+        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        if ($event) {
+            $dispatcher->expects($this->once())->method('dispatch')->with(
+                PhoneVerificationEvents::PHONE_VERIFICATION_CODE_SENT,
+                $event
+            );
+        }
+
+        return $dispatcher;
+    }
+
+    private function getBreaker($exception = null)
+    {
+        $breaker = null;
+        if ($exception instanceof \Exception) {
+            $breaker = $this->getMockBuilder('Eljam\CircuitBreaker\Breaker')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $breaker->expects($this->once())->method('protect')
+                ->willThrowException($exception);
+        }
+
+        return $breaker ?: new Breaker('name');
     }
 }
