@@ -12,6 +12,7 @@ namespace LoginCidadao\PhoneVerificationBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
+use Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType;
 
 /**
  * @codeCoverageIgnore
@@ -23,7 +24,7 @@ class SentVerificationRepository extends EntityRepository
         $query = $this->createQueryBuilder('s')
             ->where('s.phone = :phone')
             ->orderBy('s.sentAt', 'DESC')
-            ->setParameter('phone', $phoneVerification->getPhone());
+            ->setParameter('phone', $phoneVerification->getPhone(), PhoneNumberType::NAME);
 
         // Filter only SentVerification that belong to this PhoneVerification
         if ($phoneVerification->isVerified()) {
