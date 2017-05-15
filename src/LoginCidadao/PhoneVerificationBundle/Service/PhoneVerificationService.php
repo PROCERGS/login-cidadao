@@ -273,8 +273,18 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
         }
     }
 
-    public function sendVerificationCode(PhoneVerificationInterface $phoneVerification)
+    public function sendVerificationCode(PhoneVerificationInterface $phoneVerification, $forceSend = false)
     {
+        $nextDate = $this->getNextResendDate($phoneVerification);
+        if (!$forceSend && $nextDate > new \DateTime()) {
+            // We can't resend the verification code yet
+            $retryAfter = $nextDate->getTimestamp() - time();
+            throw new TooManyRequestsHttpException(
+                $retryAfter,
+                "tasks.verify_phone.resend.errors.too_many_requests"
+            );
+        }
+
         $event = new SendPhoneVerificationEvent($phoneVerification);
         $this->dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED, $event);
 
@@ -285,21 +295,6 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
         }
 
         return $sentVerification;
-    }
-
-    public function resendVerificationCode(PhoneVerificationInterface $phoneVerification)
-    {
-        $nextDate = $this->getNextResendDate($phoneVerification);
-        if ($nextDate > new \DateTime()) {
-            // We can't resend the verification code yet
-            $retryAfter = $nextDate->getTimestamp() - time();
-            throw new TooManyRequestsHttpException(
-                $retryAfter,
-                "tasks.verify_phone.resend.errors.too_many_requests"
-            );
-        }
-
-        $this->sendVerificationCode($phoneVerification);
     }
 
     public function registerVerificationSent(SentVerificationInterface $sentVerification)
