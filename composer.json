@@ -25,10 +25,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/guilhermednt/php-circuit-breaker-bundle"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/guilhermednt/circuit-breaker"
         }
     ],
     "require": {
@@ -83,7 +79,7 @@
         "ejsmont-artur/php-circuit-breaker-bundle": "dev-master",
         "jakeasmith/http_build_url": "^1",
         "procergs/sms-service": "^1.1",
-        "eljam/circuit-breaker": "dev-replace-contains"
+        "eljam/circuit-breaker": ">=0.1.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

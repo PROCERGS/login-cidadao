@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d54080e3ac294b690ad5b65f44e026b2",
-    "content-hash": "3aa777d2411158926a0ca5a000e27f83",
+    "hash": "b3090ff6b937b42c5672608de9f55ab2",
+    "content-hash": "06aed86b57497d04e08c5e06da8fcccf",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -1290,16 +1290,16 @@
         },
         {
             "name": "eljam/circuit-breaker",
-            "version": "dev-replace-contains",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/guilhermednt/circuit-breaker.git",
-                "reference": "9fd3074ea8d26e8f79574a5f46666492fa4c13b5"
+                "url": "https://github.com/eljam/circuit-breaker.git",
+                "reference": "21df7ec572ed497143866f436f5fc02576e77d8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guilhermednt/circuit-breaker/zipball/9fd3074ea8d26e8f79574a5f46666492fa4c13b5",
-                "reference": "9fd3074ea8d26e8f79574a5f46666492fa4c13b5",
+                "url": "https://api.github.com/repos/eljam/circuit-breaker/zipball/21df7ec572ed497143866f436f5fc02576e77d8d",
+                "reference": "21df7ec572ed497143866f436f5fc02576e77d8d",
                 "shasum": ""
             },
             "require": {
@@ -1319,11 +1319,7 @@
                     "Eljam\\CircuitBreaker\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Eljam\\CircuitBreaker\\": "tests/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1334,10 +1330,7 @@
                 }
             ],
             "description": "A php Circuit Breaker",
-            "support": {
-                "source": "https://github.com/guilhermednt/circuit-breaker/tree/replace-contains"
-            },
-            "time": "2017-05-11 20:22:44"
+            "time": "2017-05-14 17:15:19"
         },
         {
             "name": "friendsofsymfony/oauth-server-bundle",
@@ -7053,8 +7046,7 @@
         "bshaffer/oauth2-server-bundle": 20,
         "beelab/recaptcha2-bundle": 20,
         "qandidate/stack-request-id": 20,
-        "ejsmont-artur/php-circuit-breaker-bundle": 20,
-        "eljam/circuit-breaker": 20
+        "ejsmont-artur/php-circuit-breaker-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
