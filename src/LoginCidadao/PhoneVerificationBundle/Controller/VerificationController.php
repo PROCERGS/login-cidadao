@@ -103,7 +103,7 @@ class VerificationController extends Controller
         $verification = $phoneVerificationService->getPendingPhoneVerificationById($id, $this->getUser());
 
         try {
-            $phoneVerificationService->resendVerificationCode($verification);
+            $phoneVerificationService->sendVerificationCode($verification);
 
             $result = ['type' => 'success', 'message' => 'tasks.verify_phone.resend.success'];
         } catch (TooManyRequestsHttpException $e) {
