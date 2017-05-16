@@ -79,6 +79,10 @@ assetic:
             inputs:
                 - 'assets/vendor/bootstrap/dist/css/bootstrap.min.css'
                 - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
+        badges_css:
+            inputs:
+                - '@LoginCidadaoBadgesBundle/Resources/public/css/badges.css'
+                - '@LoginCidadaoPhoneVerificationBundle/Resources/public/css/badges.css'
         intl_tel_input_css:
             inputs:
                 - 'bundles/logincidadaocore/intl-tel-input/css/intlTelInput.css'
@@ -119,6 +123,7 @@ assetic:
         lc_logged_css:
             inputs:
                 - '@lc_base_css'
+                - '@badges_css'
                 - 'bundles/logincidadaocore/css/logged/logged.css'
 
     filters:

@@ -58,6 +58,12 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    phone_verification.badges.subscriber:
+        class: LoginCidadao\PhoneVerificationBundle\Event\BadgesSubscriber
+        arguments: [ "@translator", "@doctrine.orm.entity_manager" ]
+        tags:
+            - { name: kernel.event_subscriber }
+
     phone_verification.form:
         class: LoginCidadao\PhoneVerificationBundle\Form\PhoneVerificationType
         arguments:
