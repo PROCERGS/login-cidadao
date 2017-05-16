@@ -11,8 +11,10 @@
 namespace LoginCidadao\PhoneVerificationBundle\Event;
 
 
+use FOS\UserBundle\FOSUserEvents;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -20,6 +22,8 @@ use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Security\Http\SecurityEvents;
 
 class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwareInterface
 {
@@ -77,6 +81,7 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
             PhoneVerificationEvents::PHONE_CHANGED => 'onPhoneChange',
             PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED => 'onVerificationRequest',
             PhoneVerificationEvents::PHONE_VERIFICATION_CODE_SENT => 'onCodeSent',
+            SecurityEvents::INTERACTIVE_LOGIN => 'onLogin',
         ];
     }
 
@@ -134,5 +139,28 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
     {
         $sentVerification = $event->getSentVerification();
         $this->phoneVerificationService->registerVerificationSent($sentVerification);
+    }
+
+    public function onLogin(InteractiveLoginEvent $event, $eventName, EventDispatcherInterface $dispatcher)
+    {
+        /** @var PersonInterface $person */
+        $person = $event->getAuthenticationToken()->getUser();
+        if (!$person instanceof PersonInterface || !$phone = $person->getMobile()) {
+            return;
+        }
+
+        $verification = $this->phoneVerificationService->getPhoneVerification($person, $phone);
+        if (!$verification) {
+            $this->info(
+                "User {user_id} has a phone but didn't verify it. Creating Phone Verification request.",
+                [
+                    'user_id' => $person->getId(),
+                ]
+            );
+            $verification = $this->phoneVerificationService->enforcePhoneVerification($person, $phone);
+
+            $sendEvent = new SendPhoneVerificationEvent($verification);
+            $dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED, $sendEvent);
+        }
     }
 }
