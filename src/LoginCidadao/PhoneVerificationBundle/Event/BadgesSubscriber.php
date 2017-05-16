@@ -10,14 +10,15 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Event;
 
+use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\BadgesControlBundle\Model\AbstractBadgesEventSubscriber;
 use LoginCidadao\BadgesControlBundle\Event\EvaluateBadgesEvent;
 use LoginCidadao\BadgesControlBundle\Event\ListBearersEvent;
 use LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
 use LoginCidadao\BadgesBundle\Model\Badge;
+use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use Doctrine\ORM\EntityManager;
 
 class BadgesSubscriber extends AbstractBadgesEventSubscriber
 {
@@ -27,7 +28,7 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
     /** @var TranslatorInterface */
     protected $translator;
 
-    /** @var EntityManager */
+    /** @var EntityManagerInterface */
     protected $em;
 
     /** @var boolean */
@@ -36,7 +37,7 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
     public function __construct(
         PhoneVerificationServiceInterface $phoneVerificationService,
         TranslatorInterface $translator,
-        EntityManager $em,
+        EntityManagerInterface $em,
         $enabled
     ) {
         $this->phoneVerificationService = $phoneVerificationService;
@@ -67,7 +68,17 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
         if (!$this->enabled) {
             return;
         }
-        $this->checkPhoneVerified($event);
+
+        $person = $event->getPerson();
+        if (!$person->getMobile()) {
+            return;
+        }
+
+        $verification = $this->phoneVerificationService->getPhoneVerification($person, $person->getMobile());
+        if ($verification->isVerified()) {
+            $badge = new Badge($this->getName(), 'phone_verified', true);
+            $event->registerBadge($badge);
+        }
     }
 
     public function onListBearers(ListBearersEvent $event)
@@ -81,48 +92,14 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
             $count = $this->{$countMethod}($filterBadge->getData());
 
             $event->setCount($filterBadge, $count);
-        } else {
-            foreach ($this->badges as $name => $badge) {
-                if (!array_key_exists($filterBadge->getName(), $this->badges)) {
-                    continue;
-                }
-                $countMethod = $badge['counter'];
-                $count = $this->{$countMethod}();
-                $badge = new Badge($this->getName(), $name);
-
-                $event->setCount($badge, $count);
-            }
-        }
-    }
-
-    protected function checkPhoneVerified(EvaluateBadgesEvent $event)
-    {
-        $person = $event->getPerson();
-        if (!$person->getMobile()) {
-            return;
-        }
-        $verification = $this->phoneVerificationService->getPhoneVerification($person, $person->getMobile());
-        if ($verification->isVerified()) {
-            $event->registerBadge($this->getBadge('phone_verified', true));
-        }
-    }
-
-    protected function getBadge($name, $data)
-    {
-        if (array_key_exists($name, $this->getAvailableBadges())) {
-            return new Badge($this->getName(), $name, $data);
-        } else {
-            throw new \Exception("Badge $name not found in namespace {$this->getName()}.");
         }
     }
 
     protected function countPhoneVerified()
     {
-        return $this->em->getRepository('LoginCidadaoCoreBundle:Person')
-            ->createQueryBuilder('p')
-            ->select('COUNT(p)')
-            ->innerJoin('LoginCidadaoPhoneVerificationBundle:PhoneVerification', 'ph', 'WITH', 'ph.person = p')
-            ->andWhere('ph.verifiedAt IS NOT NULL')
-            ->getQuery()->getSingleScalarResult();
+        /** @var PhoneVerificationRepository $repo */
+        $repo = $this->em->getRepository('LoginCidadaoPhoneVerificationBundle:PhoneVerification');
+
+        return $repo->countBadges();
     }
 }
