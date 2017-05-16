@@ -32,14 +32,16 @@ class UserRegistrationSubscriberTest extends \PHPUnit_Framework_TestCase
         $verificationService = $this->getMock(
             'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface'
         );
-        $verificationService->expects($this->once())->method('enforcePhoneVerification')->with($user, $phone);
+        $verificationService->expects($this->once())
+            ->method('enforcePhoneVerification')->with($user, $phone)
+            ->willReturn($this->getPhoneVerification());
 
         $event = $this->getMockBuilder('FOS\UserBundle\Event\FilterUserResponseEvent')
             ->disableOriginalConstructor()
             ->getMock();
         $event->expects($this->once())->method('getUser')->willReturn($user);
 
-        $subscriber = new UserRegistrationSubscriber($verificationService);
+        $subscriber = new UserRegistrationSubscriber($verificationService, $this->getStackManager(true));
         $subscriber->onRegistrationCompleted($event);
     }
 
@@ -57,7 +59,27 @@ class UserRegistrationSubscriberTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $event->expects($this->once())->method('getUser')->willReturn($user);
 
-        $subscriber = new UserRegistrationSubscriber($verificationService);
+        $subscriber = new UserRegistrationSubscriber($verificationService, $this->getStackManager(false));
         $subscriber->onRegistrationCompleted($event);
+    }
+
+    private function getStackManager($setTaskSkipped = false)
+    {
+        $taskStackManager = $this->getMock('LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface');
+
+        if ($setTaskSkipped) {
+            $taskStackManager->expects($this->once())->method('setTaskSkipped')
+                ->with($this->isInstanceOf('LoginCidadao\TaskStackBundle\Model\TaskInterface'));
+        }
+
+        return $taskStackManager;
+    }
+
+    private function getPhoneVerification()
+    {
+        $phoneVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
+        $phoneVerification->expects($this->once())->method('getId')->willReturn('some_task');
+
+        return $phoneVerification;
     }
 }
