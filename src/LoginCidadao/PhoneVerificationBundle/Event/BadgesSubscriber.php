@@ -15,23 +15,38 @@ use LoginCidadao\BadgesControlBundle\Event\EvaluateBadgesEvent;
 use LoginCidadao\BadgesControlBundle\Event\ListBearersEvent;
 use LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
 use LoginCidadao\BadgesBundle\Model\Badge;
+use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Doctrine\ORM\EntityManager;
 
 class BadgesSubscriber extends AbstractBadgesEventSubscriber
 {
+    /** @var PhoneVerificationServiceInterface */
+    private $phoneVerificationService;
+
     /** @var TranslatorInterface */
     protected $translator;
 
     /** @var EntityManager */
     protected $em;
 
+    /** @var boolean */
+    private $enabled;
+
     public function __construct(
+        PhoneVerificationServiceInterface $phoneVerificationService,
         TranslatorInterface $translator,
-        EntityManager $em
+        EntityManager $em,
+        $enabled
     ) {
+        $this->phoneVerificationService = $phoneVerificationService;
         $this->translator = $translator;
         $this->em = $em;
+        $this->enabled = $enabled;
+
+        if (!$enabled) {
+            return;
+        }
 
         $namespace = 'login-cidadao';
         $this->setName($namespace);
@@ -49,6 +64,9 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
 
     public function onBadgeEvaluate(EvaluateBadgesEvent $event)
     {
+        if (!$this->enabled) {
+            return;
+        }
         $this->checkPhoneVerified($event);
     }
 
@@ -56,12 +74,18 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
     {
         $filterBadge = $event->getBadge();
         if ($filterBadge instanceof BadgeInterface) {
+            if (!array_key_exists($filterBadge->getName(), $this->badges)) {
+                return;
+            }
             $countMethod = $this->badges[$filterBadge->getName()]['counter'];
             $count = $this->{$countMethod}($filterBadge->getData());
 
             $event->setCount($filterBadge, $count);
         } else {
             foreach ($this->badges as $name => $badge) {
+                if (!array_key_exists($filterBadge->getName(), $this->badges)) {
+                    continue;
+                }
                 $countMethod = $badge['counter'];
                 $count = $this->{$countMethod}();
                 $badge = new Badge($this->getName(), $name);
@@ -77,7 +101,10 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
         if (!$person->getMobile()) {
             return;
         }
-        $event->registerBadge($this->getBadge('phone_verified', true));
+        $verification = $this->phoneVerificationService->getPhoneVerification($person, $person->getMobile());
+        if ($verification->isVerified()) {
+            $event->registerBadge($this->getBadge('phone_verified', true));
+        }
     }
 
     protected function getBadge($name, $data)
@@ -95,7 +122,7 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
             ->createQueryBuilder('p')
             ->select('COUNT(p)')
             ->innerJoin('LoginCidadaoPhoneVerificationBundle:PhoneVerification', 'ph', 'WITH', 'ph.person = p')
-            ->andWhere('ph.verified_at IS NOT NULL')
+            ->andWhere('ph.verifiedAt IS NOT NULL')
             ->getQuery()->getSingleScalarResult();
     }
 }
