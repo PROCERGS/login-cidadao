@@ -14,9 +14,32 @@ use libphonenumber\PhoneNumberUtil;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationSubscriber;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
+use Symfony\Component\Security\Http\SecurityEvents;
 
 class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
 {
+    private function getPhoneVerification()
+    {
+        $phoneVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
+
+        return $phoneVerification;
+    }
+
+    private function getPhoneVerificationService()
+    {
+        $phoneVerificationServiceClass = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface';
+        $phoneVerificationService = $this->getMock($phoneVerificationServiceClass);
+
+        return $phoneVerificationService;
+    }
+
+    private function getDispatcher()
+    {
+        return $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
     public function testGetSubscribedEvents()
     {
         $this->assertArrayHasKey(
@@ -42,18 +65,15 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $event->expects($this->any())->method('getPerson')->willReturn($person);
         $event->expects($this->any())->method('getOldPhone')->willReturn($oldPhone);
 
-        $phoneVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
+        $phoneVerification = $this->getPhoneVerification();
 
-        $phoneVerificationServiceClass = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface';
-        $phoneVerificationService = $this->getMock($phoneVerificationServiceClass);
+        $phoneVerificationService = $this->getPhoneVerificationService();
         $phoneVerificationService->expects($this->once())->method('getPhoneVerification')
             ->willReturn($phoneVerification);
         $phoneVerificationService->expects($this->once())->method('createPhoneVerification')
             ->willReturn($phoneVerification);
 
-        $dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $dispatcher = $this->getDispatcher();
         $dispatcher->expects($this->once())->method('dispatch');
 
         $listener = new PhoneVerificationSubscriber($phoneVerificationService);
@@ -72,16 +92,13 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $event->expects($this->any())->method('getPerson')->willReturn($person);
         $event->expects($this->any())->method('getOldPhone')->willReturn(null);
 
-        $phoneVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
+        $phoneVerification = $this->getPhoneVerification();
 
-        $phoneVerificationServiceClass = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface';
-        $phoneVerificationService = $this->getMock($phoneVerificationServiceClass);
+        $phoneVerificationService = $this->getPhoneVerificationService();
         $phoneVerificationService->expects($this->once())->method('createPhoneVerification')
             ->willReturn($phoneVerification);
 
-        $dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $dispatcher = $this->getDispatcher();
         $dispatcher->expects($this->once())->method('dispatch');
 
         $listener = new PhoneVerificationSubscriber($phoneVerificationService);
@@ -101,12 +118,9 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $event->expects($this->any())->method('getPerson')->willReturn($person);
         $event->expects($this->any())->method('getOldPhone')->willReturn($oldPhone);
 
-        $phoneVerificationServiceClass = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface';
-        $phoneVerificationService = $this->getMock($phoneVerificationServiceClass);
+        $phoneVerificationService = $this->getPhoneVerificationService();
 
-        $dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $dispatcher = $this->getDispatcher();
 
         $listener = new PhoneVerificationSubscriber($phoneVerificationService);
         $listener->onPhoneChange($event, PhoneVerificationEvents::PHONE_CHANGED, $dispatcher);
@@ -120,8 +134,7 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $person = new Person();
         $person->setMobile(PhoneNumberUtil::getInstance()->parse('+5551999999999', 'BR'));
 
-        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
-        $phoneVerification = $this->getMock($phoneVerificationClass);
+        $phoneVerification = $this->getPhoneVerification();
         $phoneVerification->expects($this->any())->method('getPerson')->willReturn($person);
 
         $event = $this->getMockBuilder('LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent')
@@ -152,5 +165,58 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $listener = new PhoneVerificationSubscriber($phoneVerificationService);
         $listener->onCodeSent($event);
+    }
+
+    public function testOnLoginNoPhone()
+    {
+        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person->expects($this->once())->method('getMobile')->willReturn(null);
+
+        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token->expects($this->once())->method('getUser')->willReturn($person);
+
+        $phoneVerificationService = $this->getPhoneVerificationService();
+        $dispatcher = $this->getDispatcher();
+
+        $event = $this->getMockBuilder('Symfony\Component\Security\Http\Event\InteractiveLoginEvent')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $event->expects($this->once())->method('getAuthenticationToken')->willReturn($token);
+
+        $listener = new PhoneVerificationSubscriber($phoneVerificationService);
+        $listener->onLogin($event, SecurityEvents::INTERACTIVE_LOGIN, $dispatcher);
+    }
+
+    public function testOnLoginWithPhone()
+    {
+        $phone = $this->getMockBuilder('libphonenumber\PhoneNumber')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person->expects($this->once())->method('getMobile')->willReturn($phone);
+
+        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token->expects($this->once())->method('getUser')->willReturn($person);
+
+        $verification = $this->getPhoneVerification();
+        $phoneVerificationService = $this->getPhoneVerificationService();
+        $phoneVerificationService->expects($this->once())->method('enforcePhoneVerification')
+            ->willReturn($verification);
+
+        $dispatcher = $this->getDispatcher();
+        $dispatcher->expects($this->once())->method('dispatch')
+            ->with(
+                PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED,
+                $this->isInstanceOf('LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent')
+            );
+
+        $event = $this->getMockBuilder('Symfony\Component\Security\Http\Event\InteractiveLoginEvent')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $event->expects($this->once())->method('getAuthenticationToken')->willReturn($token);
+
+        $listener = new PhoneVerificationSubscriber($phoneVerificationService);
+        $listener->onLogin($event, SecurityEvents::INTERACTIVE_LOGIN, $dispatcher);
     }
 }
