@@ -12,7 +12,9 @@ namespace LoginCidadao\PhoneVerificationBundle\Event;
 
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
+use LoginCidadao\PhoneVerificationBundle\Model\ConfirmPhoneTask;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
+use LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 
@@ -21,9 +23,15 @@ class UserRegistrationSubscriber implements EventSubscriberInterface
     /** @var PhoneVerificationServiceInterface */
     private $phoneVerificationService;
 
-    public function __construct(PhoneVerificationServiceInterface $phoneVerificationService)
-    {
+    /** @var TaskStackManagerInterface */
+    private $stackManager;
+
+    public function __construct(
+        PhoneVerificationServiceInterface $phoneVerificationService,
+        TaskStackManagerInterface $stackManager
+    ) {
         $this->phoneVerificationService = $phoneVerificationService;
+        $this->stackManager = $stackManager;
     }
 
     /**
@@ -43,6 +51,8 @@ class UserRegistrationSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $this->phoneVerificationService->enforcePhoneVerification($user, $user->getMobile());
+        $phoneVerification = $this->phoneVerificationService->enforcePhoneVerification($user, $user->getMobile());
+        $task = new ConfirmPhoneTask($phoneVerification->getId());
+        $this->stackManager->setTaskSkipped($task);
     }
 }

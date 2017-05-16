@@ -38,6 +38,7 @@ services:
         class: LoginCidadao\PhoneVerificationBundle\Event\UserRegistrationSubscriber
         arguments:
             - "@phone_verification"
+            - "@task_stack.manager"
         tags:
             - { name: kernel.event_subscriber }
 
