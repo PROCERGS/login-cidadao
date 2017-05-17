@@ -429,10 +429,6 @@ class Nfg implements LoggerAwareInterface
             $this->handleCpfCollision($otherPersonMeuRS);
         }
 
-        if ($nfgProfile->getEmail() === null) {
-            throw new MissingRequiredInformationException('Email was not sent by NFG.');
-        }
-
         $names = explode(' ', $nfgProfile->getName());
 
         /** @var PersonInterface $user */
