@@ -24,7 +24,7 @@ services:
     procergs.nfg.soap_client.factory:
         class: PROCERGS\LoginCidadao\NfgBundle\Service\SoapClientFactory
         calls:
-            - ['setCircuitBreaker', ["@?circuitBreaker", "%procergs.nfg.circuit_breaker.service_name%"]]
+            - ['setCircuitBreaker', ["procergs.nfg.circuit_breaker"]]
             - ['setLogger', ["@?logger"]]
 
     procergs.nfg.soap_client:
@@ -91,3 +91,12 @@ services:
             - ['setLogger', ["@?logger"]]
         tags:
             - { name: kernel.event_subscriber }
+
+    procergs.nfg.circuit_breaker:
+        class: Eljam\CircuitBreaker\Breaker
+        arguments:
+            - "%procergs.nfg.circuit_breaker.service_name%"
+            - { max_failure: 1, reset_timeout: 10 }
+            - "@cache"
+            - null
+            - "@event_dispatcher"

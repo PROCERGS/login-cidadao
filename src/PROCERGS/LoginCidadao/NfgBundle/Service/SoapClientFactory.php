@@ -24,17 +24,15 @@ class SoapClientFactory implements LoggerAwareInterface
 
     public function createClient($wsdl, $verifyHttps = true)
     {
-        try {
-            $this->checkAvailable();
-
-            $client = $this->instantiateSoapClient($wsdl, $this->getOptions($verifyHttps));
-            $this->reportSuccess();
-
-            return $client;
-        } catch (\SoapFault $e) {
-            $this->reportFailure($e);
-            throw new NfgServiceUnavailableException($e->getMessage(), 500, $e);
-        }
+        return $this->protect(
+            function () use ($wsdl, $verifyHttps) {
+                try {
+                    return $this->instantiateSoapClient($wsdl, $this->getOptions($verifyHttps));
+                } catch (\SoapFault $e) {
+                    throw new NfgServiceUnavailableException($e->getMessage(), 500, $e);
+                }
+            }
+        );
     }
 
     public function instantiateSoapClient($wsdl, $options)
@@ -44,8 +42,10 @@ class SoapClientFactory implements LoggerAwareInterface
 
     /**
      * @codeCoverageIgnore
+     * @param bool $verifyHttps
+     * @return array
      */
-    private function getOptions($verifyHttps)
+    private function getOptions($verifyHttps = true)
     {
         $options = [];
         if (!$verifyHttps) {
