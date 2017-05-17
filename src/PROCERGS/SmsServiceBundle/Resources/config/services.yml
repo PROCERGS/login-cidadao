@@ -9,6 +9,7 @@ services:
             - "%procergs.sms.system.key%"
             - "%procergs.sms.service_order%"
             - "%procergs.sms.from.prefix%"
+            - "%procergs.sms.should_send%"
         lazy: true
 
     sms:

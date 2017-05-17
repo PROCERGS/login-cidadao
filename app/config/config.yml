@@ -615,3 +615,4 @@ procergs_sms_service:
         key: "%tpd_system_key%"
     service_order: "%tpd_service_order%"
     from: "LC"
+    send: "%tpd_send_message%"

@@ -37,6 +37,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             ],
             'service_order' => 1234,
             'from' => 'IdP',
+            'send' => true,
         ];
     }
 

@@ -142,3 +142,4 @@ parameters:
     tpd_system_id: 'SYSTEM'
     tpd_system_key: 'SeCrEt_KeY'
     tpd_service_order: 1234
+    tpd_send_message: true

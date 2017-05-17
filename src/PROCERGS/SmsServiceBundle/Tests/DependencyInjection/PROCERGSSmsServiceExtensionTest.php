@@ -57,5 +57,6 @@ class PROCERGSSmsServiceExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($config['service_order'], $container->getParameter('procergs.sms.service_order'));
         $this->assertEquals($config['from'], $container->getParameter('procergs.sms.from.prefix'));
+        $this->assertEquals($config['send'], $container->getParameter('procergs.sms.should_send'));
     }
 }

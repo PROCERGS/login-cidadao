@@ -180,3 +180,5 @@ parameters:
     tpd_system_id: 'SYSTEM'
     tpd_system_key: 'SeCrEt_KeY'
     tpd_service_order: 1234
+    # When set to false tells the TPD system to not send de message. It's a kind of a test mode.
+    tpd_send_message: true

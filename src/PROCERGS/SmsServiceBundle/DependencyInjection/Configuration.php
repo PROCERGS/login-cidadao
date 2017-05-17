@@ -59,6 +59,9 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('from')
                     ->isRequired()
                 ->end()
+                ->booleanNode('send')
+                    ->defaultTrue()
+                ->end()
             ->end()
          ;
 
