@@ -3687,17 +3687,17 @@
         },
         {
             "name": "procergs/login-cidadao-badges-bundle",
-            "version": "2.0.1",
+            "version": "2.0.2",
             "target-dir": "LoginCidadao/BadgesBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/login-cidadao-badges-bundle.git",
-                "reference": "5bae9483323e240433ff5dc0c9564f82a61e3347"
+                "reference": "9621652344d60c6587bb82de028fbe576ea4e470"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/5bae9483323e240433ff5dc0c9564f82a61e3347",
-                "reference": "5bae9483323e240433ff5dc0c9564f82a61e3347",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/9621652344d60c6587bb82de028fbe576ea4e470",
+                "reference": "9621652344d60c6587bb82de028fbe576ea4e470",
                 "shasum": ""
             },
             "require": {
@@ -3725,10 +3725,10 @@
                 "login-cidadao"
             ],
             "support": {
-                "source": "https://github.com/PROCERGS/login-cidadao-badges-bundle/tree/2.0.1",
+                "source": "https://github.com/PROCERGS/login-cidadao-badges-bundle/tree/2.0.2",
                 "issues": "https://github.com/PROCERGS/login-cidadao-badges-bundle/issues"
             },
-            "time": "2016-09-27 18:03:38"
+            "time": "2017-05-16 21:00:51"
         },
         {
             "name": "procergs/tos-bundle",
@@ -4272,12 +4272,12 @@
             "version": "v1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/simplethings/EntityAudit.git",
+                "url": "https://github.com/simplethings/EntityAuditBundle.git",
                 "reference": "bcdd118356ef451da2f6986fbeab68184e084bf0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplethings/EntityAudit/zipball/bcdd118356ef451da2f6986fbeab68184e084bf0",
+                "url": "https://api.github.com/repos/simplethings/EntityAuditBundle/zipball/bcdd118356ef451da2f6986fbeab68184e084bf0",
                 "reference": "bcdd118356ef451da2f6986fbeab68184e084bf0",
                 "shasum": ""
             },
