@@ -277,7 +277,7 @@ class SessionManagementController extends Controller
 
         $postLogoutUri = ClientMetadata::canonicalizeUri($postLogoutUri);
 
-        if ($idToken === null) {
+        if (!$idToken) {
             return count($this->findClientByPostLogoutRedirectUri($postLogoutUri)) > 0;
         }
 
