@@ -239,4 +239,12 @@ class TaskStackManager implements TaskStackManagerInterface
     {
         return $this->getStack()->count();
     }
+
+    /**
+     * @return bool
+     */
+    public function hasIntentTask()
+    {
+        return $this->getStack()->hasIntentTask();
+    }
 }

@@ -67,4 +67,11 @@ interface TaskStackManagerInterface
      * @return int
      */
     public function countTasks();
+
+    /**
+     * Checks if the stack already have an IntentTask.
+     *
+     * @return boolean
+     */
+    public function hasIntentTask();
 }
