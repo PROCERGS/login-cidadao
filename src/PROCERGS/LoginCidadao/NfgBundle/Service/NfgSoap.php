@@ -10,7 +10,6 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
-
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberType;
 use libphonenumber\PhoneNumberUtil;

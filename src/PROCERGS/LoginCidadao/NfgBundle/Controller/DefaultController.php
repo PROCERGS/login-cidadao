@@ -2,7 +2,8 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Controller;
 
-use Ejsmont\CircuitBreaker\CircuitBreakerInterface;
+use Eljam\CircuitBreaker\Breaker;
+use Eljam\CircuitBreaker\Exception\CircuitOpenException;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper;
@@ -10,7 +11,6 @@ use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @codeCoverageIgnore
@@ -130,7 +130,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @return Nfg
+     * @return object|Nfg
      */
     private function getNfgService()
     {
@@ -139,15 +139,23 @@ class DefaultController extends Controller
 
     private function isNfgServiceAvailable()
     {
-        $serviceName = $this->getParameter('procergs.nfg.circuit_breaker.service_name');
-        if (false === $this->has('circuitBreaker') || !$serviceName) {
+        if (false === $this->has('procergs.nfg.circuit_breaker')) {
             // We don't have Circuit Breaker enabled, so we assume the service is available
             return true;
         }
 
-        /** @var CircuitBreakerInterface $cb */
-        $cb = $this->get('circuitBreaker');
+        /** @var Breaker $cb */
+        $cb = $this->get('procergs.nfg.circuit_breaker');
+        try {
+            $cb->protect(
+                function () {
+                    return true;
+                }
+            );
+        } catch (CircuitOpenException $e) {
+            return false;
+        }
 
-        return $cb->isAvailable($serviceName);
+        return false;
     }
 }

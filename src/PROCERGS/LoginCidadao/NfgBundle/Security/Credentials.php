@@ -10,7 +10,6 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Security;
 
-
 class Credentials
 {
     /** @var string */

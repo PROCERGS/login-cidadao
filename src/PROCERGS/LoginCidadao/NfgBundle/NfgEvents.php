@@ -10,7 +10,6 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle;
 
-
 class NfgEvents
 {
     /**

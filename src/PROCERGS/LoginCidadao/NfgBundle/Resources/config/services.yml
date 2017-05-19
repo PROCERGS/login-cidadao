@@ -95,8 +95,8 @@ services:
     procergs.nfg.circuit_breaker:
         class: Eljam\CircuitBreaker\Breaker
         arguments:
-            - "%procergs.nfg.circuit_breaker.service_name%"
-            - { max_failure: 1, reset_timeout: 10 }
+            - "cb.nfg_service"
+            - { max_failure: "%procergs.nfg.circuit_breaker.max_failures%", reset_timeout: "%procergs.nfg.circuit_breaker.reset_timeout%" }
             - "@cache"
             - null
             - "@event_dispatcher"
