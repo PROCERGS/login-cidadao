@@ -36,6 +36,23 @@ class PersonSerializeEventListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($person->getPhoneNumberVerified());
     }
 
+    public function testNoPhone()
+    {
+        $phoneVerificationService = $this->getPhoneVerificationService();
+
+        $eventListener = new PersonSerializeEventListener($phoneVerificationService);
+
+        $person = new Person();
+
+        $event = $this->getMockBuilder('JMS\Serializer\EventDispatcher\PreSerializeEvent')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $event->expects($this->once())->method('getObject')->willReturn($person);
+        $eventListener->onPreSerialize($event);
+
+        $this->assertFalse($person->getPhoneNumberVerified());
+    }
+
     public function testNotPerson()
     {
         $phoneVerificationService = $this->getPhoneVerificationService();
