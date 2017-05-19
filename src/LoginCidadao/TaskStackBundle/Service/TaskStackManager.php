@@ -86,13 +86,17 @@ class TaskStackManager implements TaskStackManagerInterface
      * Stacks the given $task, making sure there are no duplicates and that it was not skipped.
      *
      * @param TaskInterface $task
+     * @param IntentTask|null $intentTask
      * @return TaskStackManagerInterface
      */
-    public function addNotSkippedTaskOnce(TaskInterface $task)
+    public function addNotSkippedTaskOnce(TaskInterface $task, IntentTask $intentTask = null)
     {
         $stack = $this->getStack();
         $isSkipped = !$task->isMandatory() && $this->isSkipped($task);
         if ($isSkipped === false && $stack->hasTask($task) === false) {
+            if ($intentTask) {
+                $this->addNotSkippedTaskOnce($intentTask);
+            }
             $stack->push($task);
             $this->updateStack($stack);
         }
@@ -238,5 +242,13 @@ class TaskStackManager implements TaskStackManagerInterface
     public function countTasks()
     {
         return $this->getStack()->count();
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasIntentTask()
+    {
+        return $this->getStack()->hasIntentTask();
     }
 }

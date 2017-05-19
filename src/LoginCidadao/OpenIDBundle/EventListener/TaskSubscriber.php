@@ -14,11 +14,11 @@ use FOS\OAuthServerBundle\Event\OAuthEvent;
 use LoginCidadao\CoreBundle\Entity\City;
 use LoginCidadao\CoreBundle\Entity\Country;
 use LoginCidadao\CoreBundle\Entity\State;
-use LoginCidadao\CoreBundle\Event\GetTasksEvent;
-use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
-use LoginCidadao\CoreBundle\Model\CompleteUserInfoTask;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
+use LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTask;
+use LoginCidadao\TaskStackBundle\Event\GetTasksEvent;
+use LoginCidadao\TaskStackBundle\TaskStackEvents;
 use LoginCidadao\ValidationBundle\Validator\Constraints\CPFValidator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -66,20 +66,17 @@ class TaskSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            LoginCidadaoCoreEvents::GET_TASKS => ['onGetTasks', 0],
+            TaskStackEvents::GET_TASKS => ['onGetTasks', 50],
         ];
     }
 
-    /**
-     * @param GetTasksEvent $event
-     */
     public function onGetTasks(GetTasksEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         try {
             /** @var PersonInterface $user */
             $user = $this->tokenStorage->getToken()->getUser();
 
-            if (!($user instanceof PersonInterface)) {
+            if (!$user instanceof PersonInterface) {
                 return;
             }
         } catch (\Exception $e) {
@@ -87,21 +84,25 @@ class TaskSubscriber implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
+
         $route = $request->get('_route');
+        $scopes = $request->get('scope', false);
+        if ($route !== '_authorize_validate' || !$scopes) {
+            return;
+        }
+
         $clientId = $request->get('client_id', $request->attributes->get('clientId'));
+
+        // To force this task's execution, the RP MUST send prompt=consent and a nonce value.
+        $promptConsent = $request->get('prompt', null) == 'consent'
+            && $request->get('nonce', null) !== null;
+
         if (!$clientId) {
             return;
         }
-        if ($this->skipCompletionTaskIfAuthorized && $this->isAuthorizedClient($dispatcher, $clientId)) {
-            return;
-        }
-        $task = new CompleteUserInfoTask($clientId);
-        $scopes = $request->get('scope', false);
-        $skipped = $task->isSkipRoute($route);
-        if (
-            $route !== '_authorize_validate'
-            && !$skipped
-            && (false === $task->isTaskRoute($route) || !$scopes)
+        if ($this->skipCompletionTaskIfAuthorized
+            && $this->isAuthorizedClient($dispatcher, $clientId)
+            && !$promptConsent
         ) {
             return;
         }
@@ -115,8 +116,8 @@ class TaskSubscriber implements EventSubscriberInterface
             $emptyClaims[] = $scope;
         }
 
-        if (count($emptyClaims) > 0 || $skipped) {
-            $task->setScope($emptyClaims);
+        if (count($emptyClaims) > 0) {
+            $task = new CompleteUserInfoTask($clientId, $emptyClaims, $request->get('nonce'));
             $event->addTask($task);
         }
     }
@@ -134,6 +135,7 @@ class TaskSubscriber implements EventSubscriberInterface
             case 'full_name':
             case 'surname':
                 $value = $user->getFullName();
+
                 return $value && strlen($value) > 0 && strlen($user->getSurname()) > 0;
                 break;
             case 'mobile':
