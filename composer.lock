@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1eec0141a03de33ebf0567b2a2361d00",
-    "content-hash": "6327f1679742534ac965a4c2b36e83ba",
+    "hash": "258a2a20fd1c0888a662c244dc532da9",
+    "content-hash": "6bc60ed0a06c310766c2a36a80b75674",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -3732,16 +3732,16 @@
         },
         {
             "name": "procergs/tos-bundle",
-            "version": "1.3.1",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/tos-bundle.git",
-                "reference": "5103794578ae3e2dc64b290fa3587d96d3bd27fc"
+                "reference": "b002435cec9b7e31e69a33bddda6d9874130cf39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/5103794578ae3e2dc64b290fa3587d96d3bd27fc",
-                "reference": "5103794578ae3e2dc64b290fa3587d96d3bd27fc",
+                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/b002435cec9b7e31e69a33bddda6d9874130cf39",
+                "reference": "b002435cec9b7e31e69a33bddda6d9874130cf39",
                 "shasum": ""
             },
             "require": {
@@ -3769,7 +3769,7 @@
                 }
             ],
             "description": "Terms of Service Bundle",
-            "time": "2016-07-25 16:56:58"
+            "time": "2017-05-19 14:25:47"
         },
         {
             "name": "psr/log",

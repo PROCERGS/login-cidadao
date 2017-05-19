@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\TaskStackBundle\Service;
 
+use LoginCidadao\TaskStackBundle\Model\IntentTask;
 use LoginCidadao\TaskStackBundle\Model\TaskInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,9 +21,10 @@ interface TaskStackManagerInterface
      * Stacks the given $task, making sure there are no duplicates.
      *
      * @param TaskInterface $task
+     * @param IntentTask|null $intentTask
      * @return TaskStackManagerInterface
      */
-    public function addNotSkippedTaskOnce(TaskInterface $task);
+    public function addNotSkippedTaskOnce(TaskInterface $task, IntentTask $intentTask = null);
 
     /**
      * Marks a task as skipped.
@@ -67,4 +69,11 @@ interface TaskStackManagerInterface
      * @return int
      */
     public function countTasks();
+
+    /**
+     * Checks if the stack already have an IntentTask.
+     *
+     * @return boolean
+     */
+    public function hasIntentTask();
 }

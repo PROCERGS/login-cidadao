@@ -18,9 +18,9 @@ class UnsupportedTargetException extends \RuntimeException
     /**
      * UnsupportedTargetException constructor.
      *
-     * @param TaskTargetInterface $target
+     * @param mixed $target
      */
-    public function __construct(TaskTargetInterface $target)
+    public function __construct($target)
     {
         $message = sprintf("Task Target of class %s is not supported.", get_class($target));
         parent::__construct($message);

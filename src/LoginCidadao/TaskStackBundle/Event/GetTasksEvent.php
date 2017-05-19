@@ -12,6 +12,7 @@ namespace LoginCidadao\TaskStackBundle\Event;
 
 use LoginCidadao\TaskStackBundle\Model\IntentTask;
 use LoginCidadao\TaskStackBundle\Model\TaskInterface;
+use LoginCidadao\TaskStackBundle\Model\UrlTaskTarget;
 use LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,7 +42,11 @@ class GetTasksEvent extends Event
      */
     public function addTask(TaskInterface $task)
     {
-        $this->stackManager->addNotSkippedTaskOnce($task);
+        $intent = null;
+        if (!$this->stackManager->hasIntentTask()) {
+            $intent = new IntentTask(new UrlTaskTarget($this->getRequest()->getUri()));
+        }
+        $this->stackManager->addNotSkippedTaskOnce($task, $intent);
 
         return $this;
     }
