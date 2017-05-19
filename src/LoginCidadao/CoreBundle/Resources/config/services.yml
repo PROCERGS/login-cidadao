@@ -428,12 +428,6 @@ services:
         tags:
             - { name: form.type, alias: birthday_tel }
 
-    lc.tasks.manager:
-        class: LoginCidadao\CoreBundle\Service\TasksManager
-        lazy: true
-        calls:
-          - ["setSession", ["@?session"]]
-
     qandidate.stack.request_id.monolog_processor:
         class: Qandidate\Stack\RequestId\MonologProcessor
         tags:
