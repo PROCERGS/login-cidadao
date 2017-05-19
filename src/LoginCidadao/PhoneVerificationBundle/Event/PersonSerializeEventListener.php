@@ -32,7 +32,7 @@ class PersonSerializeEventListener
     public function onPreSerialize(PreSerializeEvent $event)
     {
         $person = $event->getObject();
-        if (!($person instanceof PersonInterface)) {
+        if (!$person instanceof PersonInterface || !$person->getMobile()) {
             return;
         }
 
