@@ -3732,16 +3732,16 @@
         },
         {
             "name": "procergs/tos-bundle",
-            "version": "1.4.0",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/tos-bundle.git",
-                "reference": "b002435cec9b7e31e69a33bddda6d9874130cf39"
+                "reference": "83489cb4343da678310daaa21142e771c955a015"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/b002435cec9b7e31e69a33bddda6d9874130cf39",
-                "reference": "b002435cec9b7e31e69a33bddda6d9874130cf39",
+                "url": "https://api.github.com/repos/PROCERGS/tos-bundle/zipball/83489cb4343da678310daaa21142e771c955a015",
+                "reference": "83489cb4343da678310daaa21142e771c955a015",
                 "shasum": ""
             },
             "require": {
@@ -3769,7 +3769,7 @@
                 }
             ],
             "description": "Terms of Service Bundle",
-            "time": "2017-05-19 14:25:47"
+            "time": "2017-05-19 17:23:22"
         },
         {
             "name": "psr/log",
