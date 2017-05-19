@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "741a1ad66b15b1ddaf6c918807364170",
-    "content-hash": "39acb54cc4c597d853a3d4155754acae",
+    "hash": "48a074ab7a4f67c4a1d6a74162db8496",
+    "content-hash": "53b57703ccfa04f162abbde3036fa142",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -3868,17 +3868,17 @@
         },
         {
             "name": "procergs/meurs-monitor-bundle",
-            "version": "v1.2.0",
+            "version": "v1.2.1",
             "target-dir": "PROCERGS/LoginCidadao/MonitorBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/meurs-monitor-bundle.git",
-                "reference": "29bdc77600766978bde9344910a991b0f2fe360e"
+                "reference": "e8a13b7d52e35f1c87fb229f2cae69c11d685f45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/meurs-monitor-bundle/zipball/29bdc77600766978bde9344910a991b0f2fe360e",
-                "reference": "29bdc77600766978bde9344910a991b0f2fe360e",
+                "url": "https://api.github.com/repos/PROCERGS/meurs-monitor-bundle/zipball/e8a13b7d52e35f1c87fb229f2cae69c11d685f45",
+                "reference": "e8a13b7d52e35f1c87fb229f2cae69c11d685f45",
                 "shasum": ""
             },
             "require": {
@@ -3915,7 +3915,7 @@
                 "login-cidadao",
                 "monitor"
             ],
-            "time": "2017-05-19 20:09:33"
+            "time": "2017-05-19 20:37:21"
         },
         {
             "name": "procergs/nfg-badges-bundle",
