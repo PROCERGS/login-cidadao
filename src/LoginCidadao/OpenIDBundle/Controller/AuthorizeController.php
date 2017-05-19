@@ -102,8 +102,10 @@ class AuthorizeController extends BaseController
                 new OAuthEvent($this->getUser(), $client)
             );
 
+            $shouldPrompt = $request->get('prompt', null) == 'consent';
+
             $server = $this->get('oauth2.server');
-            if ($event->isAuthorizedClient()) {
+            if ($event->isAuthorizedClient() && !$shouldPrompt) {
                 return $this->handleAuthorize(
                     $server,
                     $event->isAuthorizedClient()
