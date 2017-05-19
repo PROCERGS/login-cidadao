@@ -21,10 +21,4 @@ class LoginCidadaoCoreEvents
      * This gets triggered from the start() method of the entry_point service.
      */
     const AUTHENTICATION_ENTRY_POINT_START = 'authentication.entry_point.start';
-
-    /**
-     * This event gets triggered before redirecting the user to his/her final intent to check if there are pending tasks
-     * This event receives a GetTasksEvent
-     */
-    const GET_TASKS = 'login_cidadao.core.get_tasks';
 }

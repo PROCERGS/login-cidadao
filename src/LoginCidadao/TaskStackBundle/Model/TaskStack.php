@@ -19,11 +19,27 @@ class TaskStack extends \SplStack
     public function hasTask(TaskInterface $task)
     {
         /**
-         * @var integer $i
          * @var TaskInterface $stacked
          */
-        foreach ($this as $i => $stacked) {
+        foreach ($this as $stacked) {
             if ($stacked->getId() === $task->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasIntentTask()
+    {
+        /**
+         * @var TaskInterface $stacked
+         */
+        foreach ($this as $stacked) {
+            if ($stacked instanceof IntentTask) {
                 return true;
             }
         }

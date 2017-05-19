@@ -195,8 +195,6 @@ services:
             - "@router"
             - "@session"
             - "@translator"
-            - "@lc.intent.manager"
-            - "@lc.tasks.manager"
             - "%require_email_validation%"
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
@@ -429,12 +427,6 @@ services:
         class: LoginCidadao\CoreBundle\Form\Type\BirthdayTelType
         tags:
             - { name: form.type, alias: birthday_tel }
-
-    lc.tasks.manager:
-        class: LoginCidadao\CoreBundle\Service\TasksManager
-        lazy: true
-        calls:
-          - ["setSession", ["@?session"]]
 
     qandidate.stack.request_id.monolog_processor:
         class: Qandidate\Stack\RequestId\MonologProcessor
