@@ -21,10 +21,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/PROCERGS/FOSUserBundle"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/guilhermednt/php-circuit-breaker-bundle"
         }
     ],
     "require": {
@@ -74,9 +70,8 @@
         "ocramius/proxy-manager": "^1.0",
         "rollerworks/password-strength-bundle": "^1.5",
         "paragonie/random_compat": "1.4.*",
-        "procergs/meurs-monitor-bundle": "^1.1",
+        "procergs/meurs-monitor-bundle": "^1.2",
         "procergs/nfg-badges-bundle": "^1.1",
-        "ejsmont-artur/php-circuit-breaker-bundle": "dev-master",
         "jakeasmith/http_build_url": "^1",
         "procergs/sms-service": "^1.2",
         "eljam/circuit-breaker": ">=0.1.2"
