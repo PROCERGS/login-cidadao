@@ -42,11 +42,11 @@ class GetTasksEvent extends Event
      */
     public function addTask(TaskInterface $task)
     {
+        $intent = null;
         if (!$this->stackManager->hasIntentTask()) {
             $intent = new IntentTask(new UrlTaskTarget($this->getRequest()->getUri()));
-            $this->stackManager->addNotSkippedTaskOnce($intent);
         }
-        $this->stackManager->addNotSkippedTaskOnce($task);
+        $this->stackManager->addNotSkippedTaskOnce($task, $intent);
 
         return $this;
     }

@@ -5,6 +5,7 @@ namespace LoginCidadao\CoreBundle\Controller;
 use libphonenumber\PhoneNumberFormat;
 use LoginCidadao\APIBundle\Exception\RequestTimeoutException;
 use LoginCidadao\CoreBundle\Service\IntentManager;
+use LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -604,21 +605,20 @@ class DynamicFormController extends Controller
 
     /**
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      *
      * @Route("/dynamic-form/skip", name="dynamic_form_skip")
      */
     public function skipAction(Request $request)
     {
-        /** @var IntentManager $intentManager */
-        $intentManager = $this->get('lc.intent.manager');
+        /** @var TaskStackManagerInterface $taskStackManager */
+        $taskStackManager = $this->get('task_stack.manager');
 
-        if ($intentManager->hasIntent($request)) {
-            $intent = $intentManager->consumeIntent($request);
-
-            return $this->redirect($this->getSkipUrl($intent));
-        } else {
-            return $this->redirectToRoute('lc_dashboard');
+        $task = $taskStackManager->getCurrentTask();
+        if ($task) {
+            $taskStackManager->setTaskSkipped($task);
         }
+
+        return $taskStackManager->processRequest($request, $this->redirectToRoute('lc_dashboard'));
     }
 }
