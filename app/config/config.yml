@@ -582,10 +582,6 @@ procergs_login_cidadao_monitor:
                 url: "%nfg_ws_url%"
                 verify_https: "%wsdl_monitor_verify_https%"
 
-ejsmont_circuit_breaker:
-    threshold: 1
-    retry_timeout: 10
-
 procergs_nfg:
     verify_https: false
     circuit_breaker:
