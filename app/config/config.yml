@@ -581,6 +581,13 @@ procergs_login_cidadao_monitor:
                 label: WSDL Nota Fiscal Gaúcha
                 url: "%nfg_ws_url%"
                 verify_https: "%wsdl_monitor_verify_https%"
+        circuit_breaker:
+            nfg:
+                label: "Circuit Breaker NFG"
+                service_id: "procergs.nfg.circuit_breaker"
+            sms:
+                label: "Circuit Breaker SMS"
+                service_id: "procergs_phone_verification.circuit_breaker.sms"
 
 procergs_nfg:
     verify_https: false
