@@ -66,7 +66,6 @@ class AppKernel extends Kernel
             new PROCERGS\LoginCidadao\CoreBundle\PROCERGSLoginCidadaoCoreBundle(),
             new PROCERGS\LoginCidadao\MonitorBundle\PROCERGSLoginCidadaoMonitorBundle(),
             new NFG\BadgesBundle\NFGBadgesBundle(),
-            new Ejsmont\CircuitBreakerBundle\EjsmontCircuitBreakerBundle(),
             new PROCERGS\LoginCidadao\NfgBundle\PROCERGSNfgBundle(),
             new PROCERGS\LoginCidadao\AccountingBundle\PROCERGSLoginCidadaoAccountingBundle(),
             new Circle\RestClientBundle\CircleRestClientBundle(),
