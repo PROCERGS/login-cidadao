@@ -280,4 +280,20 @@ class TaskStackManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(3, $manager->countTasks());
     }
+
+    public function testOAuthToken()
+    {
+        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $response = $this->getMock('Symfony\Component\HttpFoundation\Response');
+
+        $token = $this->getMock('FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken');
+
+        $tokenStorage = $this->getTokenStorage();
+        $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
+
+        $manager = $this->getStackManager(['token_storage' => $tokenStorage]);
+        $actual = $manager->processRequest($request, $response);
+
+        $this->assertEquals($response, $actual);
+    }
 }
