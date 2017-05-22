@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Event;
 
+use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification;
 use LoginCidadao\PhoneVerificationBundle\Exception\VerificationNotSentException;
@@ -60,8 +61,13 @@ class TaskSubscriber implements EventSubscriberInterface
             return;
         }
 
+        $token = $this->tokenStorage->getToken();
+        if ($token instanceof OAuthToken) {
+            return;
+        }
+
         /** @var PersonInterface $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = $token->getUser();
         if (!$user instanceof PersonInterface) {
             return;
         }
