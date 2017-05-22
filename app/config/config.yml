@@ -589,7 +589,8 @@ ejsmont_circuit_breaker:
 procergs_nfg:
     verify_https: false
     circuit_breaker:
-        service_name: nfg_service
+        max_failures: 2
+        reset_timeout: 30
     endpoints:
         wsdl: "%nfg_ws_url%"
         login: "%nfg_url_login%"

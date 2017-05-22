@@ -153,20 +153,21 @@ class Nfg implements LoggerAwareInterface
      */
     private function getAccessId()
     {
-        $this->checkAvailable();
+        $nfgSoap = $this->nfgSoap;
 
-        try {
-            $accessId = $this->nfgSoap->getAccessID();
-            $this->reportSuccess();
+        return $this->protect(
+            function () use ($nfgSoap) {
+                try {
+                    $accessId = $nfgSoap->getAccessID();
 
-            return $accessId;
-        } catch (NfgServiceUnavailableException $e) {
-            $this->reportFailure($e);
-            throw $e;
-        } catch (\Exception $e) {
-            $this->reportFailure($e);
-            throw new NfgServiceUnavailableException($e->getMessage(), 500, $e);
-        }
+                    return $accessId;
+                } catch (NfgServiceUnavailableException $e) {
+                    throw $e;
+                } catch (\Exception $e) {
+                    throw new NfgServiceUnavailableException($e->getMessage(), 500, $e);
+                }
+            }
+        );
     }
 
     /**
@@ -177,29 +178,28 @@ class Nfg implements LoggerAwareInterface
      */
     public function getUserInfo($accessToken, $voterRegistration = null, $testRequiredInfo = true)
     {
-        $this->checkAvailable();
+        $nfgSoap = $this->nfgSoap;
 
         try {
-            $nfgProfile = $this->nfgSoap->getUserInfo($accessToken, $voterRegistration);
-            $this->reportSuccess();
-
-            $requiredInfo = [$nfgProfile->getName(), $nfgProfile->getCpf(), $nfgProfile->getEmail()];
-            $missingRequiredInfo = array_search(null, $requiredInfo);
-
-            if ($testRequiredInfo && false !== $missingRequiredInfo) {
-                throw new MissingRequiredInformationException('Some needed information was not authorized on NFG.');
-            }
-
-            return $nfgProfile;
+            $nfgProfile = $this->protect(
+                function () use ($nfgSoap, $accessToken, $voterRegistration) {
+                    return $this->nfgSoap->getUserInfo($accessToken, $voterRegistration);
+                }
+            );
         } catch (NfgServiceUnavailableException $e) {
-            $this->reportFailure($e);
-            throw $e;
-        } catch (MissingRequiredInformationException $e) {
             throw $e;
         } catch (\Exception $e) {
-            $this->reportFailure($e);
             throw new NfgServiceUnavailableException($e->getMessage(), 500, $e);
         }
+
+        $requiredInfo = [$nfgProfile->getName(), $nfgProfile->getCpf(), $nfgProfile->getEmail()];
+        $missingRequiredInfo = array_search(null, $requiredInfo);
+
+        if ($testRequiredInfo && false !== $missingRequiredInfo) {
+            throw new MissingRequiredInformationException('Some needed information was not authorized on NFG.');
+        }
+
+        return $nfgProfile;
     }
 
     /**
@@ -427,10 +427,6 @@ class Nfg implements LoggerAwareInterface
                 throw new OverrideResponseException($response);
             }
             $this->handleCpfCollision($otherPersonMeuRS);
-        }
-
-        if ($nfgProfile->getEmail() === null) {
-            throw new MissingRequiredInformationException('Email was not sent by NFG.');
         }
 
         $names = explode(' ', $nfgProfile->getName());

@@ -11,7 +11,6 @@
 namespace PROCERGS\LoginCidadao\NfgBundle\Event;
 
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class GetDisconnectCallbackResponseEvent extends GetResponseEvent

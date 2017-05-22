@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7089b0e3e625da0b1a5ab57fa1f615c4",
-    "content-hash": "12998b263150efd4ca8111eed85689c6",
+    "hash": "416baac3866dd3fa27ab7ebd4d3fd568",
+    "content-hash": "e4a0a145266d4b89c995d4f77f9b4844",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -1188,105 +1188,6 @@
                 "validator"
             ],
             "time": "2017-02-03 22:48:59"
-        },
-        {
-            "name": "ejsmont-artur/php-circuit-breaker",
-            "version": "0.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ejsmont-artur/php-circuit-breaker.git",
-                "reference": "5e63a6b8774166bf6e5a591559bf25030e8dcce7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ejsmont-artur/php-circuit-breaker/zipball/5e63a6b8774166bf6e5a591559bf25030e8dcce7",
-                "reference": "5e63a6b8774166bf6e5a591559bf25030e8dcce7",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Ejsmont": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Artur Ejsmont",
-                    "homepage": "http://artur.ejsmont.org/blog/",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP Circuit Breaker component",
-            "homepage": "https://github.com/ejsmont-artur/php-circuit-breaker",
-            "keywords": [
-                "circuit breaker",
-                "error handling",
-                "graceful"
-            ],
-            "time": "2013-03-17 09:59:05"
-        },
-        {
-            "name": "ejsmont-artur/php-circuit-breaker-bundle",
-            "version": "dev-master",
-            "target-dir": "Ejsmont/CircuitBreakerBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/guilhermednt/php-circuit-breaker-bundle.git",
-                "reference": "e9e55848d68d6850e597db9848311117cd5a22cb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/guilhermednt/php-circuit-breaker-bundle/zipball/e9e55848d68d6850e597db9848311117cd5a22cb",
-                "reference": "e9e55848d68d6850e597db9848311117cd5a22cb",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/common": ">=2.0.0",
-                "ejsmont-artur/php-circuit-breaker": ">=0.1.0",
-                "php": ">=5.3.0",
-                "symfony/symfony": "~2.8.0"
-            },
-            "require-dev": {
-                "johnkary/phpunit-speedtrap": "~1.0@dev",
-                "mockery/mockery": "~0.9",
-                "phpdocumentor/phpdocumentor": "2.*",
-                "phpunit/phpunit": "4.*"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-0": {
-                    "Ejsmont\\CircuitBreakerBundle": ""
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Artur Ejsmont",
-                    "homepage": "http://artur.ejsmont.org/blog/",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP Circuit Breaker Bundle - Symfony 2 integration",
-            "homepage": "https://github.com/ejsmont-artur/php-circuit-breaker-bundle",
-            "keywords": [
-                "circuit breaker",
-                "error handling",
-                "graceful",
-                "symfony2 adapter"
-            ],
-            "support": {
-                "source": "https://github.com/guilhermednt/php-circuit-breaker-bundle/tree/master"
-            },
-            "time": "2016-10-19 19:45:53"
         },
         {
             "name": "eljam/circuit-breaker",
@@ -2836,12 +2737,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/Gaufrette.git",
-                "reference": "90d986cd05be7ba3fbab3a6a4268609fc2e8584d"
+                "reference": "a90598370b69fd9d57163262fcd40860724abc15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/Gaufrette/zipball/90d986cd05be7ba3fbab3a6a4268609fc2e8584d",
-                "reference": "90d986cd05be7ba3fbab3a6a4268609fc2e8584d",
+                "url": "https://api.github.com/repos/KnpLabs/Gaufrette/zipball/a90598370b69fd9d57163262fcd40860724abc15",
+                "reference": "a90598370b69fd9d57163262fcd40860724abc15",
                 "shasum": ""
             },
             "require": {
@@ -2918,7 +2819,7 @@
                 "filesystem",
                 "media"
             ],
-            "time": "2017-05-18 22:23:00"
+            "time": "2017-05-22 12:01:17"
         },
         {
             "name": "knplabs/knp-gaufrette-bundle",
@@ -3972,17 +3873,17 @@
         },
         {
             "name": "procergs/meurs-monitor-bundle",
-            "version": "v1.1.0",
+            "version": "v1.2.1",
             "target-dir": "PROCERGS/LoginCidadao/MonitorBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/meurs-monitor-bundle.git",
-                "reference": "c0a5355802b41090277438bcf449f9dd0d2b0efd"
+                "reference": "e8a13b7d52e35f1c87fb229f2cae69c11d685f45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/meurs-monitor-bundle/zipball/c0a5355802b41090277438bcf449f9dd0d2b0efd",
-                "reference": "c0a5355802b41090277438bcf449f9dd0d2b0efd",
+                "url": "https://api.github.com/repos/PROCERGS/meurs-monitor-bundle/zipball/e8a13b7d52e35f1c87fb229f2cae69c11d685f45",
+                "reference": "e8a13b7d52e35f1c87fb229f2cae69c11d685f45",
                 "shasum": ""
             },
             "require": {
@@ -3990,7 +3891,6 @@
                 "php": ">=5.4.0"
             },
             "require-dev": {
-                "ejsmont-artur/php-circuit-breaker-bundle": "dev-master",
                 "phpunit/phpunit": "4.*",
                 "symfony/expression-language": "~2.4|~3.0",
                 "symfony/phpunit-bridge": "~2.7|~3.0"
@@ -4020,7 +3920,7 @@
                 "login-cidadao",
                 "monitor"
             ],
-            "time": "2016-10-26 12:42:20"
+            "time": "2017-05-19 20:37:21"
         },
         {
             "name": "procergs/nfg-badges-bundle",
@@ -5507,21 +5407,21 @@
         },
         {
             "name": "symfony/swiftmailer-bundle",
-            "version": "v2.5.4",
+            "version": "v2.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/swiftmailer-bundle.git",
-                "reference": "8ab32ce31a7156621fb92e0466586186beb89759"
+                "reference": "deabc81120c2086571f7c4484ab785c5e1b84f75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/swiftmailer-bundle/zipball/8ab32ce31a7156621fb92e0466586186beb89759",
-                "reference": "8ab32ce31a7156621fb92e0466586186beb89759",
+                "url": "https://api.github.com/repos/symfony/swiftmailer-bundle/zipball/deabc81120c2086571f7c4484ab785c5e1b84f75",
+                "reference": "deabc81120c2086571f7c4484ab785c5e1b84f75",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
-                "swiftmailer/swiftmailer": ">=4.2.0,~5.0",
+                "swiftmailer/swiftmailer": "~4.2|~5.0",
                 "symfony/config": "~2.7|~3.0",
                 "symfony/dependency-injection": "~2.7|~3.0",
                 "symfony/http-kernel": "~2.7|~3.0"
@@ -5529,7 +5429,7 @@
             "require-dev": {
                 "symfony/console": "~2.7|~3.0",
                 "symfony/framework-bundle": "~2.7|~3.0",
-                "symfony/phpunit-bridge": "~2.7|~3.0",
+                "symfony/phpunit-bridge": "~3.3@dev",
                 "symfony/yaml": "~2.7|~3.0"
             },
             "suggest": {
@@ -5538,7 +5438,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5-dev"
+                    "dev-master": "2.6-dev"
                 }
             },
             "autoload": {
@@ -5562,7 +5462,7 @@
             ],
             "description": "Symfony SwiftmailerBundle",
             "homepage": "http://symfony.com",
-            "time": "2017-03-21 21:47:36"
+            "time": "2017-05-22 04:58:24"
         },
         {
             "name": "symfony/symfony",
@@ -6696,16 +6596,16 @@
         },
         {
             "name": "sebastian/diff",
-            "version": "1.4.2",
+            "version": "1.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/diff.git",
-                "reference": "3c7d21999e815cdfac70c6c7d79d3a9cb1bc7bc2"
+                "reference": "7f066a26a962dbe58ddea9f72a4e82874a3975a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/3c7d21999e815cdfac70c6c7d79d3a9cb1bc7bc2",
-                "reference": "3c7d21999e815cdfac70c6c7d79d3a9cb1bc7bc2",
+                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/7f066a26a962dbe58ddea9f72a4e82874a3975a4",
+                "reference": "7f066a26a962dbe58ddea9f72a4e82874a3975a4",
                 "shasum": ""
             },
             "require": {
@@ -6744,7 +6644,7 @@
             "keywords": [
                 "diff"
             ],
-            "time": "2017-05-18 13:44:30"
+            "time": "2017-05-22 07:24:03"
         },
         {
             "name": "sebastian/environment",
@@ -7061,8 +6961,7 @@
         "nelmio/api-doc-bundle": 20,
         "bshaffer/oauth2-server-bundle": 20,
         "beelab/recaptcha2-bundle": 20,
-        "qandidate/stack-request-id": 20,
-        "ejsmont-artur/php-circuit-breaker-bundle": 20
+        "qandidate/stack-request-id": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

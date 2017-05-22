@@ -10,13 +10,9 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Controller;
 
-use Ejsmont\CircuitBreaker\CircuitBreakerInterface;
-use PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper;
-use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class HelpController
