@@ -31,7 +31,6 @@ use Rollerworks\Bundle\PasswordStrengthBundle\Validator\Constraints as Rollerwor
  * @ORM\Table(name="person")
  * @UniqueEntity("cpf", message="person.validation.cpf.already_used", groups={"LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Documents"})
  * @UniqueEntity("username")
- * @UniqueEntity(fields="email", errorPath="email", message="fos_user.email.already_used", groups={"LoginCidadaoRegistration", "Registration", "LoginCidadaoEmailForm", "LoginCidadaoProfile", "Dynamic"})
  * @UniqueEntity(fields="emailCanonical", errorPath="email", message="fos_user.email.already_used", groups={"LoginCidadaoRegistration", "Registration", "LoginCidadaoEmailForm", "LoginCidadaoProfile", "Dynamic"})
  * @ORM\HasLifecycleCallbacks
  * @JMS\ExclusionPolicy("all")
