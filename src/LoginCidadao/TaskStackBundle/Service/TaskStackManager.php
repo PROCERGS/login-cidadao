@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\TaskStackBundle\Service;
 
+use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\TaskStackBundle\Event\GetTasksEvent;
 use LoginCidadao\TaskStackBundle\Exception\UnsupportedTargetException;
@@ -128,7 +129,7 @@ class TaskStackManager implements TaskStackManagerInterface
     public function processRequest(Request $request, Response $defaultResponse = null)
     {
         $token = $this->tokenStorage->getToken();
-        if (!$token || !$token->getUser() instanceof PersonInterface) {
+        if (!$token || $token instanceof OAuthToken || !$token->getUser() instanceof PersonInterface) {
             return $defaultResponse;
         }
 
