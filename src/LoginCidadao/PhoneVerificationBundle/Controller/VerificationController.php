@@ -39,6 +39,10 @@ class VerificationController extends Controller
         /** @var PhoneVerificationInterface $pendingVerifications */
         $verification = $phoneVerificationService->getPendingPhoneVerificationById($id, $this->getUser());
 
+        if (!$verification) {
+            return $this->noVerificationOrVerified($request);
+        }
+
         $form = $this->createForm('LoginCidadao\PhoneVerificationBundle\Form\PhoneVerificationType');
         $form->handleRequest($request);
         $verified = false;
@@ -58,14 +62,7 @@ class VerificationController extends Controller
         }
 
         if (!$verification || $verified) {
-            /** @var TaskStackManagerInterface $taskStackManager */
-            $taskStackManager = $this->get('task_stack.manager');
-            $task = $taskStackManager->getCurrentTask();
-            if ($task) {
-                $taskStackManager->setTaskSkipped($task);
-            }
-
-            return $taskStackManager->processRequest($request, $this->redirectToRoute('lc_dashboard'));
+            return $this->noVerificationOrVerified($request);
         }
 
         $nextResend = $phoneVerificationService->getNextResendDate($verification);
@@ -101,6 +98,9 @@ class VerificationController extends Controller
         $phoneVerificationService = $this->get('phone_verification');
 
         $verification = $phoneVerificationService->getPendingPhoneVerificationById($id, $this->getUser());
+        if (!$verification instanceof PhoneVerificationInterface) {
+            throw $this->createNotFoundException();
+        }
 
         try {
             $phoneVerificationService->sendVerificationCode($verification);
@@ -165,5 +165,17 @@ class VerificationController extends Controller
         }
 
         return $this->redirectToRoute('lc_phone_verification_success', ['id' => $verification->getId()]);
+    }
+
+    private function noVerificationOrVerified(Request $request)
+    {
+        /** @var TaskStackManagerInterface $taskStackManager */
+        $taskStackManager = $this->get('task_stack.manager');
+        $task = $taskStackManager->getCurrentTask();
+        if ($task) {
+            $taskStackManager->setTaskSkipped($task);
+        }
+
+        return $taskStackManager->processRequest($request, $this->redirectToRoute('lc_dashboard'));
     }
 }
