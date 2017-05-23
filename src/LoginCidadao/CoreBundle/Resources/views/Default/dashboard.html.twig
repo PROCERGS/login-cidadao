@@ -87,8 +87,7 @@
                     </div>
                     <div class="panel-body">
                         {% if userBadges|length == 0 %}
-                            <div class="alert alert-warning" role="alert">{% trans %}You don't have any badges
-                                yet!{% endtrans %}</div>
+                            <div class="alert alert-warning" role="alert">{% trans %}You don't have any badges yet!{% endtrans %}</div>
                         {% endif %}
                         {% for client, badges in allBadges %}
                             {% for badge, content in badges %}
