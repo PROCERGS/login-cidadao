@@ -90,6 +90,7 @@ assetic:
             inputs:
                 - '@LoginCidadaoBadgesBundle/Resources/public/css/badges.css'
                 - '@LoginCidadaoPhoneVerificationBundle/Resources/public/css/badges.css'
+                - '@NFGBadgesBundle/Resources/public/css/badges.css'
         intl_tel_input_css:
             inputs:
                 - 'bundles/logincidadaocore/intl-tel-input/css/intlTelInput.css'
