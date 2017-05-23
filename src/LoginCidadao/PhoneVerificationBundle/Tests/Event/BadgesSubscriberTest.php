@@ -99,6 +99,27 @@ class BadgesSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->getSubscriber(true)->onBadgeEvaluate($event);
     }
 
+    public function testOnBadgeEvaluateNoPhoneVerification()
+    {
+        $phone = $this->getMockBuilder('libphonenumber\PhoneNumber')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person->expects($this->atLeastOnce())->method('getMobile')->willReturn($phone);
+
+        $phoneVerificationService = $this->getPhoneVerificationService();
+        $phoneVerificationService->expects($this->once())->method('getPhoneVerification')
+            ->with($person, $phone)
+            ->willReturn(null);
+
+        $event = $this->getMockBuilder('LoginCidadao\BadgesControlBundle\Event\EvaluateBadgesEvent')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $event->expects($this->once())->method('getPerson')->willReturn($person);
+
+        $this->getSubscriber(true, $phoneVerificationService)->onBadgeEvaluate($event);
+    }
+
     public function testOnListBearersWithKnownBadge()
     {
         $badge = $this->getMock('LoginCidadao\BadgesControlBundle\Model\BadgeInterface');
