@@ -17,6 +17,7 @@ use LoginCidadao\BadgesControlBundle\Event\ListBearersEvent;
 use LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
 use LoginCidadao\BadgesBundle\Model\Badge;
 use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository;
+use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -75,7 +76,7 @@ class BadgesSubscriber extends AbstractBadgesEventSubscriber
         }
 
         $verification = $this->phoneVerificationService->getPhoneVerification($person, $person->getMobile());
-        if ($verification->isVerified()) {
+        if ($verification instanceof PhoneVerificationInterface && $verification->isVerified()) {
             $badge = new Badge($this->getName(), 'phone_verified', true);
             $event->registerBadge($badge);
         }
