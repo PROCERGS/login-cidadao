@@ -3873,17 +3873,17 @@
         },
         {
             "name": "procergs/meurs-monitor-bundle",
-            "version": "v1.3.0",
+            "version": "v1.3.1",
             "target-dir": "PROCERGS/LoginCidadao/MonitorBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/meurs-monitor-bundle.git",
-                "reference": "e96bdd74c1ca58f79cf8185558b4987bc70bcb5f"
+                "reference": "2901db592df516f33fd0170d518f47850304395d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/meurs-monitor-bundle/zipball/e96bdd74c1ca58f79cf8185558b4987bc70bcb5f",
-                "reference": "e96bdd74c1ca58f79cf8185558b4987bc70bcb5f",
+                "url": "https://api.github.com/repos/PROCERGS/meurs-monitor-bundle/zipball/2901db592df516f33fd0170d518f47850304395d",
+                "reference": "2901db592df516f33fd0170d518f47850304395d",
                 "shasum": ""
             },
             "require": {
@@ -3921,7 +3921,7 @@
                 "login-cidadao",
                 "monitor"
             ],
-            "time": "2017-05-22 18:23:57"
+            "time": "2017-05-24 20:49:51"
         },
         {
             "name": "procergs/nfg-badges-bundle",
