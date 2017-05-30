@@ -2,10 +2,15 @@
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Service\RegisterRequestedScope;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Entity\ClientRepository;
+use LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier;
+use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -38,6 +43,8 @@ class RegisterListener implements EventSubscriberInterface
     private $tokenGenerator;
 
     private $emailUnconfirmedTime;
+
+    /** @var EntityManagerInterface */
     protected $em;
     private $lcSupportedScopes;
 
@@ -46,6 +53,9 @@ class RegisterListener implements EventSubscriberInterface
 
     /** @var ClientRepository */
     public $clientRepository;
+
+    /** @var SubjectIdentifierService */
+    private $subjectIdentifierService;
 
     /** @var string */
     private $defaultClientUid;
@@ -58,6 +68,7 @@ class RegisterListener implements EventSubscriberInterface
         TokenGeneratorInterface $tokenGenerator,
         RegisterRequestedScope $registerRequestedScope,
         ClientRepository $clientRepository,
+        SubjectIdentifierService $subjectIdentifierService,
         $emailUnconfirmedTime,
         $lcSupportedScopes,
         $defaultClientUid
@@ -71,6 +82,7 @@ class RegisterListener implements EventSubscriberInterface
         $this->lcSupportedScopes = $lcSupportedScopes;
         $this->registerRequestedScope = $registerRequestedScope;
         $this->clientRepository = $clientRepository;
+        $this->subjectIdentifierService = $subjectIdentifierService;
         $this->defaultClientUid = $defaultClientUid;
     }
 
@@ -98,7 +110,9 @@ class RegisterListener implements EventSubscriberInterface
         $key = '_security.main.target_path';
         if ($this->session->has($key)) {
             //this is to be catch by loggedinUserListener.php
-            return $event->setResponse(new RedirectResponse($this->router->generate('lc_home')));
+            $event->setResponse(new RedirectResponse($this->router->generate('lc_home')));
+
+            return;
         }
 
         if (!$user->getUsername()) {
@@ -116,12 +130,25 @@ class RegisterListener implements EventSubscriberInterface
 
     public function onRegistrationCompleted(FilterUserResponseEvent $event)
     {
+        /** @var PersonInterface $user */
         $user = $event->getUser();
+
+        /** @var Client $client */
+        $client = $this->clientRepository->findOneBy(['uid' => $this->defaultClientUid]);
+
         $auth = new Authorization();
         $auth->setPerson($user);
-        $auth->setClient($this->clientRepository->findOneBy(['uid' => $this->defaultClientUid]));
+        $auth->setClient($client);
         $auth->setScope(explode(' ', $this->lcSupportedScopes));
+
+        $subjectIdentifier = $this->subjectIdentifierService->getSubjectIdentifier($user, $client->getMetadata());
+        $sub = new SubjectIdentifier();
+        $sub->setPerson($user)
+            ->setClient($client)
+            ->setSubjectIdentifier($subjectIdentifier);
+
         $this->em->persist($auth);
+        $this->em->persist($sub);
         $this->em->flush();
 
         $this->mailer->sendConfirmationEmailMessage($user);
