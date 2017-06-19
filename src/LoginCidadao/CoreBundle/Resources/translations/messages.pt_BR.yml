@@ -838,6 +838,10 @@ error.generic:
 error.404:
     title: Página não encontrada
     body: A página solicitada não foi encontrada. Verifique se o endereço utilizado está correto e tente novamente.
+error.400:
+    title: Requisisão Inválida
+    body: Algum serviço utilizado enviou uma requisição inválida para o Login Cidadão. Entre em contato com os responsáveis pelo sistema utilizado.
+    line2: Se você não está utilizando um serviço, pode existir um problema em seu navegador. Recomendamos que atualize-o para evitar novos problemas.
 dynamic_form:
     title: Complete suas informações
     body: <strong>%client%</strong> precisa de detalhes adicionais sobre você. Por favor, complete as informações em branco a seguir para continuar.

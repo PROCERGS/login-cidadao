@@ -437,6 +437,10 @@ error.generic:
 error.404:
     title: Page not found
     body: The requested page couldn't be located. Checkout for any URL misspelling.
+error.400:
+    title: Bad Request
+    body: 'A service you are using sent an invalid request. Please contact the service''s maintainer.'
+    line2: 'If your aren''t using any service, this can be an issue with your browser. We advise you update it to avoid further issues.'
 dynamic_form:
     title: Complete your information
     body: <strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.
