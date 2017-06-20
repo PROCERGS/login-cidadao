@@ -12,6 +12,17 @@ services:
             - { name: kernel.event_subscriber }
             - { name: monolog.logger, channel: phone_verification }
 
+    procergs_phone_verification.update_sent_verification.subscriber:
+        class: PROCERGS\LoginCidadao\PhoneVerificationBundle\Event\UpdateSentVerificationSubscriber
+        arguments:
+            - "@sms"
+            - "@procergs_phone_verification.circuit_breaker.sms"
+        calls:
+            - ['setLogger', ["@?logger"]]
+        tags:
+            - { name: kernel.event_subscriber }
+            - { name: monolog.logger, channel: phone_verification }
+
     procergs_phone_verification.circuit_breaker.sms:
         class: Eljam\CircuitBreaker\Breaker
         arguments:
