@@ -33,4 +33,11 @@ class PhoneVerificationEvents
      * This event is triggered after the verification code is sent.
      */
     const PHONE_VERIFICATION_CODE_SENT = 'lc.phone_verification.code_sent';
+
+    /**
+     * This event is triggered when there is a need to update the status of sent verifications.
+     *
+     * Ideally this should be run only in batch situations since it's potentially a long-running task!
+     */
+    const PHONE_VERIFICATION_UPDATE_SENT_VERIFICATIONS = 'lc.phone_verification.update_sent_verifications';
 }
