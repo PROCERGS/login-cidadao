@@ -126,22 +126,4 @@ class UpdateStatusEvent extends Event
 
         return $this;
     }
-
-    private function dummy()
-    {
-        $javaFormat = 'Y-m-d\TH:i:s.uP';
-        $statuses = $this->smsService->getStatus($sentVerification->getTransactionId());
-        $status = reset($statuses);
-        $sentAt = $status->dthEnvio ? \DateTime::createFromFormat($javaFormat, $status->dthEnvio) : null;
-        $deliveredAt = $status->dthEntrega ? \DateTime::createFromFormat($javaFormat, $status->dthEntrega) : null;
-        try {
-            $deliveryStatus = DeliveryStatus::parse($status->resumoEntrega);
-        } catch (\InvalidArgumentException $e) {
-            $io->newLine();
-            $io->error(
-                "Invalid status for transaction {$sentVerification->getTransactionId()}: {$status->resumoEntrega}"
-            );
-            die();
-        }
-    }
 }

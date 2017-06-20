@@ -42,6 +42,9 @@ class SentVerificationRepository extends EntityRepository
         return $query->setMaxResults(1)->getQuery()->getOneOrNullResult();
     }
 
+    /**
+     * @return \Doctrine\ORM\Query
+     */
     public function getPendingUpdateSentVerificationQuery()
     {
         $query = $this->createQueryBuilder('s')

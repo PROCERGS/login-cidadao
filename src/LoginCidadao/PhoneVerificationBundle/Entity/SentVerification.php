@@ -215,7 +215,7 @@ class SentVerification implements SentVerificationInterface
      */
     public function isFinished()
     {
-        return $this->finished;
+        return $this->finished === true ? true : false;
     }
 
     /**

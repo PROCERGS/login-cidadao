@@ -35,6 +35,7 @@ final class DeliveryStatus
             case self::ERROR_IN_SEND:
             case self::NOT_SEND:
             case self::NO_DELIVERY_CONFIRMATION:
+            case self::PROTOCOL_NOT_FOUND:
                 return true;
             default:
                 return false;
