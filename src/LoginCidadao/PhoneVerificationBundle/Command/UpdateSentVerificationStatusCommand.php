@@ -12,12 +12,12 @@ namespace LoginCidadao\PhoneVerificationBundle\Command;
 
 use Doctrine\ORM\EntityManager;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
-use PROCERGS\LoginCidadao\PhoneVerificationBundle\Service\SmsStatusUpdater;
-use PROCERGS\Sms\SmsService;
+use LoginCidadao\PhoneVerificationBundle\Service\SmsStatusUpdater;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UpdateSentVerificationStatusCommand extends ContainerAwareCommand
 {
@@ -35,8 +35,8 @@ class UpdateSentVerificationStatusCommand extends ContainerAwareCommand
 
         $io->title('Update Verification Messages Status');
 
-        /** @var SmsService $smsService */
-        $smsService = $this->getContainer()->get('sms');
+        /** @var EventDispatcherInterface $dispatcher */
+        $dispatcher = $this->getContainer()->get('event_dispatcher');
 
         /** @var EntityManager $em */
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
@@ -44,7 +44,7 @@ class UpdateSentVerificationStatusCommand extends ContainerAwareCommand
         /** @var SentVerificationRepository $repo */
         $repo = $em->getRepository('LoginCidadaoPhoneVerificationBundle:SentVerification');
 
-        $updater = new SmsStatusUpdater($smsService, $repo);
+        $updater = new SmsStatusUpdater($dispatcher, $repo);
         $io->section('Updating messages\' status');
         $updater->updateSentVerificationStatus($io, $em);
 
