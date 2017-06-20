@@ -58,7 +58,7 @@ class UpdateStatusEvent extends Event
      * @param \DateTime $sentAt
      * @return UpdateStatusEvent
      */
-    public function setSentAt(\DateTime $sentAt)
+    public function setSentAt(\DateTime $sentAt = null)
     {
         $this->sentAt = $sentAt;
         $this->setUpdated();
@@ -78,7 +78,7 @@ class UpdateStatusEvent extends Event
      * @param \DateTime $deliveredAt
      * @return UpdateStatusEvent
      */
-    public function setDeliveredAt(\DateTime $deliveredAt)
+    public function setDeliveredAt(\DateTime $deliveredAt = null)
     {
         $this->deliveredAt = $deliveredAt;
         $this->setUpdated();
