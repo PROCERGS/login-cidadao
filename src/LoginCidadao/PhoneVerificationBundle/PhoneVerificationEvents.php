@@ -40,4 +40,9 @@ class PhoneVerificationEvents
      * Ideally this should be run only in batch situations since it's potentially a long-running task!
      */
     const PHONE_VERIFICATION_UPDATE_SENT_VERIFICATIONS = 'lc.phone_verification.update_sent_verifications';
+
+    /**
+     * This event is triggered when there is a need to get the status of sent verifications.
+     */
+    const PHONE_VERIFICATION_GET_SENT_VERIFICATION_STATUS = 'lc.phone_verification.get_sent_verification_status';
 }
