@@ -10,7 +10,7 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Service;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Event\UpdateStatusEvent;
 use LoginCidadao\PhoneVerificationBundle\Model\DeliveryStatus;
@@ -38,7 +38,7 @@ class SmsStatusUpdater
         $this->sentVerificationRepo = $sentVerificationRepo;
     }
 
-    public function updateSentVerificationStatus(SymfonyStyle $io, EntityManager $em = null)
+    public function updateSentVerificationStatus(SymfonyStyle $io, EntityManagerInterface $em = null)
     {
         $count = $this->sentVerificationRepo->countPendingUpdateSentVerification();
 
@@ -88,7 +88,7 @@ class SmsStatusUpdater
 
     /**
      * @param $amount
-     * @return float average delivery time in seconds (abs value)
+     * @return float average delivery time in minutes (abs value)
      */
     public function getAverageDeliveryTime($amount)
     {

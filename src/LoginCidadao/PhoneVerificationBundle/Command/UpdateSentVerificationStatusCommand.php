@@ -10,7 +10,7 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Command;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Service\SmsStatusUpdater;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -38,7 +38,7 @@ class UpdateSentVerificationStatusCommand extends ContainerAwareCommand
         /** @var EventDispatcherInterface $dispatcher */
         $dispatcher = $this->getContainer()->get('event_dispatcher');
 
-        /** @var EntityManager $em */
+        /** @var EntityManagerInterface $em */
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         /** @var SentVerificationRepository $repo */
