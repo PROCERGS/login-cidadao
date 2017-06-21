@@ -11,6 +11,8 @@
 namespace LoginCidadao\PhoneVerificationBundle\Model;
 
 // TODO: this should be in the sms-service lib!!
+use LoginCidadao\PhoneVerificationBundle\Exception\InvalidSentVerificationStatusException;
+
 final class DeliveryStatus
 {
     // non-final:
@@ -74,7 +76,7 @@ final class DeliveryStatus
             case "Requisi��o recebida":
                 return self::RECEIVED_REQUEST;
             default:
-                throw new \InvalidArgumentException("The status '{$state}' is not valid!");
+                throw new InvalidSentVerificationStatusException("The status '{$state}' is not valid!");
         }
     }
 }
