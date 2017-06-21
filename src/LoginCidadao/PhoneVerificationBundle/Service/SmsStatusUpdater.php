@@ -88,7 +88,7 @@ class SmsStatusUpdater
 
     /**
      * @param $amount
-     * @return float average delivery time in minutes (abs value)
+     * @return float average delivery time in seconds (abs value)
      */
     public function getAverageDeliveryTime($amount)
     {
@@ -101,13 +101,15 @@ class SmsStatusUpdater
 
         $times = [];
         foreach ($sentVerifications as $sentVerification) {
-            $times[] = $sentVerification->getDeliveredAt()->format('U') - $sentVerification->getSentAt()->format('U');
+            $times[] = abs(
+                $sentVerification->getDeliveredAt()->format('U') - $sentVerification->getSentAt()->format('U')
+            );
         }
         $sum = array_sum($times);
 
         $avg = $sum / count($times);
 
-        return abs($avg / 60);
+        return $avg;
     }
 
     /**
