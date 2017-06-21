@@ -11,25 +11,15 @@
 namespace PROCERGS\LoginCidadao\PhoneVerificationBundle\Event;
 
 use Eljam\CircuitBreaker\Breaker;
-use Eljam\CircuitBreaker\Exception\CircuitOpenException;
-use libphonenumber\PhoneNumberFormat;
-use libphonenumber\PhoneNumberUtil;
-use LoginCidadao\CoreBundle\Model\PersonInterface;
-use LoginCidadao\PhoneVerificationBundle\Entity\SentVerification;
-use LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent;
 use LoginCidadao\PhoneVerificationBundle\Event\UpdateStatusEvent;
+use LoginCidadao\PhoneVerificationBundle\Exception\InvalidSentVerificationStatusException;
 use LoginCidadao\PhoneVerificationBundle\Model\DeliveryStatus;
-use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
-use PROCERGS\Sms\Exception\SmsServiceException;
 use PROCERGS\Sms\SmsService;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerTrait;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 class UpdateSentVerificationSubscriber implements EventSubscriberInterface, LoggerAwareInterface
 {
@@ -99,17 +89,26 @@ class UpdateSentVerificationSubscriber implements EventSubscriberInterface, Logg
     public function onStatusRequested(UpdateStatusEvent $event)
     {
         $javaFormat = 'Y-m-d\TH:i:s.uP';
-        $statuses = $this->protectedGetStatus($this->smsService, $event->getTransactionId());
+        $transactionId = $event->getTransactionId();
+        $statuses = $this->protectedGetStatus($this->smsService, $transactionId);
 
         $status = reset($statuses);
         $sentAt = $status->dthEnvio ? \DateTime::createFromFormat($javaFormat, $status->dthEnvio) : null;
         $deliveredAt = $status->dthEntrega ? \DateTime::createFromFormat($javaFormat, $status->dthEntrega) : null;
 
         try {
-            $deliveryStatus = DeliveryStatus::parse($status->resumoEntrega);
-        } catch (\InvalidArgumentException $e) {
-            throw new \InvalidArgumentException(
-                "Invalid status for transaction {$event->getTransactionId()}: {$status->resumoEntrega}",
+            if ($status->resumoEntrega) {
+                $deliveryStatus = DeliveryStatus::parse($status->resumoEntrega);
+            } elseif ($status->resumoEnvio) {
+                $deliveryStatus = DeliveryStatus::parse($status->resumoEnvio);
+            } else {
+                throw new InvalidSentVerificationStatusException(
+                    "No status available for transaction {$transactionId}"
+                );
+            }
+        } catch (InvalidSentVerificationStatusException $e) {
+            throw new InvalidSentVerificationStatusException(
+                "Error for transaction id {$transactionId}: {$e->getMessage()}",
                 $e->getCode(),
                 $e
             );

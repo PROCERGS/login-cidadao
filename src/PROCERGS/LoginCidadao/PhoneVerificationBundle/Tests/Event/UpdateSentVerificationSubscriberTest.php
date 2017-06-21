@@ -41,7 +41,7 @@ class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $event = new UpdateStatusEvent($transId);
         $status = $this->getStatusResponse($transId, $sentAt, $deliveredAt, 'Entregue');
 
-        $subscriber = $this->getSubscriber($transId, [$status]);
+        $subscriber = $this->getSubscriber($transId, $status);
         $subscriber->onStatusRequested($event);
 
         $this->assertTrue($event->isUpdated());
@@ -50,9 +50,27 @@ class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($event->getDeliveryStatus());
     }
 
+    public function testTransactionNotFound()
+    {
+        $transId = '0123456';
+
+        $event = new UpdateStatusEvent($transId);
+        $status = $this->getStatusResponse($transId, null, null, null, 'Protocolo nao encontrado');
+
+        $subscriber = $this->getSubscriber($transId, $status);
+        $subscriber->onStatusRequested($event);
+
+        $this->assertTrue($event->isUpdated());
+        $this->assertNull($event->getSentAt());
+        $this->assertNull($event->getDeliveredAt());
+        $this->assertEquals(DeliveryStatus::PROTOCOL_NOT_FOUND, $event->getDeliveryStatus());
+    }
+
     public function testInvalidStatusOnStatusRequested()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->setExpectedException(
+            'LoginCidadao\PhoneVerificationBundle\Exception\InvalidSentVerificationStatusException'
+        );
 
         $transId = '0123456';
         $sentAt = new \DateTime();
@@ -61,7 +79,8 @@ class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $event = new UpdateStatusEvent($transId);
         $status = $this->getStatusResponse($transId, $sentAt, $deliveredAt, 'INVALID');
 
-        $subscriber = $this->getSubscriber($transId, [$status]);
+        $subscriber = $this->getSubscriber($transId, $status);
+
         return $subscriber->onStatusRequested($event);
     }
 
@@ -83,16 +102,27 @@ class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         return $subscriber;
     }
 
-    private function getStatusResponse($transId, \DateTime $sentAt, \DateTime $deliveredAt, $deliveryStatus)
-    {
+    private function getStatusResponse(
+        $transId,
+        \DateTime $sentAt = null,
+        \DateTime $deliveredAt = null,
+        $deliveryStatus = null,
+        $sendStatus = null
+    ) {
         $javaFormat = 'Y-m-d\TH:i:s.uP';
 
-        $status = new \stdClass();
-        $status->numero = $transId;
-        $status->dthEnvio = $sentAt->format($javaFormat);
-        $status->dthEntrega = $deliveredAt->format($javaFormat);
-        $status->resumoEntrega = $deliveryStatus;
+        $json = json_encode(
+            [
+                [
+                    'numero' => $transId,
+                    'dthEnvio' => $sentAt instanceof \DateTime ? $sentAt->format($javaFormat) : null,
+                    'dthEntrega' => $deliveredAt instanceof \DateTime ? $deliveredAt->format($javaFormat) : null,
+                    'resumoEnvio' => $sendStatus,
+                    'resumoEntrega' => $deliveryStatus,
+                ],
+            ]
+        );
 
-        return $status;
+        return json_decode($json);
     }
 }
