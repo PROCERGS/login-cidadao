@@ -24,7 +24,7 @@
                     {% if user.hasAuthorization(client) %}
                         <div class="permissions">
                             <p>{{ 'services.details.authorized_scopes' | trans }}:</p>
-                            {% for scope in scopes if scope != "openid" %}
+                            {% for scope in scopes if scope != "openid" and scope != "offline_access" %}
                                 {% if ('scope_details.' ~ scope) | trans != ('scope_details.' ~ scope) %}
                                     {{ include('LoginCidadaoCoreBundle::common.scope.details.html.twig', { 'scope': scope }) }}
                                 {% else %}
