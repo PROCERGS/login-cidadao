@@ -10,7 +10,7 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Controller;
 
-use LoginCidadao\PhoneVerificationBundle\Service\SmsStatusUpdater;
+use LoginCidadao\PhoneVerificationBundle\Service\SmsStatusService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -36,7 +36,7 @@ class StatisticsController extends Controller
         $dispatcher = $this->get('event_dispatcher');
         $sentVerificationRepo = $em->getRepository('LoginCidadaoPhoneVerificationBundle:SentVerification');
 
-        $smsUpdater = new SmsStatusUpdater($dispatcher, $sentVerificationRepo);
+        $smsUpdater = new SmsStatusService($dispatcher, $sentVerificationRepo);
         $transactionsUpdated = $smsUpdater->updateSentVerificationStatus($em);
 
         return new JsonResponse(['transactions_updated' => $transactionsUpdated]);
@@ -45,20 +45,50 @@ class StatisticsController extends Controller
     /**
      * @Route("/api/v1/phone-verification/average-delivery-time.{_format}",
      *     name="api_v1_phone_verification_average_delivery_time",
-     *     defaults={"amount"=10, "_format"="json"}
+     *     defaults={"_format"="json"}
      * )
      * @Method("GET")
      * @Template()
      */
-    public function getDeliveryAverageAction(Request $request, $amount = 10)
+    public function getDeliveryAverageAction(Request $request)
     {
+        $amount = $request->get('amount', 10);
+
         $em = $this->getDoctrine()->getManager();
         $dispatcher = $this->get('event_dispatcher');
         $sentVerificationRepo = $em->getRepository('LoginCidadaoPhoneVerificationBundle:SentVerification');
 
-        $smsUpdater = new SmsStatusUpdater($dispatcher, $sentVerificationRepo);
+        $smsUpdater = new SmsStatusService($dispatcher, $sentVerificationRepo);
         $average = $smsUpdater->getAverageDeliveryTime($amount);
 
         return new JsonResponse(['average_delivery_time' => $average, 'unit' => 'seconds']);
+    }
+
+    /**
+     * @Route("/api/v1/phone-verification/not-delivered.{_format}",
+     *     name="api_v1_phone_verification_not_delivered",
+     *     defaults={"_format"="json"}
+     * )
+     * @Method("GET")
+     * @Template()
+     */
+    public function getNotDeliveredAction(Request $request)
+    {
+        $seconds = $request->get('seconds', null);
+        $seconds = is_numeric($seconds) ? (int)$seconds : null;
+
+        $em = $this->getDoctrine()->getManager();
+        $dispatcher = $this->get('event_dispatcher');
+        $sentVerificationRepo = $em->getRepository('LoginCidadaoPhoneVerificationBundle:SentVerification');
+
+        $smsUpdater = new SmsStatusService($dispatcher, $sentVerificationRepo);
+
+        if ($seconds === null) {
+            $seconds = $smsUpdater->getAverageDeliveryTime(10);
+        }
+
+        $notDelivered = $smsUpdater->getDelayedDeliveryTransactions($seconds);
+
+        return new JsonResponse(['delayed_transactions' => $notDelivered, 'max_delay' => $seconds]);
     }
 }

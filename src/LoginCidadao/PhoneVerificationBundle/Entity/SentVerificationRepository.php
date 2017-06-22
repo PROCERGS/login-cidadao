@@ -82,4 +82,22 @@ class SentVerificationRepository extends EntityRepository
 
         return $query->getResult();
     }
+
+    /**
+     * @param \DateTime $date
+     * @return SentVerification[]
+     */
+    public function getNotDeliveredSince(\DateTime $date)
+    {
+        $query = $this->createQueryBuilder('s')
+            ->where('s.deliveredAt IS NULL')
+            ->andWhere('s.sentAt <= :date')
+            ->andWhere('s.finished IS NULL OR s.finished != :finished')
+            ->orderBy('s.sentAt', 'ASC')
+            ->setParameter('date', $date)
+            ->setParameter('finished', true, \PDO::PARAM_BOOL)
+            ->getQuery();
+
+        return $query->getResult();
+    }
 }
