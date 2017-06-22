@@ -46,7 +46,7 @@
                 {% set details = '' %}
                 {% set handle = '' %}
             {% endif %}
-            {% if scope == 'openid' %}
+            {% if scope == 'openid' or scope == 'offline_access' %}
                 <input type="hidden" name="scope[]" value="{{ scope }}">
             {% elseif scope == 'public_profile' %}
                 <li class="checkbox">
