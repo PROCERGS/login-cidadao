@@ -39,7 +39,7 @@ class StatisticsController extends Controller
         $smsUpdater = new SmsStatusService($dispatcher, $sentVerificationRepo);
         $transactionsUpdated = $smsUpdater->updateSentVerificationStatus($em);
 
-        return new JsonResponse(['transactions_updated' => $transactionsUpdated]);
+        return new JsonResponse(['transactions_updated' => $transactionsUpdated, 'count' => count($transactionsUpdated)]);
     }
 
     /**
@@ -89,6 +89,6 @@ class StatisticsController extends Controller
 
         $notDelivered = $smsUpdater->getDelayedDeliveryTransactions($seconds);
 
-        return new JsonResponse(['delayed_transactions' => $notDelivered, 'max_delay' => $seconds]);
+        return new JsonResponse(['delayed_transactions' => $notDelivered, 'count' => count($notDelivered), 'max_delay' => $seconds]);
     }
 }
