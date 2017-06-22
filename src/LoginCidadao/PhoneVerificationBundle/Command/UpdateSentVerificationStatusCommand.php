@@ -44,9 +44,9 @@ class UpdateSentVerificationStatusCommand extends ContainerAwareCommand
         /** @var SentVerificationRepository $repo */
         $repo = $em->getRepository('LoginCidadaoPhoneVerificationBundle:SentVerification');
 
-        $updater = new SmsStatusUpdater($dispatcher, $repo);
+        $updater = new SmsStatusUpdater($dispatcher, $repo, $io);
         $io->section('Updating messages\' status');
-        $updater->updateSentVerificationStatus($io, $em);
+        $updater->updateSentVerificationStatus($em);
 
         $io->section('Average delivery time');
         $avg = $updater->getAverageDeliveryTime(10);
