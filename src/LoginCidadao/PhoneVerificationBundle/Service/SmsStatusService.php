@@ -19,7 +19,7 @@ use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class SmsStatusUpdater
+class SmsStatusService
 {
     /** @var EventDispatcherInterface */
     private $dispatcher;
@@ -118,6 +118,26 @@ class SmsStatusUpdater
         $avg = $sum / count($times);
 
         return $avg;
+    }
+
+    /**
+     * @param int $maxDeliverySeconds
+     * @return array
+     */
+    public function getDelayedDeliveryTransactions($maxDeliverySeconds = 0)
+    {
+        $date = new \DateTime("-{$maxDeliverySeconds} seconds");
+        $notDelivered = $this->sentVerificationRepo->getNotDeliveredSince($date);
+
+        $transactions = [];
+        foreach ($notDelivered as $sentVerification) {
+            $transactions[] = [
+                'transaction_id' => $sentVerification->getTransactionId(),
+                'sent_at' => $sentVerification->getSentAt()->format('c'),
+            ];
+        }
+
+        return $transactions;
     }
 
     /**

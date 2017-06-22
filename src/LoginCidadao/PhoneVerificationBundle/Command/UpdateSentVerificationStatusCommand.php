@@ -12,7 +12,7 @@ namespace LoginCidadao\PhoneVerificationBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
-use LoginCidadao\PhoneVerificationBundle\Service\SmsStatusUpdater;
+use LoginCidadao\PhoneVerificationBundle\Service\SmsStatusService;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -44,7 +44,7 @@ class UpdateSentVerificationStatusCommand extends ContainerAwareCommand
         /** @var SentVerificationRepository $repo */
         $repo = $em->getRepository('LoginCidadaoPhoneVerificationBundle:SentVerification');
 
-        $updater = new SmsStatusUpdater($dispatcher, $repo, $io);
+        $updater = new SmsStatusService($dispatcher, $repo, $io);
         $io->section('Updating messages\' status');
         $updater->updateSentVerificationStatus($em);
 
