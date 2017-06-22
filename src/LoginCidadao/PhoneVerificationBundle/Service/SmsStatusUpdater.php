@@ -27,23 +27,31 @@ class SmsStatusUpdater
     /** @var SentVerificationRepository */
     private $sentVerificationRepo;
 
+    /** @var SymfonyStyle */
+    private $io;
+
     /**
      * SmsStatusUpdater constructor.
      * @param EventDispatcherInterface $dispatcher
      * @param SentVerificationRepository $sentVerificationRepo
+     * @param SymfonyStyle|null $io
      */
-    public function __construct(EventDispatcherInterface $dispatcher, SentVerificationRepository $sentVerificationRepo)
-    {
+    public function __construct(
+        EventDispatcherInterface $dispatcher,
+        SentVerificationRepository $sentVerificationRepo,
+        SymfonyStyle $io = null
+    ) {
+        $this->io = $io;
         $this->dispatcher = $dispatcher;
         $this->sentVerificationRepo = $sentVerificationRepo;
     }
 
-    public function updateSentVerificationStatus(SymfonyStyle $io, EntityManagerInterface $em = null)
+    public function updateSentVerificationStatus(EntityManagerInterface $em)
     {
         $count = $this->sentVerificationRepo->countPendingUpdateSentVerification();
 
         if ($count === 0) {
-            $io->comment('No messages pending update.');
+            $this->comment('No messages pending update.');
 
             return [];
         }
@@ -51,7 +59,7 @@ class SmsStatusUpdater
         $query = $this->sentVerificationRepo->getPendingUpdateSentVerificationQuery();
         $sentVerifications = $query->iterate();
 
-        $io->progressStart($count);
+        $this->progressStart($count);
         $transactionsUpdated = [];
         foreach ($sentVerifications as $row) {
             /** @var SentVerificationInterface $sentVerification */
@@ -59,7 +67,7 @@ class SmsStatusUpdater
             $status = $this->getStatus($sentVerification->getTransactionId());
 
             if (false === $status->isUpdated()) {
-                $io->progressAdvance(1);
+                $this->progressAdvance(1);
                 continue;
             }
 
@@ -72,15 +80,15 @@ class SmsStatusUpdater
             $em->flush();
             $em->clear();
             $transactionsUpdated[] = $sentVerification->getTransactionId();
-            $io->progressAdvance(1);
+            $this->progressAdvance(1);
         }
-        $io->progressFinish();
+        $this->progressFinish();
 
         $countUpdated = count($transactionsUpdated);
-        $io->comment("Updated {$countUpdated} transactions.");
+        $this->comment("Updated {$countUpdated} transactions.");
 
         if ($countUpdated === 0) {
-            $io->comment("It's possible the SMS-sending service you are using doesn't implement status updates.");
+            $this->comment("It's possible the SMS-sending service you are using doesn't implement status updates.");
         }
 
         return $transactionsUpdated;
@@ -122,5 +130,37 @@ class SmsStatusUpdater
         $this->dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFICATION_GET_SENT_VERIFICATION_STATUS, $event);
 
         return $event;
+    }
+
+    private function comment($message)
+    {
+        if (!$this->io) {
+            return;
+        }
+        $this->io->comment($message);
+    }
+
+    private function progressStart($max = 0)
+    {
+        if (!$this->io) {
+            return;
+        }
+        $this->io->progressStart($max);
+    }
+
+    private function progressAdvance($step = 1)
+    {
+        if (!$this->io) {
+            return;
+        }
+        $this->io->progressAdvance($step);
+    }
+
+    private function progressFinish()
+    {
+        if (!$this->io) {
+            return;
+        }
+        $this->io->progressFinish();
     }
 }

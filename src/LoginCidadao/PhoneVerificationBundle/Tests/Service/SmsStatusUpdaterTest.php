@@ -18,8 +18,8 @@ class SmsStatusUpdaterTest extends \PHPUnit_Framework_TestCase
     public function testNoPendingUpdate()
     {
         $repo = $this->getRepository([]);
-        $updater = $this->getSmsStatusUpdater($this->getDispatcher(), $repo);
-        $updater->updateSentVerificationStatus($this->getIo(), $this->getEntityManager());
+        $updater = $this->getSmsStatusUpdater($this->getDispatcher(), $repo, $this->getIo());
+        $updater->updateSentVerificationStatus($this->getEntityManager());
     }
 
     public function testOnePendingUpdate()
@@ -47,8 +47,8 @@ class SmsStatusUpdaterTest extends \PHPUnit_Framework_TestCase
         ];
 
         $repo = $this->getRepository($items);
-        $updater = $this->getSmsStatusUpdater($dispatcher, $repo);
-        $updater->updateSentVerificationStatus($this->getIo(), $this->getEntityManager());
+        $updater = $this->getSmsStatusUpdater($dispatcher, $repo, $this->getIo());
+        $updater->updateSentVerificationStatus($this->getEntityManager());
 
         $this->assertEquals($date, $sentVerification->getActuallySentAt());
         $this->assertEquals($date, $sentVerification->getDeliveredAt());
@@ -69,8 +69,8 @@ class SmsStatusUpdaterTest extends \PHPUnit_Framework_TestCase
         ];
 
         $repo = $this->getRepository($items);
-        $updater = $this->getSmsStatusUpdater($dispatcher, $repo);
-        $updater->updateSentVerificationStatus($this->getIo(), $this->getEntityManager());
+        $updater = $this->getSmsStatusUpdater($dispatcher, $repo, $this->getIo());
+        $updater->updateSentVerificationStatus($this->getEntityManager());
 
         $this->assertFalse($sentVerification->isFinished());
     }
@@ -96,10 +96,10 @@ class SmsStatusUpdaterTest extends \PHPUnit_Framework_TestCase
         $repo->expects($this->once())->method('getLastDeliveredVerifications')
             ->willReturn($verifications);
 
-        $updater = $this->getSmsStatusUpdater($this->getDispatcher(), $repo);
+        $updater = $this->getSmsStatusUpdater($this->getDispatcher(), $repo, $this->getIo());
         $avg = $updater->getAverageDeliveryTime(2);
 
-        $this->assertEquals(0.5, $avg);
+        $this->assertEquals(30, $avg);
     }
 
     public function testNoAverageTime()
@@ -108,15 +108,15 @@ class SmsStatusUpdaterTest extends \PHPUnit_Framework_TestCase
         $repo->expects($this->once())->method('getLastDeliveredVerifications')
             ->willReturn([]);
 
-        $updater = $this->getSmsStatusUpdater($this->getDispatcher(), $repo);
+        $updater = $this->getSmsStatusUpdater($this->getDispatcher(), $repo, $this->getIo());
         $avg = $updater->getAverageDeliveryTime(2);
 
         $this->assertEquals(0, $avg);
     }
 
-    private function getSmsStatusUpdater($dispatcher, $repo)
+    private function getSmsStatusUpdater($dispatcher, $repo, $io)
     {
-        $updater = new SmsStatusUpdater($dispatcher, $repo);
+        $updater = new SmsStatusUpdater($dispatcher, $repo, $io);
 
         return $updater;
     }

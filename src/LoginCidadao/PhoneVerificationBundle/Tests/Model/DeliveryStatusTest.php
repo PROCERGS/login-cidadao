@@ -62,7 +62,7 @@ class DeliveryStatusTest extends \PHPUnit_Framework_TestCase
 
     public function testParseError()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->setExpectedException('LoginCidadao\PhoneVerificationBundle\Exception\InvalidSentVerificationStatusException');
         DeliveryStatus::parse('INVALID STATUS');
     }
 }
