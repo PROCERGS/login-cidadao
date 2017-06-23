@@ -75,6 +75,26 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($sentVerification->isFinished());
     }
 
+    public function testOnePendingUpdateNoListenerNoIo()
+    {
+        $dispatcher = $this->getDispatcher();
+
+        $sentVerification = new SentVerification();
+        $sentVerification->setTransactionId('0123456');
+
+        $items = [
+            [
+                $sentVerification,
+            ],
+        ];
+
+        $repo = $this->getRepository($items);
+        $updater = $this->getSmsStatusService($dispatcher, $repo);
+        $updater->updateSentVerificationStatus($this->getEntityManager());
+
+        $this->assertFalse($sentVerification->isFinished());
+    }
+
     public function testAverageTime()
     {
         $sentVerification1 = new SentVerification();
@@ -112,6 +132,24 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
         $avg = $updater->getAverageDeliveryTime(2);
 
         $this->assertEquals(0, $avg);
+    }
+
+    public function testGetDelayedDeliveryTransactions()
+    {
+        $sentVerification = new SentVerification();
+        $sentVerification->setSentAt(new \DateTime())
+            ->setTransactionId('0123456');
+
+        $repo = $this->getRepository();
+        $repo->expects($this->once())->method('getNotDeliveredSince')->willReturn([$sentVerification]);
+
+        $updater = $this->getSmsStatusService($this->getDispatcher(), $repo, $this->getIo());
+        $notDelivered = $updater->getDelayedDeliveryTransactions(0);
+
+        $transaction = reset($notDelivered);
+
+        $this->assertEquals($sentVerification->getTransactionId(), $transaction['transaction_id']);
+        $this->assertEquals($sentVerification->getSentAt()->format('c'), $transaction['sent_at']);
     }
 
     private function getSmsStatusService($dispatcher, $repo, $io)
