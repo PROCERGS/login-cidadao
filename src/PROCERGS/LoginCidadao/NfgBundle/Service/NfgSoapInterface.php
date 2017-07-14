@@ -10,7 +10,6 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Service;
 
-
 use PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile;
 
 interface NfgSoapInterface

@@ -900,7 +900,7 @@ class ClientMetadata
             function ($value) {
                 return self::canonicalizeUri($value);
             },
-            $this->post_logout_redirect_uris
+            is_array($this->post_logout_redirect_uris) ? $this->post_logout_redirect_uris : []
         );
     }
 

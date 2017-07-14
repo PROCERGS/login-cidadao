@@ -33,7 +33,6 @@ class DefaultControllerTest extends WebTestCase
     public function urlProvider()
     {
         return array(
-            array('/'),
             array('/login'),
             array('/about'),
             array('/privacy'),

@@ -1,0 +1,15 @@
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
+
+{% block panel_body_class %}task-phone-verification{% endblock %}
+
+{% block panel_body %}
+    <h1>{{ 'tasks.verify_phone.title' | trans }}</h1>
+
+    <p class="main">
+        {{ message }}
+    </p>
+
+    <a href="{{ target }}" class="btn btn-block btn-link">
+        {{ 'tasks.verify_phone.response.continue' | trans }}
+    </a>
+{% endblock %}

@@ -10,7 +10,6 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Helper;
 
-
 use PROCERGS\LoginCidadao\NfgBundle\Helper\UrlHelper;
 
 class UrlHelperTest extends \PHPUnit_Framework_TestCase

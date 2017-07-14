@@ -62,9 +62,13 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="emailConfirmedAt">{{ 'lc.admin.person.metadata.emailConfirmedAt' | trans }}</label>
+                                <label for="emailConfirmedAt">{{ 'lc.admin.person.metadata.emailConfirmedAt.label' | trans }}</label>
                                 <span id="emailConfirmedAt" class="form-control" readonly="readonly">
-                                    {{ person.emailConfirmedAt | date('lc.admin.person.metadata.date_format' | trans) }}
+                                    {% if person.emailConfirmedAt is not null %}
+                                        {{ person.emailConfirmedAt | date('lc.admin.person.metadata.date_format' | trans) }}
+                                    {% else %}
+                                        {{ 'lc.admin.person.metadata.emailConfirmedAt.empty' | trans }}
+                                    {% endif %}
                                 </span>
                             </div>
                         </div>
@@ -78,7 +82,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="lastLogin">{{ 'lc.admin.person.metadata.hasCpf' | trans }}</label>
+                                <label for="lastLogin">{{ 'lc.admin.person.metadata.hasCpf.label' | trans }}</label>
                                 <span id="lastLogin" class="form-control" readonly="readonly">
                                     {% if person.cpf is not null %}
                                         {% if is_granted('ROLE_VIEW_USERS_CPF') %}

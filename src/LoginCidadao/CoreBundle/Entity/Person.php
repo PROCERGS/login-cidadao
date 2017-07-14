@@ -31,7 +31,6 @@ use Rollerworks\Bundle\PasswordStrengthBundle\Validator\Constraints as Rollerwor
  * @ORM\Table(name="person")
  * @UniqueEntity("cpf", message="person.validation.cpf.already_used", groups={"LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Documents"})
  * @UniqueEntity("username")
- * @UniqueEntity(fields="email", errorPath="email", message="fos_user.email.already_used", groups={"LoginCidadaoRegistration", "Registration", "LoginCidadaoEmailForm", "LoginCidadaoProfile", "Dynamic"})
  * @UniqueEntity(fields="emailCanonical", errorPath="email", message="fos_user.email.already_used", groups={"LoginCidadaoRegistration", "Registration", "LoginCidadaoEmailForm", "LoginCidadaoProfile", "Dynamic"})
  * @ORM\HasLifecycleCallbacks
  * @JMS\ExclusionPolicy("all")
@@ -140,6 +139,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @JMS\Groups({"birthdate"})
      * @ORM\Column(type="date", nullable=true)
      * @JMS\Since("1.0")
+     * @LCAssert\Age(max="150", groups={"Profile", "LoginCidadaoProfile", "Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration", "LoginCidadaoEmailForm"})
      */
     protected $birthdate;
 
@@ -401,6 +401,14 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
      * @ORM\Column(name="password_encoder_name", type="string", length=255, nullable=true)
      */
     protected $passwordEncoderName;
+
+    /**
+     * @JMS\Expose
+     * @JMS\Groups({"public_profile"})
+     * @JMS\SerializedName("phone_number_verified")
+     * @var bool
+     */
+    protected $phoneNumberVerified = false;
 
     public function __construct()
     {
@@ -1285,13 +1293,22 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
     }
 
     /**
-     * @JMS\Groups({"mobile", "phone_number"})
-     * @JMS\VirtualProperty
-     * @JMS\SerializedName("phone_number_verified")
+     * @param bool $verified
+     * @return $this
+     */
+    public function setPhoneNumberVerified($verified = false)
+    {
+        $this->phoneNumberVerified = $verified;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
      */
     public function getPhoneNumberVerified()
     {
-        return false;
+        return $this->phoneNumberVerified;
     }
 
     public function getPasswordEncoderName()
@@ -1316,6 +1333,15 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         }
 
         return $encoder;
+    }
+
+    public function getLongDisplayName()
+    {
+        if ($this->getFullName()) {
+            return $this->getFullName();
+        } else {
+            return $this->getEmail();
+        }
     }
 
     public function getShortDisplayName()

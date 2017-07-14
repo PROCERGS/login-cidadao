@@ -1,0 +1,2 @@
+phone_verification:
+    sms.message: Utilize o código %code% para verificar seu telefone no Login Cidadão ou acesse %link%

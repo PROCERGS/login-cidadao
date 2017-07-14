@@ -22,11 +22,16 @@ class ListBadgesEvent extends Event
      */
     public function registerBadges(BadgeEvaluatorInterface $evaluator)
     {
-        $name = $evaluator->getName();
-        if (!array_key_exists($name, $this->badges)) {
-            $this->badges[$name] = $evaluator->getAvailableBadges();
+        $namespace = $evaluator->getName();
+        if (!array_key_exists($namespace, $this->badges)) {
+            $this->badges[$namespace] = $evaluator->getAvailableBadges();
         } else {
-            throw new BadgesNameCollisionException("There is another bundle using the '$name' namespace.");
+            foreach ($evaluator->getAvailableBadges() as $name => $badge) {
+                if (array_key_exists($name, $this->badges[$namespace])) {
+                    throw new BadgesNameCollisionException("There is another badge named '{$namespace}.{$name}'.");
+                }
+                $this->badges[$namespace][$name] = $badge;
+            }
         }
         return $this;
     }

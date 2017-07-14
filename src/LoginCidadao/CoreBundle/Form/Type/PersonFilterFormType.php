@@ -14,7 +14,7 @@ class PersonFilterFormType extends AbstractType
         $builder->add('username',
             'Symfony\Component\Form\Extension\Core\Type\TextType',
             array(
-            'required' => false,
+            'required' => true,
             'label' => 'security.login.username'
         ));
         $builder->setMethod('GET');

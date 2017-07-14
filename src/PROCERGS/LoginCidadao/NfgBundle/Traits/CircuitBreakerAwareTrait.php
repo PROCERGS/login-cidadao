@@ -10,49 +10,32 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Traits;
 
-use Ejsmont\CircuitBreaker\CircuitBreakerInterface;
-use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
+use Eljam\CircuitBreaker\Breaker;
 use Psr\Log\LoggerInterface;
 
 trait CircuitBreakerAwareTrait
 {
-    /** @var CircuitBreakerInterface */
+    /** @var Breaker */
     private $circuitBreaker;
 
-    /** @var string */
-    private $cbServiceName;
-
     /**
-     * @param CircuitBreakerInterface|null $circuitBreaker
-     * @param null $serviceName
+     * @param Breaker|null $circuitBreaker
      * @return void
      */
-    public function setCircuitBreaker(CircuitBreakerInterface $circuitBreaker = null, $serviceName = null)
+    public function setCircuitBreaker(Breaker $circuitBreaker = null)
     {
         $this->circuitBreaker = $circuitBreaker;
-        $this->cbServiceName = $serviceName;
     }
 
-    /**
-     * @return bool
-     */
-    protected function checkAvailable()
+    protected function reportNoCircuitBreaker()
     {
-        if ($this->circuitBreaker instanceof CircuitBreakerInterface
-            && false === $this->circuitBreaker->isAvailable($this->cbServiceName)
-        ) {
-            throw new NfgServiceUnavailableException('NFG service is unavailable right now. Try again later.');
+        if (isset($this->logger) && $this->logger instanceof LoggerInterface) {
+            $this->logger->warning('NFG service is running without a Circuit Breaker!');
         }
-
-        return true;
     }
 
     protected function reportSuccess()
     {
-        if ($this->circuitBreaker && $this->cbServiceName) {
-            $this->circuitBreaker->reportSuccess($this->cbServiceName);
-        }
-
         if (isset($this->logger) && $this->logger instanceof LoggerInterface) {
             $this->logger->info('NFG service reported success');
         }
@@ -60,12 +43,26 @@ trait CircuitBreakerAwareTrait
 
     protected function reportFailure(\Exception $e = null)
     {
-        if ($this->circuitBreaker && $this->cbServiceName) {
-            $this->circuitBreaker->reportFailure($this->cbServiceName);
-        }
-
         if (isset($this->logger) && $e && $this->logger instanceof LoggerInterface) {
             $this->logger->error("NFG reported failure: {$e->getMessage()}");
+        }
+    }
+
+    protected function protect(\Closure $closure)
+    {
+        try {
+            if ($this->circuitBreaker instanceof Breaker) {
+                $result = $this->circuitBreaker->protect($closure);
+            } else {
+                $this->reportNoCircuitBreaker();
+                $result = $closure();
+            }
+            $this->reportSuccess();
+
+            return $result;
+        } catch (\Exception $e) {
+            $this->reportFailure($e);
+            throw $e;
         }
     }
 }

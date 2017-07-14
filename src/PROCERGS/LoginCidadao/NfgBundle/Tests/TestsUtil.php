@@ -10,7 +10,6 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests;
 
-
 class TestsUtil
 {
     public static function getRouter(\PHPUnit_Framework_TestCase $testCase)

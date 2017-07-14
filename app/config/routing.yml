@@ -101,8 +101,15 @@ lc_core:
     resource: "@LoginCidadaoCoreBundle/Resources/config/routing.yml"
     prefix:   /
 lc_home:
-    defaults: { _controller: FOSUserBundle:Security:login }
-    path:   /
+    path: /
+    defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /dashboard
+        permanent: false
+
+lc_phone_verification:
+    resource: "@LoginCidadaoPhoneVerificationBundle/Resources/config/routing.yml"
+    prefix:   /
 
 # Audit
 simple_things_entity_audit:

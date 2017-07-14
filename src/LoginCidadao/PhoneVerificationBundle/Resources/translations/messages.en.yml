@@ -1,0 +1,33 @@
+tasks:
+    verify_phone:
+        title: Phone Verification
+        sms_sent: We sent you a verification code to the phone you informed in your profile.
+        type_code: Please, check your SMS and type the code you've received.
+        success: Your phone is now verified.
+        failure: We couldn't verify your phone. Make sure the link you used is correct or click bellow to continue to your account.
+        response:
+            continue: Continue
+        form:
+            verificationCode:
+                label: Verification Code
+                placeholder: Type the code you received
+            errors:
+                verificationCode.invalid_code: The code typed is invalid. Check it for any typos and try again.
+            submit: Verify
+        didnt_receive:
+            button: Didn't receive your code?
+        skip:
+            open_warning: Confirm later
+            warning: Without a verified phone some functionalities may not be available. Are you sure you want to verify later?
+            confirm: Yes, I'll do the verification later
+        resend:
+            waiting:
+                please_wait: Please, wait <span class="resend-time-left">until %date%</span> before asking to resend the message.
+                date_format: m/d/Y H:i
+            timeout:
+                body: If you didn't get the message, you can ask to resend it below.
+                button: Resend SMS to %phone%
+            success: Message sent. Wait a few minutes until it arives.
+            errors:
+                too_many_requests: It's not possible to resend the verification code yet. Please, retry later.
+                unavailable: The SMS service is not available right now. Please, wait a few minutes and try again.

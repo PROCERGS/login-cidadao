@@ -10,7 +10,6 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests\EventListener;
 
-
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use LoginCidadao\CoreBundle\Entity\Person;

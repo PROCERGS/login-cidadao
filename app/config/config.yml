@@ -43,6 +43,7 @@ twig:
         postalcode_search_link: 
         third_party_login: %third_party_login%
         password_hint: "@password_hint"
+        intl_tel_input_preferred_countries: ["br"]
 
 # Assetic Configuration
 assetic:
@@ -85,6 +86,11 @@ assetic:
             inputs:
                 - 'assets/vendor/bootstrap/dist/css/bootstrap.min.css'
                 - '@LoginCidadaoCoreBundle/Resources/public/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css'
+        badges_css:
+            inputs:
+                - '@LoginCidadaoBadgesBundle/Resources/public/css/badges.css'
+                - '@LoginCidadaoPhoneVerificationBundle/Resources/public/css/badges.css'
+                - '@NFGBadgesBundle/Resources/public/css/badges.css'
         intl_tel_input_css:
             inputs:
                 - 'bundles/logincidadaocore/intl-tel-input/css/intlTelInput.css'
@@ -127,6 +133,7 @@ assetic:
         lc_logged_css:
             inputs:
                 - '@lc_base_css'
+                - '@badges_css'
                 - 'bundles/logincidadaocore/css/logged/logged.css'
 
     filters:
@@ -256,6 +263,9 @@ simple_things_entity_audit:
         - LoginCidadao\OAuthBundle\Entity\Organization
         - LoginCidadao\OpenIDBundle\Entity\ClientMetadata
 
+        - LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification
+        - LoginCidadao\PhoneVerificationBundle\Entity\SentVerification
+
         - PROCERGS\LoginCidadao\CoreBunde\Entity\PersonMeuRS
         - PROCERGS\LoginCidadao\NfgBunde\Entity\NfgProfile
         - PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink
@@ -295,7 +305,7 @@ parameters:
     user.class: LoginCidadao\CoreBundle\Entity\Person
     buzz.client.class: Donato\Generic\HWIOAuthProxyBundle\Buzz\Client\CurlProxy
     hwi_oauth.resource_owner.twitter.class: LoginCidadao\CoreBundle\OAuth\ResourceOwner\TwitterResourceOwner
-    lc_public_scopes_oidc: 'openid sub name given_name family_name full_name preferred_username picture email email_verified birthdate phone_number address updated_at'
+    lc_public_scopes_oidc: 'openid offline_access sub name given_name family_name full_name preferred_username picture email email_verified birthdate phone_number address updated_at'
     lc_public_scopes_oauth2: 'public_profile username first_name last_name full_name cpf city public_profile country state addresses id_cards mobile logout'
     lc_public_scopes: %lc_public_scopes_oidc% %lc_public_scopes_oauth2%
     lc_reserved_scopes: 'voter_registration'
@@ -560,6 +570,11 @@ donato_path_well:
 login_cidadao_tos:
     use_tasks: true
 
+login_cidadao_phone_verification:
+    enabled: true
+    verification_code:
+        length: 6
+
 procergs_login_cidadao_monitor:
     checks:
         wsdl:
@@ -567,15 +582,19 @@ procergs_login_cidadao_monitor:
                 label: WSDL Nota Fiscal Gaúcha
                 url: "%nfg_ws_url%"
                 verify_https: "%wsdl_monitor_verify_https%"
-
-ejsmont_circuit_breaker:
-    threshold: 1
-    retry_timeout: 10
+        circuit_breaker:
+            nfg:
+                label: "Circuit Breaker NFG"
+                service_id: "procergs.nfg.circuit_breaker"
+            sms:
+                label: "Circuit Breaker SMS"
+                service_id: "procergs_phone_verification.circuit_breaker.sms"
 
 procergs_nfg:
     verify_https: false
     circuit_breaker:
-        service_name: nfg_service
+        max_failures: 2
+        reset_timeout: 30
     endpoints:
         wsdl: "%nfg_ws_url%"
         login: "%nfg_url_login%"
@@ -585,3 +604,20 @@ procergs_nfg:
         username: "%soe_username%"
         password: "%soe_password%"
         hmac_secret: "%nfg_hmac_secret%"
+
+circle_rest_client:
+    curl:
+        defaults:
+            CURLOPT_FOLLOWLOCATION: false
+
+procergs_sms_service:
+    uri:
+        send: "%tpd_base_uri%/rest/sms"
+        receive: "%tpd_base_uri%/rest/sms/recebido"
+        status: "%tpd_base_uri%/rest/sms/status"
+    system:
+        id: "%tpd_system_id%"
+        key: "%tpd_system_key%"
+    service_order: "%tpd_service_order%"
+    from: "LC"
+    send: "%tpd_send_message%"

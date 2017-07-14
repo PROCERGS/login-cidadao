@@ -59,14 +59,18 @@ class AppKernel extends Kernel
             new Donato\PathWellBundle\DonatoPathWellBundle(),
             new Misd\PhoneNumberBundle\MisdPhoneNumberBundle(),
             new Rollerworks\Bundle\PasswordStrengthBundle\RollerworksPasswordStrengthBundle(),
+            new LoginCidadao\PhoneVerificationBundle\LoginCidadaoPhoneVerificationBundle(),
+            new LoginCidadao\TaskStackBundle\LoginCidadaoTaskStackBundle(),
 
             // PROCERGS
             new PROCERGS\LoginCidadao\CoreBundle\PROCERGSLoginCidadaoCoreBundle(),
             new PROCERGS\LoginCidadao\MonitorBundle\PROCERGSLoginCidadaoMonitorBundle(),
             new NFG\BadgesBundle\NFGBadgesBundle(),
-            new Ejsmont\CircuitBreakerBundle\EjsmontCircuitBreakerBundle(),
             new PROCERGS\LoginCidadao\NfgBundle\PROCERGSNfgBundle(),
             new PROCERGS\LoginCidadao\AccountingBundle\PROCERGSLoginCidadaoAccountingBundle(),
+            new Circle\RestClientBundle\CircleRestClientBundle(),
+            new PROCERGS\SmsServiceBundle\PROCERGSSmsServiceBundle(),
+            new PROCERGS\LoginCidadao\PhoneVerificationBundle\PROCERGSPhoneVerificationBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

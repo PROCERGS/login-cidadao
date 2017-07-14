@@ -4,23 +4,27 @@
 
 {% block content %}
     <div id="app-detail" class="client-details content">
-        <h1 class="visible-xs">{% trans %}Services{% endtrans %}</h1>
+        <h1 class="visible-xs">{{ 'services.title' | trans }}</h1>
 
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="media">
                     <a class="pull-left" href="#">
-                        <img src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': client }) }}" alt="" class="media-object" width="100" height="100">
+                        <img src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': client }) }}"
+                             alt="" class="media-object" width="100" height="100">
                     </a>
                     <div class="media-body">
                         <h3 class="media-heading">{{ client.name }}</h3>
                         {{ client.description }}
                     </div>
-                    <a href="{{ client.siteUrl }}" target="_blank" class="btn btn-link btn-sm pull-right"><span class="glyphicon glyphicon-link"></span> {% trans %}Go to service's page{%  endtrans %}</a>
+                    <a href="{{ client.siteUrl }}" target="_blank" class="btn btn-link btn-sm pull-right">
+                        <span class="glyphicon glyphicon-link"></span>
+                        {{ 'services.details.go_to' | trans }}
+                    </a>
                     {% if user.hasAuthorization(client) %}
                         <div class="permissions">
-                            <p>{% trans %}This service uses the following data from your Login Citizen account{%  endtrans %}:</p>
-                            {% for scope in scopes if scope != "openid" %}
+                            <p>{{ 'services.details.authorized_scopes' | trans }}:</p>
+                            {% for scope in scopes if scope != "openid" and scope != "offline_access" %}
                                 {% if ('scope_details.' ~ scope) | trans != ('scope_details.' ~ scope) %}
                                     {{ include('LoginCidadaoCoreBundle::common.scope.details.html.twig', { 'scope': scope }) }}
                                 {% else %}
@@ -36,47 +40,45 @@
         <div class="msg text-center clearfix">
             {% if client.published or user.hasAuthorization(client) %}
                 {% if user.hasAuthorization(client) %}
-                    <div class="alert alert-success app-status" role="alert">{% trans %}This service is already active in your Citizen's Login account{%  endtrans %}</div>
-                    <button type="button" class="btn btn-link btn-sm pull-right" id="app-deactivate">{% trans %}Deactivate this service{% endtrans %}</button>
+                    <div class="alert alert-success app-status" role="alert">
+                        {{ 'services.details.active' | trans }}
+                    </div>
+                    <button type="button" class="btn btn-link btn-sm pull-right" data-toggle="collapse"
+                            aria-expanded="false" aria-controls="deactivate-box" data-target="#deactivate-box">
+                        {{ 'services.details.deactivate.label' | trans }}
+                    </button>
 
-                    <div class="alert alert-danger" id="deactivate-box">
-                        <h4>{% trans %}Do you really want to disable this service?{%  endtrans %}</h4>
+                    <div class="alert alert-danger collapse" id="deactivate-box">
+                        <h4>{{ 'services.details.deactivate.confirm' | trans }}</h4>
                         <p>
                             {{ form_start(form, {'action': path('lc_revoke', { clientId: client.id }), 'attr': {'role':'form'}}) }}
-                            <button type="submit" class="btn btn-danger">{% trans %}Yes{%  endtrans %}</button>
+                            <button type="submit" class="btn btn-danger">
+                                {{ 'services.details.deactivate.yes' | trans }}
+                            </button>
                             {{ form_end(form) }}
-                            <a role="button" class="btn btn-default cancel">{% trans %}No{%  endtrans %}</a>
+                            <button type="button" class="btn btn-default" data-toggle="collapse"
+                                    aria-controls="deactivate-box" data-target="#deactivate-box">
+                                {{ 'services.details.deactivate.no' | trans }}
+                            </button>
                         </p>
                     </div>
                 {% else %}
-                    <p class="alert alert-danger app-status">{% trans %}This service is not active in your Citizen's Login account{%  endtrans %}</p>
-                    <a href="{{ client.landingPageUrl }}" class="btn btn-success" role="button" id="app-activate">{% trans %}Activate this service{% endtrans %}</a>
+                    <p class="alert alert-danger app-status">
+                        {{ 'services.details.not_active' | trans }}
+                    </p>
+                    <a href="{{ client.landingPageUrl }}" class="btn btn-success" role="button" id="app-activate">
+                        {{ 'services.details.activate' | trans }}
+                    </a>
                 {% endif %}
             {% else %}
-                <p class="alert alert-info app-status">{% trans %}This service is not available yet. Stay tuned for the launch date.{% endtrans %}</p>
+                <p class="alert alert-info app-status">
+                    {{ 'services.details.wait_launch' | trans }}
+                </p>
             {% endif %}
 
-            <a href="{{ path('lc_authorization_list') }}" class="btn btn-link btn-sm pull-left" role="button">{% trans %}Back to services{% endtrans %}</a>
-
+            <a href="{{ path('lc_authorization_list') }}" class="btn btn-link btn-sm pull-left" role="button">
+                {{ 'services.details.back' | trans }}
+            </a>
         </div>
-
     </div>
-
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        $(document).ready(function () {
-            $('#app-deactivate').on('click', function () {
-                $('#deactivate-box').slideDown();
-            });
-
-            $('#deactivate-box .cancel').on('click', function () {
-                $(this).closest('#deactivate-box').slideUp();
-            });
-
-            $('[data-toggle="popover"]').popover();
-        });
-    </script>
 {% endblock %}

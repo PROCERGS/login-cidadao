@@ -39,6 +39,9 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface
      */
     public function setSurname($suname);
 
+    /**
+     * @return \DateTime
+     */
     public function getBirthdate();
 
     /**
@@ -247,4 +250,15 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface
      * @return Country
      */
     Public function getCountry();
+
+    /**
+     * @param bool $verified
+     * @return $this
+     */
+    public function setPhoneNumberVerified($verified = false);
+
+    /**
+     * @return bool
+     */
+    public function getPhoneNumberVerified();
 }

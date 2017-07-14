@@ -1,0 +1,83 @@
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
+
+{% block panel_body_class %}task-phone-verification{% endblock %}
+
+{% block panel_body %}
+    <h1>{{ 'tasks.verify_phone.title' | trans }}</h1>
+
+    <p class="main">{{ 'tasks.verify_phone.sms_sent' | trans }}</p>
+    <p class="main">{{ 'tasks.verify_phone.type_code' | trans }}</p>
+
+    {{ form_start(form) }}
+    <div class="form-group">
+        {{ form_label(form.verificationCode, null, {'label_attr': {'class': 'sr-only'}}) }}
+        <div class="input-group">
+            <div class="input-group-addon">
+                <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
+            </div>
+            {{ form_widget(form.verificationCode) }}
+        </div>
+        <div class="has-error">{{ form_errors(form.verificationCode) }}</div>
+    </div>
+
+    <button class="btn btn-block btn-success" type="submit">
+        {{ 'tasks.verify_phone.form.submit' | trans }}
+    </button>
+    {{ form_end(form) }}
+
+    {# Resend #}
+    <div class="resend-verification-code">
+        {% if nextResend %}
+            <p style="padding: 25px 0 0" class="text-centercando o diff, percebi que esqueci de migrar al help-block">{{ 'tasks.verify_phone.resend.waiting.please_wait' | trans({'%date%': nextResend | date('tasks.verify_phone.resend.waiting.date_format' | trans)}) | raw }}</p>
+        {% endif %}
+
+        <div class="resend-timeout {{ nextResend ? 'hidden' }}" style="padding: 25px 10px 0">
+            <p>
+                {{ 'tasks.verify_phone.resend.timeout.body' | trans }}
+            </p>
+            <a href="{{ path('lc_phone_verification_code_resend', {id: verification.id}) }}"
+               class="btn btn-block btn-link resend">
+                {{ 'tasks.verify_phone.resend.timeout.button' | trans({'%phone%': verification.phone | phone_number_format('NATIONAL')}) }}
+            </a>
+        </div>
+    </div>
+    {# END OF Resend #}
+
+    {# Skip #}
+    <a href="#" class="btn btn-block btn-link collapse-confirm collapse in skip" type="button"
+       data-toggle="collapse" data-target=".collapse-confirm"
+       aria-expanded="false" aria-controls="collapse-confirm">{{ 'tasks.verify_phone.skip.open_warning' | trans }}</a>
+    <div class="collapse collapse-confirm">
+        <p class="help-block">{{ 'tasks.verify_phone.skip.warning' | trans }}</p>
+        <a href="{{ path('lc_phone_verification_skip', {id: verification.id}) }}" class="btn btn-block btn-link">{{ 'tasks.verify_phone.skip.confirm' | trans }}</a>
+    </div>
+    {# END OF Skip #}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/vendor/moment/min/moment-with-locales.min.js') }}"></script>
+    <script>
+        {% if nextResend %}
+        $(function () {
+            moment.locale('{{ app.request.locale }}');
+            var timeLeftInterval = null;
+            var nextResend = moment("{{ nextResend | date('Y-m-d H:i:s') }}", "YYYYMMDD hh:mm:ss");
+
+            var updateTimeLeft = function () {
+                var timeLeft = $('.resend-time-left');
+                if (moment().isBefore(nextResend)) {
+                    timeLeft.html(nextResend.fromNow(true));
+                } else {
+                    $('.resend-timeout').removeClass('hidden');
+                    timeLeft.parent().remove();
+                    clearInterval(timeLeftInterval);
+                }
+            };
+
+            updateTimeLeft();
+            timeLeftInterval = setInterval(updateTimeLeft, 3000);
+        });
+        {% endif %}
+    </script>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "LoginCidadaoCoreBundle:Admin:base.html.twig" %}
+
+{% block content %}
+    <div class="content">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">{{ 'admin.person.profile_views_status.title' | trans }}</h2>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-striped table-hover">
+                            <caption>{{ 'admin.person.profile_views_status.summary.caption' | trans }}</caption>
+                            <thead>
+                                <tr>
+                                    <th>{{ 'admin.person.profile_views_status.summary.actor' | trans }}</th>
+                                    <th>{{ 'admin.person.profile_views_status.summary.count' | trans }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for admin in data %}
+                                    <tr>
+                                        <td>
+                                            <a href="{{ path('lc_admin_profile_views_details', { 'id': admin.person_id }) }}"
+                                               class="text-info"
+                                               title="{{ 'admin.person.profile_views_status.summary.details.title' | trans }}">
+                                                {{ admin.person is null ? admin.auditUsername : admin.person.fullName | default(admin.person.username) }}
+                                            </a>
+                                        </td>
+                                        <td>{{ admin.views }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

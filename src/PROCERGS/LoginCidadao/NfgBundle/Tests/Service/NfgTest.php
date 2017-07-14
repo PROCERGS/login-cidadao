@@ -31,6 +31,27 @@ use Symfony\Component\Security\Core\Exception\AccountExpiredException;
  */
 class NfgTest extends \PHPUnit_Framework_TestCase
 {
+    private function getBreaker($exception = null)
+    {
+        $breaker = $this->getMockBuilder('Eljam\CircuitBreaker\Breaker')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        if ($exception instanceof \Exception) {
+            $breaker->expects($this->once())->method('protect')
+                ->willThrowException($exception);
+        } else {
+            $breaker->expects($this->once())->method('protect')
+                ->willReturnCallback(
+                    function (\Closure $closure) {
+                        return $closure();
+                    }
+                );
+        }
+
+        return $breaker;
+    }
+
     public function testLoginRedirectUnavailableAccessId()
     {
         $soapService = $this->getMock('\PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoapInterface');
@@ -40,10 +61,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
         $accessId = 'access_id'.random_int(10, 9999);
 
-        $cbService = 'service';
-        $circuitBreaker = $this->getCircuitBreaker($cbService, true);
-        $circuitBreaker->expects($this->atLeastOnce())
-            ->method('reportFailure')->with($cbService);
+        $circuitBreaker = $this->getBreaker();
 
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())->method('error');
@@ -54,7 +72,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
                 'soap' => $soapService,
             ]
         );
-        $nfg->setCircuitBreaker($circuitBreaker, $cbService);
+        $nfg->setCircuitBreaker($circuitBreaker);
         $nfg->setLogger($logger);
         $nfg->login();
     }
@@ -68,10 +86,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
         $accessId = 'access_id'.random_int(10, 9999);
 
-        $cbService = 'service';
-        $circuitBreaker = $this->getCircuitBreaker($cbService, true);
-        $circuitBreaker->expects($this->atLeastOnce())
-            ->method('reportFailure')->with($cbService);
+        $circuitBreaker = $this->getBreaker();
 
         $nfg = $this->getNfgService(
             [
@@ -79,7 +94,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
                 'soap' => $soapService,
             ]
         );
-        $nfg->setCircuitBreaker($circuitBreaker, $cbService);
+        $nfg->setCircuitBreaker($circuitBreaker);
         $nfg->login();
     }
 
@@ -88,8 +103,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
         $accessId = 'access_id'.random_int(10, 9999);
 
-        $cbService = 'service';
-        $circuitBreaker = $this->getCircuitBreaker($cbService, false);
+        $circuitBreaker = $this->getBreaker(new NfgServiceUnavailableException());
 
         $nfg = $this->getNfgService(
             [
@@ -97,7 +111,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
                 'soap' => $this->getSoapService($accessId),
             ]
         );
-        $nfg->setCircuitBreaker($circuitBreaker, $cbService);
+        $nfg->setCircuitBreaker($circuitBreaker);
         $nfg->login();
     }
 
@@ -106,8 +120,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
         $accessId = 'access_id'.random_int(10, 9999);
 
-        $cbService = 'service';
-        $circuitBreaker = $this->getCircuitBreaker($cbService, false);
+        $circuitBreaker = $this->getBreaker(new NfgServiceUnavailableException());
 
         $nfg = $this->getNfgService(
             [
@@ -115,7 +128,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
                 'soap' => $this->getSoapService($accessId),
             ]
         );
-        $nfg->setCircuitBreaker($circuitBreaker, $cbService);
+        $nfg->setCircuitBreaker($circuitBreaker);
         $nfg->connect();
     }
 
@@ -123,10 +136,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
     {
         $accessId = 'access_id'.random_int(10, 9999);
 
-        $cbService = 'service';
-        $circuitBreaker = $this->getCircuitBreaker($cbService, true);
-        $circuitBreaker->expects($this->atLeastOnce())
-            ->method('reportSuccess')->with($cbService);
+        $circuitBreaker = $this->getBreaker();
 
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())->method('info');
@@ -137,7 +147,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
                 'soap' => $this->getSoapService($accessId),
             ]
         );
-        $nfg->setCircuitBreaker($circuitBreaker, $cbService);
+        $nfg->setCircuitBreaker($circuitBreaker);
         $nfg->setLogger($logger);
 
         $response = $nfg->login();
@@ -300,8 +310,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             ->setVoterRegistration('1234567890')
             ->setPerson($person);
 
-        $cbService = 'service';
-        $circuitBreaker = $this->getCircuitBreaker($cbService, false);
+        $circuitBreaker = $this->getBreaker(new NfgServiceUnavailableException());
 
         $nfg = $this->getNfgService(
             [
@@ -309,7 +318,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
                 'soap' => $soapService,
             ]
         );
-        $nfg->setCircuitBreaker($circuitBreaker, $cbService);
+        $nfg->setCircuitBreaker($circuitBreaker);
 
         $accessToken = 'access_token'.random_int(10, 9999);
         $request = $this->getRequest($accessToken);
@@ -360,10 +369,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             ->setVoterRegistration('1234567890')
             ->setPerson($person);
 
-        $cbService = 'service';
-        $circuitBreaker = $this->getCircuitBreaker($cbService, true);
-        $circuitBreaker->expects($this->atLeastOnce())
-            ->method('reportFailure')->with($cbService);
+        $circuitBreaker = $this->getBreaker();
 
         $nfg = $this->getNfgService(
             [
@@ -371,7 +377,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
                 'soap' => $soapService,
             ]
         );
-        $nfg->setCircuitBreaker($circuitBreaker, $cbService);
+        $nfg->setCircuitBreaker($circuitBreaker);
 
         $accessToken = 'access_token'.random_int(10, 9999);
         $request = $this->getRequest($accessToken);
@@ -396,10 +402,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             ->setVoterRegistration('1234567890')
             ->setPerson($person);
 
-        $cbService = 'service';
-        $circuitBreaker = $this->getCircuitBreaker($cbService, true);
-        $circuitBreaker->expects($this->atLeastOnce())
-            ->method('reportFailure')->with($cbService);
+        $circuitBreaker = $this->getBreaker();
 
         $nfg = $this->getNfgService(
             [
@@ -407,7 +410,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
                 'soap' => $soapService,
             ]
         );
-        $nfg->setCircuitBreaker($circuitBreaker, $cbService);
+        $nfg->setCircuitBreaker($circuitBreaker);
 
         $accessToken = 'access_token'.random_int(10, 9999);
         $request = $this->getRequest($accessToken);
@@ -1046,20 +1049,6 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         }
 
         return $session;
-    }
-
-    /**
-     * @param string $serviceName
-     * @param bool $isAvailable
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getCircuitBreaker($serviceName, $isAvailable)
-    {
-        $circuitBreaker = $this->getMock('\Ejsmont\CircuitBreaker\CircuitBreakerInterface');
-        $circuitBreaker->expects($this->atLeastOnce())
-            ->method('isAvailable')->with($serviceName)->willReturn($isAvailable);
-
-        return $circuitBreaker;
     }
 
     private function getEntityManager(array $matchers = [])

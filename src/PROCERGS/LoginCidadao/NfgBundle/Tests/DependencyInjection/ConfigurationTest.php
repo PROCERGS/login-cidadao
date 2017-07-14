@@ -23,7 +23,8 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         return [
             'verify_https' => true,
             'circuit_breaker' => [
-                'service_name' => null
+                'max_failures' => 2,
+                'reset_timeout' => 30,
             ],
             'endpoints' => [
                 'wsdl' => 'https://dum.my/service.wsdl',

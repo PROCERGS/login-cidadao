@@ -87,8 +87,7 @@
                     </div>
                     <div class="panel-body">
                         {% if userBadges|length == 0 %}
-                            <div class="alert alert-warning" role="alert">{% trans %}You don't have any badges
-                                yet!{% endtrans %}</div>
+                            <div class="alert alert-warning" role="alert">{% trans %}You don't have any badges yet!{% endtrans %}</div>
                         {% endif %}
                         {% for client, badges in allBadges %}
                             {% for badge, content in badges %}
@@ -118,7 +117,7 @@
                     </div>
                     <div class="panel-body">
                         <ul class="list-group">
-                            {% if logs.logins | length == 0 %}
+                            {% if logs.logins|length == 0 %}
                                 <div class="alert alert-warning" role="alert">
                                     {{ 'dashboard.logs.login.no_entries' | trans }}
                                 </div>
@@ -145,14 +144,14 @@
                     </div>
                     <div class="panel-body">
                         <ul class="media-list">
-                            {% if logs.activity|length == 0 %}
+                            {% if logs.activity.action_log|length == 0 %}
                                 <div class="alert alert-warning" role="alert">
                                     {{ 'dashboard.logs.activity.no_entries' | trans }}
                                 </div>
                             {% endif %}
-                            {% for log in logs.activity %}
+                            {% for log in logs.activity.action_log %}
                                 <li class="media">
-                                    {{ include('LoginCidadaoCoreBundle:ActivityLog:entry.fragment.html.twig', { 'log': log }) }}
+                                    {{ include('LoginCidadaoCoreBundle:ActivityLog:entry.fragment.html.twig', { 'log': log, 'clients': logs.activity.client, 'admins': logs.activity.person }) }}
                                 </li>
                             {% endfor %}
                         </ul>

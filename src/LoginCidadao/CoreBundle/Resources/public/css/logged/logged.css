@@ -449,7 +449,6 @@ body.no-scroll {
 
 .client-details #deactivate-box {
     background-image: none;
-    display: none;
     clear: both;
 }
 
@@ -765,25 +764,6 @@ label + .glyphicon-pencil {
 
 .badges-list .locked .media-body {
     color: #CCC;
-}
-
-.badges-list .badge-has_cpf {
-    background-color: #8DDAFC;
-    border: solid 1px #5AB9DB;
-}
-
-.badges-list .badge-has_cpf:before {
-    content: "CPF";
-}
-
-.badges-list .badge-valid_email {
-    background-color: #FF7171;
-    border: solid 1px #D58D8D;
-}
-
-.badges-list .badge-valid_email:before {
-    content: "@";
-    font-size: 30px;
 }
 
 .badges-list .badge-valid_id_card_rs {
