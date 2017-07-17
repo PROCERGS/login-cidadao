@@ -107,10 +107,8 @@ class DefaultController extends Controller
             count($body),
         ];
 
-        echo '<pre>';
         echo implode(';', $header).PHP_EOL;
         echo implode("\n", $body).PHP_EOL;
-        echo implode(';', $tail).PHP_EOL;
-        echo '</pre>';
+        echo implode(';', $tail);
     }
 }
