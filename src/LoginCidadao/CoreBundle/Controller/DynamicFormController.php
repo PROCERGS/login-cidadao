@@ -32,12 +32,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class DynamicFormController extends Controller
 {
-    const LOCATION_FORM_LEVEL_CITY = 'city';
-    const LOCATION_FORM_LEVEL_STATE = 'state';
-    const LOCATION_FORM_LEVEL_COUNTRY = 'country';
-
     /**
-     * @Route("/client/{clientId}/dynamic-form", name="client_dynamic_form")
+     * @Route("/X/client/{clientId}/dynamic-form", name="client_dynamic_formX")
      * @Template()
      */
     public function editAction(Request $request, $clientId)
@@ -53,8 +49,8 @@ class DynamicFormController extends Controller
 
         $scope = $requestedScope;// $this->intersectScopes($authorizedScope, $requestedScope);
 
-        /** @var IntentManager $intentManager */
-        $intentManager = $this->get('lc.intent.manager');
+        /** @var TaskStackManagerInterface $taskStackManager */
+        $taskStackManager = $this->get('task_stack.manager');
 
         $waitEmail = count($scope) === 1 && array_search('email', $scope) !== false;
         if ($waitEmail && $person->getEmailConfirmedAt() instanceof \DateTime) {
@@ -63,7 +59,7 @@ class DynamicFormController extends Controller
 
         $placeOfBirth = new SelectData();
         $placeOfBirth->getFromObject($person);
-        $intentUrl = $intentManager->getIntent($request);
+        $intentUrl = $taskStackManager->getTargetUrl($taskStackManager->getNextTask()->getTarget());
         $skipUrl = $request->get('redirect_url', $this->generateUrl('dynamic_form_skip', ['client_id' => $clientId]));
 
         $data = new DynamicFormData();
@@ -133,7 +129,12 @@ class DynamicFormController extends Controller
                 $em->persist($idCard);
             }
 
-            $response = $this->redirect($formBuilder->getData()->getRedirectUrl());
+            $taskStackManager->setTaskSkipped($taskStackManager->getCurrentTask());
+            $response = $taskStackManager->processRequest(
+                $request,
+                $this->redirect($formBuilder->getData()->getRedirectUrl())
+            );
+            //$response = $this->redirect($formBuilder->getData()->getRedirectUrl());
             $dispatcher->dispatch(
                 FOSUserEvents::PROFILE_EDIT_COMPLETED,
                 new \FOS\UserBundle\Event\FilterUserResponseEvent(
@@ -257,7 +258,6 @@ class DynamicFormController extends Controller
         $scope,
         Person $person
     ) {
-        $placeOfBirthLevel = '';
         switch ($scope) {
             case 'name':
             case 'surname':

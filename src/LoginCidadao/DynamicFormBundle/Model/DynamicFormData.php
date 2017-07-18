@@ -1,9 +1,19 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-namespace LoginCidadao\CoreBundle\Model;
+namespace LoginCidadao\DynamicFormBundle\Model;
 
 use LoginCidadao\CoreBundle\Entity\PersonAddress;
 use LoginCidadao\CoreBundle\Model\IdCardInterface;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\CoreBundle\Model\SelectData;
 
 class DynamicFormData
 {
@@ -53,6 +63,7 @@ class DynamicFormData
     public function setPerson(PersonInterface $person)
     {
         $this->person = $person;
+
         return $this;
     }
 
@@ -63,6 +74,7 @@ class DynamicFormData
     public function setAddress(PersonAddress $address)
     {
         $this->address = $address;
+
         return $this;
     }
 
@@ -81,6 +93,7 @@ class DynamicFormData
     public function setIdCard(IdCardInterface $idCard)
     {
         $this->idCard = $idCard;
+
         return $this;
     }
 
@@ -92,6 +105,7 @@ class DynamicFormData
     public function setRedirectUrl($redirectUrl)
     {
         $this->redirectUrl = $redirectUrl;
+
         return $this;
     }
 
@@ -108,12 +122,14 @@ class DynamicFormData
     public function setScope($scope)
     {
         $this->scope = $scope;
+
         return $this;
     }
 
     public function setState($state)
     {
         $this->state = $state;
+
         return $this;
     }
 
@@ -126,6 +142,7 @@ class DynamicFormData
     public function setPlaceOfBirth(SelectData $placeOfBirth)
     {
         $this->placeOfBirth = $placeOfBirth;
+
         return $this;
     }
 }

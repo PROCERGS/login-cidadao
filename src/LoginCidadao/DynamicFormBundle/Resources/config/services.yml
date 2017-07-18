@@ -1,0 +1,9 @@
+services:
+    dynamic_form.service:
+        class: LoginCidadao\DynamicFormBundle\Service\DynamicFormService
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
+            - "@form.factory"
+            - "@fos_user.user_manager"
+            - "@task_stack.manager"
