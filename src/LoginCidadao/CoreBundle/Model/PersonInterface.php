@@ -2,6 +2,8 @@
 
 namespace LoginCidadao\CoreBundle\Model;
 
+use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\UserInterface;
 use LoginCidadao\CoreBundle\Entity\City;
 use LoginCidadao\CoreBundle\Entity\Country;
@@ -11,7 +13,7 @@ use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\EntityManager;
 
-interface PersonInterface extends EncoderAwareInterface, UserInterface
+interface PersonInterface extends EncoderAwareInterface, UserInterface, LocationAwareInterface
 {
     public function getId();
 
@@ -190,6 +192,9 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface
 
     public function getComplement();
 
+    /**
+     * @return IdCardInterface[]
+     */
     public function getIdCards();
 
     public function getBadges();
@@ -237,4 +242,9 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface
      * @return bool
      */
     public function getPhoneNumberVerified();
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getAddresses();
 }

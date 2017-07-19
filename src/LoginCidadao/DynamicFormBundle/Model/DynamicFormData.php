@@ -11,34 +11,38 @@
 namespace LoginCidadao\DynamicFormBundle\Model;
 
 use LoginCidadao\CoreBundle\Entity\PersonAddress;
+use LoginCidadao\CoreBundle\Entity\State;
 use LoginCidadao\CoreBundle\Model\IdCardInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use LoginCidadao\CoreBundle\Model\SelectData;
+use LoginCidadao\CoreBundle\Model\LocationSelectData;
 
 class DynamicFormData
 {
     /** @var PersonInterface */
-    protected $person;
+    private $person;
 
     /** @var PersonAddress */
-    protected $address;
+    private $address;
 
     /** @var IdCardInterface */
-    protected $idCard;
+    private $idCard;
+
+    /** @var State */
+    private $idCardState;
 
     /** @var string */
-    protected $redirectUrl;
+    private $redirectUrl;
 
     /** @var string */
-    protected $scope;
+    private $scope;
 
     /** @var string */
-    protected $state;
+    private $state;
 
     /**
-     * @var SelectData
+     * @var LocationSelectData
      */
-    protected $placeOfBirth;
+    private $placeOfBirth;
 
     /**
      * @return PersonInterface
@@ -46,14 +50,6 @@ class DynamicFormData
     public function getPerson()
     {
         return $this->person;
-    }
-
-    /**
-     * @return PersonAddress
-     */
-    public function getAddress()
-    {
-        return $this->address;
     }
 
     /**
@@ -65,6 +61,14 @@ class DynamicFormData
         $this->person = $person;
 
         return $this;
+    }
+
+    /**
+     * @return PersonAddress
+     */
+    public function getAddress()
+    {
+        return $this->address;
     }
 
     /**
@@ -114,16 +118,16 @@ class DynamicFormData
         return $this->scope;
     }
 
-    public function getState()
-    {
-        return $this->state;
-    }
-
     public function setScope($scope)
     {
         $this->scope = $scope;
 
         return $this;
+    }
+
+    public function getState()
+    {
+        return $this->state;
     }
 
     public function setState($state)
@@ -133,15 +137,34 @@ class DynamicFormData
         return $this;
     }
 
-    /** @return SelectData */
+    /** @return LocationSelectData */
     public function getPlaceOfBirth()
     {
         return $this->placeOfBirth;
     }
 
-    public function setPlaceOfBirth(SelectData $placeOfBirth)
+    public function setPlaceOfBirth(LocationSelectData $placeOfBirth)
     {
         $this->placeOfBirth = $placeOfBirth;
+
+        return $this;
+    }
+
+    /**
+     * @return State
+     */
+    public function getIdCardState()
+    {
+        return $this->idCardState;
+    }
+
+    /**
+     * @param State $idCardState
+     * @return DynamicFormData
+     */
+    public function setIdCardState(State $idCardState = null)
+    {
+        $this->idCardState = $idCardState;
 
         return $this;
     }

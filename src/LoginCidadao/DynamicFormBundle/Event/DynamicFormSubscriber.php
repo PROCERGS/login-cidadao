@@ -10,9 +10,8 @@
 
 namespace LoginCidadao\DynamicFormBundle\Event;
 
-
 use LoginCidadao\DynamicFormBundle\Model\DynamicFormData;
-use LoginCidadao\DynamicFormBundle\Service\DynamicFormService;
+use LoginCidadao\DynamicFormBundle\Service\DynamicFormServiceInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -20,14 +19,14 @@ use Symfony\Component\Form\FormInterface;
 
 class DynamicFormSubscriber implements EventSubscriberInterface
 {
-    /** @var  DynamicFormService */
+    /** @var  DynamicFormServiceInterface */
     private $formService;
 
     /**
      * DynamicFormSubscriber constructor.
-     * @param DynamicFormService $formService
+     * @param DynamicFormServiceInterface $formService
      */
-    public function __construct(DynamicFormService $formService)
+    public function __construct(DynamicFormServiceInterface $formService)
     {
         $this->formService = $formService;
     }
@@ -46,10 +45,10 @@ class DynamicFormSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $scopes = explode(' ', trim($data->getScope()));
-        if (count($scopes) === 0) {
+        if (trim($data->getScope()) === '') {
             return;
         }
+        $scopes = explode(' ', trim($data->getScope()));
 
         /** @var FormInterface $form */
         $form = $event->getForm();

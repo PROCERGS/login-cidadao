@@ -4,7 +4,6 @@ namespace LoginCidadao\CoreBundle\Controller;
 
 use libphonenumber\PhoneNumberFormat;
 use LoginCidadao\APIBundle\Exception\RequestTimeoutException;
-use LoginCidadao\CoreBundle\Service\IntentManager;
 use LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,18 +16,17 @@ use FOS\UserBundle\FOSUserEvents;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\PersonAddress;
 use LoginCidadao\CoreBundle\Form\Type\DynamicForm\DynamicPersonType;
-use LoginCidadao\CoreBundle\Model\DynamicFormData;
+use LoginCidadao\DynamicFormBundle\Model\DynamicFormData;
 use LoginCidadao\CoreBundle\Entity\City;
 use LoginCidadao\CoreBundle\Entity\State;
 use LoginCidadao\CoreBundle\Entity\Country;
 use LoginCidadao\CoreBundle\Entity\IdCard;
 use LoginCidadao\CoreBundle\Model\IdCardInterface;
 use LoginCidadao\ValidationControlBundle\Handler\ValidationHandler;
-use LoginCidadao\CoreBundle\Model\SelectData;
+use LoginCidadao\CoreBundle\Model\LocationSelectData;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\CoreBundle\DynamicFormEvents;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class DynamicFormController extends Controller
 {
@@ -57,7 +55,7 @@ class DynamicFormController extends Controller
             //return $this->redirect($request->get('redirect_url', null));
         }
 
-        $placeOfBirth = new SelectData();
+        $placeOfBirth = new LocationSelectData();
         $placeOfBirth->getFromObject($person);
         $intentUrl = $taskStackManager->getTargetUrl($taskStackManager->getNextTask()->getTarget());
         $skipUrl = $request->get('redirect_url', $this->generateUrl('dynamic_form_skip', ['client_id' => $clientId]));
@@ -112,7 +110,7 @@ class DynamicFormController extends Controller
             $idCard = $formBuilder->getData()->getIdCard();
             $placeOfBirth = $formBuilder->getData()->getPlaceOfBirth();
 
-            if ($placeOfBirth instanceof SelectData) {
+            if ($placeOfBirth instanceof LocationSelectData) {
                 $placeOfBirth->toObject($person);
             }
 
@@ -206,7 +204,7 @@ class DynamicFormController extends Controller
     }
 
     /**
-     * @Route("/dynamic-form/location", name="dynamic_form_location")
+     * @Route("/X/dynamic-form/location", name="Xdynamic_form_location")
      * @Template()
      */
     public function locationFormAction(Request $request)
@@ -215,7 +213,7 @@ class DynamicFormController extends Controller
         $state = $this->getState($request);
         $city = $this->getCity($request);
 
-        $locationData = new \LoginCidadao\CoreBundle\Model\SelectData();
+        $locationData = new \LoginCidadao\CoreBundle\Model\LocationSelectData();
 
         if ($city instanceof City) {
             $locationData->setCity($city)
@@ -383,7 +381,7 @@ class DynamicFormController extends Controller
     ) {
         $addresses = $person->getAddresses();
         $address = new PersonAddress();
-        $address->setLocation(new SelectData());
+        $address->setLocation(new LocationSelectData());
         if ($new === false && $addresses->count() > 0) {
             $address = $addresses->last();
             $city = $address->getCity();

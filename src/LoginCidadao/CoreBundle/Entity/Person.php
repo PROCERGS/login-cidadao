@@ -16,7 +16,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use JMS\Serializer\Annotation as JMS;
 use FOS\UserBundle\Model\User as BaseUser;
 use LoginCidadao\OAuthBundle\Entity\Client;
-use LoginCidadao\CoreBundle\Model\SelectData;
+use LoginCidadao\CoreBundle\Model\LocationSelectData;
 use LoginCidadao\LongPolling\LongPollingUtils;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
@@ -36,8 +36,7 @@ use Rollerworks\Bundle\PasswordStrengthBundle\Validator\Constraints as Rollerwor
  * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
  */
-class Person extends BaseUser implements PersonInterface, TwoFactorInterface, BackupCodeInterface,
-    LocationAwareInterface
+class Person extends BaseUser implements PersonInterface, TwoFactorInterface, BackupCodeInterface
 {
     /**
      * @ORM\Id
@@ -1208,13 +1207,13 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     public function getPlaceOfBirth()
     {
-        $location = new SelectData();
+        $location = new LocationSelectData();
         $location->getFromObject($this);
 
         return $location;
     }
 
-    public function setPlaceOfBirth(SelectData $location)
+    public function setPlaceOfBirth(LocationSelectData $location)
     {
         $location->toObject($this);
     }

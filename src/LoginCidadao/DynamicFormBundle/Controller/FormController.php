@@ -10,13 +10,17 @@
 
 namespace LoginCidadao\DynamicFormBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\DynamicFormBundle\Service\DynamicFormService;
+use LoginCidadao\DynamicFormBundle\Service\DynamicFormServiceInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @codeCoverageIgnore
+ */
 class FormController extends Controller
 {
     /**
@@ -28,7 +32,7 @@ class FormController extends Controller
         $skipUrl = $request->get('redirect_url', $this->generateUrl('dynamic_form_skip', ['client_id' => $clientId]));
         $scope = explode(' ', $request->get('scope', null));
 
-        /** @var DynamicFormService $formService */
+        /** @var DynamicFormServiceInterface $formService */
         $formService = $this->get('dynamic_form.service');
 
         /** @var PersonInterface $person */
@@ -37,7 +41,7 @@ class FormController extends Controller
         $data = $formService->getDynamicFormData($person, $request, $request->get('scope', null));
         $type = 'LoginCidadao\DynamicFormBundle\Form\DynamicFormType';
         $form = $this->createForm($type, $data, ['dynamic_form_service' => $formService]);
-        
+
         $formService->processForm($form, $request);
 
         return [
@@ -46,5 +50,23 @@ class FormController extends Controller
             'scope' => $scope,
             'skipUrl' => $skipUrl,
         ];
+    }
+
+    /**
+     * @Route("/dynamic-form/location", name="dynamic_form_location")
+     * @Template()
+     */
+    public function locationFormAction(Request $request)
+    {
+        /** @var DynamicFormService $formService */
+        $formService = $this->get('dynamic_form.service');
+
+        $level = $request->get('level');
+        $data = $formService->getLocationDataFromRequest($request);
+
+        $formBuilder = $this->createFormBuilder($data, ['cascade_validation' => true]);
+        $this->addPlaceOfBirth($formBuilder, $level);
+
+        return array('form' => $formBuilder->getForm()->createView());
     }
 }

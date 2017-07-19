@@ -98,6 +98,7 @@ class TaskStackManager implements TaskStackManagerInterface
         if ($isSkipped === false && $stack->hasTask($task) === false) {
             if ($intentTask) {
                 $this->addNotSkippedTaskOnce($intentTask);
+                $stack = $this->getStack();
             }
             $stack->push($task);
             $this->updateStack($stack);
