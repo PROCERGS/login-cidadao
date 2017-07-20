@@ -16,21 +16,19 @@ use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Model\UserManagerInterface;
-use libphonenumber\PhoneNumberFormat;
 use LoginCidadao\CoreBundle\DynamicFormEvents;
 use LoginCidadao\CoreBundle\Entity\City;
 use LoginCidadao\CoreBundle\Entity\Country;
 use LoginCidadao\CoreBundle\Entity\PersonAddress;
 use LoginCidadao\CoreBundle\Entity\State;
 use LoginCidadao\CoreBundle\Entity\StateRepository;
-use LoginCidadao\CoreBundle\Form\Type\DynamicForm\DynamicPersonType;
 use LoginCidadao\CoreBundle\Model\IdCardInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Model\LocationSelectData;
+use LoginCidadao\DynamicFormBundle\Form\DynamicFormBuilder;
 use LoginCidadao\DynamicFormBundle\Model\DynamicFormData;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface;
-use LoginCidadao\ValidationControlBundle\Handler\ValidationHandler;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -52,8 +50,8 @@ class DynamicFormService implements DynamicFormServiceInterface
     /** @var TaskStackManagerInterface */
     private $taskStackManager;
 
-    /** @var ValidationHandler */
-    private $validationHandler;
+    /** @var DynamicFormBuilder */
+    private $dynamicFormBuilder;
 
     /**
      * DynamicFormService constructor.
@@ -61,17 +59,20 @@ class DynamicFormService implements DynamicFormServiceInterface
      * @param EventDispatcherInterface $dispatcher
      * @param UserManagerInterface $userManager
      * @param TaskStackManagerInterface $taskStackManager
+     * @param DynamicFormBuilder $dynamicFormBuilder
      */
     public function __construct(
         EntityManagerInterface $em,
         EventDispatcherInterface $dispatcher,
         UserManagerInterface $userManager,
-        TaskStackManagerInterface $taskStackManager
+        TaskStackManagerInterface $taskStackManager,
+        DynamicFormBuilder $dynamicFormBuilder
     ) {
         $this->em = $em;
         $this->dispatcher = $dispatcher;
         $this->userManager = $userManager;
         $this->taskStackManager = $taskStackManager;
+        $this->dynamicFormBuilder = $dynamicFormBuilder;
     }
 
     public function getDynamicFormData(PersonInterface $person, Request $request, $scope)
@@ -93,15 +94,15 @@ class DynamicFormService implements DynamicFormServiceInterface
         return $data;
     }
 
-    public function buildForm(FormInterface $builder, PersonInterface $person, array $scopes)
+    public function buildForm(FormInterface $form, PersonInterface $person, array $scopes)
     {
         foreach ($scopes as $scope) {
-            $this->addFieldFromScope($builder, $scope, $person);
+            $this->dynamicFormBuilder->addFieldFromScope($form, $scope, $person);
         }
-        $builder->add('redirect_url', 'hidden')
+        $form->add('redirect_url', 'hidden')
             ->add('scope', 'hidden');
 
-        return $builder;
+        return $form;
     }
 
     public function processForm(FormInterface $form, Request $request)
@@ -111,8 +112,11 @@ class DynamicFormService implements DynamicFormServiceInterface
             return $form;
         }
 
-        $this->dispatchPostFormValidation($request, $form);
-        $event = $this->dispatchProfileEditSuccess($request, $form);
+        $this->dispatchFormEvent($form, $request, DynamicFormEvents::POST_FORM_VALIDATION);
+        $event = null;
+        if ($form->has('person')) {
+            $event = $this->dispatchFormEvent($form->get('person'), $request, FOSUserEvents::PROFILE_EDIT_SUCCESS);
+        }
 
         /** @var DynamicFormData $data */
         $data = $form->getData();
@@ -150,135 +154,6 @@ class DynamicFormService implements DynamicFormServiceInterface
         return $form;
     }
 
-    private function addFieldFromScope(FormInterface $form, $scope, PersonInterface $person)
-    {
-        switch ($scope) {
-            case 'name':
-            case 'surname':
-            case 'full_name':
-                $this->addRequiredPersonField($form, 'firstname');
-                $this->addRequiredPersonField($form, 'surname');
-                break;
-            case 'cpf':
-                $this->addRequiredPersonField($form, 'cpf', 'form-control cpf');
-                break;
-            case 'email':
-                $this->addRequiredPersonField($form, 'email');
-                break;
-            case 'id_cards':
-                $this->addIdCard($form, $person);
-                break;
-            case 'phone_number':
-            case 'mobile':
-                $this->addPhoneField($form);
-                break;
-            case 'birthdate':
-                $this->addBirthdayField($form);
-                break;
-            case 'city':
-                $placeOfBirthLevel = 'city';
-                $this->addPlaceOfBirth($form, $placeOfBirthLevel);
-                break;
-            case 'state':
-                $placeOfBirthLevel = 'state';
-                $this->addPlaceOfBirth($form, $placeOfBirthLevel);
-                break;
-            case 'country':
-                $placeOfBirthLevel = 'country';
-                $this->addPlaceOfBirth($form, $placeOfBirthLevel);
-                break;
-            case 'addresses':
-                $this->addAddresses($form);
-                break;
-            default:
-                break;
-        }
-    }
-
-    private function getPersonForm(FormInterface $form)
-    {
-        if ($form->has('person') === false) {
-            $form->add('person', new DynamicPersonType(), ['label' => false]);
-        }
-
-        return $form->get('person');
-    }
-
-    private function addRequiredPersonField(FormInterface $form, $field, $cssClass = null)
-    {
-        $options = ['required' => true];
-
-        if ($cssClass) {
-            $options['attr'] = ['class' => $cssClass];
-        }
-
-        $this->getPersonForm($form)->add(
-            $field,
-            null,
-            $options
-        );
-    }
-
-    private function addPhoneField(FormInterface $form)
-    {
-        $this->getPersonForm($form)->add(
-            'mobile',
-            'Misd\PhoneNumberBundle\Form\Type\PhoneNumberType',
-            [
-                'required' => true,
-                'label' => 'person.form.mobile.label',
-                'attr' => ['class' => 'form-control intl-tel', 'placeholder' => 'person.form.mobile.placeholder'],
-                'label_attr' => ['class' => 'intl-tel-label'],
-                'format' => PhoneNumberFormat::E164,
-            ]
-        );
-    }
-
-    private function addBirthdayField(FormInterface $form)
-    {
-        $this->getPersonForm($form)->add(
-            'birthdate',
-            'birthday',
-            [
-                'required' => true,
-                'format' => 'dd/MM/yyyy',
-                'widget' => 'single_text',
-                'label' => 'form.birthdate',
-                'translation_domain' => 'FOSUserBundle',
-                'attr' => ['pattern' => '[0-9/]*', 'class' => 'form-control birthdate'],
-            ]
-        );
-    }
-
-    private function addPlaceOfBirth(FormInterface $form, $level)
-    {
-        $form->add(
-            'placeOfBirth',
-            'LoginCidadao\CoreBundle\Form\Type\CitySelectorComboType',
-            [
-                'level' => $level,
-                'city_label' => 'Place of birth - City',
-                'state_label' => 'Place of birth - State',
-                'country_label' => 'Place of birth - Country',
-            ]
-        );
-
-        return;
-    }
-
-    private function addAddresses(FormInterface $form)
-    {
-        $address = new PersonAddress();
-        $address->setLocation(new LocationSelectData());
-        $form->getData()->setAddress($address);
-
-        $form->add(
-            'address',
-            'LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType',
-            ['label' => false]
-        );
-    }
-
     public function getClient($clientId)
     {
         $parsing = explode('_', $clientId, 2);
@@ -304,27 +179,10 @@ class DynamicFormService implements DynamicFormServiceInterface
         return $event;
     }
 
-    private function getFormEvent(Request $request, FormInterface $form)
+    private function dispatchFormEvent(FormInterface $form, Request $request, $eventName)
     {
-        return new FormEvent($form, $request);
-    }
-
-    private function dispatchPostFormValidation(Request $request, FormInterface $form)
-    {
-        $event = $this->getFormEvent($request, $form);
-        $this->dispatcher->dispatch(DynamicFormEvents::POST_FORM_VALIDATION, $event);
-
-        return $event;
-    }
-
-    private function dispatchProfileEditSuccess(Request $request, FormInterface $form)
-    {
-        if (!$form->has('person')) {
-            return null;
-        }
-
-        $event = $this->getFormEvent($request, $form->get('person'));
-        $this->dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_SUCCESS, $event);
+        $event = new FormEvent($form, $request);
+        $this->dispatcher->dispatch($eventName, $event);
 
         return $event;
     }
@@ -335,27 +193,6 @@ class DynamicFormService implements DynamicFormServiceInterface
         $this->dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_COMPLETED, $event);
 
         return $event;
-    }
-
-    private function addIdCard(FormInterface $form, PersonInterface $person)
-    {
-        /** @var DynamicFormData $formData */
-        $formData = $form->getData();
-        $state = $formData->getIdCardState();
-        foreach ($person->getIdCards() as $idCard) {
-            if ($idCard->getState()->getId() === $state->getId()) {
-                $formData->setIdCard($idCard);
-                break;
-            }
-        }
-
-        if (!($formData->getIdCard() instanceof IdCardInterface)) {
-            $idCard = $this->validationHandler->instantiateIdCard($state);
-            $idCard->setPerson($person);
-            $formData->setIdCard($idCard);
-        }
-
-        $form->add('idcard', 'lc_idcard_form', ['label' => false]);
     }
 
     /**
@@ -416,18 +253,13 @@ class DynamicFormService implements DynamicFormServiceInterface
 
     private function getLocationRepository($type)
     {
+        $repo = null;
         switch ($type) {
             case 'city':
-                $repo = $this->em->getRepository('LoginCidadaoCoreBundle:City');
-                break;
             case 'state':
-                $repo = $this->em->getRepository('LoginCidadaoCoreBundle:State');
-                break;
             case 'country':
-                $repo = $this->em->getRepository('LoginCidadaoCoreBundle:Country');
+                $repo = $this->em->getRepository('LoginCidadaoCoreBundle:'.ucfirst($type));
                 break;
-            default:
-                throw new \InvalidArgumentException("Invalid location type '{$type}'");
         }
 
         return $repo;

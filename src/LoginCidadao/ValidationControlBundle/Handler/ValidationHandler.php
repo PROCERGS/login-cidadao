@@ -18,9 +18,9 @@ use LoginCidadao\CoreBundle\Model\IdCardInterface;
 use LoginCidadao\CoreBundle\Entity\IdCard;
 use Symfony\Component\Validator\Constraint;
 use LoginCidadao\ValidationControlBundle\Event\IdCardValidateEvent;
-use Symfony\Component\Validator\ExecutionContextInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class ValidationHandler
 {

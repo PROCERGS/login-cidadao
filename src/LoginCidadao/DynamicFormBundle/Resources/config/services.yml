@@ -4,6 +4,11 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@event_dispatcher"
-            - "@form.factory"
             - "@fos_user.user_manager"
             - "@task_stack.manager"
+            - "@dynamic_form.builder"
+
+    dynamic_form.builder:
+        class: LoginCidadao\DynamicFormBundle\Form\DynamicFormBuilder
+        arguments:
+            - "@validation.handler"

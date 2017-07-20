@@ -27,12 +27,12 @@ interface DynamicFormServiceInterface
     public function getDynamicFormData(PersonInterface $person, Request $request, $scope);
 
     /**
-     * @param FormInterface $builder
+     * @param FormInterface $form
      * @param PersonInterface $person
      * @param array $scopes
      * @return FormInterface
      */
-    public function buildForm(FormInterface $builder, PersonInterface $person, array $scopes);
+    public function buildForm(FormInterface $form, PersonInterface $person, array $scopes);
 
     /**
      * @param FormInterface $form
