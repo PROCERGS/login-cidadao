@@ -15,6 +15,7 @@ use LoginCidadao\DynamicFormBundle\Model\DynamicFormData;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 interface DynamicFormServiceInterface
 {
@@ -46,4 +47,17 @@ interface DynamicFormServiceInterface
      * @return ClientInterface
      */
     public function getClient($clientId);
+
+    /**
+     * @param Request $request
+     * @param Response $defaultResponse
+     * @return Response
+     */
+    public function skipCurrent(Request $request, Response $defaultResponse);
+
+    /**
+     * @param DynamicFormData $data
+     * @return string
+     */
+    public function getSkipUrl(DynamicFormData $data);
 }

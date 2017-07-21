@@ -28,6 +28,7 @@ use LoginCidadao\CoreBundle\Model\LocationSelectData;
 use LoginCidadao\DynamicFormBundle\Form\DynamicFormBuilder;
 use LoginCidadao\DynamicFormBundle\Model\DynamicFormData;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTask;
 use LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
@@ -35,6 +36,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\RouterInterface;
 
 class DynamicFormService implements DynamicFormServiceInterface
 {
@@ -53,6 +55,9 @@ class DynamicFormService implements DynamicFormServiceInterface
     /** @var DynamicFormBuilder */
     private $dynamicFormBuilder;
 
+    /** @var RouterInterface */
+    private $router;
+
     /**
      * DynamicFormService constructor.
      * @param EntityManagerInterface $em
@@ -60,31 +65,38 @@ class DynamicFormService implements DynamicFormServiceInterface
      * @param UserManagerInterface $userManager
      * @param TaskStackManagerInterface $taskStackManager
      * @param DynamicFormBuilder $dynamicFormBuilder
+     * @param RouterInterface $router
      */
     public function __construct(
         EntityManagerInterface $em,
         EventDispatcherInterface $dispatcher,
         UserManagerInterface $userManager,
         TaskStackManagerInterface $taskStackManager,
-        DynamicFormBuilder $dynamicFormBuilder
+        DynamicFormBuilder $dynamicFormBuilder,
+        RouterInterface $router
     ) {
         $this->em = $em;
         $this->dispatcher = $dispatcher;
         $this->userManager = $userManager;
         $this->taskStackManager = $taskStackManager;
         $this->dynamicFormBuilder = $dynamicFormBuilder;
+        $this->router = $router;
     }
 
     public function getDynamicFormData(PersonInterface $person, Request $request, $scope)
     {
-        $url = $this->taskStackManager->getTargetUrl($this->taskStackManager->getNextTask()->getTarget());
+        $nextTask = $this->taskStackManager->getNextTask();
+        $redirectUrl = $request->get('redirect_url');
+        if ($nextTask) {
+            $redirectUrl = $this->taskStackManager->getTargetUrl($nextTask->getTarget());
+        }
 
         $placeOfBirth = new LocationSelectData();
         $placeOfBirth->getFromObject($person);
 
         $data = new DynamicFormData();
         $data->setPerson($person)
-            ->setRedirectUrl($url)
+            ->setRedirectUrl($redirectUrl)
             ->setScope($scope)
             ->setPlaceOfBirth($placeOfBirth)
             ->setIdCardState($this->getStateFromRequest($request));
@@ -107,9 +119,13 @@ class DynamicFormService implements DynamicFormServiceInterface
 
     public function processForm(FormInterface $form, Request $request)
     {
+        $dynamicFormResponse = [
+            'response' => null,
+            'form' => $form,
+        ];
         $form->handleRequest($request);
         if (!$form->isValid()) {
-            return $form;
+            return $dynamicFormResponse;
         }
 
         $this->dispatchFormEvent($form, $request, DynamicFormEvents::POST_FORM_VALIDATION);
@@ -140,9 +156,16 @@ class DynamicFormService implements DynamicFormServiceInterface
             $this->em->persist($idCard);
         }
 
-        $this->taskStackManager->setTaskSkipped($this->taskStackManager->getCurrentTask());
+        $currentTask = $this->taskStackManager->getCurrentTask();
+        if ($currentTask instanceof CompleteUserInfoTask) {
+            $this->taskStackManager->setTaskSkipped($currentTask);
+        }
+
         $response = new RedirectResponse($data->getRedirectUrl());
         $response = $this->taskStackManager->processRequest($request, $response);
+        if ($response) {
+            $event->setResponse($response);
+        }
         $this->dispatchProfileEditCompleted($person, $request, $response);
         $this->em->flush();
 
@@ -151,7 +174,9 @@ class DynamicFormService implements DynamicFormServiceInterface
             $this->dispatcher->dispatch(DynamicFormEvents::PRE_REDIRECT, $event);
         }
 
-        return $form;
+        $dynamicFormResponse['response'] = $event->getResponse();
+
+        return $dynamicFormResponse;
     }
 
     public function getClient($clientId)
@@ -274,5 +299,25 @@ class DynamicFormService implements DynamicFormServiceInterface
         $repo = $this->getLocationRepository($type);
 
         return $repo->find($id);
+    }
+
+    public function skipCurrent(Request $request, Response $defaultResponse)
+    {
+        $task = $this->taskStackManager->getCurrentTask();
+        if ($task instanceof CompleteUserInfoTask) {
+            $this->taskStackManager->setTaskSkipped($task);
+        }
+
+        return $this->taskStackManager->processRequest($request, $defaultResponse);
+    }
+
+    public function getSkipUrl(DynamicFormData $data)
+    {
+        $task = $this->taskStackManager->getCurrentTask();
+        if ($task instanceof CompleteUserInfoTask) {
+            return $this->router->generate('dynamic_form_skip');
+        }
+
+        return $data->getRedirectUrl();
     }
 }

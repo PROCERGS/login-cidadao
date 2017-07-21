@@ -600,23 +600,4 @@ class DynamicFormController extends Controller
 
         return $skipUrl;
     }
-
-    /**
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
-     *
-     * @Route("/dynamic-form/skip", name="dynamic_form_skip")
-     */
-    public function skipAction(Request $request)
-    {
-        /** @var TaskStackManagerInterface $taskStackManager */
-        $taskStackManager = $this->get('task_stack.manager');
-
-        $task = $taskStackManager->getCurrentTask();
-        if ($task) {
-            $taskStackManager->setTaskSkipped($task);
-        }
-
-        return $taskStackManager->processRequest($request, $this->redirectToRoute('lc_dashboard'));
-    }
 }

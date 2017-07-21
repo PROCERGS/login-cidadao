@@ -7,6 +7,7 @@ services:
             - "@fos_user.user_manager"
             - "@task_stack.manager"
             - "@dynamic_form.builder"
+            - "@router"
 
     dynamic_form.builder:
         class: LoginCidadao\DynamicFormBundle\Form\DynamicFormBuilder

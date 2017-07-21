@@ -16,7 +16,9 @@ use LoginCidadao\DynamicFormBundle\Service\DynamicFormServiceInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @codeCoverageIgnore
@@ -29,7 +31,6 @@ class FormController extends Controller
      */
     public function indexAction(Request $request, $clientId)
     {
-        $skipUrl = $request->get('redirect_url', $this->generateUrl('dynamic_form_skip', ['client_id' => $clientId]));
         $scope = explode(' ', $request->get('scope', null));
 
         /** @var DynamicFormServiceInterface $formService */
@@ -42,13 +43,17 @@ class FormController extends Controller
         $type = 'LoginCidadao\DynamicFormBundle\Form\DynamicFormType';
         $form = $this->createForm($type, $data, ['dynamic_form_service' => $formService]);
 
-        $formService->processForm($form, $request);
+        $result = $formService->processForm($form, $request);
+
+        if ($result['response'] instanceof RedirectResponse) {
+            return $result['response'];
+        }
 
         return [
             'client' => $formService->getClient($clientId),
             'form' => $form->createView(),
             'scope' => $scope,
-            'skipUrl' => $skipUrl,
+            'skipUrl' => $formService->getSkipUrl($data),
         ];
     }
 
@@ -68,5 +73,20 @@ class FormController extends Controller
         $this->addPlaceOfBirth($formBuilder, $level);
 
         return array('form' => $formBuilder->getForm()->createView());
+    }
+
+    /**
+     * @Route("/dynamic-form/skip", name="dynamic_form_skip")
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function skipAction(Request $request)
+    {
+        /** @var DynamicFormService $formService */
+        $formService = $this->get('dynamic_form.service');
+        $defaultResponse = $this->redirectToRoute('lc_dashboard');
+
+        return $formService->skipCurrent($request, $defaultResponse);
     }
 }
