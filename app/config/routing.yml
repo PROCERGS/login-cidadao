@@ -1,3 +1,7 @@
+login_cidadao_dynamic_form:
+    resource: "@LoginCidadaoDynamicFormBundle/Resources/config/routing.yml"
+    prefix:   /
+
 # Monitor
 _monitor:
     resource: "@LiipMonitorBundle/Resources/config/routing.xml"

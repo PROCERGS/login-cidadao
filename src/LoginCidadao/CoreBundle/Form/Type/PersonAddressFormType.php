@@ -12,7 +12,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use LoginCidadao\CoreBundle\Entity\State;
 use LoginCidadao\CoreBundle\Entity\PersonAddress;
-use LoginCidadao\CoreBundle\Model\SelectData;
+use LoginCidadao\CoreBundle\Model\LocationSelectData;
 
 class PersonAddressFormType extends AbstractType
 {
@@ -78,7 +78,7 @@ class PersonAddressFormType extends AbstractType
                 if ($data->getCity()) {
                     $data->setState($data->getCity()->getState());
                     $data->setCountry($data->getCity()->getState()->getCountry());
-                } elseif ($data->getLocation() instanceof SelectData) {
+                } elseif ($data->getLocation() instanceof LocationSelectData) {
                     $data->getLocation()->toObject($data);
                 }
             }

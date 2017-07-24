@@ -5,7 +5,7 @@ namespace LoginCidadao\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
-use LoginCidadao\CoreBundle\Model\SelectData;
+use LoginCidadao\CoreBundle\Model\LocationSelectData;
 use LoginCidadao\CoreBundle\Model\LocationAwareInterface;
 
 /**
@@ -106,7 +106,7 @@ class PersonAddress implements LocationAwareInterface
      */
     protected $postalCode;
 
-    /** @var SelectData */
+    /** @var LocationSelectData */
     protected $location;
 
     public function getAddress()
@@ -228,7 +228,7 @@ class PersonAddress implements LocationAwareInterface
         return $this->location;
     }
 
-    public function setLocation(SelectData $location)
+    public function setLocation(LocationSelectData $location)
     {
         $this->location = $location;
         return $this;
@@ -239,7 +239,7 @@ class PersonAddress implements LocationAwareInterface
         if ($this->location !== null) {
             $this->location->toObject($this);
         } else {
-            $this->location = new SelectData();
+            $this->location = new LocationSelectData();
             $this->location->getFromObject($this);
         }
     }

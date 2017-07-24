@@ -1,0 +1,217 @@
+#!/bin/bash
+
+set -e
+
+# Informe seu domínio
+echo "Type the domain that will be used: "
+read typed_domain
+export DOMAIN=$typed_domain
+
+cat <<EOT
+=============
+= Installing login-cidadao
+============================
+
+- Configuration:
+
+Domain: $DOMAIN
+
+=> Most output will be redirected to output.log
+EOT
+
+cat <<EOT
+
+-------------
+- Step 0: installing sudo
+-----------------------
+EOT
+apt-get install -y sudo >>output.log 2>&1
+
+cat <<EOT
+
+-------------
+- Step 1: dependencies
+-----------------------
+
+=> Configuring repositories...
+EOT
+
+# Let's Encrypt
+echo "deb http://ftp.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/backports.list
+
+# nginx
+curl -O http://nginx.org/keys/nginx_signing.key >>output.log 2>&1 \
+ && apt-key add nginx_signing.key >>output.log 2>&1 \
+ && echo "deb http://nginx.org/packages/debian/ jessie nginx" > /etc/apt/sources.list.d/nginx.list \
+ && echo "deb-src http://nginx.org/packages/debian/ jessie nginx" >> /etc/apt/sources.list.d/nginx.list
+
+# postgresql
+curl -O https://www.postgresql.org/media/keys/ACCC4CF8.asc >>output.log 2>&1 \
+ && apt-key add ACCC4CF8.asc >>output.log 2>&1 \
+ && echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" > /etc/apt/sources.list.d/postgresql.list
+
+apt-get update >>output.log 2>&1
+
+#######################
+
+cat <<EOT
+=> Installing dependencies...
+EOT
+
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - >>output.log 2>&1
+apt-get install -y curl gettext-base git nodejs memcached >>output.log 2>&1
+apt-get install -y nginx >>output.log 2>&1
+apt-get install -y postgresql postgresql-client >>output.log 2>&1
+apt-get install -y php5 php5-cli php5-fpm php5-curl php5-intl php5-pgsql php5-memcache >>output.log 2>&1
+apt-get install -y certbot -t jessie-backports >>output.log 2>&1
+
+# Install composer
+curl -o composer-setup.php https://getcomposer.org/installer >>output.log 2>&1
+php composer-setup.php --quiet && rm composer-setup.php && mv composer.phar /usr/local/bin/composer
+
+######################################################################################################
+######################################################################################################
+
+cat <<EOT
+
+-------------------
+- Step 2: HTTPS certificate
+-----------------------------
+
+=> Getting HTTPS certificate from Let's Encrypt
+EOT
+
+service nginx stop >>output.log 2>&1
+certbot certonly --standalone -d $DOMAIN
+service nginx start >>output.log 2>&1
+
+cat <<EOT
+=> Setting up certificate auto-renewal
+EOT
+(crontab -l 2>/dev/null; echo '0 14 * * * certbot renew --post-hook "systemctl reload nginx"') | crontab -
+
+######################################################################################################
+######################################################################################################
+
+cat <<EOT
+
+------------------------
+- Step 3: Configure email sending
+----------------------------------
+
+=> Configuring mail sending using Postfix.
+
+=> You'll be asked to answer some question during Postfix' installation.
+
+=> It's important that you set it up as an "Internet Server" and then type the domain used to send emails.
+EOT
+
+read -p "=> If you understand it, press [ENTER] to continue or Ctrl-C to cancel."
+
+# Configure postfix
+apt-get install -y postfix
+postconf -e "myorigin = $DOMAIN"
+postconf -e "myhostname=$(hostname)"
+postconf -e "relay_domains = $DOMAIN"
+postfix reload
+
+######################################################################################################
+######################################################################################################
+
+cat <<EOT
+
+-----------------------
+- Step 4: Configuring PostgreSQL
+---------------------------------
+
+=> Creating the user "logincidadao"...
+EOT
+useradd -m logincidadao
+usermod -s /bin/bash logincidadao
+
+service postgresql start
+su - postgres -c "createuser -S -D -R logincidadao"
+
+cat <<EOT
+=> Creating the schema/db: "logincidadao"...
+EOT
+su - postgres -c "createdb logincidadao"
+
+######################################################################################################
+######################################################################################################
+
+cat <<EOT
+
+----------------------------
+- Step 5: Configure nginx and php-fpm
+--------------------------------------
+
+=> Generating Diffie-Hellman Parameters...
+EOT
+openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
+
+cat <<EOT
+=> Adding nginx configuration...
+EOT
+envsubst '${DOMAIN}' < nginx.conf > /etc/nginx/conf.d/logincidadao.conf
+cat <<EOT
+=> Adding php-fpm configuration...
+EOT
+cp php-fpm.conf /etc/php5/fpm/pool.d/logincidadao.conf
+
+cat <<EOT
+=> Restarting php-fpm and nginx...
+EOT
+service php5-fpm restart
+service nginx configtest && service nginx restart
+
+######################################################################################################
+######################################################################################################
+
+cat <<EOT
+
+-----------------------
+- Step 6: Download login-cidadao
+---------------------------------
+
+=> Cloning git repository...
+EOT
+# Login Cidadão
+su - logincidadao -c "git clone https://github.com/redelivre/login-cidadao.git /home/logincidadao/login-cidadao"
+
+######################################################################################################
+######################################################################################################
+
+cat <<EOT
+
+------------------------
+- Step 7: Finishing up
+----------------------------------
+
+=> Preparing parameters.yml...
+EOT
+su - logincidadao -c "cp /home/logincidadao/login-cidadao/app/config/parameters.yml.dist /home/logincidadao/login-cidadao/app/config/parameters.yml"
+su - logincidadao -c "sed -i -E 's/database_host: +localhost/database_host: ~/g' /home/logincidadao/login-cidadao/app/config/parameters.yml"
+su - logincidadao -c "sed -i -E 's/database_port: +null/database_port: ~/g' /home/logincidadao/login-cidadao/app/config/parameters.yml"
+su - logincidadao -c "sed -i -E 's/database_password: +logincidadao/database_password: ~/g' /home/logincidadao/login-cidadao/app/config/parameters.yml"
+su - logincidadao -c "sed -i -E 's/site_domain: +localhost/site_domain: $DOMAIN/g' /home/logincidadao/login-cidadao/app/config/parameters.yml"
+
+cat <<EOT
+=> Installing composer dependencies...
+EOT
+su - logincidadao -c "cd /home/logincidadao/login-cidadao && composer install --no-interaction"
+
+cat <<EOT
+=> Generating assets and populating database...
+EOT
+su - logincidadao -c "cd /home/logincidadao/login-cidadao && rm -rf app/cache/prod"
+su - logincidadao -c "cd /home/logincidadao/login-cidadao && ./app/console doctrine:schema:update --force && ./app/console lc:database:populate batch/ && ./app/console assets:install && rm -rf app/cache/prod && ./app/console assetic:dump -e prod"
+
+cat <<EOT
+
+---
+- FINISHED!
+-------------
+
+=> Proceed to https://$DOMAIN and create your account.
+EOT

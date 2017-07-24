@@ -61,6 +61,7 @@ class AppKernel extends Kernel
             new Rollerworks\Bundle\PasswordStrengthBundle\RollerworksPasswordStrengthBundle(),
             new LoginCidadao\PhoneVerificationBundle\LoginCidadaoPhoneVerificationBundle(),
             new LoginCidadao\TaskStackBundle\LoginCidadaoTaskStackBundle(),
+            new LoginCidadao\DynamicFormBundle\LoginCidadaoDynamicFormBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

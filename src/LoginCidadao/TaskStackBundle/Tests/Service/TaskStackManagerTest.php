@@ -83,6 +83,16 @@ class TaskStackManagerTest extends \PHPUnit_Framework_TestCase
         $manager->addNotSkippedTaskOnce($task);
     }
 
+    public function testAddNotSkippedTaskOnceWithIntentTask()
+    {
+        $task = $this->getTask('task1');
+        $intentTask = new IntentTask(new UrlTaskTarget('https://example.com'));
+
+        $manager = $this->getStackManager();
+        $manager->addNotSkippedTaskOnce($task, $intentTask);
+        $this->assertEquals(2, $manager->countTasks());
+    }
+
     public function testSetTaskSkipped()
     {
         $task = $this->getTask('task1');
@@ -295,5 +305,17 @@ class TaskStackManagerTest extends \PHPUnit_Framework_TestCase
         $actual = $manager->processRequest($request, $response);
 
         $this->assertEquals($response, $actual);
+    }
+
+    public function testHasIntentTask()
+    {
+        $intentTask = new IntentTask(new UrlTaskTarget('https://example.com'));
+        $manager = $this->getStackManager();
+
+        $this->assertFalse($manager->hasIntentTask());
+
+        $manager->addNotSkippedTaskOnce($intentTask);
+
+        $this->assertTrue($manager->hasIntentTask());
     }
 }
