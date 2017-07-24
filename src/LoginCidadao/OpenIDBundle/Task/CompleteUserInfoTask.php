@@ -46,8 +46,8 @@ class CompleteUserInfoTask extends AbstractTask
         $this->nonce = $nonce;
         $this->setScope($scope);
         $this->target = new RouteTaskTarget(
-            'client_dynamic_form',
-            ['clientId' => $this->getClientId(), 'scope' => $this->getScope()]
+            'dynamic_form',
+            ['client_id' => $this->getClientId(), 'scope' => $this->getScope()]
         );
     }
 
@@ -57,7 +57,7 @@ class CompleteUserInfoTask extends AbstractTask
     public function getRoutes()
     {
         return [
-            'client_dynamic_form',
+            'dynamic_form',
             'fos_user_registration_confirm',
             'wait_valid_email',
             'dynamic_form_skip',

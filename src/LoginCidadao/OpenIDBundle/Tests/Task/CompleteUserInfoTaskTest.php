@@ -37,7 +37,7 @@ class CompleteUserInfoTaskTest extends \PHPUnit_Framework_TestCase
         $expectedId = "lc.task.complete_userinfo_{$clientId}";
         $routes = [
             'fos_user_registration_confirm',
-            'client_dynamic_form',
+            'dynamic_form',
             'dynamic_form_skip',
             'wait_valid_email',
             'dynamic_form_location',
