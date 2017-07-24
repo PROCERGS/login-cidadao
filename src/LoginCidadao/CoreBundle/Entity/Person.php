@@ -3,6 +3,7 @@
 namespace LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -20,7 +21,6 @@ use LoginCidadao\CoreBundle\Model\LocationSelectData;
 use LoginCidadao\LongPolling\LongPollingUtils;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
-use LoginCidadao\CoreBundle\Model\LocationAwareInterface;
 use LoginCidadao\ValidationBundle\Validator\Constraints as LCAssert;
 use Donato\PathWellBundle\Validator\Constraints\PathWell;
 use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
@@ -1218,7 +1218,7 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
         $location->toObject($this);
     }
 
-    public function waitUpdate(EntityManager $em, \DateTime $updatedAt)
+    public function waitUpdate(EntityManagerInterface $em, \DateTime $updatedAt)
     {
         $id = $this->getId();
         $lastUpdatedAt = null;

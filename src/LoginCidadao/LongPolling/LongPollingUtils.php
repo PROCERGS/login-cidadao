@@ -10,19 +10,21 @@
 
 namespace LoginCidadao\LongPolling;
 
+use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\APIBundle\Exception\RequestTimeoutException;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class LongPollingUtils
 {
-
     public static function runTimeLimited($callback, $waitTime = 1)
     {
         $maxExecutionTime = ini_get('max_execution_time');
-        $limit            = $maxExecutionTime ? $maxExecutionTime - 2 : 60;
-        $startTime        = time();
+        $limit = $maxExecutionTime ? $maxExecutionTime - 2 : 60;
+        $startTime = time();
         while ($limit > 0) {
             $result = call_user_func($callback);
-            $delta  = time() - $startTime;
+            $delta = time() - $startTime;
 
             if ($result !== false) {
                 return $result;
@@ -36,5 +38,27 @@ class LongPollingUtils
             sleep($waitTime);
         }
         throw new RequestTimeoutException("Request Timeout");
+    }
+
+    /**
+     * @param PersonInterface $user
+     * @param EntityManagerInterface $em
+     * @param \DateTime $updatedAt
+     * @return bool
+     * @throws RequestTimeoutException
+     */
+    public static function waitValidEmail(PersonInterface $user, EntityManagerInterface $em, \DateTime $updatedAt)
+    {
+        if ($user->getEmailConfirmedAt() instanceof \DateTime) {
+            return true;
+        }
+
+        if (!$updatedAt instanceof \DateTime) {
+            $updatedAt = new \DateTime();
+        }
+
+        $person = $user->waitUpdate($em, $updatedAt);
+
+        return $person->getEmailConfirmedAt() instanceof \DateTime;
     }
 }

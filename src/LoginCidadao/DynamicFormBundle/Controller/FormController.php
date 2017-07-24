@@ -16,6 +16,7 @@ use LoginCidadao\DynamicFormBundle\Service\DynamicFormServiceInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,11 +27,19 @@ use Symfony\Component\HttpFoundation\Response;
 class FormController extends Controller
 {
     /**
-     * @Route("/client/{clientId}/dynamic-form", name="client_dynamic_form")
-     * @Template("LoginCidadaoCoreBundle:DynamicForm:edit.html.twig")
+     * @Route("/dynamic-form", name="client_dynamic_form")
+     * @Route("/client/{clientId}/dynamic-form", name="legacy_client_dynamic_form")
+     * @Template("LoginCidadaoDynamicFormBundle:Form:edit.html.twig")
+     *
+     * @param Request $request
+     * @param string|null $clientId
+     * @return array|RedirectResponse
      */
-    public function indexAction(Request $request, $clientId)
+    public function indexAction(Request $request, $clientId = null)
     {
+        if (!$clientId) {
+            $clientId = $request->get('client_id');
+        }
         $scope = explode(' ', $request->get('scope', null));
 
         /** @var DynamicFormServiceInterface $formService */
@@ -60,6 +69,9 @@ class FormController extends Controller
     /**
      * @Route("/dynamic-form/location", name="dynamic_form_location")
      * @Template()
+     *
+     * @param Request $request
+     * @return array
      */
     public function locationFormAction(Request $request)
     {
@@ -69,10 +81,12 @@ class FormController extends Controller
         $level = $request->get('level');
         $data = $formService->getLocationDataFromRequest($request);
 
-        $formBuilder = $this->createFormBuilder($data, ['cascade_validation' => true]);
-        $this->addPlaceOfBirth($formBuilder, $level);
+        $form = $this->createFormBuilder($data, ['cascade_validation' => true])->getForm();
+        $this->addPlaceOfBirth($form, $level);
 
-        return array('form' => $formBuilder->getForm()->createView());
+        return [
+            'form' => $form->createView(),
+        ];
     }
 
     /**
@@ -88,5 +102,21 @@ class FormController extends Controller
         $defaultResponse = $this->redirectToRoute('lc_dashboard');
 
         return $formService->skipCurrent($request, $defaultResponse);
+    }
+
+    private function addPlaceOfBirth(FormInterface $form, $level)
+    {
+        $form->add(
+            'placeOfBirth',
+            'LoginCidadao\CoreBundle\Form\Type\CitySelectorComboType',
+            [
+                'level' => $level,
+                'city_label' => 'Place of birth - City',
+                'state_label' => 'Place of birth - State',
+                'country_label' => 'Place of birth - Country',
+            ]
+        );
+
+        return;
     }
 }
