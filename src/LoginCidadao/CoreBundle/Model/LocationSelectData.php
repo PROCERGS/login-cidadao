@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Model;
 
@@ -6,7 +14,7 @@ use LoginCidadao\CoreBundle\Entity\Country;
 use LoginCidadao\CoreBundle\Entity\State;
 use LoginCidadao\CoreBundle\Entity\City;
 
-class SelectData
+class LocationSelectData
 {
     /**
      * @var Country
@@ -37,7 +45,7 @@ class SelectData
      * Set country
      *
      * @param Country $country
-     * @return SelectData
+     * @return LocationSelectData
      */
     public function setCountry(Country $country = null)
     {
@@ -60,7 +68,7 @@ class SelectData
      * Set state
      *
      * @param State $state
-     * @return SelectData
+     * @return LocationSelectData
      */
     public function setState(State $state = null)
     {
@@ -83,7 +91,7 @@ class SelectData
      * Set city
      *
      * @param City $city
-     * @return SelectData
+     * @return LocationSelectData
      */
     public function setCity(City $city = null)
     {

@@ -61,6 +61,7 @@ class CompleteUserInfoTask extends AbstractTask
             'fos_user_registration_confirm',
             'wait_valid_email',
             'dynamic_form_skip',
+            'dynamic_form_location',
         ];
     }
 

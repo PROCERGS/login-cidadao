@@ -40,6 +40,7 @@ class CompleteUserInfoTaskTest extends \PHPUnit_Framework_TestCase
             'client_dynamic_form',
             'dynamic_form_skip',
             'wait_valid_email',
+            'dynamic_form_location',
         ];
 
         $task = new CompleteUserInfoTask($clientId, $scope);

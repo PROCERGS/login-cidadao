@@ -1,0 +1,15 @@
+services:
+    dynamic_form.service:
+        class: LoginCidadao\DynamicFormBundle\Service\DynamicFormService
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
+            - "@fos_user.user_manager"
+            - "@task_stack.manager"
+            - "@dynamic_form.builder"
+            - "@router"
+
+    dynamic_form.builder:
+        class: LoginCidadao\DynamicFormBundle\Form\DynamicFormBuilder
+        arguments:
+            - "@validation.handler"

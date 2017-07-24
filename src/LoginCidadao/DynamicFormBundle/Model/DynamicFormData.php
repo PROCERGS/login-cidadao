@@ -1,42 +1,66 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-namespace LoginCidadao\CoreBundle\Model;
+namespace LoginCidadao\DynamicFormBundle\Model;
 
-use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\PersonAddress;
+use LoginCidadao\CoreBundle\Entity\State;
 use LoginCidadao\CoreBundle\Model\IdCardInterface;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\CoreBundle\Model\LocationSelectData;
 
 class DynamicFormData
 {
-    /** @var Person */
-    protected $person;
+    /** @var PersonInterface */
+    private $person;
 
     /** @var PersonAddress */
-    protected $address;
+    private $address;
 
     /** @var IdCardInterface */
-    protected $idCard;
+    private $idCard;
+
+    /** @var State */
+    private $idCardState;
 
     /** @var string */
-    protected $redirectUrl;
+    private $redirectUrl;
 
     /** @var string */
-    protected $scope;
+    private $scope;
 
     /** @var string */
-    protected $state;
+    private $state;
 
     /**
-     * @var SelectData
+     * @var LocationSelectData
      */
-    protected $placeOfBirth;
+    private $placeOfBirth;
 
     /**
-     * @return Person
+     * @return PersonInterface
      */
     public function getPerson()
     {
         return $this->person;
+    }
+
+    /**
+     * @param PersonInterface $person
+     * @return DynamicFormData
+     */
+    public function setPerson(PersonInterface $person)
+    {
+        $this->person = $person;
+
+        return $this;
     }
 
     /**
@@ -48,22 +72,13 @@ class DynamicFormData
     }
 
     /**
-     * @param Person $person
-     * @return DynamicFormData
-     */
-    public function setPerson(Person $person)
-    {
-        $this->person = $person;
-        return $this;
-    }
-
-    /**
      * @param PersonAddress $address
      * @return DynamicFormData
      */
     public function setAddress(PersonAddress $address)
     {
         $this->address = $address;
+
         return $this;
     }
 
@@ -82,6 +97,7 @@ class DynamicFormData
     public function setIdCard(IdCardInterface $idCard)
     {
         $this->idCard = $idCard;
+
         return $this;
     }
 
@@ -93,6 +109,7 @@ class DynamicFormData
     public function setRedirectUrl($redirectUrl)
     {
         $this->redirectUrl = $redirectUrl;
+
         return $this;
     }
 
@@ -101,32 +118,54 @@ class DynamicFormData
         return $this->scope;
     }
 
+    public function setScope($scope)
+    {
+        $this->scope = $scope;
+
+        return $this;
+    }
+
     public function getState()
     {
         return $this->state;
     }
 
-    public function setScope($scope)
-    {
-        $this->scope = $scope;
-        return $this;
-    }
-
     public function setState($state)
     {
         $this->state = $state;
+
         return $this;
     }
 
-    /** @return SelectData */
+    /** @return LocationSelectData */
     public function getPlaceOfBirth()
     {
         return $this->placeOfBirth;
     }
 
-    public function setPlaceOfBirth(SelectData $placeOfBirth)
+    public function setPlaceOfBirth(LocationSelectData $placeOfBirth)
     {
         $this->placeOfBirth = $placeOfBirth;
+
+        return $this;
+    }
+
+    /**
+     * @return State
+     */
+    public function getIdCardState()
+    {
+        return $this->idCardState;
+    }
+
+    /**
+     * @param State $idCardState
+     * @return DynamicFormData
+     */
+    public function setIdCardState(State $idCardState = null)
+    {
+        $this->idCardState = $idCardState;
+
         return $this;
     }
 }
