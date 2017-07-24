@@ -1,0 +1,25 @@
+dynamic_form:
+    title: Complete your information
+    body: <strong>%client%</strong> needs some additional details about you. Please complete the missing information below to continue.
+    submit:
+        label: 'After completing your information, click the following button to continue:'
+        button: Save
+    skip:
+        open_warning: Skip this step
+        warning: If you chose to skip this step now, it is possible that the service you are trying to access will ask you again for this information or will deny your access. Also, we'll keep suggesting this step on each new access.
+        confirm: Skip anyway
+    email_verification:
+        body: <strong>%client%</strong> requires that you have a validated email in order to proceed.
+        how_to: Validating your email address is pretty simple and fast. You just have to click the link or button in the email we sent you.
+        post_verifying: After you validate your email address this screen will change <strong>automatically</strong> and you'll proceed to <strong>%client%</strong>.
+        success: Your email was successfully validated.
+        back_to_client: Back to %client%
+        help:
+            cant_find_email:
+                title: I'm having trouble finding the confirmation email
+                body: If you are having trouble to find the confirmation email, please make sure it isn't in the junk mail section of your email program or site.
+                change_email:
+                    body: If you are certain the email was not received, it's possible that you mistyped your email address. You can change you email address below.
+                    submit:
+                        label: If your email is mistyped, correct it and click the following button.
+                        button: Change Email

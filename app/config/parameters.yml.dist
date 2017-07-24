@@ -108,8 +108,6 @@ parameters:
 
     # Default Client UID (no need to change)
     oauth_default_client.uid: login-cidadao
-    # Notification's categories IDs (no need to change)
-    notifications_categories_alert.uid: login-cidadao-alert
 
     # Default Country ISO 2
     default_country_iso2: BR

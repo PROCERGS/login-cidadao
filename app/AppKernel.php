@@ -61,6 +61,7 @@ class AppKernel extends Kernel
             new Rollerworks\Bundle\PasswordStrengthBundle\RollerworksPasswordStrengthBundle(),
             new LoginCidadao\PhoneVerificationBundle\LoginCidadaoPhoneVerificationBundle(),
             new LoginCidadao\TaskStackBundle\LoginCidadaoTaskStackBundle(),
+            new LoginCidadao\DynamicFormBundle\LoginCidadaoDynamicFormBundle(),
 
             // PROCERGS
             new PROCERGS\LoginCidadao\CoreBundle\PROCERGSLoginCidadaoCoreBundle(),

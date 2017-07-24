@@ -146,4 +146,18 @@ class TaskSubscriberTest extends \PHPUnit_Framework_TestCase
         $subscriber = new TaskSubscriber($tokenStorage, $phoneVerificationService, true);
         $subscriber->onGetTasks($event);
     }
+
+    public function testOAuthRequest()
+    {
+        $tokenStorage = $this->getTokenStorage(false);
+        $token = $this->getMock('FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken');
+        $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
+
+        $phoneVerificationService = $this->getPhoneVerificationService();
+
+        $event = $this->getMockBuilder('LoginCidadao\TaskStackBundle\Event\GetTasksEvent')
+            ->disableOriginalConstructor()->getMock();
+        $subscriber = new TaskSubscriber($tokenStorage, $phoneVerificationService, true);
+        $subscriber->onGetTasks($event);
+    }
 }

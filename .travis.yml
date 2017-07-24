@@ -1,6 +1,10 @@
 sudo: false
 language: php
 
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
 env:
 - SYMFONY_DEPRECATIONS_HELPER=weak
 

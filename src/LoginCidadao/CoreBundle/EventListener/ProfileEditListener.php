@@ -25,8 +25,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use LoginCidadao\CoreBundle\Entity\City;
 use LoginCidadao\CoreBundle\Entity\State;
 use LoginCidadao\CoreBundle\Entity\Person;
-use LoginCidadao\CoreBundle\Model\SelectData;
-use LoginCidadao\CoreBundle\Model\DynamicFormData;
+use LoginCidadao\CoreBundle\Model\LocationSelectData;
+use LoginCidadao\DynamicFormBundle\Model\DynamicFormData;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer;
 use LoginCidadao\CoreBundle\Exception\LcValidationException;
@@ -221,7 +221,7 @@ class ProfileEditListener implements EventSubscriberInterface
     private function registerTextualState(\Symfony\Component\Form\FormEvent $event)
     {
         $data = $event->getForm()->getData();
-        if (!($data instanceof SelectData)) {
+        if (!($data instanceof LocationSelectData)) {
             return;
         }
         $form = $event->getForm();
@@ -261,7 +261,7 @@ class ProfileEditListener implements EventSubscriberInterface
     private function registerTextualCity(\Symfony\Component\Form\FormEvent $event)
     {
         $data = $event->getForm()->getData();
-        if (!($data instanceof SelectData)) {
+        if (!($data instanceof LocationSelectData)) {
             return;
         }
         $form = $event->getForm();

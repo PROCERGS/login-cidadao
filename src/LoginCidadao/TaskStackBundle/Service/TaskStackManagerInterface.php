@@ -12,6 +12,7 @@ namespace LoginCidadao\TaskStackBundle\Service;
 
 use LoginCidadao\TaskStackBundle\Model\IntentTask;
 use LoginCidadao\TaskStackBundle\Model\TaskInterface;
+use LoginCidadao\TaskStackBundle\Model\TaskTargetInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -76,4 +77,12 @@ interface TaskStackManagerInterface
      * @return boolean
      */
     public function hasIntentTask();
+
+    /**
+     * Converts a TaskTargetInterface into a string URL.
+     *
+     * @param TaskTargetInterface $target
+     * @return string
+     */
+    public function getTargetUrl(TaskTargetInterface $target);
 }
