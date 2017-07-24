@@ -137,7 +137,7 @@
         var dynamicForm = {
             'idCard': {
                 'loadedFormStateId': '{{ form.vars.data.state ? form.vars.data.state.id : 0 }}',
-                'formUrl': '{{ path('client_dynamic_form', { 'scope': 'id_cards', 'clientId': client.id }) }}',
+                'formUrl': '{{ path('dynamic_form', { 'scope': 'id_cards', 'client_id': client.id }) }}',
                 'unlockState': function () {
                     $('#form_idcard_state').removeAttr('disabled').removeAttr('readonly');
                 }

@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
 class FormController extends Controller
 {
     /**
-     * @Route("/dynamic-form", name="client_dynamic_form")
+     * @Route("/dynamic-form", name="dynamic_form")
      * @Route("/client/{clientId}/dynamic-form", name="legacy_client_dynamic_form")
      * @Template("LoginCidadaoDynamicFormBundle:Form:edit.html.twig")
      *
