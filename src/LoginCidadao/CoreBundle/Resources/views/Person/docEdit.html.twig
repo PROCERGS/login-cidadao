@@ -49,7 +49,7 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    {% javascripts '@LoginCidadaoCoreBundle/Resources/public/js/idCard.js' filter='uglifyjs2' %}
+    {% javascripts '@LoginCidadaoDynamicFormBundle/Resources/public/js/idCard.js' filter='uglifyjs2' %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
     <script>
