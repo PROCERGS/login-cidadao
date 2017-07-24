@@ -12,7 +12,6 @@ namespace LoginCidadao\DynamicFormBundle\Form;
 
 use libphonenumber\PhoneNumberFormat;
 use LoginCidadao\CoreBundle\Entity\PersonAddress;
-use LoginCidadao\CoreBundle\Form\Type\DynamicForm\DynamicPersonType;
 use LoginCidadao\CoreBundle\Model\IdCardInterface;
 use LoginCidadao\CoreBundle\Model\LocationSelectData;
 use LoginCidadao\CoreBundle\Model\PersonInterface;

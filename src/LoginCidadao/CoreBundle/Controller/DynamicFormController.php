@@ -15,7 +15,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use FOS\UserBundle\FOSUserEvents;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\PersonAddress;
-use LoginCidadao\CoreBundle\Form\Type\DynamicForm\DynamicPersonType;
+use LoginCidadao\DynamicFormBundle\Form\DynamicPersonType;
 use LoginCidadao\DynamicFormBundle\Model\DynamicFormData;
 use LoginCidadao\CoreBundle\Entity\City;
 use LoginCidadao\CoreBundle\Entity\State;
@@ -25,7 +25,7 @@ use LoginCidadao\CoreBundle\Model\IdCardInterface;
 use LoginCidadao\ValidationControlBundle\Handler\ValidationHandler;
 use LoginCidadao\CoreBundle\Model\LocationSelectData;
 use LoginCidadao\OAuthBundle\Entity\Client;
-use LoginCidadao\CoreBundle\DynamicFormEvents;
+use LoginCidadao\DynamicFormBundle\DynamicFormEvents;
 use Symfony\Component\HttpFoundation\Response;
 
 class DynamicFormController extends Controller
