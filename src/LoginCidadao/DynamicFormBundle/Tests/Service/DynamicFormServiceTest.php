@@ -174,15 +174,47 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
         $formService->processForm($form, $request);
     }
 
+    public function testProcessFormWithoutPersonForm()
+    {
+        $data = new DynamicFormData();
+        $data
+            ->setPerson(new Person())
+            ->setAddress(new PersonAddress())
+            ->setRedirectUrl('https://example.com');
+
+        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form->expects($this->once())->method('isValid')->willReturn(true);
+        $form->expects($this->once())->method('getData')->willReturn($data);
+        $form->expects($this->exactly(2))->method('has')->with('person')->willReturn(false);
+        $form->expects($this->never())->method('get')->with('person')->willReturn(null);
+        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+
+        $task = $this->getMockBuilder('LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTask')
+            ->disableOriginalConstructor()->getMock();
+        $stackManager = $this->getTaskStackManager();
+        $stackManager->expects($this->once())->method('getCurrentTask')->willReturn($task);
+        $stackManager->expects($this->once())->method('processRequest')->willReturnCallback(
+            function ($request, $response) {
+                return $response;
+            }
+        );
+
+        $formService = $this->getFormService(null, null, null, $stackManager);
+        $formService->processForm($form, $request);
+    }
+
     public function testBuildForm()
     {
+        $data = new DynamicFormData();
+        $data->setPerson($this->getPerson());
+
         $form = $this->getMock('Symfony\Component\Form\FormInterface');
         $form->expects($this->exactly(2))->method('add')->willReturn($form);
 
         $scopes = ['scope1', 'scope2'];
 
         $formService = $this->getFormService();
-        $result = $formService->buildForm($form, $this->getPerson(), $scopes);
+        $result = $formService->buildForm($form, $data, $scopes);
 
         $this->assertEquals($form, $result);
     }

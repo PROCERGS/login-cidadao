@@ -25,11 +25,6 @@ class DynamicFormBuilderTest extends \PHPUnit_Framework_TestCase
         $state = new State();
         $state->setId(1);
 
-        $fields = [];
-        $data = new DynamicFormData();
-        $data->setState($state);
-        $data->setIdCardState($state);
-
         $idCard = new IdCard();
         $idCard->setState($state);
         $idCards = [
@@ -40,7 +35,13 @@ class DynamicFormBuilderTest extends \PHPUnit_Framework_TestCase
         $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $person->expects($this->atLeastOnce())->method('getIdCards')->willReturn($idCards);
 
-        $form = $this->getForm($data, $fields);
+        $fields = [];
+        $data = new DynamicFormData();
+        $data->setState($state);
+        $data->setIdCardState($state);
+        $data->setPerson($person);
+
+        $form = $this->getForm($fields);
 
         /** @var ValidationHandler|\PHPUnit_Framework_MockObject_MockObject $validationHandler */
         $validationHandler = $this->getMockBuilder('LoginCidadao\ValidationControlBundle\Handler\ValidationHandler')
@@ -50,7 +51,7 @@ class DynamicFormBuilderTest extends \PHPUnit_Framework_TestCase
         $scopes = ['name', 'email', 'cpf', 'birthdate', 'city', 'phone_number', 'id_cards', 'addresses', 'other_claim'];
 
         foreach ($scopes as $scope) {
-            $builder->addFieldFromScope($form, $scope, $person);
+            $builder->addFieldFromScope($form, $scope, $data);
         }
 
         $this->assertNotEmpty($fields);
@@ -81,7 +82,7 @@ class DynamicFormBuilderTest extends \PHPUnit_Framework_TestCase
         $data->setIdCardState($state)
             ->setPerson($person);
 
-        $form = $this->getForm($data, $fields);
+        $form = $this->getForm($fields);
 
         /** @var ValidationHandler|\PHPUnit_Framework_MockObject_MockObject $validationHandler */
         $validationHandler = $this
@@ -96,14 +97,14 @@ class DynamicFormBuilderTest extends \PHPUnit_Framework_TestCase
         $scopes = ['id_cards'];
 
         foreach ($scopes as $scope) {
-            $builder->addFieldFromScope($form, $scope, $person);
+            $builder->addFieldFromScope($form, $scope, $data);
         }
 
         $this->assertNotEmpty($fields);
         $this->assertContains('idcard', $fields);
     }
 
-    private function getForm(&$data, &$fields)
+    private function getForm(&$fields)
     {
         $addField = function ($field) use (&$fields) {
             $fields[] = $field;
@@ -117,7 +118,6 @@ class DynamicFormBuilderTest extends \PHPUnit_Framework_TestCase
         $form = $this->getMock('Symfony\Component\Form\FormInterface');
 
         $form->expects($this->atLeastOnce())->method('add')->willReturnCallback($addField);
-        $form->expects($this->atLeastOnce())->method('getData')->willReturn($data);
         $form->expects($this->any())->method('get')->willReturnCallback(
             function ($field) use (&$fields, &$personForm) {
                 if ($field == 'person') {
