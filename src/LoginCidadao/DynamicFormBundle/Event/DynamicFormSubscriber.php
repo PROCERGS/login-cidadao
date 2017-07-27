@@ -53,6 +53,6 @@ class DynamicFormSubscriber implements EventSubscriberInterface
         /** @var FormInterface $form */
         $form = $event->getForm();
 
-        $this->formService->buildForm($form, $data->getPerson(), $scopes);
+        $this->formService->buildForm($form, $data, $scopes);
     }
 }
