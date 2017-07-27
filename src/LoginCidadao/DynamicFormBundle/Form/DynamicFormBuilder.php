@@ -33,7 +33,7 @@ class DynamicFormBuilder
         $this->validationHandler = $validationHandler;
     }
 
-    public function addFieldFromScope(FormInterface $form, $scope, PersonInterface $person)
+    public function addFieldFromScope(FormInterface $form, $scope, DynamicFormData $data)
     {
         switch ($scope) {
             case 'name':
@@ -49,7 +49,7 @@ class DynamicFormBuilder
                 $this->addRequiredPersonField($form, 'email');
                 break;
             case 'id_cards':
-                $this->addIdCard($form, $person);
+                $this->addIdCard($form, $data);
                 break;
             case 'phone_number':
             case 'mobile':
@@ -64,7 +64,7 @@ class DynamicFormBuilder
                 $this->addPlaceOfBirth($form, $scope);
                 break;
             case 'addresses':
-                $this->addAddresses($form);
+                $this->addAddresses($form, $data);
                 break;
             default:
                 break;
@@ -138,30 +138,29 @@ class DynamicFormBuilder
         return;
     }
 
-    private function addAddresses(FormInterface $form)
+    private function addAddresses(FormInterface $form, DynamicFormData $data)
     {
         $address = new PersonAddress();
         $address->setLocation(new LocationSelectData());
-        $form->getData()->setAddress($address);
+        $data->setAddress($address);
         $form->add('address', 'LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType', ['label' => false]);
     }
 
-    private function addIdCard(FormInterface $form, PersonInterface $person)
+    private function addIdCard(FormInterface $form, DynamicFormData $data)
     {
-        /** @var DynamicFormData $formData */
-        $formData = $form->getData();
-        $state = $formData->getIdCardState();
+        $person = $data->getPerson();
+        $state = $data->getIdCardState();
         foreach ($person->getIdCards() as $idCard) {
             if ($idCard->getState()->getId() === $state->getId()) {
-                $formData->setIdCard($idCard);
+                $data->setIdCard($idCard);
                 break;
             }
         }
 
-        if (!($formData->getIdCard() instanceof IdCardInterface)) {
+        if (!($data->getIdCard() instanceof IdCardInterface)) {
             $idCard = $this->validationHandler->instantiateIdCard($state);
             $idCard->setPerson($person);
-            $formData->setIdCard($idCard);
+            $data->setIdCard($idCard);
         }
 
         $form->add('idcard', 'lc_idcard_form', ['label' => false]);

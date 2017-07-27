@@ -106,10 +106,10 @@ class DynamicFormService implements DynamicFormServiceInterface
         return $data;
     }
 
-    public function buildForm(FormInterface $form, PersonInterface $person, array $scopes)
+    public function buildForm(FormInterface $form, DynamicFormData $data, array $scopes)
     {
         foreach ($scopes as $scope) {
-            $this->dynamicFormBuilder->addFieldFromScope($form, $scope, $person);
+            $this->dynamicFormBuilder->addFieldFromScope($form, $scope, $data);
         }
         $form->add('redirect_url', 'hidden')
             ->add('scope', 'hidden');
@@ -163,7 +163,7 @@ class DynamicFormService implements DynamicFormServiceInterface
 
         $response = new RedirectResponse($data->getRedirectUrl());
         $response = $this->taskStackManager->processRequest($request, $response);
-        if ($response) {
+        if ($event && $response) {
             $event->setResponse($response);
         }
         $this->dispatchProfileEditCompleted($person, $request, $response);
@@ -174,7 +174,10 @@ class DynamicFormService implements DynamicFormServiceInterface
             $this->dispatcher->dispatch(DynamicFormEvents::PRE_REDIRECT, $event);
         }
 
-        $dynamicFormResponse['response'] = $event->getResponse();
+        $dynamicFormResponse['response'] = $response;
+        if ($event) {
+            $dynamicFormResponse['response'] = $event->getResponse();
+        }
 
         return $dynamicFormResponse;
     }

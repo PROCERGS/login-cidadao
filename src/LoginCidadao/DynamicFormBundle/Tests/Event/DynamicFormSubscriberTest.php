@@ -12,7 +12,6 @@ namespace LoginCidadao\DynamicFormBundle\Tests\Event;
 
 use LoginCidadao\DynamicFormBundle\Event\DynamicFormSubscriber;
 use LoginCidadao\DynamicFormBundle\Model\DynamicFormData;
-use LoginCidadao\DynamicFormBundle\Service\DynamicFormService;
 use LoginCidadao\DynamicFormBundle\Service\DynamicFormServiceInterface;
 use Symfony\Component\Form\FormEvents;
 
@@ -86,7 +85,7 @@ class DynamicFormSubscriberTest extends \PHPUnit_Framework_TestCase
     private function getFormService($expectsBuildForm)
     {
         $FormInterface = 'Symfony\Component\Form\FormInterface';
-        $PersonInterface = 'LoginCidadao\CoreBundle\Model\PersonInterface';
+        $DynamicFormDataClass = 'LoginCidadao\DynamicFormBundle\Model\DynamicFormData';
 
         $formService = $this->getMock('LoginCidadao\DynamicFormBundle\Service\DynamicFormServiceInterface');
 
@@ -94,7 +93,7 @@ class DynamicFormSubscriberTest extends \PHPUnit_Framework_TestCase
             $formService->expects($this->once())->method('buildForm')
                 ->with(
                     $this->isInstanceOf($FormInterface),
-                    $this->isInstanceOf($PersonInterface),
+                    $this->isInstanceOf($DynamicFormDataClass),
                     $this->isType('array')
                 );
         }
