@@ -90,6 +90,9 @@ class DynamicFormService implements DynamicFormServiceInterface
         if ($nextTask) {
             $redirectUrl = $this->taskStackManager->getTargetUrl($nextTask->getTarget());
         }
+        if (!$redirectUrl) {
+            $redirectUrl = $this->router->generate('lc_dashboard');
+        }
 
         $placeOfBirth = new LocationSelectData();
         $placeOfBirth->getFromObject($person);
