@@ -18,6 +18,7 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\DynamicFormBundle\Model\DynamicFormData;
 use LoginCidadao\ValidationControlBundle\Handler\ValidationHandler;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Validator\Constraints;
 
 class DynamicFormBuilder
 {
@@ -163,6 +164,6 @@ class DynamicFormBuilder
             $data->setIdCard($idCard);
         }
 
-        $form->add('idcard', 'lc_idcard_form', ['label' => false]);
+        $form->add('idcard', 'lc_idcard_form', ['label' => false, 'constraints' => new Constraints\Valid()]);
     }
 }
