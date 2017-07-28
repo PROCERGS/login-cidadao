@@ -20,6 +20,7 @@ use LoginCidadao\CoreBundle\Model\LocationSelectData;
 use LoginCidadao\DynamicFormBundle\Model\DynamicFormData;
 use LoginCidadao\DynamicFormBundle\Service\DynamicFormService;
 use LoginCidadao\OAuthBundle\Entity\Client;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -88,6 +89,21 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($person, $data->getPerson());
         $this->assertEquals($scope, $data->getScope());
         $this->assertEquals($redirectUrl, $data->getRedirectUrl());
+    }
+
+    public function testGetDynamicFormDataWithoutRedirectUrlNorEvent()
+    {
+        $formService = $this->getFormService();
+
+        $person = $this->getPerson();
+        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request->expects($this->atLeastOnce())->method('get')->willReturn(null);
+        $scope = 'scope1 scope2';
+
+        $data = $formService->getDynamicFormData($person, $request, $scope);
+        $this->assertEquals($person, $data->getPerson());
+        $this->assertEquals($scope, $data->getScope());
+        $this->assertEquals('lc_dashboard', $data->getRedirectUrl());
     }
 
     public function testGetDynamicFormDataWithStateAcronym()
