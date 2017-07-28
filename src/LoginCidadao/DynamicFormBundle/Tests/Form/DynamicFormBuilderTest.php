@@ -104,6 +104,43 @@ class DynamicFormBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('idcard', $fields);
     }
 
+    public function testIdCardWithoutState()
+    {
+        $fields = [];
+        $state = new State();
+        $state->setId(1);
+
+        $idCard = new IdCard();
+        $idCard->setState($state);
+
+        /** @var PersonInterface|\PHPUnit_Framework_MockObject_MockObject $person */
+        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person->expects($this->never())->method('getIdCards');
+
+        $data = new DynamicFormData();
+        $data->setPerson($person);
+
+        $form = $form = $this->getMock('Symfony\Component\Form\FormInterface');
+
+        /** @var ValidationHandler|\PHPUnit_Framework_MockObject_MockObject $validationHandler */
+        $validationHandler = $this
+            ->getMockBuilder('LoginCidadao\ValidationControlBundle\Handler\ValidationHandler')
+            ->disableOriginalConstructor()->getMock();
+        $validationHandler->expects($this->never())
+            ->method('instantiateIdCard');
+
+        $builder = new DynamicFormBuilder($validationHandler);
+
+        $scopes = ['id_cards'];
+
+        foreach ($scopes as $scope) {
+            $builder->addFieldFromScope($form, $scope, $data);
+        }
+
+        $this->assertEmpty($fields);
+        $this->assertNotContains('idcard', $fields);
+    }
+
     private function getForm(&$fields)
     {
         $addField = function ($field) use (&$fields) {
