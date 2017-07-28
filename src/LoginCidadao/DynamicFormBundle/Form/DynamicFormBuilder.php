@@ -14,10 +14,10 @@ use libphonenumber\PhoneNumberFormat;
 use LoginCidadao\CoreBundle\Entity\PersonAddress;
 use LoginCidadao\CoreBundle\Model\IdCardInterface;
 use LoginCidadao\CoreBundle\Model\LocationSelectData;
-use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\DynamicFormBundle\Model\DynamicFormData;
 use LoginCidadao\ValidationControlBundle\Handler\ValidationHandler;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Validator\Constraints;
 
 class DynamicFormBuilder
 {
@@ -132,6 +132,7 @@ class DynamicFormBuilder
                 'city_label' => 'Place of birth - City',
                 'state_label' => 'Place of birth - State',
                 'country_label' => 'Place of birth - Country',
+                'constraints' => new Constraints\Valid(),
             ]
         );
 
@@ -143,13 +144,20 @@ class DynamicFormBuilder
         $address = new PersonAddress();
         $address->setLocation(new LocationSelectData());
         $data->setAddress($address);
-        $form->add('address', 'LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType', ['label' => false]);
+        $form->add(
+            'address',
+            'LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType',
+            ['label' => false, 'constraints' => new Constraints\Valid()]
+        );
     }
 
     private function addIdCard(FormInterface $form, DynamicFormData $data)
     {
         $person = $data->getPerson();
         $state = $data->getIdCardState();
+        if (!$state) {
+            return;
+        }
         foreach ($person->getIdCards() as $idCard) {
             if ($idCard->getState()->getId() === $state->getId()) {
                 $data->setIdCard($idCard);
@@ -163,6 +171,6 @@ class DynamicFormBuilder
             $data->setIdCard($idCard);
         }
 
-        $form->add('idcard', 'lc_idcard_form', ['label' => false]);
+        $form->add('idcard', 'lc_idcard_form', ['label' => false, 'constraints' => new Constraints\Valid()]);
     }
 }
