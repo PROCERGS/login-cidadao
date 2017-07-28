@@ -14,7 +14,6 @@ use libphonenumber\PhoneNumberFormat;
 use LoginCidadao\CoreBundle\Entity\PersonAddress;
 use LoginCidadao\CoreBundle\Model\IdCardInterface;
 use LoginCidadao\CoreBundle\Model\LocationSelectData;
-use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\DynamicFormBundle\Model\DynamicFormData;
 use LoginCidadao\ValidationControlBundle\Handler\ValidationHandler;
 use Symfony\Component\Form\FormInterface;
@@ -150,6 +149,9 @@ class DynamicFormBuilder
     {
         $person = $data->getPerson();
         $state = $data->getIdCardState();
+        if (!$state) {
+            return;
+        }
         foreach ($person->getIdCards() as $idCard) {
             if ($idCard->getState()->getId() === $state->getId()) {
                 $data->setIdCard($idCard);
