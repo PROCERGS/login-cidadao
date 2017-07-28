@@ -11,8 +11,8 @@
 namespace LoginCidadao\DynamicFormBundle\Form;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Validator\Constraints;
 
 class DynamicPersonType extends AbstractType
 {
@@ -26,6 +26,7 @@ class DynamicPersonType extends AbstractType
             [
                 'data_class' => 'LoginCidadao\CoreBundle\Entity\Person',
                 'validation_groups' => ['Dynamic'],
+                'constraints' => new Constraints\Valid(),
             ]
         );
     }
