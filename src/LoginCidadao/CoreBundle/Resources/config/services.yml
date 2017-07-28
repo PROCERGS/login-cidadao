@@ -282,7 +282,7 @@ services:
 
     lc.person.address.form.type:
         class: %lc.person.address.form.type.class%
-        arguments: [ "@translator", "@doctrine.orm.entity_manager" ]
+        arguments: ["@doctrine.orm.entity_manager"]
         tags:
             - { name: form.type, alias: lc_person_address }
 

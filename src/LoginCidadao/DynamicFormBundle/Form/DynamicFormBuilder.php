@@ -133,6 +133,7 @@ class DynamicFormBuilder
                 'city_label' => 'Place of birth - City',
                 'state_label' => 'Place of birth - State',
                 'country_label' => 'Place of birth - Country',
+                'constraints' => new Constraints\Valid(),
             ]
         );
 
@@ -144,7 +145,11 @@ class DynamicFormBuilder
         $address = new PersonAddress();
         $address->setLocation(new LocationSelectData());
         $data->setAddress($address);
-        $form->add('address', 'LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType', ['label' => false]);
+        $form->add(
+            'address',
+            'LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType',
+            ['label' => false, 'constraints' => new Constraints\Valid()]
+        );
     }
 
     private function addIdCard(FormInterface $form, DynamicFormData $data)
