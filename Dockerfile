@@ -4,7 +4,7 @@ RUN a2enmod rewrite
 
 # Instal OS dependencies
 RUN apt-get -y update
-RUN apt-get install -y zlibc zlib1g-dev libxml2-dev libicu-dev libpq-dev nodejs \
+RUN apt-get install -y zlibc zlib1g-dev libxml2-dev libicu-dev libpq-dev nodejs zip unzip git \
  && pecl install memcache \
  && docker-php-ext-enable memcache
 
@@ -35,8 +35,6 @@ WORKDIR /var/www/html
 # Instal composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
  && php composer-setup.php
-# TODO: move to general apt-get install + git
-RUN apt-get install -y zip unzip
 
 # Instal composer dependencies
 COPY composer.lock /var/www/html
@@ -49,4 +47,3 @@ RUN chown -R www-data /var/www/html
 RUN php app/console assets:install \
  && php app/console assets:install -e prod \
  && php app/console assetic:dump -e prod
-#COPY lc-docroot.conf /etc/apache2/conf-enabled
