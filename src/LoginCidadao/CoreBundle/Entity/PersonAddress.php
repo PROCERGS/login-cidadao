@@ -40,7 +40,7 @@ class PersonAddress implements LocationAwareInterface
      * @JMS\Expose
      * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
-     * @Assert\Length(max="30", groups={"LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Address"})
+     * @Assert\Length(max="30", groups={"Default", "LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Address"})
      * @ORM\Column(type="string", nullable=true, length=30)
      * @var string
      */
@@ -50,7 +50,7 @@ class PersonAddress implements LocationAwareInterface
      * @JMS\Expose
      * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
-     * @Assert\Length(max="255", groups={"LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Address"})
+     * @Assert\Length(max="255", groups={"Default", "LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Address"})
      * @ORM\Column(type="string", nullable=false, length=255)
      * @var string
      */
@@ -61,7 +61,7 @@ class PersonAddress implements LocationAwareInterface
      * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
      * @ORM\Column(type="string", nullable=true, length=255)
-     * @Assert\Length(max="255", groups={"LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Address"})
+     * @Assert\Length(max="255", groups={"Default", "LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Address"})
      * @var string
      */
     protected $complement;
@@ -70,7 +70,7 @@ class PersonAddress implements LocationAwareInterface
      * @JMS\Expose
      * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
-     * @Assert\Length(max="10", groups={"LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Address"})
+     * @Assert\Length(max="10", groups={"Default", "LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Address"})
      * @ORM\Column(name="address_number",type="string", nullable=true, length=10)
      * @var string
      */
@@ -100,7 +100,7 @@ class PersonAddress implements LocationAwareInterface
      * @JMS\Expose
      * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
-     * @Assert\Length(max="20", groups={"LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Address"})
+     * @Assert\Length(max="20", groups={"Default", "LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Address"})
      * @ORM\Column(name="postal_code", type="string", nullable=true, length=20)
      * @var string
      */
