@@ -760,7 +760,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test scenario where the person making the connection does not have a CPF in the profile but there is another
-     * account that user's CPF but without NFG connection.
+     * account that uses the user's CPF but without NFG connection.
      *
      * The other user's account should have the CPF set to NULL and the current user will be connected to NFG
      */
@@ -790,6 +790,8 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $nfg = $this->getNfgService(
             [
+                // flush() and persist() should be called twice since we change both $person and $otherPerson
+                'em' => $this->getEntityManager(['flush' => $this->exactly(2), 'persist' => $this->exactly(2)]),
                 'session' => $this->getSession($accessId, 'none'),
                 'soap' => $soapService,
                 'meurs_helper' => $meuRSHelper,

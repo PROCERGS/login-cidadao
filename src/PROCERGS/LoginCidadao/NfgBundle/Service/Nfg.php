@@ -380,6 +380,8 @@ class Nfg implements LoggerAwareInterface
         if (!$otherPerson->getNfgProfile()) {
             // The other person isn't linked with NFG, so $person can safely get the CPF
             $otherPerson->getPerson()->setCpf(null);
+            $this->em->persist($otherPerson->getPerson());
+            $this->em->flush($otherPerson->getPerson());
 
             $this->mailer->notifyCpfLost($otherPerson->getPerson());
 
