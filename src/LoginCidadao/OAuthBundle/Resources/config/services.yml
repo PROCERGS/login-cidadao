@@ -41,3 +41,8 @@ services:
         factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
             - LoginCidadao\OAuthBundle\Entity\AccessToken
+
+    organization:
+        class: LoginCidadao\OAuthBundle\Service\OrganizationService
+        arguments:
+            - "@checker.sector_identifier_uri"
