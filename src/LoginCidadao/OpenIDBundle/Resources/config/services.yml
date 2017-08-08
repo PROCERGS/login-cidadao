@@ -142,3 +142,8 @@ services:
             - ["setSkipCompletionTaskIfAuthorized", ["%pre_authorization.complete_information_task.skip_if_authorized%"]]
         tags:
             - { name: kernel.event_subscriber }
+
+    oidc.oauth.events_subscriber:
+        class: LoginCidadao\OpenIDBundle\EventListener\OAuthEventSubscriber
+        tags:
+            - { name: kernel.event_subscriber }

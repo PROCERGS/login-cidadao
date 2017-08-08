@@ -1,84 +1,94 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\OAuthBundle\EventListener;
 
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\OAuthServerBundle\Event\OAuthEvent;
-use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
 use LoginCidadao\CoreBundle\Entity\Authorization;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OpenIDBundle\Event\AuthorizationEvent;
+use LoginCidadao\OpenIDBundle\LoginCidadaoOpenIDEvents;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class OAuthEventListener
 {
-    private $doctrine;
-    private $personRepo;
-    /** @var Request */
-    private $request;
+    /** @var EntityManagerInterface */
+    private $em;
+
+    /** @var FormInterface */
     private $form;
 
-    public function __construct(Doctrine $doctrine, $container)
+    /** @var Request */
+    private $request;
+
+    public function __construct(EntityManagerInterface $em, FormInterface $form, RequestStack $requestStack)
     {
-        $this->doctrine   = $doctrine;
-        $this->personRepo = $this->doctrine->getRepository('LoginCidadaoCoreBundle:Person');
-        $this->request    = $container->get('request');
-        $this->form       = $container->get('fos_oauth_server.authorize.form');
+        $this->em = $em;
+        $this->form = $form;
+
+        $this->request = $requestStack->getCurrentRequest();
     }
 
     public function onPreAuthorizationProcess(OAuthEvent $event)
     {
-        $scope = $this->getScope();
-        $user  = $this->getUser($event);
-        if ($user) {
-            $event->setAuthorizedClient(
-                $user->isAuthorizedClient($event->getClient(), $scope)
-            );
+        $user = $event->getUser();
+        $client = $event->getClient();
+        if (!$user instanceof PersonInterface || !$client instanceof ClientInterface) {
+            return;
         }
+
+        $event->setAuthorizedClient(
+            $user->isAuthorizedClient($client, $this->getScope())
+        );
     }
 
-    public function onPostAuthorizationProcess(OAuthEvent $event)
+    public function onPostAuthorizationProcess(OAuthEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         if (!$event->isAuthorizedClient()) {
             return;
         }
-        if (null === $client = $event->getClient()) {
+        $client = $event->getClient();
+        if (null === $client || !$client instanceof ClientInterface) {
             return;
         }
 
-        $user  = $this->getUser($event);
+        /** @var PersonInterface $user */
+        $user = $event->getUser();
         $scope = $this->getScope();
 
-        $em          = $this->doctrine->getManager();
-        $authRepo    = $em->getRepository('LoginCidadaoCoreBundle:Authorization');
-        $currentAuth = $authRepo->findOneBy(array(
-            'person' => $user,
-            'client' => $client
-        ));
+        /** @var Authorization $currentAuth */
+        $currentAuth = $this->getCurrentAuthorization($user, $client);
 
-        // if the authorization is already there, update it.
+        $authorizationEvent = new AuthorizationEvent($user, $client, $scope);
+
+        $authEventName = LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION;
         if ($currentAuth instanceof Authorization) {
-            $merged = array_merge($currentAuth->getScope(), $scope);
-            $currentAuth->setScope($merged);
-        } else {
-            $authorization = new Authorization();
-            $authorization->setClient($client);
-            $authorization->setPerson($user);
-            $authorization->setScope($scope);
-            $em->persist($authorization);
+            // if the authorization is already there, update it.
+            $authEventName = LoginCidadaoOpenIDEvents::UPDATE_AUTHORIZATION;
+            $authorizationEvent->setAuthorization($currentAuth);
         }
 
-        $em->flush();
+        $dispatcher->dispatch($authEventName, $authorizationEvent);
+
+        $this->em->persist($authorizationEvent->getAuthorization());
+        $this->em->flush();
     }
 
-    public function getUser(OAuthEvent $event)
+    private function getScope()
     {
-        return $this->personRepo
-                ->findOneBy(array(
-                    'username' => $event->getUser()->getUsername()
-        ));
-    }
-
-    protected function getScope()
-    {
-        $form  = $this->form->getName();
+        $form = $this->form->getName();
 
         $scope = $this->request->request->get('scope', false);
         if (!$scope) {
@@ -89,5 +99,14 @@ class OAuthEventListener
         }
 
         return !is_array($scope) ? explode(' ', $scope) : $scope;
+    }
+
+    private function getCurrentAuthorization(PersonInterface $person, ClientInterface $client)
+    {
+        /** @var Authorization $currentAuth */
+        $currentAuth = $this->em->getRepository('LoginCidadaoCoreBundle:Authorization')
+            ->findOneBy(['person' => $person, 'client' => $client,]);
+
+        return $currentAuth;
     }
 }
