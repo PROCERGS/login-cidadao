@@ -531,11 +531,11 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     /**
      * Checks if a given Client can access this Person's specified scope.
-     * @param \LoginCidadao\OAuthBundle\Entity\Client $client
+     * @param ClientInterface $client
      * @param mixed $scope can be a single scope or an array with several.
      * @return boolean
      */
-    public function isAuthorizedClient(Client $client, $scope)
+    public function isAuthorizedClient(ClientInterface $client, $scope)
     {
         $authorizations = $this->getAuthorizations();
         foreach ($authorizations as $auth) {
