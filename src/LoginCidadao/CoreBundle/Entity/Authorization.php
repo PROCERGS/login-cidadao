@@ -94,11 +94,11 @@ class Authorization
     }
 
     /**
-     * @param array $scope
+     * @param array|string $scope
      */
-    public function setScope(array $scope)
+    public function setScope($scope)
     {
-        $scope       = $this->enforcePublicProfileScope($scope);
+        $scope = $this->enforcePublicProfileScope(Authorization::enforceArray($scope));
         $this->scope = $scope;
     }
 
@@ -108,15 +108,12 @@ class Authorization
      */
     public function hasScopes($needed)
     {
-        if (!is_array($needed)) {
-            $needed = array($needed);
-        }
-
-        foreach ($needed as $n) {
+        foreach (Authorization::enforceArray($needed) as $n) {
             if (array_search($n, $this->getScope()) === false) {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -125,6 +122,7 @@ class Authorization
         if (array_search('public_profile', $scope) === false) {
             $scope[] = 'public_profile';
         }
+
         return $scope;
     }
 
@@ -148,5 +146,24 @@ class Authorization
         if (!($this->getCreatedAt() instanceof \DateTime)) {
             $this->createdAt = new \DateTime();
         }
+    }
+
+    /**
+     * Enforces that a scope is an array
+     *
+     * @param $scope
+     * @return array
+     */
+    public static function enforceArray($scope)
+    {
+        if (is_array($scope)) {
+            return $scope;
+        }
+
+        if (is_bool($scope) || is_null($scope) || $scope === '') {
+            return [];
+        }
+
+        return explode(' ', $scope);
     }
 }
