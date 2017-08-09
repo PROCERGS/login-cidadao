@@ -10,7 +10,6 @@
 
 namespace LoginCidadao\CoreBundle\Tests\Entity;
 
-
 use LoginCidadao\CoreBundle\Entity\Authorization;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\OAuthBundle\Entity\Client;
