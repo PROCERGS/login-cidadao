@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of the login-cidadao project or it's bundles.
  *
  * (c) Guilherme Donato <guilhermednt on github>
@@ -15,7 +15,6 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class OrganizationRepository extends EntityRepository
 {
-
     public function findByMember(PersonInterface $person)
     {
         $query = $this->createQueryBuilder('o')
