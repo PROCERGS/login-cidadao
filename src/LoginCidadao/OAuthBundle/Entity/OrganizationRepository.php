@@ -13,6 +13,11 @@ namespace LoginCidadao\OAuthBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 
+/**
+ * Class OrganizationRepository
+ * @package LoginCidadao\OAuthBundle\Entity
+ * @codeCoverageIgnore
+ */
 class OrganizationRepository extends EntityRepository
 {
     public function findByMember(PersonInterface $person)
