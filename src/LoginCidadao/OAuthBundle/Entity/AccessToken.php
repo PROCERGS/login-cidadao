@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\OAuthBundle\Entity;
 
@@ -7,7 +15,7 @@ use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="LoginCidadao\OAuthBundle\Entity\AccessTokenRepository")
+ * @ORM\Entity
  * @ORM\Table(name="access_token")
  * @ORM\HasLifecycleCallbacks
  * @ORM\AttributeOverrides({
@@ -72,6 +80,7 @@ class AccessToken extends BaseAccessToken
         return $this;
     }
 
+    // TODO: move subjectIdentifier calculation to the corresponding Service
     public function getUserId($pairwiseSubjectIdSalt)
     {
         $id = $this->getUser()->getId();
