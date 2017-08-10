@@ -45,11 +45,9 @@ interface ClientInterface extends BaseInterface
 
     public function setId($var);
 
-    public function getCategories();
-
     public function getOwners();
 
-    public function setOwners(ArrayCollection $owners);
+    public function setOwners($owners);
 
     /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
