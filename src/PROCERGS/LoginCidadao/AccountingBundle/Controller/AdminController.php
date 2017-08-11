@@ -12,6 +12,7 @@ namespace PROCERGS\LoginCidadao\AccountingBundle\Controller;
 
 use LoginCidadao\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
+use PROCERGS\LoginCidadao\AccountingBundle\Form\MonthSelectorType;
 use PROCERGS\LoginCidadao\AccountingBundle\Service\AccountingService;
 use PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,18 +24,39 @@ use Symfony\Component\HttpFoundation\Request;
 class AdminController extends Controller
 {
     /**
-     * @Route("/accounting", name="lc_admin_accounting_summary")
+     * @Route("/accounting/{month}", name="lc_admin_accounting_summary",
+     *     requirements={"month" = "\d{4}-(?:0[1-9]|1[012])"}, defaults={"month" = null}
+     * )
      * @Template
      * @Security("has_role('ROLE_ACCOUNTING_VIEW')")
      */
-    public function indexAction()
+    public function indexAction($month = null)
     {
+        $months = [
+            (new \DateTime('first day of this month'))->modify('-2 months'),
+            (new \DateTime('first day of this month'))->modify('-1 month'),
+            new \DateTime('first day of this month'),
+        ];
+        $monthChoices = [];
+        foreach ($months as $choice) {
+            $monthChoices[] = [
+                'label' => $choice->format('m/Y'),
+                'month' => $choice->format('Y-m'),
+            ];
+        }
+
+        if ($month === null) {
+            $month = 'previous month';
+        }
+
         /** @var AccountingService $accountingService */
         $accountingService = $this->get('procergs.lc.accounting');
 
-        $start = new \DateTime('-7 days');
-        $end = new \DateTime();
-        $data = $accountingService->getAccounting($start, $end);
+        $start = new \DateTime("first day of {$month}");
+        $end = new \DateTime("last day of {$month}");
+        $data = $accountingService->filterOutInactive(
+            $accountingService->getAccounting($start, $end)
+        );
 
         // Reverse sort by access_token
         uasort(
@@ -51,6 +73,9 @@ class AdminController extends Controller
         );
 
         return [
+            'monthChoices' => $monthChoices,
+            'start' => $start,
+            'end' => $end,
             'data' => $data,
         ];
     }
