@@ -33,6 +33,7 @@ class AdminController extends Controller
     public function indexAction($month = null)
     {
         $months = [
+            (new \DateTime('first day of this month'))->modify('-3 months'),
             (new \DateTime('first day of this month'))->modify('-2 months'),
             (new \DateTime('first day of this month'))->modify('-1 month'),
             new \DateTime('first day of this month'),

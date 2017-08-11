@@ -14,6 +14,7 @@ admin.accounting:
                 internal: "Interno (PROCERGS)"
                 external: "Externo"
             has_issue: "Foi detectada alguma inconsistência nesse sistema"
+        select_month: "Selecione o mês que deseja visualizar:"
     edit:
         title: "Editando <strong>%client_name%</strong>"
         back: "Voltar"
