@@ -52,6 +52,9 @@ class DefaultController extends Controller
             new \DateTime("last day of previous month")
         );
 
+        // Remove Clients with 0 usage
+        $data = $accountingService->filterOutInactive($data);
+
         $summary = [];
         $summaryErrors = [];
         foreach ($data as $client) {

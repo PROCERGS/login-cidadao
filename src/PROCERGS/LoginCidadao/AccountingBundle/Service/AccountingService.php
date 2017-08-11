@@ -56,6 +56,9 @@ class AccountingService
      */
     public function getAccounting(\DateTime $start, \DateTime $end)
     {
+        $start->setTime(0, 0, 0);
+        $end->setTime(0, 0, 0);
+
         $data = $this->clientRepository->getAccessTokenAccounting($start, $end);
         $actionLog = $this->clientRepository->getActionLogAccounting($start, $end);
 
@@ -97,6 +100,19 @@ class AccountingService
             },
             $report
         );
+    }
+
+    /**
+     * Remove services that didn't use the API.
+     *
+     * @param array $data
+     * @return array
+     */
+    public function filterOutInactive(array $data)
+    {
+        return array_filter($data, function ($client) {
+            return $client['access_tokens'] + $client['api_usage'] > 0;
+        });
     }
 
     /**
