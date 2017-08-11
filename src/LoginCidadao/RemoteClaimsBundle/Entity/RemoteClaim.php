@@ -1,0 +1,113 @@
+<?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace LoginCidadao\RemoteClaimsBundle\Entity;
+
+use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
+use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
+
+class RemoteClaim implements RemoteClaimInterface
+{
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $displayName;
+
+    /**
+     * @var string
+     */
+    private $description;
+
+    /**
+     * @var ClaimProviderInterface
+     */
+    private $provider;
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return RemoteClaim
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisplayName()
+    {
+        return $this->displayName;
+    }
+
+    /**
+     * @param string $displayName
+     * @return RemoteClaim
+     */
+    public function setDisplayName($displayName)
+    {
+        $this->displayName = $displayName;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     * @return RemoteClaim
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return ClaimProviderInterface
+     */
+    public function getProvider()
+    {
+        return $this->provider;
+    }
+
+    /**
+     * @param ClaimProviderInterface $provider
+     * @return RemoteClaim
+     */
+    public function setProvider($provider)
+    {
+        $this->provider = $provider;
+
+        return $this;
+    }
+}

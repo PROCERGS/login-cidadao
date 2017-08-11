@@ -1,0 +1,4 @@
+services:
+#    login_cidadao_remote_claims.example:
+#        class: LoginCidadao\RemoteClaimsBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
