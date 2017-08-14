@@ -52,18 +52,7 @@ class SystemsRegistryService
 
     public function getSystemInitials(ClientInterface $client)
     {
-        $urls = array_filter(array_merge($client->getRedirectUris()));
-        $hosts = array_unique(
-            array_map(
-                function ($url) {
-                    return parse_url($url)['host'];
-                },
-                $urls
-            )
-        );
-        if ($client->getSiteUrl()) {
-            $hosts[] = $client->getSiteUrl();
-        }
+        $hosts = $this->getHosts($client);
 
         $identifiedSystems = [];
         $systems = [];
@@ -88,6 +77,35 @@ class SystemsRegistryService
         }
 
         return $identifiedSystems;
+    }
+
+    public function getSystemOwners(ClientInterface $client)
+    {
+        $hosts = $this->getHosts($client);
+
+        $identifiedOwners = [];
+        $owners = [];
+        foreach ($hosts as $host) {
+            foreach (array_column($this->fetchInfo($host), 'clienteDono') as $owner) {
+                if (array_key_exists($owner, $owners)) {
+                    $owners[$owner] += 1;
+                } else {
+                    $owners[$owner] = 1;
+                }
+            }
+        }
+        if (count($owners) <= 0) {
+            return [];
+        }
+        asort($owners);
+        $max = max($owners);
+        foreach ($owners as $key => $value) {
+            if ($value === $max) {
+                $identifiedOwners[] = $key;
+            }
+        }
+
+        return $identifiedOwners;
     }
 
     private function fetchInfo($query)
@@ -155,6 +173,9 @@ class SystemsRegistryService
                 $urls
             )
         );
+        if ($client->getSiteUrl()) {
+            $hosts[] = $client->getSiteUrl();
+        }
 
         return $hosts;
     }

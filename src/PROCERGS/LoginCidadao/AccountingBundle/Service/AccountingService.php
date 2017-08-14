@@ -56,6 +56,9 @@ class AccountingService
      */
     public function getAccounting(\DateTime $start, \DateTime $end)
     {
+        $start->setTime(0, 0, 0);
+        $end->setTime(0, 0, 0);
+
         $data = $this->clientRepository->getAccessTokenAccounting($start, $end);
         $actionLog = $this->clientRepository->getActionLogAccounting($start, $end);
 
@@ -100,6 +103,19 @@ class AccountingService
     }
 
     /**
+     * Remove services that didn't use the API.
+     *
+     * @param array $data
+     * @return array
+     */
+    public function filterOutInactive(array $data)
+    {
+        return array_filter($data, function ($client) {
+            return $client['access_tokens'] + $client['api_usage'] > 0;
+        });
+    }
+
+    /**
      * @param array $report
      * @param Client $client
      * @param array $linked
@@ -125,6 +141,7 @@ class AccountingService
             }
         } else {
             $initials = $this->systemsRegistry->getSystemInitials($client);
+            $owners = $this->systemsRegistry->getSystemOwners($client);
             if (array_key_exists($clientId, $linked)) {
                 $systemType = $linked[$clientId]->getSystemType();
             } else {
@@ -138,6 +155,7 @@ class AccountingService
             $report[$clientId] = [
                 'client' => $client,
                 'procergs_initials' => $initials,
+                'procergs_owner' => $owners,
                 'system_type' => $systemType,
                 'access_tokens' => $accessTokens ?: 0,
                 'api_usage' => $apiUsage ?: 0,

@@ -52,6 +52,9 @@ class DefaultController extends Controller
             new \DateTime("last day of previous month")
         );
 
+        // Remove Clients with 0 usage
+        $data = $accountingService->filterOutInactive($data);
+
         $summary = [];
         $summaryErrors = [];
         foreach ($data as $client) {
@@ -62,10 +65,11 @@ class DefaultController extends Controller
                 continue;
             }
             foreach ($procergsInitials as $initials) {
-                if (array_key_exists($initials, $summary)) {
-                    $summary[$initials] += $totalUsage;
+                $summary[$initials]['owner'] = implode(' ', $client['procergs_owner']);
+                if (array_key_exists('usage', $summary[$initials])) {
+                    $summary[$initials]['usage'] += $totalUsage;
                 } else {
-                    $summary[$initials] = $totalUsage;
+                    $summary[$initials]['usage'] = $totalUsage;
                 }
             }
         }
@@ -79,14 +83,14 @@ class DefaultController extends Controller
             $today->format('dmY'),
         ];
         $body = [];
-        foreach ($summary as $initials => $usage) {
+        foreach ($summary as $initials => $sysInfo) {
             $body[] = implode(
                 ';',
                 [
                     '2',
-                    '',
+                    $sysInfo['owner'],
                     $initials,
-                    $usage,
+                    $sysInfo['usage'],
                 ]
             );
         }
@@ -106,10 +110,8 @@ class DefaultController extends Controller
             count($body),
         ];
 
-        echo '<pre>';
         echo implode(';', $header).PHP_EOL;
         echo implode("\n", $body).PHP_EOL;
-        echo implode(';', $tail).PHP_EOL;
-        echo '</pre>';
+        echo implode(';', $tail);
     }
 }

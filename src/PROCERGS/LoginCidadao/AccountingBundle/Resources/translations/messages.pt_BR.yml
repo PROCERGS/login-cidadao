@@ -25,6 +25,9 @@ admin.accounting:
             initials:
                 label: "Sigla PROCERGS"
                 not_found: "Não encontrada"
+            owner:
+                label: "Cliente Dono"
+                not_found: "Não identificado"
         form:
             legend: "Vinculação a Sistemas PROCERGS"
             system_type:

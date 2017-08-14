@@ -35,6 +35,10 @@
                                 <label class="control-label">{{ 'admin.accounting.edit.client.initials.label' | trans }}</label>
                                 <pre class="form-control-static">{{ initials | join('\n') | default('admin.accounting.edit.client.initials.not_found' | trans) }}</pre>
                             </div>
+                            <div class="form-group">
+                                <label class="control-label">{{ 'admin.accounting.edit.client.owner.label' | trans }}</label>
+                                <pre class="form-control-static">{{ owners | join('\n') | default('admin.accounting.edit.client.owner.not_found' | trans) }}</pre>
+                            </div>
                             {{ form_row(form.systemType) }}
                         </fieldset>
                     </div>
