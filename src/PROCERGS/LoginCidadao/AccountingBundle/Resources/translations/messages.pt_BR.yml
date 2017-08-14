@@ -2,17 +2,19 @@ admin.accounting:
     menu: "Contabilidade"
     summary:
         title: "Contabilidade de Serviços"
-        caption: "Access Tokens gerados nos últimos 7 dias"
+        caption: "Access Tokens gerados em %month%"
         client:
             name: "Serviço"
             procergs_initials: "Sigla PROCERGS"
             system_type: "Tipo de Sistema"
             access_tokens: "Access Tokens"
             api_usage: "Uso de API"
+            total: "Total"
             type:
                 internal: "Interno (PROCERGS)"
                 external: "Externo"
             has_issue: "Foi detectada alguma inconsistência nesse sistema"
+        select_month: "Selecione o mês que deseja visualizar:"
     edit:
         title: "Editando <strong>%client_name%</strong>"
         back: "Voltar"

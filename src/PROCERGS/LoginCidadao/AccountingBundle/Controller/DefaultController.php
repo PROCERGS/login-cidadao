@@ -47,71 +47,11 @@ class DefaultController extends Controller
     {
         /** @var AccountingService $accountingService */
         $accountingService = $this->get('procergs.lc.accounting');
-        $data = $accountingService->getAccounting(
+
+        echo $accountingService->getGcsInterface(
+            'LOGCIDADAO',
             new \DateTime("first day of previous month"),
             new \DateTime("last day of previous month")
         );
-
-        // Remove Clients with 0 usage
-        $data = $accountingService->filterOutInactive($data);
-
-        $summary = [];
-        $summaryErrors = [];
-        foreach ($data as $client) {
-            $procergsInitials = $client['procergs_initials'];
-            $totalUsage = $client['access_tokens'] + $client['api_usage'];
-            if (count($procergsInitials) !== 1) {
-                $summaryErrors[] = $totalUsage;
-                continue;
-            }
-            foreach ($procergsInitials as $initials) {
-                $summary[$initials]['owner'] = implode(' ', $client['procergs_owner']);
-                if (array_key_exists('usage', $summary[$initials])) {
-                    $summary[$initials]['usage'] += $totalUsage;
-                } else {
-                    $summary[$initials]['usage'] = $totalUsage;
-                }
-            }
-        }
-
-        $today = new \DateTime();
-        $month = (new \DateTime('-1 month'))->format('mY');
-        $header = [
-            '1',
-            'LOGCIDADAO',
-            $month,
-            $today->format('dmY'),
-        ];
-        $body = [];
-        foreach ($summary as $initials => $sysInfo) {
-            $body[] = implode(
-                ';',
-                [
-                    '2',
-                    $sysInfo['owner'],
-                    $initials,
-                    $sysInfo['usage'],
-                ]
-            );
-        }
-        foreach ($summaryErrors as $usage) {
-            $body[] = implode(
-                ';',
-                [
-                    '2',
-                    '',
-                    '',
-                    $usage,
-                ]
-            );
-        }
-        $tail = [
-            '9',
-            count($body),
-        ];
-
-        echo implode(';', $header).PHP_EOL;
-        echo implode("\n", $body).PHP_EOL;
-        echo implode(';', $tail);
     }
 }
