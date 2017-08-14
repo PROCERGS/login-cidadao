@@ -15,6 +15,7 @@ use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLinkRepository;
+use PROCERGS\LoginCidadao\AccountingBundle\GcsInterface;
 
 class AccountingService
 {
@@ -148,9 +149,6 @@ class AccountingService
                 // If there is no known link we assume it's an Internal system
                 // If this assumption is false then an alarm will go off to alert the accounting team to fix it
                 $systemType = ProcergsLink::TYPE_INTERNAL;
-
-                // Otherwise we could try to assert the type from the URLs we know
-                //$systemType = $this->systemsRegistry->getTypeFromUrl($client);
             }
             $report[$clientId] = [
                 'client' => $client,
@@ -163,5 +161,18 @@ class AccountingService
         }
 
         return $report;
+    }
+
+    public function getGcsInterface($interfaceName, \DateTime $start, \DateTime $end)
+    {
+        $data = $this->filterOutInactive($this->getAccounting($start, $end));
+
+        $gcsInterface = new GcsInterface($interfaceName, $start);
+
+        foreach ($data as $client) {
+            $gcsInterface->addClient($client);
+        }
+
+        return $gcsInterface->__toString();
     }
 }
