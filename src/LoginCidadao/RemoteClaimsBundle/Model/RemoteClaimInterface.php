@@ -18,9 +18,21 @@ interface RemoteClaimInterface
     public function getName();
 
     /**
+     * @param string $name
+     * @return RemoteClaimInterface
+     */
+    public function setName($name);
+
+    /**
      * @return string
      */
     public function getDisplayName();
+
+    /**
+     * @param string $displayName
+     * @return RemoteClaimInterface
+     */
+    public function setDisplayName($displayName);
 
     /**
      * @return string
@@ -28,7 +40,41 @@ interface RemoteClaimInterface
     public function getDescription();
 
     /**
+     * @param string $description
+     * @return RemoteClaimInterface
+     */
+    public function setDescription($description);
+
+    /**
+     * @return string[]
+     */
+    public function getRecommendedScope();
+
+    /**
+     * @param string|string[] $recommendedScope
+     * @return RemoteClaimInterface
+     */
+    public function setRecommendedScope($recommendedScope);
+
+    /**
+     * @return string[]
+     */
+    public function getEssentialScope();
+
+    /**
+     * @param string|string[] $essentialScope
+     * @return RemoteClaimInterface
+     */
+    public function setEssentialScope($essentialScope);
+
+    /**
      * @return ClaimProviderInterface
      */
     public function getProvider();
+
+    /**
+     * @param ClaimProviderInterface $provider
+     * @return RemoteClaimInterface
+     */
+    public function setProvider(ClaimProviderInterface $provider);
 }

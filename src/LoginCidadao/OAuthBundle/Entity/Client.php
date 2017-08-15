@@ -15,6 +15,7 @@ use FOS\OAuthServerBundle\Entity\Client as BaseClient;
 use Doctrine\ORM\Mapping as ORM;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
+use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -32,7 +33,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
  */
-class Client extends BaseClient implements UniqueEntityInterface, ClientInterface
+class Client extends BaseClient implements UniqueEntityInterface, ClientInterface, ClaimProviderInterface
 {
     /**
      * @ORM\Id

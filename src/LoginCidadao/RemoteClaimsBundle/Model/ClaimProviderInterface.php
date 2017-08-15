@@ -20,6 +20,12 @@ interface ClaimProviderInterface
     public function getName();
 
     /**
+     * @param string $name
+     * @return ClaimProviderInterface
+     */
+    public function setName($name);
+
+    /**
      * Get the redirect_uris allowed for this Claim Provider
      *
      * @return string[]
@@ -27,16 +33,8 @@ interface ClaimProviderInterface
     public function getRedirectUris();
 
     /**
-     * Get the recommended scope needed by this Claim Provider
-     *
-     * @return string|string[]
+     * @param string[] $redirectUris
+     * @return ClaimProviderInterface
      */
-    public function getScope();
-
-    /**
-     * Get the essential scope needed by this Claim Provider.
-     *
-     * @return string|string[]
-     */
-    public function getEssentialScope();
+    public function setRedirectUris(array $redirectUris);
 }

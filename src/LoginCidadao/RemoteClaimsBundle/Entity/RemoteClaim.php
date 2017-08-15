@@ -31,6 +31,16 @@ class RemoteClaim implements RemoteClaimInterface
     private $description;
 
     /**
+     * @var string[]
+     */
+    private $providerRecommendedScope;
+
+    /**
+     * @var string[]
+     */
+    private $providerEssentialScope;
+
+    /**
      * @var ClaimProviderInterface
      */
     private $provider;
@@ -104,9 +114,48 @@ class RemoteClaim implements RemoteClaimInterface
      * @param ClaimProviderInterface $provider
      * @return RemoteClaim
      */
-    public function setProvider($provider)
+    public function setProvider(ClaimProviderInterface $provider)
     {
         $this->provider = $provider;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getRecommendedScope()
+    {
+        return $this->providerRecommendedScope;
+    }
+
+    /**
+     * @param string|string[] $recommendedScope
+     * @return RemoteClaimInterface
+     */
+    public function setRecommendedScope($recommendedScope)
+    {
+
+        $this->providerRecommendedScope = $recommendedScope;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getEssentialScope()
+    {
+        return $this->providerEssentialScope;
+    }
+
+    /**
+     * @param string|string[] $essentialScope
+     * @return RemoteClaimInterface
+     */
+    public function setEssentialScope($essentialScope)
+    {
+        $this->providerEssentialScope = $essentialScope;
 
         return $this;
     }
