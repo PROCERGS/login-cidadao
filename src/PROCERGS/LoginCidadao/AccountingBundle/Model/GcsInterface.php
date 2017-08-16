@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace PROCERGS\LoginCidadao\AccountingBundle;
+namespace PROCERGS\LoginCidadao\AccountingBundle\Model;
 
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
 
@@ -20,6 +20,9 @@ class GcsInterface
     /** @var \DateTime */
     private $start;
 
+    /** @var array */
+    private $config;
+
     private $procergsSystems = [];
     private $externalSystems = [];
     private $invalidSystems = [];
@@ -28,11 +31,17 @@ class GcsInterface
      * GcsInterface constructor.
      * @param string $interfaceName
      * @param \DateTime $start
+     * @param array $config
      */
-    public function __construct($interfaceName, \DateTime $start)
+    public function __construct($interfaceName, \DateTime $start, array $config = [])
     {
         $this->interfaceName = $interfaceName;
         $this->start = $start;
+
+        $this->config = array_merge([
+            'ignore_externals' => false,
+            'external_label' => 'EXTERNAL',
+        ], $config);
     }
 
     public function addClient($client)
@@ -94,7 +103,12 @@ class GcsInterface
 
     private function getExternalSystemsBody()
     {
-        return $this->getStaticOwnerAndInitialsBody($this->externalSystems, 'EXTERNAL', 'EXTERNAL');
+        if ($this->config['ignore_externals']) {
+            return [];
+        }
+
+        return $this->getStaticOwnerAndInitialsBody($this->externalSystems, $this->config['external_label'],
+            $this->config['external_label']);
     }
 
     private function getInvalidSystemsBody()
@@ -118,7 +132,7 @@ class GcsInterface
         $totalUsage = $client['access_tokens'] + $client['api_usage'];
 
         if (count($procergsInitials) !== 1) {
-            $this->invalidSystems[] = $totalUsage;
+            $this->registerInvalidEntry($client);
 
             return;
         }
@@ -143,7 +157,7 @@ class GcsInterface
     private function registerInvalidEntry($client)
     {
         $totalUsage = $client['access_tokens'] + $client['api_usage'];
-        $invalidSystems[] = $totalUsage;
+        $this->invalidSystems[] = $totalUsage;
     }
 
     public function __toString()

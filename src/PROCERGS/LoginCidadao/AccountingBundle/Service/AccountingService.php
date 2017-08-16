@@ -15,7 +15,7 @@ use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLinkRepository;
-use PROCERGS\LoginCidadao\AccountingBundle\GcsInterface;
+use PROCERGS\LoginCidadao\AccountingBundle\Model\GcsInterface;
 
 class AccountingService
 {
@@ -167,7 +167,7 @@ class AccountingService
     {
         $data = $this->filterOutInactive($this->getAccounting($start, $end));
 
-        $gcsInterface = new GcsInterface($interfaceName, $start);
+        $gcsInterface = new GcsInterface($interfaceName, $start, ['ignore_externals' => true]);
 
         foreach ($data as $client) {
             $gcsInterface->addClient($client);
