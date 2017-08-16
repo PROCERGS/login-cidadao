@@ -19,7 +19,6 @@ services:
                 "organization": "%accounting.procergs_systems.api.organization%"
                 "registration_number": "%accounting.procergs_systems.api.registration_number%"
                 "password": "%accounting.procergs_systems.api.password%"
-                "domains": "%accounting.procergs_systems.domains%"
 
     procergs.lc.accounting:
         class: PROCERGS\LoginCidadao\AccountingBundle\Service\AccountingService
