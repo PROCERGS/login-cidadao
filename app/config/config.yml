@@ -316,6 +316,8 @@ parameters:
     organization.class: LoginCidadao\OAuthBundle\Entity\Organization
     oauth_client.class: LoginCidadao\OAuthBundle\Entity\Client
 
+    hwi_oauth.http_client.class: PROCERGS\Generic\CurlIPv4
+
 beelab_recaptcha2:
     request_method: curl_post
     site_key: "%recaptcha_public_key%"
