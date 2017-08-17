@@ -122,17 +122,13 @@ class AccountingReport
                 throw new \InvalidArgumentException("Invalid sorting order '{$order}'");
         }
 
-        $success = uasort($report, function (AccountingReportEntry $a, AccountingReportEntry $b) use ($order) {
+        uasort($report, function (AccountingReportEntry $a, AccountingReportEntry $b) use ($order) {
             if ($a->getTotalUsage() === $b->getTotalUsage()) {
                 return 0;
             }
 
             return ($a->getTotalUsage() < $b->getTotalUsage()) ? $order : $order * -1;
         });
-
-        if (!$success) {
-            throw new \RuntimeException("Error sorting the report array");
-        }
 
         return $report;
     }
