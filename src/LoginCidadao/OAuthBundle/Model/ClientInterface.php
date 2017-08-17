@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 interface ClientInterface extends BaseInterface
 {
+    public function getId();
 
     public function setName($name);
 

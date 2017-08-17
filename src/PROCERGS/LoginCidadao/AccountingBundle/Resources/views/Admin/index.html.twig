@@ -38,8 +38,8 @@
                                 {% for item in data %}
                                     <tr>
                                         <td>
-                                            {% if (item.system_type == 'internal' and item.procergs_initials is empty)
-                                            or item.procergs_initials | length > 1 %}
+                                            {% if (item.systemType == 'internal' and item.procergsInitials is empty)
+                                            or item.procergsInitials | length > 1 %}
                                                 <span class="glyphicon glyphicon-exclamation-sign text-danger"
                                                       title="{{ 'admin.accounting.summary.client.has_issue' | trans }}"
                                                       aria-label="{{ 'admin.accounting.summary.client.has_issue' | trans }}"></span>
@@ -48,19 +48,19 @@
                                         <td>
                                             {% if is_granted('ROLE_ACCOUNTING_EDIT') %}
                                                 <a class="text-info "
-                                                   href="{{ path('lc_admin_accounting_edit_link', {'clientId': item.client.client_id}) }}">
+                                                   href="{{ path('lc_admin_accounting_edit_link', {'clientId': item.client.publicId}) }}">
                                                     {{ item.client.name }}
                                                 </a>
                                             {% else %}
                                                 {{ item.client.name }}
                                             {% endif %}
                                         </td>
-                                        <td>{{ item.procergs_initials | join(', ') }}</td>
-                                        <td>{{ ('admin.accounting.summary.client.type.' ~ item.system_type) | trans }}</td>
-                                        <td>{{ item.access_tokens }}</td>
-                                        <td>{{ item.api_usage }}</td>
+                                        <td>{{ item.procergsInitials | join(', ') }}</td>
+                                        <td>{{ ('admin.accounting.summary.client.type.' ~ item.systemType) | trans }}</td>
+                                        <td>{{ item.accessTokens }}</td>
+                                        <td>{{ item.apiUsage }}</td>
                                         <td>
-                                            <strong>{{ item.access_tokens + item.api_usage }}</strong>
+                                            <strong>{{ item.totalUsage }}</strong>
                                         </td>
                                     </tr>
                                 {% endfor %}

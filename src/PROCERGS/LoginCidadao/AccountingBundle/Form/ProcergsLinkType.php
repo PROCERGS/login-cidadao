@@ -44,11 +44,9 @@ class ProcergsLinkType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(
-            array(
-                'data_class' => 'PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink',
-            )
-        );
+        $resolver->setDefaults([
+            'data_class' => 'PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink',
+        ]);
     }
 
     /**
