@@ -14,16 +14,14 @@ services:
         class: PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService
         arguments:
             - "@procergs.lc.procergs_systems.api.client"
-            -
-                "apiUri": "%accounting.procergs_systems.api.url%"
-                "organization": "%accounting.procergs_systems.api.organization%"
-                "registration_number": "%accounting.procergs_systems.api.registration_number%"
-                "password": "%accounting.procergs_systems.api.password%"
+            - "apiUri": "%accounting.procergs_systems.api.url%"
+              "organization": "%accounting.procergs_systems.api.organization%"
+              "registration_number": "%accounting.procergs_systems.api.registration_number%"
+              "password": "%accounting.procergs_systems.api.password%"
 
     procergs.lc.accounting:
         class: PROCERGS\LoginCidadao\AccountingBundle\Service\AccountingService
         arguments:
             - "@procergs.lc.procergs_systems.api"
-            - "@lc.access_token.repository"
             - "@lc.client.repository"
             - "@procergs.lc.procergs_link.repository"

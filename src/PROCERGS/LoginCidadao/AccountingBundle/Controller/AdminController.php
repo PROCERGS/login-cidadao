@@ -13,6 +13,8 @@ namespace PROCERGS\LoginCidadao\AccountingBundle\Controller;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
 use PROCERGS\LoginCidadao\AccountingBundle\Form\MonthSelectorType;
+use PROCERGS\LoginCidadao\AccountingBundle\Model\AccountingReport;
+use PROCERGS\LoginCidadao\AccountingBundle\Model\AccountingReportEntry;
 use PROCERGS\LoginCidadao\AccountingBundle\Service\AccountingService;
 use PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -21,6 +23,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @codeCoverageIgnore
+ */
 class AdminController extends Controller
 {
     /**
@@ -55,23 +60,10 @@ class AdminController extends Controller
 
         $start = new \DateTime("first day of {$month}");
         $end = new \DateTime("last day of {$month}");
-        $data = $accountingService->filterOutInactive(
-            $accountingService->getAccounting($start, $end)
-        );
-
-        // Reverse sort by access_token
-        uasort(
-            $data,
-            function ($a, $b) {
-                $totalA = $a['access_tokens'] + $a['api_usage'];
-                $totalB = $b['access_tokens'] + $b['api_usage'];
-                if ($totalA === $totalB) {
-                    return 0;
-                }
-
-                return ($totalA < $totalB) ? 1 : -1;
-            }
-        );
+        $data = $accountingService->getAccounting($start, $end)->getReport([
+            'include_inactive' => false,
+            'sort' => AccountingReport::SORT_ORDER_DESC,
+        ]);
 
         return [
             'monthChoices' => $monthChoices,

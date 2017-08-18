@@ -44,17 +44,17 @@ class GcsInterface
         ], $config);
     }
 
-    public function addClient($client)
+    public function addClient(AccountingReportEntry $reportEntry)
     {
-        switch ($client['system_type']) {
+        switch ($reportEntry->getSystemType()) {
             case ProcergsLink::TYPE_EXTERNAL:
-                $this->countExternalSystem($client);
+                $this->externalSystems[] = $reportEntry->getTotalUsage();
                 continue;
             case ProcergsLink::TYPE_INTERNAL:
-                $this->countProcergsSystem($client);
+                $this->countProcergsSystem($reportEntry);
                 continue;
             default:
-                $this->registerInvalidEntry($client);
+                $this->registerInvalidEntry($reportEntry);
                 continue;
         }
     }
@@ -126,18 +126,18 @@ class GcsInterface
         return $body;
     }
 
-    private function countProcergsSystem($client)
+    private function countProcergsSystem(AccountingReportEntry $reportEntry)
     {
-        $procergsInitials = $client['procergs_initials'];
-        $totalUsage = $client['access_tokens'] + $client['api_usage'];
+        $procergsInitials = $reportEntry->getProcergsInitials();
+        $totalUsage = $reportEntry->getTotalUsage();
 
         if (count($procergsInitials) !== 1) {
-            $this->registerInvalidEntry($client);
+            $this->registerInvalidEntry($reportEntry);
 
             return;
         }
 
-        $owners = implode(' ', $client['procergs_owner']);
+        $owners = implode(' ', $reportEntry->getProcergsOwner());
         foreach ($procergsInitials as $initials) {
             $this->procergsSystems[$initials]['owner'] = $owners;
             if (array_key_exists('usage', $this->procergsSystems[$initials])) {
@@ -148,16 +148,9 @@ class GcsInterface
         }
     }
 
-    private function countExternalSystem($client)
+    private function registerInvalidEntry(AccountingReportEntry $reportEntry)
     {
-        $totalUsage = $client['access_tokens'] + $client['api_usage'];
-        $this->externalSystems[] = $totalUsage;
-    }
-
-    private function registerInvalidEntry($client)
-    {
-        $totalUsage = $client['access_tokens'] + $client['api_usage'];
-        $this->invalidSystems[] = $totalUsage;
+        $this->invalidSystems[] = $reportEntry->getTotalUsage();
     }
 
     public function __toString()

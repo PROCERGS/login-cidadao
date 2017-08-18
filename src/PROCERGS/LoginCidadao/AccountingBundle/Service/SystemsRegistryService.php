@@ -10,7 +10,7 @@
 
 namespace PROCERGS\LoginCidadao\AccountingBundle\Service;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface as HttpClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
@@ -32,10 +32,10 @@ class SystemsRegistryService
 
     /**
      * SystemsRegistryService constructor.
-     * @param Client $client
+     * @param HttpClientInterface $client
      * @param array $options
      */
-    public function __construct(Client $client, array $options)
+    public function __construct(HttpClientInterface $client, array $options)
     {
         $this->client = $client;
         $this->apiUri = $options['apiUri'];
@@ -116,6 +116,8 @@ class SystemsRegistryService
             } catch (ClientException $e) {
                 if ($e->getResponse()->getStatusCode() === 404) {
                     $response = $e->getResponse();
+                } else {
+                    throw $e;
                 }
             }
             $this->cache[$hashKey] = $response->json();

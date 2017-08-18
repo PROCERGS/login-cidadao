@@ -11,6 +11,7 @@
 namespace PROCERGS\LoginCidadao\AccountingBundle\Tests\Model;
 
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
+use PROCERGS\LoginCidadao\AccountingBundle\Model\AccountingReportEntry;
 use PROCERGS\LoginCidadao\AccountingBundle\Model\GcsInterface;
 
 class GcsInterfaceTest extends \PHPUnit_Framework_TestCase
@@ -23,41 +24,30 @@ class GcsInterfaceTest extends \PHPUnit_Framework_TestCase
         $config = [];
 
         $clients = [
-            [
-                'system_type' => ProcergsLink::TYPE_INTERNAL,
-                'procergs_initials' => ['XPTO'],
-                'access_tokens' => 111,
-                'api_usage' => 111,
-                'procergs_owner' => ['SOME_OWNER'],
-            ],
-            [
-                'system_type' => ProcergsLink::TYPE_INTERNAL,
-                'procergs_initials' => ['XPTO'],
-                'access_tokens' => 222,
-                'api_usage' => 222,
-                'procergs_owner' => ['SOME_OWNER'],
-            ],
-            [
-                'system_type' => ProcergsLink::TYPE_EXTERNAL,
-                'procergs_initials' => null,
-                'access_tokens' => 333,
-                'api_usage' => 333,
-                'procergs_owner' => null,
-            ],
-            [
-                'system_type' => ProcergsLink::TYPE_INTERNAL,
-                'procergs_initials' => null,
-                'access_tokens' => 444,
-                'api_usage' => 444,
-                'procergs_owner' => null,
-            ],
-            [
-                'system_type' => 'invalid',
-                'procergs_initials' => null,
-                'access_tokens' => 444,
-                'api_usage' => 444,
-                'procergs_owner' => null,
-            ],
+            (new AccountingReportEntry())
+                ->setSystemType(ProcergsLink::TYPE_INTERNAL)
+                ->setProcergsInitials(['XPTO'])
+                ->setAccessTokens(111)
+                ->setApiUsage(111)
+                ->setProcergsOwner(['SOME_OWNER']),
+            (new AccountingReportEntry())
+                ->setSystemType(ProcergsLink::TYPE_INTERNAL)
+                ->setProcergsInitials(['XPTO'])
+                ->setAccessTokens(222)
+                ->setApiUsage(222)
+                ->setProcergsOwner(['SOME_OWNER']),
+            (new AccountingReportEntry())
+                ->setSystemType(ProcergsLink::TYPE_EXTERNAL)
+                ->setAccessTokens(333)
+                ->setApiUsage(333),
+            (new AccountingReportEntry())
+                ->setSystemType(ProcergsLink::TYPE_INTERNAL)
+                ->setAccessTokens(444)
+                ->setApiUsage(444),
+            (new AccountingReportEntry())
+                ->setSystemType('invalid')
+                ->setAccessTokens(444)
+                ->setApiUsage(444),
         ];
 
         $expectedBody = implode(PHP_EOL, [
@@ -91,13 +81,10 @@ class GcsInterfaceTest extends \PHPUnit_Framework_TestCase
         ];
 
         $clients = [
-            [
-                'system_type' => ProcergsLink::TYPE_EXTERNAL,
-                'procergs_initials' => null,
-                'access_tokens' => 333,
-                'api_usage' => 333,
-                'procergs_owner' => null,
-            ],
+            (new AccountingReportEntry())
+                ->setSystemType(ProcergsLink::TYPE_EXTERNAL)
+                ->setAccessTokens(333)
+                ->setApiUsage(333),
         ];
 
         $gcsInterface = new GcsInterface($interfaceName, $start, $config);
