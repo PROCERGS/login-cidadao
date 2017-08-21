@@ -37,7 +37,6 @@ use LoginCidadao\CoreBundle\Helper\GridHelper;
 
 class PersonController extends Controller
 {
-
     /**
      * @Route("/person/authorization/{clientId}/revoke", name="lc_revoke")
      * @Template()
@@ -94,12 +93,12 @@ class PersonController extends Controller
                     }
 
                     $em->remove($auth);
-                    $em->flush();
 
                     $this->get('session')->getFlashBag()
                         ->add('success', $translator->trans('Authorization successfully revoked.'));
                     $success = true;
                 }
+                $em->flush();
 
                 if (!$success) {
                     throw new \InvalidArgumentException($translator->trans("Authorization not found."));
