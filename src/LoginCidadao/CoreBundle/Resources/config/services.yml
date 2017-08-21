@@ -463,3 +463,8 @@ services:
             - "@translator"
             - "%user.class%"
         lazy: true
+
+    long_polling:
+        class: LoginCidadao\CoreBundle\LongPolling\LongPollingUtils
+        arguments:
+            - "@doctrine.orm.entity_manager"

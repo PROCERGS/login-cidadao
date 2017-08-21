@@ -3,6 +3,7 @@
 namespace LoginCidadao\CoreBundle\Model;
 
 use Doctrine\ORM\EntityManagerInterface;
+use LoginCidadao\CoreBundle\Tests\LongPolling\LongPollableInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\UserInterface;
@@ -13,7 +14,7 @@ use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation as JMS;
 
-interface PersonInterface extends EncoderAwareInterface, UserInterface, LocationAwareInterface
+interface PersonInterface extends EncoderAwareInterface, UserInterface, LocationAwareInterface, LongPollableInterface
 {
     public function getId();
 
@@ -209,13 +210,6 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
     public function getGoogleAuthenticatorSecret();
 
     public function setGoogleAuthenticatorSecret($googleAuthenticatorSecret);
-
-    /**
-     * @param EntityManagerInterface $em
-     * @param \DateTime $updatedAt
-     * @return PersonInterface
-     */
-    public function waitUpdate(EntityManagerInterface $em, \DateTime $updatedAt);
 
     /**
      * @return City
