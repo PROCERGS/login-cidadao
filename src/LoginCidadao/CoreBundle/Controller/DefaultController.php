@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Controller;
 
@@ -6,12 +14,11 @@ use LoginCidadao\APIBundle\Entity\ActionLogRepository;
 use LoginCidadao\CoreBundle\Model\SupportMessage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use LoginCidadao\CoreBundle\Entity\SentEmail;
 use LoginCidadao\APIBundle\Entity\LogoutKey;
 
@@ -112,7 +119,7 @@ class DefaultController extends Controller
         $logoutKey = $logoutKeys->findActiveByKey($key);
 
         if (!($logoutKey instanceof LogoutKey)) {
-            throw new AccessDeniedHttpException("Invalid logout key.");
+            throw new AccessDeniedException("Invalid logout key.");
         }
 
         $result['logged_out'] = false;
