@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Controller;
 
@@ -12,7 +20,6 @@ use LoginCidadao\CoreBundle\Form\Type\TwoFactorAuthenticationDisableFormType;
 use LoginCidadao\CoreBundle\Form\Type\TwoFactorAuthenticationBackupCodeGenerationFormType;
 use Symfony\Component\Form\FormError;
 use LoginCidadao\CoreBundle\Entity\BackupCode;
-use Doctrine\ORM\EntityManager;
 use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 
 /**
@@ -44,6 +51,7 @@ class TwoFactorAuthenticationController extends Controller
                 $this->enable2FA($person, $form);
                 $message = $translator->trans('Two-Factor Authentication enabled.');
                 $this->get('session')->getFlashBag()->add('success', $message);
+
                 return $this->redirect($this->generateUrl("fos_user_change_password"));
             } else {
                 $message = $translator->trans('Invalid code! Make sure you configured your app correctly and your smartphone\'s time is adjusted.');
@@ -53,7 +61,7 @@ class TwoFactorAuthenticationController extends Controller
 
         return array(
             'form' => $form->createView(),
-            'secretUrl' => $twoFactor->getUrl($person)
+            'secretUrl' => $twoFactor->getUrl($person),
         );
     }
 
@@ -65,7 +73,7 @@ class TwoFactorAuthenticationController extends Controller
     {
         $person = $this->getPerson();
         $form = $this->createForm(new TwoFactorAuthenticationDisableFormType(),
-                                    $person);
+            $person);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -73,12 +81,11 @@ class TwoFactorAuthenticationController extends Controller
             $this->disable2FA($person, $form);
             $message = $translator->trans('Two-Factor Authentication disabled.');
             $this->get('session')->getFlashBag()->add('success', $message);
+
             return $this->redirect($this->generateUrl("fos_user_change_password"));
         }
 
-        return array(
-            'form' => $form->createView()
-        );
+        return ['form' => $form->createView()];
     }
 
     /**
@@ -89,22 +96,23 @@ class TwoFactorAuthenticationController extends Controller
     {
         $person = $this->getPerson();
         $form = $this->createForm(new TwoFactorAuthenticationBackupCodeGenerationFormType(),
-                                    $person);
+            $person);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $translator = $this->get('translator');
-            $this->removeBackupCodes($em, $person);
-            $this->generateBackupCodes($em, $person);
+            $this->removeBackupCodes($person);
+            $this->generateBackupCodes($person);
             $em->flush();
             $message = $translator->trans('New Backup Codes generated. Don\'t forget to copy and store them safely.');
             $this->get('session')->getFlashBag()->add('success', $message);
+
             return $this->redirect($this->generateUrl("fos_user_change_password"));
         }
 
         return array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
         );
     }
 
@@ -128,7 +136,7 @@ class TwoFactorAuthenticationController extends Controller
     protected function enable2FA(PersonInterface $person, $form)
     {
         $em = $this->getDoctrine()->getManager();
-        $this->generateBackupCodes($em, $person);
+        $this->generateBackupCodes($person);
         $em->persist($form->getData());
         $em->flush();
     }
@@ -145,27 +153,24 @@ class TwoFactorAuthenticationController extends Controller
         $em->flush();
     }
 
-    protected function removeBackupCodes(EntityManager $em,
-                                            PersonInterface $person)
+    protected function removeBackupCodes(PersonInterface $person)
     {
         $backupCodes = $person->getBackupCodes();
         foreach ($backupCodes as $backupCode) {
-            $em->remove($backupCode);
+            $this->getDoctrine()->getManager()->remove($backupCode);
         }
     }
 
-    protected function generateBackupCodes(EntityManager $em,
-                                            PersonInterface $person)
+    protected function generateBackupCodes(PersonInterface $person)
     {
-        $backupCodes = array();
+        $backupCodes = [];
         while (count($backupCodes) < 10) {
             $code = bin2hex(random_bytes(5));
             $backupCode = new BackupCode();
             $backupCode->setPerson($person);
             $backupCode->setCode($code);
             $backupCodes[] = $backupCode;
-            $em->persist($backupCode);
+            $this->getDoctrine()->getManager()->persist($backupCode);
         }
     }
-
 }

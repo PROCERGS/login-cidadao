@@ -66,12 +66,12 @@ services:
 
     lc.person.profile.form.type:
         class: %lc.person.profile.form.type.class%
-        arguments: [%fos_user.model.user.class%]
+        arguments:
+            - "%fos_user.model.user.class%"
+            - "@doctrine.orm.entity_manager"
+            - "%default_country_iso2%"
         tags:
             - { name: form.type, alias: lc_person_profile }
-        calls:
-            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
-            - [ setDefaultCountryIso2, [%default_country_iso2%] ]
 
     lc.person.revoke_authorization.form.type:
         class: %lc.person.revoke_authorization.form.type.class%
@@ -119,10 +119,11 @@ services:
         class: LoginCidadao\CoreBundle\Security\Http\Firewall\LoginCidadaoListener
         parent: security.authentication.listener.form
         abstract: true
+        arguments:
+            -
+            - "@doctrine.orm.entity_manager"
         calls:
-            - [setContainer, ["@service_container"]]
             - [setFormFactory, ["@form.factory"]]
-            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
             - [setTranslator, ["@translator"]]
             - [setBruteForceThreshold, [%brute_force_threshold%]]
 
@@ -136,13 +137,12 @@ services:
             - "@fos_user.util.token_generator"
             - "@lc.register_requested_scope"
             - "@lc.client.repository"
+            - "@doctrine.orm.entity_manager"
             - "%registration.email.unconfirmed_time%"
             - "%lc_supported_scopes%"
             - "%oauth_default_client.uid%"
         tags:
             - { name: kernel.event_subscriber }
-        calls:
-            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
 
     lc.profile_edit:
         class: %lc.profile_edit.class%
@@ -153,11 +153,11 @@ services:
             - "@router"
             - "@session"
             - "@security.token_storage"
+            - "@doctrine.orm.entity_manager"
             - %registration.email.unconfirmed_time%
         tags:
             - { name: kernel.event_subscriber }
         calls:
-            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
             - [setUserManager, ["@fos_user.user_manager"]]
 
     lc.change.password.form.type:
