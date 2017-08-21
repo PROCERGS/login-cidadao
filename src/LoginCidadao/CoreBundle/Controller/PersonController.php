@@ -34,6 +34,7 @@ use LoginCidadao\CoreBundle\Entity\IdCard;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\FormError;
 use LoginCidadao\CoreBundle\Helper\GridHelper;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class PersonController extends Controller
 {
@@ -45,76 +46,11 @@ class PersonController extends Controller
     {
         $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\RevokeAuthorizationFormType');
         $form->handleRequest($request);
-        $translator = $this->get('translator');
 
         if ($form->isValid()) {
-            $tokenStorage = $this->get('security.token_storage');
-            $authChecker = $this->get('security.authorization_checker');
-            $em = $this->getDoctrine()->getManager();
-            $tokens = $em->getRepository('LoginCidadaoOAuthBundle:AccessToken');
-            /** @var ClientRepository $clients */
-            $clients = $em->getRepository('LoginCidadaoOAuthBundle:Client');
-
-            try {
-
-                if (false === $authChecker->isGranted('ROLE_USER')) {
-                    throw new AccessDeniedException();
-                }
-
-                /** @var PersonInterface $user */
-                $user = $tokenStorage->getToken()->getUser();
-
-                $client = $clients->find($clientId);
-                $accessTokens = $tokens->findBy(array(
-                    'client' => $client,
-                    'user' => $user,
-                ));
-                $refreshTokens = $em->getRepository('LoginCidadaoOAuthBundle:RefreshToken')
-                    ->findBy(array(
-                        'client' => $client,
-                        'user' => $user,
-                    ));
-                /** @var Authorization[] $authorizations */
-                $authorizations = $user->getAuthorizations();
-                $success = false;
-
-                foreach ($authorizations as $auth) {
-                    if ($auth->getPerson()->getId() !== $user->getId()
-                        || $auth->getClient()->getId() !== $clientId) {
-                        continue;
-                    }
-
-                    foreach ($accessTokens as $accessToken) {
-                        $em->remove($accessToken);
-                    }
-
-                    foreach ($refreshTokens as $refreshToken) {
-                        $em->remove($refreshToken);
-                    }
-
-                    $em->remove($auth);
-
-                    $this->get('session')->getFlashBag()
-                        ->add('success', $translator->trans('Authorization successfully revoked.'));
-                    $success = true;
-                }
-                $em->flush();
-
-                if (!$success) {
-                    throw new \InvalidArgumentException($translator->trans("Authorization not found."));
-                }
-            } catch (AccessDeniedException $e) {
-                $this->get('session')->getFlashBag()->add('error',
-                    $translator->trans("Access Denied."));
-            } catch (\Exception $e) {
-                $this->get('session')->getFlashBag()->add('error',
-                    $translator->trans("Wasn't possible to disable this service."));
-                $this->get('session')->getFlashBag()->add('error',
-                    $e->getMessage());
-            }
+            $this->revoke($clientId);
         } else {
-            $this->get('session')->getFlashBag()->add('error',
-                $translator->trans("Wasn't possible to disable this service."));
+            $this->addFlash('error', $this->trans("Wasn't possible to disable this service."));
         }
 
         $url = $this->generateUrl('lc_app_details', ['clientId' => $clientId]);
@@ -570,5 +506,78 @@ class PersonController extends Controller
         $user = $badgesHandler->evaluate($this->getUser());
 
         return array('allBadges' => $badges, 'userBadges' => $user->getBadges());
+    }
+
+    private function removeAll(array $objects)
+    {
+        $em = $this->getDoctrine()->getManager();
+        foreach ($objects as $object) {
+            $em->remove($object);
+        }
+    }
+
+    private function trans($id, array $parameters = array(), $domain = null, $locale = null)
+    {
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
+
+        return $translator->trans($id, $parameters, $domain, $locale);
+    }
+
+    private function getTokens($clientId)
+    {
+        $user = $this->getUser();
+        $client = $this->getClient($clientId);
+        $em = $this->getDoctrine()->getManager();
+        $accessTokens = $em->getRepository('LoginCidadaoOAuthBundle:AccessToken')->findBy([
+            'client' => $client,
+            'user' => $user,
+        ]);
+        $refreshTokens = $em->getRepository('LoginCidadaoOAuthBundle:RefreshToken')->findBy([
+            'client' => $client,
+            'user' => $user,
+        ]);
+
+
+        return array_merge($accessTokens, $refreshTokens);
+    }
+
+    private function getClient($clientId)
+    {
+        return $this->getDoctrine()->getManager()->getRepository('LoginCidadaoOAuthBundle:Client')->find($clientId);
+    }
+
+    private function getAuthorization($clientId)
+    {
+        $auth = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Authorization')
+            ->findBy([
+                'person' => $this->getUser(),
+                'client' => $this->getClient($clientId),
+            ]);
+
+        if (!$auth) {
+            throw new \InvalidArgumentException($this->trans("Authorization not found."));
+        }
+
+        return $auth;
+    }
+
+    private function revoke($clientId)
+    {
+        try {
+            if (false === $this->isGranted('ROLE_USER')) {
+                throw new AccessDeniedException();
+            }
+
+            $this->removeAll(array_merge($this->getTokens($clientId), [$this->getAuthorization($clientId)]));
+            $this->addFlash('success', $this->trans('Authorization successfully revoked.'));
+
+            $this->getDoctrine()->getManager()->flush();
+        } catch (AccessDeniedException $e) {
+            $this->addFlash('error', $this->trans("Access Denied."));
+        } catch (\Exception $e) {
+            $this->addFlash('error', $this->trans("Wasn't possible to disable this service."));
+            $this->addFlash('error', $e->getMessage());
+        }
     }
 }
