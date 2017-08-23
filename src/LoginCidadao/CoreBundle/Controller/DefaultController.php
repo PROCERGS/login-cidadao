@@ -45,38 +45,21 @@ class DefaultController extends Controller
         $form->handleRequest($request);
         $translator = $this->get('translator');
         $message = $translator->trans('contact.form.sent');
+
         if ($form->isValid()) {
-            $emailMessage = $data->getMessage();
-            if ($correlationId !== null) {
-                $emailMessage = "<p>$emailMessage</p><p>Correlation Id: {$correlationId}</p>";
-            }
-            $email = new SentEmail();
-            $email
-                ->setType('contact-mail')
-                ->setSubject('Fale conosco - '.$data->getName())
-                ->setSender($data->getEmail())
-                ->setReceiver($this->container->getParameter('contact_form.email'))
-                ->setMessage($emailMessage);
-            $mailer = $this->get('mailer');
+            $email = $this->getEmail($data, $correlationId);
             $swiftMail = $email->getSwiftMail();
-            if ($mailer->send($swiftMail)) {
+            if ($this->get('mailer')->send($swiftMail)) {
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($email);
                 $em->flush();
                 $this->get('session')->getFlashBag()->add('success', $message);
             }
 
-            $url = $this->generateUrl("lc_contact");
-
-            return $this->redirect($url);
+            return $this->redirectToRoute('lc_contact');
         }
 
-        return $this->render(
-            'LoginCidadaoCoreBundle:Info:contact.html.twig',
-            array(
-                'form' => $form->createView(),
-            )
-        );
+        return $this->render('LoginCidadaoCoreBundle:Info:contact.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -164,8 +147,23 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request, $lastUsername)
     {
-        return array(
-            'last_username' => $lastUsername,
-        );
+        ['last_username' => $lastUsername];
+    }
+
+    private function getEmail(SupportMessage $supportMessage, $correlationId = null)
+    {
+        $message = $supportMessage->getMessage();
+        if ($correlationId !== null) {
+            $message = "<p>$message</p><p>Correlation Id: {$correlationId}</p>";
+        }
+
+        $email = (new SentEmail())
+            ->setType('contact-mail')
+            ->setSubject('Fale conosco - '.$supportMessage->getName())
+            ->setSender($supportMessage->getEmail())
+            ->setReceiver($this->container->getParameter('contact_form.email'))
+            ->setMessage($message);
+
+        return $email;
     }
 }
