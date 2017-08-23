@@ -6,7 +6,7 @@ pre_composer_script: |
     pear clear-cache
     pear update-channels
     pear upgrade
-    sudo apt-get -y -q --force-yes install zlib1g-dev &&
+    sudo apt-get -y -q --force-yes install zlib1g-dev memcached &&
     yes '' | pecl install memcache
 
 php_ini: |
