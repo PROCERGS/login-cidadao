@@ -27,7 +27,7 @@ class LongPollingUtilsTest extends \PHPUnit_Framework_TestCase
         $stopwatch = new Stopwatch();
         $stopwatch->start($timer);
 
-        $longPolling = new LongPollingUtils($this->getEntityManager());
+        $longPolling = new LongPollingUtils($this->getEntityManager(), 60);
 
         $count = 5;
         $response = $longPolling->runTimeLimited(function () use (&$count) {
@@ -37,7 +37,7 @@ class LongPollingUtilsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($response);
         $this->assertEquals(0, $count);
-        $this->assertEquals(5, $duration);
+        $this->assertLessThan(60, $duration);
     }
 
     public function testTimeout()
