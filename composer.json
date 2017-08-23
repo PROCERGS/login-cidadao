@@ -1,6 +1,5 @@
 {
-    "name": "symfony/framework-standard-edition",
-    "license": "MIT",
+    "license": "AGPL-3.0",
     "type": "project",
     "description": "The \"Symfony Standard Edition\" distribution",
     "autoload": {
@@ -64,7 +63,8 @@
         "egulias/email-validator": "~1.2",
         "misd/phone-number-bundle": "^1.1",
         "ocramius/proxy-manager": "^1.0",
-        "rollerworks/password-strength-bundle": "^1.5"
+        "rollerworks/password-strength-bundle": "^1.5",
+        "emarref/jwt": "^1.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

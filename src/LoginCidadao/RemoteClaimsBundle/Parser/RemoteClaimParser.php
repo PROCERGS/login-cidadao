@@ -10,12 +10,20 @@
 
 namespace LoginCidadao\RemoteClaimsBundle\Parser;
 
+use Emarref\Jwt\Jwt;
+use Emarref\Jwt\Token;
 use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimParserInterface;
 
 class RemoteClaimParser implements RemoteClaimParserInterface
 {
+    /**
+     * @param array|object|string $claimMetadata
+     * @param RemoteClaimInterface $claim
+     * @param ClaimProviderInterface|null $provider
+     * @return RemoteClaimInterface
+     */
     public static function parseClaim(
         $claimMetadata,
         RemoteClaimInterface $claim,
@@ -48,6 +56,15 @@ class RemoteClaimParser implements RemoteClaimParserInterface
         return $provider;
     }
 
+    public static function parseJwt($jwt, RemoteClaimInterface $claim, ClaimProviderInterface $provider = null)
+    {
+        if (!$jwt instanceof Token) {
+            $jwt = (new Jwt())->deserialize($jwt);
+        }
+
+        return self::parseClaim($jwt->getPayload()->jsonSerialize(), $claim, $provider);
+    }
+
     /**
      * @param string|array|object $data
      * @return object
@@ -59,7 +76,7 @@ class RemoteClaimParser implements RemoteClaimParserInterface
         } elseif (is_array($data)) {
             return (object)$data;
         } elseif (!is_object($data)) {
-            throw new \InvalidArgumentException('$data should be a string, array or object');
+            throw new \InvalidArgumentException("The metadata should be a string, array or object");
         }
 
         return $data;

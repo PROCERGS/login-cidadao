@@ -10,8 +10,14 @@
 
 namespace LoginCidadao\RemoteClaimsBundle\Tests\Parser;
 
+use Emarref\Jwt\Jwt;
+use Emarref\Jwt\Token;
+use Emarref\Jwt\Claim;
+use Emarref\Jwt\Encryption;
+use Emarref\Jwt\Algorithm;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
+use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Parser\RemoteClaimParser;
 
 class RemoteClaimParserTest extends \PHPUnit_Framework_TestCase
@@ -52,7 +58,41 @@ class RemoteClaimParserTest extends \PHPUnit_Framework_TestCase
         $this->assertClaimAndProvider($claim);
     }
 
-    private function assertClaimAndProvider($claim)
+    public function testParseJwt()
+    {
+        $token = new Token();
+        $token->addClaim(new Claim\Audience(['lc_aud']));
+        $token->addClaim(new Claim\Expiration(new \DateTime('30 minutes')));
+        $token->addClaim(new Claim\IssuedAt(new \DateTime()));
+        $token->addClaim(new Claim\Issuer($this->claimMetadata['claim_provider']['redirect_uris'][0]));
+        foreach ($this->claimMetadata as $name => $value) {
+            $token->addClaim(new Claim\PublicClaim($name, $value));
+        }
+
+        $secret = 'my_jwt_secret';
+        $encryption = Encryption\Factory::create(new Algorithm\Hs256($secret));
+        $jwt = (new Jwt())->serialize($token, $encryption);
+
+        $claim = RemoteClaimParser::parseJwt($jwt, new RemoteClaim(), new Client());
+
+        $this->assertClaimAndProvider($claim);
+    }
+
+    public function testInvalidJwt()
+    {
+        $this->setExpectedException('\InvalidArgumentException');
+
+        RemoteClaimParser::parseJwt('INVALID JWT', new RemoteClaim(), new Client());
+    }
+
+    public function testParseInvalidClaim()
+    {
+        $this->setExpectedException('\InvalidArgumentException');
+
+        RemoteClaimParser::parseClaim(null, new RemoteClaim());
+    }
+
+    private function assertClaimAndProvider(RemoteClaimInterface $claim)
     {
         $this->assertEquals($this->claimMetadata['claim_name'], $claim->getName());
         $this->assertEquals($this->claimMetadata['claim_display_name'], $claim->getDisplayName());

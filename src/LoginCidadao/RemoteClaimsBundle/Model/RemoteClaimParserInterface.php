@@ -10,6 +10,8 @@
 
 namespace LoginCidadao\RemoteClaimsBundle\Model;
 
+use Emarref\Jwt\Token;
+
 interface RemoteClaimParserInterface
 {
     /**
@@ -30,4 +32,12 @@ interface RemoteClaimParserInterface
      * @return ClaimProviderInterface
      */
     public static function parseClaimProvider($claimProviderMetadata, ClaimProviderInterface $provider);
+
+    /**
+     * @param Token|string $jwt
+     * @param RemoteClaimInterface $claim
+     * @param ClaimProviderInterface|null $provider
+     * @return RemoteClaimInterface
+     */
+    public static function parseJwt($jwt, RemoteClaimInterface $claim, ClaimProviderInterface $provider = null);
 }
