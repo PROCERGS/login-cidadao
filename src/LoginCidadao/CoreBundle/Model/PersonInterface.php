@@ -3,7 +3,9 @@
 namespace LoginCidadao\CoreBundle\Model;
 
 use Doctrine\ORM\EntityManagerInterface;
+use LoginCidadao\CoreBundle\Entity\BackupCode;
 use LoginCidadao\CoreBundle\Tests\LongPolling\LongPollableInterface;
+use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\UserInterface;
@@ -14,7 +16,7 @@ use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation as JMS;
 
-interface PersonInterface extends EncoderAwareInterface, UserInterface, LocationAwareInterface, LongPollableInterface
+interface PersonInterface extends EncoderAwareInterface, UserInterface, LocationAwareInterface, LongPollableInterface, TwoFactorInterface
 {
     public function getId();
 
@@ -241,4 +243,9 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
      * @return ArrayCollection
      */
     public function getAddresses();
+
+    /**
+     * @return BackupCode[]
+     */
+    public function getBackupCodes();
 }

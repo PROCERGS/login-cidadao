@@ -44,7 +44,7 @@ use Rollerworks\Bundle\PasswordStrengthBundle\Validator\Constraints as Rollerwor
  * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
  */
-class Person extends BaseUser implements PersonInterface, TwoFactorInterface, BackupCodeInterface
+class Person extends BaseUser implements PersonInterface, BackupCodeInterface
 {
     /**
      * @ORM\Id

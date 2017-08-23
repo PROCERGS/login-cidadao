@@ -468,3 +468,9 @@ services:
         class: LoginCidadao\CoreBundle\LongPolling\LongPollingUtils
         arguments:
             - "@doctrine.orm.entity_manager"
+
+    lc.two_factor:
+        class: LoginCidadao\CoreBundle\Security\TwoFactorAuthenticationService
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@scheb_two_factor.security.google_authenticator"
