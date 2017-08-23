@@ -10,10 +10,9 @@
 
 namespace LoginCidadao\DynamicFormBundle\Controller;
 
-use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\APIBundle\Exception\RequestTimeoutException;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use LoginCidadao\LongPolling\LongPollingUtils;
+use LoginCidadao\CoreBundle\LongPolling\LongPollingUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -38,8 +37,8 @@ class EmailCheckerController extends Controller
         /** @var PersonInterface $user */
         $user = $this->getUser();
 
-        /** @var EntityManagerInterface $em */
-        $em = $this->getDoctrine()->getManager();
+        /** @var LongPollingUtils $longPolling */
+        $longPolling = $this->get('long_polling');
 
         $updatedAt = \DateTime::createFromFormat('Y-m-d H:i:s', $request->get('updated_at'));
         if (!$updatedAt) {
@@ -47,7 +46,7 @@ class EmailCheckerController extends Controller
         }
 
         try {
-            $response = LongPollingUtils::waitValidEmail($user, $em, $updatedAt);
+            $response = $longPolling->waitValidEmail($user, $updatedAt);
 
             return new JsonResponse($response);
         } catch (RequestTimeoutException $e) {

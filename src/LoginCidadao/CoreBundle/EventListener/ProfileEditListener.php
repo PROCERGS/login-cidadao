@@ -10,7 +10,7 @@
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Mailer\MailerInterface;
@@ -50,7 +50,7 @@ class ProfileEditListener implements EventSubscriberInterface
         'cpf' => null,
     ];
 
-    /** @var EntityManager */
+    /** @var EntityManagerInterface */
     protected $em;
     protected $userManager;
 
@@ -61,6 +61,7 @@ class ProfileEditListener implements EventSubscriberInterface
         UrlGeneratorInterface $router,
         SessionInterface $session,
         TokenStorageInterface $tokenStorage,
+        EntityManagerInterface $em,
         $emailUnconfirmedTime
     ) {
         $this->mailer = $mailer;
@@ -69,6 +70,7 @@ class ProfileEditListener implements EventSubscriberInterface
         $this->router = $router;
         $this->session = $session;
         $this->tokenStorage = $tokenStorage;
+        $this->em = $em;
         $this->emailUnconfirmedTime = $emailUnconfirmedTime;
     }
 
@@ -176,11 +178,6 @@ class ProfileEditListener implements EventSubscriberInterface
     {
         $user = $event->getForm()->getData();
         $this->checkCPFChanged($user);
-    }
-
-    public function setEntityManager(EntityManager $var)
-    {
-        $this->em = $var;
     }
 
     public function setUserManager($var)

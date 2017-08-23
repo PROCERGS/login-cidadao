@@ -51,13 +51,9 @@ class VerificationController extends Controller
             $code = $form->getData()['verificationCode'];
             $verified = $phoneVerificationService->verify($verification, $code);
             if (!$verified) {
-                /** @var TranslatorInterface $translator */
-                $translator = $this->get('translator');
-
-                $error = new FormError(
-                    $translator->trans('tasks.verify_phone.form.errors.verificationCode.invalid_code')
-                );
-                $form->get('verificationCode')->addError($error);
+                $form->get('verificationCode')->addError(new FormError(
+                    $this->get('translator')->trans('tasks.verify_phone.form.errors.verificationCode.invalid_code')
+                ));
             }
         }
 
@@ -65,10 +61,7 @@ class VerificationController extends Controller
             return $this->noVerificationOrVerified($request);
         }
 
-        $nextResend = $phoneVerificationService->getNextResendDate($verification);
-        if ($nextResend <= new \DateTime()) {
-            $nextResend = false;
-        }
+        $nextResend = $this->getNextResendDate($verification);
 
         return ['verification' => $verification, 'nextResend' => $nextResend, 'form' => $form->createView()];
     }
@@ -177,5 +170,18 @@ class VerificationController extends Controller
         }
 
         return $taskStackManager->processRequest($request, $this->redirectToRoute('lc_dashboard'));
+    }
+
+    private function getNextResendDate(PhoneVerificationInterface $verification)
+    {
+        /** @var PhoneVerificationServiceInterface $phoneVerificationService */
+        $phoneVerificationService = $this->get('phone_verification');
+
+        $nextResend = $phoneVerificationService->getNextResendDate($verification);
+        if ($nextResend <= new \DateTime()) {
+            $nextResend = false;
+        }
+
+        return $nextResend;
     }
 }
