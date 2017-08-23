@@ -1,4 +1,5 @@
 {
+    "name": "redelivre/login-cidadao",
     "license": "AGPL-3.0",
     "type": "project",
     "description": "The \"Symfony Standard Edition\" distribution",
