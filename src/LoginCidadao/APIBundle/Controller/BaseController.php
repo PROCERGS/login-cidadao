@@ -10,11 +10,14 @@
 
 namespace LoginCidadao\APIBundle\Controller;
 
+use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
 use FOS\RestBundle\Controller\FOSRestController;
 use JMS\Serializer\SerializationContext;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OAuthBundle\Entity\AccessToken;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class BaseController extends FOSRestController
@@ -35,29 +38,15 @@ class BaseController extends FOSRestController
         return $this->handleView($view);
     }
 
-    protected function serializePerson($person, $scope)
+    protected function getClientScope(PersonInterface $user, ClientInterface $client = null)
     {
-        $person = $this->getUser();
-        $serializer = $this->get('jms_serializer');
-
-        return $serializer->serialize($person, 'json',
-            SerializationContext::create()->setGroups($scope));
-    }
-
-    protected function getClientScope(
-        PersonInterface $user,
-        ClientInterface $client = null
-    ) {
         if ($client === null) {
             $client = $this->getClient();
         }
 
         $authorization = $this->getDoctrine()
             ->getRepository('LoginCidadaoCoreBundle:Authorization')
-            ->findOneBy(array(
-                'person' => $user,
-                'client' => $client,
-            ));
+            ->findOneBy(['person' => $user, 'client' => $client]);
         if (!($authorization instanceof Authorization)) {
             throw new AccessDeniedException("Access denied");
         }
@@ -72,7 +61,10 @@ class BaseController extends FOSRestController
 
     protected function getSerializationContext($scope)
     {
-        return SerializationContext::create()->setGroups($scope);
+        /** @var SerializationContext $context */
+        $context = SerializationContext::create()->setGroups($scope);
+
+        return $context;
     }
 
     /**
@@ -82,13 +74,22 @@ class BaseController extends FOSRestController
      */
     protected function getClient()
     {
-        $token = $this->get('security.token_storage')->getToken();
-        $accessToken = $this->getDoctrine()->
-        getRepository('LoginCidadaoOAuthBundle:AccessToken')->
-        findOneBy(array('token' => $token->getToken()));
+        /** @var TokenStorageInterface $tokenStorage */
+        $tokenStorage = $this->get('security.token_storage');
+
+        /** @var OAuthToken $token */
+        $token = $tokenStorage->getToken();
+
+        if ($token instanceof OAuthToken) {
+            return null;
+        }
+
+        /** @var AccessToken $accessToken */
+        $accessToken = $this->getDoctrine()
+            ->getRepository('LoginCidadaoOAuthBundle:AccessToken')
+            ->findOneBy(['token' => $token->getToken()]);
         $client = $accessToken->getClient();
 
         return $client;
     }
-
 }

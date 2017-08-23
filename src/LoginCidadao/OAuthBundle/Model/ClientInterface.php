@@ -4,11 +4,12 @@ namespace LoginCidadao\OAuthBundle\Model;
 
 use FOS\OAuthServerBundle\Model\ClientInterface as BaseInterface;
 use LoginCidadao\CoreBundle\Entity\Authorization;
+use LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
 
-interface ClientInterface extends BaseInterface
+interface ClientInterface extends BaseInterface, UniqueEntityInterface
 {
 
     public function setName($name);

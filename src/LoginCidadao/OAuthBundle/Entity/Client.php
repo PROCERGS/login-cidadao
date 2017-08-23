@@ -21,7 +21,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation as JMS;
 use OAuth2\OAuth2;
-use LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -33,7 +32,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
  */
-class Client extends BaseClient implements UniqueEntityInterface, ClientInterface, ClaimProviderInterface
+class Client extends BaseClient implements ClientInterface, ClaimProviderInterface
 {
     /**
      * @ORM\Id
