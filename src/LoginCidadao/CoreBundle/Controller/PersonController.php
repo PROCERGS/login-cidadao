@@ -486,11 +486,10 @@ class PersonController extends Controller
             }
         }
 
-        return $this->get('templating')->renderResponse('LoginCidadaoCoreBundle:Person:registration/preFilledRegistration.html.twig',
-            array(
-                'form' => $form->createView(),
-                'actionUrl' => 'lc_prefilled_registration',
-            ));
+        return $this->get('templating')->renderResponse(
+            'LoginCidadaoCoreBundle:Person:registration/preFilledRegistration.html.twig',
+            ['form' => $form->createView(), 'actionUrl' => 'lc_prefilled_registration']
+        );
     }
 
     /**
@@ -505,7 +504,7 @@ class PersonController extends Controller
         $badges = $badgesHandler->getAvailableBadges();
         $user = $badgesHandler->evaluate($this->getUser());
 
-        return array('allBadges' => $badges, 'userBadges' => $user->getBadges());
+        return ['allBadges' => $badges, 'userBadges' => $user->getBadges()];
     }
 
     private function removeAll(array $objects)
