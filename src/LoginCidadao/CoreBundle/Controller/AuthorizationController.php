@@ -3,6 +3,7 @@
 namespace LoginCidadao\CoreBundle\Controller;
 
 use LoginCidadao\CoreBundle\Form\Type\SuggestionFormType;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -19,21 +20,17 @@ class AuthorizationController extends Controller
      */
     public function listAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $clients = $em->getRepository('LoginCidadaoOAuthBundle:Client');
-
+        /** @var Client[] $allApps */
+        $allApps = $this->getDoctrine()->getRepository('LoginCidadaoOAuthBundle:Client')->findAll();
         $user = $this->getUser();
-        $allApps = $clients->findAll();
 
-        $apps = array();
+        $apps = [];
         // Filtering off authorized apps
         foreach ($allApps as $app) {
-            if ($user->hasAuthorization($app)) {
+            if ($user->hasAuthorization($app) || !$app->isVisible()) {
                 continue;
             }
-            if ($app->isVisible()) {
-                $apps[] = $app;
-            }
+            $apps[] = $app;
         }
 
         $suggestion = $this->handleSuggestion($request);
@@ -43,12 +40,7 @@ class AuthorizationController extends Controller
             $form = $suggestion->createView();
         }
 
-        $suggestions = $em->getRepository('LoginCidadaoCoreBundle:ClientSuggestion')->findBy(
-            ['person' => $user],
-            ['createdAt' => 'desc'],
-            6
-        );
-
+        $suggestions = $this->getCurrentUserSuggestions();
         $defaultClientUid = $this->container->getParameter('oauth_default_client.uid');
 
         return compact('user', 'apps', 'form', 'suggestions', 'defaultClientUid');
@@ -81,5 +73,13 @@ class AuthorizationController extends Controller
         }
 
         return $form;
+    }
+
+    private function getCurrentUserSuggestions()
+    {
+        $suggestions = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:ClientSuggestion')
+            ->findBy(['person' => $this->getUser()], ['createdAt' => 'desc'], 6);
+
+        return $suggestions;
     }
 }

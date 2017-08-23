@@ -2,6 +2,7 @@
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 use LoginCidadao\CoreBundle\Service\RegisterRequestedScope;
@@ -9,7 +10,6 @@ use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use FOS\UserBundle\Util\TokenGeneratorInterface;
 use FOS\UserBundle\Mailer\MailerInterface;
@@ -18,7 +18,6 @@ use FOS\UserBundle\Event\FilterUserResponseEvent;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use LoginCidadao\ValidationBundle\Validator\Constraints\UsernameValidator;
-use Doctrine\ORM\EntityManager;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 
 class RegisterListener implements EventSubscriberInterface
@@ -38,7 +37,10 @@ class RegisterListener implements EventSubscriberInterface
     private $tokenGenerator;
 
     private $emailUnconfirmedTime;
-    protected $em;
+
+    /** @var EntityManagerInterface */
+    private $em;
+
     private $lcSupportedScopes;
 
     /** @var RegisterRequestedScope */
@@ -58,6 +60,7 @@ class RegisterListener implements EventSubscriberInterface
         TokenGeneratorInterface $tokenGenerator,
         RegisterRequestedScope $registerRequestedScope,
         ClientRepository $clientRepository,
+        EntityManagerInterface $em,
         $emailUnconfirmedTime,
         $lcSupportedScopes,
         $defaultClientUid
@@ -71,6 +74,7 @@ class RegisterListener implements EventSubscriberInterface
         $this->lcSupportedScopes = $lcSupportedScopes;
         $this->registerRequestedScope = $registerRequestedScope;
         $this->clientRepository = $clientRepository;
+        $this->em = $em;
         $this->defaultClientUid = $defaultClientUid;
     }
 
@@ -154,10 +158,5 @@ class RegisterListener implements EventSubscriberInterface
 
         $url = $this->router->generate('fos_user_profile_edit');
         $event->setResponse(new RedirectResponse($url));
-    }
-
-    public function setEntityManager(EntityManager $var)
-    {
-        $this->em = $var;
     }
 }

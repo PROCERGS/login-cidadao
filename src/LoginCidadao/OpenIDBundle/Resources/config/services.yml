@@ -24,6 +24,7 @@ parameters:
         issuer: %jwt_iss%
         allow_implicit: true
         enforce_state: false
+        always_issue_new_refresh_token: true
 
 services:
     oauth2.storage.user_claims:
@@ -55,20 +56,20 @@ services:
         arguments:
             - "@oauth2.storage.access_token"
             - "@oauth2.storage.refresh_token"
-            - %oauth2.server.config%
+            - "%oauth2.server.config%"
 
     oauth2.response_types.code:
         class: OAuth2\OpenID\ResponseType\AuthorizationCode
         arguments:
             - "@oauth2.storage.authorization_code"
-            - %oauth2.server.config%
+            - "%oauth2.server.config%"
 
     oauth2.response_types.id_token:
         class: %oauth2.response_types.id_token.class%
         arguments:
             - "@oauth2.storage.user_claims"
             - "@oauth2.storage.public_key"
-            - %oauth2.server.config%
+            - "%oauth2.server.config%"
 
     oauth2.response_types.id_token_token:
         class: OAuth2\OpenID\ResponseType\IdTokenToken
@@ -81,6 +82,12 @@ services:
         arguments:
             - "@oauth2.response_types.code"
             - "@oauth2.response_types.id_token"
+
+    oauth2.grant_type.refresh_token:
+        class: "%oauth2.grant_type.refresh_token.class%"
+        arguments:
+            - "@oauth2.storage.refresh_token"
+            - "%oauth2.server.config%"
 
     organization.repository:
         class: Doctrine\ORM\EntityRepository
