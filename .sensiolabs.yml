@@ -1,0 +1,21 @@
+php_version: 5
+
+pre_composer_script: |
+    #!/bin/bash
+
+    pear clear-cache
+    pear update-channels
+    pear upgrade
+    sudo apt-get -y -q --force-yes install zlib1g-dev &&
+    yes '' | pecl install memcache
+
+php_ini: |
+    extension=memcache.so
+
+exclude_patterns:
+    - batch/*
+    - app/check.php
+    - app/SymfonyRequirements.php
+    - web/config.php
+    - web/app_*.php
+    - app/Resources/node_modules/*
