@@ -43,7 +43,7 @@ parameters:
     # Translation locale
     locale:            pt_BR
     # Your application's secret. Should be the same for all servers
-    secret:            ThisTokenIsNotSoSecretChangeIt
+    secret:            ThisTokenIsNotSoSecretChangeItNow
 
     # (dev only) Show the profiler toolbar by default
     web_profiler_toolbar: true
