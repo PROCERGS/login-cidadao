@@ -4,6 +4,7 @@ pre_composer_script: |
     #!/bin/bash
 
     sed -i -e "s/database_driver:.*/database_driver: pdo_mysql/" app/config/parameters.yml.dist
+    sed -i -e "s/database_server_version:.*/database_server_version: 5.6/" app/config/parameters.yml.dist
     pear clear-cache
     pear update-channels
     pear upgrade
