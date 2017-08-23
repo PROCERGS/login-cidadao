@@ -3,6 +3,7 @@ php_version: 5
 pre_composer_script: |
     #!/bin/bash
 
+    sed -i -e "s/database_driver:.*/database_driver: pdo_mysql/" app/config/parameters.yml.dist
     pear clear-cache
     pear update-channels
     pear upgrade
@@ -12,6 +13,7 @@ pre_composer_script: |
 
 php_ini: |
     extension=memcache.so
+    extension=pdo_mysql.so
 
 exclude_patterns:
     - batch/*
