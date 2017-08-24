@@ -23,3 +23,8 @@ exclude_patterns:
     - web/config.php
     - web/app_*.php
     - app/Resources/node_modules/*
+
+rules:
+    # Although we are escaping stuff, SensioLabs is not detecting ir properly.
+    twig.xss_vulnerability:
+        enabled: false
