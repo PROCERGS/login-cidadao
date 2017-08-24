@@ -118,7 +118,7 @@ class PersonController extends BaseController
      *     200 = "Returned when successful"
      *   }
      * )
-     * @REST\Route("/person/{id}/logout-key",methods={PUT, POST})
+     * @REST\Route("/person/{id}/logout-key", methods={"PUT", "POST"})
      * @REST\View(templateVar="logoutKey")
      *
      * @throws NotFoundHttpException
