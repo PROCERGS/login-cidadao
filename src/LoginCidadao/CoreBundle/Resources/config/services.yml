@@ -1,6 +1,5 @@
 parameters:
     security.authentication.success_handler.class: LoginCidadao\CoreBundle\Handler\AuthenticationSuccessHandler
-    lc.hwi_twitter.user_provider.class: LoginCidadao\CoreBundle\Security\User\Provider\FOSUBUserProvider
     lc.person.registration.form.type.class: LoginCidadao\CoreBundle\Form\Type\RegistrationFormType
     lc.person.profile.form.type.class: LoginCidadao\CoreBundle\Form\Type\ProfileFormType
     lc.person.revoke_authorization.form.type.class: LoginCidadao\CoreBundle\Form\Type\RevokeAuthorizationFormType
@@ -45,13 +44,14 @@ services:
             - []
 
     lc.hwi_twitter.user_provider:
-        class: %lc.hwi_twitter.user_provider.class%
+        class: LoginCidadao\CoreBundle\Security\User\Provider\FOSUBUserProvider
         arguments:
             - "@fos_user.user_manager"
             - "@session"
             - "@event_dispatcher"
-            - "@service_container"
             - "@fos_user.registration.form.factory"
+            - "@validator"
+            - "@request_stack"
             - { facebook: facebookId, twitter: twitterId, google: googleId }
 
     lc.person.registration.form.type:
