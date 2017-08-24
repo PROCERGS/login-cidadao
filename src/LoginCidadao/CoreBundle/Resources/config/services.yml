@@ -10,7 +10,6 @@ parameters:
     lc.contact.form.class: LoginCidadao\CoreBundle\Form\Type\ContactFormType
     lc.person_doc.form.class: LoginCidadao\CoreBundle\Form\Type\DocFormType
     lc.user_provider.class: LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
-    lc.user_manager.class: LoginCidadao\CoreBundle\Security\User\Manager\UserManager
     lc.user_register.class: LoginCidadao\CoreBundle\EventListener\RegisterListener
     lc.profile_edit.class: LoginCidadao\CoreBundle\EventListener\ProfileEditListener
     lc.change.password.listener.class: LoginCidadao\CoreBundle\EventListener\ChangePasswordListener
@@ -88,9 +87,14 @@ services:
         arguments: ["@fos_user.user_manager"]
 
     lc.user_manager:
-        class: %lc.user_manager.class%
+        class: LoginCidadao\CoreBundle\Security\User\Manager\UserManager
         lazy: true
-        arguments: ["@security.encoder_factory", "@fos_user.util.username_canonicalizer", "@fos_user.util.email_canonicalizer", "@fos_user.object_manager", %user.class%, "@service_container"]
+        arguments:
+            - "@security.encoder_factory"
+            - "@fos_user.util.username_canonicalizer"
+            - "@fos_user.util.email_canonicalizer"
+            - "@fos_user.object_manager"
+            - %user.class%
 
     lc.login.form.type:
         class: LoginCidadao\CoreBundle\Form\Type\LoginFormType
@@ -101,7 +105,9 @@ services:
 
     lc.login.twig.extension:
         class: LoginCidadao\CoreBundle\Twig\Extension\LoginCidadaoExtension
-        arguments: ["@service_container"]
+        arguments:
+            - "@form.factory"
+            - "@fos_user.registration.form.factory"
         tags:
             - { name: twig.extension, alias: login_twig_extension }
 
