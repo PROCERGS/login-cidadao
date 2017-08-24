@@ -28,3 +28,5 @@ rules:
     # Although we are escaping stuff, SensioLabs is not detecting ir properly.
     twig.xss_vulnerability:
         enabled: false
+    task_todo_comment:
+        enabled: false
