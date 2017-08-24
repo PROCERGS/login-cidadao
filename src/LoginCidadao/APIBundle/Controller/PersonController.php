@@ -108,17 +108,17 @@ class PersonController extends BaseController
      * Generates and returns a logout key for the user.
      *
      * @ApiDoc(
-     * resource = true,
-     * description = "Generates and returns a logout key for the user.",
-     * output = {
-     * "class"="LoginCidadao\APIBundle\Entity\LogoutKey",
-     * "groups" = {"key"}
-     * },
-     * statusCodes = {
-     * 200 = "Returned when successful"
-     * }
+     *   resource = true,
+     *   description = "Generates and returns a logout key for the user.",
+     *   output = {
+     *     "class"="LoginCidadao\APIBundle\Entity\LogoutKey",
+     *     "groups" = {"key"}
+     *   },
+     *   statusCodes = {
+     *     200 = "Returned when successful"
+     *   }
      * )
-     * @REST\Get("/person/{id}/logout-key")
+     * @REST\Route("/person/{id}/logout-key",methods={PUT, POST})
      * @REST\View(templateVar="logoutKey")
      *
      * @throws NotFoundHttpException

@@ -305,10 +305,10 @@ class PersonController extends Controller
                 && ($id = $data['id']))) {
             $rg = $this->getDoctrine()
                 ->getManager()
-                ->getRepository('LoginCidadaoCoreBundle:IdCard')->findOneBy(array(
+                ->getRepository('LoginCidadaoCoreBundle:IdCard')->findOneBy([
                     'person' => $this->getUser(),
                     'id' => $id,
-                ));
+                ]);
         }
         if (!$rg) {
             $rg = new IdCard();
@@ -322,7 +322,7 @@ class PersonController extends Controller
                     != $rgNum[0] || $this->checkRGDcd($rgNum) != $rgNum[9])) {
                 $form->get('value')->addError(new FormError($this->get('translator')->trans('This RG is invalid')));
 
-                return array('form' => $form->createView());
+                return ['form' => $form->createView()];
             }
 
             $manager = $this->getDoctrine()->getManager();
@@ -339,7 +339,7 @@ class PersonController extends Controller
             if ($has) {
                 $form->get('state')->addError(new FormError($this->get('translator')->trans('You already have an ID registered for this State')));
 
-                return array('form' => $form->createView());
+                return ['form' => $form->createView()];
             }
             $manager->persist($rg);
             $manager->flush();
@@ -348,7 +348,7 @@ class PersonController extends Controller
             return $resp;
         }
 
-        return array('form' => $form->createView());
+        return ['form' => $form->createView()];
     }
 
     private function checkRGDce($rg)
@@ -416,7 +416,7 @@ class PersonController extends Controller
         $grid->setInfiniteGrid(true);
         $grid->setRoute('lc_profile_doc_rg_list');
 
-        return array('grid' => $grid->createView($request));
+        return ['grid' => $grid->createView($request)];
     }
 
     /**
@@ -457,10 +457,16 @@ class PersonController extends Controller
 
         $form = $formFactory->createForm();
 
-        $form->add('firstName', 'text',
-            array('required' => false, 'label' => 'form.firstName', 'translation_domain' => 'FOSUserBundle'))
-            ->add('surname', 'text',
-                array('required' => false, 'label' => 'form.surname', 'translation_domain' => 'FOSUserBundle'));
+        $form
+            ->add(
+                'firstName',
+                'text',
+                ['required' => false, 'label' => 'form.firstName', 'translation_domain' => 'FOSUserBundle']
+            )->add(
+                'surname',
+                'text',
+                ['required' => false, 'label' => 'form.surname', 'translation_domain' => 'FOSUserBundle']
+            );
 
         $form->setData($user);
 
@@ -515,7 +521,7 @@ class PersonController extends Controller
         }
     }
 
-    private function trans($id, array $parameters = array(), $domain = null, $locale = null)
+    private function trans($id, array $parameters = [], $domain = null, $locale = null)
     {
         /** @var TranslatorInterface $translator */
         $translator = $this->get('translator');
