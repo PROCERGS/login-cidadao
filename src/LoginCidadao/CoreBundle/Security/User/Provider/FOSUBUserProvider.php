@@ -29,7 +29,7 @@ class FOSUBUserProvider extends BaseClass
 {
 
     /** @var UserManager */
-    private $userManager;
+    protected $userManager;
 
     /** @var SessionInterface */
     private $session;
