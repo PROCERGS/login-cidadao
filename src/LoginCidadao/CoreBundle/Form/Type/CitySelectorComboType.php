@@ -2,6 +2,8 @@
 
 namespace LoginCidadao\CoreBundle\Form\Type;
 
+use LoginCidadao\CoreBundle\Model\PreferableInterface;
+use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
@@ -10,7 +12,6 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use LoginCidadao\CoreBundle\Entity\State;
 use LoginCidadao\CoreBundle\Model\LocationSelectData;
 use LoginCidadao\CoreBundle\Model\Manager\CityManager;
 use LoginCidadao\CoreBundle\Model\Manager\StateManager;
@@ -246,7 +247,7 @@ class CitySelectorComboType extends AbstractType
         }
         $collator = new \Collator($this->translator->getLocale());
         $translator = $this->translator;
-        $sortFunction = function ($a, $b) use ($collator, $translator) {
+        $sortFunction = function (ChoiceView $a, ChoiceView $b) use ($collator, $translator) {
             return $collator->compare(
                 $translator->trans($a->label),
                 $translator->trans($b->label)
@@ -263,7 +264,7 @@ class CitySelectorComboType extends AbstractType
 
     private function getPreferredChoiceCallback()
     {
-        return function ($choice, $key) {
+        return function (PreferableInterface $choice, $key) {
             return $choice->getPreference() > 0;
         };
     }
