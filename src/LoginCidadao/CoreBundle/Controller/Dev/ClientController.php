@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Controller\Dev;
 
@@ -22,27 +30,21 @@ class ClientController extends Controller
     public function newAction(Request $request)
     {
         $client = new Client();
-        $form   = $this->createForm('LoginCidadao\CoreBundle\Form\Type\ClientFormType',
-            $client);
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\ClientFormType', $client);
 
         $form->handleRequest($request);
         $messages = '';
         if ($form->isValid()) {
-            $clientManager = $this->container->get('fos_oauth_server.client_manager');
             $client->getOwners()->add($this->getUser());
             $client->setAllowedGrantTypes(Client::getAllGrants());
-            $em            = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
             $em->persist($client);
             $em->flush();
-            return $this->redirect($this->generateUrl('lc_dev_client_edit',
-                        array(
-                        'id' => $client->getId()
-            )));
+
+            return $this->redirectToRoute('lc_dev_client_edit', ['id' => $client->getId()]);
         }
-        return array(
-            'form' => $form->createView(),
-            'messages' => $messages
-        );
+
+        return ['form' => $form->createView(), 'messages' => $messages];
     }
 
     /**
@@ -60,8 +62,8 @@ class ClientController extends Controller
      */
     public function gridAction(Request $request)
     {
-        $em   = $this->getDoctrine()->getManager();
-        $sql  = $em->getRepository('LoginCidadaoOAuthBundle:Client')->createQueryBuilder('c')
+        $em = $this->getDoctrine()->getManager();
+        $sql = $em->getRepository('LoginCidadaoOAuthBundle:Client')->createQueryBuilder('c')
             ->where(':person MEMBER OF c.owners')
             ->setParameter('person', $this->getUser())
             ->addOrderBy('c.id', 'desc');
@@ -72,7 +74,8 @@ class ClientController extends Controller
         $grid->setQueryBuilder($sql);
         $grid->setInfiniteGrid(true);
         $grid->setRoute('lc_dev_client_grid');
-        return array('grid' => $grid->createView($request));
+
+        return ['grid' => $grid->createView($request)];
     }
 
     /**
@@ -87,7 +90,7 @@ class ClientController extends Controller
         $grid->setMaxResult(5);
         $parms = $request->get('ac_data');
         if (isset($parms['username'])) {
-            $em  = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
             $sql = $em->getRepository('LoginCidadaoCoreBundle:Person')->createQueryBuilder('u');
             $sql->select('u');
             $sql->where('1=1');
@@ -98,9 +101,10 @@ class ClientController extends Controller
             $grid->setQueryBuilder($sql);
         }
         $grid->setInfiniteGrid(true);
-        $grid->setRouteParams(array('ac_data'));
+        $grid->setRouteParams(['ac_data']);
         $grid->setRoute('lc_dev_client_grid_developer_filter');
-        return array('grid' => $grid->createView($request));
+
+        return ['grid' => $grid->createView($request)];
     }
 
     /**
@@ -115,16 +119,17 @@ class ClientController extends Controller
         $grid->setMaxResult(5);
         $parms = $request->get('ac_data');
         if (isset($parms['person_id']) && !empty($parms['person_id'])) {
-            $em  = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
             $sql = $em->getRepository('LoginCidadaoCoreBundle:Person')->createQueryBuilder('p');
             $sql->where('p.id in(:id)')->setParameter('id', $parms['person_id']);
             $sql->addOrderBy('p.id', 'desc');
             $grid->setQueryBuilder($sql);
         }
         $grid->setInfiniteGrid(true);
-        $grid->setRouteParams(array('ac_data'));
+        $grid->setRouteParams(['ac_data']);
         $grid->setRoute('lc_dev_client_grid_developer');
-        return array('grid' => $grid->createView($request));
+
+        return ['grid' => $grid->createView($request)];
     }
 
     /**
@@ -133,17 +138,17 @@ class ClientController extends Controller
      */
     public function editAction(Request $request, $id)
     {
-        $em     = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $client = $em->getRepository('LoginCidadaoOAuthBundle:Client')->createQueryBuilder('c')
-                ->where(':person MEMBER OF c.owners')
-                ->andWhere('c.id = :id')
-                ->setParameters(array('id' => $id, 'person' => $this->getUser()))
-                ->getQuery()->getOneOrNullResult();
+            ->where(':person MEMBER OF c.owners')
+            ->andWhere('c.id = :id')
+            ->setParameters(['id' => $id, 'person' => $this->getUser()])
+            ->getQuery()->getOneOrNullResult();
         if (!$client) {
             return $this->redirect($this->generateUrl('lc_dev_client_new'));
         }
 
-        $form     = $this->createForm('LoginCidadao\CoreBundle\Form\Type\ClientFormType',
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\ClientFormType',
             $client);
         $form->handleRequest($request);
         $messages = '';
@@ -155,17 +160,16 @@ class ClientController extends Controller
 
             $clientManager = $this->container->get('fos_oauth_server.client_manager');
             $clientManager->updateClient($client);
-            $translator    = $this->get('translator');
+            $translator = $this->get('translator');
             $this->get('session')->getFlashBag()->add('success',
                 $translator->trans('Updated successfully!'));
 
             return $this->redirectToRoute('lc_dev_client_edit', compact('id'));
         }
-        return $this->render('LoginCidadaoCoreBundle:Dev\Client:new.html.twig',
-                array(
-                'form' => $form->createView(),
-                'client' => $client,
-                'messages' => $messages
-        ));
+
+        return $this->render(
+            'LoginCidadaoCoreBundle:Dev\Client:new.html.twig',
+            ['form' => $form->createView(), 'client' => $client, 'messages' => $messages]
+        );
     }
 }
