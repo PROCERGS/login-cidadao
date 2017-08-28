@@ -65,7 +65,8 @@
         "misd/phone-number-bundle": "^1.1",
         "ocramius/proxy-manager": "^1.0",
         "rollerworks/password-strength-bundle": "^1.5",
-        "emarref/jwt": "^1.0"
+        "emarref/jwt": "^1.0",
+        "league/uri": "^4.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

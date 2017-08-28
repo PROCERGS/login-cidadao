@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "939ce10a53c0654c2e182d8929691a09",
-    "content-hash": "93ba9a283f2bb735d4346b1caec3c35d",
+    "hash": "b25bd6eb12c467fd2f69e5a3b46ebd5c",
+    "content-hash": "ba3ecac3e5f37403c396dcd70935e292",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -2169,6 +2169,68 @@
             "time": "2014-01-12 16:20:24"
         },
         {
+            "name": "jeremykendall/php-domain-parser",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jeremykendall/php-domain-parser.git",
+                "reference": "896e7e70f02bd4fd77190052799bc61e4d779672"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jeremykendall/php-domain-parser/zipball/896e7e70f02bd4fd77190052799bc61e4d779672",
+                "reference": "896e7e70f02bd4fd77190052799bc61e4d779672",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-intl": "*",
+                "ext-mbstring": "*",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "jeremykendall/debug-die": "0.0.1.*",
+                "mikey179/vfsstream": "~1.4",
+                "phpunit/phpunit": "~4.4"
+            },
+            "bin": [
+                "bin/parse",
+                "bin/update-psl"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Pdp\\": "src/"
+                },
+                "files": [
+                    "src/pdp-parse-url.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeremy Kendall",
+                    "homepage": "http://about.me/jeremykendall",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/jeremykendall/php-domain-parser/graphs/contributors"
+                }
+            ],
+            "description": "Public Suffix List based URL parsing implemented in PHP.",
+            "homepage": "https://github.com/jeremykendall/php-domain-parser",
+            "keywords": [
+                "Public Suffix List",
+                "domain parsing",
+                "url parsing"
+            ],
+            "time": "2015-03-30 12:49:45"
+        },
+        {
             "name": "jms/aop-bundle",
             "version": "1.2.0",
             "source": {
@@ -2911,6 +2973,74 @@
                 "http client"
             ],
             "time": "2015-06-25 17:26:56"
+        },
+        {
+            "name": "league/uri",
+            "version": "4.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/uri.git",
+                "reference": "a2e73bad7e60c3bc61b649680fb8b46876e342e3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/uri/zipball/a2e73bad7e60c3bc61b649680fb8b46876e342e3",
+                "reference": "a2e73bad7e60c3bc61b649680fb8b46876e342e3",
+                "shasum": ""
+            },
+            "require": {
+                "ext-fileinfo": "*",
+                "ext-intl": "*",
+                "ext-mbstring": "*",
+                "jeremykendall/php-domain-parser": "^3.0",
+                "php": ">=5.5.9",
+                "psr/http-message": "^1.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^1.9",
+                "phpunit/phpunit": "^4.0",
+                "zendframework/zend-diactoros": "^1.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\Uri\\": "src"
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ignace Nyamagana Butera",
+                    "email": "nyamsprod@gmail.com",
+                    "homepage": "https://nyamsprod.com"
+                }
+            ],
+            "description": "URI manipulation library",
+            "homepage": "http://uri.thephpleague.com",
+            "keywords": [
+                "data-uri",
+                "ftp",
+                "http",
+                "https",
+                "parse_url",
+                "psr-7",
+                "rfc3986",
+                "uri",
+                "url",
+                "ws"
+            ],
+            "time": "2016-12-12 11:36:42"
         },
         {
             "name": "liip/monitor-bundle",
@@ -3812,6 +3942,56 @@
             ],
             "description": "Terms of Service Bundle",
             "time": "2017-05-19 17:23:22"
+        },
+        {
+            "name": "psr/http-message",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-message.git",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP messages",
+            "homepage": "https://github.com/php-fig/http-message",
+            "keywords": [
+                "http",
+                "http-message",
+                "psr",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "time": "2016-08-06 14:39:51"
         },
         {
             "name": "psr/log",
