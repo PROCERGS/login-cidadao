@@ -9,7 +9,14 @@
   -->
 
 <project name="name-of-project" default="build">
-    <target name="build" depends="prepare,vendors,parameters,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb"/>
+    <target name="composer" description="Installing dependencies">
+        <exec executable="composer" failonerror="true">
+            <arg value="install" />
+            <arg value="--prefer-dist" />
+        </exec>
+    </target>
+
+    <target name="build" depends="composer,prepare,vendors,parameters,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdox,phpunit,phpcb"/>
 
     <target name="build-parallel" depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
 
