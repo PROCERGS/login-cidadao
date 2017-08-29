@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<!--
+  ~ This file is part of the login-cidadao project or it's bundles.
+  ~
+  ~ (c) Guilherme Donato <guilhermednt on github>
+  ~
+  ~ For the full copyright and license information, please view the LICENSE
+  ~ file that was distributed with this source code.
+  -->
+
+<phpdox xmlns="http://phpdox.de/config">
+    <project name="Symfony2 App" source="./src" workdir="app/build/phpdox">
+        <collector publiconly="false">
+            <include mask="*.php" />
+            <exclude mask="*Autoload.php" />
+        </collector>
+
+        <generator output="app/build">
+            <build engine="html" enabled="true" output="api"/>
+        </generator>
+    </project>
+</phpdox>
