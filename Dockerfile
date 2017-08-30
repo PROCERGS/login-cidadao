@@ -4,7 +4,7 @@ RUN a2enmod rewrite
 
 # Instal OS dependencies
 RUN apt-get -y update
-RUN apt-get install -y zlibc zlib1g-dev libxml2-dev libicu-dev libpq-dev nodejs zip unzip git \
+RUN apt-get install -y zlibc zlib1g-dev libxml2-dev libicu-dev libpq-dev nodejs zip unzip git wget \
  && pecl install memcache \
  && docker-php-ext-enable memcache
 
@@ -33,16 +33,16 @@ RUN echo "date.timezone = America/Sao_Paulo" > /usr/local/etc/php/conf.d/php-tim
 
 WORKDIR /var/www/html
 # Instal composer
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
- && php composer-setup.php
+RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/1b137f8bf6db3e79a38a5bc45324414a6b1f9df2/web/installer -O - -q | php --
+RUN mv composer.phar /usr/local/bin/composer
 
 # Instal composer dependencies
 COPY composer.lock /var/www/html
 COPY composer.json /var/www/html
-RUN php composer.phar config cache-dir
-RUN php composer.phar install --no-interaction --no-scripts --no-autoloader
+RUN composer config cache-dir
+RUN composer install --no-interaction --no-scripts --no-autoloader
 COPY . /var/www/html
-RUN php composer.phar dump-autoload -d /var/www/html
+RUN composer dump-autoload -d /var/www/html
 RUN chown -R www-data /var/www/html
 RUN php app/console assets:install \
  && php app/console assets:install -e prod \
