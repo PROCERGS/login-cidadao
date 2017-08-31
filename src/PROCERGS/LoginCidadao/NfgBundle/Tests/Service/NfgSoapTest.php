@@ -48,7 +48,7 @@ class NfgSoapTest extends \PHPUnit_Framework_TestCase
             'NomeConsumidor' => 'John Doe',
             'DtNasc' => '1970-01-01T00:00:00',
             'EmailPrinc' => 'john@doe.test',
-            'NroFoneContato' => '5192345678',
+            'NroFoneContato' => '51992345678',
             'CodSitTitulo' => '1',
         ];
 
@@ -176,6 +176,21 @@ class NfgSoapTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($nfgProfile->getMobile());
     }
 
+    public function testOldMobilePhone()
+    {
+        $client = $this->getSoapClientMock(['NroFoneContato' => '5188888888']);
+        $credentials = new Credentials('org', 'user', 'pass');
+        $nfgSoap = new NfgSoap($client, $credentials);
+
+        $nfgProfile = $nfgSoap->getUserInfo('stub');
+
+        $this->assertEquals('51988888888', $nfgProfile->getMobile()->getNationalNumber());
+    }
+
+    /**
+     * @param array $info
+     * @return \PHPUnit_Framework_MockObject_MockObject|\SoapClient
+     */
     private function getSoapClientMock(array $info = [])
     {
         $client = $this->getMock(
@@ -243,7 +258,7 @@ class NfgSoapTest extends \PHPUnit_Framework_TestCase
             'NomeConsumidor' => 'John Doe',
             'DtNasc' => '1970-01-01T00:00:00',
             'EmailPrinc' => 'john@doe.test',
-            'NroFoneContato' => '5192345678',
+            'NroFoneContato' => '51992345678',
             'CodSitTitulo' => '0',
             'MsgRetorno' => 'Sucesso.',
         ];

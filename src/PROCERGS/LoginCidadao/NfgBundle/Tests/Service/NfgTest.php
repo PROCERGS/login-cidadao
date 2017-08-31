@@ -21,6 +21,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
 use PROCERGS\LoginCidadao\NfgBundle\Tests\TestsUtil;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -63,6 +64,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $circuitBreaker = $this->getBreaker();
 
+        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $logger */
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())->method('error');
 
@@ -138,6 +140,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $circuitBreaker = $this->getBreaker();
 
+        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $logger */
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())->method('info');
 
@@ -1032,7 +1035,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
     /**
      * @param $accessId
      * @param null $shouldCall
-     * @return SessionInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|SessionInterface
      */
     private function getSession($accessId, $shouldCall = null)
     {
@@ -1074,7 +1077,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $accessToken
-     * @return Request
+     * @return \PHPUnit_Framework_MockObject_MockObject|Request
      */
     private function getRequest($accessToken)
     {
@@ -1093,7 +1096,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return FormFactory
+     * @return FormFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getFormFactory()
     {
@@ -1125,7 +1128,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return UserManagerInterface
+     * @return UserManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getUserManager()
     {
