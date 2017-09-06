@@ -33,6 +33,30 @@ class NfgSubscriberTest extends \PHPUnit_Framework_TestCase
         ], $events);
     }
 
+    public function testOnConnectCallbackResponseNoPersonOrNfgProfile()
+    {
+        /** @var EntityManagerInterface|\PHPUnit_Framework_MockObject_MockObject $em */
+        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em->expects($this->never())->method('persist');
+        $em->expects($this->never())->method('flush');
+
+        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $logger */
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger->expects($this->never())->method('notice');
+
+        $personMeuRS = new PersonMeuRS();
+
+        /** @var GetConnectCallbackResponseEvent|\PHPUnit_Framework_MockObject_MockObject $event */
+        $event = $this->getMockBuilder('PROCERGS\LoginCidadao\NfgBundle\Event\GetConnectCallbackResponseEvent')
+            ->disableOriginalConstructor()->getMock();
+        $event->expects($this->exactly(2))->method('getPersonMeuRS')->willReturn($personMeuRS);
+
+        $subscriber = new NfgSubscriber($em);
+        $subscriber->setLogger($logger);
+
+        $subscriber->onConnectCallbackResponse($event);
+    }
+
     public function testOnConnectCallbackResponseDoNothing()
     {
         /** @var EntityManagerInterface|\PHPUnit_Framework_MockObject_MockObject $em */

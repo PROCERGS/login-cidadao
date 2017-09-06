@@ -67,6 +67,10 @@ class NfgSubscriber implements EventSubscriberInterface, LoggerAwareInterface
         $nfgProfile = $event->getPersonMeuRS()->getNfgProfile();
         $person = $event->getPersonMeuRS()->getPerson();
 
+        if (!$person || !$nfgProfile) {
+            return;
+        }
+
         $updated = false;
         if (!$person->getMobile()) {
             if ($this->logger) {
