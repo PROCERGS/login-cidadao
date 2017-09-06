@@ -50,11 +50,9 @@ class TwigSwiftMailerTest extends \PHPUnit_Framework_TestCase
         $twig->expects($this->atLeastOnce())->method('loadTemplate')
             ->willReturn($template);
         $twig->expects($this->once())->method('mergeGlobals')->with($this->isType('array'))
-            ->willReturnCallback(
-                function ($context) {
-                    return $context;
-                }
-            );
+            ->willReturnCallback(function ($context) {
+                return $context;
+            });
 
         $mailer = new TwigSwiftMailer(
             $swiftMailer,
@@ -77,15 +75,13 @@ class TwigSwiftMailerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $template->expects($this->exactly(3))->method('renderBlock')
-            ->willReturnCallback(
-                function ($block) use ($withHtml) {
-                    if ($block === 'body_html' && !$withHtml) {
-                        return null;
-                    }
-
-                    return $block;
+            ->willReturnCallback(function ($block) use ($withHtml) {
+                if ($block === 'body_html' && !$withHtml) {
+                    return null;
                 }
-            );
+
+                return $block;
+            });
 
         return $template;
     }

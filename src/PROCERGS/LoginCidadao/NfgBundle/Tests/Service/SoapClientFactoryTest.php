@@ -28,11 +28,9 @@ class SoapClientFactoryTest extends \PHPUnit_Framework_TestCase
                 ->willThrowException($exception);
         } else {
             $breaker->expects($this->once())->method('protect')
-                ->willReturnCallback(
-                    function (\Closure $closure) {
-                        return $closure();
-                    }
-                );
+                ->willReturnCallback(function (\Closure $closure) {
+                    return $closure();
+                });
         }
 
         return $breaker;

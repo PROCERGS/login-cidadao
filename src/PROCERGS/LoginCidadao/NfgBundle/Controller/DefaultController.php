@@ -147,11 +147,9 @@ class DefaultController extends Controller
         /** @var Breaker $cb */
         $cb = $this->get('procergs.nfg.circuit_breaker');
         try {
-            return $cb->protect(
-                function () {
-                    return true;
-                }
-            );
+            return $cb->protect(function () {
+                return true;
+            });
         } catch (CircuitOpenException $e) {
             return false;
         }

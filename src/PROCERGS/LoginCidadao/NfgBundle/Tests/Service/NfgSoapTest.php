@@ -206,32 +206,28 @@ class NfgSoapTest extends \PHPUnit_Framework_TestCase
         );
         $client->expects($this->any())
             ->method('ObterAccessID')
-            ->willReturnCallback(
-                function ($data) {
-                    if ($data['organizacao'] === 'org'
-                        && $data['usuario'] === 'user'
-                        && $data['senha'] === 'pass'
-                    ) {
-                        $response = '{"ObterAccessIDResult":"ok"}';
-                    } else {
-                        $response = '{"ObterAccessIDResult":"error "}';
-                    }
-
-                    return json_decode($response);
+            ->willReturnCallback(function ($data) {
+                if ($data['organizacao'] === 'org'
+                    && $data['usuario'] === 'user'
+                    && $data['senha'] === 'pass'
+                ) {
+                    $response = '{"ObterAccessIDResult":"ok"}';
+                } else {
+                    $response = '{"ObterAccessIDResult":"error "}';
                 }
-            );
+
+                return json_decode($response);
+            });
 
         $xml = $this->getUserInfoXmlResponse($info);
         $client->expects($this->any())
             ->method('ConsultaCadastro')
-            ->willReturnCallback(
-                function () use ($xml) {
-                    $response = new \stdClass();
-                    $response->ConsultaCadastroResult = $xml;
+            ->willReturnCallback(function () use ($xml) {
+                $response = new \stdClass();
+                $response->ConsultaCadastroResult = $xml;
 
-                    return $response;
-                }
-            );
+                return $response;
+            });
 
         return $client;
     }
