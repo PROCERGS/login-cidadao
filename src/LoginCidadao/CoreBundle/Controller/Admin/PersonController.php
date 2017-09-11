@@ -7,6 +7,7 @@ use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use LoginCidadao\CoreBundle\Helper\GridHelper;
@@ -71,10 +72,9 @@ class PersonController extends Controller
     public function editAction(Request $request, $id)
     {
         /** @var PersonInterface $person */
-        $person = $this->getDoctrine()
-            ->getRepository('LoginCidadaoCoreBundle:Person')->find($id);
+        $person = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Person')->find($id);
         if (!$person) {
-            return $this->redirect($this->generateUrl('lc_admin_person'));
+            return $this->redirectToRoute('lc_admin_person');
         }
 
         /** @var ActionLogger $actionLogger */
@@ -89,22 +89,14 @@ class PersonController extends Controller
             $targetPersonLevel = $securityHelper->getTargetPersonLevel($person);
 
             if ($loggedUserLevel >= $targetPersonLevel) {
-                $userManager = $this->get('fos_user.user_manager');
-                $userManager->updateUser($person);
-                $translator = $this->get('translator');
-                $translator->trans('Updated successfully.');
+                $this->get('fos_user.user_manager')->updateUser($person);
+                $this->addFlash('success', $this->get('translator')->trans('Updated successfully.'));
             }
         }
 
-        $user = $this->getUser();
         $defaultClientUid = $this->container->getParameter('oauth_default_client.uid');
 
-        return array(
-            'form' => $form->createView(),
-            'person' => $person,
-            'user' => $user,
-            'defaultClientUid' => $defaultClientUid,
-        );
+        return ['form' => $form->createView(), 'person' => $person, 'defaultClientUid' => $defaultClientUid];
     }
 
     private function getRolesNames()
@@ -124,6 +116,10 @@ class PersonController extends Controller
         return array_keys($roles);
     }
 
+    /**
+     * @param PersonInterface $person
+     * @return FormInterface
+     */
     private function createPersonForm(PersonInterface $person)
     {
         $rolesNames = $this->getRolesNames();

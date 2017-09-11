@@ -17,8 +17,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DocFormType extends AbstractType
 {
-    private $em;
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add(
@@ -38,12 +36,5 @@ class DocFormType extends AbstractType
                 'validation_groups' => ['Documents'],
             ]
         );
-    }
-
-    public function setEntityManager(EntityManager $em)
-    {
-        $this->em = $em;
-
-        return $this;
     }
 }
