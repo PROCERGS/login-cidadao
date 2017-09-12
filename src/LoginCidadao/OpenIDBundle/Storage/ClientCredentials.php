@@ -10,15 +10,15 @@
 
 namespace LoginCidadao\OpenIDBundle\Storage;
 
+use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use OAuth2\ServerBundle\Storage\ClientCredentials as BaseClass;
-use Doctrine\ORM\EntityManager;
 
 class ClientCredentials extends BaseClass
 {
     private $em;
 
-    public function __construct(EntityManager $EntityManager)
+    public function __construct(EntityManagerInterface $EntityManager)
     {
         $this->em = $EntityManager;
     }
@@ -40,10 +40,7 @@ class ClientCredentials extends BaseClass
      */
     public function checkClientCredentials($client_id, $client_secret = null)
     {
-        // Get Client
-        $id = explode('_', $client_id);
-        $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
-            ->find($id[0]);
+        $client = $this->getClient($client_id);
 
         // If client exists check secret
         if ($client) {
@@ -84,11 +81,11 @@ class ClientCredentials extends BaseClass
             return false;
         }
 
-        return array(
+        return [
             'redirect_uri' => implode(' ', $client->getRedirectUris()),
             'client_id' => $client->getPublicId(),
             'grant_types' => $client->getAllowedGrantTypes(),
-        );
+        ];
     }
 
     /**
