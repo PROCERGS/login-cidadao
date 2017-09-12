@@ -33,14 +33,23 @@ class ClientManager
 
     public function getClientById($id)
     {
+        $randomId = null;
         if (strstr($id, '_') !== false) {
             $parts = explode('_', $id);
             $id = $parts[0];
+            $randomId = $parts[1];
         }
 
         $repo = $this->em->getRepository('LoginCidadaoOAuthBundle:Client');
 
-        $client = $repo->find($id);
+        if ($randomId) {
+            $client = $repo->findOneBy([
+                'id' => $id,
+                'randomId' => $randomId,
+            ]);
+        } else {
+            $client = $repo->find($id);
+        }
         $event = new GetClientEvent($client);
         $this->dispatcher->dispatch(LoginCidadaoCoreEvents::GET_CLIENT, $event);
 

@@ -78,10 +78,23 @@ class ClientCredentials extends BaseClass
      */
     public function getClientDetails($client_id)
     {
-        // Get Client
-        $id     = explode('_', $client_id);
-        $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
-            ->find($id[0]);
+        $randomId = null;
+        if (strstr($client_id, '_') !== false) {
+            $parts = explode('_', $client_id);
+            $client_id = $parts[0];
+            $randomId = $parts[1];
+        }
+
+        $repo = $this->em->getRepository('LoginCidadaoOAuthBundle:Client');
+
+        if ($randomId) {
+            $client = $repo->findOneBy([
+                'id' => $client_id,
+                'randomId' => $randomId,
+            ]);
+        } else {
+            $client = $repo->find($client_id);
+        }
 
         if (!$client) {
             return false;
