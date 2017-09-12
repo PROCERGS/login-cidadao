@@ -10,7 +10,7 @@
 
 namespace LoginCidadao\OpenIDBundle\Manager;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\CoreBundle\Event\GetClientEvent;
 use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -20,11 +20,11 @@ class ClientManager
     /** @var EventDispatcherInterface */
     protected $dispatcher;
 
-    /** @var EntityManager */
+    /** @var EntityManagerInterface */
     private $em;
 
     public function __construct(
-        EntityManager $em,
+        EntityManagerInterface $em,
         EventDispatcherInterface $dispatcher
     ) {
         $this->em = $em;
