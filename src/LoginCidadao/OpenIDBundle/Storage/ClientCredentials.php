@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\OpenIDBundle\Storage;
 
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use OAuth2\ServerBundle\Storage\ClientCredentials as BaseClass;
 use Doctrine\ORM\EntityManager;
 
@@ -30,8 +31,7 @@ class ClientCredentials extends BaseClass
      * @param $client_secret
      * (optional) If a secret is required, check that they've given the right one.
      *
-     * @return
-     * TRUE if the client credentials are valid, and MUST return FALSE if it isn't.
+     * @return TRUE if the client credentials are valid, and MUST return FALSE if it isn't.
      * @endcode
      *
      * @see http://tools.ietf.org/html/rfc6749#section-3.1
@@ -41,7 +41,7 @@ class ClientCredentials extends BaseClass
     public function checkClientCredentials($client_id, $client_secret = null)
     {
         // Get Client
-        $id     = explode('_', $client_id);
+        $id = explode('_', $client_id);
         $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
             ->find($id[0]);
 
@@ -78,6 +78,69 @@ class ClientCredentials extends BaseClass
      */
     public function getClientDetails($client_id)
     {
+        $client = $this->getClient($client_id);
+
+        if (!$client) {
+            return false;
+        }
+
+        return array(
+            'redirect_uri' => implode(' ', $client->getRedirectUris()),
+            'client_id' => $client->getPublicId(),
+            'grant_types' => $client->getAllowedGrantTypes(),
+        );
+    }
+
+    /**
+     * Determine if the client is a "public" client, and therefore
+     * does not require passing credentials for certain grant types
+     *
+     * @param $client_id
+     * Client identifier to be check with.
+     *
+     * @return TRUE if the client is public, and FALSE if it isn't.
+     * @endcode
+     *
+     * @see http://tools.ietf.org/html/rfc6749#section-2.3
+     * @see https://github.com/bshaffer/oauth2-server-php/issues/257
+     *
+     * @ingroup oauth2_section_2
+     */
+    public function isPublicClient($client_id)
+    {
+        $client = $this->getClient($client_id);
+
+        if (!$client) {
+            return false;
+        }
+
+        $secret = $client->getClientSecret();
+
+        return empty($secret);
+    }
+
+    /**
+     * Get the scope associated with this client
+     *
+     * @return STRING the space-delineated scope list for the specified client_id
+     */
+    public function getClientScope($client_id)
+    {
+        $client = $this->getClient($client_id);
+
+        if (!$client) {
+            return false;
+        }
+
+        return implode(' ', $client->getAllowedScopes());
+    }
+
+    /**
+     * @param $client_id mixed
+     * @return null|ClientInterface
+     */
+    private function getClient($client_id)
+    {
         $randomId = null;
         if (strstr($client_id, '_') !== false) {
             $parts = explode('_', $client_id);
@@ -96,65 +159,6 @@ class ClientCredentials extends BaseClass
             $client = $repo->find($client_id);
         }
 
-        if (!$client) {
-            return false;
-        }
-
-        return array(
-            'redirect_uri' => implode(' ', $client->getRedirectUris()),
-            'client_id' => $client->getPublicId(),
-            'grant_types' => $client->getAllowedGrantTypes()
-        );
-    }
-
-    /**
-     * Determine if the client is a "public" client, and therefore
-     * does not require passing credentials for certain grant types
-     *
-     * @param $client_id
-     * Client identifier to be check with.
-     *
-     * @return
-     * TRUE if the client is public, and FALSE if it isn't.
-     * @endcode
-     *
-     * @see http://tools.ietf.org/html/rfc6749#section-2.3
-     * @see https://github.com/bshaffer/oauth2-server-php/issues/257
-     *
-     * @ingroup oauth2_section_2
-     */
-    public function isPublicClient($client_id)
-    {
-        $id     = explode('_', $client_id);
-        $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
-            ->find($id[0]);
-
-        if (!$client) {
-            return false;
-        }
-
-        $secret = $client->getClientSecret();
-
-        return empty($secret);
-    }
-
-    /**
-     * Get the scope associated with this client
-     *
-     * @return
-     * STRING the space-delineated scope list for the specified client_id
-     */
-    public function getClientScope($client_id)
-    {
-        // Get Client
-        $id     = explode('_', $client_id);
-        $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
-            ->find($id[0]);
-
-        if (!$client) {
-            return false;
-        }
-
-        return implode(' ', $client->getAllowedScopes());
+        return $client;
     }
 }
