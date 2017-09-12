@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of the login-cidadao project or it's bundles.
  *
  * (c) Guilherme Donato <guilhermednt on github>
@@ -19,7 +19,7 @@ class ScopeManager extends BaseManager implements ScopeManagerInterface
 {
     private $em;
 
-    /** @var OAuth2\ServerBundle\Entity\Scope[] */
+    /** @var \OAuth2\ServerBundle\Entity\Scope[] */
     private $scopes = array();
 
     public function __construct(EntityManager $entityManager)
