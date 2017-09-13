@@ -13,6 +13,10 @@ RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
  && docker-php-ext-install pdo pdo_pgsql pdo_mysql intl soap \
  && docker-php-ext-enable pdo pdo_mysql pdo_pgsql intl soap memcache
 
+RUN apt-get install -y libz-dev libmemcached-dev \
+ && pecl install memcached-2.2.0 \
+ && echo extension=memcached.so >> /usr/local/etc/php/conf.d/memcached.ini
+
 # Create link to nodejs
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 
@@ -44,6 +48,6 @@ RUN php composer.phar install --no-interaction --no-scripts --no-autoloader
 COPY . /var/www/html
 RUN php composer.phar dump-autoload -d /var/www/html
 RUN chown -R www-data /var/www/html
-RUN php app/console assets:install \
- && php app/console assets:install -e prod \
- && php app/console assetic:dump -e prod
+# RUN php app/console assets:install \
+#  && php app/console assets:install -e prod \
+#  && php app/console assetic:dump -e prod
