@@ -27,6 +27,7 @@ before_script:
   - psql -c "create user logincidadao with password '';" -U postgres
   - psql -c "create database logincidadao with owner logincidadao" -U postgres
   - echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - composer self-update
   - composer install --prefer-dist
