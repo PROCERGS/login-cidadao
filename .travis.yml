@@ -23,6 +23,9 @@ addons:
 services:
   - memcached
 
+before_install:
+  - composer config --global github-oauth.github.com "$GITHUB_TOKEN"
+
 before_script:
   - psql -c "create user logincidadao with password '';" -U postgres
   - psql -c "create database logincidadao with owner logincidadao" -U postgres
