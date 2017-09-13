@@ -30,6 +30,7 @@ before_script:
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - composer self-update
   - composer install --prefer-dist
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then composer update --prefer-dist; fi
   - chmod -R 777 app/cache app/logs web/uploads
   - echo y | php app/console doctrine:schema:update --force
   - echo y | php app/console lc:database:populate batch/
