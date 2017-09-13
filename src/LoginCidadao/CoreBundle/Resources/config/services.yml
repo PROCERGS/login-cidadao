@@ -94,14 +94,8 @@ services:
             - "@security.encoder_factory"
             - "@fos_user.util.username_canonicalizer"
             - "@fos_user.util.email_canonicalizer"
-            - "@lc.user_object_manager"
+            - "@doctrine.orm.entity_manager"
             - "%user.class%"
-
-    lc.user_object_manager:
-        class: Doctrine\ORM\EntityManager
-        arguments:
-            - "%user.class%"
-        public: false
 
     lc.login.form.type:
         class: LoginCidadao\CoreBundle\Form\Type\LoginFormType
