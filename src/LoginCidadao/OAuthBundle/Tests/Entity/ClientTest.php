@@ -44,8 +44,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $uid = 'client-uid';
         $redirectUris = ['https://redirect.uri'];
         /** @var UploadedFile $image */
-        $image = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\UploadedFile')
-            ->disableOriginalConstructor()->getMock();
+        $image = $this->getMock('Psr\Http\Message\UploadedFileInterface');
         $imageName = 'image.name';
 
         $client = new Client();
