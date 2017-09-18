@@ -10,10 +10,10 @@ pre_composer_script: |
     pear upgrade
     sudo apt-get update
     sudo apt-get -y -q --force-yes install zlib1g-dev memcached &&
-    yes '' | pecl install memcache
+    yes '' | pecl install memcached
 
 php_ini: |
-    extension=memcache.so
+    extension=memcached.so
     extension=pdo_mysql.so
 
 exclude_patterns:
