@@ -5,15 +5,16 @@ pre_composer_script: |
 
     sed -i -e "s/database_driver:.*/database_driver: pdo_mysql/" app/config/parameters.yml.dist
     sed -i -e "s/database_server_version:.*/database_server_version: 5.6/" app/config/parameters.yml.dist
+    sed -i -e "s/memcached\.yml/memcache\.yml/" app/config/config.yml
     pear clear-cache
     pear update-channels
     pear upgrade
     sudo apt-get update
     sudo apt-get -y -q --force-yes install zlib1g-dev memcached &&
-    yes '' | pecl install memcached
+    yes '' | pecl install memcache
 
 php_ini: |
-    extension=memcached.so
+    extension=memcache.so
     extension=pdo_mysql.so
 
 exclude_patterns:
