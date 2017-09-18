@@ -65,7 +65,7 @@ class AccessToken extends BaseAccessToken
     public function setExpired()
     {
         $now = new \DateTime();
-        $this->setExpiresAt($now->getTimestamp());
+        $this->setExpiresAt($now->getTimestamp() - 1);
     }
 
     public function getIdToken()

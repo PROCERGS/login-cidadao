@@ -127,8 +127,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->setLandingPageUrl($landingPageUrl)
             ->setTermsOfUseUrl($tosUrl)
             ->setRedirectUris($redirectUris)
-            ->setAllowedGrantTypes($grantTypes)
-            ->getContacts();
+            ->setAllowedGrantTypes($grantTypes);
 
         $metadata = new ClientMetadata();
         $metadata

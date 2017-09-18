@@ -28,8 +28,11 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
         $accessToken
             ->setIdToken($idToken)
             ->setCreatedAtValue();
+
+        $this->assertFalse($accessToken->hasExpired());
+
         $accessToken->setExpired();
-        sleep(1);
+        sleep(2);
 
         $this->assertEquals($idToken, $accessToken->getIdToken());
         $this->assertTrue($accessToken->hasExpired());

@@ -50,6 +50,6 @@ class RefreshToken extends BaseRefreshToken
     public function setExpired()
     {
         $now = new \DateTime();
-        $this->setExpiresAt($now->getTimestamp());
+        $this->setExpiresAt($now->getTimestamp() - 1);
     }
 }
