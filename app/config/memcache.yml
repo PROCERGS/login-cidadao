@@ -5,39 +5,37 @@ framework:
 doctrine:
     orm:
         metadata_cache_driver:
-            type:   memcached
+            type:   memcache
             host:   %memcached_host%
             port:   %memcached_port%
         query_cache_driver:
-            type:   memcached
+            type:   memcache
             host:   %memcached_host%
             port:   %memcached_port%
         result_cache_driver:
-            type:   memcached
+            type:   memcache
             host:   %memcached_host%
             port:   %memcached_port%
 
 services:
     session.memcached:
-        class: Memcached
+        class: Memcache
         arguments:
             persistent_id: %session_prefix%
         calls:
             - [ addServer, [ %memcached_host%, %memcached_port% ]]
 
     session.handler.memcached:
-        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
-        arguments:
-            - "@session.memcached"
-            - { prefix: %session_prefix%, expiretime: %session_lifetime% }
+        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcacheSessionHandler
+        arguments: ["@session.memcached", { prefix: %session_prefix%, expiretime: %session_lifetime% } ]
 
     memcached:
-        class: Memcached
+        class: Memcache
         calls:
             - [ addServer, [ '%memcached_host%', '%memcached_port%' ]]
 
     cache:
-        class: Doctrine\Common\Cache\MemcachedCache
+        class: Doctrine\Common\Cache\MemcacheCache
         calls:
-            - [setMemcached, ['@memcached']]
+            - [setMemcache, ["@memcached"]]
             - [setNamespace, ['%memcached_prefix%']]
