@@ -13,15 +13,15 @@ namespace LoginCidadao\RemoteClaimsBundle\Model;
 interface RemoteClaimInterface
 {
     /**
-     * @return string
+     * @return TagUri
      */
     public function getName();
 
     /**
-     * @param string $name
+     * @param TagUri $name
      * @return RemoteClaimInterface
      */
-    public function setName($name);
+    public function setName(TagUri $name);
 
     /**
      * @return string

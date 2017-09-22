@@ -22,7 +22,7 @@ use LoginCidadao\RemoteClaimsBundle\Parser\RemoteClaimParser;
 
 class RemoteClaimParserTest extends \PHPUnit_Framework_TestCase
 {
-    private $claimMetadata = [
+    public static $claimMetadata = [
         'claim_version' => 1,
         'claim_name' => 'tag:example.com,2017:my_claim',
         'claim_display_name' => 'My Claim',
@@ -39,21 +39,21 @@ class RemoteClaimParserTest extends \PHPUnit_Framework_TestCase
 
     public function testParseClaimString()
     {
-        $claim = RemoteClaimParser::parseClaim(json_encode($this->claimMetadata), new RemoteClaim(), new Client());
+        $claim = RemoteClaimParser::parseClaim(json_encode(self::$claimMetadata), new RemoteClaim(), new Client());
 
         $this->assertClaimAndProvider($claim);
     }
 
     public function testParseClaimArray()
     {
-        $claim = RemoteClaimParser::parseClaim($this->claimMetadata, new RemoteClaim(), new Client());
+        $claim = RemoteClaimParser::parseClaim(self::$claimMetadata, new RemoteClaim(), new Client());
 
         $this->assertClaimAndProvider($claim);
     }
 
     public function testParseClaimObject()
     {
-        $claim = RemoteClaimParser::parseClaim((object)$this->claimMetadata, new RemoteClaim(), new Client());
+        $claim = RemoteClaimParser::parseClaim((object)self::$claimMetadata, new RemoteClaim(), new Client());
 
         $this->assertClaimAndProvider($claim);
     }
@@ -64,8 +64,8 @@ class RemoteClaimParserTest extends \PHPUnit_Framework_TestCase
         $token->addClaim(new Claim\Audience(['lc_aud']));
         $token->addClaim(new Claim\Expiration(new \DateTime('30 minutes')));
         $token->addClaim(new Claim\IssuedAt(new \DateTime()));
-        $token->addClaim(new Claim\Issuer($this->claimMetadata['claim_provider']['redirect_uris'][0]));
-        foreach ($this->claimMetadata as $name => $value) {
+        $token->addClaim(new Claim\Issuer(self::$claimMetadata['claim_provider']['redirect_uris'][0]));
+        foreach (self::$claimMetadata as $name => $value) {
             $token->addClaim(new Claim\PublicClaim($name, $value));
         }
 
@@ -94,13 +94,13 @@ class RemoteClaimParserTest extends \PHPUnit_Framework_TestCase
 
     private function assertClaimAndProvider(RemoteClaimInterface $claim)
     {
-        $this->assertEquals($this->claimMetadata['claim_name'], $claim->getName());
-        $this->assertEquals($this->claimMetadata['claim_display_name'], $claim->getDisplayName());
-        $this->assertEquals($this->claimMetadata['claim_description'], $claim->getDescription());
-        $this->assertEquals($this->claimMetadata['claim_provider_recommended_scope'], $claim->getRecommendedScope());
-        $this->assertEquals($this->claimMetadata['claim_provider_essential_scope'], $claim->getEssentialScope());
+        $this->assertEquals(self::$claimMetadata['claim_name'], $claim->getName());
+        $this->assertEquals(self::$claimMetadata['claim_display_name'], $claim->getDisplayName());
+        $this->assertEquals(self::$claimMetadata['claim_description'], $claim->getDescription());
+        $this->assertEquals(self::$claimMetadata['claim_provider_recommended_scope'], $claim->getRecommendedScope());
+        $this->assertEquals(self::$claimMetadata['claim_provider_essential_scope'], $claim->getEssentialScope());
 
-        $expectedProvider = $this->claimMetadata['claim_provider'];
+        $expectedProvider = self::$claimMetadata['claim_provider'];
         $this->assertEquals($expectedProvider['client_name'], $claim->getProvider()->getName());
         $this->assertEquals($expectedProvider['redirect_uris'], $claim->getProvider()->getRedirectUris());
     }

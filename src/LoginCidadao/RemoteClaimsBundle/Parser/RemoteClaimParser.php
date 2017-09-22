@@ -15,6 +15,7 @@ use Emarref\Jwt\Token;
 use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimParserInterface;
+use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 
 class RemoteClaimParser implements RemoteClaimParserInterface
 {
@@ -30,9 +31,10 @@ class RemoteClaimParser implements RemoteClaimParserInterface
         ClaimProviderInterface $provider = null
     ) {
         $claimMetadata = self::normalizeData($claimMetadata);
+        $claimName = TagUri::createFromString($claimMetadata->claim_name);
 
         $claim
-            ->setName($claimMetadata->claim_name)
+            ->setName($claimName)
             ->setDisplayName($claimMetadata->claim_display_name)
             ->setDescription($claimMetadata->claim_description)
             ->setRecommendedScope($claimMetadata->claim_provider_recommended_scope)

@@ -43,8 +43,8 @@ class TagUri extends AbstractHierarchicalUri implements Uri
             $validAuthorityName = $validator->isValid($authorityName);
         }
 
-        return empty($this->userInfo->__toString())
-            && empty($this->host->__toString())
+        return !$this->userInfo->__toString()
+            && !$this->host->__toString()
             && $validAuthorityName;
     }
 

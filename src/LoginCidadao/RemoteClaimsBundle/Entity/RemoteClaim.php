@@ -12,11 +12,18 @@ namespace LoginCidadao\RemoteClaimsBundle\Entity;
 
 use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
+use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
+use LoginCidadao\RemoteClaimsBundle\Validator\Constraints\HostBelongsToClaimProvider;
 
+/**
+ * RemoteClaim
+ * @package LoginCidadao\RemoteClaimsBundle\Entity
+ * @HostBelongsToClaimProvider
+ */
 class RemoteClaim implements RemoteClaimInterface
 {
     /**
-     * @var string
+     * @var TagUri
      */
     private $name;
 
@@ -46,7 +53,7 @@ class RemoteClaim implements RemoteClaimInterface
     private $provider;
 
     /**
-     * @return string
+     * @return TagUri
      */
     public function getName()
     {
@@ -54,10 +61,10 @@ class RemoteClaim implements RemoteClaimInterface
     }
 
     /**
-     * @param string $name
+     * @param TagUri $name
      * @return RemoteClaim
      */
-    public function setName($name)
+    public function setName(TagUri $name)
     {
         $this->name = $name;
 
