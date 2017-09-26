@@ -21,4 +21,9 @@ class LoginCidadaoOpenIDEvents
      * Event triggered when an authorization has to be updated.
      */
     const UPDATE_AUTHORIZATION = 'lc.oidc.update_authorization';
+
+    /**
+     * This event is triggered when we receive an Authorization Request that is not previously granted.
+     */
+    const NEW_AUTHORIZATION_REQUEST = 'lc.oidc.new_authorization_request';
 }

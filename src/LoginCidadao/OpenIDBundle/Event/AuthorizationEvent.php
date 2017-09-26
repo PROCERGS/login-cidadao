@@ -13,6 +13,7 @@ namespace LoginCidadao\OpenIDBundle\Event;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 class AuthorizationEvent extends Event
@@ -26,8 +27,11 @@ class AuthorizationEvent extends Event
     /** @var ClientInterface */
     private $client;
 
-    /** @var string[]|string */
+    /** @var string[] */
     private $scope;
+
+    /** @var RemoteClaimInterface[] */
+    private $remoteClaims;
 
     /**
      * AuthorizationEvent constructor
@@ -43,7 +47,7 @@ class AuthorizationEvent extends Event
     }
 
     /**
-     * @return string|string[]
+     * @return string[]
      */
     public function getScope()
     {
@@ -93,5 +97,24 @@ class AuthorizationEvent extends Event
     public function getClient()
     {
         return $this->client;
+    }
+
+    public function getRemoteClaims()
+    {
+        return $this->remoteClaims;
+    }
+
+    public function setRemoteClaims(array $remoteClaims)
+    {
+        $this->remoteClaims = $remoteClaims;
+
+        return $this;
+    }
+
+    public function addRemoteClaim(RemoteClaimInterface $remoteClaim)
+    {
+        $this->remoteClaims[] = $remoteClaim;
+
+        return $this;
     }
 }

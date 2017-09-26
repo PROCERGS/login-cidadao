@@ -10,10 +10,13 @@
 
 namespace LoginCidadao\RemoteClaimsBundle\Fetcher;
 
+use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Client;
 use League\Uri\Schemes\Http;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
+use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface;
+use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 use LoginCidadao\RemoteClaimsBundle\Parser\RemoteClaimParser;
 use LoginCidadao\OAuthBundle\Entity\Client as ClaimProvider;
@@ -24,13 +27,23 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
     /** @var  Client */
     private $httpClient;
 
+    /** @var RemoteClaimRepository */
+    private $claimRepo;
+
+    /** @var EntityManagerInterface */
+    private $em;
+
     /**
      * RemoteClaimFetcher constructor.
      * @param Client $httpClient
+     * @param EntityManagerInterface $em
+     * @param RemoteClaimRepository $claimRepository
      */
-    public function __construct(Client $httpClient)
+    public function __construct(Client $httpClient, EntityManagerInterface $em, RemoteClaimRepository $claimRepository)
     {
+        $this->em = $em;
         $this->httpClient = $httpClient;
+        $this->claimRepo = $claimRepository;
     }
 
     public function fetchRemoteClaim($claimUri)
@@ -75,5 +88,24 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
         }
 
         throw new NotFoundHttpException("Couldn't find the Claim's URI");
+    }
+
+    /**
+     * Fetches a RemoteClaimInterface via <code>fetchRemoteClaim</code>, persisting and returning the result.
+     * @param TagUri|string $claimUri
+     * @return RemoteClaimInterface
+     */
+    public function getRemoteClaim($claimUri)
+    {
+        $remoteClaim = $this->fetchRemoteClaim($claimUri);
+        $existingClaim = $this->claimRepo->findOneBy(['name' => $remoteClaim->getName()]);
+        if ($existingClaim instanceof RemoteClaimInterface) {
+            return $existingClaim;
+        }
+
+        $this->em->persist($remoteClaim);
+        $this->em->flush();
+
+        return $remoteClaim;
     }
 }

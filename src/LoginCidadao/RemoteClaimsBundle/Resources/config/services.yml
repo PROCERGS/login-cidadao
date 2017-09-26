@@ -1,4 +1,23 @@
 services:
-#    login_cidadao_remote_claims.example:
-#        class: LoginCidadao\RemoteClaimsBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    lc.remote_claims.http_client:
+        class: GuzzleHttp\Client
+
+    lc.remote_claims.repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim
+
+    lc.remote_claims.fetcher:
+        class: LoginCidadao\RemoteClaimsBundle\Fetcher\RemoteClaimFetcher
+        arguments:
+            - "@lc.remote_claims.http_client"
+            - "@doctrine.orm.entity_manager"
+            - "@lc.remote_claims.repository"
+
+    lc.remote_claims.auth_event_subscriber:
+        class: LoginCidadao\RemoteClaimsBundle\EventSubscriber\AuthorizationSubscriber
+        arguments:
+            - "@lc.remote_claims.fetcher"
+        tags:
+            - { name: kernel.event_subscriber }

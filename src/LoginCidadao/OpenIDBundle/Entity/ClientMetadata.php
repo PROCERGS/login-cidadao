@@ -10,7 +10,6 @@
 
 namespace LoginCidadao\OpenIDBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;

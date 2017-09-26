@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\RemoteClaimsBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
@@ -19,36 +20,53 @@ use LoginCidadao\RemoteClaimsBundle\Validator\Constraints\HostBelongsToClaimProv
  * RemoteClaim
  * @package LoginCidadao\RemoteClaimsBundle\Entity
  * @HostBelongsToClaimProvider
+ * @ORM\Entity(repositoryClass="LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository")
+ * @ORM\Table(name="remote_claim")
  */
 class RemoteClaim implements RemoteClaimInterface
 {
     /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
      * @var TagUri
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
      * @var string
+     * @ORM\Column(name="display_name", type="string", length=255, nullable=false)
      */
     private $displayName;
 
     /**
      * @var string
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
 
     /**
      * @var string[]
+     * @ORM\Column(name="provider_recommended_scope", type="json_array", nullable=true)
      */
     private $providerRecommendedScope;
 
     /**
      * @var string[]
+     * @ORM\Column(name="provider_essential_scope", type="json_array", nullable=true)
      */
     private $providerEssentialScope;
 
     /**
      * @var ClaimProviderInterface
+     *
+     * @ ORM\OneToOne(targetEntity="LoginCidadao\OAuthBundle\Entity\Client")
+     * @ ORM\JoinColumn(name="provider_id", referencedColumnName="id")
      */
     private $provider;
 

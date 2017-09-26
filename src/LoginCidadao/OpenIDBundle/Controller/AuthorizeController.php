@@ -11,6 +11,9 @@
 namespace LoginCidadao\OpenIDBundle\Controller;
 
 use FOS\OAuthServerBundle\Event\OAuthEvent;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OpenIDBundle\Event\AuthorizationEvent;
+use LoginCidadao\OpenIDBundle\LoginCidadaoOpenIDEvents;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use LoginCidadao\OpenIDBundle\Manager\ScopeManager;
 use LoginCidadao\OAuthBundle\Service\OrganizationService;
@@ -115,10 +118,13 @@ class AuthorizeController extends BaseController
             return parent::validateAuthorizeAction();
         }
 
+        /** @var PersonInterface $person */
+        $person = $this->getUser();
+
         /** @var EventDispatcher $dispatcher */
         $dispatcher = $this->get('event_dispatcher');
 
-        $event = new OAuthEvent($this->getUser(), $client);
+        $event = new OAuthEvent($person, $client);
         $dispatcher->dispatch(OAuthEvent::PRE_AUTHORIZATION_PROCESS, $event);
 
         $isAuthorized = $event->isAuthorizedClient();
@@ -126,6 +132,12 @@ class AuthorizeController extends BaseController
 
         if ($isAuthorized && !$askConsent) {
             return $this->handleAuthorize($this->getOAuth2Server(), $isAuthorized);
+        }
+
+        if (!$isAuthorized) {
+            $authEvent = new AuthorizationEvent($person, $client, $request->get('scope'));
+            $dispatcher->dispatch(LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION_REQUEST, $authEvent);
+            dump($authEvent->getRemoteClaims());
         }
 
         return parent::validateAuthorizeAction();
