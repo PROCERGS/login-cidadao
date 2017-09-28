@@ -51,7 +51,7 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
     protected $name;
 
     /**
-     * @ORM\Column(type="string", length=4000, nullable=false)
+     * @ORM\Column(type="string", length=4000, nullable=true)
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */
@@ -65,7 +65,7 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
     protected $landingPageUrl;
 
     /**
-     * @ORM\Column(type="string", length=2000, nullable=false)
+     * @ORM\Column(type="string", length=2000, nullable=true)
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */
@@ -83,7 +83,7 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
     protected $authorizations;
 
     /**
-     * @ORM\Column(type="string", length=2000)
+     * @ORM\Column(type="string", length=2000, nullable=true)
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */

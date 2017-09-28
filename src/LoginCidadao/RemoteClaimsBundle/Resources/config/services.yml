@@ -14,6 +14,7 @@ services:
             - "@lc.remote_claims.http_client"
             - "@doctrine.orm.entity_manager"
             - "@lc.remote_claims.repository"
+            - "@lc.client.repository"
 
     lc.remote_claims.auth_event_subscriber:
         class: LoginCidadao\RemoteClaimsBundle\EventSubscriber\AuthorizationSubscriber

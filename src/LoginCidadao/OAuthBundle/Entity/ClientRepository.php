@@ -12,6 +12,7 @@ namespace LoginCidadao\OAuthBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 
 /**
  * Class ClientRepository
@@ -169,5 +170,27 @@ class ClientRepository extends EntityRepository
             ->setParameters(compact('start', 'end'));
 
         return $query->getQuery()->getScalarResult();
+    }
+
+    /**
+     * @param string[] $redirectUris
+     * @return ClientInterface[]
+     */
+    public function findByRedirectUris(array $redirectUris)
+    {
+        if (count($redirectUris) <= 0) {
+            throw new \InvalidArgumentException('At least one Redirect URI must be passed.');
+        }
+        $uris = [];
+        $query = $this->createQueryBuilder('c');
+        foreach ($redirectUris as $k => $uri) {
+            $quoted = sprintf('"%s"', $uri);
+            $uris["uri{$k}"] = $quoted;
+            $query->orWhere("c.redirectUris LIKE :uri{$k}");
+        }
+
+        return $query->setParameters($uris)
+            ->getQuery()
+            ->getResult();
     }
 }

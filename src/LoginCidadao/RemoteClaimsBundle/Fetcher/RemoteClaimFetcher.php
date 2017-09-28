@@ -13,8 +13,11 @@ namespace LoginCidadao\RemoteClaimsBundle\Fetcher;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Client;
 use League\Uri\Schemes\Http;
+use LoginCidadao\OAuthBundle\Entity\ClientRepository;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository;
+use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
@@ -30,6 +33,9 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
     /** @var RemoteClaimRepository */
     private $claimRepo;
 
+    /** @var ClientRepository */
+    private $clientRepo;
+
     /** @var EntityManagerInterface */
     private $em;
 
@@ -38,12 +44,18 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
      * @param Client $httpClient
      * @param EntityManagerInterface $em
      * @param RemoteClaimRepository $claimRepository
+     * @param ClientRepository $clientRepository
      */
-    public function __construct(Client $httpClient, EntityManagerInterface $em, RemoteClaimRepository $claimRepository)
-    {
+    public function __construct(
+        Client $httpClient,
+        EntityManagerInterface $em,
+        RemoteClaimRepository $claimRepository,
+        ClientRepository $clientRepository
+    ) {
         $this->em = $em;
         $this->httpClient = $httpClient;
         $this->claimRepo = $claimRepository;
+        $this->clientRepo = $clientRepository;
     }
 
     public function fetchRemoteClaim($claimUri)
@@ -98,14 +110,50 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
     public function getRemoteClaim($claimUri)
     {
         $remoteClaim = $this->fetchRemoteClaim($claimUri);
+
+        $provider = $this->getExistingClaimProvider($remoteClaim->getProvider());
+        if ($provider instanceof ClaimProviderInterface) {
+            $remoteClaim->setProvider($provider);
+            $this->em->persist($provider);
+        }
+
         $existingClaim = $this->claimRepo->findOneBy(['name' => $remoteClaim->getName()]);
         if ($existingClaim instanceof RemoteClaimInterface) {
-            return $existingClaim;
+            $remoteClaim = $existingClaim;
         }
 
         $this->em->persist($remoteClaim);
         $this->em->flush();
 
         return $remoteClaim;
+    }
+
+    /**
+     * @param string[] $redirectUris
+     * @return ClientInterface
+     */
+    private function findClaimProvider($redirectUris)
+    {
+        $clients = $this->clientRepo->findByRedirectUris($redirectUris);
+
+        if (count($clients) > 1) {
+            throw new \InvalidArgumentException('Ambiguous redirect_uris. More than one Relying Party found.');
+        }
+
+        return reset($clients);
+    }
+
+    private function getExistingClaimProvider(ClaimProviderInterface $provider = null)
+    {
+        if (!$provider instanceof ClaimProviderInterface) {
+            return null;
+        }
+
+        $existingProvider = $this->findClaimProvider($provider->getRedirectUris());
+        if ($existingProvider instanceof ClaimProviderInterface) {
+            return $existingProvider;
+        }
+
+        return $provider;
     }
 }
