@@ -105,10 +105,16 @@ class NfgSoap implements NfgSoapInterface
             $phoneNumber = $phoneUtil->parse($crawler->filter('NroFoneContato')->text(), 'BR');
             $allowedTypes = [PhoneNumberType::MOBILE, PhoneNumberType::FIXED_LINE_OR_MOBILE];
             if (false === array_search($phoneUtil->getNumberType($phoneNumber), $allowedTypes)) {
-                $phoneNumber = null;
+                return null;
+            }
+
+            $nationalNumber = $phoneNumber->getNationalNumber();
+            if ($phoneNumber->getCountryCode() === 55 && strlen($nationalNumber) == 10) {
+                $with9thDigit = preg_replace('/^(\d{2})(\d{8})$/', '${1}9${2}', $nationalNumber);
+                $phoneNumber->setNationalNumber($with9thDigit);
             }
         } catch (NumberParseException $e) {
-            $phoneNumber = null;
+            return null;
         }
 
         return $phoneNumber;

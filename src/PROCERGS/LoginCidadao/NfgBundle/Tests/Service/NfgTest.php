@@ -21,6 +21,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
 use PROCERGS\LoginCidadao\NfgBundle\Tests\TestsUtil;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -42,11 +43,9 @@ class NfgTest extends \PHPUnit_Framework_TestCase
                 ->willThrowException($exception);
         } else {
             $breaker->expects($this->once())->method('protect')
-                ->willReturnCallback(
-                    function (\Closure $closure) {
-                        return $closure();
-                    }
-                );
+                ->willReturnCallback(function (\Closure $closure) {
+                    return $closure();
+                });
         }
 
         return $breaker;
@@ -63,6 +62,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $circuitBreaker = $this->getBreaker();
 
+        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $logger */
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())->method('error');
 
@@ -138,6 +138,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $circuitBreaker = $this->getBreaker();
 
+        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $logger */
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())->method('info');
 
@@ -501,15 +502,14 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $meuRSHelper = $this->getMeuRSHelper($nfgProfile->getCpf(), null);
 
         $dispatcher = $this->getDispatcher();
-        $dispatcher->expects($this->atLeastOnce())->method('dispatch')->willReturnCallback(
-            function ($eventName, $event) {
+        $dispatcher->expects($this->atLeastOnce())->method('dispatch')
+            ->willReturnCallback(function ($eventName, $event) {
                 if ($eventName === FOSUserEvents::REGISTRATION_INITIALIZE
                     && $event instanceof GetResponseUserEvent
                 ) {
                     $event->setResponse(new RedirectResponse('dummy'));
                 }
-            }
-        );
+            });
 
         $nfg = $this->getNfgService(
             [
@@ -1032,7 +1032,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
     /**
      * @param $accessId
      * @param null $shouldCall
-     * @return SessionInterface
+     * @return \PHPUnit_Framework_MockObject_MockObject|SessionInterface
      */
     private function getSession($accessId, $shouldCall = null)
     {
@@ -1074,7 +1074,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $accessToken
-     * @return Request
+     * @return \PHPUnit_Framework_MockObject_MockObject|Request
      */
     private function getRequest($accessToken)
     {
@@ -1093,7 +1093,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return FormFactory
+     * @return FormFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getFormFactory()
     {
@@ -1101,11 +1101,10 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $formFactory->expects($this->any())->method('createForm')->willReturnCallback(
-            function () {
+        $formFactory->expects($this->any())->method('createForm')
+            ->willReturnCallback(function () {
                 return $this->getMock('Symfony\Component\Form\FormInterface');
-            }
-        );
+            });
 
         return $formFactory;
     }
@@ -1125,16 +1124,14 @@ class NfgTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return UserManagerInterface
+     * @return UserManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getUserManager()
     {
         $userManager = $this->getMock('FOS\UserBundle\Model\UserManagerInterface');
-        $userManager->expects($this->any())->method('createUser')->willReturnCallback(
-            function () {
-                return new Person();
-            }
-        );
+        $userManager->expects($this->any())->method('createUser')->willReturnCallback(function () {
+            return new Person();
+        });
 
         return $userManager;
     }
@@ -1179,15 +1176,14 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $meuRSHelper = $this->getMeuRSHelper($nfgProfile->getCpf(), $otherPersonMeuRS);
 
         $dispatcher = $this->getDispatcher();
-        $dispatcher->expects($this->atLeastOnce())->method('dispatch')->willReturnCallback(
-            function ($eventName, $event) {
+        $dispatcher->expects($this->atLeastOnce())->method('dispatch')
+            ->willReturnCallback(function ($eventName, $event) {
                 if ($eventName === FOSUserEvents::REGISTRATION_INITIALIZE
                     && $event instanceof GetResponseUserEvent
                 ) {
                     $event->setResponse(new RedirectResponse('dummy'));
                 }
-            }
-        );
+            });
 
         $mailer = $this->getMailer();
         $mailer->expects($this->atLeastOnce())->method('notifyCpfLost');

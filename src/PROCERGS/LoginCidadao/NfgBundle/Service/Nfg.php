@@ -155,19 +155,17 @@ class Nfg implements LoggerAwareInterface
     {
         $nfgSoap = $this->nfgSoap;
 
-        return $this->protect(
-            function () use ($nfgSoap) {
-                try {
-                    $accessId = $nfgSoap->getAccessID();
+        return $this->protect(function () use ($nfgSoap) {
+            try {
+                $accessId = $nfgSoap->getAccessID();
 
-                    return $accessId;
-                } catch (NfgServiceUnavailableException $e) {
-                    throw $e;
-                } catch (\Exception $e) {
-                    throw new NfgServiceUnavailableException($e->getMessage(), 500, $e);
-                }
+                return $accessId;
+            } catch (NfgServiceUnavailableException $e) {
+                throw $e;
+            } catch (\Exception $e) {
+                throw new NfgServiceUnavailableException($e->getMessage(), 500, $e);
             }
-        );
+        });
     }
 
     /**
@@ -181,11 +179,9 @@ class Nfg implements LoggerAwareInterface
         $nfgSoap = $this->nfgSoap;
 
         try {
-            $nfgProfile = $this->protect(
-                function () use ($nfgSoap, $accessToken, $voterRegistration) {
-                    return $this->nfgSoap->getUserInfo($accessToken, $voterRegistration);
-                }
-            );
+            $nfgProfile = $this->protect(function () use ($nfgSoap, $accessToken, $voterRegistration) {
+                return $this->nfgSoap->getUserInfo($accessToken, $voterRegistration);
+            });
         } catch (NfgServiceUnavailableException $e) {
             throw $e;
         } catch (\Exception $e) {
@@ -309,14 +305,16 @@ class Nfg implements LoggerAwareInterface
      */
     public function disconnect(PersonMeuRS $personMeuRS)
     {
-        $this->em->remove($personMeuRS->getNfgProfile());
-        $personMeuRS->setNfgAccessToken(null);
-        $personMeuRS->setNfgProfile(null);
-        $this->em->flush();
+        if ($personMeuRS->getNfgProfile()) {
+            $this->em->remove($personMeuRS->getNfgProfile());
+            $personMeuRS->setNfgAccessToken(null);
+            $personMeuRS->setNfgProfile(null);
+            $this->em->flush();
+        }
 
         $response = new RedirectResponse($this->router->generate('fos_user_profile_edit'));
         $event = new GetDisconnectCallbackResponseEvent($personMeuRS, $response);
-        $this->dispatcher->dispatch(NfgEvents::CONNECT_CALLBACK_RESPONSE, $event);
+        $this->dispatcher->dispatch(NfgEvents::DISCONNECT_CALLBACK_RESPONSE, $event);
 
         return $event->getResponse();
     }

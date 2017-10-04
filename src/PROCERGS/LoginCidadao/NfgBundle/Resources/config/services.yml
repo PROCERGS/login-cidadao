@@ -100,3 +100,12 @@ services:
             - "@cache"
             - null
             - "@event_dispatcher"
+
+    procergs.nfg.subscriber:
+        class: PROCERGS\LoginCidadao\NfgBundle\EventListener\NfgSubscriber
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        calls:
+            - ['setLogger', ["@?logger"]]
+        tags:
+            - { name: kernel.event_subscriber }

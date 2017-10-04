@@ -24,12 +24,12 @@ class NfgEvents
      *
      * @Event("PROCERGS\LoginCidadao\NfgBundle\Event\GetConnectCallbackResponseEvent")
      */
-    const CONNECT_CALLBACK_RESPONSE = 'nfg.login.callback.response';
+    const CONNECT_CALLBACK_RESPONSE = 'nfg.connect.callback.response';
 
     /**
      * The DISCONNECT_CALLBACK_RESPONSE event occurs when the disconnect finishes and has a Response ready.
      *
      * @Event("PROCERGS\LoginCidadao\NfgBundle\Event\GetDisconnectCallbackResponseEvent")
      */
-    const DISCONNECT_CALLBACK_RESPONSE = 'nfg.login.callback.response';
+    const DISCONNECT_CALLBACK_RESPONSE = 'nfg.disconnect.callback.response';
 }
