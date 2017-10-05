@@ -109,6 +109,9 @@ class AccountingService implements LoggerAwareInterface
         }
         $this->logger->info("GCS Interface object is ready.");
 
-        return $gcsInterface->__toString();
+        $response = $gcsInterface->__toString();
+        $this->logger->info("Resulting GCS Interface length: ".count($response), ['response' => $response]);
+
+        return $response;
     }
 }

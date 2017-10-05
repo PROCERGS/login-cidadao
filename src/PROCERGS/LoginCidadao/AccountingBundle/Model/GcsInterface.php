@@ -155,8 +155,12 @@ class GcsInterface
 
     public function __toString()
     {
-        return $this->getHeader().PHP_EOL.
-            $this->getBody().PHP_EOL.
-            $this->getTail();
+        $header = $this->getHeader();
+        $body = $this->getBody();
+        $tail = $this->getTail();
+
+        return $header.PHP_EOL.
+            $body.PHP_EOL.
+            $tail;
     }
 }
