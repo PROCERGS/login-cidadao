@@ -107,6 +107,7 @@ class AccountingService implements LoggerAwareInterface
             );
             $gcsInterface->addClient($client);
         }
+        $this->logger->info("GCS Interface object is ready.");
 
         return $gcsInterface->__toString();
     }
