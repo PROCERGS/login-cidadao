@@ -54,7 +54,7 @@ class AccountingService implements LoggerAwareInterface
      */
     public function getAccounting(\DateTime $start, \DateTime $end)
     {
-        $this->logger->info("Getting accounting between {$start->format(c)} and {$end->format(c)}");
+        $this->logger->info("Getting accounting between {$start->format('c')} and {$end->format('c')}");
         $start->setTime(0, 0, 0);
         $end->setTime(0, 0, 0);
 
