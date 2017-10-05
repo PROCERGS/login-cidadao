@@ -54,11 +54,14 @@ class AccountingService implements LoggerAwareInterface
      */
     public function getAccounting(\DateTime $start, \DateTime $end)
     {
+        $this->logger->info("Getting accounting between {$start->format(c)} and {$end->format(c)}");
         $start->setTime(0, 0, 0);
         $end->setTime(0, 0, 0);
 
         $data = $this->clientRepository->getAccessTokenAccounting($start, $end);
         $actionLog = $this->clientRepository->getActionLogAccounting($start, $end);
+
+        $this->logger->info("Loaded accounting data");
 
         $clientIds = array_unique(array_merge(
             array_column($data, 'id'),
@@ -71,8 +74,10 @@ class AccountingService implements LoggerAwareInterface
             $clients[$client->getId()] = $client;
         }
 
+        $this->logger->info("Loading linked clients...");
         $linked = $this->systemsRegistry->fetchLinked($clients, $this->procergsLinkRepository);
 
+        $this->logger->info("Preparing AccountingReport object...");
         $report = new AccountingReport($this->systemsRegistry, $linked);
         foreach ($data as $usage) {
             /** @var \LoginCidadao\OAuthBundle\Entity\Client $client */
@@ -83,6 +88,7 @@ class AccountingService implements LoggerAwareInterface
             /** @var \LoginCidadao\OAuthBundle\Entity\Client $client */
             $report->addEntry($clients[$action['id']], null, $action['api_usage']);
         }
+        $this->logger->info("AccountingReport object ready.");
 
         return $report;
     }
