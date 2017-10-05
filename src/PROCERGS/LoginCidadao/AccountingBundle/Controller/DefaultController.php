@@ -14,6 +14,7 @@ use PROCERGS\LoginCidadao\AccountingBundle\Service\AccountingService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @codeCoverageIgnore
@@ -51,10 +52,15 @@ class DefaultController extends Controller
         /** @var AccountingService $accountingService */
         $accountingService = $this->get('procergs.lc.accounting');
 
-        echo $accountingService->getGcsInterface(
+        $gcsInterface = $accountingService->getGcsInterface(
             'LOGCIDADAO',
             new \DateTime("first day of previous month"),
             new \DateTime("last day of previous month")
         );
+
+        $response = new Response($gcsInterface);
+        $response->headers->set('Content-Type', 'text/plain');
+
+        return $response;
     }
 }
