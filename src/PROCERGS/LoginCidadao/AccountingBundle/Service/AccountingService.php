@@ -97,9 +97,14 @@ class AccountingService implements LoggerAwareInterface
     {
         $data = $this->getAccounting($start, $end)->getReport(['include_inactive' => false]);
 
+        $this->logger->info("Preparing GCS Interface...");
         $gcsInterface = new GcsInterface($interfaceName, $start, ['ignore_externals' => true]);
 
         foreach ($data as $client) {
+            $this->logger->info(
+                "Including {$client->getClient()->getPublicId()} into GCS Interface...",
+                ['entry' => $client]
+            );
             $gcsInterface->addClient($client);
         }
 
