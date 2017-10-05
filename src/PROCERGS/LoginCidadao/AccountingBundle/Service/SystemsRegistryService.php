@@ -15,10 +15,14 @@ use GuzzleHttp\Exception\ClientException;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLinkRepository;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 
-class SystemsRegistryService
+class SystemsRegistryService implements LoggerAwareInterface
 {
-    /** @var Client */
+    use LoggerAwareTrait;
+
+    /** @var HttpClientInterface */
     private $client;
 
     /** @var string */
@@ -48,6 +52,7 @@ class SystemsRegistryService
 
     public function getSystemInitials(ClientInterface $client)
     {
+        $this->logger->info("Fetching PROCERGS's system initials for client_id: {$client->getPublicId()}");
         $hosts = $this->getHosts($client);
 
         $identifiedSystems = [];
@@ -106,6 +111,7 @@ class SystemsRegistryService
 
     private function fetchInfo($query)
     {
+        $this->logger->info("Searching for '{$query}'");
         $hashKey = hash('sha256', $query);
         if (false === array_key_exists($hashKey, $this->cache)) {
             $requestUrl = str_replace('{host}', $query, $this->apiUri);
@@ -117,11 +123,17 @@ class SystemsRegistryService
                 if ($e->getResponse()->getStatusCode() === 404) {
                     $response = $e->getResponse();
                 } else {
+                    $this->logger->info(
+                        "An exception occurred when trying to fetch PROCERGS's system initials for '{$query}'",
+                        ['exception' => $e]
+                    );
                     throw $e;
                 }
             }
             $this->cache[$hashKey] = $response->json();
         }
+
+        $this->logger->info("Returning cached result for '{$query}'");
 
         return $this->cache[$hashKey];
     }

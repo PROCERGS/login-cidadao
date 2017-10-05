@@ -15,9 +15,13 @@ use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLinkRepository;
 use PROCERGS\LoginCidadao\AccountingBundle\Model\AccountingReport;
 use PROCERGS\LoginCidadao\AccountingBundle\Model\GcsInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 
-class AccountingService
+class AccountingService implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /** @var SystemsRegistryService */
     private $systemsRegistry;
 

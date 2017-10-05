@@ -18,6 +18,8 @@ services:
               "organization": "%accounting.procergs_systems.api.organization%"
               "registration_number": "%accounting.procergs_systems.api.registration_number%"
               "password": "%accounting.procergs_systems.api.password%"
+        calls:
+            - ['setLogger', ["@?logger"]]
 
     procergs.lc.accounting:
         class: PROCERGS\LoginCidadao\AccountingBundle\Service\AccountingService
@@ -25,3 +27,5 @@ services:
             - "@procergs.lc.procergs_systems.api"
             - "@lc.client.repository"
             - "@procergs.lc.procergs_link.repository"
+        calls:
+            - ['setLogger', ["@?logger"]]
