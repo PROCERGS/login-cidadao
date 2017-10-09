@@ -235,6 +235,10 @@ fos_user:
         form:
             type: LoginCidadao\CoreBundle\Form\Type\ChangePasswordFormType
 
+    from_email:
+        address: %mailer_sender_mail%
+        sender_name: %mailer_sender_name%
+
 # Audit Trail
 simple_things_entity_audit:
     global_ignore_columns:
@@ -396,7 +400,7 @@ fos_rest:
     disable_csrf_role: ROLE_API
 
 nelmio_api_doc:
-    name: MeuRS API
+    name: Login Cidadão API
 
 jms_serializer:
     metadata:

@@ -6,10 +6,13 @@ cache:
     - $HOME/.composer/cache/files
 
 env:
-- SYMFONY_DEPRECATIONS_HELPER=weak
+  - SYMFONY_DEPRECATIONS_HELPER=weak
 
 php:
-- 5.4
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
 
 matrix:
   fast_finish: true
@@ -18,21 +21,22 @@ addons:
   postgresql: "9.3"
 
 services:
-- memcached
+  - memcached
 
 before_script:
-- psql -c "create user logincidadao with password '';" -U postgres
-- psql -c "create database logincidadao with owner logincidadao" -U postgres
-- echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-- cp app/config/parameters.yml.dist app/config/parameters.yml
-- composer self-update
-- composer install --prefer-dist
-- chmod -R 777 app/cache app/logs web/uploads
-- echo y | php app/console doctrine:schema:update --force
-- echo y | php app/console lc:database:populate batch/
+  - psql -c "create user logincidadao with password '';" -U postgres
+  - psql -c "create database logincidadao with owner logincidadao" -U postgres
+  - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - cp app/config/parameters.yml.dist app/config/parameters.yml
+  - composer self-update
+  - composer install --prefer-dist
+  - chmod -R 777 app/cache app/logs web/uploads
+  - echo y | php app/console doctrine:schema:update --force
+  - echo y | php app/console lc:database:populate batch/
 
-script: phpunit -c app 
+script:
+  - ./bin/phpunit -c app
 
 after_script:
-- wget https://scrutinizer-ci.com/ocular.phar
-- php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
