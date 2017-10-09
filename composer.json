@@ -60,7 +60,7 @@
         "liip/monitor-bundle": "^2.2",
         "guzzlehttp/guzzle": "^5.3",
         "guilhermednt/pathwell-bundle": "^0.1",
-        "beelab/recaptcha2-bundle": "^1",
+        "beelab/recaptcha2-bundle": "<1",
         "bmatzner/fontawesome-bundle": "^4.6",
         "ramsey/uuid": "^3.5",
         "qandidate/stack-request-id": "dev-ramsey-uuid-v3",
