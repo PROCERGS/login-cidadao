@@ -28,6 +28,7 @@ before_script:
   - psql -c "create database logincidadao with owner logincidadao" -U postgres
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - cp app/config/parameters.yml.dist app/config/parameters.yml
+  - sed -i -e "s/resource: memcache\.yml/resource: memcached.yml/" app/config/config.yml
   - composer self-update
   - composer install --prefer-dist
   - chmod -R 777 app/cache app/logs web/uploads
