@@ -32,6 +32,7 @@ before_script:
   - composer install --prefer-dist
   - chmod -R 777 app/cache app/logs web/uploads
   - echo y | php app/console doctrine:schema:update --force
+  - echo y | php app/console doctrine:schema:update --em=logs --force
   - echo y | php app/console lc:database:populate batch/
 
 script:
