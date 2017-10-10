@@ -61,7 +61,6 @@ class MonologDBHandler extends AbstractProcessingHandler
             $this->em->persist($logEntry);
             $this->em->flush();
         } catch (\Exception $e) {
-            error_log($e->getMessage());
             if ($this->cache) {
                 $this->cache->save(self::DISABLE_LOGGING_FLAG_KEY, true, self::LIFETIME);
             }
