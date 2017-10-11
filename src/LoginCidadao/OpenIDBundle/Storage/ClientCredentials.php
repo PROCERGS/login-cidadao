@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of the login-cidadao project or it's bundles.
  *
  * (c) Guilherme Donato <guilhermednt on github>
@@ -10,14 +10,15 @@
 
 namespace LoginCidadao\OpenIDBundle\Storage;
 
+use Doctrine\ORM\EntityManagerInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use OAuth2\ServerBundle\Storage\ClientCredentials as BaseClass;
-use Doctrine\ORM\EntityManager;
 
 class ClientCredentials extends BaseClass
 {
     private $em;
 
-    public function __construct(EntityManager $EntityManager)
+    public function __construct(EntityManagerInterface $EntityManager)
     {
         $this->em = $EntityManager;
     }
@@ -30,8 +31,7 @@ class ClientCredentials extends BaseClass
      * @param $client_secret
      * (optional) If a secret is required, check that they've given the right one.
      *
-     * @return
-     * TRUE if the client credentials are valid, and MUST return FALSE if it isn't.
+     * @return TRUE if the client credentials are valid, and MUST return FALSE if it isn't.
      * @endcode
      *
      * @see http://tools.ietf.org/html/rfc6749#section-3.1
@@ -40,10 +40,7 @@ class ClientCredentials extends BaseClass
      */
     public function checkClientCredentials($client_id, $client_secret = null)
     {
-        // Get Client
-        $id     = explode('_', $client_id);
-        $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
-            ->find($id[0]);
+        $client = $this->getClient($client_id);
 
         // If client exists check secret
         if ($client) {
@@ -78,20 +75,17 @@ class ClientCredentials extends BaseClass
      */
     public function getClientDetails($client_id)
     {
-        // Get Client
-        $id     = explode('_', $client_id);
-        $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
-            ->find($id[0]);
+        $client = $this->getClient($client_id);
 
         if (!$client) {
             return false;
         }
 
-        return array(
+        return [
             'redirect_uri' => implode(' ', $client->getRedirectUris()),
             'client_id' => $client->getPublicId(),
-            'grant_types' => $client->getAllowedGrantTypes()
-        );
+            'grant_types' => $client->getAllowedGrantTypes(),
+        ];
     }
 
     /**
@@ -101,8 +95,7 @@ class ClientCredentials extends BaseClass
      * @param $client_id
      * Client identifier to be check with.
      *
-     * @return
-     * TRUE if the client is public, and FALSE if it isn't.
+     * @return TRUE if the client is public, and FALSE if it isn't.
      * @endcode
      *
      * @see http://tools.ietf.org/html/rfc6749#section-2.3
@@ -112,9 +105,7 @@ class ClientCredentials extends BaseClass
      */
     public function isPublicClient($client_id)
     {
-        $id     = explode('_', $client_id);
-        $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
-            ->find($id[0]);
+        $client = $this->getClient($client_id);
 
         if (!$client) {
             return false;
@@ -128,20 +119,43 @@ class ClientCredentials extends BaseClass
     /**
      * Get the scope associated with this client
      *
-     * @return
-     * STRING the space-delineated scope list for the specified client_id
+     * @return STRING the space-delineated scope list for the specified client_id
      */
     public function getClientScope($client_id)
     {
-        // Get Client
-        $id     = explode('_', $client_id);
-        $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
-            ->find($id[0]);
+        $client = $this->getClient($client_id);
 
         if (!$client) {
             return false;
         }
 
         return implode(' ', $client->getAllowedScopes());
+    }
+
+    /**
+     * @param $client_id mixed
+     * @return null|ClientInterface
+     */
+    private function getClient($client_id)
+    {
+        $randomId = null;
+        if (strstr($client_id, '_') !== false) {
+            $parts = explode('_', $client_id);
+            $client_id = $parts[0];
+            $randomId = $parts[1];
+        }
+
+        $repo = $this->em->getRepository('LoginCidadaoOAuthBundle:Client');
+
+        if ($randomId) {
+            $client = $repo->findOneBy([
+                'id' => $client_id,
+                'randomId' => $randomId,
+            ]);
+        } else {
+            $client = $repo->find($client_id);
+        }
+
+        return $client;
     }
 }

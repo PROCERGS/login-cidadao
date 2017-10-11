@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\OpenIDBundle\Controller;
 
@@ -7,7 +15,6 @@ use LoginCidadao\OAuthBundle\Entity\Organization;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use LoginCidadao\OpenIDBundle\Validator\SectorIdentifierUriChecker;
-use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\HttpFoundation\Request;
 use OAuth2\ServerBundle\Controller\AuthorizeController as BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -146,13 +153,18 @@ class AuthorizeController extends BaseController
         return $clientManager->getClientById($fullId);
     }
 
-    private function shouldWarnUntrusted(ClientInterface $client)
+    private function shouldWarnUntrusted(ClientInterface $client = null)
     {
         $warnUntrusted = $this->getParameter('warn_untrusted');
-        $metadata = $this->getMetadata($client);
 
-        if ($metadata && $metadata->getOrganization() instanceof OrganizationInterface) {
-            $isTrusted = $metadata->getOrganization()->isTrusted();
+        if ($client) {
+            $metadata = $this->getMetadata($client);
+
+            if ($metadata && $metadata->getOrganization() instanceof OrganizationInterface) {
+                $isTrusted = $metadata->getOrganization()->isTrusted();
+            } else {
+                $isTrusted = false;
+            }
         } else {
             $isTrusted = false;
         }
@@ -164,8 +176,12 @@ class AuthorizeController extends BaseController
         return true; // warn
     }
 
-    private function getMetadata(ClientInterface $client)
+    private function getMetadata(ClientInterface $client = null)
     {
+        if (!$client) {
+            return null;
+        }
+
         $repo = $this->getDoctrine()->getRepository('LoginCidadaoOpenIDBundle:ClientMetadata');
 
         return $repo->findOneBy(['client' => $client]);
