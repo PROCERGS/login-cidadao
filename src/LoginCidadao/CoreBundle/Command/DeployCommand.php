@@ -9,7 +9,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Doctrine\ORM\EntityManager;
 
 class DeployCommand extends ContainerAwareCommand
 {
@@ -21,8 +20,7 @@ class DeployCommand extends ContainerAwareCommand
             ->setName('lc:deploy')
             ->addOption('--update-db', null, InputOption::VALUE_NONE,
                 'Update database schema without prompting')
-            ->setDescription('Perform basic deploy commands.')
-        ;
+            ->setDescription('Perform basic deploy commands.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -31,19 +29,11 @@ class DeployCommand extends ContainerAwareCommand
 
         $io = new SymfonyStyle($input, $output);
         $io->title("Running deploy tasks...");
+
         $this->clearMetadata($io);
         $this->clearCache($io, 'prod');
         $this->checkDatabase($io);
         $this->installAssets($io);
-    }
-
-    /**
-     *
-     * @return EntityManager
-     */
-    private function getManager()
-    {
-        return $this->getContainer()->get('doctrine')->getManager();
     }
 
     private function clearMetadata(SymfonyStyle $io)
@@ -54,12 +44,13 @@ class DeployCommand extends ContainerAwareCommand
         $envs = $this->getEnvsInput();
         $io->progressStart(count($envs));
         foreach ($envs as $env => $input) {
-            $cmdOutput  = new BufferedOutput();
+            $cmdOutput = new BufferedOutput();
             $returnCode = $command->run($input, $cmdOutput);
 
             if ($returnCode !== 0) {
                 $io->newLine(2);
                 $io->error("Couldn't clear metadata cache on $env");
+
                 return;
             }
             $io->progressAdvance();
@@ -70,17 +61,18 @@ class DeployCommand extends ContainerAwareCommand
     private function installAssets(SymfonyStyle $io)
     {
         $io->section("Installing assets...");
-        $input    = $this->getEnvsInput('prod');
-        $commands = array('assets:install', 'assetic:dump');
+        $input = $this->getEnvsInput('prod');
+        $commands = ['assets:install', 'assetic:dump'];
         $io->progressStart(count($commands));
         foreach ($commands as $command) {
-            $cmdOutput  = new BufferedOutput();
+            $cmdOutput = new BufferedOutput();
             $returnCode = $this->getApplication()
-                    ->find($command)->run($input, $cmdOutput);
+                ->find($command)->run($input, $cmdOutput);
 
             if ($returnCode !== 0) {
                 $io->newLine(2);
                 $io->error("$command failed. Run it separately to find out why.");
+
                 return;
             }
             $io->progressAdvance();
@@ -92,14 +84,15 @@ class DeployCommand extends ContainerAwareCommand
     {
         $io->section("Clearing cache ($env)...");
         $io->progressStart(1);
-        $input   = $this->getEnvsInput($env);
+        $input = $this->getEnvsInput($env);
         $command = $this->getApplication()->find('cache:clear');
 
-        $cmdOutput  = new BufferedOutput();
+        $cmdOutput = new BufferedOutput();
         $returnCode = $command->run($input, $cmdOutput);
 
         if ($returnCode !== 0) {
             $io->error("cache:clear command failed. You may need to manually delete the cache folders.");
+
             return;
         }
 
@@ -108,10 +101,10 @@ class DeployCommand extends ContainerAwareCommand
 
     private function getEnvsInput($env = null)
     {
-        $envs = array(
-            'prod' => new ArrayInput(array('--env' => 'prod')),
-            'dev' => new ArrayInput(array('--env' => 'dev'))
-        );
+        $envs = [
+            'prod' => new ArrayInput(['--env' => 'prod']),
+            'dev' => new ArrayInput(['--env' => 'dev']),
+        ];
 
         if ($env === null) {
             return $envs;
@@ -123,22 +116,45 @@ class DeployCommand extends ContainerAwareCommand
     private function checkDatabase(SymfonyStyle $io)
     {
         $io->section("Checking database schema...");
+
+        $defaultEm = $this->checkSchemaNeedsUpdate('default');
+        $logsEm = $this->checkSchemaNeedsUpdate('logs');
+
+        if (!$defaultEm && !$logsEm) {
+            $io->success(trim($defaultEm));
+
+            return;
+        }
+
+        if ($defaultEm) {
+            $this->updateSchema($io, explode("\n", trim($defaultEm)), 'default');
+        }
+        if ($logsEm) {
+            $this->updateSchema($io, explode("\n", trim($logsEm)), 'logs');
+        }
+    }
+
+    private function checkSchemaNeedsUpdate($entityManager)
+    {
         $cmdOutput = new BufferedOutput();
-        $command   = $this->getApplication()->find('doctrine:schema:update');
-        $input     = new ArrayInput(array('--env' => 'dev', '--dump-sql' => true));
+        $command = $this->getApplication()->find('doctrine:schema:update');
+        $input = new ArrayInput([
+            '--env' => 'dev',
+            '--dump-sql' => true,
+            '--em' => $entityManager,
+        ]);
 
         $command->run($input, $cmdOutput);
 
         $output = $cmdOutput->fetch();
         if (strstr($output, 'Nothing to update') !== false) {
-            $io->success(trim($output));
-            return;
+            return false;
         }
 
-        $this->updateSchema($io, explode("\n", trim($output)));
+        return $output;
     }
 
-    private function updateSchema(SymfonyStyle $io, $queries)
+    private function updateSchema(SymfonyStyle $io, $queries, $entityManager)
     {
         $io->caution("Your database schema needs to be updated. The following queries will be run:");
         $io->listing($queries);
@@ -148,9 +164,13 @@ class DeployCommand extends ContainerAwareCommand
         }
 
         $cmdOutput = new BufferedOutput();
-        $command   = $this->getApplication()->find('doctrine:schema:update');
-        $force     = new ArrayInput(array('--env' => 'dev', '--dump-sql' => true,
-            '--force' => true));
+        $command = $this->getApplication()->find('doctrine:schema:update');
+        $force = new ArrayInput([
+            '--env' => 'dev',
+            '--dump-sql' => true,
+            '--force' => true,
+            '--em' => $entityManager,
+        ]);
         $command->run($force, $cmdOutput);
 
         $result = $cmdOutput->fetch();
