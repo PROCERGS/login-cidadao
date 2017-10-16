@@ -1,13 +1,30 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Security\Http\Firewall;
 
+use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\CoreBundle\Exception\RecaptchaException;
 use Doctrine\ORM\EntityManager;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormFactoryInterface;
 use LoginCidadao\CoreBundle\Entity\AccessSession;
+use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
+use Symfony\Component\Security\Http\HttpUtils;
+use Symfony\Component\Security\Http\Session\SessionAuthenticationStrategyInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener;
@@ -15,27 +32,36 @@ use Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationL
 class LoginCidadaoListener extends UsernamePasswordFormAuthenticationListener
 {
     /** @var EntityManager */
-    protected $em;
+    private $em;
 
     /** @var FormFactoryInterface */
-    protected $formFactory;
+    private $formFactory;
 
     /** @var TranslatorInterface */
-    protected $translator;
+    private $translator;
 
     /** @var integer */
-    protected $bruteForceThreshold;
-    protected $container;
+    private $bruteForceThreshold;
 
-    public function setContainer($var)
-    {
-        $this->container = $var;
+    public function __construct(
+        TokenStorageInterface $tokenStorage,
+        AuthenticationManagerInterface $authenticationManager,
+        SessionAuthenticationStrategyInterface $sessionStrategy,
+        HttpUtils $httpUtils,
+        $providerKey,
+        AuthenticationSuccessHandlerInterface $successHandler,
+        AuthenticationFailureHandlerInterface $failureHandler,
+        array $options = array(),
+        LoggerInterface $logger = null,
+        EventDispatcherInterface $dispatcher = null,
+        $csrfTokenManager = null,
+        EntityManagerInterface $em
+    ) {
+        parent::__construct($tokenStorage, $authenticationManager, $sessionStrategy, $httpUtils, $providerKey,
+            $successHandler, $failureHandler, $options, $logger, $dispatcher, $csrfTokenManager);
+        $this->em = $em;
     }
 
-    public function getContainer()
-    {
-        return $this->container;
-    }
 
     private function getFilter(Request $request)
     {
@@ -102,13 +128,6 @@ class LoginCidadaoListener extends UsernamePasswordFormAuthenticationListener
     public function setFormFactory(FormFactoryInterface $formFactory)
     {
         $this->formFactory = $formFactory;
-
-        return $this;
-    }
-
-    public function setEntityManager(EntityManager $em)
-    {
-        $this->em = $em;
 
         return $this;
     }

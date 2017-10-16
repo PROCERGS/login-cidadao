@@ -1,8 +1,15 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Form\Type;
 
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -11,8 +18,6 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 abstract class CommonFormType extends AbstractType
 {
-    protected $em;
-
     /** @var TokenStorageInterface */
     protected $tokenStorage;
     protected $translator;
@@ -21,12 +26,7 @@ abstract class CommonFormType extends AbstractType
     public function setTokenStorage(TokenStorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
-        return $this;
-    }
 
-    public function setEntityManager(EntityManager $em)
-    {
-        $this->em = $em;
         return $this;
     }
 
@@ -36,11 +36,11 @@ abstract class CommonFormType extends AbstractType
             throw new \LogicException('Token Storage is not available.');
         }
         if (null === $token = $this->tokenStorage->getToken()) {
-            return;
+            return null;
         }
 
         if (!is_object($user = $token->getUser())) {
-            return;
+            return null;
         }
 
         return $user;
@@ -56,9 +56,11 @@ abstract class CommonFormType extends AbstractType
         $this->router = $var;
     }
 
-    public function generateUrl($route, $parameters = array(),
-                                $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
-    {
+    public function generateUrl(
+        $route,
+        $parameters = array(),
+        $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH
+    ) {
         return $this->router->generate($route, $parameters, $referenceType);
     }
 }

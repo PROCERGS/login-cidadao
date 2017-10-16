@@ -45,7 +45,8 @@ class RegisterListener implements EventSubscriberInterface
     private $emailUnconfirmedTime;
 
     /** @var EntityManagerInterface */
-    protected $em;
+    private $em;
+
     private $lcSupportedScopes;
 
     /** @var RegisterRequestedScope */
@@ -68,6 +69,7 @@ class RegisterListener implements EventSubscriberInterface
         TokenGeneratorInterface $tokenGenerator,
         RegisterRequestedScope $registerRequestedScope,
         ClientRepository $clientRepository,
+        EntityManagerInterface $em,
         SubjectIdentifierService $subjectIdentifierService,
         $emailUnconfirmedTime,
         $lcSupportedScopes,
@@ -82,6 +84,7 @@ class RegisterListener implements EventSubscriberInterface
         $this->lcSupportedScopes = $lcSupportedScopes;
         $this->registerRequestedScope = $registerRequestedScope;
         $this->clientRepository = $clientRepository;
+        $this->em = $em;
         $this->subjectIdentifierService = $subjectIdentifierService;
         $this->defaultClientUid = $defaultClientUid;
     }
@@ -181,10 +184,5 @@ class RegisterListener implements EventSubscriberInterface
 
         $url = $this->router->generate('fos_user_profile_edit');
         $event->setResponse(new RedirectResponse($url));
-    }
-
-    public function setEntityManager(EntityManager $var)
-    {
-        $this->em = $var;
     }
 }

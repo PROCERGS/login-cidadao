@@ -1,12 +1,21 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Entity;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use libphonenumber\PhoneNumber;
+use LoginCidadao\CoreBundle\Tests\LongPolling\LongPollableInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -16,11 +25,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use JMS\Serializer\Annotation as JMS;
 use FOS\UserBundle\Model\User as BaseUser;
 use LoginCidadao\OAuthBundle\Entity\Client;
-use LoginCidadao\CoreBundle\Model\SelectData;
-use LoginCidadao\LongPolling\LongPollingUtils;
+use LoginCidadao\CoreBundle\Model\LocationSelectData;
+use LoginCidadao\CoreBundle\LongPolling\LongPollingUtils;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
-use LoginCidadao\CoreBundle\Model\LocationAwareInterface;
 use LoginCidadao\ValidationBundle\Validator\Constraints as LCAssert;
 use Donato\PathWellBundle\Validator\Constraints\PathWell;
 use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
@@ -36,8 +44,7 @@ use Rollerworks\Bundle\PasswordStrengthBundle\Validator\Constraints as Rollerwor
  * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
  */
-class Person extends BaseUser implements PersonInterface, TwoFactorInterface, BackupCodeInterface,
-    LocationAwareInterface
+class Person extends BaseUser implements PersonInterface, BackupCodeInterface
 {
     /**
      * @ORM\Id
@@ -1208,58 +1215,15 @@ class Person extends BaseUser implements PersonInterface, TwoFactorInterface, Ba
 
     public function getPlaceOfBirth()
     {
-        $location = new SelectData();
+        $location = new LocationSelectData();
         $location->getFromObject($this);
 
         return $location;
     }
 
-    public function setPlaceOfBirth(SelectData $location)
+    public function setPlaceOfBirth(LocationSelectData $location)
     {
         $location->toObject($this);
-    }
-
-    public function waitUpdate(EntityManager $em, \DateTime $updatedAt)
-    {
-        $id = $this->getId();
-        $lastUpdatedAt = null;
-        $callback = $this->getCheckUpdateCallback(
-            $em,
-            $id,
-            $updatedAt,
-            $lastUpdatedAt
-        );
-
-        return LongPollingUtils::runTimeLimited($callback);
-    }
-
-    private function getCheckUpdateCallback(
-        EntityManager $em,
-        $id,
-        $updatedAt,
-        $lastUpdatedAt
-    ) {
-        $people = $em->getRepository('LoginCidadaoCoreBundle:Person');
-
-        return function () use ($id, $people, $em, $updatedAt, $lastUpdatedAt) {
-            $em->clear();
-            $person = $people->find($id);
-            if (!$person->getUpdatedAt()) {
-                return false;
-            }
-
-            if ($person->getUpdatedAt() > $updatedAt) {
-                return $person;
-            }
-
-            if ($lastUpdatedAt === null) {
-                $lastUpdatedAt = $person->getUpdatedAt();
-            } elseif ($person->getUpdatedAt() != $lastUpdatedAt) {
-                return $person;
-            }
-
-            return false;
-        };
     }
 
     /**

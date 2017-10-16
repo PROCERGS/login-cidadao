@@ -1,0 +1,4 @@
+login_cidadao_dynamic_form:
+    resource: "@LoginCidadaoDynamicFormBundle/Controller/"
+    type: annotation
+    prefix: /

@@ -33,23 +33,22 @@
         "sensio/framework-extra-bundle": "~3.0,>=3.0.2,<3.0.13",
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
-        "friendsofsymfony/oauth-server-bundle": "dev-master",
+        "friendsofsymfony/oauth-server-bundle": "^1.5",
         "jms/serializer-bundle": "*",
         "simplethings/entity-audit-bundle": "^1.0",
         "hwi/oauth-bundle": "^0.4",
         "vich/uploader-bundle": "^0.14.0",
-        "knplabs/knp-gaufrette-bundle": "0.2.*@dev",
-        "knplabs/gaufrette": "dev-master",
+        "knplabs/knp-gaufrette-bundle": "^0.4",
+        "knplabs/gaufrette": "^0.3",
         "friendsofsymfony/rest-bundle": "1.7.*",
         "michelf/php-markdown": "1.4.1",
-        "nelmio/api-doc-bundle": "@dev",
-        "jms/security-extra-bundle": "dev-master",
+        "nelmio/api-doc-bundle": "^2",
+        "jms/security-extra-bundle": "*",
         "procergs/login-cidadao-badges-bundle": "^2.0",
-        "scheb/two-factor-bundle": "^1.4,<1.5",
+        "scheb/two-factor-bundle": "^2",
         "procergs/tos-bundle": "^1.4",
-        "symfony/phpunit-bridge": "^2.7",
-        "bshaffer/oauth2-server-bundle": "dev-develop#141bc7c3d8a94fe523fe6e31e71a626572a6e01f",
-        "phpseclib/phpseclib": "2.0.0",
+        "bshaffer/oauth2-server-bundle": "^0.4",
+        "phpseclib/phpseclib": "^2",
         "gree/jose": "^2.0",
         "oro/doctrine-extensions": "^1.0",
         "nelmio/cors-bundle": "^1.4",
@@ -57,7 +56,7 @@
         "liip/monitor-bundle": "^2.2",
         "guzzlehttp/guzzle": "^5.3",
         "guilhermednt/pathwell-bundle": "^0.1",
-        "beelab/recaptcha2-bundle": "^1.0",
+        "beelab/recaptcha2-bundle": "^1",
         "bmatzner/fontawesome-bundle": "^4.6",
         "ramsey/uuid": "^3.5",
         "qandidate/stack-request-id": "dev-ramsey-uuid-v3",
@@ -68,7 +67,8 @@
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
-        "phpunit/phpunit": "^4.8"
+        "phpunit/phpunit": "^4.8",
+        "symfony/phpunit-bridge": "^3.3"
     },
     "scripts": {
         "post-root-package-install": [
@@ -95,7 +95,7 @@
     },
     "config": {
         "bin-dir": "bin",
-        "platfrom": {
+        "platform": {
             "php": "5.4.16"
         }
     },

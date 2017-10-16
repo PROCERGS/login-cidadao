@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\OpenIDBundle\DependencyInjection;
 
@@ -36,8 +44,11 @@ class LoginCidadaoOpenIDExtension extends Extension implements ExtensionInterfac
         $definition = $container->getDefinition('oauth2.server');
         $args       = $definition->getArguments();
 
-        $args['oauth2.server.storage'][] = new Reference('oauth2.storage.user_claims');
-        $args['oauth2.server.storage'][] = new Reference('oauth2.storage.public_key');
+        // Use the array's key only when it's available
+        $key = array_key_exists('oauth2.server.storage', $args) ? 'oauth2.server.storage' : 0;
+
+        $args[$key]['user_claims'] = new Reference('oauth2.storage.user_claims');
+        $args[$key]['public_key'] = new Reference('oauth2.storage.public_key');
 
         $args['oauth2.server.grant_types'] = array();
 
