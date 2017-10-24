@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\HasLifecycleCallbacks
  * @ORM\AttributeOverrides({
  *      @ORM\AttributeOverride(name="scope",
- *              column=@ORM\Column(
+ *          column=@ORM\Column(
  *              name     = "scope",
  *              type     = "string",
  *              length   = 1000,
