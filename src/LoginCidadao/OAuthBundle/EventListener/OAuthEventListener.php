@@ -1,50 +1,54 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\OAuthBundle\EventListener;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\OAuthServerBundle\Event\OAuthEvent;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Helper\ScopeFinderHelper;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier;
 use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
-use Symfony\Component\Form\Form;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class OAuthEventListener
 {
+    /** @var EntityManagerInterface */
+    private $em;
+
     /** @var PersonRepository */
     private $personRepo;
-
-    /** @var Request */
-    private $request;
-
-    /** @var Form */
-    private $form;
 
     /** @var SubjectIdentifierService */
     private $subjectIdentifierService;
 
+    /** @var ScopeFinderHelper */
+    private $scopeFinder;
+
     public function __construct(
-        EntityManager $em,
-        RequestStack $requestStack,
-        Form $form,
+        EntityManagerInterface $em,
+        ScopeFinderHelper $scopeFinder,
         SubjectIdentifierService $subjectIdentifierService
     ) {
         $this->em = $em;
         $this->personRepo = $this->em->getRepository('LoginCidadaoCoreBundle:Person');
-        $this->request = $requestStack->getCurrentRequest();
-        $this->form = $form;
+        $this->scopeFinder = $scopeFinder;
         $this->subjectIdentifierService = $subjectIdentifierService;
     }
 
     public function onPreAuthorizationProcess(OAuthEvent $event)
     {
-        $scope = $this->getScope();
+        $scope = $this->scopeFinder->getScope();
         /** @var PersonInterface $user */
         $user = $this->getUser($event);
         if (!$user) {
@@ -71,21 +75,16 @@ class OAuthEventListener
 
         /** @var Client $client */
         $client = $event->getClient();
-        if (null === $client) {
-            return;
-        }
 
         /** @var PersonInterface $user */
         $user = $this->getUser($event);
-        $scope = $this->getScope();
+        $scope = $this->scopeFinder->getScope();
 
         $authRepo = $this->em->getRepository('LoginCidadaoCoreBundle:Authorization');
-        $currentAuth = $authRepo->findOneBy(
-            [
-                'person' => $user,
-                'client' => $client,
-            ]
-        );
+        $currentAuth = $authRepo->findOneBy([
+            'person' => $user,
+            'client' => $client,
+        ]);
 
         // if the authorization is already there, update it.
         if ($currentAuth instanceof Authorization) {
@@ -113,27 +112,7 @@ class OAuthEventListener
 
     public function getUser(OAuthEvent $event)
     {
-        return $this->personRepo
-            ->findOneBy(
-                array(
-                    'username' => $event->getUser()->getUsername(),
-                )
-            );
-    }
-
-    protected function getScope()
-    {
-        $form = $this->form->getName();
-
-        $scope = $this->request->request->get('scope', false);
-        if (!$scope) {
-            $scope = $this->request->query->get('scope', false);
-        }
-        if (!$scope) {
-            $scope = $this->request->request->get("{$form}[scope]", false, true);
-        }
-
-        return !is_array($scope) ? explode(' ', $scope) : $scope;
+        return $this->personRepo->findOneBy(['username' => $event->getUser()->getUsername()]);
     }
 
     private function checkSubjectIdentifierPersisted(PersonInterface $person, ClientInterface $client)

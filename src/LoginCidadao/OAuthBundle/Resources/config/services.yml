@@ -3,12 +3,17 @@ parameters:
     lc.organization.form.class: LoginCidadao\OAuthBundle\Form\OrganizationType
 
 services:
+    oauth_scope_finder:
+        class: LoginCidadao\OAuthBundle\Helper\ScopeFinderHelper
+        arguments:
+            - "@request_stack"
+            - "@fos_oauth_server.authorize.form"
+
     oauth_event_listener:
         class: LoginCidadao\OAuthBundle\EventListener\OAuthEventListener
         arguments:
             - "@doctrine.orm.entity_manager"
-            - "@request_stack"
-            - "@fos_oauth_server.authorize.form"
+            - "@oauth_scope_finder"
             - "@oidc.subject_identifier.service"
         tags:
             - { name: kernel.event_listener, event: fos_oauth_server.pre_authorization_process, method: onPreAuthorizationProcess}
