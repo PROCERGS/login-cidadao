@@ -130,6 +130,7 @@ services:
     oidc.subject_identifier.service:
         class: LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService
         arguments:
+            - "@oidc.subject_identifier.repository"
             - %secret%
 
     oidc.client_metadata.repository:
@@ -137,6 +138,12 @@ services:
         factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
             - LoginCidadao\OpenIDBundle\Entity\ClientMetadata
+
+    oidc.subject_identifier.repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier
 
     lc.oidc.tasks.subscriber:
         class: LoginCidadao\OpenIDBundle\EventListener\TaskSubscriber
