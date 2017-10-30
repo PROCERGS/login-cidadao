@@ -32,7 +32,7 @@ class LoginCidadaoOpenIDExtension extends Extension implements ExtensionInterfac
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();
-        $config        = $this->processConfiguration($configuration, $configs);
+        $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\YamlFileLoader($container,
             new FileLocator(__DIR__.'/../Resources/config'));
@@ -42,7 +42,7 @@ class LoginCidadaoOpenIDExtension extends Extension implements ExtensionInterfac
     public function process(ContainerBuilder $container)
     {
         $definition = $container->getDefinition('oauth2.server');
-        $args       = $definition->getArguments();
+        $args = $definition->getArguments();
 
         // Use the array's key only when it's available
         $key = array_key_exists('oauth2.server.storage', $args) ? 'oauth2.server.storage' : 0;
@@ -50,45 +50,45 @@ class LoginCidadaoOpenIDExtension extends Extension implements ExtensionInterfac
         $args[$key]['user_claims'] = new Reference('oauth2.storage.user_claims');
         $args[$key]['public_key'] = new Reference('oauth2.storage.public_key');
 
-        $args['oauth2.server.grant_types'] = array();
+        $args['oauth2.server.grant_types'] = [];
 
-        $args['oauth2.server.response_types'] = array(
+        $args['oauth2.server.response_types'] = [
             'token' => new Reference('oauth2.response_types.token'),
             'code' => new Reference('oauth2.response_types.code'),
             'id_token' => new Reference('oauth2.response_types.id_token'),
             'id_token token' => new Reference('oauth2.response_types.id_token_token'),
             'code id_token' => new Reference('oauth2.response_types.code_id_token'),
-        );
+        ];
         $definition->setArguments($args);
 
         if ($container->hasDefinition('gaufrette.jwks_fs_filesystem')) {
             $filesystem = new Reference('gaufrette.jwks_fs_filesystem');
-            $fileName   = $container->getParameter('jwks_private_key_file');
+            $fileName = $container->getParameter('jwks_private_key_file');
             $container->getDefinition('oauth2.storage.public_key')
-                ->addMethodCall('setFilesystem', array($filesystem, $fileName));
+                ->addMethodCall('setFilesystem', [$filesystem, $fileName]);
         }
 
         if ($container->hasDefinition('oauth2.grant_type.authorization_code')) {
             $sessionState = new Reference('oidc.storage.session_state');
             $container->getDefinition('oauth2.grant_type.authorization_code')
-                ->addMethodCall('setSessionStateStorage', array($sessionState));
+                ->addMethodCall('setSessionStateStorage', [$sessionState]);
         }
         if ($container->hasDefinition('oauth2.storage.authorization_code')) {
             $sessionState = new Reference('oidc.storage.session_state');
             $container->getDefinition('oauth2.storage.authorization_code')
-                ->addMethodCall('setSessionStateStorage', array($sessionState));
+                ->addMethodCall('setSessionStateStorage', [$sessionState]);
         }
 
         if ($container->hasDefinition('oauth2.scope_manager')) {
             $scopes = $container->getParameter('lc_supported_scopes');
             $container->getDefinition('oauth2.scope_manager')
-                ->addMethodCall('setScopes', array($scopes));
+                ->addMethodCall('setScopes', [$scopes]);
         }
 
         if ($container->hasDefinition('oauth2.storage.access_token')) {
-            $secret = $container->getParameter('secret');
+            $subjectIdentifierService = $container->getDefinition('oidc.subject_identifier.service');
             $container->getDefinition('oauth2.storage.access_token')
-                ->addMethodCall('setPairwiseSubjectIdSalt', array($secret));
+                ->addMethodCall('setSubjectIdentifierService', [$subjectIdentifierService]);
         }
     }
 }

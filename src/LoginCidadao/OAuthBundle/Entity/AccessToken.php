@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\OAuthBundle\Entity;
 
@@ -12,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\HasLifecycleCallbacks
  * @ORM\AttributeOverrides({
  *      @ORM\AttributeOverride(name="scope",
- *              column=@ORM\Column(
+ *          column=@ORM\Column(
  *              name     = "scope",
  *              type     = "string",
  *              length   = 1000,
@@ -70,24 +78,6 @@ class AccessToken extends BaseAccessToken
         $this->idToken = $idToken;
 
         return $this;
-    }
-
-    public function getUserId($pairwiseSubjectIdSalt)
-    {
-        $id = $this->getUser()->getId();
-        $client = $this->getClient();
-
-        if ($client instanceof Client && $client->getMetadata()) {
-            $metadata = $client->getMetadata();
-            if ($metadata->getSubjectType() === 'pairwise') {
-                $sectorIdentifier = $metadata->getSectorIdentifier();
-                $salt = $pairwiseSubjectIdSalt;
-
-                return hash('sha256', $sectorIdentifier.$id.$salt);
-            }
-        }
-
-        return $id;
     }
 
     /**
