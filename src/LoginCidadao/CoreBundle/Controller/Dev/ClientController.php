@@ -30,8 +30,7 @@ class ClientController extends Controller
     public function newAction(Request $request)
     {
         $client = new Client();
-        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\ClientFormType',
-            $client);
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\ClientFormType', $client);
 
         $form->handleRequest($request);
         $messages = '';
@@ -102,8 +101,7 @@ class ClientController extends Controller
             $sql->select('u');
             $sql->where('1=1');
             $sql->andWhere('u.cpf like ?1 or u.username like ?1 or u.email like ?1 or u.firstName like ?1 or u.surname like ?1');
-            $sql->setParameter('1',
-                '%'.addcslashes($parms['username'], '\\%_').'%');
+            $sql->setParameter('1', '%'.addcslashes($parms['username'], '\\%_').'%');
             $sql->addOrderBy('u.id', 'desc');
             $grid->setQueryBuilder($sql);
         }
@@ -155,8 +153,7 @@ class ClientController extends Controller
             return $this->redirect($this->generateUrl('lc_dev_client_new'));
         }
 
-        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\ClientFormType',
-            $client);
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\ClientFormType', $client);
         $form->handleRequest($request);
         $messages = '';
         if ($form->isValid()) {
@@ -168,8 +165,7 @@ class ClientController extends Controller
             $clientManager = $this->container->get('fos_oauth_server.client_manager');
             $clientManager->updateClient($client);
             $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('success',
-                $translator->trans('Updated successfully!'));
+            $this->get('session')->getFlashBag()->add('success', $translator->trans('Updated successfully!'));
 
             return $this->redirectToRoute('lc_dev_client_edit', compact('id'));
         }
