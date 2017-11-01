@@ -130,6 +130,7 @@ services:
     oidc.subject_identifier.service:
         class: LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService
         arguments:
+            - "@doctrine.orm.entity_manager"
             - "@oidc.subject_identifier.repository"
             - %secret%
 

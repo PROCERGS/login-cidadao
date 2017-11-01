@@ -19,6 +19,7 @@ use LoginCidadao\OpenIDBundle\Manager\ScopeManager;
 use LoginCidadao\OAuthBundle\Service\OrganizationService;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OpenIDBundle\Validator\SectorIdentifierUriChecker;
 use OAuth2\Server;
 use OAuth2\ServerBundle\Entity\Scope;
 use OAuth2\ServerBundle\Controller\AuthorizeController as BaseController;

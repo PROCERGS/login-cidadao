@@ -30,10 +30,21 @@ class AuthorizationEventTest extends \PHPUnit_Framework_TestCase
         $explodedScope = explode(' ', $scope);
 
         $event = new AuthorizationEvent($person, $client, $scope);
+
+        $remoteClaim1 = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface');
+        $remoteClaim2 = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface');
+
+        $event->setRemoteClaims([$remoteClaim1]);
+        $event->addRemoteClaim($remoteClaim2);
+
         $this->assertEquals($person, $event->getPerson());
         $this->assertEquals($client, $event->getClient());
         $this->assertEquals($explodedScope, $event->getScope());
         $this->assertNull($event->getAuthorization());
+        $this->assertNotEmpty($event->getRemoteClaims());
+        $this->assertContains($remoteClaim1, $event->getRemoteClaims());
+        $this->assertContains($remoteClaim2, $event->getRemoteClaims());
+        $this->assertCount(2, $event->getRemoteClaims());
 
         $event->setAuthorization($authorization);
 
