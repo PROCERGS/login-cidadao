@@ -5,6 +5,7 @@ namespace LoginCidadao\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 
 /**
  * @ORM\Entity(repositoryClass="LoginCidadao\CoreBundle\Entity\AuthorizationRepository")
@@ -77,9 +78,9 @@ class Authorization
     }
 
     /**
-     * @param \LoginCidadao\OAuthBundle\Entity\Client $client
+     * @param ClientInterface|null $client
      */
-    public function setClient(Client $client = null)
+    public function setClient(ClientInterface $client = null)
     {
         $this->client = $client;
     }

@@ -65,13 +65,18 @@ class OAuthEventListener
         );
 
         if ($event->isAuthorizedClient()) {
-            $this->subjectIdentifierService->enforceSubjectIdentifier($user, $client);
+            $this->subjectIdentifierService->enforceSubjectIdentifier($user, $client->getMetadata());
         }
     }
 
     public function onPostAuthorizationProcess(OAuthEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         if (!$event->isAuthorizedClient()) {
+            return;
+        }
+
+        if (!$event->getUser() instanceof PersonInterface
+            || !$event->getClient() instanceof ClientInterface) {
             return;
         }
 
@@ -96,7 +101,7 @@ class OAuthEventListener
 
         $dispatcher->dispatch($authEventName, $authorizationEvent);
 
-        $sub = $this->subjectIdentifierService->enforceSubjectIdentifier($user, $client, false);
+        $sub = $this->subjectIdentifierService->enforceSubjectIdentifier($user, $client->getMetadata(), false);
 
         $this->em->persist($authorizationEvent->getAuthorization());
         $this->em->persist($sub);
