@@ -19,7 +19,10 @@ use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Helper\ScopeFinderHelper;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier;
+use LoginCidadao\OpenIDBundle\Event\AuthorizationEvent;
+use LoginCidadao\OpenIDBundle\LoginCidadaoOpenIDEvents;
 use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class OAuthEventListener
 {
@@ -58,9 +61,9 @@ class OAuthEventListener
         /** @var ClientInterface $client */
         $client = $event->getClient();
 
-            $event->setAuthorizedClient(
+        $event->setAuthorizedClient(
             $user->isAuthorizedClient($client, $scope)
-            );
+        );
 
         if ($event->isAuthorizedClient()) {
             $this->checkSubjectIdentifierPersisted($user, $client);
@@ -77,7 +80,7 @@ class OAuthEventListener
         $client = $event->getClient();
 
         /** @var PersonInterface $user */
-        $user  = $this->getUser($event);
+        $user = $this->getUser($event);
         $scope = $this->scopeFinder->getScope();
 
         /** @var Authorization $currentAuth */

@@ -133,7 +133,7 @@ class AuthorizeController extends BaseController
 
         if ($isAuthorized && !$askConsent) {
             return $this->handleAuthorize($this->getOAuth2Server(), $isAuthorized);
-            }
+        }
 
         if (!$isAuthorized) {
             $authEvent = new AuthorizationEvent($person, $client, $request->get('scope'));
@@ -177,13 +177,13 @@ class AuthorizeController extends BaseController
         $warnUntrusted = $this->getParameter('warn_untrusted');
 
         if ($client) {
-        $metadata = $this->getMetadata($client);
+            $metadata = $this->getMetadata($client);
 
-        if ($metadata && $metadata->getOrganization() instanceof OrganizationInterface) {
-            $isTrusted = $metadata->getOrganization()->isTrusted();
-        } else {
-            $isTrusted = false;
-        }
+            if ($metadata && $metadata->getOrganization() instanceof OrganizationInterface) {
+                $isTrusted = $metadata->getOrganization()->isTrusted();
+            } else {
+                $isTrusted = false;
+            }
         } else {
             $isTrusted = false;
         }
