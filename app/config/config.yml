@@ -140,14 +140,25 @@ assetic:
 # Doctrine Configuration
 doctrine:
     dbal:
-        driver:   %database_driver%
-        host:     %database_host%
-        port:     %database_port%
-        dbname:   %database_name%
-        user:     %database_user%
-        password: %database_password%
-        server_version: %database_server_version%
-        charset:  UTF8
+        default_connection: default
+        connections:
+            default:
+                driver:   %database_driver%
+                host:     %database_host%
+                port:     %database_port%
+                dbname:   %database_name%
+                user:     %database_user%
+                password: %database_password%
+                charset:  UTF8
+            logs:
+                logging:  false
+                driver:   %database_driver%
+                host:     %database_host%
+                port:     %database_port%
+                dbname:   %database_name%
+                user:     %database_user%
+                password: %database_password%
+                charset:  UTF8
         # if using pdo_sqlite as your database driver, add the path in parameters.yml
         # e.g. database_path: %kernel.root_dir%/data/data.db3
         # path:     %database_path%
@@ -155,23 +166,32 @@ doctrine:
             phone_number: Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType
 
     orm:
+        default_entity_manager: default
+        entity_managers:
+            default:
+                connection: default
+                auto_mapping: true
+                dql:
+                    string_functions:
+                      right: LoginCidadao\CoreBundle\DQL\Right
+                      countif: LoginCidadao\CoreBundle\DQL\CountIf
+                      lowerunaccent: LoginCidadao\CoreBundle\DQL\LowerUnaccent
+
+                    datetime_functions:
+                          date:       Oro\ORM\Query\AST\Functions\SimpleFunction
+
+                    numeric_functions:
+                        dayofweek:    Oro\ORM\Query\AST\Functions\SimpleFunction
+            logs:
+                connection: logs
+                mappings:
+                    LoginCidadaoLogBundle: ~
+
         auto_generate_proxy_classes: %kernel.debug%
-        auto_mapping: true
         resolve_target_entities:
             LoginCidadao\CoreBundle\Model\PersonInterface: %user.class%
             LoginCidadao\OAuthBundle\Model\OrganizationInterface: %organization.class%
             LoginCidadao\OAuthBundle\Model\ClientInterface: %oauth_client.class%
-        dql:
-          string_functions:
-            right: LoginCidadao\CoreBundle\DQL\Right
-            countif: LoginCidadao\CoreBundle\DQL\CountIf
-            lowerunaccent: LoginCidadao\CoreBundle\DQL\LowerUnaccent
-
-          datetime_functions:
-                date:       Oro\ORM\Query\AST\Functions\SimpleFunction
-
-          numeric_functions:
-              dayofweek:    Oro\ORM\Query\AST\Functions\SimpleFunction
 # Swiftmailer Configuration
 swiftmailer:
     transport: %mailer_transport%
@@ -190,6 +210,7 @@ fos_oauth_server:
   auth_code_class:      LoginCidadao\OAuthBundle\Entity\AuthCode
   service:
       user_provider: fos_user.user_manager
+      client_manager: lc.oauth.client_manager
       options:
           supported_scopes: %lc_supported_scopes%
 
@@ -224,6 +245,10 @@ fos_user:
     change_password:
         form:
             type: LoginCidadao\CoreBundle\Form\Type\ChangePasswordFormType
+
+    from_email:
+        address: %mailer_sender_mail%
+        sender_name: %mailer_sender_name%
 
 # Audit Trail
 simple_things_entity_audit:
@@ -379,7 +404,7 @@ fos_rest:
     disable_csrf_role: ROLE_API
 
 nelmio_api_doc:
-    name: MeuRS API
+    name: Login Cidadão API
 
 jms_serializer:
     metadata:
@@ -537,3 +562,10 @@ login_cidadao_phone_verification:
     enabled: true
     verification_code:
         length: 6
+
+monolog:
+    handlers:
+        db:
+            type: service
+            id: lc.monolog.db.handler
+            level: info

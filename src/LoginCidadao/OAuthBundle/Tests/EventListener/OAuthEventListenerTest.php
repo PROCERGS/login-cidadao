@@ -14,215 +14,212 @@ use Doctrine\ORM\EntityManagerInterface;
 use FOS\OAuthServerBundle\Event\OAuthEvent;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 use LoginCidadao\CoreBundle\Entity\Person;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\EventListener\OAuthEventListener;
-use LoginCidadao\OpenIDBundle\LoginCidadaoOpenIDEvents;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
+use LoginCidadao\OAuthBundle\Helper\ScopeFinderHelper;
+use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
 
 class OAuthEventListenerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testOnPreAuthorizationProcessNoAuthorization()
+    public function testOnPreAuthorizationProcessNotPreAuthorized()
     {
-        $person = new Person();
-        $client = new Client();
-        $isAuthorized = false;
+        $person = $this->getPerson();
+        $person->expects($this->once())->method('isAuthorizedClient')->willReturn(false);
 
-        $event = new OAuthEvent($person, $client, $isAuthorized);
-        $listener = $this->getListener(null, null, $this->getRequest(['scope' => 'scope1']));
+        $personRepo = $this->getPersonRepository();
+        $personRepo->expects($this->once())->method('findOneBy')->willReturn($person);
+
+        $em = $this->getEntityManager(['LoginCidadaoCoreBundle:Person' => $personRepo]);
+
+        $subIdService = $this->getSubjectIdentifierService();
+
+        $listener = new OAuthEventListener($em, $this->getScopeFinder(['openid']), $subIdService);
+
+        $event = new OAuthEvent($person, new Client(), false);
         $listener->onPreAuthorizationProcess($event);
-
-        $this->assertFalse($event->isAuthorizedClient());
     }
 
-    public function testOnPreAuthorizationProcessWithAuthorization()
+    public function testOnPreAuthorizationProcessPreAuthorizedSubNotPersisted()
     {
-        $person = new Person();
-        $client = new Client();
+        $sub = 'abc123';
 
-        $scope = 'scope1';
-        $authorization = new Authorization();
-        $authorization->setPerson($person);
-        $authorization->setClient($client);
-        $authorization->setScope($scope);
+        $person = $this->getPerson();
+        $person->expects($this->once())->method('isAuthorizedClient')->willReturn(true);
 
-        $person->addAuthorization($authorization);
+        $personRepo = $this->getPersonRepository();
+        $personRepo->expects($this->once())->method('findOneBy')->willReturn($person);
 
-        $isAuthorized = false;
+        $em = $this->getEntityManager(['LoginCidadaoCoreBundle:Person' => $personRepo]);
+        $em->expects($this->once())->method('persist')
+            ->with($this->isInstanceOf('LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier'));
 
-        $event = new OAuthEvent($person, $client, $isAuthorized);
-        $listener = $this->getListener(null, null, $this->getRequest(['scope' => $scope]));
+        $subIdService = $this->getSubjectIdentifierService();
+        $subIdService->expects($this->once())->method('isSubjectIdentifierPersisted')->willReturn(false);
+        $subIdService->expects($this->once())->method('getSubjectIdentifier')->willReturn($sub);
+
+        $listener = new OAuthEventListener($em, $this->getScopeFinder(['openid']), $subIdService);
+
+        $event = new OAuthEvent($person, new Client(), false);
         $listener->onPreAuthorizationProcess($event);
-
-        $this->assertTrue($event->isAuthorizedClient());
     }
 
-    public function testOnPreAuthorizationProcessInvalidPersonAndClient()
+    public function testOnPreAuthorizationProcessPreAuthorizedSubPersisted()
     {
-        $person = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
-        $client = $this->getMock('FOS\OAuthServerBundle\Model\ClientInterface');
-        $isAuthorized = false;
+        $person = $this->getPerson();
+        $person->expects($this->once())->method('isAuthorizedClient')->willReturn(true);
 
-        $event = new OAuthEvent($person, $client, $isAuthorized);
-        $listener = $this->getListener(null, null, $this->getRequest(['scope' => 'scope1']));
+        $personRepo = $this->getPersonRepository();
+        $personRepo->expects($this->once())->method('findOneBy')->willReturn($person);
+
+        $em = $this->getEntityManager(['LoginCidadaoCoreBundle:Person' => $personRepo]);
+
+        $subIdService = $this->getSubjectIdentifierService();
+        $subIdService->expects($this->once())->method('isSubjectIdentifierPersisted')->willReturn(true);
+
+        $listener = new OAuthEventListener($em, $this->getScopeFinder(['openid']), $subIdService);
+
+        $event = new OAuthEvent($person, new Client(), false);
         $listener->onPreAuthorizationProcess($event);
-
-        $this->assertFalse($event->isAuthorizedClient());
     }
 
-    public function testOnPostAuthorizationProcessNoClient()
+    public function testOnPreAuthorizationProcessNoUser()
     {
-        $scope = 'scope1';
-        $person = new Person();
-        $client = $this->getMock('FOS\OAuthServerBundle\Model\ClientInterface');
-        $isAuthorized = true;
+        $person = $this->getPerson();
+        $personRepo = $this->getPersonRepository();
+        $personRepo->expects($this->once())->method('findOneBy')->willReturn(null);
 
-        $event = new OAuthEvent($person, $client, $isAuthorized);
-        $listener = $this->getListener(null, null, $this->getRequest(['scope' => $scope]));
-        $listener->onPostAuthorizationProcess($event, OAuthEvent::POST_AUTHORIZATION_PROCESS, $this->getDispatcher());
+        $em = $this->getEntityManager(['LoginCidadaoCoreBundle:Person' => $personRepo]);
 
-        $this->assertTrue($event->isAuthorizedClient());
+        $subIdService = $this->getSubjectIdentifierService();
+
+        $event = new OAuthEvent($person, new Client(), false);
+
+        $listener = new OAuthEventListener($em, $this->getScopeFinder(['openid']), $subIdService);
+        $listener->onPreAuthorizationProcess($event);
     }
 
-    public function testOnPostAuthorizationProcessNoAuthorization()
+    public function testOnPostAuthorizationProcessNotAuthorized()
     {
-        $person = new Person();
+        $event = new OAuthEvent(new Person(), new Client(), false);
+        $listener = new OAuthEventListener($this->getEntityManager(), $this->getScopeFinder(['openid']),
+            $this->getSubjectIdentifierService());
+        $listener->onPostAuthorizationProcess($event);
+    }
+
+    public function testOnPostAuthorizationProcessNewAuth()
+    {
+        $sub = 'abc123';
+
+        $person = $this->getPerson();
+        $personRepo = $this->getPersonRepository();
+        $personRepo->expects($this->once())->method('findOneBy')->willReturn($person);
+
+        $authRepo = $this->getAuthorizationRepository();
+        $em = $this->getEntityManager([
+            'LoginCidadaoCoreBundle:Person' => $personRepo,
+            'LoginCidadaoCoreBundle:Authorization' => $authRepo,
+        ]);
+        $em->expects($this->exactly(2))->method('persist');
+
+        $subIdService = $this->getSubjectIdentifierService();
+        $subIdService->expects($this->once())->method('getSubjectIdentifier')->willReturn($sub);
+
+        $event = new OAuthEvent(new Person(), new Client(), true);
+        $listener = new OAuthEventListener($em, $this->getScopeFinder(['openid']), $subIdService);
+        $listener->onPostAuthorizationProcess($event);
+    }
+
+    public function testOnPostAuthorizationProcessMergeAuth()
+    {
         $client = new Client();
-        $isAuthorized = false;
+        $person = $this->getPerson();
+        $personRepo = $this->getPersonRepository();
+        $personRepo->expects($this->once())->method('findOneBy')->willReturn($person);
 
-        $event = new OAuthEvent($person, $client, $isAuthorized);
-        $listener = $this->getListener();
-        $listener->onPostAuthorizationProcess($event, OAuthEvent::POST_AUTHORIZATION_PROCESS, $this->getDispatcher());
+        $auth = new Authorization();
+        $auth->setPerson($person);
+        $auth->setClient($client);
+        $auth->setScope(['scope1', 'scope2']);
 
-        $this->assertFalse($event->isAuthorizedClient());
+        $authRepo = $this->getAuthorizationRepository();
+        $authRepo->expects($this->once())->method('findOneBy')->willReturn($auth);
+
+        $em = $this->getEntityManager([
+            'LoginCidadaoCoreBundle:Person' => $personRepo,
+            'LoginCidadaoCoreBundle:Authorization' => $authRepo,
+        ]);
+
+        $subIdService = $this->getSubjectIdentifierService();
+        $subIdService->expects($this->once())->method('isSubjectIdentifierPersisted')->willReturn(true);
+
+        $event = new OAuthEvent($person, $client, true);
+        $listener = new OAuthEventListener($em, $this->getScopeFinder(['scope1', 'scope2', 'scope3']), $subIdService);
+        $listener->onPostAuthorizationProcess($event);
+
+        $this->assertContains('scope3', $auth->getScope());
     }
 
-    public function testOnPostAuthorizationProcessUpdateAuthorization()
+    /**
+     * @param array $repos
+     * @return EntityManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getEntityManager(array $repos = [])
     {
-        $person = new Person();
-        $client = new Client();
-        $isAuthorized = true;
+        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
 
-        $currentAuth = new Authorization();
+        if (count($repos) > 0) {
+            $em->expects($this->atLeastOnce())->method('getRepository')->with($this->isType('string'))
+                ->willReturnCallback(function ($key) use ($repos) {
+                    return $repos[$key];
+                });
+        }
 
-        $authRepo = $this->getMockBuilder('LoginCidadao\CoreBundle\Entity\AuthorizationRepository')
+        return $em;
+    }
+
+    private function getPersonRepository()
+    {
+        return $this->getMockBuilder('LoginCidadao\CoreBundle\Entity\PersonRepository')
             ->disableOriginalConstructor()->getMock();
-        $authRepo->expects($this->once())->method('findOneBy')->willReturn($currentAuth);
-
-        $em = $this->getEntityManager();
-        $em->expects($this->once())
-            ->method('getRepository')
-            ->with('LoginCidadaoCoreBundle:Authorization')
-            ->willReturn($authRepo);
-        $em->expects($this->once())
-            ->method('persist');
-        $em->expects($this->once())
-            ->method('flush');
-
-        $dispatcher = $this->getDispatcher();
-        $dispatcher->expects($this->once())
-            ->method('dispatch')
-            ->with(
-                LoginCidadaoOpenIDEvents::UPDATE_AUTHORIZATION,
-                $this->isInstanceOf('LoginCidadao\OpenIDBundle\Event\AuthorizationEvent')
-            );
-
-        $event = new OAuthEvent($person, $client, $isAuthorized);
-        $listener = $this->getListener($em);
-        $listener->onPostAuthorizationProcess($event, OAuthEvent::POST_AUTHORIZATION_PROCESS, $dispatcher);
-
-        $this->assertTrue($event->isAuthorizedClient());
     }
 
-    public function testOnPostAuthorizationProcessNewAuthorization()
+    private function getAuthorizationRepository()
     {
-        $person = new Person();
-        $client = new Client();
-        $isAuthorized = true;
-
-        $authRepo = $this->getMockBuilder('LoginCidadao\CoreBundle\Entity\AuthorizationRepository')
+        return $this->getMockBuilder('LoginCidadao\CoreBundle\Entity\AuthorizationRepository')
             ->disableOriginalConstructor()->getMock();
-        $authRepo->expects($this->once())->method('findOneBy')->willReturn(null);
-
-        $em = $this->getEntityManager();
-        $em->expects($this->once())
-            ->method('getRepository')
-            ->with('LoginCidadaoCoreBundle:Authorization')
-            ->willReturn($authRepo);
-        $em->expects($this->once())
-            ->method('persist');
-        $em->expects($this->once())
-            ->method('flush');
-
-        $dispatcher = $this->getDispatcher();
-        $dispatcher->expects($this->once())
-            ->method('dispatch')
-            ->with(
-                LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION,
-                $this->isInstanceOf('LoginCidadao\OpenIDBundle\Event\AuthorizationEvent')
-            );
-
-        $event = new OAuthEvent($person, $client, $isAuthorized);
-        $listener = $this->getListener($em);
-        $listener->onPostAuthorizationProcess($event, OAuthEvent::POST_AUTHORIZATION_PROCESS, $dispatcher);
-
-        $this->assertTrue($event->isAuthorizedClient());
     }
 
-    private function getListener($em = null, $form = null, $request = null)
+    /**
+     * @return SubjectIdentifierService|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getSubjectIdentifierService()
     {
-        if (!$em) {
-            $em = $this->getEntityManager();
-        }
-        if (!$form) {
-            $form = $this->getForm();
-        }
-        if (!$request) {
-            $request = $this->getRequest();
+        return $this->getMockBuilder('LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService')
+            ->disableOriginalConstructor()->getMock();
+    }
+
+    /**
+     * @return PersonInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getPerson()
+    {
+        return $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+    }
+
+    /**
+     * @param array|null $scope
+     * @return ScopeFinderHelper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getScopeFinder(array $scope = null)
+    {
+        $helper = $this->getMockBuilder('LoginCidadao\OAuthBundle\Helper\ScopeFinderHelper')
+            ->disableOriginalConstructor()->getMock();
+
+        if ($scope) {
+            $helper->expects($this->any())->method('getScope')->willReturn($scope);
         }
 
-        $requestStack = new RequestStack();
-        $requestStack->push($request);
-        $listener = new OAuthEventListener($em, $form, $requestStack);
-
-        return $listener;
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|EntityManagerInterface
-     */
-    private function getEntityManager()
-    {
-        return $this->getMock('Doctrine\ORM\EntityManagerInterface');
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|FormInterface
-     */
-    private function getForm()
-    {
-        return $this->getMock('Symfony\Component\Form\FormInterface');
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Request
-     */
-    private function getRequest($query = [], $request = [])
-    {
-        $request = new Request($query, $request);
-
-        return $request;
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface
-     */
-    private function getDispatcher()
-    {
-        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
-
-        return $dispatcher;
+        return $helper;
     }
 }

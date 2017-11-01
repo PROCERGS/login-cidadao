@@ -134,6 +134,7 @@ services:
             - "@lc.register_requested_scope"
             - "@lc.client.repository"
             - "@doctrine.orm.entity_manager"
+            - "@oidc.subject_identifier.service"
             - "%registration.email.unconfirmed_time%"
             - "%lc_supported_scopes%"
             - "%oauth_default_client.uid%"

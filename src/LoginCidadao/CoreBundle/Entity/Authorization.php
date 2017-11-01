@@ -3,6 +3,7 @@
 namespace LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Entity\Client;
 
 /**
@@ -52,7 +53,7 @@ class Authorization
     }
 
     /**
-     * @return Person
+     * @return PersonInterface
      */
     public function getPerson()
     {
@@ -60,9 +61,9 @@ class Authorization
     }
 
     /**
-     * @param \LoginCidadao\CoreBundle\Entity\Person $person
+     * @param PersonInterface|null $person
      */
-    public function setPerson(Person $person = null)
+    public function setPerson(PersonInterface $person = null)
     {
         $this->person = $person;
     }

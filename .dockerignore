@@ -1,0 +1,8 @@
+app/cache/*
+app/logs/*
+nbproject/
+vendor/
+web/bundles/
+web/css/
+web/js/
+web/images/

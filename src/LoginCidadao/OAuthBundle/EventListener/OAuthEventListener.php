@@ -13,45 +13,58 @@ namespace LoginCidadao\OAuthBundle\EventListener;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\OAuthServerBundle\Event\OAuthEvent;
 use LoginCidadao\CoreBundle\Entity\Authorization;
+use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Helper\ScopeFinderHelper;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
-use LoginCidadao\OpenIDBundle\Event\AuthorizationEvent;
-use LoginCidadao\OpenIDBundle\LoginCidadaoOpenIDEvents;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
+use LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier;
+use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
 
 class OAuthEventListener
 {
     /** @var EntityManagerInterface */
     private $em;
 
-    /** @var FormInterface */
-    private $form;
+    /** @var PersonRepository */
+    private $personRepo;
 
-    /** @var Request */
-    private $request;
+    /** @var SubjectIdentifierService */
+    private $subjectIdentifierService;
 
-    public function __construct(EntityManagerInterface $em, FormInterface $form, RequestStack $requestStack)
-    {
+    /** @var ScopeFinderHelper */
+    private $scopeFinder;
+
+    public function __construct(
+        EntityManagerInterface $em,
+        ScopeFinderHelper $scopeFinder,
+        SubjectIdentifierService $subjectIdentifierService
+    ) {
         $this->em = $em;
-        $this->form = $form;
-
-        $this->request = $requestStack->getCurrentRequest();
+        $this->personRepo = $this->em->getRepository('LoginCidadaoCoreBundle:Person');
+        $this->scopeFinder = $scopeFinder;
+        $this->subjectIdentifierService = $subjectIdentifierService;
     }
 
     public function onPreAuthorizationProcess(OAuthEvent $event)
     {
-        $user = $event->getUser();
-        $client = $event->getClient();
-        if (!$user instanceof PersonInterface || !$client instanceof ClientInterface) {
+        $scope = $this->scopeFinder->getScope();
+        /** @var PersonInterface $user */
+        $user = $this->getUser($event);
+        if (!$user) {
             return;
         }
 
-        $event->setAuthorizedClient(
-            $user->isAuthorizedClient($client, $this->getScope())
-        );
+        /** @var ClientInterface $client */
+        $client = $event->getClient();
+
+            $event->setAuthorizedClient(
+            $user->isAuthorizedClient($client, $scope)
+            );
+
+        if ($event->isAuthorizedClient()) {
+            $this->checkSubjectIdentifierPersisted($user, $client);
+        }
     }
 
     public function onPostAuthorizationProcess(OAuthEvent $event, $eventName, EventDispatcherInterface $dispatcher)
@@ -59,14 +72,13 @@ class OAuthEventListener
         if (!$event->isAuthorizedClient()) {
             return;
         }
+
+        /** @var Client $client */
         $client = $event->getClient();
-        if (null === $client || !$client instanceof ClientInterface) {
-            return;
-        }
 
         /** @var PersonInterface $user */
-        $user = $event->getUser();
-        $scope = $this->getScope();
+        $user  = $this->getUser($event);
+        $scope = $this->scopeFinder->getScope();
 
         /** @var Authorization $currentAuth */
         $currentAuth = $this->getCurrentAuthorization($user, $client);
@@ -78,27 +90,41 @@ class OAuthEventListener
             // if the authorization is already there, update it.
             $authEventName = LoginCidadaoOpenIDEvents::UPDATE_AUTHORIZATION;
             $authorizationEvent->setAuthorization($currentAuth);
+            $this->checkSubjectIdentifierPersisted($user, $client);
         }
 
         $dispatcher->dispatch($authEventName, $authorizationEvent);
 
+        $subjectIdentifier = $this->subjectIdentifierService->getSubjectIdentifier($user, $client->getMetadata());
+        $sub = new SubjectIdentifier();
+        $sub->setPerson($user)
+            ->setClient($client)
+            ->setSubjectIdentifier($subjectIdentifier);
+
         $this->em->persist($authorizationEvent->getAuthorization());
+        $this->em->persist($sub);
+
         $this->em->flush();
     }
 
-    private function getScope()
+    public function getUser(OAuthEvent $event)
     {
-        $form = $this->form->getName();
+        return $this->personRepo->findOneBy(['username' => $event->getUser()->getUsername()]);
+    }
 
-        $scope = $this->request->request->get('scope', false);
-        if (!$scope) {
-            $scope = $this->request->query->get('scope', false);
-        }
-        if (!$scope) {
-            $scope = $this->request->request->get("{$form}[scope]", false, true);
+    private function checkSubjectIdentifierPersisted(PersonInterface $person, ClientInterface $client)
+    {
+        if ($this->subjectIdentifierService->isSubjectIdentifierPersisted($person, $client)) {
+            return;
         }
 
-        return !is_array($scope) ? explode(' ', $scope) : $scope;
+        $subjectIdentifier = $this->subjectIdentifierService->getSubjectIdentifier($person, $client->getMetadata());
+        $sub = new SubjectIdentifier();
+        $sub->setPerson($person)
+            ->setClient($client)
+            ->setSubjectIdentifier($subjectIdentifier);
+        $this->em->persist($sub);
+        $this->em->flush($sub);
     }
 
     private function getCurrentAuthorization(PersonInterface $person, ClientInterface $client)

@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AuthorizeController extends BaseController
 {
+
     /**
      * @Route("/openid/connect/authorize", name="_authorize_handle")
      * @Method({"POST"})
@@ -132,7 +133,7 @@ class AuthorizeController extends BaseController
 
         if ($isAuthorized && !$askConsent) {
             return $this->handleAuthorize($this->getOAuth2Server(), $isAuthorized);
-        }
+            }
 
         if (!$isAuthorized) {
             $authEvent = new AuthorizationEvent($person, $client, $request->get('scope'));
@@ -159,21 +160,30 @@ class AuthorizeController extends BaseController
         );
     }
 
-    private function getClient(Request $request)
+    private function getClient($fullId)
     {
+        if ($fullId instanceof Request) {
+            $fullId = $fullId->get('client_id');
+        }
+
         /** @var ClientManager $clientManager */
         $clientManager = $this->get('lc.client_manager');
 
-        return $clientManager->getClientById($request->get('client_id'));
+        return $clientManager->getClientById($fullId);
     }
 
-    private function shouldWarnUntrusted(ClientInterface $client)
+    private function shouldWarnUntrusted(ClientInterface $client = null)
     {
         $warnUntrusted = $this->getParameter('warn_untrusted');
+
+        if ($client) {
         $metadata = $this->getMetadata($client);
 
         if ($metadata && $metadata->getOrganization() instanceof OrganizationInterface) {
             $isTrusted = $metadata->getOrganization()->isTrusted();
+        } else {
+            $isTrusted = false;
+        }
         } else {
             $isTrusted = false;
         }
@@ -185,11 +195,23 @@ class AuthorizeController extends BaseController
         return true; // warn
     }
 
-    private function getMetadata(ClientInterface $client)
+    private function getMetadata(ClientInterface $client = null)
     {
+        if (!$client) {
+            return null;
+        }
+
         $repo = $this->getDoctrine()->getRepository('LoginCidadaoOpenIDBundle:ClientMetadata');
 
         return $repo->findOneBy(['client' => $client]);
+    }
+
+    /**
+     * @return SectorIdentifierUriChecker
+     */
+    private function getSectorIdentifierUriChecker()
+    {
+        return $this->get('checker.sector_identifier_uri');
     }
 
     /**

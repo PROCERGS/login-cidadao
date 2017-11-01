@@ -19,15 +19,15 @@ use LoginCidadao\ValidationBundle\Validator\Constraints\UsernameValidator;
 
 class UserManager extends BaseManager
 {
+
     public function __construct(
         EncoderFactoryInterface $encoderFactory,
-        CanonicalizerInterface $usernameCanonicalizer,
-        CanonicalizerInterface $emailCanonicalizer,
+                                CanonicalizerInterface $usernameCanonicalizer,
+                                CanonicalizerInterface $emailCanonicalizer,
         ObjectManager $om,
         $class
     ) {
-        parent::__construct($encoderFactory, $usernameCanonicalizer,
-            $emailCanonicalizer, $om, $class);
+        parent::__construct($encoderFactory, $usernameCanonicalizer, $emailCanonicalizer, $om, $class);
     }
 
     public function createUser()
@@ -39,7 +39,7 @@ class UserManager extends BaseManager
      * Updates a user.
      *
      * @param UserInterface $user
-     * @param Boolean $andFlush Whether to flush the changes (default true)
+     * @param Boolean       $andFlush Whether to flush the changes (default true)
      */
     public function updateUser(UserInterface $user, $andFlush = true)
     {
@@ -56,7 +56,7 @@ class UserManager extends BaseManager
     public function enforceUsername(UserInterface $user)
     {
         $current = $user->getUsernameCanonical();
-        if (is_null($current) || strlen($current) == 0) {
+        if (is_null($current) || strlen($current) === 0) {
             $email = explode('@', $user->getEmailCanonical(), 2);
             $username = $email[0];
             if (!UsernameValidator::isUsernameValid($username)) {
@@ -71,11 +71,12 @@ class UserManager extends BaseManager
 
     /**
      * Tries to find an available username.
+     * TODO: Yeah, this is ugly, I'm sorry, but does the job.
      * This is based on HWI's FOSUBRegistrationFormHandler
      *
      * @param string $username
      * @param int $maxIterations
-     * @param null $default
+     * @param string $default
      * @return string
      */
     public function getNextAvailableUsername($username, $maxIterations = 10, $default = null)
@@ -87,27 +88,28 @@ class UserManager extends BaseManager
             $user = $this->findUserByUsername($testName);
         } while ($user !== null && $i < $maxIterations && $testName = $username.$i++);
 
-        if (is_null($user)) {
+        if (!$user) {
             return $testName;
         } else {
-            if (is_null($default)) {
-                return "$username@".time();
-            } else {
-                return $default;
-            }
+            return $default ?: "$username@".time();
         }
     }
 
     public function findUserByUsernameOrEmail($username)
     {
-        $cpf = preg_replace('/[^0-9]/', '', $username);
-        if (is_numeric($cpf) && strlen($cpf) == 11) {
-            $person = parent::findUserBy(['cpf' => $cpf]);
+        $onlyNumbers = preg_replace('/[^0-9]/', '', $username);
+        $looksLikeCpf = is_numeric($onlyNumbers) && strlen($onlyNumbers) == 11;
+
+        // If it looks like a CPF we give it a try
+        if ($looksLikeCpf) {
+            $person = parent::findUserBy(['cpf' => $onlyNumbers]);
+
             if ($person !== null) {
                 return $person;
             }
         }
 
-        return parent::findUserByUsernameOrEmail($username);
+        // If it doesn't look like a CPF number or if we couldn't find nobody with that CPF, fallback to this:
+        return parent::findUserByUsernameOrEmail($username);        
     }
 }
