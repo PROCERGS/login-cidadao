@@ -210,7 +210,6 @@ fos_oauth_server:
   auth_code_class:      LoginCidadao\OAuthBundle\Entity\AuthCode
   service:
       user_provider: fos_user.user_manager
-      client_manager: lc.oauth.client_manager
       options:
           supported_scopes: %lc_supported_scopes%
 

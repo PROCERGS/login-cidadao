@@ -22,8 +22,8 @@ class UserManager extends BaseManager
 
     public function __construct(
         EncoderFactoryInterface $encoderFactory,
-                                CanonicalizerInterface $usernameCanonicalizer,
-                                CanonicalizerInterface $emailCanonicalizer,
+        CanonicalizerInterface $usernameCanonicalizer,
+        CanonicalizerInterface $emailCanonicalizer,
         ObjectManager $om,
         $class
     ) {
@@ -39,7 +39,7 @@ class UserManager extends BaseManager
      * Updates a user.
      *
      * @param UserInterface $user
-     * @param Boolean       $andFlush Whether to flush the changes (default true)
+     * @param Boolean $andFlush Whether to flush the changes (default true)
      */
     public function updateUser(UserInterface $user, $andFlush = true)
     {
@@ -110,6 +110,6 @@ class UserManager extends BaseManager
         }
 
         // If it doesn't look like a CPF number or if we couldn't find nobody with that CPF, fallback to this:
-        return parent::findUserByUsernameOrEmail($username);        
+        return parent::findUserByUsernameOrEmail($username);
     }
 }
