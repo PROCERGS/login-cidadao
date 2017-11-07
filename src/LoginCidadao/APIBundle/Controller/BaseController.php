@@ -80,7 +80,7 @@ class BaseController extends FOSRestController
         /** @var OAuthToken $token */
         $token = $tokenStorage->getToken();
 
-        if ($token instanceof OAuthToken) {
+        if (!$token instanceof OAuthToken) {
             return null;
         }
 
@@ -88,8 +88,11 @@ class BaseController extends FOSRestController
         $accessToken = $this->getDoctrine()
             ->getRepository('LoginCidadaoOAuthBundle:AccessToken')
             ->findOneBy(['token' => $token->getToken()]);
-        $client = $accessToken->getClient();
 
-        return $client;
+        if (!$accessToken instanceof AccessToken) {
+            return null;
+        }
+
+        return $accessToken->getClient();
     }
 }
