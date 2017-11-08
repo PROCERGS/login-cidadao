@@ -18,7 +18,7 @@ class HttpUri implements UriInterface
      * Pattern extracted from Symfony\Component\Validator\Constraints\UrlValidator
      */
     const PATTERN = '~^
-            (?<scheme>%s)://                                 # protocol
+            (?<scheme>https|http)://                                 # protocol
             (?<userInfo>([\pL\pN-]+:)?([\pL\pN-]+)@)?          # basic auth
             (?<host>
                 ([\pL\pN\pS-\.])+(\.?([\pL\pN]|xn\-\-[\pL\pN-]+)+\.?) # a domain name
@@ -487,58 +487,46 @@ class HttpUri implements UriInterface
         return $this;
     }
 
-    public static function parseUri($uri)
+    private static function regexDecomposeUri($uri)
     {
-        $pattern = sprintf(self::PATTERN, implode('|', ['http', 'https']));
-
-        if (!preg_match($pattern, $uri, $m)) {
+        if (!preg_match(self::PATTERN, $uri, $m)) {
             throw new \InvalidArgumentException("Invalid HTTP URI");
         }
 
-        $parts = self::getDefaultComponents();
-
-        foreach ($m as $part => $value) {
-            if (is_numeric($part)) {
-                continue;
-            }
-            switch ($part) {
-                case 'scheme':
-                case 'userInfo':
-                case 'host':
-                case 'port':
-                case 'path':
-                case 'query':
-                case 'fragment':
-                    $parts[$part] = $value;
-                    continue;
-                default:
-                    continue;
+        foreach ($m as $key => $value) {
+            if (is_int($key)) {
+                unset($m[$key]);
             }
         }
 
-        array_walk($parts, function (&$value, $part) {
-            switch ($part) {
-                case 'userInfo':
-                    $value = preg_replace('/[@]$/', '', $value);
-                    break;
-                case 'port':
-                    $value = str_replace(':', '', $value);
-                    if (!is_numeric($value)) {
-                        $value = null;
-                    }
-                    break;
-                case 'query':
-                    $value = preg_replace('/^[?]/', '', $value);
-                    break;
-                case 'fragment':
-                    $value = preg_replace('/^[#]/', '', $value);
-                    break;
-                default:
-                    return;
-            }
-        });
+        return $m;
+    }
 
-        return $parts;
+    private static function sanitizeComponents($components)
+    {
+        $components['userInfo'] = preg_replace('/[@]$/', '', $components['userInfo']);
+        $components['query'] = preg_replace('/^[?]/', '', $components['query']);
+        $components['fragment'] = preg_replace('/^[#]/', '', $components['fragment']);
+        $components['port'] = str_replace(':', '', $components['port']);
+        if (!is_numeric($components['port'])) {
+            $components['port'] = null;
+        }
+
+        return $components;
+    }
+
+    public static function parseUri($uri)
+    {
+        $components = self::getDefaultComponents();
+        $allowedComponents = ['scheme', 'userInfo', 'host', 'port', 'path', 'query', 'fragment'];
+
+        foreach (self::regexDecomposeUri($uri) as $component => $value) {
+            if (array_search($component, $allowedComponents) !== false) {
+                $components[$component] = $value;
+            }
+        }
+
+        return self::sanitizeComponents($components);
     }
 
     public static function createFromString($uri)
