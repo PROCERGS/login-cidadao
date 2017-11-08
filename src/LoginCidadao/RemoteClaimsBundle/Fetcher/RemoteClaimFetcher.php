@@ -12,12 +12,12 @@ namespace LoginCidadao\RemoteClaimsBundle\Fetcher;
 
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Client;
-use League\Uri\Schemes\Http;
 use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository;
 use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
+use LoginCidadao\RemoteClaimsBundle\Model\HttpUri;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
@@ -61,7 +61,7 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
     public function fetchRemoteClaim($claimUri)
     {
         try {
-            $uri = Http::createFromString($claimUri);
+            $uri = HttpUri::createFromString($claimUri);
         } catch (\Exception $e) {
             $claimName = TagUri::createFromString($claimUri);
             $uri = $this->discoverClaimUri($claimName);
@@ -81,7 +81,7 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
      */
     public function discoverClaimUri(TagUri $claimName)
     {
-        $uri = Http::createFromComponents([
+        $uri = HttpUri::createFromComponents([
             'host' => $claimName->getAuthorityName(),
             'query' => http_build_query([
                 'resource' => $claimName,
@@ -89,7 +89,7 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
             ]),
         ]);
 
-        $response = $this->httpClient->get($uri);
+        $response = $this->httpClient->get($uri->__toString());
         $json = json_decode($response->getBody());
 
         foreach ($json->links as $link) {

@@ -15,9 +15,13 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Message\Request;
 use GuzzleHttp\Subscriber\History;
 use GuzzleHttp\Subscriber\Mock;
-use League\Uri\Schemes\Http;
+use LoginCidadao\OAuthBundle\Entity\ClientRepository;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository;
 use LoginCidadao\RemoteClaimsBundle\Fetcher\RemoteClaimFetcher;
+use LoginCidadao\RemoteClaimsBundle\Model\HttpUri;
+use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 use LoginCidadao\RemoteClaimsBundle\Tests\Parser\RemoteClaimParserTest;
 
@@ -30,7 +34,7 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
 
     public function testFetchByUriObject()
     {
-        $this->runTestFetch(Http::createFromString('https://dummy.com'));
+        $this->runTestFetch(HttpUri::createFromString('https://dummy.com'));
     }
 
     public function testFetchByTag()
@@ -64,13 +68,18 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
 
         $httpClient = $this->getHttpClient($data, $history);
         $em = $this->getEntityManager();
-        $em->expects($this->once())->method('persist')
-            ->with($this->isInstanceOf('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface'));
+        $em->expects($this->exactly(2))->method('persist')->willReturnCallback(function ($entity) {
+            if (!$entity instanceof ClientInterface
+                && !$entity instanceof RemoteClaimInterface) {
+                $this->fail('Expected ClientInterface or RemoteClaimInterface to be persisted.');
+            }
+        });
         $em->expects($this->once())->method('flush');
 
-        $repo = $this->getRemoteClaimRepository();
+        $remoteClaimRepo = $this->getRemoteClaimRepository();
+        $clientRepo = $this->getClientRepository();
 
-        $fetcher = new RemoteClaimFetcher($httpClient, $em, $repo);
+        $fetcher = new RemoteClaimFetcher($httpClient, $em, $remoteClaimRepo, $clientRepo);
         $fetcher->getRemoteClaim($uri);
     }
 
@@ -84,10 +93,11 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
 
         $httpClient = $this->getHttpClient($data, $history);
         $em = $this->getEntityManager();
-        $repo = $this->getRemoteClaimRepository();
-        $repo->expects($this->once())->method('findOneBy')->willReturn($remoteClaim);
+        $remoteClaimRepo = $this->getRemoteClaimRepository();
+        $remoteClaimRepo->expects($this->once())->method('findOneBy')->willReturn($remoteClaim);
+        $clientRepo = $this->getClientRepository();
 
-        $fetcher = new RemoteClaimFetcher($httpClient, $em, $repo);
+        $fetcher = new RemoteClaimFetcher($httpClient, $em, $remoteClaimRepo, $clientRepo);
         $this->assertEquals($remoteClaim, $fetcher->getRemoteClaim($uri));
     }
 
@@ -98,8 +108,12 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
         /** @var History $history */
         $history = new History();
 
-        $fetcher = new RemoteClaimFetcher($this->getHttpClient($data, $history, $expectedUri),
-            $this->getEntityManager(), $this->getRemoteClaimRepository());
+        $httpClient = $this->getHttpClient($data, $history, $expectedUri);
+        $em = $this->getEntityManager();
+        $remoteClaimRepo = $this->getRemoteClaimRepository();
+        $clientRepo = $this->getClientRepository();
+
+        $fetcher = new RemoteClaimFetcher($httpClient, $em, $remoteClaimRepo, $clientRepo);
         $remoteClaim = $fetcher->fetchRemoteClaim($uri);
 
         $this->assertEquals($data['claim_name'], $remoteClaim->getName());
@@ -153,6 +167,17 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
     private function getRemoteClaimRepository()
     {
         $repo = $this->getMockBuilder('LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository')
+            ->disableOriginalConstructor()->getMock();
+
+        return $repo;
+    }
+
+    /**
+     * @return ClientRepository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getClientRepository()
+    {
+        $repo = $this->getMockBuilder('LoginCidadao\OAuthBundle\Entity\ClientRepository')
             ->disableOriginalConstructor()->getMock();
 
         return $repo;

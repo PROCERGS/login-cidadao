@@ -10,9 +10,9 @@
 
 namespace LoginCidadao\RemoteClaimsBundle\EventSubscriber;
 
-use League\Uri\Schemes\Http;
 use LoginCidadao\OpenIDBundle\Event\AuthorizationEvent;
 use LoginCidadao\OpenIDBundle\LoginCidadaoOpenIDEvents;
+use LoginCidadao\RemoteClaimsBundle\Model\HttpUri;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
@@ -56,7 +56,7 @@ class AuthorizationSubscriber implements EventSubscriberInterface
     private function checkHttpUri($uri)
     {
         try {
-            $http = Http::createFromString($uri);
+            $http = HttpUri::createFromString($uri);
 
             return $http->getScheme() && $http->getHost();
         } catch (\Exception $e) {

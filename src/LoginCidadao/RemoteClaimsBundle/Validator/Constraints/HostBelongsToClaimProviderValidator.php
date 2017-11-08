@@ -10,7 +10,7 @@
 
 namespace LoginCidadao\RemoteClaimsBundle\Validator\Constraints;
 
-use League\Uri\UriParser;
+use LoginCidadao\RemoteClaimsBundle\Model\HttpUri;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -30,13 +30,12 @@ class HostBelongsToClaimProviderValidator extends ConstraintValidator
             return;
         }
 
-        $parser = new UriParser();
         $host = $value->getName()->getAuthorityName();
         $provider = $value->getProvider();
 
         $redirectUris = $provider->getRedirectUris();
         foreach ($redirectUris as $redirectUri) {
-            $uri = $parser->parse($redirectUri);
+            $uri = HttpUri::parseUri($redirectUri);
             if ($uri['host'] === $host) {
                 return;
             }
