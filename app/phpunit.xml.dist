@@ -40,6 +40,9 @@
                 <directory>../src/*/Bundle/*Bundle/Tests</directory>
             </exclude>
         </whitelist>
+        <blacklist>
+            <directory>../vendor</directory>
+        </blacklist>
     </filter>
 
     <listeners>
