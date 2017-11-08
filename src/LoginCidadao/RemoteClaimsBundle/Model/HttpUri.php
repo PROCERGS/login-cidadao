@@ -10,85 +10,51 @@
 
 namespace LoginCidadao\RemoteClaimsBundle\Model;
 
-use Egulias\EmailValidator\EmailValidator;
 use Psr\Http\Message\UriInterface;
 
-class TagUri implements UriInterface
+class HttpUri implements UriInterface
 {
-    const REGEX_OVERALL = '^tag:(?<taggingEntity>[^:]+):(?<specific>[^#]+)(?:#(?<fragment>[\w\d&?@:_]+))?$';
-    const REGEX_DATE = '\d{4}(?:-(?:0\d|1[012])(?:-(?:[012]\d|3[01]))?)?';
-    const REGEX_DATE_YEAR = '(?<year>\d{4})';
-    const REGEX_DATE_MONTH = '(?<month>0\d|1[012])';
-    const REGEX_DATE_DAY = '(?<day>[012]\d|3[01])';
-    const REGEX_DNScomp = '(?:[\w\d](?:[\w\d-]*[\w\d])?)';
-    const REGEX_date = '(?:\d{4}(?:-\d{2}(?:-\d{2})?)?)';
-
-    protected static $supportedSchemes = ['tag'];
+    /**
+     * Pattern extracted from Symfony\Component\Validator\Constraints\UrlValidator
+     */
+    const PATTERN = '~^
+            (?<scheme>%s)://                                 # protocol
+            (?<userInfo>([\pL\pN-]+:)?([\pL\pN-]+)@)?          # basic auth
+            (?<host>
+                ([\pL\pN\pS-\.])+(\.?([\pL\pN]|xn\-\-[\pL\pN-]+)+\.?) # a domain name
+                    |                                                 # or
+                \d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}                    # an IP address
+                    |                                                 # or
+                \[
+                    (?:(?:(?:(?:(?:(?:(?:[0-9a-f]{1,4})):){6})(?:(?:(?:(?:(?:[0-9a-f]{1,4})):(?:(?:[0-9a-f]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:::(?:(?:(?:[0-9a-f]{1,4})):){5})(?:(?:(?:(?:(?:[0-9a-f]{1,4})):(?:(?:[0-9a-f]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:[0-9a-f]{1,4})))?::(?:(?:(?:[0-9a-f]{1,4})):){4})(?:(?:(?:(?:(?:[0-9a-f]{1,4})):(?:(?:[0-9a-f]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-f]{1,4})):){0,1}(?:(?:[0-9a-f]{1,4})))?::(?:(?:(?:[0-9a-f]{1,4})):){3})(?:(?:(?:(?:(?:[0-9a-f]{1,4})):(?:(?:[0-9a-f]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-f]{1,4})):){0,2}(?:(?:[0-9a-f]{1,4})))?::(?:(?:(?:[0-9a-f]{1,4})):){2})(?:(?:(?:(?:(?:[0-9a-f]{1,4})):(?:(?:[0-9a-f]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-f]{1,4})):){0,3}(?:(?:[0-9a-f]{1,4})))?::(?:(?:[0-9a-f]{1,4})):)(?:(?:(?:(?:(?:[0-9a-f]{1,4})):(?:(?:[0-9a-f]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-f]{1,4})):){0,4}(?:(?:[0-9a-f]{1,4})))?::)(?:(?:(?:(?:(?:[0-9a-f]{1,4})):(?:(?:[0-9a-f]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-f]{1,4})):){0,5}(?:(?:[0-9a-f]{1,4})))?::)(?:(?:[0-9a-f]{1,4})))|(?:(?:(?:(?:(?:(?:[0-9a-f]{1,4})):){0,6}(?:(?:[0-9a-f]{1,4})))?::))))
+                \]  # an IPv6 address
+            )
+            (?<port>:[0-9]+)?                              # a port (optional)
+            (?<path>(?:/ (?:[\pL\pN\-._\~!$&\'()*+,;=:@]|%%[0-9A-Fa-f]{2})* )*)      # a path
+            (?<query>\? (?:[\pL\pN\-._\~!$&\'()*+,;=:@/?]|%%[0-9A-Fa-f]{2})* )?   # a query (optional)
+            (?<fragment>\# (?:[\pL\pN\-._\~!$&\'()*+,;=:@/?]|%%[0-9A-Fa-f]{2})* )?   # a fragment (optional)
+        $~ixu';
 
     /** @var string */
-    private $authorityName;
+    private $scheme = '';
 
     /** @var string */
-    private $host;
+    private $userInfo = '';
 
     /** @var string */
-    private $date;
+    private $host = '';
+
+    /** @var null|int */
+    private $port = null;
 
     /** @var string */
-    private $specific;
+    private $path = '';
 
     /** @var string */
-    private $fragment;
+    private $query = '';
 
-    private function OLDgetAuthorityName()
-    {
-        $path = $this->getPath();
-        $taggingEntity = $this->getTaggingEntityRegex();
-        if (preg_match("/^{$taggingEntity}/", $path, $m) !== 1) {
-            throw new \InvalidArgumentException('Invalid taggingEntity');
-        }
-
-        return $m['authorityName'];
-    }
-
-    private function isValid()
-    {
-        $authorityName = $this->getAuthorityName();
-        if (strstr($authorityName, '@') === false) {
-            $validAuthorityName = new Host($authorityName);
-        } else {
-            $validator = new EmailValidator();
-            $validAuthorityName = $validator->isValid($authorityName);
-        }
-
-        return !$this->userInfo->__toString()
-            && !$this->host->__toString()
-            && $validAuthorityName;
-    }
-
-    private static function getDnsNameRegex()
-    {
-        return '(?:'.self::REGEX_DNScomp.'(?:[.]'.self::REGEX_DNScomp.')*)';
-    }
-
-    private static function getTaggingEntityRegex()
-    {
-        return '(?<authorityName>'.self::getDnsNameRegex().'|'.static::getEmailAddressRegex().'),(?<date>'.self::REGEX_date.')';
-    }
-
-    private static function getEmailAddressRegex()
-    {
-        return '(?:[\w\d-._+]*@'.self::getDnsNameRegex().')';
-    }
-
-    private static function getDateRegex()
-    {
-        $day = self::REGEX_DATE_DAY;
-        $month = self::REGEX_DATE_MONTH;
-        $year = self::REGEX_DATE_YEAR;
-
-        return "$year(?:-$month(?:-$day)?)?";
-    }
+    /** @var string */
+    private $fragment = '';
 
     /**
      * Retrieve the scheme component of the URI.
@@ -106,7 +72,7 @@ class TagUri implements UriInterface
      */
     public function getScheme()
     {
-        return 'tag';
+        return $this->scheme;
     }
 
     /**
@@ -129,12 +95,9 @@ class TagUri implements UriInterface
      */
     public function getAuthority()
     {
-        return $this->authorityName;
-    }
+        $userInfoHost = implode('@', array_filter([$this->getUserInfo(), $this->getHost()]));
 
-    public function getAuthorityName()
-    {
-        return $this->getAuthority();
+        return implode(':', array_filter([$userInfoHost, $this->getPort()]));
     }
 
     /**
@@ -154,7 +117,7 @@ class TagUri implements UriInterface
      */
     public function getUserInfo()
     {
-        return '';
+        return $this->userInfo;
     }
 
     /**
@@ -170,7 +133,7 @@ class TagUri implements UriInterface
      */
     public function getHost()
     {
-        return $this->extractHost($this->getAuthority());
+        return $this->host;
     }
 
     /**
@@ -190,7 +153,7 @@ class TagUri implements UriInterface
      */
     public function getPort()
     {
-        return null;
+        return $this->port;
     }
 
     /**
@@ -220,7 +183,7 @@ class TagUri implements UriInterface
      */
     public function getPath()
     {
-        return '';
+        return $this->path;
     }
 
     /**
@@ -245,7 +208,7 @@ class TagUri implements UriInterface
      */
     public function getQuery()
     {
-        return '';
+        return $this->query;
     }
 
     /**
@@ -270,41 +233,6 @@ class TagUri implements UriInterface
     }
 
     /**
-     * Retrieve the specific component of the tag URI.
-     *
-     * If no specific is present, this method MUST return an empty string.
-     *
-     * The leading ":" character is not part of the specific and MUST NOT be
-     * added.
-     *
-     * @see https://tools.ietf.org/html/rfc4151#section-2
-     * @return string The tag URI specific.
-     */
-    public function getSpecific()
-    {
-        return $this->specific;
-    }
-
-    /**
-     * Retrieve the date component of the tag URI.
-     *
-     * The leading "," character is not part of the date and MUST NOT be
-     * added.
-     *
-     * @see https://tools.ietf.org/html/rfc4151#section-2
-     * @return string The tag URI date.
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    public function getTaggingEntity()
-    {
-        return sprintf("%s,%s", $this->getAuthority(), $this->getDate());
-    }
-
-    /**
      * Return an instance with the specified scheme.
      *
      * This method MUST retain the state of the current instance, and return
@@ -321,7 +249,7 @@ class TagUri implements UriInterface
      */
     public function withScheme($scheme)
     {
-        throw new \BadMethodCallException("This method is not supported");
+        // TODO: Implement withScheme() method.
     }
 
     /**
@@ -473,82 +401,180 @@ class TagUri implements UriInterface
      */
     public function __toString()
     {
-        $tagURI = sprintf("tag:%s:%s", $this->getTaggingEntity(), $this->getSpecific());
+        $scheme = $this->getScheme();
+        $authority = $this->getAuthority();
+        $path = $this->getPath();
+        $fragment = $this->getFragment() ? '#'.$this->getFragment() : '';
+        $query = $this->getQuery() ? '?'.$this->getQuery() : '';
 
-        if ('' !== $fragment = $this->getFragment()) {
-            $tagURI = sprintf("%s#%s", $tagURI, $fragment);
-        }
-
-        return $tagURI;
+        return "{$scheme}://{$authority}{$path}{$query}{$fragment}";
     }
 
-    public function setAuthorityName($authorityName)
+    /**
+     * @param string $scheme
+     * @return HttpUri
+     */
+    public function setScheme($scheme)
     {
-        $this->authorityName = $authorityName;
+        $this->scheme = $scheme;
 
         return $this;
     }
 
-    public function setDate($date)
+    /**
+     * @param string $userInfo
+     * @return HttpUri
+     */
+    public function setUserInfo($userInfo)
     {
-        $dateRegex = self::getDateRegex();
-        if (!preg_match("/^$dateRegex$/", $date, $m)) {
-            throw new \InvalidArgumentException('Invalid date: '.$date);
-        }
-
-        $parts = array_merge([
-            'year' => $m['year'],
-            'month' => '01',
-            'day' => '01',
-        ], $m);
-
-        if (!checkdate($parts['month'], $parts['day'], $parts['year'])) {
-            throw new \InvalidArgumentException('Invalid date: '.$date);
-        }
-        $this->date = $date;
+        $this->userInfo = $userInfo;
 
         return $this;
     }
 
-    public function setSpecific($specific)
+    /**
+     * @param string $host
+     * @return HttpUri
+     */
+    public function setHost($host)
     {
-        $this->specific = $specific;
+        $this->host = $host;
 
         return $this;
     }
 
+    /**
+     * @param int|null $port
+     * @return HttpUri
+     */
+    public function setPort($port)
+    {
+        $this->port = $port;
+
+        return $this;
+    }
+
+    /**
+     * @param string $path
+     * @return HttpUri
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    /**
+     * @param string $query
+     * @return HttpUri
+     */
+    public function setQuery($query)
+    {
+        $this->query = $query;
+
+        return $this;
+    }
+
+    /**
+     * @param string $fragment
+     * @return HttpUri
+     */
     public function setFragment($fragment)
     {
-        $this->fragment = $fragment ?: '';
+        $this->fragment = $fragment;
 
         return $this;
     }
 
-    private function extractHost($authorityName)
+    public static function parseUri($uri)
     {
-        $parts = explode('@', $authorityName);
+        $pattern = sprintf(self::PATTERN, implode('|', ['http', 'https']));
 
-        return end($parts);
+        if (!preg_match($pattern, $uri, $m)) {
+            throw new \InvalidArgumentException("Invalid HTTP URI");
+        }
+
+        $parts = self::getDefaultComponents();
+
+        foreach ($m as $part => $value) {
+            if (is_numeric($part)) {
+                continue;
+            }
+            switch ($part) {
+                case 'scheme':
+                case 'userInfo':
+                case 'host':
+                case 'port':
+                case 'path':
+                case 'query':
+                case 'fragment':
+                    $parts[$part] = $value;
+                    continue;
+                default:
+                    continue;
+            }
+        }
+
+        array_walk($parts, function (&$value, $part) {
+            switch ($part) {
+                case 'userInfo':
+                    $value = preg_replace('/[@]$/', '', $value);
+                    break;
+                case 'port':
+                    $value = str_replace(':', '', $value);
+                    if (!is_numeric($value)) {
+                        $value = null;
+                    }
+                    break;
+                case 'query':
+                    $value = preg_replace('/^[?]/', '', $value);
+                    break;
+                case 'fragment':
+                    $value = preg_replace('/^[#]/', '', $value);
+                    break;
+                default:
+                    return;
+            }
+        });
+
+        return $parts;
     }
 
-    public static function createFromString($string)
+    public static function createFromString($uri)
     {
-        $overallRegex = self::REGEX_OVERALL;
-        if (!preg_match("/{$overallRegex}/", $string, $overall)) {
-            throw new \InvalidArgumentException("The provided tag URI doesn't seem to be valid: {$string}");
-        }
+        $parts = self::parseUri($uri);
 
-        $taggingEntity = self::getTaggingEntityRegex();
-        if (preg_match("/^{$taggingEntity}/", $overall['taggingEntity'], $m) !== 1) {
-            throw new \InvalidArgumentException('Invalid taggingEntity: '.$overall['taggingEntity']);
-        }
+        return self::createFromComponents($parts);
+    }
 
-        $tagUri = (new TagUri())
-            ->setAuthorityName($m['authorityName'])
-            ->setDate($m['date'])
-            ->setSpecific($overall['specific'])
-            ->setFragment($overall['fragment']);
+    public static function createFromComponents($parts)
+    {
+        // Set default values
+        $parts = array_merge(self::getDefaultComponents(), $parts);
 
-        return $tagUri;
+        $uri = (new HttpUri())
+            ->setScheme($parts['scheme'])
+            ->setUserInfo($parts['userInfo'])
+            ->setHost($parts['host'])
+            ->setPort($parts['port'])
+            ->setPath($parts['path'])
+            ->setQuery($parts['query'])
+            ->setFragment($parts['fragment']);
+
+        return $uri;
+    }
+
+    private static function getDefaultComponents()
+    {
+        return [
+            'scheme' => '',
+            'userInfo' => '',
+            'host' => '',
+            'port' => null,
+            'path' => '',
+            'query' => '',
+            'fragment' => '',
+        ];
     }
 }

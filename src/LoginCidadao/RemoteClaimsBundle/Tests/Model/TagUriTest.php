@@ -30,6 +30,7 @@ class TagUriTest extends \PHPUnit_Framework_TestCase
         $tagUri = TagUri::createFromString($tag);
 
         $this->assertEquals($expected, $tagUri->getDate());
+        $this->assertEquals($tag, $tagUri->__toString());
     }
 
     public function testInvalidDay()
