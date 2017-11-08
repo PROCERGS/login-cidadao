@@ -36,7 +36,7 @@ before_script:
   - echo y | php app/console lc:database:populate batch/
 
 script:
-  - ./bin/phpunit -c app --coverage-clover=coverage.clover
+  - ./bin/phpunit -c app
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
