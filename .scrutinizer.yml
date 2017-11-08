@@ -5,6 +5,7 @@ filter:
         - 'web/*'
         - 'spec/*'
 tools:
+    external_code_coverage: true
     php_mess_detector: true
     php_cs_fixer:
         config:
