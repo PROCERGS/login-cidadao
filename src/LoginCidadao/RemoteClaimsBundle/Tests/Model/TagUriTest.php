@@ -22,6 +22,34 @@ class TagUriTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $name);
     }
 
+    public function testValidFullDate()
+    {
+        $expected = '2017-11-30';
+
+        $tag = "tag:example.com,{$expected}:my_claim";
+        $tagUri = TagUri::createFromString($tag);
+
+        $this->assertEquals($expected, $tagUri->getDate());
+    }
+
+    public function testInvalidDay()
+    {
+        $date = '2017-11-31';
+        $this->setExpectedException('\InvalidArgumentException', "Invalid date: {$date}");
+
+        $tag = "tag:example.com,{$date}:my_claim";
+        TagUri::createFromString($tag);
+    }
+
+    public function testInvalidMonth()
+    {
+        $date = '2017-13';
+        $this->setExpectedException('\InvalidArgumentException', "Invalid date: {$date}");
+
+        $tag = "tag:example.com,{$date}:my_claim";
+        TagUri::createFromString($tag);
+    }
+
     public function testValidEmailTagUri()
     {
         $expected = 'ful_ano+42b@example.com';

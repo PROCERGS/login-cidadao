@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f4e52c05ab1285cf2b6bb0d5210fd28f",
-    "content-hash": "339bdef2fb151585b84921d7533b6233",
+    "hash": "4ebbd85c4cb579bc1680ad186c4a88fc",
+    "content-hash": "c6c8003b922ade50df314133bb2109de",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -1138,6 +1138,48 @@
                 "validator"
             ],
             "time": "2017-02-03 22:48:59"
+        },
+        {
+            "name": "emarref/jwt",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/emarref/jwt.git",
+                "reference": "79f563750ff90dabd4fa677c4b4e5ec9ed52d9b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/emarref/jwt/zipball/79f563750ff90dabd4fa677c4b4e5ec9ed52d9b4",
+                "reference": "79f563750ff90dabd4fa677c4b4e5ec9ed52d9b4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "suggest": {
+                "ext-openssl": "Enables more token encryption options"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Emarref\\Jwt\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Malcolm Fell",
+                    "email": "emarref@gmail.com"
+                }
+            ],
+            "description": "A JWT implementation",
+            "time": "2016-09-05 20:33:06"
         },
         {
             "name": "friendsofsymfony/oauth-server-bundle",
@@ -3764,6 +3806,56 @@
             ],
             "description": "Terms of Service Bundle",
             "time": "2017-05-19 17:23:22"
+        },
+        {
+            "name": "psr/http-message",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-message.git",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP messages",
+            "homepage": "https://github.com/php-fig/http-message",
+            "keywords": [
+                "http",
+                "http-message",
+                "psr",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "time": "2016-08-06 14:39:51"
         },
         {
             "name": "psr/log",
