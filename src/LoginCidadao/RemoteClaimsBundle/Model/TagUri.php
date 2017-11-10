@@ -12,6 +12,7 @@ namespace LoginCidadao\RemoteClaimsBundle\Model;
 
 use Egulias\EmailValidator\EmailValidator;
 use Psr\Http\Message\UriInterface;
+use Symfony\Component\Intl\Exception\NotImplementedException;
 
 class TagUri implements UriInterface
 {
@@ -39,32 +40,6 @@ class TagUri implements UriInterface
 
     /** @var string */
     private $fragment;
-
-    private function OLDgetAuthorityName()
-    {
-        $path = $this->getPath();
-        $taggingEntity = $this->getTaggingEntityRegex();
-        if (preg_match("/^{$taggingEntity}/", $path, $m) !== 1) {
-            throw new \InvalidArgumentException('Invalid taggingEntity');
-        }
-
-        return $m['authorityName'];
-    }
-
-    private function isValid()
-    {
-        $authorityName = $this->getAuthorityName();
-        if (strstr($authorityName, '@') === false) {
-            $validAuthorityName = new Host($authorityName);
-        } else {
-            $validator = new EmailValidator();
-            $validAuthorityName = $validator->isValid($authorityName);
-        }
-
-        return !$this->userInfo->__toString()
-            && !$this->host->__toString()
-            && $validAuthorityName;
-    }
 
     private static function getDnsNameRegex()
     {
@@ -340,7 +315,7 @@ class TagUri implements UriInterface
      */
     public function withUserInfo($user, $password = null)
     {
-        // TODO: Implement withUserInfo() method.
+        throw new \BadMethodCallException("This method is not supported");
     }
 
     /**
@@ -357,7 +332,7 @@ class TagUri implements UriInterface
      */
     public function withHost($host)
     {
-        // TODO: Implement withHost() method.
+        throw new \BadMethodCallException("This method is not supported");
     }
 
     /**
@@ -379,7 +354,7 @@ class TagUri implements UriInterface
      */
     public function withPort($port)
     {
-        // TODO: Implement withPort() method.
+        throw new \BadMethodCallException("This method is not supported");
     }
 
     /**
@@ -406,7 +381,7 @@ class TagUri implements UriInterface
      */
     public function withPath($path)
     {
-        // TODO: Implement withPath() method.
+        throw new \BadMethodCallException("This method is not supported");
     }
 
     /**
@@ -426,7 +401,7 @@ class TagUri implements UriInterface
      */
     public function withQuery($query)
     {
-        // TODO: Implement withQuery() method.
+        throw new \BadMethodCallException("This method is not supported");
     }
 
     /**
@@ -445,7 +420,11 @@ class TagUri implements UriInterface
      */
     public function withFragment($fragment)
     {
-        // TODO: Implement withFragment() method.
+        return (new TagUri())
+            ->setAuthorityName($this->getAuthorityName())
+            ->setDate($this->getDate())
+            ->setSpecific($this->getSpecific())
+            ->setFragment($fragment);
     }
 
     /**
@@ -484,6 +463,10 @@ class TagUri implements UriInterface
 
     public function setAuthorityName($authorityName)
     {
+        if (strstr($authorityName, '@') !== false) {
+            $this->checkEmail($authorityName);
+        }
+
         $this->authorityName = $authorityName;
 
         return $this;
@@ -550,5 +533,15 @@ class TagUri implements UriInterface
             ->setFragment($overall['fragment']);
 
         return $tagUri;
+    }
+
+    private function checkEmail($email)
+    {
+        $validator = new EmailValidator();
+        if (!$validator->isValid($email)) {
+            throw new \InvalidArgumentException("Invalid authority name: '{$email}'. It doesn't seem to be a valid email address.");
+        }
+
+        return true;
     }
 }

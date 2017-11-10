@@ -47,4 +47,47 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('', $http->getQuery());
         $this->assertEquals('', $http->getFragment());
     }
+
+    public function testWithMethods()
+    {
+        $http = (new HttpUri())
+            ->withScheme('https')
+            ->withUserInfo('user', 'password')
+            ->withHost('example.com')
+            ->withPort(8042)
+            ->withPath('/over/there')
+            ->withQuery('name=ferret')
+            ->withFragment('nose');
+
+        $uri = 'https://user:password@example.com:8042/over/there?name=ferret#nose';
+        $this->assertEquals($uri, $http->__toString());
+    }
+
+    public function testInvalidUri()
+    {
+        $this->setExpectedException('\InvalidArgumentException');
+        $uri = 'not valid';
+        HttpUri::createFromString($uri);
+    }
+
+    public function testInvalidScheme()
+    {
+        $this->setExpectedException('\InvalidArgumentException');
+        $uri = 'ftp://example.com';
+        HttpUri::createFromString($uri);
+    }
+
+    public function testInvalidHost()
+    {
+        $this->setExpectedException('\InvalidArgumentException');
+        $uri = 'https://not valid.com';
+        HttpUri::createFromString($uri);
+    }
+
+    public function testInvalidPath()
+    {
+        $this->setExpectedException('\InvalidArgumentException');
+        $uri = 'https://example.com/not valid';
+        HttpUri::createFromString($uri);
+    }
 }

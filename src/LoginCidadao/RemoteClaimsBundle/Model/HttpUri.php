@@ -249,7 +249,7 @@ class HttpUri implements UriInterface
      */
     public function withScheme($scheme)
     {
-        // TODO: Implement withScheme() method.
+        return $this->with('scheme', $scheme);
     }
 
     /**
@@ -268,7 +268,9 @@ class HttpUri implements UriInterface
      */
     public function withUserInfo($user, $password = null)
     {
-        // TODO: Implement withUserInfo() method.
+        $userInfo = implode(':', [$user, $password]);
+
+        return $this->with('userInfo', $userInfo);
     }
 
     /**
@@ -285,7 +287,7 @@ class HttpUri implements UriInterface
      */
     public function withHost($host)
     {
-        // TODO: Implement withHost() method.
+        return $this->with('host', $host);
     }
 
     /**
@@ -307,7 +309,7 @@ class HttpUri implements UriInterface
      */
     public function withPort($port)
     {
-        // TODO: Implement withPort() method.
+        return $this->with('port', $port);
     }
 
     /**
@@ -334,7 +336,7 @@ class HttpUri implements UriInterface
      */
     public function withPath($path)
     {
-        // TODO: Implement withPath() method.
+        return $this->with('path', $path);
     }
 
     /**
@@ -354,7 +356,7 @@ class HttpUri implements UriInterface
      */
     public function withQuery($query)
     {
-        // TODO: Implement withQuery() method.
+        return $this->with('query', $query);
     }
 
     /**
@@ -373,7 +375,7 @@ class HttpUri implements UriInterface
      */
     public function withFragment($fragment)
     {
-        // TODO: Implement withFragment() method.
+        return $this->with('fragment', $fragment);
     }
 
     /**
@@ -564,5 +566,26 @@ class HttpUri implements UriInterface
             'query' => '',
             'fragment' => '',
         ];
+    }
+
+    private function getComponents()
+    {
+        return [
+            'scheme' => $this->getScheme(),
+            'userInfo' => $this->getUserInfo(),
+            'host' => $this->getHost(),
+            'port' => $this->getPort(),
+            'path' => $this->getPath(),
+            'query' => $this->getQuery(),
+            'fragment' => $this->getFragment(),
+        ];
+    }
+
+    private function with($component, $value)
+    {
+        $components = $this->getComponents();
+        $components[$component] = $value;
+
+        return self::createFromComponents($components);
     }
 }

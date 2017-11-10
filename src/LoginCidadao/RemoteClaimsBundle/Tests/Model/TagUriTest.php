@@ -81,4 +81,62 @@ class TagUriTest extends \PHPUnit_Framework_TestCase
 
         return TagUri::createFromString($tagUri);
     }
+
+    public function testWithFragment()
+    {
+        $tag = $this->getTagUri('example.com');
+        $expected = $tag->__toString().'#it_works';
+
+        $this->assertEquals($expected, $tag->withFragment('it_works')->__toString());
+    }
+
+    public function testGetters()
+    {
+        $tag = TagUri::createFromString('tag:example.com,2017:some-claim#fragment');
+
+        $this->assertEquals('tag', $tag->getScheme());
+        $this->assertEquals('2017', $tag->getDate());
+        $this->assertEquals('some-claim', $tag->getSpecific());
+        $this->assertEquals('fragment', $tag->getFragment());
+        $this->assertEquals('example.com', $tag->getHost());
+
+        $this->assertEquals('', $tag->getUserInfo());
+        $this->assertEquals('', $tag->getPath());
+        $this->assertEquals('', $tag->getQuery());
+        $this->assertNull($tag->getPort());
+    }
+
+    public function testWith()
+    {
+        $methods = [
+            'withScheme',
+            'withUserInfo',
+            'withHost',
+            'withPort',
+            'withPath',
+            'withQuery',
+        ];
+
+        $successCount = 0;
+        $tag = new TagUri();
+        foreach ($methods as $method) {
+            try {
+                $tag->$method();
+                $this->fail("Expected \BadMethodCallException when calling {$method}()");
+            } catch (\BadMethodCallException $e) {
+                $successCount++;
+                continue;
+            } catch (\Exception $e) {
+                $this->fail("Expected \BadMethodCallException when calling {$method}() but got ".get_class($e));
+            }
+        }
+
+        $this->assertEquals(count($methods), $successCount);
+    }
+
+    public function testSetAuthorityNameWithInvalidEmail()
+    {
+        $this->setExpectedException('\InvalidArgumentException');
+        (new TagUri())->setAuthorityName('@invalid');
+    }
 }
