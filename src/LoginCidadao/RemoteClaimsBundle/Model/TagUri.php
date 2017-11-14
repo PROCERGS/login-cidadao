@@ -12,7 +12,6 @@ namespace LoginCidadao\RemoteClaimsBundle\Model;
 
 use Egulias\EmailValidator\EmailValidator;
 use Psr\Http\Message\UriInterface;
-use Symfony\Component\Intl\Exception\NotImplementedException;
 
 class TagUri implements UriInterface
 {
@@ -28,9 +27,6 @@ class TagUri implements UriInterface
 
     /** @var string */
     private $authorityName;
-
-    /** @var string */
-    private $host;
 
     /** @var string */
     private $date;
