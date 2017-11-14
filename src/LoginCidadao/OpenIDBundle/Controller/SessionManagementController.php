@@ -253,7 +253,7 @@ class SessionManagementController extends Controller
 
         $sub = $this->getSubjectIdentifier($person, $client);
 
-        return $idToken->claims['sub'] === $sub;
+        return $idToken->claims['sub'] == $sub;
     }
 
     /**
