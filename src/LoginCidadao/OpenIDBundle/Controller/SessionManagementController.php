@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of the login-cidadao project or it's bundles.
  *
  * (c) Guilherme Donato <guilhermednt on github>
@@ -253,7 +253,7 @@ class SessionManagementController extends Controller
 
         $sub = $this->getSubjectIdentifier($person, $client);
 
-        return $idToken->claims['sub'] === $sub;
+        return $idToken->claims['sub'] == $sub;
     }
 
     /**

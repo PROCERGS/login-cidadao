@@ -550,7 +550,7 @@ class PersonController extends Controller
     private function getAuthorization($clientId)
     {
         $auth = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Authorization')
-            ->findBy([
+            ->findOneBy([
                 'person' => $this->getUser(),
                 'client' => $this->getClient($clientId),
             ]);
