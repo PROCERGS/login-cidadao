@@ -35,18 +35,12 @@ class UpdateSentVerificationStatusCommand extends ContainerAwareCommand
 
         $io->title('Update Verification Messages Status');
 
-        /** @var EventDispatcherInterface $dispatcher */
-        $dispatcher = $this->getContainer()->get('event_dispatcher');
+        /** @var SmsStatusService $updater */
+        $updater = $this->getContainer()->get('phone_verification.sms_status');
+        $updater->setSymfonyStyle($io);
 
-        /** @var EntityManagerInterface $em */
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-
-        /** @var SentVerificationRepository $repo */
-        $repo = $em->getRepository('LoginCidadaoPhoneVerificationBundle:SentVerification');
-
-        $updater = new SmsStatusService($dispatcher, $repo, $io);
         $io->section('Updating messages\' status');
-        $updater->updateSentVerificationStatus($em);
+        $updater->updateSentVerificationStatus();
 
         $io->section('Average delivery time');
         $avg = $updater->getAverageDeliveryTime(10);

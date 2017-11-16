@@ -10,16 +10,20 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Tests\Service;
 
+use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerification;
+use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Service\SmsStatusService;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
 {
     public function testNoPendingUpdate()
     {
         $repo = $this->getRepository([]);
-        $updater = $this->getSmsStatusService($this->getDispatcher(), $repo, $this->getIo());
-        $updater->updateSentVerificationStatus($this->getEntityManager());
+        $updater = $this->getSmsStatusService($this->getEntityManager(), $this->getDispatcher(), $repo, $this->getIo());
+        $updater->updateSentVerificationStatus();
     }
 
     public function testOnePendingUpdate()
@@ -47,8 +51,8 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
         ];
 
         $repo = $this->getRepository($items);
-        $updater = $this->getSmsStatusService($dispatcher, $repo, $this->getIo());
-        $updater->updateSentVerificationStatus($this->getEntityManager());
+        $updater = $this->getSmsStatusService($this->getEntityManager(), $dispatcher, $repo, $this->getIo());
+        $updater->updateSentVerificationStatus();
 
         $this->assertEquals($date, $sentVerification->getActuallySentAt());
         $this->assertEquals($date, $sentVerification->getDeliveredAt());
@@ -69,8 +73,28 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
         ];
 
         $repo = $this->getRepository($items);
-        $updater = $this->getSmsStatusService($dispatcher, $repo, $this->getIo());
-        $updater->updateSentVerificationStatus($this->getEntityManager());
+        $updater = $this->getSmsStatusService($this->getEntityManager(), $dispatcher, $repo, $this->getIo());
+        $updater->updateSentVerificationStatus();
+
+        $this->assertFalse($sentVerification->isFinished());
+    }
+
+    public function testOnePendingUpdateNoListenerNoIo()
+    {
+        $dispatcher = $this->getDispatcher();
+
+        $sentVerification = new SentVerification();
+        $sentVerification->setTransactionId('0123456');
+
+        $items = [
+            [
+                $sentVerification,
+            ],
+        ];
+
+        $repo = $this->getRepository($items);
+        $updater = $this->getSmsStatusService($this->getEntityManager(), $dispatcher, $repo);
+        $updater->updateSentVerificationStatus();
 
         $this->assertFalse($sentVerification->isFinished());
     }
@@ -96,7 +120,7 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
         $repo->expects($this->once())->method('getLastDeliveredVerifications')
             ->willReturn($verifications);
 
-        $updater = $this->getSmsStatusService($this->getDispatcher(), $repo, $this->getIo());
+        $updater = $this->getSmsStatusService($this->getEntityManager(), $this->getDispatcher(), $repo, $this->getIo());
         $avg = $updater->getAverageDeliveryTime(2);
 
         $this->assertEquals(30, $avg);
@@ -108,19 +132,47 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
         $repo->expects($this->once())->method('getLastDeliveredVerifications')
             ->willReturn([]);
 
-        $updater = $this->getSmsStatusService($this->getDispatcher(), $repo, $this->getIo());
+        $updater = $this->getSmsStatusService($this->getEntityManager(), $this->getDispatcher(), $repo, $this->getIo());
         $avg = $updater->getAverageDeliveryTime(2);
 
         $this->assertEquals(0, $avg);
     }
 
-    private function getSmsStatusService($dispatcher, $repo, $io)
+    public function testGetDelayedDeliveryTransactions()
     {
-        $updater = new SmsStatusService($dispatcher, $repo, $io);
+        $sentVerification = new SentVerification();
+        $sentVerification->setSentAt(new \DateTime())
+            ->setTransactionId('0123456');
+
+        $repo = $this->getRepository();
+        $repo->expects($this->once())->method('getNotDeliveredSince')->willReturn([$sentVerification]);
+
+        $updater = $this->getSmsStatusService($this->getEntityManager(), $this->getDispatcher(), $repo, $this->getIo());
+        $notDelivered = $updater->getDelayedDeliveryTransactions(0);
+
+        $transaction = reset($notDelivered);
+
+        $this->assertEquals($sentVerification->getTransactionId(), $transaction['transaction_id']);
+        $this->assertEquals($sentVerification->getSentAt()->format('c'), $transaction['sent_at']);
+    }
+
+    private function getSmsStatusService(
+        EntityManagerInterface $em,
+        EventDispatcherInterface $dispatcher,
+        SentVerificationRepository $repo,
+        SymfonyStyle $io = null
+    ) {
+        $updater = new SmsStatusService($em, $dispatcher, $repo);
+        if ($io !== null) {
+            $updater->setSymfonyStyle($io);
+        }
 
         return $updater;
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface
+     */
     private function getDispatcher()
     {
         $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
@@ -139,6 +191,10 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
         return $query;
     }
 
+    /**
+     * @param null $items
+     * @return \PHPUnit_Framework_MockObject_MockObject|SentVerificationRepository
+     */
     private function getRepository($items = null)
     {
         $repo = $this->getMockBuilder('LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository')
@@ -158,6 +214,9 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
         return $repo;
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|EntityManagerInterface
+     */
     private function getEntityManager()
     {
         $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
@@ -165,6 +224,9 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
         return $em;
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|SymfonyStyle
+     */
     private function getIo()
     {
         $io = $this->getMockBuilder('Symfony\Component\Console\Style\SymfonyStyle')

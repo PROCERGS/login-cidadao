@@ -21,6 +21,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class SmsStatusService
 {
+    /** @var EntityManagerInterface */
+    private $em;
+
     /** @var EventDispatcherInterface */
     private $dispatcher;
 
@@ -32,21 +35,32 @@ class SmsStatusService
 
     /**
      * SmsStatusUpdater constructor.
+     * @param EntityManagerInterface $em
      * @param EventDispatcherInterface $dispatcher
      * @param SentVerificationRepository $sentVerificationRepo
-     * @param SymfonyStyle|null $io
      */
     public function __construct(
+        EntityManagerInterface $em,
         EventDispatcherInterface $dispatcher,
-        SentVerificationRepository $sentVerificationRepo,
-        SymfonyStyle $io = null
+        SentVerificationRepository $sentVerificationRepo
     ) {
-        $this->io = $io;
+        $this->em = $em;
         $this->dispatcher = $dispatcher;
         $this->sentVerificationRepo = $sentVerificationRepo;
     }
 
-    public function updateSentVerificationStatus(EntityManagerInterface $em)
+    /**
+     * @param SymfonyStyle $io
+     * @return SmsStatusService
+     */
+    public function setSymfonyStyle(SymfonyStyle $io)
+    {
+        $this->io = $io;
+
+        return $this;
+    }
+
+    public function updateSentVerificationStatus()
     {
         $count = $this->sentVerificationRepo->countPendingUpdateSentVerification();
 
@@ -77,8 +91,8 @@ class SmsStatusService
                 ->setFinished(
                     $deliveredAt instanceof \DateTime || DeliveryStatus::isFinal($status->getDeliveryStatus())
                 );
-            $em->flush();
-            $em->clear();
+            $this->em->flush();
+            $this->em->clear();
             $transactionsUpdated[] = $sentVerification->getTransactionId();
             $this->progressAdvance(1);
         }
