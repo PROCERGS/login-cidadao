@@ -10,10 +10,14 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Tests\Command;
 
+use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\PhoneVerificationBundle\Command\UpdateSentVerificationStatusCommand;
+use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
+use LoginCidadao\PhoneVerificationBundle\Service\SmsStatusService;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UpdateSentVerificationStatusCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,6 +38,7 @@ class UpdateSentVerificationStatusCommandTest extends \PHPUnit_Framework_TestCas
         $query->expects($this->once())->method('iterate')
             ->willReturn(new \ArrayIterator([]));
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|SentVerificationRepository $repo */
         $repo = $this->getMockBuilder('LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository')
             ->disableOriginalConstructor()
             ->getMock();
@@ -41,31 +46,20 @@ class UpdateSentVerificationStatusCommandTest extends \PHPUnit_Framework_TestCas
             ->method('getPendingUpdateSentVerificationQuery')
             ->willReturn($query);
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManagerInterface $em */
         $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
-        $em
-            ->expects($this->once())
-            ->method('getRepository')
-            ->with('LoginCidadaoPhoneVerificationBundle:SentVerification')
-            ->willReturn($repo);
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface $dispatcher */
         $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+
+        $smsStatusService = new SmsStatusService($em, $dispatcher, $repo);
 
         $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
         $container
-            ->expects($this->exactly(2))
+            ->expects($this->once())
             ->method('get')
-            ->willReturnCallback(
-                function ($service) use ($em, $dispatcher) {
-                    switch ($service) {
-                        case 'doctrine.orm.entity_manager':
-                            return $em;
-                        case 'event_dispatcher':
-                            return $dispatcher;
-                        default:
-                            return null;
-                    }
-                }
-            );
+            ->with('phone_verification.sms_status')
+            ->willReturn($smsStatusService);
 
         return $container;
     }

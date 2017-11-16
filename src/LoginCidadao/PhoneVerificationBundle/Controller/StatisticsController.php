@@ -33,10 +33,8 @@ class StatisticsController extends Controller
     public function updateAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $dispatcher = $this->get('event_dispatcher');
-        $sentVerificationRepo = $em->getRepository('LoginCidadaoPhoneVerificationBundle:SentVerification');
 
-        $smsUpdater = new SmsStatusService($dispatcher, $sentVerificationRepo);
+        $smsUpdater = $this->get('phone_verification.sms_status');
         $transactionsUpdated = $smsUpdater->updateSentVerificationStatus($em);
 
         return new JsonResponse(['transactions_updated' => $transactionsUpdated, 'count' => count($transactionsUpdated)]);
