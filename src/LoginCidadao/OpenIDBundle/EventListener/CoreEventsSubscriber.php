@@ -47,11 +47,9 @@ class CoreEventsSubscriber implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
-            LoginCidadaoCoreEvents::GET_CLIENT => array(
-                array('onGetClient', 10),
-            ),
-        );
+        return [
+            LoginCidadaoCoreEvents::GET_CLIENT => ['onGetClient', 10],
+        ];
     }
 
     public function onGetClient(GetClientEvent $event)

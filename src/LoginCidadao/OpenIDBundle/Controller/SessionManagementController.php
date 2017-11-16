@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of the login-cidadao project or it's bundles.
  *
  * (c) Guilherme Donato <guilhermednt on github>
@@ -27,6 +27,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * @Route("/openid/connect")
@@ -252,7 +253,7 @@ class SessionManagementController extends Controller
 
         $sub = $this->getSubjectIdentifier($person, $client);
 
-        return $idToken->claims['sub'] === $sub;
+        return $idToken->claims['sub'] == $sub;
     }
 
     /**
@@ -263,7 +264,11 @@ class SessionManagementController extends Controller
     private function getIdToken($idToken)
     {
         if (!($idToken instanceof \JOSE_JWT)) {
-            $idToken = \JOSE_JWT::decode($idToken);
+            try {
+                $idToken = \JOSE_JWT::decode($idToken);
+            } catch (\JOSE_Exception_InvalidFormat $e) {
+                throw new BadRequestHttpException($e->getMessage(), $e);
+            }
         }
 
         return $idToken;

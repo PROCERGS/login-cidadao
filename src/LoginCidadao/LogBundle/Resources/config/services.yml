@@ -1,0 +1,7 @@
+services:
+    lc.monolog.db.handler:
+        class: LoginCidadao\LogBundle\Handler\MonologDBHandler
+        arguments:
+            - "@doctrine.orm.logs_entity_manager"
+        calls:
+            - ["setCacheProvider", ["@?cache"]]

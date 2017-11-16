@@ -1,8 +1,15 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\OpenIDBundle\Controller;
 
-use Doctrine\ORM\EntityManager;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,8 +36,7 @@ class ClientRegistrationController extends FOSRestController
         $form->handleRequest($request);
         if ($form->isValid()) {
             $metadata = $form->getData();
-            $em = $this->getDoctrine()->getManager();
-            $client = $this->registerClient($em, $metadata);
+            $client = $this->registerClient($metadata);
 
             return $this->view($metadata->fromClient($client), 201);
         } else {
@@ -101,8 +107,9 @@ class ClientRegistrationController extends FOSRestController
      * @param ClientMetadata $data
      * @return Client
      */
-    private function registerClient(EntityManager $em, ClientMetadata $data)
+    private function registerClient(ClientMetadata $data)
     {
+        $em = $this->getDoctrine()->getManager();
         if ($data->getClient() === null) {
             $client = $data->toClient();
         } else {

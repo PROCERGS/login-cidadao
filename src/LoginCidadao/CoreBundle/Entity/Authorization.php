@@ -3,6 +3,7 @@
 namespace LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Entity\Client;
 
 /**
@@ -52,7 +53,7 @@ class Authorization
     }
 
     /**
-     * @return Person
+     * @return PersonInterface
      */
     public function getPerson()
     {
@@ -60,9 +61,9 @@ class Authorization
     }
 
     /**
-     * @param \LoginCidadao\CoreBundle\Entity\Person $person
+     * @param PersonInterface|null $person
      */
-    public function setPerson(Person $person = null)
+    public function setPerson(PersonInterface $person = null)
     {
         $this->person = $person;
     }
@@ -98,7 +99,7 @@ class Authorization
      */
     public function setScope(array $scope)
     {
-        $scope       = $this->enforcePublicProfileScope($scope);
+        $scope = $this->enforcePublicProfileScope($scope);
         $this->scope = $scope;
     }
 
@@ -117,6 +118,7 @@ class Authorization
                 return false;
             }
         }
+
         return true;
     }
 
@@ -125,6 +127,7 @@ class Authorization
         if (array_search('public_profile', $scope) === false) {
             $scope[] = 'public_profile';
         }
+
         return $scope;
     }
 

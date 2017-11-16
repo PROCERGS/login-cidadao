@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of the login-cidadao project or it's bundles.
  *
  * (c) Guilherme Donato <guilhermednt on github>
@@ -10,6 +10,8 @@
 
 namespace LoginCidadao\OpenIDBundle\Storage;
 
+use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use OAuth2\ServerBundle\Storage\RefreshToken as BaseClass;
 use OAuth2\Storage\RefreshTokenInterface;
 use Doctrine\ORM\EntityManager;
@@ -20,6 +22,7 @@ class RefreshToken extends BaseClass implements RefreshTokenInterface
 
     public function __construct(EntityManager $EntityManager)
     {
+        parent::__construct($EntityManager);
         $this->em = $EntityManager;
     }
 
@@ -33,7 +36,7 @@ class RefreshToken extends BaseClass implements RefreshTokenInterface
      * @param $refresh_token
      * Refresh token to be check with.
      *
-     * @return
+     * @return array
      * An associative array as below, and NULL if the refresh_token is
      * invalid:
      * - refresh_token: Stored refresh token identifier.
@@ -48,6 +51,7 @@ class RefreshToken extends BaseClass implements RefreshTokenInterface
      */
     public function getRefreshToken($refresh_token)
     {
+        /** @var \LoginCidadao\OAuthBundle\Entity\RefreshToken $refreshToken */
         $refreshToken = $this->em->getRepository('LoginCidadaoOAuthBundle:RefreshToken')
             ->findOneBy(array('token' => $refresh_token));
 
@@ -56,15 +60,19 @@ class RefreshToken extends BaseClass implements RefreshTokenInterface
         }
 
         // Get Client
+        /** @var ClientInterface $client */
         $client = $refreshToken->getClient();
 
-        return array(
+        /** @var PersonInterface $user */
+        $user = $refreshToken->getUser();
+
+        return [
             'refresh_token' => $refreshToken->getToken(),
-            'client_id' => $client->getClientId(),
-            'user_id' => $refreshToken->getUserId(),
-            'expires' => $refreshToken->getExpires()->getTimestamp(),
-            'scope' => $refreshToken->getScope()
-        );
+            'client_id' => $client->getPublicId(),
+            'user_id' => $user->getId(),
+            'expires' => $refreshToken->getExpiresAt(),
+            'scope' => $refreshToken->getScope(),
+        ];
     }
 
     /**
@@ -90,12 +98,19 @@ class RefreshToken extends BaseClass implements RefreshTokenInterface
      * (optional) Scopes to be stored in space-separated string.
      *
      * @ingroup oauth2_section_6
+     * @return null|void
      */
-    public function setRefreshToken($refresh_token, $client_id, $user_id,
-                                    $expires, $scope = null)
-    {
+    public function setRefreshToken(
+        $refresh_token,
+        $client_id,
+        $user_id,
+        $expires,
+        $scope = null
+    ) {
         // Get Client Entity
-        $id     = explode('_', $client_id);
+        $id = explode('_', $client_id);
+
+        /** @var ClientInterface $client */
         $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
             ->find($id[0]);
 
@@ -106,6 +121,7 @@ class RefreshToken extends BaseClass implements RefreshTokenInterface
         if ($user_id === null) {
             return null;
         } else {
+            /** @var PersonInterface $user */
             $user = $this->em->getRepository('LoginCidadaoCoreBundle:Person')
                 ->find($user_id);
         }
@@ -142,7 +158,7 @@ class RefreshToken extends BaseClass implements RefreshTokenInterface
     public function unsetRefreshToken($refresh_token)
     {
         $refreshToken = $this->em->getRepository('LoginCidadaoOAuthBundle:RefreshToken')
-            ->findOneBy(array('token' => $refresh_token));
+            ->findOneBy(['token' => $refresh_token]);
         $this->em->remove($refreshToken);
         $this->em->flush();
     }

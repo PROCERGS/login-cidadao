@@ -5,7 +5,7 @@ namespace LoginCidadao\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
-use LoginCidadao\CoreBundle\Model\SelectData;
+use LoginCidadao\CoreBundle\Model\LocationSelectData;
 use LoginCidadao\CoreBundle\Model\LocationAwareInterface;
 
 /**
@@ -40,7 +40,7 @@ class PersonAddress implements LocationAwareInterface
      * @JMS\Expose
      * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
-     * @Assert\Length(max="30")
+     * @Assert\Length(max="30", groups={"Default", "LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Address"})
      * @ORM\Column(type="string", nullable=true, length=30)
      * @var string
      */
@@ -50,7 +50,7 @@ class PersonAddress implements LocationAwareInterface
      * @JMS\Expose
      * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
-     * @Assert\Length(max="255")
+     * @Assert\Length(max="255", groups={"Default", "LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Address"})
      * @ORM\Column(type="string", nullable=false, length=255)
      * @var string
      */
@@ -61,7 +61,7 @@ class PersonAddress implements LocationAwareInterface
      * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
      * @ORM\Column(type="string", nullable=true, length=255)
-     * @Assert\Length(max="255")
+     * @Assert\Length(max="255", groups={"Default", "LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Address"})
      * @var string
      */
     protected $complement;
@@ -70,7 +70,7 @@ class PersonAddress implements LocationAwareInterface
      * @JMS\Expose
      * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
-     * @Assert\Length(max="10")
+     * @Assert\Length(max="10", groups={"Default", "LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Address"})
      * @ORM\Column(name="address_number",type="string", nullable=true, length=10)
      * @var string
      */
@@ -100,13 +100,13 @@ class PersonAddress implements LocationAwareInterface
      * @JMS\Expose
      * @JMS\Groups({"addresses"})
      * @JMS\Since("1.1.0")
-     * @Assert\Length(max="20")
+     * @Assert\Length(max="20", groups={"Default", "LoginCidadaoRegistration", "Registration", "Profile", "LoginCidadaoProfile", "Dynamic", "Address"})
      * @ORM\Column(name="postal_code", type="string", nullable=true, length=20)
      * @var string
      */
     protected $postalCode;
 
-    /** @var SelectData */
+    /** @var LocationSelectData */
     protected $location;
 
     public function getAddress()
@@ -228,7 +228,7 @@ class PersonAddress implements LocationAwareInterface
         return $this->location;
     }
 
-    public function setLocation(SelectData $location)
+    public function setLocation(LocationSelectData $location)
     {
         $this->location = $location;
         return $this;
@@ -239,7 +239,7 @@ class PersonAddress implements LocationAwareInterface
         if ($this->location !== null) {
             $this->location->toObject($this);
         } else {
-            $this->location = new SelectData();
+            $this->location = new LocationSelectData();
             $this->location->getFromObject($this);
         }
     }

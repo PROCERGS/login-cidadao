@@ -10,7 +10,7 @@
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Mailer\MailerInterface;
@@ -25,8 +25,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use LoginCidadao\CoreBundle\Entity\City;
 use LoginCidadao\CoreBundle\Entity\State;
 use LoginCidadao\CoreBundle\Entity\Person;
-use LoginCidadao\CoreBundle\Model\SelectData;
-use LoginCidadao\CoreBundle\Model\DynamicFormData;
+use LoginCidadao\CoreBundle\Model\LocationSelectData;
+use LoginCidadao\DynamicFormBundle\Model\DynamicFormData;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer;
 use LoginCidadao\CoreBundle\Exception\LcValidationException;
@@ -50,7 +50,7 @@ class ProfileEditListener implements EventSubscriberInterface
         'cpf' => null,
     ];
 
-    /** @var EntityManager */
+    /** @var EntityManagerInterface */
     protected $em;
     protected $userManager;
 
@@ -61,6 +61,7 @@ class ProfileEditListener implements EventSubscriberInterface
         UrlGeneratorInterface $router,
         SessionInterface $session,
         TokenStorageInterface $tokenStorage,
+        EntityManagerInterface $em,
         $emailUnconfirmedTime
     ) {
         $this->mailer = $mailer;
@@ -69,6 +70,7 @@ class ProfileEditListener implements EventSubscriberInterface
         $this->router = $router;
         $this->session = $session;
         $this->tokenStorage = $tokenStorage;
+        $this->em = $em;
         $this->emailUnconfirmedTime = $emailUnconfirmedTime;
     }
 
@@ -178,11 +180,6 @@ class ProfileEditListener implements EventSubscriberInterface
         $this->checkCPFChanged($user);
     }
 
-    public function setEntityManager(EntityManager $var)
-    {
-        $this->em = $var;
-    }
-
     public function setUserManager($var)
     {
         $this->userManager = $var;
@@ -221,7 +218,7 @@ class ProfileEditListener implements EventSubscriberInterface
     private function registerTextualState(\Symfony\Component\Form\FormEvent $event)
     {
         $data = $event->getForm()->getData();
-        if (!($data instanceof SelectData)) {
+        if (!($data instanceof LocationSelectData)) {
             return;
         }
         $form = $event->getForm();
@@ -261,7 +258,7 @@ class ProfileEditListener implements EventSubscriberInterface
     private function registerTextualCity(\Symfony\Component\Form\FormEvent $event)
     {
         $data = $event->getForm()->getData();
-        if (!($data instanceof SelectData)) {
+        if (!($data instanceof LocationSelectData)) {
             return;
         }
         $form = $event->getForm();

@@ -1,8 +1,17 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 
 /**
  * BackupCode
@@ -39,7 +48,7 @@ class BackupCode
     /**
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="backupCodes")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
-     * @var type
+     * @var PersonInterface
      */
     private $person;
 
@@ -109,9 +118,10 @@ class BackupCode
         return $this->person;
     }
 
-    public function setPerson(Person $person)
+    public function setPerson(PersonInterface $person)
     {
         $this->person = $person;
+
         return $this;
     }
 

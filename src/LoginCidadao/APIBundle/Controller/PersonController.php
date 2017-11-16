@@ -1,21 +1,27 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\APIBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations as REST;
 use JMS\Serializer\SerializationContext;
 use LoginCidadao\APIBundle\Exception\RequestTimeoutException;
-use LoginCidadao\CoreBundle\Entity\Person;
-use LoginCidadao\CoreBundle\Entity\Authorization;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use LoginCidadao\OAuthBundle\Model\ClientUser;
 use LoginCidadao\APIBundle\Security\Audit\Annotation as Audit;
 use LoginCidadao\APIBundle\Entity\LogoutKey;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class PersonController extends BaseController
 {
@@ -47,14 +53,15 @@ class PersonController extends BaseController
             $scope = $this->getClientScope($person);
         } else {
             if ($person instanceof ClientUser) {
-                throw new AccessDeniedHttpException("This is only available to a person's Access Token, not a client's.");
+                throw new AccessDeniedException("This is only available to a person's Access Token, not a client's.");
             } else {
-                throw new AccessDeniedHttpException();
+                throw new AccessDeniedException();
             }
         }
 
         $view = $this->view($person)
             ->setSerializationContext($this->getSerializationContext($scope));
+
         return $this->handleView($view);
     }
 
@@ -79,34 +86,35 @@ class PersonController extends BaseController
      */
     public function waitPersonChangeAction(Request $request)
     {
-        $user      = $this->getUser();
-        $scope     = $this->getClientScope($user);
+        $user = $this->getUser();
+        $scope = $this->getClientScope($user);
         $updatedAt = \DateTime::createFromFormat('Y-m-d H:i:s',
-                $request->get('updated_at'));
+            $request->get('updated_at'));
 
         if (!($updatedAt instanceof \DateTime)) {
             $updatedAt = new \DateTime();
         }
 
-        $id            = $user->getId();
+        $id = $user->getId();
         $lastUpdatedAt = null;
-        $callback      = $this->getCheckUpdateCallback($id, $updatedAt,
+        $callback = $this->getCheckUpdateCallback($id, $updatedAt,
             $lastUpdatedAt);
-        $person        = $this->runTimeLimited($callback);
-        $context       = SerializationContext::create()->setGroups($scope);
-        $view          = $this->view($person)
+        $person = $this->runTimeLimited($callback);
+        $context = SerializationContext::create()->setGroups($scope);
+        $view = $this->view($person)
             ->setSerializationContext($context);
+
         return $this->handleView($view);
     }
 
     private function runTimeLimited($callback, $waitTime = 1)
     {
         $maxExecutionTime = ini_get('max_execution_time');
-        $limit            = $maxExecutionTime ? $maxExecutionTime - 2 : 60;
-        $startTime        = time();
+        $limit = $maxExecutionTime ? $maxExecutionTime - 2 : 60;
+        $startTime = time();
         while ($limit > 0) {
             $result = call_user_func($callback);
-            $delta  = time() - $startTime;
+            $delta = time() - $startTime;
 
             if ($result !== false) {
                 return $result;
@@ -124,9 +132,10 @@ class PersonController extends BaseController
 
     private function getCheckUpdateCallback($id, $updatedAt, $lastUpdatedAt)
     {
-        $em     = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getEntityManager();
         $people = $em->getRepository('LoginCidadaoCoreBundle:Person');
-        return function() use ($id, $people, $em, $updatedAt, $lastUpdatedAt) {
+
+        return function () use ($id, $people, $em, $updatedAt, $lastUpdatedAt) {
             $em->clear();
             $person = $people->find($id);
             if (!$person->getUpdatedAt()) {
@@ -168,19 +177,19 @@ class PersonController extends BaseController
      */
     public function getLogoutKeyAction($id)
     {
-        $token       = $this->get('security.token_storage')->getToken();
+        $token = $this->get('security.token_storage')->getToken();
         $accessToken = $this->getDoctrine()
             ->getRepository('LoginCidadaoOAuthBundle:AccessToken')
             ->findOneBy(array(
-            'token' => $token->getToken()
-        ));
+                'token' => $token->getToken(),
+            ));
         $client = $accessToken->getClient();
 
         $people = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Person');
         $person = $people->find($id);
 
         if (!$person->hasAuthorization($client)) {
-            throw new AccessDeniedHttpException("Not authorized");
+            throw new AccessDeniedException("Not authorized");
         }
 
         $logoutKey = new LogoutKey();
@@ -196,9 +205,10 @@ class PersonController extends BaseController
             'key' => $logoutKey->getKey(),
             'url' => $this->generateUrl('lc_logout_not_remembered_safe',
                 array(
-                'key' => $logoutKey->getKey()
-                ), UrlGeneratorInterface::ABSOLUTE_URL)
+                    'key' => $logoutKey->getKey(),
+                ), UrlGeneratorInterface::ABSOLUTE_URL),
         );
+
         return $result;
     }
 }
