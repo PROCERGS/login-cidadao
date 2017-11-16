@@ -60,7 +60,7 @@ class SmsStatusService
         return $this;
     }
 
-    public function updateSentVerificationStatus()
+    public function updateSentVerificationStatus($batchSize = 1)
     {
         $count = $this->sentVerificationRepo->countPendingUpdateSentVerification();
 
@@ -91,11 +91,15 @@ class SmsStatusService
                 ->setFinished(
                     $deliveredAt instanceof \DateTime || DeliveryStatus::isFinal($status->getDeliveryStatus())
                 );
-            $this->em->flush();
-            $this->em->clear();
             $transactionsUpdated[] = $sentVerification->getTransactionId();
+            if ((count($transactionsUpdated) % $batchSize) === 0) {
+                $this->em->flush();
+                $this->em->clear();
+            }
             $this->progressAdvance(1);
         }
+        $this->em->flush();
+        $this->em->clear();
         $this->progressFinish();
 
         $countUpdated = count($transactionsUpdated);
