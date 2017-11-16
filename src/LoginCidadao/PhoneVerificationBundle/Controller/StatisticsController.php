@@ -52,11 +52,7 @@ class StatisticsController extends Controller
     {
         $amount = $request->get('amount', 10);
 
-        $em = $this->getDoctrine()->getManager();
-        $dispatcher = $this->get('event_dispatcher');
-        $sentVerificationRepo = $em->getRepository('LoginCidadaoPhoneVerificationBundle:SentVerification');
-
-        $smsUpdater = new SmsStatusService($dispatcher, $sentVerificationRepo);
+        $smsUpdater = $this->get('phone_verification.sms_status');
         $average = $smsUpdater->getAverageDeliveryTime($amount);
 
         return new JsonResponse(['average_delivery_time' => $average, 'unit' => 'seconds']);
@@ -75,11 +71,7 @@ class StatisticsController extends Controller
         $seconds = $request->get('seconds', null);
         $seconds = is_numeric($seconds) ? (int)$seconds : null;
 
-        $em = $this->getDoctrine()->getManager();
-        $dispatcher = $this->get('event_dispatcher');
-        $sentVerificationRepo = $em->getRepository('LoginCidadaoPhoneVerificationBundle:SentVerification');
-
-        $smsUpdater = new SmsStatusService($dispatcher, $sentVerificationRepo);
+        $smsUpdater = $this->get('phone_verification.sms_status');
 
         if ($seconds === null) {
             $seconds = $smsUpdater->getAverageDeliveryTime(10);
