@@ -32,12 +32,14 @@ class StatisticsController extends Controller
      */
     public function updateAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
+        /** @var SmsStatusService $smsUpdater */
         $smsUpdater = $this->get('phone_verification.sms_status');
-        $transactionsUpdated = $smsUpdater->updateSentVerificationStatus($em);
+        $transactionsUpdated = $smsUpdater->updateSentVerificationStatus();
 
-        return new JsonResponse(['transactions_updated' => $transactionsUpdated, 'count' => count($transactionsUpdated)]);
+        return new JsonResponse([
+            'transactions_updated' => $transactionsUpdated,
+            'count' => count($transactionsUpdated),
+        ]);
     }
 
     /**
@@ -52,6 +54,7 @@ class StatisticsController extends Controller
     {
         $amount = $request->get('amount', 10);
 
+        /** @var SmsStatusService $smsUpdater */
         $smsUpdater = $this->get('phone_verification.sms_status');
         $average = $smsUpdater->getAverageDeliveryTime($amount);
 
@@ -71,6 +74,7 @@ class StatisticsController extends Controller
         $seconds = $request->get('seconds', null);
         $seconds = is_numeric($seconds) ? (int)$seconds : null;
 
+        /** @var SmsStatusService $smsUpdater */
         $smsUpdater = $this->get('phone_verification.sms_status');
 
         if ($seconds === null) {
@@ -79,6 +83,10 @@ class StatisticsController extends Controller
 
         $notDelivered = $smsUpdater->getDelayedDeliveryTransactions($seconds);
 
-        return new JsonResponse(['delayed_transactions' => $notDelivered, 'count' => count($notDelivered), 'max_delay' => $seconds]);
+        return new JsonResponse([
+            'delayed_transactions' => $notDelivered,
+            'count' => count($notDelivered),
+            'max_delay' => $seconds,
+        ]);
     }
 }

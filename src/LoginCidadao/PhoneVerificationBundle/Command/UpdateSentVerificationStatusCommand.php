@@ -10,14 +10,11 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Command;
 
-use Doctrine\ORM\EntityManagerInterface;
-use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Service\SmsStatusService;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UpdateSentVerificationStatusCommand extends ContainerAwareCommand
 {
@@ -40,7 +37,7 @@ class UpdateSentVerificationStatusCommand extends ContainerAwareCommand
         $updater->setSymfonyStyle($io);
 
         $io->section('Updating messages\' status');
-        $updater->updateSentVerificationStatus();
+        $updater->updateSentVerificationStatus(25);
 
         $io->section('Average delivery time');
         $avg = $updater->getAverageDeliveryTime(10);
