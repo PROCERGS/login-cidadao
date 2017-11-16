@@ -1,0 +1,172 @@
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
+
+{% set wait_email = scope | length == 1 and scope | first == 'email' %}
+
+{% block title %}{{ 'dynamic_form.title' | trans }}{% endblock %}
+
+{% block panel_body %}
+    {% if wait_email %}
+        <div class="email-validate-waiting">
+            <p>{{ 'dynamic_form.email_verification.body' | trans({ '%client%': client.name | e }) | raw }}</p>
+
+            <p>{{ 'dynamic_form.email_verification.how_to' | trans | raw }}</p>
+
+            <p>{{ 'dynamic_form.email_verification.post_verifying' | trans({ '%client%': client.name | e }) | raw }}</p>
+
+            <div class="text-center">
+                <button class="btn-link show-help-email">{{ 'dynamic_form.email_verification.help.cant_find_email.title' | trans | raw }}</button>
+            </div>
+
+            <div class="help-email" style="display: none;">
+                <p>{{ 'dynamic_form.email_verification.help.cant_find_email.body' | trans | raw }}</p>
+
+                <p>{{ 'dynamic_form.email_verification.help.cant_find_email.change_email.body' | trans | raw }}</p>
+
+                {{ form_start(form) }}
+                {{ form_errors(form) }}
+                {% if form.person is defined or form.placeOfBirth is defined %}
+                    {{ form_row(form.person.email, { 'attr': { 'data-original': form.person.vars.value.email } }) }}
+                    <div class="row data-changed" style="display: none">
+                        <div class="col-sm-10" style="margin-top: 5px;">
+                            {{ 'dynamic_form.email_verification.help.cant_find_email.change_email.submit.label' | trans | raw }}
+                        </div>
+                        <div class="col-sm-2 text-right">
+                            <input type="submit"
+                                   value="{{ 'dynamic_form.email_verification.help.cant_find_email.change_email.submit.button'|trans }}"
+                                   class="btn btn-success">
+                        </div>
+                    </div>
+                {% endif %}
+                {{ form_end(form) }}
+            </div>
+        </div>
+        <div class="email-validate-success text-center" style="display: none">
+            <p>{{ 'dynamic_form.email_verification.success' | trans }}</p>
+            <a class="btn btn-success"
+               href="{{ form.vars.value.redirectUrl }}">{{ 'Back to %client%' | trans({ '%client%': client.name }) }}</a>
+        </div>
+    {% else %}
+        <h1>{{ 'dynamic_form.title' | trans }}</h1>
+
+        <p>{{ 'dynamic_form.body' | trans({ '%client%': client.name | e }) | raw }}</p>
+
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+        {% if form.person is defined or form.placeOfBirth is defined %}
+            {% if form.person is defined %}
+                {{ form_row(form.person) }}
+            {% endif %}
+
+            {% if form.placeOfBirth is defined %}
+                {{ form_row(form.placeOfBirth) }}
+            {% endif %}
+        {% endif %}
+
+        {% if form.idcard is defined %}
+            <div class="id-card-forms-placeholder">
+                {{ include("LoginCidadaoCoreBundle:IdCard:form.component.html.twig", {'form': form.idcard, 'hide_footer': true }) }}
+            </div>
+        {% endif %}
+
+        {% if form.address is defined %}
+            {{ include("LoginCidadaoCoreBundle:PersonAddress:form.component.html.twig", {'form': form.address, 'embeded': true, 'hide_footer': true, 'name_as_normal_field': true }) }}
+        {% endif %}
+
+        <p>{{ 'dynamic_form.submit.label' | trans }}</p>
+        <input type="submit" value="{{ 'dynamic_form.submit.button' | trans }}" class="btn btn-block btn-success">
+
+        <a href="{{ skipUrl }}"
+           class="btn btn-block btn-link collapse-confirm collapse in skip" type="button"
+           data-toggle="collapse" data-target=".collapse-confirm"
+           aria-expanded="false" aria-controls="collapse-confirm">{{ 'dynamic_form.skip.open_warning' | trans }}</a>
+        <div class="collapse collapse-confirm">
+            <p class="help-block">{{ 'dynamic_form.skip.warning' | trans }}</p>
+            <a href="{{ skipUrl }}" class="btn btn-block btn-link">{{ 'dynamic_form.skip.confirm' | trans }}</a>
+        </div>
+
+        {{ form_end(form) }}
+
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+    '@intl_tel_input_js'
+    '@LoginCidadaoDynamicFormBundle/Resources/public/js/dynamic-form/idCard.js'
+    '@LoginCidadaoDynamicFormBundle/Resources/public/js/dynamic-form/locationSelect.js'
+    '@LoginCidadaoCoreBundle/Resources/public/js/components/jquery-scrollto.js'
+    '@LoginCidadaoCoreBundle/Resources/public/js/jquery.mask.min.js'
+    '@LoginCidadaoCoreBundle/Resources/public/js/components/intl-tel-input.js' filter='uglifyjs2' %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script>
+        {% javascripts '@intl_tel_input_utils_js' filter='uglifyjs2' %}
+        var intlTelInputUtilsScriptUrl = '{{ asset_url }}';
+        var intlTelInputPreferredCountries = {{ intl_tel_input_preferred_countries | json_encode | raw }};
+        {% endjavascripts %}
+
+        $(document).ready(function () {
+            $('.birthdate').mask('00/00/0000', {'translation': {0: {pattern: /[0-9*]/}}});
+            $('.cpf').mask('000.000.000-00', {'translation': {0: {pattern: /[0-9*]/}}});
+
+            locationSelection.formUrl = '{{ path('dynamic_form_location') }}';
+
+            {% if wait_email %}
+            dynamicForm.validEmail.wait();
+
+            $('button.show-help-email').on('click', function () {
+                $(this).fadeOut('fast', function () {
+                    $('.help-email').fadeIn();
+                });
+            });
+
+            $('input[data-original]').on('change keyup', function () {
+                if ($(this).val() != $(this).data('original')) {
+                    $('.data-changed').fadeIn();
+                } else {
+                    $('.data-changed').fadeOut();
+                }
+            });
+            {% endif %}
+
+            $('a.skip').attr('href', '#skip');
+        });
+
+        var dynamicForm = {
+            'idCard': {
+                'loadedFormStateId': '{{ form.vars.data.state ? form.vars.data.state.id : 0 }}',
+                'formUrl': '{{ path('dynamic_form', { 'scope': 'id_cards', 'client_id': client.id }) }}',
+                'unlockState': function () {
+                    $('#form_idcard_state').removeAttr('disabled').removeAttr('readonly');
+                }
+            },
+            'validEmail': {
+                'longPollingUrl': '{{ path('wait_valid_email') }}',
+                'wait': function () {
+                    $.get(dynamicForm.validEmail.longPollingUrl, function (data) {
+                        console.log(data);
+                        if (data === true) {
+                            $('.email-validate-waiting').slideUp();
+                            $('.email-validate-success').slideDown().promise().done(function () {
+                                alert("{{ 'dynamic_form.email_verification.success' | trans }}");
+                                window.location = dynamicForm.redirectUrl;
+                            });
+                        }
+                    }).fail(function () {
+                        dynamicForm.validEmail.wait();
+                    });
+                }
+            },
+            'redirectUrl': '{{ form.vars.value.redirectUrl }}',
+        };
+    </script>
+{% endblock javascripts %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets  '@LoginCidadaoCoreBundle/Resources/public/css/dynamic_form.css' '@intl_tel_input_css' filter='cssrewrite' filter='?uglifycss' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock stylesheets %}

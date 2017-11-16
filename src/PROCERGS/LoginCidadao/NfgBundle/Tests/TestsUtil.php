@@ -15,11 +15,10 @@ class TestsUtil
     public static function getRouter(\PHPUnit_Framework_TestCase $testCase)
     {
         $router = $testCase->getMock('\Symfony\Component\Routing\RouterInterface');
-        $router->expects($testCase->any())->method('generate')->willReturnCallback(
-            function ($routeName) {
+        $router->expects($testCase->any())->method('generate')
+            ->willReturnCallback(function ($routeName) {
                 return $routeName;
-            }
-        );
+            });
 
         return $router;
     }

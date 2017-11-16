@@ -1,0 +1,25 @@
+dynamic_form:
+    title: Complete suas informações
+    body: <strong>%client%</strong> precisa de detalhes adicionais sobre você. Por favor, complete as informações em branco a seguir para continuar.
+    submit:
+        label: 'Depois de completar suas informações, clique no botão a seguir para continuar:'
+        button: Salvar
+    skip:
+        open_warning: Pular etapa
+        warning: Se você escolher pular essa etapa agora, é possível que o serviço acessado solicite essas informações novamente ou negue seu acesso. Além disso, vamos sugerir essa etapa novamente a cada acesso.
+        confirm: Pular mesmo assim
+    email_verification:
+        body: <strong>%client%</strong> precisa que você possua um email validado antes de continuar.
+        how_to: Validar seu endereço de email é bastante fácil e rápido. Você só precisa clicar no link ou botão no email que lhe enviamos.
+        post_verifying: Depois de validar seu email, essa tela vai mudar <strong>automaticamente</strong> e você poderá prosseguir para <strong>%client%</strong>.
+        success: Seu email foi validado com sucesso.
+        back_to_client: Voltar para %client%
+        help:
+            cant_find_email:
+                title: Estou tendo dificuldade em encontrar o email de confirmação
+                body: Se você está tendo dificuldades em encontrar o email de confirmação, por favor verifique se ele não se encontra na caixa de spam ou lixo eletrônico do seu email.
+                change_email:
+                    body: Se você tem certeza de que o email não foi recebido, é possível que seu endereço esteja com erro de digitação. Verifique e, se necessário, altere o email no campo abaixo.
+                    submit:
+                        label: Se seu email estava incorreto, corrija-o e clique no botão a seguir.
+                        button: Trocar Email

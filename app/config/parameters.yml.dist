@@ -108,8 +108,6 @@ parameters:
 
     # Default Client UID (no need to change)
     oauth_default_client.uid: login-cidadao
-    # Notification's categories IDs (no need to change)
-    notifications_categories_alert.uid: login-cidadao-alert
 
     # Default Country ISO 2
     default_country_iso2: BR
@@ -172,9 +170,6 @@ parameters:
     accounting.procergs_systems.api.organization: 'some_organization'
     accounting.procergs_systems.api.registration_number: '12345678'
     accounting.procergs_systems.api.password: 'very_secret_password'
-    accounting.procergs_systems.domains:
-        - "some.domain.tld"
-        - "other.domain.tld"
 
     tpd_base_uri: 'https://some.address/sms'
     tpd_system_id: 'SYSTEM'

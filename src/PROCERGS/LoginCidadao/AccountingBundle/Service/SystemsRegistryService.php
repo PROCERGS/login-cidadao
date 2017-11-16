@@ -10,15 +10,19 @@
 
 namespace PROCERGS\LoginCidadao\AccountingBundle\Service;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface as HttpClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use PROCERGS\Generic\Traits\OptionalLoggerAwareTrait;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLinkRepository;
+use Psr\Log\LoggerAwareInterface;
 
-class SystemsRegistryService
+class SystemsRegistryService implements LoggerAwareInterface
 {
-    /** @var Client */
+    use OptionalLoggerAwareTrait;
+
+    /** @var HttpClientInterface */
     private $client;
 
     /** @var string */
@@ -30,15 +34,12 @@ class SystemsRegistryService
     /** @var array */
     private $cache = [];
 
-    /** @var array */
-    private $internalDomains;
-
     /**
      * SystemsRegistryService constructor.
-     * @param Client $client
+     * @param HttpClientInterface $client
      * @param array $options
      */
-    public function __construct(Client $client, array $options)
+    public function __construct(HttpClientInterface $client, array $options)
     {
         $this->client = $client;
         $this->apiUri = $options['apiUri'];
@@ -47,23 +48,12 @@ class SystemsRegistryService
             'matricula' => $options['registration_number'],
             'senha' => $options['password'],
         ];
-        $this->internalDomains = $options['domains'];
     }
 
     public function getSystemInitials(ClientInterface $client)
     {
-        $urls = array_filter(array_merge($client->getRedirectUris()));
-        $hosts = array_unique(
-            array_map(
-                function ($url) {
-                    return parse_url($url)['host'];
-                },
-                $urls
-            )
-        );
-        if ($client->getSiteUrl()) {
-            $hosts[] = $client->getSiteUrl();
-        }
+        $this->log('info', "Fetching PROCERGS's system initials for client_id: {$client->getPublicId()}");
+        $hosts = $this->getHosts($client);
 
         $identifiedSystems = [];
         $systems = [];
@@ -90,8 +80,38 @@ class SystemsRegistryService
         return $identifiedSystems;
     }
 
+    public function getSystemOwners(ClientInterface $client)
+    {
+        $hosts = $this->getHosts($client);
+
+        $identifiedOwners = [];
+        $owners = [];
+        foreach ($hosts as $host) {
+            foreach (array_column($this->fetchInfo($host), 'clienteDono') as $owner) {
+                if (array_key_exists($owner, $owners)) {
+                    $owners[$owner] += 1;
+                } else {
+                    $owners[$owner] = 1;
+                }
+            }
+        }
+        if (count($owners) <= 0) {
+            return [];
+        }
+        asort($owners);
+        $max = max($owners);
+        foreach ($owners as $key => $value) {
+            if ($value === $max) {
+                $identifiedOwners[] = $key;
+            }
+        }
+
+        return $identifiedOwners;
+    }
+
     private function fetchInfo($query)
     {
+        $this->log('info', "Searching for '{$query}'");
         $hashKey = hash('sha256', $query);
         if (false === array_key_exists($hashKey, $this->cache)) {
             $requestUrl = str_replace('{host}', $query, $this->apiUri);
@@ -102,10 +122,18 @@ class SystemsRegistryService
             } catch (ClientException $e) {
                 if ($e->getResponse()->getStatusCode() === 404) {
                     $response = $e->getResponse();
+                } else {
+                    $this->log('info',
+                        "An exception occurred when trying to fetch PROCERGS's system initials for '{$query}'",
+                        ['exception' => $e]
+                    );
+                    throw $e;
                 }
             }
             $this->cache[$hashKey] = $response->json();
         }
+
+        $this->log('info', "Returning cached result for '{$query}'");
 
         return $this->cache[$hashKey];
     }
@@ -128,19 +156,6 @@ class SystemsRegistryService
         return $result;
     }
 
-    public function getTypeFromUrl(ClientInterface $client)
-    {
-        $hosts = $this->getHosts($client);
-
-        foreach ($hosts as $host) {
-            if ($this->isInternal($host)) {
-                return ProcergsLink::TYPE_INTERNAL;
-            }
-        }
-
-        return ProcergsLink::TYPE_EXTERNAL;
-    }
-
     private function getHosts(ClientInterface $client)
     {
         $urls = array_filter($client->getRedirectUris());
@@ -155,25 +170,10 @@ class SystemsRegistryService
                 $urls
             )
         );
-
-        return $hosts;
-    }
-
-    private function isInternal($host)
-    {
-        $internal = false;
-        foreach ($this->internalDomains as $domain) {
-            $length = strlen($domain);
-            if ($length == 0) {
-                continue;
-            }
-
-            $internal = (substr($host, -$length) === $domain);
-            if ($internal) {
-                return $internal;
-            }
+        if ($client->getSiteUrl()) {
+            $hosts[] = $client->getSiteUrl();
         }
 
-        return $internal;
+        return $hosts;
     }
 }

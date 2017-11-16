@@ -14,7 +14,11 @@ use PROCERGS\LoginCidadao\AccountingBundle\Service\AccountingService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @codeCoverageIgnore
+ */
 class DefaultController extends Controller
 {
     /**
@@ -47,69 +51,16 @@ class DefaultController extends Controller
     {
         /** @var AccountingService $accountingService */
         $accountingService = $this->get('procergs.lc.accounting');
-        $data = $accountingService->getAccounting(
+
+        $gcsInterface = $accountingService->getGcsInterface(
+            'LOGCIDADAO',
             new \DateTime("first day of previous month"),
             new \DateTime("last day of previous month")
         );
 
-        $summary = [];
-        $summaryErrors = [];
-        foreach ($data as $client) {
-            $procergsInitials = $client['procergs_initials'];
-            $totalUsage = $client['access_tokens'] + $client['api_usage'];
-            if (count($procergsInitials) !== 1) {
-                $summaryErrors[] = $totalUsage;
-                continue;
-            }
-            foreach ($procergsInitials as $initials) {
-                if (array_key_exists($initials, $summary)) {
-                    $summary[$initials] += $totalUsage;
-                } else {
-                    $summary[$initials] = $totalUsage;
-                }
-            }
-        }
+        $response = new Response($gcsInterface);
+        $response->headers->set('Content-Type', 'text/plain');
 
-        $today = new \DateTime();
-        $month = (new \DateTime('-1 month'))->format('mY');
-        $header = [
-            '1',
-            'LOGCIDADAO',
-            $month,
-            $today->format('dmY'),
-        ];
-        $body = [];
-        foreach ($summary as $initials => $usage) {
-            $body[] = implode(
-                ';',
-                [
-                    '2',
-                    '',
-                    $initials,
-                    $usage,
-                ]
-            );
-        }
-        foreach ($summaryErrors as $usage) {
-            $body[] = implode(
-                ';',
-                [
-                    '2',
-                    '',
-                    '',
-                    $usage,
-                ]
-            );
-        }
-        $tail = [
-            '9',
-            count($body),
-        ];
-
-        echo '<pre>';
-        echo implode(';', $header).PHP_EOL;
-        echo implode("\n", $body).PHP_EOL;
-        echo implode(';', $tail).PHP_EOL;
-        echo '</pre>';
+        return $response;
     }
 }

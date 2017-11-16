@@ -12,6 +12,9 @@ namespace PROCERGS\LoginCidadao\AccountingBundle\Controller;
 
 use LoginCidadao\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
+use PROCERGS\LoginCidadao\AccountingBundle\Form\MonthSelectorType;
+use PROCERGS\LoginCidadao\AccountingBundle\Model\AccountingReport;
+use PROCERGS\LoginCidadao\AccountingBundle\Model\AccountingReportEntry;
 use PROCERGS\LoginCidadao\AccountingBundle\Service\AccountingService;
 use PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,37 +23,52 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @codeCoverageIgnore
+ */
 class AdminController extends Controller
 {
     /**
-     * @Route("/accounting", name="lc_admin_accounting_summary")
+     * @Route("/accounting/{month}", name="lc_admin_accounting_summary",
+     *     requirements={"month" = "\d{4}-(?:0[1-9]|1[012])"}, defaults={"month" = null}
+     * )
      * @Template
      * @Security("has_role('ROLE_ACCOUNTING_VIEW')")
      */
-    public function indexAction()
+    public function indexAction($month = null)
     {
+        $months = [
+            (new \DateTime('first day of this month'))->modify('-3 months'),
+            (new \DateTime('first day of this month'))->modify('-2 months'),
+            (new \DateTime('first day of this month'))->modify('-1 month'),
+            new \DateTime('first day of this month'),
+        ];
+        $monthChoices = [];
+        foreach ($months as $choice) {
+            $monthChoices[] = [
+                'label' => $choice->format('m/Y'),
+                'month' => $choice->format('Y-m'),
+            ];
+        }
+
+        if ($month === null) {
+            $month = 'previous month';
+        }
+
         /** @var AccountingService $accountingService */
         $accountingService = $this->get('procergs.lc.accounting');
 
-        $start = new \DateTime('-7 days');
-        $end = new \DateTime();
-        $data = $accountingService->getAccounting($start, $end);
-
-        // Reverse sort by access_token
-        uasort(
-            $data,
-            function ($a, $b) {
-                $totalA = $a['access_tokens'] + $a['api_usage'];
-                $totalB = $b['access_tokens'] + $b['api_usage'];
-                if ($totalA === $totalB) {
-                    return 0;
-                }
-
-                return ($totalA < $totalB) ? 1 : -1;
-            }
-        );
+        $start = new \DateTime("first day of {$month}");
+        $end = new \DateTime("last day of {$month}");
+        $data = $accountingService->getAccounting($start, $end)->getReport([
+            'include_inactive' => false,
+            'sort' => AccountingReport::SORT_ORDER_DESC,
+        ]);
 
         return [
+            'monthChoices' => $monthChoices,
+            'start' => $start,
+            'end' => $end,
             'data' => $data,
         ];
     }
@@ -67,6 +85,7 @@ class AdminController extends Controller
         $client = $this->getClient($clientId);
         $link = $this->getProcergsLink($client);
         $initials = $systemsRegistry->getSystemInitials($client);
+        $owners = $systemsRegistry->getSystemOwners($client);
 
         $form = $this->createForm('PROCERGS\LoginCidadao\AccountingBundle\Form\ProcergsLinkType', $link);
         $form->handleRequest($request);
@@ -82,6 +101,7 @@ class AdminController extends Controller
             'client' => $client,
             'link' => $link,
             'initials' => $initials,
+            'owners' => $owners,
             'form' => $form->createView(),
         ];
     }

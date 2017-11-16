@@ -18,6 +18,7 @@ use LoginCidadao\TaskStackBundle\Model\IntentTask;
 use LoginCidadao\TaskStackBundle\Model\RouteTaskTarget;
 use LoginCidadao\TaskStackBundle\Model\TaskInterface;
 use LoginCidadao\TaskStackBundle\Model\TaskStack;
+use LoginCidadao\TaskStackBundle\Model\TaskTargetInterface;
 use LoginCidadao\TaskStackBundle\Model\UrlTaskTarget;
 use LoginCidadao\TaskStackBundle\TaskStackEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -97,6 +98,7 @@ class TaskStackManager implements TaskStackManagerInterface
         if ($isSkipped === false && $stack->hasTask($task) === false) {
             if ($intentTask) {
                 $this->addNotSkippedTaskOnce($intentTask);
+                $stack = $this->getStack();
             }
             $stack->push($task);
             $this->updateStack($stack);
@@ -159,13 +161,7 @@ class TaskStackManager implements TaskStackManagerInterface
 
         if (false === $task->isTaskRoute($request->attributes->get('_route'))) {
             $target = $task->getTarget();
-            if ($target instanceof RouteTaskTarget) {
-                $url = $this->router->generate($target->getRoute(), $target->getParameters());
-            } elseif ($target instanceof UrlTaskTarget) {
-                $url = $target->getUrl();
-            } else {
-                throw new UnsupportedTargetException($target);
-            }
+            $url = $this->getTargetUrl($target);
 
             return new RedirectResponse($url);
         }
@@ -251,5 +247,24 @@ class TaskStackManager implements TaskStackManagerInterface
     public function hasIntentTask()
     {
         return $this->getStack()->hasIntentTask();
+    }
+
+    /**
+     * Converts a TaskTargetInterface into a string URL.
+     *
+     * @param TaskTargetInterface $target
+     * @return string
+     */
+    public function getTargetUrl(TaskTargetInterface $target)
+    {
+        if ($target instanceof RouteTaskTarget) {
+            $url = $this->router->generate($target->getRoute(), $target->getParameters());
+        } elseif ($target instanceof UrlTaskTarget) {
+            $url = $target->getUrl();
+        } else {
+            throw new UnsupportedTargetException($target);
+        }
+
+        return $url;
     }
 }

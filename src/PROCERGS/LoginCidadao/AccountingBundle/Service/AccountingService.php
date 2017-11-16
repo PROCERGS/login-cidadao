@@ -10,19 +10,20 @@
 
 namespace PROCERGS\LoginCidadao\AccountingBundle\Service;
 
-use LoginCidadao\OAuthBundle\Entity\AccessTokenRepository;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Entity\ClientRepository;
-use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
+use PROCERGS\Generic\Traits\OptionalLoggerAwareTrait;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLinkRepository;
+use PROCERGS\LoginCidadao\AccountingBundle\Model\AccountingReport;
+use PROCERGS\LoginCidadao\AccountingBundle\Model\GcsInterface;
+use Psr\Log\LoggerAwareInterface;
 
-class AccountingService
+class AccountingService implements LoggerAwareInterface
 {
+    use OptionalLoggerAwareTrait;
+
     /** @var SystemsRegistryService */
     private $systemsRegistry;
-
-    /** @var AccessTokenRepository */
-    private $accessTokenRepository;
 
     /** @var ClientRepository */
     private $clientRepository;
@@ -33,18 +34,15 @@ class AccountingService
     /**
      * AccountingService constructor.
      * @param SystemsRegistryService $systemsRegistry
-     * @param AccessTokenRepository $accessTokenRepository
      * @param ClientRepository $clientRepository
      * @param ProcergsLinkRepository $procergsLinkRepository
      */
     public function __construct(
         SystemsRegistryService $systemsRegistry,
-        AccessTokenRepository $accessTokenRepository,
         ClientRepository $clientRepository,
         ProcergsLinkRepository $procergsLinkRepository
     ) {
         $this->systemsRegistry = $systemsRegistry;
-        $this->accessTokenRepository = $accessTokenRepository;
         $this->clientRepository = $clientRepository;
         $this->procergsLinkRepository = $procergsLinkRepository;
     }
@@ -52,14 +50,23 @@ class AccountingService
     /**
      * @param \DateTime $start
      * @param \DateTime $end
-     * @return array
+     * @return AccountingReport
      */
     public function getAccounting(\DateTime $start, \DateTime $end)
     {
+        $this->log('info', "Getting accounting between {$start->format('c')} and {$end->format('c')}");
+        $start->setTime(0, 0, 0);
+        $end->setTime(0, 0, 0);
+
         $data = $this->clientRepository->getAccessTokenAccounting($start, $end);
         $actionLog = $this->clientRepository->getActionLogAccounting($start, $end);
 
-        $clientIds = array_merge(array_column($data, 'id'), array_column($actionLog, 'id'));
+        $this->log('info', "Loaded accounting data");
+
+        $clientIds = array_unique(array_merge(
+            array_column($data, 'id'),
+            array_column($actionLog, 'id')
+        ));
 
         $clients = [];
         /** @var Client $client */
@@ -67,83 +74,44 @@ class AccountingService
             $clients[$client->getId()] = $client;
         }
 
+        $this->log('info', "Loading linked clients...");
         $linked = $this->systemsRegistry->fetchLinked($clients, $this->procergsLinkRepository);
 
-        $report = [];
+        $this->log('info', "Preparing AccountingReport object...");
+        $report = new AccountingReport($this->systemsRegistry, $linked);
         foreach ($data as $usage) {
             /** @var \LoginCidadao\OAuthBundle\Entity\Client $client */
-            $client = $clients[$usage['id']];
-            $report = $this->addReportEntry($report, $client, $linked, $usage['access_tokens'], null);
+            $report->addEntry($clients[$usage['id']], $usage['access_tokens'], null);
         }
 
         foreach ($actionLog as $action) {
             /** @var \LoginCidadao\OAuthBundle\Entity\Client $client */
-            $client = $clients[$action['id']];
-            $report = $this->addReportEntry($report, $client, $linked, null, $action['api_usage']);
+            $report->addEntry($clients[$action['id']], null, $action['api_usage']);
         }
-
-        return array_map(
-            function ($value) {
-                /** @var \LoginCidadao\OAuthBundle\Entity\Client $client */
-                $client = $value['client'];
-                $value['client'] = [
-                    'client_id' => $client->getPublicId(),
-                    'name' => $client->getName(),
-                    'contacts' => $client->getContacts(),
-                ];
-                $value['redirect_uris'] = $client->getRedirectUris();
-
-                return $value;
-            },
-            $report
-        );
-    }
-
-    /**
-     * @param array $report
-     * @param Client $client
-     * @param array $linked
-     * @param int|null $accessTokens
-     * @param int|null $apiUsage
-     * @return array
-     */
-    private function addReportEntry(
-        array $report,
-        Client $client,
-        array $linked,
-        $accessTokens = null,
-        $apiUsage = null
-    ) {
-        $clientId = $client->getId();
-
-        if (array_key_exists($clientId, $report)) {
-            if ($accessTokens) {
-                $report[$clientId]['access_tokens'] = $accessTokens;
-            }
-            if ($apiUsage) {
-                $report[$clientId]['api_usage'] = $apiUsage;
-            }
-        } else {
-            $initials = $this->systemsRegistry->getSystemInitials($client);
-            if (array_key_exists($clientId, $linked)) {
-                $systemType = $linked[$clientId]->getSystemType();
-            } else {
-                // If there is no known link we assume it's an Internal system
-                // If this assumption is false then an alarm will go off to alert the accounting team to fix it
-                $systemType = ProcergsLink::TYPE_INTERNAL;
-
-                // Otherwise we could try to assert the type from the URLs we know
-                //$systemType = $this->systemsRegistry->getTypeFromUrl($client);
-            }
-            $report[$clientId] = [
-                'client' => $client,
-                'procergs_initials' => $initials,
-                'system_type' => $systemType,
-                'access_tokens' => $accessTokens ?: 0,
-                'api_usage' => $apiUsage ?: 0,
-            ];
-        }
+        $this->log('info', "AccountingReport object ready.");
 
         return $report;
+    }
+
+    public function getGcsInterface($interfaceName, \DateTime $start, \DateTime $end)
+    {
+        $data = $this->getAccounting($start, $end)->getReport(['include_inactive' => false]);
+
+        $this->log('info', "Preparing GCS Interface...");
+        $gcsInterface = new GcsInterface($interfaceName, $start, ['ignore_externals' => true]);
+
+        foreach ($data as $client) {
+            $this->log('info',
+                "Including {$client->getClient()->getPublicId()} into GCS Interface...",
+                ['entry' => $client]
+            );
+            $gcsInterface->addClient($client);
+        }
+        $this->log('info', "GCS Interface object is ready.");
+
+        $response = $gcsInterface->__toString();
+        $this->log('info', "Resulting GCS Interface length: ".strlen($response), ['response' => $response]);
+
+        return $response;
     }
 }

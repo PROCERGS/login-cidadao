@@ -1,7 +1,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
-    - { resource: memcached.yml }
+    - { resource: memcache.yml }
     - { resource: "@LoginCidadaoTOSBundle/Resources/config/config.yml" }
 
 framework:
@@ -107,7 +107,6 @@ assetic:
                 - 'bundles/logincidadaocore/css/forms.css'
                 - 'bundles/logincidadaocore/css/compact/*.css'
                 - 'bundles/logincidadaocore/css/components/awesome-bootstrap-checkbox.css'
-                - 'bundles/procergslogincidadaocore/css/compact/*.css'
         lc_task_email_validation_css:
             inputs:
                 - '@lc_compact_layout_css'
@@ -117,7 +116,6 @@ assetic:
                 - '@lc_compact_layout_css'
                 - '@intl_tel_input_css'
                 - 'bundles/logincidadaocore/css/login_register/*.css'
-                - 'bundles/procergslogincidadaocore/css/login_register/*.css'
         lc_authorization_css:
             inputs:
                 - '@lc_compact_layout_css'
@@ -150,13 +148,25 @@ assetic:
 # Doctrine Configuration
 doctrine:
     dbal:
-        driver:   %database_driver%
-        host:     %database_host%
-        port:     %database_port%
-        dbname:   %database_name%
-        user:     %database_user%
-        password: %database_password%
-        charset:  UTF8
+        default_connection: default
+        connections:
+            default:
+                driver:   %database_driver%
+                host:     %database_host%
+                port:     %database_port%
+                dbname:   %database_name%
+                user:     %database_user%
+                password: %database_password%
+                charset:  UTF8
+            logs:
+                logging:  false
+                driver:   %database_driver%
+                host:     %database_host%
+                port:     %database_port%
+                dbname:   %database_name%
+                user:     %database_user%
+                password: %database_password%
+                charset:  UTF8
         # if using pdo_sqlite as your database driver, add the path in parameters.yml
         # e.g. database_path: %kernel.root_dir%/data/data.db3
         # path:     %database_path%
@@ -164,23 +174,32 @@ doctrine:
             phone_number: Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType
 
     orm:
+        default_entity_manager: default
+        entity_managers:
+            default:
+                connection: default
+                auto_mapping: true
+                dql:
+                    string_functions:
+                      right: LoginCidadao\CoreBundle\DQL\Right
+                      countif: LoginCidadao\CoreBundle\DQL\CountIf
+                      lowerunaccent: LoginCidadao\CoreBundle\DQL\LowerUnaccent
+
+                    datetime_functions:
+                          date:       Oro\ORM\Query\AST\Functions\SimpleFunction
+
+                    numeric_functions:
+                        dayofweek:    Oro\ORM\Query\AST\Functions\SimpleFunction
+            logs:
+                connection: logs
+                mappings:
+                    LoginCidadaoLogBundle: ~
+
         auto_generate_proxy_classes: %kernel.debug%
-        auto_mapping: true
         resolve_target_entities:
             LoginCidadao\CoreBundle\Model\PersonInterface: %user.class%
             LoginCidadao\OAuthBundle\Model\OrganizationInterface: %organization.class%
             LoginCidadao\OAuthBundle\Model\ClientInterface: %oauth_client.class%
-        dql:
-          string_functions:
-            right: LoginCidadao\CoreBundle\DQL\Right
-            countif: LoginCidadao\CoreBundle\DQL\CountIf
-            lowerunaccent: LoginCidadao\CoreBundle\DQL\LowerUnaccent
-
-          datetime_functions:
-                date:       Oro\ORM\Query\AST\Functions\SimpleFunction
-
-          numeric_functions:
-              dayofweek:    Oro\ORM\Query\AST\Functions\SimpleFunction
 # Swiftmailer Configuration
 swiftmailer:
     transport: %mailer_transport%
@@ -234,6 +253,10 @@ fos_user:
     change_password:
         form:
             type: LoginCidadao\CoreBundle\Form\Type\ChangePasswordFormType
+
+    from_email:
+        address: %mailer_sender_mail%
+        sender_name: %mailer_sender_name%
 
 # Audit Trail
 simple_things_entity_audit:
@@ -316,6 +339,8 @@ parameters:
     organization.class: LoginCidadao\OAuthBundle\Entity\Organization
     oauth_client.class: LoginCidadao\OAuthBundle\Entity\Client
 
+    hwi_oauth.http_client.class: PROCERGS\Generic\CurlIPv4
+
 beelab_recaptcha2:
     request_method: curl_post
     site_key: "%recaptcha_public_key%"
@@ -394,7 +419,7 @@ fos_rest:
     disable_csrf_role: ROLE_API
 
 nelmio_api_doc:
-    name: MeuRS API
+    name: Login Cidadão API
 
 jms_serializer:
     metadata:
@@ -574,6 +599,13 @@ login_cidadao_phone_verification:
     enabled: true
     verification_code:
         length: 6
+
+monolog:
+    handlers:
+        db:
+            type: service
+            id: lc.monolog.db.handler
+            level: info
 
 procergs_login_cidadao_monitor:
     checks:

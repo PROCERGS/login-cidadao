@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of the login-cidadao project or it's bundles.
  *
  * (c) Guilherme Donato <guilhermednt on github>
@@ -10,21 +10,25 @@
 
 namespace LoginCidadao\OpenIDBundle\Storage;
 
+use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
 use OAuth2\ServerBundle\Storage\AccessToken as BaseClass;
 use OAuth2\Storage\AccessTokenInterface;
 use Doctrine\ORM\EntityManager;
-use Ramsey\Uuid\Uuid;
 
 class AccessToken extends BaseClass implements AccessTokenInterface
 {
     /** @var EntityManager */
     private $em;
 
-    /** @var string */
-    private $pairwiseSubjectIdSalt;
+    /** @var SubjectIdentifierService */
+    private $subjectIdentifierService;
 
     public function __construct(EntityManager $EntityManager)
     {
+        parent::__construct($EntityManager);
         $this->em = $EntityManager;
     }
 
@@ -36,7 +40,7 @@ class AccessToken extends BaseClass implements AccessTokenInterface
      * @param $oauth_token
      * oauth_token to be check with.
      *
-     * @return
+     * @return array|null
      * An associative array as below, and return NULL if the supplied oauth_token
      * is invalid:
      * - client_id: Stored client identifier.
@@ -47,23 +51,27 @@ class AccessToken extends BaseClass implements AccessTokenInterface
      */
     public function getAccessToken($oauth_token)
     {
+        /** @var \LoginCidadao\OAuthBundle\Entity\AccessToken $accessToken */
         $accessToken = $this->em->getRepository('LoginCidadaoOAuthBundle:AccessToken')
-            ->findOneBy(array('token' => $oauth_token));
+            ->findOneBy(['token' => $oauth_token]);
 
         if (!$accessToken) {
             return null;
         }
 
-        // Get Client
+        /** @var Client $client */
         $client = $accessToken->getClient();
 
-        return array(
+        /** @var PersonInterface $person */
+        $person = $accessToken->getUser();
+
+        return [
             'client_id' => $client->getClientId(),
-            'user_id' => $accessToken->getUserId($this->pairwiseSubjectIdSalt),
+            'user_id' => $this->subjectIdentifierService->getSubjectIdentifier($person, $client),
             'expires' => $accessToken->getExpiresAt(),
             'scope' => $accessToken->getScope(),
-            'id_token' => $accessToken->getIdToken()
-        );
+            'id_token' => $accessToken->getIdToken(),
+        ];
     }
 
     /**
@@ -71,26 +79,25 @@ class AccessToken extends BaseClass implements AccessTokenInterface
      *
      * We need to store access token data as we create and verify tokens.
      *
-     * @param $oauth_token
+     * @param string $oauth_token
      * oauth_token to be stored.
-     * @param $client_id
+     * @param string $client_id
      * Client identifier to be stored.
-     * @param $user_id
+     * @param string $user_id
      * User identifier to be stored.
-     * @param int    $expires
-     *                        Expiration to be stored as a Unix timestamp.
-     * @param string $scope
-     *                        (optional) Scopes to be stored in space-separated string.
-     *
+     * @param int $expires Expiration to be stored as a Unix timestamp.
+     * @param string $scope (optional) Scopes to be stored in space-separated string.
+     * @param null|string $id_token
+     * @return null|void
      * @ingroup oauth2_section_4
      */
-    public function setAccessToken($oauth_token, $client_id, $user_id, $expires,
-                                    $scope = null, $id_token = null)
+    public function setAccessToken($oauth_token, $client_id, $user_id, $expires, $scope = null, $id_token = null)
     {
         // Get Client Entity
-        $id     = explode('_', $client_id);
-        $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')
-            ->find($id[0]);
+        $id = explode('_', $client_id);
+
+        /** @var ClientInterface $client */
+        $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')->find($id[0]);
 
         if (!$client) {
             return null;
@@ -99,8 +106,8 @@ class AccessToken extends BaseClass implements AccessTokenInterface
         if ($user_id === null) {
             return null;
         } else {
-            $user = $this->em->getRepository('LoginCidadaoCoreBundle:Person')
-                ->find($user_id);
+            /** @var PersonInterface $user */
+            $user = $this->em->getRepository('LoginCidadaoCoreBundle:Person')->find($user_id);
         }
 
         // Create Access Token
@@ -117,8 +124,8 @@ class AccessToken extends BaseClass implements AccessTokenInterface
         $this->em->flush();
     }
 
-    public function setPairwiseSubjectIdSalt($pairwiseSubjectIdSalt)
+    public function setSubjectIdentifierService(SubjectIdentifierService $subjectIdentifierService)
     {
-        $this->pairwiseSubjectIdSalt = $pairwiseSubjectIdSalt;
+        $this->subjectIdentifierService = $subjectIdentifierService;
     }
 }
