@@ -516,6 +516,7 @@ class TagUri implements UriInterface
         if (!preg_match("/{$overallRegex}/", $string, $overall)) {
             throw new \InvalidArgumentException("The provided tag URI doesn't seem to be valid: {$string}");
         }
+        $overall = array_merge(['fragment' => ''], $overall);
 
         $taggingEntity = self::getTaggingEntityRegex();
         if (preg_match("/^{$taggingEntity}/", $overall['taggingEntity'], $m) !== 1) {
