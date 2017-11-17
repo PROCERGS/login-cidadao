@@ -16,6 +16,7 @@ use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository;
+use LoginCidadao\RemoteClaimsBundle\Exception\ClaimProviderNotFoundException;
 use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\HttpUri;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface;
@@ -82,6 +83,7 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
     public function discoverClaimUri(TagUri $claimName)
     {
         $uri = HttpUri::createFromComponents([
+            'scheme' => 'https',
             'host' => $claimName->getAuthorityName(),
             'query' => http_build_query([
                 'resource' => $claimName,
@@ -111,19 +113,23 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
     {
         $remoteClaim = $this->fetchRemoteClaim($claimUri);
 
-        $provider = $this->getExistingClaimProvider($remoteClaim->getProvider());
-        if ($provider instanceof ClaimProviderInterface) {
-            $remoteClaim->setProvider($provider);
-            $this->em->persist($provider);
-        }
-
         $existingClaim = $this->claimRepo->findOneBy(['name' => $remoteClaim->getName()]);
         if ($existingClaim instanceof RemoteClaimInterface) {
             $remoteClaim = $existingClaim;
+            $newClaim = false;
+        } else {
+            $newClaim = true;
         }
 
-        $this->em->persist($remoteClaim);
-        $this->em->flush();
+        $provider = $this->getExistingClaimProvider($remoteClaim->getProvider());
+        if ($provider instanceof ClaimProviderInterface) {
+            $remoteClaim->setProvider($provider);
+        }
+
+        if ($newClaim) {
+            $this->em->persist($remoteClaim);
+            $this->em->flush();
+        }
 
         return $remoteClaim;
     }
@@ -143,17 +149,26 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
         return reset($clients);
     }
 
+    /**
+     * Gets the persisted/ORM-attached ClaimProvider
+     * @param ClaimProviderInterface|null $provider
+     * @return ClientInterface|null
+     * @throws ClaimProviderNotFoundException
+     */
     private function getExistingClaimProvider(ClaimProviderInterface $provider = null)
     {
-        if (!$provider instanceof ClaimProviderInterface) {
-            return null;
+        $existingProvider = null;
+        if ($provider instanceof ClaimProviderInterface) {
+            $existingProvider = $this->findClaimProvider($provider->getRedirectUris());
         }
 
-        $existingProvider = $this->findClaimProvider($provider->getRedirectUris());
         if ($existingProvider instanceof ClaimProviderInterface) {
             return $existingProvider;
         }
 
-        return $provider;
+        // No pre-existing provider was found. Throw Exception!
+        throw new ClaimProviderNotFoundException(
+            "A Claim Provider was not found. This Identity Provider does NOT support Dynamic Claim Provider registration, so make sure it is already registered."
+        );
     }
 }

@@ -11,144 +11,180 @@
 namespace LoginCidadao\RemoteClaimsBundle\Tests\Fetcher;
 
 use Doctrine\ORM\EntityManagerInterface;
-use GuzzleHttp\Client;
-use GuzzleHttp\Message\Request;
-use GuzzleHttp\Subscriber\History;
-use GuzzleHttp\Subscriber\Mock;
 use LoginCidadao\OAuthBundle\Entity\ClientRepository;
-use LoginCidadao\OAuthBundle\Model\ClientInterface;
-use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository;
 use LoginCidadao\RemoteClaimsBundle\Fetcher\RemoteClaimFetcher;
-use LoginCidadao\RemoteClaimsBundle\Model\HttpUri;
-use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
-use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
+use LoginCidadao\RemoteClaimsBundle\Tests\Http\HttpMocker;
 use LoginCidadao\RemoteClaimsBundle\Tests\Parser\RemoteClaimParserTest;
 
 class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
 {
-    public function testFetchByUri()
-    {
-        $this->runTestFetch('https://dummy.com');
-    }
-
-    public function testFetchByUriObject()
-    {
-        $this->runTestFetch(HttpUri::createFromString('https://dummy.com'));
-    }
-
-    public function testFetchByTag()
-    {
-        $data = RemoteClaimParserTest::$claimMetadata;
-
-        $this->runTestFetch($data['claim_name'], 'https://dummy.com');
-    }
-
-    public function testFetchByTagObject()
-    {
-        $data = RemoteClaimParserTest::$claimMetadata;
-
-        $this->runTestFetch(TagUri::createFromString($data['claim_name']), 'https://dummy.com');
-    }
-
-    public function testDiscoveryFailure()
-    {
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
-        $data = RemoteClaimParserTest::$claimMetadata;
-        $data['claim_name'] = 'tag:example.com,2017:my_claim';
-
-        $this->runTestFetch(TagUri::createFromString('tag:example.com,2018:my_claim'), 'https://dummy.com');
-    }
-
-    public function testGetNewRemoteClaim()
+    /**
+     * Test the Claim fetch using HTTP URI.
+     */
+    public function testFetchByHttpUri()
     {
         $uri = 'https://dummy.com';
-        $data = RemoteClaimParserTest::$claimMetadata;
-        $history = new History();
 
-        $httpClient = $this->getHttpClient($data, $history);
-        $em = $this->getEntityManager();
-        $em->expects($this->exactly(2))->method('persist')->willReturnCallback(function ($entity) {
-            if (!$entity instanceof ClientInterface
-                && !$entity instanceof RemoteClaimInterface) {
-                $this->fail('Expected ClientInterface or RemoteClaimInterface to be persisted.');
-            }
-        });
-        $em->expects($this->once())->method('flush');
-
-        $remoteClaimRepo = $this->getRemoteClaimRepository();
-        $clientRepo = $this->getClientRepository();
-
-        $fetcher = new RemoteClaimFetcher($httpClient, $em, $remoteClaimRepo, $clientRepo);
-        $fetcher->getRemoteClaim($uri);
-    }
-
-    public function testGetExistingRemoteClaim()
-    {
-        $uri = 'https://dummy.com';
-        $data = RemoteClaimParserTest::$claimMetadata;
-        $history = new History();
-
-        $remoteClaim = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface');
-
-        $httpClient = $this->getHttpClient($data, $history);
-        $em = $this->getEntityManager();
-        $remoteClaimRepo = $this->getRemoteClaimRepository();
-        $remoteClaimRepo->expects($this->once())->method('findOneBy')->willReturn($remoteClaim);
-        $clientRepo = $this->getClientRepository();
-
-        $fetcher = new RemoteClaimFetcher($httpClient, $em, $remoteClaimRepo, $clientRepo);
-        $this->assertEquals($remoteClaim, $fetcher->getRemoteClaim($uri));
-    }
-
-    private function runTestFetch($uri, $expectedUri = null)
-    {
         $data = RemoteClaimParserTest::$claimMetadata;
 
-        /** @var History $history */
-        $history = new History();
-
-        $httpClient = $this->getHttpClient($data, $history, $expectedUri);
-        $em = $this->getEntityManager();
-        $remoteClaimRepo = $this->getRemoteClaimRepository();
-        $clientRepo = $this->getClientRepository();
-
-        $fetcher = new RemoteClaimFetcher($httpClient, $em, $remoteClaimRepo, $clientRepo);
+        $fetcher = $this->getFetcher(new HttpMocker($data));
         $remoteClaim = $fetcher->fetchRemoteClaim($uri);
 
-        $this->assertEquals($data['claim_name'], $remoteClaim->getName());
-
-        /** @var Request $request */
-        $request = $history->getRequests()[$expectedUri ? 1 : 0];
-        $this->assertEquals($expectedUri ?: $uri, $request->getUrl());
+        $this->assertInstanceOf('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface', $remoteClaim);
+        $this->assertEquals($data['claim_display_name'], $remoteClaim->getDisplayName());
     }
 
-    private function getHttpClient($data, &$history, $expectedUri = null)
+    /**
+     * Test the Claim fetch using Tag URI.
+     */
+    public function testFetchByTagUri()
     {
-        $client = new Client();
+        $uri = 'https://dummy.com';
 
-        $metadata = json_encode($data);
-        $length = strlen($metadata);
+        $data = RemoteClaimParserTest::$claimMetadata;
+        $tagUri = $data['claim_name'];
 
-        $responses = ["HTTP/1.1 200 OK\r\n\Content-Length: {$length}\r\n\r\n{$metadata}"];
+        $httpMocker = new HttpMocker($data, $uri);
+        $fetcher = $this->getFetcher($httpMocker);
+        $remoteClaim = $fetcher->fetchRemoteClaim($tagUri);
 
-        if ($expectedUri) {
-            $discoveryResponse = json_encode([
-                'subject' => $data['claim_name'],
-                'links' => [
-                    ['rel' => 'http://openid.net/specs/connect/1.0/claim', 'href' => $expectedUri],
-                ],
-            ]);
-            $discoveryLen = strlen($discoveryResponse);
-            array_unshift($responses,
-                "HTTP/1.1 200 OK\r\n\Content-Length: {$discoveryLen}\r\n\r\n{$discoveryResponse}");
+        $requests = $httpMocker->getHistory()->getRequests();
+        $firstRequest = reset($requests);
+
+        $this->assertInstanceOf('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface', $remoteClaim);
+        $this->assertEquals($data['claim_display_name'], $remoteClaim->getDisplayName());
+        $this->assertCount(2, $requests);
+        $this->assertEquals('https://example.com?rel=http%3A%2F%2Fopenid.net%2Fspecs%2Fconnect%2F1.0%2Fclaim',
+            $firstRequest->getUrl());
+    }
+
+    /**
+     * This test assumes the Remote Claim is already known by the IdP.
+     * The existing Remote Claim is expected to be returned.
+     */
+    public function testExistingClaim()
+    {
+        $claimUri = 'https://dummy.com';
+
+        $provider = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
+        $provider->expects($this->once())->method('getRedirectUris')->willReturn(['https://redirect.uri']);
+
+        $existingClaim = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface');
+        $existingClaim->expects($this->once())->method('getProvider')->willReturn($provider);
+
+        $claimRepository = $this->getClaimRepository();
+        $claimRepository->expects($this->once())->method('findOneBy')->willReturn($existingClaim);
+
+        $clientRepository = $this->getClientRepository();
+        $clientRepository->expects($this->once())->method('findByRedirectUris')->willReturn([$provider]);
+
+        $em = $this->getEntityManager();
+        $em->expects($this->never())->method('persist');
+
+        $fetcher = $this->getFetcher(null, $em, $claimRepository, $clientRepository);
+        $actual = $fetcher->getRemoteClaim($claimUri);
+
+        $this->assertEquals($existingClaim, $actual);
+    }
+
+    /**
+     * This method tests a new Remote Claim, unknown by the IdP.
+     * The Claim MUST be fetched and persisted.
+     */
+    public function testNewClaim()
+    {
+        $claimUri = 'https://dummy.com';
+
+        $provider = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
+
+        $existingClaim = null;
+
+        $claimRepository = $this->getClaimRepository();
+        $claimRepository->expects($this->once())->method('findOneBy')->willReturn($existingClaim);
+
+        $clientRepository = $this->getClientRepository();
+        $clientRepository->expects($this->once())->method('findByRedirectUris')->willReturn([$provider]);
+
+        $em = $this->getEntityManager();
+        $em->expects($this->once())->method('persist')
+            ->with($this->isInstanceOf('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface'));
+
+        $fetcher = $this->getFetcher(null, $em, $claimRepository, $clientRepository);
+        $actual = $fetcher->getRemoteClaim($claimUri);
+
+        $this->assertInstanceOf('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface', $actual);
+    }
+
+    /**
+     * Test that the method fails when the Claim Provider is not already persisted.
+     */
+    public function testNonExistentProvider()
+    {
+        $this->setExpectedException('LoginCidadao\RemoteClaimsBundle\Exception\ClaimProviderNotFoundException');
+        $claimUri = 'https://dummy.com';
+
+        $clientRepository = $this->getClientRepository();
+        $clientRepository->expects($this->once())->method('findByRedirectUris')->willReturn(null);
+
+        $em = $this->getEntityManager();
+        $em->expects($this->never())->method('persist');
+
+        $fetcher = $this->getFetcher(null, $em, null, $clientRepository);
+        $fetcher->getRemoteClaim($claimUri);
+    }
+
+    /**
+     * It should also fail when more than one Claim Provider is found.
+     */
+    public function testManyProviders()
+    {
+        $this->setExpectedException('\InvalidArgumentException');
+        $claimUri = 'https://dummy.com';
+
+        $provider1 = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
+        $provider2 = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
+
+        $clientRepository = $this->getClientRepository();
+        $clientRepository->expects($this->once())->method('findByRedirectUris')->willReturn([$provider1, $provider2]);
+
+        $em = $this->getEntityManager();
+        $em->expects($this->never())->method('persist');
+
+        $fetcher = $this->getFetcher(null, $em, null, $clientRepository);
+        $fetcher->getRemoteClaim($claimUri);
+    }
+
+    /**
+     * @param HttpMocker|null $httpMocker
+     * @param EntityManagerInterface|null $em
+     * @param RemoteClaimRepository|null $claimRepository
+     * @param ClientRepository|null $clientRepository
+     * @return RemoteClaimFetcher
+     */
+    private function getFetcher(
+        HttpMocker $httpMocker = null,
+        EntityManagerInterface $em = null,
+        RemoteClaimRepository $claimRepository = null,
+        ClientRepository $clientRepository = null
+    ) {
+        if ($httpMocker === null) {
+            $httpMocker = new HttpMocker();
         }
+        if ($em === null) {
+            $em = $this->getEntityManager();
+        }
+        if ($claimRepository === null) {
+            $claimRepository = $this->getClaimRepository();
+        }
+        if ($clientRepository === null) {
+            $clientRepository = $this->getClientRepository();
+        }
+        $httpClient = $httpMocker->getClient();
 
-        $mock = new Mock($responses);
-        $client->getEmitter()->attach($history);
-        $client->getEmitter()->attach($mock);
+        $fetcher = new RemoteClaimFetcher($httpClient, $em, $claimRepository, $clientRepository);
 
-        return $client;
+        return $fetcher;
     }
 
     /**
@@ -162,14 +198,13 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|RemoteClaimRepository
+     * @return RemoteClaimRepository|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getRemoteClaimRepository()
+    private function getClaimRepository()
     {
-        $repo = $this->getMockBuilder('LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository')
-            ->disableOriginalConstructor()->getMock();
-
-        return $repo;
+        return $this->getMockBuilder('LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
