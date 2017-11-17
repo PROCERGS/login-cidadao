@@ -10,8 +10,12 @@
 
 namespace LoginCidadao\RemoteClaimsBundle\Tests\EventSubscriber;
 
+use LoginCidadao\OpenIDBundle\Event\AuthorizationEvent;
 use LoginCidadao\OpenIDBundle\LoginCidadaoOpenIDEvents;
 use LoginCidadao\RemoteClaimsBundle\EventSubscriber\AuthorizationSubscriber;
+use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,6 +37,8 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
         ];
 
         $remoteClaims = [];
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|RemoteClaimFetcherInterface $fetcher */
         $fetcher = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface');
         $fetcher->expects($this->atLeastOnce())->method('getRemoteClaim')
             ->willReturnCallback(function ($scope) use (&$remoteClaims) {
@@ -41,6 +47,7 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
                 return $this->getRemoteClaim();
             });
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|AuthorizationEvent $event */
         $event = $this->getMockBuilder('LoginCidadao\OpenIDBundle\Event\AuthorizationEvent')
             ->disableOriginalConstructor()->getMock();
         $event->expects($this->atLeastOnce())->method('getScope')->willReturn($scope);
@@ -49,6 +56,37 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
         $subscriber->onNewAuthorizationRequest($event);
 
         $this->assertCount(2, $remoteClaims);
+    }
+
+    public function testOnRemoteClaimNotFound()
+    {
+        $scope = [
+            'openid',
+            'simple_claim',
+            'https://not.actually.a.remote.claim/fake',
+        ];
+
+        $remoteClaims = [];
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|RemoteClaimFetcherInterface $fetcher */
+        $fetcher = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface');
+        $fetcher->expects($this->atLeastOnce())->method('getRemoteClaim')
+            ->willThrowException(new \RuntimeException('Random error'));
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface $logger */
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger->expects($this->once())->method('log')->with(LogLevel::ERROR);
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|AuthorizationEvent $event */
+        $event = $this->getMockBuilder('LoginCidadao\OpenIDBundle\Event\AuthorizationEvent')
+            ->disableOriginalConstructor()->getMock();
+        $event->expects($this->atLeastOnce())->method('getScope')->willReturn($scope);
+
+        $subscriber = new AuthorizationSubscriber($fetcher);
+        $subscriber->setLogger($logger);
+        $subscriber->onNewAuthorizationRequest($event);
+
+        $this->assertEmpty($remoteClaims);
     }
 
     private function getRemoteClaim()
