@@ -65,8 +65,8 @@ class RemoteClaim implements RemoteClaimInterface
     /**
      * @var ClaimProviderInterface
      *
-     * @ ORM\OneToOne(targetEntity="LoginCidadao\OAuthBundle\Entity\Client")
-     * @ ORM\JoinColumn(name="provider_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="LoginCidadao\OAuthBundle\Entity\Client")
+     * @ORM\JoinColumn(name="provider_id", referencedColumnName="id")
      */
     private $provider;
 
