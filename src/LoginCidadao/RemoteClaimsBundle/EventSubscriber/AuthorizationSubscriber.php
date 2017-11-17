@@ -10,16 +10,20 @@
 
 namespace LoginCidadao\RemoteClaimsBundle\EventSubscriber;
 
+use LoginCidadao\LogBundle\Traits\LoggerAwareTrait;
 use LoginCidadao\OpenIDBundle\Event\AuthorizationEvent;
 use LoginCidadao\OpenIDBundle\LoginCidadaoOpenIDEvents;
 use LoginCidadao\RemoteClaimsBundle\Model\HttpUri;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
+use Psr\Log\LoggerAwareInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class AuthorizationSubscriber implements EventSubscriberInterface
+class AuthorizationSubscriber implements EventSubscriberInterface, LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     /** @var RemoteClaimFetcherInterface */
     private $claimFetcher;
 
@@ -46,9 +50,16 @@ class AuthorizationSubscriber implements EventSubscriberInterface
     {
         foreach ($event->getScope() as $scope) {
             if ($this->checkHttpUri($scope) || $this->checkTagUri($scope)) {
-                $remoteClaim = $this->claimFetcher->getRemoteClaim($scope);
-                $this->remoteClaims[] = $remoteClaim;
-                $event->addRemoteClaim($remoteClaim);
+                try {
+                    $remoteClaim = $this->claimFetcher->getRemoteClaim($scope);
+                    $this->remoteClaims[] = $remoteClaim;
+                    $event->addRemoteClaim($remoteClaim);
+                } catch (\Exception $e) {
+                    $this->error(
+                        "Error retrieving remote claim {$scope}: {$e->getMessage()}",
+                        ['exception' => $e]
+                    );
+                }
             }
         }
     }
