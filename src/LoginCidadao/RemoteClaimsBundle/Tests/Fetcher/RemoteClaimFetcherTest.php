@@ -59,6 +59,15 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
             $firstRequest->getUrl());
     }
 
+    public function testFetchNotFound()
+    {
+        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
+
+        $tagUri = 'tag:example.com,2018:my_claim';
+        $fetcher = $this->getFetcher();
+        $fetcher->fetchRemoteClaim($tagUri);
+    }
+
     /**
      * This test assumes the Remote Claim is already known by the IdP.
      * The existing Remote Claim is expected to be returned.
