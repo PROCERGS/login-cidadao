@@ -184,7 +184,7 @@ class ClientRepository extends EntityRepository
         $uris = [];
         $query = $this->createQueryBuilder('c');
         foreach ($redirectUris as $k => $uri) {
-            $quoted = sprintf('"%s"', $uri);
+            $quoted = sprintf('%%"%s"%%', $uri);
             $uris["uri{$k}"] = $quoted;
             $query->orWhere("c.redirectUris LIKE :uri{$k}");
         }
