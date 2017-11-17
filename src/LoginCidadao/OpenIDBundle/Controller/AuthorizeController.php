@@ -27,6 +27,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class AuthorizeController extends BaseController
@@ -139,10 +140,17 @@ class AuthorizeController extends BaseController
         if (!$isAuthorized) {
             $authEvent = new AuthorizationEvent($person, $client, $request->get('scope'));
             $dispatcher->dispatch(LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION_REQUEST, $authEvent);
-            dump($authEvent->getRemoteClaims());
+            //dump($authEvent->getRemoteClaims());
         }
 
-        return parent::validateAuthorizeAction();
+        // TODO: this following method is breaking the Remote Claim feature
+        // This method checks if the requested claims are valid, but remote claims would never be considered valid
+        // Alternatives:
+        //      a) try to remove the remote claim from the request's scope;
+        //      b) inject it to the Storage\ClientCredentials::getClientScope()
+        $response = parent::validateAuthorizeAction();
+        return JsonResponse::create();
+        return $response;
     }
 
     private function handleAuthorize(Server $server, $isAuthorized)
