@@ -85,8 +85,9 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
         $uri = HttpUri::createFromComponents([
             'scheme' => 'https',
             'host' => $claimName->getAuthorityName(),
+            'path' => '/.well-known/webfinger',
             'query' => http_build_query([
-                'resource' => $claimName,
+                'resource' => $claimName->__toString(),
                 'rel' => 'http://openid.net/specs/connect/1.0/claim',
             ]),
         ]);

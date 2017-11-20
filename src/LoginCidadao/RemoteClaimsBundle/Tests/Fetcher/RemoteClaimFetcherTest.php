@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository;
 use LoginCidadao\RemoteClaimsBundle\Fetcher\RemoteClaimFetcher;
+use LoginCidadao\RemoteClaimsBundle\Model\HttpUri;
 use LoginCidadao\RemoteClaimsBundle\Tests\Http\HttpMocker;
 use LoginCidadao\RemoteClaimsBundle\Tests\Parser\RemoteClaimParserTest;
 
@@ -55,8 +56,16 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface', $remoteClaim);
         $this->assertEquals($data['claim_display_name'], $remoteClaim->getDisplayName());
         $this->assertCount(2, $requests);
-        $this->assertEquals('https://example.com?rel=http%3A%2F%2Fopenid.net%2Fspecs%2Fconnect%2F1.0%2Fclaim',
-            $firstRequest->getUrl());
+
+        $webFingerUrl = HttpUri::createFromString($firstRequest->getUrl());
+        $this->assertEquals('https', $webFingerUrl->getScheme());
+        $this->assertEquals('example.com', $webFingerUrl->getHost());
+        $this->assertEquals('/.well-known/webfinger', $webFingerUrl->getPath());
+
+        $webFingerParams = explode('&', $webFingerUrl->getQuery());
+        $this->assertContains('rel=http%3A%2F%2Fopenid.net%2Fspecs%2Fconnect%2F1.0%2Fclaim', $webFingerParams);
+        $encodedTag = urlencode($tagUri);
+        $this->assertContains("resource={$encodedTag}", $webFingerParams);
     }
 
     public function testFetchNotFound()
