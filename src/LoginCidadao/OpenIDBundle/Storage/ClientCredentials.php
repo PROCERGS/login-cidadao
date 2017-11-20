@@ -11,7 +11,11 @@
 namespace LoginCidadao\OpenIDBundle\Storage;
 
 use Doctrine\ORM\EntityManagerInterface;
+use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
+use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository;
+use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use OAuth2\ServerBundle\Storage\ClientCredentials as BaseClass;
 
 class ClientCredentials extends BaseClass
@@ -119,17 +123,20 @@ class ClientCredentials extends BaseClass
     /**
      * Get the scope associated with this client
      *
-     * @return STRING the space-delineated scope list for the specified client_id
+     * @return string the space-delineated scope list for the specified client_id
      */
     public function getClientScope($client_id)
     {
         $client = $this->getClient($client_id);
 
-        if (!$client) {
+        if (!$client instanceof ClientInterface) {
             return false;
         }
 
-        return implode(' ', $client->getAllowedScopes());
+        $remoteClaims = $this->getRemoteClaimsTags($this->getRemoteClaims($client));
+        $allowedScopes = array_merge($client->getAllowedScopes(), $remoteClaims);
+
+        return implode(' ', $allowedScopes);
     }
 
     /**
@@ -145,17 +152,45 @@ class ClientCredentials extends BaseClass
             $randomId = $parts[1];
         }
 
+        /** @var ClientRepository $repo */
         $repo = $this->em->getRepository('LoginCidadaoOAuthBundle:Client');
 
         if ($randomId) {
+            /** @var ClientInterface $client */
             $client = $repo->findOneBy([
                 'id' => $client_id,
                 'randomId' => $randomId,
             ]);
         } else {
+            /** @var ClientInterface $client */
             $client = $repo->find($client_id);
         }
 
         return $client;
+    }
+
+    /**
+     * @param ClientInterface $client
+     * @return array|RemoteClaimInterface[]
+     */
+    private function getRemoteClaims(ClientInterface $client)
+    {
+        /** @var RemoteClaimRepository $repo */
+        $repo = $this->em->getRepository('LoginCidadaoRemoteClaimsBundle:RemoteClaim');
+
+        $remoteClaims = $repo->findByClient($client);
+
+        return $remoteClaims;
+    }
+
+    private function getRemoteClaimsTags(array $remoteClaims)
+    {
+        if (count($remoteClaims) > 0) {
+            return array_map(function (RemoteClaimInterface $claim) {
+                return $claim->getName();
+            }, $remoteClaims);
+        }
+
+        return [];
     }
 }

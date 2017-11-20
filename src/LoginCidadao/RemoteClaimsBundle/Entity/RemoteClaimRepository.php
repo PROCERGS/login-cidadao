@@ -11,8 +11,27 @@
 namespace LoginCidadao\RemoteClaimsBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 
+/**
+ * Class RemoteClaimRepository
+ * @package LoginCidadao\RemoteClaimsBundle\Entity
+ *
+ * @codeCoverageIgnore
+ */
 class RemoteClaimRepository extends EntityRepository
 {
-    //
+    /**
+     * @param ClientInterface $client
+     * @return array|RemoteClaimInterface[]
+     */
+    public function findByClient(ClientInterface $client)
+    {
+        return $this->createQueryBuilder('r')
+            ->where('r.provider = :client')
+            ->setParameter('client', $client)
+            ->getQuery()
+            ->getResult();
+    }
 }
