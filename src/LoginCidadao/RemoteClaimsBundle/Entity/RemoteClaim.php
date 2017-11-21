@@ -71,6 +71,14 @@ class RemoteClaim implements RemoteClaimInterface
     private $provider;
 
     /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * @return TagUri
      */
     public function getName()

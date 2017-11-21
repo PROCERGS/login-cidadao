@@ -20,6 +20,7 @@ use LoginCidadao\OAuthBundle\Service\OrganizationService;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OpenIDBundle\Validator\SectorIdentifierUriChecker;
+use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use OAuth2\Server;
 use OAuth2\ServerBundle\Entity\Scope;
 use OAuth2\ServerBundle\Controller\AuthorizeController as BaseController;
@@ -63,9 +64,12 @@ class AuthorizeController extends BaseController
      * @Template()
      * @param Request $request
      * @return array
+     *
+     * @deprecated
      */
     public function authorizeAction(Request $request)
     {
+        throw new \RuntimeException('This class should not be used!');
         $client = $this->getClient($request);
 
         $scope = explode(' ', $request->get('scope'));
@@ -110,7 +114,7 @@ class AuthorizeController extends BaseController
     /**
      * @Route("/openid/connect/authorize", name="_authorize_validate")
      * @Method({"GET"})
-     * @Template("OAuth2ServerBundle:Authorize:authorize.html.twig")
+     * @Template("LoginCidadaoOpenIDBundle:Authorize:authorize.html.twig")
      */
     public function validateAuthorizeAction()
     {
@@ -137,19 +141,39 @@ class AuthorizeController extends BaseController
             return $this->handleAuthorize($this->getOAuth2Server(), $isAuthorized);
         }
 
+        $remoteClaims = [];
         if (!$isAuthorized) {
             $authEvent = new AuthorizationEvent($person, $client, $request->get('scope'));
             $dispatcher->dispatch(LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION_REQUEST, $authEvent);
-            //dump($authEvent->getRemoteClaims());
+            $remoteClaims = $authEvent->getRemoteClaims();
         }
 
-        // TODO: this following method is breaking the Remote Claim feature
-        // This method checks if the requested claims are valid, but remote claims would never be considered valid
-        // Alternatives:
-        //      a) try to remove the remote claim from the request's scope;
-        //      b) inject it to the Storage\ClientCredentials::getClientScope()
-        $response = parent::validateAuthorizeAction();
-        return JsonResponse::create();
+        /** @var OrganizationService $organizationService */
+        $organizationService = $this->get('organization');
+        $warnUntrusted = $this->shouldWarnUntrusted($client);
+        $metadata = $this->getMetadata($client);
+        $organization = $organizationService->getOrganization($metadata);
+
+        // Call the lib's original Controller
+        $parentResponse = parent::validateAuthorizeAction();
+        $parentResponse['scopes'] = $this->removeRemoteScope($parentResponse['scopes']);
+
+        $response = array_merge([
+            'qs' => [
+                'client_id' => $client->getPublicId(),
+                'scope' => $parentResponse['scopes'],
+                'response_type' => $request->get('response_type'),
+                'redirect_uri' => $request->get('redirect_uri'),
+                'state' => $request->get('state'),
+                'nonce' => $request->get('nonce'),
+            ],
+            'remoteClaims' => $remoteClaims,
+            'client' => $client,
+            'metadata' => $metadata,
+            'organization' => $organization,
+            'warnUntrusted' => $warnUntrusted,
+        ], $parentResponse);
+
         return $response;
     }
 
@@ -229,5 +253,20 @@ class AuthorizeController extends BaseController
     private function getOAuth2Server()
     {
         return $this->get('oauth2.server');
+    }
+
+    /**
+     * @param array $scopes
+     * @return array
+     */
+    private function removeRemoteScope(array $scopes)
+    {
+        return array_filter($scopes, function ($scope) {
+            if (preg_match('/^tag:/', $scope) === 1) {
+                return false;
+            }
+
+            return true;
+        });
     }
 }

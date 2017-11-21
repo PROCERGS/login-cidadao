@@ -1,0 +1,8 @@
+remote_claims:
+    authZ:
+        service_requesting: '<strong>%client_name%</strong> will have access to the following information or integrations from other services:'
+        issued_by: 'from <strong>%claim_provider%</strong>'
+        show_details: 'Click for more details.'
+        show_details_with_scope: 'Click for more details and to check what information will be shared.'
+        about: 'About this integration:'
+        essentialScope: '%claim_provider% will receive the following:'

@@ -133,7 +133,12 @@ class ClientCredentials extends BaseClass
             return false;
         }
 
-        $remoteClaims = $this->getRemoteClaimsTags($this->getRemoteClaims($client));
+        /*
+         * TODO: performance issue: if there are too many Remote Claims listing all of them might be an issue
+         * To solve that we could add a listener to an Authorization event that would add the current Client into a list
+         * users, then the
+         */
+        $remoteClaims = $this->getRemoteClaimsTags($this->getAllRemoteClaims());
         $allowedScopes = array_merge($client->getAllowedScopes(), $remoteClaims);
 
         return implode(' ', $allowedScopes);
@@ -179,6 +184,19 @@ class ClientCredentials extends BaseClass
         $repo = $this->em->getRepository('LoginCidadaoRemoteClaimsBundle:RemoteClaim');
 
         $remoteClaims = $repo->findByClient($client);
+
+        return $remoteClaims;
+    }
+
+    /**
+     * @return array|RemoteClaimInterface[]
+     */
+    private function getAllRemoteClaims()
+    {
+        /** @var RemoteClaimRepository $repo */
+        $repo = $this->em->getRepository('LoginCidadaoRemoteClaimsBundle:RemoteClaim');
+
+        $remoteClaims = $repo->findAll();
 
         return $remoteClaims;
     }
