@@ -21,4 +21,11 @@ class LoginCidadaoCoreEvents
      * This gets triggered from the start() method of the entry_point service.
      */
     const AUTHENTICATION_ENTRY_POINT_START = 'authentication.entry_point.start';
+
+    /**
+     * This will be triggered whenever a scope needs translation.
+     *
+     * The TranslateScopeEvent will be used.
+     */
+    const TRANSLATE_SCOPE = 'authorization.scope.translate';
 }

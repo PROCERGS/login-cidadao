@@ -162,3 +162,8 @@ services:
         class: LoginCidadao\OpenIDBundle\EventListener\OAuthEventSubscriber
         tags:
             - { name: kernel.event_subscriber }
+
+    oidc.scopes.translation:
+        class: LoginCidadao\OpenIDBundle\EventListener\ScopeTranslatorSubscriber
+        tags:
+            - { name: kernel.event_subscriber }

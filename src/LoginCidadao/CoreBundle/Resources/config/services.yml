@@ -462,3 +462,12 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@scheb_two_factor.security.google_authenticator"
+
+    lc.scope.translator:
+        class: LoginCidadao\CoreBundle\Twig\Extension\ScopesExtension
+        arguments:
+            - "@event_dispatcher"
+            - "@translator"
+        public: false
+        tags:
+            - { name: twig.extension }
