@@ -16,6 +16,8 @@ class HttpUri implements UriInterface
 {
     /**
      * Pattern extracted from https://regex101.com/r/BGxJ6n/1/codegen?language=php
+     *
+     * TODO: use the pattern from LoginCidadao\ValidationBundle\Validator\Constraints\UriValidator when it's merged
      */
     const RFC3986 = '/(?#URI)^(?#
     Scheme  )(?<scheme>https|http):(?#
