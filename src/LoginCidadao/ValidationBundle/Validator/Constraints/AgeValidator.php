@@ -12,13 +12,17 @@ namespace LoginCidadao\ValidationBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class AgeValidator extends ConstraintValidator
 {
     public function validate($value, Constraint $constraint)
     {
+        if (!$constraint instanceof Age) {
+            throw new UnexpectedTypeException($constraint, __NAMESPACE__.'\Age');
+        }
         if (!$value instanceof \DateTime || !$constraint instanceof Age) {
-            return;
+            throw new UnexpectedTypeException($value, '\DateTime');
         }
 
         $now = new \DateTime();

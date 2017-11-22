@@ -12,6 +12,7 @@ namespace LoginCidadao\ValidationBundle\Tests\Validator\Constraints;
 
 use LoginCidadao\ValidationBundle\Validator\Constraints\Age;
 use LoginCidadao\ValidationBundle\Validator\Constraints\AgeValidator;
+use Symfony\Component\Validator\Constraints\Url;
 
 class AgeValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,7 +42,23 @@ class AgeValidatorTest extends \PHPUnit_Framework_TestCase
         $this->validate($context, new \DateTime("-{$age} months"));
     }
 
-    private function getContext($expectedMessage)
+    /**
+     * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
+     */
+    public function testExpectsDateTime()
+    {
+        $this->validate($this->getContext(), new \stdClass());
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
+     */
+    public function testExpectsAgeConstraint()
+    {
+        $this->validate($this->getContext(), new \DateTime(), new Url());
+    }
+
+    private function getContext($expectedMessage = null)
     {
         $builder = $this->getMockBuilder('Symfony\Component\Validator\Violation\ConstraintViolationBuilder')
             ->disableOriginalConstructor()
@@ -52,10 +69,12 @@ class AgeValidatorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['buildViolation'])
             ->getMock();
-        $context->expects($this->once())
-            ->method('buildViolation')
-            ->with($this->equalTo($expectedMessage))
-            ->willReturn($builder);
+        if ($expectedMessage !== null) {
+            $context->expects($this->once())
+                ->method('buildViolation')
+                ->with($this->equalTo($expectedMessage))
+                ->willReturn($builder);
+        }
 
         return $context;
     }
@@ -69,10 +88,10 @@ class AgeValidatorTest extends \PHPUnit_Framework_TestCase
         return $constraint;
     }
 
-    private function validate($context, $date)
+    private function validate($context, $date, $constraint = false)
     {
         $validator = new AgeValidator();
         $validator->initialize($context);
-        $validator->validate($date, $this->getConstraint());
+        $validator->validate($date, $constraint ?: $this->getConstraint());
     }
 }
