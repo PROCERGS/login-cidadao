@@ -10,12 +10,12 @@
 
 namespace LoginCidadao\OpenIDBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use LoginCidadao\OpenIDBundle\Validator\Constraints\SectorIdentifierUri;
 use Symfony\Component\Validator\Constraints as Assert;
+use LoginCidadao\ValidationBundle\Validator\Constraints as LCAssert;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\Mapping as ORM;
@@ -53,7 +53,7 @@ class ClientMetadata
      * @Assert\All({
      *      @Assert\Type(type="string"),
      *      @Assert\NotBlank,
-     *      @Assert\Url(checkDNS = false)
+     *      @LCAssert\Uri(checkDNS = false)
      * })
      * @ORM\Column(name="redirect_uris", type="json_array", nullable=false)
      */
@@ -300,7 +300,7 @@ class ClientMetadata
      * @JMS\Groups({"client_metadata"})
      * @Assert\All({
      *      @Assert\Type("string"),
-     *      @Assert\Url(checkDNS = false)
+     *      @LCAssert\Uri(checkDNS = false)
      * })
      * @ORM\Column(type="simple_array", nullable=true)
      */
@@ -326,7 +326,7 @@ class ClientMetadata
      * @JMS\Groups({"client_metadata"})
      * @Assert\All({
      *      @Assert\Type("string"),
-     *      @Assert\Url(checkDNS = false)
+     *      @LCAssert\Uri(checkDNS = false)
      * })
      * @ORM\Column(type="simple_array", nullable=true)
      */
