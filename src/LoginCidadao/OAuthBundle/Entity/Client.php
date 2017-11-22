@@ -12,8 +12,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation as JMS;
 use OAuth2\OAuth2;
 use Doctrine\Common\Collections\ArrayCollection;
-use LoginCidadao\CoreBundle\Entity\Person;
-use LoginCidadao\CoreBundle\Model\AbstractUniqueEntity;
 use LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
