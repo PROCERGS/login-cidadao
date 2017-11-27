@@ -13,9 +13,11 @@ namespace LoginCidadao\RemoteClaimsBundle\EventSubscriber;
 use LoginCidadao\LogBundle\Traits\LoggerAwareTrait;
 use LoginCidadao\OpenIDBundle\Event\AuthorizationEvent;
 use LoginCidadao\OpenIDBundle\LoginCidadaoOpenIDEvents;
+use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimAuthorization;
 use LoginCidadao\RemoteClaimsBundle\Model\HttpUri;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
+use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManagerInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 use Psr\Log\LoggerAwareInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -30,12 +32,19 @@ class AuthorizationSubscriber implements EventSubscriberInterface, LoggerAwareIn
     /** @var RemoteClaimInterface[] */
     private $remoteClaims;
 
+    /** @var RemoteClaimManagerInterface */
+    private $remoteClaimManager;
+
     /**
      * AuthorizationSubscriber constructor.
+     * @param RemoteClaimManagerInterface $remoteClaimManager
      * @param RemoteClaimFetcherInterface $claimFetcher
      */
-    public function __construct(RemoteClaimFetcherInterface $claimFetcher)
-    {
+    public function __construct(
+        RemoteClaimManagerInterface $remoteClaimManager,
+        RemoteClaimFetcherInterface $claimFetcher
+    ) {
+        $this->remoteClaimManager = $remoteClaimManager;
         $this->claimFetcher = $claimFetcher;
     }
 
@@ -43,6 +52,9 @@ class AuthorizationSubscriber implements EventSubscriberInterface, LoggerAwareIn
     {
         return [
             LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION_REQUEST => 'onNewAuthorizationRequest',
+            LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION => 'onNewAuthorization',
+            LoginCidadaoOpenIDEvents::UPDATE_AUTHORIZATION => 'onUpdateAuthorization',
+            LoginCidadaoOpenIDEvents::REVOKE_AUTHORIZATION => 'onRevokeAuthorization',
         ];
     }
 
@@ -64,6 +76,25 @@ class AuthorizationSubscriber implements EventSubscriberInterface, LoggerAwareIn
         }
     }
 
+    public function onNewAuthorization(AuthorizationEvent $event)
+    {
+        $this->enforceRemoteClaims($event);
+    }
+
+    public function onUpdateAuthorization(AuthorizationEvent $event)
+    {
+        $this->enforceRemoteClaims($event);
+    }
+
+    public function onRevokeAuthorization(AuthorizationEvent $event)
+    {
+        if (count($event->getRemoteClaims()) === 0) {
+            return;
+        }
+
+        $this->remoteClaimManager->revokeAllAuthorizations($event->getAuthorization());
+    }
+
     private function checkHttpUri($uri)
     {
         try {
@@ -83,6 +114,23 @@ class AuthorizationSubscriber implements EventSubscriberInterface, LoggerAwareIn
             return true;
         } catch (\Exception $e) {
             return false;
+        }
+    }
+
+    private function enforceRemoteClaims(AuthorizationEvent $event)
+    {
+        $remoteClaims = $event->getRemoteClaims();
+
+        foreach ($remoteClaims as $remoteClaim) {
+            $accessToken = bin2hex(random_bytes(20));
+            $authorization = (new RemoteClaimAuthorization())
+                ->setClient($event->getClient())
+                ->setClaimProvider($remoteClaim->getProvider())
+                ->setPerson($event->getPerson())
+                ->setClaimName($remoteClaim->getName())
+                ->setAccessToken($accessToken);
+
+            $this->remoteClaimManager->enforceAuthorization($authorization);
         }
     }
 }

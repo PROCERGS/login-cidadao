@@ -23,6 +23,11 @@ class LoginCidadaoOpenIDEvents
     const UPDATE_AUTHORIZATION = 'lc.oidc.update_authorization';
 
     /**
+     * Event triggered when an authorization is revoked.
+     */
+    const REVOKE_AUTHORIZATION = 'lc.oidc.revoke_authorization';
+
+    /**
      * This event is triggered when we receive an Authorization Request that is not previously granted.
      */
     const NEW_AUTHORIZATION_REQUEST = 'lc.oidc.new_authorization_request';
