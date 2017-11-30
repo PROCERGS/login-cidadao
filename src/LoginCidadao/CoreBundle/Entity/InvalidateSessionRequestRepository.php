@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of the login-cidadao project or it's bundles.
  *
  * (c) Guilherme Donato <guilhermednt on github>
@@ -19,6 +19,7 @@ class InvalidateSessionRequestRepository extends EntityRepository
     /**
      * @param PersonInterface $person
      * @return InvalidateSessionRequest
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findMostRecent(PersonInterface $person)
     {
