@@ -10,23 +10,19 @@
 
 namespace LoginCidadao\CoreBundle\Entity;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use libphonenumber\PhoneNumber;
-use LoginCidadao\CoreBundle\Tests\LongPolling\LongPollableInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use JMS\Serializer\Annotation as JMS;
 use FOS\UserBundle\Model\User as BaseUser;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\CoreBundle\Model\LocationSelectData;
-use LoginCidadao\CoreBundle\LongPolling\LongPollingUtils;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\ValidationBundle\Validator\Constraints as LCAssert;
