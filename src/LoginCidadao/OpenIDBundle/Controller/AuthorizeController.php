@@ -28,6 +28,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -53,7 +54,10 @@ class AuthorizeController extends BaseController
             $this->getUser(),
             $this->getClient($request), $isAuthorized
         );
-        $this->get('event_dispatcher')->dispatch(OAuthEvent::POST_AUTHORIZATION_PROCESS, $event);
+
+        /** @var EventDispatcherInterface $dispatcher */
+        $dispatcher = $this->get('event_dispatcher');
+        $dispatcher->dispatch(OAuthEvent::POST_AUTHORIZATION_PROCESS, $event);
 
         return $response;
     }
@@ -141,12 +145,9 @@ class AuthorizeController extends BaseController
             return $this->handleAuthorize($this->getOAuth2Server(), $isAuthorized);
         }
 
-        $remoteClaims = [];
-        if (!$isAuthorized) {
-            $authEvent = new AuthorizationEvent($person, $client, $request->get('scope'));
-            $dispatcher->dispatch(LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION_REQUEST, $authEvent);
-            $remoteClaims = $authEvent->getRemoteClaims();
-        }
+        $authEvent = new AuthorizationEvent($person, $client, $request->get('scope'));
+        $dispatcher->dispatch(LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION_REQUEST, $authEvent);
+        $remoteClaims = $authEvent->getRemoteClaims();
 
         /** @var OrganizationService $organizationService */
         $organizationService = $this->get('organization');

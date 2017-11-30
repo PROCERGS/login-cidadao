@@ -91,6 +91,7 @@ class OAuthEventListener
         $currentAuth = $this->getCurrentAuthorization($user, $client);
 
         $authorizationEvent = new AuthorizationEvent($user, $client, $scope);
+        $dispatcher->dispatch(LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION_REQUEST, $authorizationEvent);
 
         $authEventName = LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION;
         if ($currentAuth instanceof Authorization) {

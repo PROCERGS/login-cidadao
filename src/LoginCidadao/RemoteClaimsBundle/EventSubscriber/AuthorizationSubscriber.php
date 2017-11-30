@@ -122,12 +122,17 @@ class AuthorizationSubscriber implements EventSubscriberInterface, LoggerAwareIn
         $remoteClaims = $event->getRemoteClaims();
 
         foreach ($remoteClaims as $remoteClaim) {
+            $claimName = $remoteClaim->getName();
+            if (is_string($claimName)) {
+                $claimName = TagUri::createFromString($claimName);
+            }
+
             $accessToken = bin2hex(random_bytes(20));
             $authorization = (new RemoteClaimAuthorization())
                 ->setClient($event->getClient())
                 ->setClaimProvider($remoteClaim->getProvider())
                 ->setPerson($event->getPerson())
-                ->setClaimName($remoteClaim->getName())
+                ->setClaimName($claimName)
                 ->setAccessToken($accessToken);
 
             $this->remoteClaimManager->enforceAuthorization($authorization);
