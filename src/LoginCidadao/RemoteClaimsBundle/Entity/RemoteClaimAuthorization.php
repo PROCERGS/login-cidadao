@@ -10,27 +10,64 @@
 
 namespace LoginCidadao\RemoteClaimsBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimAuthorizationInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 
+/**
+ * Class RemoteClaimAuthorization
+ * @package LoginCidadao\RemoteClaimsBundle\Entity
+ * @ORM\Entity(repositoryClass="LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimAuthorizationRepository")
+ * @ORM\Table(name="remote_claim_authorization")
+ */
 class RemoteClaimAuthorization implements RemoteClaimAuthorizationInterface
 {
-    /** @var ClaimProviderInterface */
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @var ClaimProviderInterface
+     *
+     * @ORM\OneToOne(targetEntity="LoginCidadao\OAuthBundle\Entity\Client")
+     * @ORM\JoinColumn(name="claim_provider_id", referencedColumnName="id")
+     */
     private $claimProvider;
 
-    /** @var ClientInterface */
+    /**
+     * @var ClientInterface
+     *
+     * @ORM\OneToOne(targetEntity="LoginCidadao\OAuthBundle\Entity\Client")
+     * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
+     */
     private $client;
 
-    /** @var PersonInterface */
+    /**
+     * @var PersonInterface
+     *
+     * @ORM\OneToOne(targetEntity="LoginCidadao\CoreBundle\Entity\Person")
+     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
+     */
     private $person;
 
-    /** @var TagUri */
+    /**
+     * @var TagUri
+     *
+     * @ORM\Column(name="claim_name", type="string", length=255, nullable=false)
+     */
     private $claimName;
 
-    /** @var string */
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="access_token", type="string", length=255, nullable=false)
+     */
     private $accessToken;
 
     /**
