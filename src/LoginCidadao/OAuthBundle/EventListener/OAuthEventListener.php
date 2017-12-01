@@ -119,7 +119,7 @@ class OAuthEventListener
     {
         /** @var Authorization $currentAuth */
         $currentAuth = $this->em->getRepository('LoginCidadaoCoreBundle:Authorization')
-            ->findOneBy(['person' => $person, 'client' => $client,]);
+            ->findOneBy(['person' => $person, 'client' => $client]);
 
         return $currentAuth;
     }

@@ -28,7 +28,7 @@
                                 {% if ('scope_details.' ~ scope) | trans != ('scope_details.' ~ scope) %}
                                     {{ include('LoginCidadaoCoreBundle::common.scope.details.html.twig', { 'scope': scope }) }}
                                 {% else %}
-                                    <span class="label label-success">{{ ('scope.' ~ scope) | trans }}</span>
+                                    <span class="label label-success">{{ scope | scope }}</span>
                                 {% endif %}
                             {% endfor %}
                         </div>
