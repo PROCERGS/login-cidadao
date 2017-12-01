@@ -35,4 +35,12 @@ interface RemoteClaimManagerInterface
      * @return bool
      */
     public function revokeAllAuthorizations(Authorization $authorization);
+
+    /**
+     * Removes TagURI scopes from the given input.
+     *
+     * @param string|array $scope
+     * @return string|array Returns the input with TagURI scopes removed. The type will remain the same as the input.
+     */
+    public function filterRemoteClaims($scope);
 }

@@ -95,10 +95,12 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
         $response = $this->httpClient->get($uri->__toString());
         $json = json_decode($response->getBody());
 
-        foreach ($json->links as $link) {
-            if ($link->rel === 'http://openid.net/specs/connect/1.0/claim'
-                && $json->subject === $claimName->__toString()) {
-                return $link->href;
+        if (property_exists($json, 'links')) {
+            foreach ($json->links as $link) {
+                if ($link->rel === 'http://openid.net/specs/connect/1.0/claim'
+                    && $json->subject === $claimName->__toString()) {
+                    return $link->href;
+                }
             }
         }
 
@@ -109,6 +111,7 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
      * Fetches a RemoteClaimInterface via <code>fetchRemoteClaim</code>, persisting and returning the result.
      * @param TagUri|string $claimUri
      * @return RemoteClaimInterface
+     * @throws ClaimProviderNotFoundException
      */
     public function getRemoteClaim($claimUri)
     {
@@ -147,7 +150,7 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
             throw new \InvalidArgumentException('Ambiguous redirect_uris. More than one Relying Party found.');
         }
 
-        return reset($clients);
+        return empty($clients) ? null : reset($clients);
     }
 
     /**

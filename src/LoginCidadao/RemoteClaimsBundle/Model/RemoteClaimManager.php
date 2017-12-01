@@ -85,4 +85,30 @@ class RemoteClaimManager implements RemoteClaimManagerInterface
 
         return true;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function filterRemoteClaims($scopes)
+    {
+        $returnString = is_string($scopes);
+        if ($returnString) {
+            $scopes = explode(' ', $scopes);
+        }
+
+        $response = [];
+        foreach ($scopes as $scope) {
+            try {
+                TagUri::createFromString($scope);
+            } catch (\InvalidArgumentException $e) {
+                $response[] = $scope;
+            }
+        }
+
+        if ($returnString) {
+            return implode(' ', $response);
+        }
+
+        return $response;
+    }
 }

@@ -116,6 +116,51 @@ class RemoteClaimManagerTest extends \PHPUnit_Framework_TestCase
         $manager->revokeAllAuthorizations($authorization);
     }
 
+    public function testFilterRemoteClaimsString()
+    {
+        $scopes = 'scope1 scope2 tag:example.com,2017:my_claim scope3';
+        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo());
+        $result = $manager->filterRemoteClaims($scopes);
+
+        $this->assertEquals('scope1 scope2 scope3', $result);
+    }
+
+    public function testFilterRemoteClaimsArray()
+    {
+        $scopes = ['scope1', 'scope2', 'tag:example.com,2017:my_claim', 'scope3'];
+        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo());
+        $result = $manager->filterRemoteClaims($scopes);
+
+        $this->assertEquals(['scope1', 'scope2', 'scope3'], $result);
+    }
+
+    public function testFilterRemoteClaimsNoAction()
+    {
+        $scopes = 'scope1 scope2 scope3';
+        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo());
+        $result = $manager->filterRemoteClaims($scopes);
+
+        $this->assertEquals('scope1 scope2 scope3', $result);
+    }
+
+    public function testFilterRemoteClaimsEmptyString()
+    {
+        $scopes = '';
+        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo());
+        $result = $manager->filterRemoteClaims($scopes);
+
+        $this->assertEquals('', $result);
+    }
+
+    public function testFilterRemoteClaimsEmptyArray()
+    {
+        $scopes = [];
+        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo());
+        $result = $manager->filterRemoteClaims($scopes);
+
+        $this->assertEquals([], $result);
+    }
+
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|EntityManagerInterface
      */

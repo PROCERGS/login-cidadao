@@ -52,8 +52,8 @@ class AuthorizationSubscriber implements EventSubscriberInterface, LoggerAwareIn
     {
         return [
             LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION_REQUEST => 'onNewAuthorizationRequest',
-            LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION => 'onNewAuthorization',
-            LoginCidadaoOpenIDEvents::UPDATE_AUTHORIZATION => 'onUpdateAuthorization',
+            LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION => ['onNewAuthorization', 100],
+            LoginCidadaoOpenIDEvents::UPDATE_AUTHORIZATION => ['onUpdateAuthorization', 100],
             LoginCidadaoOpenIDEvents::REVOKE_AUTHORIZATION => 'onRevokeAuthorization',
         ];
     }

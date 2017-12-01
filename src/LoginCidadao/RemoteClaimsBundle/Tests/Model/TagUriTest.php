@@ -121,7 +121,7 @@ class TagUriTest extends \PHPUnit_Framework_TestCase
         $tag = new TagUri();
         foreach ($methods as $method) {
             try {
-                $tag->$method();
+                $tag->$method('dummy');
                 $this->fail("Expected \BadMethodCallException when calling {$method}()");
             } catch (\BadMethodCallException $e) {
                 $successCount++;
