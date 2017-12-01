@@ -7,5 +7,7 @@ if [[ ! -n "$1" ]]; then
     exit 1;
 fi
 
-php -S localhost:$1 -t $DIR & xdg-open http://localhost:$1
+php -S localhost:$1 -t $DIR &
+command -v xdg-open >/dev/null 2>&1 && xdg-open http://localhost:$1 || open http://localhost:$1
+
 wait
