@@ -13,6 +13,8 @@ namespace LoginCidadao\CoreBundle\EventListener;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
+use libphonenumber\NumberParseException;
+use libphonenumber\PhoneNumberUtil;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Service\RegisterRequestedScope;
 use LoginCidadao\OAuthBundle\Entity\Client;
@@ -67,6 +69,9 @@ class RegisterListener implements EventSubscriberInterface
     /** @var string */
     private $defaultClientUid;
 
+    /** @var string */
+    private $defaultCountry;
+
     public function __construct(
         UrlGeneratorInterface $router,
         SessionInterface $session,
@@ -79,7 +84,8 @@ class RegisterListener implements EventSubscriberInterface
         SubjectIdentifierService $subjectIdentifierService,
         $emailUnconfirmedTime,
         $lcSupportedScopes,
-        $defaultClientUid
+        $defaultClientUid,
+        $defaultCountry
     ) {
         $this->router = $router;
         $this->session = $session;
@@ -93,6 +99,7 @@ class RegisterListener implements EventSubscriberInterface
         $this->em = $em;
         $this->subjectIdentifierService = $subjectIdentifierService;
         $this->defaultClientUid = $defaultClientUid;
+        $this->defaultCountry = $defaultCountry;
     }
 
     /**
@@ -104,7 +111,13 @@ class RegisterListener implements EventSubscriberInterface
             FOSUserEvents::REGISTRATION_SUCCESS => 'onRegistrationSuccess',
             FOSUserEvents::REGISTRATION_COMPLETED => 'onRegistrationCompleted',
             FOSUserEvents::REGISTRATION_CONFIRM => 'onEmailConfirmed',
+            FOSUserEvents::REGISTRATION_INITIALIZE => 'onRegistrationInitialize',
         );
+    }
+
+    public function onRegistrationInitialize(GetResponseUserEvent $event)
+    {
+        $this->preparePreFilledRegistrationForm($event);
     }
 
     public function onRegistrationSuccess(FormEvent $event)
@@ -190,5 +203,73 @@ class RegisterListener implements EventSubscriberInterface
 
         $url = $this->router->generate('fos_user_profile_edit');
         $event->setResponse(new RedirectResponse($url));
+    }
+
+    private function preparePreFilledRegistrationForm(GetResponseUserEvent $event)
+    {
+        $request = $event->getRequest();
+        $data = $request->get('prefill');
+        if (!is_array($data) || empty($data)) {
+            return;
+        }
+
+        $user = $event->getUser();
+
+        if (!$user instanceof PersonInterface) {
+            return;
+        }
+
+        foreach ($data as $key => $value) {
+            $this->setUserInfo($user, $key, $value);
+        }
+
+        $keys = array_keys($data);
+        if (!empty($keys)) {
+            $this->registerRequestedScope->registerScope($keys, $request->getSession());
+        }
+    }
+
+    private function setUserInfo(PersonInterface $user, $key, $value)
+    {
+        switch ($key) {
+            case 'email':
+                $user->setEmail($value);
+                break;
+            case 'name':
+            case 'first_name':
+                $user->setFirstName($value);
+                break;
+            case 'surname':
+            case 'last_name':
+                $user->setSurname($value);
+                break;
+            case 'full_name':
+                $names = explode(' ', $value, 2);
+                $user->setFirstName($names[0]);
+                $user->setSurname($names[1]);
+                break;
+            case 'cpf':
+                $user->setCpf($value);
+                break;
+            case 'mobile':
+            case 'phone_number':
+                try {
+                    $util = PhoneNumberUtil::getInstance();
+                    $phoneNumber = $util->parse($value, $this->defaultCountry);
+                    $user->setMobile($phoneNumber);
+                } catch (NumberParseException $e) {
+                    // TODO: log and continue
+                    continue;
+                }
+                break;
+            case 'birthdate':
+                $date = \DateTime::createFromFormat('Y-m-d', $value);
+                if ($date instanceof \DateTime) {
+                    $user->setBirthdate($date);
+                }
+                break;
+            default:
+                continue;
+        }
     }
 }
