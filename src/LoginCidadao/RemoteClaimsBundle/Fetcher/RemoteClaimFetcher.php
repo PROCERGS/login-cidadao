@@ -80,8 +80,12 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
      * @param TagUri $claimName
      * @return string
      */
-    public function discoverClaimUri(TagUri $claimName)
+    public function discoverClaimUri($claimName)
     {
+        if (!$claimName instanceof TagUri) {
+            $claimName = TagUri::createFromString($claimName);
+        }
+
         $uri = HttpUri::createFromComponents([
             'scheme' => 'https',
             'host' => $claimName->getAuthorityName(),

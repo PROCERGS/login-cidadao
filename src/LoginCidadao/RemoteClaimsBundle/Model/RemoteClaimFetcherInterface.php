@@ -19,10 +19,10 @@ interface RemoteClaimFetcherInterface
     public function fetchRemoteClaim($claimUri);
 
     /**
-     * @param TagUri $claimName
+     * @param TagUri|string $claimName
      * @return string
      */
-    public function discoverClaimUri(TagUri $claimName);
+    public function discoverClaimUri($claimName);
 
     /**
      * Fetches a RemoteClaimInterface via <code>fetchRemoteClaim</code>, persisting and returning the result.
