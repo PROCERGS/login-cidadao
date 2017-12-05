@@ -43,4 +43,16 @@ interface RemoteClaimManagerInterface
      * @return string|array Returns the input with TagURI scopes removed. The type will remain the same as the input.
      */
     public function filterRemoteClaims($scope);
+
+    /**
+     * @param Authorization $authorization
+     * @return RemoteClaimInterface[]
+     */
+    public function getRemoteClaimsFromAuthorization(Authorization $authorization);
+
+    /**
+     * @param Authorization $authorization
+     * @return RemoteClaimAuthorizationInterface[]
+     */
+    public function getRemoteClaimsAuthorizationsFromAuthorization(Authorization $authorization);
 }

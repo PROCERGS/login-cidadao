@@ -16,6 +16,7 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimAuthorization;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimAuthorizationRepository;
+use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository;
 
 class RemoteClaimManager implements RemoteClaimManagerInterface
 {
@@ -25,17 +26,23 @@ class RemoteClaimManager implements RemoteClaimManagerInterface
     /** @var RemoteClaimAuthorizationRepository */
     private $remoteClaimAuthorizationRepository;
 
+    /** @var RemoteClaimRepository */
+    private $remoteClaimRepository;
+
     /**
      * RemoteClaimManager constructor.
      * @param EntityManagerInterface $em
      * @param RemoteClaimAuthorizationRepository $remoteClaimAuthorizationRepository
+     * @param RemoteClaimRepository $remoteClaimRepository
      */
     public function __construct(
         EntityManagerInterface $em,
-        RemoteClaimAuthorizationRepository $remoteClaimAuthorizationRepository
+        RemoteClaimAuthorizationRepository $remoteClaimAuthorizationRepository,
+        RemoteClaimRepository $remoteClaimRepository
     ) {
         $this->em = $em;
         $this->remoteClaimAuthorizationRepository = $remoteClaimAuthorizationRepository;
+        $this->remoteClaimRepository = $remoteClaimRepository;
     }
 
     /**
@@ -110,5 +117,24 @@ class RemoteClaimManager implements RemoteClaimManagerInterface
         }
 
         return $response;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRemoteClaimsFromAuthorization(Authorization $authorization)
+    {
+        return $this->remoteClaimRepository
+            ->findByClientAndPerson($authorization->getClient(), $authorization->getPerson());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRemoteClaimsAuthorizationsFromAuthorization(Authorization $authorization)
+    {
+        return $this->remoteClaimAuthorizationRepository->findAllByClientAndPerson(
+            $authorization->getClient(), $authorization->getPerson()
+        );
     }
 }
