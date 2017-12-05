@@ -90,6 +90,7 @@ class RegistrationFormType extends BaseType
             case 'name':
             case 'surname':
             case 'full_name':
+            case 'last_name':
                 $builder->add(
                     'surname',
                     null,

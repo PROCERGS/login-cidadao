@@ -43,3 +43,4 @@ Tópicos da Documentação
     - [Usando OpenID Connect](cookbook/using_openid_connect.md)
     - [Deslogando usuários "remotamente"](cookbook/using_logout.md)
     - [Documentação da API](api.md)
+    - [Migração/Importação de Usuários](cookbook/import_users.md)
