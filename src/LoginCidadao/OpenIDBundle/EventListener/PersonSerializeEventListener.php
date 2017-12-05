@@ -12,6 +12,7 @@ namespace LoginCidadao\OpenIDBundle\EventListener;
 
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
+use JMS\Serializer\GenericSerializationVisitor;
 use LoginCidadao\OAuthBundle\Model\AccessTokenManager;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
@@ -54,18 +55,26 @@ class PersonSerializeEventListener implements EventSubscriberInterface
 
     private function setSubjectIdentifier(ObjectEvent $event)
     {
+        $visitor = $event->getVisitor();
+        if (!$visitor instanceof GenericSerializationVisitor) {
+            return;
+        }
         $client = $this->accessTokenManager->getTokenClient();
         $metadata = $client->getMetadata();
 
         $sub = $this->subjectIdentifierService->getSubjectIdentifier($event->getObject(), $metadata);
-        $event->getVisitor()->addData('sub', $sub);
-        $event->getVisitor()->addData('id', $sub);
+        $visitor->addData('sub', $sub);
+        $visitor->addData('id', $sub);
     }
 
     private function addOpenIdConnectCompatibility(ObjectEvent $event)
     {
-        $person = $event->getObject();
         $visitor = $event->getVisitor();
+        if (!$visitor instanceof GenericSerializationVisitor) {
+            return;
+        }
+
+        $person = $event->getObject();
 
         if (!($person instanceof PersonInterface)) {
             return;
