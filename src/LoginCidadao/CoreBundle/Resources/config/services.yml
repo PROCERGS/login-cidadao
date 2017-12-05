@@ -267,7 +267,6 @@ services:
             - "@request_stack"
         tags:
             - { name: jms_serializer.event_listener, event: serializer.pre_serialize, method: onPreSerialize }
-            - { name: jms_serializer.event_listener, event: serializer.post_serialize, method: onPostSerialize }
 
     lc.person.address.form.type:
         class: %lc.person.address.form.type.class%
