@@ -1,8 +1,11 @@
 remote_claims:
-    authZ:
-        service_requesting: '<strong>%client_name%</strong> terá acesso às seguintes informações ou integrações fornecidas por outros serviços:'
+    details:
         issued_by: 'via <strong>%claim_provider%</strong>'
         show_details: 'Clique para ver mais detalhes.'
-        show_details_with_scope: 'Clique para ver mais detalhes e saber quais informações serão compartilhadas.'
+        show_details_with_scope: 'Clique para ver mais detalhes e listar as informações compartilhadas.'
         about: 'Sobre essa integração:'
-        essentialScope: '%claim_provider% receberá as seguintes informações:'
+        essentialScope: '%claim_provider% solicita as seguintes informações:'
+    authZ:
+        service_requesting: '<strong>%client_name%</strong> terá acesso às seguintes informações ou integrações fornecidas por outros serviços:'
+    client_details:
+        label: 'O serviço tem acesso às seguintes informações ou integrações fornecidas por terceiros:'

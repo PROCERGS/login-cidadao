@@ -72,33 +72,7 @@
             <p>{{ 'remote_claims.authZ.service_requesting' | trans({'%client_name%': client.name | e}) | raw }}</p>
             <div class="remote-claims-list list-group">
                 {% for claim in remoteClaims %}
-                    <div class="list-group-item checkbox checkbox-primary">
-                        <div class="list-group-item-heading remote-claim-display-name" style="padding-left: 20px;">
-                            <input type="checkbox" name="scope[]" checked value="{{ claim.name }}" data-size="mini"
-                                   id="remote_scope_{{ loop.index }}">
-                            <label for="remote_scope_{{ loop.index }}">
-                                <span style="display: block">{{ claim.displayName }}</span>
-                                <span>{{ 'remote_claims.authZ.issued_by' | trans({'%claim_provider%': claim.provider.name | e}) | raw }}</span>
-                            </label>
-                        </div>
-                        <span aria-controls="remoteClaim{{ claim.id }}" data-target=".remoteClaim{{ claim.id }}"
-                              role="button" data-toggle="collapse" aria-expanded="false">
-                            <div class="remote-claim-essentials list-group-item-text help-block small collapse in remoteClaim{{ claim.id }}">
-                                {% if claim.essentialScope is not empty %}
-                                    {{ 'remote_claims.authZ.show_details_with_scope' | trans }}
-                                {% else %}
-                                    {{ 'remote_claims.authZ.show_details' | trans }}
-                                {% endif %}
-                            </div>
-                            <dl class="collapse list-group-item-text small remoteClaim{{ claim.id }}">
-                                <dt>{{ 'remote_claims.authZ.about' | trans }}</dt>
-                                <dd>{{ claim.description }}</dd>
-
-                                <dt>{{ 'remote_claims.authZ.essentialScope' | trans({'%claim_provider%': claim.provider.name}) }}</dt>
-                                <dd>{{ claim.essentialScope | scope | join(', ') }}</dd>
-                            </dl>
-                        </span>
-                    </div>
+                    {{ include('LoginCidadaoRemoteClaimsBundle::remote_claim.html.twig', {'claim': claim, 'isForm': true}) }}
                 {% endfor %}
             </div>
         </div>
