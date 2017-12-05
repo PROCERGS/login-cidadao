@@ -1,6 +1,8 @@
 services:
     lc.remote_claims.http_client:
         class: GuzzleHttp\Client
+        calls:
+            - [ 'setDefaultOption', ['verify', true]] # set to false for testing purposes only
 
     lc.remote_claims.repository:
         class: Doctrine\ORM\EntityRepository
@@ -27,6 +29,7 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@lc.remote_claims.authorization.repository"
+            - "@lc.remote_claims.repository"
 
     lc.remote_claims.auth_event_subscriber:
         class: LoginCidadao\RemoteClaimsBundle\EventSubscriber\AuthorizationSubscriber
