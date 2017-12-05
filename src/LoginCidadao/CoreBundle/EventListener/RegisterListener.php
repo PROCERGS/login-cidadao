@@ -262,6 +262,7 @@ class RegisterListener implements EventSubscriberInterface
                     continue;
                 }
                 break;
+            case 'birthday':
             case 'birthdate':
                 $date = \DateTime::createFromFormat('Y-m-d', $value);
                 if ($date instanceof \DateTime) {
