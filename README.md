@@ -65,6 +65,7 @@ If you fail to comply with the aforementioned requirements you and your users ar
     - [Usando OpenID Connect](doc/cookbook/using_openid_connect.md)
     - [Deslogando usuários "remotamente"](doc/cookbook/using_logout.md)
     - [Documentação da API](doc/api.md)
+    - [Migração/Importação de Usuários](doc/cookbook/import_users.md)
   
 Você pode utilizar o visualizador em `doc/index.html` para exibir a documentação com uma formatação amigável
 em um browser iniciando um servidor built-in do PHP com o seguinte comando:
