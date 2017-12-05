@@ -1,0 +1,13 @@
+#!/bin/bash
+
+DIR="$( cd "$(dirname "$0")"/../../ ; pwd -P )"
+
+if [[ ! -n "$1" ]]; then
+    echo "Please specify a port to run the doc server."
+    exit 1;
+fi
+
+php -S localhost:$1 -t $DIR &
+command -v xdg-open >/dev/null 2>&1 && xdg-open http://localhost:$1 || open http://localhost:$1
+
+wait
