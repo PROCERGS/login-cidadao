@@ -55,4 +55,18 @@ interface RemoteClaimManagerInterface
      * @return RemoteClaimAuthorizationInterface[]
      */
     public function getRemoteClaimsAuthorizationsFromAuthorization(Authorization $authorization);
+
+    /**
+     * The response will be in the format:
+     * [
+     *   [
+     *     'authorization' => RemoteClaimAuthorizationInterface,
+     *     'remoteClaim' => RemoteClaimInterface,
+     *   ],
+     * ]
+     * @param ClientInterface $client
+     * @param PersonInterface $person
+     * @return array
+     */
+    public function getRemoteClaimsWithTokens(ClientInterface $client, PersonInterface $person);
 }

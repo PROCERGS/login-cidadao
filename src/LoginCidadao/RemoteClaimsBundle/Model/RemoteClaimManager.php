@@ -137,4 +137,29 @@ class RemoteClaimManager implements RemoteClaimManagerInterface
             $authorization->getClient(), $authorization->getPerson()
         );
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRemoteClaimsWithTokens(ClientInterface $client, PersonInterface $person)
+    {
+        /** @var RemoteClaimAuthorizationInterface[] $remoteClaimAuthorizations */
+        $remoteClaimAuthorizations = $this->remoteClaimAuthorizationRepository
+            ->findAllByClientAndPerson($client, $person);
+
+        /** @var RemoteClaimInterface[] $remoteClaims */
+        $remoteClaims = $this->remoteClaimRepository->findByClientAndPerson($client, $person);
+
+        $response = [];
+        foreach ($remoteClaimAuthorizations as $authorization) {
+            $tag = is_string($authorization->getClaimName()) ?: $authorization->getClaimName()->__toString();
+            $response[$tag]['authorization'] = $authorization;
+        }
+        foreach ($remoteClaims as $remoteClaim) {
+            $tag = is_string($remoteClaim->getName()) ?: $remoteClaim->getName()->__toString();
+            $response[$tag]['remoteClaim'] = $remoteClaim;
+        }
+
+        return $response;
+    }
 }
