@@ -48,53 +48,28 @@ If you fail to comply with the aforementioned requirements you and your users ar
   * php timezone (example: `date.timezone = America/Sao_Paulo`)
   * write permission to `app/cache`, `app/logs` and `web/uploads`
 
-## Docs
+## Docs (Portuguese)
 
-[ Read the docs ](app/Resources/doc/index.md)
+  - [Sobre o Login Cidadão](doc/about.md)
+  - **Instalação**
+    - [Instruções detalhadas](doc/deploy.md)
+    - [Passo-a-passo para Debian](doc/cookbook/deploy_debian_os.md)
+    - [Troubleshooting](doc/deploy_troubleshooting.md)
+  - **Configuração**
+    - [Arquivo parameters.yml](doc/config_parameters.md)
+  - **Gerenciamento da Instalação**
+    - [Atualizando o Login Cidadão](doc/maintenance.md)
+    - [Gerenciamento de Usuários](doc/maintenance_user_management.md)
+    - [Comandos do Symfony](doc/maintenance_symfony_commands.md)
+  - **Uso do Login Cidadão**
+    - [Usando OpenID Connect](doc/cookbook/using_openid_connect.md)
+    - [Deslogando usuários "remotamente"](doc/cookbook/using_logout.md)
+    - [Documentação da API](doc/api.md)
+    - [Migração/Importação de Usuários](doc/cookbook/import_users.md)
+  
+Você pode utilizar o visualizador em `doc/index.html` para exibir a documentação com uma formatação amigável
+em um browser iniciando um servidor built-in do PHP com o seguinte comando:
 
-## Setup (Development)
-
-### Linux
-#### Requirements
- * Sudoer user
- * PHP CLI
- * ACL-enabled filesystem
- * Composer
-
-#### Before you start
-It's highly recommended to create your `app/config/parameters.yml` before installing to avoid database connection problems.
-
-You can start by using `app/config/parameters.yml.dist` as a template by simply copying it to the same folder but naming it as `parameters.yml`, then edit the default values.
-
-#### Running the script
-Check if your environment meets Symfony's prerequesites:
-``` bash
-php app/check.php
 ```
-
-Just execute the `install.sh` script and follow instructions in case of errors or warnings. Then run:
-``` bash
-php app/console server:run
+composer lc-docs <porta desejada>
 ```
-Browse to `http://localhost:8000`
-
-### Vagrant
-
-#### Requirements
-* virtualbox
-* [vagrant](https://www.vagrantup.com/)
-* vagrant plugin [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest) for port forward
-
-#### Before you start
-It's highly recommended to create your `app/config/parameters.yml` before installing to avoid database connection problems.
-
-You can start by using `app/config/parameters.yml.vagrant` as a template by simply copying it to the same folder but naming it as `parameters.yml`, then edit the default values. Do not edit database values if you want to use the default vm database.
-
-#### Run
-``` bash
-$ vagrant up
-```
-
-### General Steps for Installation
-
-[Instructions in Brazilian Portuguese](doc/docs/como-instalar.md)

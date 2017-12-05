@@ -92,7 +92,8 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
-        ]
+        ],
+        "lc-docs": "doc/cookbook/scripts/doc-server"
     },
     "config": {
         "bin-dir": "bin",
@@ -109,6 +110,9 @@
         },
         "branch-alias": {
             "dev-master": "2.8-dev"
+        },
+        "scripts-description": {
+            "lc-docs": "Starts a PHP Built-in Server to view the docs in a pretty way."
         }
     }
 }

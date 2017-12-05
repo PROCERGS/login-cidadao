@@ -138,6 +138,7 @@ services:
             - "%registration.email.unconfirmed_time%"
             - "%lc_supported_scopes%"
             - "%oauth_default_client.uid%"
+            - "%default_country_iso2%"
         tags:
             - { name: kernel.event_subscriber }
 
