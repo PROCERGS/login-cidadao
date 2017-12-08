@@ -46,7 +46,8 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
     /**
      * @ORM\Column(type="string", nullable=false, unique=true)
      * @JMS\Expose
-     * @JMS\Groups({"public"})
+     * @JMS\SerializedName("client_name")
+     * @JMS\Groups({"public", "remote_claim"})
      */
     protected $name;
 
@@ -179,6 +180,9 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
         );
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         if ($this->getMetadata()) {
@@ -416,6 +420,12 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
         return $this;
     }
 
+    /**
+     * @JMS\VirtualProperty()
+     * @JMS\SerializedName("redirect_uris")
+     * @JMS\Groups({"remote_claim"})
+     * @return array|string[]
+     */
     public function getRedirectUris()
     {
         if ($this->getMetadata()) {
@@ -542,5 +552,26 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
             },
             $this->getOwners()
         );
+    }
+
+    /**
+     * @JMS\VirtualProperty()
+     * @JMS\SerializedName("client_id")
+     * @JMS\Groups({"remote_claim"})
+     * @inheritDoc
+     */
+    public function getPublicId()
+    {
+        return parent::getPublicId();
+    }
+
+    /**
+     * @JMS\VirtualProperty()
+     * @JMS\SerializedName("client_uri")
+     * @JMS\Groups({"remote_claim"})
+     */
+    public function getClientUri()
+    {
+        return $this->getSiteUrl();
     }
 }
