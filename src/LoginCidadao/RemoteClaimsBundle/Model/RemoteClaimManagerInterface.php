@@ -69,4 +69,11 @@ interface RemoteClaimManagerInterface
      * @return array
      */
     public function getRemoteClaimsWithTokens(ClientInterface $client, PersonInterface $person);
+
+    /**
+     * @param ClaimProviderInterface $claimProvider
+     * @param string $accessToken
+     * @return RemoteClaimAuthorizationInterface
+     */
+    public function getRemoteClaimAuthorizationByAccessToken(ClaimProviderInterface $claimProvider, $accessToken);
 }

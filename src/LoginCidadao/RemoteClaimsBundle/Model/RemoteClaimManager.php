@@ -162,4 +162,15 @@ class RemoteClaimManager implements RemoteClaimManagerInterface
 
         return $response;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRemoteClaimAuthorizationByAccessToken(ClaimProviderInterface $claimProvider, $accessToken)
+    {
+        return $this->remoteClaimAuthorizationRepository->findOneBy([
+            'claimProvider' => $claimProvider,
+            'accessToken' => $accessToken,
+        ]);
+    }
 }
