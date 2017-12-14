@@ -52,11 +52,10 @@ class PROCERGSSmsServiceExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($config['uri']['receive'], $container->getParameter('procergs.sms.uri.receive'));
         $this->assertEquals($config['uri']['status'], $container->getParameter('procergs.sms.uri.status'));
 
+        $this->assertEquals($config['system']['realm'], $container->getParameter('procergs.sms.system.realm'));
         $this->assertEquals($config['system']['id'], $container->getParameter('procergs.sms.system.id'));
         $this->assertEquals($config['system']['key'], $container->getParameter('procergs.sms.system.key'));
 
-        $this->assertEquals($config['service_order'], $container->getParameter('procergs.sms.service_order'));
-        $this->assertEquals($config['from'], $container->getParameter('procergs.sms.from.prefix'));
         $this->assertEquals($config['send'], $container->getParameter('procergs.sms.should_send'));
     }
 }

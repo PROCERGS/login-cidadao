@@ -38,8 +38,6 @@ class PROCERGSSmsServiceExtension extends Extension
             $container->setParameter("procergs.sms.system.{$key}", $value);
         }
 
-        $container->setParameter("procergs.sms.service_order", $config['service_order']);
-        $container->setParameter("procergs.sms.from.prefix", $config['from']);
         $container->setParameter("procergs.sms.should_send", $config['send']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
