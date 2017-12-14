@@ -641,15 +641,15 @@ circle_rest_client:
     curl:
         defaults:
             CURLOPT_FOLLOWLOCATION: false
+            CURLOPT_TIMEOUT: 5
 
 procergs_sms_service:
     uri:
         send: "%tpd_base_uri%/rest/sms"
-        receive: "%tpd_base_uri%/rest/sms/recebido"
-        status: "%tpd_base_uri%/rest/sms/status"
+        receive: "%tpd_base_uri%/rest/sms/receive"
+        status: "%tpd_base_uri%/rest/sms/{id}"
     system:
+        realm: "%tpd_system_realm%"
         id: "%tpd_system_id%"
         key: "%tpd_system_key%"
-    service_order: "%tpd_service_order%"
-    from: "LC"
     send: "%tpd_send_message%"
