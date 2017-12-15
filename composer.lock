@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ca68f630a5430fcf5a6c0fc89b5eb3f9",
-    "content-hash": "bcfa1ce0f967fb2bea8c85ca07d49e6b",
+    "hash": "d6b65a6feeb6a2933d2f755ca7020aa5",
+    "content-hash": "d17e7052a69defee5bece713a6f63c23",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -3975,16 +3975,16 @@
         },
         {
             "name": "procergs/sms-service",
-            "version": "1.2.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/sms-service.git",
-                "reference": "0db0ccf46af77444458c91be703d1bc6cba0f104"
+                "reference": "336ba148b0035dba19a0e6a90fb70e5ce514af8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/sms-service/zipball/0db0ccf46af77444458c91be703d1bc6cba0f104",
-                "reference": "0db0ccf46af77444458c91be703d1bc6cba0f104",
+                "url": "https://api.github.com/repos/PROCERGS/sms-service/zipball/336ba148b0035dba19a0e6a90fb70e5ce514af8b",
+                "reference": "336ba148b0035dba19a0e6a90fb70e5ce514af8b",
                 "shasum": ""
             },
             "require": {
@@ -3996,6 +3996,7 @@
                 "symfony/http-kernel": ">=2.8"
             },
             "require-dev": {
+                "guilhermednt/minimum-coverage-checker": ">=1.0.3",
                 "phpunit/phpunit": "^4.8"
             },
             "type": "library",
@@ -4012,7 +4013,7 @@
                 }
             ],
             "description": "PROCERGS SMS Service",
-            "time": "2017-05-17 14:33:33"
+            "time": "2017-12-14 16:42:39"
         },
         {
             "name": "procergs/tos-bundle",
