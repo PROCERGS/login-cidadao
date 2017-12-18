@@ -275,3 +275,4 @@ See how many users have each badge.: See how many users have each badge.
 Users by Location: Users by Location
 Information about people's location. Either by <a href="%country_url%">Country</a> or by <a href="%state_url%">State</a>: Information about people's location. Either by <a href="%country_url%">Country</a> or by <a href="%state_url%">State</a>
 'Connect to the Nota Fiscal Gaúcha': 'Connect to the Nota Fiscal Gaúcha'
+scope.aviseme: 'Data sharing with AviseMe.rs.gov.br'
