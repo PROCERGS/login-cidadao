@@ -11,6 +11,7 @@
 namespace LoginCidadao\OpenIDBundle\Storage;
 
 use Doctrine\ORM\EntityManagerInterface;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
@@ -127,6 +128,7 @@ class ClientCredentials extends BaseClass
      */
     public function getClientScope($client_id)
     {
+        /** @var Client $client */
         $client = $this->getClient($client_id);
 
         if (!$client instanceof ClientInterface) {
@@ -135,8 +137,6 @@ class ClientCredentials extends BaseClass
 
         /*
          * TODO: performance issue: if there are too many Remote Claims listing all of them might be an issue
-         * To solve that we could add a listener to an Authorization event that would add the current Client into a list
-         * users, then the
          */
         $remoteClaims = $this->getRemoteClaimsTags($this->getAllRemoteClaims());
         $allowedScopes = array_merge($client->getAllowedScopes(), $remoteClaims);
@@ -172,20 +172,6 @@ class ClientCredentials extends BaseClass
         }
 
         return $client;
-    }
-
-    /**
-     * @param ClientInterface $client
-     * @return array|RemoteClaimInterface[]
-     */
-    private function getRemoteClaims(ClientInterface $client)
-    {
-        /** @var RemoteClaimRepository $repo */
-        $repo = $this->em->getRepository('LoginCidadaoRemoteClaimsBundle:RemoteClaim');
-
-        $remoteClaims = $repo->findByClient($client);
-
-        return $remoteClaims;
     }
 
     /**

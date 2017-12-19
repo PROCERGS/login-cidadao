@@ -14,6 +14,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use LoginCidadao\OpenIDBundle\Storage\ClientCredentials;
+use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository;
+use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 
 class ClientCredentialsTest extends \PHPUnit_Framework_TestCase
 {
@@ -120,7 +122,25 @@ class ClientCredentialsTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($result);
     }
 
-    public function testGetClientScope()
+    public function testGetClientScopeWithRemoteClaim()
+    {
+        $id = 123;
+        $randomId = 'randomId';
+        $expectedRemoteClaim = 'tag:example.com,2017:my_claim';
+
+        $client = $this->getClient($id, $randomId, 'client_secret');
+
+        $em = $this->getEntityManagerFind($client, 'findOneBy', null, $expectedRemoteClaim);
+        $clientCredentials = new ClientCredentials($em);
+
+        $scopes = explode(' ', $clientCredentials->getClientScope("{$id}_{$randomId}"));
+
+        $this->assertContains('name', $scopes);
+        $this->assertContains('openid', $scopes);
+        $this->assertContains($expectedRemoteClaim, $scopes);
+    }
+
+    public function testGetClientScopeWithoutRemoteClaim()
     {
         $id = 123;
         $randomId = 'randomId';
@@ -130,9 +150,10 @@ class ClientCredentialsTest extends \PHPUnit_Framework_TestCase
         $em = $this->getEntityManagerFind($client, 'findOneBy');
         $clientCredentials = new ClientCredentials($em);
 
-        $scopes = $clientCredentials->getClientScope("{$id}_{$randomId}");
+        $scopes = explode(' ', $clientCredentials->getClientScope("{$id}_{$randomId}"));
 
-        $this->assertEquals('name openid', $scopes);
+        $this->assertContains('name', $scopes);
+        $this->assertContains('openid', $scopes);
     }
 
     public function testGetClientNotFoundScope()
@@ -158,14 +179,34 @@ class ClientCredentialsTest extends \PHPUnit_Framework_TestCase
         return $em;
     }
 
-    private function getEntityManagerFind($client, $findMethod, $em = null)
+    private function getEntityManagerFind($client, $findMethod, $em = null, $expectedRemoteClaim = null)
     {
-        $repo = $this->getClientRepository();
-        $repo->expects($this->once())->method($findMethod)->willReturn($client);
+        $clientRepo = $this->getClientRepository();
+        $clientRepo->expects($this->once())->method($findMethod)->willReturn($client);
+
+        $remoteClaimRepo = $this->getRemoteClaimRepository();
 
         $em = $em ?: $this->getEntityManager();
-        $em->expects($this->once())->method('getRepository')
-            ->with('LoginCidadaoOAuthBundle:Client')->willReturn($repo);
+        $em->expects($this->atMost(2))->method('getRepository')
+            ->willReturnCallback(function ($entity) use ($clientRepo, $remoteClaimRepo, $expectedRemoteClaim) {
+                switch ($entity) {
+                    case 'LoginCidadaoOAuthBundle:Client':
+                        return $clientRepo;
+                    case 'LoginCidadaoRemoteClaimsBundle:RemoteClaim':
+                        $remoteClaims = [];
+                        if ($expectedRemoteClaim !== null) {
+                            $expectedRemoteClaim = TagUri::createFromString($expectedRemoteClaim);
+                            $remoteClaim = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface');
+                            $remoteClaim->expects($this->any())->method('getName')->willReturn($expectedRemoteClaim);
+                            $remoteClaims[] = $remoteClaim;
+                        }
+                        $remoteClaimRepo->expects($this->once())->method('findAll')->willReturn($remoteClaims);
+
+                        return $remoteClaimRepo;
+                    default:
+                        return null;
+                }
+            });
 
         return $em;
     }
@@ -176,6 +217,17 @@ class ClientCredentialsTest extends \PHPUnit_Framework_TestCase
     private function getClientRepository()
     {
         $repo = $this->getMockBuilder('LoginCidadao\OAuthBundle\Entity\ClientRepository')
+            ->disableOriginalConstructor()->getMock();
+
+        return $repo;
+    }
+
+    /**
+     * @return RemoteClaimRepository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getRemoteClaimRepository()
+    {
+        $repo = $this->getMockBuilder('LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository')
             ->disableOriginalConstructor()->getMock();
 
         return $repo;
