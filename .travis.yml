@@ -21,9 +21,6 @@ services:
   - memcached
 
 before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
   - psql -c "create user logincidadao with password '';" -U postgres
   - psql -c "create database logincidadao with owner logincidadao" -U postgres
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
@@ -36,9 +33,6 @@ before_script:
   - echo y | php app/console lc:database:populate batch/
 
 script:
-  - ./bin/phpunit -c app --coverage-clover=clover.xml
-
-after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover clover.xml
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  # Do NOT enable test coverage here since it takes way too much time
+  # We'll use Scrutinizer for that.
+  - ./bin/phpunit -c app
