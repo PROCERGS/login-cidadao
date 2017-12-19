@@ -140,7 +140,13 @@ class OAuthEventListenerTest extends \PHPUnit_Framework_TestCase
         $subIdService = $this->getSubjectIdentifierService();
 
         $dispatcher = $this->getDispatcher();
-        $dispatcher->expects($this->once())
+        $dispatcher->expects($this->at(0))
+            ->method('dispatch')
+            ->with(
+                LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION_REQUEST,
+                $this->isInstanceOf('LoginCidadao\OpenIDBundle\Event\AuthorizationEvent')
+            );
+        $dispatcher->expects($this->at(1))
             ->method('dispatch')
             ->with(
                 LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION,
@@ -174,7 +180,13 @@ class OAuthEventListenerTest extends \PHPUnit_Framework_TestCase
         $subIdService = $this->getSubjectIdentifierService();
 
         $dispatcher = $this->getDispatcher();
-        $dispatcher->expects($this->once())
+        $dispatcher->expects($this->at(0))
+            ->method('dispatch')
+            ->with(
+                LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION_REQUEST,
+                $this->isInstanceOf('LoginCidadao\OpenIDBundle\Event\AuthorizationEvent')
+            );
+        $dispatcher->expects($this->at(1))
             ->method('dispatch')
             ->with(
                 LoginCidadaoOpenIDEvents::UPDATE_AUTHORIZATION,
