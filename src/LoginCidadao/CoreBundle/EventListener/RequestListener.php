@@ -17,7 +17,6 @@ use Symfony\Component\HttpKernel\HttpKernel;
 
 class RequestListener implements LoggerAwareInterface
 {
-
     /** @var LoggerInterface */
     private $logger;
 
@@ -28,12 +27,7 @@ class RequestListener implements LoggerAwareInterface
             return;
         }
 
-        $referer = $event->getRequest()->headers->get('referer', false);
-        if (!($this->logger instanceof LoggerInterface) || !$referer) {
-            return;
-        }
-
-        $this->logger->info("Request referrer: {$referer}");
+        $this->logReferer($event);
     }
 
     /**
@@ -47,5 +41,15 @@ class RequestListener implements LoggerAwareInterface
         $this->logger = $logger;
 
         return;
+    }
+
+    private function logReferer(GetResponseEvent $event)
+    {
+        $referer = $event->getRequest()->headers->get('referer', false);
+        if (!($this->logger instanceof LoggerInterface) || !$referer) {
+            return;
+        }
+
+        $this->logger->info("Request referrer: {$referer}");
     }
 }
