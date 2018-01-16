@@ -4,7 +4,7 @@ remote_claims:
         show_details: 'Clique para ver mais detalhes.'
         show_details_with_scope: 'Clique para ver mais detalhes e listar as informações compartilhadas.'
         about: 'Sobre essa integração:'
-        essentialScope: '%claim_provider% solicita as seguintes informações:'
+        essentialScope: 'Para essa integração, %claim_provider% solicita as seguintes informações:'
     authZ:
         service_requesting: '<strong>%client_name%</strong> terá acesso às seguintes informações ou integrações fornecidas por outros serviços:'
     client_details:

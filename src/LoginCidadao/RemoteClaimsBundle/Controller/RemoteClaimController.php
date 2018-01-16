@@ -10,33 +10,19 @@
 
 namespace LoginCidadao\RemoteClaimsBundle\Controller;
 
-use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
 use FOS\RestBundle\Controller\Annotations as REST;
-use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use LoginCidadao\APIBundle\Controller\BaseController;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 use LoginCidadao\CoreBundle\Entity\AuthorizationRepository;
-use LoginCidadao\CoreBundle\LongPolling\LongPollingUtils;
-use LoginCidadao\OAuthBundle\Model\AccessTokenManager;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimAuthorizationInterface;
-use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use LoginCidadao\CoreBundle\Model\PersonInterface;
-use LoginCidadao\OAuthBundle\Model\ClientUser;
-use LoginCidadao\APIBundle\Security\Audit\Annotation as Audit;
-use LoginCidadao\APIBundle\Entity\LogoutKey;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class RemoteClaimController extends BaseController
 {
-
     /**
      * @REST\Get("/api/v1/remote-claims/translate", name="remote_claims_validate", defaults={"_format"="json"})
      * @REST\View(templateVar="oidc_config")
