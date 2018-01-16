@@ -47,6 +47,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      * @JMS\Since("1.0")
+     * @JMS\Until("2")
      */
     protected $id;
 
@@ -193,7 +194,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @var string
      *
      * @ORM\Column(name="facebookId", type="string", length=255, nullable=true, unique=true)
-     * @JMS\Since("1.0")
+     * @JMS\Exclude
      */
     protected $facebookId;
 
@@ -201,7 +202,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @var string
      *
      * @ORM\Column(name="facebookUsername", type="string", length=255, nullable=true)
-     * @JMS\Since("1.0")
+     * @JMS\Exclude
      */
     protected $facebookUsername;
 
@@ -209,7 +210,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @var string
      *
      * @ORM\Column(name="facebookAccessToken", type="string", length=255, nullable=true)
-     * @JMS\Since("1.1")
+     * @JMS\Exclude()
      */
     protected $facebookAccessToken;
 
@@ -217,7 +218,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @var string
      *
      * @ORM\Column(name="twitterId", type="string", length=255, nullable=true, unique=true)
-     * @JMS\Since("1.0")
+     * @JMS\Exclude
      */
     protected $twitterId;
 
@@ -225,7 +226,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @var string
      *
      * @ORM\Column(name="twitterUsername", type="string", length=255, nullable=true)
-     * @JMS\Since("1.0")
+     * @JMS\Exclude
      */
     protected $twitterUsername;
 
@@ -233,7 +234,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @var string
      *
      * @ORM\Column(name="twitterAccessToken", type="string", length=255, nullable=true)
-     * @JMS\Since("1.0")
+     * @JMS\Exclude
      */
     protected $twitterAccessToken;
 
@@ -316,6 +317,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @JMS\Expose
      * @JMS\Groups({"public_profile","picture"})
      * @JMS\Since("1.0.2")
+     * @JMS\Until("2")
      */
     protected $profilePictureUrl;
 
@@ -332,7 +334,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @var string
      *
      * @ORM\Column(name="googleId", type="string", length=255, nullable=true, unique=true)
-     * @JMS\Since("1.0.3")
+     * @JMS\Exclude
      */
     protected $googleId;
 
@@ -340,7 +342,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @var string
      *
      * @ORM\Column(name="googleUsername", type="string", length=255, nullable=true)
-     * @JMS\Since("1.0.3")
+     * @JMS\Exclude
      */
     protected $googleUsername;
 
@@ -348,7 +350,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @var string
      *
      * @ORM\Column(name="googleAccessToken", type="string", length=255, nullable=true)
-     * @JMS\Since("1.0.3")
+     * @JMS\Exclude
      */
     protected $googleAccessToken;
 
@@ -381,6 +383,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
 
     /**
      * @ORM\Column(name="google_authenticator_secret", type="string", nullable=true)
+     * @JMS\Exclude
      */
     protected $googleAuthenticatorSecret;
 
@@ -409,6 +412,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @JMS\Expose
      * @JMS\Groups({"public_profile"})
      * @JMS\SerializedName("phone_number_verified")
+     * @JMS\Since("1.1")
      * @var bool
      */
     protected $phoneNumberVerified = false;
@@ -686,6 +690,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @JMS\Groups({"badges", "public_profile"})
      * @JMS\VirtualProperty
      * @JMS\SerializedName("deprecated_badges")
+     * @JMS\Until("2")
      * @return array
      */
     public function getDataValid()
@@ -1226,6 +1231,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @JMS\Groups({"public_profile"})
      * @JMS\VirtualProperty
      * @JMS\SerializedName("given_name")
+     * @JMS\Since("1.0")
      */
     public function getGivenName()
     {
@@ -1236,6 +1242,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @JMS\Groups({"full_name","name"})
      * @JMS\VirtualProperty
      * @JMS\SerializedName("family_name")
+     * @JMS\Since("1")
      */
     public function getFamilyName()
     {

@@ -33,7 +33,7 @@ class PersonAddressController extends BaseController
      * @param string  $city
      * @return \LoginCidadao\CoreBundle\Entity\City
      * @throws NotFoundHttpException when no city is found
-     * @REST\Get("/address/cities/search/{city}", name="api_1_get_cities")
+     * @REST\Get("/address/cities/search/{city}", defaults={"version": 1})
      * @Audit\Loggable(type="SELECT")
      */
     public function getCitiesAction(Request $request, $city)
@@ -68,7 +68,7 @@ class PersonAddressController extends BaseController
      * @param string  $state
      * @return \LoginCidadao\CoreBundle\Entity\State
      * @throws NotFoundHttpException when no state is found
-     * @REST\Get("/address/states/search/{state}", name="api_1_get_states")
+     * @REST\Get("/address/states/search/{state}", defaults={"version": 1})
      * @Audit\Loggable(type="SELECT")
      */
     public function getStatesAction($state)
@@ -100,7 +100,7 @@ class PersonAddressController extends BaseController
      * @param string  $country
      * @return \LoginCidadao\CoreBundle\Entity\Country
      * @throws NotFoundHttpException when no country is found
-     * @REST\Get("/address/countries/search/{country}", name="api_1_get_countries")
+     * @REST\Get("/address/countries/search/{country}", defaults={"version": 1})
      * @Audit\Loggable(type="SELECT")
      */
     public function getCountriesAction($country)
@@ -111,35 +111,6 @@ class PersonAddressController extends BaseController
         $result = $countries->findByString($country);
 
         return $this->renderWithContext($result, $context);
-    }
-
-    /**
-     * Searches cities by name and, optionally, state.
-     *
-     * @ApiDoc(
-     *   resource = true,
-     *   description = "Searches cities by name and, optionally, state.",
-     *   output = {
-     *     "class"="LoginCidadao\CoreBundle\Entity\City",
-     *     "groups" = {"public"}
-     *   },
-     *   statusCodes = {
-     *     200 = "Returned when successful",
-     *     404 = "Returned when no city is found"
-     *   }
-     * )
-     * @REST\View(templateVar="cities")
-     * @return \LoginCidadao\CoreBundle\Entity\City
-     * @throws NotFoundHttpException when no city is found
-     * @REST\Get("/address/cities/prefetch", name="api_1_get_cities_prefetch")
-     * @Audit\Loggable(type="SELECT")
-     */
-    public function getCitiesPrefetchAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $cities = $em->getRepository('LoginCidadaoCoreBundle:City')->findByPreferedState();
-
-        return $cities;
     }
 
 }

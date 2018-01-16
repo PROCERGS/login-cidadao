@@ -569,3 +569,11 @@ monolog:
             type: service
             id: lc.monolog.db.handler
             level: info
+
+login_cidadao_api:
+    versions:
+        1:
+            0: [0, 1, 2, 3]
+            1: [0]
+        2:
+            0: [0]

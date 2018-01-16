@@ -34,3 +34,8 @@ services:
         factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
             - LoginCidadao\APIBundle\Entity\ActionLog
+
+    lc.api.version:
+        class: LoginCidadao\APIBundle\Service\VersionService
+        arguments:
+            - "%lc_api.versions%"

@@ -74,7 +74,9 @@ google_login:
 lc_api:
     type: rest
     resource: "@LoginCidadaoAPIBundle/Resources/config/routing.yml"
-    prefix:   /api/v1
+    prefix:   /api/v{version}
+    requirements:
+        version: \d+(.\d+)*
 
 # API Doc
 NelmioApiDocBundle:
