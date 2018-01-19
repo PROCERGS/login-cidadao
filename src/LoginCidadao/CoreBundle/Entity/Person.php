@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use libphonenumber\PhoneNumber;
+use LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -365,9 +366,13 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
     /**
      * @JMS\Expose
      * @JMS\Groups({"public_profile"})
-     * @var array
+     * @JMS\Type("array<LoginCidadao\BadgesControlBundle\Model\Badge>")
+     * @JMS\Since("2")
+     * @JMS\Until("3")
+     * @deprecated Use RemoteClaims instead
+     * @var array|BadgeInterface[]
      */
-    protected $badges = array();
+    protected $badges = [];
 
     /**
      * @ORM\OneToMany(targetEntity="LoginCidadao\APIBundle\Entity\LogoutKey", mappedBy="person", cascade={"remove"}, orphanRemoval=true)

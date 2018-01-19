@@ -11,18 +11,24 @@
 namespace LoginCidadao\APIBundle\Service;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class VersionService
 {
+    /** @var RequestStack */
+    private $requestStack;
+
     /** @var array */
     private $supportedVersions;
 
     /**
      * VersionService constructor.
+     * @param RequestStack $requestStack
      * @param array $supportedVersions
      */
-    public function __construct(array $supportedVersions)
+    public function __construct(RequestStack $requestStack, array $supportedVersions)
     {
+        $this->requestStack = $requestStack;
         $this->supportedVersions = $supportedVersions;
     }
 
@@ -30,7 +36,7 @@ class VersionService
      * @param int|null $major
      * @param int|null $minor
      * @param int|null $patch
-     * @return string
+     * @return array
      */
     public function getLatestVersion($major = null, $minor = null, $patch = null)
     {
@@ -49,17 +55,24 @@ class VersionService
             || false === array_search($patch, $this->supportedVersions[$major][$minor])) {
             throw new \InvalidArgumentException("Invalid API version");
         }
-        $version = implode('.', [$major, $minor, $patch]);
 
-        return $version;
+        return [
+            'major' => $major,
+            'minor' => $minor,
+            'patch' => $patch,
+        ];
     }
 
     /**
      * @param Request $request
-     * @return string
+     * @return array
      */
-    public function getVersionFromRequest(Request $request)
+    public function getVersionFromRequest(Request $request = null)
     {
+        if ($request === null) {
+            $request = $this->requestStack->getCurrentRequest();
+        }
+
         $pathVersion = $request->attributes->get('version');
         $version = explode('.', $pathVersion, 3);
 
@@ -75,5 +88,14 @@ class VersionService
         }
 
         return $this->getLatestVersion($major, $minor, $patch);
+    }
+
+    /**
+     * @param array $components
+     * @return string
+     */
+    public function getString(array $components)
+    {
+        return implode('.', $components);
     }
 }

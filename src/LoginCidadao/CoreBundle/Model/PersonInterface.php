@@ -3,6 +3,7 @@
 namespace LoginCidadao\CoreBundle\Model;
 
 use Doctrine\ORM\EntityManagerInterface;
+use LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
 use LoginCidadao\CoreBundle\Entity\BackupCode;
 use LoginCidadao\CoreBundle\Tests\LongPolling\LongPollableInterface;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
@@ -200,6 +201,9 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
      */
     public function getIdCards();
 
+    /**
+     * @return BadgeInterface[]
+     */
     public function getBadges();
 
     /**

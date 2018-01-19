@@ -38,4 +38,5 @@ services:
     lc.api.version:
         class: LoginCidadao\APIBundle\Service\VersionService
         arguments:
+            - "@request_stack"
             - "%lc_api.versions%"

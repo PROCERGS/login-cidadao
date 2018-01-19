@@ -78,7 +78,7 @@ class BaseController extends FOSRestController
 
         /** @var VersionService $versionService */
         $versionService = $this->get('lc.api.version');
-        $version = $versionService->getVersionFromRequest($this->getRequest());
+        $version = $versionService->getString($versionService->getVersionFromRequest($this->getRequest()));
 
         $context->setVersion($version);
 
