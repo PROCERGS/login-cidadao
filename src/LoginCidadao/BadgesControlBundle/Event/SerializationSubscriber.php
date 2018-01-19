@@ -51,14 +51,14 @@ class SerializationSubscriber implements EventSubscriberInterface
 
     public function onPostSerialize(ObjectEvent $event)
     {
-        if (version_compare($this->getApiVersion(true), '2', '>=')) {
-            return;
-        }
-
         /** @var PersonInterface $person */
         $person = $event->getObject();
 
         if (!$person instanceof PersonInterface) {
+            return;
+        }
+
+        if (version_compare($this->getApiVersion(true), '2', '>=')) {
             return;
         }
 
