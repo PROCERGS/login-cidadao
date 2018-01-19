@@ -12,6 +12,7 @@ namespace LoginCidadao\APIBundle\Tests\Service;
 
 use LoginCidadao\APIBundle\Service\VersionService;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class VersionServiceTest extends \PHPUnit_Framework_TestCase
@@ -54,7 +55,10 @@ class VersionServiceTest extends \PHPUnit_Framework_TestCase
         $attributes->expects($this->any())
             ->method('get')->with('version')
             ->willReturn($version);
-        $request->attributes = $attributes;
+
+        if ($request instanceof Request) {
+            $request->attributes = $attributes;
+        }
 
         $requestStack = $this->getMock('Symfony\Component\HttpFoundation\RequestStack');
         $requestStack->expects($this->any())->method('getCurrentRequest')->willReturn($request);
