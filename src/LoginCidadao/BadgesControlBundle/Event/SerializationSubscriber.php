@@ -50,7 +50,6 @@ class SerializationSubscriber implements EventSubscriberInterface
 
     public function onPostSerialize(ObjectEvent $event)
     {
-        /** @var PersonInterface $person */
         $person = $event->getObject();
 
         if (!$person instanceof PersonInterface) {

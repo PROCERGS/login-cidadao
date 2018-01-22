@@ -18,7 +18,6 @@ use LoginCidadao\CoreBundle\Entity\Authorization;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Entity\AccessToken;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -71,7 +70,7 @@ class BaseController extends FOSRestController
         $versionService = $this->get('lc.api.version');
         $version = $versionService->getString($versionService->getVersionFromRequest());
 
-        $context->setVersion($version);
+        $context->setVersion(/** @scrutinizer ignore-type */ $version);
 
         return $context;
     }
