@@ -59,10 +59,6 @@ class PersonSerializeEventListenerTest extends \PHPUnit_Framework_TestCase
     public function testOnPostSerializePersonV1()
     {
         $this->runOnPostSerializeTest(['major' => 1, 0, 0], false, 2);
-    }
-
-    public function testOnPostSerializePersonV1_1()
-    {
         $this->runOnPostSerializeTest(['major' => 1, 1, 0], true, 4);
     }
 
