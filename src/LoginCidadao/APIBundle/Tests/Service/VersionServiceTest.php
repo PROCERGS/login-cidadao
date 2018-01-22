@@ -51,6 +51,7 @@ class VersionServiceTest extends \PHPUnit_Framework_TestCase
     {
         $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ParameterBag $attributes */
         $attributes = $this->getMock('Symfony\Component\HttpFoundation\ParameterBag');
         $attributes->expects($this->any())
             ->method('get')->with('version')
@@ -116,7 +117,7 @@ class VersionServiceTest extends \PHPUnit_Framework_TestCase
 
         $versionService = $this->getVersionService();
 
-        $versionService->getLatestVersion('a');
+        $versionService->getLatestVersion(/** @scrutinizer ignore-type */'a');
     }
 
     public function testGetVersionFromRequest()
