@@ -39,15 +39,6 @@ class BaseController extends FOSRestController
         return $this->handleView($view);
     }
 
-    protected function serializePerson($person, $scope)
-    {
-        $person = $this->getUser();
-        $serializer = $this->get('jms_serializer');
-
-        return $serializer->serialize($person, 'json',
-            SerializationContext::create()->setGroups($scope));
-    }
-
     protected function getClientScope(
         PersonInterface $user,
         ClientInterface $client = null
@@ -78,7 +69,7 @@ class BaseController extends FOSRestController
 
         /** @var VersionService $versionService */
         $versionService = $this->get('lc.api.version');
-        $version = $versionService->getString($versionService->getVersionFromRequest($this->getRequest()));
+        $version = $versionService->getString($versionService->getVersionFromRequest());
 
         $context->setVersion($version);
 
@@ -112,23 +103,5 @@ class BaseController extends FOSRestController
         }
 
         return $accessToken->getClient();
-    }
-
-    protected function getVersion(Request $request)
-    {
-        $supportedVersions = $this->getParameter('lc_api.versions');
-        $pathVersion = $request->attributes->get('version');
-        $version = explode('.', $pathVersion, 3);
-
-        $major = $minor = $patch = null;
-        if (array_key_exists(0, $version)) {
-            $major = $version[0];
-        }
-        if (array_key_exists(1, $version)) {
-            $minor = $version[1];
-        }
-        if (array_key_exists(2, $version)) {
-            $patch = $version[2];
-        }
     }
 }
