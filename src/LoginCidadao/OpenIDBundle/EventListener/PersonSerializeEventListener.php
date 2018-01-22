@@ -78,13 +78,10 @@ class PersonSerializeEventListener implements EventSubscriberInterface
 
     private function addOpenIdConnectCompatibility(ObjectEvent $event)
     {
+        /** @var PersonInterface $person */
         $person = $event->getObject();
         /** @var GenericSerializationVisitor $visitor */
         $visitor = $event->getVisitor();
-
-        if (!($person instanceof PersonInterface)) {
-            return;
-        }
 
         if (version_compare($this->getApiVersion(true), '1.1.0', '>=')) {
             $visitor->addData('picture', $person->getProfilePictureUrl());
