@@ -86,14 +86,12 @@ class BaseController extends FOSRestController
         /** @var TokenStorageInterface $tokenStorage */
         $tokenStorage = $this->get('security.token_storage');
 
-        /** @var OAuthToken $token */
         $token = $tokenStorage->getToken();
 
         if (!$token instanceof OAuthToken) {
             return null;
         }
 
-        /** @var AccessToken $accessToken */
         $accessToken = $this->getDoctrine()
             ->getRepository('LoginCidadaoOAuthBundle:AccessToken')
             ->findOneBy(['token' => $token->getToken()]);
