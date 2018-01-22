@@ -12,7 +12,6 @@ use LoginCidadao\BadgesControlBundle\Handler\BadgesHandler;
 
 class SerializationSubscriber implements EventSubscriberInterface
 {
-
     /** @var BadgesHandler */
     protected $handler;
 
@@ -58,7 +57,7 @@ class SerializationSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if (version_compare($this->getApiVersion(true), '2', '>=')) {
+        if (version_compare($this->getApiVersion(), '2', '>=')) {
             return;
         }
 
@@ -67,21 +66,19 @@ class SerializationSubscriber implements EventSubscriberInterface
 
         $badges = [];
         foreach ($person->getBadges() as $badge) {
-            $key = "{$badge->getName()}.{$badge->getName()}";
+            $key = "{$badge->getNamespace()}.{$badge->getName()}";
             $badges[$key] = $badge->getData();
         }
         $visitor->addData('badges', $badges);
     }
 
     /**
-     * @param bool $string
-     * @return array|string
+     * @return string
      */
-    private function getApiVersion($string = false)
+    private function getApiVersion()
     {
         $version = $this->versionService->getVersionFromRequest();
 
-        return $string ? $this->versionService->getString($version) : $version;
+        return $this->versionService->getString($version);
     }
-
 }
