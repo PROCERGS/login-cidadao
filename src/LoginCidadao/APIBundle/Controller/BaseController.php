@@ -13,6 +13,7 @@ namespace LoginCidadao\APIBundle\Controller;
 use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
 use FOS\RestBundle\Controller\FOSRestController;
 use JMS\Serializer\SerializationContext;
+use LoginCidadao\APIBundle\Service\VersionService;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Entity\AccessToken;
@@ -22,7 +23,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class BaseController extends FOSRestController
 {
-
     protected function renderWithContext($content, $context = null)
     {
         $person = $this->getUser();
@@ -38,8 +38,10 @@ class BaseController extends FOSRestController
         return $this->handleView($view);
     }
 
-    protected function getClientScope(PersonInterface $user, ClientInterface $client = null)
-    {
+    protected function getClientScope(
+        PersonInterface $user,
+        ClientInterface $client = null
+    ) {
         if ($client === null) {
             $client = $this->getClient();
         }
@@ -64,6 +66,12 @@ class BaseController extends FOSRestController
         /** @var SerializationContext $context */
         $context = SerializationContext::create()->setGroups($scope);
 
+        /** @var VersionService $versionService */
+        $versionService = $this->get('lc.api.version');
+        $version = $versionService->getString($versionService->getVersionFromRequest());
+
+        $context->setVersion(/** @scrutinizer ignore-type */ $version);
+
         return $context;
     }
 
@@ -77,14 +85,12 @@ class BaseController extends FOSRestController
         /** @var TokenStorageInterface $tokenStorage */
         $tokenStorage = $this->get('security.token_storage');
 
-        /** @var OAuthToken $token */
         $token = $tokenStorage->getToken();
 
         if (!$token instanceof OAuthToken) {
             return null;
-        }
+    }
 
-        /** @var AccessToken $accessToken */
         $accessToken = $this->getDoctrine()
             ->getRepository('LoginCidadaoOAuthBundle:AccessToken')
             ->findOneBy(['token' => $token->getToken()]);

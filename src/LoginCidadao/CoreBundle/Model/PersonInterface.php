@@ -10,7 +10,9 @@
 
 namespace LoginCidadao\CoreBundle\Model;
 
+use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
 use LoginCidadao\CoreBundle\Entity\BackupCode;
 use LoginCidadao\CoreBundle\Tests\LongPolling\LongPollableInterface;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
@@ -21,6 +23,7 @@ use LoginCidadao\CoreBundle\Entity\City;
 use LoginCidadao\CoreBundle\Entity\Country;
 use LoginCidadao\CoreBundle\Entity\State;
 use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation as JMS;
 
 interface PersonInterface extends EncoderAwareInterface, UserInterface, LocationAwareInterface, LongPollableInterface, TwoFactorInterface
@@ -207,6 +210,9 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
      */
     public function getIdCards();
 
+    /**
+     * @return BadgeInterface[]
+     */
     public function getBadges();
 
     /**
