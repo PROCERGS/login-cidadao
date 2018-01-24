@@ -43,6 +43,7 @@ class PersonController extends BaseController
      *   }
      * )
      * @REST\View(templateVar="person")
+     * @REST\Get(defaults={"version": 2})
      * @Audit\Loggable(type="SELECT")
      * @throws NotFoundHttpException
      */
