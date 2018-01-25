@@ -12,11 +12,15 @@ namespace LoginCidadao\RemoteClaimsBundle\Fetcher;
 
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\TransferException;
+use LoginCidadao\LogBundle\Traits\LoggerAwareTrait;
 use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository;
+use LoginCidadao\RemoteClaimsBundle\Event\UpdateRemoteClaimUriEvent;
 use LoginCidadao\RemoteClaimsBundle\Exception\ClaimProviderNotFoundException;
+use LoginCidadao\RemoteClaimsBundle\Exception\ClaimUriUnavailableException;
 use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\HttpUri;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface;
@@ -24,10 +28,14 @@ use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 use LoginCidadao\RemoteClaimsBundle\Parser\RemoteClaimParser;
 use LoginCidadao\OAuthBundle\Entity\Client as ClaimProvider;
+use LoginCidadao\RemoteClaimsBundle\RemoteClaimEvents;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RemoteClaimFetcher implements RemoteClaimFetcherInterface
 {
+    use LoggerAwareTrait;
+
     /** @var  Client */
     private $httpClient;
 
@@ -40,23 +48,29 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
     /** @var EntityManagerInterface */
     private $em;
 
+    /** @var EventDispatcherInterface */
+    private $dispatcher;
+
     /**
      * RemoteClaimFetcher constructor.
      * @param Client $httpClient
      * @param EntityManagerInterface $em
      * @param RemoteClaimRepository $claimRepository
      * @param ClientRepository $clientRepository
+     * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(
         Client $httpClient,
         EntityManagerInterface $em,
         RemoteClaimRepository $claimRepository,
-        ClientRepository $clientRepository
+        ClientRepository $clientRepository,
+        EventDispatcherInterface $dispatcher
     ) {
         $this->em = $em;
         $this->httpClient = $httpClient;
         $this->claimRepo = $claimRepository;
         $this->clientRepo = $clientRepository;
+        $this->dispatcher = $dispatcher;
     }
 
     public function fetchRemoteClaim($claimUri)
@@ -65,19 +79,27 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
             $uri = HttpUri::createFromString($claimUri);
         } catch (\Exception $e) {
             $claimName = TagUri::createFromString($claimUri);
-            $uri = $this->discoverClaimUri($claimName);
+            try {
+                $uri = $this->discoverClaimUri($claimName);
+            } catch (ClaimUriUnavailableException $e) {
+                throw new NotFoundHttpException();
+            }
         }
 
-        $response = $this->httpClient->get($uri);
-        $body = $response->getBody()->__toString();
+        try {
+            $response = $this->httpClient->get($uri);
+            $body = $response->getBody()->__toString();
 
-        $remoteClaim = RemoteClaimParser::parseClaim($body, new RemoteClaim(), new ClaimProvider());
+            $remoteClaim = RemoteClaimParser::parseClaim($body, new RemoteClaim(), new ClaimProvider());
 
-        return $remoteClaim;
+            return $remoteClaim;
+        } catch (\Exception $e) {
+            throw new NotFoundHttpException();
+        }
     }
 
     /**
-     * @param TagUri $claimName
+     * @param TagUri|string $claimName
      * @return string
      */
     public function discoverClaimUri($claimName)
@@ -86,6 +108,24 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
             $claimName = TagUri::createFromString($claimName);
         }
 
+        $uri = $this->performDiscovery($claimName);
+
+        if ($uri === false) {
+            $uri = $this->discoveryFallback($claimName);
+        } else {
+            $event = new UpdateRemoteClaimUriEvent($claimName, $uri);
+            $this->dispatcher->dispatch(RemoteClaimEvents::REMOTE_CLAIM_UPDATE_URI, $event);
+        }
+
+        return $uri;
+    }
+
+    /**
+     * @param TagUri|string $claimName
+     * @return mixed
+     */
+    private function performDiscovery(TagUri $claimName)
+    {
         $uri = HttpUri::createFromComponents([
             'scheme' => 'https',
             'host' => $claimName->getAuthorityName(),
@@ -96,19 +136,38 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
             ]),
         ]);
 
-        $response = $this->httpClient->get($uri->__toString());
-        $json = json_decode($response->getBody());
+        try {
+            $response = $this->httpClient->get($uri->__toString());
+            $json = json_decode($response->getBody());
 
-        if (property_exists($json, 'links')) {
-            foreach ($json->links as $link) {
-                if ($link->rel === 'http://openid.net/specs/connect/1.0/claim'
-                    && $json->subject === $claimName->__toString()) {
-                    return $link->href;
+            if (property_exists($json, 'links')) {
+                foreach ($json->links as $link) {
+                    if ($link->rel === 'http://openid.net/specs/connect/1.0/claim'
+                        && $json->subject === $claimName->__toString()) {
+                        return $link->href;
+                    }
                 }
             }
+        } catch (TransferException $e) {
+            return false;
         }
 
-        throw new NotFoundHttpException("Couldn't find the Claim's URI");
+        return false;
+    }
+
+    /**
+     * @param $claimName
+     * @return string
+     */
+    private function discoveryFallback(TagUri $claimName)
+    {
+        $remoteClaim = $this->getExistingRemoteClaim($claimName);
+
+        if (!$remoteClaim instanceof RemoteClaimInterface || $remoteClaim->getUri() === null) {
+            throw new ClaimUriUnavailableException();
+        }
+
+        return $remoteClaim->getUri();
     }
 
     /**
@@ -121,7 +180,7 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
     {
         $remoteClaim = $this->fetchRemoteClaim($claimUri);
 
-        $existingClaim = $this->claimRepo->findOneBy(['name' => $remoteClaim->getName()]);
+        $existingClaim = $this->getExistingRemoteClaim($remoteClaim->getName());
         if ($existingClaim instanceof RemoteClaimInterface) {
             $remoteClaim = $existingClaim;
             $newClaim = false;
@@ -138,6 +197,18 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
             $this->em->persist($remoteClaim);
             $this->em->flush();
         }
+
+        return $remoteClaim;
+    }
+
+    /**
+     * @param TagUri $claimName
+     * @return null|RemoteClaimInterface
+     */
+    private function getExistingRemoteClaim(TagUri $claimName)
+    {
+        /** @var RemoteClaimInterface $remoteClaim */
+        $remoteClaim = $this->claimRepo->findOneBy(['name' => $claimName]);
 
         return $remoteClaim;
     }

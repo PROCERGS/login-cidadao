@@ -10,6 +10,8 @@
 
 namespace LoginCidadao\RemoteClaimsBundle\Model;
 
+use LoginCidadao\RemoteClaimsBundle\Exception\ClaimUriUnavailableException;
+
 interface RemoteClaimFetcherInterface
 {
     /**
@@ -19,8 +21,14 @@ interface RemoteClaimFetcherInterface
     public function fetchRemoteClaim($claimUri);
 
     /**
+     * Tries to discover the current Claim URI.
+     *
+     * If discovery succeeds the value is persisted into the RemoteClaimInterface.
+     *
+     * If the discovery fails then the persisted value will be returned, if present.
      * @param TagUri|string $claimName
-     * @return string
+     * @return string Claim URI if the discovery process succeeds. Persisted (cached) version otherwise.
+     * @throws ClaimUriUnavailableException when the Claim URI can't be determined.
      */
     public function discoverClaimUri($claimName);
 

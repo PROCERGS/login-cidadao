@@ -11,12 +11,17 @@
 namespace LoginCidadao\RemoteClaimsBundle\Tests\Fetcher;
 
 use Doctrine\ORM\EntityManagerInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\TransferException;
 use LoginCidadao\OAuthBundle\Entity\ClientRepository;
+use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository;
 use LoginCidadao\RemoteClaimsBundle\Fetcher\RemoteClaimFetcher;
 use LoginCidadao\RemoteClaimsBundle\Model\HttpUri;
+use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 use LoginCidadao\RemoteClaimsBundle\Tests\Http\HttpMocker;
 use LoginCidadao\RemoteClaimsBundle\Tests\Parser\RemoteClaimParserTest;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
 {
@@ -68,12 +73,25 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
         $this->assertContains("resource={$encodedTag}", $webFingerParams);
     }
 
-    public function testFetchNotFound()
+    public function testFetchTagNotFound()
     {
         $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
 
         $tagUri = 'tag:example.com,2018:my_claim';
         $fetcher = $this->getFetcher();
+        $fetcher->fetchRemoteClaim($tagUri);
+    }
+
+    public function testFetchUriNotFound()
+    {
+        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
+
+        $httpClient = $this->getMockBuilder('GuzzleHttp\Client')
+            ->disableOriginalConstructor()->getMock();
+        $httpClient->expects($this->once())->method('get')->willThrowException(new TransferException());
+
+        $tagUri = 'https://claim.uri/dummy';
+        $fetcher = $this->getFetcher($httpClient);
         $fetcher->fetchRemoteClaim($tagUri);
     }
 
@@ -173,22 +191,64 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
         $fetcher->getRemoteClaim($claimUri);
     }
 
+    public function testHttpErrorOnFetch()
+    {
+        $tagUri = 'tag:example.com,2018:my_claim';
+
+        $httpClient = $this->getMockBuilder('GuzzleHttp\Client')
+            ->disableOriginalConstructor()->getMock();
+        $httpClient->expects($this->once())->method('get')
+            ->willThrowException(new TransferException('Some error'));
+
+        $fetcher = $this->getFetcher($httpClient);
+        $this->setExpectedException('LoginCidadao\RemoteClaimsBundle\Exception\ClaimUriUnavailableException');
+        $fetcher->discoverClaimUri($tagUri);
+    }
+
+    public function testDiscoveryFallback()
+    {
+        $tagUri = TagUri::createFromString('tag:example.com,2018:my_claim');
+
+        $httpClient = $this->getMockBuilder('GuzzleHttp\Client')
+            ->disableOriginalConstructor()->getMock();
+        $httpClient->expects($this->once())->method('get')
+            ->willThrowException(new TransferException('Some error'));
+
+        $uri = 'https://my.claim.uri/';
+        $remoteClaim = (new RemoteClaim())->setUri($uri);
+
+        $claimRepo = $this->getClaimRepository();
+        $claimRepo->expects($this->once())->method('findOneBy')->with(['name' => $tagUri])
+            ->willReturn($remoteClaim);
+
+        $fetcher = $this->getFetcher($httpClient, null, $claimRepo);
+        $this->assertSame($uri, $fetcher->discoverClaimUri($tagUri));
+    }
+
     /**
-     * @param HttpMocker|null $httpMocker
+     * @param HttpMocker|Client|null $httpMocker
      * @param EntityManagerInterface|null $em
      * @param RemoteClaimRepository|null $claimRepository
      * @param ClientRepository|null $clientRepository
+     * @param EventDispatcherInterface|null $dispatcher
      * @return RemoteClaimFetcher
      */
     private function getFetcher(
-        HttpMocker $httpMocker = null,
+        $httpMocker = null,
         EntityManagerInterface $em = null,
         RemoteClaimRepository $claimRepository = null,
-        ClientRepository $clientRepository = null
+        ClientRepository $clientRepository = null,
+        EventDispatcherInterface $dispatcher = null
     ) {
-        if ($httpMocker === null) {
-            $httpMocker = new HttpMocker();
+        if ($httpMocker instanceof Client) {
+            $httpClient = $httpMocker;
+        } else {
+            if ($httpMocker === null) {
+                $httpMocker = new HttpMocker();
+            }
+            $httpClient = $httpMocker->getClient();
         }
+
         if ($em === null) {
             $em = $this->getEntityManager();
         }
@@ -198,9 +258,11 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
         if ($clientRepository === null) {
             $clientRepository = $this->getClientRepository();
         }
-        $httpClient = $httpMocker->getClient();
+        if ($dispatcher === null) {
+            $dispatcher = $this->getDispatcher();
+        }
 
-        $fetcher = new RemoteClaimFetcher($httpClient, $em, $claimRepository, $clientRepository);
+        $fetcher = new RemoteClaimFetcher($httpClient, $em, $claimRepository, $clientRepository, $dispatcher);
 
         return $fetcher;
     }
@@ -234,5 +296,13 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
 
         return $repo;
+    }
+
+    /**
+     * @return EventDispatcherInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getDispatcher()
+    {
+        return $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
     }
 }

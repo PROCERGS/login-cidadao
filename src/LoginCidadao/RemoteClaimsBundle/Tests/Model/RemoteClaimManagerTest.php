@@ -13,8 +13,11 @@ namespace LoginCidadao\RemoteClaimsBundle\Tests\Model;
 use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
+use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimAuthorization;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimAuthorizationRepository;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository;
+use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimAuthorizationInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManager;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
@@ -198,6 +201,113 @@ class RemoteClaimManagerTest extends \PHPUnit_Framework_TestCase
         $manager->getRemoteClaimsAuthorizationsFromAuthorization($authorization);
     }
 
+    public function testGetExistingRemoteClaim()
+    {
+        $claimName = new TagUri();
+
+        $expected = new RemoteClaim();
+        $repo = $this->getRemoteClaimRepo();
+        $repo->expects($this->once())->method('findOneBy')->with(['name' => $claimName])
+            ->willReturn($expected);
+
+        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $repo);
+
+        $this->assertSame($expected, $manager->getExistingRemoteClaim($claimName));
+    }
+
+    public function testGetRemoteClaimsWithTokens()
+    {
+        $client = $this->getClient();
+        $person = $this->getPerson();
+        $claimName = (new TagUri())
+            ->setAuthorityName('example.com')
+            ->setDate('2018-01')
+            ->setSpecific('example');
+
+        $claimAuth = (new RemoteClaimAuthorization())
+            ->setPerson($person)
+            ->setClient($client)
+            ->setClaimName($claimName);
+
+        $authRepo = $this->getRepo();
+        $authRepo->expects($this->once())->method('findAllByClientAndPerson')
+            ->with($client, $person)->willReturn([$claimAuth]);
+
+        $remoteClaim = (new RemoteClaim())->setName($claimName);
+        $claimsRepo = $this->getRemoteClaimRepo();
+        $claimsRepo->expects($this->once())->method('findByClientAndPerson')
+            ->with($client, $person)->willReturn([$remoteClaim]);
+
+        $manager = new RemoteClaimManager($this->getEntityManager(), $authRepo, $claimsRepo);
+        $result = $manager->getRemoteClaimsWithTokens($client, $person);
+
+        $this->assertEquals([
+            'tag:example.com,2018-01:example' => [
+                'authorization' => $claimAuth,
+                'remoteClaim' => $remoteClaim,
+            ],
+        ], $result);
+    }
+
+    public function testGetRemoteClaimAuthorizationByAccessToken()
+    {
+        $claimName = TagUri::createFromString('tag:example.com,2017:my_claim');
+        $client = $this->getClient();
+        $person = $this->getPerson();
+        $provider = $this->getClaimProvider();
+        $token = 'my_access_token';
+        $claimAuth = (new RemoteClaimAuthorization())
+            ->setPerson($person)
+            ->setClient($client)
+            ->setClaimName($claimName)
+            ->setAccessToken($token)
+            ->setClaimProvider($provider);
+
+        $authRepo = $this->getRepo();
+        $authRepo->expects($this->once())->method('findOneBy')
+            ->with([
+                'claimProvider' => $provider,
+                'accessToken' => $token,
+            ])
+            ->willReturn($claimAuth);
+
+        $manager = new RemoteClaimManager($this->getEntityManager(), $authRepo, $this->getRemoteClaimRepo());
+
+        $this->assertSame($claimAuth, $manager->getRemoteClaimAuthorizationByAccessToken($provider, $token));
+    }
+
+    public function testUpdateRemoteClaimUri()
+    {
+        $claimName = TagUri::createFromString('tag:example.com,2018:my_claim2');
+        $uri = 'https://new.uri';
+
+        $remoteClaim = (new RemoteClaim())
+            ->setUri('https://old.uri/');
+
+        $claimRepo = $this->getRemoteClaimRepo();
+        $claimRepo->expects($this->once())->method('findOneBy')
+            ->willReturn($remoteClaim);
+        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $claimRepo);
+        $manager->updateRemoteClaimUri($claimName, $uri);
+
+        $this->assertEquals($uri, $remoteClaim->getUri());
+    }
+
+    public function testUpdateRemoteClaimUriNotFoundClaim()
+    {
+        $claimName = TagUri::createFromString('tag:example.com,2018:my_claim2');
+        $uri = 'https://new.uri';
+
+        $remoteClaim = null;
+
+        $claimRepo = $this->getRemoteClaimRepo();
+        $claimRepo->expects($this->once())->method('findOneBy')
+            ->willReturn($remoteClaim);
+        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $claimRepo);
+
+        $this->assertNull($manager->updateRemoteClaimUri($claimName, $uri));
+    }
+
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|EntityManagerInterface
      */
@@ -246,6 +356,14 @@ class RemoteClaimManagerTest extends \PHPUnit_Framework_TestCase
     private function getClient()
     {
         return $this->getMock('LoginCidadao\OAuthBundle\Model\ClientInterface');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|ClaimProviderInterface
+     */
+    private function getClaimProvider()
+    {
+        return $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
     }
 
     /**

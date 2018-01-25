@@ -10,16 +10,19 @@
 
 namespace LoginCidadao\RemoteClaimsBundle\EventSubscriber;
 
+use GuzzleHttp\Exception\TransferException;
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
 use JMS\Serializer\EventDispatcher\Events;
 use JMS\Serializer\GenericSerializationVisitor;
 use LoginCidadao\OAuthBundle\Model\AccessTokenManager;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\RemoteClaimsBundle\Exception\ClaimUriUnavailableException;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimAuthorizationInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManagerInterface;
+use Psr\Http\Message\UriInterface;
 
 class PersonSerializeEventSubscriber implements EventSubscriberInterface
 {
@@ -93,7 +96,12 @@ class PersonSerializeEventSubscriber implements EventSubscriberInterface
             $claimAuthorization = $remoteClaim['authorization'];
 
             $name = (string)$claim->getName();
-            $endpoint = $this->fetcher->discoverClaimUri($claim->getName());
+            try {
+                $endpoint = $this->fetcher->discoverClaimUri($claim->getName());
+            } catch (ClaimUriUnavailableException $e) {
+                // TODO: log error
+                continue;
+            }
 
             $claimNames[$name] = $name;
             $claimSources[$name] = [
