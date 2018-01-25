@@ -139,4 +139,14 @@ class TagUriTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\InvalidArgumentException');
         (new TagUri())->setAuthorityName('@invalid');
     }
+
+    public function testTagCreatedInteractively()
+    {
+        $tag = (new TagUri())
+            ->setAuthorityName('example.com')
+            ->setDate('2018-01')
+            ->setSpecific('example');
+
+        $this->assertEquals('tag:example.com,2018-01:example', $tag->__toString());
+    }
 }

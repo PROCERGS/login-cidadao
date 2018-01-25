@@ -35,7 +35,7 @@ class TagUri implements UriInterface
     private $specific;
 
     /** @var string */
-    private $fragment;
+    private $fragment = '';
 
     private static function getDnsNameRegex()
     {
