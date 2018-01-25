@@ -24,6 +24,19 @@ interface RemoteClaimInterface
     public function setName(TagUri $name);
 
     /**
+     * This value is to be considered a "cached value" and will be used only when the Discovery process fails.
+     *
+     * @return string
+     */
+    public function getUri();
+
+    /**
+     * @param string $uri
+     * @return RemoteClaimInterface
+     */
+    public function setUri($uri);
+
+    /**
      * @return string
      */
     public function getDisplayName();

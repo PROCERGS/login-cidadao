@@ -15,6 +15,7 @@ use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 use LoginCidadao\RemoteClaimsBundle\Validator\Constraints\HostBelongsToClaimProvider;
+use Psr\Http\Message\UriInterface;
 
 /**
  * RemoteClaim
@@ -37,6 +38,17 @@ class RemoteClaim implements RemoteClaimInterface
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
+
+    /**
+     * Uri used to access the Claim Metadata.
+     *
+     * This value is to be considered a "cached value" and will be used only when the Discovery process fails.
+     *
+     * @var string
+     *
+     * @ORM\Column(name="claim_uri", type="string", length=2083, nullable=true)
+     */
+    private $uri;
 
     /**
      * @var string
@@ -94,6 +106,10 @@ class RemoteClaim implements RemoteClaimInterface
      */
     public function getName()
     {
+        if (is_string($this->name)) {
+            return TagUri::createFromString($this->name);
+        }
+
         return $this->name;
     }
 
@@ -104,6 +120,24 @@ class RemoteClaim implements RemoteClaimInterface
     public function setName(TagUri $name)
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUri()
+    {
+        return $this->uri;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setUri($uri)
+    {
+        $this->uri = $uri;
 
         return $this;
     }
