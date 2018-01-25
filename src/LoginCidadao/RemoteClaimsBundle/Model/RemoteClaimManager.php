@@ -122,6 +122,16 @@ class RemoteClaimManager implements RemoteClaimManagerInterface
     /**
      * @inheritDoc
      */
+    public function getExistingRemoteClaim(TagUri $claimName)
+    {
+        return $this->remoteClaimRepository->findOneBy([
+            'name' => $claimName,
+        ]);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getRemoteClaimsFromAuthorization(Authorization $authorization)
     {
         return $this->remoteClaimRepository
@@ -172,5 +182,24 @@ class RemoteClaimManager implements RemoteClaimManagerInterface
             'claimProvider' => $claimProvider,
             'accessToken' => $accessToken,
         ]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateRemoteClaimUri(TagUri $claimName, $uri)
+    {
+        $remoteClaim = $this->getExistingRemoteClaim($claimName);
+
+        if (!$remoteClaim instanceof RemoteClaimInterface) {
+            // TODO: log
+            // TODO: throw exception?
+            return null;
+        }
+
+        $remoteClaim->setUri($uri);
+        $this->em->flush();
+
+        return $remoteClaim;
     }
 }

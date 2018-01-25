@@ -45,6 +45,14 @@ interface RemoteClaimManagerInterface
     public function filterRemoteClaims($scope);
 
     /**
+     * Get an already persisted RemoteClaimInterface without trying to fetch it again.
+     *
+     * @param TagUri $claimName
+     * @return RemoteClaimInterface
+     */
+    public function getExistingRemoteClaim(TagUri $claimName);
+
+    /**
      * @param Authorization $authorization
      * @return RemoteClaimInterface[]
      */
@@ -66,7 +74,7 @@ interface RemoteClaimManagerInterface
      * ]
      * @param ClientInterface $client
      * @param PersonInterface $person
-     * @return array
+     * @return RemoteClaimInterface[]
      */
     public function getRemoteClaimsWithTokens(ClientInterface $client, PersonInterface $person);
 
@@ -76,4 +84,11 @@ interface RemoteClaimManagerInterface
      * @return RemoteClaimAuthorizationInterface
      */
     public function getRemoteClaimAuthorizationByAccessToken(ClaimProviderInterface $claimProvider, $accessToken);
+
+    /**
+     * @param TagUri $claimName
+     * @param string $uri the new URI
+     * @return RemoteClaimInterface the updated Remote Claim
+     */
+    public function updateRemoteClaimUri(TagUri $claimName, $uri);
 }
