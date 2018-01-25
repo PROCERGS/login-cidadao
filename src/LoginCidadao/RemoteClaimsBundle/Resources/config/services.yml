@@ -23,6 +23,7 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@lc.remote_claims.repository"
             - "@lc.client.repository"
+            - "@event_dispatcher"
 
     lc.remote_claims.manager:
         class: LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManager
@@ -47,3 +48,10 @@ services:
             - "@lc.remote_claims.fetcher"
         tags:
             - { name: jms_serializer.event_listener, event: serializer.post_serialize, method: onPostSerialize }
+
+    lc.remote_claims.subscriber:
+        class: LoginCidadao\RemoteClaimsBundle\EventSubscriber\RemoteClaimSubscriber
+        arguments:
+            - "@lc.remote_claims.manager"
+        tags:
+            - { name: kernel.event_subscriber }
