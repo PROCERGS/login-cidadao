@@ -56,9 +56,10 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
 
         $initials = $registry->getSystemInitials($client);
 
-        $this->assertContains('host1', $queries);
-        $this->assertContains('host2', $queries);
         $this->assertContains('http://host1/path', $queries);
+        $this->assertContains('http://host2/path', $queries);
+        $this->assertContains('http://host2/path2', $queries);
+        $this->assertCount(3, $queries);
         $this->assertContains('XPTO', $initials);
     }
 
@@ -69,7 +70,7 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
 
         $queries = [];
         $httpClient = $this->getHttpClient();
-        $httpClient->expects($this->exactly(2))->method('get')
+        $httpClient->expects($this->once())->method('get')
             ->willReturnCallback(function ($url, $options) use (&$queries) {
                 $queries[] = str_replace('https://api.uri/', '', $url);
 
@@ -84,8 +85,8 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
         $registry = $this->getRegistry($httpClient);
         $registry->getSystemInitials($client);
 
-        $this->assertContains('host1', $queries);
         $this->assertContains('http://host1/path', $queries);
+        $this->assertCount(1, $queries);
     }
 
     public function testGetSystemInitialsServerError()

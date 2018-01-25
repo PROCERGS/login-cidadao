@@ -53,12 +53,12 @@ class SystemsRegistryService implements LoggerAwareInterface
     public function getSystemInitials(ClientInterface $client)
     {
         $this->log('info', "Fetching PROCERGS's system initials for client_id: {$client->getPublicId()}");
-        $hosts = $this->getHosts($client);
+        $queries = $this->getQueries($client);
 
         $identifiedSystems = [];
         $systems = [];
-        foreach ($hosts as $host) {
-            foreach (array_column($this->fetchInfo($host), 'sistema') as $system) {
+        foreach ($queries as $query) {
+            foreach (array_column($this->fetchInfo($query), 'sistema') as $system) {
                 if (array_key_exists($system, $systems)) {
                     $systems[$system] += 1;
                 } else {
@@ -82,12 +82,12 @@ class SystemsRegistryService implements LoggerAwareInterface
 
     public function getSystemOwners(ClientInterface $client)
     {
-        $hosts = $this->getHosts($client);
+        $queries = $this->getQueries($client);
 
         $identifiedOwners = [];
         $owners = [];
-        foreach ($hosts as $host) {
-            foreach (array_column($this->fetchInfo($host), 'clienteDono') as $owner) {
+        foreach ($queries as $query) {
+            foreach (array_column($this->fetchInfo($query), 'clienteDono') as $owner) {
                 if (array_key_exists($owner, $owners)) {
                     $owners[$owner] += 1;
                 } else {
@@ -156,24 +156,13 @@ class SystemsRegistryService implements LoggerAwareInterface
         return $result;
     }
 
-    private function getHosts(ClientInterface $client)
+    private function getQueries(ClientInterface $client)
     {
         $urls = array_filter($client->getRedirectUris());
         if ($client->getSiteUrl()) {
             $urls[] = $client->getSiteUrl();
         }
-        $hosts = array_unique(
-            array_map(
-                function ($url) {
-                    return parse_url($url)['host'];
-                },
-                $urls
-            )
-        );
-        if ($client->getSiteUrl()) {
-            $hosts[] = $client->getSiteUrl();
-        }
 
-        return $hosts;
+        return array_unique($urls);
     }
 }
