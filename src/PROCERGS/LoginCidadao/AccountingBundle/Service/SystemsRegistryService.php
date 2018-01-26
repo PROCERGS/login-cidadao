@@ -131,9 +131,9 @@ class SystemsRegistryService implements LoggerAwareInterface
                 }
             }
             $this->cache[$hashKey] = $response->json();
+        } else {
+            $this->log('info', "Returning cached result for '{$query}'");
         }
-
-        $this->log('info', "Returning cached result for '{$query}'");
 
         return $this->cache[$hashKey];
     }

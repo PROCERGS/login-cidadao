@@ -39,7 +39,6 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
 
         $queries = [];
         $httpClient = $this->getHttpClient();
-        // We have 2 hosts and 3 URIs, so we need 3 requests since the 3 URIs use only 2 hosts
         $httpClient->expects($this->exactly(3))->method('get')
             ->willReturnCallback(function ($url, $options) use (&$queries) {
                 $queries[] = str_replace('https://api.uri/', '', $url);
@@ -55,6 +54,50 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
         $registry = $this->getRegistry($httpClient);
 
         $initials = $registry->getSystemInitials($client);
+
+        $this->assertContains('http://host1/path', $queries);
+        $this->assertContains('http://host2/path', $queries);
+        $this->assertContains('http://host2/path2', $queries);
+        $this->assertCount(3, $queries);
+        $this->assertContains('XPTO', $initials);
+    }
+
+    public function testGetSystemInitialsFromCache()
+    {
+        $client = new Client();
+        $client->setSiteUrl('http://host1/path');
+        $client->setRedirectUris([
+            'http://host1/path',
+            'http://host2/path',
+            'http://host2/path2',
+        ]);
+
+        $queries = [];
+        $httpClient = $this->getHttpClient();
+        $httpClient->expects($this->exactly(3))->method('get')
+            ->willReturnCallback(function ($url, $options) use (&$queries) {
+                $queries[] = str_replace('https://api.uri/', '', $url);
+
+                $headers = $options['headers'];
+                $this->assertEquals($this->config['organization'], $headers['organizacao']);
+
+                $response = $this->getResponse([['sistema' => 'XPTO']]);
+
+                return $response;
+            });
+
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        // Logger should be called 11 times:
+        //      2 for 'Fetching PROCERGS's system initials for client_id'
+        //      6 for 'Searching for ...'
+        //      3 for 'Returning cached result for ...'
+        $logger->expects($this->exactly(11))->method('log')->with('info');
+
+        $registry = $this->getRegistry($httpClient);
+        $registry->setLogger($logger);
+
+        $initials = $registry->getSystemInitials($client);
+        $registry->getSystemInitials($client);
 
         $this->assertContains('http://host1/path', $queries);
         $this->assertContains('http://host2/path', $queries);
