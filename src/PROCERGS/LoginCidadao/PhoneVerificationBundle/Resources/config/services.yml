@@ -16,7 +16,10 @@ services:
         class: Eljam\CircuitBreaker\Breaker
         arguments:
             - "phone_verification.sms"
-            - { max_failure: "%procergs_phone_verification.max_failures%", reset_timeout: "%procergs_phone_verification.reset_timeout%" }
+            - max_failure: "%procergs_phone_verification.max_failures%"
+              reset_timeout: "%procergs_phone_verification.reset_timeout%"
+              allowed_exceptions:
+                - 'PROCERGS\Sms\Exception\InvalidCountryException'
             - "@cache"
             - null
             - "@event_dispatcher"
