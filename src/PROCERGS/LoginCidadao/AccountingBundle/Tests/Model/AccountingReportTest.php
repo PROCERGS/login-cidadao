@@ -89,6 +89,40 @@ class AccountingReportTest extends \PHPUnit_Framework_TestCase
         $report->getReport(['sort' => 'INVALID']);
     }
 
+    public function testLazyLoadInitials()
+    {
+        $getInitialsCalls = 0;
+        $getOwnerCalls = 0;
+
+        $registryClass = 'PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService';
+        $registry = $this->getMockBuilder($registryClass)->disableOriginalConstructor()->getMock();
+        $registry->expects($this->exactly(2))->method('getSystemInitials')
+            ->willReturnCallback(function () use (&$getInitialsCalls) {
+                $getInitialsCalls++;
+
+                return ['XPTO'];
+            });
+        $registry->expects($this->exactly(2))->method('getSystemOwners')
+            ->willReturnCallback(function () use (&$getOwnerCalls) {
+                $getOwnerCalls++;
+
+                return ['OWNER'];
+            });
+
+        $client1 = (new Client())->setId(123);
+        $client2 = (new Client())->setId(456);
+        $client3 = (new Client())->setId(789);
+
+        $report = $this->getAccountingReport($registry);
+        $report->addEntry($client1, 10, 20, true);
+        $report->addEntry($client2, 30, 40, true);
+        $report->addEntry($client3, 0, 0, true);
+
+        $report->getReport(['include_inactive' => false]);
+        $this->assertEquals(2, $getInitialsCalls);
+        $this->assertEquals(2, $getOwnerCalls);
+    }
+
     private function doTestSorting(AccountingReport $report, array $options = [])
     {
         $options['sort'] = AccountingReport::SORT_ORDER_ASC;
@@ -109,12 +143,14 @@ class AccountingReportTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    private function getAccountingReport()
+    private function getAccountingReport($registry = null)
     {
-        $registryClass = 'PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService';
-        $registry = $this->getMockBuilder($registryClass)->disableOriginalConstructor()->getMock();
-        $registry->expects($this->any())->method('getSystemInitials')->willReturn(['XPTO']);
-        $registry->expects($this->any())->method('getSystemOwners')->willReturn(['OWNER']);
+        if ($registry === null) {
+            $registryClass = 'PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService';
+            $registry = $this->getMockBuilder($registryClass)->disableOriginalConstructor()->getMock();
+            $registry->expects($this->any())->method('getSystemInitials')->willReturn(['XPTO']);
+            $registry->expects($this->any())->method('getSystemOwners')->willReturn(['OWNER']);
+        }
 
         $linked = [
             321 => (new ProcergsLink())
