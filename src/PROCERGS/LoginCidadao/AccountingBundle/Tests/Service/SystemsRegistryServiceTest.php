@@ -10,6 +10,7 @@
 
 namespace PROCERGS\LoginCidadao\AccountingBundle\Tests\Service;
 
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Message\RequestInterface;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
@@ -39,17 +40,7 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
 
         $queries = [];
         $httpClient = $this->getHttpClient();
-        $httpClient->expects($this->exactly(3))->method('get')
-            ->willReturnCallback(function ($url, $options) use (&$queries) {
-                $queries[] = str_replace('https://api.uri/', '', $url);
-
-                $headers = $options['headers'];
-                $this->assertEquals($this->config['organization'], $headers['organizacao']);
-
-                $response = $this->getResponse([['sistema' => 'XPTO']]);
-
-                return $response;
-            });
+        $this->httpClientExpectGet($httpClient, $queries, 3);
 
         $registry = $this->getRegistry($httpClient);
 
@@ -74,17 +65,7 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
 
         $queries = [];
         $httpClient = $this->getHttpClient();
-        $httpClient->expects($this->exactly(3))->method('get')
-            ->willReturnCallback(function ($url, $options) use (&$queries) {
-                $queries[] = str_replace('https://api.uri/', '', $url);
-
-                $headers = $options['headers'];
-                $this->assertEquals($this->config['organization'], $headers['organizacao']);
-
-                $response = $this->getResponse([['sistema' => 'XPTO']]);
-
-                return $response;
-            });
+        $this->httpClientExpectGet($httpClient, $queries, 3);
 
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         // Logger should be called 11 times:
@@ -261,5 +242,25 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
         }
 
         return $response;
+    }
+
+    /**
+     * @param ClientInterface|\PHPUnit_Framework_MockObject_MockObject $httpClient
+     * @param $queries
+     * @param $count
+     */
+    private function httpClientExpectGet(&$httpClient, &$queries, $count)
+    {
+        $httpClient->expects($this->exactly($count))->method('get')
+            ->willReturnCallback(function ($url, $options) use (&$queries) {
+                $queries[] = str_replace('https://api.uri/', '', $url);
+
+                $headers = $options['headers'];
+                $this->assertEquals($this->config['organization'], $headers['organizacao']);
+
+                $response = $this->getResponse([['sistema' => 'XPTO']]);
+
+                return $response;
+            });
     }
 }
