@@ -39,9 +39,9 @@ class AccountingReport
         $this->linked = $linked;
     }
 
-    public function addEntry(ClientInterface $client, $accessTokens = null, $apiUsage = null)
+    public function addEntry(ClientInterface $client, $accessTokens = null, $apiUsage = null, $lazyLoad = false)
     {
-        $this->createEntryIfNeeded($client);
+        $this->createEntryIfNeeded($client, !$lazyLoad);
         $entry = $this->getEntry($client);
 
         if ($accessTokens) {
@@ -70,18 +70,34 @@ class AccountingReport
             $report = $this->sortReport($report, $options['sort']);
         }
 
+        $systemsRegistry = $this->systemsRegistry;
+        $report = array_map(function (AccountingReportEntry $entry) use ($systemsRegistry) {
+            if (false === $entry->isQueriedSystemsRegistry()) {
+                $client = $entry->getClient();
+                $entry->setProcergsInitials($systemsRegistry->getSystemInitials($client));
+                $entry->setProcergsOwner($systemsRegistry->getSystemOwners($client));
+                $entry->setQueriedSystemsRegistry(true);
+            }
+
+            return $entry;
+        }, $report);
+
         return $report;
     }
 
-    private function createEntryIfNeeded(ClientInterface $client)
+    private function createEntryIfNeeded(ClientInterface $client, $querySystemsRegistry = true)
     {
         $clientId = $client->getId();
         if (array_key_exists($clientId, $this->report)) {
             return;
         }
 
-        $initials = $this->systemsRegistry->getSystemInitials($client);
-        $owners = $this->systemsRegistry->getSystemOwners($client);
+        $initials = null;
+        $owners = null;
+        if ($querySystemsRegistry) {
+            $initials = $this->systemsRegistry->getSystemInitials($client);
+            $owners = $this->systemsRegistry->getSystemOwners($client);
+        }
 
         $this->report[$clientId] = (new AccountingReportEntry())
             ->setClient($client)
@@ -89,7 +105,8 @@ class AccountingReport
             ->setProcergsOwner($owners)
             ->setSystemType($this->getSystemType($clientId))
             ->setAccessTokens(0)
-            ->setApiUsage(0);
+            ->setApiUsage(0)
+            ->setQueriedSystemsRegistry($querySystemsRegistry);
     }
 
     private function getEntry(ClientInterface $client)

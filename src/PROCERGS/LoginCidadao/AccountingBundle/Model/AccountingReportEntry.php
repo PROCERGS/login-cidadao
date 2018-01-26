@@ -33,6 +33,13 @@ class AccountingReportEntry
     private $apiUsage;
 
     /**
+     * Register if this Entry was already queried in the Systems Registry.
+     *
+     * @var bool
+     */
+    private $queriedSystemsRegistry = false;
+
+    /**
      * @return ClientInterface
      */
     public function getClient()
@@ -149,5 +156,24 @@ class AccountingReportEntry
     public function getTotalUsage()
     {
         return $this->getAccessTokens() + $this->getApiUsage();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isQueriedSystemsRegistry()
+    {
+        return $this->queriedSystemsRegistry;
+    }
+
+    /**
+     * @param bool $queriedSystemsRegistry
+     * @return AccountingReportEntry
+     */
+    public function setQueriedSystemsRegistry($queriedSystemsRegistry)
+    {
+        $this->queriedSystemsRegistry = $queriedSystemsRegistry;
+
+        return $this;
     }
 }
