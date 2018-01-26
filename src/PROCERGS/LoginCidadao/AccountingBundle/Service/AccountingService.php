@@ -81,12 +81,12 @@ class AccountingService implements LoggerAwareInterface
         $report = new AccountingReport($this->systemsRegistry, $linked);
         foreach ($data as $usage) {
             /** @var \LoginCidadao\OAuthBundle\Entity\Client $client */
-            $report->addEntry($clients[$usage['id']], $usage['access_tokens'], null);
+            $report->addEntry($clients[$usage['id']], $usage['access_tokens'], null, true);
         }
 
         foreach ($actionLog as $action) {
             /** @var \LoginCidadao\OAuthBundle\Entity\Client $client */
-            $report->addEntry($clients[$action['id']], null, $action['api_usage']);
+            $report->addEntry($clients[$action['id']], null, $action['api_usage'], true);
         }
         $this->log('info', "AccountingReport object ready.");
 
