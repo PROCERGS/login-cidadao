@@ -174,13 +174,12 @@ class SystemsRegistryService implements LoggerAwareInterface
         return array_unique($urls);
     }
 
-    private function filterInactive($response, \DateTime $activeAfter = null)
+    private function filterInactive($systems, \DateTime $activeAfter = null)
     {
-        if ($activeAfter === null) {
-            return $response;
+        if ($activeAfter instanceof \DateTime) {
+            $systems = $this->removeDecommissionedByDate($systems, $activeAfter);
         }
 
-        $systems = $this->removeDecommissionedByDate($response, $activeAfter);
         $systems = $this->removeDecommissionedBySituation($systems);
 
         return $systems;
