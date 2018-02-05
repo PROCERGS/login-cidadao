@@ -78,7 +78,7 @@ class AccountingService implements LoggerAwareInterface
         $linked = $this->systemsRegistry->fetchLinked($clients, $this->procergsLinkRepository);
 
         $this->log('info', "Preparing AccountingReport object...");
-        $report = new AccountingReport($this->systemsRegistry, $linked);
+        $report = new AccountingReport($this->systemsRegistry, $linked, $start);
         foreach ($data as $usage) {
             /** @var \LoginCidadao\OAuthBundle\Entity\Client $client */
             $report->addEntry($clients[$usage['id']], $usage['access_tokens'], null, true);

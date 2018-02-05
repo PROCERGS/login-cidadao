@@ -13,6 +13,7 @@ namespace PROCERGS\LoginCidadao\AccountingBundle\Tests\Model;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
 use PROCERGS\LoginCidadao\AccountingBundle\Model\AccountingReport;
+use PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService;
 
 /**
  * @codeCoverageIgnore
@@ -147,6 +148,7 @@ class AccountingReportTest extends \PHPUnit_Framework_TestCase
     {
         if ($registry === null) {
             $registryClass = 'PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService';
+            /** @var SystemsRegistryService|\PHPUnit_Framework_MockObject_MockObject $registry */
             $registry = $this->getMockBuilder($registryClass)->disableOriginalConstructor()->getMock();
             $registry->expects($this->any())->method('getSystemInitials')->willReturn(['XPTO']);
             $registry->expects($this->any())->method('getSystemOwners')->willReturn(['OWNER']);
@@ -158,6 +160,6 @@ class AccountingReportTest extends \PHPUnit_Framework_TestCase
                 ->setClient((new Client())->setId(321)),
         ];
 
-        return new AccountingReport($registry, $linked);
+        return new AccountingReport($registry, $linked, new \DateTime());
     }
 }

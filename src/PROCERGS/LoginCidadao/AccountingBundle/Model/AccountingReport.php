@@ -28,15 +28,20 @@ class AccountingReport
     /** @var AccountingReportEntry[] */
     private $report = [];
 
+    /** @var \DateTime */
+    private $activeAfter;
+
     /**
      * AccountingReport constructor.
      * @param SystemsRegistryService $systemsRegistry
      * @param array $linked
+     * @param \DateTime $activeAfter
      */
-    public function __construct(SystemsRegistryService $systemsRegistry, array $linked = [])
+    public function __construct(SystemsRegistryService $systemsRegistry, array $linked = [], \DateTime $activeAfter)
     {
         $this->systemsRegistry = $systemsRegistry;
         $this->linked = $linked;
+        $this->activeAfter = $activeAfter;
     }
 
     public function addEntry(ClientInterface $client, $accessTokens = null, $apiUsage = null, $lazyLoad = false)
@@ -74,8 +79,8 @@ class AccountingReport
         $report = array_map(function (AccountingReportEntry $entry) use ($systemsRegistry) {
             if (false === $entry->isQueriedSystemsRegistry()) {
                 $client = $entry->getClient();
-                $entry->setProcergsInitials($systemsRegistry->getSystemInitials($client));
-                $entry->setProcergsOwner($systemsRegistry->getSystemOwners($client));
+                $entry->setProcergsInitials($systemsRegistry->getSystemInitials($client, $this->activeAfter));
+                $entry->setProcergsOwner($systemsRegistry->getSystemOwners($client, $this->activeAfter));
                 $entry->setQueriedSystemsRegistry(true);
             }
 
@@ -95,8 +100,8 @@ class AccountingReport
         $initials = null;
         $owners = null;
         if ($querySystemsRegistry) {
-            $initials = $this->systemsRegistry->getSystemInitials($client);
-            $owners = $this->systemsRegistry->getSystemOwners($client);
+            $initials = $this->systemsRegistry->getSystemInitials($client, $this->activeAfter);
+            $owners = $this->systemsRegistry->getSystemOwners($client, $this->activeAfter);
         }
 
         $this->report[$clientId] = (new AccountingReportEntry())
