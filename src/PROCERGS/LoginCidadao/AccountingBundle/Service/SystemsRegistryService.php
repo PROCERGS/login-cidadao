@@ -180,23 +180,39 @@ class SystemsRegistryService implements LoggerAwareInterface
             return $response;
         }
 
-        $systems = [];
-        foreach ($response as $system) {
-            if (array_key_exists('decommissionedOn', $system)) {
-                $decommissionedOn = \DateTime::createFromFormat('Y-m-d', $system['decommissionedOn']);
-                if ($decommissionedOn < $activeAfter) {
-                    $this->log('info',
-                        "Ignoring system {$system['sistema']}: decommissioned on {$decommissionedOn->format('Y-m-d')}");
-                    continue;
-                }
-            }
-            if (array_key_exists('situacao', $system) && $system['situacao'] !== 'Implantado') {
-                $this->log('info', "Ignoring system {$system['sistema']}: field 'situacao' !== 'Implantado'");
-                continue;
-            }
-            $systems[] = $system;
-        }
+        $systems = $this->removeDecommissionedByDate($response, $activeAfter);
+        $systems = $this->removeDecommissionedBySituation($systems);
 
         return $systems;
+    }
+
+    private function removeDecommissionedByDate($systems, \DateTime $activeAfter = null)
+    {
+        return array_filter($systems, function ($system) use ($activeAfter) {
+            if (!isset($system['decommissionedOn'])) {
+                return true;
+            }
+
+            $decommissionedOn = \DateTime::createFromFormat('Y-m-d', $system['decommissionedOn']);
+            if ($decommissionedOn < $activeAfter) {
+                $this->log('info',
+                    "Ignoring system {$system['sistema']}: decommissioned on {$decommissionedOn->format('Y-m-d')}");
+
+                return false;
+            }
+
+            return true;
+        });
+    }
+
+    private function removeDecommissionedBySituation($systems)
+    {
+        return array_filter($systems, function ($system) {
+            if (!isset($system['situacao'])) {
+                return true;
+            }
+
+            return $system['situacao'] === 'Implantado';
+        });
     }
 }
