@@ -139,6 +139,46 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
         $registry->getSystemInitials($client);
     }
 
+    public function testGetSystemInitialsIgnoreInactiveSystemsWithoutDecommissionDate()
+    {
+        $queries = [];
+        $httpClient = $this->getHttpClient();
+        $this->httpClientExpectGet($httpClient, $queries, 1, [
+            ['sistema' => 'XPTO1', 'situacao' => 'Implantado'],
+            ['sistema' => 'XPTO2', 'situacao' => 'Not Implantado'],
+        ]);
+
+        $client = new Client();
+        $client->setSiteUrl('http://host1/path');
+
+        $registry = $this->getRegistry($httpClient);
+        $initials = $registry->getSystemInitials($client, new \DateTime());
+
+        $this->assertNotEmpty($initials);
+        $this->assertContains('XPTO1', $initials);
+        $this->assertNotContains('XPTO2', $initials);
+    }
+
+    public function testGetSystemInitialsIgnoreInactiveSystemsWithDecommissionDate()
+    {
+        $queries = [];
+        $httpClient = $this->getHttpClient();
+        $this->httpClientExpectGet($httpClient, $queries, 1, [
+            ['sistema' => 'XPTO1', 'decommissionedOn' => '2018-02-03'],
+            ['sistema' => 'XPTO2', 'decommissionedOn' => '2018-01-31'],
+        ]);
+
+        $client = new Client();
+        $client->setSiteUrl('http://host1/path');
+
+        $registry = $this->getRegistry($httpClient);
+        $initials = $registry->getSystemInitials($client, \DateTime::createFromFormat('Y-m-d', '2018-02-01'));
+
+        $this->assertNotEmpty($initials);
+        $this->assertContains('XPTO1', $initials);
+        $this->assertNotContains('XPTO2', $initials);
+    }
+
     public function testGetSystemOwners()
     {
         $client = new Client();
@@ -248,17 +288,18 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
      * @param ClientInterface|\PHPUnit_Framework_MockObject_MockObject $httpClient
      * @param $queries
      * @param $count
+     * @param array|null $payload
      */
-    private function httpClientExpectGet(&$httpClient, &$queries, $count)
+    private function httpClientExpectGet(&$httpClient, &$queries, $count, $payload = null)
     {
         $httpClient->expects($this->exactly($count))->method('get')
-            ->willReturnCallback(function ($url, $options) use (&$queries) {
+            ->willReturnCallback(function ($url, $options) use (&$queries, $payload) {
                 $queries[] = str_replace('https://api.uri/', '', $url);
 
                 $headers = $options['headers'];
                 $this->assertEquals($this->config['organization'], $headers['organizacao']);
 
-                $response = $this->getResponse([['sistema' => 'XPTO']]);
+                $response = $this->getResponse($payload ?: [['sistema' => 'XPTO']]);
 
                 return $response;
             });

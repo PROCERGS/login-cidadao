@@ -50,7 +50,7 @@ class SystemsRegistryService implements LoggerAwareInterface
         ];
     }
 
-    public function getSystemInitials(ClientInterface $client)
+    public function getSystemInitials(ClientInterface $client, \DateTime $activeAfter = null)
     {
         $this->log('info', "Fetching PROCERGS's system initials for client_id: {$client->getPublicId()}");
         $queries = $this->getQueries($client);
@@ -58,7 +58,7 @@ class SystemsRegistryService implements LoggerAwareInterface
         $identifiedSystems = [];
         $systems = [];
         foreach ($queries as $query) {
-            foreach (array_column($this->fetchInfo($query), 'sistema') as $system) {
+            foreach (array_column($this->fetchInfo($query, $activeAfter), 'sistema') as $system) {
                 if (array_key_exists($system, $systems)) {
                     $systems[$system] += 1;
                 } else {
@@ -80,14 +80,14 @@ class SystemsRegistryService implements LoggerAwareInterface
         return $identifiedSystems;
     }
 
-    public function getSystemOwners(ClientInterface $client)
+    public function getSystemOwners(ClientInterface $client, \DateTime $activeAfter = null)
     {
         $queries = $this->getQueries($client);
 
         $identifiedOwners = [];
         $owners = [];
         foreach ($queries as $query) {
-            foreach (array_column($this->fetchInfo($query), 'clienteDono') as $owner) {
+            foreach (array_column($this->fetchInfo($query, $activeAfter), 'clienteDono') as $owner) {
                 if (array_key_exists($owner, $owners)) {
                     $owners[$owner] += 1;
                 } else {
@@ -109,7 +109,12 @@ class SystemsRegistryService implements LoggerAwareInterface
         return $identifiedOwners;
     }
 
-    private function fetchInfo($query)
+    /**
+     * @param $query
+     * @param \DateTime $activeAfter systems deactivated after this date will be included in the report.
+     * @return mixed
+     */
+    private function fetchInfo($query, \DateTime $activeAfter = null)
     {
         $this->log('info', "Searching for '{$query}'");
         $hashKey = hash('sha256', $query);
@@ -130,7 +135,10 @@ class SystemsRegistryService implements LoggerAwareInterface
                     throw $e;
                 }
             }
-            $this->cache[$hashKey] = $response->json();
+
+            $systems = $this->filterInactive($response->json(), $activeAfter);
+
+            $this->cache[$hashKey] = $systems;
         } else {
             $this->log('info', "Returning cached result for '{$query}'");
         }
@@ -164,5 +172,31 @@ class SystemsRegistryService implements LoggerAwareInterface
         }
 
         return array_unique($urls);
+    }
+
+    private function filterInactive($response, \DateTime $activeAfter = null)
+    {
+        if ($activeAfter === null) {
+            return $response;
+        }
+
+        $systems = [];
+        foreach ($response as $system) {
+            if (array_key_exists('decommissionedOn', $system)) {
+                $decommissionedOn = \DateTime::createFromFormat('Y-m-d', $system['decommissionedOn']);
+                if ($decommissionedOn < $activeAfter) {
+                    $this->log('info',
+                        "Ignoring system {$system['sistema']}: decommissioned on {$decommissionedOn->format('Y-m-d')}");
+                    continue;
+                }
+            }
+            if (array_key_exists('situacao', $system) && $system['situacao'] !== 'Implantado') {
+                $this->log('info', "Ignoring system {$system['sistema']}: field 'situacao' !== 'Implantado'");
+                continue;
+            }
+            $systems[] = $system;
+        }
+
+        return $systems;
     }
 }
