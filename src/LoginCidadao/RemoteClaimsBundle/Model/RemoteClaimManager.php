@@ -162,11 +162,11 @@ class RemoteClaimManager implements RemoteClaimManagerInterface
 
         $response = [];
         foreach ($remoteClaimAuthorizations as $authorization) {
-            $tag = is_string($authorization->getClaimName()) ?: $authorization->getClaimName()->__toString();
+            $tag = $this->getTagString($authorization->getClaimName());
             $response[$tag]['authorization'] = $authorization;
         }
         foreach ($remoteClaims as $remoteClaim) {
-            $tag = is_string($remoteClaim->getName()) ?: $remoteClaim->getName()->__toString();
+            $tag = $this->getTagString($remoteClaim->getName());
             $response[$tag]['remoteClaim'] = $remoteClaim;
         }
 
@@ -201,5 +201,14 @@ class RemoteClaimManager implements RemoteClaimManagerInterface
         $this->em->flush();
 
         return $remoteClaim;
+    }
+
+    /**
+     * @param string|TagUri $tag
+     * @return string
+     */
+    private function getTagString($tag)
+    {
+        return is_string($tag) ? $tag : $tag->__toString();
     }
 }
