@@ -10,11 +10,11 @@
 
 namespace LoginCidadao\RemoteClaimsBundle\EventSubscriber;
 
-use GuzzleHttp\Exception\TransferException;
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
 use JMS\Serializer\EventDispatcher\Events;
 use JMS\Serializer\GenericSerializationVisitor;
+use LoginCidadao\APIBundle\Service\VersionService;
 use LoginCidadao\OAuthBundle\Model\AccessTokenManager;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\RemoteClaimsBundle\Exception\ClaimUriUnavailableException;
@@ -22,7 +22,6 @@ use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimAuthorizationInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManagerInterface;
-use Psr\Http\Message\UriInterface;
 
 class PersonSerializeEventSubscriber implements EventSubscriberInterface
 {
@@ -35,20 +34,26 @@ class PersonSerializeEventSubscriber implements EventSubscriberInterface
     /** @var RemoteClaimFetcherInterface */
     private $fetcher;
 
+    /** @var VersionService */
+    private $versionService;
+
     /**
      * PersonSerializeEventSubscriber constructor.
      * @param AccessTokenManager $accessTokenManager
      * @param RemoteClaimManagerInterface $remoteClaimManager
      * @param RemoteClaimFetcherInterface $fetcher
+     * @param VersionService $versionService
      */
     public function __construct(
         AccessTokenManager $accessTokenManager,
         RemoteClaimManagerInterface $remoteClaimManager,
-        RemoteClaimFetcherInterface $fetcher
+        RemoteClaimFetcherInterface $fetcher,
+        VersionService $versionService
     ) {
         $this->accessTokenManager = $accessTokenManager;
         $this->remoteClaimManager = $remoteClaimManager;
         $this->fetcher = $fetcher;
+        $this->versionService = $versionService;
     }
 
     public static function getSubscribedEvents()
@@ -68,7 +73,9 @@ class PersonSerializeEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $this->addDistributedAndAggregatedClaims($event);
+        if ($this->checkVersion()) {
+            $this->addDistributedAndAggregatedClaims($event);
+        }
     }
 
     private function addDistributedAndAggregatedClaims(ObjectEvent $event)
@@ -112,5 +119,16 @@ class PersonSerializeEventSubscriber implements EventSubscriberInterface
 
         $visitor->addData('_claim_names', $claimNames);
         $visitor->addData('_claim_sources', $claimSources);
+    }
+
+    /**
+     * @return bool
+     */
+    private function checkVersion()
+    {
+        $version = $this->versionService->getVersionFromRequest();
+        $version = $this->versionService->getString($version);
+
+        return version_compare($version, '2.0.0', '>=');
     }
 }
