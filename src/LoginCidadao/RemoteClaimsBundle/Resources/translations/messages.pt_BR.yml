@@ -1,5 +1,6 @@
 remote_claims:
     details:
+        issuer_logo_alt: 'Logo de %claim_provider%'
         issued_by: 'via %img% <strong>%claim_provider%</strong>'
         show_details: 'Clique para ver mais detalhes.'
         show_details_with_scope: 'Clique para ver mais detalhes.'
