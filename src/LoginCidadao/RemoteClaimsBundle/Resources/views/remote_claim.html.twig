@@ -3,7 +3,7 @@
         <img alt="{{ 'remote_claims.details.issuer_logo_alt' | trans }}"
                 {#src="http://via.placeholder.com/350x350"#}
              src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', {'client': claim.provider}) }}"
-             style="margin-bottom: 0" class="img-responsive">
+             style="margin-bottom: 0; max-width: 100% !important;" class="img-responsive">
     </span>
 {% endset %}
 {% set claimInfo %}
