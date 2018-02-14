@@ -2,7 +2,7 @@ services:
     lc.remote_claims.http_client:
         class: GuzzleHttp\Client
         calls:
-            - [ 'setDefaultOption', ['verify', false]] # set to false for testing purposes only
+            - [ 'setDefaultOption', ['verify', true]] # set to false for testing purposes only
 
     lc.remote_claims.repository:
         class: Doctrine\ORM\EntityRepository
