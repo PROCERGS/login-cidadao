@@ -1,13 +1,13 @@
 {% spaceless %}
-    {% if client.imageName is null %}
-        {% if client.metadata is not null and client.metadata.logoUri is not null %}
-            {{ client.metadata.logouri }}
-        {% else %}
+    {% if client.metadata is not null and client.metadata.logoUri is not null %}
+        {{ client.metadata.logouri }}
+    {% else %}
+        {% if client.imageName is null %}
             {% image '@LoginCidadaoCoreBundle/Resources/public/images/userav.png' %}
                 {{ asset_url }}
             {% endimage %}
+        {% else %}
+            {{ vich_uploader_asset(client, 'image') }}
         {% endif %}
-    {% else %}
-        {{ vich_uploader_asset(client, 'image') }}
     {% endif %}
 {% endspaceless %}
