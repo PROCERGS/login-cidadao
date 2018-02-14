@@ -21,6 +21,7 @@ use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManagerInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 use Psr\Log\LoggerAwareInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class AuthorizationSubscriber implements EventSubscriberInterface, LoggerAwareInterface
 {
@@ -35,17 +36,23 @@ class AuthorizationSubscriber implements EventSubscriberInterface, LoggerAwareIn
     /** @var RemoteClaimManagerInterface */
     private $remoteClaimManager;
 
+    /** @var AuthorizationCheckerInterface */
+    private $authChecker;
+
     /**
      * AuthorizationSubscriber constructor.
      * @param RemoteClaimManagerInterface $remoteClaimManager
      * @param RemoteClaimFetcherInterface $claimFetcher
+     * @param AuthorizationCheckerInterface $authChecker
      */
     public function __construct(
         RemoteClaimManagerInterface $remoteClaimManager,
-        RemoteClaimFetcherInterface $claimFetcher
+        RemoteClaimFetcherInterface $claimFetcher,
+        AuthorizationCheckerInterface $authChecker
     ) {
         $this->remoteClaimManager = $remoteClaimManager;
         $this->claimFetcher = $claimFetcher;
+        $this->authChecker = $authChecker;
     }
 
     public static function getSubscribedEvents()
@@ -60,6 +67,9 @@ class AuthorizationSubscriber implements EventSubscriberInterface, LoggerAwareIn
 
     public function onNewAuthorizationRequest(AuthorizationEvent $event)
     {
+        if (false === $this->authChecker->isGranted('FEATURE_REMOTE_CLAIMS')) {
+            return;
+        }
         foreach ($event->getScope() as $scope) {
             if ($this->checkHttpUri($scope) || $this->checkTagUri($scope)) {
                 try {
@@ -78,11 +88,17 @@ class AuthorizationSubscriber implements EventSubscriberInterface, LoggerAwareIn
 
     public function onNewAuthorization(AuthorizationEvent $event)
     {
+        if (false === $this->authChecker->isGranted('FEATURE_REMOTE_CLAIMS')) {
+            return;
+        }
         $this->enforceRemoteClaims($event);
     }
 
     public function onUpdateAuthorization(AuthorizationEvent $event)
     {
+        if (false === $this->authChecker->isGranted('FEATURE_REMOTE_CLAIMS')) {
+            return;
+        }
         $this->enforceRemoteClaims($event);
     }
 

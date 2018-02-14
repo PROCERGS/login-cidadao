@@ -2,7 +2,7 @@ services:
     lc.remote_claims.http_client:
         class: GuzzleHttp\Client
         calls:
-            - [ 'setDefaultOption', ['verify', true]] # set to false for testing purposes only
+            - [ 'setDefaultOption', ['verify', false]] # set to false for testing purposes only
 
     lc.remote_claims.repository:
         class: Doctrine\ORM\EntityRepository
@@ -37,6 +37,7 @@ services:
         arguments:
             - "@lc.remote_claims.manager"
             - "@lc.remote_claims.fetcher"
+            - "@security.authorization_checker"
         tags:
             - { name: kernel.event_subscriber }
 
