@@ -15,7 +15,6 @@ use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 use LoginCidadao\RemoteClaimsBundle\Validator\Constraints\HostBelongsToClaimProvider;
-use Psr\Http\Message\UriInterface;
 
 /**
  * RemoteClaim

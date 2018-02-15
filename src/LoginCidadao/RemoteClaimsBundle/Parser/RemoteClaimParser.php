@@ -52,6 +52,7 @@ class RemoteClaimParser implements RemoteClaimParserInterface
         $claimProviderMetadata = self::normalizeData($claimProviderMetadata);
 
         $provider
+            ->setClientId($claimProviderMetadata->client_id)
             ->setName($claimProviderMetadata->client_name)
             ->setRedirectUris($claimProviderMetadata->redirect_uris);
 

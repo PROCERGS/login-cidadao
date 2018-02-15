@@ -31,6 +31,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthorizeController extends BaseController
 {
@@ -157,6 +158,9 @@ class AuthorizeController extends BaseController
 
         // Call the lib's original Controller
         $parentResponse = parent::validateAuthorizeAction();
+        if (!is_array($parentResponse)) {
+            return $parentResponse;
+        }
         $parentResponse['scopes'] = $this->removeRemoteScope($parentResponse['scopes']);
 
         $response = array_merge([

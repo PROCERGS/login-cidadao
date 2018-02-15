@@ -393,6 +393,18 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
     }
 
     /**
+     * @inheritDoc
+     */
+    public function setClientId($clientId)
+    {
+        $parts = explode('_', $clientId, 2);
+        $this->setId($parts[0]);
+        $this->setRandomId($parts[1]);
+
+        return $this;
+    }
+
+    /**
      * Compatibility with OIDC code
      */
     public function getClientId()

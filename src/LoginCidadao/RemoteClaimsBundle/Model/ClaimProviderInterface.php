@@ -13,6 +13,17 @@ namespace LoginCidadao\RemoteClaimsBundle\Model;
 interface ClaimProviderInterface
 {
     /**
+     * @return string
+     */
+    public function getClientId();
+
+    /**
+     * @param string $clientId
+     * @return ClaimProviderInterface
+     */
+    public function setClientId($clientId);
+
+    /**
      * Get the name of the Claim Provider
      *
      * @return string

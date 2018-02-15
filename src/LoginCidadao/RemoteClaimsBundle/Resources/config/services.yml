@@ -22,7 +22,7 @@ services:
             - "@lc.remote_claims.http_client"
             - "@doctrine.orm.entity_manager"
             - "@lc.remote_claims.repository"
-            - "@lc.client.repository"
+            - "@lc.client_manager"
             - "@event_dispatcher"
 
     lc.remote_claims.manager:

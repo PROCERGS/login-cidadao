@@ -30,6 +30,7 @@ class RemoteClaimParserTest extends \PHPUnit_Framework_TestCase
         'claim_provider_recommended_scope' => ['scope1', 'scope2', 'scope3'],
         'claim_provider_essential_scope' => ['scope2'],
         'claim_provider' => [
+            'client_id' => '123_r4nd0mid',
             'client_name' => 'The Provider',
             'redirect_uris' => ['https://redirect.uri'],
             'bar' => 'foo',
@@ -101,6 +102,7 @@ class RemoteClaimParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(self::$claimMetadata['claim_provider_essential_scope'], $claim->getEssentialScope());
 
         $expectedProvider = self::$claimMetadata['claim_provider'];
+        $this->assertEquals($expectedProvider['client_id'], $claim->getProvider()->getClientId());
         $this->assertEquals($expectedProvider['client_name'], $claim->getProvider()->getName());
         $this->assertEquals($expectedProvider['redirect_uris'], $claim->getProvider()->getRedirectUris());
     }

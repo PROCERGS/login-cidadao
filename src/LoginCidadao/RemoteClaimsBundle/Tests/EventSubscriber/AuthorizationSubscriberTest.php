@@ -20,6 +20,7 @@ use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -56,7 +57,7 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
         $event = $this->getEvent();
         $event->expects($this->atLeastOnce())->method('getScope')->willReturn($scope);
 
-        $subscriber = new AuthorizationSubscriber($this->getRemoteClaimManager(), $fetcher);
+        $subscriber = new AuthorizationSubscriber($this->getRemoteClaimManager(), $fetcher, $this->getAuthChecker());
         $subscriber->onNewAuthorizationRequest($event);
 
         $this->assertCount(2, $remoteClaims);
@@ -83,7 +84,7 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
         $event = $this->getEvent();
         $event->expects($this->atLeastOnce())->method('getScope')->willReturn($scope);
 
-        $subscriber = new AuthorizationSubscriber($this->getRemoteClaimManager(), $fetcher);
+        $subscriber = new AuthorizationSubscriber($this->getRemoteClaimManager(), $fetcher, $this->getAuthChecker());
         $subscriber->setLogger($logger);
         $subscriber->onNewAuthorizationRequest($event);
 
@@ -131,7 +132,7 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
             ->method('revokeAllAuthorizations')
             ->with($this->isInstanceOf('LoginCidadao\CoreBundle\Entity\Authorization'));
 
-        $subscriber = new AuthorizationSubscriber($manager, $this->getRemoteClaimFetcher());
+        $subscriber = new AuthorizationSubscriber($manager, $this->getRemoteClaimFetcher(), $this->getAuthChecker());
         $subscriber->onRevokeAuthorization($event);
     }
 
@@ -143,7 +144,7 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
         $manager = $this->getRemoteClaimManager();
         $manager->expects($this->never())->method('revokeAllAuthorizations');
 
-        $subscriber = new AuthorizationSubscriber($manager, $this->getRemoteClaimFetcher());
+        $subscriber = new AuthorizationSubscriber($manager, $this->getRemoteClaimFetcher(), $this->getAuthChecker());
         $subscriber->onRevokeAuthorization($event);
     }
 
@@ -161,7 +162,7 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
             ->method('enforceAuthorization')
             ->with($this->isInstanceOf('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimAuthorizationInterface'));
 
-        $subscriber = new AuthorizationSubscriber($manager, $this->getRemoteClaimFetcher());
+        $subscriber = new AuthorizationSubscriber($manager, $this->getRemoteClaimFetcher(), $this->getAuthChecker());
 
         return [
             'subscriber' => $subscriber,
@@ -228,5 +229,16 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
     private function getPerson()
     {
         return $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|AuthorizationCheckerInterface
+     */
+    private function getAuthChecker($isGranted = true)
+    {
+        $checker = $this->getMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
+        $checker->expects($this->any())->method('isGranted')->willReturn($isGranted);
+
+        return $checker;
     }
 }

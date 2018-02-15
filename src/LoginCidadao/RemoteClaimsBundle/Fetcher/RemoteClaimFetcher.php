@@ -16,6 +16,7 @@ use GuzzleHttp\Exception\TransferException;
 use LoginCidadao\LogBundle\Traits\LoggerAwareTrait;
 use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository;
 use LoginCidadao\RemoteClaimsBundle\Event\UpdateRemoteClaimUriEvent;
@@ -42,8 +43,8 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
     /** @var RemoteClaimRepository */
     private $claimRepo;
 
-    /** @var ClientRepository */
-    private $clientRepo;
+    /** @var ClientManager */
+    private $clientManager;
 
     /** @var EntityManagerInterface */
     private $em;
@@ -56,20 +57,20 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
      * @param Client $httpClient
      * @param EntityManagerInterface $em
      * @param RemoteClaimRepository $claimRepository
-     * @param ClientRepository $clientRepository
+     * @param ClientManager $clientManager
      * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(
         Client $httpClient,
         EntityManagerInterface $em,
         RemoteClaimRepository $claimRepository,
-        ClientRepository $clientRepository,
+        ClientManager $clientManager,
         EventDispatcherInterface $dispatcher
     ) {
         $this->em = $em;
         $this->httpClient = $httpClient;
         $this->claimRepo = $claimRepository;
-        $this->clientRepo = $clientRepository;
+        $this->clientManager = $clientManager;
         $this->dispatcher = $dispatcher;
     }
 
@@ -214,18 +215,19 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
     }
 
     /**
-     * @param string[] $redirectUris
+     * @param string $clientId
      * @return ClientInterface
+     * @throws ClaimProviderNotFoundException
      */
-    private function findClaimProvider($redirectUris)
+    private function findClaimProvider($clientId)
     {
-        $clients = $this->clientRepo->findByRedirectUris($redirectUris);
+        $client = $this->clientManager->getClientById($clientId);
 
-        if (count($clients) > 1) {
-            throw new \InvalidArgumentException('Ambiguous redirect_uris. More than one Relying Party found.');
+        if (!$client instanceof ClaimProviderInterface) {
+            throw new ClaimProviderNotFoundException('Relying Party "'.$clientId.'" not found.');
         }
 
-        return empty($clients) ? null : reset($clients);
+        return $client;
     }
 
     /**
@@ -238,7 +240,7 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
     {
         $existingProvider = null;
         if ($provider instanceof ClaimProviderInterface) {
-            $existingProvider = $this->findClaimProvider($provider->getRedirectUris());
+            $existingProvider = $this->findClaimProvider($provider->getClientId());
         }
 
         if ($existingProvider instanceof ClaimProviderInterface) {

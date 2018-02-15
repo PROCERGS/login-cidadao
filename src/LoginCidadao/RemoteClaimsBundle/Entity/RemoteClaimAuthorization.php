@@ -51,7 +51,7 @@ class RemoteClaimAuthorization implements RemoteClaimAuthorizationInterface
     /**
      * @var PersonInterface
      *
-     * @ORM\OneToOne(targetEntity="LoginCidadao\CoreBundle\Entity\Person")
+     * @ORM\ManyToOne(targetEntity="LoginCidadao\CoreBundle\Entity\Person")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
     private $person;

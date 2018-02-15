@@ -24,7 +24,10 @@ use Symfony\Component\HttpFoundation\Request;
 class RemoteClaimController extends BaseController
 {
     /**
-     * @REST\Get("/api/v1/remote-claims/translate", name="remote_claims_validate", defaults={"_format"="json"})
+     * @REST\Get("/api/v{version}/remote-claims/translate",
+     *     name="remote_claims_validate",
+     *     defaults={"_format"="json"},
+     *     requirements={"version": "\d+(.\d+)*"})
      * @REST\View(templateVar="oidc_config")
      */
     public function validateRemoteClaimAction(Request $request)
