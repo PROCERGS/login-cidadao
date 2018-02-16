@@ -38,7 +38,7 @@ class ClientController extends Controller
 
         /** @var RemoteClaimManagerInterface $remoteClaimManager */
         $remoteClaimManager = $this->get('lc.remote_claims.manager');
-        $remoteClaims = $remoteClaimManager->getRemoteClaimsFromAuthorization($authorization);
+        $remoteClaims = $authorization ? $remoteClaimManager->getRemoteClaimsFromAuthorization($authorization) : [];
 
         $scopes = empty($authorization) ? [] : $authorization->getScope();
 
