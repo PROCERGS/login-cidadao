@@ -183,6 +183,11 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
 
         $existingClaim = $this->getExistingRemoteClaim($remoteClaim->getName());
         if ($existingClaim instanceof RemoteClaimInterface) {
+            $existingClaim
+                ->setDescription($remoteClaim->getDescription())
+                ->setRecommendedScope($remoteClaim->getRecommendedScope())
+                ->setEssentialScope($remoteClaim->getEssentialScope())
+                ->setDisplayName($remoteClaim->getDisplayName());
             $remoteClaim = $existingClaim;
             $newClaim = false;
         } else {
@@ -196,8 +201,8 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
 
         if ($newClaim) {
             $this->em->persist($remoteClaim);
-            $this->em->flush();
         }
+        $this->em->flush();
 
         return $remoteClaim;
     }
