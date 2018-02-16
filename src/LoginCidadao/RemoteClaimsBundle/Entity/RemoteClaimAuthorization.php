@@ -35,7 +35,7 @@ class RemoteClaimAuthorization implements RemoteClaimAuthorizationInterface
     /**
      * @var ClaimProviderInterface
      *
-     * @ORM\OneToOne(targetEntity="LoginCidadao\OAuthBundle\Entity\Client")
+     * @ORM\ManyToOne(targetEntity="LoginCidadao\OAuthBundle\Entity\Client")
      * @ORM\JoinColumn(name="claim_provider_id", referencedColumnName="id")
      */
     private $claimProvider;
@@ -43,7 +43,7 @@ class RemoteClaimAuthorization implements RemoteClaimAuthorizationInterface
     /**
      * @var ClientInterface
      *
-     * @ORM\OneToOne(targetEntity="LoginCidadao\OAuthBundle\Entity\Client")
+     * @ORM\ManyToOne(targetEntity="LoginCidadao\OAuthBundle\Entity\Client")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      */
     private $client;
