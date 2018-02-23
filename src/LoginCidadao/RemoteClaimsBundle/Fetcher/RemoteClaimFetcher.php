@@ -194,7 +194,7 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
             $newClaim = true;
         }
 
-        $provider = $this->getExistingClaimProvider($remoteClaim->getProvider());
+        $provider = $this->findClaimProvider($remoteClaim->getProvider()->getClientId());
         if ($provider instanceof ClaimProviderInterface) {
             $remoteClaim->setProvider($provider);
         }
@@ -233,28 +233,5 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
         }
 
         return $client;
-    }
-
-    /**
-     * Gets the persisted/ORM-attached ClaimProvider
-     * @param ClaimProviderInterface|null $provider
-     * @return ClientInterface|null
-     * @throws ClaimProviderNotFoundException
-     */
-    private function getExistingClaimProvider(ClaimProviderInterface $provider = null)
-    {
-        $existingProvider = null;
-        if ($provider instanceof ClaimProviderInterface) {
-            $existingProvider = $this->findClaimProvider($provider->getClientId());
-        }
-
-        if ($existingProvider instanceof ClaimProviderInterface) {
-            return $existingProvider;
-        }
-
-        // No pre-existing provider was found. Throw Exception!
-        throw new ClaimProviderNotFoundException(
-            "A Claim Provider was not found. This Identity Provider does NOT support Dynamic Claim Provider registration, so make sure it is already registered."
-        );
     }
 }
