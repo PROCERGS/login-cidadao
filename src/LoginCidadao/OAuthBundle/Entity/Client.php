@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\OAuthBundle\Entity;
 
@@ -6,15 +14,13 @@ use LoginCidadao\CoreBundle\Entity\Authorization;
 use FOS\OAuthServerBundle\Entity\Client as BaseClient;
 use Doctrine\ORM\Mapping as ORM;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
+use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation as JMS;
 use OAuth2\OAuth2;
-use Doctrine\Common\Collections\ArrayCollection;
-use LoginCidadao\CoreBundle\Entity\Person;
-use LoginCidadao\CoreBundle\Model\AbstractUniqueEntity;
-use LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -26,7 +32,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @JMS\ExclusionPolicy("all")
  * @Vich\Uploadable
  */
-class Client extends BaseClient implements UniqueEntityInterface, ClientInterface
+class Client extends BaseClient implements ClientInterface, ClaimProviderInterface
 {
     /**
      * @ORM\Id
@@ -40,12 +46,13 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     /**
      * @ORM\Column(type="string", nullable=false, unique=true)
      * @JMS\Expose
-     * @JMS\Groups({"public"})
+     * @JMS\SerializedName("client_name")
+     * @JMS\Groups({"public", "remote_claim"})
      */
     protected $name;
 
     /**
-     * @ORM\Column(type="string", length=4000, nullable=false)
+     * @ORM\Column(type="string", length=4000, nullable=true)
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */
@@ -59,7 +66,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     protected $landingPageUrl;
 
     /**
-     * @ORM\Column(type="string", length=2000, nullable=false)
+     * @ORM\Column(type="string", length=2000, nullable=true)
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */
@@ -72,11 +79,12 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
 
     /**
      * @ORM\OneToMany(targetEntity="LoginCidadao\CoreBundle\Entity\Authorization", mappedBy="client", cascade={"remove"}, orphanRemoval=true)
+     * @var Authorization[]
      */
     protected $authorizations;
 
     /**
-     * @ORM\Column(type="string", length=2000)
+     * @ORM\Column(type="string", length=2000, nullable=true)
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */
@@ -123,7 +131,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id")}
      *      )
-     * @var ArrayCollection
+     * @var PersonInterface[]
      */
     protected $owners;
 
@@ -151,8 +159,8 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     public function __construct()
     {
         parent::__construct();
-        $this->authorizations = new ArrayCollection();
-        $this->owners = new ArrayCollection();
+        $this->authorizations = [];
+        $this->owners = [];
 
         $this->allowedScopes = array(
             'public_profile',
@@ -172,6 +180,9 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         );
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         if ($this->getMetadata()) {
@@ -205,6 +216,8 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     public function setDescription($description)
     {
         $this->description = $description;
+
+        return $this;
     }
 
     public function getSiteUrl()
@@ -226,15 +239,34 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         return $this;
     }
 
+    /**
+     * @param array|Authorization[] $authorizations
+     * @return $this
+     */
+    public function setAuthorizations($authorizations = [])
+    {
+        $this->authorizations = $authorizations;
+
+        return $this;
+    }
+
+    /**
+     * @return array|Authorization[]
+     */
     public function getAuthorizations()
     {
         return $this->authorizations;
     }
 
+    /**
+     * @param Authorization $authorization
+     */
     public function removeAuthorization(Authorization $authorization)
     {
-        if ($this->authorizations->contains($authorization)) {
-            $this->authorizations->removeElement($authorization);
+        foreach ($this->authorizations as $k => $candidate) {
+            if ($candidate->getId() === $authorization->getId()) {
+                unset($this->authorizations[$k]);
+            }
         }
     }
 
@@ -278,10 +310,10 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
 
     public function getAllowedScopes()
     {
-        $scopes = $this->allowedScopes;
+        $scopes = ['public_profile', 'openid'];
 
-        if (!is_array($scopes)) {
-            $scopes = array('public_profile');
+        if (is_array($this->allowedScopes)) {
+            $scopes = $this->allowedScopes;
         }
 
         return $scopes;
@@ -325,11 +357,6 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         return $this;
     }
 
-    public function getCategories()
-    {
-        return $this->categories;
-    }
-
     public function getOwners()
     {
         return $this->owners;
@@ -337,7 +364,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
 
     /* Unique Interface Stuff */
 
-    public function setOwners(ArrayCollection $owners)
+    public function setOwners($owners)
     {
         $this->owners = $owners;
 
@@ -355,12 +382,24 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
 
     /**
      * Sets the Unique Id of the Entity.
-     * @param string $id the entity UID
-     * @return AbstractUniqueEntity
+     * @param string $uid the entity UID
+     * @return $this
      */
     public function setUid($uid = null)
     {
         $this->uid = $uid;
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setClientId($clientId)
+    {
+        $parts = explode('_', $clientId, 2);
+        $this->setId($parts[0]);
+        $this->setRandomId($parts[1]);
 
         return $this;
     }
@@ -386,13 +425,19 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         return $this->metadata;
     }
 
-    public function setMetadata(\LoginCidadao\OpenIDBundle\Entity\ClientMetadata $metadata)
+    public function setMetadata(ClientMetadata $metadata)
     {
         $this->metadata = $metadata;
 
         return $this;
     }
 
+    /**
+     * @JMS\VirtualProperty()
+     * @JMS\SerializedName("redirect_uris")
+     * @JMS\Groups({"remote_claim"})
+     * @return array|string[]
+     */
     public function getRedirectUris()
     {
         if ($this->getMetadata()) {
@@ -429,6 +474,7 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
      * during Doctrine hydration.
      *
      * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $image
+     * @return $this
      */
     public function setImage($image)
     {
@@ -437,6 +483,8 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
         if ($this->image) {
             $this->updatedAt = new \DateTime('now');
         }
+
+        return $this;
     }
 
     /**
@@ -449,10 +497,13 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
 
     /**
      * @param string $imageName
+     * @return $this
      */
     public function setImageName($imageName)
     {
         $this->imageName = $imageName;
+
+        return $this;
     }
 
     public function getUpdatedAt()
@@ -463,6 +514,8 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
     /**
      * @ORM\PrePersist
      * @ORM\PreUpdate
+     * @param \DateTime|null $updatedAt
+     * @return $this
      */
     public function setUpdatedAt($updatedAt = null)
     {
@@ -509,7 +562,28 @@ class Client extends BaseClient implements UniqueEntityInterface, ClientInterfac
             function (PersonInterface $owner) {
                 return $owner->getEmail();
             },
-            $this->getOwners()->toArray()
+            $this->getOwners()
         );
+    }
+
+    /**
+     * @JMS\VirtualProperty()
+     * @JMS\SerializedName("client_id")
+     * @JMS\Groups({"remote_claim"})
+     * @inheritDoc
+     */
+    public function getPublicId()
+    {
+        return parent::getPublicId();
+    }
+
+    /**
+     * @JMS\VirtualProperty()
+     * @JMS\SerializedName("client_uri")
+     * @JMS\Groups({"remote_claim"})
+     */
+    public function getClientUri()
+    {
+        return $this->getSiteUrl();
     }
 }

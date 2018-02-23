@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Security\User\Provider;
 
@@ -6,9 +14,11 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseClass;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Security\Exception\DuplicateEmailException;
+use LoginCidadao\CoreBundle\Security\User\Manager\UserManager;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use LoginCidadao\CoreBundle\Security\Exception\AlreadyLinkedAccount;
@@ -19,7 +29,6 @@ use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Form\Factory\FactoryInterface;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use LoginCidadao\ValidationBundle\Validator\Constraints\UsernameValidator;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -27,20 +36,23 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class FOSUBUserProvider extends BaseClass
 {
 
-    /** @var UserManagerInterface */
+    /** @var UserManager */
     protected $userManager;
 
     /** @var SessionInterface */
-    protected $session;
+    private $session;
 
     /** @var EventDispatcherInterface */
-    protected $dispatcher;
-
-    /** @var ContainerInterface */
-    protected $container;
+    private $dispatcher;
 
     /** @var FactoryInterface */
-    protected $formFactory;
+    private $formFactory;
+
+    /** @var ValidatorInterface */
+    private $validator;
+
+    /** @var RequestStack */
+    private $requestStack;
 
     /**
      * Constructor.
@@ -48,24 +60,28 @@ class FOSUBUserProvider extends BaseClass
      * @param UserManagerInterface $userManager FOSUB user provider.
      * @param SessionInterface $session
      * @param EventDispatcherInterface $dispatcher
-     * @param ContainerInterface $container
      * @param FactoryInterface $formFactory
+     * @param ValidatorInterface $validator
+     * @param RequestStack $requestStack
      * @param array $properties Property mapping.
+     * @internal param ContainerInterface $container
      */
     public function __construct(
         UserManagerInterface $userManager,
         SessionInterface $session,
         EventDispatcherInterface $dispatcher,
-        ContainerInterface $container,
         FactoryInterface $formFactory,
+        ValidatorInterface $validator,
+        RequestStack $requestStack,
         array $properties
     ) {
+        parent::__construct($userManager, $properties);
         $this->userManager = $userManager;
         $this->session = $session;
         $this->dispatcher = $dispatcher;
-        $this->container = $container;
         $this->formFactory = $formFactory;
-        $this->properties = $properties;
+        $this->validator = $validator;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -85,9 +101,6 @@ class FOSUBUserProvider extends BaseClass
         $existingUser = $this->userManager->findUserBy(array("{$service}Id" => $username));
         if ($existingUser instanceof UserInterface && $existingUser->getId() != $user->getId()) {
             throw new AlreadyLinkedAccount();
-            $previousUser->$setter_id(null);
-            $previousUser->$setter_token(null);
-            $this->userManager->updateUser($previousUser);
         }
 
         $screenName = $response->getNickname();
@@ -125,6 +138,7 @@ class FOSUBUserProvider extends BaseClass
 
         $userInfo = $this->checkEmail($service, $userInfo);
 
+        /** @var PersonInterface $user */
         $user = $this->userManager->createUser();
         $this->setUserInfo($user, $userInfo, $service);
 
@@ -156,10 +170,8 @@ class FOSUBUserProvider extends BaseClass
         $user->setEnabled(true);
         $this->userManager->updateCanonicalFields($user);
 
-        /** @var ValidatorInterface $validator */
-        $validator = $this->container->get('validator');
         /** @var ConstraintViolationList $errors */
-        $errors = $validator->validate($user, ['LoginCidadaoProfile']);
+        $errors = $this->validator->validate($user, ['LoginCidadaoProfile']);
         if (count($errors) > 0) {
             foreach ($errors as $error) {
                 if ($error->getPropertyPath() === 'email'
@@ -174,7 +186,7 @@ class FOSUBUserProvider extends BaseClass
         $form = $this->formFactory->createForm();
         $form->setData($user);
 
-        $request = $this->container->get('request');
+        $request = $this->requestStack->getCurrentRequest();
         $eventResponse = new RedirectResponse('/');
         $event = new FormEvent($form, $request);
         $this->dispatcher->dispatch(

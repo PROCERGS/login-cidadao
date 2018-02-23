@@ -218,7 +218,6 @@ fos_oauth_server:
   auth_code_class:      LoginCidadao\OAuthBundle\Entity\AuthCode
   service:
       user_provider: fos_user.user_manager
-      client_manager: lc.oauth.client_manager
       options:
           supported_scopes: %lc_supported_scopes%
 
@@ -375,12 +374,12 @@ vich_uploader:
     storage:    gaufrette
     mappings:
         user_image:
-            uri_prefix:         %uri_root%/uploads/profile-pictures
+            uri_prefix:         %uri_root%uploads/profile-pictures
             upload_destination: user_image_fs
             namer:              vich_uploader.namer_uniqid
             inject_on_load:     false
         client_image:
-            uri_prefix:         %uri_root%/uploads/client-pictures
+            uri_prefix:         %uri_root%uploads/client-pictures
             upload_destination: client_image_fs
             namer:              vich_uploader.namer_uniqid
             inject_on_load:     false
@@ -606,6 +605,14 @@ monolog:
             type: service
             id: lc.monolog.db.handler
             level: info
+
+login_cidadao_api:
+    versions:
+        1:
+            0: [0, 1, 2, 3]
+            1: [0]
+        2:
+            0: [0]
 
 procergs_login_cidadao_monitor:
     checks:

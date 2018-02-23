@@ -4,11 +4,12 @@ namespace LoginCidadao\OAuthBundle\Model;
 
 use FOS\OAuthServerBundle\Model\ClientInterface as BaseInterface;
 use LoginCidadao\CoreBundle\Entity\Authorization;
+use LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
 
-interface ClientInterface extends BaseInterface
+interface ClientInterface extends BaseInterface, UniqueEntityInterface
 {
     public function getId();
 
@@ -46,11 +47,9 @@ interface ClientInterface extends BaseInterface
 
     public function setId($var);
 
-    public function getCategories();
-
     public function getOwners();
 
-    public function setOwners(ArrayCollection $owners);
+    public function setOwners($owners);
 
     /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance

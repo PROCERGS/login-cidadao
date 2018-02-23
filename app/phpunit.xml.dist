@@ -15,6 +15,7 @@
     
     <php>
         <ini name="error_reporting" value="E_ALL &amp; ~E_NOTICE" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
     </php>
 
     <testsuites>
@@ -40,6 +41,9 @@
                 <directory>../src/*/Bundle/*Bundle/Tests</directory>
             </exclude>
         </whitelist>
+        <blacklist>
+            <directory>../vendor</directory>
+        </blacklist>
     </filter>
 
     <listeners>

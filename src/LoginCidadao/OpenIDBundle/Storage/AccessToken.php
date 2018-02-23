@@ -104,7 +104,7 @@ class AccessToken extends BaseClass implements AccessTokenInterface
         }
 
         if ($user_id === null) {
-            return null;
+            $user = null;
         } else {
             /** @var PersonInterface $user */
             $user = $this->em->getRepository('LoginCidadaoCoreBundle:Person')->find($user_id);
@@ -114,7 +114,9 @@ class AccessToken extends BaseClass implements AccessTokenInterface
         $accessToken = new \LoginCidadao\OAuthBundle\Entity\AccessToken();
         $accessToken->setToken($oauth_token);
         $accessToken->setClient($client);
-        $accessToken->setUser($user);
+        if ($user !== null) {
+            $accessToken->setUser($user);
+        }
         $accessToken->setExpiresAt($expires);
         $accessToken->setScope($scope);
         $accessToken->setIdToken($id_token);

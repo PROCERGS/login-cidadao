@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of the login-cidadao project or it's bundles.
  *
  * (c) Guilherme Donato <guilhermednt on github>
@@ -13,9 +13,13 @@ namespace LoginCidadao\OAuthBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 
+/**
+ * Class OrganizationRepository
+ * @package LoginCidadao\OAuthBundle\Entity
+ * @codeCoverageIgnore
+ */
 class OrganizationRepository extends EntityRepository
 {
-
     public function findByMember(PersonInterface $person)
     {
         $query = $this->createQueryBuilder('o')

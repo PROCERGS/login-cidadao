@@ -48,6 +48,7 @@ services:
         arguments:
             - "@lc_accesstoken_manager"
             - "@oidc.subject_identifier.service"
+            - "@lc.api.version"
         tags:
             - { name: jms_serializer.event_listener, event: serializer.post_serialize, method: onPostSerialize }
 
@@ -130,6 +131,7 @@ services:
     oidc.subject_identifier.service:
         class: LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService
         arguments:
+            - "@doctrine.orm.entity_manager"
             - "@oidc.subject_identifier.repository"
             - %secret%
 
@@ -154,5 +156,15 @@ services:
             - "@lc.client_manager"
         calls:
             - ["setSkipCompletionTaskIfAuthorized", ["%pre_authorization.complete_information_task.skip_if_authorized%"]]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    oidc.oauth.events_subscriber:
+        class: LoginCidadao\OpenIDBundle\EventListener\OAuthEventSubscriber
+        tags:
+            - { name: kernel.event_subscriber }
+
+    oidc.scopes.translation:
+        class: LoginCidadao\OpenIDBundle\EventListener\ScopeTranslatorSubscriber
         tags:
             - { name: kernel.event_subscriber }
