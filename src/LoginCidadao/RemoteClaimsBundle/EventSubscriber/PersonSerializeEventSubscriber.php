@@ -86,9 +86,6 @@ class PersonSerializeEventSubscriber implements EventSubscriberInterface
         }
 
         $person = $event->getObject();
-        if (!$person instanceof PersonInterface) {
-            return;
-        }
         $client = $this->accessTokenManager->getTokenClient();
 
         $remoteClaims = $this->remoteClaimManager->getRemoteClaimsWithTokens($client, $person);
