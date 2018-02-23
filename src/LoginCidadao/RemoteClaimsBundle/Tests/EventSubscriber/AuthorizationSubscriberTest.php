@@ -148,6 +148,19 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
         $subscriber->onRevokeAuthorization($event);
     }
 
+    public function testFeatureFlagOff()
+    {
+        $event = $this->getEvent();
+
+        $claimManager = $this->getRemoteClaimManager();
+        $claimFetcher = $this->getRemoteClaimFetcher();
+        $subscriber = new AuthorizationSubscriber($claimManager, $claimFetcher, $this->getAuthChecker(false));
+
+        $subscriber->onNewAuthorizationRequest($event);
+        $subscriber->onNewAuthorization($event);
+        $subscriber->onUpdateAuthorization($event);
+    }
+
     private function prepareEnforceRemoteClaimsTest()
     {
         $remoteClaims = [$this->getCompleteRemoteClaim(), $this->getCompleteRemoteClaim()];
