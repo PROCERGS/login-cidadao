@@ -17,6 +17,7 @@ use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository;
 use LoginCidadao\RemoteClaimsBundle\Fetcher\RemoteClaimFetcher;
+use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\HttpUri;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 use LoginCidadao\RemoteClaimsBundle\Tests\Http\HttpMocker;
@@ -103,11 +104,12 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
     {
         $claimUri = 'https://dummy.com';
 
+        /** @var ClaimProviderInterface|\PHPUnit_Framework_MockObject_MockObject $provider */
         $provider = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
         $provider->expects($this->once())->method('getClientId')->willReturn(['https://redirect.uri']);
 
-        $existingClaim = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface');
-        $existingClaim->expects($this->once())->method('getProvider')->willReturn($provider);
+        $existingClaim = new RemoteClaim();
+        $existingClaim->setProvider($provider);
 
         $claimRepository = $this->getClaimRepository();
         $claimRepository->expects($this->once())->method('findOneBy')->willReturn($existingClaim);
@@ -202,6 +204,19 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
 
         $fetcher = $this->getFetcher($httpClient, null, $claimRepo);
         $this->assertSame($uri, $fetcher->discoverClaimUri($tagUri));
+    }
+
+    public function testProviderNotFound()
+    {
+        $this->setExpectedException('LoginCidadao\RemoteClaimsBundle\Exception\ClaimProviderNotFoundException');
+
+        $claimUri = 'https://dummy.com';
+
+        $clientManager = $this->getClientManager();
+        $clientManager->expects($this->once())->method('getClientById')->willReturn(null);
+
+        $fetcher = $this->getFetcher(null, null, null, $clientManager, null);
+        $fetcher->getRemoteClaim($claimUri);
     }
 
     /**
