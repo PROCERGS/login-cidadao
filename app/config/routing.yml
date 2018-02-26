@@ -2,6 +2,11 @@ procergs_login_cidadao_accounting:
     resource: "@PROCERGSLoginCidadaoAccountingBundle/Resources/config/routing.yml"
     prefix:   /
 
+procergs_nfg:
+    resource: "@PROCERGSNfgBundle/Controller/"
+    type:     annotation
+    prefix:   /nfg
+
 # Remote Claims
 lc_remote_claims_remote_claim:
     type:     rest
