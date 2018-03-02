@@ -44,6 +44,7 @@ twig:
         third_party_login: %third_party_login%
         password_hint: "@password_hint"
         intl_tel_input_preferred_countries: ["br"]
+        google_analytics_trackingId: "%google_analytics_trackingId%"
 
 # Assetic Configuration
 assetic:
