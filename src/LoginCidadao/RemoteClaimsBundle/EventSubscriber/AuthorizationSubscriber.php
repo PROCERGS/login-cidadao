@@ -136,6 +136,9 @@ class AuthorizationSubscriber implements EventSubscriberInterface, LoggerAwareIn
     private function enforceRemoteClaims(AuthorizationEvent $event)
     {
         $remoteClaims = $event->getRemoteClaims();
+        if (!is_array($remoteClaims) || count($remoteClaims) === 0) {
+            return;
+        }
 
         foreach ($remoteClaims as $remoteClaim) {
             $claimName = $remoteClaim->getName();
