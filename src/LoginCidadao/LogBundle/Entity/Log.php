@@ -14,7 +14,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="log")
+ * @ORM\Table(name="log", indexes={
+ *     @ORM\Index(name="log_idx_message", columns={"message"}),
+ *     @ORM\Index(name="log_idx_date", columns={"created_at"}),
+ *     @ORM\Index(name="log_idx_level", columns={"level", "level_name"})
+ * })
  * @ORM\HasLifecycleCallbacks
  */
 class Log
