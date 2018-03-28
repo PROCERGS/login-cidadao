@@ -13,6 +13,8 @@ namespace LoginCidadao\CoreBundle\Security\User\Manager;
 use FOS\UserBundle\Doctrine\UserManager as BaseManager;
 use Doctrine\Common\Persistence\ObjectManager;
 use FOS\UserBundle\Util\CanonicalizerInterface;
+use libphonenumber\PhoneNumber;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use FOS\UserBundle\Model\UserInterface;
 use LoginCidadao\ValidationBundle\Validator\Constraints\UsernameValidator;
@@ -111,5 +113,57 @@ class UserManager extends BaseManager
 
         // If it doesn't look like a CPF number or if we couldn't find nobody with that CPF, fallback to this:
         return parent::findUserByUsernameOrEmail($username);
+    }
+
+    public function blockPerson(PersonInterface $person, $andFlush = true)
+    {
+        if (!$person->isEnabled() && !$person->isAccountNonLocked()) {
+            return null;
+        }
+
+        $person
+            ->setUpdatedAt(new \DateTime())
+            ->setEnabled(false)
+            ->setLocked(true)
+            ->setPassword('#BLOCKED#'.microtime());
+
+        $this->updateUser($person, $andFlush);
+
+        return $person;
+    }
+
+    public function blockUsersByPhone(PhoneNumber $phone, $flushStrategy = null)
+    {
+        $andFlush = false;
+        $once = false;
+        switch ($flushStrategy) {
+            case 'each':
+                $andFlush = true;
+                break;
+            case 'once':
+                $once = true;
+                break;
+            case 'never':
+            default:
+                $andFlush = false;
+                $once = false;
+        }
+
+        /** @var PersonInterface[] $users */
+        $users = $this->repository->findBy(['mobile' => $phone]);
+
+        $blockedUsers = [];
+        foreach ($users as $user) {
+            $user = $this->blockPerson($user, $andFlush);
+            if ($user instanceof PersonInterface) {
+                $blockedUsers[] = $user;
+            }
+            // TODO: add yield when we upgrade to PHP 7.0
+        }
+        if ($once) {
+            $this->objectManager->flush();
+        }
+
+        return $blockedUsers;
     }
 }
