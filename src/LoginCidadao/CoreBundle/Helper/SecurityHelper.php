@@ -145,4 +145,24 @@ class SecurityHelper
     {
         return $this->authChecker->isGranted($attributes, $object);
     }
+
+    /**
+     * @return PersonInterface|null
+     */
+    public function getUser()
+    {
+        $user = null;
+        try {
+            /** @var PersonInterface $user */
+            $user = $this->tokenStorage->getToken()->getUser();
+
+            if (!$user instanceof PersonInterface) {
+                $user = null;
+            }
+        } catch (\Exception $e) {
+            $user = null;
+        }
+
+        return $user;
+    }
 }

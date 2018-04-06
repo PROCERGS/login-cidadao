@@ -462,3 +462,10 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@scheb_two_factor.security.google_authenticator"
+
+    lc.person.repository:
+        myrepository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - LoginCidadao\CoreBundle\Entity\Person

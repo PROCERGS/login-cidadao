@@ -4,6 +4,7 @@ namespace LoginCidadao\OAuthBundle\Model;
 
 use FOS\OAuthServerBundle\Model\ClientInterface as BaseInterface;
 use LoginCidadao\CoreBundle\Entity\Authorization;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -47,8 +48,15 @@ interface ClientInterface extends BaseInterface
 
     public function getCategories();
 
+    /**
+     * @return PersonInterface[]|ArrayCollection
+     */
     public function getOwners();
 
+    /**
+     * @param ArrayCollection $owners
+     * @return ClientInterface
+     */
     public function setOwners(ArrayCollection $owners);
 
     /**
@@ -81,4 +89,10 @@ interface ClientInterface extends BaseInterface
      * @return ClientMetadata
      */
     public function getMetadata();
+
+    /**
+     * @param string[] $allowedScopes
+     * @return ClientInterface
+     */
+    public function setAllowedScopes(array $allowedScopes);
 }

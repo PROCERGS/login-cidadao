@@ -114,7 +114,7 @@ services:
     oidc.core.events_subscriber:
         class: LoginCidadao\OpenIDBundle\EventListener\CoreEventsSubscriber
         arguments:
-            - "@doctrine.orm.entity_manager"
+            - "@oidc.client_metadata.repository"
             - "@checker.sector_identifier_uri"
             - "%revalidate_sector_identifier_uri_on_auth%"
         tags:
@@ -126,7 +126,8 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@event_dispatcher"
-            - ""
+            - "@lc.person.repository"
+            - "%lc_public_scopes%"
 
     oidc.subject_identifier.service:
         class: LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService
@@ -149,9 +150,7 @@ services:
     lc.oidc.tasks.subscriber:
         class: LoginCidadao\OpenIDBundle\EventListener\TaskSubscriber
         arguments:
-            - "@security.token_storage"
-            - "@security.authorization_checker"
-            - "@security.http_utils"
+            - "@lc.security.helper"
             - "@lc.client_manager"
         calls:
             - ["setSkipCompletionTaskIfAuthorized", ["%pre_authorization.complete_information_task.skip_if_authorized%"]]

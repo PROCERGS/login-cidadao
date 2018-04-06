@@ -12,6 +12,8 @@ namespace LoginCidadao\OpenIDBundle\Controller;
 
 use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\SerializationContext;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
@@ -36,7 +38,7 @@ class ClientRegistrationController extends FOSRestController
         $form->handleRequest($request);
         if ($form->isValid()) {
             $metadata = $form->getData();
-            $client = $this->registerClient($metadata);
+            $client = $this->getClientManager()->register($metadata);
 
             return $this->view($metadata->fromClient($client), 201);
         } else {
@@ -103,63 +105,6 @@ class ClientRegistrationController extends FOSRestController
         }
     }
 
-    /**
-     * @param ClientMetadata $data
-     * @return Client
-     */
-    private function registerClient(ClientMetadata $data)
-    {
-        $em = $this->getDoctrine()->getManager();
-        if ($data->getClient() === null) {
-            $client = $data->toClient();
-        } else {
-            $client = $data->getClient();
-        }
-
-        if ($client->getName() === null) {
-            $firstUrl = $this->getHost($client->getRedirectUris()[0]);
-            $client->setName($firstUrl);
-        }
-        if ($client->getDescription() === null) {
-            $client->setDescription('');
-        }
-        if ($client->getTermsOfUseUrl() === null) {
-            $client->setTermsOfUseUrl('');
-        }
-        if ($client->getSiteUrl() === null) {
-            $client->setSiteUrl('');
-        }
-
-        if (count($data->getContacts()) > 0) {
-            $owners = $em->getRepository($this->getParameter('user.class'))
-                ->findByEmail($data->getContacts());
-
-            foreach ($owners as $person) {
-                if ($person->getConfirmationToken() !== null) {
-                    continue;
-                }
-                $client->getOwners()->add($person);
-            }
-        }
-
-        $publicScopes = explode(' ', $this->getParameter('lc_public_scopes'));
-        $client->setAllowedScopes($publicScopes);
-
-        $em->persist($client);
-
-        $data->setClient($client);
-        $em->persist($data);
-
-        $em->flush();
-
-        return $client;
-    }
-
-    private function getHost($uri)
-    {
-        return parse_url($uri, PHP_URL_HOST);
-    }
-
     private function parseJsonRequest(Request $request)
     {
         $request->setFormat('json', 'application/json');
@@ -175,7 +120,8 @@ class ClientRegistrationController extends FOSRestController
 
     /**
      * @param string $clientId
-     * @return Client
+     * @return ClientInterface
+     * @throws DynamicRegistrationException
      */
     private function getClientOr404($clientId)
     {
@@ -189,6 +135,7 @@ class ClientRegistrationController extends FOSRestController
         $entityId = $parts[0];
         $publicId = $parts[1];
 
+        /** @var ClientInterface $client */
         $client = $this->getDoctrine()->getRepository('LoginCidadaoOAuthBundle:Client')
             ->findOneBy(array('id' => $entityId, 'randomId' => $publicId));
 
@@ -199,10 +146,8 @@ class ClientRegistrationController extends FOSRestController
         return $client;
     }
 
-    private function checkRegistrationAccessToken(
-        Request $request,
-        Client $client
-    ) {
+    private function checkRegistrationAccessToken(Request $request, Client $client)
+    {
         $raw = $request->get(
             'access_token',
             $request->headers->get('authorization')
@@ -213,5 +158,13 @@ class ClientRegistrationController extends FOSRestController
         if (!$token || $metadata->getRegistrationAccessToken() !== $token) {
             throw $this->createAccessDeniedException();
         }
+    }
+
+    /**
+     * @return ClientManager|object
+     */
+    private function getClientManager()
+    {
+        return $this->get('lc.client_manager');
     }
 }
