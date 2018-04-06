@@ -59,7 +59,7 @@ class BlockByPhoneCommand extends AbstractPersonBlockCommand
         /** @var PersonInterface[] $users */
         $users = $this->getEntityManager()
             ->getRepository('LoginCidadaoCoreBundle:Person')
-            ->findBy(['mobile' => $phone]);
+            ->findBy(['mobile' => $phone, 'enabled' => true]);
 
         return $users;
     }
