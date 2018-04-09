@@ -54,18 +54,25 @@ class ClientManagerTest extends \PHPUnit_Framework_TestCase
         $manager->getClientById($id);
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception\UniqueConstraintViolationException
+     */
     public function testRegisterEmpty()
     {
         $em = $this->emExpectRegistration($this->getEntityManager());
 
         $manager = new ClientManager($em, $this->getDispatcher(), $this->getPersonRepository(), 'scope1 scope2');
+        $metadata = $manager->populateNewMetadata(new ClientMetadata());
 
-        $registeredClient = $manager->register(new ClientMetadata());
+        $registeredClient = $manager->register($metadata);
 
         $this->assertInstanceOf('LoginCidadao\OAuthBundle\Model\ClientInterface', $registeredClient);
         $this->assertSame('clientID', $registeredClient->getId());
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception\UniqueConstraintViolationException
+     */
     public function testRegisterWithClient()
     {
         $client = new Client();
@@ -83,6 +90,9 @@ class ClientManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($client, $registeredClient);
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception\UniqueConstraintViolationException
+     */
     public function testRegisterWithContacts()
     {
         $emails = ['email@example.com', 'not-verified@example.com', 'non-existent@example.com'];
@@ -104,6 +114,7 @@ class ClientManagerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($users);
 
         $manager = new ClientManager($em, $this->getDispatcher(), $personRepo, 'scope1 scope2');
+        $metadata = $manager->populateNewMetadata($metadata);
 
         $registeredClient = $manager->register($metadata);
 

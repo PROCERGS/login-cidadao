@@ -100,8 +100,9 @@ class ClientManager
     private function sanitizeClient(ClientInterface $client)
     {
         if ($client->getName() === null) {
-            $firstUrl = $client->getRedirectUris() ? parse_url($client->getRedirectUris()[0],
-                PHP_URL_HOST) : 'Unamed Client';
+            $firstUrl = $client->getRedirectUris()
+                ? parse_url($client->getRedirectUris()[0], PHP_URL_HOST)
+                : 'Unamed Client';
             $client->setName($firstUrl);
         }
         if ($client->getDescription() === null) {
@@ -126,6 +127,9 @@ class ClientManager
         }
 
         $client = $this->sanitizeClient($client);
+        if ($data->getClientName() === null) {
+            $data->setClientName($client->getName());
+        }
 
         if (count($data->getContacts()) > 0) {
             /** @var PersonInterface[] $owners */
