@@ -98,13 +98,8 @@ class CompleteUserInfoTaskValidator
             return null;
         }
 
-        $emptyClaims = [];
         $scopes = explode(' ', $request->get('scope', false));
-        foreach ($scopes as $scope) {
-            if (false === $this->checkScope($user, $scope)) {
-                $emptyClaims[] = $scope;
-            }
-        }
+        $emptyClaims = array_intersect($scopes, $this->checkScopes($user));
 
         if (empty($emptyClaims) > 0) {
             return null;
@@ -126,48 +121,45 @@ class CompleteUserInfoTaskValidator
         return $nonce !== null;
     }
 
-    /**
-     * Check if scope's data is missing from $user
-     *
-     * @param PersonInterface $user
-     * @param string $scope
-     * @return bool
-     */
-    private function checkScope(PersonInterface $user, $scope)
+    private function checkScopes(PersonInterface $user)
     {
-        // 'id_cards', 'addresses'
-        switch ($scope) {
-            case 'name':
-            case 'full_name':
-            case 'surname':
-                $value = $user->getFullName();
+        $fullName = $user->getFullName();
+        $missingScope = $this->setSynonyms([
+            'full_name' => $this->isFilled($fullName) && $this->isFilled($user->getSurname()),
+            'phone_number' => $this->isFilled($user->getMobile()),
+            'country' => $user->getCountry() instanceof Country,
+            'state' => $user->getState() instanceof State,
+            'city' => $user->getCity() instanceof City,
+            'birthday' => $user->getBirthdate() instanceof \DateTime,
+            'email_verified' => $user->getEmailConfirmedAt() instanceof \DateTime,
+            'cpf' => $this->isFilled($user->getCpf()) && CPFValidator::isCPFValid($user->getCpf()),
+        ], [
+            'name' => 'full_name',
+            'birthdate' => 'birthday',
+            'surname' => 'full_name',
+            'mobile' => 'phone_number',
+            'email' => 'email_verified',
+        ]);
 
-                return $value && strlen($value) > 0 && strlen($user->getSurname()) > 0;
-                break;
-            case 'mobile':
-            case 'phone_number':
-                $value = $user->getMobile();
-                break;
-            case 'country':
-                return $user->getCountry() instanceof Country;
-            case 'state':
-                return $user->getState() instanceof State;
-            case 'city':
-                return $user->getCity() instanceof City;
-            case 'birthdate':
-                return $user->getBirthdate() instanceof \DateTime;
-            case 'email':
-            case 'email_verified':
-                return $user->getEmailConfirmedAt() instanceof \DateTime;
-            case 'cpf':
-                $cpf = $user->getCpf();
+        return array_keys(
+            array_filter($missingScope, function ($value) {
+                return !$value;
+            })
+        );
+    }
 
-                return $cpf && CPFValidator::isCPFValid($cpf);
-            default:
-                return true;
+    private function isFilled($value)
+    {
+        return $value && strlen($value) > 0;
+    }
+
+    private function setSynonyms(array $data, array $synonyms)
+    {
+        foreach ($synonyms as $synonym => $original) {
+            $data[$synonym] = $data[$original];
         }
 
-        return $value && strlen($value) > 0;
+        return $data;
     }
 
     /**
