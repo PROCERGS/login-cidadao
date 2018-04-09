@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\OpenIDBundle\Controller;
 
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\SerializationContext;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
@@ -31,14 +32,21 @@ class ClientRegistrationController extends FOSRestController
     public function registerAction(Request $request)
     {
         $this->parseJsonRequest($request);
+        $clientManager = $this->getClientManager();
 
         $data = new ClientMetadata();
-        $form = $this->createForm(new ClientMetadataForm(), $data, ['cascade_validation' => true]);
+        $form = $this->createForm(new ClientMetadataForm($clientManager), $data, ['cascade_validation' => true]);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
             $metadata = $form->getData();
-            $client = $this->getClientManager()->register($metadata);
+            try {
+                $client = $clientManager->register($metadata);
+            } catch (UniqueConstraintViolationException $e) {
+                $error = new DynamicRegistrationException('Client already exists', 400);
+
+                return $this->view($error->getData(), $error->getCode());
+            }
 
             return $this->view($metadata->fromClient($client), 201);
         } else {
@@ -108,13 +116,9 @@ class ClientRegistrationController extends FOSRestController
     private function parseJsonRequest(Request $request)
     {
         $request->setFormat('json', 'application/json');
-        if (0 === strpos(
-                $request->headers->get('Content-Type'),
-                'application/json'
-            )
-        ) {
+        if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
             $data = json_decode($request->getContent(), true);
-            $request->request->replace(is_array($data) ? $data : array());
+            $request->request->replace(is_array($data) ? $data : []);
         }
     }
 
@@ -137,7 +141,7 @@ class ClientRegistrationController extends FOSRestController
 
         /** @var ClientInterface $client */
         $client = $this->getDoctrine()->getRepository('LoginCidadaoOAuthBundle:Client')
-            ->findOneBy(array('id' => $entityId, 'randomId' => $publicId));
+            ->findOneBy(['id' => $entityId, 'randomId' => $publicId]);
 
         if (!$client) {
             throw $this->createNotFoundException('Client not found.');

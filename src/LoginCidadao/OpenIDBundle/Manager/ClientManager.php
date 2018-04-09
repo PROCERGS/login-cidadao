@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\OpenIDBundle\Manager;
 
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Event\GetClientEvent;
@@ -77,7 +78,46 @@ class ClientManager
         return $event->getClient();
     }
 
+    /**
+     * @param ClientMetadata $data
+     * @return \LoginCidadao\OAuthBundle\Entity\Client
+     * @throws UniqueConstraintViolationException
+     */
     public function register(ClientMetadata $data)
+    {
+        $client = $data->getClient();
+
+        $this->em->persist($client);
+
+        $data->setClient($client);
+        $this->em->persist($data);
+
+        $this->em->flush();
+
+        return $client;
+    }
+
+    private function sanitizeClient(ClientInterface $client)
+    {
+        if ($client->getName() === null) {
+            $firstUrl = $client->getRedirectUris() ? parse_url($client->getRedirectUris()[0],
+                PHP_URL_HOST) : 'Unamed Client';
+            $client->setName($firstUrl);
+        }
+        if ($client->getDescription() === null) {
+            $client->setDescription('');
+        }
+        if ($client->getTermsOfUseUrl() === null) {
+            $client->setTermsOfUseUrl('');
+        }
+        if ($client->getSiteUrl() === null) {
+            $client->setSiteUrl('');
+        }
+
+        return $client;
+    }
+
+    public function populateNewMetadata(ClientMetadata $data)
     {
         if ($data->getClient() === null) {
             $client = $data->toClient();
@@ -105,32 +145,8 @@ class ClientManager
         $publicScopes = explode(' ', $this->publicScopes);
         $client->setAllowedScopes($publicScopes);
 
-        $this->em->persist($client);
-
         $data->setClient($client);
-        $this->em->persist($data);
 
-        $this->em->flush();
-
-        return $client;
-    }
-
-    private function sanitizeClient(ClientInterface $client)
-    {
-        if ($client->getName() === null) {
-            $firstUrl = parse_url($client->getRedirectUris()[0], PHP_URL_HOST);
-            $client->setName($firstUrl);
-        }
-        if ($client->getDescription() === null) {
-            $client->setDescription('');
-        }
-        if ($client->getTermsOfUseUrl() === null) {
-            $client->setTermsOfUseUrl('');
-        }
-        if ($client->getSiteUrl() === null) {
-            $client->setSiteUrl('');
-        }
-
-        return $client;
+        return $data;
     }
 }
