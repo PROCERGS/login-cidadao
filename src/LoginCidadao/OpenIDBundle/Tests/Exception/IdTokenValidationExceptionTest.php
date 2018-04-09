@@ -15,7 +15,7 @@ use LoginCidadao\OpenIDBundle\Exception\IdTokenValidationException;
 class IdTokenValidationExceptionTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function test__construct()
+    public function testConstruct()
     {
         $e = new IdTokenValidationException('message', 400);
 

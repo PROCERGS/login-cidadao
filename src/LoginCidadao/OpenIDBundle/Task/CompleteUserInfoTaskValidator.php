@@ -174,7 +174,6 @@ class CompleteUserInfoTaskValidator
     {
         // Can this Task be skipped if the RP is already Authorized?
         if ($this->skipIfAuthorized) {
-
             // To force this task's execution, the RP MUST send prompt=consent and a nonce value.
             $shouldPromptConsent = $this->shouldPromptConsent($request);
             $isAuthorized = $this->isClientAuthorized($user, $client);

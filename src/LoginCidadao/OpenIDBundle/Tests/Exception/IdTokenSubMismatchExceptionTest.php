@@ -15,7 +15,7 @@ use LoginCidadao\OpenIDBundle\Exception\IdTokenSubMismatchException;
 class IdTokenSubMismatchExceptionTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function test__construct()
+    public function testConstruct()
     {
         $e = new IdTokenSubMismatchException('message', 400);
 
