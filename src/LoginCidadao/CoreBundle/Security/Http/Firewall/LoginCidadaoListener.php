@@ -24,6 +24,7 @@ use LoginCidadao\CoreBundle\Entity\AccessSession;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
+use Symfony\Component\Security\Http\ParameterBagUtils;
 use Symfony\Component\Security\Http\Session\SessionAuthenticationStrategyInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
@@ -66,9 +67,9 @@ class LoginCidadaoListener extends UsernamePasswordFormAuthenticationListener
     private function getFilter(Request $request)
     {
         if ($this->options['post_only']) {
-            $username = trim($request->request->get($this->options['username_parameter'], null, true));
+            $username = trim(ParameterBagUtils::getParameterBagValue($request->request, $this->options['username_parameter']));
         } else {
-            $username = trim($request->get($this->options['username_parameter'], null, true));
+            $username = trim(ParameterBagUtils::getRequestParameterValue($request, $this->options['username_parameter']));
         }
 
         return [

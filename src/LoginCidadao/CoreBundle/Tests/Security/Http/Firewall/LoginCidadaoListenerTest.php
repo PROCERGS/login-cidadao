@@ -98,7 +98,9 @@ class LoginCidadaoListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $request->expects($this->exactly(2))->method('getSession')->willReturn($session);
         $request->expects($this->exactly(2))->method('getClientIp')->willReturn($ip);
-        $request->request = new ParameterBag(['username' => $username]);
+        if ($request instanceof Request && $request->request === null) {
+            $request->request = new ParameterBag(['username' => $username]);
+        }
 
         $listener = $this->getListener($threshold, $username, $ip, $form, true);
         $this->invokeMethod($listener, 'attemptAuthentication', [$request]);

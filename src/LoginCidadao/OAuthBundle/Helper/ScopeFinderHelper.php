@@ -13,6 +13,7 @@ namespace LoginCidadao\OAuthBundle\Helper;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Http\ParameterBagUtils;
 
 class ScopeFinderHelper
 {
@@ -50,7 +51,7 @@ class ScopeFinderHelper
                 return null;
             }
             $form = $this->form->getName();
-            $scope = $this->request->request->get("{$form}[scope]", false, true);
+            $scope = ParameterBagUtils::getParameterBagValue($this->request->request, "{$form}[scope]");
         }
 
         return !is_array($scope) ? explode(' ', $scope) : $scope;
