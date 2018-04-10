@@ -22,6 +22,11 @@ use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Form\ClientMetadataForm;
 use LoginCidadao\OpenIDBundle\Exception\DynamicRegistrationException;
 
+/**
+ * Class ClientRegistrationController
+ * @package LoginCidadao\OpenIDBundle\Controller
+ * @codeCoverageIgnore
+ */
 class ClientRegistrationController extends FOSRestController
 {
 
