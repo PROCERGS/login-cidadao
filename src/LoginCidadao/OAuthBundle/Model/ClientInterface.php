@@ -107,4 +107,9 @@ interface ClientInterface extends BaseInterface
      * @return mixed
      */
     public function getClientSecret();
+
+    /**
+     * @return mixed
+     */
+    public function getId();
 }
