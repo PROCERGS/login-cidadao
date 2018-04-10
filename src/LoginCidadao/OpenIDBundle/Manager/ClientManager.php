@@ -53,6 +53,10 @@ class ClientManager
         $this->publicScopes = $publicScopes;
     }
 
+    /**
+     * @param mixed $id
+     * @return ClientInterface|null
+     */
     public function getClientById($id)
     {
         $randomId = null;
@@ -80,7 +84,7 @@ class ClientManager
 
     /**
      * @param ClientMetadata $data
-     * @return \LoginCidadao\OAuthBundle\Entity\Client
+     * @return ClientInterface
      * @throws UniqueConstraintViolationException
      */
     public function register(ClientMetadata $data)

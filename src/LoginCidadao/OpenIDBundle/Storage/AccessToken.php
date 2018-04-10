@@ -55,7 +55,6 @@ class AccessToken extends BaseClass implements AccessTokenInterface
      */
     public function getAccessToken($oauth_token)
     {
-        /** @var \LoginCidadao\OAuthBundle\Entity\AccessToken $accessToken */
         $accessToken = $this->em->getRepository('LoginCidadaoOAuthBundle:AccessToken')
             ->findOneBy(['token' => $oauth_token]);
 

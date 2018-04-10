@@ -32,7 +32,7 @@ class SubjectIdentifierServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param null $id
+     * @param mixed|null $id
      * @return PersonInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getPerson($id = null)
