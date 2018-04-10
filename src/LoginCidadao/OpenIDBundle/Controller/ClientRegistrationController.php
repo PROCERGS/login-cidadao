@@ -125,25 +125,12 @@ class ClientRegistrationController extends FOSRestController
     /**
      * @param string $clientId
      * @return ClientInterface
-     * @throws DynamicRegistrationException
      */
     private function getClientOr404($clientId)
     {
-        $parts = explode('_', $clientId, 2);
-        if (count($parts) !== 2) {
-            throw new DynamicRegistrationException(
-                "Invalid client_id",
-                DynamicRegistrationException::ERROR_INVALID_CLIENT_METADATA
-            );
-        }
-        $entityId = $parts[0];
-        $publicId = $parts[1];
+        $client = $this->getClientManager()->getClientById($clientId);
 
-        /** @var ClientInterface $client */
-        $client = $this->getDoctrine()->getRepository('LoginCidadaoOAuthBundle:Client')
-            ->findOneBy(['id' => $entityId, 'randomId' => $publicId]);
-
-        if (!$client) {
+        if (!$client instanceof ClientInterface) {
             throw $this->createNotFoundException('Client not found.');
         }
 

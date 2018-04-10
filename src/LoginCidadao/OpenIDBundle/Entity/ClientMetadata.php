@@ -42,7 +42,7 @@ class ClientMetadata
     protected $client_secret;
 
     /**
-     * @var Client
+     * @var ClientInterface
      * @ORM\OneToOne(targetEntity="LoginCidadao\OAuthBundle\Entity\Client", inversedBy="metadata", cascade={"persist"})
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      */

@@ -94,11 +94,13 @@ class CompleteUserInfoTaskValidator
      */
     public function getCompleteUserInfoTask(PersonInterface $user, ClientInterface $client, Request $request)
     {
-        if (!$this->isRouteValid($request) || $this->canSkipTask($request, $user, $client)) {
+        if (!$this->isRouteValid($request)
+            || $this->canSkipTask($request, $user, $client)
+            || false === $scope = $request->get('scope', false)) {
             return null;
         }
 
-        $scopes = explode(' ', $request->get('scope', false));
+        $scopes = explode(' ', $scope);
         $emptyClaims = array_intersect($scopes, $this->checkScopes($user));
 
         if (empty($emptyClaims) > 0) {

@@ -59,7 +59,7 @@ class AccessToken extends BaseClass implements AccessTokenInterface
         $accessToken = $this->em->getRepository('LoginCidadaoOAuthBundle:AccessToken')
             ->findOneBy(['token' => $oauth_token]);
 
-        if (!$accessToken) {
+        if (!$accessToken instanceof \LoginCidadao\OAuthBundle\Entity\AccessToken) {
             return null;
         }
 

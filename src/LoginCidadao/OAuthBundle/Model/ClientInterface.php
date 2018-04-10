@@ -95,4 +95,16 @@ interface ClientInterface extends BaseInterface
      * @return ClientInterface
      */
     public function setAllowedScopes(array $allowedScopes);
+
+    /**
+     * Alias of getPublicId()
+     * @return mixed
+     */
+    public function getClientId();
+
+    /**
+     * Alias of getSecret()
+     * @return mixed
+     */
+    public function getClientSecret();
 }
