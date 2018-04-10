@@ -13,6 +13,7 @@ namespace LoginCidadao\OpenIDBundle\Storage;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
 use OAuth2\ServerBundle\Storage\AccessToken as BaseClass;
 use OAuth2\Storage\AccessTokenInterface;
@@ -22,6 +23,9 @@ class AccessToken extends BaseClass implements AccessTokenInterface
 {
     /** @var EntityManager */
     private $em;
+
+    /** @var ClientManager */
+    private $clientManager;
 
     /** @var SubjectIdentifierService */
     private $subjectIdentifierService;
@@ -67,7 +71,7 @@ class AccessToken extends BaseClass implements AccessTokenInterface
 
         return [
             'client_id' => $client->getClientId(),
-            'user_id' => $this->subjectIdentifierService->getSubjectIdentifier($person, $client),
+            'user_id' => $this->subjectIdentifierService->getSubjectIdentifier($person, $client->getMetadata()),
             'expires' => $accessToken->getExpiresAt(),
             'scope' => $accessToken->getScope(),
             'id_token' => $accessToken->getIdToken(),
@@ -90,24 +94,14 @@ class AccessToken extends BaseClass implements AccessTokenInterface
      * @param null|string $id_token
      * @return null|void
      * @ingroup oauth2_section_4
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function setAccessToken($oauth_token, $client_id, $user_id, $expires, $scope = null, $id_token = null)
     {
-        // Get Client Entity
-        $id = explode('_', $client_id);
-
-        /** @var ClientInterface $client */
-        $client = $this->em->getRepository('LoginCidadaoOAuthBundle:Client')->find($id[0]);
-
-        if (!$client) {
-            return null;
-        }
-
-        if ($user_id === null) {
+        if ($user_id === null || !$client = $this->clientManager->getClientById($client_id)) {
             return null;
         } else {
-            /** @var PersonInterface $user */
-            $user = $this->em->getRepository('LoginCidadaoCoreBundle:Person')->find($user_id);
+            $user = $this->getUser($client, $user_id);
         }
 
         // Create Access Token
@@ -127,5 +121,25 @@ class AccessToken extends BaseClass implements AccessTokenInterface
     public function setSubjectIdentifierService(SubjectIdentifierService $subjectIdentifierService)
     {
         $this->subjectIdentifierService = $subjectIdentifierService;
+    }
+
+    public function setClientManager(ClientManager $clientManager)
+    {
+        $this->clientManager = $clientManager;
+    }
+
+    /**
+     * @param ClientInterface $client
+     * @param $user_id
+     * @return PersonInterface|null|object
+     */
+    private function getUser(ClientInterface $client, $user_id)
+    {
+        $user = $this->subjectIdentifierService->getPerson($user_id, $client);
+        if (!$user instanceof PersonInterface) {
+            $user = $this->em->getRepository('LoginCidadaoCoreBundle:Person')->find($user_id);
+        }
+
+        return $user;
     }
 }

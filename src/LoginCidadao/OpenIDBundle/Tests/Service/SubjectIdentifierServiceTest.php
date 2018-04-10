@@ -10,10 +10,15 @@
 
 namespace LoginCidadao\OpenIDBundle\Tests\Service;
 
+use LoginCidadao\OAuthBundle\Entity\Client;
+use LoginCidadao\OpenIDBundle\Entity\SubjectIdentifierRepository;
 use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
 
 class SubjectIdentifierServiceTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return SubjectIdentifierRepository|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function getRepo()
     {
         $repo = $this->getMockBuilder('LoginCidadao\OpenIDBundle\Entity\SubjectIdentifierRepository')
@@ -131,5 +136,19 @@ class SubjectIdentifierServiceTest extends \PHPUnit_Framework_TestCase
         $service = new SubjectIdentifierService($repo, $secret);
 
         $this->assertTrue($service->isSubjectIdentifierPersisted($this->getPerson(), $client));
+    }
+
+    public function testGetPerson()
+    {
+        $subId = 'my_sub_id';
+        $client = new Client();
+
+        $repo = $this->getRepo();
+        $repo->expects($this->once())
+            ->method('findOneBy')->with(['subjectIdentifier' => $subId, 'client' => $client])
+            ->willReturn($subId);
+
+        $service = new SubjectIdentifierService($repo, 'my.secret');
+        $person = $service->getPerson($subId, $client);
     }
 }

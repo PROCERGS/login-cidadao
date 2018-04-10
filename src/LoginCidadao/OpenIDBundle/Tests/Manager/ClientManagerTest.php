@@ -123,6 +123,21 @@ class ClientManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $registeredClient->getOwners());
     }
 
+    public function testPopulateNewMetadata()
+    {
+        $client = (new Client())
+            ->setRedirectUris(['https://example.com']);
+        $metadata = (new ClientMetadata())
+            ->setClient($client);
+
+        $em = $this->getEntityManager();
+
+        $manager = new ClientManager($em, $this->getDispatcher(), $this->getPersonRepository(),
+            'scope1 scope2');
+        $metadata = $manager->populateNewMetadata($metadata);
+        $this->assertSame('example.com', $metadata->getClient()->getName());
+    }
+
     /**
      * @return EntityManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
