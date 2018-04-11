@@ -431,8 +431,8 @@ services:
 
     lc.request.referer_logger:
         class: LoginCidadao\CoreBundle\EventListener\RequestListener
-        calls:
-            - [ 'setLogger', ["@logger"] ]
+        arguments:
+            - "@logger"
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
             - { name: monolog.logger, channel: request }

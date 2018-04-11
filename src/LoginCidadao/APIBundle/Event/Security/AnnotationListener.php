@@ -3,7 +3,6 @@
 namespace LoginCidadao\APIBundle\Event\Security;
 
 use Doctrine\Common\Annotations\Reader;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
@@ -11,7 +10,6 @@ use LoginCidadao\APIBundle\Security\Audit\Annotation\Loggable;
 
 class AnnotationListener
 {
-
     /** @var Reader */
     protected $reader;
 
@@ -46,7 +44,7 @@ class AnnotationListener
         $response = $event->getResponse();
         $responseCode = $response->getStatusCode();
 
-        $annotations = $this->getLoggableAnnotations($request);
+        $annotations = $request->attributes->get('_loggable');
         if (is_array($annotations)) {
             foreach ($annotations as $annotation) {
                 $actionLogId = $annotation->getActionLogId();
@@ -54,15 +52,4 @@ class AnnotationListener
             }
         }
     }
-
-    /**
-     *
-     * @param Request $request
-     * @return Loggable[]
-     */
-    private function getLoggableAnnotations(Request $request)
-    {
-        return $request->attributes->get('_loggable');
-    }
-
 }
