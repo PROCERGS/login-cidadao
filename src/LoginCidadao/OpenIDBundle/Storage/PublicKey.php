@@ -31,11 +31,10 @@ class PublicKey implements PublicKeyInterface
         $this->em = $em;
     }
 
-    public function setFilesystem(Filesystem $filesystem,
-                                    $fileName = 'private.pem')
+    public function setFilesystem(Filesystem $filesystem, $fileName = 'private.pem')
     {
         $this->filesystem = $filesystem;
-        $this->fileName   = $fileName;
+        $this->fileName = $fileName;
     }
 
     public function getEncryptionAlgorithm($client_id = null)
@@ -47,6 +46,7 @@ class PublicKey implements PublicKeyInterface
     {
         $key = $this->getPrivateKeyResource();
         openssl_pkey_export($key, $priv);
+
         return $priv;
     }
 
@@ -63,7 +63,7 @@ class PublicKey implements PublicKeyInterface
     private function createKeys()
     {
         $priv = null;
-        $key  = openssl_pkey_new();
+        $key = openssl_pkey_new();
         openssl_pkey_export($key, $priv);
         $file = $this->filesystem->get($this->fileName, true);
         $file->setContent($priv);
