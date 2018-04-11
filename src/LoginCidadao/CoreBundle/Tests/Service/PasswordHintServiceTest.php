@@ -159,6 +159,7 @@ class PasswordHintServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $expectedMessagesMap
      * @return TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getTranslator($expectedMessagesMap = [])
@@ -173,16 +174,14 @@ class PasswordHintServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private
-    function getValidator()
+    private function getValidator()
     {
         return $this->getMock('Symfony\Component\Validator\Validator\ValidatorInterface');
     }
 
-    private
-    function runGetRequirementsTest(
+    private function runGetRequirementsTest(
         $hasProp,
-        $constraints = [],
+        $constraints,
         $userClass,
         $expected
     ) {
