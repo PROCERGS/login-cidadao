@@ -9,6 +9,7 @@
 namespace LoginCidadao\APIBundle\Tests\Event\Security;
 
 use Doctrine\Common\Annotations\Reader;
+use LoginCidadao\APIBundle\Controller\PersonController;
 use LoginCidadao\APIBundle\Event\Security\AnnotationListener;
 use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
 use LoginCidadao\APIBundle\Security\Audit\Annotation\Loggable;
@@ -55,7 +56,39 @@ class AnnotationListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnKernelController()
     {
-        $this->markTestSkipped('This is not working yet');
+        $logId = 'logId666';
+        $controller = new PersonController();
+        $request = new Request();
+
+        $annotation = (new Loggable(['type' => 'LOGIN']))
+            ->setActionLogId($logId);
+
+        /** @var Reader|\PHPUnit_Framework_MockObject_MockObject $reader */
+        $reader = $this->getMock('Doctrine\Common\Annotations\Reader');
+        $reader->expects($this->once())
+            ->method('getMethodAnnotations')->willReturn([$annotation]);
+
+        /** @var ActionLogger|\PHPUnit_Framework_MockObject_MockObject $logger */
+        $logger = $this->getMockBuilder('LoginCidadao\APIBundle\Security\Audit\ActionLogger')
+            ->disableOriginalConstructor()->getMock();
+        $logger->expects($this->once())->method('logActivity')->with($request, $annotation, [$controller, 'getPersonAction']);
+
+        /** @var FilterControllerEvent|\PHPUnit_Framework_MockObject_MockObject $event */
+        $event = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\FilterControllerEvent')
+            ->disableOriginalConstructor()->getMock();
+        $event->expects($this->once())
+            ->method('getController')
+            ->willReturn([$controller, 'getPersonAction']);
+        $event->expects($this->once())
+            ->method('getRequest')
+            ->willReturn($request);
+
+        $listener = new AnnotationListener($reader, $logger);
+        $listener->onKernelController($event);
+    }
+
+    public function testOnKernelControllerMissingController()
+    {
         /** @var Reader|\PHPUnit_Framework_MockObject_MockObject $reader */
         $reader = $this->getMock('Doctrine\Common\Annotations\Reader');
 
@@ -68,7 +101,7 @@ class AnnotationListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $event->expects($this->once())
             ->method('getController')
-            ->willReturn(['LoginCidadao\APIBundle\Controller\PersonController', 'getPerson']);
+            ->willReturn(null);
 
         $listener = new AnnotationListener($reader, $logger);
         $listener->onKernelController($event);
