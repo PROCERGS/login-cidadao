@@ -301,6 +301,28 @@ class SecurityHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($helper->isGranted($attributes, $object));
     }
 
+    public function testGetTokenRoles()
+    {
+        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token->expects($this->once())->method('getRoles')->willReturn([]);
+
+        $tokenStorage = $this->getTokenStorage();
+        $tokenStorage->expects($this->once())
+            ->method('getToken')
+            ->willReturn($token);
+
+        $helper = new SecurityHelper(
+            $this->getAuthChecker(),
+            $tokenStorage,
+            $this->getActionLogRepository(),
+            $this->getExtremeNotificationsHelper(),
+            $this->getRouter(),
+            'cookieName'
+        );
+
+        $this->assertEmpty($helper->getTokenRoles());
+    }
+
     /**
      * @return AuthorizationCheckerInterface|\PHPUnit_Framework_MockObject_MockObject
      */

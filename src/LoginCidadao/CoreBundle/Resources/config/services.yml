@@ -305,8 +305,6 @@ services:
     account.security_listener:
         class: %account.security_listener.class%
         arguments:
-            - "@security.authorization_checker"
-            - "@security.token_storage"
             - "@lc.security.helper"
             - "@lc.action_logger"
         tags:

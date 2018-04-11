@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Routing\RouterInterface;
 use LoginCidadao\APIBundle\Entity\ActionLogRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use Symfony\Component\Security\Core\Role\RoleInterface;
 
 class SecurityHelper
 {
@@ -157,5 +158,13 @@ class SecurityHelper
         }
 
         return $user;
+    }
+
+    /**
+     * @return RoleInterface[]
+     */
+    public function getTokenRoles()
+    {
+        return $this->tokenStorage->getToken()->getRoles();
     }
 }
