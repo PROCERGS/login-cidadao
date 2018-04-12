@@ -4,12 +4,16 @@ namespace LoginCidadao\OpenIDBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * Class JsonWebKeyControllerTest
+ * @package LoginCidadao\OpenIDBundle\Tests\Controller
+ * @group controller
+ * @group kernel
+ */
 class JsonWebKeyControllerTest extends WebTestCase
 {
-
     public function testGet()
     {
-        $this->markTestSkipped('Skipping controller tests since they take WAY too long to run');
         $client = static::createClient(array(), array('HTTPS' => true));
 
         $client->request('GET', '/openid/connect/jwks');

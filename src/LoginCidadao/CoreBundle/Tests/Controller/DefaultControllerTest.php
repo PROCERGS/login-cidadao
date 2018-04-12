@@ -4,6 +4,12 @@ namespace LoginCidadao\CoreBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * Class DefaultControllerTest
+ * @package LoginCidadao\CoreBundle\Tests\Controller
+ * @group controller
+ * @group kernel
+ */
 class DefaultControllerTest extends WebTestCase
 {
 
@@ -12,7 +18,6 @@ class DefaultControllerTest extends WebTestCase
      */
     public function testAnonymousPages($url)
     {
-        $this->markTestSkipped('Skipping controller tests since they take WAY too long to run');
         $client = self::createClient(array(), array('HTTPS' => true));
         $client->request('GET', $url);
 
@@ -24,7 +29,6 @@ class DefaultControllerTest extends WebTestCase
      */
     public function testHttps($url)
     {
-        $this->markTestSkipped('Skipping controller tests since they take WAY too long to run');
         $client = self::createClient(array(), array('HTTPS' => false));
         $client->request('GET', $url);
 

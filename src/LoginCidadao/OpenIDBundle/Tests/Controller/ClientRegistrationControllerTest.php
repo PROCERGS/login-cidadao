@@ -4,12 +4,16 @@ namespace LoginCidadao\OpenIDBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * Class ClientRegistrationControllerTest
+ * @package LoginCidadao\OpenIDBundle\Tests\Controller
+ * @group controller
+ * @group kernel
+ */
 class ClientRegistrationControllerTest extends WebTestCase
 {
-
     public function testRegister()
     {
-        $this->markTestSkipped('Skipping controller tests since they take WAY too long to run');
         $client = static::createClient(array(), array('HTTPS' => true));
 
         $data = array(
@@ -58,7 +62,6 @@ class ClientRegistrationControllerTest extends WebTestCase
 
     public function testRegisterInvalidRedirectUri()
     {
-        $this->markTestSkipped('Skipping controller tests since they take WAY too long to run');
         $client = static::createClient(array(), array('HTTPS' => true));
 
         $data = array(
@@ -81,7 +84,6 @@ class ClientRegistrationControllerTest extends WebTestCase
 
     public function testRegisterInvalidMetadata()
     {
-        $this->markTestSkipped('Skipping controller tests since they take WAY too long to run');
         $client = static::createClient(array(), array('HTTPS' => true));
 
         $data = array(
