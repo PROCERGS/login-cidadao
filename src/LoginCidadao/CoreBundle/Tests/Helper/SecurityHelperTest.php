@@ -323,6 +323,49 @@ class SecurityHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($helper->getTokenRoles());
     }
 
+    public function testHasToken()
+    {
+        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+
+        $tokenStorage = $this->getTokenStorage();
+        $tokenStorage->expects($this->once())
+            ->method('getToken')
+            ->willReturn($token);
+
+        $helper = new SecurityHelper(
+            $this->getAuthChecker(),
+            $tokenStorage,
+            $this->getActionLogRepository(),
+            $this->getExtremeNotificationsHelper(),
+            $this->getRouter(),
+            'cookieName'
+        );
+
+        $this->assertTrue($helper->hasToken());
+    }
+
+    public function testIsOAuthToken()
+    {
+        $token = $this->getMockBuilder('FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken')
+            ->disableOriginalConstructor()->getMock();
+
+        $tokenStorage = $this->getTokenStorage();
+        $tokenStorage->expects($this->once())
+            ->method('getToken')
+            ->willReturn($token);
+
+        $helper = new SecurityHelper(
+            $this->getAuthChecker(),
+            $tokenStorage,
+            $this->getActionLogRepository(),
+            $this->getExtremeNotificationsHelper(),
+            $this->getRouter(),
+            'cookieName'
+        );
+
+        $this->assertTrue($helper->isOAuthToken());
+    }
+
     /**
      * @return AuthorizationCheckerInterface|\PHPUnit_Framework_MockObject_MockObject
      */

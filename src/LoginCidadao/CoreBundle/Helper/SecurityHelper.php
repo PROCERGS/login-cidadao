@@ -2,6 +2,7 @@
 
 namespace LoginCidadao\CoreBundle\Helper;
 
+use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -78,6 +79,22 @@ class SecurityHelper
         } else {
             return max(array_values($map));
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasToken()
+    {
+        return $this->tokenStorage->getToken() !== null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOAuthToken()
+    {
+        return $this->tokenStorage->getToken() instanceof OAuthToken;
     }
 
     private function getRoleMapping()
