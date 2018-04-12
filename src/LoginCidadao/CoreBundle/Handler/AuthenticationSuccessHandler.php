@@ -53,8 +53,10 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
                 'ip' => $request->getClientIp(),
                 'username' => $form['username'],
             );
+
+            /** @var AccessSession|null $accessSession */
             $accessSession = $this->em->getRepository('LoginCidadaoCoreBundle:AccessSession')->findOneBy($vars);
-            if (!$accessSession) {
+            if (!$accessSession instanceof AccessSession) {
                 $accessSession = new AccessSession();
                 $accessSession->fromArray($vars);
             }

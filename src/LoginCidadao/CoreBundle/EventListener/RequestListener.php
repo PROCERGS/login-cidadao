@@ -37,6 +37,7 @@ class RequestListener
 
     private function logReferer(GetResponseEvent $event)
     {
+        /** @var string|false $referer */
         $referer = $event->getRequest()->headers->get('referer', false);
         if (false === $referer) {
             return;

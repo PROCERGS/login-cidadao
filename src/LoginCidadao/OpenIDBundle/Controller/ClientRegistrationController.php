@@ -133,6 +133,7 @@ class ClientRegistrationController extends FOSRestController
      */
     private function getClientOr404($clientId)
     {
+        /** @var ClientInterface|null $client */
         $client = $this->getClientManager()->getClientById($clientId);
 
         if (!$client instanceof ClientInterface) {
