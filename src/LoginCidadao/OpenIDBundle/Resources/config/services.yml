@@ -152,7 +152,12 @@ services:
         arguments:
             - "@lc.security.helper"
             - "@lc.client_manager"
-        calls:
-            - ["setSkipCompletionTaskIfAuthorized", ["%pre_authorization.complete_information_task.skip_if_authorized%"]]
+            - "@lc.oidc.tasks.complete_user_info.validator"
         tags:
             - { name: kernel.event_subscriber }
+
+    lc.oidc.tasks.complete_user_info.validator:
+        class: LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTaskValidator
+        arguments:
+            - "@event_dispatcher"
+            - "%pre_authorization.complete_information_task.skip_if_authorized%"

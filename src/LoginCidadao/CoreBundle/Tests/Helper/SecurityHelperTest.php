@@ -220,6 +220,25 @@ class SecurityHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($helper->getUser());
     }
 
+    public function testGetUserNoToken()
+    {
+        $tokenStorage = $this->getTokenStorage();
+        $tokenStorage->expects($this->once())
+            ->method('getToken')
+            ->willReturn(null);
+
+        $helper = new SecurityHelper(
+            $this->getAuthChecker(),
+            $tokenStorage,
+            $this->getActionLogRepository(),
+            $this->getExtremeNotificationsHelper(),
+            $this->getRouter(),
+            'cookieName'
+        );
+
+        $this->assertNull($helper->getUser());
+    }
+
     public function testGetTargetPersonLevel()
     {
         $personLvl3 = new Person();

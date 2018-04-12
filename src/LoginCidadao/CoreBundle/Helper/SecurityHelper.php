@@ -163,9 +163,12 @@ class SecurityHelper
      */
     public function getUser()
     {
+        if (null === $token = $this->tokenStorage->getToken()) {
+            return null;
+        }
         try {
             /** @var PersonInterface $user */
-            $user = $this->tokenStorage->getToken()->getUser();
+            $user = $token->getUser();
 
             if (!$user instanceof PersonInterface) {
                 $user = null;

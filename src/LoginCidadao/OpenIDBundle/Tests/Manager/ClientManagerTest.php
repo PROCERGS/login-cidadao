@@ -27,14 +27,23 @@ class ClientManagerTest extends \PHPUnit_Framework_TestCase
         $id = 123;
 
         $repo = $this->getClientRepository();
-        $repo->expects($this->once())->method('find')->willReturn(new Client());
+        $repo->expects($this->once())->method('find')->with($id)->willReturn(new Client());
 
         $em = $this->getEntityManager();
         $em->expects($this->once())->method('getRepository')->with('LoginCidadaoOAuthBundle:Client')
             ->willReturn($repo);
 
         $manager = new ClientManager($em, $this->getDispatcher(), $this->getPersonRepository(), '');
-        $manager->getClientById($id);
+        $this->assertInstanceOf('LoginCidadao\OAuthBundle\Model\ClientInterface', $manager->getClientById($id));
+    }
+
+    public function testGetClientByNull()
+    {
+        $em = $this->getEntityManager();
+        $em->expects($this->never())->method('getRepository');
+
+        $manager = new ClientManager($em, $this->getDispatcher(), $this->getPersonRepository(), '');
+        $this->assertNull($manager->getClientById(null));
     }
 
     public function testGetClientByPublicId()

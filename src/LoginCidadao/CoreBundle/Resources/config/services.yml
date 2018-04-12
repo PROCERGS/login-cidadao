@@ -187,8 +187,7 @@ services:
     kernel.listener.logged_in_user_listener:
         class: %kernel.listener.logged_in_user_listener.class%
         arguments:
-            - "@security.token_storage"
-            - "@security.authorization_checker"
+            - "@lc.security.helper"
             - "@router"
             - "@session"
             - "@translator"

@@ -59,6 +59,9 @@ class ClientManager
      */
     public function getClientById($id)
     {
+        if ($id === null) {
+            return null;
+        }
         $randomId = null;
         if (strstr($id, '_') !== false) {
             $parts = explode('_', $id);
