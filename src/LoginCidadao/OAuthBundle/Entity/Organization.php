@@ -147,7 +147,7 @@ class Organization implements OrganizationInterface
 
     /**
      * @param PersonInterface[] $members
-     * @return \Organization
+     * @return Organization
      */
     public function setMembers(array $members)
     {
@@ -166,7 +166,7 @@ class Organization implements OrganizationInterface
 
     /**
      * @param \DateTime $verifiedAt
-     * @return \Organization
+     * @return Organization
      */
     public function setVerifiedAt($verifiedAt)
     {
@@ -281,10 +281,13 @@ class Organization implements OrganizationInterface
 
     /**
      * @param string $sectorIdentifierUri
+     * @return Organization
      */
     public function setSectorIdentifierUri($sectorIdentifierUri)
     {
         $this->sectorIdentifierUri = $sectorIdentifierUri;
+
+        return $this;
     }
 
     /**
