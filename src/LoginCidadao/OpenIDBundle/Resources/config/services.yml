@@ -38,7 +38,7 @@ services:
     oidc.storage.session_state:
         class: %oidc.storage.session_state.class%
         arguments:
-            - "@doctrine.orm.entity_manager"
+            - "@lc.client_manager"
             - "@security.token_storage"
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
