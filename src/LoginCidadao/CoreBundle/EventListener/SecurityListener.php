@@ -47,6 +47,7 @@ class SecurityListener
         /** @var PersonInterface $target */
         $target = $event->getTargetUser();
 
+        $impersonator = null;
         if ($this->securityHelper->isGranted('ROLE_PREVIOUS_ADMIN')) {
             // Impersonator is going back to normal
             foreach ($this->securityHelper->getTokenRoles() as $role) {

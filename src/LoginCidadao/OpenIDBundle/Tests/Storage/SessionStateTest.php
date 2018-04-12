@@ -15,6 +15,7 @@ use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use LoginCidadao\OpenIDBundle\Storage\SessionState;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -22,6 +23,7 @@ class SessionStateTest extends \PHPUnit_Framework_TestCase
 {
     public function testOnKernelResponseAddCookie()
     {
+        /** @var ResponseHeaderBag|\PHPUnit_Framework_MockObject_MockObject $headers */
         $headers = $this->getMock('Symfony\Component\HttpFoundation\ResponseHeaderBag');
         $headers->expects($this->once())->method('setCookie')
             ->with($this->isInstanceOf('Symfony\Component\HttpFoundation\Cookie'));
@@ -44,6 +46,7 @@ class SessionStateTest extends \PHPUnit_Framework_TestCase
 
     public function testOnKernelResponseRemoveCookie()
     {
+        /** @var ResponseHeaderBag|\PHPUnit_Framework_MockObject_MockObject $headers */
         $headers = $this->getMock('Symfony\Component\HttpFoundation\ResponseHeaderBag');
         $headers->expects($this->once())->method('removeCookie')->with('session_state');
 

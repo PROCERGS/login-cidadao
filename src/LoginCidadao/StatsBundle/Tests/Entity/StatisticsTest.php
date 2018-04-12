@@ -20,6 +20,7 @@ class StatisticsTest extends \PHPUnit_Framework_TestCase
         $time = '01:02:03';
         $index = 'index';
         $key = 'key';
+        /** @var \DateTime $timestamp */
         $timestamp = \DateTime::createFromFormat('Y-m-d H:i:s', "{$date} {$time}");
         $value = 321;
 

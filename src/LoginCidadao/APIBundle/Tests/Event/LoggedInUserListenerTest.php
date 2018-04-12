@@ -29,7 +29,7 @@ class LoggedInUserListenerTest extends \PHPUnit_Framework_TestCase
         $accessToken->setToken($accessTokenToken);
         $accessToken->setClient($client);
 
-        /** @var AccessTokenRepository|\PHPUnit_Framework_MockObject_MockObject $accessTokenRepo */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|AccessTokenRepository $accessTokenRepo */
         $accessTokenRepo = $this->getMockBuilder('LoginCidadao\OAuthBundle\Entity\AccessTokenRepository')
             ->disableOriginalConstructor()->getMock();
         $accessTokenRepo->expects($this->once())

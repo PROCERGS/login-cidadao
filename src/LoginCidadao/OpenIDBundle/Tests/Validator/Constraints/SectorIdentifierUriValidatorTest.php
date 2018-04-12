@@ -27,7 +27,7 @@ class SectorIdentifierUriValidatorTest extends \PHPUnit_Framework_TestCase
         $constraint = new SectorIdentifierUri();
         $organization = new Organization();
 
-        /** @var OrganizationRepository|\PHPUnit_Framework_MockObject_MockObject $repo */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|OrganizationRepository $repo */
         $repo = $this->getMockBuilder('LoginCidadao\OAuthBundle\Entity\OrganizationRepository')
             ->disableOriginalConstructor()->getMock();
         $repo->expects($this->once())

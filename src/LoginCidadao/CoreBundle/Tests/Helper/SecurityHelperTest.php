@@ -18,6 +18,7 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -277,6 +278,7 @@ class SecurityHelperTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
         $request->setSession($session);
 
+        /** @var ResponseHeaderBag|\PHPUnit_Framework_MockObject_MockObject $headers */
         $headers = $this->getMock('Symfony\Component\HttpFoundation\ResponseHeaderBag');
         $headers->expects($this->once())->method('clearCookie')->with($rememberMe);
 
