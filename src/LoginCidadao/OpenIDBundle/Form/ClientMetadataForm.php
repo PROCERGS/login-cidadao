@@ -10,12 +10,25 @@
 
 namespace LoginCidadao\OpenIDBundle\Form;
 
+use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ClientMetadataForm extends AbstractType
 {
+    /** @var ClientManager */
+    private $clientManager;
+
+    /**
+     * @inheritDoc
+     */
+    public function __construct(ClientManager $clientManager)
+    {
+        $this->clientManager = $clientManager;
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -52,16 +65,24 @@ class ClientMetadataForm extends AbstractType
             ->add('require_auth_time')
             ->add('default_acr_values')
             ->add('initiate_login_uri', 'text')
-            ->add('request_uris');
+            ->add('request_uris')
+            ->addEventListener(FormEvents::SUBMIT, [$this, 'onSubmit']);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'LoginCidadao\OpenIDBundle\Entity\ClientMetadata',
-            'csrf_protection' => false
-        ));
+            'csrf_protection' => false,
+        ]);
+    }
+
+    public function onSubmit(FormEvent $event)
+    {
+        $data = $this->clientManager->populateNewMetadata($event->getData());
+
+        $event->setData($data);
     }
 
     public function getName()

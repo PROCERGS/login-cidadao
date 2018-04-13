@@ -68,7 +68,8 @@
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
         "phpunit/phpunit": "^4.8",
-        "symfony/phpunit-bridge": "^3.3"
+        "symfony/phpunit-bridge": "^3.3",
+        "johnkary/phpunit-speedtrap": "^1.0"
     },
     "scripts": {
         "post-root-package-install": [
@@ -92,7 +93,8 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
         ],
-        "lc-docs": "doc/cookbook/scripts/doc-server"
+        "lc-docs": "doc/cookbook/scripts/doc-server",
+        "test": "bin/phpunit -c app"
     },
     "config": {
         "bin-dir": "bin",

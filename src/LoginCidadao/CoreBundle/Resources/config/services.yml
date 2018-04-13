@@ -187,8 +187,7 @@ services:
     kernel.listener.logged_in_user_listener:
         class: %kernel.listener.logged_in_user_listener.class%
         arguments:
-            - "@security.token_storage"
-            - "@security.authorization_checker"
+            - "@lc.security.helper"
             - "@router"
             - "@session"
             - "@translator"
@@ -305,8 +304,6 @@ services:
     account.security_listener:
         class: %account.security_listener.class%
         arguments:
-            - "@security.authorization_checker"
-            - "@security.token_storage"
             - "@lc.security.helper"
             - "@lc.action_logger"
         tags:
@@ -431,8 +428,8 @@ services:
 
     lc.request.referer_logger:
         class: LoginCidadao\CoreBundle\EventListener\RequestListener
-        calls:
-            - [ 'setLogger', ["@logger"] ]
+        arguments:
+            - "@logger"
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
             - { name: monolog.logger, channel: request }
@@ -462,3 +459,10 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@scheb_two_factor.security.google_authenticator"
+
+    lc.person.repository:
+        myrepository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - LoginCidadao\CoreBundle\Entity\Person

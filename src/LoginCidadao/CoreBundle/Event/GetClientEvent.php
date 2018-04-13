@@ -28,7 +28,7 @@ class GetClientEvent extends Event
     }
 
     /**
-     * @return ClientInterface
+     * @return ClientInterface|null
      */
     public function getClient()
     {

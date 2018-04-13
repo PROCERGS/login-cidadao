@@ -10,10 +10,18 @@
 
 namespace LoginCidadao\OpenIDBundle\Tests\Service;
 
+use LoginCidadao\CoreBundle\Entity\Person;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OpenIDBundle\Entity\SubjectIdentifierRepository;
 use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
 
 class SubjectIdentifierServiceTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return SubjectIdentifierRepository|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function getRepo()
     {
         $repo = $this->getMockBuilder('LoginCidadao\OpenIDBundle\Entity\SubjectIdentifierRepository')
@@ -23,6 +31,10 @@ class SubjectIdentifierServiceTest extends \PHPUnit_Framework_TestCase
         return $repo;
     }
 
+    /**
+     * @param mixed|null $id
+     * @return PersonInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function getPerson($id = null)
     {
         $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
@@ -123,6 +135,7 @@ class SubjectIdentifierServiceTest extends \PHPUnit_Framework_TestCase
         $secret = 'my.secret';
 
         $subId = $this->getMock('LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier');
+        /** @var ClientInterface $client */
         $client = $this->getMock('LoginCidadao\OAuthBundle\Model\ClientInterface');
 
         $repo = $this->getRepo();
@@ -131,5 +144,20 @@ class SubjectIdentifierServiceTest extends \PHPUnit_Framework_TestCase
         $service = new SubjectIdentifierService($repo, $secret);
 
         $this->assertTrue($service->isSubjectIdentifierPersisted($this->getPerson(), $client));
+    }
+
+    public function testGetPerson()
+    {
+        $person = new Person();
+        $subId = 'my_sub_id';
+        $client = new Client();
+
+        $repo = $this->getRepo();
+        $repo->expects($this->once())
+            ->method('findOneBy')->with(['subjectIdentifier' => $subId, 'client' => $client])
+            ->willReturn($person);
+
+        $service = new SubjectIdentifierService($repo, 'my.secret');
+        $this->assertSame($person, $service->getPerson($subId, $client));
     }
 }
