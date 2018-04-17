@@ -1,9 +1,18 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\OAuthBundle\Model;
 
 use FOS\OAuthServerBundle\Model\ClientInterface as BaseInterface;
 use LoginCidadao\CoreBundle\Entity\Authorization;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use Symfony\Component\HttpFoundation\File\File;
@@ -46,6 +55,9 @@ interface ClientInterface extends BaseInterface, UniqueEntityInterface
 
     public function setId($var);
 
+    /**
+     * @return PersonInterface[]|ArrayCollection
+     */
     public function getOwners();
 
     public function setOwners($owners);
@@ -80,4 +92,27 @@ interface ClientInterface extends BaseInterface, UniqueEntityInterface
      * @return ClientMetadata
      */
     public function getMetadata();
+
+    /**
+     * @param string[] $allowedScopes
+     * @return ClientInterface
+     */
+    public function setAllowedScopes(array $allowedScopes);
+
+    /**
+     * Alias of getPublicId()
+     * @return mixed
+     */
+    public function getClientId();
+
+    /**
+     * Alias of getSecret()
+     * @return mixed
+     */
+    public function getClientSecret();
+
+    /**
+     * @return mixed
+     */
+    public function getId();
 }

@@ -62,6 +62,7 @@
         "qandidate/stack-request-id": "dev-ramsey-uuid-v3",
         "egulias/email-validator": "~1.2",
         "misd/phone-number-bundle": "^1.1",
+        "giggsey/libphonenumber-for-php": "^8.9",
         "ocramius/proxy-manager": "^1.0",
         "rollerworks/password-strength-bundle": "^1.5",
         "emarref/jwt": "^1.0",
@@ -70,7 +71,8 @@
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
         "phpunit/phpunit": "^4.8",
-        "symfony/phpunit-bridge": "^3.3"
+        "symfony/phpunit-bridge": "^3.3",
+        "johnkary/phpunit-speedtrap": "^1.0"
     },
     "scripts": {
         "post-root-package-install": [
@@ -94,7 +96,8 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
         ],
-        "lc-docs": "doc/cookbook/scripts/doc-server"
+        "lc-docs": "doc/cookbook/scripts/doc-server",
+        "test": "bin/phpunit -c app"
     },
     "config": {
         "bin-dir": "bin",

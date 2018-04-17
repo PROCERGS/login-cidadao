@@ -280,10 +280,13 @@ class Organization implements OrganizationInterface
 
     /**
      * @param string $sectorIdentifierUri
+     * @return Organization
      */
     public function setSectorIdentifierUri($sectorIdentifierUri)
     {
         $this->sectorIdentifierUri = $sectorIdentifierUri;
+
+        return $this;
     }
 
     /**

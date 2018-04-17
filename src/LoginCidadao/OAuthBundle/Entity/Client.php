@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\OAuthBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 use FOS\OAuthServerBundle\Entity\Client as BaseClient;
 use Doctrine\ORM\Mapping as ORM;
@@ -131,7 +132,7 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id")}
      *      )
-     * @var PersonInterface[]
+     * @var PersonInterface[]|ArrayCollection
      */
     protected $owners;
 
@@ -160,7 +161,7 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
     {
         parent::__construct();
         $this->authorizations = [];
-        $this->owners = [];
+        $this->owners = new ArrayCollection();
 
         $this->allowedScopes = array(
             'public_profile',

@@ -10,72 +10,47 @@
 
 namespace LoginCidadao\OAuthBundle\Tests\Entity;
 
+use LoginCidadao\CoreBundle\Entity\Person;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Entity\Organization;
 
 class OrganizationTest extends \PHPUnit_Framework_TestCase
 {
     public function testOrganization()
     {
-        $id = '321';
-        $name = 'Organization Name';
-        $members = [$this->getPerson()];
-        $verifiedAt = new \DateTime();
-        $domain = 'domain.com';
-        $clients = [$this->getClient()];
-        $validationUrl = 'https://validation.url';
-        $secret = 'super secret';
-        $sectorIdentifierUri = 'https://sector.identifier';
+        $organization = (new Organization())
+            ->setId($id = 'orgId')
+            ->setName($name = 'My Organization')
+            ->setMembers($members = [new Person()])
+            ->setVerifiedAt($verifiedAt = new \DateTime())
+            ->setDomain($domain = 'example.com')
+            ->setClients($clients = [new Client()])
+            ->setValidationUrl($validationUri = 'https://example.com/validate')
+            ->setValidationSecret($validationSecret = 'val-secret')
+            ->setValidatedUrl($validatedUri = 'https://example.com/validated')
+            ->setTrusted(true)
+            ->setSectorIdentifierUri($sectorUri = 'https://example.com');
 
-        $organization = new Organization();
-        $this->assertFalse($organization->isVerified());
-        $organization
-            ->setId($id)
-            ->setName($name)
-            ->setMembers($members)
-            ->setVerifiedAt($verifiedAt)
-            ->setDomain($domain)
-            ->setClients($clients)
-            ->setValidationUrl($validationUrl)
-            ->setValidationSecret($secret)
-            ->setTrusted(true);
+        $this->assertSame($id, $organization->getId());
+        $this->assertSame($name, $organization->getName());
+        $this->assertSame($members, $organization->getMembers());
+        $this->assertSame($verifiedAt, $organization->getVerifiedAt());
+        $this->assertSame($domain, $organization->getDomain());
+        $this->assertSame($clients, $organization->getClients());
+        $this->assertSame($validationUri, $organization->getValidationUrl());
+        $this->assertSame($validationSecret, $organization->getValidationSecret());
+        $this->assertSame($sectorUri, $organization->getSectorIdentifierUri());
 
-        $organization->setSectorIdentifierUri($sectorIdentifierUri);
-
-        $this->assertEquals($id, $organization->getId());
-        $this->assertEquals($name, $organization->getName());
-        $this->assertEquals($name, $organization->__toString());
-        $this->assertEquals($members, $organization->getMembers());
-        $this->assertEquals($verifiedAt, $organization->getVerifiedAt());
-        $this->assertEquals($domain, $organization->getDomain());
-        $this->assertEquals($clients, $organization->getClients());
-        $this->assertEquals($validationUrl, $organization->getValidationUrl());
-        $this->assertEquals($secret, $organization->getValidationSecret());
-        $this->assertEquals($sectorIdentifierUri, $organization->getSectorIdentifierUri());
         $this->assertTrue($organization->isTrusted());
         $this->assertTrue($organization->isVerified());
-    }
-
-    public function testCheckValidation()
-    {
-        $validationUrl = 'https://validation.url';
-        $validatedUrl = 'https://validated.url';
-        $organization = new Organization();
-        $organization->setValidatedUrl($validatedUrl);
-        $organization->setValidationUrl($validationUrl);
 
         $this->assertFalse($organization->checkValidation());
+        $this->assertNull($organization->getVerifiedAt());
+        $this->assertFalse($organization->isVerified());
 
-        $organization->setValidatedUrl($validationUrl);
+        $organization->setValidatedUrl($organization->getValidationUrl());
+        $organization->setVerifiedAt(new \DateTime());
         $this->assertTrue($organization->checkValidation());
-    }
-
-    private function getPerson()
-    {
-        return $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
-    }
-
-    private function getClient()
-    {
-        return $this->getMock('LoginCidadao\OAuthBundle\Model\ClientInterface');
+        $this->assertSame($name, $organization->__toString());
     }
 }

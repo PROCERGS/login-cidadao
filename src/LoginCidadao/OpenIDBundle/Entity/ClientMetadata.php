@@ -11,6 +11,7 @@
 namespace LoginCidadao\OpenIDBundle\Entity;
 
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use LoginCidadao\OpenIDBundle\Validator\Constraints\SectorIdentifierUri;
@@ -40,7 +41,7 @@ class ClientMetadata
     protected $client_secret;
 
     /**
-     * @var Client
+     * @var ClientInterface
      * @ORM\OneToOne(targetEntity="LoginCidadao\OAuthBundle\Entity\Client", inversedBy="metadata", cascade={"persist"})
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      */
@@ -338,6 +339,17 @@ class ClientMetadata
         $this->application_type = 'web';
         $this->require_auth_time = false;
         $this->subject_type = 'pairwise';
+    }
+
+    /**
+     * @param mixed $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getRedirectUris()
@@ -776,9 +788,6 @@ class ClientMetadata
      */
     public function toClient()
     {
-        $name = $this->getClientName();
-        $hasName = $name !== null && strlen($name) > 0;
-
         $grantTypes = $this->getGrantTypes();
         $clientUri = $this->getClientUri();
         $tosUri = $this->getTosUri();
@@ -819,7 +828,7 @@ class ClientMetadata
         return $this->client;
     }
 
-    public function setClient(Client $client)
+    public function setClient(ClientInterface $client)
     {
         $this->client = $client;
 
