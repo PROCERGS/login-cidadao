@@ -131,7 +131,6 @@ class ClientBaseFormType extends AbstractType
                         'class' => 'LoginCidadaoCoreBundle:Person',
                         'choice_label' => 'fullNameOrUsername',
                         'query_builder' => function (EntityRepository $er) use (&$entity) {
-                            //$country = $er->createQueryBuilder('h')->getEntityManager()->getRepository('LoginCidadaoCoreBundle:Person')->findOneBy(array('iso2' => 'BR'));
                             $sql = $er->createQueryBuilder('u');
                             if (!empty($entity['owners'])) {
                                 $sql->where('u.id in (:owners)');

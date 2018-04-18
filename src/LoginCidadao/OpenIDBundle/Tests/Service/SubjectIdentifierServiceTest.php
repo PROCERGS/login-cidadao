@@ -67,7 +67,7 @@ class SubjectIdentifierServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param null $type
+     * @param null|string $type
      * @param ClientInterface|null $client
      * @return ClientMetadata|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -165,7 +165,6 @@ class SubjectIdentifierServiceTest extends \PHPUnit_Framework_TestCase
     {
         $secret = 'my.secret';
 
-        $client = $this->getClient();
         $subId = $this->getMock('LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier');
         /** @var ClientInterface $client */
         $client = $this->getMock('LoginCidadao\OAuthBundle\Model\ClientInterface');

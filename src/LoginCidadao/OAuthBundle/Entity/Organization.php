@@ -68,7 +68,7 @@ class Organization implements OrganizationInterface
 
     /**
      * @ORM\OneToMany(targetEntity="LoginCidadao\OpenIDBundle\Entity\ClientMetadata", mappedBy="organization")
-     * @var ClientInterface
+     * @var ClientInterface[]
      */
     private $clients;
 

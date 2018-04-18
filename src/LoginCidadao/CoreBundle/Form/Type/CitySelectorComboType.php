@@ -260,7 +260,7 @@ class CitySelectorComboType extends AbstractType
 
     private function getPreferredChoiceCallback()
     {
-        return function (PreferableInterface $choice, $key) {
+        return function (PreferableInterface $choice) {
             return $choice->getPreference() > 0;
         };
     }

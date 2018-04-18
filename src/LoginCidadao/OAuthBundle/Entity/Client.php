@@ -80,7 +80,7 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
 
     /**
      * @ORM\OneToMany(targetEntity="LoginCidadao\CoreBundle\Entity\Authorization", mappedBy="client", cascade={"remove"}, orphanRemoval=true)
-     * @var Authorization[]
+     * @var Authorization[]|ArrayCollection
      */
     private $authorizations;
 
@@ -241,7 +241,7 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
     }
 
     /**
-     * @param array|Authorization[] $authorizations
+     * @param array|Authorization[]|ArrayCollection $authorizations
      * @return $this
      */
     public function setAuthorizations($authorizations = [])
