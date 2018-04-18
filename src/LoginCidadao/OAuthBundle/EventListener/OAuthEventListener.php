@@ -87,7 +87,7 @@ class OAuthEventListener
         $user = $this->getUser($event);
         $scope = $this->scopeFinder->getScope();
 
-        /** @var Authorization $currentAuth */
+        /** @var Authorization|null $currentAuth */
         $currentAuth = $this->getCurrentAuthorization($user, $client);
 
         $authorizationEvent = new AuthorizationEvent($user, $client, $scope);

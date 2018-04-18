@@ -33,7 +33,7 @@ class RemoteClaim implements RemoteClaimInterface
     protected $id;
 
     /**
-     * @var TagUri
+     * @var TagUri|string
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;

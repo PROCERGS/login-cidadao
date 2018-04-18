@@ -31,7 +31,7 @@ class ClientController extends Controller
         $client = $clients->find($clientId);
         $user = $this->getUser();
 
-        /** @var Authorization $authorization */
+        /** @var Authorization|null $authorization */
         $authorization = $this->getDoctrine()
             ->getRepository('LoginCidadaoCoreBundle:Authorization')
             ->findOneBy(['person' => $user, 'client' => $client]);

@@ -74,6 +74,7 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
     private $termsOfUseUrl;
 
     /**
+     * @var string[]|null
      * @ORM\Column(type="json_array", nullable=false)
      */
     private $allowedScopes;

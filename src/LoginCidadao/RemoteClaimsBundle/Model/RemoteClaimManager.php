@@ -47,6 +47,7 @@ class RemoteClaimManager implements RemoteClaimManagerInterface
 
     /**
      * {@inheritdoc}
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function enforceAuthorization(RemoteClaimAuthorizationInterface $authorization)
     {
@@ -62,6 +63,7 @@ class RemoteClaimManager implements RemoteClaimManagerInterface
 
     /**
      * {@inheritdoc}
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function isAuthorized($claimName, PersonInterface $person, ClientInterface $client)
     {

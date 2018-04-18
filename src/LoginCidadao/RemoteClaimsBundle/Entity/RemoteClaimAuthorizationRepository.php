@@ -26,7 +26,8 @@ class RemoteClaimAuthorizationRepository extends EntityRepository
 {
     /**
      * @param RemoteClaimAuthorizationInterface $authorization
-     * @return RemoteClaimAuthorizationInterface
+     * @return RemoteClaimAuthorizationInterface|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findAuthorization(RemoteClaimAuthorizationInterface $authorization)
     {

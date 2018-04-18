@@ -18,6 +18,7 @@ use LoginCidadao\CoreBundle\Entity\AuthorizationRepository;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimAuthorizationInterface;
+use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 

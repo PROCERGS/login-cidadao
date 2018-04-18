@@ -146,7 +146,7 @@ class ClientCredentials extends BaseClass
 
     /**
      * @param $client_id mixed
-     * @return null|ClientInterface
+     * @return ClientInterface|null
      */
     private function getClient($client_id)
     {
@@ -161,13 +161,13 @@ class ClientCredentials extends BaseClass
         $repo = $this->em->getRepository('LoginCidadaoOAuthBundle:Client');
 
         if ($randomId) {
-            /** @var ClientInterface $client */
+            /** @var ClientInterface|null $client */
             $client = $repo->findOneBy([
                 'id' => $client_id,
                 'randomId' => $randomId,
             ]);
         } else {
-            /** @var ClientInterface $client */
+            /** @var ClientInterface|null $client */
             $client = $repo->find($client_id);
         }
 
