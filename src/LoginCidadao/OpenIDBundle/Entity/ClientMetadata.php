@@ -352,6 +352,9 @@ class ClientMetadata
         return $this;
     }
 
+    /**
+     * @return string[]
+     */
     public function getRedirectUris()
     {
         return $this->redirect_uris;

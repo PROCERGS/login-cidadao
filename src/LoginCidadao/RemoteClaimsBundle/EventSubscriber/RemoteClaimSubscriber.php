@@ -11,7 +11,6 @@
 namespace LoginCidadao\RemoteClaimsBundle\EventSubscriber;
 
 use LoginCidadao\LogBundle\Traits\LoggerAwareTrait;
-use LoginCidadao\RemoteClaimsBundle\Event\UpdateRemoteClaimEvent;
 use LoginCidadao\RemoteClaimsBundle\Event\UpdateRemoteClaimUriEvent;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManagerInterface;
 use LoginCidadao\RemoteClaimsBundle\RemoteClaimEvents;

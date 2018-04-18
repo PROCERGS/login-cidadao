@@ -97,7 +97,8 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
         ],
         "lc-docs": "doc/cookbook/scripts/doc-server",
-        "test": "bin/phpunit -c app"
+        "test": "bin/phpunit -c app",
+        "quick-test": "bin/phpunit -c app --exclude-group=kernel --colors=always"
     },
     "config": {
         "bin-dir": "bin",

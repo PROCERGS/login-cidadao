@@ -15,23 +15,17 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OpenIDBundle\Event\AuthorizationEvent;
 use LoginCidadao\OpenIDBundle\LoginCidadaoOpenIDEvents;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
-use LoginCidadao\OpenIDBundle\Manager\ScopeManager;
 use LoginCidadao\OAuthBundle\Service\OrganizationService;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
-use LoginCidadao\OpenIDBundle\Validator\SectorIdentifierUriChecker;
-use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use OAuth2\Server;
-use OAuth2\ServerBundle\Entity\Scope;
 use OAuth2\ServerBundle\Controller\AuthorizeController as BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class AuthorizeController extends BaseController
 {
@@ -67,53 +61,12 @@ class AuthorizeController extends BaseController
      * Render the Authorization fragment
      *
      * @Template()
-     * @param Request $request
-     * @return array
      *
      * @deprecated
      */
-    public function authorizeAction(Request $request)
+    public function authorizeAction()
     {
         throw new \RuntimeException('This class should not be used!');
-        $client = $this->getClient($request);
-
-        $scope = explode(' ', $request->get('scope'));
-        if (array_search('public_profile', $scope) === false) {
-            $scope[] = 'public_profile';
-        }
-
-        /** @var ScopeManager $scopeManager */
-        $scopeManager = $this->get('oauth2.scope_manager');
-        $scopes = array_map(
-            function (Scope $value) {
-                return $value->getScope();
-            },
-            $scopeManager->findScopesByScopes($scope)
-        );
-
-        /** @var OrganizationService $organizationService */
-        $organizationService = $this->get('organization');
-        $warnUntrusted = $this->shouldWarnUntrusted($client);
-        $metadata = $this->getMetadata($client);
-        $organization = $organizationService->getOrganization($metadata);
-
-        $qs = [
-            'client_id' => $client->getPublicId(),
-            'scope' => $scope,
-            'response_type' => $request->get('response_type'),
-            'redirect_uri' => $request->get('redirect_uri'),
-            'state' => $request->get('state'),
-            'nonce' => $request->get('nonce'),
-        ];
-
-        return [
-            'qs' => $qs,
-            'scopes' => $scopes,
-            'client' => $client,
-            'warnUntrusted' => $warnUntrusted,
-            'metadata' => $metadata,
-            'organization' => $organization,
-        ];
     }
 
     /**
@@ -242,14 +195,6 @@ class AuthorizeController extends BaseController
         $repo = $this->getDoctrine()->getRepository('LoginCidadaoOpenIDBundle:ClientMetadata');
 
         return $repo->findOneBy(['client' => $client]);
-    }
-
-    /**
-     * @return SectorIdentifierUriChecker
-     */
-    private function getSectorIdentifierUriChecker()
-    {
-        return $this->get('checker.sector_identifier_uri');
     }
 
     /**

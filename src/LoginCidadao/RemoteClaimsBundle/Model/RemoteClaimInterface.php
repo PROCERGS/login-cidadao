@@ -13,6 +13,17 @@ namespace LoginCidadao\RemoteClaimsBundle\Model;
 interface RemoteClaimInterface
 {
     /**
+     * @return mixed
+     */
+    public function getId();
+
+    /**
+     * @param mixed $id
+     * @return RemoteClaimInterface
+     */
+    public function setId($id);
+
+    /**
      * @return TagUri
      */
     public function getName();
