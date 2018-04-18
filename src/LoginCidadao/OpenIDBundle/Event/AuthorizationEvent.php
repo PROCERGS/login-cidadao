@@ -30,7 +30,7 @@ class AuthorizationEvent extends Event
     /** @var string[] */
     private $scope;
 
-    /** @var RemoteClaimInterface[] */
+    /** @var RemoteClaimInterface[]|null */
     private $remoteClaims;
 
     /**
@@ -65,7 +65,7 @@ class AuthorizationEvent extends Event
     }
 
     /**
-     * @return Authorization
+     * @return Authorization|null
      */
     public function getAuthorization()
     {

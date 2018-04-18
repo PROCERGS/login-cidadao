@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\OAuthBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 use FOS\OAuthServerBundle\Entity\Client as BaseClient;
 use Doctrine\ORM\Mapping as ORM;
@@ -49,46 +50,47 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
      * @JMS\SerializedName("client_name")
      * @JMS\Groups({"public", "remote_claim"})
      */
-    protected $name;
+    private $name;
 
     /**
      * @ORM\Column(type="string", length=4000, nullable=true)
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */
-    protected $description;
+    private $description;
 
     /**
      * @ORM\Column(type="string", length=2000, nullable=true)
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */
-    protected $landingPageUrl;
+    private $landingPageUrl;
 
     /**
      * @ORM\Column(type="string", length=2000, nullable=true)
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */
-    protected $termsOfUseUrl;
+    private $termsOfUseUrl;
 
     /**
+     * @var string[]|null
      * @ORM\Column(type="json_array", nullable=false)
      */
-    protected $allowedScopes;
+    private $allowedScopes;
 
     /**
      * @ORM\OneToMany(targetEntity="LoginCidadao\CoreBundle\Entity\Authorization", mappedBy="client", cascade={"remove"}, orphanRemoval=true)
-     * @var Authorization[]
+     * @var Authorization[]|ArrayCollection
      */
-    protected $authorizations;
+    private $authorizations;
 
     /**
      * @ORM\Column(type="string", length=2000, nullable=true)
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */
-    protected $siteUrl;
+    private $siteUrl;
 
     /**
      * @Assert\File(
@@ -101,7 +103,7 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
      * @var File $image
      * @JMS\Since("1.0.2")
      */
-    protected $image;
+    private $image;
 
     /**
      * @ORM\Column(type="string", length=255, name="image_name", nullable=true)
@@ -109,21 +111,21 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
      * @var string $imageName
      * @JMS\Since("1.0.2")
      */
-    protected $imageName;
+    private $imageName;
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */
-    protected $published;
+    private $published;
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
      * @JMS\Expose
      * @JMS\Groups({"public"})
      */
-    protected $visible;
+    private $visible;
 
     /**
      * @ORM\ManyToMany(targetEntity="LoginCidadao\CoreBundle\Entity\Person", inversedBy="clients"  )
@@ -131,25 +133,25 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
      *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="client_id", referencedColumnName="id")}
      *      )
-     * @var PersonInterface[]
+     * @var PersonInterface[]|ArrayCollection
      */
-    protected $owners;
+    private $owners;
 
     /**
      * @ORM\OneToMany(targetEntity="LoginCidadao\APIBundle\Entity\LogoutKey", mappedBy="client")
      */
-    protected $logoutKeys;
+    private $logoutKeys;
 
     /**
      * @var \LoginCidadao\OpenIDBundle\Entity\ClientMetadata
      * @ORM\OneToOne(targetEntity="LoginCidadao\OpenIDBundle\Entity\ClientMetadata", mappedBy="client", cascade={"persist"})
      */
-    protected $metadata;
+    private $metadata;
 
     /**
      * @ORM\Column(name="updated_at", type="datetime")
      */
-    protected $updatedAt;
+    private $updatedAt;
     /**
      * @ORM\Column(type="string", nullable=true, unique=true)
      * @var string
@@ -160,7 +162,7 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
     {
         parent::__construct();
         $this->authorizations = [];
-        $this->owners = [];
+        $this->owners = new ArrayCollection();
 
         $this->allowedScopes = array(
             'public_profile',
@@ -240,7 +242,7 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
     }
 
     /**
-     * @param array|Authorization[] $authorizations
+     * @param array|Authorization[]|ArrayCollection $authorizations
      * @return $this
      */
     public function setAuthorizations($authorizations = [])
@@ -383,7 +385,7 @@ class Client extends BaseClient implements ClientInterface, ClaimProviderInterfa
     /**
      * Sets the Unique Id of the Entity.
      * @param string $uid the entity UID
-     * @return $this
+     * @return ClientInterface
      */
     public function setUid($uid = null)
     {

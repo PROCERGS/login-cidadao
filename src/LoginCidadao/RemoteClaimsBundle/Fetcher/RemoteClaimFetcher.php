@@ -209,11 +209,11 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
 
     /**
      * @param TagUri $claimName
-     * @return null|RemoteClaimInterface
+     * @return RemoteClaimInterface|null
      */
     private function getExistingRemoteClaim(TagUri $claimName)
     {
-        /** @var RemoteClaimInterface $remoteClaim */
+        /** @var RemoteClaimInterface|null $remoteClaim */
         $remoteClaim = $this->claimRepo->findOneBy(['name' => $claimName]);
 
         return $remoteClaim;

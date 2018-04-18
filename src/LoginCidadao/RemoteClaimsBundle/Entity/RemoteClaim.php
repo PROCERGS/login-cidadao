@@ -33,7 +33,7 @@ class RemoteClaim implements RemoteClaimInterface
     protected $id;
 
     /**
-     * @var TagUri
+     * @var TagUri|string
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
@@ -212,8 +212,7 @@ class RemoteClaim implements RemoteClaimInterface
      */
     public function setRecommendedScope($recommendedScope)
     {
-
-        $this->providerRecommendedScope = $recommendedScope;
+        $this->providerRecommendedScope = $this->enforceScopeArray($recommendedScope);
 
         return $this;
     }
@@ -232,8 +231,21 @@ class RemoteClaim implements RemoteClaimInterface
      */
     public function setEssentialScope($essentialScope)
     {
-        $this->providerEssentialScope = $essentialScope;
+        $this->providerEssentialScope = $this->enforceScopeArray($essentialScope);
 
         return $this;
+    }
+
+    /**
+     * @param $scope
+     * @return string[]
+     */
+    private function enforceScopeArray($scope)
+    {
+        if (is_array($scope)) {
+            return $scope;
+        }
+
+        return explode(' ', $scope);
     }
 }

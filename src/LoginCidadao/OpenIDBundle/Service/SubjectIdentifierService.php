@@ -77,6 +77,21 @@ class SubjectIdentifierService
     }
 
     /**
+     * @param $subjectIdentifier
+     * @param ClientInterface|null $client
+     * @return PersonInterface|null|object
+     */
+    public function getPerson($subjectIdentifier, ClientInterface $client = null)
+    {
+        $criteria = ['subjectIdentifier' => $subjectIdentifier];
+        if ($client instanceof ClientInterface) {
+            $criteria['client'] = $client;
+        }
+
+        return $this->subjectIdentifierRepo->findOneBy($criteria);
+    }
+
+    /**
      * @param PersonInterface $subject
      * @param ClientMetadata|ClientInterface $client
      * @return mixed|null

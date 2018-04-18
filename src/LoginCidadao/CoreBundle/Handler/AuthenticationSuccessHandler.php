@@ -10,7 +10,7 @@
 
 namespace LoginCidadao\CoreBundle\Handler;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\HttpUtils;
@@ -20,18 +20,18 @@ use LoginCidadao\CoreBundle\Entity\AccessSession;
 
 class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 {
-    /** @var EntityManager */
+    /** @var EntityManagerInterface */
     private $em;
 
     /**
      * Constructor
      * @param HttpUtils $httpUtils
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
      * @param array $options
      */
     public function __construct(
         HttpUtils $httpUtils,
-        EntityManager $em,
+        EntityManagerInterface $em,
         $options
     ) {
         parent::__construct($httpUtils, $options);
@@ -53,8 +53,10 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
                 'ip' => $request->getClientIp(),
                 'username' => $form['username'],
             );
+
+            /** @var AccessSession|null $accessSession */
             $accessSession = $this->em->getRepository('LoginCidadaoCoreBundle:AccessSession')->findOneBy($vars);
-            if (!$accessSession) {
+            if (!$accessSession instanceof AccessSession) {
                 $accessSession = new AccessSession();
                 $accessSession->fromArray($vars);
             }

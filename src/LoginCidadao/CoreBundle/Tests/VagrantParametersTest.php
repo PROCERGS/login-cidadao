@@ -13,9 +13,13 @@ namespace LoginCidadao\CoreBundle\Tests;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Class VagrantParametersTest
+ * @package LoginCidadao\CoreBundle\Tests
+ * @group kernel
+ */
 class VagrantParametersTest extends KernelTestCase
 {
-
     private $dist;
     private $vagrant;
 

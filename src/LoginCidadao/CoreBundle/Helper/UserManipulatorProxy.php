@@ -12,6 +12,7 @@ namespace LoginCidadao\CoreBundle\Helper;
 
 use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Util\UserManipulator;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -136,6 +137,7 @@ class UserManipulatorProxy extends UserManipulator
 
     private function findUsername($usernameOrEmail)
     {
+        /** @var PersonInterface|null $user */
         $user = $this->userManager->findUserByUsernameOrEmail($usernameOrEmail);
 
         if (!$user) {

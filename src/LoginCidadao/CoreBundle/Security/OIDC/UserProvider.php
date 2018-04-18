@@ -51,7 +51,7 @@ class UserProvider extends OAuth2UserProvider implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
-        /** @var PersonInterface $user */
+        /** @var PersonInterface|null $user */
         $user = $this->em->getRepository('LoginCidadaoCoreBundle:Person')
             ->find($username);
 

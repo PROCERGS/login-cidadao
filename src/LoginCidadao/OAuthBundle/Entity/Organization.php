@@ -68,7 +68,7 @@ class Organization implements OrganizationInterface
 
     /**
      * @ORM\OneToMany(targetEntity="LoginCidadao\OpenIDBundle\Entity\ClientMetadata", mappedBy="organization")
-     * @var ClientInterface
+     * @var ClientInterface[]
      */
     private $clients;
 
@@ -280,10 +280,13 @@ class Organization implements OrganizationInterface
 
     /**
      * @param string $sectorIdentifierUri
+     * @return Organization
      */
     public function setSectorIdentifierUri($sectorIdentifierUri)
     {
         $this->sectorIdentifierUri = $sectorIdentifierUri;
+
+        return $this;
     }
 
     /**

@@ -36,37 +36,35 @@ class LoginCidadaoExtension extends \Twig_Extension
     /**
      * Returns a list of global functions to add to the existing list.
      *
-     * @return array An array of global functions
+     * @return \Twig_SimpleFunction[] An array of global functions
      */
     public function getFunctions()
     {
-        return array(
+        return [
             new \Twig_SimpleFunction('lc_getForm', [$this, 'getForm'], ['is_safe' => ['html']]),
             new \Twig_SimpleFunction('lc_getFormFactory', [$this, 'getFormFactory'], ['is_safe' => ['html']]),
-        );
+        ];
     }
 
+    /**
+     * @return array|\Twig_SimpleFilter[]
+     */
     public function getFilters()
     {
-        return array(
+        return [
             new \Twig_SimpleFilter('formatCep', [$this, 'formatCep']),
             new \Twig_SimpleFilter('formatCpf', [$this, 'formatCpf']),
-        );
+        ];
     }
 
-    public function formatCep($var)
+    public function formatCep($cep)
     {
-        $var = substr($var, 0, 5).'-'.substr($var, 5, 3);
-
-        return $var;
+        return preg_replace('/(\d{5})(\d{3})/', '$1-$2', $cep);
     }
 
-    public function formatCpf($var)
+    public function formatCpf($cpf)
     {
-        $var = substr($var, 0, 3).'.'.substr($var, 3, 3).'.'.substr($var, 6, 3).'-'.substr($var,
-                9);
-
-        return $var;
+        return preg_replace('/(\d{3})(\d{3})(\d{3})(\d{2})/', '$1.$2.$3-$4', $cpf);
     }
 
     /**
@@ -82,8 +80,8 @@ class LoginCidadaoExtension extends \Twig_Extension
     public function getForm($name = 'LoginCidadao\CoreBundle\Form\Type\LoginFormType')
     {
         return $this->formFactory
-            ->create($name)
-            ->createView();
+                ->create($name)
+                ->createView();
     }
 
     public function getFormFactory()

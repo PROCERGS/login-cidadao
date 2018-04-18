@@ -38,7 +38,7 @@ class HostBelongsToClaimProviderValidatorTest extends \PHPUnit_Framework_TestCas
         $violationBuilder->expects($this->once())->method('setParameter')
             ->with('{{ host }}', $host)->willReturn($violationBuilder);
 
-        /** @var ExecutionContextInterface $context */
+        /** @var ExecutionContextInterface|\PHPUnit_Framework_MockObject_MockObject $context */
         $context = $this->getMock('Symfony\Component\Validator\Context\ExecutionContextInterface');
         $context->expects($this->once())->method('buildViolation')->willReturn($violationBuilder);
 
@@ -57,7 +57,7 @@ class HostBelongsToClaimProviderValidatorTest extends \PHPUnit_Framework_TestCas
 
     private function getRemoteClaim($claimName, $redirectUris)
     {
-        /** @var ClaimProviderInterface $provider */
+        /** @var ClaimProviderInterface|\PHPUnit_Framework_MockObject_MockObject $provider */
         $provider = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
         $provider->expects($this->once())->method('getRedirectUris')
             ->willReturn($redirectUris);

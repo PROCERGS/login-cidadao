@@ -36,7 +36,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class FOSUBUserProvider extends BaseClass
 {
 
-    /** @var UserManager */
+    /** @var UserManagerInterface|UserManager */
     protected $userManager;
 
     /** @var SessionInterface */
@@ -86,6 +86,7 @@ class FOSUBUserProvider extends BaseClass
 
     /**
      * {@inheritDoc}
+     * @throws AlreadyLinkedAccount
      */
     public function connect(UserInterface $user, UserResponseInterface $response)
     {
@@ -98,6 +99,7 @@ class FOSUBUserProvider extends BaseClass
         $setter_token = $setter.'AccessToken';
         $setter_username = $setter.'Username';
 
+        /** @var PersonInterface $existingUser|null */
         $existingUser = $this->userManager->findUserBy(array("{$service}Id" => $username));
         if ($existingUser instanceof UserInterface && $existingUser->getId() != $user->getId()) {
             throw new AlreadyLinkedAccount();
@@ -117,6 +119,8 @@ class FOSUBUserProvider extends BaseClass
 
     /**
      * {@inheritDoc}
+     * @throws MissingEmailException
+     * @throws DuplicateEmailException
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {

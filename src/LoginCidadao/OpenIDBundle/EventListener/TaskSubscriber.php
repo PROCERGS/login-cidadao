@@ -10,58 +10,43 @@
 
 namespace LoginCidadao\OpenIDBundle\EventListener;
 
-use FOS\OAuthServerBundle\Event\OAuthEvent;
-use LoginCidadao\CoreBundle\Entity\City;
-use LoginCidadao\CoreBundle\Entity\Country;
-use LoginCidadao\CoreBundle\Entity\State;
+use LoginCidadao\CoreBundle\Helper\SecurityHelper;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
-use LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTask;
+use LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTaskValidator;
 use LoginCidadao\TaskStackBundle\Event\GetTasksEvent;
+use LoginCidadao\TaskStackBundle\Model\TaskInterface;
 use LoginCidadao\TaskStackBundle\TaskStackEvents;
-use LoginCidadao\ValidationBundle\Validator\Constraints\CPFValidator;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Http\HttpUtils;
+use Symfony\Component\HttpFoundation\Request;
 
 class TaskSubscriber implements EventSubscriberInterface
 {
-    /** @var TokenStorage */
-    protected $tokenStorage;
-
-    /** @var AuthorizationCheckerInterface */
-    protected $authChecker;
-
-    /** @var HttpUtils */
-    protected $httpUtils;
+    /** @var SecurityHelper */
+    private $securityHelper;
 
     /** @var ClientManager */
     private $clientManager;
 
-    /** @var bool */
-    private $skipCompletionTaskIfAuthorized;
+    /** @var CompleteUserInfoTaskValidator */
+    private $taskValidator;
 
     /**
      * TaskSubscriber constructor.
-     * @param TokenStorage $tokenStorage
-     * @param AuthorizationCheckerInterface $authChecker
-     * @param HttpUtils $httpUtils
+     * @param SecurityHelper $securityHelper
      * @param ClientManager $clientManager
+     * @param CompleteUserInfoTaskValidator $taskValidator
      */
     public function __construct(
-        TokenStorage $tokenStorage,
-        AuthorizationCheckerInterface $authChecker,
-        HttpUtils $httpUtils,
-        ClientManager $clientManager
+        SecurityHelper $securityHelper,
+        ClientManager $clientManager,
+        CompleteUserInfoTaskValidator $taskValidator
     ) {
-        $this->tokenStorage = $tokenStorage;
-        $this->authChecker = $authChecker;
-        $this->httpUtils = $httpUtils;
+        $this->securityHelper = $securityHelper;
         $this->clientManager = $clientManager;
+        $this->taskValidator = $taskValidator;
     }
-
 
     public static function getSubscribedEvents()
     {
@@ -70,115 +55,26 @@ class TaskSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onGetTasks(GetTasksEvent $event, $eventName, EventDispatcherInterface $dispatcher)
+    public function onGetTasks(GetTasksEvent $event)
     {
-        try {
-            /** @var PersonInterface $user */
-            $user = $this->tokenStorage->getToken()->getUser();
-
-            if (!$user instanceof PersonInterface) {
-                return;
-            }
-        } catch (\Exception $e) {
-            return;
-        }
-
         $request = $event->getRequest();
+        $user = $this->securityHelper->getUser();
+        $client = $this->getClientFromRequest($request);
 
-        $route = $request->get('_route');
-        $scopes = $request->get('scope', false);
-        if ($route !== '_authorize_validate' || !$scopes) {
+        if (!$user instanceof PersonInterface || !$client instanceof ClientInterface) {
             return;
         }
 
-        $clientId = $request->get('client_id', $request->attributes->get('clientId'));
-
-        // To force this task's execution, the RP MUST send prompt=consent and a nonce value.
-        $promptConsent = $request->get('prompt', null) == 'consent'
-            && $request->get('nonce', null) !== null;
-
-        if (!$clientId) {
-            return;
-        }
-        if ($this->skipCompletionTaskIfAuthorized
-            && $this->isAuthorizedClient($dispatcher, $clientId)
-            && !$promptConsent
-        ) {
-            return;
-        }
-
-        $scopes = explode(' ', $scopes);
-        $emptyClaims = [];
-        foreach ($scopes as $scope) {
-            if ($this->checkScope($user, $scope)) {
-                continue;
-            }
-            $emptyClaims[] = $scope;
-        }
-
-        if (count($emptyClaims) > 0) {
-            $task = new CompleteUserInfoTask($clientId, $emptyClaims, $request->get('nonce'));
+        $task = $this->taskValidator->getCompleteUserInfoTask($user, $client, $request);
+        if ($task instanceof TaskInterface) {
             $event->addTask($task);
         }
     }
 
-    /**
-     * @param PersonInterface $user
-     * @param string $scope
-     * @return bool
-     */
-    private function checkScope(PersonInterface $user, $scope)
+    private function getClientFromRequest(Request $request)
     {
-        // 'id_cards', 'addresses'
-        switch ($scope) {
-            case 'name':
-            case 'full_name':
-            case 'surname':
-                $value = $user->getFullName();
+        $clientId = $request->get('client_id', $request->get('clientId'));
 
-                return $value && strlen($value) > 0 && strlen($user->getSurname()) > 0;
-                break;
-            case 'mobile':
-            case 'phone_number':
-                $value = $user->getMobile();
-                break;
-            case 'country':
-                return $user->getCountry() instanceof Country;
-            case 'state':
-                return $user->getState() instanceof State;
-            case 'city':
-                return $user->getCity() instanceof City;
-            case 'birthdate':
-                return $user->getBirthdate() instanceof \DateTime;
-            case 'email':
-            case 'email_verified':
-                return $user->getEmailConfirmedAt() instanceof \DateTime;
-            case 'cpf':
-                $cpf = $user->getCpf();
-
-                return $cpf && CPFValidator::isCPFValid($cpf);
-            default:
-                return true;
-        }
-
-        return $value && strlen($value) > 0;
-    }
-
-    private function isAuthorizedClient(EventDispatcherInterface $dispatcher, $clientId)
-    {
-        $client = $this->clientManager->getClientById($clientId);
-
-        /** @var OAuthEvent $event */
-        $event = $dispatcher->dispatch(
-            OAuthEvent::PRE_AUTHORIZATION_PROCESS,
-            new OAuthEvent($this->tokenStorage->getToken()->getUser(), $client)
-        );
-
-        return $event->isAuthorizedClient();
-    }
-
-    public function setSkipCompletionTaskIfAuthorized($skip)
-    {
-        $this->skipCompletionTaskIfAuthorized = $skip;
+        return $this->clientManager->getClientById($clientId);
     }
 }

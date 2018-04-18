@@ -72,7 +72,7 @@ interface OrganizationInterface
     public function setDomain($domain);
 
     /**
-     * @return ClientInterface
+     * @return ClientInterface[]
      */
     public function getClients();
 
