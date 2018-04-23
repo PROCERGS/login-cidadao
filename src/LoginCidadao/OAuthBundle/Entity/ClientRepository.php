@@ -22,6 +22,12 @@ use LoginCidadao\OAuthBundle\Model\ClientInterface;
 class ClientRepository extends EntityRepository
 {
 
+    /**
+     * @param PersonInterface $person
+     * @param $id
+     * @return ClientInterface|Client|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function findOneOwned(PersonInterface $person, $id)
     {
         return $this->createQueryBuilder('c')
@@ -138,6 +144,8 @@ class ClientRepository extends EntityRepository
 
     /**
      * @return mixed
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countClients()
     {
@@ -192,5 +200,13 @@ class ClientRepository extends EntityRepository
         return $query->setParameters($uris)
             ->getQuery()
             ->getResult();
+    }
+
+    public function getOwnedByPersonQuery(PersonInterface $person)
+    {
+        return $this->createQueryBuilder('c')
+            ->where(':person MEMBER OF c.owners')
+            ->setParameter('person', $person)
+            ->addOrderBy('c.id', 'desc');
     }
 }
