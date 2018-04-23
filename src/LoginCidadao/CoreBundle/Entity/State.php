@@ -12,6 +12,7 @@ namespace LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
+use LoginCidadao\CoreBundle\Model\PreferableInterface;
 
 /**
  * State
@@ -19,7 +20,7 @@ use JMS\Serializer\Annotation\Groups;
  * @ORM\Table(name="state",indexes={@ORM\Index(name="state_preference_index", columns={"preference"})})
  * @ORM\Entity(repositoryClass="LoginCidadao\CoreBundle\Entity\StateRepository")
  */
-class State
+class State implements PreferableInterface
 {
 
     const REVIEWED_OK = 0;

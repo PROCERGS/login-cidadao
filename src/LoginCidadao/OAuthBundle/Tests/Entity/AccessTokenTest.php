@@ -14,16 +14,25 @@ use LoginCidadao\OAuthBundle\Entity\AccessToken;
 
 class AccessTokenTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAccessToken()
+    /**
+     * @group time-sensitive
+     */
+    public function testEntity()
     {
-        $idToken = 'jwt.id.token';
-        $accessToken = new AccessToken();
-        $accessToken->setExpired();
-        $accessToken->setIdToken($idToken);
-        $accessToken->setCreatedAtValue();
+        $idToken = 'id_token';
 
-        $this->assertSame($idToken, $accessToken->getIdToken());
+        $accessToken = new AccessToken();
+        $accessToken
+            ->setIdToken($idToken)
+            ->setCreatedAtValue();
+
+        $this->assertFalse($accessToken->hasExpired());
+
+        $accessToken->setExpired();
+        sleep(2);
+
+        $this->assertEquals($idToken, $accessToken->getIdToken());
+        $this->assertTrue($accessToken->hasExpired());
         $this->assertInstanceOf('\DateTime', $accessToken->getCreatedAt());
-        $this->assertInternalType('int', $accessToken->getExpiresAt());
     }
 }

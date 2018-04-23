@@ -10,7 +10,6 @@
 
 namespace LoginCidadao\OpenIDBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
@@ -37,18 +36,20 @@ class ClientMetadata
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
-    protected $client_id;
-    protected $client_secret;
+    private $id;
+    private $client_id;
+    private $client_secret;
 
     /**
      * @var ClientInterface
      * @ORM\OneToOne(targetEntity="LoginCidadao\OAuthBundle\Entity\Client", inversedBy="metadata", cascade={"persist"})
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      */
-    protected $client;
+    private $client;
 
     /**
+     * @var string[]
+     *
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
      * @Assert\All({
@@ -58,7 +59,7 @@ class ClientMetadata
      * })
      * @ORM\Column(name="redirect_uris", type="json_array", nullable=false)
      */
-    protected $redirect_uris;
+    private $redirect_uris;
 
     /**
      * @JMS\Expose
@@ -68,7 +69,7 @@ class ClientMetadata
      * })
      * @ORM\Column(name="response_types", type="simple_array", nullable=false)
      */
-    protected $response_types = array('code');
+    private $response_types = array('code');
 
     /**
      * @JMS\Expose
@@ -78,7 +79,7 @@ class ClientMetadata
      * })
      * @ORM\Column(type="simple_array", nullable=false)
      */
-    protected $grant_types = array('authorization_code');
+    private $grant_types = array('authorization_code');
 
     /**
      * @JMS\Expose
@@ -86,7 +87,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(name="application_type", type="string", length=100, nullable=false)
      */
-    protected $application_type = 'web';
+    private $application_type = 'web';
 
     /**
      * @JMS\Expose
@@ -96,7 +97,7 @@ class ClientMetadata
      * })
      * @ORM\Column(type="simple_array", nullable=true)
      */
-    protected $contacts;
+    private $contacts;
 
     /**
      * @JMS\Expose
@@ -104,7 +105,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", nullable=true)
      */
-    protected $client_name;
+    private $client_name;
 
     /**
      * @JMS\Expose
@@ -113,7 +114,7 @@ class ClientMetadata
      * @Assert\Url(checkDNS = false)
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
-    protected $logo_uri;
+    private $logo_uri;
 
     /**
      * @JMS\Expose
@@ -122,7 +123,7 @@ class ClientMetadata
      * @Assert\Url(checkDNS = false)
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
-    protected $client_uri;
+    private $client_uri;
 
     /**
      * @JMS\Expose
@@ -131,7 +132,7 @@ class ClientMetadata
      * @Assert\Url(checkDNS = false)
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
-    protected $policy_uri;
+    private $policy_uri;
 
     /**
      * @JMS\Expose
@@ -140,7 +141,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
-    protected $tos_uri;
+    private $tos_uri;
 
     /**
      * @JMS\Expose
@@ -149,7 +150,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
-    protected $jwks_uri;
+    private $jwks_uri;
 
     /**
      * @JMS\Expose
@@ -157,7 +158,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $jwks;
+    private $jwks;
 
     /**
      * @JMS\Expose
@@ -166,7 +167,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
-    protected $sector_identifier_uri;
+    private $sector_identifier_uri;
 
     /**
      * @JMS\Expose
@@ -174,7 +175,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    protected $subject_type;
+    private $subject_type;
 
     /**
      * @JMS\Expose
@@ -182,7 +183,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $id_token_signed_response_alg;
+    private $id_token_signed_response_alg;
 
     /**
      * @JMS\Expose
@@ -190,7 +191,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $id_token_encrypted_response_alg;
+    private $id_token_encrypted_response_alg;
 
     /**
      * @JMS\Expose
@@ -198,7 +199,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $id_token_encrypted_response_enc;
+    private $id_token_encrypted_response_enc;
 
     /**
      * @JMS\Expose
@@ -206,7 +207,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $userinfo_signed_response_alg;
+    private $userinfo_signed_response_alg;
 
     /**
      * @JMS\Expose
@@ -214,7 +215,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $userinfo_encrypted_response_alg;
+    private $userinfo_encrypted_response_alg;
 
     /**
      * @JMS\Expose
@@ -222,7 +223,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $userinfo_encrypted_response_enc;
+    private $userinfo_encrypted_response_enc;
 
     /**
      * @JMS\Expose
@@ -230,7 +231,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $request_object_signing_alg;
+    private $request_object_signing_alg;
 
     /**
      * @JMS\Expose
@@ -238,7 +239,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $request_object_encryption_alg;
+    private $request_object_encryption_alg;
 
     /**
      * @JMS\Expose
@@ -246,7 +247,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $request_object_encryption_enc;
+    private $request_object_encryption_enc;
 
     /**
      * @JMS\Expose
@@ -254,7 +255,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $token_endpoint_auth_method;
+    private $token_endpoint_auth_method;
 
     /**
      * @JMS\Expose
@@ -262,7 +263,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $token_endpoint_auth_signing_alg;
+    private $token_endpoint_auth_signing_alg;
 
     /**
      * @JMS\Expose
@@ -270,14 +271,14 @@ class ClientMetadata
      * @Assert\Type(type="integer")
      * @ORM\Column(type="integer", nullable=true)
      */
-    protected $default_max_age;
+    private $default_max_age;
 
     /**
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="boolean")
      */
-    protected $require_auth_time = false;
+    private $require_auth_time = false;
 
     /**
      * @JMS\Expose
@@ -285,7 +286,7 @@ class ClientMetadata
      * @Assert\Type(type="array")
      * @ORM\Column(type="simple_array", nullable=true)
      */
-    protected $default_acr_values;
+    private $default_acr_values;
 
     /**
      * @JMS\Expose
@@ -294,7 +295,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
-    protected $initiate_login_uri;
+    private $initiate_login_uri;
 
     /**
      * @JMS\Expose
@@ -305,7 +306,7 @@ class ClientMetadata
      * })
      * @ORM\Column(type="simple_array", nullable=true)
      */
-    protected $request_uris;
+    private $request_uris;
 
     /**
      * @JMS\Expose
@@ -313,14 +314,14 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", nullable=true)
      */
-    protected $registration_access_token;
+    private $registration_access_token;
 
     /**
      * @var OrganizationInterface
      * @ORM\ManyToOne(targetEntity="LoginCidadao\OAuthBundle\Model\OrganizationInterface", inversedBy="clients")
      * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $organization;
+    private $organization;
 
     /**
      * @JMS\Expose
@@ -331,7 +332,7 @@ class ClientMetadata
      * })
      * @ORM\Column(type="simple_array", nullable=true)
      */
-    protected $post_logout_redirect_uris;
+    private $post_logout_redirect_uris;
 
     public function __construct()
     {
@@ -353,6 +354,9 @@ class ClientMetadata
         return $this;
     }
 
+    /**
+     * @return string[]
+     */
     public function getRedirectUris()
     {
         return $this->redirect_uris;
@@ -814,7 +818,7 @@ class ClientMetadata
             $client->setName($clientName);
         }
 
-        if ($redirectUris) {
+        if (count($redirectUris) > 0) {
             $client->setRedirectUris($redirectUris);
         }
 

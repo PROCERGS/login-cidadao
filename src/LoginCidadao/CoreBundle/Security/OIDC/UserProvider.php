@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of the login-cidadao project or it's bundles.
  *
  * (c) Guilherme Donato <guilhermednt on github>
@@ -11,6 +11,8 @@
 namespace LoginCidadao\CoreBundle\Security\OIDC;
 
 use Doctrine\ORM\EntityManager;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
+use OAuth2\ServerBundle\Entity\User;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -23,10 +25,12 @@ class UserProvider extends OAuth2UserProvider implements UserProviderInterface
     private $em;
     private $encoderFactory;
 
-    public function __construct(EntityManager $entityManager,
-                                EncoderFactoryInterface $encoderFactory)
-    {
-        $this->em             = $entityManager;
+    public function __construct(
+        EntityManager $entityManager,
+        EncoderFactoryInterface $encoderFactory
+    ) {
+        parent::__construct($entityManager, $encoderFactory);
+        $this->em = $entityManager;
         $this->encoderFactory = $encoderFactory;
     }
 
@@ -47,6 +51,7 @@ class UserProvider extends OAuth2UserProvider implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
+        /** @var PersonInterface|null $user */
         $user = $this->em->getRepository('LoginCidadaoCoreBundle:Person')
             ->find($username);
 
@@ -74,7 +79,7 @@ class UserProvider extends OAuth2UserProvider implements UserProviderInterface
      */
     public function refreshUser(UserInterface $user)
     {
-        if (!$user instanceof OAuth2User) {
+        if (!$user instanceof PersonInterface) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.',
                 get_class($user)));
         }
@@ -111,13 +116,17 @@ class UserProvider extends OAuth2UserProvider implements UserProviderInterface
      *
      * @return UserInterface
      */
-    public function createUser($username, $password, array $roles = array(),
-                                array $scopes = array())
-    {
-        $user = parent::createUser();
+    public function createUser(
+        $username,
+        $password,
+        array $roles = array(),
+        array $scopes = array()
+    ) {
+        /** @var User $user */
+        $user = parent::createUser($username, $password, $roles, $scopes);
 
         // Generate password
-        $salt     = $this->generateSalt();
+        $salt = $this->generateSalt();
         $password = $this->encoderFactory->getEncoder($user)
             ->encodePassword($password, $salt);
 

@@ -132,6 +132,7 @@ services:
     oidc.subject_identifier.service:
         class: LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService
         arguments:
+            - "@doctrine.orm.entity_manager"
             - "@oidc.subject_identifier.repository"
             - %secret%
 
@@ -161,3 +162,13 @@ services:
         arguments:
             - "@event_dispatcher"
             - "%pre_authorization.complete_information_task.skip_if_authorized%"
+
+    oidc.oauth.events_subscriber:
+        class: LoginCidadao\OpenIDBundle\EventListener\OAuthEventSubscriber
+        tags:
+            - { name: kernel.event_subscriber }
+
+    oidc.scopes.translation:
+        class: LoginCidadao\OpenIDBundle\EventListener\ScopeTranslatorSubscriber
+        tags:
+            - { name: kernel.event_subscriber }

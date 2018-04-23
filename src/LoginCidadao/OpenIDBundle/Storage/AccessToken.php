@@ -107,7 +107,9 @@ class AccessToken extends BaseClass implements AccessTokenInterface
         $accessToken = new \LoginCidadao\OAuthBundle\Entity\AccessToken();
         $accessToken->setToken($oauth_token);
         $accessToken->setClient($client);
-        $accessToken->setUser($user);
+        if ($user !== null) {
+            $accessToken->setUser($user);
+        }
         $accessToken->setExpiresAt($expires);
         $accessToken->setScope($scope);
         $accessToken->setIdToken($id_token);

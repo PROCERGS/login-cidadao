@@ -30,11 +30,6 @@ class PersonSerializeEventListenerTest extends \PHPUnit_Framework_TestCase
                 'method' => 'onPreSerialize',
                 'class' => 'LoginCidadao\CoreBundle\Model\PersonInterface',
             ],
-            [
-                'event' => 'serializer.post_serialize',
-                'method' => 'onPostSerialize',
-                'class' => 'LoginCidadao\CoreBundle\Model\PersonInterface',
-            ],
         ], PersonSerializeEventListener::getSubscribedEvents());
     }
 
@@ -81,7 +76,6 @@ class PersonSerializeEventListenerTest extends \PHPUnit_Framework_TestCase
             );
 
         $listener = new PersonSerializeEventListener($uploadHelper, $templateHelper, $kernel, $requestStack);
-        $listener->onPostSerialize($postEvent);
         $listener->onPreSerialize($event);
     }
 }
