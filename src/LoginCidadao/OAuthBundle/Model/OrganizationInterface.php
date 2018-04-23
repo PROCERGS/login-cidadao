@@ -23,6 +23,7 @@ interface OrganizationInterface
     /**
      *
      * @param int $id
+     * @return OrganizationInterface
      */
     public function setId($id);
 
@@ -33,6 +34,7 @@ interface OrganizationInterface
 
     /**
      * @param string $name
+     * @return OrganizationInterface
      */
     public function setName($name);
 
@@ -43,6 +45,7 @@ interface OrganizationInterface
 
     /**
      * @param PersonInterface[] $members
+     * @return OrganizationInterface
      */
     public function setMembers(array $members);
 
@@ -53,6 +56,7 @@ interface OrganizationInterface
 
     /**
      * @param \DateTime $verifiedAt
+     * @return OrganizationInterface
      */
     public function setVerifiedAt($verifiedAt);
 
@@ -63,16 +67,18 @@ interface OrganizationInterface
 
     /**
      * @param string $domain
+     * @return OrganizationInterface
      */
     public function setDomain($domain);
 
     /**
-     * @return ClientInterface
+     * @return ClientInterface[]
      */
     public function getClients();
 
     /**
      * @param ClientInterface[] $clients
+     * @return OrganizationInterface
      */
     public function setClients(array $clients);
 
@@ -83,6 +89,7 @@ interface OrganizationInterface
 
     /**
      * @param string $validationUrl
+     * @return OrganizationInterface
      */
     public function setValidationUrl($validationUrl);
 
@@ -93,6 +100,7 @@ interface OrganizationInterface
 
     /**
      * @param string $validationSecret
+     * @return OrganizationInterface
      */
     public function setValidationSecret($validationSecret);
 
@@ -114,6 +122,7 @@ interface OrganizationInterface
 
     /**
      * @param boolean $trusted
+     * @return OrganizationInterface
      */
     public function setTrusted($trusted);
 }

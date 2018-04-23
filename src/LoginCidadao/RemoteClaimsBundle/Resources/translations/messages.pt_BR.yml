@@ -1,0 +1,12 @@
+remote_claims:
+    details:
+        issuer_logo_alt: 'Logo de %claim_provider%'
+        issued_by: 'via %img% <strong>%claim_provider%</strong>'
+        show_details: 'Clique para ver mais detalhes.'
+        show_details_with_scope: 'Clique para ver mais detalhes.'
+        about: 'Sobre essa integração:'
+        essentialScope: 'Para essa integração, %claim_provider% solicita as seguintes informações:'
+    authZ:
+        service_requesting: '<strong>%client_name%</strong> terá acesso às seguintes informações ou integrações fornecidas por outros serviços:'
+    client_details:
+        label: 'O serviço tem acesso às seguintes informações ou integrações fornecidas por terceiros:'

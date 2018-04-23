@@ -1,6 +1,5 @@
 parameters:
     security.authentication.success_handler.class: LoginCidadao\CoreBundle\Handler\AuthenticationSuccessHandler
-    lc.hwi_twitter.user_provider.class: LoginCidadao\CoreBundle\Security\User\Provider\FOSUBUserProvider
     lc.person.registration.form.type.class: LoginCidadao\CoreBundle\Form\Type\RegistrationFormType
     lc.person.profile.form.type.class: LoginCidadao\CoreBundle\Form\Type\ProfileFormType
     lc.person.revoke_authorization.form.type.class: LoginCidadao\CoreBundle\Form\Type\RevokeAuthorizationFormType
@@ -11,7 +10,6 @@ parameters:
     lc.contact.form.class: LoginCidadao\CoreBundle\Form\Type\ContactFormType
     lc.person_doc.form.class: LoginCidadao\CoreBundle\Form\Type\DocFormType
     lc.user_provider.class: LoginCidadao\CoreBundle\Security\User\Provider\LoginCidadaoProvider
-    lc.user_manager.class: LoginCidadao\CoreBundle\Security\User\Manager\UserManager
     lc.user_register.class: LoginCidadao\CoreBundle\EventListener\RegisterListener
     lc.profile_edit.class: LoginCidadao\CoreBundle\EventListener\ProfileEditListener
     lc.change.password.listener.class: LoginCidadao\CoreBundle\EventListener\ChangePasswordListener
@@ -45,13 +43,14 @@ services:
             - []
 
     lc.hwi_twitter.user_provider:
-        class: %lc.hwi_twitter.user_provider.class%
+        class: LoginCidadao\CoreBundle\Security\User\Provider\FOSUBUserProvider
         arguments:
             - "@fos_user.user_manager"
             - "@session"
             - "@event_dispatcher"
-            - "@service_container"
             - "@fos_user.registration.form.factory"
+            - "@validator"
+            - "@request_stack"
             - { facebook: facebookId, twitter: twitterId, google: googleId }
 
     lc.person.registration.form.type:
@@ -88,7 +87,7 @@ services:
         arguments: ["@fos_user.user_manager"]
 
     lc.user_manager:
-        class: %lc.user_manager.class%
+        class: LoginCidadao\CoreBundle\Security\User\Manager\UserManager
         lazy: true
         arguments:
             - "@security.encoder_factory"
@@ -106,7 +105,9 @@ services:
 
     lc.login.twig.extension:
         class: LoginCidadao\CoreBundle\Twig\Extension\LoginCidadaoExtension
-        arguments: ["@service_container"]
+        arguments:
+            - "@form.factory"
+            - "@fos_user.registration.form.factory"
         tags:
             - { name: twig.extension, alias: login_twig_extension }
 
@@ -202,8 +203,7 @@ services:
     kernel.listener.logged_in_user_listener:
         class: %kernel.listener.logged_in_user_listener.class%
         arguments:
-            - "@security.token_storage"
-            - "@security.authorization_checker"
+            - "@lc.security.helper"
             - "@router"
             - "@session"
             - "@translator"
@@ -281,7 +281,6 @@ services:
             - "@request_stack"
         tags:
             - { name: jms_serializer.event_listener, event: serializer.pre_serialize, method: onPreSerialize }
-            - { name: jms_serializer.event_listener, event: serializer.post_serialize, method: onPostSerialize }
 
     lc.person.address.form.type:
         class: %lc.person.address.form.type.class%
@@ -320,8 +319,6 @@ services:
     account.security_listener:
         class: %account.security_listener.class%
         arguments:
-            - "@security.authorization_checker"
-            - "@security.token_storage"
             - "@lc.security.helper"
             - "@lc.action_logger"
         tags:
@@ -446,8 +443,8 @@ services:
 
     lc.request.referer_logger:
         class: LoginCidadao\CoreBundle\EventListener\RequestListener
-        calls:
-            - [ 'setLogger', ["@logger"] ]
+        arguments:
+            - "@logger"
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
             - { name: monolog.logger, channel: request }
@@ -477,3 +474,19 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@scheb_two_factor.security.google_authenticator"
+
+    lc.person.repository:
+        myrepository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - LoginCidadao\CoreBundle\Entity\Person
+
+    lc.scope.translator:
+        class: LoginCidadao\CoreBundle\Twig\Extension\ScopesExtension
+        arguments:
+            - "@event_dispatcher"
+            - "@translator"
+        public: false
+        tags:
+            - { name: twig.extension }

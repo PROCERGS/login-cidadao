@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\OAuthBundle\Model;
 
@@ -6,11 +14,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ClientUser implements UserInterface
 {
-
     /**
      * @var ClientInterface
      */
-    protected $client;
+    private $client;
 
     public function __construct(ClientInterface $client)
     {
@@ -29,7 +36,7 @@ class ClientUser implements UserInterface
 
     public function getRoles()
     {
-        return array('ROLE_API_CLIENT');
+        return ['ROLE_API_CLIENT'];
     }
 
     public function getSalt()
@@ -49,5 +56,4 @@ class ClientUser implements UserInterface
     {
         return $this->client;
     }
-
 }

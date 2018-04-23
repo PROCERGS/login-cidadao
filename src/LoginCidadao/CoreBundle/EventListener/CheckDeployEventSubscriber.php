@@ -1,14 +1,21 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
 use Doctrine\Common\Cache\CacheProvider;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\CoreBundle\Entity\CityRepository;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class CheckDeployEventSubscriber implements EventSubscriberInterface
@@ -27,10 +34,16 @@ class CheckDeployEventSubscriber implements EventSubscriberInterface
     /** @var string */
     private $defaultClientUid;
 
-    public function __construct(
-        EntityManager $em,
-        $defaultClientUid
-    ) {
+    /**
+     * {@inheritDoc}
+     */
+    public static function getSubscribedEvents()
+    {
+        return [KernelEvents::REQUEST => 'checkDeploy'];
+    }
+
+    public function __construct(EntityManagerInterface $em, $defaultClientUid)
+    {
         $this->cityRepository = $em->getRepository('LoginCidadaoCoreBundle:City');
         $this->clientRepository = $em->getRepository('LoginCidadaoOAuthBundle:Client');
         $this->defaultClientUid = $defaultClientUid;
@@ -46,17 +59,7 @@ class CheckDeployEventSubscriber implements EventSubscriberInterface
         $this->cache = $cache;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public static function getSubscribedEvents()
-    {
-        return array(
-            KernelEvents::REQUEST => 'checkDeploy',
-        );
-    }
-
-    public function checkDeploy(GetResponseEvent $event)
+    public function checkDeploy()
     {
         if (null === $this->cache || $this->cache->contains(self::CHECK_DEPLOY_KEY)) {
             return;
@@ -64,7 +67,7 @@ class CheckDeployEventSubscriber implements EventSubscriberInterface
 
         $clients = $this->clientRepository->countClients();
         $cities = $this->cityRepository->countCities();
-        $hasDefaultClient = $this->clientRepository->findOneByUid($this->defaultClientUid) instanceof Client;
+        $hasDefaultClient = $this->clientRepository->findOneBy(['uid' => $this->defaultClientUid]) instanceof Client;
 
         if ($clients <= 0 || $cities <= 0 || !$hasDefaultClient) {
             $this->cache->delete(self::CHECK_DEPLOY_KEY);

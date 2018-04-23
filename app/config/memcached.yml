@@ -30,7 +30,9 @@ services:
 
     session.handler.memcached:
         class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
-        arguments: ["@session.memcached", { prefix: %session_prefix%, expiretime: %session_lifetime% } ]
+        arguments:
+            - "@session.memcached"
+            - { prefix: %session_prefix%, expiretime: %session_lifetime% }
 
     memcached:
         class: Memcached
@@ -40,5 +42,5 @@ services:
     cache:
         class: Doctrine\Common\Cache\MemcachedCache
         calls:
-            - [setMemcached, ["@memcached"]]
+            - [setMemcached, ['@memcached']]
             - [setNamespace, ['%memcached_prefix%']]

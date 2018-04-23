@@ -7,7 +7,7 @@ services:
     lc.api.logged_in_user_listener:
         class: %lc_api_access_token_definer.class%
         arguments:
-            - "@doctrine.orm.entity_manager"
+            - "@lc.access_token.repository"
             - "@security.token_storage"
             - "@simplethings_entityaudit.config"
         tags:

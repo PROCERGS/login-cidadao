@@ -1,3 +1,9 @@
+# Remote Claims
+lc_remote_claims_remote_claim:
+    type:     rest
+    resource: LoginCidadao\RemoteClaimsBundle\Controller\RemoteClaimController
+
+# Dynamic Forms
 login_cidadao_dynamic_form:
     resource: "@LoginCidadaoDynamicFormBundle/Resources/config/routing.yml"
     prefix:   /

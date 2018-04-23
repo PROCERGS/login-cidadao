@@ -211,7 +211,6 @@ fos_oauth_server:
   auth_code_class:      LoginCidadao\OAuthBundle\Entity\AuthCode
   service:
       user_provider: fos_user.user_manager
-      client_manager: lc.oauth.client_manager
       options:
           supported_scopes: %lc_supported_scopes%
 
@@ -361,12 +360,12 @@ vich_uploader:
     storage:    gaufrette
     mappings:
         user_image:
-            uri_prefix:         %uri_root%/uploads/profile-pictures
+            uri_prefix:         %uri_root%uploads/profile-pictures
             upload_destination: user_image_fs
             namer:              vich_uploader.namer_uniqid
             inject_on_load:     false
         client_image:
-            uri_prefix:         %uri_root%/uploads/client-pictures
+            uri_prefix:         %uri_root%uploads/client-pictures
             upload_destination: client_image_fs
             namer:              vich_uploader.namer_uniqid
             inject_on_load:     false
@@ -578,3 +577,17 @@ login_cidadao_api:
             1: [0]
         2:
             0: [0]
+
+knp_paginator:
+    page_range: 5
+    default_options:
+        page_name: page
+        sort_field_name: sort
+        sort_direction_name: direction
+        distinct: true
+        filter_field_name: filterField
+        filter_value_name: filterValue
+    template:
+        pagination: '@KnpPaginator/Pagination/twitter_bootstrap_v3_pagination.html.twig'     # sliding pagination controls template
+        sortable: '@KnpPaginator/Pagination/sortable_link.html.twig' # sort link template
+        filtration: '@KnpPaginator/Pagination/filtration.html.twig'  # filters template
