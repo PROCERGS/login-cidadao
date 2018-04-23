@@ -134,20 +134,8 @@ class UserManager extends BaseManager
 
     public function blockUsersByPhone(PhoneNumber $phone, $flushStrategy = null)
     {
-        $andFlush = false;
-        $once = false;
-        switch ($flushStrategy) {
-            case 'each':
-                $andFlush = true;
-                break;
-            case 'once':
-                $once = true;
-                break;
-            case 'never':
-            default:
-                $andFlush = false;
-                $once = false;
-        }
+        $andFlush = $flushStrategy === 'each' ? true : false;
+        $once = $flushStrategy === 'once' ? true : false;
 
         /** @var PersonInterface[] $users */
         $users = $this->repository->findBy(['mobile' => $phone]);

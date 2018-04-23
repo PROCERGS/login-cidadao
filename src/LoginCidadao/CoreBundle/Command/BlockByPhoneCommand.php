@@ -11,6 +11,7 @@
 namespace LoginCidadao\CoreBundle\Command;
 
 use libphonenumber\NumberParseException;
+use libphonenumber\PhoneNumber;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\ValidationBundle\Validator\Constraints\MobilePhoneNumberValidator;
 use Symfony\Component\Console\Input\InputArgument;
@@ -38,20 +39,8 @@ class BlockByPhoneCommand extends AbstractPersonBlockCommand
 
     protected function getUsers(SymfonyStyle $io, InputInterface $input, OutputInterface $output)
     {
-        $phoneArg = $input->getArgument('phone');
-        $phoneUtil = $this->getPhoneUtil();
-        $checkMobile = !$input->getOption('ignore-mobile-validation');
-        try {
-            $phone = $phoneUtil->parse($phoneArg);
-
-            if ($checkMobile && false === MobilePhoneNumberValidator::isMobile($phone)) {
-                $io->error('The given phone is not a mobile phone...');
-
-                return [];
-            }
-        } catch (NumberParseException $e) {
-            $io->error("'{$phoneArg}' doesn't appear to be a valid phone number.");
-
+        $phone = $this->getValidPhone($io, $input);
+        if ($phone instanceof PhoneNumber) {
             return [];
         }
 
@@ -62,5 +51,28 @@ class BlockByPhoneCommand extends AbstractPersonBlockCommand
             ->findBy(['mobile' => $phone, 'enabled' => true]);
 
         return $users;
+    }
+
+    private function getValidPhone(SymfonyStyle $io, InputInterface $input)
+    {
+        $phoneArg = $input->getArgument('phone');
+        $phoneUtil = $this->getPhoneUtil();
+        $checkMobile = !$input->getOption('ignore-mobile-validation');
+
+        try {
+            $phone = $phoneUtil->parse($phoneArg);
+
+            if ($checkMobile && false === MobilePhoneNumberValidator::isMobile($phone)) {
+                $io->error('The given phone is not a mobile phone...');
+
+                return null;
+            }
+        } catch (NumberParseException $e) {
+            $io->error("'{$phoneArg}' doesn't appear to be a valid phone number.");
+
+            return null;
+        }
+
+        return $phone;
     }
 }

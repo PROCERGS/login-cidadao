@@ -191,12 +191,10 @@ abstract class AbstractPersonBlockCommand extends ContainerAwareCommand
 
         $io->progressStart(count($blockedUsers));
         foreach ($blockedUsers as $user) {
-            if (!$user->getEmailConfirmedAt() instanceof \DateTime) {
+            if ($dryRun || !$user->getEmailConfirmedAt() instanceof \DateTime) {
                 continue;
             }
-            if (!$dryRun) {
-                $mailer->sendAccountBlockedMessage($user);
-            }
+            $mailer->sendAccountBlockedMessage($user);
             $io->progressAdvance();
         }
         $io->progressFinish();
