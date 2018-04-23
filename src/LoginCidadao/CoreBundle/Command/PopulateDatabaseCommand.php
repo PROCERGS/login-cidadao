@@ -1,7 +1,18 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Command;
 
+use Doctrine\DBAL\Driver\Statement;
+use LoginCidadao\OAuthBundle\Entity\ClientRepository;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,6 +45,9 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
         $db = $em->getConnection();
 
         $db->beginTransaction();
+        $countries = 0;
+        $states = 0;
+        $cities = 0;
         try {
             $db->exec('DELETE FROM city;');
             $db->exec('DELETE FROM state;');
@@ -41,18 +55,18 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
 
             $countryInsert = 'INSERT INTO country (id, name, iso2, postal_format, postal_name, reviewed, iso3, iso_num) VALUES (:id, :name, :iso2, :postal_format, :postal_name, :reviewed, :iso3, :iso_num)';
             $countryQuery = $db->prepare($countryInsert);
-            $countries = $this->loopInsert($dir, 'country_dump.csv', $countryQuery, array($this, 'prepareCountryData'));
+            $countries = $this->loopInsert($dir, 'country_dump.csv', $countryQuery, [$this, 'prepareCountryData']);
 
             $statesInsert = 'INSERT INTO state (id, name, acronym, country_id, iso6, fips, stat, class, reviewed) VALUES (:id, :name, :acronym, :country_id, :iso6, :fips, :stat, :class, :reviewed)';
             $statesQuery = $db->prepare($statesInsert);
-            $states = $this->loopInsert($dir, 'state_dump.csv', $statesQuery, array($this, 'prepareStateData'));
+            $states = $this->loopInsert($dir, 'state_dump.csv', $statesQuery, [$this, 'prepareStateData']);
 
             $citiesInsert = 'INSERT INTO city (id, name, state_id, stat, reviewed) VALUES (:id, :name, :state_id, :stat, :reviewed)';
             $citiesQuery = $db->prepare($citiesInsert);
-            $cities = $this->loopInsert($dir, 'city_dump.csv', $citiesQuery, array($this, 'prepareCityData'));
+            $cities = $this->loopInsert($dir, 'city_dump.csv', $citiesQuery, [$this, 'prepareCityData']);
 
             $db->commit();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $db->rollBack();
         }
         $output->writeln("Added $countries countries, $states states and $cities cities.");
@@ -76,36 +90,44 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
                 $vars[$k] = null;
             }
         }
+
         return $vars;
     }
 
     protected function prepareStateData($row)
     {
         list($id, $name, $acronym, $country_id, $iso6, $fips, $stat, $class, $reviewed) = $row;
+
         return compact('id', 'name', 'acronym', 'country_id', 'iso6', 'fips', 'stat', 'class', 'reviewed');
     }
 
     protected function prepareCityData($row)
     {
         list($id, $name, $state_id, $stat, $reviewed) = $row;
+
         return compact('id', 'name', 'state_id', 'stat', 'reviewed');
     }
 
-    private function loopInsert($dir, $fileName, $query, $prepareFunction, $debug = false)
+    /**
+     * @param $dir
+     * @param $fileName
+     * @param Statement $query
+     * @param $prepareFunction
+     * @return int
+     */
+    private function loopInsert($dir, $fileName, $query, $prepareFunction)
     {
         $entries = 0;
         $file = $dir.DIRECTORY_SEPARATOR.$fileName;
         if (($handle = fopen($file, 'r')) !== false) {
             while (($row = fgetcsv($handle)) !== false) {
                 $data = $prepareFunction($row);
-                if ($debug) {
-                    var_dump($data);
-                }
                 $query->execute($data);
                 $entries++;
             }
             fclose($handle);
         }
+
         return $entries;
     }
 
@@ -117,21 +139,22 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
             $picture = new File($dir.DIRECTORY_SEPARATOR.$pictureName);
             $domain = $this->getContainer()->getParameter('site_domain');
             $url = "//$domain";
-            $grantTypes = array(
+            $grantTypes = [
                 "authorization_code",
                 "token",
                 "password",
                 "client_credentials",
                 "refresh_token",
-                "extensions"
-            );
+                "extensions",
+            ];
 
             $clientManager = $this->getContainer()->get('fos_oauth_server.client_manager');
+            /** @var ClientInterface $client */
             $client = $clientManager->createClient();
             $client->setName('Login Cidadão');
             $client->setDescription('Login Cidadão');
             $client->setSiteUrl($url);
-            $client->setRedirectUris(array($url));
+            $client->setRedirectUris([$url]);
             $client->setAllowedGrantTypes($grantTypes);
             $client->setTermsOfUseUrl($url);
             $client->setPublished(true);
@@ -144,13 +167,16 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
     }
 
     /**
-     * @return Client
+     * @return ClientInterface
      */
     private function getDefaultOAuthClient()
     {
-        $em = $this->getManager();
+        /** @var ClientRepository $repo */
+        $repo = $this->getManager()->getRepository('LoginCidadaoOAuthBundle:Client');
         $uid = $this->getContainer()->getParameter('oauth_default_client.uid');
-        $client = $em->getRepository('LoginCidadaoOAuthBundle:Client')->findOneByUid($uid);
+
+        /** @var ClientInterface $client */
+        $client = $repo->findOneBy(['uid' => $uid]);
 
         return $client;
     }

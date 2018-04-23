@@ -10,8 +10,12 @@
 
 namespace LoginCidadao\CoreBundle\Tests\Twig\Extension;
 
+use FOS\UserBundle\Form\Factory\FactoryInterface;
 use LoginCidadao\CoreBundle\Twig\Extension\LoginCidadaoExtension;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 
 class LoginCidadaoExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -57,11 +61,7 @@ class LoginCidadaoExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('create')->with($name)
             ->willReturn($form);
 
-        $container = $this->getContainer();
-        $container->expects($this->once())
-            ->method('get')->with('form.factory')
-            ->willReturn($formFactory);
-        $extension = $this->getLoginCidadaoExtension($container);
+        $extension = $this->getLoginCidadaoExtension($formFactory);
         $extension->getForm($name);
     }
 
@@ -72,29 +72,34 @@ class LoginCidadaoExtensionTest extends \PHPUnit_Framework_TestCase
         $form = $this->getMock('Symfony\Component\Form\FormInterface');
         $form->expects($this->once())->method('createView');
 
-        $formFactory = $this->getMock('FOS\UserBundle\Form\Factory\FactoryInterface');
+        $formFactory = $this->getRegistrationFormFactory();
         $formFactory->expects($this->once())
             ->method('createForm')
             ->willReturn($form);
 
-        $container = $this->getContainer();
-        $container->expects($this->once())
-            ->method('get')->with($name)
-            ->willReturn($formFactory);
-        $extension = $this->getLoginCidadaoExtension($container);
+        $extension = $this->getLoginCidadaoExtension(null, $formFactory);
         $extension->getFormFactory($name);
     }
 
-    private function getLoginCidadaoExtension(ContainerInterface $container = null)
+    private function getLoginCidadaoExtension($formFactory = null, $registrationFormFactory = null)
     {
-        return new LoginCidadaoExtension($container ?: $this->getContainer());
+        return new LoginCidadaoExtension($formFactory ?: $this->getFormFactory(),
+            $registrationFormFactory ?: $this->getRegistrationFormFactory());
     }
 
     /**
-     * @return ContainerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return FactoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getContainer()
+    private function getRegistrationFormFactory()
     {
-        return $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        return $this->getMock('FOS\UserBundle\Form\Factory\FactoryInterface');
+    }
+
+    /**
+     * @return FormFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getFormFactory()
+    {
+        return $this->getMock('Symfony\Component\Form\FormFactoryInterface');
     }
 }

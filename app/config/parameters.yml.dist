@@ -11,6 +11,7 @@ parameters:
     database_user:     logincidadao
     # Database password (use ~ for socket)
     database_password: logincidadao
+    database_server_version: ~
 
     # Trusted proxies (http://symfony.com/doc/current/cookbook/request/load_balancer_reverse_proxy.html)
     trusted_proxies: []
@@ -42,7 +43,7 @@ parameters:
     # Translation locale
     locale:            pt_BR
     # Your application's secret. Should be the same for all servers
-    secret:            ThisTokenIsNotSoSecretChangeIt
+    secret:            ThisTokenIsNotSoSecretChangeItNow
 
     # (dev only) Show the profiler toolbar by default
     web_profiler_toolbar: true

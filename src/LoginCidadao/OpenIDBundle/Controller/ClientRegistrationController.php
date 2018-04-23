@@ -15,6 +15,7 @@ use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\SerializationContext;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
@@ -55,7 +56,9 @@ class ClientRegistrationController extends FOSRestController
 
             return $this->view($metadata->fromClient($client), 201);
         } else {
-            $error = $this->handleFormErrors($form->getErrors(true));
+            /** @var FormError[] $errors */
+            $errors = $form->getErrors(true);
+            $error = $this->handleFormErrors($errors);
 
             return $this->view($error->getData(), 400);
         }
@@ -96,7 +99,6 @@ class ClientRegistrationController extends FOSRestController
                 '$1',
                 $cause->getPropertyPath()
             );
-            //$property      = str_replace('data.', '', $cause->getPropertyPath());
 
             switch ($property) {
                 case 'redirect_uris':

@@ -10,20 +10,27 @@
 
 namespace LoginCidadao\CoreBundle\Twig\Extension;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use FOS\UserBundle\Form\Factory\FactoryInterface;
+use Symfony\Component\Form\FormFactoryInterface;
 
 class LoginCidadaoExtension extends \Twig_Extension
 {
-    protected $container;
+    /** @var FormFactoryInterface */
+    private $formFactory;
+
+    /** @var FactoryInterface */
+    private $registrationFormFactory;
 
     /**
      * Constructor.
      *
-     * @param ContainerInterface $container
+     * @param FormFactoryInterface $formFactory
+     * @param FactoryInterface $registrationFormFactory
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(FormFactoryInterface $formFactory, FactoryInterface $registrationFormFactory)
     {
-        $this->container = $container;
+        $this->formFactory = $formFactory;
+        $this->registrationFormFactory = $registrationFormFactory;
     }
 
     /**
@@ -72,13 +79,13 @@ class LoginCidadaoExtension extends \Twig_Extension
 
     public function getForm($name = 'LoginCidadao\CoreBundle\Form\Type\LoginFormType')
     {
-        return $this->container->get('form.factory')
-            ->create($name)
-            ->createView();
+        return $this->formFactory
+                ->create($name)
+                ->createView();
     }
 
-    public function getFormFactory($name = 'fos_user.registration.form.factory')
+    public function getFormFactory()
     {
-        return $this->container->get($name)->createForm()->createView();
+        return $this->registrationFormFactory->createForm()->createView();
     }
 }

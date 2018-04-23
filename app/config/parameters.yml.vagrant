@@ -5,6 +5,7 @@ parameters:
     database_name:     lc
     database_user:     vagrant
     database_password: ~
+    database_server_version: ~
 
     # Trusted proxies (http://symfony.com/doc/current/cookbook/request/load_balancer_reverse_proxy.html)
     trusted_proxies: []
@@ -29,7 +30,7 @@ parameters:
     mailer_password:   ~
 
     locale:            en
-    secret:            ThisTokenIsNotSoSecretChangeIt
+    secret:            ThisTokenIsNotSoSecretChangeItNow
 
     web_profiler_toolbar: true
 

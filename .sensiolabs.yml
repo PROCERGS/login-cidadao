@@ -1,0 +1,33 @@
+php_version: 5
+
+pre_composer_script: |
+    #!/bin/bash
+
+    sed -i -e "s/database_driver:.*/database_driver: pdo_mysql/" app/config/parameters.yml.dist
+    sed -i -e "s/database_server_version:.*/database_server_version: 5.6/" app/config/parameters.yml.dist
+    sed -i -e "s/memcached\.yml/memcache\.yml/" app/config/config.yml
+    pear clear-cache
+    pear update-channels
+    pear upgrade
+    sudo apt-get update
+    sudo apt-get -y -q --force-yes install zlib1g-dev memcached &&
+    yes '' | pecl install memcache
+
+php_ini: |
+    extension=memcache.so
+    extension=pdo_mysql.so
+
+exclude_patterns:
+    - batch/*
+    - app/check.php
+    - app/SymfonyRequirements.php
+    - web/config.php
+    - web/app_*.php
+    - app/Resources/node_modules/*
+
+rules:
+    # Although we are escaping stuff, SensioLabs is not detecting ir properly.
+    twig.xss_vulnerability:
+        enabled: false
+    task_todo_comment:
+        enabled: false

@@ -89,7 +89,7 @@ class BaseController extends FOSRestController
 
         if (!$token instanceof OAuthToken) {
             return null;
-        }
+    }
 
         $accessToken = $this->getDoctrine()
             ->getRepository('LoginCidadaoOAuthBundle:AccessToken')

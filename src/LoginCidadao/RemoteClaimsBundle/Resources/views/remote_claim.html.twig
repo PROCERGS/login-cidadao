@@ -1,0 +1,33 @@
+{% set imgHtml %}
+    <span style="display: inline-block; width: 24px; height: 24px; overflow: hidden; float: left; margin-right: 6px;">
+        <img alt="{{ 'remote_claims.details.issuer_logo_alt' | trans({'%claim_provider%': claim.provider.name | e}) }}"
+                {#src="http://via.placeholder.com/350x350"#}
+             src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', {'client': claim.provider}) }}"
+             style="margin-bottom: 0; max-width: 100% !important;" class="img-responsive">
+    </span>
+{% endset %}
+{% set claimInfo %}
+    <span class="clearfix">
+        {{ imgHtml }}
+        <span style="vertical-align: middle; height: 24px; line-height: 24px; float: left;">{{ claim.displayName }}</span>
+        <span style="vertical-align: middle; height: 24px; line-height: 24px; float: left; margin-left: 6px; font-size: 0.85em;">
+            {{ 'remote_claims.details.issued_by' | trans({'%claim_provider%': claim.provider.name | e, '%img%': ''}) | raw }}
+        </span>
+    </span>
+{% endset %}
+<div class="list-group-item {{ isForm ? 'checkbox checkbox-primary' }}">
+    <div class="list-group-item-heading remote-claim-display-name" {{ isForm ? 'style="padding-left: 20px;"' }}>
+        {% if isForm %}
+            {% set inputId = 'remote_scope_' ~ claim.id %}
+            <input type="checkbox" name="scope[]" checked value="{{ claim.name }}" data-size="mini" id="{{ inputId }}">
+            <label for="{{ inputId }}">
+                {{ claimInfo }}
+            </label>
+        {% else %}
+            {{ claimInfo }}
+        {% endif %}
+    </div>
+    {% if not hideDetails | default(false) %}
+        {{ include('LoginCidadaoRemoteClaimsBundle::remote_claim.details.html.twig') }}
+    {% endif %}
+</div>

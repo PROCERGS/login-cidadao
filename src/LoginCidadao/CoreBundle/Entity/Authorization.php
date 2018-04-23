@@ -13,6 +13,7 @@ namespace LoginCidadao\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 
 /**
  * @ORM\Entity(repositoryClass="LoginCidadao\CoreBundle\Entity\AuthorizationRepository")
@@ -85,9 +86,9 @@ class Authorization
     }
 
     /**
-     * @param \LoginCidadao\OAuthBundle\Entity\Client $client
+     * @param ClientInterface|null $client
      */
-    public function setClient(Client $client = null)
+    public function setClient(ClientInterface $client = null)
     {
         $this->client = $client;
     }
@@ -103,11 +104,11 @@ class Authorization
     }
 
     /**
-     * @param array $scope
+     * @param array|string $scope
      */
-    public function setScope(array $scope)
+    public function setScope($scope)
     {
-        $scope = $this->enforcePublicProfileScope($scope);
+        $scope = $this->enforcePublicProfileScope(Authorization::enforceArray($scope));
         $this->scope = $scope;
     }
 
@@ -117,11 +118,7 @@ class Authorization
      */
     public function hasScopes($needed)
     {
-        if (!is_array($needed)) {
-            $needed = array($needed);
-        }
-
-        foreach ($needed as $n) {
+        foreach (Authorization::enforceArray($needed) as $n) {
             if (array_search($n, $this->getScope()) === false) {
                 return false;
             }
@@ -159,5 +156,24 @@ class Authorization
         if (!($this->getCreatedAt() instanceof \DateTime)) {
             $this->createdAt = new \DateTime();
         }
+    }
+
+    /**
+     * Enforces that a scope is an array
+     *
+     * @param $scope
+     * @return array
+     */
+    public static function enforceArray($scope)
+    {
+        if (is_array($scope)) {
+            return $scope;
+        }
+
+        if (is_bool($scope) || is_null($scope) || $scope === '') {
+            return [];
+        }
+
+        return explode(' ', $scope);
     }
 }

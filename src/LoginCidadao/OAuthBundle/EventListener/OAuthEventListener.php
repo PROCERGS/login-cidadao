@@ -18,8 +18,10 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Helper\ScopeFinderHelper;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
-use LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier;
+use LoginCidadao\OpenIDBundle\Event\AuthorizationEvent;
+use LoginCidadao\OpenIDBundle\LoginCidadaoOpenIDEvents;
 use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class OAuthEventListener
 {
@@ -63,13 +65,18 @@ class OAuthEventListener
         );
 
         if ($event->isAuthorizedClient()) {
-            $this->checkSubjectIdentifierPersisted($user, $client);
+            $this->subjectIdentifierService->enforceSubjectIdentifier($user, $client->getMetadata());
         }
     }
 
-    public function onPostAuthorizationProcess(OAuthEvent $event)
+    public function onPostAuthorizationProcess(OAuthEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         if (!$event->isAuthorizedClient()) {
+            return;
+        }
+
+        if (!$event->getUser() instanceof PersonInterface
+            || !$event->getClient() instanceof ClientInterface) {
             return;
         }
 
@@ -80,32 +87,25 @@ class OAuthEventListener
         $user = $this->getUser($event);
         $scope = $this->scopeFinder->getScope();
 
-        $authRepo = $this->em->getRepository('LoginCidadaoCoreBundle:Authorization');
-        $currentAuth = $authRepo->findOneBy([
-            'person' => $user,
-            'client' => $client,
-        ]);
+        /** @var Authorization|null $currentAuth */
+        $currentAuth = $this->getCurrentAuthorization($user, $client);
 
-        // if the authorization is already there, update it.
+        $authorizationEvent = new AuthorizationEvent($user, $client, $scope);
+        $dispatcher->dispatch(LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION_REQUEST, $authorizationEvent);
+
+        $authEventName = LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION;
         if ($currentAuth instanceof Authorization) {
-            $merged = array_merge($currentAuth->getScope(), $scope);
-            $currentAuth->setScope($merged);
-            $this->checkSubjectIdentifierPersisted($user, $client);
-        } else {
-            $authorization = new Authorization();
-            $authorization->setClient($client);
-            $authorization->setPerson($user);
-            $authorization->setScope($scope);
-
-            $subjectIdentifier = $this->subjectIdentifierService->getSubjectIdentifier($user, $client->getMetadata());
-            $sub = new SubjectIdentifier();
-            $sub->setPerson($user)
-                ->setClient($client)
-                ->setSubjectIdentifier($subjectIdentifier);
-
-            $this->em->persist($authorization);
-            $this->em->persist($sub);
+            // if the authorization is already there, update it.
+            $authEventName = LoginCidadaoOpenIDEvents::UPDATE_AUTHORIZATION;
+            $authorizationEvent->setAuthorization($currentAuth);
         }
+
+        $dispatcher->dispatch($authEventName, $authorizationEvent);
+
+        $sub = $this->subjectIdentifierService->enforceSubjectIdentifier($user, $client->getMetadata(), false);
+
+        $this->em->persist($authorizationEvent->getAuthorization());
+        $this->em->persist($sub);
 
         $this->em->flush();
     }
@@ -115,18 +115,12 @@ class OAuthEventListener
         return $this->personRepo->findOneBy(['username' => $event->getUser()->getUsername()]);
     }
 
-    private function checkSubjectIdentifierPersisted(PersonInterface $person, ClientInterface $client)
+    private function getCurrentAuthorization(PersonInterface $person, ClientInterface $client)
     {
-        if ($this->subjectIdentifierService->isSubjectIdentifierPersisted($person, $client)) {
-            return;
-        }
+        /** @var Authorization $currentAuth */
+        $currentAuth = $this->em->getRepository('LoginCidadaoCoreBundle:Authorization')
+            ->findOneBy(['person' => $person, 'client' => $client]);
 
-        $subjectIdentifier = $this->subjectIdentifierService->getSubjectIdentifier($person, $client->getMetadata());
-        $sub = new SubjectIdentifier();
-        $sub->setPerson($person)
-            ->setClient($client)
-            ->setSubjectIdentifier($subjectIdentifier);
-        $this->em->persist($sub);
-        $this->em->flush($sub);
+        return $currentAuth;
     }
 }

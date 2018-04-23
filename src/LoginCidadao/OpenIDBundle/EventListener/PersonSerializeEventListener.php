@@ -80,15 +80,17 @@ class PersonSerializeEventListener implements EventSubscriberInterface
     {
         /** @var PersonInterface $person */
         $person = $event->getObject();
-        /** @var GenericSerializationVisitor $visitor */
         $visitor = $event->getVisitor();
+        if (!$visitor instanceof GenericSerializationVisitor) {
+            return;
+        }
 
         if (version_compare($this->getApiVersion(true), '1.1.0', '>=')) {
-            $visitor->addData('picture', $person->getProfilePictureUrl());
-            $visitor->addData(
-                'email_verified',
-                $person->getEmailConfirmedAt() instanceof \DateTime
-            );
+        $visitor->addData('picture', $person->getProfilePictureUrl());
+        $visitor->addData(
+            'email_verified',
+            $person->getEmailConfirmedAt() instanceof \DateTime
+        );
         }
     }
 

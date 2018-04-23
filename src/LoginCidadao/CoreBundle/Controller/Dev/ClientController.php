@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Controller\Dev;
 
@@ -16,6 +24,7 @@ use LoginCidadao\OAuthBundle\Entity\Client;
  */
 class ClientController extends Controller
 {
+
     /**
      * @Route("/new", name="lc_dev_client_new")
      * @Template()
@@ -30,7 +39,7 @@ class ClientController extends Controller
         if ($form->isValid()) {
             $client->getOwners()->add($this->getUser());
             $client->setAllowedGrantTypes(Client::getAllGrants());
-            $em = $this->getDoctrine()->getManager();
+            $em            = $this->getDoctrine()->getManager();
             $em->persist($client);
             $em->flush();
 
@@ -122,7 +131,8 @@ class ClientController extends Controller
         $grid->setQueryBuilder($sql);
         $grid->setInfiniteGrid(true);
         $grid->setRoute('lc_dev_client_grid');
-        return array('grid' => $grid->createView($request));
+
+        return ['grid' => $grid->createView($request)];
     }
 
     /**
@@ -148,9 +158,10 @@ class ClientController extends Controller
             $grid->setQueryBuilder($sql);
         }
         $grid->setInfiniteGrid(true);
-        $grid->setRouteParams(array('ac_data'));
+        $grid->setRouteParams(['ac_data']);
         $grid->setRoute('lc_dev_client_grid_developer_filter');
-        return array('grid' => $grid->createView($request));
+
+        return ['grid' => $grid->createView($request)];
     }
 
     /**
