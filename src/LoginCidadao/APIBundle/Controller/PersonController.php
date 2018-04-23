@@ -10,9 +10,10 @@
 
 namespace LoginCidadao\APIBundle\Controller;
 
+use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
 use FOS\RestBundle\Controller\Annotations as REST;
 use JMS\Serializer\SerializationContext;
-use LoginCidadao\APIBundle\Exception\RequestTimeoutException;
+use LoginCidadao\CoreBundle\LongPolling\LongPollingUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -43,6 +44,7 @@ class PersonController extends BaseController
      *   }
      * )
      * @REST\View(templateVar="person")
+     * @REST\Get(defaults={"version": 2})
      * @Audit\Loggable(type="SELECT")
      * @throws NotFoundHttpException
      */
@@ -59,8 +61,7 @@ class PersonController extends BaseController
             }
         }
 
-        $view = $this->view($person)
-            ->setSerializationContext($this->getSerializationContext($scope));
+        $view = $this->view($person)->setSerializationContext($this->getSerializationContext($scope));
 
         return $this->handleView($view);
     }
@@ -86,103 +87,50 @@ class PersonController extends BaseController
      */
     public function waitPersonChangeAction(Request $request)
     {
-        $user = $this->getUser();
-        $scope = $this->getClientScope($user);
-        $updatedAt = \DateTime::createFromFormat('Y-m-d H:i:s',
-            $request->get('updated_at'));
+        /** @var LongPollingUtils $longPolling */
+        $longPolling = $this->get('long_polling');
 
-        if (!($updatedAt instanceof \DateTime)) {
+        $user = $this->getUser();
+        $updatedAt = \DateTime::createFromFormat('Y-m-d H:i:s', $request->get('updated_at'));
+
+        if (!$updatedAt instanceof \DateTime) {
             $updatedAt = new \DateTime();
         }
 
-        $id = $user->getId();
-        $lastUpdatedAt = null;
-        $callback = $this->getCheckUpdateCallback($id, $updatedAt,
-            $lastUpdatedAt);
-        $person = $this->runTimeLimited($callback);
-        $context = SerializationContext::create()->setGroups($scope);
-        $view = $this->view($person)
-            ->setSerializationContext($context);
+        $callback = $longPolling->getEntityUpdateCheckerCallback($user, $updatedAt);
+        $person = $longPolling->runTimeLimited($callback);
+        $context = SerializationContext::create()->setGroups($this->getClientScope($user));
+        $view = $this->view($person)->setSerializationContext($context);
 
         return $this->handleView($view);
-    }
-
-    private function runTimeLimited($callback, $waitTime = 1)
-    {
-        $maxExecutionTime = ini_get('max_execution_time');
-        $limit = $maxExecutionTime ? $maxExecutionTime - 2 : 60;
-        $startTime = time();
-        while ($limit > 0) {
-            $result = call_user_func($callback);
-            $delta = time() - $startTime;
-
-            if ($result !== false) {
-                return $result;
-            }
-
-            $limit -= $delta;
-            if ($limit <= 0) {
-                break;
-            }
-            $startTime = time();
-            sleep($waitTime);
-        }
-        throw new RequestTimeoutException("Request Timeout");
-    }
-
-    private function getCheckUpdateCallback($id, $updatedAt, $lastUpdatedAt)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-        $people = $em->getRepository('LoginCidadaoCoreBundle:Person');
-
-        return function () use ($id, $people, $em, $updatedAt, $lastUpdatedAt) {
-            $em->clear();
-            $person = $people->find($id);
-            if (!$person->getUpdatedAt()) {
-                return false;
-            }
-
-            if ($person->getUpdatedAt() > $updatedAt) {
-                return $person;
-            }
-
-            if ($lastUpdatedAt === null) {
-                $lastUpdatedAt = $person->getUpdatedAt();
-            } elseif ($person->getUpdatedAt() != $lastUpdatedAt) {
-                return $person;
-            }
-
-            return false;
-        };
     }
 
     /**
      * Generates and returns a logout key for the user.
      *
      * @ApiDoc(
-     * resource = true,
-     * description = "Generates and returns a logout key for the user.",
-     * output = {
-     * "class"="LoginCidadao\APIBundle\Entity\LogoutKey",
-     * "groups" = {"key"}
-     * },
-     * statusCodes = {
-     * 200 = "Returned when successful"
-     * }
+     *   resource = true,
+     *   description = "Generates and returns a logout key for the user.",
+     *   output = {
+     *     "class"="LoginCidadao\APIBundle\Entity\LogoutKey",
+     *     "groups" = {"key"}
+     *   },
+     *   statusCodes = {
+     *     200 = "Returned when successful"
+     *   }
      * )
-     * @REST\Get("/person/{id}/logout-key")
+     * @REST\Route("/person/{id}/logout-key", methods={"PUT", "POST"})
      * @REST\View(templateVar="logoutKey")
      *
      * @throws NotFoundHttpException
      */
     public function getLogoutKeyAction($id)
     {
+        /** @var OAuthToken $token */
         $token = $this->get('security.token_storage')->getToken();
         $accessToken = $this->getDoctrine()
             ->getRepository('LoginCidadaoOAuthBundle:AccessToken')
-            ->findOneBy(array(
-                'token' => $token->getToken(),
-            ));
+            ->findOneBy(['token' => $token->getToken()]);
         $client = $accessToken->getClient();
 
         $people = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Person');
@@ -201,13 +149,14 @@ class PersonController extends BaseController
         $em->persist($logoutKey);
         $em->flush();
 
-        $result = array(
+        $result = [
             'key' => $logoutKey->getKey(),
-            'url' => $this->generateUrl('lc_logout_not_remembered_safe',
-                array(
-                    'key' => $logoutKey->getKey(),
-                ), UrlGeneratorInterface::ABSOLUTE_URL),
-        );
+            'url' => $this->generateUrl(
+                'lc_logout_not_remembered_safe',
+                ['key' => $logoutKey->getKey()],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            ),
+        ];
 
         return $result;
     }

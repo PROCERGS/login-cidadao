@@ -1,8 +1,18 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Model;
 
 use Doctrine\ORM\EntityManagerInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
 use LoginCidadao\CoreBundle\Entity\BackupCode;
 use LoginCidadao\CoreBundle\Tests\LongPolling\LongPollableInterface;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
@@ -67,11 +77,11 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
 
     /**
      * Checks if a given Client can access this Person's specified scope.
-     * @param \LoginCidadao\OAuthBundle\Entity\Client $client
+     * @param ClientInterface $client
      * @param mixed $scope can be a single scope or an array with several.
      * @return boolean
      */
-    public function isAuthorizedClient(Client $client, $scope);
+    public function isAuthorizedClient(ClientInterface $client, $scope);
 
     /**
      * Checks if this Person has any authorization for a given Client.
@@ -224,6 +234,9 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
      */
     public function getIdCards();
 
+    /**
+     * @return BadgeInterface[]
+     */
     public function getBadges();
 
     /**

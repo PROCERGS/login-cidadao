@@ -52,11 +52,6 @@ class PersonSerializeEventListener implements EventSubscriberInterface
                 'method' => 'onPreSerialize',
                 'class' => 'LoginCidadao\CoreBundle\Model\PersonInterface',
             ],
-            [
-                'event' => 'serializer.post_serialize',
-                'method' => 'onPostSerialize',
-                'class' => 'LoginCidadao\CoreBundle\Model\PersonInterface',
-            ],
         ];
     }
 
@@ -74,10 +69,5 @@ class PersonSerializeEventListener implements EventSubscriberInterface
                 $this->request
             );
         }
-    }
-
-    public function onPostSerialize(ObjectEvent $event)
-    {
-        //
     }
 }

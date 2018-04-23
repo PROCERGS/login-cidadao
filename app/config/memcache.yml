@@ -8,14 +8,17 @@ doctrine:
             type:   memcache
             host:   %memcached_host%
             port:   %memcached_port%
+            namespace: '%memcached_prefix%'
         query_cache_driver:
             type:   memcache
             host:   %memcached_host%
             port:   %memcached_port%
+            namespace: '%memcached_prefix%'
         result_cache_driver:
             type:   memcache
             host:   %memcached_host%
             port:   %memcached_port%
+            namespace: '%memcached_prefix%'
 
 services:
     session.memcached:

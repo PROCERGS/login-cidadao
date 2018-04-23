@@ -4,9 +4,14 @@ namespace LoginCidadao\OpenIDBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * Class JsonWebKeyControllerTest
+ * @package LoginCidadao\OpenIDBundle\Tests\Controller
+ * @group controller
+ * @group kernel
+ */
 class JsonWebKeyControllerTest extends WebTestCase
 {
-
     public function testGet()
     {
         $client = static::createClient(array(), array('HTTPS' => true));

@@ -1,14 +1,24 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\OAuthBundle\Model;
 
 use FOS\OAuthServerBundle\Model\ClientInterface as BaseInterface;
 use LoginCidadao\CoreBundle\Entity\Authorization;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\CoreBundle\Model\UniqueEntityInterface;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
 
-interface ClientInterface extends BaseInterface
+interface ClientInterface extends BaseInterface, UniqueEntityInterface
 {
     public function getId();
 
@@ -46,11 +56,12 @@ interface ClientInterface extends BaseInterface
 
     public function setId($var);
 
-    public function getCategories();
-
+    /**
+     * @return PersonInterface[]|ArrayCollection
+     */
     public function getOwners();
 
-    public function setOwners(ArrayCollection $owners);
+    public function setOwners($owners);
 
     /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
@@ -82,4 +93,27 @@ interface ClientInterface extends BaseInterface
      * @return ClientMetadata
      */
     public function getMetadata();
+
+    /**
+     * @param string[] $allowedScopes
+     * @return ClientInterface
+     */
+    public function setAllowedScopes(array $allowedScopes);
+
+    /**
+     * Alias of getPublicId()
+     * @return mixed
+     */
+    public function getClientId();
+
+    /**
+     * Alias of getSecret()
+     * @return mixed
+     */
+    public function getClientSecret();
+
+    /**
+     * @return mixed
+     */
+    public function getId();
 }

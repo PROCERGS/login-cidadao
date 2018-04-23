@@ -4,6 +4,12 @@ namespace LoginCidadao\CoreBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * Class DefaultControllerTest
+ * @package LoginCidadao\CoreBundle\Tests\Controller
+ * @group controller
+ * @group kernel
+ */
 class DefaultControllerTest extends WebTestCase
 {
 

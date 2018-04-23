@@ -1,0 +1,17 @@
+<span aria-controls="remoteClaim{{ claim.id }}" data-target=".remoteClaim{{ claim.id }}" role="button"
+      data-toggle="collapse" aria-expanded="false">
+    <div class="remote-claim-essentials list-group-item-text help-block small collapse in remoteClaim{{ claim.id }}">
+        {% if claim.essentialScope is not empty %}
+            {{ 'remote_claims.details.show_details_with_scope' | trans }}
+        {% else %}
+            {{ 'remote_claims.details.show_details' | trans }}
+        {% endif %}
+    </div>
+    <dl class="collapse list-group-item-text small remoteClaim{{ claim.id }}">
+        <dt>{{ 'remote_claims.details.about' | trans }}</dt>
+        <dd>{{ claim.description }}</dd>
+
+        <dt>{{ 'remote_claims.details.essentialScope' | trans({'%claim_provider%': claim.provider.name}) }}</dt>
+        <dd>{{ claim.essentialScope | scope | join(', ') }}</dd>
+    </dl>
+</span>

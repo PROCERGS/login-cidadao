@@ -10,17 +10,17 @@
 
 namespace LoginCidadao\OpenIDBundle\EventListener;
 
-use Doctrine\ORM\EntityManager;
 use LoginCidadao\CoreBundle\Event\GetClientEvent;
 use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
+use LoginCidadao\OpenIDBundle\Entity\ClientMetadataRepository;
 use LoginCidadao\OpenIDBundle\Validator\SectorIdentifierUriChecker;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CoreEventsSubscriber implements EventSubscriberInterface
 {
-    /** @var EntityManager */
-    protected $em;
+    /** @var ClientMetadataRepository */
+    protected $clientMetadataRepository;
 
     /** @var SectorIdentifierUriChecker */
     protected $sectorIdentifierUriChecker;
@@ -30,16 +30,16 @@ class CoreEventsSubscriber implements EventSubscriberInterface
 
     /**
      * CoreEventsListener constructor.
-     * @param EntityManager $em
+     * @param ClientMetadataRepository $clientMetadataRepository
      * @param SectorIdentifierUriChecker $sectorIdentifierUriChecker
      * @param boolean $revalidateSectorIdentifierUriOnAuth
      */
     public function __construct(
-        EntityManager $em,
+        ClientMetadataRepository $clientMetadataRepository,
         SectorIdentifierUriChecker $sectorIdentifierUriChecker,
         $revalidateSectorIdentifierUriOnAuth
     ) {
-        $this->em = $em;
+        $this->clientMetadataRepository = $clientMetadataRepository;
         $this->sectorIdentifierUriChecker = $sectorIdentifierUriChecker;
         $this->revalidateSectorIdentifierUriOnAuth = $revalidateSectorIdentifierUriOnAuth;
     }
@@ -58,12 +58,8 @@ class CoreEventsSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $repo = $this->em->getRepository('LoginCidadaoOpenIDBundle:ClientMetadata');
-        $metadata = $repo->findOneBy(
-            array(
-                'client' => $event->getClient(),
-            )
-        );
+        $metadata = $this->clientMetadataRepository->findOneBy(['client' => $event->getClient()]);
+
         if ($metadata instanceof ClientMetadata) {
             $this->sectorIdentifierUriChecker->recheck($metadata);
         }

@@ -1,60 +1,56 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
-use Symfony\Component\Security\Http\Event\SwitchUserEvent;
-use Symfony\Component\Security\Core\Role\SwitchUserRole;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\HttpKernel;
 use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
 use LoginCidadao\CoreBundle\Helper\SecurityHelper;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernel;
+use Symfony\Component\Security\Core\Role\SwitchUserRole;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Security\Http\Event\SwitchUserEvent;
 
 class SecurityListener
 {
-    /** @var AuthorizationCheckerInterface */
-    private $authChecker;
-
-    /** @var TokenStorageInterface */
-    private $tokenStorage;
-
     /** @var SecurityHelper */
     private $securityHelper;
 
     /** @var ActionLogger */
     private $logger;
 
-    public function __construct(AuthorizationCheckerInterface $authChecker,
-                                TokenStorageInterface $tokenStorage,
-                                SecurityHelper $securityHelper,
-                                ActionLogger $logger)
-    {
-        $this->tokenStorage   = $tokenStorage;
-        $this->authChecker    = $authChecker;
+    public function __construct(
+        SecurityHelper $securityHelper,
+        ActionLogger $logger
+    ) {
         $this->securityHelper = $securityHelper;
-        $this->logger         = $logger;
+        $this->logger = $logger;
     }
 
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
         $controllerAction = array($this, 'onSecurityInteractiveLogin');
-        $person           = $event->getAuthenticationToken()->getUser();
-        $this->logger->registerLogin($event->getRequest(), $person,
-            $controllerAction);
+        $person = $event->getAuthenticationToken()->getUser();
+        $this->logger->registerLogin($event->getRequest(), $person, $controllerAction);
     }
 
     public function onSwitchUser(SwitchUserEvent $event)
     {
-        $tokenStorage = $this->tokenStorage;
-        $authChecker  = $this->authChecker;
-        $target       = $event->getTargetUser();
+        /** @var PersonInterface $target */
+        $target = $event->getTargetUser();
 
-        if ($authChecker->isGranted('ROLE_PREVIOUS_ADMIN')) {
+        $impersonator = null;
+        if ($this->securityHelper->isGranted('ROLE_PREVIOUS_ADMIN')) {
             // Impersonator is going back to normal
-            foreach ($tokenStorage->getToken()->getRoles() as $role) {
+            foreach ($this->securityHelper->getTokenRoles() as $role) {
                 if ($role instanceof SwitchUserRole) {
                     $impersonator = $role->getSource()->getUser();
                     break;
@@ -63,39 +59,32 @@ class SecurityListener
             $isImpersonating = false;
         } else {
             // Impersonator is becoming the target user
-            $impersonator    = $this->tokenStorage->getToken()->getUser();
+            $impersonator = $this->securityHelper->getUser();
             $isImpersonating = true;
         }
 
         $controllerAction = array($this, 'onSwitchUser');
-        $this->logger->registerImpersonate($event->getRequest(), $target,
-            $impersonator, $controllerAction, $isImpersonating);
+        $this->logger->registerImpersonate(
+            $event->getRequest(),
+            $target,
+            $impersonator,
+            $controllerAction,
+            $isImpersonating
+        );
     }
 
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if (HttpKernel::MASTER_REQUEST != $event->getRequestType()) {
-            // don't do anything if it's not the master request
-            return;
-        }
-        $token = $this->tokenStorage->getToken();
-        if (is_null($token)) {
-            return;
-        }
-
-        if ($this->authChecker->isGranted('FEATURE_IMPERSONATION_REPORTS')) {
-            if (!($token->getUser() instanceof PersonInterface)) {
-                // We don't have a PersonInterface... Nothing to do here.
-                return;
-            }
-
+        if (HttpKernel::MASTER_REQUEST === $event->getRequestType()
+            && $this->securityHelper->getUser() instanceof PersonInterface
+            && $this->securityHelper->isGranted('FEATURE_IMPERSONATION_REPORTS')) {
             $this->checkPendingImpersonateReport();
         }
     }
 
-    public function checkPendingImpersonateReport()
+    private function checkPendingImpersonateReport()
     {
-        $person = $this->tokenStorage->getToken()->getUser();
+        $person = $this->securityHelper->getUser();
         $this->securityHelper->checkPendingImpersonateReport($person);
     }
 }

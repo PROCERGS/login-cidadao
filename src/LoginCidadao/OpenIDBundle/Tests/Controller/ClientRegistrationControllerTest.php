@@ -4,9 +4,14 @@ namespace LoginCidadao\OpenIDBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * Class ClientRegistrationControllerTest
+ * @package LoginCidadao\OpenIDBundle\Tests\Controller
+ * @group controller
+ * @group kernel
+ */
 class ClientRegistrationControllerTest extends WebTestCase
 {
-
     public function testRegister()
     {
         $client = static::createClient(array(), array('HTTPS' => true));

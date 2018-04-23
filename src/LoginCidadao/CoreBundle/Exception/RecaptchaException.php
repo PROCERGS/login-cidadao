@@ -10,14 +10,14 @@
 
 namespace LoginCidadao\CoreBundle\Exception;
 
-
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
 class RecaptchaException extends BadCredentialsException
 {
-
     /**
-     * RecaptchaException constructor.
+     * @param string $message
+     * @param int $code
+     * @param \Exception|null $previous
      */
     public function __construct($message = "", $code = 0, \Exception $previous = null)
     {
