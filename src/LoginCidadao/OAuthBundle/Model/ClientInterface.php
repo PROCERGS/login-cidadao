@@ -94,6 +94,12 @@ interface ClientInterface extends BaseInterface, UniqueEntityInterface
     public function getMetadata();
 
     /**
+     * @param ClientMetadata $metadata
+     * @return ClientInterface
+     */
+    public function setMetadata(ClientMetadata $metadata);
+
+    /**
      * @param string[] $allowedScopes
      * @return ClientInterface
      */

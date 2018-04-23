@@ -64,6 +64,7 @@ class AppKernel extends Kernel
             new LoginCidadao\DynamicFormBundle\LoginCidadaoDynamicFormBundle(),
             new LoginCidadao\LogBundle\LoginCidadaoLogBundle(),
             new LoginCidadao\RemoteClaimsBundle\LoginCidadaoRemoteClaimsBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
