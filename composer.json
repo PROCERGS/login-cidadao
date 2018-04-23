@@ -63,7 +63,8 @@
         "egulias/email-validator": "~1.2",
         "misd/phone-number-bundle": "^1.1",
         "ocramius/proxy-manager": "^1.0",
-        "rollerworks/password-strength-bundle": "^1.5"
+        "rollerworks/password-strength-bundle": "^1.5",
+        "knplabs/knp-paginator-bundle": "^2.7"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
