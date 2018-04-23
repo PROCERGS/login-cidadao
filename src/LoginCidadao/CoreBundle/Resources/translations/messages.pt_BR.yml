@@ -953,3 +953,34 @@ services:
             confirm: Você quer mesmo desativar este serviço?
             yes: Sim
             no: Não
+
+email:
+    account_blocked:
+        message:
+            subject: 'Notificação de Bloqueio por Violação dos Termos de Uso'
+            text: |
+                Notificação de Bloqueio por Violação dos Termos de Uso:
+
+                Durante uma verificação de rotina, identificamos uma conta no Login Cidadão registrada sob seu email <strong>%email%</strong>.
+
+                Foi constatado que a conta em questão foi utilizada para tentar acessar informações pessoais de terceiros, o que viola os Termos de Uso do Login Cidadão e, por esse motivo, foi bloqueada permanentemente com base no texto:
+
+                    "O Login Cidadão somente pode ser utilizado para fins pessoais, não sendo permitida a utilização em nome de terceiros ou com a finalidade de obter informações de terceiros."
+                     (...)
+                    "A não observância pelo usuário dos seus deveres previstos nestes Termos de Uso ou em qualquer outra legislação aplicável, poderá acarretar a suspensão ou cancelamento do seu acesso ao Login Cidadão, ou a um ou mais serviços disponibilizados, além de outras sanções previstas em lei."
+
+                Cordialmente,
+                Equipe Login Cidadão
+            html: >
+                Notificação de Bloqueio por Violação dos Termos de Uso:<br>
+                <br>
+                Durante uma verificação de rotina, identificamos uma conta no Login Cidadão registrada sob seu email <strong>%email%</strong>.<br>
+                <br>
+                Foi constatado que a conta em questão foi utilizada para tentar acessar informações pessoais de terceiros, o que viola os Termos de Uso do Login Cidadão e, por esse motivo, foi bloqueada permanentemente com base no texto:<br>
+                <br>
+                    "O Login Cidadão somente pode ser utilizado para fins pessoais, não sendo permitida a utilização em nome de terceiros ou com a finalidade de obter informações de terceiros."<br>
+                     (...)<br>
+                    "A não observância pelo usuário dos seus deveres previstos nestes Termos de Uso ou em qualquer outra legislação aplicável, poderá acarretar a suspensão ou cancelamento do seu acesso ao Login Cidadão, ou a um ou mais serviços disponibilizados, além de outras sanções previstas em lei."<br>
+                <br>
+                Cordialmente,<br>
+                Equipe Login Cidadão

@@ -131,6 +131,9 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
 
     public function setEmailConfirmedAt(\DateTime $emailConfirmedAt = null);
 
+    /**
+     * @return \DateTime
+     */
     public function getEmailConfirmedAt();
 
     public function getSocialNetworksPicture();
@@ -209,8 +212,6 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
 
     public function isClientAuthorized($app_id);
 
-    public function setUpdatedAt($var = null);
-
     public function getUpdatedAt();
 
     public function setGoogleId($var);
@@ -285,4 +286,10 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
      * @return BackupCode[]
      */
     public function getBackupCodes();
+
+    /**
+     * @param \DateTime|null $updatedAt
+     * @return PersonInterface
+     */
+    public function setUpdatedAt($updatedAt = null);
 }
