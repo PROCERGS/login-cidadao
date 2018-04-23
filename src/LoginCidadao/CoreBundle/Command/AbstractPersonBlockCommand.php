@@ -23,6 +23,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * Class AbstractPersonBlockCommand
+ * @package LoginCidadao\CoreBundle\Command
+ * @codeCoverageIgnore
+ */
 abstract class AbstractPersonBlockCommand extends ContainerAwareCommand
 {
     /** @var PhoneNumberUtil */

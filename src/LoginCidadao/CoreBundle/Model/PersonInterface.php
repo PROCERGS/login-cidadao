@@ -264,7 +264,7 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
     public function getBackupCodes();
 
     /**
-     * @param \DateTime|\null $updatedAt
+     * @param \DateTime|null $updatedAt
      * @return PersonInterface
      */
     public function setUpdatedAt($updatedAt = null);

@@ -10,15 +10,17 @@
 
 namespace LoginCidadao\CoreBundle\Command;
 
-use libphonenumber\NumberParseException;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use LoginCidadao\ValidationBundle\Validator\Constraints\MobilePhoneNumberValidator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * Class BlockUserCommand
+ * @package LoginCidadao\CoreBundle\Command
+ * @codeCoverageIgnore
+ */
 class BlockUserCommand extends AbstractPersonBlockCommand
 {
 
