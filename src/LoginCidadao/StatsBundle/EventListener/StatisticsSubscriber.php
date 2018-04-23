@@ -14,37 +14,33 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use LoginCidadao\StatsBundle\Entity\Statistics;
-use LoginCidadao\StatsBundle\Handler\StatsHandler;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 
 class StatisticsSubscriber implements EventSubscriber
 {
-    /** @var StatsHandler */
-    protected $statsHandler;
-
-    public function setStatsHandler(StatsHandler $statsHandler)
-    {
-        $this->statsHandler = $statsHandler;
-    }
-
     public function getSubscribedEvents()
     {
-        return array(
-            'postPersist',
-            'postRemove',
-        );
+        return ['postPersist', 'postRemove'];
     }
 
+    /**
+     * @param LifecycleEventArgs $args
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function postPersist(LifecycleEventArgs $args)
     {
         $this->authorizations($args);
         $this->authorizationsAggregate($args);
     }
 
-    public function authorizations(LifecycleEventArgs $args)
+    /**
+     * @param LifecycleEventArgs $args
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    private function authorizations(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
-        if (!($entity instanceof Authorization)) {
+        if (!$entity instanceof Authorization) {
             return;
         }
 
@@ -73,18 +69,19 @@ class StatisticsSubscriber implements EventSubscriber
         );
         if (count($counts) > 0) {
             $count = $counts[0]['qty'];
+            $count = is_int($count) ? $count : 0;
         } else {
-            $count = 0;
-        }
-
-        if (!is_int($count)) {
             $count = 0;
         }
 
         return $count;
     }
 
-    public function authorizationsAggregate(LifecycleEventArgs $args)
+    /**
+     * @param LifecycleEventArgs $args
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    private function authorizationsAggregate(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
         if (!($entity instanceof Authorization)) {
@@ -94,17 +91,17 @@ class StatisticsSubscriber implements EventSubscriber
         $em = $args->getEntityManager();
         $key = $entity->getClient()->getId();
         $date = \DateTime::createFromFormat('Y-m-d H:i:s', date('Y-m-d 00:00:00'));
+
+        /** @var ClientRepository $clientRepo */
         $clientRepo = $em->getRepository('LoginCidadaoOAuthBundle:Client');
         $statsRepo = $em->getRepository('LoginCidadaoStatsBundle:Statistics');
         $count = $this->getClientCount($clientRepo, $entity);
 
-        $statistics = $statsRepo->findOneBy(
-            array(
-                'timestamp' => $date,
-                'index' => 'agg.client.users',
-                'key' => $key,
-            )
-        );
+        $statistics = $statsRepo->findOneBy([
+            'timestamp' => $date,
+            'index' => 'agg.client.users',
+            'key' => $key,
+        ]);
         if (!($statistics instanceof Statistics)) {
             $statistics = new Statistics();
             $statistics->setIndex('agg.client.users')
@@ -116,6 +113,10 @@ class StatisticsSubscriber implements EventSubscriber
         $em->flush($statistics);
     }
 
+    /**
+     * @param LifecycleEventArgs $args
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function postRemove(LifecycleEventArgs $args)
     {
         $this->authorizations($args);

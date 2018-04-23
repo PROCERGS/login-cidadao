@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\HasLifecycleCallbacks
  * @ORM\AttributeOverrides({
  *      @ORM\AttributeOverride(name="scope",
- *          column=@ORM\Column(
+ *              column=@ORM\Column(
  *              name     = "scope",
  *              type     = "string",
  *              length   = 1000,
@@ -65,7 +65,7 @@ class AccessToken extends BaseAccessToken
     public function setExpired()
     {
         $now = new \DateTime();
-        $this->setExpiresAt($now->getTimestamp());
+        $this->setExpiresAt($now->getTimestamp() - 1);
     }
 
     public function getIdToken()

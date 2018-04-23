@@ -10,8 +10,6 @@
 
 namespace LoginCidadao\OpenIDBundle\Validator\Constraints;
 
-use Doctrine\ORM\EntityManager;
-use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Entity\Organization;
 use LoginCidadao\OAuthBundle\Entity\OrganizationRepository;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
@@ -31,6 +29,7 @@ class SectorIdentifierUriValidator extends ConstraintValidator
     /**
      * SectorIdentifierUriValidator constructor.
      * @param OrganizationRepository $orgRepo
+     * @param SectorIdentifierUriChecker $uriChecker
      */
     public function __construct(OrganizationRepository $orgRepo, SectorIdentifierUriChecker $uriChecker)
     {
@@ -61,12 +60,5 @@ class SectorIdentifierUriValidator extends ConstraintValidator
         if ($success && $organization instanceof Organization) {
             $metadata->setOrganization($organization);
         }
-    }
-
-    private function buildUrlViolation($message)
-    {
-        $this->context->buildViolation($message)
-            ->atPath('sector_identifier_uri')
-            ->addViolation();
     }
 }

@@ -22,27 +22,27 @@ class ContactFormType extends AbstractType
         $builder->add(
             'name',
             'text',
-            array(
+            [
                 'required' => true,
                 'label' => 'contact.form.name.label',
-                'attr' => ['placeholder' => 'contact.form.name.placeholder']
-            )
+                'attr' => ['placeholder' => 'contact.form.name.placeholder'],
+            ]
         )->add(
             'email',
             'email',
-            array(
+            [
                 'required' => true,
                 'label' => 'contact.form.email.label',
-                'attr' => ['placeholder' => 'contact.form.email.placeholder']
-            )
+                'attr' => ['placeholder' => 'contact.form.email.placeholder'],
+            ]
         )->add(
             'message',
             'Symfony\Component\Form\Extension\Core\Type\TextareaType',
-            array(
+            [
                 'required' => true,
                 'label' => 'contact.form.message.label',
-                'attr' => ['placeholder' => 'contact.form.message.placeholder']
-            )
+                'attr' => ['placeholder' => 'contact.form.message.placeholder'],
+            ]
         );
 
         if ($this->enableCaptcha) {
@@ -60,11 +60,9 @@ class ContactFormType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(
-            [
-                'data_class' => 'LoginCidadao\CoreBundle\Model\SupportMessage',
-            ]
-        );
+        $resolver->setDefaults([
+            'data_class' => 'LoginCidadao\CoreBundle\Model\SupportMessage',
+        ]);
     }
 
 

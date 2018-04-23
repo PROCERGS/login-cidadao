@@ -20,7 +20,7 @@ class ScopeManager extends BaseManager implements ScopeManagerInterface
     private $em;
 
     /** @var \OAuth2\ServerBundle\Entity\Scope[] */
-    private $scopes = array();
+    private $scopes = [];
 
     public function __construct(EntityManager $entityManager)
     {
@@ -48,10 +48,18 @@ class ScopeManager extends BaseManager implements ScopeManagerInterface
      * Find a single scope by the scope
      *
      * @param $scope
-     * @return Scope
+     * @return \OAuth2\ServerBundle\Entity\Scope
      */
     public function findScopeByScope($scope)
     {
+        if (preg_match('/^tag:/', $scope) === 1) {
+            $scopeObj = new \OAuth2\ServerBundle\Entity\Scope();
+            $scopeObj->setScope($scope);
+            $scopeObj->setDescription($scope);
+
+            return $scopeObj;
+        }
+
         return $this->scopes[$scope];
     }
 
@@ -59,7 +67,7 @@ class ScopeManager extends BaseManager implements ScopeManagerInterface
      * Find all the scopes by an array of scopes
      *
      * @param array $scopes
-     * @return mixed|void
+     * @return \OAuth2\ServerBundle\Entity\Scope[]
      */
     public function findScopesByScopes(array $scopes)
     {
@@ -69,6 +77,7 @@ class ScopeManager extends BaseManager implements ScopeManagerInterface
                 $result[$scope] = $obj;
             }
         }
+
         return $result;
     }
 }

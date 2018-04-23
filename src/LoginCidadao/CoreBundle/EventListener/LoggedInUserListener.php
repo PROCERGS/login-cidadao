@@ -1,25 +1,26 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
-use Symfony\Component\HttpKernel\HttpKernel;
+use LoginCidadao\CoreBundle\Helper\SecurityHelper;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
-use LoginCidadao\CoreBundle\Exception\RedirectResponseException;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class LoggedInUserListener
 {
-    /** @var TokenStorageInterface */
-    private $tokenStorage;
-
-    /** @var AuthorizationCheckerInterface */
-    private $authChecker;
+    /** @var SecurityHelper */
+    private $securityHelper;
 
     /** @var RouterInterface */
     private $router;
@@ -34,62 +35,36 @@ class LoggedInUserListener
     private $requireEmailValidation;
 
     public function __construct(
-        TokenStorageInterface $tokenStorage,
-        AuthorizationCheckerInterface $authChecker,
+        SecurityHelper $securityHelper,
         RouterInterface $router,
         Session $session,
         TranslatorInterface $translator,
         $requireEmailValidation
     ) {
-        $this->tokenStorage = $tokenStorage;
-        $this->authChecker = $authChecker;
+        $this->securityHelper = $securityHelper;
         $this->router = $router;
         $this->session = $session;
         $this->translator = $translator;
-
         $this->requireEmailValidation = $requireEmailValidation;
     }
 
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if (HttpKernel::MASTER_REQUEST != $event->getRequestType()) {
-            // don't do anything if it's not the master request
-            return;
-        }
-        $token = $this->tokenStorage->getToken();
-
-        if (is_null($token) || $token instanceof OAuthToken ||
-            $this->authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') === false
+        if ($event->isMasterRequest()
+            && $this->securityHelper->hasToken() && false === $this->securityHelper->isOAuthToken()
+            && $this->securityHelper->isGranted('IS_AUTHENTICATED_REMEMBERED')
+            && $this->securityHelper->getUser() instanceof PersonInterface
         ) {
-            return;
-        }
-        if (!($token->getUser() instanceof PersonInterface)) {
-            // We don't have a PersonInterface... Nothing to do here.
-            return;
-        }
-
-        try {
-            $this->checkUnconfirmedEmail();
-        } catch (RedirectResponseException $e) {
-            $event->setResponse($e->getResponse());
+            $this->checkUnconfirmedEmail($this->securityHelper->getUser());
         }
     }
 
-    protected function checkUnconfirmedEmail()
+    private function checkUnconfirmedEmail(PersonInterface $person)
     {
-        if ($this->requireEmailValidation) {
-            // There is a Task for that already
-            return;
-        }
-        $token = $this->tokenStorage->getToken();
-        $user = $token->getUser();
-        if (is_null($user->getEmailConfirmedAt())) {
-            $params = array('%url%' => $this->router->generate('lc_resend_confirmation_email'));
+        if (false === $this->requireEmailValidation && !$person->getEmailConfirmedAt() instanceof \DateTime) {
+            $params = ['%url%' => $this->router->generate('lc_resend_confirmation_email')];
             $title = $this->translator->trans('notification.unconfirmed.email.title');
-            $text = $this->translator->trans(
-                'notification.unconfirmed.email.shortText',
-                $params
-            );
+            $text = $this->translator->trans('notification.unconfirmed.email.shortText', $params);
             $alert = "<strong>{$title}</strong> {$text}";
 
             $this->session->getFlashBag()->add('alert.unconfirmed.email', $alert);
