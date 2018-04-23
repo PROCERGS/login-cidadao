@@ -30,7 +30,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 abstract class AbstractPersonBlockCommand extends ContainerAwareCommand
 {
-    /** @var PhoneNumberUtil */
+    /** @var PhoneNumberUtil|null */
     private $phoneUtil;
 
     /**
@@ -39,7 +39,7 @@ abstract class AbstractPersonBlockCommand extends ContainerAwareCommand
      * @param OutputInterface $output
      * @return PersonInterface[]
      */
-    protected abstract function getUsers(SymfonyStyle $io, InputInterface $input, OutputInterface $output);
+    abstract protected function getUsers(SymfonyStyle $io, InputInterface $input, OutputInterface $output);
 
     protected function configure()
     {
