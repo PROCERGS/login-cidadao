@@ -69,7 +69,7 @@ class ClientMetadata
      * })
      * @ORM\Column(name="response_types", type="simple_array", nullable=false)
      */
-    private $response_types = array('code');
+    private $response_types = ['code'];
 
     /**
      * @JMS\Expose
@@ -79,7 +79,7 @@ class ClientMetadata
      * })
      * @ORM\Column(type="simple_array", nullable=false)
      */
-    private $grant_types = array('authorization_code');
+    private $grant_types = ['authorization_code'];
 
     /**
      * @JMS\Expose
@@ -173,9 +173,9 @@ class ClientMetadata
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
-     * @ORM\Column(type="string", length=20, nullable=true)
+     * @ORM\Column(type="string", length=20, nullable=false, options={"default" : "pairwise"})
      */
-    private $subject_type;
+    private $subject_type = 'pairwise';
 
     /**
      * @JMS\Expose
@@ -336,8 +336,8 @@ class ClientMetadata
 
     public function __construct()
     {
-        $this->response_types = array('code');
-        $this->grant_types = array('authorization_code');
+        $this->response_types = ['code'];
+        $this->grant_types = ['authorization_code'];
         $this->application_type = 'web';
         $this->require_auth_time = false;
         $this->subject_type = 'pairwise';
@@ -867,6 +867,10 @@ class ClientMetadata
 
         if (!$this->getTokenEndpointAuthMethod()) {
             $this->setTokenEndpointAuthMethod('client_secret_basic');
+        }
+
+        if (null === $this->getSubjectType()) {
+            $this->setSubjectType('pairwise');
         }
     }
 
