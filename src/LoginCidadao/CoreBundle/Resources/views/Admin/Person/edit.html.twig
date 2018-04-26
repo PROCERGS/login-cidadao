@@ -31,7 +31,9 @@
                             {{ form_row(form.username) }}
                             {{ form_row(form.firstName) }}
                             {{ form_row(form.surname) }}
-                            {{ form_row(form.email) }}
+                            <span class="{{ person.emailConfirmedAt is not null ? 'has-success' : 'has-error' }}">
+                                {{ form_row(form.email) }}
+                            </span>
                         </div>
                         <div class="col-md-6">
                             {{ form_row(form.birthdate) }}
@@ -45,7 +47,7 @@
                         <div class="col-md-6">
                             {{ form_row(form.city) }}
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 {{ phoneVerification is null ? 'has-error' : (phoneVerification.verifiedAt is not null ? 'has-success' : 'has-warning') }}">
                             {{ form_row(form.mobile) }}
                         </div>
                         <div class="col-md-6">
