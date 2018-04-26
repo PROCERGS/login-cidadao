@@ -524,11 +524,18 @@ class ClientMetadata
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSubjectType()
     {
         return $this->subject_type;
     }
 
+    /**
+     * @param string $subject_type
+     * @return ClientMetadata
+     */
     public function setSubjectType($subject_type)
     {
         $this->subject_type = $subject_type;
@@ -846,11 +853,11 @@ class ClientMetadata
     public function checkDefaults()
     {
         if (!$this->getGrantTypes()) {
-            $this->setGrantTypes(array('authorization_code'));
+            $this->setGrantTypes(['authorization_code']);
         }
 
         if (!$this->getResponseTypes()) {
-            $this->setResponseTypes(array('code'));
+            $this->setResponseTypes(['code']);
         }
 
         if (!$this->getApplicationType()) {
@@ -934,6 +941,8 @@ class ClientMetadata
 
     /**
      * Add trailing slashes
+     * @param $uri
+     * @return string
      */
     public static function canonicalizeUri($uri)
     {
@@ -941,9 +950,8 @@ class ClientMetadata
         if (array_key_exists('path', $parsed) === false) {
             $parsed['path'] = '/';
         }
-        $unparsed = self::unparseUrl($parsed);
 
-        return $unparsed;
+        return self::unparseUrl($parsed);
     }
 
     private static function unparseUrl($parsed_url)
@@ -956,8 +964,7 @@ class ClientMetadata
         $pass = ($user || $pass) ? "$pass@" : '';
         $path = isset($parsed_url['path']) ? $parsed_url['path'] : '';
         $query = isset($parsed_url['query']) ? '?'.$parsed_url['query'] : '';
-        $fragment = isset($parsed_url['fragment']) ? '#'.$parsed_url['fragment']
-            : '';
+        $fragment = isset($parsed_url['fragment']) ? '#'.$parsed_url['fragment'] : '';
 
         return "$scheme$user$pass$host$port$path$query$fragment";
     }

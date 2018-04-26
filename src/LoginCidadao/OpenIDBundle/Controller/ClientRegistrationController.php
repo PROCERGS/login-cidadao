@@ -94,11 +94,7 @@ class ClientRegistrationController extends FOSRestController
             $cause = $error->getCause();
             $value = $cause->getInvalidValue();
             $propertyRegex = '/^data\\.([a-zA-Z0-9_]+).*$/';
-            $property = preg_replace(
-                $propertyRegex,
-                '$1',
-                $cause->getPropertyPath()
-            );
+            $property = preg_replace($propertyRegex, '$1', $cause->getPropertyPath());
 
             switch ($property) {
                 case 'redirect_uris':
