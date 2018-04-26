@@ -8,16 +8,22 @@
             {% form_theme form 'LoginCidadaoCoreBundle::Form/fields.html.twig' %}
             {{ form_start(form, {'attr' : {'role' : 'form'}}) }}
             {{ form_errors(form) }}
-            <div class="panel panel-default">
+            <div class="panel {{ person.enabled ? 'panel-default' : 'panel-danger' }}">
                 <div class="panel-heading">
-                    <h2 class="panel-title">{{ 'General'|trans }}</h2>
+                    <h2 class="panel-title">
+                        {{ 'General'|trans }}
+                        {% if not person.enabled %}
+                            - {{ 'lc.admin.person.alert.blocked' | trans }}
+                        {% endif %}
+                    </h2>
                 </div>
                 <div class="panel-body">
                     <div class="row clearfix">
                         <div class="col-md-5">
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <img src="{{ include("LoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': person}) }}" alt="" class="col-xs-12 img-responsive"/>
+                                    <img src="{{ include("LoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': person}) }}"
+                                         alt="" class="col-xs-12 img-responsive"/>
                                 </div>
                             </div>
                         </div>
@@ -41,6 +47,13 @@
                         </div>
                         <div class="col-md-6">
                             {{ form_row(form.mobile) }}
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="users_with_same_phone">{{ 'lc.admin.person.general.usersWithSamePhone.label' | trans }}</label>
+                                <input type="text" id="users_with_same_phone" readonly="readonly" class="form-control"
+                                       value="{{ 'lc.admin.person.general.usersWithSamePhone.value' | transchoice(samePhoneCount) }}">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -68,6 +81,18 @@
                                         {{ person.emailConfirmedAt | date('lc.admin.person.metadata.date_format' | trans) }}
                                     {% else %}
                                         {{ 'lc.admin.person.metadata.emailConfirmedAt.empty' | trans }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phoneVerifiedAt">{{ 'lc.admin.person.metadata.phoneVerifiedAt.label' | trans }}</label>
+                                <span id="phoneVerifiedAt" class="form-control" readonly="readonly">
+                                    {% if phoneVerification is not null %}
+                                        {{ phoneVerification.verifiedAt | date('lc.admin.person.metadata.date_format' | trans) }}
+                                    {% else %}
+                                        {{ 'lc.admin.person.metadata.phoneVerifiedAt.empty' | trans }}
                                     {% endif %}
                                 </span>
                             </div>
@@ -110,7 +135,7 @@
                             <div class="col-md-12">
                                 {{ form_row(form.roles) }}
                                 <div class="form-bar text-right">
-                                    <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
+                                    <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}"/>
                                 </div>
                             </div>
                         </div>
@@ -131,11 +156,13 @@
                                     <li class="list-group-item service clearfix">
                                         <div class="media clearfix">
                                             <div class="pull-left">
-                                                <img src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': auth.client }) }}" width="65" height="65" alt="" class="media-object">
+                                                <img src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': auth.client }) }}"
+                                                     width="65" height="65" alt="" class="media-object">
                                             </div>
                                             <div class="media-body">
                                                 <h5 class="media-heading">{{ auth.client.name }}</h5>
-                                                <label for="authorization_{{ auth.id }}">{{ 'lc.admin.person.metadata.authorization.createdAt' | trans }}:</label>
+                                                <label for="authorization_{{ auth.id }}">{{ 'lc.admin.person.metadata.authorization.createdAt' | trans }}
+                                                    :</label>
                                                 <span id="authorization_{{ auth.id }}">{{ auth.createdAt | date('lc.admin.person.metadata.date_format' | trans) }}</span>
                                             </div>
                                         </div>
@@ -145,7 +172,7 @@
                         </ul>
 
                     {% else %}
-                        <p class="empty">{% trans %}There are no active services yet.{%  endtrans %}</p>
+                        <p class="empty">{% trans %}There are no active services yet.{% endtrans %}</p>
                     {% endif %}
                 </div>
             </div>

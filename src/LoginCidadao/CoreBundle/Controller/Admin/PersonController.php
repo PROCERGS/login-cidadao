@@ -2,8 +2,11 @@
 
 namespace LoginCidadao\CoreBundle\Controller\Admin;
 
+use libphonenumber\PhoneNumber;
 use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
+use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService;
+use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -71,8 +74,11 @@ class PersonController extends Controller
      */
     public function editAction(Request $request, $id)
     {
+        /** @var PersonRepository $repo */
+        $repo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Person');
+
         /** @var PersonInterface $person */
-        $person = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Person')->find($id);
+        $person = $repo->find($id);
         if (!$person) {
             return $this->redirectToRoute('lc_admin_person');
         }
@@ -80,6 +86,17 @@ class PersonController extends Controller
         /** @var ActionLogger $actionLogger */
         $actionLogger = $this->get('lc.action_logger');
         $actionLogger->registerProfileView($request, $person, $this->getUser(), [$this, 'editAction']);
+
+        $phone = $person->getMobile();
+        $phoneVerification = null;
+        $samePhoneCount = 0;
+        if ($phone instanceof PhoneNumber) {
+            $samePhoneCount = $repo->countByPhone($phone);
+
+            /** @var PhoneVerificationServiceInterface $phoneVerificationService */
+            $phoneVerificationService = $this->get('phone_verification');
+            $phoneVerification = $phoneVerificationService->getPhoneVerification($person, $person->getMobile());
+        }
 
         $form = $this->createPersonForm($person);
         $form->handleRequest($request);
@@ -96,7 +113,13 @@ class PersonController extends Controller
 
         $defaultClientUid = $this->container->getParameter('oauth_default_client.uid');
 
-        return ['form' => $form->createView(), 'person' => $person, 'defaultClientUid' => $defaultClientUid];
+        return [
+            'form' => $form->createView(),
+            'person' => $person,
+            'phoneVerification' => $phoneVerification,
+            'samePhoneCount' => $samePhoneCount,
+            'defaultClientUid' => $defaultClientUid,
+        ];
     }
 
     private function getRolesNames()

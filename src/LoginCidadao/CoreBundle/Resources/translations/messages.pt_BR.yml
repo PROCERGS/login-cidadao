@@ -892,19 +892,29 @@ profile:
 scope_details.handle.title: O que é isso?
 flash_message.close: Fechar
 city_selector.no_javascript: 'Os campos referentes à sua Naturalidade não estão disponíveis pois seu navegador não está com JavaScript ativado.'
-lc.admin.person.metadata:
-    title: "Metadados"
-    date_format: "d/m/Y H:i:s"
-    createdAt: "Data de Criação da Conta"
-    emailConfirmedAt:
-        label: "Data de Confirmação de Email"
-        empty: "Email não confirmado"
-    lastLogin: "Último Login"
-    hasCpf:
-        label: "Cadastrou CPF?"
-        yes: "Sim"
-        no: "Não"
-    authorization.createdAt: "Data da Autorização"
+lc.admin.person:
+    alert:
+        blocked: "Essa conta está bloqueada!"
+    general:
+        usersWithSamePhone:
+            label: "Pessoas com o mesmo telefone"
+            value: "{0} Nenhuma|{1} Apenas essa pessoa|]1,Inf[ %count% pessoas estão usando esse mesmo número!"
+    metadata:
+        title: "Metadados"
+        date_format: "d/m/Y H:i:s"
+        createdAt: "Data de Criação da Conta"
+        emailConfirmedAt:
+            label: "Data de Confirmação de Email"
+            empty: "Email não confirmado"
+        phoneVerifiedAt:
+            label: "Data de Verificação do Telefone"
+            empty: "Telefone não verificado!"
+        lastLogin: "Último Login"
+        hasCpf:
+            label: "Cadastrou CPF?"
+            yes: "Sim"
+            no: "Não"
+        authorization.createdAt: "Data da Autorização"
 dashboard:
     active_services:
         no_entries: Você ainda não ativou nenhum serviço.

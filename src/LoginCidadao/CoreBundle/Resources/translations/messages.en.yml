@@ -491,19 +491,29 @@ profile:
 scope_details.handle.title: What is this?
 flash_message.close: Close
 city_selector.no_javascript: 'The fields related to your place of birth are unavailable because your browser does not have JavaScript enabled.'
-lc.admin.person.metadata:
-    title: "Metadata"
-    date_format: "m/d/Y H:i:s"
-    createdAt: "Account Creation Date"
-    emailConfirmedAt:
-        label: "Email Confirmation Date"
-        empty: "Email not confirmed"
-    lastLogin: "Last Login"
-    hasCpf:
-        label: "Filled CPF/Taxpayer ID?"
-        yes: "Yes"
-        no: "No"
-    authorization.createdAt: "Authorization Date"
+lc.admin.person:
+    alert:
+        blocked: "This account is locked!"
+    general:
+        usersWithSamePhone:
+            label: "Users with the same Phone number"
+            value: "{0} No one|{1} Only this person|]1,Inf[ %count% people have this same phone number"
+    metadata:
+        title: "Metadata"
+        date_format: "m/d/Y H:i:s"
+        createdAt: "Account Creation Date"
+        emailConfirmedAt:
+            label: "Email Confirmation Date"
+            empty: "Email not confirmed"
+        phoneVerifiedAt:
+            label: "Phone Verification Date"
+            empty: "Phone not verified!"
+        lastLogin: "Last Login"
+        hasCpf:
+            label: "Filled CPF/Taxpayer ID?"
+            yes: "Yes"
+            no: "No"
+        authorization.createdAt: "Authorization Date"
 dashboard:
     active_services:
         no_entries: You didn't connect to any service.
