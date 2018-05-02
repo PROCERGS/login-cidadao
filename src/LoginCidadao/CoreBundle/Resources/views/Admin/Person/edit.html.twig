@@ -77,6 +77,14 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label for="lastLogin">{{ 'lc.admin.person.metadata.lastLogin' | trans }}</label>
+                                <span id="lastLogin" class="form-control" readonly="readonly">
+                                    {{ person.lastLogin | date('lc.admin.person.metadata.date_format' | trans) }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <label for="emailConfirmedAt">{{ 'lc.admin.person.metadata.emailConfirmedAt.label' | trans }}</label>
                                 <span id="emailConfirmedAt" class="form-control" readonly="readonly">
                                     {% if person.emailConfirmedAt is not null %}
@@ -101,14 +109,6 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="lastLogin">{{ 'lc.admin.person.metadata.lastLogin' | trans }}</label>
-                                <span id="lastLogin" class="form-control" readonly="readonly">
-                                    {{ person.lastLogin | date('lc.admin.person.metadata.date_format' | trans) }}
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
                                 <label for="lastLogin">{{ 'lc.admin.person.metadata.hasCpf.label' | trans }}</label>
                                 <span id="lastLogin" class="form-control" readonly="readonly">
                                     {% if person.cpf is not null %}
@@ -120,6 +120,24 @@
                                     {% else %}
                                         {{ 'lc.admin.person.metadata.hasCpf.no' | trans }}
                                     {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{ 'lc.admin.person.3rd_party.title'|trans }}</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="row clearfix">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="userCreatedAt">{{ 'lc.admin.person.metadata.createdAt' | trans }}</label>
+                                <span id="userCreatedAt" class="form-control" readonly="readonly">
+                                    {{ person.createdAt | date('lc.admin.person.metadata.date_format' | trans) }}
                                 </span>
                             </div>
                         </div>
