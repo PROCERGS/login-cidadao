@@ -852,31 +852,60 @@ class ClientMetadata
      */
     public function checkDefaults()
     {
+        $this->enforceDefaultGrantTypes();
+        $this->enforceDefaultResponseTypes();
+        $this->enforceDefaultApplicationType();
+        $this->enforceDefaultRequireAuthTime();
+        $this->enforceDefaultIdTokenSignedResponseAlg();
+        $this->enforceDefaultTokenEndpointAuthMethod();
+        $this->enforceValidSubjectType();
+    }
+
+    private function enforceDefaultGrantTypes()
+    {
         if (!$this->getGrantTypes()) {
             $this->setGrantTypes(['authorization_code']);
         }
+    }
 
+    private function enforceDefaultResponseTypes()
+    {
         if (!$this->getResponseTypes()) {
             $this->setResponseTypes(['code']);
         }
+    }
 
+    private function enforceDefaultApplicationType()
+    {
         if (!$this->getApplicationType()) {
             $this->setApplicationType('web');
         }
+    }
 
+    private function enforceDefaultRequireAuthTime()
+    {
         if (!$this->getRequireAuthTime()) {
             $this->setRequireAuthTime(false);
         }
+    }
 
+    private function enforceDefaultIdTokenSignedResponseAlg()
+    {
         if (!$this->getIdTokenSignedResponseAlg()) {
             $this->setIdTokenSignedResponseAlg('RS256');
         }
+    }
 
+    private function enforceDefaultTokenEndpointAuthMethod()
+    {
         if (!$this->getTokenEndpointAuthMethod()) {
             $this->setTokenEndpointAuthMethod('client_secret_basic');
         }
+    }
 
-        if (null === $this->getSubjectType()) {
+    private function enforceValidSubjectType()
+    {
+        if (false === array_search($this->getSubjectType(), ['public', 'pairwise'])) {
             $this->setSubjectType('pairwise');
         }
     }
