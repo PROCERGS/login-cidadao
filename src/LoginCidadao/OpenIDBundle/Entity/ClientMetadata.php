@@ -900,6 +900,17 @@ class ClientMetadata
     }
 
     /**
+     * @param string $registration_access_token
+     * @return ClientMetadata
+     */
+    public function setRegistrationAccessToken($registration_access_token)
+    {
+        $this->registration_access_token = $registration_access_token;
+
+        return $this;
+    }
+
+    /**
      * @return OrganizationInterface
      */
     public function getOrganization()

@@ -23,7 +23,7 @@ class ScopeManagerTest extends \PHPUnit_Framework_TestCase
         $manager = $this->getScopeManager();
         $manager->setScopes('scope1 scope2 scope3');
 
-        foreach (['scope1', 'scope2', 'scope3'] as $scopeName) {
+        foreach (['scope1', 'scope2', 'scope3', 'tag:test'] as $scopeName) {
             /** @var Scope $scope */
             $scope = $manager->findScopeByScope($scopeName);
             $this->assertInstanceOf(self::SCOPE_CLASS, $scope);
