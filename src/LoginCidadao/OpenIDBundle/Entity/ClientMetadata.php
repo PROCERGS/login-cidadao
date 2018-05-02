@@ -846,11 +846,11 @@ class ClientMetadata
     public function checkDefaults()
     {
         if (!$this->getGrantTypes()) {
-            $this->setGrantTypes(array('authorization_code'));
+            $this->setGrantTypes(['authorization_code']);
         }
 
         if (!$this->getResponseTypes()) {
-            $this->setResponseTypes(array('code'));
+            $this->setResponseTypes(['code']);
         }
 
         if (!$this->getApplicationType()) {
@@ -886,6 +886,17 @@ class ClientMetadata
     public function getRegistrationAccessToken()
     {
         return $this->registration_access_token;
+    }
+
+    /**
+     * @param string $registration_access_token
+     * @return ClientMetadata
+     */
+    public function setRegistrationAccessToken($registration_access_token)
+    {
+        $this->registration_access_token = $registration_access_token;
+
+        return $this;
     }
 
     /**
