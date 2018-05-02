@@ -44,13 +44,4 @@ class ScopeTranslatorSubscriberTest extends \PHPUnit_Framework_TestCase
         $subscriber->onTranslateScope($event);
         $this->assertNull($event->getTranslation());
     }
-
-    /**
-     * @return TranslateScopeEvent|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getEvent()
-    {
-        return $this->getMockBuilder('LoginCidadao\CoreBundle\Event\TranslateScopeEvent')
-            ->disableOriginalConstructor()->getMock();
-    }
 }
