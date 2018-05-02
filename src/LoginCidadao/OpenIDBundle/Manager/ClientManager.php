@@ -19,6 +19,7 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Security\Core\Util\SecureRandom;
 
 class ClientManager
 {
@@ -127,6 +128,8 @@ class ClientManager
 
     public function populateNewMetadata(ClientMetadata $data)
     {
+        $this->initializeRegistrationAccessToken($data);
+
         if ($data->getClient() === null) {
             $client = $data->toClient();
         } else {
@@ -159,5 +162,13 @@ class ClientManager
         $data->setClient($client);
 
         return $data;
+    }
+
+    private function initializeRegistrationAccessToken(ClientMetadata &$data)
+    {
+        if (null === $data->getRegistrationAccessToken()) {
+            $registrationAccessToken = bin2hex(random_bytes(120));
+            $data->setRegistrationAccessToken($registrationAccessToken);
+        }
     }
 }

@@ -147,10 +147,7 @@ class ClientRegistrationController extends FOSRestController
 
     private function checkRegistrationAccessToken(Request $request, Client $client)
     {
-        $raw = $request->get(
-            'access_token',
-            $request->headers->get('authorization')
-        );
+        $raw = $request->get('access_token', $request->headers->get('authorization'));
 
         $token = str_replace('Bearer ', '', $raw);
         $metadata = $client->getMetadata();
