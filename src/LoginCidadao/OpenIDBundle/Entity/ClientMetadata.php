@@ -69,7 +69,7 @@ class ClientMetadata
      * })
      * @ORM\Column(name="response_types", type="simple_array", nullable=false)
      */
-    private $response_types = array('code');
+    private $response_types = ['code'];
 
     /**
      * @JMS\Expose
@@ -79,7 +79,7 @@ class ClientMetadata
      * })
      * @ORM\Column(type="simple_array", nullable=false)
      */
-    private $grant_types = array('authorization_code');
+    private $grant_types = ['authorization_code'];
 
     /**
      * @JMS\Expose
@@ -173,9 +173,9 @@ class ClientMetadata
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
-     * @ORM\Column(type="string", length=20, nullable=true)
+     * @ORM\Column(type="string", length=20, nullable=false, options={"default" : "pairwise"})
      */
-    private $subject_type;
+    private $subject_type = 'pairwise';
 
     /**
      * @JMS\Expose
@@ -336,8 +336,8 @@ class ClientMetadata
 
     public function __construct()
     {
-        $this->response_types = array('code');
-        $this->grant_types = array('authorization_code');
+        $this->response_types = ['code'];
+        $this->grant_types = ['authorization_code'];
         $this->application_type = 'web';
         $this->require_auth_time = false;
         $this->subject_type = 'pairwise';
@@ -524,11 +524,18 @@ class ClientMetadata
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSubjectType()
     {
         return $this->subject_type;
     }
 
+    /**
+     * @param string $subject_type
+     * @return ClientMetadata
+     */
     public function setSubjectType($subject_type)
     {
         $this->subject_type = $subject_type;
@@ -845,28 +852,61 @@ class ClientMetadata
      */
     public function checkDefaults()
     {
+        $this->enforceDefaultGrantTypes();
+        $this->enforceDefaultResponseTypes();
+        $this->enforceDefaultApplicationType();
+        $this->enforceDefaultRequireAuthTime();
+        $this->enforceDefaultIdTokenSignedResponseAlg();
+        $this->enforceDefaultTokenEndpointAuthMethod();
+        $this->enforceValidSubjectType();
+    }
+
+    private function enforceDefaultGrantTypes()
+    {
         if (!$this->getGrantTypes()) {
             $this->setGrantTypes(['authorization_code']);
         }
+    }
 
+    private function enforceDefaultResponseTypes()
+    {
         if (!$this->getResponseTypes()) {
             $this->setResponseTypes(['code']);
         }
+    }
 
+    private function enforceDefaultApplicationType()
+    {
         if (!$this->getApplicationType()) {
             $this->setApplicationType('web');
         }
+    }
 
+    private function enforceDefaultRequireAuthTime()
+    {
         if (!$this->getRequireAuthTime()) {
             $this->setRequireAuthTime(false);
         }
+    }
 
+    private function enforceDefaultIdTokenSignedResponseAlg()
+    {
         if (!$this->getIdTokenSignedResponseAlg()) {
             $this->setIdTokenSignedResponseAlg('RS256');
         }
+    }
 
+    private function enforceDefaultTokenEndpointAuthMethod()
+    {
         if (!$this->getTokenEndpointAuthMethod()) {
             $this->setTokenEndpointAuthMethod('client_secret_basic');
+        }
+    }
+
+    private function enforceValidSubjectType()
+    {
+        if (false === array_search($this->getSubjectType(), ['public', 'pairwise'])) {
+            $this->setSubjectType('pairwise');
         }
     }
 
@@ -941,6 +981,8 @@ class ClientMetadata
 
     /**
      * Add trailing slashes
+     * @param $uri
+     * @return string
      */
     public static function canonicalizeUri($uri)
     {
@@ -948,9 +990,8 @@ class ClientMetadata
         if (array_key_exists('path', $parsed) === false) {
             $parsed['path'] = '/';
         }
-        $unparsed = self::unparseUrl($parsed);
 
-        return $unparsed;
+        return self::unparseUrl($parsed);
     }
 
     private static function unparseUrl($parsed_url)
@@ -963,8 +1004,7 @@ class ClientMetadata
         $pass = ($user || $pass) ? "$pass@" : '';
         $path = isset($parsed_url['path']) ? $parsed_url['path'] : '';
         $query = isset($parsed_url['query']) ? '?'.$parsed_url['query'] : '';
-        $fragment = isset($parsed_url['fragment']) ? '#'.$parsed_url['fragment']
-            : '';
+        $fragment = isset($parsed_url['fragment']) ? '#'.$parsed_url['fragment'] : '';
 
         return "$scheme$user$pass$host$port$path$query$fragment";
     }
