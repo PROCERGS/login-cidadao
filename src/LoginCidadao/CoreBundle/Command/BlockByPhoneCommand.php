@@ -45,7 +45,7 @@ class BlockByPhoneCommand extends AbstractPersonBlockCommand
     protected function getUsers(SymfonyStyle $io, InputInterface $input, OutputInterface $output)
     {
         $phone = $this->getValidPhone($io, $input);
-        if ($phone instanceof PhoneNumber) {
+        if (!$phone instanceof PhoneNumber) {
             return [];
         }
 
