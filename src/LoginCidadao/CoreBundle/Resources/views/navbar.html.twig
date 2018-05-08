@@ -26,18 +26,18 @@
                     {% endif %}
                 </li>
             {% else %}
-
-                {% if is_granted('ROLE_ALLOWED_TO_SWITCH') or is_granted('ROLE_PREVIOUS_ADMIN') %}
+                {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
                     <li class="impersonation pull-right">
-                        {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-                            <a class="impersonation-exit btn btn-danger btn-xs" href="?_switch_user=_exit">Back to
-                                Normal</a>
-                        {% else %}
-                            <form method="get">
-                                <input class="impersonation-username" type="text" name="_switch_user"
-                                       placeholder="Impersonate"/>
-                            </form>
-                        {% endif %}
+                        <a class="impersonation-exit btn btn-danger btn-xs"
+                           href="{{ url('lc_home', {"_switch_user": "_exit"}) }}">Back to Normal</a>
+                    </li>
+                {% endif %}
+                {% if is_granted("ROLE_PERSON_EDIT") %}
+                    <li class="impersonation pull-right">
+                        <form action="{{ url('lc_admin_person_search') }}">
+                            <input name="query" type="text" placeholder="Search user..."
+                                   class="impersonation-username"/>
+                        </form>
                     </li>
                 {% endif %}
 

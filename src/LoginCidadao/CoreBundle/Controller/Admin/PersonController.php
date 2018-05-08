@@ -2,6 +2,7 @@
 
 namespace LoginCidadao\CoreBundle\Controller\Admin;
 
+use Doctrine\ORM\NonUniqueResultException;
 use libphonenumber\PhoneNumber;
 use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
@@ -30,10 +31,40 @@ class PersonController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PersonFilterFormType');
+        $data = null;
+        if ($request->get('search') !== null) {
+            $data = ['username' => $request->get('search')];
+        }
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PersonFilterFormType', $data);
         $form = $form->createView();
 
         return compact('form');
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @Route("/search", name="lc_admin_person_search")
+     */
+    public function smartSearchAction(Request $request)
+    {
+        $searchQuery = $request->get('query');
+
+        /** @var PersonRepository $repo */
+        $repo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Person');
+        try {
+            $person = $repo->getSmartSearchQuery($searchQuery)
+                ->getQuery()->getOneOrNullResult();
+
+            if ($person instanceof PersonInterface) {
+                return $this->redirectToRoute('lc_admin_person_edit', ['id' => $person->getId()]);
+            }
+        } catch (NonUniqueResultException $e) {
+            // Failed...
+        }
+
+        return $this->redirectToRoute('lc_admin_person', ['search' => $searchQuery]);
     }
 
     /**

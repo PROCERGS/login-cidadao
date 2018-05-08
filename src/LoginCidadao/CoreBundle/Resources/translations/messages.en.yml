@@ -494,6 +494,8 @@ city_selector.no_javascript: 'The fields related to your place of birth are unav
 lc.admin.person:
     alert:
         blocked: "This account is locked!"
+    impersonate:
+        button: "Impersonate"
     general:
         usersWithSamePhone:
             label: "Users with the same Phone number"

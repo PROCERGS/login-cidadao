@@ -895,6 +895,8 @@ city_selector.no_javascript: 'Os campos referentes à sua Naturalidade não est�
 lc.admin.person:
     alert:
         blocked: "Essa conta está bloqueada!"
+    impersonate:
+        button: "Impersonate"
     general:
         usersWithSamePhone:
             label: "Pessoas com o mesmo telefone"
