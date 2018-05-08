@@ -102,7 +102,7 @@ class GenerateSubjectIdentifiersCommand extends ContainerAwareCommand
                 ->setClient($auth->getClient())
                 ->setSubjectIdentifier($subId);
             $this->em->persist($sub);
-            if ($current++ % 50 === 0) {
+            if ($current++ % 200 === 0) {
                 $this->em->flush();
                 $this->em->clear();
             }
