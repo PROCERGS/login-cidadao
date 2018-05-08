@@ -514,6 +514,13 @@ lc.admin.person:
             yes: "Yes"
             no: "No"
         authorization.createdAt: "Authorization Date"
+        tosAccepted:
+            label: "Terms of Service Agreement Date"
+            empty: "Didn't accept!"
+    3rd_party:
+        title: "Third Party Connections"
+        connected_no_username: "Connected"
+        not_connected: "Not Connected"
 dashboard:
     active_services:
         no_entries: You didn't connect to any service.

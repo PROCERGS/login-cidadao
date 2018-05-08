@@ -915,6 +915,13 @@ lc.admin.person:
             yes: "Sim"
             no: "Não"
         authorization.createdAt: "Data da Autorização"
+        tosAccepted:
+            label: "Data de aceite dos Termos de Uso"
+            empty: "Não aceitou!"
+    3rd_party:
+        title: "Conexão com Serviços de Terceiros"
+        connected_no_username: "Conectado"
+        not_connected: "Não conectado"
 dashboard:
     active_services:
         no_entries: Você ainda não ativou nenhum serviço.

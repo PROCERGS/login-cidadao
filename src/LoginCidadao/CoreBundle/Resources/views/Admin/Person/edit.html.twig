@@ -123,27 +123,34 @@
                                 </span>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title">{{ 'lc.admin.person.3rd_party.title'|trans }}</h2>
-                </div>
-                <div class="panel-body">
-                    <div class="row clearfix">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="userCreatedAt">{{ 'lc.admin.person.metadata.createdAt' | trans }}</label>
-                                <span id="userCreatedAt" class="form-control" readonly="readonly">
-                                    {{ person.createdAt | date('lc.admin.person.metadata.date_format' | trans) }}
+                                <label for="tosAccepted">{{ 'lc.admin.person.metadata.tosAccepted.label' | trans }}</label>
+                                <span id="tosAccepted" class="form-control" readonly="readonly">
+                                    {% if agreement is not null %}
+                                        {{ agreement.agreedAt | date('lc.admin.person.metadata.date_format' | trans) }}
+                                    {% else %}
+                                        {{ 'lc.admin.person.metadata.tosAccepted.empty' | trans }}
+                                    {% endif %}
                                 </span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            {% if is_granted('ROLE_VIEW_3RD_PARTY_CONNECTIONS') %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">{{ 'lc.admin.person.3rd_party.title' | trans }}</h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row clearfix">
+                            {{ include("LoginCidadaoCoreBundle:Admin/Person:extensible.3rd_party_connections.html.twig") }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
 
             {% if form.roles is defined %}
                 <div class="panel panel-default">
