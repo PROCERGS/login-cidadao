@@ -7,6 +7,7 @@ use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
+use LoginCidadao\TOSBundle\Model\TOSManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -87,6 +88,10 @@ class PersonController extends Controller
         $actionLogger = $this->get('lc.action_logger');
         $actionLogger->registerProfileView($request, $person, $this->getUser(), [$this, 'editAction']);
 
+        /** @var TOSManager $tosManager */
+        $tosManager = $this->get('tos.manager');
+        $agreement = $tosManager->getCurrentTermsAgreement($person);
+
         $phone = $person->getMobile();
         $phoneVerification = null;
         $samePhoneCount = 0;
@@ -119,6 +124,7 @@ class PersonController extends Controller
             'phoneVerification' => $phoneVerification,
             'samePhoneCount' => $samePhoneCount,
             'defaultClientUid' => $defaultClientUid,
+            'agreement' => $agreement,
         ];
     }
 
