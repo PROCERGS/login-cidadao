@@ -6,7 +6,6 @@ use Doctrine\ORM\NonUniqueResultException;
 use libphonenumber\PhoneNumber;
 use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
-use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
 use LoginCidadao\TOSBundle\Model\TOSManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -21,6 +20,7 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 /**
  * @Route("/admin/person")
  * @Security("has_role('ROLE_PERSON_EDIT')")
+ * @codeCoverageIgnore
  */
 class PersonController extends Controller
 {
