@@ -494,6 +494,11 @@ city_selector.no_javascript: 'The fields related to your place of birth are unav
 lc.admin.person:
     alert:
         blocked: "This account is locked!"
+    block:
+        button: "Block this User"
+        failed: "Couldn't block this user. An error occurred."
+        success: "User Blocked!"
+        invalid_token: "It was not possible to block this user: the block token was not found, is invalid or has expired. Try again."
     impersonate:
         button: "Impersonate"
     general:

@@ -895,6 +895,11 @@ city_selector.no_javascript: 'Os campos referentes à sua Naturalidade não est�
 lc.admin.person:
     alert:
         blocked: "Essa conta está bloqueada!"
+    block:
+        button: "Bloquear Usuário"
+        failed: "Ocorreu um erro ao bloquear esse usuário"
+        success: "Usuário bloqueado!"
+        invalid_token: "Não foi possível bloquear esse usuário: o token de bloqueio não foi encontrado, é inválido ou expirou. Tente novamente."
     impersonate:
         button: "Impersonate"
     general:

@@ -6,12 +6,15 @@ use Doctrine\ORM\NonUniqueResultException;
 use libphonenumber\PhoneNumber;
 use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
+use LoginCidadao\CoreBundle\Security\User\Manager\UserManager;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
 use LoginCidadao\TOSBundle\Model\TOSManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use LoginCidadao\CoreBundle\Helper\GridHelper;
@@ -65,6 +68,43 @@ class PersonController extends Controller
         }
 
         return $this->redirectToRoute('lc_admin_person', ['search' => $searchQuery]);
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @param $token
+     * @return Response
+     *
+     * @Route("/{id}/block/{token}", name="lc_admin_person_block")
+     * @Security("has_role('ROLE_PERSON_BLOCK')")
+     */
+    public function blockAction(Request $request, $id, $token)
+    {
+        if (!$this->isBlockTokenValid($request->getSession(), $id, $token)) {
+            $this->addFlash('error', $this->get('translator')->trans('lc.admin.person.block.invalid_token'));
+
+            return $this->redirectToRoute('lc_admin_person_edit', ['id' => $id]);
+        }
+
+        /** @var UserManager $userManager */
+        $userManager = $this->get('lc.user_manager');
+        /** @var PersonRepository $repo */
+        $repo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Person');
+
+        $person = $repo->find($id);
+        if (!$person instanceof PersonInterface) {
+            return $this->redirectToRoute('lc_admin_person');
+        }
+
+        $blockResponse = $userManager->blockPerson($person);
+        if (null === $blockResponse) {
+            $this->addFlash('error', $this->get('translator')->trans('lc.admin.person.block.failed'));
+        } else {
+            $this->addFlash('success', $this->get('translator')->trans('lc.admin.person.block.success'));
+        }
+
+        return $this->redirectToRoute('lc_admin_person_edit', ['id' => $id]);
     }
 
     /**
@@ -149,6 +189,8 @@ class PersonController extends Controller
 
         $defaultClientUid = $this->container->getParameter('oauth_default_client.uid');
 
+        $blockToken = $this->setBlockToken($request->getSession(), $person->getId());
+
         return [
             'form' => $form->createView(),
             'person' => $person,
@@ -156,6 +198,7 @@ class PersonController extends Controller
             'samePhoneCount' => $samePhoneCount,
             'defaultClientUid' => $defaultClientUid,
             'agreement' => $agreement,
+            'blockToken' => $blockToken,
         ];
     }
 
@@ -214,5 +257,30 @@ class PersonController extends Controller
         }
 
         return compact('reports');
+    }
+
+    private function setBlockToken(SessionInterface $session, $id)
+    {
+        $token = bin2hex(random_bytes(64));
+        $session->set("block_token_{$id}", $token);
+
+        return $token;
+    }
+
+    /**
+     * @param SessionInterface $session
+     * @param mixed $id
+     * @param string $token
+     * @return bool
+     */
+    private function isBlockTokenValid(SessionInterface $session, $id, $token, $clear = true)
+    {
+        $key = "block_token_{$id}";
+        $stored = $session->get($key);
+        if ($clear) {
+            $session->remove($key);
+        }
+
+        return $stored !== null && $stored === $token;
     }
 }

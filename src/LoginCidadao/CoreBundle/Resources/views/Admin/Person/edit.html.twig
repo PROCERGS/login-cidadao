@@ -16,12 +16,21 @@
                             - {{ 'lc.admin.person.alert.blocked' | trans }}
                         {% endif %}
 
-                        {% if is_granted('ROLE_ALLOWED_TO_SWITCH') %}
-                            <a href="{{ url('lc_home', {"_switch_user": person.username}) }}"
-                               class="btn btn-danger btn-xs pull-right">
-                                {{ 'lc.admin.person.impersonate.button' | trans }}
+                        <span class="pull-right">
+                            {% if is_granted('ROLE_ALLOWED_TO_SWITCH') %}
+                                <a href="{{ url('lc_home', {"_switch_user": person.username}) }}"
+                                   class="btn btn-danger btn-xs">
+                                    {{ 'lc.admin.person.impersonate.button' | trans }}
+                                </a>
+                            {% endif %}
+
+                            {% if is_granted('ROLE_PERSON_BLOCK') and person.enabled %}
+                                <a href="{{ url('lc_admin_person_block', {"id": person.id, "token": blockToken}) }}"
+                                   class="btn btn-danger btn-xs">
+                                {{ 'lc.admin.person.block.button' | trans }}
                             </a>
-                        {% endif %}
+                            {% endif %}
+                        </span>
                     </h2>
                 </div>
                 <div class="panel-body">
