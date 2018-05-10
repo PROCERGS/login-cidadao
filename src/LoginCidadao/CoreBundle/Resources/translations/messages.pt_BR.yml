@@ -896,6 +896,7 @@ lc.admin.person:
     alert:
         blocked: "Essa conta está bloqueada!"
     block:
+        enable_block: "Preparar bloqueio..."
         button: "Bloquear Usuário"
         failed: "Ocorreu um erro ao bloquear esse usuário"
         success: "Usuário bloqueado!"

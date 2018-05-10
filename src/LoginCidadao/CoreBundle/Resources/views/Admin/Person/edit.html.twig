@@ -16,7 +16,7 @@
                             - {{ 'lc.admin.person.alert.blocked' | trans }}
                         {% endif %}
 
-                        <span class="pull-right">
+                        <div class="pull-right">
                             {% if is_granted('ROLE_ALLOWED_TO_SWITCH') %}
                                 <a href="{{ url('lc_home', {"_switch_user": person.username}) }}"
                                    class="btn btn-danger btn-xs">
@@ -25,12 +25,16 @@
                             {% endif %}
 
                             {% if is_granted('ROLE_PERSON_BLOCK') and person.enabled %}
-                                <a href="{{ url('lc_admin_person_block', {"id": person.id, "token": blockToken}) }}"
-                                   class="btn btn-danger btn-xs">
-                                {{ 'lc.admin.person.block.button' | trans }}
-                            </a>
+                                <input class="confirmation" type="checkbox" name="unlock_block_user" id="unlock_block_user">
+                                <label for="unlock_block_user" class="text-danger">
+                                    <p>{{ 'lc.admin.person.block.enable_block' | trans }}</p>
+                                </label>
+                                <a href="#{{ url('lc_admin_person_block', {"id": person.id, "token": blockToken}) }}"
+                                   class="btn btn-danger btn-xs needsConfirmation">
+                                    {{ 'lc.admin.person.block.button' | trans }}
+                                </a>
                             {% endif %}
-                        </span>
+                        </div>
                     </h2>
                 </div>
                 <div class="panel-body">
@@ -225,4 +229,39 @@
             {% endif %}
         </div>
     </div>
+{% endblock %}
+
+{% block stylesheets_custom %}
+    {{ parent() }}
+    <style>
+        @keyframes fadeInOpacity {
+            0% {
+                display: none;
+                opacity: 0;
+                width: 0;
+            }
+            100% {
+                opacity: 1;
+                width: 100px;
+            }
+        }
+
+        .confirmation:not(:checked) ~ .needsConfirmation {
+            display: none;
+            opacity: 0;
+            width: 0;
+        }
+        .confirmation:checked ~ .needsConfirmation {
+            opacity: 1;
+            width: auto;
+            animation-name: fadeInOpacity;
+            animation-iteration-count: 1;
+            animation-timing-function: ease-in;
+            animation-duration: 2s;
+        }
+
+        .confirmation + label {
+            font-size: 12px;
+        }
+    </style>
 {% endblock %}
