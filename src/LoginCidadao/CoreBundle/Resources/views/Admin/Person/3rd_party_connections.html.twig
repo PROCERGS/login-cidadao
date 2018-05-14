@@ -1,0 +1,22 @@
+<dl>
+    {% block connections %}
+        {{ include("LoginCidadaoCoreBundle:Admin/Person:3rd_party_connection.html.twig", {
+            is_enabled: third_party_login.facebook,
+            connection_name: "Facebook",
+            is_connected: person.facebookId is not null,
+            connection_id: person.facebookUsername
+        }) }}
+        {{ include("LoginCidadaoCoreBundle:Admin/Person:3rd_party_connection.html.twig", {
+            is_enabled: third_party_login.google,
+            connection_name: "Google",
+            is_connected: person.googleId is not null,
+            connection_id: person.googleUsername
+        }) }}
+        {{ include("LoginCidadaoCoreBundle:Admin/Person:3rd_party_connection.html.twig", {
+            is_enabled: third_party_login.twitter,
+            connection_name: "Twitter",
+            is_connected: person.twitterId is not null,
+            connection_id: person.twitterUsername
+        }) }}
+    {% endblock connections %}
+</dl>

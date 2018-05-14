@@ -491,19 +491,44 @@ profile:
 scope_details.handle.title: What is this?
 flash_message.close: Close
 city_selector.no_javascript: 'The fields related to your place of birth are unavailable because your browser does not have JavaScript enabled.'
-lc.admin.person.metadata:
-    title: "Metadata"
-    date_format: "m/d/Y H:i:s"
-    createdAt: "Account Creation Date"
-    emailConfirmedAt:
-        label: "Email Confirmation Date"
-        empty: "Email not confirmed"
-    lastLogin: "Last Login"
-    hasCpf:
-        label: "Filled CPF/Taxpayer ID?"
-        yes: "Yes"
-        no: "No"
-    authorization.createdAt: "Authorization Date"
+lc.admin.person:
+    alert:
+        blocked: "This account is locked!"
+    block:
+        enable_block: "Prepare to block..."
+        button: "Block this User"
+        failed: "Couldn't block this user. An error occurred."
+        success: "User Blocked!"
+        invalid_token: "It was not possible to block this user: the block token was not found, is invalid or has expired. Try again."
+    impersonate:
+        button: "Impersonate"
+    general:
+        usersWithSamePhone:
+            label: "Users with the same Phone number"
+            value: "{0} No one|{1} Only this person|]1,Inf[ %count% people have this same phone number"
+    metadata:
+        title: "Metadata"
+        date_format: "m/d/Y H:i:s"
+        createdAt: "Account Creation Date"
+        emailConfirmedAt:
+            label: "Email Confirmation Date"
+            empty: "Email not confirmed"
+        phoneVerifiedAt:
+            label: "Phone Verification Date"
+            empty: "Phone not verified!"
+        lastLogin: "Last Login"
+        hasCpf:
+            label: "Filled CPF/Taxpayer ID?"
+            yes: "Yes"
+            no: "No"
+        authorization.createdAt: "Authorization Date"
+        tosAccepted:
+            label: "Terms of Service Agreement Date"
+            empty: "Didn't accept!"
+    3rd_party:
+        title: "Third Party Connections"
+        connected_no_username: "Connected"
+        not_connected: "Not Connected"
 dashboard:
     active_services:
         no_entries: You didn't connect to any service.
