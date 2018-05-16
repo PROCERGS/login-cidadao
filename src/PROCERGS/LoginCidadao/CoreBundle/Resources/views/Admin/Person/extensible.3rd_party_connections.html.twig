@@ -1,0 +1,12 @@
+{% extends "LoginCidadaoCoreBundle:Admin/Person:3rd_party_connections.html.twig" %}
+
+{% block connections %}
+    {{ parent() }}
+
+    {{ include("LoginCidadaoCoreBundle:Admin/Person:3rd_party_connection.html.twig", {
+        is_enabled: third_party_login.nfg,
+        connection_name: "Nota Fiscal Gaúcha (NFG)",
+        is_connected: person | personRS.nfgAccessToken is not null,
+        connection_id: person.cpf
+    }) }}
+{% endblock connections %}
