@@ -14,7 +14,7 @@
     bootstrap                   = "bootstrap.php.cache" >
     
     <php>
-        <ini name="error_reporting" value="E_ALL &amp; ~E_NOTICE" />
+        <ini name="error_reporting" value="E_ALL" />
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
     </php>
 
