@@ -96,11 +96,11 @@ class StatsHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return StatisticsRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|StatisticsRepository
      */
     private function getRepository()
     {
-        /** @var StatisticsRepository|\PHPUnit_Framework_MockObject_MockObject $repo */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|StatisticsRepository $repo */
         $repo = $this->getMockBuilder('LoginCidadao\StatsBundle\Entity\StatisticsRepository')
             ->disableOriginalConstructor()->getMock();
 
