@@ -17,7 +17,7 @@ use PROCERGS\LoginCidadao\CoreBundle\Twig\Extension\RsExtension;
 
 class RsExtensionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testSomething()
+    public function testExtension()
     {
         $person = new Person();
         $personMeuRS = (new PersonMeuRS())
