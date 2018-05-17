@@ -26,6 +26,7 @@ class StatsHandlerTest extends \PHPUnit_Framework_TestCase
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|StatisticsRepository $repo */
         $repo = $this->getRepository();
+        /** @scrutinizer ignore-call */
         $repo->expects($this->once())->method('findStatsByIndexKeyDate')->with($index, $key, $afterDate)
             ->willReturn($stats);
 
@@ -42,6 +43,7 @@ class StatsHandlerTest extends \PHPUnit_Framework_TestCase
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|StatisticsRepository $repo */
         $repo = $this->getRepository();
+        /** @scrutinizer ignore-call */
         $repo->expects($this->once())->method('findIndexedStatsByIndexKeyDays')->with($index, $key, $days)
             ->willReturn($response);
 
@@ -58,6 +60,7 @@ class StatsHandlerTest extends \PHPUnit_Framework_TestCase
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|StatisticsRepository $repo */
         $repo = $this->getRepository();
+        /** @scrutinizer ignore-call */
         $repo->expects($this->once())->method('findIndexedUniqueStatsByIndexKeyDate')->with($index, $key, $afterDate)
             ->willReturn($response);
 
@@ -74,6 +77,7 @@ class StatsHandlerTest extends \PHPUnit_Framework_TestCase
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|StatisticsRepository $repo */
         $repo = $this->getRepository();
+        /** @scrutinizer ignore-call */
         $repo->expects($this->once())->method('findIndexedUniqueStatsByIndexKeyDays')->with($index, $key, $days)
             ->willReturn($response);
 
@@ -90,6 +94,7 @@ class StatsHandlerTest extends \PHPUnit_Framework_TestCase
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|StatisticsRepository $repo */
         $repo = $this->getRepository();
+        /** @scrutinizer ignore-call */
         $repo->expects($this->once())->method('findOneBy')->with([
             'timestamp' => $date,
             'index' => $index,
