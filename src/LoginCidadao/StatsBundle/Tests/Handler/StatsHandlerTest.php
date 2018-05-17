@@ -24,6 +24,7 @@ class StatsHandlerTest extends \PHPUnit_Framework_TestCase
         $afterDate = new \DateTime();
         $stats = [new Statistics()];
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|StatisticsRepository $repo */
         $repo = $this->getRepository();
         $repo->expects($this->once())->method('findStatsByIndexKeyDate')->with($index, $key, $afterDate)
             ->willReturn($stats);
@@ -39,6 +40,7 @@ class StatsHandlerTest extends \PHPUnit_Framework_TestCase
         $days = 5;
         $response = [new Statistics()];
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|StatisticsRepository $repo */
         $repo = $this->getRepository();
         $repo->expects($this->once())->method('findIndexedStatsByIndexKeyDays')->with($index, $key, $days)
             ->willReturn($response);
@@ -54,6 +56,7 @@ class StatsHandlerTest extends \PHPUnit_Framework_TestCase
         $afterDate = new \DateTime();
         $response = [new Statistics()];
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|StatisticsRepository $repo */
         $repo = $this->getRepository();
         $repo->expects($this->once())->method('findIndexedUniqueStatsByIndexKeyDate')->with($index, $key, $afterDate)
             ->willReturn($response);
@@ -69,6 +72,7 @@ class StatsHandlerTest extends \PHPUnit_Framework_TestCase
         $days = 5;
         $response = [new Statistics()];
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|StatisticsRepository $repo */
         $repo = $this->getRepository();
         $repo->expects($this->once())->method('findIndexedUniqueStatsByIndexKeyDays')->with($index, $key, $days)
             ->willReturn($response);
@@ -84,6 +88,7 @@ class StatsHandlerTest extends \PHPUnit_Framework_TestCase
         $date = new \DateTime();
         $response = new Statistics();
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|StatisticsRepository $repo */
         $repo = $this->getRepository();
         $repo->expects($this->once())->method('findOneBy')->with([
             'timestamp' => $date,
