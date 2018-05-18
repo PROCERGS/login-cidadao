@@ -17,6 +17,11 @@ use FOS\RestBundle\Controller\Annotations as REST;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+/**
+ * Class WellKnownController
+ * @package LoginCidadao\OpenIDBundle\Controller
+ * @codeCoverageIgnore
+ */
 class WellKnownController extends FOSRestController
 {
 
