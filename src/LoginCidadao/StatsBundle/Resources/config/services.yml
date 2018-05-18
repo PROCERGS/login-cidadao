@@ -10,9 +10,9 @@ services:
 
     statistics.handler:
         class: %statistics.handler.class%
+        arguments:
+            - "@statistics.repository"
         lazy: true
-        calls:
-            - [setStatsRepo, ["@statistics.repository"]]
 
     statistics.subscriber:
         class: 'LoginCidadao\StatsBundle\EventListener\StatisticsSubscriber'

@@ -19,11 +19,9 @@ class AuthorizationCode extends BaseAuthorizationCode
     /** @var SessionState */
     private $sessionStateStorage;
 
-    public function createAccessToken(AccessTokenInterface $accessToken,
-                                        $client_id, $user_id, $scope)
+    public function createAccessToken(AccessTokenInterface $accessToken, $client_id, $user_id, $scope)
     {
-        $token = parent::createAccessToken($accessToken, $client_id, $user_id,
-                $scope);
+        $token = parent::createAccessToken($accessToken, $client_id, $user_id, $scope);
 
         if (array_key_exists('session_state', $token) === false) {
             $sessionState = $this->sessionStateStorage->getSessionState($client_id, $this->authCode['session_id']);

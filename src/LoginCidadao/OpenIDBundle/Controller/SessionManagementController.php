@@ -31,6 +31,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * @Route("/openid/connect")
+ * @codeCoverageIgnore
  */
 class SessionManagementController extends Controller
 {
