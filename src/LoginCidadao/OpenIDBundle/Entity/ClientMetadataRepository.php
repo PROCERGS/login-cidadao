@@ -12,6 +12,11 @@ namespace LoginCidadao\OpenIDBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 
+/**
+ * Class ClientMetadataRepository
+ * @package LoginCidadao\OpenIDBundle\Entity
+ * @codeCoverageIgnore
+ */
 class ClientMetadataRepository extends EntityRepository
 {
     public function findByPostLogoutRedirectUri($uri)

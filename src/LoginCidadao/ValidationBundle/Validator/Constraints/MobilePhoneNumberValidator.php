@@ -11,7 +11,6 @@
 namespace LoginCidadao\ValidationBundle\Validator\Constraints;
 
 use libphonenumber\PhoneNumber;
-use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberType;
 use libphonenumber\PhoneNumberUtil;
 use Symfony\Component\Validator\Constraint;
@@ -30,33 +29,13 @@ class MobilePhoneNumberValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if (!($constraint instanceof MobilePhoneNumber)) {
-            return;
-        }
+        if ($constraint instanceof MobilePhoneNumber) {
+            $phoneNumber = $this->getPhoneNumber($value);
 
-        $phoneNumber = false;
-        if ($value instanceof PhoneNumber) {
-            $number = $this->phoneNumberToString($value);
-            $phoneNumber = $value;
-        } else {
-            // Remove formatting
-            $number = preg_replace('/[^0-9+]/', '', $value);
-        }
-
-        $phoneUtil = PhoneNumberUtil::getInstance();
-
-        if (!$phoneNumber) {
-            try {
-                $phoneNumber = $phoneUtil->parse($number, null);
-            } catch (\Exception $e) {
-                // This failure will be detected by another Validator
-                return;
+            // Check length
+            if ($phoneNumber !== null && false === self::isMobile($phoneNumber)) {
+                $this->context->addViolation($constraint->missing9thDigit);
             }
-        }
-
-        // Check length
-        if (false === self::isMobile($phoneNumber)) {
-            $this->context->addViolation($constraint->missing9thDigit);
         }
     }
 
@@ -69,7 +48,7 @@ class MobilePhoneNumberValidator extends ConstraintValidator
      */
     public static function isMobile($phone)
     {
-        if (!($phone instanceof PhoneNumber)) {
+        if (!$phone instanceof PhoneNumber) {
             return false;
         }
 
@@ -88,14 +67,20 @@ class MobilePhoneNumberValidator extends ConstraintValidator
         return true;
     }
 
-    private function phoneNumberToString($phone)
+    private function getPhoneNumber($value)
     {
-        if ($phone instanceof PhoneNumber) {
+        if ($value instanceof PhoneNumber) {
+            return $value;
+        }
+
+        $number = preg_replace('/[^0-9+]/', '', $value);
+        try {
             $phoneUtil = PhoneNumberUtil::getInstance();
 
-            return $phoneUtil->format($phone, PhoneNumberFormat::E164);
-        } else {
-            return $phone;
+            return $phoneUtil->parse($number, null);
+        } catch (\Exception $e) {
+            // This failure will be detected by another Validator
+            return null;
         }
     }
 }
