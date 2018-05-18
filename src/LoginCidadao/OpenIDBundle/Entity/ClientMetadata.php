@@ -704,6 +704,10 @@ class ClientMetadata
         return $this->default_acr_values;
     }
 
+    /**
+     * @param $default_acr_values
+     * @return ClientMetadata
+     */
     public function setDefaultAcrValues($default_acr_values)
     {
         $this->default_acr_values = $default_acr_values;
@@ -716,6 +720,10 @@ class ClientMetadata
         return $this->initiate_login_uri;
     }
 
+    /**
+     * @param $initiate_login_uri
+     * @return ClientMetadata
+     */
     public function setInitiateLoginUri($initiate_login_uri)
     {
         $this->initiate_login_uri = $initiate_login_uri;
