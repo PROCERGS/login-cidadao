@@ -1,0 +1,50 @@
+snc_redis:
+    clients:
+        default:
+            type: predis
+            alias: default
+            dsn: redis://lc_redis
+            logging: false
+    session:
+        client: default
+        prefix: "%session_prefix%"
+        ttl: "%session_lifetime%"
+    doctrine:
+        metadata_cache:
+            client: default
+            entity_manager: default
+            document_manager: default
+        result_cache:
+            client: default
+            entity_manager: default
+        query_cache:
+            client: default
+            entity_manager: default
+        second_level_cache:
+            client: default
+            entity_manager: default
+
+framework:
+    session:
+        handler_id: snc_redis.session.handler
+
+#doctrine:
+#    orm:
+#        metadata_cache_driver:
+#            type:   predis
+#            host:   %redis_host%
+#            port:   %redis_port%
+#        query_cache_driver:
+#            type:   predis
+#            host:   %redis_host%
+#            port:   %redis_port%
+#        result_cache_driver:
+#            type:   predis
+#            host:   %redis_host%
+#            port:   %redis_port%
+
+services:
+    cache:
+        class: Doctrine\Common\Cache\PredisCache
+        arguments:
+            - "@snc_redis.default"
