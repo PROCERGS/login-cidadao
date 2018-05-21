@@ -96,7 +96,6 @@ class SoapClientFactoryTest extends \PHPUnit_Framework_TestCase
         /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $logger */
         $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger->expects($this->atLeastOnce())->method('info');
-        $logger->expects($this->atLeastOnce())->method('error');
 
         $successFactory->setLogger($logger);
         $successFactory->createClient('valid', true);
