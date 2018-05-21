@@ -131,7 +131,7 @@ class SubjectIdentifierService
             $subjectType = $forceSubjectType;
         }
 
-        if ($subjectType === 'pairwise') {
+        if ($subjectType === 'pairwise' && $metadata instanceof ClientMetadata) {
             $sectorIdentifier = $metadata->getSectorIdentifier();
             $salt = $this->pairwiseSubjectIdSalt;
             $pairwise = hash('sha256', $sectorIdentifier.$id.$salt);
