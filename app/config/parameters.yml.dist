@@ -165,6 +165,9 @@ parameters:
     # You can override the LoginCidadaoCoreBundle::analytics.html.twig entirely if you don't want the default settings
     google_analytics_trackingId: YourGoogleAnalyticsId
 
+    # Application Name to be logged on Logstash
+    logstash.application_name: login-cidadao
+
     nfg_ws_url: 'https://dum.my/service.wsdl'
     nfg_url_auth: 'https://dum.my/auth'
     nfg_url_login: 'https://dum.my/login'
