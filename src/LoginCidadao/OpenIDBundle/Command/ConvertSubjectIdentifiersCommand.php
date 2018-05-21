@@ -26,6 +26,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * @codeCoverageIgnore Ignoring command code. Ideally it should be refactored into a testable Service
+ */
 class ConvertSubjectIdentifiersCommand extends ContainerAwareCommand
 {
     /** @var EntityManagerInterface */
