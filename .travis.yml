@@ -10,6 +10,7 @@ php:
   - 5.5
   - 5.6
   - 7.0
+  - 7.1
 
 matrix:
   fast_finish: true
@@ -19,12 +20,14 @@ addons:
 
 services:
   - memcached
+  - redis
 
 before_script:
   - psql -c "create user logincidadao with password '';" -U postgres
   - psql -c "create database logincidadao with owner logincidadao" -U postgres
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - cp app/config/parameters.yml.dist app/config/parameters.yml
+  - 'sed -i -e "s/resource: memcache\.yml/resource: redis.yml/" app/config/config.yml'
   - composer self-update
   - composer install --prefer-dist
   - chmod -R 777 app/cache app/logs web/uploads

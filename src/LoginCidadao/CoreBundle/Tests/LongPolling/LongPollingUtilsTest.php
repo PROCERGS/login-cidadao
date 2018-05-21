@@ -107,6 +107,12 @@ class LongPollingUtilsTest extends \PHPUnit_Framework_TestCase
 
     public function testWaitValidEmail()
     {
+        if (version_compare(phpversion(), '7.1', '>=')) {
+            $this->markTestSkipped("This won't work on PHP 7.1");
+
+            return;
+        }
+
         $updatedAt = new \DateTime('-1 hour');
         $currentUpdatedAt = new \DateTime('-1 hour');
 
