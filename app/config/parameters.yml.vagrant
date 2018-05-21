@@ -126,3 +126,6 @@ parameters:
     # The ID provided by Google Analytics to configure tracking
     # You can override the LoginCidadaoCoreBundle::analytics.html.twig entirely if you don't want the default settings
     google_analytics_trackingId: YourGoogleAnalyticsId
+
+    # Application Name to be logged on Logstash
+    logstash.application_name: login-cidadao
