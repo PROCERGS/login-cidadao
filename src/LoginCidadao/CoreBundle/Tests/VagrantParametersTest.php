@@ -10,32 +10,30 @@
 
 namespace LoginCidadao\CoreBundle\Tests;
 
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class VagrantParametersTest
  * @package LoginCidadao\CoreBundle\Tests
- * @group kernel
  */
-class VagrantParametersTest extends KernelTestCase
+class VagrantParametersTest extends \PHPUnit_Framework_TestCase
 {
     private $dist;
     private $vagrant;
 
     protected function setUp()
     {
-        self::bootKernel();
+        $rootDir = realpath(__DIR__.'/../../../../app');
+        $distPath = implode(DIRECTORY_SEPARATOR, [$rootDir, 'config', 'parameters.yml.dist']);
+        $vagrantPath = implode(DIRECTORY_SEPARATOR, [$rootDir, 'config', 'parameters.yml.vagrant']);
 
-        $kernel = self::$kernel;
-
-        $distPath = implode(DIRECTORY_SEPARATOR, [$kernel->getRootDir(), 'config', 'parameters.yml.dist']);
-        $vagrantPath = implode(DIRECTORY_SEPARATOR, [$kernel->getRootDir(), 'config', 'parameters.yml.vagrant']);
-
-        $this->dist = Yaml::parse(file_get_contents($distPath));
-        $this->vagrant = Yaml::parse(file_get_contents($vagrantPath));
+        if (file_exists($distPath) && file_exists($vagrantPath)) {
+            $this->dist = Yaml::parse(file_get_contents($distPath));
+            $this->vagrant = Yaml::parse(file_get_contents($vagrantPath));
+        } else {
+            $this->fail("Config files nor found!");
+        }
     }
-
 
     public function testMissingParameters()
     {
