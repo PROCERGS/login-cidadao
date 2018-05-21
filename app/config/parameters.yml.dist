@@ -27,6 +27,11 @@ parameters:
     # Memcached cache prefix
     memcached_prefix: lc_cache_
 
+    # Redis DSN
+    redis_dsn: redis://localhost
+    # Redis Prefix/Namespace
+    redis_prefix: lc_
+
     # Session prefix
     session_prefix: lc_sess_
     # Session lifetime (seconds)
@@ -157,3 +162,6 @@ parameters:
     # The ID provided by Google Analytics to configure tracking
     # You can override the LoginCidadaoCoreBundle::analytics.html.twig entirely if you don't want the default settings
     google_analytics_trackingId: YourGoogleAnalyticsId
+
+    # Application Name to be logged on Logstash
+    logstash.application_name: login-cidadao

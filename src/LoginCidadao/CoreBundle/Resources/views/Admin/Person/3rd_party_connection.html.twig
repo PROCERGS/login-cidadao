@@ -1,0 +1,14 @@
+{% if is_enabled | default(false) %}
+    <dt>{{ connection_name }}</dt>
+    <dd>
+        {% if is_connected %}
+            {% if is_granted('ROLE_VIEW_3RD_PARTY_CONNECTIONS_USERNAMES') %}
+                {{ connection_id | default('lc.admin.person.3rd_party.connected_no_username' | trans) }}
+            {% else %}
+                {{ 'lc.admin.person.3rd_party.connected_no_username' | trans }}
+            {% endif %}
+        {% else %}
+            {{ 'lc.admin.person.3rd_party.not_connected' | trans }}
+        {% endif %}
+    </dd>
+{% endif %}

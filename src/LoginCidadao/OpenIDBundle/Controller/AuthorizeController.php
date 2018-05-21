@@ -27,6 +27,11 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class AuthorizeController
+ * @package LoginCidadao\OpenIDBundle\Controller
+ * @codeCoverageIgnore
+ */
 class AuthorizeController extends BaseController
 {
 
