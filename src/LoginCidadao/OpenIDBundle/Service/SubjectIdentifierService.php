@@ -113,6 +113,12 @@ class SubjectIdentifierService
         return null;
     }
 
+    /**
+     * @param PersonInterface $subject
+     * @param ClientMetadata $metadata
+     * @param string $forceSubjectType
+     * @return mixed|string
+     */
     private function calculateSubjectIdentifier(
         PersonInterface $subject,
         ClientMetadata $metadata = null,
