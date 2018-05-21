@@ -3,7 +3,7 @@ imports:
     - { resource: security.yml }
     - { resource: memcache.yml }
     # Uncomment bellow to enable Logstash formatting
-    #- { resource: logstash.yml }
+    - { resource: logstash.yml }
     - { resource: "@LoginCidadaoTOSBundle/Resources/config/config.yml" }
 
 framework:
