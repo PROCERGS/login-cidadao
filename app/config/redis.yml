@@ -3,8 +3,10 @@ snc_redis:
         default:
             type: predis
             alias: default
-            dsn: redis://lc_redis
+            dsn: "%redis_dsn%"
             logging: false
+            options:
+                prefix: "%redis_prefix%"
     session:
         client: default
         prefix: "%session_prefix%"

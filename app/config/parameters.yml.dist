@@ -27,6 +27,11 @@ parameters:
     # Memcached cache prefix
     memcached_prefix: lc_cache_
 
+    # Redis DSN
+    redis_dsn: redis://localhost
+    # Redis Prefix/Namespace
+    redis_prefix: lc_
+
     # Session prefix
     session_prefix: lc_sess_
     # Session lifetime (seconds)
