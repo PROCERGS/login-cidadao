@@ -23,7 +23,7 @@
     <testsuites>
         <testsuite name="Project Test Suite">
             <directory>../src/*/*Bundle/Tests</directory>
-            <directory>../src/*/*/*Bundle/Tests</directory>
+            <directory>../src/PROCERGS/*/*Bundle/Tests</directory>
             <directory>../src/*/Bundle/*Bundle/Tests</directory>
         </testsuite>
     </testsuites>
@@ -42,6 +42,10 @@
                 <directory>../src/*/*Bundle/Tests</directory>
                 <directory>../src/*/Bundle/*Bundle/Resources</directory>
                 <directory>../src/*/Bundle/*Bundle/Tests</directory>
+                <directory>../src/PROCERGS/*/*Bundle/Resources</directory>
+                <directory>../src/PROCERGS/*/*Bundle/Tests</directory>
+                <directory>../src/PROCERGS/*/Bundle/*Bundle/Resources</directory>
+                <directory>../src/PROCERGS/*/Bundle/*Bundle/Tests</directory>
             </exclude>
         </whitelist>
         <blacklist>
