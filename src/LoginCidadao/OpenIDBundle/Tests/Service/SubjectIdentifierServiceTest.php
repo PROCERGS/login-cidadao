@@ -16,6 +16,7 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
+use LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier;
 use LoginCidadao\OpenIDBundle\Entity\SubjectIdentifierRepository;
 use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
 
@@ -232,5 +233,35 @@ class SubjectIdentifierServiceTest extends \PHPUnit_Framework_TestCase
 
         $service = new SubjectIdentifierService($this->getEntityManager(), $repo, 'my.secret');
         $this->assertSame($person, $service->getPerson($subId, $client));
+    }
+
+    public function testConvertSubjectIdentifier()
+    {
+        $oldSub = '123';
+
+        /** @var PersonInterface|\PHPUnit_Framework_MockObject_MockObject $person */
+        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person->expects($this->once())->method('getId')->willReturn($oldSub);
+
+        $client = new Client();
+        $metadata = new ClientMetadata();
+        $metadata->setClient($client);
+
+        $subjectIdentifier = (new SubjectIdentifier())
+            ->setClient($client)
+            ->setPerson($person)
+            ->setSubjectIdentifier($oldSub);
+
+        $repo = $this->getRepo();
+        $repo->expects($this->once())
+            ->method('findOneBy')->with(['person' => $person, 'client' => $client])
+            ->willReturn($subjectIdentifier);
+
+        $service = new SubjectIdentifierService($this->getEntityManager(), $repo, 'my.secret');
+        $newSub = $service->convertSubjectIdentifier($person, $metadata);
+
+        $this->assertSame($person, $newSub->getPerson());
+        $this->assertSame($client, $newSub->getClient());
+        $this->assertNotEquals($oldSub, $newSub->getSubjectIdentifier());
     }
 }

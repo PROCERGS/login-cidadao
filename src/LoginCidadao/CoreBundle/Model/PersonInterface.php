@@ -125,6 +125,9 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
 
     public function setCreatedAt(\DateTime $createdAt);
 
+    /**
+     * @return \DateTime
+     */
     public function getCreatedAt();
 
     public function setCreatedAtValue();

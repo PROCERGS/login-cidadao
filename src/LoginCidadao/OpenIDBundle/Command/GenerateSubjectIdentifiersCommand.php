@@ -22,6 +22,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * @codeCoverageIgnore Ignoring command code. Ideally it should be refactored into a testable Service
+ */
 class GenerateSubjectIdentifiersCommand extends ContainerAwareCommand
 {
     /** @var EntityManagerInterface */
@@ -102,7 +105,7 @@ class GenerateSubjectIdentifiersCommand extends ContainerAwareCommand
                 ->setClient($auth->getClient())
                 ->setSubjectIdentifier($subId);
             $this->em->persist($sub);
-            if ($current++ % 50 === 0) {
+            if ($current++ % 200 === 0) {
                 $this->em->flush();
                 $this->em->clear();
             }
