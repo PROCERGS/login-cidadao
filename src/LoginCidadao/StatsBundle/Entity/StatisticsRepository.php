@@ -16,50 +16,29 @@ use Doctrine\ORM\QueryBuilder;
 class StatisticsRepository extends EntityRepository
 {
 
-    public function findIndexedStatsByIndexKeyDays(
-        $index,
-        $keys = null,
-        $days = null
-    ) {
+    public function findIndexedStatsByIndexKeyDays($index, $keys = null, $days = null)
+    {
         $data = $this->findStatsByIndexKeyDays($index, $keys, $days);
 
         return $this->indexResults($data);
     }
 
-    public function findStatsByIndexKeyDays(
-        $index,
-        $keys = null,
-        $days = null
-    ) {
-        $query = $this->getFindStatsByIndexKeyDateQuery(
-            $index,
-            $keys,
-            null,
-            $days
-        );
-
-        return $query->getQuery()->getResult();
-    }
-    public function findStatsByIndexKeyDate(
-        $index,
-        $keys = null,
-        \DateTime $afterDate = null
-    ) {
-        $query = $this->getFindStatsByIndexKeyDateQuery(
-            $index,
-            $keys,
-            $afterDate
-        );
+    public function findStatsByIndexKeyDays($index, $keys = null, $days = null)
+    {
+        $query = $this->getFindStatsByIndexKeyDateQuery($index, $keys, null, $days);
 
         return $query->getQuery()->getResult();
     }
 
-    public function getFindStatsByIndexKeyDateQuery(
-        $index,
-        $keys = null,
-        \DateTime $afterDate = null,
-        $days = null
-    ) {
+    public function findStatsByIndexKeyDate($index, $keys = null, \DateTime $afterDate = null)
+    {
+        $query = $this->getFindStatsByIndexKeyDateQuery($index, $keys, $afterDate);
+
+        return $query->getQuery()->getResult();
+    }
+
+    public function getFindStatsByIndexKeyDateQuery($index, $keys = null, \DateTime $afterDate = null, $days = null)
+    {
         $query = $this->createQueryBuilder('s')
             ->where('s.index = :index')
             ->setParameter('index', $index);
@@ -96,16 +75,9 @@ class StatisticsRepository extends EntityRepository
         return $result;
     }
 
-    public function findIndexedUniqueStatsByIndexKeyDate(
-        $index,
-        $keys = null,
-        \DateTime $afterDate = null
-    ) {
-        $query = $this->getFindStatsByIndexKeyDateQuery(
-            $index,
-            $keys,
-            $afterDate
-        );
+    public function findIndexedUniqueStatsByIndexKeyDate($index, $keys = null, \DateTime $afterDate = null)
+    {
+        $query = $this->getFindStatsByIndexKeyDateQuery($index, $keys, $afterDate);
         $this->applyGreatestNPerGroupDate($query);
         $data = $query->getQuery()->getResult();
 
@@ -127,17 +99,9 @@ class StatisticsRepository extends EntityRepository
         );
     }
 
-    public function findIndexedUniqueStatsByIndexKeyDays(
-        $index,
-        $keys = null,
-        $days = null
-    ) {
-        $query = $this->getFindStatsByIndexKeyDateQuery(
-            $index,
-            $keys,
-            null,
-            $days
-        );
+    public function findIndexedUniqueStatsByIndexKeyDays($index, $keys = null, $days = null)
+    {
+        $query = $this->getFindStatsByIndexKeyDateQuery($index, $keys, null, $days);
         $this->applyGreatestNPerGroupDate($query);
         $data = $query->getQuery()->getResult();
 

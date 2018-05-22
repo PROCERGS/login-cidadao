@@ -11,6 +11,7 @@
 namespace LoginCidadao\CoreBundle\Service;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class RegisterRequestedScope
 {
@@ -22,10 +23,21 @@ class RegisterRequestedScope
         $route = $request->get('_route');
 
         if ($route === '_authorize_validate') {
-            $session = $request->getSession();
-
-            $session->set('requested_scope', $request->get('scope'));
+            $this->registerScope($request->get('scope'), $request->getSession());
         }
+    }
+
+    /**
+     * @param $scope
+     * @param SessionInterface $session
+     */
+    public function registerScope($scope, SessionInterface $session)
+    {
+        if (is_array($scope)) {
+            $scope = implode(' ', $scope);
+        }
+
+        $session->set('requested_scope', $scope);
     }
 
     /**

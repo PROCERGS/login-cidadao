@@ -5,6 +5,7 @@ namespace LoginCidadao\APIBundle\Controller;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use LoginCidadao\APIBundle\Security\Audit\Annotation as Audit;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class BadgeController extends BaseController
 {

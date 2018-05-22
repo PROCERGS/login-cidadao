@@ -17,6 +17,11 @@ use FOS\RestBundle\Controller\Annotations as REST;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+/**
+ * Class WellKnownController
+ * @package LoginCidadao\OpenIDBundle\Controller
+ * @codeCoverageIgnore
+ */
 class WellKnownController extends FOSRestController
 {
 
@@ -30,7 +35,7 @@ class WellKnownController extends FOSRestController
             UrlGeneratorInterface::ABSOLUTE_URL);
         $tokenEndpoint  = $this->generateUrl('_token', array(),
             UrlGeneratorInterface::ABSOLUTE_URL);
-        $personEndpoint = $this->generateUrl('get_person',
+        $personEndpoint = $this->generateUrl('api_get_person',
             array('_format' => 'json'), UrlGeneratorInterface::ABSOLUTE_URL);
 
         $registrationEndpoint = $this->generateUrl('oidc_dynamic_registration',

@@ -1,0 +1,20 @@
+{% block subject %}
+    {% autoescape false %}
+        {{ 'email.account_blocked.message.subject' | trans }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block body_text %}
+    {% autoescape false %}
+        {{ 'email.account_blocked.message.text' | trans({ '%email%': email }) }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+    {% autoescape false %}
+        {{ include("LoginCidadaoCoreBundle::common.email.html.twig", {
+            'subject' : 'email.account_blocked.message.subject' | trans,
+            'msg' : 'email.account_blocked.message.html' | trans({ '%email%': email }) | raw
+        } ) }}
+    {% endautoescape %}
+{% endblock %}

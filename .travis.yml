@@ -5,14 +5,12 @@ cache:
   directories:
     - $HOME/.composer/cache/files
 
-env:
-  - SYMFONY_DEPRECATIONS_HELPER=weak
-
 php:
   - 5.4
   - 5.5
   - 5.6
   - 7.0
+  - 7.1
 
 matrix:
   fast_finish: true
@@ -22,13 +20,14 @@ addons:
 
 services:
   - memcached
+  - redis
 
 before_script:
   - psql -c "create user logincidadao with password '';" -U postgres
   - psql -c "create database logincidadao with owner logincidadao" -U postgres
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - cp app/config/parameters.yml.dist app/config/parameters.yml
-  - 'sed -i -e "s/resource: memcache\.yml/resource: memcached.yml/" app/config/config.yml'
+  - 'sed -i -e "s/resource: memcache\.yml/resource: redis.yml/" app/config/config.yml'
   - composer self-update
   - composer install --prefer-dist
   - chmod -R 777 app/cache app/logs web/uploads
@@ -37,8 +36,6 @@ before_script:
   - echo y | php app/console lc:database:populate batch/
 
 script:
+  # Do NOT enable test coverage here since it takes way too much time
+  # We'll use Scrutinizer for that.
   - ./bin/phpunit -c app
-
-after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover

@@ -10,20 +10,20 @@
 
 namespace LoginCidadao\OpenIDBundle\Validator;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SectorIdentifierUriChecker
 {
-    /** @var EntityManager */
+    /** @var EntityManagerInterface */
     private $em;
 
     /**
      * SectorIdentifierUriChecker constructor.
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
      */
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
@@ -51,7 +51,7 @@ class SectorIdentifierUriChecker
         if (!is_array($allowedUris)) {
             return false;
         }
-        
+
         foreach ($metadata->getRedirectUris() as $uri) {
             if (array_search($uri, $allowedUris) === false) {
                 return false;

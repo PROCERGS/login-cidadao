@@ -1,0 +1,12 @@
+services:
+    monolog.formatter.logstash:
+        class: Monolog\Formatter\LogstashFormatter
+        arguments:
+            - "%logstash.application_name%"
+monolog:
+    handlers:
+        logstash:
+            type:  stream
+            path:  %kernel.logs_dir%/%kernel.environment%.logstash.log
+            level: debug
+            formatter: monolog.formatter.logstash

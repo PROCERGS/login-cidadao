@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of the login-cidadao project or it's bundles.
  *
  * (c) Guilherme Donato <guilhermednt on github>
@@ -10,9 +10,9 @@
 
 namespace LoginCidadao\CoreBundle\Helper;
 
-use FOS\UserBundle\Util\UserManipulator as BaseClass;
 use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Util\UserManipulator;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -33,8 +33,11 @@ class UserManipulatorProxy extends UserManipulator
      * @param ContainerInterface $container
      * @internal param UserManipulator $userManipulator
      */
-    public function __construct(UserManagerInterface $userManager, EventDispatcherInterface $dispatcher, ContainerInterface $container)
-    {
+    public function __construct(
+        UserManagerInterface $userManager,
+        EventDispatcherInterface $dispatcher,
+        ContainerInterface $container
+    ) {
         parent::__construct($userManager, $dispatcher, $container);
         $this->userManager = $userManager;
     }
@@ -134,10 +137,13 @@ class UserManipulatorProxy extends UserManipulator
 
     private function findUsername($usernameOrEmail)
     {
+        /** @var PersonInterface|null $user */
         $user = $this->userManager->findUserByUsernameOrEmail($usernameOrEmail);
 
         if (!$user) {
-            throw new \InvalidArgumentException(sprintf('User identified by "%s" username or email does not exist.', $usernameOrEmail));
+            throw new \InvalidArgumentException(sprintf(
+                'User identified by "%s" username or email does not exist.', $usernameOrEmail
+            ));
         }
 
         return $user->getUsername();

@@ -10,42 +10,39 @@
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
-use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
 
-class RequestListener implements LoggerAwareInterface
+class RequestListener
 {
-
     /** @var LoggerInterface */
     private $logger;
 
+    /**
+     * RequestListener constructor.
+     * @param LoggerInterface $logger
+     */
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if (HttpKernel::MASTER_REQUEST != $event->getRequestType()) {
-            // don't do anything if it's not the master request
-            return;
+        if (HttpKernel::MASTER_REQUEST === $event->getRequestType()) {
+            $this->logReferer($event);
         }
+    }
 
+    private function logReferer(GetResponseEvent $event)
+    {
+        /** @var string|false $referer */
         $referer = $event->getRequest()->headers->get('referer', false);
-        if (!($this->logger instanceof LoggerInterface) || !$referer) {
+        if (false === $referer) {
             return;
         }
 
         $this->logger->info("Request referrer: {$referer}");
-    }
-
-    /**
-     * Sets a logger instance on the object
-     *
-     * @param LoggerInterface $logger
-     * @return null
-     */
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-
-        return;
     }
 }

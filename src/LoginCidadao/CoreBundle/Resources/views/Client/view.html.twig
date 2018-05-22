@@ -28,10 +28,22 @@
                                 {% if ('scope_details.' ~ scope) | trans != ('scope_details.' ~ scope) %}
                                     {{ include('LoginCidadaoCoreBundle::common.scope.details.html.twig', { 'scope': scope }) }}
                                 {% else %}
-                                    <span class="label label-success">{{ ('scope.' ~ scope) | trans }}</span>
+                                    <span class="label label-success">{{ scope | scope }}</span>
                                 {% endif %}
                             {% endfor %}
                         </div>
+
+                        {% if is_granted('FEATURE_REMOTE_CLAIMS') and remoteClaims is not empty %}
+                            <div class="remote-claims">
+                                <p>{{ 'remote_claims.client_details.label' | trans }}</p>
+
+                                <div class="remote-claims-list list-group">
+                                    {% for claim in remoteClaims %}
+                                        {{ include('LoginCidadaoRemoteClaimsBundle::remote_claim.html.twig', {'claim': claim, 'isForm': false}) }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>

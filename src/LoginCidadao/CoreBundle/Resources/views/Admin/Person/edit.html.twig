@@ -8,16 +8,42 @@
             {% form_theme form 'LoginCidadaoCoreBundle::Form/fields.html.twig' %}
             {{ form_start(form, {'attr' : {'role' : 'form'}}) }}
             {{ form_errors(form) }}
-            <div class="panel panel-default">
+            <div class="panel {{ person.enabled ? 'panel-default' : 'panel-danger' }}">
                 <div class="panel-heading">
-                    <h2 class="panel-title">{{ 'General'|trans }}</h2>
+                    <h2 class="panel-title">
+                        {{ 'General'|trans }}
+                        {% if not person.enabled %}
+                            - {{ 'lc.admin.person.alert.blocked' | trans }}
+                        {% endif %}
+
+                        <div class="pull-right">
+                            {% if is_granted('ROLE_ALLOWED_TO_SWITCH') %}
+                                <a href="{{ url('lc_home', {"_switch_user": person.username}) }}"
+                                   class="btn btn-danger btn-xs">
+                                    {{ 'lc.admin.person.impersonate.button' | trans }}
+                                </a>
+                            {% endif %}
+
+                            {% if is_granted('ROLE_PERSON_BLOCK') and person.enabled %}
+                                <input class="confirmation" type="checkbox" name="unlock_block_user" id="unlock_block_user">
+                                <label for="unlock_block_user" class="text-danger">
+                                    <p>{{ 'lc.admin.person.block.enable_block' | trans }}</p>
+                                </label>
+                                <a href="#{{ url('lc_admin_person_block', {"id": person.id, "token": blockToken}) }}"
+                                   class="btn btn-danger btn-xs needsConfirmation">
+                                    {{ 'lc.admin.person.block.button' | trans }}
+                                </a>
+                            {% endif %}
+                        </div>
+                    </h2>
                 </div>
                 <div class="panel-body">
                     <div class="row clearfix">
                         <div class="col-md-5">
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <img src="{{ include("LoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': person}) }}" alt="" class="col-xs-12 img-responsive"/>
+                                    <img src="{{ include("LoginCidadaoCoreBundle:Person:currentUserPicture.html.twig", {'targetPerson': person}) }}"
+                                         alt="" class="col-xs-12 img-responsive"/>
                                 </div>
                             </div>
                         </div>
@@ -25,7 +51,9 @@
                             {{ form_row(form.username) }}
                             {{ form_row(form.firstName) }}
                             {{ form_row(form.surname) }}
-                            {{ form_row(form.email) }}
+                            <span class="{{ person.emailConfirmedAt is not null ? 'has-success' : 'has-error' }}">
+                                {{ form_row(form.email) }}
+                            </span>
                         </div>
                         <div class="col-md-6">
                             {{ form_row(form.birthdate) }}
@@ -39,8 +67,15 @@
                         <div class="col-md-6">
                             {{ form_row(form.city) }}
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 {{ phoneVerification is null ? 'has-error' : (phoneVerification.verifiedAt is not null ? 'has-success' : 'has-warning') }}">
                             {{ form_row(form.mobile) }}
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="users_with_same_phone">{{ 'lc.admin.person.general.usersWithSamePhone.label' | trans }}</label>
+                                <input type="text" id="users_with_same_phone" readonly="readonly" class="form-control"
+                                       value="{{ 'lc.admin.person.general.usersWithSamePhone.value' | transchoice(samePhoneCount) }}">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -62,6 +97,14 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label for="lastLogin">{{ 'lc.admin.person.metadata.lastLogin' | trans }}</label>
+                                <span id="lastLogin" class="form-control" readonly="readonly">
+                                    {{ person.lastLogin | date('lc.admin.person.metadata.date_format' | trans) }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <label for="emailConfirmedAt">{{ 'lc.admin.person.metadata.emailConfirmedAt.label' | trans }}</label>
                                 <span id="emailConfirmedAt" class="form-control" readonly="readonly">
                                     {% if person.emailConfirmedAt is not null %}
@@ -74,9 +117,13 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="lastLogin">{{ 'lc.admin.person.metadata.lastLogin' | trans }}</label>
-                                <span id="lastLogin" class="form-control" readonly="readonly">
-                                    {{ person.lastLogin | date('lc.admin.person.metadata.date_format' | trans) }}
+                                <label for="phoneVerifiedAt">{{ 'lc.admin.person.metadata.phoneVerifiedAt.label' | trans }}</label>
+                                <span id="phoneVerifiedAt" class="form-control" readonly="readonly">
+                                    {% if phoneVerification is not null %}
+                                        {{ phoneVerification.verifiedAt | date('lc.admin.person.metadata.date_format' | trans) }}
+                                    {% else %}
+                                        {{ 'lc.admin.person.metadata.phoneVerifiedAt.empty' | trans }}
+                                    {% endif %}
                                 </span>
                             </div>
                         </div>
@@ -96,9 +143,34 @@
                                 </span>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="tosAccepted">{{ 'lc.admin.person.metadata.tosAccepted.label' | trans }}</label>
+                                <span id="tosAccepted" class="form-control" readonly="readonly">
+                                    {% if agreement is not null %}
+                                        {{ agreement.agreedAt | date('lc.admin.person.metadata.date_format' | trans) }}
+                                    {% else %}
+                                        {{ 'lc.admin.person.metadata.tosAccepted.empty' | trans }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            {% if is_granted('ROLE_VIEW_3RD_PARTY_CONNECTIONS') %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">{{ 'lc.admin.person.3rd_party.title' | trans }}</h2>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row clearfix">
+                            {{ include("LoginCidadaoCoreBundle:Admin/Person:extensible.3rd_party_connections.html.twig") }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
 
             {% if form.roles is defined %}
                 <div class="panel panel-default">
@@ -110,7 +182,7 @@
                             <div class="col-md-12">
                                 {{ form_row(form.roles) }}
                                 <div class="form-bar text-right">
-                                    <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}" />
+                                    <input class='btn btn-success' type="submit" value="{{ 'Send'|trans }}"/>
                                 </div>
                             </div>
                         </div>
@@ -131,11 +203,13 @@
                                     <li class="list-group-item service clearfix">
                                         <div class="media clearfix">
                                             <div class="pull-left">
-                                                <img src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': auth.client }) }}" width="65" height="65" alt="" class="media-object">
+                                                <img src="{{ include('LoginCidadaoCoreBundle:Client:imageUrl.html.twig', { 'client': auth.client }) }}"
+                                                     width="65" height="65" alt="" class="media-object">
                                             </div>
                                             <div class="media-body">
                                                 <h5 class="media-heading">{{ auth.client.name }}</h5>
-                                                <label for="authorization_{{ auth.id }}">{{ 'lc.admin.person.metadata.authorization.createdAt' | trans }}:</label>
+                                                <label for="authorization_{{ auth.id }}">{{ 'lc.admin.person.metadata.authorization.createdAt' | trans }}
+                                                    :</label>
                                                 <span id="authorization_{{ auth.id }}">{{ auth.createdAt | date('lc.admin.person.metadata.date_format' | trans) }}</span>
                                             </div>
                                         </div>
@@ -145,7 +219,7 @@
                         </ul>
 
                     {% else %}
-                        <p class="empty">{% trans %}There are no active services yet.{%  endtrans %}</p>
+                        <p class="empty">{% trans %}There are no active services yet.{% endtrans %}</p>
                     {% endif %}
                 </div>
             </div>
@@ -155,4 +229,39 @@
             {% endif %}
         </div>
     </div>
+{% endblock %}
+
+{% block stylesheets_custom %}
+    {{ parent() }}
+    <style>
+        @keyframes fadeInOpacity {
+            0% {
+                display: none;
+                opacity: 0;
+                width: 0;
+            }
+            100% {
+                opacity: 1;
+                width: 100px;
+            }
+        }
+
+        .confirmation:not(:checked) ~ .needsConfirmation {
+            display: none;
+            opacity: 0;
+            width: 0;
+        }
+        .confirmation:checked ~ .needsConfirmation {
+            opacity: 1;
+            width: auto;
+            animation-name: fadeInOpacity;
+            animation-iteration-count: 1;
+            animation-timing-function: ease-in;
+            animation-duration: 2s;
+        }
+
+        .confirmation + label {
+            font-size: 12px;
+        }
+    </style>
 {% endblock %}

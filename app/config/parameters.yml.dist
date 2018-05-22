@@ -11,6 +11,7 @@ parameters:
     database_user:     logincidadao
     # Database password (use ~ for socket)
     database_password: logincidadao
+    database_server_version: ~
 
     # Trusted proxies (http://symfony.com/doc/current/cookbook/request/load_balancer_reverse_proxy.html)
     trusted_proxies: []
@@ -28,6 +29,11 @@ parameters:
     # Memcached cache prefix
     memcached_prefix: lc_cache_
 
+    # Redis DSN
+    redis_dsn: redis://localhost
+    # Redis Prefix/Namespace
+    redis_prefix: lc_
+
     # Session prefix
     session_prefix: lc_sess_
     # Session lifetime (seconds)
@@ -44,7 +50,7 @@ parameters:
     # Translation locale
     locale:            pt_BR
     # Your application's secret. Should be the same for all servers
-    secret:            ThisTokenIsNotSoSecretChangeIt
+    secret:            ThisTokenIsNotSoSecretChangeItNow
 
     # (dev only) Show the profiler toolbar by default
     web_profiler_toolbar: true
@@ -154,6 +160,13 @@ parameters:
     # When true, during the authorization process, the user will only be prompted to fill in missing information
     # if it's a new authorization
     pre_authorization.complete_information_task.skip_if_authorized: true
+
+    # The ID provided by Google Analytics to configure tracking
+    # You can override the LoginCidadaoCoreBundle::analytics.html.twig entirely if you don't want the default settings
+    google_analytics_trackingId: YourGoogleAnalyticsId
+
+    # Application Name to be logged on Logstash
+    logstash.application_name: login-cidadao
 
     nfg_ws_url: 'https://dum.my/service.wsdl'
     nfg_url_auth: 'https://dum.my/auth'

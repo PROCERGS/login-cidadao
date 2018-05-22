@@ -1,13 +1,21 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Controller;
 
+use LoginCidadao\CoreBundle\Model\LocationSelectData;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use LoginCidadao\CoreBundle\Entity\PersonAddress;
-use LoginCidadao\CoreBundle\Form\Type\RemovePersonAddressFormType;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Form\FormError;
@@ -35,7 +43,7 @@ class PersonAddressController extends Controller
     public function newAddressAction(Request $request)
     {
         $address = new PersonAddress();
-        $form    = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType', $address);
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType', $address);
 
         $form->handleRequest($request);
 
@@ -57,6 +65,7 @@ class PersonAddressController extends Controller
         $form = $form->get('location');
         if (!$address->getCountry()) {
             $form->get('country')->addError(new FormError($this->get('translator')->trans('required.field')));
+
             return false;
         }
         $isPreferred = $em->getRepository('LoginCidadaoCoreBundle:Country')->isPreferred($address->getCountry());
@@ -64,9 +73,9 @@ class PersonAddressController extends Controller
             $steppe = ucwords(strtolower(trim($form->get('statesteppe')->getData())));
             if ($steppe) {
                 $repo = $em->getRepository('LoginCidadaoCoreBundle:State');
-                $ent  = $repo->findOneBy(array(
+                $ent = $repo->findOneBy(array(
                     'name' => $steppe,
-                    'country' => $address->getCountry()
+                    'country' => $address->getCountry(),
                 ));
                 if (!$ent) {
                     $ent = new State();
@@ -79,6 +88,7 @@ class PersonAddressController extends Controller
         }
         if (!$address->getState()) {
             $form->get('state')->addError(new FormError($this->get('translator')->trans('required.field')));
+
             return false;
         }
         if (!$address->getCity() && !$isPreferred) {
@@ -92,9 +102,9 @@ class PersonAddressController extends Controller
             }
             if ($state && $steppe) {
                 $repo = $em->getRepository('LoginCidadaoCoreBundle:City');
-                $ent  = $repo->findOneBy(array(
+                $ent = $repo->findOneBy(array(
                     'name' => $steppe,
-                    'state' => $state
+                    'state' => $state,
                 ));
                 if (!$ent) {
                     $ent = new City();
@@ -107,8 +117,10 @@ class PersonAddressController extends Controller
         }
         if (!$address->getCity()) {
             $form->get('city')->addError(new FormError($this->get('translator')->trans('required.field')));
+
             return false;
         }
+
         return true;
     }
 
@@ -118,21 +130,15 @@ class PersonAddressController extends Controller
      */
     public function editAction(Request $request, $id)
     {
-        $em        = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $addresses = $em->getRepository('LoginCidadaoCoreBundle:PersonAddress');
-        $address   = $addresses->find($id);
+        /** @var PersonAddress $address */
+        $address = $addresses->find($id);
         if ($address->getPerson()->getId() !== $this->getUser()->getId()) {
             throw new AccessDeniedException();
         }
-        if ($address->getId() > 0) {
-            $city = $address->getCity();
-            if ($city instanceof City) {
-                $state   = $city->getState();
-                $country = $state->getCountry();
-                $address->getLocation()->setCity($city)
-                    ->setState($state)->setCountry($country);
-            }
-        }
+
+        $address = $this->prepareAddressForEdition($address);
 
         $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType', $address);
         $form->handleRequest($request);
@@ -141,10 +147,11 @@ class PersonAddressController extends Controller
             $address->setPerson($this->getUser());
 
             $em->flush();
+
             return $this->redirect($this->generateUrl('lc_person_addresses'));
         }
         $deleteForms = $this->getDeleteForms();
-        $edit_form   = $form->createView();
+        $edit_form = $form->createView();
 
         return compact('edit_form', 'deleteForms');
     }
@@ -156,14 +163,14 @@ class PersonAddressController extends Controller
     public function deleteAction(Request $request, $id)
     {
         $translator = $this->get('translator');
-        $form       = $this->createForm('LoginCidadao\CoreBundle\Form\Type\RemovePersonAddressFormType');
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\RemovePersonAddressFormType');
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $person    = $this->getUser();
-            $em        = $this->getDoctrine()->getManager();
+            $person = $this->getUser();
+            $em = $this->getDoctrine()->getManager();
             $addresses = $em->getRepository('LoginCidadaoCoreBundle:PersonAddress');
-            $address   = $addresses->find($id);
+            $address = $addresses->find($id);
 
             try {
                 if ($address->getPerson()->getId() !== $person->getId()) {
@@ -190,19 +197,38 @@ class PersonAddressController extends Controller
 
     protected function getDeleteForms()
     {
-        $person      = $this->getUser();
+        $person = $this->getUser();
         $deleteForms = array();
-        $addresses   = $person->getAddresses();
+        $addresses = $person->getAddresses();
 
         if (is_array($addresses) || $addresses instanceof Collection) {
             foreach ($addresses as $address) {
-                $data                           = array('address_id' => $address->getId());
+                $data = array('address_id' => $address->getId());
                 $deleteForms[$address->getId()] = $this->createForm(
-                        'LoginCidadao\CoreBundle\Form\Type\RemovePersonAddressFormType',
-                        $data)
+                    'LoginCidadao\CoreBundle\Form\Type\RemovePersonAddressFormType',
+                    $data)
                     ->createView();
             }
         }
+
         return $deleteForms;
+    }
+
+    private function prepareAddressForEdition(PersonAddress $address)
+    {
+        if ($address->getId() > 0) {
+            $city = $address->getCity();
+            if ($city instanceof City) {
+                if (!$address->getLocation() instanceof LocationSelectData) {
+                    $address->setLocation(new LocationSelectData());
+                }
+                $state = $city->getState();
+                $country = $state->getCountry();
+                $address->getLocation()->setCity($city)
+                    ->setState($state)->setCountry($country);
+            }
+        }
+
+        return $address;
     }
 }

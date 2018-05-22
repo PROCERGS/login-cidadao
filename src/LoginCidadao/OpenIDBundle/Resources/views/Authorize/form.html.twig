@@ -38,34 +38,45 @@
     <p class="msg">{{ 'authorization.description' | trans({'%client_name%': client.name | e}) | raw }}</p>
 
     <ul class="permissions">
-        {% for scope in scopes|sort %}
-            {% if ('scope_details.' ~ scope) | trans != ('scope_details.' ~ scope) %}
+        {% for scope, scopeTrans in scopes | scope(true) | sort %}
+            {% set index = loop.index %}
+            {% if scope | scope_has_description %}
                 {% set details = include('LoginCidadaoCoreBundle::common.scope.details.attr.html.twig', { 'scope': scope }) %}
                 {% set handle = include('LoginCidadaoCoreBundle::common.scope.details.handle.html.twig', { 'scope': scope }) %}
             {% else %}
                 {% set details = '' %}
                 {% set handle = '' %}
             {% endif %}
-            {% if scope == 'openid' or scope == 'offline_access' %}
+            {% if scopeTrans is empty %}
+                {# If no translation is found, then it's a hidden scope #}
                 <input type="hidden" name="scope[]" value="{{ scope }}">
             {% elseif scope == 'public_profile' %}
                 <li class="checkbox">
-                    <input type="checkbox" name="scope[]" checked disabled value="{{ scope }}" data-size="mini"
-                           id="scope_{{ loop.index }}">
-                    <label for="scope_{{ loop.index }}">
+                    <input type="checkbox" name="scope[]" checked disabled value="{{ scope }}" id="scope_{{ index }}">
+                    <label for="scope_{{ index }}">
+                        <span {{ details | raw }}>{{ scopeTrans }} {{ handle | raw }}</span>
                     </label>
-                    <span {{ details | raw }}>{{ ('scope.' ~ scope) | trans }} {{ handle | raw }}</span>
                     <input type="hidden" name="scope[]" value="{{ scope }}">
                 </li>
             {% else %}
                 <li class="checkbox checkbox-primary">
-                    <input type="checkbox" name="scope[]" checked value="{{ scope }}" data-size="mini"
-                           id="scope_{{ loop.index }}">
-                    <label for="scope_{{ loop.index }}">{{ ('scope.' ~ scope) | trans }}</label>
+                    <input type="checkbox" name="scope[]" checked value="{{ scope }}" id="scope_{{ index }}">
+                    <label for="scope_{{ index }}">{{ scopeTrans }}</label>
                 </li>
             {% endif %}
         {% endfor %}
     </ul>
+
+    {% if is_granted('FEATURE_REMOTE_CLAIMS') and remoteClaims is not empty %}
+        <div class="remote-claims">
+            <p>{{ 'remote_claims.authZ.service_requesting' | trans({'%client_name%': client.name | e}) | raw }}</p>
+            <div class="remote-claims-list list-group">
+                {% for claim in remoteClaims %}
+                    {{ include('LoginCidadaoRemoteClaimsBundle::remote_claim.html.twig', {'claim': claim, 'isForm': true}) }}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
 
     {% if is_granted('FEATURE_ORGANIZATIONS') %}
         {% if organization is not empty %}

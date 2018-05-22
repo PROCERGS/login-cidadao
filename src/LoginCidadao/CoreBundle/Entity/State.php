@@ -1,9 +1,18 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
+use LoginCidadao\CoreBundle\Model\PreferableInterface;
 
 /**
  * State
@@ -11,7 +20,7 @@ use JMS\Serializer\Annotation\Groups;
  * @ORM\Table(name="state",indexes={@ORM\Index(name="state_preference_index", columns={"preference"})})
  * @ORM\Entity(repositoryClass="LoginCidadao\CoreBundle\Entity\StateRepository")
  */
-class State
+class State implements PreferableInterface
 {
 
     const REVIEWED_OK = 0;
