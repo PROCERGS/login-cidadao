@@ -534,7 +534,16 @@ required.field.state: 'Obrigatório preencher campo sobre o nacionalidade - esta
 restrict.location.creation: 'Não é possivel criar nova localização'
 field.loader : 'Carregando...'
 Updated successfully! : 'Atualizado com sucesso'
-contact.form.sent: Sua mensagem foi enviada. Agradecemos por entrar em contato conosco.
+contact.form:
+    sent: "Sua mensagem foi enviada. Agradecemos por entrar em contato conosco."
+    extra:
+        id: "Identificador Interno"
+        created_at: "Data de Criação da Conta"
+        email_confirmed_at: "Data de Confirmação de Email"
+        has_cpf:
+            label: "Tem CPF?"
+            yes: "Sim"
+            no: "Não"
 previous page: 'página anterior'
 statistics.list: 'Estatísticas'
 statistics.userByBadge: 'Estatísticas - Usuários por Medalha'
@@ -892,19 +901,44 @@ profile:
 scope_details.handle.title: O que é isso?
 flash_message.close: Fechar
 city_selector.no_javascript: 'Os campos referentes à sua Naturalidade não estão disponíveis pois seu navegador não está com JavaScript ativado.'
-lc.admin.person.metadata:
-    title: "Metadados"
-    date_format: "d/m/Y H:i:s"
-    createdAt: "Data de Criação da Conta"
-    emailConfirmedAt:
-        label: "Data de Confirmação de Email"
-        empty: "Email não confirmado"
-    lastLogin: "Último Login"
-    hasCpf:
-        label: "Cadastrou CPF?"
-        yes: "Sim"
-        no: "Não"
-    authorization.createdAt: "Data da Autorização"
+lc.admin.person:
+    alert:
+        blocked: "Essa conta está bloqueada!"
+    block:
+        enable_block: "Preparar bloqueio..."
+        button: "Bloquear Usuário"
+        failed: "Ocorreu um erro ao bloquear esse usuário"
+        success: "Usuário bloqueado!"
+        invalid_token: "Não foi possível bloquear esse usuário: o token de bloqueio não foi encontrado, é inválido ou expirou. Tente novamente."
+    impersonate:
+        button: "Impersonate"
+    general:
+        usersWithSamePhone:
+            label: "Pessoas com o mesmo telefone"
+            value: "{0} Nenhuma|{1} Apenas essa pessoa|]1,Inf[ %count% pessoas estão usando esse mesmo número!"
+    metadata:
+        title: "Metadados"
+        date_format: "d/m/Y H:i:s"
+        createdAt: "Data de Criação da Conta"
+        emailConfirmedAt:
+            label: "Data de Confirmação de Email"
+            empty: "Email não confirmado"
+        phoneVerifiedAt:
+            label: "Data de Verificação do Telefone"
+            empty: "Telefone não verificado!"
+        lastLogin: "Último Login"
+        hasCpf:
+            label: "Cadastrou CPF?"
+            yes: "Sim"
+            no: "Não"
+        authorization.createdAt: "Data da Autorização"
+        tosAccepted:
+            label: "Data de aceite dos Termos de Uso"
+            empty: "Não aceitou!"
+    3rd_party:
+        title: "Conexão com Serviços de Terceiros"
+        connected_no_username: "Conectado"
+        not_connected: "Não conectado"
 dashboard:
     active_services:
         no_entries: Você ainda não ativou nenhum serviço.
@@ -953,3 +987,34 @@ services:
             confirm: Você quer mesmo desativar este serviço?
             yes: Sim
             no: Não
+
+email:
+    account_blocked:
+        message:
+            subject: 'Notificação de Bloqueio por Violação dos Termos de Uso'
+            text: |
+                Notificação de Bloqueio por Violação dos Termos de Uso:
+
+                Durante uma verificação de rotina, identificamos uma conta no Login Cidadão registrada sob seu email <strong>%email%</strong>.
+
+                Foi constatado que a conta em questão foi utilizada para tentar acessar informações pessoais de terceiros, o que viola os Termos de Uso do Login Cidadão e, por esse motivo, foi bloqueada permanentemente com base no texto:
+
+                    "O Login Cidadão somente pode ser utilizado para fins pessoais, não sendo permitida a utilização em nome de terceiros ou com a finalidade de obter informações de terceiros."
+                     (...)
+                    "A não observância pelo usuário dos seus deveres previstos nestes Termos de Uso ou em qualquer outra legislação aplicável, poderá acarretar a suspensão ou cancelamento do seu acesso ao Login Cidadão, ou a um ou mais serviços disponibilizados, além de outras sanções previstas em lei."
+
+                Cordialmente,
+                Equipe Login Cidadão
+            html: >
+                Notificação de Bloqueio por Violação dos Termos de Uso:<br>
+                <br>
+                Durante uma verificação de rotina, identificamos uma conta no Login Cidadão registrada sob seu email <strong>%email%</strong>.<br>
+                <br>
+                Foi constatado que a conta em questão foi utilizada para tentar acessar informações pessoais de terceiros, o que viola os Termos de Uso do Login Cidadão e, por esse motivo, foi bloqueada permanentemente com base no texto:<br>
+                <br>
+                    "O Login Cidadão somente pode ser utilizado para fins pessoais, não sendo permitida a utilização em nome de terceiros ou com a finalidade de obter informações de terceiros."<br>
+                     (...)<br>
+                    "A não observância pelo usuário dos seus deveres previstos nestes Termos de Uso ou em qualquer outra legislação aplicável, poderá acarretar a suspensão ou cancelamento do seu acesso ao Login Cidadão, ou a um ou mais serviços disponibilizados, além de outras sanções previstas em lei."<br>
+                <br>
+                Cordialmente,<br>
+                Equipe Login Cidadão

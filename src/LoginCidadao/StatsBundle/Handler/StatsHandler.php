@@ -16,9 +16,13 @@ use LoginCidadao\StatsBundle\Entity\StatisticsRepository;
 class StatsHandler
 {
     /** @var StatisticsRepository */
-    protected $repo;
+    private $repo;
 
-    public function setStatsRepo(StatisticsRepository $repo)
+    /**
+     * StatsHandler constructor.
+     * @param StatisticsRepository $repo
+     */
+    public function __construct(StatisticsRepository $repo)
     {
         $this->repo = $repo;
     }
@@ -30,32 +34,17 @@ class StatsHandler
 
     public function getIndexed($index, $key = null, $days = null)
     {
-        return $this->repo->findIndexedStatsByIndexKeyDays(
-            $index,
-            $key,
-            $days
-        );
+        return $this->repo->findIndexedStatsByIndexKeyDays($index, $key, $days);
     }
 
-    public function getIndexedUniqueDate(
-        $index,
-        $keys = null,
-        \DateTime $afterDate = null
-    ) {
-        return $this->repo->findIndexedUniqueStatsByIndexKeyDate(
-            $index,
-            $keys,
-            $afterDate
-        );
+    public function getIndexedUniqueDate($index, $keys = null, \DateTime $afterDate = null)
+    {
+        return $this->repo->findIndexedUniqueStatsByIndexKeyDate($index, $keys, $afterDate);
     }
 
     public function getIndexedUniqueLastDays($index, $keys = null, $days = null)
     {
-        return $this->repo->findIndexedUniqueStatsByIndexKeyDays(
-            $index,
-            $keys,
-            $days
-        );
+        return $this->repo->findIndexedUniqueStatsByIndexKeyDays($index, $keys, $days);
     }
 
     /**
@@ -66,12 +55,13 @@ class StatsHandler
      */
     public function getOneByDate(\DateTime $date, $index, $key)
     {
-        return $this->repo->findOneBy(
-            array(
-                'timestamp' => $date,
-                'index' => $index,
-                'key' => $key,
-            )
-        );
+        /** @var Statistics|null $stat */
+        $stat = $this->repo->findOneBy([
+            'timestamp' => $date,
+            'index' => $index,
+            'key' => $key,
+        ]);
+
+        return $stat;
     }
 }

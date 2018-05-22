@@ -2,6 +2,8 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: memcached.yml }
+    # Uncomment bellow to enable Logstash formatting
+    #- { resource: logstash.yml }
     - { resource: "@LoginCidadaoTOSBundle/Resources/config/config.yml" }
 
 framework:
@@ -40,6 +42,7 @@ twig:
         third_party_login: %third_party_login%
         password_hint: "@password_hint"
         intl_tel_input_preferred_countries: ["br"]
+        google_analytics_trackingId: "%google_analytics_trackingId%"
 
 # Assetic Configuration
 assetic:
@@ -176,6 +179,7 @@ doctrine:
                       right: LoginCidadao\CoreBundle\DQL\Right
                       countif: LoginCidadao\CoreBundle\DQL\CountIf
                       lowerunaccent: LoginCidadao\CoreBundle\DQL\LowerUnaccent
+                      cast: Oro\ORM\Query\AST\Functions\Cast
 
                     datetime_functions:
                           date:       Oro\ORM\Query\AST\Functions\SimpleFunction
@@ -210,7 +214,6 @@ fos_oauth_server:
   auth_code_class:      LoginCidadao\OAuthBundle\Entity\AuthCode
   service:
       user_provider: fos_user.user_manager
-      client_manager: lc.oauth.client_manager
       options:
           supported_scopes: %lc_supported_scopes%
 
@@ -360,12 +363,12 @@ vich_uploader:
     storage:    gaufrette
     mappings:
         user_image:
-            uri_prefix:         %uri_root%/uploads/profile-pictures
+            uri_prefix:         %uri_root%uploads/profile-pictures
             upload_destination: user_image_fs
             namer:              vich_uploader.namer_uniqid
             inject_on_load:     false
         client_image:
-            uri_prefix:         %uri_root%/uploads/client-pictures
+            uri_prefix:         %uri_root%uploads/client-pictures
             upload_destination: client_image_fs
             namer:              vich_uploader.namer_uniqid
             inject_on_load:     false
@@ -569,3 +572,25 @@ monolog:
             type: service
             id: lc.monolog.db.handler
             level: info
+
+login_cidadao_api:
+    versions:
+        1:
+            0: [0, 1, 2, 3]
+            1: [0]
+        2:
+            0: [0]
+
+knp_paginator:
+    page_range: 5
+    default_options:
+        page_name: page
+        sort_field_name: sort
+        sort_direction_name: direction
+        distinct: true
+        filter_field_name: filterField
+        filter_value_name: filterValue
+    template:
+        pagination: '@KnpPaginator/Pagination/twitter_bootstrap_v3_pagination.html.twig'     # sliding pagination controls template
+        sortable: '@KnpPaginator/Pagination/sortable_link.html.twig' # sort link template
+        filtration: '@KnpPaginator/Pagination/filtration.html.twig'  # filters template

@@ -5,6 +5,7 @@ parameters:
     database_name:     lc
     database_user:     vagrant
     database_password: ~
+    database_server_version: ~
 
     # Trusted proxies (http://symfony.com/doc/current/cookbook/request/load_balancer_reverse_proxy.html)
     trusted_proxies: []
@@ -18,6 +19,11 @@ parameters:
     # Memcached cache prefix
     memcached_prefix: lc_cache_
 
+    # Redis DSN
+    redis_dsn: redis://localhost
+    # Redis Prefix/Namespace
+    redis_prefix: lc_
+
     session_prefix: lc_sess_
     session_lifetime: 86400
     # Session Remember Me Cookie Name
@@ -29,7 +35,7 @@ parameters:
     mailer_password:   ~
 
     locale:            en
-    secret:            ThisTokenIsNotSoSecretChangeIt
+    secret:            ThisTokenIsNotSoSecretChangeItNow
 
     web_profiler_toolbar: true
 
@@ -116,3 +122,10 @@ parameters:
     # When true, during the authorization process, the user will only be prompted to fill in missing information
     # if it's a new authorization
     pre_authorization.complete_information_task.skip_if_authorized: true
+
+    # The ID provided by Google Analytics to configure tracking
+    # You can override the LoginCidadaoCoreBundle::analytics.html.twig entirely if you don't want the default settings
+    google_analytics_trackingId: YourGoogleAnalyticsId
+
+    # Application Name to be logged on Logstash
+    logstash.application_name: login-cidadao

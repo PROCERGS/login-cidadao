@@ -19,52 +19,40 @@ class ContactFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add(
-            'name',
-            'text',
-            array(
+        $builder
+            ->add('name', 'text', [
                 'required' => true,
+                'disabled' => $options['loggedIn'],
                 'label' => 'contact.form.name.label',
-                'attr' => ['placeholder' => 'contact.form.name.placeholder']
-            )
-        )->add(
-            'email',
-            'email',
-            array(
+                'attr' => ['placeholder' => 'contact.form.name.placeholder'],
+            ])
+            ->add('email', 'email', [
                 'required' => true,
+                'disabled' => $options['loggedIn'],
                 'label' => 'contact.form.email.label',
-                'attr' => ['placeholder' => 'contact.form.email.placeholder']
-            )
-        )->add(
-            'message',
-            'Symfony\Component\Form\Extension\Core\Type\TextareaType',
-            array(
+                'attr' => ['placeholder' => 'contact.form.email.placeholder'],
+            ])
+            ->add('message', 'Symfony\Component\Form\Extension\Core\Type\TextareaType', [
                 'required' => true,
                 'label' => 'contact.form.message.label',
-                'attr' => ['placeholder' => 'contact.form.message.placeholder']
-            )
-        );
+                'attr' => ['placeholder' => 'contact.form.message.placeholder'],
+            ]);
 
         if ($this->enableCaptcha) {
-            $builder->add(
-                'recaptcha',
-                'Beelab\Recaptcha2Bundle\Form\Type\RecaptchaType',
-                [
-                    'label' => false,
-                    'mapped' => false,
-                    'constraints' => new Recaptcha2(['groups' => ['LoginCidadaoRegistration', 'Registration']]),
-                ]
-            );
+            $builder->add('recaptcha', 'Beelab\Recaptcha2Bundle\Form\Type\RecaptchaType', [
+                'label' => false,
+                'mapped' => false,
+                'constraints' => new Recaptcha2(['groups' => ['LoginCidadaoRegistration', 'Registration']]),
+            ]);
         }
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(
-            [
-                'data_class' => 'LoginCidadao\CoreBundle\Model\SupportMessage',
-            ]
-        );
+        $resolver->setDefaults([
+            'data_class' => 'LoginCidadao\CoreBundle\Model\SupportMessage',
+            'loggedIn' => false,
+        ]);
     }
 
 

@@ -305,10 +305,10 @@ class PersonController extends Controller
                 && ($id = $data['id']))) {
             $rg = $this->getDoctrine()
                 ->getManager()
-                ->getRepository('LoginCidadaoCoreBundle:IdCard')->findOneBy(array(
+                ->getRepository('LoginCidadaoCoreBundle:IdCard')->findOneBy([
                     'person' => $this->getUser(),
                     'id' => $id,
-                ));
+                ]);
         }
         if (!$rg) {
             $rg = new IdCard();
@@ -322,7 +322,7 @@ class PersonController extends Controller
                     != $rgNum[0] || $this->checkRGDcd($rgNum) != $rgNum[9])) {
                 $form->get('value')->addError(new FormError($this->get('translator')->trans('This RG is invalid')));
 
-                return array('form' => $form->createView());
+                return ['form' => $form->createView()];
             }
 
             $manager = $this->getDoctrine()->getManager();
@@ -339,7 +339,7 @@ class PersonController extends Controller
             if ($has) {
                 $form->get('state')->addError(new FormError($this->get('translator')->trans('You already have an ID registered for this State')));
 
-                return array('form' => $form->createView());
+                return ['form' => $form->createView()];
             }
             $manager->persist($rg);
             $manager->flush();
@@ -348,7 +348,7 @@ class PersonController extends Controller
             return $resp;
         }
 
-        return array('form' => $form->createView());
+        return ['form' => $form->createView()];
     }
 
     private function checkRGDce($rg)
@@ -416,81 +416,7 @@ class PersonController extends Controller
         $grid->setInfiniteGrid(true);
         $grid->setRoute('lc_profile_doc_rg_list');
 
-        return array('grid' => $grid->createView($request));
-    }
-
-    /**
-     * @Route("/register/prefilled", name="lc_prefilled_registration")
-     */
-    public function preFilledRegistrationAction(Request $request)
-    {
-        if (null !== $this->getUser()) {
-            return $this->get('templating')->renderResponse('LoginCidadaoCoreBundle:Person:registration/errorAlreadyLoggedin.html.twig');
-        }
-        /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
-        $formFactory = $this->get('fos_user.registration.form.factory');
-        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
-        $userManager = $this->get('fos_user.user_manager');
-        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
-        $dispatcher = $this->get('event_dispatcher');
-
-        /** @var PersonInterface $user */
-        $user = $userManager->createUser();
-        $user->setEnabled(true);
-
-        $fullName = $request->get('full_name');
-
-        if (!is_null($fullName)) {
-            $name = explode(' ', trim($fullName), 2);
-            $user->setFirstName($name[0]);
-            $user->setSurname($name[1]);
-        }
-        $user->setEmail($request->get('email'));
-        $user->setMobile($request->get('mobile'));
-
-        $event = new GetResponseUserEvent($user, $request);
-        $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, $event);
-
-        if (null !== $event->getResponse()) {
-            return $event->getResponse();
-        }
-
-        $form = $formFactory->createForm();
-
-        $form->add('firstName', 'text',
-            array('required' => false, 'label' => 'form.firstName', 'translation_domain' => 'FOSUserBundle'))
-            ->add('surname', 'text',
-                array('required' => false, 'label' => 'form.surname', 'translation_domain' => 'FOSUserBundle'));
-
-        $form->setData($user);
-
-        if ('POST' === $request->getMethod()) {
-            $form->bind($request);
-
-            if ($form->isValid()) {
-                $event = new FormEvent($form, $request);
-                $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS,
-                    $event);
-
-                $userManager->updateUser($user);
-
-                if (null === $response = $event->getResponse()) {
-                    $url = $this->get('router')->generate('fos_user_registration_confirmed');
-                    $response = new RedirectResponse($url);
-                }
-
-                $dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED,
-                    new FilterUserResponseEvent($user, $request, $response));
-
-                return $response;
-            }
-        }
-
-        return $this->get('templating')->renderResponse('LoginCidadaoCoreBundle:Person:registration/preFilledRegistration.html.twig',
-            array(
-                'form' => $form->createView(),
-                'actionUrl' => 'lc_prefilled_registration',
-            ));
+        return ['grid' => $grid->createView($request)];
     }
 
     /**
@@ -505,7 +431,7 @@ class PersonController extends Controller
         $badges = $badgesHandler->getAvailableBadges();
         $user = $badgesHandler->evaluate($this->getUser());
 
-        return array('allBadges' => $badges, 'userBadges' => $user->getBadges());
+        return ['allBadges' => $badges, 'userBadges' => $user->getBadges()];
     }
 
     private function removeAll(array $objects)
@@ -516,7 +442,7 @@ class PersonController extends Controller
         }
     }
 
-    private function trans($id, array $parameters = array(), $domain = null, $locale = null)
+    private function trans($id, array $parameters = [], $domain = null, $locale = null)
     {
         /** @var TranslatorInterface $translator */
         $translator = $this->get('translator');

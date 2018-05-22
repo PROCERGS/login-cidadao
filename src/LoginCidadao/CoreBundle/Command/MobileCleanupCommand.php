@@ -11,24 +11,17 @@
 namespace LoginCidadao\CoreBundle\Command;
 
 use Doctrine\DBAL\Types\ConversionException;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Internal\Hydration\IterableResult;
-use libphonenumber\NumberFormat;
 use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
-use libphonenumber\PhoneNumberType;
 use libphonenumber\PhoneNumberUtil;
-use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\ValidationBundle\Validator\Constraints\MobilePhoneNumberValidator;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\ProgressIndicator;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Doctrine\ORM\EntityManager;
 

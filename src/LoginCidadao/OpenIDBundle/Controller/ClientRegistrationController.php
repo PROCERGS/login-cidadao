@@ -10,8 +10,12 @@
 
 namespace LoginCidadao\OpenIDBundle\Controller;
 
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\SerializationContext;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OpenIDBundle\Manager\ClientManager;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
@@ -19,6 +23,11 @@ use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Form\ClientMetadataForm;
 use LoginCidadao\OpenIDBundle\Exception\DynamicRegistrationException;
 
+/**
+ * Class ClientRegistrationController
+ * @package LoginCidadao\OpenIDBundle\Controller
+ * @codeCoverageIgnore
+ */
 class ClientRegistrationController extends FOSRestController
 {
 
@@ -29,18 +38,27 @@ class ClientRegistrationController extends FOSRestController
     public function registerAction(Request $request)
     {
         $this->parseJsonRequest($request);
+        $clientManager = $this->getClientManager();
 
         $data = new ClientMetadata();
-        $form = $this->createForm(new ClientMetadataForm(), $data, ['cascade_validation' => true]);
+        $form = $this->createForm(new ClientMetadataForm($clientManager), $data, ['cascade_validation' => true]);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
             $metadata = $form->getData();
-            $client = $this->registerClient($metadata);
+            try {
+                $client = $clientManager->register($metadata);
+            } catch (UniqueConstraintViolationException $e) {
+                $error = new DynamicRegistrationException('Client already exists', 400);
+
+                return $this->view($error->getData(), $error->getCode());
+            }
 
             return $this->view($metadata->fromClient($client), 201);
         } else {
-            $error = $this->handleFormErrors($form->getErrors(true));
+            /** @var FormError[] $errors */
+            $errors = $form->getErrors(true);
+            $error = $this->handleFormErrors($errors);
 
             return $this->view($error->getData(), 400);
         }
@@ -76,12 +94,7 @@ class ClientRegistrationController extends FOSRestController
             $cause = $error->getCause();
             $value = $cause->getInvalidValue();
             $propertyRegex = '/^data\\.([a-zA-Z0-9_]+).*$/';
-            $property = preg_replace(
-                $propertyRegex,
-                '$1',
-                $cause->getPropertyPath()
-            );
-            //$property      = str_replace('data.', '', $cause->getPropertyPath());
+            $property = preg_replace($propertyRegex, '$1', $cause->getPropertyPath());
 
             switch ($property) {
                 case 'redirect_uris':
@@ -103,115 +116,47 @@ class ClientRegistrationController extends FOSRestController
         }
     }
 
-    /**
-     * @param ClientMetadata $data
-     * @return Client
-     */
-    private function registerClient(ClientMetadata $data)
-    {
-        $em = $this->getDoctrine()->getManager();
-        if ($data->getClient() === null) {
-            $client = $data->toClient();
-        } else {
-            $client = $data->getClient();
-        }
-
-        if ($client->getName() === null) {
-            $firstUrl = $this->getHost($client->getRedirectUris()[0]);
-            $client->setName($firstUrl);
-        }
-        if ($client->getDescription() === null) {
-            $client->setDescription('');
-        }
-        if ($client->getTermsOfUseUrl() === null) {
-            $client->setTermsOfUseUrl('');
-        }
-        if ($client->getSiteUrl() === null) {
-            $client->setSiteUrl('');
-        }
-
-        if (count($data->getContacts()) > 0) {
-            $owners = $em->getRepository($this->getParameter('user.class'))
-                ->findByEmail($data->getContacts());
-
-            foreach ($owners as $person) {
-                if ($person->getConfirmationToken() !== null) {
-                    continue;
-                }
-                $client->getOwners()->add($person);
-            }
-        }
-
-        $publicScopes = explode(' ', $this->getParameter('lc_public_scopes'));
-        $client->setAllowedScopes($publicScopes);
-
-        $em->persist($client);
-
-        $data->setClient($client);
-        $em->persist($data);
-
-        $em->flush();
-
-        return $client;
-    }
-
-    private function getHost($uri)
-    {
-        return parse_url($uri, PHP_URL_HOST);
-    }
-
     private function parseJsonRequest(Request $request)
     {
         $request->setFormat('json', 'application/json');
-        if (0 === strpos(
-                $request->headers->get('Content-Type'),
-                'application/json'
-            )
-        ) {
+        if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
             $data = json_decode($request->getContent(), true);
-            $request->request->replace(is_array($data) ? $data : array());
+            $request->request->replace(is_array($data) ? $data : []);
         }
     }
 
     /**
      * @param string $clientId
-     * @return Client
+     * @return ClientInterface
      */
     private function getClientOr404($clientId)
     {
-        $parts = explode('_', $clientId, 2);
-        if (count($parts) !== 2) {
-            throw new DynamicRegistrationException(
-                "Invalid client_id",
-                DynamicRegistrationException::ERROR_INVALID_CLIENT_METADATA
-            );
-        }
-        $entityId = $parts[0];
-        $publicId = $parts[1];
+        /** @var ClientInterface|null $client */
+        $client = $this->getClientManager()->getClientById($clientId);
 
-        $client = $this->getDoctrine()->getRepository('LoginCidadaoOAuthBundle:Client')
-            ->findOneBy(array('id' => $entityId, 'randomId' => $publicId));
-
-        if (!$client) {
+        if (!$client instanceof ClientInterface) {
             throw $this->createNotFoundException('Client not found.');
         }
 
         return $client;
     }
 
-    private function checkRegistrationAccessToken(
-        Request $request,
-        Client $client
-    ) {
-        $raw = $request->get(
-            'access_token',
-            $request->headers->get('authorization')
-        );
+    private function checkRegistrationAccessToken(Request $request, Client $client)
+    {
+        $raw = $request->get('access_token', $request->headers->get('authorization'));
 
         $token = str_replace('Bearer ', '', $raw);
         $metadata = $client->getMetadata();
         if (!$token || $metadata->getRegistrationAccessToken() !== $token) {
             throw $this->createAccessDeniedException();
         }
+    }
+
+    /**
+     * @return ClientManager|object
+     */
+    private function getClientManager()
+    {
+        return $this->get('lc.client_manager');
     }
 }

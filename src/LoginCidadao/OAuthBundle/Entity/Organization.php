@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of the login-cidadao project or it's bundles.
  *
  * (c) Guilherme Donato <guilhermednt on github>
@@ -11,7 +11,6 @@
 namespace LoginCidadao\OAuthBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
@@ -36,14 +35,14 @@ class Organization implements OrganizationInterface
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    private $id;
 
     /**
      * @ORM\Column(name="name", type="string", nullable=false, unique=true)
      * @Assert\NotBlank
      * @var string
      */
-    protected $name;
+    private $name;
 
     /**
      * @var PersonInterface[]
@@ -53,62 +52,62 @@ class Organization implements OrganizationInterface
      *      inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id")}
      * )
      */
-    protected $members;
+    private $members;
 
     /**
      * @ORM\Column(name="verified_at", type="datetime", nullable=true)
      * @var \DateTime
      */
-    protected $verifiedAt;
+    private $verifiedAt;
 
     /**
      * @ORM\Column(name="domain", type="string", nullable=false, unique=true)
      * @var string
      */
-    protected $domain;
+    private $domain;
 
     /**
      * @ORM\OneToMany(targetEntity="LoginCidadao\OpenIDBundle\Entity\ClientMetadata", mappedBy="organization")
-     * @var ClientInterface
+     * @var ClientInterface[]
      */
-    protected $clients;
+    private $clients;
 
     /**
      * @Assert\Url
      * @ORM\Column(name="validation_url", type="string", nullable=true, unique=true)
      * @var string
      */
-    protected $validationUrl;
+    private $validationUrl;
 
     /**
      * @ORM\Column(name="validation_secret", type="string", nullable=true)
      * @var string
      */
-    protected $validationSecret;
+    private $validationSecret;
 
     /**
      * @ORM\Column(name="validated_url", type="string", nullable=true)
      * @var string
      */
-    protected $validatedUrl;
+    private $validatedUrl;
 
     /**
      * @ORM\Column(name="trusted", type="boolean", nullable=false)
      * @var boolean
      */
-    protected $trusted;
+    private $trusted;
 
     /**
      * @Assert\Url
      * @ORM\Column(name="sector_identifier_uri", type="string", nullable=true, unique=true)
      * @var string
      */
-    protected $sectorIdentifierUri;
+    private $sectorIdentifierUri;
 
     public function __construct()
     {
-        $this->members = new ArrayCollection();
-        $this->clients = new ArrayCollection();
+        $this->members = [];
+        $this->clients = [];
         $this->initializeValidationCode();
         $this->trusted = false;
     }
@@ -147,7 +146,7 @@ class Organization implements OrganizationInterface
 
     /**
      * @param PersonInterface[] $members
-     * @return \Organization
+     * @return OrganizationInterface
      */
     public function setMembers(array $members)
     {
@@ -166,7 +165,7 @@ class Organization implements OrganizationInterface
 
     /**
      * @param \DateTime $verifiedAt
-     * @return \Organization
+     * @return OrganizationInterface
      */
     public function setVerifiedAt($verifiedAt)
     {
@@ -262,7 +261,7 @@ class Organization implements OrganizationInterface
     /**
      *
      * @param boolean $trusted
-     * @return \LoginCidadao\OAuthBundle\Entity\Organization
+     * @return OrganizationInterface
      */
     public function setTrusted($trusted)
     {
@@ -281,10 +280,13 @@ class Organization implements OrganizationInterface
 
     /**
      * @param string $sectorIdentifierUri
+     * @return Organization
      */
     public function setSectorIdentifierUri($sectorIdentifierUri)
     {
         $this->sectorIdentifierUri = $sectorIdentifierUri;
+
+        return $this;
     }
 
     /**

@@ -30,6 +30,7 @@ security:
             - ROLE_ORGANIZATIONS_DELETE
             - ROLE_SKIP_TOS_AGREEMENT
             - ROLE_PERSON_EDIT
+            - ROLE_VIEW_3RD_PARTY_CONNECTIONS
         ROLE_SUPER_ADMIN:
             - ROLE_ADMIN
             - ROLE_ALLOWED_TO_SWITCH
@@ -43,12 +44,17 @@ security:
             - ROLE_IMPERSONATION_REPORTS_LIST_ALL
             - ROLE_VIEW_USERS_CPF
             - ROLE_AUDIT_PROFILE_VIEWS
+            - ROLE_VIEW_3RD_PARTY_CONNECTIONS_USERNAMES
+            - ROLE_PERSON_BLOCK
 
         ROLE_ALLOWED_TO_SWITCH: FEATURE_IMPERSONATION_REPORTS
         ROLE_EDIT_CLIENT_ALLOWED_RESTRICTED_SCOPES: ROLE_EDIT_CLIENT_ALLOWED_SCOPES
         ROLE_VIEW_USERS_CPF:
         ROLE_AUDIT_PROFILE_VIEWS: FEATURE_SHOW_PROFILE_VIEWS
-        FEATURE_ALPHA:  FEATURE_BETA, FEATURE_SHOW_PROFILE_VIEWS
+        ROLE_VIEW_3RD_PARTY_CONNECTIONS_USERNAMES: ROLE_VIEW_3RD_PARTY_CONNECTIONS
+        ROLE_VIEW_3RD_PARTY_CONNECTIONS:
+        ROLE_PERSON_BLOCK:
+        FEATURE_ALPHA:  FEATURE_BETA, FEATURE_SHOW_PROFILE_VIEWS, FEATURE_REMOTE_CLAIMS
         FEATURE_BETA:   FEATURE_PROD, FEATURE_ORGANIZATIONS
         FEATURE_PROD:   FEATURE_2FACTOR_AUTH, FEATURE_INVALIDATE_SESSIONS
         FEATURE_IGP_VALIDATION:
@@ -56,6 +62,7 @@ security:
         FEATURE_IMPERSONATION_REPORTS:
         FEATURE_EDIT_USERNAME:
         FEATURE_SHOW_PROFILE_VIEWS:
+        FEATURE_REMOTE_CLAIMS:
 
     providers:
         chainprovider:
@@ -135,9 +142,8 @@ security:
                 use_referer:                    true
             anonymous: false
 
-
         api:
-          pattern:    ^/api/v1(?!/public)
+          pattern:    ^/api/v\d+(.\d+)*(?!/public)
           fos_oauth:  true
           stateless:  true
           anonymous:  true
@@ -149,7 +155,6 @@ security:
         - { path: ^/_error, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
 
         - { path: ^/api/v1/address/(cities|states|countries)/search, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        - { path: ^/api/v1/address/cities/prefetch, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/api/v1/public/lc_consultaCep2, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/api/v1/statistics, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/api/v1/phone-verification/(update-status|average-delivery-time|not-delivered), role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_monitors%, requires_channel: https }

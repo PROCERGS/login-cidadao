@@ -1,9 +1,22 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Egulias\EmailValidator\EmailValidator;
+use libphonenumber\PhoneNumber;
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberUtil;
 
 class PersonRepository extends EntityRepository
 {
@@ -142,6 +155,27 @@ class PersonRepository extends EntityRepository
             ->where('p.id in(:ids)')
             ->setParameters(compact('ids'))
             ->addOrderBy('p.id', 'desc');
+    }
+
+    /**
+     * @param PhoneNumber $phone
+     * @return int
+     */
+    public function countByPhone(PhoneNumber $phone)
+    {
+        try {
+            $phoneUtil = PhoneNumberUtil::getInstance();
+
+            return $this->createQueryBuilder('p')
+                ->select('COUNT(p)')
+                ->where('p.mobile = :mobile')
+                ->setParameter('mobile', $phoneUtil->format($phone, PhoneNumberFormat::E164))
+                ->getQuery()->getSingleScalarResult();
+        } catch (NoResultException $e) {
+            return 0;
+        } catch (NonUniqueResultException $e) {
+            return 0;
+        }
     }
 
     /**

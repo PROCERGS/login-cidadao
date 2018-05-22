@@ -1,85 +1,98 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Form\Type;
 
 use Beelab\Recaptcha2Bundle\Validator\Constraints\Recaptcha2;
+use Doctrine\ORM\EntityManagerInterface;
+use LoginCidadao\CoreBundle\Entity\AccessSession;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LoginFormType extends AbstractType
 {
-    protected $container;
+    /** @var EntityManagerInterface */
+    private $em;
 
-    public function setContainer($var)
-    {
-        $this->container = $var;
-    }
+    /** @var Request */
+    private $request;
 
-    public function getContainer()
-    {
-        return $this->container;
-    }
+    /** @var int */
+    private $bruteForceThreshold;
 
+    /** @var bool */
     private $verifyCaptcha;
 
-    public function hasVerifyCaptcha()
+    /**
+     * @param ContainerInterface $container
+     * @throws \Exception
+     */
+    public function setContainer(ContainerInterface $container)
+    {
+        $this->em = $container->get('doctrine.orm.entity_manager');
+        $this->request = $container->get('request');
+        $this->bruteForceThreshold = $container->getParameter('brute_force_threshold');
+    }
+
+    /**
+     * @return bool
+     */
+    private function shouldVerifyCaptcha()
     {
         if ($this->verifyCaptcha === null) {
-            $request = $this->container->get('request');
-            $session = $request->getSession();
+            $session = $this->request->getSession();
             if (null !== $session) {
                 $lastUsername = $session->get(Security::LAST_USERNAME);
-                $doctrine = $this->container->get('doctrine');
-                $vars = array(
-                    'ip' => $request->getClientIp(),
+                $vars = [
+                    'ip' => $this->request->getClientIp(),
                     'username' => $lastUsername,
-                );
-                $accessSession = $doctrine->getRepository('LoginCidadaoCoreBundle:AccessSession')->findOneBy($vars);
-                $this->verifyCaptcha = ($accessSession && $accessSession->getVal()
-                    >= $this->container->getParameter('brute_force_threshold'));
+                ];
+                /** @var AccessSession|null $accessSession */
+                $accessSession = $this->em->getRepository('LoginCidadaoCoreBundle:AccessSession')
+                    ->findOneBy($vars);
+                $this->verifyCaptcha = $accessSession && $accessSession->getVal() >= $this->bruteForceThreshold;
             }
         }
 
         return $this->verifyCaptcha;
     }
 
-    public function setVerifyCaptcha($var)
-    {
-        $this->verifyCaptcha = $var;
-    }
-
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     * @throws \Exception
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->setVerifyCaptcha($options['check_captcha']);
+        $this->verifyCaptcha = $options['check_captcha'];
 
         $builder->add(
             'username',
             'Symfony\Component\Form\Extension\Core\Type\TextType',
-            array(
-                'label' => 'security.login.username',
-            )
+            ['label' => 'security.login.username']
         );
         $builder->add(
             'password',
             'Symfony\Component\Form\Extension\Core\Type\PasswordType',
-            array(
-                'label' => 'security.login.password',
-                'attr' => array('autocomplete' => 'off'),
-                'mapped' => false,
-            )
+            ['label' => 'security.login.password', 'attr' => ['autocomplete' => 'off'], 'mapped' => false]
         );
 
-        if ($this->hasVerifyCaptcha()) {
+        if ($this->shouldVerifyCaptcha()) {
             $builder->add(
                 'recaptcha',
                 'Beelab\Recaptcha2Bundle\Form\Type\RecaptchaType',
-                [
-                    'label' => false,
-                    'mapped' => false,
-                    'constraints' => new Recaptcha2(),
-                ]
+                ['label' => false, 'mapped' => false, 'constraints' => new Recaptcha2()]
             );
         }
     }
@@ -91,13 +104,11 @@ class LoginFormType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(
-            array(
-                'csrf_protection' => true,
-                'csrf_field_name' => 'csrf_token',
-                'csrf_token_id' => 'authenticate',
-                'check_captcha' => null,
-            )
-        );
+        $resolver->setDefaults([
+            'csrf_protection' => true,
+            'csrf_field_name' => 'csrf_token',
+            'csrf_token_id' => 'authenticate',
+            'check_captcha' => null,
+        ]);
     }
 }

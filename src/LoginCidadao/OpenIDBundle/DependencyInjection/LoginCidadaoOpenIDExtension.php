@@ -90,5 +90,11 @@ class LoginCidadaoOpenIDExtension extends Extension implements ExtensionInterfac
             $container->getDefinition('oauth2.storage.access_token')
                 ->addMethodCall('setSubjectIdentifierService', [$subjectIdentifierService]);
         }
+
+        if ($container->hasDefinition('oauth2.storage.access_token')) {
+            $clientManagerService = $container->getDefinition('lc.client_manager');
+            $container->getDefinition('oauth2.storage.access_token')
+                ->addMethodCall('setClientManager', [$clientManagerService]);
+        }
     }
 }

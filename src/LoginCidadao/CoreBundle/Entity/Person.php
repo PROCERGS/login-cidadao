@@ -10,23 +10,20 @@
 
 namespace LoginCidadao\CoreBundle\Entity;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use libphonenumber\PhoneNumber;
-use LoginCidadao\CoreBundle\Tests\LongPolling\LongPollableInterface;
+use LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Scheb\TwoFactorBundle\Model\BackupCodeInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use JMS\Serializer\Annotation as JMS;
 use FOS\UserBundle\Model\User as BaseUser;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\CoreBundle\Model\LocationSelectData;
-use LoginCidadao\CoreBundle\LongPolling\LongPollingUtils;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\ValidationBundle\Validator\Constraints as LCAssert;
@@ -51,6 +48,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      * @JMS\Since("1.0")
+     * @JMS\Until("2")
      */
     protected $id;
 
@@ -197,7 +195,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @var string
      *
      * @ORM\Column(name="facebookId", type="string", length=255, nullable=true, unique=true)
-     * @JMS\Since("1.0")
+     * @JMS\Exclude
      */
     protected $facebookId;
 
@@ -205,7 +203,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @var string
      *
      * @ORM\Column(name="facebookUsername", type="string", length=255, nullable=true)
-     * @JMS\Since("1.0")
+     * @JMS\Exclude
      */
     protected $facebookUsername;
 
@@ -213,7 +211,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @var string
      *
      * @ORM\Column(name="facebookAccessToken", type="string", length=255, nullable=true)
-     * @JMS\Since("1.1")
+     * @JMS\Exclude()
      */
     protected $facebookAccessToken;
 
@@ -221,7 +219,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @var string
      *
      * @ORM\Column(name="twitterId", type="string", length=255, nullable=true, unique=true)
-     * @JMS\Since("1.0")
+     * @JMS\Exclude
      */
     protected $twitterId;
 
@@ -229,7 +227,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @var string
      *
      * @ORM\Column(name="twitterUsername", type="string", length=255, nullable=true)
-     * @JMS\Since("1.0")
+     * @JMS\Exclude
      */
     protected $twitterUsername;
 
@@ -237,7 +235,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @var string
      *
      * @ORM\Column(name="twitterAccessToken", type="string", length=255, nullable=true)
-     * @JMS\Since("1.0")
+     * @JMS\Exclude
      */
     protected $twitterAccessToken;
 
@@ -320,6 +318,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @JMS\Expose
      * @JMS\Groups({"public_profile","picture"})
      * @JMS\Since("1.0.2")
+     * @JMS\Until("2")
      */
     protected $profilePictureUrl;
 
@@ -336,7 +335,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @var string
      *
      * @ORM\Column(name="googleId", type="string", length=255, nullable=true, unique=true)
-     * @JMS\Since("1.0.3")
+     * @JMS\Exclude
      */
     protected $googleId;
 
@@ -344,7 +343,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @var string
      *
      * @ORM\Column(name="googleUsername", type="string", length=255, nullable=true)
-     * @JMS\Since("1.0.3")
+     * @JMS\Exclude
      */
     protected $googleUsername;
 
@@ -352,7 +351,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @var string
      *
      * @ORM\Column(name="googleAccessToken", type="string", length=255, nullable=true)
-     * @JMS\Since("1.0.3")
+     * @JMS\Exclude
      */
     protected $googleAccessToken;
 
@@ -367,9 +366,13 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
     /**
      * @JMS\Expose
      * @JMS\Groups({"public_profile"})
-     * @var array
+     * @JMS\Type("array<LoginCidadao\BadgesControlBundle\Model\Badge>")
+     * @JMS\Since("2")
+     * @JMS\Until("3")
+     * @deprecated Use RemoteClaims instead
+     * @var array|BadgeInterface[]
      */
-    protected $badges = array();
+    protected $badges = [];
 
     /**
      * @ORM\OneToMany(targetEntity="LoginCidadao\APIBundle\Entity\LogoutKey", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
@@ -385,6 +388,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
 
     /**
      * @ORM\Column(name="google_authenticator_secret", type="string", nullable=true)
+     * @JMS\Exclude
      */
     protected $googleAuthenticatorSecret;
 
@@ -413,6 +417,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @JMS\Expose
      * @JMS\Groups({"public_profile"})
      * @JMS\SerializedName("phone_number_verified")
+     * @JMS\Since("1.1")
      * @var bool
      */
     protected $phoneNumberVerified = false;
@@ -532,11 +537,11 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
 
     /**
      * Checks if a given Client can access this Person's specified scope.
-     * @param \LoginCidadao\OAuthBundle\Entity\Client $client
+     * @param ClientInterface $client
      * @param mixed $scope can be a single scope or an array with several.
      * @return boolean
      */
-    public function isAuthorizedClient(Client $client, $scope)
+    public function isAuthorizedClient(ClientInterface $client, $scope)
     {
         $authorizations = $this->getAuthorizations();
         foreach ($authorizations as $auth) {
@@ -690,6 +695,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @JMS\Groups({"badges", "public_profile"})
      * @JMS\VirtualProperty
      * @JMS\SerializedName("deprecated_badges")
+     * @JMS\Until("2")
      * @return array
      */
     public function getDataValid()
@@ -1090,12 +1096,12 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
 
     public function getBadges()
     {
-        return $this->badges;
+        return /** @scrutinizer ignore-deprecated */ $this->badges;
     }
 
     public function mergeBadges(array $badges)
     {
-        $this->badges = array_merge($this->badges, $badges);
+        /** @scrutinizer ignore-deprecated */ $this->badges = array_merge(/** @scrutinizer ignore-deprecated */ $this->badges, $badges);
 
         return $this;
     }
@@ -1230,6 +1236,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @JMS\Groups({"public_profile"})
      * @JMS\VirtualProperty
      * @JMS\SerializedName("given_name")
+     * @JMS\Since("1.0")
      */
     public function getGivenName()
     {
@@ -1240,6 +1247,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @JMS\Groups({"full_name","name"})
      * @JMS\VirtualProperty
      * @JMS\SerializedName("family_name")
+     * @JMS\Since("1")
      */
     public function getFamilyName()
     {

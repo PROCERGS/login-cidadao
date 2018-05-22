@@ -17,6 +17,7 @@ use phpseclib\Crypt\RSA;
 
 /**
  * @REST\Route("/openid/connect")
+ * @codeCoverageIgnore
  */
 class JsonWebKeyController extends FOSRestController
 {

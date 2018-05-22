@@ -1,13 +1,33 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\OAuthBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 
+/**
+ * Class ClientRepository
+ * @package LoginCidadao\OAuthBundle\Entity
+ * @codeCoverageIgnore
+ */
 class ClientRepository extends EntityRepository
 {
 
+    /**
+     * @param PersonInterface $person
+     * @param $id
+     * @return ClientInterface|Client|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function findOneOwned(PersonInterface $person, $id)
     {
         return $this->createQueryBuilder('c')
@@ -124,6 +144,8 @@ class ClientRepository extends EntityRepository
 
     /**
      * @return mixed
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countClients()
     {
@@ -156,5 +178,35 @@ class ClientRepository extends EntityRepository
             ->setParameters(compact('start', 'end'));
 
         return $query->getQuery()->getScalarResult();
+    }
+
+    /**
+     * @param string[] $redirectUris
+     * @return ClientInterface[]
+     */
+    public function findByRedirectUris(array $redirectUris)
+    {
+        if (count($redirectUris) <= 0) {
+            throw new \InvalidArgumentException('At least one Redirect URI must be passed.');
+        }
+        $uris = [];
+        $query = $this->createQueryBuilder('c');
+        foreach ($redirectUris as $k => $uri) {
+            $quoted = sprintf('%%"%s"%%', $uri);
+            $uris["uri{$k}"] = $quoted;
+            $query->orWhere("c.redirectUris LIKE :uri{$k}");
+        }
+
+        return $query->setParameters($uris)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getOwnedByPersonQuery(PersonInterface $person)
+    {
+        return $this->createQueryBuilder('c')
+            ->where(':person MEMBER OF c.owners')
+            ->setParameter('person', $person)
+            ->addOrderBy('c.id', 'desc');
     }
 }
