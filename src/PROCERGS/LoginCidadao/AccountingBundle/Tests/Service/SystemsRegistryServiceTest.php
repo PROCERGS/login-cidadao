@@ -10,6 +10,7 @@
 
 namespace PROCERGS\LoginCidadao\AccountingBundle\Tests\Service;
 
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Message\RequestInterface;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
@@ -39,26 +40,50 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
 
         $queries = [];
         $httpClient = $this->getHttpClient();
-        // We have 2 hosts and 3 URIs, so we need 3 requests since the 3 URIs use only 2 hosts
-        $httpClient->expects($this->exactly(3))->method('get')
-            ->willReturnCallback(function ($url, $options) use (&$queries) {
-                $queries[] = str_replace('https://api.uri/', '', $url);
-
-                $headers = $options['headers'];
-                $this->assertEquals($this->config['organization'], $headers['organizacao']);
-
-                $response = $this->getResponse([['sistema' => 'XPTO']]);
-
-                return $response;
-            });
+        $this->httpClientExpectGet($httpClient, $queries, 3);
 
         $registry = $this->getRegistry($httpClient);
 
         $initials = $registry->getSystemInitials($client);
 
-        $this->assertContains('host1', $queries);
-        $this->assertContains('host2', $queries);
         $this->assertContains('http://host1/path', $queries);
+        $this->assertContains('http://host2/path', $queries);
+        $this->assertContains('http://host2/path2', $queries);
+        $this->assertCount(3, $queries);
+        $this->assertContains('XPTO', $initials);
+    }
+
+    public function testGetSystemInitialsFromCache()
+    {
+        $client = new Client();
+        $client->setSiteUrl('http://host1/path');
+        $client->setRedirectUris([
+            'http://host1/path',
+            'http://host2/path',
+            'http://host2/path2',
+        ]);
+
+        $queries = [];
+        $httpClient = $this->getHttpClient();
+        $this->httpClientExpectGet($httpClient, $queries, 3);
+
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        // Logger should be called 11 times:
+        //      2 for 'Fetching PROCERGS's system initials for client_id'
+        //      6 for 'Searching for ...'
+        //      3 for 'Returning cached result for ...'
+        $logger->expects($this->exactly(11))->method('log')->with('info');
+
+        $registry = $this->getRegistry($httpClient);
+        $registry->setLogger($logger);
+
+        $initials = $registry->getSystemInitials($client);
+        $registry->getSystemInitials($client);
+
+        $this->assertContains('http://host1/path', $queries);
+        $this->assertContains('http://host2/path', $queries);
+        $this->assertContains('http://host2/path2', $queries);
+        $this->assertCount(3, $queries);
         $this->assertContains('XPTO', $initials);
     }
 
@@ -69,7 +94,7 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
 
         $queries = [];
         $httpClient = $this->getHttpClient();
-        $httpClient->expects($this->exactly(2))->method('get')
+        $httpClient->expects($this->once())->method('get')
             ->willReturnCallback(function ($url, $options) use (&$queries) {
                 $queries[] = str_replace('https://api.uri/', '', $url);
 
@@ -84,8 +109,8 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
         $registry = $this->getRegistry($httpClient);
         $registry->getSystemInitials($client);
 
-        $this->assertContains('host1', $queries);
         $this->assertContains('http://host1/path', $queries);
+        $this->assertCount(1, $queries);
     }
 
     public function testGetSystemInitialsServerError()
@@ -112,6 +137,46 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
 
         $registry = $this->getRegistry($httpClient);
         $registry->getSystemInitials($client);
+    }
+
+    public function testGetSystemInitialsIgnoreInactiveSystemsWithoutDecommissionDate()
+    {
+        $queries = [];
+        $httpClient = $this->getHttpClient();
+        $this->httpClientExpectGet($httpClient, $queries, 1, [
+            ['sistema' => 'XPTO1', 'situacao' => 'Implantado'],
+            ['sistema' => 'XPTO2', 'situacao' => 'Not Implantado'],
+        ]);
+
+        $client = new Client();
+        $client->setSiteUrl('http://host1/path');
+
+        $registry = $this->getRegistry($httpClient);
+        $initials = $registry->getSystemInitials($client, new \DateTime());
+
+        $this->assertNotEmpty($initials);
+        $this->assertContains('XPTO1', $initials);
+        $this->assertNotContains('XPTO2', $initials);
+    }
+
+    public function testGetSystemInitialsIgnoreInactiveSystemsWithDecommissionDate()
+    {
+        $queries = [];
+        $httpClient = $this->getHttpClient();
+        $this->httpClientExpectGet($httpClient, $queries, 1, [
+            ['sistema' => 'XPTO1', 'decommissionedOn' => '2018-02-03'],
+            ['sistema' => 'XPTO2', 'decommissionedOn' => '2018-01-31'],
+        ]);
+
+        $client = new Client();
+        $client->setSiteUrl('http://host1/path');
+
+        $registry = $this->getRegistry($httpClient);
+        $initials = $registry->getSystemInitials($client, \DateTime::createFromFormat('Y-m-d', '2018-02-01'));
+
+        $this->assertNotEmpty($initials);
+        $this->assertContains('XPTO1', $initials);
+        $this->assertNotContains('XPTO2', $initials);
     }
 
     public function testGetSystemOwners()
@@ -217,5 +282,26 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
         }
 
         return $response;
+    }
+
+    /**
+     * @param ClientInterface|\PHPUnit_Framework_MockObject_MockObject $httpClient
+     * @param $queries
+     * @param $count
+     * @param array|null $payload
+     */
+    private function httpClientExpectGet(&$httpClient, &$queries, $count, $payload = null)
+    {
+        $httpClient->expects($this->exactly($count))->method('get')
+            ->willReturnCallback(function ($url, $options) use (&$queries, $payload) {
+                $queries[] = str_replace('https://api.uri/', '', $url);
+
+                $headers = $options['headers'];
+                $this->assertEquals($this->config['organization'], $headers['organizacao']);
+
+                $response = $this->getResponse($payload ?: [['sistema' => 'XPTO']]);
+
+                return $response;
+            });
     }
 }

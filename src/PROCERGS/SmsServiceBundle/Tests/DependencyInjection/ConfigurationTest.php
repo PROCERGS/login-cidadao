@@ -32,11 +32,10 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
                 'status' => 'https://some.address/send',
             ],
             'system' => [
+                'realm' => 'my_realm',
                 'id' => 'SYSTEM',
                 'key' => 'SECRET_KEY',
             ],
-            'service_order' => 1234,
-            'from' => 'IdP',
             'send' => true,
         ];
     }

@@ -18,6 +18,9 @@ use LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent;
 use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
 use PROCERGS\LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationSubscriber;
+use PROCERGS\Sms\Exception\InvalidCountryException;
+use PROCERGS\Sms\SmsService;
+use Psr\Log\LogLevel;
 
 class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -67,16 +70,45 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $subscriber->onVerificationRequest($event, PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED, $dispatcher);
     }
 
+    public function testUnsupportedCountry()
+    {
+        $phoneNumber = new PhoneNumber();
+        $phoneNumber->setCountryCode(1)
+            ->setNationalNumber('123456');
+        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $phoneVerification = $this->getPhoneVerification($person, $phoneNumber);
+        $event = $this->getEvent($phoneVerification, false);
+        $dispatcher = $this->getDispatcher();
+        $breakerConfig = [
+            'allowed_exceptions' => ['PROCERGS\Sms\Exception\InvalidCountryException'],
+        ];
+        $breaker = new Breaker('my_breaker', $breakerConfig);
+
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger->expects($this->once())->method('log')->with(LogLevel::ERROR);
+
+        $smsService = $this->getSmsService();
+        $smsService->expects($this->once())->method('easySend')
+            ->willThrowException(new InvalidCountryException('Unsupported Country'));
+
+        $subscriber = $this->getPhoneVerificationSubscriber($breaker, false, $smsService, $logger);
+        $subscriber->setLogger($logger);
+
+        $subscriber->onVerificationRequest($event, PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED, $dispatcher);
+    }
+
     /**
      * @param Breaker|null $breaker
      * @param bool $expectEasySend
      * @return PhoneVerificationSubscriber
      */
-    private function getPhoneVerificationSubscriber(Breaker $breaker = null, $expectEasySend = true)
-    {
-        $smsService = $this->getMockBuilder('PROCERGS\Sms\SmsService')
-            ->disableOriginalConstructor()
-            ->getMock();
+    private function getPhoneVerificationSubscriber(
+        Breaker $breaker = null,
+        $expectEasySend = true,
+        $smsService = null,
+        $logger = null
+    ) {
+        $smsService = $smsService ?: $this->getSmsService();
         if ($expectEasySend) {
             $smsService->expects($this->once())->method('easySend')->willReturn('012345');
         }
@@ -93,13 +125,27 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $breaker = $breaker ?: new Breaker('breaker');
 
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
-        $logger->expects($this->once())->method('log');
+        if ($logger === null) {
+            $logger = $this->getMock('Psr\Log\LoggerInterface');
+            $logger->expects($this->once())->method('log');
+        }
 
         $subscriber = new PhoneVerificationSubscriber($smsService, $translator, $router, $breaker);
         $subscriber->setLogger($logger);
 
         return $subscriber;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|SmsService
+     */
+    private function getSmsService()
+    {
+        $smsService = $this->getMockBuilder('PROCERGS\Sms\SmsService')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        return $smsService;
     }
 
     private function getPhoneVerification(PersonInterface $person, PhoneNumber $phoneNumber)

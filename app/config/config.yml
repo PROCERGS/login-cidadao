@@ -3,7 +3,7 @@ imports:
     - { resource: security.yml }
     - { resource: memcache.yml }
     # Uncomment bellow to enable Logstash formatting
-    #- { resource: logstash.yml }
+    - { resource: logstash.yml }
     - { resource: "@LoginCidadaoTOSBundle/Resources/config/config.yml" }
 
 framework:
@@ -334,7 +334,7 @@ parameters:
     lc_public_scopes_oidc: 'openid offline_access sub name given_name family_name full_name preferred_username picture email email_verified birthdate phone_number address updated_at'
     lc_public_scopes_oauth2: 'public_profile username first_name last_name full_name cpf city public_profile country state addresses id_cards mobile logout'
     lc_public_scopes: %lc_public_scopes_oidc% %lc_public_scopes_oauth2%
-    lc_reserved_scopes: 'voter_registration'
+    lc_reserved_scopes: 'voter_registration aviseme'
     lc_supported_scopes: %lc_public_scopes% %lc_reserved_scopes%
     lc_idcard_country_acronym: BR
 
@@ -666,15 +666,15 @@ circle_rest_client:
     curl:
         defaults:
             CURLOPT_FOLLOWLOCATION: false
+            CURLOPT_TIMEOUT: 5
 
 procergs_sms_service:
     uri:
         send: "%tpd_base_uri%/rest/sms"
-        receive: "%tpd_base_uri%/rest/sms/recebido"
-        status: "%tpd_base_uri%/rest/sms/status"
+        receive: "%tpd_base_uri%/rest/sms/receive"
+        status: "%tpd_base_uri%/rest/sms/{id}"
     system:
+        realm: "%tpd_system_realm%"
         id: "%tpd_system_id%"
         key: "%tpd_system_key%"
-    service_order: "%tpd_service_order%"
-    from: "LC"
     send: "%tpd_send_message%"

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a9ad48bf2947c9e6afd176e1e030950c",
+    "content-hash": "6b5b3de4e5b607c94f992c26736143b1",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -4273,16 +4273,16 @@
         },
         {
             "name": "procergs/sms-service",
-            "version": "1.2.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/sms-service.git",
-                "reference": "0db0ccf46af77444458c91be703d1bc6cba0f104"
+                "reference": "336ba148b0035dba19a0e6a90fb70e5ce514af8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/sms-service/zipball/0db0ccf46af77444458c91be703d1bc6cba0f104",
-                "reference": "0db0ccf46af77444458c91be703d1bc6cba0f104",
+                "url": "https://api.github.com/repos/PROCERGS/sms-service/zipball/336ba148b0035dba19a0e6a90fb70e5ce514af8b",
+                "reference": "336ba148b0035dba19a0e6a90fb70e5ce514af8b",
                 "shasum": ""
             },
             "require": {
@@ -4294,6 +4294,7 @@
                 "symfony/http-kernel": ">=2.8"
             },
             "require-dev": {
+                "guilhermednt/minimum-coverage-checker": ">=1.0.3",
                 "phpunit/phpunit": "^4.8"
             },
             "type": "library",
@@ -4310,7 +4311,7 @@
                 }
             ],
             "description": "PROCERGS SMS Service",
-            "time": "2017-05-17T14:33:33+00:00"
+            "time": "2017-12-14T16:42:39+00:00"
         },
         {
             "name": "procergs/tos-bundle",
@@ -7444,16 +7445,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v3.4.10",
+            "version": "v3.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "63cdae00a75862fa543b765ba63d55f6b6397d0c"
+                "reference": "7470518370113785f67a7fd8e6e1667661e88805"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/63cdae00a75862fa543b765ba63d55f6b6397d0c",
-                "reference": "63cdae00a75862fa543b765ba63d55f6b6397d0c",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/7470518370113785f67a7fd8e6e1667661e88805",
+                "reference": "7470518370113785f67a7fd8e6e1667661e88805",
                 "shasum": ""
             },
             "require": {
@@ -7506,7 +7507,7 @@
             ],
             "description": "Symfony PHPUnit Bridge",
             "homepage": "https://symfony.com",
-            "time": "2018-05-16T12:49:49+00:00"
+            "time": "2018-04-30T15:36:51+00:00"
         }
     ],
     "aliases": [],

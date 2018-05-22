@@ -20,8 +20,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 interface ClientInterface extends BaseInterface, UniqueEntityInterface
 {
-    public function getId();
-
     public function setName($name);
 
     public function getName();

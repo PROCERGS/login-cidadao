@@ -50,15 +50,15 @@ class SystemsRegistryService implements LoggerAwareInterface
         ];
     }
 
-    public function getSystemInitials(ClientInterface $client)
+    public function getSystemInitials(ClientInterface $client, \DateTime $activeAfter = null)
     {
         $this->log('info', "Fetching PROCERGS's system initials for client_id: {$client->getPublicId()}");
-        $hosts = $this->getHosts($client);
+        $queries = $this->getQueries($client);
 
         $identifiedSystems = [];
         $systems = [];
-        foreach ($hosts as $host) {
-            foreach (array_column($this->fetchInfo($host), 'sistema') as $system) {
+        foreach ($queries as $query) {
+            foreach (array_column($this->fetchInfo($query, $activeAfter), 'sistema') as $system) {
                 if (array_key_exists($system, $systems)) {
                     $systems[$system] += 1;
                 } else {
@@ -80,14 +80,14 @@ class SystemsRegistryService implements LoggerAwareInterface
         return $identifiedSystems;
     }
 
-    public function getSystemOwners(ClientInterface $client)
+    public function getSystemOwners(ClientInterface $client, \DateTime $activeAfter = null)
     {
-        $hosts = $this->getHosts($client);
+        $queries = $this->getQueries($client);
 
         $identifiedOwners = [];
         $owners = [];
-        foreach ($hosts as $host) {
-            foreach (array_column($this->fetchInfo($host), 'clienteDono') as $owner) {
+        foreach ($queries as $query) {
+            foreach (array_column($this->fetchInfo($query, $activeAfter), 'clienteDono') as $owner) {
                 if (array_key_exists($owner, $owners)) {
                     $owners[$owner] += 1;
                 } else {
@@ -109,7 +109,12 @@ class SystemsRegistryService implements LoggerAwareInterface
         return $identifiedOwners;
     }
 
-    private function fetchInfo($query)
+    /**
+     * @param $query
+     * @param \DateTime $activeAfter systems deactivated after this date will be included in the report.
+     * @return mixed
+     */
+    private function fetchInfo($query, \DateTime $activeAfter = null)
     {
         $this->log('info', "Searching for '{$query}'");
         $hashKey = hash('sha256', $query);
@@ -130,10 +135,13 @@ class SystemsRegistryService implements LoggerAwareInterface
                     throw $e;
                 }
             }
-            $this->cache[$hashKey] = $response->json();
-        }
 
-        $this->log('info', "Returning cached result for '{$query}'");
+            $systems = $this->filterInactive($response->json(), $activeAfter);
+
+            $this->cache[$hashKey] = $systems;
+        } else {
+            $this->log('info', "Returning cached result for '{$query}'");
+        }
 
         return $this->cache[$hashKey];
     }
@@ -156,24 +164,54 @@ class SystemsRegistryService implements LoggerAwareInterface
         return $result;
     }
 
-    private function getHosts(ClientInterface $client)
+    private function getQueries(ClientInterface $client)
     {
         $urls = array_filter($client->getRedirectUris());
         if ($client->getSiteUrl()) {
             $urls[] = $client->getSiteUrl();
         }
-        $hosts = array_unique(
-            array_map(
-                function ($url) {
-                    return parse_url($url)['host'];
-                },
-                $urls
-            )
-        );
-        if ($client->getSiteUrl()) {
-            $hosts[] = $client->getSiteUrl();
+
+        return array_unique($urls);
+    }
+
+    private function filterInactive($systems, \DateTime $activeAfter = null)
+    {
+        if ($activeAfter instanceof \DateTime) {
+            $systems = $this->removeDecommissionedByDate($systems, $activeAfter);
         }
 
-        return $hosts;
+        $systems = $this->removeDecommissionedBySituation($systems);
+
+        return $systems;
+    }
+
+    private function removeDecommissionedByDate($systems, \DateTime $activeAfter = null)
+    {
+        return array_filter($systems, function ($system) use ($activeAfter) {
+            if (!isset($system['decommissionedOn'])) {
+                return true;
+            }
+
+            $decommissionedOn = \DateTime::createFromFormat('Y-m-d', $system['decommissionedOn']);
+            if ($decommissionedOn < $activeAfter) {
+                $this->log('info',
+                    "Ignoring system {$system['sistema']}: decommissioned on {$decommissionedOn->format('Y-m-d')}");
+
+                return false;
+            }
+
+            return true;
+        });
+    }
+
+    private function removeDecommissionedBySituation($systems)
+    {
+        return array_filter($systems, function ($system) {
+            if (!isset($system['situacao'])) {
+                return true;
+            }
+
+            return $system['situacao'] === 'Implantado';
+        });
     }
 }

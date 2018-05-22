@@ -711,3 +711,4 @@ See how many users have each badge.: Veja quantas pessoas possuem cada medalha.
 Users by Location: Usuários por Localização
 Information about people's location. Either by <a href="%country_url%">Country</a> or by <a href="%state_url%">State</a>: Informações sobre a localização das pessoas, tanto <a href="%country_url%">por País</a> quanto <a href="%state_url%">por Estado</a>
 'Connect to the Nota Fiscal Gaúcha': 'Conectar à Nota Fiscal Gaúcha'
+scope.aviseme: 'Integração com AviseMe.rs.gov.br'

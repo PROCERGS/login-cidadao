@@ -185,8 +185,8 @@ parameters:
     accounting.procergs_systems.api.password: 'very_secret_password'
 
     tpd_base_uri: 'https://some.address/sms'
+    tpd_system_realm: 'REALM'
     tpd_system_id: 'SYSTEM'
     tpd_system_key: 'SeCrEt_KeY'
-    tpd_service_order: 1234
     # When set to false tells the TPD system to not send de message. It's a kind of a test mode.
     tpd_send_message: true
