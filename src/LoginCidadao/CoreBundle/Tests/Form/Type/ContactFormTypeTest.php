@@ -46,7 +46,10 @@ class ContactFormTypeTest extends \PHPUnit_Framework_TestCase
         /** @var OptionsResolver|\PHPUnit_Framework_MockObject_MockObject $resolver */
         $resolver = $this->getMockBuilder('Symfony\Component\OptionsResolver\OptionsResolver')->getMock();
         $resolver->expects($this->once())
-            ->method('setDefaults')->with(['data_class' => 'LoginCidadao\CoreBundle\Model\SupportMessage']);
+            ->method('setDefaults')->with([
+                'data_class' => 'LoginCidadao\CoreBundle\Model\SupportMessage',
+                'loggedIn' => false,
+            ]);
 
         $form = new ContactFormType(true);
         $form->configureOptions($resolver);
