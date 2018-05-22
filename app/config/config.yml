@@ -179,6 +179,7 @@ doctrine:
                       right: LoginCidadao\CoreBundle\DQL\Right
                       countif: LoginCidadao\CoreBundle\DQL\CountIf
                       lowerunaccent: LoginCidadao\CoreBundle\DQL\LowerUnaccent
+                      cast: Oro\ORM\Query\AST\Functions\Cast
 
                     datetime_functions:
                           date:       Oro\ORM\Query\AST\Functions\SimpleFunction

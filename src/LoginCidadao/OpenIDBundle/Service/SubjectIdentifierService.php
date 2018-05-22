@@ -113,11 +113,25 @@ class SubjectIdentifierService
         return null;
     }
 
-    private function calculateSubjectIdentifier(PersonInterface $subject, ClientMetadata $metadata = null)
-    {
+    /**
+     * @param PersonInterface $subject
+     * @param ClientMetadata $metadata
+     * @param string $forceSubjectType
+     * @return mixed|string
+     */
+    private function calculateSubjectIdentifier(
+        PersonInterface $subject,
+        ClientMetadata $metadata = null,
+        $forceSubjectType = null
+    ) {
         $id = $subject->getId();
 
-        if ($metadata instanceof ClientMetadata && $metadata->getSubjectType() === 'pairwise') {
+        $subjectType = $this->getSubjectType($metadata);
+        if ($forceSubjectType !== null) {
+            $subjectType = $forceSubjectType;
+        }
+
+        if ($subjectType === 'pairwise' && $metadata instanceof ClientMetadata) {
             $sectorIdentifier = $metadata->getSectorIdentifier();
             $salt = $this->pairwiseSubjectIdSalt;
             $pairwise = hash('sha256', $sectorIdentifier.$id.$salt);
@@ -172,5 +186,30 @@ class SubjectIdentifierService
         ]);
 
         return $subjectIdentifier;
+    }
+
+    /**
+     * @param ClientMetadata $metadata
+     * @return string
+     */
+    private function getSubjectType(ClientMetadata $metadata = null)
+    {
+        return $metadata instanceof ClientMetadata && $metadata->getSubjectType() === 'pairwise' ? 'pairwise' : 'public';
+    }
+
+    /**
+     * @param PersonInterface $person
+     * @param ClientMetadata $metadata
+     * @return SubjectIdentifier|null
+     */
+    public function convertSubjectIdentifier(PersonInterface $person, ClientMetadata $metadata)
+    {
+        $sub = $this->getSubjectIdentifierEntity($person, $metadata);
+
+        $newSub = $this->calculateSubjectIdentifier($person, $metadata, 'pairwise');
+
+        $sub->setSubjectIdentifier($newSub);
+
+        return $sub;
     }
 }
