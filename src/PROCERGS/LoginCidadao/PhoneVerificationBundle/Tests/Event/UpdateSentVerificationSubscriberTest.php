@@ -11,16 +11,10 @@
 namespace PROCERGS\LoginCidadao\PhoneVerificationBundle\Tests\Event;
 
 use Eljam\CircuitBreaker\Breaker;
-use Eljam\CircuitBreaker\Exception\CircuitOpenException;
 use libphonenumber\PhoneNumber;
-use LoginCidadao\CoreBundle\Model\PersonInterface;
-use LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent;
 use LoginCidadao\PhoneVerificationBundle\Event\UpdateStatusEvent;
 use LoginCidadao\PhoneVerificationBundle\Exception\InvalidSentVerificationStatusException;
-use LoginCidadao\PhoneVerificationBundle\Model\DeliveryStatus;
-use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
-use PROCERGS\LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationSubscriber;
 use PROCERGS\LoginCidadao\PhoneVerificationBundle\Event\UpdateSentVerificationSubscriber;
 use PROCERGS\Sms\Exception\TransactionNotFoundException;
 use PROCERGS\Sms\Protocols\SmsStatusInterface;
