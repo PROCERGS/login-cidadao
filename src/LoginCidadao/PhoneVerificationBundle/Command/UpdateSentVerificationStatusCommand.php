@@ -37,7 +37,7 @@ class UpdateSentVerificationStatusCommand extends ContainerAwareCommand
         $updater->setSymfonyStyle($io);
 
         $io->section('Updating messages\' status');
-        $updater->updateSentVerificationStatus(25);
+        $updater->updateSentVerificationStatus(100);
 
         $io->section('Average delivery time');
         $avg = $updater->getAverageDeliveryTime(10);

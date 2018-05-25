@@ -60,6 +60,12 @@ class SmsStatusService
         return $this;
     }
 
+    public function getSmsStatus($transactionId)
+    {
+        $event = $this->getStatus($transactionId);
+        var_dump($event);
+    }
+
     public function updateSentVerificationStatus($batchSize = 1)
     {
         $count = $this->sentVerificationRepo->countPendingUpdateSentVerification();
@@ -73,28 +79,33 @@ class SmsStatusService
         $query = $this->sentVerificationRepo->getPendingUpdateSentVerificationQuery();
         $sentVerifications = $query->iterate();
 
+        //$this->em->getConnection()->getConfiguration()->setSQLLogger(null);
+        gc_enable();
         $this->progressStart($count);
         $transactionsUpdated = [];
         foreach ($sentVerifications as $row) {
             /** @var SentVerificationInterface $sentVerification */
             $sentVerification = $row[0];
-            $status = $this->getStatus($sentVerification->getTransactionId());
-
-            if (false === $status->isUpdated()) {
+            $event = $this->getStatus($sentVerification->getTransactionId());
+            if (false === $event->isUpdated()) {
                 $this->progressAdvance(1);
+                unset($event);
+                unset($sentVerification);
+                gc_collect_cycles();
                 continue;
             }
 
-            $deliveredAt = $status->getDeliveredAt();
-            $sentVerification->setActuallySentAt($status->getSentAt())
+            $deliveredAt = $event->getDeliveredAt();
+            $sentVerification->setActuallySentAt($event->getSentAt())
                 ->setDeliveredAt($deliveredAt)
-                ->setFinished(
-                    $deliveredAt instanceof \DateTime || DeliveryStatus::isFinal($status->getDeliveryStatus())
-                );
+                ->setFinished($deliveredAt instanceof \DateTime || $event->getDeliveryStatus()->isFinal());
             $transactionsUpdated[] = $sentVerification->getTransactionId();
+            unset($event);
+            unset($sentVerification);
             if ((count($transactionsUpdated) % $batchSize) === 0) {
                 $this->em->flush();
                 $this->em->clear();
+                gc_collect_cycles();
             }
             $this->progressAdvance(1);
         }
