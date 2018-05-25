@@ -30,7 +30,7 @@ services:
             - max_failure: "%procergs_phone_verification.max_failures%"
               reset_timeout: "%procergs_phone_verification.reset_timeout%"
               allowed_exceptions:
-                - 'PROCERGS\Sms\Exception\InvalidCountryException'
+                - 'PROCERGS\Sms\Exception\SmsExceptionInterface'
             - "@cache"
             - null
             - "@event_dispatcher"

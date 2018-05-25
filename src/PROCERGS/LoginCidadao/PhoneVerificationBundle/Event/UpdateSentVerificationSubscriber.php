@@ -13,8 +13,12 @@ namespace PROCERGS\LoginCidadao\PhoneVerificationBundle\Event;
 use Eljam\CircuitBreaker\Breaker;
 use LoginCidadao\PhoneVerificationBundle\Event\UpdateStatusEvent;
 use LoginCidadao\PhoneVerificationBundle\Exception\InvalidSentVerificationStatusException;
-use LoginCidadao\PhoneVerificationBundle\Model\DeliveryStatus;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
+use PROCERGS\Sms\Exception\InvalidStatusException;
+use PROCERGS\Sms\Exception\SmsExceptionInterface;
+use PROCERGS\Sms\Exception\TransactionNotFoundException;
+use PROCERGS\Sms\Protocols\SmsInterface;
+use PROCERGS\Sms\Protocols\SmsStatusInterface;
 use PROCERGS\Sms\SmsService;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -86,26 +90,30 @@ class UpdateSentVerificationSubscriber implements EventSubscriberInterface, Logg
         ];
     }
 
+    /**
+     * @param UpdateStatusEvent $event
+     * @throws \Exception
+     */
     public function onStatusRequested(UpdateStatusEvent $event)
     {
-        $javaFormat = 'Y-m-d\TH:i:s.uP';
         $transactionId = $event->getTransactionId();
-        $statuses = $this->protectedGetStatus($this->smsService, $transactionId);
-
-        $status = reset($statuses);
-        $sentAt = $status->dthEnvio ? \DateTime::createFromFormat($javaFormat, $status->dthEnvio) : null;
-        $deliveredAt = $status->dthEntrega ? \DateTime::createFromFormat($javaFormat, $status->dthEntrega) : null;
 
         try {
-            if ($status->resumoEntrega) {
-                $deliveryStatus = DeliveryStatus::parse($status->resumoEntrega);
-            } elseif ($status->resumoEnvio) {
-                $deliveryStatus = DeliveryStatus::parse($status->resumoEnvio);
-            } else {
+            $sms = $this->protectedGetStatus($this->smsService, $transactionId);
+            $status = $sms->getStatus();
+            if (!$status instanceof SmsStatusInterface) {
                 throw new InvalidSentVerificationStatusException(
                     "No status available for transaction {$transactionId}"
                 );
             }
+        } catch (TransactionNotFoundException $e) {
+            return;
+        } catch (SmsExceptionInterface $e) {
+            throw new InvalidSentVerificationStatusException(
+                "Error for transaction id {$transactionId}: {$e->getMessage()}",
+                $e->getCode(),
+                $e
+            );
         } catch (InvalidSentVerificationStatusException $e) {
             throw new InvalidSentVerificationStatusException(
                 "Error for transaction id {$transactionId}: {$e->getMessage()}",
@@ -114,15 +122,18 @@ class UpdateSentVerificationSubscriber implements EventSubscriberInterface, Logg
             );
         }
 
-        $event->setDeliveredAt($deliveredAt)
-            ->setSentAt($sentAt)
-            ->setDeliveryStatus($deliveryStatus);
+        $event->setDeliveryStatus($status);
+        unset($sms);
     }
 
-    private function protectedGetStatus(
-        SmsService $smsService,
-        $transactionId
-    ) {
+    /**
+     * @param SmsService $smsService
+     * @param $transactionId
+     * @return SmsInterface
+     * @throws \Exception|TransactionNotFoundException
+     */
+    private function protectedGetStatus(SmsService $smsService, $transactionId)
+    {
         return $this->breaker->protect(
             function () use ($smsService, $transactionId) {
                 $statuses = $this->smsService->getStatus($transactionId);

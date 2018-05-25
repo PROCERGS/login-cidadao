@@ -16,11 +16,15 @@ use libphonenumber\PhoneNumber;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent;
 use LoginCidadao\PhoneVerificationBundle\Event\UpdateStatusEvent;
+use LoginCidadao\PhoneVerificationBundle\Exception\InvalidSentVerificationStatusException;
 use LoginCidadao\PhoneVerificationBundle\Model\DeliveryStatus;
 use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
 use PROCERGS\LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationSubscriber;
 use PROCERGS\LoginCidadao\PhoneVerificationBundle\Event\UpdateSentVerificationSubscriber;
+use PROCERGS\Sms\Exception\TransactionNotFoundException;
+use PROCERGS\Sms\Protocols\SmsStatusInterface;
+use PROCERGS\Sms\Protocols\V2\SmsBuilder;
 
 class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,7 +43,7 @@ class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $deliveredAt = new \DateTime('+5 minutes');
 
         $event = new UpdateStatusEvent($transId);
-        $status = $this->getStatusResponse($transId, $sentAt, $deliveredAt, 'Entregue');
+        $status = $this->getStatusResponse($transId, $sentAt, $deliveredAt, SmsStatusInterface::DELIVERED);
 
         $subscriber = $this->getSubscriber($transId, $status);
         $subscriber->onStatusRequested($event);
@@ -55,15 +59,14 @@ class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $transId = '0123456';
 
         $event = new UpdateStatusEvent($transId);
-        $status = $this->getStatusResponse($transId, null, null, null, 'Protocolo nao encontrado');
 
-        $subscriber = $this->getSubscriber($transId, $status);
+        $subscriber = $this->getSubscriber($transId, new TransactionNotFoundException());
         $subscriber->onStatusRequested($event);
 
-        $this->assertTrue($event->isUpdated());
+        $this->assertFalse($event->isUpdated());
         $this->assertNull($event->getSentAt());
         $this->assertNull($event->getDeliveredAt());
-        $this->assertEquals(DeliveryStatus::PROTOCOL_NOT_FOUND, $event->getDeliveryStatus());
+        $this->assertNull($event->getDeliveryStatus());
     }
 
     public function testInvalidStatusOnStatusRequested()
@@ -73,13 +76,10 @@ class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         );
 
         $transId = '0123456';
-        $sentAt = new \DateTime();
-        $deliveredAt = new \DateTime('+5 minutes');
 
         $event = new UpdateStatusEvent($transId);
-        $status = $this->getStatusResponse($transId, $sentAt, $deliveredAt, 'INVALID');
 
-        $subscriber = $this->getSubscriber($transId, $status);
+        $subscriber = $this->getSubscriber($transId, new InvalidSentVerificationStatusException());
 
         return $subscriber->onStatusRequested($event);
     }
@@ -91,13 +91,19 @@ class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $smsService->expects($this->once())->method('getStatus')->with($transactionId)->willReturn($status);
+        if ($status instanceof \Exception) {
+            $smsService->expects($this->once())->method('getStatus')->with($transactionId)->willThrowException($status);
+        } else {
+            $smsService->expects($this->once())->method('getStatus')->with($transactionId)->willReturn($status);
 
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
-        $logger->expects($this->once())->method('log');
+            $logger = $this->getMock('Psr\Log\LoggerInterface');
+            $logger->expects($this->once())->method('log');
+        }
 
         $subscriber = new UpdateSentVerificationSubscriber($smsService, $breaker);
-        $subscriber->setLogger($logger);
+        if (isset($logger)) {
+            $subscriber->setLogger($logger);
+        }
 
         return $subscriber;
     }
@@ -106,23 +112,17 @@ class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $transId,
         \DateTime $sentAt = null,
         \DateTime $deliveredAt = null,
-        $deliveryStatus = null,
-        $sendStatus = null
+        $statusCode = null
     ) {
-        $javaFormat = 'Y-m-d\TH:i:s.uP';
+        $to = (new PhoneNumber())
+            ->setCountryCode(55)
+            ->setNationalNumber('51987654321');
+        $text = 'dummy';
 
-        $json = json_encode(
-            [
-                [
-                    'numero' => $transId,
-                    'dthEnvio' => $sentAt instanceof \DateTime ? $sentAt->format($javaFormat) : null,
-                    'dthEntrega' => $deliveredAt instanceof \DateTime ? $deliveredAt->format($javaFormat) : null,
-                    'resumoEnvio' => $sendStatus,
-                    'resumoEntrega' => $deliveryStatus,
-                ],
-            ]
-        );
-
-        return json_decode($json);
+        return (new SmsBuilder($to, $text))
+            ->setId($transId)
+            ->setSendDate($sentAt)
+            ->setDeliveryDate($deliveredAt)
+            ->setStatus($statusCode);
     }
 }
