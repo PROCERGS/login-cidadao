@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Event;
 
+use PROCERGS\Sms\Protocols\SmsStatusInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 class UpdateStatusEvent extends Event
@@ -23,7 +24,7 @@ class UpdateStatusEvent extends Event
     /** @var \DateTime */
     private $deliveredAt;
 
-    /** @var int */
+    /** @var SmsStatusInterface */
     private $deliveryStatus;
 
     /** @var boolean */
@@ -51,19 +52,11 @@ class UpdateStatusEvent extends Event
      */
     public function getSentAt()
     {
-        return $this->sentAt;
-    }
-
-    /**
-     * @param \DateTime $sentAt
-     * @return UpdateStatusEvent
-     */
-    public function setSentAt(\DateTime $sentAt = null)
-    {
-        $this->sentAt = $sentAt;
-        $this->setUpdated();
-
-        return $this;
+        if ($this->getDeliveryStatus() instanceof SmsStatusInterface) {
+            return $this->getDeliveryStatus()->getDateSent();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -71,23 +64,15 @@ class UpdateStatusEvent extends Event
      */
     public function getDeliveredAt()
     {
-        return $this->deliveredAt;
+        if ($this->getDeliveryStatus() instanceof SmsStatusInterface) {
+            return $this->getDeliveryStatus()->getDateDelivered();
+        } else {
+            return null;
+        }
     }
 
     /**
-     * @param \DateTime $deliveredAt
-     * @return UpdateStatusEvent
-     */
-    public function setDeliveredAt(\DateTime $deliveredAt = null)
-    {
-        $this->deliveredAt = $deliveredAt;
-        $this->setUpdated();
-
-        return $this;
-    }
-
-    /**
-     * @return int
+     * @return SmsStatusInterface
      */
     public function getDeliveryStatus()
     {
@@ -95,7 +80,7 @@ class UpdateStatusEvent extends Event
     }
 
     /**
-     * @param int $deliveryStatus
+     * @param SmsStatusInterface $deliveryStatus
      * @return UpdateStatusEvent
      */
     public function setDeliveryStatus($deliveryStatus)

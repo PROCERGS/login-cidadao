@@ -13,7 +13,10 @@ namespace LoginCidadao\PhoneVerificationBundle\Tests\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerification;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
+use LoginCidadao\PhoneVerificationBundle\Event\UpdateStatusEvent;
 use LoginCidadao\PhoneVerificationBundle\Service\SmsStatusService;
+use PROCERGS\Sms\Protocols\SmsStatusInterface;
+use PROCERGS\Sms\Protocols\V2\SmsStatus;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -34,10 +37,10 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
         $dispatcher->expects($this->atMost(1))
             ->method('dispatch')
             ->willReturnCallback(
-                function ($eventName, $event) use ($date) {
-                    $event->setDeliveryStatus('Entregue')
-                        ->setDeliveredAt($date)
-                        ->setSentAt($date);
+                function ($eventName, UpdateStatusEvent $event) use ($date) {
+                    $event->setDeliveryStatus(
+                        new SmsStatus($date, $date, SmsStatusInterface::DELIVERED, 'some detail')
+                    );
                 }
             );
 
