@@ -13,7 +13,6 @@ namespace LoginCidadao\PhoneVerificationBundle\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Event\UpdateStatusEvent;
-use LoginCidadao\PhoneVerificationBundle\Model\DeliveryStatus;
 use LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
 use Symfony\Component\Console\Style\SymfonyStyle;
