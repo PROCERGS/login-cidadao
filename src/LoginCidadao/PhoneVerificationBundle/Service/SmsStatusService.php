@@ -84,7 +84,7 @@ class SmsStatusService
         $query = $this->sentVerificationRepo->getPendingUpdateSentVerificationQuery();
         $sentVerifications = $query->iterate();
 
-        //$this->em->getConnection()->getConfiguration()->setSQLLogger(null);
+        $this->em->getConnection() ? $this->em->getConnection()->getConfiguration()->setSQLLogger(null) : null;
         gc_enable();
         $this->progressStart($count);
         $transactionsUpdated = [];

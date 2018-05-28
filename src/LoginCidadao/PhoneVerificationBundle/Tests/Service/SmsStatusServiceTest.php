@@ -225,7 +225,7 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param null $items
+     * @param null|array $items
      * @return \PHPUnit_Framework_MockObject_MockObject|SentVerificationRepository
      */
     private function getRepository($items = null)
