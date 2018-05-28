@@ -38,13 +38,8 @@ class UpdateSentVerificationStatusCommandTest extends \PHPUnit_Framework_TestCas
         $query->expects($this->once())->method('iterate')
             ->willReturn(new \ArrayIterator([]));
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|SentVerificationRepository $repo */
-        $repo = $this->getMockBuilder('LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $repo->expects($this->once())
-            ->method('getPendingUpdateSentVerificationQuery')
-            ->willReturn($query);
+        /** @var SentVerificationRepository $repo */
+        $repo = $this->getRepo($query);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManagerInterface $em */
         $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
@@ -84,5 +79,23 @@ class UpdateSentVerificationStatusCommandTest extends \PHPUnit_Framework_TestCas
         $application->add($command);
 
         return new CommandTester($application->find('lc:phone-verification:update-sent-status'));
+    }
+
+    /**
+     * @param $query
+     * @return SentVerificationRepository
+     */
+    private function getRepo($query)
+    {
+        /** @var \PHPUnit_Framework_MockObject_MockObject|SentVerificationRepository $repo */
+        $repo = $this->getMockBuilder('LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @scrutinizer ignore-call */
+        $repo->expects($this->once())
+            ->method('getPendingUpdateSentVerificationQuery')
+            ->willReturn($query);
+
+        return $repo;
     }
 }

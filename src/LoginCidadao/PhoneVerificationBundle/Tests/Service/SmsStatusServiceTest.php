@@ -15,8 +15,7 @@ use LoginCidadao\PhoneVerificationBundle\Entity\SentVerification;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Event\UpdateStatusEvent;
 use LoginCidadao\PhoneVerificationBundle\Service\SmsStatusService;
-use PROCERGS\Sms\Protocols\SmsStatusInterface;
-use PROCERGS\Sms\Protocols\V2\SmsStatus;
+use LoginCidadao\PhoneVerificationBundle\Model\SmsStatusInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -33,14 +32,17 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
     {
         $date = new \DateTime();
 
+        /** @var SmsStatusInterface|\PHPUnit_Framework_MockObject_MockObject $status */
+        $status = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\SmsStatusInterface');
+        $status->expects($this->once())->method('getDateSent')->willReturn($date);
+        $status->expects($this->once())->method('getDateDelivered')->willReturn($date);
+
         $dispatcher = $this->getDispatcher();
         $dispatcher->expects($this->atMost(1))
             ->method('dispatch')
             ->willReturnCallback(
-                function ($eventName, UpdateStatusEvent $event) use ($date) {
-                    $event->setDeliveryStatus(
-                        new SmsStatus($date, $date, SmsStatusInterface::DELIVERED, 'some detail')
-                    );
+                function ($eventName, UpdateStatusEvent $event) use ($status) {
+                    $event->setDeliveryStatus($status);
                 }
             );
 
@@ -159,6 +161,34 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($sentVerification->getSentAt()->format('c'), $transaction['sent_at']);
     }
 
+    public function testGetSmsStatus()
+    {
+        $id = '1234';
+        $date = new \DateTime();
+
+        /** @var SmsStatusInterface|\PHPUnit_Framework_MockObject_MockObject $status */
+        $status = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\SmsStatusInterface');
+        $status->expects($this->once())->method('getDateSent')->willReturn($date);
+        $status->expects($this->once())->method('getDateDelivered')->willReturn($date);
+
+        $dispatcher = $this->getDispatcher();
+        $dispatcher->expects($this->atMost(1))
+            ->method('dispatch')
+            ->willReturnCallback(
+                function ($eventName, UpdateStatusEvent $event) use ($status) {
+                    $event->setDeliveryStatus($status);
+                }
+            );
+
+        $updater = $this->getSmsStatusService($this->getEntityManager(), $dispatcher, $this->getRepository(),
+            $this->getIo());
+        $response = $updater->getSmsStatus($id);
+
+        $this->assertSame($status, $response);
+        $this->assertSame($date, $response->getDateSent());
+        $this->assertSame($date, $response->getDateDelivered());
+    }
+
     private function getSmsStatusService(
         EntityManagerInterface $em,
         EventDispatcherInterface $dispatcher,
@@ -195,7 +225,7 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param null $items
+     * @param null|array $items
      * @return \PHPUnit_Framework_MockObject_MockObject|SentVerificationRepository
      */
     private function getRepository($items = null)

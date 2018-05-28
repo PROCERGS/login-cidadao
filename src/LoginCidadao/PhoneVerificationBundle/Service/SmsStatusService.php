@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Event\UpdateStatusEvent;
 use LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface;
+use LoginCidadao\PhoneVerificationBundle\Model\SmsStatusInterface;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -59,10 +60,15 @@ class SmsStatusService
         return $this;
     }
 
+    /**
+     * @param $transactionId
+     * @return SmsStatusInterface
+     */
     public function getSmsStatus($transactionId)
     {
         $event = $this->getStatus($transactionId);
-        var_dump($event);
+
+        return $event->getDeliveryStatus();
     }
 
     public function updateSentVerificationStatus($batchSize = 1)
@@ -78,7 +84,7 @@ class SmsStatusService
         $query = $this->sentVerificationRepo->getPendingUpdateSentVerificationQuery();
         $sentVerifications = $query->iterate();
 
-        //$this->em->getConnection()->getConfiguration()->setSQLLogger(null);
+        $this->em->getConnection() ? $this->em->getConnection()->getConfiguration()->setSQLLogger(null) : null;
         gc_enable();
         $this->progressStart($count);
         $transactionsUpdated = [];
