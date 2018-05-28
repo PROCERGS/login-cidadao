@@ -11,19 +11,23 @@
 namespace LoginCidadao\PhoneVerificationBundle\Tests\Event;
 
 use LoginCidadao\PhoneVerificationBundle\Event\UpdateStatusEvent;
-use PROCERGS\Sms\Protocols\SmsStatusInterface;
-use PROCERGS\Sms\Protocols\V2\SmsStatus;
+use LoginCidadao\PhoneVerificationBundle\Model\SmsStatusInterface;
 
 class UpdateStatusEventTest extends \PHPUnit_Framework_TestCase
 {
     public function testEvent()
     {
         $transactionId = '0123456';
-        $details = 'something';
         $date = new \DateTime();
-        $status = new SmsStatus($date, $date, SmsStatusInterface::DELIVERED, $details);
+
+        /** @var SmsStatusInterface|\PHPUnit_Framework_MockObject_MockObject $status */
+        $status = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\SmsStatusInterface');
+        $status->expects($this->once())->method('getDateSent')->willReturn($date);
+        $status->expects($this->once())->method('getDateDelivered')->willReturn($date);
 
         $event = new UpdateStatusEvent($transactionId);
+        $this->assertNull($event->getSentAt());
+        $this->assertNull($event->getDeliveredAt());
         $this->assertFalse($event->isUpdated());
         $event->setDeliveryStatus($status);
 

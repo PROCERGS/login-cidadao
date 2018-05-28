@@ -10,19 +10,13 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Event;
 
-use PROCERGS\Sms\Protocols\SmsStatusInterface;
+use LoginCidadao\PhoneVerificationBundle\Model\SmsStatusInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 class UpdateStatusEvent extends Event
 {
     /** @var string */
     private $transactionId;
-
-    /** @var \DateTime */
-    private $sentAt;
-
-    /** @var \DateTime */
-    private $deliveredAt;
 
     /** @var SmsStatusInterface */
     private $deliveryStatus;
