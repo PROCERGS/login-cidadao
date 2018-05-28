@@ -91,6 +91,7 @@ class UpdateSentVerificationStatusCommandTest extends \PHPUnit_Framework_TestCas
         $repo = $this->getMockBuilder('LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository')
             ->disableOriginalConstructor()
             ->getMock();
+        /** @scrutinizer ignore-call */
         $repo->expects($this->once())
             ->method('getPendingUpdateSentVerificationQuery')
             ->willReturn($query);
