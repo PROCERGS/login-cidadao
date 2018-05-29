@@ -14,10 +14,10 @@ use Eljam\CircuitBreaker\Breaker;
 use libphonenumber\PhoneNumber;
 use LoginCidadao\PhoneVerificationBundle\Event\UpdateStatusEvent;
 use LoginCidadao\PhoneVerificationBundle\Exception\InvalidSentVerificationStatusException;
+use LoginCidadao\PhoneVerificationBundle\Model\SmsStatusInterface;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
 use PROCERGS\LoginCidadao\PhoneVerificationBundle\Event\UpdateSentVerificationSubscriber;
 use PROCERGS\Sms\Exception\TransactionNotFoundException;
-use PROCERGS\Sms\Protocols\SmsStatusInterface;
 use PROCERGS\Sms\Protocols\V2\SmsBuilder;
 
 class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
@@ -30,6 +30,9 @@ class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testCompleteOnStatusRequested()
     {
         $transId = '0123456';
@@ -48,6 +51,9 @@ class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($event->getDeliveryStatus());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testTransactionNotFound()
     {
         $transId = '0123456';
@@ -63,6 +69,9 @@ class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($event->getDeliveryStatus());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testInvalidStatusOnStatusRequested()
     {
         $this->setExpectedException(
@@ -117,6 +126,7 @@ class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
             ->setId($transId)
             ->setSendDate($sentAt)
             ->setDeliveryDate($deliveredAt)
-            ->setStatus($statusCode);
+            ->setStatus($statusCode)
+            ->build();
     }
 }
