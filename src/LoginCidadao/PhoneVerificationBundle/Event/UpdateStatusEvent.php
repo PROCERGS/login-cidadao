@@ -46,7 +46,7 @@ class UpdateStatusEvent extends Event
      */
     public function getSentAt()
     {
-        if ($this->getDeliveryStatus() instanceof SmsStatusInterface) {
+        if (null !== $this->getDeliveryStatus()) {
             return $this->getDeliveryStatus()->getDateSent();
         } else {
             return null;
@@ -58,7 +58,7 @@ class UpdateStatusEvent extends Event
      */
     public function getDeliveredAt()
     {
-        if ($this->getDeliveryStatus() instanceof SmsStatusInterface) {
+        if (null !== $this->getDeliveryStatus()) {
             return $this->getDeliveryStatus()->getDateDelivered();
         } else {
             return null;
