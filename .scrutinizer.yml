@@ -151,7 +151,6 @@ build:
     dependencies:
         before:
             - psql -c "CREATE DATABASE logincidadao WITH OWNER = scrutinizer"
-            - 'sed -i -e "s/resource: memcache\.yml/resource: memcached.yml/" app/config/config.yml'
     project_setup:
         before:
             - cp app/config/parameters.yml.dist app/config/parameters.yml
