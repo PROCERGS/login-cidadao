@@ -145,6 +145,8 @@ build_failure_conditions:
     - 'project.metric_change("scrutinizer.quality", < -0.10)'
 build:
     environment:
+        php:
+            version: '7.1'
         postgresql: true
         variables:
             SYMFONY_DEPRECATIONS_HELPER: 'weak'
