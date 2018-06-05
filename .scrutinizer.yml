@@ -151,11 +151,11 @@ build:
     dependencies:
         before:
             - psql -c "CREATE DATABASE logincidadao WITH OWNER = scrutinizer"
-    project_setup:
-        before:
             - cp app/config/parameters.yml.dist app/config/parameters.yml
             - 'sed -i -e "s/database_user:     logincidadao/database_user:     scrutinizer/" app/config/parameters.yml'
             - 'sed -i -e "s/database_password: logincidadao/database_password: scrutinizer/" app/config/parameters.yml'
+    project_setup:
+        before:
             - php app/console doctrine:schema:update --force
             - php app/console doctrine:schema:update --em=logs --force
             - php app/console lc:database:populate batch/
