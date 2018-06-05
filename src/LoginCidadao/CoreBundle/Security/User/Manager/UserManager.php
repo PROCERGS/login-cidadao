@@ -11,27 +11,13 @@
 namespace LoginCidadao\CoreBundle\Security\User\Manager;
 
 use FOS\UserBundle\Doctrine\UserManager as BaseManager;
-use Doctrine\Common\Persistence\ObjectManager;
-use FOS\UserBundle\Util\CanonicalizerInterface;
 use libphonenumber\PhoneNumber;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use FOS\UserBundle\Model\UserInterface;
 use LoginCidadao\ValidationBundle\Validator\Constraints\UsernameValidator;
 
 class UserManager extends BaseManager
 {
-
-    public function __construct(
-        EncoderFactoryInterface $encoderFactory,
-        CanonicalizerInterface $usernameCanonicalizer,
-        CanonicalizerInterface $emailCanonicalizer,
-        ObjectManager $om,
-        $class
-    ) {
-        parent::__construct($encoderFactory, $usernameCanonicalizer, $emailCanonicalizer, $om, $class);
-    }
-
     public function createUser()
     {
         return parent::createUser();

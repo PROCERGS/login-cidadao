@@ -37,7 +37,7 @@
         "jms/serializer-bundle": "*",
         "simplethings/entity-audit-bundle": "^1.0",
         "hwi/oauth-bundle": "^0.4",
-        "vich/uploader-bundle": "^0.14.0",
+        "vich/uploader-bundle": "^1.6",
         "knplabs/knp-gaufrette-bundle": "^0.4",
         "knplabs/gaufrette": "^0.3",
         "friendsofsymfony/rest-bundle": "1.7.*",
@@ -106,7 +106,7 @@
     "config": {
         "bin-dir": "bin",
         "platform": {
-            "php": "5.4.16"
+            "php": "7.1.8"
         }
     },
     "extra": {

@@ -1,7 +1,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
-    - { resource: memcached.yml }
+    - { resource: redis.yml }
     # Uncomment bellow to enable Logstash formatting
     #- { resource: logstash.yml }
     - { resource: "@LoginCidadaoTOSBundle/Resources/config/config.yml" }
@@ -213,7 +213,7 @@ fos_oauth_server:
   refresh_token_class:  LoginCidadao\OAuthBundle\Entity\RefreshToken
   auth_code_class:      LoginCidadao\OAuthBundle\Entity\AuthCode
   service:
-      user_provider: fos_user.user_manager
+      user_provider: fos_user.user_provider
       options:
           supported_scopes: %lc_supported_scopes%
 
