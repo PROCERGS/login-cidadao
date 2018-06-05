@@ -36,7 +36,7 @@
         "friendsofsymfony/oauth-server-bundle": "^1.5",
         "jms/serializer-bundle": "*",
         "simplethings/entity-audit-bundle": "^1.0",
-        "hwi/oauth-bundle": "^0.4",
+        "hwi/oauth-bundle": "*",
         "vich/uploader-bundle": "^1.6",
         "knplabs/knp-gaufrette-bundle": "^0.4",
         "knplabs/gaufrette": "^0.3",
