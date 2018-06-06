@@ -63,7 +63,6 @@ class BaseController extends FOSRestController
 
     protected function getSerializationContext($scope)
     {
-
         /** @var VersionService $versionService */
         $versionService = $this->get('lc.api.version');
         $version = $versionService->getString($versionService->getVersionFromRequest());
@@ -101,5 +100,23 @@ class BaseController extends FOSRestController
         }
 
         return $accessToken->getClient();
+    }
+
+    protected function getJMSSerializationContext($scope)
+    {
+        $context = $this->getSerializationContext($scope);
+
+        return $this->convertContextToJMSContext($context);
+    }
+
+    protected function convertContextToJMSContext(Context $context): SerializationContext
+    {
+        $jmsContext = SerializationContext::create();
+
+        $jmsContext->setGroups($context->getGroups());
+        $jmsContext->setSerializeNull($context->getSerializeNull());
+        $jmsContext->setVersion($context->getVersion());
+
+        return $jmsContext;
     }
 }

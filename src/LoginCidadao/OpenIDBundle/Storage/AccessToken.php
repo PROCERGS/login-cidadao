@@ -97,9 +97,10 @@ class AccessToken extends BaseClass implements AccessTokenInterface
      */
     public function setAccessToken($oauth_token, $client_id, $user_id, $expires, $scope = null, $id_token = null)
     {
-        if ($user_id === null || !$client = $this->clientManager->getClientById($client_id)) {
+        $user = null;
+        if (!$client = $this->clientManager->getClientById($client_id)) {
             return null;
-        } else {
+        } elseif ($user_id !== null) {
             $user = $this->getUser($client, $user_id);
         }
 

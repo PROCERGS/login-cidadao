@@ -78,7 +78,7 @@ class ClientRegistrationController extends FOSRestController
         }
         $this->checkRegistrationAccessToken($request, $client);
 
-        $context = (new Context())->setGroups("client_metadata");
+        $context = (new Context())->setGroups(["client_metadata"]);
         $view = $this->view($client->getMetadata())->setContext($context);
 
         return $this->handleView($view);
