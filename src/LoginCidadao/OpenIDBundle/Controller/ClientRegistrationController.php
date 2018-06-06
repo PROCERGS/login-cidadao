@@ -11,6 +11,7 @@
 namespace LoginCidadao\OpenIDBundle\Controller;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use FOS\RestBundle\Context\Context;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\SerializationContext;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
@@ -77,9 +78,8 @@ class ClientRegistrationController extends FOSRestController
         }
         $this->checkRegistrationAccessToken($request, $client);
 
-        $context = SerializationContext::create()->setGroups("client_metadata");
-
-        $view = $this->view($client->getMetadata())->setSerializationContext($context);
+        $context = (new Context())->setGroups("client_metadata");
+        $view = $this->view($client->getMetadata())->setContext($context);
 
         return $this->handleView($view);
     }
