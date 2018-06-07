@@ -52,6 +52,19 @@ class RemoteClaimTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($essential, $remoteClaim->getEssentialScope());
     }
 
+    public function testScopeIsAlwaysArray()
+    {
+        $remoteClaim = (new RemoteClaim())
+            ->setRecommendedScope('scope1 scope2')
+            ->setEssentialScope('scope3 scope4');
+
+        $this->assertContains('scope1', $remoteClaim->getRecommendedScope());
+        $this->assertContains('scope2', $remoteClaim->getRecommendedScope());
+
+        $this->assertContains('scope3', $remoteClaim->getEssentialScope());
+        $this->assertContains('scope4', $remoteClaim->getEssentialScope());
+    }
+
     public function testGetNameAlwaysReturnsTagUri()
     {
         $remoteClaim = new RemoteClaim();

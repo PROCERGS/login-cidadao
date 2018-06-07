@@ -95,7 +95,7 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
 
             return $remoteClaim;
         } catch (\Exception $e) {
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException($e->getMessage(), $e);
         }
     }
 
