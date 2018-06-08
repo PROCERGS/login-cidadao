@@ -110,8 +110,10 @@ class UserManager extends BaseManager
         $person
             ->setUpdatedAt(new \DateTime())
             ->setEnabled(false)
-            ->setLocked(true)
             ->setPassword('#BLOCKED#'.microtime());
+        if (method_exists($person, 'setLocked')) {
+            $person->setLocked(true);
+        }
 
         $this->updateUser($person, $andFlush);
 
