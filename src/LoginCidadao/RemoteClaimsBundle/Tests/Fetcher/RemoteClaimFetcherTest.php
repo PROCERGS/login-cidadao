@@ -27,10 +27,11 @@ use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 use LoginCidadao\RemoteClaimsBundle\Tests\Http\HttpMocker;
 use LoginCidadao\RemoteClaimsBundle\Tests\Parser\RemoteClaimParserTest;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
+class RemoteClaimFetcherTest extends TestCase
 {
     /**
      * Test the Claim fetch using HTTP URI.
@@ -82,7 +83,7 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
 
     public function testFetchTagNotFound()
     {
-        $this->setExpectedException(NotFoundHttpException::class);
+        $this->expectException(NotFoundHttpException::class);
 
         $tagUri = 'tag:example.com,2018:my_claim';
         $fetcher = $this->getFetcher();
@@ -91,7 +92,7 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
 
     public function testFetchUriNotFound()
     {
-        $this->setExpectedException(NotFoundHttpException::class);
+        $this->expectException(NotFoundHttpException::class);
 
         $httpClient = new HttpMocker(null, null, [
             new RequestException('Not found', new Request('GET', 'dummy')),
@@ -111,7 +112,7 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
         $claimUri = 'https://dummy.com';
 
         /** @var ClaimProviderInterface|\PHPUnit_Framework_MockObject_MockObject $provider */
-        $provider = $this->getMock(ClaimProviderInterface::class);
+        $provider = $this->createMock(ClaimProviderInterface::class);
         $provider->expects($this->once())->method('getClientId')->willReturn(['https://redirect.uri']);
 
         $existingClaim = new RemoteClaim();
@@ -141,7 +142,7 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
     {
         $claimUri = 'https://dummy.com';
 
-        $provider = $this->getMock(ClaimProviderInterface::class);
+        $provider = $this->createMock(ClaimProviderInterface::class);
 
         $existingClaim = null;
 
@@ -167,7 +168,7 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
      */
     public function testNonExistentProvider()
     {
-        $this->setExpectedException(ClaimProviderNotFoundException::class);
+        $this->expectException(ClaimProviderNotFoundException::class);
         $claimUri = 'https://dummy.com';
 
         $clientManager = $this->getClientManager();
@@ -190,7 +191,7 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $fetcher = $this->getFetcher($httpClient);
-        $this->setExpectedException(ClaimUriUnavailableException::class);
+        $this->expectException(ClaimUriUnavailableException::class);
         $fetcher->discoverClaimUri($tagUri);
     }
 
@@ -215,7 +216,7 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
 
     public function testProviderNotFound()
     {
-        $this->setExpectedException(ClaimProviderNotFoundException::class);
+        $this->expectException(ClaimProviderNotFoundException::class);
 
         $claimUri = 'https://dummy.com';
 
@@ -274,7 +275,7 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
      */
     private function getEntityManager()
     {
-        $em = $this->getMock(EntityManagerInterface::class);
+        $em = $this->createMock(EntityManagerInterface::class);
 
         return $em;
     }
@@ -305,6 +306,6 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
      */
     private function getDispatcher()
     {
-        return $this->getMock(EventDispatcherInterface::class);
+        return $this->createMock(EventDispatcherInterface::class);
     }
 }

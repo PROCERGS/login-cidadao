@@ -11,9 +11,11 @@
 namespace LoginCidadao\APIBundle\Tests\DependencyInjection;
 
 use LoginCidadao\APIBundle\DependencyInjection\Configuration;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 
-class ConfigurationTest extends \PHPUnit_Framework_TestCase
+class ConfigurationTest extends TestCase
 {
     public static function getSampleConfig()
     {
@@ -41,14 +43,14 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyConfig()
     {
-        $this->setExpectedException('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException');
+        $this->expectException(InvalidConfigurationException::class);
         $processor = new Processor();
         $processor->processConfiguration(new Configuration(), []);
     }
 
     public function testIncompleteConfig()
     {
-        $this->setExpectedException('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException');
+        $this->expectException(InvalidConfigurationException::class);
         $processor = new Processor();
         $processor->processConfiguration(new Configuration(), [
             [
@@ -62,6 +64,8 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testSampleConfig()
     {
         $processor = new Processor();
-        $processor->processConfiguration(new Configuration(), [static::getSampleConfig()]);
+        $result = $processor->processConfiguration(new Configuration(), [static::getSampleConfig()]);
+
+        $this->assertInternalType('array', $result);
     }
 }

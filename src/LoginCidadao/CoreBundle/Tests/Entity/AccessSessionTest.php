@@ -11,8 +11,9 @@
 namespace LoginCidadao\CoreBundle\Tests\Entity;
 
 use LoginCidadao\CoreBundle\Entity\AccessSession;
+use PHPUnit\Framework\TestCase;
 
-class AccessSessionTest extends \PHPUnit_Framework_TestCase
+class AccessSessionTest extends TestCase
 {
     public function testAccessSession()
     {

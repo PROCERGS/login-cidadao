@@ -13,16 +13,17 @@ namespace LoginCidadao\TaskStackBundle\Tests\Event;
 use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
 use LoginCidadao\TaskStackBundle\Event\RequestSubscriber;
 use LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class RequestSubscriberTest extends \PHPUnit_Framework_TestCase
+class RequestSubscriberTest extends TestCase
 {
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|TaskStackManagerInterface
      */
     private function getStackManager()
     {
-        return $this->getMock('LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface');
+        return $this->createMock('LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface');
     }
 
     public function testGetSubscribedEvents()
@@ -36,8 +37,8 @@ class RequestSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testOnRequest()
     {
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
-        $response = $this->getMock('Symfony\Component\HttpFoundation\Response');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
+        $response = $this->createMock('Symfony\Component\HttpFoundation\Response');
 
         $stackManager = $this->getStackManager();
         $stackManager->expects($this->once())->method('processRequest')->willReturn($response);
@@ -73,11 +74,11 @@ class RequestSubscriberTest extends \PHPUnit_Framework_TestCase
         $stackManager->expects($this->once())->method('emptyStack');
         $stackManager->expects($this->once())->method('addNotSkippedTaskOnce');
 
-        $session = $this->getMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $session = $this->createMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
         $session->expects($this->once())->method('has')->willReturn(true);
         $session->expects($this->once())->method('remove');
 
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
         $request->expects($this->once())->method('getSession')->willReturn($session);
 
         $event = $this->getMockBuilder('LoginCidadao\TaskStackBundle\Event\EntryPointStartEvent')

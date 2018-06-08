@@ -19,8 +19,9 @@ use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Parser\RemoteClaimParser;
+use PHPUnit\Framework\TestCase;
 
-class RemoteClaimParserTest extends \PHPUnit_Framework_TestCase
+class RemoteClaimParserTest extends TestCase
 {
     public static $claimMetadata = [
         'claim_version' => 1,
@@ -81,14 +82,14 @@ class RemoteClaimParserTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidJwt()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
 
         RemoteClaimParser::parseJwt('INVALID JWT', new RemoteClaim(), new Client());
     }
 
     public function testParseInvalidClaim()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
 
         RemoteClaimParser::parseClaim(null, new RemoteClaim());
     }

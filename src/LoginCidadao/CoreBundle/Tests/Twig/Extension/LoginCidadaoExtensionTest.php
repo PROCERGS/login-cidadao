@@ -12,12 +12,10 @@ namespace LoginCidadao\CoreBundle\Tests\Twig\Extension;
 
 use FOS\UserBundle\Form\Factory\FactoryInterface;
 use LoginCidadao\CoreBundle\Twig\Extension\LoginCidadaoExtension;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Form\FormFactory;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
 
-class LoginCidadaoExtensionTest extends \PHPUnit_Framework_TestCase
+class LoginCidadaoExtensionTest extends TestCase
 {
 
     public function testGetFunctions()
@@ -53,10 +51,10 @@ class LoginCidadaoExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $name = 'form_name';
 
-        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form = $this->createMock('Symfony\Component\Form\FormInterface');
         $form->expects($this->once())->method('createView');
 
-        $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+        $formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
         $formFactory->expects($this->once())
             ->method('create')->with($name)
             ->willReturn($form);
@@ -67,9 +65,7 @@ class LoginCidadaoExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFormFactory()
     {
-        $name = 'form_factory_name';
-
-        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form = $this->createMock('Symfony\Component\Form\FormInterface');
         $form->expects($this->once())->method('createView');
 
         $formFactory = $this->getRegistrationFormFactory();
@@ -78,7 +74,7 @@ class LoginCidadaoExtensionTest extends \PHPUnit_Framework_TestCase
             ->willReturn($form);
 
         $extension = $this->getLoginCidadaoExtension(null, $formFactory);
-        $extension->getFormFactory($name);
+        $extension->getFormFactory();
     }
 
     private function getLoginCidadaoExtension($formFactory = null, $registrationFormFactory = null)
@@ -92,7 +88,7 @@ class LoginCidadaoExtensionTest extends \PHPUnit_Framework_TestCase
      */
     private function getRegistrationFormFactory()
     {
-        return $this->getMock('FOS\UserBundle\Form\Factory\FactoryInterface');
+        return $this->createMock('FOS\UserBundle\Form\Factory\FactoryInterface');
     }
 
     /**
@@ -100,6 +96,6 @@ class LoginCidadaoExtensionTest extends \PHPUnit_Framework_TestCase
      */
     private function getFormFactory()
     {
-        return $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+        return $this->createMock('Symfony\Component\Form\FormFactoryInterface');
     }
 }

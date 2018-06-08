@@ -13,13 +13,14 @@ namespace LoginCidadao\CoreBundle\Tests\EventListener;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
 use JMS\Serializer\EventDispatcher\PreSerializeEvent;
 use LoginCidadao\CoreBundle\EventListener\PersonSerializeEventListener;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Kernel;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
-class PersonSerializeEventListenerTest extends \PHPUnit_Framework_TestCase
+class PersonSerializeEventListenerTest extends TestCase
 {
 
     public function testGetSubscribedEvents()
@@ -36,17 +37,13 @@ class PersonSerializeEventListenerTest extends \PHPUnit_Framework_TestCase
     public function testListener()
     {
         $request = new Request();
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
 
         /** @var PreSerializeEvent|\PHPUnit_Framework_MockObject_MockObject $event */
         $event = $this->getMockBuilder('JMS\Serializer\EventDispatcher\PreSerializeEvent')
             ->disableOriginalConstructor()->getMock();
         $event->expects($this->once())
             ->method('getObject')->willReturn($person);
-
-        /** @var ObjectEvent $postEvent */
-        $postEvent = $this->getMockBuilder('JMS\Serializer\EventDispatcher\ObjectEvent')
-            ->disableOriginalConstructor()->getMock();
 
         /** @var UploaderHelper $uploadHelper */
         $uploadHelper = $this->getMockBuilder('Vich\UploaderBundle\Templating\Helper\UploaderHelper')

@@ -11,8 +11,9 @@
 namespace LoginCidadao\OAuthBundle\Tests\Entity;
 
 use LoginCidadao\OAuthBundle\Entity\AccessToken;
+use PHPUnit\Framework\TestCase;
 
-class AccessTokenTest extends \PHPUnit_Framework_TestCase
+class AccessTokenTest extends TestCase
 {
     /**
      * @group time-sensitive

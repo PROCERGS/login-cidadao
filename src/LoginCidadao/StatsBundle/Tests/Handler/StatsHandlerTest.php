@@ -14,8 +14,9 @@ namespace LoginCidadao\StatsBundle\Tests\Handler;
 use LoginCidadao\StatsBundle\Entity\Statistics;
 use LoginCidadao\StatsBundle\Entity\StatisticsRepository;
 use LoginCidadao\StatsBundle\Handler\StatsHandler;
+use PHPUnit\Framework\TestCase;
 
-class StatsHandlerTest extends \PHPUnit_Framework_TestCase
+class StatsHandlerTest extends TestCase
 {
     public function testHandler()
     {

@@ -13,8 +13,9 @@ namespace LoginCidadao\CoreBundle\Tests\Entity;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\OAuthBundle\Entity\Client;
+use PHPUnit\Framework\TestCase;
 
-class AuthorizationTest extends \PHPUnit_Framework_TestCase
+class AuthorizationTest extends TestCase
 {
     public function testEntity()
     {

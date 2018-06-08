@@ -26,24 +26,23 @@ class HostBelongsToClaimProviderValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if (!$value instanceof RemoteClaimInterface) {
-            return;
-        }
+        if ($value instanceof RemoteClaimInterface) {
 
-        $host = $value->getName()->getAuthorityName();
-        $provider = $value->getProvider();
+            $host = $value->getName()->getAuthorityName();
+            $provider = $value->getProvider();
 
-        $redirectUris = $provider->getRedirectUris();
-        foreach ($redirectUris as $redirectUri) {
-            $uri = HttpUri::parseUri($redirectUri);
-            if ($uri['host'] === $host) {
-                return;
+            $redirectUris = $provider->getRedirectUris();
+            foreach ($redirectUris as $redirectUri) {
+                $uri = HttpUri::parseUri($redirectUri);
+                if ($uri['host'] === $host) {
+                    return;
+                }
             }
+
+
+            $this->context->buildViolation($constraint->message)
+                ->setParameter('{{ host }}', $host)
+                ->addViolation();
         }
-
-
-        $this->context->buildViolation($constraint->message)
-            ->setParameter('{{ host }}', $host)
-            ->addViolation();
     }
 }

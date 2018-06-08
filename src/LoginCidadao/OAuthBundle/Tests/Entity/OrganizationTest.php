@@ -13,8 +13,9 @@ namespace LoginCidadao\OAuthBundle\Tests\Entity;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Entity\Organization;
+use PHPUnit\Framework\TestCase;
 
-class OrganizationTest extends \PHPUnit_Framework_TestCase
+class OrganizationTest extends TestCase
 {
     public function testOrganization()
     {

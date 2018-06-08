@@ -10,16 +10,19 @@
 
 namespace LoginCidadao\APIBundle\Tests\Event;
 
+use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
 use LoginCidadao\APIBundle\Event\LoggedInUserListener;
 use LoginCidadao\OAuthBundle\Entity\AccessToken;
 use LoginCidadao\OAuthBundle\Entity\AccessTokenRepository;
 use LoginCidadao\OAuthBundle\Entity\Client;
+use PHPUnit\Framework\TestCase;
 use SimpleThings\EntityAudit\AuditConfiguration;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-class LoggedInUserListenerTest extends \PHPUnit_Framework_TestCase
+class LoggedInUserListenerTest extends TestCase
 {
     public function testOnKernelRequest()
     {
@@ -30,25 +33,24 @@ class LoggedInUserListenerTest extends \PHPUnit_Framework_TestCase
         $accessToken->setClient($client);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|AccessTokenRepository $accessTokenRepo */
-        $accessTokenRepo = $this->getMockBuilder('LoginCidadao\OAuthBundle\Entity\AccessTokenRepository')
+        $accessTokenRepo = $this->getMockBuilder(AccessTokenRepository::class)
             ->disableOriginalConstructor()->getMock();
         $accessTokenRepo->expects($this->once())
             ->method('findOneBy')->with(['token' => $accessTokenToken])
             ->willReturn($accessToken);
 
-        $token = $this->getMock('FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken');
+        $token = $this->createMock(OAuthToken::class);
         $token->expects($this->exactly(2))
             ->method('getToken')->willReturn($accessTokenToken);
 
         /** @var TokenStorageInterface|\PHPUnit_Framework_MockObject_MockObject $tokenStorage */
-        $tokenStorage = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
+        $tokenStorage = $this->createMock(TokenStorageInterface::class);
         $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
 
         $auditConfig = new AuditConfiguration();
 
         /** @var GetResponseEvent|\PHPUnit_Framework_MockObject_MockObject $event */
-        $event = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseEvent')
-            ->disableOriginalConstructor()->getMock();
+        $event = $this->getMockBuilder(GetResponseEvent::class)->disableOriginalConstructor()->getMock();
         $event->expects($this->once())
             ->method('getRequestType')->willReturn(HttpKernelInterface::MASTER_REQUEST);
 
@@ -59,18 +61,17 @@ class LoggedInUserListenerTest extends \PHPUnit_Framework_TestCase
     public function testOnKernelRequestNotMaster()
     {
         /** @var AccessTokenRepository|\PHPUnit_Framework_MockObject_MockObject $accessTokenRepo */
-        $accessTokenRepo = $this->getMockBuilder('LoginCidadao\OAuthBundle\Entity\AccessTokenRepository')
+        $accessTokenRepo = $this->getMockBuilder(AccessTokenRepository::class)
             ->disableOriginalConstructor()->getMock();
 
         /** @var TokenStorageInterface|\PHPUnit_Framework_MockObject_MockObject $tokenStorage */
-        $tokenStorage = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
+        $tokenStorage = $this->createMock(TokenStorageInterface::class);
         $tokenStorage->expects($this->never())->method('getToken');
 
         $auditConfig = new AuditConfiguration();
 
         /** @var GetResponseEvent|\PHPUnit_Framework_MockObject_MockObject $event */
-        $event = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseEvent')
-            ->disableOriginalConstructor()->getMock();
+        $event = $this->getMockBuilder(GetResponseEvent::class)->disableOriginalConstructor()->getMock();
         $event->expects($this->once())
             ->method('getRequestType')->willReturn(HttpKernelInterface::SUB_REQUEST);
 
@@ -81,20 +82,19 @@ class LoggedInUserListenerTest extends \PHPUnit_Framework_TestCase
     public function testOnKernelRequestNotOAuthToken()
     {
         /** @var AccessTokenRepository|\PHPUnit_Framework_MockObject_MockObject $accessTokenRepo */
-        $accessTokenRepo = $this->getMockBuilder('LoginCidadao\OAuthBundle\Entity\AccessTokenRepository')
+        $accessTokenRepo = $this->getMockBuilder(AccessTokenRepository::class)
             ->disableOriginalConstructor()->getMock();
 
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock(TokenInterface::class);
 
         /** @var TokenStorageInterface|\PHPUnit_Framework_MockObject_MockObject $tokenStorage */
-        $tokenStorage = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
+        $tokenStorage = $this->createMock(TokenStorageInterface::class);
         $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
 
         $auditConfig = new AuditConfiguration();
 
         /** @var GetResponseEvent|\PHPUnit_Framework_MockObject_MockObject $event */
-        $event = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseEvent')
-            ->disableOriginalConstructor()->getMock();
+        $event = $this->getMockBuilder(GetResponseEvent::class)->disableOriginalConstructor()->getMock();
         $event->expects($this->once())
             ->method('getRequestType')->willReturn(HttpKernelInterface::MASTER_REQUEST);
 

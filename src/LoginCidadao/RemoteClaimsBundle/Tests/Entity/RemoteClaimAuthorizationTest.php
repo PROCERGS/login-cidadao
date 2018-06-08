@@ -15,19 +15,20 @@ use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use PHPUnit\Framework\TestCase;
 
-class RemoteClaimAuthorizationTest extends \PHPUnit_Framework_TestCase
+class RemoteClaimAuthorizationTest extends TestCase
 {
     public function testRemoteClaimAuthorization()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|ClientInterface $client */
-        $client = $this->getMock('LoginCidadao\OAuthBundle\Model\ClientInterface');
+        $client = $this->createMock('LoginCidadao\OAuthBundle\Model\ClientInterface');
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|ClaimProviderInterface $provider */
-        $provider = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
+        $provider = $this->createMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|PersonInterface $person */
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
 
         $claimName = new TagUri();
         $accessToken = 'my_accessToken';

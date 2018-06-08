@@ -13,9 +13,10 @@ namespace LoginCidadao\CoreBundle\Tests\Model;
 use libphonenumber\PhoneNumber;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Model\SupportMessage;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class SupportMessageTest extends \PHPUnit_Framework_TestCase
+class SupportMessageTest extends TestCase
 {
     public function testSimpleSupportMessage()
     {
@@ -35,7 +36,7 @@ class SupportMessageTest extends \PHPUnit_Framework_TestCase
     public function testCompleteSupportMessage()
     {
         /** @var TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject $translator */
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator = $this->createMock('Symfony\Component\Translation\TranslatorInterface');
         $translator->expects($this->exactly(10))->method('trans')->willReturnCallback(function ($text) {
             return $text;
         });

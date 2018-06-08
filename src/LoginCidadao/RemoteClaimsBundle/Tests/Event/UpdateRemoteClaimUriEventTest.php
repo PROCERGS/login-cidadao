@@ -12,8 +12,9 @@ namespace LoginCidadao\RemoteClaimsBundle\Tests\Event;
 
 use LoginCidadao\RemoteClaimsBundle\Event\UpdateRemoteClaimUriEvent;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
+use PHPUnit\Framework\TestCase;
 
-class UpdateRemoteClaimUriEventTest extends \PHPUnit_Framework_TestCase
+class UpdateRemoteClaimUriEventTest extends TestCase
 {
     public function testEvent()
     {

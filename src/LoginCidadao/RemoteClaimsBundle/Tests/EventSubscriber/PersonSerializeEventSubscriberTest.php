@@ -25,8 +25,9 @@ use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManagerInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
+use PHPUnit\Framework\TestCase;
 
-class PersonSerializeEventSubscriberTest extends \PHPUnit_Framework_TestCase
+class PersonSerializeEventSubscriberTest extends TestCase
 {
     // PersonSerializeEventSubscriber
 
@@ -176,7 +177,7 @@ class PersonSerializeEventSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function getPerson()
     {
-        return $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        return $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
     }
 
     /**
@@ -184,7 +185,7 @@ class PersonSerializeEventSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function getClient()
     {
-        return $this->getMock('LoginCidadao\OAuthBundle\Entity\Client');
+        return $this->createMock('LoginCidadao\OAuthBundle\Entity\Client');
     }
 
     /**
@@ -201,7 +202,7 @@ class PersonSerializeEventSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function getRemoteClaimManager()
     {
-        return $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManagerInterface');
+        return $this->createMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManagerInterface');
     }
 
     /**
@@ -209,7 +210,7 @@ class PersonSerializeEventSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function getFetcher()
     {
-        return $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface');
+        return $this->createMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface');
     }
 
     /**

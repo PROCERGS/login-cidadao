@@ -11,14 +11,15 @@
 namespace LoginCidadao\OpenIDBundle\Tests\Entity;
 
 use LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier;
+use PHPUnit\Framework\TestCase;
 
-class SubjectIdentifierTest extends \PHPUnit_Framework_TestCase
+class SubjectIdentifierTest extends TestCase
 {
     public function testGettersSetters()
     {
         $subId = 'some_subject_identifier';
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
-        $client = $this->getMock('LoginCidadao\OAuthBundle\Model\ClientInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $client = $this->createMock('LoginCidadao\OAuthBundle\Model\ClientInterface');
         $createdAt = new \DateTime();
         $updatedAt = new \DateTime();
 

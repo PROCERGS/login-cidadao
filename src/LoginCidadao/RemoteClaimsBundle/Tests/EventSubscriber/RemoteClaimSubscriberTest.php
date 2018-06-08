@@ -15,8 +15,9 @@ use LoginCidadao\RemoteClaimsBundle\EventSubscriber\RemoteClaimSubscriber;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManagerInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 use LoginCidadao\RemoteClaimsBundle\RemoteClaimEvents;
+use PHPUnit\Framework\TestCase;
 
-class RemoteClaimSubscriberTest extends \PHPUnit_Framework_TestCase
+class RemoteClaimSubscriberTest extends TestCase
 {
     public function testGetSubscribedEvents()
     {
@@ -44,6 +45,6 @@ class RemoteClaimSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function getRemoteClaimManager()
     {
-        return $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManagerInterface');
+        return $this->createMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManagerInterface');
     }
 }

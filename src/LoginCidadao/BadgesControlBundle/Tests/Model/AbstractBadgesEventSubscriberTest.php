@@ -15,8 +15,9 @@ use LoginCidadao\BadgesControlBundle\Event\ListBadgesEvent;
 use LoginCidadao\BadgesControlBundle\Event\ListBearersEvent;
 use LoginCidadao\BadgesControlBundle\Exception\BadgesNameCollisionException;
 use LoginCidadao\BadgesControlBundle\Model\AbstractBadgesEventSubscriber;
+use PHPUnit\Framework\TestCase;
 
-class AbstractBadgesEventSubscriberTest extends \PHPUnit_Framework_TestCase
+class AbstractBadgesEventSubscriberTest extends TestCase
 {
     public function testAbstractSubscriber()
     {
@@ -44,7 +45,7 @@ class AbstractBadgesEventSubscriberTest extends \PHPUnit_Framework_TestCase
             $this->fail("Unexpected exception");
         }
 
-        $filterBadge = $this->getMock('LoginCidadao\BadgesControlBundle\Model\BadgeInterface');
+        $filterBadge = $this->createMock('LoginCidadao\BadgesControlBundle\Model\BadgeInterface');
         $filterBadge->expects($this->once())->method('getNamespace')->willReturn('namespace');
 
         /** @var ListBearersEvent|\PHPUnit_Framework_MockObject_MockObject $bearersEvent */

@@ -19,15 +19,16 @@ use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier;
 use LoginCidadao\OpenIDBundle\Entity\SubjectIdentifierRepository;
 use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
+use PHPUnit\Framework\TestCase;
 
-class SubjectIdentifierServiceTest extends \PHPUnit_Framework_TestCase
+class SubjectIdentifierServiceTest extends TestCase
 {
     /**
      * @return EntityManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getEntityManager()
     {
-        return $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        return $this->createMock('Doctrine\ORM\EntityManagerInterface');
     }
 
     /**
@@ -36,7 +37,7 @@ class SubjectIdentifierServiceTest extends \PHPUnit_Framework_TestCase
     private function getClient()
     {
         /** @var ClientInterface|\PHPUnit_Framework_MockObject_MockObject $client */
-        $client = $this->getMock('LoginCidadao\OAuthBundle\Model\ClientInterface');
+        $client = $this->createMock('LoginCidadao\OAuthBundle\Model\ClientInterface');
 
         return $client;
     }
@@ -59,7 +60,7 @@ class SubjectIdentifierServiceTest extends \PHPUnit_Framework_TestCase
      */
     private function getPerson($id = null)
     {
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         if ($id) {
             $person->expects($this->once())->method('getId')->willReturn($id);
         }
@@ -74,7 +75,7 @@ class SubjectIdentifierServiceTest extends \PHPUnit_Framework_TestCase
      */
     private function getClientMetadata($type = null, ClientInterface $client = null)
     {
-        $metadata = $this->getMock('LoginCidadao\OpenIDBundle\Entity\ClientMetadata');
+        $metadata = $this->createMock('LoginCidadao\OpenIDBundle\Entity\ClientMetadata');
 
         if ($client) {
             $metadata->expects($this->any())->method('getClient')->willReturn($client);
@@ -146,7 +147,7 @@ class SubjectIdentifierServiceTest extends \PHPUnit_Framework_TestCase
         $secret = 'my.secret';
         $expectedSub = 'my_sub_id';
 
-        $subId = $this->getMock('LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier');
+        $subId = $this->createMock('LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier');
         $subId->expects($this->once())->method('getSubjectIdentifier')->willReturn($expectedSub);
 
         $repo = $this->getRepo();
@@ -166,9 +167,9 @@ class SubjectIdentifierServiceTest extends \PHPUnit_Framework_TestCase
     {
         $secret = 'my.secret';
 
-        $subId = $this->getMock('LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier');
+        $subId = $this->createMock('LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier');
         /** @var ClientInterface $client */
-        $client = $this->getMock('LoginCidadao\OAuthBundle\Model\ClientInterface');
+        $client = $this->createMock('LoginCidadao\OAuthBundle\Model\ClientInterface');
 
         $repo = $this->getRepo();
         $repo->expects($this->once())->method('findOneBy')->willReturn($subId);
@@ -204,7 +205,7 @@ class SubjectIdentifierServiceTest extends \PHPUnit_Framework_TestCase
     {
         $secret = 'my.secret';
 
-        $subId = $this->getMock('LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier');
+        $subId = $this->createMock('LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier');
 
         $repo = $this->getRepo();
         $repo->expects($this->once())->method('findOneBy')->willReturn($subId);
@@ -240,7 +241,7 @@ class SubjectIdentifierServiceTest extends \PHPUnit_Framework_TestCase
         $oldSub = '123';
 
         /** @var PersonInterface|\PHPUnit_Framework_MockObject_MockObject $person */
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $person->expects($this->once())->method('getId')->willReturn($oldSub);
 
         $client = new Client();

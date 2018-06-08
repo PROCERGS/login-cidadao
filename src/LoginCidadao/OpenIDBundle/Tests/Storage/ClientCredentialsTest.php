@@ -16,8 +16,9 @@ use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use LoginCidadao\OpenIDBundle\Storage\ClientCredentials;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
+use PHPUnit\Framework\TestCase;
 
-class ClientCredentialsTest extends \PHPUnit_Framework_TestCase
+class ClientCredentialsTest extends TestCase
 {
     public function testCheckClientCredentials()
     {
@@ -174,7 +175,7 @@ class ClientCredentialsTest extends \PHPUnit_Framework_TestCase
      */
     private function getEntityManager()
     {
-        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em = $this->createMock('Doctrine\ORM\EntityManagerInterface');
 
         return $em;
     }
@@ -196,7 +197,7 @@ class ClientCredentialsTest extends \PHPUnit_Framework_TestCase
                         $remoteClaims = [];
                         if ($expectedRemoteClaim !== null) {
                             $expectedRemoteClaim = TagUri::createFromString($expectedRemoteClaim);
-                            $remoteClaim = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface');
+                            $remoteClaim = $this->createMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface');
                             $remoteClaim->expects($this->any())->method('getName')->willReturn($expectedRemoteClaim);
                             $remoteClaims[] = $remoteClaim;
                         }

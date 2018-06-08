@@ -11,8 +11,9 @@
 namespace LoginCidadao\CoreBundle\Tests\Exception;
 
 use LoginCidadao\CoreBundle\Exception\RecaptchaException;
+use PHPUnit\Framework\TestCase;
 
-class RecaptchaExceptionTest extends \PHPUnit_Framework_TestCase
+class RecaptchaExceptionTest extends TestCase
 {
 
     public function testGetClass()

@@ -11,15 +11,16 @@
 namespace LoginCidadao\PhoneVerificationBundle\Tests\Event;
 
 use LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent;
+use PHPUnit\Framework\TestCase;
 
-class SendPhoneVerificationEventTest extends \PHPUnit_Framework_TestCase
+class SendPhoneVerificationEventTest extends TestCase
 {
     public function testSendPhoneVerificationEvent()
     {
         $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
-        $phoneVerification = $this->getMock($phoneVerificationClass);
+        $phoneVerification = $this->createMock($phoneVerificationClass);
 
-        $sentVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface');
+        $sentVerification = $this->createMock('LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface');
 
         $event = new SendPhoneVerificationEvent($phoneVerification);
         $event->setSentVerification($sentVerification);

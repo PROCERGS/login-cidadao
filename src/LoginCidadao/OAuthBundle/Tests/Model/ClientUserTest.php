@@ -12,8 +12,9 @@ namespace LoginCidadao\OAuthBundle\Tests\Model;
 
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Model\ClientUser;
+use PHPUnit\Framework\TestCase;
 
-class ClientUserTest extends \PHPUnit_Framework_TestCase
+class ClientUserTest extends TestCase
 {
 
     public function testClientUser()

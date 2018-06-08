@@ -16,8 +16,9 @@ use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Validator\Constraints\SectorIdentifierUri;
 use LoginCidadao\OpenIDBundle\Validator\Constraints\SectorIdentifierUriValidator;
 use LoginCidadao\OpenIDBundle\Validator\SectorIdentifierUriChecker;
+use PHPUnit\Framework\TestCase;
 
-class SectorIdentifierUriValidatorTest extends \PHPUnit_Framework_TestCase
+class SectorIdentifierUriValidatorTest extends TestCase
 {
     public function testValidate()
     {

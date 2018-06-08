@@ -13,15 +13,16 @@ namespace LoginCidadao\PhoneVerificationBundle\Tests\Event;
 use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\PhoneVerificationBundle\Event\BadgesSubscriber;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
+use PHPUnit\Framework\TestCase;
 
-class BadgesSubscriberTest extends \PHPUnit_Framework_TestCase
+class BadgesSubscriberTest extends TestCase
 {
     private function getEmWithRepo()
     {
         $repo = $this->getMockBuilder('LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository')
             ->disableOriginalConstructor()
             ->getMock();
-        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em = $this->createMock('Doctrine\ORM\EntityManagerInterface');
         $em->expects($this->once())->method('getRepository')->willReturn($repo);
 
         return $em;
@@ -30,7 +31,7 @@ class BadgesSubscriberTest extends \PHPUnit_Framework_TestCase
     private function getPhoneVerificationService()
     {
         $class = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface';
-        $phoneVerificationService = $this->getMock($class);
+        $phoneVerificationService = $this->createMock($class);
 
         return $phoneVerificationService;
     }
@@ -41,17 +42,17 @@ class BadgesSubscriberTest extends \PHPUnit_Framework_TestCase
         EntityManagerInterface $em = null
     ) {
         $phoneVerificationService = $phoneVerificationService ?: $this->getPhoneVerificationService();
-        $em = $em ?: $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em = $em ?: $this->createMock('Doctrine\ORM\EntityManagerInterface');
 
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator = $this->createMock('Symfony\Component\Translation\TranslatorInterface');
 
         return new BadgesSubscriber($phoneVerificationService, $translator, $em, $enabled);
     }
 
     public function testConstructor()
     {
-        $this->getSubscriber(true);
-        $this->getSubscriber(false);
+        $this->assertInstanceOf(BadgesSubscriber::class, $this->getSubscriber(true));
+        $this->assertInstanceOf(BadgesSubscriber::class, $this->getSubscriber(false));
     }
 
     public function testOnBadgeEvaluateDisabled()
@@ -59,7 +60,7 @@ class BadgesSubscriberTest extends \PHPUnit_Framework_TestCase
         $event = $this->getMockBuilder('LoginCidadao\BadgesControlBundle\Event\EvaluateBadgesEvent')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->getSubscriber(false)->onBadgeEvaluate($event);
+        $this->assertNull($this->getSubscriber(false)->onBadgeEvaluate($event));
     }
 
     public function testOnBadgeEvaluate()
@@ -67,10 +68,10 @@ class BadgesSubscriberTest extends \PHPUnit_Framework_TestCase
         $phone = $this->getMockBuilder('libphonenumber\PhoneNumber')
             ->disableOriginalConstructor()
             ->getMock();
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $person->expects($this->atLeastOnce())->method('getMobile')->willReturn($phone);
 
-        $phoneVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
+        $phoneVerification = $this->createMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
         $phoneVerification->expects($this->once())->method('isVerified')->willReturn(true);
 
         $phoneVerificationService = $this->getPhoneVerificationService();
@@ -88,7 +89,7 @@ class BadgesSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testOnBadgeEvaluateNoPhone()
     {
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $person->expects($this->atLeastOnce())->method('getMobile')->willReturn(null);
 
         $event = $this->getMockBuilder('LoginCidadao\BadgesControlBundle\Event\EvaluateBadgesEvent')
@@ -104,7 +105,7 @@ class BadgesSubscriberTest extends \PHPUnit_Framework_TestCase
         $phone = $this->getMockBuilder('libphonenumber\PhoneNumber')
             ->disableOriginalConstructor()
             ->getMock();
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $person->expects($this->atLeastOnce())->method('getMobile')->willReturn($phone);
 
         $phoneVerificationService = $this->getPhoneVerificationService();
@@ -122,7 +123,7 @@ class BadgesSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testOnListBearersWithKnownBadge()
     {
-        $badge = $this->getMock('LoginCidadao\BadgesControlBundle\Model\BadgeInterface');
+        $badge = $this->createMock('LoginCidadao\BadgesControlBundle\Model\BadgeInterface');
         $badge->expects($this->atLeastOnce())->method('getName')->willReturn('phone_verified');
 
         $phoneVerificationService = $this->getPhoneVerificationService();
@@ -138,7 +139,7 @@ class BadgesSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testOnListBearersWithUnknownBadge()
     {
-        $badge = $this->getMock('LoginCidadao\BadgesControlBundle\Model\BadgeInterface');
+        $badge = $this->createMock('LoginCidadao\BadgesControlBundle\Model\BadgeInterface');
         $badge->expects($this->atLeastOnce())->method('getName')->willReturn('UNKNOWN');
 
         $phoneVerificationService = $this->getPhoneVerificationService();

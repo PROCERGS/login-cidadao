@@ -14,12 +14,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\LongPolling\LongPollingUtils;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
  * @group time-sensitive
  */
-class LongPollingUtilsTest extends \PHPUnit_Framework_TestCase
+class LongPollingUtilsTest extends TestCase
 {
     public function testRunTimeLimited()
     {
@@ -42,7 +43,7 @@ class LongPollingUtilsTest extends \PHPUnit_Framework_TestCase
 
     public function testTimeout()
     {
-        $this->setExpectedException('LoginCidadao\APIBundle\Exception\RequestTimeoutException');
+        $this->expectException('LoginCidadao\APIBundle\Exception\RequestTimeoutException');
 
         $longPolling = new LongPollingUtils($this->getEntityManager(), 30);
         $longPolling->runTimeLimited(function () {
@@ -138,7 +139,7 @@ class LongPollingUtilsTest extends \PHPUnit_Framework_TestCase
      */
     private function getEntityManager()
     {
-        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em = $this->createMock('Doctrine\ORM\EntityManagerInterface');
 
         return $em;
     }
@@ -160,7 +161,7 @@ class LongPollingUtilsTest extends \PHPUnit_Framework_TestCase
     private function getPerson()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|PersonInterface $person */
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $person->expects($this->any())->method('getId')->willReturn(123);
 
         return $person;

@@ -18,8 +18,9 @@ use LoginCidadao\OAuthBundle\Model\AccessTokenManager;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\EventListener\PersonSerializeEventListener;
 use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
+use PHPUnit\Framework\TestCase;
 
-class PersonSerializeEventListenerTest extends \PHPUnit_Framework_TestCase
+class PersonSerializeEventListenerTest extends TestCase
 {
     public function testGetSubscribedEvents()
     {
@@ -121,7 +122,7 @@ class PersonSerializeEventListenerTest extends \PHPUnit_Framework_TestCase
     private function runOnPostSerializeTest($version, $expectOIDCFields, $addDataCount)
     {
         $pictureUrl = 'https://picture.url/pic.jpg';
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         if ($expectOIDCFields) {
             $person->expects($this->once())->method('getProfilePictureUrl')->willReturn($pictureUrl);
             $person->expects($this->once())->method('getEmailConfirmedAt')->willReturn(new \DateTime());

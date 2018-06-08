@@ -14,8 +14,9 @@ use Gaufrette\Exception\FileNotFound;
 use Gaufrette\File;
 use Gaufrette\Filesystem;
 use LoginCidadao\OpenIDBundle\Storage\PublicKey;
+use PHPUnit\Framework\TestCase;
 
-class PublicKeyTest extends \PHPUnit_Framework_TestCase
+class PublicKeyTest extends TestCase
 {
     public function testPublicKey()
     {

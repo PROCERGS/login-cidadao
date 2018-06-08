@@ -72,9 +72,9 @@
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
-        "phpunit/phpunit": "^4.8",
-        "symfony/phpunit-bridge": "^3.3",
-        "johnkary/phpunit-speedtrap": "^1.0"
+        "phpunit/phpunit": "^6",
+        "symfony/phpunit-bridge": "^4",
+        "johnkary/phpunit-speedtrap": "^2"
     },
     "scripts": {
         "post-root-package-install": [

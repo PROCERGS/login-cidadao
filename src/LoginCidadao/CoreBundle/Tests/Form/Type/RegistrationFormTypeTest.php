@@ -11,10 +11,11 @@
 namespace LoginCidadao\CoreBundle\Tests\Form\Type;
 
 use LoginCidadao\CoreBundle\Form\Type\RegistrationFormType;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class RegistrationFormTypeTest extends \PHPUnit_Framework_TestCase
+class RegistrationFormTypeTest extends TestCase
 {
 
     public function testBuildForm()
@@ -52,7 +53,7 @@ class RegistrationFormTypeTest extends \PHPUnit_Framework_TestCase
      */
     private function getSession()
     {
-        return $this->getMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        return $this->createMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
     }
 
     /**
@@ -60,6 +61,6 @@ class RegistrationFormTypeTest extends \PHPUnit_Framework_TestCase
      */
     private function getFormBuilder()
     {
-        return $this->getMock('Symfony\Component\Form\FormBuilderInterface');
+        return $this->createMock('Symfony\Component\Form\FormBuilderInterface');
     }
 }
