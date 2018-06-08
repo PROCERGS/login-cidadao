@@ -126,7 +126,7 @@ class UserManager extends BaseManager
         $once = $flushStrategy === 'once' ? true : false;
 
         /** @var PersonInterface[] $users */
-        $users = $this->repository->findBy(['mobile' => $phone]);
+        $users = parent::getRepository()->findBy(['mobile' => $phone]);
 
         $blockedUsers = [];
         foreach ($users as $user) {
