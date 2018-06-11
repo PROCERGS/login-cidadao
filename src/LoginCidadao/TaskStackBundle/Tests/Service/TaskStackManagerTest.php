@@ -14,10 +14,14 @@ use LoginCidadao\TaskStackBundle\Model\IntentTask;
 use LoginCidadao\TaskStackBundle\Model\RouteTaskTarget;
 use LoginCidadao\TaskStackBundle\Model\UrlTaskTarget;
 use LoginCidadao\TaskStackBundle\Service\TaskStackManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
 class TaskStackManagerTest extends TestCase
 {
@@ -122,6 +126,7 @@ class TaskStackManagerTest extends TestCase
         $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getUser')->willReturn($user);
 
+        /** @var TokenStorageInterface|MockObject $tokenStorage */
         $tokenStorage = $this->getTokenStorage();
         $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
 
@@ -141,6 +146,7 @@ class TaskStackManagerTest extends TestCase
         $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getUser')->willReturn($user);
 
+        /** @var TokenStorageInterface|MockObject $tokenStorage */
         $tokenStorage = $this->getTokenStorage();
         $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
 
@@ -164,6 +170,7 @@ class TaskStackManagerTest extends TestCase
         $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getUser')->willReturn($user);
 
+        /** @var TokenStorageInterface|MockObject $tokenStorage */
         $tokenStorage = $this->getTokenStorage();
         $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
 
@@ -188,6 +195,7 @@ class TaskStackManagerTest extends TestCase
         $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getUser')->willReturn($user);
 
+        /** @var TokenStorageInterface|MockObject $tokenStorage */
         $tokenStorage = $this->getTokenStorage();
         $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
 
@@ -212,6 +220,7 @@ class TaskStackManagerTest extends TestCase
         $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getUser')->willReturn($user);
 
+        /** @var TokenStorageInterface|MockObject $tokenStorage */
         $tokenStorage = $this->getTokenStorage();
         $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
 
@@ -236,9 +245,10 @@ class TaskStackManagerTest extends TestCase
         $tokenStorage = $this->getTokenStorage();
         $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
 
-        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
+        /** @var MockObject|Request $request */
+        $request = $this->createMock(Request::class);
         $request->attributes = new ParameterBag(['_route' => 'foo_bar']);
-        $response = $this->createMock('Symfony\Component\HttpFoundation\Response');
+        $response = $this->createMock(Response::class);
 
         $task = $this->getTask('t1');
 
