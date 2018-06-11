@@ -125,7 +125,7 @@ class ActionLog
     private $actionType;
 
     /**
-     * @var string
+     * @var integer
      *
      * @ORM\Column(name="response_code", type="integer", nullable=true)
      */
@@ -428,7 +428,7 @@ class ActionLog
     }
 
     /**
-     * @return Client
+     * @return ClientInterface
      */
     public function getClient()
     {
