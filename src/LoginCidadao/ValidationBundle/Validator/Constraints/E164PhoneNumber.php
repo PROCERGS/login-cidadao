@@ -21,6 +21,6 @@ class E164PhoneNumber extends Constraint
 
     public function validatedBy()
     {
-        return get_class($this).'Validator';
+        return E164PhoneNumberValidator::class;
     }
 }
