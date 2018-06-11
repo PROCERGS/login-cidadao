@@ -60,6 +60,7 @@ class DynamicFormServiceTest extends TestCase
         $formService = $this->getFormService($em, null, null, $stackManager, null);
 
         $person = $this->getPerson();
+        /** @var MockObject|Request $request */
         $request = $this->getRequest();
         $request->expects($this->exactly(2))->method('get')->willReturnCallback(
             function ($key) {
@@ -463,12 +464,12 @@ class DynamicFormServiceTest extends TestCase
     }
 
     /**
-     * @param null $em
-     * @param null $dispatcher
-     * @param null $userManager
-     * @param null $taskStackManager
-     * @param null $dynamicFormBuilder
-     * @param null $router
+     * @param EntityManagerInterface|null $em
+     * @param EventDispatcherInterface|null $dispatcher
+     * @param UserManagerInterface|null $userManager
+     * @param TaskStackManagerInterface|null $taskStackManager
+     * @param DynamicFormBuilder|null $dynamicFormBuilder
+     * @param RouterInterface|null $router
      * @return DynamicFormService
      */
     private function getFormService(
@@ -501,12 +502,11 @@ class DynamicFormServiceTest extends TestCase
         }
         if (!$router) {
             /** @var MockObject|RouterInterface $router */
-            $router = $this->createMock('Symfony\Component\Routing\RouterInterface');
-            $router->expects($this->any())->method('generate')->willReturnCallback(
-                function ($name) {
+            $router = $this->createMock(RouterInterface::class);
+            $router->expects($this->any())->method('generate')
+                ->willReturnCallback(function ($name) {
                     return $name;
-                }
-            );
+                });
         }
 
         $formService = new DynamicFormService(
