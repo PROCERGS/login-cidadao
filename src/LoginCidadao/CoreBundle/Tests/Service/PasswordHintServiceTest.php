@@ -12,7 +12,7 @@ namespace LoginCidadao\CoreBundle\Tests\Service;
 
 use LoginCidadao\CoreBundle\Service\PasswordHintService;
 use PHPUnit\Framework\TestCase;
-use Rollerworks\Bundle\PasswordStrengthBundle\Validator\Constraints\PasswordRequirements;
+use Rollerworks\Component\PasswordStrength\Validator\Constraints\PasswordRequirements;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;

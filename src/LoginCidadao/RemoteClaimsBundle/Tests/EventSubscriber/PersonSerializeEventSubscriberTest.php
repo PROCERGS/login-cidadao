@@ -120,7 +120,7 @@ class PersonSerializeEventSubscriberTest extends TestCase
 
         $visitor = $this->getVisitor();
         $visitor->expects($this->exactly(2))
-            ->method('addData')->willReturnCallback(function ($key, $value) use (&$dummyJson) {
+            ->method('setData')->willReturnCallback(function ($key, $value) use (&$dummyJson) {
                 $this->assertContains($key, ['_claim_names', '_claim_sources']);
                 $dummyJson[$key] = $value;
             });

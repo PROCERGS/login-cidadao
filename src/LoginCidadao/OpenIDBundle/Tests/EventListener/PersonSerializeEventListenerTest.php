@@ -114,7 +114,7 @@ class PersonSerializeEventListenerTest extends TestCase
                     $this->assertTrue($value);
                     break;
                 default:
-                    $this->fail("Unexpected addData call: {$key}");
+                    $this->fail("Unexpected setData call: {$key}");
             }
         };
     }
@@ -130,7 +130,7 @@ class PersonSerializeEventListenerTest extends TestCase
 
         $visitor = $this->getVisitor();
         $visitor->expects($this->exactly($addDataCount))
-            ->method('addData')
+            ->method('setData')
             ->willReturnCallback($this->getAddDataCallback('sub', $pictureUrl));
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|ObjectEvent $event */

@@ -101,7 +101,7 @@ class SerializationSubscriberTest extends TestCase
 
         $visitor = $this->getMockBuilder('JMS\Serializer\GenericSerializationVisitor')
             ->disableOriginalConstructor()->getMock();
-        $visitor->expects($this->once())->method('addData')->with('badges', $badgesSerialized);
+        $visitor->expects($this->once())->method('setData')->with('badges', $badgesSerialized);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|ObjectEvent $event */
         $event = $this->getMockBuilder('JMS\Serializer\EventDispatcher\ObjectEvent')
