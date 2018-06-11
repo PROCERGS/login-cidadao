@@ -20,6 +20,7 @@ use Symfony\Component\Validator\Exception\RuntimeException;
  * @package LoginCidadao\ValidationBundle\Validator\Constraints
  *
  * TODO: remove after update to Symfony 4.1
+ * @codeCoverageIgnore
  */
 class EmailValidator extends \Symfony\Component\Validator\Constraints\EmailValidator
 {

@@ -137,6 +137,28 @@ class AccessTokenTest extends TestCase
     /**
      * @throws \Doctrine\ORM\OptimisticLockException
      */
+    public function testSetAccessTokenClientNotFound()
+    {
+        $clientId = 'client_id';
+        $userId = 'subId';
+        $token = 'my.access.token';
+        $expires = time();
+        $scope = 'scope1 scope2';
+        $idToken = 'id-token-here';
+
+        $clientManager = $this->getClientManager();
+        $clientManager->expects($this->once())
+            ->method('getClientById')->with($clientId)
+            ->willReturn(null);
+
+        $accessTokenStorage = new AccessToken($this->getEntityManager());
+        $accessTokenStorage->setClientManager($clientManager);
+        $this->assertNull($accessTokenStorage->setAccessToken($token, $clientId, $userId, $expires, $scope, $idToken));
+    }
+
+    /**
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function testSetAccessTokenClientCredentials()
     {
         $clientId = 'client_id';
