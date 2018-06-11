@@ -30,7 +30,7 @@ class AccessTokenTest extends TestCase
         $this->assertFalse($accessToken->hasExpired());
 
         $accessToken->setExpired();
-        sleep(2);
+        sleep(3);
 
         $this->assertEquals($idToken, $accessToken->getIdToken());
         $this->assertTrue($accessToken->hasExpired());
