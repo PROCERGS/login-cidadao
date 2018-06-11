@@ -111,7 +111,7 @@ class BaseController extends FOSRestController
 
     protected function convertContextToJMSContext(Context $context): SerializationContext
     {
-        $jmsContext = SerializationContext::create();
+        $jmsContext = new SerializationContext();
 
         $jmsContext->setGroups($context->getGroups());
         $jmsContext->setSerializeNull($context->getSerializeNull());
