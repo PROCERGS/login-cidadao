@@ -203,10 +203,6 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
 
     public function getGoogleAccessToken();
 
-    public function setComplement($var);
-
-    public function getComplement();
-
     /**
      * @return IdCardInterface[]
      */
