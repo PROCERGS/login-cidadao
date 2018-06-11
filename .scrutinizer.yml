@@ -9,6 +9,7 @@ filter:
         - app/
         - web/
         - spec/
+        - src/**/Tests/**
 tools:
     php_mess_detector: true
     php_cs_fixer:
