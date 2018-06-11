@@ -2,14 +2,14 @@
 # tests: true
 filter:
     paths:
-        - src/
+        - "src/"
     dependency_paths:
-        - vendor/
+        - "vendor/"
     excluded_paths:
-        - app/
-        - web/
-        - spec/
-        - src/**/Tests/**
+        - "app/"
+        - "web/"
+        - "spec/"
+        - "*/Tests/*"
 tools:
     php_mess_detector: true
     php_cs_fixer:
