@@ -12,8 +12,9 @@ namespace LoginCidadao\PhoneVerificationBundle\Tests\Event;
 
 use FOS\UserBundle\FOSUserEvents;
 use LoginCidadao\PhoneVerificationBundle\Event\UserRegistrationSubscriber;
+use PHPUnit\Framework\TestCase;
 
-class UserRegistrationSubscriberTest extends \PHPUnit_Framework_TestCase
+class UserRegistrationSubscriberTest extends TestCase
 {
     public function testGetSubscribedEvents()
     {
@@ -25,11 +26,11 @@ class UserRegistrationSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testOnRegistrationCompletedWithPhone()
     {
-        $phone = $this->getMock('libphonenumber\PhoneNumber');
-        $user = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $phone = $this->createMock('libphonenumber\PhoneNumber');
+        $user = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $user->expects($this->exactly(2))->method('getMobile')->willReturn($phone);
 
-        $verificationService = $this->getMock(
+        $verificationService = $this->createMock(
             'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface'
         );
         $verificationService->expects($this->once())
@@ -47,10 +48,10 @@ class UserRegistrationSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testOnRegistrationCompletedWithoutPhone()
     {
-        $user = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $user = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $user->expects($this->once())->method('getMobile')->willReturn(null);
 
-        $verificationService = $this->getMock(
+        $verificationService = $this->createMock(
             'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface'
         );
 
@@ -65,7 +66,7 @@ class UserRegistrationSubscriberTest extends \PHPUnit_Framework_TestCase
 
     private function getStackManager($setTaskSkipped = false)
     {
-        $taskStackManager = $this->getMock('LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface');
+        $taskStackManager = $this->createMock('LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface');
 
         if ($setTaskSkipped) {
             $taskStackManager->expects($this->once())->method('setTaskSkipped')
@@ -77,7 +78,7 @@ class UserRegistrationSubscriberTest extends \PHPUnit_Framework_TestCase
 
     private function getPhoneVerification()
     {
-        $phoneVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
+        $phoneVerification = $this->createMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
         $phoneVerification->expects($this->once())->method('getId')->willReturn('some_task');
 
         return $phoneVerification;

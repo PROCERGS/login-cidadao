@@ -11,8 +11,9 @@
 namespace LoginCidadao\PhoneVerificationBundle\Tests\Service;
 
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationOptions;
+use PHPUnit\Framework\TestCase;
 
-class PhoneVerificationOptionsTest extends \PHPUnit_Framework_TestCase
+class PhoneVerificationOptionsTest extends TestCase
 {
     public function testOptions()
     {

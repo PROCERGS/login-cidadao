@@ -2,15 +2,15 @@
 
 namespace LoginCidadao\CoreBundle\Controller;
 
+use LoginCidadao\CoreBundle\Entity\IdCardRepository;
+use LoginCidadao\CoreBundle\Entity\StateRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use LoginCidadao\CoreBundle\Form\Type\RemoveIdCardFormType;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use Doctrine\Common\Collections\Collection;
-use LoginCidadao\CoreBundle\Entity\IdCard;
 use LoginCidadao\ValidationControlBundle\Handler\ValidationHandler;
 
 class IdCardController extends Controller
@@ -22,9 +22,13 @@ class IdCardController extends Controller
      */
     public function listAction(Request $request)
     {
-        $idCards     = $this->getIdCards();
+        $idCards = $this->getIdCards();
         $deleteForms = $this->getDeleteForms($idCards);
-        $states      = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:State')->findStateByPreferredCountry($this->container->getParameter('lc_idcard_country_acronym'));
+
+        /** @var StateRepository $stateRepo */
+        $stateRepo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:State');
+        $states = $stateRepo->findStateByPreferredCountry($this->getParameter('lc_idcard_country_acronym'));
+
         return compact('idCards', 'deleteForms', 'states');
     }
 
@@ -37,14 +41,13 @@ class IdCardController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $stateId = $request->get('state');
-        $state   = null;
+        $state = null;
         if ($stateId > 0) {
-            $state = $em->getRepository('LoginCidadaoCoreBundle:State')
-                ->find($stateId);
+            $state = $em->getRepository('LoginCidadaoCoreBundle:State')->find($stateId);
         }
 
         $validationHandler = $this->getValidationHandler();
-        $idCard            = $validationHandler->instantiateIdCard($state);
+        $idCard = $validationHandler->instantiateIdCard($state);
 
         $idCard->setPerson($this->getPerson());
         $form = $this->createForm('lc_idcard_form', $idCard);
@@ -59,7 +62,7 @@ class IdCardController extends Controller
 
         return array(
             'form' => $form->createView(),
-            'deleteForms' => $this->getDeleteForms()
+            'deleteForms' => $this->getDeleteForms(),
         );
     }
 
@@ -69,13 +72,14 @@ class IdCardController extends Controller
      */
     public function editAction(Request $request, $id)
     {
-        $fragment          = $request->query->has('fragment');
-        $em                = $this->getDoctrine()->getManager();
-        $person            = $this->getUser();
+        $fragment = $request->query->has('fragment');
+        $em = $this->getDoctrine()->getManager();
+        $person = $this->getUser();
         $validationHandler = $this->getValidationHandler();
 
+        /** @var IdCardRepository $idCards */
         $idCards = $em->getRepository('LoginCidadaoCoreBundle:IdCard');
-        $idCard  = $idCards->findPersonIdCard($person, $id);
+        $idCard = $idCards->findPersonIdCard($person, $id);
 
         $form = $this->createForm('lc_idcard_form', $idCard);
         $form->handleRequest($request);
@@ -84,6 +88,7 @@ class IdCardController extends Controller
             $em->persist($form->getData());
             $validationHandler->persistIdCard($form, $request);
             $em->flush();
+
             return $this->redirect($this->generateUrl('lc_documents'));
         }
 
@@ -91,7 +96,7 @@ class IdCardController extends Controller
             'form' => $form->createView(),
             'fragment' => $fragment,
             'id' => $id,
-            'deleteForms' => $this->getDeleteForms()
+            'deleteForms' => $this->getDeleteForms(),
         );
     }
 
@@ -102,14 +107,14 @@ class IdCardController extends Controller
     public function deleteAction(Request $request, $id)
     {
         $translator = $this->get('translator');
-        $form       = $this->createForm('LoginCidadao\CoreBundle\Form\Type\RemoveIdCardFormType');
+        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\RemoveIdCardFormType');
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $person  = $this->getUser();
-            $em      = $this->getDoctrine()->getManager();
+            $person = $this->getUser();
+            $em = $this->getDoctrine()->getManager();
             $idCards = $em->getRepository('LoginCidadaoCoreBundle:IdCard');
-            $idCard  = $idCards->find($id);
+            $idCard = $idCards->find($id);
 
             try {
                 if ($idCard->getPerson()->getId() !== $person->getId()) {
@@ -130,6 +135,7 @@ class IdCardController extends Controller
             $this->get('session')->getFlashBag()->add('error',
                 $translator->trans("Couldn't remove this ID Card."));
         }
+
         return $this->redirect($this->generateUrl('lc_documents'));
     }
 
@@ -139,11 +145,11 @@ class IdCardController extends Controller
      */
     public function addNewButtonAction()
     {
-        $preferredCountry = $this->container->getParameter('lc_idcard_country_acronym');
+        $preferredCountry = $this->getParameter('lc_idcard_country_acronym');
 
-        $states = $this->getDoctrine()
-            ->getRepository('LoginCidadaoCoreBundle:State')
-            ->findStateByPreferredCountry($preferredCountry);
+        /** @var StateRepository $stateRepo */
+        $stateRepo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:State');
+        $states = $stateRepo->findStateByPreferredCountry($preferredCountry);
 
         return compact('states');
     }
@@ -157,13 +163,14 @@ class IdCardController extends Controller
 
         if (is_array($idCards) || $idCards instanceof Collection) {
             foreach ($idCards as $idCard) {
-                $data                          = array('id_card_id' => $idCard->getId());
+                $data = array('id_card_id' => $idCard->getId());
                 $deleteForms[$idCard->getId()] = $this->createForm(
-                        'LoginCidadao\CoreBundle\Form\Type\RemoveIdCardFormType',
-                        $data)
+                    'LoginCidadao\CoreBundle\Form\Type\RemoveIdCardFormType',
+                    $data)
                     ->createView();
             }
         }
+
         return $deleteForms;
     }
 
@@ -178,7 +185,9 @@ class IdCardController extends Controller
     protected function getIdCards()
     {
         $person = $this->getPerson();
-        $repo   = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:IdCard');
+        /** @var IdCardRepository $repo */
+        $repo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:IdCard');
+
         return $repo->findByPersonOrderByStateAcronym($person);
     }
 

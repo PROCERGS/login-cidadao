@@ -13,8 +13,9 @@ namespace LoginCidadao\OpenIDBundle\Tests\EventListener;
 use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
 use LoginCidadao\CoreBundle\Event\TranslateScopeEvent;
 use LoginCidadao\OpenIDBundle\EventListener\ScopeTranslatorSubscriber;
+use PHPUnit\Framework\TestCase;
 
-class ScopeTranslatorSubscriberTest extends \PHPUnit_Framework_TestCase
+class ScopeTranslatorSubscriberTest extends TestCase
 {
     public function testGetSubscribedEvents()
     {

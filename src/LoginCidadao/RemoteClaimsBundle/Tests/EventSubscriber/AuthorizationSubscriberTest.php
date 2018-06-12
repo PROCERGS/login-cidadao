@@ -18,11 +18,12 @@ use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManagerInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
+class AuthorizationSubscriberTest extends TestCase
 {
     public function testGetSubscribedEvents()
     {
@@ -78,7 +79,7 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \RuntimeException('Random error'));
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface $logger */
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())->method('log')->with(LogLevel::ERROR);
 
         $event = $this->getEvent();
@@ -121,7 +122,7 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $remoteClaims = [$this->getCompleteRemoteClaim(), $this->getCompleteRemoteClaim()];
 
-        $authorization = $this->getMock('LoginCidadao\CoreBundle\Entity\Authorization');
+        $authorization = $this->createMock('LoginCidadao\CoreBundle\Entity\Authorization');
 
         $event = $this->getEvent();
         $event->expects($this->once())->method('getRemoteClaims')->willReturn($remoteClaims);
@@ -151,14 +152,15 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testFeatureFlagOff()
     {
         $event = $this->getEvent();
+        $event->expects($this->never())->method('addRemoteClaim');
 
         $claimManager = $this->getRemoteClaimManager();
         $claimFetcher = $this->getRemoteClaimFetcher();
         $subscriber = new AuthorizationSubscriber($claimManager, $claimFetcher, $this->getAuthChecker(false));
 
-        $subscriber->onNewAuthorizationRequest($event);
-        $subscriber->onNewAuthorization($event);
-        $subscriber->onUpdateAuthorization($event);
+        $this->assertNull($subscriber->onNewAuthorizationRequest($event));
+        $this->assertNull($subscriber->onNewAuthorization($event));
+        $this->assertNull($subscriber->onUpdateAuthorization($event));
     }
 
     private function prepareEnforceRemoteClaimsTest()
@@ -185,14 +187,14 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
 
     private function getRemoteClaim()
     {
-        $remoteClaim = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface');
+        $remoteClaim = $this->createMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface');
 
         return $remoteClaim;
     }
 
     private function getCompleteRemoteClaim($name = null)
     {
-        $provider = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
+        $provider = $this->createMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
 
         $remoteClaim = $this->getRemoteClaim();
         $remoteClaim->expects($this->any())->method('getProvider')
@@ -208,7 +210,7 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function getRemoteClaimManager()
     {
-        return $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManagerInterface');
+        return $this->createMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManagerInterface');
     }
 
     /**
@@ -216,7 +218,7 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function getRemoteClaimFetcher()
     {
-        return $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface');
+        return $this->createMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimFetcherInterface');
     }
 
     /**
@@ -224,7 +226,7 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function getClient()
     {
-        return $this->getMock('LoginCidadao\OAuthBundle\Model\ClientInterface');
+        return $this->createMock('LoginCidadao\OAuthBundle\Model\ClientInterface');
     }
 
     /**
@@ -241,7 +243,7 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function getPerson()
     {
-        return $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        return $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
     }
 
     /**
@@ -249,7 +251,7 @@ class AuthorizationSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     private function getAuthChecker($isGranted = true)
     {
-        $checker = $this->getMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
+        $checker = $this->createMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
         $checker->expects($this->any())->method('isGranted')->willReturn($isGranted);
 
         return $checker;

@@ -1,7 +1,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
-    - { resource: memcached.yml }
+    - { resource: redis.yml }
     # Uncomment bellow to enable Logstash formatting
     #- { resource: logstash.yml }
     - { resource: "@LoginCidadaoTOSBundle/Resources/config/config.yml" }
@@ -152,6 +152,7 @@ doctrine:
                 dbname:   %database_name%
                 user:     %database_user%
                 password: %database_password%
+                server_version: %database_server_version%
                 charset:  UTF8
             logs:
                 logging:  false
@@ -161,6 +162,7 @@ doctrine:
                 dbname:   %database_name%
                 user:     %database_user%
                 password: %database_password%
+                server_version: %database_server_version%
                 charset:  UTF8
         # if using pdo_sqlite as your database driver, add the path in parameters.yml
         # e.g. database_path: %kernel.root_dir%/data/data.db3
@@ -213,7 +215,7 @@ fos_oauth_server:
   refresh_token_class:  LoginCidadao\OAuthBundle\Entity\RefreshToken
   auth_code_class:      LoginCidadao\OAuthBundle\Entity\AuthCode
   service:
-      user_provider: fos_user.user_manager
+      user_provider: fos_user.user_provider
       options:
           supported_scopes: %lc_supported_scopes%
 
@@ -288,7 +290,7 @@ hwi_oauth:
     connect:
         confirmation: false
         account_connector: lc.hwi_twitter.user_provider
-    firewall_name: main
+    firewall_names: ['main']
     failed_auth_path: fos_user_profile_edit
     fosub:
         username_iterations: 30
@@ -375,7 +377,7 @@ vich_uploader:
 
 # Disabling annotations is needed by FOS Rest Bundle
 sensio_framework_extra:
-    view: { annotations: false }
+    view: { annotations: true }
     router: { annotations: true }
     request: { converters: true }
 

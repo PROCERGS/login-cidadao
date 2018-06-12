@@ -14,8 +14,9 @@ use LoginCidadao\CoreBundle\Entity\Authorization;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OpenIDBundle\Event\AuthorizationEvent;
+use PHPUnit\Framework\TestCase;
 
-class AuthorizationEventTest extends \PHPUnit_Framework_TestCase
+class AuthorizationEventTest extends TestCase
 {
     public function testEvent()
     {
@@ -31,8 +32,8 @@ class AuthorizationEventTest extends \PHPUnit_Framework_TestCase
 
         $event = new AuthorizationEvent($person, $client, $scope);
 
-        $remoteClaim1 = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface');
-        $remoteClaim2 = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface');
+        $remoteClaim1 = $this->createMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface');
+        $remoteClaim2 = $this->createMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface');
 
         $event->setRemoteClaims([$remoteClaim1]);
         $event->addRemoteClaim($remoteClaim2);

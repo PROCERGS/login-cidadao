@@ -15,9 +15,12 @@ use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use LoginCidadao\OpenIDBundle\Storage\ClientCredentials;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository;
+use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ClientCredentialsTest extends \PHPUnit_Framework_TestCase
+class ClientCredentialsTest extends TestCase
 {
     public function testCheckClientCredentials()
     {
@@ -89,6 +92,7 @@ class ClientCredentialsTest extends \PHPUnit_Framework_TestCase
         $em = $this->getEntityManagerFind(null, 'findOneBy');
         $clientCredentials = new ClientCredentials($em);
 
+        /** @var array|bool $details */
         $details = $clientCredentials->getClientDetails("{$id}_{$randomId}");
 
         $this->assertFalse($details);
@@ -164,6 +168,7 @@ class ClientCredentialsTest extends \PHPUnit_Framework_TestCase
         $em = $this->getEntityManagerFind(null, 'findOneBy');
         $clientCredentials = new ClientCredentials($em);
 
+        /** @var string|bool $scopes */
         $scopes = $clientCredentials->getClientScope("{$id}_{$randomId}");
 
         $this->assertFalse($scopes);
@@ -174,13 +179,14 @@ class ClientCredentialsTest extends \PHPUnit_Framework_TestCase
      */
     private function getEntityManager()
     {
-        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em = $this->createMock('Doctrine\ORM\EntityManagerInterface');
 
         return $em;
     }
 
     private function getEntityManagerFind($client, $findMethod, $em = null, $expectedRemoteClaim = null)
     {
+        /** @var MockObject|ClientRepository $clientRepo */
         $clientRepo = $this->getClientRepository();
         $clientRepo->expects($this->once())->method($findMethod)->willReturn($client);
 
@@ -196,7 +202,8 @@ class ClientCredentialsTest extends \PHPUnit_Framework_TestCase
                         $remoteClaims = [];
                         if ($expectedRemoteClaim !== null) {
                             $expectedRemoteClaim = TagUri::createFromString($expectedRemoteClaim);
-                            $remoteClaim = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface');
+                            /** @var RemoteClaimInterface|MockObject $remoteClaim */
+                            $remoteClaim = $this->createMock(RemoteClaimInterface::class);
                             $remoteClaim->expects($this->any())->method('getName')->willReturn($expectedRemoteClaim);
                             $remoteClaims[] = $remoteClaim;
                         }

@@ -68,7 +68,7 @@ class SerializationSubscriber implements EventSubscriberInterface
             $key = "{$badge->getNamespace()}.{$badge->getName()}";
             $badges[$key] = $badge->getData();
         }
-        $visitor->addData('badges', $badges);
+        $visitor->setData('badges', $badges);
     }
 
     /**

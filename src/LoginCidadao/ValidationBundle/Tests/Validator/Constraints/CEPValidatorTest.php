@@ -12,9 +12,10 @@ namespace LoginCidadao\ValidationBundle\Tests\Validator\Constraints;
 
 use LoginCidadao\ValidationBundle\Validator\Constraints\CEP;
 use LoginCidadao\ValidationBundle\Validator\Constraints\CEPValidator;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-class CEPValidatorTest extends \PHPUnit_Framework_TestCase
+class CEPValidatorTest extends TestCase
 {
     public function testValid()
     {
@@ -55,7 +56,7 @@ class CEPValidatorTest extends \PHPUnit_Framework_TestCase
      */
     private function getContext($violations)
     {
-        $context = $this->getMock('Symfony\Component\Validator\Context\ExecutionContextInterface');
+        $context = $this->createMock('Symfony\Component\Validator\Context\ExecutionContextInterface');
         $context->expects($violations)->method('addViolation');
 
         return $context;

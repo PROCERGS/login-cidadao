@@ -2,9 +2,13 @@
 
 namespace LoginCidadao\APIBundle\Controller;
 
+use LoginCidadao\CoreBundle\Entity\City;
+use LoginCidadao\CoreBundle\Entity\Country;
+use LoginCidadao\CoreBundle\Entity\State;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as REST;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use LoginCidadao\APIBundle\Security\Audit\Annotation as Audit;
 
@@ -31,7 +35,7 @@ class PersonAddressController extends BaseController
      * )
      * @REST\View(templateVar="cities")
      * @param string  $city
-     * @return \LoginCidadao\CoreBundle\Entity\City
+     * @return City|Response
      * @throws NotFoundHttpException when no city is found
      * @REST\Get("/address/cities/search/{city}", defaults={"version": 1})
      * @Audit\Loggable(type="SELECT")
@@ -66,7 +70,7 @@ class PersonAddressController extends BaseController
      * )
      * @REST\View(templateVar="states")
      * @param string  $state
-     * @return \LoginCidadao\CoreBundle\Entity\State
+     * @return State|Response
      * @throws NotFoundHttpException when no state is found
      * @REST\Get("/address/states/search/{state}", defaults={"version": 1})
      * @Audit\Loggable(type="SELECT")
@@ -98,7 +102,7 @@ class PersonAddressController extends BaseController
      * )
      * @REST\View(templateVar="countries")
      * @param string  $country
-     * @return \LoginCidadao\CoreBundle\Entity\Country
+     * @return Country|Response
      * @throws NotFoundHttpException when no country is found
      * @REST\Get("/address/countries/search/{country}", defaults={"version": 1})
      * @Audit\Loggable(type="SELECT")

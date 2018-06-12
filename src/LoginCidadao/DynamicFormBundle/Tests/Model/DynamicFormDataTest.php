@@ -15,24 +15,25 @@ use LoginCidadao\CoreBundle\Model\IdCardInterface;
 use LoginCidadao\CoreBundle\Model\LocationSelectData;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\DynamicFormBundle\Model\DynamicFormData;
+use PHPUnit\Framework\TestCase;
 
-class DynamicFormDataTest extends \PHPUnit_Framework_TestCase
+class DynamicFormDataTest extends TestCase
 {
     public function testModel()
     {
         /** @var PersonInterface $person */
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
 
         /** @var IdCardInterface $idCard */
-        $idCard = $this->getMock('LoginCidadao\CoreBundle\Model\IdCardInterface');
+        $idCard = $this->createMock('LoginCidadao\CoreBundle\Model\IdCardInterface');
 
         /** @var LocationSelectData $placeOfBirth */
-        $placeOfBirth = $this->getMock('LoginCidadao\CoreBundle\Model\LocationSelectData');
+        $placeOfBirth = $this->createMock('LoginCidadao\CoreBundle\Model\LocationSelectData');
 
         /** @var PersonAddress $personAddress */
-        $personAddress = $this->getMock('LoginCidadao\CoreBundle\Entity\PersonAddress');
+        $personAddress = $this->createMock('LoginCidadao\CoreBundle\Entity\PersonAddress');
 
-        $idCardState = $this->getMock('LoginCidadao\CoreBundle\Entity\State');
+        $idCardState = $this->createMock('LoginCidadao\CoreBundle\Entity\State');
         $scope = 'scope1 scope2';
         $state = 'Some State';
         $url = 'https://example.com';

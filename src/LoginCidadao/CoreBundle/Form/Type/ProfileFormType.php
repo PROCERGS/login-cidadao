@@ -73,7 +73,7 @@ class ProfileFormType extends BaseType
                 [
                     'required' => false,
                     'allow_delete' => true, // not mandatory, default is true
-                    'download_link' => true,// not mandatory, default is true
+                    'download_uri' => true,// not mandatory, default is true
                 ])
             ->add('placeOfBirth',
                 'LoginCidadao\CoreBundle\Form\Type\CitySelectorComboType',

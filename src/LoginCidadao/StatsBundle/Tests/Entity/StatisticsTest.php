@@ -11,8 +11,9 @@
 namespace LoginCidadao\StatsBundle\Tests\Entity;
 
 use LoginCidadao\StatsBundle\Entity\Statistics;
+use PHPUnit\Framework\TestCase;
 
-class StatisticsTest extends \PHPUnit_Framework_TestCase
+class StatisticsTest extends TestCase
 {
     public function testStatistics()
     {

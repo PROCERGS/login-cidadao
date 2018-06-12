@@ -13,9 +13,10 @@ namespace LoginCidadao\ValidationBundle\Tests\Validator\Constraints;
 use libphonenumber\PhoneNumber;
 use LoginCidadao\ValidationBundle\Validator\Constraints\MobilePhoneNumber;
 use LoginCidadao\ValidationBundle\Validator\Constraints\MobilePhoneNumberValidator;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-class MobilePhoneNumberValidatorTest extends \PHPUnit_Framework_TestCase
+class MobilePhoneNumberValidatorTest extends TestCase
 {
     public function testNotPhoneNumber()
     {
@@ -79,7 +80,7 @@ class MobilePhoneNumberValidatorTest extends \PHPUnit_Framework_TestCase
      */
     private function getContext($violations)
     {
-        $context = $this->getMock('Symfony\Component\Validator\Context\ExecutionContextInterface');
+        $context = $this->createMock('Symfony\Component\Validator\Context\ExecutionContextInterface');
         $context->expects($violations)->method('addViolation');
 
         return $context;

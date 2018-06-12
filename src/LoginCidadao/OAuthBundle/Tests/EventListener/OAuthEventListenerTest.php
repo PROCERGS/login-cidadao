@@ -22,9 +22,10 @@ use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier;
 use LoginCidadao\OpenIDBundle\LoginCidadaoOpenIDEvents;
 use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class OAuthEventListenerTest extends \PHPUnit_Framework_TestCase
+class OAuthEventListenerTest extends TestCase
 {
     public function testOnPreAuthorizationProcessNotPreAuthorized()
     {
@@ -85,11 +86,11 @@ class OAuthEventListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnPreAuthorizationProcessInvalidPersonAndClient()
     {
-        $person = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
+        $person = $this->createMock('Symfony\Component\Security\Core\User\UserInterface');
         $personRepo = $this->getPersonRepository();
         $personRepo->expects($this->once())->method('findOneBy')->willReturn(null);
 
-        $client = $this->getMock('FOS\OAuthServerBundle\Model\ClientInterface');
+        $client = $this->createMock('FOS\OAuthServerBundle\Model\ClientInterface');
 
         $em = $this->getEntityManager(['LoginCidadaoCoreBundle:Person' => $personRepo]);
         $subIdService = $this->getSubjectIdentifierService();
@@ -102,7 +103,7 @@ class OAuthEventListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnPostAuthorizationProcessInvalidClient()
     {
-        $client = $this->getMock('FOS\OAuthServerBundle\Model\ClientInterface');
+        $client = $this->createMock('FOS\OAuthServerBundle\Model\ClientInterface');
 
         $event = new OAuthEvent(new Person(), $client, true);
 
@@ -118,8 +119,11 @@ class OAuthEventListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnPostAuthorizationProcessNotAuthorized()
     {
+        $em = $this->getEntityManager();
+        $em->expects($this->never())->method('flush');
+
         $event = new OAuthEvent(new Person(), new Client(), false);
-        $listener = new OAuthEventListener($this->getEntityManager(), $this->getScopeFinder(['openid']),
+        $listener = new OAuthEventListener($em, $this->getScopeFinder(['openid']),
             $this->getSubjectIdentifierService());
         $listener->onPostAuthorizationProcess($event, OAuthEvent::POST_AUTHORIZATION_PROCESS, $this->getDispatcher());
     }
@@ -166,7 +170,7 @@ class OAuthEventListenerTest extends \PHPUnit_Framework_TestCase
         $personRepo = $this->getPersonRepository();
         $personRepo->expects($this->once())->method('findOneBy')->willReturn($person);
 
-        $currentAuth = $this->getMock('LoginCidadao\CoreBundle\Entity\Authorization');
+        $currentAuth = $this->createMock('LoginCidadao\CoreBundle\Entity\Authorization');
 
         $authRepo = $this->getAuthorizationRepository();
         $authRepo->expects($this->once())->method('findOneBy')->willReturn($currentAuth);
@@ -206,7 +210,7 @@ class OAuthEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     private function getEntityManager(array $repos = [])
     {
-        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em = $this->createMock('Doctrine\ORM\EntityManagerInterface');
 
         if (count($repos) > 0) {
             $em->expects($this->atLeastOnce())->method('getRepository')->with($this->isType('string'))
@@ -244,7 +248,7 @@ class OAuthEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     private function getPerson()
     {
-        return $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        return $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
     }
 
     /**
@@ -269,7 +273,7 @@ class OAuthEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     private function getClientMetadata(ClientInterface $client = null)
     {
-        $metadata = $this->getMock('LoginCidadao\OpenIDBundle\Entity\ClientMetadata');
+        $metadata = $this->createMock('LoginCidadao\OpenIDBundle\Entity\ClientMetadata');
 
         if ($client) {
             $metadata->expects($this->any())->method('getClient')->willReturn($client);
@@ -283,7 +287,7 @@ class OAuthEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     private function getClient()
     {
-        $client = $this->getMock('LoginCidadao\OAuthBundle\Model\ClientInterface');
+        $client = $this->createMock('LoginCidadao\OAuthBundle\Model\ClientInterface');
 
         $client->expects($this->any())->method('getMetadata')->willReturn($this->getClientMetadata($client));
 
@@ -295,7 +299,7 @@ class OAuthEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     private function getDispatcher()
     {
-        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
 
         return $dispatcher;
     }
@@ -305,6 +309,6 @@ class OAuthEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     private function getSubjectIdentifier()
     {
-        return $this->getMock('LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier');
+        return $this->createMock('LoginCidadao\OpenIDBundle\Entity\SubjectIdentifier');
     }
 }

@@ -11,8 +11,9 @@
 namespace LoginCidadao\OpenIDBundle\Tests\Exception;
 
 use LoginCidadao\OpenIDBundle\Exception\IdTokenValidationException;
+use PHPUnit\Framework\TestCase;
 
-class IdTokenValidationExceptionTest extends \PHPUnit_Framework_TestCase
+class IdTokenValidationExceptionTest extends TestCase
 {
 
     public function testConstruct()

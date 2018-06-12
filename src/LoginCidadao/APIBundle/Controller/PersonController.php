@@ -61,9 +61,7 @@ class PersonController extends BaseController
             }
         }
 
-        $view = $this->view($person)->setSerializationContext($this->getSerializationContext($scope));
-
-        return $this->handleView($view);
+        return $this->renderWithContext($person, $this->getSerializationContext($scope));
     }
 
     /**
@@ -99,10 +97,8 @@ class PersonController extends BaseController
 
         $callback = $longPolling->getEntityUpdateCheckerCallback($user, $updatedAt);
         $person = $longPolling->runTimeLimited($callback);
-        $context = SerializationContext::create()->setGroups($this->getClientScope($user));
-        $view = $this->view($person)->setSerializationContext($context);
 
-        return $this->handleView($view);
+        return $this->renderWithContext($person, $this->getSerializationContext($this->getClientScope($user)));
     }
 
     /**

@@ -11,12 +11,13 @@
 namespace LoginCidadao\PhoneVerificationBundle\Tests\Event;
 
 use LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationEvent;
+use PHPUnit\Framework\TestCase;
 
-class PhoneVerificationEventTest extends \PHPUnit_Framework_TestCase
+class PhoneVerificationEventTest extends TestCase
 {
     public function testPhoneVerificationEventTest()
     {
-        $phoneVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
+        $phoneVerification = $this->createMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
         $providedCode = '123456';
 
         $event = new PhoneVerificationEvent($phoneVerification, $providedCode);

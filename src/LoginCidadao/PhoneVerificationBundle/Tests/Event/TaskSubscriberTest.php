@@ -14,23 +14,24 @@ use libphonenumber\PhoneNumberType;
 use LoginCidadao\PhoneVerificationBundle\Event\TaskSubscriber;
 use LoginCidadao\PhoneVerificationBundle\Exception\VerificationNotSentException;
 use LoginCidadao\TaskStackBundle\TaskStackEvents;
+use PHPUnit\Framework\TestCase;
 
-class TaskSubscriberTest extends \PHPUnit_Framework_TestCase
+class TaskSubscriberTest extends TestCase
 {
     private function getUser($userClass = 'LoginCidadao\CoreBundle\Model\PersonInterface')
     {
-        return $this->getMock($userClass);
+        return $this->createMock($userClass);
     }
 
     private function getTokenStorage($shouldBeUsed = true, $user = null)
     {
-        $tokenStorage = $this->getMock(
+        $tokenStorage = $this->createMock(
             'Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface'
         );
         if ($shouldBeUsed) {
             $user = $user ?: $this->getUser();
 
-            $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+            $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
             $token->expects($this->atLeastOnce())->method('getUser')->willReturn($user);
 
             $tokenStorage->expects($this->atLeastOnce())->method('getToken')->willReturn($token);
@@ -42,7 +43,7 @@ class TaskSubscriberTest extends \PHPUnit_Framework_TestCase
     private function getPhoneVerificationService()
     {
         $class = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface';
-        $phoneVerificationService = $this->getMock($class);
+        $phoneVerificationService = $this->createMock($class);
 
         return $phoneVerificationService;
     }
@@ -56,6 +57,7 @@ class TaskSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $tokenStorage = $this->getTokenStorage(false);
         $phoneVerificationService = $this->getPhoneVerificationService();
+        $phoneVerificationService->expects($this->never())->method('getAllPendingPhoneVerification');
 
         $event = $this->getMockBuilder('LoginCidadao\TaskStackBundle\Event\GetTasksEvent')
             ->disableOriginalConstructor()->getMock();
@@ -66,7 +68,7 @@ class TaskSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testOnGetTasks()
     {
-        $phoneVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
+        $phoneVerification = $this->createMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
         $tokenStorage = $this->getTokenStorage();
 
         $phoneVerificationService = $this->getPhoneVerificationService();
@@ -86,7 +88,7 @@ class TaskSubscriberTest extends \PHPUnit_Framework_TestCase
         $user = $this->getUser();
         $user->expects($this->once())->method('getMobile')->willReturn(null);
 
-        $phoneVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
+        $phoneVerification = $this->createMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
         $phoneVerification->expects($this->once())->method('getPhone')->willReturn(new PhoneNumberType());
         $tokenStorage = $this->getTokenStorage(true, $user);
 
@@ -103,7 +105,7 @@ class TaskSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testOnGetTasksSendFailed()
     {
-        $phoneVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
+        $phoneVerification = $this->createMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
         $tokenStorage = $this->getTokenStorage();
 
         $phoneVerificationService = $this->getPhoneVerificationService();
@@ -150,7 +152,7 @@ class TaskSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testOAuthRequest()
     {
         $tokenStorage = $this->getTokenStorage(false);
-        $token = $this->getMock('FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken');
+        $token = $this->createMock('FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken');
         $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
 
         $phoneVerificationService = $this->getPhoneVerificationService();

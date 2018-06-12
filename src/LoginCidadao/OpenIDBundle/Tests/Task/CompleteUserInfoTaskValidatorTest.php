@@ -14,10 +14,11 @@ use FOS\OAuthServerBundle\Event\OAuthEvent;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTaskValidator;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class CompleteUserInfoTaskValidatorTest extends \PHPUnit_Framework_TestCase
+class CompleteUserInfoTaskValidatorTest extends TestCase
 {
     public function testGetCompleteUserInfoTaskCantSkipNoTask()
     {

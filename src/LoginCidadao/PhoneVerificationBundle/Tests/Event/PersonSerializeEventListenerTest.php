@@ -15,9 +15,13 @@ use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification;
 use LoginCidadao\PhoneVerificationBundle\Event\PersonSerializeEventListener;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService;
+use PHPUnit\Framework\TestCase;
 
-class PersonSerializeEventListenerTest extends \PHPUnit_Framework_TestCase
+class PersonSerializeEventListenerTest extends TestCase
 {
+    /**
+     * @throws \libphonenumber\NumberParseException
+     */
     public function testOnPreSerialize()
     {
         $phoneVerificationService = $this->getPhoneVerificationService();
@@ -63,9 +67,7 @@ class PersonSerializeEventListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $event->expects($this->once())->method('getObject')->willReturn(new \DateTime());
-        $response = $eventListener->onPreSerialize($event);
-
-        $this->assertNull($response);
+        $eventListener->onPreSerialize($event);
     }
 
     /**
@@ -74,7 +76,7 @@ class PersonSerializeEventListenerTest extends \PHPUnit_Framework_TestCase
     private function getPhoneVerificationService()
     {
         $phoneVerificationServiceClass = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface';
-        $phoneVerificationService = $this->getMock($phoneVerificationServiceClass);
+        $phoneVerificationService = $this->createMock($phoneVerificationServiceClass);
 
         $phoneVerificationService->expects($this->any())->method('getPhoneVerification')
             ->willReturnCallback(

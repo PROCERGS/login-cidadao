@@ -14,24 +14,25 @@ use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use LoginCidadao\OpenIDBundle\Storage\SessionState;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class SessionStateTest extends \PHPUnit_Framework_TestCase
+class SessionStateTest extends TestCase
 {
     public function testOnKernelResponseAddCookie()
     {
         /** @var ResponseHeaderBag|\PHPUnit_Framework_MockObject_MockObject $headers */
-        $headers = $this->getMock('Symfony\Component\HttpFoundation\ResponseHeaderBag');
+        $headers = $this->createMock('Symfony\Component\HttpFoundation\ResponseHeaderBag');
         $headers->expects($this->once())->method('setCookie')
             ->with($this->isInstanceOf('Symfony\Component\HttpFoundation\Cookie'));
 
         $response = new Response();
         $response->headers = $headers;
 
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('serialize')->willReturn('serialized');
 
         $tokenStorage = $this->getTokenStorage();
@@ -47,7 +48,7 @@ class SessionStateTest extends \PHPUnit_Framework_TestCase
     public function testOnKernelResponseRemoveCookie()
     {
         /** @var ResponseHeaderBag|\PHPUnit_Framework_MockObject_MockObject $headers */
-        $headers = $this->getMock('Symfony\Component\HttpFoundation\ResponseHeaderBag');
+        $headers = $this->createMock('Symfony\Component\HttpFoundation\ResponseHeaderBag');
         $headers->expects($this->once())->method('removeCookie')->with('session_state');
 
         $response = new Response();
@@ -85,7 +86,7 @@ class SessionStateTest extends \PHPUnit_Framework_TestCase
      */
     private function getTokenStorage()
     {
-        return $this->getMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
+        return $this->createMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
     }
 
     /**

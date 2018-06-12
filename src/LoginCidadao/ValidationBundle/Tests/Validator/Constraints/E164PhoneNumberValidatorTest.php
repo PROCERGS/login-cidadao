@@ -12,9 +12,10 @@ namespace LoginCidadao\ValidationBundle\Tests\Validator\Constraints;
 
 use LoginCidadao\ValidationBundle\Validator\Constraints\E164PhoneNumber;
 use LoginCidadao\ValidationBundle\Validator\Constraints\E164PhoneNumberValidator;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-class E164PhoneNumberValidatorTest extends \PHPUnit_Framework_TestCase
+class E164PhoneNumberValidatorTest extends TestCase
 {
     public function testValidationSuccess()
     {
@@ -36,7 +37,7 @@ class E164PhoneNumberValidatorTest extends \PHPUnit_Framework_TestCase
      */
     private function getContext($violations)
     {
-        $context = $this->getMock('Symfony\Component\Validator\Context\ExecutionContextInterface');
+        $context = $this->createMock('Symfony\Component\Validator\Context\ExecutionContextInterface');
         $context->expects($violations)->method('addViolation');
 
         return $context;

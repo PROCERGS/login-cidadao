@@ -13,6 +13,7 @@ namespace LoginCidadao\CoreBundle\Tests\Form\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\CoreBundle\Entity\AccessSession;
 use LoginCidadao\CoreBundle\Form\Type\LoginFormType;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +21,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
 
-class LoginFormTypeTest extends \PHPUnit_Framework_TestCase
+class LoginFormTypeTest extends TestCase
 {
     public function testGetBlockPrefix()
     {
@@ -43,22 +44,22 @@ class LoginFormTypeTest extends \PHPUnit_Framework_TestCase
             ->willReturn($accessSession);
 
         /** @var EntityManagerInterface|\PHPUnit_Framework_MockObject_MockObject $em */
-        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em = $this->createMock('Doctrine\ORM\EntityManagerInterface');
         $em->expects($this->once())
             ->method('getRepository')->with('LoginCidadaoCoreBundle:AccessSession')
             ->willReturn($repo);
 
         /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
-        $session = $this->getMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $session = $this->createMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
         $session->expects($this->once())
             ->method('get')->with(Security::LAST_USERNAME)->willReturn($username);
 
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
         $request->expects($this->once())->method('getSession')->willReturn($session);
         $request->expects($this->once())->method('getClientIp')->willReturn($ip);
 
         /** @var FormBuilderInterface|\PHPUnit_Framework_MockObject_MockObject $builder */
-        $builder = $this->getMock('Symfony\Component\Form\FormBuilderInterface');
+        $builder = $this->createMock('Symfony\Component\Form\FormBuilderInterface');
         $builder->expects($this->exactly(2))->method('add')->with($this->logicalOr(
             $this->equalTo('username'),
             $this->equalTo('password')
@@ -85,22 +86,22 @@ class LoginFormTypeTest extends \PHPUnit_Framework_TestCase
             ->willReturn($accessSession);
 
         /** @var EntityManagerInterface|\PHPUnit_Framework_MockObject_MockObject $em */
-        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em = $this->createMock('Doctrine\ORM\EntityManagerInterface');
         $em->expects($this->once())
             ->method('getRepository')->with('LoginCidadaoCoreBundle:AccessSession')
             ->willReturn($repo);
 
         /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
-        $session = $this->getMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $session = $this->createMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
         $session->expects($this->once())
             ->method('get')->with(Security::LAST_USERNAME)->willReturn($username);
 
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
         $request->expects($this->once())->method('getSession')->willReturn($session);
         $request->expects($this->once())->method('getClientIp')->willReturn($ip);
 
         /** @var FormBuilderInterface|\PHPUnit_Framework_MockObject_MockObject $builder */
-        $builder = $this->getMock('Symfony\Component\Form\FormBuilderInterface');
+        $builder = $this->createMock('Symfony\Component\Form\FormBuilderInterface');
         $builder->expects($this->exactly(3))->method('add')->with($this->logicalOr(
             $this->equalTo('username'),
             $this->equalTo('password'),
@@ -145,7 +146,7 @@ class LoginFormTypeTest extends \PHPUnit_Framework_TestCase
      */
     private function getContainer($em = null, $request = null, $threshold = null)
     {
-        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
         $container->expects($this->exactly(2))
             ->method('get')
             ->willReturnMap([
