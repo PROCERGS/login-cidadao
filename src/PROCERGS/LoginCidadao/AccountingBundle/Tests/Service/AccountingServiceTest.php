@@ -11,10 +11,15 @@
 namespace PROCERGS\LoginCidadao\AccountingBundle\Tests\Service;
 
 use LoginCidadao\OAuthBundle\Entity\Client;
+use LoginCidadao\OAuthBundle\Entity\ClientRepository;
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
+use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLinkRepository;
+use PROCERGS\LoginCidadao\AccountingBundle\Model\AccountingReport;
 use PROCERGS\LoginCidadao\AccountingBundle\Service\AccountingService;
+use PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService;
 
-class AccountingServiceTest extends \PHPUnit_Framework_TestCase
+class AccountingServiceTest extends TestCase
 {
     public function testGetAccounting()
     {
@@ -53,7 +58,7 @@ class AccountingServiceTest extends \PHPUnit_Framework_TestCase
         $service = $this->getAccountingService($registry, $clientRepo);
         $report = $service->getAccounting(new \DateTime(), new \DateTime());
 
-        $this->assertInstanceOf('PROCERGS\LoginCidadao\AccountingBundle\Model\AccountingReport', $report);
+        $this->assertInstanceOf(AccountingReport::class, $report);
         $this->assertCount(2, $report->getReport());
         foreach ($report->getReport() as $entry) {
             $this->assertContains($entry->getClient(), $clients);
@@ -74,7 +79,7 @@ class AccountingServiceTest extends \PHPUnit_Framework_TestCase
         $service = $this->getAccountingService($registry, $clientRepo);
         $report = $service->getAccounting(new \DateTime(), new \DateTime());
 
-        $this->assertInstanceOf('PROCERGS\LoginCidadao\AccountingBundle\Model\AccountingReport', $report);
+        $this->assertInstanceOf(AccountingReport::class, $report);
         $this->assertEmpty($report->getReport());
     }
 
@@ -117,13 +122,16 @@ class AccountingServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('9;2', end($lines));
     }
 
-    private function getAccountingService(
-        $registry,
-        $clientRepo,
-        $linkRepo = null
-    ) {
+    /**
+     * @param $registry
+     * @param $clientRepo
+     * @param ProcergsLinkRepository $linkRepo
+     * @return AccountingService
+     */
+    private function getAccountingService($registry, $clientRepo, $linkRepo = null)
+    {
         if (!$linkRepo) {
-            $linkRepo = $this->getMockBuilder('PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLinkRepository')
+            $linkRepo = $this->getMockBuilder(ProcergsLinkRepository::class)
                 ->disableOriginalConstructor()->getMock();
         }
 
@@ -132,19 +140,18 @@ class AccountingServiceTest extends \PHPUnit_Framework_TestCase
 
     private function getRegistry()
     {
-        return $this->getMockBuilder('PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService')
+        return $this->getMockBuilder(SystemsRegistryService::class)
             ->disableOriginalConstructor()->getMock();
     }
 
     private function getClientRepo()
     {
-        return $this->getRepo('LoginCidadao\OAuthBundle\Entity\ClientRepository');
+        return $this->getRepo(ClientRepository::class);
     }
 
     private function getRepo($className)
     {
-        $repo = $this->getMockBuilder($className)
-            ->disableOriginalConstructor()->getMock();
+        $repo = $this->getMockBuilder($className)->disableOriginalConstructor()->getMock();
 
         return $repo;
     }

@@ -12,6 +12,7 @@ namespace PROCERGS\LoginCidadao\AccountingBundle\Service;
 
 use GuzzleHttp\ClientInterface as HttpClientInterface;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\GuzzleException;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use PROCERGS\Generic\Traits\OptionalLoggerAwareTrait;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
@@ -50,6 +51,12 @@ class SystemsRegistryService implements LoggerAwareInterface
         ];
     }
 
+    /**
+     * @param ClientInterface $client
+     * @param \DateTime|null $activeAfter
+     * @return array
+     * @throws GuzzleException
+     */
     public function getSystemInitials(ClientInterface $client, \DateTime $activeAfter = null)
     {
         $this->log('info', "Fetching PROCERGS's system initials for client_id: {$client->getPublicId()}");
@@ -80,6 +87,12 @@ class SystemsRegistryService implements LoggerAwareInterface
         return $identifiedSystems;
     }
 
+    /**
+     * @param ClientInterface $client
+     * @param \DateTime|null $activeAfter
+     * @return array
+     * @throws GuzzleException
+     */
     public function getSystemOwners(ClientInterface $client, \DateTime $activeAfter = null)
     {
         $queries = $this->getQueries($client);
@@ -113,6 +126,7 @@ class SystemsRegistryService implements LoggerAwareInterface
      * @param $query
      * @param \DateTime $activeAfter systems deactivated after this date will be included in the report.
      * @return mixed
+     * @throws GuzzleException
      */
     private function fetchInfo($query, \DateTime $activeAfter = null)
     {
@@ -123,9 +137,9 @@ class SystemsRegistryService implements LoggerAwareInterface
 
             $response = null;
             try {
-                $response = $this->client->get($requestUrl, ['headers' => $this->headers]);
-            } catch (ClientException $e) {
-                if ($e->getResponse()->getStatusCode() === 404) {
+                $response = $this->client->request('get', $requestUrl, ['headers' => $this->headers]);
+            } catch (GuzzleException $e) {
+                if ($e instanceof ClientException && $e->getResponse()->getStatusCode() === 404) {
                     $response = $e->getResponse();
                 } else {
                     $this->log('info',
@@ -136,7 +150,7 @@ class SystemsRegistryService implements LoggerAwareInterface
                 }
             }
 
-            $systems = $this->filterInactive($response->json(), $activeAfter);
+            $systems = $this->filterInactive(json_decode($response->getBody()->__toString(), true), $activeAfter);
 
             $this->cache[$hashKey] = $systems;
         } else {

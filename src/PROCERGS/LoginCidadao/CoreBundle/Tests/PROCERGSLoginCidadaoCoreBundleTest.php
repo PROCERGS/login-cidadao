@@ -10,10 +10,11 @@
 
 namespace PROCERGS\LoginCidadao\CoreBundle\Tests;
 
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\CoreBundle\PROCERGSLoginCidadaoCoreBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class PROCERGSLoginCidadaoCoreBundleTest extends \PHPUnit_Framework_TestCase
+class PROCERGSLoginCidadaoCoreBundleTest extends TestCase
 {
     public function testBuild()
     {

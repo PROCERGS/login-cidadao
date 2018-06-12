@@ -10,10 +10,12 @@
 
 namespace PROCERGS\LoginCidadao\PhoneVerificationBundle\Tests\DependencyInjection;
 
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\PhoneVerificationBundle\DependencyInjection\Configuration;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 
-class ConfigurationTest extends \PHPUnit_Framework_TestCase
+class ConfigurationTest extends TestCase
 {
     public static function getConfig($maxFailures = 2, $resetTimeout = 10)
     {
@@ -26,10 +28,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testGetConfigTreeBuilder()
     {
         $configuration = new Configuration();
-        $this->assertInstanceOf(
-            'Symfony\Component\Config\Definition\Builder\TreeBuilder',
-            $configuration->getConfigTreeBuilder()
-        );
+        $this->assertInstanceOf(TreeBuilder::class, $configuration->getConfigTreeBuilder());
     }
 
     public function testEmptyConfig()

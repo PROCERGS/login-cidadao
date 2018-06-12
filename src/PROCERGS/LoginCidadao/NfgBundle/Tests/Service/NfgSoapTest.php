@@ -12,13 +12,15 @@ namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Service;
 
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
+use PHPUnit\Framework\TestCase;
+use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Security\Credentials;
 use PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoap;
 
 /**
  * @codeCoverageIgnore
  */
-class NfgSoapTest extends \PHPUnit_Framework_TestCase
+class NfgSoapTest extends TestCase
 {
     public function testValidGetAccessID()
     {
@@ -32,7 +34,7 @@ class NfgSoapTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidCredentialsGetAccessID()
     {
-        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
+        $this->expectException(NfgServiceUnavailableException::class);
 
         $client = $this->getSoapClientMock();
         $credentials = new Credentials('invalid', 'invalid', 'invalid');
@@ -101,7 +103,7 @@ class NfgSoapTest extends \PHPUnit_Framework_TestCase
 
     public function testErrorResponse()
     {
-        $this->setExpectedException('RuntimeException');
+        $this->expectException(\RuntimeException::class);
         $userInfo = [
             'CodSitRetorno' => '500',
             'MsgRetorno' => 'Some error',
@@ -193,17 +195,11 @@ class NfgSoapTest extends \PHPUnit_Framework_TestCase
      */
     private function getSoapClientMock(array $info = [])
     {
-        $client = $this->getMock(
-            '\SoapClient',
-            ['ObterAccessID', 'ConsultaCadastro'],
-            ['https://dum.my/service.wsdl'],
-            '',
-            false,
-            false,
-            false,
-            true,
-            false
-        );
+        $client = $this->getMockBuilder(\SoapClient::class)
+            ->setMethods(['ObterAccessID', 'ConsultaCadastro'])
+            ->setConstructorArgs(['https://dum.my/service.wsdl'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $client->expects($this->any())
             ->method('ObterAccessID')
             ->willReturnCallback(function ($data) {

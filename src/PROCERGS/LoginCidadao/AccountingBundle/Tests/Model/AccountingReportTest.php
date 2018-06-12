@@ -11,6 +11,8 @@
 namespace PROCERGS\LoginCidadao\AccountingBundle\Tests\Model;
 
 use LoginCidadao\OAuthBundle\Entity\Client;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
 use PROCERGS\LoginCidadao\AccountingBundle\Model\AccountingReport;
 use PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService;
@@ -18,7 +20,7 @@ use PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService;
 /**
  * @codeCoverageIgnore
  */
-class AccountingReportTest extends \PHPUnit_Framework_TestCase
+class AccountingReportTest extends TestCase
 {
     public function testAddEntryNotLinked()
     {
@@ -84,7 +86,7 @@ class AccountingReportTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidOrder()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
 
         $report = $this->getAccountingReport();
         $report->getReport(['sort' => 'INVALID']);
@@ -95,8 +97,7 @@ class AccountingReportTest extends \PHPUnit_Framework_TestCase
         $getInitialsCalls = 0;
         $getOwnerCalls = 0;
 
-        $registryClass = 'PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService';
-        $registry = $this->getMockBuilder($registryClass)->disableOriginalConstructor()->getMock();
+        $registry = $this->getMockBuilder(SystemsRegistryService::class)->disableOriginalConstructor()->getMock();
         $registry->expects($this->exactly(2))->method('getSystemInitials')
             ->willReturnCallback(function () use (&$getInitialsCalls) {
                 $getInitialsCalls++;
@@ -147,9 +148,8 @@ class AccountingReportTest extends \PHPUnit_Framework_TestCase
     private function getAccountingReport($registry = null)
     {
         if ($registry === null) {
-            $registryClass = 'PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService';
-            /** @var SystemsRegistryService|\PHPUnit_Framework_MockObject_MockObject $registry */
-            $registry = $this->getMockBuilder($registryClass)->disableOriginalConstructor()->getMock();
+            /** @var SystemsRegistryService|MockObject $registry */
+            $registry = $this->getMockBuilder(SystemsRegistryService::class)->disableOriginalConstructor()->getMock();
             $registry->expects($this->any())->method('getSystemInitials')->willReturn(['XPTO']);
             $registry->expects($this->any())->method('getSystemOwners')->willReturn(['OWNER']);
         }

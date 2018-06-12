@@ -10,11 +10,12 @@
 
 namespace PROCERGS\LoginCidadao\AccountingBundle\Tests\Model;
 
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
 use PROCERGS\LoginCidadao\AccountingBundle\Model\AccountingReportEntry;
 use PROCERGS\LoginCidadao\AccountingBundle\Model\GcsInterface;
 
-class GcsInterfaceTest extends \PHPUnit_Framework_TestCase
+class GcsInterfaceTest extends TestCase
 {
     public function testGcsInterface()
     {

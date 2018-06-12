@@ -10,17 +10,18 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Event;
 
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\NfgBundle\Event\GetConnectCallbackResponseEvent;
 use Symfony\Component\HttpFoundation\Response;
 
-class GetConnectCallbackResponseEventTest extends \PHPUnit_Framework_TestCase
+class GetConnectCallbackResponseEventTest extends TestCase
 {
     public function testEvent()
     {
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
-        $personMeuRS = $this->getMock('PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
+        $personMeuRS = $this->createMock('PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS');
         $overrideExisting = true;
-        $response = $this->getMock('Symfony\Component\HttpFoundation\Response');
+        $response = $this->createMock('Symfony\Component\HttpFoundation\Response');
 
         $event = new GetConnectCallbackResponseEvent($request, $personMeuRS, $overrideExisting, $response);
 
