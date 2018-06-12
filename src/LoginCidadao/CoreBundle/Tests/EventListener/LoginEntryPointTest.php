@@ -13,12 +13,13 @@ namespace LoginCidadao\CoreBundle\Tests\EventListener;
 use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
 use LoginCidadao\CoreBundle\EventListener\LoginEntryPoint;
 use LoginCidadao\CoreBundle\Service\RegisterRequestedScope;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\HttpUtils;
 
-class LoginEntryPointTest extends \PHPUnit_Framework_TestCase
+class LoginEntryPointTest extends TestCase
 {
 
     public function testStart()
@@ -27,13 +28,13 @@ class LoginEntryPointTest extends \PHPUnit_Framework_TestCase
         $redirect = new RedirectResponse('https://example.com');
 
         /** @var HttpUtils|\PHPUnit_Framework_MockObject_MockObject $httpUtils */
-        $httpUtils = $this->getMock('Symfony\Component\Security\Http\HttpUtils');
+        $httpUtils = $this->createMock('Symfony\Component\Security\Http\HttpUtils');
         $httpUtils->expects($this->once())
             ->method('createRedirectResponse')->with($request, 'fos_user_security_login')
             ->willReturn($redirect);
 
         /** @var EventDispatcherInterface|\PHPUnit_Framework_MockObject_MockObject $dispatcher */
-        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $dispatcher->expects($this->once())
             ->method('dispatch')->with(
                 LoginCidadaoCoreEvents::AUTHENTICATION_ENTRY_POINT_START,
@@ -41,7 +42,7 @@ class LoginEntryPointTest extends \PHPUnit_Framework_TestCase
             );
 
         /** @var RegisterRequestedScope|\PHPUnit_Framework_MockObject_MockObject $registerScopeService */
-        $registerScopeService = $this->getMock('LoginCidadao\CoreBundle\Service\RegisterRequestedScope');
+        $registerScopeService = $this->createMock('LoginCidadao\CoreBundle\Service\RegisterRequestedScope');
         $registerScopeService->expects($this->once())
             ->method('registerRequestedScope')->with($request);
 

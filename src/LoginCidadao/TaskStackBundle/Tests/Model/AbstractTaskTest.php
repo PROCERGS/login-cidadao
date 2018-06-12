@@ -11,8 +11,9 @@
 namespace LoginCidadao\TaskStackBundle\Tests\Model;
 
 use LoginCidadao\TaskStackBundle\Model\AbstractTask;
+use PHPUnit\Framework\TestCase;
 
-class AbstractTaskTest extends \PHPUnit_Framework_TestCase
+class AbstractTaskTest extends TestCase
 {
     public function testAbstractTask()
     {

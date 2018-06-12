@@ -12,19 +12,26 @@ namespace LoginCidadao\RemoteClaimsBundle\Tests\Fetcher;
 
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
+use GuzzleHttp\Psr7\Request;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository;
+use LoginCidadao\RemoteClaimsBundle\Exception\ClaimProviderNotFoundException;
+use LoginCidadao\RemoteClaimsBundle\Exception\ClaimUriUnavailableException;
 use LoginCidadao\RemoteClaimsBundle\Fetcher\RemoteClaimFetcher;
 use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\HttpUri;
+use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 use LoginCidadao\RemoteClaimsBundle\Tests\Http\HttpMocker;
 use LoginCidadao\RemoteClaimsBundle\Tests\Parser\RemoteClaimParserTest;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
+class RemoteClaimFetcherTest extends TestCase
 {
     /**
      * Test the Claim fetch using HTTP URI.
@@ -38,7 +45,7 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
         $fetcher = $this->getFetcher(new HttpMocker($data));
         $remoteClaim = $fetcher->fetchRemoteClaim($uri);
 
-        $this->assertInstanceOf('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface', $remoteClaim);
+        $this->assertInstanceOf(RemoteClaimInterface::class, $remoteClaim);
         $this->assertEquals($data['claim_display_name'], $remoteClaim->getDisplayName());
     }
 
@@ -56,14 +63,14 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
         $fetcher = $this->getFetcher($httpMocker);
         $remoteClaim = $fetcher->fetchRemoteClaim($tagUri);
 
-        $requests = $httpMocker->getHistory()->getRequests();
-        $firstRequest = reset($requests);
+        $requests = $httpMocker->getRequests();
+        $firstRequest = $requests[0];
 
-        $this->assertInstanceOf('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface', $remoteClaim);
+        $this->assertInstanceOf(RemoteClaimInterface::class, $remoteClaim);
         $this->assertEquals($data['claim_display_name'], $remoteClaim->getDisplayName());
         $this->assertCount(2, $requests);
 
-        $webFingerUrl = HttpUri::createFromString($firstRequest->getUrl());
+        $webFingerUrl = HttpUri::createFromString($firstRequest->getUri());
         $this->assertEquals('https', $webFingerUrl->getScheme());
         $this->assertEquals('example.com', $webFingerUrl->getHost());
         $this->assertEquals('/.well-known/webfinger', $webFingerUrl->getPath());
@@ -76,7 +83,7 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
 
     public function testFetchTagNotFound()
     {
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
+        $this->expectException(NotFoundHttpException::class);
 
         $tagUri = 'tag:example.com,2018:my_claim';
         $fetcher = $this->getFetcher();
@@ -85,11 +92,11 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
 
     public function testFetchUriNotFound()
     {
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
+        $this->expectException(NotFoundHttpException::class);
 
-        $httpClient = $this->getMockBuilder('GuzzleHttp\Client')
-            ->disableOriginalConstructor()->getMock();
-        $httpClient->expects($this->once())->method('get')->willThrowException(new TransferException());
+        $httpClient = new HttpMocker(null, null, [
+            new RequestException('Not found', new Request('GET', 'dummy')),
+        ]);
 
         $tagUri = 'https://claim.uri/dummy';
         $fetcher = $this->getFetcher($httpClient);
@@ -105,7 +112,7 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
         $claimUri = 'https://dummy.com';
 
         /** @var ClaimProviderInterface|\PHPUnit_Framework_MockObject_MockObject $provider */
-        $provider = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
+        $provider = $this->createMock(ClaimProviderInterface::class);
         $provider->expects($this->once())->method('getClientId')->willReturn(['https://redirect.uri']);
 
         $existingClaim = new RemoteClaim();
@@ -120,7 +127,8 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
         $em = $this->getEntityManager();
         $em->expects($this->never())->method('persist');
 
-        $fetcher = $this->getFetcher(null, $em, $claimRepository, $clientManager);
+        $data = RemoteClaimParserTest::$claimMetadata;
+        $fetcher = $this->getFetcher(new HttpMocker($data), $em, $claimRepository, $clientManager);
         $actual = $fetcher->getRemoteClaim($claimUri);
 
         $this->assertEquals($existingClaim, $actual);
@@ -134,7 +142,7 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
     {
         $claimUri = 'https://dummy.com';
 
-        $provider = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
+        $provider = $this->createMock(ClaimProviderInterface::class);
 
         $existingClaim = null;
 
@@ -146,12 +154,13 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
 
         $em = $this->getEntityManager();
         $em->expects($this->once())->method('persist')
-            ->with($this->isInstanceOf('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface'));
+            ->with($this->isInstanceOf(RemoteClaimInterface::class));
 
-        $fetcher = $this->getFetcher(null, $em, $claimRepository, $clientManager);
+        $data = RemoteClaimParserTest::$claimMetadata;
+        $fetcher = $this->getFetcher(new HttpMocker($data), $em, $claimRepository, $clientManager);
         $actual = $fetcher->getRemoteClaim($claimUri);
 
-        $this->assertInstanceOf('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface', $actual);
+        $this->assertInstanceOf(RemoteClaimInterface::class, $actual);
     }
 
     /**
@@ -159,7 +168,7 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
      */
     public function testNonExistentProvider()
     {
-        $this->setExpectedException('LoginCidadao\RemoteClaimsBundle\Exception\ClaimProviderNotFoundException');
+        $this->expectException(ClaimProviderNotFoundException::class);
         $claimUri = 'https://dummy.com';
 
         $clientManager = $this->getClientManager();
@@ -168,7 +177,8 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
         $em = $this->getEntityManager();
         $em->expects($this->never())->method('persist');
 
-        $fetcher = $this->getFetcher(null, $em, null, $clientManager);
+        $httpMocker = new HttpMocker(RemoteClaimParserTest::$claimMetadata);
+        $fetcher = $this->getFetcher($httpMocker, $em, null, $clientManager);
         $fetcher->getRemoteClaim($claimUri);
     }
 
@@ -176,13 +186,12 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
     {
         $tagUri = 'tag:example.com,2018:my_claim';
 
-        $httpClient = $this->getMockBuilder('GuzzleHttp\Client')
-            ->disableOriginalConstructor()->getMock();
-        $httpClient->expects($this->once())->method('get')
-            ->willThrowException(new TransferException('Some error'));
+        $httpClient = new HttpMocker(null, null, [
+            new RequestException('Not found', new Request('GET', 'dummy')),
+        ]);
 
         $fetcher = $this->getFetcher($httpClient);
-        $this->setExpectedException('LoginCidadao\RemoteClaimsBundle\Exception\ClaimUriUnavailableException');
+        $this->expectException(ClaimUriUnavailableException::class);
         $fetcher->discoverClaimUri($tagUri);
     }
 
@@ -190,10 +199,9 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
     {
         $tagUri = TagUri::createFromString('tag:example.com,2018:my_claim');
 
-        $httpClient = $this->getMockBuilder('GuzzleHttp\Client')
-            ->disableOriginalConstructor()->getMock();
-        $httpClient->expects($this->once())->method('get')
-            ->willThrowException(new TransferException('Some error'));
+        $httpClient = new HttpMocker(null, null, [
+            new RequestException('Error discovering URI', new Request('GET', 'dummy')),
+        ]);
 
         $uri = 'https://my.claim.uri/';
         $remoteClaim = (new RemoteClaim())->setUri($uri);
@@ -208,14 +216,15 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
 
     public function testProviderNotFound()
     {
-        $this->setExpectedException('LoginCidadao\RemoteClaimsBundle\Exception\ClaimProviderNotFoundException');
+        $this->expectException(ClaimProviderNotFoundException::class);
 
         $claimUri = 'https://dummy.com';
 
         $clientManager = $this->getClientManager();
         $clientManager->expects($this->once())->method('getClientById')->willReturn(null);
 
-        $fetcher = $this->getFetcher(null, null, null, $clientManager, null);
+        $httpMocker = new HttpMocker(RemoteClaimParserTest::$claimMetadata);
+        $fetcher = $this->getFetcher($httpMocker, null, null, $clientManager, null);
         $fetcher->getRemoteClaim($claimUri);
     }
 
@@ -266,7 +275,7 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
      */
     private function getEntityManager()
     {
-        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em = $this->createMock(EntityManagerInterface::class);
 
         return $em;
     }
@@ -276,7 +285,7 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
      */
     private function getClaimRepository()
     {
-        return $this->getMockBuilder('LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository')
+        return $this->getMockBuilder(RemoteClaimRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -286,7 +295,7 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
      */
     private function getClientManager()
     {
-        $manager = $this->getMockBuilder('LoginCidadao\OpenIDBundle\Manager\ClientManager')
+        $manager = $this->getMockBuilder(ClientManager::class)
             ->disableOriginalConstructor()->getMock();
 
         return $manager;
@@ -297,6 +306,6 @@ class RemoteClaimFetcherTest extends \PHPUnit_Framework_TestCase
      */
     private function getDispatcher()
     {
-        return $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        return $this->createMock(EventDispatcherInterface::class);
     }
 }

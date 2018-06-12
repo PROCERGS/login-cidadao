@@ -12,8 +12,9 @@ namespace LoginCidadao\ValidationBundle\Tests\Validator\Constraints;
 
 use LoginCidadao\ValidationBundle\Validator\Constraints\Age;
 use LoginCidadao\ValidationBundle\Validator\Constraints\AgeValidator;
+use PHPUnit\Framework\TestCase;
 
-class AgeValidatorTest extends \PHPUnit_Framework_TestCase
+class AgeValidatorTest extends TestCase
 {
     const MIN_AGE = 18;
     const MAX_AGE = 150;

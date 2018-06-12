@@ -10,13 +10,14 @@
 
 namespace LoginCidadao\CoreBundle\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class VagrantParametersTest
  * @package LoginCidadao\CoreBundle\Tests
  */
-class VagrantParametersTest extends \PHPUnit_Framework_TestCase
+class VagrantParametersTest extends TestCase
 {
     private $dist;
     private $vagrant;

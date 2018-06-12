@@ -11,8 +11,9 @@
 namespace LoginCidadao\RemoteClaimsBundle\Tests\Model;
 
 use LoginCidadao\RemoteClaimsBundle\Model\HttpUri;
+use PHPUnit\Framework\TestCase;
 
-class HttpUriTest extends \PHPUnit_Framework_TestCase
+class HttpUriTest extends TestCase
 {
     public function testValidCompleteUri()
     {
@@ -65,28 +66,28 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidUri()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $uri = 'not valid';
         HttpUri::createFromString($uri);
     }
 
     public function testInvalidScheme()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $uri = 'ftp://example.com';
         HttpUri::createFromString($uri);
     }
 
     public function testInvalidHost()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $uri = 'https://not valid.com';
         HttpUri::createFromString($uri);
     }
 
     public function testInvalidPath()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $uri = 'https://example.com/not valid';
         HttpUri::createFromString($uri);
     }

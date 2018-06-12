@@ -14,8 +14,9 @@ use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
 use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
+use PHPUnit\Framework\TestCase;
 
-class RemoteClaimTest extends \PHPUnit_Framework_TestCase
+class RemoteClaimTest extends TestCase
 {
     public function testRemoteClaim()
     {
@@ -28,7 +29,7 @@ class RemoteClaimTest extends \PHPUnit_Framework_TestCase
         $uri = 'https://some.uri/example';
 
         /** @var ClaimProviderInterface $provider */
-        $provider = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
+        $provider = $this->createMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
 
         /** @var RemoteClaimInterface|RemoteClaim $remoteClaim */
         $remoteClaim = (new RemoteClaim())
@@ -52,6 +53,22 @@ class RemoteClaimTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($essential, $remoteClaim->getEssentialScope());
     }
 
+    public function testScopeIsAlwaysArray()
+    {
+        $remoteClaim = (new RemoteClaim())
+            ->setRecommendedScope('scope1 scope2')
+            ->setEssentialScope('scope3 scope4');
+
+        $this->assertContains('scope1', $remoteClaim->getRecommendedScope());
+        $this->assertContains('scope2', $remoteClaim->getRecommendedScope());
+
+        $this->assertContains('scope3', $remoteClaim->getEssentialScope());
+        $this->assertContains('scope4', $remoteClaim->getEssentialScope());
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
     public function testGetNameAlwaysReturnsTagUri()
     {
         $remoteClaim = new RemoteClaim();

@@ -18,9 +18,10 @@ use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTaskValidator;
 use LoginCidadao\TaskStackBundle\Event\GetTasksEvent;
 use LoginCidadao\TaskStackBundle\TaskStackEvents;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class TaskSubscriberTest extends \PHPUnit_Framework_TestCase
+class TaskSubscriberTest extends TestCase
 {
     public function testGetSubscribedEvents()
     {

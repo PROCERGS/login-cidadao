@@ -2,13 +2,14 @@
 # tests: true
 filter:
     paths:
-        - src/
+        - "src/"
     dependency_paths:
-        - vendor/
+        - "vendor/"
     excluded_paths:
-        - app/
-        - web/
-        - spec/
+        - "app/"
+        - "web/"
+        - "spec/"
+        - "*/Tests/*"
 tools:
     php_mess_detector: true
     php_cs_fixer:
@@ -145,18 +146,19 @@ build_failure_conditions:
     - 'project.metric_change("scrutinizer.quality", < -0.10)'
 build:
     environment:
+        php:
+            version: '7.1'
         postgresql: true
         variables:
             SYMFONY_DEPRECATIONS_HELPER: 'weak'
     dependencies:
         before:
             - psql -c "CREATE DATABASE logincidadao WITH OWNER = scrutinizer"
-            - 'sed -i -e "s/resource: memcache\.yml/resource: memcached.yml/" app/config/config.yml'
-    project_setup:
-        before:
             - cp app/config/parameters.yml.dist app/config/parameters.yml
             - 'sed -i -e "s/database_user:     logincidadao/database_user:     scrutinizer/" app/config/parameters.yml'
             - 'sed -i -e "s/database_password: logincidadao/database_password: scrutinizer/" app/config/parameters.yml'
+    project_setup:
+        before:
             - php app/console doctrine:schema:update --force
             - php app/console doctrine:schema:update --em=logs --force
             - php app/console lc:database:populate batch/

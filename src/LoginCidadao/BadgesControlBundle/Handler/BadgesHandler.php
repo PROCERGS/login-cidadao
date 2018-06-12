@@ -19,7 +19,7 @@ class BadgesHandler
 
     public function __construct(EventDispatcherInterface $dispatcher)
     {
-        $this->evaluators = array();
+        $this->evaluators = [];
         $this->dispatcher = $dispatcher;
 
         $this->setup();
@@ -27,10 +27,11 @@ class BadgesHandler
 
     public function register(BadgeEvaluatorInterface $evaluator)
     {
-        $id = $evaluator->getId();
+        $id = $evaluator->getName();
         if (!array_key_exists($id, $this->evaluators)) {
-            $this->evaluators[$evaluator->getId()] = $evaluator;
+            $this->evaluators[$evaluator->getName()] = $evaluator;
         }
+
         return $this;
     }
 
@@ -44,6 +45,7 @@ class BadgesHandler
     {
         $event = new EvaluateBadgesEvent($person);
         $this->dispatcher->dispatch(BadgesEvents::BADGES_EVALUATE, $event);
+
         return $event->getPerson();
     }
 
@@ -56,6 +58,7 @@ class BadgesHandler
     {
         $event = new ListBadgesEvent();
         $this->dispatcher->dispatch(BadgesEvents::BADGES_LIST_AVAILABLE, $event);
+
         return $event->getBadges();
     }
 
@@ -63,6 +66,7 @@ class BadgesHandler
     {
         $event = new ListBearersEvent($badge, $value);
         $this->dispatcher->dispatch(BadgesEvents::BADGES_LIST_BEARERS, $event);
+
         return $event->getCount();
     }
 

@@ -11,15 +11,20 @@
 namespace LoginCidadao\DynamicFormBundle\Tests\Form;
 
 use LoginCidadao\DynamicFormBundle\Form\DynamicFormType;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class DynamicFormTypeTest extends \PHPUnit_Framework_TestCase
+class DynamicFormTypeTest extends TestCase
 {
     public function testBuildForm()
     {
-        $formService = $this->getMock('LoginCidadao\DynamicFormBundle\Service\DynamicFormServiceInterface');
+        $formService = $this->createMock('LoginCidadao\DynamicFormBundle\Service\DynamicFormServiceInterface');
         $options = ['dynamic_form_service' => $formService];
 
-        $builder = $this->getMock('Symfony\Component\Form\FormBuilderInterface');
+        /** @var MockObject|FormBuilderInterface $builder */
+        $builder = $this->createMock(FormBuilderInterface::class);
         $builder->expects($this->once())->method('addEventSubscriber')
             ->with($this->isInstanceOf('LoginCidadao\DynamicFormBundle\Event\DynamicFormSubscriber'));
 
@@ -29,7 +34,8 @@ class DynamicFormTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testConfigureOptions()
     {
-        $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolver');
+        /** @var MockObject|OptionsResolver $resolver */
+        $resolver = $this->createMock(OptionsResolver::class);
         $resolver->expects($this->once())->method('setRequired')->with('dynamic_form_service');
 
         $form = new DynamicFormType();

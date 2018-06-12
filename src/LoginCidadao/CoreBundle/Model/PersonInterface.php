@@ -10,7 +10,6 @@
 
 namespace LoginCidadao\CoreBundle\Model;
 
-use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
 use LoginCidadao\CoreBundle\Entity\BackupCode;
@@ -23,7 +22,6 @@ use LoginCidadao\CoreBundle\Entity\City;
 use LoginCidadao\CoreBundle\Entity\Country;
 use LoginCidadao\CoreBundle\Entity\State;
 use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
-use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation as JMS;
 
 interface PersonInterface extends EncoderAwareInterface, UserInterface, LocationAwareInterface, LongPollableInterface, TwoFactorInterface
@@ -228,10 +226,6 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
     public function setGoogleAccessToken($var);
 
     public function getGoogleAccessToken();
-
-    public function setComplement($var);
-
-    public function getComplement();
 
     /**
      * @return IdCardInterface[]

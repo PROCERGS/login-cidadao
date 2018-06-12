@@ -12,8 +12,9 @@ namespace LoginCidadao\OpenIDBundle\Tests\Storage;
 
 use Doctrine\ORM\EntityManager;
 use LoginCidadao\OpenIDBundle\Storage\UserClaims;
+use PHPUnit\Framework\TestCase;
 
-class UserClaimsTest extends \PHPUnit_Framework_TestCase
+class UserClaimsTest extends TestCase
 {
 
     public function testGetUserClaims()

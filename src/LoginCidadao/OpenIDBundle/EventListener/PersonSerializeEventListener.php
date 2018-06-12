@@ -68,11 +68,11 @@ class PersonSerializeEventListener implements EventSubscriberInterface
 
         /** @var GenericSerializationVisitor $visitor */
         $visitor = $event->getVisitor();
-        $visitor->addData('sub', $sub);
+        $visitor->setData('sub', $sub);
 
         $version = $this->getApiVersion();
         if ($version['major'] == 1) {
-            $visitor->addData('id', $sub);
+            $visitor->setData('id', $sub);
         }
     }
 
@@ -83,8 +83,8 @@ class PersonSerializeEventListener implements EventSubscriberInterface
         $visitor = $event->getVisitor();
         if ($visitor instanceof GenericSerializationVisitor
             && version_compare($this->getApiVersion(true), '1.1.0', '>=')) {
-            $visitor->addData('picture', $person->getProfilePictureUrl());
-            $visitor->addData(
+            $visitor->setData('picture', $person->getProfilePictureUrl());
+            $visitor->setData(
                 'email_verified',
                 $person->getEmailConfirmedAt() instanceof \DateTime
             );

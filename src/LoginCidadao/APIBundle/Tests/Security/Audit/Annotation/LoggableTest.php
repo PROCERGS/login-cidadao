@@ -12,8 +12,9 @@ namespace LoginCidadao\APIBundle\Tests\Security\Audit\Annotation;
 
 use LoginCidadao\APIBundle\Entity\ActionLog;
 use LoginCidadao\APIBundle\Security\Audit\Annotation\Loggable;
+use PHPUnit\Framework\TestCase;
 
-class LoggableTest extends \PHPUnit_Framework_TestCase
+class LoggableTest extends TestCase
 {
 
     public function testActionLogId()

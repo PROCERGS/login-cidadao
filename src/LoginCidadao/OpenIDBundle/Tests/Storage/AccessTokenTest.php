@@ -11,6 +11,7 @@
 namespace LoginCidadao\Tests\OpenIDBundle\Storage;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\OAuthBundle\Entity\Client;
@@ -18,8 +19,9 @@ use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
 use LoginCidadao\OpenIDBundle\Storage\AccessToken;
+use PHPUnit\Framework\TestCase;
 
-class AccessTokenTest extends \PHPUnit_Framework_TestCase
+class AccessTokenTest extends TestCase
 {
 
     public function testGetAccessToken()
@@ -45,7 +47,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
         $accessToken->setScope($scope);
         $accessToken->setIdToken($idToken);
 
-        $repo = $this->getMockBuilder('Doctrine\ORM\EntityRepository')->disableOriginalConstructor()->getMock();
+        $repo = $this->getMockBuilder(EntityRepository::class)->disableOriginalConstructor()->getMock();
         $repo->expects($this->once())
             ->method('findOneBy')->with(['token' => $token])
             ->willReturn($accessToken);
@@ -75,7 +77,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
     public function testGetAccessTokenNotFound()
     {
         $token = 'my.access.token';
-        $repo = $this->getMockBuilder('Doctrine\ORM\EntityRepository')->disableOriginalConstructor()->getMock();
+        $repo = $this->getMockBuilder(EntityRepository::class)->disableOriginalConstructor()->getMock();
         $repo->expects($this->once())
             ->method('findOneBy')->with(['token' => $token])
             ->willReturn(null);
@@ -116,14 +118,12 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
         $em = $this->getEntityManager();
         $em->expects($this->once())->method('flush');
         $em->expects($this->once())->method('persist')
-            ->with($this->isInstanceOf('LoginCidadao\OAuthBundle\Entity\AccessToken'));
+            ->with($this->isInstanceOf(\LoginCidadao\OAuthBundle\Entity\AccessToken::class));
         $em->expects($this->once())
             ->method('getRepository')->with('LoginCidadaoCoreBundle:Person')
             ->willReturn($personRepo);
 
-        /** @var ClientManager|\PHPUnit_Framework_MockObject_MockObject $clientManager */
-        $clientManager = $this->getMockBuilder('LoginCidadao\OpenIDBundle\Manager\ClientManager')
-            ->disableOriginalConstructor()->getMock();
+        $clientManager = $this->getClientManager();
         $clientManager->expects($this->once())
             ->method('getClientById')->with($clientId)
             ->willReturn($client);
@@ -137,7 +137,29 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
     /**
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function testSetAccessTokenNoUser()
+    public function testSetAccessTokenClientNotFound()
+    {
+        $clientId = 'client_id';
+        $userId = 'subId';
+        $token = 'my.access.token';
+        $expires = time();
+        $scope = 'scope1 scope2';
+        $idToken = 'id-token-here';
+
+        $clientManager = $this->getClientManager();
+        $clientManager->expects($this->once())
+            ->method('getClientById')->with($clientId)
+            ->willReturn(null);
+
+        $accessTokenStorage = new AccessToken($this->getEntityManager());
+        $accessTokenStorage->setClientManager($clientManager);
+        $this->assertNull($accessTokenStorage->setAccessToken($token, $clientId, $userId, $expires, $scope, $idToken));
+    }
+
+    /**
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function testSetAccessTokenClientCredentials()
     {
         $clientId = 'client_id';
         $userId = null;
@@ -145,8 +167,15 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
         $expires = time();
         $scope = 'scope1 scope2';
         $idToken = 'id-token-here';
+        $client = new Client();
+
+        $clientManager = $this->getClientManager();
+        $clientManager->expects($this->once())
+            ->method('getClientById')->with($clientId)
+            ->willReturn($client);
 
         $accessTokenStorage = new AccessToken($this->getEntityManager());
+        $accessTokenStorage->setClientManager($clientManager);
         $this->assertNull($accessTokenStorage->setAccessToken($token, $clientId, $userId, $expires, $scope, $idToken));
     }
 
@@ -155,7 +184,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
      */
     private function getEntityManager()
     {
-        return $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
+        return $this->getMockBuilder(EntityManager::class)->disableOriginalConstructor()->getMock();
     }
 
     /**
@@ -163,7 +192,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
      */
     private function getPersonRepository()
     {
-        return $this->getMockBuilder('LoginCidadao\CoreBundle\Entity\PersonRepository')
+        return $this->getMockBuilder(PersonRepository::class)
             ->disableOriginalConstructor()->getMock();
     }
 
@@ -172,7 +201,19 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
      */
     private function getSubjectIdentifierService()
     {
-        return $this->getMockBuilder('LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService')
+        return $this->getMockBuilder(SubjectIdentifierService::class)
             ->disableOriginalConstructor()->getMock();
+    }
+
+    /**
+     * @return ClientManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getClientManager()
+    {
+        /** @var ClientManager|\PHPUnit_Framework_MockObject_MockObject $clientManager */
+        $clientManager = $this->getMockBuilder(ClientManager::class)
+            ->disableOriginalConstructor()->getMock();
+
+        return $clientManager;
     }
 }

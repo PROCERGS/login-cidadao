@@ -11,12 +11,14 @@
 namespace LoginCidadao\LocaleBundle\Tests\EventListener;
 
 use LoginCidadao\LocaleBundle\EventListener\LocaleListener;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class LocaleListenerTest extends \PHPUnit_Framework_TestCase
+class LocaleListenerTest extends TestCase
 {
 
     public function testGetSubscribedEvents()
@@ -28,6 +30,7 @@ class LocaleListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnKernelRequestNoSession()
     {
+        /** @var MockObject|GetResponseEvent $event */
         $event = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseEvent')
             ->disableOriginalConstructor()->getMock();
         $event->expects($this->once())
@@ -44,7 +47,7 @@ class LocaleListenerTest extends \PHPUnit_Framework_TestCase
         $sessionName = 'sessionName';
 
         /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
-        $session = $this->getMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $session = $this->createMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
         $session->expects($this->once())->method('getName')->willReturn($sessionName);
         $session->expects($this->once())->method('set')->with('_locale', $locale);
 
@@ -68,7 +71,7 @@ class LocaleListenerTest extends \PHPUnit_Framework_TestCase
         $sessionName = 'sessionName';
 
         /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
-        $session = $this->getMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $session = $this->createMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
         $session->expects($this->once())->method('getName')->willReturn($sessionName);
         $session->expects($this->once())->method('get')->with('_locale', 'en')->willReturn($locale);
 

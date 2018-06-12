@@ -10,12 +10,16 @@
 
 namespace LoginCidadao\DynamicFormBundle\Tests\Event;
 
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\DynamicFormBundle\Event\DynamicFormSubscriber;
 use LoginCidadao\DynamicFormBundle\Model\DynamicFormData;
 use LoginCidadao\DynamicFormBundle\Service\DynamicFormServiceInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
-class DynamicFormSubscriberTest extends \PHPUnit_Framework_TestCase
+class DynamicFormSubscriberTest extends TestCase
 {
     public function testSubscribedEvents()
     {
@@ -28,15 +32,17 @@ class DynamicFormSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testFullPreSetData()
     {
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
-        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        /** @var PersonInterface $person */
+        $person = $this->createMock(PersonInterface::class);
+        $form = $this->createMock('Symfony\Component\Form\FormInterface');
 
         $data = new DynamicFormData();
         $data
             ->setPerson($person)
             ->setScope('scope1 scope2');
 
-        $event = $this->getMockBuilder('Symfony\Component\Form\FormEvent')
+        /** @var MockObject|FormEvent $event */
+        $event = $this->getMockBuilder(FormEvent::class)
             ->disableOriginalConstructor()->getMock();
         $event->expects($this->once())->method('getData')
             ->willReturn($data);
@@ -49,6 +55,7 @@ class DynamicFormSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidData()
     {
+        /** @var MockObject|FormEvent $event */
         $event = $this->getMockBuilder('Symfony\Component\Form\FormEvent')
             ->disableOriginalConstructor()->getMock();
         $event->expects($this->once())->method('getData')
@@ -60,11 +67,10 @@ class DynamicFormSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testNoScope()
     {
-        $form = $this->getMock('Symfony\Component\Form\FormInterface');
-
         $data = new DynamicFormData();
         $data->setScope('');
 
+        /** @var MockObject|FormEvent $event */
         $event = $this->getMockBuilder('Symfony\Component\Form\FormEvent')
             ->disableOriginalConstructor()->getMock();
         $event->expects($this->once())->method('getData')
@@ -82,12 +88,16 @@ class DynamicFormSubscriberTest extends \PHPUnit_Framework_TestCase
         return $subscriber;
     }
 
+    /**
+     * @param $expectsBuildForm
+     * @return MockObject|DynamicFormServiceInterface
+     */
     private function getFormService($expectsBuildForm)
     {
         $FormInterface = 'Symfony\Component\Form\FormInterface';
         $DynamicFormDataClass = 'LoginCidadao\DynamicFormBundle\Model\DynamicFormData';
 
-        $formService = $this->getMock('LoginCidadao\DynamicFormBundle\Service\DynamicFormServiceInterface');
+        $formService = $this->createMock(DynamicFormServiceInterface::class);
 
         if ($expectsBuildForm) {
             $formService->expects($this->once())->method('buildForm')

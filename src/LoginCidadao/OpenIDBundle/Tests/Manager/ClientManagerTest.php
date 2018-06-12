@@ -18,9 +18,10 @@ use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class ClientManagerTest extends \PHPUnit_Framework_TestCase
+class ClientManagerTest extends TestCase
 {
     public function testGetClientById()
     {
@@ -152,7 +153,7 @@ class ClientManagerTest extends \PHPUnit_Framework_TestCase
      */
     private function getEntityManager()
     {
-        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em = $this->createMock('Doctrine\ORM\EntityManagerInterface');
 
         return $em;
     }
@@ -200,7 +201,7 @@ class ClientManagerTest extends \PHPUnit_Framework_TestCase
      */
     private function getDispatcher()
     {
-        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
 
         return $dispatcher;
     }

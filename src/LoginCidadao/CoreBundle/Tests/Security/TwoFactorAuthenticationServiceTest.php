@@ -15,9 +15,11 @@ use LoginCidadao\CoreBundle\Entity\BackupCode;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Security\TwoFactorAuthenticationService;
 use Google\Authenticator\GoogleAuthenticator as Google;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
 
-class TwoFactorAuthenticationServiceTest extends \PHPUnit_Framework_TestCase
+class TwoFactorAuthenticationServiceTest extends TestCase
 {
     public function testEnable()
     {
@@ -39,10 +41,10 @@ class TwoFactorAuthenticationServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testEnableWrongCode()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|PersonInterface $person */
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
 
         $twoFactor = new TwoFactorAuthenticationService($this->getEntityManager(), $this->getGoogleAuthenticator());
         $person->expects($this->once())->method('getGoogleAuthenticatorSecret')
@@ -102,8 +104,8 @@ class TwoFactorAuthenticationServiceTest extends \PHPUnit_Framework_TestCase
         $url = 'https://secret.url';
         $person = $this->getPerson();
 
-        $googleAuthClass = 'Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator';
-        $googleAuth = $this->getMockBuilder($googleAuthClass)->disableOriginalConstructor()->getMock();
+        /** @var MockObject|GoogleAuthenticator $googleAuth */
+        $googleAuth = $this->getMockBuilder(GoogleAuthenticator::class)->disableOriginalConstructor()->getMock();
         $googleAuth->expects($this->once())->method('getUrl')->with($person)->willReturn($url);
 
         $twoFactor = new TwoFactorAuthenticationService($this->getEntityManager(), $googleAuth);
@@ -111,11 +113,11 @@ class TwoFactorAuthenticationServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|EntityManagerInterface
+     * @return MockObject|EntityManagerInterface
      */
     private function getEntityManager()
     {
-        return $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        return $this->createMock('Doctrine\ORM\EntityManagerInterface');
     }
 
     private function getGoogleAuthenticator($googleAuth = null)
@@ -132,7 +134,7 @@ class TwoFactorAuthenticationServiceTest extends \PHPUnit_Framework_TestCase
      */
     private function getPerson()
     {
-        return $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        return $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
     }
 
     /**

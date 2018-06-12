@@ -10,10 +10,9 @@
 
 namespace LoginCidadao\CoreBundle\Service;
 
-use Rollerworks\Bundle\PasswordStrengthBundle\Validator\Constraints\PasswordRequirements;
+use Rollerworks\Component\PasswordStrength\Validator\Constraints\PasswordRequirements;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Mapping\ClassMetadataInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

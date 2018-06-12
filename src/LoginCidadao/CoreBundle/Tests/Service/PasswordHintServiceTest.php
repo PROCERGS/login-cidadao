@@ -11,13 +11,14 @@
 namespace LoginCidadao\CoreBundle\Tests\Service;
 
 use LoginCidadao\CoreBundle\Service\PasswordHintService;
-use Rollerworks\Bundle\PasswordStrengthBundle\Validator\Constraints\PasswordRequirements;
+use PHPUnit\Framework\TestCase;
+use Rollerworks\Component\PasswordStrength\Validator\Constraints\PasswordRequirements;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class PasswordHintServiceTest extends \PHPUnit_Framework_TestCase
+class PasswordHintServiceTest extends TestCase
 {
 
     public function testGetHintStringNoLimits()
@@ -104,7 +105,7 @@ class PasswordHintServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->runGetRequirementsTest(false, [], $userClass, $expected);
 
-        $metadata = $this->getMock('Symfony\Component\Validator\Mapping\ClassMetadataInterface');
+        $metadata = $this->createMock('Symfony\Component\Validator\Mapping\ClassMetadataInterface');
         $metadata->expects($this->once())
             ->method('hasPropertyMetadata')->with('plainPassword')->willReturn(false);
 
@@ -166,7 +167,7 @@ class PasswordHintServiceTest extends \PHPUnit_Framework_TestCase
      */
     private function getTranslator($expectedMessagesMap = [])
     {
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator = $this->createMock('Symfony\Component\Translation\TranslatorInterface');
         $translator->expects($this->exactly(count($expectedMessagesMap)))
             ->method('trans')->willReturnMap($expectedMessagesMap);
 
@@ -178,7 +179,7 @@ class PasswordHintServiceTest extends \PHPUnit_Framework_TestCase
      */
     private function getValidator()
     {
-        return $this->getMock('Symfony\Component\Validator\Validator\ValidatorInterface');
+        return $this->createMock('Symfony\Component\Validator\Validator\ValidatorInterface');
     }
 
     private function runGetRequirementsTest(
@@ -187,12 +188,12 @@ class PasswordHintServiceTest extends \PHPUnit_Framework_TestCase
         $userClass,
         $expected
     ) {
-        $metadata = $this->getMock('Symfony\Component\Validator\Mapping\ClassMetadataInterface');
+        $metadata = $this->createMock('Symfony\Component\Validator\Mapping\ClassMetadataInterface');
         $metadata->expects($this->once())
             ->method('hasPropertyMetadata')->with('plainPassword')->willReturn($hasProp);
 
         if ($hasProp) {
-            $propMetadata = $this->getMock('Symfony\Component\Validator\Mapping\PropertyMetadataInterface');
+            $propMetadata = $this->createMock('Symfony\Component\Validator\Mapping\PropertyMetadataInterface');
             $propMetadata->expects($this->once())
                 ->method('getConstraints')->willReturn($constraints);
 

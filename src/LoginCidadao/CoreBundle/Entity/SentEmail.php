@@ -226,9 +226,9 @@ class SentEmail
 
     public function getSwiftMail()
     {
-        return \Swift_Message::newInstance()->setSubject($this->getSubject())
-                ->setFrom($this->getSender())
-                ->setTo($this->getReceiver())
-                ->setBody($this->getMessage(), 'text/html');
+        return (new \Swift_Message($this->getSubject()))
+            ->setFrom($this->getSender())
+            ->setTo($this->getReceiver())
+            ->setBody($this->getMessage(), 'text/html');
     }
 }

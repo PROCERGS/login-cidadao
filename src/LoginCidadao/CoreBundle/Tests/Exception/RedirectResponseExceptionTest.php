@@ -11,9 +11,10 @@
 namespace LoginCidadao\CoreBundle\Tests\Exception;
 
 use LoginCidadao\CoreBundle\Exception\RedirectResponseException;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class RedirectResponseExceptionTest extends \PHPUnit_Framework_TestCase
+class RedirectResponseExceptionTest extends TestCase
 {
 
     public function testGetResponse()

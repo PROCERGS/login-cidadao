@@ -11,11 +11,12 @@
 namespace LoginCidadao\APIBundle\Tests\Service;
 
 use LoginCidadao\APIBundle\Service\VersionService;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class VersionServiceTest extends \PHPUnit_Framework_TestCase
+class VersionServiceTest extends TestCase
 {
     private function getSupportedVersions()
     {
@@ -49,10 +50,10 @@ class VersionServiceTest extends \PHPUnit_Framework_TestCase
      */
     private function getRequestStack($version = null)
     {
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|ParameterBag $attributes */
-        $attributes = $this->getMock('Symfony\Component\HttpFoundation\ParameterBag');
+        $attributes = $this->createMock('Symfony\Component\HttpFoundation\ParameterBag');
         $attributes->expects($this->any())
             ->method('get')->with('version')
             ->willReturn($version);
@@ -61,7 +62,7 @@ class VersionServiceTest extends \PHPUnit_Framework_TestCase
             $request->attributes = $attributes;
         }
 
-        $requestStack = $this->getMock('Symfony\Component\HttpFoundation\RequestStack');
+        $requestStack = $this->createMock('Symfony\Component\HttpFoundation\RequestStack');
         $requestStack->expects($this->any())->method('getCurrentRequest')->willReturn($request);
 
         return $requestStack;
@@ -77,7 +78,7 @@ class VersionServiceTest extends \PHPUnit_Framework_TestCase
         $expected = $this->getExpectedVersion(3, 0, 5);
 
         /** @var RequestStack $requestStack */
-        $requestStack = $this->getMock('Symfony\Component\HttpFoundation\RequestStack');
+        $requestStack = $this->createMock('Symfony\Component\HttpFoundation\RequestStack');
 
         $versionService = new VersionService($requestStack, $this->getSupportedVersions());
         $this->assertEquals($expected, $versionService->getLatestVersion());
@@ -86,7 +87,7 @@ class VersionServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetLatestVersionPartials()
     {
         /** @var RequestStack $requestStack */
-        $requestStack = $this->getMock('Symfony\Component\HttpFoundation\RequestStack');
+        $requestStack = $this->createMock('Symfony\Component\HttpFoundation\RequestStack');
 
         $versionService = new VersionService($requestStack, $this->getSupportedVersions());
 
@@ -104,7 +105,7 @@ class VersionServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetNonExistentVersion()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
 
         $versionService = $this->getVersionService();
 
@@ -113,7 +114,7 @@ class VersionServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLatestVersionWithInvalidInput()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
 
         $versionService = $this->getVersionService();
 

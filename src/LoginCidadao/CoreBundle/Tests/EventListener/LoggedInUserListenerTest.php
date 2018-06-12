@@ -13,12 +13,13 @@ namespace LoginCidadao\CoreBundle\Tests\EventListener;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\EventListener\LoggedInUserListener;
 use LoginCidadao\CoreBundle\Helper\SecurityHelper;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class LoggedInUserListenerTest extends \PHPUnit_Framework_TestCase
+class LoggedInUserListenerTest extends TestCase
 {
     public function testOnKernelRequest()
     {
@@ -34,10 +35,10 @@ class LoggedInUserListenerTest extends \PHPUnit_Framework_TestCase
             ->method('isGranted')->with('IS_AUTHENTICATED_REMEMBERED')->willReturn(true);
 
         /** @var RouterInterface|\PHPUnit_Framework_MockObject_MockObject $router */
-        $router = $this->getMock('Symfony\Component\Routing\RouterInterface');
+        $router = $this->createMock('Symfony\Component\Routing\RouterInterface');
         $router->expects($this->once())->method('generate')->with('lc_resend_confirmation_email');
 
-        $flashBag = $this->getMock('Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface');
+        $flashBag = $this->createMock('Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface');
         $flashBag->expects($this->once())
             ->method('add')->with('alert.unconfirmed.email', $this->isType('string'));
 
@@ -47,7 +48,7 @@ class LoggedInUserListenerTest extends \PHPUnit_Framework_TestCase
         $session->expects($this->once())->method('getFlashBag')->willReturn($flashBag);
 
         /** @var TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject $translator */
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator = $this->createMock('Symfony\Component\Translation\TranslatorInterface');
         $translator->expects($this->exactly(2))->method('trans')->with($this->logicalOr(
             $this->equalTo('notification.unconfirmed.email.title'),
             $this->equalTo('notification.unconfirmed.email.shortText')

@@ -53,7 +53,7 @@ class AuthorizationController extends Controller
     private function handleSuggestion(Request $request)
     {
         $suggestion = new ClientSuggestion();
-        $form = $this->createForm(new SuggestionFormType(), $suggestion);
+        $form = $this->createForm(SuggestionFormType::class, $suggestion);
 
         $em = $this->getDoctrine()->getManager();
         $form->handleRequest($request);

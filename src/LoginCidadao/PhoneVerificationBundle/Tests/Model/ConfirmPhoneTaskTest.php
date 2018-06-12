@@ -12,8 +12,9 @@ namespace LoginCidadao\PhoneVerificationBundle\Tests\Model;
 
 use LoginCidadao\PhoneVerificationBundle\Model\ConfirmPhoneTask;
 use LoginCidadao\TaskStackBundle\Model\RouteTaskTarget;
+use PHPUnit\Framework\TestCase;
 
-class ConfirmPhoneTaskTest extends \PHPUnit_Framework_TestCase
+class ConfirmPhoneTaskTest extends TestCase
 {
     public function testTask()
     {

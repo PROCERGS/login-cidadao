@@ -11,10 +11,11 @@
 namespace LoginCidadao\CoreBundle\Tests\Helper;
 
 use LoginCidadao\CoreBundle\Helper\ExtremeNotificationsHelper;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class ExtremeNotificationsHelperTest extends \PHPUnit_Framework_TestCase
+class ExtremeNotificationsHelperTest extends TestCase
 {
 
     public function testHelper()
@@ -31,11 +32,11 @@ class ExtremeNotificationsHelperTest extends \PHPUnit_Framework_TestCase
             ->with('alert.unconfirmed.email', $translated);
 
         /** @var Session|\PHPUnit_Framework_MockObject_MockObject $session */
-        $session = $this->getMock('Symfony\Component\HttpFoundation\Session\Session');
+        $session = $this->createMock('Symfony\Component\HttpFoundation\Session\Session');
         $session->expects($this->exactly(2))->method('getFlashBag')->willReturn($flashBag);
 
         /** @var TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject $translator */
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator = $this->createMock('Symfony\Component\Translation\TranslatorInterface');
         $translator->expects($this->once())->method('trans')->with($id, $parameters)->willReturn($translated);
         $translator->expects($this->once())->method('transChoice')->with($id, $number, $parameters)
             ->willReturn($translated);

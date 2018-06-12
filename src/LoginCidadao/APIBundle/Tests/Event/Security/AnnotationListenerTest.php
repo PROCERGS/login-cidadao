@@ -15,12 +15,13 @@ use LoginCidadao\APIBundle\Controller\PersonController;
 use LoginCidadao\APIBundle\Event\Security\AnnotationListener;
 use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
 use LoginCidadao\APIBundle\Security\Audit\Annotation\Loggable;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
-class AnnotationListenerTest extends \PHPUnit_Framework_TestCase
+class AnnotationListenerTest extends TestCase
 {
 
     public function testOnKernelResponse()
@@ -29,11 +30,10 @@ class AnnotationListenerTest extends \PHPUnit_Framework_TestCase
         $responseCode = 200;
 
         /** @var Reader|\PHPUnit_Framework_MockObject_MockObject $reader */
-        $reader = $this->getMock('Doctrine\Common\Annotations\Reader');
+        $reader = $this->createMock(Reader::class);
 
         /** @var ActionLogger|\PHPUnit_Framework_MockObject_MockObject $logger */
-        $logger = $this->getMockBuilder('LoginCidadao\APIBundle\Security\Audit\ActionLogger')
-            ->disableOriginalConstructor()->getMock();
+        $logger = $this->getMockBuilder(ActionLogger::class)->disableOriginalConstructor()->getMock();
         $logger->expects($this->once())->method('updateResponseCode')->with($logId, $responseCode);
 
         $attrs = [
@@ -47,8 +47,7 @@ class AnnotationListenerTest extends \PHPUnit_Framework_TestCase
         $response = new Response('', $responseCode);
 
         /** @var FilterResponseEvent|\PHPUnit_Framework_MockObject_MockObject $event */
-        $event = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\FilterResponseEvent')
-            ->disableOriginalConstructor()->getMock();
+        $event = $this->getMockBuilder(FilterResponseEvent::class)->disableOriginalConstructor()->getMock();
         $event->expects($this->once())->method('getRequest')->willReturn($request);
         $event->expects($this->once())->method('getResponse')->willReturn($response);
 
@@ -66,18 +65,18 @@ class AnnotationListenerTest extends \PHPUnit_Framework_TestCase
             ->setActionLogId($logId);
 
         /** @var Reader|\PHPUnit_Framework_MockObject_MockObject $reader */
-        $reader = $this->getMock('Doctrine\Common\Annotations\Reader');
+        $reader = $this->createMock(Reader::class);
         $reader->expects($this->once())
             ->method('getMethodAnnotations')->willReturn([$annotation]);
 
         /** @var ActionLogger|\PHPUnit_Framework_MockObject_MockObject $logger */
-        $logger = $this->getMockBuilder('LoginCidadao\APIBundle\Security\Audit\ActionLogger')
-            ->disableOriginalConstructor()->getMock();
-        $logger->expects($this->once())->method('logActivity')->with($request, $annotation, [$controller, 'getPersonAction']);
+        $logger = $this->getMockBuilder(ActionLogger::class)->disableOriginalConstructor()->getMock();
+        $logger->expects($this->once())
+            ->method('logActivity')
+            ->with($request, $annotation, [$controller, 'getPersonAction']);
 
         /** @var FilterControllerEvent|\PHPUnit_Framework_MockObject_MockObject $event */
-        $event = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\FilterControllerEvent')
-            ->disableOriginalConstructor()->getMock();
+        $event = $this->getMockBuilder(FilterControllerEvent::class)->disableOriginalConstructor()->getMock();
         $event->expects($this->once())
             ->method('getController')
             ->willReturn([$controller, 'getPersonAction']);
@@ -92,15 +91,13 @@ class AnnotationListenerTest extends \PHPUnit_Framework_TestCase
     public function testOnKernelControllerMissingController()
     {
         /** @var Reader|\PHPUnit_Framework_MockObject_MockObject $reader */
-        $reader = $this->getMock('Doctrine\Common\Annotations\Reader');
+        $reader = $this->createMock(Reader::class);
 
         /** @var ActionLogger|\PHPUnit_Framework_MockObject_MockObject $logger */
-        $logger = $this->getMockBuilder('LoginCidadao\APIBundle\Security\Audit\ActionLogger')
-            ->disableOriginalConstructor()->getMock();
+        $logger = $this->getMockBuilder(ActionLogger::class)->disableOriginalConstructor()->getMock();
 
         /** @var FilterControllerEvent|\PHPUnit_Framework_MockObject_MockObject $event */
-        $event = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\FilterControllerEvent')
-            ->disableOriginalConstructor()->getMock();
+        $event = $this->getMockBuilder(FilterControllerEvent::class)->disableOriginalConstructor()->getMock();
         $event->expects($this->once())
             ->method('getController')
             ->willReturn(null);
