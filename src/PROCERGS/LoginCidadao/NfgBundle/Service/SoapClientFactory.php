@@ -53,16 +53,14 @@ class SoapClientFactory implements LoggerAwareInterface
     {
         $options = ['exceptions' => true];
         if (!$verifyHttps) {
-            $options['stream_context'] = stream_context_create(
-                [
-                    'ssl' => [
-                        // disable SSL/TLS security checks
-                        'verify_peer' => false,
-                        'verify_peer_name' => false,
-                        'allow_self_signed' => true,
-                    ],
-                ]
-            );
+            $options['stream_context'] = stream_context_create([
+                'ssl' => [
+                    // disable SSL/TLS security checks
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true,
+                ],
+            ]);
         }
 
         return $options;
