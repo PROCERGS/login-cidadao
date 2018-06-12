@@ -17,10 +17,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/PROCERGS/stack-request-id"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/PROCERGS/FOSUserBundle"
         }
     ],
     "require": {
@@ -59,7 +55,7 @@
         "liip/monitor-bundle": "^2.6",
         "guzzlehttp/guzzle": "^6.3",
         "guilhermednt/pathwell-bundle": "^0.1",
-        "beelab/recaptcha2-bundle": "<1",
+        "beelab/recaptcha2-bundle": "^1",
         "bmatzner/fontawesome-bundle": "^4.6",
         "ramsey/uuid": "^3.7",
         "qandidate/stack-request-id": "dev-ramsey-uuid-v3",
@@ -73,7 +69,6 @@
         "knplabs/knp-paginator-bundle": "^2.8",
         "snc/redis-bundle": "^2.1",
         "predis/predis": "^1.1",
-        "paragonie/random_compat": "1.4.*",
         "procergs/meurs-monitor-bundle": "^1.3",
         "procergs/nfg-badges-bundle": "^1.1",
         "jakeasmith/http_build_url": "^1",
