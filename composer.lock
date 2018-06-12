@@ -4358,17 +4358,17 @@
         },
         {
             "name": "procergs/nfg-badges-bundle",
-            "version": "v1.1.2",
+            "version": "1.1.3",
             "target-dir": "NFG/BadgesBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/nfg-badges-bundle.git",
-                "reference": "43b5bfd744df82fb29794bd37200ae4c679d2e20"
+                "reference": "fb830032dc2475216d7b8faba75bfde0890cfbd2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/nfg-badges-bundle/zipball/43b5bfd744df82fb29794bd37200ae4c679d2e20",
-                "reference": "43b5bfd744df82fb29794bd37200ae4c679d2e20",
+                "url": "https://api.github.com/repos/PROCERGS/nfg-badges-bundle/zipball/fb830032dc2475216d7b8faba75bfde0890cfbd2",
+                "reference": "fb830032dc2475216d7b8faba75bfde0890cfbd2",
                 "shasum": ""
             },
             "require": {
@@ -4399,7 +4399,7 @@
                 "meurs",
                 "nfg"
             ],
-            "time": "2016-12-02T12:32:06+00:00"
+            "time": "2018-06-12T17:09:33+00:00"
         },
         {
             "name": "procergs/sms-service",
