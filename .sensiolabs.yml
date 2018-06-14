@@ -5,10 +5,10 @@ pre_composer_script: |
 
     sed -i -e "s/database_driver:.*/database_driver: pdo_mysql/" app/config/parameters.yml.dist
     sed -i -e "s/database_server_version:.*/database_server_version: 5.6/" app/config/parameters.yml.dist
+    sudo service redis start
 
 php_ini: |
     extension=pdo_mysql.so
-    extension=zip.so
 
 exclude_patterns:
     - batch/*
