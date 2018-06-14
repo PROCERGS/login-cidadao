@@ -11,9 +11,10 @@
 namespace LoginCidadao\OpenIDBundle\Tests\Validator\Constraints;
 
 use LoginCidadao\OpenIDBundle\Validator\Constraints\SectorIdentifierUri;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraint;
 
-class SectorIdentifierUriTest extends \PHPUnit_Framework_TestCase
+class SectorIdentifierUriTest extends TestCase
 {
 
     public function testAll()

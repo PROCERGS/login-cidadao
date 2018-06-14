@@ -11,8 +11,9 @@
 namespace LoginCidadao\OpenIDBundle\Tests\Exception;
 
 use LoginCidadao\OpenIDBundle\Exception\IdTokenSubMismatchException;
+use PHPUnit\Framework\TestCase;
 
-class IdTokenSubMismatchExceptionTest extends \PHPUnit_Framework_TestCase
+class IdTokenSubMismatchExceptionTest extends TestCase
 {
 
     public function testConstruct()

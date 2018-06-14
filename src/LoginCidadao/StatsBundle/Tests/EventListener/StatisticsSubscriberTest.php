@@ -16,8 +16,9 @@ use LoginCidadao\CoreBundle\Entity\Authorization;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\StatsBundle\EventListener\StatisticsSubscriber;
+use PHPUnit\Framework\TestCase;
 
-class StatisticsSubscriberTest extends \PHPUnit_Framework_TestCase
+class StatisticsSubscriberTest extends TestCase
 {
     public function testGetSubscribedEvents()
     {
@@ -30,7 +31,9 @@ class StatisticsSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testPostPersistNonAuthorization()
     {
         /** @var EntityManagerInterface|\PHPUnit_Framework_MockObject_MockObject $em */
-        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em = $this->createMock('Doctrine\ORM\EntityManagerInterface');
+        $em->expects($this->never())->method('flush');
+
         $args = new LifecycleEventArgs(new \stdClass(), $em);
 
         $subscriber = new StatisticsSubscriber();
@@ -69,7 +72,7 @@ class StatisticsSubscriberTest extends \PHPUnit_Framework_TestCase
             });
 
         /** @var EntityManagerInterface|\PHPUnit_Framework_MockObject_MockObject $em */
-        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em = $this->createMock('Doctrine\ORM\EntityManagerInterface');
         $em->expects($this->exactly(3))
             ->method('getRepository')
             ->willReturnMap([
@@ -113,7 +116,7 @@ class StatisticsSubscriberTest extends \PHPUnit_Framework_TestCase
             });
 
         /** @var EntityManagerInterface|\PHPUnit_Framework_MockObject_MockObject $em */
-        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em = $this->createMock('Doctrine\ORM\EntityManagerInterface');
         $em->expects($this->exactly(3))
             ->method('getRepository')
             ->willReturnMap([

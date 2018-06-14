@@ -11,12 +11,15 @@
 namespace LoginCidadao\OAuthBundle\Tests\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use LoginCidadao\CoreBundle\Entity\Authorization;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use OAuth2\OAuth2;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 
-class ClientTest extends \PHPUnit_Framework_TestCase
+class ClientTest extends TestCase
 {
     public function testGetAllGrants()
     {
@@ -40,11 +43,11 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $landingPageUrl = 'https://landing.page.url';
         $tosUrl = 'https://tos.url';
         $allowedScope = ['scope1', 'scope2'];
-        $owners = [$this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface')];
+        $owners = [$this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface')];
         $uid = 'client-uid';
         $redirectUris = ['https://redirect.uri'];
         /** @var UploadedFile $image */
-        $image = $this->getMock('Psr\Http\Message\UploadedFileInterface');
+        $image = $this->createMock('Psr\Http\Message\UploadedFileInterface');
         $imageName = 'image.name';
 
         $client = new Client();
@@ -209,7 +212,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testRemoveAuthorizationAsArray()
     {
-        $authorization = $this->getMock('LoginCidadao\CoreBundle\Entity\Authorization');
+        /** @var MockObject|Authorization $authorization */
+        $authorization = $this->createMock('LoginCidadao\CoreBundle\Entity\Authorization');
         $authorization->expects($this->any())
             ->method('getId')->willReturn('1');
 
@@ -225,7 +229,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testRemoveAuthorizationAsArrayCollection()
     {
-        $authorization = $this->getMock('LoginCidadao\CoreBundle\Entity\Authorization');
+        /** @var MockObject|Authorization $authorization */
+        $authorization = $this->createMock('LoginCidadao\CoreBundle\Entity\Authorization');
         $authorization->expects($this->any())
             ->method('getId')->willReturn('1');
 
@@ -257,6 +262,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     private function getPerson()
     {
-        return $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        return $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
     }
 }

@@ -12,11 +12,12 @@ namespace LoginCidadao\CoreBundle\Tests\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\CoreBundle\Handler\AuthenticationSuccessHandler;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
-class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
+class AuthenticationSuccessHandlerTest extends TestCase
 {
 
     public function testOnAuthenticationSuccess()
@@ -30,7 +31,7 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(null);
 
         /** @var EntityManagerInterface|\PHPUnit_Framework_MockObject_MockObject $em */
-        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em = $this->createMock('Doctrine\ORM\EntityManagerInterface');
         $em->expects($this->once())->method('persist')
             ->with($this->isInstanceOf('LoginCidadao\CoreBundle\Entity\AccessSession'));
         $em->expects($this->once())->method('flush');
@@ -38,7 +39,7 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($repo);
 
         /** @var HttpUtils $httpUtils */
-        $httpUtils = $this->getMock('Symfony\Component\Security\Http\HttpUtils');
+        $httpUtils = $this->createMock('Symfony\Component\Security\Http\HttpUtils');
 
         /** @var Request|\PHPUnit_Framework_MockObject_MockObject $request */
         $request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
@@ -48,7 +49,7 @@ class AuthenticationSuccessHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['username' => $username]);
 
         /** @var TokenInterface $token */
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
 
         $handler = new AuthenticationSuccessHandler($httpUtils, $em, []);
         $handler->onAuthenticationSuccess($request, $token);

@@ -134,7 +134,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
      * @JMS\Expose
      * @JMS\Groups({"email"})
      * @JMS\Since("1.0")
-     * @Assert\Email(strict=true, groups={"Profile", "LoginCidadaoProfile", "Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration", "LoginCidadaoEmailForm"})
+     * @LCAssert\Email(strict=true, groups={"Profile", "LoginCidadaoProfile", "Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration", "LoginCidadaoEmailForm"})
      * @Assert\NotBlank(message="person.validation.email.not_blank", groups={"Profile", "LoginCidadaoProfile", "Registration", "ResetPassword", "ChangePassword", "LoginCidadaoRegistration", "LoginCidadaoEmailForm"})
      */
     protected $email;
@@ -402,6 +402,8 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
     protected $nationality;
 
     /**
+     * @var BackupCode[]|ArrayCollection
+     *
      * @JMS\Exclude
      * @ORM\OneToMany(targetEntity="BackupCode", mappedBy="person", cascade={"remove"}, orphanRemoval=true)
      */
@@ -519,7 +521,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
     }
 
     /**
-     * @return Authorization[]
+     * @return Authorization[]|ArrayCollection
      */
     public function getAuthorizations($uidToIgnore = null)
     {
@@ -725,10 +727,10 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
     }
 
     /**
-     * @param \LoginCidadao\CoreBundle\Entity\City $city
-     * @return City
+     * @param City $city
+     * @return PersonInterface
      */
-    public function setCity(\LoginCidadao\CoreBundle\Entity\City $city = null)
+    public function setCity(City $city = null)
     {
         $this->city = $city;
 
@@ -736,7 +738,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
     }
 
     /**
-     * @return \LoginCidadao\CoreBundle\Entity\City
+     * @return City
      */
     public function getCity()
     {
@@ -1077,18 +1079,6 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
         return $this->country;
     }
 
-    public function setComplement($var)
-    {
-        $this->complement = $var;
-
-        return $this;
-    }
-
-    public function getComplement()
-    {
-        return $this->complement;
-    }
-
     public function getIdCards()
     {
         return $this->idCards;
@@ -1096,12 +1086,15 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
 
     public function getBadges()
     {
-        return /** @scrutinizer ignore-deprecated */ $this->badges;
+        return /** @scrutinizer ignore-deprecated */
+            $this->badges;
     }
 
     public function mergeBadges(array $badges)
     {
-        /** @scrutinizer ignore-deprecated */ $this->badges = array_merge(/** @scrutinizer ignore-deprecated */ $this->badges, $badges);
+        /** @scrutinizer ignore-deprecated */
+        $this->badges = array_merge(/** @scrutinizer ignore-deprecated */
+            $this->badges, $badges);
 
         return $this;
     }
@@ -1193,7 +1186,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
 
     /**
      * @param string $code
-     * @return BackupCode
+     * @return BackupCode|false
      */
     private function findBackupCode($code)
     {

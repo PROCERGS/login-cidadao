@@ -11,12 +11,13 @@
 namespace LoginCidadao\TaskStackBundle\Tests\Exception;
 
 use LoginCidadao\TaskStackBundle\Exception\UnsupportedTargetException;
+use PHPUnit\Framework\TestCase;
 
-class UnsupportedTargetExceptionTest extends \PHPUnit_Framework_TestCase
+class UnsupportedTargetExceptionTest extends TestCase
 {
     public function testException()
     {
-        $target = $this->getMock('LoginCidadao\TaskStackBundle\Model\TaskTargetInterface');
+        $target = $this->createMock('LoginCidadao\TaskStackBundle\Model\TaskTargetInterface');
 
         $e = new UnsupportedTargetException($target);
 

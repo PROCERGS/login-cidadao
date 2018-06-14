@@ -11,6 +11,7 @@
 namespace LoginCidadao\RemoteClaimsBundle\Model;
 
 use Egulias\EmailValidator\EmailValidator;
+use Egulias\EmailValidator\Validation\RFCValidation;
 use Psr\Http\Message\UriInterface;
 
 class TagUri implements UriInterface
@@ -535,7 +536,7 @@ class TagUri implements UriInterface
     private function checkEmail($email)
     {
         $validator = new EmailValidator();
-        if (!$validator->isValid($email)) {
+        if (!$validator->isValid($email, new RFCValidation())) {
             throw new \InvalidArgumentException("Invalid authority name: '{$email}'. It doesn't seem to be a valid email address.");
         }
 

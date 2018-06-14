@@ -30,23 +30,14 @@ framework:
     session:
         handler_id: snc_redis.session.handler
 
-#doctrine:
-#    orm:
-#        metadata_cache_driver:
-#            type:   predis
-#            host:   %redis_host%
-#            port:   %redis_port%
-#        query_cache_driver:
-#            type:   predis
-#            host:   %redis_host%
-#            port:   %redis_port%
-#        result_cache_driver:
-#            type:   predis
-#            host:   %redis_host%
-#            port:   %redis_port%
-
 services:
     cache:
         class: Doctrine\Common\Cache\PredisCache
         arguments:
             - "@snc_redis.default"
+
+liip_monitor:
+    checks:
+        redis:
+            main:
+                dsn: "%redis_dsn%"

@@ -86,7 +86,7 @@ class AccessToken extends BaseClass implements AccessTokenInterface
      * oauth_token to be stored.
      * @param string $client_id
      * Client identifier to be stored.
-     * @param string $user_id
+     * @param string|null $user_id
      * User identifier to be stored.
      * @param int $expires Expiration to be stored as a Unix timestamp.
      * @param string $scope (optional) Scopes to be stored in space-separated string.
@@ -95,11 +95,12 @@ class AccessToken extends BaseClass implements AccessTokenInterface
      * @ingroup oauth2_section_4
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function setAccessToken($oauth_token, $client_id, $user_id, $expires, $scope = null, $id_token = null)
+    public function setAccessToken($oauth_token, $client_id, $user_id = null, $expires, $scope = null, $id_token = null)
     {
-        if ($user_id === null || !$client = $this->clientManager->getClientById($client_id)) {
+        $user = null;
+        if (!$client = $this->clientManager->getClientById($client_id)) {
             return null;
-        } else {
+        } elseif ($user_id !== null) {
             $user = $this->getUser($client, $user_id);
         }
 

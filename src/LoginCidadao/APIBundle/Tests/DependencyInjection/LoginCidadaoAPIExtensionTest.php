@@ -11,10 +11,11 @@
 namespace LoginCidadao\APIBundle\Tests\DependencyInjection;
 
 use LoginCidadao\APIBundle\DependencyInjection\LoginCidadaoAPIExtension;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
-class LoginCidadaoAPIExtensionTest extends \PHPUnit_Framework_TestCase
+class LoginCidadaoAPIExtensionTest extends TestCase
 {
     private function createContainer()
     {

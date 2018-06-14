@@ -15,9 +15,10 @@ use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 use LoginCidadao\RemoteClaimsBundle\Validator\Constraints\HostBelongsToClaimProvider;
 use LoginCidadao\RemoteClaimsBundle\Validator\Constraints\HostBelongsToClaimProviderValidator;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-class HostBelongsToClaimProviderValidatorTest extends \PHPUnit_Framework_TestCase
+class HostBelongsToClaimProviderValidatorTest extends TestCase
 {
     public function testValidateOk()
     {
@@ -33,13 +34,13 @@ class HostBelongsToClaimProviderValidatorTest extends \PHPUnit_Framework_TestCas
         $host = 'example.com';
         $claimName = TagUri::createFromString("tag:{$host},2017:my_claim");
 
-        $violationBuilder = $this->getMock('Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface');
+        $violationBuilder = $this->createMock('Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface');
         $violationBuilder->expects($this->once())->method('addViolation');
         $violationBuilder->expects($this->once())->method('setParameter')
             ->with('{{ host }}', $host)->willReturn($violationBuilder);
 
         /** @var ExecutionContextInterface|\PHPUnit_Framework_MockObject_MockObject $context */
-        $context = $this->getMock('Symfony\Component\Validator\Context\ExecutionContextInterface');
+        $context = $this->createMock('Symfony\Component\Validator\Context\ExecutionContextInterface');
         $context->expects($this->once())->method('buildViolation')->willReturn($violationBuilder);
 
         $value = $this->getRemoteClaim($claimName, ['https://my.example.com/']);
@@ -49,16 +50,10 @@ class HostBelongsToClaimProviderValidatorTest extends \PHPUnit_Framework_TestCas
         $validator->validate($value, new HostBelongsToClaimProvider());
     }
 
-    public function testValidateNotRemoteClaim()
-    {
-        $validator = new HostBelongsToClaimProviderValidator();
-        $validator->validate(null, new HostBelongsToClaimProvider());
-    }
-
     private function getRemoteClaim($claimName, $redirectUris)
     {
         /** @var ClaimProviderInterface|\PHPUnit_Framework_MockObject_MockObject $provider */
-        $provider = $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
+        $provider = $this->createMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
         $provider->expects($this->once())->method('getRedirectUris')
             ->willReturn($redirectUris);
 

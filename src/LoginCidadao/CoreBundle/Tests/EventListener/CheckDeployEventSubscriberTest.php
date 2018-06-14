@@ -13,9 +13,10 @@ namespace LoginCidadao\CoreBundle\Tests\EventListener;
 use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\CoreBundle\EventListener\CheckDeployEventSubscriber;
 use LoginCidadao\OAuthBundle\Entity\Client;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class CheckDeployEventSubscriberTest extends \PHPUnit_Framework_TestCase
+class CheckDeployEventSubscriberTest extends TestCase
 {
 
     public function testGetSubscribedEvents()
@@ -40,10 +41,10 @@ class CheckDeployEventSubscriberTest extends \PHPUnit_Framework_TestCase
             ->method('findOneBy')->with(['uid' => $defaultUid])
             ->willReturn(new Client());
 
-        $cache = $this->getMock('Doctrine\Common\Cache\CacheProvider');
+        $cache = $this->createMock('Doctrine\Common\Cache\CacheProvider');
 
         /** @var EntityManagerInterface|\PHPUnit_Framework_MockObject_MockObject $em */
-        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em = $this->createMock('Doctrine\ORM\EntityManagerInterface');
         $em->expects($this->exactly(2))
             ->method('getRepository')
             ->willReturnMap([
@@ -60,7 +61,8 @@ class CheckDeployEventSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckDeployNotOk()
     {
-        $this->setExpectedException('\RuntimeException', 'Make sure you did run the populate database command.');
+        $this->expectException('\RuntimeException');
+        $this->expectExceptionMessage('Make sure you did run the populate database command.');
         $defaultUid = 'default-client';
 
         $cityRepo = $this->getMockBuilder('LoginCidadao\CoreBundle\Entity\CityRepository')
@@ -68,10 +70,10 @@ class CheckDeployEventSubscriberTest extends \PHPUnit_Framework_TestCase
         $clientRepo = $this->getMockBuilder('LoginCidadao\OAuthBundle\Entity\ClientRepository')
             ->disableOriginalConstructor()->getMock();
 
-        $cache = $this->getMock('Doctrine\Common\Cache\CacheProvider');
+        $cache = $this->createMock('Doctrine\Common\Cache\CacheProvider');
 
         /** @var EntityManagerInterface|\PHPUnit_Framework_MockObject_MockObject $em */
-        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em = $this->createMock('Doctrine\ORM\EntityManagerInterface');
         $em->expects($this->exactly(2))
             ->method('getRepository')
             ->willReturnMap([

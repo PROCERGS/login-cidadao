@@ -16,8 +16,9 @@ use LoginCidadao\APIBundle\Service\VersionService;
 use LoginCidadao\BadgesControlBundle\Event\SerializationSubscriber;
 use LoginCidadao\BadgesControlBundle\Handler\BadgesHandler;
 use LoginCidadao\BadgesControlBundle\Model\Badge;
+use PHPUnit\Framework\TestCase;
 
-class SerializationSubscriberTest extends \PHPUnit_Framework_TestCase
+class SerializationSubscriberTest extends TestCase
 {
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|BadgesHandler
@@ -55,7 +56,7 @@ class SerializationSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testOnPreSerializePerson()
     {
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|PreSerializeEvent $event */
         $event = $this->getMockBuilder('JMS\Serializer\EventDispatcher\PreSerializeEvent')
@@ -95,12 +96,12 @@ class SerializationSubscriberTest extends \PHPUnit_Framework_TestCase
             'namespace.name' => 'data',
         ];
 
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $person->expects($this->once())->method('getBadges')->willReturn($badges);
 
         $visitor = $this->getMockBuilder('JMS\Serializer\GenericSerializationVisitor')
             ->disableOriginalConstructor()->getMock();
-        $visitor->expects($this->once())->method('addData')->with('badges', $badgesSerialized);
+        $visitor->expects($this->once())->method('setData')->with('badges', $badgesSerialized);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|ObjectEvent $event */
         $event = $this->getMockBuilder('JMS\Serializer\EventDispatcher\ObjectEvent')
@@ -118,7 +119,7 @@ class SerializationSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testOnPostSerializePersonV2()
     {
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|ObjectEvent $event */
         $event = $this->getMockBuilder('JMS\Serializer\EventDispatcher\ObjectEvent')

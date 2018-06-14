@@ -8,7 +8,6 @@ use LoginCidadao\BadgesControlBundle\Exception\BadgesNameCollisionException;
 
 class ListBadgesEvent extends Event
 {
-
     protected $badges;
 
     public function __construct()
@@ -17,8 +16,10 @@ class ListBadgesEvent extends Event
     }
 
     /**
-     * 
-     * @return array
+     *
+     * @param BadgeEvaluatorInterface $evaluator
+     * @return ListBadgesEvent
+     * @throws BadgesNameCollisionException
      */
     public function registerBadges(BadgeEvaluatorInterface $evaluator)
     {
@@ -33,12 +34,12 @@ class ListBadgesEvent extends Event
                 $this->badges[$namespace][$name] = $badge;
             }
         }
+
         return $this;
     }
-    
+
     public function getBadges()
     {
         return $this->badges;
     }
-
 }

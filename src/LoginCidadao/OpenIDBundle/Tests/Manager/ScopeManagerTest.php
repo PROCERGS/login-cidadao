@@ -13,8 +13,9 @@ namespace LoginCidadao\OpenIDBundle\Tests\Manager;
 use Doctrine\ORM\EntityManager;
 use LoginCidadao\OpenIDBundle\Manager\ScopeManager;
 use OAuth2\ServerBundle\Entity\Scope;
+use PHPUnit\Framework\TestCase;
 
-class ScopeManagerTest extends \PHPUnit_Framework_TestCase
+class ScopeManagerTest extends TestCase
 {
     const SCOPE_CLASS = 'OAuth2\ServerBundle\Entity\Scope';
 

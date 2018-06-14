@@ -18,8 +18,9 @@ use LoginCidadao\OAuthBundle\Model\AccessTokenManager;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\EventListener\PersonSerializeEventListener;
 use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
+use PHPUnit\Framework\TestCase;
 
-class PersonSerializeEventListenerTest extends \PHPUnit_Framework_TestCase
+class PersonSerializeEventListenerTest extends TestCase
 {
     public function testGetSubscribedEvents()
     {
@@ -113,7 +114,7 @@ class PersonSerializeEventListenerTest extends \PHPUnit_Framework_TestCase
                     $this->assertTrue($value);
                     break;
                 default:
-                    $this->fail("Unexpected addData call: {$key}");
+                    $this->fail("Unexpected setData call: {$key}");
             }
         };
     }
@@ -121,7 +122,7 @@ class PersonSerializeEventListenerTest extends \PHPUnit_Framework_TestCase
     private function runOnPostSerializeTest($version, $expectOIDCFields, $addDataCount)
     {
         $pictureUrl = 'https://picture.url/pic.jpg';
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         if ($expectOIDCFields) {
             $person->expects($this->once())->method('getProfilePictureUrl')->willReturn($pictureUrl);
             $person->expects($this->once())->method('getEmailConfirmedAt')->willReturn(new \DateTime());
@@ -129,7 +130,7 @@ class PersonSerializeEventListenerTest extends \PHPUnit_Framework_TestCase
 
         $visitor = $this->getVisitor();
         $visitor->expects($this->exactly($addDataCount))
-            ->method('addData')
+            ->method('setData')
             ->willReturnCallback($this->getAddDataCallback('sub', $pictureUrl));
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|ObjectEvent $event */

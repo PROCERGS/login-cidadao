@@ -11,8 +11,9 @@
 namespace LoginCidadao\PhoneVerificationBundle\Tests\Entity;
 
 use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification;
+use PHPUnit\Framework\TestCase;
 
-class PhoneVerificationTest extends \PHPUnit_Framework_TestCase
+class PhoneVerificationTest extends TestCase
 {
     public function testConstructor()
     {
@@ -28,8 +29,8 @@ class PhoneVerificationTest extends \PHPUnit_Framework_TestCase
     {
         $phoneVerification = new PhoneVerification();
 
-        $person = $this->getMock('LoginCidadao\CoreBundle\Entity\Person');
-        $phone = $this->getMock('libphonenumber\PhoneNumber');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Entity\Person');
+        $phone = $this->createMock('libphonenumber\PhoneNumber');
         $date = new \DateTime();
         $code = '123456';
         $token = 'abcdef';

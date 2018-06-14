@@ -14,13 +14,14 @@ use libphonenumber\PhoneNumberUtil;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationSubscriber;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Http\SecurityEvents;
 
-class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
+class PhoneVerificationSubscriberTest extends TestCase
 {
     private function getPhoneVerification()
     {
-        $phoneVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
+        $phoneVerification = $this->createMock('LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface');
 
         return $phoneVerification;
     }
@@ -28,7 +29,7 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
     private function getPhoneVerificationService()
     {
         $phoneVerificationServiceClass = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface';
-        $phoneVerificationService = $this->getMock($phoneVerificationServiceClass);
+        $phoneVerificationService = $this->createMock($phoneVerificationServiceClass);
 
         return $phoneVerificationService;
     }
@@ -52,6 +53,9 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @throws \libphonenumber\NumberParseException
+     */
     public function testOnPhoneChange()
     {
         $person = new Person();
@@ -80,6 +84,9 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $listener->onPhoneChange($event, PhoneVerificationEvents::PHONE_CHANGED, $dispatcher);
     }
 
+    /**
+     * @throws \libphonenumber\NumberParseException
+     */
     public function testOnPhoneSet()
     {
         $person = new Person();
@@ -105,6 +112,9 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $listener->onPhoneChange($event, PhoneVerificationEvents::PHONE_CHANGED, $dispatcher);
     }
 
+    /**
+     * @throws \libphonenumber\NumberParseException
+     */
     public function testOnPhoneUnset()
     {
         $oldPhone = PhoneNumberUtil::getInstance()->parse('+5551999999999', 'BR');
@@ -121,15 +131,19 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         $phoneVerificationService = $this->getPhoneVerificationService();
 
         $dispatcher = $this->getDispatcher();
+        $dispatcher->expects($this->never())->method('dispatch');
 
         $listener = new PhoneVerificationSubscriber($phoneVerificationService);
         $listener->onPhoneChange($event, PhoneVerificationEvents::PHONE_CHANGED, $dispatcher);
     }
 
+    /**
+     * @throws \libphonenumber\NumberParseException
+     */
     public function testOnVerificationRequest()
     {
         $phoneVerificationServiceClass = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface';
-        $phoneVerificationService = $this->getMock($phoneVerificationServiceClass);
+        $phoneVerificationService = $this->createMock($phoneVerificationServiceClass);
 
         $person = new Person();
         $person->setMobile(PhoneNumberUtil::getInstance()->parse('+5551999999999', 'BR'));
@@ -142,7 +156,7 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $event->expects($this->once())->method('getPhoneVerification')->willReturn($phoneVerification);
 
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
         $logger->expects($this->atLeastOnce())->method('log');
 
         $listener = new PhoneVerificationSubscriber($phoneVerificationService);
@@ -152,10 +166,10 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testOnCodeSent()
     {
-        $sentVerification = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface');
+        $sentVerification = $this->createMock('LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface');
 
         $phoneVerificationServiceClass = 'LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface';
-        $phoneVerificationService = $this->getMock($phoneVerificationServiceClass);
+        $phoneVerificationService = $this->createMock($phoneVerificationServiceClass);
         $phoneVerificationService->expects($this->once())->method('registerVerificationSent')->with($sentVerification);
 
         $event = $this->getMockBuilder('LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent')
@@ -169,10 +183,10 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testOnLoginNoPhone()
     {
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $person->expects($this->once())->method('getMobile')->willReturn(null);
 
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getUser')->willReturn($person);
 
         $phoneVerificationService = $this->getPhoneVerificationService();
@@ -193,10 +207,10 @@ class PhoneVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $person->expects($this->once())->method('getMobile')->willReturn($phone);
 
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getUser')->willReturn($person);
 
         $verification = $this->getPhoneVerification();

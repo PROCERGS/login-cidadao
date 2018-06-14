@@ -14,11 +14,16 @@ use LoginCidadao\TaskStackBundle\Model\IntentTask;
 use LoginCidadao\TaskStackBundle\Model\RouteTaskTarget;
 use LoginCidadao\TaskStackBundle\Model\UrlTaskTarget;
 use LoginCidadao\TaskStackBundle\Service\TaskStackManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
-class TaskStackManagerTest extends \PHPUnit_Framework_TestCase
+class TaskStackManagerTest extends TestCase
 {
     private function getSession()
     {
@@ -29,14 +34,14 @@ class TaskStackManagerTest extends \PHPUnit_Framework_TestCase
 
     private function getTokenStorage()
     {
-        return $this->getMock(
+        return $this->createMock(
             'Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface'
         );
     }
 
     private function getRouter()
     {
-        $router = $this->getMock('Symfony\Component\Routing\RouterInterface');
+        $router = $this->createMock('Symfony\Component\Routing\RouterInterface');
         $router->expects($this->any())->method('generate')->willReturnCallback(
             function ($route, $params) {
                 return $route;
@@ -48,7 +53,7 @@ class TaskStackManagerTest extends \PHPUnit_Framework_TestCase
 
     private function getDispatcher()
     {
-        return $this->getMock(
+        return $this->createMock(
             'Symfony\Component\EventDispatcher\EventDispatcherInterface'
         );
     }
@@ -104,8 +109,8 @@ class TaskStackManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testNotAuthenticated()
     {
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
-        $response = $this->getMock('Symfony\Component\HttpFoundation\Response');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
+        $response = $this->createMock('Symfony\Component\HttpFoundation\Response');
 
         $tokenStorage = $this->getTokenStorage();
         $tokenStorage->expects($this->once())->method('getToken')->willReturn(null);
@@ -116,17 +121,18 @@ class TaskStackManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyStack()
     {
-        $user = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $user = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
 
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getUser')->willReturn($user);
 
+        /** @var TokenStorageInterface|MockObject $tokenStorage */
         $tokenStorage = $this->getTokenStorage();
         $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
 
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
         $request->attributes = new ParameterBag(['_route' => 'foo_bar']);
-        $response = $this->getMock('Symfony\Component\HttpFoundation\Response');
+        $response = $this->createMock('Symfony\Component\HttpFoundation\Response');
 
         $manager = $this->getStackManager(['token_storage' => $tokenStorage]);
         $manager->emptyStack();
@@ -135,17 +141,18 @@ class TaskStackManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testPendingRouteTask()
     {
-        $user = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $user = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
 
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getUser')->willReturn($user);
 
+        /** @var TokenStorageInterface|MockObject $tokenStorage */
         $tokenStorage = $this->getTokenStorage();
         $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
 
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
         $request->attributes = new ParameterBag(['_route' => 'foo_bar']);
-        $response = $this->getMock('Symfony\Component\HttpFoundation\Response');
+        $response = $this->createMock('Symfony\Component\HttpFoundation\Response');
 
         $task = $this->getTask('t1');
         $task->expects($this->atLeastOnce())->method('getRoutes')->willReturn([]);
@@ -158,17 +165,18 @@ class TaskStackManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testCurrentRouteTask()
     {
-        $user = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $user = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
 
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getUser')->willReturn($user);
 
+        /** @var TokenStorageInterface|MockObject $tokenStorage */
         $tokenStorage = $this->getTokenStorage();
         $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
 
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
         $request->attributes = new ParameterBag(['_route' => 'foo_bar']);
-        $response = $this->getMock('Symfony\Component\HttpFoundation\Response');
+        $response = $this->createMock('Symfony\Component\HttpFoundation\Response');
 
         $task = $this->getTask('t1');
         $task->expects($this->atLeastOnce())->method('getRoutes')->willReturn(['foo_bar']);
@@ -180,22 +188,23 @@ class TaskStackManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testPendingTaskInvalidTarget()
     {
-        $this->setExpectedException('LoginCidadao\TaskStackBundle\Exception\UnsupportedTargetException');
+        $this->expectException('LoginCidadao\TaskStackBundle\Exception\UnsupportedTargetException');
 
-        $user = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $user = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
 
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getUser')->willReturn($user);
 
+        /** @var TokenStorageInterface|MockObject $tokenStorage */
         $tokenStorage = $this->getTokenStorage();
         $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
 
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
         $request->attributes = new ParameterBag(['_route' => 'foo_bar']);
-        $response = $this->getMock('Symfony\Component\HttpFoundation\Response');
+        $response = $this->createMock('Symfony\Component\HttpFoundation\Response');
 
         $task = $this->getTask('t1');
-        $invalidTarget = $this->getMock('LoginCidadao\TaskStackBundle\Model\TaskTargetInterface');
+        $invalidTarget = $this->createMock('LoginCidadao\TaskStackBundle\Model\TaskTargetInterface');
         $task->expects($this->atLeastOnce())->method('getRoutes')->willReturn([]);
         $task->expects($this->atLeastOnce())->method('getTarget')->willReturn($invalidTarget);
 
@@ -206,17 +215,18 @@ class TaskStackManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testPendingIntentTask()
     {
-        $user = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $user = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
 
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getUser')->willReturn($user);
 
+        /** @var TokenStorageInterface|MockObject $tokenStorage */
         $tokenStorage = $this->getTokenStorage();
         $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
 
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
         $request->attributes = new ParameterBag(['_route' => 'foo_bar']);
-        $response = $this->getMock('Symfony\Component\HttpFoundation\Response');
+        $response = $this->createMock('Symfony\Component\HttpFoundation\Response');
 
         $task = new IntentTask(new UrlTaskTarget('some_url'));
 
@@ -227,17 +237,18 @@ class TaskStackManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSkippedTask()
     {
-        $user = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $user = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
 
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getUser')->willReturn($user);
 
         $tokenStorage = $this->getTokenStorage();
         $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
 
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        /** @var MockObject|Request $request */
+        $request = $this->createMock(Request::class);
         $request->attributes = new ParameterBag(['_route' => 'foo_bar']);
-        $response = $this->getMock('Symfony\Component\HttpFoundation\Response');
+        $response = $this->createMock(Response::class);
 
         $task = $this->getTask('t1');
 
@@ -293,10 +304,10 @@ class TaskStackManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testOAuthToken()
     {
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
-        $response = $this->getMock('Symfony\Component\HttpFoundation\Response');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
+        $response = $this->createMock('Symfony\Component\HttpFoundation\Response');
 
-        $token = $this->getMock('FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken');
+        $token = $this->createMock('FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken');
 
         $tokenStorage = $this->getTokenStorage();
         $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);

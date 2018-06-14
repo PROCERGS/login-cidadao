@@ -11,8 +11,9 @@
 namespace LoginCidadao\RemoteClaimsBundle\Tests\Model;
 
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
+use PHPUnit\Framework\TestCase;
 
-class TagUriTest extends \PHPUnit_Framework_TestCase
+class TagUriTest extends TestCase
 {
     public function testValidTagUri()
     {
@@ -36,7 +37,8 @@ class TagUriTest extends \PHPUnit_Framework_TestCase
     public function testInvalidDay()
     {
         $date = '2017-11-31';
-        $this->setExpectedException('\InvalidArgumentException', "Invalid date: {$date}");
+        $this->expectException('\InvalidArgumentException');
+        $this->expectExceptionMessage("Invalid date: {$date}");
 
         $tag = "tag:example.com,{$date}:my_claim";
         TagUri::createFromString($tag);
@@ -45,7 +47,8 @@ class TagUriTest extends \PHPUnit_Framework_TestCase
     public function testInvalidMonth()
     {
         $date = '2017-13';
-        $this->setExpectedException('\InvalidArgumentException', "Invalid date: {$date}");
+        $this->expectException('\InvalidArgumentException');
+        $this->expectExceptionMessage("Invalid date: {$date}");
 
         $tag = "tag:example.com,{$date}:my_claim";
         TagUri::createFromString($tag);
@@ -61,13 +64,13 @@ class TagUriTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidTagUri()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $this->getTagUri('example .com');
     }
 
     public function testInvalidEmailTagUri()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         $this->getTagUri('test@example.com test');
     }
 
@@ -136,7 +139,7 @@ class TagUriTest extends \PHPUnit_Framework_TestCase
 
     public function testSetAuthorityNameWithInvalidEmail()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         (new TagUri())->setAuthorityName('@invalid');
     }
 

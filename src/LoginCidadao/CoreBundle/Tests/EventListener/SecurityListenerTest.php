@@ -14,6 +14,7 @@ use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\EventListener\SecurityListener;
 use LoginCidadao\CoreBundle\Helper\SecurityHelper;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -23,7 +24,7 @@ use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\Event\SwitchUserEvent;
 
-class SecurityListenerTest extends \PHPUnit_Framework_TestCase
+class SecurityListenerTest extends TestCase
 {
     public function testOnImpersonate()
     {
@@ -55,7 +56,7 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
 
         /** @var TokenInterface|\PHPUnit_Framework_MockObject_MockObject $sourceToken */
-        $sourceToken = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $sourceToken = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $sourceToken->expects($this->once())->method('getUser')->willReturn($admin);
 
         $securityHelper = $this->getSecurityHelper();
@@ -83,7 +84,7 @@ class SecurityListenerTest extends \PHPUnit_Framework_TestCase
         $person = new Person();
 
         /** @var TokenInterface|\PHPUnit_Framework_MockObject_MockObject $token */
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getUser')->willReturn($person);
 
         $actionLogger = $this->getActionLogger();

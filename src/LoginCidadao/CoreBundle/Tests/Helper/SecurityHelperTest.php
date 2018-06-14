@@ -15,7 +15,7 @@ use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Helper\ExtremeNotificationsHelper;
 use LoginCidadao\CoreBundle\Helper\SecurityHelper;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use Symfony\Component\HttpFoundation\HeaderBag;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -25,7 +25,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\User;
 
-class SecurityHelperTest extends \PHPUnit_Framework_TestCase
+class SecurityHelperTest extends TestCase
 {
     public function testGetLoggedInUserLevelNonDefault()
     {
@@ -155,7 +155,7 @@ class SecurityHelperTest extends \PHPUnit_Framework_TestCase
     {
         $person = new Person();
 
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getUser')->willReturn($person);
 
         $tokenStorage = $this->getTokenStorage();
@@ -179,7 +179,7 @@ class SecurityHelperTest extends \PHPUnit_Framework_TestCase
     {
         $user = new User('username', 'password');
 
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getUser')->willReturn($user);
 
         $tokenStorage = $this->getTokenStorage();
@@ -201,7 +201,7 @@ class SecurityHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUserException()
     {
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getUser')->willThrowException(new \RuntimeException());
 
         $tokenStorage = $this->getTokenStorage();
@@ -249,7 +249,7 @@ class SecurityHelperTest extends \PHPUnit_Framework_TestCase
         ]);
 
         /** @var PersonInterface|\PHPUnit_Framework_MockObject_MockObject $personLvlDefault */
-        $personLvlDefault = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $personLvlDefault = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $personLvlDefault->expects($this->once())
             ->method('getRoles')
             ->willReturn(['OTHER_ROLE']);
@@ -272,14 +272,14 @@ class SecurityHelperTest extends \PHPUnit_Framework_TestCase
         $rememberMe = 'cookieName';
 
         /** @var SessionInterface|\PHPUnit_Framework_MockObject_MockObject $session */
-        $session = $this->getMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $session = $this->createMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
         $session->expects($this->once())->method('invalidate');
 
         $request = new Request();
         $request->setSession($session);
 
         /** @var ResponseHeaderBag|\PHPUnit_Framework_MockObject_MockObject $headers */
-        $headers = $this->getMock('Symfony\Component\HttpFoundation\ResponseHeaderBag');
+        $headers = $this->createMock('Symfony\Component\HttpFoundation\ResponseHeaderBag');
         $headers->expects($this->once())->method('clearCookie')->with($rememberMe);
 
         $response = new Response();
@@ -324,7 +324,7 @@ class SecurityHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTokenRoles()
     {
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())->method('getRoles')->willReturn([]);
 
         $tokenStorage = $this->getTokenStorage();
@@ -346,7 +346,7 @@ class SecurityHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testHasToken()
     {
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
 
         $tokenStorage = $this->getTokenStorage();
         $tokenStorage->expects($this->once())
@@ -392,7 +392,7 @@ class SecurityHelperTest extends \PHPUnit_Framework_TestCase
      */
     private function getAuthChecker()
     {
-        return $this->getMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
+        return $this->createMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
     }
 
     /**
@@ -400,7 +400,7 @@ class SecurityHelperTest extends \PHPUnit_Framework_TestCase
      */
     private function getTokenStorage()
     {
-        return $this->getMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
+        return $this->createMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
     }
 
     /**
@@ -426,6 +426,6 @@ class SecurityHelperTest extends \PHPUnit_Framework_TestCase
      */
     private function getRouter()
     {
-        return $this->getMock('Symfony\Component\Routing\RouterInterface');
+        return $this->createMock('Symfony\Component\Routing\RouterInterface');
     }
 }

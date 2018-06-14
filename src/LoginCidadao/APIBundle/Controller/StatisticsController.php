@@ -11,6 +11,7 @@
 namespace LoginCidadao\APIBundle\Controller;
 
 use Doctrine\Common\Cache\CacheProvider;
+use FOS\RestBundle\Context\Context;
 use FOS\RestBundle\Controller\Annotations as REST;
 use JMS\Serializer\SerializationContext;
 use LoginCidadao\CoreBundle\Entity\AuthorizationRepository;
@@ -63,10 +64,10 @@ class StatisticsController extends BaseController
             'users_by_service' => $usersByService,
         ];
 
-        $view = $this->view($this->getTotalAndRemoveUid($stats, $uid))
-            ->setSerializationContext(SerializationContext::create()->setSerializeNull(true));
-
-        return $this->handleView($view);
+        return $this->renderWithContext(
+            $this->getTotalAndRemoveUid($stats, $uid),
+            (new Context())->setSerializeNull(true)
+        );
     }
 
     private function fetchCached($id, callable $callback)

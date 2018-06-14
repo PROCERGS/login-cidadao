@@ -10,7 +10,6 @@
 
 namespace LoginCidadao\OpenIDBundle\Tests\EventListener;
 
-use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\CoreBundle\Event\GetClientEvent;
 use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
 use LoginCidadao\OAuthBundle\Entity\Client;
@@ -18,8 +17,9 @@ use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadataRepository;
 use LoginCidadao\OpenIDBundle\EventListener\CoreEventsSubscriber;
 use LoginCidadao\OpenIDBundle\Validator\SectorIdentifierUriChecker;
+use PHPUnit\Framework\TestCase;
 
-class CoreEventsSubscriberTest extends \PHPUnit_Framework_TestCase
+class CoreEventsSubscriberTest extends TestCase
 {
 
     public function testGetSubscribedEvents()
@@ -52,6 +52,8 @@ class CoreEventsSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testOnGetClientNoRevalidation()
     {
         $repo = $this->getClientMetadataRepository();
+        $repo->expects($this->never())->method('findOneBy');
+
         $uriChecker = $this->getSectorIdentifierUriChecker();
 
         $subscriber = new CoreEventsSubscriber($repo, $uriChecker, false);

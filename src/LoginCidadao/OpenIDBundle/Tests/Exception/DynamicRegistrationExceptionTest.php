@@ -11,8 +11,9 @@
 namespace LoginCidadao\OpenIDBundle\Tests\Exception;
 
 use LoginCidadao\OpenIDBundle\Exception\DynamicRegistrationException;
+use PHPUnit\Framework\TestCase;
 
-class DynamicRegistrationExceptionTest extends \PHPUnit_Framework_TestCase
+class DynamicRegistrationExceptionTest extends TestCase
 {
 
     public function testGetData()
