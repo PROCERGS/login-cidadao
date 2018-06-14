@@ -8,6 +8,7 @@ pre_composer_script: |
 
 php_ini: |
     extension=pdo_mysql.so
+    extension=zip.so
 
 exclude_patterns:
     - batch/*
