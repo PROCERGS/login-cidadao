@@ -172,3 +172,10 @@ services:
         class: LoginCidadao\OpenIDBundle\EventListener\ScopeTranslatorSubscriber
         tags:
             - { name: kernel.event_subscriber }
+
+    oidc.client_metadata.form:
+        class: LoginCidadao\OpenIDBundle\Form\ClientMetadataWebForm
+        arguments:
+            - "@security.authorization_checker"
+        tags:
+            - { name: form.type, alias: oidc_client_metadata_form_type }

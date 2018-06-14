@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\CoreBundle\Form\Type;
 
+use LoginCidadao\OpenIDBundle\Form\ClientMetadataWebForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
 use LoginCidadao\CoreBundle\Form\DataTransformer\FromArray;
@@ -51,10 +52,7 @@ class ClientBaseFormType extends AbstractType
                 'Symfony\Component\Form\Extension\Core\Type\TextareaType',
                 ['required' => true, 'attr' => array('rows' => 4)]
             )
-            ->add(
-                'metadata',
-                'LoginCidadao\OpenIDBundle\Form\ClientMetadataWebForm'
-            )
+            ->add('metadata', 'oidc_client_metadata_form_type')
             ->add(
                 'siteUrl',
                 'Symfony\Component\Form\Extension\Core\Type\TextType',
