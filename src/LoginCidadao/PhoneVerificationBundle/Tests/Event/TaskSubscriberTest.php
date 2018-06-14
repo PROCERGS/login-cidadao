@@ -85,7 +85,7 @@ class TaskSubscriberTest extends TestCase
 
     public function testOnGetTasksOAuthToken()
     {
-        $token = $this->getMock('FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken');
+        $token = $this->createMock('FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken');
         $tokenStorage = $this->getTokenStorage(false);
         $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
 

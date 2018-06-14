@@ -12,16 +12,18 @@ namespace LoginCidadao\PhoneVerificationBundle\Tests\Event;
 
 use LoginCidadao\PhoneVerificationBundle\Event\UpdateStatusEvent;
 use LoginCidadao\PhoneVerificationBundle\Model\SmsStatusInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class UpdateStatusEventTest extends \PHPUnit_Framework_TestCase
+class UpdateStatusEventTest extends TestCase
 {
     public function testEvent()
     {
         $transactionId = '0123456';
         $date = new \DateTime();
 
-        /** @var SmsStatusInterface|\PHPUnit_Framework_MockObject_MockObject $status */
-        $status = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\SmsStatusInterface');
+        /** @var SmsStatusInterface|MockObject $status */
+        $status = $this->createMock('LoginCidadao\PhoneVerificationBundle\Model\SmsStatusInterface');
         $status->expects($this->once())->method('getDateSent')->willReturn($date);
         $status->expects($this->once())->method('getDateDelivered')->willReturn($date);
 

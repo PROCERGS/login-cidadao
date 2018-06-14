@@ -14,12 +14,14 @@ use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\PhoneVerificationBundle\Command\UpdateSentVerificationStatusCommand;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Service\SmsStatusService;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class UpdateSentVerificationStatusCommandTest extends \PHPUnit_Framework_TestCase
+class UpdateSentVerificationStatusCommandTest extends TestCase
 {
     public function testExecute()
     {
@@ -41,15 +43,15 @@ class UpdateSentVerificationStatusCommandTest extends \PHPUnit_Framework_TestCas
         /** @var SentVerificationRepository $repo */
         $repo = $this->getRepo($query);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManagerInterface $em */
-        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        /** @var MockObject|EntityManagerInterface $em */
+        $em = $this->createMock('Doctrine\ORM\EntityManagerInterface');
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface $dispatcher */
-        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        /** @var MockObject|EventDispatcherInterface $dispatcher */
+        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
 
         $smsStatusService = new SmsStatusService($em, $dispatcher, $repo);
 
-        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
         $container
             ->expects($this->once())
             ->method('get')
@@ -87,7 +89,7 @@ class UpdateSentVerificationStatusCommandTest extends \PHPUnit_Framework_TestCas
      */
     private function getRepo($query)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|SentVerificationRepository $repo */
+        /** @var MockObject|SentVerificationRepository $repo */
         $repo = $this->getMockBuilder('LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository')
             ->disableOriginalConstructor()
             ->getMock();
