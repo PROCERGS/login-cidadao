@@ -10,11 +10,12 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests\DependencyInjection;
 
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\NfgBundle\DependencyInjection\PROCERGSNfgExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
-class PROCERGSNfgExtensionTest extends \PHPUnit_Framework_TestCase
+class PROCERGSNfgExtensionTest extends TestCase
 {
     /**
      * @return ContainerBuilder

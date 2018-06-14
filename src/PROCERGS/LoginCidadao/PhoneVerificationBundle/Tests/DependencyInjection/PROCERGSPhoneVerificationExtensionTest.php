@@ -10,11 +10,12 @@
 
 namespace PROCERGS\LoginCidadao\PhoneVerificationBundle\Tests\DependencyInjection;
 
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\PhoneVerificationBundle\DependencyInjection\PROCERGSPhoneVerificationExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
-class PROCERGSPhoneVerificationExtensionTest extends \PHPUnit_Framework_TestCase
+class PROCERGSPhoneVerificationExtensionTest extends TestCase
 {
     private function createContainer()
     {

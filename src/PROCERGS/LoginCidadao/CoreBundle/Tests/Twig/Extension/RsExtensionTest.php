@@ -11,11 +11,12 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Tests\Twig\Extension;
 
 use LoginCidadao\CoreBundle\Entity\Person;
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper;
 use PROCERGS\LoginCidadao\CoreBundle\Twig\Extension\RsExtension;
 
-class RsExtensionTest extends \PHPUnit_Framework_TestCase
+class RsExtensionTest extends TestCase
 {
     public function testExtension()
     {

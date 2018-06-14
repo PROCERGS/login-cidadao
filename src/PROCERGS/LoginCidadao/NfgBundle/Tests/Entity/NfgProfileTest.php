@@ -10,9 +10,10 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Entity;
 
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile;
 
-class NfgProfileTest extends \PHPUnit_Framework_TestCase
+class NfgProfileTest extends TestCase
 {
     public function testUpdatedAt()
     {

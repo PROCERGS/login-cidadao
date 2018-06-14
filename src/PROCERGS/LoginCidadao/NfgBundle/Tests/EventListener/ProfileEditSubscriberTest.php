@@ -10,16 +10,26 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests\EventListener;
 
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use LoginCidadao\CoreBundle\Entity\Person;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
+use PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper;
 use PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\NfgBundle\EventListener\ProfileEditSubscriber;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
+use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
-class ProfileEditSubscriberTest extends \PHPUnit_Framework_TestCase
+class ProfileEditSubscriberTest extends TestCase
 {
     public function testImplementsSubscriberInterface()
     {
@@ -199,7 +209,7 @@ class ProfileEditSubscriberTest extends \PHPUnit_Framework_TestCase
             $this->getTokenStorage($person),
             $this->getTranslator()
         );
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())->method('notice');
         $subscriber->setLogger($logger);
 
@@ -291,35 +301,40 @@ class ProfileEditSubscriberTest extends \PHPUnit_Framework_TestCase
         $subscriber->onProfileDocEditSuccess(new FormEvent($form, $this->getRequest()));
     }
 
+    /**
+     * @return MockObject|EntityManagerInterface
+     */
     private function getEntityManager()
     {
-        return $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(EntityManagerInterface::class);
     }
 
+    /**
+     * @return MockObject|MeuRSHelper
+     */
     private function getMeuRSHelper()
     {
-        return $this->getMockBuilder('PROCERGS\LoginCidadao\CoreBundle\Helper\MeuRSHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder(MeuRSHelper::class)->disableOriginalConstructor()->getMock();
     }
 
+    /**
+     * @return MockObject|Nfg
+     */
     private function getNfgService()
     {
-        return $this->getMockBuilder('PROCERGS\LoginCidadao\NfgBundle\Service\Nfg')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->getMockBuilder(Nfg::class)->disableOriginalConstructor()->getMock();
     }
 
+    /**
+     * @param null|UserInterface $currentUser
+     * @return MockObject|TokenStorageInterface
+     */
     private function getTokenStorage($currentUser = null)
     {
-        $tokenStorage = $this->getMock(
-            'Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface'
-        );
+        $tokenStorage = $this->createMock(TokenStorageInterface::class);
 
         if ($currentUser) {
-            $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+            $token = $this->createMock(TokenInterface::class);
             $token->expects($this->atLeastOnce())->method('getUser')->willReturn($currentUser);
             $tokenStorage->expects($this->atLeastOnce())->method('getToken')->willReturn($token);
         }
@@ -327,22 +342,29 @@ class ProfileEditSubscriberTest extends \PHPUnit_Framework_TestCase
         return $tokenStorage;
     }
 
+    /**
+     * @return MockObject|TranslatorInterface
+     */
     private function getTranslator()
     {
-        return $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        return $this->createMock(TranslatorInterface::class);
     }
 
     /**
-     * @return Request
+     * @return Request|MockObject
      */
     private function getRequest()
     {
-        return $this->getMock('Symfony\Component\HttpFoundation\Request');
+        return $this->createMock(Request::class);
     }
 
+    /**
+     * @param null $data
+     * @return MockObject|FormInterface
+     */
     private function getForm($data = null)
     {
-        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form = $this->createMock('Symfony\Component\Form\FormInterface');
         if ($data) {
             $form->expects($this->any())->method('getData')->willReturn($data);
         }
@@ -350,6 +372,12 @@ class ProfileEditSubscriberTest extends \PHPUnit_Framework_TestCase
         return $form;
     }
 
+    /**
+     * @param FormInterface|MockObject $form
+     * @param $personMeuRS
+     * @param $voterRegistration
+     * @return mixed
+     */
     private function prepareFormError($form, $personMeuRS, $voterRegistration)
     {
         $voterRegForm = $this->getForm($voterRegistration);

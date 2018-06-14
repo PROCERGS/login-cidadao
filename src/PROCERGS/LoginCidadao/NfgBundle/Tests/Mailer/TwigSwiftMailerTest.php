@@ -11,9 +11,10 @@
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Mailer;
 
 use LoginCidadao\CoreBundle\Entity\Person;
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\NfgBundle\Mailer\TwigSwiftMailer;
 
-class TwigSwiftMailerTest extends \PHPUnit_Framework_TestCase
+class TwigSwiftMailerTest extends TestCase
 {
     public function testNotifyCpfLostWithHtml()
     {
@@ -42,7 +43,7 @@ class TwigSwiftMailerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $swiftMailer->expects($this->atLeastOnce())->method('send');
 
-        $urlGenerator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
+        $urlGenerator = $this->createMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
 
         $twig = $this->getMockBuilder('Twig_Environment')
             ->disableOriginalConstructor()

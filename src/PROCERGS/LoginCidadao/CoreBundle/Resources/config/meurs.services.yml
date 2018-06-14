@@ -17,32 +17,32 @@ services:
     procergs_logincidadao.nfgws:
         class: %procergs_logincidadao.nfgws.class%
         calls:
-            - [setMeuRSHelper, [@meurs.helper] ]
-            - [setUrl, [%nfg_ws_url%]]
-            - [setOrganizacao, [%soe_organization%]]
-            - [setUsuario, [%soe_username%]]
-            - [setSenha, [%soe_password%]]
+            - [setMeuRSHelper, ["@meurs.helper"] ]
+            - [setUrl, ["%nfg_ws_url%"]]
+            - [setOrganizacao, ["%soe_organization%"]]
+            - [setUsuario, ["%soe_username%"]]
+            - [setSenha, ["%soe_password%"]]
 
     meurs.helper:
-        class: %meurs.helper.class%
+        class: "%meurs.helper.class%"
         arguments:
-            - @doctrine.orm.entity_manager
-            - @meurs.entities.person_meurs.repository
+            - "@doctrine.orm.entity_manager"
+            - "@meurs.entities.person_meurs.repository"
 
     meurs.person_meurs.form:
-        class: %meurs.person_meurs.form.class%
+        class: "%meurs.person_meurs.form.class%"
         tags:
             - { name: form.type, alias: person_meurs_type }
 
     meurs.person_meurs.voter_registration.form:
-        class: %meurs.person_meurs.voter_registration.form.class%
+        class: "%meurs.person_meurs.voter_registration.form.class%"
         tags:
             - { name: form.type, alias: person_meurs_voter_registration_type }
 
     lc.person_doc.form:
-        class: %lc.person_doc.form.class%
+        class: "%lc.person_doc.form.class%"
         calls:
-            - [setMeuRSHelper, [@meurs.helper] ]
+            - [setMeuRSHelper, ["@meurs.helper"] ]
         tags:
             - { name: form.type, alias: person_doc_form_type }
 

@@ -10,11 +10,13 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Test\Service;
 
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Service\SoapClientFactory;
 use Psr\Log\LoggerInterface;
 
-class SoapClientFactoryTest extends \PHPUnit_Framework_TestCase
+class SoapClientFactoryTest extends TestCase
 {
     private function getBreaker($exception = null)
     {
@@ -41,9 +43,13 @@ class SoapClientFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new SoapClientFactory();
 
         try {
-            $factory->createClient('invalid', true);
+            $client = $factory->createClient('invalid', true);
+            $this->fail('Exception not thrown');
+        } catch (AssertionFailedError $e) {
+            var_dump($client);
+            throw $e;
         } catch (\Exception $e) {
-            $this->assertInstanceOf('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException', $e);
+            $this->assertInstanceOf(NfgServiceUnavailableException::class, $e);
             $this->assertInstanceOf('SoapFault', $e->getPrevious());
         }
     }
@@ -94,7 +100,7 @@ class SoapClientFactoryTest extends \PHPUnit_Framework_TestCase
         $successFactory = $this->getValidFactory();
 
         /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $logger */
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
         $logger->expects($this->atLeastOnce())->method('info');
 
         $successFactory->setLogger($logger);

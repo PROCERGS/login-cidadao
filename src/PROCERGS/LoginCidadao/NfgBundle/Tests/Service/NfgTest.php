@@ -10,16 +10,20 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Service;
 
+use Eljam\CircuitBreaker\Breaker;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\Form\Factory\FormFactory;
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Util\Canonicalizer;
 use LoginCidadao\CoreBundle\Entity\Person;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException;
 use PROCERGS\LoginCidadao\NfgBundle\Service\Nfg;
+use PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoapInterface;
 use PROCERGS\LoginCidadao\NfgBundle\Tests\TestsUtil;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -30,13 +34,13 @@ use Symfony\Component\Security\Core\Exception\AccountExpiredException;
 /**
  * @codeCoverageIgnore
  */
-class NfgTest extends \PHPUnit_Framework_TestCase
+class NfgTest extends TestCase
 {
+    use TestsUtil;
+
     private function getBreaker($exception = null)
     {
-        $breaker = $this->getMockBuilder('Eljam\CircuitBreaker\Breaker')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $breaker = $this->getMockBuilder(Breaker::class)->disableOriginalConstructor()->getMock();
 
         if ($exception instanceof \Exception) {
             $breaker->expects($this->once())->method('protect')
@@ -53,17 +57,17 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testLoginRedirectUnavailableAccessId()
     {
-        $soapService = $this->getMock('\PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoapInterface');
+        $soapService = $this->createMock(NfgSoapInterface::class);
         $soapService->expects($this->once())->method('getAccessID')
             ->willThrowException(new NfgServiceUnavailableException());
 
-        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
+        $this->expectException(NfgServiceUnavailableException::class);
         $accessId = 'access_id'.random_int(10, 9999);
 
         $circuitBreaker = $this->getBreaker();
 
-        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $logger */
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        /** @var LoggerInterface|MockObject $logger */
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())->method('error');
 
         $nfg = $this->getNfgService(
@@ -79,11 +83,11 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testLoginRedirectUnavailableUnknownError()
     {
-        $soapService = $this->getMock('\PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoapInterface');
+        $soapService = $this->createMock('\PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoapInterface');
         $soapService->expects($this->once())->method('getAccessID')
             ->willThrowException(new \RuntimeException());
 
-        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
+        $this->expectException(NfgServiceUnavailableException::class);
         $accessId = 'access_id'.random_int(10, 9999);
 
         $circuitBreaker = $this->getBreaker();
@@ -100,7 +104,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testLoginRedirectUnavailable()
     {
-        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
+        $this->expectException(NfgServiceUnavailableException::class);
         $accessId = 'access_id'.random_int(10, 9999);
 
         $circuitBreaker = $this->getBreaker(new NfgServiceUnavailableException());
@@ -117,7 +121,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testConnectRedirectUnavailable()
     {
-        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
+        $this->expectException(NfgServiceUnavailableException::class);
         $accessId = 'access_id'.random_int(10, 9999);
 
         $circuitBreaker = $this->getBreaker(new NfgServiceUnavailableException());
@@ -139,7 +143,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         $circuitBreaker = $this->getBreaker();
 
         /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $logger */
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())->method('info');
 
         $nfg = $this->getNfgService(
@@ -189,7 +193,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testLoginCallbackMissingParams()
     {
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\BadRequestHttpException');
+        $this->expectException('Symfony\Component\HttpKernel\Exception\BadRequestHttpException');
         $cpf = '12345678901';
         $accessId = 'access_id'.random_int(10, 9999);
         $secret = "my very super secret secret";
@@ -207,7 +211,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testLoginCallbackInvalidSignature()
     {
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException');
+        $this->expectException('Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException');
         $cpf = '12345678901';
         $accessId = 'access_id'.random_int(10, 9999);
         $secret = "my very super secret secret";
@@ -225,7 +229,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testLoginCallbackInvalidAccessId()
     {
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException');
+        $this->expectException('Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException');
         $cpf = '12345678901';
         $accessId = 'access_id'.random_int(10, 9999);
         $secret = "my very super secret secret";
@@ -243,7 +247,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testLoginCallbackInactiveUser()
     {
-        $this->setExpectedException('Symfony\Component\Security\Core\Exception\AccountStatusException');
+        $this->expectException('Symfony\Component\Security\Core\Exception\AccountStatusException');
 
         $cpf = '12345678901';
         $accessId = 'access_id'.random_int(10, 9999);
@@ -274,7 +278,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testLoginNonexistentUser()
     {
-        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\ConnectionNotFoundException');
+        $this->expectException('PROCERGS\LoginCidadao\NfgBundle\Exception\ConnectionNotFoundException');
 
         $cpf = '12345678901';
         $accessId = 'access_id'.random_int(10, 9999);
@@ -299,7 +303,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testPreUserInfoUnavailable()
     {
-        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
+        $this->expectException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
         $accessId = 'access_id'.random_int(10, 9999);
         $soapService = $this->getSoapService($accessId);
 
@@ -329,7 +333,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testConnectCallbackMissingAccessToken()
     {
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\BadRequestHttpException');
+        $this->expectException('Symfony\Component\HttpKernel\Exception\BadRequestHttpException');
         $accessId = 'access_id'.random_int(10, 9999);
         $soapService = $this->getSoapService($accessId);
 
@@ -355,10 +359,10 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testUserInfoUnavailable()
     {
-        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
+        $this->expectException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
         $accessId = 'access_id'.random_int(10, 9999);
 
-        $soapService = $this->getMock('\PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoapInterface');
+        $soapService = $this->createMock('\PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoapInterface');
         $soapService->expects($this->once())->method('getUserInfo')
             ->willThrowException(new NfgServiceUnavailableException());
 
@@ -388,10 +392,10 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testUserInfoError()
     {
-        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
+        $this->expectException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgServiceUnavailableException');
         $accessId = 'access_id'.random_int(10, 9999);
 
-        $soapService = $this->getMock('\PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoapInterface');
+        $soapService = $this->createMock('\PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoapInterface');
         $soapService->expects($this->once())->method('getUserInfo')
             ->willThrowException(new \RuntimeException());
 
@@ -421,7 +425,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testIncompleteInfo()
     {
-        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException');
+        $this->expectException('PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException');
 
         $nfgProfile = $this->getNfgProfile();
         $nfgProfile->setCpf(null)
@@ -571,7 +575,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testRegistrationCpfCollision()
     {
-        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\CpfInUseException');
+        $this->expectException('PROCERGS\LoginCidadao\NfgBundle\Exception\CpfInUseException');
 
         $accessId = 'access_id'.random_int(10, 9999);
         $soapService = $this->getSoapService($accessId);
@@ -630,7 +634,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testRegistrationEmailCollision()
     {
-        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\EmailInUseException');
+        $this->expectException('PROCERGS\LoginCidadao\NfgBundle\Exception\EmailInUseException');
 
         $accessId = 'access_id'.random_int(10, 9999);
         $soapService = $this->getSoapService($accessId);
@@ -731,7 +735,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
      */
     public function testConnectCallbackCpfMismatch()
     {
-        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\CpfMismatchException');
+        $this->expectException('PROCERGS\LoginCidadao\NfgBundle\Exception\CpfMismatchException');
         $accessId = 'access_id'.random_int(10, 9999);
         $soapService = $this->getSoapService($accessId);
 
@@ -820,7 +824,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
      */
     public function testConnectCallbackWithoutCpfAndCollision()
     {
-        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException');
+        $this->expectException('PROCERGS\LoginCidadao\NfgBundle\Exception\NfgAccountCollisionException');
 
         $accessId = 'access_id'.random_int(10, 9999);
         $accessToken = 'access_token'.random_int(10, 9999);
@@ -940,7 +944,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
             $collaborators['soap'] = $this->getSoapService($accessId);
         }
         if (false === array_key_exists('router', $collaborators)) {
-            $collaborators['router'] = TestsUtil::getRouter($this);
+            $collaborators['router'] = $this->getRouter($this);
         }
         if (false === array_key_exists('session', $collaborators)) {
             $collaborators['session'] = $this->getSession($accessId, 'none');
@@ -1001,7 +1005,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     private function getSoapService($accessId)
     {
-        $soapService = $this->getMock('\PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoapInterface');
+        $soapService = $this->createMock('\PROCERGS\LoginCidadao\NfgBundle\Service\NfgSoapInterface');
         $soapService->expects($this->any())->method('getAccessID')->willReturn($accessId);
 
         return $soapService;
@@ -1018,7 +1022,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
         } else {
             $frequency = $this->any();
         }
-        $loginManager = $this->getMock('\FOS\UserBundle\Security\LoginManagerInterface');
+        $loginManager = $this->createMock('\FOS\UserBundle\Security\LoginManagerInterface');
         $loginManager->expects($frequency)
             ->method('logInUser')->with(
                 $this->isType('string'),
@@ -1036,7 +1040,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
      */
     private function getSession($accessId, $shouldCall = null)
     {
-        $session = $this->getMock('\Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $session = $this->createMock('\Symfony\Component\HttpFoundation\Session\SessionInterface');
         switch ($shouldCall) {
             case 'get':
                 $session->expects($this->atLeastOnce())
@@ -1078,7 +1082,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
      */
     private function getRequest($accessToken)
     {
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
         $request->expects($this->atLeastOnce())->method('get')->with('paccessid')->willReturn($accessToken);
 
         return $request;
@@ -1089,7 +1093,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
      */
     private function getDispatcher()
     {
-        return $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        return $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
     }
 
     /**
@@ -1103,7 +1107,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
         $formFactory->expects($this->any())->method('createForm')
             ->willReturnCallback(function () {
-                return $this->getMock('Symfony\Component\Form\FormInterface');
+                return $this->createMock('Symfony\Component\Form\FormInterface');
             });
 
         return $formFactory;
@@ -1128,7 +1132,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
      */
     private function getUserManager()
     {
-        $userManager = $this->getMock('FOS\UserBundle\Model\UserManagerInterface');
+        $userManager = $this->createMock('FOS\UserBundle\Model\UserManagerInterface');
         $userManager->expects($this->any())->method('createUser')->willReturnCallback(function () {
             return new Person();
         });
@@ -1159,7 +1163,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     private function getMailer()
     {
-        return $this->getMock('PROCERGS\LoginCidadao\NfgBundle\Mailer\MailerInterface');
+        return $this->createMock('PROCERGS\LoginCidadao\NfgBundle\Mailer\MailerInterface');
     }
 
     public function testRegisterCpfTakeOver()
@@ -1211,7 +1215,7 @@ class NfgTest extends \PHPUnit_Framework_TestCase
 
     public function testRegisterEmailMissing()
     {
-        $this->setExpectedException('PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException');
+        $this->expectException('PROCERGS\LoginCidadao\NfgBundle\Exception\MissingRequiredInformationException');
 
         $accessId = 'access_id'.random_int(10, 9999);
         $soapService = $this->getSoapService($accessId);

@@ -18,10 +18,11 @@
 namespace PROCERGS\SmsServiceBundle\Tests\DependencyInjection;
 
 
+use PHPUnit\Framework\TestCase;
 use PROCERGS\SmsServiceBundle\DependencyInjection\Configuration;
 use Symfony\Component\Config\Definition\Processor;
 
-class ConfigurationTest extends \PHPUnit_Framework_TestCase
+class ConfigurationTest extends TestCase
 {
     public static function getConfig()
     {
@@ -51,7 +52,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyConfig()
     {
-        $this->setExpectedException('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException');
+        $this->expectException('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException');
         $processor = new Processor();
         $processor->processConfiguration(new Configuration(), []);
     }

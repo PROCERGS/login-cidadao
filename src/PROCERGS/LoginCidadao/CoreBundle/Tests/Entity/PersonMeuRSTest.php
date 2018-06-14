@@ -11,10 +11,11 @@
 namespace PROCERGS\LoginCidadao\CoreBundle\Tests\Entity;
 
 use LoginCidadao\CoreBundle\Entity\Person;
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile;
 
-class PersonMeuRSTest extends \PHPUnit_Framework_TestCase
+class PersonMeuRSTest extends TestCase
 {
     public function testEntity()
     {

@@ -10,11 +10,12 @@
 
 namespace PROCERGS\SmsServiceBundle\Tests\DependencyInjection;
 
+use PHPUnit\Framework\TestCase;
 use PROCERGS\SmsServiceBundle\DependencyInjection\PROCERGSSmsServiceExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
-class PROCERGSSmsServiceExtensionTest extends \PHPUnit_Framework_TestCase
+class PROCERGSSmsServiceExtensionTest extends TestCase
 {
     private function createContainer()
     {

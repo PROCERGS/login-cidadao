@@ -10,9 +10,10 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Helper;
 
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\NfgBundle\Helper\UrlHelper;
 
-class UrlHelperTest extends \PHPUnit_Framework_TestCase
+class UrlHelperTest extends TestCase
 {
     public function testAddToEmptyQuery()
     {
