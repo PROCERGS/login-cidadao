@@ -16,11 +16,14 @@ use LoginCidadao\PhoneVerificationBundle\Event\UpdateStatusEvent;
 use LoginCidadao\PhoneVerificationBundle\Exception\InvalidSentVerificationStatusException;
 use LoginCidadao\PhoneVerificationBundle\Model\SmsStatusInterface;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\PhoneVerificationBundle\Event\UpdateSentVerificationSubscriber;
 use PROCERGS\Sms\Exception\TransactionNotFoundException;
 use PROCERGS\Sms\Protocols\V2\SmsBuilder;
+use PROCERGS\Sms\SmsService;
+use Psr\Log\LoggerInterface;
 
-class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
+class UpdateSentVerificationSubscriberTest extends TestCase
 {
     public function testGetSubscribedEvents()
     {
@@ -74,9 +77,7 @@ class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidStatusOnStatusRequested()
     {
-        $this->setExpectedException(
-            'LoginCidadao\PhoneVerificationBundle\Exception\InvalidSentVerificationStatusException'
-        );
+        $this->expectException(InvalidSentVerificationStatusException::class);
 
         $transId = '0123456';
 
@@ -90,7 +91,7 @@ class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
     private function getSubscriber($transactionId, $status, $breaker = null)
     {
         $breaker = $breaker ?: new Breaker('breaker');
-        $smsService = $this->getMockBuilder('PROCERGS\Sms\SmsService')
+        $smsService = $this->getMockBuilder(SmsService::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -99,7 +100,7 @@ class UpdateSentVerificationSubscriberTest extends \PHPUnit_Framework_TestCase
         } else {
             $smsService->expects($this->once())->method('getStatus')->with($transactionId)->willReturn($status);
 
-            $logger = $this->getMock('Psr\Log\LoggerInterface');
+            $logger = $this->createMock(LoggerInterface::class);
             $logger->expects($this->once())->method('log');
         }
 
