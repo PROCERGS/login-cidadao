@@ -74,3 +74,16 @@ services:
             - "@phone_verification.options"
         tags:
             - { name: form.type }
+
+    phone_verification.sent_verification.repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - LoginCidadao\PhoneVerificationBundle\Entity\SentVerification
+
+    phone_verification.sms_status:
+        class: LoginCidadao\PhoneVerificationBundle\Service\SmsStatusService
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
+            - "@phone_verification.sent_verification.repository"
