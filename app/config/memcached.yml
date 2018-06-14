@@ -44,3 +44,10 @@ services:
         calls:
             - [setMemcached, ['@memcached']]
             - [setNamespace, ['%memcached_prefix%']]
+
+liip_monitor:
+    checks:
+        memcache:
+            main:
+                host: %memcached_host%
+                port: %memcached_port%

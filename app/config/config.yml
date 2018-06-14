@@ -536,11 +536,6 @@ nelmio_security:
 liip_monitor:
     enable_controller: true
     checks:
-        memcache:
-            main:
-                host: %memcached_host%
-                port: %memcached_port%
-
         doctrine_dbal: default
 
         readable_directory:
@@ -552,6 +547,9 @@ liip_monitor:
             - '%kernel.cache_dir%'
             - '%user_profile_upload_dir%'
             - '%client_image_upload_dir%'
+
+        security_advisory:
+            lock_file: '%kernel.root_dir%/../composer.lock'
 
 services:
     fos_user.doctrine_registry:
