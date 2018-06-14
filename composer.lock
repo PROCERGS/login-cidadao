@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "92b316282eb9d3f591f996dff6a34dd8",
+    "content-hash": "ee17913f3ab8d58beb7098421996f1c3",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -1655,16 +1655,16 @@
         },
         {
             "name": "giggsey/libphonenumber-for-php",
-            "version": "8.9.7",
+            "version": "8.9.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-                "reference": "cc4ec7cd91e6bc629f868dd4564aa74bbcd8dd34"
+                "reference": "420621360d56499ac1b0e6293561ed8661017c6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/cc4ec7cd91e6bc629f868dd4564aa74bbcd8dd34",
-                "reference": "cc4ec7cd91e6bc629f868dd4564aa74bbcd8dd34",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/420621360d56499ac1b0e6293561ed8661017c6b",
+                "reference": "420621360d56499ac1b0e6293561ed8661017c6b",
                 "shasum": ""
             },
             "require": {
@@ -1719,7 +1719,7 @@
                 "phonenumber",
                 "validation"
             ],
-            "time": "2018-05-29T11:52:24+00:00"
+            "time": "2018-06-14T11:25:48+00:00"
         },
         {
             "name": "giggsey/locale",
@@ -4403,16 +4403,16 @@
         },
         {
             "name": "procergs/sms-service",
-            "version": "2.0.0",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/sms-service.git",
-                "reference": "336ba148b0035dba19a0e6a90fb70e5ce514af8b"
+                "reference": "ffb7f666da895ac00ddf10e73855a1ebcc8eb0b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/sms-service/zipball/336ba148b0035dba19a0e6a90fb70e5ce514af8b",
-                "reference": "336ba148b0035dba19a0e6a90fb70e5ce514af8b",
+                "url": "https://api.github.com/repos/PROCERGS/sms-service/zipball/ffb7f666da895ac00ddf10e73855a1ebcc8eb0b9",
+                "reference": "ffb7f666da895ac00ddf10e73855a1ebcc8eb0b9",
                 "shasum": ""
             },
             "require": {
@@ -4441,7 +4441,7 @@
                 }
             ],
             "description": "PROCERGS SMS Service",
-            "time": "2017-12-14T16:42:39+00:00"
+            "time": "2018-05-25T20:39:39+00:00"
         },
         {
             "name": "procergs/tos-bundle",
@@ -5256,26 +5256,35 @@
         },
         {
             "name": "sonata-project/google-authenticator",
-            "version": "1.0.2",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/GoogleAuthenticator.git",
-                "reference": "72f47caddd09d09c0d3c3e046f6b435e0c004cd4"
+                "reference": "ccf7ecb68e875562c70b28a470fe0daf48625b39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/GoogleAuthenticator/zipball/72f47caddd09d09c0d3c3e046f6b435e0c004cd4",
-                "reference": "72f47caddd09d09c0d3c3e046f6b435e0c004cd4",
+                "url": "https://api.github.com/repos/sonata-project/GoogleAuthenticator/zipball/ccf7ecb68e875562c70b28a470fe0daf48625b39",
+                "reference": "ccf7ecb68e875562c70b28a470fe0daf48625b39",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "paragonie/random_compat": "^2.0",
+                "php": "^5.3 || ^7.0"
+            },
+            "require-dev": {
+                "sllh/php-cs-fixer-styleci-bridge": "^2.0",
+                "symfony/phpunit-bridge": "~2.7|~3.0"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
-                    "Google\\Authenticator\\": "lib/",
-                    "Google\\Authenticator\\Tests\\": "tests/"
+                    "Google\\Authenticator\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -5284,17 +5293,16 @@
             ],
             "authors": [
                 {
-                    "name": "Thomas Rabaix",
-                    "email": "thomas.rabaix@gmail.com",
-                    "homepage": "http://sonata-project.org/"
-                },
-                {
                     "name": "Christian Stocker",
                     "email": "me@chregu.tv"
                 },
                 {
                     "name": "Andre DeMarre",
                     "homepage": "http://www.devnetwork.net/viewtopic.php?f=50&t=94989"
+                },
+                {
+                    "name": "Thomas Rabaix",
+                    "email": "thomas.rabaix@gmail.com"
                 }
             ],
             "description": "Library to integrate Google Authenticator into a PHP project",
@@ -5302,7 +5310,7 @@
             "keywords": [
                 "google authenticator"
             ],
-            "time": "2014-03-31T09:18:53+00:00"
+            "time": "2017-04-19T14:00:07+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
