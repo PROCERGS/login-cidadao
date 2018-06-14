@@ -83,6 +83,20 @@ class TaskSubscriberTest extends TestCase
         $subscriber->onGetTasks($event);
     }
 
+    public function testOnGetTasksOAuthToken()
+    {
+        $token = $this->createMock('FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken');
+        $tokenStorage = $this->getTokenStorage(false);
+        $tokenStorage->expects($this->once())->method('getToken')->willReturn($token);
+
+        $phoneVerificationService = $this->getPhoneVerificationService();
+        $event = $this->getMockBuilder('LoginCidadao\TaskStackBundle\Event\GetTasksEvent')
+            ->disableOriginalConstructor()->getMock();
+
+        $subscriber = new TaskSubscriber($tokenStorage, $phoneVerificationService, true);
+        $subscriber->onGetTasks($event);
+    }
+
     public function testOnGetTasksOrphanVerification()
     {
         $user = $this->getUser();

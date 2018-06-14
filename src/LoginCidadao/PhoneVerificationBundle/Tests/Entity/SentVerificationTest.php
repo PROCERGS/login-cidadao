@@ -38,7 +38,10 @@ class SentVerificationTest extends TestCase
             ->setMessageSent($message)
             ->setTransactionId($transactionId)
             ->setPhone($phone)
-            ->setSentAt($date);
+            ->setSentAt($date)
+            ->setActuallySentAt($date)
+            ->setDeliveredAt($date)
+            ->setFinished(true);
 
         $this->assertNull($sentVerification->getId());
         $this->assertEquals($message, $sentVerification->getMessageSent());
@@ -46,5 +49,8 @@ class SentVerificationTest extends TestCase
         $this->assertEquals($phone, $sentVerification->getPhone());
         $this->assertInstanceOf('\DateTime', $sentVerification->getSentAt());
         $this->assertEquals($date, $sentVerification->getSentAt());
+        $this->assertEquals($date, $sentVerification->getActuallySentAt());
+        $this->assertEquals($date, $sentVerification->getDeliveredAt());
+        $this->assertTrue($sentVerification->isFinished());
     }
 }

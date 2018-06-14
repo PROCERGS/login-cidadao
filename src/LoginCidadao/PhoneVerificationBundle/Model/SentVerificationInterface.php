@@ -14,6 +14,7 @@ use libphonenumber\PhoneNumber;
 
 interface SentVerificationInterface
 {
+
     /**
      * @return mixed
      */
@@ -62,4 +63,42 @@ interface SentVerificationInterface
      * @return SentVerificationInterface
      */
     public function setTransactionId($transactionId);
+
+    /**
+     * Get the date the message was actually sent to the user's phone
+     *
+     * @return \DateTime
+     */
+    public function getActuallySentAt();
+
+    /**
+     * Set the date the message was actually sent to the user's phone
+     *
+     * @param \DateTime $sentAt
+     * @return SentVerificationInterface
+     */
+    public function setActuallySentAt(\DateTime $sentAt = null);
+
+    /**
+     * @return \DateTime
+     */
+    public function getDeliveredAt();
+
+    /**
+     * @param \DateTime $deliveredAt
+     * @return SentVerificationInterface
+     */
+    public function setDeliveredAt(\DateTime $deliveredAt = null);
+
+    /**
+     * Determines whether or not a SentVerification status reached it's final state.
+     * @return bool
+     */
+    public function isFinished();
+
+    /**
+     * @param bool $finished
+     * @return SentVerificationInterface
+     */
+    public function setFinished($finished = true);
 }
