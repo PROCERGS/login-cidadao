@@ -114,8 +114,8 @@ class PersonSerializeEventSubscriber implements EventSubscriberInterface
             ];
         }
 
-        $visitor->addData('_claim_names', $claimNames);
-        $visitor->addData('_claim_sources', $claimSources);
+        $visitor->setData('_claim_names', $claimNames);
+        $visitor->setData('_claim_sources', $claimSources);
     }
 
     /**

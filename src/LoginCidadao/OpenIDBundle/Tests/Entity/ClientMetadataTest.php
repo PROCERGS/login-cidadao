@@ -10,12 +10,12 @@
 
 namespace LoginCidadao\OpenIDBundle\Tests\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
+use PHPUnit\Framework\TestCase;
 
-class ClientMetadataTest extends \PHPUnit_Framework_TestCase
+class ClientMetadataTest extends TestCase
 {
     public function testEntity()
     {

@@ -11,6 +11,7 @@
 namespace LoginCidadao\APIBundle\Controller;
 
 use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
+use FOS\RestBundle\Context\Context;
 use FOS\RestBundle\Controller\FOSRestController;
 use JMS\Serializer\SerializationContext;
 use LoginCidadao\APIBundle\Service\VersionService;
@@ -32,8 +33,7 @@ class BaseController extends FOSRestController
             $context = $this->getSerializationContext($scope);
         }
 
-        $view = $this->view($content)
-            ->setSerializationContext($context);
+        $view = $this->view($content)->setContext($context);
 
         return $this->handleView($view);
     }
@@ -63,14 +63,14 @@ class BaseController extends FOSRestController
 
     protected function getSerializationContext($scope)
     {
-        /** @var SerializationContext $context */
-        $context = SerializationContext::create()->setGroups($scope);
-
         /** @var VersionService $versionService */
         $versionService = $this->get('lc.api.version');
         $version = $versionService->getString($versionService->getVersionFromRequest());
 
-        $context->setVersion(/** @scrutinizer ignore-type */ $version);
+        $context = new Context();
+        $context->setGroups($scope);
+        $context->setVersion(/** @scrutinizer ignore-type */
+            $version);
 
         return $context;
     }
@@ -89,7 +89,7 @@ class BaseController extends FOSRestController
 
         if (!$token instanceof OAuthToken) {
             return null;
-    }
+        }
 
         $accessToken = $this->getDoctrine()
             ->getRepository('LoginCidadaoOAuthBundle:AccessToken')
@@ -100,5 +100,23 @@ class BaseController extends FOSRestController
         }
 
         return $accessToken->getClient();
+    }
+
+    protected function getJMSSerializationContext($scope)
+    {
+        $context = $this->getSerializationContext($scope);
+
+        return $this->convertContextToJMSContext($context);
+    }
+
+    protected function convertContextToJMSContext(Context $context): SerializationContext
+    {
+        $jmsContext = new SerializationContext();
+
+        $jmsContext->setGroups($context->getGroups());
+        $jmsContext->setSerializeNull($context->getSerializeNull());
+        $jmsContext->setVersion($context->getVersion());
+
+        return $jmsContext;
     }
 }

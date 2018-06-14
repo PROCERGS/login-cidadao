@@ -11,8 +11,9 @@
 namespace LoginCidadao\OAuthBundle\Tests\Entity;
 
 use LoginCidadao\OAuthBundle\Entity\AccessToken;
+use PHPUnit\Framework\TestCase;
 
-class AccessTokenTest extends \PHPUnit_Framework_TestCase
+class AccessTokenTest extends TestCase
 {
     /**
      * @group time-sensitive
@@ -29,7 +30,7 @@ class AccessTokenTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($accessToken->hasExpired());
 
         $accessToken->setExpired();
-        sleep(2);
+        sleep(3);
 
         $this->assertEquals($idToken, $accessToken->getIdToken());
         $this->assertTrue($accessToken->hasExpired());

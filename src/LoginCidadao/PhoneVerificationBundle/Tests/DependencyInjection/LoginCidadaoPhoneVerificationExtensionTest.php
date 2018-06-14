@@ -11,10 +11,11 @@
 namespace LoginCidadao\PhoneVerificationBundle\Tests\DependencyInjection;
 
 use LoginCidadao\PhoneVerificationBundle\DependencyInjection\LoginCidadaoPhoneVerificationExtension;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
-class LoginCidadaoPhoneVerificationExtensionTest extends \PHPUnit_Framework_TestCase
+class LoginCidadaoPhoneVerificationExtensionTest extends TestCase
 {
     private function createContainer()
     {

@@ -11,8 +11,9 @@
 namespace LoginCidadao\TaskStackBundle\Tests\Model;
 
 use LoginCidadao\TaskStackBundle\Model\IntentTask;
+use PHPUnit\Framework\TestCase;
 
-class IntentTaskTest extends \PHPUnit_Framework_TestCase
+class IntentTaskTest extends TestCase
 {
     public function testIntentTask()
     {

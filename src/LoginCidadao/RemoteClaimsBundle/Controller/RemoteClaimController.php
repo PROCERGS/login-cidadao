@@ -11,6 +11,7 @@
 namespace LoginCidadao\RemoteClaimsBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations as REST;
+use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use LoginCidadao\APIBundle\Controller\BaseController;
 use LoginCidadao\CoreBundle\Entity\Authorization;
@@ -25,7 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 class RemoteClaimController extends BaseController
 {
     /**
-     * @REST\Get("/api/v{version}/remote-claims/translate",
+     * @REST\Post("/api/v{version}/remote-claims/translate",
      *     name="remote_claims_validate",
      *     defaults={"_format"="json"},
      *     requirements={"version": "\d+(.\d+)*"})
@@ -64,9 +65,9 @@ class RemoteClaimController extends BaseController
 
         /** @var SerializerInterface $serializer */
         $serializer = $this->get('jms_serializer');
-        $personSerializationContext = $this->getSerializationContext($authorization->getScope());
+        $personSerializationContext = $this->getJMSSerializationContext($authorization->getScope());
         $serializedPerson = $serializer->serialize($person, $format, $personSerializationContext);
-        $serializedClient = $serializer->serialize($client, $format, $this->getSerializationContext(['remote_claim']));
+        $serializedClient = $serializer->serialize($client, $format, $this->getJMSSerializationContext(['remote_claim']));
 
         $response = [
             'claim_name' => (string)$remoteClaimAuthorization->getClaimName(),

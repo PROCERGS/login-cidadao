@@ -11,8 +11,9 @@
 namespace LoginCidadao\PhoneVerificationBundle\Tests\Form;
 
 use LoginCidadao\PhoneVerificationBundle\Form\PhoneVerificationType;
+use PHPUnit\Framework\TestCase;
 
-class PhoneVerificationTypeTest extends \PHPUnit_Framework_TestCase
+class PhoneVerificationTypeTest extends TestCase
 {
     private function getOptions($useUpper, $useLower)
     {
@@ -28,7 +29,7 @@ class PhoneVerificationTypeTest extends \PHPUnit_Framework_TestCase
 
     private function getBuilder($expectedType)
     {
-        $builder = $this->getMock('Symfony\Component\Form\FormBuilderInterface');
+        $builder = $this->createMock('Symfony\Component\Form\FormBuilderInterface');
         $builder->expects($this->once())->method('add')->with(
             $this->equalTo('verificationCode'),
             $this->equalTo($expectedType)

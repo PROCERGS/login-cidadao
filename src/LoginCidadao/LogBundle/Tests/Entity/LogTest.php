@@ -12,8 +12,9 @@ namespace LoginCidadao\LogBundle\Tests\Entity;
 
 use LoginCidadao\LogBundle\Entity\Log;
 use Monolog\Logger;
+use PHPUnit\Framework\TestCase;
 
-class LogTest extends \PHPUnit_Framework_TestCase
+class LogTest extends TestCase
 {
     public function testEntity()
     {

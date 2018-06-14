@@ -11,15 +11,16 @@
 namespace LoginCidadao\TaskStackBundle\Tests\Event;
 
 use LoginCidadao\TaskStackBundle\Event\EntryPointStartEvent;
+use PHPUnit\Framework\TestCase;
 
-class EntryPointStartEventTest extends \PHPUnit_Framework_TestCase
+class EntryPointStartEventTest extends TestCase
 {
     public function testEvent()
     {
         $request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
             ->disableOriginalConstructor()
             ->getMock();
-        $authException = $this->getMock('Symfony\Component\Security\Core\Exception\AuthenticationException');
+        $authException = $this->createMock('Symfony\Component\Security\Core\Exception\AuthenticationException');
         $event = new EntryPointStartEvent($request, $authException);
 
         $this->assertEquals($request, $event->getRequest());

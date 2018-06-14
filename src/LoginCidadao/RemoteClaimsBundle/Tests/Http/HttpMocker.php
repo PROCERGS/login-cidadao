@@ -11,14 +11,20 @@
 namespace LoginCidadao\RemoteClaimsBundle\Tests\Http;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Subscriber\History;
-use GuzzleHttp\Subscriber\Mock;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use LoginCidadao\RemoteClaimsBundle\Tests\Parser\RemoteClaimParserTest;
 
 class HttpMocker
 {
-    /** @var History */
-    private $history;
+    /** @var array */
+    private $requests;
+
+    /** @var array */
+    private $responses;
 
     /** @var mixed */
     private $data;
@@ -30,18 +36,15 @@ class HttpMocker
      * HttpMocker constructor.
      * @param mixed $data Remote Claim metadata
      * @param string|null $expectedUri if a Discovery call is expected, this parameter MUST be the Claim's URI
+     * @param array|null $responses
      */
-    public function __construct($data = null, $expectedUri = null)
+    public function __construct($data = null, $expectedUri = null, array $responses = null)
     {
-        $this->history = new History();
-        $this->data = $data !== null ? $data : RemoteClaimParserTest::$claimMetadata;
-
-        $this->client = new Client();
-
-        $metadata = json_encode($this->data);
-        $length = strlen($metadata);
-
-        $responses = ["HTTP/1.1 200 OK\r\n\Content-Length: {$length}\r\n\r\n{$metadata}"];
+        if (null === $responses) {
+            $this->setDefaultResponse(json_encode($data));
+        } else {
+            $this->responses = $responses;
+        }
 
         if ($expectedUri !== null) {
             $discoveryResponse = json_encode([
@@ -50,14 +53,24 @@ class HttpMocker
                     ['rel' => 'http://openid.net/specs/connect/1.0/claim', 'href' => $expectedUri],
                 ],
             ]);
-            $discoveryLen = strlen($discoveryResponse);
-            array_unshift($responses,
-                "HTTP/1.1 200 OK\r\n\Content-Length: {$discoveryLen}\r\n\r\n{$discoveryResponse}");
+            array_unshift($this->responses,
+                new Response(200, ['Content-Length' => strlen($discoveryResponse)], $discoveryResponse));
         }
 
-        $mock = new Mock($responses);
-        $this->client->getEmitter()->attach($this->history);
-        $this->client->getEmitter()->attach($mock);
+        $this->requests = [];
+        $stack = HandlerStack::create(new MockHandler($this->responses));
+        $stack->push(Middleware::history($this->requests));
+
+        $this->data = $data !== null ? $data : RemoteClaimParserTest::$claimMetadata;
+
+        $this->client = new Client(['handler' => $stack]);
+    }
+
+    private function setDefaultResponse(string $metadata)
+    {
+        $this->responses = [
+            new Response(200, ['Content-Length' => strlen($metadata)], $metadata),
+        ];
     }
 
     /**
@@ -69,10 +82,26 @@ class HttpMocker
     }
 
     /**
-     * @return History
+     * @return array
      */
-    public function getHistory()
+    public function getTransactions(): array
     {
-        return $this->history;
+        return $this->requests;
+    }
+
+    /**
+     * @return Request[]
+     */
+    public function getRequests(): array
+    {
+        return array_column($this->getTransactions(), 'request');
+    }
+
+    /**
+     * @return Response[]
+     */
+    public function getResponses(): array
+    {
+        return array_column($this->getTransactions(), 'response');
     }
 }

@@ -11,8 +11,9 @@
 namespace LoginCidadao\PhoneVerificationBundle\Tests\Entity;
 
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerification;
+use PHPUnit\Framework\TestCase;
 
-class SentVerificationTest extends \PHPUnit_Framework_TestCase
+class SentVerificationTest extends TestCase
 {
     public function testConstructor()
     {
@@ -28,7 +29,7 @@ class SentVerificationTest extends \PHPUnit_Framework_TestCase
     {
         $sentVerification = new SentVerification();
 
-        $phone = $this->getMock('libphonenumber\PhoneNumber');
+        $phone = $this->createMock('libphonenumber\PhoneNumber');
         $message = 'some message';
         $transactionId = '1234567890';
         $date = new \DateTime();

@@ -11,8 +11,9 @@
 namespace LoginCidadao\OAuthBundle\Tests\Entity;
 
 use LoginCidadao\OAuthBundle\Entity\AuthCode;
+use PHPUnit\Framework\TestCase;
 
-class AuthCodeTest extends \PHPUnit_Framework_TestCase
+class AuthCodeTest extends TestCase
 {
     public function testAuthCode()
     {

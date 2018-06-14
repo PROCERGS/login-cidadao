@@ -13,8 +13,9 @@ namespace LoginCidadao\PhoneVerificationBundle\Tests\Event;
 use FOS\UserBundle\FOSUserEvents;
 use libphonenumber\PhoneNumberUtil;
 use LoginCidadao\PhoneVerificationBundle\Event\ProfileEditSubscriber;
+use PHPUnit\Framework\TestCase;
 
-class ProfileEditSubscriberTest extends \PHPUnit_Framework_TestCase
+class ProfileEditSubscriberTest extends TestCase
 {
     public function testGetSubscribedEvents()
     {
@@ -30,7 +31,7 @@ class ProfileEditSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testOnProfileEditInitialize()
     {
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $person->expects($this->once())->method('getMobile');
 
         $event = $this->getMockBuilder('FOS\UserBundle\Event\GetResponseUserEvent')
@@ -55,7 +56,7 @@ class ProfileEditSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testOnProfileEditSuccess()
     {
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $person->expects($this->any())->method('getMobile')
             ->willReturn(PhoneNumberUtil::getInstance()->parse('+5551999999999', 'BR'));
 
@@ -76,7 +77,7 @@ class ProfileEditSubscriberTest extends \PHPUnit_Framework_TestCase
         $subscriber = new ProfileEditSubscriber();
 
         // Prepare oldPhone
-        $person2 = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person2 = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $person2->expects($this->any())->method('getMobile')
             ->willReturn(PhoneNumberUtil::getInstance()->parse('+5551999998888', 'BR'));
 

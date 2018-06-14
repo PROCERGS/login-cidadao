@@ -11,17 +11,18 @@
 namespace LoginCidadao\CoreBundle\Tests\EventListener;
 
 use LoginCidadao\CoreBundle\EventListener\RequestListener;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class RequestListenerTest extends \PHPUnit_Framework_TestCase
+class RequestListenerTest extends TestCase
 {
     public function testOnKernelRequest()
     {
         /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $logger */
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())
             ->method('info')->with($this->stringContains('https://example.com'));
 
@@ -42,7 +43,7 @@ class RequestListenerTest extends \PHPUnit_Framework_TestCase
     public function testNoReferer()
     {
         /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $logger */
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
         $logger->expects($this->never())->method('info');
 
         $request = new Request();
@@ -62,7 +63,7 @@ class RequestListenerTest extends \PHPUnit_Framework_TestCase
     public function testNotMasterRequest()
     {
         /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $logger */
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
         $logger->expects($this->never())->method('info');
 
         /** @var GetResponseEvent|\PHPUnit_Framework_MockObject_MockObject $event */

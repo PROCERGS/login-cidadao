@@ -10,7 +10,9 @@
 
 namespace LoginCidadao\CoreBundle\Form\Type;
 
+use LoginCidadao\CoreBundle\Entity\ClientSuggestion;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -19,19 +21,11 @@ class SuggestionFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add(
-            'text',
-            'Symfony\Component\Form\Extension\Core\Type\TextareaType',
-            ['required' => true]
-        );
+        $builder->add('text', TextareaType::class, ['required' => true]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(
-            [
-                'data_class' => 'LoginCidadao\CoreBundle\Entity\ClientSuggestion',
-            ]
-        );
+        $resolver->setDefaults(['data_class' => ClientSuggestion::class]);
     }
 }

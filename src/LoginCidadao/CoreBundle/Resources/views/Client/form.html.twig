@@ -134,7 +134,9 @@
                         {{ form_row(form.allowedScopes) }}
                     {% endif %}
                     {{ form_row(metadata.application_type) }}
-                    {{ form_row(metadata.subject_type) }}
+                    {% if is_granted('ROLE_EDIT_CLIENT_SUBJECT_TYPE') %}
+                        {{ form_row(metadata.subject_type) }}
+                    {% endif %}
                     {{ form_row(metadata.sector_identifier_uri) }}
                     {{ form_row(metadata.policy_uri) }}
                     {{ form_row(metadata.jwks_uri) }}

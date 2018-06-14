@@ -11,18 +11,19 @@
 namespace LoginCidadao\TaskStackBundle\Tests\Event;
 
 use LoginCidadao\TaskStackBundle\Event\GetTasksEvent;
+use PHPUnit\Framework\TestCase;
 
-class GetTasksEventTest extends \PHPUnit_Framework_TestCase
+class GetTasksEventTest extends TestCase
 {
     public function testEvent()
     {
-        $task = $this->getMock('LoginCidadao\TaskStackBundle\Model\TaskInterface');
+        $task = $this->createMock('LoginCidadao\TaskStackBundle\Model\TaskInterface');
 
-        $stackManager = $this->getMock('LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface');
+        $stackManager = $this->createMock('LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface');
         $stackManager->expects($this->once())->method('addNotSkippedTaskOnce')->with($task);
         $stackManager->expects($this->exactly(2))->method('setTaskSkipped')->with($task);
 
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
         $event = new GetTasksEvent($stackManager, $request);
 
         $event->forceAddUniqueTask($task);
@@ -34,9 +35,9 @@ class GetTasksEventTest extends \PHPUnit_Framework_TestCase
     public function testAddTaskIfStackEmpty()
     {
         $tasks = [];
-        $task = $this->getMock('LoginCidadao\TaskStackBundle\Model\TaskInterface');
+        $task = $this->createMock('LoginCidadao\TaskStackBundle\Model\TaskInterface');
 
-        $stackManager = $this->getMock('LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface');
+        $stackManager = $this->createMock('LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface');
         $stackManager->expects($this->atLeastOnce())->method('addNotSkippedTaskOnce')
             ->with($task)->willReturnCallback(
                 function ($task) use (&$tasks) {
@@ -56,7 +57,7 @@ class GetTasksEventTest extends \PHPUnit_Framework_TestCase
             }
         );
 
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
         $event = new GetTasksEvent($stackManager, $request);
 
         $event->addTaskIfStackEmpty($task);
@@ -67,12 +68,12 @@ class GetTasksEventTest extends \PHPUnit_Framework_TestCase
     public function testAddTaskIfStackEmptyWithIntent()
     {
         $tasks = [];
-        $task = $this->getMock('LoginCidadao\TaskStackBundle\Model\TaskInterface');
+        $task = $this->createMock('LoginCidadao\TaskStackBundle\Model\TaskInterface');
         $intentTask = $this->getMockBuilder('LoginCidadao\TaskStackBundle\Model\IntentTask')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $stackManager = $this->getMock('LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface');
+        $stackManager = $this->createMock('LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface');
         $stackManager->expects($this->atLeastOnce())->method('getCurrentTask')->willReturnCallback(
             function () use (&$tasks) {
                 return $tasks[0];
@@ -98,7 +99,7 @@ class GetTasksEventTest extends \PHPUnit_Framework_TestCase
             }
         );
 
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
         $event = new GetTasksEvent($stackManager, $request);
 
         $event->addTaskIfStackEmpty($intentTask);

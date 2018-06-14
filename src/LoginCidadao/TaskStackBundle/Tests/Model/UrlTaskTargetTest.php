@@ -11,8 +11,9 @@
 namespace LoginCidadao\TaskStackBundle\Tests\Model;
 
 use LoginCidadao\TaskStackBundle\Model\UrlTaskTarget;
+use PHPUnit\Framework\TestCase;
 
-class UrlTaskTargetTest extends \PHPUnit_Framework_TestCase
+class UrlTaskTargetTest extends TestCase
 {
     public function testRouteTaskTarget()
     {

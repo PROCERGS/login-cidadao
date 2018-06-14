@@ -16,8 +16,9 @@ use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OpenIDBundle\Event\AuthorizationEvent;
 use LoginCidadao\OpenIDBundle\EventListener\OAuthEventSubscriber;
 use LoginCidadao\OpenIDBundle\LoginCidadaoOpenIDEvents;
+use PHPUnit\Framework\TestCase;
 
-class OAuthEventSubscriberTest extends \PHPUnit_Framework_TestCase
+class OAuthEventSubscriberTest extends TestCase
 {
     public function testGetSubscribedEvents()
     {

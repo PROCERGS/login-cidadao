@@ -16,10 +16,12 @@ use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Event\UpdateStatusEvent;
 use LoginCidadao\PhoneVerificationBundle\Service\SmsStatusService;
 use LoginCidadao\PhoneVerificationBundle\Model\SmsStatusInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
+class SmsStatusServiceTest extends TestCase
 {
     public function testNoPendingUpdate()
     {
@@ -32,8 +34,8 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
     {
         $date = new \DateTime();
 
-        /** @var SmsStatusInterface|\PHPUnit_Framework_MockObject_MockObject $status */
-        $status = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\SmsStatusInterface');
+        /** @var SmsStatusInterface|MockObject $status */
+        $status = $this->createMock('LoginCidadao\PhoneVerificationBundle\Model\SmsStatusInterface');
         $status->expects($this->once())->method('getDateSent')->willReturn($date);
         $status->expects($this->once())->method('getDateDelivered')->willReturn($date);
 
@@ -166,8 +168,8 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
         $id = '1234';
         $date = new \DateTime();
 
-        /** @var SmsStatusInterface|\PHPUnit_Framework_MockObject_MockObject $status */
-        $status = $this->getMock('LoginCidadao\PhoneVerificationBundle\Model\SmsStatusInterface');
+        /** @var SmsStatusInterface|MockObject $status */
+        $status = $this->createMock('LoginCidadao\PhoneVerificationBundle\Model\SmsStatusInterface');
         $status->expects($this->once())->method('getDateSent')->willReturn($date);
         $status->expects($this->once())->method('getDateDelivered')->willReturn($date);
 
@@ -204,11 +206,11 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface
+     * @return MockObject|EventDispatcherInterface
      */
     private function getDispatcher()
     {
-        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
 
         return $dispatcher;
     }
@@ -226,7 +228,7 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param null|array $items
-     * @return \PHPUnit_Framework_MockObject_MockObject|SentVerificationRepository
+     * @return MockObject|SentVerificationRepository
      */
     private function getRepository($items = null)
     {
@@ -248,17 +250,17 @@ class SmsStatusServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|EntityManagerInterface
+     * @return MockObject|EntityManagerInterface
      */
     private function getEntityManager()
     {
-        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em = $this->createMock('Doctrine\ORM\EntityManagerInterface');
 
         return $em;
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|SymfonyStyle
+     * @return MockObject|SymfonyStyle
      */
     private function getIo()
     {

@@ -11,15 +11,16 @@
 namespace LoginCidadao\CoreBundle\Tests\Form\Type;
 
 use LoginCidadao\CoreBundle\Form\Type\ContactFormType;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ContactFormTypeTest extends \PHPUnit_Framework_TestCase
+class ContactFormTypeTest extends TestCase
 {
     public function testBuildFormWithCaptcha()
     {
         /** @var FormBuilderInterface|\PHPUnit_Framework_MockObject_MockObject $builder */
-        $builder = $this->getMock('Symfony\Component\Form\FormBuilderInterface');
+        $builder = $this->createMock('Symfony\Component\Form\FormBuilderInterface');
         $builder->expects($this->exactly(4))->method('add')->willReturn($builder);
 
         $form = new ContactFormType(true);
@@ -29,7 +30,7 @@ class ContactFormTypeTest extends \PHPUnit_Framework_TestCase
     public function testBuildFormWithoutCaptcha()
     {
         /** @var FormBuilderInterface|\PHPUnit_Framework_MockObject_MockObject $builder */
-        $builder = $this->getMock('Symfony\Component\Form\FormBuilderInterface');
+        $builder = $this->createMock('Symfony\Component\Form\FormBuilderInterface');
         $builder->expects($this->exactly(3))->method('add')->willReturn($builder);
 
         $form = new ContactFormType(false);

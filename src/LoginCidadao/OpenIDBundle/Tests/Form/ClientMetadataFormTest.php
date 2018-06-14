@@ -13,13 +13,14 @@ namespace LoginCidadao\OpenIDBundle\Tests\Form;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Form\ClientMetadataForm;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ClientMetadataFormTest extends \PHPUnit_Framework_TestCase
+class ClientMetadataFormTest extends TestCase
 {
 
     public function testGetName()
@@ -45,7 +46,7 @@ class ClientMetadataFormTest extends \PHPUnit_Framework_TestCase
     public function testBuildForm()
     {
         /** @var FormBuilderInterface|\PHPUnit_Framework_MockObject_MockObject $builder */
-        $builder = $this->getMock('Symfony\Component\Form\FormBuilderInterface');
+        $builder = $this->createMock('Symfony\Component\Form\FormBuilderInterface');
         $builder->expects($this->exactly(33))->method('add')->willReturn($builder);
 
         $form = new ClientMetadataForm($this->getClientManager());
@@ -65,7 +66,7 @@ class ClientMetadataFormTest extends \PHPUnit_Framework_TestCase
             ->method('populateNewMetadata')->with($metadata);
 
         /** @var FormInterface $formInterface */
-        $formInterface = $this->getMock('Symfony\Component\Form\FormInterface');
+        $formInterface = $this->createMock('Symfony\Component\Form\FormInterface');
         $event = new FormEvent($formInterface, $metadata);
 
         $form = new ClientMetadataForm($clientManager);

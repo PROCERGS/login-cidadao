@@ -11,8 +11,9 @@
 namespace LoginCidadao\OAuthBundle\Tests\Entity;
 
 use LoginCidadao\OAuthBundle\Entity\RefreshToken;
+use PHPUnit\Framework\TestCase;
 
-class RefreshTokenTest extends \PHPUnit_Framework_TestCase
+class RefreshTokenTest extends TestCase
 {
     /**
      * @group time-sensitive

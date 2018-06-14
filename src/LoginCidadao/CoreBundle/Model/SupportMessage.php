@@ -15,6 +15,7 @@ use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use LoginCidadao\ValidationBundle\Validator\Constraints as LCAssert;
 
 /**
  * Class SupportMessage represents a message sent by an user needing help.
@@ -45,7 +46,7 @@ class SupportMessage
      * @var string
      *
      * @Assert\NotBlank
-     * @Assert\Email(strict=true)
+     * @LCAssert\Email(strict=true)
      * @Assert\Length(
      *     max="255",
      *     maxMessage="person.validation.email.length.max"

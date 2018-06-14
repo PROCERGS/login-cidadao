@@ -55,7 +55,7 @@ class ConvertSubjectIdentifiersCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dryRyn = $input->hasOption('dry-run');
+        $dryRyn = $input->getOption('dry-run');
         $io = new SymfonyStyle($input, $output);
 
         $io->title('Convert Public Subject Identifiers to Pairwise');
@@ -104,6 +104,7 @@ class ConvertSubjectIdentifiersCommand extends ContainerAwareCommand
 
                 $this->em->persist($sub);
                 if ($done++ % 50 === 0) {
+                    $this->em->flush();
                     $this->em->clear();
                 }
                 $io->progressAdvance();
@@ -116,6 +117,7 @@ class ConvertSubjectIdentifiersCommand extends ContainerAwareCommand
             } else {
                 $this->em->commit();
             }
+            $this->em->flush();
             $this->em->clear();
 
             $io->success("Done! {$done} Authorizations updated!");

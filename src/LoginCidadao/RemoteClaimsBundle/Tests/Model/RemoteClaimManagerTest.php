@@ -22,8 +22,9 @@ use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimAuthorizationInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManager;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
+use PHPUnit\Framework\TestCase;
 
-class RemoteClaimManagerTest extends \PHPUnit_Framework_TestCase
+class RemoteClaimManagerTest extends TestCase
 {
     public function testEnforceNewAuthorization()
     {
@@ -171,7 +172,7 @@ class RemoteClaimManagerTest extends \PHPUnit_Framework_TestCase
         $person = $this->getPerson();
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|Authorization $authorization */
-        $authorization = $this->getMock('LoginCidadao\CoreBundle\Entity\Authorization');
+        $authorization = $this->createMock('LoginCidadao\CoreBundle\Entity\Authorization');
         $authorization->expects($this->once())->method('getClient')->willReturn($client);
         $authorization->expects($this->once())->method('getPerson')->willReturn($person);
 
@@ -189,7 +190,7 @@ class RemoteClaimManagerTest extends \PHPUnit_Framework_TestCase
         $person = $this->getPerson();
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|Authorization $authorization */
-        $authorization = $this->getMock('LoginCidadao\CoreBundle\Entity\Authorization');
+        $authorization = $this->createMock('LoginCidadao\CoreBundle\Entity\Authorization');
         $authorization->expects($this->once())->method('getClient')->willReturn($client);
         $authorization->expects($this->once())->method('getPerson')->willReturn($person);
 
@@ -313,7 +314,7 @@ class RemoteClaimManagerTest extends \PHPUnit_Framework_TestCase
      */
     private function getEntityManager()
     {
-        return $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        return $this->createMock('Doctrine\ORM\EntityManagerInterface');
     }
 
     /**
@@ -339,7 +340,7 @@ class RemoteClaimManagerTest extends \PHPUnit_Framework_TestCase
      */
     private function getRemoteClaimAuthorization()
     {
-        return $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimAuthorizationInterface');
+        return $this->createMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimAuthorizationInterface');
     }
 
     /**
@@ -347,7 +348,7 @@ class RemoteClaimManagerTest extends \PHPUnit_Framework_TestCase
      */
     private function getPerson()
     {
-        return $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        return $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
     }
 
     /**
@@ -355,7 +356,7 @@ class RemoteClaimManagerTest extends \PHPUnit_Framework_TestCase
      */
     private function getClient()
     {
-        return $this->getMock('LoginCidadao\OAuthBundle\Model\ClientInterface');
+        return $this->createMock('LoginCidadao\OAuthBundle\Model\ClientInterface');
     }
 
     /**
@@ -363,7 +364,7 @@ class RemoteClaimManagerTest extends \PHPUnit_Framework_TestCase
      */
     private function getClaimProvider()
     {
-        return $this->getMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
+        return $this->createMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
     }
 
     /**
@@ -371,6 +372,6 @@ class RemoteClaimManagerTest extends \PHPUnit_Framework_TestCase
      */
     private function getAuthorization()
     {
-        return $this->getMock('LoginCidadao\CoreBundle\Entity\Authorization');
+        return $this->createMock('LoginCidadao\CoreBundle\Entity\Authorization');
     }
 }

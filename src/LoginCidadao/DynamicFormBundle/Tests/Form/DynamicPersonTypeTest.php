@@ -10,18 +10,22 @@
 
 namespace LoginCidadao\DynamicFormBundle\Tests\Form;
 
+use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\DynamicFormBundle\Form\DynamicPersonType;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Valid;
 
-class DynamicPersonTypeTest extends \PHPUnit_Framework_TestCase
+class DynamicPersonTypeTest extends TestCase
 {
     public function testConfigureOptions()
     {
-        $personClass = 'LoginCidadao\CoreBundle\Entity\Person';
-        $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolver');
+        /** @var OptionsResolver|MockObject $resolver */
+        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
         $resolver->expects($this->once())->method('setDefaults')->with(
             [
-                'data_class' => $personClass,
+                'data_class' => Person::class,
                 'validation_groups' => ['Dynamic'],
                 'constraints' => new Valid(),
             ]
