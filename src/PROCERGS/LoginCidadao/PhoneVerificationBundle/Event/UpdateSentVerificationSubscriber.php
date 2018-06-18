@@ -14,7 +14,6 @@ use Eljam\CircuitBreaker\Breaker;
 use LoginCidadao\PhoneVerificationBundle\Event\UpdateStatusEvent;
 use LoginCidadao\PhoneVerificationBundle\Exception\InvalidSentVerificationStatusException;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
-use PROCERGS\Sms\Exception\InvalidStatusException;
 use PROCERGS\Sms\Exception\SmsExceptionInterface;
 use PROCERGS\Sms\Exception\TransactionNotFoundException;
 use PROCERGS\Sms\Protocols\SmsInterface;
@@ -41,10 +40,8 @@ class UpdateSentVerificationSubscriber implements EventSubscriberInterface, Logg
      * @param SmsService $smsService
      * @param Breaker $breaker
      */
-    public function __construct(
-        SmsService $smsService,
-        Breaker $breaker
-    ) {
+    public function __construct(SmsService $smsService, Breaker $breaker)
+    {
         $this->smsService = $smsService;
         $this->breaker = $breaker;
     }
@@ -108,13 +105,7 @@ class UpdateSentVerificationSubscriber implements EventSubscriberInterface, Logg
             }
         } catch (TransactionNotFoundException $e) {
             return;
-        } catch (SmsExceptionInterface $e) {
-            throw new InvalidSentVerificationStatusException(
-                "Error for transaction id {$transactionId}: {$e->getMessage()}",
-                $e->getCode(),
-                $e
-            );
-        } catch (InvalidSentVerificationStatusException $e) {
+        } catch (InvalidSentVerificationStatusException|SmsExceptionInterface $e) {
             throw new InvalidSentVerificationStatusException(
                 "Error for transaction id {$transactionId}: {$e->getMessage()}",
                 $e->getCode(),
@@ -134,17 +125,15 @@ class UpdateSentVerificationSubscriber implements EventSubscriberInterface, Logg
      */
     private function protectedGetStatus(SmsService $smsService, $transactionId)
     {
-        return $this->breaker->protect(
-            function () use ($smsService, $transactionId) {
-                $statuses = $this->smsService->getStatus($transactionId);
+        return $this->breaker->protect(function () use ($smsService, $transactionId) {
+            $statuses = $this->smsService->getStatus($transactionId);
 
-                $this->info(
-                    'Updating status for transaction ID: {transaction_id}',
-                    ['transaction_id' => $transactionId]
-                );
+            $this->info(
+                'Updating status for transaction ID: {transaction_id}',
+                ['transaction_id' => $transactionId]
+            );
 
-                return $statuses;
-            }
-        );
+            return $statuses;
+        });
     }
 }
