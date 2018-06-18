@@ -227,9 +227,7 @@ class SessionManagementController extends Controller
             return true;
         } catch (IdTokenSubMismatchException $e) {
             throw $e;
-        } catch (\JOSE_Exception_VerificationFailed $e) {
-            throw new IdTokenValidationException($e->getMessage(), Response::HTTP_BAD_REQUEST, $e);
-        } catch (\Exception $e) {
+        } catch (\JOSE_Exception_VerificationFailed|\Exception $e) {
             throw new IdTokenValidationException($e->getMessage(), Response::HTTP_BAD_REQUEST, $e);
         }
     }
