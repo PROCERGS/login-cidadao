@@ -96,7 +96,7 @@ class UpdateSentVerificationSubscriber implements EventSubscriberInterface, Logg
         $transactionId = $event->getTransactionId();
 
         try {
-            $sms = $this->protectedGetStatus($this->smsService, $transactionId);
+            $sms = $this->protectedGetStatus($transactionId);
             $status = $sms->getStatus();
             if (!$status instanceof SmsStatusInterface) {
                 throw new InvalidSentVerificationStatusException(
@@ -118,20 +118,16 @@ class UpdateSentVerificationSubscriber implements EventSubscriberInterface, Logg
     }
 
     /**
-     * @param SmsService $smsService
      * @param $transactionId
      * @return SmsInterface
      * @throws \Exception|TransactionNotFoundException
      */
-    private function protectedGetStatus(SmsService $smsService, $transactionId)
+    private function protectedGetStatus($transactionId)
     {
-        return $this->breaker->protect(function () use ($smsService, $transactionId) {
+        return $this->breaker->protect(function () use ($transactionId) {
             $statuses = $this->smsService->getStatus($transactionId);
 
-            $this->info(
-                'Updating status for transaction ID: {transaction_id}',
-                ['transaction_id' => $transactionId]
-            );
+            $this->info('Updating status for transaction ID: {transaction_id}', ['transaction_id' => $transactionId]);
 
             return $statuses;
         });
