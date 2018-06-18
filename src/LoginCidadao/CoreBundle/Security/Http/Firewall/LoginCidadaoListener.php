@@ -68,9 +68,11 @@ class LoginCidadaoListener extends UsernamePasswordFormAuthenticationListener
     private function getFilter(Request $request)
     {
         if ($this->options['post_only']) {
-            $username = trim(ParameterBagUtils::getParameterBagValue($request->request, $this->options['username_parameter']));
+            $username = trim(ParameterBagUtils::getParameterBagValue($request->request,
+                $this->options['username_parameter']));
         } else {
-            $username = trim(ParameterBagUtils::getRequestParameterValue($request, $this->options['username_parameter']));
+            $username = trim(ParameterBagUtils::getRequestParameterValue($request,
+                $this->options['username_parameter']));
         }
 
         return [
@@ -96,12 +98,13 @@ class LoginCidadaoListener extends UsernamePasswordFormAuthenticationListener
         $form->handleRequest($request);
         if (!$form->isValid()) {
             $message = null;
-            /** @var FormError $error */
             foreach ($form->getErrors() as $error) {
-                if ($error->getOrigin()->getName() === 'recaptcha') {
-                    throw new RecaptchaException($error->getMessage());
+                if ($error instanceof FormError) {
+                    if ($error->getOrigin()->getName() === 'recaptcha') {
+                        throw new RecaptchaException($error->getMessage());
+                    }
+                    $message = $this->translator->trans($error->getMessage());
                 }
-                $message = $this->translator->trans($error->getMessage());
             }
             throw new BadCredentialsException($message);
         }
