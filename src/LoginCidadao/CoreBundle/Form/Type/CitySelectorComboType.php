@@ -249,7 +249,7 @@ class CitySelectorComboType extends AbstractType
                 $translator->trans($b->label)
             );
         };
-        @usort($view->children['country']->vars['choices'], $sortFunction);
+        usort($view->children['country']->vars['choices'], $sortFunction);
         if (array_key_exists('state', $view->children) && $view->children['state']->vars['choice_translation_domain']) {
             usort($view->children['state']->vars['choices'], $sortFunction);
         }

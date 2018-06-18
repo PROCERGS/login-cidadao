@@ -218,7 +218,7 @@ class SessionManagementController extends Controller
         /** @var PublicKey $publicKeyStorage */
         $publicKeyStorage = $this->get('oauth2.storage.public_key');
         try {
-            @$idToken->verify($publicKeyStorage->getPublicKey($idToken->claims['aud']));
+            $idToken->verify($publicKeyStorage->getPublicKey($idToken->claims['aud']));
 
             if (false === $this->checkIdTokenSub($this->getUser(), $idToken)) {
                 throw new IdTokenSubMismatchException('Invalid subject identifier', Response::HTTP_BAD_REQUEST);
