@@ -11,6 +11,7 @@
 namespace LoginCidadao\PhoneVerificationBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Internal\Hydration\IterableResult;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Event\UpdateStatusEvent;
 use LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface;
@@ -71,6 +72,10 @@ class SmsStatusService
         return $event->getDeliveryStatus();
     }
 
+    /**
+     * @param int $batchSize
+     * @return array
+     */
     public function updateSentVerificationStatus($batchSize = 1)
     {
         $count = $this->sentVerificationRepo->countPendingUpdateSentVerification();
@@ -81,41 +86,22 @@ class SmsStatusService
             return [];
         }
 
-        $query = $this->sentVerificationRepo->getPendingUpdateSentVerificationQuery();
-        $sentVerifications = $query->iterate();
-
         $this->em->getConnection() ? $this->em->getConnection()->getConfiguration()->setSQLLogger(null) : null;
         gc_enable();
         $this->progressStart($count);
         $transactionsUpdated = [];
-        foreach ($sentVerifications as $row) {
-            /** @var SentVerificationInterface $sentVerification */
-            $sentVerification = $row[0];
-            $event = $this->getStatus($sentVerification->getTransactionId());
-            if (false === $event->isUpdated()) {
-                $this->progressAdvance(1);
-                unset($event);
-                unset($sentVerification);
-                gc_collect_cycles();
-                continue;
-            }
+        foreach ($this->iterateSentVerifications() as $row) {
+            $transactionsUpdated[] = $this->handleSentVerificationStatusUpdate($row[0]);
+            array_filter($transactionsUpdated);
 
-            $deliveredAt = $event->getDeliveredAt();
-            $sentVerification->setActuallySentAt($event->getSentAt())
-                ->setDeliveredAt($deliveredAt)
-                ->setFinished($deliveredAt instanceof \DateTime || $event->getDeliveryStatus()->isFinal());
-            $transactionsUpdated[] = $sentVerification->getTransactionId();
-            unset($event);
-            unset($sentVerification);
             if ((count($transactionsUpdated) % $batchSize) === 0) {
-                $this->em->flush();
-                $this->em->clear();
+                $this->flushAndClear();
                 gc_collect_cycles();
             }
             $this->progressAdvance(1);
         }
-        $this->em->flush();
-        $this->em->clear();
+
+        $this->flushAndClear();
         $this->progressFinish();
 
         $countUpdated = count($transactionsUpdated);
@@ -126,6 +112,28 @@ class SmsStatusService
         }
 
         return $transactionsUpdated;
+    }
+
+    /**
+     * @param SentVerificationInterface $sentVerification
+     * @return SentVerificationInterface|null
+     */
+    private function handleSentVerificationStatusUpdate(SentVerificationInterface $sentVerification)
+    {
+        try {
+            $event = $this->getStatus($sentVerification->getTransactionId());
+            if (false === $event->isUpdated()) {
+                $this->progressAdvance(1);
+                unset($event, $sentVerification);
+                gc_collect_cycles();
+
+                return null;
+            }
+
+            return $this->updateSentVerification($sentVerification, $event);
+        } finally {
+            unset($event, $sentVerification);
+        }
     }
 
     /**
@@ -216,5 +224,29 @@ class SmsStatusService
             return;
         }
         $this->io->progressFinish();
+    }
+
+    /**
+     * @return IterableResult
+     */
+    private function iterateSentVerifications()
+    {
+        return $this->sentVerificationRepo->getPendingUpdateSentVerificationQuery()->iterate();
+    }
+
+    private function flushAndClear()
+    {
+        $this->em->flush();
+        $this->em->clear();
+    }
+
+    private function updateSentVerification(SentVerificationInterface $sentVerification, UpdateStatusEvent $event)
+    {
+        $deliveredAt = $event->getDeliveredAt();
+        $sentVerification->setActuallySentAt($event->getSentAt())
+            ->setDeliveredAt($deliveredAt)
+            ->setFinished($deliveredAt instanceof \DateTime || $event->getDeliveryStatus()->isFinal());
+
+        return $sentVerification;
     }
 }

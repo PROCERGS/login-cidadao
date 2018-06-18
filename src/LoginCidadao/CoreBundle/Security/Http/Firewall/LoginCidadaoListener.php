@@ -15,6 +15,7 @@ use LoginCidadao\CoreBundle\Exception\RecaptchaException;
 use Doctrine\ORM\EntityManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Security;
@@ -95,6 +96,7 @@ class LoginCidadaoListener extends UsernamePasswordFormAuthenticationListener
         $form->handleRequest($request);
         if (!$form->isValid()) {
             $message = null;
+            /** @var FormError $error */
             foreach ($form->getErrors() as $error) {
                 if ($error->getOrigin()->getName() === 'recaptcha') {
                     throw new RecaptchaException($error->getMessage());
