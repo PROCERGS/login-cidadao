@@ -62,6 +62,8 @@ class ClientMetadata
     private $redirect_uris;
 
     /**
+     * @var array
+     *
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
      * @Assert\All({
@@ -72,6 +74,8 @@ class ClientMetadata
     private $response_types = ['code'];
 
     /**
+     * @var array
+     *
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
      * @Assert\All({
@@ -416,7 +420,7 @@ class ClientMetadata
                 $this->getClient()->getOwners()->toArray()
             );
         }
-        $contacts = is_array($this->contacts) ? $this->contacts : [];
+        $contacts = $this->contacts ?? [];
 
         return array_unique(array_merge($contacts, $owners));
     }
@@ -972,7 +976,7 @@ class ClientMetadata
             function ($value) {
                 return self::canonicalizeUri($value);
             },
-            is_array($this->post_logout_redirect_uris) ? $this->post_logout_redirect_uris : []
+            $this->post_logout_redirect_uris ?? []
         );
     }
 
