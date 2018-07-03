@@ -6,6 +6,8 @@ snc_redis:
             dsn: "%redis_dsn%"
             logging: false
             options:
+                replication: "%redis_replication%"
+                service: "%redis_sentinel_service%"
                 prefix: "%redis_prefix%"
     session:
         client: default
@@ -36,8 +38,9 @@ services:
         arguments:
             - "@snc_redis.default"
 
-liip_monitor:
-    checks:
-        redis:
-            main:
-                dsn: "%redis_dsn%"
+# Commented since LiipMonitorBundle doesn't support Redis Replication
+#liip_monitor:
+#    checks:
+#        redis:
+#            main:
+#                dsn: "%redis_dsn%"

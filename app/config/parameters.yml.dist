@@ -33,6 +33,10 @@ parameters:
     redis_dsn: redis://localhost
     # Redis Prefix/Namespace
     redis_prefix: lc_
+    # Redis Replication
+    redis_replication: false
+    # Redis Sentinel Service Name
+    redis_sentinel_service: ~
 
     # Session prefix
     session_prefix: lc_sess_

@@ -25,6 +25,10 @@ parameters:
     redis_dsn: redis://localhost
     # Redis Prefix/Namespace
     redis_prefix: lc_
+    # Redis Replication
+    redis_replication: false
+    # Redis Sentinel Service Name
+    redis_sentinel_service: ~
 
     session_prefix: lc_sess_
     session_lifetime: 86400
