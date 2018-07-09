@@ -22,12 +22,18 @@ class SoapClientFactory implements LoggerAwareInterface
     /** @var LoggerInterface */
     private $logger;
 
+    /**
+     * @param $wsdl
+     * @param bool $verifyHttps
+     * @return mixed
+     * @throws NfgServiceUnavailableException|\Exception
+     */
     public function createClient($wsdl, $verifyHttps = true)
     {
         return $this->protect(function () use ($wsdl, $verifyHttps) {
             try {
                 return $this->instantiateSoapClient($wsdl, $this->getOptions($verifyHttps));
-            } catch (\SoapFault $e) {
+            } catch (\SoapFault|\Exception $e) {
                 throw new NfgServiceUnavailableException($e->getMessage(), 500, $e);
             }
         });
@@ -35,7 +41,7 @@ class SoapClientFactory implements LoggerAwareInterface
 
     public function instantiateSoapClient($wsdl, $options)
     {
-        return @new \SoapClient($wsdl, $options);
+        return new \SoapClient($wsdl, $options);
     }
 
     /**
@@ -45,18 +51,16 @@ class SoapClientFactory implements LoggerAwareInterface
      */
     private function getOptions($verifyHttps = true)
     {
-        $options = [];
+        $options = ['exceptions' => true];
         if (!$verifyHttps) {
-            $options['stream_context'] = stream_context_create(
-                [
-                    'ssl' => [
-                        // disable SSL/TLS security checks
-                        'verify_peer' => false,
-                        'verify_peer_name' => false,
-                        'allow_self_signed' => true,
-                    ],
-                ]
-            );
+            $options['stream_context'] = stream_context_create([
+                'ssl' => [
+                    // disable SSL/TLS security checks
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true,
+                ],
+            ]);
         }
 
         return $options;

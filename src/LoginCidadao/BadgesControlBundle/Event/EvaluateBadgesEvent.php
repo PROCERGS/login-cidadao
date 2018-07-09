@@ -30,18 +30,13 @@ class EvaluateBadgesEvent extends Event
         foreach ($badges as $badge) {
             $this->registerBadge($badge);
         }
+
         return $this;
     }
 
     public function registerBadge(BadgeInterface $badge)
     {
-        $namespace = $badge->getNamespace();
-        $name = $badge->getName();
-        $badgeArray = array(
-            "$namespace.$name" => $badge->getData()
-        );
-
-        $this->getPerson()->mergeBadges($badgeArray);
+        $this->getPerson()->mergeBadges([$badge]);
     }
 
 }

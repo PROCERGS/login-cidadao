@@ -11,19 +11,27 @@
 namespace LoginCidadao\OpenIDBundle\Controller;
 
 use FOS\OAuthServerBundle\Event\OAuthEvent;
-use LoginCidadao\OAuthBundle\Entity\Organization;
-use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OpenIDBundle\Event\AuthorizationEvent;
+use LoginCidadao\OpenIDBundle\LoginCidadaoOpenIDEvents;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
-use LoginCidadao\OpenIDBundle\Validator\SectorIdentifierUriChecker;
-use Symfony\Component\HttpFoundation\Request;
+use LoginCidadao\OAuthBundle\Service\OrganizationService;
+use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use OAuth2\Server;
 use OAuth2\ServerBundle\Controller\AuthorizeController as BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
-use LoginCidadao\OAuthBundle\Model\ClientInterface;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class AuthorizeController
+ * @package LoginCidadao\OpenIDBundle\Controller
+ * @codeCoverageIgnore
+ */
 class AuthorizeController extends BaseController
 {
 
@@ -34,109 +42,116 @@ class AuthorizeController extends BaseController
     public function handleAuthorizeAction()
     {
         $request = $this->getRequest();
-        $scope = $request->request->get('scope');
-        $is_authorized = $request->request->has('rejected') === false || $request->request->has('accepted')
-            === true;
-        $request->request->set('scope', implode(' ', $scope));
+        $implodedScope = implode(' ', $request->request->get('scope'));
+        $request->request->set('scope', $implodedScope);
 
-        $server = $this->get('oauth2.server');
-        $client = $this->getClient($request);
+        $isAuthorized = $request->request->has('accepted')
+            || !$request->request->has('rejected');
 
-        $response = $this->handleAuthorize($server, $is_authorized);
+        $response = $this->handleAuthorize($this->getOAuth2Server(), $isAuthorized);
 
-        $event = new OAuthEvent($this->getUser(), $client, $is_authorized);
-        $this->get('event_dispatcher')
-            ->dispatch(OAuthEvent::POST_AUTHORIZATION_PROCESS, $event);
+        $event = new OAuthEvent(
+            $this->getUser(),
+            $this->getClient($request), $isAuthorized
+        );
+
+        /** @var EventDispatcherInterface $dispatcher */
+        $dispatcher = $this->get('event_dispatcher');
+        $dispatcher->dispatch(OAuthEvent::POST_AUTHORIZATION_PROCESS, $event);
 
         return $response;
     }
 
     /**
+     * Render the Authorization fragment
+     *
      * @Template()
+     *
+     * @deprecated
      */
-    public function authorizeAction(
-        $client_id,
-        $scope,
-        $response_type,
-        $redirect_uri,
-        $state = null,
-        $nonce = null
-    ) {
-        $client = $this->getClient($client_id);
-
-        $scope = explode(' ', $scope);
-        if (array_search('public_profile', $scope) === false) {
-            $scope[] = 'public_profile';
-        }
-
-        $scopeManager = $this->getScopeManager();
-        $scopes = array_map(
-            function ($value) {
-                return $value->getScope();
-            },
-            $scopeManager->findScopesByScopes($scope)
-        );
-
-        $warnUntrusted = $this->shouldWarnUntrusted($client);
-        $metadata = $this->getMetadata($client);
-        $organization = $this->getOrganization($metadata);
-
-        $qs = compact(
-            'client_id',
-            'scope',
-            'response_type',
-            'redirect_uri',
-            'state',
-            'nonce'
-        );
-
-        return compact('qs', 'scopes', 'client', 'warnUntrusted', 'metadata', 'organization');
+    public function authorizeAction()
+    {
+        throw new \RuntimeException('This class should not be used!');
     }
 
     /**
      * @Route("/openid/connect/authorize", name="_authorize_validate")
      * @Method({"GET"})
-     * @Template("OAuth2ServerBundle:Authorize:authorize.html.twig")
+     * @Template("LoginCidadaoOpenIDBundle:Authorize:authorize.html.twig")
      */
     public function validateAuthorizeAction()
     {
         $request = $this->getRequest();
         $client = $this->getClient($request);
 
-        if ($client instanceof \FOS\OAuthServerBundle\Model\ClientInterface) {
-            $event = $this->get('event_dispatcher')->dispatch(
-                OAuthEvent::PRE_AUTHORIZATION_PROCESS,
-                new OAuthEvent($this->getUser(), $client)
-            );
-
-            $shouldPrompt = $request->get('prompt', null) == 'consent';
-
-            $server = $this->get('oauth2.server');
-            if ($event->isAuthorizedClient() && !$shouldPrompt) {
-                return $this->handleAuthorize(
-                    $server,
-                    $event->isAuthorizedClient()
-                );
-            }
+        if (!$client instanceof \FOS\OAuthServerBundle\Model\ClientInterface) {
+            return parent::validateAuthorizeAction();
         }
 
-        return parent::validateAuthorizeAction();
+        /** @var PersonInterface $person */
+        $person = $this->getUser();
+
+        /** @var EventDispatcher $dispatcher */
+        $dispatcher = $this->get('event_dispatcher');
+
+        $event = new OAuthEvent($person, $client);
+        $dispatcher->dispatch(OAuthEvent::PRE_AUTHORIZATION_PROCESS, $event);
+
+        $isAuthorized = $event->isAuthorizedClient();
+        $askConsent = $request->get('prompt', null) == 'consent';
+
+        if ($isAuthorized && !$askConsent) {
+            return $this->handleAuthorize($this->getOAuth2Server(), $isAuthorized);
+        }
+
+        $authEvent = new AuthorizationEvent($person, $client, $request->get('scope'));
+        $dispatcher->dispatch(LoginCidadaoOpenIDEvents::NEW_AUTHORIZATION_REQUEST, $authEvent);
+        $remoteClaims = $authEvent->getRemoteClaims();
+
+        /** @var OrganizationService $organizationService */
+        $organizationService = $this->get('organization');
+        $warnUntrusted = $this->shouldWarnUntrusted($client);
+        $metadata = $this->getMetadata($client);
+        $organization = $organizationService->getOrganization($metadata);
+
+        // Call the lib's original Controller
+        $parentResponse = parent::validateAuthorizeAction();
+        if (!is_array($parentResponse)) {
+            return $parentResponse;
+        }
+        $parentResponse['scopes'] = $this->removeRemoteScope($parentResponse['scopes']);
+
+        $response = array_merge([
+            'qs' => [
+                'client_id' => $client->getPublicId(),
+                'scope' => $parentResponse['scopes'],
+                'response_type' => $request->get('response_type'),
+                'redirect_uri' => $request->get('redirect_uri'),
+                'state' => $request->get('state'),
+                'nonce' => $request->get('nonce'),
+            ],
+            'remoteClaims' => $remoteClaims,
+            'client' => $client,
+            'metadata' => $metadata,
+            'organization' => $organization,
+            'warnUntrusted' => $warnUntrusted,
+        ], $parentResponse);
+
+        return $response;
     }
 
-    /**
-     * @return \OAuth2\ServerBundle\Manager\ScopeManager
-     */
-    private function getScopeManager()
+    private function handleAuthorize(Server $server, $isAuthorized)
     {
-        return $this->get('oauth2.scope_manager');
-    }
+        /** @var \OAuth2\Request $request */
+        $request = $this->get('oauth2.request');
 
-    private function handleAuthorize($server, $is_authorized)
-    {
+        /** @var \OAuth2\Response $response */
+        $response = $this->get('oauth2.response');
+
         return $server->handleAuthorizeRequest(
-            $this->get('oauth2.request'),
-            $this->get('oauth2.response'),
-            $is_authorized,
+            $request,
+            $response,
+            $isAuthorized,
             $this->getUser()->getId()
         );
     }
@@ -187,39 +202,26 @@ class AuthorizeController extends BaseController
         return $repo->findOneBy(['client' => $client]);
     }
 
-    private function getOrganization(ClientMetadata $metadata = null)
+    /**
+     * @return object|Server
+     */
+    private function getOAuth2Server()
     {
-        if ($metadata === null) {
-            return null;
-        }
-
-        if ($metadata->getOrganization() === null && $metadata->getSectorIdentifierUri()) {
-            $sectorIdentifierUri = $metadata->getSectorIdentifierUri();
-            try {
-                $verified = $this->getSectorIdentifierUriChecker()->check($metadata, $sectorIdentifierUri);
-            } catch (HttpException $e) {
-                $verified = false;
-            }
-            $uri = parse_url($sectorIdentifierUri);
-            $domain = $uri['host'];
-
-            $organization = new Organization();
-            $organization->setDomain($domain)
-                ->setName($domain)
-                ->setTrusted(false)
-                ->setVerifiedAt($verified ? new \DateTime() : null);
-
-            return $organization;
-        }
-
-        return $metadata->getOrganization();
+        return $this->get('oauth2.server');
     }
 
     /**
-     * @return SectorIdentifierUriChecker
+     * @param array $scopes
+     * @return array
      */
-    private function getSectorIdentifierUriChecker()
+    private function removeRemoteScope(array $scopes)
     {
-        return $this->get('checker.sector_identifier_uri');
+        return array_filter($scopes, function ($scope) {
+            if (preg_match('/^tag:/', $scope) === 1) {
+                return false;
+            }
+
+            return true;
+        });
     }
 }

@@ -11,15 +11,21 @@
 namespace PROCERGS\LoginCidadao\AccountingBundle\Tests\Service;
 
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Message\RequestInterface;
+use GuzzleHttp\Exception\ClientException;
+use function GuzzleHttp\Psr7\stream_for;
 use LoginCidadao\OAuthBundle\Entity\Client;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
+use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLinkRepository;
 use PROCERGS\LoginCidadao\AccountingBundle\Service\SystemsRegistryService;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * @codeCoverageIgnore
  */
-class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
+class SystemsRegistryServiceTest extends TestCase
 {
     private $config = [
         'apiUri' => 'https://api.uri/{host}',
@@ -67,7 +73,8 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
         $httpClient = $this->getHttpClient();
         $this->httpClientExpectGet($httpClient, $queries, 3);
 
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        /** @var LoggerInterface|MockObject $logger */
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
         // Logger should be called 11 times:
         //      2 for 'Fetching PROCERGS's system initials for client_id'
         //      6 for 'Searching for ...'
@@ -94,8 +101,9 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
 
         $queries = [];
         $httpClient = $this->getHttpClient();
-        $httpClient->expects($this->once())->method('get')
-            ->willReturnCallback(function ($url, $options) use (&$queries) {
+        $httpClient->expects($this->once())->method('request')->with('get')
+            ->willReturnCallback(function ($method, $url) use (&$queries) {
+                $this->assertSame('get', $method);
                 $queries[] = str_replace('https://api.uri/', '', $url);
 
                 $e = $this->getMockBuilder('GuzzleHttp\Exception\ClientException')
@@ -116,18 +124,18 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetSystemInitialsServerError()
     {
         // Since this is a batch job, we do not handle errors so that the job can fail and alert us.
-        $this->setExpectedException('GuzzleHttp\Exception\ClientException');
+        $this->expectException(ClientException::class);
 
         $client = new Client();
         $client->setRedirectUris(['http://host1/path']);
 
         $queries = [];
         $httpClient = $this->getHttpClient();
-        $httpClient->expects($this->once())->method('get')
+        $httpClient->expects($this->once())->method('request')->with('get')
             ->willReturnCallback(function ($url) use (&$queries) {
                 $queries[] = str_replace('https://api.uri/', '', $url);
 
-                $e = $this->getMockBuilder('GuzzleHttp\Exception\ClientException')
+                $e = $this->getMockBuilder(ClientException::class)
                     ->disableOriginalConstructor()->getMock();
                 $e->expects($this->once())->method('getResponse')
                     ->willReturn($this->getResponse(null, 500));
@@ -196,7 +204,7 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
         $client->setRedirectUris(['https://host1/path', 'https://host2/path']);
 
         $httpClient = $this->getHttpClient();
-        $httpClient->expects($this->atLeastOnce())->method('get')
+        $httpClient->expects($this->atLeastOnce())->method('request')->with('get')
             ->willReturnCallback(function () {
                 $e = $this->getMockBuilder('GuzzleHttp\Exception\ClientException')
                     ->disableOriginalConstructor()->getMock();
@@ -221,11 +229,12 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
         $link->setClient($client)
             ->setSystemType(ProcergsLink::TYPE_INTERNAL);
 
-        $repoClass = 'PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLinkRepository';
-        $repo = $this->getMockBuilder($repoClass)->disableOriginalConstructor()->getMock();
+        /** @var ProcergsLinkRepository|MockObject $repo */
+        $repo = $this->getMockBuilder(ProcergsLinkRepository::class)->disableOriginalConstructor()->getMock();
         $repo->expects($this->once())->method('findBy')->willReturn([$link]);
 
-        $emptyRepo = $this->getMockBuilder($repoClass)->disableOriginalConstructor()->getMock();
+        /** @var ProcergsLinkRepository|MockObject $emptyRepo */
+        $emptyRepo = $this->getMockBuilder(ProcergsLinkRepository::class)->disableOriginalConstructor()->getMock();
         $emptyRepo->expects($this->once())->method('findBy')->willReturn([]);
 
         $registry = $this->getRegistry($this->getHttpClient());
@@ -236,25 +245,30 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($links);
     }
 
+    /**
+     * @return MockObject|ClientInterface
+     */
     private function getHttpClient()
     {
-        return $this->getMock('GuzzleHttp\ClientInterface');
+        return $this->createMock(ClientInterface::class);
     }
 
     private function getRegistry($client = null, $options = null)
     {
         if (!$client) {
             $client = $this->getHttpClient();
-            $client->expects($this->any())->method('get')->willReturn($this->getResponse([
-                [
-                    'sistema' => 'XPTO',
-                    'clienteDono' => 'CLIENT',
-                    'urls' => [
-                        'url' => 'https://url.tld/',
-                        'ambiente' => 'Produção',
+            $client->expects($this->any())
+                ->method('request')->with('get')
+                ->willReturn($this->getResponse([
+                    [
+                        'sistema' => 'XPTO',
+                        'clienteDono' => 'CLIENT',
+                        'urls' => [
+                            'url' => 'https://url.tld/',
+                            'ambiente' => 'Produção',
+                        ],
                     ],
-                ],
-            ]));
+                ]));
         }
 
         if (!$options) {
@@ -267,13 +281,13 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @param $json
      * @param null $statusCode
-     * @return RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ResponseInterface|MockObject
      */
     private function getResponse($json = null, $statusCode = null)
     {
-        $response = $this->getMock('GuzzleHttp\Message\ResponseInterface');
+        $response = $this->createMock(ResponseInterface::class);
         if ($json) {
-            $response->expects($this->atLeastOnce())->method('json')->willReturn($json);
+            $response->expects($this->atLeastOnce())->method('getBody')->willReturn(stream_for(json_encode($json)));
         }
 
         if ($statusCode) {
@@ -285,15 +299,16 @@ class SystemsRegistryServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param ClientInterface|\PHPUnit_Framework_MockObject_MockObject $httpClient
+     * @param ClientInterface|MockObject $httpClient
      * @param $queries
      * @param $count
      * @param array|null $payload
      */
     private function httpClientExpectGet(&$httpClient, &$queries, $count, $payload = null)
     {
-        $httpClient->expects($this->exactly($count))->method('get')
-            ->willReturnCallback(function ($url, $options) use (&$queries, $payload) {
+        $httpClient->expects($this->exactly($count))->method('request')->with('get')
+            ->willReturnCallback(function ($method, $url, $options) use (&$queries, $payload) {
+                $this->assertSame('get', $method);
                 $queries[] = str_replace('https://api.uri/', '', $url);
 
                 $headers = $options['headers'];

@@ -10,15 +10,16 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Event;
 
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\NfgBundle\Event\GetLoginCallbackResponseEvent;
 use Symfony\Component\HttpFoundation\Response;
 
-class GetLoginCallbackResponseEventTest extends \PHPUnit_Framework_TestCase
+class GetLoginCallbackResponseEventTest extends TestCase
 {
     public function testEvent()
     {
         $params = ['some' => 'param'];
-        $response = $this->getMock('Symfony\Component\HttpFoundation\Response');
+        $response = $this->createMock('Symfony\Component\HttpFoundation\Response');
 
         $event = new GetLoginCallbackResponseEvent($params, $response);
 

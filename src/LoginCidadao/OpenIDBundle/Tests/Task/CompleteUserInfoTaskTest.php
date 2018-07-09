@@ -11,8 +11,9 @@
 namespace LoginCidadao\OpenIDBundle\Tests\Task;
 
 use LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTask;
+use PHPUnit\Framework\TestCase;
 
-class CompleteUserInfoTaskTest extends \PHPUnit_Framework_TestCase
+class CompleteUserInfoTaskTest extends TestCase
 {
     public function testTaskWithNonce()
     {

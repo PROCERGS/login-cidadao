@@ -12,6 +12,7 @@ namespace LoginCidadao\PhoneVerificationBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
+use LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface;
 use Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType;
 
 /**
@@ -39,5 +40,64 @@ class SentVerificationRepository extends EntityRepository
         }
 
         return $query->setMaxResults(1)->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @return \Doctrine\ORM\Query
+     */
+    public function getPendingUpdateSentVerificationQuery()
+    {
+        $query = $this->createQueryBuilder('s')
+            ->where('s.finished IS NULL OR s.finished != :finished')
+            ->setParameter('finished', true, \PDO::PARAM_BOOL)
+            ->orderBy('s.sentAt', 'DESC')
+            ->getQuery();
+
+        return $query;
+    }
+
+    public function countPendingUpdateSentVerification()
+    {
+        $count = $this->createQueryBuilder('s')
+            ->select('COUNT(s)')
+            ->where('s.finished IS NULL OR s.finished != :finished')
+            ->setParameter('finished', true, \PDO::PARAM_BOOL)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $count;
+    }
+
+    /**
+     * @param int $limit
+     * @return array|SentVerificationInterface[]
+     */
+    public function getLastDeliveredVerifications($limit = 10)
+    {
+        $query = $this->createQueryBuilder('s')
+            ->where('s.deliveredAt IS NOT NULL')
+            ->orderBy('s.deliveredAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery();
+
+        return $query->getResult();
+    }
+
+    /**
+     * @param \DateTime $date
+     * @return SentVerification[]
+     */
+    public function getNotDeliveredSince(\DateTime $date)
+    {
+        $query = $this->createQueryBuilder('s')
+            ->where('s.deliveredAt IS NULL')
+            ->andWhere('s.sentAt <= :date')
+            ->andWhere('s.finished IS NULL OR s.finished != :finished')
+            ->orderBy('s.sentAt', 'ASC')
+            ->setParameter('date', $date)
+            ->setParameter('finished', true, \PDO::PARAM_BOOL)
+            ->getQuery();
+
+        return $query->getResult();
     }
 }

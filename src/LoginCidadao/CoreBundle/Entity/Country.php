@@ -12,6 +12,7 @@ namespace LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
+use LoginCidadao\CoreBundle\Model\PreferableInterface;
 
 /**
  * City
@@ -19,7 +20,7 @@ use JMS\Serializer\Annotation\Groups;
  * @ORM\Table(name="country")
  * @ORM\Entity(repositoryClass="LoginCidadao\CoreBundle\Entity\CountryRepository")
  */
-class Country
+class Country implements PreferableInterface
 {
     const REVIEWED_OK     = 0;
     const REVIEWED_IGNORE = 1;

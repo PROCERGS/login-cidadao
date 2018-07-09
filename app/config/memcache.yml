@@ -8,14 +8,17 @@ doctrine:
             type:   memcache
             host:   %memcached_host%
             port:   %memcached_port%
+            namespace: '%memcached_prefix%'
         query_cache_driver:
             type:   memcache
             host:   %memcached_host%
             port:   %memcached_port%
+            namespace: '%memcached_prefix%'
         result_cache_driver:
             type:   memcache
             host:   %memcached_host%
             port:   %memcached_port%
+            namespace: '%memcached_prefix%'
 
 services:
     session.memcached:
@@ -39,6 +42,13 @@ services:
         calls:
             - [setMemcache, ["@memcached"]]
             - [setNamespace, ['%memcached_prefix%']]
+
+liip_monitor:
+    checks:
+        memcache:
+            main:
+                host: %memcached_host%
+                port: %memcached_port%
 
     circuitBreakerCacheBackend:
         class: Doctrine\Common\Cache\MemcacheCache

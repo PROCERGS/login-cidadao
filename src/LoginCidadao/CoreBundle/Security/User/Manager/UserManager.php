@@ -11,25 +11,13 @@
 namespace LoginCidadao\CoreBundle\Security\User\Manager;
 
 use FOS\UserBundle\Doctrine\UserManager as BaseManager;
-use Doctrine\Common\Persistence\ObjectManager;
-use FOS\UserBundle\Util\CanonicalizerInterface;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use libphonenumber\PhoneNumber;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use FOS\UserBundle\Model\UserInterface;
 use LoginCidadao\ValidationBundle\Validator\Constraints\UsernameValidator;
 
 class UserManager extends BaseManager
 {
-
-    public function __construct(
-        EncoderFactoryInterface $encoderFactory,
-        CanonicalizerInterface $usernameCanonicalizer,
-        CanonicalizerInterface $emailCanonicalizer,
-        ObjectManager $om,
-        $class
-    ) {
-        parent::__construct($encoderFactory, $usernameCanonicalizer, $emailCanonicalizer, $om, $class);
-    }
-
     public function createUser()
     {
         return parent::createUser();
@@ -111,5 +99,47 @@ class UserManager extends BaseManager
 
         // If it doesn't look like a CPF number or if we couldn't find nobody with that CPF, fallback to this:
         return parent::findUserByUsernameOrEmail($username);
+    }
+
+    public function blockPerson(PersonInterface $person, $andFlush = true)
+    {
+        if (!$person->isEnabled() && !$person->isAccountNonLocked()) {
+            return null;
+        }
+
+        $person
+            ->setUpdatedAt(new \DateTime())
+            ->setEnabled(false)
+            ->setPassword('#BLOCKED#'.microtime());
+        if (method_exists($person, 'setLocked')) {
+            $person->setLocked(true);
+        }
+
+        $this->updateUser($person, $andFlush);
+
+        return $person;
+    }
+
+    public function blockUsersByPhone(PhoneNumber $phone, $flushStrategy = null)
+    {
+        $andFlush = $flushStrategy === 'each' ? true : false;
+        $once = $flushStrategy === 'once' ? true : false;
+
+        /** @var PersonInterface[] $users */
+        $users = parent::getRepository()->findBy(['mobile' => $phone]);
+
+        $blockedUsers = [];
+        foreach ($users as $user) {
+            $user = $this->blockPerson($user, $andFlush);
+            if ($user instanceof PersonInterface) {
+                $blockedUsers[] = $user;
+            }
+            // TODO: add yield when we upgrade to PHP 7.0
+        }
+        if ($once) {
+            $this->objectManager->flush();
+        }
+
+        return $blockedUsers;
     }
 }

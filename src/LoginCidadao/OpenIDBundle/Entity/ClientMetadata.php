@@ -10,8 +10,8 @@
 
 namespace LoginCidadao\OpenIDBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use LoginCidadao\OpenIDBundle\Validator\Constraints\SectorIdentifierUri;
@@ -36,18 +36,20 @@ class ClientMetadata
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
-    protected $client_id;
-    protected $client_secret;
+    private $id;
+    private $client_id;
+    private $client_secret;
 
     /**
-     * @var Client
+     * @var ClientInterface
      * @ORM\OneToOne(targetEntity="LoginCidadao\OAuthBundle\Entity\Client", inversedBy="metadata", cascade={"persist"})
      * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
      */
-    protected $client;
+    private $client;
 
     /**
+     * @var string[]
+     *
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
      * @Assert\All({
@@ -57,9 +59,11 @@ class ClientMetadata
      * })
      * @ORM\Column(name="redirect_uris", type="json_array", nullable=false)
      */
-    protected $redirect_uris;
+    private $redirect_uris;
 
     /**
+     * @var array
+     *
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
      * @Assert\All({
@@ -67,9 +71,11 @@ class ClientMetadata
      * })
      * @ORM\Column(name="response_types", type="simple_array", nullable=false)
      */
-    protected $response_types = array('code');
+    private $response_types = ['code'];
 
     /**
+     * @var array
+     *
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
      * @Assert\All({
@@ -77,7 +83,7 @@ class ClientMetadata
      * })
      * @ORM\Column(type="simple_array", nullable=false)
      */
-    protected $grant_types = array('authorization_code');
+    private $grant_types = ['authorization_code'];
 
     /**
      * @JMS\Expose
@@ -85,7 +91,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(name="application_type", type="string", length=100, nullable=false)
      */
-    protected $application_type = 'web';
+    private $application_type = 'web';
 
     /**
      * @JMS\Expose
@@ -95,7 +101,7 @@ class ClientMetadata
      * })
      * @ORM\Column(type="simple_array", nullable=true)
      */
-    protected $contacts;
+    private $contacts;
 
     /**
      * @JMS\Expose
@@ -103,7 +109,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", nullable=true)
      */
-    protected $client_name;
+    private $client_name;
 
     /**
      * @JMS\Expose
@@ -112,7 +118,7 @@ class ClientMetadata
      * @Assert\Url(checkDNS = false)
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
-    protected $logo_uri;
+    private $logo_uri;
 
     /**
      * @JMS\Expose
@@ -121,7 +127,7 @@ class ClientMetadata
      * @Assert\Url(checkDNS = false)
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
-    protected $client_uri;
+    private $client_uri;
 
     /**
      * @JMS\Expose
@@ -130,7 +136,7 @@ class ClientMetadata
      * @Assert\Url(checkDNS = false)
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
-    protected $policy_uri;
+    private $policy_uri;
 
     /**
      * @JMS\Expose
@@ -139,7 +145,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
-    protected $tos_uri;
+    private $tos_uri;
 
     /**
      * @JMS\Expose
@@ -148,7 +154,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
-    protected $jwks_uri;
+    private $jwks_uri;
 
     /**
      * @JMS\Expose
@@ -156,7 +162,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $jwks;
+    private $jwks;
 
     /**
      * @JMS\Expose
@@ -165,23 +171,15 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
-    protected $sector_identifier_uri;
+    private $sector_identifier_uri;
 
     /**
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="string")
-     * @ORM\Column(type="string", length=20, nullable=true)
+     * @ORM\Column(type="string", length=20, nullable=false, options={"default" : "pairwise"})
      */
-    protected $subject_type;
-
-    /**
-     * @JMS\Expose
-     * @JMS\Groups({"client_metadata"})
-     * @Assert\Type(type="string")
-     * @ORM\Column(type="string", length=50, nullable=true)
-     */
-    protected $id_token_signed_response_alg;
+    private $subject_type = 'pairwise';
 
     /**
      * @JMS\Expose
@@ -189,7 +187,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $id_token_encrypted_response_alg;
+    private $id_token_signed_response_alg;
 
     /**
      * @JMS\Expose
@@ -197,7 +195,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $id_token_encrypted_response_enc;
+    private $id_token_encrypted_response_alg;
 
     /**
      * @JMS\Expose
@@ -205,7 +203,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $userinfo_signed_response_alg;
+    private $id_token_encrypted_response_enc;
 
     /**
      * @JMS\Expose
@@ -213,7 +211,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $userinfo_encrypted_response_alg;
+    private $userinfo_signed_response_alg;
 
     /**
      * @JMS\Expose
@@ -221,7 +219,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $userinfo_encrypted_response_enc;
+    private $userinfo_encrypted_response_alg;
 
     /**
      * @JMS\Expose
@@ -229,7 +227,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $request_object_signing_alg;
+    private $userinfo_encrypted_response_enc;
 
     /**
      * @JMS\Expose
@@ -237,7 +235,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $request_object_encryption_alg;
+    private $request_object_signing_alg;
 
     /**
      * @JMS\Expose
@@ -245,7 +243,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $request_object_encryption_enc;
+    private $request_object_encryption_alg;
 
     /**
      * @JMS\Expose
@@ -253,7 +251,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $token_endpoint_auth_method;
+    private $request_object_encryption_enc;
 
     /**
      * @JMS\Expose
@@ -261,7 +259,15 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $token_endpoint_auth_signing_alg;
+    private $token_endpoint_auth_method;
+
+    /**
+     * @JMS\Expose
+     * @JMS\Groups({"client_metadata"})
+     * @Assert\Type(type="string")
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $token_endpoint_auth_signing_alg;
 
     /**
      * @JMS\Expose
@@ -269,14 +275,14 @@ class ClientMetadata
      * @Assert\Type(type="integer")
      * @ORM\Column(type="integer", nullable=true)
      */
-    protected $default_max_age;
+    private $default_max_age;
 
     /**
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
      * @Assert\Type(type="boolean")
      */
-    protected $require_auth_time = false;
+    private $require_auth_time = false;
 
     /**
      * @JMS\Expose
@@ -284,7 +290,7 @@ class ClientMetadata
      * @Assert\Type(type="array")
      * @ORM\Column(type="simple_array", nullable=true)
      */
-    protected $default_acr_values;
+    private $default_acr_values;
 
     /**
      * @JMS\Expose
@@ -293,7 +299,7 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", length=2000, nullable=true)
      */
-    protected $initiate_login_uri;
+    private $initiate_login_uri;
 
     /**
      * @JMS\Expose
@@ -304,7 +310,7 @@ class ClientMetadata
      * })
      * @ORM\Column(type="simple_array", nullable=true)
      */
-    protected $request_uris;
+    private $request_uris;
 
     /**
      * @JMS\Expose
@@ -312,14 +318,14 @@ class ClientMetadata
      * @Assert\Type(type="string")
      * @ORM\Column(type="string", nullable=true)
      */
-    protected $registration_access_token;
+    private $registration_access_token;
 
     /**
      * @var OrganizationInterface
      * @ORM\ManyToOne(targetEntity="LoginCidadao\OAuthBundle\Model\OrganizationInterface", inversedBy="clients")
      * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $organization;
+    private $organization;
 
     /**
      * @JMS\Expose
@@ -330,17 +336,31 @@ class ClientMetadata
      * })
      * @ORM\Column(type="simple_array", nullable=true)
      */
-    protected $post_logout_redirect_uris;
+    private $post_logout_redirect_uris;
 
     public function __construct()
     {
-        $this->response_types = array('code');
-        $this->grant_types = array('authorization_code');
+        $this->response_types = ['code'];
+        $this->grant_types = ['authorization_code'];
         $this->application_type = 'web';
         $this->require_auth_time = false;
         $this->subject_type = 'pairwise';
     }
 
+    /**
+     * @param mixed $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
     public function getRedirectUris()
     {
         return $this->redirect_uris;
@@ -400,7 +420,7 @@ class ClientMetadata
                 $this->getClient()->getOwners()->toArray()
             );
         }
-        $contacts = is_array($this->contacts) ? $this->contacts : [];
+        $contacts = $this->contacts ?? [];
 
         return array_unique(array_merge($contacts, $owners));
     }
@@ -508,11 +528,18 @@ class ClientMetadata
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSubjectType()
     {
         return $this->subject_type;
     }
 
+    /**
+     * @param string $subject_type
+     * @return ClientMetadata
+     */
     public function setSubjectType($subject_type)
     {
         $this->subject_type = $subject_type;
@@ -681,6 +708,10 @@ class ClientMetadata
         return $this->default_acr_values;
     }
 
+    /**
+     * @param $default_acr_values
+     * @return ClientMetadata
+     */
     public function setDefaultAcrValues($default_acr_values)
     {
         $this->default_acr_values = $default_acr_values;
@@ -693,6 +724,10 @@ class ClientMetadata
         return $this->initiate_login_uri;
     }
 
+    /**
+     * @param $initiate_login_uri
+     * @return ClientMetadata
+     */
     public function setInitiateLoginUri($initiate_login_uri)
     {
         $this->initiate_login_uri = $initiate_login_uri;
@@ -777,9 +812,6 @@ class ClientMetadata
      */
     public function toClient()
     {
-        $name = $this->getClientName();
-        $hasName = $name !== null && strlen($name) > 0;
-
         $grantTypes = $this->getGrantTypes();
         $clientUri = $this->getClientUri();
         $tosUri = $this->getTosUri();
@@ -805,7 +837,7 @@ class ClientMetadata
             $client->setName($clientName);
         }
 
-        if ($redirectUris) {
+        if (count($redirectUris) > 0) {
             $client->setRedirectUris($redirectUris);
         }
 
@@ -820,7 +852,7 @@ class ClientMetadata
         return $this->client;
     }
 
-    public function setClient(Client $client)
+    public function setClient(ClientInterface $client)
     {
         $this->client = $client;
 
@@ -832,28 +864,61 @@ class ClientMetadata
      */
     public function checkDefaults()
     {
+        $this->enforceDefaultGrantTypes();
+        $this->enforceDefaultResponseTypes();
+        $this->enforceDefaultApplicationType();
+        $this->enforceDefaultRequireAuthTime();
+        $this->enforceDefaultIdTokenSignedResponseAlg();
+        $this->enforceDefaultTokenEndpointAuthMethod();
+        $this->enforceValidSubjectType();
+    }
+
+    private function enforceDefaultGrantTypes()
+    {
         if (!$this->getGrantTypes()) {
-            $this->setGrantTypes(array('authorization_code'));
+            $this->setGrantTypes(['authorization_code']);
         }
+    }
 
+    private function enforceDefaultResponseTypes()
+    {
         if (!$this->getResponseTypes()) {
-            $this->setResponseTypes(array('code'));
+            $this->setResponseTypes(['code']);
         }
+    }
 
+    private function enforceDefaultApplicationType()
+    {
         if (!$this->getApplicationType()) {
             $this->setApplicationType('web');
         }
+    }
 
+    private function enforceDefaultRequireAuthTime()
+    {
         if (!$this->getRequireAuthTime()) {
             $this->setRequireAuthTime(false);
         }
+    }
 
+    private function enforceDefaultIdTokenSignedResponseAlg()
+    {
         if (!$this->getIdTokenSignedResponseAlg()) {
             $this->setIdTokenSignedResponseAlg('RS256');
         }
+    }
 
+    private function enforceDefaultTokenEndpointAuthMethod()
+    {
         if (!$this->getTokenEndpointAuthMethod()) {
             $this->setTokenEndpointAuthMethod('client_secret_basic');
+        }
+    }
+
+    private function enforceValidSubjectType()
+    {
+        if (false === array_search($this->getSubjectType(), ['public', 'pairwise'])) {
+            $this->setSubjectType('pairwise');
         }
     }
 
@@ -873,6 +938,17 @@ class ClientMetadata
     public function getRegistrationAccessToken()
     {
         return $this->registration_access_token;
+    }
+
+    /**
+     * @param string $registration_access_token
+     * @return ClientMetadata
+     */
+    public function setRegistrationAccessToken($registration_access_token)
+    {
+        $this->registration_access_token = $registration_access_token;
+
+        return $this;
     }
 
     /**
@@ -900,7 +976,7 @@ class ClientMetadata
             function ($value) {
                 return self::canonicalizeUri($value);
             },
-            is_array($this->post_logout_redirect_uris) ? $this->post_logout_redirect_uris : []
+            $this->post_logout_redirect_uris ?? []
         );
     }
 
@@ -917,6 +993,8 @@ class ClientMetadata
 
     /**
      * Add trailing slashes
+     * @param $uri
+     * @return string
      */
     public static function canonicalizeUri($uri)
     {
@@ -924,9 +1002,8 @@ class ClientMetadata
         if (array_key_exists('path', $parsed) === false) {
             $parsed['path'] = '/';
         }
-        $unparsed = self::unparseUrl($parsed);
 
-        return $unparsed;
+        return self::unparseUrl($parsed);
     }
 
     private static function unparseUrl($parsed_url)
@@ -939,8 +1016,7 @@ class ClientMetadata
         $pass = ($user || $pass) ? "$pass@" : '';
         $path = isset($parsed_url['path']) ? $parsed_url['path'] : '';
         $query = isset($parsed_url['query']) ? '?'.$parsed_url['query'] : '';
-        $fragment = isset($parsed_url['fragment']) ? '#'.$parsed_url['fragment']
-            : '';
+        $fragment = isset($parsed_url['fragment']) ? '#'.$parsed_url['fragment'] : '';
 
         return "$scheme$user$pass$host$port$path$query$fragment";
     }

@@ -1,4 +1,4 @@
-<form action="{{ path('fos_oauth_server_authorize') }}" method="POST" class="fos_oauth_server_authorize" {{ form_enctype(form) }}>
+{{ form_start(form, {'action': path('fos_oauth_server_authorize'), 'method': 'POST', 'attr': {'class': 'fos_oauth_server_authorize'} }) }}
     <h3>{% trans %}Authorize Application{% endtrans %}</h3>
 
     <div class="connect-diagram row">
@@ -38,4 +38,4 @@
     {{ form_row(form.state) }}
     {{ form_row(form.scope) }}
     {{ form_rest(form) }}
-</form>
+{{ form_end(form) }}

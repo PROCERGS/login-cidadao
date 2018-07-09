@@ -11,12 +11,13 @@
 namespace PROCERGS\LoginCidadao\AccountingBundle\Tests\Entity;
 
 use LoginCidadao\OAuthBundle\Entity\Client;
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
 
 /**
  * @codeCoverageIgnore
  */
-class ProcergsLinkTest extends \PHPUnit_Framework_TestCase
+class ProcergsLinkTest extends TestCase
 {
     public function testEntity()
     {
@@ -42,7 +43,7 @@ class ProcergsLinkTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidType()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
 
         $link = new ProcergsLink();
         $link->setSystemType('INVALID');

@@ -16,9 +16,11 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\DynamicFormBundle\Form\DynamicFormBuilder;
 use LoginCidadao\DynamicFormBundle\Model\DynamicFormData;
 use LoginCidadao\ValidationControlBundle\Handler\ValidationHandler;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\FormInterface;
 
-class DynamicFormBuilderTest extends \PHPUnit_Framework_TestCase
+class DynamicFormBuilderTest extends TestCase
 {
     public function testAddFieldFromScope()
     {
@@ -32,7 +34,7 @@ class DynamicFormBuilderTest extends \PHPUnit_Framework_TestCase
         ];
 
         /** @var PersonInterface|\PHPUnit_Framework_MockObject_MockObject $person */
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $person->expects($this->atLeastOnce())->method('getIdCards')->willReturn($idCards);
 
         $fields = [];
@@ -75,7 +77,7 @@ class DynamicFormBuilderTest extends \PHPUnit_Framework_TestCase
         $idCard->setState($state);
 
         /** @var PersonInterface|\PHPUnit_Framework_MockObject_MockObject $person */
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $person->expects($this->atLeastOnce())->method('getIdCards')->willReturn([]);
 
         $data = new DynamicFormData();
@@ -114,13 +116,14 @@ class DynamicFormBuilderTest extends \PHPUnit_Framework_TestCase
         $idCard->setState($state);
 
         /** @var PersonInterface|\PHPUnit_Framework_MockObject_MockObject $person */
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
         $person->expects($this->never())->method('getIdCards');
 
         $data = new DynamicFormData();
         $data->setPerson($person);
 
-        $form = $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        /** @var MockObject|FormInterface $form */
+        $form = $form = $this->createMock(FormInterface::class);
 
         /** @var ValidationHandler|\PHPUnit_Framework_MockObject_MockObject $validationHandler */
         $validationHandler = $this
@@ -148,11 +151,11 @@ class DynamicFormBuilderTest extends \PHPUnit_Framework_TestCase
         };
 
         /** @var FormInterface|\PHPUnit_Framework_MockObject_MockObject $form */
-        $personForm = $this->getMock('Symfony\Component\Form\FormInterface');
+        $personForm = $this->createMock('Symfony\Component\Form\FormInterface');
         $personForm->expects($this->any())->method('add')->willReturnCallback($addField);
 
         /** @var FormInterface|\PHPUnit_Framework_MockObject_MockObject $form */
-        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form = $this->createMock('Symfony\Component\Form\FormInterface');
 
         $form->expects($this->atLeastOnce())->method('add')->willReturnCallback($addField);
         $form->expects($this->any())->method('get')->willReturnCallback(

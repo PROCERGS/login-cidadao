@@ -12,14 +12,16 @@
     stopOnFailure               = "false"
     syntaxCheck                 = "false"
     bootstrap                   = "bootstrap.php.cache" >
-    
+
     <php>
         <ini name="error_reporting" value="E_ALL &amp; ~E_NOTICE" />
+        <!--<env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />-->
     </php>
 
     <testsuites>
         <testsuite name="Project Test Suite">
             <directory>../src/*/*Bundle/Tests</directory>
+            <directory>../src/PROCERGS/*/*Bundle/Tests</directory>
             <directory>../src/*/Bundle/*Bundle/Tests</directory>
         </testsuite>
     </testsuites>
@@ -38,11 +40,30 @@
                 <directory>../src/*/*Bundle/Tests</directory>
                 <directory>../src/*/Bundle/*Bundle/Resources</directory>
                 <directory>../src/*/Bundle/*Bundle/Tests</directory>
+                <directory>../src/PROCERGS/*/*Bundle/Resources</directory>
+                <directory>../src/PROCERGS/*/*Bundle/Tests</directory>
+                <directory>../src/PROCERGS/*/Bundle/*Bundle/Resources</directory>
+                <directory>../src/PROCERGS/*/Bundle/*Bundle/Tests</directory>
             </exclude>
         </whitelist>
+        <blacklist>
+            <directory>../vendor</directory>
+        </blacklist>
     </filter>
 
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
+        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener">
+            <arguments>
+                <array>
+                    <element key="slowThreshold">
+                        <integer>500</integer>
+                    </element>
+                    <element key="reportLength">
+                        <integer>5</integer>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
     </listeners>
 </phpunit>

@@ -10,23 +10,23 @@
 
 namespace LoginCidadao\OpenIDBundle\Storage;
 
-use Doctrine\ORM\EntityManager;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class SessionState
 {
-    /** @var EntityManager */
-    protected $em;
+    /** @var ClientManager */
+    private $clientManager;
 
     /** @var TokenStorageInterface */
     protected $tokenStorage;
 
-    public function __construct(EntityManager $em,
-                                TokenStorageInterface $tokenStorage)
+    public function __construct(ClientManager $clientManager, TokenStorageInterface $tokenStorage)
     {
-        $this->em           = $em;
+        $this->clientManager = $clientManager;
         $this->tokenStorage = $tokenStorage;
     }
 
@@ -34,7 +34,7 @@ class SessionState
     {
         $client = $this->getClient($client_id);
 
-        $url  = $client->getMetadata()->getClientUri();
+        $url = $client->getMetadata()->getClientUri();
         $salt = bin2hex(random_bytes(15));
 
         $state = $client_id.$url.$sessionId.$salt;
@@ -54,27 +54,23 @@ class SessionState
 
     /**
      * @param string $client_id
-     * @return \LoginCidadao\OAuthBundle\Entity\Client
+     * @return ClientInterface
      */
     private function getClient($client_id)
     {
-        $id = explode('_', $client_id);
-        return $this->em->getRepository('LoginCidadaoOAuthBundle:Client')->find($id[0]);
+        return $this->clientManager->getClientById($client_id);
     }
 
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        if (!$event->isMasterRequest()) {
-            return;
-        }
-        $token = $this->tokenStorage->getToken();
-        if ($token !== null) {
-            $state  = hash('sha256', $token->serialize());
-            $cookie = new Cookie('session_state', $state, 0, '/', null, false,
-                false);
-            $event->getResponse()->headers->setCookie($cookie);
-        } else {
-            $event->getResponse()->headers->removeCookie('session_state');
+        if ($event->isMasterRequest()) {
+            $sessionId = $this->getSessionId();
+            if ($sessionId !== '') {
+                $cookie = new Cookie('session_state', $sessionId, 0, '/', null, false, false);
+                $event->getResponse()->headers->setCookie($cookie);
+            } else {
+                $event->getResponse()->headers->removeCookie('session_state');
+            }
         }
     }
 }

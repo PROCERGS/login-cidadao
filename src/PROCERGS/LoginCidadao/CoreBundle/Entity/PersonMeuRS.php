@@ -13,7 +13,6 @@ namespace PROCERGS\LoginCidadao\CoreBundle\Entity;
 use PROCERGS\Generic\ValidationBundle\Validator\Constraints as PROCERGSAssert;
 use PROCERGS\LoginCidadao\NfgBundle\Entity\NfgProfile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\Mapping as ORM;
@@ -65,28 +64,6 @@ class PersonMeuRS
      * @JMS\Since("1.0.2")
      */
     protected $voterRegistration;
-
-    /**
-     * @JMS\Groups({"badges", "public_profile"})
-     * @JMS\VirtualProperty
-     * @JMS\SerializedName("deprecated_badges")
-     * @return array
-     */
-    public function getDataValid()
-    {
-        $terms['cpf'] = (is_numeric($this->cpf) && strlen($this->nfgAccessToken));
-        $terms['email'] = is_null($this->getConfirmationToken());
-        if ($this->getNfgProfile()) {
-            $terms['nfg_access_lvl'] = $this->getNfgProfile()->getAccessLvl();
-            $terms['voter_registration'] = $this->getNfgProfile()->getVoterRegistrationSit()
-            > 0 ? true : false;
-        } else {
-            $terms['nfg_access_lvl'] = 0;
-            $terms['voter_registration'] = false;
-        }
-
-        return $terms;
-    }
 
     public function setNfgAccessToken($var)
     {

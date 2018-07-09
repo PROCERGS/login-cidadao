@@ -12,6 +12,8 @@ namespace LoginCidadao\OpenIDBundle\EventListener;
 
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
+use JMS\Serializer\GenericSerializationVisitor;
+use LoginCidadao\APIBundle\Service\VersionService;
 use LoginCidadao\OAuthBundle\Model\AccessTokenManager;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
@@ -19,28 +21,33 @@ use LoginCidadao\OpenIDBundle\Service\SubjectIdentifierService;
 class PersonSerializeEventListener implements EventSubscriberInterface
 {
     /** @var AccessTokenManager */
-    protected $accessTokenManager;
+    private $accessTokenManager;
 
     /** @var SubjectIdentifierService */
-    protected $subjectIdentifierService;
+    private $subjectIdentifierService;
+
+    /** @var VersionService */
+    private $versionService;
 
     public function __construct(
         AccessTokenManager $accessTokenManager,
-        SubjectIdentifierService $subjectIdentifierService
+        SubjectIdentifierService $subjectIdentifierService,
+        VersionService $versionService
     ) {
         $this->accessTokenManager = $accessTokenManager;
         $this->subjectIdentifierService = $subjectIdentifierService;
+        $this->versionService = $versionService;
     }
 
     public static function getSubscribedEvents()
     {
-        return array(
-            array(
+        return [
+            [
                 'event' => 'serializer.post_serialize',
                 'method' => 'onPostSerialize',
                 'class' => 'LoginCidadao\CoreBundle\Model\PersonInterface',
-            ),
-        );
+            ],
+        ];
     }
 
     public function onPostSerialize(ObjectEvent $event)
@@ -58,23 +65,40 @@ class PersonSerializeEventListener implements EventSubscriberInterface
         $metadata = $client->getMetadata();
 
         $sub = $this->subjectIdentifierService->getSubjectIdentifier($event->getObject(), $metadata);
-        $event->getVisitor()->addData('sub', $sub);
-        $event->getVisitor()->addData('id', $sub);
+
+        /** @var GenericSerializationVisitor $visitor */
+        $visitor = $event->getVisitor();
+        $visitor->setData('sub', $sub);
+
+        $version = $this->getApiVersion();
+        if ($version['major'] == 1) {
+            $visitor->setData('id', $sub);
+        }
     }
 
     private function addOpenIdConnectCompatibility(ObjectEvent $event)
     {
+        /** @var PersonInterface $person */
         $person = $event->getObject();
         $visitor = $event->getVisitor();
-
-        if (!($person instanceof PersonInterface)) {
-            return;
+        if ($visitor instanceof GenericSerializationVisitor
+            && version_compare($this->getApiVersion(true), '1.1.0', '>=')) {
+            $visitor->setData('picture', $person->getProfilePictureUrl());
+            $visitor->setData(
+                'email_verified',
+                $person->getEmailConfirmedAt() instanceof \DateTime
+            );
         }
+    }
 
-        $visitor->addData('picture', $person->getProfilePictureUrl());
-        $visitor->addData(
-            'email_verified',
-            $person->getEmailConfirmedAt() instanceof \DateTime
-        );
+    /**
+     * @param bool $string
+     * @return array|string
+     */
+    private function getApiVersion($string = false)
+    {
+        $version = $this->versionService->getVersionFromRequest();
+
+        return $string ? $this->versionService->getString($version) : $version;
     }
 }

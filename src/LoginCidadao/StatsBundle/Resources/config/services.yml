@@ -1,6 +1,5 @@
 parameters:
     statistics.handler.class: LoginCidadao\StatsBundle\Handler\StatsHandler
-    statistics.subscriber.class: LoginCidadao\StatsBundle\EventListener\StatisticsSubscriber
 
 services:
     statistics.repository:
@@ -11,11 +10,11 @@ services:
 
     statistics.handler:
         class: %statistics.handler.class%
+        arguments:
+            - "@statistics.repository"
         lazy: true
-        calls:
-            - [setStatsRepo, ["@statistics.repository"]]
 
     statistics.subscriber:
-        class: %statistics.subscriber.class%
+        class: 'LoginCidadao\StatsBundle\EventListener\StatisticsSubscriber'
         tags:
             - { name: doctrine.event_subscriber, connection: default }

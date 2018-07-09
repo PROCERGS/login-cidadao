@@ -10,15 +10,16 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests\Event;
 
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\NfgBundle\Event\GetDisconnectCallbackResponseEvent;
 use Symfony\Component\HttpFoundation\Response;
 
-class GetDisconnectCallbackResponseEventTest extends \PHPUnit_Framework_TestCase
+class GetDisconnectCallbackResponseEventTest extends TestCase
 {
     public function testEvent()
     {
-        $personMeuRS = $this->getMock('PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS');
-        $response = $this->getMock('Symfony\Component\HttpFoundation\Response');
+        $personMeuRS = $this->createMock('PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS');
+        $response = $this->createMock('Symfony\Component\HttpFoundation\Response');
 
         $event = new GetDisconnectCallbackResponseEvent($personMeuRS, $response);
 

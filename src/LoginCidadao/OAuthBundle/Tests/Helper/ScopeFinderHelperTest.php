@@ -11,11 +11,12 @@
 namespace LoginCidadao\OAuthBundle\Tests\Helper;
 
 use LoginCidadao\OAuthBundle\Helper\ScopeFinderHelper;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class ScopeFinderHelperTest extends \PHPUnit_Framework_TestCase
+class ScopeFinderHelperTest extends TestCase
 {
     public function testGetScopeFromRequest()
     {
@@ -46,7 +47,7 @@ class ScopeFinderHelperTest extends \PHPUnit_Framework_TestCase
         $request->request = new ParameterBag(["{$formName}" => ['scope' => 'openid name']]);
         $request->query = new ParameterBag();
 
-        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form = $this->createMock('Symfony\Component\Form\FormInterface');
         $form->expects($this->once())->method('getName')->willReturn($formName);
 
         $helper = new ScopeFinderHelper($request, $form);
@@ -67,7 +68,7 @@ class ScopeFinderHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidConstructorCall()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException('\InvalidArgumentException');
         new ScopeFinderHelper('error');
     }
 

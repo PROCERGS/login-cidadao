@@ -11,9 +11,10 @@
 namespace LoginCidadao\PhoneVerificationBundle\Tests\DependencyInjection;
 
 use LoginCidadao\PhoneVerificationBundle\DependencyInjection\Configuration;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Processor;
 
-class ConfigurationTest extends \PHPUnit_Framework_TestCase
+class ConfigurationTest extends TestCase
 {
     public static function getSampleConfig()
     {

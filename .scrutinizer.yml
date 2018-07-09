@@ -1,9 +1,15 @@
+# language: php
+# tests: true
 filter:
+    paths:
+        - "src/"
+    dependency_paths:
+        - "vendor/"
     excluded_paths:
-        - 'vendor/*'
-        - 'app/*'
-        - 'web/*'
-        - 'spec/*'
+        - "app/"
+        - "web/"
+        - "spec/"
+        - "*/Tests/*"
 tools:
     php_mess_detector: true
     php_cs_fixer:
@@ -11,33 +17,157 @@ tools:
             level: psr2
     php_analyzer:
         config:
-            parameter_reference_check: { enabled: true }
-            checkstyle: { enabled: true, no_trailing_whitespace: true, naming: { enabled: true, local_variable: '^[a-z][a-zA-Z0-9]*$', abstract_class_name: ^Abstract|Factory$, utility_class_name: 'Utils?$', constant_name: '^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*$', property_name: '^[a-z][a-zA-Z0-9]*$', method_name: '^(?:[a-z]|__)[a-zA-Z0-9]*$', parameter_name: '^[a-z][a-zA-Z0-9]*$', interface_name: '^[A-Z][a-zA-Z0-9]*Interface$', type_name: '^[A-Z][a-zA-Z0-9]*$', exception_name: '^[A-Z][a-zA-Z0-9]*Exception$', isser_method_name: '^(?:is|has|should|may|supports)' } }
-            unreachable_code: { enabled: true }
-            check_access_control: { enabled: false }
-            typo_checks: { enabled: true }
-            check_variables: { enabled: true }
-            suspicious_code: { enabled: true, overriding_parameter: false, overriding_closure_use: false, parameter_closure_use_conflict: false, parameter_multiple_times: false, non_existent_class_in_instanceof_check: false, non_existent_class_in_catch_clause: false, assignment_of_null_return: false, non_commented_switch_fallthrough: false, non_commented_empty_catch_block: false, overriding_private_members: false, use_statement_alias_conflict: false, precedence_in_condition_assignment: false }
-            dead_assignments: { enabled: true }
-            verify_php_doc_comments: { enabled: true, parameters: true, return: true, suggest_more_specific_types: true, ask_for_return_if_not_inferrable: true, ask_for_param_type_annotation: true }
-            loops_must_use_braces: { enabled: true }
-            check_usage_context: { enabled: true, method_call_on_non_object: { enabled: true, ignore_null_pointer: true }, foreach: { value_as_reference: true, traversable: true }, missing_argument: true, argument_type_checks: lenient }
-            simplify_boolean_return: { enabled: false }
-            phpunit_checks: { enabled: false }
-            reflection_checks: { enabled: false }
-            precedence_checks: { enabled: true, assignment_in_condition: true, comparison_of_bit_result: true }
-            basic_semantic_checks: { enabled: true }
-            unused_code: { enabled: true }
-            doctrine_parameter_binding: { enabled: false }
-            doctrine_entity_manager_injection: { enabled: false }
-            doc_comment_fixes: { enabled: false }
-            reflection_fixes: { enabled: false }
-            use_statement_fixes: { enabled: true, remove_unused: true, preserve_multiple: false, order_alphabetically: false }
-    php_code_sniffer:
-        config:
-            standard: PSR2
-            sniffs: { generic: { php: { disallow_short_open_tag_sniff: true } } }
+            parameter_reference_check:
+                enabled: true
+            checkstyle:
+                enabled: true
+                no_trailing_whitespace: true
+                naming:
+                    enabled: true
+                    local_variable: '^[a-z][a-zA-Z0-9]*$'
+                    abstract_class_name: ^Abstract|Factory$
+                    utility_class_name: 'Utils?$'
+                    constant_name: '^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*$'
+                    property_name: '^[a-z][a-zA-Z0-9]*$'
+                    method_name: '^(?:[a-z]|__)[a-zA-Z0-9]*$'
+                    parameter_name: '^[a-z][a-zA-Z0-9]*$'
+                    interface_name: '^[A-Z][a-zA-Z0-9]*Interface$'
+                    type_name: '^[A-Z][a-zA-Z0-9]*$'
+                    exception_name: '^[A-Z][a-zA-Z0-9]*Exception$'
+                    isser_method_name: '^(?:is|has|should|may|supports)'
+            unreachable_code:
+                enabled: true
+            check_access_control:
+                enabled: false
+            typo_checks:
+                enabled: true
+            check_variables:
+                enabled: true
+            suspicious_code:
+                enabled: true
+                overriding_parameter: false
+                overriding_closure_use: false
+                parameter_closure_use_conflict: false
+                parameter_multiple_times: false
+                non_existent_class_in_instanceof_check: false
+                non_existent_class_in_catch_clause: false
+                assignment_of_null_return: false
+                non_commented_switch_fallthrough: false
+                non_commented_empty_catch_block: false
+                overriding_private_members: false
+                use_statement_alias_conflict: false
+                precedence_in_condition_assignment: false
+            dead_assignments:
+                enabled: true
+            verify_php_doc_comments:
+                enabled: true
+                parameters: true
+                return: true
+                suggest_more_specific_types: true
+                ask_for_return_if_not_inferrable: true
+                ask_for_param_type_annotation: true
+            loops_must_use_braces:
+                enabled: true
+            check_usage_context:
+                enabled: true
+                method_call_on_non_object:
+                    enabled: true
+                    ignore_null_pointer: true
+                foreach:
+                    value_as_reference: true
+                    traversable: true
+                missing_argument: true
+                argument_type_checks: lenient
+            simplify_boolean_return:
+                enabled: false
+            phpunit_checks:
+                enabled: false
+            reflection_checks:
+                enabled: false
+            precedence_checks:
+                enabled: true
+                assignment_in_condition: true
+                comparison_of_bit_result: true
+            basic_semantic_checks:
+                enabled: true
+            unused_code:
+                enabled: true
+            doctrine_parameter_binding:
+                enabled: false
+            doctrine_entity_manager_injection:
+                enabled: false
+            doc_comment_fixes:
+                enabled: false
+            reflection_fixes:
+                enabled: false
+            use_statement_fixes:
+                enabled: true
+                remove_unused: true
+                preserve_multiple: false
+                order_alphabetically: false
     sensiolabs_security_checker: true
     php_cpd: true
     php_loc: true
     php_pdepend: true
+checks:
+    php:
+        code_rating: true
+        duplication: true
+        unused_variables: true
+        useless_calls: false
+        unused_properties: true
+        unused_parameters: true
+        unused_methods: true
+        unreachable_code: true
+        simplify_boolean_return: true
+        too_many_arguments: true
+        comparison_always_same_result: true
+        properties_in_camelcaps: true
+        parameters_in_camelcaps: true
+        overriding_parameter: true
+        no_goto: true
+        return_doc_comment_if_not_inferrable: true
+build_failure_conditions:
+    #- 'elements.rating(<= D).exists'               # No classes/methods with a rating of D or worse
+    - 'elements.rating(<= D).new.exists'           # No new classes/methods with a rating of D or worse
+                                                   # allowed (useful for legacy code)
+
+    #- 'issues.label("coding-style").exists'        # No coding style issues allowed
+    - 'issues.label("coding-style").new.exists'    # No new coding style issues allowed
+
+    - 'issues.label("coding-style").new.count > 5' # More than 5 new coding style issues.
+    - 'issues.severity(>= MAJOR).new.exists'       # New issues of major or higher severity
+
+    - 'project.metric("scrutinizer.quality", < 6)' # Code Quality Rating drops below 6
+
+    # Code Coverage decreased from previous inspection
+    - 'project.metric_change("scrutinizer.test_coverage", < -0.001)'
+    # Code Quality Rating drops more than 10%
+    - 'project.metric_change("scrutinizer.quality", < -0.10)'
+build:
+    environment:
+        php:
+            version: '7.1'
+        postgresql: true
+        variables:
+            SYMFONY_DEPRECATIONS_HELPER: 'weak'
+    dependencies:
+        before:
+            - psql -c "CREATE DATABASE logincidadao WITH OWNER = scrutinizer"
+            - cp app/config/parameters.yml.dist app/config/parameters.yml
+            - 'sed -i -e "s/database_user:     logincidadao/database_user:     scrutinizer/" app/config/parameters.yml'
+            - 'sed -i -e "s/database_password: logincidadao/database_password: scrutinizer/" app/config/parameters.yml'
+    project_setup:
+        before:
+            - php app/console doctrine:schema:update --force
+            - php app/console doctrine:schema:update --em=logs --force
+            - php app/console lc:database:populate batch/
+    tests:
+        override:
+            - php-scrutinizer-run
+            -
+                command: 'bin/phpunit -c app --coverage-clover=clover.xml'
+                idle_timeout: 360
+                coverage:
+                    file: 'clover.xml'
+                    format: 'clover'

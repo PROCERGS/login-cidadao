@@ -11,13 +11,14 @@
 namespace LoginCidadao\PhoneVerificationBundle\Tests\Event;
 
 use LoginCidadao\PhoneVerificationBundle\Event\PhoneChangedEvent;
+use PHPUnit\Framework\TestCase;
 
-class PhoneChangedEventTest extends \PHPUnit_Framework_TestCase
+class PhoneChangedEventTest extends TestCase
 {
     public function testEventChangePhone()
     {
-        $person = $this->getMock('LoginCidadao\CoreBundle\Entity\Person');
-        $phone = $this->getMock('libphonenumber\PhoneNumber');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Entity\Person');
+        $phone = $this->createMock('libphonenumber\PhoneNumber');
         $event = new PhoneChangedEvent($person, $phone);
 
         $this->assertEquals($person, $event->getPerson());
@@ -27,7 +28,7 @@ class PhoneChangedEventTest extends \PHPUnit_Framework_TestCase
 
     public function testEventSetPhone()
     {
-        $person = $this->getMock('LoginCidadao\CoreBundle\Entity\Person');
+        $person = $this->createMock('LoginCidadao\CoreBundle\Entity\Person');
         $event = new PhoneChangedEvent($person, null);
 
         $this->assertEquals($person, $event->getPerson());

@@ -130,6 +130,12 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
         }
     }
 
+    /**
+     * @param SendPhoneVerificationEvent $event
+     * @param EventDispatcherInterface $dispatcher
+     * @param $message
+     * @throws \Exception
+     */
     private function sendSmsAndRegister(
         SendPhoneVerificationEvent $event,
         EventDispatcherInterface $dispatcher,
@@ -151,11 +157,16 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
         }
     }
 
-    private function protectedSendSms(
-        SmsService $smsService,
-        PhoneVerificationInterface $phoneVerification,
-        $message
-    ) {
+    /**
+     * @param SmsService $smsService
+     * @param PhoneVerificationInterface $phoneVerification
+     * @param $message
+     * @return mixed
+     * @throws \Exception
+     * @throws CircuitOpenException
+     */
+    private function protectedSendSms(SmsService $smsService, PhoneVerificationInterface $phoneVerification, $message)
+    {
         return $this->breaker->protect(
             function () use ($smsService, $phoneVerification, $message) {
                 $transactionId = $smsService->easySend($phoneVerification->getPhone(), $message);

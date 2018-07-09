@@ -10,6 +10,8 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests\EventListener;
 
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\NfgBundle\EventListener\ExceptionListener;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\ConnectionNotFoundException;
 use PROCERGS\LoginCidadao\NfgBundle\Exception\CpfMismatchException;
@@ -24,8 +26,10 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class ExceptionListenerTest extends \PHPUnit_Framework_TestCase
+class ExceptionListenerTest extends TestCase
 {
+    use TestsUtil;
+
     public function testEmailInUse()
     {
         $this->expectRedirect(new EmailInUseException(), 'nfg_help_email_in_use');
@@ -85,27 +89,27 @@ class ExceptionListenerTest extends \PHPUnit_Framework_TestCase
      */
     private function getExceptionListener()
     {
-        $router = TestsUtil::getRouter($this);
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $router = $this->getRouter();
+        $translator = $this->createMock('Symfony\Component\Translation\TranslatorInterface');
 
         return new ExceptionListener($router, $translator);
     }
 
     /**
-     * @return HttpKernelInterface
+     * @return HttpKernelInterface|MockObject
      */
     private function getKernel()
     {
-        return $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
+        return $this->createMock('Symfony\Component\HttpKernel\HttpKernelInterface');
     }
 
     /**
      * @param Session $session
-     * @return Request
+     * @return Request|MockObject
      */
     private function getRequest($session = null)
     {
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->createMock('Symfony\Component\HttpFoundation\Request');
         $request->expects($this->any())->method('getSession')->willReturn($session);
 
         return $request;
@@ -134,10 +138,10 @@ class ExceptionListenerTest extends \PHPUnit_Framework_TestCase
 
     private function getSessionWithFlash()
     {
-        $flashbag = $this->getMock('Symfony\Component\HttpFoundation\Session\Flash\FlashBag');
+        $flashbag = $this->createMock('Symfony\Component\HttpFoundation\Session\Flash\FlashBag');
         $flashbag->expects($this->once())->method('add');
 
-        $session = $this->getMock('Symfony\Component\HttpFoundation\Session\Session');
+        $session = $this->createMock('Symfony\Component\HttpFoundation\Session\Session');
         $session->expects($this->once())->method('getFlashBag')->willReturn($flashbag);
 
         return $session;

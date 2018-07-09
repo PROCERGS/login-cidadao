@@ -18,7 +18,6 @@ interface UniqueEntityInterface
     /**
      * Sets the Unique Id of the Entity.
      * @param string $uid the entity UID
-     * @return AbstractUniqueEntity
      */
     public function setUid($uid = null);
 }

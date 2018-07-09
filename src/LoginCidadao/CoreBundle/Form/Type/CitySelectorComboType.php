@@ -1,7 +1,17 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Form\Type;
 
+use LoginCidadao\CoreBundle\Model\PreferableInterface;
+use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
@@ -10,7 +20,6 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use LoginCidadao\CoreBundle\Entity\State;
 use LoginCidadao\CoreBundle\Model\LocationSelectData;
 use LoginCidadao\CoreBundle\Model\Manager\CityManager;
 use LoginCidadao\CoreBundle\Model\Manager\StateManager;
@@ -54,19 +63,17 @@ class CitySelectorComboType extends AbstractType
         $builder->add(
             'country',
             'Symfony\Bridge\Doctrine\Form\Type\EntityType',
-            array(
+            [
                 'placeholder' => '',
                 'class' => $this->countryManager->getClass(),
                 'choice_label' => 'name',
                 'choices' => $this->countryManager->findAll(),
-                'attr' => array(
-                    'class' => 'form-control location-select country-select',
-                ),
+                'attr' => ['class' => 'form-control location-select country-select'],
                 'translation_domain' => 'messages',
                 'choice_translation_domain' => true,
                 'label' => $options['country_label'],
                 'preferred_choices' => $preferredChoiceCallback,
-            )
+            ]
         );
 
         $stateManager = $this->stateManager;
@@ -83,7 +90,7 @@ class CitySelectorComboType extends AbstractType
                 return;
             }
             if ($countryId === null) {
-                $choices = array();
+                $choices = [];
             } else {
                 $choices = $stateManager->findByCountryId($countryId);
             }
@@ -94,13 +101,10 @@ class CitySelectorComboType extends AbstractType
                 $form->add(
                     'state_text',
                     (empty($choices) ? 'Symfony\Component\Form\Extension\Core\Type\TextType' : 'Symfony\Component\Form\Extension\Core\Type\HiddenType'),
-                    array(
+                    [
                         'label' => $options['state_label'],
-                        //'mapped' => false,
-                        'attr' => array(
-                            'class' => 'form-control location-select state-select location-text',
-                        ),
-                    )
+                        'attr' => ['class' => 'form-control location-select state-select location-text'],
+                    ]
                 );
 
                 return;
@@ -112,17 +116,15 @@ class CitySelectorComboType extends AbstractType
             $form->add(
                 'state',
                 'Symfony\Bridge\Doctrine\Form\Type\EntityType',
-                array(
+                [
                     'class' => $stateManager->getClass(),
                     'choice_label' => 'name',
                     'placeholder' => '',
                     'choices' => $choices,
-                    'attr' => array(
-                        'class' => 'form-control location-select state-select',
-                    ),
+                    'attr' => ['class' => 'form-control location-select state-select'],
                     'label' => $options['state_label'],
                     'preferred_choices' => $preferredChoiceCallback,
-                )
+                ]
             );
         };
 
@@ -131,7 +133,7 @@ class CitySelectorComboType extends AbstractType
                 return;
             }
             if ($stateId === null) {
-                $choices = array();
+                $choices = [];
             } else {
                 $choices = $cityManager->findByStateId($stateId);
             }
@@ -142,13 +144,10 @@ class CitySelectorComboType extends AbstractType
                 $form->add(
                     'city_text',
                     'Symfony\Component\Form\Extension\Core\Type\TextType',
-                    array(
+                    [
                         'label' => $options['city_label'],
-                        //'mapped' => false,
-                        'attr' => array(
-                            'class' => 'form-control location-select city-select location-text',
-                        ),
-                    )
+                        'attr' => ['class' => 'form-control location-select city-select location-text'],
+                    ]
                 );
 
                 return;
@@ -160,16 +159,14 @@ class CitySelectorComboType extends AbstractType
             $form->add(
                 'city',
                 'Symfony\Bridge\Doctrine\Form\Type\EntityType',
-                array(
+                [
                     'class' => $cityManager->getClass(),
                     'placeholder' => '',
                     'choice_label' => 'name',
-                    'choices' => $stateId === null ? array() : $cityManager->findByStateId($stateId),
-                    'attr' => array(
-                        'class' => 'form-control location-select city-select',
-                    ),
+                    'choices' => $stateId === null ? [] : $cityManager->findByStateId($stateId),
+                    'attr' => ['class' => 'form-control location-select city-select'],
                     'label' => $options['city_label'],
-                )
+                ]
             );
         };
 
@@ -224,7 +221,7 @@ class CitySelectorComboType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'LoginCidadao\CoreBundle\Model\LocationSelectData',
                 'label' => false,
                 'level' => 'city',
@@ -232,7 +229,7 @@ class CitySelectorComboType extends AbstractType
                 'state_label' => 'State',
                 'city_label' => 'City',
                 'translation_domain' => 'messages',
-            )
+            ]
         );
     }
 
@@ -246,13 +243,13 @@ class CitySelectorComboType extends AbstractType
         }
         $collator = new \Collator($this->translator->getLocale());
         $translator = $this->translator;
-        $sortFunction = function ($a, $b) use ($collator, $translator) {
+        $sortFunction = function (ChoiceView $a, ChoiceView $b) use ($collator, $translator) {
             return $collator->compare(
                 $translator->trans($a->label),
                 $translator->trans($b->label)
             );
         };
-        @usort($view->children['country']->vars['choices'], $sortFunction);
+        usort($view->children['country']->vars['choices'], $sortFunction);
         if (array_key_exists('state', $view->children) && $view->children['state']->vars['choice_translation_domain']) {
             usort($view->children['state']->vars['choices'], $sortFunction);
         }
@@ -263,7 +260,7 @@ class CitySelectorComboType extends AbstractType
 
     private function getPreferredChoiceCallback()
     {
-        return function ($choice, $key) {
+        return function (PreferableInterface $choice) {
             return $choice->getPreference() > 0;
         };
     }

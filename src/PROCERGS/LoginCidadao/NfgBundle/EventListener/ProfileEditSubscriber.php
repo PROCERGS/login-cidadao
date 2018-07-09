@@ -10,8 +10,7 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\EventListener;
 
-
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use FOS\UserBundle\FOSUserEvents;
@@ -38,7 +37,7 @@ class ProfileEditSubscriber implements EventSubscriberInterface, LoggerAwareInte
     /** @var MeuRSHelper */
     private $meuRSHelper;
 
-    /** @var EntityManager */
+    /** @var EntityManagerInterface */
     private $em;
 
     /** @var Nfg */
@@ -55,14 +54,14 @@ class ProfileEditSubscriber implements EventSubscriberInterface, LoggerAwareInte
 
     /**
      * ProfileEditListener constructor.
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
      * @param MeuRSHelper $meuRSHelper
      * @param Nfg $nfg
      * @param TokenStorageInterface $tokenStorage
      * @param TranslatorInterface $translator
      */
     public function __construct(
-        EntityManager $em,
+        EntityManagerInterface $em,
         MeuRSHelper $meuRSHelper,
         Nfg $nfg,
         TokenStorageInterface $tokenStorage,

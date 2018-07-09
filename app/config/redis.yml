@@ -1,0 +1,46 @@
+snc_redis:
+    clients:
+        default:
+            type: predis
+            alias: default
+            dsn: "%redis_dsn%"
+            logging: false
+            options:
+                replication: "%redis_replication%"
+                service: "%redis_sentinel_service%"
+                prefix: "%redis_prefix%"
+    session:
+        client: default
+        prefix: "%session_prefix%"
+        ttl: "%session_lifetime%"
+    doctrine:
+        metadata_cache:
+            client: default
+            entity_manager: default
+            document_manager: default
+        result_cache:
+            client: default
+            entity_manager: default
+        query_cache:
+            client: default
+            entity_manager: default
+        second_level_cache:
+            client: default
+            entity_manager: default
+
+framework:
+    session:
+        handler_id: snc_redis.session.handler
+
+services:
+    cache:
+        class: Doctrine\Common\Cache\PredisCache
+        arguments:
+            - "@snc_redis.default"
+
+# Commented since LiipMonitorBundle doesn't support Redis Replication
+#liip_monitor:
+#    checks:
+#        redis:
+#            main:
+#                dsn: "%redis_dsn%"

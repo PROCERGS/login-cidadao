@@ -13,8 +13,9 @@ namespace LoginCidadao\LogBundle\Tests\Handler;
 use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\LogBundle\Handler\MonologDBHandler;
+use PHPUnit\Framework\TestCase;
 
-class MonologDBHandlerTest extends \PHPUnit_Framework_TestCase
+class MonologDBHandlerTest extends TestCase
 {
     private $record = [
         'message' => 'Some message',
@@ -99,7 +100,7 @@ class MonologDBHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private function getEntityManager()
     {
-        return $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        return $this->createMock('Doctrine\ORM\EntityManagerInterface');
     }
 
     /**
@@ -107,6 +108,6 @@ class MonologDBHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private function getCache()
     {
-        return $this->getMock('Doctrine\Common\Cache\CacheProvider');
+        return $this->createMock('Doctrine\Common\Cache\CacheProvider');
     }
 }

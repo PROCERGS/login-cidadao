@@ -10,10 +10,15 @@
 
 namespace PROCERGS\LoginCidadao\AccountingBundle\Tests\Form;
 
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
 use PROCERGS\LoginCidadao\AccountingBundle\Form\ProcergsLinkType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ProcergsLinkTypeTest extends \PHPUnit_Framework_TestCase
+class ProcergsLinkTypeTest extends TestCase
 {
     public function testBuildForm()
     {
@@ -26,9 +31,10 @@ class ProcergsLinkTypeTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $builder = $this->getMock('Symfony\Component\Form\FormBuilderInterface');
+        /** @var FormBuilderInterface|MockObject $builder */
+        $builder = $this->createMock(FormBuilderInterface::class);
         $builder->expects($this->once())->method('add')
-            ->with('systemType', 'Symfony\Component\Form\Extension\Core\Type\ChoiceType', $fieldOptions);
+            ->with('systemType', ChoiceType::class, $fieldOptions);
 
         $form = new ProcergsLinkType();
         $form->buildForm($builder, []);
@@ -36,9 +42,10 @@ class ProcergsLinkTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testConfigureOptions()
     {
-        $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolver');
+        /** @var OptionsResolver|MockObject $resolver */
+        $resolver = $this->createMock(OptionsResolver::class);
         $resolver->expects($this->exactly(2))->method('setDefaults')
-            ->with(['data_class' => 'PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink']);
+            ->with(['data_class' => ProcergsLink::class]);
 
         $form = new ProcergsLinkType();
         $form->configureOptions($resolver);

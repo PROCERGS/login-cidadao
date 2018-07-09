@@ -10,23 +10,37 @@
 
 namespace LoginCidadao\DynamicFormBundle\Tests\Service;
 
+use Doctrine\ORM\EntityManagerInterface;
+use FOS\UserBundle\Model\UserManagerInterface;
 use LoginCidadao\CoreBundle\Entity\City;
+use LoginCidadao\CoreBundle\Entity\CityRepository;
 use LoginCidadao\CoreBundle\Entity\Country;
+use LoginCidadao\CoreBundle\Entity\CountryRepository;
 use LoginCidadao\CoreBundle\Entity\IdCard;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\PersonAddress;
 use LoginCidadao\CoreBundle\Entity\State;
+use LoginCidadao\CoreBundle\Entity\StateRepository;
 use LoginCidadao\CoreBundle\Model\LocationSelectData;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\DynamicFormBundle\Form\DynamicFormBuilder;
 use LoginCidadao\DynamicFormBundle\Model\DynamicFormData;
 use LoginCidadao\DynamicFormBundle\Service\DynamicFormService;
 use LoginCidadao\OAuthBundle\Entity\Client;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RouterInterface;
 
-class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
+class DynamicFormServiceTest extends TestCase
 {
     public function testGetDynamicFormDataWithStateId()
     {
-        $target = $this->getMock('LoginCidadao\TaskStackBundle\Model\TaskTargetInterface');
+        $target = $this->createMock('LoginCidadao\TaskStackBundle\Model\TaskTargetInterface');
         $task = $this->getMockBuilder('LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTask')
             ->disableOriginalConstructor()->getMock();
         $task->expects($this->once())->method('getTarget')->willReturn($target);
@@ -46,7 +60,8 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
         $formService = $this->getFormService($em, null, null, $stackManager, null);
 
         $person = $this->getPerson();
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        /** @var MockObject|Request $request */
+        $request = $this->getRequest();
         $request->expects($this->exactly(2))->method('get')->willReturnCallback(
             function ($key) {
                 switch ($key) {
@@ -69,7 +84,7 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDynamicFormDataWithoutState()
     {
-        $target = $this->getMock('LoginCidadao\TaskStackBundle\Model\TaskTargetInterface');
+        $target = $this->createMock('LoginCidadao\TaskStackBundle\Model\TaskTargetInterface');
         $task = $this->getMockBuilder('LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTask')
             ->disableOriginalConstructor()->getMock();
         $task->expects($this->once())->method('getTarget')->willReturn($target);
@@ -82,7 +97,7 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
         $formService = $this->getFormService(null, null, null, $stackManager, null);
 
         $person = $this->getPerson();
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->getRequest();
         $scope = 'scope1 scope2';
 
         $data = $formService->getDynamicFormData($person, $request, $scope);
@@ -96,7 +111,7 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
         $formService = $this->getFormService();
 
         $person = $this->getPerson();
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->getRequest();
         $request->expects($this->atLeastOnce())->method('get')->willReturn(null);
         $scope = 'scope1 scope2';
 
@@ -108,7 +123,7 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDynamicFormDataWithStateAcronym()
     {
-        $target = $this->getMock('LoginCidadao\TaskStackBundle\Model\TaskTargetInterface');
+        $target = $this->createMock('LoginCidadao\TaskStackBundle\Model\TaskTargetInterface');
         $task = $this->getMockBuilder('LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTask')
             ->disableOriginalConstructor()->getMock();
         $task->expects($this->once())->method('getTarget')->willReturn($target);
@@ -128,7 +143,7 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
         $formService = $this->getFormService($em, null, null, $stackManager, null);
 
         $person = $this->getPerson();
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->getRequest();
         $request->expects($this->atLeastOnce())->method('get')->willReturnCallback(
             function ($key) {
                 switch ($key) {
@@ -151,9 +166,9 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessInvalidForm()
     {
-        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form = $this->getForm();
         $form->expects($this->once())->method('isValid')->willReturn(false);
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->getRequest();
 
         $formService = $this->getFormService();
         $formService->processForm($form, $request);
@@ -169,12 +184,12 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
             ->setIdCard(new IdCard())
             ->setRedirectUrl('https://example.com');
 
-        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form = $this->getForm();
         $form->expects($this->once())->method('isValid')->willReturn(true);
         $form->expects($this->once())->method('getData')->willReturn($data);
         $form->expects($this->exactly(2))->method('has')->with('person')->willReturn(true);
         $form->expects($this->once())->method('get')->with('person')->willReturn($form);
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->getRequest();
 
         $task = $this->getMockBuilder('LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTask')
             ->disableOriginalConstructor()->getMock();
@@ -198,12 +213,12 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
             ->setAddress(new PersonAddress())
             ->setRedirectUrl('https://example.com');
 
-        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form = $this->getForm();
         $form->expects($this->once())->method('isValid')->willReturn(true);
         $form->expects($this->once())->method('getData')->willReturn($data);
         $form->expects($this->exactly(2))->method('has')->with('person')->willReturn(false);
         $form->expects($this->never())->method('get')->with('person')->willReturn(null);
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request = $this->getRequest();
 
         $task = $this->getMockBuilder('LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTask')
             ->disableOriginalConstructor()->getMock();
@@ -224,7 +239,7 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
         $data = new DynamicFormData();
         $data->setPerson($this->getPerson());
 
-        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form = $this->getForm();
         $form->expects($this->exactly(2))->method('add')->willReturn($form);
 
         $scopes = ['scope1', 'scope2'];
@@ -259,7 +274,8 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetClientBadId()
     {
-        $this->setExpectedException('\InvalidArgumentException', 'Invalid client_id.');
+        $this->expectException('\InvalidArgumentException');
+        $this->expectExceptionMessage('Invalid client_id.');
 
         $clientId = 'invalid';
         $formService = $this->getFormService();
@@ -268,7 +284,8 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetClientNotFound()
     {
-        $this->setExpectedException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', 'Client not found');
+        $this->expectException('Symfony\Component\HttpKernel\Exception\NotFoundHttpException');
+        $this->expectExceptionMessage('Client not found');
 
         $repo = $this->getMockBuilder('LoginCidadao\OAuthBundle\Entity\ClientRepository')
             ->disableOriginalConstructor()->getMock();
@@ -307,9 +324,7 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
             }
         );
 
-        $request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $request = $this->getRequest();
         $request->expects($this->exactly(3))->method('get')->willReturn(1);
 
         $formService = $this->getFormService($em);
@@ -342,9 +357,7 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
             }
         );
 
-        $request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $request = $this->getRequest();
         $request->expects($this->exactly(3))->method('get')->willReturn(1);
 
         $formService = $this->getFormService($em);
@@ -375,9 +388,7 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
             }
         );
 
-        $request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $request = $this->getRequest();
         $request->expects($this->exactly(3))->method('get')->willReturn(1);
 
         $formService = $this->getFormService($em);
@@ -390,9 +401,7 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLocationDataFromRequestNoIds()
     {
-        $request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $request = $this->getRequest();
         $request->expects($this->exactly(3))->method('get')->willReturn(null);
 
         $formService = $this->getFormService();
@@ -405,10 +414,9 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testSkipCurrent()
     {
-        $request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $defaultResponse = $this->getMock('Symfony\Component\HttpFoundation\Response');
+        $request = $this->getRequest();
+        /** @var MockObject|Response $defaultResponse */
+        $defaultResponse = $this->createMock('Symfony\Component\HttpFoundation\Response');
 
         $task = $this->getMockBuilder('LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTask')
             ->disableOriginalConstructor()->getMock();
@@ -455,6 +463,15 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data->getRedirectUrl(), $url);
     }
 
+    /**
+     * @param EntityManagerInterface|null $em
+     * @param EventDispatcherInterface|null $dispatcher
+     * @param UserManagerInterface|null $userManager
+     * @param TaskStackManagerInterface|null $taskStackManager
+     * @param DynamicFormBuilder|null $dynamicFormBuilder
+     * @param RouterInterface|null $router
+     * @return DynamicFormService
+     */
     private function getFormService(
         $em = null,
         $dispatcher = null,
@@ -462,31 +479,34 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
         $taskStackManager = null,
         $dynamicFormBuilder = null,
         $router = null
-    ) {
+    ): DynamicFormService {
         if (!$em) {
             $em = $this->getEntityManager();
         }
         if (!$dispatcher) {
-            $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+            /** @var MockObject|EventDispatcherInterface $dispatcher */
+            $dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         }
         if (!$userManager) {
-            $userManager = $this->getMock('FOS\UserBundle\Model\UserManagerInterface');
+            /** @var MockObject|UserManagerInterface $userManager */
+            $userManager = $this->createMock('FOS\UserBundle\Model\UserManagerInterface');
         }
         if (!$taskStackManager) {
             $taskStackManager = $this->getTaskStackManager();
         }
         if (!$dynamicFormBuilder) {
+            /** @var MockObject|DynamicFormBuilder $dynamicFormBuilder */
             $dynamicFormBuilder = $this->getMockBuilder('LoginCidadao\DynamicFormBundle\Form\DynamicFormBuilder')
                 ->disableOriginalConstructor()
                 ->getMock();
         }
         if (!$router) {
-            $router = $this->getMock('Symfony\Component\Routing\RouterInterface');
-            $router->expects($this->any())->method('generate')->willReturnCallback(
-                function ($name) {
+            /** @var MockObject|RouterInterface $router */
+            $router = $this->createMock(RouterInterface::class);
+            $router->expects($this->any())->method('generate')
+                ->willReturnCallback(function ($name) {
                     return $name;
-                }
-            );
+                });
         }
 
         $formService = new DynamicFormService(
@@ -501,21 +521,34 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
         return $formService;
     }
 
+    /**
+     * @return \PHPUnit\Framework\MockObject\MockObject|TaskStackManagerInterface
+     */
     private function getTaskStackManager()
     {
-        return $this->getMock('LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface');
+        return $this->createMock('LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface');
     }
 
+    /**
+     * @return \PHPUnit\Framework\MockObject\MockObject|PersonInterface
+     */
     private function getPerson()
     {
-        return $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        return $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
     }
 
+    /**
+     * @return \PHPUnit\Framework\MockObject\MockObject|EntityManagerInterface
+     */
     private function getEntityManager()
     {
-        return $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        return $this->createMock('Doctrine\ORM\EntityManagerInterface');
     }
 
+    /**
+     * @param $class
+     * @return null|\PHPUnit\Framework\MockObject\MockObject|CountryRepository|StateRepository|CityRepository
+     */
     private function getLocationRepo($class)
     {
         switch ($class) {
@@ -531,5 +564,26 @@ class DynamicFormServiceTest extends \PHPUnit_Framework_TestCase
             default:
                 return null;
         }
+    }
+
+    /**
+     * @return MockObject|Request
+     */
+    private function getRequest()
+    {
+        /** @var MockObject|Request $request */
+        $request = $this->getMockBuilder(Request::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        return $request;
+    }
+
+    /**
+     * @return MockObject|FormInterface
+     */
+    private function getForm()
+    {
+        return $this->createMock(FormInterface::class);
     }
 }

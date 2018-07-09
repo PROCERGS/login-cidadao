@@ -11,15 +11,19 @@
 namespace LoginCidadao\CoreBundle\Tests\LongPolling;
 
 use Doctrine\ORM\EntityManagerInterface;
+use LoginCidadao\APIBundle\Exception\RequestTimeoutException;
+use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\LongPolling\LongPollingUtils;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
  * @group time-sensitive
  */
-class LongPollingUtilsTest extends \PHPUnit_Framework_TestCase
+class LongPollingUtilsTest extends TestCase
 {
     public function testRunTimeLimited()
     {
@@ -42,7 +46,7 @@ class LongPollingUtilsTest extends \PHPUnit_Framework_TestCase
 
     public function testTimeout()
     {
-        $this->setExpectedException('LoginCidadao\APIBundle\Exception\RequestTimeoutException');
+        $this->expectException(RequestTimeoutException::class);
 
         $longPolling = new LongPollingUtils($this->getEntityManager(), 30);
         $longPolling->runTimeLimited(function () {
@@ -110,13 +114,10 @@ class LongPollingUtilsTest extends \PHPUnit_Framework_TestCase
         $updatedAt = new \DateTime('-1 hour');
         $currentUpdatedAt = new \DateTime('-1 hour');
 
-        $person = $this->getPerson();
-        $person->expects($this->any())->method('getUpdatedAt')
-            ->willReturnCallback(function () use (&$currentUpdatedAt) {
-                return $currentUpdatedAt;
-            });
+        $person = new Person();
+        $person->setUpdatedAt($updatedAt);
 
-        $repo = $this->getEvolvingPersonRepo($person, $currentUpdatedAt);
+        $repo = $this->getEvolvingPersonRepoWithRealPerson($person, $currentUpdatedAt);
 
         $em = $this->getEntityManager();
         $em->expects($this->once())->method('getRepository')->willReturn($repo);
@@ -128,42 +129,42 @@ class LongPollingUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|EntityManagerInterface
+     * @return MockObject|EntityManagerInterface
      */
     private function getEntityManager()
     {
-        $em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $em = $this->createMock(EntityManagerInterface::class);
 
         return $em;
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|PersonRepository
+     * @return MockObject|PersonRepository
      */
     private function getPersonRepository()
     {
-        $repo = $this->getMockBuilder('LoginCidadao\CoreBundle\Entity\PersonRepository')
+        $repo = $this->getMockBuilder(PersonRepository::class)
             ->disableOriginalConstructor()->getMock();
 
         return $repo;
     }
 
     /**
-     * @return PersonInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return PersonInterface|MockObject
      */
     private function getPerson()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|PersonInterface $person */
-        $person = $this->getMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        /** @var MockObject|PersonInterface $person */
+        $person = $this->createMock(PersonInterface::class);
         $person->expects($this->any())->method('getId')->willReturn(123);
 
         return $person;
     }
 
     /**
-     * @param PersonInterface|\PHPUnit_Framework_MockObject_MockObject $person
+     * @param PersonInterface|MockObject $person
      * @param \DateTime|null $currentUpdatedAt
-     * @return PersonRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @return PersonRepository|MockObject
      */
     private function getEvolvingPersonRepo(&$person, &$currentUpdatedAt)
     {
@@ -173,6 +174,26 @@ class LongPollingUtilsTest extends \PHPUnit_Framework_TestCase
             ->willReturnCallback(function () use (&$person, &$currentUpdatedAt) {
                 $currentUpdatedAt = new \DateTime();
                 $person->expects($this->any())->method('getEmailConfirmedAt')->willReturn($currentUpdatedAt);
+
+                return $person;
+            });
+
+        return $repo;
+    }
+
+    /**
+     * @param PersonInterface $person
+     * @param $currentUpdatedAt
+     * @return PersonRepository|MockObject
+     */
+    private function getEvolvingPersonRepoWithRealPerson(PersonInterface &$person, &$currentUpdatedAt)
+    {
+        $repo = $this->getPersonRepository();
+        $repo->expects($this->at(0))->method('find')->willReturn($person);
+        $repo->expects($this->at(1))->method('find')
+            ->willReturnCallback(function () use (&$person, &$currentUpdatedAt) {
+                $person->setUpdatedAt($currentUpdatedAt);
+                $person->setEmailConfirmedAt($currentUpdatedAt);
 
                 return $person;
             });

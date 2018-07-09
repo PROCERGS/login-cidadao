@@ -236,190 +236,6 @@ class PersonController extends Controller
     }
 
     /**
-     * @Route("/profile/doc/edit", name="lc_profile_doc_edit")
-     * @Template()
-     */
-    public function docEditAction(Request $request)
-    {
-        $user = $this->getUser();
-        $dispatcher = $this->get('event_dispatcher');
-
-        $event = new GetResponseUserEvent($user, $request);
-        $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $event);
-
-        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\DocFormType',
-            $user);
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-
-            $event = new FormEvent($form, $request);
-            $dispatcher->dispatch(ProfileEditListener::PROFILE_DOC_EDIT_SUCCESS,
-                $event);
-
-            $userManager = $this->get('fos_user.user_manager');
-            $userManager->updateUser($user);
-            $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('success',
-                $translator->trans("Documents were successfully changed"));
-        }
-        $return = $this->docRgListAction($request);
-        $return['form'] = $form->createView();
-
-        return $return;
-    }
-
-    /**
-     * @Route("/profile/doc/rg/remove", name="lc_profile_doc_rg_remove")
-     * @Template()
-     */
-    public function docRgRemoveAction(Request $request)
-    {
-        if ($id = $request->get('id')) {
-            $em = $this->getDoctrine()->getManager();
-            $rg = $em->getRepository('LoginCidadaoCoreBundle:IdCard')
-                ->createQueryBuilder('u')
-                ->where('u.person = :person and u.id = :id')
-                ->setParameter('person', $this->getUser())
-                ->setParameter('id', $id)
-                ->getQuery()
-                ->getOneOrNullResult();
-            if ($rg) {
-                $em->remove($rg);
-                $em->flush();
-            }
-        }
-        $resp = new Response('<script>rgGrid.getGrid();</script>');
-
-        return $resp;
-    }
-
-    /**
-     * @Route("/profile/doc/rg/edit", name="lc_profile_doc_rg_edit")
-     * @Template()
-     */
-    public function docRgEditAction(Request $request)
-    {
-        $form = $this->createForm(new DocRgFormType());
-        $rg = null;
-        if (($id = $request->get('id')) || (($data = $request->get($form->getName()))
-                && ($id = $data['id']))) {
-            $rg = $this->getDoctrine()
-                ->getManager()
-                ->getRepository('LoginCidadaoCoreBundle:IdCard')->findOneBy(array(
-                    'person' => $this->getUser(),
-                    'id' => $id,
-                ));
-        }
-        if (!$rg) {
-            $rg = new IdCard();
-            $rg->setPerson($this->getUser());
-        }
-        $form = $this->createForm(new DocRgFormType(), $rg);
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $rgNum = str_split($form->get('value')->getData());
-            if (($form->get('state')->getData()->getId() == 43) && ($this->checkRGDce($rgNum)
-                    != $rgNum[0] || $this->checkRGDcd($rgNum) != $rgNum[9])) {
-                $form->get('value')->addError(new FormError($this->get('translator')->trans('This RG is invalid')));
-
-                return array('form' => $form->createView());
-            }
-
-            $manager = $this->getDoctrine()->getManager();
-            $dql = $manager->getRepository('LoginCidadaoCoreBundle:IdCard')
-                ->createQueryBuilder('u')
-                ->where('u.person = :person and u.state = :state')
-                ->setParameter('person', $this->getUser())
-                ->setParameter('state', $form->get('state')->getData())
-                ->orderBy('u.id', 'ASC');
-            if ($rg->getId()) {
-                $dql->andWhere('u != :rg')->setParameter('rg', $rg);
-            }
-            $has = $dql->getQuery()->getResult();
-            if ($has) {
-                $form->get('state')->addError(new FormError($this->get('translator')->trans('You already have an ID registered for this State')));
-
-                return array('form' => $form->createView());
-            }
-            $manager->persist($rg);
-            $manager->flush();
-            $resp = new Response('<script>rgGrid.getGrid();</script>');
-
-            return $resp;
-        }
-
-        return array('form' => $form->createView());
-    }
-
-    private function checkRGDce($rg)
-    {
-        $total = ($rg[1] * 2) + ($rg[2] * 3) + ($rg[3] * 4) + ($rg[4] * 5) + ($rg[5]
-                * 6) + ($rg[6] * 7) + ($rg[7] * 8) + ($rg[8] * 9);
-        $resto = $total % 11;
-
-        if ($resto == 0 || $resto == 1) {
-            return 1;
-        } else {
-            return 11 - $resto;
-        }
-    }
-
-    private function checkRGDcd($rg)
-    {
-        $n1 = ($rg[8] * 2) % 9;
-        $n2 = ($rg[6] * 2) % 9;
-        $n3 = ($rg[4] * 2) % 9;
-        $n4 = ($rg[2] * 2) % 9;
-        $n5 = ($rg[0] * 2) % 9;
-        $total = $n1 + $n2 + $n3 + $n4 + $n5 + $rg[7] + $rg[5] + $rg[3] + $rg[1];
-
-        if ($rg[8] == 9) {
-            $total = $total + 9;
-        }
-        if ($rg[6] == 9) {
-            $total = $total + 9;
-        }
-        if ($rg[4] == 9) {
-            $total = $total + 9;
-        }
-        if ($rg[2] == 9) {
-            $total = $total + 9;
-        }
-        if ($rg[0] == 9) {
-            $total = $total + 9;
-        }
-
-        $resto = $total % 10;
-
-        if ($resto == 0) {
-            return 1;
-        } else {
-            return 10 - $resto;
-        }
-    }
-
-    /**
-     * @Route("/profile/doc/rg/list", name="lc_profile_doc_rg_list")
-     * @Template()
-     */
-    public function docRgListAction(Request $request)
-    {
-        $sql = $this->getDoctrine()->getManager()
-            ->getRepository('LoginCidadaoCoreBundle:IdCard')
-            ->getGridQuery($this->getUser());
-
-        $grid = new GridHelper();
-        $grid->setId('rg-grid');
-        $grid->setPerPage(4);
-        $grid->setMaxResult(4);
-        $grid->setQueryBuilder($sql);
-        $grid->setInfiniteGrid(true);
-        $grid->setRoute('lc_profile_doc_rg_list');
-
-        return array('grid' => $grid->createView($request));
-    }
-
-    /**
      * @Route("/profile/badges", name="lc_profile_badges")
      * @Template()
      */
@@ -431,7 +247,7 @@ class PersonController extends Controller
         $badges = $badgesHandler->getAvailableBadges();
         $user = $badgesHandler->evaluate($this->getUser());
 
-        return array('allBadges' => $badges, 'userBadges' => $user->getBadges());
+        return ['allBadges' => $badges, 'userBadges' => $user->getBadges()];
     }
 
     private function removeAll(array $objects)
@@ -442,7 +258,7 @@ class PersonController extends Controller
         }
     }
 
-    private function trans($id, array $parameters = array(), $domain = null, $locale = null)
+    private function trans($id, array $parameters = [], $domain = null, $locale = null)
     {
         /** @var TranslatorInterface $translator */
         $translator = $this->get('translator');

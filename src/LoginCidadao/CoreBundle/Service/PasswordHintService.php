@@ -10,10 +10,10 @@
 
 namespace LoginCidadao\CoreBundle\Service;
 
-use Rollerworks\Bundle\PasswordStrengthBundle\Validator\Constraints\PasswordRequirements;
+use Rollerworks\Component\PasswordStrength\Validator\Constraints\PasswordRequirements;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Mapping\ClassMetadataInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PasswordHintService
@@ -57,16 +57,17 @@ class PasswordHintService
             'requireSpecialCharacter' => false,
         ];
 
-        /** @var ClassMetadata $metadata */
         $metadata = $this->validator->getMetadataFor($this->userClass);
 
-        if (!($metadata instanceof ClassMetadata) || false === $metadata->hasPropertyMetadata('plainPassword')) {
+        if (!$metadata instanceof ClassMetadataInterface || false === $metadata->hasPropertyMetadata('plainPassword')) {
             return $requirements;
         }
         $propertyMetadata = $metadata->getPropertyMetadata('plainPassword');
         $constraints = [];
-        foreach ($propertyMetadata as $propertymetadata) {
-            $constraints = array_merge($constraints, $propertymetadata->getConstraints());
+        foreach ($propertyMetadata as $pMetadata) {
+            if (method_exists($pMetadata, 'getConstraints')) {
+                $constraints = array_merge($constraints, $pMetadata->getConstraints());
+            }
         }
 
         foreach ($constraints as $constraint) {

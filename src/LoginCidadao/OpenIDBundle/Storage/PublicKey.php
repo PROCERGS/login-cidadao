@@ -11,31 +11,21 @@
 namespace LoginCidadao\OpenIDBundle\Storage;
 
 use Gaufrette\Filesystem;
-use Doctrine\ORM\EntityManager;
 use Gaufrette\Exception\FileNotFound;
 use OAuth2\Storage\PublicKeyInterface;
 
 class PublicKey implements PublicKeyInterface
 {
-    /** @var EntityManager */
-    private $em;
-
     /** @var Filesystem */
     private $filesystem;
 
     /** @var string */
     private $fileName;
 
-    public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
-    }
-
-    public function setFilesystem(Filesystem $filesystem,
-                                    $fileName = 'private.pem')
+    public function setFilesystem(Filesystem $filesystem, $fileName = 'private.pem')
     {
         $this->filesystem = $filesystem;
-        $this->fileName   = $fileName;
+        $this->fileName = $fileName;
     }
 
     public function getEncryptionAlgorithm($client_id = null)
@@ -47,6 +37,7 @@ class PublicKey implements PublicKeyInterface
     {
         $key = $this->getPrivateKeyResource();
         openssl_pkey_export($key, $priv);
+
         return $priv;
     }
 
@@ -63,7 +54,7 @@ class PublicKey implements PublicKeyInterface
     private function createKeys()
     {
         $priv = null;
-        $key  = openssl_pkey_new();
+        $key = openssl_pkey_new();
         openssl_pkey_export($key, $priv);
         $file = $this->filesystem->get($this->fileName, true);
         $file->setContent($priv);

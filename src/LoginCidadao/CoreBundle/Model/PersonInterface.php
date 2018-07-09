@@ -1,8 +1,17 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Model;
 
-use Doctrine\ORM\EntityManagerInterface;
+use LoginCidadao\OAuthBundle\Model\ClientInterface;
+use LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
 use LoginCidadao\CoreBundle\Entity\BackupCode;
 use LoginCidadao\CoreBundle\Tests\LongPolling\LongPollableInterface;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
@@ -13,7 +22,6 @@ use LoginCidadao\CoreBundle\Entity\City;
 use LoginCidadao\CoreBundle\Entity\Country;
 use LoginCidadao\CoreBundle\Entity\State;
 use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
-use LoginCidadao\OAuthBundle\Entity\Client;
 use JMS\Serializer\Annotation as JMS;
 
 interface PersonInterface extends EncoderAwareInterface, UserInterface, LocationAwareInterface, LongPollableInterface, TwoFactorInterface
@@ -67,11 +75,11 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
 
     /**
      * Checks if a given Client can access this Person's specified scope.
-     * @param \LoginCidadao\OAuthBundle\Entity\Client $client
+     * @param ClientInterface $client
      * @param mixed $scope can be a single scope or an array with several.
      * @return boolean
      */
-    public function isAuthorizedClient(Client $client, $scope);
+    public function isAuthorizedClient(ClientInterface $client, $scope);
 
     /**
      * Checks if this Person has any authorization for a given Client.
@@ -115,12 +123,18 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
 
     public function setCreatedAt(\DateTime $createdAt);
 
+    /**
+     * @return \DateTime
+     */
     public function getCreatedAt();
 
     public function setCreatedAtValue();
 
     public function setEmailConfirmedAt(\DateTime $emailConfirmedAt = null);
 
+    /**
+     * @return \DateTime
+     */
     public function getEmailConfirmedAt();
 
     public function getSocialNetworksPicture();
@@ -199,8 +213,6 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
 
     public function isClientAuthorized($app_id);
 
-    public function setUpdatedAt($var = null);
-
     public function getUpdatedAt();
 
     public function setGoogleId($var);
@@ -215,15 +227,14 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
 
     public function getGoogleAccessToken();
 
-    public function setComplement($var);
-
-    public function getComplement();
-
     /**
      * @return IdCardInterface[]
      */
     public function getIdCards();
 
+    /**
+     * @return BadgeInterface[]
+     */
     public function getBadges();
 
     /**
@@ -272,4 +283,10 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
      * @return BackupCode[]
      */
     public function getBackupCodes();
+
+    /**
+     * @param \DateTime|null $updatedAt
+     * @return PersonInterface
+     */
+    public function setUpdatedAt($updatedAt = null);
 }

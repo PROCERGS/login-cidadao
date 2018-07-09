@@ -10,12 +10,12 @@
 
 namespace PROCERGS\LoginCidadao\NfgBundle\Tests;
 
-class TestsUtil
+trait TestsUtil
 {
-    public static function getRouter(\PHPUnit_Framework_TestCase $testCase)
+    private function getRouter()
     {
-        $router = $testCase->getMock('\Symfony\Component\Routing\RouterInterface');
-        $router->expects($testCase->any())->method('generate')
+        $router = $this->createMock('\Symfony\Component\Routing\RouterInterface');
+        $router->expects($this->any())->method('generate')
             ->willReturnCallback(function ($routeName) {
                 return $routeName;
             });

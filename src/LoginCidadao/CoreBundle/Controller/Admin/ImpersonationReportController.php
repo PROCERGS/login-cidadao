@@ -10,6 +10,10 @@
 
 namespace LoginCidadao\CoreBundle\Controller\Admin;
 
+use LoginCidadao\APIBundle\Entity\ActionLogRepository;
+use LoginCidadao\CoreBundle\Entity\ImpersonationReportRepository;
+use LoginCidadao\CoreBundle\Entity\PersonRepository;
+use LoginCidadao\CoreBundle\Form\ImpersonationReportType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -18,7 +22,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use LoginCidadao\CoreBundle\Form\ImpersonationReportType;
 use LoginCidadao\CoreBundle\Entity\ImpersonationReport;
 use LoginCidadao\APIBundle\Entity\ActionLog;
 
@@ -35,16 +38,15 @@ class ImpersonationReportController extends Controller
      */
     public function indexAction()
     {
-        $logRepo    = $this->getDoctrine()
-            ->getRepository('LoginCidadaoAPIBundle:ActionLog');
+        /** @var ActionLogRepository $logRepo */
+        $logRepo = $this->getDoctrine()->getRepository('LoginCidadaoAPIBundle:ActionLog');
+
+        /** @var ImpersonationReportRepository $reportRepo */
         $reportRepo = $this->getDoctrine()
             ->getRepository('LoginCidadaoCoreBundle:ImpersonationReport');
 
-        $pending = $logRepo->findImpersonatonsWithoutReports(null,
-            $this->getUser(), true);
-        $reports = $reportRepo->findBy(array(
-            'impersonator' => $this->getUser()
-        ));
+        $pending = $logRepo->findImpersonatonsWithoutReports(null, $this->getUser(), true);
+        $reports = $reportRepo->findBy(['impersonator' => $this->getUser()]);
 
         return compact('pending', 'reports');
     }
@@ -76,7 +78,10 @@ class ImpersonationReportController extends Controller
             return $this->redirectToRoute('lc_admin_impersonation_report_index');
         }
 
-        return array('form' => $form->createView(), 'report' => $report);
+        return [
+            'form' => $form->createView(),
+            'report' => $report,
+        ];
     }
 
     /**
@@ -88,8 +93,7 @@ class ImpersonationReportController extends Controller
     {
         $report = $this->getOr404($id);
 
-        $form = $this->createForm('LoginCidadao\CoreBundle\Form\ImpersonationReportType',
-            $report);
+        $form = $this->createForm(ImpersonationReportType::class, $report);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -100,7 +104,10 @@ class ImpersonationReportController extends Controller
             return $this->redirectToRoute('lc_admin_impersonation_report_index');
         }
 
-        return array('form' => $form->createView(), 'report' => $report);
+        return [
+            'form' => $form->createView(),
+            'report' => $report,
+        ];
     }
 
     /**
@@ -111,8 +118,7 @@ class ImpersonationReportController extends Controller
      */
     private function getActionLogOr404($id)
     {
-        $logRepo = $this->getDoctrine()
-            ->getRepository('LoginCidadaoAPIBundle:ActionLog');
+        $logRepo = $this->getDoctrine()->getRepository('LoginCidadaoAPIBundle:ActionLog');
 
         $log = $logRepo->find($id);
 
@@ -126,13 +132,12 @@ class ImpersonationReportController extends Controller
     /**
      *
      * @param integer $id
-     * @return ActionLog
+     * @return ImpersonationReport
      * @throws NotFoundHttpException
      */
     private function getOr404($id)
     {
-        $reportRepo = $this->getDoctrine()
-            ->getRepository('LoginCidadaoCoreBundle:ImpersonationReport');
+        $reportRepo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:ImpersonationReport');
 
         $report = $reportRepo->find($id);
 
@@ -151,16 +156,18 @@ class ImpersonationReportController extends Controller
      */
     private function getNewReport(ActionLog $log)
     {
-        $reportRepo = $this->getDoctrine()
-            ->getRepository('LoginCidadaoCoreBundle:ImpersonationReport');
-        $personRepo = $this->getDoctrine()
-            ->getRepository('LoginCidadaoCoreBundle:Person');
+        /** @var ImpersonationReportRepository $reportRepo */
+        $reportRepo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:ImpersonationReport');
+
+        /** @var PersonRepository $personRepo */
+        $personRepo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Person');
 
         $report = new ImpersonationReport();
 
         $existingReport = $reportRepo->findOneBy(array('actionLog' => $log));
         if ($existingReport instanceof ImpersonationReport) {
             $this->addFlash('error', "This action was already reported.");
+
             return $this->redirectToRoute('lc_admin_impersonation_report_index');
         }
 
