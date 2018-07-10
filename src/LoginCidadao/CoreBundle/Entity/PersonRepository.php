@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Egulias\EmailValidator\EmailValidator;
+use Egulias\EmailValidator\Validation\RFCValidation;
 use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
@@ -235,7 +236,7 @@ class PersonRepository extends EntityRepository
 
         // Check email
         $emailValidator = new EmailValidator();
-        if ($emailValidator->isValid($query)) {
+        if ($emailValidator->isValid($query, new RFCValidation())) {
             return $this->getEmailSearchQuery($query);
         }
 
