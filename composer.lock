@@ -377,7 +377,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CircleOfNice/CiRestClientBundle/zipball/196c09582b31dd1e7953ba4825b441ad09f4853c",
+                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/CircleOfNice/CiRestClientBundle/196c09582b31dd1e7953ba4825b441ad09f4853c",
                 "reference": "196c09582b31dd1e7953ba4825b441ad09f4853c",
                 "shasum": ""
             },
@@ -400,7 +400,6 @@
                     "Circle\\RestClientBundle": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL"
             ],
@@ -1262,7 +1261,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/eljam/circuit-breaker/zipball/653322e12e8b6ed9ee8a17d0406e0250580e78b5",
+                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/eljam/circuit-breaker/653322e12e8b6ed9ee8a17d0406e0250580e78b5",
                 "reference": "653322e12e8b6ed9ee8a17d0406e0250580e78b5",
                 "shasum": ""
             },
@@ -1283,7 +1282,6 @@
                     "Eljam\\CircuitBreaker\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1583,16 +1581,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "8e723f2c7a36191b0fd7db60d8f8d0aacc20d807"
+                "reference": "007fd9bd48a17d23b1c38b01115db202db7d989c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/8e723f2c7a36191b0fd7db60d8f8d0aacc20d807",
-                "reference": "8e723f2c7a36191b0fd7db60d8f8d0aacc20d807",
+                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/FriendsOfSymfony/FOSUserBundle/007fd9bd48a17d23b1c38b01115db202db7d989c",
+                "reference": "007fd9bd48a17d23b1c38b01115db202db7d989c",
                 "shasum": ""
             },
             "require": {
-                "paragonie/random_compat": "^1 || ^2",
+                "paragonie/random_compat": "^1 || ^2 || ^9",
                 "php": "^5.5.9 || ^7.0",
                 "symfony/form": "^2.8 || ^3.0 || ^4.0",
                 "symfony/framework-bundle": "^2.8 || ^3.0 || ^4.0",
@@ -1629,7 +1627,6 @@
                     "/Tests/"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1651,20 +1648,20 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2018-06-08T13:55:34+00:00"
+            "time": "2018-07-10T10:55:28+00:00"
         },
         {
             "name": "giggsey/libphonenumber-for-php",
-            "version": "8.9.8",
+            "version": "8.9.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-                "reference": "420621360d56499ac1b0e6293561ed8661017c6b"
+                "reference": "79a3ee64277b3c8f71dc379c7325155b945058d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/420621360d56499ac1b0e6293561ed8661017c6b",
-                "reference": "420621360d56499ac1b0e6293561ed8661017c6b",
+                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/giggsey/libphonenumber-for-php/79a3ee64277b3c8f71dc379c7325155b945058d7",
+                "reference": "79a3ee64277b3c8f71dc379c7325155b945058d7",
                 "shasum": ""
             },
             "require": {
@@ -1698,7 +1695,6 @@
                     "/src/timezone/data/"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -1719,7 +1715,7 @@
                 "phonenumber",
                 "validation"
             ],
-            "time": "2018-06-14T11:25:48+00:00"
+            "time": "2018-06-27T13:04:37+00:00"
         },
         {
             "name": "giggsey/locale",
@@ -2343,7 +2339,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jakeasmith/http_build_url/zipball/93c273e77cb1edead0cf8bcf8cd2003428e74e37",
+                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/jakeasmith/http_build_url/93c273e77cb1edead0cf8bcf8cd2003428e74e37",
                 "reference": "93c273e77cb1edead0cf8bcf8cd2003428e74e37",
                 "shasum": ""
             },
@@ -2353,7 +2349,6 @@
                     "src/http_build_url.php"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2835,16 +2830,16 @@
         },
         {
             "name": "jms/serializer-bundle",
-            "version": "2.4.1",
+            "version": "2.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/JMSSerializerBundle.git",
-                "reference": "73bad761515fabae3cb52bde7c73484081a91118"
+                "reference": "22eb9a2f7983394b0770237ca91e879eb2a4b4a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/JMSSerializerBundle/zipball/73bad761515fabae3cb52bde7c73484081a91118",
-                "reference": "73bad761515fabae3cb52bde7c73484081a91118",
+                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/schmittjoh/JMSSerializerBundle/22eb9a2f7983394b0770237ca91e879eb2a4b4a6",
+                "reference": "22eb9a2f7983394b0770237ca91e879eb2a4b4a6",
                 "shasum": ""
             },
             "require": {
@@ -2882,9 +2877,8 @@
                     "/Tests/"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "Apache-2.0"
+                "MIT"
             ],
             "authors": [
                 {
@@ -2905,7 +2899,7 @@
                 "serialization",
                 "xml"
             ],
-            "time": "2018-05-25T10:56:25+00:00"
+            "time": "2018-06-19T13:39:25+00:00"
         },
         {
             "name": "knplabs/gaufrette",
@@ -3321,16 +3315,16 @@
         },
         {
             "name": "liip/monitor-bundle",
-            "version": "2.6.5",
+            "version": "2.6.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liip/LiipMonitorBundle.git",
-                "reference": "20d6679a9aed0752fdb73fee7da2695c57ac7da4"
+                "reference": "ec3cb6c138db79c78ab48a2409146194f2576bce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liip/LiipMonitorBundle/zipball/20d6679a9aed0752fdb73fee7da2695c57ac7da4",
-                "reference": "20d6679a9aed0752fdb73fee7da2695c57ac7da4",
+                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/liip/LiipMonitorBundle/ec3cb6c138db79c78ab48a2409146194f2576bce",
+                "reference": "ec3cb6c138db79c78ab48a2409146194f2576bce",
                 "shasum": ""
             },
             "require": {
@@ -3368,7 +3362,6 @@
                     "Liip\\MonitorBundle\\": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -3397,7 +3390,7 @@
                 "monitor",
                 "monitoring"
             ],
-            "time": "2018-05-24T08:23:16+00:00"
+            "time": "2018-06-28T05:13:08+00:00"
         },
         {
             "name": "michelf/php-markdown",
@@ -3972,16 +3965,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v2.0.15",
+            "version": "v2.0.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "10bcb46e8f3d365170f6de9d05245aa066b81f09"
+                "reference": "29af24f25bab834fcbb38ad2a69fa93b867e070d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/10bcb46e8f3d365170f6de9d05245aa066b81f09",
-                "reference": "10bcb46e8f3d365170f6de9d05245aa066b81f09",
+                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/paragonie/random_compat/29af24f25bab834fcbb38ad2a69fa93b867e070d",
+                "reference": "29af24f25bab834fcbb38ad2a69fa93b867e070d",
                 "shasum": ""
             },
             "require": {
@@ -3999,7 +3992,6 @@
                     "lib/random.php"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -4017,7 +4009,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2018-06-08T15:26:40+00:00"
+            "time": "2018-07-04T16:31:37+00:00"
         },
         {
             "name": "phpcollection/phpcollection",
@@ -4315,7 +4307,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/meurs-monitor-bundle/zipball/2901db592df516f33fd0170d518f47850304395d",
+                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/PROCERGS/meurs-monitor-bundle/2901db592df516f33fd0170d518f47850304395d",
                 "reference": "2901db592df516f33fd0170d518f47850304395d",
                 "shasum": ""
             },
@@ -4338,7 +4330,6 @@
                     "PROCERGS\\LoginCidadao\\MonitorBundle": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -4367,7 +4358,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/nfg-badges-bundle/zipball/fb830032dc2475216d7b8faba75bfde0890cfbd2",
+                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/PROCERGS/nfg-badges-bundle/fb830032dc2475216d7b8faba75bfde0890cfbd2",
                 "reference": "fb830032dc2475216d7b8faba75bfde0890cfbd2",
                 "shasum": ""
             },
@@ -4380,7 +4371,6 @@
                     "NFG\\BadgesBundle": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -4411,7 +4401,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/sms-service/zipball/ffb7f666da895ac00ddf10e73855a1ebcc8eb0b9",
+                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/PROCERGS/sms-service/ffb7f666da895ac00ddf10e73855a1ebcc8eb0b9",
                 "reference": "ffb7f666da895ac00ddf10e73855a1ebcc8eb0b9",
                 "shasum": ""
             },
@@ -4433,7 +4423,6 @@
                     "PROCERGS\\Sms\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "authors": [
                 {
                     "name": "Guilherme Donato",
@@ -5191,16 +5180,16 @@
         },
         {
             "name": "snc/redis-bundle",
-            "version": "2.1.3",
+            "version": "2.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/snc/SncRedisBundle.git",
-                "reference": "5d8169e961901fdc652e00bcbb1974cc966aef8b"
+                "reference": "3f3c233ebbfba43d3abd2403be0bc34c11e6dc06"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/snc/SncRedisBundle/zipball/5d8169e961901fdc652e00bcbb1974cc966aef8b",
-                "reference": "5d8169e961901fdc652e00bcbb1974cc966aef8b",
+                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/snc/SncRedisBundle/3f3c233ebbfba43d3abd2403be0bc34c11e6dc06",
+                "reference": "3f3c233ebbfba43d3abd2403be0bc34c11e6dc06",
                 "shasum": ""
             },
             "require": {
@@ -5231,7 +5220,6 @@
                     "Snc\\RedisBundle\\": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -5252,7 +5240,7 @@
                 "redis",
                 "symfony"
             ],
-            "time": "2018-05-09T08:08:39+00:00"
+            "time": "2018-06-25T15:31:46+00:00"
         },
         {
             "name": "sonata-project/google-authenticator",
@@ -5314,16 +5302,16 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v6.0.2",
+            "version": "v6.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "412333372fb6c8ffb65496a2bbd7321af75733fc"
+                "reference": "aa899fef280b1c1aec8d5d4ac069af7f80c89a23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/412333372fb6c8ffb65496a2bbd7321af75733fc",
-                "reference": "412333372fb6c8ffb65496a2bbd7321af75733fc",
+                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/swiftmailer/swiftmailer/aa899fef280b1c1aec8d5d4ac069af7f80c89a23",
+                "reference": "aa899fef280b1c1aec8d5d4ac069af7f80c89a23",
                 "shasum": ""
             },
             "require": {
@@ -5334,10 +5322,14 @@
                 "mockery/mockery": "~0.9.1",
                 "symfony/phpunit-bridge": "~3.3@dev"
             },
+            "suggest": {
+                "ext-intl": "Needed to support internationalized email addresses",
+                "true/punycode": "Needed to support internationalized email addresses, if ext-intl is not installed"
+            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "6.0-dev"
+                    "dev-master": "6.1-dev"
                 }
             },
             "autoload": {
@@ -5345,7 +5337,6 @@
                     "lib/swift_required.php"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -5359,13 +5350,13 @@
                 }
             ],
             "description": "Swiftmailer, free feature-rich PHP mailer",
-            "homepage": "http://swiftmailer.symfony.com",
+            "homepage": "https://swiftmailer.symfony.com",
             "keywords": [
                 "email",
                 "mail",
                 "mailer"
             ],
-            "time": "2017-09-30T22:39:41+00:00"
+            "time": "2018-07-04T11:12:44+00:00"
         },
         {
             "name": "symfony/assetic-bundle",
@@ -6135,16 +6126,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.8.41",
+            "version": "v2.8.42",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "24fc640d544a67869a4106de5fc303c597398629"
+                "reference": "0084ec5bb6614688f547ef80bf1ef8a900c4e350"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/24fc640d544a67869a4106de5fc303c597398629",
-                "reference": "24fc640d544a67869a4106de5fc303c597398629",
+                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/symfony/symfony/0084ec5bb6614688f547ef80bf1ef8a900c4e350",
+                "reference": "0084ec5bb6614688f547ef80bf1ef8a900c4e350",
                 "shasum": ""
             },
             "require": {
@@ -6252,7 +6243,6 @@
                     "**/Tests/"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6271,7 +6261,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2018-05-25T12:03:11+00:00"
+            "time": "2018-06-25T12:02:18+00:00"
         },
         {
             "name": "twig/twig",
@@ -6677,37 +6667,37 @@
         },
         {
             "name": "zendframework/zenddiagnostics",
-            "version": "v1.1.0",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/ZendDiagnostics.git",
-                "reference": "d27aa064c5185c5830e917ffe48284b0995eed13"
+                "url": "https://github.com/zendframework/zend-diagnostics.git",
+                "reference": "bb03241c503fdf4d6d420e06653a8b65a10b239d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/ZendDiagnostics/zipball/d27aa064c5185c5830e917ffe48284b0995eed13",
-                "reference": "d27aa064c5185c5830e917ffe48284b0995eed13",
+                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/zendframework/zend-diagnostics/bb03241c503fdf4d6d420e06653a8b65a10b239d",
+                "reference": "bb03241c503fdf4d6d420e06653a8b65a10b239d",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.6|^7.0"
+                "php": "^5.6 || ^7.0"
             },
             "require-dev": {
                 "doctrine/migrations": "^1.0",
-                "guzzle/http": "^3.0",
-                "guzzle/plugin-mock": "^3.0",
+                "guzzlehttp/guzzle": "^5.3.2 || ^6.3.3",
                 "mikey179/vfsstream": "^1.6",
                 "php-amqplib/php-amqplib": "^2.0",
-                "phpunit/phpunit": "^4.7|^5.0",
+                "phpunit/phpunit": "^5.7.27 || 6.5.8 || ^7.1.2",
                 "predis/predis": "^1.0",
                 "sensiolabs/security-checker": "^1.3",
-                "symfony/yaml": "^2.7|^3.0|^4.0",
+                "symfony/yaml": "^2.7 || ^3.0 || ^4.0",
+                "zendframework/zend-coding-standard": "~1.0.0",
                 "zendframework/zend-loader": "^2.0"
             },
             "suggest": {
                 "doctrine/migrations": "Required by Check\\DoctrineMigration",
                 "ext-bcmath": "Required by Check\\CpuPerformance",
-                "guzzle/http": "Required by Check\\GuzzleHttpService",
+                "guzzlehttp/guzzle": "Required by Check\\GuzzleHttpService",
                 "predis/predis": "Required by Check\\Redis",
                 "sensiolabs/security-checker": "Required by Check\\SecurityAdvisory",
                 "symfony/yaml": "Required by Check\\YamlFile",
@@ -6716,27 +6706,27 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.2.x-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "ZendDiagnostics\\": "src/",
-                    "ZendDiagnosticsTest\\": "tests/"
+                "psr-4": {
+                    "ZendDiagnostics\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
             "description": "A set of components for performing diagnostic tests in PHP applications",
-            "homepage": "https://github.com/zendframework/ZendDiagnostics",
+            "homepage": "https://github.com/zendframework/zend-diagnostics",
             "keywords": [
+                "ZendFramework",
                 "diagnostics",
                 "php",
-                "test"
+                "test",
+                "zf"
             ],
-            "time": "2017-12-13T08:36:13+00:00"
+            "time": "2018-06-25T22:03:27+00:00"
         }
     ],
     "packages-dev": [
@@ -6798,7 +6788,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/3e01bdad3e18354c3dce54466b7fbe33a9f9f7f8",
+                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/myclabs/DeepCopy/3e01bdad3e18354c3dce54466b7fbe33a9f9f7f8",
                 "reference": "3e01bdad3e18354c3dce54466b7fbe33a9f9f7f8",
                 "shasum": ""
             },
@@ -6822,7 +6812,6 @@
                     "src/DeepCopy/deep_copy.php"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -7404,16 +7393,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "6.5.8",
+            "version": "6.5.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "4f21a3c6b97c42952fd5c2837bb354ec0199b97b"
+                "reference": "093ca5508174cd8ab8efe44fd1dde447adfdec8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/4f21a3c6b97c42952fd5c2837bb354ec0199b97b",
-                "reference": "4f21a3c6b97c42952fd5c2837bb354ec0199b97b",
+                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/sebastianbergmann/phpunit/093ca5508174cd8ab8efe44fd1dde447adfdec8f",
+                "reference": "093ca5508174cd8ab8efe44fd1dde447adfdec8f",
                 "shasum": ""
             },
             "require": {
@@ -7466,7 +7455,6 @@
                     "src/"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -7484,7 +7472,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-04-10T11:38:34+00:00"
+            "time": "2018-07-03T06:40:40+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -8154,16 +8142,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "b3451fc442baaf9169e50491a059ef17582c4424"
+                "reference": "c7f28cbf2df4e9deed7fc376ca4f146eaa5afc8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/b3451fc442baaf9169e50491a059ef17582c4424",
-                "reference": "b3451fc442baaf9169e50491a059ef17582c4424",
+                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/symfony/phpunit-bridge/c7f28cbf2df4e9deed7fc376ca4f146eaa5afc8a",
+                "reference": "c7f28cbf2df4e9deed7fc376ca4f146eaa5afc8a",
                 "shasum": ""
             },
             "require": {
@@ -8200,7 +8188,6 @@
                     "/Tests/"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -8216,7 +8203,7 @@
             ],
             "description": "Symfony PHPUnit Bridge",
             "homepage": "https://symfony.com",
-            "time": "2018-05-25T14:55:38+00:00"
+            "time": "2018-06-11T12:56:28+00:00"
         },
         {
             "name": "theseer/tokenizer",
