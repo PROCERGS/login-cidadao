@@ -291,6 +291,9 @@ simple_things_entity_audit:
         - LoginCidadao\OAuthBundle\Entity\Organization
         - LoginCidadao\OpenIDBundle\Entity\ClientMetadata
 
+        - LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim
+        - LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimAuthorization
+
         - LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification
         - LoginCidadao\PhoneVerificationBundle\Entity\SentVerification
 
