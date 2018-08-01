@@ -63,11 +63,16 @@ class RemoteClaimController extends BaseController
             'person' => $person,
         ]);
 
+        if ($authorization instanceof Authorization) {
+            throw $this->createNotFoundException("Authorization not found");
+        }
+
         /** @var SerializerInterface $serializer */
         $serializer = $this->get('jms_serializer');
         $personSerializationContext = $this->getJMSSerializationContext($authorization->getScope());
         $serializedPerson = $serializer->serialize($person, $format, $personSerializationContext);
-        $serializedClient = $serializer->serialize($client, $format, $this->getJMSSerializationContext(['remote_claim']));
+        $serializedClient = $serializer->serialize($client, $format,
+            $this->getJMSSerializationContext(['remote_claim']));
 
         $response = [
             'claim_name' => (string)$remoteClaimAuthorization->getClaimName(),
