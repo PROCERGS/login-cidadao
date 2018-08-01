@@ -12,6 +12,9 @@ namespace LoginCidadao\RemoteClaimsBundle\Tests\Model;
 
 use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\CoreBundle\Entity\Authorization;
+use LoginCidadao\CoreBundle\Entity\Person;
+use LoginCidadao\CoreBundle\Service\AuthorizationManager;
+use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimAuthorization;
@@ -22,13 +25,24 @@ use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimAuthorizationInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimManager;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class RemoteClaimManagerTest extends TestCase
 {
     public function testEnforceNewAuthorization()
     {
-        $authorization = $this->getRemoteClaimAuthorization();
+        $person = new Person();
+        $claimProvider = new Client();
+        $claimName = new TagUri();
+        $remoteClaim = new RemoteClaim();
+        $authorization = (new RemoteClaimAuthorization())
+            ->setClaimName($claimName)
+            ->setPerson($person)
+            ->setClaimProvider($claimProvider);
+
+        $remoteClaimRepo = $this->getRemoteClaimRepo();
+        $remoteClaimRepo->expects($this->once())->method('findOneBy')->willReturn($remoteClaim);
 
         $em = $this->getEntityManager();
         $em->expects($this->once())->method('persist')->with($authorization);
@@ -36,13 +50,24 @@ class RemoteClaimManagerTest extends TestCase
         $repo = $this->getRepo();
         $repo->expects($this->once())->method('findAuthorization')->willReturn(null);
 
-        $manager = new RemoteClaimManager($em, $repo, $this->getRemoteClaimRepo());
+        $manager = new RemoteClaimManager($em, $repo, $remoteClaimRepo, $this->getAuthorizationManager());
         $this->assertSame($authorization, $manager->enforceAuthorization($authorization));
     }
 
     public function testEnforceExistingAuthorization()
     {
-        $authorization = $this->getRemoteClaimAuthorization();
+        $person = new Person();
+        $claimProvider = new Client();
+        $claimName = new TagUri();
+        $remoteClaim = new RemoteClaim();
+        $authorization = (new RemoteClaimAuthorization())
+            ->setClaimName($claimName)
+            ->setPerson($person)
+            ->setClaimProvider($claimProvider);
+
+        $remoteClaimRepo = $this->getRemoteClaimRepo();
+        $remoteClaimRepo->expects($this->once())->method('findOneBy')->willReturn($remoteClaim);
+
         $existingAuthorization = $this->getRemoteClaimAuthorization();
 
         $em = $this->getEntityManager();
@@ -51,7 +76,7 @@ class RemoteClaimManagerTest extends TestCase
         $repo = $this->getRepo();
         $repo->expects($this->once())->method('findAuthorization')->willReturn($existingAuthorization);
 
-        $manager = new RemoteClaimManager($em, $repo, $this->getRemoteClaimRepo());
+        $manager = new RemoteClaimManager($em, $repo, $remoteClaimRepo, $this->getAuthorizationManager());
         $this->assertSame($existingAuthorization, $manager->enforceAuthorization($authorization));
     }
 
@@ -65,7 +90,8 @@ class RemoteClaimManagerTest extends TestCase
         $repo = $this->getRepo();
         $repo->expects($this->once())->method('findAuthorization')->willReturn($authorization);
 
-        $manager = new RemoteClaimManager($this->getEntityManager(), $repo, $this->getRemoteClaimRepo());
+        $manager = new RemoteClaimManager($this->getEntityManager(), $repo, $this->getRemoteClaimRepo(),
+            $this->getAuthorizationManager());
 
         $this->assertTrue($manager->isAuthorized($claimName, $person, $client));
     }
@@ -80,7 +106,8 @@ class RemoteClaimManagerTest extends TestCase
         $repo = $this->getRepo();
         $repo->expects($this->once())->method('findAuthorization')->willReturn($authorization);
 
-        $manager = new RemoteClaimManager($this->getEntityManager(), $repo, $this->getRemoteClaimRepo());
+        $manager = new RemoteClaimManager($this->getEntityManager(), $repo, $this->getRemoteClaimRepo(),
+            $this->getAuthorizationManager());
 
         $this->assertTrue($manager->isAuthorized($claimName, $person, $client));
     }
@@ -94,7 +121,8 @@ class RemoteClaimManagerTest extends TestCase
         $repo = $this->getRepo();
         $repo->expects($this->once())->method('findAuthorization')->willReturn(null);
 
-        $manager = new RemoteClaimManager($this->getEntityManager(), $repo, $this->getRemoteClaimRepo());
+        $manager = new RemoteClaimManager($this->getEntityManager(), $repo, $this->getRemoteClaimRepo(),
+            $this->getAuthorizationManager());
 
         $this->assertFalse($manager->isAuthorized($claimName, $person, $client));
     }
@@ -117,14 +145,15 @@ class RemoteClaimManagerTest extends TestCase
         $repo = $this->getRepo();
         $repo->expects($this->once())->method('findAllByClientAndPerson')->willReturn($remoteClaimAuthorizations);
 
-        $manager = new RemoteClaimManager($em, $repo, $this->getRemoteClaimRepo());
+        $manager = new RemoteClaimManager($em, $repo, $this->getRemoteClaimRepo(), $this->getAuthorizationManager());
         $manager->revokeAllAuthorizations($authorization);
     }
 
     public function testFilterRemoteClaimsString()
     {
         $scopes = 'scope1 scope2 tag:example.com,2017:my_claim scope3';
-        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $this->getRemoteClaimRepo());
+        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $this->getRemoteClaimRepo(),
+            $this->getAuthorizationManager());
         $result = $manager->filterRemoteClaims($scopes);
 
         $this->assertEquals('scope1 scope2 scope3', $result);
@@ -133,7 +162,8 @@ class RemoteClaimManagerTest extends TestCase
     public function testFilterRemoteClaimsArray()
     {
         $scopes = ['scope1', 'scope2', 'tag:example.com,2017:my_claim', 'scope3'];
-        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $this->getRemoteClaimRepo());
+        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $this->getRemoteClaimRepo(),
+            $this->getAuthorizationManager());
         $result = $manager->filterRemoteClaims($scopes);
 
         $this->assertEquals(['scope1', 'scope2', 'scope3'], $result);
@@ -142,7 +172,8 @@ class RemoteClaimManagerTest extends TestCase
     public function testFilterRemoteClaimsNoAction()
     {
         $scopes = 'scope1 scope2 scope3';
-        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $this->getRemoteClaimRepo());
+        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $this->getRemoteClaimRepo(),
+            $this->getAuthorizationManager());
         $result = $manager->filterRemoteClaims($scopes);
 
         $this->assertEquals('scope1 scope2 scope3', $result);
@@ -151,7 +182,8 @@ class RemoteClaimManagerTest extends TestCase
     public function testFilterRemoteClaimsEmptyString()
     {
         $scopes = '';
-        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $this->getRemoteClaimRepo());
+        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $this->getRemoteClaimRepo(),
+            $this->getAuthorizationManager());
         $result = $manager->filterRemoteClaims($scopes);
 
         $this->assertEquals('', $result);
@@ -160,7 +192,8 @@ class RemoteClaimManagerTest extends TestCase
     public function testFilterRemoteClaimsEmptyArray()
     {
         $scopes = [];
-        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $this->getRemoteClaimRepo());
+        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $this->getRemoteClaimRepo(),
+            $this->getAuthorizationManager());
         $result = $manager->filterRemoteClaims($scopes);
 
         $this->assertEquals([], $result);
@@ -180,7 +213,8 @@ class RemoteClaimManagerTest extends TestCase
         $repo->expects($this->once())->method('findByClientAndPerson')
             ->with($client, $person);
 
-        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $repo);
+        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $repo,
+            $this->getAuthorizationManager());
         $manager->getRemoteClaimsFromAuthorization($authorization);
     }
 
@@ -198,7 +232,8 @@ class RemoteClaimManagerTest extends TestCase
         $repo->expects($this->once())->method('findAllByClientAndPerson')
             ->with($client, $person);
 
-        $manager = new RemoteClaimManager($this->getEntityManager(), $repo, $this->getRemoteClaimRepo());
+        $manager = new RemoteClaimManager($this->getEntityManager(), $repo, $this->getRemoteClaimRepo(),
+            $this->getAuthorizationManager());
         $manager->getRemoteClaimsAuthorizationsFromAuthorization($authorization);
     }
 
@@ -211,7 +246,8 @@ class RemoteClaimManagerTest extends TestCase
         $repo->expects($this->once())->method('findOneBy')->with(['name' => $claimName])
             ->willReturn($expected);
 
-        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $repo);
+        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $repo,
+            $this->getAuthorizationManager());
 
         $this->assertSame($expected, $manager->getExistingRemoteClaim($claimName));
     }
@@ -239,7 +275,8 @@ class RemoteClaimManagerTest extends TestCase
         $claimsRepo->expects($this->once())->method('findByClientAndPerson')
             ->with($client, $person)->willReturn([$remoteClaim]);
 
-        $manager = new RemoteClaimManager($this->getEntityManager(), $authRepo, $claimsRepo);
+        $manager = new RemoteClaimManager($this->getEntityManager(), $authRepo, $claimsRepo,
+            $this->getAuthorizationManager());
         $result = $manager->getRemoteClaimsWithTokens($client, $person);
 
         $this->assertEquals([
@@ -272,7 +309,7 @@ class RemoteClaimManagerTest extends TestCase
             ])
             ->willReturn($claimAuth);
 
-        $manager = new RemoteClaimManager($this->getEntityManager(), $authRepo, $this->getRemoteClaimRepo());
+        $manager = new RemoteClaimManager($this->getEntityManager(), $authRepo, $this->getRemoteClaimRepo(), $this->getAuthorizationManager());
 
         $this->assertSame($claimAuth, $manager->getRemoteClaimAuthorizationByAccessToken($provider, $token));
     }
@@ -288,7 +325,7 @@ class RemoteClaimManagerTest extends TestCase
         $claimRepo = $this->getRemoteClaimRepo();
         $claimRepo->expects($this->once())->method('findOneBy')
             ->willReturn($remoteClaim);
-        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $claimRepo);
+        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $claimRepo, $this->getAuthorizationManager());
         $manager->updateRemoteClaimUri($claimName, $uri);
 
         $this->assertEquals($uri, $remoteClaim->getUri());
@@ -304,7 +341,7 @@ class RemoteClaimManagerTest extends TestCase
         $claimRepo = $this->getRemoteClaimRepo();
         $claimRepo->expects($this->once())->method('findOneBy')
             ->willReturn($remoteClaim);
-        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $claimRepo);
+        $manager = new RemoteClaimManager($this->getEntityManager(), $this->getRepo(), $claimRepo, $this->getAuthorizationManager());
 
         $this->assertNull($manager->updateRemoteClaimUri($claimName, $uri));
     }
@@ -322,7 +359,7 @@ class RemoteClaimManagerTest extends TestCase
      */
     private function getRepo()
     {
-        return $this->getMockBuilder('LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimAuthorizationRepository')
+        return $this->getMockBuilder(RemoteClaimAuthorizationRepository::class)
             ->disableOriginalConstructor()->getMock();
     }
 
@@ -331,16 +368,23 @@ class RemoteClaimManagerTest extends TestCase
      */
     private function getRemoteClaimRepo()
     {
-        return $this->getMockBuilder('LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimRepository')
+        return $this->getMockBuilder(RemoteClaimRepository::class)
             ->disableOriginalConstructor()->getMock();
     }
 
     /**
+     * @param TagUri|null $claimName
      * @return \PHPUnit_Framework_MockObject_MockObject|RemoteClaimAuthorizationInterface
      */
-    private function getRemoteClaimAuthorization()
+    private function getRemoteClaimAuthorization(TagUri $claimName = null)
     {
-        return $this->createMock('LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimAuthorizationInterface');
+        $claimAuth = $this->createMock(RemoteClaimAuthorizationInterface::class);
+
+        if ($claimName !== null) {
+            $claimAuth->expects($this->any())->method('getClaimName')->willReturn($claimName);
+        }
+
+        return $claimAuth;
     }
 
     /**
@@ -348,7 +392,7 @@ class RemoteClaimManagerTest extends TestCase
      */
     private function getPerson()
     {
-        return $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        return $this->createMock(PersonInterface::class);
     }
 
     /**
@@ -356,7 +400,7 @@ class RemoteClaimManagerTest extends TestCase
      */
     private function getClient()
     {
-        return $this->createMock('LoginCidadao\OAuthBundle\Model\ClientInterface');
+        return $this->createMock(ClientInterface::class);
     }
 
     /**
@@ -364,7 +408,7 @@ class RemoteClaimManagerTest extends TestCase
      */
     private function getClaimProvider()
     {
-        return $this->createMock('LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface');
+        return $this->createMock(ClaimProviderInterface::class);
     }
 
     /**
@@ -372,6 +416,14 @@ class RemoteClaimManagerTest extends TestCase
      */
     private function getAuthorization()
     {
-        return $this->createMock('LoginCidadao\CoreBundle\Entity\Authorization');
+        return $this->createMock(Authorization::class);
+    }
+
+    /**
+     * @return MockObject|AuthorizationManager
+     */
+    private function getAuthorizationManager()
+    {
+        return $this->createMock(AuthorizationManager::class);
     }
 }

@@ -82,6 +82,15 @@ class RemoteClaim implements RemoteClaimInterface
     private $provider;
 
     /**
+     * RemoteClaim constructor.
+     */
+    public function __construct()
+    {
+        $this->providerEssentialScope = [];
+        $this->providerRecommendedScope = [];
+    }
+
+    /**
      * @return mixed
      */
     public function getId()

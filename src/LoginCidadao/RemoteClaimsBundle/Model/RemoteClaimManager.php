@@ -13,6 +13,7 @@ namespace LoginCidadao\RemoteClaimsBundle\Model;
 use Doctrine\ORM\EntityManagerInterface;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\CoreBundle\Service\AuthorizationManager;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimAuthorization;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaimAuthorizationRepository;
@@ -29,20 +30,26 @@ class RemoteClaimManager implements RemoteClaimManagerInterface
     /** @var RemoteClaimRepository */
     private $remoteClaimRepository;
 
+    /** @var AuthorizationManager */
+    private $authorizationManager;
+
     /**
      * RemoteClaimManager constructor.
      * @param EntityManagerInterface $em
      * @param RemoteClaimAuthorizationRepository $remoteClaimAuthorizationRepository
      * @param RemoteClaimRepository $remoteClaimRepository
+     * @param AuthorizationManager $authorizationManager
      */
     public function __construct(
         EntityManagerInterface $em,
         RemoteClaimAuthorizationRepository $remoteClaimAuthorizationRepository,
-        RemoteClaimRepository $remoteClaimRepository
+        RemoteClaimRepository $remoteClaimRepository,
+        AuthorizationManager $authorizationManager
     ) {
         $this->em = $em;
         $this->remoteClaimAuthorizationRepository = $remoteClaimAuthorizationRepository;
         $this->remoteClaimRepository = $remoteClaimRepository;
+        $this->authorizationManager = $authorizationManager;
     }
 
     /**
@@ -51,6 +58,9 @@ class RemoteClaimManager implements RemoteClaimManagerInterface
      */
     public function enforceAuthorization(RemoteClaimAuthorizationInterface $authorization)
     {
+        $remoteClaim = $this->getExistingRemoteClaim($authorization->getClaimName());
+        $this->enforceImplicitAuthorization($authorization, $remoteClaim);
+
         $existingAuthorization = $this->remoteClaimAuthorizationRepository->findAuthorization($authorization);
         if ($existingAuthorization instanceof RemoteClaimAuthorizationInterface) {
             return $existingAuthorization;
@@ -203,6 +213,24 @@ class RemoteClaimManager implements RemoteClaimManagerInterface
         $this->em->flush();
 
         return $remoteClaim;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function enforceImplicitAuthorization(
+        RemoteClaimAuthorizationInterface $claimAuthorization,
+        RemoteClaimInterface $remoteClaim
+    ): Authorization {
+        /** @var ClaimProviderInterface|ClientInterface $provider */
+        $provider = $claimAuthorization->getClaimProvider();
+
+        return $this->authorizationManager->enforceAuthorization(
+            $claimAuthorization->getPerson(),
+            $provider,
+            array_merge($remoteClaim->getEssentialScope(), $remoteClaim->getRecommendedScope()),
+            AuthorizationManager::SCOPE_MERGE
+        );
     }
 
     /**
