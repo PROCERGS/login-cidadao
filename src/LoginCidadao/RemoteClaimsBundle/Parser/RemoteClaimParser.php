@@ -37,8 +37,8 @@ class RemoteClaimParser implements RemoteClaimParserInterface
             ->setName($claimName)
             ->setDisplayName($claimMetadata->claim_display_name)
             ->setDescription($claimMetadata->claim_description)
-            ->setRecommendedScope($claimMetadata->claim_provider_recommended_scope)
-            ->setEssentialScope($claimMetadata->claim_provider_essential_scope);
+            ->setRecommendedScope($claimMetadata->claim_provider_recommended_scope ?? [])
+            ->setEssentialScope($claimMetadata->claim_provider_essential_scope ?? []);
 
         if ($provider) {
             $claim->setProvider(self::parseClaimProvider($claimMetadata->claim_provider, $provider));
@@ -54,7 +54,7 @@ class RemoteClaimParser implements RemoteClaimParserInterface
         $provider
             ->setClientId($claimProviderMetadata->client_id)
             ->setName($claimProviderMetadata->client_name)
-            ->setRedirectUris($claimProviderMetadata->redirect_uris);
+            ->setRedirectUris($claimProviderMetadata->redirect_uris ?? []);
 
         return $provider;
     }

@@ -246,6 +246,10 @@ class RemoteClaim implements RemoteClaimInterface
             return $scope;
         }
 
+        if (trim($scope) === '') {
+            return [];
+        }
+
         return explode(' ', $scope);
     }
 }
