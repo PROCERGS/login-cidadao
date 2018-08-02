@@ -27,6 +27,10 @@ $stack = new \Qandidate\Stack\RequestId($kernel, $generator);
 $kernel->loadClassCache();
 //$kernel = new AppCache($kernel);
 $request = Request::createFromGlobals();
+
+// This line is required after Symfony 2.8.44
+Request::setTrustedHeaderName(Request::HEADER_FORWARDED, null);
+
 $response = $stack->handle($request);
 $response->send();
 $kernel->terminate($request, $response);
