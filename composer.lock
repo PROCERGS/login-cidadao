@@ -377,7 +377,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/CircleOfNice/CiRestClientBundle/196c09582b31dd1e7953ba4825b441ad09f4853c",
+                "url": "https://api.github.com/repos/CircleOfNice/CiRestClientBundle/zipball/196c09582b31dd1e7953ba4825b441ad09f4853c",
                 "reference": "196c09582b31dd1e7953ba4825b441ad09f4853c",
                 "shasum": ""
             },
@@ -1261,7 +1261,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/eljam/circuit-breaker/653322e12e8b6ed9ee8a17d0406e0250580e78b5",
+                "url": "https://api.github.com/repos/eljam/circuit-breaker/zipball/653322e12e8b6ed9ee8a17d0406e0250580e78b5",
                 "reference": "653322e12e8b6ed9ee8a17d0406e0250580e78b5",
                 "shasum": ""
             },
@@ -2342,7 +2342,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/jakeasmith/http_build_url/93c273e77cb1edead0cf8bcf8cd2003428e74e37",
+                "url": "https://api.github.com/repos/jakeasmith/http_build_url/zipball/93c273e77cb1edead0cf8bcf8cd2003428e74e37",
                 "reference": "93c273e77cb1edead0cf8bcf8cd2003428e74e37",
                 "shasum": ""
             },
@@ -4310,7 +4310,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/PROCERGS/meurs-monitor-bundle/2901db592df516f33fd0170d518f47850304395d",
+                "url": "https://api.github.com/repos/PROCERGS/meurs-monitor-bundle/zipball/2901db592df516f33fd0170d518f47850304395d",
                 "reference": "2901db592df516f33fd0170d518f47850304395d",
                 "shasum": ""
             },
@@ -4361,7 +4361,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/PROCERGS/nfg-badges-bundle/fb830032dc2475216d7b8faba75bfde0890cfbd2",
+                "url": "https://api.github.com/repos/PROCERGS/nfg-badges-bundle/zipball/fb830032dc2475216d7b8faba75bfde0890cfbd2",
                 "reference": "fb830032dc2475216d7b8faba75bfde0890cfbd2",
                 "shasum": ""
             },
@@ -4404,7 +4404,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://artifactory.des.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/PROCERGS/sms-service/ffb7f666da895ac00ddf10e73855a1ebcc8eb0b9",
+                "url": "https://api.github.com/repos/PROCERGS/sms-service/zipball/ffb7f666da895ac00ddf10e73855a1ebcc8eb0b9",
                 "reference": "ffb7f666da895ac00ddf10e73855a1ebcc8eb0b9",
                 "shasum": ""
             },
