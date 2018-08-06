@@ -275,6 +275,7 @@ simple_things_entity_audit:
         - LoginCidadao\CoreBundle\Entity\PersonAddress
         - LoginCidadao\CoreBundle\Entity\SentEmail
         - LoginCidadao\CoreBundle\Entity\State
+        - LoginCidadao\CoreBundle\Entity\AccountRecoveryData
 
         - LoginCidadao\OAuthBundle\Entity\AccessToken
         - LoginCidadao\OAuthBundle\Entity\AuthCode
