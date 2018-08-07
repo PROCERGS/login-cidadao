@@ -47,9 +47,8 @@ class AccountRecoveryData
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
-     * @LCAssert\Email(strict=true)
-     * @Assert\NotBlank(message="person.validation.email.not_blank")
-     * @Assert\Expression("value != this.getPerson().getEmail()")
+     * @LCAssert\Email(strict=true, optional=true)
+     * @Assert\Expression("value != this.getPerson().getEmail()", message="account_recovery.edit.email.should_be_different")
      */
     private $email;
 
@@ -69,7 +68,7 @@ class AccountRecoveryData
      *     type="mobile",
      *     groups={"Registration", "LoginCidadaoRegistration", "Dynamic", "Profile", "LoginCidadaoProfile"}
      * )
-     * @Assert\Expression("value != this.getPerson().getMobile()")
+     * @Assert\Expression("value != this.getPerson().getMobile()", message="account_recovery.edit.phone.should_be_different")
      */
     private $mobile;
 

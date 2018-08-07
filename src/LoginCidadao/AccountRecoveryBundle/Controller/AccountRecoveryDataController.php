@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 class AccountRecoveryDataController extends Controller
 {
     /**
-     * @Route("/account-recovery-data")
+     * @Route("/account-recovery-data", name="account_recovery_edit")
      * @Template()
      */
     public function editAction(Request $request)
@@ -37,11 +37,12 @@ class AccountRecoveryDataController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('account_recovery_edit');
         }
 
         return [
             'form' => $form->createView(),
         ];
     }
-
 }

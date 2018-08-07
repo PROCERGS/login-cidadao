@@ -1,0 +1,6 @@
+account_recovery:
+    edit:
+        email:
+            should_be_different: 'Seu email alternativo deve ser diferente do seu email principal.'
+        phone:
+            should_be_different: 'Seu telefone alternativo deve ser diferente do seu telefone principal.'

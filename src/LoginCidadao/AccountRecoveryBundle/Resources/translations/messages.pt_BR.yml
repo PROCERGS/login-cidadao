@@ -1,0 +1,12 @@
+account_recovery:
+    edit:
+        title: 'Informações de Contato Alternativas'
+        description: 'Cadastre meios de contato alternativos para que você consiga recuperar sua conta caso perca acesso ao seu email e celular principais.'
+    form:
+        email:
+            label: 'Email Alternativo'
+            placeholder: 'Digite seu email alternativo'
+        mobile:
+            label: 'Celular Alternativo'
+            placeholder: 'Digite seu celular alternativo'
+        submit: 'Salvar'

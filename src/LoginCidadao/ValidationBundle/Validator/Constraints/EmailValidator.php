@@ -29,6 +29,10 @@ class EmailValidator extends \Symfony\Component\Validator\Constraints\EmailValid
      */
     public function validate($value, Constraint $constraint)
     {
+        if (null === $value || '' === $value) {
+            return;
+        }
+
         if ($constraint->strict) {
             if (!class_exists('\Egulias\EmailValidator\EmailValidator') || !class_exists('\Egulias\EmailValidator\Validation\RFCValidation')) {
                 throw new RuntimeException('Strict email validation requires egulias/email-validator');

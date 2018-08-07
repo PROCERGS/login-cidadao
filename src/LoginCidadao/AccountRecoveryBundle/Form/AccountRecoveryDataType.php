@@ -27,18 +27,24 @@ class AccountRecoveryDataType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', EmailType::class)
-            ->add('mobile', PhoneNumberType::class,
-                [
-                    'required' => false,
-                    'label' => 'person.form.mobile.label',
-                    'attr' => [
-                        'class' => 'form-control intl-tel',
-                        'placeholder' => 'person.form.mobile.placeholder',
-                    ],
-                    'label_attr' => ['class' => 'intl-tel-label'],
-                    'format' => PhoneNumberFormat::E164,
-                ]);
+            ->add('email', EmailType::class, [
+                'required' => false,
+                'label' => 'account_recovery.form.email.label',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'account_recovery.form.email.placeholder',
+                ],
+            ])
+            ->add('mobile', PhoneNumberType::class, [
+                'required' => false,
+                'label' => 'account_recovery.form.mobile.label',
+                'attr' => [
+                    'class' => 'form-control intl-tel',
+                    'placeholder' => 'account_recovery.form.mobile.placeholder',
+                ],
+                'label_attr' => ['class' => 'intl-tel-label'],
+                'format' => PhoneNumberFormat::E164,
+            ]);
     }
 
     /**

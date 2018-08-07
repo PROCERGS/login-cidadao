@@ -1,11 +1,39 @@
-{% extends "::base.html.twig" %}
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
+
+{% block panel_body_class %}account-recovery-data-edit{% endblock %}
 
 {% block title %}LoginCidadaoCoreBundle:AccountRecoveryData:edit{% endblock %}
 
-{% block body %}
-    <h1>Welcome to the AccountRecoveryData:edit page</h1>
+{% block panel_body %}
+    <h1>{{ 'account_recovery.edit.title' | trans }}</h1>
+
+    <p>{{ 'account_recovery.edit.description' | trans }}</p>
 
     {{ form_start(form) }}
-    <button type="submit">Submit</button>
+    <div class="form-group">
+        {{ form_label(form.email, null, {'label_attr': {'class': 'sr-only'}}) }}
+        <div class="input-group">
+            <div class="input-group-addon">
+                <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+            </div>
+            {{ form_widget(form.email) }}
+        </div>
+        <div class="has-error">{{ form_errors(form.email) }}</div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.mobile, null, {'label_attr': {'class': 'sr-only'}}) }}
+        <div class="input-group">
+            <div class="input-group-addon">
+                <span class="glyphicon glyphicon-phone" aria-hidden="true"></span>
+            </div>
+            {{ form_widget(form.mobile) }}
+        </div>
+        <div class="has-error">{{ form_errors(form.mobile) }}</div>
+    </div>
+
+    <button class="btn btn-block btn-success" type="submit">
+        {{ 'account_recovery.form.submit' | trans }}
+    </button>
     {{ form_end(form) }}
 {% endblock %}
