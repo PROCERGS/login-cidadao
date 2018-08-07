@@ -82,6 +82,15 @@ class RemoteClaim implements RemoteClaimInterface
     private $provider;
 
     /**
+     * RemoteClaim constructor.
+     */
+    public function __construct()
+    {
+        $this->providerEssentialScope = [];
+        $this->providerRecommendedScope = [];
+    }
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -244,6 +253,10 @@ class RemoteClaim implements RemoteClaimInterface
     {
         if (is_array($scope)) {
             return $scope;
+        }
+
+        if (trim($scope) === '') {
+            return [];
         }
 
         return explode(' ', $scope);

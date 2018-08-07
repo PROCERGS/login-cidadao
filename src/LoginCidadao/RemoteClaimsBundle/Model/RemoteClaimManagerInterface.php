@@ -91,4 +91,14 @@ interface RemoteClaimManagerInterface
      * @return RemoteClaimInterface the updated Remote Claim
      */
     public function updateRemoteClaimUri(TagUri $claimName, $uri);
+
+    /**
+     * @param RemoteClaimAuthorizationInterface $claimAuthorization
+     * @param RemoteClaimInterface $remoteClaim
+     * @return Authorization
+     */
+    public function enforceImplicitAuthorization(
+        RemoteClaimAuthorizationInterface $claimAuthorization,
+        RemoteClaimInterface $remoteClaim
+    ): Authorization;
 }

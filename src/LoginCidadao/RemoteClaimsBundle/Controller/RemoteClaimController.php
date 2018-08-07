@@ -16,6 +16,7 @@ use JMS\Serializer\SerializerInterface;
 use LoginCidadao\APIBundle\Controller\BaseController;
 use LoginCidadao\CoreBundle\Entity\Authorization;
 use LoginCidadao\CoreBundle\Entity\AuthorizationRepository;
+use LoginCidadao\CoreBundle\Service\AuthorizationManager;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\ClaimProviderInterface;
 use LoginCidadao\RemoteClaimsBundle\Model\RemoteClaimAuthorizationInterface;
@@ -54,20 +55,22 @@ class RemoteClaimController extends BaseController
         $person = $remoteClaimAuthorization->getPerson();
         $client = $remoteClaimAuthorization->getClient();
 
-        /** @var AuthorizationRepository $authorizationRepo */
-        $authorizationRepo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Authorization');
+        /** @var AuthorizationManager $authorizationManager */
+        $authorizationManager = $this->get('lc.authorization.manager');
 
-        /** @var Authorization $authorization */
-        $authorization = $authorizationRepo->findOneBy([
-            'client' => $provider,
-            'person' => $person,
-        ]);
+        /** @var Authorization|null $authorization */
+        $authorization = $authorizationManager->getAuthorization($person, $provider);
+
+        if ($authorization instanceof Authorization) {
+            throw $this->createNotFoundException("Authorization not found");
+        }
 
         /** @var SerializerInterface $serializer */
         $serializer = $this->get('jms_serializer');
         $personSerializationContext = $this->getJMSSerializationContext($authorization->getScope());
         $serializedPerson = $serializer->serialize($person, $format, $personSerializationContext);
-        $serializedClient = $serializer->serialize($client, $format, $this->getJMSSerializationContext(['remote_claim']));
+        $serializedClient = $serializer->serialize($client, $format,
+            $this->getJMSSerializationContext(['remote_claim']));
 
         $response = [
             'claim_name' => (string)$remoteClaimAuthorization->getClaimName(),

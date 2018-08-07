@@ -54,6 +54,14 @@ class Authorization
     protected $createdAt;
 
     /**
+     * Authorization constructor.
+     */
+    public function __construct()
+    {
+        $this->scope = [];
+    }
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -71,10 +79,13 @@ class Authorization
 
     /**
      * @param PersonInterface|null $person
+     * @return Authorization
      */
     public function setPerson(PersonInterface $person = null)
     {
         $this->person = $person;
+
+        return $this;
     }
 
     /**
@@ -87,10 +98,13 @@ class Authorization
 
     /**
      * @param ClientInterface|null $client
+     * @return Authorization
      */
     public function setClient(ClientInterface $client = null)
     {
         $this->client = $client;
+
+        return $this;
     }
 
     /**
@@ -105,11 +119,14 @@ class Authorization
 
     /**
      * @param array|string $scope
+     * @return Authorization
      */
     public function setScope($scope)
     {
         $scope = $this->enforcePublicProfileScope(Authorization::enforceArray($scope));
         $this->scope = $scope;
+
+        return $this;
     }
 
     /**

@@ -82,16 +82,43 @@ class RemoteClaimParserTest extends TestCase
 
     public function testInvalidJwt()
     {
-        $this->expectException('\InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
 
         RemoteClaimParser::parseJwt('INVALID JWT', new RemoteClaim(), new Client());
     }
 
     public function testParseInvalidClaim()
     {
-        $this->expectException('\InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
 
         RemoteClaimParser::parseClaim(null, new RemoteClaim());
+    }
+
+    public function testParseMinimalRemoteClaim()
+    {
+        $provider = [
+            'client_id' => self::$claimMetadata['claim_provider']['client_id'],
+            'client_name' => self::$claimMetadata['claim_provider']['client_name'],
+        ];
+
+        $string = json_encode([
+            'claim_schema_version' => '1',
+            'claim_name' => self::$claimMetadata['claim_name'],
+            'claim_display_name' => self::$claimMetadata['claim_display_name'],
+            'claim_provider' => $provider,
+        ]);
+
+        $claim = RemoteClaimParser::parseClaim($string, new RemoteClaim(), new Client());
+        $this->assertEquals(self::$claimMetadata['claim_name'], $claim->getName());
+        $this->assertEquals(self::$claimMetadata['claim_display_name'], $claim->getDisplayName());
+        $this->assertNull($claim->getDescription());
+        $this->assertEmpty($claim->getRecommendedScope());
+        $this->assertEmpty($claim->getEssentialScope());
+
+        $expectedProvider = self::$claimMetadata['claim_provider'];
+        $this->assertEquals($expectedProvider['client_id'], $claim->getProvider()->getClientId());
+        $this->assertEquals($expectedProvider['client_name'], $claim->getProvider()->getName());
+        $this->assertEmpty($claim->getProvider()->getRedirectUris());
     }
 
     private function assertClaimAndProvider(RemoteClaimInterface $claim)

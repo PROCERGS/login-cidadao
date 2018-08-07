@@ -44,6 +44,9 @@ if (!IpUtils::checkIp($clientIp, $allowed)) {
     exit("You ($clientIp) are not allowed to access this file.");
 }
 
+// This line is required after Symfony 2.8.44
+Request::setTrustedHeaderName(Request::HEADER_FORWARDED, null);
+
 $response = $stack->handle($request);
 $response->send();
 $kernel->terminate($request, $response);
