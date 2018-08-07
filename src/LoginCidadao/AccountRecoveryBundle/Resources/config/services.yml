@@ -1,0 +1,14 @@
+parameters:
+
+services:
+    lc.account_recovery.repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - LoginCidadao\AccountRecoveryBundle\Entity\AccountRecoveryData
+
+    lc.account_recovery:
+        class: LoginCidadao\AccountRecoveryBundle\Service\AccountRecoveryService
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@lc.account_recovery.repository"

@@ -1,0 +1,4 @@
+lc_account_recovery:
+    resource: "@LoginCidadaoAccountRecoveryBundle/Controller/"
+    type: annotation
+    prefix: /

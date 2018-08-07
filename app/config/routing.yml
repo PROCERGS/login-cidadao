@@ -1,3 +1,8 @@
+# Account Recovery
+lc_account_recovery:
+    resource: "@LoginCidadaoAccountRecoveryBundle/Resources/config/routing.yml"
+    prefix:   /
+
 # Remote Claims
 lc_remote_claims_remote_claim:
     type:     rest

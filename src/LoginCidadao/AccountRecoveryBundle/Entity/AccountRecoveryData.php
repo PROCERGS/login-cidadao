@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace LoginCidadao\CoreBundle\Entity;
+namespace LoginCidadao\AccountRecoveryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use libphonenumber\PhoneNumber;
@@ -21,7 +21,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * AccountRecoveryData
  *
  * @ORM\Table(name="account_recovery_data")
- * @ORM\Entity(repositoryClass="LoginCidadao\CoreBundle\Entity\AccountRecoveryDataRepository")
+ * @ORM\Entity(repositoryClass="LoginCidadao\AccountRecoveryBundle\Entity\AccountRecoveryDataRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class AccountRecoveryData
 {
@@ -37,7 +38,7 @@ class AccountRecoveryData
     /**
      * @var PersonInterface
      *
-     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\ManyToOne(targetEntity="LoginCidadao\CoreBundle\Entity\Person")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", nullable=false)
      */
     private $person;
@@ -48,6 +49,7 @@ class AccountRecoveryData
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      * @LCAssert\Email(strict=true)
      * @Assert\NotBlank(message="person.validation.email.not_blank")
+     * @Assert\Expression("value != this.getPerson().getEmail()")
      */
     private $email;
 
@@ -67,6 +69,7 @@ class AccountRecoveryData
      *     type="mobile",
      *     groups={"Registration", "LoginCidadaoRegistration", "Dynamic", "Profile", "LoginCidadaoProfile"}
      * )
+     * @Assert\Expression("value != this.getPerson().getMobile()")
      */
     private $mobile;
 
@@ -125,7 +128,7 @@ class AccountRecoveryData
      *
      * @return AccountRecoveryData
      */
-    public function setEmail(string $email): AccountRecoveryData
+    public function setEmail(string $email = null): AccountRecoveryData
     {
         $this->email = $email;
 
@@ -137,7 +140,7 @@ class AccountRecoveryData
      *
      * @return string
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -149,7 +152,7 @@ class AccountRecoveryData
      *
      * @return AccountRecoveryData
      */
-    public function setMobile(PhoneNumber $mobile): AccountRecoveryData
+    public function setMobile(PhoneNumber $mobile = null): AccountRecoveryData
     {
         $this->mobile = $mobile;
 
@@ -161,23 +164,9 @@ class AccountRecoveryData
      *
      * @return PhoneNumber
      */
-    public function getMobile(): PhoneNumber
+    public function getMobile(): ?PhoneNumber
     {
         return $this->mobile;
-    }
-
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return AccountRecoveryData
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
     }
 
     /**
@@ -191,20 +180,6 @@ class AccountRecoveryData
     }
 
     /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return AccountRecoveryData
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
      * Get updatedAt
      *
      * @return \DateTime
@@ -212,5 +187,30 @@ class AccountRecoveryData
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAt(): AccountRecoveryData
+    {
+        if (!$this->getCreatedAt() instanceof \DateTime) {
+            $this->createdAt = new \DateTime();
+        }
+        if (!$this->updatedAt instanceof \DateTime) {
+            $this->updatedAt = new \DateTime();
+        }
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function setUpdatedAt(): AccountRecoveryData
+    {
+        $this->updatedAt = new \DateTime('now');
+
+        return $this;
     }
 }

@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace LoginCidadao\CoreBundle\Service;
+namespace LoginCidadao\AccountRecoveryBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use libphonenumber\PhoneNumber;
-use LoginCidadao\CoreBundle\Entity\AccountRecoveryData;
-use LoginCidadao\CoreBundle\Entity\AccountRecoveryDataRepository;
+use LoginCidadao\AccountRecoveryBundle\Entity\AccountRecoveryData;
+use LoginCidadao\AccountRecoveryBundle\Entity\AccountRecoveryDataRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class AccountRecoveryService
@@ -48,13 +48,13 @@ class AccountRecoveryService
         return $data;
     }
 
-    public function setRecoveryEmail(PersonInterface $person, string $email): AccountRecoveryData
+    public function setRecoveryEmail(PersonInterface $person, string $email = null): AccountRecoveryData
     {
         return $this->getAccountRecoveryData($person)
             ->setEmail($email);
     }
 
-    public function setRecoveryPhone(PersonInterface $person, PhoneNumber $phoneNumber): AccountRecoveryData
+    public function setRecoveryPhone(PersonInterface $person, PhoneNumber $phoneNumber = null): AccountRecoveryData
     {
         return $this->getAccountRecoveryData($person)
             ->setMobile($phoneNumber);
