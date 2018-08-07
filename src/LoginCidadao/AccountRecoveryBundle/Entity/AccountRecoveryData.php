@@ -47,7 +47,7 @@ class AccountRecoveryData
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
-     * @LCAssert\Email(strict=true, optional=true)
+     * @LCAssert\Email(strict=true)
      * @Assert\Expression("value != this.getPerson().getEmail()", message="account_recovery.edit.email.should_be_different")
      */
     private $email;
