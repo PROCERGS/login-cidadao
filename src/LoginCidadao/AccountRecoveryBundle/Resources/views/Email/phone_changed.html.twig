@@ -6,7 +6,7 @@
 
 {% block body_text %}
     {% autoescape false %}
-        {{ 'account_recovery.email.phone_changed.message.text' | trans({ '%phone%': newPhone, '%name%': name }) }}
+        {{ 'account_recovery.email.phone_changed.message.text' | trans({ '%phone%': newPhone | phone_number_format('NATIONAL'), '%name%': name }) }}
     {% endautoescape %}
 {% endblock %}
 
