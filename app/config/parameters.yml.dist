@@ -95,6 +95,8 @@ parameters:
     contact_form.email: '%mailer_receiver_mail%'
     # Logs email address
     logs.email: '%mailer_receiver_mail%'
+    # Development email address (all emails will be sent to this address when in Dev mode)
+    dev_email_destination: '%mailer_receiver_mail%'
 
     # Compatible with strtotime() but without + and - sign
     # You probably don't need to change this

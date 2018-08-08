@@ -57,6 +57,8 @@ parameters:
     contact_form.email: '%mailer_receiver_mail%'
     # Logs email address
     logs.email: '%mailer_receiver_mail%'
+    # Development email address (all emails will be sent to this address when in Dev mode)
+    dev_email_destination: '%mailer_receiver_mail%'
 
     recaptcha_public_key: ~
     recaptcha_private_key: ~
