@@ -55,10 +55,18 @@ class AccountRecoveryDataEventSubscriber implements EventSubscriberInterface
         $currentPhone = $event->getAccountRecoveryData()->getMobile();
 
         if (null !== $this->originalRecoveryEmail && $this->originalRecoveryEmail !== $currentEmail) {
-            $this->notifyEmailChanged($event->getAccountRecoveryData(), $this->originalRecoveryEmail);
+            if (null !== $currentEmail) {
+                $this->notifyEmailChanged($event->getAccountRecoveryData(), $this->originalRecoveryEmail);
+            } else {
+                $this->notifyEmailRemoved($event->getAccountRecoveryData(), $this->originalRecoveryEmail);
+            }
         }
         if (null !== $this->originalRecoveryPhone && $this->originalRecoveryPhone !== $currentPhone) {
-            $this->notifyPhoneChanged($event->getAccountRecoveryData(), $this->originalRecoveryPhone);
+            if (null !== $currentPhone) {
+                $this->notifyPhoneChanged($event->getAccountRecoveryData(), $this->originalRecoveryPhone);
+            } else {
+                $this->notifyPhoneRemoved($event->getAccountRecoveryData(), $this->originalRecoveryPhone);
+            }
         }
     }
 
@@ -74,6 +82,24 @@ class AccountRecoveryDataEventSubscriber implements EventSubscriberInterface
     {
         $person = $accountRecoveryData->getPerson();
         $this->mailer->sendRecoveryPhoneChangedMessage($accountRecoveryData, $person->getEmail());
-        $this->mailer->sendRecoveryPhoneChangedMessage($accountRecoveryData, $accountRecoveryData->getEmail());
+        if (null !== $accountRecoveryData->getEmail()) {
+            $this->mailer->sendRecoveryPhoneChangedMessage($accountRecoveryData, $accountRecoveryData->getEmail());
+        }
+    }
+
+    private function notifyEmailRemoved(AccountRecoveryData $accountRecoveryData, string $oldEmail)
+    {
+        $person = $accountRecoveryData->getPerson();
+        $this->mailer->sendRecoveryEmailRemovedMessage($accountRecoveryData, $oldEmail);
+        $this->mailer->sendRecoveryEmailRemovedMessage($accountRecoveryData, $person->getEmail());
+    }
+
+    private function notifyPhoneRemoved(AccountRecoveryData $accountRecoveryData, PhoneNumber $oldPhone)
+    {
+        $person = $accountRecoveryData->getPerson();
+        $this->mailer->sendRecoveryPhoneRemovedMessage($accountRecoveryData, $person->getEmail());
+        if (null !== $accountRecoveryData->getEmail()) {
+            $this->mailer->sendRecoveryPhoneRemovedMessage($accountRecoveryData, $accountRecoveryData->getEmail());
+        }
     }
 }

@@ -78,10 +78,138 @@ class AccountRecoveryDataEventSubscriberTest extends TestCase
         $subscriber->onEditCompleted($finalEvent);
     }
 
+    public function testOnEditCompletedRemovedRecoveryData()
+    {
+        $initialEmail = 'email@example.com';
+        $initialPhone = new PhoneNumber();
+
+        $finalEmail = null;
+        $finalPhone = null;
+
+        /** @var AccountRecoveryMailer|MockObject $mailer */
+        $mailer = $this->createMock(AccountRecoveryMailer::class);
+        $mailer->expects($this->exactly(2))->method('sendRecoveryEmailRemovedMessage');
+        $mailer->expects($this->exactly(1))->method('sendRecoveryPhoneRemovedMessage');
+
+        /** @var AccountRecoveryData|MockObject $data */
+        $data = $this->createMock(AccountRecoveryData::class);
+        $data->expects($this->once())->method('getEmail')->willReturn($initialEmail);
+        $data->expects($this->once())->method('getMobile')->willReturn($initialPhone);
+
+        $finalData = (new AccountRecoveryData())
+            ->setPerson((new Person())
+                ->setEmail($mainEmail = 'main@example.com'))
+            ->setEmail($finalEmail)
+            ->setMobile($finalPhone);
+
+        $initialEvent = new AccountRecoveryDataEditEvent($data);
+        $finalEvent = new AccountRecoveryDataEditEvent($finalData);
+
+        $subscriber = new AccountRecoveryDataEventSubscriber($mailer);
+        $subscriber->onEditInitialize($initialEvent);
+        $subscriber->onEditCompleted($finalEvent);
+    }
+
+    public function testOnEditCompletedRemovedPhoneWithoutEmail()
+    {
+        $initialEmail = null;
+        $initialPhone = new PhoneNumber();
+
+        $finalEmail = $initialEmail;
+        $finalPhone = null;
+
+        /** @var AccountRecoveryMailer|MockObject $mailer */
+        $mailer = $this->createMock(AccountRecoveryMailer::class);
+        $mailer->expects($this->never())->method('sendRecoveryEmailRemovedMessage');
+        $mailer->expects($this->once())->method('sendRecoveryPhoneRemovedMessage');
+
+        /** @var AccountRecoveryData|MockObject $data */
+        $data = $this->createMock(AccountRecoveryData::class);
+        $data->expects($this->once())->method('getEmail')->willReturn($initialEmail);
+        $data->expects($this->once())->method('getMobile')->willReturn($initialPhone);
+
+        $finalData = (new AccountRecoveryData())
+            ->setPerson((new Person())
+                ->setEmail($mainEmail = 'main@example.com'))
+            ->setEmail($finalEmail)
+            ->setMobile($finalPhone);
+
+        $initialEvent = new AccountRecoveryDataEditEvent($data);
+        $finalEvent = new AccountRecoveryDataEditEvent($finalData);
+
+        $subscriber = new AccountRecoveryDataEventSubscriber($mailer);
+        $subscriber->onEditInitialize($initialEvent);
+        $subscriber->onEditCompleted($finalEvent);
+    }
+
+    public function testOnEditCompletedRemovedPhoneWithEmail()
+    {
+        $initialEmail = 'email@example.com';
+        $initialPhone = new PhoneNumber();
+
+        $finalEmail = $initialEmail;
+        $finalPhone = null;
+
+        /** @var AccountRecoveryMailer|MockObject $mailer */
+        $mailer = $this->createMock(AccountRecoveryMailer::class);
+        $mailer->expects($this->never())->method('sendRecoveryEmailRemovedMessage');
+        $mailer->expects($this->exactly(2))->method('sendRecoveryPhoneRemovedMessage');
+
+        /** @var AccountRecoveryData|MockObject $data */
+        $data = $this->createMock(AccountRecoveryData::class);
+        $data->expects($this->once())->method('getEmail')->willReturn($initialEmail);
+        $data->expects($this->once())->method('getMobile')->willReturn($initialPhone);
+
+        $finalData = (new AccountRecoveryData())
+            ->setPerson((new Person())
+                ->setEmail($mainEmail = 'main@example.com'))
+            ->setEmail($finalEmail)
+            ->setMobile($finalPhone);
+
+        $initialEvent = new AccountRecoveryDataEditEvent($data);
+        $finalEvent = new AccountRecoveryDataEditEvent($finalData);
+
+        $subscriber = new AccountRecoveryDataEventSubscriber($mailer);
+        $subscriber->onEditInitialize($initialEvent);
+        $subscriber->onEditCompleted($finalEvent);
+    }
+
     public function testOnEditCompletedWithoutChanges()
     {
         $initialEmail = 'email@example.com';
         $initialPhone = new PhoneNumber();
+
+        $finalEmail = $initialEmail;
+        $finalPhone = $initialPhone;
+
+        /** @var AccountRecoveryMailer|MockObject $mailer */
+        $mailer = $this->createMock(AccountRecoveryMailer::class);
+        $mailer->expects($this->never())->method('sendRecoveryEmailChangedMessage');
+        $mailer->expects($this->never())->method('sendRecoveryPhoneChangedMessage');
+
+        /** @var AccountRecoveryData|MockObject $data */
+        $data = $this->createMock(AccountRecoveryData::class);
+        $data->expects($this->once())->method('getEmail')->willReturn($initialEmail);
+        $data->expects($this->once())->method('getMobile')->willReturn($initialPhone);
+
+        $finalData = (new AccountRecoveryData())
+            ->setPerson((new Person())
+                ->setEmail($mainEmail = 'main@example.com'))
+            ->setEmail($finalEmail)
+            ->setMobile($finalPhone);
+
+        $initialEvent = new AccountRecoveryDataEditEvent($data);
+        $finalEvent = new AccountRecoveryDataEditEvent($finalData);
+
+        $subscriber = new AccountRecoveryDataEventSubscriber($mailer);
+        $subscriber->onEditInitialize($initialEvent);
+        $subscriber->onEditCompleted($finalEvent);
+    }
+
+    public function testOnAddRecoveryData()
+    {
+        $initialEmail = null;
+        $initialPhone = null;
 
         $finalEmail = $initialEmail;
         $finalPhone = $initialPhone;

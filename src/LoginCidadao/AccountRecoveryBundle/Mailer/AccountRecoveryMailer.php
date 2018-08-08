@@ -21,7 +21,10 @@ use LoginCidadao\AccountRecoveryBundle\Entity\AccountRecoveryData;
 class AccountRecoveryMailer extends TwigSwiftMailer
 {
     private const TEMPLATE_EMAIL_CHANGED = 'LoginCidadaoAccountRecoveryBundle:Email:email_changed.html.twig';
+    private const TEMPLATE_EMAIL_REMOVED = 'LoginCidadaoAccountRecoveryBundle:Email:email_removed.html.twig';
+
     private const TEMPLATE_PHONE_CHANGED = 'LoginCidadaoAccountRecoveryBundle:Email:phone_changed.html.twig';
+    private const TEMPLATE_PHONE_REMOVED = 'LoginCidadaoAccountRecoveryBundle:Email:phone_removed.html.twig';
 
     public function sendRecoveryEmailChangedMessage(AccountRecoveryData $accountRecoveryData, string $toEmail)
     {
@@ -30,6 +33,15 @@ class AccountRecoveryMailer extends TwigSwiftMailer
             $accountRecoveryData,
             $toEmail,
             ['newEmail' => $accountRecoveryData->getEmail()]
+        );
+    }
+
+    public function sendRecoveryEmailRemovedMessage(AccountRecoveryData $accountRecoveryData, string $toEmail)
+    {
+        $this->sendRecoveryDataChangedMessage(
+            self::TEMPLATE_EMAIL_REMOVED,
+            $accountRecoveryData,
+            $toEmail
         );
     }
 
@@ -43,11 +55,20 @@ class AccountRecoveryMailer extends TwigSwiftMailer
         );
     }
 
+    public function sendRecoveryPhoneRemovedMessage(AccountRecoveryData $accountRecoveryData, string $toEmail)
+    {
+        $this->sendRecoveryDataChangedMessage(
+            self::TEMPLATE_PHONE_REMOVED,
+            $accountRecoveryData,
+            $toEmail
+        );
+    }
+
     private function sendRecoveryDataChangedMessage(
         string $template,
         AccountRecoveryData $accountRecoveryData,
         string $toEmail,
-        array $context
+        array $context = []
     ) {
         $person = $accountRecoveryData->getPerson();
         $context['name'] = $person->getFirstName() ?? $person->getEmail();

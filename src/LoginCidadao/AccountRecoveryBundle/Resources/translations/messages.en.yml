@@ -16,8 +16,19 @@ account_recovery:
                 subject: 'Your recovery email was changed'
                 text: 'Hi, %name%!\n\nWe are sending your this message to let you know that your recovery email, the one you can use to recover your account in case you lose access to your main email and mobile, was changed to %email%.\n\nIf your are not behind this change, please contact us immediately!\n'
                 html: 'Hi, %name%!<br><br>We are sending your this message to let you know that your recovery email, the one you can use to recover your account in case you lose access to your main email and mobile, was changed to <strong>%email%</strong>.<br><br>If your are not behind this change, please contact us immediately!'
+        email_removed:
+            message:
+                subject: 'Your recovery email was REMOVED'
+                text: 'Hi, %name%!\n\nWe are sending your this message to let you know that your recovery email, the one you can use to recover your account in case you lose access to your main email and mobile, was REMOVED.\n\nIf your are not behind this change, please contact us immediately!\n'
+                html: 'Hi, %name%!<br><br>We are sending your this message to let you know that your recovery email, the one you can use to recover your account in case you lose access to your main email and mobile, was <strong>REMOVED</strong>.<br><br>If your are not behind this change, please contact us immediately!'
+
         phone_changed:
             message:
                 subject: 'Your recovery mobile number was changed'
                 text: 'Hi, %name%!\n\nWe are sending your this message to let you know that your recovery mobile number, the one you can use to recover your account in case you lose access to your main email and mobile, was changed to %phone%.\n\nIf your are not behind this change, please contact us immediately!\n'
                 html: 'Hi, %name%!<br><br>We are sending your this message to let you know that your recovery mobile number, the one you can use to recover your account in case you lose access to your main email and mobile, was changed to <strong>%phone%</strong>.<br><br>If your are not behind this change, please contact us immediately!'
+        phone_removed:
+            message:
+                subject: 'Your recovery mobile number was REMOVED'
+                text: 'Hi, %name%!\n\nWe are sending your this message to let you know that your recovery mobile number, the one you can use to recover your account in case you lose access to your main email and mobile, was REMOVED.\n\nIf your are not behind this change, please contact us immediately!\n'
+                html: 'Hi, %name%!<br><br>We are sending your this message to let you know that your recovery mobile number, the one you can use to recover your account in case you lose access to your main email and mobile, was <strong>REMOVED</strong>.<br><br>If your are not behind this change, please contact us immediately!'

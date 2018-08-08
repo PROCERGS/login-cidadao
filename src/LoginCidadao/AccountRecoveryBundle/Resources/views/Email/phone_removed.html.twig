@@ -1,0 +1,20 @@
+{% block subject %}
+    {% autoescape false %}
+        {{ 'account_recovery.email.phone_removed.message.subject' | trans }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block body_text %}
+    {% autoescape false %}
+        {{ 'account_recovery.email.phone_removed.message.text' | trans({ '%name%': name }) }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+    {% autoescape false %}
+        {{ include("LoginCidadaoCoreBundle::common.email.html.twig", {
+            'subject' : 'account_recovery.email.phone_removed.message.subject' | trans,
+            'msg' : 'account_recovery.email.phone_removed.message.html' | trans({ '%name%': name | e }) | raw
+        } ) }}
+    {% endautoescape %}
+{% endblock %}
