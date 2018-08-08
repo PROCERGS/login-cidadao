@@ -1,4 +1,14 @@
 account_recovery:
+    security_panel:
+        title: 'Account Recovery Information'
+        about: 'Configure a backup email and mobile number to allow you to access your account event in the event you lose access to your main email and mobile.'
+        email:
+            current: 'Current Recovery Email'
+            none: 'No recovery email set'
+        phone:
+            current: 'Current Recovery Mobile'
+            none: 'No recovery mobile number set'
+        edit_button: 'Change Recovery Information'
     edit:
         title: 'Account Recovery Information'
         description: 'Configure alternate contact information so you can recover your account in the event you lose access to your main email and mobile.'

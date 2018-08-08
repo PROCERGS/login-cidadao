@@ -8,6 +8,10 @@
             <h1 class="visible-xs">{{ 'Security' | trans }}</h1>
             {{ include("LoginCidadaoCoreBundle:Person:changePassword.html.twig") }}
 
+            {% if is_granted('FEATURE_ACCOUNT_RECOVERY_DATA') %}
+                {{ render(controller("LoginCidadaoAccountRecoveryBundle:AccountRecoveryData:securityPanel")) }}
+            {% endif %}
+
             {{ render(controller("LoginCidadaoCoreBundle:InvalidateSessions:invalidate")) }}
 
             {{ include("LoginCidadaoCoreBundle:TwoFactorAuthentication:enableDisable.panel.html.twig") }}

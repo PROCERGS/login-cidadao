@@ -1,4 +1,14 @@
 account_recovery:
+    security_panel:
+        title: 'Informações de Contato Alternativas'
+        about: 'Configure um email e um telefone alternativos para que você consiga acessar sua conta mesmo no caso de perder acesso ao seu email e telefone principais.'
+        email:
+            current: 'Email atual'
+            none: 'Nenhum email alternativo definido'
+        phone:
+            current: 'Celular atual'
+            none: 'Nenhum celular alternativo definido'
+        edit_button: 'Alterar Informações'
     edit:
         title: 'Informações de Contato Alternativas'
         description: 'Cadastre meios de contato alternativos para que você consiga recuperar sua conta caso perca acesso ao seu email e celular principais.'

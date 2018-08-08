@@ -69,4 +69,14 @@ class AccountRecoveryDataController extends Controller
             'form' => $form->createView(),
         ];
     }
+
+    public function securityPanelAction()
+    {
+        /** @var AccountRecoveryService $accountRecoveryService */
+        $accountRecoveryService = $this->get('lc.account_recovery');
+
+        return $this->render('LoginCidadaoAccountRecoveryBundle:AccountRecoveryData:security.panel.html.twig', [
+            'recoveryData' => $accountRecoveryService->getAccountRecoveryData($this->getUser()),
+        ]);
+    }
 }

@@ -1,0 +1,26 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title">{{ 'account_recovery.security_panel.title' | trans }}</h2>
+    </div>
+    <div class="panel-body">
+        <p>{{ 'account_recovery.security_panel.about' | trans }}</p>
+        <dl>
+            <dt>{{ 'account_recovery.security_panel.email.current' | trans }}</dt>
+            <dd>{{ recoveryData.email | default('account_recovery.security_panel.email.none' | trans) }}</dd>
+
+            <dt>{{ 'account_recovery.security_panel.phone.current' | trans }}</dt>
+            <dd>
+                {% if recoveryData.mobile is not null %}
+                    {{ recoveryData.mobile | phone_number_format('NATIONAL') }}
+                {% else %}
+                    {{ 'account_recovery.security_panel.phone.none' | trans }}
+                {% endif %}
+            </dd>
+        </dl>
+        <p>
+            <a href="{{ path("account_recovery_edit") }}" class="btn btn-success">
+                {{ 'account_recovery.security_panel.edit_button' | trans }}
+            </a>
+        </p>
+    </div>
+</div>
