@@ -10,9 +10,13 @@
 
 namespace LoginCidadao\AccountRecoveryBundle\Event;
 
+use FOS\UserBundle\Event\GetResponseUserEvent;
+use FOS\UserBundle\FOSUserEvents;
 use libphonenumber\PhoneNumber;
 use LoginCidadao\AccountRecoveryBundle\Entity\AccountRecoveryData;
 use LoginCidadao\AccountRecoveryBundle\Mailer\AccountRecoveryMailer;
+use LoginCidadao\AccountRecoveryBundle\Service\AccountRecoveryService;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class AccountRecoveryDataEventSubscriber implements EventSubscriberInterface
@@ -26,13 +30,18 @@ class AccountRecoveryDataEventSubscriber implements EventSubscriberInterface
     /** @var AccountRecoveryMailer */
     private $mailer;
 
+    /** @var AccountRecoveryService */
+    private $accountRecoveryService;
+
     /**
      * AccountRecoveryDataEventSubscriber constructor.
      * @param AccountRecoveryMailer $mailer
+     * @param AccountRecoveryService $accountRecoveryService
      */
-    public function __construct(AccountRecoveryMailer $mailer)
+    public function __construct(AccountRecoveryMailer $mailer, AccountRecoveryService $accountRecoveryService)
     {
         $this->mailer = $mailer;
+        $this->accountRecoveryService = $accountRecoveryService;
     }
 
     public static function getSubscribedEvents()
@@ -40,6 +49,7 @@ class AccountRecoveryDataEventSubscriber implements EventSubscriberInterface
         return [
             AccountRecoveryEvents::ACCOUNT_RECOVERY_DATA_EDIT_INITIALIZE => 'onEditInitialize',
             AccountRecoveryEvents::ACCOUNT_RECOVERY_DATA_EDIT_COMPLETED => 'onEditCompleted',
+            FOSUserEvents::RESETTING_SEND_EMAIL_COMPLETED => 'onPasswordResetRequested',
         ];
     }
 
@@ -61,13 +71,22 @@ class AccountRecoveryDataEventSubscriber implements EventSubscriberInterface
                 $this->notifyEmailRemoved($event->getAccountRecoveryData(), $this->originalRecoveryEmail);
             }
         }
-        if (null !== $this->originalRecoveryPhone && $this->originalRecoveryPhone !== $currentPhone) {
+        if (null !== $this->originalRecoveryPhone && $this->originalRecoveryPhone->__toString() !== $currentPhone->__toString()) {
             if (null !== $currentPhone) {
                 $this->notifyPhoneChanged($event->getAccountRecoveryData(), $this->originalRecoveryPhone);
             } else {
                 $this->notifyPhoneRemoved($event->getAccountRecoveryData(), $this->originalRecoveryPhone);
             }
         }
+    }
+
+    public function onPasswordResetRequested(GetResponseUserEvent $event)
+    {
+        $user = $event->getUser();
+        if ($user instanceof PersonInterface) {
+            $this->accountRecoveryService->sendPasswordResetEmail($user);
+        }
+        // TODO: send SMS
     }
 
     private function notifyEmailChanged(AccountRecoveryData $accountRecoveryData, string $oldEmail)

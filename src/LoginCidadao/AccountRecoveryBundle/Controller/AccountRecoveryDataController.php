@@ -56,7 +56,7 @@ class AccountRecoveryDataController extends Controller
             $this->getDoctrine()->getManager()->flush();
 
             if (null === $response = $event->getResponse()) {
-                $response = $this->redirectToRoute('account_recovery_edit');
+                $response = $this->redirectToRoute($request->get('parent', 'account_recovery_edit'));
             }
 
             $event = new AccountRecoveryDataEditEvent($recoveryData, $response);
@@ -70,13 +70,14 @@ class AccountRecoveryDataController extends Controller
         ];
     }
 
-    public function securityPanelAction()
+    public function securityPanelAction(Request $request)
     {
         /** @var AccountRecoveryService $accountRecoveryService */
         $accountRecoveryService = $this->get('lc.account_recovery');
 
         return $this->render('LoginCidadaoAccountRecoveryBundle:AccountRecoveryData:security.panel.html.twig', [
             'recoveryData' => $accountRecoveryService->getAccountRecoveryData($this->getUser()),
+            'parent' => $request->get('parent'),
         ]);
     }
 }

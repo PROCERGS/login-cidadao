@@ -12,6 +12,7 @@ namespace LoginCidadao\AccountRecoveryBundle\Mailer;
 
 use FOS\UserBundle\Mailer\TwigSwiftMailer;
 use LoginCidadao\AccountRecoveryBundle\Entity\AccountRecoveryData;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Class AccountRecoveryMailer
@@ -62,6 +63,25 @@ class AccountRecoveryMailer extends TwigSwiftMailer
             $accountRecoveryData,
             $toEmail
         );
+    }
+
+    public function sendResettingEmailMessageToRecoveryEmail(AccountRecoveryData $accountRecoveryData)
+    {
+        $person = $accountRecoveryData->getPerson();
+        $template = $this->parameters['template']['resetting'];
+
+        $url = $this->router->generate(
+            'fos_user_resetting_reset',
+            ['token' => $person->getConfirmationToken()],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
+        $context = ['user' => $person, 'confirmationUrl' => $url];
+
+        $from = $this->parameters['from_email']['resetting'];
+        $to = $accountRecoveryData->getEmail();
+
+        $this->sendMessage($template, $context, $from, $to);
     }
 
     private function sendRecoveryDataChangedMessage(

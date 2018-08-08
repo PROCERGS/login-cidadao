@@ -9,7 +9,7 @@
             {{ include("LoginCidadaoCoreBundle:Person:changePassword.html.twig") }}
 
             {% if is_granted('FEATURE_ACCOUNT_RECOVERY_DATA') %}
-                {{ render(controller("LoginCidadaoAccountRecoveryBundle:AccountRecoveryData:securityPanel")) }}
+                {{ render(controller("LoginCidadaoAccountRecoveryBundle:AccountRecoveryData:securityPanel", {'parent': app.request.attributes.get('_route')})) }}
             {% endif %}
 
             {{ render(controller("LoginCidadaoCoreBundle:InvalidateSessions:invalidate")) }}

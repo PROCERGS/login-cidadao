@@ -12,11 +12,13 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@lc.account_recovery.repository"
+            - "@lc.account_recovery.mailer"
 
     lc.account_recovery.data.subscriber:
         class: LoginCidadao\AccountRecoveryBundle\Event\AccountRecoveryDataEventSubscriber
         arguments:
             - "@lc.account_recovery.mailer"
+            - "@lc.account_recovery"
         tags:
             - { name: kernel.event_subscriber }
 
@@ -26,6 +28,9 @@ services:
             - "@mailer"
             - "@router"
             - "@twig"
-            - from_email:
+            - template:
+                  resetting: "%fos_user.resetting.email.template%"
+              from_email:
+                  resetting: "%fos_user.resetting.email.from_email%"
                   recovery_data_changed: "%mailer_sender_mail%"
                   email_sender_name: "%mailer_sender_name%"

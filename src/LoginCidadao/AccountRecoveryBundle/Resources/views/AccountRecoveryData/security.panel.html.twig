@@ -18,7 +18,7 @@
             </dd>
         </dl>
         <p>
-            <a href="{{ path("account_recovery_edit") }}" class="btn btn-success">
+            <a href="{{ path("account_recovery_edit", {'parent': parent}) }}" class="btn btn-success">
                 {{ 'account_recovery.security_panel.edit_button' | trans }}
             </a>
         </p>
