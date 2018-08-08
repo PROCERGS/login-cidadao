@@ -50,10 +50,10 @@ class AccountRecoveryDataController extends Controller
         $form = $this->createForm(AccountRecoveryDataType::class, $recoveryData);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
             $event = new AccountRecoveryDataEditEvent($recoveryData);
             $eventDispatcher->dispatch(AccountRecoveryEvents::ACCOUNT_RECOVERY_DATA_EDIT_SUCCESS, $event);
+
+            $this->getDoctrine()->getManager()->flush();
 
             if (null === $response = $event->getResponse()) {
                 $response = $this->redirectToRoute('account_recovery_edit');

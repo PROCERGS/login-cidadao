@@ -1,0 +1,20 @@
+{% block subject %}
+    {% autoescape false %}
+        {{ 'account_recovery.email.email_changed.message.subject' | trans }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block body_text %}
+    {% autoescape false %}
+        {{ 'account_recovery.email.email_changed.message.text' | trans({ '%email%': newEmail, '%name%': name }) }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+    {% autoescape false %}
+        {{ include("LoginCidadaoCoreBundle::common.email.html.twig", {
+            'subject' : 'account_recovery.email.email_changed.message.subject' | trans,
+            'msg' : 'account_recovery.email.email_changed.message.html' | trans({ '%email%': newEmail | e, '%name%': name | e }) | raw
+        } ) }}
+    {% endautoescape %}
+{% endblock %}

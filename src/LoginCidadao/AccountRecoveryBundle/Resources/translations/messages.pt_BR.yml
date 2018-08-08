@@ -10,3 +10,14 @@ account_recovery:
             label: 'Celular Alternativo'
             placeholder: 'Digite seu celular alternativo'
         submit: 'Salvar'
+    email:
+        email_changed:
+            message:
+                subject: 'Seu email alternativo foi alterado'
+                text: 'Olá, %name%!\n\nEstamos lhe enviando esse email para informar que seu endereço de email alternativo, utilizado para recuperar sua conta em caso de perda de acesso ao email principal, foi alterado para %email%.\n\nSe não foi você quem fez essa mudança, por favor entre em contato com a equipe do Login Cidadão imediatamente!\n'
+                html: 'Olá, %name%!<br><br>Estamos lhe enviando esse email para informar que seu endereço de email alternativo, utilizado para recuperar sua conta em caso de perda de acesso ao email principal, foi alterado para <strong>%email%</strong>.<br><br>Se não foi você quem fez essa mudança, por favor entre em contato com a equipe do Login Cidadão imediatamente!'
+        phone_changed:
+            message:
+                subject: 'Seu celular alternativo foi alterado'
+                text: 'Olá, %name%!\n\nEstamos lhe enviando esse email para informar que seu telefone celular alternativo, utilizado para recuperar sua conta em caso de perda de acesso ao celular principal, foi alterado para %phone%.\n\nSe não foi você quem fez essa mudança, por favor entre em contato com a equipe do Login Cidadão imediatamente!\n'
+                html: 'Olá, %name%!<br><br>Estamos lhe enviando esse email para informar que seu telefone celular alternativo, utilizado para recuperar sua conta em caso de perda de acesso ao celular principal, foi alterado para <strong>%phone%</strong>.<br><br>Se não foi você quem fez essa mudança, por favor entre em contato com a equipe do Login Cidadão imediatamente!'
