@@ -33,16 +33,10 @@ If you fail to comply with the aforementioned requirements you and your users ar
 
 ## OS Dependencies
 
- * PHP >=5.4
+ * PHP >=7.1
  * [composer](https://getcomposer.org)
  * [node.js](http://nvm.sh)
- * [memcached](https://memcached.org/)
-
-### PHP Extensions
-  * php5-curl
-  * php5-intl
-  * php5-mysql or php5-pgsql or your preferred driver
-  * php5-memcache (you can use php5-memcached instead, just remember to change the `Memcache` classes to `Memcached`)
+ * [redis](https://redis.io/)
 
 ### System Configuration
   * php timezone (example: `date.timezone = America/Sao_Paulo`)
