@@ -13,11 +13,11 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@lc.account_recovery.repository"
             - "@lc.account_recovery.mailer"
+            - "@event_dispatcher"
 
     lc.account_recovery.data.subscriber:
         class: LoginCidadao\AccountRecoveryBundle\Event\AccountRecoveryDataEventSubscriber
         arguments:
-            - "@lc.account_recovery.mailer"
             - "@lc.account_recovery"
         tags:
             - { name: kernel.event_subscriber }
