@@ -475,6 +475,18 @@ nelmio_cors:
             allow_origin: ['*']
             allow_headers: ['*']
             allow_methods: ['POST', 'PUT', 'GET', 'DELETE']
+        '^/.well-known/openid-configuration':
+            allow_origin: ['*']
+            allow_headers: ['*']
+            allow_methods: ['GET']
+        '^/openid/connect/jwks':
+            allow_origin: ['*']
+            allow_headers: ['*']
+            allow_methods: ['GET']
+        '^/openid/connect/token':
+            allow_origin: ['*']
+            allow_headers: ['*']
+            allow_methods: ['POST']
 
 nelmio_security:
     # signs/verifies all cookies
