@@ -1,0 +1,4 @@
+lc_cpf_verification:
+    resource: "@PROCERGSLoginCidadaoCpfVerificationBundle/Controller/"
+    type: annotation
+    prefix: /

@@ -35,7 +35,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
             new Vich\UploaderBundle\VichUploaderBundle(),
 
-            new JMS\DiExtraBundle\JMSDiExtraBundle($this),
+            new JMS\DiExtraBundle\JMSDiExtraBundle(),
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
@@ -76,6 +76,7 @@ class AppKernel extends Kernel
             new Circle\RestClientBundle\CircleRestClientBundle(),
             new PROCERGS\SmsServiceBundle\PROCERGSSmsServiceBundle(),
             new PROCERGS\LoginCidadao\PhoneVerificationBundle\PROCERGSPhoneVerificationBundle(),
+            new PROCERGS\LoginCidadao\CpfVerificationBundle\PROCERGSLoginCidadaoCpfVerificationBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

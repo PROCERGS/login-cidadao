@@ -1,3 +1,7 @@
+procergs_login_cidadao_cpf_verification:
+    resource: "@PROCERGSLoginCidadaoCpfVerificationBundle/Resources/config/routing.yml"
+    prefix:   /
+
 procergs_login_cidadao_accounting:
     resource: "@PROCERGSLoginCidadaoAccountingBundle/Resources/config/routing.yml"
     prefix:   /
