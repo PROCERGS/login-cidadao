@@ -11,10 +11,11 @@
 namespace PROCERGS\LoginCidadao\CpfVerificationBundle\Exception;
 
 use PROCERGS\LoginCidadao\CpfVerificationBundle\Model\ChallengeInterface;
-use Throwable;
 
-class WrongAnswerException extends \RuntimeException
+class WrongAnswerException extends CpfVerificationException
 {
+    public const ERROR_CODE = 'wrong_answer';
+
     /** @var ChallengeInterface */
     private $challenge;
 
@@ -25,7 +26,7 @@ class WrongAnswerException extends \RuntimeException
         ChallengeInterface $challenge,
         string $message = "",
         int $code = 0,
-        Throwable $previous = null
+        \Throwable $previous = null
     ) {
         $this->challenge = $challenge;
         parent::__construct($message, $code, $previous);

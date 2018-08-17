@@ -10,16 +10,14 @@
 
 namespace PROCERGS\LoginCidadao\CpfVerificationBundle\Exception;
 
-use Throwable;
-
-class CpfNotSubscribedToNfgException extends \RuntimeException
+class CpfNotSubscribedToNfgException extends CpfVerificationException
 {
     public const ERROR_CODE = 'cpf_not_subscribed_to_nfg';
 
     /** @var string */
     private $cpf;
 
-    public function __construct(string $cpf, string $message = "", int $code = 0, Throwable $previous = null)
+    public function __construct(string $cpf, string $message = "", int $code = 0, \Throwable $previous = null)
     {
         $this->cpf = $cpf;
         parent::__construct($message, $code, $previous);
