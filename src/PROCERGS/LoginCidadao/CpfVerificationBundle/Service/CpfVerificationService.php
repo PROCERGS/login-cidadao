@@ -11,13 +11,11 @@
 namespace PROCERGS\LoginCidadao\CpfVerificationBundle\Service;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use PROCERGS\LoginCidadao\CpfVerificationBundle\Exception\CpfNotSubscribedToNfgException;
+use PROCERGS\LoginCidadao\CpfVerificationBundle\Exception\CpfVerificationException;
+use PROCERGS\LoginCidadao\CpfVerificationBundle\Exception\WrongAnswerException;
 use PROCERGS\LoginCidadao\CpfVerificationBundle\Model\ChallengeInterface;
-use PROCERGS\LoginCidadao\CpfVerificationBundle\Model\SelectMotherInitialsChallenge;
-use PROCERGS\LoginCidadao\CpfVerificationBundle\Model\TypeBirthdayChallenge;
-use PROCERGS\LoginCidadao\CpfVerificationBundle\Model\TypeMotherInitialsChallenge;
-use PROCERGS\LoginCidadao\CpfVerificationBundle\Model\TypePostalCodeChallenge;
-use PROCERGS\LoginCidadao\CpfVerificationBundle\Model\TypeVoterRegistrationChallenge;
 use PROCERGS\LoginCidadao\CpfVerificationBundle\Parser\ChallengeParser;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
@@ -38,93 +36,72 @@ class CpfVerificationService
     /**
      * @param string $cpf
      * @return ChallengeInterface[]
-     * @throws CpfNotSubscribedToNfgException
+     * @throws CpfVerificationException
      */
     public function listAvailableChallenges(string $cpf): array
     {
-        $challenges = $this->getAvailableChallengesFromApi($cpf);
+        $body = $this->sendGetRequest($this->getListChallengesPath($cpf));
 
-        return $challenges;
-
-        return [
-            new TypeMotherInitialsChallenge(1, $cpf),
-            new SelectMotherInitialsChallenge(2, $cpf, ['ABC', 'DEF', 'XYZ']),
-            new TypePostalCodeChallenge(3, $cpf),
-            new TypeBirthdayChallenge(4, $cpf),
-            new TypeVoterRegistrationChallenge(5, $cpf),
-        ];
+        return $this->parseChallengesList($body);
     }
 
     /**
      * @param ChallengeInterface $challenge
      * @return ChallengeInterface
-     * @throws CpfNotSubscribedToNfgException
+     * @throws CpfVerificationException
      */
     public function selectChallenge(ChallengeInterface $challenge): ChallengeInterface
     {
-        return $this->selectChallengeFromApi($challenge);
+        $body = $this->sendGetRequest($this->getChallengePath($challenge));
 
-        return $challenge;
+        return ChallengeParser::parseJson($body);
     }
 
     /**
      * @param ChallengeInterface $challenge
      * @param $answer
      * @return bool
-     * @throws CpfNotSubscribedToNfgException
+     * @throws CpfVerificationException
      */
     public function answerChallenge(ChallengeInterface $challenge, $answer): bool
     {
-        // TODO: implement actual method
-
-        return true;
+        return $this->submitAnswer($challenge, $answer);
     }
 
-    private function getAvailableChallengesFromApi(string $cpf): array
+    /**
+     * @param ChallengeInterface $challenge
+     * @param string $answer
+     * @return bool
+     * @throws CpfVerificationException
+     */
+    private function submitAnswer(ChallengeInterface $challenge, string $answer)
     {
-        $response = $this->client->get("cpf/{$cpf}/challenges");
+        try {
+            $response = $this->client->post($this->getChallengePath($challenge), [
+                'form_params' => ['answer' => $answer],
+            ]);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+        }
         $statusCode = $response->getStatusCode();
         $body = (string)$response->getBody();
-        if ($statusCode === 200) {
-            return $this->parseChallengesList($body);
-        }
+        $response = json_decode($body, true);
 
-        if ($statusCode === 403) {
-            $response = json_decode($body);
-            if ($response['error'] === CpfNotSubscribedToNfgException::ERROR_CODE) {
-                throw new CpfNotSubscribedToNfgException($cpf, $response['message'] ?? null);
-            }
+        if ($statusCode === 200 || $statusCode === 204) {
+            return true;
         }
 
         if ($statusCode === 429) {
-            throw new TooManyRequestsHttpException();
-        }
-
-        throw new \LogicException("Invalid response code {$statusCode} with body {$body}");
-    }
-
-    private function selectChallengeFromApi(ChallengeInterface $challenge): ChallengeInterface
-    {
-        $response = $this->client->get("cpf/{$challenge->getCpf()}/challenges/{$challenge->getName()}");
-        $statusCode = $response->getStatusCode();
-        $body = (string)$response->getBody();
-
-        if ($statusCode === 200) {
-            return ChallengeParser::parseJson((string)$response->getBody());
+            throw $this->getTooManyRequestsException($response['message'] ?? null);
         }
 
         if ($statusCode === 403) {
-            $response = json_decode($body);
-            if ($response['error'] === CpfNotSubscribedToNfgException::ERROR_CODE) {
-                throw new CpfNotSubscribedToNfgException($challenge->getCpf(), $response['message'] ?? null);
+            if ($response['error'] === WrongAnswerException::ERROR_CODE) {
+                throw new WrongAnswerException($challenge, $response['message'] ?? "Wrong answer: {$answer}");
             }
         }
 
-        if ($statusCode === 429) {
-            throw new TooManyRequestsHttpException();
-        }
-
-        throw new \LogicException("Invalid response code {$statusCode} with body {$body}");
+        throw $this->getInvalidResponseException($statusCode, $body);
     }
 
     /**
@@ -143,5 +120,58 @@ class CpfVerificationService
         }
 
         return $challenges;
+    }
+
+    private function getListChallengesPath(string $cpf): string
+    {
+        return "cpf/{$cpf}/challenges";
+    }
+
+    private function getChallengePath(ChallengeInterface $challenge): string
+    {
+        return "cpf/{$challenge->getCpf()}/challenges/{$challenge->getName()}";
+    }
+
+    /**
+     * @param string $uri
+     * @return string
+     * @throws CpfVerificationException
+     */
+    private function sendGetRequest(string $uri): string
+    {
+        try {
+            $response = $this->client->get($uri);
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+        }
+
+        $statusCode = $response->getStatusCode();
+        $body = (string)$response->getBody();
+        if ($statusCode === 200) {
+            return $body;
+        }
+
+        $response = json_decode($body);
+        if ($statusCode === 403) {
+            if ($response['error'] === CpfNotSubscribedToNfgException::ERROR_CODE) {
+                throw new CpfNotSubscribedToNfgException($response['cpf'], $response['message'] ?? null);
+            }
+        }
+
+        if ($statusCode === 429) {
+            throw $this->getTooManyRequestsException($response['message'] ?? null);
+        }
+
+        throw $this->getInvalidResponseException($statusCode, $body);
+    }
+
+    private function getInvalidResponseException($statusCode, $body): \LogicException
+    {
+        return new \LogicException("Invalid response code \"{$statusCode}\" with body \"{$body}\"");
+    }
+
+    private function getTooManyRequestsException($message = null): TooManyRequestsHttpException
+    {
+        return new TooManyRequestsHttpException(null, $message);
     }
 }
