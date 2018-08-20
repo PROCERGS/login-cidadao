@@ -16,12 +16,17 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PROCERGS\LoginCidadao\CpfVerificationBundle\Exception\CpfVerificationException;
 use PROCERGS\LoginCidadao\CpfVerificationBundle\Model\ChallengeInterface;
 use PROCERGS\LoginCidadao\CpfVerificationBundle\Model\TypeMotherInitialsChallenge;
+use PROCERGS\LoginCidadao\CpfVerificationBundle\Service\CpfVerificationHttpService;
 use PROCERGS\LoginCidadao\CpfVerificationBundle\Service\CpfVerificationService;
 
 class CpfVerificationServiceTest extends TestCase
 {
+    /**
+     * @throws CpfVerificationException
+     */
     public function testListAvailableChallenges()
     {
         $cpf = '12345678901';
@@ -32,10 +37,14 @@ class CpfVerificationServiceTest extends TestCase
                 ['challenge' => 'select_mother_initials', 'attempts_left' => 2],
             ],
         ]);
-        $client = $this->getHttpClient([
-            new Response(200, [], $response),
-        ]);
-        $service = new CpfVerificationService($client);
+
+        $httpService = $this->getHttpService();
+        $httpService->expects($this->once())->method('getListChallengesPath')
+            ->with($cpf)->willReturn($uri = 'my/challenges');
+        $httpService->expects($this->once())->method('sendGetRequest')
+            ->with($uri)->willReturn($response);
+
+        $service = new CpfVerificationService($httpService);
         $challenges = $service->listAvailableChallenges($cpf);
 
         foreach ($challenges as $challenge) {
@@ -44,27 +53,41 @@ class CpfVerificationServiceTest extends TestCase
         }
     }
 
+    /**
+     * @throws CpfVerificationException
+     */
     public function testSelectChallenge()
     {
         $cpf = '12345678901';
         $response = json_encode(['challenge' => 'type_mother_initials', 'attempts_left' => 3, 'cpf' => $cpf]);
-        $client = $this->getHttpClient([
-            new Response(200, [], $response),
-        ]);
 
         /** @var ChallengeInterface|MockObject $challenge */
         $challenge = $this->createMock(ChallengeInterface::class);
 
-        $service = new CpfVerificationService($client);
+        $httpService = $this->getHttpService();
+        $httpService->expects($this->once())->method('getChallengePath')
+            ->with($challenge)->willReturn($uri = 'my/challenge/uri');
+        $httpService->expects($this->once())->method('sendGetRequest')
+            ->with($uri)->willReturn($response);
+
+        $service = new CpfVerificationService($httpService);
         $this->assertInstanceOf(TypeMotherInitialsChallenge::class, $service->selectChallenge($challenge));
     }
 
+    /**
+     * @throws CpfVerificationException
+     */
     public function testAnswerChallenge()
     {
         /** @var ChallengeInterface|MockObject $challenge */
         $challenge = $this->createMock(ChallengeInterface::class);
 
-        $service = new CpfVerificationService($this->getHttpClient([new Response(204)]));
+        $httpService = $this->getHttpService();
+        $httpService->expects($this->once())->method('submitAnswer')
+            ->with($challenge)
+            ->willReturn(true);
+
+        $service = new CpfVerificationService($httpService);
         $this->assertTrue($service->answerChallenge($challenge, 'answer'));
     }
 
@@ -78,5 +101,16 @@ class CpfVerificationServiceTest extends TestCase
         $handler = HandlerStack::create($mock);
 
         return new Client(['handler' => $handler]);
+    }
+
+    /**
+     * @return CpfVerificationHttpService|MockObject
+     */
+    private function getHttpService()
+    {
+        /** @var CpfVerificationHttpService|MockObject $httpService */
+        $httpService = $this->createMock(CpfVerificationHttpService::class);
+
+        return $httpService;
     }
 }
