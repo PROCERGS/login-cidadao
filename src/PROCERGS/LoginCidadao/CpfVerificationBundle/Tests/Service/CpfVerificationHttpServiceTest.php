@@ -175,6 +175,23 @@ class CpfVerificationHttpServiceTest extends TestCase
         $this->assertSame('cpf/12345678901/challenges/my_challenge', $service->getChallengePath($challenge));
     }
 
+    public function testCustomChallengePath()
+    {
+        $service = new CpfVerificationHttpService($this->getHttpClient(), ['challenge' => $path = 'my/challenge']);
+        $challenge = $this->createMock(ChallengeInterface::class);
+        $challenge->expects($this->once())->method('getCpf')->willReturn('12345678901');
+        $challenge->expects($this->once())->method('getName')->willReturn('my_challenge');
+
+        $this->assertSame($path, $service->getChallengePath($challenge));
+    }
+
+    public function testCustomListChallengesPath()
+    {
+        $service = new CpfVerificationHttpService($this->getHttpClient(), ['listChallenges' => $path = 'challenges/']);
+
+        $this->assertSame($path, $service->getListChallengesPath('12345678901'));
+    }
+
     /**
      * @param array $responses
      * @return Client

@@ -76,7 +76,7 @@ class AppKernel extends Kernel
             new Circle\RestClientBundle\CircleRestClientBundle(),
             new PROCERGS\SmsServiceBundle\PROCERGSSmsServiceBundle(),
             new PROCERGS\LoginCidadao\PhoneVerificationBundle\PROCERGSPhoneVerificationBundle(),
-            new PROCERGS\LoginCidadao\CpfVerificationBundle\PROCERGSLoginCidadaoCpfVerificationBundle(),
+            new PROCERGS\LoginCidadao\CpfVerificationBundle\PROCERGSCpfVerificationBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

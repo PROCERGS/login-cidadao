@@ -1,2 +1,16 @@
 services:
+    procergs.nfg.cpf_verification.http_client:
+        class: GuzzleHttp\Client
+        arguments:
+            - base_uri: "%procergs.nfg.cpf_verification.base_uri%"
 
+    procergs.nfg.cpf_verification.http_service:
+        class: PROCERGS\LoginCidadao\CpfVerificationBundle\Service\CpfVerificationHttpService
+        arguments:
+            - "@procergs.nfg.cpf_verification.http_client"
+            -
+
+    procergs.nfg.cpf_verification.service:
+        class: PROCERGS\LoginCidadao\CpfVerificationBundle\Service\CpfVerificationService
+        arguments:
+            - "@procergs.nfg.cpf_verification.http_service"

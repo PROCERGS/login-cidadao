@@ -681,3 +681,6 @@ procergs_sms_service:
         id: "%tpd_system_id%"
         key: "%tpd_system_key%"
     send: "%tpd_send_message%"
+
+procergs_cpf_verification:
+    base_uri: "%nfg_cpf_verification_base_uri%"

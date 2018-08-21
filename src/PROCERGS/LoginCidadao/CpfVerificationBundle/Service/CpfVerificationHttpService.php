@@ -20,16 +20,26 @@ use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class CpfVerificationHttpService
 {
+    private const DEFAULT_ENDPOINTS = [
+        'listChallenges' => 'cpf/:cpf/challenges',
+        'challenge' => 'cpf/:cpf/challenges/:challengeName',
+    ];
+
     /** @var Client */
     private $client;
+
+    /** @var array */
+    private $options;
 
     /**
      * CpfVerificationHttpService constructor.
      * @param Client $client
+     * @param array $endpoints
      */
-    public function __construct(Client $client)
+    public function __construct(Client $client, array $endpoints = [])
     {
         $this->client = $client;
+        $this->options['endpoints'] = array_merge(self::DEFAULT_ENDPOINTS, $endpoints);
     }
 
     /**
@@ -113,11 +123,15 @@ class CpfVerificationHttpService
 
     public function getListChallengesPath(string $cpf): string
     {
-        return "cpf/{$cpf}/challenges";
+        return str_replace(':cpf', $cpf, $this->options['endpoints']['listChallenges']);
     }
 
     public function getChallengePath(ChallengeInterface $challenge): string
     {
-        return "cpf/{$challenge->getCpf()}/challenges/{$challenge->getName()}";
+        return str_replace(
+            [':cpf', ':challengeName'],
+            [$challenge->getCpf(), $challenge->getName()],
+            $this->options['endpoints']['challenge']
+        );
     }
 }

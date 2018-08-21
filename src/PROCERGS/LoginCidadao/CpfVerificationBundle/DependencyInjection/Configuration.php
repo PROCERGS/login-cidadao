@@ -18,7 +18,20 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('procergs_login_cidadao_cpf_verification');
+        $rootNode = $treeBuilder->root('procergs_cpf_verification');
+
+        $rootNode
+            ->children()
+                ->scalarNode('base_uri')
+                    ->isRequired()
+                ->end()
+                ->scalarNode('list_challenges_path')
+                    ->defaultNull()
+                ->end()
+                ->scalarNode('challenge_path')
+                    ->defaultNull()
+                ->end()
+            ->end();
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
