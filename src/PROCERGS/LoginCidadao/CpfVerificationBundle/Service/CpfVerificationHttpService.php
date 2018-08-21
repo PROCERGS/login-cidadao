@@ -36,10 +36,10 @@ class CpfVerificationHttpService
      * @param Client $client
      * @param array $endpoints
      */
-    public function __construct(Client $client, array $endpoints = [])
+    public function __construct(Client $client, array $endpoints = null)
     {
         $this->client = $client;
-        $this->options['endpoints'] = array_merge(self::DEFAULT_ENDPOINTS, $endpoints);
+        $this->options['endpoints'] = array_merge(self::DEFAULT_ENDPOINTS, $endpoints ?? []);
     }
 
     /**
