@@ -155,3 +155,6 @@ parameters:
     tpd_system_id: 'SYSTEM'
     tpd_system_key: 'SeCrEt_KeY'
     tpd_send_message: true
+
+    # CPF Verification Settings
+    nfg_cpf_verification_base_uri: 'https://example.com'

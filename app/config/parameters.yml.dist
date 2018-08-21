@@ -194,3 +194,6 @@ parameters:
     tpd_system_key: 'SeCrEt_KeY'
     # When set to false tells the TPD system to not send de message. It's a kind of a test mode.
     tpd_send_message: true
+
+    # CPF Verification Settings
+    nfg_cpf_verification_base_uri: 'https://example.com'
