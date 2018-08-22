@@ -44,11 +44,10 @@ class ProcergsLinkTypeTest extends TestCase
     {
         /** @var OptionsResolver|MockObject $resolver */
         $resolver = $this->createMock(OptionsResolver::class);
-        $resolver->expects($this->exactly(2))->method('setDefaults')
+        $resolver->expects($this->once())->method('setDefaults')
             ->with(['data_class' => ProcergsLink::class]);
 
         $form = new ProcergsLinkType();
         $form->configureOptions($resolver);
-        $form->setDefaultOptions($resolver);
     }
 }
