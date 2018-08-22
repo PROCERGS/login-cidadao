@@ -82,7 +82,10 @@ class MobileCleanupCommand extends ContainerAwareCommand
      */
     private function getManager()
     {
-        return $this->getContainer()->get('doctrine')->getManager();
+        /** @var EntityManager $em */
+        $em = $this->getContainer()->get('doctrine')->getManager();
+
+        return $em;
     }
 
     private function processPhones(InputInterface $input, OutputInterface $output)
