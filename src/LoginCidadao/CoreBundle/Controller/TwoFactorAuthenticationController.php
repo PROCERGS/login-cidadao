@@ -25,7 +25,6 @@ use Symfony\Component\Form\FormError;
  */
 class TwoFactorAuthenticationController extends Controller
 {
-
     /**
      * @Route("/enable", name="2fa_enable")
      * @Template()
@@ -39,7 +38,7 @@ class TwoFactorAuthenticationController extends Controller
         $person = $this->getUser();
         $person->setGoogleAuthenticatorSecret($twoFactor->generateSecret());
 
-        $form = $this->createForm(new TwoFactorAuthenticationFormType(), $person);
+        $form = $this->createForm(TwoFactorAuthenticationFormType::class, $person);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -71,7 +70,7 @@ class TwoFactorAuthenticationController extends Controller
         $twoFactor = $this->get('lc.two_factor');
 
         $person = $this->getUser();
-        $form = $this->createForm(new TwoFactorAuthenticationDisableFormType(), $person);
+        $form = $this->createForm(TwoFactorAuthenticationDisableFormType::class, $person);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -96,7 +95,7 @@ class TwoFactorAuthenticationController extends Controller
         $twoFactor = $this->get('lc.two_factor');
 
         $person = $this->getUser();
-        $form = $this->createForm(new TwoFactorAuthenticationBackupCodeGenerationFormType(), $person);
+        $form = $this->createForm(TwoFactorAuthenticationBackupCodeGenerationFormType::class, $person);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -111,14 +110,5 @@ class TwoFactorAuthenticationController extends Controller
         }
 
         return ['form' => $form->createView()];
-    }
-
-    /**
-     * @Route("/teste")
-     * @Template()
-     */
-    public function formAction()
-    {
-        return [];
     }
 }

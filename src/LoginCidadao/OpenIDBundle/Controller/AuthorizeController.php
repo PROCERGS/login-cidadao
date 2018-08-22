@@ -230,7 +230,12 @@ class AuthorizeController extends BaseController
     {
         /** @var RequestStack $requestStack */
         $requestStack = $this->get('request_stack');
+        $request = $requestStack->getCurrentRequest();
 
-        return $requestStack->getCurrentRequest();
+        if ($request instanceof Request) {
+            return $request;
+        }
+
+        throw new \RuntimeException("Request could not be found");
     }
 }

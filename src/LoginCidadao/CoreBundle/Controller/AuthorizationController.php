@@ -7,6 +7,8 @@ use LoginCidadao\OAuthBundle\Entity\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use LoginCidadao\CoreBundle\Entity\ClientSuggestion;
@@ -48,7 +50,7 @@ class AuthorizationController extends Controller
 
     /**
      * @param Request $request
-     * @return \Symfony\Component\Form\Form|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @return FormInterface|RedirectResponse
      */
     private function handleSuggestion(Request $request)
     {

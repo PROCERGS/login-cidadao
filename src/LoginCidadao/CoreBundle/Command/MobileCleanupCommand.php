@@ -136,6 +136,7 @@ class MobileCleanupCommand extends ContainerAwareCommand
     private function getNextEntry(IterableResult $results)
     {
         try {
+            /** @var array|false $next */
             $next = $results->next();
 
             if (false === $next) {
