@@ -11,6 +11,9 @@
 namespace LoginCidadao\CoreBundle\Form\Type;
 
 use LoginCidadao\OpenIDBundle\Form\ClientMetadataWebForm;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
 use LoginCidadao\CoreBundle\Form\DataTransformer\FromArray;
@@ -20,6 +23,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class ClientBaseFormType extends AbstractType
 {
@@ -42,64 +46,25 @@ class ClientBaseFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('name', TextType::class, ['required' => true])
+            ->add('description', TextareaType::class, ['required' => true, 'attr' => array('rows' => 4)])
+            ->add('metadata', ClientMetadataWebForm::class)
+            ->add('siteUrl', TextType::class, ['required' => true])
             ->add(
-                'name',
-                'Symfony\Component\Form\Extension\Core\Type\TextType',
-                ['required' => true]
-            )
-            ->add(
-                'description',
-                'Symfony\Component\Form\Extension\Core\Type\TextareaType',
-                ['required' => true, 'attr' => array('rows' => 4)]
-            )
-            ->add('metadata', 'oidc_client_metadata_form_type')
-            ->add(
-                'siteUrl',
-                'Symfony\Component\Form\Extension\Core\Type\TextType',
-                ['required' => true]
-            )
-            ->add(
-                $builder->create(
-                    'redirectUris',
-                    'Symfony\Component\Form\Extension\Core\Type\TextareaType',
-                    ['required' => true, 'attr' => ['rows' => 4]]
-                )
+                $builder
+                    ->create('redirectUris', TextareaType::class, ['required' => true, 'attr' => ['rows' => 4]])
                     ->addModelTransformer(new FromArray())
             )
-            ->add(
-                'landingPageUrl',
-                'Symfony\Component\Form\Extension\Core\Type\TextType',
-                ['required' => true]
-            )
-            ->add(
-                'termsOfUseUrl',
-                'Symfony\Component\Form\Extension\Core\Type\TextType',
-                ['required' => true]
-            )
-            ->add(
-                'image',
-                'Vich\UploaderBundle\Form\Type\VichFileType',
-                [
-                    'required' => false,
-                    'allow_delete' => true, // not mandatory, default is true
-                    'download_uri' => true, // not mandatory, default is true
-                ]
-            )
-            ->add(
-                'id',
-                'Symfony\Component\Form\Extension\Core\Type\HiddenType',
-                ['required' => false]
-            )
-            ->add(
-                'published',
-                'LoginCidadao\CoreBundle\Form\Type\SwitchType',
-                ['required' => false]
-            )
-            ->add(
-                'visible',
-                'LoginCidadao\CoreBundle\Form\Type\SwitchType',
-                ['required' => false]
-            );
+            ->add('landingPageUrl', TextType::class, ['required' => true])
+            ->add('termsOfUseUrl', TextType::class, ['required' => true])
+            ->add('image', VichFileType::class, [
+                'required' => false,
+                'allow_delete' => true, // not mandatory, default is true
+                'download_uri' => true, // not mandatory, default is true
+            ])
+            ->add('id', HiddenType::class, ['required' => false])
+            ->add('published', SwitchType::class, ['required' => false])
+            ->add('visible', SwitchType::class, ['required' => false]);
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
@@ -108,7 +73,7 @@ class ClientBaseFormType extends AbstractType
                 $form = $event->getForm();
                 $form->add(
                     'owners',
-                    'LoginCidadao\CoreBundle\Form\Type\AjaxChoiceType',
+                    AjaxChoiceType::class,
                     [
                         'label' => 'dev.ac.owners',
                         'ajax_choice_attr' => [
@@ -153,7 +118,7 @@ class ClientBaseFormType extends AbstractType
                 if ($entity->getId()) {
                     $form->add(
                         'owners',
-                        'LoginCidadao\CoreBundle\Form\Type\AjaxChoiceType',
+                        AjaxChoiceType::class,
                         [
                             'label' => 'dev.ac.owners',
                             'ajax_choice_attr' => [

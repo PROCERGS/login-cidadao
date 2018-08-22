@@ -20,7 +20,11 @@ abstract class CommonFormType extends AbstractType
 {
     /** @var TokenStorageInterface */
     protected $tokenStorage;
+
+    /** @var TranslatorInterface */
     protected $translator;
+
+    /** @var RouterInterface */
     protected $router;
 
     public function setTokenStorage(TokenStorageInterface $tokenStorage)

@@ -28,10 +28,10 @@ class CompleteUserInfoTaskValidatorTest extends TestCase
         $request = $this->getRequest();
         $request->expects($this->exactly(3))
             ->method('get')->willReturnMap([
-                ['_route', null, false, '_authorize_validate'],
-                ['scope', false, false, 'scope1'],
-                ['prompt', null, false, false],
-                ['nonce', null, false, false],
+                ['_route', null, '_authorize_validate'],
+                ['scope', false, 'scope1'],
+                ['prompt', null, false],
+                ['nonce', null, false],
             ]);
 
         $dispatcher = $this->getEventDispatcherInterface();
@@ -48,10 +48,10 @@ class CompleteUserInfoTaskValidatorTest extends TestCase
         $request = $this->getRequest();
         $request->expects($this->exactly(4))
             ->method('get')->willReturnMap([
-                ['_route', null, false, '_authorize_validate'],
-                ['scope', false, false, 'name mobile country state city birthdate email cpf other'],
-                ['prompt', null, false, false],
-                ['nonce', null, false, false],
+                ['_route', null, '_authorize_validate'],
+                ['scope', false, 'name mobile country state city birthdate email cpf other'],
+                ['prompt', null, false],
+                ['nonce', null, false],
             ]);
 
         $dispatcher = $this->getEventDispatcherInterface();
@@ -71,10 +71,10 @@ class CompleteUserInfoTaskValidatorTest extends TestCase
         $request = $this->getRequest();
         $request->expects($this->exactly(3))
             ->method('get')->willReturnMap([
-                ['_route', null, false, '_authorize_validate'],
-                ['scope', false, false, 'scope1'],
-                ['prompt', null, false, false],
-                ['nonce', null, false, false],
+                ['_route', null, '_authorize_validate'],
+                ['scope', false, 'scope1'],
+                ['prompt', null, false],
+                ['nonce', null, false],
             ]);
 
         $dispatcher = $this->getEventDispatcherInterface();
@@ -160,8 +160,8 @@ class CompleteUserInfoTaskValidatorTest extends TestCase
         $request = $this->getRequest();
         $request->expects($this->exactly(2))
             ->method('get')->willReturnMap([
-                ['_route', null, false, '_authorize_validate'],
-                ['scope', false, false, 'scope1'],
+                ['_route', null, '_authorize_validate'],
+                ['scope', false, 'scope1'],
             ]);
 
         $validator = new CompleteUserInfoTaskValidator($this->getEventDispatcherInterface(), true);

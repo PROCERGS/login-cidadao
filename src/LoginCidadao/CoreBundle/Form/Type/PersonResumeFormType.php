@@ -2,10 +2,14 @@
 
 namespace LoginCidadao\CoreBundle\Form\Type;
 
+use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use LoginCidadao\CoreBundle\Form\Type\CommonFormType;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,71 +27,43 @@ class PersonResumeFormType extends CommonFormType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(
-            array(
-                'available_roles' => array(),
-            )
-        );
+        $resolver->setDefaults([
+            'available_roles' => [],
+        ]);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add(
-            'username',
-            null,
-            array(
-                'read_only' => 'true',
-            )
-        );
-        $builder->add(
-            'email',
-            'email',
-            array(
-                'label' => 'form.email',
-                'read_only' => 'true',
-                'translation_domain' => 'FOSUserBundle',
-            )
-        );
-        $builder->add(
-            'firstName',
-            'text',
-            array(
-                'label' => 'form.firstName',
-                'read_only' => 'true',
-                'translation_domain' => 'FOSUserBundle',
-            )
-        );
-        $builder->add(
-            'surname',
-            'text',
-            array(
-                'label' => 'form.surname',
-                'read_only' => 'true',
-                'translation_domain' => 'FOSUserBundle',
-            )
-        );
-        $builder->add(
-            'birthdate',
-            'birthday',
-            array(
-                'required' => false,
-                'read_only' => 'true',
-                'format' => 'yyyy-MM-dd',
-                'widget' => 'single_text',
-                'label' => 'form.birthdate',
-                'translation_domain' => 'FOSUserBundle',
-            )
-        );
-        $builder->add(
-            'mobile',
-            'Misd\PhoneNumberBundle\Form\Type\PhoneNumberType',
-            array(
-                'required' => false,
-                'read_only' => 'true',
-                'label' => 'form.mobile',
-                'translation_domain' => 'FOSUserBundle',
-            )
-        );
+        $builder->add('username', null, ['attr' => ['readonly' => true]]);
+        $builder->add('email', EmailType::class, [
+            'label' => 'form.email',
+            'attr' => ['readonly' => true],
+            'translation_domain' => 'FOSUserBundle',
+        ]);
+        $builder->add('firstName', TextType::class, [
+            'label' => 'form.firstName',
+            'attr' => ['readonly' => true],
+            'translation_domain' => 'FOSUserBundle',
+        ]);
+        $builder->add('surname', TextType::class, [
+            'label' => 'form.surname',
+            'attr' => ['readonly' => true],
+            'translation_domain' => 'FOSUserBundle',
+        ]);
+        $builder->add('birthdate', BirthdayType::class, [
+            'required' => false,
+            'attr' => ['readonly' => true],
+            'format' => 'yyyy-MM-dd',
+            'widget' => 'single_text',
+            'label' => 'form.birthdate',
+            'translation_domain' => 'FOSUserBundle',
+        ]);
+        $builder->add('mobile', PhoneNumberType::class, [
+            'required' => false,
+            'attr' => ['readonly' => true],
+            'label' => 'form.mobile',
+            'translation_domain' => 'FOSUserBundle',
+        ]);
 
         $user = $this->getUser();
 
@@ -124,48 +100,34 @@ class PersonResumeFormType extends CommonFormType
         if ($country) {
             $countryName = $country->getName();
         }
-        $form->add(
-            'country',
-            'text',
-            array(
-                'required' => true,
-                'mapped' => false,
-                'read_only' => true,
-                'data' => $countryName,
-            )
-        );
+        $form->add('country', TextType::class, [
+            'required' => true,
+            'mapped' => false,
+            'attr' => ['readonly' => true],
+            'data' => $countryName,
+        ]);
 
         $stateName = '';
         if ($state) {
             $stateName = $state->getName();
         }
-        $form->add(
-            'state',
-            'text',
-            array(
-                'required' => true,
-                'read_only' => 'true',
-                'mapped' => false,
-                'read_only' => true,
-                'data' => $stateName,
-            )
-        );
+        $form->add('state', TextType::class, [
+            'required' => true,
+            'attr' => ['readonly' => true],
+            'mapped' => false,
+            'data' => $stateName,
+        ]);
 
         $cityName = '';
         if ($city) {
             $cityName = $city->getName();
         }
-        $form->add(
-            'city',
-            'text',
-            array(
-                'required' => true,
-                'read_only' => 'true',
-                'mapped' => false,
-                'read_only' => true,
-                'data' => $cityName,
-            )
-        );
+        $form->add('city', TextType::class, [
+            'required' => true,
+            'attr' => ['readonly' => true],
+            'mapped' => false,
+            'data' => $cityName,
+        ]);
 
         return $form;
     }
@@ -208,16 +170,12 @@ class PersonResumeFormType extends CommonFormType
         }
         asort($filteredRoles);
 
-        $form->add(
-            'roles',
-            'choice',
-            array(
-                'choices' => $filteredRoles,
-                'multiple' => true,
-                'read_only' => ($targetPersonLevel > $loggedUserLevel),
-                'disabled' => ($targetPersonLevel > $loggedUserLevel),
-            )
-        );
+        $form->add('roles', ChoiceType::class, [
+            'choices' => $filteredRoles,
+            'multiple' => true,
+            'attr' => ['readonly' => ($targetPersonLevel > $loggedUserLevel)],
+            'disabled' => ($targetPersonLevel > $loggedUserLevel),
+        ]);
 
         return $filteredRoles;
     }

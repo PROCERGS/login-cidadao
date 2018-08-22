@@ -398,7 +398,6 @@ services:
             - "@lc.register_requested_scope"
 
     lc.invalidate_session_request.repository:
-        myrepository:
         class: Doctrine\ORM\EntityRepository
         factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
@@ -473,7 +472,6 @@ services:
             - "@scheb_two_factor.security.google_authenticator"
 
     lc.person.repository:
-        myrepository:
         class: Doctrine\ORM\EntityRepository
         factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
