@@ -956,11 +956,6 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
         return $range;
     }
 
-    public function hasLocalProfilePicture()
-    {
-        return !is_null($this->getImageName());
-    }
-
     public function getSuggestions()
     {
         return $this->suggestions;
@@ -971,34 +966,6 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
         $this->suggestions = $suggestions;
 
         return $this;
-    }
-
-    public function prepareAPISerialize(
-        $imageHelper,
-        $templateHelper,
-        $isDev,
-        $request
-    ) {
-        // User's profile picture
-        if ($this->hasLocalProfilePicture()) {
-            $picturePath = $imageHelper->asset($this, 'image');
-            $pictureUrl = $request->getUriForPath($picturePath);
-            if ($isDev) {
-                $pictureUrl = str_replace('/app_dev.php', '', $pictureUrl);
-            }
-        } else {
-            $pictureUrl = $this->getSocialNetworksPicture();
-        }
-        if (is_null($pictureUrl)) {
-            // TODO: fix this and make it comply to DRY
-            $picturePath = $templateHelper->getUrl('bundles/logincidadaocore/images/userav.png');
-            $pictureUrl = $request->getUriForPath($picturePath);
-            if ($isDev) {
-                $pictureUrl = str_replace('/app_dev.php', '', $pictureUrl);
-            }
-        }
-        $this->setProfilePictureUrl($pictureUrl);
-        $this->serialize();
     }
 
     public function isClientAuthorized($app_id)

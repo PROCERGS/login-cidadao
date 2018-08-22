@@ -10,10 +10,10 @@
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use JMS\Serializer\EventDispatcher\ObjectEvent;
 use JMS\Serializer\EventDispatcher\PreSerializeEvent;
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
@@ -21,6 +21,7 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 
 class PersonSerializeEventListener implements EventSubscriberInterface
 {
+    /** @var Packages */
     protected $templateHelper;
 
     /** @var UploaderHelper */
@@ -34,7 +35,7 @@ class PersonSerializeEventListener implements EventSubscriberInterface
 
     public function __construct(
         UploaderHelper $uploaderHelper,
-        $templateHelper,
+        Packages $templateHelper,
         Kernel $kernel,
         RequestStack $requestStack
     ) {
@@ -59,15 +60,38 @@ class PersonSerializeEventListener implements EventSubscriberInterface
     {
         $person = $event->getObject();
         if ($person instanceof PersonInterface) {
-            $imgHelper = $this->uploaderHelper;
-            $templateHelper = $this->templateHelper;
-            $isDev = $this->kernel->getEnvironment() === 'dev';
-            $person->prepareAPISerialize(
-                $imgHelper,
-                $templateHelper,
-                $isDev,
-                $this->request
-            );
+            $this->preparePictureUri($person);
         }
+    }
+
+    private function preparePictureUri(PersonInterface $person)
+    {
+        if ($this->hasLocalProfilePicture($person)) {
+            $picturePath = $this->uploaderHelper->asset($person, 'image');
+            $pictureUrl = $this->request->getUriForPath($picturePath);
+        } elseif ($this->hasSocialNetworkPicture($person)) {
+            $pictureUrl = $person->getSocialNetworksPicture();
+        } else {
+            $picturePath = $this->templateHelper->getUrl('bundles/logincidadaocore/images/userav.png');
+            $pictureUrl = $this->request->getUriForPath($picturePath);
+        }
+
+        if ($this->kernel->getEnvironment() === 'dev') {
+            $pictureUrl = str_replace('/app_dev.php', '', $pictureUrl);
+        }
+
+        $person->setProfilePictureUrl($pictureUrl);
+        $person->serialize();
+    }
+
+    private function hasLocalProfilePicture(PersonInterface $person)
+    {
+        return !is_null($person->getImageName());
+    }
+
+    private function hasSocialNetworkPicture(PersonInterface $person)
+    {
+        // Currently only Facebook is supported
+        return !is_null($person->getFacebookId());
     }
 }

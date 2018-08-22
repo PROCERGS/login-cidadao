@@ -11,12 +11,16 @@
 namespace LoginCidadao\OAuthBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
+use LoginCidadao\CoreBundle\Form\Type\AjaxChoiceType;
+use LoginCidadao\CoreBundle\Form\Type\SwitchType;
+use LoginCidadao\OAuthBundle\Entity\Organization;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use LoginCidadao\OAuthBundle\Model\OrganizationInterface;
@@ -54,40 +58,23 @@ class OrganizationType extends AbstractType
         };
 
         $builder
-            ->add(
-                'name',
-                'Symfony\Component\Form\Extension\Core\Type\TextType',
-                array('label' => 'organizations.form.name.label')
-            )
-            ->add(
-                'domain',
-                'Symfony\Component\Form\Extension\Core\Type\TextType',
-                array('label' => 'organizations.form.domain.label')
-            )
-            ->add(
-                'sectorIdentifierUri',
-                'Symfony\Component\Form\Extension\Core\Type\UrlType',
-                array('label' => 'organizations.form.sectorIdentifierUri.label')
-            );
+            ->add('name', TextType::class, ['label' => 'organizations.form.name.label'])
+            ->add('domain', TextType::class, ['label' => 'organizations.form.domain.label'])
+            ->add('sectorIdentifierUri', UrlType::class, ['label' => 'organizations.form.sectorIdentifierUri.label']);
 
         if ($this->authorizationChecker->isGranted('ROLE_ORGANIZATIONS_CAN_TRUST')) {
-            $builder->add(
-                'trusted',
-                'LoginCidadao\CoreBundle\Form\Type\SwitchType',
-                array('label' => 'organizations.form.trusted.label', 'required' => false)
-            );
+            $builder->add('trusted', SwitchType::class, [
+                'label' => 'organizations.form.trusted.label',
+                'required' => false,
+            ]);
         }
         if ($this->authorizationChecker->isGranted('ROLE_ORGANIZATIONS_VALIDATE')
             && $builder->getData()->getId()
         ) {
-            $builder->add(
-                'validationUrl',
-                'Symfony\Component\Form\Extension\Core\Type\UrlType',
-                array(
-                    'required' => false,
-                    'label' => 'organizations.form.validationUrl.label',
-                )
-            );
+            $builder->add('validationUrl', UrlType::class, [
+                'required' => false,
+                'label' => 'organizations.form.validationUrl.label',
+            ]);
         }
 
         $organization = $builder->getData();
@@ -96,19 +83,9 @@ class OrganizationType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(
-            array(
-                'data_class' => 'LoginCidadao\OAuthBundle\Entity\Organization',
-            )
-        );
-    }
-
-    /**
-     * @param OptionsResolverInterface $resolver
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $this->configureOptions($resolver);
+        $resolver->setDefaults([
+            'data_class' => Organization::class,
+        ]);
     }
 
     private function prepareMembersField(
@@ -149,30 +126,27 @@ class OrganizationType extends AbstractType
                     return $sql;
                 };
 
-                $form->add(
-                    'members',
-                    'LoginCidadao\CoreBundle\Form\Type\AjaxChoiceType',
-                    array(
+                $form->add('members', AjaxChoiceType::class, [
                         'label' => 'organizations.form.members.label',
-                        'ajax_choice_attr' => array(
-                            'filter' => array(
+                        'ajax_choice_attr' => [
+                            'filter' => [
                                 'route' => 'lc_organizations_members_filter',
                                 'search_prop' => 'username',
-                                'extra_form_prop' => array('service_id' => 'id'),
-                            ),
-                            'selected' => array(
+                                'extra_form_prop' => ['service_id' => 'id'],
+                            ],
+                            'selected' => [
                                 'route' => 'lc_organizations_members',
-                                'extra_form_prop' => array('person_id' => 'members'),
-                            ),
+                                'extra_form_prop' => ['person_id' => 'members'],
+                            ],
                             'property_value' => 'id',
                             'property_text' => 'fullNameOrUsername',
                             'search_prop_label' => 'organizations.form.members.search.label',
-                        ),
+                        ],
                         'required' => false,
                         'class' => 'LoginCidadaoCoreBundle:Person',
                         'choice_label' => 'fullNameOrUsername',
                         'query_builder' => $qb,
-                    )
+                    ]
                 );
             }
         );
@@ -195,30 +169,27 @@ class OrganizationType extends AbstractType
                 };
 
                 if ($entity->getId()) {
-                    $form->add(
-                        'members',
-                        'LoginCidadao\CoreBundle\Form\Type\AjaxChoiceType',
-                        array(
+                    $form->add('members', AjaxChoiceType::class, [
                             'label' => 'organizations.form.members.label',
-                            'ajax_choice_attr' => array(
-                                'filter' => array(
+                            'ajax_choice_attr' => [
+                                'filter' => [
                                     'route' => 'lc_organizations_members_filter',
                                     'search_prop' => 'username',
-                                    'extra_form_prop' => array('service_id' => 'id'),
-                                ),
-                                'selected' => array(
+                                    'extra_form_prop' => ['service_id' => 'id'],
+                                ],
+                                'selected' => [
                                     'route' => 'lc_organizations_members',
-                                    'extra_form_prop' => array('person_id' => 'members'),
-                                ),
+                                    'extra_form_prop' => ['person_id' => 'members'],
+                                ],
                                 'property_value' => 'id',
                                 'property_text' => 'fullNameOrUsername',
                                 'search_prop_label' => 'organizations.form.members.search.label',
-                            ),
+                            ],
                             'required' => false,
                             'class' => 'LoginCidadaoCoreBundle:Person',
                             'choice_label' => 'fullNameOrUsername',
                             'query_builder' => $qb,
-                        )
+                        ]
                     );
                 }
             }

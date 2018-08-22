@@ -66,6 +66,7 @@ class AppKernel extends Kernel
             new LoginCidadao\RemoteClaimsBundle\LoginCidadaoRemoteClaimsBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Snc\RedisBundle\SncRedisBundle(),
+            new Http\HttplugBundle\HttplugBundle(),
 
             // PROCERGS
             new PROCERGS\LoginCidadao\CoreBundle\PROCERGSLoginCidadaoCoreBundle(),

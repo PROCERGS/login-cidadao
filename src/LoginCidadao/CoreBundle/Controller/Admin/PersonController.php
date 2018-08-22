@@ -6,6 +6,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use libphonenumber\PhoneNumber;
 use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
+use LoginCidadao\CoreBundle\Form\Type\PersonResumeFormType;
 use LoginCidadao\CoreBundle\Security\User\Manager\UserManager;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
 use LoginCidadao\TOSBundle\Model\TOSManager;
@@ -228,9 +229,9 @@ class PersonController extends Controller
         $rolesNames = $this->getRolesNames();
 
         return $this->get('form.factory')->create(
-            $this->get('lc.person.resume.form.type'),
+            PersonResumeFormType::class,
             $person,
-            array('available_roles' => $rolesNames)
+            ['available_roles' => $rolesNames]
         );
     }
 

@@ -329,8 +329,6 @@ hwi_oauth:
             client_id:      %google_app_key%
             client_secret:  %google_app_secret%
             scope:          "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
-    http_client:
-        verify_peer: false
 
 parameters:
     user.class: LoginCidadao\CoreBundle\Entity\Person
@@ -475,6 +473,18 @@ nelmio_cors:
             allow_origin: ['*']
             allow_headers: ['*']
             allow_methods: ['POST', 'PUT', 'GET', 'DELETE']
+        '^/.well-known/openid-configuration':
+            allow_origin: ['*']
+            allow_headers: ['*']
+            allow_methods: ['GET']
+        '^/openid/connect/jwks':
+            allow_origin: ['*']
+            allow_headers: ['*']
+            allow_methods: ['GET']
+        '^/openid/connect/token':
+            allow_origin: ['*']
+            allow_headers: ['*']
+            allow_methods: ['POST']
 
 nelmio_security:
     # signs/verifies all cookies
