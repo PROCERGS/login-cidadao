@@ -13,6 +13,7 @@ namespace LoginCidadao\OAuthBundle\Model;
 use Doctrine\ORM\EntityManager;
 use LoginCidadao\OAuthBundle\Entity\AccessToken;
 use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
+use LoginCidadao\OAuthBundle\Entity\AccessTokenRepository;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -24,10 +25,9 @@ class AccessTokenManager
     /** @var TokenStorageInterface */
     private $tokenStorage;
 
-    public function __construct(EntityManager $em,
-                                TokenStorageInterface $tokenStorage)
+    public function __construct(EntityManager $em, TokenStorageInterface $tokenStorage)
     {
-        $this->em           = $em;
+        $this->em = $em;
         $this->tokenStorage = $tokenStorage;
     }
 
@@ -37,6 +37,7 @@ class AccessTokenManager
     public function hasToken()
     {
         $securityToken = $this->tokenStorage->getToken();
+
         return ($securityToken instanceof OAuthToken);
     }
 
@@ -54,8 +55,13 @@ class AccessTokenManager
             }
             $token = $securityToken->getToken();
         }
+        /** @var AccessTokenRepository $repo */
         $repo = $this->em->getRepository('LoginCidadaoOAuthBundle:AccessToken');
-        return $repo->findOneByToken($token);
+
+        /** @var AccessToken $accessToken */
+        $accessToken = $repo->findOneBy(['token' => $token]);
+
+        return $accessToken;
     }
 
     /**
