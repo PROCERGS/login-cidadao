@@ -7834,7 +7834,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/phpspec/prophecy/4ba436b55987b4bf311cb7c6ba82aa528aac0a06",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/4ba436b55987b4bf311cb7c6ba82aa528aac0a06",
                 "reference": "4ba436b55987b4bf311cb7c6ba82aa528aac0a06",
                 "shasum": ""
             },
@@ -8145,7 +8145,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/sebastianbergmann/phpunit/24da433d7384824d65ea93fbb462e2f31bbb494e",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/24da433d7384824d65ea93fbb462e2f31bbb494e",
                 "reference": "24da433d7384824d65ea93fbb462e2f31bbb494e",
                 "shasum": ""
             },
@@ -8228,7 +8228,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/sebastianbergmann/phpunit-mock-objects/cd1cf05c553ecfec36b170070573e540b67d3f1f",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/cd1cf05c553ecfec36b170070573e540b67d3f1f",
                 "reference": "cd1cf05c553ecfec36b170070573e540b67d3f1f",
                 "shasum": ""
             },
@@ -8845,7 +8845,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/sensiolabs/SensioGeneratorBundle/28cbaa244bd0816fd8908b93f90380bcd7b67a65",
+                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/28cbaa244bd0816fd8908b93f90380bcd7b67a65",
                 "reference": "28cbaa244bd0816fd8908b93f90380bcd7b67a65",
                 "shasum": ""
             },
