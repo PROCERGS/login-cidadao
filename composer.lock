@@ -376,7 +376,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/clue/php-stream-filter/d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0",
+                "url": "https://api.github.com/repos/clue/php-stream-filter/zipball/d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0",
                 "reference": "d80fdee9b3a7e0d16fc330a22f41f3ad0eeb09d0",
                 "shasum": ""
             },
@@ -427,7 +427,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/composer/ca-bundle/46afded9720f40b9dc63542af4e3e43a1177acb0",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/46afded9720f40b9dc63542af4e3e43a1177acb0",
                 "reference": "46afded9720f40b9dc63542af4e3e43a1177acb0",
                 "shasum": ""
             },
@@ -550,7 +550,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/doctrine/cache/d768d58baee9a4862ca783840eca1b9add7a7f57",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/d768d58baee9a4862ca783840eca1b9add7a7f57",
                 "reference": "d768d58baee9a4862ca783840eca1b9add7a7f57",
                 "shasum": ""
             },
@@ -691,7 +691,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/doctrine/common/a210246d286c77d2b89040f8691ba7b3a713d2c1",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/a210246d286c77d2b89040f8691ba7b3a713d2c1",
                 "reference": "a210246d286c77d2b89040f8691ba7b3a713d2c1",
                 "shasum": ""
             },
@@ -773,7 +773,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/doctrine/dbal/5140a64c08b4b607b9bedaae0cedd26f04a0e621",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/5140a64c08b4b607b9bedaae0cedd26f04a0e621",
                 "reference": "5140a64c08b4b607b9bedaae0cedd26f04a0e621",
                 "shasum": ""
             },
@@ -1024,7 +1024,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/doctrine/event-manager/a520bc093a0170feeb6b14e9d83f3a14452e64b3",
+                "url": "https://api.github.com/repos/doctrine/event-manager/zipball/a520bc093a0170feeb6b14e9d83f3a14452e64b3",
                 "reference": "a520bc093a0170feeb6b14e9d83f3a14452e64b3",
                 "shasum": ""
             },
@@ -1272,7 +1272,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/doctrine/doctrine2/d2b4dd71d2a276edd65d0c170375b445f8a4a4a8",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/d2b4dd71d2a276edd65d0c170375b445f8a4a4a8",
                 "reference": "d2b4dd71d2a276edd65d0c170375b445f8a4a4a8",
                 "shasum": ""
             },
@@ -1353,7 +1353,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/doctrine/persistence/17896f6d56a2794a1619e019596ae627aabd8fd5",
+                "url": "https://api.github.com/repos/doctrine/persistence/zipball/17896f6d56a2794a1619e019596ae627aabd8fd5",
                 "reference": "17896f6d56a2794a1619e019596ae627aabd8fd5",
                 "shasum": ""
             },
@@ -1430,7 +1430,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/doctrine/reflection/02538d3f95e88eb397a5f86274deb2c6175c2ab6",
+                "url": "https://api.github.com/repos/doctrine/reflection/zipball/02538d3f95e88eb397a5f86274deb2c6175c2ab6",
                 "reference": "02538d3f95e88eb397a5f86274deb2c6175c2ab6",
                 "shasum": ""
             },
@@ -1504,7 +1504,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/egulias/EmailValidator/54859fabea8b3beecbb1a282888d5c990036b9e3",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/54859fabea8b3beecbb1a282888d5c990036b9e3",
                 "reference": "54859fabea8b3beecbb1a282888d5c990036b9e3",
                 "shasum": ""
             },
@@ -1602,7 +1602,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/php-fig/link-util/1a07821801a148be4add11ab0603e4af55a72fac",
+                "url": "https://api.github.com/repos/php-fig/link-util/zipball/1a07821801a148be4add11ab0603e4af55a72fac",
                 "reference": "1a07821801a148be4add11ab0603e4af55a72fac",
                 "shasum": ""
             },
@@ -1738,7 +1738,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/FriendsOfSymfony/oauth2-php/a41fef63f81ef2ef632350a6c7dc66d15baa9240",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/oauth2-php/zipball/a41fef63f81ef2ef632350a6c7dc66d15baa9240",
                 "reference": "a41fef63f81ef2ef632350a6c7dc66d15baa9240",
                 "shasum": ""
             },
@@ -1791,7 +1791,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/FriendsOfSymfony/FOSRestBundle/3725279a6554c1d894eee0b377f49d3f69e3c217",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/3725279a6554c1d894eee0b377f49d3f69e3c217",
                 "reference": "3725279a6554c1d894eee0b377f49d3f69e3c217",
                 "shasum": ""
             },
@@ -1892,7 +1892,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/FriendsOfSymfony/FOSUserBundle/d41c5a9b95075e6bd95ffa11746514e3e9630539",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/d41c5a9b95075e6bd95ffa11746514e3e9630539",
                 "reference": "d41c5a9b95075e6bd95ffa11746514e3e9630539",
                 "shasum": ""
             },
@@ -1967,7 +1967,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/giggsey/libphonenumber-for-php/b906325b1bcf99309bc10bff7cbdc1ed8fbcf774",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/b906325b1bcf99309bc10bff7cbdc1ed8fbcf774",
                 "reference": "b906325b1bcf99309bc10bff7cbdc1ed8fbcf774",
                 "shasum": ""
             },
@@ -2083,7 +2083,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/google/recaptcha/e7add3be59211482ecdb942288f52da64a35f61a",
+                "url": "https://api.github.com/repos/google/recaptcha/zipball/e7add3be59211482ecdb942288f52da64a35f61a",
                 "reference": "e7add3be59211482ecdb942288f52da64a35f61a",
                 "shasum": ""
             },
@@ -2404,7 +2404,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/hwi/HWIOAuthBundle/0963709b04d8ac0d6d6c0c78787f6f59bd0d9a01",
+                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/0963709b04d8ac0d6d6c0c78787f6f59bd0d9a01",
                 "reference": "0963709b04d8ac0d6d6c0c78787f6f59bd0d9a01",
                 "shasum": ""
             },
@@ -3241,7 +3241,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/KnpLabs/knp-components/f0f830361ff0ee83ea5c5ffe49b429d2b0ff4266",
+                "url": "https://api.github.com/repos/KnpLabs/knp-components/zipball/f0f830361ff0ee83ea5c5ffe49b429d2b0ff4266",
                 "reference": "f0f830361ff0ee83ea5c5ffe49b429d2b0ff4266",
                 "shasum": ""
             },
@@ -3506,7 +3506,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/liip/LiipMonitorBundle/1d94a7e04093e896a1f7f3a47e6746017184c31d",
+                "url": "https://api.github.com/repos/liip/LiipMonitorBundle/zipball/1d94a7e04093e896a1f7f3a47e6746017184c31d",
                 "reference": "1d94a7e04093e896a1f7f3a47e6746017184c31d",
                 "shasum": ""
             },
@@ -4101,7 +4101,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/oroinc/doctrine-extensions/cfe8d4daa82f46e846480d24c51a6a5182e8cb95",
+                "url": "https://api.github.com/repos/oroinc/doctrine-extensions/zipball/cfe8d4daa82f46e846480d24c51a6a5182e8cb95",
                 "reference": "cfe8d4daa82f46e846480d24c51a6a5182e8cb95",
                 "shasum": ""
             },
@@ -4203,7 +4203,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/php-http/cache-plugin/c573ac6ea9b4e33fad567f875b844229d18000b9",
+                "url": "https://api.github.com/repos/php-http/cache-plugin/zipball/c573ac6ea9b4e33fad567f875b844229d18000b9",
                 "reference": "c573ac6ea9b4e33fad567f875b844229d18000b9",
                 "shasum": ""
             },
@@ -4258,7 +4258,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/php-http/client-common/9accb4a082eb06403747c0ffd444112eda41a0fd",
+                "url": "https://api.github.com/repos/php-http/client-common/zipball/9accb4a082eb06403747c0ffd444112eda41a0fd",
                 "reference": "9accb4a082eb06403747c0ffd444112eda41a0fd",
                 "shasum": ""
             },
@@ -4318,7 +4318,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/php-http/curl-client/6341a93d00e5d953fc868a3928b5167e6513f2b6",
+                "url": "https://api.github.com/repos/php-http/curl-client/zipball/6341a93d00e5d953fc868a3928b5167e6513f2b6",
                 "reference": "6341a93d00e5d953fc868a3928b5167e6513f2b6",
                 "shasum": ""
             },
@@ -4373,7 +4373,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/php-http/discovery/9a6cb24de552bfe1aa9d7d1569e2d49c5b169a33",
+                "url": "https://api.github.com/repos/php-http/discovery/zipball/9a6cb24de552bfe1aa9d7d1569e2d49c5b169a33",
                 "reference": "9a6cb24de552bfe1aa9d7d1569e2d49c5b169a33",
                 "shasum": ""
             },
@@ -4434,7 +4434,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/php-http/httplug/1c6381726c18579c4ca2ef1ec1498fdae8bdf018",
+                "url": "https://api.github.com/repos/php-http/httplug/zipball/1c6381726c18579c4ca2ef1ec1498fdae8bdf018",
                 "reference": "1c6381726c18579c4ca2ef1ec1498fdae8bdf018",
                 "shasum": ""
             },
@@ -4489,7 +4489,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/php-http/HttplugBundle/9fed9ddee92ee20cc39050749f2fb9b6cec3f83d",
+                "url": "https://api.github.com/repos/php-http/HttplugBundle/zipball/9fed9ddee92ee20cc39050749f2fb9b6cec3f83d",
                 "reference": "9fed9ddee92ee20cc39050749f2fb9b6cec3f83d",
                 "shasum": ""
             },
@@ -4588,7 +4588,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/php-http/logger-plugin/d6c2ac7d542bf9928a0ac7a8a249d02848b824ec",
+                "url": "https://api.github.com/repos/php-http/logger-plugin/zipball/d6c2ac7d542bf9928a0ac7a8a249d02848b824ec",
                 "reference": "d6c2ac7d542bf9928a0ac7a8a249d02848b824ec",
                 "shasum": ""
             },
@@ -4642,7 +4642,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/php-http/message/741f2266a202d59c4ed75436671e1b8e6f475ea3",
+                "url": "https://api.github.com/repos/php-http/message/zipball/741f2266a202d59c4ed75436671e1b8e6f475ea3",
                 "reference": "741f2266a202d59c4ed75436671e1b8e6f475ea3",
                 "shasum": ""
             },
@@ -4713,7 +4713,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/php-http/message-factory/a478cb11f66a6ac48d8954216cfed9aa06a501a1",
+                "url": "https://api.github.com/repos/php-http/message-factory/zipball/a478cb11f66a6ac48d8954216cfed9aa06a501a1",
                 "reference": "a478cb11f66a6ac48d8954216cfed9aa06a501a1",
                 "shasum": ""
             },
@@ -4762,7 +4762,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/php-http/promise/dc494cdc9d7160b9a09bd5573272195242ce7980",
+                "url": "https://api.github.com/repos/php-http/promise/zipball/dc494cdc9d7160b9a09bd5573272195242ce7980",
                 "reference": "dc494cdc9d7160b9a09bd5573272195242ce7980",
                 "shasum": ""
             },
@@ -4811,7 +4811,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/php-http/stopwatch-plugin/b9d4ab7a0f4ca1fc17e323e880d1235076e31dbf",
+                "url": "https://api.github.com/repos/php-http/stopwatch-plugin/zipball/b9d4ab7a0f4ca1fc17e323e880d1235076e31dbf",
                 "reference": "b9d4ab7a0f4ca1fc17e323e880d1235076e31dbf",
                 "shasum": ""
             },
@@ -5189,7 +5189,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/php-fig/cache/d11b50ad223250cf17b86e38383413f5a6764bf8",
+                "url": "https://api.github.com/repos/php-fig/cache/zipball/d11b50ad223250cf17b86e38383413f5a6764bf8",
                 "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8",
                 "shasum": ""
             },
@@ -5333,7 +5333,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/php-fig/link/eea8e8662d5cd3ae4517c9b864493f59fca95562",
+                "url": "https://api.github.com/repos/php-fig/link/zipball/eea8e8662d5cd3ae4517c9b864493f59fca95562",
                 "reference": "eea8e8662d5cd3ae4517c9b864493f59fca95562",
                 "shasum": ""
             },
@@ -5428,7 +5428,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/php-fig/simple-cache/408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
+                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
                 "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
                 "shasum": ""
             },
@@ -5676,7 +5676,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/rollerworks/PasswordStrengthValidator/90459659cf9f3554029c4ff8206bbf20b79fd259",
+                "url": "https://api.github.com/repos/rollerworks/PasswordStrengthValidator/zipball/90459659cf9f3554029c4ff8206bbf20b79fd259",
                 "reference": "90459659cf9f3554029c4ff8206bbf20b79fd259",
                 "shasum": ""
             },
@@ -5809,7 +5809,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/sensiolabs/SensioDistributionBundle/209b11f8cee5bf71986dd703e45e27d3ed7a6d15",
+                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/209b11f8cee5bf71986dd703e45e27d3ed7a6d15",
                 "reference": "209b11f8cee5bf71986dd703e45e27d3ed7a6d15",
                 "shasum": ""
             },
@@ -5930,7 +5930,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/sensiolabs/security-checker/dc270d5fec418cc6ac983671dba5d80ffaffb142",
+                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/dc270d5fec418cc6ac983671dba5d80ffaffb142",
                 "reference": "dc270d5fec418cc6ac983671dba5d80ffaffb142",
                 "shasum": ""
             },
@@ -6343,7 +6343,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/symfony/polyfill-apcu/19e1b73bf255265ad0b568f81766ae2a3266d8d2",
+                "url": "https://api.github.com/repos/symfony/polyfill-apcu/zipball/19e1b73bf255265ad0b568f81766ae2a3266d8d2",
                 "reference": "19e1b73bf255265ad0b568f81766ae2a3266d8d2",
                 "shasum": ""
             },
@@ -6398,7 +6398,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/symfony/polyfill-ctype/e3d826245268269cd66f8326bd8bc066687b4a19",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/e3d826245268269cd66f8326bd8bc066687b4a19",
                 "reference": "e3d826245268269cd66f8326bd8bc066687b4a19",
                 "shasum": ""
             },
@@ -6455,7 +6455,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/symfony/polyfill-intl-icu/f22a90256d577c7ef7efad8df1f0201663d57644",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-icu/zipball/f22a90256d577c7ef7efad8df1f0201663d57644",
                 "reference": "f22a90256d577c7ef7efad8df1f0201663d57644",
                 "shasum": ""
             },
@@ -6512,7 +6512,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/symfony/polyfill-mbstring/d0cd638f4634c16d8df4508e847f14e9e43168b8",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/d0cd638f4634c16d8df4508e847f14e9e43168b8",
                 "reference": "d0cd638f4634c16d8df4508e847f14e9e43168b8",
                 "shasum": ""
             },
@@ -6570,7 +6570,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/symfony/polyfill-php56/7b4fc009172cc0196535b0328bd1226284a28000",
+                "url": "https://api.github.com/repos/symfony/polyfill-php56/zipball/7b4fc009172cc0196535b0328bd1226284a28000",
                 "reference": "7b4fc009172cc0196535b0328bd1226284a28000",
                 "shasum": ""
             },
@@ -6625,7 +6625,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/symfony/polyfill-php70/1e24b0c4a56d55aaf368763a06c6d1c7d3194934",
+                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/1e24b0c4a56d55aaf368763a06c6d1c7d3194934",
                 "reference": "1e24b0c4a56d55aaf368763a06c6d1c7d3194934",
                 "shasum": ""
             },
@@ -6683,7 +6683,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/symfony/polyfill-util/8e15d04ba3440984d23e7964b2ee1d25c8de1581",
+                "url": "https://api.github.com/repos/symfony/polyfill-util/zipball/8e15d04ba3440984d23e7964b2ee1d25c8de1581",
                 "reference": "8e15d04ba3440984d23e7964b2ee1d25c8de1581",
                 "shasum": ""
             },
@@ -6857,7 +6857,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/symfony/symfony/f50e17fa4edd6216f7fe5b908f04e64ba1d19a9e",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/f50e17fa4edd6216f7fe5b908f04e64ba1d19a9e",
                 "reference": "f50e17fa4edd6216f7fe5b908f04e64ba1d19a9e",
                 "shasum": ""
             },
@@ -7128,7 +7128,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/dustin10/VichUploaderBundle/37bc4b3264a0e22608a56406d5019b26864b9553",
+                "url": "https://api.github.com/repos/dustin10/VichUploaderBundle/zipball/37bc4b3264a0e22608a56406d5019b26864b9553",
                 "reference": "37bc4b3264a0e22608a56406d5019b26864b9553",
                 "shasum": ""
             },
@@ -7312,7 +7312,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://secweb.intra.rs.gov.br/artifactory/api/composer/php-remote/vcs-dists/zip/zendframework/zend-code/c21db169075c6ec4b342149f446e7b7b724f95eb",
+                "url": "https://api.github.com/repos/zendframework/zend-code/zipball/c21db169075c6ec4b342149f446e7b7b724f95eb",
                 "reference": "c21db169075c6ec4b342149f446e7b7b724f95eb",
                 "shasum": ""
             },
