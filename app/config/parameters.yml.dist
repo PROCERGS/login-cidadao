@@ -109,7 +109,7 @@ parameters:
     mailer_receiver_mail: ~
 
     # Pictures upload directory
-    user_profile_upload_dir: %kernel.root_dir%/../web/uploads/profile-pictures
+    user_profile_upload_dir: '%kernel.root_dir%/../web/uploads/profile-pictures'
     # Client (services) pictures upload directory
     client_image_upload_dir: '%kernel.root_dir%/../web/uploads/client-pictures'
 
@@ -128,10 +128,10 @@ parameters:
     # OpenID Connect
     # JWT Config (no need to change)
     #  - it is necessary since we can't access the oidc.issuer_url in the Compiler Pass
-    jwt_iss: http://%site_domain%%base_path%
+    jwt_iss: 'http://%site_domain%%base_path%'
 
     # JWKS Config
-    jwks_dir: %kernel.root_dir%/../app/config/jwks
+    jwks_dir: '%kernel.root_dir%/../app/config/jwks'
     jwks_private_key_file: private.pem
 
     # Two Factor Auth Issuer Name

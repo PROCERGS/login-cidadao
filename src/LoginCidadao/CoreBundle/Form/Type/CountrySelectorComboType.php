@@ -26,7 +26,7 @@ class CountrySelectorComboType extends AbstractType
         $resolver->setDefaults(array(
             'class' => 'LoginCidadaoCoreBundle:Country',
             'choice_label' => 'name',
-            'empty_value' => '',
+            'placeholder' => '',
             'query_builder' => $this->getFilterFunction(),
             'label' => 'Place of birth - Country',
             'attr' => array(

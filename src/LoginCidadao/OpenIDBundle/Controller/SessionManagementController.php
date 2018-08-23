@@ -126,14 +126,10 @@ class SessionManagementController extends Controller
         $authorizedLogout = !$getLogoutConsent;
         $formChecked = false;
 
-        $form = $this->createForm(
-            new EndSessionForm(),
-            ['logout' => true, 'redirect' => true],
-            [
-                'getLogoutConsent' => $getLogoutConsent,
-                'getRedirectConsent' => $getRedirectConsent,
-            ]
-        );
+        $form = $this->createForm(EndSessionForm::class, ['logout' => true, 'redirect' => true], [
+            'getLogoutConsent' => $getLogoutConsent,
+            'getRedirectConsent' => $getRedirectConsent,
+        ]);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $data = $form->getData();

@@ -17,7 +17,7 @@
 
 {% block widget_attributes -%}
     id="{{ id }}" name="{{ full_name }}"
-    {%- if read_only %} readonly="readonly"{% endif -%}
+    {%- if read_only is defined and read_only %} readonly="readonly"{% endif -%}
     {%- if disabled %} disabled="disabled"{% endif -%}
     {%- if required %} required="required"{% endif -%}
     {%- if attr.class is not defined %}
@@ -88,7 +88,7 @@
 {%- endblock ajax_choice_label %}
 
 {% block ajax_choice_widget -%}
-    {% if required and empty_value is none and not empty_value_in_choices and not multiple -%}
+    {% if required and placeholder is none and not placeholder_in_choices and not multiple -%}
         {% set required = false %}
     {%- endif -%}
     <div class="ac-sandbox">
@@ -105,8 +105,8 @@
             {%- endif -%}
         </div>
         <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
-            {% if empty_value is not none -%}
-                <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
+            {% if placeholder is not none -%}
+                <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder|trans({}, translation_domain) }}</option>
             {%- endif %}
             {%- if preferred_choices|length > 0 -%}
                 {% set options = preferred_choices %}

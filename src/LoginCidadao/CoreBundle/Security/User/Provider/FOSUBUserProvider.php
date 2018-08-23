@@ -111,7 +111,7 @@ class FOSUBUserProvider extends BaseClass
         $user->$setter_username($screenName);
 
         if ($service === 'facebook') {
-            $this->setFacebookData($user, $response->getResponse());
+            $this->setFacebookData($user, $response->getData());
         }
 
         $this->userManager->updateUser($user);
@@ -121,6 +121,7 @@ class FOSUBUserProvider extends BaseClass
      * {@inheritDoc}
      * @throws MissingEmailException
      * @throws DuplicateEmailException
+     * @throws \Exception
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
@@ -154,7 +155,7 @@ class FOSUBUserProvider extends BaseClass
         }
 
         if ($service === 'facebook') {
-            $this->setFacebookData($user, $response->getResponse());
+            $this->setFacebookData($user, $response->getData());
         }
 
         $username = Uuid::uuid4()->toString();
