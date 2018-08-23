@@ -31,4 +31,4 @@ before_script:
 script:
   # Do NOT enable test coverage here since it takes way too much time
   # We'll use Scrutinizer for that.
-  - ./bin/phpunit -c app
+  - composer test
