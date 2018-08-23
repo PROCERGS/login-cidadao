@@ -37,7 +37,7 @@ class StateSelectorComboType extends AbstractType
             'invalid_message' => 'The selected state was not found',
             'class' => 'LoginCidadaoCoreBundle:State',
             'choice_label' => 'name',
-            'empty_value' => '',
+            'placeholder' => '',
             'query_builder' => $this->getFilterFunction($country),
             'label' => 'Place of birth - State',
             'attr' => array(

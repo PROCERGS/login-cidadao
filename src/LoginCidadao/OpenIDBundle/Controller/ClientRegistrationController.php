@@ -13,7 +13,6 @@ namespace LoginCidadao\OpenIDBundle\Controller;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use FOS\RestBundle\Context\Context;
 use LoginCidadao\OAuthBundle\Entity\Client;
-use JMS\Serializer\SerializationContext;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use Symfony\Component\Form\FormError;
@@ -42,7 +41,7 @@ class ClientRegistrationController extends FOSRestController
         $clientManager = $this->getClientManager();
 
         $data = new ClientMetadata();
-        $form = $this->createForm(new ClientMetadataForm($clientManager), $data, ['cascade_validation' => true]);
+        $form = $this->createForm(ClientMetadataForm::class, $data, ['cascade_validation' => true]);
 
         $form->handleRequest($request);
         if ($form->isValid()) {

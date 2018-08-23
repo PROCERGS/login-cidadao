@@ -317,8 +317,6 @@ hwi_oauth:
             client_id:      %google_app_key%
             client_secret:  %google_app_secret%
             scope:          "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
-    http_client:
-        verify_peer: false
 
 parameters:
     user.class: LoginCidadao\CoreBundle\Entity\Person
