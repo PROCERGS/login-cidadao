@@ -22,6 +22,7 @@ use FOS\RestBundle\Controller\Annotations as REST;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Form\ClientMetadataForm;
 use LoginCidadao\OpenIDBundle\Exception\DynamicRegistrationException;
+use Symfony\Component\Validator\Constraints\Valid;
 
 /**
  * Class ClientRegistrationController
@@ -41,7 +42,7 @@ class ClientRegistrationController extends FOSRestController
         $clientManager = $this->getClientManager();
 
         $data = new ClientMetadata();
-        $form = $this->createForm(ClientMetadataForm::class, $data, ['cascade_validation' => true]);
+        $form = $this->createForm(ClientMetadataForm::class, $data, ['constraints' => new Valid()]);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
