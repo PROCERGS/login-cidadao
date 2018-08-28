@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
@@ -146,12 +147,17 @@ class LoginFormTypeTest extends TestCase
      */
     private function getContainer($em = null, $request = null, $threshold = null)
     {
+        $requestStack = new RequestStack();
+        if (null !== $request) {
+            $requestStack->push($request);
+        }
+
         $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerInterface');
         $container->expects($this->exactly(2))
             ->method('get')
             ->willReturnMap([
                 ['doctrine.orm.entity_manager', 1, $em],
-                ['request', 1, $request],
+                ['request_stack', 1, $requestStack],
             ]);
         $container->expects($this->once())
             ->method('getParameter')
