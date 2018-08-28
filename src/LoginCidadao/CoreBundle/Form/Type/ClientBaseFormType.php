@@ -23,6 +23,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Validator\Constraints\Valid;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class ClientBaseFormType extends AbstractType
@@ -155,6 +156,6 @@ class ClientBaseFormType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(['cascade_validation' => true]);
+        $resolver->setDefaults(['constraints' => new Valid()]);
     }
 }
