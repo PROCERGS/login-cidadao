@@ -20,6 +20,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\Valid;
 
 /**
  * @codeCoverageIgnore
@@ -81,7 +82,7 @@ class FormController extends Controller
         $level = $request->get('level');
         $data = $formService->getLocationDataFromRequest($request);
 
-        $form = $this->createFormBuilder($data, ['cascade_validation' => true])->getForm();
+        $form = $this->createFormBuilder($data, ['constraints' => new Valid()])->getForm();
         $this->addPlaceOfBirth($form, $level);
 
         return [
