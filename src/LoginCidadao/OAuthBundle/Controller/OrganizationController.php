@@ -10,6 +10,9 @@
 
 namespace LoginCidadao\OAuthBundle\Controller;
 
+use LoginCidadao\OAuthBundle\Entity\OrganizationRepository;
+use LoginCidadao\OAuthBundle\Form\OrganizationType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -33,8 +36,8 @@ class OrganizationController extends Controller
     {
         $checker = $this->get('security.authorization_checker');
 
-        $myOrganizations    = $this->fetchMyOrganizations();
-        $otherOrganizations = array();
+        $myOrganizations = $this->fetchMyOrganizations();
+        $otherOrganizations = [];
 
         if ($checker->isGranted('ROLE_ORGANIZATIONS_LIST_ALL')) {
             $otherOrganizations = $this->fetchOtherOrganizations();
@@ -52,14 +55,13 @@ class OrganizationController extends Controller
     {
         $organization = new Organization();
 
-        $form = $this->createForm('LoginCidadao\OAuthBundle\Form\OrganizationType',
-            $organization);
+        $form = $this->createForm(OrganizationType::class, $organization);
 
         $form->handleRequest($request);
 
         $em = $this->getDoctrine()->getManager();
         if ($form->isValid()) {
-            $organization->getMembers()->add($this->getUser());
+            $organization->getMembers()[] = $this->getUser();
             $em->persist($organization);
             $em->flush();
 
@@ -82,9 +84,7 @@ class OrganizationController extends Controller
             $this->denyAccessUnlessGranted('ROLE_ORGANIZATIONS_EDIT_ANY_ORG');
         }
 
-        $form = $this->createForm('LoginCidadao\OAuthBundle\Form\OrganizationType',
-            $organization);
-
+        $form = $this->createForm(OrganizationType::class, $organization);
         $form->handleRequest($request);
 
         $em = $this->getDoctrine()->getManager();
@@ -103,7 +103,7 @@ class OrganizationController extends Controller
      * @Route("/{id}", name="lc_organizations_show", requirements={"id" = "\d+"})
      * @Template()
      */
-    public function showAction(Request $request, $id)
+    public function showAction($id)
     {
         $organization = $this->getOr404($id);
 
@@ -118,13 +118,12 @@ class OrganizationController extends Controller
     {
         $organization = $this->getOr404($id);
 
-        $em   = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $form = $this->createFormBuilder($organization)
-            ->add('delete', 'submit',
-                array(
+            ->add('delete', SubmitType::class, [
                 'label' => 'organizations.form.delete.yes',
-                'attr' => array('class' => 'btn-danger')
-            ))
+                'attr' => ['class' => 'btn-danger'],
+            ])
             ->getForm();
 
         $form->handleRequest($request);
@@ -134,9 +133,8 @@ class OrganizationController extends Controller
             $em->flush();
 
             $translator = $this->get('translator');
-            $params     = array('%name%' => $organization->getName());
-            $message    = $translator->trans('organizations.form.delete.success',
-                $params);
+            $params = ['%name%' => $organization->getName()];
+            $message = $translator->trans('organizations.form.delete.success', $params);
             $this->get('session')->getFlashBag()->add('success', $message);
 
             return $this->redirectToRoute('lc_organizations_list');
@@ -160,9 +158,7 @@ class OrganizationController extends Controller
 
     private function fetchMyOrganizations()
     {
-        return $this->getDoctrine()
-                ->getRepository('LoginCidadaoOAuthBundle:Organization')
-                ->findByMember($this->getUser());
+        return $this->getOrganizationRepository()->findByMember($this->getUser());
     }
 
     /**
@@ -170,8 +166,14 @@ class OrganizationController extends Controller
      */
     private function fetchOtherOrganizations()
     {
-        return $this->getDoctrine()
-                ->getRepository('LoginCidadaoOAuthBundle:Organization')
-                ->findByNotMember($this->getUser());
+        return $this->getOrganizationRepository()->findByNotMember($this->getUser());
+    }
+
+    private function getOrganizationRepository()
+    {
+        /** @var OrganizationRepository $repo */
+        $repo = $this->getDoctrine()->getRepository('LoginCidadaoOAuthBundle:Organization');
+
+        return $repo;
     }
 }
