@@ -1,9 +1,19 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Controller;
 
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Validator\Constraints\Length;
@@ -20,13 +30,13 @@ class TwitterController extends Controller
     public function beforeRegisterAction(Request $request)
     {
         $formBuilder = $this->createFormBuilder()
-            ->add('email', 'email', [
+            ->add('email', EmailType::class, [
                 'constraints' => [
                     new NotBlank(),
                     new Length(['min' => 3]),
                 ],
             ])
-            ->add('save', 'submit');
+            ->add('save', SubmitType::class);
 
         $form = $formBuilder->getForm();
 
