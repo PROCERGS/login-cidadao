@@ -1,9 +1,19 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Controller;
 
 use LoginCidadao\CoreBundle\Entity\IdCardRepository;
 use LoginCidadao\CoreBundle\Entity\StateRepository;
+use LoginCidadao\CoreBundle\Form\Type\IdCardType;
+use LoginCidadao\CoreBundle\Form\Type\RemoveIdCardFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -20,7 +30,7 @@ class IdCardController extends Controller
      * @Route("/person/idcards", name="lc_person_id_cards_list")
      * @Template
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         $idCards = $this->getIdCards();
         $deleteForms = $this->getDeleteForms($idCards);
@@ -50,7 +60,7 @@ class IdCardController extends Controller
         $idCard = $validationHandler->instantiateIdCard($state);
 
         $idCard->setPerson($this->getPerson());
-        $form = $this->createForm('lc_idcard_form', $idCard);
+        $form = $this->createForm(IdCardType::class, $idCard);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $em->persist($form->getData());
@@ -81,7 +91,7 @@ class IdCardController extends Controller
         $idCards = $em->getRepository('LoginCidadaoCoreBundle:IdCard');
         $idCard = $idCards->findPersonIdCard($person, $id);
 
-        $form = $this->createForm('lc_idcard_form', $idCard);
+        $form = $this->createForm(IdCardType::class, $idCard);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -107,7 +117,7 @@ class IdCardController extends Controller
     public function deleteAction(Request $request, $id)
     {
         $translator = $this->get('translator');
-        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\RemoveIdCardFormType');
+        $form = $this->createForm(RemoveIdCardFormType::class);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -163,11 +173,8 @@ class IdCardController extends Controller
 
         if (is_array($idCards) || $idCards instanceof Collection) {
             foreach ($idCards as $idCard) {
-                $data = array('id_card_id' => $idCard->getId());
-                $deleteForms[$idCard->getId()] = $this->createForm(
-                    'LoginCidadao\CoreBundle\Form\Type\RemoveIdCardFormType',
-                    $data)
-                    ->createView();
+                $data = ['id_card_id' => $idCard->getId()];
+                $deleteForms[$idCard->getId()] = $this->createForm(RemoveIdCardFormType::class, $data)->createView();
             }
         }
 
