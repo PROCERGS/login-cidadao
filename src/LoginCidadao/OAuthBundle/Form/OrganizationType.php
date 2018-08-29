@@ -47,16 +47,6 @@ class OrganizationType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $members = function (EntityRepository $er) {
-            return $er->createQueryBuilder('p')
-                ->innerJoin(
-                    'LoginCidadaoOAuthBundle:Organization',
-                    'o',
-                    'WITH',
-                    'p MEMBER OF o.members'
-                );
-        };
-
         $builder
             ->add('name', TextType::class, ['label' => 'organizations.form.name.label'])
             ->add('domain', TextType::class, ['label' => 'organizations.form.domain.label'])
@@ -101,7 +91,7 @@ class OrganizationType extends AbstractType
             return;
         }
 
-        if (!$organization->getMembers()->contains($person) &&
+        if (false === array_search($person, $organization->getMembers()) &&
             !$checker->isGranted('ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG')
         ) {
             return;
