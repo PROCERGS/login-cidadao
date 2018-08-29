@@ -50,7 +50,7 @@ class IdCardType extends AbstractType
             'required' => true,
             'class' => 'LoginCidadaoCoreBundle:State',
             'choice_label' => 'name',
-            'read_only' => true,
+            'attr' => ['readonly' => true],
             'query_builder' => function (EntityRepository $er) use ($countryAcronym) {
                 return $er->createQueryBuilder('s')
                     ->join('LoginCidadaoCoreBundle:Country', 'c',

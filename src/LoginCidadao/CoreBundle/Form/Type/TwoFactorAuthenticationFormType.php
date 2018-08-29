@@ -27,7 +27,7 @@ class TwoFactorAuthenticationFormType extends AbstractType
     {
         $builder
             ->add('googleAuthenticatorSecret', TextType::class, [
-                'read_only' => true,
+                'attr' => ['readonly' => true],
                 'label' => "Authenticator Secret",
             ])
             ->add('verification', TextType::class, [
