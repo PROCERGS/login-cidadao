@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\OAuthBundle\Form;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
 use LoginCidadao\CoreBundle\Form\Type\AjaxChoiceType;
 use LoginCidadao\CoreBundle\Form\Type\SwitchType;
@@ -91,7 +92,11 @@ class OrganizationType extends AbstractType
             return;
         }
 
-        if (false === array_search($person, $organization->getMembers()) &&
+        $members = $organization->getMembers();
+        if ($members instanceof Collection) {
+            $members = $members->toArray();
+        }
+        if (false === array_search($person, $members) &&
             !$checker->isGranted('ROLE_ORGANIZATIONS_MANAGE_MEMBERS_ANY_ORG')
         ) {
             return;
