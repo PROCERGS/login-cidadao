@@ -103,9 +103,11 @@ class ConvertSubjectIdentifiersCommand extends ContainerAwareCommand
                 }
 
                 $this->em->persist($sub);
-                if ($done++ % 50 === 0) {
+                if (!$dryRyn && $done++ % 200 === 0) {
+                    $this->em->commit();
                     $this->em->flush();
                     $this->em->clear();
+                    $this->em->beginTransaction();
                 }
                 $io->progressAdvance();
             }
@@ -116,9 +118,9 @@ class ConvertSubjectIdentifiersCommand extends ContainerAwareCommand
                 $io->note("Dry Run: no changes were persisted.");
             } else {
                 $this->em->commit();
+                $this->em->flush();
+                $this->em->clear();
             }
-            $this->em->flush();
-            $this->em->clear();
 
             $io->success("Done! {$done} Authorizations updated!");
         } catch (\Exception $e) {
