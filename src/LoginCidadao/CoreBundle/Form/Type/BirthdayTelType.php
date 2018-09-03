@@ -11,6 +11,7 @@
 namespace LoginCidadao\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 
 class BirthdayTelType extends AbstractType
 {
@@ -21,6 +22,6 @@ class BirthdayTelType extends AbstractType
 
     public function getParent()
     {
-        return 'birthday';
+        return BirthdayType::class;
     }
 }

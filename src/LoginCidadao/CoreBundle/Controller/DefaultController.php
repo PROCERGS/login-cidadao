@@ -11,6 +11,7 @@
 namespace LoginCidadao\CoreBundle\Controller;
 
 use LoginCidadao\APIBundle\Entity\ActionLogRepository;
+use LoginCidadao\CoreBundle\Form\Type\ContactFormType;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Model\SupportMessage;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +49,7 @@ class DefaultController extends Controller
         $data = new SupportMessage($person);
         $data->setExtra('Correlation Id', $correlationId);
 
-        $form = $this->createForm('contact_form_type', $data, ['loggedIn' => $person instanceof PersonInterface]);
+        $form = $this->createForm(ContactFormType::class, $data, ['loggedIn' => $person instanceof PersonInterface]);
         $form->handleRequest($request);
 
         /** @var TranslatorInterface $translator */
