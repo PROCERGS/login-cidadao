@@ -107,7 +107,7 @@ class RegistrationFormType extends BaseType
                 ]);
             },
             'birthday' => function (FormBuilderInterface $builder) {
-                $builder->add('birthdate', 'LoginCidadao\CoreBundle\Form\Type\BirthdayTelType', [
+                $builder->add('birthdate', BirthdayTelType::class, [
                     'required' => true,
                     'format' => 'dd/MM/yyyy',
                     'widget' => 'single_text',
