@@ -79,7 +79,7 @@ class DynamicFormBuilder
     private function getPersonForm(FormInterface $form)
     {
         if ($form->has('person') === false) {
-            $form->add('person', new DynamicPersonType(), ['label' => false]);
+            $form->add('person', DynamicPersonType::class, ['label' => false]);
         }
 
         return $form->get('person');
