@@ -31,6 +31,7 @@ use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTask;
 use LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -114,8 +115,8 @@ class DynamicFormService implements DynamicFormServiceInterface
         foreach ($scopes as $scope) {
             $this->dynamicFormBuilder->addFieldFromScope($form, $scope, $data);
         }
-        $form->add('redirect_url', 'hidden')
-            ->add('scope', 'hidden');
+        $form->add('redirect_url', HiddenType::class)
+            ->add('scope', HiddenType::class);
 
         return $form;
     }
