@@ -41,10 +41,13 @@ class ClientRegistrationController extends FOSRestController
         $this->parseJsonRequest($request);
         $clientManager = $this->getClientManager();
 
-        $data = new ClientMetadata();
-        $form = $this->createForm(ClientMetadataForm::class, $data, ['constraints' => new Valid()]);
+        $form = $this->createForm(ClientMetadataForm::class, new ClientMetadata(), [
+            'constraints' => new Valid(),
+            'client_manager' => $clientManager,
+        ]);
 
-        $form->handleRequest($request);
+        $data = json_decode($request->getContent(), true);
+        $form->submit($data);
         if ($form->isValid()) {
             $metadata = $form->getData();
             try {
@@ -114,6 +117,8 @@ class ClientRegistrationController extends FOSRestController
                     );
             }
         }
+
+        throw new \RuntimeException('No errors found but there should be at least one!');
     }
 
     private function parseJsonRequest(Request $request)

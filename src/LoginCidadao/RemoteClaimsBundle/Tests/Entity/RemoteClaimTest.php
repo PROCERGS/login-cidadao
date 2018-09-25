@@ -66,6 +66,16 @@ class RemoteClaimTest extends TestCase
         $this->assertContains('scope4', $remoteClaim->getEssentialScope());
     }
 
+    public function testEmptyArrayOnEmptyString()
+    {
+        $remoteClaim = (new RemoteClaim())
+            ->setRecommendedScope(' ')
+            ->setEssentialScope(' ');
+
+        $this->assertEmpty($remoteClaim->getRecommendedScope());
+        $this->assertEmpty($remoteClaim->getEssentialScope());
+    }
+
     /**
      * @throws \ReflectionException
      */
