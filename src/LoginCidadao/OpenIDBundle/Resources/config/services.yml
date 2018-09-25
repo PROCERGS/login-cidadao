@@ -179,3 +179,8 @@ services:
             - "@security.authorization_checker"
         tags:
             - { name: form.type, alias: oidc_client_metadata_form_type }
+
+    LoginCidadao\OpenIDBundle\Form\ClientMetadataForm:
+        arguments:
+            - '@lc.client_manager'
+        tags: [form.type]
