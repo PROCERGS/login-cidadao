@@ -41,10 +41,7 @@ class ClientRegistrationController extends FOSRestController
         $this->parseJsonRequest($request);
         $clientManager = $this->getClientManager();
 
-        $form = $this->createForm(ClientMetadataForm::class, new ClientMetadata(), [
-            'constraints' => new Valid(),
-            'client_manager' => $clientManager,
-        ]);
+        $form = $this->createForm(ClientMetadataForm::class, new ClientMetadata(), ['constraints' => new Valid()]);
 
         $data = json_decode($request->getContent(), true);
         $form->submit($data);
