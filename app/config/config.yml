@@ -244,7 +244,7 @@ fos_user:
                 address:        %mailer_sender_mail%
                 sender_name:    %mailer_sender_name%
         form:
-            type:               lc_person_resetting
+            type:               LoginCidadao\CoreBundle\Form\Type\ResettingFormType
     service:
         user_manager: lc.user_manager
         mailer: fos_user.mailer.twig_swift
