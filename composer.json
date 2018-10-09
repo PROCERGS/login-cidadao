@@ -43,7 +43,7 @@
         "michelf/php-markdown": "^1.8",
         "nelmio/api-doc-bundle": "^2",
         "jms/security-extra-bundle": "*",
-        "procergs/login-cidadao-badges-bundle": "^2.0",
+        "procergs/login-cidadao-badges-bundle": "^3",
         "scheb/two-factor-bundle": "^2",
         "procergs/tos-bundle": "^2",
         "bshaffer/oauth2-server-bundle": "^0.4",
