@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "24ab8110d5bb6a70ef2004a298b8975d",
+    "content-hash": "0ada0319eda33c506863f6774690fd8c",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -5332,17 +5332,17 @@
         },
         {
             "name": "procergs/nfg-badges-bundle",
-            "version": "1.1.3",
+            "version": "2.0.0",
             "target-dir": "NFG/BadgesBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/nfg-badges-bundle.git",
-                "reference": "fb830032dc2475216d7b8faba75bfde0890cfbd2"
+                "reference": "8f1176b7d08a3d8806b783867d1a305e09de4042"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/nfg-badges-bundle/zipball/fb830032dc2475216d7b8faba75bfde0890cfbd2",
-                "reference": "fb830032dc2475216d7b8faba75bfde0890cfbd2",
+                "url": "https://api.github.com/repos/PROCERGS/nfg-badges-bundle/zipball/8f1176b7d08a3d8806b783867d1a305e09de4042",
+                "reference": "8f1176b7d08a3d8806b783867d1a305e09de4042",
                 "shasum": ""
             },
             "require": {
@@ -5373,7 +5373,7 @@
                 "meurs",
                 "nfg"
             ],
-            "time": "2018-06-12T17:09:33+00:00"
+            "time": "2018-10-09T21:00:17+00:00"
         },
         {
             "name": "procergs/sms-service",
