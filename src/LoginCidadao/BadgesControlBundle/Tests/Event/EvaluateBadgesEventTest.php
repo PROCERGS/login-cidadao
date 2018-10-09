@@ -11,6 +11,7 @@
 namespace LoginCidadao\BadgesControlBundle\Tests\Event;
 
 use LoginCidadao\BadgesControlBundle\Event\EvaluateBadgesEvent;
+use LoginCidadao\BadgesControlBundle\Model\BadgeInterface;
 use LoginCidadao\CoreBundle\Entity\Person;
 use PHPUnit\Framework\TestCase;
 
@@ -21,8 +22,10 @@ class EvaluateBadgesEventTest extends TestCase
         $person = new Person();
         $this->assertEmpty($person->getBadges());
 
-        $badge1 = $this->createMock('LoginCidadao\BadgesControlBundle\Model\BadgeInterface');
-        $badge2 = $this->createMock('LoginCidadao\BadgesControlBundle\Model\BadgeInterface');
+        $badge1 = $this->createMock(BadgeInterface::class);
+        $badge1->expects($this->any())->method('__toString')->willReturn('badge1');
+        $badge2 = $this->createMock(BadgeInterface::class);
+        $badge2->expects($this->any())->method('__toString')->willReturn('badge2');
 
         $event = new EvaluateBadgesEvent($person);
         $event->registerBadges([$badge1, $badge2]);

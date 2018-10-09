@@ -1060,8 +1060,7 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
     public function mergeBadges(array $badges)
     {
         /** @scrutinizer ignore-deprecated */
-        $this->badges = array_merge(/** @scrutinizer ignore-deprecated */
-            $this->badges, $badges);
+        $this->badges = array_unique(array_merge($this->badges, $badges));
 
         return $this;
     }
