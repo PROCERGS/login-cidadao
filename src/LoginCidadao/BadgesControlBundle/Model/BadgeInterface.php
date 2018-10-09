@@ -12,7 +12,6 @@ use JMS\Serializer\Annotation as JMS;
  */
 interface BadgeInterface
 {
-
     /**
      * @JMS\Groups({"public_profile"})
      * @JMS\VirtualProperty
@@ -36,4 +35,9 @@ interface BadgeInterface
      * @return mixed
      */
     public function getData();
+
+    /**
+     * @return string
+     */
+    public function __toString(): string;
 }

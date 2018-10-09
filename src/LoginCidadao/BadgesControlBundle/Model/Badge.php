@@ -57,4 +57,13 @@ class Badge implements BadgeInterface
         return $this->namespace;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function __toString(): string
+    {
+        return "{$this->getNamespace()}.{$this->getName()}={$this->getData()}";
+    }
+
+
 }
