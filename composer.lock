@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3f2f43dc8c4cc312cab3a86c7975fd08",
+    "content-hash": "8ce9b1c2aa78eaecd5af26a807dfb334",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -1501,16 +1501,16 @@
         },
         {
             "name": "egulias/email-validator",
-            "version": "2.1.5",
+            "version": "2.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "54859fabea8b3beecbb1a282888d5c990036b9e3"
+                "reference": "0578b32b30b22de3e8664f797cf846fc9246f786"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/54859fabea8b3beecbb1a282888d5c990036b9e3",
-                "reference": "54859fabea8b3beecbb1a282888d5c990036b9e3",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/0578b32b30b22de3e8664f797cf846fc9246f786",
+                "reference": "0578b32b30b22de3e8664f797cf846fc9246f786",
                 "shasum": ""
             },
             "require": {
@@ -1536,6 +1536,7 @@
                     "Egulias\\EmailValidator\\": "EmailValidator"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1553,7 +1554,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2018-08-16T20:49:45+00:00"
+            "time": "2018-09-25T20:47:26+00:00"
         },
         {
             "name": "emarref/jwt",
@@ -1893,12 +1894,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "5bdbbc661c74ce8468a6db224498d1f865140b49"
+                "reference": "4125505ba6eba82ddf944378a3d636081c06da0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/5bdbbc661c74ce8468a6db224498d1f865140b49",
-                "reference": "5bdbbc661c74ce8468a6db224498d1f865140b49",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/4125505ba6eba82ddf944378a3d636081c06da0c",
+                "reference": "4125505ba6eba82ddf944378a3d636081c06da0c",
                 "shasum": ""
             },
             "require": {
@@ -1928,7 +1929,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.1.x-dev"
+                    "dev-master": "2.2.x-dev"
                 }
             },
             "autoload": {
@@ -1961,20 +1962,20 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2018-08-25T16:44:39+00:00"
+            "time": "2018-09-19T15:05:28+00:00"
         },
         {
             "name": "giggsey/libphonenumber-for-php",
-            "version": "8.9.12",
+            "version": "8.9.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-                "reference": "b906325b1bcf99309bc10bff7cbdc1ed8fbcf774"
+                "reference": "3189adeaaa27d657a96f580d71365d9e76f04a75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/b906325b1bcf99309bc10bff7cbdc1ed8fbcf774",
-                "reference": "b906325b1bcf99309bc10bff7cbdc1ed8fbcf774",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/3189adeaaa27d657a96f580d71365d9e76f04a75",
+                "reference": "3189adeaaa27d657a96f580d71365d9e76f04a75",
                 "shasum": ""
             },
             "require": {
@@ -1988,7 +1989,7 @@
                 "pear/versioncontrol_git": "^0.5",
                 "phing/phing": "^2.7",
                 "php-coveralls/php-coveralls": "^1.0|^2.0",
-                "phpunit/phpunit": "^4.8|^5.0",
+                "phpunit/phpunit": "^4.8.36|^5.0",
                 "symfony/console": "^2.8|^3.0"
             },
             "type": "library",
@@ -2008,6 +2009,7 @@
                     "/src/timezone/data/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
@@ -2028,7 +2030,7 @@
                 "phonenumber",
                 "validation"
             ],
-            "time": "2018-08-23T10:23:25+00:00"
+            "time": "2018-10-04T12:19:57+00:00"
         },
         {
             "name": "giggsey/locale",
@@ -3150,16 +3152,16 @@
         },
         {
             "name": "knplabs/gaufrette",
-            "version": "v0.6.0",
+            "version": "v0.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/Gaufrette.git",
-                "reference": "a7c71edef4528d9881f534515f9061660255afe3"
+                "reference": "a0627e91e8753f442eea6560cb347151cd306b2c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/Gaufrette/zipball/a7c71edef4528d9881f534515f9061660255afe3",
-                "reference": "a7c71edef4528d9881f534515f9061660255afe3",
+                "url": "https://api.github.com/repos/KnpLabs/Gaufrette/zipball/a0627e91e8753f442eea6560cb347151cd306b2c",
+                "reference": "a0627e91e8753f442eea6560cb347151cd306b2c",
                 "shasum": ""
             },
             "require": {
@@ -3235,20 +3237,20 @@
                 "filesystem",
                 "media"
             ],
-            "time": "2018-03-26T12:19:49+00:00"
+            "time": "2018-08-30T13:26:15+00:00"
         },
         {
             "name": "knplabs/knp-components",
-            "version": "v1.3.9",
+            "version": "v1.3.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/knp-components.git",
-                "reference": "f0f830361ff0ee83ea5c5ffe49b429d2b0ff4266"
+                "reference": "fc1755ba2b77f83a3d3c99e21f3026ba2a1429be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/knp-components/zipball/f0f830361ff0ee83ea5c5ffe49b429d2b0ff4266",
-                "reference": "f0f830361ff0ee83ea5c5ffe49b429d2b0ff4266",
+                "url": "https://api.github.com/repos/KnpLabs/knp-components/zipball/fc1755ba2b77f83a3d3c99e21f3026ba2a1429be",
+                "reference": "fc1755ba2b77f83a3d3c99e21f3026ba2a1429be",
                 "shasum": ""
             },
             "require": {
@@ -3278,6 +3280,7 @@
                     "Knp\\Component": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -3300,7 +3303,7 @@
                 "pager",
                 "paginator"
             ],
-            "time": "2018-08-03T08:37:27+00:00"
+            "time": "2018-09-11T07:54:48+00:00"
         },
         {
             "name": "knplabs/knp-gaufrette-bundle",
@@ -3504,16 +3507,16 @@
         },
         {
             "name": "liip/monitor-bundle",
-            "version": "2.7.2",
+            "version": "2.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liip/LiipMonitorBundle.git",
-                "reference": "1d94a7e04093e896a1f7f3a47e6746017184c31d"
+                "reference": "4930824692c0104f89c62d9324b069dd5af90898"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liip/LiipMonitorBundle/zipball/1d94a7e04093e896a1f7f3a47e6746017184c31d",
-                "reference": "1d94a7e04093e896a1f7f3a47e6746017184c31d",
+                "url": "https://api.github.com/repos/liip/LiipMonitorBundle/zipball/4930824692c0104f89c62d9324b069dd5af90898",
+                "reference": "4930824692c0104f89c62d9324b069dd5af90898",
                 "shasum": ""
             },
             "require": {
@@ -3551,6 +3554,7 @@
                     "Liip\\MonitorBundle\\": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -3579,7 +3583,7 @@
                 "monitor",
                 "monitoring"
             ],
-            "time": "2018-08-16T07:10:46+00:00"
+            "time": "2018-10-05T14:56:54+00:00"
         },
         {
             "name": "michelf/php-markdown",
@@ -4256,16 +4260,16 @@
         },
         {
             "name": "php-http/client-common",
-            "version": "1.7.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/client-common.git",
-                "reference": "9accb4a082eb06403747c0ffd444112eda41a0fd"
+                "reference": "0b9ce659aa46aee106f8c66597ea0c070fcd9dff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/client-common/zipball/9accb4a082eb06403747c0ffd444112eda41a0fd",
-                "reference": "9accb4a082eb06403747c0ffd444112eda41a0fd",
+                "url": "https://api.github.com/repos/php-http/client-common/zipball/0b9ce659aa46aee106f8c66597ea0c070fcd9dff",
+                "reference": "0b9ce659aa46aee106f8c66597ea0c070fcd9dff",
                 "shasum": ""
             },
             "require": {
@@ -4287,7 +4291,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.7-dev"
+                    "dev-master": "1.8-dev"
                 }
             },
             "autoload": {
@@ -4295,6 +4299,7 @@
                     "Http\\Client\\Common\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -4312,7 +4317,7 @@
                 "http",
                 "httplug"
             ],
-            "time": "2017-11-30T11:06:59+00:00"
+            "time": "2018-10-09T06:46:29+00:00"
         },
         {
             "name": "php-http/curl-client",
@@ -5101,21 +5106,23 @@
         },
         {
             "name": "procergs/login-cidadao-badges-bundle",
-            "version": "2.0.2",
+            "version": "3.0.0",
             "target-dir": "LoginCidadao/BadgesBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PROCERGS/login-cidadao-badges-bundle.git",
-                "reference": "9621652344d60c6587bb82de028fbe576ea4e470"
+                "reference": "beb6820c16961e7e0eff31d83691ed546e1f4aa4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/9621652344d60c6587bb82de028fbe576ea4e470",
-                "reference": "9621652344d60c6587bb82de028fbe576ea4e470",
+                "url": "https://api.github.com/repos/PROCERGS/login-cidadao-badges-bundle/zipball/beb6820c16961e7e0eff31d83691ed546e1f4aa4",
+                "reference": "beb6820c16961e7e0eff31d83691ed546e1f4aa4",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "doctrine/orm": ">=2.4",
+                "php": ">=5.3.0",
+                "symfony/translation": "2.8.*|^3"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -5139,10 +5146,10 @@
                 "login-cidadao"
             ],
             "support": {
-                "source": "https://github.com/PROCERGS/login-cidadao-badges-bundle/tree/2.0.2",
+                "source": "https://github.com/PROCERGS/login-cidadao-badges-bundle/tree/3.0.0",
                 "issues": "https://github.com/PROCERGS/login-cidadao-badges-bundle/issues"
             },
-            "time": "2017-05-16T21:00:51+00:00"
+            "time": "2018-10-09T19:28:29+00:00"
         },
         {
             "name": "procergs/tos-bundle",
@@ -6148,16 +6155,16 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v6.1.2",
+            "version": "v6.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "7d760881d266d63c5e7a1155cbcf2ac656a31ca8"
+                "reference": "8ddcb66ac10c392d3beb54829eef8ac1438595f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/7d760881d266d63c5e7a1155cbcf2ac656a31ca8",
-                "reference": "7d760881d266d63c5e7a1155cbcf2ac656a31ca8",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/8ddcb66ac10c392d3beb54829eef8ac1438595f4",
+                "reference": "8ddcb66ac10c392d3beb54829eef8ac1438595f4",
                 "shasum": ""
             },
             "require": {
@@ -6203,7 +6210,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2018-07-13T07:04:35+00:00"
+            "time": "2018-09-11T07:12:52+00:00"
         },
         {
             "name": "symfony/assetic-bundle",
@@ -6793,16 +6800,16 @@
         },
         {
             "name": "symfony/swiftmailer-bundle",
-            "version": "v3.2.2",
+            "version": "v3.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/swiftmailer-bundle.git",
-                "reference": "f1ba0552a9cd4df0191a58845fbd5541cf9eda2d"
+                "reference": "7bd5de67552ee3f7e04df89d662d41eba346dc83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/swiftmailer-bundle/zipball/f1ba0552a9cd4df0191a58845fbd5541cf9eda2d",
-                "reference": "f1ba0552a9cd4df0191a58845fbd5541cf9eda2d",
+                "url": "https://api.github.com/repos/symfony/swiftmailer-bundle/zipball/7bd5de67552ee3f7e04df89d662d41eba346dc83",
+                "reference": "7bd5de67552ee3f7e04df89d662d41eba346dc83",
                 "shasum": ""
             },
             "require": {
@@ -6851,20 +6858,20 @@
             ],
             "description": "Symfony SwiftmailerBundle",
             "homepage": "http://symfony.com",
-            "time": "2018-04-03T16:29:41+00:00"
+            "time": "2018-08-29T08:49:17+00:00"
         },
         {
             "name": "symfony/symfony",
-            "version": "v3.4.15",
+            "version": "v3.4.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "5bb5c2d4b0d5cf10672015b68519a199e6ac27c1"
+                "reference": "de239d25e0bb3be451a17b627705a5970c6c59e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/5bb5c2d4b0d5cf10672015b68519a199e6ac27c1",
-                "reference": "5bb5c2d4b0d5cf10672015b68519a199e6ac27c1",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/de239d25e0bb3be451a17b627705a5970c6c59e6",
+                "reference": "de239d25e0bb3be451a17b627705a5970c6c59e6",
                 "shasum": ""
             },
             "require": {
@@ -7006,7 +7013,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2018-08-28T06:06:28+00:00"
+            "time": "2018-10-03T12:03:55+00:00"
         },
         {
             "name": "twig/twig",
@@ -7417,16 +7424,16 @@
         },
         {
             "name": "zendframework/zenddiagnostics",
-            "version": "v1.3.0",
+            "version": "v1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-diagnostics.git",
-                "reference": "6dd4a159a1bd6fcc8f14f2eda195b5caebabc414"
+                "reference": "90bc83201c8fdd97715705e58bf2688796086cde"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-diagnostics/zipball/6dd4a159a1bd6fcc8f14f2eda195b5caebabc414",
-                "reference": "6dd4a159a1bd6fcc8f14f2eda195b5caebabc414",
+                "url": "https://api.github.com/repos/zendframework/zend-diagnostics/zipball/90bc83201c8fdd97715705e58bf2688796086cde",
+                "reference": "90bc83201c8fdd97715705e58bf2688796086cde",
                 "shasum": ""
             },
             "require": {
@@ -7478,7 +7485,7 @@
                 "test",
                 "zf"
             ],
-            "time": "2018-07-30T20:31:14+00:00"
+            "time": "2018-09-17T16:14:52+00:00"
         }
     ],
     "packages-dev": [
@@ -8144,16 +8151,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "6.5.12",
+            "version": "6.5.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "24da433d7384824d65ea93fbb462e2f31bbb494e"
+                "reference": "0973426fb012359b2f18d3bd1e90ef1172839693"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/24da433d7384824d65ea93fbb462e2f31bbb494e",
-                "reference": "24da433d7384824d65ea93fbb462e2f31bbb494e",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0973426fb012359b2f18d3bd1e90ef1172839693",
+                "reference": "0973426fb012359b2f18d3bd1e90ef1172839693",
                 "shasum": ""
             },
             "require": {
@@ -8206,6 +8213,7 @@
                     "src/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -8223,7 +8231,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-08-22T06:32:48+00:00"
+            "time": "2018-09-08T15:10:43+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -8897,16 +8905,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v4.1.4",
+            "version": "v4.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "d5f433034543bbe3b0dfa2f34e6cc85bf839846f"
+                "reference": "2474c5d4a5e3431fee2f6f0dddde9d34983d9ceb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/d5f433034543bbe3b0dfa2f34e6cc85bf839846f",
-                "reference": "d5f433034543bbe3b0dfa2f34e6cc85bf839846f",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/2474c5d4a5e3431fee2f6f0dddde9d34983d9ceb",
+                "reference": "2474c5d4a5e3431fee2f6f0dddde9d34983d9ceb",
                 "shasum": ""
             },
             "require": {
@@ -8959,7 +8967,7 @@
             ],
             "description": "Symfony PHPUnit Bridge",
             "homepage": "https://symfony.com",
-            "time": "2018-08-27T17:47:02+00:00"
+            "time": "2018-10-02T12:40:59+00:00"
         },
         {
             "name": "theseer/tokenizer",
