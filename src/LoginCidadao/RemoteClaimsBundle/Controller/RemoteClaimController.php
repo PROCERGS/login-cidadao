@@ -61,7 +61,7 @@ class RemoteClaimController extends BaseController
         /** @var Authorization|null $authorization */
         $authorization = $authorizationManager->getAuthorization($person, $provider);
 
-        if ($authorization instanceof Authorization) {
+        if (!$authorization instanceof Authorization) {
             throw $this->createNotFoundException("Authorization not found");
         }
 
