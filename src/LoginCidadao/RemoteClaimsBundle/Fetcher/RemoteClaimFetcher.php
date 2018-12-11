@@ -14,7 +14,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\TransferException;
 use LoginCidadao\LogBundle\Traits\LoggerAwareTrait;
-use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
@@ -30,6 +29,7 @@ use LoginCidadao\RemoteClaimsBundle\Model\TagUri;
 use LoginCidadao\RemoteClaimsBundle\Parser\RemoteClaimParser;
 use LoginCidadao\OAuthBundle\Entity\Client as ClaimProvider;
 use LoginCidadao\RemoteClaimsBundle\RemoteClaimEvents;
+use Psr\Log\LogLevel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -95,6 +95,7 @@ class RemoteClaimFetcher implements RemoteClaimFetcherInterface
 
             return $remoteClaim;
         } catch (\Exception $e) {
+            $this->log(LogLevel::ERROR, "Error fetching remote claim: {$e->getMessage()}");
             throw new NotFoundHttpException($e->getMessage(), $e);
         }
     }
