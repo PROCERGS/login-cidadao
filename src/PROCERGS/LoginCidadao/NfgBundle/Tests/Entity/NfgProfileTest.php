@@ -35,4 +35,21 @@ class NfgProfileTest extends TestCase
 
         $this->assertEquals($id, $nfgProfile->getId());
     }
+
+    public function testCpfZeroPadding()
+    {
+        $nfgProfile = new NfgProfile();
+
+        $nfgProfile->setCpf('1');
+        $this->assertEquals('00000000001', $nfgProfile->getCpf());
+
+        $nfgProfile->setCpf(1);
+        $this->assertEquals('00000000001', $nfgProfile->getCpf());
+    }
+
+    public function testNonNumericCpf()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        (new NfgProfile())->setCpf('a');
+    }
 }
