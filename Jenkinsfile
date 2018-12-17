@@ -2,11 +2,11 @@ pipeline {
     agent { label 'php' }
 
     stages {
-        stage('Clean') {
-            steps {
-                cleanWs()
-            }
-        }
+        //stage('Clean') {
+        //    steps {
+        //        cleanWs()
+        //    }
+        //}
         stage('Build') {
             steps {
                 sh 'composer install --no-progress --no-interaction --no-scripts --prefer-dist'
@@ -54,6 +54,11 @@ pipeline {
                     artifactory.upload(uploadSpec)
                 }
             }
+        }
+    }
+    post {
+        always {
+            deleteDir()
         }
     }
 }
