@@ -1,2 +1,8 @@
-0;$Sistema$;$BuildDescr$;$Ambiente$;-;S;S;N;L;-;-;N;-;-;S
+0;$Sistema$;$BuildDescr$;$Ambiente$;-;S;S;N;L;-;-;N;-;-;S;S;S
 1;-;$PathOrigem$\app;MEU PHP 5.4;\MEU\app;D;-;-;-;-;N;N;N
+1;-;$PathOrigem$\src;MEU PHP 5.4;\MEU\src;D;-;-;-;-;N;N;N
+1;-;$PathOrigem$\vendor;MEU PHP 5.4;\MEU\vendor;D;-;-;-;-;N;N;N
+1;-;$PathOrigem$\web;MEU PHP 5.4;\MEU\web;D;-;-;-;-;N;N;N
+1;-;$PathOrigem$\vendor;MEU PHP 5.4;\MEU\vendor;D;-;-;-;-;N;N;N
+1;composer.lock;$PathOrigem$\;MEU PHP 5.4;\MEU\;A;-;-;-;-;N;N;N
+1;composer.json;$PathOrigem$\;MEU PHP 5.4;\MEU\;A;-;-;-;-;N;N;N
