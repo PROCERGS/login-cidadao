@@ -15,7 +15,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 sh 'php -i | grep debug'
-                sh 'composer test -- --coverage-clover=clover.xml --log-junit=junit.xml'
+                sh 'composer test -- --log-junit=junit.xml'
                 //sh 'composer test -- --coverage-clover=clover.xml --log-junit=junit.xml'
             }
         }
