@@ -14,7 +14,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\TransferException;
 use LoginCidadao\LogBundle\Traits\LoggerAwareTrait;
-use LoginCidadao\OAuthBundle\Entity\ClientRepository;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use LoginCidadao\RemoteClaimsBundle\Entity\RemoteClaim;
