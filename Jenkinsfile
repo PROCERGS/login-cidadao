@@ -40,7 +40,7 @@ pipeline {
         // https://github.com/jfrog/project-examples/tree/master/jenkins-examples/pipeline-examples
         stage('Archive') {
             steps {
-                # Save commit ID to file
+                // Save commit ID to file
                 sh 'echo $GIT_COMMIT > web/commit'
                 sh 'composer archive --format=zip --dir=dist'
                 archiveArtifacts artifacts: 'dist/*.zip'
