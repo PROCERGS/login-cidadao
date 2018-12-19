@@ -1,9 +1,9 @@
 {
     "name": "procergs/login-cidadao",
-    "version": "1.20.0-RC",
+    "version": "1.20.0-RC1",
     "license": "AGPL-3.0",
     "type": "project",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "description": "login-cidadao",
     "autoload": {
         "psr-4": {
             "": "src/",
