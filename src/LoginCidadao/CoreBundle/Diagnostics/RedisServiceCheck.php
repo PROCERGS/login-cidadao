@@ -10,26 +10,27 @@
 
 namespace LoginCidadao\CoreBundle\Diagnostics;
 
-use Predis\Client;
+use Predis\ClientInterface;
 use Predis\PredisException;
 use ZendDiagnostics\Check\CheckInterface;
 use ZendDiagnostics\Result\Failure;
 use ZendDiagnostics\Result\Success;
+use ZendDiagnostics\Result\Warning;
 
 class RedisServiceCheck implements CheckInterface
 {
     private const KEY_PREFIX = 'redis_check_';
 
     /**
-     * @var Client
+     * @var ClientInterface
      */
     private $redis;
 
     /**
      * RedisServiceCheck constructor.
-     * @param Client $redis
+     * @param ClientInterface $redis
      */
-    public function __construct(Client $redis = null)
+    public function __construct(ClientInterface $redis = null)
     {
         $this->redis = $redis;
     }
@@ -40,7 +41,7 @@ class RedisServiceCheck implements CheckInterface
     public function check()
     {
         if ($this->redis === null) {
-            return new Success('Redis is not configured. Nothing to test...');
+            return new Warning('Redis is not configured. Nothing to test...');
         }
 
         $key = self::KEY_PREFIX.random_int(0, PHP_INT_MAX);
@@ -48,6 +49,7 @@ class RedisServiceCheck implements CheckInterface
 
         try {
             $this->redis->set($key, $value);
+            sleep(2);
             $response = $this->redis->get($key);
             $this->redis->del([$key]);
 
