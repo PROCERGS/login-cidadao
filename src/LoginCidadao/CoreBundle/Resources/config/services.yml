@@ -497,3 +497,10 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@lc.authorization.repository"
+
+    monitor.check.redis_predis:
+        class: LoginCidadao\CoreBundle\Diagnostics\RedisServiceCheck
+        arguments:
+            - "@?snc_redis.default"
+        tags:
+            - { name: liip_monitor.check, alias: redis_predis }
