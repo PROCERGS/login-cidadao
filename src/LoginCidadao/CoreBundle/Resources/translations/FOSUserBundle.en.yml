@@ -8,7 +8,7 @@ registration.email.subject: '%username%''s email confirmation!'
 registration.email.message: "Hello %username%!\n\nTo finish activating your account - please visit %confirmationUrl%\n\nRegards, the Staff\n"
 registration.submit: Register
 registration.register: Register
-resseting.forgot_password: 'Forgot your password?'
+resetting.forgot_password: 'Forgot your password?'
 resetting.password_already_requested: 'The password for this user has already been requested within the last 24 hours.'
 resetting.email.subject: 'Reset Password'
 resetting.email.message: 'Someone recently requested to reset your password Citizen''s Login.'

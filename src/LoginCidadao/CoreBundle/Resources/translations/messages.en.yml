@@ -413,16 +413,29 @@ tasks.confirm_email:
     resent.alert: Another message was sent
     success.alert: Email successfuly verified!
 Close: Close
-resetting.request.title: Password Recovery
-resetting.request.description: To recover your password type your email below and we'll send you instructions on how to create a new password.
-resetting.request.invalid_username: '"%username%" is not registered.'
-resetting.request.username.label: 'Email:'
-resetting.request.username.placeholder: Type your Email
-resetting.request.submit: Recover Password
-resetting.check_email: An email with password recovery instructions was sent to you. Open the email and click the link in the message.
-resetting.reset.title: Creating new Password
-resetting.reset.description: Fill the following fields to create a new password.
-resetting.reset.submit: Change password
+resetting:
+    request:
+        title: Password Recovery
+        description: To recover your password type your email below and we'll send you instructions on how to create a new password.
+        invalid_username: '"%username%" is not registered.'
+        username:
+            label: 'Email:'
+            placeholder: Type your Email
+        submit: Recover Password
+    check_email: An email with password recovery instructions was sent to you. Open the email and click the link in the message.
+    reset:
+        title: Creating new Password
+        description: Fill the following fields to create a new password.
+        submit: Change password
+    user_not_found:
+        body: |
+            We didn't find an account with the provided information.
+
+            Check if you didn't use a diferent email address when you created your account.
+
+            If you typed your taxpayer's ID (CPF), type your email since your account might not have a CPF yet.
+        back_to_form: 'Back to the form'
+
 openid.session.end:
     title:
     logging_out: You are being logged out.
