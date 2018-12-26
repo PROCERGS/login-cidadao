@@ -35,10 +35,12 @@ form.phone: Telefone
 form.phone.example: (51) 99999-9999
 form.mobile: Celular
 form.mobile.example: (51) 99999-9999
-resseting.forgot_password: 'Esqueceu sua senha?'
-resetting.email.subject: 'Redefinir senha'
-resetting.email.message: 'Alguém solicitou recentemente para redefinir sua senha do Login Cidadão.'
-resetting.password_already_requested: 'Este usuário já solicitou uma senha nas últimas 24 horas.'
+resetting:
+    forgot_password: 'Esqueceu sua senha?'
+    email:
+        subject: 'Redefinir senha'
+        message: 'Alguém solicitou recentemente para redefinir sua senha do Login Cidadão.'
+    password_already_requested: 'Este usuário já solicitou uma senha nas últimas 24 horas.'
 change_password.submit: 'Alterar senha'
 change_password.flash.success: 'Senha alterada com sucesso!'
 'As a safety measure we need you to type your password to confirm any changes.': 'Como medida de segurança, por favor informe sua senha para confirmar quaisquer mudanças.'
