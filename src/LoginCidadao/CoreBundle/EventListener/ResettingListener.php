@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
@@ -12,7 +20,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ResettingListener implements EventSubscriberInterface
 {
+    /** @var UrlGeneratorInterface */
     private $router;
+
+    /** @var int */
     private $tokenTtl;
 
     public function __construct(UrlGeneratorInterface $router, $tokenTtl)
