@@ -1,0 +1,19 @@
+{% extends 'LoginCidadaoCoreBundle::compact.base.html.twig' %}
+
+{% block top_buttons %}
+    <a href="{{ path('fos_user_security_login') }}" class="btn btn-compact-text">
+        {{ 'home.login.button' | trans }}
+    </a>
+{% endblock %}
+
+{% block panel_body %}
+    <h1>{{ 'resetting.request.title' | trans }}</h1>
+
+    <p>{{ 'resetting.user_not_found.body' | trans | nl2br }}</p>
+
+    <p>
+        <a href="{{ path('fos_user_resetting_request') }}" class="btn btn-success btn-block">
+            {{ 'resetting.user_not_found.back_to_form' | trans }}
+        </a>
+    </p>
+{% endblock %}
