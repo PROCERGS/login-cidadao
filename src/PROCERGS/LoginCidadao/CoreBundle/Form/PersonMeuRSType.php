@@ -27,8 +27,7 @@ class PersonMeuRSType extends AbstractType
             ->add('nfgAccessToken')
             ->add('voterRegistration')
             ->add('person')
-            ->add('nfgProfile')
-        ;
+            ->add('nfgProfile');
     }
 
     /**
@@ -36,9 +35,7 @@ class PersonMeuRSType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => PersonMeuRS::class
-        ));
+        $resolver->setDefaults(['data_class' => PersonMeuRS::class]);
     }
 
     /**
