@@ -176,7 +176,7 @@ class FOSUBUserProvider extends BaseClass
         $this->userManager->updateCanonicalFields($user);
 
         /** @var ConstraintViolationList $errors */
-        $errors = $this->validator->validate($user, ['LoginCidadaoProfile']);
+        $errors = $this->validator->validate($user, null, ['LoginCidadaoProfile']);
         if (count($errors) > 0) {
             foreach ($errors as $error) {
                 if ($error->getPropertyPath() === 'email'
