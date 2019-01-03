@@ -13,7 +13,9 @@ namespace LoginCidadao\OpenIDBundle\Tests\Task;
 use FOS\OAuthServerBundle\Event\OAuthEvent;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\OAuthBundle\Entity\Client;
+use LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTask;
 use LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTaskValidator;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,10 +30,10 @@ class CompleteUserInfoTaskValidatorTest extends TestCase
         $request = $this->getRequest();
         $request->expects($this->exactly(3))
             ->method('get')->willReturnMap([
-                ['_route', null, false, '_authorize_validate'],
-                ['scope', false, false, 'scope1'],
-                ['prompt', null, false, false],
-                ['nonce', null, false, false],
+                ['_route', null, '_authorize_validate'],
+                ['scope', false, 'scope1'],
+                ['prompt', null, false],
+                ['nonce', null, false],
             ]);
 
         $dispatcher = $this->getEventDispatcherInterface();
@@ -48,10 +50,10 @@ class CompleteUserInfoTaskValidatorTest extends TestCase
         $request = $this->getRequest();
         $request->expects($this->exactly(4))
             ->method('get')->willReturnMap([
-                ['_route', null, false, '_authorize_validate'],
-                ['scope', false, false, 'name mobile country state city birthdate email cpf other'],
-                ['prompt', null, false, false],
-                ['nonce', null, false, false],
+                ['_route', null, '_authorize_validate'],
+                ['scope', false, 'name mobile country state city birthdate email cpf other'],
+                ['prompt', null, false],
+                ['nonce', null, false],
             ]);
 
         $dispatcher = $this->getEventDispatcherInterface();
@@ -59,7 +61,7 @@ class CompleteUserInfoTaskValidatorTest extends TestCase
 
         $task = $validator->getCompleteUserInfoTask($user, $client, $request);
 
-        $this->assertInstanceOf('LoginCidadao\OpenIDBundle\Task\CompleteUserInfoTask', $task);
+        $this->assertInstanceOf(CompleteUserInfoTask::class, $task);
         $this->assertSame('name mobile country state city birthdate email cpf', $task->getScope());
     }
 
@@ -71,10 +73,10 @@ class CompleteUserInfoTaskValidatorTest extends TestCase
         $request = $this->getRequest();
         $request->expects($this->exactly(3))
             ->method('get')->willReturnMap([
-                ['_route', null, false, '_authorize_validate'],
-                ['scope', false, false, 'scope1'],
-                ['prompt', null, false, false],
-                ['nonce', null, false, false],
+                ['_route', null, '_authorize_validate'],
+                ['scope', false, 'scope1'],
+                ['prompt', null, false],
+                ['nonce', null, false],
             ]);
 
         $dispatcher = $this->getEventDispatcherInterface();
@@ -160,8 +162,8 @@ class CompleteUserInfoTaskValidatorTest extends TestCase
         $request = $this->getRequest();
         $request->expects($this->exactly(2))
             ->method('get')->willReturnMap([
-                ['_route', null, false, '_authorize_validate'],
-                ['scope', false, false, 'scope1'],
+                ['_route', null, '_authorize_validate'],
+                ['scope', false, 'scope1'],
             ]);
 
         $validator = new CompleteUserInfoTaskValidator($this->getEventDispatcherInterface(), true);
@@ -170,28 +172,28 @@ class CompleteUserInfoTaskValidatorTest extends TestCase
     }
 
     /**
-     * @return Request|\PHPUnit_Framework_MockObject_MockObject
+     * @return Request|MockObject
      */
     private function getRequest()
     {
-        return $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
+        return $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()->getMock();
     }
 
     /**
-     * @return EventDispatcherInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return EventDispatcherInterface|MockObject
      */
     private function getEventDispatcherInterface()
     {
-        return $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
+        return $this->getMockBuilder(EventDispatcherInterface::class)
             ->disableOriginalConstructor()->getMock();
     }
 
-    private function dispatcherExpectAuthorized(\PHPUnit_Framework_MockObject_MockObject $dispatcher)
+    private function dispatcherExpectAuthorized(MockObject $dispatcher)
     {
         $dispatcher->expects($this->once())
             ->method('dispatch')
-            ->with(OAuthEvent::PRE_AUTHORIZATION_PROCESS, $this->isInstanceOf('FOS\OAuthServerBundle\Event\OAuthEvent'))
+            ->with(OAuthEvent::PRE_AUTHORIZATION_PROCESS, $this->isInstanceOf(OAuthEvent::class))
             ->willReturnCallback(function ($eventName, OAuthEvent $event) {
                 $event->setAuthorizedClient(true);
 

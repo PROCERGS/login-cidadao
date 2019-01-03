@@ -92,12 +92,14 @@ class NfgProfile
     public function setId($var)
     {
         $this->id = $var;
+
         return $this;
     }
 
     public function setName($var)
     {
         $this->name = $var;
+
         return $this;
     }
 
@@ -106,9 +108,16 @@ class NfgProfile
         return $this->name;
     }
 
-    public function setCpf($var)
+    public function setCpf($cpf)
     {
-        $this->cpf = $var;
+        if (null !== $cpf && !is_numeric($cpf)) {
+            throw new \InvalidArgumentException('Invalid CPF. CPF must be all numbers');
+        }
+        if (strlen($cpf) < 11) {
+            $cpf = str_pad($cpf, 11, '0', STR_PAD_LEFT);
+        }
+        $this->cpf = $cpf;
+
         return $this;
     }
 
@@ -120,6 +129,7 @@ class NfgProfile
     public function setEmail($var)
     {
         $this->email = $var;
+
         return $this;
     }
 
@@ -131,6 +141,7 @@ class NfgProfile
     public function setBirthdate($var)
     {
         $this->birthdate = $var;
+
         return $this;
     }
 
@@ -142,6 +153,7 @@ class NfgProfile
     public function setMobile($var)
     {
         $this->mobile = $var;
+
         return $this;
     }
 
@@ -156,6 +168,7 @@ class NfgProfile
     public function setAccessLvl($var)
     {
         $this->accessLvl = $var;
+
         return $this;
     }
 
@@ -167,6 +180,7 @@ class NfgProfile
     public function setVoterRegistration($var)
     {
         $this->voterRegistration = $var;
+
         return $this;
     }
 
@@ -178,6 +192,7 @@ class NfgProfile
     public function setVoterRegistrationSit($var)
     {
         $this->voterRegistrationSit = $var;
+
         return $this;
     }
 
@@ -197,6 +212,7 @@ class NfgProfile
         } else {
             $this->updatedAt = new \DateTime('now');
         }
+
         return $this;
     }
 

@@ -13,7 +13,6 @@ namespace LoginCidadao\OpenIDBundle\Controller;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use FOS\RestBundle\Context\Context;
 use LoginCidadao\OAuthBundle\Entity\Client;
-use JMS\Serializer\SerializationContext;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use Symfony\Component\Form\FormError;
@@ -23,6 +22,7 @@ use FOS\RestBundle\Controller\Annotations as REST;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Form\ClientMetadataForm;
 use LoginCidadao\OpenIDBundle\Exception\DynamicRegistrationException;
+use Symfony\Component\Validator\Constraints\Valid;
 
 /**
  * Class ClientRegistrationController
@@ -41,10 +41,10 @@ class ClientRegistrationController extends FOSRestController
         $this->parseJsonRequest($request);
         $clientManager = $this->getClientManager();
 
-        $data = new ClientMetadata();
-        $form = $this->createForm(new ClientMetadataForm($clientManager), $data, ['cascade_validation' => true]);
+        $form = $this->createForm(ClientMetadataForm::class, new ClientMetadata(), ['constraints' => new Valid()]);
 
-        $form->handleRequest($request);
+        $data = json_decode($request->getContent(), true);
+        $form->submit($data);
         if ($form->isValid()) {
             $metadata = $form->getData();
             try {
@@ -114,6 +114,8 @@ class ClientRegistrationController extends FOSRestController
                     );
             }
         }
+
+        throw new \RuntimeException('No errors found but there should be at least one!');
     }
 
     private function parseJsonRequest(Request $request)

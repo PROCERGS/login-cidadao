@@ -10,9 +10,10 @@
 
 namespace PROCERGS\LoginCidadao\CoreBundle\Form;
 
+use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PersonMeuRSType extends AbstractType
 {
@@ -26,18 +27,15 @@ class PersonMeuRSType extends AbstractType
             ->add('nfgAccessToken')
             ->add('voterRegistration')
             ->add('person')
-            ->add('nfgProfile')
-        ;
+            ->add('nfgProfile');
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function setDefaultOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRS'
-        ));
+        $resolver->setDefaults(['data_class' => PersonMeuRS::class]);
     }
 
     /**

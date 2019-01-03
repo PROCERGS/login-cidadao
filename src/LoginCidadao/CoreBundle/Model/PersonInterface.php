@@ -198,18 +198,9 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
      */
     public function getAgeRange();
 
-    public function hasLocalProfilePicture();
-
     public function getSuggestions();
 
     public function setSuggestions($suggestions);
-
-    public function prepareAPISerialize(
-        $imageHelper,
-        $templateHelper,
-        $isDev,
-        $request
-    );
 
     public function isClientAuthorized($app_id);
 

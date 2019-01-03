@@ -16,6 +16,7 @@ use LoginCidadao\CoreBundle\Entity\AccessSession;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -40,8 +41,11 @@ class LoginFormType extends AbstractType
      */
     public function setContainer(ContainerInterface $container)
     {
+        /** @var RequestStack $requestStack */
+        $requestStack = $container->get('request_stack');
+
         $this->em = $container->get('doctrine.orm.entity_manager');
-        $this->request = $container->get('request');
+        $this->request = $requestStack->getCurrentRequest();
         $this->bruteForceThreshold = $container->getParameter('brute_force_threshold');
     }
 

@@ -1,10 +1,25 @@
 Login Cidadão
 =============
 
+This is an Digital Identity (DI) solution for Open Government, Networked
+Democracy and Colaborative Citizenship. Technically it's a federated OAuth2
+and OpenID provider.
+
+It's aimed at easy install while retaining a high level of user-control over
+the use of their data and the applications that have access to it.
+
+Deployed since 2014 in Rio Grande do Sul (BR) it has today more than 500k
+users and has prooved to be a central tool to ease out citizen/government
+interactions providing SSO with preserved privacy and security for all
+government services ![read more (PT_BR)](https://logincidadao.rs.gov.br/about)
+
 [![Build Status](https://travis-ci.org/redelivre/login-cidadao.svg?branch=master)](https://travis-ci.org/redelivre/login-cidadao)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/redelivre/login-cidadao/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/redelivre/login-cidadao/?branch=master)
 [![Join the chat at https://telegram.me/IdentidadeDigital](https://patrolavia.github.io/telegram-badge/chat.png)](https://telegram.me/IdentidadeDigital)
 [![Receive updates at https://telegram.me/logincidadao](https://patrolavia.github.io/telegram-badge/follow.png)](https://telegram.me/logincidadao)
+
+# Screenshot
+![Screenshot](./screenshots/0.png)
 
 ## Requirements
 

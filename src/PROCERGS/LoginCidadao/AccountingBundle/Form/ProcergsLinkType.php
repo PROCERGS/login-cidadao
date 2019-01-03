@@ -14,7 +14,6 @@ use PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ProcergsLinkType extends AbstractType
 {
@@ -47,13 +46,5 @@ class ProcergsLinkType extends AbstractType
         $resolver->setDefaults([
             'data_class' => 'PROCERGS\LoginCidadao\AccountingBundle\Entity\ProcergsLink',
         ]);
-    }
-
-    /**
-     * @param OptionsResolverInterface $resolver
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $this->configureOptions($resolver);
     }
 }

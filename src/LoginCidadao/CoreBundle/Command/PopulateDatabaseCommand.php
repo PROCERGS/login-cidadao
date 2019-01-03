@@ -78,7 +78,10 @@ class PopulateDatabaseCommand extends ContainerAwareCommand
      */
     private function getManager()
     {
-        return $this->getContainer()->get('doctrine')->getManager();
+        /** @var EntityManager $em */
+        $em = $this->getContainer()->get('doctrine')->getManager();
+
+        return $em;
     }
 
     protected function prepareCountryData($row)

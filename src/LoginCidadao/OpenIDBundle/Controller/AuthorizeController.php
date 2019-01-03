@@ -26,6 +26,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class AuthorizeController
@@ -223,5 +224,18 @@ class AuthorizeController extends BaseController
 
             return true;
         });
+    }
+
+    private function getRequest(): Request
+    {
+        /** @var RequestStack $requestStack */
+        $requestStack = $this->get('request_stack');
+        $request = $requestStack->getCurrentRequest();
+
+        if ($request instanceof Request) {
+            return $request;
+        }
+
+        throw new \RuntimeException("Request could not be found");
     }
 }

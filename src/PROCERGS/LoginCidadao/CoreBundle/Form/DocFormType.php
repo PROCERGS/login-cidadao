@@ -16,6 +16,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Valid;
 
 class DocFormType extends BaseForm
 {
@@ -31,7 +32,7 @@ class DocFormType extends BaseForm
         $builder->add(
             'personMeuRS',
             'PROCERGS\LoginCidadao\CoreBundle\Form\PersonMeuRSVoterRegistrationType',
-            ['compound' => true, 'validation_groups' => ['Documents'], 'cascade_validation' => true]
+            ['compound' => true, 'validation_groups' => ['Documents'], 'constraints' => new Valid()]
         );
     }
 
@@ -58,7 +59,7 @@ class DocFormType extends BaseForm
             [
                 'data_class' => 'LoginCidadao\CoreBundle\Entity\Person',
                 'validation_groups' => ['Documents'],
-                'cascade_validation' => true,
+                'constraints' => new Valid(),
             ]
         );
     }

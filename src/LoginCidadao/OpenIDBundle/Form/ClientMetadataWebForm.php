@@ -71,7 +71,7 @@ class ClientMetadataWebForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('organization', 'text', ['disabled' => true])
+            ->add('organization', TextType::class, ['disabled' => true])
             ->add(
                 $builder->create('request_uris', TextareaType::class, ['required' => false])
                     ->addModelTransformer(new FromArray())

@@ -18,6 +18,7 @@ security:
             - ROLE_ORGANIZATIONS_BIND_CLIENT
             - ROLE_EDIT_CLIENT_ALLOWED_SCOPES
             - FEATURE_EDIT_USERNAME
+            - FEATURE_BETA
         ROLE_SUPER:
             - ROLE_DEV
             - ROLE_ORGANIZATIONS_CREATE

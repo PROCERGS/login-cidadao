@@ -12,10 +12,15 @@ namespace LoginCidadao\DynamicFormBundle\Form;
 
 use libphonenumber\PhoneNumberFormat;
 use LoginCidadao\CoreBundle\Entity\PersonAddress;
+use LoginCidadao\CoreBundle\Form\Type\CitySelectorComboType;
+use LoginCidadao\CoreBundle\Form\Type\IdCardType;
+use LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType;
 use LoginCidadao\CoreBundle\Model\IdCardInterface;
 use LoginCidadao\CoreBundle\Model\LocationSelectData;
 use LoginCidadao\DynamicFormBundle\Model\DynamicFormData;
 use LoginCidadao\ValidationControlBundle\Handler\ValidationHandler;
+use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Constraints;
 
@@ -74,7 +79,7 @@ class DynamicFormBuilder
     private function getPersonForm(FormInterface $form)
     {
         if ($form->has('person') === false) {
-            $form->add('person', new DynamicPersonType(), ['label' => false]);
+            $form->add('person', DynamicPersonType::class, ['label' => false]);
         }
 
         return $form->get('person');
@@ -93,48 +98,36 @@ class DynamicFormBuilder
 
     private function addPhoneField(FormInterface $form)
     {
-        $this->getPersonForm($form)->add(
-            'mobile',
-            'Misd\PhoneNumberBundle\Form\Type\PhoneNumberType',
-            [
-                'required' => true,
-                'label' => 'person.form.mobile.label',
-                'attr' => ['class' => 'form-control intl-tel', 'placeholder' => 'person.form.mobile.placeholder'],
-                'label_attr' => ['class' => 'intl-tel-label'],
-                'format' => PhoneNumberFormat::E164,
-            ]
-        );
+        $this->getPersonForm($form)->add('mobile', PhoneNumberType::class, [
+            'required' => true,
+            'label' => 'person.form.mobile.label',
+            'attr' => ['class' => 'form-control intl-tel', 'placeholder' => 'person.form.mobile.placeholder'],
+            'label_attr' => ['class' => 'intl-tel-label'],
+            'format' => PhoneNumberFormat::E164,
+        ]);
     }
 
     private function addBirthdayField(FormInterface $form)
     {
-        $this->getPersonForm($form)->add(
-            'birthdate',
-            'birthday',
-            [
-                'required' => true,
-                'format' => 'dd/MM/yyyy',
-                'widget' => 'single_text',
-                'label' => 'form.birthdate',
-                'translation_domain' => 'FOSUserBundle',
-                'attr' => ['pattern' => '[0-9/]*', 'class' => 'form-control birthdate'],
-            ]
-        );
+        $this->getPersonForm($form)->add('birthdate', BirthdayType::class, [
+            'required' => true,
+            'format' => 'dd/MM/yyyy',
+            'widget' => 'single_text',
+            'label' => 'form.birthdate',
+            'translation_domain' => 'FOSUserBundle',
+            'attr' => ['pattern' => '[0-9/]*', 'class' => 'form-control birthdate'],
+        ]);
     }
 
     private function addPlaceOfBirth(FormInterface $form, $level)
     {
-        $form->add(
-            'placeOfBirth',
-            'LoginCidadao\CoreBundle\Form\Type\CitySelectorComboType',
-            [
-                'level' => $level,
-                'city_label' => 'Place of birth - City',
-                'state_label' => 'Place of birth - State',
-                'country_label' => 'Place of birth - Country',
-                'constraints' => new Constraints\Valid(),
-            ]
-        );
+        $form->add('placeOfBirth', CitySelectorComboType::class, [
+            'level' => $level,
+            'city_label' => 'Place of birth - City',
+            'state_label' => 'Place of birth - State',
+            'country_label' => 'Place of birth - Country',
+            'constraints' => new Constraints\Valid(),
+        ]);
 
         return;
     }
@@ -144,11 +137,10 @@ class DynamicFormBuilder
         $address = new PersonAddress();
         $address->setLocation(new LocationSelectData());
         $data->setAddress($address);
-        $form->add(
-            'address',
-            'LoginCidadao\CoreBundle\Form\Type\PersonAddressFormType',
-            ['label' => false, 'constraints' => new Constraints\Valid()]
-        );
+        $form->add('address', PersonAddressFormType::class, [
+            'label' => false,
+            'constraints' => new Constraints\Valid(),
+        ]);
     }
 
     private function addIdCard(FormInterface $form, DynamicFormData $data)
@@ -171,6 +163,6 @@ class DynamicFormBuilder
             $data->setIdCard($idCard);
         }
 
-        $form->add('idcard', 'lc_idcard_form', ['label' => false, 'constraints' => new Constraints\Valid()]);
+        $form->add('idcard', IdCardType::class, ['label' => false, 'constraints' => new Constraints\Valid()]);
     }
 }

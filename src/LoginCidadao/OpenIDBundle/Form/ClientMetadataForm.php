@@ -10,8 +10,10 @@
 
 namespace LoginCidadao\OpenIDBundle\Form;
 
+use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -42,13 +44,13 @@ class ClientMetadataForm extends AbstractType
             ->add('application_type')
             ->add('contacts')
             ->add('client_name')
-            ->add('logo_uri', 'text')
-            ->add('client_uri', 'text')
-            ->add('policy_uri', 'text')
-            ->add('tos_uri', 'text')
+            ->add('logo_uri', TextType::class)
+            ->add('client_uri', TextType::class)
+            ->add('policy_uri', TextType::class)
+            ->add('tos_uri', TextType::class)
             ->add('jwks_uri')
             ->add('jwks')
-            ->add('sector_identifier_uri', 'text')
+            ->add('sector_identifier_uri', TextType::class)
             ->add('subject_type')
             ->add('id_token_signed_response_alg')
             ->add('id_token_encrypted_response_alg')
@@ -64,7 +66,7 @@ class ClientMetadataForm extends AbstractType
             ->add('default_max_age')
             ->add('require_auth_time')
             ->add('default_acr_values')
-            ->add('initiate_login_uri', 'text')
+            ->add('initiate_login_uri', TextType::class)
             ->add('request_uris')
             ->addEventListener(FormEvents::SUBMIT, [$this, 'onSubmit']);
     }
@@ -73,7 +75,7 @@ class ClientMetadataForm extends AbstractType
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults([
-            'data_class' => 'LoginCidadao\OpenIDBundle\Entity\ClientMetadata',
+            'data_class' => ClientMetadata::class,
             'csrf_protection' => false,
         ]);
     }

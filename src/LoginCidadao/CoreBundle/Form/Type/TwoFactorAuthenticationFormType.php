@@ -1,8 +1,21 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Form\Type;
 
+use LoginCidadao\CoreBundle\Entity\Person;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
@@ -13,51 +26,39 @@ class TwoFactorAuthenticationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('googleAuthenticatorSecret', 'text',
-                array(
-                'read_only' => true,
-                'label' => "Authenticator Secret"
-                )
-            )
-            ->add('verification', 'text',
-                array(
+            ->add('googleAuthenticatorSecret', TextType::class, [
+                'attr' => ['readonly' => true],
+                'label' => "Authenticator Secret",
+            ])
+            ->add('verification', TextType::class, [
                 'label' => 'Generated Code',
-                'mapped' => false
-                )
-            )
-        ;
+                'mapped' => false,
+            ]);
         if (strlen($builder->getData()->getPassword()) == 0) {
-            $builder->add('plainPassword', 'repeated',
-                array(
+            $builder->add('plainPassword', RepeatedType::class, [
                 'type' => 'password',
-                'attr' => array('autocomplete' => 'off')
-                )
-            );
+                'attr' => ['autocomplete' => 'off'],
+            ]);
         } else {
-            $builder->add('current_password', 'password',
-                array(
+            $builder->add('current_password', PasswordType::class, [
                 'required' => true,
-                'attr' => array('autocomplete' => 'off'),
+                'attr' => ['autocomplete' => 'off'],
                 'constraints' => new UserPassword(),
-                'mapped' => false
-                )
-            );
+                'mapped' => false,
+            ]);
         }
         $builder
-            ->add('enable', 'submit',
-                array(
-                'attr' => array('class' => 'btn btn-success'),
-                'label' => 'Activate Two-Factor Authentication'
-                )
-            )
-        ;
+            ->add('enable', SubmitType::class, [
+                'attr' => ['class' => 'btn btn-success'],
+                'label' => 'Activate Two-Factor Authentication',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'LoginCidadao\CoreBundle\Entity\Person'
-        ));
+        $resolver->setDefaults([
+            'data_class' => Person::class,
+        ]);
     }
 
     public function getName()

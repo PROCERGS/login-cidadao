@@ -1,10 +1,11 @@
 imports:
-    - { resource: parameters.yml }
-    - { resource: security.yml }
-    - { resource: redis.yml }
+    - { resource: 'parameters.yml' }
+    - { resource: 'security.yml' }
+    - { resource: 'redis.yml' }
     # Uncomment bellow to enable Logstash formatting
     - { resource: logstash.yml }
     - { resource: "@LoginCidadaoTOSBundle/Resources/config/config.yml" }
+    - { resource: 'workflows/*.{yml,yaml}' }
 
 framework:
     #esi:             ~
@@ -14,8 +15,8 @@ framework:
         base_path: ~
     translator:
         enabled: true
-        fallback: %locale%
-    secret:          %secret%
+        fallback: "%locale%"
+    secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
         strict_requirements: ~
@@ -26,15 +27,15 @@ framework:
         engines: ['twig']
         #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
-    trusted_proxies: %trusted_proxies%
+    trusted_proxies: "%trusted_proxies%"
     session:         ~
     fragments:       ~
     http_method_override: true
 
 # Twig Configuration
 twig:
-    debug:            %kernel.debug%
-    strict_variables: %kernel.debug%
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
     exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
     form_themes:
         - 'LoginCidadaoCoreBundle:Form:fields.html.twig'
@@ -43,14 +44,14 @@ twig:
         facebook_app_id: "%facebook_app_id%"
         app_router: "@router"
         postalcode_search_link: 
-        third_party_login: %third_party_login%
+        third_party_login: "%third_party_login%"
         password_hint: "@password_hint"
         intl_tel_input_preferred_countries: ["br"]
         google_analytics_trackingId: "%google_analytics_trackingId%"
 
 # Assetic Configuration
 assetic:
-    debug:          %kernel.debug%
+    debug:          "%kernel.debug%"
     use_controller: false
     #java: /usr/bin/java
     assets:
@@ -140,9 +141,9 @@ assetic:
     filters:
         cssrewrite: ~
         uglifyjs2:
-            bin: %kernel.root_dir%/Resources/node_modules/uglify-js/bin/uglifyjs
+            bin: "%kernel.root_dir%/Resources/node_modules/uglify-js/bin/uglifyjs"
         uglifycss:
-            bin: %kernel.root_dir%/Resources/node_modules/uglifycss/uglifycss
+            bin: "%kernel.root_dir%/Resources/node_modules/uglifycss/uglifycss"
         #closure:
         #    jar: %kernel.root_dir%/Resources/java/compiler.jar
         #yui_css:
@@ -154,23 +155,23 @@ doctrine:
         default_connection: default
         connections:
             default:
-                driver:   %database_driver%
-                host:     %database_host%
-                port:     %database_port%
-                dbname:   %database_name%
-                user:     %database_user%
-                password: %database_password%
-                server_version: %database_server_version%
+                driver:   "%database_driver%"
+                host:     "%database_host%"
+                port:     "%database_port%"
+                dbname:   "%database_name%"
+                user:     "%database_user%"
+                password: "%database_password%"
+                server_version: "%database_server_version%"
                 charset:  UTF8
             logs:
                 logging:  false
-                driver:   %database_driver%
-                host:     %database_host%
-                port:     %database_port%
-                dbname:   %database_name%
-                user:     %database_user%
-                password: %database_password%
-                server_version: %database_server_version%
+                driver:   "%database_driver%"
+                host:     "%database_host%"
+                port:     "%database_port%"
+                dbname:   "%database_name%"
+                user:     "%database_user%"
+                password: "%database_password%"
+                server_version: "%database_server_version%"
                 charset:  UTF8
         # if using pdo_sqlite as your database driver, add the path in parameters.yml
         # e.g. database_path: %kernel.root_dir%/data/data.db3
@@ -201,19 +202,19 @@ doctrine:
                 mappings:
                     LoginCidadaoLogBundle: ~
 
-        auto_generate_proxy_classes: %kernel.debug%
+        auto_generate_proxy_classes: "%kernel.debug%"
         resolve_target_entities:
-            LoginCidadao\CoreBundle\Model\PersonInterface: %user.class%
-            LoginCidadao\OAuthBundle\Model\OrganizationInterface: %organization.class%
-            LoginCidadao\OAuthBundle\Model\ClientInterface: %oauth_client.class%
+            LoginCidadao\CoreBundle\Model\PersonInterface: "%user.class%"
+            LoginCidadao\OAuthBundle\Model\OrganizationInterface: "%organization.class%"
+            LoginCidadao\OAuthBundle\Model\ClientInterface: "%oauth_client.class%"
 # Swiftmailer Configuration
 swiftmailer:
-    transport: %mailer_transport%
-    host:      %mailer_host%
-    username:  %mailer_user%
-    password:  %mailer_password%
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
     spool:     { type: memory }
-    sender_address: %mailer_sender_mail%
+    sender_address: "%mailer_sender_mail%"
     #delivery_address: %mailer_sender_mail%
 
 fos_oauth_server:
@@ -225,19 +226,19 @@ fos_oauth_server:
   service:
       user_provider: fos_user.user_provider
       options:
-          supported_scopes: %lc_supported_scopes%
+          supported_scopes: "%lc_supported_scopes%"
 
 fos_user:
     db_driver: orm
     firewall_name: main
-    user_class: %user.class%
+    user_class: "%user.class%"
     registration:
         confirmation:
             enabled: false
             template: LoginCidadaoCoreBundle:Person:registration/email.html.twig
             from_email:
-              address: %mailer_sender_mail%
-              sender_name: %mailer_sender_name%
+              address: "%mailer_sender_mail%"
+              sender_name: "%mailer_sender_name%"
         form:
             type: LoginCidadao\CoreBundle\Form\Type\RegistrationFormType
             validation_groups:  [LoginCidadaoRegistration]
@@ -248,10 +249,10 @@ fos_user:
         email:
             template: LoginCidadaoCoreBundle:Person:resetting/email.html.twig
             from_email:
-                address:        %mailer_sender_mail%
-                sender_name:    %mailer_sender_name%
+                address:        "%mailer_sender_mail%"
+                sender_name:    "%mailer_sender_name%"
         form:
-            type:               lc_person_resetting
+            type:               LoginCidadao\CoreBundle\Form\Type\ResettingFormType
     service:
         user_manager: lc.user_manager
         mailer: fos_user.mailer.twig_swift
@@ -260,8 +261,8 @@ fos_user:
             type: LoginCidadao\CoreBundle\Form\Type\ChangePasswordFormType
 
     from_email:
-        address: %mailer_sender_mail%
-        sender_name: %mailer_sender_name%
+        address: "%mailer_sender_mail%"
+        sender_name: "%mailer_sender_name%"
 
 # Audit Trail
 simple_things_entity_audit:
@@ -316,21 +317,19 @@ hwi_oauth:
     resource_owners:
         facebook:
             type:           facebook
-            client_id:      %facebook_app_id%
-            client_secret:  %facebook_app_secret%
+            client_id:      "%facebook_app_id%"
+            client_secret:  "%facebook_app_secret%"
             scope:          "email user_about_me user_birthday user_location"
         twitter:
             type:           twitter
-            client_id:      %twitter_app_key%
-            client_secret:  %twitter_app_secret%
+            client_id:      "%twitter_app_key%"
+            client_secret:  "%twitter_app_secret%"
             scope:          "email"
         google:
             type:           google
-            client_id:      %google_app_key%
-            client_secret:  %google_app_secret%
+            client_id:      "%google_app_key%"
+            client_secret:  "%google_app_secret%"
             scope:          "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
-    http_client:
-        verify_peer: false
 
 parameters:
     user.class: LoginCidadao\CoreBundle\Entity\Person
@@ -338,9 +337,9 @@ parameters:
     hwi_oauth.resource_owner.twitter.class: LoginCidadao\CoreBundle\OAuth\ResourceOwner\TwitterResourceOwner
     lc_public_scopes_oidc: 'openid offline_access sub name given_name family_name full_name preferred_username picture email email_verified birthdate phone_number address updated_at'
     lc_public_scopes_oauth2: 'public_profile username first_name last_name full_name cpf city public_profile country state addresses id_cards mobile logout'
-    lc_public_scopes: %lc_public_scopes_oidc% %lc_public_scopes_oauth2%
+    lc_public_scopes: "%lc_public_scopes_oidc% %lc_public_scopes_oauth2%"
     lc_reserved_scopes: 'voter_registration aviseme'
-    lc_supported_scopes: %lc_public_scopes% %lc_reserved_scopes%
+    lc_supported_scopes: "%lc_public_scopes% %lc_reserved_scopes%"
     lc_idcard_country_acronym: BR
 
     oauth2.user_provider.class: LoginCidadao\CoreBundle\Security\OIDC\UserProvider
@@ -361,13 +360,13 @@ knp_gaufrette:
     adapters:
         user_local_adapter:
             local:
-                directory: %user_profile_upload_dir%
+                directory: "%user_profile_upload_dir%"
         client_local_adapter:
             local:
-                directory: %client_image_upload_dir%
+                directory: "%client_image_upload_dir%"
         jwks_local_adapter:
             local:
-                directory: %jwks_dir%
+                directory: "%jwks_dir%"
 
     filesystems:
         user_image_fs:
@@ -383,12 +382,12 @@ vich_uploader:
     storage:    gaufrette
     mappings:
         user_image:
-            uri_prefix:         %uri_root%uploads/profile-pictures
+            uri_prefix:         "%uri_root%uploads/profile-pictures"
             upload_destination: user_image_fs
             namer:              vich_uploader.namer_uniqid
             inject_on_load:     false
         client_image:
-            uri_prefix:         %uri_root%uploads/client-pictures
+            uri_prefix:         "%uri_root%uploads/client-pictures"
             upload_destination: client_image_fs
             namer:              vich_uploader.namer_uniqid
             inject_on_load:     false
@@ -451,14 +450,14 @@ scheb_two_factor:
     email:
         enabled: false
         mailer: swiftmailer
-        sender_email: %mailer_sender_mail%
+        sender_email: "%mailer_sender_mail%"
         digits: 6
         template: LoginCidadaoCoreBundle:TwoFactorAuthentication:form.html.twig
 
     google:
         enabled: true
-        server_name: %site_domain%
-        issuer: %two_factor_issuer%
+        server_name: "%site_domain%"
+        issuer: "%two_factor_issuer%"
         template: LoginCidadaoCoreBundle:TwoFactorAuthentication:form.html.twig
 
     persister: ~
