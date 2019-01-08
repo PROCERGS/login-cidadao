@@ -81,5 +81,9 @@ class LoginCidadaoPhoneVerificationExtensionTest extends TestCase
             $config['verification_token']['length'],
             $container->getParameter('lc.phone_verification.options.token.length')
         );
+        $this->assertEquals(
+            $config['blocklist']['require_validation_threshold'],
+            $container->getParameter('lc.phone_verification.options.blocklist.require_validation_threshold')
+        );
     }
 }

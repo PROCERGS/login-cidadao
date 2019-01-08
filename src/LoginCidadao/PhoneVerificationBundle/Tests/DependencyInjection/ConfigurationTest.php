@@ -33,6 +33,11 @@ class ConfigurationTest extends TestCase
             'sms' => [
                 'resend_timeout' => '+5 minutes',
             ],
+            'blocklist' => [
+                'enable_auto_block' => true,
+                'auto_block_limit' => 10,
+                'require_validation_threshold' => 3,
+            ],
         ];
     }
 

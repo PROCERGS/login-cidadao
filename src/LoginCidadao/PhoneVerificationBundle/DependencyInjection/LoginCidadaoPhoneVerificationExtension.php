@@ -33,6 +33,9 @@ class LoginCidadaoPhoneVerificationExtension extends Extension
         foreach ($config['sms'] as $key => $value) {
             $container->setParameter("lc.phone_verification.options.sms.{$key}", $value);
         }
+        foreach ($config['blocklist'] as $key => $value) {
+            $container->setParameter("lc.phone_verification.options.blocklist.{$key}", $value);
+        }
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
