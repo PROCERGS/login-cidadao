@@ -30,14 +30,26 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
 
     public function getEmail();
 
+    /**
+     * @param string $email
+     * @return self
+     */
     public function setEmail($email);
 
     public function getFirstName();
 
+    /**
+     * @param $firstName
+     * @return self
+     */
     public function setFirstName($firstName);
 
     public function getSurname();
 
+    /**
+     * @param $suname
+     * @return self
+     */
     public function setSurname($suname);
 
     /**
@@ -45,10 +57,18 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
      */
     public function getBirthdate();
 
+    /**
+     * @param $birthdate
+     * @return self
+     */
     public function setBirthdate($birthdate);
 
     public function getMobile();
 
+    /**
+     * @param $mobile
+     * @return self
+     */
     public function setMobile($mobile);
 
     public function getAuthorizations();
@@ -68,7 +88,23 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
      */
     public function hasAuthorization($client);
 
+    /**
+     * @param $facebookId
+     * @return PersonInterface
+     */
     public function setFacebookId($facebookId);
+
+    /**
+     * @param $facebookAccessToken
+     * @return PersonInterface
+     */
+    public function setFacebookAccessToken($facebookAccessToken);
+
+    /**
+     * @param $facebookUsername
+     * @return PersonInterface
+     */
+    public function setFacebookUsername($facebookUsername);
 
     public function getFacebookId();
 
@@ -93,6 +129,10 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
      */
     public function getFullName();
 
+    /**
+     * @param $cpf
+     * @return self
+     */
     public function setCpf($cpf);
 
     public function getCpf();
@@ -124,8 +164,6 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
     public function getConfirmationToken();
 
     public function setConfirmationToken($confirmationToken);
-
-    public function setFacebookUsername($facebookUsername);
 
     public function getFacebookUsername();
 
