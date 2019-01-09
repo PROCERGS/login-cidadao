@@ -31,3 +31,7 @@ tasks:
             errors:
                 too_many_requests: It's not possible to resend the verification code yet. Please, retry later.
                 unavailable: The SMS service is not available right now. Please, wait a few minutes and try again.
+
+        edit:
+            show_form: Click here to change your phone number
+            submit: Change Phone Number

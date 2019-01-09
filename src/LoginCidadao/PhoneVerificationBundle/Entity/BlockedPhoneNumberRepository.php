@@ -13,6 +13,12 @@ namespace LoginCidadao\PhoneVerificationBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 use libphonenumber\PhoneNumber;
 
+/**
+ * Class BlockedPhoneNumberRepository
+ * @package LoginCidadao\PhoneVerificationBundle\Entity
+ *
+ * @codeCoverageIgnore
+ */
 class BlockedPhoneNumberRepository extends EntityRepository
 {
     /**

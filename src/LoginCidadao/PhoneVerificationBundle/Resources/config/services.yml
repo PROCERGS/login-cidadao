@@ -9,7 +9,13 @@ services:
             - "%lc.phone_verification.options.code.use_upper%"
             - "%lc.phone_verification.options.sms.resend_timeout%"
             - "%lc.phone_verification.options.token.length%"
-            - "%lc.phone_verification.options.blocklist.require_validation_threshold%"
+            - "%lc.phone_verification.options.require_validation_threshold%"
+        lazy: true
+
+    phone_verification.blocklist.options:
+        class: LoginCidadao\PhoneVerificationBundle\Service\BlocklistOptions
+        arguments:
+            - "%lc.phone_verification.options.blocklist.auto_block_limit%"
         lazy: true
 
     phone_verification:

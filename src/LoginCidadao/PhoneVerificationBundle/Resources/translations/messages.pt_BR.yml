@@ -31,3 +31,7 @@ tasks:
             errors:
                 too_many_requests: Ainda não é possível reenviar o código de verificação. Aguarde alguns minutos e tente novamente.
                 unavailable: O serviço de SMS está indisponível no momento. Por favor, aguarde alguns minutos e tente novamente.
+
+        edit:
+            show_form: Clique aqui para alterar seu telefone
+            submit: Alterar Telefone

@@ -25,6 +25,10 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('enabled')
                     ->defaultFalse()
                 ->end()
+                // User's will HAVE TO verify their phone number after X accounts are using it
+                ->scalarNode('require_validation_threshold')
+                    ->defaultValue(3)
+                ->end()
                 ->arrayNode('verification_code')
                     ->addDefaultsIfNotSet()
                     ->children()
@@ -73,11 +77,6 @@ class Configuration implements ConfigurationInterface
                         // A phone will get block-listed after X accounts are using it
                         ->scalarNode('auto_block_limit')
                             ->defaultValue(10)
-                        ->end()
-                        // TODO: require_validation_threshold might be better suited as a child of login_cidadao_phone_verification
-                        // User's will HAVE TO verify their phone number after X accounts are using it
-                        ->scalarNode('require_validation_threshold')
-                            ->defaultValue(3)
                         ->end()
                     ->end()
                 ->end()

@@ -12,6 +12,9 @@ namespace LoginCidadao\PhoneVerificationBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use libphonenumber\PhoneNumber;
+use LoginCidadao\CoreBundle\Entity\Person;
+use LoginCidadao\CoreBundle\Entity\PersonRepository;
+use LoginCidadao\PhoneVerificationBundle\Entity\SentVerification;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationEvent;
 use LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent;
@@ -24,7 +27,6 @@ use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification;
 use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class PhoneVerificationService implements PhoneVerificationServiceInterface
 {
@@ -39,6 +41,9 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
 
     /** @var SentVerificationRepository */
     private $sentVerificationRepository;
+
+    /** @var PersonRepository */
+    private $personRepository;
 
     /** @var EventDispatcherInterface */
     private $dispatcher;
@@ -57,10 +62,9 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
         $this->options = $options;
         $this->em = $em;
         $this->dispatcher = $dispatcher;
-        $this->phoneVerificationRepository = $this->em
-            ->getRepository('LoginCidadaoPhoneVerificationBundle:PhoneVerification');
-        $this->sentVerificationRepository = $this->em
-            ->getRepository('LoginCidadaoPhoneVerificationBundle:SentVerification');
+        $this->phoneVerificationRepository = $this->em->getRepository(PhoneVerification::class);
+        $this->sentVerificationRepository = $this->em->getRepository(SentVerification::class);
+        $this->personRepository = $this->em->getRepository(Person::class);
     }
 
     /**
@@ -126,6 +130,8 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
      * @param PersonInterface $person
      * @param mixed $phone
      * @return PhoneVerificationInterface
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function createPhoneVerification(PersonInterface $person, PhoneNumber $phone)
     {
@@ -185,6 +191,8 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
     /**
      * @param PhoneVerificationInterface $phoneVerification
      * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function removePhoneVerification(PhoneVerificationInterface $phoneVerification)
     {
@@ -198,6 +206,8 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
      * @param PersonInterface $person
      * @param mixed $phone
      * @return PhoneVerificationInterface
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function enforcePhoneVerification(PersonInterface $person, PhoneNumber $phone)
     {
@@ -256,6 +266,8 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
      * @param PhoneVerificationInterface $phoneVerification
      * @param $providedCode
      * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function verify(PhoneVerificationInterface $phoneVerification, $providedCode)
     {
@@ -297,6 +309,12 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
         return $sentVerification;
     }
 
+    /**
+     * @param SentVerificationInterface $sentVerification
+     * @return \LoginCidadao\PhoneVerificationBundle\Entity\SentVerification|SentVerificationInterface
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function registerVerificationSent(SentVerificationInterface $sentVerification)
     {
         $this->em->persist($sentVerification);
@@ -322,6 +340,13 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
         return $lastSentVerification->getSentAt()->add($timeout);
     }
 
+    /**
+     * @param PhoneVerificationInterface $phoneVerification
+     * @param string $token
+     * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function verifyToken(PhoneVerificationInterface $phoneVerification, $token)
     {
         if ($phoneVerification->isVerified()) {
@@ -333,5 +358,15 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
         }
 
         return $this->verify($phoneVerification, $phoneVerification->getVerificationCode());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isVerificationMandatory(PhoneVerificationInterface $phoneVerification): bool
+    {
+        $accountsCount = $this->personRepository->countByPhone($phoneVerification->getPhone());
+
+        return $accountsCount >= $this->options->getEnforceVerificationThreshold();
     }
 }

@@ -11,6 +11,7 @@
 namespace LoginCidadao\PhoneVerificationBundle\Event;
 
 use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
+use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification;
 use LoginCidadao\PhoneVerificationBundle\Exception\VerificationNotSentException;
@@ -94,6 +95,8 @@ class TaskSubscriber implements EventSubscriberInterface
             }
         }
 
-        $event->addTaskIfStackEmpty(new ConfirmPhoneTask($pendingVerification->getId()));
+        $isMandatory = $this->phoneVerificationService->isVerificationMandatory($pendingVerification);
+        $task = new ConfirmPhoneTask($pendingVerification->getId(), $isMandatory);
+        $event->addTaskIfStackEmpty($task);
     }
 }

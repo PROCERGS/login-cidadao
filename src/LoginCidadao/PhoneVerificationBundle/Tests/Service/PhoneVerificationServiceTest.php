@@ -10,6 +10,12 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Tests\Service;
 
+use LoginCidadao\CoreBundle\Entity\Person;
+use LoginCidadao\CoreBundle\Entity\PersonRepository;
+use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification;
+use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository;
+use LoginCidadao\PhoneVerificationBundle\Entity\SentVerification;
+use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService;
 use PHPUnit\Framework\TestCase;
@@ -58,12 +64,17 @@ class PhoneVerificationServiceTest extends TestCase
 
     private function getPhoneVerificationRepository()
     {
-        return $this->getRepository('LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository');
+        return $this->getRepository(PhoneVerificationRepository::class);
     }
 
     private function getSentVerificationRepository()
     {
-        return $this->getRepository('LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository');
+        return $this->getRepository(SentVerificationRepository::class);
+    }
+
+    private function getPersonRepository()
+    {
+        return $this->getRepository(PersonRepository::class);
     }
 
     /**
@@ -105,13 +116,21 @@ class PhoneVerificationServiceTest extends TestCase
             $sentVerificationRepository = $this->getSentVerificationRepository();
         }
 
-        $em->expects($this->exactly(2))->method('getRepository')->willReturnCallback(
-            function ($class) use ($phoneVerificationRepository, $sentVerificationRepository) {
+        if (array_key_exists('person_repository', $arguments)) {
+            $personRepository = $arguments['person_repository'];
+        } else {
+            $personRepository = $this->getPersonRepository();
+        }
+
+        $em->expects($this->exactly(3))->method('getRepository')->willReturnCallback(
+            function ($class) use ($phoneVerificationRepository, $sentVerificationRepository, $personRepository) {
                 switch ($class) {
-                    case 'LoginCidadaoPhoneVerificationBundle:PhoneVerification':
+                    case PhoneVerification::class:
                         return $phoneVerificationRepository;
-                    case 'LoginCidadaoPhoneVerificationBundle:SentVerification':
+                    case SentVerification::class:
                         return $sentVerificationRepository;
+                    case Person::class:
+                        return $personRepository;
                     default:
                         return null;
                 }
