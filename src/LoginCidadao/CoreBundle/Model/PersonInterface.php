@@ -88,7 +88,23 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
      */
     public function hasAuthorization($client);
 
+    /**
+     * @param $facebookId
+     * @return PersonInterface
+     */
     public function setFacebookId($facebookId);
+
+    /**
+     * @param $facebookAccessToken
+     * @return PersonInterface
+     */
+    public function setFacebookAccessToken($facebookAccessToken);
+
+    /**
+     * @param $facebookUsername
+     * @return PersonInterface
+     */
+    public function setFacebookUsername($facebookUsername);
 
     public function getFacebookId();
 
@@ -148,8 +164,6 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
     public function getConfirmationToken();
 
     public function setConfirmationToken($confirmationToken);
-
-    public function setFacebookUsername($facebookUsername);
 
     public function getFacebookUsername();
 
