@@ -94,21 +94,13 @@ class FOSUBUserProvider extends BaseClass
 
         $service = $response->getResourceOwner()->getName();
 
-        $setter = 'set'.ucfirst($service);
-        $setter_id = $setter.'Id';
-        $setter_token = $setter.'AccessToken';
-        $setter_username = $setter.'Username';
-
-        /** @var PersonInterface $existingUser|null */
-        $existingUser = $this->userManager->findUserBy(array("{$service}Id" => $username));
+        /** @var PersonInterface|null $existingUser */
+        $existingUser = $this->userManager->findUserBy(["{$service}Id" => $username]);
         if ($existingUser instanceof UserInterface && $existingUser->getId() != $user->getId()) {
             throw new AlreadyLinkedAccount();
         }
 
-        $screenName = $response->getNickname();
-        $user->$setter_id($username);
-        $user->$setter_token($response->getAccessToken());
-        $user->$setter_username($screenName);
+        $user = $this->setServiceData($user, $response);
 
         if ($service === 'facebook') {
             $this->setFacebookData($user, $response->getData());
@@ -128,65 +120,46 @@ class FOSUBUserProvider extends BaseClass
         $userInfo = $this->getUserInfo($response);
         $service = $response->getResourceOwner()->getName();
 
-        $user = $this->userManager->findUserBy(array("{$service}Id" => $userInfo['id']));
+        $user = $this->userManager->findUserBy(["{$service}Id" => $userInfo['id']]);
 
         if ($user instanceof PersonInterface) {
-            $user = parent::loadUserByOAuthUserResponse($response);
-
-            $serviceName = $response->getResourceOwner()->getName();
-            $setter = 'set'.ucfirst($serviceName).'AccessToken';
-
-            $user->$setter($response->getAccessToken());
+            $this->setAccessToken($user, $service, $response->getAccessToken());
 
             return $user;
         }
 
+        return $this->createOAuthUser($userInfo, $service, $response->getData());
+    }
+
+    /**
+     * @param array $userInfo
+     * @param string $service
+     * @param array $oauthData
+     * @return PersonInterface
+     * @throws DuplicateEmailException
+     * @throws MissingEmailException
+     */
+    private function createOAuthUser(array $userInfo, string $service, array $oauthData)
+    {
         $userInfo = $this->checkEmail($service, $userInfo);
 
         /** @var PersonInterface $user */
         $user = $this->userManager->createUser();
         $this->setUserInfo($user, $userInfo, $service);
 
-        if ($userInfo['first_name']) {
-            $user->setFirstName($userInfo['first_name']);
-        }
-        if ($userInfo['family_name']) {
-            $user->setSurname($userInfo['family_name']);
-        }
-
         if ($service === 'facebook') {
-            $this->setFacebookData($user, $response->getData());
+            $this->setFacebookData($user, $oauthData);
         }
 
         $username = Uuid::uuid4()->toString();
-        if (!UsernameValidator::isUsernameValid($username)) {
-            $username = UsernameValidator::getValidUsername();
-        }
 
-        $availableUsername = $this->userManager->getNextAvailableUsername(
-            $username,
-            10,
-            Uuid::uuid4()->toString()
-        );
-
-        $user->setUsername($availableUsername);
+        $user->setUsername($username);
         $user->setEmail($userInfo['email']);
         $user->setPassword('');
         $user->setEnabled(true);
         $this->userManager->updateCanonicalFields($user);
 
-        /** @var ConstraintViolationList $errors */
-        $errors = $this->validator->validate($user, null, ['LoginCidadaoProfile']);
-        if (count($errors) > 0) {
-            foreach ($errors as $error) {
-                if ($error->getPropertyPath() === 'email'
-                    && method_exists($error, 'getConstraint')
-                    && $error->getConstraint() instanceof UniqueEntity
-                ) {
-                    throw new DuplicateEmailException($service);
-                }
-            }
-        }
+        $this->checkErrors($user, $service);
 
         $form = $this->formFactory->createForm();
         $form->setData($user);
@@ -194,20 +167,12 @@ class FOSUBUserProvider extends BaseClass
         $request = $this->requestStack->getCurrentRequest();
         $eventResponse = new RedirectResponse('/');
         $event = new FormEvent($form, $request);
-        $this->dispatcher->dispatch(
-            FOSUserEvents::REGISTRATION_SUCCESS,
-            $event
-        );
+        $this->dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
 
         $this->userManager->updateUser($user);
 
-        $this->dispatcher->dispatch(
-            FOSUserEvents::REGISTRATION_COMPLETED,
-            new FilterUserResponseEvent(
-                $user, $request,
-                $eventResponse
-            )
-        );
+        $event = new FilterUserResponseEvent($user, $request, $eventResponse);
+        $this->dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED, $event);
 
         return $user;
     }
@@ -234,16 +199,22 @@ class FOSUBUserProvider extends BaseClass
      * @param string $service
      * @return PersonInterface
      */
-    private function setUserInfo(PersonInterface $person, array $userInfo, $service)
+    private function setUserInfo(PersonInterface $person, array $userInfo, string $service)
     {
         $setter = 'set'.ucfirst($service);
         $setter_id = $setter.'Id';
-        $setter_token = $setter.'AccessToken';
         $setter_username = $setter.'Username';
 
         $person->$setter_id($userInfo['id']);
-        $person->$setter_token($userInfo['access_token']);
+        $this->setAccessToken($person, $service, $userInfo['access_token']);
         $person->$setter_username($userInfo['username']);
+
+        if ($userInfo['first_name']) {
+            $person->setFirstName($userInfo['first_name']);
+        }
+        if ($userInfo['family_name']) {
+            $person->setSurname($userInfo['family_name']);
+        }
 
         return $person;
     }
@@ -256,44 +227,88 @@ class FOSUBUserProvider extends BaseClass
      */
     private function checkEmail($service, $userInfo)
     {
-        if (!$userInfo['email'] || $this->session->has("$service.email")) {
-            if (!$this->session->get("$service.email")) {
-                $this->session->set("$service.userinfo", $userInfo);
+        $emailKey = "{$service}.email";
+        $userInfoKey = "{$service}.userinfo";
+        if (!$userInfo['email'] || $this->session->has($emailKey)) {
+            if (!$this->session->get($emailKey)) {
+                $this->session->set($userInfoKey, $userInfo);
                 throw new MissingEmailException($service);
             }
-            $userInfo['email'] = $this->session->get("$service.email");
-            $this->session->remove("$service.email");
-            $this->session->remove("$service.userinfo");
+            $userInfo['email'] = $this->session->get($emailKey);
+            $this->session->remove($emailKey);
+            $this->session->remove($userInfoKey);
         }
 
         return $userInfo;
     }
 
-    private function setFacebookData($person, $fbdata)
+    private function setFacebookData($person, array $data)
     {
-        if (!($person instanceof PersonInterface)) {
-            return;
+        if ($person instanceof PersonInterface) {
+            if (isset($data['id'])) {
+                $person->setFacebookId($data['id']);
+                $person->addRole('ROLE_FACEBOOK');
+            }
+            if (isset($data['first_name']) && is_null($person->getFirstName())) {
+                $person->setFirstName($data['first_name']);
+            }
+            if (isset($data['last_name']) && is_null($person->getSurname())) {
+                $person->setSurname($data['last_name']);
+            }
+            if (isset($data['email']) && is_null($person->getEmail())) {
+                $person->setEmail($data['email']);
+            }
+            if (isset($data['birthday']) && is_null($person->getBirthdate())) {
+                $date = \DateTime::createFromFormat('m/d/Y', $data['birthday']);
+                $person->setBirthdate($date);
+            }
+            if (isset($data['username']) && is_null($person->getFacebookUsername())) {
+                $person->setFacebookUsername($data['username']);
+            }
+        }
+    }
+
+    private function setServiceData(UserInterface $user, UserResponseInterface $response): UserInterface
+    {
+        if ($user instanceof PersonInterface) {
+            $service = $response->getResourceOwner()->getName();
+            $setter = 'set'.ucfirst($service);
+            $setter_id = $setter.'Id';
+            $setter_username = $setter.'Username';
+
+            $user->$setter_id($response->getUsername());
+            $this->setAccessToken($user, $service, $response->getAccessToken());
+            $user->$setter_username($response->getNickname());
         }
 
-        if (isset($fbdata['id'])) {
-            $person->setFacebookId($fbdata['id']);
-            $person->addRole('ROLE_FACEBOOK');
-        }
-        if (isset($fbdata['first_name']) && is_null($person->getFirstName())) {
-            $person->setFirstName($fbdata['first_name']);
-        }
-        if (isset($fbdata['last_name']) && is_null($person->getSurname())) {
-            $person->setSurname($fbdata['last_name']);
-        }
-        if (isset($fbdata['email']) && is_null($person->getEmail())) {
-            $person->setEmail($fbdata['email']);
-        }
-        if (isset($fbdata['birthday']) && is_null($person->getBirthdate())) {
-            $date = \DateTime::createFromFormat('m/d/Y', $fbdata['birthday']);
-            $person->setBirthdate($date);
-        }
-        if (isset($fbdata['username']) && is_null($person->getFacebookUsername())) {
-            $person->setFacebookUsername($fbdata['username']);
+        return $user;
+    }
+
+    private function setAccessToken(UserInterface $user, string $serviceName, string $accessToken)
+    {
+        $setter = 'set'.ucfirst($serviceName).'AccessToken';
+
+        return $user->$setter($accessToken);
+    }
+
+    /**
+     * @param UserInterface $user
+     * @param string $service
+     * @throws DuplicateEmailException
+     */
+    private function checkErrors(UserInterface $user, string $service)
+    {
+        /** @var ConstraintViolationList $errors */
+        $errors = $this->validator->validate($user, null, ['LoginCidadaoProfile']);
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
+                if ($error->getPropertyPath() === 'email'
+                    && method_exists($error, 'getConstraint')
+                    && $error->getConstraint() instanceof UniqueEntity
+                ) {
+                    throw new DuplicateEmailException($service);
+                }
+            }
         }
     }
 }
