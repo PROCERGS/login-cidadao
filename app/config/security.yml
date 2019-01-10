@@ -160,7 +160,7 @@ security:
         - { path: ^/api/v1/address/(cities|states|countries)/search, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/api/v1/public/lc_consultaCep2, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/api/v1/statistics, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        - { path: ^/api/v1/phone-verification/(update-status|average-delivery-time|not-delivered), role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_monitors%, requires_channel: https }
+        - { path: ^/api/v1/phone-verification/(update-status|average-delivery-time|not-delivered), role: IS_AUTHENTICATED_ANONYMOUSLY, ips: "%allowed_monitors%", requires_channel: https }
         - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ], requires_channel: https }
 
         - { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
@@ -178,7 +178,7 @@ security:
         - { path: ^/connect/twitter$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/connect/google$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
 
-        - { path: ^/monitor/health, role: IS_AUTHENTICATED_ANONYMOUSLY, ip: %allowed_monitors%, requires_channel: https }
+        - { path: ^/monitor/health, role: IS_AUTHENTICATED_ANONYMOUSLY, ips: "%allowed_monitors%", requires_channel: https }
 
         - { path: ^/nelmio/csp/report$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/(contact|privacy|about|help|register), role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

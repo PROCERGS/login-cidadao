@@ -13,11 +13,7 @@ parameters:
     database_password: logincidadao
     database_server_version: ~
 
-    # Trusted proxies (http://symfony.com/doc/current/cookbook/request/load_balancer_reverse_proxy.html)
-    trusted_proxies: []
-    # IPs allowed to access dev environment
-    dev_allowed: [ 127.0.0.0/8 ]
-    # IPs allowed to access monitoring endpoint
+    # IPs allowed to access monitoring endpoints
     allowed_monitors: [ 127.0.0.0/8 ]
 
     # Memcached server address
