@@ -72,7 +72,7 @@
         "php-http/httplug-bundle": "^1.11",
         "php-http/curl-client": "^1.7",
         "guzzlehttp/psr7": "^1.4",
-        "symfony/dotenv": "^4.2"
+        "symfony/dotenv": "^3|^4"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3",
