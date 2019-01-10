@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f3d13f6d9574e7b4a51bdb1626983a64",
+    "content-hash": "d81562914646af70e7880feff093a52a",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
