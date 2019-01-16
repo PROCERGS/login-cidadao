@@ -12,6 +12,7 @@ namespace LoginCidadao\PhoneVerificationBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use libphonenumber\PhoneNumber;
+use LoginCidadao\PhoneVerificationBundle\Model\BlockedPhoneNumberInterface;
 
 /**
  * Class BlockedPhoneNumberRepository
@@ -25,7 +26,7 @@ class BlockedPhoneNumberRepository extends EntityRepository
      * @param PhoneNumber $phoneNumber
      * @return BlockedPhoneNumber
      */
-    public function findByPhone(PhoneNumber $phoneNumber): BlockedPhoneNumber
+    public function findByPhone(PhoneNumber $phoneNumber): ?BlockedPhoneNumberInterface
     {
         /** @var BlockedPhoneNumber $blockedPhone */
         $blockedPhone = $this->findOneBy(['phoneNumber' => $phoneNumber]);

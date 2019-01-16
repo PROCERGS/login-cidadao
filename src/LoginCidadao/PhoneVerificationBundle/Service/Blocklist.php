@@ -12,6 +12,7 @@ namespace LoginCidadao\PhoneVerificationBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use libphonenumber\PhoneNumber;
+use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
@@ -39,6 +40,28 @@ class Blocklist implements BlocklistInterface
 
     /** @var BlocklistOptions */
     private $options;
+
+    /**
+     * Blocklist constructor.
+     * @param UserManager $userManager
+     * @param TwigSwiftMailer $mailer
+     * @param EntityManagerInterface $em
+     * @param BlocklistOptions $options
+     */
+    public function __construct(
+        UserManager $userManager,
+        TwigSwiftMailer $mailer,
+        EntityManagerInterface $em,
+        BlocklistOptions $options
+    ) {
+        $this->userManager = $userManager;
+        $this->mailer = $mailer;
+        $this->em = $em;
+        $this->options = $options;
+        $this->blockedPhoneRepository = $this->em->getRepository(BlockedPhoneNumber::class);
+        $this->personRepository = $this->em->getRepository(Person::class);
+    }
+
 
     public function isBlocked(PhoneNumber $phoneNumber): bool
     {
@@ -76,7 +99,7 @@ class Blocklist implements BlocklistInterface
 
     private function isManuallyBlocked(PhoneNumber $phoneNumber): bool
     {
-        return $this->blockedPhoneRepository->findByPhone($phoneNumber) instanceof PhoneNumber;
+        return $this->blockedPhoneRepository->findByPhone($phoneNumber) instanceof BlockedPhoneNumberInterface;
     }
 
     private function isBlockedAutomatically(PhoneNumber $phoneNumber): bool
