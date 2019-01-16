@@ -10,8 +10,6 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Event;
 
-
-use FOS\UserBundle\FOSUserEvents;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
@@ -92,14 +90,11 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
         $newPhone = $person->getMobile();
 
         $phoneUtil = PhoneNumberUtil::getInstance();
-        $this->info(
-            'Phone changed from {old} to {new} for user {id}',
-            [
-                'id' => $person->getId(),
-                'old' => $oldPhone ? $phoneUtil->format($oldPhone, PhoneNumberFormat::E164) : null,
-                'new' => $newPhone ? $phoneUtil->format($newPhone, PhoneNumberFormat::E164) : null,
-            ]
-        );
+        $this->info('Phone changed from {old} to {new} for user {id}', [
+            'id' => $person->getId(),
+            'old' => $oldPhone ? $phoneUtil->format($oldPhone, PhoneNumberFormat::E164) : null,
+            'new' => $newPhone ? $phoneUtil->format($newPhone, PhoneNumberFormat::E164) : null,
+        ]);
 
         if ($oldPhone) {
             $oldPhoneVerification = $this->phoneVerificationService->getPhoneVerification($person, $oldPhone);
@@ -112,10 +107,7 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
         }
 
         if ($newPhone) {
-            $phoneVerification = $this->phoneVerificationService->createPhoneVerification(
-                $person,
-                $newPhone
-            );
+            $phoneVerification = $this->phoneVerificationService->createPhoneVerification($person, $newPhone);
 
             $sendEvent = new SendPhoneVerificationEvent($phoneVerification);
             $dispatcher->dispatch(PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED, $sendEvent);
@@ -126,13 +118,10 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
     {
         $person = $event->getPhoneVerification()->getPerson();
         $phoneUtil = PhoneNumberUtil::getInstance();
-        $this->info(
-            'Phone Verification requested for {phone} for user {user_id}',
-            [
-                'user_id' => $person->getId(),
-                'phone' => $phoneUtil->format($person->getMobile(), PhoneNumberFormat::E164),
-            ]
-        );
+        $this->info('Phone Verification requested for {phone} for user {user_id}', [
+            'user_id' => $person->getId(),
+            'phone' => $phoneUtil->format($person->getMobile(), PhoneNumberFormat::E164),
+        ]);
     }
 
     public function onCodeSent(SendPhoneVerificationEvent $event)
@@ -153,9 +142,7 @@ class PhoneVerificationSubscriber implements EventSubscriberInterface, LoggerAwa
         if (!$verification) {
             $this->info(
                 "User {user_id} has a phone but didn't verify it. Creating Phone Verification request.",
-                [
-                    'user_id' => $person->getId(),
-                ]
+                ['user_id' => $person->getId()]
             );
             $verification = $this->phoneVerificationService->enforcePhoneVerification($person, $phone);
 
