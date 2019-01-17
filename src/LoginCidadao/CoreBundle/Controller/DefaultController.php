@@ -11,6 +11,7 @@
 namespace LoginCidadao\CoreBundle\Controller;
 
 use LoginCidadao\APIBundle\Entity\ActionLogRepository;
+use LoginCidadao\BadgesControlBundle\Handler\BadgesHandler;
 use LoginCidadao\CoreBundle\Form\Type\ContactFormType;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Model\SupportMessage;
@@ -79,6 +80,7 @@ class DefaultController extends Controller
     public function dashboardAction()
     {
         // badges
+        /** @var BadgesHandler $badgesHandler */
         $badgesHandler = $this->get('badges.handler');
         $badges = $badgesHandler->getAvailableBadges();
         $userBadges = $badgesHandler->evaluate($this->getUser())->getBadges();
