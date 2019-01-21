@@ -37,4 +37,11 @@ class PersonTest extends TestCase
         $this->assertSame($badge2, $badges['namespace1.badge2']);
         $this->assertSame($badge3, $badges['namespace2.badge1']);
     }
+
+    public function testEmptyBadges()
+    {
+        $person = new Person();
+
+        $this->assertEmpty($person->getBadges());
+    }
 }
