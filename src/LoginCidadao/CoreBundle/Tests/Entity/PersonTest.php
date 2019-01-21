@@ -31,7 +31,7 @@ class PersonTest extends TestCase
         $this->assertCount(3, $badges);
         $this->assertContains('namespace1.badge1', array_keys($badges));
         $this->assertContains('namespace1.badge2', array_keys($badges));
-        $this->assertContains('namespace3.badge1', array_keys($badges));
+        $this->assertContains('namespace2.badge1', array_keys($badges));
 
         $this->assertSame($badge1, $badges['namespace1.badge1']);
         $this->assertSame($badge2, $badges['namespace1.badge2']);
