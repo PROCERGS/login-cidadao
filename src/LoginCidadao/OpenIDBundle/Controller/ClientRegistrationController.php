@@ -15,6 +15,7 @@ use FOS\RestBundle\Context\Context;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
+use LoginCidadao\OpenIDBundle\Model\CreateClientRequest;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -37,6 +38,19 @@ class ClientRegistrationController extends FOSRestController
      * @REST\View(templateVar="client")
      */
     public function registerAction(Request $request)
+    {
+        $createClientRequest = new CreateClientRequest();
+
+        $form = $this->createForm(ClientMetadataForm::class, $createClientRequest);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $clientManager = $this->getClientManager();
+            $metadata = $clientManager->createClientMetadata($createClientRequest);
+        }
+    }
+
+    public function registerActionOld(Request $request)
     {
         $this->parseJsonRequest($request);
         $clientManager = $this->getClientManager();
@@ -93,7 +107,7 @@ class ClientRegistrationController extends FOSRestController
         foreach ($errors as $error) {
             $cause = $error->getCause();
             $value = $cause->getInvalidValue();
-            $propertyRegex = '/^data\\.([a-zA-Z0-9_]+).*$/';
+            $propertyRegex = '/^(?:data\.|children\[)([a-zA-Z0-9_]+)\]?.*$/';
             $property = preg_replace($propertyRegex, '$1', $cause->getPropertyPath());
 
             switch ($property) {
