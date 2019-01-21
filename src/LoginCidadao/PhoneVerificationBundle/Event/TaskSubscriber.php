@@ -11,7 +11,6 @@
 namespace LoginCidadao\PhoneVerificationBundle\Event;
 
 use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
-use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification;
 use LoginCidadao\PhoneVerificationBundle\Exception\VerificationNotSentException;

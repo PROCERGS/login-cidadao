@@ -1030,3 +1030,36 @@ email:
                 <br>
                 Cordialmente,<br>
                 Equipe Login Cidadão
+    account_auto_blocked:
+        message:
+            subject: 'Notificação de Bloqueio por Violação dos Termos de Uso'
+            text: |
+                Notificação de Bloqueio por Violação dos Termos de Uso:
+
+                Um mecanismo automático anti-fraude identificou uma atividade suspeita em sua conta do Login Cidadão registrada sob seu email %email%.
+
+                Foi identificada que a conta em questão poderia estar sendo utilizada para tentar acessar informações pessoais de terceiros, o que viola os Termos de Uso do Login Cidadão e, por esse motivo, foi bloqueada com base no texto:
+
+                    "O Login Cidadão somente pode ser utilizado para fins pessoais, não sendo permitida a utilização em nome de terceiros ou com a finalidade de obter informações de terceiros."
+                     (...)
+                    "A não observância pelo usuário dos seus deveres previstos nestes Termos de Uso ou em qualquer outra legislação aplicável, poderá acarretar a suspensão ou cancelamento do seu acesso ao Login Cidadão, ou a um ou mais serviços disponibilizados, além de outras sanções previstas em lei."
+
+                Caso acredite que essa ação tenha sido executada por engano, é possível solicitar uma reavaliação não-automática através do forumlário de contato disponível no Login Cidadão.
+
+                Cordialmente,
+                Equipe Login Cidadão
+            html: >
+                Notificação de Bloqueio por Violação dos Termos de Uso:<br>
+                <br>
+                Um mecanismo automático anti-fraude identificou uma atividade suspeita em sua conta do Login Cidadão registrada sob seu email <strong>%email%</strong>.<br>
+                <br>
+                Foi identificada que a conta em questão poderia estar sendo utilizada para tentar acessar informações pessoais de terceiros, o que viola os Termos de Uso do Login Cidadão e, por esse motivo, foi bloqueada com base no texto:<br>
+                <br>
+                    "O Login Cidadão somente pode ser utilizado para fins pessoais, não sendo permitida a utilização em nome de terceiros ou com a finalidade de obter informações de terceiros."<br>
+                     (...)<br>
+                    "A não observância pelo usuário dos seus deveres previstos nestes Termos de Uso ou em qualquer outra legislação aplicável, poderá acarretar a suspensão ou cancelamento do seu acesso ao Login Cidadão, ou a um ou mais serviços disponibilizados, além de outras sanções previstas em lei."<br>
+                <br>
+                Caso acredite que essa ação tenha sido executada por engano, é possível solicitar uma reavaliação não-automática através do forumlário de contato disponível no Login Cidadão.<br>
+                <br>
+                Cordialmente,<br>
+                Equipe Login Cidadão

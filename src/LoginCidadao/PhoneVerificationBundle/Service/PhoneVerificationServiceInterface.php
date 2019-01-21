@@ -143,4 +143,10 @@ interface PhoneVerificationServiceInterface
      * @return bool
      */
     public function isVerificationMandatory(PhoneVerificationInterface $phoneVerification): bool;
+
+    /**
+     * @param PhoneNumber $phoneNumber
+     * @return int how many users have this PhoneNumber verified
+     */
+    public function countVerified(PhoneNumber $phoneNumber): int;
 }

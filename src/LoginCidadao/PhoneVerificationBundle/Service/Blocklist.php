@@ -19,6 +19,8 @@ use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Security\User\Manager\UserManager;
 use LoginCidadao\PhoneVerificationBundle\Entity\BlockedPhoneNumber;
 use LoginCidadao\PhoneVerificationBundle\Entity\BlockedPhoneNumberRepository;
+use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification;
+use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Model\BlockedPhoneNumberInterface;
 
 class Blocklist implements BlocklistInterface
@@ -32,8 +34,8 @@ class Blocklist implements BlocklistInterface
     /** @var BlockedPhoneNumberRepository */
     private $blockedPhoneRepository;
 
-    /** @var PersonRepository */
-    private $personRepository;
+    /** @var PhoneVerificationServiceInterface */
+    private $phoneVerificationService;
 
     /** @var EntityManagerInterface */
     private $em;
@@ -46,12 +48,14 @@ class Blocklist implements BlocklistInterface
      * @param UserManager $userManager
      * @param TwigSwiftMailer $mailer
      * @param EntityManagerInterface $em
+     * @param PhoneVerificationServiceInterface $phoneVerificationService
      * @param BlocklistOptions $options
      */
     public function __construct(
         UserManager $userManager,
         TwigSwiftMailer $mailer,
         EntityManagerInterface $em,
+        PhoneVerificationServiceInterface $phoneVerificationService,
         BlocklistOptions $options
     ) {
         $this->userManager = $userManager;
@@ -59,21 +63,36 @@ class Blocklist implements BlocklistInterface
         $this->em = $em;
         $this->options = $options;
         $this->blockedPhoneRepository = $this->em->getRepository(BlockedPhoneNumber::class);
-        $this->personRepository = $this->em->getRepository(Person::class);
+        $this->phoneVerificationService = $phoneVerificationService;
     }
 
-
-    public function isBlocked(PhoneNumber $phoneNumber): bool
+    /**
+     * @inheritDoc
+     */
+    public function isPhoneBlocked(PhoneNumber $phoneNumber): bool
     {
         return $this->isManuallyBlocked($phoneNumber) || $this->isBlockedAutomatically($phoneNumber);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function blockByPhone(PhoneNumber $phoneNumber): array
     {
-        $blockedUsers = $this->userManager->blockUsersByPhone($phoneNumber);
+        $blockedUsers = $this->userManager->blockUsersByPhone($phoneNumber, false);
         $this->notifyBlockedUsers($blockedUsers);
 
         return $blockedUsers;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function checkPhoneNumber(PhoneNumber $phoneNumber)
+    {
+        if ($this->isPhoneBlocked($phoneNumber)) {
+            $this->blockByPhone($phoneNumber);
+        }
     }
 
     public function addBlockedPhoneNumber(
@@ -93,7 +112,7 @@ class Blocklist implements BlocklistInterface
     private function notifyBlockedUsers(array $blockedUsers)
     {
         foreach ($blockedUsers as $person) {
-            $this->mailer->sendAccountBlockedMessage($person);
+            $this->mailer->sendAccountAutoBlockedMessage($person);
         }
     }
 
@@ -107,8 +126,7 @@ class Blocklist implements BlocklistInterface
         if ($this->options->isAutoBlockEnabled()) {
             $autoBlockLimit = $this->options->getAutoBlockPhoneLimit();
 
-            // TODO: count ONLY verified phones!!!!!
-            return $this->personRepository->countByPhone($phoneNumber) >= $autoBlockLimit;
+            return $this->phoneVerificationService->countVerified($phoneNumber) >= $autoBlockLimit;
         }
 
         return false;

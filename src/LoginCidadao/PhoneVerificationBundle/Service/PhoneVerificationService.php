@@ -369,4 +369,12 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
 
         return $accountsCount >= $this->options->getEnforceVerificationThreshold();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function countVerified(PhoneNumber $phoneNumber): int
+    {
+        return $this->phoneVerificationRepository->countVerified($phoneNumber);
+    }
 }

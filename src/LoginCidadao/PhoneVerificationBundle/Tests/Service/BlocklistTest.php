@@ -15,12 +15,16 @@ use libphonenumber\PhoneNumber;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Security\User\Manager\UserManager;
 use LoginCidadao\PhoneVerificationBundle\Entity\BlockedPhoneNumber;
 use LoginCidadao\PhoneVerificationBundle\Entity\BlockedPhoneNumberRepository;
+use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification;
+use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Model\BlockedPhoneNumberInterface;
 use LoginCidadao\PhoneVerificationBundle\Service\Blocklist;
 use LoginCidadao\PhoneVerificationBundle\Service\BlocklistOptions;
+use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -36,15 +40,13 @@ class BlocklistTest extends TestCase
             ->method('findByPhone')->with($phoneNumber)
             ->willReturn($blocked);
 
-        $em = $this->getEntityManager([
-            BlockedPhoneNumber::class => $blockedPhoneRepository,
-            Person::class => $this->createMock(PersonRepository::class),
-        ]);
+        $em = $this->getEntityManager($blockedPhoneRepository);
 
         $options = new BlocklistOptions(2);
 
-        $blocklist = new Blocklist($this->getUserManager(), $this->getMailer(), $em, $options);
-        $this->assertTrue($blocklist->isBlocked($phoneNumber));
+        $blocklist = new Blocklist($this->getUserManager(), $this->getMailer(), $em,
+            $this->getPhoneVerificationService(), $options);
+        $this->assertTrue($blocklist->isPhoneBlocked($phoneNumber));
     }
 
     public function testAutoBlocked()
@@ -56,18 +58,15 @@ class BlocklistTest extends TestCase
             ->method('findByPhone')->with($phoneNumber)
             ->willReturn(null);
 
-        $personRepo = $this->createMock(PersonRepository::class);
-        $personRepo->expects($this->once())->method('countByPhone')->willReturn(3);
+        $phoneVerification = $this->getPhoneVerificationService();
+        $phoneVerification->expects($this->once())->method('countVerified')->willReturn(3);
 
-        $em = $this->getEntityManager([
-            BlockedPhoneNumber::class => $blockedPhoneRepository,
-            Person::class => $personRepo,
-        ]);
+        $em = $this->getEntityManager($blockedPhoneRepository);
 
         $options = new BlocklistOptions(2);
 
-        $blocklist = new Blocklist($this->getUserManager(), $this->getMailer(), $em, $options);
-        $this->assertTrue($blocklist->isBlocked($phoneNumber));
+        $blocklist = new Blocklist($this->getUserManager(), $this->getMailer(), $em, $phoneVerification, $options);
+        $this->assertTrue($blocklist->isPhoneBlocked($phoneNumber));
     }
 
     public function testNotBlocked()
@@ -79,15 +78,45 @@ class BlocklistTest extends TestCase
             ->method('findByPhone')->with($phoneNumber)
             ->willReturn(null);
 
-        $em = $this->getEntityManager([
-            BlockedPhoneNumber::class => $blockedPhoneRepository,
-            Person::class => $this->createMock(PersonRepository::class),
-        ]);
+        $em = $this->getEntityManager($blockedPhoneRepository);
 
         $options = new BlocklistOptions(0);
 
-        $blocklist = new Blocklist($this->getUserManager(), $this->getMailer(), $em, $options);
-        $this->assertFalse($blocklist->isBlocked($phoneNumber));
+        $blocklist = new Blocklist($this->getUserManager(), $this->getMailer(), $em,
+            $this->getPhoneVerificationService(), $options);
+        $this->assertFalse($blocklist->isPhoneBlocked($phoneNumber));
+    }
+
+    public function testBlockByPhone()
+    {
+        $phoneNumber = new PhoneNumber();
+        $users = [
+            (new Person())->setMobile($phoneNumber),
+            (new Person())->setMobile($phoneNumber),
+            (new Person())->setMobile($phoneNumber),
+        ];
+
+        $userManager = $this->getUserManager();
+        $userManager->expects($this->once())->method('blockUsersByPhone')
+            ->with($phoneNumber)->willReturn($users);
+
+        $mailer = $this->getMailer();
+        $mailer->expects($this->exactly(count($users)))->method('sendAccountAutoBlockedMessage')
+            ->with($this->isInstanceOf(PersonInterface::class));
+
+        $blockedPhoneRepository = $this->createMock(BlockedPhoneNumberRepository::class);
+
+        $em = $this->getEntityManager($blockedPhoneRepository);
+
+        $options = new BlocklistOptions(0);
+
+        $blocklist = new Blocklist($userManager, $mailer, $em, $this->getPhoneVerificationService(), $options);
+        $this->assertSame($users, $blocklist->blockByPhone($phoneNumber));
+    }
+
+    public function testAddBlockedPhoneNumber()
+    {
+
     }
 
     /**
@@ -107,17 +136,24 @@ class BlocklistTest extends TestCase
     }
 
     /**
-     * @param array $repositories
+     * @param BlockedPhoneNumberRepository|MockObject $repository
      * @return MockObject|EntityManagerInterface
      */
-    private function getEntityManager(array $repositories)
+    private function getEntityManager($repository)
     {
         $em = $this->createMock(EntityManagerInterface::class);
-        $em->expects($this->atLeast(2))->method('getRepository')
-            ->willReturnCallback(function ($entity) use ($repositories) {
-                return $repositories[$entity];
-            });
+        $em->expects($this->once())->method('getRepository')
+            ->with(BlockedPhoneNumber::class)
+            ->willReturn($repository);
 
         return $em;
+    }
+
+    /**
+     * @return MockObject|PhoneVerificationServiceInterface
+     */
+    private function getPhoneVerificationService()
+    {
+        return $this->createMock(PhoneVerificationServiceInterface::class);
     }
 }

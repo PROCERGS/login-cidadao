@@ -75,6 +75,15 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    phone_verification.blocklist.subscriber:
+        class: LoginCidadao\PhoneVerificationBundle\Event\BlocklistSubscriber
+        arguments:
+            - "@phone_verification.blocklist"
+            - "@lc.user_manager"
+            - "@security.token_storage"
+        tags:
+            - { name: kernel.event_subscriber }
+
     phone_verification.form:
         class: LoginCidadao\PhoneVerificationBundle\Form\PhoneVerificationType
         arguments:
@@ -94,3 +103,12 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@event_dispatcher"
             - "@phone_verification.sent_verification.repository"
+
+    phone_verification.blocklist:
+        class: LoginCidadao\PhoneVerificationBundle\Service\Blocklist
+        arguments:
+            - "@lc.user_manager"
+            - "@lc.mailer"
+            - "@doctrine.orm.entity_manager"
+            - "@phone_verification"
+            - "@phone_verification.blocklist.options"

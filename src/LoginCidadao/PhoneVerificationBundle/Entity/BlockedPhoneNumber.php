@@ -21,25 +21,39 @@ use LoginCidadao\PhoneVerificationBundle\Model\BlockedPhoneNumberInterface;
  * @package LoginCidadao\PhoneVerificationBundle\Model
  *
  * @ORM\Entity(repositoryClass="LoginCidadao\PhoneVerificationBundle\Entity\BlockedPhoneNumberRepository")
- * @ORM\Table(name="person")
+ * @ORM\Table(name="blocked_phone_number")
  * @ORM\HasLifecycleCallbacks
  */
 class BlockedPhoneNumber implements BlockedPhoneNumberInterface
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
     private $id;
 
     /**
      * @var PhoneNumber
+     *
+     * @ORM\Column(name="phone_number", type="phone_number", nullable=false)
      */
     private $phoneNumber;
 
     /**
      * @var PersonInterface
+     *
+     * @ORM\ManyToOne(targetEntity="LoginCidadao\CoreBundle\Entity\Person")
+     * @ORM\JoinColumn(name="blocked_by_person_id", referencedColumnName="id", unique=false)
      */
     private $blockedBy;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
     private $createdAt;
 
