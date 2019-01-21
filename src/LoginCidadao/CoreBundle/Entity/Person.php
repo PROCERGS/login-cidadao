@@ -1053,8 +1053,15 @@ class Person extends BaseUser implements PersonInterface, BackupCodeInterface
 
     public function getBadges()
     {
-        return /** @scrutinizer ignore-deprecated */
+        $badges = /** @scrutinizer ignore-deprecated */
             $this->badges;
+        $badgesMap = [];
+        foreach ($badges as $badge) {
+            $key = "{$badge->getNamespace()}.{$badge->getName()}";
+            $badgesMap[$key] = $badge;
+        }
+
+        return $badgesMap;
     }
 
     public function mergeBadges(array $badges)
