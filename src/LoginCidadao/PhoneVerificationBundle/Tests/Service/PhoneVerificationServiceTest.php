@@ -33,11 +33,17 @@ use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class PhoneVerificationServiceTest extends TestCase
 {
+    /**
+     * @return MockObject|PhoneVerificationInterface
+     */
     private function getPhoneVerification()
     {
         return $this->createMock(PhoneVerificationInterface::class);
     }
 
+    /**
+     * @return MockObject|PhoneVerificationOptions
+     */
     private function getServiceOptions()
     {
         $options = $this->getMockBuilder(PhoneVerificationOptions::class)
@@ -47,11 +53,17 @@ class PhoneVerificationServiceTest extends TestCase
         return $options;
     }
 
+    /**
+     * @return MockObject|EntityManagerInterface
+     */
     private function getEntityManager()
     {
         return $this->createMock(EntityManagerInterface::class);
     }
 
+    /**
+     * @return MockObject|EventDispatcherInterface
+     */
     private function getDispatcher()
     {
         return $this->createMock(EventDispatcherInterface::class);
@@ -66,16 +78,25 @@ class PhoneVerificationServiceTest extends TestCase
         return $repository;
     }
 
+    /**
+     * @return MockObject|PhoneVerificationRepository
+     */
     private function getPhoneVerificationRepository()
     {
         return $this->getRepository(PhoneVerificationRepository::class);
     }
 
+    /**
+     * @return MockObject|SentVerificationRepository
+     */
     private function getSentVerificationRepository()
     {
         return $this->getRepository(SentVerificationRepository::class);
     }
 
+    /**
+     * @return MockObject|PersonRepository
+     */
     private function getPersonRepository()
     {
         return $this->getRepository(PersonRepository::class);
@@ -153,6 +174,7 @@ class PhoneVerificationServiceTest extends TestCase
 
         $service = $this->getService(['phone_verification_repository' => $repository]);
 
+        /** @var PersonInterface|MockObject $person */
         $person = $this->createMock(PersonInterface::class);
         $phone = $this->createMock(PhoneNumber::class);
 
@@ -173,6 +195,7 @@ class PhoneVerificationServiceTest extends TestCase
 
         $service = $this->getService(['em' => $em, 'phone_verification_repository' => $repository]);
 
+        /** @var PersonInterface|MockObject $person */
         $person = $this->createMock(PersonInterface::class);
         $phone = $this->createMock(PhoneNumber::class);
 
@@ -191,6 +214,7 @@ class PhoneVerificationServiceTest extends TestCase
 
         $service = $this->getService(['phone_verification_repository' => $repository]);
 
+        /** @var PersonInterface|MockObject $person */
         $person = $this->createMock(PersonInterface::class);
         $phone = $this->createMock(PhoneNumber::class);
 
@@ -206,7 +230,7 @@ class PhoneVerificationServiceTest extends TestCase
 
         $service = $this->getService(compact('em'));
 
-        $phoneVerification = $this->createMock(PhoneVerificationInterface::class);
+        $phoneVerification = $this->getPhoneVerification();
         $this->assertTrue($service->removePhoneVerification($phoneVerification));
     }
 
@@ -221,6 +245,7 @@ class PhoneVerificationServiceTest extends TestCase
 
         $service = $this->getService(['em' => $em, 'phone_verification_repository' => $repository]);
 
+        /** @var PersonInterface|MockObject $person */
         $person = $this->createMock(PersonInterface::class);
         $phone = $this->createMock(PhoneNumber::class);
 
@@ -251,7 +276,7 @@ class PhoneVerificationServiceTest extends TestCase
 
     public function testSuccessfulVerify()
     {
-        $phoneVerification = $this->createMock(PhoneVerificationInterface::class);
+        $phoneVerification = $this->getPhoneVerification();
         $phoneVerification->expects($this->once())->method('setVerifiedAt');
         $phoneVerification->expects($this->atLeastOnce())->method('getVerificationCode')->willReturn('123');
 
@@ -270,7 +295,7 @@ class PhoneVerificationServiceTest extends TestCase
 
     public function testUnsuccessfulVerify()
     {
-        $phoneVerification = $this->createMock(PhoneVerificationInterface::class);
+        $phoneVerification = $this->getPhoneVerification();
         $phoneVerification->expects($this->never())->method('setVerifiedAt');
         $phoneVerification->expects($this->atLeastOnce())->method('getVerificationCode')->willReturn('321');
 
@@ -323,6 +348,7 @@ class PhoneVerificationServiceTest extends TestCase
     {
         $phoneVerification = $this->getPhoneVerification();
 
+        /** @var SentVerificationInterface|MockObject $sentVerification */
         $sentVerification = $this->createMock(SentVerificationInterface::class);
 
         $dispatcher = $this->getDispatcher();
@@ -331,7 +357,7 @@ class PhoneVerificationServiceTest extends TestCase
                 PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED,
                 $this->isInstanceOf(SendPhoneVerificationEvent::class)
             )->willReturnCallback(
-                function ($eventName, $event) use ($sentVerification) {
+                function ($eventName, SendPhoneVerificationEvent $event) use ($sentVerification) {
                     $event->setSentVerification($sentVerification);
                 }
             );
@@ -369,8 +395,8 @@ class PhoneVerificationServiceTest extends TestCase
                 PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED,
                 $this->isInstanceOf(SendPhoneVerificationEvent::class)
             )->willReturnCallback(
-                function ($eventName, $event) {
-                    $sentAt = new \DateTime("-5 minutes");
+                function ($eventName, SendPhoneVerificationEvent $event) {
+                    /** @var SentVerificationInterface|MockObject $sentVerification */
                     $sentVerification = $this->createMock(SentVerificationInterface::class);
                     $event->setSentVerification($sentVerification);
                 }
@@ -401,6 +427,7 @@ class PhoneVerificationServiceTest extends TestCase
 
     public function testRegisterVerificationSent()
     {
+        /** @var SentVerificationInterface|MockObject $sentVerification */
         $sentVerification = $this->createMock(SentVerificationInterface::class);
 
         $em = $this->getEntityManager();

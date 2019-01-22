@@ -130,8 +130,6 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
      * @param PersonInterface $person
      * @param mixed $phone
      * @return PhoneVerificationInterface
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function createPhoneVerification(PersonInterface $person, PhoneNumber $phone)
     {
@@ -191,8 +189,6 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
     /**
      * @param PhoneVerificationInterface $phoneVerification
      * @return bool
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function removePhoneVerification(PhoneVerificationInterface $phoneVerification)
     {
@@ -206,8 +202,6 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
      * @param PersonInterface $person
      * @param mixed $phone
      * @return PhoneVerificationInterface
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function enforcePhoneVerification(PersonInterface $person, PhoneNumber $phone)
     {
@@ -266,8 +260,6 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
      * @param PhoneVerificationInterface $phoneVerification
      * @param $providedCode
      * @return bool
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function verify(PhoneVerificationInterface $phoneVerification, $providedCode)
     {
@@ -312,8 +304,6 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
     /**
      * @param SentVerificationInterface $sentVerification
      * @return \LoginCidadao\PhoneVerificationBundle\Entity\SentVerification|SentVerificationInterface
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function registerVerificationSent(SentVerificationInterface $sentVerification)
     {
@@ -344,8 +334,6 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
      * @param PhoneVerificationInterface $phoneVerification
      * @param string $token
      * @return bool
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function verifyToken(PhoneVerificationInterface $phoneVerification, $token)
     {
