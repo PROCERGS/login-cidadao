@@ -12,7 +12,6 @@ namespace LoginCidadao\PhoneVerificationBundle\Event;
 
 use libphonenumber\PhoneNumber;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
-use LoginCidadao\CoreBundle\Security\User\Manager\UserManager;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
 use LoginCidadao\PhoneVerificationBundle\Service\BlocklistInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -27,25 +26,24 @@ class BlocklistSubscriber implements EventSubscriberInterface
     /** @var BlocklistInterface */
     private $blocklist;
 
-    /** @var UserManager */
-    private $userManager;
-
     /** @var TokenStorageInterface */
     private $tokenStorage;
 
     /**
      * BlocklistSubscriber constructor.
      * @param BlocklistInterface $blocklist
-     * @param UserManager $userManager
-     * @param TokenStorageInterface $tokenStorage
      */
-    public function __construct(
-        BlocklistInterface $blocklist,
-        UserManager $userManager,
-        TokenStorageInterface $tokenStorage
-    ) {
+    public function __construct(BlocklistInterface $blocklist)
+    {
         $this->blocklist = $blocklist;
-        $this->userManager = $userManager;
+    }
+
+    /**
+     * @param TokenStorageInterface $tokenStorage
+     * @codeCoverageIgnore
+     */
+    public function setTokenStorage(TokenStorageInterface $tokenStorage)
+    {
         $this->tokenStorage = $tokenStorage;
     }
 
@@ -69,17 +67,17 @@ class BlocklistSubscriber implements EventSubscriberInterface
 
     public function onLogin(InteractiveLoginEvent $event)
     {
-        try {
-            $person = $event->getAuthenticationToken()->getUser();
+        $person = $event->getAuthenticationToken()->getUser();
+        if ($person instanceof PersonInterface) {
             $phone = $person->getMobile();
-        } catch (\Exception $e) {
-            // User object not available...
-            return;
+            $this->checkPhone($phone);
         }
-
-        $this->checkPhone($phone);
     }
 
+    /**
+     * @param GetResponseEvent $event
+     * @codeCoverageIgnore
+     */
     public function onRequest(GetResponseEvent $event)
     {
         if ($event->isMasterRequest() && null !== $this->tokenStorage->getToken()) {
