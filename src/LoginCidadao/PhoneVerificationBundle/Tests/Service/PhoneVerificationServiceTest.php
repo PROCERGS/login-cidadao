@@ -10,29 +10,37 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Tests\Service;
 
+use Doctrine\ORM\EntityManagerInterface;
+use libphonenumber\PhoneNumber;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification;
 use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerification;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
+use LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent;
+use LoginCidadao\PhoneVerificationBundle\Exception\VerificationNotSentException;
+use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
+use LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface;
 use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
+use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationOptions;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationService;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class PhoneVerificationServiceTest extends TestCase
 {
     private function getPhoneVerification()
     {
-        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
-        $phoneVerification = $this->createMock($phoneVerificationClass);
-
-        return $phoneVerification;
+        return $this->createMock(PhoneVerificationInterface::class);
     }
 
     private function getServiceOptions()
     {
-        $options = $this->getMockBuilder('LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationOptions')
+        $options = $this->getMockBuilder(PhoneVerificationOptions::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -41,16 +49,12 @@ class PhoneVerificationServiceTest extends TestCase
 
     private function getEntityManager()
     {
-        return $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(EntityManagerInterface::class);
     }
 
     private function getDispatcher()
     {
-        return $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(EventDispatcherInterface::class);
     }
 
     private function getRepository($class)
@@ -142,24 +146,22 @@ class PhoneVerificationServiceTest extends TestCase
 
     public function testGetPhoneVerification()
     {
-        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
-        $phoneVerification = $this->createMock($phoneVerificationClass);
+        $phoneVerification = $this->getPhoneVerification();
 
         $repository = $this->getPhoneVerificationRepository();
         $repository->expects($this->once())->method('findOneBy')->willReturn($phoneVerification);
 
         $service = $this->getService(['phone_verification_repository' => $repository]);
 
-        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
-        $phone = $this->createMock('libphonenumber\PhoneNumber');
+        $person = $this->createMock(PersonInterface::class);
+        $phone = $this->createMock(PhoneNumber::class);
 
         $this->assertEquals($phoneVerification, $service->getPhoneVerification($person, $phone));
     }
 
     public function testCreatePhoneVerification()
     {
-        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
-        $existingPhoneVerification = $this->createMock($phoneVerificationClass);
+        $existingPhoneVerification = $this->getPhoneVerification();
 
         $repository = $this->getPhoneVerificationRepository();
         $repository->expects($this->atLeastOnce())->method('findOneBy')->willReturn($existingPhoneVerification);
@@ -171,19 +173,17 @@ class PhoneVerificationServiceTest extends TestCase
 
         $service = $this->getService(['em' => $em, 'phone_verification_repository' => $repository]);
 
-        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
-        $phone = $this->createMock('libphonenumber\PhoneNumber');
+        $person = $this->createMock(PersonInterface::class);
+        $phone = $this->createMock(PhoneNumber::class);
 
-        $this->assertInstanceOf($phoneVerificationClass, $service->createPhoneVerification($person, $phone));
+        $this->assertInstanceOf(PhoneVerificationInterface::class, $service->createPhoneVerification($person, $phone));
     }
 
     public function testGetPendingPhoneVerification()
     {
-        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
-        $phoneVerification = $this->createMock($phoneVerificationClass);
+        $phoneVerification = $this->getPhoneVerification();
 
-        $repoClass = 'LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository';
-        $repository = $this->getMockBuilder($repoClass)
+        $repository = $this->getMockBuilder(PhoneVerificationRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
         $repository->expects($this->once())->method('findOneBy')->willReturn($phoneVerification);
@@ -191,8 +191,8 @@ class PhoneVerificationServiceTest extends TestCase
 
         $service = $this->getService(['phone_verification_repository' => $repository]);
 
-        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
-        $phone = $this->createMock('libphonenumber\PhoneNumber');
+        $person = $this->createMock(PersonInterface::class);
+        $phone = $this->createMock(PhoneNumber::class);
 
         $this->assertEquals($phoneVerification, $service->getPendingPhoneVerification($person, $phone));
         $this->assertEquals($phoneVerification, $service->getAllPendingPhoneVerification($person));
@@ -206,8 +206,7 @@ class PhoneVerificationServiceTest extends TestCase
 
         $service = $this->getService(compact('em'));
 
-        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
-        $phoneVerification = $this->createMock($phoneVerificationClass);
+        $phoneVerification = $this->createMock(PhoneVerificationInterface::class);
         $this->assertTrue($service->removePhoneVerification($phoneVerification));
     }
 
@@ -222,8 +221,8 @@ class PhoneVerificationServiceTest extends TestCase
 
         $service = $this->getService(['em' => $em, 'phone_verification_repository' => $repository]);
 
-        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
-        $phone = $this->createMock('libphonenumber\PhoneNumber');
+        $person = $this->createMock(PersonInterface::class);
+        $phone = $this->createMock(PhoneNumber::class);
 
         $service->enforcePhoneVerification($person, $phone);
     }
@@ -252,8 +251,7 @@ class PhoneVerificationServiceTest extends TestCase
 
     public function testSuccessfulVerify()
     {
-        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
-        $phoneVerification = $this->createMock($phoneVerificationClass);
+        $phoneVerification = $this->createMock(PhoneVerificationInterface::class);
         $phoneVerification->expects($this->once())->method('setVerifiedAt');
         $phoneVerification->expects($this->atLeastOnce())->method('getVerificationCode')->willReturn('123');
 
@@ -272,8 +270,7 @@ class PhoneVerificationServiceTest extends TestCase
 
     public function testUnsuccessfulVerify()
     {
-        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
-        $phoneVerification = $this->createMock($phoneVerificationClass);
+        $phoneVerification = $this->createMock(PhoneVerificationInterface::class);
         $phoneVerification->expects($this->never())->method('setVerifiedAt');
         $phoneVerification->expects($this->atLeastOnce())->method('getVerificationCode')->willReturn('321');
 
@@ -293,9 +290,8 @@ class PhoneVerificationServiceTest extends TestCase
     public function testGetPhoneVerificationById()
     {
         $id = random_int(1, 9999);
-        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
-        $phoneVerification = $this->createMock($phoneVerificationClass);
-        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $phoneVerification = $this->createMock(PhoneVerificationInterface::class);
+        $person = $this->createMock(PersonInterface::class);
 
         $repository = $this->getPhoneVerificationRepository();
         $repository->expects($this->once())->method('findOneBy')
@@ -310,9 +306,8 @@ class PhoneVerificationServiceTest extends TestCase
     public function testGetPendingPhoneVerificationById()
     {
         $id = random_int(1, 9999);
-        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
-        $phoneVerification = $this->createMock($phoneVerificationClass);
-        $person = $this->createMock('LoginCidadao\CoreBundle\Model\PersonInterface');
+        $phoneVerification = $this->createMock(PhoneVerificationInterface::class);
+        $person = $this->createMock(PersonInterface::class);
 
         $repository = $this->getPhoneVerificationRepository();
         $repository->expects($this->once())->method('findOneBy')
@@ -326,18 +321,15 @@ class PhoneVerificationServiceTest extends TestCase
 
     public function testSendVerificationCodeSuccess()
     {
-        $phoneVerificationClass = 'LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface';
-        $phoneVerification = $this->createMock($phoneVerificationClass);
+        $phoneVerification = $this->getPhoneVerification();
 
-        $sentVerification = $this->createMock(
-            'LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface'
-        );
+        $sentVerification = $this->createMock(SentVerificationInterface::class);
 
         $dispatcher = $this->getDispatcher();
         $dispatcher->expects($this->once())->method('dispatch')
             ->with(
                 PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED,
-                $this->isInstanceOf('LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent')
+                $this->isInstanceOf(SendPhoneVerificationEvent::class)
             )->willReturnCallback(
                 function ($eventName, $event) use ($sentVerification) {
                     $event->setSentVerification($sentVerification);
@@ -352,7 +344,7 @@ class PhoneVerificationServiceTest extends TestCase
 
     public function testSendVerificationCodeFailure()
     {
-        $this->expectException('LoginCidadao\PhoneVerificationBundle\Exception\VerificationNotSentException');
+        $this->expectException(VerificationNotSentException::class);
 
         $phoneVerification = $this->getPhoneVerification();
 
@@ -360,7 +352,7 @@ class PhoneVerificationServiceTest extends TestCase
         $dispatcher->expects($this->once())->method('dispatch')
             ->with(
                 PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED,
-                $this->isInstanceOf('LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent')
+                $this->isInstanceOf(SendPhoneVerificationEvent::class)
             );
 
         $service = $this->getService(compact('dispatcher'));
@@ -375,13 +367,11 @@ class PhoneVerificationServiceTest extends TestCase
         $dispatcher->expects($this->once())->method('dispatch')
             ->with(
                 PhoneVerificationEvents::PHONE_VERIFICATION_REQUESTED,
-                $this->isInstanceOf('LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent')
+                $this->isInstanceOf(SendPhoneVerificationEvent::class)
             )->willReturnCallback(
                 function ($eventName, $event) {
                     $sentAt = new \DateTime("-5 minutes");
-                    $sentVerification = $this->createMock(
-                        'LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface'
-                    );
+                    $sentVerification = $this->createMock(SentVerificationInterface::class);
                     $event->setSentVerification($sentVerification);
                 }
             );
@@ -392,9 +382,9 @@ class PhoneVerificationServiceTest extends TestCase
 
     public function testResendVerificationCodeFailure()
     {
-        $this->expectException('Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException');
+        $this->expectException(TooManyRequestsHttpException::class);
         $sentAt = new \DateTime();
-        $sentVerification = $this->createMock('LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface');
+        $sentVerification = $this->createMock(SentVerificationInterface::class);
         $sentVerification->expects($this->once())->method('getSentAt')->willReturn($sentAt);
 
         $phoneVerification = $this->getPhoneVerification();
@@ -411,7 +401,7 @@ class PhoneVerificationServiceTest extends TestCase
 
     public function testRegisterVerificationSent()
     {
-        $sentVerification = $this->createMock('LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface');
+        $sentVerification = $this->createMock(SentVerificationInterface::class);
 
         $em = $this->getEntityManager();
         $em->expects($this->once())->method('persist')->with($sentVerification);
@@ -426,7 +416,7 @@ class PhoneVerificationServiceTest extends TestCase
         $timeout = \DateInterval::createFromDateString('+ 5 minutes');
         $sentAt = new \DateTime("-5 minutes");
         $expected = $sentAt->add($timeout);
-        $sentVerification = $this->createMock('LoginCidadao\PhoneVerificationBundle\Model\SentVerificationInterface');
+        $sentVerification = $this->createMock(SentVerificationInterface::class);
         $sentVerification->expects($this->once())->method('getSentAt')->willReturn($sentAt);
 
         $repository = $this->getSentVerificationRepository();
@@ -476,5 +466,52 @@ class PhoneVerificationServiceTest extends TestCase
 
         $service = $this->getService();
         $this->assertFalse($service->verifyToken($phoneVerification, 'wrong'));
+    }
+
+    public function testMandatoryVerification()
+    {
+        $this->assertTrue($this->isMandatoryTest(3, 3));
+        $this->assertTrue($this->isMandatoryTest(4, 3));
+    }
+
+    public function testOptionalVerification()
+    {
+        $this->assertFalse($this->isMandatoryTest(2, 3));
+        $this->assertFalse($this->isMandatoryTest(0, 3));
+    }
+
+    public function testCountVerified()
+    {
+        $count = 5;
+
+        /** @var PhoneNumber|MockObject $phoneNumber */
+        $phoneNumber = $this->createMock(PhoneNumber::class);
+
+        $repo = $this->getPhoneVerificationRepository();
+        $repo->expects($this->once())->method('countVerified')->with($phoneNumber)->willReturn($count);
+
+        $service = $this->getService(['phone_verification_repository' => $repo]);
+        $this->assertEquals($count, $service->countVerified($phoneNumber));
+    }
+
+    private function isMandatoryTest(int $phoneCount, int $threshold)
+    {
+        $phoneNumber = $this->createMock(PhoneNumber::class);
+
+        /** @var PhoneVerificationInterface|MockObject $phoneVerification */
+        $phoneVerification = $this->createMock(PhoneVerificationInterface::class);
+        $phoneVerification->expects($this->once())->method('getPhone')->willReturn($phoneNumber);
+
+        $personRepo = $this->getPersonRepository();
+        $personRepo->expects($this->once())->method('countByPhone')->with($phoneNumber)->willReturn($phoneCount);
+
+        $options = new PhoneVerificationOptions(6, true, true, false, false, 10, 6, $threshold);
+
+        $phoneVerificationService = $this->getService([
+            'person_repository' => $personRepo,
+            'options' => $options,
+        ]);
+
+        return $phoneVerificationService->isVerificationMandatory($phoneVerification);
     }
 }

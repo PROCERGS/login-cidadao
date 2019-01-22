@@ -116,7 +116,56 @@ class BlocklistTest extends TestCase
 
     public function testAddBlockedPhoneNumber()
     {
+        /** @var MockObject|PhoneNumber $phoneNumber */
+        $phoneNumber = $this->createMock(PhoneNumber::class);
 
+        /** @var MockObject|PersonInterface $blocker */
+        $blocker = $this->createMock(PersonInterface::class);
+
+        $userManager = $this->getUserManager();
+        $options = new BlocklistOptions(0);
+
+        $blockedPhoneRepository = $this->createMock(BlockedPhoneNumberRepository::class);
+        $em = $this->getEntityManager($blockedPhoneRepository);
+        $em->expects($this->once())->method('flush');
+        $em->expects($this->once())->method('persist')
+            ->with($this->isInstanceOf(BlockedPhoneNumberInterface::class));
+
+        $service = new Blocklist($userManager, $this->getMailer(), $em, $this->getPhoneVerificationService(), $options);
+        $blockedPhoneNumber = $service->addBlockedPhoneNumber($phoneNumber, $blocker);
+
+        $this->assertInstanceOf(BlockedPhoneNumberInterface::class, $blockedPhoneNumber);
+        $this->assertInstanceOf(\DateTime::class, $blockedPhoneNumber->getCreatedAt());
+        $this->assertSame($phoneNumber, $blockedPhoneNumber->getPhoneNumber());
+        $this->assertSame($blocker, $blockedPhoneNumber->getBlockedBy());
+    }
+
+    public function testCheckPhoneNumber()
+    {
+        $users = [
+            $this->createMock(PersonInterface::class),
+            $this->createMock(PersonInterface::class),
+        ];
+
+        /** @var PhoneNumber|MockObject $phoneNumber */
+        $phoneNumber = $this->createMock(PhoneNumber::class);
+        $blockedPhone = $this->createMock(BlockedPhoneNumberInterface::class);
+
+        $blockedPhoneRepository = $this->createMock(BlockedPhoneNumberRepository::class);
+        $blockedPhoneRepository->expects($this->once())->method('findByPhone')->willReturn($blockedPhone);
+
+        $userManager = $this->getUserManager();
+        $userManager->expects($this->once())->method('blockUsersByPhone')->with($phoneNumber)->willReturn($users);
+
+        $mailer = $this->getMailer();
+        $mailer->expects($this->exactly(count($users)))->method('sendAccountAutoBlockedMessage')
+            ->with($this->isInstanceOf(PersonInterface::class));
+
+        $em = $this->getEntityManager($blockedPhoneRepository);
+        $options = new BlocklistOptions(0);
+
+        $service = new Blocklist($userManager, $mailer, $em, $this->getPhoneVerificationService(), $options);
+        $service->checkPhoneNumber($phoneNumber);
     }
 
     /**

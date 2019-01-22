@@ -10,7 +10,7 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Service;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use libphonenumber\PhoneNumber;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
@@ -33,7 +33,7 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
     /** @var PhoneVerificationOptions */
     private $options;
 
-    /** @var EntityManager */
+    /** @var EntityManagerInterface */
     private $em;
 
     /** @var PhoneVerificationRepository */
@@ -51,12 +51,12 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
     /**
      * PhoneVerificationService constructor.
      * @param PhoneVerificationOptions $options
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
      * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(
         PhoneVerificationOptions $options,
-        EntityManager $em,
+        EntityManagerInterface $em,
         EventDispatcherInterface $dispatcher
     ) {
         $this->options = $options;

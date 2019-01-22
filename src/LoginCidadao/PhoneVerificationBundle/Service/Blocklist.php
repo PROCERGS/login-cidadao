@@ -88,11 +88,14 @@ class Blocklist implements BlocklistInterface
     /**
      * @inheritDoc
      */
-    public function checkPhoneNumber(PhoneNumber $phoneNumber)
+    public function checkPhoneNumber(PhoneNumber $phoneNumber): array
     {
+        $blocked = [];
         if ($this->isPhoneBlocked($phoneNumber)) {
-            $this->blockByPhone($phoneNumber);
+            $blocked = $this->blockByPhone($phoneNumber);
         }
+
+        return $blocked;
     }
 
     public function addBlockedPhoneNumber(

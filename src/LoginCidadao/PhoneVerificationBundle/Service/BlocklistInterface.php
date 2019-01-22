@@ -27,7 +27,7 @@ interface BlocklistInterface
      * Checks if the phone is blocked. If it is, all relevant accounts will be blocked.
      *
      * @param PhoneNumber $phoneNumber
-     * @return mixed
+     * @return PersonInterface[]
      */
-    public function checkPhoneNumber(PhoneNumber $phoneNumber);
+    public function checkPhoneNumber(PhoneNumber $phoneNumber): array;
 }
