@@ -20,7 +20,7 @@
         {{ form_row(form.message, { 'attr' : {'class' :'form-control', 'rows': '3' }, 'label_attr' : {'class': 'sr-only'} } ) }}
 
         {% if form.recaptcha is defined %}
-            {{ form_widget(form.recaptcha) }}
+            {{ form_row(form.recaptcha) }}
         {% endif %}
 
         <button type="submit" class="btn btn-success pull-right">{{ 'contact.form.submit'|trans }}</button>
