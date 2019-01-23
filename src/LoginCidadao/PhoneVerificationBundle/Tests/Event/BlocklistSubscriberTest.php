@@ -18,7 +18,6 @@ use LoginCidadao\PhoneVerificationBundle\PhoneVerificationEvents;
 use LoginCidadao\PhoneVerificationBundle\Service\BlocklistInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
