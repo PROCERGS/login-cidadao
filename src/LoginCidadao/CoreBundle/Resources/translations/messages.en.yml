@@ -151,6 +151,7 @@ Authentication Code: Authentication Code
 View this notification on Citizen Login: View this notification on Citizen Login
 contact.form:
     sent: "Your message has been sent. Thank you for contacting us."
+    captcha.error: "Check the \"I'm not a robot\" box"
     extra:
         id: "Internal ID"
         created_at: "Account Creation Date"
