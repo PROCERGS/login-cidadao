@@ -70,6 +70,44 @@ class BlocklistSubscriberTest extends TestCase
         $subscriber->onLogin($event);
     }
 
+    public function testDisabledFeatureOnPhoneChange()
+    {
+        $phoneNumber = $this->createMock(PhoneNumber::class);
+
+        $person = $this->createMock(PersonInterface::class);
+        $person->expects($this->once())->method('getMobile')->willReturn($phoneNumber);
+
+        /** @var PhoneChangedEvent|MockObject $event */
+        $event = $this->createMock(PhoneChangedEvent::class);
+        $event->expects($this->once())->method('getPerson')->willReturn($person);
+
+        $blocklistService = $this->getBlocklistService(false);
+        $blocklistService->expects($this->never())->method('checkPhoneNumber');
+
+        $subscriber = new BlocklistSubscriber($blocklistService, $this->getAuthorizationChecker(false));
+        $subscriber->onPhoneChange($event);
+    }
+
+    public function testDisabledFeatureOnLogin()
+    {
+        $phoneNumber = $this->createMock(PhoneNumber::class);
+
+        $person = $this->createMock(PersonInterface::class);
+        $person->expects($this->once())->method('getMobile')->willReturn($phoneNumber);
+
+        $token = $this->createMock(TokenInterface::class);
+        $token->expects($this->once())->method('getUser')->willReturn($person);
+
+        /** @var InteractiveLoginEvent|MockObject $event */
+        $event = $this->createMock(InteractiveLoginEvent::class);
+        $event->expects($this->once())->method('getAuthenticationToken')->willReturn($token);
+
+        $blocklistService = $this->getBlocklistService(false);
+
+        $subscriber = new BlocklistSubscriber($blocklistService, $this->getAuthorizationChecker(false));
+        $subscriber->onLogin($event);
+    }
+
     /**
      * @param bool $expectCheck
      * @param PhoneNumber|null $phoneNumber
