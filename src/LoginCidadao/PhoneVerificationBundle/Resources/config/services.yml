@@ -79,8 +79,7 @@ services:
         class: LoginCidadao\PhoneVerificationBundle\Event\BlocklistSubscriber
         arguments:
             - "@phone_verification.blocklist"
-        calls:
-            - ['setTokenStorage', ["@security.token_storage"]]
+            - "@security.authorization_checker"
         tags:
             - { name: kernel.event_subscriber }
 

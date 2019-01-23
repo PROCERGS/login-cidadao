@@ -443,6 +443,8 @@ services:
         class: LoginCidadao\CoreBundle\EventListener\RequestListener
         arguments:
             - "@logger"
+            - "@security.token_storage"
+            - "@router"
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
             - { name: monolog.logger, channel: request }

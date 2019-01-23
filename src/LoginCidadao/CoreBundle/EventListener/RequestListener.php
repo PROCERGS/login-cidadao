@@ -10,28 +10,42 @@
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
+use LoginCidadao\CoreBundle\Model\PersonInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\HttpKernel;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class RequestListener
 {
     /** @var LoggerInterface */
     private $logger;
 
+    /** @var TokenStorageInterface */
+    private $tokenStorage;
+
+    /** @var RouterInterface */
+    private $router;
+
     /**
      * RequestListener constructor.
      * @param LoggerInterface $logger
+     * @param TokenStorageInterface $tokenStorage
+     * @param RouterInterface $router
      */
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, TokenStorageInterface $tokenStorage, RouterInterface $router)
     {
         $this->logger = $logger;
+        $this->tokenStorage = $tokenStorage;
+        $this->router = $router;
     }
 
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if (HttpKernel::MASTER_REQUEST === $event->getRequestType()) {
+        if ($event->isMasterRequest()) {
             $this->logReferer($event);
+            $this->checkUserEnabled($event);
         }
     }
 
@@ -44,5 +58,17 @@ class RequestListener
         }
 
         $this->logger->info("Request referrer: {$referer}");
+    }
+
+    private function checkUserEnabled(GetResponseEvent $event)
+    {
+        if (null !== $token = $this->tokenStorage->getToken()) {
+            /** @var PersonInterface $person */
+            if (($person = $token->getUser()) instanceof PersonInterface && false === $person->isEnabled()) {
+                $uri = $this->router->generate('fos_user_security_logout');
+                $event->setResponse(new RedirectResponse($uri));
+                $event->stopPropagation();
+            }
+        }
     }
 }
