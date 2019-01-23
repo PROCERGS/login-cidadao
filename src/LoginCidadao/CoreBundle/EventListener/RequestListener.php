@@ -10,8 +10,9 @@
 
 namespace LoginCidadao\CoreBundle\EventListener;
 
-use LoginCidadao\CoreBundle\Model\PersonInterface;
+use FOS\UserBundle\Model\FosUserInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Routing\RouterInterface;
@@ -51,20 +52,21 @@ class RequestListener
 
     private function logReferer(GetResponseEvent $event)
     {
-        /** @var string|false $referer */
-        $referer = $event->getRequest()->headers->get('referer', false);
-        if (false === $referer) {
-            return;
-        }
+        /** @var HeaderBag $headers */
+        $headers = $event->getRequest()->headers;
 
-        $this->logger->info("Request referrer: {$referer}");
+        /** @var string|false $referer */
+        $referer = $headers instanceof HeaderBag ? $headers->get('referer', false) : false;
+        if (false !== $referer) {
+            $this->logger->info("Request referrer: {$referer}");
+        }
     }
 
     private function checkUserEnabled(GetResponseEvent $event)
     {
         if (null !== $token = $this->tokenStorage->getToken()) {
-            /** @var PersonInterface $person */
-            if (($person = $token->getUser()) instanceof PersonInterface && false === $person->isEnabled()) {
+            /** @var FosUserInterface $person */
+            if (($person = $token->getUser()) instanceof FosUserInterface && false === $person->isEnabled()) {
                 $uri = $this->router->generate('fos_user_security_logout');
                 $event->setResponse(new RedirectResponse($uri));
                 $event->stopPropagation();
