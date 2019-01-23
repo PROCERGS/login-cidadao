@@ -20,6 +20,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 
@@ -30,7 +31,6 @@ class BlocklistSubscriberTest extends TestCase
         $this->assertEquals([
             PhoneVerificationEvents::PHONE_CHANGED => 'onPhoneChange',
             SecurityEvents::INTERACTIVE_LOGIN => 'onLogin',
-            KernelEvents::REQUEST => 'onRequest',
         ], BlocklistSubscriber::getSubscribedEvents());
     }
 
@@ -47,7 +47,7 @@ class BlocklistSubscriberTest extends TestCase
 
         $blocklistService = $this->getBlocklistService(true, $phoneNumber);
 
-        $subscriber = new BlocklistSubscriber($blocklistService);
+        $subscriber = new BlocklistSubscriber($blocklistService, $this->getAuthorizationChecker());
         $subscriber->onPhoneChange($event);
     }
 
@@ -67,7 +67,7 @@ class BlocklistSubscriberTest extends TestCase
 
         $blocklistService = $this->getBlocklistService(true, $phoneNumber);
 
-        $subscriber = new BlocklistSubscriber($blocklistService);
+        $subscriber = new BlocklistSubscriber($blocklistService, $this->getAuthorizationChecker());
         $subscriber->onLogin($event);
     }
 
@@ -85,5 +85,18 @@ class BlocklistSubscriberTest extends TestCase
         }
 
         return $blocklistService;
+    }
+
+    /**
+     * @param bool $isGranted
+     * @return MockObject|AuthorizationCheckerInterface
+     */
+    private function getAuthorizationChecker(bool $isGranted = true)
+    {
+        $authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
+        $authorizationChecker->expects($this->once())->method('isGranted')
+            ->with('FEATURE_PHONE_BLOCKLIST')->willReturn($isGranted);
+
+        return $authorizationChecker;
     }
 }
