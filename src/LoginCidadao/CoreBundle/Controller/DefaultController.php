@@ -11,6 +11,7 @@
 namespace LoginCidadao\CoreBundle\Controller;
 
 use LoginCidadao\APIBundle\Entity\ActionLogRepository;
+use LoginCidadao\BadgesControlBundle\Handler\BadgesHandler;
 use LoginCidadao\CoreBundle\Form\Type\ContactFormType;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Model\SupportMessage;
@@ -44,16 +45,20 @@ class DefaultController extends Controller
      */
     public function contactAction(Request $request, $correlationId = null)
     {
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
+
         $person = $this->getUser() instanceof PersonInterface ? $this->getUser() : null;
 
         $data = new SupportMessage($person);
         $data->setExtra('Correlation Id', $correlationId);
 
-        $form = $this->createForm(ContactFormType::class, $data, ['loggedIn' => $person instanceof PersonInterface]);
+        $form = $this->createForm(ContactFormType::class, $data, [
+            'loggedIn' => $person instanceof PersonInterface,
+            'recaptchaError' => $translator->trans('contact.form.captcha.error'),
+        ]);
         $form->handleRequest($request);
 
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
         $message = $translator->trans('contact.form.sent');
 
         if ($form->isValid()) {
@@ -79,6 +84,7 @@ class DefaultController extends Controller
     public function dashboardAction()
     {
         // badges
+        /** @var BadgesHandler $badgesHandler */
         $badgesHandler = $this->get('badges.handler');
         $badges = $badgesHandler->getAvailableBadges();
         $userBadges = $badgesHandler->evaluate($this->getUser())->getBadges();

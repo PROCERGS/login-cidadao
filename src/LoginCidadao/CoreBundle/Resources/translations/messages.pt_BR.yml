@@ -536,6 +536,7 @@ field.loader : 'Carregando...'
 Updated successfully! : 'Atualizado com sucesso'
 contact.form:
     sent: "Sua mensagem foi enviada. Agradecemos por entrar em contato conosco."
+    captcha.error: "Marque a opção \"Não sou um robô\""
     extra:
         id: "Identificador Interno"
         created_at: "Data de Criação da Conta"
