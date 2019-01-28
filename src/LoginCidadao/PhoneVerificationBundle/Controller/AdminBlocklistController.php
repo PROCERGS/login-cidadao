@@ -16,7 +16,6 @@ use LoginCidadao\PhoneVerificationBundle\Entity\BlockedPhoneNumberRepository;
 use LoginCidadao\PhoneVerificationBundle\Form\BlockPhoneFormType;
 use LoginCidadao\PhoneVerificationBundle\Form\SearchPhoneNumberType;
 use LoginCidadao\PhoneVerificationBundle\Model\BlockPhoneNumberRequest;
-use LoginCidadao\PhoneVerificationBundle\Service\Blocklist;
 use LoginCidadao\PhoneVerificationBundle\Service\BlocklistInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
