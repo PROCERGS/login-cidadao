@@ -12,15 +12,11 @@ namespace LoginCidadao\PhoneVerificationBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use libphonenumber\PhoneNumber;
-use LoginCidadao\CoreBundle\Entity\Person;
-use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Mailer\TwigSwiftMailer;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Security\User\Manager\UserManager;
 use LoginCidadao\PhoneVerificationBundle\Entity\BlockedPhoneNumber;
 use LoginCidadao\PhoneVerificationBundle\Entity\BlockedPhoneNumberRepository;
-use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification;
-use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Model\BlockedPhoneNumberInterface;
 
 class Blocklist implements BlocklistInterface

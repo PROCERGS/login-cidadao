@@ -12,6 +12,7 @@ namespace LoginCidadao\PhoneVerificationBundle\Service;
 
 use libphonenumber\PhoneNumber;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\PhoneVerificationBundle\Model\BlockedPhoneNumberInterface;
 
 interface BlocklistInterface
 {
@@ -30,4 +31,14 @@ interface BlocklistInterface
      * @return PersonInterface[]
      */
     public function checkPhoneNumber(PhoneNumber $phoneNumber): array;
+
+    /**
+     * @param PhoneNumber $phoneNumber
+     * @param PersonInterface $blockedBy
+     * @return BlockedPhoneNumberInterface
+     */
+    public function addBlockedPhoneNumber(
+        PhoneNumber $phoneNumber,
+        PersonInterface $blockedBy
+    ): BlockedPhoneNumberInterface;
 }

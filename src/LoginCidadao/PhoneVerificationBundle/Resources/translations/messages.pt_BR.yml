@@ -35,3 +35,26 @@ tasks:
         edit:
             show_form: Clique aqui para alterar seu telefone
             submit: Alterar Telefone
+
+admin:
+    blocklist:
+        menu_item: Bloqueio de Telefones
+        list:
+            title: Busca de Telefones Banidos
+            form:
+                phone:
+                    label: Telefone a ser pesquisado
+                    placeholder: Digite o telefone que deseja pesquisar
+                submit.label: Pesquisar
+            table:
+                header:
+                    phone_number: Telefone
+                    blocked_by: Banido por
+                    date_blocked: Banido em
+        new:
+            title: Banir usuários por telefone
+            form:
+                phone:
+                    label: Telefone que será banido
+                    placeholder: Digite o telefone a ser banido
+                submit.label: Banir Telefone

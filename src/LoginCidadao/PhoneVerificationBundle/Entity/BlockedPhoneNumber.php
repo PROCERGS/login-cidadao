@@ -21,7 +21,9 @@ use LoginCidadao\PhoneVerificationBundle\Model\BlockedPhoneNumberInterface;
  * @package LoginCidadao\PhoneVerificationBundle\Model
  *
  * @ORM\Entity(repositoryClass="LoginCidadao\PhoneVerificationBundle\Entity\BlockedPhoneNumberRepository")
- * @ORM\Table(name="blocked_phone_number")
+ * @ORM\Table(name="blocked_phone_number", indexes={
+ *     @ORM\Index(name="blocked_phone_number_idx", columns={"phoneNumber"})
+ * })
  * @ORM\HasLifecycleCallbacks
  */
 class BlockedPhoneNumber implements BlockedPhoneNumberInterface
@@ -38,7 +40,7 @@ class BlockedPhoneNumber implements BlockedPhoneNumberInterface
     /**
      * @var PhoneNumber
      *
-     * @ORM\Column(name="phone_number", type="phone_number", nullable=false)
+     * @ORM\Column(name="phone_number", type="phone_number", nullable=false, unique=true)
      */
     private $phoneNumber;
 

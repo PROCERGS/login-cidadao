@@ -24,13 +24,38 @@ class BlockedPhoneNumberRepository extends EntityRepository
 {
     /**
      * @param PhoneNumber $phoneNumber
-     * @return BlockedPhoneNumber
+     * @return BlockedPhoneNumberInterface
      */
     public function findByPhone(PhoneNumber $phoneNumber): ?BlockedPhoneNumberInterface
     {
-        /** @var BlockedPhoneNumber $blockedPhone */
+        /** @var BlockedPhoneNumberInterface $blockedPhone */
         $blockedPhone = $this->findOneBy(['phoneNumber' => $phoneNumber]);
 
         return $blockedPhone;
+    }
+
+    /**
+     * @param string $search
+     * @return BlockedPhoneNumberInterface[]
+     */
+    public function searchBlocksByPartialPhone(string $search): array
+    {
+
+        return $this->getSearchByPartialPhoneQuery($search)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getSearchByPartialPhoneQuery(string $search)
+    {
+        if ($search[0] === '+') {
+            $search = "{$search}%";
+        } else {
+            $search = "%{$search}%";
+        }
+
+        return $this->createQueryBuilder('b')
+            ->where('b.phoneNumber LIKE :search')
+            ->setParameter('search', $search);
     }
 }

@@ -35,3 +35,26 @@ tasks:
         edit:
             show_form: Click here to change your phone number
             submit: Change Phone Number
+
+admin:
+    blocklist:
+        menu_item: Ban Phone Numbers
+        list:
+            title: Search Banned Phone Numbers
+            form:
+                phone:
+                    label: Phone to be searched
+                    placeholder: Type the phone you want to search
+                submit.label: Search
+            table:
+                header:
+                    phone_number: Phone number
+                    blocked_by: Banned by
+                    date_blocked: Date banned
+        new:
+            title: Ban users by phone
+            form:
+                phone:
+                    label: Phone number that will be banned
+                    placeholder: Type the phone number that will be banned
+                submit.label: Ban Phone Number
