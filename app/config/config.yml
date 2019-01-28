@@ -288,6 +288,7 @@ simple_things_entity_audit:
 
         - LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification
         - LoginCidadao\PhoneVerificationBundle\Entity\SentVerification
+        - LoginCidadao\PhoneVerificationBundle\Entity\BlockedPhoneNumber
 
 hwi_oauth:
     connect:

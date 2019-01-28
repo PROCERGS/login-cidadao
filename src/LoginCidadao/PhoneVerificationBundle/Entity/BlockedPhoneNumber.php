@@ -22,7 +22,7 @@ use LoginCidadao\PhoneVerificationBundle\Model\BlockedPhoneNumberInterface;
  *
  * @ORM\Entity(repositoryClass="LoginCidadao\PhoneVerificationBundle\Entity\BlockedPhoneNumberRepository")
  * @ORM\Table(name="blocked_phone_number", indexes={
- *     @ORM\Index(name="blocked_phone_number_idx", columns={"phoneNumber"})
+ *     @ORM\Index(name="blocked_phone_number_idx", columns={"phone_number"})
  * })
  * @ORM\HasLifecycleCallbacks
  */
