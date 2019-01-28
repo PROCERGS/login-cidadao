@@ -18,6 +18,7 @@ use Egulias\EmailValidator\Validation\RFCValidation;
 use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
+use Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType;
 
 class PersonRepository extends EntityRepository
 {
@@ -211,6 +212,13 @@ class PersonRepository extends EntityRepository
             ->orWhere('LowerUnaccent(p.firstName) LIKE LowerUnaccent(:name)')
             ->orWhere('LowerUnaccent(p.surname) LIKE LowerUnaccent(:name)')
             ->setParameter('name', "%{$sanitized}%");
+    }
+
+    public function getPhoneSearchQuery(PhoneNumber $phoneNumber)
+    {
+        return $this->getBaseSearchQuery()
+            ->where('p.mobile = :mobile')
+            ->setParameter('mobile', $phoneNumber, PhoneNumberType::NAME);
     }
 
     /**

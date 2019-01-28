@@ -94,6 +94,9 @@ class Blocklist implements BlocklistInterface
         return $blocked;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function addBlockedPhoneNumber(
         PhoneNumber $phoneNumber,
         PersonInterface $blockedBy
@@ -101,6 +104,17 @@ class Blocklist implements BlocklistInterface
         $blockedPhoneNumber = new BlockedPhoneNumber($phoneNumber, $blockedBy, new \DateTime());
         $this->em->persist($blockedPhoneNumber);
         $this->em->flush();
+
+        return $blockedPhoneNumber;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getBlockedPhoneNumberByPhone(PhoneNumber $phoneNumber): ?BlockedPhoneNumberInterface
+    {
+        /** @var BlockedPhoneNumberInterface $blockedPhoneNumber */
+        $blockedPhoneNumber = $this->blockedPhoneRepository->findByPhone($phoneNumber);
 
         return $blockedPhoneNumber;
     }

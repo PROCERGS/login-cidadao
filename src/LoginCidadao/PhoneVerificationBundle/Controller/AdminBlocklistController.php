@@ -10,16 +10,24 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Controller;
 
+use libphonenumber\NumberParseException;
+use libphonenumber\PhoneNumber;
+use libphonenumber\PhoneNumberType;
+use libphonenumber\PhoneNumberUtil;
+use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Helper\GridHelper;
 use LoginCidadao\PhoneVerificationBundle\Entity\BlockedPhoneNumber;
 use LoginCidadao\PhoneVerificationBundle\Entity\BlockedPhoneNumberRepository;
 use LoginCidadao\PhoneVerificationBundle\Form\BlockPhoneFormType;
 use LoginCidadao\PhoneVerificationBundle\Form\SearchPhoneNumberType;
+use LoginCidadao\PhoneVerificationBundle\Model\BlockedPhoneNumberInterface;
 use LoginCidadao\PhoneVerificationBundle\Model\BlockPhoneNumberRequest;
 use LoginCidadao\PhoneVerificationBundle\Service\BlocklistInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -105,6 +113,21 @@ class AdminBlocklistController extends Controller
     }
 
     /**
+     * @Route("/admin/phones/blocklist/{phone}", name="phone_blocklist_details", requirements={"phone": "[0-9+]+"})
+     * @Template()
+     */
+    public function detailsAction(Request $request, string $phone)
+    {
+        $phoneNumber = $this->parsePhone($phone);
+        $blockedPhone = $this->getOr404($phoneNumber);
+
+        return [
+            'blockedPhone' => $blockedPhone,
+            'grid' => $this->getUsersByPhoneGrid($request, $phoneNumber),
+        ];
+    }
+
+    /**
      * @return BlocklistInterface
      */
     private function getBlocklistService(): BlocklistInterface
@@ -113,5 +136,45 @@ class AdminBlocklistController extends Controller
         $blocklistService = $this->get('phone_verification.blocklist');
 
         return $blocklistService;
+    }
+
+    private function parsePhone($phone): PhoneNumber
+    {
+        $phoneUtils = PhoneNumberUtil::getInstance();
+        try {
+            return $phoneUtils->parse($phone);
+        } catch (NumberParseException $e) {
+            throw new BadRequestHttpException("Invalid phone number");
+        }
+    }
+
+    private function getOr404(PhoneNumber $phoneNumber): BlockedPhoneNumberInterface
+    {
+        $blocklistService = $this->getBlocklistService();
+        $blockedPhone = $blocklistService->getBlockedPhoneNumberByPhone($phoneNumber);
+
+        if (null === $blockedPhone) {
+            throw new NotFoundHttpException("Blocked Phone Number not found");
+        }
+
+        return $blockedPhone;
+    }
+
+    private function getUsersByPhoneGrid(Request $request, PhoneNumber $phoneNumber)
+    {
+        $grid = new GridHelper();
+        $grid->setId('person-grid');
+        $grid->setPerPage(5);
+        $grid->setMaxResult(5);
+        $grid->setInfiniteGrid(true);
+        $grid->setRoute('phone_blocklist_details');
+        $grid->setRouteParams(['phone']);
+
+        /** @var PersonRepository $repo */
+        $repo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Person');
+        $query = $repo->getPhoneSearchQuery($phoneNumber);
+        $grid->setQueryBuilder($query);
+
+        return $grid->createView($request);
     }
 }

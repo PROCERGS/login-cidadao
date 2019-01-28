@@ -41,4 +41,10 @@ interface BlocklistInterface
         PhoneNumber $phoneNumber,
         PersonInterface $blockedBy
     ): BlockedPhoneNumberInterface;
+
+    /**
+     * @param PhoneNumber $phoneNumber
+     * @return BlockedPhoneNumberInterface|null
+     */
+    public function getBlockedPhoneNumberByPhone(PhoneNumber $phoneNumber): ?BlockedPhoneNumberInterface;
 }

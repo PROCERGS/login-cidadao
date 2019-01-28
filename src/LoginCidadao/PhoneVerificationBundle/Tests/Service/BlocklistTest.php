@@ -168,6 +168,23 @@ class BlocklistTest extends TestCase
         $service->checkPhoneNumber($phoneNumber);
     }
 
+    public function testGetBlockedPhoneNumberByPhone()
+    {
+        /** @var PhoneNumber|MockObject $phoneNumber */
+        $phoneNumber = $this->createMock(PhoneNumber::class);
+        $blockedPhone = $this->createMock(BlockedPhoneNumberInterface::class);
+
+        $blockedPhoneRepository = $this->createMock(BlockedPhoneNumberRepository::class);
+        $blockedPhoneRepository->expects($this->once())->method('findByPhone')->willReturn($blockedPhone);
+
+        $em = $this->getEntityManager($blockedPhoneRepository);
+        $options = new BlocklistOptions(0);
+
+        $service = new Blocklist($this->getUserManager(), $this->getMailer(), $em,
+            $this->getPhoneVerificationService(), $options);
+        $this->assertSame($blockedPhone, $service->getBlockedPhoneNumberByPhone($phoneNumber));
+    }
+
     /**
      * @return MockObject|UserManager
      */

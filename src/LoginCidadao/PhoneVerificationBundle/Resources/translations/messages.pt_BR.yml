@@ -51,6 +51,8 @@ admin:
                     phone_number: Telefone
                     blocked_by: Banido por
                     date_blocked: Banido em
+                load_more: Carregar mais
+                details: Detalhes
                 date_blocked_format: d/m/Y H:i:s
         new:
             title: Banir usuários por telefone
@@ -59,3 +61,15 @@ admin:
                     label: Telefone que será banido
                     placeholder: Digite o telefone a ser banido
                 submit.label: Banir Telefone
+        details:
+            title: "Detalhes de Telefone Banido: %phone%"
+            blocked_by: Banido por:
+            date_blocked: Banido em:
+            date_blocked_format: d/m/Y H:i:s
+            users_table:
+                header:
+                    full_name: Nome Completo
+                    cpf: CPF
+                    email: Email
+                user_details: Detalhes
+                load_more: Carregar mais

@@ -51,6 +51,8 @@ admin:
                     phone_number: Phone number
                     blocked_by: Banned by
                     date_blocked: Date banned
+                load_more: Load more
+                details: Details
                 date_blocked_format: m/d/Y H:i:s
         new:
             title: Ban users by phone
@@ -59,3 +61,15 @@ admin:
                     label: Phone number that will be banned
                     placeholder: Type the phone number that will be banned
                 submit.label: Ban Phone Number
+        details:
+            title: "Banned Phone Details: %phone%"
+            blocked_by: Banned by:
+            date_blocked: Date banned:
+            date_blocked_format: m/d/Y H:i:s
+            users_table:
+                header:
+                    full_name: Full Name
+                    cpf: "Tax Payer's ID (CPF)"
+                    email: Email
+                user_details: Details
+                load_more: Load more
