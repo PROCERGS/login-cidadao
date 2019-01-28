@@ -51,6 +51,7 @@ admin:
                     phone_number: Telefone
                     blocked_by: Banido por
                     date_blocked: Banido em
+                date_blocked_format: d/m/Y H:i:s
         new:
             title: Banir usuários por telefone
             form:

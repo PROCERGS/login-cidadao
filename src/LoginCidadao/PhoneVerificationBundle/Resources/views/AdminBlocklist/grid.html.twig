@@ -39,7 +39,7 @@
     </div>
     <div class="col-md-4">
         <dt>{{ 'admin.blocklist.list.table.header.date_blocked' | trans }}</dt>
-        <dd>{{ row.createdAt | date }}</dd>
+        <dd>{{ row.createdAt | date('admin.blocklist.list.table.date_blocked_format' | trans) }}</dd>
     </div>
 {% endblock grid_row_data %}
 
