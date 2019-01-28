@@ -36,7 +36,17 @@
     </div>
     <div class="col-md-3">
         <dt>{{ 'admin.blocklist.details.users_table.header.cpf' | trans }}</dt>
-        <dd>{{ row.cpf }}</dd>
+        <dd>
+            {% if row.cpf is not null %}
+                {% if is_granted('ROLE_VIEW_USERS_CPF') %}
+                    {{ row.cpf }}
+                {% else %}
+                    {{ 'lc.admin.person.metadata.hasCpf.yes' | trans }}
+                {% endif %}
+            {% else %}
+                {{ 'lc.admin.person.metadata.hasCpf.no' | trans }}
+            {% endif %}
+        </dd>
     </div>
     <div class="col-md-4">
         <dt>{{ 'admin.blocklist.details.users_table.header.email' | trans }}</dt>
