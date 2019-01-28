@@ -12,7 +12,6 @@ namespace LoginCidadao\CoreBundle\EventListener;
 
 use FOS\UserBundle\Model\FosUserInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Routing\RouterInterface;
@@ -52,12 +51,8 @@ class RequestListener
 
     private function logReferer(GetResponseEvent $event)
     {
-        /** @var HeaderBag $headers */
-        $headers = $event->getRequest()->headers;
-
-        /** @var string|false $referer */
-        $referer = $headers instanceof HeaderBag ? $headers->get('referer', false) : false;
-        if (false !== $referer) {
+        $referer = $event->getRequest()->headers->get('referer', null);
+        if (null !== $referer) {
             $this->logger->info("Request referrer: {$referer}");
         }
     }

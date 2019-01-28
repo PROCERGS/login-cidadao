@@ -11,7 +11,6 @@
 namespace LoginCidadao\CoreBundle\Tests\EventListener;
 
 use FOS\UserBundle\Model\FosUserInterface;
-use FOS\UserBundle\Model\UserInterface;
 use LoginCidadao\CoreBundle\EventListener\RequestListener;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -127,7 +126,10 @@ class RequestListenerTest extends TestCase
         $event = $this->createMock(GetResponseEvent::class);
         $event->expects($this->once())->method('isMasterRequest')->willReturn($isMasterRequest);
 
-        if (null !== $request) {
+        if (null === $request) {
+            $request = new Request();
+            $event->expects($this->any())->method('getRequest')->willReturn($request);
+        } else {
             $event->expects($this->once())->method('getRequest')->willReturn($request);
         }
 
