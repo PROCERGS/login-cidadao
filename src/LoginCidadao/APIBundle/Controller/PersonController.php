@@ -145,7 +145,7 @@ class PersonController extends BaseController
         $em->persist($logoutKey);
         $em->flush();
 
-        $result = [
+        return [
             'key' => $logoutKey->getKey(),
             'url' => $this->generateUrl(
                 'lc_logout_not_remembered_safe',
@@ -153,7 +153,5 @@ class PersonController extends BaseController
                 UrlGeneratorInterface::ABSOLUTE_URL
             ),
         ];
-
-        return $result;
     }
 }

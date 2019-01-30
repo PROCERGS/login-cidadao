@@ -40,7 +40,8 @@ admin:
     blocklist:
         menu_item: Ban Phone Numbers
         list:
-            title: Search Banned Phone Numbers
+            title: Search Manually Banned Phone Numbers
+            new: Ban a Phone Number
             form:
                 phone:
                     label: Phone to be searched

@@ -40,7 +40,8 @@ admin:
     blocklist:
         menu_item: Bloqueio de Telefones
         list:
-            title: Busca de Telefones Banidos
+            title: Busca de Telefones Banidos Manualmente
+            new: Banir um Telefone
             form:
                 phone:
                     label: Telefone a ser pesquisado
