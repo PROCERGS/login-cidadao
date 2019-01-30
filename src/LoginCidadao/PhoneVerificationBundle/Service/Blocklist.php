@@ -75,6 +75,7 @@ class Blocklist implements BlocklistInterface
      */
     public function blockByPhone(PhoneNumber $phoneNumber): array
     {
+        $this->em->flush();
         $blockedUsers = $this->userManager->blockUsersByPhone($phoneNumber, UserManager::FLUSH_STRATEGY_ONCE);
         $this->notifyBlockedUsers($blockedUsers);
 

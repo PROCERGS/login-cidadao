@@ -107,6 +107,7 @@ class BlocklistTest extends TestCase
         $blockedPhoneRepository = $this->createMock(BlockedPhoneNumberRepository::class);
 
         $em = $this->getEntityManager($blockedPhoneRepository);
+        $em->expects($this->once())->method('flush');
 
         $options = new BlocklistOptions(0);
 
