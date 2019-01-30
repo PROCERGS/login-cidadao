@@ -44,16 +44,21 @@ class ContactFormType extends AbstractType
             ]);
 
         if ($this->enableCaptcha) {
+            $recaptchaConstraint = new Recaptcha2();
+            $recaptchaConstraint->message = $options['recaptchaError'];
             $builder->add('recaptcha', RecaptchaType::class, [
                 'label' => false,
                 'mapped' => false,
-                'constraints' => new Recaptcha2(['groups' => ['LoginCidadaoRegistration', 'Registration']]),
+                'constraints' => $recaptchaConstraint,
             ]);
         }
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setRequired([
+            'recaptchaError'
+        ]);
         $resolver->setDefaults([
             'data_class' => SupportMessage::class,
             'loggedIn' => false,

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "97d32455498813c459a0e55ad6d0617d",
+    "content-hash": "f552da4e53bb80290bdb1bf4e998d211",
     "packages": [
         {
             "name": "beelab/recaptcha2-bundle",
@@ -372,20 +372,20 @@
         },
         {
             "name": "ci/restclientbundle",
-            "version": "2.0.2",
+            "version": "2.0.3",
             "target-dir": "Circle/RestClientBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CircleOfNice/CiRestClientBundle.git",
-                "reference": "196c09582b31dd1e7953ba4825b441ad09f4853c"
+                "reference": "f1d01e9eaf0f1d48a0f2dad470680a747e13d462"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CircleOfNice/CiRestClientBundle/zipball/196c09582b31dd1e7953ba4825b441ad09f4853c",
-                "reference": "196c09582b31dd1e7953ba4825b441ad09f4853c",
+                "url": "https://api.github.com/repos/CircleOfNice/CiRestClientBundle/zipball/f1d01e9eaf0f1d48a0f2dad470680a747e13d462",
+                "reference": "f1d01e9eaf0f1d48a0f2dad470680a747e13d462",
                 "shasum": ""
             },
-            "require-dev": {
+            "require": {
                 "ext-curl": "*",
                 "php": ">=5.4",
                 "symfony/config": ">=2.1",
@@ -418,7 +418,7 @@
             "keywords": [
                 "REST client curl POST GET PUT DELETE OPTIONS CONNECT PATCH TRACE HEAD content-type payload library plugin"
             ],
-            "time": "2016-08-28T09:01:46+00:00"
+            "time": "2019-01-21T09:27:51+00:00"
         },
         {
             "name": "clue/stream-filter",
@@ -1764,16 +1764,16 @@
         },
         {
             "name": "friendsofsymfony/oauth-server-bundle",
-            "version": "1.6.1",
+            "version": "1.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSOAuthServerBundle.git",
-                "reference": "5cc4c8555dedb5c7e737a35789bd429ccd9ad254"
+                "reference": "fcaa25cc49474bdb0db7894f880976fe76ffed23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSOAuthServerBundle/zipball/5cc4c8555dedb5c7e737a35789bd429ccd9ad254",
-                "reference": "5cc4c8555dedb5c7e737a35789bd429ccd9ad254",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSOAuthServerBundle/zipball/fcaa25cc49474bdb0db7894f880976fe76ffed23",
+                "reference": "fcaa25cc49474bdb0db7894f880976fe76ffed23",
                 "shasum": ""
             },
             "require": {
@@ -1797,6 +1797,7 @@
                 "symfony/form": "~2.8|~3.0|^4.0",
                 "symfony/phpunit-bridge": "~2.8|~3.0|^4.0",
                 "symfony/templating": "~2.8|~3.0|^4.0",
+                "symfony/twig-bundle": "~2.8|~3.0|^4.0",
                 "symfony/yaml": "~2.8|~3.0|^4.0",
                 "willdurand/propel-typehintable-behavior": "^1.0.4"
             },
@@ -1843,7 +1844,7 @@
                 "oauth2",
                 "server"
             ],
-            "time": "2018-04-18T13:46:16+00:00"
+            "time": "2019-01-23T15:23:04+00:00"
         },
         {
             "name": "friendsofsymfony/oauth2-php",
@@ -3309,16 +3310,16 @@
         },
         {
             "name": "knplabs/gaufrette",
-            "version": "v0.8.0",
+            "version": "v0.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/Gaufrette.git",
-                "reference": "1f7c4bf5fa603d9396ba812cf3171713adc7b394"
+                "reference": "80cc42e1c5f008a8fc9d02e856c60140c7d1ea19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/Gaufrette/zipball/1f7c4bf5fa603d9396ba812cf3171713adc7b394",
-                "reference": "1f7c4bf5fa603d9396ba812cf3171713adc7b394",
+                "url": "https://api.github.com/repos/KnpLabs/Gaufrette/zipball/80cc42e1c5f008a8fc9d02e856c60140c7d1ea19",
+                "reference": "80cc42e1c5f008a8fc9d02e856c60140c7d1ea19",
                 "shasum": ""
             },
             "require": {
@@ -3394,7 +3395,7 @@
                 "filesystem",
                 "media"
             ],
-            "time": "2018-12-21T14:09:42+00:00"
+            "time": "2019-01-11T10:04:44+00:00"
         },
         {
             "name": "knplabs/knp-components",
@@ -4537,16 +4538,16 @@
         },
         {
             "name": "php-http/discovery",
-            "version": "1.5.2",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/discovery.git",
-                "reference": "ffef11d54171336d841a34816a35bc035fb8cef0"
+                "reference": "02b7ea21eafa0757af04140890a67d8ed45f83b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/discovery/zipball/ffef11d54171336d841a34816a35bc035fb8cef0",
-                "reference": "ffef11d54171336d841a34816a35bc035fb8cef0",
+                "url": "https://api.github.com/repos/php-http/discovery/zipball/02b7ea21eafa0757af04140890a67d8ed45f83b2",
+                "reference": "02b7ea21eafa0757af04140890a67d8ed45f83b2",
                 "shasum": ""
             },
             "require": {
@@ -4556,8 +4557,7 @@
                 "nyholm/psr7": "<1.0"
             },
             "require-dev": {
-                "henrikbjorn/phpspec-code-coverage": "^2.0.2",
-                "php-http/httplug": "^1.0|^2.0",
+                "php-http/httplug": "^1.0 || ^2.0",
                 "php-http/message-factory": "^1.0",
                 "phpspec/phpspec": "^2.4",
                 "puli/composer-plugin": "1.0.0-beta10"
@@ -4598,7 +4598,7 @@
                 "message",
                 "psr7"
             ],
-            "time": "2018-12-31T07:31:26+00:00"
+            "time": "2019-01-23T12:41:22+00:00"
         },
         {
             "name": "php-http/httplug",
@@ -7382,16 +7382,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v2.6.0",
+            "version": "v2.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "a11dd39f5b6589e14f0ff3b36675d06047c589b1"
+                "reference": "7d7342c8a4059fefb9b8d07db0cc14007021f9b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/a11dd39f5b6589e14f0ff3b36675d06047c589b1",
-                "reference": "a11dd39f5b6589e14f0ff3b36675d06047c589b1",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/7d7342c8a4059fefb9b8d07db0cc14007021f9b7",
+                "reference": "7d7342c8a4059fefb9b8d07db0cc14007021f9b7",
                 "shasum": ""
             },
             "require": {
@@ -7445,7 +7445,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2018-12-16T10:36:48+00:00"
+            "time": "2019-01-14T15:00:48+00:00"
         },
         {
             "name": "ua-parser/uap-php",
@@ -8528,16 +8528,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.5.1",
+            "version": "7.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "c23d78776ad415d5506e0679723cb461d71f488f"
+                "reference": "7c89093bd00f7d5ddf0ab81dee04f801416b4944"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c23d78776ad415d5506e0679723cb461d71f488f",
-                "reference": "c23d78776ad415d5506e0679723cb461d71f488f",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7c89093bd00f7d5ddf0ab81dee04f801416b4944",
+                "reference": "7c89093bd00f7d5ddf0ab81dee04f801416b4944",
                 "shasum": ""
             },
             "require": {
@@ -8608,7 +8608,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-12-12T07:20:32+00:00"
+            "time": "2019-01-15T08:19:08+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
