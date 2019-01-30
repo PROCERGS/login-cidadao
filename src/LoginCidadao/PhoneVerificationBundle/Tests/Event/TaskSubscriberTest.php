@@ -13,6 +13,7 @@ namespace LoginCidadao\PhoneVerificationBundle\Tests\Event;
 use libphonenumber\PhoneNumberType;
 use LoginCidadao\PhoneVerificationBundle\Event\TaskSubscriber;
 use LoginCidadao\PhoneVerificationBundle\Exception\VerificationNotSentException;
+use LoginCidadao\PhoneVerificationBundle\Model\ConfirmPhoneTask;
 use LoginCidadao\TaskStackBundle\TaskStackEvents;
 use PHPUnit\Framework\TestCase;
 
@@ -72,12 +73,19 @@ class TaskSubscriberTest extends TestCase
         $tokenStorage = $this->getTokenStorage();
 
         $phoneVerificationService = $this->getPhoneVerificationService();
-        $phoneVerificationService->expects($this->once())->method('getAllPendingPhoneVerification')
+        $phoneVerificationService->expects($this->once())
+            ->method('getAllPendingPhoneVerification')
             ->willReturn([$phoneVerification]);
+        $phoneVerificationService->expects($this->once())
+            ->method('isVerificationMandatory')
+            ->willReturn(true);
 
         $event = $this->getMockBuilder('LoginCidadao\TaskStackBundle\Event\GetTasksEvent')
             ->disableOriginalConstructor()->getMock();
-        $event->expects($this->once())->method('addTaskIfStackEmpty');
+        $event->expects($this->once())->method('addTaskIfStackEmpty')
+            ->willReturnCallback(function (ConfirmPhoneTask $task) {
+                $this->assertTrue($task->isMandatory());
+            });
 
         $subscriber = new TaskSubscriber($tokenStorage, $phoneVerificationService, true);
         $subscriber->onGetTasks($event);

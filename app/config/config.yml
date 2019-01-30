@@ -296,6 +296,7 @@ simple_things_entity_audit:
 
         - LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification
         - LoginCidadao\PhoneVerificationBundle\Entity\SentVerification
+        - LoginCidadao\PhoneVerificationBundle\Entity\BlockedPhoneNumber
 
         - PROCERGS\LoginCidadao\CoreBunde\Entity\PersonMeuRS
         - PROCERGS\LoginCidadao\NfgBunde\Entity\NfgProfile

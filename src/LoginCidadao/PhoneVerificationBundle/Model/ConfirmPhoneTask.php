@@ -22,13 +22,18 @@ class ConfirmPhoneTask extends AbstractTask
     /** @var TaskTargetInterface */
     private $target;
 
+    /** @var bool */
+    private $mandatory;
+
     /**
      * ConfirmPhoneTask constructor.
      * @param mixed $verificationId
+     * @param bool $mandatory
      */
-    public function __construct($verificationId)
+    public function __construct($verificationId, bool $mandatory = false)
     {
         $this->verificationId = $verificationId;
+        $this->mandatory = $mandatory;
         $this->target = new RouteTaskTarget('lc_verify_phone', ['id' => $verificationId]);
     }
 
@@ -54,6 +59,7 @@ class ConfirmPhoneTask extends AbstractTask
             'lc_phone_verification_code_resend',
             'lc_phone_verification_verify_link',
             'lc_phone_verification_skip',
+            'lc_phone_verification_edit_phone',
         ];
     }
 
@@ -70,6 +76,6 @@ class ConfirmPhoneTask extends AbstractTask
      */
     public function isMandatory()
     {
-        return false;
+        return $this->mandatory;
     }
 }

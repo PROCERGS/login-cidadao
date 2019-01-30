@@ -94,6 +94,8 @@ class TaskSubscriber implements EventSubscriberInterface
             }
         }
 
-        $event->addTaskIfStackEmpty(new ConfirmPhoneTask($pendingVerification->getId()));
+        $isMandatory = $this->phoneVerificationService->isVerificationMandatory($pendingVerification);
+        $task = new ConfirmPhoneTask($pendingVerification->getId(), $isMandatory);
+        $event->addTaskIfStackEmpty($task);
     }
 }

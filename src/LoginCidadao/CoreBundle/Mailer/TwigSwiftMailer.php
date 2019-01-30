@@ -48,4 +48,15 @@ class TwigSwiftMailer extends BaseMailer
         $context = ['email' => $person->getEmail()];
         $this->sendMessage($template, $context, $from, $person->getEmail());
     }
+
+    public function sendAccountAutoBlockedMessage(PersonInterface $person)
+    {
+        $template = $this->parameters['template']['account_auto_blocked'];
+        $fromEmail = $this->parameters['from_email']['account_auto_blocked'];
+        $fromName = $this->parameters['from_email']['email_sender_name'];
+        $from = [$fromEmail => $fromName];
+
+        $context = ['email' => $person->getEmail()];
+        $this->sendMessage($template, $context, $from, $person->getEmail());
+    }
 }
