@@ -31,3 +31,46 @@ tasks:
             errors:
                 too_many_requests: It's not possible to resend the verification code yet. Please, retry later.
                 unavailable: The SMS service is not available right now. Please, wait a few minutes and try again.
+
+        edit:
+            show_form: Click here to change your phone number
+            submit: Change Phone Number
+
+admin:
+    blocklist:
+        menu_item: Ban Phone Numbers
+        list:
+            title: Search Manually Banned Phone Numbers
+            new: Ban a Phone Number
+            form:
+                phone:
+                    label: Phone to be searched
+                    placeholder: Type the phone you want to search
+                submit.label: Search
+            table:
+                header:
+                    phone_number: Phone number
+                    blocked_by: Banned by
+                    date_blocked: Date banned
+                load_more: Load more
+                details: Details
+                date_blocked_format: m/d/Y H:i:s
+        new:
+            title: Ban users by phone
+            form:
+                phone:
+                    label: Phone number that will be banned
+                    placeholder: Type the phone number that will be banned
+                submit.label: Ban Phone Number
+        details:
+            title: "Banned Phone Details: %phone%"
+            blocked_by: Banned by:
+            date_blocked: Date banned:
+            date_blocked_format: m/d/Y H:i:s
+            users_table:
+                header:
+                    full_name: Full Name
+                    cpf: "Tax Payer's ID (CPF)"
+                    email: Email
+                user_details: Details
+                load_more: Load more

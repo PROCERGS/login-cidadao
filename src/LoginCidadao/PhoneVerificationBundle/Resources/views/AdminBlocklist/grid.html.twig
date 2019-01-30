@@ -1,0 +1,58 @@
+{% extends "LoginCidadaoCoreBundle::grid_layout.html.twig" %}
+
+{% block grid_header_data %}
+    <div class="col-md-3">{{ 'admin.blocklist.list.table.header.phone_number' | trans }}</div>
+    <div class="col-md-4">{{ 'admin.blocklist.list.table.header.blocked_by' | trans }}</div>
+    <div class="col-md-4">{{ 'admin.blocklist.list.table.header.date_blocked' | trans }}</div>
+{% endblock grid_header_data %}
+
+{% block grid_row_action %}
+    {% set formattedPhone = row.phoneNumber | phone_number_format('E164') %}
+    <div class="col-md-1 action-column-grid">
+        <div class="btn-group btn-group-justified">
+            <div class="btn-group">
+                <a href="{{ path('phone_blocklist_details', {'phone': formattedPhone}) }}">
+                    <button type="button" class="btn btn-warning edit-row-grid" id="{{ grid.getId }}-row-{{ row.id }}"
+                            data-row="{{ grid.getRouteParams | merge({'phone': formattedPhone}) | json_encode }}">
+                        <span class="glyphicon glyphicon-search"></span>
+                        <span class="label-action-column-grid">{{ 'admin.blocklist.list.table.details' | trans }} </span>
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock grid_row_action %}
+
+{% block grid_row_data %}
+    {% if row.phoneNumber.countryCode == 55 %}
+        {% set format = 'NATIONAL' %}
+    {% else %}
+        {% set format = 'INTERNATIONAL' %}
+    {% endif %}
+
+    <div class="col-md-3">
+        <dt>{{ 'admin.blocklist.list.table.header.phone_number' | trans }}</dt>
+        <dd>{{ row.phoneNumber | phone_number_format(format) }}</dd>
+    </div>
+    <div class="col-md-4">
+        <dt>{{ 'admin.blocklist.list.table.header.blocked_by' | trans }}</dt>
+        <dd>{{ row.blockedBy.fullName }}</dd>
+    </div>
+    <div class="col-md-4">
+        <dt>{{ 'admin.blocklist.list.table.header.date_blocked' | trans }}</dt>
+        <dd>{{ row.createdAt | date('admin.blocklist.list.table.date_blocked_format' | trans) }}</dd>
+    </div>
+{% endblock grid_row_data %}
+
+{% block grid_infinite_pagination %}
+    <div class="btn-group btn-group-justified">
+        {% if not grid.getRlast and grid.isInfiniteGrid %}
+            {% set routeParams = { 'page': grid.page + 1 } %}
+            <div class="btn-group">
+                <button type="button" class="btn btn-info infinitescroll-next-button " data-retrive="#{{ grid.getId }}">
+                    {{ 'admin.blocklist.list.table.load_more' | trans }}
+                </button>
+            </div>
+        {% endif %}
+    </div>
+{% endblock grid_infinite_pagination %}
