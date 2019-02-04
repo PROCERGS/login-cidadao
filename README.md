@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/procergs/login-cidadao.png?label=ready&title=Ready)](https://waffle.io/procergs/login-cidadao)
 Login Cidadão
 =============
 
