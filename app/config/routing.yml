@@ -1,3 +1,8 @@
+support:
+    resource: "@LoginCidadaoSupportBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 # Remote Claims
 lc_remote_claims_remote_claim:
     type:     rest

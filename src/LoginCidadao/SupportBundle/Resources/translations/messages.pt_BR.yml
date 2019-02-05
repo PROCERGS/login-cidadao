@@ -1,0 +1,46 @@
+support:
+    search:
+        menu: "Pesquisar Usuários"
+        title: "Pesquisar Usuário"
+        submit: "Pesquisar"
+    person:
+        title: "Informações de %first_name%"
+        view:
+            date_format: "d/m/Y"
+            datetime_format: "d/m/Y H:i:s"
+            first_name.label: "Nome"
+            last_name.label: "Sobrenome"
+            birthday.label: "Data de Nascimento"
+            cpf.label: "CPF"
+            email.label: "Email"
+            emailVerifiedAt.label: "Data de verificação do email"
+            phoneNumber.label: "Telefone"
+            lastPasswordResetRequest.label: "Última solicitação de recuperação de senha"
+            2FA:
+                label: "Autenticação de 2 Fatores ativa?"
+                enabled: "Autenticação de 2 Fatores ATIVA"
+                disabled: "SEM Autenticação de 2 Fatores"
+            enabled:
+                label: "Usuário ativo?"
+                enabled: "Usuário ativo"
+                disabled: "Usuário BLOQUEADO!"
+            lastUpdate.label: "Data da Última Atualização"
+            createdAt.label: "Data de Criação da Conta"
+            connections:
+                enabled: "Conectado"
+                disabled: "Desconectado"
+                facebook.label: "Facebook"
+                twitter.label: "Twitter"
+                google.label: "Google"
+        validation:
+            title: "Validação de Dados Pessoais"
+            cpf: "Verificar CPF"
+            birthday: "Verificar data de nascimento"
+            email: "Verificar email"
+            phoneNumber: "Verificar telefone"
+        initialContact:
+            title: "Mensagem Inicial"
+            about: "Você está acessando esse perfil para atender a demanda originada na seguinte mensagem:"
+            subject: "Título da Mensagem Inicial"
+            date: "Data da Mensagem Inicial"
+            message: "Mensagem Inicial"

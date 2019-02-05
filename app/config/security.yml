@@ -34,6 +34,7 @@ security:
             - ROLE_VIEW_3RD_PARTY_CONNECTIONS
             - ROLE_EDIT_CLIENT_SUBJECT_TYPE
             - ROLE_EDIT_BLOCKED_PHONES
+            - ROLE_SUPPORT_MANAGER
         ROLE_SUPER_ADMIN:
             - ROLE_ADMIN
             - ROLE_ALLOWED_TO_SWITCH
@@ -69,6 +70,19 @@ security:
         FEATURE_SHOW_PROFILE_VIEWS:
         FEATURE_REMOTE_CLAIMS:
         FEATURE_PHONE_BLOCKLIST:
+
+        # Support Roles
+        ROLE_SUPPORT_AGENT:
+        ROLE_SUPPORT_MANAGER:
+            - ROLE_SUPPORT_AGENT
+            - ROLE_SUPPORT_MANAGE_AGENTS
+            - ROLE_SUPPORT_VIEW_EMAIL
+            - ROLE_SUPPORT_VIEW_PHONE
+            - ROLE_SUPPORT_VIEW_BIRTHDAY
+        ROLE_SUPPORT_MANAGE_AGENTS:
+        ROLE_SUPPORT_VIEW_EMAIL:
+        ROLE_SUPPORT_VIEW_PHONE:
+        ROLE_SUPPORT_VIEW_BIRTHDAY:
 
     providers:
         chainprovider:
