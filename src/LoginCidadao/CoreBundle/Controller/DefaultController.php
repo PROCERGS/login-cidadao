@@ -92,19 +92,20 @@ class DefaultController extends Controller
         // logs
         $em = $this->getDoctrine()->getManager();
 
+        $showProfileViews = $this->isGranted('FEATURE_SHOW_PROFILE_VIEWS');
         /** @var ActionLogRepository $logRepo */
         $logRepo = $em->getRepository('LoginCidadaoAPIBundle:ActionLog');
         $logs['logins'] = $logRepo->findLoginsByPerson($this->getUser(), 5);
-        $logs['activity'] = $logRepo->getActivityLogsByTarget($this->getUser(), 4);
+        $logs['activity'] = $logRepo->getActivityLogsByTarget($this->getUser(), 4, $showProfileViews);
 
         $defaultClientUid = $this->container->getParameter('oauth_default_client.uid');
 
-        return array(
+        return [
             'allBadges' => $badges,
             'userBadges' => $userBadges,
             'logs' => $logs,
             'defaultClientUid' => $defaultClientUid,
-        );
+        ];
     }
 
     /**
@@ -170,9 +171,10 @@ class DefaultController extends Controller
     {
         $message = $supportMessage->getFormattedMessage($translator);
 
-        $email = (new SentEmail())
+        $email = new SentEmail();
+        $email
             ->setType('contact-mail')
-            ->setSubject('Fale conosco - '.$supportMessage->getName())
+            ->setSubject('Fale conosco - '.$supportMessage->getName()." - Ticket: {$email->getSupportTicket()}")
             ->setSender($supportMessage->getEmail())
             ->setReceiver($this->container->getParameter('contact_form.email'))
             ->setMessage($message);

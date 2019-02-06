@@ -230,6 +230,13 @@ class PersonRepository extends EntityRepository
             ->setParameter('mobile', $phoneNumber, PhoneNumberType::NAME);
     }
 
+    public function getPartialPhoneSearchQuery(string $phoneNumber)
+    {
+        return $this->getBaseSearchQuery()
+            ->where('p.mobile LIKE :mobile')
+            ->setParameter('mobile', "{$phoneNumber}%");
+    }
+
     /**
      * This will return the appropriate query for the input given.
      * @param $query
@@ -255,6 +262,10 @@ class PersonRepository extends EntityRepository
         $emailValidator = new EmailValidator();
         if ($emailValidator->isValid($query, new RFCValidation())) {
             return $this->getEmailSearchQuery($query);
+        }
+
+        if ($query[0] === '+') {
+            return $this->getPartialPhoneSearchQuery($query);
         }
 
         // Defaults to name search

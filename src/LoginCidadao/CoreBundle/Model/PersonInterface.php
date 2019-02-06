@@ -24,10 +24,8 @@ use LoginCidadao\CoreBundle\Entity\State;
 use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 use JMS\Serializer\Annotation as JMS;
 
-interface PersonInterface extends EncoderAwareInterface, UserInterface, LocationAwareInterface, LongPollableInterface, TwoFactorInterface
+interface PersonInterface extends IdentifiablePersonInterface, EncoderAwareInterface, UserInterface, LocationAwareInterface, LongPollableInterface, TwoFactorInterface
 {
-    public function getId();
-
     public function getEmail();
 
     /**
@@ -294,4 +292,9 @@ interface PersonInterface extends EncoderAwareInterface, UserInterface, Location
      * @return PersonInterface
      */
     public function setUpdatedAt($updatedAt = null);
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getPasswordRequestedAt();
 }

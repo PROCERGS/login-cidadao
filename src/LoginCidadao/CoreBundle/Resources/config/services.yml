@@ -508,3 +508,9 @@ services:
             - "@?snc_redis.default"
         tags:
             - { name: liip_monitor.check, alias: redis_predis }
+
+    lc.sent_email.repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - LoginCidadao\CoreBundle\Entity\SentEmail
