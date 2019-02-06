@@ -16,21 +16,21 @@
                             <dt>{{ 'support.person.view.birthday.label' | trans }}</dt>
                             <dd>{{ person.birthday }}</dd>
                             <dt>{{ 'support.person.view.cpf.label' | trans }}</dt>
-                            <dd>{{ person.cpf }}</dd>
+                            <dd>{{ person.cpf | formatCpf }}</dd>
                             <dt>{{ 'support.person.view.email.label' | trans }}</dt>
                             <dd>{{ person.email }}</dd>
                             <dt>{{ 'support.person.view.emailVerifiedAt.label' | trans }}</dt>
-                            <dd>{{ person.emailVerifiedAt | date('support.person.view.datetime_format' | trans) }}</dd>
+                            <dd>{{ person.emailVerifiedAt is empty ? "-" : person.emailVerifiedAt | date('support.person.view.datetime_format' | trans) }}</dd>
                             <dt>{{ 'support.person.view.phoneNumber.label' | trans }}</dt>
                             <dd>{{ person.phoneNumber }}</dd>
                             <dt>{{ 'support.person.view.lastPasswordResetRequest.label' | trans }}</dt>
-                            <dd>{{ person.lastPasswordResetRequest | date('support.person.view.datetime_format' | trans) }}</dd>
+                            <dd>{{ person.lastPasswordResetRequest is empty ? "-" : person.lastPasswordResetRequest | date('support.person.view.datetime_format' | trans) }}</dd>
                             <dt>{{ 'support.person.view.2FA.label' | trans }}</dt>
                             <dd>{{ (person.has2FA ? 'support.person.view.2FA.enabled' : 'support.person.view.2FA.disabled') | trans }}</dd>
                             <dt>{{ 'support.person.view.enabled.label' | trans }}</dt>
                             <dd>{{ (person.enabled ? 'support.person.view.enabled.enabled' : 'support.person.view.enabled.disabled') | trans }}</dd>
                             <dt>{{ 'support.person.view.lastUpdate.label' | trans }}</dt>
-                            <dd>{{ person.lastUpdate | date('support.person.view.datetime_format' | trans) }}</dd>
+                            <dd>{{ person.lastUpdate is empty ? "-" : person.lastUpdate | date('support.person.view.datetime_format' | trans) }}</dd>
                             <dt>{{ 'support.person.view.createdAt.label' | trans }}</dt>
                             <dd>{{ person.createdAt | date('support.person.view.datetime_format' | trans) }}</dd>
                         </dl>
