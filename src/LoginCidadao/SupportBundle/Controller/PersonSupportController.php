@@ -12,6 +12,7 @@ namespace LoginCidadao\SupportBundle\Controller;
 
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
+use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Entity\SentEmail;
 use LoginCidadao\CoreBundle\Helper\GridHelper;
@@ -83,6 +84,10 @@ class PersonSupportController extends Controller
         $supportHandler = $this->get(SupportHandler::class);
 
         $person = $supportHandler->getSupportPerson($id);
+
+        /** @var ActionLogger $actionLogger */
+        $actionLogger = $this->get('lc.action_logger');
+        $actionLogger->registerProfileView($request, $person, $this->getUser(), [$this, 'viewAction']);
 
         return $this->render('LoginCidadaoSupportBundle:PersonSupport:view.html.twig', [
             'person' => $person,
