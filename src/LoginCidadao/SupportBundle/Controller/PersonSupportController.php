@@ -11,8 +11,10 @@
 namespace LoginCidadao\SupportBundle\Controller;
 
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\QueryBuilder;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Entity\SentEmail;
+use LoginCidadao\CoreBundle\Helper\GridHelper;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\SupportBundle\Form\PersonSearchFormType;
 use LoginCidadao\SupportBundle\Model\PersonSearchRequest;
@@ -35,6 +37,7 @@ class PersonSupportController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $gridView = null;
         $search = new PersonSearchRequest();
 
         $search->smartSearch = $request->get('search', null);
@@ -45,9 +48,9 @@ class PersonSupportController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var PersonRepository $repo */
             $repo = $this->getDoctrine()->getRepository('LoginCidadaoCoreBundle:Person');
+            $query = $repo->getSmartSearchQuery($search->smartSearch);
             try {
-                $person = $repo->getSmartSearchQuery($search->smartSearch)
-                    ->getQuery()->getOneOrNullResult();
+                $person = $query->getQuery()->getOneOrNullResult();
 
                 if ($person instanceof PersonInterface) {
                     return $this->redirectToRoute('lc_support_person_view', [
@@ -56,14 +59,15 @@ class PersonSupportController extends Controller
                     ]);
                 }
             } catch (NonUniqueResultException $e) {
-                // TODO: regular search
+                $grid = $this->getPersonGrid($query, $form);
+                $gridView = $grid->createView($request);
             }
-
-            dump("FORM OK");
         }
 
         return $this->render('LoginCidadaoSupportBundle:PersonSupport:index.html.twig', [
             'form' => $form->createView(),
+            'grid' => $gridView,
+            'search' => $search,
         ]);
     }
 
@@ -96,5 +100,19 @@ class PersonSupportController extends Controller
         }
 
         return $sentEmail;
+    }
+
+    private function getPersonGrid(QueryBuilder $query, $form): GridHelper
+    {
+        $grid = new GridHelper();
+        $grid->setId('person-grid');
+        $grid->setPerPage(5);
+        $grid->setMaxResult(5);
+        $grid->setInfiniteGrid(true);
+        $grid->setRoute('lc_support_person_search');
+        $grid->setRouteParams([$form->getName()]);
+        $grid->setQueryBuilder($query);
+
+        return $grid;
     }
 }

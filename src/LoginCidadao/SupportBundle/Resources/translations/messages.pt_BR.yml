@@ -3,6 +3,14 @@ support:
         menu: "Pesquisar Usuários"
         title: "Pesquisar Usuário"
         submit: "Pesquisar"
+        grid:
+            first_name: "Nome"
+            last_name: "Sobrenome"
+            cpf: "CPF"
+            phone_number: "Telefone"
+            email: "Email"
+            details: "Ver Detalhes"
+            load_more: "Carregar mais"
     person:
         title: "Informações de %first_name%"
         view:
