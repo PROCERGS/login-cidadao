@@ -24,6 +24,21 @@ class PersonalDataTest extends TestCase
         $this->assertNotNull($data->getHash());
         $this->assertNotNull($data->getChallenge());
         $this->assertTrue($data->checkValue($value));
+        $this->assertTrue($data->isValueFilled());
+        $this->assertEquals($value, $data->__toString());
+    }
+
+    public function testKnownEmptyValue()
+    {
+        $data = PersonalData::createWithValue($name = 'privateInfo', $value = null);
+
+        $this->assertSame($name, $data->getName());
+        $this->assertSame('', $data->getValue());
+        $this->assertNotNull($data->getHash());
+        $this->assertNotNull($data->getChallenge());
+        $this->assertTrue($data->checkValue(''));
+        $this->assertFalse($data->isValueFilled());
+        $this->assertEquals('', $data->__toString());
     }
 
     public function testUnknownValue()
@@ -36,6 +51,8 @@ class PersonalDataTest extends TestCase
         $this->assertNotNull($data->getHash());
         $this->assertNotNull($data->getChallenge());
         $this->assertTrue($data->checkValue($value));
+        $this->assertTrue($data->isValueFilled());
+        $this->assertEquals('Yes', $data->__toString());
     }
 
     public function testCreateInvalidObject()

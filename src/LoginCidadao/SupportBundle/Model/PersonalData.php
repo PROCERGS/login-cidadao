@@ -55,8 +55,12 @@ class PersonalData
     {
         if (null === $value) {
             $value = '';
+            $filled = false;
+        } else {
+            $filled = (bool)$value;
         }
-        return new self($name, $value, (bool)$value, null, $challenge);
+
+        return new self($name, $value, $filled, null, $challenge);
     }
 
     public static function createWithoutValue(string $name, ?string $value, string $challenge = null): PersonalData

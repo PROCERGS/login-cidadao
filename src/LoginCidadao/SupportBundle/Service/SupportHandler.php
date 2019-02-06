@@ -14,6 +14,7 @@ use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Entity\SentEmail;
 use LoginCidadao\CoreBundle\Entity\SentEmailRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\SupportBundle\Exception\PersonNotFoundException;
 use LoginCidadao\SupportBundle\Model\PersonalData;
 use LoginCidadao\SupportBundle\Model\SupportPerson;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -48,9 +49,11 @@ class SupportHandler
     public function getSupportPerson($id): SupportPerson
     {
         $person = $this->personRepository->find($id);
-        if ($person instanceof PersonInterface) {
-            return new SupportPerson($person, $this->authChecker);
+        if (!$person instanceof PersonInterface) {
+            throw new PersonNotFoundException();
         }
+
+        return new SupportPerson($person, $this->authChecker);
     }
 
     public function getInitialMessage($id): ?SentEmail

@@ -98,17 +98,12 @@ class SupportPerson
         $this->setBirthday($person, $authorizationChecker);
     }
 
-    public function checkCpf(string $cpf)
-    {
-        return $this->cpf->checkValue($cpf);
-    }
-
     private function setPhoneNumber(PersonInterface $person, AuthorizationCheckerInterface $authorizationChecker)
     {
         $phoneNumber = $person->getMobile();
         if ($phoneNumber instanceof PhoneNumber) {
             $phoneUtil = PhoneNumberUtil::getInstance();
-            $phoneNumber = $phoneUtil->format($person->getMobile(), PhoneNumberFormat::E164);
+            $phoneNumber = $phoneUtil->format($phoneNumber, PhoneNumberFormat::E164);
         }
         if ($authorizationChecker->isGranted('ROLE_SUPPORT_VIEW_PHONE')) {
             $this->phoneNumber = PersonalData::createWithValue('phoneNumber', $phoneNumber);
@@ -208,7 +203,7 @@ class SupportPerson
     /**
      * @return bool
      */
-    public function isHas2FA(): bool
+    public function has2FA(): bool
     {
         return $this->has2FA;
     }

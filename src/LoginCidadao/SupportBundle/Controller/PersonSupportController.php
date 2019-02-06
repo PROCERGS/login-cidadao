@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @package LoginCidadao\SupportBundle\Controller
  *
  * @Security("has_role('ROLE_SUPPORT_AGENT')")
+ * @codeCoverageIgnore
  */
 class PersonSupportController extends Controller
 {
