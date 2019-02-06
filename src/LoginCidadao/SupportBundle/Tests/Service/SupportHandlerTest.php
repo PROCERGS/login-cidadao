@@ -139,7 +139,8 @@ class SupportHandlerTest extends TestCase
     {
         $sentEmailRepo = $this->createMock(SentEmailRepository::class);
         if (null !== $id) {
-            $sentEmailRepo->expects($this->once())->method('find')->with($id)->willReturn($sentEmail);
+            $sentEmailRepo->expects($this->once())->method('findOneBy')
+                ->with(['supportTicket' => $id])->willReturn($sentEmail);
         }
 
         return $sentEmailRepo;

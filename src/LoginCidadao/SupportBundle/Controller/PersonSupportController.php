@@ -36,8 +36,9 @@ class PersonSupportController extends Controller
 {
     /**
      * @Route("/support/search", name="lc_support_person_search")
+     * @Security("has_role('ROLE_SUPPORT_SEARCH_USERS')")
      */
-    public function indexAction(Request $request)
+    public function searchAction(Request $request)
     {
         $gridView = null;
         $search = new PersonSearchRequest();

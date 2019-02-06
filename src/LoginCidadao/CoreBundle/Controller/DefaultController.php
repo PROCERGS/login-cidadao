@@ -171,9 +171,10 @@ class DefaultController extends Controller
     {
         $message = $supportMessage->getFormattedMessage($translator);
 
-        $email = (new SentEmail())
+        $email = new SentEmail();
+        $email
             ->setType('contact-mail')
-            ->setSubject('Fale conosco - '.$supportMessage->getName())
+            ->setSubject('Fale conosco - '.$supportMessage->getName()." - Ticket: {$email->getSupportTicket()}")
             ->setSender($supportMessage->getEmail())
             ->setReceiver($this->container->getParameter('contact_form.email'))
             ->setMessage($message);

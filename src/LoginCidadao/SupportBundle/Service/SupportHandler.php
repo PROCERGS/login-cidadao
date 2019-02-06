@@ -56,10 +56,10 @@ class SupportHandler
         return new SupportPerson($person, $this->authChecker);
     }
 
-    public function getInitialMessage($id): ?SentEmail
+    public function getInitialMessage($ticket): ?SentEmail
     {
         /** @var SentEmail $sentEmail */
-        $sentEmail = $this->sentEmailRepository->find($id);
+        $sentEmail = $this->sentEmailRepository->findOneBy(['supportTicket' => $ticket]);
 
         return $sentEmail;
     }

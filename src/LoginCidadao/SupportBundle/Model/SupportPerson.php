@@ -13,7 +13,6 @@ namespace LoginCidadao\SupportBundle\Model;
 use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
-use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Model\IdentifiablePersonInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -64,7 +63,7 @@ class SupportPerson implements IdentifiablePersonInterface
 
     /**
      * SupportPerson constructor.
-     * @param PersonInterface|Person $person
+     * @param PersonInterface $person
      * @param AuthorizationCheckerInterface $authorizationChecker
      */
     public function __construct(PersonInterface $person, AuthorizationCheckerInterface $authorizationChecker)

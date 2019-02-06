@@ -292,4 +292,9 @@ interface PersonInterface extends IdentifiablePersonInterface, EncoderAwareInter
      * @return PersonInterface
      */
     public function setUpdatedAt($updatedAt = null);
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getPasswordRequestedAt();
 }
