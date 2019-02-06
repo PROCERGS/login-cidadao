@@ -6,6 +6,7 @@ imports:
     #- { resource: logstash.yml }
     - { resource: "@LoginCidadaoTOSBundle/Resources/config/config.yml" }
     - { resource: 'workflows/*.{yml,yaml}' }
+    - { resource: "@LoginCidadaoSupportBundle/Resources/config/services.yml" }
 
 framework:
     #esi:             ~

@@ -1,0 +1,139 @@
+{% extends "LoginCidadaoSupportBundle::base.html.twig" %}
+{% block content %}
+    <div class="content">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">{{ 'support.person.title' | trans({'%first_name%': person.name}) }}</h2>
+            </div>
+            <div class="panel-body">
+                <div class="row clearfix">
+                    <div class="col-md-12">
+                        <dl>
+                            <dt>{{ 'support.person.view.first_name.label' | trans }}</dt>
+                            <dd>{{ person.firstName }}</dd>
+                            <dt>{{ 'support.person.view.last_name.label' | trans }}</dt>
+                            <dd>{{ person.lastName }}</dd>
+                            <dt>{{ 'support.person.view.birthday.label' | trans }}</dt>
+                            <dd>{{ person.birthday }}</dd>
+                            <dt>{{ 'support.person.view.cpf.label' | trans }}</dt>
+                            <dd>{{ person.cpf | formatCpf }}</dd>
+                            <dt>{{ 'support.person.view.email.label' | trans }}</dt>
+                            <dd>{{ person.email }}</dd>
+                            <dt>{{ 'support.person.view.emailVerifiedAt.label' | trans }}</dt>
+                            <dd>{{ person.emailVerifiedAt is empty ? "-" : person.emailVerifiedAt | date('support.person.view.datetime_format' | trans) }}</dd>
+                            <dt>{{ 'support.person.view.phoneNumber.label' | trans }}</dt>
+                            <dd>{{ person.phoneNumber }}</dd>
+                            <dt>{{ 'support.person.view.lastPasswordResetRequest.label' | trans }}</dt>
+                            <dd>{{ person.lastPasswordResetRequest is empty ? "-" : person.lastPasswordResetRequest | date('support.person.view.datetime_format' | trans) }}</dd>
+                            <dt>{{ 'support.person.view.2FA.label' | trans }}</dt>
+                            <dd>{{ (person.has2FA ? 'support.person.view.2FA.enabled' : 'support.person.view.2FA.disabled') | trans }}</dd>
+                            <dt>{{ 'support.person.view.enabled.label' | trans }}</dt>
+                            <dd>{{ (person.enabled ? 'support.person.view.enabled.enabled' : 'support.person.view.enabled.disabled') | trans }}</dd>
+                            <dt>{{ 'support.person.view.lastUpdate.label' | trans }}</dt>
+                            <dd>{{ person.lastUpdate is empty ? "-" : person.lastUpdate | date('support.person.view.datetime_format' | trans) }}</dd>
+                            <dt>{{ 'support.person.view.createdAt.label' | trans }}</dt>
+                            <dd>{{ person.createdAt | date('support.person.view.datetime_format' | trans) }}</dd>
+                        </dl>
+
+                        <dl>
+                            {% for thirdParty, connected in person.thirdPartyConnections %}
+                                <dt>{{ ('support.person.view.connections.' ~ thirdParty ~ '.label') | trans }}</dt>
+                                <dd>{{ (connected ? 'support.person.view.connections.enabled' : 'support.person.view.connections.disabled') | trans }}</dd>
+                            {% endfor %}
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if dataValidation | length > 0 %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{ 'support.person.validation.title' | trans }}</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="row clearfix">
+                        <div class="col-md-12">
+                            <dl>
+                                {% for validation in dataValidation %}
+                                    <dt>
+                                        <label for="validation_{{ validation.name }}">{{ ('support.person.validation.' ~ validation.name) | trans }}</label>
+                                    </dt>
+                                    <dd>
+                                        <input id="validation_{{ validation.name }}" type="text"
+                                               class="data-validation"
+                                               data-name="{{ validation.name }}"
+                                               data-hash="{{ validation.hash }}"
+                                               data-challenge="{{ validation.challenge }}"/>
+                                    </dd>
+                                {% endfor %}
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">{{ 'support.person.initialContact.title' | trans }}</h2>
+            </div>
+            <div class="panel-body">
+                <div class="row clearfix">
+                    <div class="col-md-12">
+                        <p>{{ 'support.person.initialContact.about' | trans }}</p>
+                        <dl>
+                            <dt>{{ 'support.person.initialContact.subject' | trans }}</dt>
+                            <dd>{{ supportRequest.subject }}</dd>
+                            <dt>{{ 'support.person.initialContact.date' | trans }}</dt>
+                            <dd>{{ supportRequest.date | date }}</dd>
+                            <dt>{{ 'support.person.initialContact.message' | trans }}</dt>
+                            <dd>{{ supportRequest.message }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+        '@LoginCidadaoSupportBundle/Resources/public/js/sha512.js'
+        filter='uglifyjs2' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+        var validation = {{ dataValidation | json_encode | raw }};
+
+        function check(field, value) {
+            var challenge = validation[field].challenge,
+                hash = validation[field].hash,
+                sha = new jsSHA('SHA-512', 'TEXT');
+            sha.setHMACKey(value, 'TEXT');
+            sha.update(challenge);
+
+            var userHash = sha.getHMAC('HEX');
+
+            //console.log(userHash === hash, userHash, hash);
+
+            return userHash === hash;
+        }
+
+        $(document).ready(function () {
+            $(".data-validation").on('input', function () {
+                var e = $(this),
+                    value = e.val().trim(),
+                    field = e.data('name');
+
+                if ('' === value) {
+                    e.css('border', 'auto');
+                    return;
+                }
+                e.css('border', '2px solid ' + (check(field, value) ? 'green' : 'red'));
+            });
+        });
+    </script>
+{% endblock javascripts %}

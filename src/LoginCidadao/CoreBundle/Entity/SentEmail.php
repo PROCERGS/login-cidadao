@@ -11,6 +11,7 @@
 namespace LoginCidadao\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 
 /**
  * SentEmail
@@ -71,9 +72,21 @@ class SentEmail
      */
     private $type;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="support_ticket", type="string", length=255, unique=true)
+     */
+    private $supportTicket;
+
     public function __construct()
     {
         $this->setDate(new \DateTime());
+        try {
+            $this->supportTicket = Uuid::uuid4();
+        } catch (\Exception $e) {
+            $this->supportTicket = bin2hex(random_bytes(4));
+        }
     }
 
     /**
@@ -222,6 +235,14 @@ class SentEmail
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSupportTicket(): string
+    {
+        return $this->supportTicket;
     }
 
     public function getSwiftMail()
