@@ -10,10 +10,13 @@
 
 namespace LoginCidadao\SupportBundle\Service;
 
+use libphonenumber\PhoneNumber;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Entity\SentEmail;
 use LoginCidadao\CoreBundle\Entity\SentEmailRepository;
+use LoginCidadao\CoreBundle\Model\IdentifiablePersonInterface;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
 use LoginCidadao\SupportBundle\Exception\PersonNotFoundException;
 use LoginCidadao\SupportBundle\Model\PersonalData;
 use LoginCidadao\SupportBundle\Model\SupportPerson;
@@ -24,6 +27,9 @@ class SupportHandler
     /** @var AuthorizationCheckerInterface */
     private $authChecker;
 
+    /** @var PhoneVerificationServiceInterface */
+    private $phoneVerificationService;
+
     /** @var PersonRepository */
     private $personRepository;
 
@@ -33,15 +39,18 @@ class SupportHandler
     /**
      * SupportHandler constructor.
      * @param AuthorizationCheckerInterface $authChecker
+     * @param PhoneVerificationServiceInterface $phoneVerificationService
      * @param PersonRepository $personRepository
      * @param SentEmailRepository $sentEmailRepository
      */
     public function __construct(
         AuthorizationCheckerInterface $authChecker,
+        PhoneVerificationServiceInterface $phoneVerificationService,
         PersonRepository $personRepository,
         SentEmailRepository $sentEmailRepository
     ) {
         $this->authChecker = $authChecker;
+        $this->phoneVerificationService = $phoneVerificationService;
         $this->personRepository = $personRepository;
         $this->sentEmailRepository = $sentEmailRepository;
     }
@@ -54,6 +63,42 @@ class SupportHandler
         }
 
         return new SupportPerson($person, $this->authChecker);
+    }
+
+    public function getThirdPartyConnections(IdentifiablePersonInterface $person): array
+    {
+        $connections = [];
+        if (!$person instanceof PersonInterface) {
+            /** @var PersonInterface $person */
+            $person = $this->personRepository->find($person->getId());
+        }
+
+        if ($person instanceof PersonInterface) {
+            $connections = [
+                'facebook' => $person->getFacebookId() !== null,
+                'google' => $person->getGoogleId() !== null,
+                'twitter' => $person->getTwitterId() !== null,
+            ];
+        }
+
+        return $connections;
+    }
+
+    public function getPhoneMetadata(IdentifiablePersonInterface $person): array
+    {
+        /** @var PersonInterface $person */
+        $person = $this->personRepository->find($person->getId());
+        $phone = $person->getMobile();
+
+        if ($phone instanceof PhoneNumber) {
+            $samePhoneCount = $this->personRepository->countByPhone($phone);
+            $phoneVerification = $this->phoneVerificationService->getPhoneVerification($person, $phone);
+        }
+
+        return [
+            'samePhoneCount' => $samePhoneCount ?? 0,
+            'verification' => $phoneVerification ?? null,
+        ];
     }
 
     public function getInitialMessage($ticket): ?SentEmail

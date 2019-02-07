@@ -39,9 +39,7 @@ class SupportPersonTest extends TestCase
         $person->expects($this->once())->method('isEnabled')->willReturn(true);
         $person->expects($this->once())->method('getUpdatedAt')->willReturn($lastUpdate = new \DateTime());
         $person->expects($this->once())->method('getCreatedAt')->willReturn($createdAt = new \DateTime());
-        $person->expects($this->once())->method('getFacebookId')->willReturn('facebook');
-        $person->expects($this->once())->method('getGoogleId')->willReturn('google');
-        $person->expects($this->once())->method('getTwitterId')->willReturn('twitter');
+        $person->expects($this->once())->method('getLastLogin')->willReturn($lastLogin = new \DateTime());
         $person->expects($this->once())->method('getMobile')->willReturn($phone);
 
         $supportPerson = new SupportPerson($person, $authChecker);
@@ -64,13 +62,9 @@ class SupportPersonTest extends TestCase
         $this->assertSame($lastPwReset, $supportPerson->getLastPasswordResetRequest());
         $this->assertSame($lastUpdate, $supportPerson->getLastUpdate());
         $this->assertSame($createdAt, $supportPerson->getCreatedAt());
+        $this->assertSame($lastLogin, $supportPerson->getLastLogin());
         $this->assertTrue($supportPerson->has2FA());
         $this->assertTrue($supportPerson->isEnabled());
-        $this->assertEquals([
-            'facebook' => true,
-            'google' => true,
-            'twitter' => true,
-        ], $supportPerson->getThirdPartyConnections());
     }
 
     public function testFullAccess()
@@ -96,9 +90,6 @@ class SupportPersonTest extends TestCase
         $person->expects($this->once())->method('isEnabled')->willReturn(true);
         $person->expects($this->once())->method('getUpdatedAt')->willReturn($lastUpdate = new \DateTime());
         $person->expects($this->once())->method('getCreatedAt')->willReturn($createdAt = new \DateTime());
-        $person->expects($this->once())->method('getFacebookId')->willReturn('facebook');
-        $person->expects($this->once())->method('getGoogleId')->willReturn('google');
-        $person->expects($this->once())->method('getTwitterId')->willReturn('twitter');
         $person->expects($this->once())->method('getMobile')->willReturn($phone);
 
         $supportPerson = new SupportPerson($person, $authChecker);
@@ -123,11 +114,6 @@ class SupportPersonTest extends TestCase
         $this->assertSame($createdAt, $supportPerson->getCreatedAt());
         $this->assertTrue($supportPerson->has2FA());
         $this->assertTrue($supportPerson->isEnabled());
-        $this->assertEquals([
-            'facebook' => true,
-            'google' => true,
-            'twitter' => true,
-        ], $supportPerson->getThirdPartyConnections());
     }
 
     public function testGetName()

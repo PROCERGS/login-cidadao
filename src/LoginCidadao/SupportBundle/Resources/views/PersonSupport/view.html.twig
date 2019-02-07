@@ -23,6 +23,9 @@
                             <dd>{{ person.emailVerifiedAt is empty ? "-" : person.emailVerifiedAt | date('support.person.view.datetime_format' | trans) }}</dd>
                             <dt>{{ 'support.person.view.phoneNumber.label' | trans }}</dt>
                             <dd>{{ person.phoneNumber }}</dd>
+                            <dd>{{ 'support.person.view.phoneNumber.usersWithSamePhone' | transchoice(phoneMetadata.samePhoneCount) }}</dd>
+                            <dt>{{ 'support.person.view.phoneNumberVerification.label' | trans }}</dt>
+                            <dd>{{ phoneMetadata.verification is empty ? 'support.person.view.phoneNumberVerification.not_verified' | trans : phoneMetadata.verification.verifiedAt | date('support.person.view.datetime_format' | trans) }}</dd>
                             <dt>{{ 'support.person.view.lastPasswordResetRequest.label' | trans }}</dt>
                             <dd>{{ person.lastPasswordResetRequest is empty ? "-" : person.lastPasswordResetRequest | date('support.person.view.datetime_format' | trans) }}</dd>
                             <dt>{{ 'support.person.view.2FA.label' | trans }}</dt>
@@ -33,10 +36,12 @@
                             <dd>{{ person.lastUpdate is empty ? "-" : person.lastUpdate | date('support.person.view.datetime_format' | trans) }}</dd>
                             <dt>{{ 'support.person.view.createdAt.label' | trans }}</dt>
                             <dd>{{ person.createdAt | date('support.person.view.datetime_format' | trans) }}</dd>
+                            <dt>{{ 'support.person.view.lastLogin.label' | trans }}</dt>
+                            <dd>{{ person.lastLogin | date('support.person.view.datetime_format' | trans) }}</dd>
                         </dl>
 
                         <dl>
-                            {% for thirdParty, connected in person.thirdPartyConnections %}
+                            {% for thirdParty, connected in thirdPartyConnections %}
                                 <dt>{{ ('support.person.view.connections.' ~ thirdParty ~ '.label') | trans }}</dt>
                                 <dd>{{ (connected ? 'support.person.view.connections.enabled' : 'support.person.view.connections.disabled') | trans }}</dd>
                             {% endfor %}
@@ -74,26 +79,28 @@
             </div>
         {% endif %}
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h2 class="panel-title">{{ 'support.person.initialContact.title' | trans }}</h2>
-            </div>
-            <div class="panel-body">
-                <div class="row clearfix">
-                    <div class="col-md-12">
-                        <p>{{ 'support.person.initialContact.about' | trans }}</p>
-                        <dl>
-                            <dt>{{ 'support.person.initialContact.subject' | trans }}</dt>
-                            <dd>{{ supportRequest.subject }}</dd>
-                            <dt>{{ 'support.person.initialContact.date' | trans }}</dt>
-                            <dd>{{ supportRequest.date | date }}</dd>
-                            <dt>{{ 'support.person.initialContact.message' | trans }}</dt>
-                            <dd>{{ supportRequest.message }}</dd>
-                        </dl>
+        {% if supportRequest is not null %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{ 'support.person.initialContact.title' | trans }}</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="row clearfix">
+                        <div class="col-md-12">
+                            <p>{{ 'support.person.initialContact.about' | trans }}</p>
+                            <dl>
+                                <dt>{{ 'support.person.initialContact.subject' | trans }}</dt>
+                                <dd>{{ supportRequest.subject }}</dd>
+                                <dt>{{ 'support.person.initialContact.date' | trans }}</dt>
+                                <dd>{{ supportRequest.date | date }}</dd>
+                                <dt>{{ 'support.person.initialContact.message' | trans }}</dt>
+                                <dd>{{ supportRequest.message }}</dd>
+                            </dl>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 {% endblock %}
 
