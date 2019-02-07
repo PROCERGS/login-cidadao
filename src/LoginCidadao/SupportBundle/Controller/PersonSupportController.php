@@ -86,7 +86,7 @@ class PersonSupportController extends Controller
             if (!$this->isGranted('ROLE_SKIP_SUPPORT_TOKEN_VALIDATION')) {
                 throw $e;
             }
-            $supportRequest = $this->getDummySupportMessage();
+            $supportRequest = null;
         }
 
         /** @var SupportHandler $supportHandler */
@@ -131,15 +131,5 @@ class PersonSupportController extends Controller
         $grid->setQueryBuilder($query);
 
         return $grid;
-    }
-
-    private function getDummySupportMessage()
-    {
-        return (new SentEmail())
-            ->setType('dummy')
-            ->setDate(new \DateTime())
-            ->setSubject('Dummy message')
-            ->setMessage('Dummy message')
-            ->setSender('Dummy');
     }
 }

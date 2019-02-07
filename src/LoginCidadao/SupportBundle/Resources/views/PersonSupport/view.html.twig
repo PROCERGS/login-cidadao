@@ -79,26 +79,28 @@
             </div>
         {% endif %}
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h2 class="panel-title">{{ 'support.person.initialContact.title' | trans }}</h2>
-            </div>
-            <div class="panel-body">
-                <div class="row clearfix">
-                    <div class="col-md-12">
-                        <p>{{ 'support.person.initialContact.about' | trans }}</p>
-                        <dl>
-                            <dt>{{ 'support.person.initialContact.subject' | trans }}</dt>
-                            <dd>{{ supportRequest.subject }}</dd>
-                            <dt>{{ 'support.person.initialContact.date' | trans }}</dt>
-                            <dd>{{ supportRequest.date | date }}</dd>
-                            <dt>{{ 'support.person.initialContact.message' | trans }}</dt>
-                            <dd>{{ supportRequest.message }}</dd>
-                        </dl>
+        {% if supportRequest is not null %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{ 'support.person.initialContact.title' | trans }}</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="row clearfix">
+                        <div class="col-md-12">
+                            <p>{{ 'support.person.initialContact.about' | trans }}</p>
+                            <dl>
+                                <dt>{{ 'support.person.initialContact.subject' | trans }}</dt>
+                                <dd>{{ supportRequest.subject }}</dd>
+                                <dt>{{ 'support.person.initialContact.date' | trans }}</dt>
+                                <dd>{{ supportRequest.date | date }}</dd>
+                                <dt>{{ 'support.person.initialContact.message' | trans }}</dt>
+                                <dd>{{ supportRequest.message }}</dd>
+                            </dl>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 {% endblock %}
 
