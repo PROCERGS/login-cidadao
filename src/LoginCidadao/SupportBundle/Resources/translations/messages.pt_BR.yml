@@ -1,6 +1,8 @@
 support:
     search:
-        menu: "Pesquisar Usuários"
+        menu:
+            support: "Painel de Suporte"
+            search: "Pesquisar Usuários"
         title: "Pesquisar Usuário"
         submit: "Pesquisar"
         grid:
@@ -22,7 +24,12 @@ support:
             cpf.label: "CPF"
             email.label: "Email"
             emailVerifiedAt.label: "Data de verificação do email"
-            phoneNumber.label: "Telefone"
+            phoneNumber:
+                label: "Telefone"
+                usersWithSamePhone: "{0} Nenhuma conta utiliza esse telefone|{1} Apenas essa conta utiliza esse telefone|]1,Inf[ %count% pessoas estão usando esse mesmo número!"
+            phoneNumberVerification:
+                label: "Data de Verificação do Telefone"
+                not_verified: "NÃO verificado"
             lastPasswordResetRequest.label: "Última solicitação de recuperação de senha"
             2FA:
                 label: "Autenticação de 2 Fatores ativa?"
@@ -34,6 +41,7 @@ support:
                 disabled: "Usuário BLOQUEADO!"
             lastUpdate.label: "Data da Última Atualização"
             createdAt.label: "Data de Criação da Conta"
+            lastLogin.label: "Último Login"
             connections:
                 enabled: "Conectado"
                 disabled: "Desconectado"

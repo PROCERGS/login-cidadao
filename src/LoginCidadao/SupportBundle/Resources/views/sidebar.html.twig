@@ -11,7 +11,7 @@
             {% if is_granted('ROLE_SUPPORT_SEARCH_USERS') %}
                 <li class="services glyph {{ myController matches '#\PersonSupportController::#' ? 'active' }}">
                     <a href="{{ path('lc_support_person_search') }}">
-                        <span>{{ 'support.search.menu' | trans }}</span>
+                        <span>{{ 'support.search.menu.search' | trans }}</span>
                         <i class="glyphicon glyphicon-search icon"></i>
                     </a>
                 </li>

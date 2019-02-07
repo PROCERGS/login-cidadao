@@ -24,6 +24,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class PersonSupportController
@@ -37,6 +39,8 @@ class PersonSupportController extends Controller
     /**
      * @Route("/support/search", name="lc_support_person_search")
      * @Security("has_role('ROLE_SUPPORT_SEARCH_USERS')")
+     * @param Request $request
+     * @return Response
      */
     public function searchAction(Request $request)
     {
@@ -76,15 +80,27 @@ class PersonSupportController extends Controller
 
     /**
      * @Route("/support/person/{id}", name="lc_support_person_view")
+     * @param Request $request
+     * @param $id
+     * @return Response
      */
     public function viewAction(Request $request, $id)
     {
-        $supportRequest = $this->validateSupportTicketId($request->get('ticket'));
+        try {
+            $supportRequest = $this->validateSupportTicketId($request->get('ticket'));
+        } catch (NotFoundHttpException $e) {
+            if (!$this->isGranted('ROLE_SKIP_SUPPORT_TOKEN_VALIDATION')) {
+                throw $e;
+            }
+            $supportRequest = null;
+        }
 
         /** @var SupportHandler $supportHandler */
         $supportHandler = $this->get(SupportHandler::class);
 
         $person = $supportHandler->getSupportPerson($id);
+        $phoneMetadata = $supportHandler->getPhoneMetadata($person);
+        $thirdPartyConnections = $supportHandler->getThirdPartyConnections($person);
 
         /** @var ActionLogger $actionLogger */
         $actionLogger = $this->get('lc.action_logger');
@@ -92,8 +108,10 @@ class PersonSupportController extends Controller
 
         return $this->render('LoginCidadaoSupportBundle:PersonSupport:view.html.twig', [
             'person' => $person,
+            'thirdPartyConnections' => $thirdPartyConnections,
             'supportRequest' => $supportRequest,
             'dataValidation' => $supportHandler->getValidationMap($person),
+            'phoneMetadata' => $phoneMetadata,
         ]);
     }
 

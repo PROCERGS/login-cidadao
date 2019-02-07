@@ -3,6 +3,7 @@ services:
         class: LoginCidadao\SupportBundle\Service\SupportHandler
         arguments:
             - "@security.authorization_checker"
+            - "@phone_verification"
             - "@lc.person.repository"
             - "@lc.sent_email.repository"
 

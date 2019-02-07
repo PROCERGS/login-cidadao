@@ -297,4 +297,6 @@ interface PersonInterface extends IdentifiablePersonInterface, EncoderAwareInter
      * @return \DateTimeInterface|null
      */
     public function getPasswordRequestedAt();
+
+    public function getLastLogin();
 }

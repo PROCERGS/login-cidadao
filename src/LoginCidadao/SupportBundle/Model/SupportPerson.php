@@ -49,9 +49,6 @@ class SupportPerson implements IdentifiablePersonInterface
     /** @var bool */
     private $has2FA;
 
-    /** @var array */
-    private $thirdPartyConnections = [];
-
     /** @var bool */
     private $isEnabled;
 
@@ -60,6 +57,9 @@ class SupportPerson implements IdentifiablePersonInterface
 
     /** @var \DateTimeInterface */
     private $createdAt;
+
+    /** @var \DateTimeInterface */
+    private $lastLogin;
 
     /**
      * SupportPerson constructor.
@@ -77,12 +77,7 @@ class SupportPerson implements IdentifiablePersonInterface
         $this->isEnabled = $person->isEnabled();
         $this->lastUpdate = $person->getUpdatedAt();
         $this->createdAt = $person->getCreatedAt();
-
-        $this->thirdPartyConnections = [
-            'facebook' => $person->getFacebookId() !== null,
-            'google' => $person->getGoogleId() !== null,
-            'twitter' => $person->getTwitterId() !== null,
-        ];
+        $this->lastLogin = $person->getLastLogin();
 
         if ($authorizationChecker->isGranted('ROLE_VIEW_USERS_CPF')) {
             $this->cpf = PersonalData::createWithValue('cpf', $person->getCpf());
@@ -209,14 +204,6 @@ class SupportPerson implements IdentifiablePersonInterface
     }
 
     /**
-     * @return array
-     */
-    public function getThirdPartyConnections(): array
-    {
-        return $this->thirdPartyConnections;
-    }
-
-    /**
      * @return bool
      */
     public function isEnabled(): bool
@@ -238,5 +225,13 @@ class SupportPerson implements IdentifiablePersonInterface
     public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getLastLogin(): \DateTimeInterface
+    {
+        return $this->lastLogin;
     }
 }

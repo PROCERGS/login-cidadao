@@ -10,10 +10,14 @@
 
 namespace LoginCidadao\SupportBundle\Tests\Service;
 
+use libphonenumber\PhoneNumber;
 use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Entity\SentEmail;
 use LoginCidadao\CoreBundle\Entity\SentEmailRepository;
+use LoginCidadao\CoreBundle\Model\IdentifiablePersonInterface;
+use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
+use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
 use LoginCidadao\SupportBundle\Exception\PersonNotFoundException;
 use LoginCidadao\SupportBundle\Model\PersonalData;
 use LoginCidadao\SupportBundle\Model\SupportPerson;
@@ -29,8 +33,12 @@ class SupportHandlerTest extends TestCase
         $id = 123;
         $person = $this->createMock(Person::class);
 
-        $handler = new SupportHandler($this->getAuthChecker(), $this->getPersonRepo($id, $person),
-            $this->getSentEmailRepo());
+        $handler = new SupportHandler(
+            $this->getAuthChecker(),
+            $this->getPhoneVerificationService(),
+            $this->getPersonRepo($id, $person),
+            $this->getSentEmailRepo()
+        );
         $supportPerson = $handler->getSupportPerson($id);
 
         $this->assertInstanceOf(SupportPerson::class, $supportPerson);
@@ -41,7 +49,8 @@ class SupportHandlerTest extends TestCase
         $this->expectException(PersonNotFoundException::class);
         $id = 123;
 
-        $handler = new SupportHandler($this->getAuthChecker(), $this->getPersonRepo($id, null),
+        $handler = new SupportHandler($this->getAuthChecker(), $this->getPhoneVerificationService(),
+            $this->getPersonRepo($id, null),
             $this->getSentEmailRepo());
         $handler->getSupportPerson($id);
     }
@@ -51,8 +60,12 @@ class SupportHandlerTest extends TestCase
         $id = 123;
         $sentEmail = $this->createMock(SentEmail::class);
 
-        $handler = new SupportHandler($this->getAuthChecker(), $this->getPersonRepo(),
-            $this->getSentEmailRepo($id, $sentEmail));
+        $handler = new SupportHandler(
+            $this->getAuthChecker(),
+            $this->getPhoneVerificationService(),
+            $this->getPersonRepo(),
+            $this->getSentEmailRepo($id, $sentEmail)
+        );
 
         $this->assertSame($sentEmail, $handler->getInitialMessage($id));
     }
@@ -72,7 +85,12 @@ class SupportHandlerTest extends TestCase
         $person->expects($this->once())->method('getPhoneNumber')
             ->willReturn($this->getPersonalData('phoneNumber', 'hash', 'challenge', null, true));
 
-        $handler = new SupportHandler($this->getAuthChecker(), $this->getPersonRepo(), $this->getSentEmailRepo());
+        $handler = new SupportHandler(
+            $this->getAuthChecker(),
+            $this->getPhoneVerificationService(),
+            $this->getPersonRepo(),
+            $this->getSentEmailRepo()
+        );
 
         $map = $handler->getValidationMap($person);
 
@@ -85,6 +103,157 @@ class SupportHandlerTest extends TestCase
         // Email
         $this->assertEquals('challenge', $map['email']['challenge']);
         $this->assertEquals('hash', $map['email']['hash']);
+    }
+
+    public function testGetPhoneMetadata()
+    {
+        $id = 321;
+        $phoneNumber = new PhoneNumber();
+
+        $person = $this->createMock(Person::class);
+        $person->expects($this->once())->method('getMobile')->willReturn($phoneNumber);
+
+        $supportPerson = $this->createMock(SupportPerson::class);
+        $supportPerson->expects($this->once())->method('getId')->willReturn($id);
+
+        $personRepo = $this->getPersonRepo($id, $person);
+        $personRepo->expects($this->once())->method('countByPhone')->with($phoneNumber)->willReturn(3);
+
+        $verification = $this->createMock(PhoneVerificationInterface::class);
+        $verificationService = $this->getPhoneVerificationService();
+        $verificationService->expects($this->once())
+            ->method('getPhoneVerification')->with($person, $phoneNumber)->willReturn($verification);
+
+        $handler = new SupportHandler(
+            $this->getAuthChecker(),
+            $verificationService,
+            $personRepo,
+            $this->getSentEmailRepo()
+        );
+        $metadata = $handler->getPhoneMetadata($supportPerson);
+
+        $this->assertEquals(3, $metadata['samePhoneCount']);
+        $this->assertSame($verification, $metadata['verification']);
+    }
+
+    public function testGetPhoneMetadataNoVerification()
+    {
+        $id = 321;
+        $phoneNumber = new PhoneNumber();
+
+        $person = $this->createMock(Person::class);
+        $person->expects($this->once())->method('getMobile')->willReturn($phoneNumber);
+
+        $supportPerson = $this->createMock(SupportPerson::class);
+        $supportPerson->expects($this->once())->method('getId')->willReturn($id);
+
+        $personRepo = $this->getPersonRepo($id, $person);
+        $personRepo->expects($this->once())->method('countByPhone')->with($phoneNumber)->willReturn(3);
+
+        $verificationService = $this->getPhoneVerificationService();
+        $verificationService->expects($this->once())
+            ->method('getPhoneVerification')->with($person, $phoneNumber)->willReturn(null);
+
+        $handler = new SupportHandler(
+            $this->getAuthChecker(),
+            $verificationService,
+            $personRepo,
+            $this->getSentEmailRepo()
+        );
+        $metadata = $handler->getPhoneMetadata($supportPerson);
+
+        $this->assertEquals(3, $metadata['samePhoneCount']);
+        $this->assertNull($metadata['verification']);
+    }
+
+    public function testGetPhoneMetadataNoPhone()
+    {
+        $id = 321;
+
+        $person = $this->createMock(Person::class);
+        $person->expects($this->once())->method('getMobile')->willReturn(null);
+
+        $supportPerson = $this->createMock(SupportPerson::class);
+        $supportPerson->expects($this->once())->method('getId')->willReturn($id);
+
+        $personRepo = $this->getPersonRepo($id, $person);
+        $personRepo->expects($this->never())->method('countByPhone');
+
+        $verificationService = $this->getPhoneVerificationService();
+        $verificationService->expects($this->never())->method('getPhoneVerification');
+
+        $handler = new SupportHandler(
+            $this->getAuthChecker(),
+            $verificationService,
+            $personRepo,
+            $this->getSentEmailRepo()
+        );
+        $metadata = $handler->getPhoneMetadata($supportPerson);
+
+        $this->assertEquals(0, $metadata['samePhoneCount']);
+        $this->assertNull($metadata['verification']);
+    }
+
+    public function testThirdPartyConnections()
+    {
+        /** @var IdentifiablePersonInterface|MockObject $identifiablePerson */
+        $identifiablePerson = $this->createMock(IdentifiablePersonInterface::class);
+        $identifiablePerson->expects($this->once())->method('getId')->willReturn($id = 666);
+
+        $person = $this->createMock(Person::class);
+        $person->expects($this->once())->method('getFacebookId')->willReturn('facebook');
+        $person->expects($this->once())->method('getGoogleId')->willReturn('google');
+        $person->expects($this->once())->method('getTwitterId')->willReturn('twitter');
+
+        $handler = new SupportHandler(
+            $this->getAuthChecker(),
+            $this->getPhoneVerificationService(),
+            $this->getPersonRepo($id, $person),
+            $this->getSentEmailRepo()
+        );
+        $this->assertEquals([
+            'google' => true,
+            'facebook' => true,
+            'twitter' => true,
+        ], $handler->getThirdPartyConnections($identifiablePerson));
+    }
+
+    public function testThirdPartyConnectionsWithPersonInterface()
+    {
+        $person = $this->createMock(Person::class);
+        $person->expects($this->once())->method('getFacebookId')->willReturn('facebook');
+        $person->expects($this->once())->method('getGoogleId')->willReturn('google');
+        $person->expects($this->once())->method('getTwitterId')->willReturn('twitter');
+
+        $personRepo = $this->getPersonRepo();
+        $personRepo->expects($this->never())->method('find');
+
+        $handler = new SupportHandler(
+            $this->getAuthChecker(),
+            $this->getPhoneVerificationService(),
+            $personRepo,
+            $this->getSentEmailRepo()
+        );
+        $this->assertEquals([
+            'google' => true,
+            'facebook' => true,
+            'twitter' => true,
+        ], $handler->getThirdPartyConnections($person));
+    }
+
+    public function testThirdPartyConnectionsUserNotFound()
+    {
+        /** @var IdentifiablePersonInterface|MockObject $identifiablePerson */
+        $identifiablePerson = $this->createMock(IdentifiablePersonInterface::class);
+        $identifiablePerson->expects($this->once())->method('getId')->willReturn($id = 666);
+
+        $handler = new SupportHandler(
+            $this->getAuthChecker(),
+            $this->getPhoneVerificationService(),
+            $this->getPersonRepo($id, null),
+            $this->getSentEmailRepo()
+        );
+        $this->assertEmpty($handler->getThirdPartyConnections($identifiablePerson));
     }
 
     private function getPersonalData(?string $name, ?string $hash, ?string $challenge, $value, bool $filled)
@@ -144,5 +313,13 @@ class SupportHandlerTest extends TestCase
         }
 
         return $sentEmailRepo;
+    }
+
+    /**
+     * @return MockObject|PhoneVerificationServiceInterface
+     */
+    private function getPhoneVerificationService()
+    {
+        return $this->createMock(PhoneVerificationServiceInterface::class);
     }
 }
